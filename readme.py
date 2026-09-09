@@ -5,6 +5,7 @@ import seaborn as sns
 import matplotlib.font_manager as fm
 import os
 
+
 # ==========================================
 # 0. 한글 폰트 및 페이지 설정
 # ==========================================
@@ -23,7 +24,7 @@ plt.rcParams['axes.unicode_minus'] = False
 
 
 # ==========================================
-# 1. 데이터 로드 및 전처리 (자동 컬럼 감지)
+# 1. 데이터 로드 및 전처리 (자동 컬럼 감지 및 안전망 추가)
 # ==========================================
 @st.cache_data
 def load_data():
@@ -31,34 +32,32 @@ def load_data():
     country_df = pd.read_csv('country_codes_sample.csv', encoding='utf-8')
 
     baci_df = baci_df.dropna(subset=['t', 'i'])
-    baci_df['v'] = baci_df['v'].fillna(0)
+    baci_df['v'] = pd.to_numeric(baci_df['v'], errors='coerce').fillna(0)
+    # 💡 수정 포인트 1: 수출액(v)에 문자가 섞여있어도 강제로 숫자로 변환(에러 방지)
 
-    # 💡 CSV 파일의 컬럼명을 자동으로 찾아서 알아서 연결해주는 마법의 코드!
+    # 컬럼 자동 감지
     c_cols = country_df.columns.tolist()
-    
-    # 1. 코드 컬럼 자동 감지 (i, code, id 등)
     code_col = c_cols[0]
     for col in c_cols:
         if col.lower() in ['country_code', 'code', 'i', 'id', '국가코드']:
             code_col = col
             break
             
-    # 2. 국가명 컬럼 자동 감지 (name, kr, 국가명 등) 
     name_col = c_cols[1] if len(c_cols) > 1 else c_cols[0]
     for col in c_cols:
         if any(x in col.lower() for x in ['name', 'kr', '국가명', '이름', 'country']):
             name_col = col
             break
 
-    # 자동 감지된 컬럼으로 병합
+    # 데이터 병합 및 컬럼명 변경
     df = pd.merge(baci_df, country_df, left_on='i', right_on=code_col, how='inner')
-    
-    # 컬럼명 통일
     df = df.rename(columns={'t': '연도', name_col: '국가명', 'v': '수출액'})
 
-    # 무역액 기준 3등분하여 등급 부여
-    # 수출액이 같거나 0인 데이터가 많아 그룹이 안 나뉘는 현상 방지 (rank 사용)
-    df['무역액등급'] = pd.qcut(df['수출액'].rank(method='first'), q=3, labels=['소', '중', '대'])
+    # 💡 수정 포인트 2: 데이터 개수가 3개 이상일 때만 3등분(대, 중, 소) 진행
+    if len(df) >= 3:
+        df['무역액등급'] = pd.qcut(df['수출액'].rank(method='first'), q=3, labels=['소', '중', '대'])
+    else:
+        df['무역액등급'] = '소' # 데이터가 부족하면 기본값 부여
     
     return df
 
