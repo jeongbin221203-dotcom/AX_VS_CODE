@@ -4,7 +4,7 @@ baci_85_sample.csv
 country_codes_sample.csv    사용
 streamlit 사용
 
-한글지원(글꼴 다운로드)
+한글지원(글꼴 다운로드) [text](../AX2_JBL/0907/NanumGothic-Bold.ttf)
 
 오른쪽 화면에
 1. 타이틀 : 무역 분석 대시보드
