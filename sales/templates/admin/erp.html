@@ -5,7 +5,7 @@
   ERP 가 멈춰도 영업 입력은 계속됩니다. 입금은 ERP 가 원장이므로 ERP 의 누적 입금액을 받아 CRM 과 대사합니다.</p>
 
 <div class="metrics m4">
-  {{ metric('연동 방식', {'file': '파일 (EAI·PI/PO·CPI)', 'sap_odata': 'SAP S/4HANA OData', 'none': '사용 안 함'}.get(cfg.adapter, cfg.adapter)) }}
+  {{ metric('연동 방식', {'file': '파일 (EAI·PI/PO·CPI)', 'sap_odata': 'SAP S/4HANA OData', 'rest': 'REST (더존·영림원·자체 ERP)', 'none': '사용 안 함'}.get(cfg.adapter, cfg.adapter)) }}
   {{ metric('전송 대기', '{:,}건'.format(summary.get('대기', 0))) }}
   {{ metric('전송 실패', '{:,}건'.format(summary.get('실패', 0)), '재시도 필요' if summary.get('실패') else none, 'down' if summary.get('실패') else none) }}
   {{ metric('전송 완료', '{:,}건'.format(summary.get('전송완료', 0))) }}
@@ -15,7 +15,7 @@
 {% endif %}
 
 <section class="card">
-  {{ tabs([('outbox', '📤 매출 전송 (CRM → ERP)'), ('payments', '📥 입금 대사 (ERP → CRM)'), ('settings', '⚙️ 연동 설정')], tab) }}
+  {{ tabs([('outbox', '📤 매출 전송 (CRM → ERP)'), ('payments', '📥 입금 대사 (ERP → CRM)'), ('inbound', '🔄 ERP 수신 API'), ('settings', '⚙️ 연동 설정')], tab) }}
 
   {% if tab == 'payments' %}
     <p class="muted">ERP(SAP FBL5N 등)에서 매출별 <strong>누적 입금액</strong>을 CSV/Excel 로 받아 올리면 CRM 입금과 비교합니다.
@@ -40,16 +40,40 @@
       {% endif %}
     {% endif %}
 
+  {% elif tab == 'inbound' %}
+    <p class="muted">ERP·EAI 가 CRM 으로 보내는 실시간 연동입니다. 관리자 &gt; 🔑 API 연동에서 <code>erp:write</code> 권한 키를 발급해
+      ERP 쪽에 등록하세요(대리 사용자는 전사 범위인 임원·관리자, 품목 수신은 관리자). 본문은 <code>{"items": [...]}</code>, 한 번에 1,000건,
+      항목별 결과를 돌려주며 모든 반영은 감사로그에 남습니다. 명세: <a href="{{ url_for('api.openapi') }}" target="_blank" rel="noopener">OpenAPI</a></p>
+    <table class="data">
+      <thead><tr><th>주소 (POST)</th><th>보내는 것</th><th>처리</th></tr></thead>
+      <tbody>
+        <tr><td><code>/api/v1/erp/payments</code></td><td>매출별 누적 입금액 <code>{ref: "CRM-123", paid_total}</code></td><td>차액만 입금 반영 — 같은 값을 다시 보내도 이중 입금 없음. 과입금·취소 건은 '확인필요'</td></tr>
+        <tr><td><code>/api/v1/erp/acks</code></td><td>전표번호 회신 <code>{ref, erp_doc_no, ok, message}</code></td><td>파일·EAI 처럼 나중에 번호가 정해지는 연동에서 매출에 ERP 번호 기록, 실패면 재시도 대상</td></tr>
+        <tr><td><code>/api/v1/erp/credit</code></td><td>여신한도 <code>{erp_code, credit_limit}</code></td><td>재무(ERP) 한도로 거래처 여신 갱신 → 한도 초과 경고에 바로 반영</td></tr>
+        <tr><td><code>/api/v1/erp/products</code></td><td>자재 마스터 <code>{code, name, unit, list_price, tax_type}</code></td><td>품목코드 기준 등록·수정 (견적·매출 단가에 사용)</td></tr>
+      </tbody>
+    </table>
+    <pre class="secret">curl -X POST {{ url_for('api.erp_payments', _external=True) }}   -H "Authorization: Bearer sk_xxxxxxxx_..." -H "Content-Type: application/json"   -d '{"items": [{"ref": "CRM-123", "erp_doc_no": "90001234", "paid_total": 5500000}]}'</pre>
+
   {% elif tab == 'settings' %}
+    <form method="post" action="{{ url_for('admin.erp_test') }}" class="toolbar">
+      {{ csrf() }}<button class="btn btn-primary">🔌 연결 테스트</button>
+      <span class="muted small">전표를 만들지 않고 연결·인증만 확인합니다 (파일: 폴더 쓰기, SAP: CSRF 토큰 발급, REST: 상태 확인 주소 GET).</span>
+    </form>
     <table class="data">
       <tbody>
-        <tr><th>어댑터 (SALES_ERP_ADAPTER)</th><td>{{ cfg.adapter }}</td></tr>
+        <tr><th>어댑터 (SALES_ERP_ADAPTER)</th><td>{{ cfg.adapter }} — file · sap_odata · rest · none</td></tr>
         <tr><th>파일 출력 폴더</th><td><code>{{ cfg.outbound_dir }}</code></td></tr>
         <tr><th>SAP OData 주소</th><td>{{ cfg.sap_base_url or '(미설정)' }}</td></tr>
         <tr><th>SAP 클라이언트 / 사용자</th><td>{{ cfg.sap_client or '-' }} / {{ cfg.sap_user or '-' }} (비밀번호는 표시하지 않음)</td></tr>
         <tr><th>판매조직 / 유통경로 / 제품군 / 오더유형</th><td>{{ cfg.sap_sales_org }} / {{ cfg.sap_dist_channel }} / {{ cfg.sap_division }} / {{ cfg.sap_order_type }}</td></tr>
         <tr><th>기본 자재번호 / 단위 / 가격조건</th><td>{{ cfg.sap_default_material or '(없음 — 매출에 품목코드 필수)' }} / {{ cfg.sap_unit }} / {{ cfg.sap_price_condition }}</td></tr>
         <tr><th>취소 시 거부사유 코드</th><td>{{ cfg.sap_reject_reason }}</td></tr>
+        <tr><th>REST 전송 / 취소 / 상태 확인 주소</th><td>{{ cfg.rest_url or '(미설정)' }} / {{ cfg.rest_cancel_url or '(전송 주소/{doc_no}/cancel)' }} / {{ cfg.rest_health_url or '(전송 주소)' }}</td></tr>
+        <tr><th>REST 인증 · 서명</th><td>{{ cfg.rest_auth }}{% if cfg.rest_auth == 'header' %} ({{ cfg.rest_header }}){% endif %}
+          · 토큰 {{ '설정됨' if cfg.rest_token or cfg.rest_password else '없음' }} · HMAC 서명 {{ '사용' if cfg.rest_hmac_secret else '안 함' }}</td></tr>
+        <tr><th>REST 전표번호 위치 · 필드 이름 바꾸기</th><td><code>{{ cfg.rest_docno_path }}</code> · <code>{{ cfg.rest_field_map or '(표준 이름 그대로)' }}</code></td></tr>
+        <tr><th>인증서 검증</th><td>{{ '사용' if cfg.sap_verify_tls else '끔 (개발 전용 — 운영에서는 기동 거부)' }}</td></tr>
       </tbody>
     </table>
     <p class="muted small">설정은 서버 환경변수로 바꿉니다(README 참고). SAP 연동은 CSRF 토큰 발급 → 판매오더(A_SalesOrder) 생성 → 고객 PO 번호에 CRM 매출번호를 넣어 역방향 대사 키로 씁니다.</p>

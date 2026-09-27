@@ -34,7 +34,7 @@ ACTIONS = {
     "PR_CREATE": "구매요청", "PR_DECIDE": "구매요청 결재", "PR_CANCEL": "구매요청 취소",
     "PO_CREATE": "발주", "PO_APPROVE": "발주 결재", "PO_UPDATE": "발주 변경", "PO_CANCEL": "발주 취소",
     "MATERIAL_SYNC": "SAP 마스터 동기화", "MFA_ENABLE": "2단계 인증 등록", "MFA_DISABLE": "2단계 인증 해제",
-    "MFA_FAIL": "2단계 인증 실패", "SSO_LOGIN": "SSO 로그인", "SSO_FAIL": "SSO 로그인 실패",
+    "MFA_FAIL": "2단계 인증 실패", "MFA_RECOVERY": "복구 코드 사용", "SSO_LOGIN": "SSO 로그인", "SSO_FAIL": "SSO 로그인 실패",
     "FORM_UPDATE": "엑셀 양식 변경",
 }
 

@@ -57,8 +57,11 @@ def login():
 @bp.route("/login/mfa", methods=["GET", "POST"])
 def login_mfa():
     uid, at = session.get("mfa_uid"), int(session.get("mfa_at", 0))
-    if not uid or time.time() - at > MFA_PENDING_SECONDS:
-        session.clear()
+    if not uid:                                     # 2단계 대기 중이 아니면 세션을 건드리지 않는다
+        return redirect(url_for("dashboard.index") if g.user else url_for("auth.login"))
+    if time.time() - at > MFA_PENDING_SECONDS:
+        for k in ("mfa_uid", "mfa_at", "mfa_next"):
+            session.pop(k, None)
         flash("다시 로그인하세요.", "info")
         return redirect(url_for("auth.login"))
     if request.method == "POST":
@@ -76,14 +79,14 @@ def login_mfa():
     return render_template("login_mfa.html", title="2단계 인증")
 
 
-@bp.get("/sso/login")
+@bp.post("/sso/login")
 def sso_login():
     if not sso.enabled():
         abort(404)
     url, stash = sso.start()
     session.clear()
     session["sso"] = stash
-    session["sso_next"] = safe_next(request.args.get("next"), url_for("dashboard.index"))
+    session["sso_next"] = safe_next(request.form.get("next"), url_for("dashboard.index"))
     return redirect(url)
 
 
@@ -105,6 +108,7 @@ def sso_callback():
 def logout():
     if g.user:
         audit.log(actor(), "LOGOUT", "user", g.user["id"])
+        auth.end_sessions(g.user["id"])             # 쿠키가 복사돼 있어도 더는 쓸 수 없다
     session.clear()
     flash("로그아웃했습니다.", "info")
     return redirect(url_for("auth.login"))

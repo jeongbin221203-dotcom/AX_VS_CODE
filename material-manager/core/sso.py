@@ -155,7 +155,8 @@ def _upsert_user(claims: dict, ip: str) -> tuple[dict | None, str]:
         if role is None:
             audit.record(conn, who, "SSO_FAIL", "user", user["id"] if user else "", {"reason": "매핑된 그룹 없음"})
             if user is not None and user["active"]:
-                conn.execute("UPDATE users SET active = 0, updated_at = ? WHERE id = ?", (now_str(), user["id"]))
+                conn.execute("UPDATE users SET active = 0, suspended_by = 'sso', updated_at = ? WHERE id = ?",
+                             (now_str(), user["id"]))
             return None, "이 시스템을 쓸 권한(사내 그룹)이 없습니다. 담당 부서에 권한을 요청하세요."
         ts = now_str()
         if user is None:
@@ -164,19 +165,24 @@ def _upsert_user(claims: dict, ip: str) -> tuple[dict | None, str]:
                 audit.record(conn, who, "SSO_FAIL", "user", "", {"reason": "아이디 충돌", "username": username})
                 return None, f"아이디 '{username}'가 로컬 계정과 겹칩니다. 시스템관리자에게 계정 정리를 요청하세요."
             uid = conn.execute(
-                "INSERT INTO users (username, name, role, password_hash, auth_source, sso_subject, created_at, updated_at) "
-                "VALUES (?, ?, ?, ?, 'sso', ?, ?, ?)",
-                (username, display, role, "sso$" + secrets.token_hex(16), sub, ts, ts)).lastrowid   # 비밀번호 로그인 불가
+                "INSERT INTO users (username, name, role, password_hash, auth_source, sso_subject, all_warehouses, "
+                "created_at, updated_at) VALUES (?, ?, ?, ?, 'sso', ?, ?, ?, ?)",
+                (username, display, role, "sso$" + secrets.token_hex(16), sub,
+                 1 if config.NEW_USER_ALL_WAREHOUSES else 0, ts, ts)).lastrowid   # 비밀번호 로그인 불가
             audit.record(conn, {**who, "id": uid}, "USER_CREATE", "user", uid,
                          {"username": username, "role": role, "source": "sso"})
         else:
             uid = user["id"]
+            if not user["active"] and (user["suspended_by"] or "") != "sso":
+                audit.record(conn, {**who, "id": uid}, "SSO_FAIL", "user", uid, {"reason": "관리자가 중지한 계정"})
+                return None, "사용이 중지된 계정입니다. 관리자에게 문의하세요."
             changes = {}
             if user["role"] != role:
                 changes["role"] = [user["role"], role]
             if user["name"] != display:
                 changes["name"] = [user["name"], display]
-            conn.execute("UPDATE users SET role = ?, name = ?, active = 1, last_login_at = ?, updated_at = ? WHERE id = ?",
+            conn.execute("UPDATE users SET role = ?, name = ?, active = 1, suspended_by = '', last_login_at = ?, "
+                         "updated_at = ? WHERE id = ?",
                          (role, display, ts, ts, uid))
             if changes:
                 audit.record(conn, {**who, "id": uid}, "USER_UPDATE", "user", uid, {**changes, "source": "sso"})

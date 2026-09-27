@@ -31,11 +31,14 @@ MM_SECRET_KEY=아무-긴-문자열 python app.py
 
 **데이터 범위(플랜트·창고 권한)**: 사용자마다 '모든 창고' 또는 특정 플랜트(그 아래 창고 전체, 나중에 생긴 창고 포함)·창고만
 볼 수 있게 한다. 재고·이력·증빙·수불부·SAP·결재·대사 모두 범위 밖은 보이지 않고(증빙은 404), 범위 밖 창고로는 등록할 수 없다.
+새 사용자(직접 등록·SSO 첫 로그인)는 범위 '없음'으로 시작한다 → 시스템관리자가 범위를 줘야 데이터가 보인다(`MM_NEW_USER_ALL_WAREHOUSES=1`이면 예전처럼 전체).
 월 마감은 회사 전체에 적용되므로 모든 창고 권한이 있는 관리자만 한다. 시스템관리자는 항상 전체.
 
 **직무 분리(SoD)**
 - 본인이 등록한 거래는 본인이 취소할 수 없다(다른 관리자). 본인이 올린 증빙도 본인이 삭제할 수 없다.
 - 실사 조정 금액이 `MM_ADJ_APPROVAL_AMOUNT`(기본 50만 원) 이상이면 바로 반영하지 않고 **결재 요청**이 된다.
+  금액은 자재 마스터 단가로 계산한다(화면 단가를 낮춰 결재를 피할 수 없음). 장부수량은 실사일 기준.
+- 과거 일자 출고·이동·조정은 그날부터 오늘까지 **어느 날도 재고가 음수가 되지 않아야** 등록된다.
   요청자가 아닌 관리자(그 창고 권한 필요)가 승인해야 반영되고, 거래에 등록자와 승인자가 함께 남는다. 반려는 사유 필수.
 - 시스템관리자는 본인 계정의 역할·상태·범위·비밀번호 초기화를 할 수 없다(다른 시스템관리자).
 
@@ -55,7 +58,7 @@ MM_SECRET_KEY=아무-긴-문자열 python app.py
 - **2단계 인증 (TOTP)** — 비밀번호 계정용. Microsoft/Google Authenticator 등. 사이드바 '2단계 인증'에서 QR로 등록.
   - `MM_MFA_REQUIRED_ROLES`(기본 `ADMIN`) 역할은 등록해야만 시스템을 쓸 수 있다.
   - 비밀키는 암호화 저장(`MM_MFA_KEY`, 없으면 세션 키에서 만든다 → 운영에서는 따로 지정), 같은 코드 재사용 금지,
-    복구 코드 10개(한 번씩), 실패는 비밀번호 실패와 같은 잠금에 합산. 휴대폰 분실 시 다른 시스템관리자가 초기화.
+    복구 코드 10개(64비트, 코드별 소금 해시, 한 번씩), 실패는 비밀번호 실패와 같은 잠금에 합산. 휴대폰 분실 시 다른 시스템관리자가 초기화.
 
 ## 구매요청 → 결재 → 발주 → 입고 (구매 메뉴)
 
@@ -132,7 +135,7 @@ MM_SECRET_KEY=아무-긴-문자열 python app.py
 | 비인가 접근 | 로그인 필수(**사내 SSO**·**2단계 인증**), 역할별 메뉴·서버 검사(403), **플랜트·창고 데이터 범위**, 최초 설정은 콘솔 코드 필요 |
 | 비밀번호 추측 | PBKDF2-SHA256 60만 회, 계정 5회 실패 시 15분 잠금, **IP 단위 15분 20회 실패 시 차단** |
 | 계정 존재 확인 | 없는 아이디도 같은 시간 해시 계산, 실패 문구 통일, 중지 계정은 비밀번호가 맞을 때만 안내 |
-| 세션 탈취 | HttpOnly·SameSite 쿠키, 로그인 시 세션 교체, **비밀번호가 바뀌면 이전 세션 전부 무효**, 30분 무활동 로그아웃, 최대 8시간 |
+| 세션 탈취 | HttpOnly·SameSite 쿠키, 로그인 시 세션 교체, **비밀번호가 바뀌거나 로그아웃하면 서버에서 이전 세션 전부 무효**(복사된 쿠키도 못 씀), 30분 무활동 로그아웃, 최대 8시간 |
 | 위조 요청(CSRF) | GET/HEAD/OPTIONS 외 모든 요청에 세션 토큰 검사 |
 | XSS | Jinja 자동 이스케이프, **CSP로 이 서버의 스크립트만 허용(인라인 스크립트·외부 CDN 없음)**, 증빙 이미지는 sandbox로 격리 |
 | 클릭재킹 | X-Frame-Options SAMEORIGIN, CSP frame-ancestors |
@@ -258,7 +261,7 @@ material-manager/
 │   ├── auth.py · audit.py · documents.py · utils.py · seed.py
 ├── views/              화면 (블루프린트 14개 + helpers.py)
 ├── templates/ · static/ (Chart.js는 static/vendor)
-└── tests/              test_core · test_app · test_enterprise · test_advanced · test_forms (SQLite·PostgreSQL 둘 다)
+└── tests/              test_core · test_app · test_enterprise · test_advanced · test_forms · test_review (SQLite·PostgreSQL 둘 다)
 ```
 
 ## 설계 원칙
@@ -276,7 +279,7 @@ material-manager/
 
 ```bash
 pip install -r requirements-dev.txt
-python -m pytest tests -q                                                    # SQLite, 76개
+python -m pytest tests -q                                                    # SQLite, 90개
 MM_DATABASE_URL=postgresql://user@host:5432/mm_test python -m pytest tests -q  # PostgreSQL (DB 이름에 test 필수)
 ```
 테스트는 임시 DB만 쓴다(운영 SQLite 파일과 이름에 test가 없는 PostgreSQL DB는 초기화를 거부).

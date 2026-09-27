@@ -218,6 +218,14 @@ def erp_send():
     return redirect(url_for("admin.erp"))
 
 
+@bp.route("/erp/test", methods=["POST"])
+def erp_test():
+    ok, message = erp.test_connection()
+    db.audit("ERP연결테스트", "ERP", None, {"성공": ok, "내용": message[:200]})
+    flash(("ERP 연결 정상 — " if ok else "ERP 연결 실패 — ") + message, "success" if ok else "error")
+    return redirect(url_for("admin.erp", tab="settings"))
+
+
 @bp.route("/erp/retry", methods=["POST"])
 def erp_retry():
     ids = [int(v) for v in request.form.getlist("ids") if v.isdigit()]

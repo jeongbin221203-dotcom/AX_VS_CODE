@@ -24,7 +24,7 @@ os.environ["MM_PW_ITERATIONS"] = "1000"          # 테스트 속도용. 운영 �
 import pandas as pd  # noqa: E402
 
 import config  # noqa: E402
-from core import audit, auth, db, documents, periods, repository as repo, sap, seed, services, storage  # noqa: E402
+from core import auth, db, documents, periods, repository as repo, sap, seed, services, storage  # noqa: E402
 
 TODAY = date.today().isoformat()
 

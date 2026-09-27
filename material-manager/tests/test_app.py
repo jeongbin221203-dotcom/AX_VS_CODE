@@ -40,6 +40,7 @@ def app():
     """테스트마다 빈 DB에서 시작한다 (test_core 와 같은 임시 DB를 공유하므로 매번 초기화)."""
     config.SAP_MODE = "off"
     config.MFA_REQUIRED_ROLES = set()          # 2단계 인증 필수는 test_enterprise의 전용 테스트에서 확인
+    config.NEW_USER_ALL_WAREHOUSES = True      # 테스트 사용자는 전체 범위 (기본값 '없음'은 전용 테스트에서 확인)
     db.reset_database()
     application = create_app({"TESTING": True})
     for role, username in USERS.items():
@@ -109,6 +110,12 @@ def test_first_run_setup_then_login():
     assert c.get("/setup").status_code == 404, "사용자가 생긴 뒤에는 최초 설정을 열 수 없다"
 
 
+def login_ok_after_lock_hidden(app) -> bool:
+    """없는 아이디와 잠긴 아이디의 응답 문구가 같아야 한다."""
+    fake = post(app.test_client(), "/login", {"username": "nobody-here", "password": "x"}).get_data(as_text=True)
+    return "아이디 또는 비밀번호가 올바르지 않습니다" in fake
+
+
 def test_login_required_and_lockout(app):
     c = app.test_client()
     res = c.get("/stock/")
@@ -116,8 +123,9 @@ def test_login_required_and_lockout(app):
     for _ in range(config.LOGIN_MAX_FAILS):
         post(c, "/login", {"username": "clerk", "password": "wrong-pass1"})
     res = post(c, "/login", {"username": "clerk", "password": PW})
-    assert "잠겼습니다" in res.get_data(as_text=True), "연속 실패 후 올바른 비밀번호도 거부"
-    assert actions().count("LOGIN_FAIL") == config.LOGIN_MAX_FAILS + 1
+    assert "로그인할 수 없습니다" in res.get_data(as_text=True), "연속 실패 후 올바른 비밀번호도 거부"
+    assert login_ok_after_lock_hidden(app), "잠김 여부로 계정 존재가 드러나지 않는다"
+    assert actions().count("LOGIN_FAIL") == config.LOGIN_MAX_FAILS + 2      # + 없는 아이디 1건
 
 
 def test_post_without_csrf_rejected(client):
@@ -223,7 +231,7 @@ def test_history_reverse(client):
     res = post(client, "/history/reverse", {"tx_id": tx_id, "reason": "수량 오입력", "next": "https://evil.example"})
     assert res.headers["Location"].endswith("/history/")
     html = client.get("/history/").get_data(as_text=True)
-    assert f"취소됨(#" in html and f"취소거래(#{tx_id})" in html
+    assert "취소됨(#" in html and f"취소거래(#{tx_id})" in html
     with db.get_conn() as conn:
         assert conn.execute("SELECT 1 FROM transactions WHERE id = ?", (tx_id,)).fetchone(), "원거래는 남는다"
 

@@ -27,7 +27,9 @@ def closed_through() -> str:
 
 
 def date_problem(conn, tx_date: str) -> str:
-    """거래 일자로 쓸 수 없으면 사유."""
+    """거래 일자로 쓸 수 없으면 사유.
+    모든 거래 등록 경로가 여기를 지나므로 기간 공유 잠금을 잡는다 → 마감(배타 잠금)과 동시에 진행되지 않는다."""
+    db.lock_shared(conn, "period")
     ym = repo.closed_through(conn)
     if ym and tx_date <= month_end(ym):
         return f"{ym}월까지 마감되어 {tx_date} 일자로는 등록할 수 없습니다. 마감 이후 일자로 입력하세요."
@@ -36,13 +38,16 @@ def date_problem(conn, tx_date: str) -> str:
     return ""
 
 
-def next_closable() -> str:
+def next_closable(conn=None) -> str:
     """다음에 마감할 달. 마감 이력이 없으면 가장 오래된 거래의 달부터."""
-    ym = closed_through()
+    if conn is None:
+        with db.get_conn() as c:
+            return next_closable(c)
+    ym = repo.closed_through(conn)
     if ym:
         y, m = int(ym[:4]), int(ym[5:7])
         return f"{y + 1}-01" if m == 12 else f"{y}-{m + 1:02d}"
-    first = db.scalar("SELECT MIN(tx_date) FROM transactions")
+    first = conn.execute("SELECT MIN(tx_date) FROM transactions").fetchone()[0]
     return str(first)[:7] if first else prev_month(date.today().strftime("%Y-%m"))
 
 
@@ -50,12 +55,12 @@ def close_month(ym: str, actor: dict | None) -> PeriodResult:
     this_month = date.today().strftime("%Y-%m")
     if ym >= this_month:
         return PeriodResult(False, "진행 중이거나 미래인 달은 마감할 수 없습니다.")
-    expected = next_closable()
-    if ym != expected:
-        return PeriodResult(False, f"마감은 한 달씩 순서대로 합니다. 다음 마감 대상은 {expected}입니다.")
     end = month_end(ym)
     with db.transaction() as conn:
         db.lock(conn, "period")
+        expected = next_closable(conn)               # 잠금 안에서 확인 (두 서버가 같은 달을 동시에 마감하지 않게)
+        if ym != expected:
+            return PeriodResult(False, f"마감은 한 달씩 순서대로 합니다. 다음 마감 대상은 {expected}입니다.")
         if sap.enabled():
             unsent = sap.unsent_until(conn, end)
             if unsent:

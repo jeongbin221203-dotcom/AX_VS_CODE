@@ -70,8 +70,21 @@ def _match_step(secret: str, code: str, last_step: int) -> int | None:
     return None
 
 
-def _hash_code(code: str) -> str:
-    return hashlib.sha256(code.strip().upper().replace("-", "").encode()).hexdigest()
+def _norm_code(code: str) -> str:
+    return code.strip().upper().replace("-", "").replace(" ", "")
+
+
+def _hash_code(code: str, salt: str | None = None) -> str:
+    """복구 코드 저장값 '소금$해시'. 코드가 64비트라 DB가 새어도 대입으로 찾을 수 없다."""
+    salt = salt if salt is not None else secrets.token_hex(8)
+    return salt + "$" + hashlib.sha256((salt + ":" + _norm_code(code)).encode()).hexdigest()
+
+
+def _code_matches(code: str, stored: str) -> bool:
+    if "$" in stored:
+        salt = stored.split("$", 1)[0]
+        return hmac.compare_digest(_hash_code(code, salt), stored)
+    return hmac.compare_digest(hashlib.sha256(_norm_code(code).encode()).hexdigest(), stored)   # 예전 형식
 
 
 def enable(user_id: int, secret: str, code: str, actor: dict) -> tuple[bool, str, list[str]]:
@@ -79,7 +92,7 @@ def enable(user_id: int, secret: str, code: str, actor: dict) -> tuple[bool, str
     step = _match_step(secret, code, 0)
     if step is None:
         return False, "인증 앱의 6자리 코드가 맞지 않습니다. 휴대폰 시간이 맞는지 확인하세요.", []
-    codes = ["-".join([secrets.token_hex(2).upper(), secrets.token_hex(2).upper()]) for _ in range(10)]
+    codes = ["-".join(secrets.token_hex(2).upper() for _ in range(4)) for _ in range(10)]   # 64비트
     with db.transaction() as conn:
         conn.execute("UPDATE users SET totp_secret = ?, totp_enabled = 1, totp_last_step = ?, recovery_codes = ?, "
                      "updated_at = ? WHERE id = ?",
@@ -117,12 +130,12 @@ def verify(user_id: int, code: str, ip: str = "") -> tuple[bool, str]:
             conn.execute("UPDATE users SET totp_last_step = ?, failed_count = 0 WHERE id = ?", (step, user_id))
             return True, ""
         hashes = json.loads(u["recovery_codes"] or "[]")
-        h = _hash_code(code)
-        if h in hashes:
+        h = next((x for x in hashes if _code_matches(code, x)), None)
+        if h is not None:
             hashes.remove(h)
             conn.execute("UPDATE users SET recovery_codes = ?, failed_count = 0 WHERE id = ?",
                          (json.dumps(hashes), user_id))
-            audit.record(conn, actor, "MFA_FAIL", "user", user_id, {"note": "복구 코드 사용", "left": len(hashes)})
+            audit.record(conn, actor, "MFA_RECOVERY", "user", user_id, {"left": len(hashes)})
             return True, f"복구 코드를 사용했습니다. 남은 복구 코드 {len(hashes)}개."
         fails = int(u["failed_count"] or 0) + 1
         locked = ""

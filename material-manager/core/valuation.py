@@ -82,7 +82,7 @@ def _remove_at_price(area: Area, qty: float, price: float, fallback: float) -> t
         taken.append([use, lp])
         left -= use
         area.layers[i] = [lq - use, lp]
-    area.layers = deque(l for l in area.layers if l[0] > EPS)
+    area.layers = deque(x for x in area.layers if x[0] > EPS)
     if left > EPS:
         v, t = _consume(area, left, fallback)
         value += v
@@ -117,7 +117,28 @@ class Engine:
         orig = t["reversal_of"]
         tkey = (t["transfer_no"], t["lot_no"], orig is None) if t["transfer_no"] else None
 
-        if orig is not None and int(orig) in self.tx_value:
+        old_value = a.value
+        if orig is not None and int(orig) not in self.tx_value:
+            # 원거래가 마감 스냅샷 이전이라 평가 금액을 모른다 → 입고 취소는 원거래 단가, 출고 취소는 현재 평균으로
+            if q > 0:
+                price = a.avg(fallback)
+                v = q * price
+                if fifo:
+                    a.layers.appendleft([q, price])
+            else:
+                price = float(t["unit_price"] or 0) if t["tx_type"] == "IN" and not t["transfer_no"] else 0.0
+                if price <= 0:
+                    price = a.avg(fallback)
+                if fifo:
+                    removed, _ = _remove_at_price(a, -q, price, fallback)
+                    v = -removed
+                else:
+                    v = q * price
+            self.warnings.append(f"거래 #{t['id']}: 마감 이전 거래 #{int(orig)}의 취소 — 원거래 금액 대신 "
+                                 f"단가 {price:,.2f}로 평가")
+            kind = ("transfer" if t["transfer_no"] else "adjust" if t["tx_type"] == "ADJ" else
+                    "receipt" if t["tx_type"] == "IN" else "issue")
+        elif orig is not None and int(orig) in self.tx_value:
             orig = int(orig)
             v = -self.tx_value[orig]
             if fifo:
@@ -168,6 +189,9 @@ class Engine:
             a.value = sum(lq * lp for lq, lp in a.layers)
         else:
             a.value += v
+        residual = a.value - (old_value + v)          # 위에서 금액을 맞추며 생긴 차이 → 조정으로 잡아 표가 맞게
+        if stats is not None and abs(residual) > 0.005:
+            stats.adjustments += residual
         if a.qty > EPS:
             a.last_price = a.value / a.qty
         self.tx_value[int(t["id"])] = v

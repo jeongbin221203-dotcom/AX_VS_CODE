@@ -128,6 +128,25 @@ def current_stock(conn: Conn, material_id: int, warehouse_id: int | None = None,
     return float(snap) + float(delta)
 
 
+def balance_window(conn: Conn, material_id: int, warehouse_id: int, lot_no: str | None,
+                   tx_date: str) -> tuple[float, float]:
+    """(tx_date 말 재고, tx_date 이후 어느 날이든 가장 낮았던 일말 재고).
+
+    과거 일자로 출고·이동·조정을 넣으면 그날부터 오늘까지의 모든 일말 재고가 함께 줄어든다.
+    그래서 출고 가능량은 '오늘 재고'가 아니라 이 최저값이다."""
+    now = current_stock(conn, material_id, warehouse_id, lot_no)
+    lsql, lp = (" AND t.lot_no = ?", [lot_no]) if lot_no is not None else ("", [])
+    rows = conn.execute(
+        f"SELECT t.tx_date, {db.STOCK_EXPR} AS net FROM transactions t "
+        f"WHERE t.material_id = ? AND t.warehouse_id = ? AND t.tx_date > ?{lsql} "
+        "GROUP BY t.tx_date ORDER BY t.tx_date DESC", (material_id, warehouse_id, tx_date, *lp)).fetchall()
+    bal = low = now
+    for r in rows:                                    # 오늘부터 거꾸로: 그 날짜 거래를 빼면 전날 말 재고
+        bal -= float(r["net"])
+        low = min(low, bal)
+    return bal, low
+
+
 def _base_snapshot(conn: Conn, as_of: str) -> str:
     """as_of(포함) 이전에 끝난 마감월 중 가장 최근 달. 없으면 ''."""
     ym = closed_through(conn)

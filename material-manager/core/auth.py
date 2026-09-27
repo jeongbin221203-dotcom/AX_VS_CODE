@@ -48,8 +48,15 @@ def verify_password(password: str, stored: str) -> bool:
 
 
 def session_stamp(user: dict) -> str:
-    """세션에 넣는 도장. 비밀번호가 바뀌면 달라져 그 전에 발급된 세션(탈취된 쿠키 포함)이 모두 무효가 된다."""
-    return hashlib.sha256(f"{user['id']}:{user['password_hash']}".encode()).hexdigest()[:24]
+    """세션에 넣는 도장. 비밀번호가 바뀌거나 로그아웃하면(session_ver) 달라져
+    그 전에 발급된 세션(탈취된 쿠키 포함)이 모두 무효가 된다."""
+    raw = f"{user['id']}:{user['password_hash']}:{int(user.get('session_ver') or 0)}"
+    return hashlib.sha256(raw.encode()).hexdigest()[:24]
+
+
+def end_sessions(user_id: int) -> None:
+    """이 사용자의 모든 세션을 서버에서 끝낸다 (쿠키만 지우는 것이 아니라 도장을 바꾼다)."""
+    db.execute("UPDATE users SET session_ver = COALESCE(session_ver, 0) + 1 WHERE id = ?", (user_id,))
 
 
 def _dummy_verify(password: str) -> None:
@@ -138,7 +145,8 @@ def authenticate(username: str, password: str, ip: str = "") -> AuthResult:
         actor = {"id": user["id"], "name": user["name"], "role": user["role"], "ip": ip}
         if user["locked_until"] and user["locked_until"] > now.strftime("%Y-%m-%d %H:%M:%S"):
             audit.record(conn, actor, "LOGIN_FAIL", "user", user["id"], {"reason": "잠김"})
-            return AuthResult(False, f"로그인 실패가 반복되어 {user['locked_until'][11:16]}까지 잠겼습니다.")
+            _dummy_verify(password)
+            return AuthResult(False, generic + f" 실패가 반복되면 {config.LOGIN_LOCK_MINUTES}분간 로그인할 수 없습니다.")
         if verify_password(password, user["password_hash"]) and not user["active"]:
             audit.record(conn, actor, "LOGIN_FAIL", "user", user["id"], {"reason": "비활성 계정"})
             return AuthResult(False, "사용이 중지된 계정입니다. 관리자에게 문의하세요.")
@@ -178,10 +186,12 @@ def create_user(username: str, name: str, role: str, password: str,
             return AuthResult(False, f"아이디 '{username}'는 이미 있습니다.")
         uid = conn.execute(
             """
-            INSERT INTO users (username, name, role, password_hash, must_change_pw, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO users (username, name, role, password_hash, must_change_pw, all_warehouses,
+                               created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """,
-            (username, name, role, hash_password(password), 1 if must_change_pw else 0, ts, ts),
+            (username, name, role, hash_password(password), 1 if must_change_pw else 0,
+             1 if config.NEW_USER_ALL_WAREHOUSES else 0, ts, ts),
         ).lastrowid
         audit.record(conn, actor, "USER_CREATE", "user", uid,
                      {"username": username, "name": name, "role": role})
@@ -209,8 +219,8 @@ def update_user(user_id: int, name: str, role: str, active: bool, actor: dict | 
         diff = audit.changes(before, after, after.keys())
         if not diff:
             return AuthResult(True, "변경된 내용이 없습니다.")
-        conn.execute("UPDATE users SET name = ?, role = ?, active = ?, updated_at = ? WHERE id = ?",
-                     (after["name"], role, after["active"], now_str(), user_id))
+        conn.execute("UPDATE users SET name = ?, role = ?, active = ?, suspended_by = ?, updated_at = ? WHERE id = ?",
+                     (after["name"], role, after["active"], "" if active else "admin", now_str(), user_id))
         audit.record(conn, actor, "USER_UPDATE", "user", user_id, diff)
     return AuthResult(True, "사용자 정보를 저장했습니다.")
 

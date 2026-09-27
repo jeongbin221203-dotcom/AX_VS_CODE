@@ -25,6 +25,7 @@
 - 2026-09-27 "모두 추가": PostgreSQL+Alembic, S3/로컬 저장소, DB 작업 큐·스케줄러·알림, 품목·특가·견적·부가세(공급가액/부가세/합계), 다단계 결재선·대결·독촉, HR 연동, OIDC(PKCE), REST API(/api/v1), 지표·readyz·JSON 로그·읽기 전용 모드, 회사 엑셀 양식(업로드 열 매핑·내려받기 서식 파일). Docker는 이 PC에 없어 compose는 기동 미검증.
 - 2026-09-27 대기업 운영 보강: 담당자 owner_id 연결(동명이인 분리), 승인 후 조건 변경 시 승인 무효, 관리자 자기결재 금지, 삭제 대신 보존(매출은 '취소'), 감사로그 해시 체인+수정·삭제 트리거, password/SSO 인증·잠금·세션 만료, 개인정보 마스킹·수식 주입 차단·다운로드 감사, ERP(SAP OData/파일) 전송 대기열·입금 대사, 세금계산서·전자세금계산서 증빙(이미지/PDF/XML, `sale_documents` 테이블, 파일은 `data/documents/`) 등록·검증. 상세는 `sales/README.md`.
 - 하지 않은 것: SAP·IdP·S3 실시스템 연결 검증(모의 서버로만 확인), 세금계산서 발행·OCR, 컨테이너 실기동.
+- 포트폴리오(Version 4)는 아직 옛 수치(6,020줄·테스트 37·메뉴 14·SQLite) — 제출 전 갱신 필요. 현재: 코드 10,895줄(테스트 제외)+테스트 1,890줄, 테스트 65, 메뉴 18.
 - 사용자 `data/sales.db`에는 담당자 계정 없이 만든 샘플 데이터(9/27 17:54~56, 여러 번 생성)가 있어 담당자 '미연결' 상태(관리자만 조회).
 - 확인용 서버는 SALES_PORT=5011 + DB 복사본 사용(Windows는 같은 포트에 여러 프로세스가 바인딩됨).
 - 게시된 Artifact: https://claude.ai/artifact/CTxZ4PEpwjc7xMdtveRMNQ (제목 "업무 시스템 포트폴리오". 다른 대화/폴더에서 수정하려면 이 URL을 `url`로 넘겨 업데이트)
@@ -33,7 +34,7 @@
 
 ## 자재관리 `material-manager/` (2026-09-27 Streamlit → Flask 전환)
 - 사용자 요청으로 Flask 구조로 전환. 전환 전 원본은 `material_manager_streamlit_backup/`. `core/`(업무 로직)는 그대로 두고 화면 계층만 교체.
-- 실행: `MM_SECRET_KEY=... python app.py` → http://127.0.0.1:5002 (대한사료 5000, 영업관리 5001과 분리). 테스트: `python -m pytest tests -q` (76개, SQLite). `MM_DATABASE_URL=postgresql://...mm_test`로 PostgreSQL에서도 같은 76개.
+- 실행: `MM_SECRET_KEY=... python app.py` → http://127.0.0.1:5002 (대한사료 5000, 영업관리 5001과 분리). 테스트: `python -m pytest tests -q` (90개, SQLite). `MM_DATABASE_URL=postgresql://...mm_test`로 PostgreSQL에서도 같은 90개.
 - 구조: `core/`(db·storage·repository·services·approvals·org·periods·reconcile·sap·jobs·auth·audit·documents) · `views/`(블루프린트 14개 + helpers.py) · `templates/` · `static/` · `batch.py`(`sap_sync.py`는 호환용).
 - 2026-09-27 대기업 대응 추가(사용자 요청 "모두 실행"): 로그인·역할 4단계(조회/담당자/관리자/시스템관리자)·감사로그(트리거로 수정·삭제 차단),
   거래 삭제 폐지 → 취소 거래(역분개), 월 마감 + 월말 재고 스냅샷, SAP 전송 대기열(mock/http, 실제 SAP 미검증).

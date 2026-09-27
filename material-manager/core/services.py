@@ -78,6 +78,8 @@ def register_transaction(material_id: int, tx_type: str, qty_input: float, tx_da
     lot_no, expiry_date = lot_no.strip().upper(), expiry_date.strip()
     if tx_type != "IN":
         po_no = po_item = ""
+    if po_item.isdigit():
+        po_item = str(int(po_item))                    # '010'과 '10'을 같은 품목으로 (입고 누계가 새지 않게)
     if tx_type != "OUT":
         cost_center = ""
 
@@ -110,6 +112,7 @@ def register_transaction(material_id: int, tx_type: str, qty_input: float, tx_da
                 if problem:
                     return Result(False, problem)
             if po_no:
+                db.lock(conn, f"po:{po_no}")
                 problem = purchasing.receipt_problem(conn, po_no, po_item, material_id, wh_id, qty)
                 if problem:
                     return Result(False, problem)
@@ -123,9 +126,10 @@ def register_transaction(material_id: int, tx_type: str, qty_input: float, tx_da
                 if problem:
                     return Result(False, problem)
             else:
-                stock_now = repo.current_stock(conn, material_id, wh_id)
-                if qty > stock_now:
-                    return Result(False, f"재고 부족: {wh['code']} 현재고 {stock_now:,.2f}, 출고 요청 {qty:,.2f}")
+                _, avail = repo.balance_window(conn, material_id, wh_id, None, tx_date)
+                if qty > avail + 1e-9:
+                    return Result(False, f"재고 부족: {wh['code']} {tx_date} 이후 출고 가능 {avail:,.2f}, "
+                                         f"출고 요청 {qty:,.2f}")
                 allocations = [("", qty)]
         else:                                               # ADJ
             if qty_input < 0:
@@ -136,11 +140,15 @@ def register_transaction(material_id: int, tx_type: str, qty_input: float, tx_da
                 problem = _lot_problem(conn, mat, lot_no, expiry_date, tx_date, receiving=False)
                 if problem:
                     return Result(False, problem)
-            stock_now = repo.current_stock(conn, material_id, wh_id, lot_no if lot_managed else None)
-            qty = qty_input - stock_now
-            if qty == 0:
-                return Result(False, "실사수량이 현재고와 같아 조정할 내용이 없습니다.")
-            amount = abs(qty) * max(float(unit_price), 0.0)
+            stock_now, low = repo.balance_window(conn, material_id, wh_id, lot_no if lot_managed else None, tx_date)
+            qty = qty_input - stock_now                    # 실사일 말 장부수량과의 차이
+            if abs(qty) < 1e-9:
+                return Result(False, "실사수량이 장부수량과 같아 조정할 내용이 없습니다.")
+            if low + qty < -1e-9:
+                return Result(False, f"{tx_date} 이후 출고가 있어 이 조정을 넣으면 재고가 음수가 됩니다. "
+                                     "실사일을 확인하세요.")
+            # 결재 기준 금액은 자재 마스터 단가로 계산한다 (화면 단가를 낮춰 결재를 피할 수 없게)
+            amount = abs(qty) * max(float(mat["unit_price"] or 0), float(unit_price or 0), 0.0)
             if config.ADJ_APPROVAL_AMOUNT and amount >= config.ADJ_APPROVAL_AMOUNT:
                 req_id = approvals.create(conn, "ADJ", material_id, wh_id, tx_date, qty, amount, who, {
                     "book_qty": stock_now, "counted_qty": qty_input, "unit_price": max(float(unit_price), 0.0),
@@ -195,7 +203,10 @@ def _lot_problem(conn, mat: dict, lot_no: str, expiry_date: str, tx_date: str, r
 def _allocate(conn, mat: dict, wh_id: int, qty: float, lot_no: str | None, tx_date: str
               ) -> tuple[list[tuple[str, float]], str]:
     """출고·이동할 로트 배정. 로트를 주면 그 로트에서, 안 주면 유효기한이 빠른 로트부터(FEFO)."""
-    balances = repo.lot_balances(conn, mat["id"], wh_id)
+    balances = [{**b, "qty": min(float(b["qty"]),
+                                 repo.balance_window(conn, mat["id"], wh_id, b["lot_no"], tx_date)[1])}
+                for b in repo.lot_balances(conn, mat["id"], wh_id)]
+    balances = [b for b in balances if b["qty"] > 1e-9]
     expired = {b["lot_no"] for b in balances if b["expiry_date"] and b["expiry_date"] < tx_date}
     if lot_no:
         if mat["expiry_managed"] and lot_no in expired:
@@ -259,9 +270,10 @@ def post_approved_adjustment(conn, req: dict, approver: dict) -> Result:
     db.lock(conn, f"stock:{req['material_id']}")
     qty = float(req["qty"])
     lot = extra.get("lot_no", "")
+    _, low = repo.balance_window(conn, req["material_id"], req["warehouse_id"], lot if lot else None, req["tx_date"])
     now = repo.current_stock(conn, req["material_id"], req["warehouse_id"], lot if lot else None)
-    if now + qty < 0:
-        return Result(False, f"반영하면 재고가 {now + qty:,.2f}로 음수가 됩니다. 실사를 다시 하세요.")
+    if low + qty < -1e-9:
+        return Result(False, f"반영하면 재고가 {low + qty:,.2f}로 음수가 되는 날이 생깁니다. 실사를 다시 하세요.")
     requester = {"id": req["requested_by_id"], "name": req["requested_by"], "ip": approver.get("ip", "")}
     tx_id = _insert(conn, requester, {
         "material_id": req["material_id"], "tx_type": "ADJ", "qty": qty, "warehouse_id": req["warehouse_id"],
@@ -303,9 +315,9 @@ def transfer(material_id: int, from_wh: int, to_wh: int, qty: float, tx_date: st
             if problem:
                 return Result(False, problem)
         else:
-            stock_now = repo.current_stock(conn, material_id, from_wh)
-            if qty > stock_now:
-                return Result(False, f"재고 부족: {src['code']} 현재고 {stock_now:,.2f}, 이동 요청 {qty:,.2f}")
+            _, avail = repo.balance_window(conn, material_id, from_wh, None, tx_date)
+            if qty > avail + 1e-9:
+                return Result(False, f"재고 부족: {src['code']} {tx_date} 이후 이동 가능 {avail:,.2f}, 이동 요청 {qty:,.2f}")
             allocations = [("", qty)]
         transfer_no = f"TRF-{tx_date.replace('-', '')}-{secrets.token_hex(4).upper()}"
         mvt = sap.transfer_movement_type(src["plant_id"] == dst["plant_id"])
@@ -354,11 +366,15 @@ def reverse_transaction(tx_id: int, reason: str, *, actor: dict | None = None,
         if config.SOD_ENFORCE and who.get("id") is not None and tx["created_by_id"] == who["id"]:
             return Result(False, "본인이 등록한 거래는 다른 관리자가 취소해야 합니다(직무 분리).")
         legs = repo.transfer_legs(conn, tx["transfer_no"]) if tx["transfer_no"] else [tx]
+        if wh_ids is not None and any(leg["tx_type"] == "OUT" and leg["warehouse_id"] not in wh_ids for leg in legs):
+            return Result(False, "보낸 창고 권한이 있어야 이동을 취소할 수 있습니다.")
         for leg in legs:
             done = repo.reversal_id(conn, leg["id"])
             if done is not None:
                 return Result(False, f"이미 취소된 거래입니다 (취소 거래 #{done}).")
         db.lock(conn, f"stock:{tx['material_id']}")
+        for po in sorted({leg["po_no"] for leg in legs if leg["po_no"]}):
+            db.lock(conn, f"po:{po}")
         after = 0.0
         for leg in legs:
             effect = leg["qty"] if leg["tx_type"] in ("IN", "ADJ") else -leg["qty"]

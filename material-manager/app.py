@@ -52,7 +52,7 @@ def create_app(test_config: dict | None = None) -> Flask:
     if auth.count_users() == 0 and not app.config.get("SETUP_CODE"):
         with db.transaction() as conn:
             conn.execute("INSERT INTO app_settings (key, value) VALUES ('setup_code', ?) ON CONFLICT (key) DO NOTHING",
-                         (os.getenv("MM_SETUP_CODE") or secrets.token_hex(4),))
+                         (os.getenv("MM_SETUP_CODE") or secrets.token_hex(8),))
             app.config["SETUP_CODE"] = conn.execute(
                 "SELECT value FROM app_settings WHERE key = 'setup_code'").fetchone()[0]
         app.logger.warning("최초 설정 코드: %s  (http://%s:%s/setup 에서 입력)",

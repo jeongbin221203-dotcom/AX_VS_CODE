@@ -27,6 +27,7 @@ SCOPES = {
     "sales:write": "매출 등록",
     "products:read": "품목·단가 조회",
     "quotes:read": "견적 조회",
+    "erp:write": "ERP 수신 (입금·전표번호·여신·품목)",
 }
 
 

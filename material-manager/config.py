@@ -136,6 +136,8 @@ SSO_GROUPS_CLAIM = os.getenv("MM_SSO_GROUPS_CLAIM", "groups")
 SSO_ROLE_MAP = dict(kv.split("=", 1) for kv in os.getenv("MM_SSO_ROLE_MAP", "").split(",") if "=" in kv)
 SSO_ONLY = os.getenv("MM_SSO_ONLY", "0") == "1"             # 1이면 비밀번호 로그인은 비상용 시스템관리자만
 SSO_REQUIRE_MFA = os.getenv("MM_SSO_REQUIRE_MFA", "0") == "1"   # 1이면 ID 토큰 amr에 mfa가 있어야 로그인
+# 새 사용자(직접 등록·SSO 첫 로그인)의 창고 범위. 기본은 '없음' → 관리자가 범위를 줘야 데이터가 보인다.
+NEW_USER_ALL_WAREHOUSES = os.getenv("MM_NEW_USER_ALL_WAREHOUSES", "0") == "1"
 MFA_REQUIRED_ROLES = set(filter(None, os.getenv("MM_MFA_REQUIRED_ROLES", "ADMIN").split(",")))
 TOTP_ISSUER = "자재관리"
 

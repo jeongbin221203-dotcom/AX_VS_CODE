@@ -381,6 +381,8 @@ MIGRATIONS = [
     ("users", "totp_enabled", "INTEGER DEFAULT 0"),
     ("users", "totp_last_step", "BIGINT DEFAULT 0"),
     ("users", "recovery_codes", "TEXT DEFAULT ''"),
+    ("users", "session_ver", "INTEGER DEFAULT 0"),      # 로그아웃하면 올려 그 전 세션 쿠키를 모두 무효로
+    ("users", "suspended_by", "TEXT DEFAULT ''"),       # 중지 주체: admin(관리자) | sso(사내 그룹에서 빠짐)
 ]
 
 INDEXES = """
@@ -622,6 +624,12 @@ def lock(conn: Conn, key: str) -> None:
     """트랜잭션이 끝날 때까지 key 단위로 줄 세운다 (PostgreSQL). SQLite는 이미 전체 쓰기 잠금이라 할 일 없음."""
     if conn.pg:
         conn.execute("SELECT pg_advisory_xact_lock(hashtext(?))", (key,))
+
+
+def lock_shared(conn: Conn, key: str) -> None:
+    """공유 잠금 (PostgreSQL). 같은 key의 lock()(배타)과만 서로 기다린다 — 거래 등록끼리는 막지 않는다."""
+    if conn.pg:
+        conn.execute("SELECT pg_advisory_xact_lock_shared(hashtext(?))", (key,))
 
 
 def skip_locked() -> str:

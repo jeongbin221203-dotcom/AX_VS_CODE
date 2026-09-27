@@ -158,18 +158,19 @@ class Bank:
 
     # ---- 뽑기 --------------------------------------------------------------
     def pick(self, part: int, n_questions: int, levels: list[int] | None = None, qtype: str | None = None,
-             exclude: set[str] | None = None, rng: random.Random | None = None,
-             prefer_fresh: set[str] | None = None) -> list[str]:
+             exclude: set[str] | None = None, rng: random.Random | None = None, graphic: bool | None = None,
+             last_seen: dict[str, str] | None = None) -> list[str]:
         """조건에 맞는 item 을 문항 수가 n_questions 에 이를 때까지 뽑아 ref 목록으로 돌려준다.
-        prefer_fresh: 이미 푼 ref 집합 — 안 푼 문제를 먼저 낸다."""
+        last_seen: {ref: 마지막으로 푼 시각} — 안 푼 문제 먼저, 그다음 오래전에 푼 문제 순으로 낸다."""
         rng = rng or random.Random()
         pool = [it for it in self.items.get(part, [])
                 if (not levels or it["level"] in levels)
                 and (not qtype or any(q.qtype == qtype for q in self.questions(it)))
-                and (not exclude or self.ref(it) not in exclude)]
+                and (not exclude or self.ref(it) not in exclude)
+                and (graphic is None or bool(it.get("graphic")) == graphic)]
         rng.shuffle(pool)
-        if prefer_fresh:
-            pool.sort(key=lambda it: self.ref(it) in prefer_fresh)   # 안정 정렬: 섞인 순서 유지
+        if last_seen:
+            pool.sort(key=lambda it: last_seen.get(self.ref(it), ""))   # 안정 정렬: 같은 조건은 섞인 순서 유지
         out, count = [], 0
         for it in pool:
             if count >= n_questions:
@@ -179,12 +180,15 @@ class Bank:
         return out
 
     def pick_p7(self, singles_q: int, doubles: int, triples: int, levels: list[int] | None,
-                rng: random.Random, exclude: set[str] | None = None) -> list[str]:
+                rng: random.Random, exclude: set[str] | None = None,
+                last_seen: dict[str, str] | None = None) -> list[str]:
         """Part 7 은 단일/이중/삼중 지문을 나눠 뽑는다."""
         def pool(kind: str) -> list[dict]:
             p = [it for it in self.items.get(7, []) if it["kind"] == kind
                  and (not levels or it["level"] in levels) and (not exclude or self.ref(it) not in exclude)]
             rng.shuffle(p)
+            if last_seen:
+                p.sort(key=lambda it: last_seen.get(self.ref(it), ""))
             return p
         out, count = [], 0
         for it in pool("single"):

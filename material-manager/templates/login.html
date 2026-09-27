@@ -2,7 +2,11 @@
 {% block public %}
 {% if sso %}
 <section class="card">
-  <a class="btn btn-primary" href="{{ url_for('auth.sso_login', next=next or none) }}">사내 계정으로 로그인 (SSO)</a>
+  <form method="post" action="{{ url_for('auth.sso_login') }}">
+    <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+    <input type="hidden" name="next" value="{{ next }}">
+    <button class="btn btn-primary" type="submit">사내 계정으로 로그인 (SSO)</button>
+  </form>
   <p class="muted small">회사 계정·2단계 인증으로 로그인합니다. 권한은 사내 그룹에 따라 자동으로 정해집니다.</p>
 </section>
 {% endif %}

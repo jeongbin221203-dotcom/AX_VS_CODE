@@ -309,6 +309,71 @@ def create_sale():
 
 
 # ----------------------------------------------------------------------------
+# ERP → CRM 수신 (ERP·EAI 가 호출). 본문 {"items": [...]} 최대 1,000건, 항목별 결과를 돌려준다
+# ----------------------------------------------------------------------------
+MAX_ITEMS = 1000
+
+
+def _items() -> list[dict]:
+    body = request.get_json(silent=True)
+    items = body.get("items") if isinstance(body, dict) else None
+    if not isinstance(items, list) or not items or not all(isinstance(i, dict) for i in items):
+        raise ApiError(400, "bad_request", '본문은 {"items": [ {...}, ... ]} 형식이어야 합니다.')
+    if len(items) > MAX_ITEMS:
+        raise ApiError(413, "too_many_items", f"한 번에 {MAX_ITEMS:,}건까지 보낼 수 있습니다.")
+    return items
+
+
+def _erp_result(results: list[dict]):
+    counts: dict[str, int] = {}
+    for r in results:
+        counts[r["result"]] = counts.get(r["result"], 0) + 1
+    return jsonify(results=results, summary=counts)
+
+
+@bp.route("/erp/payments", methods=["POST"])
+def erp_payments():
+    """누적 입금액 — 같은 값을 여러 번 보내도 차액만 반영(멱등)."""
+    require("erp:write")
+    from core import erp
+    return _erp_result(erp.receive_payments(_items()))
+
+
+@bp.route("/erp/acks", methods=["POST"])
+def erp_acks():
+    """전표번호 회신 [{ref: "CRM-123", erp_doc_no, ok: true|false, message}] (파일·EAI 비동기 연동)."""
+    require("erp:write")
+    from core import erp
+    results = []
+    for i in _items():
+        try:
+            r = erp.receive_ack(str(i.get("ref") or ""), str(i.get("erp_doc_no") or ""), bool(i.get("ok", True)),
+                                str(i.get("message") or ""))
+            results.append({"ref": i.get("ref"), "result": "반영", **r})
+        except (ValueError, PermissionError) as exc:
+            results.append({"ref": i.get("ref"), "result": "오류", "message": str(exc)})
+    return _erp_result(results)
+
+
+@bp.route("/erp/credit", methods=["POST"])
+def erp_credit():
+    """여신한도 [{erp_code, credit_limit}] — 재무(ERP)가 원장."""
+    require("erp:write")
+    from core import erp
+    return _erp_result(erp.receive_credit(_items()))
+
+
+@bp.route("/erp/products", methods=["POST"])
+def erp_products():
+    """자재(품목) 마스터 [{code, name, unit, list_price, tax_type, category, active}]."""
+    require("erp:write")
+    if not ent.has_role(g.user, "ADMIN"):
+        raise ApiError(403, "forbidden", "품목 마스터 수신은 대리 사용자가 시스템관리자인 키만 할 수 있습니다.")
+    from core import erp
+    return _erp_result(erp.receive_products(_items()))
+
+
+# ----------------------------------------------------------------------------
 # OpenAPI
 # ----------------------------------------------------------------------------
 def _list_op(summary: str, scope: str, params: list[dict] | None = None) -> dict:
@@ -387,6 +452,27 @@ def openapi():
                                                             _q("on", "기준일 YYYY-MM-DD")],
                                              "responses": {"200": {"description": "단가"}}}},
             "/quotes": {"get": _list_op("견적 목록", "quotes:read", [_q("status", "상태")])},
+            **{f"/erp/{name}": {"post": {
+                "summary": summary, "security": [{"bearer": ["erp:write"]}],
+                "requestBody": {"required": True, "content": {"application/json": {"schema": {
+                    "type": "object", "required": ["items"],
+                    "properties": {"items": {"type": "array", "maxItems": MAX_ITEMS,
+                                             "items": {"type": "object", "properties": props}}}}}}},
+                "responses": {"200": {"description": "항목별 결과 {results, summary}"},
+                              "400": {"$ref": "#/components/responses/Error"},
+                              "403": {"$ref": "#/components/responses/Error"}}}}
+               for name, summary, props in (
+                   ("payments", "ERP 누적 입금액 수신 (차액만 반영, 멱등)",
+                    {"ref": {"type": "string", "example": "CRM-123"}, "erp_doc_no": {"type": "string"},
+                     "paid_total": {"type": "integer"}, "sale_total": {"type": "integer"}}),
+                   ("acks", "전표번호 회신 (비동기 연동)",
+                    {"ref": {"type": "string"}, "erp_doc_no": {"type": "string"}, "ok": {"type": "boolean"},
+                     "message": {"type": "string"}}),
+                   ("credit", "여신한도 수신", {"erp_code": {"type": "string"}, "credit_limit": {"type": "integer"}}),
+                   ("products", "자재(품목) 마스터 수신 (대리 사용자 관리자)",
+                    {"code": {"type": "string"}, "name": {"type": "string"}, "unit": {"type": "string"},
+                     "list_price": {"type": "integer"}, "tax_type": {"type": "string", "enum": list(db.TAX_TYPES)},
+                     "category": {"type": "string"}, "active": {"type": "integer"}}))},
             "/quotes/{id}": {"get": {"summary": "견적 상세 (품목 포함)", "security": [{"bearer": ["quotes:read"]}],
                                      "parameters": [{"name": "id", "in": "path", "required": True,
                                                      "schema": {"type": "integer"}}],

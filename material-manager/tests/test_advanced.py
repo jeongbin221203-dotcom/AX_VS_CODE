@@ -4,7 +4,6 @@ SQLite(기본)와 PostgreSQL(MM_DATABASE_URL=...mm_test) 모두에서 돌린다.
 """
 from __future__ import annotations
 
-import io
 import os
 import re
 import sys
@@ -130,7 +129,7 @@ def idp(monkeypatch):
 
 
 def sso_login(c, idp_state, claims):
-    res = c.get("/sso/login")
+    res = post(c, "/sso/login")
     q = urllib.parse.parse_qs(urllib.parse.urlsplit(res.headers["Location"]).query)
     assert q["code_challenge_method"] == ["S256"]
     idp_state["nonce"] = q["nonce"][0]
@@ -159,7 +158,7 @@ def test_sso_rejects_bad_token_and_collisions(app, idp):
     res = c.get("/sso/callback?code=abc&state=forged")
     assert res.status_code == 302 and c.get("/stock/").status_code == 302, "state 위조"
     c = app.test_client()
-    res = c.get("/sso/login")
+    res = post(c, "/sso/login")
     q = urllib.parse.parse_qs(urllib.parse.urlsplit(res.headers["Location"]).query)
     idp["nonce"] = "다른-nonce"
     idp["claims"] = {"sub": "u-2", "preferred_username": "kim", "groups": ["grp-mm-clerk"]}

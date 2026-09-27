@@ -97,7 +97,9 @@ def enqueue(conn, tx_id: int, reversal_of: int | None = None) -> str:
     status = "PENDING"
     if reversal_of is not None:
         orig = conn.execute("SELECT id, status FROM sap_outbox WHERE tx_id = ?", (reversal_of,)).fetchone()
-        if orig is not None and orig["status"] in ("PENDING", "ERROR", "FAILED"):
+        if orig is None:                              # 원거래가 SAP 연동 전 거래 → SAP에도 없으니 보낼 것 없음
+            return "NONE"
+        if orig["status"] in ("PENDING", "ERROR", "FAILED"):
             conn.execute("UPDATE sap_outbox SET status = 'CANCELLED', last_error = ?, updated_at = ? WHERE id = ?",
                          ("전송 전에 취소됨", ts, orig["id"]))
             status = "CANCELLED"
