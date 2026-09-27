@@ -12,6 +12,10 @@
       <option value="">모든 등급</option>
       {% for gr in GRADES %}<option value="{{ gr.level }}" {{ 'selected' if level == gr.level }}>{{ gr.name }}</option>{% endfor %}
     </select>
+    <select name="tier" data-autosubmit aria-label="필수/도전">
+      <option value="">필수 + 도전</option>
+      {% for k, v in TIERS.items() %}<option value="{{ k }}" {{ 'selected' if tier == k }}>{{ v }} 단어</option>{% endfor %}
+    </select>
     <select name="set" data-autosubmit aria-label="단어 범위">
       {% for k, v in sets.items() %}<option value="{{ k }}" {{ 'selected' if which == k }}>{{ v }}</option>{% endfor %}
     </select>
@@ -22,7 +26,7 @@
 <div class="card listen-card" id="ls-card">
   <div class="spread small muted"><span id="ls-prog"></span><span id="ls-phase"></span></div>
   <div class="ls-word" id="ls-word">준비</div>
-  <div class="ls-pos muted" id="ls-pos"></div>
+  <div class="ls-pos muted"><span id="ls-pos"></span> <span class="tag ok hidden" id="ls-tier">도전</span></div>
   <div class="ls-meaning" id="ls-meaning">{{ words|length }}개 단어</div>
   <div class="ls-ex muted" id="ls-ex"></div>
   <div class="ls-controls">
@@ -72,7 +76,7 @@
     <table class="small"><tbody>
       {% for n, a, b in chunks %}
         <tr><td>{{ n }}번 파일</td><td class="num">{{ a }}~{{ b }}번째 단어</td><td class="muted">{{ words[a - 1].word }} … {{ words[b - 1].word }}</td>
-          <td class="r"><a class="btn small" data-audio-link href="{{ url_for('vocab.audio_file', level=level or '', set=which, chunk=n) }}">받기</a></td></tr>
+          <td class="r"><a class="btn small" data-audio-link href="{{ url_for('vocab.audio_file', level=level or '', set=which, tier=tier or '', chunk=n) }}">받기</a></td></tr>
       {% endfor %}
     </tbody></table>
     </div>
@@ -82,7 +86,7 @@
     {% endif %}
   </div>
 </div>
-<script type="application/json" id="ls-data">{{ {"words": words, "tts": tts, "key": (level or 0)|string + "-" + which}|tojson }}</script>
+<script type="application/json" id="ls-data">{{ {"words": words, "tts": tts, "key": (level or 0)|string + "-" + which + "-" + (tier or "all")}|tojson }}</script>
 {% else %}
 <div class="card empty">이 조건에 해당하는 단어가 없습니다. 범위를 '전체'로 바꿔 보세요.</div>
 {% endif %}

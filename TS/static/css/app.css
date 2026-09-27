@@ -266,9 +266,15 @@ ul.clean { padding-left: 1.1em; margin: 0; }
 ul.clean li { margin: 4px 0; }
 
 @media (max-width: 640px) {
-  .topbar { flex-direction: column; align-items: stretch; gap: 6px; padding: 8px 12px; }
+  .topbar { flex-direction: column; align-items: stretch; gap: 6px; padding: 8px 12px; position: static; }
+  .nav { flex-wrap: wrap; overflow: visible; }
+  .nav a { padding: 6px 9px; }
   .wrap { padding: 16px 16px 48px; }
-  .quiz-top { top: 86px; }
+  .quiz-top { top: 0; }
   .choices.row4 { grid-template-columns: repeat(2, 1fr); }
   .grade-btns { grid-template-columns: repeat(2, 1fr); }
+  .qnav { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; }
+  .qnav button { min-width: 40px; min-height: 36px; flex: none; }
+  .quiz-top .btn.small { min-height: 36px; }
+  .choice { padding: 11px 12px; }
 }

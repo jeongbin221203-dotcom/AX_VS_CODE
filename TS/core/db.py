@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS sessions (
     level        INTEGER,
     items        TEXT NOT NULL,        -- JSON: ["5:p5-001", "3:p3-004", ...] 문제 묶음 순서
     time_limit   INTEGER,              -- RC 제한 시간(초), 없으면 NULL
+    seen_before  INTEGER,              -- 모의고사: 전에 풀어 본 문제 묶음 수
     total        INTEGER NOT NULL DEFAULT 0,
     correct      INTEGER NOT NULL DEFAULT 0,
     lc_total     INTEGER NOT NULL DEFAULT 0,
@@ -105,6 +106,9 @@ def configure(path: Path | str) -> None:
     _db_path.parent.mkdir(parents=True, exist_ok=True)
     with connect() as con:
         con.executescript(SCHEMA)
+        cols = {r["name"] for r in con.execute("PRAGMA table_info(sessions)")}
+        if "seen_before" not in cols:                       # 예전 DB 업그레이드
+            con.execute("ALTER TABLE sessions ADD COLUMN seen_before INTEGER")
 
 
 @contextmanager

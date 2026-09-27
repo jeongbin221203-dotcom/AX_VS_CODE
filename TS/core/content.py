@@ -16,6 +16,7 @@ from pathlib import Path
 LC_PARTS = (1, 2, 3, 4)
 RC_PARTS = (5, 6, 7)
 PARTS = LC_PARTS + RC_PARTS
+TIERS = {"core": "필수", "stretch": "도전"}
 SET_PARTS = (3, 4, 6, 7)
 
 PART_INFO = {
@@ -84,7 +85,9 @@ class Bank:
                 it["part"] = part
                 by_id[f"{part}:{it['id']}"] = it
             items[part] = data
-        vocab = self._read_all("vocab")
+        vocab = [dict(v) for v in self._read_all("vocab")]
+        for v in vocab:
+            v.setdefault("tier", "core")               # 필수(core) / 도전(stretch)
         # 다 읽은 뒤 한 번에 바꿔 끼운다
         self.items, self.by_id = items, by_id
         self.vocab, self.vocab_by_id = vocab, {v["id"]: v for v in vocab}

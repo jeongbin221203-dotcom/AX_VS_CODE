@@ -84,11 +84,12 @@ def new_learned_today(today: date | None = None) -> int:
 
 
 def queue(bank: Bank, level: int | None, daily_new: int, starred_only: bool = False,
-          today: date | None = None) -> dict:
+          today: date | None = None, tier: str | None = None) -> dict:
     """오늘 볼 카드: 복습 예정(due) 먼저, 그다음 새 단어(하루 한도까지)."""
     today = today or date.today()
     cs = cards()
-    words = [w for w in bank.vocab if not level or w["level"] == level]
+    words = [w for w in bank.vocab if (not level or w["level"] == level) and (not tier or w["tier"] == tier)]
+    words.sort(key=lambda w: (w["level"], w["tier"] != "core"))      # 새 단어는 낮은 등급·필수 단어부터
     due = [w for w in words if w["id"] in cs and cs[w["id"]]["reps"] + cs[w["id"]]["lapses"] > 0
            and cs[w["id"]]["due"] <= today.isoformat() and (not starred_only or cs[w["id"]]["starred"])]
     due.sort(key=lambda w: cs[w["id"]]["due"])
@@ -107,8 +108,13 @@ def level_progress(bank: Bank, today: date | None = None) -> list[dict]:
     for lv in range(1, 6):
         words = [w for w in bank.vocab if w["level"] == lv]
         seen = [cs[w["id"]] for w in words if w["id"] in cs and cs[w["id"]]["reps"] + cs[w["id"]]["lapses"] > 0]
+        tiers = {}
+        for t in ("core", "stretch"):
+            tw = [w for w in words if w["tier"] == t]
+            tc = [cs[w["id"]] for w in tw if w["id"] in cs and cs[w["id"]]["reps"] + cs[w["id"]]["lapses"] > 0]
+            tiers[t] = {"total": len(tw), "seen": len(tc), "mastered": sum(1 for c in tc if c["interval"] >= MASTERED_DAYS)}
         out.append({
-            "level": lv,
+            "level": lv, "tiers": tiers,
             "total": len(words),
             "seen": len(seen),
             "mastered": sum(1 for c in seen if c["interval"] >= MASTERED_DAYS),

@@ -283,3 +283,12 @@ def test_audio_text_cleaning():
     from core.audio import _clean
     assert _clean("comply with ~") == "comply with"
     assert _clean("청구서(송장), 계산서") == "청구서, 계산서"
+
+
+def test_every_level_has_core_and_stretch_words(bank):
+    for lv in range(1, 6):
+        tiers = {w["tier"] for w in bank.vocab if w["level"] == lv}
+        assert tiers == {"core", "stretch"}, f"level {lv}: {tiers}"
+    stretch_first = srs.queue(bank, 2, 5, tier="stretch")["new"]
+    assert stretch_first and all(w["tier"] == "stretch" for w in stretch_first)
+    assert all(w["tier"] == "core" for w in srs.queue(bank, 2, 5)["new"])    # 새 단어는 필수부터

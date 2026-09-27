@@ -26,6 +26,7 @@
     $("vs-kind").textContent = again.has(cur.id) ? "다시 보기" : cur.is_new ? "새 단어" : "복습";
     $("vs-word").textContent = cur.word;
     $("vs-pos").textContent = cur.pos;
+    $("vs-tier").classList.toggle("hidden", cur.tier !== "stretch");
     $("vs-meaning").textContent = cur.meaning;
     $("vs-ex").textContent = cur.example;
     $("vs-exko").textContent = cur.example_ko;

@@ -61,16 +61,18 @@
   </div>
 </div>
 
-<div class="card" style="margin-top:14px">
-  <div class="spread">
-    <div><h2 style="margin:0">{{ grade.name }} 단어 {{ vocab_n }}개</h2>
-      <span class="small muted">이 등급 문제에 자주 나오는 단어</span></div>
+<div class="grid two" style="margin-top:14px">
+  {% for t, label, hint in [('core', '필수 단어', grade.name ~ ' 점수대에서 꼭 알아야 할 단어'), ('stretch', '도전 단어', ('이 단어까지 알면 ' ~ GRADE_BY_LEVEL[level + 1].name ~ '(' ~ GRADE_BY_LEVEL[level + 1].low ~ '점+)에 도전할 만합니다') if level < 5 else '900점 이상 만점권을 가르는 단어')] %}
+  <div class="card">
+    <h2 style="margin:0">{{ label }} {{ vocab_n[t] }}개</h2>
+    <p class="small muted" style="margin:4px 0 10px">{{ hint }}</p>
     <div class="row">
-      <a class="btn" href="{{ url_for('vocab.word_list', level=level) }}">목록</a>
-      <a class="btn" href="{{ url_for('vocab.quiz', level=level) }}">뜻 고르기 퀴즈</a>
-      <a class="btn" href="{{ url_for('vocab.listen', level=level) }}">🔊 듣기</a>
-      <a class="btn primary" href="{{ url_for('vocab.study', level=level) }}">카드 학습</a>
+      <a class="btn {{ 'primary' if t == 'core' }}" href="{{ url_for('vocab.study', level=level, tier=t) }}">카드 학습</a>
+      <a class="btn" href="{{ url_for('vocab.listen', level=level, tier=t) }}">🔊 듣기</a>
+      <a class="btn" href="{{ url_for('vocab.quiz', level=level, tier=t) }}">퀴즈</a>
+      <a class="btn" href="{{ url_for('vocab.word_list', level=level, tier=t) }}">목록</a>
     </div>
   </div>
+  {% endfor %}
 </div>
 {% endblock %}

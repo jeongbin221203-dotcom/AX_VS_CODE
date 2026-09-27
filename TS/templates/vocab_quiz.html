@@ -5,8 +5,12 @@
   <div><h1>뜻 고르기 퀴즈 {% if level %}{{ grade_badge(level) }}{% endif %}</h1>
     <div class="muted small">무작위 {{ questions|length }}단어 · 같은 품사의 뜻을 오답으로 섞습니다. 결과는 카드 일정에 영향을 주지 않습니다.</div></div>
   <div class="seg">
-    <a href="{{ url_for('vocab.quiz') }}" class="{{ 'on' if not level }}">전체</a>
-    {% for gr in GRADES %}<a href="{{ url_for('vocab.quiz', level=gr.level) }}" class="{{ 'on' if level == gr.level }}">{{ gr.name }}</a>{% endfor %}
+    <a href="{{ url_for('vocab.quiz', tier=tier or '') }}" class="{{ 'on' if not level }}">전체</a>
+    {% for gr in GRADES %}<a href="{{ url_for('vocab.quiz', level=gr.level, tier=tier or '') }}" class="{{ 'on' if level == gr.level }}">{{ gr.name }}</a>{% endfor %}
+  </div>
+  <div class="seg">
+    <a href="{{ url_for('vocab.quiz', level=level or '') }}" class="{{ 'on' if not tier }}">필수+도전</a>
+    {% for k, v in TIERS.items() %}<a href="{{ url_for('vocab.quiz', level=level or '', tier=k) }}" class="{{ 'on' if tier == k }}">{{ v }}</a>{% endfor %}
   </div>
 </div>
 <div class="card" style="max-width:680px;margin:0 auto" id="vq">

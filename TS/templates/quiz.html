@@ -7,7 +7,12 @@
   <p class="muted">문제 {{ payload["items"]|length }}개 묶음
     {% if s.time_limit %} · RC 제한 시간 {{ (s.time_limit // 60) }}분{% endif %}</p>
   <ul class="clean small">
-    {% if s.mode in ('mock', 'diagnostic') %}
+    {% if payload.real %}
+      <li><b>실제 시험과 같은 진행입니다.</b> LC는 음성에 맞춰 자동으로 넘어가며, 다시 듣기·되돌아가기·일시정지가 없습니다.</li>
+      <li>답할 시간: Part 1·2 5초, Part 3·4는 문제를 읽어 준 뒤 8초(표 문제 12초). 음성이 나오는 동안 미리 문제를 읽어 두세요.</li>
+      <li>LC가 끝나면 RC 75분이 자동으로 시작됩니다. RC 안에서는 문제를 자유롭게 오갈 수 있고, 시간이 끝나면 자동 제출합니다.</li>
+      <li>새로고침하거나 창을 닫아도 답안은 이 브라우저에 남아 이어서 볼 수 있습니다.</li>
+    {% elif s.mode in ('mock', 'diagnostic') %}
       <li>끝까지 풀고 <b>제출</b>하면 채점과 추정 점수가 나옵니다. 중간에 정답은 보여 주지 않습니다.</li>
       <li>듣기(LC)는 문제마다 <b>한 번만</b> 재생됩니다. 화면에 들어가면 자동으로 시작합니다.</li>
       <li>RC 제한 시간은 RC 문제를 보고 있는 동안만 줄어듭니다. 시간이 끝나면 자동 제출합니다.</li>

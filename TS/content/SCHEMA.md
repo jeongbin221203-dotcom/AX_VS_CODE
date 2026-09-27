@@ -90,3 +90,5 @@ question type: 주제·목적 | 세부 사항 | 사실 확인(NOT/TRUE) | 추론
 ```
 - pos: n. | v. | adj. | adv. | prep. | conj. | phr.
 - tip: 자주 나오는 짝꿍 표현·혼동 단어·파생어. 없으면 빈 문자열.
+- tier: `core`(필수 — 그 점수대에서 꼭 알아야 할 단어) | `stretch`(도전 — 알면 다음 등급에 도전할 만한 단어). 없으면 core.
+- 파일: vocab.json, vocab_2.json, vocab_3.json(등급별 기본), vocab_s1~s5.json(등급별 도전 단어 추가분).

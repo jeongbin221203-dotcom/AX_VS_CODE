@@ -10,6 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent
 DB_PATH = Path(os.environ.get("TS_DB_PATH", BASE_DIR / "data" / "ts.db"))
 CONTENT_DIR = Path(os.environ.get("TS_CONTENT_DIR", BASE_DIR / "content" / "toeic"))
 PORT = int(os.environ.get("TS_PORT", "5003"))          # 대한사료 5000, 영업 5001, 자재 5002와 분리
+HOST = os.environ.get("TS_HOST", "127.0.0.1")          # 같은 와이파이의 휴대폰에서 접속하려면 TS_HOST=0.0.0.0
 DEBUG = os.environ.get("TS_DEBUG", "0") == "1"
 
 

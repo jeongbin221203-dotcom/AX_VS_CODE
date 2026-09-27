@@ -17,20 +17,22 @@ class StudyError(ValueError):
 
 # ---- 세션 만들기 ------------------------------------------------------------------
 
-def _attempted_refs(part: int) -> set[str]:
+def _last_seen() -> dict[str, str]:
+    """{ref: 마지막으로 푼 시각} — 안 푼 문제·오래전에 푼 문제를 먼저 내기 위해."""
     with db.connect() as con:
-        rows = con.execute("SELECT DISTINCT item_id FROM attempts WHERE part = ?", (part,)).fetchall()
-    return {f"{part}:{r['item_id']}" for r in rows}
+        rows = con.execute("SELECT part, item_id, MAX(created_at) AS t FROM attempts GROUP BY part, item_id").fetchall()
+    return {f"{r['part']}:{r['item_id']}": r["t"] for r in rows}
 
 
 def _create(mode: str, refs: list[str], *, variant: str | None = None, part: int | None = None,
-            level: int | None = None, time_limit: int | None = None) -> int:
+            level: int | None = None, time_limit: int | None = None, seen_before: int | None = None) -> int:
     if not refs:
         raise StudyError("조건에 맞는 문제가 없습니다. 등급이나 유형 조건을 바꿔 보세요.")
     with db.connect() as con:
         cur = con.execute(
-            "INSERT INTO sessions(created_at, mode, variant, part, level, items, time_limit) VALUES (?,?,?,?,?,?,?)",
-            (db.now(), mode, variant, part, level, json.dumps(refs), time_limit))
+            "INSERT INTO sessions(created_at, mode, variant, part, level, items, time_limit, seen_before) "
+            "VALUES (?,?,?,?,?,?,?,?)",
+            (db.now(), mode, variant, part, level, json.dumps(refs), time_limit, seen_before))
         return int(cur.lastrowid)
 
 
@@ -39,13 +41,15 @@ def start_practice(bank: Bank, part: int, level: int | None, qtype: str | None, 
     if part not in PART_INFO:
         raise StudyError("알 수 없는 파트입니다.")
     n = max(1, min(n, 100))
-    refs = bank.pick(part, n, [level] if level else None, qtype or None, rng=rng,
-                     prefer_fresh=_attempted_refs(part))
+    refs = bank.pick(part, n, [level] if level else None, qtype or None, rng=rng, last_seen=_last_seen())
     return _create("practice", refs, variant=qtype or None, part=part, level=level)
 
 
-def _pick_mixed(bank: Bank, part: int, n: int, rng: random.Random, used: set[str]) -> list[str]:
+def _pick_mixed(bank: Bank, part: int, n: int, rng: random.Random, used: set[str],
+                last_seen: dict[str, str] | None = None, graphic: bool | None = None) -> list[str]:
     """등급 분포(MOCK_LEVEL_MIX)대로 n문항 가까이 뽑는다. 모자라면 다른 등급으로 채운다."""
+    if n <= 0:
+        return []
     per_item = {3: 3, 4: 3, 6: 4}.get(part, 1)          # 세트형 파트는 세트 단위로 나눈다
     units = max(1, round(n / per_item))
     raw = {lv: units * share for lv, share in scoring.MOCK_LEVEL_MIX.items()}
@@ -57,13 +61,13 @@ def _pick_mixed(bank: Bank, part: int, n: int, rng: random.Random, used: set[str
     for lv, k in alloc.items():
         if k <= 0:
             continue
-        refs = bank.pick(part, k * per_item, [lv], exclude=used, rng=rng)
+        refs = bank.pick(part, k * per_item, [lv], exclude=used, rng=rng, graphic=graphic, last_seen=last_seen)
         for r in refs:
             used.add(r)
             got += len(bank.questions(bank.item(r)))
         out += refs
     if got < n:
-        more = bank.pick(part, n - got, None, exclude=used, rng=rng)
+        more = bank.pick(part, n - got, None, exclude=used, rng=rng, graphic=graphic, last_seen=last_seen)
         used.update(more)
         out += more
     out.sort(key=lambda r: bank.item(r)["level"])                  # 실제 시험처럼 쉬운 문제부터
@@ -75,14 +79,43 @@ def start_mock(bank: Bank, form_key: str, rng: random.Random | None = None) -> i
     if not form:
         raise StudyError("알 수 없는 모의고사 종류입니다.")
     rng = rng or random.Random()
+    seen = _last_seen()
     used: set[str] = set()
     refs: list[str] = []
     for part in (1, 2, 3, 4, 5, 6):
-        refs += _pick_mixed(bank, part, form[f"p{part}"], rng, used)
-    p7 = bank.pick_p7(form["p7_single"], form["p7_double"], form["p7_triple"], None, rng)
-    refs += sorted(p7[:], key=lambda r: ({"single": 0, "double": 1, "triple": 2}[bank.item(r)["kind"]],
-                                         bank.item(r)["level"]))
-    return _create("mock", refs, variant=form_key, time_limit=form["rc_minutes"] * 60)
+        n = form[f"p{part}"]
+        g = form.get(f"p{part}_graphic", 0)                 # 실제 시험: Part 3·4 마지막 세트들은 시각 자료 문제
+        if g:
+            plain = _pick_mixed(bank, part, n - g * 3, rng, used, seen, graphic=False)
+            refs += plain + _pick_mixed(bank, part, g * 3, rng, used, seen, graphic=True)
+        else:
+            refs += _pick_mixed(bank, part, n, rng, used, seen)
+    p7 = bank.pick_p7(form["p7_single"], form["p7_double"], form["p7_triple"], None, rng, last_seen=seen)
+    refs += sorted(p7, key=lambda r: ({"single": 0, "double": 1, "triple": 2}[bank.item(r)["kind"]],
+                                      bank.item(r)["level"]))
+    return _create("mock", refs, variant=form_key, time_limit=form["rc_minutes"] * 60,
+                   seen_before=sum(1 for r in refs if r in seen))
+
+
+def fresh_mock_capacity(bank: Bank, form_key: str = "full") -> dict:
+    """안 푼 문제만으로 실전 모의고사를 몇 회 더 볼 수 있는지 (가장 모자란 구성 기준)."""
+    form = scoring.MOCK_FORMS[form_key]
+    seen = _last_seen()
+    fresh = {p: [it for it in bank.items.get(p, []) if bank.ref(it) not in seen] for p in PART_INFO}
+    need = {
+        "Part 1": (sum(1 for _ in fresh[1]), form["p1"]),
+        "Part 2": (len(fresh[2]), form["p2"]),
+        "Part 3": (len(fresh[3]), form["p3"] // 3),
+        "Part 4": (len(fresh[4]), form["p4"] // 3),
+        "Part 5": (len(fresh[5]), form["p5"]),
+        "Part 6": (len(fresh[6]), form["p6"] // 4),
+        "Part 7 단일": (sum(len(it["questions"]) for it in fresh[7] if it["kind"] == "single"), form["p7_single"]),
+        "Part 7 이중": (sum(1 for it in fresh[7] if it["kind"] == "double"), form["p7_double"]),
+        "Part 7 삼중": (sum(1 for it in fresh[7] if it["kind"] == "triple"), form["p7_triple"]),
+    }
+    times = {k: (have // want if want else 99) for k, (have, want) in need.items()}
+    short = min(times, key=times.get)
+    return {"times": times[short], "limit": short}
 
 
 def start_diagnostic(bank: Bank, rng: random.Random | None = None) -> int:
@@ -241,7 +274,9 @@ def finish_session(bank: Bank, sid: int, duration_sec=None) -> dict:
     lc = [(r["level"], bool(r["correct"])) for r in rows if r["part"] in LC_PARTS]
     rc = [(r["level"], bool(r["correct"])) for r in rows if r["part"] not in LC_PARTS]
     est = {"lc_est": None, "rc_est": None, "total_est": None}
-    if s["mode"] in ("mock", "diagnostic"):
+    if s["mode"] == "mock" and scoring.MOCK_FORMS.get(s["variant"] or "", {}).get("real"):
+        est = scoring.estimate_raw(sum(ok for _, ok in lc), len(lc), sum(ok for _, ok in rc), len(rc))
+    elif s["mode"] in ("mock", "diagnostic"):
         est = scoring.estimate(lc, rc)
     try:
         dur = int(duration_sec) if duration_sec is not None else None

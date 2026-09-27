@@ -182,6 +182,8 @@ def check_vocab(c: Checker, item: dict, w: str) -> None:
     c.need(item, w, "tip", str)
     if item.get("pos") not in POS:
         c.err(w, f"pos는 {sorted(POS)} 중 하나")
+    if item.get("tier", "core") not in ("core", "stretch"):
+        c.err(w, "tier는 core(필수) / stretch(도전)")
 
 
 CHECKS = {"part1.json": check_part1, "part2.json": check_part2, "part3.json": check_part3,

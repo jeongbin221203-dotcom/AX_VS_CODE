@@ -3,18 +3,22 @@
 {% block content %}
 <div class="page-head">
   <div>
-    <h1>단어 카드 {% if level %}{{ grade_badge(level) }}{% endif %}{% if starred %} ★ 별표{% endif %}</h1>
+    <h1>단어 카드 {% if level %}{{ grade_badge(level) }}{% endif %}{% if tier %} {{ TIERS[tier] }}{% endif %}{% if starred %} ★ 별표{% endif %}</h1>
     <div class="muted small" id="vs-progress"></div>
   </div>
   <div class="seg">
     <a href="{{ url_for('vocab.study') }}" class="{{ 'on' if not level and not starred }}">전체</a>
-    {% for gr in GRADES %}<a href="{{ url_for('vocab.study', level=gr.level) }}" class="{{ 'on' if level == gr.level }}">{{ gr.name }}</a>{% endfor %}
+    {% for gr in GRADES %}<a href="{{ url_for('vocab.study', level=gr.level, tier=tier or '') }}" class="{{ 'on' if level == gr.level }}">{{ gr.name }}</a>{% endfor %}
+  </div>
+  <div class="seg">
+    <a href="{{ url_for('vocab.study', level=level or '') }}" class="{{ 'on' if not tier }}">필수+도전</a>
+    {% for k, v in TIERS.items() %}<a href="{{ url_for('vocab.study', level=level or '', tier=k) }}" class="{{ 'on' if tier == k }}">{{ v }}</a>{% endfor %}
   </div>
 </div>
 
 {% if cards %}
 <div class="card flash-card" id="card">
-  <div class="spread small muted"><span id="vs-kind"></span><button class="star" id="vs-star" title="별표">★</button></div>
+  <div class="spread small muted"><span><span id="vs-kind"></span> <span class="tag ok hidden" id="vs-tier">도전</span></span><button class="star" id="vs-star" title="별표">★</button></div>
   <div class="word" id="vs-word"></div>
   <div class="pos" id="vs-pos"></div>
   <button class="btn small ghost" id="vs-say">🔊 발음 <span class="kbd">S</span></button>

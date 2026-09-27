@@ -8,10 +8,16 @@ from pathlib import Path
 from flask import Blueprint, current_app, flash, jsonify, redirect, render_template, request, send_file, url_for
 
 from core import audio, db, srs
+from core.content import TIERS
 
 from .helpers import bank
 
 bp = Blueprint("vocab", __name__)
+
+
+def _tier_arg():
+    t = request.args.get("tier", "")
+    return t if t in TIERS else None
 
 
 def _level_arg():
@@ -37,13 +43,14 @@ def overview():
 def study():
     b = bank()
     level = _level_arg()
+    tier = _tier_arg()
     starred = request.args.get("starred") == "1"
     st = db.get_settings()
-    q = srs.queue(b, level, int(st["daily_new_words"] or 0), starred_only=starred)
+    q = srs.queue(b, level, int(st["daily_new_words"] or 0), starred_only=starred, tier=tier)
     cs = srs.cards()
     cards = [{**w, "is_new": False, "starred": bool(cs.get(w["id"], {}).get("starred"))} for w in q["due"]] + \
             [{**w, "is_new": True, "starred": bool(cs.get(w["id"], {}).get("starred"))} for w in q["new"]]
-    return render_template("vocab_study.html", cards=cards, level=level, starred=starred,
+    return render_template("vocab_study.html", cards=cards, level=level, starred=starred, tier=tier, TIERS=TIERS,
                            tts={"rate": float(st["tts_rate"]), "accent": st["tts_accent"]})
 
 
@@ -51,6 +58,7 @@ def study():
 def word_list():
     b = bank()
     level = _level_arg()
+    tier = _tier_arg()
     flt = request.args.get("filter", "all")
     term = request.args.get("q", "").strip().lower()
     cs = srs.cards()
@@ -58,6 +66,8 @@ def word_list():
     rows = []
     for w in b.vocab:
         if level and w["level"] != level:
+            continue
+        if tier and w["tier"] != tier:
             continue
         if term and term not in w["word"].lower() and term not in w["meaning"]:
             continue
@@ -72,7 +82,7 @@ def word_list():
             continue
         rows.append({**w, "state": state, "card": c, "due_today": bool(seen and c["due"] <= today)})
     st = db.get_settings()
-    return render_template("vocab_list.html", rows=rows, level=level, flt=flt, q=term,
+    return render_template("vocab_list.html", rows=rows, level=level, flt=flt, q=term, tier=tier, TIERS=TIERS,
                            tts={"rate": float(st["tts_rate"]), "accent": st["tts_accent"]})
 
 
@@ -80,7 +90,8 @@ def word_list():
 def quiz():
     b = bank()
     level = _level_arg()
-    pool = [w for w in b.vocab if not level or w["level"] == level]
+    tier = _tier_arg()
+    pool = [w for w in b.vocab if (not level or w["level"] == level) and (not tier or w["tier"] == tier)]
     rng = random.Random()
     picks = rng.sample(pool, min(15, len(pool)))
     questions = []
@@ -94,7 +105,7 @@ def quiz():
                           "meaning": w["meaning"], "options": [o["meaning"] for o in opts],
                           "answer": [o["id"] for o in opts].index(w["id"]), "tip": w["tip"]})
     st = db.get_settings()
-    return render_template("vocab_quiz.html", questions=questions, level=level,
+    return render_template("vocab_quiz.html", questions=questions, level=level, tier=tier, TIERS=TIERS,
                            tts={"rate": float(st["tts_rate"]), "accent": st["tts_accent"]})
 
 
@@ -109,11 +120,13 @@ def _word_state(c) -> str:
     return "mastered" if c["interval"] >= srs.MASTERED_DAYS else "learning"
 
 
-def _listen_words(level: int | None, which: str) -> list[dict]:
+def _listen_words(level: int | None, which: str, tier: str | None = None) -> list[dict]:
     cs = srs.cards()
     out = []
-    for w in bank().vocab:
+    for w in sorted(bank().vocab, key=lambda w: (w["level"], w["tier"] != "core")):
         if level and w["level"] != level:
+            continue
+        if tier and w["tier"] != tier:
             continue
         c = cs.get(w["id"])
         st = _word_state(c)
@@ -126,7 +139,7 @@ def _listen_words(level: int | None, which: str) -> list[dict]:
         if which == "starred" and not (c and c["starred"]):
             continue
         out.append({"id": w["id"], "level": w["level"], "word": w["word"], "pos": w["pos"], "meaning": w["meaning"],
-                    "example": w["example"], "example_ko": w["example_ko"], "state": st,
+                    "example": w["example"], "example_ko": w["example_ko"], "state": st, "tier": w["tier"],
                     "starred": bool(c and c["starred"])})
     return out
 
@@ -136,10 +149,12 @@ def listen():
     level = _level_arg()
     which = request.args.get("set", "all")
     which = which if which in LISTEN_SETS else "all"
-    words = _listen_words(level, which)
+    tier = _tier_arg()
+    words = _listen_words(level, which, tier)
     st = db.get_settings()
     chunks = [(i // AUDIO_CHUNK + 1, i + 1, min(i + AUDIO_CHUNK, len(words))) for i in range(0, len(words), AUDIO_CHUNK)]
     return render_template("vocab_listen.html", words=words, level=level, which=which, sets=LISTEN_SETS,
+                           tier=tier, TIERS=TIERS,
                            chunks=chunks, audio_ok=audio.available(),
                            tts={"rate": float(st["tts_rate"]), "accent": st["tts_accent"]})
 
@@ -156,13 +171,14 @@ def audio_file():
     except ValueError:
         chunk, repeats = 1, 3
     example = request.args.get("example") == "1"
-    words = _listen_words(level, which)[(chunk - 1) * AUDIO_CHUNK: chunk * AUDIO_CHUNK]
+    tier = _tier_arg()
+    words = _listen_words(level, which, tier)[(chunk - 1) * AUDIO_CHUNK: chunk * AUDIO_CHUNK]
     try:
         path = audio.build(words, Path(current_app.config["DB_PATH"]).parent / "audio", repeats=repeats, example=example)
     except audio.AudioError as e:
         flash(str(e), "error")
-        return redirect(url_for("vocab.listen", level=level or "", set=which))
-    grade = f"L{level}" if level else "all"
+        return redirect(url_for("vocab.listen", level=level or "", set=which, tier=tier or ""))
+    grade = (f"L{level}" if level else "all") + (f"_{tier}" if tier else "")
     name = f"TOEIC_vocab_{grade}_{which}_{(chunk - 1) * AUDIO_CHUNK + 1:04d}-{(chunk - 1) * AUDIO_CHUNK + len(words):04d}.wav"
     return send_file(path, mimetype="audio/wav", as_attachment=True, download_name=name)
 

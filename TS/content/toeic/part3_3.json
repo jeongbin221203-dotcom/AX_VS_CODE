@@ -1,0 +1,3610 @@
+[
+ {
+  "id": "p3-061",
+  "level": 1,
+  "topic": "공항 수하물 분실 신고",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "W",
+    "t": "Hello. My suitcase didn't come out at baggage claim. I was on the flight from Singapore."
+   },
+   {
+    "s": "M",
+    "t": "I'm sorry about that. Can I see your boarding pass and baggage tag?"
+   },
+   {
+    "s": "W",
+    "t": "Here they are. It's a large blue suitcase with a black handle."
+   },
+   {
+    "s": "M",
+    "t": "Thank you. It looks like your bag is still in Singapore. It will arrive on the next flight tonight."
+   },
+   {
+    "s": "W",
+    "t": "Oh, good. But I'm staying at a hotel downtown."
+   },
+   {
+    "s": "M",
+    "t": "No problem. We'll deliver it to your hotel tomorrow morning. Please write the hotel address on this form."
+   }
+  ],
+  "graphic": null,
+  "questions": [
+   {
+    "q": "Where most likely are the speakers?",
+    "choices": [
+     "At a luggage store",
+     "At an airport",
+     "At a hotel",
+     "At a travel agency"
+    ],
+    "answer": 1,
+    "type": "화자 정보(직업·장소)",
+    "explanation": "여자가 \"My suitcase didn't come out at baggage claim\"이라고 하고 탑승권과 수하물표를 보여 주므로 공항 수하물 찾는 곳이다. 호텔은 여자가 묵을 곳일 뿐 대화 장소가 아니다."
+   },
+   {
+    "q": "What does the man say about the woman's bag?",
+    "choices": [
+     "It will arrive later today.",
+     "It was damaged during the flight.",
+     "It is too heavy to carry.",
+     "It was sent to the wrong city."
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "남자가 \"It will arrive on the next flight tonight\"라고 했으므로 오늘 밤 다음 비행기로 도착한다. 가방은 아직 싱가포르에 있을 뿐 다른 도시로 잘못 간 것이 아니다."
+   },
+   {
+    "q": "What does the man ask the woman to do?",
+    "choices": [
+     "Write down an address",
+     "Come back tomorrow",
+     "Pay a delivery fee",
+     "Call the hotel"
+    ],
+    "answer": 0,
+    "type": "요청·제안",
+    "explanation": "남자가 \"Please write the hotel address on this form\"이라고 했으므로 양식에 호텔 주소를 적어 달라는 요청이다. 다시 오라는 말은 없고 가방은 다음 날 아침 호텔로 배달된다."
+   }
+  ],
+  "translation": "W: 안녕하세요. 수하물 찾는 곳에서 제 여행 가방이 안 나왔어요. 싱가포르에서 오는 비행기를 탔어요.\nM: 죄송합니다. 탑승권과 수하물표를 보여 주시겠어요?\nW: 여기 있어요. 검은 손잡이가 달린 큰 파란색 가방이에요.\nM: 감사합니다. 가방이 아직 싱가포르에 있는 것 같네요. 오늘 밤 다음 비행기로 도착할 거예요.\nW: 아, 다행이네요. 그런데 저는 시내 호텔에 묵어요.\nM: 괜찮습니다. 내일 아침에 호텔로 배달해 드릴게요. 이 양식에 호텔 주소를 적어 주세요."
+ },
+ {
+  "id": "p3-062",
+  "level": 1,
+  "topic": "옷 수선 맡기기",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "M",
+    "t": "Hi. I bought these pants last week, but they're too long. Can you make them shorter?"
+   },
+   {
+    "s": "W",
+    "t": "Sure. Please put them on, and I'll check the length."
+   },
+   {
+    "s": "M",
+    "t": "OK. How about now?"
+   },
+   {
+    "s": "W",
+    "t": "I think about three centimeters shorter will look good. Is that OK?"
+   },
+   {
+    "s": "M",
+    "t": "Yes, that's fine. When will they be ready?"
+   },
+   {
+    "s": "W",
+    "t": "On Thursday afternoon. You can pay when you pick them up."
+   }
+  ],
+  "graphic": {
+   "title": "Nina's Tailor Shop — Price List",
+   "rows": [
+    [
+     "Service",
+     "Price"
+    ],
+    [
+     "Shorten pants",
+     "$12"
+    ],
+    [
+     "Shorten sleeves",
+     "$15"
+    ],
+    [
+     "Replace zipper",
+     "$18"
+    ],
+    [
+     "Take in waist",
+     "$20"
+    ]
+   ]
+  },
+  "questions": [
+   {
+    "q": "Why is the man visiting the shop?",
+    "choices": [
+     "His jacket is too small.",
+     "He lost a button.",
+     "He wants to buy new pants.",
+     "His pants are too long."
+    ],
+    "answer": 3,
+    "type": "주제·목적",
+    "explanation": "남자가 \"they're too long. Can you make them shorter?\"라고 했으므로 바지가 길어서 수선하러 왔다. 새 바지는 지난주에 이미 샀다."
+   },
+   {
+    "q": "Look at the graphic. How much will the man pay?",
+    "choices": [
+     "$12",
+     "$15",
+     "$18",
+     "$20"
+    ],
+    "answer": 0,
+    "type": "시각 자료 연계",
+    "explanation": "남자는 바지 길이를 줄이려 하므로 표의 Shorten pants 항목, 12달러를 낸다. 소매 줄임(15달러)이나 허리 줄임(20달러)은 요청하지 않았다."
+   },
+   {
+    "q": "When will the man pick up his item?",
+    "choices": [
+     "On Thursday",
+     "On Tuesday",
+     "Today",
+     "Next week"
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "여자가 \"On Thursday afternoon\"이라고 했으므로 목요일에 찾아간다. next week는 바지를 산 시점(last week)과 헷갈리게 만든 오답이다."
+   }
+  ],
+  "translation": "M: 안녕하세요. 지난주에 이 바지를 샀는데 너무 길어요. 줄여 주실 수 있나요?\nW: 그럼요. 입어 보세요, 길이를 확인할게요.\nM: 네. 지금은 어때요?\nW: 3센티미터 정도 줄이면 보기 좋을 것 같아요. 괜찮으세요?\nM: 네, 좋아요. 언제 다 되나요?\nW: 목요일 오후에요. 돈은 찾아가실 때 내시면 돼요."
+ },
+ {
+  "id": "p3-063",
+  "level": 1,
+  "topic": "보드게임 카페 이용",
+  "speakers": {
+   "W": "female",
+   "M": "male",
+   "M2": "male"
+  },
+  "script": [
+   {
+    "s": "W",
+    "t": "Welcome to Game Corner Café. How many people?"
+   },
+   {
+    "s": "M",
+    "t": "Just two of us. How much does it cost to play?"
+   },
+   {
+    "s": "W",
+    "t": "It's five dollars per person for two hours. Drinks are extra."
+   },
+   {
+    "s": "M2",
+    "t": "Do you have any games for beginners? We've never played board games before."
+   },
+   {
+    "s": "W",
+    "t": "Yes, we have a shelf of easy games by the window. I can explain the rules if you'd like."
+   },
+   {
+    "s": "M2",
+    "t": "That would be great, thanks."
+   },
+   {
+    "s": "M",
+    "t": "And can we order two iced teas, please?"
+   },
+   {
+    "s": "W",
+    "t": "Of course. Please have a seat at table four, and I'll bring them over."
+   }
+  ],
+  "graphic": null,
+  "questions": [
+   {
+    "q": "Where most likely does the woman work?",
+    "choices": [
+     "At a school",
+     "At a toy store",
+     "At a bookstore",
+     "At a café"
+    ],
+    "answer": 3,
+    "type": "화자 정보(직업·장소)",
+    "explanation": "여자가 \"Welcome to Game Corner Café\"라고 인사하고 이용 요금과 음료를 안내하므로 보드게임 카페 직원이다. 게임을 파는 장난감 가게가 아니라 시간당 요금을 받는 카페다."
+   },
+   {
+    "q": "What do the men say about themselves?",
+    "choices": [
+     "They are new to board games.",
+     "They want to buy a game.",
+     "They are regular customers.",
+     "They are waiting for a friend."
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "두 번째 남자가 \"We've never played board games before\"라고 했으므로 보드게임이 처음이다. 두 명뿐이라고 했으니 친구를 기다린다는 말은 없다."
+   },
+   {
+    "q": "What does the woman offer to do?",
+    "choices": [
+     "Bring some snacks",
+     "Explain some game rules",
+     "Give a discount",
+     "Save a table by the window"
+    ],
+    "answer": 1,
+    "type": "요청·제안",
+    "explanation": "여자가 \"I can explain the rules if you'd like\"라고 했으므로 게임 규칙 설명을 제안했다. 창가(window)는 쉬운 게임이 있는 선반 위치일 뿐 자리를 맡아 주겠다는 것이 아니다."
+   }
+  ],
+  "translation": "W: 게임 코너 카페에 오신 것을 환영합니다. 몇 분이세요?\nM: 저희 둘뿐이에요. 게임하는 데 얼마예요?\nW: 1인당 2시간에 5달러예요. 음료는 따로 받아요.\nM2: 초보자용 게임도 있나요? 저희는 보드게임을 한 번도 해 본 적이 없어요.\nW: 네, 창가 선반에 쉬운 게임들이 있어요. 원하시면 규칙을 설명해 드릴게요.\nM2: 그러면 좋죠, 고마워요.\nM: 그리고 아이스티 두 잔 주문할 수 있을까요?\nW: 물론이죠. 4번 테이블에 앉으세요, 가져다 드릴게요."
+ },
+ {
+  "id": "p3-064",
+  "level": 1,
+  "topic": "스포츠 센터 테니스 코트 예약",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "W",
+    "t": "Hi, I'd like to book a tennis court for Saturday."
+   },
+   {
+    "s": "M",
+    "t": "Sure. What time would you like?"
+   },
+   {
+    "s": "W",
+    "t": "In the morning, please. My friend and I want to play before lunch."
+   },
+   {
+    "s": "M",
+    "t": "Let me see. The courts are full until eleven, but Court 3 is free from eleven to twelve."
+   },
+   {
+    "s": "W",
+    "t": "That's perfect. We'll take it."
+   },
+   {
+    "s": "M",
+    "t": "Great. Can I have your membership number?"
+   },
+   {
+    "s": "W",
+    "t": "Oh, I'm not a member. Is that a problem?"
+   },
+   {
+    "s": "M",
+    "t": "Not at all. Non-members just pay a little more. You can pay at the front desk on Saturday."
+   }
+  ],
+  "graphic": {
+   "title": "Riverside Sports Center — Saturday Courts",
+   "rows": [
+    [
+     "Time",
+     "Court"
+    ],
+    [
+     "9:00 – 10:00",
+     "Court 1"
+    ],
+    [
+     "10:00 – 11:00",
+     "Court 2"
+    ],
+    [
+     "11:00 – 12:00",
+     "Court 3"
+    ],
+    [
+     "1:00 – 2:00",
+     "Court 4"
+    ]
+   ]
+  },
+  "questions": [
+   {
+    "q": "What does the woman want to do?",
+    "choices": [
+     "Reserve a tennis court",
+     "Join a tennis class",
+     "Watch a tennis match",
+     "Buy a tennis racket"
+    ],
+    "answer": 0,
+    "type": "주제·목적",
+    "explanation": "여자가 \"I'd like to book a tennis court for Saturday\"라고 했으므로 테니스 코트를 예약하려 한다. book을 reserve로 바꿔 표현했다."
+   },
+   {
+    "q": "Look at the graphic. What time will the woman play tennis?",
+    "choices": [
+     "9:00 – 10:00",
+     "10:00 – 11:00",
+     "11:00 – 12:00",
+     "1:00 – 2:00"
+    ],
+    "answer": 2,
+    "type": "시각 자료 연계",
+    "explanation": "남자가 \"Court 3 is free from eleven to twelve\"라고 하자 여자가 그것으로 하겠다고 했다. 표에서 Court 3은 11시~12시다. 오후 1시는 점심 전에 치고 싶다는 여자의 말과 맞지 않는다."
+   },
+   {
+    "q": "What does the man say about non-members?",
+    "choices": [
+     "They must pay online.",
+     "They pay a higher price.",
+     "They cannot play on Saturday.",
+     "They need to fill out a form."
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "남자가 \"Non-members just pay a little more\"라고 했으므로 비회원은 요금이 조금 더 비싸다. 결제는 토요일에 안내 데스크에서 하므로 온라인 결제는 오답이다."
+   }
+  ],
+  "translation": "W: 안녕하세요, 토요일에 테니스 코트를 예약하고 싶어요.\nM: 네. 몇 시로 하시겠어요?\nW: 오전으로요. 친구랑 점심 전에 치고 싶어요.\nM: 볼게요. 11시까지는 코트가 다 찼는데, 3번 코트가 11시부터 12시까지 비어 있어요.\nW: 딱 좋네요. 그걸로 할게요.\nM: 좋습니다. 회원 번호를 알려 주시겠어요?\nW: 아, 저는 회원이 아니에요. 문제가 되나요?\nM: 전혀요. 비회원은 요금을 조금 더 내시기만 하면 돼요. 토요일에 안내 데스크에서 결제하시면 됩니다."
+ },
+ {
+  "id": "p3-065",
+  "level": 1,
+  "topic": "택배 방문 수거 요청",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "M",
+    "t": "Hello, this is Fast Line Couriers. How can I help you?"
+   },
+   {
+    "s": "W",
+    "t": "Hi. I need to send a box to our office in Chicago. Can someone pick it up today?"
+   },
+   {
+    "s": "M",
+    "t": "Yes. Our driver can come between two and four this afternoon. What's your address?"
+   },
+   {
+    "s": "W",
+    "t": "It's 45 Maple Street, the Brighton Building. We're on the fifth floor."
+   },
+   {
+    "s": "M",
+    "t": "Got it. How big is the box?"
+   },
+   {
+    "s": "W",
+    "t": "It's small. It has some sample products in it."
+   },
+   {
+    "s": "M",
+    "t": "OK. Please print the shipping label from our Web site and put it on the box before the driver arrives."
+   }
+  ],
+  "graphic": null,
+  "questions": [
+   {
+    "q": "Why is the woman calling?",
+    "choices": [
+     "To report a lost package",
+     "To arrange a package pickup",
+     "To change a delivery address",
+     "To order sample products"
+    ],
+    "answer": 1,
+    "type": "주제·목적",
+    "explanation": "여자가 \"Can someone pick it up today?\"라고 했으므로 택배 수거를 요청하려고 전화했다. 샘플 제품은 상자 안에 든 물건일 뿐 주문하려는 것이 아니다."
+   },
+   {
+    "q": "When will the driver arrive?",
+    "choices": [
+     "This morning",
+     "This evening",
+     "Tomorrow morning",
+     "This afternoon"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "남자가 \"Our driver can come between two and four this afternoon\"이라고 했으므로 오늘 오후에 온다."
+   },
+   {
+    "q": "What does the man ask the woman to do?",
+    "choices": [
+     "Bring a box to the lobby",
+     "Attach a label to a box",
+     "Call back later",
+     "Pay the driver in cash"
+    ],
+    "answer": 1,
+    "type": "요청·제안",
+    "explanation": "남자가 \"Please print the shipping label ... and put it on the box\"라고 했으므로 상자에 배송 라벨을 붙이라는 요청이다. put it on을 attach로 바꿔 표현했다."
+   }
+  ],
+  "translation": "M: 안녕하세요, 패스트 라인 택배입니다. 무엇을 도와드릴까요?\nW: 안녕하세요. 시카고 사무실로 상자 하나를 보내야 해요. 오늘 누가 가지러 올 수 있나요?\nM: 네. 오늘 오후 2시에서 4시 사이에 기사님이 갈 수 있어요. 주소가 어떻게 되세요?\nW: 메이플 가 45번지, 브라이턴 빌딩이에요. 저희는 5층에 있어요.\nM: 알겠습니다. 상자는 얼마나 큰가요?\nW: 작아요. 샘플 제품이 들어 있어요.\nM: 네. 기사님이 도착하기 전에 저희 웹사이트에서 배송 라벨을 출력해서 상자에 붙여 주세요."
+ },
+ {
+  "id": "p3-066",
+  "level": 1,
+  "topic": "도서관 회원증 발급",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "W",
+    "t": "Excuse me. I just moved to this town. How can I get a library card?"
+   },
+   {
+    "s": "M",
+    "t": "It's easy. I just need to see a photo ID and something with your new address on it."
+   },
+   {
+    "s": "W",
+    "t": "I have my driver's license and a phone bill. Is that enough?"
+   },
+   {
+    "s": "M",
+    "t": "Yes, that's fine. Please fill out this short form."
+   },
+   {
+    "s": "W",
+    "t": "OK. How many books can I borrow at one time?"
+   },
+   {
+    "s": "M",
+    "t": "Up to ten books, for three weeks. Here's your card. You can also use it to borrow movies."
+   }
+  ],
+  "graphic": null,
+  "questions": [
+   {
+    "q": "Who most likely is the man?",
+    "choices": [
+     "A bookstore owner",
+     "A librarian",
+     "A real estate agent",
+     "A bank teller"
+    ],
+    "answer": 1,
+    "type": "화자 정보(직업·장소)",
+    "explanation": "여자가 도서관 회원증(library card) 발급을 묻고 남자가 대출 권수와 기간을 안내하므로 남자는 도서관 직원이다."
+   },
+   {
+    "q": "What does the woman say she recently did?",
+    "choices": [
+     "She paid a phone bill.",
+     "She started a new job.",
+     "She lost her library card.",
+     "She moved to a new town."
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "여자가 \"I just moved to this town\"이라고 했으므로 최근에 이사를 왔다. 전화 요금 고지서는 주소 확인용으로 가져온 서류다."
+   },
+   {
+    "q": "How long can the woman keep the books?",
+    "choices": [
+     "Two weeks",
+     "Ten days",
+     "One week",
+     "Three weeks"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "남자가 \"Up to ten books, for three weeks\"라고 했으므로 3주 동안 빌릴 수 있다. ten은 빌릴 수 있는 책 권수다."
+   }
+  ],
+  "translation": "W: 실례합니다. 이 동네로 막 이사 왔는데요. 도서관 회원증은 어떻게 만들 수 있나요?\nM: 간단해요. 사진이 있는 신분증과 새 주소가 적힌 서류만 보여 주시면 돼요.\nW: 운전면허증이랑 전화 요금 고지서가 있어요. 그거면 될까요?\nM: 네, 됩니다. 이 짧은 양식을 작성해 주세요.\nW: 네. 한 번에 몇 권까지 빌릴 수 있나요?\nM: 최대 10권을 3주 동안 빌릴 수 있어요. 여기 회원증이요. 영화를 빌릴 때도 쓰실 수 있어요."
+ },
+ {
+  "id": "p3-067",
+  "level": 1,
+  "topic": "꽃집에서 개업 축하 꽃 주문",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "M",
+    "t": "Hi. I'd like to send some flowers to a friend. She's opening a new restaurant on Monday."
+   },
+   {
+    "s": "W",
+    "t": "How nice. We have some beautiful plants that are popular for new businesses."
+   },
+   {
+    "s": "M",
+    "t": "Hmm, I think she'd like flowers more. Maybe something yellow?"
+   },
+   {
+    "s": "W",
+    "t": "How about these sunflowers? They're very fresh."
+   },
+   {
+    "s": "M",
+    "t": "They're great. Can you deliver them on Monday morning?"
+   },
+   {
+    "s": "W",
+    "t": "Yes. Would you like to add a card? You can write a message here."
+   }
+  ],
+  "graphic": null,
+  "questions": [
+   {
+    "q": "Why is the man sending flowers?",
+    "choices": [
+     "A friend is moving to a new house.",
+     "A friend is opening a business.",
+     "A friend is having a birthday.",
+     "A friend got a new job."
+    ],
+    "answer": 1,
+    "type": "주제·목적",
+    "explanation": "남자가 \"She's opening a new restaurant on Monday\"라고 했으므로 친구의 식당 개업을 축하하려는 것이다. 새 식당을 business로 바꿔 표현했다."
+   },
+   {
+    "q": "What kind of flowers does the man choose?",
+    "choices": [
+     "Lilies",
+     "Tulips",
+     "Sunflowers",
+     "Roses"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "여자가 \"How about these sunflowers?\"라고 하자 남자가 \"They're great\"라고 했으므로 해바라기를 골랐다."
+   },
+   {
+    "q": "What does the woman suggest?",
+    "choices": [
+     "Picking up the flowers",
+     "Paying for delivery later",
+     "Adding a message card",
+     "Choosing a plant"
+    ],
+    "answer": 2,
+    "type": "요청·제안",
+    "explanation": "여자가 마지막에 \"Would you like to add a card?\"라고 했으므로 메시지 카드를 추가하라고 제안했다. 화분도 처음에 권했지만 남자가 꽃을 원한다고 한 뒤로는 제안하지 않았고, 대화 마지막 제안은 카드다."
+   }
+  ],
+  "translation": "M: 안녕하세요. 친구에게 꽃을 보내고 싶어요. 친구가 월요일에 새 식당을 열거든요.\nW: 좋네요. 개업 선물로 인기 있는 예쁜 화분들이 있어요.\nM: 음, 친구는 꽃을 더 좋아할 것 같아요. 노란색 꽃이면 좋겠어요.\nW: 이 해바라기는 어떠세요? 아주 싱싱해요.\nM: 좋네요. 월요일 아침에 배달해 주실 수 있나요?\nW: 네. 카드도 함께 넣으시겠어요? 여기에 메시지를 쓰시면 돼요."
+ },
+ {
+  "id": "p3-068",
+  "level": 1,
+  "topic": "세차장 서비스 선택",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "W",
+    "t": "Hi. I'd like to get my car washed. What services do you have?"
+   },
+   {
+    "s": "M",
+    "t": "We have a basic wash for ten dollars. It cleans the outside of the car."
+   },
+   {
+    "s": "W",
+    "t": "What about the inside? There's a lot of sand in it from the beach."
+   },
+   {
+    "s": "M",
+    "t": "Then you need the full service. It's twenty dollars, and we vacuum the inside too."
+   },
+   {
+    "s": "W",
+    "t": "OK, I'll get that one. How long will it take?"
+   },
+   {
+    "s": "M",
+    "t": "About thirty minutes. You can wait in our lounge. There's free coffee."
+   }
+  ],
+  "graphic": null,
+  "questions": [
+   {
+    "q": "What problem does the woman mention?",
+    "choices": [
+     "Her car has sand inside.",
+     "Her car will not start.",
+     "Her car needs new tires.",
+     "Her car window is broken."
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "여자가 \"There's a lot of sand in it from the beach\"라고 했으므로 차 안에 모래가 많다."
+   },
+   {
+    "q": "How much will the woman most likely pay?",
+    "choices": [
+     "$15",
+     "$10",
+     "$20",
+     "$30"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "남자가 실내 청소까지 하는 full service는 \"twenty dollars\"라고 했고 여자가 그것으로 하겠다고 했으므로 20달러다. 10달러는 외부만 닦는 기본 세차다."
+   },
+   {
+    "q": "What does the man suggest the woman do?",
+    "choices": [
+     "Pay in advance",
+     "Come back tomorrow",
+     "Leave her car keys",
+     "Wait in a lounge"
+    ],
+    "answer": 3,
+    "type": "요청·제안",
+    "explanation": "남자가 \"You can wait in our lounge\"라고 했으므로 휴게실에서 기다리라고 권했다. 30분이면 끝나므로 내일 다시 오라는 말은 없다."
+   }
+  ],
+  "translation": "W: 안녕하세요. 세차를 하고 싶은데요. 어떤 서비스가 있나요?\nM: 10달러짜리 기본 세차가 있어요. 차 바깥을 닦아 드려요.\nW: 안쪽은요? 바닷가에 다녀와서 모래가 많아요.\nM: 그럼 풀서비스가 필요하시겠네요. 20달러이고, 실내도 진공청소기로 청소해 드려요.\nW: 좋아요, 그걸로 할게요. 얼마나 걸리나요?\nM: 30분 정도요. 저희 휴게실에서 기다리시면 돼요. 커피는 무료예요."
+ },
+ {
+  "id": "p3-069",
+  "level": 2,
+  "topic": "어학원 스페인어 수업 등록",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "M",
+    "t": "Hi, I'm calling about your Spanish classes. My company is sending me to Madrid in the spring, so I need to learn some basics."
+   },
+   {
+    "s": "W",
+    "t": "Great. Have you studied Spanish before?"
+   },
+   {
+    "s": "M",
+    "t": "No, never. I'm a complete beginner."
+   },
+   {
+    "s": "W",
+    "t": "Then you should take Level 1. We have two sections."
+   },
+   {
+    "s": "M",
+    "t": "I work until six on weekdays, so the evening one would be better for me."
+   },
+   {
+    "s": "W",
+    "t": "OK. There are still a few seats left. You can register on our Web site, or I can sign you up over the phone."
+   },
+   {
+    "s": "M",
+    "t": "Over the phone is fine. Do I need to buy a textbook?"
+   },
+   {
+    "s": "W",
+    "t": "Yes, but you can get it at our front desk on the first day of class."
+   }
+  ],
+  "graphic": {
+   "title": "City Language Institute — Spanish Classes",
+   "rows": [
+    [
+     "Class",
+     "Days",
+     "Time"
+    ],
+    [
+     "Level 1 (A)",
+     "Mon / Wed",
+     "10:00 A.M."
+    ],
+    [
+     "Level 1 (B)",
+     "Tue / Thu",
+     "7:00 P.M."
+    ],
+    [
+     "Level 2",
+     "Mon / Wed",
+     "7:00 P.M."
+    ],
+    [
+     "Conversation",
+     "Saturday",
+     "9:00 A.M."
+    ]
+   ]
+  },
+  "questions": [
+   {
+    "q": "Why does the man want to learn Spanish?",
+    "choices": [
+     "He needs it for a job interview.",
+     "He wants to read Spanish books.",
+     "He is moving to Madrid permanently.",
+     "He is going on a business trip."
+    ],
+    "answer": 3,
+    "type": "주제·목적",
+    "explanation": "남자가 \"My company is sending me to Madrid in the spring\"라고 했으므로 회사 일로 마드리드에 가게 되어 배운다. 영구 이주한다는 말은 없다."
+   },
+   {
+    "q": "Look at the graphic. Which class will the man most likely take?",
+    "choices": [
+     "Level 1 (A)",
+     "Level 1 (B)",
+     "Level 2",
+     "Conversation"
+    ],
+    "answer": 1,
+    "type": "시각 자료 연계",
+    "explanation": "남자는 완전 초보라 Level 1을 들어야 하고, 평일 6시까지 일해서 저녁 수업이 낫다고 했다. 표에서 저녁에 하는 Level 1은 화·목 오후 7시의 Level 1 (B)다. Level 1 (A)는 오전 수업이고, 월·수 저녁 수업은 Level 2다."
+   },
+   {
+    "q": "Where can the man get a textbook?",
+    "choices": [
+     "At a nearby bookstore",
+     "On the institute's Web site",
+     "At the institute's front desk",
+     "From his company"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "여자가 \"you can get it at our front desk on the first day of class\"라고 했으므로 어학원 안내 데스크에서 산다. 웹사이트는 등록 방법으로 언급됐다."
+   }
+  ],
+  "translation": "M: 안녕하세요, 스페인어 수업 때문에 전화드렸어요. 회사에서 봄에 저를 마드리드로 보내서 기초를 좀 배워야 해요.\nW: 좋습니다. 스페인어를 공부해 보신 적 있나요?\nM: 아니요, 전혀요. 완전 초보예요.\nW: 그럼 1단계를 들으셔야 해요. 반이 두 개 있어요.\nM: 평일에는 6시까지 일해서 저녁반이 저한테 더 나아요.\nW: 네. 아직 자리가 몇 개 남아 있어요. 저희 웹사이트에서 등록하셔도 되고, 제가 전화로 등록해 드릴 수도 있어요.\nM: 전화로 해 주세요. 교재를 사야 하나요?\nW: 네, 하지만 첫 수업 날 저희 안내 데스크에서 사시면 돼요."
+ },
+ {
+  "id": "p3-070",
+  "level": 2,
+  "topic": "자동차 대리점 정기 점검",
+  "speakers": {
+   "M": "male",
+   "W": "female",
+   "M2": "male"
+  },
+  "script": [
+   {
+    "s": "M",
+    "t": "Good morning. I have an appointment at nine for an oil change and a regular checkup."
+   },
+   {
+    "s": "W",
+    "t": "Yes, Mr. Harris. Let me get one of our mechanics. Kevin, this is Mr. Harris's car."
+   },
+   {
+    "s": "M2",
+    "t": "Hi. I'll take a look. Is there anything else you've noticed with the car?"
+   },
+   {
+    "s": "M",
+    "t": "Actually, yes. The brakes make a strange noise when I stop."
+   },
+   {
+    "s": "M2",
+    "t": "OK, I'll check them too. That might take an extra hour."
+   },
+   {
+    "s": "M",
+    "t": "Hmm. I have to be at work by ten."
+   },
+   {
+    "s": "W",
+    "t": "We can give you a ride to your office. Our shuttle leaves every half hour."
+   },
+   {
+    "s": "M",
+    "t": "That would be very helpful. Thank you."
+   }
+  ],
+  "graphic": null,
+  "questions": [
+   {
+    "q": "Where are the speakers?",
+    "choices": [
+     "At a car dealership service center",
+     "At a gas station",
+     "At a car rental office",
+     "At a parking garage"
+    ],
+    "answer": 0,
+    "type": "화자 정보(직업·장소)",
+    "explanation": "여자가 정비사(mechanic)를 부르고 남자가 오일 교환과 정기 점검 예약을 했다고 하므로 자동차 정비 서비스 센터다."
+   },
+   {
+    "q": "What problem does Mr. Harris mention?",
+    "choices": [
+     "His brakes make a noise.",
+     "His headlight is broken.",
+     "His tires are flat.",
+     "His engine will not start."
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "해리스 씨가 \"The brakes make a strange noise when I stop\"이라고 했으므로 브레이크 소음이 문제다."
+   },
+   {
+    "q": "What does the woman offer?",
+    "choices": [
+     "A free car wash",
+     "A rental car for the day",
+     "A discount on the repair",
+     "A ride to his workplace"
+    ],
+    "answer": 3,
+    "type": "요청·제안",
+    "explanation": "10시까지 출근해야 한다는 말에 여자가 \"We can give you a ride to your office\"라고 했으므로 사무실까지 태워 주겠다고 제안했다. 대여 차량 제공은 언급되지 않았다."
+   }
+  ],
+  "translation": "M: 안녕하세요. 9시에 오일 교환과 정기 점검 예약을 했어요.\nW: 네, 해리스 씨. 정비사를 불러 드릴게요. 케빈, 해리스 씨 차예요.\nM2: 안녕하세요. 제가 살펴볼게요. 차에서 다른 이상한 점을 느끼신 게 있나요?\nM: 사실 있어요. 멈출 때 브레이크에서 이상한 소리가 나요.\nM2: 네, 그것도 점검할게요. 한 시간 정도 더 걸릴 수 있어요.\nM: 음. 10시까지 회사에 가야 하는데요.\nW: 사무실까지 태워 드릴 수 있어요. 저희 셔틀이 30분마다 출발해요.\nM: 그러면 정말 도움이 되겠네요. 감사합니다."
+ },
+ {
+  "id": "p3-071",
+  "level": 2,
+  "topic": "지역 신문 광고 게재",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "W",
+    "t": "Hello, Daily Herald advertising department. This is Lisa."
+   },
+   {
+    "s": "M",
+    "t": "Hi, Lisa. I own a bakery on Pine Street, and I'd like to put an ad in your paper for our grand opening."
+   },
+   {
+    "s": "W",
+    "t": "Wonderful. How big would you like the ad to be?"
+   },
+   {
+    "s": "M",
+    "t": "I don't want to spend more than a hundred dollars, but I'd like it to be as big as possible."
+   },
+   {
+    "s": "W",
+    "t": "I understand. Then this size would be the best choice for you."
+   },
+   {
+    "s": "M",
+    "t": "Good. Can it run in this Saturday's paper?"
+   },
+   {
+    "s": "W",
+    "t": "Yes, but we need the design by Wednesday. Could you e-mail me your logo and a photo of your shop?"
+   }
+  ],
+  "graphic": {
+   "title": "Daily Herald — Ad Rates (one day)",
+   "rows": [
+    [
+     "Ad Size",
+     "Price"
+    ],
+    [
+     "Business card",
+     "$45"
+    ],
+    [
+     "Quarter page",
+     "$95"
+    ],
+    [
+     "Half page",
+     "$160"
+    ],
+    [
+     "Full page",
+     "$280"
+    ]
+   ]
+  },
+  "questions": [
+   {
+    "q": "What kind of business does the man own?",
+    "choices": [
+     "A printing company",
+     "A bakery",
+     "A flower shop",
+     "A café"
+    ],
+    "answer": 1,
+    "type": "화자 정보(직업·장소)",
+    "explanation": "남자가 \"I own a bakery on Pine Street\"라고 했으므로 제과점 주인이다."
+   },
+   {
+    "q": "Look at the graphic. Which ad size will the man most likely choose?",
+    "choices": [
+     "Business card",
+     "Quarter page",
+     "Half page",
+     "Full page"
+    ],
+    "answer": 1,
+    "type": "시각 자료 연계",
+    "explanation": "남자는 100달러 넘게 쓰고 싶지 않지만 되도록 크게 하고 싶다고 했다. 표에서 100달러 이하 중 가장 큰 것은 95달러인 Quarter page다. Half page는 160달러로 예산을 넘는다."
+   },
+   {
+    "q": "What does the woman ask the man to send?",
+    "choices": [
+     "A logo and a photo",
+     "A payment receipt",
+     "A list of prices",
+     "A signed contract"
+    ],
+    "answer": 0,
+    "type": "요청·제안",
+    "explanation": "여자가 \"Could you e-mail me your logo and a photo of your shop?\"이라고 했으므로 로고와 가게 사진을 보내 달라고 했다."
+   }
+  ],
+  "translation": "W: 안녕하세요, 데일리 헤럴드 광고부 리사입니다.\nM: 안녕하세요, 리사. 파인 가에서 제과점을 하는데요, 개업 행사 광고를 신문에 내고 싶어요.\nW: 좋습니다. 광고 크기는 어느 정도로 하시겠어요?\nM: 100달러 넘게 쓰고 싶지는 않은데, 되도록 크게 하고 싶어요.\nW: 알겠습니다. 그럼 이 크기가 가장 좋겠네요.\nM: 좋아요. 이번 토요일 신문에 실릴 수 있나요?\nW: 네, 하지만 디자인은 수요일까지 필요해요. 로고와 가게 사진을 이메일로 보내 주시겠어요?"
+ },
+ {
+  "id": "p3-072",
+  "level": 2,
+  "topic": "사과 과수원 체험 투어 예약",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "M",
+    "t": "Hi, I'm calling from Greenfield Elementary School. We'd like to bring our second-grade class to your orchard for an apple-picking tour."
+   },
+   {
+    "s": "W",
+    "t": "We'd love to have you. How many students are there?"
+   },
+   {
+    "s": "M",
+    "t": "Thirty students and four teachers. Is the first Friday in October available?"
+   },
+   {
+    "s": "W",
+    "t": "Let me check. Yes, that day is open. The tour takes about two hours, and each child can take home a small bag of apples."
+   },
+   {
+    "s": "M",
+    "t": "The kids will love that. Is there a place for them to eat lunch?"
+   },
+   {
+    "s": "W",
+    "t": "Yes, we have picnic tables next to the barn. But if it rains, we'll have to move the date."
+   },
+   {
+    "s": "M",
+    "t": "I see. Then I'll send you a list of the students' names this week."
+   }
+  ],
+  "graphic": null,
+  "questions": [
+   {
+    "q": "Who most likely is the man?",
+    "choices": [
+     "A farm worker",
+     "A bus driver",
+     "A tour guide",
+     "A school teacher"
+    ],
+    "answer": 3,
+    "type": "화자 정보(직업·장소)",
+    "explanation": "남자가 초등학교에서 전화했다며 \"We'd like to bring our second-grade class\"라고 했으므로 학교 교사다. 여자가 과수원 측 사람이다."
+   },
+   {
+    "q": "What will each student receive?",
+    "choices": [
+     "A picnic lunch",
+     "A photo of the class",
+     "A free T-shirt",
+     "A bag of apples"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "여자가 \"each child can take home a small bag of apples\"라고 했으므로 사과 한 봉지를 받는다. 점심은 먹을 장소(picnic tables)만 제공된다."
+   },
+   {
+    "q": "What does the woman say could happen?",
+    "choices": [
+     "The tour could be shortened.",
+     "The orchard could be closed for repairs.",
+     "The date could be changed because of weather.",
+     "The price could go up."
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "여자가 \"if it rains, we'll have to move the date\"라고 했으므로 비가 오면 날짜가 바뀔 수 있다. rains를 weather로, move the date를 date could be changed로 바꿔 표현했다."
+   }
+  ],
+  "translation": "M: 안녕하세요, 그린필드 초등학교에서 전화드렸어요. 2학년 반 학생들을 데리고 과수원에 사과 따기 체험을 가고 싶어요.\nW: 대환영이에요. 학생이 몇 명인가요?\nM: 학생 30명과 교사 4명이에요. 10월 첫째 주 금요일 가능할까요?\nW: 확인해 볼게요. 네, 그날 비어 있어요. 투어는 2시간 정도 걸리고, 아이들마다 사과 한 봉지씩 가져갈 수 있어요.\nM: 아이들이 정말 좋아하겠네요. 점심 먹을 곳이 있나요?\nW: 네, 헛간 옆에 피크닉 테이블이 있어요. 하지만 비가 오면 날짜를 옮겨야 해요.\nM: 알겠습니다. 그럼 이번 주에 학생 명단을 보내 드릴게요."
+ },
+ {
+  "id": "p3-073",
+  "level": 2,
+  "topic": "영화제 자원봉사자 업무 안내",
+  "speakers": {
+   "W": "female",
+   "M": "male",
+   "W2": "female"
+  },
+  "script": [
+   {
+    "s": "W",
+    "t": "Hi, everyone. Thanks for volunteering at this year's film festival. I'm Rachel, the volunteer coordinator."
+   },
+   {
+    "s": "M",
+    "t": "Hi, Rachel. I'm Daniel. I signed up to work at the ticket booth."
+   },
+   {
+    "s": "W2",
+    "t": "And I'm Grace. I'm supposed to help guests find their seats in Theater 2."
+   },
+   {
+    "s": "W",
+    "t": "Great. Your festival T-shirts are in this box. Please wear them during your shifts so guests can find you easily."
+   },
+   {
+    "s": "M",
+    "t": "What should we do if a guest asks about a movie schedule?"
+   },
+   {
+    "s": "W",
+    "t": "Every volunteer gets a printed program. It lists all the showtimes."
+   },
+   {
+    "s": "W2",
+    "t": "The first movie starts at ten, right?"
+   },
+   {
+    "s": "W",
+    "t": "Yes, and the doors open at nine thirty."
+   },
+   {
+    "s": "M",
+    "t": "Then we'd better get to our places."
+   }
+  ],
+  "graphic": null,
+  "questions": [
+   {
+    "q": "Where is the conversation most likely taking place?",
+    "choices": [
+     "At a sports stadium",
+     "At a museum",
+     "At a concert hall",
+     "At a film festival"
+    ],
+    "answer": 3,
+    "type": "화자 정보(직업·장소)",
+    "explanation": "여자가 \"Thanks for volunteering at this year's film festival\"이라고 했으므로 영화제 현장이다."
+   },
+   {
+    "q": "What does Rachel ask the volunteers to do?",
+    "choices": [
+     "Sell programs",
+     "Wear festival T-shirts",
+     "Arrive by nine o'clock",
+     "Check guests' bags"
+    ],
+    "answer": 1,
+    "type": "요청·제안",
+    "explanation": "레이철이 \"Please wear them during your shifts\"라고 했으므로 영화제 티셔츠를 입으라고 요청했다. 프로그램은 자원봉사자에게 나눠 주는 것이지 판매하는 것이 아니다."
+   },
+   {
+    "q": "What does the man imply when he says, \"Then we'd better get to our places\"?",
+    "choices": [
+     "They are in the wrong theater.",
+     "They want to leave early.",
+     "They need to find better seats.",
+     "They should start working soon."
+    ],
+    "answer": 3,
+    "type": "의도 파악",
+    "explanation": "문을 9시 30분에 연다는 말을 들은 직후에 한 말이므로 곧 업무를 시작해야 하니 각자 자리로 가자는 뜻이다. places는 좌석이 아니라 각자 맡은 근무 위치를 말한다."
+   }
+  ],
+  "translation": "W: 안녕하세요, 여러분. 올해 영화제에 자원봉사해 주셔서 감사합니다. 저는 자원봉사 담당자 레이철이에요.\nM: 안녕하세요, 레이철. 저는 대니얼이에요. 매표소 근무를 신청했어요.\nW2: 저는 그레이스예요. 2관에서 관객들이 자리를 찾도록 돕기로 했어요.\nW: 좋아요. 영화제 티셔츠는 이 상자에 있어요. 관객들이 쉽게 찾을 수 있게 근무 시간에 입어 주세요.\nM: 관객이 영화 시간표를 물어보면 어떻게 해야 하나요?\nW: 자원봉사자 모두에게 인쇄된 프로그램을 드려요. 상영 시간이 전부 나와 있어요.\nW2: 첫 영화는 10시에 시작하죠?\nW: 네, 입장은 9시 30분부터예요.\nM: 그럼 각자 자리로 가는 게 좋겠네요."
+ },
+ {
+  "id": "p3-074",
+  "level": 2,
+  "topic": "안경점에서 새 안경 맞추기",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "W",
+    "t": "Hi. I'd like to order some new glasses. Here's the prescription from my eye doctor."
+   },
+   {
+    "s": "M",
+    "t": "Thank you. Have you chosen a frame yet?"
+   },
+   {
+    "s": "W",
+    "t": "I like this black one, but it's a little expensive."
+   },
+   {
+    "s": "M",
+    "t": "This brown frame looks almost the same, and it's forty dollars cheaper."
+   },
+   {
+    "s": "W",
+    "t": "Oh, you're right. I'll take the brown one, then. How soon can I get them?"
+   },
+   {
+    "s": "M",
+    "t": "Usually it takes a week. But we're very busy this month."
+   },
+   {
+    "s": "W",
+    "t": "I see. Could you call me when they're ready? I'll leave my number."
+   }
+  ],
+  "graphic": null,
+  "questions": [
+   {
+    "q": "What did the woman bring to the store?",
+    "choices": [
+     "A prescription",
+     "A receipt",
+     "A discount coupon",
+     "A broken pair of glasses"
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "여자가 \"Here's the prescription from my eye doctor\"라고 했으므로 안과 처방전을 가져왔다."
+   },
+   {
+    "q": "Why does the man recommend the brown frame?",
+    "choices": [
+     "It is available now.",
+     "It costs less.",
+     "It is more popular.",
+     "It is lighter."
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "남자가 갈색 테가 거의 똑같아 보이고 \"forty dollars cheaper\"라고 했으므로 가격이 더 싸서 권했다."
+   },
+   {
+    "q": "What does the man mean when he says, \"But we're very busy this month\"?",
+    "choices": [
+     "The store needs more workers.",
+     "The glasses may take longer than usual.",
+     "He cannot help the woman right now.",
+     "The woman should come back next month."
+    ],
+    "answer": 1,
+    "type": "의도 파악",
+    "explanation": "보통은 일주일이 걸린다고 말한 뒤 이 말을 덧붙였으므로 이번에는 평소보다 더 오래 걸릴 수 있다는 뜻이다. 그래서 여자가 준비되면 전화해 달라고 한다. 다음 달에 다시 오라는 뜻은 아니다."
+   }
+  ],
+  "translation": "W: 안녕하세요. 새 안경을 맞추고 싶어요. 안과에서 받은 처방전이에요.\nM: 감사합니다. 안경테는 고르셨나요?\nW: 이 검은색이 마음에 드는데 좀 비싸네요.\nM: 이 갈색 테도 거의 똑같아 보이는데 40달러 더 싸요.\nW: 아, 그렇네요. 그럼 갈색으로 할게요. 얼마나 빨리 받을 수 있나요?\nM: 보통은 일주일 걸려요. 그런데 이번 달은 저희가 정말 바빠서요.\nW: 그렇군요. 준비되면 전화 주시겠어요? 번호를 남겨 둘게요."
+ },
+ {
+  "id": "p3-075",
+  "level": 2,
+  "topic": "시청 주민 수영장 여름 프로그램 문의",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "M",
+    "t": "Hello, Parks and Recreation office. How can I help you?"
+   },
+   {
+    "s": "W",
+    "t": "Hi. I saw a flyer about summer swimming lessons at the community pool. Is it too late to sign up my son?"
+   },
+   {
+    "s": "M",
+    "t": "Not at all. Registration is open until the end of this week. How old is he?"
+   },
+   {
+    "s": "W",
+    "t": "He's eight, and he can swim a little."
+   },
+   {
+    "s": "M",
+    "t": "Then he'd be in the intermediate group. Lessons are on Tuesday and Thursday mornings."
+   },
+   {
+    "s": "W",
+    "t": "Perfect. How do I register?"
+   },
+   {
+    "s": "M",
+    "t": "You'll need to come to this office in person with proof that you live in the city, like a utility bill."
+   }
+  ],
+  "graphic": null,
+  "questions": [
+   {
+    "q": "How did the woman learn about the lessons?",
+    "choices": [
+     "From a newspaper",
+     "From a flyer",
+     "From a friend",
+     "From a Web site"
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "여자가 \"I saw a flyer about summer swimming lessons\"라고 했으므로 전단지를 보고 알았다."
+   },
+   {
+    "q": "When does registration close?",
+    "choices": [
+     "Next Tuesday",
+     "At the end of the month",
+     "Tomorrow",
+     "At the end of this week"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "남자가 \"Registration is open until the end of this week\"라고 했으므로 이번 주말에 등록이 마감된다."
+   },
+   {
+    "q": "What does the woman need to bring?",
+    "choices": [
+     "Proof of her address",
+     "A registration fee in cash",
+     "A swimming certificate",
+     "A photo of her son"
+    ],
+    "answer": 0,
+    "type": "요청·제안",
+    "explanation": "남자가 시에 산다는 증명으로 공과금 고지서 같은 것을 가져오라고 했으므로 주소 증빙이 필요하다. proof that you live in the city를 proof of her address로 바꿔 표현했다."
+   }
+  ],
+  "translation": "M: 안녕하세요, 공원여가과입니다. 무엇을 도와드릴까요?\nW: 안녕하세요. 주민 수영장 여름 수영 강습 전단지를 봤는데요. 아들을 등록하기엔 너무 늦었나요?\nM: 전혀요. 이번 주말까지 등록을 받아요. 아드님이 몇 살인가요?\nW: 여덟 살이고 수영을 조금 할 줄 알아요.\nM: 그럼 중급반이겠네요. 강습은 화요일과 목요일 오전이에요.\nW: 딱 좋네요. 어떻게 등록하나요?\nM: 공과금 고지서처럼 시에 거주한다는 증명서를 가지고 이 사무실로 직접 오셔야 해요."
+ },
+ {
+  "id": "p3-076",
+  "level": 2,
+  "topic": "사진관 여권 사진 촬영",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "W",
+    "t": "Hi. I need passport photos. Can you take them now?"
+   },
+   {
+    "s": "M",
+    "t": "Sure. It'll just take a few minutes. Please sit on this chair and look at the camera."
+   },
+   {
+    "s": "W",
+    "t": "Should I take off my glasses?"
+   },
+   {
+    "s": "M",
+    "t": "Yes, glasses aren't allowed in passport photos anymore."
+   },
+   {
+    "s": "W",
+    "t": "OK. How many photos will I get?"
+   },
+   {
+    "s": "M",
+    "t": "You'll get four photos. That's twelve dollars. If you want a digital copy too, it's three dollars more."
+   },
+   {
+    "s": "W",
+    "t": "Just the printed ones, please. I'm sending in my passport application today."
+   }
+  ],
+  "graphic": null,
+  "questions": [
+   {
+    "q": "What does the man tell the woman to do?",
+    "choices": [
+     "Come back later",
+     "Fill out a form",
+     "Change her shirt",
+     "Remove her glasses"
+    ],
+    "answer": 3,
+    "type": "요청·제안",
+    "explanation": "남자가 여권 사진에는 안경이 허용되지 않는다며 벗으라고 했으므로 안경을 벗으라는 요청이다. take off를 remove로 바꿔 표현했다."
+   },
+   {
+    "q": "How much will the woman most likely pay?",
+    "choices": [
+     "$15",
+     "$3",
+     "$12",
+     "$4"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "사진 4장은 12달러이고 디지털 파일은 3달러 추가인데, 여자가 \"Just the printed ones\"라고 했으므로 12달러를 낸다. 15달러는 디지털 파일까지 포함한 금액이다."
+   },
+   {
+    "q": "What does the woman say she will do today?",
+    "choices": [
+     "Buy new glasses",
+     "Print some documents",
+     "Take a flight",
+     "Submit a passport application"
+    ],
+    "answer": 3,
+    "type": "다음 할 일",
+    "explanation": "여자가 \"I'm sending in my passport application today\"라고 했으므로 오늘 여권 신청서를 제출한다. sending in을 submit으로 바꿔 표현했다."
+   }
+  ],
+  "translation": "W: 안녕하세요. 여권 사진이 필요한데요. 지금 찍을 수 있나요?\nM: 그럼요. 몇 분이면 돼요. 이 의자에 앉아서 카메라를 봐 주세요.\nW: 안경을 벗어야 하나요?\nM: 네, 이제 여권 사진에는 안경이 허용되지 않아요.\nW: 알겠어요. 사진은 몇 장 나오나요?\nM: 네 장이요. 12달러입니다. 디지털 파일도 원하시면 3달러 추가예요.\nW: 인화한 것만 주세요. 오늘 여권 신청서를 낼 거예요."
+ },
+ {
+  "id": "p3-077",
+  "level": 3,
+  "topic": "시청 인허가 창구에서 간판 설치 허가 신청",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "M",
+    "t": "Good morning. I'm opening a hair salon on Oak Avenue next month, and I was told I need a permit to put up a sign outside."
+   },
+   {
+    "s": "W",
+    "t": "That's right. Will the sign hang over the sidewalk, or will it be attached flat against the wall?"
+   },
+   {
+    "s": "M",
+    "t": "It'll hang over the sidewalk. The designer said it would be easier for people walking by to see."
+   },
+   {
+    "s": "W",
+    "t": "In that case, you'll need a projecting sign permit. It takes longer to process because a city inspector has to approve the location."
+   },
+   {
+    "s": "M",
+    "t": "Hmm, the salon opens on the fifteenth. Will I get it in time?"
+   },
+   {
+    "s": "W",
+    "t": "If you submit everything today, you should. Just make sure you include a drawing that shows the sign's measurements."
+   },
+   {
+    "s": "M",
+    "t": "The designer has that. I'll ask her to e-mail it to me right now."
+   }
+  ],
+  "graphic": {
+   "title": "City Permit Office — Sign Permits",
+   "rows": [
+    [
+     "Permit Type",
+     "Fee",
+     "Processing Time"
+    ],
+    [
+     "Wall sign",
+     "$50",
+     "3 business days"
+    ],
+    [
+     "Window sign",
+     "$25",
+     "1 business day"
+    ],
+    [
+     "Projecting sign",
+     "$120",
+     "10 business days"
+    ],
+    [
+     "Temporary banner",
+     "$15",
+     "Same day"
+    ]
+   ]
+  },
+  "questions": [
+   {
+    "q": "What is the man preparing to do?",
+    "choices": [
+     "Design a building",
+     "Repair a sidewalk",
+     "Apply for a city job",
+     "Open a new business"
+    ],
+    "answer": 3,
+    "type": "주제·목적",
+    "explanation": "남자가 \"I'm opening a hair salon on Oak Avenue next month\"라고 했으므로 새 가게를 열 준비를 하고 있다. hair salon을 business로 바꿔 표현했다."
+   },
+   {
+    "q": "Look at the graphic. How long will it most likely take to process the man's permit?",
+    "choices": [
+     "3 business days",
+     "1 business day",
+     "10 business days",
+     "Same day"
+    ],
+    "answer": 2,
+    "type": "시각 자료 연계",
+    "explanation": "간판이 인도 위로 걸린다고 하자 여자가 projecting sign permit이 필요하다고 했다. 표에서 Projecting sign의 처리 기간은 영업일 10일이다. 3일은 벽에 붙이는 간판(Wall sign)이다."
+   },
+   {
+    "q": "What will the man most likely do next?",
+    "choices": [
+     "Pay a fee online",
+     "Contact his designer",
+     "Meet an inspector",
+     "Visit the salon location"
+    ],
+    "answer": 1,
+    "type": "다음 할 일",
+    "explanation": "여자가 간판 치수가 나온 도면을 첨부하라고 하자 남자가 \"I'll ask her to e-mail it to me right now\"라고 했다. her는 디자이너이므로 디자이너에게 연락할 것이다."
+   }
+  ],
+  "translation": "M: 안녕하세요. 다음 달에 오크 가에 미용실을 여는데, 밖에 간판을 달려면 허가가 필요하다고 들었어요.\nW: 맞아요. 간판이 인도 위로 튀어나오게 걸리나요, 아니면 벽에 평평하게 붙나요?\nM: 인도 위로 걸려요. 디자이너 말로는 지나가는 사람들이 보기 더 쉽대요.\nW: 그렇다면 돌출 간판 허가가 필요해요. 시 조사관이 위치를 승인해야 해서 처리가 더 오래 걸려요.\nM: 음, 미용실이 15일에 문을 여는데요. 그때까지 받을 수 있을까요?\nW: 오늘 서류를 다 내시면 될 거예요. 간판 치수가 나온 도면만 꼭 넣어 주세요.\nM: 디자이너가 갖고 있어요. 지금 바로 이메일로 보내 달라고 할게요."
+ },
+ {
+  "id": "p3-078",
+  "level": 3,
+  "topic": "사무실 화분 관리 서비스 계약",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "W",
+    "t": "Hi, this is Amanda from Green Office Plant Service. I'm calling to follow up on the quote I sent you last week."
+   },
+   {
+    "s": "M",
+    "t": "Oh, thanks for calling. We looked it over, and we're interested in having plants placed in our lobby and meeting rooms."
+   },
+   {
+    "s": "W",
+    "t": "Great. Our standard plan includes a weekly visit for watering and trimming. And if any plant dies, we replace it for free."
+   },
+   {
+    "s": "M",
+    "t": "That sounds good. One concern, though. Our lobby doesn't get much sunlight."
+   },
+   {
+    "s": "W",
+    "t": "That's not a problem. Many of our plants grow well in low light."
+   },
+   {
+    "s": "M",
+    "t": "OK. Could someone come by to look at the space before we sign anything?"
+   },
+   {
+    "s": "W",
+    "t": "Of course. I'm in your area on Thursday. I can stop by around two, if that works."
+   }
+  ],
+  "graphic": null,
+  "questions": [
+   {
+    "q": "Why is the woman calling?",
+    "choices": [
+     "To follow up on a price estimate",
+     "To apologize for a late visit",
+     "To ask for payment",
+     "To schedule a delivery of furniture"
+    ],
+    "answer": 0,
+    "type": "주제·목적",
+    "explanation": "여자가 \"I'm calling to follow up on the quote I sent you last week\"라고 했으므로 보낸 견적에 대한 후속 연락이다. quote를 price estimate로 바꿔 표현했다."
+   },
+   {
+    "q": "What does the woman imply when she says, \"Many of our plants grow well in low light\"?",
+    "choices": [
+     "The lobby is suitable for plants.",
+     "The man should move his office.",
+     "The plants need less water.",
+     "Some plants will cost more."
+    ],
+    "answer": 0,
+    "type": "의도 파악",
+    "explanation": "남자가 로비에 햇빛이 잘 들지 않는다고 걱정하자 한 말이므로, 빛이 적은 로비에도 식물을 둘 수 있다는 뜻이다. 물을 덜 줘도 된다는 내용은 없다."
+   },
+   {
+    "q": "What does the woman offer to do on Thursday?",
+    "choices": [
+     "Sign a contract",
+     "Deliver some plants",
+     "Visit the man's office",
+     "Send a revised quote"
+    ],
+    "answer": 2,
+    "type": "요청·제안",
+    "explanation": "남자가 계약 전에 공간을 봐 달라고 하자 여자가 \"I can stop by around two\"라고 했으므로 목요일에 사무실을 방문하겠다고 제안했다. 계약은 방문 후의 일이다."
+   }
+  ],
+  "translation": "W: 안녕하세요, 그린 오피스 식물 관리 서비스의 어맨다입니다. 지난주에 보내 드린 견적 관련해서 다시 연락드렸어요.\nM: 아, 전화 주셔서 고마워요. 검토해 봤는데, 로비와 회의실에 식물을 두는 데 관심이 있어요.\nW: 좋습니다. 기본 요금제에는 매주 방문해서 물 주기와 가지치기가 포함돼요. 그리고 식물이 죽으면 무료로 교체해 드려요.\nM: 좋네요. 그런데 걱정되는 게 하나 있어요. 저희 로비에는 햇빛이 많이 들지 않아요.\nW: 문제없어요. 저희 식물 중에는 빛이 적은 곳에서도 잘 자라는 게 많아요.\nM: 알겠어요. 계약하기 전에 누가 와서 공간을 봐 줄 수 있나요?\nW: 물론이죠. 목요일에 그쪽 근처에 가요. 괜찮으시면 2시쯤 들를 수 있어요."
+ },
+ {
+  "id": "p3-079",
+  "level": 3,
+  "topic": "병원 간호사 교대 근무 인수인계",
+  "speakers": {
+   "W": "female",
+   "M": "male",
+   "W2": "female"
+  },
+  "script": [
+   {
+    "s": "W",
+    "t": "Good morning, Marcus. Before I go home, let me update you on the patients in rooms 5 through 8."
+   },
+   {
+    "s": "M",
+    "t": "Thanks, Helen. Anything I should know about right away?"
+   },
+   {
+    "s": "W",
+    "t": "The patient in room 6 had a fever overnight. It's down now, but the doctor wants his temperature checked every two hours."
+   },
+   {
+    "s": "M",
+    "t": "Got it. I'll make a note of that."
+   },
+   {
+    "s": "W2",
+    "t": "Sorry to interrupt. Marcus, the patient in room 8 is being discharged this morning. His family is coming to pick him up at eleven."
+   },
+   {
+    "s": "M",
+    "t": "OK. Has the paperwork been prepared?"
+   },
+   {
+    "s": "W2",
+    "t": "Not yet. The doctor still needs to sign the discharge form."
+   },
+   {
+    "s": "M",
+    "t": "I'll call her office after I check on room 6."
+   }
+  ],
+  "graphic": null,
+  "questions": [
+   {
+    "q": "Who most likely are the speakers?",
+    "choices": [
+     "Patients' relatives",
+     "Hospital staff",
+     "Pharmacy workers",
+     "Hotel employees"
+    ],
+    "answer": 1,
+    "type": "화자 정보(직업·장소)",
+    "explanation": "병실(rooms 5 through 8)의 환자 상태, 체온 측정, 퇴원 서류를 이야기하며 교대 인수인계를 하므로 병원 직원들이다."
+   },
+   {
+    "q": "What does Helen say about the patient in room 6?",
+    "choices": [
+     "His family will visit him at eleven.",
+     "He needs to change rooms.",
+     "He is leaving the hospital today.",
+     "His temperature needs to be monitored."
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "헬렌이 6호실 환자가 밤에 열이 났으며 의사가 \"his temperature checked every two hours\"를 원한다고 했으므로 체온을 계속 확인해야 한다. 오늘 퇴원하는 사람은 8호실 환자다."
+   },
+   {
+    "q": "What will Marcus do after checking on room 6?",
+    "choices": [
+     "Contact a doctor's office",
+     "Prepare a new room",
+     "Go home",
+     "Meet a patient's family"
+    ],
+    "answer": 0,
+    "type": "다음 할 일",
+    "explanation": "마커스가 \"I'll call her office after I check on room 6\"라고 했고 her는 퇴원 서류에 서명해야 하는 의사이므로 의사 사무실에 연락할 것이다. 집에 가는 사람은 교대를 마친 헬렌이다."
+   }
+  ],
+  "translation": "W: 좋은 아침이에요, 마커스. 퇴근하기 전에 5호실부터 8호실 환자들 상황을 알려 줄게요.\nM: 고마워요, 헬렌. 바로 알아야 할 게 있나요?\nW: 6호실 환자가 밤새 열이 났어요. 지금은 내렸지만, 의사 선생님이 두 시간마다 체온을 재 달래요.\nM: 알겠어요. 적어 둘게요.\nW2: 말씀 중에 죄송해요. 마커스, 8호실 환자가 오늘 오전에 퇴원해요. 가족분들이 11시에 데리러 오세요.\nM: 네. 서류는 준비됐나요?\nW2: 아직이요. 의사 선생님이 퇴원 서류에 서명을 해야 해요.\nM: 6호실 확인하고 나서 선생님 사무실에 전화할게요."
+ },
+ {
+  "id": "p3-080",
+  "level": 3,
+  "topic": "엘리베이터 정기 점검 일정 조율",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "M",
+    "t": "Hi, Ms. Kim. This is Paul from Summit Elevator Services. We're scheduled to do maintenance at your building next week, and I wanted to confirm the times."
+   },
+   {
+    "s": "W",
+    "t": "Thanks, Paul. I have the schedule you sent in front of me. Is there a problem?"
+   },
+   {
+    "s": "M",
+    "t": "Actually, one of our technicians is out sick, so we can't do the job on Tuesday. We'd like to move it to Friday, same time."
+   },
+   {
+    "s": "W",
+    "t": "Friday's a bit difficult. Our company is moving some furniture to the eighth floor that afternoon, and we'll need the freight elevator."
+   },
+   {
+    "s": "M",
+    "t": "I see. What if we do it Friday morning instead, from eight to ten?"
+   },
+   {
+    "s": "W",
+    "t": "That should work. The movers won't arrive until one."
+   },
+   {
+    "s": "M",
+    "t": "Great. I'll send you an updated schedule by e-mail today."
+   }
+  ],
+  "graphic": {
+   "title": "Summit Elevator Services — Maintenance Schedule",
+   "rows": [
+    [
+     "Day",
+     "Elevator",
+     "Time"
+    ],
+    [
+     "Monday",
+     "Elevator A (lobby)",
+     "8:00 – 10:00 A.M."
+    ],
+    [
+     "Tuesday",
+     "Freight elevator",
+     "1:00 – 3:00 P.M."
+    ],
+    [
+     "Wednesday",
+     "Elevator B (lobby)",
+     "8:00 – 10:00 A.M."
+    ],
+    [
+     "Thursday",
+     "Parking garage elevator",
+     "1:00 – 3:00 P.M."
+    ]
+   ]
+  },
+  "questions": [
+   {
+    "q": "Why does the man want to change the schedule?",
+    "choices": [
+     "A worker is not available.",
+     "The building will be closed.",
+     "The job will take longer than expected.",
+     "Some parts have not arrived."
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "남자가 \"one of our technicians is out sick\"이라고 했으므로 기술자 한 명이 아파서 일할 수 없기 때문이다."
+   },
+   {
+    "q": "Look at the graphic. Which elevator's maintenance will be rescheduled?",
+    "choices": [
+     "Elevator A (lobby)",
+     "Freight elevator",
+     "Elevator B (lobby)",
+     "Parking garage elevator"
+    ],
+    "answer": 1,
+    "type": "시각 자료 연계",
+    "explanation": "남자가 화요일 작업을 할 수 없다고 했고, 표에서 화요일 점검 대상은 화물용 엘리베이터(Freight elevator)다. 여자가 금요일 오후 가구 이동에 화물 엘리베이터가 필요하다고 한 것도 이와 맞는다."
+   },
+   {
+    "q": "What will happen on Friday afternoon?",
+    "choices": [
+     "A new elevator will be installed.",
+     "Furniture will be moved.",
+     "A company meeting will be held.",
+     "A safety inspection will take place."
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "여자가 \"Our company is moving some furniture to the eighth floor that afternoon\"이라고 했으므로 금요일 오후에 가구를 옮긴다. 엘리베이터 점검은 금요일 오전으로 옮겨졌다."
+   }
+  ],
+  "translation": "M: 안녕하세요, 김 선생님. 서밋 엘리베이터 서비스의 폴입니다. 다음 주에 건물 점검이 잡혀 있어서 시간을 확인하려고 연락드렸어요.\nW: 고마워요, 폴. 보내 주신 일정표를 보고 있어요. 문제가 있나요?\nM: 사실 기술자 한 명이 아파서 화요일 작업을 못 하게 됐어요. 금요일 같은 시간으로 옮기고 싶어요.\nW: 금요일은 좀 곤란해요. 그날 오후에 저희 회사가 8층으로 가구를 옮기는데 화물 엘리베이터가 필요하거든요.\nM: 그렇군요. 그럼 금요일 오전 8시부터 10시까지 하면 어떨까요?\nW: 그건 괜찮을 것 같아요. 이삿짐 업체는 1시나 돼야 오거든요.\nM: 좋습니다. 오늘 수정된 일정표를 이메일로 보내 드릴게요."
+ },
+ {
+  "id": "p3-081",
+  "level": 3,
+  "topic": "자선 경매 기부 물품 모집",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "W",
+    "t": "Hi, Tony. You're on the planning committee for the children's hospital charity auction, aren't you?"
+   },
+   {
+    "s": "M",
+    "t": "Yes, I am. We're still collecting items for it. The auction is on the twentieth."
+   },
+   {
+    "s": "W",
+    "t": "Well, my sister owns a pottery studio, and she said she'd be happy to donate a set of handmade bowls."
+   },
+   {
+    "s": "M",
+    "t": "That's wonderful. Last year, the handmade items raised the most money."
+   },
+   {
+    "s": "W",
+    "t": "She was also wondering whether she could put a small sign next to the bowls with the name of her studio."
+   },
+   {
+    "s": "M",
+    "t": "I'll have to check with the committee chair. But we did that for a few local businesses last year."
+   },
+   {
+    "s": "W",
+    "t": "OK. When does she need to drop off the bowls?"
+   },
+   {
+    "s": "M",
+    "t": "By the fifteenth. She can bring them to the community center."
+   }
+  ],
+  "graphic": null,
+  "questions": [
+   {
+    "q": "What event are the speakers discussing?",
+    "choices": [
+     "A hospital opening",
+     "A fund-raising auction",
+     "A pottery class",
+     "A community festival"
+    ],
+    "answer": 1,
+    "type": "주제·목적",
+    "explanation": "여자가 \"the children's hospital charity auction\"을 언급하고 기부 물품 이야기를 하므로 기금 마련 경매를 논의하고 있다. charity를 fund-raising으로 바꿔 표현했다."
+   },
+   {
+    "q": "What does the man imply when he says, \"we did that for a few local businesses last year\"?",
+    "choices": [
+     "The committee needs more volunteers.",
+     "The woman's sister has donated before.",
+     "The request will probably be approved.",
+     "The auction was more successful last year."
+    ],
+    "answer": 2,
+    "type": "의도 파악",
+    "explanation": "스튜디오 이름이 적힌 안내판을 둘 수 있는지 묻자 위원장에게 확인해야 하지만 작년에도 몇몇 지역 업체에 그렇게 해 줬다고 했으므로 요청이 받아들여질 가능성이 높다는 뜻이다."
+   },
+   {
+    "q": "What should the woman's sister do by the fifteenth?",
+    "choices": [
+     "Pay a fee",
+     "Contact the committee chair",
+     "Register for the auction",
+     "Deliver her donation"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "남자가 그릇을 가져다 놓아야 하는 날짜를 \"By the fifteenth\"라고 했으므로 15일까지 기부 물품을 전달해야 한다. 위원장에게 확인하는 것은 남자가 할 일이다."
+   }
+  ],
+  "translation": "W: 안녕하세요, 토니. 어린이 병원 자선 경매 기획위원이시죠?\nM: 네, 맞아요. 아직 경매 물품을 모으고 있어요. 경매는 20일이에요.\nW: 그런데 제 여동생이 도자기 공방을 하는데, 수제 그릇 세트를 기꺼이 기부하겠대요.\nM: 정말 좋네요. 작년에 수제 물품이 가장 많은 돈을 모았어요.\nW: 그리고 그릇 옆에 공방 이름이 적힌 작은 안내판을 둘 수 있는지 궁금해하더라고요.\nM: 위원장님께 확인해 봐야 해요. 하지만 작년에 몇몇 지역 업체에는 그렇게 해 드렸어요.\nW: 알겠어요. 그릇은 언제까지 가져다 놓아야 하나요?\nM: 15일까지요. 주민 센터로 가져오시면 돼요."
+ },
+ {
+  "id": "p3-082",
+  "level": 3,
+  "topic": "사내 식당 메뉴 설문 결과",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "M",
+    "t": "Olivia, have you seen the results of the cafeteria survey?"
+   },
+   {
+    "s": "W",
+    "t": "I just finished reading them. Most employees are happy with the lunch menu, but a lot of people want more vegetarian options."
+   },
+   {
+    "s": "M",
+    "t": "I noticed that too. Our current food supplier only offers two vegetarian dishes."
+   },
+   {
+    "s": "W",
+    "t": "Right. And several people complained that the cafeteria closes too early. Some of the engineers work late and can't get dinner."
+   },
+   {
+    "s": "M",
+    "t": "Extending the hours would cost more, though. We'd have to hire another cook."
+   },
+   {
+    "s": "W",
+    "t": "What if we just put in a few vending machines with sandwiches and salads? That would be much cheaper."
+   },
+   {
+    "s": "M",
+    "t": "Good idea. Why don't you look into some vending companies and bring a few options to Monday's meeting?"
+   }
+  ],
+  "graphic": null,
+  "questions": [
+   {
+    "q": "What did many employees request in the survey?",
+    "choices": [
+     "A bigger dining area",
+     "Lower prices",
+     "More vegetarian meals",
+     "Faster service"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "여자가 \"a lot of people want more vegetarian options\"라고 했으므로 채식 메뉴를 더 원했다."
+   },
+   {
+    "q": "Why does the man hesitate to extend the cafeteria's hours?",
+    "choices": [
+     "It would increase costs.",
+     "The building closes early.",
+     "Few employees work late.",
+     "The supplier cannot deliver at night."
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "남자가 \"Extending the hours would cost more\"라며 요리사를 더 뽑아야 한다고 했으므로 비용 증가 때문이다. 늦게까지 일하는 엔지니어들이 있다고 했으니 야근자가 적다는 것은 틀리다."
+   },
+   {
+    "q": "What does the man ask the woman to do?",
+    "choices": [
+     "Hire a new cook",
+     "Conduct another survey",
+     "Research some vending companies",
+     "Change food suppliers"
+    ],
+    "answer": 2,
+    "type": "요청·제안",
+    "explanation": "남자가 \"Why don't you look into some vending companies and bring a few options\"라고 했으므로 자판기 업체를 알아봐 달라는 요청이다. look into를 research로 바꿔 표현했다."
+   }
+  ],
+  "translation": "M: 올리비아, 구내식당 설문 결과 봤어요?\nW: 방금 다 읽었어요. 직원 대부분이 점심 메뉴에 만족하는데, 채식 메뉴를 더 원하는 사람이 많아요.\nM: 저도 그걸 봤어요. 지금 식자재 업체는 채식 요리를 두 가지밖에 안 해요.\nW: 맞아요. 그리고 식당이 너무 일찍 닫는다는 불만도 여럿 있었어요. 늦게까지 일하는 엔지니어들이 저녁을 못 먹는대요.\nM: 그런데 운영 시간을 늘리면 비용이 더 들어요. 요리사를 한 명 더 뽑아야 하거든요.\nW: 샌드위치랑 샐러드를 파는 자판기를 몇 대 들이면 어때요? 그게 훨씬 저렴할 거예요.\nM: 좋은 생각이네요. 자판기 업체를 몇 군데 알아보고 월요일 회의에 몇 가지 안을 가져와 줄래요?"
+ },
+ {
+  "id": "p3-083",
+  "level": 3,
+  "topic": "회사 야유회 전세 버스 선택",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "W",
+    "t": "Jason, I'm booking the bus for our company picnic at Lake Hartley. Can you help me choose a company?"
+   },
+   {
+    "s": "M",
+    "t": "Sure. How many people have signed up?"
+   },
+   {
+    "s": "W",
+    "t": "Forty-two so far, and a few more might join."
+   },
+   {
+    "s": "M",
+    "t": "Then we need a bus with at least fifty seats, just to be safe."
+   },
+   {
+    "s": "W",
+    "t": "I agree. There are two options with enough seats. One of them has free Wi-Fi, but it's more expensive."
+   },
+   {
+    "s": "M",
+    "t": "The drive is only an hour. I don't think people need Wi-Fi. Let's go with the cheaper one."
+   },
+   {
+    "s": "W",
+    "t": "OK. I'll call them this afternoon. By the way, could you send a reminder to everyone that the sign-up deadline is Friday?"
+   }
+  ],
+  "graphic": {
+   "title": "Charter Bus Options",
+   "rows": [
+    [
+     "Company",
+     "Seats",
+     "Wi-Fi",
+     "Price"
+    ],
+    [
+     "Road Star",
+     "35",
+     "Yes",
+     "$450"
+    ],
+    [
+     "Blue Line",
+     "45",
+     "No",
+     "$520"
+    ],
+    [
+     "Metro Coach",
+     "55",
+     "No",
+     "$600"
+    ],
+    [
+     "Express Tours",
+     "55",
+     "Yes",
+     "$720"
+    ]
+   ]
+  },
+  "questions": [
+   {
+    "q": "What are the speakers planning?",
+    "choices": [
+     "A training session",
+     "A client meeting",
+     "Transportation for a company outing",
+     "A business trip abroad"
+    ],
+    "answer": 2,
+    "type": "주제·목적",
+    "explanation": "여자가 \"I'm booking the bus for our company picnic\"이라고 했으므로 회사 야유회 교통편을 준비하고 있다."
+   },
+   {
+    "q": "Look at the graphic. Which company will the woman most likely call?",
+    "choices": [
+     "Road Star",
+     "Blue Line",
+     "Metro Coach",
+     "Express Tours"
+    ],
+    "answer": 2,
+    "type": "시각 자료 연계",
+    "explanation": "50석 이상인 버스는 Metro Coach와 Express Tours인데, 남자가 와이파이가 필요 없으니 더 싼 곳으로 하자고 했다. 표에서 와이파이가 없고 더 싼 600달러짜리 Metro Coach다."
+   },
+   {
+    "q": "What does the woman ask the man to do?",
+    "choices": [
+     "Remind employees about a deadline",
+     "Collect money from participants",
+     "Call a bus company",
+     "Reserve a picnic area"
+    ],
+    "answer": 0,
+    "type": "요청·제안",
+    "explanation": "여자가 \"could you send a reminder to everyone that the sign-up deadline is Friday?\"라고 했으므로 신청 마감일을 직원들에게 다시 알려 달라고 했다. 버스 회사에는 여자가 직접 전화한다."
+   }
+  ],
+  "translation": "W: 제이슨, 하틀리 호수로 가는 회사 야유회 버스를 예약하려는데요. 업체 고르는 것 좀 도와줄래요?\nM: 그럼요. 몇 명이 신청했어요?\nW: 지금까지 42명이고, 몇 명 더 올 수도 있어요.\nM: 그럼 만일을 위해 적어도 50석짜리 버스가 필요하겠네요.\nW: 동감이에요. 좌석이 충분한 곳이 두 군데 있어요. 한 곳은 무료 와이파이가 있는데 더 비싸요.\nM: 한 시간밖에 안 걸리잖아요. 와이파이는 필요 없을 것 같아요. 더 싼 곳으로 해요.\nW: 좋아요. 오늘 오후에 전화할게요. 그런데 신청 마감이 금요일이라고 모두에게 다시 알려 줄 수 있어요?"
+ },
+ {
+  "id": "p3-084",
+  "level": 3,
+  "topic": "배송 트럭 경로 변경",
+  "speakers": {
+   "M": "male",
+   "W": "female",
+   "M2": "male"
+  },
+  "script": [
+   {
+    "s": "M",
+    "t": "Sandra, Eric, have you heard? The city is closing the Fulton Bridge for repairs starting Monday."
+   },
+   {
+    "s": "W",
+    "t": "Oh no. Half of our delivery trucks use that bridge every morning."
+   },
+   {
+    "s": "M2",
+    "t": "I just checked the map. If the drivers take the Harbor Road instead, it adds about twenty minutes to each trip."
+   },
+   {
+    "s": "W",
+    "t": "That means some stores won't get their deliveries before they open."
+   },
+   {
+    "s": "M",
+    "t": "Could we start loading the trucks earlier? Say, at five instead of six?"
+   },
+   {
+    "s": "M2",
+    "t": "The warehouse crew won't be thrilled."
+   },
+   {
+    "s": "W",
+    "t": "Maybe we can offer them a bonus for the early shift while the bridge is closed. I'll talk to the operations manager about the budget."
+   },
+   {
+    "s": "M",
+    "t": "Good. And Eric, can you update the route plans for the drivers?"
+   }
+  ],
+  "graphic": null,
+  "questions": [
+   {
+    "q": "What problem are the speakers discussing?",
+    "choices": [
+     "A store has canceled an order.",
+     "A bridge will be closed.",
+     "A truck has broken down.",
+     "A warehouse is short of space."
+    ],
+    "answer": 1,
+    "type": "주제·목적",
+    "explanation": "첫 남자가 \"The city is closing the Fulton Bridge for repairs\"라고 했고 그 영향으로 배송 경로를 바꾸는 이야기를 하므로 다리 폐쇄가 문제다."
+   },
+   {
+    "q": "What does Eric imply when he says, \"The warehouse crew won't be thrilled\"?",
+    "choices": [
+     "The warehouse will close early.",
+     "Workers are not trained for the new route.",
+     "Workers may not like starting earlier.",
+     "The warehouse needs more staff."
+    ],
+    "answer": 2,
+    "type": "의도 파악",
+    "explanation": "트럭 적재를 6시에서 5시로 앞당기자는 제안에 대한 반응이므로 창고 직원들이 일찍 출근하는 것을 싫어할 것이라는 뜻이다. 그래서 여자가 조기 근무 보너스를 제안한다."
+   },
+   {
+    "q": "What will the woman most likely do next?",
+    "choices": [
+     "Call the city office",
+     "Speak with a manager",
+     "Update the route plans",
+     "Load the trucks"
+    ],
+    "answer": 1,
+    "type": "다음 할 일",
+    "explanation": "여자가 \"I'll talk to the operations manager about the budget\"이라고 했으므로 운영 관리자와 이야기할 것이다. 경로 계획 수정은 에릭에게 맡긴 일이다."
+   }
+  ],
+  "translation": "M: 샌드라, 에릭, 소식 들었어요? 시에서 월요일부터 보수 공사 때문에 풀턴 다리를 막는대요.\nW: 이런. 우리 배송 트럭 절반이 매일 아침 그 다리를 이용하잖아요.\nM2: 방금 지도를 봤어요. 기사들이 대신 하버 로드로 가면 운행마다 20분 정도 더 걸려요.\nW: 그럼 몇몇 매장은 문 열기 전에 물건을 못 받겠네요.\nM: 트럭 싣는 걸 더 일찍 시작하면 어때요? 6시 말고 5시로요.\nM2: 창고 직원들이 반기지는 않을 거예요.\nW: 다리가 막혀 있는 동안 조기 근무 수당을 주는 방법도 있어요. 제가 운영 관리자에게 예산 얘기를 해 볼게요.\nM: 좋아요. 그리고 에릭, 기사들 경로 계획을 수정해 줄 수 있어요?"
+ },
+ {
+  "id": "p3-085",
+  "level": 4,
+  "topic": "연구실 원심분리기 구매 검토",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "W",
+    "t": "Dr. Singh, I've narrowed down the centrifuge options for the lab. Do you have a minute to go over them?"
+   },
+   {
+    "s": "M",
+    "t": "Sure. Remember, whatever we order has to fit on the bench by the window, so nothing wider than sixty centimeters."
+   },
+   {
+    "s": "W",
+    "t": "Right, I've already ruled out the one that was too big. Of the remaining three, the fastest one is also the most expensive."
+   },
+   {
+    "s": "M",
+    "t": "We don't really need top speed for the blood samples we process. What matters more is how quiet it is. The research assistants have been complaining about the noise from our old one."
+   },
+   {
+    "s": "W",
+    "t": "In that case, this model is clearly the best choice. It's also within our budget."
+   },
+   {
+    "s": "M",
+    "t": "Great. Go ahead and place the order. And ask the supplier whether they'll take our old unit away when they deliver the new one."
+   }
+  ],
+  "graphic": {
+   "title": "Centrifuge Comparison",
+   "rows": [
+    [
+     "Model",
+     "Width",
+     "Max Speed",
+     "Noise Level"
+    ],
+    [
+     "CX-200",
+     "55 cm",
+     "15,000 rpm",
+     "58 dB"
+    ],
+    [
+     "CX-300",
+     "58 cm",
+     "18,000 rpm",
+     "62 dB"
+    ],
+    [
+     "LabSpin 5",
+     "59 cm",
+     "12,000 rpm",
+     "48 dB"
+    ],
+    [
+     "ProSpin X",
+     "72 cm",
+     "20,000 rpm",
+     "65 dB"
+    ]
+   ]
+  },
+  "questions": [
+   {
+    "q": "What requirement does the man mention first?",
+    "choices": [
+     "The equipment must be made by a certain company.",
+     "The equipment must be delivered this week.",
+     "The equipment must come with training.",
+     "The equipment must fit in a limited space."
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "남자가 처음에 \"it has to fit on the bench by the window, so nothing wider than sixty centimeters\"라고 했으므로 정해진 공간에 들어가야 한다는 조건이다."
+   },
+   {
+    "q": "Look at the graphic. Which model will the woman most likely order?",
+    "choices": [
+     "CX-200",
+     "CX-300",
+     "LabSpin 5",
+     "ProSpin X"
+    ],
+    "answer": 2,
+    "type": "시각 자료 연계",
+    "explanation": "폭 72cm인 ProSpin X는 이미 제외됐고, 남자는 속도보다 소음이 적은 것이 중요하다고 했다. 나머지 셋 중 소음이 가장 낮은 48dB의 LabSpin 5가 답이다. CX-300은 남은 것 중 가장 빠른 모델이다."
+   },
+   {
+    "q": "What does the man ask the woman to find out?",
+    "choices": [
+     "Whether a discount is available",
+     "How long the warranty lasts",
+     "When the research assistants are available",
+     "Whether the supplier will remove old equipment"
+    ],
+    "answer": 3,
+    "type": "요청·제안",
+    "explanation": "남자가 \"ask the supplier whether they'll take our old unit away\"라고 했으므로 공급업체가 기존 장비를 수거해 가는지 알아봐 달라고 했다. take away를 remove로 바꿔 표현했다."
+   }
+  ],
+  "translation": "W: 싱 박사님, 연구실 원심분리기 후보를 좁혀 봤어요. 잠깐 같이 검토해 주실 수 있나요?\nM: 그럼요. 무엇을 주문하든 창가 실험대 위에 들어가야 하니까 폭이 60센티미터를 넘으면 안 돼요.\nW: 맞아요, 너무 큰 건 이미 뺐어요. 남은 세 개 중에서 가장 빠른 게 가장 비싸기도 해요.\nM: 우리가 처리하는 혈액 샘플에는 최고 속도가 꼭 필요하진 않아요. 더 중요한 건 얼마나 조용하냐예요. 연구 보조원들이 예전 장비 소음 때문에 계속 불평하고 있거든요.\nW: 그렇다면 이 모델이 확실히 가장 좋겠네요. 예산 안에도 들어가고요.\nM: 좋아요. 주문 진행해 주세요. 그리고 새 장비를 배송할 때 예전 장비를 가져가 주는지 공급업체에 물어봐 주세요."
+ },
+ {
+  "id": "p3-086",
+  "level": 4,
+  "topic": "미술관 신규 전시 조명 설치",
+  "speakers": {
+   "W": "female",
+   "M": "male",
+   "W2": "female"
+  },
+  "script": [
+   {
+    "s": "W",
+    "t": "Thanks for coming in on short notice, Victor. As you can see, the new photography exhibit opens on Saturday, and the lighting still isn't right."
+   },
+   {
+    "s": "M",
+    "t": "I noticed that when I walked in. There's a lot of glare on the glass frames along this wall."
+   },
+   {
+    "s": "W2",
+    "t": "That's what worries me as the curator. Visitors won't be able to see the photos clearly."
+   },
+   {
+    "s": "M",
+    "t": "The problem is the angle of the ceiling lights. If we replace these fixtures with adjustable track lights, we can point them away from the glass."
+   },
+   {
+    "s": "W",
+    "t": "How long would that take?"
+   },
+   {
+    "s": "M",
+    "t": "My team could install them on Thursday, but I'd need to order the fixtures today."
+   },
+   {
+    "s": "W2",
+    "t": "Our budget for the exhibit is almost used up, though."
+   },
+   {
+    "s": "W",
+    "t": "I'll ask the director if we can use some of the funds from next quarter. Victor, please send me a written estimate within the hour."
+   }
+  ],
+  "graphic": null,
+  "questions": [
+   {
+    "q": "What problem are the speakers discussing?",
+    "choices": [
+     "Some photographs were damaged.",
+     "The ceiling needs to be repaired.",
+     "Light is reflecting off some frames.",
+     "The exhibit opening was postponed."
+    ],
+    "answer": 2,
+    "type": "주제·목적",
+    "explanation": "남자가 \"There's a lot of glare on the glass frames\"라고 했고 큐레이터도 관람객이 사진을 제대로 못 볼 것을 걱정하므로 액자 유리에 빛이 반사되는 문제다. glare를 light reflecting으로 바꿔 표현했다."
+   },
+   {
+    "q": "What is the man's proposed solution?",
+    "choices": [
+     "Closing the window blinds",
+     "Installing adjustable lights",
+     "Using a different type of glass",
+     "Moving the photos to another wall"
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "남자가 \"replace these fixtures with adjustable track lights\"를 제안하고 빛을 유리 반대쪽으로 향하게 하자고 했으므로 각도 조절 조명 설치가 해결책이다."
+   },
+   {
+    "q": "What does the first woman ask Victor to do?",
+    "choices": [
+     "Speak with the director",
+     "Install the lights today",
+     "Provide a cost estimate",
+     "Reduce his team's fee"
+    ],
+    "answer": 2,
+    "type": "요청·제안",
+    "explanation": "첫 번째 여자가 \"Victor, please send me a written estimate within the hour\"라고 했으므로 서면 견적을 요청했다. 관장과 이야기하는 것은 여자 자신이 할 일이다."
+   }
+  ],
+  "translation": "W: 급하게 불렀는데 와 줘서 고마워요, 빅터. 보다시피 새 사진전이 토요일에 개막하는데 조명이 아직 제대로 안 돼 있어요.\nM: 들어오면서 봤어요. 이쪽 벽 유리 액자에 빛 반사가 심하네요.\nW2: 큐레이터로서 제가 걱정하는 게 그거예요. 관람객들이 사진을 제대로 못 볼 거예요.\nM: 문제는 천장 조명의 각도예요. 이 조명 기구를 각도 조절이 되는 트랙 조명으로 바꾸면 빛을 유리 반대쪽으로 돌릴 수 있어요.\nW: 얼마나 걸릴까요?\nM: 저희 팀이 목요일에 설치할 수 있는데, 조명 기구는 오늘 주문해야 해요.\nW2: 그런데 전시 예산이 거의 다 떨어졌어요.\nW: 다음 분기 자금을 일부 쓸 수 있는지 관장님께 여쭤볼게요. 빅터, 한 시간 안에 서면 견적서를 보내 주세요."
+ },
+ {
+  "id": "p3-087",
+  "level": 4,
+  "topic": "온라인 교육 플랫폼 계약 갱신",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "M",
+    "t": "Hi, Monica. Our contract with LearnPoint is up for renewal next month. Have you had a chance to look at the usage report?"
+   },
+   {
+    "s": "W",
+    "t": "I have. Only about a third of our staff logged in more than once last year."
+   },
+   {
+    "s": "M",
+    "t": "That's lower than I expected, considering what we pay for it."
+   },
+   {
+    "s": "W",
+    "t": "I asked a few people why, and they said most of the courses are too general. They want training that's specific to our industry."
+   },
+   {
+    "s": "M",
+    "t": "LearnPoint did say they're adding a logistics series this spring."
+   },
+   {
+    "s": "W",
+    "t": "They've been saying that for two years."
+   },
+   {
+    "s": "M",
+    "t": "Fair enough. Then let's ask a couple of other providers for proposals before we decide anything. Could you put together a list of the topics our staff want most?"
+   }
+  ],
+  "graphic": null,
+  "questions": [
+   {
+    "q": "What did the woman find in the usage report?",
+    "choices": [
+     "The number of users has doubled.",
+     "The platform is too expensive to maintain.",
+     "Most courses were completed on time.",
+     "Few employees use the platform regularly."
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "여자가 \"Only about a third of our staff logged in more than once last year\"라고 했으므로 플랫폼을 꾸준히 쓰는 직원이 적다. 가격이 비싸다는 것은 남자의 반응이지 보고서 내용이 아니다."
+   },
+   {
+    "q": "What does the woman imply when she says, \"They've been saying that for two years\"?",
+    "choices": [
+     "She wants a two-year contract.",
+     "She already took the new courses.",
+     "She doubts the company's promise.",
+     "She thinks the courses are outdated."
+    ],
+    "answer": 2,
+    "type": "의도 파악",
+    "explanation": "물류 과정을 이번 봄에 추가한다는 말에 2년째 그 말만 하고 있다고 답했으므로 그 약속을 믿지 않는다는 뜻이다. 그래서 남자도 \"Fair enough\"라며 다른 업체를 알아보자고 한다."
+   },
+   {
+    "q": "What does the man ask the woman to do?",
+    "choices": [
+     "Identify employees' preferred training topics",
+     "Design a new logistics course",
+     "Renew the current contract",
+     "Contact LearnPoint's sales team"
+    ],
+    "answer": 0,
+    "type": "요청·제안",
+    "explanation": "남자가 \"Could you put together a list of the topics our staff want most?\"라고 했으므로 직원들이 가장 원하는 교육 주제를 정리해 달라는 요청이다. 다른 업체에 제안을 받는 것은 결정 전에 할 일이지 여자에게 맡긴 일이 아니다."
+   }
+  ],
+  "translation": "M: 안녕하세요, 모니카. 런포인트와의 계약이 다음 달에 갱신이에요. 이용 현황 보고서 볼 기회가 있었어요?\nW: 봤어요. 작년에 두 번 이상 접속한 직원이 3분의 1 정도밖에 안 돼요.\nM: 우리가 내는 비용을 생각하면 예상보다 낮네요.\nW: 몇 사람한테 이유를 물었더니 과정 대부분이 너무 일반적이래요. 우리 업계에 맞는 교육을 원한대요.\nM: 런포인트가 이번 봄에 물류 시리즈를 추가한다고는 했어요.\nW: 2년째 그 말만 하고 있어요.\nM: 그렇긴 하네요. 그럼 결정하기 전에 다른 업체 두어 곳에 제안서를 받아 봅시다. 직원들이 가장 원하는 주제 목록을 정리해 줄 수 있어요?"
+ },
+ {
+  "id": "p3-088",
+  "level": 4,
+  "topic": "식당 메뉴 개편용 식자재 공급업체 선택",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "W",
+    "t": "Carlos, I've been comparing suppliers for the seafood on our new summer menu. Here are the four I contacted."
+   },
+   {
+    "s": "M",
+    "t": "Thanks. Freshness is my top priority, so I'd rather not use anyone who delivers less than three times a week."
+   },
+   {
+    "s": "W",
+    "t": "That leaves two of them. One is a bit cheaper, but they require a minimum order that's way more than we'd use."
+   },
+   {
+    "s": "M",
+    "t": "Then we'd end up throwing food away. Let's go with the other one."
+   },
+   {
+    "s": "W",
+    "t": "OK. I'll ask them to send a sample of their salmon and shrimp this week so you can test the new recipes."
+   },
+   {
+    "s": "M",
+    "t": "Perfect. And let's keep the menu launch on the first of June. If the samples aren't good, though, we'll have to rethink the whole seafood section."
+   }
+  ],
+  "graphic": {
+   "title": "Seafood Supplier Comparison",
+   "rows": [
+    [
+     "Supplier",
+     "Deliveries per Week",
+     "Minimum Order"
+    ],
+    [
+     "Ocean Harvest",
+     "2",
+     "$300"
+    ],
+    [
+     "Blue Bay Foods",
+     "5",
+     "$1,500"
+    ],
+    [
+     "Coastline Market",
+     "3",
+     "$400"
+    ],
+    [
+     "Northern Catch",
+     "1",
+     "$200"
+    ]
+   ]
+  },
+  "questions": [
+   {
+    "q": "What is the man's main concern about suppliers?",
+    "choices": [
+     "How quickly they respond",
+     "How they package the food",
+     "Where they are located",
+     "How fresh the food will be"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "남자가 \"Freshness is my top priority\"라며 주 3회 미만 배송 업체는 쓰지 않겠다고 했으므로 식재료 신선도가 가장 중요하다."
+   },
+   {
+    "q": "Look at the graphic. Which supplier will the speakers most likely use?",
+    "choices": [
+     "Ocean Harvest",
+     "Blue Bay Foods",
+     "Coastline Market",
+     "Northern Catch"
+    ],
+    "answer": 2,
+    "type": "시각 자료 연계",
+    "explanation": "주 3회 이상 배송하는 곳은 Blue Bay Foods(5회)와 Coastline Market(3회)이다. 여자가 한 곳은 최소 주문량이 너무 많다고 했고 남자가 음식을 버리게 될 것이라며 다른 곳으로 하자고 했으므로, 최소 주문액 1,500달러인 Blue Bay가 아닌 Coastline Market이다."
+   },
+   {
+    "q": "What will the woman request from the supplier?",
+    "choices": [
+     "Product samples",
+     "A signed contract",
+     "A lower price",
+     "A delivery schedule"
+    ],
+    "answer": 0,
+    "type": "요청·제안",
+    "explanation": "여자가 \"I'll ask them to send a sample of their salmon and shrimp\"라고 했으므로 샘플을 요청할 것이다."
+   }
+  ],
+  "translation": "W: 카를로스, 새 여름 메뉴에 쓸 해산물 공급업체를 비교해 봤어요. 연락해 본 네 곳이에요.\nM: 고마워요. 저는 신선도가 가장 중요해서 일주일에 세 번 미만으로 배송하는 곳은 쓰고 싶지 않아요.\nW: 그러면 두 곳이 남아요. 한 곳이 조금 더 싼데, 최소 주문량이 우리가 쓰는 양보다 훨씬 많아요.\nM: 그럼 결국 음식을 버리게 되겠네요. 다른 곳으로 하죠.\nW: 알겠어요. 새 레시피를 시험해 보실 수 있게 이번 주에 연어와 새우 샘플을 보내 달라고 할게요.\nM: 좋아요. 그리고 메뉴 출시는 6월 1일로 유지합시다. 다만 샘플이 별로면 해산물 부문 전체를 다시 생각해야 해요."
+ },
+ {
+  "id": "p3-089",
+  "level": 4,
+  "topic": "고객센터 통화 대기 시간 단축",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "M",
+    "t": "Nadia, I just saw last month's numbers for the customer service center. The average wait time on the phone was over twelve minutes."
+   },
+   {
+    "s": "W",
+    "t": "I know. Since we launched the new smartphone, calls about setting it up have tripled."
+   },
+   {
+    "s": "M",
+    "t": "Is there anything we can do quickly? Hiring and training new agents would take at least two months."
+   },
+   {
+    "s": "W",
+    "t": "Well, most callers are asking the same five or six questions."
+   },
+   {
+    "s": "M",
+    "t": "So you're thinking of a video guide?"
+   },
+   {
+    "s": "W",
+    "t": "Exactly. We could post short setup videos on our Web site and play a message during the wait that tells callers where to find them."
+   },
+   {
+    "s": "M",
+    "t": "I like that. Can you get the product team to help with the scripts? They know the features best."
+   },
+   {
+    "s": "W",
+    "t": "I'll set up a meeting with them tomorrow."
+   }
+  ],
+  "graphic": null,
+  "questions": [
+   {
+    "q": "What caused the increase in calls?",
+    "choices": [
+     "A change in prices",
+     "A problem with the Web site",
+     "The release of a new product",
+     "A shortage of agents"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "여자가 \"Since we launched the new smartphone, calls about setting it up have tripled\"라고 했으므로 신제품 출시 이후 문의가 늘었다. launched를 release로 바꿔 표현했다."
+   },
+   {
+    "q": "Why does the woman say, \"most callers are asking the same five or six questions\"?",
+    "choices": [
+     "To complain that customers do not read manuals",
+     "To show that the problem is not serious",
+     "To explain why agents need more training",
+     "To suggest that common questions could be answered another way"
+    ],
+    "answer": 3,
+    "type": "의도 파악",
+    "explanation": "신입 상담원을 뽑는 데 오래 걸린다는 말에 이어 한 말이고, 남자가 곧바로 영상 안내를 떠올리므로 반복되는 질문은 다른 방법으로 해결할 수 있다는 제안이다."
+   },
+   {
+    "q": "What will the woman do tomorrow?",
+    "choices": [
+     "Meet with the product team",
+     "Record a phone message",
+     "Interview new agents",
+     "Update the Web site"
+    ],
+    "answer": 0,
+    "type": "다음 할 일",
+    "explanation": "남자가 제품팀에 대본 작성 도움을 받으라고 하자 여자가 \"I'll set up a meeting with them tomorrow\"라고 했으므로 내일 제품팀과 회의한다."
+   }
+  ],
+  "translation": "M: 나디아, 방금 고객센터 지난달 수치를 봤어요. 전화 평균 대기 시간이 12분이 넘더라고요.\nW: 알아요. 새 스마트폰을 출시한 뒤로 설정 관련 전화가 세 배로 늘었어요.\nM: 빨리 할 수 있는 방법이 있을까요? 새 상담원을 뽑아서 교육하려면 적어도 두 달은 걸릴 거예요.\nW: 음, 전화하는 사람 대부분이 똑같은 대여섯 가지 질문을 해요.\nM: 그럼 영상 안내를 생각하는 거예요?\nW: 맞아요. 웹사이트에 짧은 설정 영상을 올리고, 대기 중에 영상 위치를 알려 주는 안내 메시지를 틀면 돼요.\nM: 좋네요. 제품팀에 대본 작성을 도와 달라고 해 줄래요? 기능은 그 사람들이 제일 잘 아니까요.\nW: 내일 그 팀과 회의를 잡을게요."
+ },
+ {
+  "id": "p3-090",
+  "level": 4,
+  "topic": "사옥 옥상 정원 조성 공사",
+  "speakers": {
+   "M": "male",
+   "W": "female",
+   "M2": "male"
+  },
+  "script": [
+   {
+    "s": "M",
+    "t": "Thanks for meeting with us, Ms. Porter. We'd like to turn the roof of our building into a garden where employees can take breaks."
+   },
+   {
+    "s": "W",
+    "t": "That's a great idea. Before we design anything, though, we'll need an engineer to confirm that the roof can support the extra weight of soil and planters."
+   },
+   {
+    "s": "M2",
+    "t": "I'm the facilities manager here. The building was renovated five years ago, and I have the structural reports from that project."
+   },
+   {
+    "s": "W",
+    "t": "That would save a lot of time. If the reports are recent enough, we might not need a new inspection at all."
+   },
+   {
+    "s": "M",
+    "t": "How long would the whole project take?"
+   },
+   {
+    "s": "W",
+    "t": "Usually about three months. But we don't plant anything during winter, so if we don't start by October, it'll have to wait until spring."
+   },
+   {
+    "s": "M2",
+    "t": "I'll send you the reports this afternoon."
+   }
+  ],
+  "graphic": null,
+  "questions": [
+   {
+    "q": "What does the company want to create?",
+    "choices": [
+     "A vegetable garden to sell produce",
+     "A new parking area",
+     "A larger lobby",
+     "A rooftop space for employees"
+    ],
+    "answer": 3,
+    "type": "주제·목적",
+    "explanation": "첫 남자가 \"turn the roof of our building into a garden where employees can take breaks\"라고 했으므로 직원용 옥상 정원을 만들려 한다."
+   },
+   {
+    "q": "Why might the project be completed more quickly?",
+    "choices": [
+     "The design is already finished.",
+     "Existing documents may be sufficient.",
+     "The plants have been ordered.",
+     "The company has hired extra workers."
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "시설 관리자가 5년 전 보수 공사 때의 구조 보고서가 있다고 하자 여자가 최근 것이면 새 점검이 필요 없을 수도 있어 시간이 많이 절약된다고 했다. 기존 문서로 충분할 수 있다는 것이 이유다."
+   },
+   {
+    "q": "According to the woman, what could delay the project?",
+    "choices": [
+     "Starting after a certain month",
+     "Bad weather in the spring",
+     "A change in city regulations",
+     "A shortage of materials"
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "여자가 \"if we don't start by October, it'll have to wait until spring\"이라고 했으므로 10월 이후에 시작하면 봄까지 미뤄진다. 겨울에 심지 않기 때문이지 봄 날씨가 문제가 아니다."
+   }
+  ],
+  "translation": "M: 만나 주셔서 감사합니다, 포터 씨. 저희 건물 옥상을 직원들이 쉴 수 있는 정원으로 바꾸고 싶어요.\nW: 좋은 생각이네요. 다만 설계를 하기 전에 옥상이 흙과 화분의 추가 무게를 견딜 수 있는지 엔지니어가 확인해야 해요.\nM2: 제가 이곳 시설 관리자예요. 건물을 5년 전에 보수했는데, 그때 만든 구조 보고서가 있어요.\nW: 그러면 시간이 많이 절약되겠네요. 보고서가 충분히 최근 것이면 새로 점검할 필요가 아예 없을 수도 있어요.\nM: 전체 공사는 얼마나 걸릴까요?\nW: 보통 석 달 정도요. 하지만 겨울에는 아무것도 심지 않아서 10월까지 시작하지 못하면 봄까지 기다려야 해요.\nM2: 오늘 오후에 보고서를 보내 드릴게요."
+ },
+ {
+  "id": "p3-091",
+  "level": 4,
+  "topic": "출판사 원고 교정 일정 조정",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "W",
+    "t": "Hi, Ben. It's Laura from Maple Press. I'm calling about the production schedule for your cookbook."
+   },
+   {
+    "s": "M",
+    "t": "Hi, Laura. Is everything on track?"
+   },
+   {
+    "s": "W",
+    "t": "Mostly. But the photographer just told us she needs another week to reshoot the dessert chapter. The lighting in the first photos wasn't right."
+   },
+   {
+    "s": "M",
+    "t": "I see. Does that push back the publication date?"
+   },
+   {
+    "s": "W",
+    "t": "Not necessarily. We could give you less time for your final review. Instead of two weeks, you'd have one."
+   },
+   {
+    "s": "M",
+    "t": "That's tight, but I think I can manage. I've already read most of the text twice."
+   },
+   {
+    "s": "W",
+    "t": "Great. Then the only step that moves is the photo shoot, and everything after it stays the same. I'll send you a revised schedule this afternoon."
+   }
+  ],
+  "graphic": {
+   "title": "Maple Press — Production Schedule",
+   "rows": [
+    [
+     "Stage",
+     "Deadline"
+    ],
+    [
+     "Photo shoot",
+     "March 3"
+    ],
+    [
+     "Page layout",
+     "March 17"
+    ],
+    [
+     "Author's final review",
+     "March 31"
+    ],
+    [
+     "Printing",
+     "April 14"
+    ]
+   ]
+  },
+  "questions": [
+   {
+    "q": "Who most likely is the man?",
+    "choices": [
+     "A printer",
+     "A chef at a restaurant",
+     "An author",
+     "A photographer"
+    ],
+    "answer": 2,
+    "type": "화자 정보(직업·장소)",
+    "explanation": "여자가 \"the production schedule for your cookbook\"이라고 했고 남자가 최종 검토를 맡으므로 요리책의 저자다. 사진작가는 대화에 언급된 제3자다."
+   },
+   {
+    "q": "Why is there a delay?",
+    "choices": [
+     "A printer is out of order.",
+     "Some photos must be taken again.",
+     "The text needs to be rewritten.",
+     "A chapter was added to the book."
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "여자가 사진작가가 \"needs another week to reshoot the dessert chapter\"라고 했으므로 사진을 다시 찍어야 해서 늦어진다. reshoot를 taken again으로 바꿔 표현했다."
+   },
+   {
+    "q": "Look at the graphic. Which deadline will be changed?",
+    "choices": [
+     "March 3",
+     "March 17",
+     "March 31",
+     "April 14"
+    ],
+    "answer": 0,
+    "type": "시각 자료 연계",
+    "explanation": "여자가 \"the only step that moves is the photo shoot\"이라고 했으므로 표에서 Photo shoot의 마감일인 3월 3일이 바뀐다. 최종 검토 기간은 줄어들지만 마감일(3월 31일)은 그대로다."
+   }
+  ],
+  "translation": "W: 안녕하세요, 벤. 메이플 출판사의 로라예요. 요리책 제작 일정 때문에 전화했어요.\nM: 안녕하세요, 로라. 다 순조롭게 진행되고 있나요?\nW: 대체로요. 그런데 사진작가가 디저트 장을 다시 찍는 데 일주일이 더 필요하다고 방금 알려 왔어요. 처음 사진의 조명이 좋지 않았대요.\nM: 그렇군요. 그럼 출간일이 미뤄지나요?\nW: 꼭 그렇진 않아요. 작가님의 최종 검토 기간을 줄이면 돼요. 2주 대신 1주가 되는 거죠.\nM: 빠듯하지만 할 수 있을 것 같아요. 본문 대부분은 이미 두 번 읽었거든요.\nW: 좋아요. 그럼 바뀌는 건 사진 촬영 단계뿐이고 그 이후는 모두 그대로예요. 오늘 오후에 수정 일정표를 보내 드릴게요."
+ },
+ {
+  "id": "p3-092",
+  "level": 4,
+  "topic": "공유 자전거 업체와의 직원 복지 제휴",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "W",
+    "t": "Greg, a representative from CityCycle contacted me. They're offering discounted bike-share memberships to companies in this district."
+   },
+   {
+    "s": "M",
+    "t": "Interesting. How much of a discount?"
+   },
+   {
+    "s": "W",
+    "t": "Forty percent off the annual fee if at least twenty employees sign up. And they'd install a docking station right outside our building."
+   },
+   {
+    "s": "M",
+    "t": "That could really help with the parking shortage. We have more cars than spaces as it is."
+   },
+   {
+    "s": "W",
+    "t": "That's what I was thinking. The only catch is that we'd have to commit for two years."
+   },
+   {
+    "s": "M",
+    "t": "Two years is nothing if people actually use it."
+   },
+   {
+    "s": "W",
+    "t": "True. Maybe we should send out a quick survey first to see how many people are interested."
+   },
+   {
+    "s": "M",
+    "t": "Good idea. Put one together, and I'll mention it at Friday's staff meeting."
+   }
+  ],
+  "graphic": null,
+  "questions": [
+   {
+    "q": "What is CityCycle offering?",
+    "choices": [
+     "Free bicycle repairs",
+     "Discounted memberships",
+     "Bicycle safety training",
+     "A new parking garage"
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "여자가 CityCycle이 \"discounted bike-share memberships\"를 제안한다고 했으므로 할인된 회원권이다."
+   },
+   {
+    "q": "What does the man mean when he says, \"Two years is nothing if people actually use it\"?",
+    "choices": [
+     "Two years is too short for the program.",
+     "Employees rarely ride bicycles.",
+     "The company should wait two years.",
+     "The contract length is not a serious concern."
+    ],
+    "answer": 3,
+    "type": "의도 파악",
+    "explanation": "2년 약정이 유일한 단점이라는 말에 대한 대답이므로, 직원들이 실제로 이용한다면 약정 기간은 큰 문제가 아니라는 뜻이다."
+   },
+   {
+    "q": "What will the woman most likely do next?",
+    "choices": [
+     "Create a survey",
+     "Lead a staff meeting",
+     "Visit a docking station",
+     "Sign a contract"
+    ],
+    "answer": 0,
+    "type": "다음 할 일",
+    "explanation": "남자가 \"Put one together\"라고 설문을 만들라고 했으므로 여자는 설문지를 만들 것이다. 직원 회의에서 이 안건을 언급하는 사람은 남자다."
+   }
+  ],
+  "translation": "W: 그레그, 시티사이클 담당자에게서 연락이 왔어요. 이 지역 회사들에 공유 자전거 회원권을 할인해 준대요.\nM: 흥미롭네요. 얼마나 할인되나요?\nW: 직원이 최소 20명 가입하면 연회비 40퍼센트 할인이요. 그리고 우리 건물 바로 앞에 거치대도 설치해 준대요.\nM: 주차난 해결에 정말 도움이 될 수 있겠네요. 지금도 차가 주차 공간보다 많잖아요.\nW: 저도 그렇게 생각했어요. 단 하나 걸리는 건 2년 약정을 해야 한다는 거예요.\nM: 사람들이 실제로 이용하기만 하면 2년은 아무것도 아니죠.\nW: 맞아요. 먼저 간단한 설문을 돌려서 관심 있는 사람이 몇 명인지 보는 게 좋겠어요.\nM: 좋은 생각이에요. 설문을 만들어 주세요, 제가 금요일 직원 회의에서 얘기할게요."
+ },
+ {
+  "id": "p3-093",
+  "level": 5,
+  "topic": "임상시험 데이터 외부 감사 대비",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "M",
+    "t": "Priya, the external auditors confirmed they'll be here the week of the ninth to review the data from our Phase Two trial."
+   },
+   {
+    "s": "W",
+    "t": "That's earlier than we'd planned. Two of the partner clinics still haven't uploaded their final patient records."
+   },
+   {
+    "s": "M",
+    "t": "I know. I called both of them this morning. One promised to finish by Friday. The other said they're, quote, doing their best."
+   },
+   {
+    "s": "W",
+    "t": "So, in other words, don't count on it."
+   },
+   {
+    "s": "M",
+    "t": "Pretty much. I'm wondering if we should ask the auditors to review that clinic's data separately, at a later date."
+   },
+   {
+    "s": "W",
+    "t": "They might agree, as long as we explain it in writing. Auditors tend to be more flexible when the request is documented ahead of time."
+   },
+   {
+    "s": "M",
+    "t": "Then could you draft a letter explaining the situation? I'll review it before it goes out, and we'll copy the legal department."
+   }
+  ],
+  "graphic": null,
+  "questions": [
+   {
+    "q": "What problem does the woman mention?",
+    "choices": [
+     "A clinic has left the study.",
+     "The trial results were disappointing.",
+     "An auditor has canceled a visit.",
+     "Some records have not been submitted."
+    ],
+    "answer": 3,
+    "type": "주제·목적",
+    "explanation": "여자가 \"Two of the partner clinics still haven't uploaded their final patient records\"라고 했으므로 일부 기록이 아직 제출되지 않았다. 감사 일정은 취소된 것이 아니라 예상보다 앞당겨졌다."
+   },
+   {
+    "q": "What does the woman imply when she says, \"So, in other words, don't count on it\"?",
+    "choices": [
+     "She is not sure the trial will continue.",
+     "The auditors will not accept late data.",
+     "One clinic will probably miss the deadline.",
+     "The man should not call the clinic again."
+    ],
+    "answer": 2,
+    "type": "의도 파악",
+    "explanation": "한 병원이 그저 \"doing their best\"라고만 답했다는 말에 대한 반응이므로 그 병원은 기한을 맞추지 못할 가능성이 높다는 뜻이다. 남자가 그 병원 데이터를 따로 검토받자고 이어 가는 것도 이를 뒷받침한다."
+   },
+   {
+    "q": "What does the man ask the woman to do?",
+    "choices": [
+     "Contact the legal department",
+     "Prepare a written request",
+     "Visit the partner clinics",
+     "Postpone the audit"
+    ],
+    "answer": 1,
+    "type": "요청·제안",
+    "explanation": "남자가 \"could you draft a letter explaining the situation?\"이라고 했으므로 상황을 설명하는 서면 요청서를 작성해 달라는 것이다. 법무팀은 참조로 넣을 대상일 뿐 여자에게 연락을 맡긴 것이 아니다."
+   }
+  ],
+  "translation": "M: 프리야, 외부 감사단이 2상 시험 데이터를 검토하러 9일이 있는 주에 온다고 확정했어요.\nW: 우리가 계획했던 것보다 이르네요. 협력 병원 두 곳이 아직 최종 환자 기록을 올리지 않았어요.\nM: 알아요. 오늘 아침에 두 곳 모두 전화했어요. 한 곳은 금요일까지 끝내겠다고 약속했고요. 다른 곳은, 그대로 옮기자면, '최선을 다하고 있다'고 하더군요.\nW: 그러니까 다시 말해 기대하지 말라는 거네요.\nM: 거의 그렇죠. 감사단에 그 병원 데이터는 나중에 따로 검토해 달라고 요청해야 하나 싶어요.\nW: 서면으로 설명하면 동의해 줄 수도 있어요. 감사단은 요청이 미리 문서로 오면 좀 더 유연한 편이거든요.\nM: 그럼 상황을 설명하는 서한 초안을 써 줄래요? 보내기 전에 제가 검토하고, 법무팀도 참조로 넣을게요."
+ },
+ {
+  "id": "p3-094",
+  "level": 5,
+  "topic": "물류센터 자동화 로봇 공급업체 비교",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "W",
+    "t": "Now that we've seen all the demonstrations, I think we can eliminate a couple of the robot vendors for the distribution center."
+   },
+   {
+    "s": "M",
+    "t": "Agreed. Frankly, anything that takes longer than six months to install is off the table. We can't have the floor disrupted through the holiday season."
+   },
+   {
+    "s": "W",
+    "t": "That rules out two of them. And I'd be hesitant about the one with the lowest per-unit price. Their maintenance contract only covers the first year."
+   },
+   {
+    "s": "M",
+    "t": "Right, and repair costs after that could easily wipe out the savings. So we're down to one option."
+   },
+   {
+    "s": "W",
+    "t": "Its price is higher, but the three-year warranty and the installation time make it the safest choice."
+   },
+   {
+    "s": "M",
+    "t": "I'll present it to the board on Tuesday. Could you get me the reference contacts they mentioned? I'd like to talk to a couple of their existing clients first."
+   }
+  ],
+  "graphic": {
+   "title": "Warehouse Robot Vendors",
+   "rows": [
+    [
+     "Vendor",
+     "Price per Unit",
+     "Installation",
+     "Maintenance Coverage"
+    ],
+    [
+     "AutoMove",
+     "$38,000",
+     "4 months",
+     "1 year"
+    ],
+    [
+     "StackPro",
+     "$45,000",
+     "9 months",
+     "3 years"
+    ],
+    [
+     "LiftLogic",
+     "$47,500",
+     "5 months",
+     "3 years"
+    ],
+    [
+     "Robonet",
+     "$52,000",
+     "8 months",
+     "2 years"
+    ]
+   ]
+  },
+  "questions": [
+   {
+    "q": "Why does the man want to avoid a long installation?",
+    "choices": [
+     "It would interfere with a busy period.",
+     "It would exceed the budget.",
+     "It would delay a board meeting.",
+     "It would require extra staff."
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "남자가 설치가 길면 \"We can't have the floor disrupted through the holiday season\"이라고 했으므로 성수기 업무에 지장을 주기 때문이다. holiday season을 busy period로 바꿔 표현했다."
+   },
+   {
+    "q": "Look at the graphic. Which vendor will the man most likely recommend?",
+    "choices": [
+     "AutoMove",
+     "StackPro",
+     "LiftLogic",
+     "Robonet"
+    ],
+    "answer": 2,
+    "type": "시각 자료 연계",
+    "explanation": "설치 6개월 초과(StackPro 9개월, Robonet 8개월)는 제외되고, 단가가 가장 낮은 AutoMove는 유지보수가 1년뿐이라 뺐다. 남은 곳은 설치 5개월, 보증 3년인 LiftLogic이다."
+   },
+   {
+    "q": "What does the man ask the woman for?",
+    "choices": [
+     "A report on the demonstrations",
+     "A revised price quote",
+     "Contact information for current customers",
+     "A copy of the warranty"
+    ],
+    "answer": 2,
+    "type": "요청·제안",
+    "explanation": "남자가 \"Could you get me the reference contacts they mentioned?\"라며 기존 고객과 이야기하고 싶다고 했으므로 현재 고객들의 연락처를 요청했다. existing clients를 current customers로 바꿔 표현했다."
+   }
+  ],
+  "translation": "W: 시연을 다 봤으니 물류센터 로봇 업체 두어 곳은 제외할 수 있을 것 같아요.\nM: 동의해요. 솔직히 설치에 6개월 넘게 걸리는 곳은 고려 대상이 아니에요. 연말 성수기 내내 현장이 어수선하면 안 되니까요.\nW: 그러면 한 곳이 빠지네요. 그리고 단가가 가장 낮은 곳도 망설여져요. 유지보수 계약이 첫해만 적용되거든요.\nM: 맞아요, 그 이후 수리비가 절감액을 쉽게 다 까먹을 수 있죠. 그럼 선택지가 하나로 줄었네요.\nW: 가격은 더 높지만 3년 보증과 설치 기간을 보면 가장 안전한 선택이에요.\nM: 화요일에 이사회에 보고할게요. 업체가 말한 추천 고객 연락처를 받아 줄래요? 기존 고객 두어 곳과 먼저 이야기해 보고 싶어요."
+ },
+ {
+  "id": "p3-095",
+  "level": 5,
+  "topic": "호텔 체인과 항공사 마일리지 제휴 협상",
+  "speakers": {
+   "W": "female",
+   "M": "male",
+   "W2": "female"
+  },
+  "script": [
+   {
+    "s": "W",
+    "t": "Thanks for joining the call, Hiroshi. As we mentioned, Crestline Hotels is interested in letting our loyalty members earn miles with your airline."
+   },
+   {
+    "s": "M",
+    "t": "We're very interested as well. The main sticking point for us is the rate. Your proposal offers one mile per dollar spent, and our other hotel partners offer two."
+   },
+   {
+    "s": "W2",
+    "t": "I understand, but most of those partners are budget chains. Our average room rate is nearly double theirs."
+   },
+   {
+    "s": "M",
+    "t": "That's a fair point."
+   },
+   {
+    "s": "W",
+    "t": "What if we kept the rate at one mile per dollar, but added a bonus of five hundred miles for stays of three nights or more?"
+   },
+   {
+    "s": "M",
+    "t": "That could work. Our frequent flyers do tend to take longer trips. I'd need to run the numbers with our finance team, though."
+   },
+   {
+    "s": "W2",
+    "t": "Of course. We can send you our booking data from last year to help with that."
+   },
+   {
+    "s": "M",
+    "t": "That would be helpful. Let's plan to talk again next Thursday."
+   }
+  ],
+  "graphic": null,
+  "questions": [
+   {
+    "q": "What are the speakers mainly discussing?",
+    "choices": [
+     "The terms of a partnership",
+     "Changes to room rates",
+     "A hotel booking error",
+     "A new flight route"
+    ],
+    "answer": 0,
+    "type": "주제·목적",
+    "explanation": "호텔 회원이 항공 마일리지를 적립하는 제휴를 두고 적립률과 보너스를 협상하고 있으므로 제휴 조건이 주제다."
+   },
+   {
+    "q": "Why does the second woman mention budget chains?",
+    "choices": [
+     "To justify a lower earning rate",
+     "To complain about competitors' prices",
+     "To suggest new partners",
+     "To explain a drop in bookings"
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "남자가 다른 호텔은 달러당 2마일을 준다고 하자 두 번째 여자가 그 호텔들은 저가 체인이고 자사 객실 요금은 거의 두 배라고 했다. 자사가 더 낮은 적립률을 제시하는 것이 타당하다는 근거를 댄 것이다."
+   },
+   {
+    "q": "What does the man mean when he says, \"That's a fair point\"?",
+    "choices": [
+     "He believes the rate should be doubled.",
+     "He accepts the woman's reasoning.",
+     "He wants to end the negotiation.",
+     "He thinks the price is fair."
+    ],
+    "answer": 1,
+    "type": "의도 파악",
+    "explanation": "객실 요금이 두 배라서 1마일만 줘도 된다는 설명에 대한 답이므로 상대의 논리를 인정한다는 뜻이다. 적립률을 두 배로 올려야 한다는 의미가 아니다."
+   }
+  ],
+  "translation": "W: 통화에 참여해 주셔서 감사합니다, 히로시. 말씀드렸듯이 크레스트라인 호텔은 저희 회원들이 귀사 항공사 마일리지를 적립할 수 있게 하고 싶어요.\nM: 저희도 관심이 많습니다. 저희 쪽에서 걸리는 건 적립률이에요. 제안서에는 1달러당 1마일인데, 다른 호텔 제휴사들은 2마일을 줍니다.\nW2: 이해합니다만, 그 제휴사들은 대부분 저가 체인이에요. 저희 평균 객실 요금은 그들의 거의 두 배입니다.\nM: 일리 있는 말씀이네요.\nW: 적립률은 달러당 1마일로 유지하되, 3박 이상 투숙하면 500마일 보너스를 더하면 어떨까요?\nM: 괜찮을 수 있겠네요. 저희 상용 고객들은 여행을 길게 하는 편이거든요. 다만 재무팀과 수치를 따져 봐야 해요.\nW2: 물론이죠. 도움이 되도록 작년 예약 데이터를 보내 드릴게요.\nM: 그러면 도움이 되겠네요. 다음 주 목요일에 다시 이야기하죠."
+ },
+ {
+  "id": "p3-096",
+  "level": 5,
+  "topic": "공연장 좌석 재배치와 소방 규정",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "M",
+    "t": "Ms. Dubois, I've reviewed your plan to add more seating for the jazz festival, and I'm afraid there's an issue with the fire code."
+   },
+   {
+    "s": "W",
+    "t": "Oh? We only wanted to add seats in one section, in front of the stage."
+   },
+   {
+    "s": "M",
+    "t": "Yes, but the aisle in that section would end up narrower than the legal minimum. Emergency exits have to stay clear at all times."
+   },
+   {
+    "s": "W",
+    "t": "What if we added the seats to a different section instead? We really need to increase capacity. Ticket sales have been far stronger than we expected."
+   },
+   {
+    "s": "M",
+    "t": "The balcony can't take any more. But the section with the widest aisles could absorb the additional seats without violating the code."
+   },
+   {
+    "s": "W",
+    "t": "Then we'll do that. Will you need to inspect the hall again?"
+   },
+   {
+    "s": "M",
+    "t": "Yes. Submit a revised floor plan, and I'll schedule a final inspection before opening night."
+   }
+  ],
+  "graphic": {
+   "title": "Harbor Concert Hall — Seating Sections",
+   "rows": [
+    [
+     "Section",
+     "Current Seats",
+     "Aisle Width"
+    ],
+    [
+     "Floor Front",
+     "220",
+     "1.1 m"
+    ],
+    [
+     "Floor Rear",
+     "260",
+     "1.8 m"
+    ],
+    [
+     "Side Terraces",
+     "140",
+     "1.4 m"
+    ],
+    [
+     "Balcony",
+     "180",
+     "1.2 m"
+    ]
+   ]
+  },
+  "questions": [
+   {
+    "q": "Who most likely is the man?",
+    "choices": [
+     "A stage designer",
+     "A ticket agent",
+     "A concert promoter",
+     "A safety inspector"
+    ],
+    "answer": 3,
+    "type": "화자 정보(직업·장소)",
+    "explanation": "남자가 좌석 계획을 소방 규정(fire code) 기준으로 검토하고 최종 점검 일정을 잡겠다고 하므로 안전 점검관이다."
+   },
+   {
+    "q": "Why does the woman want to add seats?",
+    "choices": [
+     "Some seats were damaged.",
+     "A sponsor asked for more seats.",
+     "Demand for tickets is high.",
+     "A larger stage is being built."
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "여자가 \"Ticket sales have been far stronger than we expected\"라고 했으므로 표 수요가 많아서 좌석을 늘리려 한다."
+   },
+   {
+    "q": "Look at the graphic. Where will the additional seats most likely be placed?",
+    "choices": [
+     "Floor Front",
+     "Floor Rear",
+     "Side Terraces",
+     "Balcony"
+    ],
+    "answer": 1,
+    "type": "시각 자료 연계",
+    "explanation": "남자가 통로가 가장 넓은 구역이면 규정 위반 없이 좌석을 추가할 수 있다고 했고 여자가 그렇게 하겠다고 했다. 표에서 통로 폭이 가장 넓은 곳은 1.8m인 Floor Rear다. 무대 앞(Floor Front)은 원래 계획이었지만 통로가 좁아 불가하다."
+   }
+  ],
+  "translation": "M: 뒤부아 씨, 재즈 페스티벌 좌석 증설 계획을 검토했는데, 소방 규정에 문제가 있습니다.\nW: 네? 저희는 무대 앞 한 구역에만 좌석을 추가하려고 했는데요.\nM: 네, 하지만 그렇게 하면 그 구역 통로가 법정 최소 폭보다 좁아져요. 비상구는 늘 막힘없이 유지돼야 합니다.\nW: 대신 다른 구역에 좌석을 추가하면 어떨까요? 수용 인원을 꼭 늘려야 해요. 표가 예상보다 훨씬 많이 팔렸거든요.\nM: 발코니는 더 이상 안 됩니다. 하지만 통로가 가장 넓은 구역이면 규정을 어기지 않고 추가 좌석을 둘 수 있어요.\nW: 그럼 그렇게 할게요. 공연장을 다시 점검하셔야 하나요?\nM: 네. 수정한 평면도를 제출하시면 개막 공연 전에 최종 점검 일정을 잡겠습니다."
+ },
+ {
+  "id": "p3-097",
+  "level": 5,
+  "topic": "식품 제조사 자발적 리콜 대응",
+  "speakers": {
+   "M": "male",
+   "W": "female",
+   "W2": "female"
+  },
+  "script": [
+   {
+    "s": "M",
+    "t": "Thanks for coming on such short notice. Quality control found that one batch of our granola bars may contain traces of peanuts that aren't listed on the label."
+   },
+   {
+    "s": "W",
+    "t": "How many units are we talking about?"
+   },
+   {
+    "s": "M",
+    "t": "Roughly eight thousand boxes, all shipped to stores in the Northeast last week."
+   },
+   {
+    "s": "W2",
+    "t": "Has anyone reported getting sick?"
+   },
+   {
+    "s": "M",
+    "t": "Not so far. But we can't take any chances with allergens. I'd like to issue a voluntary recall today."
+   },
+   {
+    "s": "W",
+    "t": "I'll contact our distributors and ask them to pull the product from the shelves immediately."
+   },
+   {
+    "s": "W2",
+    "t": "And I'll draft a public statement. It should explain which batch numbers are affected and how customers can get a refund."
+   },
+   {
+    "s": "M",
+    "t": "Good. Please have it ready for legal review by three o'clock."
+   }
+  ],
+  "graphic": null,
+  "questions": [
+   {
+    "q": "What problem did quality control find?",
+    "choices": [
+     "A batch of products was underweight.",
+     "Some boxes were damaged in shipping.",
+     "An ingredient was missing from a label.",
+     "A machine produced bars of the wrong size."
+    ],
+    "answer": 2,
+    "type": "주제·목적",
+    "explanation": "남자가 그래놀라 바에 \"traces of peanuts that aren't listed on the label\"이 들어 있을 수 있다고 했으므로 라벨에 성분이 빠진 문제다."
+   },
+   {
+    "q": "According to the man, why will the company issue a recall?",
+    "choices": [
+     "Because many customers have complained",
+     "To comply with a court order",
+     "Because a store has requested it",
+     "To avoid any risk to customers"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "아직 아픈 사람은 없지만 남자가 \"we can't take any chances with allergens\"라고 했으므로 알레르기 위험을 조금도 감수하지 않으려고 자발적으로 리콜한다. 신고된 사례는 아직 없다."
+   },
+   {
+    "q": "What will the second woman do?",
+    "choices": [
+     "Issue customer refunds",
+     "Call some distributors",
+     "Write an announcement",
+     "Test more samples"
+    ],
+    "answer": 2,
+    "type": "다음 할 일",
+    "explanation": "두 번째 여자가 \"I'll draft a public statement\"라고 했으므로 대외 발표문을 작성한다. 유통업체에 연락하는 것은 첫 번째 여자의 일이다."
+   }
+  ],
+  "translation": "M: 급하게 모였는데 와 주셔서 감사합니다. 품질관리팀이 우리 그래놀라 바 한 묶음에 라벨에 표시되지 않은 땅콩 성분이 소량 들어 있을 수 있다는 걸 발견했어요.\nW: 수량이 얼마나 되나요?\nM: 대략 8천 상자이고, 전부 지난주에 북동부 지역 매장으로 출고됐어요.\nW2: 아프다고 신고한 사람이 있나요?\nM: 아직은 없어요. 하지만 알레르기 유발 성분은 조금도 위험을 감수할 수 없어요. 오늘 자발적 리콜을 발표하고 싶어요.\nW: 제가 유통업체에 연락해서 즉시 매대에서 제품을 빼 달라고 할게요.\nW2: 저는 대외 발표문 초안을 쓸게요. 어떤 제조 번호가 해당되는지, 소비자가 어떻게 환불받을 수 있는지 설명해야겠죠.\nM: 좋아요. 3시까지 법무 검토를 받을 수 있게 준비해 주세요."
+ },
+ {
+  "id": "p3-098",
+  "level": 5,
+  "topic": "재생에너지 전력 구매 계약 선택",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "W",
+    "t": "Andrew, the energy consultant sent over four renewable power contracts for our factories. Headquarters wants us to pick one by the end of the month."
+   },
+   {
+    "s": "M",
+    "t": "Our goal is to cover at least seventy percent of our electricity with renewables, right?"
+   },
+   {
+    "s": "W",
+    "t": "Right. Two of the contracts get us there. The cheaper of those two requires a fifteen-year commitment, though."
+   },
+   {
+    "s": "M",
+    "t": "That's a long time. Energy prices could fall considerably in that period."
+   },
+   {
+    "s": "W",
+    "t": "Exactly my concern. The other one costs slightly more per unit, but it's only a ten-year term, and we can renegotiate the price after five years."
+   },
+   {
+    "s": "M",
+    "t": "Given how quickly the technology is changing, flexibility is worth paying for."
+   },
+   {
+    "s": "W",
+    "t": "I'll let the consultant know, then. Should I copy the finance director?"
+   },
+   {
+    "s": "M",
+    "t": "Yes, and ask her to confirm that the extra cost fits within next year's budget."
+   }
+  ],
+  "graphic": {
+   "title": "Renewable Power Contract Options",
+   "rows": [
+    [
+     "Provider",
+     "Renewable Share",
+     "Term",
+     "Price per kWh"
+    ],
+    [
+     "SunGrid",
+     "50%",
+     "5 years",
+     "$0.09"
+    ],
+    [
+     "WindPath",
+     "75%",
+     "15 years",
+     "$0.10"
+    ],
+    [
+     "TerraVolt",
+     "80%",
+     "10 years",
+     "$0.11"
+    ],
+    [
+     "Horizon Power",
+     "60%",
+     "12 years",
+     "$0.08"
+    ]
+   ]
+  },
+  "questions": [
+   {
+    "q": "What must the speakers do by the end of the month?",
+    "choices": [
+     "Choose an energy contract",
+     "Hire a new consultant",
+     "Submit next year's budget",
+     "Reduce factory output"
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "여자가 \"Headquarters wants us to pick one by the end of the month\"라고 했으므로 월말까지 전력 계약을 골라야 한다."
+   },
+   {
+    "q": "What does the man imply when he says, \"flexibility is worth paying for\"?",
+    "choices": [
+     "He thinks the consultant charges too much.",
+     "He supports the more expensive option.",
+     "He prefers to buy new equipment.",
+     "He wants to delay the decision."
+    ],
+    "answer": 1,
+    "type": "의도 파악",
+    "explanation": "단가는 조금 더 비싸지만 10년 계약에 5년 뒤 재협상이 가능한 안을 두고 한 말이므로, 유연성을 위해 더 비싼 안을 택하자는 뜻이다."
+   },
+   {
+    "q": "Look at the graphic. Which provider will the speakers most likely choose?",
+    "choices": [
+     "SunGrid",
+     "WindPath",
+     "TerraVolt",
+     "Horizon Power"
+    ],
+    "answer": 2,
+    "type": "시각 자료 연계",
+    "explanation": "재생에너지 70% 이상인 곳은 WindPath(75%)와 TerraVolt(80%)다. 더 싼 WindPath는 15년 약정이라 우려했고, 단가가 조금 더 높은 10년 계약을 택하기로 했으므로 TerraVolt다."
+   }
+  ],
+  "translation": "W: 앤드루, 에너지 컨설턴트가 우리 공장용 재생에너지 전력 계약안을 네 가지 보내왔어요. 본사에서는 월말까지 하나를 고르라고 해요.\nM: 우리 목표가 전력의 최소 70퍼센트를 재생에너지로 충당하는 거였죠?\nW: 맞아요. 그 기준을 맞추는 계약이 두 개예요. 그런데 그중 더 싼 쪽은 15년 약정이 필요해요.\nM: 긴 기간이네요. 그동안 에너지 가격이 상당히 내려갈 수도 있어요.\nW: 제가 걱정하는 게 바로 그거예요. 다른 하나는 단가가 약간 더 높지만 10년 계약이고, 5년 뒤에 가격을 재협상할 수 있어요.\nM: 기술이 얼마나 빨리 바뀌는지 생각하면 유연성은 돈을 더 낼 만한 가치가 있어요.\nW: 그럼 컨설턴트에게 알릴게요. 재무 이사님도 참조로 넣을까요?\nM: 네, 그리고 추가 비용이 내년 예산 안에 들어가는지 확인해 달라고 해 주세요."
+ },
+ {
+  "id": "p3-099",
+  "level": 5,
+  "topic": "동남아 시장 진출 현지 유통 파트너 선정",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "M",
+    "t": "Elena, I read your report on potential distributors for our entry into the Vietnamese market. You seem to favor Linh Phat Trading."
+   },
+   {
+    "s": "W",
+    "t": "I do. They're not the largest distributor, but they already carry two brands of kitchen appliances similar to ours, so their sales staff know the category."
+   },
+   {
+    "s": "M",
+    "t": "Wouldn't that be a conflict of interest? They'd be selling our competitors' products alongside ours."
+   },
+   {
+    "s": "W",
+    "t": "I raised that with them directly. Their director pointed out that neither of those brands has a high-end line, which is exactly where we'd be positioned."
+   },
+   {
+    "s": "M",
+    "t": "Hmm. So we wouldn't be competing for the same customers."
+   },
+   {
+    "s": "W",
+    "t": "Right. And they have warehouses in both Hanoi and Ho Chi Minh City, which the larger firm doesn't."
+   },
+   {
+    "s": "M",
+    "t": "I'm persuaded. Before we commit, though, I'd like to meet their director in person. Can you see if she's available the week after next?"
+   }
+  ],
+  "graphic": null,
+  "questions": [
+   {
+    "q": "What is the woman's report about?",
+    "choices": [
+     "Possible business partners in a new market",
+     "A competitor's new product line",
+     "Customer complaints about appliances",
+     "The cost of building a warehouse"
+    ],
+    "answer": 0,
+    "type": "주제·목적",
+    "explanation": "남자가 \"your report on potential distributors for our entry into the Vietnamese market\"라고 했으므로 새 시장의 잠재적 유통 파트너에 관한 보고서다."
+   },
+   {
+    "q": "Why does the man say, \"So we wouldn't be competing for the same customers\"?",
+    "choices": [
+     "To suggest targeting a different market",
+     "To question the woman's research",
+     "To explain why sales have fallen",
+     "To show that his concern has been addressed"
+    ],
+    "answer": 3,
+    "type": "의도 파악",
+    "explanation": "이해 상충을 걱정했는데 경쟁 브랜드들에 고급 라인이 없어 자사와 겹치지 않는다는 설명을 듣고 한 말이므로, 자신의 우려가 해소됐음을 나타낸다. 이어서 \"I'm persuaded\"라고 한 것도 같은 맥락이다."
+   },
+   {
+    "q": "What does the man ask the woman to do?",
+    "choices": [
+     "Draft a contract",
+     "Visit a warehouse",
+     "Revise her report",
+     "Arrange a meeting"
+    ],
+    "answer": 3,
+    "type": "요청·제안",
+    "explanation": "남자가 상대 이사를 직접 만나고 싶다며 \"Can you see if she's available the week after next?\"라고 했으므로 만남 일정을 잡아 달라는 요청이다. 계약은 그 이후의 일이다."
+   }
+  ],
+  "translation": "M: 엘레나, 베트남 시장 진출을 위한 유통업체 후보 보고서를 읽었어요. 린팟 무역을 선호하는 것 같더군요.\nW: 네. 가장 큰 유통업체는 아니지만, 우리와 비슷한 주방 가전 브랜드를 이미 두 개 취급하고 있어서 영업 직원들이 이 품목을 잘 알아요.\nM: 그건 이해 상충 아닌가요? 우리 제품 옆에서 경쟁사 제품을 파는 거잖아요.\nW: 그 문제를 직접 물어봤어요. 그쪽 이사가 두 브랜드 모두 고급 라인이 없다고 짚더라고요. 바로 우리가 자리 잡으려는 곳이죠.\nM: 음. 그럼 같은 고객을 두고 경쟁하지는 않겠네요.\nW: 맞아요. 그리고 하노이와 호찌민 두 곳 모두에 창고가 있는데, 더 큰 업체는 그렇지 않아요.\nM: 설득됐어요. 다만 확정하기 전에 그쪽 이사를 직접 만나 보고 싶어요. 다다음 주에 시간이 되는지 알아봐 줄래요?"
+ },
+ {
+  "id": "p3-100",
+  "level": 5,
+  "topic": "해외 미술관 소장품 대여 보험",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "W",
+    "t": "Mr. Albright, I've heard back from the insurers about the paintings we're borrowing from the Lisbon museum for our spring exhibition."
+   },
+   {
+    "s": "M",
+    "t": "Good. The lending agreement says the coverage has to include both transit and the full exhibition period, correct?"
+   },
+   {
+    "s": "W",
+    "t": "Yes. And the museum also insists that the insurer have experience handling fine art. Two of the four quotes don't meet that requirement."
+   },
+   {
+    "s": "M",
+    "t": "What about the other two?"
+   },
+   {
+    "s": "W",
+    "t": "Both qualify. One has a lower premium, but its deductible is much higher. If a painting were damaged, we'd have to pay a large amount ourselves before the policy covered anything."
+   },
+   {
+    "s": "M",
+    "t": "With works this valuable, I'd rather keep our own exposure as small as possible, even if the premium is higher."
+   },
+   {
+    "s": "W",
+    "t": "I agree. I'll send the policy to the museum's registrar for approval before we sign."
+   }
+  ],
+  "graphic": {
+   "title": "Insurance Quotes — Lisbon Loan",
+   "rows": [
+    [
+     "Insurer",
+     "Fine Art Experience",
+     "Premium",
+     "Deductible"
+    ],
+    [
+     "Atlas Mutual",
+     "No",
+     "$18,000",
+     "$5,000"
+    ],
+    [
+     "Veritas Art Cover",
+     "Yes",
+     "$26,000",
+     "$10,000"
+    ],
+    [
+     "Meridian Group",
+     "No",
+     "$21,000",
+     "$15,000"
+    ],
+    [
+     "Castellan Insurance",
+     "Yes",
+     "$22,500",
+     "$50,000"
+    ]
+   ]
+  },
+  "questions": [
+   {
+    "q": "What are the speakers preparing for?",
+    "choices": [
+     "The opening of a museum in Lisbon",
+     "The restoration of damaged art",
+     "An exhibition of borrowed artwork",
+     "The sale of some paintings"
+    ],
+    "answer": 2,
+    "type": "주제·목적",
+    "explanation": "여자가 \"the paintings we're borrowing from the Lisbon museum for our spring exhibition\"이라고 했으므로 대여 작품 전시를 준비하고 있다."
+   },
+   {
+    "q": "Look at the graphic. Which insurer will the speakers most likely choose?",
+    "choices": [
+     "Atlas Mutual",
+     "Veritas Art Cover",
+     "Meridian Group",
+     "Castellan Insurance"
+    ],
+    "answer": 1,
+    "type": "시각 자료 연계",
+    "explanation": "미술품 경험이 있는 곳은 Veritas와 Castellan이다. Castellan은 보험료가 더 낮지만 자기부담금이 5만 달러로 높고, 남자가 보험료가 높더라도 자체 부담을 최소화하겠다고 했으므로 자기부담금이 1만 달러인 Veritas Art Cover다."
+   },
+   {
+    "q": "What will the woman do before signing?",
+    "choices": [
+     "Get approval from the lending museum",
+     "Inspect the paintings",
+     "Request more quotes",
+     "Negotiate a lower premium"
+    ],
+    "answer": 0,
+    "type": "다음 할 일",
+    "explanation": "여자가 \"I'll send the policy to the museum's registrar for approval before we sign\"이라고 했으므로 대여 미술관의 승인을 받는다. registrar는 소장품 관리 담당자다."
+   }
+  ],
+  "translation": "W: 올브라이트 씨, 봄 전시를 위해 리스본 미술관에서 빌리는 그림들의 보험 건으로 보험사들에게서 답을 받았어요.\nM: 좋아요. 대여 계약서에 따르면 보장 범위에 운송과 전시 기간 전체가 모두 포함돼야 하죠?\nW: 네. 그리고 미술관 측은 보험사가 미술품을 다뤄 본 경험이 있어야 한다고 강조해요. 견적 네 개 중 두 개는 그 조건을 충족하지 못해요.\nM: 나머지 두 개는요?\nW: 둘 다 조건에 맞아요. 한 곳은 보험료가 더 낮지만 자기부담금이 훨씬 높아요. 그림이 손상되면 보험이 보장하기 전에 우리가 큰 금액을 먼저 내야 해요.\nM: 이렇게 귀중한 작품이면 보험료가 더 높더라도 우리 쪽 부담은 최대한 작게 하고 싶어요.\nW: 동감이에요. 서명하기 전에 보험 증권을 미술관 소장품 담당자에게 보내 승인받을게요."
+ }
+]

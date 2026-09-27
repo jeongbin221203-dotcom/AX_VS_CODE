@@ -53,6 +53,7 @@
     $("ls-prog").textContent = `${pos + 1} / ${order.length}` + (round > 1 ? ` · ${round}회차` : "");
     $("ls-word").textContent = w.word;
     $("ls-pos").textContent = w.pos;
+    $("ls-tier").classList.toggle("hidden", w.tier !== "stretch");
     $("ls-meaning").textContent = w.meaning;
     $("ls-ex").textContent = readOpts().example ? `${w.example}  ${w.example_ko}` : "";
     $("ls-star").classList.toggle("on", !!w.starred);

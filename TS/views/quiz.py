@@ -82,8 +82,8 @@ def mock():
             return redirect(url_for("quiz.mock"))
         return redirect(url_for("quiz.quiz", sid=sid))
     past = [s for s in stats.recent_sessions(100) if s["mode"] == "mock"]
-    return render_template("mock.html", forms=scoring.MOCK_FORMS, past=past,
-                           selected=request.args.get("form", "mini"))
+    return render_template("mock.html", forms=scoring.MOCK_FORMS, past=past, fresh=study.fresh_mock_capacity(bank()),
+                           selected=request.args.get("form", "full"))
 
 
 # ---- 오답노트 ----------------------------------------------------------------------
@@ -164,6 +164,7 @@ def quiz(sid: int):
     st = db.get_settings()
     payload = {
         "sid": sid, "mode": s["mode"], "items": items, "graded": graded,
+        "real": bool(s["mode"] == "mock" and scoring.MOCK_FORMS.get(s["variant"] or "", {}).get("real")),
         "time_limit": s["time_limit"], "created_at": s["created_at"],
         "target_sec": TARGET_SEC, "lc_parts": list(LC_PARTS),
         "tts": {"rate": float(st["tts_rate"]), "accent": st["tts_accent"]},

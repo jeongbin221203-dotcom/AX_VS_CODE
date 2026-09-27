@@ -89,10 +89,34 @@ MOCK_FORMS = {
     "half": {"name": "하프 모의고사", "desc": "LC 약 50문항 + RC 약 50문항 · 약 65분",
              "p1": 3, "p2": 12, "p3": 18, "p4": 15, "p5": 15, "p6": 8, "p7_single": 14, "p7_double": 1, "p7_triple": 1,
              "rc_minutes": 38},
-    "full": {"name": "실전 모의고사", "desc": "LC 100문항 + RC 100문항 · 약 2시간",
+    # 실제 시험과 같은 구성·진행: LC 는 음성 흐름대로 자동 진행(다시 듣기·되돌아가기 없음), RC 75분
+    "full": {"name": "실전 모의고사", "desc": "실제 토익과 같은 200문항 · LC 약 45분 자동 진행 + RC 75분",
              "p1": 6, "p2": 25, "p3": 39, "p4": 30, "p5": 30, "p6": 16, "p7_single": 29, "p7_double": 2, "p7_triple": 3,
-             "rc_minutes": 75},
+             "p3_graphic": 3, "p4_graphic": 2, "rc_minutes": 75, "real": True},
 }
+
+# ---- 실전 모의고사: 원점수(맞힌 개수, 100문항 기준) → 환산 점수 ------------------------------
+# 흔히 쓰이는 비공식 환산 구간. 시험마다 실제 환산표는 다르므로 ±30점 정도 오차가 있다.
+_LC_RAW = [(0, 5), (5, 10), (10, 25), (15, 45), (20, 65), (25, 85), (30, 105), (35, 125), (40, 150), (45, 175),
+           (50, 200), (55, 230), (60, 260), (65, 290), (70, 320), (75, 350), (80, 380), (85, 410), (90, 445),
+           (95, 475), (97, 495), (100, 495)]
+_RC_RAW = [(0, 5), (5, 5), (10, 20), (15, 35), (20, 55), (25, 75), (30, 95), (35, 115), (40, 140), (45, 165),
+           (50, 190), (55, 220), (60, 250), (65, 280), (70, 310), (75, 340), (80, 370), (85, 400), (90, 435),
+           (95, 465), (98, 495), (100, 495)]
+
+
+def raw_section_score(section: str, correct: int, total: int) -> int:
+    """맞힌 개수를 100문항 기준으로 맞춘 뒤 환산 구간으로 바꾼다."""
+    raw = 100 * correct / total if total else 0
+    table = [(x / 100, y) for x, y in (_LC_RAW if section == "LC" else _RC_RAW)]
+    return _interp(table, raw / 100)
+
+
+def estimate_raw(lc_correct: int, lc_total: int, rc_correct: int, rc_total: int) -> dict:
+    lc = raw_section_score("LC", lc_correct, lc_total) if lc_total else None
+    rc = raw_section_score("RC", rc_correct, rc_total) if rc_total else None
+    return {"lc_est": lc, "rc_est": rc, "total_est": (lc + rc) if lc is not None and rc is not None else None}
+
 
 # 진단 테스트: 등급을 고르게 섞은 짧은 세트 (약 15분)
 DIAGNOSTIC_FORM = {

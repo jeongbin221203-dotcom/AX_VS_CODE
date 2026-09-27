@@ -48,7 +48,24 @@
 </div>
 
 {% if s.total_est is not none %}
+  {% if s.variant == 'full' %}
+  <div class="card" style="margin-top:14px">
+    <div class="spread"><h2 style="margin:0">내 위치</h2>
+      <span class="small muted">LC {{ s.lc_correct }}/{{ s.lc_total }}개 → {{ s.lc_est }}점 · RC {{ s.rc_correct }}/{{ s.rc_total }}개 → {{ s.rc_est }}점</span></div>
+    <div class="ladder" style="margin-top:10px">
+      {% for gr in GRADES %}
+        <div class="step g{{ gr.level }}{{ ' cur' if grade and grade.level == gr.level }}"><b>{{ gr.name }}</b>{{ gr.low }}~{{ gr.high }}
+          {% if grade and grade.level == gr.level %}<div>{{ s.total_est }}점</div>{% endif %}</div>
+      {% endfor %}
+    </div>
+    {% if grade and grade.level < 5 %}<p class="small" style="margin:8px 0 0">다음 등급 {{ GRADE_BY_LEVEL[grade.level + 1].name }}까지 <b>{{ GRADE_BY_LEVEL[grade.level + 1].low - s.total_est }}점</b>.
+      <a href="{{ url_for('main.guide', level=grade.level) }}">{{ grade.name }} 등급 가이드 보기</a></p>{% endif %}
+    {% if s.seen_before %}<p class="small" style="margin:6px 0 0"><span class="tag bad">주의</span> 이 시험에는 전에 풀어 본 문제 묶음이 {{ s.seen_before }}개 섞여 있어 점수가 실제보다 높을 수 있습니다.</p>{% endif %}
+  </div>
+  <p class="small muted" style="margin-top:10px">점수는 맞힌 개수(원점수)를 흔히 쓰이는 환산 구간으로 바꾼 값입니다. 실제 환산표는 시험마다 달라 ±30점 정도 차이가 날 수 있습니다.</p>
+  {% else %}
 <p class="small muted" style="margin-top:10px">추정 점수는 정답률을 난이도로 보정해 일반적인 환산 구간에 맞춘 값입니다. 실제 토익 점수와 차이가 날 수 있습니다.</p>
+  {% endif %}
 {% endif %}
 
 <div class="grid two" style="margin-top:14px">

@@ -1,0 +1,1484 @@
+[
+ {
+  "id": "p7-101",
+  "level": 4,
+  "kind": "single",
+  "passages": [
+   {
+    "doc_type": "연구 보고서",
+    "title": "Summary of Findings — Staggered-Start Pilot / Prepared by: Operations Research Team, Dunmore Mutual Insurance / Date: August 3",
+    "text": "From March through June, the claims contact center in Brantford tested a staggered-start schedule. Instead of all 64 agents beginning at 8:00 A.M., agents were divided into three groups starting at 7:00, 8:30, and 10:00 A.M. Closing time was extended from 5:00 to 7:30 P.M. [1]\n\nResults were mixed but largely positive. The average time callers waited on hold fell from 4 minutes 10 seconds to 2 minutes 35 seconds, and the share of calls abandoned before reaching an agent dropped from 11 percent to 6 percent. [2] Evening coverage proved especially valuable: nearly a fifth of all calls during the pilot were received after 5:00 P.M., most from policyholders who said they could not call during their own working hours.\n\nHowever, agents in the 10:00 A.M. group reported feeling disconnected from colleagues, since the weekly team briefing was held at 8:30 A.M. [3] Supervisors also noted that coaching sessions were harder to arrange across three start times.\n\nWe recommend adopting the schedule permanently at Brantford, with two adjustments: moving team briefings to 11:00 A.M., when all three groups are present, and rotating agents among the groups every quarter. [4] The Hamilton center, which handles a similar volume of calls, could begin using the same schedule in January."
+   }
+  ],
+  "questions": [
+   {
+    "q": "What is the main purpose of the report?",
+    "choices": [
+     "To announce the opening of a new contact center",
+     "To propose hiring additional agents",
+     "To evaluate a trial change in working hours",
+     "To compare two call centers' customer ratings"
+    ],
+    "answer": 2,
+    "type": "주제·목적",
+    "explanation": "보고서는 브랜트퍼드 콜센터가 3~6월에 시험한 시차 출근제(staggered-start schedule)의 결과를 정리하고 정식 도입을 권고한다. 새 센터 개설이나 추가 채용, 두 센터의 고객 평가 비교는 다루지 않는다."
+   },
+   {
+    "q": "What is indicated about calls received after 5:00 P.M.?",
+    "choices": [
+     "Many came from people who were busy earlier in the day.",
+     "They were handled mainly by supervisors.",
+     "They had longer hold times than morning calls.",
+     "They made up about half of all calls during the pilot."
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "둘째 단락에 오후 5시 이후 전화는 전체의 약 5분의 1이며, 대부분 자신의 근무 시간에는 전화할 수 없었다는 가입자들이었다고 나온다. '절반'은 수치가 틀리고, 감독자가 처리했다거나 대기 시간이 길었다는 내용은 없다."
+   },
+   {
+    "q": "In which of the positions marked [1], [2], [3], and [4] does the following sentence best belong?\n“This also meant that they missed announcements that were shared only in person.”",
+    "choices": [
+     "[1]",
+     "[2]",
+     "[3]",
+     "[4]"
+    ],
+    "answer": 2,
+    "type": "문장 삽입",
+    "explanation": "[3] 앞 문장은 10시 출근조가 오전 8시 30분에 열리는 주간 팀 브리핑 때문에 동료들과 단절감을 느꼈다는 내용이다. 주어 they(10시 조)가 브리핑에 참석하지 못해 대면으로만 전달된 공지를 놓쳤다는 삽입 문장이 이어지기에 자연스럽다."
+   },
+   {
+    "q": "What is NOT mentioned as a result of the pilot?",
+    "choices": [
+     "Shorter waiting times for callers",
+     "Lower overtime costs for the company",
+     "Fewer calls ending before an agent answered",
+     "Difficulty in scheduling coaching sessions"
+    ],
+    "answer": 1,
+    "type": "사실 확인(NOT/TRUE)",
+    "explanation": "대기 시간 단축(4분 10초→2분 35초), 연결 전 포기 전화 감소(11%→6%), 코칭 일정 조율의 어려움은 모두 언급된다. 초과 근무 비용 절감은 보고서 어디에도 없다."
+   }
+  ],
+  "translation": "조사 결과 요약 — 시차 출근 시범 운영 / 작성: 운영 연구팀, 던모어 뮤추얼 보험 / 날짜: 8월 3일\n\n3월부터 6월까지 브랜트퍼드의 보험금 청구 콜센터는 시차 출근 일정을 시험했다. 상담원 64명 전원이 오전 8시에 시작하는 대신, 상담원을 오전 7시, 8시 30분, 10시에 시작하는 세 조로 나누었다. 마감 시간은 오후 5시에서 7시 30분으로 연장되었다. [1]\n\n결과는 엇갈렸지만 대체로 긍정적이었다. 발신자의 평균 대기 시간은 4분 10초에서 2분 35초로 줄었고, 상담원과 연결되기 전에 끊긴 전화의 비율은 11%에서 6%로 떨어졌다. [2] 저녁 시간대 운영이 특히 가치가 있었다. 시범 기간 전체 전화의 약 5분의 1이 오후 5시 이후에 걸려 왔으며, 대부분 자신의 근무 시간에는 전화할 수 없었다고 말한 가입자들이었다.\n\n그러나 10시 조 상담원들은 주간 팀 브리핑이 오전 8시 30분에 열려 동료들과 단절된 느낌을 받았다고 보고했다. [3] (이는 또한 그들이 대면으로만 공유된 공지를 놓쳤다는 뜻이었다.) 감독자들도 세 가지 출근 시간에 걸쳐 코칭 시간을 잡기가 더 어려웠다고 지적했다.\n\n우리는 두 가지를 조정하여 브랜트퍼드에서 이 일정을 정식으로 채택할 것을 권고한다. 세 조가 모두 있는 오전 11시로 팀 브리핑을 옮기고, 분기마다 상담원의 조를 순환시키는 것이다. [4] 비슷한 양의 전화를 처리하는 해밀턴 센터도 1월부터 같은 일정을 시작할 수 있을 것이다."
+ },
+ {
+  "id": "p7-102",
+  "level": 4,
+  "kind": "single",
+  "passages": [
+   {
+    "doc_type": "온라인 채팅",
+    "title": "Online chat discussion — Nadia Farouk, Ben Osei, Carla Reyes",
+    "text": "Nadia Farouk [9:02 A.M.]: Heads-up: Polyform Packaging just told us the molded trays for our blenders go up 14 percent on October 1.\nBen Osei [9:04 A.M.]: Ouch. That's for the whole Tessa line?\nNadia Farouk [9:05 A.M.]: All three models. They're blaming the rising cost of resin.\nCarla Reyes [9:07 A.M.]: That wipes out most of what we saved on the new freight contract. Any chance they'd phase it in?\nNadia Farouk [9:09 A.M.]: I asked. They'll hold the current price on anything we order before September 20.\nBen Osei [9:10 A.M.]: Then let's pull the whole fourth-quarter order forward. We have warehouse space now that the Kessler shipment has gone out.\nCarla Reyes [9:12 A.M.]: Not so fast. A full quarter's worth of trays is about $86,000, paid up front. I'd have to borrow from the Q4 marketing budget.\nBen Osei [9:13 A.M.]: What about ordering half now?\nNadia Farouk [9:15 A.M.]: That could work. Meanwhile, Greenloop sent us samples of their paper-pulp trays last spring. They were a bit bulkier, but I think they'd pass our drop tests.\nBen Osei [9:16 A.M.]: Customers have been asking for plastic-free packaging anyway.\nCarla Reyes [9:18 A.M.]: If Greenloop can match what we pay Polyform now, I'm all for it. Nadia, can you get a quote by Friday?\nNadia Farouk [9:19 A.M.]: On it."
+   }
+  ],
+  "questions": [
+   {
+    "q": "According to Ms. Farouk, why is Polyform Packaging raising its prices?",
+    "choices": [
+     "Its freight contract has expired.",
+     "Demand for its trays has grown.",
+     "It is redesigning its product line.",
+     "The material it uses has become more expensive."
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "9시 5분에 파루크 씨는 폴리폼이 수지(resin) 가격 상승을 이유로 들었다고 말한다. 운송 계약은 이 회사(화자들)의 계약이며, 수요 증가나 제품 재설계는 언급되지 않는다."
+   },
+   {
+    "q": "At 9:12 A.M., what does Ms. Reyes most likely mean when she writes, “Not so fast”?",
+    "choices": [
+     "She thinks the warehouse is already full.",
+     "She is concerned about the cost of paying for a large order early.",
+     "She wants to wait until the price increase is confirmed.",
+     "She believes the order must be approved by Polyform first."
+    ],
+    "answer": 1,
+    "type": "의도 파악",
+    "explanation": "오스 씨가 4분기 물량 전체를 앞당겨 주문하자고 하자 레예스 씨는 이 말 뒤에 한 분기 물량이 약 86,000달러이고 선불이며 마케팅 예산에서 돈을 빌려야 한다고 설명한다. 즉 큰 금액을 미리 지출하는 부담을 우려한 것이다. 창고 공간은 오히려 있다고 했다."
+   },
+   {
+    "q": "At 9:16 A.M., why does Mr. Osei write, “Customers have been asking for plastic-free packaging anyway”?",
+    "choices": [
+     "To express support for considering another supplier",
+     "To explain why sales of the Tessa line have fallen",
+     "To suggest that the drop tests should be repeated",
+     "To object to the size of Greenloop's trays"
+    ],
+    "answer": 0,
+    "type": "의도 파악",
+    "explanation": "파루크 씨가 그린루프의 종이 펄프 트레이를 대안으로 꺼내자, 오스 씨는 고객들이 어차피 플라스틱 없는 포장을 원해 왔다고 말하며 그 대안에 힘을 싣는다. 판매 감소, 재시험, 크기에 대한 반대의 뜻은 없다."
+   },
+   {
+    "q": "What will Ms. Farouk most likely do next?",
+    "choices": [
+     "Cancel the order with Polyform",
+     "Arrange for new drop tests",
+     "Request pricing from another supplier",
+     "Move funds from the marketing budget"
+    ],
+    "answer": 2,
+    "type": "추론",
+    "explanation": "레예스 씨가 금요일까지 (그린루프의) 견적을 받아 달라고 하자 파루크 씨는 'On it(바로 하겠다)'이라고 답한다. 폴리폼 주문 취소나 예산 이동은 그녀가 맡은 일이 아니다."
+   }
+  ],
+  "translation": "나디아 파루크 [오전 9:02]: 알려 드려요. 폴리폼 패키징이 방금 우리 블렌더용 성형 트레이 가격을 10월 1일부터 14% 올린다고 알려 왔어요.\n벤 오세이 [오전 9:04]: 아이고. 테사 라인 전체요?\n나디아 파루크 [오전 9:05]: 세 모델 모두요. 수지 가격 상승 탓이래요.\n카를라 레예스 [오전 9:07]: 그러면 새 운송 계약으로 절감한 금액 대부분이 날아가요. 단계적으로 올려 줄 가능성은 없나요?\n나디아 파루크 [오전 9:09]: 물어봤어요. 9월 20일 전에 주문하는 건 현재 가격을 유지해 준대요.\n벤 오세이 [오전 9:10]: 그럼 4분기 주문 전체를 앞당깁시다. 케슬러 물량이 나가서 이제 창고 공간이 있어요.\n카를라 레예스 [오전 9:12]: 잠깐만요. 한 분기 분량 트레이면 약 86,000달러를 선불로 내야 해요. 4분기 마케팅 예산에서 빌려 와야 할 거예요.\n벤 오세이 [오전 9:13]: 지금 절반만 주문하면요?\n나디아 파루크 [오전 9:15]: 그건 되겠네요. 그리고 그린루프가 지난봄에 종이 펄프 트레이 샘플을 보내왔어요. 조금 더 부피가 크긴 했지만 우리 낙하 시험은 통과할 것 같아요.\n벤 오세이 [오전 9:16]: 어차피 고객들이 플라스틱 없는 포장을 요청해 왔잖아요.\n카를라 레예스 [오전 9:18]: 그린루프가 지금 폴리폼에 내는 가격을 맞춰 줄 수 있다면 전 대찬성이에요. 나디아, 금요일까지 견적 받아 줄 수 있어요?\n나디아 파루크 [오전 9:19]: 바로 할게요."
+ },
+ {
+  "id": "p7-103",
+  "level": 4,
+  "kind": "single",
+  "passages": [
+   {
+    "doc_type": "청구서",
+    "title": "Invoice #CP-2718 — Castellan Print Works / Client: Norhaven Outdoor Supply / Invoice date: October 3",
+    "text": "Description | Quantity | Unit price | Amount\nProduct catalogs, 48 pages, full color | 2,000 | $3.40 | $6,800.00\nOrder forms, single sheet | 2,000 | $0.25 | $500.00\nDesign revisions, third round | 2 hours | $65.00 | $130.00\nSubtotal: $7,430.00\nVolume discount (10% on catalog orders of 2,000 units or more): −$680.00\nRush fee: $0.00\nAmount due: $6,750.00\n\nPayment terms: A 2% discount applies to the amount due if payment is received within 10 days of the invoice date. Otherwise, the full amount is due within 30 days.\n\nNotes: The first two rounds of design revisions are included in the quoted price; additional rounds are billed at our standard hourly rate. Your order was delivered on October 2, one day after the date promised in our quote because of an unexpected press repair. We have therefore removed the rush fee shown in the quote. We apologize for the delay and thank you for your business."
+   }
+  ],
+  "questions": [
+   {
+    "q": "How much will Norhaven Outdoor Supply pay if its payment is received on October 10?",
+    "choices": [
+     "$6,080.00",
+     "$6,615.00",
+     "$6,750.00",
+     "$7,281.40"
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "청구일(10월 3일)로부터 10일 이내 입금이면 청구액의 2%가 할인된다. 6,750달러 × 0.98 = 6,615달러이다. 7,281.40달러는 할인 전 소계에 2%를 적용한 잘못된 값이다."
+   },
+   {
+    "q": "What is suggested about Norhaven Outdoor Supply?",
+    "choices": [
+     "It asked for more changes to the design than the quote covered.",
+     "It paid a rush fee in advance.",
+     "It ordered fewer catalogs than it originally planned.",
+     "It has not used Castellan Print Works before."
+    ],
+    "answer": 0,
+    "type": "추론",
+    "explanation": "견적가에는 디자인 수정 두 번까지만 포함되고, 청구서에 '세 번째 수정' 2시간이 따로 청구되었다. 따라서 고객이 견적 범위를 넘는 수정을 요청했음을 알 수 있다. 급행료는 오히려 면제되었다."
+   },
+   {
+    "q": "What is true about the delivery of the order?",
+    "choices": [
+     "It was delayed at the client's request.",
+     "It was split into two shipments.",
+     "It arrived later than the printer had promised.",
+     "It required an additional delivery charge."
+    ],
+    "answer": 2,
+    "type": "사실 확인(NOT/TRUE)",
+    "explanation": "비고에 인쇄기 수리로 약속일보다 하루 늦은 10월 2일에 배송되었다고 나온다. 그래서 급행료를 뺐다. 고객 요청 지연, 분할 배송, 추가 배송비는 없다."
+   }
+  ],
+  "translation": "청구서 #CP-2718 — 카스텔란 프린트 웍스 / 고객: 노헤이븐 아웃도어 서플라이 / 청구일: 10월 3일\n\n품목 | 수량 | 단가 | 금액\n제품 카탈로그, 48쪽, 풀컬러 | 2,000 | 3.40달러 | 6,800.00달러\n주문서, 낱장 | 2,000 | 0.25달러 | 500.00달러\n디자인 수정, 3차 | 2시간 | 65.00달러 | 130.00달러\n소계: 7,430.00달러\n수량 할인(2,000부 이상 카탈로그 주문 시 10%): −680.00달러\n급행료: 0.00달러\n청구 금액: 6,750.00달러\n\n지불 조건: 청구일로부터 10일 이내에 입금되면 청구 금액의 2%가 할인됩니다. 그렇지 않으면 30일 이내에 전액을 내셔야 합니다.\n\n비고: 디자인 수정 1·2차는 견적가에 포함되어 있으며, 추가 수정은 당사의 표준 시간당 요금으로 청구됩니다. 고객님의 주문은 예기치 못한 인쇄기 수리로 인해 견적서에 약속한 날짜보다 하루 늦은 10월 2일에 배송되었습니다. 따라서 견적서에 표시된 급행료를 삭제했습니다. 지연에 사과드리며 거래에 감사드립니다."
+ },
+ {
+  "id": "p7-104",
+  "level": 4,
+  "kind": "single",
+  "passages": [
+   {
+    "doc_type": "회람",
+    "title": "To: All Employees / From: Mariam Castell, Director of People Operations, Quillon Analytics / Date: May 12 / Subject: Home-office equipment allowance",
+    "text": "Beginning June 1, employees approved for hybrid or fully remote work will be eligible for a one-time home-office allowance of up to $600. [1] The allowance may be used for a desk, an ergonomic chair, a monitor, or a headset. Laptops and phones will continue to be issued by the IT department and may not be purchased with the allowance.\n\nTo claim the allowance, submit itemized receipts through the Expenses portal within 60 days of purchase. [2] Items bought before June 1 are not eligible, even if they meet all other requirements. Employees who leave the company within twelve months of receiving the allowance will be asked to return any monitor purchased with it; other items need not be returned.\n\nEmployees who work in the office four or more days per week do not qualify. [3] However, any employee may request an ergonomic assessment from Facilities, regardless of work arrangement. If the assessment recommends specialized equipment, such as a sit-stand desk, the cost will be covered separately and will not count toward the $600 limit. [4]\n\nQuestions may be directed to peopleops@quillon.com."
+   }
+  ],
+  "questions": [
+   {
+    "q": "What is the purpose of the memo?",
+    "choices": [
+     "To remind staff to return company laptops",
+     "To introduce a benefit for certain employees",
+     "To announce new office furniture at headquarters",
+     "To explain changes to the expense portal"
+    ],
+    "answer": 1,
+    "type": "주제·목적",
+    "explanation": "회람은 6월 1일부터 하이브리드·원격 근무 승인자에게 최대 600달러의 재택 사무 장비 지원금을 준다는 새 혜택을 알린다. 노트북 반납, 본사 가구, 경비 포털 변경은 목적이 아니다."
+   },
+   {
+    "q": "What can NOT be purchased with the allowance?",
+    "choices": [
+     "A headset",
+     "A monitor",
+     "A laptop computer",
+     "An ergonomic chair"
+    ],
+    "answer": 2,
+    "type": "사실 확인(NOT/TRUE)",
+    "explanation": "책상, 인체공학 의자, 모니터, 헤드셋은 사용할 수 있지만 노트북과 전화기는 IT 부서가 계속 지급하므로 지원금으로 살 수 없다고 명시되어 있다."
+   },
+   {
+    "q": "What is indicated about employees who leave the company within a year of receiving the allowance?",
+    "choices": [
+     "They must repay the full $600.",
+     "They may have to give back one type of equipment.",
+     "They lose access to ergonomic assessments.",
+     "They must submit their receipts again."
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "지원금을 받은 뒤 12개월 안에 퇴사하면 지원금으로 산 모니터만 반납하고 다른 물품은 반납하지 않아도 된다고 했다. 600달러 전액 상환은 사실이 아니다."
+   },
+   {
+    "q": "In which of the positions marked [1], [2], [3], and [4] does the following sentence best belong?\n“Their workstations are already provided and maintained at our offices.”",
+    "choices": [
+     "[1]",
+     "[2]",
+     "[3]",
+     "[4]"
+    ],
+    "answer": 2,
+    "type": "문장 삽입",
+    "explanation": "[3] 앞 문장은 주 4일 이상 사무실에서 근무하는 직원은 대상이 아니라는 내용이다. 그들의 업무 공간은 이미 사무실에 마련·관리되어 있다는 문장이 그 이유를 설명하므로 [3]이 알맞다. Their가 가리킬 대상도 바로 앞의 employees다."
+   }
+  ],
+  "translation": "수신: 전 직원 / 발신: 마리암 카스텔, 인사 운영 이사, 퀼론 애널리틱스 / 날짜: 5월 12일 / 제목: 재택 사무 장비 지원금\n\n6월 1일부터 하이브리드 또는 전면 원격 근무를 승인받은 직원은 최대 600달러의 1회성 재택 사무 지원금을 받을 수 있습니다. [1] 지원금은 책상, 인체공학 의자, 모니터, 헤드셋 구입에 쓸 수 있습니다. 노트북과 전화기는 계속 IT 부서에서 지급하며 지원금으로 구입할 수 없습니다.\n\n지원금을 청구하려면 구입 후 60일 이내에 경비 포털을 통해 항목별 영수증을 제출하십시오. [2] 6월 1일 이전에 구입한 물품은 다른 요건을 모두 충족하더라도 대상이 아닙니다. 지원금을 받은 뒤 12개월 안에 퇴사하는 직원은 지원금으로 구입한 모니터를 반납해야 하며, 다른 물품은 반납할 필요가 없습니다.\n\n주 4일 이상 사무실에서 근무하는 직원은 해당되지 않습니다. [3] (그들의 업무 공간은 이미 사무실에 마련되어 관리되고 있습니다.) 다만 근무 형태와 관계없이 모든 직원은 시설팀에 인체공학 평가를 요청할 수 있습니다. 평가에서 높이 조절 책상 같은 특수 장비를 권고하면 그 비용은 별도로 지원되며 600달러 한도에 포함되지 않습니다. [4]\n\n문의는 peopleops@quillon.com으로 보내 주십시오."
+ },
+ {
+  "id": "p7-105",
+  "level": 4,
+  "kind": "double",
+  "passages": [
+   {
+    "doc_type": "제안 요청서",
+    "title": "Request for Proposals — Employee Café Operations, Merriweather Biotech, Ashby Campus",
+    "text": "Merriweather Biotech invites qualified food-service companies to submit proposals to operate the employee café at our Ashby campus for a three-year term beginning March 1.\n\nScope: breakfast and lunch service, Monday to Friday, for approximately 450 employees on site; catering for up to eight internal events per month.\n\nRequirements:\n• At least two vegetarian hot entrées daily\n• Cashless payment, including payroll deduction\n• Menus reviewed quarterly by a registered dietitian\n\nMerriweather will provide the kitchen, equipment, and utilities at no charge. The operator will pay a monthly concession fee equal to 5 percent of gross sales.\n\nProposals are due by 5:00 P.M. on November 15. Finalists will be invited to host a tasting for our selection panel during the week of December 2. Questions must be submitted in writing to Aaron Pike, Facilities Manager, by November 1."
+   },
+   {
+    "doc_type": "이메일",
+    "title": "From: Lucia Brenner, Harvest Table Catering / To: Aaron Pike / Date: October 29 / Subject: RFP question",
+    "text": "Dear Mr. Pike,\n\nHarvest Table Catering intends to respond to your request for proposals. We currently run staff cafés for two hospitals in the region, each serving roughly 600 people a day, so the size of your site is well within our experience.\n\nBefore we finalize our pricing, I would like to clarify two points. Our standard model includes a dinner service for employees who work late, which several of our clients value highly. Would a proposal that includes this option be considered, or should we limit it to the services described? We would also like to know whether the 5 percent fee applies to event catering.\n\nFor your information, our in-house nutritionist, a registered dietitian, already reviews all of our menus every month.\n\nBest regards,\nLucia Brenner"
+   }
+  ],
+  "questions": [
+   {
+    "q": "What is the purpose of the request for proposals?",
+    "choices": [
+     "To sell kitchen equipment to local restaurants",
+     "To recruit a registered dietitian",
+     "To find a company to run a food service",
+     "To plan a series of internal events"
+    ],
+    "answer": 2,
+    "type": "주제·목적",
+    "explanation": "메리웨더 바이오테크는 애슈비 캠퍼스 직원 카페를 3년간 운영할 식음료 업체의 제안서를 받는다. 영양사 채용이나 행사 기획이 목적이 아니다."
+   },
+   {
+    "q": "According to the request for proposals, what will Merriweather Biotech provide?",
+    "choices": [
+     "Payment processing systems",
+     "Cooking facilities",
+     "Staff for events",
+     "Menu planning services"
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "주방, 장비, 공공요금을 무상으로 제공한다(provide the kitchen, equipment, and utilities at no charge)고 했다. 결제 시스템(비현금 결제)은 운영사가 갖춰야 할 요건이다."
+   },
+   {
+    "q": "What is indicated about Ms. Brenner's e-mail?",
+    "choices": [
+     "It was sent after proposals were due.",
+     "It was sent within the period allowed for questions.",
+     "It was addressed to the selection panel.",
+     "It includes Harvest Table's final pricing."
+    ],
+    "answer": 1,
+    "type": "연계 문제",
+    "explanation": "요청서에 질문은 11월 1일까지 서면으로 에런 파이크에게 보내야 한다고 했고, 브레너 씨의 이메일은 10월 29일에 파이크 씨에게 보내졌다. 따라서 질문 기한 안에 보낸 것이다. 가격은 아직 확정 전이라고 했다."
+   },
+   {
+    "q": "Which requirement does Harvest Table Catering already exceed?",
+    "choices": [
+     "The number of vegetarian dishes",
+     "The size of the workforce served",
+     "The type of payment accepted",
+     "The frequency of menu reviews"
+    ],
+    "answer": 3,
+    "type": "연계 문제",
+    "explanation": "요청서는 등록 영양사가 분기마다 메뉴를 검토하도록 요구하지만, 이메일에 따르면 하비스트 테이블은 이미 매달 검토한다. 채식 요리나 결제 방식에 대한 언급은 없고, 급식 인원은 요건이 아니라 현장 규모다."
+   },
+   {
+    "q": "In the e-mail, the word “run” in paragraph 1 is closest in meaning to",
+    "choices": [
+     "manage",
+     "hurry",
+     "extend",
+     "publish"
+    ],
+    "answer": 0,
+    "type": "동의어",
+    "explanation": "'run staff cafés for two hospitals'는 병원 두 곳의 직원 카페를 '운영한다'는 뜻이므로 manage가 가장 가깝다. hurry(서두르다)나 extend(연장하다)는 이 문맥에 맞지 않는다."
+   }
+  ],
+  "translation": "[제안 요청서]\n직원 카페 운영 제안 요청 — 메리웨더 바이오테크, 애슈비 캠퍼스\n\n메리웨더 바이오테크는 3월 1일부터 3년간 애슈비 캠퍼스의 직원 카페를 운영할 자격 있는 식음료 업체의 제안서를 받습니다.\n\n범위: 현장 직원 약 450명을 위한 월~금 아침·점심 제공, 월 최대 8회의 사내 행사 케이터링.\n\n요건:\n• 매일 채식 따뜻한 주요리 최소 2가지\n• 급여 공제를 포함한 비현금 결제\n• 등록 영양사의 분기별 메뉴 검토\n\n메리웨더는 주방, 장비, 공공요금을 무상으로 제공합니다. 운영사는 총매출의 5%에 해당하는 월 영업권료를 냅니다.\n\n제안서 마감은 11월 15일 오후 5시입니다. 최종 후보는 12월 2일 주에 선정 위원단을 위한 시식회를 열도록 초청됩니다. 질문은 11월 1일까지 시설 관리자 에런 파이크에게 서면으로 제출해야 합니다.\n\n[이메일]\n발신: 루시아 브레너, 하비스트 테이블 케이터링 / 수신: 에런 파이크 / 날짜: 10월 29일 / 제목: 제안 요청 관련 질문\n\n파이크 씨께,\n\n하비스트 테이블 케이터링은 귀사의 제안 요청에 응할 계획입니다. 저희는 현재 이 지역 병원 두 곳에서 각각 하루 약 600명이 이용하는 직원 카페를 운영하고 있어, 귀사 현장 규모는 충분히 저희 경험 범위 안에 있습니다.\n\n가격을 확정하기 전에 두 가지를 확인하고 싶습니다. 저희 표준 모델에는 늦게까지 일하는 직원을 위한 저녁 식사 서비스가 포함되어 있는데, 여러 고객사가 이를 높이 평가합니다. 이 선택 사항을 포함한 제안서도 검토 대상이 되는지, 아니면 명시된 서비스로만 한정해야 하는지 알려 주십시오. 또한 5% 수수료가 행사 케이터링에도 적용되는지 알고 싶습니다.\n\n참고로 저희 사내 영양 전문가는 등록 영양사로서 이미 모든 메뉴를 매달 검토하고 있습니다.\n\n루시아 브레너 드림"
+ },
+ {
+  "id": "p7-106",
+  "level": 4,
+  "kind": "double",
+  "passages": [
+   {
+    "doc_type": "웹페이지",
+    "title": "www.pacifichomeexpo.ca/exhibit — Exhibitor Packages, Pacific Home & Garden Expo (March 14–16)",
+    "text": "Standard Booth (3 m × 3 m) — $2,400\nIncludes carpet, one table, two chairs, and a company sign.\n\nCorner Booth (3 m × 3 m, open on two sides) — $2,900\nIncludes everything in the Standard package plus additional lighting.\n\nIsland Booth (6 m × 6 m, open on all four sides) — $8,800\nFurniture is not included.\n\nConditions\n• Exhibitors who book by December 31 receive 10 percent off any package.\n• An electrical connection is included only in the Corner and Island packages. Standard exhibitors may add one for $180.\n• Companies exhibiting at the Expo for the first time may apply for a booth on Innovators' Row, a discounted section offering Standard booths for $1,600. Early-booking discounts do not apply to Innovators' Row.\n• Cancellations made more than 60 days before the Expo are refunded minus a $300 fee. Later cancellations are not refunded."
+   },
+   {
+    "doc_type": "이메일",
+    "title": "From: Owen Tate, Greenspire Planters / To: exhibitors@pacifichomeexpo.ca / Date: January 8 / Subject: Booth booking",
+    "text": "Hello,\n\nGreenspire Planters would like to reserve a booth at this year's Expo. Although our staff have attended the Expo as visitors for years, this will be the first time we exhibit. We make self-watering planters, and we plan to run a live demonstration using a small water pump, so we will definitely need power at our booth.\n\nWe are a small company and would like to keep our costs down. At the same time, visibility matters a great deal to us, so if possible we'd prefer a location that visitors can approach from more than one side.\n\nCould you tell me what options remain? We are ready to pay a deposit this week.\n\nOwen Tate"
+   }
+  ],
+  "questions": [
+   {
+    "q": "In the e-mail, the word “remain” in paragraph 3 is closest in meaning to",
+    "choices": [
+     "stay unchanged",
+     "wait patiently",
+     "continue",
+     "are still available"
+    ],
+    "answer": 3,
+    "type": "동의어",
+    "explanation": "'what options remain'은 (이미 예약된 것을 제외하고) 어떤 선택지가 '아직 남아 있는지', 즉 이용 가능한지를 묻는 표현이다. stay unchanged(변하지 않다)는 remain의 다른 뜻으로 여기서는 맞지 않는다."
+   },
+   {
+    "q": "What is suggested about Greenspire Planters?",
+    "choices": [
+     "It is eligible for a booth on Innovators' Row.",
+     "It exhibited at last year's Expo.",
+     "It has reserved an Island Booth.",
+     "It has canceled a previous booking."
+    ],
+    "answer": 0,
+    "type": "연계 문제",
+    "explanation": "웹페이지에 따르면 처음 전시하는 회사는 이노베이터스 로에 지원할 수 있다. 이메일에서 테이트 씨는 방문객으로만 왔고 이번이 첫 전시라고 했으므로 자격이 있다. 작년에 전시한 적은 없다."
+   },
+   {
+    "q": "Why will Greenspire Planters most likely not receive a 10 percent discount?",
+    "choices": [
+     "It is a small company.",
+     "It needs an electrical connection.",
+     "It wants a booth open on two sides.",
+     "It is booking after the deadline for the discount."
+    ],
+    "answer": 3,
+    "type": "연계 문제",
+    "explanation": "10% 할인은 12월 31일까지 예약한 전시 업체에만 적용되는데, 테이트 씨의 이메일은 1월 8일에 보내졌다. 회사 규모나 전기 필요 여부는 할인 조건과 관계없다."
+   },
+   {
+    "q": "Why does Mr. Tate mention a water pump?",
+    "choices": [
+     "To explain why his booth will need power",
+     "To request a larger booth",
+     "To describe a product he plans to sell",
+     "To ask about safety regulations"
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "작은 물 펌프로 시연을 할 계획이라 부스에 전원이 꼭 필요하다(so we will definitely need power)고 했다. 펌프는 판매 제품이 아니라 시연 장비다."
+   },
+   {
+    "q": "If Greenspire Planters takes a booth on Innovators' Row, how much will it most likely pay for the booth and the service it needs?",
+    "choices": [
+     "$1,600",
+     "$2,580",
+     "$2,900",
+     "$1,780"
+    ],
+    "answer": 3,
+    "type": "연계 문제",
+    "explanation": "이노베이터스 로의 스탠더드 부스는 1,600달러이고, 스탠더드 부스에는 전기가 포함되지 않아 180달러를 추가해야 한다. 이메일에서 전원이 꼭 필요하다고 했으므로 1,600 + 180 = 1,780달러이다. 조기 예약 할인은 이노베이터스 로에 적용되지 않는다."
+   }
+  ],
+  "translation": "[웹페이지]\n전시 업체 패키지 — 퍼시픽 홈 앤드 가든 엑스포(3월 14~16일)\n\n스탠더드 부스(3m × 3m) — 2,400달러\n카펫, 테이블 1개, 의자 2개, 회사 간판 포함.\n\n코너 부스(3m × 3m, 두 면 개방) — 2,900달러\n스탠더드 패키지 전체에 추가 조명 포함.\n\n아일랜드 부스(6m × 6m, 네 면 개방) — 8,800달러\n가구 미포함.\n\n조건\n• 12월 31일까지 예약하는 전시 업체는 모든 패키지를 10% 할인받습니다.\n• 전기 연결은 코너와 아일랜드 패키지에만 포함됩니다. 스탠더드 전시 업체는 180달러에 추가할 수 있습니다.\n• 엑스포에 처음 전시하는 회사는 스탠더드 부스를 1,600달러에 제공하는 할인 구역인 '이노베이터스 로'에 지원할 수 있습니다. 조기 예약 할인은 이노베이터스 로에는 적용되지 않습니다.\n• 엑스포 60일 전보다 앞서 취소하면 300달러 수수료를 뺀 금액을 환불합니다. 그 이후 취소는 환불되지 않습니다.\n\n[이메일]\n발신: 오언 테이트, 그린스파이어 플랜터스 / 수신: exhibitors@pacifichomeexpo.ca / 날짜: 1월 8일 / 제목: 부스 예약\n\n안녕하세요.\n\n그린스파이어 플랜터스는 올해 엑스포에 부스를 예약하고 싶습니다. 저희 직원들은 수년간 방문객으로 엑스포에 참석했지만, 전시는 이번이 처음입니다. 저희는 자동 급수 화분을 만드는데, 작은 물 펌프를 이용한 실시간 시연을 할 계획이라 부스에 전원이 꼭 필요합니다.\n\n저희는 작은 회사라 비용을 줄이고 싶습니다. 동시에 눈에 잘 띄는 것이 저희에게 매우 중요하므로, 가능하다면 방문객이 한쪽 이상에서 다가올 수 있는 위치를 원합니다.\n\n어떤 선택지가 남아 있는지 알려 주시겠습니까? 이번 주에 보증금을 낼 준비가 되어 있습니다.\n\n오언 테이트"
+ },
+ {
+  "id": "p7-107",
+  "level": 4,
+  "kind": "double",
+  "passages": [
+   {
+    "doc_type": "재무 요약",
+    "title": "Kittering Home Bakeries — Second-Quarter Results Summary (April–June)",
+    "text": "Revenue: $18.4 million (up 6% from the same quarter last year)\n• Retail stores: $11.2 million (up 2%)\n• Wholesale to grocery chains: $5.1 million (up 9%)\n• Online orders: $2.1 million (up 31%)\n\nOperating costs rose 8%, driven mainly by a 12% increase in the price of flour and butter. Operating profit was $1.6 million, down from $1.9 million a year earlier.\n\nStore count: 42 (two stores in Leeds closed in May; one store in York opened in June)\n\nOutlook: Management expects ingredient costs to stabilize in the fourth quarter. A new distribution center in Sheffield, scheduled to open in September, is expected to cut delivery costs for wholesale and online orders by about 15%."
+   },
+   {
+    "doc_type": "이메일",
+    "title": "From: Priya Nandakumar, Ridgefield Capital / To: investor.relations@kittering.co.uk / Date: July 29 / Subject: Q2 questions",
+    "text": "Dear Investor Relations Team,\n\nThank you for the second-quarter summary. I have two questions ahead of the results call on August 5.\n\nFirst, the summary attributes most of the cost increase to ingredients. Were the costs of the two store closures included in the second quarter, or will they appear in the third-quarter figures?\n\nSecond, your fastest-growing channel is still your smallest. Does the Sheffield facility change your targets for that channel, and will it also serve the area around your newest store?\n\nI would also appreciate receiving the presentation slides before the call, if they are available.\n\nKind regards,\nPriya Nandakumar"
+   }
+  ],
+  "questions": [
+   {
+    "q": "What is indicated about Kittering Home Bakeries' second quarter?",
+    "choices": [
+     "Its profit fell even though its revenue grew.",
+     "Its wholesale revenue declined.",
+     "It opened more stores than it closed.",
+     "Its delivery costs fell by 15 percent."
+    ],
+    "answer": 0,
+    "type": "사실 확인(NOT/TRUE)",
+    "explanation": "매출은 6% 늘었지만 영업이익은 190만 달러에서 160만 달러로 줄었다. 도매는 9% 늘었고, 매장은 2곳 폐점·1곳 개점이며, 배송비 15% 절감은 9월 개장 예정인 센터에 대한 전망일 뿐이다."
+   },
+   {
+    "q": "According to the summary, what was the main cause of higher operating costs?",
+    "choices": [
+     "The opening of a new store",
+     "Higher prices for ingredients",
+     "Expanded delivery services",
+     "The construction of a distribution center"
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "영업 비용 증가는 주로 밀가루와 버터 가격 12% 상승 때문이라고 했다(driven mainly by a 12% increase in the price of flour and butter)."
+   },
+   {
+    "q": "Which channel does Ms. Nandakumar refer to in her second question?",
+    "choices": [
+     "Retail stores",
+     "Wholesale to grocery chains",
+     "Online orders",
+     "Corporate catering"
+    ],
+    "answer": 2,
+    "type": "연계 문제",
+    "explanation": "그녀는 '가장 빠르게 성장하지만 여전히 가장 작은 채널'을 언급한다. 요약에서 온라인 주문은 31% 성장으로 가장 빠르고 매출 210만 달러로 가장 작다."
+   },
+   {
+    "q": "Which location does Ms. Nandakumar ask about in connection with the Sheffield facility?",
+    "choices": [
+     "Leeds",
+     "Sheffield",
+     "Ridgefield",
+     "York"
+    ],
+    "answer": 3,
+    "type": "연계 문제",
+    "explanation": "이메일에서 셰필드 시설이 '가장 최근에 연 매장' 주변 지역도 담당하는지 묻는다. 요약에 따르면 6월에 요크에 매장 1곳이 새로 열렸다. 리즈 매장은 문을 닫았다."
+   },
+   {
+    "q": "What will most likely happen on August 5?",
+    "choices": [
+     "A new store will open.",
+     "Company results will be discussed with investors.",
+     "The Sheffield center will begin operations.",
+     "Third-quarter figures will be released."
+    ],
+    "answer": 1,
+    "type": "추론",
+    "explanation": "난다쿠마르 씨는 8월 5일 실적 발표 통화(results call) 전에 질문한다고 했으므로 그날 투자자와 실적을 논의하는 자리가 있다. 셰필드 센터는 9월 개장 예정이다."
+   }
+  ],
+  "translation": "[재무 요약]\n키터링 홈 베이커리 — 2분기 실적 요약(4~6월)\n\n매출: 1,840만 달러(전년 동기 대비 6% 증가)\n• 소매 매장: 1,120만 달러(2% 증가)\n• 식료품 체인 도매: 510만 달러(9% 증가)\n• 온라인 주문: 210만 달러(31% 증가)\n\n영업 비용은 주로 밀가루와 버터 가격 12% 상승으로 8% 늘었다. 영업이익은 전년 190만 달러에서 줄어든 160만 달러였다.\n\n매장 수: 42개(5월에 리즈 매장 2곳 폐점, 6월에 요크 매장 1곳 개점)\n\n전망: 경영진은 4분기에 원재료 비용이 안정될 것으로 예상한다. 9월 개장 예정인 셰필드의 새 물류 센터는 도매와 온라인 주문의 배송비를 약 15% 줄일 것으로 기대된다.\n\n[이메일]\n발신: 프리야 난다쿠마르, 리지필드 캐피털 / 수신: investor.relations@kittering.co.uk / 날짜: 7월 29일 / 제목: 2분기 관련 질문\n\n투자자 관계팀께,\n\n2분기 요약 자료 감사합니다. 8월 5일 실적 발표 통화에 앞서 두 가지 질문이 있습니다.\n\n첫째, 요약은 비용 증가의 대부분을 원재료 탓으로 돌리고 있습니다. 매장 2곳 폐점 비용이 2분기에 포함되었습니까, 아니면 3분기 수치에 반영됩니까?\n\n둘째, 가장 빠르게 성장하는 채널이 여전히 가장 작습니다. 셰필드 시설로 그 채널의 목표가 달라집니까? 그리고 그 시설이 가장 최근에 연 매장 주변 지역도 담당하게 됩니까?\n\n가능하다면 통화 전에 발표 슬라이드를 받아 보고 싶습니다.\n\n프리야 난다쿠마르 드림"
+ },
+ {
+  "id": "p7-108",
+  "level": 4,
+  "kind": "triple",
+  "passages": [
+   {
+    "doc_type": "견적서",
+    "title": "Estimate — Stellar Commercial Movers / Client: Fenwick & Doyle Architects / Move: 220 Harlow Street to 15 Canal Quay / Date: February 2",
+    "text": "Packing of files and equipment (2 days) — $3,200\nMoving crew and trucks (Saturday, March 8) — $5,400\nDisassembly and reassembly of 30 workstations — $1,500\nCrating of large-format plotters (2 units) — $600\nTotal estimate: $10,700\n\nNotes: The crew rate above applies to weekend moves. A weekday move reduces the crew-and-truck cost by 15 percent but must begin after 6:00 P.M. Any item valued at more than $5,000 must be declared in writing at least seven days before the move to be covered by our full-value protection. Undeclared items are covered at $10 per kilogram."
+   },
+   {
+    "doc_type": "회람",
+    "title": "To: All Staff / From: Gemma Doyle, Managing Partner / Date: February 10 / Subject: Canal Quay move",
+    "text": "As you know, we will move to our new office at 15 Canal Quay next month. To keep costs within budget, we have rescheduled the move to the evening of Thursday, March 6, instead of the weekend. Please note the following:\n\n• Pack your personal items in the labeled boxes by noon on March 6. Files and equipment will be packed by the movers.\n• The office will close at 3:00 P.M. that day. Please work from home on Friday, March 7.\n• Hamid Rostami of the IT group will coordinate the move of the two plotters and the server, and he will send the movers the list of high-value items."
+   },
+   {
+    "doc_type": "이메일",
+    "title": "From: Hamid Rostami / To: Gemma Doyle / Date: March 11 / Subject: Plotter damage",
+    "text": "Gemma,\n\nUnfortunately, one of our plotters arrived at Canal Quay with a cracked print head. Stellar has asked for a copy of our declaration form, and here I have to admit a problem: I didn't send it until March 3. The plotter is valued at $14,000, and the repair quote is $2,300. Stellar says that without a timely declaration it can offer compensation based only on weight, which for a 90-kilogram unit is well below the repair cost.\n\nThe good news is that the server and all the workstations were set up without any issues, and everyone was able to log in on Monday morning. I'll call the manufacturer today to ask about a faster repair.\n\nHamid"
+   }
+  ],
+  "questions": [
+   {
+    "q": "According to the estimate, what is a condition of a weekday move?",
+    "choices": [
+     "It must be completed in one day.",
+     "It must start in the evening.",
+     "It requires extra packing time.",
+     "It is available only for small offices."
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "견적서 비고에 평일 이사는 인력·트럭 비용이 15% 줄지만 오후 6시 이후에 시작해야 한다고 나온다."
+   },
+   {
+    "q": "How much will Fenwick & Doyle Architects most likely be charged for the moving crew and trucks?",
+    "choices": [
+     "$9,095",
+     "$5,400",
+     "$4,590",
+     "$4,860"
+    ],
+    "answer": 2,
+    "type": "연계 문제",
+    "explanation": "회람에 따르면 이사를 주말에서 3월 6일 목요일 저녁으로 옮겼다. 견적서상 평일 이사는 인력·트럭 비용 5,400달러가 15% 줄어 5,400 × 0.85 = 4,590달러가 된다. 9,095달러는 총액 전체에 할인을 적용한 잘못된 값이다."
+   },
+   {
+    "q": "Why will the damaged plotter not be covered at its full value?",
+    "choices": [
+     "It was packed by office staff.",
+     "Its value was below $5,000.",
+     "It was moved on a weekday.",
+     "Its declaration was sent too close to the moving date."
+    ],
+    "answer": 3,
+    "type": "연계 문제",
+    "explanation": "견적서는 5,000달러 초과 물품을 이사 최소 7일 전에 서면 신고해야 전액 보상한다고 했다. 이사일은 3월 6일인데 로스타미 씨는 3월 3일에야 신고서를 보냈으므로 3일 전에 불과했다. 플로터 가격은 14,000달러다."
+   },
+   {
+    "q": "How much compensation will Stellar most likely offer for the plotter?",
+    "choices": [
+     "$900",
+     "$2,300",
+     "$1,400",
+     "$14,000"
+    ],
+    "answer": 0,
+    "type": "연계 문제",
+    "explanation": "미신고 물품은 킬로그램당 10달러로 보상되며(견적서), 플로터 무게는 90kg이다(이메일). 따라서 90 × 10 = 900달러로, 수리비 2,300달러에 훨씬 못 미친다."
+   },
+   {
+    "q": "In the estimate, the word “declared” is closest in meaning to",
+    "choices": [
+     "announced publicly",
+     "promised",
+     "formally reported",
+     "proven"
+    ],
+    "answer": 2,
+    "type": "동의어",
+    "explanation": "'must be declared in writing'은 고가 물품을 서면으로 '신고해야' 한다는 뜻이므로 formally reported가 가장 가깝다. announced publicly(공개 발표하다)는 대중에게 알린다는 의미라 맞지 않는다."
+   }
+  ],
+  "translation": "[견적서]\n견적서 — 스텔라 상업 이사 / 고객: 펜윅 앤드 도일 건축 / 이사: 할로 스트리트 220번지 → 커낼 키 15번지 / 날짜: 2월 2일\n\n서류 및 장비 포장(2일) — 3,200달러\n이사 인력 및 트럭(3월 8일 토요일) — 5,400달러\n업무용 책상 30개 분해 및 재조립 — 1,500달러\n대형 플로터 나무 상자 포장(2대) — 600달러\n총 견적: 10,700달러\n\n비고: 위의 인력 요금은 주말 이사 기준입니다. 평일 이사는 인력·트럭 비용이 15% 줄지만 오후 6시 이후에 시작해야 합니다. 5,000달러를 넘는 물품은 전액 보상을 받으려면 이사 최소 7일 전에 서면으로 신고해야 합니다. 신고하지 않은 물품은 킬로그램당 10달러로 보상됩니다.\n\n[회람]\n수신: 전 직원 / 발신: 젬마 도일, 대표 파트너 / 날짜: 2월 10일 / 제목: 커낼 키 이전\n\n아시다시피 우리는 다음 달 커낼 키 15번지의 새 사무실로 이전합니다. 예산 안에서 비용을 맞추기 위해 이사를 주말 대신 3월 6일 목요일 저녁으로 변경했습니다. 다음 사항에 유의해 주십시오.\n\n• 3월 6일 정오까지 개인 물품을 라벨이 붙은 상자에 싸 주십시오. 서류와 장비는 이사 업체가 포장합니다.\n• 그날 사무실은 오후 3시에 문을 닫습니다. 3월 7일 금요일에는 재택근무를 해 주십시오.\n• IT팀의 하미드 로스타미가 플로터 2대와 서버 이전을 조율하고, 고가 물품 목록을 이사 업체에 보낼 것입니다.\n\n[이메일]\n발신: 하미드 로스타미 / 수신: 젬마 도일 / 날짜: 3월 11일 / 제목: 플로터 파손\n\n젬마,\n\n안타깝게도 플로터 한 대가 인쇄 헤드에 금이 간 채 커낼 키에 도착했습니다. 스텔라가 우리 신고서 사본을 요청했는데, 여기서 문제를 인정해야겠습니다. 제가 3월 3일에야 신고서를 보냈습니다. 플로터 가격은 14,000달러이고 수리 견적은 2,300달러입니다. 스텔라는 기한 내 신고가 없으면 무게 기준으로만 보상할 수 있다고 하는데, 90킬로그램짜리 장비라 수리비에 한참 못 미칩니다.\n\n좋은 소식은 서버와 모든 업무용 책상이 문제없이 설치되어 월요일 아침 모두 로그인할 수 있었다는 점입니다. 오늘 제조사에 전화해 더 빠른 수리가 가능한지 알아보겠습니다.\n\n하미드"
+ },
+ {
+  "id": "p7-109",
+  "level": 4,
+  "kind": "triple",
+  "passages": [
+   {
+    "doc_type": "웹페이지",
+    "title": "www.harbourlightwork.com/membership — Harbourlight Workspace Membership Plans",
+    "text": "Flex — $190 per month\n10 day passes per month; access from 8:00 A.M. to 6:00 P.M.\n\nResident — $340 per month\nUnlimited 24-hour access; dedicated desk and locker\n\nStudio — $1,150 per month\nPrivate office for up to four people; 24-hour access; 10 hours of meeting-room time per month\n\nAll plans include Wi-Fi, coffee, and up to 200 printed pages per month. Additional printing is charged at $0.10 per page. Flex and Resident members may book meeting rooms at $25 per hour. Members who pay for twelve months in advance receive two months free."
+   },
+   {
+    "doc_type": "이메일",
+    "title": "From: Tomasz Wierzbicki / To: membership@harbourlightwork.com / Date: April 3 / Subject: Changing my plan",
+    "text": "Hello,\n\nI've been a Flex member since January. Since my consulting work picked up, I've been using all my passes by the third week of the month, and I've started meeting clients in the evenings, which isn't possible under my current plan. I would like to switch to a plan with round-the-clock access starting this month, but I don't need a private office. I'll be traveling for most of next winter, so please don't sign me up for a full year.\n\nAlso, could you confirm that my April invoice will reflect the change? I had already booked a meeting room for four hours on April 10.\n\nThanks,\nTomasz Wierzbicki"
+   },
+   {
+    "doc_type": "청구서",
+    "title": "Invoice — Harbourlight Workspace / Member: Tomasz Wierzbicki / Billing period: April",
+    "text": "Resident membership (April) — $340.00\nMeeting room, April 10 (4 hours × $25.00) — $100.00\nPrinting: 350 pages (200 included) — $15.00\nCredit: Flex fee already paid for April — ($190.00)\nTotal due: $265.00"
+   }
+  ],
+  "questions": [
+   {
+    "q": "Why does Mr. Wierzbicki want to change his membership?",
+    "choices": [
+     "He needs to use the space outside regular hours.",
+     "He has hired an assistant.",
+     "He wants a private office for client meetings.",
+     "He will be traveling during the winter."
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "저녁에 고객을 만나기 시작했는데 현재 플랜(오전 8시~오후 6시)으로는 불가능해 24시간 이용 플랜으로 바꾸고 싶다고 했다. 개인 사무실은 필요 없다고 했고, 겨울 출장은 1년 선납을 원하지 않는 이유다."
+   },
+   {
+    "q": "Why was Mr. Wierzbicki charged for the meeting room?",
+    "choices": [
+     "He booked it before paying his April fee.",
+     "His new plan does not include meeting-room hours.",
+     "He used it for more than ten hours.",
+     "He booked it on a weekend."
+    ],
+    "answer": 1,
+    "type": "연계 문제",
+    "explanation": "웹페이지에 따르면 회의실 이용 시간은 스튜디오 플랜에만 포함되고, 플렉스·레지던트 회원은 시간당 25달러를 낸다. 청구서상 그는 레지던트로 바꿨으므로 4시간 × 25달러 = 100달러가 청구되었다."
+   },
+   {
+    "q": "Why most likely did Mr. Wierzbicki not receive two free months?",
+    "choices": [
+     "He changed plans in the middle of the month.",
+     "He has been a member for less than a year.",
+     "He chose not to pay for a full year in advance.",
+     "The offer does not apply to the Resident plan."
+    ],
+    "answer": 2,
+    "type": "연계 문제",
+    "explanation": "12개월을 선납하면 두 달이 무료지만(웹페이지), 그는 다음 겨울 대부분 출장을 가므로 1년 단위로 가입시키지 말라고 했다(이메일). 레지던트 플랜이 제외된다는 말은 없다."
+   },
+   {
+    "q": "What is indicated about Mr. Wierzbicki's printing in April?",
+    "choices": [
+     "It was included in the Resident fee.",
+     "It was charged at a discounted rate.",
+     "It was mostly for client meetings.",
+     "It exceeded the monthly allowance by 150 pages."
+    ],
+    "answer": 3,
+    "type": "연계 문제",
+    "explanation": "청구서에 350쪽 중 200쪽이 포함되어 있다고 나오므로 150쪽을 초과했다. 웹페이지의 추가 요금 쪽당 0.10달러를 적용하면 150 × 0.10 = 15달러로 청구서 금액과 일치한다."
+   },
+   {
+    "q": "In the e-mail, the phrase “picked up” in paragraph 1 is closest in meaning to",
+    "choices": [
+     "collected",
+     "increased",
+     "lifted",
+     "answered"
+    ],
+    "answer": 1,
+    "type": "동의어",
+    "explanation": "'my consulting work picked up'은 컨설팅 일이 '늘었다'는 뜻이다. 그래서 이용권을 셋째 주면 다 쓴다고 이어진다. collected(모으다)나 lifted(들어 올리다)는 pick up의 다른 뜻이다."
+   }
+  ],
+  "translation": "[웹페이지]\n하버라이트 워크스페이스 멤버십 플랜\n\n플렉스 — 월 190달러\n월 10일 이용권, 오전 8시~오후 6시 이용\n\n레지던트 — 월 340달러\n24시간 무제한 이용, 전용 책상과 사물함\n\n스튜디오 — 월 1,150달러\n최대 4인용 개인 사무실, 24시간 이용, 월 10시간 회의실 이용\n\n모든 플랜에는 와이파이, 커피, 월 200쪽까지의 인쇄가 포함됩니다. 추가 인쇄는 쪽당 0.10달러입니다. 플렉스와 레지던트 회원은 시간당 25달러에 회의실을 예약할 수 있습니다. 12개월을 선납하는 회원은 두 달을 무료로 받습니다.\n\n[이메일]\n발신: 토마시 비에르즈비츠키 / 수신: membership@harbourlightwork.com / 날짜: 4월 3일 / 제목: 플랜 변경\n\n안녕하세요.\n\n저는 1월부터 플렉스 회원입니다. 컨설팅 일이 늘어서 매달 셋째 주면 이용권을 다 쓰고 있고, 저녁에 고객을 만나기 시작했는데 현재 플랜으로는 그게 불가능합니다. 이번 달부터 24시간 이용할 수 있는 플랜으로 바꾸고 싶지만 개인 사무실은 필요 없습니다. 다음 겨울 대부분은 출장을 다닐 예정이니 1년 단위로 가입시키지는 말아 주세요.\n\n또한 4월 청구서에 변경 사항이 반영되는지 확인해 주시겠어요? 4월 10일에 이미 회의실을 4시간 예약해 두었습니다.\n\n감사합니다.\n토마시 비에르즈비츠키\n\n[청구서]\n청구서 — 하버라이트 워크스페이스 / 회원: 토마시 비에르즈비츠키 / 청구 기간: 4월\n\n레지던트 멤버십(4월) — 340.00달러\n회의실, 4월 10일(4시간 × 25.00달러) — 100.00달러\n인쇄: 350쪽(200쪽 포함) — 15.00달러\n차감: 이미 낸 4월 플렉스 요금 — (190.00달러)\n청구 금액: 265.00달러"
+ },
+ {
+  "id": "p7-110",
+  "level": 4,
+  "kind": "triple",
+  "passages": [
+   {
+    "doc_type": "일정표",
+    "title": "Carmody Institute — Supply Chain Webinar Series (November)",
+    "text": "All sessions last one hour.\n\nTue., Nov. 4, 10:00 A.M. — Demand Forecasting Basics (Dr. Ana Weller)\nThu., Nov. 6, 2:00 P.M. — Negotiating with Overseas Suppliers (Rahul Iyer)\nTue., Nov. 11, 10:00 A.M. — Inventory Metrics That Matter (Dr. Ana Weller)\nThu., Nov. 13, 2:00 P.M. — Customs Compliance Update (Sofia Lindgren)\n\nFees: $75 per session, or $240 for all four. Members of the Carmody Alumni Network pay $60 per session or $200 for all four.\n\nRecordings are available for 14 days, to registered participants only. A certificate of completion is issued only to participants who attend all four sessions live."
+   },
+   {
+    "doc_type": "이메일",
+    "title": "From: Registration Office, Carmody Institute / To: Diane Okoro / Date: October 29 / Subject: Registration confirmed",
+    "text": "Dear Ms. Okoro,\n\nThank you for registering for the complete Supply Chain Webinar Series. As a member of the Carmody Alumni Network, you have been charged the member rate. Your access link, which is valid for all sessions, appears below.\n\nPlease note that Ms. Lindgren's session has been moved from November 13 to November 14 at 9:00 A.M. because of a scheduling conflict. We apologize for any inconvenience.\n\nAccess link: carmody.edu/live/SC-4471\n\nRegistration Office\nCarmody Institute"
+   },
+   {
+    "doc_type": "문자 메시지",
+    "title": "Text-message chain — Diane Okoro, Felix Grant",
+    "text": "Diane Okoro [1:48 P.M.]: Felix, I'm logging into the customs webinar now in case you want to join from your desk.\nFelix Grant [1:50 P.M.]: Didn't you see the e-mail?\nDiane Okoro [1:51 P.M.]: What e-mail?\nFelix Grant [1:52 P.M.]: The one from Carmody. That session is tomorrow morning now.\nDiane Okoro [1:53 P.M.]: Oh no. I have the quarterly review with the Delhi team then.\nFelix Grant [1:54 P.M.]: Can't you just watch the recording afterward?\nDiane Okoro [1:56 P.M.]: I could, but then I wouldn't get the certificate. I'll ask Marta whether we can push the review to the afternoon."
+   }
+  ],
+  "questions": [
+   {
+    "q": "What is true about the webinar series?",
+    "choices": [
+     "Each session is led by a different instructor.",
+     "Recordings can be viewed by anyone for 14 days.",
+     "One instructor leads more than one session.",
+     "All sessions begin in the morning."
+    ],
+    "answer": 2,
+    "type": "사실 확인(NOT/TRUE)",
+    "explanation": "애나 웰러 박사가 11월 4일과 11일 두 세션을 진행한다. 녹화본은 등록자만 볼 수 있고, 2시 세션도 있으므로 다른 선택지는 틀리다."
+   },
+   {
+    "q": "How much less did Ms. Okoro pay than a nonmember registering for the same sessions?",
+    "choices": [
+     "$15",
+     "$60",
+     "$100",
+     "$40"
+    ],
+    "answer": 3,
+    "type": "연계 문제",
+    "explanation": "이메일에 따르면 오코로 씨는 시리즈 전체를 동문 회원가로 등록했다. 일정표상 네 세션 전체는 비회원 240달러, 회원 200달러이므로 40달러 적게 냈다. 15달러는 한 세션 기준 차이다."
+   },
+   {
+    "q": "At 1:50 P.M., what does Mr. Grant most likely mean when he writes, “Didn't you see the e-mail?”",
+    "choices": [
+     "He sent Ms. Okoro the access link earlier.",
+     "The session is not taking place at that time.",
+     "He wants Ms. Okoro to reply to a client.",
+     "The webinar has been canceled."
+    ],
+    "answer": 1,
+    "type": "의도 파악",
+    "explanation": "오코로 씨가 세관 웨비나에 접속하려 하자 그랜트 씨는 이메일을 못 봤느냐고 되묻고, 곧 그 세션이 내일 아침으로 바뀌었다고 설명한다. 즉 지금은 세션이 열리지 않는다는 뜻이다. 취소가 아니라 일정 변경이다."
+   },
+   {
+    "q": "What is suggested about Ms. Okoro?",
+    "choices": [
+     "She has attended the earlier sessions live.",
+     "She works in the Delhi office.",
+     "She is a speaker in the series.",
+     "She registered for only one session."
+    ],
+    "answer": 0,
+    "type": "연계 문제",
+    "explanation": "수료증은 네 세션을 모두 실시간으로 들은 사람에게만 주어진다(일정표). 오코로 씨가 녹화본을 보면 수료증을 못 받는다고 걱정하는 것은 앞의 세 세션을 이미 실시간으로 들었기 때문이라고 추론할 수 있다. 그녀는 전체 시리즈에 등록했다."
+   },
+   {
+    "q": "What will Ms. Okoro most likely do next?",
+    "choices": [
+     "Watch a recording of the session",
+     "Request a refund for one session",
+     "Try to reschedule a meeting",
+     "Contact Ms. Lindgren"
+    ],
+    "answer": 2,
+    "type": "추론",
+    "explanation": "마지막 메시지에서 마르타에게 분기 검토 회의를 오후로 미룰 수 있는지 물어보겠다고 했다. 녹화본을 보면 수료증을 못 받으므로 그 방법은 택하지 않으려 한다."
+   }
+  ],
+  "translation": "[일정표]\n카모디 인스티튜트 — 공급망 웨비나 시리즈(11월)\n\n모든 세션은 1시간입니다.\n\n11월 4일(화) 오전 10시 — 수요 예측 기초(애나 웰러 박사)\n11월 6일(목) 오후 2시 — 해외 공급업체와의 협상(라훌 아이어)\n11월 11일(화) 오전 10시 — 중요한 재고 지표(애나 웰러 박사)\n11월 13일(목) 오후 2시 — 통관 규정 최신 정보(소피아 린드그렌)\n\n수강료: 세션당 75달러, 네 세션 전체 240달러. 카모디 동문 네트워크 회원은 세션당 60달러, 전체 200달러.\n\n녹화본은 등록한 참가자에 한해 14일간 제공됩니다. 수료증은 네 세션을 모두 실시간으로 참석한 참가자에게만 발급됩니다.\n\n[이메일]\n발신: 카모디 인스티튜트 등록처 / 수신: 다이앤 오코로 / 날짜: 10월 29일 / 제목: 등록 확인\n\n오코로 님께,\n\n공급망 웨비나 시리즈 전체에 등록해 주셔서 감사합니다. 카모디 동문 네트워크 회원이시므로 회원가가 청구되었습니다. 모든 세션에 유효한 접속 링크는 아래에 있습니다.\n\n일정 충돌로 인해 린드그렌 씨의 세션이 11월 13일에서 11월 14일 오전 9시로 옮겨졌음을 알려 드립니다. 불편을 드려 죄송합니다.\n\n접속 링크: carmody.edu/live/SC-4471\n\n카모디 인스티튜트 등록처\n\n[문자 메시지]\n다이앤 오코로 [오후 1:48]: 펠릭스, 지금 통관 웨비나에 접속하려는데 자리에서 같이 들을래요?\n펠릭스 그랜트 [오후 1:50]: 이메일 못 봤어요?\n다이앤 오코로 [오후 1:51]: 무슨 이메일이요?\n펠릭스 그랜트 [오후 1:52]: 카모디에서 온 거요. 그 세션은 이제 내일 아침이에요.\n다이앤 오코로 [오후 1:53]: 이런. 그때 델리팀과 분기 검토 회의가 있어요.\n펠릭스 그랜트 [오후 1:54]: 나중에 녹화본을 보면 되지 않아요?\n다이앤 오코로 [오후 1:56]: 그럴 수는 있지만 그러면 수료증을 못 받아요. 마르타에게 검토 회의를 오후로 미룰 수 있는지 물어볼게요."
+ },
+ {
+  "id": "p7-111",
+  "level": 5,
+  "kind": "single",
+  "passages": [
+   {
+    "doc_type": "계약서",
+    "title": "Software Subscription Agreement — Excerpt / Between Novaleaf Systems Ltd. (“Provider”) and Arden & Co. Retail (“Customer”)",
+    "text": "4. Term and Renewal\n4.1 The initial term of this Agreement is 24 months from the Effective Date. Thereafter, it will renew automatically for successive 12-month periods unless either party gives written notice of non-renewal at least 90 days before the end of the then-current term.\n4.2 Subscription fees for any renewal term may be increased by no more than the lower of (a) 5 percent or (b) the annual change in the national consumer price index, provided that the Provider notifies the Customer of the increase at least 120 days before the renewal date.\n\n5. Service Levels\n5.1 The Provider will make the platform available 99.5 percent of each calendar month, excluding scheduled maintenance announced at least 48 hours in advance.\n5.2 If availability falls below that level, the Customer will receive a credit against the next invoice equal to 10 percent of that month's fee for each full 0.5 percentage point of shortfall, up to a maximum of 50 percent. Such credits are the Customer's sole financial remedy for unavailability, except as provided in Section 9.\n\n6. Data\n6.1 Upon termination, the Provider will, at the Customer's request made within 30 days, export all Customer data in a standard format at no additional charge. After that period, the Provider may delete the data."
+   }
+  ],
+  "questions": [
+   {
+    "q": "If the platform is available 98.4 percent of a month, what credit will the Customer receive?",
+    "choices": [
+     "20 percent of that month's fee",
+     "10 percent of that month's fee",
+     "22 percent of that month's fee",
+     "50 percent of that month's fee"
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "기준 99.5%에서 98.4%를 빼면 부족분은 1.1%포인트다. 크레딧은 '완전한' 0.5%포인트마다 10%이므로 0.5포인트 두 개분, 즉 20%다. 22%는 나머지 0.1포인트까지 비례 계산한 잘못된 값이다."
+   },
+   {
+    "q": "If the consumer price index rose by 3.2 percent and the Provider gives notice 150 days before the renewal date, what is the largest fee increase allowed?",
+    "choices": [
+     "No increase",
+     "5 percent",
+     "8.2 percent",
+     "3.2 percent"
+    ],
+    "answer": 3,
+    "type": "추론",
+    "explanation": "4.2항에 따라 인상 한도는 5%와 물가지수 변동률 중 '낮은 쪽'이므로 3.2%다. 통보도 120일 전보다 앞선 150일 전이므로 요건을 충족해 인상이 가능하다."
+   },
+   {
+    "q": "What is indicated about the Agreement?",
+    "choices": [
+     "It ends automatically after 24 months.",
+     "It continues unless one party chooses to end it.",
+     "It allows the Provider to delete data immediately upon termination.",
+     "It charges a fee for exporting data."
+    ],
+    "answer": 1,
+    "type": "사실 확인(NOT/TRUE)",
+    "explanation": "최초 24개월 이후 어느 한쪽이 90일 전까지 서면으로 갱신 거절을 통보하지 않으면 12개월씩 자동 갱신된다. 데이터는 종료 후 30일 요청 기간이 지나야 삭제할 수 있고, 추출은 무료다."
+   },
+   {
+    "q": "In section 5.2, the word “sole” is closest in meaning to",
+    "choices": [
+     "lonely",
+     "underlying",
+     "only",
+     "unique"
+    ],
+    "answer": 2,
+    "type": "동의어",
+    "explanation": "'the Customer's sole financial remedy'는 크레딧이 고객이 받을 수 있는 '유일한' 금전적 구제 수단이라는 뜻이므로 only가 가장 가깝다. unique는 '독특한'이라는 뜻이 강해 이 문맥에 맞지 않는다."
+   }
+  ],
+  "translation": "소프트웨어 구독 계약서 — 발췌 / 노바리프 시스템즈(“공급자”)와 아든 앤드 코 리테일(“고객”) 간\n\n4. 기간 및 갱신\n4.1 본 계약의 최초 기간은 발효일로부터 24개월이다. 그 이후에는 어느 한 당사자가 당시 기간 만료 최소 90일 전에 서면으로 갱신 거절을 통보하지 않는 한 12개월 단위로 자동 갱신된다.\n4.2 갱신 기간의 구독료는 (a) 5% 또는 (b) 국가 소비자물가지수의 연간 변동률 중 낮은 쪽을 넘지 않는 범위에서 인상될 수 있다. 단, 공급자는 갱신일 최소 120일 전에 고객에게 인상을 통보해야 한다.\n\n5. 서비스 수준\n5.1 공급자는 최소 48시간 전에 공지한 정기 점검을 제외하고 매월 99.5%의 시간 동안 플랫폼을 이용 가능하게 한다.\n5.2 가용성이 그 수준에 못 미치면, 고객은 부족분 0.5%포인트마다 그달 요금의 10%에 해당하는 크레딧을 다음 청구서에서 받으며, 최대 50%까지로 한다. 이러한 크레딧은 제9조에 규정된 경우를 제외하고 서비스 불가에 대한 고객의 유일한 금전적 구제 수단이다.\n\n6. 데이터\n6.1 계약 종료 시 공급자는 30일 이내에 고객이 요청하면 모든 고객 데이터를 표준 형식으로 추가 비용 없이 추출해 준다. 그 기간이 지나면 공급자는 데이터를 삭제할 수 있다."
+ },
+ {
+  "id": "p7-112",
+  "level": 5,
+  "kind": "single",
+  "passages": [
+   {
+    "doc_type": "기사",
+    "title": "Study Finds Fitting Tools Cut Returns — But Not for Everyone / By Hannah Liebermann",
+    "text": "Online clothing retailers have long struggled with return rates that can exceed 30 percent, far higher than in most other retail categories. A new study from the Vestry School of Business suggests that virtual fitting tools, which recommend a size based on a shopper's measurements, can reduce returns substantially, though the benefit is unevenly distributed. [1]\n\nResearchers tracked 1.2 million orders at three mid-sized retailers over eighteen months. Among shoppers who used a fitting tool, the return rate for trousers and jackets fell by nearly a third. For knitwear and loose-fitting items, however, the difference was negligible. [2]\n\nMore surprising was the tools' effect on repeat customers. Shoppers who had previously returned at least two items for sizing reasons were the most likely to use the tools — and the most likely to benefit. [3] First-time buyers, by contrast, often skipped the tool entirely, and those who did use it saw only modest gains.\n\nThe authors caution that fitting tools address only one cause of returns. In surveys, nearly 40 percent of respondents said they had returned items because the color or fabric differed from what they had expected. [4] “Retailers who invest only in sizing technology may be disappointed,” said lead author Dr. Tomas Ekberg. “Better photography and more accurate descriptions matter just as much.”"
+   }
+  ],
+  "questions": [
+   {
+    "q": "What is the article mainly about?",
+    "choices": [
+     "Research on how a technology affects returned merchandise",
+     "A retailer's decision to stop accepting returns",
+     "Changes in how clothing sizes are labeled",
+     "The launch of a new online clothing store"
+    ],
+    "answer": 0,
+    "type": "주제·목적",
+    "explanation": "기사는 가상 피팅 도구가 온라인 의류 반품률에 미치는 영향을 조사한 경영대학원 연구를 소개한다. 반품 중단 결정이나 사이즈 표기 변경, 매장 개점은 다루지 않는다."
+   },
+   {
+    "q": "What is indicated about knitwear?",
+    "choices": [
+     "It is returned more often than jackets.",
+     "It was not included in the study.",
+     "Fitting tools had little effect on its return rate.",
+     "Most customers buy it without using a size chart."
+    ],
+    "answer": 2,
+    "type": "사실 확인(NOT/TRUE)",
+    "explanation": "둘째 단락에서 니트웨어와 헐렁한 옷은 피팅 도구 사용 여부에 따른 차이가 '무시할 만했다(negligible)'고 했다. 연구에는 포함되었고, 재킷보다 반품이 많다는 비교는 없다."
+   },
+   {
+    "q": "In paragraph 4, the word “address” is closest in meaning to",
+    "choices": [
+     "deliver",
+     "deal with",
+     "label",
+     "lecture"
+    ],
+    "answer": 1,
+    "type": "동의어",
+    "explanation": "'fitting tools address only one cause of returns'는 피팅 도구가 반품의 여러 원인 중 하나만 '해결한다/다룬다'는 뜻이므로 deal with가 가장 가깝다. deliver(배달하다), lecture(강연하다)는 address의 다른 뜻과 관련된 함정이다."
+   },
+   {
+    "q": "In which of the positions marked [1], [2], [3], and [4] does the following sentence best belong?\n“This, the researchers believe, is because such shoppers had already learned that standard size charts were unreliable for them.”",
+    "choices": [
+     "[1]",
+     "[2]",
+     "[3]",
+     "[4]"
+    ],
+    "answer": 2,
+    "type": "문장 삽입",
+    "explanation": "[3] 앞 문장은 사이즈 문제로 두 번 이상 반품한 고객이 도구를 가장 많이 쓰고 가장 큰 효과를 봤다는 내용이다. 삽입 문장의 such shoppers가 이들을 가리키며, 그 이유(표준 사이즈표를 믿을 수 없다는 경험)를 설명하므로 [3]이 알맞다."
+   }
+  ],
+  "translation": "연구 결과, 피팅 도구가 반품을 줄이지만 모두에게 그런 것은 아니다 / 해나 리버만 기자\n\n온라인 의류 소매업체들은 대부분의 다른 소매 분야보다 훨씬 높은, 30%를 넘기도 하는 반품률로 오랫동안 어려움을 겪어 왔다. 베스트리 경영대학원의 새 연구는 쇼핑객의 신체 치수를 바탕으로 사이즈를 추천하는 가상 피팅 도구가 반품을 상당히 줄일 수 있지만, 그 혜택이 고르게 분포하지는 않는다고 시사한다. [1]\n\n연구진은 18개월 동안 중형 소매업체 세 곳의 주문 120만 건을 추적했다. 피팅 도구를 사용한 쇼핑객 사이에서 바지와 재킷의 반품률은 거의 3분의 1 줄었다. 그러나 니트웨어와 헐렁한 옷은 차이가 무시할 만한 수준이었다. [2]\n\n더 놀라운 것은 재구매 고객에 대한 효과였다. 이전에 사이즈 문제로 두 개 이상 반품한 적이 있는 쇼핑객이 도구를 사용할 가능성이 가장 높았고, 효과를 볼 가능성도 가장 높았다. [3] (연구진은 이들이 표준 사이즈표가 자신에게 맞지 않는다는 것을 이미 알게 되었기 때문이라고 본다.) 반면 첫 구매자는 도구를 아예 건너뛰는 경우가 많았고, 사용한 사람도 효과가 크지 않았다.\n\n저자들은 피팅 도구가 반품 원인 중 하나만 해결한다고 경고한다. 설문에서 응답자의 약 40%는 색상이나 원단이 예상과 달라 반품한 적이 있다고 답했다. [4] 제1저자 토마스 에크베리 박사는 “사이즈 기술에만 투자하는 소매업체는 실망할 수 있다”며 “더 나은 사진과 더 정확한 설명도 똑같이 중요하다”고 말했다."
+ },
+ {
+  "id": "p7-113",
+  "level": 5,
+  "kind": "single",
+  "passages": [
+   {
+    "doc_type": "온라인 채팅",
+    "title": "Online chat discussion — Joanna Pryce, Kwame Asante, Stefan Moll, Lin Feng",
+    "text": "Joanna Pryce [10:14 A.M.]: The lab has confirmed it. The latches on batch 2207 of the Orbit strollers can open under load. We need to stop all shipments of that batch today.\nKwame Asante [10:16 A.M.]: Batch 2207 went to three distributors. Two still have most of it in their warehouses. The third, Brightlane, has already delivered to stores.\nStefan Moll [10:18 A.M.]: Under the regulations, we must notify the product safety authority within two business days of confirming a defect. So Thursday at the latest.\nLin Feng [10:19 A.M.]: And customers? My team will get calls the minute this is public.\nJoanna Pryce [10:21 A.M.]: We'll offer free replacement latches. The fix takes five minutes with a screwdriver.\nStefan Moll [10:22 A.M.]: I'd be careful there. If we ask parents to do the repair themselves and one goes wrong...\nJoanna Pryce [10:23 A.M.]: Point taken. Kwame, could the stores do the swap?\nKwame Asante [10:25 A.M.]: Brightlane's stores could, if we get them the parts by next week. Our supplier has 4,000 latches ready, but batch 2207 was 6,500 units.\nLin Feng [10:26 A.M.]: Then people who've already bought one come first. Stock in warehouses can wait.\nJoanna Pryce [10:27 A.M.]: Agreed. Lin, please draft a script for customer calls and send it to Stefan before anything goes out.\nStefan Moll [10:28 A.M.]: I'll have comments back within an hour of receiving it."
+   }
+  ],
+  "questions": [
+   {
+    "q": "What problem are the writers discussing?",
+    "choices": [
+     "A shipment was sent to the wrong distributor.",
+     "A part of a product may fail.",
+     "A lab test was delayed.",
+     "A supplier has stopped making latches."
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "프라이스 씨가 첫 메시지에서 2207 배치 유모차의 잠금 걸쇠가 하중을 받으면 열릴 수 있다고 실험실이 확인했다고 말한다. 공급업체는 오히려 걸쇠 4,000개를 준비해 두었다."
+   },
+   {
+    "q": "At 10:22 A.M., what does Mr. Moll imply when he writes, “I'd be careful there”?",
+    "choices": [
+     "He doubts that the repair takes only five minutes.",
+     "He thinks the replacement latches are too expensive.",
+     "He is worried about the risks of customers making repairs themselves.",
+     "He wants to delay the announcement until Thursday."
+    ],
+    "answer": 2,
+    "type": "의도 파악",
+    "explanation": "프라이스 씨가 드라이버로 5분이면 되는 수리라며 교체 걸쇠를 제공하자고 하자, 몰 씨는 이렇게 말한 뒤 부모에게 직접 수리를 맡겼다가 잘못되는 경우를 언급한다. 즉 고객 자가 수리의 위험을 우려한 것이다. 그래서 프라이스 씨가 매장에서 교체할 수 있는지 묻는다."
+   },
+   {
+    "q": "At 10:26 A.M., why most likely does Ms. Feng write, “Stock in warehouses can wait”?",
+    "choices": [
+     "There are not enough replacement parts for every affected unit.",
+     "The distributors have refused to return their stock.",
+     "Warehouse staff are not trained to install the parts.",
+     "The warehouses will be closed until next week."
+    ],
+    "answer": 0,
+    "type": "의도 파악",
+    "explanation": "아산테 씨가 걸쇠는 4,000개뿐인데 배치 물량은 6,500대라고 하자, 펑 씨는 이미 구매한 고객을 우선하고 창고 재고는 나중에 처리하자고 한다. 부품이 모든 물량에 부족하기 때문에 우선순위를 정한 것이다."
+   },
+   {
+    "q": "On what day does the online chat most likely take place?",
+    "choices": [
+     "Monday",
+     "Wednesday",
+     "Thursday",
+     "Tuesday"
+    ],
+    "answer": 3,
+    "type": "추론",
+    "explanation": "몰 씨는 결함을 확인한 뒤 영업일 기준 2일 이내에 신고해야 하므로 '늦어도 목요일'이라고 했다. 결함은 오늘 확인되었으므로(The lab has confirmed it), 오늘부터 2영업일 뒤가 목요일인 날은 화요일이다."
+   }
+  ],
+  "translation": "조애나 프라이스 [오전 10:14]: 실험실에서 확인했어요. 오빗 유모차 2207 배치의 잠금 걸쇠가 하중을 받으면 열릴 수 있대요. 오늘 그 배치의 출고를 모두 멈춰야 해요.\n콰메 아산테 [오전 10:16]: 2207 배치는 유통업체 세 곳에 갔어요. 두 곳은 아직 대부분을 창고에 갖고 있어요. 세 번째인 브라이트레인은 이미 매장에 납품했어요.\n슈테판 몰 [오전 10:18]: 규정상 결함을 확인한 뒤 영업일 기준 2일 이내에 제품안전 당국에 신고해야 해요. 그러니 늦어도 목요일이에요.\n린 펑 [오전 10:19]: 고객은요? 이게 알려지는 순간 우리 팀에 전화가 올 거예요.\n조애나 프라이스 [오전 10:21]: 교체용 걸쇠를 무료로 제공할 거예요. 드라이버로 5분이면 고칠 수 있어요.\n슈테판 몰 [오전 10:22]: 그건 조심해야 해요. 부모들에게 직접 수리하라고 했다가 하나라도 잘못되면...\n조애나 프라이스 [오전 10:23]: 일리 있네요. 콰메, 매장에서 교체해 줄 수 있을까요?\n콰메 아산테 [오전 10:25]: 다음 주까지 부품을 보내 주면 브라이트레인 매장은 할 수 있어요. 공급업체에 걸쇠 4,000개가 준비되어 있지만 2207 배치는 6,500대였어요.\n린 펑 [오전 10:26]: 그럼 이미 구매한 분들이 먼저예요. 창고 재고는 기다려도 돼요.\n조애나 프라이스 [오전 10:27]: 동의해요. 린, 고객 전화 응대 스크립트 초안을 써서 뭐든 나가기 전에 슈테판에게 보내 주세요.\n슈테판 몰 [오전 10:28]: 받으면 한 시간 안에 의견 드릴게요."
+ },
+ {
+  "id": "p7-114",
+  "level": 5,
+  "kind": "single",
+  "passages": [
+   {
+    "doc_type": "회람",
+    "title": "To: All Staff / From: Imogen Vance, Chief Operating Officer, Lattimer Consulting / Date: December 2 / Subject: Revised travel policy",
+    "text": "Following the board's decision to cut our business-travel emissions by 25 percent by the end of next year, the following changes to the travel policy will take effect on January 1. [1]\n\nFirst, each practice group will receive an annual carbon budget, measured in tonnes of CO2, equal to its average travel emissions over the past three years minus 25 percent. Group leaders will receive monthly reports showing how much of their budget has been used. [2]\n\nSecond, rail travel will be mandatory for any trip on which the train journey takes five hours or less, regardless of fare. Exceptions require written approval from the group leader and will be reviewed quarterly.\n\nThird, business-class air travel will be limited to flights of more than nine hours. [3] The current threshold is six hours.\n\nGroups that finish the year under budget may carry up to half of the unused amount into the following year. Groups that exceed their budget will not face penalties this year, but their leaders will be asked to present a reduction plan to the operations committee. [4]\n\nTravel booked before January 1 will be honored under the current policy, even for trips taking place after that date."
+   }
+  ],
+  "questions": [
+   {
+    "q": "Why was the memo written?",
+    "choices": [
+     "To explain how a company target will be put into practice",
+     "To announce the results of an emissions audit",
+     "To request suggestions for reducing travel costs",
+     "To introduce a new travel booking service"
+    ],
+    "answer": 0,
+    "type": "주제·목적",
+    "explanation": "이사회가 정한 출장 배출량 25% 감축 목표를 실행하기 위해 1월 1일부터 바뀌는 출장 규정(탄소 예산, 철도 의무화, 비즈니스석 제한)을 설명하는 회람이다."
+   },
+   {
+    "q": "In which of the positions marked [1], [2], [3], and [4] does the following sentence best belong?\n“Travel for client projects will be counted against the budget of the group that manages the client relationship.”",
+    "choices": [
+     "[1]",
+     "[2]",
+     "[3]",
+     "[4]"
+    ],
+    "answer": 1,
+    "type": "문장 삽입",
+    "explanation": "[2] 앞에서 부서(프랙티스 그룹)별 연간 탄소 예산과 사용량 보고를 설명한다. 고객 프로젝트 출장이 어느 그룹 예산에서 차감되는지 정하는 문장은 이 예산 설명에 이어지는 것이 자연스럽다."
+   },
+   {
+    "q": "What is suggested about a seven-hour flight that is booked on December 20 for a trip in March?",
+    "choices": [
+     "It must be replaced by rail travel.",
+     "It requires the group leader's written approval.",
+     "It may be taken in business class.",
+     "It will not count toward any group's budget."
+    ],
+    "answer": 2,
+    "type": "추론",
+    "explanation": "1월 1일 이전에 예약한 출장은 현행 규정을 따르고, 현행 규정의 비즈니스석 기준은 6시간이다. 따라서 12월 20일에 예약한 7시간 비행은 3월 출장이라도 비즈니스석을 이용할 수 있다. 새 기준(9시간 초과)은 적용되지 않는다."
+   },
+   {
+    "q": "In the last paragraph, the word “honored” is closest in meaning to",
+    "choices": [
+     "praised",
+     "awarded",
+     "respected personally",
+     "accepted as valid"
+    ],
+    "answer": 3,
+    "type": "동의어",
+    "explanation": "'Travel booked before January 1 will be honored under the current policy'는 기존 예약이 현행 규정에 따라 '유효한 것으로 인정된다'는 뜻이다. praised(칭찬받다)나 awarded(수여되다)는 honor의 다른 뜻이다."
+   }
+  ],
+  "translation": "수신: 전 직원 / 발신: 이모젠 밴스, 최고운영책임자, 래티머 컨설팅 / 날짜: 12월 2일 / 제목: 출장 규정 개정\n\n내년 말까지 출장 배출량을 25% 줄이기로 한 이사회 결정에 따라, 다음과 같은 출장 규정 변경이 1월 1일부터 시행됩니다. [1]\n\n첫째, 각 프랙티스 그룹은 이산화탄소 톤 단위로 측정한 연간 탄소 예산을 받으며, 이는 지난 3년간 평균 출장 배출량에서 25%를 뺀 양입니다. 그룹장은 예산 사용량을 보여 주는 월간 보고서를 받게 됩니다. [2] (고객 프로젝트 출장은 해당 고객 관계를 관리하는 그룹의 예산에서 차감됩니다.)\n\n둘째, 기차로 5시간 이하 걸리는 출장은 요금과 관계없이 철도 이용이 의무입니다. 예외는 그룹장의 서면 승인이 필요하며 분기마다 검토됩니다.\n\n셋째, 비즈니스석 항공 이용은 9시간을 넘는 비행으로 제한됩니다. [3] 현재 기준은 6시간입니다.\n\n연말에 예산보다 적게 쓴 그룹은 남은 양의 절반까지 다음 해로 이월할 수 있습니다. 예산을 초과한 그룹은 올해에는 불이익을 받지 않지만, 그룹장은 운영위원회에 감축 계획을 발표해야 합니다. [4]\n\n1월 1일 이전에 예약한 출장은 그 이후에 이루어지더라도 현행 규정에 따라 인정됩니다."
+ },
+ {
+  "id": "p7-115",
+  "level": 5,
+  "kind": "double",
+  "passages": [
+   {
+    "doc_type": "재무 요약",
+    "title": "Aldermoor Springs plc — Full-Year Results Summary",
+    "text": "Net sales: £142.6 million (previous year: £131.0 million), up 8.9%\nVolume: 612 million litres (previous year: 598 million)\nGross margin: 38.1% (previous year: 40.4%)\nOperating profit: £17.2 million (previous year: £18.9 million)\nDividend per share: 6.0p (previous year: 6.0p)\n\nChair's commentary: Sales growth was driven chiefly by price increases in our premium glass-bottle range, which now accounts for 27% of net sales. Margins came under pressure from a 22% rise in the cost of glass and from one-off expenses of £2.3 million related to the closure of our Fellbridge bottling line. Excluding those one-off costs, operating profit would have risen modestly. The Board has decided to hold the dividend flat and to direct surplus cash toward a new returnable-bottle facility in Kendal, due to open in the second half of next year."
+   },
+   {
+    "doc_type": "이메일",
+    "title": "From: Gordon Achterberg / To: Company Secretary, Aldermoor Springs plc / Date: March 14 / Subject: Question for the annual general meeting",
+    "text": "Dear Sir or Madam,\n\nAs a shareholder of some twenty years, I will attend the annual general meeting on April 9, and I would like the following question put to the Board.\n\nThe results summary shows that sales volume grew by only about two percent, while net sales rose far faster. I understand that premium products carry higher prices, but I am concerned that the company is relying on price rather than on attracting new customers. Is the Board confident that its higher prices can be sustained if competitors do not follow?\n\nI am also disappointed that the dividend has not increased, for the first time in over a decade. I would ask the Board to confirm that this is a temporary decision tied to the investment it describes, and not a change in policy.\n\nYours faithfully,\nGordon Achterberg"
+   }
+  ],
+  "questions": [
+   {
+    "q": "What is indicated in the results summary?",
+    "choices": [
+     "Operating profit was lower than in the previous year.",
+     "Gross margin improved.",
+     "Sales volume declined.",
+     "The dividend per share was reduced."
+    ],
+    "answer": 0,
+    "type": "사실 확인(NOT/TRUE)",
+    "explanation": "영업이익은 전년 1,890만 파운드에서 1,720만 파운드로 줄었다. 매출총이익률은 40.4%에서 38.1%로 낮아졌고, 판매량은 늘었으며, 배당은 6.0펜스로 동결되었다."
+   },
+   {
+    "q": "According to the summary, what is one reason margins were lower?",
+    "choices": [
+     "Sales of the premium range fell.",
+     "A new facility opened in Kendal.",
+     "Packaging material became more expensive.",
+     "The company lowered its prices."
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "의장 논평에 유리 가격 22% 상승과 펠브리지 병입 라인 폐쇄에 따른 일회성 비용이 이익률을 압박했다고 나온다. 유리는 병(포장재) 재료다. 켄달 시설은 내년 하반기 개장 예정이다."
+   },
+   {
+    "q": "What does Mr. Achterberg want the Board to confirm about the dividend?",
+    "choices": [
+     "That it will be paid earlier than usual",
+     "That it will rise next year by a fixed amount",
+     "That it was reduced because of lower sales",
+     "That it is linked to building a returnable-bottle plant"
+    ],
+    "answer": 3,
+    "type": "연계 문제",
+    "explanation": "그는 배당 동결이 '이사회가 설명한 투자'와 연결된 일시적 결정인지 확인해 달라고 했다. 요약에 따르면 이사회는 잉여 현금을 켄달의 재사용 병 시설에 투입하기로 했다. 배당은 삭감이 아니라 동결이다."
+   },
+   {
+    "q": "Which part of the business is Mr. Achterberg most likely concerned about?",
+    "choices": [
+     "The Fellbridge bottling line",
+     "The premium glass-bottle range",
+     "The returnable-bottle facility",
+     "The company's overseas sales"
+    ],
+    "answer": 1,
+    "type": "연계 문제",
+    "explanation": "그는 판매량보다 매출이 훨씬 빨리 늘어 회사가 가격에 의존한다고 우려한다. 요약에 따르면 매출 성장은 주로 프리미엄 유리병 제품군의 가격 인상에서 나왔으므로 그의 걱정은 이 제품군의 가격 유지 가능성이다."
+   },
+   {
+    "q": "In the e-mail, the word “sustained” in paragraph 2 is closest in meaning to",
+    "choices": [
+     "supported physically",
+     "suffered",
+     "maintained",
+     "confirmed"
+    ],
+    "answer": 2,
+    "type": "동의어",
+    "explanation": "'higher prices can be sustained'는 높은 가격이 경쟁사가 따라오지 않아도 '유지될' 수 있느냐는 뜻이므로 maintained가 가장 가깝다. suffered(입다, 겪다)는 sustain damage 같은 다른 용법에서 온 함정이다."
+   }
+  ],
+  "translation": "[재무 요약]\n올더무어 스프링스 — 연간 실적 요약\n\n순매출: 1억 4,260만 파운드(전년 1억 3,100만 파운드), 8.9% 증가\n판매량: 6억 1,200만 리터(전년 5억 9,800만 리터)\n매출총이익률: 38.1%(전년 40.4%)\n영업이익: 1,720만 파운드(전년 1,890만 파운드)\n주당 배당금: 6.0펜스(전년 6.0펜스)\n\n의장 논평: 매출 성장은 주로 프리미엄 유리병 제품군의 가격 인상에서 비롯되었으며, 이 제품군은 현재 순매출의 27%를 차지합니다. 이익률은 유리 가격 22% 상승과 펠브리지 병입 라인 폐쇄에 따른 230만 파운드의 일회성 비용으로 압박을 받았습니다. 이 일회성 비용을 제외하면 영업이익은 소폭 증가했을 것입니다. 이사회는 배당금을 동결하고 잉여 현금을 내년 하반기 개장 예정인 켄달의 새 재사용 병 시설에 투입하기로 결정했습니다.\n\n[이메일]\n발신: 고든 아흐터베르크 / 수신: 올더무어 스프링스 회사 비서 / 날짜: 3월 14일 / 제목: 정기 주주총회 질문\n\n담당자께,\n\n약 20년간 주주로 있어 온 저는 4월 9일 정기 주주총회에 참석할 예정이며, 다음 질문을 이사회에 전달해 주시기 바랍니다.\n\n실적 요약을 보면 판매량은 약 2%밖에 늘지 않은 반면 순매출은 훨씬 빠르게 증가했습니다. 프리미엄 제품이 더 비싸다는 것은 이해하지만, 회사가 새 고객을 끌어들이기보다 가격에 의존하는 것이 아닌가 우려됩니다. 경쟁사들이 따라오지 않더라도 이사회는 높은 가격이 유지될 수 있다고 확신합니까?\n\n또한 10여 년 만에 처음으로 배당금이 오르지 않아 실망스럽습니다. 이것이 이사회가 설명한 투자와 연관된 일시적 결정이며 정책 변경이 아니라는 점을 확인해 주시기 바랍니다.\n\n고든 아흐터베르크 드림"
+ },
+ {
+  "id": "p7-116",
+  "level": 5,
+  "kind": "double",
+  "passages": [
+   {
+    "doc_type": "계약서",
+    "title": "Supply Agreement — Excerpt / Kovač Dairy Cooperative (“Supplier”) and Brennan Foodservice Ltd. (“Buyer”)",
+    "text": "7. Pricing\n7.1 The base price for whole milk is €0.46 per litre, delivered.\n7.2 Either party may request a price review if the regional farm-gate milk index published by the Agricultural Statistics Office moves by more than 8 percent from its level on the date of signing (index value: 112.0). A request must be made in writing and supported by the most recently published index figure.\n7.3 Following a valid request, the base price will be adjusted by half of the percentage change in the index. The adjusted price will apply to deliveries beginning on the first day of the month following the request.\n7.4 No more than one price review may be requested in any six-month period.\n\n8. Volumes\n8.1 The Buyer will purchase no fewer than 180,000 litres per month. A shortfall in any month may be made up in the following month without penalty."
+   },
+   {
+    "doc_type": "이메일",
+    "title": "From: Marta Kovač, Kovač Dairy Cooperative / To: Declan Brennan, Brennan Foodservice Ltd. / Date: September 18 / Subject: Price review request under Section 7",
+    "text": "Dear Mr. Brennan,\n\nI am writing to request a price review under Section 7.2 of our agreement. The Agricultural Statistics Office's August figure for the regional farm-gate index, published on September 12, is 127.68, up from 112.0 when we signed in March. A copy of the publication is attached.\n\nAs you know, feed and energy costs for our member farms have risen sharply this year, and the index reflects this. We value our partnership with Brennan Foodservice and have not sought any changes to the terms until now.\n\nIn line with the adjustment method we agreed on, we would expect the new price to take effect with the October deliveries. I would be glad to discuss this by phone if that would be helpful.\n\nRegards,\nMarta Kovač"
+   }
+  ],
+  "questions": [
+   {
+    "q": "Why did Ms. Kovač write to Mr. Brennan?",
+    "choices": [
+     "To report a delay in deliveries",
+     "To propose increasing the monthly volume",
+     "To ask about the Buyer's shortfall",
+     "To formally request a change in price"
+    ],
+    "answer": 3,
+    "type": "주제·목적",
+    "explanation": "첫 문장에서 계약 7.2항에 따른 가격 재검토를 요청한다고 밝히고 근거가 되는 지수 자료를 첨부했다. 배송 지연이나 물량 변경, 구매자의 부족분은 언급하지 않는다."
+   },
+   {
+    "q": "If the review is carried out as the agreement specifies, what will the new base price per litre be?",
+    "choices": [
+     "€0.4922",
+     "€0.5244",
+     "€0.4600",
+     "€0.5060"
+    ],
+    "answer": 0,
+    "type": "연계 문제",
+    "explanation": "지수가 112.0에서 127.68로 14% 올랐다(127.68 ÷ 112 = 1.14). 7.3항에 따라 기본 가격은 변동률의 절반인 7%만 조정되므로 0.46 × 1.07 = 0.4922유로다. 0.5244유로는 14%를 그대로 적용한 값이다."
+   },
+   {
+    "q": "What is indicated about Ms. Kovač's request?",
+    "choices": [
+     "It was made by telephone.",
+     "It will apply to September deliveries.",
+     "It was submitted by the Buyer.",
+     "It meets the conditions described in Section 7.2."
+    ],
+    "answer": 3,
+    "type": "연계 문제",
+    "explanation": "7.2항은 지수가 8% 넘게 움직이면 서면으로, 최신 지수 자료를 근거로 요청할 수 있다고 한다. 이메일의 요청은 서면이고 최신(8월) 수치를 첨부했으며 변동률이 14%이므로 조건을 충족한다. 적용은 다음 달인 10월 배송부터다."
+   },
+   {
+    "q": "According to the agreement, when is the earliest that another price review could be requested?",
+    "choices": [
+     "In March of the following year",
+     "At the end of October",
+     "Immediately after the October deliveries",
+     "Once the Buyer's volume exceeds 180,000 litres"
+    ],
+    "answer": 0,
+    "type": "추론",
+    "explanation": "7.4항에 따라 6개월 동안 가격 재검토는 한 번만 요청할 수 있다. 이번 요청이 9월 18일이므로 다음 요청은 그로부터 6개월 뒤인 이듬해 3월 이후에야 가능하다."
+   },
+   {
+    "q": "In the e-mail, the word “reflects” in paragraph 2 is closest in meaning to",
+    "choices": [
+     "considers",
+     "shows",
+     "bounces",
+     "returns"
+    ],
+    "answer": 1,
+    "type": "동의어",
+    "explanation": "'the index reflects this'는 지수가 사료·에너지 비용 상승을 '보여 준다/나타낸다'는 뜻이므로 shows가 가장 가깝다. considers(숙고하다)는 reflect on의 뜻, bounces는 빛의 반사와 관련된 함정이다."
+   }
+  ],
+  "translation": "[계약서]\n공급 계약서 — 발췌 / 코바치 낙농 협동조합(“공급자”)과 브레넌 푸드서비스(“구매자”) 간\n\n7. 가격\n7.1 전유의 기본 가격은 배송 포함 리터당 0.46유로이다.\n7.2 농업통계청이 발표하는 지역 산지 우유 지수가 계약 체결일 수준(지수 112.0)에서 8%를 넘게 움직이면 어느 당사자든 가격 재검토를 요청할 수 있다. 요청은 서면으로 해야 하며 가장 최근에 발표된 지수 수치로 뒷받침되어야 한다.\n7.3 유효한 요청이 있으면 기본 가격은 지수 변동률의 절반만큼 조정된다. 조정된 가격은 요청한 다음 달 1일부터의 배송에 적용된다.\n7.4 6개월 동안 가격 재검토는 한 번만 요청할 수 있다.\n\n8. 물량\n8.1 구매자는 매월 최소 180,000리터를 구매한다. 어느 달의 부족분은 다음 달에 불이익 없이 채울 수 있다.\n\n[이메일]\n발신: 마르타 코바치, 코바치 낙농 협동조합 / 수신: 데클런 브레넌, 브레넌 푸드서비스 / 날짜: 9월 18일 / 제목: 제7조에 따른 가격 재검토 요청\n\n브레넌 씨께,\n\n계약서 7.2항에 따라 가격 재검토를 요청드립니다. 9월 12일에 발표된 농업통계청의 지역 산지 지수 8월 수치는 127.68로, 3월 계약 당시의 112.0에서 올랐습니다. 발표 자료 사본을 첨부합니다.\n\n아시다시피 올해 저희 조합원 농가의 사료비와 에너지 비용이 급격히 올랐고, 지수가 이를 보여 줍니다. 저희는 브레넌 푸드서비스와의 협력을 소중히 여기며 지금까지 조건 변경을 요청한 적이 없습니다.\n\n합의한 조정 방식에 따라 새 가격이 10월 배송부터 적용되기를 기대합니다. 도움이 된다면 전화로 기꺼이 논의하겠습니다.\n\n마르타 코바치 드림"
+ },
+ {
+  "id": "p7-117",
+  "level": 5,
+  "kind": "double",
+  "passages": [
+   {
+    "doc_type": "공고",
+    "title": "Wexley Foundation — Small Business Export Grants: Guidelines",
+    "text": "The Wexley Foundation offers matching grants of up to $25,000 to help manufacturers with fewer than 50 employees enter their first overseas market.\n\nEligible costs include trade-show fees, product certification required by the target market, and translation of marketing materials. Travel costs are eligible, but they may make up no more than 20 percent of the total grant. Salaries and equipment purchases are not eligible.\n\nGrants are matching: the Foundation pays 50 cents for every dollar the applicant spends on eligible costs. For example, a company with $30,000 in eligible expenses would receive $15,000.\n\nApplicants must not have exported to any country in the past three years. Applications are reviewed in two rounds each year, with deadlines of March 31 and September 30. Decisions are announced within eight weeks of each deadline. Expenses incurred before a grant is approved cannot be reimbursed."
+   },
+   {
+    "doc_type": "이메일",
+    "title": "From: Farah Siddiqui, Tallis Ceramics / To: grants@wexleyfoundation.org / Date: April 2 / Subject: Eligibility question",
+    "text": "To the Grants Team,\n\nTallis Ceramics, a maker of commercial kitchen tiles with 34 employees, plans to enter the Canadian market. Our budget for the project is as follows: $24,000 to exhibit at the Toronto Hospitality Show in November, $9,000 for Canadian safety certification, $6,000 for travel, and $12,000 for a new kiln to meet the demand we expect.\n\nWe made a single shipment to a distributor in Ireland six years ago, but that relationship ended the same year.\n\nI realize we have just missed the spring deadline. Could you tell me whether our plans would qualify, and whether it would still be possible to receive support for the November show if we apply in the next round?\n\nSincerely,\nFarah Siddiqui"
+   }
+  ],
+  "questions": [
+   {
+    "q": "What is the purpose of the guidelines?",
+    "choices": [
+     "To describe the conditions for receiving financial support",
+     "To announce the winners of a grant competition",
+     "To invite companies to exhibit at a trade show",
+     "To explain new export regulations"
+    ],
+    "answer": 0,
+    "type": "주제·목적",
+    "explanation": "웩슬리 재단의 소기업 수출 보조금 지침으로, 대상 기업, 인정 비용, 매칭 방식, 신청 자격과 일정 등 지원 조건을 설명한다."
+   },
+   {
+    "q": "Which item in Tallis Ceramics' budget is not eligible for a grant?",
+    "choices": [
+     "The trade-show fee",
+     "The safety certification",
+     "The travel costs",
+     "The new kiln"
+    ],
+    "answer": 3,
+    "type": "연계 문제",
+    "explanation": "지침상 급여와 장비 구입은 인정되지 않는다. 시딕 씨의 예산 중 새 가마(kiln) 12,000달러가 장비 구입에 해당한다. 전시회비, 인증, 출장비(한도 내)는 인정 비용이다."
+   },
+   {
+    "q": "What is the largest grant Tallis Ceramics could receive for its budget?",
+    "choices": [
+     "$19,500",
+     "$25,000",
+     "$16,500",
+     "$25,500"
+    ],
+    "answer": 0,
+    "type": "연계 문제",
+    "explanation": "인정 비용은 전시회 24,000 + 인증 9,000 + 출장 6,000 = 39,000달러이고, 재단은 그 절반인 19,500달러를 지원한다. 출장비 몫 3,000달러는 보조금의 20%(3,900달러)를 넘지 않는다. 25,500달러는 가마까지 포함한 잘못된 계산이며 한도 25,000달러도 넘는다."
+   },
+   {
+    "q": "What is indicated about Tallis Ceramics?",
+    "choices": [
+     "It has too many employees to apply.",
+     "It currently sells products in Ireland.",
+     "It has already received a grant from the foundation.",
+     "It meets the foundation's requirement regarding past exports."
+    ],
+    "answer": 3,
+    "type": "연계 문제",
+    "explanation": "신청자는 최근 3년간 수출 실적이 없어야 한다(지침). 탈리스는 6년 전에 아일랜드로 한 번 선적했을 뿐이므로 요건을 충족한다. 직원 34명은 50명 미만 기준에도 맞는다."
+   },
+   {
+    "q": "What problem might Tallis Ceramics face if it applies in the next round?",
+    "choices": [
+     "Its application would be reviewed by a different committee.",
+     "The Canadian certification might expire.",
+     "It might have to pay some show costs before a decision is made.",
+     "Travel costs would no longer be eligible."
+    ],
+    "answer": 2,
+    "type": "추론",
+    "explanation": "다음 마감은 9월 30일이고 결정은 마감 후 8주 이내, 즉 11월 말까지 나올 수 있다. 11월 전시회 비용은 그 전에 지출될 가능성이 높은데, 승인 전 지출은 보전되지 않으므로 전시회 비용을 지원받지 못할 수 있다."
+   }
+  ],
+  "translation": "[공고]\n웩슬리 재단 — 소기업 수출 보조금: 지침\n\n웩슬리 재단은 직원 50명 미만 제조업체가 첫 해외 시장에 진출하도록 돕기 위해 최대 25,000달러의 매칭 보조금을 제공합니다.\n\n인정 비용에는 무역 전시회 참가비, 대상 시장이 요구하는 제품 인증, 마케팅 자료 번역이 포함됩니다. 출장비도 인정되지만 총 보조금의 20%를 넘을 수 없습니다. 급여와 장비 구입은 인정되지 않습니다.\n\n보조금은 매칭 방식입니다. 재단은 신청자가 인정 비용에 쓰는 1달러마다 50센트를 지급합니다. 예를 들어 인정 비용이 30,000달러인 회사는 15,000달러를 받게 됩니다.\n\n신청자는 최근 3년간 어느 나라에도 수출한 적이 없어야 합니다. 신청서는 매년 두 차례 심사하며 마감일은 3월 31일과 9월 30일입니다. 결정은 각 마감일로부터 8주 이내에 발표됩니다. 보조금 승인 전에 발생한 비용은 보전되지 않습니다.\n\n[이메일]\n발신: 파라 시딕, 탈리스 세라믹스 / 수신: grants@wexleyfoundation.org / 날짜: 4월 2일 / 제목: 자격 문의\n\n보조금 담당팀께,\n\n직원 34명의 상업용 주방 타일 제조업체인 탈리스 세라믹스는 캐나다 시장 진출을 계획하고 있습니다. 프로젝트 예산은 다음과 같습니다. 11월 토론토 호스피탈리티 쇼 참가 24,000달러, 캐나다 안전 인증 9,000달러, 출장비 6,000달러, 예상 수요에 대비한 새 가마 12,000달러입니다.\n\n저희는 6년 전 아일랜드의 유통업체에 한 번 선적한 적이 있지만, 그 관계는 같은 해에 끝났습니다.\n\n봄 마감을 막 놓친 것을 알고 있습니다. 저희 계획이 자격이 되는지, 그리고 다음 차수에 신청해도 11월 전시회에 대한 지원을 받을 수 있는지 알려 주시겠습니까?\n\n파라 시딕 드림"
+ },
+ {
+  "id": "p7-118",
+  "level": 5,
+  "kind": "triple",
+  "passages": [
+   {
+    "doc_type": "일정표",
+    "title": "Project Schedule — Renovation of Halberd Public Library, East Wing / Contractor: Ostrander Build Group",
+    "text": "Phase 1: Roof replacement — April 7 to May 2\nPhase 2: Window installation — May 5 to May 23\nPhase 3: Interior finishing (flooring, lighting, shelving) — May 26 to June 27\nPhase 4: Inspection and furniture delivery — June 30 to July 11\nReopening: July 14\n\nConditions:\n• Roof work cannot proceed on days when the chance of rain is forecast above 60 percent. Each such day extends Phase 1 by one working day.\n• Window installation may begin only after the roof has been inspected and approved.\n• Interior finishing may overlap with window installation by no more than one week, provided the affected rooms are sealed from dust.\n• Any delay of more than ten working days in total must be formally reported to the Library Board."
+   },
+   {
+    "doc_type": "이메일",
+    "title": "From: Keith Ostrander / To: Rosa Delgado, Library Director / Date: May 5 / Subject: Schedule update",
+    "text": "Dear Ms. Delgado,\n\nApril was wetter than expected. We lost eight working days to rain, so the roof will not be finished until May 14. The roof inspector has confirmed that she can visit on May 15, and if the roof is approved, the window crew will start the following Monday, May 19. Window installation will still take three weeks.\n\nTo limit the effect on the reopening date, I propose starting interior finishing on May 26 as planned, beginning with the ground-floor reading rooms, which will be sealed off from the upper floors. We would also add a Saturday crew throughout June. I believe we can still hand over the building in time for furniture delivery to begin by July 7.\n\nBest regards,\nKeith Ostrander"
+   },
+   {
+    "doc_type": "회의록",
+    "title": "Halberd Public Library Board — Meeting Minutes, May 12 (Excerpt)",
+    "text": "Present: R. Delgado (Director), P. Huang (Chair), S. Abara, T. Lind\n\nItem 3: East Wing renovation\nMs. Delgado reported that roof work had been delayed by rain. Although the delay is below the level that requires a formal report, she wished to keep the Board informed. She noted that the contractor's proposal to begin interior finishing on May 26 would exceed the overlap permitted under the schedule, and she has asked the contractor to begin on June 2 instead. Mr. Abara asked whether the summer reading program, scheduled to begin on July 14, should be moved to the West Wing. The Board agreed to decide the matter on June 9, once the revised schedule is known.\n\nAction: Ms. Delgado to circulate the revised schedule to Board members by June 6."
+   }
+  ],
+  "questions": [
+   {
+    "q": "According to the schedule, what must happen before window installation can begin?",
+    "choices": [
+     "The interior rooms must be sealed.",
+     "The Library Board must approve a new date.",
+     "Furniture must be ordered.",
+     "The roof must pass an inspection."
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "일정표 조건에 창문 설치는 지붕이 점검을 받고 승인된 뒤에만 시작할 수 있다고 명시되어 있다. 방 밀폐는 내부 마감을 창문 공사와 겹쳐 진행할 때의 조건이다."
+   },
+   {
+    "q": "What is suggested about the delay described in Mr. Ostrander's e-mail?",
+    "choices": [
+     "It did not reach the level that requires a formal report.",
+     "It was caused by a late inspection.",
+     "It will postpone the reopening to August.",
+     "It affected only the window installation."
+    ],
+    "answer": 0,
+    "type": "연계 문제",
+    "explanation": "이메일에 따르면 비로 8일(작업일)을 잃었고, 일정표상 공식 보고는 총 10일 넘는 지연부터 필요하다. 회의록에서도 공식 보고 대상 수준에 못 미친다고 했다. 원인은 점검이 아니라 비였다."
+   },
+   {
+    "q": "Why did Ms. Delgado ask the contractor to start interior finishing on June 2?",
+    "choices": [
+     "The reading rooms could not be sealed from dust.",
+     "Starting on May 26 would overlap window work by more than one week.",
+     "The Saturday crew would not be available until June.",
+     "The roof inspection was rescheduled."
+    ],
+    "answer": 1,
+    "type": "연계 문제",
+    "explanation": "이메일상 창문 공사는 5월 19일부터 3주, 즉 6월 6일경까지 진행된다. 내부 마감을 5월 26일에 시작하면 2주가 겹쳐, 일정표가 허용하는 최대 1주를 넘는다. 6월 2일에 시작하면 겹치는 기간이 1주가 된다. 회의록도 허용 범위를 넘는다고 했다."
+   },
+   {
+    "q": "What is indicated about the summer reading program?",
+    "choices": [
+     "It has been moved to the West Wing.",
+     "It was canceled because of the renovation.",
+     "It will be led by Mr. Abara.",
+     "It was planned to start on the East Wing's reopening date."
+    ],
+    "answer": 3,
+    "type": "연계 문제",
+    "explanation": "회의록에 여름 독서 프로그램이 7월 14일 시작 예정이라고 나오고, 일정표상 동관 재개관일도 7월 14일이다. 서관 이전 여부는 6월 9일에 결정하기로 했으므로 아직 옮겨지지 않았다."
+   },
+   {
+    "q": "In the minutes, the word “circulate” is closest in meaning to",
+    "choices": [
+     "rotate",
+     "distribute",
+     "surround",
+     "travel"
+    ],
+    "answer": 1,
+    "type": "동의어",
+    "explanation": "'circulate the revised schedule to Board members'는 수정된 일정표를 이사들에게 '배포하다/돌리다'는 뜻이므로 distribute가 가장 가깝다. rotate(회전하다)나 travel(이동하다)은 circulate의 물리적 의미와 관련된 함정이다."
+   }
+  ],
+  "translation": "[일정표]\n공사 일정 — 핼버드 공공도서관 동관 리모델링 / 시공사: 오스트랜더 빌드 그룹\n\n1단계: 지붕 교체 — 4월 7일~5월 2일\n2단계: 창문 설치 — 5월 5일~5월 23일\n3단계: 내부 마감(바닥, 조명, 서가) — 5월 26일~6월 27일\n4단계: 점검 및 가구 반입 — 6월 30일~7월 11일\n재개관: 7월 14일\n\n조건:\n• 강수 확률이 60%를 넘게 예보된 날에는 지붕 작업을 할 수 없다. 그런 날마다 1단계가 작업일 하루씩 연장된다.\n• 창문 설치는 지붕이 점검을 받고 승인된 뒤에만 시작할 수 있다.\n• 내부 마감은 해당 공간을 먼지로부터 밀폐하는 조건으로 창문 설치와 최대 1주까지 겹칠 수 있다.\n• 총 작업일 10일을 넘는 지연은 도서관 이사회에 공식 보고해야 한다.\n\n[이메일]\n발신: 키스 오스트랜더 / 수신: 로사 델가도, 도서관장 / 날짜: 5월 5일 / 제목: 일정 업데이트\n\n델가도 관장님께,\n\n4월은 예상보다 비가 많았습니다. 비로 작업일 8일을 잃어 지붕은 5월 14일에야 끝납니다. 지붕 점검관이 5월 15일에 방문할 수 있다고 확인했으며, 지붕이 승인되면 창문 작업팀이 그다음 월요일인 5월 19일에 시작합니다. 창문 설치는 여전히 3주가 걸립니다.\n\n재개관일에 미치는 영향을 줄이기 위해, 위층과 밀폐해 차단할 1층 열람실부터 내부 마감을 예정대로 5월 26일에 시작할 것을 제안합니다. 또한 6월 내내 토요일 작업팀을 추가하겠습니다. 가구 반입이 7월 7일까지 시작될 수 있도록 건물을 넘겨 드릴 수 있다고 생각합니다.\n\n키스 오스트랜더 드림\n\n[회의록]\n핼버드 공공도서관 이사회 — 회의록, 5월 12일(발췌)\n\n참석: R. 델가도(관장), P. 황(의장), S. 아바라, T. 린드\n\n안건 3: 동관 리모델링\n델가도 관장은 지붕 공사가 비로 지연되었다고 보고했다. 지연이 공식 보고가 필요한 수준에는 못 미치지만 이사회에 알리고 싶었다고 했다. 그녀는 5월 26일에 내부 마감을 시작하겠다는 시공사의 제안이 일정표에서 허용하는 중복 기간을 넘는다고 지적하고, 대신 6월 2일에 시작하도록 시공사에 요청했다. 아바라 이사는 7월 14일 시작 예정인 여름 독서 프로그램을 서관으로 옮겨야 하는지 물었다. 이사회는 수정 일정이 나온 뒤인 6월 9일에 이 문제를 결정하기로 했다.\n\n조치 사항: 델가도 관장은 6월 6일까지 수정 일정을 이사들에게 배포한다."
+ },
+ {
+  "id": "p7-119",
+  "level": 5,
+  "kind": "triple",
+  "passages": [
+   {
+    "doc_type": "제안 요청서",
+    "title": "Request for Proposals — Vehicle Tracking System / Issued by: Marlow County Transit Authority",
+    "text": "Marlow County Transit Authority (MCTA) seeks a vendor to supply and maintain GPS tracking units and software for its fleet of 140 buses.\n\nProposals will be scored as follows:\n• Total five-year cost: 40 points\n• Technical capability, including real-time passenger information: 35 points\n• Experience with public-sector clients: 15 points\n• Implementation timeline: 10 points\n\nVendors must be able to equip the entire fleet within 120 days of contract signing. Proposals that do not meet this requirement will not be scored. Pricing must include hardware, installation, software licenses, and support for five years."
+   },
+   {
+    "doc_type": "평가표",
+    "title": "Evaluation Summary — Vehicle Tracking System Proposals",
+    "text": "Vendor | Five-year cost | Installation time | Cost | Technical | Experience | Timeline | Total\nRoutewise | $912,000 | 90 days | 34 | 30 | 15 | 8 | 87\nTransitrack | $760,000 | 150 days | — | — | — | — | Not scored\nGeoline Systems | $798,000 | 100 days | 40 | 26 | 9 | 7 | 82\nPaxmap | $1,030,000 | 60 days | 30 | 33 | 12 | 10 | 85"
+   },
+   {
+    "doc_type": "이메일",
+    "title": "From: Grace Mbeki, Procurement Director / To: MCTA Board Members / Date: February 3 / Subject: Recommendation — vehicle tracking contract",
+    "text": "Board members,\n\nThe evaluation panel recommends awarding the contract to the highest-scoring vendor. Although its price is not the lowest among the scored proposals, it has installed similar systems for four transit agencies of comparable size, and its passenger information app received the second-highest technical score.\n\nThe lowest-priced proposal was excluded from scoring, and some Board members have asked whether we could negotiate a longer installation period with that vendor. Our legal counsel advises against this: changing a mandatory requirement after proposals have been opened would be unfair to the other bidders and could expose MCTA to a legal challenge.\n\nIf the Board approves the recommendation on February 10, installation should be complete by mid-May, before the summer timetable begins.\n\nGrace Mbeki"
+   }
+  ],
+  "questions": [
+   {
+    "q": "According to the request for proposals, which criterion carries the most weight?",
+    "choices": [
+     "Total cost over five years",
+     "Technical capability",
+     "Public-sector experience",
+     "Speed of implementation"
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "배점은 5년 총비용 40점, 기술력 35점, 공공 부문 경험 15점, 구축 기간 10점이므로 5년 총비용의 비중이 가장 크다."
+   },
+   {
+    "q": "Which vendor does the evaluation panel recommend?",
+    "choices": [
+     "Paxmap",
+     "Geoline Systems",
+     "Transitrack",
+     "Routewise"
+    ],
+    "answer": 3,
+    "type": "연계 문제",
+    "explanation": "이메일은 최고 득점 업체를 추천한다고 했고, 평가표에서 루트와이즈가 87점으로 가장 높다. 경험 점수 만점(15점)과 기술 점수 2위(30점)도 이메일 설명과 일치한다. 팩스맵은 기술 점수 1위지만 총점 85점이다."
+   },
+   {
+    "q": "Why was Transitrack's proposal not scored?",
+    "choices": [
+     "Its price did not include software licenses.",
+     "It lacked experience with public-sector clients.",
+     "It could not equip the fleet within the required period.",
+     "It was submitted after the deadline."
+    ],
+    "answer": 2,
+    "type": "연계 문제",
+    "explanation": "요청서는 계약 후 120일 안에 전 차량 설치가 가능해야 하며 그렇지 않으면 채점하지 않는다고 했다. 평가표상 트랜시트랙의 설치 기간은 150일이다. 이메일에서도 가장 저렴한 제안이 채점에서 제외되었다고 했다."
+   },
+   {
+    "q": "What does Ms. Mbeki's legal counsel advise against?",
+    "choices": [
+     "Altering a required condition to accommodate one bidder",
+     "Awarding the contract before the summer timetable",
+     "Asking vendors to lower their prices",
+     "Delaying the Board's vote until February 10"
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "일부 이사가 최저가 업체와 설치 기간 연장을 협상할 수 있는지 묻자, 법률 고문은 제안서 개봉 후 필수 요건을 바꾸면 다른 입찰자에게 불공정하고 법적 이의 제기를 받을 수 있다며 반대했다."
+   },
+   {
+    "q": "In the e-mail, the word “expose” in paragraph 2 is closest in meaning to",
+    "choices": [
+     "reveal",
+     "make vulnerable",
+     "display",
+     "uncover"
+    ],
+    "answer": 1,
+    "type": "동의어",
+    "explanation": "'could expose MCTA to a legal challenge'는 교통청을 법적 이의 제기에 '노출시킬/취약하게 만들' 수 있다는 뜻이다. reveal, display, uncover는 '드러내다'라는 expose의 다른 뜻이라 이 문맥에 맞지 않는다."
+   }
+  ],
+  "translation": "[제안 요청서]\n차량 위치 추적 시스템 제안 요청 / 발행: 말로 카운티 교통청\n\n말로 카운티 교통청(MCTA)은 버스 140대에 GPS 추적 장치와 소프트웨어를 공급하고 유지 관리할 업체를 찾습니다.\n\n제안서는 다음과 같이 채점합니다.\n• 5년 총비용: 40점\n• 실시간 승객 정보를 포함한 기술력: 35점\n• 공공 부문 고객 경험: 15점\n• 구축 일정: 10점\n\n업체는 계약 체결 후 120일 이내에 전 차량에 장비를 설치할 수 있어야 합니다. 이 요건을 충족하지 못하는 제안서는 채점하지 않습니다. 가격에는 하드웨어, 설치, 소프트웨어 라이선스, 5년간의 지원이 포함되어야 합니다.\n\n[평가표]\n차량 위치 추적 시스템 제안 평가 요약\n\n업체 | 5년 비용 | 설치 기간 | 비용 | 기술 | 경험 | 일정 | 총점\n루트와이즈 | 912,000달러 | 90일 | 34 | 30 | 15 | 8 | 87\n트랜시트랙 | 760,000달러 | 150일 | — | — | — | — | 채점 제외\n지오라인 시스템즈 | 798,000달러 | 100일 | 40 | 26 | 9 | 7 | 82\n팩스맵 | 1,030,000달러 | 60일 | 30 | 33 | 12 | 10 | 85\n\n[이메일]\n발신: 그레이스 음베키, 구매 이사 / 수신: MCTA 이사회 / 날짜: 2월 3일 / 제목: 추천 — 차량 추적 계약\n\n이사님들께,\n\n평가 위원단은 최고 득점 업체에 계약을 주도록 추천합니다. 채점된 제안 중 가격이 가장 낮지는 않지만, 이 업체는 비슷한 규모의 교통 기관 네 곳에 유사한 시스템을 설치했으며 승객 정보 앱은 기술 점수 2위를 받았습니다.\n\n가장 저렴한 제안은 채점에서 제외되었고, 일부 이사님들은 그 업체와 설치 기간 연장을 협상할 수 있는지 물으셨습니다. 법률 고문은 이에 반대합니다. 제안서를 개봉한 뒤 필수 요건을 바꾸면 다른 입찰자에게 불공정하며 MCTA가 법적 이의 제기에 노출될 수 있기 때문입니다.\n\n이사회가 2월 10일에 추천안을 승인하면 여름 시간표가 시작되기 전인 5월 중순까지 설치가 완료될 것입니다.\n\n그레이스 음베키"
+ },
+ {
+  "id": "p7-120",
+  "level": 5,
+  "kind": "triple",
+  "passages": [
+   {
+    "doc_type": "요금표",
+    "title": "Pelham Freight Forwarding — Air Freight Rates, Shanghai (PVG) to Frankfurt (FRA), effective October 1",
+    "text": "Chargeable weight is the greater of the actual weight and the volumetric weight (length × width × height in centimeters ÷ 6,000).\n\nRate per chargeable kg: 100–499 kg: $4.20 | 500–999 kg: $3.80 | 1,000 kg and above: $3.40\nFuel surcharge: $0.65 per chargeable kg\nSecurity screening: $45 per shipment\nCustoms clearance at destination: $120 per shipment (waived for clients who use Pelham's bonded warehouse)\nStorage: free for 3 days after arrival; thereafter $0.15 per kg per day, based on actual weight"
+   },
+   {
+    "doc_type": "청구서",
+    "title": "Invoice #PF-50318 — Pelham Freight Forwarding / Client: Aurelio Lighting GmbH / Shipment: 12 cartons, PVG–FRA, arrived October 14, collected October 20",
+    "text": "Actual weight: 640 kg | Volumetric weight: 820 kg\nFreight (820 kg × $3.80): $3,116.00\nFuel surcharge (820 kg × $0.65): $533.00\nSecurity screening: $45.00\nCustoms clearance: $120.00\nStorage (3 days × 820 kg × $0.15): $369.00\nTotal: $4,183.00"
+   },
+   {
+    "doc_type": "이메일",
+    "title": "From: Jonas Keller, Aurelio Lighting GmbH / To: billing@pelhamfreight.com / Date: October 27 / Subject: Invoice PF-50318",
+    "text": "Hello,\n\nWe have reviewed invoice PF-50318 and found two items that do not match your published rates. First, the storage charge appears to have been calculated incorrectly. Second, since August we have routed all of our Frankfurt shipments through your bonded warehouse, so we should not have been charged for one of the services listed.\n\nI would also point out that our truck arrived to collect the cartons on October 17, but your warehouse was closed that day and the next for an inventory count, and our next available truck could not come until October 20. We therefore ask that the storage charge be removed altogether.\n\nPlease send a corrected invoice. We will pay it immediately upon receipt.\n\nJonas Keller"
+   }
+  ],
+  "questions": [
+   {
+    "q": "Why was the freight charge calculated using 820 kg?",
+    "choices": [
+     "The shipment was over 1,000 kg.",
+     "The client requested express service.",
+     "The fuel surcharge applies to the volumetric weight only.",
+     "The volumetric weight was greater than the actual weight."
+    ],
+    "answer": 3,
+    "type": "연계 문제",
+    "explanation": "요금표에 따르면 과금 중량은 실제 중량과 부피 중량 중 큰 값이다. 청구서상 실제 중량은 640kg, 부피 중량은 820kg이므로 820kg이 적용되었다."
+   },
+   {
+    "q": "Which charge does Mr. Keller say should not have been billed?",
+    "choices": [
+     "Customs clearance",
+     "Security screening",
+     "Fuel surcharge",
+     "Freight"
+    ],
+    "answer": 0,
+    "type": "연계 문제",
+    "explanation": "켈러 씨는 8월부터 모든 프랑크푸르트 화물을 펠럼의 보세 창고로 보내고 있다고 했다. 요금표상 보세 창고 이용 고객은 도착지 통관 수수료 120달러가 면제된다."
+   },
+   {
+    "q": "What error was made in the storage charge?",
+    "choices": [
+     "The free period was not applied.",
+     "The wrong daily rate was used.",
+     "It was based on volumetric rather than actual weight.",
+     "It was charged for the wrong shipment."
+    ],
+    "answer": 2,
+    "type": "연계 문제",
+    "explanation": "요금표는 보관료를 실제 중량 기준으로 계산한다고 했는데, 청구서는 820kg(부피 중량)으로 계산했다. 무료 3일 이후 3일(18~20일)과 일일 요율 0.15달러는 맞게 적용되었다."
+   },
+   {
+    "q": "If Pelham corrects both errors according to its published rates but does not remove the storage charge altogether, what will the new total be?",
+    "choices": [
+     "$3,694.00",
+     "$4,063.00",
+     "$4,102.00",
+     "$3,982.00"
+    ],
+    "answer": 3,
+    "type": "연계 문제",
+    "explanation": "통관 수수료 120달러를 빼고, 보관료를 실제 중량으로 다시 계산하면 3일 × 640kg × 0.15달러 = 288달러로 기존 369달러보다 81달러 줄어든다. 4,183 − 120 − 81 = 3,982달러다. 3,694달러는 보관료 전체를 뺀 금액이다."
+   },
+   {
+    "q": "Why does Mr. Keller mention the inventory count?",
+    "choices": [
+     "To request a discount on future shipments",
+     "To argue that the delay in collection was not his company's fault",
+     "To explain why the cartons were damaged",
+     "To complain that the warehouse was understaffed"
+    ],
+    "answer": 1,
+    "type": "추론",
+    "explanation": "켈러 씨는 10월 17일에 트럭을 보냈지만 재고 조사로 창고가 이틀간 문을 닫아 20일에야 수거할 수 있었다며 보관료 전액 삭제를 요구한다. 수거 지연이 자사 책임이 아니라고 주장하려는 것이다."
+   }
+  ],
+  "translation": "[요금표]\n펠럼 화물 운송 — 항공 화물 요금, 상하이(PVG)→프랑크푸르트(FRA), 10월 1일부 적용\n\n과금 중량은 실제 중량과 부피 중량(가로 × 세로 × 높이(cm) ÷ 6,000) 중 큰 값입니다.\n\n과금 kg당 요금: 100~499kg: 4.20달러 | 500~999kg: 3.80달러 | 1,000kg 이상: 3.40달러\n유류 할증료: 과금 kg당 0.65달러\n보안 검색: 건당 45달러\n도착지 통관: 건당 120달러(펠럼 보세 창고 이용 고객은 면제)\n보관료: 도착 후 3일간 무료, 이후 실제 중량 기준 kg당 하루 0.15달러\n\n[청구서]\n청구서 #PF-50318 — 펠럼 화물 운송 / 고객: 아우렐리오 라이팅 / 화물: 12상자, PVG–FRA, 10월 14일 도착, 10월 20일 수거\n\n실제 중량: 640kg | 부피 중량: 820kg\n운임(820kg × 3.80달러): 3,116.00달러\n유류 할증료(820kg × 0.65달러): 533.00달러\n보안 검색: 45.00달러\n통관: 120.00달러\n보관료(3일 × 820kg × 0.15달러): 369.00달러\n합계: 4,183.00달러\n\n[이메일]\n발신: 요나스 켈러, 아우렐리오 라이팅 / 수신: billing@pelhamfreight.com / 날짜: 10월 27일 / 제목: 청구서 PF-50318\n\n안녕하세요.\n\n청구서 PF-50318을 검토한 결과 귀사의 공시 요금과 맞지 않는 항목 두 개를 발견했습니다. 첫째, 보관료가 잘못 계산된 것 같습니다. 둘째, 저희는 8월부터 모든 프랑크푸르트 화물을 귀사의 보세 창고를 통해 보내고 있으므로, 목록에 있는 서비스 중 하나는 청구되지 말았어야 합니다.\n\n또한 저희 트럭이 10월 17일에 상자를 수거하러 갔지만 귀사 창고가 재고 조사로 그날과 다음 날 문을 닫았고, 다음으로 가능한 트럭은 10월 20일에야 갈 수 있었다는 점도 말씀드립니다. 따라서 보관료 전액을 삭제해 주실 것을 요청합니다.\n\n수정된 청구서를 보내 주십시오. 받는 즉시 지불하겠습니다.\n\n요나스 켈러"
+ }
+]

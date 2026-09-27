@@ -20,19 +20,21 @@
   {% set gr = GRADE_BY_LEVEL[p.level] %}
   <div class="card">
     <div class="spread"><h2 style="margin:0">{{ grade_badge(gr) }} {{ gr.ko }}</h2><span class="muted small">{{ gr.low }}~{{ gr.high }}점</span></div>
-    <table class="small" style="margin-top:8px"><tbody>
-      <tr><td>전체</td><td class="r num">{{ p.total }}</td></tr>
-      <tr><td>학습 시작</td><td class="r num">{{ p.seen }}</td></tr>
-      <tr><td>암기 완료</td><td class="r num">{{ p.mastered }}</td></tr>
-      <tr><td>오늘 복습</td><td class="r num">{{ p.due }}</td></tr>
-    </tbody></table>
-    <div class="bar ok" style="margin:8px 0" title="암기 완료 비율"><i style="width:{{ ((p.mastered / p.total * 100) if p.total else 0)|round }}%"></i></div>
-    <div class="row">
-      <a class="btn small primary" href="{{ url_for('vocab.study', level=p.level) }}">카드</a>
-      <a class="btn small" href="{{ url_for('vocab.quiz', level=p.level) }}">퀴즈</a>
-      <a class="btn small" href="{{ url_for('vocab.word_list', level=p.level) }}">목록</a>
-      <a class="btn small" href="{{ url_for('vocab.listen', level=p.level) }}">듣기</a>
-    </div>
+    <p class="small muted" style="margin:6px 0 4px">오늘 복습 {{ p.due }} · 학습 시작 {{ p.seen }} / {{ p.total }}</p>
+    {% for t, label, hint in [('core', '필수', '이 점수대에서 꼭 알아야 할 단어'), ('stretch', '도전', '알면 다음 등급에 도전할 만한 단어' if p.level < 5 else '900점 이상 만점권 단어')] %}
+      {% set x = p.tiers[t] %}
+      <div style="margin-top:10px">
+        <div class="spread small"><span><b>{{ label }} 단어</b> <span class="muted">{{ hint }}</span></span>
+          <span class="num">암기 {{ x.mastered }} / {{ x.total }}</span></div>
+        <div class="bar {{ 'ok' if t == 'core' }}" style="margin:5px 0" title="암기 완료 비율"><i style="width:{{ ((x.mastered / x.total * 100) if x.total else 0)|round }}%"></i></div>
+        <div class="row">
+          <a class="btn small {{ 'primary' if t == 'core' }}" href="{{ url_for('vocab.study', level=p.level, tier=t) }}">카드</a>
+          <a class="btn small" href="{{ url_for('vocab.quiz', level=p.level, tier=t) }}">퀴즈</a>
+          <a class="btn small" href="{{ url_for('vocab.word_list', level=p.level, tier=t) }}">목록</a>
+          <a class="btn small" href="{{ url_for('vocab.listen', level=p.level, tier=t) }}">듣기</a>
+        </div>
+      </div>
+    {% endfor %}
   </div>
 {% endfor %}
 </div>

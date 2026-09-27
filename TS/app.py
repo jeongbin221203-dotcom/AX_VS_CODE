@@ -56,4 +56,13 @@ def create_app(test_config: dict | None = None) -> Flask:
 
 
 if __name__ == "__main__":
-    create_app().run(host="127.0.0.1", port=config.PORT, debug=config.DEBUG)
+    if config.HOST != "127.0.0.1":
+        import socket
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            s.connect(("8.8.8.8", 80))
+            print(f" * 휴대폰(같은 와이파이)에서: http://{s.getsockname()[0]}:{config.PORT}")
+            s.close()
+        except OSError:
+            pass
+    create_app().run(host=config.HOST, port=config.PORT, debug=config.DEBUG)

@@ -36,7 +36,8 @@ def guide(level: int | None = None):
     b = bank()
     counts = {p: b.count_questions(p, level) for p in PART_INFO}
     return render_template("guide.html", level=level, grade=scoring.GRADE_BY_LEVEL[level], g=GUIDE[level],
-                           tips=PART_TIPS, counts=counts, vocab_n=sum(1 for w in b.vocab if w["level"] == level))
+                           tips=PART_TIPS, counts=counts, vocab_n={t: sum(1 for w in b.vocab if w["level"] == level and w["tier"] == t)
+                                    for t in ("core", "stretch")})
 
 
 @bp.route("/stats")

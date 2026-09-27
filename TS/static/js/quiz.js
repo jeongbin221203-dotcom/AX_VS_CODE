@@ -9,6 +9,7 @@
   const INSTANT = P.mode === "practice" || P.mode === "review";
   const EXAM = P.mode === "diagnostic" || P.mode === "mock";
   const RESULT = P.mode === "result";
+  const REAL = EXAM && !!P.real;           // 실전 모의고사: LC 자동 진행, 되돌아가기 없음
   const PART_NAME = { 1: "사진 묘사", 2: "질의응답", 3: "짧은 대화", 4: "짧은 담화", 5: "단문 빈칸", 6: "장문 빈칸", 7: "독해" };
   const GRADE = { 1: "Orange", 2: "Brown", 3: "Green", 4: "Blue", 5: "Gold" };
   const isLC = it => P.lc_parts.includes(it.part);
@@ -21,6 +22,10 @@
   const played = {};           // 시험 모드: 한 번 재생한 듣기 문제
   let idx = 0, curQ = 0, started = false, rcUsed = 0, totalMs = 0, submitting = false, wrongOnly = false;
   let audioState = "idle";     // idle | playing | done
+  let realToken = 0;           // 실전 LC 자동 진행 취소용
+  const firstRC = items.findIndex(it => !P.lc_parts.includes(it.part));
+  const inLC = i => i >= 0 && i < items.length && P.lc_parts.includes(items[i].part);
+  const BACKUP = `ts-exam-${P.sid}`;
 
   const $ = sel => document.querySelector(sel);
   const stage = $("#stage"), qnav = $("#qnav"), timerEl = $("#timer"), progEl = $("#progress");
@@ -147,6 +152,74 @@
     }
   }
 
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+  async function countdown(sec, my, label) {
+    for (let t = sec; t > 0; t--) {
+      if (my !== realToken) return false;
+      const st = $("#audio-status");
+      if (st) st.textContent = `${label} · 답안 시간 ${t}초`;
+      await sleep(1000);
+    }
+    return my === realToken;
+  }
+
+  /* 실전 LC: 음성 → (Part 3·4 는 문제를 하나씩 읽고 8초, 시각 자료 문제 12초) → 다음 문제로 자동 이동 */
+  async function runRealLC(it) {
+    const my = ++realToken;
+    played[it.ref] = true;
+    if (!TTS.supported) return;
+    audioState = "playing";
+    updateAudioBox(it);
+    const { accent, segs } = segmentsFor(it);
+    if (!(await TTS.play(segs, { rate: 1, accent })) || my !== realToken) return;
+    if (it.part === 1 || it.part === 2) {
+      if (!(await countdown(5, my, `${numberOf(it, 0)}번`))) return;
+    } else {
+      for (let q = 0; q < it.questions.length; q++) {
+        curQ = q;
+        render({ keepQ: true });
+        updateAudioBox(it);
+        const n = numberOf(it, q);
+        if (!(await TTS.play([{ text: `Number ${n}. ${it.questions[q].q}`, gender: "male" }], { rate: 1, accent: "us" })) || my !== realToken) return;
+        if (!(await countdown(it.questions[q].type === "시각 자료 연계" ? 12 : 8, my, `${n}번`))) return;
+      }
+    }
+    audioState = "done";
+    saveBackup();
+    if (inLC(idx + 1)) go(idx + 1, undefined, true);
+    else if (firstRC >= 0) {
+      go(firstRC, undefined, true);
+      showBanner("Listening이 끝났습니다. 지금부터 Reading 75분이 시작됩니다.");
+    } else submitExam(true);
+  }
+
+  function showBanner(text) {
+    const b = document.createElement("div");
+    b.className = "flash ok";
+    b.textContent = text;
+    stage.prepend(b);
+    setTimeout(() => b.remove(), 8000);
+  }
+
+  // 시험 답안 임시 저장 (새로고침·실수로 닫기 대비, 이 브라우저에만)
+  function saveBackup() {
+    if (!EXAM) return;
+    try { localStorage.setItem(BACKUP, JSON.stringify({ answers, idx, rcUsed, totalMs, elapsed })); } catch (e) { /* 저장 불가 */ }
+  }
+  function loadBackup() {
+    if (!EXAM) return;
+    try {
+      const b = JSON.parse(localStorage.getItem(BACKUP) || "null");
+      if (!b) return;
+      Object.assign(answers, b.answers || {});
+      Object.assign(elapsed, b.elapsed || {});
+      idx = Math.min(b.idx || 0, items.length - 1);
+      rcUsed = b.rcUsed || 0;
+      totalMs = b.totalMs || 0;
+    } catch (e) { /* 무시 */ }
+  }
+
   function canReplay(it) { return !EXAM || !played[it.ref]; }
 
   function audioBoxHtml(it) {
@@ -159,7 +232,8 @@
     if (!box) return;
     const accentName = { us: "미국", uk: "영국", au: "호주", ca: "캐나다" }[TTS.accentFor(P.tts.accent, it.ref)] || "";
     let btn = "";
-    if (audioState === "playing") btn = `<button class="btn small" data-act="stop">■ 정지</button>`;
+    if (REAL && isLC(it)) btn = "";
+    else if (audioState === "playing") btn = `<button class="btn small" data-act="stop">■ 정지</button>`;
     else if (canReplay(it) || RESULT || isGraded(it)) btn = `<button class="btn small primary" data-act="play">▶ ${audioState === "done" ? "다시 듣기" : "듣기"}</button> <span class="kbd">R</span>`;
     const status = audioState === "playing" ? "재생 중…" : audioState === "done" ? (EXAM ? "재생 끝 (시험 모드는 한 번만 들을 수 있습니다)" : "재생 끝") : "";
     box.innerHTML = `${btn}<span class="status" id="audio-status">${status}</span><span class="status" style="margin-left:auto">${accentName} 억양 · 속도 ${P.tts.rate}×</span>`;
@@ -177,8 +251,8 @@
     }
     const g = graded[it.ref];
     const head = `<div class="item-head"><b>Part ${it.part}</b> ${PART_NAME[it.part]}
-      <span class="badge g${it.level}">${GRADE[it.level]}</span>
-      ${it.topic ? `<span class="tag">${esc(it.topic)}</span>` : ""}${it.doc_type ? `<span class="tag">${esc(it.doc_type)}</span>` : ""}
+      ${EXAM ? "" : `<span class="badge g${it.level}">${GRADE[it.level]}</span>`}
+      ${it.topic && !EXAM ? `<span class="tag">${esc(it.topic)}</span>` : ""}${it.doc_type && !EXAM ? `<span class="tag">${esc(it.doc_type)}</span>` : ""}
       ${it.kind && it.kind !== "single" ? `<span class="tag">${it.kind === "double" ? "이중 지문" : "삼중 지문"}</span>` : ""}
       <span style="margin-left:auto">${idx + 1} / ${items.length}</span>
       <span class="timer" id="item-timer"></span></div>`;
@@ -234,12 +308,15 @@
     if (INSTANT) {
       if (!isGraded(it)) right = `<button class="btn primary" data-act="grade" ${allAnswered(it) ? "" : "disabled"}>채점하기 <span class="kbd">Enter</span></button>`;
       else right = last ? `<button class="btn primary" data-act="finish">결과 보기</button>` : `<button class="btn primary" data-act="next">다음 문제 → <span class="kbd">Enter</span></button>`;
+    } else if (REAL && isLC(it)) {
+      return `<div class="quiz-foot"><span class="muted small">LC는 음성에 맞춰 자동으로 넘어갑니다 (실제 시험과 같이 되돌아가기·다시 듣기 없음)</span></div>`;
     } else if (EXAM) {
       right = last ? `<button class="btn primary" data-act="submit">제출하기</button>` : `<button class="btn primary" data-act="next">다음 → <span class="kbd">Enter</span></button>`;
     } else {
       right = last ? "" : `<button class="btn primary" data-act="next">다음 →</button>`;
     }
-    const left = idx > 0 ? `<button class="btn" data-act="prev">← 이전</button>` : "<span></span>";
+    const canPrev = idx > 0 && !(REAL && (inLC(idx - 1) || isLC(it)));
+    const left = canPrev ? `<button class="btn" data-act="prev">← 이전</button>` : "<span></span>";
     return `<div class="quiz-foot">${left}<div class="row">${right}</div></div>`;
   }
 
@@ -250,7 +327,8 @@
       const r = resultOf(it, x.q);
       if (r) cls += r.correct ? " ok" : " bad";
       else if (chosen(it, x.q) !== undefined) cls += " answered";
-      return `<button type="button" class="${cls}" data-go="${x.i}">${n + 1}</button>`;
+      const locked = REAL && (inLC(x.i) || inLC(idx));
+      return `<button type="button" class="${cls}" data-go="${x.i}"${locked ? " disabled" : ""}>${n + 1}</button>`;
     }).join("");
     const answeredN = qlist.filter(x => chosen(items[x.i], x.q) !== undefined).length;
     const gradedList = qlist.map(x => resultOf(items[x.i], x.q)).filter(Boolean);
@@ -261,11 +339,14 @@
   }
 
   // ---------------------------------------------------------------- 이동·채점
-  function go(i, opts) {
+  function go(i, opts, auto) {
     if (i < 0 || i >= items.length) return;
+    if (REAL && !auto && started && (inLC(i) || inLC(idx))) return;      // 실전: LC 는 자동으로만 이동
+    realToken++;
     TTS.stop();
     audioState = "idle";
     idx = i;
+    saveBackup();
     render(opts);
     if (RESULT) $("#quiz-main").scrollIntoView({ block: "start" });
     else window.scrollTo({ top: 0 });
@@ -281,6 +362,7 @@
   function maybeAutoplay() {
     const it = items[idx];
     if (!started || !isLC(it) || RESULT || isGraded(it)) return;
+    if (REAL) { runRealLC(it); return; }
     if (EXAM && played[it.ref]) return;
     if (EXAM) played[it.ref] = true;
     playAudio(it);
@@ -294,6 +376,7 @@
     // 다음으로 답하지 않은 문항으로 이동
     curQ = qidx;
     for (let q = 0; q < nq(it); q++) if (chosen(it, q) === undefined) { curQ = q; break; }
+    saveBackup();
     if (INSTANT && nq(it) === 1) { grade(); return; }
     render({ keepQ: true, scrollQ: true });
   }
@@ -332,6 +415,7 @@
       }
       const r = await TS.post(`/api/quiz/${P.sid}/submit`, body);
       TTS.stop();
+      try { localStorage.removeItem(BACKUP); } catch (e) { /* 무시 */ }
       window.onbeforeunload = null;
       location.href = r.redirect;
     } catch (e) {
@@ -357,6 +441,7 @@
     totalMs += d;
     if (!isGraded(it)) elapsed[it.ref] = (elapsed[it.ref] || 0) + d;
     if (EXAM && !isLC(it)) rcUsed += d;
+    if (EXAM && Math.floor(totalMs / 5000) !== Math.floor((totalMs - d) / 5000)) saveBackup();
     // 문제별 시간 (RC 목표 시간 대비)
     const el = $("#item-timer");
     if (el) {
@@ -420,7 +505,7 @@
       else if (INSTANT) finish();
     } else if (k === "arrowright") step(1);
     else if (k === "arrowleft") step(-1);
-    else if (k === "r" && isLC(it) && (canReplay(it) || isGraded(it) || RESULT)) { if (EXAM) played[it.ref] = true; playAudio(it); }
+    else if (k === "r" && !REAL && isLC(it) && (canReplay(it) || isGraded(it) || RESULT)) { if (EXAM) played[it.ref] = true; playAudio(it); }
     else if (k === "arrowdown" && nq(it) > 1) { curQ = Math.min(nq(it) - 1, curQ + 1); render({ keepQ: true, scrollQ: true }); }
     else if (k === "arrowup" && nq(it) > 1) { curQ = Math.max(0, curQ - 1); render({ keepQ: true, scrollQ: true }); }
   });
@@ -434,7 +519,7 @@
     $("#intro")?.classList.add("hidden");
     $("#quiz-main").classList.remove("hidden");
     last = performance.now();
-    go(idx);
+    go(idx, undefined, true);
   }
 
   if (!items.length) {
@@ -455,6 +540,7 @@
     render();
   } else {
     TTS.load();
+    loadBackup();
     const needIntro = EXAM || items.some(isLC);
     if (needIntro) {
       $("#start-btn").addEventListener("click", start);

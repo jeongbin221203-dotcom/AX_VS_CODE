@@ -1,0 +1,702 @@
+[
+ {
+  "id": "p1-071",
+  "level": 1,
+  "type": "1인 동작",
+  "scene": "공항 체크인 카운터 앞에서 한 여성이 여행 가방을 수하물 저울 위에 올려놓고 있다.",
+  "statements": [
+   "She's putting a suitcase on a scale.",
+   "She's opening a suitcase.",
+   "She's boarding an airplane.",
+   "She's reading a magazine."
+  ],
+  "answer": 0,
+  "explanation": "정답 (A): '여행 가방을 저울 위에 올려놓고 있다.' (B)는 suitcase를 반복했지만 가방을 열고 있지 않다. (C)는 공항에서 연상되는 '탑승하다'를 쓴 함정이고, (D)는 사진에 잡지가 없다."
+ },
+ {
+  "id": "p1-072",
+  "level": 1,
+  "type": "1인 동작",
+  "scene": "세차장에서 한 남자가 호스로 자동차에 물을 뿌리며 차를 씻고 있다.",
+  "statements": [
+   "He's driving a car.",
+   "He's changing a tire.",
+   "He's washing a car.",
+   "He's watering a lawn."
+  ],
+  "answer": 2,
+  "explanation": "정답 (C): '차를 씻고 있다.' (A)는 car를 반복했지만 운전 중이 아니고, (B)는 자동차에서 연상되는 타이어 교체다. (D)는 호스·물에서 연상되는 '잔디에 물 주기'로 만든 함정이다."
+ },
+ {
+  "id": "p1-073",
+  "level": 1,
+  "type": "1인 동작",
+  "scene": "제과점 주방에서 흰 모자를 쓴 제빵사가 오븐에서 빵이 담긴 쟁반을 꺼내고 있다.",
+  "statements": [
+   "He's eating some bread.",
+   "He's taking a tray out of an oven.",
+   "He's washing a tray.",
+   "He's closing a window."
+  ],
+  "answer": 1,
+  "explanation": "정답 (B): '오븐에서 쟁반을 꺼내고 있다.' (A)는 빵을 먹고 있지 않고, (C)는 tray를 반복했지만 씻는 동작이 아니다. (D)는 사진에 없는 동작이다."
+ },
+ {
+  "id": "p1-074",
+  "level": 1,
+  "type": "1인 동작",
+  "scene": "코인 세탁소에서 한 여자가 앞이 열린 세탁기 안에 옷을 넣고 있다.",
+  "statements": [
+   "She's folding some towels.",
+   "She's putting clothes into a washing machine.",
+   "She's ironing a shirt.",
+   "She's hanging clothes outside."
+  ],
+  "answer": 1,
+  "explanation": "정답 (B): '세탁기에 옷을 넣고 있다.' (A), (C), (D)는 모두 세탁소에서 연상되는 동작(수건 개기, 다림질, 빨래 널기)이지만 사진 속 동작과 다르다."
+ },
+ {
+  "id": "p1-075",
+  "level": 1,
+  "type": "2인 이상 동작",
+  "scene": "테니스 코트에서 두 사람이 네트를 사이에 두고 라켓으로 공을 치고 있다.",
+  "statements": [
+   "They're playing tennis.",
+   "They're sitting on a bench.",
+   "They're fixing a net.",
+   "They're watching a game on TV."
+  ],
+  "answer": 0,
+  "explanation": "정답 (A): '테니스를 치고 있다.' (B)는 두 사람이 서서 움직이고 있으므로 틀리고, (C)는 net을 반복한 함정이다. (D)는 경기를 TV로 보고 있지 않다."
+ },
+ {
+  "id": "p1-076",
+  "level": 1,
+  "type": "2인 이상 동작",
+  "scene": "요가 교실에서 여러 사람이 각자 매트 위에 서서 두 팔을 머리 위로 뻗고 있다.",
+  "statements": [
+   "They're rolling up their mats.",
+   "They're running on a track.",
+   "They're raising their arms.",
+   "They're lying on the floor."
+  ],
+  "answer": 2,
+  "explanation": "정답 (C): '팔을 들어 올리고 있다.' (A)는 mat를 반복했지만 매트를 말고 있지 않다. (B)는 운동에서 연상되는 달리기이고, (D)는 사람들이 서 있으므로 틀리다."
+ },
+ {
+  "id": "p1-077",
+  "level": 1,
+  "type": "사물·배경",
+  "scene": "주차 건물 안에 승용차 여러 대가 칸마다 주차되어 있다. 사람은 보이지 않는다.",
+  "statements": [
+   "Some cars are parked in a garage.",
+   "Some people are getting into a car.",
+   "A car is being washed.",
+   "A man is driving out of a garage."
+  ],
+  "answer": 0,
+  "explanation": "정답 (A): '차들이 주차장에 세워져 있다.' 사람이 없는 사진인데 (B)와 (D)는 사람의 동작을 묘사했다. (C)는 세차 중이 아니다."
+ },
+ {
+  "id": "p1-078",
+  "level": 1,
+  "type": "사물·배경",
+  "scene": "건물 뒤편에 파란색·초록색·노란색 분리수거함 세 개가 나란히 놓여 있다. 사람은 없다.",
+  "statements": [
+   "Someone is emptying a bin.",
+   "There are three bins side by side.",
+   "The bins are on a truck.",
+   "A man is carrying a bag of trash."
+  ],
+  "answer": 1,
+  "explanation": "정답 (B): '수거함 세 개가 나란히 있다.' (A)와 (D)는 사진에 없는 사람을 등장시켰고, (C)는 수거함이 트럭 위가 아니라 바닥에 놓여 있으므로 틀리다."
+ },
+ {
+  "id": "p1-079",
+  "level": 1,
+  "type": "상태(수동태 진행/완료)",
+  "scene": "꽃집 앞 인도에 꽃이 꽂힌 양동이들이 줄지어 놓여 있다. 사람은 없다.",
+  "statements": [
+   "Some flowers are being planted.",
+   "A woman is buying flowers.",
+   "The shop is closed for the day.",
+   "Some flowers have been placed outside a shop."
+  ],
+  "answer": 3,
+  "explanation": "정답 (D): '꽃들이 가게 밖에 놓여 있다.' (A)는 flowers를 반복했지만 심는 중(being planted)이 아니고, (B)는 사람이 없는 사진이다. (C)는 사진만으로 영업 여부를 알 수 없다."
+ },
+ {
+  "id": "p1-080",
+  "level": 1,
+  "type": "상태(수동태 진행/완료)",
+  "scene": "캠핑장 잔디밭에 텐트 두 개가 쳐져 있다. 주변에 사람은 없다.",
+  "statements": [
+   "Some tents are being taken down.",
+   "Some people are sleeping in a tent.",
+   "Some tents are folded in a bag.",
+   "Some tents have been set up on the grass."
+  ],
+  "answer": 3,
+  "explanation": "정답 (D): '텐트가 잔디 위에 설치되어 있다.' (A)는 '걷는 중'이라 사람이 필요하고, (B)는 사람이 보이지 않는다. (C)는 텐트가 가방에 접혀 있지 않고 펼쳐져 있다."
+ },
+ {
+  "id": "p1-081",
+  "level": 2,
+  "type": "1인 동작",
+  "scene": "농산물 직판장 가판대에서 한 남자가 저울 위에 토마토를 올려 무게를 달고 있다.",
+  "statements": [
+   "He's weighing some tomatoes.",
+   "He's planting some tomatoes.",
+   "He's cooking some vegetables.",
+   "He's paying for his groceries."
+  ],
+  "answer": 0,
+  "explanation": "정답 (A): '토마토 무게를 달고 있다.' (B)는 tomatoes를 반복했지만 심는 동작이 아니고, (C)는 채소에서 연상되는 요리다. (D)는 시장에서 연상되는 계산 동작이지만 돈을 내고 있지 않다."
+ },
+ {
+  "id": "p1-082",
+  "level": 2,
+  "type": "1인 동작",
+  "scene": "녹음실에서 헤드폰을 쓴 여자가 스탠드 마이크 앞에서 노래를 부르고 있다.",
+  "statements": [
+   "She's singing into a microphone.",
+   "She's taking off her headphones.",
+   "She's playing the piano.",
+   "She's repairing a microphone."
+  ],
+  "answer": 0,
+  "explanation": "정답 (A): '마이크에 대고 노래하고 있다.' (B)는 헤드폰을 '쓰고 있는' 상태를 '벗는 중(taking off)'으로 바꾼 전형적 함정이다. (C)는 피아노가 없고, (D)는 microphone을 반복했지만 수리 중이 아니다."
+ },
+ {
+  "id": "p1-083",
+  "level": 2,
+  "type": "1인 동작",
+  "scene": "주유소에서 한 남자가 주유기 노즐을 차에 꽂고 기름을 넣고 있다.",
+  "statements": [
+   "He's cleaning a windshield.",
+   "He's getting out of a car.",
+   "He's pumping gas into a car.",
+   "He's paying at a counter."
+  ],
+  "answer": 2,
+  "explanation": "정답 (C): '차에 기름을 넣고 있다.' (A)는 주유소에서 연상되는 앞유리 닦기, (B)는 이미 차 밖에 서 있으므로 틀리고, (D)는 계산대가 보이지 않는다."
+ },
+ {
+  "id": "p1-084",
+  "level": 2,
+  "type": "2인 이상 동작",
+  "scene": "사무실 건물 외벽에서 작업자 두 명이 곤돌라에 서서 긴 막대 걸레로 유리창을 닦고 있다.",
+  "statements": [
+   "Some workers are opening the windows.",
+   "They're climbing down a ladder.",
+   "Some workers are cleaning windows.",
+   "They're painting the building."
+  ],
+  "answer": 2,
+  "explanation": "정답 (C): '창문을 닦고 있다.' (A)는 windows를 반복했지만 여는 동작이 아니다. (B)는 사다리가 아닌 곤돌라에 있고, (D)는 높은 곳 작업에서 연상되는 페인트칠이다."
+ },
+ {
+  "id": "p1-085",
+  "level": 2,
+  "type": "2인 이상 동작",
+  "scene": "도예 교실에서 여러 사람이 각자 물레 앞에 앉아 젖은 점토로 그릇 모양을 빚고 있다.",
+  "statements": [
+   "They're washing some dishes.",
+   "They're painting a picture.",
+   "They're standing in a line.",
+   "They're shaping some clay."
+  ],
+  "answer": 3,
+  "explanation": "정답 (D): '점토를 빚고 있다.' (A)는 그릇(dish)에서 연상되는 설거지이고, (B)는 미술 수업에서 연상되는 그림 그리기다. (C)는 모두 앉아 있으므로 틀리다."
+ },
+ {
+  "id": "p1-086",
+  "level": 2,
+  "type": "2인 이상 동작",
+  "scene": "동물병원 진료대 위에 개가 올라가 있고, 수의사가 청진기로 진찰하는 동안 주인이 개를 붙잡고 있다.",
+  "statements": [
+   "A man is walking a dog in a park.",
+   "A veterinarian is examining a dog.",
+   "They're feeding the dog.",
+   "A dog is sleeping on the floor."
+  ],
+  "answer": 1,
+  "explanation": "정답 (B): '수의사가 개를 진찰하고 있다.' (A)는 dog을 반복했지만 장소가 공원이 아니다. (C)는 먹이를 주고 있지 않고, (D)는 개가 바닥이 아니라 진료대 위에 있다."
+ },
+ {
+  "id": "p1-087",
+  "level": 2,
+  "type": "사물·배경",
+  "scene": "제과점 유리 진열장 안에 케이크와 빵들이 여러 층으로 진열되어 있다. 손님은 없다.",
+  "statements": [
+   "A baker is decorating a cake.",
+   "Some bread is being sliced.",
+   "The shelves are empty.",
+   "Some pastries are on display."
+  ],
+  "answer": 3,
+  "explanation": "정답 (D): '빵과 과자가 진열되어 있다.' (A)와 (B)는 사진에 없는 사람의 동작이 필요한 문장이다. (C)는 진열장이 가득 차 있으므로 반대 내용이다."
+ },
+ {
+  "id": "p1-088",
+  "level": 2,
+  "type": "사물·배경",
+  "scene": "쇼핑몰 1층과 2층을 잇는 에스컬레이터 두 대가 나란히 있다. 아무도 타고 있지 않다.",
+  "statements": [
+   "People are riding an escalator.",
+   "There are escalators between two floors.",
+   "An escalator is being repaired.",
+   "Some shoppers are carrying bags."
+  ],
+  "answer": 1,
+  "explanation": "정답 (B): '두 층 사이에 에스컬레이터가 있다.' (A)와 (D)는 사람이 없는데 사람을 묘사했다. (C)는 수리 중(being repaired)이라면 작업자가 보여야 한다."
+ },
+ {
+  "id": "p1-089",
+  "level": 2,
+  "type": "상태(수동태 진행/완료)",
+  "scene": "건물 옥상 정원에 나무 화분들이 줄지어 놓여 있고, 화분마다 채소가 자라고 있다. 사람은 없다.",
+  "statements": [
+   "Some planters have been arranged in rows.",
+   "Some plants are being watered.",
+   "A woman is picking vegetables.",
+   "Some planters are hanging from a roof."
+  ],
+  "answer": 0,
+  "explanation": "정답 (A): '화분들이 줄지어 배치되어 있다.' (B)는 물을 주는 중(being watered)이라 사람이 필요하고, (C)는 사람이 없다. (D)는 화분이 매달려 있지 않고 바닥에 놓여 있다."
+ },
+ {
+  "id": "p1-090",
+  "level": 2,
+  "type": "상태(수동태 진행/완료)",
+  "scene": "행사 전 연회장. 둥근 테이블마다 흰 식탁보가 덮여 있고 의자가 둘러 놓여 있다. 사람은 없다.",
+  "statements": [
+   "A server is removing a tablecloth.",
+   "The tables have been covered with cloths.",
+   "Guests are seated at the tables.",
+   "The tables are being set up outside."
+  ],
+  "answer": 1,
+  "explanation": "정답 (B): '테이블이 식탁보로 덮여 있다.' (A)와 (C)는 사진에 없는 사람을 묘사했다. (D)는 실내이고, 설치 중(being set up)인 상태도 아니다."
+ },
+ {
+  "id": "p1-091",
+  "level": 3,
+  "type": "1인 동작",
+  "scene": "양복점에서 목에 줄자를 건 재단사가 마네킹에 입힌 재킷의 어깨 너비를 줄자로 재고 있다.",
+  "statements": [
+   "He's trying on a jacket.",
+   "He's sewing a button onto a shirt.",
+   "He's hanging a jacket on a rack.",
+   "He's taking a measurement."
+  ],
+  "answer": 3,
+  "explanation": "정답 (D): '치수를 재고 있다.' (A)는 재킷을 입어 보는 사람이 아니라 마네킹이 입고 있다. (B)는 재단사에서 연상되는 바느질이고, (C)는 jacket을 반복했지만 옷걸이에 거는 동작이 아니다."
+ },
+ {
+  "id": "p1-092",
+  "level": 3,
+  "type": "1인 동작",
+  "scene": "서점 입구의 진열대에서 한 여자가 신간 책들을 표지가 보이도록 세워 놓고 있다.",
+  "statements": [
+   "She's reading a book at a table.",
+   "She's paying for some books.",
+   "She's setting up a book display.",
+   "She's packing books into a box."
+  ],
+  "answer": 2,
+  "explanation": "정답 (C): '책 진열을 하고 있다.' (A)는 책을 읽고 있지 않고, (B)는 서점에서 연상되는 계산이다. (D)는 책을 상자에서 꺼내 놓는 쪽이지 상자에 넣고 있지 않다."
+ },
+ {
+  "id": "p1-093",
+  "level": 3,
+  "type": "2인 이상 동작",
+  "scene": "텅 빈 공연장 무대에서 지휘자가 지휘봉을 들고 있고, 단원들이 악보를 보며 악기를 연주하고 있다. 객석은 비어 있다.",
+  "statements": [
+   "An audience is applauding.",
+   "Some musicians are playing instruments.",
+   "The musicians are putting away their instruments.",
+   "A conductor is sitting in the front row."
+  ],
+  "answer": 1,
+  "explanation": "정답 (B): '연주자들이 악기를 연주하고 있다.' (A)는 객석이 비어 있으므로 틀리고, (C)는 instruments를 반복했지만 악기를 정리하는 중이 아니다. (D)는 지휘자가 무대에 서 있으므로 틀리다."
+ },
+ {
+  "id": "p1-094",
+  "level": 3,
+  "type": "2인 이상 동작",
+  "scene": "스키장에서 스키를 신은 두 사람이 리프트 의자에 나란히 앉아 슬로프 위쪽으로 올라가고 있다.",
+  "statements": [
+   "They're skiing down a slope.",
+   "Two people are riding a ski lift.",
+   "They're putting on their skis.",
+   "They're waiting in line for a lift."
+  ],
+  "answer": 1,
+  "explanation": "정답 (B): '두 사람이 스키 리프트를 타고 있다.' (A)는 스키장에서 연상되는 활강 동작이고, (C)는 이미 스키를 신은 상태를 '신는 중'으로 바꾼 함정이다. (D)는 이미 리프트에 타 있으므로 틀리다."
+ },
+ {
+  "id": "p1-095",
+  "level": 3,
+  "type": "사물·배경",
+  "scene": "음료 공장의 컨베이어 벨트 위로 빈 유리병들이 일렬로 이동하고 있다. 작업자는 보이지 않는다.",
+  "statements": [
+   "Some bottles are moving along a conveyor belt.",
+   "Workers are filling some bottles.",
+   "Some bottles have fallen on the floor.",
+   "A belt is being repaired."
+  ],
+  "answer": 0,
+  "explanation": "정답 (A): '병들이 컨베이어 벨트를 따라 이동하고 있다.' (B)와 (D)는 작업자가 없는데 사람의 동작을 전제한다. (C)는 병들이 넘어져 있지 않다."
+ },
+ {
+  "id": "p1-096",
+  "level": 3,
+  "type": "사물·배경",
+  "scene": "바다 위를 지나는 여객선 갑판. 난간을 따라 빈 벤치들이 놓여 있고 멀리 해안선이 보인다.",
+  "statements": [
+   "There are benches along the railing of a deck.",
+   "Passengers are leaning against a railing.",
+   "A ferry is tied up at a pier.",
+   "Some benches are being painted."
+  ],
+  "answer": 0,
+  "explanation": "정답 (A): '갑판 난간을 따라 벤치가 있다.' (B)는 railing을 반복했지만 승객이 없다. (C)는 배가 바다 위에 있으므로 부두에 묶여 있지 않고, (D)는 칠하는 사람이 없다."
+ },
+ {
+  "id": "p1-097",
+  "level": 3,
+  "type": "사물·배경",
+  "scene": "주차장 출구에 차단기가 내려와 있고, 옆에 무인 정산기가 서 있다. 차량은 없다.",
+  "statements": [
+   "A barrier has been lowered at an exit.",
+   "A car is passing through a gate.",
+   "A driver is paying a fee.",
+   "Some cars are lined up at an exit."
+  ],
+  "answer": 0,
+  "explanation": "정답 (A): '출구에 차단기가 내려와 있다.' (B)와 (D)는 차량이 없는 사진이고, (C)는 정산기에서 연상되는 요금 지불이지만 운전자가 없다."
+ },
+ {
+  "id": "p1-098",
+  "level": 3,
+  "type": "상태(수동태 진행/완료)",
+  "scene": "세탁소 안 천장 레일에 비닐 커버를 씌운 셔츠와 정장들이 줄지어 걸려 있다. 사람은 없다.",
+  "statements": [
+   "Some clothes are being folded.",
+   "A customer is picking up a suit.",
+   "Some shirts are drying on a line.",
+   "Some garments have been covered in plastic."
+  ],
+  "answer": 3,
+  "explanation": "정답 (D): '옷들이 비닐로 씌워져 있다.' (A)는 개는 중(being folded)이 아니고 걸려 있다. (B)는 손님이 없고, (C)는 빨랫줄에서 말리는 것이 아니라 비닐에 싸인 채 레일에 걸려 있다."
+ },
+ {
+  "id": "p1-099",
+  "level": 3,
+  "type": "상태(수동태 진행/완료)",
+  "scene": "해변 모래사장에 선베드들이 줄지어 놓여 있고, 그 사이의 파라솔들은 모두 접혀 있다. 사람은 없다.",
+  "statements": [
+   "Some umbrellas are being opened.",
+   "Some beach umbrellas have been closed.",
+   "People are lying on the lounge chairs.",
+   "Some chairs are being stacked."
+  ],
+  "answer": 1,
+  "explanation": "정답 (B): '파라솔들이 접혀 있다.' (A)는 umbrellas를 반복했지만 펴는 중이 아니며, 그러려면 사람이 필요하다. (C)는 선베드가 비어 있고, (D)는 의자를 쌓는 중이 아니다."
+ },
+ {
+  "id": "p1-100",
+  "level": 3,
+  "type": "상태(수동태 진행/완료)",
+  "scene": "체육관 한쪽 벽에 운동 매트들이 둥글게 말린 채 세워져 있다. 사람은 없다.",
+  "statements": [
+   "Some people are exercising on mats.",
+   "Some mats are being spread on the floor.",
+   "Some mats have been rolled up.",
+   "The mats are hanging on hooks."
+  ],
+  "answer": 2,
+  "explanation": "정답 (C): '매트들이 말려 있다.' (A)는 사람이 없고, (B)는 바닥에 펴는 중이 아니다. (D)는 매트가 고리에 걸린 것이 아니라 벽에 세워져 있다."
+ },
+ {
+  "id": "p1-101",
+  "level": 4,
+  "type": "1인 동작",
+  "scene": "작업실에서 한 여자가 재봉틀 앞에 앉아 두 손으로 천을 바늘 아래로 밀어 넣고 있다.",
+  "statements": [
+   "She's cutting fabric with scissors.",
+   "She's guiding some fabric through a sewing machine.",
+   "She's threading a needle by hand.",
+   "She's folding a piece of cloth."
+  ],
+  "answer": 1,
+  "explanation": "정답 (B): '재봉틀로 천을 밀어 넣고 있다.' (A)는 fabric을 반복했지만 가위질을 하고 있지 않다. (C)는 needle에서 연상되는 '바늘에 실 꿰기'이고, (D)는 천을 개고 있지 않다."
+ },
+ {
+  "id": "p1-102",
+  "level": 4,
+  "type": "1인 동작",
+  "scene": "도로변에서 형광 조끼를 입은 측량사가 삼각대 위에 올린 측량 장비의 렌즈를 들여다보고 있다.",
+  "statements": [
+   "He's taking a photo of a building.",
+   "He's looking through a device on a tripod.",
+   "He's directing traffic.",
+   "He's folding up a tripod."
+  ],
+  "answer": 1,
+  "explanation": "정답 (B): '삼각대 위 장비를 들여다보고 있다.' (A)는 삼각대에서 연상되는 사진 촬영 함정이고, (C)는 형광 조끼·도로에서 연상되는 교통 정리다. (D)는 tripod를 반복했지만 접는 동작이 아니다."
+ },
+ {
+  "id": "p1-103",
+  "level": 4,
+  "type": "2인 이상 동작",
+  "scene": "포도밭에서 밀짚모자를 쓴 인부 두 명이 가위로 포도송이를 잘라 각자의 바구니에 담고 있다.",
+  "statements": [
+   "They're planting some vines.",
+   "They're pouring wine into glasses.",
+   "Some workers are harvesting grapes.",
+   "They're carrying a basket between them."
+  ],
+  "answer": 2,
+  "explanation": "정답 (C): '포도를 수확하고 있다.' (A)는 포도밭에서 연상되는 '심기', (B)는 포도에서 연상되는 와인이다. (D)는 바구니를 각자 들고 있을 뿐 둘이 함께 나르고 있지 않다."
+ },
+ {
+  "id": "p1-104",
+  "level": 4,
+  "type": "2인 이상 동작",
+  "scene": "방송국 스튜디오에서 한 남자가 대형 카메라의 초점을 조정하고, 진행자는 책상에 앉아 원고를 넘기고 있다.",
+  "statements": [
+   "They're both looking into a camera.",
+   "One of the men is adjusting a camera.",
+   "They're shaking hands at a desk.",
+   "A presenter is putting on a microphone."
+  ],
+  "answer": 1,
+  "explanation": "정답 (B): '한 사람이 카메라를 조정하고 있다.' (A)는 camera를 반복했지만 두 사람 모두 카메라를 보고 있지는 않다. (C)는 악수하고 있지 않고, (D)는 진행자가 원고를 넘기고 있지 마이크를 착용하는 중이 아니다."
+ },
+ {
+  "id": "p1-105",
+  "level": 4,
+  "type": "사물·배경",
+  "scene": "건물 옥상에 태양광 패널들이 같은 각도로 여러 줄 설치되어 있다. 사람은 없다.",
+  "statements": [
+   "Some panels are being installed.",
+   "Workers are cleaning a roof.",
+   "Some panels are leaning against a wall.",
+   "Rows of solar panels cover a rooftop."
+  ],
+  "answer": 3,
+  "explanation": "정답 (D): '태양광 패널이 줄지어 옥상을 덮고 있다.' (A)는 설치 중(being installed)이라 작업자가 있어야 하고, (B)는 사람이 없다. (C)는 panels를 반복했지만 벽에 기대어 있지 않고 옥상에 고정되어 있다."
+ },
+ {
+  "id": "p1-106",
+  "level": 4,
+  "type": "사물·배경",
+  "scene": "호숫가 잔디밭에 나무 피크닉 테이블 몇 개가 흩어져 있다. 테이블 위에는 아무것도 없고 사람도 없다.",
+  "statements": [
+   "Some picnic tables are unoccupied.",
+   "Some people are having lunch outdoors.",
+   "The tables are being carried to the lake.",
+   "Food has been set out on the tables."
+  ],
+  "answer": 0,
+  "explanation": "정답 (A): '피크닉 테이블들이 비어 있다.' (B)는 사람이 없고, (C)는 옮기는 중이 아니다. (D)는 피크닉에서 연상되는 음식이지만 테이블 위에 아무것도 없다."
+ },
+ {
+  "id": "p1-107",
+  "level": 4,
+  "type": "사물·배경",
+  "scene": "계단식 강의실. 좌석들이 앞쪽 무대를 향해 층층이 배열되어 있고, 무대 뒤 스크린이 내려와 있다. 사람은 없다.",
+  "statements": [
+   "The seats in the hall face a screen.",
+   "A speaker is addressing an audience.",
+   "A screen is being rolled up.",
+   "The seats have been folded and stacked."
+  ],
+  "answer": 0,
+  "explanation": "정답 (A): '강당 좌석이 스크린을 향해 있다.' (B)는 연사도 청중도 없고, (C)는 screen을 반복했지만 말아 올리는 중이 아니다. (D)는 좌석이 쌓여 있지 않고 고정되어 있다."
+ },
+ {
+  "id": "p1-108",
+  "level": 4,
+  "type": "상태(수동태 진행/완료)",
+  "scene": "우체국 뒤편. 벽면 선반의 칸마다 소포와 봉투들이 지역별로 나뉘어 꽂혀 있다. 사람은 없다.",
+  "statements": [
+   "A clerk is weighing a package.",
+   "Packages are being loaded onto a truck.",
+   "Packages have been sorted into compartments.",
+   "Some envelopes are scattered on the floor."
+  ],
+  "answer": 2,
+  "explanation": "정답 (C): '소포들이 칸마다 분류되어 있다.' (A)는 직원이 없고, (B)는 트럭이 없으며 싣는 중도 아니다. (D)는 봉투가 선반에 정리되어 있지 바닥에 흩어져 있지 않다."
+ },
+ {
+  "id": "p1-109",
+  "level": 4,
+  "type": "상태(수동태 진행/완료)",
+  "scene": "호숫가 카약 대여소. 금속 거치대에 카약들이 여러 단으로 올려져 있다. 물가에 사람은 없다.",
+  "statements": [
+   "Some kayaks are being paddled across a lake.",
+   "Kayaks are being loaded onto a car.",
+   "Some kayaks are floating near a dock.",
+   "Some kayaks have been placed on a rack."
+  ],
+  "answer": 3,
+  "explanation": "정답 (D): '카약들이 거치대에 놓여 있다.' (A)와 (B)는 진행 수동태로 사람이 필요한 동작이다. (C)는 카약이 물 위가 아니라 거치대 위에 있다."
+ },
+ {
+  "id": "p1-110",
+  "level": 4,
+  "type": "상태(수동태 진행/완료)",
+  "scene": "공연 전 빈 무대. 마이크 스탠드 세 개와 대형 스피커들이 설치되어 있고 조명이 켜져 있다. 사람은 없다.",
+  "statements": [
+   "Some equipment has been set up on a stage.",
+   "Some musicians are tuning their instruments.",
+   "Speakers are being carried off the stage.",
+   "A performer is bowing to the audience."
+  ],
+  "answer": 0,
+  "explanation": "정답 (A): '무대 위에 장비가 설치되어 있다.' (B)와 (D)는 무대에서 연상되는 사람의 동작이지만 사람이 없다. (C)는 speakers(스피커)를 반복했지만 옮기는 중이 아니다."
+ },
+ {
+  "id": "p1-111",
+  "level": 5,
+  "type": "1인 동작",
+  "scene": "쇼핑몰 벽면에 한 여자가 붓으로 대형 벽화를 그리고 있다. 옆에는 접이식 사다리와 페인트 통들이 놓여 있다.",
+  "statements": [
+   "A woman is hanging a picture on a wall.",
+   "A woman is applying paint to a wall.",
+   "A woman is climbing a ladder.",
+   "A woman is prying open a can of paint."
+  ],
+  "answer": 1,
+  "explanation": "정답 (B): '벽에 페인트를 칠하고 있다.' (A)는 wall을 반복했지만 그림을 거는 동작이 아니다. (C)는 사다리가 옆에 있을 뿐 올라가고 있지 않고, (D)는 페인트 통이 보이지만 여는 중이 아니다."
+ },
+ {
+  "id": "p1-112",
+  "level": 5,
+  "type": "2인 이상 동작",
+  "scene": "공항 보안 검색대에서 한 여행객이 가방을 엑스레이 벨트 위에 올리고, 보안 요원이 모니터를 지켜보고 있다.",
+  "statements": [
+   "A security officer is opening a suitcase.",
+   "A traveler is placing a bag on a conveyor.",
+   "Passengers are boarding a plane.",
+   "Some bags are being unloaded from a cart."
+  ],
+  "answer": 1,
+  "explanation": "정답 (B): '여행객이 가방을 벨트에 올리고 있다.' (A)는 보안 검색에서 연상되는 가방 개봉이지만 요원은 모니터를 보고 있다. (C)는 공항에서 연상되는 탑승이고, (D)는 bags를 반복했지만 카트가 없다."
+ },
+ {
+  "id": "p1-113",
+  "level": 5,
+  "type": "2인 이상 동작",
+  "scene": "푸드 트럭 창구에서 요리사가 종이봉투를 내밀고 있고, 트럭 앞에 선 손님이 손을 뻗어 받으려 하고 있다.",
+  "statements": [
+   "Some customers are ordering from a menu at a table.",
+   "A cook is stepping out of a truck.",
+   "Some people are seated in a food court.",
+   "A customer is reaching for an order."
+  ],
+  "answer": 3,
+  "explanation": "정답 (D): '손님이 주문한 음식을 받으려고 손을 뻗고 있다.' (A)는 order를 반복했지만 테이블에서 주문하는 장면이 아니다. (B)는 요리사가 트럭 안에 있으므로 틀리고, (C)는 앉아 있는 사람이 없다."
+ },
+ {
+  "id": "p1-114",
+  "level": 5,
+  "type": "사물·배경",
+  "scene": "오래된 석조 건물들 사이로 시계탑 하나가 지붕들보다 높이 솟아 있다. 거리에는 사람이 없다.",
+  "statements": [
+   "A clock tower rises above the surrounding buildings.",
+   "A clock is being repaired.",
+   "People are gathering in a square.",
+   "Some buildings are being torn down."
+  ],
+  "answer": 0,
+  "explanation": "정답 (A): '시계탑이 주변 건물들보다 높이 솟아 있다.' (B)는 clock을 반복했지만 수리 중이 아니며, 진행 수동태는 작업자를 전제한다. (C)는 사람이 없고, (D)는 철거 중인 건물이 없다."
+ },
+ {
+  "id": "p1-115",
+  "level": 5,
+  "type": "사물·배경",
+  "scene": "호텔 객실 복도. 양쪽으로 객실 문들이 일정한 간격으로 늘어서 있고, 바닥에는 긴 카펫이 깔려 있다. 사람은 없다.",
+  "statements": [
+   "A housekeeper is pushing a cart.",
+   "Doors line both sides of a hallway.",
+   "A carpet is being vacuumed.",
+   "Some doors are being painted."
+  ],
+  "answer": 1,
+  "explanation": "정답 (B): '복도 양쪽에 문들이 늘어서 있다.' (A)는 호텔에서 연상되는 청소 직원이지만 사람이 없다. (C)는 carpet을 반복한 진행 수동태 함정이고, (D)도 칠하는 사람이 없다."
+ },
+ {
+  "id": "p1-116",
+  "level": 5,
+  "type": "사물·배경",
+  "scene": "경기가 없는 날의 야구장. 관중석의 빈 좌석들이 층층이 그라운드를 내려다보고 있다.",
+  "statements": [
+   "Rows of empty seats overlook a field.",
+   "Spectators are cheering in the stands.",
+   "The field is being mowed.",
+   "Some seats are being installed."
+  ],
+  "answer": 0,
+  "explanation": "정답 (A): '빈 좌석 줄들이 경기장을 내려다보고 있다.' (B)는 경기장에서 연상되는 관중이지만 좌석이 비어 있다. (C)는 field를 반복한 진행 수동태로 작업자가 없고, (D)도 설치 작업이 보이지 않는다."
+ },
+ {
+  "id": "p1-117",
+  "level": 5,
+  "type": "상태(수동태 진행/완료)",
+  "scene": "정돈된 호텔 객실. 침대 끝에 흰 수건들이 반듯하게 개어 쌓여 있다. 사람은 없다.",
+  "statements": [
+   "A bed is being made.",
+   "Some towels are hanging on a rack.",
+   "A housekeeper is folding towels.",
+   "Some towels have been folded on a bed."
+  ],
+  "answer": 3,
+  "explanation": "정답 (D): '수건들이 침대 위에 개어져 있다.' (A)는 이미 정돈된 침대를 '정돈되는 중'으로 바꾼 함정이다. (B)는 수건이 걸려 있지 않고 침대 위에 있으며, (C)는 개는 사람이 없다(완료 상태 vs 진행 동작)."
+ },
+ {
+  "id": "p1-118",
+  "level": 5,
+  "type": "상태(수동태 진행/완료)",
+  "scene": "비가 그친 식당 테라스. 의자들이 물기가 빠지도록 테이블 가장자리에 비스듬히 기대어져 있다. 손님은 없다.",
+  "statements": [
+   "Some chairs are being stacked.",
+   "Diners are seated on a terrace.",
+   "Some chairs have been tilted against the tables.",
+   "The chairs have been placed upside down on the tables."
+  ],
+  "answer": 2,
+  "explanation": "정답 (C): '의자들이 테이블에 기울여 기대어져 있다.' (A)는 쌓는 중이 아니고, (B)는 손님이 없다. (D)는 의자가 테이블 위에 뒤집혀 올려진 것이 아니라 가장자리에 비스듬히 기대어 있으므로 위치·모양이 다르다."
+ },
+ {
+  "id": "p1-119",
+  "level": 5,
+  "type": "상태(수동태 진행/완료)",
+  "scene": "자동차 정비소. 승용차 한 대가 리프트에 들려 바닥에서 높이 올라가 있다. 정비사는 보이지 않는다.",
+  "statements": [
+   "A vehicle has been raised off the ground.",
+   "A mechanic is working under a car.",
+   "A tire is being changed.",
+   "A car is being driven into a garage."
+  ],
+  "answer": 0,
+  "explanation": "정답 (A): '차량이 바닥에서 들어 올려져 있다.' (B)는 정비소에서 연상되는 정비사이지만 사람이 없다. (C)와 (D)는 진행 수동태로, 작업 중인 사람이 필요하다."
+ },
+ {
+  "id": "p1-120",
+  "level": 5,
+  "type": "상태(수동태 진행/완료)",
+  "scene": "이사 중인 사무실. 책상 위에 모니터들이 뽁뽁이(에어캡)에 싸여 있고, 테이프로 봉한 상자들이 옆에 쌓여 있다. 사람은 없다.",
+  "statements": [
+   "Some boxes are being taped shut.",
+   "Workers are unpacking some equipment.",
+   "Some equipment has been wrapped in protective material.",
+   "Some monitors have been mounted on a wall."
+  ],
+  "answer": 2,
+  "explanation": "정답 (C): '장비가 보호재로 싸여 있다.' (A)는 상자가 이미 봉해진 상태인데 '봉하는 중'이라 했고, (B)는 사람이 없으며 짐을 푸는 것도 아니다. (D)는 monitors를 반복했지만 벽에 걸려 있지 않고 책상 위에 있다."
+ }
+]
