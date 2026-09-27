@@ -13,6 +13,18 @@
   </div>
 </div>
 
+<div class="card">
+  <div class="spread">
+    <div><h2 style="margin:0">단어 시험</h2>
+      <span class="small muted">틀린 단어는 복습 카드에 들어가고, 2번 이상 틀리면 '자주 잊는 단어'로 모입니다.</span></div>
+    <div class="row">
+      <a class="btn {{ 'primary' if weak_n }}" href="{{ url_for('vocab.quiz', set='weak', n=30) }}">자주 잊는 단어 시험 ({{ weak_n }})</a>
+      <a class="btn" href="{{ url_for('vocab.quiz', set='missed', n=30) }}">최근 틀린 단어 ({{ missed_n }})</a>
+      <a class="btn" href="{{ url_for('vocab.quiz') }}">전체 시험</a>
+    </div>
+  </div>
+</div>
+
 <div class="card small muted">오늘 새로 본 단어 {{ new_today }} / {{ daily_new }}개 (하루 한도는 <a href="{{ url_for('main.settings') }}">설정</a>에서)</div>
 
 <div class="grid three" style="margin-top:14px">

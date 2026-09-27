@@ -36,7 +36,8 @@ def overview():
     cs = srs.cards()
     return render_template("vocab.html", progress=srs.level_progress(b), due=len(q["due"]), new=len(q["new"]),
                            new_today=srs.new_learned_today(), daily_new=st["daily_new_words"],
-                           starred=sum(1 for c in cs.values() if c["starred"]))
+                           starred=sum(1 for c in cs.values() if c["starred"]),
+                           weak_n=len(quiz_pool(None, None, "weak")), missed_n=len(quiz_pool(None, None, "missed")))
 
 
 @bp.route("/vocab/study")
@@ -62,6 +63,7 @@ def word_list():
     flt = request.args.get("filter", "all")
     term = request.args.get("q", "").strip().lower()
     cs = srs.cards()
+    fails = srs.fail_counts() if flt == "weak" else {}
     today = date.today().isoformat()
     rows = []
     for w in b.vocab:
@@ -78,7 +80,7 @@ def word_list():
             continue
         if flt in ("new", "learning", "mastered") and state != flt:
             continue
-        if flt == "weak" and not (c and c["lapses"] >= 2):
+        if flt == "weak" and fails.get(w["id"], 0) < srs.WEAK_MIN_FAILS:
             continue
         rows.append({**w, "state": state, "card": c, "due_today": bool(seen and c["due"] <= today)})
     st = db.get_settings()
@@ -86,30 +88,84 @@ def word_list():
                            tts={"rate": float(st["tts_rate"]), "accent": st["tts_accent"]})
 
 
+QUIZ_SETS = {"all": "전체", "weak": "자주 잊는 단어", "missed": "최근 틀린 단어", "starred": "★ 별표",
+             "learning": "학습 중"}
+QUIZ_SIZES = (15, 30, 50)
+
+
+def quiz_pool(level: int | None, tier: str | None, which: str) -> list[dict]:
+    b = bank()
+    words = [w for w in b.vocab if (not level or w["level"] == level) and (not tier or w["tier"] == tier)]
+    if which == "all":
+        return words
+    cs = srs.cards()
+    if which == "weak":
+        fails = srs.fail_counts()
+        return [w for w in words if fails.get(w["id"], 0) >= srs.WEAK_MIN_FAILS]
+    if which == "missed":
+        missed = srs.recently_missed()
+        return [w for w in words if w["id"] in missed]
+    if which == "starred":
+        return [w for w in words if cs.get(w["id"], {}).get("starred")]
+    if which == "learning":
+        return [w for w in words if _word_state(cs.get(w["id"])) == "learning"]
+    return words
+
+
 @bp.route("/vocab/quiz")
 def quiz():
     b = bank()
     level = _level_arg()
     tier = _tier_arg()
-    pool = [w for w in b.vocab if (not level or w["level"] == level) and (not tier or w["tier"] == tier)]
+    which = request.args.get("set", "all")
+    which = which if which in QUIZ_SETS else "all"
+    try:
+        n = int(request.args.get("n", "15"))
+    except ValueError:
+        n = 15
+    n = n if n in QUIZ_SIZES else 15
+    pool = quiz_pool(level, tier, which)
     rng = random.Random()
-    picks = rng.sample(pool, min(15, len(pool)))
+    # 자주 잊는·최근 틀린 단어는 많이 틀린 것부터, 나머지는 무작위
+    if which in ("weak", "missed"):
+        fails = srs.fail_counts()
+        rng.shuffle(pool)
+        pool.sort(key=lambda w: -fails.get(w["id"], 0))
+        picks = pool[:n]
+        rng.shuffle(picks)
+    else:
+        picks = rng.sample(pool, min(n, len(pool)))
+    # 오답 선택지는 같은 등급(없으면 전체)의 같은 품사 뜻에서
+    levels = {w["level"] for w in picks}
+    distract_pool = [w for w in b.vocab if w["level"] in levels] or b.vocab
     questions = []
     for w in picks:
-        same_pos = [x for x in pool if x["id"] != w["id"] and x["pos"] == w["pos"]]
-        others = same_pos if len(same_pos) >= 3 else [x for x in pool if x["id"] != w["id"]]
+        same_pos = [x for x in distract_pool if x["id"] != w["id"] and x["pos"] == w["pos"] and x["meaning"] != w["meaning"]]
+        others = same_pos if len(same_pos) >= 3 else [x for x in distract_pool if x["id"] != w["id"]]
         distract = rng.sample(others, min(3, len(others)))
         opts = [w] + distract
         rng.shuffle(opts)
         questions.append({"id": w["id"], "word": w["word"], "pos": w["pos"], "example": w["example"],
-                          "meaning": w["meaning"], "options": [o["meaning"] for o in opts],
+                          "example_ko": w["example_ko"], "meaning": w["meaning"], "tier": w["tier"],
+                          "options": [o["meaning"] for o in opts],
                           "answer": [o["id"] for o in opts].index(w["id"]), "tip": w["tip"]})
+    counts = {k: len(quiz_pool(level, tier, k)) for k in QUIZ_SETS}
     st = db.get_settings()
     return render_template("vocab_quiz.html", questions=questions, level=level, tier=tier, TIERS=TIERS,
+                           which=which, sets=QUIZ_SETS, counts=counts, n=n, sizes=QUIZ_SIZES,
                            tts={"rate": float(st["tts_rate"]), "accent": st["tts_accent"]})
 
 
-LISTEN_SETS = {"all": "전체", "new": "아직 안 본 단어", "learning": "학습 중", "weak": "자주 잊는 단어(2번 이상)",
+@bp.route("/api/vocab/quiz/answer", methods=["POST"])
+def api_quiz_answer():
+    data = request.get_json(silent=True) or {}
+    wid = str(data.get("word_id", ""))
+    if wid not in bank().vocab_by_id:
+        return jsonify(error="없는 단어"), 400
+    return jsonify(srs.quiz_answer(wid, bool(data.get("correct"))))
+
+
+LISTEN_SETS = {"all": "전체", "new": "아직 안 본 단어", "learning": "학습 중", "weak": "자주 잊는 단어(2번 이상 틀림)",
                "starred": "★ 별표"}
 AUDIO_MINUTES = (10, 30, 60)
 
@@ -132,6 +188,7 @@ def _word_state(c) -> str:
 
 def _listen_words(level: int | None, which: str, tier: str | None = None) -> list[dict]:
     cs = srs.cards()
+    fails = srs.fail_counts() if which == "weak" else {}
     out = []
     for w in sorted(bank().vocab, key=lambda w: (w["level"], w["tier"] != "core")):
         if level and w["level"] != level:
@@ -144,7 +201,7 @@ def _listen_words(level: int | None, which: str, tier: str | None = None) -> lis
             continue
         if which == "learning" and st != "learning":
             continue
-        if which == "weak" and not (c and c["lapses"] >= 2):
+        if which == "weak" and fails.get(w["id"], 0) < srs.WEAK_MIN_FAILS:
             continue
         if which == "starred" and not (c and c["starred"]):
             continue

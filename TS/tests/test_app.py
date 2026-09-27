@@ -327,3 +327,36 @@ def test_every_level_has_core_and_stretch_words(bank):
     stretch_first = srs.queue(bank, 2, 5, tier="stretch")["new"]
     assert stretch_first and all(w["tier"] == "stretch" for w in stretch_first)
     assert all(w["tier"] == "core" for w in srs.queue(bank, 2, 5)["new"])    # 새 단어는 필수부터
+
+
+def test_vocab_quiz_records_and_collects_weak_words(client, bank):
+    h = _csrf(client)
+    wid = next(w["id"] for w in bank.vocab if w["level"] == 3 and w["tier"] == "stretch")
+    # 한 번 틀림 → 복습 카드(내일), 최근 틀린 단어
+    r = client.post("/api/vocab/quiz/answer", headers=h, json={"word_id": wid, "correct": False})
+    assert r.json["scheduled"] is True
+    assert srs.cards()[wid]["due"] == (date.today() + timedelta(days=1)).isoformat()
+    assert wid in srs.recently_missed() and srs.fail_counts()[wid] == 1
+    # 두 번 틀리면 자주 잊는 단어
+    client.post("/api/vocab/quiz/answer", headers=h, json={"word_id": wid, "correct": False})
+    page = client.get("/vocab/quiz?level=3&tier=stretch&set=weak").data.decode()
+    assert bank.vocab_by_id[wid]["word"] in page
+    # 맞히면 최근 틀린 단어에서는 빠지지만 자주 잊는 단어에는 남는다
+    r = client.post("/api/vocab/quiz/answer", headers=h, json={"word_id": wid, "correct": True})
+    assert r.json["scheduled"] is False
+    assert wid not in srs.recently_missed() and srs.fail_counts()[wid] == 2
+    assert client.post("/api/vocab/quiz/answer", headers=h, json={"word_id": "nope"}).status_code == 400
+
+
+@pytest.mark.parametrize("q", ["set=weak", "set=missed", "set=starred", "set=learning", "n=50&level=2&tier=core", "n=30"])
+def test_vocab_quiz_pages(client, q):
+    r = client.get(f"/vocab/quiz?{q}")
+    assert r.status_code == 200
+
+
+def test_vocab_quiz_size_and_distractors(client):
+    html = client.get("/vocab/quiz?n=30&level=4").data.decode()
+    qs = json.loads(re.search(r'id="vq-data">(.*?)</script>', html, re.S).group(1))
+    assert len(qs) == 30 and len({q["id"] for q in qs}) == 30
+    for q in qs:
+        assert len(q["options"]) == 4 and len(set(q["options"])) == 4 and q["options"][q["answer"]] == q["meaning"]

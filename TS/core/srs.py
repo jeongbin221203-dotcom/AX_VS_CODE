@@ -58,6 +58,41 @@ def review(word_id: str, grade: int, today: date | None = None) -> dict:
     return {"word_id": word_id, "interval": interval, "due": due, "ef": ef}
 
 
+WEAK_MIN_FAILS = 2          # 이만큼 틀리면(카드 '다시' + 퀴즈 오답) '자주 잊는 단어'
+
+
+def quiz_answer(word_id: str, correct: bool) -> dict:
+    """퀴즈 한 문제 기록. 틀리면 복습 카드에 '다시'로 넣어 내일 다시 나오게 한다."""
+    with db.connect() as con:
+        con.execute("INSERT INTO vocab_quiz_log(word_id, correct, answered_at) VALUES (?,?,?)",
+                    (word_id, int(bool(correct)), db.now()))
+    if correct:
+        return {"scheduled": False}
+    r = review(word_id, 0)
+    return {"scheduled": True, "due": r["due"]}
+
+
+def fail_counts() -> dict[str, int]:
+    """단어별 틀린 횟수 (카드에서 '다시' + 퀴즈 오답; 퀴즈 오답은 카드 기록에도 남으므로 카드 기록만 센다)."""
+    with db.connect() as con:
+        return {r[0]: r[1] for r in con.execute(
+            "SELECT word_id, COUNT(*) FROM vocab_log WHERE grade = 0 GROUP BY word_id")}
+
+
+def recently_missed() -> set[str]:
+    """마지막으로 본 결과가 '틀림'인 단어 (카드 '다시' 또는 퀴즈 오답 뒤에 아직 못 맞힌 단어)."""
+    with db.connect() as con:
+        rows = con.execute(
+            "SELECT word_id, at, ok FROM ("
+            " SELECT word_id, reviewed_at AS at, grade > 0 AS ok FROM vocab_log"
+            " UNION ALL SELECT word_id, answered_at AS at, correct AS ok FROM vocab_quiz_log"
+            ") ORDER BY at").fetchall()
+    last: dict[str, int] = {}
+    for wid, _, ok in rows:
+        last[wid] = ok
+    return {w for w, ok in last.items() if not ok}
+
+
 def toggle_star(word_id: str) -> bool:
     with db.connect() as con:
         card = con.execute("SELECT starred FROM vocab_cards WHERE word_id = ?", (word_id,)).fetchone()

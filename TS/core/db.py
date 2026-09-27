@@ -97,6 +97,15 @@ CREATE TABLE IF NOT EXISTS vocab_log (
     reviewed_at TEXT NOT NULL
 );
 CREATE INDEX IF NOT EXISTS idx_vocab_log_at ON vocab_log(reviewed_at);
+
+-- 단어 뜻 고르기 퀴즈 기록 (틀리면 vocab_log 에도 '다시'로 남아 복습 카드에 들어간다)
+CREATE TABLE IF NOT EXISTS vocab_quiz_log (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    word_id     TEXT NOT NULL,
+    correct     INTEGER NOT NULL,
+    answered_at TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_vocab_quiz_word ON vocab_quiz_log(word_id);
 """
 
 

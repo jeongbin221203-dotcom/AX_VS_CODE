@@ -1,35 +1,61 @@
 {% extends "base.html" %}
-{% block title %}뜻 고르기 퀴즈{% endblock %}
+{% block title %}단어 시험{% endblock %}
 {% block content %}
 <div class="page-head">
-  <div><h1>뜻 고르기 퀴즈 {% if level %}{{ grade_badge(level) }}{% endif %}</h1>
-    <div class="muted small">무작위 {{ questions|length }}단어 · 같은 품사의 뜻을 오답으로 섞습니다. 결과는 카드 일정에 영향을 주지 않습니다.</div></div>
-  <div class="seg">
-    <a href="{{ url_for('vocab.quiz', tier=tier or '') }}" class="{{ 'on' if not level }}">전체</a>
-    {% for gr in GRADES %}<a href="{{ url_for('vocab.quiz', level=gr.level, tier=tier or '') }}" class="{{ 'on' if level == gr.level }}">{{ gr.name }}</a>{% endfor %}
-  </div>
-  <div class="seg">
-    <a href="{{ url_for('vocab.quiz', level=level or '') }}" class="{{ 'on' if not tier }}">필수+도전</a>
-    {% for k, v in TIERS.items() %}<a href="{{ url_for('vocab.quiz', level=level or '', tier=k) }}" class="{{ 'on' if tier == k }}">{{ v }}</a>{% endfor %}
-  </div>
+  <div><h1>단어 시험 {% if level %}{{ grade_badge(level) }}{% endif %}{% if tier %} <span class="tag ok">{{ TIERS[tier] }}</span>{% endif %}</h1>
+    <div class="muted small">뜻 고르기 · 틀린 단어는 바로 복습 카드에 들어가 내일 다시 나옵니다. 2번 이상 틀리면 '자주 잊는 단어'로 모입니다.</div></div>
+  <form class="row" method="get">
+    <select name="level" data-autosubmit aria-label="등급">
+      <option value="">모든 등급</option>
+      {% for gr in GRADES %}<option value="{{ gr.level }}" {{ 'selected' if level == gr.level }}>{{ gr.name }}</option>{% endfor %}
+    </select>
+    <select name="tier" data-autosubmit aria-label="필수/도전">
+      <option value="">필수 + 도전</option>
+      {% for k, v in TIERS.items() %}<option value="{{ k }}" {{ 'selected' if tier == k }}>{{ v }} 단어</option>{% endfor %}
+    </select>
+    <select name="set" data-autosubmit aria-label="시험 범위">
+      {% for k, v in sets.items() %}<option value="{{ k }}" {{ 'selected' if which == k }}>{{ v }} ({{ counts[k] }})</option>{% endfor %}
+    </select>
+    <select name="n" data-autosubmit aria-label="문항 수">
+      {% for s in sizes %}<option value="{{ s }}" {{ 'selected' if n == s }}>{{ s }}문제</option>{% endfor %}
+    </select>
+  </form>
 </div>
+
+{% if questions %}
 <div class="card" style="max-width:680px;margin:0 auto" id="vq">
   <div class="spread small muted"><span id="vq-prog"></span><span id="vq-score"></span></div>
   <div class="flash-card" style="min-height:0;padding:16px 0">
     <div class="word" id="vq-word"></div>
-    <div class="pos" id="vq-pos"></div>
+    <div class="pos"><span id="vq-pos"></span> <span class="tag ok hidden" id="vq-tier">도전</span> <span class="tag hidden" id="vq-round">다시 풀기</span></div>
   </div>
   <div class="choices" id="vq-choices"></div>
   <div class="explain hidden" id="vq-explain"></div>
   <div class="quiz-foot"><span></span><button class="btn primary hidden" id="vq-next">다음 <span class="kbd">Enter</span></button></div>
 </div>
-<div class="card empty hidden" id="vq-done" style="max-width:680px;margin:0 auto">
+<div class="card hidden" id="vq-done" style="max-width:680px;margin:0 auto">
   <h2 id="vq-final"></h2>
-  <div id="vq-missed" class="small" style="text-align:left"></div>
-  <a class="btn primary" href="{{ request.full_path }}">다시 하기</a>
+  <p class="small" id="vq-note"></p>
+  <div id="vq-missed" class="small"></div>
+  <div class="row" style="margin-top:14px">
+    <button class="btn primary hidden" id="vq-retry">틀린 단어만 다시 풀기</button>
+    <a class="btn" href="{{ url_for('vocab.study') }}">복습 카드로</a>
+    <a class="btn" href="{{ request.full_path }}">새 문제로 다시</a>
+    <a class="btn" href="{{ url_for('vocab.quiz', level=level or '', tier=tier or '', set='weak', n=n) }}">자주 잊는 단어 시험</a>
+  </div>
 </div>
 <script type="application/json" id="vq-data">{{ questions|tojson }}</script>
 <script type="application/json" id="tts-data">{{ tts|tojson }}</script>
+{% else %}
+<div class="card empty">
+  {% if which == 'weak' %}아직 2번 이상 틀린 단어가 없습니다. 시험이나 카드에서 틀린 단어가 쌓이면 여기에 모입니다.
+  {% elif which == 'missed' %}최근에 틀린 단어가 없습니다.
+  {% elif which == 'starred' %}별표한 단어가 없습니다. 카드·목록·듣기에서 ★를 누르면 모입니다.
+  {% elif which == 'learning' %}학습 중인 단어가 없습니다. 단어 카드로 먼저 공부해 보세요.
+  {% else %}조건에 맞는 단어가 없습니다.{% endif %}
+  <div style="margin-top:12px"><a class="btn primary" href="{{ url_for('vocab.quiz', level=level or '', tier=tier or '') }}">전체 단어로 시험</a></div>
+</div>
+{% endif %}
 {% endblock %}
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/tts.js') }}"></script>
