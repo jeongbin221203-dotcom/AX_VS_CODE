@@ -65,12 +65,15 @@
     const w = cur();
     const accent = D.tts.accent === "mix" ? "us" : D.tts.accent;
     const segs = [];
+    const ACC = [["us", "미국"], ["uk", "영국"], ["au", "호주"]];     // 반복할 때 미국 → 영국 → 호주
     for (let i = 0; i < o.repeats; i++) {
-      segs.push({ text: clean(w.word), gender: i % 2 ? "male" : "female", rate: o.rateEn, pause: o.gap, onStart: () => show(`영어 ${i + 1}/${o.repeats}`) });
+      const [acc, accName] = ACC[i % 3];
+      segs.push({ text: clean(w.word), gender: (i + order[pos]) % 2 ? "male" : "female", accent: acc, rate: o.rateEn,
+                  pause: o.gap, onStart: () => show(`영어 ${i + 1}/${o.repeats} · ${accName}`) });
       if (o.spell && i === 0 && !/\s/.test(w.word)) segs.push({ text: clean(w.word).toUpperCase().split("").join(", "), gender: "female", rate: o.rateEn, pause: o.gap });
     }
     segs.push({ text: clean(w.meaning) || w.meaning, lang: "ko", rate: o.rateKo, pause: o.example ? o.gap : 0, onStart: () => show("뜻") });
-    if (o.example) segs.push({ text: w.example, gender: "female", rate: o.rateEn, pause: 0, onStart: () => show("예문") });
+    if (o.example) segs.push({ text: w.example, gender: "female", accent: ACC[order[pos] % 3][0], rate: o.rateEn, pause: 0, onStart: () => show("예문") });
     await TTS.play(segs, { rate: o.rateEn, accent });
     return my === token;
   }
@@ -143,17 +146,33 @@
     } catch (e) { /* 미지원 */ }
   }
 
-  // 음성 파일 링크에 반복·예문 옵션 붙이기
-  const af = $("audio-opts");
-  if (af) document.addEventListener("click", e => {
-    const a = e.target.closest("[data-audio-link]");
-    if (!a) return;
-    const u = new URL(a.href);
-    u.searchParams.set("repeats", af.repeats.value);
-    if (af.example.checked) u.searchParams.set("example", "1"); else u.searchParams.delete("example");
-    a.href = u.toString();
-    a.textContent = "만드는 중…";
-    setTimeout(() => { a.textContent = "받기"; }, 8000);
+  // ---- 1시간 음성 파일: 만들기 → 진행률 → 재생·받기
+  async function makeFile(btn) {
+    const row = btn.closest("tr");
+    const box = row.querySelector(".audio-job");
+    btn.disabled = true;
+    try {
+      let job = await TS.post("/api/vocab/audio/prepare", { ...D.audio, chunk: Number(btn.dataset.make) });
+      while (job.state === "running") {
+        box.textContent = job.total ? `음성 만드는 중… ${job.done} / ${job.total}` : "준비 중…";
+        await new Promise(r => setTimeout(r, 1500));
+        const res = await fetch(`/api/vocab/audio/status/${job.key}`);
+        job = await res.json();
+        if (!res.ok) throw new Error(job.error || "상태 확인 실패");
+      }
+      if (job.state === "error") throw new Error(job.error);
+      box.innerHTML = `<audio controls preload="none" src="${job.url}" style="width:100%;margin-top:6px"></audio>` +
+        `<div class="row" style="margin-top:4px"><a class="btn small primary" href="${job.download}">⬇ 받기</a>` +
+        `<span class="muted">약 ${job.minutes}분 · ${job.mb}MB · ${TS.esc(job.name)}</span></div>`;
+      btn.classList.add("hidden");
+    } catch (e) {
+      box.textContent = "실패: " + e.message;
+      btn.disabled = false;
+    }
+  }
+  document.addEventListener("click", e => {
+    const b = e.target.closest("[data-make]");
+    if (b) makeFile(b);
   });
 
   TTS.load();

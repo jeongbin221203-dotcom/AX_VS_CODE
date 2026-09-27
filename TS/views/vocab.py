@@ -111,7 +111,17 @@ def quiz():
 
 LISTEN_SETS = {"all": "전체", "new": "아직 안 본 단어", "learning": "학습 중", "weak": "자주 잊는 단어(2번 이상)",
                "starred": "★ 별표"}
-AUDIO_CHUNK = 50
+AUDIO_MINUTES = (10, 30, 60)
+
+
+def _audio_opts():
+    try:
+        minutes = int(request.args.get("minutes", "60"))
+        repeats = int(request.args.get("repeats", "3"))
+    except ValueError:
+        minutes, repeats = 60, 3
+    return {"minutes": minutes if minutes in AUDIO_MINUTES else 60, "repeats": max(1, min(repeats, 5)),
+            "example": request.args.get("example") == "1", "fill": request.args.get("fill", "1") == "1"}
 
 
 def _word_state(c) -> str:
@@ -152,35 +162,87 @@ def listen():
     tier = _tier_arg()
     words = _listen_words(level, which, tier)
     st = db.get_settings()
-    chunks = [(i // AUDIO_CHUNK + 1, i + 1, min(i + AUDIO_CHUNK, len(words))) for i in range(0, len(words), AUDIO_CHUNK)]
+    ao = _audio_opts()
+    files = audio.plan(words, ao["minutes"], repeats=ao["repeats"], example=ao["example"], fill=ao["fill"],
+                       seed=f"{level}-{which}-{tier}")
+    spw = audio.seconds_per_word(ao["repeats"], ao["example"])
+    chunks, start = [], 1
+    for n, f in enumerate(files, 1):
+        new = min(len(f), max(0, len(words) - start + 1))          # 채우기로 다시 넣은 단어는 제외한 새 단어 수
+        chunks.append({"n": n, "first": start, "last": start + new - 1, "count": len(f), "new": new,
+                       "minutes": round(len(f) * spw / 60), "head": f[0]["word"], "tail": f[-1]["word"]})
+        start += new
     return render_template("vocab_listen.html", words=words, level=level, which=which, sets=LISTEN_SETS,
                            tier=tier, TIERS=TIERS,
-                           chunks=chunks, audio_ok=audio.available(),
+                           chunks=chunks, audio_ok=audio.available(), ao=ao, minutes_opts=AUDIO_MINUTES,
+                           mp3=audio.lameenc is not None,
                            tts={"rate": float(st["tts_rate"]), "accent": st["tts_accent"]})
 
 
-@bp.route("/vocab/audio")
-def audio_file():
-    """단어 묶음(50개)을 음성 파일로 내려준다 — 휴대폰에서 화면을 끈 채 듣기용."""
-    level = _level_arg()
-    which = request.args.get("set", "all")
-    which = which if which in LISTEN_SETS else "all"
+def _audio_request(args) -> tuple[list[dict], dict, str]:
+    """요청 인자 → (이 파일에 들어갈 단어, 옵션, 파일 이름)."""
     try:
-        chunk = max(1, int(request.args.get("chunk", "1")))
-        repeats = int(request.args.get("repeats", "3"))
-    except ValueError:
-        chunk, repeats = 1, 3
-    example = request.args.get("example") == "1"
-    tier = _tier_arg()
-    words = _listen_words(level, which, tier)[(chunk - 1) * AUDIO_CHUNK: chunk * AUDIO_CHUNK]
-    try:
-        path = audio.build(words, Path(current_app.config["DB_PATH"]).parent / "audio", repeats=repeats, example=example)
-    except audio.AudioError as e:
-        flash(str(e), "error")
-        return redirect(url_for("vocab.listen", level=level or "", set=which, tier=tier or ""))
-    grade = (f"L{level}" if level else "all") + (f"_{tier}" if tier else "")
-    name = f"TOEIC_vocab_{grade}_{which}_{(chunk - 1) * AUDIO_CHUNK + 1:04d}-{(chunk - 1) * AUDIO_CHUNK + len(words):04d}.wav"
-    return send_file(path, mimetype="audio/wav", as_attachment=True, download_name=name)
+        level = int(args.get("level") or 0) or None
+        chunk = max(1, int(args.get("chunk") or 1))
+        minutes = int(args.get("minutes") or 60)
+        repeats = int(args.get("repeats") or 3)
+    except (TypeError, ValueError):
+        level, chunk, minutes, repeats = None, 1, 60, 3
+    level = level if level in (1, 2, 3, 4, 5) else None
+    which = args.get("set") if args.get("set") in LISTEN_SETS else "all"
+    tier = args.get("tier") if args.get("tier") in TIERS else None
+    ao = {"minutes": minutes if minutes in AUDIO_MINUTES else 60, "repeats": max(1, min(repeats, 5)),
+          "example": str(args.get("example")) in ("1", "true", "True"),
+          "fill": str(args.get("fill", "1")) in ("1", "true", "True")}
+    files = audio.plan(_listen_words(level, which, tier), ao["minutes"], repeats=ao["repeats"],
+                       example=ao["example"], fill=ao["fill"], seed=f"{level}-{which}-{tier}")
+    words = files[chunk - 1] if chunk <= len(files) else []
+    grade = (bank_grade_name(level) if level else "전체") + (f"_{TIERS[tier]}" if tier else "")
+    name = f"토익단어_{grade}_{ao['minutes']}분_{chunk:02d}.mp3"
+    return words, ao, name
+
+
+def bank_grade_name(level: int) -> str:
+    return {1: "Orange", 2: "Brown", 3: "Green", 4: "Blue", 5: "Gold"}[level]
+
+
+@bp.route("/api/vocab/audio/prepare", methods=["POST"])
+def audio_prepare():
+    """1시간짜리 음성 파일 만들기 시작 (처음엔 1~2분, 만든 뒤에는 바로)."""
+    words, ao, name = _audio_request(request.get_json(silent=True) or {})
+    if not words:
+        return jsonify(error="단어가 없습니다."), 400
+    if not audio.available():
+        return jsonify(error="음성 파일 기능에 필요한 패키지(edge-tts, lameenc)가 설치되지 않았습니다."), 400
+    job = audio.start_job(words, Path(current_app.config["DB_PATH"]).parent / "audio",
+                          repeats=ao["repeats"], example=ao["example"], name=name)
+    return jsonify(_job_view(job))
+
+
+@bp.route("/api/vocab/audio/status/<key>")
+def audio_status(key: str):
+    job = audio.get_job(key)
+    if not job:
+        return jsonify(error="작업이 없습니다. 다시 만들어 주세요."), 404
+    return jsonify(_job_view(job))
+
+
+def _job_view(job: dict) -> dict:
+    out = {k: job.get(k) for k in ("key", "state", "done", "total", "error", "name", "minutes", "mb")}
+    if job["state"] == "done":
+        out["url"] = url_for("vocab.audio_file", key=job["key"])
+        out["download"] = url_for("vocab.audio_file", key=job["key"], dl=1)
+    return out
+
+
+@bp.route("/vocab/audio/<key>.mp3")
+def audio_file(key: str):
+    """만든 음성 파일: 바로 재생(스트리밍) 또는 ?dl=1 로 내려받기."""
+    job = audio.get_job(key)
+    if not job or job["state"] != "done" or not Path(job["path"]).exists():
+        return jsonify(error="파일이 없습니다. 듣기 화면에서 다시 만들어 주세요."), 404
+    return send_file(job["path"], mimetype="audio/mpeg", as_attachment=request.args.get("dl") == "1",
+                     download_name=job["name"], conditional=True)
 
 
 @bp.route("/api/vocab/review", methods=["POST"])

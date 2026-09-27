@@ -5,7 +5,7 @@
 <div class="page-head">
   <div>
     <h1>단어 듣기 <span class="muted small">운전·이동 중</span></h1>
-    <div class="muted small">영어 단어 <b id="ls-rep-label">3</b>번 → 한국어 뜻 → 다음 단어. <b>정지</b>를 누를 때까지 계속 반복합니다.</div>
+    <div class="muted small">영어 단어 <b id="ls-rep-label">3</b>번(미국 → 영국 → 호주 발음) → 한국어 뜻 → 다음 단어. <b>정지</b>를 누를 때까지 계속 반복합니다.</div>
   </div>
   <form class="row" method="get">
     <select name="level" data-autosubmit aria-label="등급">
@@ -64,29 +64,37 @@
   </div>
 
   <div class="card">
-    <h2>화면 꺼도 듣기 — 음성 파일 받기</h2>
-    <p class="small">휴대폰 브라우저는 화면이 꺼지면 음성이 멈춥니다. 운전할 때는 아래 파일을 받아 휴대폰 음악 앱으로 틀어 두세요.
-      (50단어씩 한 파일, 약 5~6분 · WAV 약 10MB · Windows 내장 음성으로 만듦)</p>
+    <h2>화면 꺼도 듣기 — 1시간 음성 파일</h2>
+    <p class="small">휴대폰 브라우저 음성은 화면이 꺼지면 멈춥니다. 운전할 때는 아래 <b>음성 파일</b>을 쓰세요.
+      파일 재생은 화면이 꺼져도 계속됩니다. 휴대폰에서 <b>재생</b>을 누르거나 <b>받기</b>로 저장해 음악 앱으로 들으세요.</p>
     {% if audio_ok %}
-    <form class="row" id="audio-opts">
-      <label class="small">반복 <select name="repeats">{% for n in [1, 2, 3, 4] %}<option value="{{ n }}" {{ 'selected' if n == 3 }}>{{ n }}번</option>{% endfor %}</select></label>
-      <label class="small"><input type="checkbox" name="example" value="1"> 예문 포함</label>
+    <form class="row" id="audio-opts" method="get">
+      <input type="hidden" name="level" value="{{ level or '' }}"><input type="hidden" name="set" value="{{ which }}"><input type="hidden" name="tier" value="{{ tier or '' }}">
+      <label class="small">길이 <select name="minutes" data-autosubmit>{% for m in minutes_opts %}<option value="{{ m }}" {{ 'selected' if ao.minutes == m }}>{{ '1시간' if m == 60 else m ~ '분' }}</option>{% endfor %}</select></label>
+      <label class="small">반복 <select name="repeats" data-autosubmit>{% for n in [1, 2, 3, 4] %}<option value="{{ n }}" {{ 'selected' if ao.repeats == n }}>{{ n }}번</option>{% endfor %}</select></label>
+      <label class="small"><input type="checkbox" name="example" value="1" data-autosubmit {{ 'checked' if ao.example }}> 예문 포함</label>
+      <input type="hidden" name="fill" value="0">
+      <label class="small"><input type="checkbox" name="fill" value="1" data-autosubmit {{ 'checked' if ao.fill }}> 짧으면 다시 섞어서 길이 채우기</label>
     </form>
-    <div class="table-wrap" style="max-height:320px;overflow-y:auto;margin-top:8px">
+    <div class="table-wrap" style="max-height:420px;overflow-y:auto;margin-top:8px">
     <table class="small"><tbody>
-      {% for n, a, b in chunks %}
-        <tr><td>{{ n }}번 파일</td><td class="num">{{ a }}~{{ b }}번째 단어</td><td class="muted">{{ words[a - 1].word }} … {{ words[b - 1].word }}</td>
-          <td class="r"><a class="btn small" data-audio-link href="{{ url_for('vocab.audio_file', level=level or '', set=which, tier=tier or '', chunk=n) }}">받기</a></td></tr>
+      {% for c in chunks %}
+        <tr data-chunk="{{ c.n }}">
+          <td><b>{{ c.n }}번 파일</b> <span class="muted">약 {{ c.minutes }}분</span>
+            <div class="muted">{% if c.new %}{{ c.first }}~{{ c.last }}번째 단어{% endif %}{% if c.count > c.new %} + 다시 듣기 {{ c.count - c.new }}개{% endif %} · {{ c.head }} …</div>
+            <div class="audio-job small"></div></td>
+          <td class="r"><button class="btn small primary" data-make="{{ c.n }}">만들기</button></td>
+        </tr>
       {% endfor %}
     </tbody></table>
     </div>
-    <p class="small muted">처음 받을 때 몇 초 걸립니다. 같은 설정이면 다음부터는 바로 받습니다.</p>
+    <p class="small muted">처음 만들 때 1~2분 걸립니다(자연스러운 온라인 음성을 받아 옴). 한 번 만든 파일은 바로 재생·저장됩니다.</p>
     {% else %}
-      <div class="empty">음성 파일 만들기는 Windows에서만 됩니다.</div>
+      <div class="empty">음성 파일 기능에 필요한 패키지가 없습니다. <code>pip install -r requirements.txt</code></div>
     {% endif %}
   </div>
 </div>
-<script type="application/json" id="ls-data">{{ {"words": words, "tts": tts, "key": (level or 0)|string + "-" + which + "-" + (tier or "all")}|tojson }}</script>
+<script type="application/json" id="ls-data">{{ {"words": words, "tts": tts, "key": (level or 0)|string + "-" + which + "-" + (tier or "all"), "audio": {"level": level or "", "set": which, "tier": tier or "", "minutes": ao.minutes, "repeats": ao.repeats, "example": ao.example, "fill": ao.fill}}|tojson }}</script>
 {% else %}
 <div class="card empty">이 조건에 해당하는 단어가 없습니다. 범위를 '전체'로 바꿔 보세요.</div>
 {% endif %}

@@ -264,19 +264,54 @@ def test_settings_validation(client):
     assert s["target_score"] == "900" and s["tts_rate"] == "1.5" and s["tts_accent"] == "mix"
 
 
-def test_listen_audio_download(client, monkeypatch, tmp_path):
+def test_listen_audio_one_hour_files(client, monkeypatch, tmp_path):
     from core import audio
+    built = {}
 
     def fake_build(words, out_dir, **kw):
-        assert len(words) == 50 and kw["repeats"] == 2 and kw["example"] is True
-        f = tmp_path / "x.wav"
-        f.write_bytes(b"RIFF" + b"0" * 2000)
+        built["n"], built["kw"] = len(words), kw
+        f = tmp_path / "x.mp3"
+        f.write_bytes(bytes([0xFF, 0xF3, 0x64, 0xC4]) + b"0" * 2000)
         return f
     monkeypatch.setattr(audio, "build", fake_build)
     monkeypatch.setattr(audio, "available", lambda: True)
-    r = client.get("/vocab/audio?level=1&set=all&chunk=2&repeats=2&example=1")
-    assert r.status_code == 200 and r.mimetype == "audio/wav"
-    assert "0051-0100" in r.headers["Content-Disposition"]
+    monkeypatch.setattr(audio, "duration_sec", lambda p: 3600)
+    h = _csrf(client)
+    # 한 등급(약 360단어)은 1시간이 안 되므로 다시 섞어 넣어 1시간을 채운다
+    per_hour = int(3600 / audio.seconds_per_word(3, False))
+    r = client.post("/api/vocab/audio/prepare", headers=h, json={"level": 2, "set": "all", "minutes": 60, "repeats": 3, "chunk": 1})
+    assert r.status_code == 200
+    job = r.json
+    for _ in range(50):
+        if job["state"] != "running":
+            break
+        import time
+        time.sleep(0.05)
+        job = client.get(f"/api/vocab/audio/status/{job['key']}").json
+    assert job["state"] == "done", job
+    assert built["n"] == per_hour and built["kw"]["repeats"] == 3
+    r = client.get(job["download"])
+    assert r.status_code == 200 and r.mimetype == "audio/mpeg" and "attachment" in r.headers["Content-Disposition"]
+    assert client.get(job["url"]).headers.get("Content-Disposition", "").startswith("inline")
+    page = client.get("/vocab/listen?level=2&minutes=60").data.decode()
+    assert "1번 파일" in page and "2번 파일" not in page
+
+
+def test_audio_plan_splits_and_fills():
+    from core import audio
+    words = [{"id": f"w{i}", "word": "a", "meaning": "b"} for i in range(1000)]
+    per = int(3600 / audio.seconds_per_word(3, False))
+    files = audio.plan(words, 60, repeats=3)
+    assert all(len(f) == per for f in files) and len(files) == -(-1000 // per)
+    assert [w["id"] for f in files for w in f][:1000] == [w["id"] for w in words]      # 순서대로, 빠짐없이
+    assert len(audio.plan(words[:10], 10, repeats=3, fill=False)[0]) == 10
+
+
+def test_audio_segments_rotate_accents():
+    from core import audio
+    segs = audio._segments([{"word": "submit", "meaning": "제출하다", "example": "Submit it."}], 3, True)
+    voices = [v for _, v in segs]
+    assert [v[:5] for v in voices[:3]] == ["en-US", "en-GB", "en-AU"] and voices[3].startswith("ko-KR") and voices[-1] == "gap"
 
 
 def test_audio_text_cleaning():
