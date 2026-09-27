@@ -509,3 +509,14 @@ def test_toefl_vocab_pages(tclient):
     assert tclient.post("/api/vocab/review", headers=h, json={"word_id": "tv-0001", "grade": 4}).status_code == 400
     # 토익 단어 화면은 그대로
     assert "등급별 단어" in tclient.get("/vocab").data.decode()
+
+
+def test_all_python_files_compile_and_gunicorn_config():
+    """배포 서버(gunicorn)가 읽는 설정 파일까지 모든 .py 파일이 문법 오류 없이 읽혀야 한다."""
+    for p in ROOT.rglob("*.py"):
+        if "__pycache__" in p.parts:
+            continue
+        compile(p.read_text(encoding="utf-8"), str(p), "exec")
+    conf = {}
+    exec((ROOT / "gunicorn.conf.py").read_text(encoding="utf-8"), conf)
+    assert conf["workers"] == 1 and conf["worker_class"] == "gthread" and conf["threads"] >= 2
