@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf, table %}
+{% block content %}
+<div class="metrics m3">
+  <div class="metric"><div class="metric-label">현재 마감</div><div class="metric-value">{{ closed ~ '월까지' if closed else '없음' }}</div></div>
+  <div class="metric"><div class="metric-label">다음 마감 대상</div><div class="metric-value">{{ next_ym }}</div></div>
+  <div class="metric"><div class="metric-label">SAP 연동</div><div class="metric-value">{{ 'ON' if g.sap_on else 'OFF' }}</div>
+    {% if g.sap_on %}<div class="metric-delta">그 달 거래가 모두 SAP에 전기돼야 마감됩니다</div>{% endif %}</div>
+</div>
+
+<section class="card">
+  <h3>월 마감</h3>
+  <p class="muted small">마감하면 그 달까지의 일자로는 입출고·취소를 등록할 수 없고, 월말 재고가 저장됩니다.
+     잘못된 거래는 열린 기간에 취소 거래로 바로잡습니다. 진행 중인 달은 마감할 수 없습니다.</p>
+  {% if not scope_all() %}
+  <div class="alert alert-info">월 마감은 회사 전체에 적용되어 모든 창고 권한이 있는 관리자만 할 수 있습니다.</div>
+  {% elif next_ym < today().strftime('%Y-%m') %}
+  <form class="row-actions" method="post" action="{{ url_for('periods.close') }}">
+    {{ csrf() }}
+    <input type="hidden" name="ym" value="{{ next_ym }}">
+    <label class="check"><input type="checkbox" required> {{ next_ym }}월 마감을 확인했습니다.</label>
+    <button class="btn btn-primary">{{ next_ym }}월 마감</button>
+  </form>
+  {% else %}
+  <div class="alert alert-info">{{ next_ym }}월은 진행 중입니다. 달이 끝난 뒤 마감할 수 있습니다.</div>
+  {% endif %}
+</section>
+
+{% if can('ADMIN') and closed %}
+<details class="card">
+  <summary>마감 해제 (시스템관리자)</summary>
+  <form class="row-actions" method="post" action="{{ url_for('periods.reopen') }}">
+    {{ csrf() }}
+    <label class="grow">해제 사유 (감사로그에 남습니다)<input name="reason" required></label>
+    <label class="check"><input type="checkbox" name="confirm" value="1" required> {{ closed }}월 마감을 해제합니다.</label>
+    <button class="btn btn-danger">해제</button>
+  </form>
+</details>
+{% endif %}
+
+<h3>마감 이력</h3>
+{{ table(history, "아직 마감한 달이 없습니다.") }}
+
+{% if snapshot %}
+<h3>{{ closed }}월 말 재고 (마감 스냅샷)</h3>
+{{ table(snapshot) }}
+{% endif %}
+{% endblock %}

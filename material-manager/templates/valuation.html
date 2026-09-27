@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% from "_macros.html" import metric, table, download %}
+{% block content %}
+<form class="toolbar" method="get">
+  <label>기준월<input type="month" name="ym" value="{{ ym }}"></label>
+  <label>평가 방법
+    <select name="method">{% for k, v in methods.items() %}<option value="{{ k }}" {{ 'selected' if k == method }}>{{ v }}</option>{% endfor %}</select>
+  </label>
+  <button class="btn btn-primary">조회</button>
+</form>
+<p class="muted small">{{ start }} ~ {{ end }} · 자재 × 플랜트 단위 평가. 입고는 입고 단가, 출고·조정(−)은 {{ '현재 평균단가' if method == 'MAVG' else '먼저 들어온 층부터' }}로 계산합니다.
+  취소 거래는 원거래 금액을 그대로 되돌리고, 같은 플랜트 안의 창고 이동은 금액이 바뀌지 않습니다. 월 마감 때 평가 상태가 저장되어 지난달은 고정됩니다.</p>
+
+<div class="metrics m4">
+  {{ metric("기초 재고자산", "₩ {:,.0f}".format(totals.open_value)) }}
+  {{ metric("입고 금액", "₩ {:,.0f}".format(totals.receipts)) }}
+  {{ metric("출고 원가", "₩ {:,.0f}".format(totals.issues), "조정 ₩ {:+,.0f}".format(totals.adjustments)) }}
+  {{ metric("기말 재고자산", "₩ {:,.0f}".format(totals.close_value)) }}
+</div>
+{% if warn_count %}
+  <div class="alert alert-warning">평가 시점보다 재고가 모자란 출고 {{ warn_count }}건은 마지막 단가로 평가했습니다 (과거 일자 입력 등).
+    <details><summary>보기</summary>{% for w in warnings %}<div class="small">{{ w }}</div>{% endfor %}</details></div>
+{% endif %}
+{{ table(grid, "이 기간에 평가할 재고가 없습니다.") }}
+{{ download(url_with(export='xlsx'), '⬇️ 재고평가 엑셀 다운로드') }}
+{% endblock %}

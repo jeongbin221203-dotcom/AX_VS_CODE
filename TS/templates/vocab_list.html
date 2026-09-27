@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}단어 목록{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><h1>단어 목록 {% if level %}{{ grade_badge(level) }}{% endif %}</h1>
+    <div class="muted small">{{ rows|length }}개 · 단어를 누르면 발음을 들려줍니다.</div></div>
+  <form class="row" method="get">
+    <select name="level" data-autosubmit aria-label="등급">
+      <option value="">모든 등급</option>
+      {% for gr in GRADES %}<option value="{{ gr.level }}" {{ 'selected' if level == gr.level }}>{{ gr.name }}</option>{% endfor %}
+    </select>
+    <select name="filter" data-autosubmit aria-label="상태">
+      {% for k, v in [('all', '전체'), ('new', '아직 안 봄'), ('learning', '학습 중'), ('mastered', '암기 완료'), ('weak', '2번 이상 잊음'), ('starred', '★ 별표')] %}
+        <option value="{{ k }}" {{ 'selected' if flt == k }}>{{ v }}</option>
+      {% endfor %}
+    </select>
+    <input name="q" value="{{ q }}" placeholder="단어·뜻 검색">
+    <button class="btn">검색</button>
+  </form>
+</div>
+
+<div class="card">
+  {% if rows %}
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>단어</th><th>뜻</th><th>예문</th><th>팁</th><th>상태</th><th></th></tr></thead>
+    <tbody>
+    {% for w in rows %}
+      <tr>
+        <td><button class="btn ghost small" data-say="{{ w.word }}"><b>{{ w.word }}</b></button><div class="muted small">{{ w.pos }} {{ grade_badge(w.level) if not level }}</div></td>
+        <td>{{ w.meaning }}</td>
+        <td class="small">{{ w.example }}<div class="muted">{{ w.example_ko }}</div></td>
+        <td class="small muted">{{ w.tip }}</td>
+        <td class="small">
+          {% if w.state == 'new' %}<span class="tag">안 봄</span>
+          {% elif w.state == 'mastered' %}<span class="tag ok">암기 완료</span>
+          {% else %}<span class="tag">학습 중 · {{ w.card.interval }}일</span>{% endif %}
+          {% if w.card and w.card.lapses %}<div class="muted">잊음 {{ w.card.lapses }}</div>{% endif %}
+        </td>
+        <td><button class="star {{ 'on' if w.card and w.card.starred }}" data-star="{{ w.id }}" title="별표">★</button></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  {% else %}<div class="empty">조건에 맞는 단어가 없습니다.</div>{% endif %}
+</div>
+<script type="application/json" id="tts-data">{{ tts|tojson }}</script>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/tts.js') }}"></script>
+<script src="{{ url_for('static', filename='js/vocab-extra.js') }}"></script>
+{% endblock %}

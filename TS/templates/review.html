@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}오답노트{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>오답노트</h1>
+    <div class="muted small">틀린 문항이 자동으로 모입니다. 복습에서 <b>연속 2번</b> 맞히면 '졸업'으로 옮겨집니다.</div>
+  </div>
+  <div class="row">
+    <a class="btn primary" href="{{ url_for('quiz.review_start', n=10, part=part or '') }}">{% if part %}Part {{ part }} {% endif %}10문항 복습</a>
+    <a class="btn" href="{{ url_for('quiz.review_start', n=30, part=part or '') }}">30문항</a>
+  </div>
+</div>
+
+<div class="card">
+  <div class="spread">
+    <div class="seg">
+      <a href="{{ url_for('quiz.review', status='open') }}" class="{{ 'on' if status == 'open' }}">복습 중 {{ n_open }}</a>
+      <a href="{{ url_for('quiz.review', status='cleared') }}" class="{{ 'on' if status == 'cleared' }}">졸업</a>
+    </div>
+    <form class="row" method="get">
+      <input type="hidden" name="status" value="{{ status }}">
+      <select name="part" data-autosubmit aria-label="파트">
+        <option value="">모든 파트</option>
+        {% for p, n in by_part.items() %}<option value="{{ p }}" {{ 'selected' if part == p }}>Part {{ p }} ({{ n }})</option>{% endfor %}
+      </select>
+      <select name="type" data-autosubmit aria-label="유형">
+        <option value="">모든 유형</option>
+        {% for t in types %}<option value="{{ t }}" {{ 'selected' if qtype == t }}>{{ t }}</option>{% endfor %}
+      </select>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  {% if rows %}
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>파트</th><th>문제</th><th>유형</th><th class="r">틀림</th><th class="r">연속 정답</th><th>메모</th><th></th></tr></thead>
+    <tbody>
+    {% for r in rows %}
+      <tr>
+        <td class="num">P{{ r.part }} {{ grade_badge(r.level) }}</td>
+        <td class="small">{{ r.preview|truncate(90) }}<div class="muted">마지막 오답 {{ r.last_wrong_at[:10] }}</div></td>
+        <td class="small">{{ r.qtype }}</td>
+        <td class="r num">{{ r.wrong_count }}</td>
+        <td class="r num">{{ r.right_streak }}</td>
+        <td style="min-width:200px">
+          <form method="post" action="{{ url_for('quiz.review_note') }}" class="row">
+            <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+            <input type="hidden" name="qkey" value="{{ r.qkey }}">
+            <input name="memo" value="{{ r.memo }}" placeholder="왜 틀렸는지" style="flex:1;min-width:120px">
+            <button class="btn small">저장</button>
+          </form>
+        </td>
+        <td class="r">
+          <form method="post" action="{{ url_for('quiz.review_note') }}">
+            <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+            <input type="hidden" name="qkey" value="{{ r.qkey }}">
+            {% if status == 'open' %}
+              <button class="btn small ghost" name="status" value="cleared" title="복습 목록에서 빼기">졸업 처리</button>
+            {% else %}
+              <button class="btn small ghost" name="status" value="open">다시 복습</button>
+            {% endif %}
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  {% else %}
+    <div class="empty">{{ '틀린 문제가 없습니다. 파트 연습이나 모의고사를 풀면 여기에 쌓입니다.' if status == 'open' else '아직 졸업한 문제가 없습니다.' }}</div>
+  {% endif %}
+</div>
+{% endblock %}

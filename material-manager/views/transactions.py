@@ -1,0 +1,133 @@
+"""입출고 등록 화면 (입고 · 출고 · 실사조정 · 창고 간 이동)."""
+
+from datetime import date, timedelta
+
+from flask import Blueprint, abort, flash, g, redirect, request, url_for
+
+import config
+from core import db, documents, org, periods, purchasing, repository as repo, services
+from core.utils import month_end
+from views.documents import meta_from_form, uploaded_file
+from views.helpers import a_int, actor, f_float, f_str, render_page, role_required
+
+bp = Blueprint("transactions", __name__, url_prefix="/transactions")
+
+TYPES = {**config.TX_LABEL, "TRF": "창고 간 이동"}
+
+
+def _page(tx_type: str, mid: int | None, wh: int | None, form: dict | None = None):
+    opts = services.material_options(active_only=True)
+    wh_opts = org.warehouse_options(g.wh_ids)
+    if not opts or not wh_opts:
+        return render_page("transactions.html", "transactions", opts=opts, wh_opts=wh_opts)
+    if mid not in opts:
+        mid = next(iter(opts))
+    if wh not in wh_opts:
+        wh = next(iter(wh_opts))
+    mat = repo.get_material(mid)
+    warehouse = org.get_warehouse(wh)
+    with db.get_conn() as conn:
+        stock_now = repo.current_stock(conn, mid, wh)
+    ym = periods.closed_through()
+    min_date = (date.fromisoformat(month_end(ym)) + timedelta(days=1)).isoformat() if ym else ""
+    lots = repo.stock_by_lot(material_id=mid, warehouse_id=wh).to_dict("records") if mat["lot_managed"] else []
+    frag, wp = db.in_clause(g.wh_ids)
+    known_lots = (db.query_df(
+        "SELECT DISTINCT l.lot_no, l.expiry_date FROM lots l JOIN transactions t ON t.material_id = l.material_id "
+        f"AND t.lot_no = l.lot_no WHERE l.material_id = ?{' AND t.warehouse_id' + frag if frag else ''} ORDER BY l.lot_no",
+        (mid, *wp)).to_dict("records") if mat["lot_managed"] else [])
+    po_lines = purchasing.open_po_lines(wh, mid) if tx_type == "IN" else []
+    return render_page("transactions.html", "transactions", opts=opts, tx_type=tx_type, types=TYPES,
+                       lots=lots, known_lots=known_lots, po_lines=po_lines,
+                       mid=mid, mat=mat, wh=wh, warehouse=warehouse, wh_opts=wh_opts,
+                       all_wh_opts=org.warehouse_options(None), stock_now=stock_now, form=form or {},
+                       accept=documents.ACCEPT, min_date=min_date, movement=config.SAP_MOVEMENT_TYPES,
+                       approval_limit=config.ADJ_APPROVAL_AMOUNT)
+
+
+@bp.get("/")
+@role_required("CLERK")
+def index():
+    tx_type = request.args.get("type", "IN")
+    if tx_type not in TYPES:
+        tx_type = "IN"
+    return _page(tx_type, a_int("material"), a_int("wh"))
+
+
+def _ids() -> tuple[int, int]:
+    try:
+        return int(f_str("material_id")), int(f_str("warehouse_id"))
+    except ValueError:
+        abort(400, "자재와 창고를 선택하세요.")
+
+
+@bp.post("/")
+@role_required("CLERK")
+def create():
+    tx_type = f_str("tx_type")
+    if tx_type not in config.TX_LABEL:
+        abort(400, f"알 수 없는 거래 유형: {tx_type}")
+    mid, wh = _ids()
+    try:
+        qty_input = f_float("qty")
+        price = f_float("unit_price")
+        tx_date = date.fromisoformat(f_str("tx_date") or date.today().isoformat())
+    except ValueError as exc:
+        flash(str(exc) if "숫자" in str(exc) else "일자 형식이 올바르지 않습니다.", "error")
+        return _page(tx_type, mid, wh, form=request.form)
+
+    # 증빙을 함께 올렸으면 먼저 검증한다 → 증빙이 잘못되면 거래도 등록하지 않는다
+    data, filename = uploaded_file()
+    prepared = documents.prepare(data, filename, meta_from_form()) if data else None
+    if prepared and not prepared.ok:
+        for msg in prepared.errors:
+            flash(f"증빙: {msg}", "error")
+        flash("증빙을 고치거나 빼고 다시 등록하세요. 거래는 등록되지 않았습니다.", "info")
+        return _page(tx_type, mid, wh, form=request.form)
+
+    po_no, po_item = f_str("po_no"), f_str("po_item")
+    if "|" in f_str("po_line"):                        # 이 시스템 발주 품목을 고른 경우
+        po_no, po_item = f_str("po_line").split("|", 1)
+    result = services.register_transaction(
+        material_id=mid, tx_type=tx_type, qty_input=qty_input,
+        tx_date=tx_date.isoformat(), unit_price=price,
+        ref_no=f_str("ref_no"), partner=f_str("partner"), note=f_str("note"),
+        actor=actor(), po_no=po_no, po_item=po_item, cost_center=f_str("cost_center"),
+        warehouse_id=wh, wh_ids=g.wh_ids, lot_no=f_str("lot_no"), expiry_date=f_str("expiry_date"),
+    )
+    if not result.ok:
+        flash(result.message, "error")
+        return _page(tx_type, mid, wh, form=request.form)
+
+    flash(result.message, "info" if result.pending else "success")
+    if result.warning:
+        flash(result.warning, "warning")
+    if prepared and result.pending:
+        flash("결재 대기 중이라 증빙은 저장하지 않았습니다. 승인된 뒤 증빙 화면에서 그 거래에 올려 주세요.", "warning")
+    elif prepared:
+        for msg in prepared.warnings:
+            flash(f"증빙: {msg}", "warning")
+        saved = documents.save(prepared, tx_id=result.tx_id, actor=actor())
+        flash(saved.message if saved.ok else
+              f"거래는 등록됐지만 증빙 저장에 실패했습니다. 증빙 화면에서 거래 #{result.tx_id}에 다시 올려 주세요.",
+              "success" if saved.ok else "error")
+    return redirect(url_for("transactions.index", type=tx_type, material=mid, wh=wh))
+
+
+@bp.post("/transfer")
+@role_required("CLERK")
+def transfer():
+    mid, wh = _ids()
+    try:
+        to_wh = int(f_str("to_warehouse_id"))
+        qty = f_float("qty")
+        tx_date = date.fromisoformat(f_str("tx_date") or date.today().isoformat())
+    except ValueError:
+        flash("받는 창고·수량·일자를 확인하세요.", "error")
+        return _page("TRF", mid, wh, form=request.form)
+    result = services.transfer(mid, wh, to_wh, qty, tx_date.isoformat(), actor=actor(),
+                               ref_no=f_str("ref_no"), note=f_str("note"), wh_ids=g.wh_ids, lot_no=f_str("lot_no"))
+    flash(result.message, "success" if result.ok else "error")
+    if not result.ok:
+        return _page("TRF", mid, wh, form=request.form)
+    return redirect(url_for("transactions.index", type="TRF", material=mid, wh=wh))

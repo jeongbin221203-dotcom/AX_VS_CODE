@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% from "_macros.html" import metric, table, chart, tabs %}
+{% block content %}
+<form method="get" class="toolbar">
+  <label>분석 기간
+    <select name="days" onchange="this.form.submit()">
+      {% for d in periods %}<option value="{{ d }}" {{ 'selected' if d == period }}>최근 {{ d }}일</option>{% endfor %}
+    </select>
+  </label>
+</form>
+
+<div class="metrics m5">
+  {{ metric('진행 기회', '{:,}건'.format(v.open_deals)) }}
+  {{ metric('평균 수주금액', v.avg_deal|mil) }}
+  {{ metric('승률', v.win_rate ~ '%', '수주 ' ~ v.won_cnt ~ ' / 실주 ' ~ v.lost_cnt) }}
+  {{ metric('평균 영업주기', '%.0f일'|format(v.avg_cycle_days)) }}
+  {{ metric('월 환산 영업속도', v.velocity_per_month|mil) }}
+</div>
+<p class="muted small">영업속도 = (진행 기회수 × 평균 수주금액 × 승률) ÷ 평균 영업주기.
+  네 변수 중 무엇을 개선해야 매출이 가장 크게 움직이는지 판단하는 지표입니다.</p>
+
+<section class="card">
+  <div class="grid-2">
+    <div><h3>🔻 단계별 진입 건수와 전환율</h3>{{ chart(conv_chart) }}</div>
+    <div><h3>⏱️ 단계별 평균 체류일</h3>{{ chart(dwell_chart) }}</div>
+  </div>
+  {{ table(conv) }}
+  {% if worst %}
+    <div class="alert alert-info">가장 많이 이탈하는 구간은 <strong>{{ worst['단계'] }} {{ worst['전환대상'] }}</strong> 로
+      전환율 {{ worst['전환율'] }}% 입니다. 이 단계의 활동 품질과 자격검증을 먼저 점검하십시오.</div>
+  {% endif %}
+</section>
+
+<section class="card">
+  <h3>🏁 Win / Loss 분석</h3>
+  {% set tab = request.args.get('tab', 'reasons') %}
+  {{ tabs([('reasons', '실주 사유'), ('competitor', '경쟁사별 승률'), ('source', '유입경로별 성과')], tab) }}
+  {% if tab == 'competitor' %}
+    {% if competitor.empty %}<div class="alert alert-info">해당 기간 마감된 건이 없습니다.</div>
+    {% else %}{{ chart(comp_chart) }}{{ table(competitor) }}{% endif %}
+  {% elif tab == 'source' %}
+    {{ table(source) }}
+  {% else %}
+    {% if reasons.empty %}<div class="alert alert-info">해당 기간 실주 건이 없습니다.</div>
+    {% else %}{{ chart(reasons_chart) }}{{ table(reasons) }}{% endif %}
+  {% endif %}
+</section>
+{% endblock %}

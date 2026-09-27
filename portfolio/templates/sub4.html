@@ -1,0 +1,280 @@
+{% extends 'base.html' %}
+{% set active_page = 'sub4' %}
+
+{% block content %}
+<style>
+    html { 
+        scroll-behavior: smooth; 
+        scroll-padding-top: 100px; 
+    }
+    .career-section-title {
+        text-align: center;
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #111;
+        margin-bottom: 15px;
+    }
+    .career-section-subtitle {
+        text-align: center;
+        font-size: 1.1rem;
+        color: #666;
+        margin-bottom: 50px;
+    }
+    
+    /* 인재상 그리드 */
+    .talent-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+        margin-bottom: 80px;
+    }
+    .talent-card {
+        background: #fbf9f6;
+        border-radius: 20px;
+        padding: 40px 30px;
+        text-align: center;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.02);
+        border: 1px solid #eaeaea;
+        transition: 0.3s;
+    }
+    .talent-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 35px rgba(0,0,0,0.08);
+        border-color: #1e5a22;
+    }
+    .talent-icon {
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+    }
+    .talent-card h3 {
+        font-size: 1.4rem;
+        color: #1e5a22;
+        margin-bottom: 15px;
+        font-weight: 700;
+    }
+    .talent-card p {
+        font-size: 1rem;
+        color: #555;
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    /* 채용 절차 그리드 */
+    .process-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        margin-bottom: 80px;
+    }
+    .process-step {
+        background: white;
+        border-radius: 16px;
+        padding: 30px 20px;
+        text-align: center;
+        border: 1px solid #eaeaea;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.02);
+        position: relative;
+    }
+    .process-num {
+        display: inline-block;
+        width: 45px; height: 45px;
+        background: #1e5a22;
+        color: white;
+        border-radius: 50%;
+        line-height: 45px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+    .process-step h4 {
+        font-size: 1.2rem;
+        color: #111;
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+    .process-step p {
+        font-size: 0.95rem;
+        color: #666;
+        margin: 0;
+        line-height: 1.5;
+    }
+
+    /* 복리후생 그리드 */
+    .welfare-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+    }
+    .welfare-card {
+        background: white;
+        border-radius: 16px;
+        padding: 35px 30px;
+        border: 1px solid #eaeaea;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.02);
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+        transition: 0.3s;
+    }
+    .welfare-card:hover {
+        border-color: #1e5a22;
+        transform: translateY(-5px);
+    }
+    .welfare-icon {
+        font-size: 2rem;
+        background: #f4f8f4;
+        padding: 15px;
+        border-radius: 12px;
+    }
+    .welfare-text h4 {
+        font-size: 1.2rem;
+        color: #111;
+        margin: 0 0 8px 0;
+        font-weight: 700;
+    }
+    .welfare-text p {
+        font-size: 0.95rem;
+        color: #666;
+        margin: 0;
+        line-height: 1.5;
+    }
+
+    @media (max-width: 992px) {
+        .talent-grid, .welfare-grid { grid-template-columns: 1fr; }
+        .process-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+</style>
+
+<!-- 1. 히로 배너 및 탭 메뉴 -->
+<section class="hero" style="height: 60vh; min-height: 500px; background-image: url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1920');">
+    <div class="hero-content left-align">
+        <span class="hero-category">Career</span>
+        <h1>The First Food for All</h1>
+        <hr class="hero-divider">
+        <p>대한사료와 함께 대한민국 축산업의 미래를 열어갈 인재를 기다립니다.</p>
+        
+        <div class="hero-tabs" id="careerTabs">
+            <a href="#talent" class="tab active" onclick="activateTab(this)">인재상</a>
+            <a href="#process" class="tab" onclick="activateTab(this)">채용절차</a>
+            <a href="#welfare" class="tab" onclick="activateTab(this)">복리후생</a>
+        </div>
+    </div>
+</section>
+
+<!-- 2. 인재상 섹션 -->
+<section id="talent">
+    <div class="section-inner" style="max-width: 1200px;">
+        <h2 class="career-section-title">대한사료의 인재상</h2>
+        <p class="career-section-subtitle">도전정신과 열정을 품고 미래를 향해 나아가는 혁신적인 인재를 찾습니다.</p>
+        
+        <div class="talent-grid">
+            <div class="talent-card">
+                <div class="talent-icon">🔥</div>
+                <h3>열정 (Passion)</h3>
+                <p>일에 대한 뜨거운 열정과 책임감을 가지고 긍정적인 에너지로 조직에 활력을 불어넣는 인재</p>
+            </div>
+            <div class="talent-card">
+                <div class="talent-icon">🚀</div>
+                <h3>도전 (Challenge)</h3>
+                <p>현실에 안주하지 않고 끊임없는 혁신과 도전정신으로 새로운 가치를 창출하는 개척자</p>
+            </div>
+            <div class="talent-card">
+                <div class="talent-icon">💡</div>
+                <h3>전문성 (Expertise)</h3>
+                <p>자신의 분야에서 최고가 되기 위해 부단히 학습하고 전문 역량을 키워나가는 프로페셔널</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 3. 채용 절차 섹션 -->
+<section id="process" class="bg-light">
+    <div class="section-inner" style="max-width: 1200px;">
+        <h2 class="career-section-title">채용 절차</h2>
+        <p class="career-section-subtitle">대한사료와 함께 성장할 동반자를 맞이하는 공정하고 체계적인 채용 프로세스입니다.</p>
+        
+        <div class="process-grid">
+            <div class="process-step">
+                <span class="process-num">01</span>
+                <h4>서류 전형</h4>
+                <p>지원자의 역량과 가치관, 직무 적합성을 종합적으로 평가합니다.</p>
+            </div>
+            <div class="process-step">
+                <span class="process-num">02</span>
+                <h4>실무진 면접</h4>
+                <p>직무 전문성과 실무 수행 능력을 심층적으로 인터뷰합니다.</p>
+            </div>
+            <div class="process-step">
+                <span class="process-num">03</span>
+                <h4>임원진 면접</h4>
+                <p>기업 문화 적합성과 인성, 발전 가능성을 최종적으로 검증합니다.</p>
+            </div>
+            <div class="process-step">
+                <span class="process-num">04</span>
+                <h4>최종 합격</h4>
+                <p>건강검진 및 최종 입사 절차를 진행합니다.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 4. 복리후생 제도 섹션 -->
+<section id="welfare">
+    <div class="section-inner" style="max-width: 1200px;">
+        <h2 class="career-section-title">복리후생 제도</h2>
+        <p class="career-section-subtitle">임직원의 행복과 안정된 삶을 지원하는 다양한 복지 혜택을 제공합니다.</p>
+        
+        <div class="welfare-grid">
+            <div class="welfare-card">
+                <div class="welfare-icon">🏥</div>
+                <div class="welfare-text">
+                    <h4>건강 및 의료 지원</h4>
+                    <p>임직원 및 가족 건강검진 지원, 단체 상해보험 가입을 통한 든든한 의료 보장</p>
+                </div>
+            </div>
+            <div class="welfare-card">
+                <div class="welfare-icon">🏠</div>
+                <div class="welfare-text">
+                    <h4>주거 및 생활 안정</h4>
+                    <p>기숙사 운영 및 주택자금 대출 이자 지원 등 주거 안정을 위한 실질적 혜택</p>
+                </div>
+            </div>
+            <div class="welfare-card">
+                <div class="welfare-icon">🎓</div>
+                <div class="welfare-text">
+                    <h4>자기계발 및 교육</h4>
+                    <p>사내·외 전문 교육 수강 지원, 도서 구입비 및 자격증 취득 비용 지원</p>
+                </div>
+            </div>
+            <div class="welfare-card">
+                <div class="welfare-icon">👨‍👩‍👧‍👦</div>
+                <div class="welfare-text">
+                    <h4>가족 친화 지원</h4>
+                    <p>자녀 학자금 지원, 명절 귀성 여비 지급 및 경조사 지원금 운영</p>
+                </div>
+            </div>
+            <div class="welfare-card">
+                <div class="welfare-icon">🏖️</div>
+                <div class="welfare-text">
+                    <h4>여가 및 휴식 지원</h4>
+                    <p>콘도미니엄 회원권 이용, 장기근속 포상 및 리프레시 휴가 부여</p>
+                </div>
+            </div>
+            <div class="welfare-card">
+                <div class="welfare-icon">🎁</div>
+                <div class="welfare-text">
+                    <h4>근무 환경 및 기타</h4>
+                    <p>구내식당 운영(중·석식 제공), 사내 카페테리아 및 명절 선물 지급</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function activateTab(element) {
+        document.querySelectorAll('#careerTabs .tab').forEach(t => t.classList.remove('active'));
+        element.classList.add('active');
+    }
+</script>
+{% endblock %}

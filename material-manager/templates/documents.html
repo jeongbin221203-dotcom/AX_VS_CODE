@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf, metric, table, tabs as tab_bar, doc_fields, pager as pager_nav %}
+{% block content %}
+{{ tab_bar(tabs, tab) }}
+
+{% if tab == "list" %}
+  <form class="toolbar" method="get">
+    <label>작성일자 시작<input type="date" name="start" value="{{ start.isoformat() }}"></label>
+    <label>종료<input type="date" name="end" value="{{ end.isoformat() }}"></label>
+    <fieldset>
+      <legend>종류 (비우면 전체)</legend>
+      <div class="checks">
+        {% for code, label in DOC_TYPES.items() %}
+          <label class="check"><input type="checkbox" name="type" value="{{ code }}" {{ 'checked' if code in types }}> {{ label }}</label>
+        {% endfor %}
+      </div>
+    </fieldset>
+    <label class="grow">검색 (공급자 · 사업자번호 · 승인번호 · 파일명 · 메모)
+      <input name="q" value="{{ keyword }}">
+    </label>
+    <label class="check"><input type="checkbox" name="unlinked" value="1" {{ 'checked' if unlinked }}> 미연결만</label>
+    {% if tx_id %}<input type="hidden" name="tx" value="{{ tx_id }}">{% endif %}
+    <button class="btn btn-primary">조회</button>
+  </form>
+  {% if tx_id %}
+    <div class="alert alert-info">거래 #{{ tx_id }}에 연결된 증빙만 보고 있습니다. <a href="{{ url_with(tx=none) }}">전체 보기</a> · <a href="{{ url_for('documents.index', tab='new', tx=tx_id) }}">이 거래에 증빙 추가</a></div>
+  {% endif %}
+
+  <div class="metrics m4">
+    {{ metric("증빙 건수", "{:,} 건".format(count)) }}
+    {{ metric("공급가액 합계", "₩ {:,.0f}".format(supply_sum)) }}
+    {{ metric("세액 합계", "₩ {:,.0f}".format(tax_sum)) }}
+    {{ metric("거래 미연결", "{:,} 건".format(unlinked_cnt), "입고 거래와 연결해 주세요" if unlinked_cnt else none, "down") }}
+  </div>
+  {{ table(grid, "조건에 맞는 증빙이 없습니다.") }}
+  {{ pager_nav(pager) }}
+  <p class="muted small">증빙 이미지를 열거나 내려받으면 감사로그에 기록됩니다.{% if g.wh_ids is not none %} 권한이 있는 창고의 거래에 연결된 증빙과 본인이 올린 미연결 증빙만 보입니다.{% endif %}</p>
+
+{% else %}
+  <form class="card form" method="post" action="{{ url_for('documents.create') }}" enctype="multipart/form-data">
+    {{ csrf() }}
+    {{ doc_fields(form, accept) }}
+    <div class="form-grid g3">
+      <label>연결할 거래 (선택 — 나중에 연결해도 됩니다)
+        <select name="tx_id">
+          <option value="">연결 안 함</option>
+          {% for k, v in tx_opts %}<option value="{{ k }}" {{ 'selected' if k|string == (form.tx_id or '')|string }}>{{ v }}</option>{% endfor %}
+        </select>
+      </label>
+      <label>등록자<input value="{{ g.user.name }} (로그인 사용자로 기록)" disabled></label>
+    </div>
+    <div><button class="btn btn-primary">증빙 등록</button></div>
+  </form>
+{% endif %}
+{% endblock %}

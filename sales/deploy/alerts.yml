@@ -1,0 +1,74 @@
+# 경보 규칙 — 조치 방법은 docs/RUNBOOK.md 의 같은 이름 절을 본다
+groups:
+  - name: sales
+    rules:
+      - alert: SalesAppDown
+        expr: up{job="sales"} == 0
+        for: 2m
+        labels: { severity: critical }
+        annotations: { summary: "앱 서버 {{ $labels.instance }} 응답 없음", runbook: "RUNBOOK.md#1-앱-서버-장애" }
+
+      - alert: SalesDatabaseDown
+        expr: min(sales_db_up) == 0
+        for: 1m
+        labels: { severity: critical }
+        annotations: { summary: "DB 연결 실패", runbook: "RUNBOOK.md#2-db-장애" }
+
+      - alert: SalesSchemaOutdated
+        expr: min(sales_schema_current) == 0
+        for: 5m
+        labels: { severity: warning }
+        annotations: { summary: "DB 스키마가 코드보다 오래됨 — migrate 누락", runbook: "RUNBOOK.md#배포" }
+
+      - alert: SalesHighErrorRate
+        expr: sum(rate(sales_http_requests_total{status=~"5.."}[5m])) / sum(rate(sales_http_requests_total[5m])) > 0.02
+        for: 5m
+        labels: { severity: critical }
+        annotations: { summary: "5xx 비율 2% 초과", runbook: "RUNBOOK.md#4-오류율-증가·응답-지연" }
+
+      - alert: SalesSlowResponses
+        expr: histogram_quantile(0.95, sum by (le) (rate(sales_http_request_duration_seconds_bucket[10m]))) > 2
+        for: 10m
+        labels: { severity: warning }
+        annotations: { summary: "p95 응답 2초 초과", runbook: "RUNBOOK.md#4-오류율-증가·응답-지연" }
+
+      - alert: SalesWorkerStopped
+        expr: min(sales_worker_heartbeat_age_seconds) > 300
+        for: 2m
+        labels: { severity: critical }
+        annotations: { summary: "워커 신호가 5분 넘게 없음 — 배치·알림·ERP 전송 중단", runbook: "RUNBOOK.md#3-워커·배치-장애" }
+
+      - alert: SalesJobBacklog
+        expr: max(sales_jobs_oldest_waiting_seconds) > 900
+        for: 5m
+        labels: { severity: warning }
+        annotations: { summary: "실행 시각이 15분 넘게 지난 작업이 대기 중", runbook: "RUNBOOK.md#3-워커·배치-장애" }
+
+      - alert: SalesJobsFailed
+        expr: max(sales_jobs{status="실패"}) > 0
+        for: 10m
+        labels: { severity: warning }
+        annotations: { summary: "실패한 배치 작업 {{ $value }}건", runbook: "RUNBOOK.md#3-워커·배치-장애" }
+
+      - alert: SalesErpSendFailed
+        expr: max(sales_erp_documents{status="전송실패"}) > 0
+        for: 30m
+        labels: { severity: warning }
+        annotations: { summary: "ERP 전송 실패 매출 {{ $value }}건", runbook: "RUNBOOK.md#5-외부-시스템-장애" }
+
+      - alert: SalesApprovalsOverdue
+        expr: max(sales_approval_steps_overdue) > 10
+        for: 1h
+        labels: { severity: info }
+        annotations: { summary: "기한 지난 결재 단계 {{ $value }}건", runbook: "RUNBOOK.md#5-외부-시스템-장애" }
+
+      - alert: SalesLoginFailureSpike
+        expr: max(sales_login_failures_15m) > 30
+        labels: { severity: warning }
+        annotations: { summary: "15분간 로그인·API 인증 실패 {{ $value }}건 — 대입 공격 의심", runbook: "RUNBOOK.md#6-보안-사고" }
+
+      - alert: SalesReadOnlyTooLong
+        expr: max(sales_read_only) == 1
+        for: 2h
+        labels: { severity: warning }
+        annotations: { summary: "읽기 전용 점검 모드가 2시간 넘게 켜져 있음", runbook: "RUNBOOK.md#점검-모드" }

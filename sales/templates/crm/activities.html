@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% from "_macros.html" import metric, table, chart, tabs, csrf, select, owner_input, download %}
+{% block content %}
+<form method="get" class="toolbar" action="{{ page_path() }}">
+  <label>조회 기간
+    <select name="days">{% for d in periods %}<option value="{{ d }}" {{ 'selected' if d == days }}>최근 {{ d }}일</option>{% endfor %}</select>
+  </label>
+  <label>활동 유형 {{ select('type', ACT_TYPES, act_type, blank='전체') }}</label>
+  <label class="grow">거래처 {{ select('customer_id', customers.items()|list, cid_filter or '', blank='(전체)') }}</label>
+  <button class="btn">조회</button>
+</form>
+
+<div class="metrics m3">
+  {{ metric('활동 건수', '{:,}건'.format(m_count)) }}
+  {{ metric('접촉 거래처 수', '{:,}개'.format(m_customers)) }}
+  {{ metric('후속 액션 예정', '{:,}건'.format(m_upcoming)) }}
+</div>
+<section class="card">
+  <h3>📊 유형별 활동 건수</h3>
+  {% if type_chart.empty %}<div class="alert alert-info">표시할 데이터가 없습니다.</div>{% else %}{{ chart(type_chart) }}{% endif %}
+</section>
+<div class="card-head"><span></span>{{ download(export_url('activities')) }}</div>
+{{ table(tbl, 380) }}
+
+<section class="card">
+  {% set tab = request.args.get('tab', 'new') %}
+  {{ tabs([('new', '➕ 활동 등록'), ('delete', '🗑️ 삭제')], tab) }}
+  {% if tab == 'delete' %}
+    {% if not del_options %}
+      <div class="alert alert-info">삭제할 활동이 없습니다.</div>
+    {% else %}
+      <form method="post" action="{{ url_for('crm.activity_delete') }}" class="toolbar">
+        {{ csrf() }}
+        <label class="grow">삭제할 활동 {{ select('activity_id', del_options, '') }}</label>
+        <button class="btn btn-danger">🗑️ 삭제</button>
+      </form>
+    {% endif %}
+  {% else %}
+    {% if not customers %}
+      <div class="alert alert-warning">등록된 거래처가 없습니다. 먼저 거래처를 등록하세요.</div>
+    {% else %}
+    <form method="post" action="{{ url_for('crm.activity_add') }}" class="form" data-deal-filter>
+      {{ csrf() }}
+      <div class="form-grid g3">
+        <label>거래처 * {{ select('customer_id', customers.items()|list, f.customer_id or '', blank='선택하세요') }}</label>
+        <label>관련 영업기회 (선택)
+          <select name="deal_id">
+            <option value="">(없음)</option>
+            {% for d in deals %}<option value="{{ d.id }}" data-customer="{{ d.customer_id }}" {{ 'selected' if d.id|string == (f.deal_id or '')|string }}>{{ d.label }}</option>{% endfor %}
+          </select>
+        </label>
+        <label>활동일 <input type="date" name="act_date" value="{{ f.act_date }}"></label>
+        <label>활동 유형 {{ select('act_type', ACT_TYPES, f.act_type) }}</label>
+        {{ owner_input('owner_id', f.owner_id) }}
+      </div>
+      <label>활동내용 * <textarea name="summary" rows="3" required placeholder="예) 구매팀 미팅, 도입 일정 협의">{{ f.summary or '' }}</textarea></label>
+      <div class="form-grid g2">
+        <label>다음 액션 <input name="next_action" value="{{ f.next_action or '' }}"></label>
+        <label>다음 일정 <input type="date" name="next_date" value="{{ f.next_date or '' }}"></label>
+      </div>
+      <button class="btn btn-primary">등록</button>
+    </form>
+    {% endif %}
+  {% endif %}
+</section>
+{% endblock %}

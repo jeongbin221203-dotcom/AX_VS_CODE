@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% from "_macros.html" import metric, table, download, pager as pager_nav %}
+{% block content %}
+{% if empty %}
+  <div class="alert alert-info">등록된 자재가 없습니다.</div>
+{% else %}
+  <div class="tabs">
+    <a href="{{ url_with(view=none, page=none) }}" class="{{ 'active' if not by_wh and not by_lot }}">자재별 (선택 창고 합계)</a>
+    <a href="{{ url_with(view='wh', page=none) }}" class="{{ 'active' if by_wh }}">창고별</a>
+    <a href="{{ url_with(view='lot', page=none) }}" class="{{ 'active' if by_lot }}">로트·유효기한</a>
+  </div>
+  <form class="toolbar" method="get">
+    {% if by_wh %}<input type="hidden" name="view" value="wh">{% endif %}
+    {% if by_lot %}<input type="hidden" name="view" value="lot">{% endif %}
+    <label class="grow">검색 (코드 / 자재명 / {{ '창고' if by_wh else ('로트 / 창고' if by_lot else '규격 / 위치') }})
+      <input name="q" value="{{ keyword }}" placeholder="예: 팔레트, A-01">
+    </label>
+    <label>창고 (비우면 권한 안 전체)
+      <select name="wh" multiple size="3">
+        {% for k, v in wh_opts.items() %}<option value="{{ k }}" {{ 'selected' if k in wh_sel }}>{{ v }}</option>{% endfor %}
+      </select>
+    </label>
+    {% if categories %}
+    <fieldset>
+      <legend>분류</legend>
+      <div class="checks">
+        {% for c in categories %}
+          <label class="check"><input type="checkbox" name="cat" value="{{ c }}" {{ 'checked' if c in selected_cats }}> {{ c }}</label>
+        {% endfor %}
+      </div>
+    </fieldset>
+    {% endif %}
+    {% if by_lot %}<label class="check"><input type="checkbox" name="expiring" value="1" {{ 'checked' if expiring }}> 기한 30일 이내·지남만</label>
+    {% elif not by_wh %}<label class="check"><input type="checkbox" name="shortage" value="1" {{ 'checked' if only_shortage }}> 미달만 보기</label>{% endif %}
+    <button class="btn btn-primary">조회</button>
+  </form>
+  {% if g.wh_ids is not none %}<p class="muted small">권한이 있는 창고 {{ wh_opts|length }}곳의 재고만 보입니다.</p>{% endif %}
+
+  {% if not by_lot %}
+  <div class="metrics m3">
+    {{ metric("조회 " ~ ('행' if by_wh else '품목'), "{:,}".format(count)) }}
+    {{ metric("재고금액 합계", "₩ {:,.0f}".format(stock_value)) }}
+    {{ metric("미달 품목", "{:,} 종".format(shortage_cnt) if not by_wh else "-") }}
+  </div>
+  {% else %}
+  <p class="muted small">빨간 줄은 유효기한이 지난 로트(출고 불가, 실사조정으로 폐기), 노란 줄은 30일 이내 임박입니다.</p>
+  {% endif %}
+
+  {{ table(grid, "조건에 맞는 재고가 없습니다.") }}
+  {{ pager_nav(pager) }}
+  {{ download(url_with(export='xlsx', page=none), '⬇️ 재고현황 엑셀 다운로드') }}
+{% endif %}
+{% endblock %}

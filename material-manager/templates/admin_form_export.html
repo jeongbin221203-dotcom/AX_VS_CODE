@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf %}
+{% block content %}
+<p><a href="{{ url_for('admin.forms_list') }}">← 엑셀 양식 목록</a> · <strong>{{ form_title }}</strong> (내려받기)</p>
+
+<section class="card">
+  <h3>1. 회사 양식 파일 (선택)</h3>
+  {% if cfg.has_template %}
+    <p>올린 양식: 시트 {{ sheets|join(', ') }} ·
+      <a href="{{ url_for('admin.form_template_download', key=key) }}">양식 파일 받기</a></p>
+    {% if tmpl_headers %}<p class="muted small">{{ cfg.header_row or 1 }}행 머리글: {{ tmpl_headers|join(' | ') }}</p>{% endif %}
+    <form method="post" action="{{ url_for('admin.form_template_delete', key=key) }}">
+      {{ csrf() }}<button class="btn btn-sm">양식 파일 빼기</button>
+    </form>
+  {% else %}
+    <p class="muted small">로고·제목·결재란·서식이 들어간 회사 .xlsx를 올리면 그 파일에 데이터를 채웁니다. 없으면 아래 설정으로 새 파일을 만듭니다.</p>
+  {% endif %}
+  <form class="row-actions" method="post" action="{{ url_for('admin.form_template', key=key) }}" enctype="multipart/form-data">
+    {{ csrf() }}
+    <label>{{ '양식 파일 바꾸기' if cfg.has_template else '양식 파일 올리기' }} (.xlsx, 5MB 이하, 매크로 불가)<input type="file" name="file" accept=".xlsx" required></label>
+    <button class="btn">올리기</button>
+  </form>
+</section>
+
+<form class="card form" method="post">
+  {{ csrf() }}
+  <h3>2. 위치와 열</h3>
+  <div class="form-grid g5">
+    <label>시트 이름
+      {% if sheets %}
+        <select name="sheet">{% for s in sheets %}<option {{ 'selected' if s == cfg.sheet }}>{{ s }}</option>{% endfor %}</select>
+      {% else %}<input name="sheet" value="{{ cfg.sheet or '' }}" placeholder="{{ form_title }}">{% endif %}
+    </label>
+    <label>머리글 행<input name="header_row" type="number" min="1" max="200" value="{{ cfg.header_row or 1 }}"></label>
+    <label>데이터 시작 행<input name="start_row" type="number" min="1" max="1000" value="{{ cfg.start_row or ((cfg.header_row or 1) + 1) }}"></label>
+    <label>시작 열<input name="start_col" value="{{ cfg.start_col or 'A' }}" maxlength="3"></label>
+    <label class="check"><input type="checkbox" name="write_header" value="1" {{ 'checked' if cfg.get('write_header', true) }}> 머리글을 써 넣기
+      <span class="hint">양식에 머리글이 이미 있으면 끄세요</span></label>
+  </div>
+  <label>제목 ({% raw %}{{제목}}{% endraw %} 자리에 들어감)<input name="title" value="{{ cfg.title or '' }}" placeholder="{{ form_title }}"></label>
+
+  <table class="data">
+    <tr><th>#</th><th>이 시스템 항목</th><th>회사 양식 머리글</th><th>숫자 서식</th></tr>
+    {% for r in rows %}
+    <tr>
+      <td class="num">{{ loop.index }}</td>
+      <td><select name="source"><option value="">(사용 안 함)</option>
+        {% for s in sources %}<option {{ 'selected' if s == r.source }}>{{ s }}</option>{% endfor %}</select></td>
+      <td><input name="header" value="{{ r.header }}"></td>
+      <td><select name="format">{% for k, v in formats.items() %}<option value="{{ k }}" {{ 'selected' if k == r.format }}>{{ v }}</option>{% endfor %}</select></td>
+    </tr>
+    {% endfor %}
+  </table>
+  <p class="muted small">위에서부터 순서대로 시작 열부터 채웁니다. '사용 안 함'인 줄은 빠집니다. 줄이 더 필요하면 저장한 뒤 다시 열면 빈 줄 3개가 더 생깁니다.
+    데이터 행은 양식의 첫 데이터 행(시작 행) 서식을 그대로 이어 씁니다.</p>
+  <div class="row-actions">
+    <button class="btn btn-primary">저장</button>
+    <a class="btn" href="{{ url_for('admin.form_sample', key=key) }}">⬇️ 미리보기 (예시 두 줄)</a>
+  </div>
+</form>
+
+<details class="card">
+  <summary>기본 양식으로 되돌리기</summary>
+  <form class="row-actions" method="post" action="{{ url_for('admin.form_reset', key=key) }}">
+    {{ csrf() }}<label class="check"><input type="checkbox" required> 설정과 양식 파일을 모두 지웁니다.</label><button class="btn btn-danger">되돌리기</button>
+  </form>
+</details>
+{% if cfg.updated_at %}<p class="muted small">마지막 변경: {{ cfg.updated_at }} · {{ cfg.updated_by }}</p>{% endif %}
+{% endblock %}

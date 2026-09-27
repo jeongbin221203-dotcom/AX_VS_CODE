@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}{{ grade.name }} 등급 가이드{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <div class="muted small">등급별 학습 가이드</div>
+    <h1>{{ grade_badge(grade) }} {{ grade.name }} · {{ grade.low }}~{{ grade.high }}점 <span class="muted">({{ grade.ko }})</span></h1>
+  </div>
+  <div class="seg">
+    {% for gr in GRADES %}<a href="{{ url_for('main.guide', level=gr.level) }}" class="{{ 'on' if gr.level == level }}">{{ gr.name }}</a>{% endfor %}
+  </div>
+</div>
+
+<div class="card">
+  <h2>{{ g.headline }}</h2>
+  <p><b>다음 목표</b> · {{ g.next_goal }}</p>
+</div>
+
+<div class="grid two" style="margin-top:14px">
+  <div class="card">
+    <h2>이 등급의 흔한 모습</h2>
+    <ul class="clean">{% for s in g.state %}<li>{{ s }}</li>{% endfor %}</ul>
+  </div>
+  <div class="card">
+    <h2>핵심 과제</h2>
+    <ul class="clean">{% for s in g.tasks %}<li>{{ s }}</li>{% endfor %}</ul>
+  </div>
+  <div class="card">
+    <h2>문법 체크리스트</h2>
+    <ul class="clean">{% for s in g.grammar %}<li>{{ s }}</li>{% endfor %}</ul>
+    <a class="btn small" style="margin-top:10px" href="{{ url_for('quiz.practice_start', part=5, level=level, n=20) }}">{{ grade.name }} Part 5 20문항</a>
+  </div>
+  <div class="card">
+    <h2>하루 루틴 <span class="small muted">(합계 {{ g.routine | sum(attribute=1) }}분)</span></h2>
+    <table><tbody>
+      {% for name, minutes in g.routine %}<tr><td>{{ name }}</td><td class="r num">{{ minutes }}분</td></tr>{% endfor %}
+    </tbody></table>
+    <p class="small muted" style="margin-top:8px">하루 새 단어 권장: {{ g.daily_new_words }}개 (설정에서 바꿀 수 있음)</p>
+  </div>
+</div>
+
+<div class="card" style="margin-top:14px">
+  <h2>이 등급 문제로 연습</h2>
+  <p class="small muted">목표 정답률은 다음 등급으로 올라가기 위한 대략의 기준입니다.</p>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>파트</th><th class="r">문제 수</th><th class="r">목표 정답률</th><th>풀이 전략</th><th></th></tr></thead>
+    <tbody>
+    {% for p, info in PART_INFO.items() %}
+      <tr>
+        <td><b>Part {{ p }}</b><div class="small muted">{{ info.name }}</div>
+          {% if p in g.focus_parts %}<span class="tag ok">집중</span>{% endif %}</td>
+        <td class="r num">{{ counts[p] }}</td>
+        <td class="r num">{{ g.targets.get(p) | pct }}</td>
+        <td class="small"><ul class="clean">{% for t in tips[p] %}<li>{{ t }}</li>{% endfor %}</ul></td>
+        <td class="r">{% if counts[p] %}<a class="btn small primary" href="{{ url_for('quiz.practice_start', part=p, level=level, n=10 if p in (1, 2, 5) else 6) }}">풀기</a>{% endif %}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<div class="card" style="margin-top:14px">
+  <div class="spread">
+    <div><h2 style="margin:0">{{ grade.name }} 단어 {{ vocab_n }}개</h2>
+      <span class="small muted">이 등급 문제에 자주 나오는 단어</span></div>
+    <div class="row">
+      <a class="btn" href="{{ url_for('vocab.word_list', level=level) }}">목록</a>
+      <a class="btn" href="{{ url_for('vocab.quiz', level=level) }}">뜻 고르기 퀴즈</a>
+      <a class="btn" href="{{ url_for('vocab.listen', level=level) }}">🔊 듣기</a>
+      <a class="btn primary" href="{{ url_for('vocab.study', level=level) }}">카드 학습</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

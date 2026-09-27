@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}파트 연습{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>파트 연습</h1>
+    <div class="muted small">등급을 고르지 않으면 모든 등급에서 섞어 냅니다. 안 푼 문제를 먼저 냅니다.
+      {% if grade %}지금 등급: {{ grade_badge(grade) }}{% endif %}</div>
+  </div>
+</div>
+
+<div class="stack">
+{% for p in parts %}
+  <div class="card">
+    <div class="spread">
+      <div>
+        <h2 style="margin:0">Part {{ p.part }} · {{ p.name }} <span class="tag">{{ p.section }}</span></h2>
+        <div class="small muted">실제 시험 {{ p.real_count }}문항{% if p.sec_per_q %} · 목표 문항당 {{ p.sec_per_q }}초{% endif %}</div>
+      </div>
+      <form class="row" method="get" action="{{ url_for('quiz.practice_start') }}">
+        <input type="hidden" name="part" value="{{ p.part }}">
+        <select name="level" aria-label="등급">
+          <option value="">모든 등급</option>
+          {% for gr in GRADES %}
+            <option value="{{ gr.level }}" {{ 'selected' if p.rec_level == gr.level }}>{{ gr.name }} ({{ p.counts[gr.level] }}){{ ' · 추천' if p.rec_level == gr.level }}</option>
+          {% endfor %}
+        </select>
+        <select name="type" aria-label="유형">
+          <option value="">모든 유형</option>
+          {% for t, n in p.types %}<option value="{{ t }}">{{ t }} ({{ n }})</option>{% endfor %}
+        </select>
+        <select name="n" aria-label="문항 수">
+          {% for n in ([5, 10, 20, 30] if p.part in (1, 2, 5) else [3, 6, 9, 12] if p.part in (3, 4) else [4, 8, 12] if p.part == 6 else [4, 8, 12, 20]) %}
+            <option value="{{ n }}" {{ 'selected' if loop.index == 2 }}>{{ n }}문항</option>
+          {% endfor %}
+        </select>
+        <button class="btn primary">풀기</button>
+      </form>
+    </div>
+    <div class="table-wrap" style="margin-top:10px">
+      <table class="small">
+        <thead><tr><th>등급별</th>{% for gr in GRADES %}<th class="r">{{ gr.name }}</th>{% endfor %}</tr></thead>
+        <tbody>
+          <tr><td class="muted">문제</td>{% for gr in GRADES %}<td class="r num">{{ p.counts[gr.level] }}</td>{% endfor %}</tr>
+          <tr><td class="muted">내 정답률</td>{% for gr in GRADES %}{% set a = p.acc[gr.level] %}
+            <td class="r num">{% if a %}{{ a.rate|pct }} <span class="muted">({{ a.n }})</span>{% else %}–{% endif %}</td>{% endfor %}</tr>
+        </tbody>
+      </table>
+    </div>
+    <details style="margin-top:8px"><summary class="small">풀이 전략</summary>
+      <ul class="clean small">{% for t in tips[p.part] %}<li>{{ t }}</li>{% endfor %}</ul></details>
+  </div>
+{% endfor %}
+</div>
+{% endblock %}

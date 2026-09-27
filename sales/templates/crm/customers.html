@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% from "_macros.html" import table, tabs, csrf, select, owner_input, download %}
+
+{% macro customer_form(f, statuses, edit) %}
+  <div class="form-grid g3">
+    <label>거래처명 * <input name="name" value="{{ f.name or '' }}" required></label>
+    <label>사업자번호 <input name="biz_no" value="{{ f.biz_no or '' }}"></label>
+    <label>업종 {{ select('industry', INDUSTRIES, f.industry) }}</label>
+    {{ owner_input('owner_id', f.owner_id, '영업담당자 *') }}
+    <label>등급 {{ select('grade', GRADES, f.grade) }}</label>
+    {% if edit %}<label>상태 {{ select('status', statuses, f.status) }}</label>
+    {% else %}<input type="hidden" name="status" value="활성">{% endif %}
+    <label>고객측 담당자 <input name="manager" value="{{ f.manager or '' }}"></label>
+    <label>연락처 <input name="phone" value="{{ f.phone or '' }}"></label>
+    <label>이메일 <input name="email" type="email" value="{{ f.email or '' }}"></label>
+    <label>여신한도(원) <input name="credit_limit" type="number" min="0" step="10000000" value="{{ f.credit_limit or 0 }}"></label>
+    <label>결제조건(일) <input name="payment_terms" type="number" min="0" value="{{ f.payment_terms if f.payment_terms is not none else 30 }}"></label>
+    <label>주소 <input name="address" value="{{ f.address or '' }}"></label>
+    <label>ERP 코드 (SAP 고객번호) <input name="erp_code" value="{{ f.erp_code or '' }}" placeholder="예) C100234"></label>
+  </div>
+  <label>메모 <textarea name="memo" rows="3">{{ f.memo or '' }}</textarea></label>
+{% endmacro %}
+
+{% block content %}
+<form method="get" class="toolbar" action="{{ page_path() }}">
+  <label class="grow">검색 (거래처명/담당자/메모) <input name="q" value="{{ q }}"></label>
+  <label>등급 {{ select('grade', GRADES, grade, blank='전체') }}</label>
+  <label>상태 {{ select('status', statuses, cstatus, blank='전체') }}</label>
+  <button class="btn">조회</button>
+</form>
+
+<div class="card-head">
+  <p class="muted">총 {{ tbl.total }}개 거래처 · 행을 누르면 수정 화면으로 이동합니다. 목록의 고객 연락처·이메일은 가려서 표시합니다.</p>
+  {{ download(export_url('customers')) }}
+</div>
+{{ table(tbl, 460) }}
+
+<section class="card">
+  {{ tabs([('new', '➕ 신규 등록'), ('edit', '✏️ 수정 / 삭제')], tab) }}
+  {% if tab == 'edit' %}
+    {% if not options %}
+      <div class="alert alert-info">등록된 거래처가 없습니다.</div>
+    {% else %}
+      <form method="get" class="toolbar" action="{{ page_path() }}">
+        <input type="hidden" name="tab" value="edit">
+        <label class="grow">수정할 거래처 {{ select('id', options.items()|list, edit_id or '', blank='선택하세요') }}</label>
+        <button class="btn">불러오기</button>
+      </form>
+      {% if edit_id %}
+        <form method="post" action="{{ url_for('crm.customer_save') }}" class="form">
+          {{ csrf() }}<input type="hidden" name="id" value="{{ edit_id }}">
+          <input type="hidden" name="row_version" value="{{ f.row_version or 0 }}">
+          {{ customer_form(f, statuses, true) }}
+          <button class="btn btn-primary">💾 저장</button>
+        </form>
+        <form method="post" action="{{ url_for('crm.customer_delete', cid=edit_id) }}" class="danger-zone">
+          {{ csrf() }}
+          <label class="check"><input type="checkbox" name="confirm" value="1"> 삭제 확인 (영업기회·활동·매출 이력이 있으면 삭제되지 않습니다 → 상태를 '종료'로)</label>
+          <button class="btn btn-danger">🗑️ 삭제</button>
+        </form>
+
+        <h3>📇 이 거래처 요약</h3>
+        <div class="grid-2">
+          <div><p class="muted small">진행 중 영업기회</p>{{ table(cust_deals) }}</div>
+          <div><p class="muted small">최근 영업활동</p>{{ table(cust_acts) }}</div>
+        </div>
+      {% endif %}
+    {% endif %}
+  {% else %}
+    <form method="post" action="{{ url_for('crm.customer_save') }}" class="form">
+      {{ csrf() }}
+      {{ customer_form(f, statuses, false) }}
+      <button class="btn btn-primary">등록</button>
+    </form>
+  {% endif %}
+</section>
+{% endblock %}

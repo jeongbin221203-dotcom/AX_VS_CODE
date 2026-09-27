@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="alert alert-error">{{ message }}</div>
+  <p><a class="btn" href="{{ url_for('dashboard.index') }}">대시보드로</a></p>
+  <p class="muted small">오류 코드 {{ code }}</p>
+{% endblock %}

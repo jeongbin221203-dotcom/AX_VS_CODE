@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% set active_page = 'sub1' %}
+
+{% block content %}
+<!-- 상세 페이지 히로 배너 -->
+<section class="hero" style="height: 50vh; min-height: 400px; background-image: url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854?q=80&w=1920');">
+    <div class="hero-content left-align">
+        <span class="hero-category">Product Detail</span>
+        <h1 id="detailTitle">제품 상세 정보</h1>
+        <hr class="hero-divider">
+        <p>대한사료의 70년 과학적 영양 설계와 혁신 기술을 확인하세요.</p>
+    </div>
+</section>
+
+<!-- 상세 내용 본문 섹션 -->
+<section>
+    <div class="section-inner" style="max-width: 1000px;">
+        <div style="background: #fbf9f6; border-radius: 20px; padding: 50px; box-shadow: 0 10px 30px rgba(0,0,0,0.02);">
+            
+            <!-- 동적으로 변경될 메인 제목 -->
+            <h2 id="subHeading" style="color: #1e5a22; font-size: 2.2rem; margin-top: 0; margin-bottom: 20px; font-weight: 700;">정밀 영양 설계 솔루션</h2>
+            
+            <!-- 설명 1 -->
+            <p id="desc1" style="font-size: 1.1rem; line-height: 1.8; color: #555; margin-bottom: 20px;">
+                대한사료는 축종별 유전 능력을 극대화하고 농가의 수익성 향상을 이끌어내기 위해 최첨단 바이오 기술과 현장 데이터 기반의 맞춤형 사양 프로그램을 제공합니다.
+            </p>
+
+            <!-- 설명 2 -->
+            <p id="desc2" style="font-size: 1.1rem; line-height: 1.8; color: #555; margin-bottom: 40px;">
+                계절과 기후 변화(온도·습도)에 따른 가축의 섭취량 변화를 실시간 분석하여, 어떤 환경에서도 흔들림 없는 완벽한 영양 밸런스를 보장합니다.
+            </p>
+
+            <!-- 핵심 기술 리스트 -->
+            <h3 style="font-size: 1.4rem; color: #111; margin-bottom: 15px; border-left: 4px solid #1e5a22; padding-left: 12px;">핵심 적용 기술 및 기대 효과</h3>
+            <ul id="featureList" style="font-size: 1.05rem; line-height: 1.9; color: #555; padding-left: 20px; margin-bottom: 40px;">
+                <li>엄격한 HACCP 인증 시설에서 생산된 무결점 안전 사료</li>
+                <li>소화 흡수율 극대화 및 장내 환경 개선 솔루션 탑재</li>
+                <li>농가 목표 등급 달성 및 사료 효율 혁신</li>
+            </ul>
+
+            <!-- 목록으로 돌아가기 버튼 -->
+            <div style="text-align: center;">
+                <a href="/sub1" style="display: inline-block; padding: 14px 35px; background: #1e5a22; color: white; border-radius: 30px; font-weight: 600; font-size: 1.05rem; transition: 0.3s;">제품 목록으로 돌아가기</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 카테고리별 공식 홈페이지 분석 내용 동적 렌더링 스크립트 -->
+<script>
+    const pathSegments = window.location.pathname.split('/');
+    const category = pathSegments[pathSegments.length - 1];
+
+    if (category === 'chicken') {
+        document.getElementById('detailTitle').innerText = '양계 사료 상세 정보';
+        document.getElementById('subHeading').innerText = '대한사료 양계 시리즈 (7단계 정밀영양 시스템)';
+        document.getElementById('desc1').innerText = '산란의 과학을 완성하다! 대한사료는 기존 3단계 체계를 넘어 산란계의 생리 변화를 7단계로 세분화했습니다. 성장부터 산란 이후까지 각 단계별 최적의 영양을 제공하여 닭의 건강과 농가의 생산성을 함께 지켜갑니다.';
+        document.getElementById('desc2').innerText = '대학 및 연구기관 협력을 통해 검증된 사료 설계 기술을 적용하며, 주요 육종사 표준성적 대비 뛰어난 육성 성적(S1, S2, G 및 1~16주령 구간에서 표준 대비 우수한 증체량)을 입증했습니다. 또한 전 제품은 HACCP(식품안전관리인증) 시설에서 엄격하게 생산됩니다.';
+        document.getElementById('featureList').innerHTML = `
+            <li>산란계 생리 변화에 맞춘 <strong>7단계 세분화 영양 설계</strong> 시스템</li>
+            <li>주요 육종사 표준성적 대비 입증된 우수 증체량 (S1, S2, G, 육성기 전 구간)</li>
+            <li>대학 및 연구기관과의 지속적인 R&D 협력을 통한 고도화된 영양학 적용</li>
+            <li><strong>HACCP(식품안전관리인증)</strong> 적용 시설에서 원료 입고부터 출하까지 철저한 위생 관리</li>
+        `;
+    } else if (category === 'pig') {
+        document.getElementById('detailTitle').innerText = '양돈 사료 상세 정보';
+        document.getElementById('subHeading').innerText = '장 건강의 혁신, 키워드림 (DCT 및 메타바이오틱스 솔루션)';
+        document.getElementById('desc1').innerText = '돼지의 소화생리와 영양대사를 과학적으로 분석한 DCT(Digestive Care Technology) 기술을 기반으로 개발되었습니다. 자돈의 초기 스트레스를 최소화하고 소화율을 극대화하여 연중 최고 수준의 육성률을 이끌어냅니다.';
+        document.getElementById('desc2').innerText = '5세대 메타바이오틱스(유익균 대사물질)를 첨가하여 장내 유해균을 억제하고 융모 발달을 촉진합니다. 이를 통해 돈사 내 암모니아 가스 및 분뇨 악취를 획기적으로 저감시키며 출하 일령 단축에 기여합니다.';
+        document.getElementById('featureList').innerHTML = `
+            <li><strong>DCT 기술</strong> 적용을 통한 자돈 초기 소화 흡수율 극대화</li>
+            <li>5세대 메타바이오틱스 첨가로 장내 마이크로바이옴 개선 및 면역력 증진</li>
+            <li>분뇨 내 질소 배출량 저감으로 돈사 내 암모니아 악취 획기적 개선</li>
+            <li>사료 효율 개선 및 출하 일령 단축을 통한 농가 수익성 극대화</li>
+        `;
+    } else if (category === 'cow') {
+        document.getElementById('detailTitle').innerText = '축우 사료 상세 정보';
+        document.getElementById('subHeading').innerText = '최고 등급의 완성, NEW 뉴텍프리미엄 (한우 비육 솔루션)';
+        document.getElementById('desc1').innerText = '최신 한우 도체등급 판정 기준(육질·육량)에 완벽히 부합하도록 설계된 한우 전용 프리미엄 라인업입니다. 송아지 전기부터 비육 후기까지 성장 단계별 요구 영양을 정밀하게 타겟팅합니다.';
+        document.getElementById('desc2').innerText = '초정밀 가공된 얇은 옥수수 후레이크 공법을 적용하여 반추위 내 발효 속도를 최적화하고, 정밀한 비타민 A 조절 기술을 통해 등심 단면적 확대와 화이트 마블링(근내지방) 형성을 극대화합니다.';
+        document.getElementById('featureList').innerHTML = `
+            <li>최신 한우 도체등급 판정 기준 맞춤형 단계별 영양 공급</li>
+            <li>정밀한 <strong>비타민 A 조절 기술</strong> 적용으로 최고급 육질 등급 달성</li>
+            <li>초정밀 얇은 옥수수 후레이크 가공으로 반추위 에너지 이용률 극대화</li>
+            <li>생효모 첨가를 통한 반추위 내 산증(Acidosis) 예방 및 사양 안정화</li>
+        `;
+    } else if (category === 'fish') {
+        document.getElementById('detailTitle').innerText = '양어 사료 상세 정보';
+        document.getElementById('subHeading').innerText = '수질 환경까지 지키는 아쿠아닉스 피쉬라인 (친환경 양어 솔루션)';
+        document.getElementById('desc1').innerText = '특허받은 정밀 그래뉼 공법 및 저온 압출 기술을 적용하여 어류의 소화 흡수율을 높이고 수중에서도 형태가 완벽히 유지되는 고품질 전문 양어 사료입니다.';
+        document.getElementById('desc2').innerText = '슈퍼프라임(Super Prime) 등급의 최고급 칠레산 어분을 주원료로 채택하여 치어의 초기 생존율을 극대화합니다. 잔여 사료와 분변 발생량을 줄여 양식장 수질 오염을 원천 방지합니다.';
+        document.getElementById('featureList').innerHTML = `
+            <li>특허받은 <strong>그래뉼 공법 및 저온 압출 기술</strong>로 기호성 및 소화율 증대</li>
+            <li>슈퍼프라임 등급 칠레산 어분 적용으로 균형 잡힌 고단백 영양 공급</li>
+            <li>치어 및 육성어의 면역력 강화 및 폐사율 최소화</li>
+            <li>분변 및 용출물 감소를 통한 친환경 양식장 수질 환경 보호</li>
+        `;
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}뜻 고르기 퀴즈{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><h1>뜻 고르기 퀴즈 {% if level %}{{ grade_badge(level) }}{% endif %}</h1>
+    <div class="muted small">무작위 {{ questions|length }}단어 · 같은 품사의 뜻을 오답으로 섞습니다. 결과는 카드 일정에 영향을 주지 않습니다.</div></div>
+  <div class="seg">
+    <a href="{{ url_for('vocab.quiz') }}" class="{{ 'on' if not level }}">전체</a>
+    {% for gr in GRADES %}<a href="{{ url_for('vocab.quiz', level=gr.level) }}" class="{{ 'on' if level == gr.level }}">{{ gr.name }}</a>{% endfor %}
+  </div>
+</div>
+<div class="card" style="max-width:680px;margin:0 auto" id="vq">
+  <div class="spread small muted"><span id="vq-prog"></span><span id="vq-score"></span></div>
+  <div class="flash-card" style="min-height:0;padding:16px 0">
+    <div class="word" id="vq-word"></div>
+    <div class="pos" id="vq-pos"></div>
+  </div>
+  <div class="choices" id="vq-choices"></div>
+  <div class="explain hidden" id="vq-explain"></div>
+  <div class="quiz-foot"><span></span><button class="btn primary hidden" id="vq-next">다음 <span class="kbd">Enter</span></button></div>
+</div>
+<div class="card empty hidden" id="vq-done" style="max-width:680px;margin:0 auto">
+  <h2 id="vq-final"></h2>
+  <div id="vq-missed" class="small" style="text-align:left"></div>
+  <a class="btn primary" href="{{ request.full_path }}">다시 하기</a>
+</div>
+<script type="application/json" id="vq-data">{{ questions|tojson }}</script>
+<script type="application/json" id="tts-data">{{ tts|tojson }}</script>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/tts.js') }}"></script>
+<script src="{{ url_for('static', filename='js/vocab-extra.js') }}"></script>
+{% endblock %}

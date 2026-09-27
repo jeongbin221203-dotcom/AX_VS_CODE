@@ -1,0 +1,22 @@
+"""운영 서버 실행 (waitress — Windows/Linux 공용 WSGI 서버).
+
+    set SALES_ENV=production
+    set SALES_SECRET_KEY=...           (고정값)
+    set SALES_AUTH_MODE=sso            (또는 password)
+    python serve.py
+
+HTTPS 는 앞단 리버스 프록시(IIS·nginx·L4)에서 처리하고, 이 서버는 사내망 내부 포트로만 연다.
+SSO 헤더는 직접 연결된 프록시 IP(SALES_TRUSTED_PROXIES)에서 온 요청만 믿으므로
+waitress 의 X-Forwarded-For 치환 기능은 켜지 않는다.
+"""
+import os
+
+from waitress import serve
+
+import config
+from app import create_app
+
+if __name__ == "__main__":
+    serve(create_app(), host=config.HOST, port=config.PORT,
+          threads=int(os.environ.get("SALES_THREADS", "8")),
+          url_scheme="https" if config.PRODUCTION else "http")

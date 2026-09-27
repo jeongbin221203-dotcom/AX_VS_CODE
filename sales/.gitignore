@@ -1,0 +1,10 @@
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+# 실행 데이터 (DB·업로드·증빙·백업·로그) — 저장소에 올리지 않는다
+data/
+# 비밀값·인증서
+.env
+deploy/.env
+deploy/certs/
+deploy/metrics_token

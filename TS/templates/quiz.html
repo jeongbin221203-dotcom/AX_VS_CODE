@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}{{ session_title(s) }}{% endblock %}
+{% block body_class %}quiz-page{% endblock %}
+{% block content %}
+<div id="intro" class="card" style="max-width:640px;margin:30px auto">
+  <h1>{{ session_title(s) }}</h1>
+  <p class="muted">문제 {{ payload["items"]|length }}개 묶음
+    {% if s.time_limit %} · RC 제한 시간 {{ (s.time_limit // 60) }}분{% endif %}</p>
+  <ul class="clean small">
+    {% if s.mode in ('mock', 'diagnostic') %}
+      <li>끝까지 풀고 <b>제출</b>하면 채점과 추정 점수가 나옵니다. 중간에 정답은 보여 주지 않습니다.</li>
+      <li>듣기(LC)는 문제마다 <b>한 번만</b> 재생됩니다. 화면에 들어가면 자동으로 시작합니다.</li>
+      <li>RC 제한 시간은 RC 문제를 보고 있는 동안만 줄어듭니다. 시간이 끝나면 자동 제출합니다.</li>
+    {% else %}
+      <li>답을 고르면 바로 채점하고 해설을 보여 줍니다 (세트 문제는 모두 고른 뒤 <b>채점하기</b>).</li>
+      <li>틀린 문항은 오답노트에 자동으로 들어갑니다. 복습에서 연속 2번 맞히면 빠집니다.</li>
+      <li>듣기 문제는 다시 듣기(R)와 채점 뒤 스크립트·해석 보기가 가능합니다.</li>
+    {% endif %}
+    <li>단축키: <span class="kbd">1~4</span>/<span class="kbd">A~D</span> 선택 · <span class="kbd">Enter</span> 채점·다음 ·
+      <span class="kbd">←</span><span class="kbd">→</span> 이동 · <span class="kbd">↑</span><span class="kbd">↓</span> 세트 안 문항 이동 · <span class="kbd">R</span> 다시 듣기</li>
+  </ul>
+  <p class="small muted">듣기 음성은 브라우저 음성 합성으로 만듭니다. 크롬·엣지에서 가장 자연스럽습니다. 음성 속도·억양은 설정에서 바꿀 수 있습니다.</p>
+  <button class="btn primary" id="start-btn">시작하기</button>
+</div>
+
+<div id="quiz-main" class="hidden">
+  <div class="quiz-top">
+    <b>{{ session_title(s) }}</b>
+    <span class="progress muted small" id="progress"></span>
+    <span class="timer" id="timer"></span>
+    {% if s.mode in ('practice', 'review') %}
+      <button class="btn small" id="finish-btn">그만하고 결과 보기</button>
+    {% else %}
+      <button class="btn small primary" id="submit-btn">제출하기</button>
+    {% endif %}
+  </div>
+  <div class="qnav" id="qnav"></div>
+  <div id="stage"></div>
+</div>
+<script type="application/json" id="payload">{{ payload|tojson }}</script>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/tts.js') }}"></script>
+<script src="{{ url_for('static', filename='js/quiz.js') }}"></script>
+{% endblock %}

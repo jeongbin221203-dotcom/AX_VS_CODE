@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}전체 기록{% endblock %}
+{% block content %}
+<div class="page-head"><h1>전체 기록</h1><a class="btn" href="{{ url_for('main.stats_page') }}">← 통계</a></div>
+<div class="card">
+  {% if sessions %}
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>날짜</th><th>종류</th><th class="r">정답</th><th class="r">정답률</th><th class="r">추정 점수</th><th class="r">시간</th></tr></thead>
+    <tbody>
+    {% for s in sessions %}
+      <tr>
+        <td class="num">{{ s.finished_at[:16].replace('T', ' ') }}</td>
+        <td><a href="{{ url_for('quiz.result', sid=s.id) }}">{{ session_title(s) }}</a> <span class="tag">{{ MODE_LABEL[s.mode] }}</span></td>
+        <td class="r num">{{ s.correct }}/{{ s.total }}</td>
+        <td class="r num">{{ ((s.correct / s.total) if s.total else none)|pct }}</td>
+        <td class="r num">{% if s.total_est is not none %}<b>{{ s.total_est }}</b>{% else %}–{% endif %}</td>
+        <td class="r num">{{ s.duration_sec|mmss }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  {% else %}<div class="empty">아직 기록이 없습니다.</div>{% endif %}
+</div>
+{% endblock %}

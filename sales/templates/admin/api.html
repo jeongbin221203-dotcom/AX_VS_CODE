@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% from "_macros.html" import table, csrf, select %}
+{% block content %}
+<p class="subtitle">그룹웨어·BI·ERP 같은 다른 시스템이 <code>/api/v1</code> 로 데이터를 읽고 매출을 등록할 때 쓰는 키입니다.
+  키는 대리 사용자의 역할·데이터 범위로 동작하고, 감사로그에는 <code>API:이름</code> 으로 남습니다.
+  명세: <a href="{{ url_for('api.openapi') }}" target="_blank" rel="noopener">OpenAPI (JSON)</a></p>
+
+{% if new_key %}
+<div class="alert alert-warning">
+  <strong>새 API 키 — 지금 한 번만 보여 줍니다.</strong> 안전한 곳(비밀 저장소)에 보관하세요. 잃어버리면 폐기 후 다시 발급합니다.
+  <pre class="secret">{{ new_key }}</pre>
+  <span class="small">호출 예: <code>curl -H "Authorization: Bearer {{ new_key[:12] }}…" {{ url_for('api.me', _external=True) }}</code></span>
+</div>
+{% endif %}
+
+<section class="card">
+  <h3>발급된 키</h3>
+  {{ table(clients, 300, '발급된 키가 없습니다.') }}
+  {% for cid, label in revocable %}
+  <form method="post" action="{{ url_for('admin.api_revoke', cid=cid) }}" class="toolbar">
+    {{ csrf() }}<span class="grow">{{ label }}</span><button class="btn btn-sm btn-danger">폐기</button>
+  </form>
+  {% endfor %}
+</section>
+
+<section class="card">
+  <h3>➕ 새 키 발급</h3>
+  <form method="post" action="{{ url_for('admin.api_create') }}" class="form">
+    {{ csrf() }}
+    <div class="form-grid g4">
+      <label>이름 * <input name="name" required placeholder="예) 그룹웨어"></label>
+      <label>대리 사용자 * {{ select('user_id', user_opts, '', blank='선택하세요') }}</label>
+      <label>분당 호출 한도 <input type="number" name="rate_limit" min="1" value="120"></label>
+      <label>허용 IP (쉼표, CIDR) <input name="allowed_ips" placeholder="10.0.0.0/8, 192.168.10.5"></label>
+    </div>
+    <fieldset class="checks">
+      <legend>권한 범위</legend>
+      {% for key, label in scopes.items() %}
+        <label class="check"><input type="checkbox" name="scopes" value="{{ key }}"> {{ label }} <code>{{ key }}</code></label>
+      {% endfor %}
+    </fieldset>
+    <p class="muted small">필요한 권한만 주세요. 대리 사용자를 영업사원으로 지정하면 그 사람 담당 데이터만 보입니다.</p>
+    <button class="btn btn-primary">발급</button>
+  </form>
+</section>
+{% endblock %}

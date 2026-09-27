@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf, table %}
+{% block content %}
+<p class="muted small">운영에서는 각 서버에서 <code>python batch.py --loop</code>를 서비스로 띄워 둡니다. 작업마다 DB 잠금(임대 {{ lease }}초)을 잡은 서버 한 대만 실행하고,
+  그 서버가 죽으면 임대가 끝난 뒤 다른 서버가 이어받습니다. 이 화면을 보는 서버: <code>{{ worker }}</code></p>
+
+<div class="table-wrap"><table class="data">
+  <tr><th>작업</th><th>주기</th><th>사용</th><th>실행 중인 서버</th><th>마지막 시작</th><th>마지막 종료</th><th>결과</th><th>메시지</th><th></th></tr>
+  {% for j in status %}
+  <tr class="{{ 'tone-danger' if j.last_status == 'ERROR' }}">
+    <td>{{ j.label }} <span class="muted small">({{ j.name }})</span></td>
+    <td class="num">{{ j.interval }}초</td>
+    <td>{{ '사용' if j.enabled else '꺼짐' }}</td>
+    <td>{{ j.holder or '-' }}</td>
+    <td>{{ j.last_started or '-' }}</td>
+    <td>{{ j.last_finished or '-' }}</td>
+    <td>{{ j.last_status or '-' }}</td>
+    <td>{{ (j.last_message or '')[:120] }}</td>
+    <td>
+      <form method="post" action="{{ url_for('admin.job_run', name=j.name) }}">
+        {{ csrf() }}<button class="btn btn-sm" {{ 'disabled' if not j.enabled }}>지금 실행</button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+</table></div>
+
+<h3>최근 실행 기록</h3>
+{{ table(runs, "아직 실행 기록이 없습니다.") }}
+{% endblock %}

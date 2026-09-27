@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% from "_macros.html" import table, chart, csrf %}
+{% block content %}
+<p class="subtitle">담당자별 월 목표를 입력하면 대시보드 달성률에 즉시 반영됩니다. (단위: 원)</p>
+
+<section class="card">
+  <h3>💾 {{ g.ym }} 목표 입력</h3>
+  <form method="post" action="{{ url_for('finance.targets_save') }}">
+    {{ csrf() }}
+    <div class="table-wrap">
+      <table class="data">
+        <thead><tr><th>담당자</th><th class="num">목표금액(원)</th></tr></thead>
+        <tbody>
+          {% for owner_id, label, amount in rows %}
+            <tr><td><input type="hidden" name="owner_id" value="{{ owner_id }}">{{ label }}</td>
+                <td class="num"><input name="amount" type="number" min="0" step="1000000" value="{{ amount }}"></td></tr>
+          {% else %}
+            <tr><td colspan="2" class="muted">목표를 입력할 수 있는 담당자가 없습니다.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="row-actions">
+      <button class="btn btn-primary">💾 {{ g.ym }} 목표 저장</button>
+      <span class="muted small">담당자 목록은 조직·사용자 메뉴에 등록된 활성 사용자(내 권한 범위)입니다.</span>
+    </div>
+  </form>
+</section>
+
+<section class="card">
+  <h3>📌 {{ g.ym }} 목표 대비 실적</h3>
+  {% if not perf.empty %}
+    {{ chart(perf_chart) }}
+    {{ table(perf) }}
+    <div class="progress"><div style="width: {{ [rate, 100]|min }}%"></div></div>
+    <p class="muted small">전사 달성률 {{ '%.1f'|format(rate) }}% ({{ total_s|won }} / {{ total_t|won }})</p>
+  {% else %}
+    <div class="alert alert-info">담당자 정보가 없습니다. 거래처나 매출을 먼저 등록하세요.</div>
+  {% endif %}
+</section>
+
+<section class="card">
+  <h3>📅 최근 12개월 목표 vs 매출</h3>
+  {{ chart(trend_chart) }}
+  {{ table(trend) }}
+</section>
+{% endblock %}

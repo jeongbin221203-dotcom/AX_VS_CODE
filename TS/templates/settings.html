@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}설정{% endblock %}
+{% block content %}
+<div class="page-head"><h1>설정</h1></div>
+<form method="post" class="grid two">
+  <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+  <div class="card">
+    <h2>목표</h2>
+    <label class="field"><span>목표 점수 (10~990)</span><input type="number" name="target_score" min="10" max="990" step="5" value="{{ s.target_score }}" required></label>
+    <label class="field"><span>시험일</span><input type="date" name="exam_date" value="{{ s.exam_date }}"></label>
+    <label class="field"><span>현재 점수 직접 입력 (비우면 진단·모의고사 추정치 사용)</span>
+      <input type="number" name="current_score" min="10" max="990" step="5" value="{{ s.current_score }}" placeholder="예: 650"></label>
+    <p class="small muted">직접 입력한 뒤에 진단·모의고사를 보면 그 추정치가 새 현재 점수가 됩니다.</p>
+  </div>
+  <div class="card">
+    <h2>하루 학습량</h2>
+    <label class="field"><span>하루 문항 수 목표</span><input type="number" name="daily_questions" min="5" max="300" value="{{ s.daily_questions }}"></label>
+    <label class="field"><span>하루 새 단어 수</span><input type="number" name="daily_new_words" min="0" max="200" value="{{ s.daily_new_words }}"></label>
+    <h2 style="margin-top:18px">듣기 음성</h2>
+    <label class="field"><span>속도</span>
+      <select name="tts_rate">
+        {% for r in ['0.8', '0.9', '1.0', '1.1', '1.2'] %}<option value="{{ r }}" {{ 'selected' if (s.tts_rate|float) == (r|float) }}>{{ r }}×{{ ' (기본)' if r == '1.0' }}</option>{% endfor %}
+      </select></label>
+    <label class="field"><span>억양</span>
+      <select name="tts_accent">
+        {% for k, v in [('mix', '섞기 (실제 시험처럼)'), ('us', '미국'), ('uk', '영국'), ('au', '호주')] %}
+          <option value="{{ k }}" {{ 'selected' if s.tts_accent == k }}>{{ v }}</option>{% endfor %}
+      </select></label>
+    <p class="small muted">브라우저에 설치된 영어 음성을 씁니다. 엣지의 'Online (Natural)' 음성이 가장 자연스럽습니다.
+      <button type="button" class="btn small" id="voice-test">음성 확인</button></p>
+    <div class="small muted" id="voice-info"></div>
+  </div>
+  <div><button class="btn primary">저장</button></div>
+</form>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/tts.js') }}"></script>
+<script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+{% endblock %}

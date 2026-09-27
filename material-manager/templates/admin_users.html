@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf, table %}
+{% block content %}
+<section class="card">
+  <h3>사용자 추가</h3>
+  <form class="form-grid g4" method="post" action="{{ url_for('admin.create_user') }}">
+    {{ csrf() }}
+    <label>아이디<input name="username" required></label>
+    <label>이름<input name="name" required></label>
+    <label>역할
+      <select name="role">{% for code, (lv, label) in ROLES.items() %}<option value="{{ code }}" {{ 'selected' if code == 'CLERK' }}>{{ label }}</option>{% endfor %}</select>
+    </label>
+    <label>임시 비밀번호 (8자+, 영문·숫자)<input name="password" type="text" autocomplete="off" required></label>
+    <div><button class="btn btn-primary">추가</button></div>
+  </form>
+  <p class="muted small">조회: 조회·다운로드 / 담당자: + 입출고·이동·증빙 등록 / 관리자: + 자재 마스터·거래 취소·결재·월 마감·SAP 재전송·재고 대사 / 시스템관리자: + 사용자·조직·배치·감사로그·데이터 관리·마감 해제.
+    본인 계정의 역할·상태·범위·비밀번호 초기화는 다른 시스템관리자가 해야 합니다(직무 분리).</p>
+</section>
+
+{{ table(grid) }}
+
+<h3>사용자 변경</h3>
+{% for u in users %}
+<details class="card">
+  <summary>{{ u.name }} ({{ u.username }}) · {{ role_label(u.role) }}{{ ' · 중지' if not u.active }}</summary>
+  <form class="row-actions" method="post" action="{{ url_for('admin.update_user', user_id=u.id) }}">
+    {{ csrf() }}
+    <label>이름<input name="name" value="{{ u.name }}" required></label>
+    <label>역할
+      <select name="role">{% for code, (lv, label) in ROLES.items() %}<option value="{{ code }}" {{ 'selected' if code == u.role }}>{{ label }}</option>{% endfor %}</select>
+    </label>
+    <label>상태
+      <select name="active"><option value="1" {{ 'selected' if u.active }}>사용</option><option value="0" {{ 'selected' if not u.active }}>중지</option></select>
+    </label>
+    <button class="btn">저장</button>
+  </form>
+  {% if u.role != 'ADMIN' %}
+  <form class="form" method="post" action="{{ url_for('admin.user_scope', user_id=u.id) }}">
+    {{ csrf() }}
+    <fieldset>
+      <legend>데이터 범위 (지금: {{ u.scope_label }})</legend>
+      <label class="check"><input type="checkbox" name="all" value="1" {{ 'checked' if u.all_warehouses }}> 모든 창고</label>
+      <div class="checks">
+        {% for p in plants %}<label class="check"><input type="checkbox" name="plant" value="{{ p.id }}" {{ 'checked' if p.id in u.scope_plants }}> {{ p.code }} {{ p.name }} (플랜트 전체)</label>{% endfor %}
+      </div>
+      <div class="checks">
+        {% for w in warehouses %}<label class="check"><input type="checkbox" name="warehouse" value="{{ w.id }}" {{ 'checked' if w.id in u.scope_whs }}> {{ w.plant_code }}/{{ w.code }} {{ w.name }}</label>{% endfor %}
+      </div>
+      <p class="muted small">'모든 창고'를 끄면 고른 플랜트(그 아래 창고 전체, 나중에 생긴 창고 포함)와 창고만 보고 처리합니다. 시스템관리자는 항상 전체입니다.</p>
+      <div><button class="btn">범위 저장</button></div>
+    </fieldset>
+  </form>
+  {% endif %}
+  {% if u.totp_enabled %}
+  <form class="row-actions" method="post" action="{{ url_for('admin.mfa_reset', user_id=u.id) }}">
+    {{ csrf() }}
+    <label class="grow">2단계 인증 초기화 사유 (휴대폰 분실 등)<input name="reason" required></label>
+    <button class="btn">2단계 인증 초기화</button>
+  </form>
+  {% endif %}
+  {% if u.auth_source != 'sso' %}
+  <form class="row-actions" method="post" action="{{ url_for('admin.reset_password', user_id=u.id) }}">
+    {{ csrf() }}
+    <label>임시 비밀번호로 초기화 (잠금도 해제)<input name="password" type="text" autocomplete="off" required></label>
+    <button class="btn">초기화</button>
+  </form>
+  {% else %}<p class="muted small">사내 SSO 사용자 — 역할은 로그인할 때 사내 그룹으로 다시 정해집니다.</p>{% endif %}
+</details>
+{% endfor %}
+{% endblock %}

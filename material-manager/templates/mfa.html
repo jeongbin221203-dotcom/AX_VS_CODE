@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+{% if codes %}
+  <section class="card">
+    <h3>복구 코드 (지금 한 번만 보입니다)</h3>
+    <p class="muted small">휴대폰을 잃어버렸을 때 인증 코드 대신 하나씩 쓸 수 있습니다. 인쇄하거나 안전한 곳에 보관하세요.</p>
+    <pre class="codes">{% for c in codes %}{{ c }}
+{% endfor %}</pre>
+  </section>
+{% endif %}
+{% if enabled %}
+  <div class="alert alert-success">2단계 인증이 켜져 있습니다. 로그인할 때마다 인증 앱의 코드를 입력합니다.</div>
+  {% if not required %}
+  <form class="card row-actions" method="post">
+    <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+    <input type="hidden" name="action" value="disable">
+    <label>현재 인증 코드<input name="code" inputmode="numeric" autocomplete="one-time-code" required></label>
+    <button class="btn btn-danger">2단계 인증 끄기</button>
+  </form>
+  {% else %}
+  <p class="muted small">{{ role_label(g.user.role) }}은 2단계 인증이 필수라 끌 수 없습니다. 휴대폰을 바꾸면 시스템관리자에게 재등록을 요청하세요.</p>
+  {% endif %}
+{% else %}
+  {% if required %}<div class="alert alert-warning">{{ role_label(g.user.role) }}은 2단계 인증을 등록해야 시스템을 쓸 수 있습니다.</div>{% endif %}
+  <section class="card">
+    <h3>1. 인증 앱에 등록</h3>
+    <p class="muted small">휴대폰 인증 앱에서 QR 코드를 찍거나, 아래 키를 직접 입력하세요.</p>
+    <div class="qr" data-qr="{{ uri }}"></div>
+    <p>키: <code class="mono">{{ secret }}</code></p>
+  </section>
+  <form class="card form narrow-form" method="post">
+    <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+    <input type="hidden" name="action" value="enable">
+    <h3>2. 앱에 뜬 6자리 코드로 확인</h3>
+    <label>인증 코드<input name="code" inputmode="numeric" autocomplete="one-time-code" required></label>
+    <div><button class="btn btn-primary">2단계 인증 켜기</button></div>
+  </form>
+{% endif %}
+{% endblock %}

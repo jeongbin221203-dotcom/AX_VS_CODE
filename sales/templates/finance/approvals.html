@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% from "_macros.html" import metric, table, tabs, csrf, select, download %}
+{% block content %}
+<p class="subtitle">할인율 구간별 결재선 — 10% 이하: 팀장 / 20% 이하: 팀장 → 임원 / 20% 초과: 팀장 → 임원 → 관리자.
+  단계마다 {{ sla_hours }}시간 안에 결재하지 않으면 결재자에게 독촉, 윗선에 지연 보고가 갑니다.
+  본인이 요청한 건은 결재할 수 없고, 한 사람은 한 건에서 한 단계만 결재합니다.</p>
+
+<div class="metrics m3">
+  {{ metric('내 결재 대기', mine_cnt ~ '건') }}
+  {{ metric('내가 요청한 건', requested_cnt ~ '건') }}
+  {{ metric('대기 중 총액', mine_total|mil) }}
+</div>
+
+<section class="card">
+  {{ tabs([('mine', '📥 내 결재 대기'), ('requested', '📤 내 요청 현황'), ('history', '🗃️ 결재 이력'), ('delegation', '🔁 대결 지정')], tab) }}
+  {% if tab == 'delegation' %}
+    <p class="muted small">출장·휴가 등으로 자리를 비울 때, 기간 동안 다른 사람이 내 결재를 대신합니다(대결). 결재 기록에는 "OOO 대결" 로 남습니다.</p>
+    {{ table(delegations) }}
+    <form method="post" action="{{ url_for('finance.delegation_add') }}" class="form">
+      {{ csrf() }}
+      <div class="form-grid g4">
+        {% if is_admin %}<label>원결재자 {{ select('from_user_id', user_opts, g.user.id) }}</label>{% endif %}
+        <label>대결자 * {{ select('to_user_id', user_opts, '', blank='선택하세요') }}</label>
+        <label>시작일 <input type="date" name="start_date" value="{{ today_str }}" required></label>
+        <label>종료일 <input type="date" name="end_date" required></label>
+        <label class="span2">사유 * <input name="reason" required placeholder="예) 해외 출장"></label>
+      </div>
+      <button class="btn btn-primary">대결 지정</button>
+    </form>
+    {% for did, label in revocable %}
+    <form method="post" action="{{ url_for('finance.delegation_revoke', did=did) }}" class="toolbar">
+      {{ csrf() }}<span class="grow">{{ label }}</span>
+      <button class="btn btn-sm btn-danger">대결 취소</button>
+    </form>
+    {% endfor %}
+  {% elif tab == 'requested' %}
+    {{ table(requested) }}
+  {% elif tab == 'history' %}
+    <form method="get" class="card-head" action="{{ page_path() }}">
+      <input type="hidden" name="tab" value="history">
+      <label>상태 <select name="status" onchange="this.form.submit()">
+        <option value="">전체</option>
+        {% for s in statuses %}<option {{ 'selected' if s == hist_status }}>{{ s }}</option>{% endfor %}
+      </select></label>
+      {{ download(export_url('history')) }}
+    </form>
+    {{ table(hist, 360) }}
+  {% else %}
+    {% if mine.empty %}
+      <div class="alert alert-success">결재할 건이 없습니다.</div>
+    {% else %}
+      {{ table(mine) }}
+      <form method="get" class="toolbar" action="{{ page_path() }}">
+        <label class="grow">결재 대상 {{ select('aid', options, pick) }}</label>
+        <button class="btn">선택</button>
+      </form>
+      {% if picked %}
+        <div class="alert alert-info">요청자 <strong>{{ picked['요청자'] }}</strong> · 요청사유: {{ picked['사유'] or '(미기재)' }}<br>
+          결재선: {{ picked['결재선'] }} · 내 차례: {{ picked['내 차례'] }}</div>
+        <form method="post" action="{{ url_for('finance.approval_decide', aid=pick) }}" class="form">
+          {{ csrf() }}
+          <label>결재 의견 <textarea name="comment" rows="3" placeholder="반려 시 필수"></textarea></label>
+          <div class="row-actions">
+            <button class="btn btn-primary" name="decision" value="approve">✅ 승인</button>
+            <button class="btn btn-danger" name="decision" value="reject">❌ 반려</button>
+          </div>
+        </form>
+      {% endif %}
+    {% endif %}
+  {% endif %}
+</section>
+{% endblock %}

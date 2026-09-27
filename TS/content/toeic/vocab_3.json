@@ -1,0 +1,4002 @@
+[
+ {
+  "id": "v-1201",
+  "level": 4,
+  "word": "clause",
+  "pos": "n.",
+  "meaning": "조항, 조목",
+  "example": "Please review the termination clause before signing the contract.",
+  "example_ko": "계약서에 서명하기 전에 해지 조항을 검토해 주세요.",
+  "tip": "termination clause (해지 조항), penalty clause (위약 조항)"
+ },
+ {
+  "id": "v-1202",
+  "level": 4,
+  "word": "provision",
+  "pos": "n.",
+  "meaning": "조항, 공급, 대비",
+  "example": "The lease includes a provision for early termination.",
+  "example_ko": "임대 계약에는 조기 해지에 관한 조항이 포함되어 있습니다.",
+  "tip": "make provision for (대비하다) · provisional adj. 임시의"
+ },
+ {
+  "id": "v-1203",
+  "level": 4,
+  "word": "binding",
+  "pos": "adj.",
+  "meaning": "구속력 있는",
+  "example": "Once signed, the agreement is legally binding on both parties.",
+  "example_ko": "서명하면 그 계약은 양측에 법적 구속력을 갖습니다.",
+  "tip": "legally binding (법적 구속력이 있는) · bind v."
+ },
+ {
+  "id": "v-1204",
+  "level": 4,
+  "word": "breach",
+  "pos": "n.",
+  "meaning": "위반, 침해",
+  "example": "The supplier was found to be in breach of contract.",
+  "example_ko": "그 공급업체는 계약을 위반한 것으로 드러났습니다.",
+  "tip": "breach of contract (계약 위반), data breach (정보 유출)"
+ },
+ {
+  "id": "v-1205",
+  "level": 4,
+  "word": "terminate",
+  "pos": "v.",
+  "meaning": "종료하다, 해지하다",
+  "example": "Either party may terminate the agreement with 30 days' notice.",
+  "example_ko": "어느 쪽이든 30일 전에 통보하면 계약을 해지할 수 있습니다.",
+  "tip": "termination n. 해지 · terminate a contract"
+ },
+ {
+  "id": "v-1206",
+  "level": 4,
+  "word": "addendum",
+  "pos": "n.",
+  "meaning": "부록, 추가 조항",
+  "example": "An addendum to the contract outlines the new delivery terms.",
+  "example_ko": "계약서 부록에 새로운 배송 조건이 명시되어 있습니다.",
+  "tip": "복수형 addenda"
+ },
+ {
+  "id": "v-1207",
+  "level": 4,
+  "word": "enforceable",
+  "pos": "adj.",
+  "meaning": "시행할 수 있는, 법적 효력이 있는",
+  "example": "Verbal agreements are not always enforceable in court.",
+  "example_ko": "구두 합의가 법정에서 항상 효력이 있는 것은 아닙니다.",
+  "tip": "enforce v. 시행하다 · unenforceable (효력 없는)"
+ },
+ {
+  "id": "v-1208",
+  "level": 4,
+  "word": "signatory",
+  "pos": "n.",
+  "meaning": "서명인, 서명 당사자",
+  "example": "All signatories must initial each page of the document.",
+  "example_ko": "모든 서명 당사자는 문서의 각 쪽에 약식 서명을 해야 합니다.",
+  "tip": "signature n. 서명과 구별"
+ },
+ {
+  "id": "v-1209",
+  "level": 4,
+  "word": "infringe",
+  "pos": "v.",
+  "meaning": "침해하다, 위반하다",
+  "example": "The design may infringe on a competitor's patent.",
+  "example_ko": "그 디자인은 경쟁사의 특허를 침해할 수 있습니다.",
+  "tip": "infringe on (침해하다) · infringement n."
+ },
+ {
+  "id": "v-1210",
+  "level": 4,
+  "word": "dispute",
+  "pos": "n.",
+  "meaning": "분쟁, 논쟁",
+  "example": "The two firms settled their dispute out of court.",
+  "example_ko": "두 회사는 법정 밖에서 분쟁을 해결했습니다.",
+  "tip": "settle a dispute (분쟁을 해결하다)"
+ },
+ {
+  "id": "v-1211",
+  "level": 4,
+  "word": "settlement",
+  "pos": "n.",
+  "meaning": "합의, 정산, 해결",
+  "example": "The parties reached a settlement after months of talks.",
+  "example_ko": "양측은 몇 달간의 협상 끝에 합의에 이르렀습니다.",
+  "tip": "reach a settlement (합의에 이르다)"
+ },
+ {
+  "id": "v-1212",
+  "level": 4,
+  "word": "confidentiality",
+  "pos": "n.",
+  "meaning": "기밀 유지, 비밀 보장",
+  "example": "Employees must sign a confidentiality agreement on their first day.",
+  "example_ko": "직원들은 첫 출근일에 기밀 유지 계약서에 서명해야 합니다.",
+  "tip": "confidential adj. 기밀의"
+ },
+ {
+  "id": "v-1213",
+  "level": 4,
+  "word": "dividend",
+  "pos": "n.",
+  "meaning": "배당금",
+  "example": "The company will pay a quarterly dividend to shareholders.",
+  "example_ko": "회사는 주주들에게 분기 배당금을 지급할 예정입니다.",
+  "tip": "pay a dividend (배당금을 지급하다)"
+ },
+ {
+  "id": "v-1214",
+  "level": 4,
+  "word": "shareholder",
+  "pos": "n.",
+  "meaning": "주주",
+  "example": "Shareholders approved the merger at the annual meeting.",
+  "example_ko": "주주들이 연례 총회에서 합병을 승인했습니다.",
+  "tip": "= stockholder"
+ },
+ {
+  "id": "v-1215",
+  "level": 4,
+  "word": "stake",
+  "pos": "n.",
+  "meaning": "지분, 이해관계",
+  "example": "The firm acquired a 20 percent stake in the startup.",
+  "example_ko": "그 회사는 신생 기업의 지분 20퍼센트를 인수했습니다.",
+  "tip": "have a stake in (이해관계가 있다) · stakeholder n."
+ },
+ {
+  "id": "v-1216",
+  "level": 4,
+  "word": "equity",
+  "pos": "n.",
+  "meaning": "지분, 자기 자본, 공정",
+  "example": "The startup raised funds by selling equity to investors.",
+  "example_ko": "그 신생 기업은 투자자에게 지분을 팔아 자금을 조달했습니다.",
+  "tip": "equity stake (지분) · equitable adj. 공정한"
+ },
+ {
+  "id": "v-1217",
+  "level": 4,
+  "word": "expenditure",
+  "pos": "n.",
+  "meaning": "지출, 비용",
+  "example": "Capital expenditure rose sharply this year.",
+  "example_ko": "올해 설비 투자 지출이 급격히 늘었습니다.",
+  "tip": "capital expenditure (설비 투자)"
+ },
+ {
+  "id": "v-1218",
+  "level": 4,
+  "word": "appraisal",
+  "pos": "n.",
+  "meaning": "평가, 감정",
+  "example": "An independent appraisal valued the building at five million dollars.",
+  "example_ko": "독립적인 감정 결과 그 건물은 500만 달러로 평가되었습니다.",
+  "tip": "performance appraisal (인사 고과) · appraise v."
+ },
+ {
+  "id": "v-1219",
+  "level": 4,
+  "word": "projection",
+  "pos": "n.",
+  "meaning": "예상, 추정",
+  "example": "Sales projections for next quarter look promising.",
+  "example_ko": "다음 분기 매출 예상치가 밝아 보입니다.",
+  "tip": "project v. 예상하다 · projected adj."
+ },
+ {
+  "id": "v-1220",
+  "level": 4,
+  "word": "overhead",
+  "pos": "n.",
+  "meaning": "간접비, 고정비",
+  "example": "Moving to a smaller office cut our overhead.",
+  "example_ko": "더 작은 사무실로 옮기면서 간접비가 줄었습니다.",
+  "tip": "overhead costs (간접비)"
+ },
+ {
+  "id": "v-1221",
+  "level": 4,
+  "word": "outlay",
+  "pos": "n.",
+  "meaning": "지출, 경비",
+  "example": "The initial outlay for the new system was relatively small.",
+  "example_ko": "새 시스템의 초기 지출은 비교적 적었습니다.",
+  "tip": "initial outlay (초기 비용)"
+ },
+ {
+  "id": "v-1222",
+  "level": 4,
+  "word": "accrue",
+  "pos": "v.",
+  "meaning": "누적되다, 생기다",
+  "example": "Interest accrues daily on the unpaid balance.",
+  "example_ko": "미납 잔액에는 매일 이자가 붙습니다.",
+  "tip": "accrued vacation (쌓인 휴가) · accrual n."
+ },
+ {
+  "id": "v-1223",
+  "level": 4,
+  "word": "capital",
+  "pos": "n.",
+  "meaning": "자본, 자금",
+  "example": "The company needs additional capital to expand overseas.",
+  "example_ko": "회사는 해외로 확장하기 위해 추가 자본이 필요합니다.",
+  "tip": "raise capital (자본을 조달하다)"
+ },
+ {
+  "id": "v-1224",
+  "level": 4,
+  "word": "portfolio",
+  "pos": "n.",
+  "meaning": "투자 자산 구성, 작품집",
+  "example": "Investors should diversify their portfolios to reduce risk.",
+  "example_ko": "투자자는 위험을 줄이기 위해 투자 자산을 분산해야 합니다.",
+  "tip": "product portfolio (제품군)"
+ },
+ {
+  "id": "v-1225",
+  "level": 4,
+  "word": "deficit",
+  "pos": "n.",
+  "meaning": "적자, 부족액",
+  "example": "The division reported a deficit for the second year in a row.",
+  "example_ko": "그 부서는 2년 연속 적자를 기록했습니다.",
+  "tip": "↔ surplus (흑자)"
+ },
+ {
+  "id": "v-1226",
+  "level": 4,
+  "word": "valuation",
+  "pos": "n.",
+  "meaning": "가치 평가, 평가액",
+  "example": "The investment raised the startup's valuation to 50 million dollars.",
+  "example_ko": "그 투자로 신생 기업의 평가액이 5천만 달러로 올랐습니다.",
+  "tip": "market valuation (시장 평가액)"
+ },
+ {
+  "id": "v-1227",
+  "level": 4,
+  "word": "probation",
+  "pos": "n.",
+  "meaning": "수습 기간, 근신",
+  "example": "New hires are on probation for the first three months.",
+  "example_ko": "신입 사원은 처음 석 달 동안 수습 기간입니다.",
+  "tip": "on probation (수습 중인)"
+ },
+ {
+  "id": "v-1228",
+  "level": 4,
+  "word": "severance",
+  "pos": "n.",
+  "meaning": "퇴직, 해고 수당",
+  "example": "Laid-off workers will receive severance pay.",
+  "example_ko": "해고된 직원들은 퇴직 수당을 받게 됩니다.",
+  "tip": "severance pay (퇴직금, 해고 수당)"
+ },
+ {
+  "id": "v-1229",
+  "level": 4,
+  "word": "payroll",
+  "pos": "n.",
+  "meaning": "급여 명단, 급여 업무",
+  "example": "Payroll is processed on the last business day of each month.",
+  "example_ko": "급여는 매달 마지막 영업일에 처리됩니다.",
+  "tip": "on the payroll (고용되어 있는)"
+ },
+ {
+  "id": "v-1230",
+  "level": 4,
+  "word": "pension",
+  "pos": "n.",
+  "meaning": "연금",
+  "example": "Employees contribute a portion of their salary to the pension plan.",
+  "example_ko": "직원들은 급여의 일부를 연금 제도에 납입합니다.",
+  "tip": "pension plan (연금 제도)"
+ },
+ {
+  "id": "v-1231",
+  "level": 4,
+  "word": "disciplinary",
+  "pos": "adj.",
+  "meaning": "징계의",
+  "example": "Repeated lateness may result in disciplinary action.",
+  "example_ko": "잦은 지각은 징계 조치로 이어질 수 있습니다.",
+  "tip": "disciplinary action (징계 조치)"
+ },
+ {
+  "id": "v-1232",
+  "level": 4,
+  "word": "seniority",
+  "pos": "n.",
+  "meaning": "근속 연수, 연공서열",
+  "example": "Vacation days are allocated according to seniority.",
+  "example_ko": "휴가 일수는 근속 연수에 따라 배정됩니다.",
+  "tip": "senior adj. 상급의"
+ },
+ {
+  "id": "v-1233",
+  "level": 4,
+  "word": "entitlement",
+  "pos": "n.",
+  "meaning": "자격, 받을 권리",
+  "example": "Your annual leave entitlement is 15 days.",
+  "example_ko": "귀하가 받을 수 있는 연차 휴가는 15일입니다.",
+  "tip": "be entitled to (권리가 있다)"
+ },
+ {
+  "id": "v-1234",
+  "level": 4,
+  "word": "headcount",
+  "pos": "n.",
+  "meaning": "인원수, 정원",
+  "example": "We cannot hire more staff without increasing our headcount budget.",
+  "example_ko": "정원 예산을 늘리지 않으면 직원을 더 뽑을 수 없습니다.",
+  "tip": "headcount freeze (인원 동결)"
+ },
+ {
+  "id": "v-1235",
+  "level": 4,
+  "word": "allowance",
+  "pos": "n.",
+  "meaning": "수당, 허용량",
+  "example": "Staff receive a monthly transportation allowance.",
+  "example_ko": "직원들은 매달 교통 수당을 받습니다.",
+  "tip": "baggage allowance (수하물 허용량)"
+ },
+ {
+  "id": "v-1236",
+  "level": 4,
+  "word": "onboarding",
+  "pos": "n.",
+  "meaning": "신입 적응 교육",
+  "example": "The onboarding process takes about two weeks.",
+  "example_ko": "신입 적응 교육 과정은 약 2주가 걸립니다.",
+  "tip": "onboard v. 신입을 적응시키다"
+ },
+ {
+  "id": "v-1237",
+  "level": 4,
+  "word": "reassign",
+  "pos": "v.",
+  "meaning": "재배치하다",
+  "example": "She was reassigned to the Singapore office last month.",
+  "example_ko": "그녀는 지난달 싱가포르 지사로 재배치되었습니다.",
+  "tip": "reassignment n."
+ },
+ {
+  "id": "v-1238",
+  "level": 4,
+  "word": "dismiss",
+  "pos": "v.",
+  "meaning": "해고하다, 묵살하다",
+  "example": "The manager dismissed the idea without discussion.",
+  "example_ko": "매니저는 논의도 없이 그 아이디어를 묵살했습니다.",
+  "tip": "dismissal n. 해고"
+ },
+ {
+  "id": "v-1239",
+  "level": 4,
+  "word": "specification",
+  "pos": "n.",
+  "meaning": "사양, 명세",
+  "example": "The parts must meet the client's exact specifications.",
+  "example_ko": "부품은 고객의 정확한 사양을 충족해야 합니다.",
+  "tip": "specs (줄임말) · specify v."
+ },
+ {
+  "id": "v-1240",
+  "level": 4,
+  "word": "calibrate",
+  "pos": "v.",
+  "meaning": "보정하다, 눈금을 맞추다",
+  "example": "Technicians calibrate the scales every morning.",
+  "example_ko": "기술자들은 매일 아침 저울을 보정합니다.",
+  "tip": "calibration n."
+ },
+ {
+  "id": "v-1241",
+  "level": 4,
+  "word": "prototype",
+  "pos": "n.",
+  "meaning": "시제품, 원형",
+  "example": "Engineers are testing a prototype of the new engine.",
+  "example_ko": "기술자들이 새 엔진의 시제품을 시험하고 있습니다.",
+  "tip": "build a prototype (시제품을 만들다)"
+ },
+ {
+  "id": "v-1242",
+  "level": 4,
+  "word": "defect",
+  "pos": "n.",
+  "meaning": "결함, 흠",
+  "example": "Every unit is inspected for defects before shipping.",
+  "example_ko": "모든 제품은 출하 전에 결함 검사를 받습니다.",
+  "tip": "defective adj. 결함 있는"
+ },
+ {
+  "id": "v-1243",
+  "level": 4,
+  "word": "throughput",
+  "pos": "n.",
+  "meaning": "처리량, 생산량",
+  "example": "The new conveyor system doubled our throughput.",
+  "example_ko": "새 컨베이어 시스템으로 처리량이 두 배가 되었습니다.",
+  "tip": "= output"
+ },
+ {
+  "id": "v-1244",
+  "level": 4,
+  "word": "downtime",
+  "pos": "n.",
+  "meaning": "가동 중지 시간",
+  "example": "Regular maintenance helps minimize equipment downtime.",
+  "example_ko": "정기 점검은 장비 가동 중지 시간을 줄이는 데 도움이 됩니다.",
+  "tip": "minimize downtime (가동 중지를 최소화하다)"
+ },
+ {
+  "id": "v-1245",
+  "level": 4,
+  "word": "automation",
+  "pos": "n.",
+  "meaning": "자동화",
+  "example": "Automation has reduced labor costs at the plant.",
+  "example_ko": "자동화로 공장의 인건비가 줄었습니다.",
+  "tip": "automate v. · automated adj."
+ },
+ {
+  "id": "v-1246",
+  "level": 4,
+  "word": "batch",
+  "pos": "n.",
+  "meaning": "한 회분, 묶음",
+  "example": "This batch of products failed the quality test.",
+  "example_ko": "이번 회분 제품은 품질 검사를 통과하지 못했습니다.",
+  "tip": "in batches (여러 번에 나누어)"
+ },
+ {
+  "id": "v-1247",
+  "level": 4,
+  "word": "flaw",
+  "pos": "n.",
+  "meaning": "결점, 결함",
+  "example": "A design flaw caused the product recall.",
+  "example_ko": "설계 결함 때문에 제품 회수가 이루어졌습니다.",
+  "tip": "flawless adj. 흠 없는"
+ },
+ {
+  "id": "v-1248",
+  "level": 4,
+  "word": "durability",
+  "pos": "n.",
+  "meaning": "내구성",
+  "example": "The material was chosen for its durability.",
+  "example_ko": "그 소재는 내구성 때문에 선택되었습니다.",
+  "tip": "durable adj. 튼튼한"
+ },
+ {
+  "id": "v-1249",
+  "level": 4,
+  "word": "procurement",
+  "pos": "n.",
+  "meaning": "조달, 구매",
+  "example": "All equipment purchases must go through the procurement department.",
+  "example_ko": "모든 장비 구매는 구매 부서를 거쳐야 합니다.",
+  "tip": "procure v. 조달하다"
+ },
+ {
+  "id": "v-1250",
+  "level": 4,
+  "word": "procure",
+  "pos": "v.",
+  "meaning": "조달하다, 확보하다",
+  "example": "We need to procure raw materials at lower prices.",
+  "example_ko": "원자재를 더 낮은 가격에 조달해야 합니다.",
+  "tip": "procurement n."
+ },
+ {
+  "id": "v-1251",
+  "level": 4,
+  "word": "logistics",
+  "pos": "n.",
+  "meaning": "물류, 세부 실행 계획",
+  "example": "The company hired a firm to handle its logistics.",
+  "example_ko": "회사는 물류를 맡길 업체를 고용했습니다.",
+  "tip": "logistical adj. 물류의"
+ },
+ {
+  "id": "v-1252",
+  "level": 4,
+  "word": "consignment",
+  "pos": "n.",
+  "meaning": "탁송 화물, 위탁 판매",
+  "example": "The first consignment of goods was shipped yesterday.",
+  "example_ko": "첫 번째 탁송 화물이 어제 발송되었습니다.",
+  "tip": "on consignment (위탁 판매로)"
+ },
+ {
+  "id": "v-1253",
+  "level": 4,
+  "word": "dispatch",
+  "pos": "v.",
+  "meaning": "발송하다, 파견하다",
+  "example": "Orders are dispatched within 24 hours.",
+  "example_ko": "주문품은 24시간 이내에 발송됩니다.",
+  "tip": "n. 발송 · = send"
+ },
+ {
+  "id": "v-1254",
+  "level": 4,
+  "word": "manifest",
+  "pos": "n.",
+  "meaning": "적하 목록, 화물 명세서",
+  "example": "Every container must be listed on the shipping manifest.",
+  "example_ko": "모든 컨테이너는 선적 목록에 기재되어야 합니다.",
+  "tip": "v. 드러내다"
+ },
+ {
+  "id": "v-1255",
+  "level": 4,
+  "word": "customs",
+  "pos": "n.",
+  "meaning": "세관, 통관",
+  "example": "The shipment is being held at customs.",
+  "example_ko": "그 화물은 세관에 묶여 있습니다.",
+  "tip": "clear customs (통관하다)"
+ },
+ {
+  "id": "v-1256",
+  "level": 4,
+  "word": "tariff",
+  "pos": "n.",
+  "meaning": "관세, 요금표",
+  "example": "New tariffs on imported steel took effect this month.",
+  "example_ko": "수입 철강에 대한 새 관세가 이번 달부터 시행되었습니다.",
+  "tip": "impose a tariff (관세를 부과하다)"
+ },
+ {
+  "id": "v-1257",
+  "level": 4,
+  "word": "carrier",
+  "pos": "n.",
+  "meaning": "운송 회사, 통신사",
+  "example": "We are switching to a cheaper shipping carrier.",
+  "example_ko": "더 저렴한 운송 회사로 바꿀 예정입니다.",
+  "tip": "air carrier (항공사)"
+ },
+ {
+  "id": "v-1258",
+  "level": 4,
+  "word": "fleet",
+  "pos": "n.",
+  "meaning": "보유 차량, 선단",
+  "example": "The company is expanding its fleet of delivery trucks.",
+  "example_ko": "회사는 배송 트럭 보유 대수를 늘리고 있습니다.",
+  "tip": "a fleet of vehicles (차량 무리)"
+ },
+ {
+  "id": "v-1259",
+  "level": 4,
+  "word": "perishable",
+  "pos": "adj.",
+  "meaning": "상하기 쉬운",
+  "example": "Perishable goods must be stored in refrigerated containers.",
+  "example_ko": "상하기 쉬운 상품은 냉장 컨테이너에 보관해야 합니다.",
+  "tip": "perishables n. 부패하기 쉬운 식품"
+ },
+ {
+  "id": "v-1260",
+  "level": 4,
+  "word": "expedited",
+  "pos": "adj.",
+  "meaning": "신속 처리된, 빠른",
+  "example": "Expedited shipping costs an additional ten dollars.",
+  "example_ko": "빠른 배송은 10달러가 추가됩니다.",
+  "tip": "expedite v. 신속히 처리하다"
+ },
+ {
+  "id": "v-1261",
+  "level": 4,
+  "word": "stockpile",
+  "pos": "n.",
+  "meaning": "비축량, 비축물",
+  "example": "The plant keeps a stockpile of spare parts.",
+  "example_ko": "그 공장은 예비 부품을 비축해 둡니다.",
+  "tip": "v. 비축하다"
+ },
+ {
+  "id": "v-1262",
+  "level": 4,
+  "word": "reroute",
+  "pos": "v.",
+  "meaning": "경로를 바꾸다",
+  "example": "Shipments were rerouted due to the port strike.",
+  "example_ko": "항만 파업으로 화물 경로가 변경되었습니다.",
+  "tip": "re (다시) + route (경로)"
+ },
+ {
+  "id": "v-1263",
+  "level": 4,
+  "word": "demographic",
+  "pos": "n.",
+  "meaning": "인구 집단, 인구 통계",
+  "example": "The ad targets a younger demographic.",
+  "example_ko": "그 광고는 젊은 층을 겨냥합니다.",
+  "tip": "demographics (인구 통계 자료)"
+ },
+ {
+  "id": "v-1264",
+  "level": 4,
+  "word": "niche",
+  "pos": "n.",
+  "meaning": "틈새, 틈새시장",
+  "example": "The firm found a profitable niche in eco-friendly packaging.",
+  "example_ko": "그 회사는 친환경 포장에서 수익성 있는 틈새시장을 찾았습니다.",
+  "tip": "niche market (틈새시장)"
+ },
+ {
+  "id": "v-1265",
+  "level": 4,
+  "word": "testimonial",
+  "pos": "n.",
+  "meaning": "추천 후기, 사용 후기",
+  "example": "Customer testimonials are featured on our homepage.",
+  "example_ko": "고객 추천 후기가 홈페이지에 실려 있습니다.",
+  "tip": "testimony (법정 증언)와 구별"
+ },
+ {
+  "id": "v-1266",
+  "level": 4,
+  "word": "endorsement",
+  "pos": "n.",
+  "meaning": "지지, 광고 출연, 배서",
+  "example": "The athlete signed an endorsement deal with a sportswear brand.",
+  "example_ko": "그 선수는 스포츠 의류 브랜드와 광고 계약을 맺었습니다.",
+  "tip": "endorse v. 지지하다"
+ },
+ {
+  "id": "v-1267",
+  "level": 4,
+  "word": "loyalty",
+  "pos": "n.",
+  "meaning": "충성도, 애용",
+  "example": "The rewards program is designed to build customer loyalty.",
+  "example_ko": "그 보상 프로그램은 고객 충성도를 높이기 위해 만들어졌습니다.",
+  "tip": "loyalty program (단골 고객 프로그램)"
+ },
+ {
+  "id": "v-1268",
+  "level": 4,
+  "word": "retention",
+  "pos": "n.",
+  "meaning": "유지, 보유",
+  "example": "Improving employee retention is a top priority this year.",
+  "example_ko": "직원 유지율을 높이는 것이 올해 최우선 과제입니다.",
+  "tip": "customer retention (고객 유지) · retain v."
+ },
+ {
+  "id": "v-1269",
+  "level": 4,
+  "word": "outreach",
+  "pos": "n.",
+  "meaning": "대외 활동, 봉사 활동",
+  "example": "The company expanded its community outreach programs.",
+  "example_ko": "회사는 지역 사회 봉사 프로그램을 확대했습니다.",
+  "tip": "outreach program (봉사 프로그램)"
+ },
+ {
+  "id": "v-1270",
+  "level": 4,
+  "word": "rebate",
+  "pos": "n.",
+  "meaning": "환급, 할인 환불",
+  "example": "Customers can claim a rebate after purchase.",
+  "example_ko": "고객은 구매 후 환급금을 신청할 수 있습니다.",
+  "tip": "refund (환불)와 구별"
+ },
+ {
+  "id": "v-1271",
+  "level": 4,
+  "word": "promotional",
+  "pos": "adj.",
+  "meaning": "판촉의, 홍보의",
+  "example": "Promotional materials will be sent to all stores.",
+  "example_ko": "판촉 자료가 모든 매장에 발송될 것입니다.",
+  "tip": "promotional event (판촉 행사)"
+ },
+ {
+  "id": "v-1272",
+  "level": 4,
+  "word": "showcase",
+  "pos": "v.",
+  "meaning": "선보이다, 소개하다",
+  "example": "The trade fair is a chance to showcase our new products.",
+  "example_ko": "그 무역 박람회는 신제품을 선보일 기회입니다.",
+  "tip": "n. 진열장, 공개 행사"
+ },
+ {
+  "id": "v-1273",
+  "level": 4,
+  "word": "penetrate",
+  "pos": "v.",
+  "meaning": "진출하다, 침투하다",
+  "example": "The brand struggled to penetrate the Asian market.",
+  "example_ko": "그 브랜드는 아시아 시장에 진출하는 데 어려움을 겪었습니다.",
+  "tip": "market penetration (시장 침투율)"
+ },
+ {
+  "id": "v-1274",
+  "level": 4,
+  "word": "hypothesis",
+  "pos": "n.",
+  "meaning": "가설",
+  "example": "The data supported the researchers' hypothesis.",
+  "example_ko": "자료는 연구진의 가설을 뒷받침했습니다.",
+  "tip": "복수형 hypotheses"
+ },
+ {
+  "id": "v-1275",
+  "level": 4,
+  "word": "methodology",
+  "pos": "n.",
+  "meaning": "방법론, 연구 방법",
+  "example": "The report explains the survey methodology in detail.",
+  "example_ko": "보고서는 설문 방법을 자세히 설명합니다.",
+  "tip": "method (방법)보다 체계적인 방식"
+ },
+ {
+  "id": "v-1276",
+  "level": 4,
+  "word": "findings",
+  "pos": "n.",
+  "meaning": "연구 결과, 조사 결과",
+  "example": "The findings will be published in next month's journal.",
+  "example_ko": "연구 결과는 다음 달 학술지에 실릴 예정입니다.",
+  "tip": "주로 복수형으로 씀"
+ },
+ {
+  "id": "v-1277",
+  "level": 4,
+  "word": "variable",
+  "pos": "n.",
+  "meaning": "변수",
+  "example": "Several variables affect consumer spending.",
+  "example_ko": "여러 변수가 소비자 지출에 영향을 줍니다.",
+  "tip": "adj. 변동이 심한"
+ },
+ {
+  "id": "v-1278",
+  "level": 4,
+  "word": "validate",
+  "pos": "v.",
+  "meaning": "입증하다, 유효성을 확인하다",
+  "example": "Further testing is needed to validate the results.",
+  "example_ko": "결과를 입증하려면 추가 시험이 필요합니다.",
+  "tip": "validation n. · valid adj."
+ },
+ {
+  "id": "v-1279",
+  "level": 4,
+  "word": "feasibility",
+  "pos": "n.",
+  "meaning": "실현 가능성, 타당성",
+  "example": "A feasibility study will be completed by June.",
+  "example_ko": "타당성 조사는 6월까지 마무리됩니다.",
+  "tip": "feasibility study (타당성 조사) · feasible adj."
+ },
+ {
+  "id": "v-1280",
+  "level": 4,
+  "word": "pilot",
+  "pos": "adj.",
+  "meaning": "시범적인",
+  "example": "The pilot program will run in three stores.",
+  "example_ko": "시범 프로그램은 세 개 매장에서 운영됩니다.",
+  "tip": "pilot project (시범 사업)"
+ },
+ {
+  "id": "v-1281",
+  "level": 4,
+  "word": "spokesperson",
+  "pos": "n.",
+  "meaning": "대변인",
+  "example": "A company spokesperson declined to comment.",
+  "example_ko": "회사 대변인은 논평을 거부했습니다.",
+  "tip": "= spokesman, spokeswoman"
+ },
+ {
+  "id": "v-1282",
+  "level": 4,
+  "word": "publicity",
+  "pos": "n.",
+  "meaning": "홍보, 언론의 관심",
+  "example": "The event generated a lot of positive publicity.",
+  "example_ko": "그 행사는 긍정적인 언론 관심을 많이 불러왔습니다.",
+  "tip": "publicize v. 알리다"
+ },
+ {
+  "id": "v-1283",
+  "level": 4,
+  "word": "credibility",
+  "pos": "n.",
+  "meaning": "신뢰성, 신용",
+  "example": "The error damaged the company's credibility.",
+  "example_ko": "그 실수로 회사의 신뢰성이 손상되었습니다.",
+  "tip": "credible adj. 믿을 만한"
+ },
+ {
+  "id": "v-1284",
+  "level": 4,
+  "word": "coverage",
+  "pos": "n.",
+  "meaning": "보도, 보장 범위",
+  "example": "The launch received extensive media coverage.",
+  "example_ko": "출시 소식이 언론에 폭넓게 보도되었습니다.",
+  "tip": "insurance coverage (보험 보장)"
+ },
+ {
+  "id": "v-1285",
+  "level": 4,
+  "word": "clarify",
+  "pos": "v.",
+  "meaning": "명확히 하다, 해명하다",
+  "example": "The CEO issued a statement to clarify the company's position.",
+  "example_ko": "대표는 회사의 입장을 해명하는 성명을 냈습니다.",
+  "tip": "clarification n."
+ },
+ {
+  "id": "v-1286",
+  "level": 4,
+  "word": "reputable",
+  "pos": "adj.",
+  "meaning": "평판이 좋은, 믿을 만한",
+  "example": "Always buy parts from a reputable supplier.",
+  "example_ko": "항상 믿을 만한 공급업체에서 부품을 사세요.",
+  "tip": "reputation n."
+ },
+ {
+  "id": "v-1287",
+  "level": 4,
+  "word": "occupant",
+  "pos": "n.",
+  "meaning": "입주자, 거주자",
+  "example": "The previous occupant left the office in good condition.",
+  "example_ko": "이전 입주자는 사무실을 좋은 상태로 두고 떠났습니다.",
+  "tip": "occupancy n. 입주, 점유율"
+ },
+ {
+  "id": "v-1288",
+  "level": 4,
+  "word": "mortgage",
+  "pos": "n.",
+  "meaning": "주택 담보 대출",
+  "example": "They took out a mortgage to buy the warehouse.",
+  "example_ko": "그들은 창고를 사려고 담보 대출을 받았습니다.",
+  "tip": "take out a mortgage (담보 대출을 받다)"
+ },
+ {
+  "id": "v-1289",
+  "level": 4,
+  "word": "premises",
+  "pos": "n.",
+  "meaning": "구내, 부지, 건물",
+  "example": "Smoking is not permitted on the premises.",
+  "example_ko": "구내에서는 흡연이 금지되어 있습니다.",
+  "tip": "항상 복수형 · on the premises (구내에서)"
+ },
+ {
+  "id": "v-1290",
+  "level": 4,
+  "word": "amenity",
+  "pos": "n.",
+  "meaning": "편의 시설",
+  "example": "The building offers amenities such as a gym and a café.",
+  "example_ko": "그 건물에는 체육관과 카페 같은 편의 시설이 있습니다.",
+  "tip": "주로 복수형 amenities"
+ },
+ {
+  "id": "v-1291",
+  "level": 4,
+  "word": "tenancy",
+  "pos": "n.",
+  "meaning": "임차, 임차 기간",
+  "example": "The tenancy agreement runs for two years.",
+  "example_ko": "임대차 계약은 2년 동안 유효합니다.",
+  "tip": "tenant n. 세입자"
+ },
+ {
+  "id": "v-1292",
+  "level": 4,
+  "word": "appraise",
+  "pos": "v.",
+  "meaning": "감정하다, 평가하다",
+  "example": "The property was appraised at a higher value than expected.",
+  "example_ko": "그 부동산은 예상보다 높은 가격으로 감정되었습니다.",
+  "tip": "apprise (알리다)와 혼동 주의"
+ },
+ {
+  "id": "v-1293",
+  "level": 4,
+  "word": "sublet",
+  "pos": "v.",
+  "meaning": "전대하다, 다시 세놓다",
+  "example": "Tenants may not sublet the space without permission.",
+  "example_ko": "세입자는 허락 없이 공간을 다시 세놓을 수 없습니다.",
+  "tip": "= sublease"
+ },
+ {
+  "id": "v-1294",
+  "level": 4,
+  "word": "listing",
+  "pos": "n.",
+  "meaning": "매물 목록, 상장",
+  "example": "The apartment listing includes photos and a floor plan.",
+  "example_ko": "아파트 매물 정보에는 사진과 평면도가 포함됩니다.",
+  "tip": "stock listing (주식 상장)"
+ },
+ {
+  "id": "v-1295",
+  "level": 4,
+  "word": "troubleshoot",
+  "pos": "v.",
+  "meaning": "문제를 해결하다, 고장을 고치다",
+  "example": "The IT team is troubleshooting the network problem.",
+  "example_ko": "IT팀이 네트워크 문제를 해결하고 있습니다.",
+  "tip": "troubleshooting guide (문제 해결 안내서)"
+ },
+ {
+  "id": "v-1296",
+  "level": 4,
+  "word": "outage",
+  "pos": "n.",
+  "meaning": "정전, 서비스 중단",
+  "example": "A power outage shut down the servers for two hours.",
+  "example_ko": "정전으로 서버가 두 시간 동안 멈췄습니다.",
+  "tip": "power outage (정전)"
+ },
+ {
+  "id": "v-1297",
+  "level": 4,
+  "word": "encryption",
+  "pos": "n.",
+  "meaning": "암호화",
+  "example": "All customer data is protected by encryption.",
+  "example_ko": "모든 고객 정보는 암호화로 보호됩니다.",
+  "tip": "encrypt v. 암호화하다"
+ },
+ {
+  "id": "v-1298",
+  "level": 4,
+  "word": "authenticate",
+  "pos": "v.",
+  "meaning": "인증하다, 진짜임을 증명하다",
+  "example": "Users must authenticate with a security code.",
+  "example_ko": "사용자는 보안 코드로 인증해야 합니다.",
+  "tip": "authentication n."
+ },
+ {
+  "id": "v-1299",
+  "level": 4,
+  "word": "glitch",
+  "pos": "n.",
+  "meaning": "작은 결함, 오류",
+  "example": "A software glitch delayed the payment process.",
+  "example_ko": "소프트웨어 오류로 결제 처리가 늦어졌습니다.",
+  "tip": "= bug"
+ },
+ {
+  "id": "v-1300",
+  "level": 4,
+  "word": "integrate",
+  "pos": "v.",
+  "meaning": "통합하다, 연동하다",
+  "example": "The new app integrates with our existing systems.",
+  "example_ko": "새 앱은 기존 시스템과 연동됩니다.",
+  "tip": "integrate A into B · integration n."
+ },
+ {
+  "id": "v-1301",
+  "level": 4,
+  "word": "deploy",
+  "pos": "v.",
+  "meaning": "도입하다, 배치하다",
+  "example": "The company will deploy the new software next week.",
+  "example_ko": "회사는 다음 주에 새 소프트웨어를 도입합니다.",
+  "tip": "deployment n."
+ },
+ {
+  "id": "v-1302",
+  "level": 4,
+  "word": "migrate",
+  "pos": "v.",
+  "meaning": "이전하다, 옮기다",
+  "example": "We will migrate all files to the cloud by March.",
+  "example_ko": "3월까지 모든 파일을 클라우드로 옮길 예정입니다.",
+  "tip": "data migration (데이터 이전)"
+ },
+ {
+  "id": "v-1303",
+  "level": 4,
+  "word": "bandwidth",
+  "pos": "n.",
+  "meaning": "대역폭, 업무 여력",
+  "example": "I don't have the bandwidth to take on another project.",
+  "example_ko": "저는 다른 프로젝트를 맡을 여력이 없습니다.",
+  "tip": "비유적으로 업무 여력을 뜻함"
+ },
+ {
+  "id": "v-1304",
+  "level": 4,
+  "word": "cutting-edge",
+  "pos": "adj.",
+  "meaning": "최첨단의",
+  "example": "The lab uses cutting-edge technology.",
+  "example_ko": "그 연구소는 최첨단 기술을 사용합니다.",
+  "tip": "= state-of-the-art"
+ },
+ {
+  "id": "v-1305",
+  "level": 4,
+  "word": "state-of-the-art",
+  "pos": "adj.",
+  "meaning": "최신식의, 최첨단의",
+  "example": "The factory is equipped with state-of-the-art machinery.",
+  "example_ko": "그 공장은 최신식 기계를 갖추고 있습니다.",
+  "tip": "= cutting-edge"
+ },
+ {
+  "id": "v-1306",
+  "level": 4,
+  "word": "user-friendly",
+  "pos": "adj.",
+  "meaning": "사용하기 쉬운",
+  "example": "The new interface is much more user-friendly.",
+  "example_ko": "새 화면은 훨씬 사용하기 쉽습니다.",
+  "tip": "= easy to use"
+ },
+ {
+  "id": "v-1307",
+  "level": 4,
+  "word": "restructure",
+  "pos": "v.",
+  "meaning": "구조 조정하다, 개편하다",
+  "example": "The firm restructured its sales division last year.",
+  "example_ko": "회사는 작년에 영업 부문을 개편했습니다.",
+  "tip": "restructuring n. 구조 조정"
+ },
+ {
+  "id": "v-1308",
+  "level": 4,
+  "word": "oversight",
+  "pos": "n.",
+  "meaning": "감독, 실수로 빠뜨림",
+  "example": "The error was due to an oversight in the billing department.",
+  "example_ko": "그 오류는 청구 부서의 실수로 생긴 것이었습니다.",
+  "tip": "두 뜻 모두 출제 · oversee v. 감독하다"
+ },
+ {
+  "id": "v-1309",
+  "level": 4,
+  "word": "synergy",
+  "pos": "n.",
+  "meaning": "시너지, 상승효과",
+  "example": "The merger is expected to create synergies in marketing.",
+  "example_ko": "합병은 마케팅 분야에서 상승효과를 낼 것으로 기대됩니다.",
+  "tip": "synergistic adj."
+ },
+ {
+  "id": "v-1310",
+  "level": 4,
+  "word": "prioritize",
+  "pos": "v.",
+  "meaning": "우선순위를 정하다, 우선 처리하다",
+  "example": "Please prioritize the requests from key clients.",
+  "example_ko": "주요 고객의 요청을 우선 처리해 주세요.",
+  "tip": "priority n. 우선 사항"
+ },
+ {
+  "id": "v-1311",
+  "level": 4,
+  "word": "align",
+  "pos": "v.",
+  "meaning": "맞추다, 일치시키다",
+  "example": "Our goals should align with the company's strategy.",
+  "example_ko": "우리 목표는 회사 전략과 일치해야 합니다.",
+  "tip": "align with · alignment n."
+ },
+ {
+  "id": "v-1312",
+  "level": 4,
+  "word": "optimize",
+  "pos": "v.",
+  "meaning": "최적화하다",
+  "example": "We optimized the website to load faster.",
+  "example_ko": "웹사이트가 더 빨리 뜨도록 최적화했습니다.",
+  "tip": "optimal adj. 최적의"
+ },
+ {
+  "id": "v-1313",
+  "level": 4,
+  "word": "outsource",
+  "pos": "v.",
+  "meaning": "외부에 맡기다",
+  "example": "Many firms outsource their customer service.",
+  "example_ko": "많은 회사가 고객 서비스를 외부에 맡깁니다.",
+  "tip": "outsourcing n. 외주"
+ },
+ {
+  "id": "v-1314",
+  "level": 4,
+  "word": "diversify",
+  "pos": "v.",
+  "meaning": "다각화하다",
+  "example": "The company plans to diversify its product line.",
+  "example_ko": "회사는 제품군을 다각화할 계획입니다.",
+  "tip": "diversification n."
+ },
+ {
+  "id": "v-1315",
+  "level": 4,
+  "word": "milestone",
+  "pos": "n.",
+  "meaning": "중요한 단계, 이정표",
+  "example": "Reaching one million users was a major milestone.",
+  "example_ko": "사용자 백만 명 달성은 중요한 이정표였습니다.",
+  "tip": "reach a milestone (중요한 단계에 이르다)"
+ },
+ {
+  "id": "v-1316",
+  "level": 4,
+  "word": "deliverable",
+  "pos": "n.",
+  "meaning": "산출물, 결과물",
+  "example": "The first deliverable is due at the end of the month.",
+  "example_ko": "첫 번째 결과물은 월말까지 제출해야 합니다.",
+  "tip": "주로 복수형 deliverables"
+ },
+ {
+  "id": "v-1317",
+  "level": 4,
+  "word": "accountability",
+  "pos": "n.",
+  "meaning": "책임, 책무",
+  "example": "The new policy increases accountability among managers.",
+  "example_ko": "새 정책은 관리자들의 책임을 강화합니다.",
+  "tip": "accountable adj. 책임이 있는"
+ },
+ {
+  "id": "v-1318",
+  "level": 4,
+  "word": "tentatively",
+  "pos": "adv.",
+  "meaning": "잠정적으로, 임시로",
+  "example": "The meeting is tentatively scheduled for Thursday.",
+  "example_ko": "회의는 목요일로 잠정 예정되어 있습니다.",
+  "tip": "tentative adj. 잠정적인"
+ },
+ {
+  "id": "v-1319",
+  "level": 4,
+  "word": "accordingly",
+  "pos": "adv.",
+  "meaning": "그에 맞게, 따라서",
+  "example": "Prices have risen, and we have adjusted our budget accordingly.",
+  "example_ko": "가격이 올라 그에 맞게 예산을 조정했습니다.",
+  "tip": "동사 뒤에서는 그에 맞게"
+ },
+ {
+  "id": "v-1320",
+  "level": 4,
+  "word": "substantially",
+  "pos": "adv.",
+  "meaning": "상당히, 크게",
+  "example": "Costs have increased substantially since last year.",
+  "example_ko": "작년 이후 비용이 크게 늘었습니다.",
+  "tip": "= considerably"
+ },
+ {
+  "id": "v-1321",
+  "level": 4,
+  "word": "adequately",
+  "pos": "adv.",
+  "meaning": "충분히, 적절히",
+  "example": "Staff were not adequately trained on the new system.",
+  "example_ko": "직원들은 새 시스템에 대해 충분히 교육받지 못했습니다.",
+  "tip": "adequate adj. 충분한"
+ },
+ {
+  "id": "v-1322",
+  "level": 4,
+  "word": "markedly",
+  "pos": "adv.",
+  "meaning": "현저히, 두드러지게",
+  "example": "Customer satisfaction improved markedly after the update.",
+  "example_ko": "업데이트 후 고객 만족도가 두드러지게 올랐습니다.",
+  "tip": "marked adj. 뚜렷한"
+ },
+ {
+  "id": "v-1323",
+  "level": 4,
+  "word": "subsequently",
+  "pos": "adv.",
+  "meaning": "그 후에, 이어서",
+  "example": "The product was recalled and subsequently redesigned.",
+  "example_ko": "그 제품은 회수된 후 다시 설계되었습니다.",
+  "tip": "subsequent adj. 그 다음의"
+ },
+ {
+  "id": "v-1324",
+  "level": 4,
+  "word": "collectively",
+  "pos": "adv.",
+  "meaning": "공동으로, 전체적으로",
+  "example": "The board will decide collectively on the proposal.",
+  "example_ko": "이사회가 그 제안에 대해 공동으로 결정할 것입니다.",
+  "tip": "collective adj. 집단의"
+ },
+ {
+  "id": "v-1325",
+  "level": 4,
+  "word": "readily",
+  "pos": "adv.",
+  "meaning": "쉽게, 기꺼이",
+  "example": "Spare parts are readily available.",
+  "example_ko": "예비 부품은 쉽게 구할 수 있습니다.",
+  "tip": "readily available (쉽게 구할 수 있는)"
+ },
+ {
+  "id": "v-1326",
+  "level": 4,
+  "word": "reportedly",
+  "pos": "adv.",
+  "meaning": "전하는 바에 따르면",
+  "example": "The company is reportedly planning to open a new plant.",
+  "example_ko": "전하는 바에 따르면 그 회사는 새 공장을 열 계획입니다.",
+  "tip": "= allegedly"
+ },
+ {
+  "id": "v-1327",
+  "level": 4,
+  "word": "virtually",
+  "pos": "adv.",
+  "meaning": "사실상, 거의",
+  "example": "The new model is virtually identical to the old one.",
+  "example_ko": "새 모델은 이전 모델과 사실상 똑같습니다.",
+  "tip": "virtual adj. 가상의, 사실상의"
+ },
+ {
+  "id": "v-1328",
+  "level": 4,
+  "word": "noticeably",
+  "pos": "adv.",
+  "meaning": "눈에 띄게, 현저히",
+  "example": "Response times have improved noticeably.",
+  "example_ko": "응답 시간이 눈에 띄게 빨라졌습니다.",
+  "tip": "noticeable adj. 눈에 띄는"
+ },
+ {
+  "id": "v-1329",
+  "level": 4,
+  "word": "exclusively",
+  "pos": "adv.",
+  "meaning": "오로지, 독점적으로",
+  "example": "This offer is available exclusively to members.",
+  "example_ko": "이 혜택은 회원에게만 제공됩니다.",
+  "tip": "exclusive adj. 독점적인"
+ },
+ {
+  "id": "v-1330",
+  "level": 4,
+  "word": "rigorous",
+  "pos": "adj.",
+  "meaning": "엄격한, 철저한",
+  "example": "All products undergo rigorous testing.",
+  "example_ko": "모든 제품은 엄격한 시험을 거칩니다.",
+  "tip": "rigorously adv."
+ },
+ {
+  "id": "v-1331",
+  "level": 4,
+  "word": "robust",
+  "pos": "adj.",
+  "meaning": "탄탄한, 튼튼한",
+  "example": "The company reported robust sales growth.",
+  "example_ko": "회사는 탄탄한 매출 성장을 발표했습니다.",
+  "tip": "robust economy (탄탄한 경제)"
+ },
+ {
+  "id": "v-1332",
+  "level": 4,
+  "word": "versatile",
+  "pos": "adj.",
+  "meaning": "다용도의, 다재다능한",
+  "example": "This versatile machine can cut, drill, and polish.",
+  "example_ko": "이 다용도 기계는 자르기, 뚫기, 연마를 모두 할 수 있습니다.",
+  "tip": "versatility n."
+ },
+ {
+  "id": "v-1333",
+  "level": 4,
+  "word": "competent",
+  "pos": "adj.",
+  "meaning": "유능한, 능숙한",
+  "example": "We need a competent accountant to handle the audit.",
+  "example_ko": "감사를 맡을 유능한 회계사가 필요합니다.",
+  "tip": "competence n. 능력"
+ },
+ {
+  "id": "v-1334",
+  "level": 4,
+  "word": "resourceful",
+  "pos": "adj.",
+  "meaning": "수완이 좋은, 지략 있는",
+  "example": "A resourceful manager found a way to cut costs.",
+  "example_ko": "수완 좋은 매니저가 비용을 줄일 방법을 찾았습니다.",
+  "tip": "resource n. 자원"
+ },
+ {
+  "id": "v-1335",
+  "level": 4,
+  "word": "cost-effective",
+  "pos": "adj.",
+  "meaning": "비용 효율이 높은",
+  "example": "Video conferencing is a cost-effective alternative to travel.",
+  "example_ko": "화상 회의는 출장을 대신할 비용 효율적인 방법입니다.",
+  "tip": "= economical"
+ },
+ {
+  "id": "v-1336",
+  "level": 4,
+  "word": "sustainable",
+  "pos": "adj.",
+  "meaning": "지속 가능한",
+  "example": "The firm is committed to sustainable manufacturing.",
+  "example_ko": "회사는 지속 가능한 제조에 힘쓰고 있습니다.",
+  "tip": "sustainability n."
+ },
+ {
+  "id": "v-1337",
+  "level": 4,
+  "word": "affiliated",
+  "pos": "adj.",
+  "meaning": "제휴한, 계열의",
+  "example": "The hotel is affiliated with a major international chain.",
+  "example_ko": "그 호텔은 대형 국제 체인과 제휴되어 있습니다.",
+  "tip": "affiliate n. 계열사"
+ },
+ {
+  "id": "v-1338",
+  "level": 4,
+  "word": "applicable",
+  "pos": "adj.",
+  "meaning": "적용되는, 해당되는",
+  "example": "Please fill in all applicable sections.",
+  "example_ko": "해당되는 칸을 모두 작성해 주세요.",
+  "tip": "if applicable (해당될 경우)"
+ },
+ {
+  "id": "v-1339",
+  "level": 4,
+  "word": "respective",
+  "pos": "adj.",
+  "meaning": "각각의",
+  "example": "The managers returned to their respective offices.",
+  "example_ko": "관리자들은 각자의 사무실로 돌아갔습니다.",
+  "tip": "respectively adv. 각각"
+ },
+ {
+  "id": "v-1340",
+  "level": 4,
+  "word": "unforeseen",
+  "pos": "adj.",
+  "meaning": "예상치 못한",
+  "example": "The project was delayed by unforeseen circumstances.",
+  "example_ko": "프로젝트는 예상치 못한 상황으로 늦어졌습니다.",
+  "tip": "unforeseen circumstances (예기치 못한 상황)"
+ },
+ {
+  "id": "v-1341",
+  "level": 4,
+  "word": "invaluable",
+  "pos": "adj.",
+  "meaning": "매우 귀중한",
+  "example": "Her experience was invaluable during the merger.",
+  "example_ko": "합병 과정에서 그녀의 경험은 매우 귀중했습니다.",
+  "tip": "가치 없음이 아니라 매우 귀중함"
+ },
+ {
+  "id": "v-1342",
+  "level": 4,
+  "word": "sizable",
+  "pos": "adj.",
+  "meaning": "상당한, 꽤 큰",
+  "example": "The company made a sizable donation to the hospital.",
+  "example_ko": "회사는 병원에 상당한 금액을 기부했습니다.",
+  "tip": "= considerable"
+ },
+ {
+  "id": "v-1343",
+  "level": 4,
+  "word": "extensive",
+  "pos": "adj.",
+  "meaning": "광범위한, 폭넓은",
+  "example": "The candidate has extensive experience in logistics.",
+  "example_ko": "그 지원자는 물류 분야에서 폭넓은 경력을 갖고 있습니다.",
+  "tip": "extensively adv."
+ },
+ {
+  "id": "v-1344",
+  "level": 4,
+  "word": "seasoned",
+  "pos": "adj.",
+  "meaning": "노련한, 경험 많은",
+  "example": "The project is led by a seasoned engineer.",
+  "example_ko": "그 프로젝트는 노련한 기술자가 이끕니다.",
+  "tip": "= experienced"
+ },
+ {
+  "id": "v-1345",
+  "level": 4,
+  "word": "reallocate",
+  "pos": "v.",
+  "meaning": "재배분하다",
+  "example": "Funds were reallocated to the marketing budget.",
+  "example_ko": "자금이 마케팅 예산으로 재배분되었습니다.",
+  "tip": "allocate v. 배분하다"
+ },
+ {
+  "id": "v-1346",
+  "level": 4,
+  "word": "reiterate",
+  "pos": "v.",
+  "meaning": "되풀이하다, 재차 강조하다",
+  "example": "The CEO reiterated his commitment to quality.",
+  "example_ko": "대표는 품질에 대한 의지를 재차 강조했습니다.",
+  "tip": "= restate"
+ },
+ {
+  "id": "v-1347",
+  "level": 4,
+  "word": "attain",
+  "pos": "v.",
+  "meaning": "달성하다, 이르다",
+  "example": "The team attained its sales target early.",
+  "example_ko": "팀은 판매 목표를 일찍 달성했습니다.",
+  "tip": "attainable adj. 달성 가능한"
+ },
+ {
+  "id": "v-1348",
+  "level": 4,
+  "word": "compile",
+  "pos": "v.",
+  "meaning": "취합하다, 편집하다",
+  "example": "She compiled a list of potential suppliers.",
+  "example_ko": "그녀는 잠재 공급업체 목록을 취합했습니다.",
+  "tip": "compilation n."
+ },
+ {
+  "id": "v-1349",
+  "level": 4,
+  "word": "convene",
+  "pos": "v.",
+  "meaning": "소집하다, 모이다",
+  "example": "The board will convene next Tuesday.",
+  "example_ko": "이사회는 다음 주 화요일에 소집됩니다.",
+  "tip": "convention n. 대회"
+ },
+ {
+  "id": "v-1350",
+  "level": 4,
+  "word": "reconfigure",
+  "pos": "v.",
+  "meaning": "재구성하다, 설정을 바꾸다",
+  "example": "The IT team reconfigured the network over the weekend.",
+  "example_ko": "IT팀이 주말 동안 네트워크 설정을 바꿨습니다.",
+  "tip": "configuration n. 구성, 설정"
+ },
+ {
+  "id": "v-1351",
+  "level": 4,
+  "word": "circulate",
+  "pos": "v.",
+  "meaning": "회람시키다, 돌리다",
+  "example": "Please circulate the memo to all staff.",
+  "example_ko": "그 메모를 전 직원에게 회람해 주세요.",
+  "tip": "circulation n. 유통, 발행 부수"
+ },
+ {
+  "id": "v-1352",
+  "level": 4,
+  "word": "incorporate",
+  "pos": "v.",
+  "meaning": "반영하다, 포함시키다",
+  "example": "We incorporated customer feedback into the new design.",
+  "example_ko": "고객 의견을 새 디자인에 반영했습니다.",
+  "tip": "incorporate A into B · incorporated (법인의)"
+ },
+ {
+  "id": "v-1353",
+  "level": 4,
+  "word": "withhold",
+  "pos": "v.",
+  "meaning": "보류하다, 원천 징수하다",
+  "example": "Payment will be withheld until the work is complete.",
+  "example_ko": "작업이 끝날 때까지 지급이 보류됩니다.",
+  "tip": "withholding tax (원천 징수세)"
+ },
+ {
+  "id": "v-1354",
+  "level": 4,
+  "word": "facilitate",
+  "pos": "v.",
+  "meaning": "쉽게 하다, 촉진하다",
+  "example": "The new software will facilitate communication between teams.",
+  "example_ko": "새 소프트웨어는 팀 간 소통을 쉽게 해 줄 것입니다.",
+  "tip": "facilitator n. 진행자"
+ },
+ {
+  "id": "v-1355",
+  "level": 4,
+  "word": "formulate",
+  "pos": "v.",
+  "meaning": "세우다, 공식화하다",
+  "example": "The committee formulated a new pricing strategy.",
+  "example_ko": "위원회는 새 가격 전략을 세웠습니다.",
+  "tip": "formulation n."
+ },
+ {
+  "id": "v-1356",
+  "level": 4,
+  "word": "foster",
+  "pos": "v.",
+  "meaning": "육성하다, 조성하다",
+  "example": "The program fosters innovation among employees.",
+  "example_ko": "그 프로그램은 직원들의 혁신을 북돋웁니다.",
+  "tip": "foster a culture of (문화를 조성하다)"
+ },
+ {
+  "id": "v-1357",
+  "level": 4,
+  "word": "mandate",
+  "pos": "n.",
+  "meaning": "권한, 지시",
+  "example": "The committee has a mandate to review safety rules.",
+  "example_ko": "위원회는 안전 규정을 검토할 권한이 있습니다.",
+  "tip": "mandatory adj. 의무적인"
+ },
+ {
+  "id": "v-1358",
+  "level": 4,
+  "word": "commence",
+  "pos": "v.",
+  "meaning": "시작하다",
+  "example": "Construction will commence in early spring.",
+  "example_ko": "공사는 초봄에 시작됩니다.",
+  "tip": "commencement n. 개시, 졸업식"
+ },
+ {
+  "id": "v-1359",
+  "level": 4,
+  "word": "adjourn",
+  "pos": "v.",
+  "meaning": "휴회하다, 연기하다",
+  "example": "The meeting was adjourned until next week.",
+  "example_ko": "회의는 다음 주까지 휴회되었습니다.",
+  "tip": "adjournment n."
+ },
+ {
+  "id": "v-1360",
+  "level": 4,
+  "word": "accelerate",
+  "pos": "v.",
+  "meaning": "가속하다, 앞당기다",
+  "example": "The new equipment will accelerate production.",
+  "example_ko": "새 장비는 생산 속도를 높일 것입니다.",
+  "tip": "acceleration n."
+ },
+ {
+  "id": "v-1361",
+  "level": 4,
+  "word": "underestimate",
+  "pos": "v.",
+  "meaning": "과소평가하다",
+  "example": "We underestimated the cost of the renovation.",
+  "example_ko": "우리는 보수 공사 비용을 과소평가했습니다.",
+  "tip": "↔ overestimate (과대평가하다)"
+ },
+ {
+  "id": "v-1362",
+  "level": 4,
+  "word": "scrutinize",
+  "pos": "v.",
+  "meaning": "면밀히 조사하다",
+  "example": "Auditors scrutinized every expense report.",
+  "example_ko": "감사관들은 모든 경비 보고서를 꼼꼼히 조사했습니다.",
+  "tip": "scrutiny n. 정밀 조사"
+ },
+ {
+  "id": "v-1363",
+  "level": 4,
+  "word": "itemize",
+  "pos": "v.",
+  "meaning": "항목별로 적다",
+  "example": "Please itemize all expenses on the form.",
+  "example_ko": "양식에 모든 경비를 항목별로 적어 주세요.",
+  "tip": "itemized receipt (항목별 영수증)"
+ },
+ {
+  "id": "v-1364",
+  "level": 4,
+  "word": "oblige",
+  "pos": "v.",
+  "meaning": "의무를 지우다, 호의를 베풀다",
+  "example": "The contract obliges the supplier to deliver on time.",
+  "example_ko": "계약에 따라 공급업체는 제때 납품할 의무가 있습니다.",
+  "tip": "be obliged to (해야 하다)"
+ },
+ {
+  "id": "v-1365",
+  "level": 4,
+  "word": "be accountable for",
+  "pos": "phr.",
+  "meaning": "책임을 지다",
+  "example": "Each manager is accountable for their team's budget.",
+  "example_ko": "각 관리자는 팀 예산에 책임을 집니다.",
+  "tip": "accountability n. 책임"
+ },
+ {
+  "id": "v-1366",
+  "level": 4,
+  "word": "be exempt from",
+  "pos": "phr.",
+  "meaning": "면제되다",
+  "example": "Nonprofit organizations are exempt from this tax.",
+  "example_ko": "비영리 단체는 이 세금이 면제됩니다.",
+  "tip": "exemption n. 면제"
+ },
+ {
+  "id": "v-1367",
+  "level": 4,
+  "word": "be obligated to",
+  "pos": "phr.",
+  "meaning": "해야 할 의무가 있다",
+  "example": "You are not obligated to buy anything.",
+  "example_ko": "꼭 무언가를 구매하실 의무는 없습니다.",
+  "tip": "obligation n. 의무"
+ },
+ {
+  "id": "v-1368",
+  "level": 4,
+  "word": "be bound by",
+  "pos": "phr.",
+  "meaning": "구속을 받다, 따라야 하다",
+  "example": "Employees are bound by the company's code of conduct.",
+  "example_ko": "직원들은 회사 행동 강령을 따라야 합니다.",
+  "tip": "binding adj. 구속력 있는"
+ },
+ {
+  "id": "v-1369",
+  "level": 4,
+  "word": "be credited with",
+  "pos": "phr.",
+  "meaning": "공로를 인정받다",
+  "example": "She is credited with doubling the company's sales.",
+  "example_ko": "그녀는 회사 매출을 두 배로 늘린 공로를 인정받고 있습니다.",
+  "tip": "credit A with B"
+ },
+ {
+  "id": "v-1370",
+  "level": 4,
+  "word": "be slated for",
+  "pos": "phr.",
+  "meaning": "예정되어 있다",
+  "example": "The store is slated for renovation next year.",
+  "example_ko": "그 매장은 내년에 보수 공사가 예정되어 있습니다.",
+  "tip": "= be scheduled for"
+ },
+ {
+  "id": "v-1371",
+  "level": 4,
+  "word": "be poised to",
+  "pos": "phr.",
+  "meaning": "곧 할 태세다",
+  "example": "The company is poised to become the market leader.",
+  "example_ko": "그 회사는 곧 시장 선두가 될 태세입니다.",
+  "tip": "be poised for + 명사"
+ },
+ {
+  "id": "v-1372",
+  "level": 4,
+  "word": "on a trial basis",
+  "pos": "phr.",
+  "meaning": "시험 삼아, 시범적으로",
+  "example": "The new schedule will be used on a trial basis.",
+  "example_ko": "새 일정은 시범적으로 운영됩니다.",
+  "tip": "on a daily basis (매일)"
+ },
+ {
+  "id": "v-1373",
+  "level": 4,
+  "word": "in bulk",
+  "pos": "phr.",
+  "meaning": "대량으로",
+  "example": "Buying in bulk lowers the unit price.",
+  "example_ko": "대량으로 사면 단가가 낮아집니다.",
+  "tip": "bulk order (대량 주문)"
+ },
+ {
+  "id": "v-1374",
+  "level": 4,
+  "word": "in transit",
+  "pos": "phr.",
+  "meaning": "운송 중에",
+  "example": "The goods were damaged in transit.",
+  "example_ko": "상품이 운송 중에 파손되었습니다.",
+  "tip": "= en route"
+ },
+ {
+  "id": "v-1375",
+  "level": 4,
+  "word": "on short notice",
+  "pos": "phr.",
+  "meaning": "갑작스럽게, 촉박하게",
+  "example": "Thank you for coming on such short notice.",
+  "example_ko": "이렇게 갑작스러운 연락에도 와 주셔서 감사합니다.",
+  "tip": "at short notice (영국식)"
+ },
+ {
+  "id": "v-1376",
+  "level": 4,
+  "word": "be in line with",
+  "pos": "phr.",
+  "meaning": "부합하다, 일치하다",
+  "example": "The results are in line with our forecast.",
+  "example_ko": "결과는 우리 예측과 일치합니다.",
+  "tip": "in line with (따라, 일치하여)"
+ },
+ {
+  "id": "v-1377",
+  "level": 4,
+  "word": "with the aim of",
+  "pos": "phr.",
+  "meaning": "목적으로",
+  "example": "The program was created with the aim of reducing waste.",
+  "example_ko": "그 프로그램은 낭비를 줄일 목적으로 만들어졌습니다.",
+  "tip": "with the aim of + 동명사"
+ },
+ {
+  "id": "v-1378",
+  "level": 4,
+  "word": "in anticipation of",
+  "pos": "phr.",
+  "meaning": "예상하여, 대비하여",
+  "example": "We increased inventory in anticipation of the holiday rush.",
+  "example_ko": "연휴 성수기를 예상해 재고를 늘렸습니다.",
+  "tip": "anticipate v. 예상하다"
+ },
+ {
+  "id": "v-1379",
+  "level": 4,
+  "word": "as a token of",
+  "pos": "phr.",
+  "meaning": "표시로",
+  "example": "Please accept this gift as a token of our appreciation.",
+  "example_ko": "감사의 표시로 이 선물을 받아 주세요.",
+  "tip": "token of gratitude (감사의 표시)"
+ },
+ {
+  "id": "v-1380",
+  "level": 4,
+  "word": "lay off",
+  "pos": "phr.",
+  "meaning": "해고하다",
+  "example": "The factory laid off 200 workers.",
+  "example_ko": "그 공장은 직원 200명을 해고했습니다.",
+  "tip": "layoff n. 해고"
+ },
+ {
+  "id": "v-1381",
+  "level": 4,
+  "word": "fill in for",
+  "pos": "phr.",
+  "meaning": "대신 일하다",
+  "example": "Can you fill in for me at tomorrow's meeting?",
+  "example_ko": "내일 회의에 저 대신 참석해 줄 수 있나요?",
+  "tip": "= cover for, stand in for"
+ },
+ {
+  "id": "v-1382",
+  "level": 4,
+  "word": "step down",
+  "pos": "phr.",
+  "meaning": "사임하다, 물러나다",
+  "example": "The CEO will step down at the end of the year.",
+  "example_ko": "대표는 연말에 물러날 예정입니다.",
+  "tip": "step down as (직에서 물러나다)"
+ },
+ {
+  "id": "v-1383",
+  "level": 4,
+  "word": "roll out",
+  "pos": "phr.",
+  "meaning": "출시하다, 도입하다",
+  "example": "The bank will roll out its new mobile app next month.",
+  "example_ko": "은행은 다음 달 새 모바일 앱을 출시합니다.",
+  "tip": "rollout n. 출시"
+ },
+ {
+  "id": "v-1384",
+  "level": 4,
+  "word": "follow up on",
+  "pos": "phr.",
+  "meaning": "후속 조치를 하다, 다시 확인하다",
+  "example": "I'm calling to follow up on my order.",
+  "example_ko": "제 주문 건을 확인하려고 전화드렸습니다.",
+  "tip": "follow-up n. 후속 조치"
+ },
+ {
+  "id": "v-1385",
+  "level": 4,
+  "word": "draw up",
+  "pos": "phr.",
+  "meaning": "작성하다",
+  "example": "The lawyer drew up a new contract.",
+  "example_ko": "변호사가 새 계약서를 작성했습니다.",
+  "tip": "draw up a plan (계획을 세우다)"
+ },
+ {
+  "id": "v-1386",
+  "level": 4,
+  "word": "sign off on",
+  "pos": "phr.",
+  "meaning": "승인하다",
+  "example": "The director must sign off on all budgets.",
+  "example_ko": "이사가 모든 예산을 승인해야 합니다.",
+  "tip": "= approve"
+ },
+ {
+  "id": "v-1387",
+  "level": 4,
+  "word": "make up for",
+  "pos": "phr.",
+  "meaning": "보충하다, 만회하다",
+  "example": "Strong online sales made up for weak store sales.",
+  "example_ko": "온라인 판매 호조가 매장 판매 부진을 만회했습니다.",
+  "tip": "= compensate for"
+ },
+ {
+  "id": "v-1388",
+  "level": 4,
+  "word": "phase in",
+  "pos": "phr.",
+  "meaning": "단계적으로 도입하다",
+  "example": "The new system will be phased in over six months.",
+  "example_ko": "새 시스템은 6개월에 걸쳐 단계적으로 도입됩니다.",
+  "tip": "↔ phase out (단계적으로 폐지하다)"
+ },
+ {
+  "id": "v-1389",
+  "level": 4,
+  "word": "in the pipeline",
+  "pos": "phr.",
+  "meaning": "진행 중인, 준비 중인",
+  "example": "Several new products are in the pipeline.",
+  "example_ko": "여러 신제품이 준비 중입니다.",
+  "tip": "= in the works"
+ },
+ {
+  "id": "v-1390",
+  "level": 4,
+  "word": "under warranty",
+  "pos": "phr.",
+  "meaning": "보증 기간 중인",
+  "example": "The printer is still under warranty.",
+  "example_ko": "그 프린터는 아직 보증 기간 중입니다.",
+  "tip": "warranty n. 품질 보증"
+ },
+ {
+  "id": "v-1391",
+  "level": 4,
+  "word": "at full capacity",
+  "pos": "phr.",
+  "meaning": "최대로 가동하여, 만원으로",
+  "example": "The plant is operating at full capacity.",
+  "example_ko": "공장이 최대로 가동되고 있습니다.",
+  "tip": "capacity n. 수용력"
+ },
+ {
+  "id": "v-1392",
+  "level": 4,
+  "word": "up to code",
+  "pos": "phr.",
+  "meaning": "건축 법규에 맞는",
+  "example": "The wiring is not up to code.",
+  "example_ko": "배선이 건축 법규에 맞지 않습니다.",
+  "tip": "building code (건축 법규)"
+ },
+ {
+  "id": "v-1393",
+  "level": 4,
+  "word": "conform to",
+  "pos": "phr.",
+  "meaning": "따르다, 부합하다",
+  "example": "All products must conform to safety standards.",
+  "example_ko": "모든 제품은 안전 기준에 부합해야 합니다.",
+  "tip": "conformity n. 준수"
+ },
+ {
+  "id": "v-1394",
+  "level": 4,
+  "word": "break ground",
+  "pos": "phr.",
+  "meaning": "착공하다",
+  "example": "The company will break ground on its new headquarters in May.",
+  "example_ko": "회사는 5월에 새 본사를 착공합니다.",
+  "tip": "groundbreaking adj. 획기적인"
+ },
+ {
+  "id": "v-1395",
+  "level": 4,
+  "word": "carry over",
+  "pos": "phr.",
+  "meaning": "이월하다, 넘기다",
+  "example": "Unused vacation days can be carried over to next year.",
+  "example_ko": "쓰지 않은 휴가는 내년으로 이월할 수 있습니다.",
+  "tip": "carryover n. 이월"
+ },
+ {
+  "id": "v-1396",
+  "level": 4,
+  "word": "in a timely manner",
+  "pos": "phr.",
+  "meaning": "제때에, 시기적절하게",
+  "example": "Please respond to customer emails in a timely manner.",
+  "example_ko": "고객 이메일에 제때 답해 주세요.",
+  "tip": "timely adj. 시기적절한"
+ },
+ {
+  "id": "v-1397",
+  "level": 4,
+  "word": "take effect",
+  "pos": "phr.",
+  "meaning": "시행되다, 효력이 생기다",
+  "example": "The new policy will take effect on July 1.",
+  "example_ko": "새 정책은 7월 1일부터 시행됩니다.",
+  "tip": "= come into effect, go into effect"
+ },
+ {
+  "id": "v-1398",
+  "level": 4,
+  "word": "on back order",
+  "pos": "phr.",
+  "meaning": "입고 대기 중인",
+  "example": "The item you requested is currently on back order.",
+  "example_ko": "요청하신 상품은 현재 입고 대기 중입니다.",
+  "tip": "backorder v. 이월 주문하다"
+ },
+ {
+  "id": "v-1399",
+  "level": 4,
+  "word": "press release",
+  "pos": "phr.",
+  "meaning": "보도 자료",
+  "example": "The company issued a press release about the merger.",
+  "example_ko": "회사는 합병에 관한 보도 자료를 냈습니다.",
+  "tip": "issue a press release (보도 자료를 내다)"
+ },
+ {
+  "id": "v-1400",
+  "level": 4,
+  "word": "file a claim",
+  "pos": "phr.",
+  "meaning": "보상을 청구하다",
+  "example": "You can file a claim for the damaged goods.",
+  "example_ko": "파손된 상품에 대해 보상을 청구할 수 있습니다.",
+  "tip": "insurance claim (보험 청구)"
+ },
+ {
+  "id": "v-1401",
+  "level": 5,
+  "word": "indemnify",
+  "pos": "v.",
+  "meaning": "손해를 보상하다, 배상을 약속하다",
+  "example": "The contractor agreed to indemnify the client against any losses.",
+  "example_ko": "계약자는 고객의 모든 손실을 보상하기로 약속했습니다.",
+  "tip": "indemnity n. 손해 배상 · indemnify A against B"
+ },
+ {
+  "id": "v-1402",
+  "level": 5,
+  "word": "jurisdiction",
+  "pos": "n.",
+  "meaning": "관할권, 관할 구역",
+  "example": "The case falls under the jurisdiction of the state court.",
+  "example_ko": "그 사건은 주 법원의 관할에 속합니다.",
+  "tip": "fall under the jurisdiction of (관할에 속하다)"
+ },
+ {
+  "id": "v-1403",
+  "level": 5,
+  "word": "covenant",
+  "pos": "n.",
+  "meaning": "약정, 계약 조항",
+  "example": "The loan agreement contains strict financial covenants.",
+  "example_ko": "대출 계약에는 엄격한 재무 약정이 들어 있습니다.",
+  "tip": "restrictive covenant (제한 약정)"
+ },
+ {
+  "id": "v-1404",
+  "level": 5,
+  "word": "lien",
+  "pos": "n.",
+  "meaning": "담보권, 유치권",
+  "example": "The bank placed a lien on the property.",
+  "example_ko": "은행이 그 부동산에 담보권을 설정했습니다.",
+  "tip": "place a lien on (담보권을 설정하다)"
+ },
+ {
+  "id": "v-1405",
+  "level": 5,
+  "word": "statutory",
+  "pos": "adj.",
+  "meaning": "법으로 정해진, 법정의",
+  "example": "Employees are entitled to statutory holidays.",
+  "example_ko": "직원들은 법정 공휴일을 누릴 권리가 있습니다.",
+  "tip": "statute n. 법령"
+ },
+ {
+  "id": "v-1406",
+  "level": 5,
+  "word": "ratify",
+  "pos": "v.",
+  "meaning": "비준하다, 승인하다",
+  "example": "The union members voted to ratify the new agreement.",
+  "example_ko": "노조원들은 새 협약을 승인하기로 표결했습니다.",
+  "tip": "ratification n. 비준"
+ },
+ {
+  "id": "v-1407",
+  "level": 5,
+  "word": "nullify",
+  "pos": "v.",
+  "meaning": "무효로 하다",
+  "example": "Any unauthorized changes will nullify the warranty.",
+  "example_ko": "승인되지 않은 변경은 보증을 무효로 만듭니다.",
+  "tip": "= invalidate, void"
+ },
+ {
+  "id": "v-1408",
+  "level": 5,
+  "word": "bylaw",
+  "pos": "n.",
+  "meaning": "내규, 정관",
+  "example": "The company's bylaws require an annual shareholder meeting.",
+  "example_ko": "회사 정관은 연례 주주 총회를 요구합니다.",
+  "tip": "주로 복수형 bylaws"
+ },
+ {
+  "id": "v-1409",
+  "level": 5,
+  "word": "fiduciary",
+  "pos": "adj.",
+  "meaning": "수탁자의, 신탁의",
+  "example": "Directors have a fiduciary duty to act in shareholders' interests.",
+  "example_ko": "이사들은 주주의 이익을 위해 행동할 수탁자 의무가 있습니다.",
+  "tip": "fiduciary duty (수탁자 의무)"
+ },
+ {
+  "id": "v-1410",
+  "level": 5,
+  "word": "litigation",
+  "pos": "n.",
+  "meaning": "소송",
+  "example": "The company wants to avoid costly litigation.",
+  "example_ko": "회사는 비용이 많이 드는 소송을 피하고 싶어 합니다.",
+  "tip": "litigate v. · litigant n. 소송 당사자"
+ },
+ {
+  "id": "v-1411",
+  "level": 5,
+  "word": "injunction",
+  "pos": "n.",
+  "meaning": "금지 명령, 가처분",
+  "example": "The court issued an injunction to stop the sale.",
+  "example_ko": "법원은 판매를 중지하라는 금지 명령을 내렸습니다.",
+  "tip": "issue an injunction (금지 명령을 내리다)"
+ },
+ {
+  "id": "v-1412",
+  "level": 5,
+  "word": "remunerate",
+  "pos": "v.",
+  "meaning": "보수를 지급하다",
+  "example": "Consultants will be remunerated on an hourly basis.",
+  "example_ko": "컨설턴트에게는 시간 단위로 보수가 지급됩니다.",
+  "tip": "remuneration n. 보수"
+ },
+ {
+  "id": "v-1413",
+  "level": 5,
+  "word": "codify",
+  "pos": "v.",
+  "meaning": "성문화하다, 체계화하다",
+  "example": "The new rules were codified in the employee handbook.",
+  "example_ko": "새 규정은 직원 안내서에 명문화되었습니다.",
+  "tip": "code n. 법전, 규정"
+ },
+ {
+  "id": "v-1414",
+  "level": 5,
+  "word": "abrogate",
+  "pos": "v.",
+  "meaning": "폐지하다, 파기하다",
+  "example": "Neither party may abrogate the treaty without notice.",
+  "example_ko": "어느 쪽도 통보 없이 협정을 파기할 수 없습니다.",
+  "tip": "= revoke, repeal"
+ },
+ {
+  "id": "v-1415",
+  "level": 5,
+  "word": "revoke",
+  "pos": "v.",
+  "meaning": "취소하다, 철회하다",
+  "example": "The license was revoked after repeated violations.",
+  "example_ko": "반복된 위반 후 면허가 취소되었습니다.",
+  "tip": "revocation n. 취소"
+ },
+ {
+  "id": "v-1416",
+  "level": 5,
+  "word": "amortize",
+  "pos": "v.",
+  "meaning": "분할 상환하다, 상각하다",
+  "example": "The cost of the equipment will be amortized over five years.",
+  "example_ko": "장비 비용은 5년에 걸쳐 상각됩니다.",
+  "tip": "amortization n."
+ },
+ {
+  "id": "v-1417",
+  "level": 5,
+  "word": "liquidity",
+  "pos": "n.",
+  "meaning": "유동성",
+  "example": "The bank has enough liquidity to meet its obligations.",
+  "example_ko": "그 은행은 채무를 감당할 유동성이 충분합니다.",
+  "tip": "liquid assets (유동 자산)"
+ },
+ {
+  "id": "v-1418",
+  "level": 5,
+  "word": "divest",
+  "pos": "v.",
+  "meaning": "매각하다, 처분하다",
+  "example": "The group plans to divest its retail division.",
+  "example_ko": "그 그룹은 소매 부문을 매각할 계획입니다.",
+  "tip": "divestiture n. 매각 · divest oneself of"
+ },
+ {
+  "id": "v-1419",
+  "level": 5,
+  "word": "insolvent",
+  "pos": "adj.",
+  "meaning": "지급 불능의, 파산한",
+  "example": "The supplier became insolvent and ceased trading.",
+  "example_ko": "그 공급업체는 지급 불능 상태가 되어 영업을 중단했습니다.",
+  "tip": "insolvency n. · ↔ solvent"
+ },
+ {
+  "id": "v-1420",
+  "level": 5,
+  "word": "arrears",
+  "pos": "n.",
+  "meaning": "연체금, 체납금",
+  "example": "The tenant is three months in arrears with the rent.",
+  "example_ko": "그 세입자는 집세가 석 달 밀려 있습니다.",
+  "tip": "in arrears (연체된)"
+ },
+ {
+  "id": "v-1421",
+  "level": 5,
+  "word": "underwrite",
+  "pos": "v.",
+  "meaning": "인수하다, 보증하다",
+  "example": "Two banks will underwrite the share offering.",
+  "example_ko": "두 은행이 주식 공모를 인수할 예정입니다.",
+  "tip": "underwriter n. 인수업자, 보험업자"
+ },
+ {
+  "id": "v-1422",
+  "level": 5,
+  "word": "disburse",
+  "pos": "v.",
+  "meaning": "지급하다, 지출하다",
+  "example": "Funds will be disbursed once the paperwork is approved.",
+  "example_ko": "서류가 승인되면 자금이 지급됩니다.",
+  "tip": "disbursement n. 지급"
+ },
+ {
+  "id": "v-1423",
+  "level": 5,
+  "word": "remit",
+  "pos": "v.",
+  "meaning": "송금하다",
+  "example": "Please remit payment within 30 days.",
+  "example_ko": "30일 이내에 대금을 송금해 주세요.",
+  "tip": "remittance n. 송금"
+ },
+ {
+  "id": "v-1424",
+  "level": 5,
+  "word": "levy",
+  "pos": "v.",
+  "meaning": "부과하다, 징수하다",
+  "example": "The city levies a tax on hotel stays.",
+  "example_ko": "시는 호텔 숙박에 세금을 부과합니다.",
+  "tip": "n. 세금, 부과금"
+ },
+ {
+  "id": "v-1425",
+  "level": 5,
+  "word": "windfall",
+  "pos": "n.",
+  "meaning": "뜻밖의 수입, 횡재",
+  "example": "The company received a windfall from the sale of its old headquarters.",
+  "example_ko": "회사는 옛 본사 매각으로 뜻밖의 수입을 얻었습니다.",
+  "tip": "windfall profit (초과 이윤)"
+ },
+ {
+  "id": "v-1426",
+  "level": 5,
+  "word": "austerity",
+  "pos": "n.",
+  "meaning": "긴축, 내핍",
+  "example": "The government introduced austerity measures to cut debt.",
+  "example_ko": "정부는 부채를 줄이려고 긴축 조치를 도입했습니다.",
+  "tip": "austerity measures (긴축 조치)"
+ },
+ {
+  "id": "v-1427",
+  "level": 5,
+  "word": "receivable",
+  "pos": "adj.",
+  "meaning": "받을, 미수의",
+  "example": "Accounts receivable have increased this quarter.",
+  "example_ko": "이번 분기 매출 채권이 늘었습니다.",
+  "tip": "accounts receivable ↔ accounts payable (매입 채무)"
+ },
+ {
+  "id": "v-1428",
+  "level": 5,
+  "word": "escrow",
+  "pos": "n.",
+  "meaning": "제3자 예탁, 에스크로",
+  "example": "The deposit will be held in escrow until closing.",
+  "example_ko": "계약금은 거래 완료 시까지 제3자에게 예치됩니다.",
+  "tip": "in escrow (제3자 예탁 중인)"
+ },
+ {
+  "id": "v-1429",
+  "level": 5,
+  "word": "hedge",
+  "pos": "v.",
+  "meaning": "위험에 대비하다, 분산하다",
+  "example": "The firm hedges against currency fluctuations.",
+  "example_ko": "회사는 환율 변동 위험에 대비합니다.",
+  "tip": "hedge against · hedge fund"
+ },
+ {
+  "id": "v-1430",
+  "level": 5,
+  "word": "recoup",
+  "pos": "v.",
+  "meaning": "만회하다, 회수하다",
+  "example": "It will take three years to recoup the investment.",
+  "example_ko": "투자금을 회수하는 데 3년이 걸릴 것입니다.",
+  "tip": "recoup losses (손실을 만회하다)"
+ },
+ {
+  "id": "v-1431",
+  "level": 5,
+  "word": "attrition",
+  "pos": "n.",
+  "meaning": "자연 감소, 소모",
+  "example": "The company will reduce staff through attrition rather than layoffs.",
+  "example_ko": "회사는 해고 대신 자연 감소로 인원을 줄일 것입니다.",
+  "tip": "attrition rate (이직률)"
+ },
+ {
+  "id": "v-1432",
+  "level": 5,
+  "word": "grievance",
+  "pos": "n.",
+  "meaning": "고충, 불만",
+  "example": "Employees can file a grievance with HR.",
+  "example_ko": "직원들은 인사팀에 고충을 제기할 수 있습니다.",
+  "tip": "grievance procedure (고충 처리 절차)"
+ },
+ {
+  "id": "v-1433",
+  "level": 5,
+  "word": "stipend",
+  "pos": "n.",
+  "meaning": "정액 수당, 급여",
+  "example": "Interns receive a monthly stipend.",
+  "example_ko": "인턴은 매달 수당을 받습니다.",
+  "tip": "주로 연수생이나 인턴의 정액 수당"
+ },
+ {
+  "id": "v-1434",
+  "level": 5,
+  "word": "sabbatical",
+  "pos": "n.",
+  "meaning": "안식 휴가",
+  "example": "After ten years of service, staff may take a paid sabbatical.",
+  "example_ko": "10년 근속하면 유급 안식 휴가를 쓸 수 있습니다.",
+  "tip": "on sabbatical (안식 휴가 중인)"
+ },
+ {
+  "id": "v-1435",
+  "level": 5,
+  "word": "nepotism",
+  "pos": "n.",
+  "meaning": "족벌주의, 연고 채용",
+  "example": "The policy is intended to prevent nepotism in hiring.",
+  "example_ko": "그 정책은 채용에서의 연고주의를 막기 위한 것입니다.",
+  "tip": "= favoritism"
+ },
+ {
+  "id": "v-1436",
+  "level": 5,
+  "word": "redundancy",
+  "pos": "n.",
+  "meaning": "정리 해고, 여분",
+  "example": "The restructuring led to 50 redundancies.",
+  "example_ko": "구조 조정으로 50명이 정리 해고되었습니다.",
+  "tip": "redundant adj. 불필요한, 해고된"
+ },
+ {
+  "id": "v-1437",
+  "level": 5,
+  "word": "reprimand",
+  "pos": "v.",
+  "meaning": "질책하다, 견책하다",
+  "example": "He was reprimanded for violating safety rules.",
+  "example_ko": "그는 안전 규정을 어겨 견책을 받았습니다.",
+  "tip": "n. 견책 · = rebuke"
+ },
+ {
+  "id": "v-1438",
+  "level": 5,
+  "word": "probationary",
+  "pos": "adj.",
+  "meaning": "수습의, 시험 기간의",
+  "example": "The probationary period lasts six months.",
+  "example_ko": "수습 기간은 6개월입니다.",
+  "tip": "probation n. 수습"
+ },
+ {
+  "id": "v-1439",
+  "level": 5,
+  "word": "secondment",
+  "pos": "n.",
+  "meaning": "파견 근무",
+  "example": "She is on secondment to the London office.",
+  "example_ko": "그녀는 런던 지사에 파견 근무 중입니다.",
+  "tip": "on secondment (파견 중인)"
+ },
+ {
+  "id": "v-1440",
+  "level": 5,
+  "word": "vested",
+  "pos": "adj.",
+  "meaning": "확정된, 기득의",
+  "example": "Employees become fully vested in the plan after three years.",
+  "example_ko": "직원은 3년 후 그 제도에 대한 권리가 완전히 확정됩니다.",
+  "tip": "vested interest (이해관계, 기득권)"
+ },
+ {
+  "id": "v-1441",
+  "level": 5,
+  "word": "meritocracy",
+  "pos": "n.",
+  "meaning": "능력주의",
+  "example": "The firm prides itself on being a meritocracy.",
+  "example_ko": "그 회사는 능력주의 조직이라는 점을 자랑으로 여깁니다.",
+  "tip": "merit n. 장점, 공로"
+ },
+ {
+  "id": "v-1442",
+  "level": 5,
+  "word": "bottleneck",
+  "pos": "n.",
+  "meaning": "병목, 걸림돌",
+  "example": "The packaging line has become a bottleneck.",
+  "example_ko": "포장 라인이 병목 구간이 되었습니다.",
+  "tip": "= holdup"
+ },
+ {
+  "id": "v-1443",
+  "level": 5,
+  "word": "retrofit",
+  "pos": "v.",
+  "meaning": "개조하다, 새 장비를 달다",
+  "example": "The old plant was retrofitted with energy-saving lights.",
+  "example_ko": "낡은 공장에 절전 조명이 새로 설치되었습니다.",
+  "tip": "n. 개조"
+ },
+ {
+  "id": "v-1444",
+  "level": 5,
+  "word": "obsolescence",
+  "pos": "n.",
+  "meaning": "노후화, 구식화",
+  "example": "Rapid obsolescence is a problem in the electronics industry.",
+  "example_ko": "빠른 구식화는 전자 산업의 문제입니다.",
+  "tip": "planned obsolescence (계획적 구식화) · obsolete adj."
+ },
+ {
+  "id": "v-1445",
+  "level": 5,
+  "word": "contaminant",
+  "pos": "n.",
+  "meaning": "오염 물질",
+  "example": "Filters remove contaminants from the water.",
+  "example_ko": "필터가 물에서 오염 물질을 제거합니다.",
+  "tip": "contaminate v. · contamination n."
+ },
+ {
+  "id": "v-1446",
+  "level": 5,
+  "word": "ergonomic",
+  "pos": "adj.",
+  "meaning": "인체 공학적인",
+  "example": "The office was furnished with ergonomic chairs.",
+  "example_ko": "사무실에 인체 공학적 의자가 비치되었습니다.",
+  "tip": "ergonomics n. 인체 공학"
+ },
+ {
+  "id": "v-1447",
+  "level": 5,
+  "word": "impediment",
+  "pos": "n.",
+  "meaning": "장애, 방해물",
+  "example": "High costs remain the main impediment to expansion.",
+  "example_ko": "높은 비용이 여전히 확장의 주된 걸림돌입니다.",
+  "tip": "impede v. 방해하다"
+ },
+ {
+  "id": "v-1448",
+  "level": 5,
+  "word": "tolerance",
+  "pos": "n.",
+  "meaning": "허용 오차, 내성",
+  "example": "Parts must be machined to very tight tolerances.",
+  "example_ko": "부품은 아주 작은 허용 오차 이내로 가공되어야 합니다.",
+  "tip": "zero tolerance (무관용)"
+ },
+ {
+  "id": "v-1449",
+  "level": 5,
+  "word": "yield",
+  "pos": "n.",
+  "meaning": "수율, 수익률",
+  "example": "The new process increased the yield of usable chips.",
+  "example_ko": "새 공정으로 쓸 수 있는 칩의 수율이 높아졌습니다.",
+  "tip": "v. 산출하다, 양보하다"
+ },
+ {
+  "id": "v-1450",
+  "level": 5,
+  "word": "consignee",
+  "pos": "n.",
+  "meaning": "수하인, 받는 사람",
+  "example": "The consignee must sign for the delivery.",
+  "example_ko": "수하인은 배송품 수령 서명을 해야 합니다.",
+  "tip": "consignor (발송인)와 구별"
+ },
+ {
+  "id": "v-1451",
+  "level": 5,
+  "word": "embargo",
+  "pos": "n.",
+  "meaning": "수출입 금지, 보도 유예",
+  "example": "The government lifted the trade embargo.",
+  "example_ko": "정부는 무역 금지 조치를 해제했습니다.",
+  "tip": "lift an embargo (금지를 해제하다)"
+ },
+ {
+  "id": "v-1452",
+  "level": 5,
+  "word": "requisition",
+  "pos": "n.",
+  "meaning": "요청서, 청구",
+  "example": "Submit a purchase requisition before ordering supplies.",
+  "example_ko": "비품을 주문하기 전에 구매 요청서를 제출하세요.",
+  "tip": "purchase requisition (구매 요청서)"
+ },
+ {
+  "id": "v-1453",
+  "level": 5,
+  "word": "provenance",
+  "pos": "n.",
+  "meaning": "출처, 원산지",
+  "example": "Buyers want to know the provenance of the ingredients.",
+  "example_ko": "구매자들은 재료의 원산지를 알고 싶어 합니다.",
+  "tip": "= origin"
+ },
+ {
+  "id": "v-1454",
+  "level": 5,
+  "word": "demurrage",
+  "pos": "n.",
+  "meaning": "체선료, 지체료",
+  "example": "Delays at the port resulted in heavy demurrage charges.",
+  "example_ko": "항만 지연으로 막대한 체선료가 발생했습니다.",
+  "tip": "화물 반출이 늦어질 때 부과되는 요금"
+ },
+ {
+  "id": "v-1455",
+  "level": 5,
+  "word": "expeditiously",
+  "pos": "adv.",
+  "meaning": "신속하게",
+  "example": "The claim will be processed as expeditiously as possible.",
+  "example_ko": "청구는 최대한 신속하게 처리될 것입니다.",
+  "tip": "expedite v. · = promptly"
+ },
+ {
+  "id": "v-1456",
+  "level": 5,
+  "word": "saturate",
+  "pos": "v.",
+  "meaning": "포화시키다",
+  "example": "The smartphone market is already saturated.",
+  "example_ko": "스마트폰 시장은 이미 포화 상태입니다.",
+  "tip": "saturation n. 포화"
+ },
+ {
+  "id": "v-1457",
+  "level": 5,
+  "word": "differentiate",
+  "pos": "v.",
+  "meaning": "차별화하다, 구별하다",
+  "example": "We must differentiate our product from cheaper rivals.",
+  "example_ko": "더 싼 경쟁 제품과 우리 제품을 차별화해야 합니다.",
+  "tip": "differentiate A from B"
+ },
+ {
+  "id": "v-1458",
+  "level": 5,
+  "word": "ubiquitous",
+  "pos": "adj.",
+  "meaning": "어디에나 있는",
+  "example": "Mobile payment has become ubiquitous in the region.",
+  "example_ko": "그 지역에서 모바일 결제는 어디서나 쓰이게 되었습니다.",
+  "tip": "= omnipresent"
+ },
+ {
+  "id": "v-1459",
+  "level": 5,
+  "word": "cannibalize",
+  "pos": "v.",
+  "meaning": "자사 매출을 잠식하다",
+  "example": "The cheaper model may cannibalize sales of our premium line.",
+  "example_ko": "더 싼 모델이 고급 제품군의 매출을 잠식할 수 있습니다.",
+  "tip": "cannibalization n."
+ },
+ {
+  "id": "v-1460",
+  "level": 5,
+  "word": "affinity",
+  "pos": "n.",
+  "meaning": "친밀감, 선호",
+  "example": "Younger consumers show a strong affinity for the brand.",
+  "example_ko": "젊은 소비자들은 그 브랜드에 강한 친밀감을 보입니다.",
+  "tip": "affinity for, affinity with"
+ },
+ {
+  "id": "v-1461",
+  "level": 5,
+  "word": "flagship",
+  "pos": "adj.",
+  "meaning": "대표적인, 주력의",
+  "example": "The company opened its flagship store in Seoul.",
+  "example_ko": "회사는 서울에 대표 매장을 열었습니다.",
+  "tip": "flagship product (주력 상품)"
+ },
+ {
+  "id": "v-1462",
+  "level": 5,
+  "word": "entice",
+  "pos": "v.",
+  "meaning": "유인하다, 끌어들이다",
+  "example": "Free samples are used to entice new customers.",
+  "example_ko": "무료 샘플은 신규 고객을 끌어들이는 데 쓰입니다.",
+  "tip": "enticing adj. 매력적인"
+ },
+ {
+  "id": "v-1463",
+  "level": 5,
+  "word": "patronage",
+  "pos": "n.",
+  "meaning": "애용, 후원",
+  "example": "Thank you for your continued patronage.",
+  "example_ko": "변함없이 이용해 주셔서 감사합니다.",
+  "tip": "patron n. 단골"
+ },
+ {
+  "id": "v-1464",
+  "level": 5,
+  "word": "discretionary",
+  "pos": "adj.",
+  "meaning": "재량의, 임의의",
+  "example": "Consumers are cutting back on discretionary spending.",
+  "example_ko": "소비자들이 필수적이지 않은 지출을 줄이고 있습니다.",
+  "tip": "discretionary income (재량 소득) · discretion n."
+ },
+ {
+  "id": "v-1465",
+  "level": 5,
+  "word": "clout",
+  "pos": "n.",
+  "meaning": "영향력, 세력",
+  "example": "The retailer has enough clout to negotiate lower prices.",
+  "example_ko": "그 소매업체는 더 낮은 가격을 협상할 만한 영향력이 있습니다.",
+  "tip": "= influence"
+ },
+ {
+  "id": "v-1466",
+  "level": 5,
+  "word": "empirical",
+  "pos": "adj.",
+  "meaning": "실증적인, 경험적인",
+  "example": "There is little empirical evidence to support the claim.",
+  "example_ko": "그 주장을 뒷받침할 실증적 증거는 거의 없습니다.",
+  "tip": "empirical data (실증 자료)"
+ },
+ {
+  "id": "v-1467",
+  "level": 5,
+  "word": "extrapolate",
+  "pos": "v.",
+  "meaning": "추정하다",
+  "example": "We extrapolated next year's sales from current trends.",
+  "example_ko": "현재 추세에서 내년 매출을 추정했습니다.",
+  "tip": "extrapolation n."
+ },
+ {
+  "id": "v-1468",
+  "level": 5,
+  "word": "correlation",
+  "pos": "n.",
+  "meaning": "상관관계",
+  "example": "There is a strong correlation between training and productivity.",
+  "example_ko": "교육과 생산성 사이에는 강한 상관관계가 있습니다.",
+  "tip": "correlate v. · causation (인과 관계)와 구별"
+ },
+ {
+  "id": "v-1469",
+  "level": 5,
+  "word": "anomaly",
+  "pos": "n.",
+  "meaning": "이상, 변칙",
+  "example": "Analysts noticed an anomaly in the sales data.",
+  "example_ko": "분석가들이 판매 자료에서 이상한 점을 발견했습니다.",
+  "tip": "anomalous adj."
+ },
+ {
+  "id": "v-1470",
+  "level": 5,
+  "word": "substantiate",
+  "pos": "v.",
+  "meaning": "입증하다",
+  "example": "The report fails to substantiate its main claims.",
+  "example_ko": "그 보고서는 주요 주장을 입증하지 못합니다.",
+  "tip": "= corroborate, verify"
+ },
+ {
+  "id": "v-1471",
+  "level": 5,
+  "word": "quantify",
+  "pos": "v.",
+  "meaning": "수치화하다, 정량화하다",
+  "example": "It is difficult to quantify the benefits of the program.",
+  "example_ko": "그 프로그램의 효과를 수치로 나타내기는 어렵습니다.",
+  "tip": "quantifiable adj."
+ },
+ {
+  "id": "v-1472",
+  "level": 5,
+  "word": "unequivocal",
+  "pos": "adj.",
+  "meaning": "명백한, 확고한",
+  "example": "The survey results were unequivocal.",
+  "example_ko": "설문 결과는 명백했습니다.",
+  "tip": "unequivocally adv. · ↔ ambiguous"
+ },
+ {
+  "id": "v-1473",
+  "level": 5,
+  "word": "conclusive",
+  "pos": "adj.",
+  "meaning": "결정적인, 확실한",
+  "example": "The test results are not yet conclusive.",
+  "example_ko": "시험 결과는 아직 확정적이지 않습니다.",
+  "tip": "↔ inconclusive"
+ },
+ {
+  "id": "v-1474",
+  "level": 5,
+  "word": "inconclusive",
+  "pos": "adj.",
+  "meaning": "결론이 나지 않는",
+  "example": "The first round of trials was inconclusive.",
+  "example_ko": "1차 시험은 결론이 나지 않았습니다.",
+  "tip": "↔ conclusive"
+ },
+ {
+  "id": "v-1475",
+  "level": 5,
+  "word": "longitudinal",
+  "pos": "adj.",
+  "meaning": "장기간에 걸친, 종단적인",
+  "example": "The longitudinal study tracked workers for ten years.",
+  "example_ko": "그 장기 연구는 근로자들을 10년간 추적했습니다.",
+  "tip": "longitudinal study (종단 연구)"
+ },
+ {
+  "id": "v-1476",
+  "level": 5,
+  "word": "peer-reviewed",
+  "pos": "adj.",
+  "meaning": "동료 심사를 거친",
+  "example": "The results were published in a peer-reviewed journal.",
+  "example_ko": "결과는 동료 심사를 거친 학술지에 실렸습니다.",
+  "tip": "peer review n. 동료 심사"
+ },
+ {
+  "id": "v-1477",
+  "level": 5,
+  "word": "allegation",
+  "pos": "n.",
+  "meaning": "의혹, 혐의 주장",
+  "example": "The company denied the allegations of fraud.",
+  "example_ko": "회사는 사기 의혹을 부인했습니다.",
+  "tip": "allege v. · allegedly adv."
+ },
+ {
+  "id": "v-1478",
+  "level": 5,
+  "word": "retract",
+  "pos": "v.",
+  "meaning": "철회하다, 취소하다",
+  "example": "The newspaper retracted the story and apologized.",
+  "example_ko": "신문은 그 기사를 철회하고 사과했습니다.",
+  "tip": "retraction n. 정정 기사"
+ },
+ {
+  "id": "v-1479",
+  "level": 5,
+  "word": "refute",
+  "pos": "v.",
+  "meaning": "반박하다",
+  "example": "The spokesperson refuted the claims in the report.",
+  "example_ko": "대변인은 보고서의 주장을 반박했습니다.",
+  "tip": "= rebut · refutation n."
+ },
+ {
+  "id": "v-1480",
+  "level": 5,
+  "word": "disavow",
+  "pos": "v.",
+  "meaning": "부인하다, 관계를 끊다",
+  "example": "The firm disavowed the comments made by its former employee.",
+  "example_ko": "회사는 전 직원의 발언과 관계가 없다고 밝혔습니다.",
+  "tip": "= disown"
+ },
+ {
+  "id": "v-1481",
+  "level": 5,
+  "word": "conciliatory",
+  "pos": "adj.",
+  "meaning": "달래는, 화해하려는",
+  "example": "The CEO struck a conciliatory tone in his statement.",
+  "example_ko": "대표는 성명에서 화해하려는 어조를 취했습니다.",
+  "tip": "conciliation n. 조정"
+ },
+ {
+  "id": "v-1482",
+  "level": 5,
+  "word": "transparency",
+  "pos": "n.",
+  "meaning": "투명성",
+  "example": "Investors are demanding greater transparency.",
+  "example_ko": "투자자들은 더 높은 투명성을 요구하고 있습니다.",
+  "tip": "transparent adj. 투명한"
+ },
+ {
+  "id": "v-1483",
+  "level": 5,
+  "word": "backlash",
+  "pos": "n.",
+  "meaning": "반발, 역풍",
+  "example": "The price hike triggered a backlash from customers.",
+  "example_ko": "가격 인상은 고객들의 반발을 불러일으켰습니다.",
+  "tip": "face a backlash (반발에 직면하다)"
+ },
+ {
+  "id": "v-1484",
+  "level": 5,
+  "word": "zoning",
+  "pos": "n.",
+  "meaning": "용도 지역 설정",
+  "example": "Zoning laws prohibit factories in this area.",
+  "example_ko": "용도 지역 법규상 이 지역에는 공장을 지을 수 없습니다.",
+  "tip": "zoning permit (용도 허가)"
+ },
+ {
+  "id": "v-1485",
+  "level": 5,
+  "word": "easement",
+  "pos": "n.",
+  "meaning": "통행권, 지역권",
+  "example": "The utility company has an easement across the property.",
+  "example_ko": "그 공공설비 회사는 그 부지를 지나는 통행권을 갖고 있습니다.",
+  "tip": "ease (완화)와 무관한 법률 용어"
+ },
+ {
+  "id": "v-1486",
+  "level": 5,
+  "word": "encumbrance",
+  "pos": "n.",
+  "meaning": "부담, 저당권",
+  "example": "The title is free of any encumbrances.",
+  "example_ko": "그 소유권에는 어떤 부담도 설정되어 있지 않습니다.",
+  "tip": "encumber v. 부담을 지우다"
+ },
+ {
+  "id": "v-1487",
+  "level": 5,
+  "word": "dilapidated",
+  "pos": "adj.",
+  "meaning": "낡아 허물어진",
+  "example": "The dilapidated warehouse will be demolished.",
+  "example_ko": "낡아 허물어진 창고는 철거될 예정입니다.",
+  "tip": "= run-down"
+ },
+ {
+  "id": "v-1488",
+  "level": 5,
+  "word": "habitable",
+  "pos": "adj.",
+  "meaning": "거주할 수 있는",
+  "example": "The landlord must keep the unit in habitable condition.",
+  "example_ko": "임대인은 그 세대를 거주 가능한 상태로 유지해야 합니다.",
+  "tip": "inhabit v. 거주하다"
+ },
+ {
+  "id": "v-1489",
+  "level": 5,
+  "word": "vacate",
+  "pos": "v.",
+  "meaning": "비우다, 떠나다",
+  "example": "Tenants must vacate the premises by the end of the month.",
+  "example_ko": "세입자는 월말까지 그 건물을 비워야 합니다.",
+  "tip": "vacant adj. · vacancy n."
+ },
+ {
+  "id": "v-1490",
+  "level": 5,
+  "word": "foreclosure",
+  "pos": "n.",
+  "meaning": "압류, 담보권 행사",
+  "example": "The bank began foreclosure proceedings on the property.",
+  "example_ko": "은행은 그 부동산에 대한 압류 절차를 시작했습니다.",
+  "tip": "foreclose v. 압류하다"
+ },
+ {
+  "id": "v-1491",
+  "level": 5,
+  "word": "leasehold",
+  "pos": "n.",
+  "meaning": "임차권, 임차 부동산",
+  "example": "The company owns the leasehold on the building until 2040.",
+  "example_ko": "회사는 2040년까지 그 건물의 임차권을 갖고 있습니다.",
+  "tip": "↔ freehold (자유 보유권)"
+ },
+ {
+  "id": "v-1492",
+  "level": 5,
+  "word": "interoperability",
+  "pos": "n.",
+  "meaning": "상호 운용성",
+  "example": "Interoperability between the two systems is essential.",
+  "example_ko": "두 시스템 간 상호 운용성이 필수적입니다.",
+  "tip": "interoperable adj."
+ },
+ {
+  "id": "v-1493",
+  "level": 5,
+  "word": "latency",
+  "pos": "n.",
+  "meaning": "지연 시간",
+  "example": "The upgrade reduced network latency.",
+  "example_ko": "업그레이드로 네트워크 지연 시간이 줄었습니다.",
+  "tip": "low latency (짧은 지연)"
+ },
+ {
+  "id": "v-1494",
+  "level": 5,
+  "word": "scalable",
+  "pos": "adj.",
+  "meaning": "확장 가능한",
+  "example": "We need a scalable solution that can grow with the business.",
+  "example_ko": "사업과 함께 커질 수 있는 확장 가능한 해결책이 필요합니다.",
+  "tip": "scalability n."
+ },
+ {
+  "id": "v-1495",
+  "level": 5,
+  "word": "vulnerability",
+  "pos": "n.",
+  "meaning": "취약점, 취약성",
+  "example": "The update fixes a security vulnerability.",
+  "example_ko": "이번 업데이트는 보안 취약점을 고칩니다.",
+  "tip": "vulnerable adj. 취약한"
+ },
+ {
+  "id": "v-1496",
+  "level": 5,
+  "word": "seamless",
+  "pos": "adj.",
+  "meaning": "매끄러운, 끊김 없는",
+  "example": "We aim to provide a seamless customer experience.",
+  "example_ko": "매끄러운 고객 경험을 제공하는 것이 목표입니다.",
+  "tip": "seamlessly adv."
+ },
+ {
+  "id": "v-1497",
+  "level": 5,
+  "word": "intuitive",
+  "pos": "adj.",
+  "meaning": "직관적인",
+  "example": "The app has an intuitive interface.",
+  "example_ko": "그 앱은 직관적인 화면 구성을 갖추고 있습니다.",
+  "tip": "intuition n. 직관"
+ },
+ {
+  "id": "v-1498",
+  "level": 5,
+  "word": "disruptive",
+  "pos": "adj.",
+  "meaning": "판도를 바꾸는, 지장을 주는",
+  "example": "Disruptive technologies are reshaping the industry.",
+  "example_ko": "판도를 바꾸는 기술이 업계를 재편하고 있습니다.",
+  "tip": "disrupt v. · disruption n."
+ },
+ {
+  "id": "v-1499",
+  "level": 5,
+  "word": "decommission",
+  "pos": "v.",
+  "meaning": "가동을 중단하다, 폐기하다",
+  "example": "The old servers will be decommissioned next year.",
+  "example_ko": "구형 서버는 내년에 가동 중단됩니다.",
+  "tip": "commission v. 가동하다"
+ },
+ {
+  "id": "v-1500",
+  "level": 5,
+  "word": "overhaul",
+  "pos": "v.",
+  "meaning": "전면 개편하다, 정비하다",
+  "example": "The company plans to overhaul its pricing system.",
+  "example_ko": "회사는 가격 체계를 전면 개편할 계획입니다.",
+  "tip": "n. 전면 점검"
+ },
+ {
+  "id": "v-1501",
+  "level": 5,
+  "word": "spearhead",
+  "pos": "v.",
+  "meaning": "앞장서다, 이끌다",
+  "example": "She spearheaded the company's move into Asia.",
+  "example_ko": "그녀는 회사의 아시아 진출을 이끌었습니다.",
+  "tip": "= lead"
+ },
+ {
+  "id": "v-1502",
+  "level": 5,
+  "word": "galvanize",
+  "pos": "v.",
+  "meaning": "자극하다, 활기를 불어넣다",
+  "example": "The new CEO galvanized the sales team.",
+  "example_ko": "새 대표는 영업팀에 활기를 불어넣었습니다.",
+  "tip": "galvanize A into action (행동하게 만들다)"
+ },
+ {
+  "id": "v-1503",
+  "level": 5,
+  "word": "delineate",
+  "pos": "v.",
+  "meaning": "명확히 규정하다, 서술하다",
+  "example": "The contract clearly delineates each party's responsibilities.",
+  "example_ko": "계약서는 각 당사자의 책임을 명확히 규정합니다.",
+  "tip": "= outline, define"
+ },
+ {
+  "id": "v-1504",
+  "level": 5,
+  "word": "holistic",
+  "pos": "adj.",
+  "meaning": "전체적인, 총체적인",
+  "example": "We take a holistic approach to employee wellness.",
+  "example_ko": "우리는 직원 건강에 총체적으로 접근합니다.",
+  "tip": "holistic approach (총체적 접근)"
+ },
+ {
+  "id": "v-1505",
+  "level": 5,
+  "word": "decentralize",
+  "pos": "v.",
+  "meaning": "분권화하다",
+  "example": "The firm decentralized decision-making to regional offices.",
+  "example_ko": "회사는 의사 결정 권한을 지역 사무소로 분산했습니다.",
+  "tip": "↔ centralize"
+ },
+ {
+  "id": "v-1506",
+  "level": 5,
+  "word": "consortium",
+  "pos": "n.",
+  "meaning": "컨소시엄, 협력단",
+  "example": "A consortium of banks financed the project.",
+  "example_ko": "은행 협력단이 그 사업에 자금을 댔습니다.",
+  "tip": "복수형 consortia"
+ },
+ {
+  "id": "v-1507",
+  "level": 5,
+  "word": "conglomerate",
+  "pos": "n.",
+  "meaning": "대기업, 복합 기업",
+  "example": "The brand is owned by a large media conglomerate.",
+  "example_ko": "그 브랜드는 대형 미디어 복합 기업 소유입니다.",
+  "tip": "= corporate group"
+ },
+ {
+  "id": "v-1508",
+  "level": 5,
+  "word": "impetus",
+  "pos": "n.",
+  "meaning": "자극, 추진력",
+  "example": "The new law gave fresh impetus to green investment.",
+  "example_ko": "새 법은 친환경 투자에 새로운 추진력을 주었습니다.",
+  "tip": "give impetus to (추진력을 주다)"
+ },
+ {
+  "id": "v-1509",
+  "level": 5,
+  "word": "catalyst",
+  "pos": "n.",
+  "meaning": "촉매, 계기",
+  "example": "The merger was a catalyst for change.",
+  "example_ko": "합병은 변화의 계기가 되었습니다.",
+  "tip": "catalyst for (계기)"
+ },
+ {
+  "id": "v-1510",
+  "level": 5,
+  "word": "trajectory",
+  "pos": "n.",
+  "meaning": "궤도, 추세",
+  "example": "The company's growth trajectory remains strong.",
+  "example_ko": "회사의 성장 추세는 여전히 견고합니다.",
+  "tip": "growth trajectory (성장 추세)"
+ },
+ {
+  "id": "v-1511",
+  "level": 5,
+  "word": "forgo",
+  "pos": "v.",
+  "meaning": "포기하다, 없이 지내다",
+  "example": "Executives agreed to forgo their bonuses this year.",
+  "example_ko": "임원들은 올해 상여금을 포기하기로 했습니다.",
+  "tip": "forego (앞서다)와 철자 혼동 주의"
+ },
+ {
+  "id": "v-1512",
+  "level": 5,
+  "word": "relinquish",
+  "pos": "v.",
+  "meaning": "넘겨주다, 포기하다",
+  "example": "The founder relinquished control of the company.",
+  "example_ko": "창업자는 회사 경영권을 넘겨주었습니다.",
+  "tip": "= give up, surrender"
+ },
+ {
+  "id": "v-1513",
+  "level": 5,
+  "word": "preempt",
+  "pos": "v.",
+  "meaning": "선수를 치다, 미리 막다",
+  "example": "The company lowered prices to preempt competitors.",
+  "example_ko": "회사는 경쟁사보다 선수를 치려고 가격을 내렸습니다.",
+  "tip": "preemptive adj. 선제적인"
+ },
+ {
+  "id": "v-1514",
+  "level": 5,
+  "word": "concur",
+  "pos": "v.",
+  "meaning": "동의하다, 동시에 일어나다",
+  "example": "The board concurred with the committee's recommendation.",
+  "example_ko": "이사회는 위원회의 권고에 동의했습니다.",
+  "tip": "concur with · concurrence n."
+ },
+ {
+  "id": "v-1515",
+  "level": 5,
+  "word": "deliberation",
+  "pos": "n.",
+  "meaning": "숙고, 심의",
+  "example": "After much deliberation, the board approved the plan.",
+  "example_ko": "오랜 숙고 끝에 이사회는 그 계획을 승인했습니다.",
+  "tip": "deliberate v. 숙고하다, adj. 의도적인"
+ },
+ {
+  "id": "v-1516",
+  "level": 5,
+  "word": "exacerbate",
+  "pos": "v.",
+  "meaning": "악화시키다",
+  "example": "The shortage was exacerbated by shipping delays.",
+  "example_ko": "배송 지연으로 부족 현상이 더 심해졌습니다.",
+  "tip": "= aggravate, worsen"
+ },
+ {
+  "id": "v-1517",
+  "level": 5,
+  "word": "ameliorate",
+  "pos": "v.",
+  "meaning": "개선하다",
+  "example": "Steps were taken to ameliorate working conditions.",
+  "example_ko": "근무 환경을 개선하기 위한 조치가 취해졌습니다.",
+  "tip": "= improve"
+ },
+ {
+  "id": "v-1518",
+  "level": 5,
+  "word": "obviate",
+  "pos": "v.",
+  "meaning": "없애다, 불필요하게 하다",
+  "example": "The new system obviates the need for manual entry.",
+  "example_ko": "새 시스템으로 수동 입력이 필요 없어졌습니다.",
+  "tip": "obviate the need for (필요를 없애다)"
+ },
+ {
+  "id": "v-1519",
+  "level": 5,
+  "word": "promulgate",
+  "pos": "v.",
+  "meaning": "공포하다, 널리 알리다",
+  "example": "The regulations were promulgated last year.",
+  "example_ko": "그 규정은 작년에 공포되었습니다.",
+  "tip": "promulgation n."
+ },
+ {
+  "id": "v-1520",
+  "level": 5,
+  "word": "supplant",
+  "pos": "v.",
+  "meaning": "대체하다, 밀어내다",
+  "example": "Digital payments are gradually supplanting cash.",
+  "example_ko": "디지털 결제가 점차 현금을 대체하고 있습니다.",
+  "tip": "= replace, supersede"
+ },
+ {
+  "id": "v-1521",
+  "level": 5,
+  "word": "burgeoning",
+  "pos": "adj.",
+  "meaning": "급성장하는",
+  "example": "The firm is targeting the burgeoning middle class.",
+  "example_ko": "그 회사는 급성장하는 중산층을 겨냥하고 있습니다.",
+  "tip": "burgeon v. 급성장하다"
+ },
+ {
+  "id": "v-1522",
+  "level": 5,
+  "word": "nascent",
+  "pos": "adj.",
+  "meaning": "초기의, 막 생겨난",
+  "example": "The nascent industry needs government support.",
+  "example_ko": "그 초기 산업은 정부 지원이 필요합니다.",
+  "tip": "= emerging"
+ },
+ {
+  "id": "v-1523",
+  "level": 5,
+  "word": "lackluster",
+  "pos": "adj.",
+  "meaning": "부진한, 활기 없는",
+  "example": "Lackluster sales forced the company to cut prices.",
+  "example_ko": "부진한 매출로 회사는 가격을 내려야 했습니다.",
+  "tip": "= sluggish"
+ },
+ {
+  "id": "v-1524",
+  "level": 5,
+  "word": "stellar",
+  "pos": "adj.",
+  "meaning": "뛰어난, 우수한",
+  "example": "The sales team had a stellar year.",
+  "example_ko": "영업팀은 뛰어난 한 해를 보냈습니다.",
+  "tip": "stellar performance (뛰어난 실적)"
+ },
+ {
+  "id": "v-1525",
+  "level": 5,
+  "word": "formidable",
+  "pos": "adj.",
+  "meaning": "만만치 않은, 강력한",
+  "example": "The company faces formidable competition overseas.",
+  "example_ko": "회사는 해외에서 만만치 않은 경쟁에 직면해 있습니다.",
+  "tip": "formidable rival (강적)"
+ },
+ {
+  "id": "v-1526",
+  "level": 5,
+  "word": "preeminent",
+  "pos": "adj.",
+  "meaning": "탁월한, 걸출한",
+  "example": "She is a preeminent expert in supply chain management.",
+  "example_ko": "그녀는 공급망 관리 분야의 탁월한 전문가입니다.",
+  "tip": "preeminence n."
+ },
+ {
+  "id": "v-1527",
+  "level": 5,
+  "word": "auspicious",
+  "pos": "adj.",
+  "meaning": "순조로운, 길조의",
+  "example": "The new product had an auspicious launch.",
+  "example_ko": "신제품은 순조롭게 출시되었습니다.",
+  "tip": "↔ inauspicious"
+ },
+ {
+  "id": "v-1528",
+  "level": 5,
+  "word": "tenuous",
+  "pos": "adj.",
+  "meaning": "미약한, 빈약한",
+  "example": "The link between the two events is tenuous at best.",
+  "example_ko": "두 사건의 연관성은 기껏해야 미약합니다.",
+  "tip": "tenuous connection (희박한 관련성)"
+ },
+ {
+  "id": "v-1529",
+  "level": 5,
+  "word": "cursory",
+  "pos": "adj.",
+  "meaning": "대충 하는, 피상적인",
+  "example": "A cursory glance at the report revealed several errors.",
+  "example_ko": "보고서를 대충 훑어보기만 해도 여러 오류가 보였습니다.",
+  "tip": "↔ thorough"
+ },
+ {
+  "id": "v-1530",
+  "level": 5,
+  "word": "exhaustive",
+  "pos": "adj.",
+  "meaning": "철저한, 빠짐없는",
+  "example": "The auditors conducted an exhaustive review.",
+  "example_ko": "감사관들은 빠짐없이 철저하게 검토했습니다.",
+  "tip": "exhausted (지친)와 구별"
+ },
+ {
+  "id": "v-1531",
+  "level": 5,
+  "word": "perfunctory",
+  "pos": "adj.",
+  "meaning": "형식적인, 성의 없는",
+  "example": "The manager gave only a perfunctory response.",
+  "example_ko": "매니저는 형식적인 답변만 했습니다.",
+  "tip": "= cursory"
+ },
+ {
+  "id": "v-1532",
+  "level": 5,
+  "word": "protracted",
+  "pos": "adj.",
+  "meaning": "오래 끄는, 장기화된",
+  "example": "After protracted negotiations, a deal was reached.",
+  "example_ko": "오래 끈 협상 끝에 합의가 이루어졌습니다.",
+  "tip": "protract v. 연장하다"
+ },
+ {
+  "id": "v-1533",
+  "level": 5,
+  "word": "imminent",
+  "pos": "adj.",
+  "meaning": "임박한",
+  "example": "An announcement about the merger is imminent.",
+  "example_ko": "합병 발표가 임박했습니다.",
+  "tip": "eminent (저명한)와 혼동 주의"
+ },
+ {
+  "id": "v-1534",
+  "level": 5,
+  "word": "prerogative",
+  "pos": "n.",
+  "meaning": "특권, 고유 권한",
+  "example": "Hiring decisions are the manager's prerogative.",
+  "example_ko": "채용 결정은 관리자의 고유 권한입니다.",
+  "tip": "= privilege"
+ },
+ {
+  "id": "v-1535",
+  "level": 5,
+  "word": "inordinate",
+  "pos": "adj.",
+  "meaning": "과도한, 지나친",
+  "example": "The project consumed an inordinate amount of time.",
+  "example_ko": "그 프로젝트에 지나치게 많은 시간이 들었습니다.",
+  "tip": "= excessive"
+ },
+ {
+  "id": "v-1536",
+  "level": 5,
+  "word": "exorbitant",
+  "pos": "adj.",
+  "meaning": "터무니없이 비싼",
+  "example": "The consultant charged exorbitant fees.",
+  "example_ko": "그 컨설턴트는 터무니없이 비싼 수수료를 청구했습니다.",
+  "tip": "exorbitant price (터무니없는 가격)"
+ },
+ {
+  "id": "v-1537",
+  "level": 5,
+  "word": "requisite",
+  "pos": "adj.",
+  "meaning": "필요한, 필수의",
+  "example": "Applicants must have the requisite skills.",
+  "example_ko": "지원자는 필요한 기술을 갖추어야 합니다.",
+  "tip": "prerequisite (전제 조건)"
+ },
+ {
+  "id": "v-1538",
+  "level": 5,
+  "word": "conversant",
+  "pos": "adj.",
+  "meaning": "정통한, 잘 아는",
+  "example": "All staff should be conversant with the new regulations.",
+  "example_ko": "모든 직원은 새 규정을 잘 알고 있어야 합니다.",
+  "tip": "conversant with (잘 알고 있는)"
+ },
+ {
+  "id": "v-1539",
+  "level": 5,
+  "word": "amalgamate",
+  "pos": "v.",
+  "meaning": "합병하다, 통합하다",
+  "example": "The two departments were amalgamated into one.",
+  "example_ko": "두 부서는 하나로 통합되었습니다.",
+  "tip": "amalgamation n."
+ },
+ {
+  "id": "v-1540",
+  "level": 5,
+  "word": "impartial",
+  "pos": "adj.",
+  "meaning": "공정한, 치우치지 않은",
+  "example": "An impartial panel will review the complaints.",
+  "example_ko": "공정한 위원단이 불만 사항을 검토할 것입니다.",
+  "tip": "= unbiased"
+ },
+ {
+  "id": "v-1541",
+  "level": 5,
+  "word": "verbatim",
+  "pos": "adv.",
+  "meaning": "글자 그대로",
+  "example": "The quote was reproduced verbatim in the report.",
+  "example_ko": "그 인용문은 보고서에 글자 그대로 옮겨졌습니다.",
+  "tip": "adj. 축어적인"
+ },
+ {
+  "id": "v-1542",
+  "level": 5,
+  "word": "retroactively",
+  "pos": "adv.",
+  "meaning": "소급하여",
+  "example": "The pay raise will be applied retroactively to January.",
+  "example_ko": "임금 인상은 1월로 소급 적용됩니다.",
+  "tip": "retroactive adj. 소급하는"
+ },
+ {
+  "id": "v-1543",
+  "level": 5,
+  "word": "concurrently",
+  "pos": "adv.",
+  "meaning": "동시에",
+  "example": "The two projects will run concurrently.",
+  "example_ko": "두 프로젝트는 동시에 진행됩니다.",
+  "tip": "= simultaneously"
+ },
+ {
+  "id": "v-1544",
+  "level": 5,
+  "word": "invariably",
+  "pos": "adv.",
+  "meaning": "언제나, 변함없이",
+  "example": "Late deliveries invariably lead to complaints.",
+  "example_ko": "배송이 늦으면 언제나 불만이 생깁니다.",
+  "tip": "invariable adj."
+ },
+ {
+  "id": "v-1545",
+  "level": 5,
+  "word": "ostensibly",
+  "pos": "adv.",
+  "meaning": "표면상으로는",
+  "example": "The trip was ostensibly for business.",
+  "example_ko": "그 출장은 표면상으로는 업무용이었습니다.",
+  "tip": "ostensible adj."
+ },
+ {
+  "id": "v-1546",
+  "level": 5,
+  "word": "categorically",
+  "pos": "adv.",
+  "meaning": "단호히, 절대적으로",
+  "example": "The company categorically denied the rumors.",
+  "example_ko": "회사는 그 소문을 단호히 부인했습니다.",
+  "tip": "categorical adj."
+ },
+ {
+  "id": "v-1547",
+  "level": 5,
+  "word": "henceforth",
+  "pos": "adv.",
+  "meaning": "앞으로, 이후로",
+  "example": "Henceforth, all expenses must be approved in advance.",
+  "example_ko": "앞으로 모든 경비는 사전 승인을 받아야 합니다.",
+  "tip": "= from now on"
+ },
+ {
+  "id": "v-1548",
+  "level": 5,
+  "word": "thereby",
+  "pos": "adv.",
+  "meaning": "그렇게 함으로써",
+  "example": "We automated the process, thereby reducing errors.",
+  "example_ko": "공정을 자동화하여 오류를 줄였습니다.",
+  "tip": "thereby + 분사"
+ },
+ {
+  "id": "v-1549",
+  "level": 5,
+  "word": "whereby",
+  "pos": "conj.",
+  "meaning": "그에 따라, 그것에 의해",
+  "example": "We set up a system whereby staff can report issues anonymously.",
+  "example_ko": "직원이 익명으로 문제를 보고할 수 있는 제도를 만들었습니다.",
+  "tip": "= by which"
+ },
+ {
+  "id": "v-1550",
+  "level": 5,
+  "word": "provisionally",
+  "pos": "adv.",
+  "meaning": "임시로, 잠정적으로",
+  "example": "The contract has been provisionally approved.",
+  "example_ko": "계약은 잠정 승인되었습니다.",
+  "tip": "provisional adj."
+ },
+ {
+  "id": "v-1551",
+  "level": 5,
+  "word": "judiciously",
+  "pos": "adv.",
+  "meaning": "신중하게, 분별 있게",
+  "example": "Funds must be spent judiciously.",
+  "example_ko": "자금은 신중하게 써야 합니다.",
+  "tip": "judicious adj."
+ },
+ {
+  "id": "v-1552",
+  "level": 5,
+  "word": "precipitate",
+  "pos": "v.",
+  "meaning": "촉발하다, 재촉하다",
+  "example": "The scandal precipitated the CEO's resignation.",
+  "example_ko": "그 추문이 대표의 사임을 재촉했습니다.",
+  "tip": "= trigger"
+ },
+ {
+  "id": "v-1553",
+  "level": 5,
+  "word": "reciprocate",
+  "pos": "v.",
+  "meaning": "보답하다, 화답하다",
+  "example": "We hope our partners will reciprocate our goodwill.",
+  "example_ko": "협력사들이 우리의 호의에 화답하기를 바랍니다.",
+  "tip": "reciprocal adj. 상호 간의"
+ },
+ {
+  "id": "v-1554",
+  "level": 5,
+  "word": "adjudicate",
+  "pos": "v.",
+  "meaning": "판정하다, 심판하다",
+  "example": "An independent panel will adjudicate the dispute.",
+  "example_ko": "독립 위원단이 그 분쟁을 판정할 것입니다.",
+  "tip": "adjudication n."
+ },
+ {
+  "id": "v-1555",
+  "level": 5,
+  "word": "verifiable",
+  "pos": "adj.",
+  "meaning": "검증 가능한",
+  "example": "All claims must be supported by verifiable data.",
+  "example_ko": "모든 주장은 검증 가능한 자료로 뒷받침되어야 합니다.",
+  "tip": "verify v. 검증하다"
+ },
+ {
+  "id": "v-1556",
+  "level": 5,
+  "word": "contravene",
+  "pos": "v.",
+  "meaning": "위반하다, 어긋나다",
+  "example": "The practice contravenes company policy.",
+  "example_ko": "그 관행은 회사 방침에 어긋납니다.",
+  "tip": "contravention n."
+ },
+ {
+  "id": "v-1557",
+  "level": 5,
+  "word": "abeyance",
+  "pos": "n.",
+  "meaning": "중지, 보류",
+  "example": "The project is in abeyance until funding is secured.",
+  "example_ko": "자금이 확보될 때까지 그 사업은 보류 상태입니다.",
+  "tip": "in abeyance (보류 중인)"
+ },
+ {
+  "id": "v-1558",
+  "level": 5,
+  "word": "onus",
+  "pos": "n.",
+  "meaning": "책임, 부담",
+  "example": "The onus is on the seller to prove the goods were delivered.",
+  "example_ko": "상품 배송을 입증할 책임은 판매자에게 있습니다.",
+  "tip": "the onus is on A (책임이 A에게 있다)"
+ },
+ {
+  "id": "v-1559",
+  "level": 5,
+  "word": "proviso",
+  "pos": "n.",
+  "meaning": "단서, 조건",
+  "example": "He agreed, with the proviso that costs be shared.",
+  "example_ko": "그는 비용을 분담한다는 조건으로 동의했습니다.",
+  "tip": "with the proviso that (조건으로)"
+ },
+ {
+  "id": "v-1560",
+  "level": 5,
+  "word": "solicitation",
+  "pos": "n.",
+  "meaning": "요청, 권유, 입찰 공고",
+  "example": "The firm issued a solicitation for bids on the project.",
+  "example_ko": "회사는 그 사업에 대한 입찰 공고를 냈습니다.",
+  "tip": "solicit v. 요청하다"
+ },
+ {
+  "id": "v-1561",
+  "level": 5,
+  "word": "moratorium",
+  "pos": "n.",
+  "meaning": "일시 중지, 지불 유예",
+  "example": "The company announced a moratorium on hiring.",
+  "example_ko": "회사는 채용 일시 중지를 발표했습니다.",
+  "tip": "moratorium on (중지)"
+ },
+ {
+  "id": "v-1562",
+  "level": 5,
+  "word": "surcharge",
+  "pos": "n.",
+  "meaning": "추가 요금, 할증료",
+  "example": "A fuel surcharge will be added to all shipments.",
+  "example_ko": "모든 배송에 유류 할증료가 추가됩니다.",
+  "tip": "fuel surcharge (유류 할증료)"
+ },
+ {
+  "id": "v-1563",
+  "level": 5,
+  "word": "accrual",
+  "pos": "n.",
+  "meaning": "누적, 발생액",
+  "example": "Vacation accrual begins after the probationary period.",
+  "example_ko": "휴가 누적은 수습 기간 이후부터 시작됩니다.",
+  "tip": "accrue v. 누적되다"
+ },
+ {
+  "id": "v-1564",
+  "level": 5,
+  "word": "fungible",
+  "pos": "adj.",
+  "meaning": "대체 가능한",
+  "example": "Commodities like oil are largely fungible.",
+  "example_ko": "석유 같은 원자재는 대체로 서로 바꿔 쓸 수 있습니다.",
+  "tip": "non-fungible (대체 불가능한)"
+ },
+ {
+  "id": "v-1565",
+  "level": 5,
+  "word": "at the expense of",
+  "pos": "phr.",
+  "meaning": "희생하여, 대가로",
+  "example": "The company grew rapidly at the expense of quality.",
+  "example_ko": "회사는 품질을 희생하며 빠르게 성장했습니다.",
+  "tip": "at one's expense (비용을 대고)"
+ },
+ {
+  "id": "v-1566",
+  "level": 5,
+  "word": "in tandem with",
+  "pos": "phr.",
+  "meaning": "함께, 협력하여",
+  "example": "Marketing works in tandem with the sales team.",
+  "example_ko": "마케팅팀은 영업팀과 함께 일합니다.",
+  "tip": "in tandem (동시에, 협력하여)"
+ },
+ {
+  "id": "v-1567",
+  "level": 5,
+  "word": "on the grounds that",
+  "pos": "phr.",
+  "meaning": "라는 이유로",
+  "example": "The claim was rejected on the grounds that it was filed late.",
+  "example_ko": "그 청구는 늦게 제출되었다는 이유로 거절되었습니다.",
+  "tip": "on the grounds of + 명사"
+ },
+ {
+  "id": "v-1568",
+  "level": 5,
+  "word": "be incumbent upon",
+  "pos": "phr.",
+  "meaning": "의무이다, 책임이다",
+  "example": "It is incumbent upon managers to report safety issues.",
+  "example_ko": "안전 문제를 보고하는 것은 관리자의 의무입니다.",
+  "tip": "It is incumbent on A to 동사"
+ },
+ {
+  "id": "v-1569",
+  "level": 5,
+  "word": "in the interest of",
+  "pos": "phr.",
+  "meaning": "위하여",
+  "example": "In the interest of safety, the elevator will be closed.",
+  "example_ko": "안전을 위해 엘리베이터 운행이 중단됩니다.",
+  "tip": "in the interest of time (시간 절약을 위해)"
+ },
+ {
+  "id": "v-1570",
+  "level": 5,
+  "word": "for the foreseeable future",
+  "pos": "phr.",
+  "meaning": "당분간",
+  "example": "Prices are expected to remain stable for the foreseeable future.",
+  "example_ko": "가격은 당분간 안정세를 유지할 것으로 예상됩니다.",
+  "tip": "foreseeable adj. 예측 가능한"
+ },
+ {
+  "id": "v-1571",
+  "level": 5,
+  "word": "with a view to",
+  "pos": "phr.",
+  "meaning": "할 목적으로",
+  "example": "The land was bought with a view to building a factory.",
+  "example_ko": "그 땅은 공장을 지을 목적으로 매입되었습니다.",
+  "tip": "to 뒤에 동명사"
+ },
+ {
+  "id": "v-1572",
+  "level": 5,
+  "word": "be at odds with",
+  "pos": "phr.",
+  "meaning": "상충하다, 의견이 맞지 않다",
+  "example": "The findings are at odds with earlier research.",
+  "example_ko": "그 결과는 이전 연구와 상충합니다.",
+  "tip": "= conflict with"
+ },
+ {
+  "id": "v-1573",
+  "level": 5,
+  "word": "in the offing",
+  "pos": "phr.",
+  "meaning": "곧 일어날 듯한",
+  "example": "Rumors suggest a merger is in the offing.",
+  "example_ko": "소문으로는 합병이 곧 있을 것 같습니다.",
+  "tip": "= imminent"
+ },
+ {
+  "id": "v-1574",
+  "level": 5,
+  "word": "on the brink of",
+  "pos": "phr.",
+  "meaning": "직전에, 막 하려는",
+  "example": "The firm was on the brink of bankruptcy.",
+  "example_ko": "그 회사는 파산 직전이었습니다.",
+  "tip": "= on the verge of"
+ },
+ {
+  "id": "v-1575",
+  "level": 5,
+  "word": "be privy to",
+  "pos": "phr.",
+  "meaning": "은밀히 알고 있다",
+  "example": "Only senior executives were privy to the negotiations.",
+  "example_ko": "고위 임원들만 그 협상 내용을 알고 있었습니다.",
+  "tip": "privy adj. 내막을 아는"
+ },
+ {
+  "id": "v-1576",
+  "level": 5,
+  "word": "in the red",
+  "pos": "phr.",
+  "meaning": "적자 상태인",
+  "example": "The division has been in the red for two years.",
+  "example_ko": "그 부문은 2년째 적자입니다.",
+  "tip": "↔ in the black"
+ },
+ {
+  "id": "v-1577",
+  "level": 5,
+  "word": "in the black",
+  "pos": "phr.",
+  "meaning": "흑자 상태인",
+  "example": "The company is finally back in the black.",
+  "example_ko": "회사가 마침내 흑자로 돌아섰습니다.",
+  "tip": "↔ in the red"
+ },
+ {
+  "id": "v-1578",
+  "level": 5,
+  "word": "take precedence over",
+  "pos": "phr.",
+  "meaning": "보다 우선하다",
+  "example": "Safety takes precedence over speed.",
+  "example_ko": "안전이 속도보다 우선합니다.",
+  "tip": "precedence n. 우선"
+ },
+ {
+  "id": "v-1579",
+  "level": 5,
+  "word": "capitalize on",
+  "pos": "phr.",
+  "meaning": "활용하다, 기회로 삼다",
+  "example": "We should capitalize on the growing demand for electric cars.",
+  "example_ko": "전기차 수요 증가를 기회로 삼아야 합니다.",
+  "tip": "= take advantage of"
+ },
+ {
+  "id": "v-1580",
+  "level": 5,
+  "word": "err on the side of caution",
+  "pos": "phr.",
+  "meaning": "신중을 기하다",
+  "example": "We decided to err on the side of caution and delay the launch.",
+  "example_ko": "우리는 신중을 기해 출시를 미루기로 했습니다.",
+  "tip": "err v. 실수하다"
+ },
+ {
+  "id": "v-1581",
+  "level": 5,
+  "word": "hammer out",
+  "pos": "phr.",
+  "meaning": "애써 합의를 이끌어내다",
+  "example": "Negotiators hammered out a deal overnight.",
+  "example_ko": "협상가들은 밤새 애써 합의를 이끌어냈습니다.",
+  "tip": "hammer out an agreement (합의를 도출하다)"
+ },
+ {
+  "id": "v-1582",
+  "level": 5,
+  "word": "stave off",
+  "pos": "phr.",
+  "meaning": "막아내다, 피하다",
+  "example": "The loan helped the firm stave off bankruptcy.",
+  "example_ko": "그 대출 덕분에 회사는 파산을 면했습니다.",
+  "tip": "= ward off"
+ },
+ {
+  "id": "v-1583",
+  "level": 5,
+  "word": "weed out",
+  "pos": "phr.",
+  "meaning": "걸러내다, 제거하다",
+  "example": "The screening process weeds out unqualified applicants.",
+  "example_ko": "심사 과정에서 자격이 없는 지원자를 걸러냅니다.",
+  "tip": "= screen out"
+ },
+ {
+  "id": "v-1584",
+  "level": 5,
+  "word": "shore up",
+  "pos": "phr.",
+  "meaning": "강화하다, 떠받치다",
+  "example": "The company cut costs to shore up its finances.",
+  "example_ko": "회사는 재정을 강화하려고 비용을 줄였습니다.",
+  "tip": "= bolster"
+ },
+ {
+  "id": "v-1585",
+  "level": 5,
+  "word": "mull over",
+  "pos": "phr.",
+  "meaning": "곰곰이 생각하다",
+  "example": "The board is still mulling over the proposal.",
+  "example_ko": "이사회는 아직 그 제안을 곰곰이 검토하고 있습니다.",
+  "tip": "= think over"
+ },
+ {
+  "id": "v-1586",
+  "level": 5,
+  "word": "factor in",
+  "pos": "phr.",
+  "meaning": "계산에 넣다, 고려하다",
+  "example": "Don't forget to factor in shipping costs.",
+  "example_ko": "배송비를 계산에 넣는 것을 잊지 마세요.",
+  "tip": "factor A in"
+ },
+ {
+  "id": "v-1587",
+  "level": 5,
+  "word": "pro rata",
+  "pos": "phr.",
+  "meaning": "비율에 따라, 비례하여",
+  "example": "Part-time staff receive benefits on a pro rata basis.",
+  "example_ko": "시간제 직원은 근무 비율에 따라 복리 후생을 받습니다.",
+  "tip": "prorated adj. 비례 배분된"
+ },
+ {
+  "id": "v-1588",
+  "level": 5,
+  "word": "ad hoc",
+  "pos": "phr.",
+  "meaning": "임시의, 특별 목적의",
+  "example": "An ad hoc committee was formed to handle the crisis.",
+  "example_ko": "위기에 대처하려고 임시 위원회가 구성되었습니다.",
+  "tip": "on an ad hoc basis (그때그때)"
+ },
+ {
+  "id": "v-1589",
+  "level": 5,
+  "word": "bona fide",
+  "pos": "phr.",
+  "meaning": "진짜의, 진실한",
+  "example": "Only bona fide customers are eligible for the discount.",
+  "example_ko": "실제 고객만 할인을 받을 수 있습니다.",
+  "tip": "= genuine"
+ },
+ {
+  "id": "v-1590",
+  "level": 5,
+  "word": "de facto",
+  "pos": "phr.",
+  "meaning": "사실상의",
+  "example": "He is the de facto leader of the project.",
+  "example_ko": "그가 사실상 그 프로젝트의 책임자입니다.",
+  "tip": "↔ de jure (법률상의)"
+ },
+ {
+  "id": "v-1591",
+  "level": 5,
+  "word": "per annum",
+  "pos": "phr.",
+  "meaning": "1년에, 연간",
+  "example": "The loan carries interest of 5 percent per annum.",
+  "example_ko": "그 대출의 이자는 연 5퍼센트입니다.",
+  "tip": "= per year, annually"
+ },
+ {
+  "id": "v-1592",
+  "level": 5,
+  "word": "null and void",
+  "pos": "phr.",
+  "meaning": "무효인",
+  "example": "The contract was declared null and void.",
+  "example_ko": "그 계약은 무효로 선언되었습니다.",
+  "tip": "= invalid"
+ },
+ {
+  "id": "v-1593",
+  "level": 5,
+  "word": "due diligence",
+  "pos": "phr.",
+  "meaning": "실사, 충분한 주의",
+  "example": "The buyer completed due diligence before the acquisition.",
+  "example_ko": "인수자는 인수 전에 실사를 마쳤습니다.",
+  "tip": "conduct due diligence (실사를 하다)"
+ },
+ {
+  "id": "v-1594",
+  "level": 5,
+  "word": "red tape",
+  "pos": "phr.",
+  "meaning": "번거로운 행정 절차",
+  "example": "The new law aims to cut red tape for small businesses.",
+  "example_ko": "새 법은 중소기업의 번거로운 절차를 줄이는 것이 목표입니다.",
+  "tip": "cut red tape (절차를 간소화하다)"
+ },
+ {
+  "id": "v-1595",
+  "level": 5,
+  "word": "ballpark figure",
+  "pos": "phr.",
+  "meaning": "대략적인 수치, 어림값",
+  "example": "Can you give me a ballpark figure for the repairs?",
+  "example_ko": "수리비가 대략 얼마인지 알려 주실 수 있나요?",
+  "tip": "= rough estimate"
+ },
+ {
+  "id": "v-1596",
+  "level": 5,
+  "word": "in good faith",
+  "pos": "phr.",
+  "meaning": "선의로, 성실하게",
+  "example": "Both parties negotiated in good faith.",
+  "example_ko": "양측은 성실하게 협상했습니다.",
+  "tip": "bad faith (악의)"
+ },
+ {
+  "id": "v-1597",
+  "level": 5,
+  "word": "to the letter",
+  "pos": "phr.",
+  "meaning": "정확히, 글자 그대로",
+  "example": "Follow the safety instructions to the letter.",
+  "example_ko": "안전 지침을 정확히 지키세요.",
+  "tip": "= exactly"
+ },
+ {
+  "id": "v-1598",
+  "level": 5,
+  "word": "at the outset",
+  "pos": "phr.",
+  "meaning": "처음에, 시작할 때",
+  "example": "We made our expectations clear at the outset.",
+  "example_ko": "처음부터 우리의 기대 사항을 분명히 했습니다.",
+  "tip": "= at the beginning"
+ },
+ {
+  "id": "v-1599",
+  "level": 5,
+  "word": "fall through",
+  "pos": "phr.",
+  "meaning": "무산되다",
+  "example": "The deal fell through at the last minute.",
+  "example_ko": "그 거래는 막판에 무산되었습니다.",
+  "tip": "= collapse"
+ },
+ {
+  "id": "v-1600",
+  "level": 5,
+  "word": "make headway",
+  "pos": "phr.",
+  "meaning": "진전을 보이다",
+  "example": "Negotiators are making headway on the new contract.",
+  "example_ko": "협상가들이 새 계약에 진전을 보이고 있습니다.",
+  "tip": "make headway on (진전을 보이다)"
+ }
+]

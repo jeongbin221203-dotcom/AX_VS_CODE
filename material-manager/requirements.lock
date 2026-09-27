@@ -1,0 +1,33 @@
+# 검증에 쓴 정확한 버전 (Python 3.14, 2026-09-27). 운영 설치: pip install -r requirements.lock
+# 버전을 올릴 때는 테스트(SQLite·PostgreSQL)를 다시 돌린 뒤 이 파일을 갱신한다.
+blinker==1.9.0
+boto3==1.43.103
+botocore==1.43.103
+cffi==2.1.1
+click==8.5.0
+cryptography==50.0.1
+defusedxml==0.7.1
+et-xmlfile==2.0.0
+flask==3.0.0
+importlib-metadata==9.0.0
+itsdangerous==2.2.0
+jinja2==3.1.6
+jmespath==1.1.0
+joserfc==1.7.5
+markupsafe==3.0.3
+numpy==2.5.3
+openpyxl==3.1.5
+pandas==3.0.5
+psycopg==3.3.6
+psycopg-binary==3.3.6
+psycopg-pool==3.3.3
+pycparser==3.0
+python-dateutil==2.9.0.post0
+s3transfer==0.19.2
+six==1.17.0
+typing-extensions==4.16.0
+tzdata==2026.4
+urllib3==2.7.0
+waitress==3.0.2
+werkzeug==3.1.8
+zipp==4.1.0

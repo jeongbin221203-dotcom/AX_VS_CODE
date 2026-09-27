@@ -1,0 +1,277 @@
+{% extends 'base.html' %}
+{% set active_page = 'sub1' %}
+
+{% block content %}
+<style>
+    html { 
+        scroll-behavior: smooth; 
+        scroll-padding-top: 100px; 
+    }
+    .product-box {
+        background: #fbf9f6;
+        border-radius: 20px;
+        padding: 50px;
+        margin-bottom: 40px;
+        display: flex;
+        align-items: center;
+        gap: 60px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+    }
+    .product-box.reverse {
+        flex-direction: row-reverse;
+    }
+    .product-text {
+        flex: 1.2;
+    }
+    .product-img-wrap {
+        flex: 1;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+        background: #e2e8f0;
+    }
+    .product-img-wrap img {
+        width: 100%;
+        height: 320px;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.5s ease;
+    }
+    .product-img-wrap img:hover {
+        transform: scale(1.03);
+    }
+    .btn-view {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 22px;
+        background: #1a1a1a;
+        color: white;
+        border-radius: 30px;
+        font-size: 0.95rem;
+        font-weight: 500;
+        margin-top: 25px;
+        transition: 0.3s;
+        cursor: pointer;
+        border: none;
+    }
+    .btn-view:hover {
+        background: #1e5a22;
+    }
+    
+    /* 다운로드 알림 팝업 모달 스타일 */
+    #downloadModal {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.5);
+        z-index: 3000;
+        justify-content: center;
+        align-items: center;
+    }
+    .modal-content {
+        background: white;
+        padding: 40px;
+        border-radius: 16px;
+        text-align: center;
+        max-width: 400px;
+        width: 90%;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+</style>
+
+<!-- 1. 히로 배너 및 탭 메뉴 -->
+<section class="hero" style="height: 60vh; min-height: 500px; background-image: url('https://images.unsplash.com/photo-1590682680695-43b964a3ae17?q=80&w=1920');">
+    <div class="hero-content left-align">
+        <span class="hero-category">Products</span>
+        <h1>The First Food for All</h1>
+        <hr class="hero-divider">
+        <p>자연을 이해하고, 생명을 존중하며, 미래를 함께 키웁니다.</p>
+        
+        <div class="hero-tabs" id="productTabs">
+            <a href="#brand" class="tab active" onclick="activateTab(this)">브랜드관</a>
+            <a href="#chicken" class="tab" onclick="activateTab(this)">양계</a>
+            <a href="#pig" class="tab" onclick="activateTab(this)">양돈</a>
+            <a href="#cow" class="tab" onclick="activateTab(this)">축우</a>
+            <a href="#fish" class="tab" onclick="activateTab(this)">양어</a>
+            <a href="#etc" class="tab" onclick="activateTab(this)">기타</a>
+        </div>
+    </div>
+</section>
+
+<!-- 2. 브랜드관 (표 요약) -->
+<section id="brand" class="bg-light">
+    <div class="section-inner">
+        <h2 class="section-title">브랜드관</h2>
+        <p class="section-subtitle">대한사료의 70년 기술력이 집약된 대표 제품 라인업입니다.</p>
+        
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th width="12%">축종</th>
+                    <th width="23%">적용 대상</th>
+                    <th width="35%">핵심 적용 기술</th>
+                    <th width="30%">기대 효과</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>양계</strong></td>
+                    <td>산란계, 종계, 육계</td>
+                    <td>전 생육주기 정밀 사양 프로그램 (대체 단백질원 배합)</td>
+                    <td>산란율 향상, 난각 품질 개선, 폐사율 감소</td>
+                </tr>
+                <tr>
+                    <td><strong>양돈</strong></td>
+                    <td>자돈, 비육돈, 모돈</td>
+                    <td>D·C·T 기술 및 5세대 메타바이오틱스 첨가</td>
+                    <td>장내 환경 개선, 면역력 증진, 출하 일령 단축</td>
+                </tr>
+                <tr>
+                    <td><strong>축우</strong></td>
+                    <td>한우, 낙농우, 송아지</td>
+                    <td>고급 후레이크 가공 기술 및 TMF 특별 레시피</td>
+                    <td>육질 등급 향상, 유량 증가, 번식 효율 극대화</td>
+                </tr>
+                <tr>
+                    <td><strong>양어</strong></td>
+                    <td>넙치, 조피볼락 등 치어</td>
+                    <td>아쿠아닉스(특허 그래뉼 공법) 저온 압출 기술</td>
+                    <td>치어 생존율 극대화, 분변 감소로 수질 환경 보호</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- 3. 양계 사료 섹션 -->
+<section id="chicken">
+    <div class="section-inner" style="max-width: 1200px;">
+        <div class="product-box">
+            <div class="product-text">
+                <span style="color: #1e5a22; font-weight: bold; font-size: 0.95rem; display: block; margin-bottom: 8px;">양계 | POULTRY FEED</span>
+                <h2 style="font-size: 2.2rem; color: #111; margin-bottom: 20px; font-weight: 700;">대한사료 양계 시리즈</h2>
+                <p style="font-size: 1.05rem; line-height: 1.8; color: #555; margin-bottom: 15px;">
+                    대한사료는 기존 3단계 체계를 넘어, 산란계의 생리 변화를 <strong>7단계로 세분화</strong>했습니다.
+                </p>
+                <p style="font-size: 1.05rem; line-height: 1.8; color: #555; margin-bottom: 20px;">
+                    단계별 영양 밸런스를 정밀하게 조정하여 사료 효율을 획기적으로 높이고, 닭의 컨디션과 산란율을 365일 최적의 상태로 유지시킵니다.
+                </p>
+                <a href="/sub1/detail/chicken" class="btn-view">VIEW MORE →</a>
+            </div>
+            <div class="product-img-wrap">
+                <img src="https://images.unsplash.com/photo-1563245372-f21724e3856d?q=80&w=800" alt="Poultry">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 4. 양돈 사료 섹션 -->
+<section id="pig" class="bg-light">
+    <div class="section-inner" style="max-width: 1200px;">
+        <div class="product-box reverse">
+            <div class="product-text">
+                <span style="color: #1e5a22; font-weight: bold; font-size: 0.95rem; display: block; margin-bottom: 8px;">양돈 | SWINE FEED</span>
+                <h2 style="font-size: 2.2rem; color: #111; margin-bottom: 20px; font-weight: 700;">장 건강의 혁신, 키워드림</h2>
+                <p style="font-size: 1.05rem; line-height: 1.8; color: #555; margin-bottom: 15px;">
+                    대한사료의 양돈사료는 <strong>DCT(Digestive Care Technology) 기술</strong>을 기반으로 개발되었습니다.
+                </p>
+                <p style="font-size: 1.05rem; line-height: 1.8; color: #555; margin-bottom: 20px;">
+                    돼지의 소화생리와 영양대사를 과학적으로 분석하여 소화율을 높이고, 영양 흡수를 극대화하는 정밀영양 솔루션입니다.
+                </p>
+                <a href="/sub1/detail/pig" class="btn-view">VIEW MORE →</a>
+            </div>
+            <div class="product-img-wrap">
+                <img src="https://images.unsplash.com/photo-1516467508483-a7212febe31a?q=80&w=800" alt="Swine">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 5. 축우 사료 섹션 -->
+<section id="cow">
+    <div class="section-inner" style="max-width: 1200px;">
+        <div class="product-box">
+            <div class="product-text">
+                <span style="color: #1e5a22; font-weight: bold; font-size: 0.95rem; display: block; margin-bottom: 8px;">축우 | CATTLE FEED</span>
+                <h2 style="font-size: 2.2rem; color: #111; margin-bottom: 20px; font-weight: 700;">최고 등급의 완성, NEW뉴텍프리미엄</h2>
+                <p style="font-size: 1.05rem; line-height: 1.8; color: #555; margin-bottom: 15px;">
+                    NEW 뉴텍 프리미엄은 최신 <strong>한우 도체등급 판정 기준</strong>에 맞춰 개발된 축우 전용 프리미엄 사료입니다.
+                </p>
+                <p style="font-size: 1.05rem; line-height: 1.8; color: #555; margin-bottom: 20px;">
+                    고급 후레이크 가공 기술을 적용하여 성장 단계별 요구 영양을 정밀 설계하고 체중 증가와 근내지방 형성을 최적화합니다.
+                </p>
+                <a href="/sub1/detail/cow" class="btn-view">VIEW MORE →</a>
+            </div>
+            <div class="product-img-wrap">
+                <img src="https://images.unsplash.com/photo-1527153857715-3908f2bae5e8?q=80&w=800" alt="Cattle">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 6. 양어 사료 섹션 -->
+<section id="fish" class="bg-light">
+    <div class="section-inner" style="max-width: 1200px;">
+        <div class="product-box reverse">
+            <div class="product-text">
+                <span style="color: #1e5a22; font-weight: bold; font-size: 0.95rem; display: block; margin-bottom: 8px;">양어 | AQUA FEED</span>
+                <h2 style="font-size: 2.2rem; color: #111; margin-bottom: 20px; font-weight: 700;">수질 환경까지 지키는 아쿠아닉스</h2>
+                <p style="font-size: 1.05rem; line-height: 1.8; color: #555; margin-bottom: 15px;">
+                    특허받은 <strong>정밀 그래뉼 공법</strong>을 적용해 우수한 기호성과 안정적인 품질을 구현한 전문 양어 사료입니다.
+                </p>
+                <p style="font-size: 1.05rem; line-height: 1.8; color: #555; margin-bottom: 20px;">
+                    치어 생존율을 극대화하고 분변을 감소시켜 양식장 수질 환경을 보호하는 친환경 솔루션을 제공합니다.
+                </p>
+                <a href="/sub1/detail/fish" class="btn-view">VIEW MORE →</a>
+            </div>
+            <div class="product-img-wrap">
+                <img src="https://images.unsplash.com/photo-1524704796725-9fc3044a58b2?q=80&w=800" alt="Aqua">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 7. 기타 전문 사료 섹션 (전체 카탈로그 다운로드 버튼 적용) -->
+<section id="etc">
+    <div class="section-inner" style="max-width: 1200px;">
+        <div class="product-box">
+            <div class="product-text">
+                <span style="color: #1e5a22; font-weight: bold; font-size: 0.95rem; display: block; margin-bottom: 8px;">기타 | SPECIALTY FEED</span>
+                <h2 style="font-size: 2.2rem; color: #111; margin-bottom: 20px; font-weight: 700;">기타 전문 사료</h2>
+                <p style="font-size: 1.05rem; line-height: 1.8; color: #555; margin-bottom: 20px;">
+                    특수 목적 축산 및 반려동물의 건강한 삶을 위한 대한사료의 프리미엄 특수 라인업입니다.
+                </p>
+                <button onclick="openDownloadModal()" class="btn-view">전체 카탈로그 다운로드 ↓</button>
+            </div>
+            <div class="product-img-wrap">
+                <img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?q=80&w=800" alt="Specialty">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 다운로드 안내 모달 팝업 -->
+<div id="downloadModal">
+    <div class="modal-content">
+        <h3 style="color: #1e5a22; margin-top: 0; font-size: 1.5rem;">📥 카탈로그 다운로드</h3>
+        <p style="color: #555; line-height: 1.6; margin: 20px 0;">대한사료 2026년 통합 제품 카탈로그(PDF) 다운로드가 준비되었습니다.</p>
+        <button onclick="closeDownloadModal()" style="padding: 10px 24px; background: #1e5a22; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">확인</button>
+    </div>
+</div>
+
+<script>
+    function activateTab(element) {
+        document.querySelectorAll('#productTabs .tab').forEach(t => t.classList.remove('active'));
+        element.classList.add('active');
+    }
+
+    function openDownloadModal() {
+        document.getElementById('downloadModal').style.display = 'flex';
+    }
+
+    function closeDownloadModal() {
+        document.getElementById('downloadModal').style.display = 'none';
+    }
+</script>
+{% endblock %}

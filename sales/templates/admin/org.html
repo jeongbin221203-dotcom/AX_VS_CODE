@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% from "_macros.html" import metric, table, tabs, csrf, select %}
+{% block content %}
+<div class="metrics m3">
+  {{ metric('조직', org_cnt ~ '개') }}
+  {{ metric('사용자', user_cnt ~ '명') }}
+  {{ metric('비활성 계정', inactive_cnt ~ '명') }}
+</div>
+
+<section class="card">
+  {{ tabs([('orgs', '🏛️ 조직도'), ('users', '🙍 사용자'), ('transfer', '🔁 담당자 이관'), ('hr', '🔄 인사 연동')], tab) }}
+  {% if tab == 'users' %}
+    <p class="muted small">행을 누르면 해당 사용자를 수정합니다. 이름이 같은 사용자가 있어도 데이터는 사번(사용자)별로 따로 관리됩니다.</p>
+    {{ table(users, 360) }}
+    <h3>{{ '사용자 수정 — ' ~ target.name ~ ' (' ~ target.emp_no ~ ')' if target.id else '사용자 신규 등록' }}</h3>
+    {% if target.id %}<a class="btn btn-sm" href="{{ url_for('admin.org', tab='users') }}">+ 신규 등록으로 전환</a>{% endif %}
+    <form method="post" action="{{ url_for('admin.user_save') }}" class="form">
+      {{ csrf() }}
+      {% if target.id %}<input type="hidden" name="id" value="{{ target.id }}">{% endif %}
+      <div class="form-grid g3">
+        <label>사번 * <input name="emp_no" value="{{ target.emp_no or '' }}" required></label>
+        <label>이름 * <input name="name" value="{{ target.name or '' }}" required></label>
+        <label>역할 *
+          <select name="role">{% for r in roles %}<option value="{{ r }}" {{ 'selected' if r == target.role }}>{{ ROLE_LABEL[r] }} ({{ r }})</option>{% endfor %}</select>
+        </label>
+        <label>소속 {{ select('org_id', org_options, target.org_id or '', blank='(미배정)') }}</label>
+        <label>이메일 <input name="email" type="email" value="{{ target.email or '' }}"></label>
+        <label class="check"><input type="checkbox" name="active" value="1" {{ 'checked' if target.active }}> 사용</label>
+        {% if password_mode %}
+          <label>임시 비밀번호 {{ '(바꿀 때만 입력)' if target.id else '*' }}
+            <input type="password" name="temp_password" autocomplete="new-password" {{ '' if target.id else 'required' }}></label>
+        {% endif %}
+      </div>
+      <button class="btn btn-primary">저장</button>
+    </form>
+    {% if target.id and locked %}
+      <form method="post" action="{{ url_for('admin.user_unlock', uid=target.id) }}" class="toolbar">
+        {{ csrf() }}
+        <span class="warn-text">로그인 실패 {{ target.failed_logins or 0 }}회{% if target.locked_until %} · {{ target.locked_until }}까지 잠김{% endif %}</span>
+        <button class="btn btn-sm">잠금 해제</button>
+      </form>
+    {% endif %}
+    <p class="muted small">퇴사자는 삭제 대신 '사용' 체크를 해제하고, 담당 거래처는 '담당자 이관' 탭에서 넘기십시오. 실적·활동 이력은 원래 담당자에게 남습니다.
+      {% if password_mode %}임시 비밀번호를 받은 사용자는 첫 로그인 때 비밀번호를 바꿔야 합니다.{% endif %}</p>
+
+  {% elif tab == 'hr' %}
+    <p class="muted">인사 시스템의 조직도·사원 정보를 사번·조직코드 기준으로 맞춥니다. 퇴직자와 피드에서 빠진 인사 연동 사원은 비활성화하고
+      대결 지정을 취소하며, 담당 거래처가 남아 있으면 이관 알림을 보냅니다. 로컬 계정은 피드에 없어도 그대로 둡니다.
+      피드 인원이 평소보다 크게 적으면(잘린 파일) 반영하지 않습니다.</p>
+    <p class="small">자동 연동 원천: <code>{{ hr_source or '미설정 (SALES_HR_SOURCE)' }}</code> — 설정하면 매일 03:00 배치로 반영합니다.
+      {% if hr_last %}<br>마지막 반영: {{ hr_last.ts }} · {{ hr_last.actor }}{% endif %}</p>
+    <form method="post" action="{{ url_for('admin.hr_preview') }}" enctype="multipart/form-data" class="toolbar">
+      {{ csrf() }}
+      <label class="grow">인사 데이터 JSON (비우면 원천에서 읽기) <input type="file" name="file" accept=".json"></label>
+      <button class="btn">🔍 변경 미리보기</button>
+    </form>
+    {% if hr_error %}<div class="alert alert-error">{{ hr_error }}</div>{% endif %}
+    {% if hr_preview %}
+      {% set pv = hr_preview %}
+      <div class="metrics m4">
+        {{ metric('신규 조직', pv.summary.orgs_new ~ '개') }}{{ metric('조직 변경·폐지', (pv.summary.orgs_update + pv.summary.orgs_close) ~ '개') }}
+        {{ metric('신규 사원', pv.summary.users_new ~ '명') }}{{ metric('변경 / 비활성화', pv.summary.users_update ~ ' / ' ~ pv.summary.users_leave ~ '명') }}
+      </div>
+      {% if pv.blocked %}<div class="alert alert-error">{{ pv.blocked }}</div>{% endif %}
+      {% for w in pv.warnings %}<div class="alert alert-warning">{{ w }}</div>{% endfor %}
+      <ul class="small change-list">
+        {% for o in pv.orgs_new %}<li>➕ 조직 {{ o.code }} {{ o.name }}{% if o.parent %} (상위 {{ o.parent }}){% endif %}</li>{% endfor %}
+        {% for o in pv.orgs_update %}<li>✏️ 조직 {{ o.code }} {{ o.name }}: {{ o.changes }}</li>{% endfor %}
+        {% for o in pv.orgs_close %}<li>⛔ 조직 폐지 {{ o.code }} {{ o.name }}</li>{% endfor %}
+        {% for u in pv.users_new %}<li>➕ {{ u.emp_no }} {{ u.name }} · {{ u.position or '' }} · {{ ROLE_LABEL.get(u.role, u.role) }} · {{ u.org or '소속 없음' }}</li>{% endfor %}
+        {% for u in pv.users_update %}<li>✏️ {{ u.emp_no }} {{ u.name }}: {{ u.changes }}</li>{% endfor %}
+        {% for u in pv.users_leave %}<li>🚪 {{ u.emp_no }} {{ u.name }} 비활성화 — {{ u.reason }}</li>{% endfor %}
+      </ul>
+      {% if not pv.blocked %}
+      <form method="post" action="{{ url_for('admin.hr_apply') }}">
+        {{ csrf() }}<input type="hidden" name="hr_token" value="{{ hr_token }}">
+        <button class="btn btn-primary">✅ 반영</button>
+      </form>
+      {% endif %}
+    {% endif %}
+  {% elif tab == 'transfer' %}
+    <p class="muted">퇴사·팀 이동 시 거래처와 진행 중 영업기회를 다른 담당자에게 넘깁니다.
+      매출·활동·목표는 실적 귀속을 지키기 위해 원래 담당자에게 남깁니다. 이관 내역은 감사로그에 기록됩니다.</p>
+    <form method="post" action="{{ url_for('admin.user_transfer') }}" class="form">
+      {{ csrf() }}
+      <div class="form-grid g2">
+        <label>넘겨주는 담당자 {{ select('from_id', all_users, '') }}</label>
+        <label>받는 담당자 (활성 사용자) {{ select('to_id', active_users, '') }}</label>
+      </div>
+      <label class="check"><input type="checkbox" name="include_closed" value="1"> 마감된(수주·실주) 영업기회도 함께 이관</label>
+      <button class="btn btn-primary">이관 실행</button>
+    </form>
+
+  {% else %}
+    {{ table(orgs) }}
+    <h3>조직 등록</h3>
+    <form method="post" action="{{ url_for('admin.org_save') }}" class="form">
+      {{ csrf() }}
+      <div class="form-grid g3">
+        <label>조직명 * <input name="name" required></label>
+        <label>구분 {{ select('org_type', org_types, '팀') }}</label>
+        <label>상위 조직 {{ select('parent_id', org_options, '', blank='(최상위)') }}</label>
+      </div>
+      <button class="btn btn-primary">등록</button>
+    </form>
+    {% if org_options %}
+    <h3>조직 삭제</h3>
+    <form method="post" action="{{ url_for('admin.org_delete') }}" class="toolbar">
+      {{ csrf() }}
+      <label class="grow">삭제할 조직 {{ select('org_id', org_options, '') }}</label>
+      <button class="btn btn-danger">🗑️ 조직 삭제</button>
+    </form>
+    {% endif %}
+  {% endif %}
+</section>
+{% endblock %}

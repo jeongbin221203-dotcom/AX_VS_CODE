@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% from "_macros.html" import metric, table, select, download %}
+{% block content %}
+<p class="subtitle">데이터 변경·로그인·다운로드 이력을 시간순으로 보관합니다. 기록은 앞 기록의 해시를 이어 받는 체인으로 묶여 있고,
+  DB 트리거로 수정·삭제가 막혀 있습니다(관리자·초기화로도 지울 수 없음).</p>
+<form method="get" class="toolbar" action="{{ page_path() }}">
+  <label>사용자 {{ select('actor', actors, actor, blank='전체') }}</label>
+  <label>대상 {{ select('entity', entities, entity, blank='전체') }}</label>
+  <label>표시 건수 <select name="limit">{% for l in limits %}<option {{ 'selected' if l == limit }}>{{ l }}</option>{% endfor %}</select></label>
+  <button class="btn">조회</button>
+  <button class="btn" name="verify" value="1">🔐 무결성 검증</button>
+</form>
+{% if chain %}
+  {% if chain.broken_id %}
+    <div class="alert alert-error">무결성 이상: 번호 {{ chain.broken_id }} 에서 체인이 끊겼습니다 — {{ chain.reason }}.
+      이 시점 전후 기록이 DB 에서 직접 변경되었을 수 있습니다. 보안 담당자에게 알리세요.</div>
+  {% else %}
+    <div class="alert alert-success">무결성 확인: 해시 체인 {{ '{:,}'.format(chain.verified) }}건 모두 기록 당시와 같습니다.
+      {% if chain.unsigned %}(체인 도입 이전 기록 {{ '{:,}'.format(chain.unsigned) }}건은 해시가 없어 검증 대상이 아닙니다){% endif %}</div>
+  {% endif %}
+{% endif %}
+<div class="card-head">
+  <div class="metrics m3">{{ metric('조회된 로그', '{:,}건'.format(tbl.total)) }}</div>
+  {{ download(export_url('audit')) }}
+</div>
+{{ table(tbl, 460) }}
+{% endblock %}

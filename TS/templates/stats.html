@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}통계{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><h1>학습 통계</h1><div class="muted small">연속 학습 {{ streak }}일</div></div>
+  <a class="btn" href="{{ url_for('main.history') }}">전체 기록</a>
+</div>
+
+<div class="grid two">
+  <div class="card">
+    <h2>추정 점수 추이</h2>
+    {% if history %}<div class="chart-box"><canvas id="score-chart"></canvas></div>
+      <script type="application/json" id="score-data">{{ history|tojson }}</script>
+    {% else %}<div class="empty">진단 테스트·모의고사 기록이 없습니다.</div>{% endif %}
+  </div>
+  <div class="card">
+    <h2>최근 30일 학습량</h2>
+    <div class="chart-box"><canvas id="daily-chart"></canvas></div>
+    <script type="application/json" id="daily-data">{{ daily|tojson }}</script>
+  </div>
+</div>
+
+<div class="card" style="margin-top:14px">
+  <h2>파트별 정답률</h2>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>파트</th><th class="r">전체</th><th class="r">최근 7일</th><th class="r">문항당 시간</th>
+      {% for gr in GRADES %}<th class="r">{{ gr.name }}</th>{% endfor %}</tr></thead>
+    <tbody>
+    {% for p, info in PART_INFO.items() %}
+      {% set a, w = acc_all[p], acc_7[p] %}
+      <tr>
+        <td>Part {{ p }} <span class="muted small">{{ info.name }}</span></td>
+        <td class="r num">{{ a.rate|pct }} <span class="muted small">({{ a.n }})</span></td>
+        <td class="r num">{{ w.rate|pct }} <span class="muted small">({{ w.n }})</span></td>
+        <td class="r num">{% if p in times and times[p] %}
+            <span class="{{ 'tag bad' if times[p] > target_sec[p] else 'tag ok' }}">{{ times[p]|round|int }}초 / {{ target_sec[p] }}초</span>
+          {% else %}–{% endif %}</td>
+        {% for gr in GRADES %}{% set x = lvl.get((p, gr.level)) %}
+          <td class="r num small">{% if x %}{{ x.rate|pct }}<div class="muted">{{ x.n }}</div>{% else %}–{% endif %}</td>
+        {% endfor %}
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  <p class="small muted">문항당 시간은 RC 파트의 최근 100문항 평균입니다 (목표: Part 5 20초, Part 6 30초, Part 7 60초).</p>
+</div>
+
+<div class="grid two" style="margin-top:14px">
+  <div class="card">
+    <h2>약한 유형 <span class="small muted">(3문항 이상 푼 유형, 정답률 낮은 순)</span></h2>
+    {% if types %}
+    <table>
+      <tbody>
+      {% for t in types[:15] %}
+        <tr>
+          <td>P{{ t.part }} · {{ t.qtype }}</td>
+          <td style="width:30%"><div class="bar {{ 'ok' if t.rate >= 0.75 else ('bad' if t.rate < 0.5) }}"><i style="width:{{ (t.rate * 100)|round }}%"></i></div></td>
+          <td class="r num">{{ t.rate|pct }} <span class="muted small">({{ t.n }})</span></td>
+          <td class="r"><a class="btn small" href="{{ url_for('quiz.practice_start', part=t.part, type=t.qtype, n=10) }}">연습</a></td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% else %}<div class="empty">아직 기록이 부족합니다.</div>{% endif %}
+  </div>
+  <div class="card">
+    <h2>단어 진도</h2>
+    <table>
+      <thead><tr><th>등급</th><th class="r">학습 시작</th><th class="r">암기 완료</th><th class="r">전체</th><th></th></tr></thead>
+      <tbody>
+      {% for v in vocab %}
+        <tr><td>{{ grade_badge(v.level) }}</td><td class="r num">{{ v.seen }}</td><td class="r num">{{ v.mastered }}</td>
+          <td class="r num">{{ v.total }}</td>
+          <td style="width:30%"><div class="bar ok"><i style="width:{{ ((v.mastered / v.total * 100) if v.total else 0)|round }}%"></i></div></td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='vendor/chart.umd.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+{% endblock %}

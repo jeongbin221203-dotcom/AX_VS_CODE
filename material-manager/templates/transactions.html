@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf, metric, doc_fields %}
+
+{# 로트 선택: 출고·이동은 기본이 자동(유효기한 빠른 순) #}
+{% macro lot_select(lots, form) %}
+  <label>로트
+    <select name="lot_no">
+      <option value="">자동 — 유효기한 빠른 로트부터 (FEFO)</option>
+      {% for l in lots %}
+        <option value="{{ l.lot_no }}" {{ 'selected' if form.lot_no == l.lot_no }}>{{ l.lot_no }} · {{ "{:,.2f}".format(l.stock) }}{{ ' · ~' ~ l.expiry_date if l.expiry_date }}{{ ' (기한 지남)' if l.days_left is not none and l.days_left < 0 }}</option>
+      {% endfor %}
+    </select>
+  </label>
+{% endmacro %}
+{% block content %}
+{% if not opts %}
+  <div class="alert alert-info">사용 중인 자재가 없습니다. 먼저 <a href="{{ url_for('materials.index', tab='new') }}">자재를 등록</a>하세요.</div>
+{% elif not wh_opts %}
+  <div class="alert alert-warning">등록할 수 있는 창고가 없습니다. 시스템관리자에게 데이터 범위(플랜트·창고) 부여를 요청하세요.</div>
+{% else %}
+  <div class="tabs">
+    {% for code, label in types.items() %}
+      <a href="{{ url_for('transactions.index', type=code, material=mid, wh=wh) }}" class="{{ 'active' if code == tx_type }}">{{ label }}</a>
+    {% endfor %}
+  </div>
+
+  <form class="toolbar" method="get">
+    <input type="hidden" name="type" value="{{ tx_type }}">
+    <label>{{ '보내는 창고' if tx_type == 'TRF' else '창고' }}
+      <select name="wh" data-autosubmit>
+        {% for k, v in wh_opts.items() %}<option value="{{ k }}" {{ 'selected' if k == wh }}>{{ v }}</option>{% endfor %}
+      </select>
+    </label>
+    <label class="grow">자재
+      <select name="material" data-autosubmit>
+        {% for k, v in opts.items() %}<option value="{{ k }}" {{ 'selected' if k == mid }}>{{ v }}</option>{% endfor %}
+      </select>
+    </label>
+    <noscript><button class="btn">선택</button></noscript>
+  </form>
+
+  <div class="metrics m3">
+    {{ metric(warehouse.code ~ " 현재고", "{:,.2f} {}".format(stock_now, mat.unit)) }}
+    {{ metric("안전재고 (자재 전체)", "{:,.2f} {}".format(mat.safety_stock, mat.unit)) }}
+    {{ metric("기준단가", "₩ {:,.0f}".format(mat.unit_price)) }}
+  </div>
+
+  {% if g.sap_on %}
+    {% if mat.sap_matnr and warehouse.sap_plant and warehouse.sap_sloc %}
+      <p class="muted small">SAP: 자재 {{ mat.sap_matnr }} · 플랜트 {{ warehouse.sap_plant }} · 저장위치 {{ warehouse.sap_sloc }} — 등록하면 전송 대기열에 들어갑니다.</p>
+    {% else %}
+      <div class="alert alert-warning">SAP 매핑이 부족해 등록할 수 없습니다 (자재 SAP 번호: {{ mat.sap_matnr or '없음' }}, 창고 플랜트/저장위치: {{ warehouse.sap_plant or '없음' }}/{{ warehouse.sap_sloc or '없음' }}).</div>
+    {% endif %}
+  {% endif %}
+
+  {% if mat.lot_managed %}
+    <p class="muted small">로트 관리 자재{{ ' · 유효기한 관리 (기한 지난 로트는 출고 불가)' if mat.expiry_managed }} —
+      이 창고 로트: {% for l in lots %}<span class="badge">{{ l.lot_no }} {{ "{:,.2f}".format(l.stock) }}{{ ' ~' ~ l.expiry_date if l.expiry_date }}</span> {% else %}없음{% endfor %}</p>
+  {% endif %}
+  <datalist id="known-lots">{% for l in known_lots %}<option value="{{ l.lot_no }}">{{ l.expiry_date }}</option>{% endfor %}</datalist>
+
+  {% if tx_type == "TRF" %}
+  <form class="card form" method="post" action="{{ url_for('transactions.transfer') }}">
+    {{ csrf() }}
+    <input type="hidden" name="material_id" value="{{ mid }}">
+    <input type="hidden" name="warehouse_id" value="{{ wh }}">
+    <div class="form-grid g3">
+      <label>받는 창고 *
+        <select name="to_warehouse_id" required>
+          {% for k, v in all_wh_opts.items() if k != wh %}<option value="{{ k }}" {{ 'selected' if k|string == (form.to_warehouse_id or '')|string }}>{{ v }}</option>{% endfor %}
+        </select>
+      </label>
+      <label>수량 *<input name="qty" type="number" min="0" step="any" required value="{{ form.qty or '' }}"></label>
+      {% if mat.lot_managed %}{{ lot_select(lots, form) }}{% endif %}
+      <label>일자<input name="tx_date" type="date" value="{{ form.tx_date or today().isoformat() }}"
+                      max="{{ today().isoformat() }}" {% if min_date %}min="{{ min_date }}"{% endif %}></label>
+      <label>문서번호 (이동요청 등)<input name="ref_no" value="{{ form.ref_no or '' }}"></label>
+      <label>담당자<input value="{{ g.user.name }} (로그인 사용자로 기록)" disabled></label>
+    </div>
+    <label>비고<input name="note" value="{{ form.note or '' }}"></label>
+    <p class="muted small">보내는 창고 출고와 받는 창고 입고가 같은 이동번호로 함께 기록됩니다.
+      SAP에는 같은 플랜트면 {{ movement.TRF_SLOC }}, 다른 플랜트면 {{ movement.TRF_PLANT }}으로 한 번 전기됩니다.</p>
+    <div><button class="btn btn-primary">이동 등록</button></div>
+  </form>
+  {% else %}
+  <form class="card form" method="post" action="{{ url_for('transactions.create') }}" enctype="multipart/form-data">
+    {{ csrf() }}
+    <input type="hidden" name="tx_type" value="{{ tx_type }}">
+    <input type="hidden" name="material_id" value="{{ mid }}">
+    <input type="hidden" name="warehouse_id" value="{{ wh }}">
+    <div class="form-grid g3">
+      {% if tx_type == "ADJ" %}
+        <label>실사수량 *
+          <input name="qty" type="number" min="0" step="any" required
+                 value="{{ form.qty or ('%g' % (stock_now if stock_now > 0 else 0)) }}">
+          <span class="hint">창고에서 직접 센 수량. 차이 금액이 ₩{{ '{:,}'.format(approval_limit) }} 이상이면 관리자 결재 후 반영됩니다.</span>
+        </label>
+      {% else %}
+        <label>수량 *<input name="qty" type="number" min="0" step="any" required value="{{ form.qty or '' }}"></label>
+      {% endif %}
+      {% if mat.lot_managed %}
+        {% if tx_type == "OUT" %}
+          {{ lot_select(lots, form) }}
+        {% else %}
+          <label>로트 *<input name="lot_no" list="known-lots" value="{{ form.lot_no or '' }}" required autocomplete="off"
+                             placeholder="{{ '공급처 로트 번호' if tx_type == 'IN' else '실사한 로트' }}"></label>
+          <label>유효기한{{ ' * (새 로트)' if mat.expiry_managed }}<input name="expiry_date" type="date" value="{{ form.expiry_date or '' }}"></label>
+        {% endif %}
+      {% endif %}
+      <label>일자<input name="tx_date" type="date" value="{{ form.tx_date or today().isoformat() }}"
+                      max="{{ today().isoformat() }}" {% if min_date %}min="{{ min_date }}"{% endif %}>
+        {% if g.closed_through %}<span class="hint">{{ g.closed_through }}월까지 마감 — 그 이후 일자만 가능</span>{% endif %}
+      </label>
+      <label>단가(원)<input name="unit_price" type="number" min="0" step="any" value="{{ form.unit_price or ('%g' % mat.unit_price) }}"></label>
+
+      <label>문서번호 (PO/출고요청/B/L 등)<input name="ref_no" value="{{ form.ref_no or '' }}"></label>
+      <label>거래처 / 사용부서<input name="partner" value="{{ form.partner or '' }}"></label>
+      <label>담당자<input value="{{ g.user.name }} (로그인 사용자로 기록)" disabled></label>
+      {% if tx_type == "IN" and po_lines %}
+        <label>발주 품목 (이 시스템 발주)
+          <select name="po_line">
+            <option value="">발주 없이 / 아래에 직접 입력</option>
+            {% for p in po_lines %}<option value="{{ p.po_no }}|{{ p.line_no }}">{{ p.po_no }} / {{ p.line_no }} · 잔량 {{ "{:,.2f}".format(p.remaining) }} · ₩{{ "{:,.0f}".format(p.price) }} · {{ p.supplier }}</option>{% endfor %}
+          </select>
+        </label>
+      {% endif %}
+      {% if tx_type == "IN" %}
+        <label>구매오더 번호{{ ' (없으면 무PO 입고 ' ~ movement.IN_NO_PO ~ ')' if g.sap_on }}<input name="po_no" value="{{ form.po_no or '' }}"></label>
+        <label>구매오더 품목<input name="po_item" value="{{ form.po_item or '' }}" placeholder="10"></label>
+      {% elif tx_type == "OUT" %}
+        <label>원가센터{{ ' *' if g.sap_on }}<input name="cost_center" value="{{ form.cost_center or '' }}" {{ 'required' if g.sap_on }}></label>
+      {% endif %}
+    </div>
+    <label>비고<input name="note" value="{{ form.note or '' }}"></label>
+    <details {{ 'open' if tx_type == 'IN' and form.doc_type }}>
+      <summary>📎 증빙 첨부 (선택) — 세금계산서 · 전자세금계산서 · 거래명세서 이미지</summary>
+      {{ doc_fields(form, accept, required=false) }}
+    </details>
+    <div><button class="btn btn-primary">{{ TX_LABEL[tx_type] }} 등록</button></div>
+  </form>
+  {% endif %}
+{% endif %}
+{% endblock %}

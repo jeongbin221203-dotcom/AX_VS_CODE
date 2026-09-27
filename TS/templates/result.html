@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block title %}결과 · {{ session_title(s) }}{% endblock %}
+{% block body_class %}quiz-page{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <div class="muted small">{{ MODE_LABEL[s.mode] }} · {{ (s.finished_at or s.created_at)[:16].replace('T', ' ') }}</div>
+    <h1>{{ session_title(s) }} 결과</h1>
+  </div>
+  <div class="row">
+    {% if s.mode == 'practice' and s.part %}
+      <a class="btn" href="{{ url_for('quiz.practice_start', part=s.part, level=s.level or '', type=s.variant or '', n=s.total or 10) }}">같은 조건으로 다시</a>
+    {% endif %}
+    <a class="btn" href="{{ url_for('quiz.review') }}">오답노트</a>
+    <a class="btn primary" href="{{ url_for('main.dashboard') }}">오늘 할 일로</a>
+  </div>
+</div>
+
+{% if not s.finished_at %}
+  <div class="flash error">아직 끝나지 않은 세션입니다. <a href="{{ url_for('quiz.quiz', sid=s.id) }}">이어서 풀기</a></div>
+{% endif %}
+
+<div class="grid four">
+  {% if s.total_est is not none %}
+  <div class="card kpi">
+    <div class="label">추정 점수</div>
+    <div class="value">{{ s.total_est }}</div>
+    <div class="sub">LC {{ s.lc_est }} · RC {{ s.rc_est }} {{ grade_badge(grade) }}</div>
+  </div>
+  {% endif %}
+  <div class="card kpi">
+    <div class="label">정답</div>
+    <div class="value">{{ s.correct }} / {{ s.total }}</div>
+    <div class="sub">{{ ((s.correct / s.total) if s.total else none) | pct }}</div>
+  </div>
+  {% if s.lc_total and s.rc_total %}
+  <div class="card kpi">
+    <div class="label">LC / RC 정답률</div>
+    <div class="value">{{ (s.lc_correct / s.lc_total) | pct }} · {{ (s.rc_correct / s.rc_total) | pct }}</div>
+    <div class="sub">LC {{ s.lc_correct }}/{{ s.lc_total }} · RC {{ s.rc_correct }}/{{ s.rc_total }}</div>
+  </div>
+  {% endif %}
+  <div class="card kpi">
+    <div class="label">걸린 시간</div>
+    <div class="value">{{ s.duration_sec | mmss }}</div>
+    <div class="sub">{% if s.total %}문항당 {{ (s.duration_sec / s.total) | round | int }}초{% endif %}</div>
+  </div>
+</div>
+
+{% if s.total_est is not none %}
+<p class="small muted" style="margin-top:10px">추정 점수는 정답률을 난이도로 보정해 일반적인 환산 구간에 맞춘 값입니다. 실제 토익 점수와 차이가 날 수 있습니다.</p>
+{% endif %}
+
+<div class="grid two" style="margin-top:14px">
+  <div class="card">
+    <h2>파트별</h2>
+    <table>
+      <thead><tr><th>파트</th><th class="r">정답</th><th>정답률</th></tr></thead>
+      <tbody>
+      {% for p, d in by_part|dictsort %}
+        {% set r = d.c / d.n %}
+        <tr><td>Part {{ p }} {{ PART_INFO[p].name }}</td><td class="r num">{{ d.c }}/{{ d.n }}</td>
+          <td style="width:40%"><div class="bar {{ 'ok' if r >= 0.75 else ('bad' if r < 0.5) }}"><i style="width:{{ (r * 100)|round }}%"></i></div></td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="card">
+    <h2>이번에 틀린 유형</h2>
+    {% if weak_types %}
+    <table>
+      <thead><tr><th>유형</th><th class="r">정답</th><th></th></tr></thead>
+      <tbody>
+      {% for (p, t), d in weak_types %}
+        <tr><td>Part {{ p }} · {{ t }}</td><td class="r num">{{ d.c }}/{{ d.n }}</td>
+          <td class="r"><a class="btn small" href="{{ url_for('quiz.practice_start', part=p, type=t, n=10) }}">이 유형 연습</a></td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% else %}<div class="empty">모두 맞혔습니다.</div>{% endif %}
+  </div>
+</div>
+
+{% if payload["items"] %}
+<div class="card" style="margin-top:14px">
+  <div class="spread">
+    <h2 style="margin:0">문제 다시 보기</h2>
+    <label class="small"><input type="checkbox" id="wrong-only"> 틀린 문제만 넘기기</label>
+  </div>
+  <div id="quiz-main">
+    <div class="quiz-top" style="position:static;border:0;padding:6px 0;margin:0">
+      <span class="progress muted small" id="progress"></span><span class="timer hidden" id="timer"></span>
+    </div>
+    <div class="qnav" id="qnav"></div>
+    <div id="stage"></div>
+  </div>
+</div>
+<script type="application/json" id="payload">{{ payload|tojson }}</script>
+{% endif %}
+{% endblock %}
+{% block scripts %}
+{% if payload["items"] %}
+<script src="{{ url_for('static', filename='js/tts.js') }}"></script>
+<script src="{{ url_for('static', filename='js/quiz.js') }}"></script>
+{% endif %}
+{% endblock %}

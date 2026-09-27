@@ -1,0 +1,1742 @@
+[
+ {
+  "id": "p6-021",
+  "level": 1,
+  "doc_type": "공지",
+  "title": "NOTICE\nMaple Street Public Library — Renovation",
+  "passage": "Dear library visitors,\n\nThe Maple Street Public Library will close for renovation from June 2 to June 30. During this time, workers {1} new shelves, brighter lights, and a larger children's area. {2}\n\nWhile the building is closed, you can still borrow books from our branch on Oak Avenue. It is open from 9 A.M. to 6 P.M., Monday through Saturday. Books that are due in June can be returned there, too. There will be no late fees during the closure.\n\nOur online services will also stay {3}. You can read e-books and renew your items on our Web site at any time.\n\nWe are sorry for any inconvenience. We look forward to welcoming you back to a new and more comfortable library in July. Please visit our Web site for {4} information.\n\nMaple Street Public Library",
+  "questions": [
+   {
+    "q": "",
+    "choices": [
+     "installed",
+     "were installing",
+     "have installed",
+     "will install"
+    ],
+    "answer": 3,
+    "type": "동사 시제·태",
+    "explanation": "도서관은 6월 2일부터 30일까지 문을 '닫을 것(will close)'이라고 했으므로, 그 기간에 할 공사도 앞으로의 일이다. 따라서 미래 시제 will install이 정답이다. installed, have installed, were installing은 모두 이미 일어난 일을 나타낸다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "Our reading club meets every Tuesday evening in Room 3.",
+     "Library cards can be renewed at the front desk during this period.",
+     "The new café will serve sandwiches and cold drinks.",
+     "We hope these changes will make the library a better place for everyone."
+    ],
+    "answer": 3,
+    "type": "문장 삽입",
+    "explanation": "바로 앞 문장이 새 서가·조명·어린이 공간 등 공사 내용이므로 '이 변화가 도서관을 더 좋은 곳으로 만들기를 바란다'는 문장이 자연스럽다. 공사 기간에는 건물이 닫히므로 독서 모임이나 안내 데스크 이용은 맞지 않고, 카페는 언급된 적이 없다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "available",
+     "availably",
+     "availability",
+     "avail"
+    ],
+    "answer": 0,
+    "type": "품사",
+    "explanation": "stay는 '~한 상태로 있다'는 뜻으로 뒤에 형용사 보어가 온다. 따라서 형용사 available(이용 가능한)이 정답이다. availably는 부사, availability는 명사, avail은 동사·명사이다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "additional",
+     "final",
+     "private",
+     "early"
+    ],
+    "answer": 0,
+    "type": "어휘",
+    "explanation": "웹사이트에서 '추가' 정보를 확인하라는 안내가 자연스러우므로 additional이 정답이다. final(마지막의), private(개인적인), early(이른)는 information과 문맥상 어울리지 않는다."
+   }
+  ],
+  "translation": "도서관 이용자 여러분께,\n\n메이플 스트리트 공공도서관은 6월 2일부터 6월 30일까지 보수 공사로 문을 닫습니다. 이 기간 동안 작업자들이 새 서가, 더 밝은 조명, 더 넓은 어린이 공간을 설치할 예정입니다. 이러한 변화로 도서관이 모두에게 더 좋은 곳이 되기를 바랍니다.\n\n건물이 닫혀 있는 동안에도 오크 애비뉴 분관에서 책을 빌릴 수 있습니다. 분관은 월요일부터 토요일까지 오전 9시부터 오후 6시까지 엽니다. 6월에 반납 기한인 책도 그곳에 반납할 수 있습니다. 휴관 기간에는 연체료가 없습니다.\n\n온라인 서비스도 계속 이용하실 수 있습니다. 언제든지 웹사이트에서 전자책을 읽고 대출을 연장할 수 있습니다.\n\n불편을 드려 죄송합니다. 7월에 새롭고 더 편안해진 도서관에서 여러분을 다시 맞이하기를 기대합니다. 추가 정보는 웹사이트를 방문해 주십시오.\n\n메이플 스트리트 공공도서관"
+ },
+ {
+  "id": "p6-022",
+  "level": 1,
+  "doc_type": "광고",
+  "title": "Green Basket Market — Fresh from Local Farms",
+  "passage": "Are you looking for fresh, healthy food for your family? Visit Green Basket Market on Pine Road! All of our fruits and vegetables {1} from farms within 50 kilometers of the store. Farmers deliver them to us every morning, so they are always fresh.\n\nWe also sell eggs, milk, cheese, and bread from local producers. {2} our prices are low, our products are high in quality. {3}\n\nThis month, we are offering a special deal. Spend $30 or more, and you will get a free bag of apples. Just show this advertisement to {4} of our cashiers.\n\nGreen Basket Market is open every day from 7 A.M. to 9 P.M. Come and taste the difference!",
+  "questions": [
+   {
+    "q": "",
+    "choices": [
+     "come",
+     "comes",
+     "coming",
+     "to come"
+    ],
+    "answer": 0,
+    "type": "수 일치",
+    "explanation": "주어 All of our fruits and vegetables는 복수이므로 복수 동사 come이 정답이다. comes는 단수 주어에 쓰고, coming과 to come은 문장의 동사 자리에 올 수 없다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "Although",
+     "Because",
+     "Unless",
+     "So"
+    ],
+    "answer": 0,
+    "type": "접속사",
+    "explanation": "'가격은 낮지만 품질은 높다'는 양보의 관계이므로 Although(~이지만)가 정답이다. Because(~때문에)는 이유, Unless(~하지 않으면)는 조건을 나타내 의미가 맞지 않고, So는 절 앞에서 이렇게 쓸 수 없다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "Our store will be closed on weekends.",
+     "In fact, many of our customers say our vegetables taste better than any others in town.",
+     "We are hiring truck drivers for our new warehouse.",
+     "Please return your library books on time."
+    ],
+    "answer": 1,
+    "type": "문장 삽입",
+    "explanation": "앞 문장이 '품질이 높다'는 내용이므로 '실제로 고객들이 우리 채소가 가장 맛있다고 말한다'는 근거가 이어지는 것이 자연스럽다. 주말 휴무는 '매일 영업'과 모순되고, 트럭 기사 채용과 도서 반납은 광고 흐름과 관계가 없다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "it",
+     "one",
+     "they",
+     "its"
+    ],
+    "answer": 1,
+    "type": "대명사",
+    "explanation": "'계산원 중 한 명에게' 광고를 보여 주라는 뜻이므로 of our cashiers 앞에 올 수 있는 one이 정답이다. it, they는 '~ 중의'를 뜻하는 of 구와 이렇게 쓰지 않고, its는 소유격이라 뒤에 명사가 필요하다."
+   }
+  ],
+  "translation": "가족을 위한 신선하고 건강한 음식을 찾고 계신가요? 파인 로드의 그린 바스켓 마켓을 방문하세요! 저희 과일과 채소는 모두 매장에서 50킬로미터 이내의 농장에서 옵니다. 농부들이 매일 아침 배달해 주기 때문에 언제나 신선합니다.\n\n저희는 지역 생산자의 달걀, 우유, 치즈, 빵도 판매합니다. 가격은 낮지만 제품의 품질은 높습니다. 실제로 많은 고객들이 저희 채소가 동네 어느 곳보다 맛있다고 말합니다.\n\n이번 달에는 특별 행사를 진행합니다. 30달러 이상 구매하시면 사과 한 봉지를 무료로 드립니다. 계산원 중 한 명에게 이 광고를 보여 주기만 하면 됩니다.\n\n그린 바스켓 마켓은 매일 오전 7시부터 오후 9시까지 영업합니다. 오셔서 차이를 맛보세요!"
+ },
+ {
+  "id": "p6-023",
+  "level": 1,
+  "doc_type": "이메일",
+  "title": "To: Daniel Kim <dkim@mailnet.com>\nFrom: Home Cooking Monthly <service@homecookingmonthly.com>\nDate: October 3\nSubject: Your subscription",
+  "passage": "Dear Mr. Kim,\n\nThank you for reading Home Cooking Monthly. Your one-year subscription {1} on October 31. To keep receiving our magazine, please renew it before that date.\n\nIf you renew now, you will pay only $24 for another year. That is 20 percent {2} than the regular price. {3} You will also receive our special holiday recipe book for free.\n\nRenewing is easy. Just click the button below and enter your payment information. If you have any questions, please call one of our customer service agents at 555-0182. {4} are available Monday to Friday from 9 A.M. to 5 P.M.\n\nWe hope you will continue to enjoy our recipes!\n\nSincerely,\nKaren Brooks\nCustomer Service Manager",
+  "questions": [
+   {
+    "q": "",
+    "choices": [
+     "ended",
+     "will end",
+     "has ended",
+     "was ending"
+    ],
+    "answer": 1,
+    "type": "동사 시제·태",
+    "explanation": "이메일은 10월 3일에 보냈고, 바로 뒤에서 '그 날짜 전에 갱신하라'고 하므로 구독은 아직 끝나지 않았다. 따라서 미래 시제 will end가 정답이다. ended, has ended, was ending은 이미 끝난 일을 나타내 문맥과 맞지 않는다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "low",
+     "lower",
+     "lowest",
+     "more low"
+    ],
+    "answer": 1,
+    "type": "비교",
+    "explanation": "뒤에 than이 있으므로 비교급이 필요하다. low의 비교급은 lower이므로 정답이다. lowest는 최상급이고, more low는 틀린 형태이다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "This special price is only for current subscribers.",
+     "Your magazine was delivered to the wrong address last week.",
+     "Our office will move to a new building next year.",
+     "We have canceled your subscription as you requested."
+    ],
+    "answer": 0,
+    "type": "문장 삽입",
+    "explanation": "앞에서 할인된 갱신 가격을 소개하고 있으므로 '이 특별 가격은 기존 구독자만 받을 수 있다'는 문장이 자연스럽다. 배송 오류와 사무실 이전은 흐름과 관계없고, 구독 취소는 갱신을 권하는 이메일 내용과 모순된다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "It",
+     "He",
+     "They",
+     "Its"
+    ],
+    "answer": 2,
+    "type": "대명사",
+    "explanation": "빈칸은 앞 문장의 our customer service agents(고객 서비스 상담원들)를 가리키는 주어 자리이다. 복수 명사를 받는 주격 대명사 They가 정답이다. It, He는 단수이고, Its는 소유격이라 주어 자리에 올 수 없다."
+   }
+  ],
+  "translation": "김 선생님께,\n\n<홈 쿠킹 먼슬리>를 읽어 주셔서 감사합니다. 선생님의 1년 구독이 10월 31일에 끝납니다. 계속 잡지를 받으시려면 그 전에 구독을 갱신해 주십시오.\n\n지금 갱신하시면 1년 더 구독하는 데 24달러만 내시면 됩니다. 정가보다 20퍼센트 저렴합니다. 이 특별 가격은 기존 구독자에게만 제공됩니다. 또한 특별 명절 요리책도 무료로 받으시게 됩니다.\n\n갱신은 간단합니다. 아래 버튼을 누르고 결제 정보를 입력하시기만 하면 됩니다. 궁금한 점이 있으시면 555-0182번으로 고객 서비스 상담원에게 전화해 주십시오. 상담원들은 월요일부터 금요일까지 오전 9시부터 오후 5시까지 응대합니다.\n\n앞으로도 저희 요리법을 즐겨 주시기 바랍니다!\n\n캐런 브룩스\n고객 서비스 매니저"
+ },
+ {
+  "id": "p6-024",
+  "level": 1,
+  "doc_type": "안내문",
+  "title": "Riverton City Transit — Route 12 Change",
+  "passage": "Starting on Monday, April 7, bus Route 12 will take a new path. The bus will no longer stop on Elm Street {1} road construction. Instead, it will use Bay Road.\n\nTwo new stops will be added on Bay Road: one at City Hospital and one at Lincoln High School. {2} Other stops on Route 12 will not change.\n\nThe bus will run every 15 minutes during the morning and evening rush hours. At other times, it will come every 30 minutes. The fare is still $2.\n\nMaps of the new route are {3} at all bus stations and on our Web site. You can also download our free app to check bus times.\n\nWe thank you for your {4} while the construction work continues.\n\nRiverton City Transit",
+  "questions": [
+   {
+    "q": "",
+    "choices": [
+     "because",
+     "because of",
+     "due",
+     "since"
+    ],
+    "answer": 1,
+    "type": "전치사",
+    "explanation": "빈칸 뒤에 명사구 road construction만 있으므로 전치사가 필요하다. because of(~ 때문에)가 정답이다. because와 since는 접속사로 뒤에 주어와 동사가 있는 절이 와야 하고, due는 to 없이 쓸 수 없다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "The hospital is looking for new nurses.",
+     "The fare will increase to $5 next month.",
+     "The Elm Street stop will remain open during the construction.",
+     "These stops will make it easier for patients and students to reach their destinations."
+    ],
+    "answer": 3,
+    "type": "문장 삽입",
+    "explanation": "앞 문장에서 병원과 고등학교에 새 정류장이 생긴다고 했으므로 '환자와 학생이 목적지에 가기 쉬워진다'는 문장이 이어진다. 요금은 '여전히 2달러'라고 했고, 엘름 스트리트에는 더 이상 서지 않는다고 했으므로 두 문장은 모순이며, 간호사 채용은 관계없다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "available",
+     "possible",
+     "famous",
+     "empty"
+    ],
+    "answer": 0,
+    "type": "어휘",
+    "explanation": "새 노선 지도를 모든 정류장과 웹사이트에서 '구할 수 있다'는 뜻이 되어야 하므로 available이 정답이다. possible(가능한), famous(유명한), empty(비어 있는)는 지도와 어울리지 않는다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "patient",
+     "patience",
+     "patiently",
+     "patients"
+    ],
+    "answer": 1,
+    "type": "품사",
+    "explanation": "소유격 your 뒤에는 명사가 오며, 공사 기간 동안 '기다려 주셔서' 감사하다는 뜻이므로 patience(인내)가 정답이다. patient는 형용사(참을성 있는) 또는 '환자', patients는 '환자들'이라 뜻이 맞지 않고, patiently는 부사이다."
+   }
+  ],
+  "translation": "4월 7일 월요일부터 12번 버스는 새로운 경로로 운행합니다. 도로 공사 때문에 버스는 더 이상 엘름 스트리트에 정차하지 않습니다. 대신 베이 로드를 이용합니다.\n\n베이 로드에 새 정류장 두 곳이 추가됩니다. 한 곳은 시립 병원, 다른 한 곳은 링컨 고등학교 앞입니다. 이 정류장들로 환자와 학생들이 목적지에 더 쉽게 갈 수 있을 것입니다. 12번 노선의 다른 정류장은 바뀌지 않습니다.\n\n버스는 아침과 저녁 출퇴근 시간에는 15분마다 운행합니다. 그 외 시간에는 30분마다 옵니다. 요금은 그대로 2달러입니다.\n\n새 노선 지도는 모든 버스 정류장과 웹사이트에서 구할 수 있습니다. 무료 앱을 내려받아 버스 시간을 확인할 수도 있습니다.\n\n공사가 계속되는 동안 기다려 주셔서 감사합니다.\n\n리버턴 시 교통공사"
+ },
+ {
+  "id": "p6-025",
+  "level": 1,
+  "doc_type": "편지",
+  "title": "Greenview Park Association\n15 Garden Lane, Greenview\n\nMay 10\n\nMs. Julia Hayes\n82 River Street\nGreenview",
+  "passage": "Dear Ms. Hayes,\n\nThank you for visiting Greenview Park so often. We are writing to ask for your help. On Saturday, May 24, we will hold our yearly Park Clean-Up Day, and we need volunteers.\n\nVolunteers will pick up trash, plant flowers, and paint benches. The event starts at 9 A.M. and {1} at noon. {2} We will provide gloves, tools, and bags. After the work, all volunteers will enjoy a free lunch {3} by a local restaurant.\n\nLast year, more than 80 people joined us. This year, we hope to have even more. If you would like to take part, please fill out the enclosed form and send {4} back to us by May 17.\n\nThank you for your support.\n\nSincerely,\nRobert Chen\nVolunteer Coordinator",
+  "questions": [
+   {
+    "q": "",
+    "choices": [
+     "finishes",
+     "finish",
+     "finishing",
+     "finished"
+    ],
+    "answer": 0,
+    "type": "수 일치",
+    "explanation": "주어 The event는 단수이고 and 앞의 동사 starts와 같은 현재 시제로 나란히 이어져야 하므로 finishes가 정답이다. finish는 복수 주어용, finished는 과거라 starts와 맞지 않으며, finishing은 동사 자리에 올 수 없다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "The park will be closed all day on May 24.",
+     "Please pay the entrance fee at the gate.",
+     "You do not need to bring anything with you.",
+     "Our restaurant opens at 11 A.M. every day."
+    ],
+    "answer": 2,
+    "type": "문장 삽입",
+    "explanation": "바로 뒤 문장이 '장갑, 도구, 봉투를 제공한다'이므로 '아무것도 가져올 필요가 없다'는 문장이 앞에 오는 것이 자연스럽다. 공원 폐쇄는 행사 개최와 모순되고, 입장료와 식당 영업시간은 흐름과 관계없다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "provide",
+     "provided",
+     "providing",
+     "provides"
+    ],
+    "answer": 1,
+    "type": "준동사(to부정사·동명사·분사)",
+    "explanation": "점심은 식당에 의해 '제공되는' 것이므로 수동의 의미를 가진 과거분사 provided가 lunch를 뒤에서 꾸민다. 뒤의 by a local restaurant도 수동의 단서이다. providing은 능동, provide와 provides는 동사라 이 자리에 올 수 없다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "it",
+     "them",
+     "its",
+     "they"
+    ],
+    "answer": 0,
+    "type": "대명사",
+    "explanation": "보내야 할 것은 앞에 나온 the enclosed form(동봉된 신청서) 하나이므로 단수 목적격 it이 정답이다. them은 복수, its는 소유격, they는 주격이라 맞지 않는다."
+   }
+  ],
+  "translation": "헤이스 씨께,\n\n그린뷰 공원을 자주 찾아 주셔서 감사합니다. 도움을 요청드리고자 편지를 드립니다. 5월 24일 토요일에 매년 열리는 공원 대청소의 날 행사를 여는데, 자원봉사자가 필요합니다.\n\n자원봉사자들은 쓰레기를 줍고, 꽃을 심고, 벤치를 칠할 것입니다. 행사는 오전 9시에 시작해 정오에 끝납니다. 아무것도 가져오실 필요가 없습니다. 장갑, 도구, 봉투는 저희가 제공합니다. 작업이 끝나면 모든 자원봉사자는 지역 식당이 제공하는 무료 점심을 즐기게 됩니다.\n\n작년에는 80명이 넘는 분들이 함께해 주셨습니다. 올해는 더 많은 분이 오시기를 바랍니다. 참여를 원하시면 동봉된 신청서를 작성해 5월 17일까지 보내 주십시오.\n\n도와주셔서 감사합니다.\n\n로버트 첸\n자원봉사 담당자"
+ },
+ {
+  "id": "p6-026",
+  "level": 1,
+  "doc_type": "기사",
+  "title": "Summer Festival Brings Crowds to Lakeside",
+  "passage": "LAKESIDE (July 14) — Thousands of people came to Lakeside Park last weekend for the town's tenth Summer Festival. The two-day event {1} music, food, and games for families.\n\nLocal bands played on the main stage from noon until late at night. More than 30 food stands sold dishes from around the world. {2}, children enjoyed face painting and pony rides at the play area near the lake.\n\n\"This was our {3} festival ever,\" said organizer Maria Lopez. \"About 12,000 people attended, which is 2,000 more than last year.\" {4}\n\nThe festival is organized by volunteers and supported by local businesses. All money from ticket sales goes to the town's parks. Next year's festival will take place in July again, and organizers are already looking for new bands and food sellers.",
+  "questions": [
+   {
+    "q": "",
+    "choices": [
+     "features",
+     "will feature",
+     "featured",
+     "is featuring"
+    ],
+    "answer": 2,
+    "type": "동사 시제·태",
+    "explanation": "축제는 '지난 주말(last weekend)'에 열렸고 뒤 문장들도 played, sold 등 과거 시제이므로 과거형 featured가 정답이다. features, is featuring은 현재, will feature는 미래라 이미 끝난 행사에 맞지 않는다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "In addition",
+     "However",
+     "Instead",
+     "Otherwise"
+    ],
+    "answer": 0,
+    "type": "접속사",
+    "explanation": "밴드 공연, 음식 판매에 이어 어린이 활동을 하나 더 덧붙이고 있으므로 In addition(게다가)이 정답이다. However(하지만)는 반대, Instead(대신에)는 대체, Otherwise(그렇지 않으면)는 조건을 나타낸다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "big",
+     "bigger",
+     "most big",
+     "biggest"
+    ],
+    "answer": 3,
+    "type": "비교",
+    "explanation": "our와 ever가 함께 쓰여 '지금까지 중 가장 큰 축제'라는 뜻이 되어야 하므로 최상급 biggest가 정답이다. 뒤에서 작년보다 2,000명이 더 왔다는 내용도 단서다. bigger는 than과 함께 쓰고, most big은 틀린 형태이다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "Tickets for the first festival will go on sale next week.",
+     "Unfortunately, the festival was canceled because of rain.",
+     "The park will be sold to a private company next month.",
+     "She thanked all the volunteers who helped make the event a success."
+    ],
+    "answer": 3,
+    "type": "문장 삽입",
+    "explanation": "주최자가 축제의 성공을 말한 인용문 바로 뒤이므로 '행사를 성공으로 이끈 자원봉사자들에게 감사했다'는 문장이 자연스럽다. 올해가 열 번째 축제이므로 '첫 축제 표 판매'는 맞지 않고, 비로 취소되었다는 내용은 기사 전체와 모순되며, 공원 매각은 관계없다."
+   }
+  ],
+  "translation": "레이크사이드(7월 14일) — 지난 주말 수천 명이 마을의 열 번째 여름 축제를 즐기러 레이크사이드 공원을 찾았다. 이틀 동안 열린 이 행사에서는 가족을 위한 음악, 음식, 놀이가 펼쳐졌다.\n\n지역 밴드들이 정오부터 밤늦게까지 메인 무대에서 공연했다. 30개가 넘는 음식 가판대에서 세계 각국의 요리를 팔았다. 게다가 아이들은 호숫가 놀이 공간에서 페이스 페인팅과 조랑말 타기를 즐겼다.\n\n\"지금까지 열린 축제 중 가장 큰 축제였습니다\"라고 주최자 마리아 로페스는 말했다. \"약 1만 2천 명이 참석했는데, 작년보다 2천 명 많은 숫자입니다.\" 그녀는 행사를 성공으로 이끌어 준 모든 자원봉사자에게 감사를 전했다.\n\n이 축제는 자원봉사자들이 운영하고 지역 업체들이 후원한다. 입장권 판매 수익은 모두 마을 공원에 쓰인다. 내년 축제도 7월에 열릴 예정이며, 주최 측은 벌써 새 밴드와 음식 판매자를 찾고 있다."
+ },
+ {
+  "id": "p6-027",
+  "level": 2,
+  "doc_type": "이메일",
+  "title": "To: Priya Nair <pnair@fastmail.com>\nFrom: Harbor Crest Hotels Rewards <rewards@harborcrest.com>\nDate: August 5\nSubject: Welcome to Crest Rewards",
+  "passage": "Dear Ms. Nair,\n\nWelcome to Crest Rewards, the loyalty program of Harbor Crest Hotels! Thank you for {1} during your recent stay in Boston.\n\nAs a member, you will earn ten points for every dollar you spend at any of our 45 hotels. You can use these points for free nights, room upgrades, and meals at our restaurants. {2}\n\nMembers also enjoy other benefits. For example, you can check in early and check out {3} than other guests at no extra charge. In addition, you will receive special offers by e-mail each month.\n\nTo see your points, simply log in to your account at www.harborcrest.com/rewards. Your member number is HC-58210. Please keep this number {4} you can use it when you make your next reservation.\n\nWe look forward to seeing you again soon.\n\nHarbor Crest Hotels",
+  "questions": [
+   {
+    "q": "",
+    "choices": [
+     "join",
+     "joined",
+     "joining",
+     "to join"
+    ],
+    "answer": 2,
+    "type": "준동사(to부정사·동명사·분사)",
+    "explanation": "Thank you for 뒤의 for는 전치사이므로 동명사가 와야 한다. 따라서 joining이 정답이다. 이메일 첫 줄의 Welcome to Crest Rewards로 보아 '가입해 주셔서 감사하다'는 뜻이다. 동사원형 join, 과거형 joined, to부정사 to join은 전치사 뒤에 올 수 없다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "Points never expire as long as you stay with us at least once every two years.",
+     "Unfortunately, our Boston hotel is fully booked this month.",
+     "Please return your room key to the front desk.",
+     "Please note that our hotels do not have restaurants."
+    ],
+    "answer": 0,
+    "type": "문장 삽입",
+    "explanation": "앞 문장이 포인트를 적립하고 사용하는 방법이므로 '2년에 한 번 이상 숙박하면 포인트가 소멸되지 않는다'는 포인트 관련 설명이 이어지는 것이 자연스럽다. 식당이 없다는 문장은 '레스토랑 식사에 포인트를 쓸 수 있다'는 내용과 모순되고, 나머지는 흐름과 관계없다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "late",
+     "later",
+     "latest",
+     "lately"
+    ],
+    "answer": 1,
+    "type": "비교",
+    "explanation": "뒤에 than other guests가 있으므로 비교급 later가 정답이다. 앞의 early와 짝을 이뤄 '다른 손님보다 늦게 퇴실'한다는 뜻이다. latest는 최상급, lately는 '최근에'라는 다른 뜻의 부사이다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "so that",
+     "even if",
+     "although",
+     "unless"
+    ],
+    "answer": 0,
+    "type": "접속사",
+    "explanation": "번호를 보관하는 목적이 '다음 예약 때 사용할 수 있도록'이므로 목적을 나타내는 so that이 정답이다. even if(~라 하더라도), although(~이지만)는 양보, unless(~하지 않으면)는 조건이라 뜻이 맞지 않는다."
+   }
+  ],
+  "translation": "나이르 씨께,\n\n하버 크레스트 호텔의 고객 우대 프로그램인 크레스트 리워즈에 오신 것을 환영합니다! 최근 보스턴에 머무시는 동안 가입해 주셔서 감사합니다.\n\n회원으로서 저희 45개 호텔 어디에서든 1달러를 쓰실 때마다 10포인트를 적립하게 됩니다. 이 포인트는 무료 숙박, 객실 업그레이드, 저희 레스토랑 식사에 사용할 수 있습니다. 2년에 한 번 이상 저희 호텔에 숙박하시면 포인트는 소멸되지 않습니다.\n\n회원은 다른 혜택도 누립니다. 예를 들어 추가 요금 없이 다른 손님보다 일찍 체크인하고 늦게 체크아웃할 수 있습니다. 또한 매달 이메일로 특별 혜택을 받게 됩니다.\n\n포인트를 확인하시려면 www.harborcrest.com/rewards에서 계정에 로그인하시면 됩니다. 회원 번호는 HC-58210입니다. 다음 예약 때 사용하실 수 있도록 이 번호를 보관해 주십시오.\n\n곧 다시 뵙기를 기대합니다.\n\n하버 크레스트 호텔"
+ },
+ {
+  "id": "p6-028",
+  "level": 2,
+  "doc_type": "공지",
+  "title": "MEMO\nTo: All Staff\nFrom: Facilities Department\nDate: November 3\nSubject: Office move",
+  "passage": "As many of you know, our company has grown quickly over the past two years. To make room for our growing team, we will move to a new office at 250 Madison Avenue on Saturday, December 6.\n\nThe new office is larger and closer to the subway station. It also has two meeting rooms and a kitchen {1} all employees can use. {2}\n\nBefore the move, each employee will receive boxes and labels. Please pack your personal items and write your name on each box. The moving company will take care of all furniture and computers, so you do not need to pack {3}.\n\nWe expect the move to go smoothly. {4}, if any of your equipment does not work on Monday, December 8, please contact the IT help desk immediately.\n\nThank you for your cooperation.",
+  "questions": [
+   {
+    "q": "",
+    "choices": [
+     "who",
+     "what",
+     "that",
+     "where"
+    ],
+    "answer": 2,
+    "type": "관계사",
+    "explanation": "선행사 a kitchen(사물)을 꾸미고, 뒤 절 all employees can use에 목적어가 빠져 있으므로 목적격 관계대명사 that이 정답이다. who는 사람에게 쓰고, what은 선행사를 포함하므로 앞에 명사가 올 수 없으며, where는 뒤에 완전한 절이 와야 한다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "Our company has decided to reduce its number of employees.",
+     "Please pack all furniture by Friday.",
+     "The subway station will be closed for repairs until next year.",
+     "A floor plan showing each department's new location is attached."
+    ],
+    "answer": 3,
+    "type": "문장 삽입",
+    "explanation": "새 사무실의 규모와 시설을 설명한 단락의 끝이므로 '각 부서의 새 위치를 보여 주는 배치도를 첨부한다'는 문장이 자연스럽다. 회사가 빠르게 성장했다고 했으므로 인원 감축은 모순이고, 가구는 이사 업체가 맡는다고 했으므로 가구 포장 요청도 맞지 않는다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "it",
+     "themselves",
+     "them",
+     "theirs"
+    ],
+    "answer": 2,
+    "type": "대명사",
+    "explanation": "포장할 필요가 없는 것은 앞의 all furniture and computers(복수)이므로 목적격 복수 대명사 them이 정답이다. it은 단수, themselves는 주어와 같은 대상을 가리킬 때 쓰며, theirs는 소유대명사이다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "However",
+     "Therefore",
+     "For example",
+     "Similarly"
+    ],
+    "answer": 0,
+    "type": "접속사",
+    "explanation": "'이사가 순조로울 것으로 예상한다'는 말 뒤에 '그래도 장비가 작동하지 않으면 연락하라'는 반대 가능성이 이어지므로 However가 정답이다. Therefore(그러므로), For example(예를 들어), Similarly(마찬가지로)는 이 관계를 나타내지 않는다."
+   }
+  ],
+  "translation": "많은 분들이 아시다시피 우리 회사는 지난 2년 동안 빠르게 성장했습니다. 늘어나는 인원을 수용하기 위해 12월 6일 토요일에 매디슨 애비뉴 250번지의 새 사무실로 이전합니다.\n\n새 사무실은 더 넓고 지하철역과 더 가깝습니다. 또한 회의실 두 개와 모든 직원이 사용할 수 있는 주방이 있습니다. 각 부서의 새 위치를 보여 주는 배치도를 첨부합니다.\n\n이사 전에 각 직원은 상자와 라벨을 받게 됩니다. 개인 물품을 포장하고 상자마다 이름을 적어 주십시오. 가구와 컴퓨터는 모두 이사 업체가 처리하므로 그것들은 포장하실 필요가 없습니다.\n\n이사는 순조롭게 진행될 것으로 예상합니다. 하지만 12월 8일 월요일에 장비가 작동하지 않으면 즉시 IT 헬프 데스크에 연락해 주십시오.\n\n협조해 주셔서 감사합니다."
+ },
+ {
+  "id": "p6-029",
+  "level": 2,
+  "doc_type": "광고",
+  "title": "Oceans Alive! — A New Exhibit at the Carver Science Museum",
+  "passage": "Dive into the deep sea without getting wet! Oceans Alive!, the Carver Science Museum's newest exhibit, opens on March 15 and {1} until September 30.\n\nVisitors can walk through a glass tunnel surrounded by giant screens that show whales, sharks, and colorful coral reefs. They can also touch real sea stars in our touch pool, {2} is supervised by trained staff at all times. {3}\n\nThe exhibit is especially popular with school groups. Teachers who book a class visit at least two weeks in advance will receive a free activity guide for {4} students.\n\nTickets are $15 for adults and $8 for children under 12. Museum members can visit the exhibit for free. For more information, visit www.carverscience.org.",
+  "questions": [
+   {
+    "q": "",
+    "choices": [
+     "will run",
+     "ran",
+     "has run",
+     "was running"
+    ],
+    "answer": 0,
+    "type": "동사 시제·태",
+    "explanation": "전시는 3월 15일에 '열리고(opens)' 9월 30일까지 계속될 예정이므로 미래 시제 will run이 정답이다. 광고는 앞으로 열릴 전시를 알리고 있으므로 ran, has run, was running처럼 지난 일을 나타내는 형태는 맞지 않는다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "who",
+     "where",
+     "which",
+     "what"
+    ],
+    "answer": 2,
+    "type": "관계사",
+    "explanation": "콤마 뒤에서 앞의 사물 our touch pool을 보충 설명하고, 뒤 절에 주어가 빠져 있으므로 주격 관계대명사 which가 정답이다. who는 사람, where는 뒤에 완전한 절이 필요하며, what은 콤마 뒤 계속적 용법으로 쓰지 않는다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "The museum is closed from March to September.",
+     "Swimming lessons are offered to all visitors.",
+     "The coral reef in the exhibit was destroyed by a storm last year.",
+     "A short film about protecting the ocean is also shown every hour in our theater."
+    ],
+    "answer": 3,
+    "type": "문장 삽입",
+    "explanation": "관람객이 할 수 있는 체험(터널 걷기, 불가사리 만지기)을 나열한 단락이므로 '매시간 해양 보호 단편 영화도 상영한다'는 체험이 하나 더 추가되는 것이 자연스럽다. 3월~9월 휴관은 전시 기간과 모순되고, 수영 강습과 산호초 파괴는 흐름에 맞지 않는다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "its",
+     "our",
+     "his",
+     "their"
+    ],
+    "answer": 3,
+    "type": "대명사",
+    "explanation": "활동 안내서는 교사들의 학생들을 위한 것이므로 Teachers(복수)를 가리키는 소유격 their가 정답이다. its는 사물 단수, his는 남성 단수를 가리키고, our는 박물관 자신의 학생이 되어 뜻이 맞지 않는다."
+   }
+  ],
+  "translation": "물에 젖지 않고 깊은 바다로 뛰어드세요! 카버 과학관의 최신 전시 <오션스 얼라이브!>가 3월 15일에 개막해 9월 30일까지 계속됩니다.\n\n관람객은 고래, 상어, 형형색색의 산호초를 보여 주는 대형 스크린으로 둘러싸인 유리 터널을 걸을 수 있습니다. 또한 터치 풀에서 진짜 불가사리를 만져 볼 수도 있는데, 이곳은 항상 훈련받은 직원이 지켜봅니다. 극장에서는 매시간 해양 보호에 관한 단편 영화도 상영합니다.\n\n이 전시는 특히 학교 단체에게 인기가 많습니다. 최소 2주 전에 학급 관람을 예약하는 교사는 학생들을 위한 무료 활동 안내서를 받습니다.\n\n입장료는 성인 15달러, 12세 미만 어린이 8달러입니다. 과학관 회원은 무료로 관람할 수 있습니다. 자세한 정보는 www.carverscience.org를 방문하세요."
+ },
+ {
+  "id": "p6-030",
+  "level": 2,
+  "doc_type": "편지",
+  "title": "Westbrook Property Management\n410 Cedar Avenue, Portland, OR 97205\n\nJune 2\n\nMr. Samuel Ortiz\nApartment 5B, 18 Hill Street\nPortland, OR 97210",
+  "passage": "Dear Mr. Ortiz,\n\nYour lease for Apartment 5B {1} on August 31. We have enjoyed having you as a tenant, and we would like to offer you a new one-year lease.\n\nUnder the new lease, your monthly rent will increase slightly, from $1,200 to $1,250. This is the first increase in three years, and the new rent is still {2} lower than the average rent for similar apartments in the area. {3}\n\nIf you wish to stay, please sign both copies of the enclosed lease and return one to our office by July 15. If we do not hear from you by that date, we will assume that you plan to move out, and the apartment will be {4} to new tenants.\n\nPlease feel free to contact me with any questions.\n\nSincerely,\nGrace Lin\nProperty Manager",
+  "questions": [
+   {
+    "q": "",
+    "choices": [
+     "expires",
+     "expired",
+     "has expired",
+     "was expiring"
+    ],
+    "answer": 0,
+    "type": "동사 시제·태",
+    "explanation": "편지는 6월 2일에 쓰였고 '새 임대 계약을 제안한다'고 했으므로 8월 31일 만료는 앞으로 정해진 일이다. 확정된 일정은 현재 시제로 나타낼 수 있으므로 expires가 정답이다. expired, has expired, was expiring은 이미 끝났다는 뜻이 되어 맞지 않는다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "very",
+     "much",
+     "more",
+     "most"
+    ],
+    "answer": 1,
+    "type": "비교",
+    "explanation": "비교급 lower를 강조할 때는 much를 쓴다. very는 원급을 꾸미고, more는 이미 비교급인 lower 앞에 다시 쓸 수 없으며, most는 최상급을 만든다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "Your rent will be reduced to $1,000 next year.",
+     "In addition, we will repaint the hallways and replace the carpets in the building this fall.",
+     "We are sorry that you have decided to move out.",
+     "The apartment is currently empty."
+    ],
+    "answer": 1,
+    "type": "문장 삽입",
+    "explanation": "임대료 인상이 크지 않다고 설명한 뒤 '게다가 가을에 복도 도색과 카펫 교체를 한다'며 계약 연장의 장점을 덧붙이는 것이 자연스럽다. 임대료는 오르므로 1,000달러 인하는 모순이고, 세입자가 이사를 결정한 적도 없으며, 현재 살고 있으므로 빈집이라는 말도 틀리다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "applied",
+     "reminded",
+     "offered",
+     "informed"
+    ],
+    "answer": 2,
+    "type": "어휘",
+    "explanation": "기존 세입자가 답하지 않으면 아파트를 새 세입자에게 '내놓는다'는 뜻이 되어야 하므로 offered가 정답이다. applied(적용된), reminded(상기된), informed(통지받은)는 'to new tenants'와 함께 뜻이 통하지 않는다."
+   }
+  ],
+  "translation": "오르티스 씨께,\n\n5B호 아파트의 임대 계약이 8월 31일에 만료됩니다. 그동안 세입자로 모실 수 있어 기뻤으며, 새로운 1년 임대 계약을 제안드리고자 합니다.\n\n새 계약에서는 월세가 1,200달러에서 1,250달러로 약간 인상됩니다. 이는 3년 만의 첫 인상이며, 새 월세도 이 지역의 비슷한 아파트 평균 월세보다 훨씬 낮습니다. 또한 올가을에는 건물 복도를 새로 칠하고 카펫을 교체할 예정입니다.\n\n계속 거주하기를 원하시면 동봉된 계약서 두 부에 모두 서명하시고 7월 15일까지 한 부를 저희 사무실로 보내 주십시오. 그때까지 연락이 없으면 이사하실 계획으로 알고 아파트를 새 세입자에게 내놓겠습니다.\n\n궁금한 점이 있으시면 언제든지 연락해 주십시오.\n\n그레이스 린\n부동산 관리 책임자"
+ },
+ {
+  "id": "p6-031",
+  "level": 2,
+  "doc_type": "기사",
+  "title": "Review: Casa Verde Brings Fresh Flavors to Main Street",
+  "passage": "Casa Verde, which opened on Main Street last month, is already one of the busiest restaurants in town. After two visits, I can see why.\n\nThe menu is small but carefully chosen. Most dishes are made with vegetables from the owner's own farm, and the flavors are bright and fresh. The grilled corn soup was especially {1}. {2}, the roasted chicken was a little dry on my second visit.\n\nThe service is friendly and quick. Our server explained each dish {3} and suggested a wonderful local wine. {4}\n\nPrices are reasonable, with most main dishes under $20. Casa Verde is open Tuesday through Sunday, and reservations are strongly recommended on weekends.\n\n— Review by Ellen Park",
+  "questions": [
+   {
+    "q": "",
+    "choices": [
+     "crowded",
+     "late",
+     "expensive",
+     "impressive"
+    ],
+    "answer": 3,
+    "type": "어휘",
+    "explanation": "앞 문장에서 음식 맛이 밝고 신선하다고 칭찬하고 있으므로 옥수수 수프가 특히 '인상적이었다'는 impressive가 정답이다. crowded(붐비는)는 음식에 쓰지 않고, expensive(비싼)는 뒤의 '가격이 합리적'이라는 내용과 어긋나며, late(늦은)는 뜻이 맞지 않는다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "As a result",
+     "For instance",
+     "On the other hand",
+     "In addition"
+    ],
+    "answer": 2,
+    "type": "접속사",
+    "explanation": "앞에서는 수프를 칭찬하고 뒤에서는 닭고기가 퍽퍽했다는 단점을 말하므로 대조를 나타내는 On the other hand(반면에)가 정답이다. As a result(그 결과), For instance(예를 들어), In addition(게다가)은 대조 관계를 나타내지 않는다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "clear",
+     "clearly",
+     "clearer",
+     "clearness"
+    ],
+    "answer": 1,
+    "type": "품사",
+    "explanation": "동사 explained와 목적어 each dish로 이미 완전한 문장이므로 동사를 꾸미는 부사 clearly가 정답이다. clear, clearer는 형용사, clearness는 명사라 이 자리에 올 수 없다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "However, we had to wait almost an hour for our food.",
+     "The restaurant has been closed for more than ten years.",
+     "The chef is planning to open a bakery in Paris.",
+     "Even on a busy Friday night, we never waited long for our food."
+    ],
+    "answer": 3,
+    "type": "문장 삽입",
+    "explanation": "서비스가 '친절하고 빠르다'고 한 단락이므로 '붐비는 금요일 밤에도 오래 기다리지 않았다'는 문장이 이를 뒷받침한다. 한 시간 대기는 '빠르다'와 모순되고, 지난달 개업했으므로 10년 폐업도 틀리며, 파리 제과점 계획은 흐름과 관계없다."
+   }
+  ],
+  "translation": "지난달 메인 스트리트에 문을 연 카사 베르데는 벌써 동네에서 가장 붐비는 식당 중 하나가 되었다. 두 번 방문해 보니 그 이유를 알 수 있었다.\n\n메뉴는 적지만 신중하게 골라졌다. 대부분의 요리는 주인의 농장에서 기른 채소로 만들어지며, 맛이 산뜻하고 신선하다. 구운 옥수수 수프가 특히 인상적이었다. 반면에 두 번째 방문 때 로스트 치킨은 조금 퍽퍽했다.\n\n서비스는 친절하고 빠르다. 서버는 요리 하나하나를 명확하게 설명해 주었고 훌륭한 지역 와인을 추천해 주었다. 붐비는 금요일 밤에도 음식을 오래 기다린 적이 없었다.\n\n가격은 합리적이며 대부분의 메인 요리가 20달러 미만이다. 카사 베르데는 화요일부터 일요일까지 영업하며, 주말에는 예약을 강력히 권한다.\n\n— 엘렌 박 리뷰"
+ },
+ {
+  "id": "p6-032",
+  "level": 2,
+  "doc_type": "안내문",
+  "title": "Workshop Information: Effective Presentations\nKellerman Consulting — Staff Development Program",
+  "passage": "All employees are invited to attend a one-day workshop on giving effective presentations. The workshop will be held on Thursday, October 16, from 9:00 A.M. to 4:00 P.M. in Conference Room A.\n\nThe workshop will be led by Dr. Nora Blake, a communication expert {1} has trained staff at more than 200 companies. Participants will learn how to organize their ideas, design clear slides, and speak with confidence. {2}\n\nSpace is limited to 25 people. To register, please send an e-mail to training@kellerman.com by October 9. Because the workshop takes place during regular working hours, you must also get {3} from your manager before registering.\n\nLunch and refreshments will be provided. Participants are asked {4} a laptop, as there will be several hands-on activities.",
+  "questions": [
+   {
+    "q": "",
+    "choices": [
+     "whose",
+     "which",
+     "who",
+     "whom"
+    ],
+    "answer": 2,
+    "type": "관계사",
+    "explanation": "선행사 a communication expert는 사람이고 뒤 절 has trained ...에 주어가 없으므로 주격 관계대명사 who가 정답이다. which는 사물, whose는 뒤에 명사가 와야 하며, whom은 목적격이라 주어 자리를 채울 수 없다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "Each participant will also give a short practice presentation and receive feedback.",
+     "The workshop has been canceled due to low interest.",
+     "Dr. Blake will not be able to attend the workshop.",
+     "Registration is not necessary for this event."
+    ],
+    "answer": 0,
+    "type": "문장 삽입",
+    "explanation": "참가자들이 배울 내용을 설명하는 단락이므로 '짧은 연습 발표를 하고 피드백을 받는다'는 활동이 이어지는 것이 자연스럽다. 워크숍 취소와 강사 불참은 안내문 전체와 모순되고, 뒤에서 등록 방법을 안내하므로 등록 불필요도 틀리다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "attention",
+     "access",
+     "advice",
+     "approval"
+    ],
+    "answer": 3,
+    "type": "어휘",
+    "explanation": "워크숍이 근무 시간 중에 열리므로(Because ...) 등록 전에 관리자의 '승인'을 받아야 한다는 뜻이 자연스럽다. 따라서 approval이 정답이다. attention(주의), access(접근), advice(조언)는 근무 시간 중 참석과 논리적으로 연결되지 않는다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "bring",
+     "bringing",
+     "to bring",
+     "brought"
+    ],
+    "answer": 2,
+    "type": "준동사(to부정사·동명사·분사)",
+    "explanation": "ask A to do(A에게 ~하라고 요청하다)의 수동태 be asked to do 구조이므로 to bring이 정답이다. bring, bringing, brought는 are asked 뒤에서 이 구조를 이루지 못한다."
+   }
+  ],
+  "translation": "전 직원을 효과적인 발표에 관한 하루 워크숍에 초대합니다. 워크숍은 10월 16일 목요일 오전 9시부터 오후 4시까지 A 회의실에서 열립니다.\n\n워크숍은 200개가 넘는 회사의 직원을 교육한 커뮤니케이션 전문가 노라 블레이크 박사가 진행합니다. 참가자들은 생각을 정리하고, 명확한 슬라이드를 만들고, 자신감 있게 말하는 법을 배웁니다. 각 참가자는 짧은 연습 발표도 하고 피드백을 받게 됩니다.\n\n정원은 25명입니다. 등록하려면 10월 9일까지 training@kellerman.com으로 이메일을 보내 주십시오. 워크숍이 정규 근무 시간에 진행되므로 등록 전에 관리자의 승인도 받아야 합니다.\n\n점심과 다과가 제공됩니다. 실습 활동이 여러 번 있으므로 참가자는 노트북을 가져오시기 바랍니다."
+ },
+ {
+  "id": "p6-033",
+  "level": 3,
+  "doc_type": "공지",
+  "title": "PRODUCT RECALL NOTICE\nBrightHome AquaPure Electric Kettle (Model AK-200)",
+  "passage": "BrightHome Appliances is voluntarily recalling its AquaPure Electric Kettle, Model AK-200. The kettles {1} between January and April of this year and were sold at home goods stores nationwide.\n\nOur quality team has found that the handle on some units may become loose after repeated use. {2} Although no injuries have been reported, we are taking this step to ensure our customers' safety.\n\nCustomers should stop using the kettle immediately and check the model number printed on the bottom. {3} your kettle is an AK-200, you are entitled to a full refund or a free replacement. Simply bring the product to any participating store, with or without a receipt.\n\nFor a list of participating stores, visit www.brighthome.com/recall or call 1-800-555-0147. We sincerely apologize for any inconvenience this may cause, and we {4} your understanding.",
+  "questions": [
+   {
+    "q": "",
+    "choices": [
+     "manufactured",
+     "have manufactured",
+     "were manufactured",
+     "are manufacturing"
+    ],
+    "answer": 2,
+    "type": "동사 시제·태",
+    "explanation": "주전자는 스스로 만드는 것이 아니라 '만들어지는' 대상이므로 수동태가 필요하고, 올해 1~4월이라는 지난 기간이며 뒤의 were sold와 나란히 쓰였으므로 과거 수동태 were manufactured가 정답이다. manufactured, have manufactured, are manufacturing은 모두 능동이라 목적어가 필요하다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "The kettle has received several design awards this year.",
+     "As a result, several customers have been seriously injured.",
+     "In rare cases, this could cause the kettle to tip over while it contains hot water.",
+     "Customers who bought the kettle last year will receive a discount coupon."
+    ],
+    "answer": 2,
+    "type": "문장 삽입",
+    "explanation": "앞 문장이 '손잡이가 헐거워질 수 있다'는 결함이므로 그 결함이 일으킬 수 있는 위험(뜨거운 물이 든 채 기울어짐)을 설명하는 문장이 이어진다. 바로 뒤에 '부상 보고는 없다'고 했으므로 '심각한 부상'은 모순이고, 디자인상과 할인 쿠폰은 리콜 흐름과 맞지 않는다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "Unless",
+     "Although",
+     "Whether",
+     "If"
+    ],
+    "answer": 3,
+    "type": "접속사",
+    "explanation": "'모델 번호를 확인해서 AK-200이라면 환불·교환을 받을 수 있다'는 조건 관계이므로 If가 정답이다. Unless(~하지 않으면)는 반대 조건, Although(~이지만)는 양보라 뜻이 맞지 않고, Whether는 or not 등과 함께 '~인지 아닌지'를 나타내 주절과 이렇게 이어지지 않는다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "depend",
+     "respond",
+     "apologize",
+     "appreciate"
+    ],
+    "answer": 3,
+    "type": "어휘",
+    "explanation": "사과에 이어 '양해해 주셔서 감사하다'는 뜻이 되도록 목적어 your understanding을 바로 취하는 appreciate가 정답이다. depend와 respond는 자동사라 on, to가 필요하고, apologize는 이미 앞에서 쓴 표현이며 your understanding을 목적어로 취하지 않는다."
+   }
+  ],
+  "translation": "브라이트홈 가전은 아쿠아퓨어 전기 주전자 AK-200 모델을 자발적으로 리콜합니다. 해당 주전자는 올해 1월에서 4월 사이에 제조되어 전국의 생활용품 매장에서 판매되었습니다.\n\n당사 품질팀은 일부 제품의 손잡이가 반복 사용 후 헐거워질 수 있다는 사실을 발견했습니다. 드문 경우 이로 인해 뜨거운 물이 담긴 상태에서 주전자가 넘어질 수 있습니다. 부상 사례는 보고되지 않았지만 고객의 안전을 위해 이 조치를 취합니다.\n\n고객께서는 즉시 주전자 사용을 중단하고 바닥에 인쇄된 모델 번호를 확인해 주십시오. 주전자가 AK-200이라면 전액 환불이나 무료 교환을 받으실 수 있습니다. 영수증 유무와 관계없이 참여 매장에 제품을 가져오시기만 하면 됩니다.\n\n참여 매장 목록은 www.brighthome.com/recall을 방문하시거나 1-800-555-0147로 전화해 확인하십시오. 이로 인해 불편을 드릴 수 있는 점 진심으로 사과드리며, 양해해 주셔서 감사합니다."
+ },
+ {
+  "id": "p6-034",
+  "level": 3,
+  "doc_type": "이메일",
+  "title": "To: Olivia Grant <ogrant@webmail.com>\nFrom: Customer Care <care@stridefootwear.com>\nDate: September 22\nSubject: RE: Order #48213",
+  "passage": "Dear Ms. Grant,\n\nThank you for contacting Stride Footwear. I was sorry to read that the running shoes you ordered arrived in the wrong size. I have looked into your order, and it appears that the mistake occurred in our warehouse, not on your part.\n\nA pair in the correct size, 7.5, {1} to you this morning by express delivery. You should receive it within two business days. {2}, please return the incorrect pair using the prepaid shipping label attached to this e-mail. {3}\n\nTo apologize for the trouble, I have also added a $20 credit to your account. It will be applied automatically the next time you shop with {4}.\n\nIf there is anything else I can do for you, please let me know.\n\nBest regards,\nDaniel Reyes\nCustomer Care Team",
+  "questions": [
+   {
+    "q": "",
+    "choices": [
+     "was shipped",
+     "will ship",
+     "has shipped",
+     "is shipping"
+    ],
+    "answer": 0,
+    "type": "동사 시제·태",
+    "explanation": "신발은 '보내지는' 대상이므로 수동태가 필요하고, this morning(오늘 아침)이라는 지난 시점이 있으므로 과거 수동태 was shipped가 정답이다. has shipped, is shipping, will ship은 능동이며, will ship은 이미 지난 오늘 아침과도 맞지 않는다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "Otherwise",
+     "Meanwhile",
+     "Nevertheless",
+     "Consequently"
+    ],
+    "answer": 1,
+    "type": "접속사",
+    "explanation": "새 신발이 도착하기까지 이틀이 걸리는데 '그동안' 잘못 온 신발을 반품해 달라는 흐름이므로 Meanwhile(그동안, 한편)이 정답이다. Otherwise(그렇지 않으면), Nevertheless(그럼에도 불구하고), Consequently(그 결과)는 두 문장의 관계와 맞지 않는다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "Unfortunately, size 7.5 is currently out of stock.",
+     "We are glad to hear that the shoes fit you perfectly.",
+     "Simply drop the package off at any post office; there is no charge to you.",
+     "Your refund has been sent to your credit card."
+    ],
+    "answer": 2,
+    "type": "문장 삽입",
+    "explanation": "앞 문장이 선불 배송 라벨을 이용한 반품 요청이므로 '우체국에 맡기기만 하면 되고 비용은 없다'는 반품 방법 안내가 이어진다. 7.5 사이즈는 이미 발송되었으므로 품절은 모순이고, 신발이 딱 맞는다는 말은 사이즈가 틀렸다는 내용과 반대이며, 환불이 아니라 교환이다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "our",
+     "ours",
+     "we",
+     "us"
+    ],
+    "answer": 3,
+    "type": "대명사",
+    "explanation": "전치사 with의 목적어 자리이며, 쇼핑하는 곳은 이메일을 보낸 회사(Stride Footwear)이므로 목적격 us가 정답이다. our는 소유격이라 뒤에 명사가 필요하고, ours는 '우리의 것', we는 주격이라 전치사 뒤에 올 수 없다."
+   }
+  ],
+  "translation": "그랜트 씨께,\n\n스트라이드 풋웨어에 연락해 주셔서 감사합니다. 주문하신 러닝화가 잘못된 사이즈로 도착했다는 글을 읽고 죄송했습니다. 주문 내역을 확인해 보니 실수는 고객님이 아니라 저희 창고에서 발생한 것으로 보입니다.\n\n올바른 사이즈인 7.5 제품이 오늘 아침 빠른 배송으로 발송되었습니다. 영업일 기준 2일 안에 받으실 것입니다. 그동안 이 이메일에 첨부된 선불 배송 라벨을 이용해 잘못 간 제품을 반품해 주십시오. 가까운 우체국에 소포를 맡기기만 하시면 되며, 비용은 들지 않습니다.\n\n불편을 드린 데 대한 사과로 고객님 계정에 20달러 적립금도 넣어 드렸습니다. 다음에 저희 매장에서 쇼핑하실 때 자동으로 적용됩니다.\n\n더 도와드릴 일이 있으면 알려 주십시오.\n\n다니엘 레예스\n고객 지원팀"
+ },
+ {
+  "id": "p6-035",
+  "level": 3,
+  "doc_type": "광고",
+  "title": "Now Hiring: Assistant Store Manager\nFreshway Supermarkets",
+  "passage": "Freshway Supermarkets, a chain of 38 grocery stores across the Midwest, is seeking an assistant store manager for its new location in Springfield, which is scheduled to open in May.\n\nThe successful candidate will help the store manager supervise a team of about 40 employees, {1} work schedules, and monitor inventory levels. The position also involves {2} customer concerns in a friendly and professional manner. {3}\n\nApplicants should have at least two years of experience in retail management. Experience in the grocery industry is preferred but not required. Candidates must also be available to work {4} evenings and weekends.\n\nFreshway offers a competitive salary, health insurance, and a generous employee discount. To apply, please submit a résumé and cover letter at www.freshway.com/careers by March 31.",
+  "questions": [
+   {
+    "q": "",
+    "choices": [
+     "prepared",
+     "preparation",
+     "preparing",
+     "prepare"
+    ],
+    "answer": 3,
+    "type": "준동사(to부정사·동명사·분사)",
+    "explanation": "help A (to) do 구조에서 supervise, prepare, monitor 세 동사원형이 콤마와 and로 나란히 이어지는 병렬 구조이므로 prepare가 정답이다. prepared, preparing은 supervise·monitor와 형태가 맞지 않고, preparation은 명사이다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "addressing",
+     "admitting",
+     "attending",
+     "advertising"
+    ],
+    "answer": 0,
+    "type": "어휘",
+    "explanation": "customer concerns(고객 불만·우려)를 '처리하다'라는 뜻의 address가 알맞으므로 addressing이 정답이다. attending(참석하는), admitting(인정하는), advertising(광고하는)은 고객 불만과 어울리지 않는다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "No previous experience is necessary for this position.",
+     "Customers can order groceries online for home delivery.",
+     "The Springfield store closed last year after 20 years of business.",
+     "The assistant manager will also be responsible for training new staff members."
+    ],
+    "answer": 3,
+    "type": "문장 삽입",
+    "explanation": "앞 두 문장이 업무 내용(직원 관리, 일정, 재고, 고객 응대)이므로 '신입 직원 교육도 담당한다'는 업무가 하나 더 추가되는 것이 자연스럽다. 뒤에서 2년 경력이 필요하다고 했으므로 경력 불필요는 모순이고, 스프링필드 매장은 5월 개장 예정이므로 폐점도 틀리다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "occasionally",
+     "occasional",
+     "occasion",
+     "occasioned"
+    ],
+    "answer": 1,
+    "type": "품사",
+    "explanation": "빈칸 뒤 evenings and weekends는 work의 시간을 나타내는 명사구이므로 이를 꾸미는 형용사 occasional(가끔의)이 정답이다. 부사 occasionally는 명사를 꾸밀 수 없고, occasion은 명사, occasioned는 동사의 과거형이다."
+   }
+  ],
+  "translation": "중서부 전역에 38개 식료품점을 운영하는 프레시웨이 슈퍼마켓이 5월 개장 예정인 스프링필드 신규 매장의 부점장을 찾고 있습니다.\n\n채용된 분은 점장을 도와 약 40명의 직원을 관리하고, 근무 일정을 짜고, 재고 수준을 점검하게 됩니다. 이 직무는 친절하고 전문적인 태도로 고객 불만을 처리하는 일도 포함합니다. 부점장은 신입 직원 교육도 책임지게 됩니다.\n\n지원자는 소매점 관리 경력이 최소 2년 있어야 합니다. 식료품 업계 경력은 우대하지만 필수는 아닙니다. 또한 가끔 저녁과 주말에도 근무할 수 있어야 합니다.\n\n프레시웨이는 경쟁력 있는 급여, 건강 보험, 넉넉한 직원 할인을 제공합니다. 지원하시려면 3월 31일까지 www.freshway.com/careers에서 이력서와 자기소개서를 제출해 주십시오."
+ },
+ {
+  "id": "p6-036",
+  "level": 3,
+  "doc_type": "기사",
+  "title": "Local Bakery Wins National Small Business Award",
+  "passage": "MILLBROOK (May 8) — Hanson's Bakery, a family-owned business on Center Street, has been named Small Business of the Year by the National Retail Federation. The award recognizes companies that show excellence in customer service, growth, and community involvement.\n\nOwner Peter Hanson opened the bakery in 2009 with just two employees. Today, it employs 35 people and supplies bread to more than 60 restaurants in the region. {1}, the bakery donates its unsold bread to local food banks every evening.\n\n\"We are honored to receive this award,\" said Mr. Hanson. \"It really belongs to our staff, {2} hard work made it possible.\" {3}\n\nHanson's Bakery will receive a $10,000 prize, which Mr. Hanson plans to use to {4} the bakery's kitchen. The award will be presented at a ceremony in Washington, D.C., on June 12.",
+  "questions": [
+   {
+    "q": "",
+    "choices": [
+     "Instead",
+     "In addition",
+     "Otherwise",
+     "Even so"
+    ],
+    "answer": 1,
+    "type": "접속사",
+    "explanation": "앞에서 성장(직원 35명, 식당 60곳 납품)을 말하고, 뒤에서 지역 사회 기여(푸드뱅크 기부)를 덧붙이므로 In addition(게다가)이 정답이다. 두 내용 모두 수상 이유를 뒷받침하므로 Instead(대신에), Otherwise(그렇지 않으면), Even so(그렇기는 하지만)는 맞지 않는다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "whose",
+     "who",
+     "which",
+     "whom"
+    ],
+    "answer": 0,
+    "type": "관계사",
+    "explanation": "선행사 our staff와 빈칸 뒤 명사 hard work가 '직원들의 노고'라는 소유 관계이므로 소유격 관계대명사 whose가 정답이다. who, which, whom 뒤에는 hard work made ...처럼 완전한 절이 바로 올 수 없다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "The bakery was forced to close last month due to falling sales.",
+     "Mr. Hanson declined to comment on the award.",
+     "The ceremony was held in Millbrook last week.",
+     "He added that he hopes to hire ten more people next year as the business continues to grow."
+    ],
+    "answer": 3,
+    "type": "문장 삽입",
+    "explanation": "수상 소감 인용문 뒤이므로 '그는 ~라고 덧붙였다'로 발언을 이어 가는 문장이 자연스럽다. 판매 감소로 인한 폐업은 성장 내용과 모순되고, 소감을 말했으므로 논평 거부도 틀리며, 시상식은 6월 12일 워싱턴에서 열릴 예정이다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "reduce",
+     "observe",
+     "upgrade",
+     "delay"
+    ],
+    "answer": 2,
+    "type": "어휘",
+    "explanation": "상금 1만 달러를 사용해 주방을 '개선하다'는 뜻이 자연스러우므로 upgrade가 정답이다. reduce(줄이다), observe(관찰하다), delay(미루다)는 상금을 쓰는 목적으로 어울리지 않는다."
+   }
+  ],
+  "translation": "밀브룩(5월 8일) — 센터 스트리트의 가족 경영 업체인 핸슨스 베이커리가 전국 소매업 연맹이 선정한 올해의 소기업으로 뽑혔다. 이 상은 고객 서비스, 성장, 지역 사회 참여에서 탁월함을 보인 기업에 주어진다.\n\n주인 피터 핸슨은 2009년 직원 단 두 명과 함께 제과점을 열었다. 현재는 35명을 고용하고 있으며 지역 내 60곳이 넘는 식당에 빵을 공급한다. 게다가 이 제과점은 매일 저녁 팔리지 않은 빵을 지역 푸드뱅크에 기부한다.\n\n\"이 상을 받게 되어 영광입니다\"라고 핸슨 씨는 말했다. \"이 상은 사실 노고로 이를 가능하게 해 준 직원들의 것입니다.\" 그는 사업이 계속 성장함에 따라 내년에 10명을 더 채용하기를 희망한다고 덧붙였다.\n\n핸슨스 베이커리는 1만 달러의 상금을 받게 되며, 핸슨 씨는 이를 제과점 주방을 개선하는 데 쓸 계획이다. 시상식은 6월 12일 워싱턴 D.C.에서 열린다."
+ },
+ {
+  "id": "p6-037",
+  "level": 3,
+  "doc_type": "편지",
+  "title": "Pacific Paper Supply\n900 Harbor Way, Oakland, CA 94607\n\nJuly 1\n\nMs. Rachel Kim\nOffice Manager, Linden Law Group\n45 Market Street, San Francisco, CA 94105",
+  "passage": "Dear Ms. Kim,\n\nWe are writing to inform you of an upcoming change in our prices. Beginning September 1, the price of most of our paper products will rise by approximately 6 percent. This increase is necessary because the cost of raw materials and transportation {1} steadily over the past year.\n\nWe understand that this change may affect your budget. {2}, we would like to offer you an opportunity to save. Any order placed before August 31 will be charged at current prices, {3} of its size. {4}\n\nWe value our long relationship with Linden Law Group and remain committed to providing high-quality products and reliable delivery. If you have any questions about the new prices, please contact your account representative, Mark Evans, at 510-555-0193.\n\nSincerely,\nHoward Blake\nSales Director",
+  "questions": [
+   {
+    "q": "",
+    "choices": [
+     "has risen",
+     "rises",
+     "will rise",
+     "rising"
+    ],
+    "answer": 0,
+    "type": "동사 시제·태",
+    "explanation": "over the past year(지난 1년 동안)는 과거부터 지금까지 이어진 기간이므로 현재완료 has risen이 정답이다. rises는 일반적 사실, will rise는 미래라 기간 표현과 맞지 않고, rising은 동사 자리에 올 수 없다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "Similarly",
+     "For this reason",
+     "In contrast",
+     "Otherwise"
+    ],
+    "answer": 1,
+    "type": "접속사",
+    "explanation": "'인상이 예산에 영향을 줄 수 있음을 안다'는 것이 '절약 기회를 제공하는' 이유이므로 For this reason(이런 이유로)이 정답이다. Similarly(마찬가지로), In contrast(대조적으로), Otherwise(그렇지 않으면)는 이유-결과 관계를 나타내지 않는다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "instead",
+     "because",
+     "regardless",
+     "apart"
+    ],
+    "answer": 2,
+    "type": "전치사",
+    "explanation": "regardless of(~와 관계없이)가 되어 '주문 규모와 관계없이 현재 가격을 적용한다'는 뜻이 된다. instead of(~ 대신에), because of(~ 때문에)는 뜻이 맞지 않고, apart는 of가 아니라 from과 함께 쓴다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "This may be a good time to stock up on the items your office uses most often.",
+     "We have therefore decided to lower all of our prices.",
+     "Unfortunately, we are no longer able to deliver to San Francisco.",
+     "Your last order was delivered to the wrong address."
+    ],
+    "answer": 0,
+    "type": "문장 삽입",
+    "explanation": "8월 31일 전 주문은 현재 가격이 적용된다고 했으므로 '자주 쓰는 물품을 미리 사 두기에 좋은 때'라는 권유가 자연스럽게 이어진다. 가격 인하는 인상 공지와 모순되고, 배송 중단은 '안정적인 배송을 약속한다'는 내용과 어긋나며, 배송 오류는 관계없다."
+   }
+  ],
+  "translation": "김 씨께,\n\n곧 있을 가격 변경에 대해 알려 드리고자 편지를 드립니다. 9월 1일부터 대부분의 종이 제품 가격이 약 6퍼센트 인상됩니다. 지난 1년 동안 원자재비와 운송비가 꾸준히 올랐기 때문에 이번 인상이 불가피합니다.\n\n이번 변경이 귀사의 예산에 영향을 줄 수 있다는 점을 잘 알고 있습니다. 이런 이유로 절약할 기회를 드리고자 합니다. 8월 31일 전에 하시는 주문은 규모와 관계없이 현재 가격으로 청구됩니다. 지금이 사무실에서 가장 자주 쓰는 물품을 미리 사 두기에 좋은 때일 수 있습니다.\n\n저희는 린든 법률 그룹과의 오랜 관계를 소중히 여기며, 앞으로도 고품질 제품과 안정적인 배송을 제공하기 위해 최선을 다하겠습니다. 새 가격에 관해 궁금한 점이 있으시면 담당자 마크 에반스(510-555-0193)에게 연락해 주십시오.\n\n하워드 블레이크\n영업 이사"
+ },
+ {
+  "id": "p6-038",
+  "level": 3,
+  "doc_type": "안내문",
+  "title": "Summer Internship Program — Information for Applicants\nNorthgate Engineering",
+  "passage": "Northgate Engineering's ten-week summer internship program gives university students the chance to gain real-world experience in civil and environmental engineering. Interns work alongside our engineers on active projects, {1} bridges, water treatment plants, and public buildings.\n\nEligibility\nApplicants must be currently enrolled in an engineering program and must have completed at least two years of study. {2}\n\nProgram Details\nThe program runs from June 9 to August 15. Interns work 40 hours per week and are paid $22 per hour. Each intern is assigned a mentor {3} provides guidance throughout the summer. At the end of the program, interns present their work to senior management.\n\nHow to Apply\nSubmit your application online by February 28. Applications must include a résumé, a copy of your transcript, and one letter of recommendation. Because we receive a large number of applications each year, only candidates selected for interviews {4}.",
+  "questions": [
+   {
+    "q": "",
+    "choices": [
+     "included",
+     "including",
+     "inclusion",
+     "includes"
+    ],
+    "answer": 1,
+    "type": "준동사(to부정사·동명사·분사)",
+    "explanation": "including은 '~을 포함하여'라는 뜻으로 명사구 앞에서 예를 드는 분사형 전치사이다. 앞의 active projects의 예로 다리, 정수장, 공공건물을 들고 있으므로 including이 정답이다. included는 수동 의미라 뒤에 목적어를 둘 수 없고, inclusion은 명사, includes는 동사라 콤마 뒤 이 자리에 올 수 없다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "The program is also open to high school students.",
+     "Interns will be paid for only the first five weeks.",
+     "Previous work experience is helpful but not required.",
+     "Our engineers recently completed a new bridge in Denver."
+    ],
+    "answer": 2,
+    "type": "문장 삽입",
+    "explanation": "'지원 자격(Eligibility)' 항목 안이므로 '이전 근무 경험은 도움이 되지만 필수는 아니다'라는 자격 관련 문장이 자연스럽다. 대학 공학 전공 재학생이어야 하므로 고등학생 허용은 모순이고, 급여는 프로그램 세부 사항이며 5주만 지급도 사실과 다르고, 덴버 교량은 자격과 관계없다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "who",
+     "whom",
+     "whose",
+     "what"
+    ],
+    "answer": 0,
+    "type": "관계사",
+    "explanation": "선행사 a mentor는 사람이고 뒤 절 provides guidance에 주어가 없으므로 주격 관계대명사 who가 정답이다. whom은 목적격, whose는 뒤에 명사가 필요하며, what은 선행사를 포함하므로 앞에 명사가 올 수 없다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "contacted",
+     "will contact",
+     "will be contacted",
+     "have contacted"
+    ],
+    "answer": 2,
+    "type": "동사 시제·태",
+    "explanation": "면접 대상자는 회사로부터 '연락을 받는' 입장이므로 수동태가 필요하고, 지원 마감(2월 28일) 이후의 일이므로 미래 수동태 will be contacted가 정답이다. will contact, have contacted는 능동이라 목적어가 없고, contacted는 과거 시제라 앞으로의 절차와 맞지 않는다."
+   }
+  ],
+  "translation": "노스게이트 엔지니어링의 10주 여름 인턴십 프로그램은 대학생들에게 토목·환경 공학 분야의 실무 경험을 쌓을 기회를 제공합니다. 인턴들은 다리, 정수장, 공공건물을 포함한 진행 중인 프로젝트에서 저희 엔지니어들과 함께 일합니다.\n\n지원 자격\n지원자는 현재 공학 전공 과정에 재학 중이어야 하며 최소 2년의 학업을 마쳤어야 합니다. 이전 근무 경험은 도움이 되지만 필수는 아닙니다.\n\n프로그램 세부 사항\n프로그램은 6월 9일부터 8월 15일까지 진행됩니다. 인턴은 주 40시간 근무하며 시간당 22달러를 받습니다. 각 인턴에게는 여름 내내 지도해 줄 멘토가 배정됩니다. 프로그램이 끝날 때 인턴들은 고위 경영진 앞에서 자신의 작업을 발표합니다.\n\n지원 방법\n2월 28일까지 온라인으로 지원서를 제출하십시오. 지원서에는 이력서, 성적 증명서 사본, 추천서 한 부가 포함되어야 합니다. 매년 많은 지원서가 접수되므로 면접 대상자로 선정된 분에게만 연락을 드립니다."
+ },
+ {
+  "id": "p6-039",
+  "level": 4,
+  "doc_type": "이메일",
+  "title": "To: All Accounting Department Staff\nFrom: Irene Walsh, Finance Systems Manager\nDate: January 12\nSubject: Transition to LedgerPro",
+  "passage": "Dear colleagues,\n\nAs announced at last month's department meeting, we will be replacing our current accounting software with LedgerPro. The transition will take place over the weekend of February 7. During this period, the existing system {1} from 6:00 P.M. on Friday, February 6, until Monday morning.\n\nTo prepare, all staff members are required to complete a two-hour online training course by January 31. {2} Employees who have not finished the course by the deadline will not be granted access to the new system.\n\nPlease note that all records from the past five years will be transferred automatically. Older records, {3}, will remain in the current system, which will be kept in read-only mode until the end of the year.\n\nI realize that adapting to new software can be challenging, especially during a busy period. However, LedgerPro should make month-end reporting considerably {4} efficient once everyone is familiar with it.",
+  "questions": [
+   {
+    "q": "",
+    "choices": [
+     "has been shut down",
+     "was shut down",
+     "will be shut down",
+     "had been shut down"
+    ],
+    "answer": 2,
+    "type": "동사 시제·태",
+    "explanation": "이메일 날짜는 1월 12일이고 전환은 2월 7일 주말에 '일어날 것(will take place)'이므로 기존 시스템 중단도 미래의 일이다. 시스템은 '중단되는' 대상이므로 미래 수동태 will be shut down이 정답이다. 나머지는 모두 이미 일어난 일을 나타낸다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "LedgerPro has been in use in our department since last year.",
+     "Attendance at the training course is optional.",
+     "The course was held in the main conference room last Tuesday.",
+     "A link to the course, along with your login details, will be sent to you in a separate e-mail."
+    ],
+    "answer": 3,
+    "type": "문장 삽입",
+    "explanation": "온라인 교육 이수를 요구한 직후이므로 '교육 링크와 로그인 정보를 별도 이메일로 보낸다'는 안내가 자연스럽다. LedgerPro는 이제 도입되므로 작년부터 사용했다는 말은 모순이고, 교육은 필수이며 1월 31일까지 이수할 온라인 과정이므로 선택 사항이나 지난주 회의실 교육은 맞지 않는다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "therefore",
+     "however",
+     "for example",
+     "in addition"
+    ],
+    "answer": 1,
+    "type": "접속사",
+    "explanation": "앞 문장은 '5년 치 기록은 자동 이전된다', 빈칸 문장은 '그보다 오래된 기록은 기존 시스템에 남는다'로 서로 대조된다. 따라서 문장 중간에 삽입되어 대조를 나타내는 however가 정답이다. therefore(그러므로), for example(예를 들어), in addition(게다가)은 대조 관계를 나타내지 않는다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "more",
+     "most",
+     "much",
+     "very"
+    ],
+    "answer": 0,
+    "type": "비교",
+    "explanation": "형용사 efficient를 비교급으로 만들어 '(지금보다) 훨씬 더 효율적으로'라는 뜻이 되어야 한다. considerably는 비교급을 강조하는 부사이므로 more가 정답이다. most는 최상급이라 considerably와 어울리지 않고, much와 very는 efficient를 비교급으로 만들지 못한다."
+   }
+  ],
+  "translation": "동료 여러분께,\n\n지난달 부서 회의에서 발표한 대로 현재의 회계 소프트웨어를 LedgerPro로 교체합니다. 전환은 2월 7일 주말에 진행됩니다. 이 기간 동안 기존 시스템은 2월 6일 금요일 오후 6시부터 월요일 아침까지 중단됩니다.\n\n준비를 위해 모든 직원은 1월 31일까지 2시간짜리 온라인 교육 과정을 이수해야 합니다. 교육 링크와 로그인 정보는 별도의 이메일로 보내 드립니다. 기한까지 교육을 마치지 않은 직원에게는 새 시스템 접근 권한이 부여되지 않습니다.\n\n지난 5년간의 모든 기록은 자동으로 이전된다는 점을 알려 드립니다. 하지만 그보다 오래된 기록은 기존 시스템에 남게 되며, 기존 시스템은 연말까지 읽기 전용 모드로 유지됩니다.\n\n특히 바쁜 시기에 새 소프트웨어에 적응하는 것이 어려울 수 있다는 점을 압니다. 하지만 모두가 익숙해지면 LedgerPro가 월말 보고를 훨씬 더 효율적으로 만들어 줄 것입니다."
+ },
+ {
+  "id": "p6-040",
+  "level": 4,
+  "doc_type": "공지",
+  "title": "NOTICE TO ALL PRODUCTION STAFF\nDelmont Manufacturing — Plant 2",
+  "passage": "Please be advised that inspectors from the State Department of Labor will conduct a safety inspection of Plant 2 on Wednesday, March 18. Such inspections are routine, but the results {1} into account when our operating license is reviewed next year.\n\nIn preparation, supervisors will walk through each work area on Monday, March 16, to identify any potential problems. All employees are expected to keep aisles clear of boxes and equipment and to make sure that emergency exits are not blocked. {2}\n\nThroughout the inspection, employees should continue their normal duties. {3} an inspector ask you a question, answer honestly and to the best of your knowledge. If you are unsure of the answer, refer the inspector to your supervisor.\n\nLast year's inspection identified only two minor issues, both of which were corrected within a week. With everyone's cooperation, we hope to achieve an even {4} result this year.",
+  "questions": [
+   {
+    "q": "",
+    "choices": [
+     "take",
+     "will be taken",
+     "are taking",
+     "have taken"
+    ],
+    "answer": 1,
+    "type": "동사 시제·태",
+    "explanation": "take A into account(A를 고려하다)에서 결과는 '고려되는' 대상이므로 수동태가 필요하고, 허가 심사가 내년(next year)이므로 미래 수동태 will be taken이 정답이다. take, are taking, have taken은 모두 능동이라 결과가 스스로 무언가를 고려하는 뜻이 된다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "Protective gear, including helmets and safety glasses, must also be worn at all times on the production floor.",
+     "Production will therefore be suspended for the entire week.",
+     "The inspection has been postponed until further notice.",
+     "Employees are encouraged to take the day off during the inspection."
+    ],
+    "answer": 0,
+    "type": "문장 삽입",
+    "explanation": "통로 정리, 비상구 확보 등 직원이 지켜야 할 안전 준비 사항을 나열한 단락이므로 '보호 장비 착용'이라는 준비 사항이 하나 더 이어지는 것이 자연스럽다. 뒤에서 점검 중에도 평소 업무를 계속하라고 했으므로 생산 중단이나 휴가 권유는 모순이고, 점검 연기도 공지 전체와 맞지 않는다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "If",
+     "Should",
+     "Were",
+     "Unless"
+    ],
+    "answer": 1,
+    "type": "접속사",
+    "explanation": "빈칸 뒤 동사가 ask(동사원형)이므로 If an inspector should ask에서 If를 생략하고 Should를 앞으로 보낸 도치 구문이 되어야 한다. If를 쓰면 주어 an inspector에 맞춰 asks가 필요하고, Were는 뒤에 to ask가 와야 하며, Unless는 뜻과 형태 모두 맞지 않는다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "better",
+     "well",
+     "best",
+     "good"
+    ],
+    "answer": 0,
+    "type": "비교",
+    "explanation": "작년에 경미한 문제가 두 건뿐이었고 올해는 그보다 '훨씬 더 좋은' 결과를 바란다는 뜻이다. even은 비교급을 강조하므로 better가 정답이다. best는 최상급, good은 원급이라 even과 어울리지 않고, well은 부사라 명사 result를 꾸밀 수 없다."
+   }
+  ],
+  "translation": "주 노동부 점검관들이 3월 18일 수요일에 제2공장의 안전 점검을 실시할 예정임을 알려 드립니다. 이러한 점검은 정기적인 것이지만, 그 결과는 내년에 우리 공장의 운영 허가를 심사할 때 고려될 것입니다.\n\n준비를 위해 관리자들이 3월 16일 월요일에 각 작업 구역을 돌며 잠재적인 문제를 확인할 것입니다. 모든 직원은 통로에 상자와 장비가 없도록 정리하고 비상구가 막히지 않도록 해야 합니다. 또한 생산 현장에서는 헬멧과 보안경을 포함한 보호 장비를 항상 착용해야 합니다.\n\n점검 중에도 직원들은 평소 업무를 계속해야 합니다. 점검관이 질문을 하면 정직하게, 아는 범위 내에서 답하십시오. 답을 잘 모르겠으면 점검관을 관리자에게 안내하십시오.\n\n작년 점검에서는 경미한 문제 두 건만 발견되었고, 둘 다 일주일 안에 시정되었습니다. 모두가 협조해 주시면 올해는 훨씬 더 좋은 결과를 얻을 수 있을 것입니다."
+ },
+ {
+  "id": "p6-041",
+  "level": 4,
+  "doc_type": "기사",
+  "title": "Charity Run Raises Record Amount for Children's Hospital",
+  "passage": "GREENFIELD (October 20) — More than 2,500 runners took part in the annual Hope Run on Sunday, raising a record $410,000 for Greenfield Children's Hospital. The total is nearly double the amount collected last year, {1} was itself a record at the time.\n\nOrganizers attributed the increase largely to a new online platform that allowed participants to collect donations from friends and family. {2} Several local companies also agreed to match the donations their employees raised, which significantly boosted the total.\n\nThe money will be used to build a new pediatric rehabilitation center. Construction {3} next spring and is expected to take about two years. Hospital director Sandra Kim said the center would allow young patients to receive treatment close to home {4} traveling to facilities in other cities.\n\nRegistration for next year's Hope Run will open in March.",
+  "questions": [
+   {
+    "q": "",
+    "choices": [
+     "what",
+     "that",
+     "which",
+     "who"
+    ],
+    "answer": 2,
+    "type": "관계사",
+    "explanation": "콤마 뒤에서 앞의 the amount collected last year(작년 모금액)를 보충 설명하고 뒤 절에 주어가 없으므로 계속적 용법의 주격 관계대명사 which가 정답이다. that은 콤마 뒤 계속적 용법으로 쓸 수 없고, what은 선행사를 포함하며, who는 사람에게 쓴다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "As a result, the event was canceled due to low participation.",
+     "Through the platform, each runner raised an average of $120, compared with $60 in previous years.",
+     "The hospital plans to close its children's ward next year.",
+     "Runners were not allowed to accept donations online."
+    ],
+    "answer": 1,
+    "type": "문장 삽입",
+    "explanation": "앞 문장이 '새 온라인 플랫폼 덕분에 모금액이 늘었다'이므로 그 플랫폼을 통한 1인당 모금액 증가를 구체적으로 보여 주는 문장이 이어진다. 행사가 성황리에 열렸으므로 취소는 모순이고, 온라인 기부 금지는 플랫폼 내용과 반대이며, 소아 병동 폐쇄는 재활 센터 건립과 맞지 않는다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "began",
+     "has begun",
+     "will begin",
+     "had begun"
+    ],
+    "answer": 2,
+    "type": "동사 시제·태",
+    "explanation": "앞 문장에서 모금액이 센터를 짓는 데 '쓰일 것(will be used)'이라고 했고 next spring(내년 봄)이 있으므로 미래 시제 will begin이 정답이다. began, has begun, had begun은 모두 이미 시작된 일을 나타내 next spring과 맞지 않는다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "because of",
+     "as well as",
+     "in spite of",
+     "instead of"
+    ],
+    "answer": 3,
+    "type": "전치사",
+    "explanation": "센터가 생기면 아이들이 '다른 도시의 시설로 가는 대신' 집 가까이에서 치료받을 수 있다는 뜻이므로 instead of가 정답이다. because of(~ 때문에), in spite of(~에도 불구하고)는 논리가 맞지 않고, as well as(~뿐만 아니라)는 두 가지를 모두 한다는 뜻이 된다."
+   }
+  ],
+  "translation": "그린필드(10월 20일) — 일요일에 열린 연례 행사 '희망 달리기'에 2,500명이 넘는 주자가 참가해 그린필드 어린이 병원을 위해 사상 최대인 41만 달러를 모금했다. 이 금액은 작년 모금액의 거의 두 배인데, 작년 모금액도 당시로서는 최고 기록이었다.\n\n주최 측은 증가의 주된 원인으로 참가자들이 친구와 가족에게서 기부를 모을 수 있게 한 새로운 온라인 플랫폼을 꼽았다. 이 플랫폼을 통해 주자 한 명당 평균 120달러를 모았는데, 이전 해에는 60달러였다. 여러 지역 기업도 직원들이 모은 기부금만큼 같은 금액을 내기로 해 모금액이 크게 늘었다.\n\n모금액은 새 소아 재활 센터를 짓는 데 쓰인다. 공사는 내년 봄에 시작되며 약 2년이 걸릴 것으로 예상된다. 샌드라 김 병원장은 이 센터가 생기면 어린 환자들이 다른 도시의 시설로 가는 대신 집 가까이에서 치료받을 수 있을 것이라고 말했다.\n\n내년 희망 달리기 등록은 3월에 시작된다."
+ },
+ {
+  "id": "p6-042",
+  "level": 4,
+  "doc_type": "광고",
+  "title": "Thyme & Table Corporate Catering",
+  "passage": "Planning a board meeting, a training day, or a company celebration? Let Thyme & Table take care of the food so that you can focus on {1} matters most: your guests.\n\nFor over fifteen years, we have been serving businesses throughout the Chicago area. Our menus range from light breakfast platters to full three-course dinners, and every dish is prepared on the day of your event using seasonal ingredients. {2}\n\nOrdering is simple. Choose from our set menus online, or work with one of our event planners to create a menu tailored to your budget. Orders placed at least 48 hours in advance are delivered free of charge; for last-minute requests, a small fee {3}.\n\nNew corporate clients receive 15 percent off their first order. Simply enter the code WELCOME15 when ordering. Once you have tried our service, we are confident you will find it {4} to hold an event without us.",
+  "questions": [
+   {
+    "q": "",
+    "choices": [
+     "that",
+     "what",
+     "which",
+     "where"
+    ],
+    "answer": 1,
+    "type": "관계사",
+    "explanation": "전치사 on 뒤에 선행사가 없고, 빈칸이 이끄는 절 matters most의 주어 역할도 해야 하므로 선행사를 포함한 관계대명사 what(~하는 것)이 정답이다. that과 which는 앞에 선행사가 필요하고, where는 뒤에 완전한 절이 와야 한다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "All of our dishes are frozen and reheated before delivery.",
+     "We recently opened our first location in Chicago.",
+     "Delivery is available only on weekends.",
+     "We can also accommodate vegetarian, gluten-free, and other dietary requirements upon request."
+    ],
+    "answer": 3,
+    "type": "문장 삽입",
+    "explanation": "메뉴의 범위와 준비 방식을 소개하는 단락이므로 '채식·글루텐 프리 등 식단 요구도 맞출 수 있다'는 메뉴 관련 장점이 자연스럽게 이어진다. 당일 조리한다고 했으므로 냉동 후 데우기는 모순이고, 15년 넘게 영업했으므로 최근 첫 매장 개점도 틀리며, 회사 행사가 대상인데 주말만 배달은 맞지 않는다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "will be charged",
+     "charges",
+     "will charge",
+     "has charged"
+    ],
+    "answer": 0,
+    "type": "동사 시제·태",
+    "explanation": "수수료(a small fee)는 '부과되는' 대상이므로 수동태가 필요하고, 앞으로 급한 주문을 할 경우의 일이므로 will be charged가 정답이다. charges, will charge, has charged는 능동이라 수수료가 무언가를 청구한다는 이상한 뜻이 된다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "hard",
+     "likely",
+     "easy",
+     "willing"
+    ],
+    "answer": 0,
+    "type": "어휘",
+    "explanation": "find it + 형용사 + to do(~하는 것이 …하다고 생각하다) 구조로, 서비스를 한 번 이용하면 '우리 없이 행사를 여는 것이 어렵다'고 느낄 것이라는 자신감을 나타낸다. 따라서 hard가 정답이다. easy는 광고의 의도와 반대이고, likely와 willing은 사람이나 일의 가능성을 나타내 이 구조와 맞지 않는다."
+   }
+  ],
+  "translation": "이사회, 교육의 날, 회사 축하 행사를 계획하고 계신가요? 음식은 타임 앤 테이블에 맡기시고 가장 중요한 것, 즉 손님에게 집중하십시오.\n\n저희는 15년 넘게 시카고 전역의 기업에 서비스를 제공해 왔습니다. 메뉴는 가벼운 아침 식사 플래터부터 정식 3코스 저녁 식사까지 다양하며, 모든 요리는 제철 재료를 사용해 행사 당일에 준비됩니다. 요청하시면 채식, 글루텐 프리 및 기타 식단 요구 사항도 맞춰 드립니다.\n\n주문은 간단합니다. 온라인에서 세트 메뉴를 고르시거나, 저희 행사 기획자와 함께 예산에 맞춘 메뉴를 만드십시오. 최소 48시간 전에 하신 주문은 무료로 배달되며, 급한 요청에는 소액의 수수료가 부과됩니다.\n\n신규 기업 고객은 첫 주문 시 15퍼센트 할인을 받습니다. 주문할 때 코드 WELCOME15를 입력하시기만 하면 됩니다. 한 번 저희 서비스를 이용해 보시면 저희 없이 행사를 여는 것이 어렵다고 느끼실 것이라 확신합니다."
+ },
+ {
+  "id": "p6-043",
+  "level": 4,
+  "doc_type": "편지",
+  "title": "Kestrel Electronics Customer Service Center\n2200 Commerce Boulevard, Austin, TX 78741\n\nApril 9\n\nMr. Leonard Price\n317 Birch Lane\nAustin, TX 78745",
+  "passage": "Dear Mr. Price,\n\nThank you for sending us your Kestrel X9 laptop for repair. Our technicians have examined the device and determined that the screen flickering you described {1} by a faulty display cable.\n\nBecause your laptop was purchased eleven months ago, it is still covered by our standard one-year warranty. {2}, the repair, including parts and labor, will be carried out at no cost to you. {3}\n\nWe also noticed that the laptop's battery life is noticeably {4} than would be expected for a device of its age. Although battery wear is not covered by the warranty, we can replace the battery for $79 at the same time if you wish. Please call us at 512-555-0166 by April 14 to let us know your decision.\n\nSincerely,\nMonica Shaw\nService Coordinator",
+  "questions": [
+   {
+    "q": "",
+    "choices": [
+     "was caused",
+     "causes",
+     "is causing",
+     "will cause"
+    ],
+    "answer": 0,
+    "type": "동사 시제·태",
+    "explanation": "화면 깜박임은 불량 케이블에 의해 '일어난' 것이므로 수동태가 필요하고(뒤의 by가 단서), 기술자가 이미 점검을 마친(have examined, determined) 과거의 원인이므로 was caused가 정답이다. causes, is causing, will cause는 능동이라 by 구와 맞지 않는다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "Nevertheless",
+     "Otherwise",
+     "Accordingly",
+     "Conversely"
+    ],
+    "answer": 2,
+    "type": "접속사",
+    "explanation": "'아직 보증 기간 안이다'가 원인이고 '수리가 무료로 진행된다'가 결과이므로 Accordingly(따라서)가 정답이다. Nevertheless(그럼에도 불구하고), Conversely(반대로)는 대조, Otherwise(그렇지 않으면)는 조건을 나타낸다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "Unfortunately, your warranty expired last month.",
+     "We expect to return the repaired laptop to you within five business days.",
+     "Please send us a payment of $150 for the repair.",
+     "The new display cable is currently unavailable, so the repair cannot be done."
+    ],
+    "answer": 1,
+    "type": "문장 삽입",
+    "explanation": "무료 수리를 진행한다는 안내 뒤이므로 '5영업일 안에 수리된 노트북을 돌려보낼 예정'이라는 일정 안내가 자연스럽다. 보증 만료와 150달러 청구는 '보증 기간 내 무료 수리'와 모순되고, 수리 불가도 '수리가 진행된다'는 내용과 어긋난다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "shortly",
+     "short",
+     "shorter",
+     "shortest"
+    ],
+    "answer": 2,
+    "type": "비교",
+    "explanation": "뒤에 than이 있으므로 비교급 shorter가 정답이다. 배터리 수명이 '예상보다 눈에 띄게 짧다'는 뜻이며, noticeably는 비교급을 꾸민다. short는 원급, shortest는 최상급이고, shortly는 '곧'이라는 뜻의 부사라 be동사 뒤 보어 자리에 맞지 않는다."
+   }
+  ],
+  "translation": "프라이스 씨께,\n\n수리를 위해 케스트렐 X9 노트북을 보내 주셔서 감사합니다. 저희 기술자들이 기기를 점검한 결과, 말씀하신 화면 깜박임은 불량 디스플레이 케이블 때문에 발생한 것으로 확인되었습니다.\n\n노트북을 11개월 전에 구입하셨으므로 아직 표준 1년 보증 기간에 해당합니다. 따라서 부품과 공임을 포함한 수리는 무료로 진행됩니다. 수리된 노트북은 영업일 기준 5일 안에 돌려보내 드릴 예정입니다.\n\n또한 노트북 배터리 수명이 해당 사용 기간의 기기에서 예상되는 것보다 눈에 띄게 짧다는 점도 발견했습니다. 배터리 마모는 보증 대상이 아니지만, 원하시면 79달러에 배터리를 함께 교체해 드릴 수 있습니다. 결정하시면 4월 14일까지 512-555-0166으로 전화해 알려 주십시오.\n\n모니카 쇼\n서비스 코디네이터"
+ },
+ {
+  "id": "p6-044",
+  "level": 4,
+  "doc_type": "안내문",
+  "title": "Call for Speakers — Pacific Logistics Summit 2027",
+  "passage": "The organizing committee of the Pacific Logistics Summit is now accepting proposals for presentations at next year's event, which will take place in Vancouver from May 12 to 14. The summit brings together more than 1,500 professionals from shipping, warehousing, and supply chain technology.\n\nWe welcome proposals on a wide range of topics, including automation, sustainable transport, and workforce development. Presentations should be practical in focus and {1} concrete examples from the speaker's own experience. {2}\n\nProposals must be submitted through our online portal no later than November 30. Each submission should include a title, a summary of no more than 300 words, and a brief biography of the speaker. Incomplete submissions will not be {3}.\n\nAll proposals will be reviewed by a panel of industry experts, and applicants will be notified of the committee's decision by January 15. Selected speakers will receive free registration for all three days of the summit, {4} a travel allowance of up to $500.",
+  "questions": [
+   {
+    "q": "",
+    "choices": [
+     "exclude",
+     "include",
+     "conclude",
+     "preclude"
+    ],
+    "answer": 1,
+    "type": "어휘",
+    "explanation": "발표는 실용적이어야 하고 발표자의 경험에서 나온 구체적 사례를 '포함해야' 한다는 뜻이므로 include가 정답이다. exclude(제외하다)는 반대 의미이고, conclude(결론짓다), preclude(불가능하게 하다)는 examples를 목적어로 자연스럽게 취하지 못한다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "The summit was held in Vancouver for the first time last month.",
+     "Only professionals from the shipping industry may attend.",
+     "Purely promotional talks about a specific product or service will not be accepted.",
+     "Speakers will be selected by random drawing."
+    ],
+    "answer": 2,
+    "type": "문장 삽입",
+    "explanation": "발표가 '실용적'이어야 한다는 기준 바로 뒤이므로, 받지 않는 발표 유형(특정 제품 홍보)을 밝히는 문장이 자연스럽다. 행사는 내년에 열리므로 지난달 개최는 틀리고, 창고·공급망 기술 분야도 참여하므로 해운업만 참석 가능하다는 것도 모순이며, 전문가 패널이 심사하므로 추첨도 맞지 않는다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "considerate",
+     "considering",
+     "considered",
+     "consideration"
+    ],
+    "answer": 2,
+    "type": "품사",
+    "explanation": "will not be 뒤에 과거분사가 와서 수동태 '고려되지 않는다(심사 대상이 아니다)'가 되어야 하므로 considered가 정답이다. considerate는 '사려 깊은'이라는 형용사로 뜻이 맞지 않고, considering은 능동 진행, consideration은 명사라 이 자리에 맞지 않는다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "as well as",
+     "as long as",
+     "so that",
+     "in case"
+    ],
+    "answer": 0,
+    "type": "접속사",
+    "explanation": "선정된 발표자가 받는 혜택으로 무료 등록과 여비 지원을 함께 나열하므로 '~뿐만 아니라'라는 뜻의 as well as가 정답이며, 뒤에 명사구가 올 수 있다. as long as(~하는 한), so that(~하도록), in case(~할 경우에 대비해)는 뒤에 절이 와야 하고 뜻도 맞지 않는다."
+   }
+  ],
+  "translation": "태평양 물류 서밋 조직위원회가 내년 행사 발표 제안서를 접수하고 있습니다. 행사는 5월 12일부터 14일까지 밴쿠버에서 열립니다. 이 서밋에는 해운, 창고, 공급망 기술 분야의 전문가 1,500명 이상이 모입니다.\n\n자동화, 지속 가능한 운송, 인력 개발 등 다양한 주제의 제안을 환영합니다. 발표는 실용적인 내용이어야 하며 발표자 자신의 경험에서 나온 구체적인 사례를 포함해야 합니다. 특정 제품이나 서비스를 홍보하기만 하는 발표는 받지 않습니다.\n\n제안서는 늦어도 11월 30일까지 온라인 포털을 통해 제출해야 합니다. 각 제출물에는 제목, 300단어 이내의 요약, 발표자의 간단한 약력이 포함되어야 합니다. 불완전한 제출물은 심사 대상이 되지 않습니다.\n\n모든 제안서는 업계 전문가 패널이 검토하며, 지원자들은 1월 15일까지 위원회의 결정을 통보받습니다. 선정된 발표자는 최대 500달러의 여비 지원뿐만 아니라 서밋 3일 전체의 무료 등록 혜택을 받습니다."
+ },
+ {
+  "id": "p6-045",
+  "level": 5,
+  "doc_type": "기사",
+  "title": "Halvorsen Foods and Brightmill Agree to Merge",
+  "passage": "OSLO (February 3) — Halvorsen Foods, the Nordic region's largest producer of frozen meals, announced yesterday that it has agreed to merge with Brightmill, a British maker of plant-based snacks. The combined company, which will operate under the Halvorsen name, is expected to generate annual revenues of roughly €2.4 billion.\n\nThe deal, {1} still requires the approval of regulators in both countries, is scheduled to close in the third quarter. Brightmill's chief executive, Fiona Doyle, will join Halvorsen's board and oversee the company's newly formed snack division.\n\nAnalysts have largely welcomed the agreement. Halvorsen has struggled to expand beyond its home market, {2} Brightmill's products are already sold in more than 20 countries. {3}\n\nNot everyone is convinced, however. Some investors have questioned whether the two firms' very different corporate cultures can be successfully {4}, pointing to a similar merger in the industry that collapsed within two years.",
+  "questions": [
+   {
+    "q": "",
+    "choices": [
+     "that",
+     "what",
+     "which",
+     "who"
+    ],
+    "answer": 2,
+    "type": "관계사",
+    "explanation": "주어 The deal과 동사 is scheduled 사이에 콤마로 삽입된 계속적 용법의 관계절이며, 선행사가 사물(the deal)이고 절에 주어가 없으므로 which가 정답이다. that은 콤마와 함께 계속적 용법으로 쓸 수 없고, what은 선행사를 포함하며, who는 사람을 가리킨다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "so that",
+     "whereas",
+     "unless",
+     "as if"
+    ],
+    "answer": 1,
+    "type": "접속사",
+    "explanation": "'할버슨은 해외 확장에 어려움을 겪었다'와 '브라이트밀 제품은 이미 20개국 이상에서 팔린다'는 두 회사의 상황을 대조하므로 whereas(~인 반면)가 정답이다. so that(~하도록)은 목적, unless(~하지 않으면)는 조건, as if(마치 ~인 것처럼)는 가정을 나타내 뜻이 맞지 않는다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "The merger would therefore give Halvorsen immediate access to an extensive international distribution network.",
+     "As a result, Brightmill has decided to withdraw from all foreign markets.",
+     "Ms. Doyle will retire from the food industry once the deal is completed.",
+     "Regulators approved the deal last week, ahead of schedule."
+    ],
+    "answer": 0,
+    "type": "문장 삽입",
+    "explanation": "앞 문장의 대조(할버슨은 해외 진출에 약하고 브라이트밀은 20여 개국에 판매)를 바탕으로 '따라서 합병으로 할버슨이 광범위한 해외 유통망을 곧바로 얻게 된다'는 결론이 이어지고, 이는 분석가들이 합병을 반긴 이유가 된다. 해외 시장 철수는 이 논리와 반대이고, 도일 씨는 이사회에 합류할 예정이며, 규제 당국의 승인은 아직 필요하다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "isolated",
+     "duplicated",
+     "terminated",
+     "integrated"
+    ],
+    "answer": 3,
+    "type": "어휘",
+    "explanation": "매우 다른 두 기업 문화가 성공적으로 '통합될' 수 있을지 의문이라는 뜻이며, 뒤에서 2년 만에 무너진 비슷한 합병을 예로 들고 있으므로 integrated가 정답이다. isolated(고립된), duplicated(복제된), terminated(종료된)는 successfully와 함께 합병의 우려를 나타내는 뜻이 되지 않는다."
+   }
+  ],
+  "translation": "오슬로(2월 3일) — 북유럽 최대의 냉동식품 생산업체인 할버슨 푸드가 영국의 식물성 스낵 제조업체 브라이트밀과 합병하기로 합의했다고 어제 발표했다. 할버슨이라는 이름으로 운영될 합병 회사는 연 매출이 약 24억 유로에 이를 것으로 예상된다.\n\n아직 양국 규제 당국의 승인이 필요한 이 거래는 3분기에 마무리될 예정이다. 브라이트밀의 최고경영자 피오나 도일은 할버슨 이사회에 합류해 새로 만들어지는 스낵 부문을 총괄하게 된다.\n\n분석가들은 대체로 이번 합의를 반겼다. 할버슨은 자국 시장을 넘어 확장하는 데 어려움을 겪어 온 반면, 브라이트밀의 제품은 이미 20개국 이상에서 판매되고 있다. 따라서 이번 합병으로 할버슨은 광범위한 해외 유통망을 곧바로 확보하게 될 것이다.\n\n그러나 모두가 확신하는 것은 아니다. 일부 투자자들은 업계에서 2년 만에 무너진 비슷한 합병 사례를 들며, 매우 다른 두 회사의 기업 문화가 성공적으로 통합될 수 있을지 의문을 제기했다."
+ },
+ {
+  "id": "p6-046",
+  "level": 5,
+  "doc_type": "이메일",
+  "title": "To: Prospective Suppliers\nFrom: Tomasz Novak, Head of Procurement, Arlen Hospital Group\nDate: August 18\nSubject: Request for Proposals — Medical Uniforms and Linens",
+  "passage": "Dear Supplier,\n\nArlen Hospital Group, which operates seven hospitals across the region, is inviting proposals for the supply of medical uniforms and linens. At present, these items are purchased from four separate vendors. {1} the administrative burden this arrangement creates, we intend to award a single contract covering all seven sites beginning next April.\n\nProposals should outline pricing, delivery schedules, and the supplier's ability to accommodate sudden increases in demand. {2} Suppliers that have held similar contracts with healthcare providers are strongly encouraged to include references.\n\nThe full specifications are available in the attached document. Please note that proposals {3} after 5:00 P.M. on September 30 will not be considered, regardless of the reason for the delay.\n\nWe anticipate announcing the successful bidder by mid-December. Unsuccessful bidders will receive feedback on their proposals upon request, {4} may prove useful in future tenders.\n\nTomasz Novak",
+  "questions": [
+   {
+    "q": "",
+    "choices": [
+     "Despite",
+     "Although",
+     "Unless",
+     "Given"
+    ],
+    "answer": 3,
+    "type": "전치사",
+    "explanation": "Given은 '~을 고려하면'이라는 전치사로 쓰여 뒤에 명사구(the administrative burden ...)를 취한다. 네 곳의 공급업체에서 사는 데 따른 행정 부담을 '고려해' 단일 계약을 맺겠다는 흐름이므로 정답이다. Despite(~에도 불구하고)는 논리가 반대이고, Although와 Unless는 접속사라 뒤에 완전한 절이 와야 한다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "Pricing information should not be included at this stage.",
+     "Flexibility of this kind is essential, as patient numbers can rise sharply during seasonal outbreaks of illness.",
+     "The contract was awarded to a local supplier earlier this month.",
+     "We are therefore satisfied with our current arrangement of four vendors."
+    ],
+    "answer": 1,
+    "type": "문장 삽입",
+    "explanation": "바로 앞에서 '갑작스러운 수요 증가에 대응하는 능력'을 적으라고 했으므로, 그런 유연성이 왜 중요한지(계절성 질병 유행 시 환자 급증) 설명하는 문장이 이어진다. 앞 문장에서 가격을 적으라고 했으므로 가격 제외는 모순이고, 계약 체결 완료와 현재 방식 만족은 제안 요청이라는 이메일 목적과 반대이다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "receive",
+     "received",
+     "receiving",
+     "are received"
+    ],
+    "answer": 1,
+    "type": "준동사(to부정사·동명사·분사)",
+    "explanation": "문장의 동사는 will not be considered이므로 빈칸은 주어 proposals를 뒤에서 꾸미는 수식어 자리이다. 제안서는 '접수되는' 대상이므로 과거분사 received가 정답이다. receiving은 능동이라 뜻이 맞지 않고, receive와 are received는 동사라 한 문장에 동사가 둘이 된다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "what",
+     "it",
+     "which",
+     "whom"
+    ],
+    "answer": 2,
+    "type": "관계사",
+    "explanation": "콤마 뒤에서 앞의 feedback(사물)을 보충 설명하고 절에 주어가 없으므로 계속적 용법의 주격 관계대명사 which가 정답이다. it을 쓰면 접속사 없이 두 절이 이어지는 오류가 되고, what은 선행사를 포함하며, whom은 사람을 가리키는 목적격이다."
+   }
+  ],
+  "translation": "공급업체 담당자께,\n\n지역 내 병원 일곱 곳을 운영하는 알렌 병원 그룹은 의료용 유니폼과 린넨 공급에 관한 제안서를 받고 있습니다. 현재 이 물품들은 네 곳의 공급업체에서 따로 구매하고 있습니다. 이런 방식이 만드는 행정 부담을 고려해, 내년 4월부터 일곱 곳 전체를 포괄하는 단일 계약을 맺고자 합니다.\n\n제안서에는 가격, 납품 일정, 갑작스러운 수요 증가에 대응할 수 있는 능력을 기술해 주십시오. 계절성 질병이 유행할 때는 환자 수가 급격히 늘 수 있으므로 이러한 유연성은 필수적입니다. 의료 기관과 비슷한 계약을 맺은 경험이 있는 공급업체는 추천처를 함께 제출하시기를 적극 권합니다.\n\n전체 사양은 첨부 문서에서 확인하실 수 있습니다. 9월 30일 오후 5시 이후에 접수된 제안서는 지연 사유와 관계없이 검토하지 않는다는 점에 유의해 주십시오.\n\n낙찰 업체는 12월 중순까지 발표할 예정입니다. 선정되지 않은 업체는 요청 시 제안서에 대한 피드백을 받게 되며, 이는 향후 입찰에 유용할 수 있습니다.\n\n토마시 노박"
+ },
+ {
+  "id": "p6-047",
+  "level": 5,
+  "doc_type": "공지",
+  "title": "PUBLIC NOTICE\nCity of Port Alden — Eastern Waterfront Redevelopment Plan",
+  "passage": "The City of Port Alden invites residents to comment on the draft plan for the redevelopment of the Eastern Waterfront. The plan proposes converting the former shipyard into a mixed-use district containing housing, office space, and a public park along the water.\n\nThe draft, {1} over eighteen months in consultation with local businesses and community groups, is available for review at City Hall and on the city's Web site. {2}\n\nWritten comments may be submitted by e-mail or by post until June 20. In addition, two public meetings will be held at the Port Alden Community Center on June 4 and June 11. City planners will present the key features of the plan and respond to questions from {3} in attendance.\n\nAll comments received during the consultation period will be carefully reviewed. Where appropriate, the plan will be revised before it is submitted to the City Council for final approval. The Council {4} its decision in the autumn.",
+  "questions": [
+   {
+    "q": "",
+    "choices": [
+     "preparing",
+     "prepared",
+     "was prepared",
+     "having prepared"
+    ],
+    "answer": 1,
+    "type": "준동사(to부정사·동명사·분사)",
+    "explanation": "주어 The draft와 동사 is available 사이에 삽입된 수식어 자리이다. 초안은 18개월에 걸쳐 '작성된' 대상이므로 과거분사 prepared가 정답이다. preparing과 having prepared는 능동이라 초안이 무언가를 작성한 뜻이 되고, was prepared는 동사라 이미 동사 is가 있는 문장에 올 수 없다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "Construction of the new park was completed last year.",
+     "Residents are not permitted to comment on the plan.",
+     "The shipyard will therefore continue to operate at full capacity.",
+     "Printed copies can also be requested free of charge from the Planning Department."
+    ],
+    "answer": 3,
+    "type": "문장 삽입",
+    "explanation": "초안을 시청과 웹사이트에서 열람할 수 있다는 문장 뒤이므로 '인쇄본도 무료로 요청할 수 있다'는 열람 방법 안내가 자연스럽게 이어진다. 아직 초안 단계이므로 공원 완공은 모순이고, 공지 자체가 주민 의견을 구하므로 의견 제출 금지도 틀리며, 조선소는 이미 '이전의(former)' 조선소이다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "them",
+     "they",
+     "those",
+     "their"
+    ],
+    "answer": 2,
+    "type": "대명사",
+    "explanation": "those in attendance는 '참석한 사람들'이라는 뜻으로, those가 뒤의 수식어(in attendance)의 꾸밈을 받는 대명사로 쓰인다. them과 they는 앞에 가리키는 명사가 없고 이렇게 수식어를 받지 못하며, their는 소유격이라 뒤에 명사가 필요하다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "made",
+     "has made",
+     "had made",
+     "is expected to make"
+    ],
+    "answer": 3,
+    "type": "동사 시제·태",
+    "explanation": "앞 문장에서 계획은 수정된 뒤 의회에 '제출될 것'이라고 했고 in the autumn(올가을)도 앞으로의 시점이므로 미래를 나타내는 is expected to make가 정답이다. made, has made, had made는 모두 결정이 이미 내려졌다는 뜻이 되어 흐름과 맞지 않는다."
+   }
+  ],
+  "translation": "포트 올던 시는 이스턴 워터프런트 재개발 계획 초안에 대한 주민 의견을 구합니다. 이 계획은 이전의 조선소 부지를 주택, 사무 공간, 수변 공공 공원을 갖춘 복합 용도 지구로 바꾸는 것을 제안합니다.\n\n지역 기업 및 주민 단체와 협의하며 18개월에 걸쳐 작성된 초안은 시청과 시 웹사이트에서 열람할 수 있습니다. 인쇄본도 도시계획과에 무료로 요청할 수 있습니다.\n\n서면 의견은 6월 20일까지 이메일이나 우편으로 제출할 수 있습니다. 또한 6월 4일과 6월 11일에 포트 올던 주민센터에서 공청회가 두 차례 열립니다. 시 도시계획 담당자들이 계획의 핵심 내용을 발표하고 참석자들의 질문에 답할 것입니다.\n\n의견 수렴 기간에 접수된 모든 의견은 신중하게 검토됩니다. 필요한 경우 계획은 최종 승인을 위해 시의회에 제출되기 전에 수정됩니다. 시의회는 올가을에 결정을 내릴 것으로 예상됩니다."
+ },
+ {
+  "id": "p6-048",
+  "level": 5,
+  "doc_type": "광고",
+  "title": "Strategic Leadership Program\nWhitmore School of Business — Executive Education",
+  "passage": "Today's senior managers face challenges that were unimaginable a decade ago: rapidly shifting markets, remote and hybrid teams, and ever-growing expectations from customers and regulators alike. The Whitmore Strategic Leadership Program is designed to help experienced executives respond to {1} challenges with confidence.\n\nOver six intensive weeks, participants examine real cases drawn from a variety of industries and work in small groups to develop solutions to problems {2} by their own organizations. {3}\n\nClasses meet on Friday evenings and Saturdays, allowing participants to continue working full time. Previous graduates have described the program as the most {4} professional experience of their careers, citing in particular the chance to learn from peers in other fields.\n\nApplicants should have at least ten years of management experience. The next session begins on October 3; enrollment is limited to 40 participants. Visit whitmore.edu/slp to apply.",
+  "questions": [
+   {
+    "q": "",
+    "choices": [
+     "this",
+     "that",
+     "these",
+     "it"
+    ],
+    "answer": 2,
+    "type": "대명사",
+    "explanation": "빈칸은 복수 명사 challenges를 꾸미면서 앞 문장에서 콜론 뒤에 나열한 세 가지 과제(빠르게 변하는 시장, 원격·하이브리드 팀, 높아지는 기대)를 다시 가리킨다. 복수형 지시어 these가 정답이다. this와 that은 단수 명사를 꾸미고, it은 명사 앞에서 수식어로 쓸 수 없다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "face",
+     "to face",
+     "facing",
+     "faced"
+    ],
+    "answer": 3,
+    "type": "준동사(to부정사·동명사·분사)",
+    "explanation": "문제들은 참가자의 조직이 '직면하는' 대상, 즉 조직에 의해 '맞닥뜨려지는' 것이므로 뒤의 by와 함께 수동 의미의 과거분사 faced가 problems를 꾸민다. facing은 능동이라 by 구와 맞지 않고, face는 동사원형, to face는 '직면할'이라는 미래·목적 의미라 by 구와 어울리지 않는다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "Each participant is also paired with a faculty coach who provides individual feedback throughout the program.",
+     "Classes are taught entirely online through prerecorded videos.",
+     "The program is intended primarily for recent university graduates.",
+     "Participants must therefore take six weeks of leave from their jobs."
+    ],
+    "answer": 0,
+    "type": "문장 삽입",
+    "explanation": "6주간의 학습 방식(사례 분석, 소그룹 활동)을 설명하는 단락이므로 '교수진 코치가 개별 피드백을 제공한다'는 방식이 하나 더 이어지는 것이 자연스럽다. 금요일 저녁과 토요일에 수업이 '열린다(meet)'고 했으므로 녹화 영상 수업은 모순이고, 10년 이상 경력자 대상이므로 대학 졸업생 대상도 틀리며, 일을 계속하며 수강할 수 있으므로 휴직 필요도 맞지 않는다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "rewarded",
+     "rewarding",
+     "reward",
+     "rewardingly"
+    ],
+    "answer": 1,
+    "type": "품사",
+    "explanation": "the most 뒤에서 명사 experience를 꾸미는 형용사 자리이다. 경험이 '보람을 주는' 것이므로 능동 의미의 rewarding이 정답이다. rewarded는 '보상받은'이라는 수동 의미로 경험을 꾸미기에 어색하고, reward는 명사·동사, rewardingly는 부사이다."
+   }
+  ],
+  "translation": "오늘날의 고위 관리자들은 10년 전에는 상상할 수 없었던 과제에 직면해 있습니다. 급변하는 시장, 원격·하이브리드 팀, 그리고 고객과 규제 당국 모두의 점점 커지는 기대가 그것입니다. 휘트모어 전략적 리더십 프로그램은 경험 많은 경영자들이 이러한 과제에 자신 있게 대응하도록 돕기 위해 만들어졌습니다.\n\n6주간의 집중 과정 동안 참가자들은 다양한 산업에서 가져온 실제 사례를 분석하고, 소그룹으로 자기 조직이 직면한 문제의 해결책을 만듭니다. 각 참가자에게는 과정 내내 개별 피드백을 주는 교수진 코치도 배정됩니다.\n\n수업은 금요일 저녁과 토요일에 열리므로 참가자는 계속 전일제로 근무할 수 있습니다. 이전 수료생들은 이 프로그램을 경력에서 가장 보람 있는 직업적 경험이라고 평가하며, 특히 다른 분야의 동료들에게서 배울 수 있는 기회를 꼽았습니다.\n\n지원자는 최소 10년의 관리 경력이 있어야 합니다. 다음 과정은 10월 3일에 시작하며 정원은 40명입니다. 지원하시려면 whitmore.edu/slp를 방문하십시오."
+ },
+ {
+  "id": "p6-049",
+  "level": 5,
+  "doc_type": "편지",
+  "title": "Morrow & Tate Architects\n88 Wellington Street, Toronto, ON M5J 2N7\n\nNovember 14\n\nMs. Evelyn Carter\nDirector of Operations, Carter Family Foods\n1450 Lakeshore Road, Mississauga, ON L5E 1E9",
+  "passage": "Dear Ms. Carter,\n\nI am writing to update you on the status of the new distribution center in Mississauga. As you know, our original schedule called for construction to begin on December 1. Unfortunately, the city has not yet issued the building permit, and we now expect work to start in mid-January {1}.\n\nThe delay stems from the city's request for an additional traffic study. {2} We have already hired an engineering firm to carry out the study, and its report should be submitted by December 10.\n\nI want to assure you that this setback should not affect the overall completion date. By {3} certain tasks that were originally planned in sequence, the contractor believes the lost weeks can be made up during the spring. In fact, had the permit been issued on time, the project {4} slightly ahead of schedule.\n\nI will contact you as soon as we receive a decision from the city.\n\nYours sincerely,\nAlan Morrow\nPrincipal",
+  "questions": [
+   {
+    "q": "",
+    "choices": [
+     "at the latest",
+     "at least",
+     "at most",
+     "at the earliest"
+    ],
+    "answer": 3,
+    "type": "어휘",
+    "explanation": "허가가 아직 나지 않아 착공이 늦어지는 상황이므로 '빨라야 1월 중순'이라는 뜻의 at the earliest가 정답이다. at the latest(늦어도)는 오히려 일정이 확실하다는 뜻이 되어 허가 지연 상황과 맞지 않고, at most(많아야), at least(적어도)는 수량에 주로 쓰여 시점 표현과 어울리지 않는다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "The permit was issued last week, so work will begin as planned.",
+     "As a result, we have decided to cancel the project.",
+     "Because the site is next to a busy highway, planners want to confirm that truck traffic will not cause congestion.",
+     "The study was completed in October and approved by the city."
+    ],
+    "answer": 2,
+    "type": "문장 삽입",
+    "explanation": "앞 문장에서 시가 교통 조사를 추가로 요구했다고 했으므로 '부지가 혼잡한 고속도로 옆이라 트럭 통행이 정체를 일으키지 않는지 확인하려 한다'는 요구 이유가 이어지는 것이 자연스럽다. 허가는 아직 나오지 않았고, 프로젝트는 계속되며, 조사는 이제 막 업체를 고용해 12월 10일에 보고서가 나올 예정이므로 나머지는 모두 모순이다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "overlapped",
+     "overlapping",
+     "overlap",
+     "to overlap"
+    ],
+    "answer": 1,
+    "type": "준동사(to부정사·동명사·분사)",
+    "explanation": "전치사 By 뒤에는 동명사가 와서 '~함으로써'라는 뜻이 된다. 뒤에 목적어 certain tasks가 있으므로 능동형 동명사 overlapping이 정답이다. overlap은 동사원형, to overlap은 to부정사라 전치사 뒤에 올 수 없고, overlapped는 과거분사라 목적어를 취하는 이 자리와 맞지 않는다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "had been",
+     "will have been",
+     "would be",
+     "would have been"
+    ],
+    "answer": 3,
+    "type": "동사 시제·태",
+    "explanation": "had the permit been issued on time은 if the permit had been issued on time에서 if를 생략하고 도치한 가정법 과거완료이다. 따라서 주절에는 would have p.p.가 필요하므로 would have been이 정답이다. would be는 가정법 과거, will have been은 미래완료이며, had been은 주절의 형태가 아니다."
+   }
+  ],
+  "translation": "카터 씨께,\n\n미시소거 신규 물류 센터의 진행 상황을 알려 드리고자 편지를 드립니다. 아시다시피 원래 일정은 12월 1일 착공이었습니다. 안타깝게도 시가 아직 건축 허가를 내주지 않아, 현재로서는 빨라야 1월 중순에 공사가 시작될 것으로 예상합니다.\n\n지연은 시가 추가 교통 조사를 요청했기 때문입니다. 부지가 교통량이 많은 고속도로 옆에 있어서 시 도시계획 담당자들이 트럭 통행으로 인한 정체가 없을지 확인하려고 합니다. 저희는 이미 조사를 수행할 엔지니어링 회사를 고용했으며, 보고서는 12월 10일까지 제출될 예정입니다.\n\n이번 차질이 전체 완공일에는 영향을 주지 않을 것임을 말씀드립니다. 원래 순서대로 진행하기로 했던 일부 작업을 겹쳐 진행함으로써 늦어진 몇 주를 봄에 만회할 수 있다고 시공사는 판단하고 있습니다. 사실 허가가 제때 나왔다면 공사는 일정보다 약간 앞서 있었을 것입니다.\n\n시의 결정을 받는 대로 연락드리겠습니다.\n\n앨런 모로\n대표"
+ },
+ {
+  "id": "p6-050",
+  "level": 5,
+  "doc_type": "안내문",
+  "title": "Coastal Rail — Important Information About the New Winter Timetable",
+  "passage": "From Sunday, December 7, Coastal Rail will introduce a revised timetable on its Northshore Line. The changes are intended to improve reliability, as well as to {1} engineering work on the Harwick Bridge, which is scheduled to continue until March.\n\nKey changes\nWeekday peak services between Harwick and Central Station will run every 12 minutes instead of every 10. Although this means slightly fewer trains, each will have eight carriages rather than six, so overall capacity will be {2} than it is now. {3}\n\nLate-evening services will end at 11:30 P.M. rather than midnight, with replacement buses operating until 1:00 A.M.\n\nPassengers are advised to check journey times before traveling, as some departure times {4} by up to five minutes. Updated timetables are available at all staffed stations and through the Coastal Rail app. We apologize for any inconvenience and thank passengers for their patience while this essential work is carried out.",
+  "questions": [
+   {
+    "q": "",
+    "choices": [
+     "abandon",
+     "postpone",
+     "attract",
+     "accommodate"
+    ],
+    "answer": 3,
+    "type": "어휘",
+    "explanation": "다리 공사가 3월까지 '계속될 예정'이므로 시간표 변경의 목적은 그 공사를 '수용하다(가능하게 하다)'라는 accommodate가 알맞다. abandon(포기하다), postpone(연기하다)은 공사가 계속된다는 내용과 모순되고, attract(끌어들이다)는 공사와 뜻이 통하지 않는다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "greatly",
+     "great",
+     "greatest",
+     "greater"
+    ],
+    "answer": 3,
+    "type": "비교",
+    "explanation": "뒤에 than it is now가 있으므로 비교급 greater가 정답이다. 열차 수는 약간 줄지만 객차가 6량에서 8량으로 늘어 '전체 수송력은 지금보다 더 크다'는 뜻이다. great은 원급, greatest는 최상급이고, greatly는 부사라 be동사 뒤 보어 자리에 올 수 없다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "As a result, passengers will experience more crowded trains during peak hours.",
+     "In fact, the longer trains will provide several hundred additional seats per hour during the morning rush.",
+     "Weekend services will therefore be suspended until further notice.",
+     "The Harwick Bridge reopened to trains last month after the work was completed."
+    ],
+    "answer": 1,
+    "type": "문장 삽입",
+    "explanation": "앞 문장의 '전체 수송력이 더 커진다'를 '실제로 긴 열차가 아침 출근 시간에 시간당 수백 석을 더 제공한다'는 구체적 수치로 뒷받침하는 것이 자연스럽다. 수송력이 늘어나므로 더 혼잡해진다는 문장은 모순이고, 주말 운행 중단은 근거가 없으며, 다리 공사는 3월까지 계속되므로 완료되었다는 문장도 틀리다."
+   },
+   {
+    "q": "",
+    "choices": [
+     "will adjust",
+     "adjusting",
+     "have adjusted",
+     "will be adjusted"
+    ],
+    "answer": 3,
+    "type": "동사 시제·태",
+    "explanation": "주어 some departure times(출발 시각)는 철도 회사에 의해 '조정되는' 대상이므로 수동태가 필요하고, 12월 7일부터 적용될 변경이므로 미래 수동태 will be adjusted가 정답이다. will adjust와 have adjusted는 능동이라 출발 시각이 무언가를 조정하는 뜻이 되고, adjusting은 동사 자리에 올 수 없다."
+   }
+  ],
+  "translation": "12월 7일 일요일부터 코스털 레일은 노스쇼어선에 개정된 시간표를 도입합니다. 이번 변경은 운행 신뢰성을 높이는 것뿐만 아니라 3월까지 계속될 예정인 하윅 다리 공사를 수용하기 위한 것입니다.\n\n주요 변경 사항\n하윅과 중앙역 사이의 평일 출퇴근 시간 열차는 10분이 아닌 12분 간격으로 운행합니다. 열차 수는 약간 줄지만 각 열차가 6량이 아닌 8량으로 운행되므로 전체 수송력은 지금보다 커집니다. 실제로 더 길어진 열차는 아침 출근 시간에 시간당 수백 석의 좌석을 추가로 제공합니다.\n\n심야 열차는 자정이 아닌 오후 11시 30분에 운행을 마치며, 오전 1시까지는 대체 버스가 운행합니다.\n\n일부 출발 시각이 최대 5분까지 조정되므로 승객 여러분은 이동 전에 소요 시간을 확인하시기 바랍니다. 개정된 시간표는 직원이 있는 모든 역과 코스털 레일 앱에서 확인하실 수 있습니다. 불편을 드려 죄송하며, 이 필수 공사가 진행되는 동안 양해해 주시는 승객 여러분께 감사드립니다."
+ }
+]

@@ -1,0 +1,3002 @@
+[
+ {
+  "id": "p5-151",
+  "level": 1,
+  "type": "어휘",
+  "question": "Passengers must show their ------- at the gate before boarding.",
+  "choices": [
+   "recipes",
+   "menus",
+   "tickets",
+   "salaries"
+  ],
+  "answer": 2,
+  "explanation": "탑승(boarding) 전에 게이트에서 보여 줘야 하는 것은 항공권이므로 tickets가 알맞다. recipes(요리법), menus(메뉴), salaries(급여)는 탑승 게이트 상황과 어울리지 않는다.",
+  "translation": "승객들은 탑승 전에 게이트에서 항공권을 보여 주어야 한다."
+ },
+ {
+  "id": "p5-152",
+  "level": 1,
+  "type": "어휘",
+  "question": "Please ------- the red button to stop the machine.",
+  "choices": [
+   "borrow",
+   "taste",
+   "press",
+   "wear"
+  ],
+  "answer": 2,
+  "explanation": "버튼(button)과 짝을 이루는 동사는 '누르다'라는 뜻의 press이다. wear(입다), borrow(빌리다), taste(맛보다)는 기계를 멈추기 위해 버튼에 하는 동작이 아니다.",
+  "translation": "기계를 멈추려면 빨간 버튼을 누르세요."
+ },
+ {
+  "id": "p5-153",
+  "level": 1,
+  "type": "어휘",
+  "question": "The farmers' market sells fresh ------- every Saturday morning.",
+  "choices": [
+   "vegetables",
+   "computers",
+   "tickets",
+   "furniture"
+  ],
+  "answer": 0,
+  "explanation": "farmers' market(농산물 직판장)에서 파는 fresh(신선한) 물건은 채소이므로 vegetables가 정답이다. computers, furniture, tickets는 fresh와 어울리지 않고 농산물 시장의 상품도 아니다.",
+  "translation": "그 농산물 직판장은 매주 토요일 아침 신선한 채소를 판다."
+ },
+ {
+  "id": "p5-154",
+  "level": 1,
+  "type": "어휘",
+  "question": "The mechanic will ------- the brakes on your car this afternoon.",
+  "choices": [
+   "teach",
+   "rent",
+   "repair",
+   "cook"
+  ],
+  "answer": 2,
+  "explanation": "정비공(mechanic)이 자동차 브레이크에 하는 일은 '수리하다'이므로 repair가 알맞다. cook(요리하다), teach(가르치다), rent(빌리다)는 brakes를 목적어로 자연스럽게 쓸 수 없다.",
+  "translation": "정비사가 오늘 오후에 당신 차의 브레이크를 수리할 것이다."
+ },
+ {
+  "id": "p5-155",
+  "level": 1,
+  "type": "어휘",
+  "question": "Our online store offers free ------- on all orders over $50.",
+  "choices": [
+   "shipping",
+   "sleeping",
+   "weather",
+   "history"
+  ],
+  "answer": 0,
+  "explanation": "온라인 상점이 50달러 이상 주문에 무료로 제공하는 것은 배송이므로 free shipping(무료 배송)이 정답이다. weather, history, sleeping은 주문(orders)과 관련된 서비스가 아니다.",
+  "translation": "저희 온라인 상점은 50달러가 넘는 모든 주문에 무료 배송을 제공합니다."
+ },
+ {
+  "id": "p5-156",
+  "level": 1,
+  "type": "어휘",
+  "question": "Guests can ------- out of the hotel until noon.",
+  "choices": [
+   "turn",
+   "look",
+   "check",
+   "run"
+  ],
+  "answer": 2,
+  "explanation": "호텔에서 '퇴실하다'는 check out이므로 check가 정답이다. look out(조심하다), turn out(판명되다), run out(다 떨어지다)은 호텔 퇴실 시간과 맞지 않는다.",
+  "translation": "투숙객은 정오까지 호텔에서 체크아웃할 수 있다."
+ },
+ {
+  "id": "p5-157",
+  "level": 1,
+  "type": "어휘",
+  "question": "The bank will be ------- on Sunday for the national holiday.",
+  "choices": [
+   "tired",
+   "short",
+   "empty",
+   "closed"
+  ],
+  "answer": 3,
+  "explanation": "국경일(national holiday) 때문에 은행이 '문을 닫는다'는 흐름이므로 closed가 알맞다. empty(비어 있는), tired(피곤한), short(짧은)는 휴일에 은행의 영업 상태를 나타내지 못한다.",
+  "translation": "그 은행은 국경일이라 일요일에 문을 닫을 것이다."
+ },
+ {
+  "id": "p5-158",
+  "level": 1,
+  "type": "어휘",
+  "question": "Ms. Svensson is ------- a new dress for the fashion show.",
+  "choices": [
+   "designing",
+   "sleeping",
+   "driving",
+   "eating"
+  ],
+  "answer": 0,
+  "explanation": "패션쇼를 위해 새 드레스를 '디자인하고 있다'가 자연스러우므로 designing이 정답이다. eating, sleeping, driving은 dress를 목적어로 쓸 수 없거나 의미가 맞지 않는다.",
+  "translation": "스벤슨 씨는 패션쇼를 위해 새 드레스를 디자인하고 있다."
+ },
+ {
+  "id": "p5-159",
+  "level": 1,
+  "type": "어휘",
+  "question": "Students must ------- the class fee before the course begins.",
+  "choices": [
+   "cost",
+   "pay",
+   "earn",
+   "spend"
+  ],
+  "answer": 1,
+  "explanation": "fee(수강료)는 '내다'라는 뜻의 pay와 짝을 이룬다. spend는 spend money on처럼 쓰고, cost는 사물이 주어로 와서 '비용이 들다'라는 뜻이며, earn(벌다)은 의미가 반대다.",
+  "translation": "학생들은 강좌가 시작되기 전에 수강료를 내야 한다."
+ },
+ {
+  "id": "p5-160",
+  "level": 1,
+  "type": "어휘",
+  "question": "The newspaper ------- a story about the new city library yesterday.",
+  "choices": [
+   "cooked",
+   "hired",
+   "washed",
+   "published"
+  ],
+  "answer": 3,
+  "explanation": "신문이 기사(story)를 '실었다, 게재했다'는 뜻이므로 published가 알맞다. hired(고용했다), cooked(요리했다), washed(씻었다)는 기사와 어울리지 않는다.",
+  "translation": "그 신문은 어제 새 시립 도서관에 관한 기사를 실었다."
+ },
+ {
+  "id": "p5-161",
+  "level": 1,
+  "type": "품사",
+  "question": "------- to the science museum is free for children under 12.",
+  "choices": [
+   "Admissible",
+   "Admission",
+   "Admitted",
+   "Admit"
+  ],
+  "answer": 1,
+  "explanation": "문장의 주어 자리이고 뒤에 동사 is가 있으므로 명사 Admission(입장)이 와야 한다. Admit은 동사원형, Admitted는 과거분사, Admissible은 형용사라 주어가 될 수 없다.",
+  "translation": "12세 미만 어린이는 과학관 입장이 무료이다."
+ },
+ {
+  "id": "p5-162",
+  "level": 1,
+  "type": "품사",
+  "question": "The nurse spoke ------- to the young patient.",
+  "choices": [
+   "gentler",
+   "gently",
+   "gentleness",
+   "gentle"
+  ],
+  "answer": 1,
+  "explanation": "자동사 spoke를 꾸며 주는 자리이므로 부사 gently가 알맞다. gentle과 gentler는 형용사, gentleness는 명사라서 동사를 수식할 수 없다.",
+  "translation": "간호사는 어린 환자에게 부드럽게 말했다."
+ },
+ {
+  "id": "p5-163",
+  "level": 1,
+  "type": "품사",
+  "question": "The new delivery trucks are very -------.",
+  "choices": [
+   "quietness",
+   "quietly",
+   "quiets",
+   "quiet"
+  ],
+  "answer": 3,
+  "explanation": "be동사 are 뒤 very의 꾸밈을 받는 보어 자리이므로 형용사 quiet이 정답이다. quietly는 부사, quietness는 명사, quiets는 동사 형태라 보어로 알맞지 않다.",
+  "translation": "새 배송 트럭들은 매우 조용하다."
+ },
+ {
+  "id": "p5-164",
+  "level": 1,
+  "type": "품사",
+  "question": "Please make a ------- before the end of the month.",
+  "choices": [
+   "payment",
+   "pay",
+   "paid",
+   "payable"
+  ],
+  "answer": 0,
+  "explanation": "관사 a 뒤, make의 목적어 자리이므로 명사 payment가 와야 한다. make a payment(지불하다)는 자주 쓰는 표현이다. pay는 동사로 주로 쓰이고, paid와 payable은 형용사 성격이라 관사 뒤 단독으로 쓸 수 없다.",
+  "translation": "월말 전에 납부해 주세요."
+ },
+ {
+  "id": "p5-165",
+  "level": 1,
+  "type": "품사",
+  "question": "Customers were ------- with the fast service at the new café.",
+  "choices": [
+   "please",
+   "pleased",
+   "pleasure",
+   "pleasing"
+  ],
+  "answer": 1,
+  "explanation": "고객이 '기뻐한' 것이므로 감정을 느끼는 사람 주어에는 과거분사형 형용사 pleased가 온다(be pleased with). pleasing은 '기쁘게 하는'이라는 뜻이라 사물 주어에 쓰고, please는 동사, pleasure는 명사다.",
+  "translation": "고객들은 새 카페의 빠른 서비스에 만족했다."
+ },
+ {
+  "id": "p5-166",
+  "level": 1,
+  "type": "품사",
+  "question": "The factory ------- produces 500 bicycles a day.",
+  "choices": [
+   "used",
+   "usually",
+   "usual",
+   "use"
+  ],
+  "answer": 1,
+  "explanation": "주어와 동사 produces 사이에서 동사를 꾸미는 자리이므로 빈도부사 usually가 알맞다. usual은 형용사, use는 동사·명사, used는 과거분사라 이 자리에 올 수 없다.",
+  "translation": "그 공장은 보통 하루에 자전거 500대를 생산한다."
+ },
+ {
+  "id": "p5-167",
+  "level": 1,
+  "type": "품사",
+  "question": "Our new banking app is easy to -------.",
+  "choices": [
+   "usefully",
+   "usage",
+   "use",
+   "useful"
+  ],
+  "answer": 2,
+  "explanation": "to부정사의 to 뒤에는 동사원형이 오므로 use가 정답이다. useful은 형용사, usefully는 부사, usage는 명사라 to 뒤에 올 수 없다.",
+  "translation": "저희 새 은행 앱은 사용하기 쉽습니다."
+ },
+ {
+  "id": "p5-168",
+  "level": 1,
+  "type": "품사",
+  "question": "Chef Moreau prepares every dish with great -------.",
+  "choices": [
+   "skilled",
+   "skill",
+   "skillfully",
+   "skillful"
+  ],
+  "answer": 1,
+  "explanation": "전치사 with와 형용사 great 뒤에는 명사가 와야 하므로 skill이 알맞다. skillful과 skilled는 형용사, skillfully는 부사라 형용사 뒤 명사 자리에 올 수 없다.",
+  "translation": "모로 셰프는 모든 요리를 뛰어난 솜씨로 준비한다."
+ },
+ {
+  "id": "p5-169",
+  "level": 1,
+  "type": "품사",
+  "question": "The teacher's explanation of the new exam was very -------.",
+  "choices": [
+   "clearly",
+   "clarity",
+   "clarify",
+   "clear"
+  ],
+  "answer": 3,
+  "explanation": "be동사 was 뒤 very가 꾸미는 보어 자리이므로 형용사 clear가 정답이다. clearly는 부사, clarity는 명사, clarify는 동사라 이 자리에 맞지 않는다.",
+  "translation": "새 시험에 대한 선생님의 설명은 매우 명확했다."
+ },
+ {
+  "id": "p5-170",
+  "level": 1,
+  "type": "동사 시제·태",
+  "question": "Mr. Haddad ------- the invoice to the client yesterday.",
+  "choices": [
+   "emailing",
+   "emails",
+   "emailed",
+   "will email"
+  ],
+  "answer": 2,
+  "explanation": "과거 시점 부사 yesterday가 있으므로 과거시제 emailed가 알맞다. emails는 현재, will email은 미래라 시제가 맞지 않고, emailing은 동사 역할을 혼자 할 수 없다.",
+  "translation": "하다드 씨는 어제 고객에게 청구서를 이메일로 보냈다."
+ },
+ {
+  "id": "p5-171",
+  "level": 1,
+  "type": "동사 시제·태",
+  "question": "The airline ------- a new route to Hanoi next month.",
+  "choices": [
+   "will start",
+   "has started",
+   "started",
+   "starting"
+  ],
+  "answer": 0,
+  "explanation": "미래 시점 부사 next month가 있으므로 미래시제 will start가 정답이다. started와 has started는 이미 일어난 일을 나타내고, starting은 조동사 없이 동사 자리에 올 수 없다.",
+  "translation": "그 항공사는 다음 달 하노이행 신규 노선을 시작할 것이다."
+ },
+ {
+  "id": "p5-172",
+  "level": 1,
+  "type": "동사 시제·태",
+  "question": "The workers ------- a new sign above the store right now.",
+  "choices": [
+   "are installing",
+   "have installed",
+   "install",
+   "installed"
+  ],
+  "answer": 0,
+  "explanation": "right now(지금)는 진행 중인 동작을 나타내므로 현재진행형 are installing이 알맞다. install은 습관, installed는 과거, have installed는 완료를 나타내 right now와 어울리지 않는다.",
+  "translation": "인부들이 지금 가게 위에 새 간판을 설치하고 있다."
+ },
+ {
+  "id": "p5-173",
+  "level": 1,
+  "type": "동사 시제·태",
+  "question": "Mr. Novak ------- in the accounting department now.",
+  "choices": [
+   "works",
+   "to work",
+   "have worked",
+   "working"
+  ],
+  "answer": 0,
+  "explanation": "주어가 3인칭 단수이고 현재(now)의 사실을 말하므로 works가 정답이다. working과 to work는 혼자 동사 역할을 할 수 없고, have worked는 3인칭 단수 주어와 수가 맞지 않는다.",
+  "translation": "노박 씨는 지금 회계부에서 일한다."
+ },
+ {
+  "id": "p5-174",
+  "level": 1,
+  "type": "동사 시제·태",
+  "question": "These leather chairs ------- in Italy.",
+  "choices": [
+   "made",
+   "make",
+   "were made",
+   "making"
+  ],
+  "answer": 2,
+  "explanation": "의자는 '만들어진' 대상이므로 수동태 were made가 알맞다. made와 make는 능동이라 의자가 무엇을 만든다는 뜻이 되고, making은 동사 역할을 할 수 없다.",
+  "translation": "이 가죽 의자들은 이탈리아에서 만들어졌다."
+ },
+ {
+  "id": "p5-175",
+  "level": 1,
+  "type": "접속사",
+  "question": "The main printer is broken, ------- please use the one in Room 204.",
+  "choices": [
+   "because",
+   "unless",
+   "so",
+   "although"
+  ],
+  "answer": 2,
+  "explanation": "'프린터가 고장 났다, 그래서 204호 것을 써 달라'는 원인과 결과 흐름이므로 so가 알맞다. because는 이유를 뒤에 붙이고, although(비록 ~지만)와 unless(~하지 않으면)는 의미가 맞지 않는다.",
+  "translation": "주 프린터가 고장 났으니 204호에 있는 것을 사용해 주세요."
+ },
+ {
+  "id": "p5-176",
+  "level": 1,
+  "type": "접속사",
+  "question": "Ms. Ito speaks both Japanese ------- Korean.",
+  "choices": [
+   "and",
+   "or",
+   "but",
+   "so"
+  ],
+  "answer": 0,
+  "explanation": "both A and B(A와 B 둘 다)는 짝을 이루는 표현이므로 and가 정답이다. or는 either와, but은 not only 등과 짝을 이루고, so는 결과를 나타낸다.",
+  "translation": "이토 씨는 일본어와 한국어를 둘 다 한다."
+ },
+ {
+  "id": "p5-177",
+  "level": 1,
+  "type": "접속사",
+  "question": "We will ship your order ------- we receive your payment.",
+  "choices": [
+   "and",
+   "after",
+   "so",
+   "but"
+  ],
+  "answer": 1,
+  "explanation": "'결제를 받은 후에 주문품을 발송한다'는 시간 관계이므로 부사절 접속사 after가 알맞다. but, so, and는 등위접속사라 시간 순서를 나타내지 못하고 의미도 어색하다.",
+  "translation": "결제를 받은 후에 주문품을 발송하겠습니다."
+ },
+ {
+  "id": "p5-178",
+  "level": 1,
+  "type": "전치사",
+  "question": "The weekly sales meeting is ------- Tuesday.",
+  "choices": [
+   "in",
+   "to",
+   "on",
+   "at"
+  ],
+  "answer": 2,
+  "explanation": "요일 앞에는 전치사 on을 쓴다. at은 시각, in은 월·연도 같은 긴 기간 앞에 쓰고, to는 방향을 나타내므로 요일과 어울리지 않는다.",
+  "translation": "주간 영업 회의는 화요일에 있다."
+ },
+ {
+  "id": "p5-179",
+  "level": 1,
+  "type": "전치사",
+  "question": "The first-aid workshop will last ------- two hours.",
+  "choices": [
+   "since",
+   "for",
+   "on",
+   "at"
+  ],
+  "answer": 1,
+  "explanation": "two hours 같은 기간 앞에서 '~ 동안'을 나타내는 전치사는 for이다. since는 시작 시점 앞에, on은 날짜 앞에, at은 시각 앞에 쓴다.",
+  "translation": "응급처치 워크숍은 두 시간 동안 진행될 것이다."
+ },
+ {
+  "id": "p5-180",
+  "level": 1,
+  "type": "전치사",
+  "question": "This express train goes ------- Seoul to Busan.",
+  "choices": [
+   "at",
+   "on",
+   "with",
+   "from"
+  ],
+  "answer": 3,
+  "explanation": "from A to B(A에서 B까지)의 짝 표현이므로 from이 정답이다. at, on, with는 뒤의 to와 짝을 이루어 출발지를 나타내지 못한다.",
+  "translation": "이 급행열차는 서울에서 부산까지 간다."
+ },
+ {
+  "id": "p5-181",
+  "level": 1,
+  "type": "준동사(to부정사·동명사·분사)",
+  "question": "Mr. Chowdhury wants ------- a new laptop for work.",
+  "choices": [
+   "buying",
+   "to buy",
+   "buys",
+   "bought"
+  ],
+  "answer": 1,
+  "explanation": "want는 목적어로 to부정사를 취하므로 to buy가 알맞다. buying은 동명사라 want 뒤에 쓰지 않고, bought와 buys는 이미 동사 wants가 있어 올 수 없다.",
+  "translation": "차우두리 씨는 업무용 새 노트북을 사고 싶어 한다."
+ },
+ {
+  "id": "p5-182",
+  "level": 1,
+  "type": "준동사(to부정사·동명사·분사)",
+  "question": "Ms. Park enjoys ------- with customers from other countries.",
+  "choices": [
+   "to talk",
+   "talks",
+   "talked",
+   "talking"
+  ],
+  "answer": 3,
+  "explanation": "enjoy는 동명사를 목적어로 취하므로 talking이 정답이다. to talk는 enjoy 뒤에 쓰지 않으며, talked와 talks는 동사 형태라 목적어 자리에 올 수 없다.",
+  "translation": "박 씨는 다른 나라에서 온 고객들과 이야기하는 것을 즐긴다."
+ },
+ {
+  "id": "p5-183",
+  "level": 1,
+  "type": "준동사(to부정사·동명사·분사)",
+  "question": "Construction workers wear helmets ------- their heads.",
+  "choices": [
+   "protected",
+   "to protect",
+   "protect",
+   "protects"
+  ],
+  "answer": 1,
+  "explanation": "'머리를 보호하기 위해'라는 목적을 나타내므로 to부정사 to protect가 알맞다. protect와 protects는 이미 동사 wear가 있어 올 수 없고, protected는 '보호된'이라는 수동 의미라 뒤에 목적어를 둘 수 없다.",
+  "translation": "건설 노동자들은 머리를 보호하기 위해 안전모를 쓴다."
+ },
+ {
+  "id": "p5-184",
+  "level": 1,
+  "type": "관계사",
+  "question": "This is the hotel ------- we stayed during the trade fair.",
+  "choices": [
+   "what",
+   "which",
+   "where",
+   "who"
+  ],
+  "answer": 2,
+  "explanation": "선행사가 장소(the hotel)이고 뒤 문장(we stayed)이 완전하므로 관계부사 where가 정답이다. which는 뒤 문장에 빠진 성분이 있어야 하고(stayed at이면 가능), who는 사람, what은 선행사 없이 쓴다.",
+  "translation": "여기가 무역 박람회 기간에 우리가 묵었던 호텔이다."
+ },
+ {
+  "id": "p5-185",
+  "level": 1,
+  "type": "관계사",
+  "question": "The package ------- arrived this morning is for Mr. Wong.",
+  "choices": [
+   "whom",
+   "where",
+   "who",
+   "which"
+  ],
+  "answer": 3,
+  "explanation": "선행사가 사물(the package)이고 뒤에 주어가 빠져 있으므로 주격 관계대명사 which가 알맞다. who와 whom은 사람에게 쓰고, where는 뒤에 완전한 문장이 와야 한다.",
+  "translation": "오늘 아침에 도착한 소포는 웡 씨 앞으로 온 것이다."
+ },
+ {
+  "id": "p5-186",
+  "level": 1,
+  "type": "대명사",
+  "question": "The shoe company changed ------- logo last year.",
+  "choices": [
+   "its",
+   "it",
+   "it's",
+   "itself"
+  ],
+  "answer": 0,
+  "explanation": "명사 logo 앞에서 '그것의'를 뜻하는 소유격이 필요하므로 its가 정답이다. it은 주격·목적격, it's는 it is의 줄임말, itself는 재귀대명사라 명사를 꾸밀 수 없다.",
+  "translation": "그 신발 회사는 작년에 로고를 바꿨다."
+ },
+ {
+  "id": "p5-187",
+  "level": 1,
+  "type": "대명사",
+  "question": "Mr. Silva has two new interns, and he trains ------- every morning.",
+  "choices": [
+   "theirs",
+   "they",
+   "their",
+   "them"
+  ],
+  "answer": 3,
+  "explanation": "동사 trains의 목적어 자리이므로 목적격 them이 알맞다. they는 주격, their는 소유격, theirs는 소유대명사라 '그들을 훈련시킨다'는 의미를 만들 수 없다.",
+  "translation": "실바 씨에게는 새 인턴이 두 명 있고, 그는 매일 아침 그들을 교육한다."
+ },
+ {
+  "id": "p5-188",
+  "level": 1,
+  "type": "수 일치",
+  "question": "The price of the concert tickets ------- $20.",
+  "choices": [
+   "is",
+   "being",
+   "be",
+   "are"
+  ],
+  "answer": 0,
+  "explanation": "주어의 중심 명사는 단수 The price이고 of the concert tickets는 수식어이므로 단수 동사 is가 알맞다. are는 tickets에 맞춘 오답이고, be와 being은 동사 자리에 단독으로 쓸 수 없다.",
+  "translation": "콘서트 티켓 가격은 20달러이다."
+ },
+ {
+  "id": "p5-189",
+  "level": 1,
+  "type": "수 일치",
+  "question": "Our head chef ------- fresh fish at the market every day.",
+  "choices": [
+   "buying",
+   "buy",
+   "to buy",
+   "buys"
+  ],
+  "answer": 3,
+  "explanation": "주어 Our head chef가 3인칭 단수이고 반복되는 습관(every day)이므로 buys가 정답이다. buy는 복수 주어에 쓰며, buying과 to buy는 문장의 동사가 될 수 없다.",
+  "translation": "우리 수석 셰프는 매일 시장에서 신선한 생선을 산다."
+ },
+ {
+  "id": "p5-190",
+  "level": 1,
+  "type": "비교",
+  "question": "Summer is the ------- season for our beach resort.",
+  "choices": [
+   "busy",
+   "busily",
+   "busier",
+   "busiest"
+  ],
+  "answer": 3,
+  "explanation": "the와 함께 '가장 바쁜'을 나타내는 최상급 busiest가 알맞다. busy는 원급, busier는 than과 쓰는 비교급이며, busily는 부사라 명사 season을 꾸밀 수 없다.",
+  "translation": "여름은 우리 해변 리조트의 가장 바쁜 시즌이다."
+ },
+ {
+  "id": "p5-191",
+  "level": 2,
+  "type": "어휘",
+  "question": "Please ------- your seat belt while the airplane is taxiing.",
+  "choices": [
+   "hang",
+   "fasten",
+   "button",
+   "fold"
+  ],
+  "answer": 1,
+  "explanation": "seat belt(안전벨트)와 짝을 이루는 동사는 '매다'라는 뜻의 fasten이다. button(단추를 채우다), hang(걸다), fold(접다)는 안전벨트와 어울리지 않는다.",
+  "translation": "비행기가 지상 이동하는 동안 안전벨트를 매 주십시오."
+ },
+ {
+  "id": "p5-192",
+  "level": 2,
+  "type": "어휘",
+  "question": "The Harborview Inn ------- breakfast free of charge to all guests.",
+  "choices": [
+   "attends",
+   "borrows",
+   "spends",
+   "serves"
+  ],
+  "answer": 3,
+  "explanation": "호텔이 투숙객에게 아침 식사를 '제공하다'는 serves가 알맞다. spends(쓰다), attends(참석하다), borrows(빌리다)는 breakfast를 손님에게 준다는 의미를 만들지 못한다.",
+  "translation": "하버뷰 인은 모든 투숙객에게 아침 식사를 무료로 제공한다."
+ },
+ {
+  "id": "p5-193",
+  "level": 2,
+  "type": "어휘",
+  "question": "Customers may ------- unused items within 30 days for a full refund.",
+  "choices": [
+   "remain",
+   "return",
+   "repeat",
+   "reply"
+  ],
+  "answer": 1,
+  "explanation": "전액 환불(full refund)을 받으려면 물건을 '반품하다'가 자연스러우므로 return이 정답이다. reply는 to가 필요하고, remain은 자동사이며, repeat(반복하다)은 의미가 맞지 않는다.",
+  "translation": "고객은 사용하지 않은 물품을 30일 이내에 반품하고 전액 환불받을 수 있다."
+ },
+ {
+  "id": "p5-194",
+  "level": 2,
+  "type": "어휘",
+  "question": "Take one tablet ------- a day, once in the morning and once at night.",
+  "choices": [
+   "second",
+   "twice",
+   "pair",
+   "double"
+  ],
+  "answer": 1,
+  "explanation": "뒤에 '아침에 한 번, 밤에 한 번'이라고 했으므로 '하루 두 번'을 뜻하는 twice가 알맞다. double(두 배의), second(두 번째), pair(한 쌍)는 횟수를 나타내는 부사로 쓰이지 않는다.",
+  "translation": "하루 두 번, 아침에 한 번 밤에 한 번 한 알씩 복용하세요."
+ },
+ {
+  "id": "p5-195",
+  "level": 2,
+  "type": "어휘",
+  "question": "Your antivirus software ------- will expire at the end of the year.",
+  "choices": [
+   "vacancy",
+   "license",
+   "appointment",
+   "audience"
+  ],
+  "answer": 1,
+  "explanation": "소프트웨어와 함께 쓰여 '만료되다(expire)'의 주어가 될 수 있는 것은 사용권인 license이다. audience(청중), vacancy(공석), appointment(약속)는 소프트웨어와 어울리지 않는다.",
+  "translation": "귀하의 백신 소프트웨어 사용권은 연말에 만료됩니다."
+ },
+ {
+  "id": "p5-196",
+  "level": 2,
+  "type": "어휘",
+  "question": "Ms. Nkemelu ------- for a small business loan at Fairway Bank.",
+  "choices": [
+   "requested",
+   "submitted",
+   "borrowed",
+   "applied"
+  ],
+  "answer": 3,
+  "explanation": "빈칸 뒤 전치사 for와 함께 '~을 신청하다'는 apply for이므로 applied가 정답이다. requested, submitted, borrowed는 타동사라 for 없이 바로 목적어를 취한다.",
+  "translation": "은케멜루 씨는 페어웨이 은행에 소상공인 대출을 신청했다."
+ },
+ {
+  "id": "p5-197",
+  "level": 2,
+  "type": "어휘",
+  "question": "Construction of the Riverside Bridge is ------- to finish in October.",
+  "choices": [
+   "hoped",
+   "wished",
+   "expected",
+   "waited"
+  ],
+  "answer": 2,
+  "explanation": "be expected to(~할 것으로 예상되다)는 수동태로 자주 쓰는 표현이므로 expected가 알맞다. hope, wish, wait는 'be p.p. to' 형태의 수동태로 쓰지 않는다.",
+  "translation": "리버사이드 다리 공사는 10월에 끝날 것으로 예상된다."
+ },
+ {
+  "id": "p5-198",
+  "level": 2,
+  "type": "어휘",
+  "question": "Please ------- in your timesheet to the payroll team by Friday.",
+  "choices": [
+   "break",
+   "look",
+   "hand",
+   "stand"
+  ],
+  "answer": 2,
+  "explanation": "hand in은 '제출하다'라는 구동사이므로 hand가 정답이다. look in(잠깐 들르다), stand in(대신하다), break in(침입하다)은 근무 시간표를 제출한다는 의미가 되지 않는다.",
+  "translation": "금요일까지 근무 시간표를 급여팀에 제출해 주세요."
+ },
+ {
+  "id": "p5-199",
+  "level": 2,
+  "type": "어휘",
+  "question": "Trend Weekly magazine has more than 50,000 -------.",
+  "choices": [
+   "patients",
+   "passengers",
+   "tenants",
+   "subscribers"
+  ],
+  "answer": 3,
+  "explanation": "잡지와 관련해 수를 셀 수 있는 사람은 구독자이므로 subscribers가 알맞다. passengers(승객), patients(환자), tenants(세입자)는 잡지와 어울리지 않는다.",
+  "translation": "트렌드 위클리 잡지는 구독자가 5만 명이 넘는다."
+ },
+ {
+  "id": "p5-200",
+  "level": 2,
+  "type": "어휘",
+  "question": "The city council will ------- a public meeting to discuss the new park.",
+  "choices": [
+   "do",
+   "carry",
+   "keep",
+   "hold"
+  ],
+  "answer": 3,
+  "explanation": "meeting과 짝을 이루어 '회의를 열다'는 hold a meeting이므로 hold가 정답이다. do, keep, carry는 meeting과 함께 '개최하다'라는 뜻을 만들지 않는다.",
+  "translation": "시의회는 새 공원에 대해 논의하기 위해 공청회를 열 것이다."
+ },
+ {
+  "id": "p5-201",
+  "level": 2,
+  "type": "품사",
+  "question": "Mr. Laurent works as a ------- for a travel magazine.",
+  "choices": [
+   "photographic",
+   "photograph",
+   "photographed",
+   "photographer"
+  ],
+  "answer": 3,
+  "explanation": "'~로서 일하다(work as)' 뒤에는 사람을 나타내는 명사가 와야 하므로 photographer(사진작가)가 알맞다. photograph는 사진이라는 사물 명사라 사람의 직업이 될 수 없고, photographic은 형용사, photographed는 과거분사다.",
+  "translation": "로랑 씨는 여행 잡지사에서 사진작가로 일한다."
+ },
+ {
+  "id": "p5-202",
+  "level": 2,
+  "type": "품사",
+  "question": "The factory's safety rules have been ------- updated.",
+  "choices": [
+   "recency",
+   "recent",
+   "recently",
+   "more recent"
+  ],
+  "answer": 2,
+  "explanation": "have been과 과거분사 updated 사이에서 동사를 꾸미는 자리이므로 부사 recently가 정답이다. recent와 more recent는 형용사, recency는 명사라 이 자리에 올 수 없다.",
+  "translation": "공장의 안전 규정이 최근에 개정되었다."
+ },
+ {
+  "id": "p5-203",
+  "level": 2,
+  "type": "품사",
+  "question": "The hotel staff were very ------- to our needs.",
+  "choices": [
+   "responsive",
+   "response",
+   "respond",
+   "responsively"
+  ],
+  "answer": 0,
+  "explanation": "be동사 were 뒤 very의 꾸밈을 받는 보어 자리이므로 형용사 responsive(잘 반응하는)가 알맞다. respond는 동사, response는 명사, responsively는 부사다.",
+  "translation": "호텔 직원들은 우리의 요구에 매우 신속하게 응대했다."
+ },
+ {
+  "id": "p5-204",
+  "level": 2,
+  "type": "품사",
+  "question": "Thank you for your ------- in Clearwave Solar's energy products.",
+  "choices": [
+   "interest",
+   "interested",
+   "interestingly",
+   "interesting"
+  ],
+  "answer": 0,
+  "explanation": "소유격 your 뒤에는 명사가 와야 하므로 interest(관심)가 정답이다. interested와 interesting은 형용사, interestingly는 부사라 소유격 뒤 단독으로 올 수 없다.",
+  "translation": "클리어웨이브 솔라의 에너지 제품에 관심을 가져 주셔서 감사합니다."
+ },
+ {
+  "id": "p5-205",
+  "level": 2,
+  "type": "품사",
+  "question": "The tour guide explained the history of the castle -------.",
+  "choices": [
+   "clearness",
+   "clarify",
+   "clear",
+   "clearly"
+  ],
+  "answer": 3,
+  "explanation": "완전한 문장(주어+동사+목적어) 뒤에서 동사 explained를 꾸미는 부사 clearly가 알맞다. clear는 형용사, clearness는 명사, clarify는 동사라 이 자리에 맞지 않는다.",
+  "translation": "관광 가이드는 그 성의 역사를 알기 쉽게 설명했다."
+ },
+ {
+  "id": "p5-206",
+  "level": 2,
+  "type": "품사",
+  "question": "The results of the customer survey were -------.",
+  "choices": [
+   "surprisingly",
+   "surprise",
+   "surprising",
+   "surprised"
+  ],
+  "answer": 2,
+  "explanation": "주어가 사물(results)이고 '놀라게 하는'이라는 뜻이 필요하므로 -ing형 형용사 surprising이 알맞다. surprised는 사람이 놀란 감정을 나타내고, surprise는 명사·동사, surprisingly는 부사라 보어가 될 수 없다.",
+  "translation": "고객 설문 조사 결과는 놀라웠다."
+ },
+ {
+  "id": "p5-207",
+  "level": 2,
+  "type": "품사",
+  "question": "For help with your order, please contact our customer ------- team.",
+  "choices": [
+   "serve",
+   "service",
+   "served",
+   "serving"
+  ],
+  "answer": 1,
+  "explanation": "customer service team(고객 서비스팀)은 명사가 명사를 꾸미는 복합명사이므로 service가 정답이다. serve는 동사, served와 serving은 분사라 복합명사를 만들지 못한다.",
+  "translation": "주문 관련 도움이 필요하시면 고객 서비스팀에 연락해 주세요."
+ },
+ {
+  "id": "p5-208",
+  "level": 2,
+  "type": "품사",
+  "question": "Ms. Obi became ------- with the new accounting program after only a week.",
+  "choices": [
+   "familiar",
+   "familiarize",
+   "familiarity",
+   "familiarly"
+  ],
+  "answer": 0,
+  "explanation": "become 뒤는 주격 보어 자리이므로 형용사 familiar(익숙한)가 알맞다. be/become familiar with는 자주 쓰는 표현이다. familiarly는 부사, familiarity는 명사, familiarize는 동사다.",
+  "translation": "오비 씨는 불과 일주일 만에 새 회계 프로그램에 익숙해졌다."
+ },
+ {
+  "id": "p5-209",
+  "level": 2,
+  "type": "품사",
+  "question": "Brightfield Farms made a large ------- in new harvesting equipment.",
+  "choices": [
+   "investor",
+   "investment",
+   "invested",
+   "invest"
+  ],
+  "answer": 1,
+  "explanation": "관사 a와 형용사 large 뒤 명사 자리이며 '투자를 하다(make an investment)'라는 뜻이 필요하므로 investment가 정답이다. investor도 명사지만 '투자자'라 의미가 맞지 않고, invest는 동사, invested는 분사다.",
+  "translation": "브라이트필드 농장은 새 수확 장비에 많은 투자를 했다."
+ },
+ {
+  "id": "p5-210",
+  "level": 2,
+  "type": "동사 시제·태",
+  "question": "Ms. Andersen ------- in Toronto since 2019.",
+  "choices": [
+   "has lived",
+   "is living",
+   "lived",
+   "lives"
+  ],
+  "answer": 0,
+  "explanation": "since 2019(2019년 이후로)는 과거부터 지금까지 이어지는 기간을 나타내므로 현재완료 has lived가 알맞다. lives와 is living은 현재, lived는 과거라 since와 함께 쓰기 어렵다.",
+  "translation": "안데르센 씨는 2019년부터 토론토에 살고 있다."
+ },
+ {
+  "id": "p5-211",
+  "level": 2,
+  "type": "동사 시제·태",
+  "question": "The new lunch menu ------- by our head chef last week.",
+  "choices": [
+   "was created",
+   "created",
+   "is creating",
+   "creates"
+  ],
+  "answer": 0,
+  "explanation": "메뉴는 '만들어진' 대상이고 last week가 과거이므로 과거 수동태 was created가 정답이다. created는 능동이라 뒤에 목적어가 필요하고, creates와 is creating은 현재이면서 능동이다.",
+  "translation": "새 점심 메뉴는 지난주에 우리 수석 셰프가 만들었다."
+ },
+ {
+  "id": "p5-212",
+  "level": 2,
+  "type": "동사 시제·태",
+  "question": "At the moment, the IT team ------- the company's network system.",
+  "choices": [
+   "upgrades",
+   "is upgrading",
+   "upgraded",
+   "has been upgraded"
+  ],
+  "answer": 1,
+  "explanation": "at the moment(지금)는 진행 중인 일을 나타내므로 현재진행 is upgrading이 알맞다. upgrades는 습관, upgraded는 과거를 나타내고, has been upgraded는 수동태라 뒤에 목적어를 둘 수 없다.",
+  "translation": "지금 IT팀이 회사 네트워크 시스템을 업그레이드하고 있다."
+ },
+ {
+  "id": "p5-213",
+  "level": 2,
+  "type": "동사 시제·태",
+  "question": "If it rains tomorrow, the organizers ------- the concert indoors.",
+  "choices": [
+   "will move",
+   "have moved",
+   "moving",
+   "moved"
+  ],
+  "answer": 0,
+  "explanation": "조건절(If it rains tomorrow)은 현재시제로 미래를 나타내고, 주절에는 미래시제가 오므로 will move가 정답이다. moved와 have moved는 과거·완료라 tomorrow와 맞지 않고, moving은 동사가 될 수 없다.",
+  "translation": "내일 비가 오면 주최 측은 콘서트를 실내로 옮길 것이다."
+ },
+ {
+  "id": "p5-214",
+  "level": 2,
+  "type": "동사 시제·태",
+  "question": "All sales staff ------- to attend the product training next Friday.",
+  "choices": [
+   "requiring",
+   "require",
+   "are required",
+   "have required"
+  ],
+  "answer": 2,
+  "explanation": "직원들이 참석하도록 '요구받는' 것이므로 be required to(~해야 한다)의 수동태 are required가 알맞다. require와 have required는 능동이라 뒤에 목적어가 필요하고, requiring은 동사 역할을 할 수 없다.",
+  "translation": "모든 영업 직원은 다음 주 금요일 제품 교육에 참석해야 한다."
+ },
+ {
+  "id": "p5-215",
+  "level": 2,
+  "type": "접속사",
+  "question": "Please fill out this medical history form ------- you wait.",
+  "choices": [
+   "so",
+   "while",
+   "during",
+   "because"
+  ],
+  "answer": 1,
+  "explanation": "뒤에 절(you wait)이 오고 '기다리는 동안'이라는 뜻이므로 접속사 while이 알맞다. during은 전치사라 절을 이끌 수 없고, because(~ 때문에)와 so(그래서)는 의미가 맞지 않는다.",
+  "translation": "기다리시는 동안 이 병력 기록지를 작성해 주세요."
+ },
+ {
+  "id": "p5-216",
+  "level": 2,
+  "type": "접속사",
+  "question": "Subscribers can choose ------- a monthly plan or a yearly plan.",
+  "choices": [
+   "either",
+   "neither",
+   "both",
+   "so"
+  ],
+  "answer": 0,
+  "explanation": "뒤의 or와 짝을 이루는 것은 either A or B(A나 B 중 하나)이므로 either가 정답이다. both는 and, neither는 nor와 짝을 이루고, so는 이런 상관 구조를 만들지 않는다.",
+  "translation": "구독자는 월간 요금제나 연간 요금제 중 하나를 선택할 수 있다."
+ },
+ {
+  "id": "p5-217",
+  "level": 2,
+  "type": "접속사",
+  "question": "Mr. Castillo will call you back ------- he finishes his meeting.",
+  "choices": [
+   "so that",
+   "even though",
+   "as soon as",
+   "as well as"
+  ],
+  "answer": 2,
+  "explanation": "'회의가 끝나자마자 전화하겠다'는 시간 관계이므로 as soon as가 알맞다. as well as(~뿐 아니라)는 절을 연결하는 접속사가 아니고, so that(~하도록)과 even though(비록 ~일지라도)는 의미가 맞지 않는다.",
+  "translation": "카스티요 씨는 회의가 끝나는 대로 다시 전화드릴 것입니다."
+ },
+ {
+  "id": "p5-218",
+  "level": 2,
+  "type": "전치사",
+  "question": "The distribution warehouse has been closed ------- last Tuesday.",
+  "choices": [
+   "ago",
+   "from",
+   "for",
+   "since"
+  ],
+  "answer": 3,
+  "explanation": "현재완료(has been closed)와 함께 과거 시작 시점(last Tuesday)을 나타내는 전치사는 since이다. for는 기간 앞에, from은 보통 to와 함께 쓰며, ago는 기간 뒤에 오는 부사다.",
+  "translation": "물류 창고는 지난 화요일부터 문을 닫은 상태다."
+ },
+ {
+  "id": "p5-219",
+  "level": 2,
+  "type": "전치사",
+  "question": "Please do not enter the laboratory ------- safety glasses.",
+  "choices": [
+   "among",
+   "beside",
+   "without",
+   "except"
+  ],
+  "answer": 2,
+  "explanation": "'보안경 없이 실험실에 들어가지 마라'가 자연스러우므로 without이 정답이다. except(~을 제외하고), beside(~ 옆에), among(~ 사이에)은 의미가 통하지 않는다.",
+  "translation": "보안경을 쓰지 않고 실험실에 들어가지 마세요."
+ },
+ {
+  "id": "p5-220",
+  "level": 2,
+  "type": "전치사",
+  "question": "The Coral Bay Resort is only a five-minute walk ------- the beach.",
+  "choices": [
+   "of",
+   "at",
+   "on",
+   "from"
+  ],
+  "answer": 3,
+  "explanation": "'해변에서 걸어서 5분 거리'라는 뜻으로 거리의 기준점을 나타내는 전치사 from이 알맞다. at, on, of는 a five-minute walk와 함께 출발 기준을 나타내지 못한다.",
+  "translation": "코랄 베이 리조트는 해변에서 걸어서 5분 거리밖에 되지 않는다."
+ },
+ {
+  "id": "p5-221",
+  "level": 2,
+  "type": "준동사(to부정사·동명사·분사)",
+  "question": "Mr. Adeyemi is interested in ------- a small bakery downtown.",
+  "choices": [
+   "starting",
+   "to start",
+   "start",
+   "started"
+  ],
+  "answer": 0,
+  "explanation": "전치사 in 뒤에는 동명사가 오므로 starting이 알맞다. to start는 전치사 뒤에 쓸 수 없고, start와 started는 동사 형태라 전치사의 목적어가 될 수 없다.",
+  "translation": "아데예미 씨는 시내에 작은 빵집을 여는 데 관심이 있다."
+ },
+ {
+  "id": "p5-222",
+  "level": 2,
+  "type": "준동사(to부정사·동명사·분사)",
+  "question": "The budget report ------- by the finance team contains several errors.",
+  "choices": [
+   "preparing",
+   "prepares",
+   "prepared",
+   "to prepare"
+  ],
+  "answer": 2,
+  "explanation": "보고서는 재무팀에 의해 '작성된' 것이므로 명사를 뒤에서 꾸미는 과거분사 prepared가 정답이다. preparing은 능동이라 by와 맞지 않고, prepares는 이미 동사 contains가 있어 올 수 없으며, to prepare는 의미가 어색하다.",
+  "translation": "재무팀이 작성한 예산 보고서에 몇 가지 오류가 있다."
+ },
+ {
+  "id": "p5-223",
+  "level": 2,
+  "type": "준동사(to부정사·동명사·분사)",
+  "question": "It is important ------- your password every three months.",
+  "choices": [
+   "changing",
+   "changed",
+   "change",
+   "to change"
+  ],
+  "answer": 3,
+  "explanation": "가주어 It의 진주어 자리이므로 to부정사 to change가 알맞다(It is important to ~). changing은 이 구문에서 진주어로 쓰지 않고, changed와 change는 동사 형태라 올 수 없다.",
+  "translation": "비밀번호를 석 달마다 바꾸는 것이 중요하다."
+ },
+ {
+  "id": "p5-224",
+  "level": 2,
+  "type": "관계사",
+  "question": "The candidate ------- we interviewed on Monday has accepted our offer.",
+  "choices": [
+   "whose",
+   "whom",
+   "which",
+   "what"
+  ],
+  "answer": 1,
+  "explanation": "선행사가 사람(The candidate)이고 관계절에서 interviewed의 목적어가 빠져 있으므로 목적격 관계대명사 whom이 알맞다. whose는 뒤에 명사가 와야 하고, which는 사물, what은 선행사가 없을 때 쓴다.",
+  "translation": "우리가 월요일에 면접을 본 지원자가 제안을 수락했다."
+ },
+ {
+  "id": "p5-225",
+  "level": 2,
+  "type": "관계사",
+  "question": "Please tell the catering team ------- you need for the awards dinner.",
+  "choices": [
+   "what",
+   "where",
+   "whom",
+   "that"
+  ],
+  "answer": 0,
+  "explanation": "tell의 직접목적어 자리이며 선행사가 없고 need의 목적어가 빠져 있으므로 '~하는 것'을 뜻하는 what이 정답이다. that은 선행사가 필요하거나 완전한 절을 이끌고, whom은 사람, where는 완전한 절과 쓴다.",
+  "translation": "시상식 만찬에 필요한 것을 케이터링 팀에 알려 주세요."
+ },
+ {
+  "id": "p5-226",
+  "level": 2,
+  "type": "대명사",
+  "question": "If you forgot your ID card, you may borrow ------- from the security desk.",
+  "choices": [
+   "it",
+   "ones",
+   "one",
+   "other"
+  ],
+  "answer": 2,
+  "explanation": "특정한 그 카드가 아니라 같은 종류의 '하나'를 빌리는 것이므로 부정대명사 one이 알맞다. it은 앞에 나온 바로 그 카드를 가리키게 되어 의미가 어색하고, ones는 복수, other는 단독으로 명사 자리에 쓰지 않는다.",
+  "translation": "신분증을 잊고 왔다면 보안 데스크에서 하나 빌릴 수 있습니다."
+ },
+ {
+  "id": "p5-227",
+  "level": 2,
+  "type": "대명사",
+  "question": "We prepared all the food for the charity fundraiser -------.",
+  "choices": [
+   "ours",
+   "us",
+   "our",
+   "ourselves"
+  ],
+  "answer": 3,
+  "explanation": "완전한 문장 뒤에서 '우리가 직접'이라고 주어를 강조하는 재귀대명사 ourselves가 정답이다. our는 소유격이라 명사가 필요하고, us와 ours는 문장 끝에서 강조 역할을 하지 못한다.",
+  "translation": "우리는 자선 모금 행사 음식을 모두 직접 준비했다."
+ },
+ {
+  "id": "p5-228",
+  "level": 2,
+  "type": "수 일치",
+  "question": "One of the new nurses ------- from Brazil.",
+  "choices": [
+   "comes",
+   "come",
+   "to come",
+   "coming"
+  ],
+  "answer": 0,
+  "explanation": "One of + 복수명사가 주어일 때 핵심 주어는 One이므로 단수 동사 comes가 알맞다. come은 nurses에 맞춘 오답이고, coming과 to come은 동사가 될 수 없다.",
+  "translation": "새로 온 간호사 중 한 명은 브라질 출신이다."
+ },
+ {
+  "id": "p5-229",
+  "level": 2,
+  "type": "수 일치",
+  "question": "The information on these Web pages ------- updated weekly.",
+  "choices": [
+   "are",
+   "is",
+   "were",
+   "have"
+  ],
+  "answer": 1,
+  "explanation": "information은 셀 수 없는 명사로 단수 취급하므로 is가 정답이다. are와 were는 복수 동사이며 Web pages에 맞춘 함정이고, have는 뒤에 been이 없어 수동태가 되지 않는다.",
+  "translation": "이 웹페이지의 정보는 매주 업데이트된다."
+ },
+ {
+  "id": "p5-230",
+  "level": 2,
+  "type": "비교",
+  "question": "Please arrive as ------- as possible for the factory tour.",
+  "choices": [
+   "earliest",
+   "earliness",
+   "early",
+   "earlier"
+  ],
+  "answer": 2,
+  "explanation": "as ~ as possible(가능한 한 ~하게) 사이에는 원급이 오므로 early가 알맞다. earlier는 비교급, earliest는 최상급이라 as ~ as 사이에 쓸 수 없고, earliness는 명사다.",
+  "translation": "공장 견학에 가능한 한 일찍 도착해 주세요."
+ },
+ {
+  "id": "p5-231",
+  "level": 3,
+  "type": "어휘",
+  "question": "When it opens next spring, the new wing of St. Clement Hospital will ------- 80 additional beds.",
+  "choices": [
+   "accommodate",
+   "accumulate",
+   "accompany",
+   "accomplish"
+  ],
+  "answer": 0,
+  "explanation": "병동이 병상 80개를 '수용하다'라는 뜻이 필요하므로 accommodate가 알맞다. accompany(동행하다), accomplish(성취하다), accumulate(축적하다)는 형태가 비슷하지만 의미가 맞지 않는다.",
+  "translation": "내년 봄에 문을 열면 세인트 클레멘트 병원의 새 병동은 병상 80개를 추가로 수용할 것이다."
+ },
+ {
+  "id": "p5-232",
+  "level": 3,
+  "type": "어휘",
+  "question": "The shipment was held at the border because the customs ------- was incomplete.",
+  "choices": [
+   "reputation",
+   "occupation",
+   "declaration",
+   "celebration"
+  ],
+  "answer": 2,
+  "explanation": "세관(customs)과 짝을 이루어 화물이 통관되지 못한 이유가 되는 것은 세관 신고서, 즉 customs declaration이다. reputation(평판), occupation(직업), celebration(축하)은 customs와 어울리지 않는다.",
+  "translation": "세관 신고서가 미비해서 그 화물은 국경에서 보류되었다."
+ },
+ {
+  "id": "p5-233",
+  "level": 3,
+  "type": "어휘",
+  "question": "Please ------- the attached invoice and let us know if you find any errors.",
+  "choices": [
+   "arrange",
+   "examine",
+   "reply",
+   "apply"
+  ],
+  "answer": 1,
+  "explanation": "첨부된 청구서에서 오류를 찾으려면 '검토하다'라는 뜻의 examine이 필요하다. apply(적용하다·지원하다), arrange(준비하다·배열하다)는 의미가 어색하고, reply는 자동사라 to가 필요하다.",
+  "translation": "첨부된 청구서를 검토하시고 오류가 있으면 알려 주십시오."
+ },
+ {
+  "id": "p5-234",
+  "level": 3,
+  "type": "어휘",
+  "question": "After her successful product launch, Ms. Kowalski was ------- to lead the design team.",
+  "choices": [
+   "retired",
+   "selected",
+   "resigned",
+   "rejected"
+  ],
+  "answer": 1,
+  "explanation": "성공적인 출시 이후 디자인팀을 이끌도록 '선발되었다'는 흐름이므로 selected가 알맞다. retired와 resigned는 '은퇴·사임했다'는 자동사라 수동태로 to lead와 쓰기 어렵고, rejected(거절당한)는 문맥과 반대다.",
+  "translation": "성공적인 제품 출시 이후 코발스키 씨는 디자인팀을 이끌 사람으로 선발되었다."
+ },
+ {
+  "id": "p5-235",
+  "level": 3,
+  "type": "어휘",
+  "question": "The client's order was shipped ------- after the payment was confirmed.",
+  "choices": [
+   "lately",
+   "promptly",
+   "hardly",
+   "formerly"
+  ],
+  "answer": 1,
+  "explanation": "결제 확인 '직후 신속히' 발송되었다는 뜻이 되어야 하므로 promptly가 정답이다. hardly(거의 ~않다)는 의미가 어색하고, lately(최근에)와 formerly(이전에)는 after절과 논리가 맞지 않는다.",
+  "translation": "고객의 주문품은 결제가 확인된 후 즉시 발송되었다."
+ },
+ {
+  "id": "p5-236",
+  "level": 3,
+  "type": "어휘",
+  "question": "Greenleaf Farms plans to ------- its operations into three new provinces.",
+  "choices": [
+   "expire",
+   "exhibit",
+   "expand",
+   "exclude"
+  ],
+  "answer": 2,
+  "explanation": "사업(operations)을 새 지역으로 '확장하다'는 expand가 알맞다. exhibit(전시하다), expire(만료되다), exclude(제외하다)는 새로운 지역으로 사업을 넓힌다는 의미가 되지 않는다.",
+  "translation": "그린리프 농장은 세 개의 새 지방으로 사업을 확장할 계획이다."
+ },
+ {
+  "id": "p5-237",
+  "level": 3,
+  "type": "어휘",
+  "question": "The law firm of Mendez & Kaur ------- clients in both civil and commercial cases.",
+  "choices": [
+   "reserves",
+   "resolves",
+   "resembles",
+   "represents"
+  ],
+  "answer": 3,
+  "explanation": "법률 사무소가 소송에서 고객을 '대리하다'는 represents가 알맞다. resembles(닮다), reserves(예약하다), resolves(해결하다)는 clients를 목적어로 할 때 의미가 맞지 않는다.",
+  "translation": "멘데스 앤드 카우르 법률 사무소는 민사 사건과 상사 사건 모두에서 고객을 대리한다."
+ },
+ {
+  "id": "p5-238",
+  "level": 3,
+  "type": "어휘",
+  "question": "Energy ------- at the plant has dropped by 15 percent since new lighting was installed.",
+  "choices": [
+   "condition",
+   "construction",
+   "consumption",
+   "competition"
+  ],
+  "answer": 2,
+  "explanation": "새 조명 설치 후 15퍼센트 줄어든 것은 에너지 '소비량'이므로 energy consumption이 정답이다. construction(건설), competition(경쟁), condition(상태)은 수치가 줄어드는 대상으로 energy와 어울리지 않는다.",
+  "translation": "새 조명이 설치된 이후 공장의 에너지 소비량이 15퍼센트 감소했다."
+ },
+ {
+  "id": "p5-239",
+  "level": 3,
+  "type": "어휘",
+  "question": "Applicants must have at least three years of ------- experience in pharmaceutical sales.",
+  "choices": [
+   "reluctant",
+   "relevant",
+   "redundant",
+   "reliant"
+  ],
+  "answer": 1,
+  "explanation": "지원 자격으로 '관련된' 경력을 요구하는 것이므로 relevant가 알맞다. reluctant(꺼리는), redundant(불필요한), reliant(의존하는)는 experience를 꾸미는 조건으로 어울리지 않는다.",
+  "translation": "지원자는 제약 영업 분야의 관련 경력이 최소 3년 이상 있어야 한다."
+ },
+ {
+  "id": "p5-240",
+  "level": 3,
+  "type": "어휘",
+  "question": "Skyward Airlines apologized for the ------- caused by the sudden schedule change.",
+  "choices": [
+   "insurance",
+   "instruction",
+   "inconvenience",
+   "intention"
+  ],
+  "answer": 2,
+  "explanation": "갑작스러운 일정 변경이 초래한 것에 대해 사과하므로 '불편'을 뜻하는 inconvenience가 정답이다. intention(의도), instruction(지시), insurance(보험)는 caused by와 사과의 대상으로 맞지 않는다.",
+  "translation": "스카이워드 항공은 갑작스러운 일정 변경으로 인한 불편에 대해 사과했다."
+ },
+ {
+  "id": "p5-241",
+  "level": 3,
+  "type": "품사",
+  "question": "The chemical plant's new filters have ------- reduced harmful emissions.",
+  "choices": [
+   "dramatic",
+   "dramatize",
+   "dramatically",
+   "drama"
+  ],
+  "answer": 2,
+  "explanation": "have와 과거분사 reduced 사이에서 동사를 꾸미는 부사 자리이므로 dramatically가 알맞다. dramatic은 형용사, drama는 명사, dramatize는 동사라 이 자리에 올 수 없다.",
+  "translation": "화학 공장의 새 필터는 유해 배출물을 극적으로 줄였다."
+ },
+ {
+  "id": "p5-242",
+  "level": 3,
+  "type": "품사",
+  "question": "The company spokesperson gave a ------- statement to reporters outside the courthouse.",
+  "choices": [
+   "briefly",
+   "briefness",
+   "briefs",
+   "brief"
+  ],
+  "answer": 3,
+  "explanation": "관사 a와 명사 statement 사이에서 명사를 꾸미는 형용사 자리이므로 brief(짧은)가 정답이다. briefly는 부사, briefness와 briefs는 명사라 statement를 수식하기에 알맞지 않다.",
+  "translation": "회사 대변인은 법원 밖에서 기자들에게 짧은 성명을 발표했다."
+ },
+ {
+  "id": "p5-243",
+  "level": 3,
+  "type": "품사",
+  "question": "Customers have praised the ------- of Westbrook Bank's new mobile app.",
+  "choices": [
+   "simplicity",
+   "simple",
+   "simply",
+   "simplify"
+  ],
+  "answer": 0,
+  "explanation": "관사 the 뒤이며 of의 수식을 받는 praised의 목적어 자리이므로 명사 simplicity가 알맞다. simple은 형용사, simply는 부사, simplify는 동사라 명사 자리에 올 수 없다.",
+  "translation": "고객들은 웨스트브룩 은행 새 모바일 앱의 간편함을 칭찬했다."
+ },
+ {
+  "id": "p5-244",
+  "level": 3,
+  "type": "품사",
+  "question": "The ------- of our passengers is always our top priority.",
+  "choices": [
+   "safety",
+   "saves",
+   "safely",
+   "safe"
+  ],
+  "answer": 0,
+  "explanation": "The와 of 사이, 문장의 주어 자리이므로 명사 safety가 정답이다. safe는 형용사(명사로 쓰면 '금고'라 의미가 맞지 않음), safely는 부사, saves는 동사다.",
+  "translation": "승객의 안전은 언제나 저희의 최우선 사항입니다."
+ },
+ {
+  "id": "p5-245",
+  "level": 3,
+  "type": "품사",
+  "question": "The redesigned Web site makes online shopping more ------- for students.",
+  "choices": [
+   "affordably",
+   "afford",
+   "affordability",
+   "affordable"
+  ],
+  "answer": 3,
+  "explanation": "make + 목적어 + 목적격 보어 구조에서 보어 자리이므로 형용사 affordable이 알맞다. affordably는 부사라 보어가 될 수 없고, afford는 동사, affordability는 명사라 more와 함께 목적어의 상태를 설명하지 못한다.",
+  "translation": "새로 디자인된 웹사이트 덕분에 학생들이 온라인 쇼핑을 더 저렴하게 할 수 있다."
+ },
+ {
+  "id": "p5-246",
+  "level": 3,
+  "type": "품사",
+  "question": "The ------- customers were offered a full refund and a discount coupon.",
+  "choices": [
+   "disappointed",
+   "disappointment",
+   "disappointing",
+   "disappoint"
+  ],
+  "answer": 0,
+  "explanation": "고객들이 '실망한' 감정을 느낀 것이므로 과거분사형 형용사 disappointed가 알맞다. disappointing은 '실망스럽게 하는'이라 고객을 꾸미면 의미가 어색하고, disappoint는 동사, disappointment는 명사다.",
+  "translation": "실망한 고객들에게 전액 환불과 할인 쿠폰이 제공되었다."
+ },
+ {
+  "id": "p5-247",
+  "level": 3,
+  "type": "품사",
+  "question": "The new pricing plan has been ------- popular with small restaurant owners.",
+  "choices": [
+   "particularly",
+   "particular",
+   "particularity",
+   "particulars"
+  ],
+  "answer": 0,
+  "explanation": "형용사 popular를 앞에서 꾸미는 부사 자리이므로 particularly가 정답이다. particular는 형용사라 다른 형용사를 꾸밀 수 없고, particularity와 particulars는 명사다.",
+  "translation": "새 요금제는 소규모 식당 주인들에게 특히 인기가 있다."
+ },
+ {
+  "id": "p5-248",
+  "level": 3,
+  "type": "품사",
+  "question": "Please submit your ------- request at least two weeks in advance.",
+  "choices": [
+   "vacationer",
+   "vacationed",
+   "vacationing",
+   "vacation"
+  ],
+  "answer": 3,
+  "explanation": "request와 결합해 '휴가 신청'이라는 복합명사를 만드는 vacation이 알맞다. vacationed와 vacationing은 분사라 의미가 어색하고, vacationer는 '휴가객'이라는 사람 명사라 request와 어울리지 않는다.",
+  "translation": "휴가 신청서는 적어도 2주 전에 제출해 주세요."
+ },
+ {
+  "id": "p5-249",
+  "level": 3,
+  "type": "품사",
+  "question": "All warehouse staff received ------- on the new inventory scanners.",
+  "choices": [
+   "trained",
+   "trainer",
+   "training",
+   "trains"
+  ],
+  "answer": 2,
+  "explanation": "received의 목적어 자리이며 관사 없이 쓰는 불가산 명사 training(교육)이 정답이다. trainer는 가산명사라 관사가 필요하고 의미도 맞지 않으며, trained는 분사, trains는 동사 또는 '기차'라 어울리지 않는다.",
+  "translation": "모든 창고 직원은 새 재고 스캐너에 대한 교육을 받았다."
+ },
+ {
+  "id": "p5-250",
+  "level": 3,
+  "type": "동사 시제·태",
+  "question": "The shipment ------- at the warehouse when the power went out.",
+  "choices": [
+   "will unload",
+   "unloaded",
+   "is unloading",
+   "was being unloaded"
+  ],
+  "answer": 3,
+  "explanation": "정전이 된 과거 시점(when the power went out)에 화물이 '내려지는 중'이었으므로 과거진행 수동태 was being unloaded가 알맞다. unloaded는 능동이라 목적어가 필요하고, is unloading과 will unload는 시제가 맞지 않는다.",
+  "translation": "정전이 되었을 때 화물은 창고에서 하역되는 중이었다."
+ },
+ {
+  "id": "p5-251",
+  "level": 3,
+  "type": "동사 시제·태",
+  "question": "Over the past five years, online bookings at Solana Travel ------- steadily.",
+  "choices": [
+   "grows",
+   "have grown",
+   "are grown",
+   "will grow"
+  ],
+  "answer": 1,
+  "explanation": "over the past five years는 과거부터 현재까지의 기간을 나타내므로 현재완료 have grown이 정답이다. will grow는 미래, grows는 단수 동사라 bookings와 맞지 않고, grow는 자동사라 are grown처럼 수동태로 쓰지 않는다.",
+  "translation": "지난 5년 동안 솔라나 여행사의 온라인 예약은 꾸준히 증가했다."
+ },
+ {
+  "id": "p5-252",
+  "level": 3,
+  "type": "동사 시제·태",
+  "question": "Dr. Reinholt ------- the keynote speech at next week's medical conference.",
+  "choices": [
+   "delivering",
+   "will deliver",
+   "delivered",
+   "has delivered"
+  ],
+  "answer": 1,
+  "explanation": "next week's conference는 미래의 일이므로 미래시제 will deliver가 알맞다. delivered와 has delivered는 이미 일어난 일을 나타내고, delivering은 동사 역할을 할 수 없다.",
+  "translation": "라인홀트 박사는 다음 주 의학 학회에서 기조연설을 할 것이다."
+ },
+ {
+  "id": "p5-253",
+  "level": 3,
+  "type": "동사 시제·태",
+  "question": "The assembly line's old machines ------- with robotic equipment last year.",
+  "choices": [
+   "were replaced",
+   "have been replaced",
+   "replaced",
+   "are replacing"
+  ],
+  "answer": 0,
+  "explanation": "기계가 '교체된' 것이므로 수동태이고, last year라는 과거 시점이 있어 과거 수동태 were replaced가 정답이다. have been replaced는 현재완료라 last year와 함께 쓸 수 없고, replaced와 are replacing은 능동이다.",
+  "translation": "조립 라인의 낡은 기계들은 작년에 로봇 장비로 교체되었다."
+ },
+ {
+  "id": "p5-254",
+  "level": 3,
+  "type": "동사 시제·태",
+  "question": "Ms. Liang ------- the market analysis by the time her manager asked for it.",
+  "choices": [
+   "will already finish",
+   "already finishes",
+   "had already finished",
+   "has already finished"
+  ],
+  "answer": 2,
+  "explanation": "관리자가 요청한 과거 시점(asked)보다 먼저 끝낸 일이므로 과거완료 had already finished가 알맞다. has finished는 현재완료, finishes는 현재, will finish는 미래라 과거 기준 시점과 맞지 않는다.",
+  "translation": "리앙 씨는 관리자가 요청했을 때 이미 시장 분석을 끝낸 상태였다."
+ },
+ {
+  "id": "p5-255",
+  "level": 3,
+  "type": "접속사",
+  "question": "------- your loan application is approved, the funds will be transferred within two days.",
+  "choices": [
+   "Unless",
+   "Once",
+   "Whereas",
+   "Despite"
+  ],
+  "answer": 1,
+  "explanation": "'일단 승인되면 이틀 안에 송금된다'는 흐름이므로 접속사 Once(일단 ~하면)가 알맞다. Despite는 전치사라 절을 이끌 수 없고, Unless(~하지 않으면)와 Whereas(반면에)는 논리가 맞지 않는다.",
+  "translation": "대출 신청이 승인되면 자금은 이틀 안에 송금됩니다."
+ },
+ {
+  "id": "p5-256",
+  "level": 3,
+  "type": "접속사",
+  "question": "The rooftop pool at the Meridian Hotel is closed ------- repairs are being made.",
+  "choices": [
+   "during",
+   "whether",
+   "while",
+   "so"
+  ],
+  "answer": 2,
+  "explanation": "뒤에 절(repairs are being made)이 오고 '수리하는 동안'이라는 뜻이므로 접속사 while이 정답이다. during은 전치사라 절 앞에 쓸 수 없고, whether(~인지)와 so(그래서)는 의미가 맞지 않는다.",
+  "translation": "메리디언 호텔의 옥상 수영장은 수리가 진행되는 동안 문을 닫는다."
+ },
+ {
+  "id": "p5-257",
+  "level": 3,
+  "type": "접속사",
+  "question": "Mr. Delgado asked ------- the replacement parts could be delivered earlier.",
+  "choices": [
+   "unless",
+   "which",
+   "what",
+   "whether"
+  ],
+  "answer": 3,
+  "explanation": "asked의 목적어로 '~인지 아닌지'를 묻는 명사절이 필요하고 뒤 절이 완전하므로 whether가 알맞다. what과 which는 뒤에 빠진 성분이 있어야 하고, unless는 부사절 접속사라 목적어절을 이끌 수 없다.",
+  "translation": "델가도 씨는 교체 부품을 더 일찍 배송받을 수 있는지 물었다."
+ },
+ {
+  "id": "p5-258",
+  "level": 3,
+  "type": "전치사",
+  "question": "Please direct any questions about reimbursement ------- Ms. Varga in Accounting.",
+  "choices": [
+   "to",
+   "at",
+   "for",
+   "on"
+  ],
+  "answer": 0,
+  "explanation": "direct A to B(A를 B에게 보내다·문의하다)의 구조이므로 to가 정답이다. for, at, on은 direct와 함께 문의 대상을 나타내지 못한다.",
+  "translation": "환급 관련 질문은 회계팀 바르가 씨에게 문의해 주세요."
+ },
+ {
+  "id": "p5-259",
+  "level": 3,
+  "type": "전치사",
+  "question": "All visitors must sign in at the front desk ------- entering the laboratory.",
+  "choices": [
+   "in spite of",
+   "instead of",
+   "because of",
+   "prior to"
+  ],
+  "answer": 3,
+  "explanation": "'실험실에 들어가기 전에' 서명해야 한다는 뜻이므로 '~ 전에'를 뜻하는 prior to가 알맞다. because of(~ 때문에), in spite of(~에도 불구하고), instead of(~ 대신에)는 의미가 맞지 않는다.",
+  "translation": "모든 방문객은 실험실에 들어가기 전에 안내 데스크에서 서명해야 한다."
+ },
+ {
+  "id": "p5-260",
+  "level": 3,
+  "type": "전치사",
+  "question": "The two publishers have worked together closely ------- the past decade.",
+  "choices": [
+   "among",
+   "between",
+   "beside",
+   "throughout"
+  ],
+  "answer": 3,
+  "explanation": "the past decade라는 기간 '내내'를 나타내는 throughout이 정답이다. among과 between은 대상 사이의 위치·관계를 나타내고, beside(~ 옆에)는 기간과 함께 쓰지 않는다.",
+  "translation": "두 출판사는 지난 10년 내내 긴밀히 협력해 왔다."
+ },
+ {
+  "id": "p5-261",
+  "level": 3,
+  "type": "준동사(to부정사·동명사·분사)",
+  "question": "The consultant recommended ------- the product launch until the spring.",
+  "choices": [
+   "to postpone",
+   "postpone",
+   "postponing",
+   "postponed"
+  ],
+  "answer": 2,
+  "explanation": "recommend는 동명사를 목적어로 취하므로 postponing이 알맞다. recommend 뒤에 to부정사를 바로 쓰지 않으며(recommend + 사람 + to부정사는 가능), postpone과 postponed는 목적어 자리에 올 수 없다.",
+  "translation": "컨설턴트는 제품 출시를 봄까지 연기할 것을 권했다."
+ },
+ {
+  "id": "p5-262",
+  "level": 3,
+  "type": "준동사(to부정사·동명사·분사)",
+  "question": "The hotel's free shuttle helps guests ------- the city center in about ten minutes.",
+  "choices": [
+   "reach",
+   "reached",
+   "reaches",
+   "reaching"
+  ],
+  "answer": 0,
+  "explanation": "help + 목적어 + (to) 동사원형 구조이므로 동사원형 reach가 정답이다. reaching과 reached는 help의 목적격 보어로 쓰지 않고, reaches는 이미 동사 helps가 있어 올 수 없다.",
+  "translation": "호텔의 무료 셔틀은 투숙객이 약 10분 만에 시내 중심가에 갈 수 있도록 돕는다."
+ },
+ {
+  "id": "p5-263",
+  "level": 3,
+  "type": "준동사(to부정사·동명사·분사)",
+  "question": "Anyone ------- in joining the volunteer program should contact Ms. Hale.",
+  "choices": [
+   "to interest",
+   "interests",
+   "interesting",
+   "interested"
+  ],
+  "answer": 3,
+  "explanation": "Anyone을 뒤에서 꾸미며 '관심이 있는' 사람을 뜻하므로 과거분사 interested가 알맞다(be interested in). interesting은 '흥미를 주는'이라 의미가 반대이고, interests는 동사라 should와 충돌하며, to interest는 '관심을 끌기 위해'라는 뜻이 된다.",
+  "translation": "자원봉사 프로그램에 참여하는 데 관심이 있는 사람은 누구든지 헤일 씨에게 연락하세요."
+ },
+ {
+  "id": "p5-264",
+  "level": 3,
+  "type": "관계사",
+  "question": "Ms. Obuya, ------- the board appointed last month, has already introduced several changes.",
+  "choices": [
+   "whom",
+   "which",
+   "whose",
+   "what"
+  ],
+  "answer": 0,
+  "explanation": "선행사가 사람(Ms. Obuya)이고 관계절에서 appointed의 목적어가 빠져 있으므로 목적격 whom이 알맞다. which는 사물에 쓰고, whose는 뒤에 명사가 필요하며, what은 선행사를 가질 수 없고 콤마 뒤에 쓰지 않는다.",
+  "translation": "지난달 이사회가 임명한 오부야 씨는 이미 여러 변화를 도입했다."
+ },
+ {
+  "id": "p5-265",
+  "level": 3,
+  "type": "관계사",
+  "question": "The city ------- our new factory is located offers generous tax benefits.",
+  "choices": [
+   "who",
+   "which",
+   "where",
+   "that"
+  ],
+  "answer": 2,
+  "explanation": "선행사가 장소(The city)이고 관계절(our new factory is located)이 완전하므로 관계부사 where가 정답이다. which와 that은 뒤에 빠진 성분이 있어야 하고(located in which는 가능), who는 사람에게 쓴다.",
+  "translation": "우리 새 공장이 있는 도시는 넉넉한 세금 혜택을 제공한다."
+ },
+ {
+  "id": "p5-266",
+  "level": 3,
+  "type": "대명사",
+  "question": "If this model is out of stock, we can order ------- one for you from our supplier.",
+  "choices": [
+   "other",
+   "others",
+   "the others",
+   "another"
+  ],
+  "answer": 3,
+  "explanation": "단수 명사 one 앞에서 '또 하나의, 다른 하나의'를 뜻하는 another가 알맞다. other는 단수 가산명사 앞에 단독으로 쓰지 않고, others와 the others는 대명사라 뒤에 명사를 둘 수 없다.",
+  "translation": "이 모델이 품절이면 공급업체에 다른 제품을 하나 주문해 드릴 수 있습니다."
+ },
+ {
+  "id": "p5-267",
+  "level": 3,
+  "type": "대명사",
+  "question": "On their first day, interns are asked to introduce ------- to the team.",
+  "choices": [
+   "their",
+   "themselves",
+   "them",
+   "theirs"
+  ],
+  "answer": 1,
+  "explanation": "introduce의 목적어가 주어인 interns 자신이므로 재귀대명사 themselves가 정답이다. them은 주어와 다른 사람을 가리키게 되고, their는 소유격, theirs는 소유대명사라 의미가 맞지 않는다.",
+  "translation": "첫날 인턴들은 팀원들에게 자기소개를 하도록 요청받는다."
+ },
+ {
+  "id": "p5-268",
+  "level": 3,
+  "type": "수 일치",
+  "question": "A list of approved suppliers ------- attached to this e-mail.",
+  "choices": [
+   "being",
+   "is",
+   "are",
+   "have"
+  ],
+  "answer": 1,
+  "explanation": "주어의 중심 명사는 단수 A list이고 of approved suppliers는 수식어이므로 단수 동사 is가 알맞다. are는 suppliers에 맞춘 함정이고, have는 복수형이며 뒤에 been이 필요하고, being은 동사가 될 수 없다.",
+  "translation": "승인된 공급업체 목록이 이 이메일에 첨부되어 있습니다."
+ },
+ {
+  "id": "p5-269",
+  "level": 3,
+  "type": "수 일치",
+  "question": "The results of the user survey ------- that most people prefer the new design.",
+  "choices": [
+   "show",
+   "showing",
+   "has shown",
+   "shows"
+  ],
+  "answer": 0,
+  "explanation": "주어의 중심 명사가 복수 The results이므로 복수 동사 show가 정답이다. shows와 has shown은 단수 주어에 맞는 형태이고(survey에 맞춘 함정), showing은 동사가 될 수 없다.",
+  "translation": "사용자 설문 조사 결과는 대부분의 사람들이 새 디자인을 선호한다는 것을 보여 준다."
+ },
+ {
+  "id": "p5-270",
+  "level": 3,
+  "type": "비교",
+  "question": "This quarter, ------- customers complained about delivery times than last quarter.",
+  "choices": [
+   "least",
+   "fewer",
+   "less",
+   "little"
+  ],
+  "answer": 1,
+  "explanation": "뒤에 than이 있어 비교급이 필요하고, customers는 셀 수 있는 복수명사이므로 fewer가 알맞다. less는 셀 수 없는 명사에 쓰고, little은 원급, least는 최상급이다.",
+  "translation": "이번 분기에는 지난 분기보다 배송 시간에 대해 불평한 고객이 더 적었다."
+ },
+ {
+  "id": "p5-271",
+  "level": 4,
+  "type": "어휘",
+  "question": "Ms. Brennan has ------- agreed to speak at the logistics summit, pending approval from her employer.",
+  "choices": [
+   "tentatively",
+   "accurately",
+   "densely",
+   "equally"
+  ],
+  "answer": 0,
+  "explanation": "pending approval(승인을 기다리는 중)이라는 조건이 붙어 있으므로 '잠정적으로' 동의했다는 tentatively가 알맞다. accurately(정확하게), densely(빽빽하게), equally(동등하게)는 agreed를 꾸미기에 문맥이 맞지 않는다.",
+  "translation": "브레넌 씨는 고용주의 승인을 조건으로 물류 정상 회의에서 연설하기로 잠정 동의했다."
+ },
+ {
+  "id": "p5-272",
+  "level": 4,
+  "type": "어휘",
+  "question": "Veltrix Pharmaceuticals has received regulatory ------- to sell its allergy drug in Europe.",
+  "choices": [
+   "closure",
+   "compliance",
+   "clearance",
+   "conclusion"
+  ],
+  "answer": 2,
+  "explanation": "규제 당국으로부터 판매 '허가'를 받았다는 뜻이므로 regulatory clearance가 정답이다. closure(폐쇄), conclusion(결론)은 의미가 맞지 않고, compliance(준수)는 회사가 지키는 것이지 받는 허가가 아니며 to부정사와도 어울리지 않는다.",
+  "translation": "벨트릭스 제약은 유럽에서 알레르기 약을 판매할 수 있는 규제 당국의 허가를 받았다."
+ },
+ {
+  "id": "p5-273",
+  "level": 4,
+  "type": "어휘",
+  "question": "Due to a scheduling -------, your interview has been moved to Thursday afternoon.",
+  "choices": [
+   "contest",
+   "contrast",
+   "conflict",
+   "context"
+  ],
+  "answer": 2,
+  "explanation": "일정이 겹쳐 면접이 옮겨졌다는 뜻이므로 scheduling conflict(일정 충돌)가 알맞다. contrast(대조), contest(대회), context(맥락)는 scheduling과 결합해 일정 변경의 이유를 나타내지 못한다.",
+  "translation": "일정이 겹쳐 귀하의 면접이 목요일 오후로 변경되었습니다."
+ },
+ {
+  "id": "p5-274",
+  "level": 4,
+  "type": "어휘",
+  "question": "Our financial advisors can help you ------- a retirement plan that suits your needs.",
+  "choices": [
+   "devote",
+   "derive",
+   "deviate",
+   "devise"
+  ],
+  "answer": 3,
+  "explanation": "필요에 맞는 은퇴 계획을 '고안하다, 세우다'는 devise가 알맞다. deviate(벗어나다)는 자동사이고, devote는 devote A to B로 쓰며, derive(끌어내다)는 plan과 어울리지 않는다.",
+  "translation": "저희 재무 상담사들이 고객님의 필요에 맞는 은퇴 계획을 세우도록 도와드릴 수 있습니다."
+ },
+ {
+  "id": "p5-275",
+  "level": 4,
+  "type": "어휘",
+  "question": "The Aldridge Hotel is ------- located near both the convention center and the subway station.",
+  "choices": [
+   "mutually",
+   "eventually",
+   "conveniently",
+   "accidentally"
+  ],
+  "answer": 2,
+  "explanation": "컨벤션 센터와 지하철역 근처에 있다는 것은 '편리하게' 위치했다는 의미이므로 conveniently가 정답이다. conveniently located는 자주 쓰는 짝 표현이다. accidentally(우연히), eventually(결국), mutually(서로)는 located와 어울리지 않는다.",
+  "translation": "올드리지 호텔은 컨벤션 센터와 지하철역 모두에 가까운 편리한 곳에 있다."
+ },
+ {
+  "id": "p5-276",
+  "level": 4,
+  "type": "어휘",
+  "question": "Sales of electric scooters have ------- over the past two years as fuel prices have risen.",
+  "choices": [
+   "surrendered",
+   "surged",
+   "surrounded",
+   "supervised"
+  ],
+  "answer": 1,
+  "explanation": "연료비가 오르면서 전동 스쿠터 판매가 '급증했다'가 자연스러우므로 자동사 surged가 알맞다. surrendered(항복했다)는 의미가 맞지 않고, supervised와 surrounded는 타동사라 목적어가 필요하다.",
+  "translation": "연료 가격이 오르면서 지난 2년간 전동 스쿠터 판매가 급증했다."
+ },
+ {
+  "id": "p5-277",
+  "level": 4,
+  "type": "어휘",
+  "question": "The contractor must ------- a detailed cost estimate before any work begins.",
+  "choices": [
+   "prevail",
+   "proceed",
+   "pertain",
+   "provide"
+  ],
+  "answer": 3,
+  "explanation": "견적서(estimate)를 '제공하다'라는 타동사가 필요하므로 provide가 정답이다. proceed(진행하다), prevail(우세하다), pertain(관련되다)은 모두 자동사라 목적어를 바로 취할 수 없다.",
+  "translation": "시공업체는 작업을 시작하기 전에 상세한 비용 견적서를 제출해야 한다."
+ },
+ {
+  "id": "p5-278",
+  "level": 4,
+  "type": "어휘",
+  "question": "The marketing director will ------- with the design agency to finalize the holiday campaign.",
+  "choices": [
+   "commence",
+   "collaborate",
+   "compile",
+   "comprise"
+  ],
+  "answer": 1,
+  "explanation": "뒤의 with와 함께 '~와 협력하다'를 뜻하는 collaborate가 알맞다. compile(편집하다), commence(시작하다), comprise(구성하다)는 with와 짝을 이루어 협업을 나타내지 못한다.",
+  "translation": "마케팅 이사는 연말 캠페인을 마무리하기 위해 디자인 대행사와 협력할 것이다."
+ },
+ {
+  "id": "p5-279",
+  "level": 4,
+  "type": "어휘",
+  "question": "The Harbor Literacy Project relies ------- on donations from local businesses.",
+  "choices": [
+   "heavily",
+   "narrowly",
+   "briefly",
+   "sharply"
+  ],
+  "answer": 0,
+  "explanation": "rely heavily on(~에 크게 의존하다)은 자주 쓰는 짝 표현이므로 heavily가 정답이다. sharply(급격히), narrowly(간신히), briefly(잠시)는 relies on과 어울리지 않는다.",
+  "translation": "하버 문해 교육 프로젝트는 지역 기업의 기부금에 크게 의존한다."
+ },
+ {
+  "id": "p5-280",
+  "level": 4,
+  "type": "어휘",
+  "question": "Maison Leclair plans to ------- its flagship store on the Champs-Élysées next spring.",
+  "choices": [
+   "recite",
+   "reclaim",
+   "revoke",
+   "renovate"
+  ],
+  "answer": 3,
+  "explanation": "매장을 '개조하다, 보수하다'라는 뜻의 renovate가 알맞다. reclaim(되찾다), recite(암송하다), revoke(취소하다)는 매장을 목적어로 할 때 문맥에 맞지 않는다.",
+  "translation": "메종 르클레르는 내년 봄 샹젤리제 거리의 플래그십 매장을 개조할 계획이다."
+ },
+ {
+  "id": "p5-281",
+  "level": 4,
+  "type": "품사",
+  "question": "The new CFO has taken several steps to make the company more financially -------.",
+  "choices": [
+   "stably",
+   "stable",
+   "stabilize",
+   "stability"
+  ],
+  "answer": 1,
+  "explanation": "make + 목적어 + 목적격 보어 구조이며 부사 financially의 꾸밈을 받으므로 형용사 stable이 알맞다. stably는 부사라 보어가 될 수 없고, stability는 명사라 부사의 수식을 받지 못하며, stabilize는 동사다.",
+  "translation": "새 최고재무책임자는 회사를 재정적으로 더 안정되게 만들기 위해 여러 조치를 취했다."
+ },
+ {
+  "id": "p5-282",
+  "level": 4,
+  "type": "품사",
+  "question": "Ms. Chandra's ------- as a negotiator helped the firm close the acquisition.",
+  "choices": [
+   "expertly",
+   "experts",
+   "expert",
+   "expertise"
+  ],
+  "answer": 3,
+  "explanation": "소유격 Ms. Chandra's 뒤 주어 자리이며 '전문성'을 뜻하는 불가산 명사 expertise가 정답이다. expert는 사람을 뜻해 '협상가로서의 전문가'가 되어 의미가 어색하고, experts는 복수라 helped의 의미 주어로 맞지 않으며, expertly는 부사다.",
+  "translation": "찬드라 씨의 협상가로서의 전문성은 회사가 인수를 성사시키는 데 도움이 되었다."
+ },
+ {
+  "id": "p5-283",
+  "level": 4,
+  "type": "품사",
+  "question": "Despite increased competition, our prices have remained ------- throughout the holiday season.",
+  "choices": [
+   "competitive",
+   "competition",
+   "compete",
+   "competitively"
+  ],
+  "answer": 0,
+  "explanation": "remain은 보어를 취하는 동사이므로 형용사 competitive(경쟁력 있는)가 알맞다. competitively는 부사라 보어가 될 수 없고, compete는 동사, competition은 명사라 가격의 상태를 설명하지 못한다.",
+  "translation": "경쟁이 심해졌음에도 저희 가격은 연말 시즌 내내 경쟁력을 유지했습니다."
+ },
+ {
+  "id": "p5-284",
+  "level": 4,
+  "type": "품사",
+  "question": "The grant proposal was ------- written, but it lacked supporting data.",
+  "choices": [
+   "persuasion",
+   "persuade",
+   "persuasive",
+   "persuasively"
+  ],
+  "answer": 3,
+  "explanation": "be동사 was와 과거분사 written 사이에서 동사를 꾸미는 부사 자리이므로 persuasively가 정답이다. persuasive는 형용사, persuasion은 명사, persuade는 동사라 과거분사를 수식할 수 없다.",
+  "translation": "보조금 제안서는 설득력 있게 작성되었지만 근거 자료가 부족했다."
+ },
+ {
+  "id": "p5-285",
+  "level": 4,
+  "type": "품사",
+  "question": "The ------- of the new shipment-tracking system took nearly three months.",
+  "choices": [
+   "implementation",
+   "implement",
+   "implementing",
+   "implemented"
+  ],
+  "answer": 0,
+  "explanation": "The와 of 사이의 주어 자리이므로 명사 implementation(도입, 시행)이 알맞다. implement는 명사로 쓰면 '도구'라는 뜻이라 의미가 맞지 않고, implemented와 implementing은 분사 형태다.",
+  "translation": "새 배송 추적 시스템의 도입에는 거의 3개월이 걸렸다."
+ },
+ {
+  "id": "p5-286",
+  "level": 4,
+  "type": "품사",
+  "question": "Coastline Air introduced a new ------- program for its frequent flyers.",
+  "choices": [
+   "loyalist",
+   "loyally",
+   "loyal",
+   "loyalty"
+  ],
+  "answer": 3,
+  "explanation": "program과 결합해 '고객 보상 프로그램'을 뜻하는 복합명사 loyalty program이므로 loyalty가 정답이다. loyal은 형용사라 '충성스러운 프로그램'이 되어 어색하고, loyally는 부사, loyalist는 '충성파'라는 사람 명사다.",
+  "translation": "코스트라인 항공은 단골 승객을 위한 새 마일리지 보상 프로그램을 도입했다."
+ },
+ {
+  "id": "p5-287",
+  "level": 4,
+  "type": "품사",
+  "question": "Applicants who are ------- in both Spanish and Portuguese will be given preference.",
+  "choices": [
+   "fluence",
+   "fluency",
+   "fluently",
+   "fluent"
+  ],
+  "answer": 3,
+  "explanation": "are 뒤 보어 자리이며 in과 함께 '~에 유창한'을 뜻하는 형용사 fluent가 알맞다. fluency는 명사, fluently는 부사라 보어로 쓰지 않고, fluence는 일상 영어에서 쓰지 않는 단어다.",
+  "translation": "스페인어와 포르투갈어에 모두 능통한 지원자를 우대합니다."
+ },
+ {
+  "id": "p5-288",
+  "level": 4,
+  "type": "품사",
+  "question": "Quarterly profits at Norvane Motors rose ------- despite weak demand in Asia.",
+  "choices": [
+   "modestly",
+   "modesty",
+   "modest",
+   "more modest"
+  ],
+  "answer": 0,
+  "explanation": "자동사 rose를 꾸미는 부사 자리이므로 modestly(소폭으로)가 정답이다. modest와 more modest는 형용사라 동사를 수식할 수 없고, modesty는 명사다.",
+  "translation": "아시아 지역 수요 부진에도 노베인 모터스의 분기 이익은 소폭 증가했다."
+ },
+ {
+  "id": "p5-289",
+  "level": 4,
+  "type": "품사",
+  "question": "Lakeside Medical Center is looking for ------- nurses to work night shifts.",
+  "choices": [
+   "experiencing",
+   "experiences",
+   "experienced",
+   "experience"
+  ],
+  "answer": 2,
+  "explanation": "명사 nurses를 앞에서 꾸며 '경험이 풍부한'을 뜻하는 과거분사형 형용사 experienced가 알맞다. experiencing은 '경험하고 있는'이라 목적어가 필요하고, experience와 experiences는 명사·동사라 이 자리에서 의미가 맞지 않는다.",
+  "translation": "레이크사이드 의료 센터는 야간 근무를 할 경력 간호사를 찾고 있다."
+ },
+ {
+  "id": "p5-290",
+  "level": 4,
+  "type": "동사 시제·태",
+  "question": "Ms. Greer ------- the Singapore office since it opened in 2018.",
+  "choices": [
+   "headed",
+   "heads",
+   "will head",
+   "has been heading"
+  ],
+  "answer": 3,
+  "explanation": "since it opened in 2018(2018년 문을 연 이후로)은 과거부터 지금까지 계속되는 일을 나타내므로 현재완료진행 has been heading이 정답이다. heads는 현재, headed는 과거, will head는 미래라 since와 맞지 않는다.",
+  "translation": "그리어 씨는 싱가포르 사무소가 2018년 문을 연 이후로 계속 그곳을 이끌고 있다."
+ },
+ {
+  "id": "p5-291",
+  "level": 4,
+  "type": "동사 시제·태",
+  "question": "The conference room is unavailable this morning because it ------- for the board meeting.",
+  "choices": [
+   "has prepared",
+   "is being prepared",
+   "prepares",
+   "is preparing"
+  ],
+  "answer": 1,
+  "explanation": "회의실은 '준비되는' 대상이고 this morning 지금 진행 중이므로 현재진행 수동태 is being prepared가 알맞다. prepares, has prepared, is preparing은 모두 능동이라 회의실이 무언가를 준비한다는 뜻이 된다.",
+  "translation": "이사회 회의 준비가 진행 중이라 오늘 오전에는 회의실을 사용할 수 없다."
+ },
+ {
+  "id": "p5-292",
+  "level": 4,
+  "type": "동사 시제·태",
+  "question": "Since the new chatbot was launched, customer complaints ------- by almost half.",
+  "choices": [
+   "have decreased",
+   "were decreased",
+   "decrease",
+   "had decreased"
+  ],
+  "answer": 0,
+  "explanation": "since절이 과거 시작점을 나타내고 주절은 그때부터 지금까지의 변화이므로 현재완료 have decreased가 정답이다. decrease는 현재, had decreased는 과거완료라 기준 시점이 맞지 않고, decrease는 자동사로 주로 쓰여 were decreased는 부자연스럽다.",
+  "translation": "새 챗봇이 도입된 이후 고객 불만이 거의 절반으로 줄었다."
+ },
+ {
+  "id": "p5-293",
+  "level": 4,
+  "type": "동사 시제·태",
+  "question": "By next March, Harmon Freight ------- in business for fifty years.",
+  "choices": [
+   "has been",
+   "will have been",
+   "was",
+   "had been"
+  ],
+  "answer": 1,
+  "explanation": "By next March(내년 3월이면)는 미래 기준 시점까지의 지속을 나타내므로 미래완료 will have been이 알맞다. has been은 현재, was와 had been은 과거 기준이라 미래 시점과 맞지 않는다.",
+  "translation": "내년 3월이면 하몬 화물은 창업 50주년을 맞게 된다."
+ },
+ {
+  "id": "p5-294",
+  "level": 4,
+  "type": "동사 시제·태",
+  "question": "Every applicant's references ------- before a formal job offer is made.",
+  "choices": [
+   "checking",
+   "are checked",
+   "have checked",
+   "check"
+  ],
+  "answer": 1,
+  "explanation": "추천인 정보(references)는 '확인되는' 대상이므로 수동태 are checked가 정답이다. check와 have checked는 능동이라 목적어가 필요하고, checking은 동사 역할을 할 수 없다.",
+  "translation": "정식 채용 제안을 하기 전에 모든 지원자의 추천인 정보를 확인한다."
+ },
+ {
+  "id": "p5-295",
+  "level": 4,
+  "type": "접속사",
+  "question": "Please keep your receipt ------- you need to exchange the item later.",
+  "choices": [
+   "even if",
+   "so that",
+   "whereas",
+   "in case"
+  ],
+  "answer": 3,
+  "explanation": "'나중에 교환해야 할 경우에 대비해' 영수증을 보관하라는 뜻이므로 in case가 알맞다. even if(설령 ~라도)와 whereas(반면에)는 논리가 맞지 않고, so that(~하도록)은 교환이 필요하게 만든다는 이상한 의미가 된다.",
+  "translation": "나중에 제품을 교환해야 할 경우에 대비해 영수증을 보관하세요."
+ },
+ {
+  "id": "p5-296",
+  "level": 4,
+  "type": "접속사",
+  "question": "The plant will stay open during the holiday ------- orders remain at their current level.",
+  "choices": [
+   "as long as",
+   "in order to",
+   "rather than",
+   "as well as"
+  ],
+  "answer": 0,
+  "explanation": "'주문이 현재 수준을 유지하는 한' 공장을 계속 연다는 조건이므로 as long as가 정답이다. as well as와 rather than은 절과 절을 잇는 부사절 접속사가 아니고, in order to는 뒤에 동사원형이 온다.",
+  "translation": "주문량이 현재 수준을 유지하는 한 공장은 연휴 기간에도 계속 가동될 것이다."
+ },
+ {
+  "id": "p5-297",
+  "level": 4,
+  "type": "접속사",
+  "question": "------- the Lyon branch focuses on retail clients, the Paris branch serves mainly corporations.",
+  "choices": [
+   "Whereas",
+   "Despite",
+   "Therefore",
+   "Unless"
+  ],
+  "answer": 0,
+  "explanation": "리옹 지점과 파리 지점의 고객층을 대조하므로 '반면에'를 뜻하는 접속사 Whereas가 알맞다. Unless는 조건이라 의미가 맞지 않고, Therefore는 부사라 절을 연결하지 못하며, Despite는 전치사다.",
+  "translation": "리옹 지점은 개인 고객에 집중하는 반면 파리 지점은 주로 기업을 상대한다."
+ },
+ {
+  "id": "p5-298",
+  "level": 4,
+  "type": "전치사",
+  "question": "------- the merger, the two banks will operate under a single brand name.",
+  "choices": [
+   "Except",
+   "Unlike",
+   "Following",
+   "Toward"
+  ],
+  "answer": 2,
+  "explanation": "'합병 후에' 하나의 브랜드로 운영된다는 뜻이므로 '~ 이후에'를 뜻하는 전치사 Following이 정답이다. Unlike(~와 달리), Except(~을 제외하고), Toward(~ 쪽으로)는 의미가 통하지 않는다.",
+  "translation": "합병 이후 두 은행은 단일 브랜드로 운영될 것이다."
+ },
+ {
+  "id": "p5-299",
+  "level": 4,
+  "type": "전치사",
+  "question": "All employees, ------- those currently on medical leave, must complete the online survey.",
+  "choices": [
+   "across",
+   "beneath",
+   "except",
+   "among"
+  ],
+  "answer": 2,
+  "explanation": "'병가 중인 사람을 제외한' 모든 직원이라는 뜻이므로 except가 알맞다. among(~ 사이에), beneath(~ 아래에), across(~을 가로질러)는 이 문맥에서 의미가 통하지 않는다.",
+  "translation": "현재 병가 중인 사람을 제외한 모든 직원은 온라인 설문을 작성해야 한다."
+ },
+ {
+  "id": "p5-300",
+  "level": 4,
+  "type": "전치사",
+  "question": "The new stadium in Porto Alegre was completed two months ------- schedule.",
+  "choices": [
+   "instead of",
+   "prior",
+   "ahead of",
+   "in front of"
+  ],
+  "answer": 2,
+  "explanation": "ahead of schedule(예정보다 앞서)은 굳어진 표현이므로 ahead of가 정답이다. in front of는 공간상 앞을 나타내고, prior는 to가 있어야 전치사처럼 쓰이며, instead of(~ 대신)는 의미가 맞지 않는다.",
+  "translation": "포르투알레그리의 새 경기장은 예정보다 두 달 앞서 완공되었다."
+ },
+ {
+  "id": "p5-301",
+  "level": 4,
+  "type": "준동사(to부정사·동명사·분사)",
+  "question": "Mr. Sato is responsible for ------- that all outgoing shipments meet quality standards.",
+  "choices": [
+   "to verify",
+   "verifies",
+   "verifying",
+   "verified"
+  ],
+  "answer": 2,
+  "explanation": "전치사 for 뒤에는 동명사가 오므로 verifying이 알맞다. to verify는 전치사 뒤에 올 수 없고, verified와 verifies는 동사 형태라 전치사의 목적어가 될 수 없다.",
+  "translation": "사토 씨는 출고되는 모든 화물이 품질 기준을 충족하는지 확인하는 일을 맡고 있다."
+ },
+ {
+  "id": "p5-302",
+  "level": 4,
+  "type": "준동사(to부정사·동명사·분사)",
+  "question": "------- by the positive reviews, the owner of Casa Lucía opened a second restaurant.",
+  "choices": [
+   "Encourages",
+   "Encouraged",
+   "Encouraging",
+   "To encourage"
+  ],
+  "answer": 1,
+  "explanation": "주절의 주어(the owner)가 좋은 평에 의해 '고무된' 것이므로 수동 의미의 분사구문 Encouraged가 정답이다. Encouraging은 능동이라 뒤에 목적어가 필요하고, To encourage는 목적을 나타내 의미가 어색하며, Encourages는 동사라 분사구문을 만들 수 없다.",
+  "translation": "좋은 평가에 힘입어 카사 루시아의 주인은 두 번째 식당을 열었다."
+ },
+ {
+  "id": "p5-303",
+  "level": 4,
+  "type": "준동사(to부정사·동명사·분사)",
+  "question": "The zoning committee has yet ------- a final decision on the housing project.",
+  "choices": [
+   "reaching",
+   "reach",
+   "to reach",
+   "reached"
+  ],
+  "answer": 2,
+  "explanation": "have yet to + 동사원형은 '아직 ~하지 않았다'는 표현이므로 to reach가 알맞다. reaching, reached, reach는 has yet 뒤에서 이 구문을 만들지 못한다.",
+  "translation": "용도지역 위원회는 그 주택 사업에 대해 아직 최종 결정을 내리지 못했다."
+ },
+ {
+  "id": "p5-304",
+  "level": 4,
+  "type": "관계사",
+  "question": "The resort has 200 guest rooms, most of ------- overlook the Aegean Sea.",
+  "choices": [
+   "what",
+   "which",
+   "whom",
+   "them"
+  ],
+  "answer": 1,
+  "explanation": "콤마 뒤에 두 절을 연결하면서 전치사 of의 목적어가 되는 관계대명사가 필요하고 선행사가 사물(rooms)이므로 which가 정답이다. them은 접속 기능이 없어 문장이 두 개로 이어지는 오류가 되고, whom은 사람, what은 선행사를 가질 수 없다.",
+  "translation": "그 리조트에는 객실이 200개 있는데, 대부분이 에게해를 내려다본다."
+ },
+ {
+  "id": "p5-305",
+  "level": 4,
+  "type": "관계사",
+  "question": "The company has introduced a system ------- employees can report safety concerns anonymously.",
+  "choices": [
+   "what",
+   "whereby",
+   "whereas",
+   "which"
+  ],
+  "answer": 1,
+  "explanation": "뒤의 절이 완전하고 '그 제도를 통해'라는 의미이므로 관계부사 whereby(= by which)가 알맞다. whereas는 대조 접속사라 선행사를 꾸미지 못하고, which와 what은 뒤에 빠진 성분이 있어야 한다.",
+  "translation": "회사는 직원들이 익명으로 안전 문제를 신고할 수 있는 제도를 도입했다."
+ },
+ {
+  "id": "p5-306",
+  "level": 4,
+  "type": "대명사",
+  "question": "Some staff members prefer to work from home, while ------- prefer the office.",
+  "choices": [
+   "the other",
+   "others",
+   "other",
+   "another"
+  ],
+  "answer": 1,
+  "explanation": "'어떤 사람들은 ~, 다른 사람들은 ~'이라는 Some ~ others 구조이며 동사 prefer가 복수형이므로 others가 알맞다. another와 the other는 단수라 prefer와 수가 맞지 않고, other는 단독으로 대명사로 쓰지 않는다.",
+  "translation": "일부 직원은 재택근무를 선호하는 반면 다른 직원들은 사무실을 선호한다."
+ },
+ {
+  "id": "p5-307",
+  "level": 4,
+  "type": "대명사",
+  "question": "------- who wishes to attend the awards gala must register by Friday.",
+  "choices": [
+   "Everything",
+   "Whoever",
+   "Those",
+   "Anyone"
+  ],
+  "answer": 3,
+  "explanation": "단수 동사 wishes와 관계대명사 who의 선행사가 되는 사람 대명사는 Anyone이다. Those는 복수라 wishes와 수가 맞지 않고, Whoever 뒤에 who를 또 쓸 수 없으며, Everything은 사물이라 who와 맞지 않는다.",
+  "translation": "시상식 갈라에 참석하려는 사람은 누구든 금요일까지 등록해야 한다."
+ },
+ {
+  "id": "p5-308",
+  "level": 4,
+  "type": "수 일치",
+  "question": "Either the regional managers or the director ------- the final budget each year.",
+  "choices": [
+   "approves",
+   "approve",
+   "approving",
+   "to approve"
+  ],
+  "answer": 0,
+  "explanation": "either A or B가 주어이면 동사는 B(the director)에 수를 맞추므로 단수 approves가 정답이다. approve는 A(managers)에 맞춘 함정이고, approving과 to approve는 동사가 될 수 없다.",
+  "translation": "매년 지역 관리자들이나 이사 중 한쪽이 최종 예산을 승인한다."
+ },
+ {
+  "id": "p5-309",
+  "level": 4,
+  "type": "수 일치",
+  "question": "Shoppers who ------- online before noon will receive their groceries the same day.",
+  "choices": [
+   "to order",
+   "orders",
+   "order",
+   "ordering"
+  ],
+  "answer": 2,
+  "explanation": "주격 관계대명사 who 뒤 동사는 선행사 Shoppers(복수)에 수를 맞추므로 order가 알맞다. orders는 단수 주어에 맞는 형태이고, ordering과 to order는 관계절의 동사가 될 수 없다.",
+  "translation": "정오 전에 온라인으로 주문하는 쇼핑객은 당일에 식료품을 받게 된다."
+ },
+ {
+  "id": "p5-310",
+  "level": 4,
+  "type": "비교",
+  "question": "Tokyo Station handles more passengers than any ------- station in Japan.",
+  "choices": [
+   "other",
+   "else",
+   "others",
+   "another"
+  ],
+  "answer": 0,
+  "explanation": "비교급 + than any other + 단수명사는 최상급 의미를 나타내는 구문이므로 other가 정답이다. others는 명사를 꾸밀 수 없고, another는 any와 함께 쓰지 않으며, else는 명사 앞에서 수식하지 않는다.",
+  "translation": "도쿄역은 일본의 다른 어떤 역보다 많은 승객을 처리한다."
+ },
+ {
+  "id": "p5-311",
+  "level": 5,
+  "type": "어휘",
+  "question": "The internal auditors concluded that the regional office's travel claims were ------- with company policy.",
+  "choices": [
+   "constant",
+   "consecutive",
+   "constituent",
+   "consistent"
+  ],
+  "answer": 3,
+  "explanation": "be consistent with(~와 일치하다, 부합하다)는 짝 표현으로 출장비 청구가 회사 정책에 '부합했다'는 뜻이 되므로 consistent가 알맞다. constant(끊임없는), constituent(구성하는), consecutive(연속적인)는 with와 함께 정책 준수 여부를 나타내지 못한다.",
+  "translation": "내부 감사관들은 지역 사무소의 출장비 청구가 회사 정책에 부합한다고 결론 내렸다."
+ },
+ {
+  "id": "p5-312",
+  "level": 5,
+  "type": "어휘",
+  "question": "The transit authority voted to ------- the outdated fare regulation, which had been in place since 1998.",
+  "choices": [
+   "rescind",
+   "recede",
+   "rebound",
+   "relent"
+  ],
+  "answer": 0,
+  "explanation": "오래된(outdated) 규정을 '폐지하다, 철회하다'라는 타동사가 필요하므로 rescind가 정답이다. recede(물러나다), rebound(반등하다), relent(누그러지다)는 모두 자동사라 목적어를 바로 취할 수 없다.",
+  "translation": "교통 당국은 1998년부터 시행되어 온 낡은 요금 규정을 폐지하기로 의결했다."
+ },
+ {
+  "id": "p5-313",
+  "level": 5,
+  "type": "어휘",
+  "question": "The new division head wasted no time in ------- sweeping changes to the hiring process.",
+  "choices": [
+   "instituting",
+   "inhabiting",
+   "insisting",
+   "inheriting"
+  ],
+  "answer": 0,
+  "explanation": "changes를 목적어로 '(제도·변화를) 도입하다, 시행하다'라는 뜻의 instituting이 알맞다. inhabiting(거주하다), inheriting(물려받다)은 changes와 의미가 맞지 않고, insisting은 on이 필요하다.",
+  "translation": "새 부서장은 지체 없이 채용 절차에 대대적인 변화를 도입했다."
+ },
+ {
+  "id": "p5-314",
+  "level": 5,
+  "type": "어휘",
+  "question": "Because the trial results are only -------, further studies will be needed before any conclusions are drawn.",
+  "choices": [
+   "prestigious",
+   "preliminary",
+   "predominant",
+   "perpetual"
+  ],
+  "answer": 1,
+  "explanation": "결론을 내리기 전에 추가 연구가 필요하다는 것은 결과가 아직 '예비적'이라는 뜻이므로 preliminary가 정답이다. predominant(지배적인), perpetual(영구적인), prestigious(명망 있는)는 추가 연구가 필요한 이유가 되지 못한다.",
+  "translation": "임상시험 결과가 예비 단계에 불과하므로 결론을 내리기 전에 추가 연구가 필요할 것이다."
+ },
+ {
+  "id": "p5-315",
+  "level": 5,
+  "type": "어휘",
+  "question": "The upper-deck lounge is reserved ------- for first-class passengers and elite members.",
+  "choices": [
+   "extensively",
+   "exclusively",
+   "excessively",
+   "expressively"
+  ],
+  "answer": 1,
+  "explanation": "라운지가 일등석 승객과 우수 회원 '전용'으로 마련되었다는 뜻이므로 exclusively가 알맞다. be reserved exclusively for는 자주 쓰는 표현이다. extensively(광범위하게), excessively(지나치게), expressively(표현력 있게)는 reserved for와 어울리지 않는다.",
+  "translation": "위층 라운지는 일등석 승객과 우수 회원 전용으로 마련되어 있다."
+ },
+ {
+  "id": "p5-316",
+  "level": 5,
+  "type": "어휘",
+  "question": "Unless both parties agree to an extension, the supply agreement will remain in ------- only until December 31.",
+  "choices": [
+   "motion",
+   "force",
+   "range",
+   "stock"
+  ],
+  "answer": 1,
+  "explanation": "remain in force(효력이 유지되다)는 계약·법규에 쓰는 굳어진 표현이므로 force가 정답이다. in motion(움직이는 중), in stock(재고가 있는), in range(범위 안에)는 계약의 효력을 나타내지 못한다.",
+  "translation": "양측이 연장에 합의하지 않으면 공급 계약은 12월 31일까지만 효력이 유지된다."
+ },
+ {
+  "id": "p5-317",
+  "level": 5,
+  "type": "어휘",
+  "question": "Weeks of unusually heavy rainfall have ------- this year's coffee harvest in the highland region.",
+  "choices": [
+   "alleviated",
+   "persuaded",
+   "commended",
+   "jeopardized"
+  ],
+  "answer": 3,
+  "explanation": "이례적 폭우가 수확을 '위태롭게 했다'는 부정적 결과가 자연스러우므로 jeopardized가 알맞다. commended(칭찬했다), persuaded(설득했다)는 harvest와 의미가 맞지 않고, alleviated(완화했다)는 문맥과 반대다.",
+  "translation": "몇 주간 이어진 이례적인 폭우로 고지대 지역의 올해 커피 수확이 위태로워졌다."
+ },
+ {
+  "id": "p5-318",
+  "level": 5,
+  "type": "어휘",
+  "question": "Ms. Ivanova will ------- in for the communications director at tomorrow's press briefing.",
+  "choices": [
+   "bring",
+   "give",
+   "stand",
+   "turn"
+  ],
+  "answer": 2,
+  "explanation": "stand in for는 '~을 대신하다'라는 구동사이므로 stand가 정답이다. turn in(제출하다), bring in(들여오다), give in(굴복하다)은 for와 함께 대리 역할을 나타내지 못한다.",
+  "translation": "이바노바 씨가 내일 언론 브리핑에서 홍보 이사를 대신할 것이다."
+ },
+ {
+  "id": "p5-319",
+  "level": 5,
+  "type": "어휘",
+  "question": "The merger will create a media group with a ------- share of the European streaming market.",
+  "choices": [
+   "dormant",
+   "diligent",
+   "docile",
+   "dominant"
+  ],
+  "answer": 3,
+  "explanation": "합병으로 시장에서 '지배적인' 점유율을 갖게 된다는 뜻이므로 dominant가 알맞다. dormant(휴면 중인), diligent(부지런한), docile(유순한)은 share(점유율)를 꾸미기에 의미가 맞지 않는다.",
+  "translation": "이번 합병으로 유럽 스트리밍 시장에서 지배적인 점유율을 가진 미디어 그룹이 탄생할 것이다."
+ },
+ {
+  "id": "p5-320",
+  "level": 5,
+  "type": "어휘",
+  "question": "The riverside film festival is funded ------- by private donations and receives no money from the city.",
+  "choices": [
+   "lately",
+   "closely",
+   "hardly",
+   "entirely"
+  ],
+  "answer": 3,
+  "explanation": "시로부터 돈을 전혀 받지 않는다고 했으므로 '전적으로' 개인 기부로 운영된다는 entirely가 정답이다. hardly(거의 ~않다)는 뒤 내용과 모순되고, lately(최근에), closely(면밀히)는 funded by와 의미가 맞지 않는다.",
+  "translation": "그 강변 영화제는 전적으로 개인 기부금으로 운영되며 시로부터는 자금을 받지 않는다."
+ },
+ {
+  "id": "p5-321",
+  "level": 5,
+  "type": "품사",
+  "question": "Following several complaints, the agency conducted a thorough ------- of its recruitment practices.",
+  "choices": [
+   "reassessment",
+   "reassess",
+   "reassessed",
+   "reassessing"
+  ],
+  "answer": 0,
+  "explanation": "관사 a와 형용사 thorough 뒤, conducted의 목적어 자리이므로 명사 reassessment가 알맞다. reassess는 동사이고, reassessed와 reassessing은 분사라 관사와 형용사의 꾸밈을 받는 명사 자리에 적합하지 않다.",
+  "translation": "여러 건의 불만이 제기된 후 그 기관은 채용 관행을 철저히 재평가했다."
+ },
+ {
+  "id": "p5-322",
+  "level": 5,
+  "type": "품사",
+  "question": "Ms. Kagame is ------- the most accomplished textile designer the company has ever employed.",
+  "choices": [
+   "arguably",
+   "arguable",
+   "argue",
+   "argument"
+  ],
+  "answer": 0,
+  "explanation": "최상급 표현 the most accomplished 앞에서 '거의 틀림없이'라는 뜻으로 수식하는 부사 arguably가 정답이다. arguable은 형용사, argument는 명사, argue는 동사라 이 위치에 올 수 없다.",
+  "translation": "카가메 씨는 아마도 회사가 고용해 온 직물 디자이너 중 가장 뛰어난 사람일 것이다."
+ },
+ {
+  "id": "p5-323",
+  "level": 5,
+  "type": "품사",
+  "question": "Over the last decade, rural clinics have become ------- dependent on government grants.",
+  "choices": [
+   "increasing",
+   "increased",
+   "increase",
+   "increasingly"
+  ],
+  "answer": 3,
+  "explanation": "형용사 dependent를 앞에서 꾸미는 부사 자리이므로 increasingly가 알맞다. increasing과 increased는 형용사·분사라 다른 형용사를 꾸밀 수 없고, increase는 명사·동사다.",
+  "translation": "지난 10년간 농촌 진료소들은 정부 보조금에 점점 더 의존하게 되었다."
+ },
+ {
+  "id": "p5-324",
+  "level": 5,
+  "type": "품사",
+  "question": "Participants described the leadership workshop as both informative and -------.",
+  "choices": [
+   "engage",
+   "engaging",
+   "engaged",
+   "engagement"
+  ],
+  "answer": 1,
+  "explanation": "both A and B는 같은 품사를 연결하므로 형용사 informative와 짝을 이루며 '흥미를 끄는'이라는 뜻의 engaging이 정답이다. engaged는 '몰두한, 약혼한'이라 워크숍을 설명하기 어색하고, engagement는 명사, engage는 동사다.",
+  "translation": "참가자들은 리더십 워크숍이 유익하고도 흥미로웠다고 말했다."
+ },
+ {
+  "id": "p5-325",
+  "level": 5,
+  "type": "품사",
+  "question": "After months of talks, the two logistics firms signed a ------- beneficial partnership agreement.",
+  "choices": [
+   "mutually",
+   "mutualize",
+   "mutual",
+   "mutuality"
+  ],
+  "answer": 0,
+  "explanation": "형용사 beneficial을 앞에서 꾸미는 부사 자리이므로 mutually가 알맞다(mutually beneficial: 상호 이익이 되는). mutual은 형용사라 다른 형용사를 꾸밀 수 없고, mutuality는 명사, mutualize는 동사다.",
+  "translation": "수개월의 협상 끝에 두 물류 회사는 상호 이익이 되는 제휴 계약을 체결했다."
+ },
+ {
+  "id": "p5-326",
+  "level": 5,
+  "type": "품사",
+  "question": "The consultant's report questions the ------- of expanding into three new markets at once.",
+  "choices": [
+   "feasible",
+   "feasibility",
+   "feasibly",
+   "infeasible"
+  ],
+  "answer": 1,
+  "explanation": "관사 the와 전치사 of 사이, questions의 목적어 자리이므로 명사 feasibility(실현 가능성)가 알맞다. feasible은 형용사, feasibly는 부사, infeasible은 '실현 불가능한'이라는 형용사라 명사 자리에 올 수 없다.",
+  "translation": "컨설턴트의 보고서는 세 개의 새 시장에 한꺼번에 진출하는 것의 실현 가능성에 의문을 제기한다."
+ },
+ {
+  "id": "p5-327",
+  "level": 5,
+  "type": "품사",
+  "question": "The firmware upgrade has been postponed ------- because of unresolved compatibility issues.",
+  "choices": [
+   "indefiniteness",
+   "indefinite",
+   "definite",
+   "indefinitely"
+  ],
+  "answer": 3,
+  "explanation": "수동태 has been postponed를 꾸미는 부사 자리이므로 indefinitely(무기한으로)가 정답이다. indefinite와 definite는 형용사, indefiniteness는 명사라 동사를 수식할 수 없다.",
+  "translation": "해결되지 않은 호환성 문제로 펌웨어 업그레이드가 무기한 연기되었다."
+ },
+ {
+  "id": "p5-328",
+  "level": 5,
+  "type": "품사",
+  "question": "Rising fuel surcharges have made long-haul flights ------- expensive for many budget travelers.",
+  "choices": [
+   "prohibit",
+   "prohibitively",
+   "prohibitive",
+   "prohibition"
+  ],
+  "answer": 1,
+  "explanation": "make + 목적어 + 형용사(expensive) 구조에서 형용사 expensive를 꾸미는 부사 자리이므로 prohibitively(엄두를 못 낼 만큼)가 알맞다. prohibitive는 형용사라 다른 형용사를 꾸밀 수 없고, prohibition은 명사, prohibit는 동사다.",
+  "translation": "유류할증료가 오르면서 많은 저예산 여행객에게 장거리 항공편이 엄두를 못 낼 만큼 비싸졌다."
+ },
+ {
+  "id": "p5-329",
+  "level": 5,
+  "type": "품사",
+  "question": "Since opening its Jakarta office, the agency's ------- in Southeast Asia has grown steadily.",
+  "choices": [
+   "presence",
+   "present",
+   "presently",
+   "presentable"
+  ],
+  "answer": 0,
+  "explanation": "소유격 the agency's 뒤 주어 자리이며 '입지, 존재감'을 뜻하는 명사 presence가 정답이다. present는 명사로 쓰면 '선물·현재'라 의미가 맞지 않고, presently는 부사, presentable은 형용사다.",
+  "translation": "자카르타 사무소를 연 이후 그 대행사의 동남아시아 내 입지는 꾸준히 커졌다."
+ },
+ {
+  "id": "p5-330",
+  "level": 5,
+  "type": "동사 시제·태",
+  "question": "The board recommended that the expansion proposal ------- until more reliable cost data is available.",
+  "choices": [
+   "was postponing",
+   "postpones",
+   "be postponed",
+   "to postpone"
+  ],
+  "answer": 2,
+  "explanation": "recommend 같은 제안·요구 동사 뒤 that절에는 (should) + 동사원형을 쓰며, 제안서는 '연기되는' 대상이므로 be postponed가 알맞다. postpones와 was postponing은 능동이고 형태도 맞지 않으며, to postpone은 that절의 동사가 될 수 없다.",
+  "translation": "이사회는 더 신뢰할 만한 비용 자료가 나올 때까지 확장 제안을 연기할 것을 권고했다."
+ },
+ {
+  "id": "p5-331",
+  "level": 5,
+  "type": "동사 시제·태",
+  "question": "Were sufficient funds available, the city ------- the new public library this year.",
+  "choices": [
+   "has built",
+   "will build",
+   "would build",
+   "builds"
+  ],
+  "answer": 2,
+  "explanation": "Were ~ available은 If가 생략되고 도치된 가정법 과거(= If sufficient funds were available)이므로 주절에는 would + 동사원형인 would build가 정답이다. will build, builds, has built는 가정법 주절의 형태가 아니다.",
+  "translation": "충분한 자금이 있다면 시는 올해 새 공공 도서관을 지을 텐데."
+ },
+ {
+  "id": "p5-332",
+  "level": 5,
+  "type": "동사 시제·태",
+  "question": "Not until the safety inspection ------- will the plant be allowed to resume production.",
+  "choices": [
+   "completing",
+   "completes",
+   "is completed",
+   "will be completed"
+  ],
+  "answer": 2,
+  "explanation": "Not until이 이끄는 시간 부사절에서는 미래 대신 현재시제를 쓰고, 점검은 '완료되는' 대상이므로 현재 수동태 is completed가 알맞다. will be completed는 시간절에 미래시제를 쓴 오류이고, completes는 능동이며, completing은 동사가 될 수 없다.",
+  "translation": "안전 점검이 끝나야만 공장은 생산을 재개할 수 있다."
+ },
+ {
+  "id": "p5-333",
+  "level": 5,
+  "type": "동사 시제·태",
+  "question": "The acquisition, which ------- in secret for several months, was finally announced on Monday.",
+  "choices": [
+   "has been negotiated",
+   "had been negotiated",
+   "negotiates",
+   "was negotiating"
+  ],
+  "answer": 1,
+  "explanation": "월요일에 발표된 과거 시점보다 앞서 몇 달간 '협상되어 온' 것이므로 과거완료 수동태 had been negotiated가 정답이다. has been negotiated는 현재완료라 과거 기준과 맞지 않고, was negotiating과 negotiates는 능동이라 인수가 협상을 했다는 뜻이 된다.",
+  "translation": "몇 달간 비밀리에 협상되어 온 그 인수 건이 마침내 월요일에 발표되었다."
+ },
+ {
+  "id": "p5-334",
+  "level": 5,
+  "type": "동사 시제·태",
+  "question": "Ms. Dlamini ------- to the Johannesburg office if the restructuring plan is approved next week.",
+  "choices": [
+   "has been transferred",
+   "had transferred",
+   "will be transferred",
+   "was transferred"
+  ],
+  "answer": 2,
+  "explanation": "조건절(if ~ is approved next week)이 미래 상황을 나타내므로 주절은 미래이고, 직원은 '전근되는' 대상이므로 will be transferred가 알맞다. was transferred와 has been transferred는 이미 일어난 일이고, had transferred는 과거완료 능동이다.",
+  "translation": "다음 주 구조조정안이 승인되면 들라미니 씨는 요하네스버그 사무소로 전근될 것이다."
+ },
+ {
+  "id": "p5-335",
+  "level": 5,
+  "type": "접속사",
+  "question": "------- the replacement parts arrive by Friday, the assembly plant will have to halt production.",
+  "choices": [
+   "Once",
+   "Because",
+   "Whereas",
+   "Unless"
+  ],
+  "answer": 3,
+  "explanation": "'금요일까지 부품이 도착하지 않으면 생산을 중단해야 한다'는 조건이므로 Unless가 정답이다. Once(일단 ~하면)와 Because(~ 때문에)는 부품 도착이 생산 중단의 원인이 되어 논리가 맞지 않고, Whereas(반면에)는 대조라 어울리지 않는다.",
+  "translation": "교체 부품이 금요일까지 도착하지 않으면 조립 공장은 생산을 중단해야 할 것이다."
+ },
+ {
+  "id": "p5-336",
+  "level": 5,
+  "type": "접속사",
+  "question": "The analytics platform is extremely powerful; -------, its interface can be confusing for new users.",
+  "choices": [
+   "therefore",
+   "moreover",
+   "however",
+   "otherwise"
+  ],
+  "answer": 2,
+  "explanation": "앞 절은 장점, 뒤 절은 단점으로 서로 대조되므로 however가 알맞다. therefore(그러므로)와 moreover(게다가)는 대조를 나타내지 못하고, otherwise(그렇지 않으면)는 조건의 의미라 맞지 않는다.",
+  "translation": "그 분석 플랫폼은 매우 강력하지만, 인터페이스는 신규 사용자에게 헷갈릴 수 있다."
+ },
+ {
+  "id": "p5-337",
+  "level": 5,
+  "type": "접속사",
+  "question": "------- costly the renovation may be, it is necessary to meet the revised fire code.",
+  "choices": [
+   "Whatever",
+   "However",
+   "Although",
+   "Even"
+  ],
+  "answer": 1,
+  "explanation": "However + 형용사 + 주어 + 동사는 '아무리 ~하더라도'라는 양보 구문이므로 However가 정답이다. Although는 바로 뒤에 형용사를 둘 수 없고, Whatever는 명사와 함께 쓰며, Even은 부사라 절을 이끌지 못한다.",
+  "translation": "보수 공사 비용이 아무리 많이 들더라도 개정된 소방 규정을 충족하려면 반드시 필요하다."
+ },
+ {
+  "id": "p5-338",
+  "level": 5,
+  "type": "전치사",
+  "question": "Reimbursement will be processed ------- receipt of all required supporting documents.",
+  "choices": [
+   "above",
+   "along",
+   "upon",
+   "beside"
+  ],
+  "answer": 2,
+  "explanation": "upon receipt of(~을 받는 즉시)는 굳어진 표현이므로 upon이 알맞다. above(~ 위에), along(~을 따라), beside(~ 옆에)는 receipt와 함께 '받는 즉시'라는 시간 의미를 만들지 못한다.",
+  "translation": "필요한 증빙 서류가 모두 접수되는 즉시 비용이 환급 처리됩니다."
+ },
+ {
+  "id": "p5-339",
+  "level": 5,
+  "type": "전치사",
+  "question": "The package tour to Patagonia costs $2,400 per person, ------- international airfare.",
+  "choices": [
+   "in favor of",
+   "exclusive of",
+   "by means of",
+   "on behalf of"
+  ],
+  "answer": 1,
+  "explanation": "여행 요금에서 국제선 항공료는 '제외하고'라는 뜻이므로 exclusive of가 정답이다. on behalf of(~을 대신하여), in favor of(~에 찬성하여), by means of(~을 수단으로)는 가격 조건을 나타내지 못한다.",
+  "translation": "파타고니아 패키지 여행은 국제선 항공료를 제외하고 1인당 2,400달러이다."
+ },
+ {
+  "id": "p5-340",
+  "level": 5,
+  "type": "전치사",
+  "question": "The harvest festival was postponed ------- growing concerns about the approaching typhoon.",
+  "choices": [
+   "amid",
+   "versus",
+   "beside",
+   "among"
+  ],
+  "answer": 0,
+  "explanation": "amid는 '(어떤 상황·분위기) 속에서'라는 뜻으로 concerns 같은 추상명사와 잘 어울리므로 정답이다. among은 셋 이상의 구체적 대상 사이를 나타내고, beside(~ 옆에)와 versus(~ 대)는 의미가 맞지 않는다.",
+  "translation": "다가오는 태풍에 대한 우려가 커지는 가운데 추수 축제가 연기되었다."
+ },
+ {
+  "id": "p5-341",
+  "level": 5,
+  "type": "준동사(to부정사·동명사·분사)",
+  "question": "The sustainability report, ------- next month, will outline the company's carbon reduction targets.",
+  "choices": [
+   "having released",
+   "releases",
+   "to be released",
+   "to release"
+  ],
+  "answer": 2,
+  "explanation": "보고서는 앞으로 '발표될' 것이므로 미래·수동의 의미를 가진 to be released가 알맞다. releases는 이미 동사 will outline이 있어 쓸 수 없고, having released와 to release는 능동이라 보고서가 무언가를 발표한다는 뜻이 된다.",
+  "translation": "다음 달 발표될 지속가능경영 보고서에는 회사의 탄소 감축 목표가 담길 것이다."
+ },
+ {
+  "id": "p5-342",
+  "level": 5,
+  "type": "준동사(to부정사·동명사·분사)",
+  "question": "------- all the licensing requirements, the applicant was invited to the final interview.",
+  "choices": [
+   "Having met",
+   "Met",
+   "To be met",
+   "Having been met"
+  ],
+  "answer": 0,
+  "explanation": "지원자가 요건을 '충족한' 것이 초대받기 이전의 일이고 능동이므로 완료 분사구문 Having met이 정답이다. Having been met과 To be met은 수동이라 뒤에 목적어를 둘 수 없고, Met은 수동 의미라 지원자가 충족되었다는 뜻이 된다.",
+  "translation": "모든 자격 요건을 갖춘 그 지원자는 최종 면접에 초대받았다."
+ },
+ {
+  "id": "p5-343",
+  "level": 5,
+  "type": "준동사(to부정사·동명사·분사)",
+  "question": "The new printing policy is aimed at ------- paper waste across all regional offices.",
+  "choices": [
+   "to reduce",
+   "reduced",
+   "reduce",
+   "reducing"
+  ],
+  "answer": 3,
+  "explanation": "be aimed at의 at은 전치사이므로 뒤에 동명사 reducing이 와야 한다. reduce와 reduced는 전치사의 목적어가 될 수 없고, to reduce는 전치사 at 뒤에 쓸 수 없다.",
+  "translation": "새 인쇄 정책은 모든 지역 사무소의 종이 낭비를 줄이는 것을 목표로 한다."
+ },
+ {
+  "id": "p5-344",
+  "level": 5,
+  "type": "관계사",
+  "question": "This year's leadership award goes to Dr. Oyelaran, ------- the research institute owes much of its recent success.",
+  "choices": [
+   "who",
+   "whom",
+   "to which",
+   "to whom"
+  ],
+  "answer": 3,
+  "explanation": "관계절이 owe A to B(A를 B 덕분으로 여기다) 구조이므로 전치사 to가 관계대명사 앞으로 온 to whom이 알맞고, 선행사가 사람(Dr. Oyelaran)이다. whom과 who만 쓰면 owe ~ to의 to가 빠져 불완전하고, to which는 사물 선행사에 쓴다.",
+  "translation": "올해 리더십상은 연구소의 최근 성공이 상당 부분 그 덕분인 오옐라란 박사에게 돌아간다."
+ },
+ {
+  "id": "p5-345",
+  "level": 5,
+  "type": "관계사",
+  "question": "------- impressed the judges most was the simplicity of the app's design.",
+  "choices": [
+   "That",
+   "What",
+   "Which",
+   "Whose"
+  ],
+  "answer": 1,
+  "explanation": "문장 전체의 주어가 되는 명사절을 이끌면서 관계절 안에서 impressed의 주어 역할도 하는 what(~하는 것)이 알맞다. That은 완전한 절을 이끌어야 하고, Which와 Whose는 선행사 없이 이 구조를 만들지 못한다.",
+  "translation": "심사위원들에게 가장 깊은 인상을 준 것은 그 앱 디자인의 단순함이었다."
+ },
+ {
+  "id": "p5-346",
+  "level": 5,
+  "type": "대명사",
+  "question": "Of the five grant proposals submitted, ------- met all of the foundation's funding criteria.",
+  "choices": [
+   "none",
+   "neither",
+   "nothing",
+   "no"
+  ],
+  "answer": 0,
+  "explanation": "'다섯 개 제안서 중 어느 것도 ~않았다'는 뜻으로 of 이하 셋 이상의 대상을 받는 대명사 none이 정답이다. nothing은 of 구문의 범위를 받지 않고, no는 한정사라 단독으로 주어가 될 수 없으며, neither는 둘 중에서만 쓴다.",
+  "translation": "제출된 다섯 건의 보조금 제안서 중 어느 것도 재단의 지원 기준을 모두 충족하지 못했다."
+ },
+ {
+  "id": "p5-347",
+  "level": 5,
+  "type": "대명사",
+  "question": "The headquarters building ------- is modest, but the surrounding gardens are spectacular.",
+  "choices": [
+   "itself",
+   "themselves",
+   "its",
+   "it"
+  ],
+  "answer": 0,
+  "explanation": "주어 The headquarters building을 바로 뒤에서 강조해 '건물 자체는'이라는 뜻을 만드는 재귀대명사 itself가 알맞다. its는 소유격이라 명사가 필요하고, it은 주어가 겹쳐 비문이 되며, themselves는 복수라 단수 주어와 맞지 않는다.",
+  "translation": "본사 건물 자체는 수수하지만 주변 정원은 장관이다."
+ },
+ {
+  "id": "p5-348",
+  "level": 5,
+  "type": "수 일치",
+  "question": "Implementing the new data-protection procedures across all branches ------- careful coordination.",
+  "choices": [
+   "have required",
+   "requiring",
+   "require",
+   "requires"
+  ],
+  "answer": 3,
+  "explanation": "동명사구(Implementing ~ branches)가 주어이면 단수 취급하므로 requires가 정답이다. require와 have required는 복수 명사 procedures·branches에 맞춘 함정이고, requiring은 동사가 될 수 없다.",
+  "translation": "모든 지점에 새 데이터 보호 절차를 시행하려면 신중한 조율이 필요하다."
+ },
+ {
+  "id": "p5-349",
+  "level": 5,
+  "type": "수 일치",
+  "question": "The quality of the components that the supplier ships to its overseas plants ------- a concern for the board.",
+  "choices": [
+   "remain",
+   "remaining",
+   "remains",
+   "have remained"
+  ],
+  "answer": 2,
+  "explanation": "주어의 핵심은 단수 The quality이고 of 이하와 관계절(that ~ plants)은 수식어이므로 단수 동사 remains가 알맞다. remain과 have remained는 components나 plants에 맞춘 함정이고, remaining은 동사가 될 수 없다.",
+  "translation": "공급업체가 해외 공장으로 보내는 부품의 품질은 여전히 이사회의 걱정거리다."
+ },
+ {
+  "id": "p5-350",
+  "level": 5,
+  "type": "비교",
+  "question": "In terms of battery life, the X9 tablet is clearly ------- to its predecessor.",
+  "choices": [
+   "higher",
+   "better",
+   "superior",
+   "more"
+  ],
+  "answer": 2,
+  "explanation": "뒤에 than이 아니라 to가 오므로 라틴어 비교 형용사 superior(~보다 우수한)가 정답이다. better, more, higher는 비교급이라 than과 함께 써야 하므로 to와 맞지 않는다.",
+  "translation": "배터리 수명 면에서 X9 태블릿은 이전 모델보다 확실히 우수하다."
+ }
+]

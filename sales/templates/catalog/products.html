@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% from "_macros.html" import table, tabs, csrf, select, download %}
+{% block content %}
+<p class="subtitle">매출·견적의 단가는 <strong>거래처 특가(해당 일자에 유효) → 품목 정가</strong> 순으로 정해집니다.
+  품목은 시스템관리자가, 거래처 특가는 팀장 이상이 담당 범위의 거래처에 대해 등록합니다. 모든 변경은 감사로그에 남습니다.</p>
+
+<section class="card">
+  {{ tabs([('products', '📦 품목 마스터'), ('prices', '🏷️ 거래처 특가')], tab) }}
+  {% if tab == 'prices' %}
+    <form method="get" class="toolbar" action="{{ page_path() }}">
+      <input type="hidden" name="tab" value="prices">
+      <label class="grow">거래처 {{ select('customer_id', customers.items()|list, cust_id or '', blank='전체') }}</label>
+      <button class="btn">조회</button>
+      {{ download(export_url('prices')) }}
+    </form>
+    {{ table(prices, 360, '등록된 특가가 없습니다.') }}
+    {% if can_set_price %}
+    <form method="post" action="{{ url_for('catalog.price_save') }}" class="form">
+      {{ csrf() }}
+      <h3>특가 등록</h3>
+      <div class="form-grid g3">
+        <label>거래처 * {{ select('customer_id', customers.items()|list, cust_id or '', blank='선택하세요') }}</label>
+        <label>품목 * {{ select('product_id', product_opts, '', blank='선택하세요') }}</label>
+        <label>특가(원) * <input type="number" name="unit_price" min="1" step="1000" required></label>
+        <label>시작일 <input type="date" name="valid_from" value="{{ today_str }}"></label>
+        <label>종료일 (비우면 계속) <input type="date" name="valid_to"></label>
+        <label>메모 <input name="memo" placeholder="예) 2026 연간계약"></label>
+      </div>
+      <p class="muted small">같은 거래처·품목의 기존 특가가 새 시작일과 겹치면 전날로 종료합니다(기간 중복 없음).</p>
+      <button class="btn btn-primary">특가 등록</button>
+    </form>
+    {% endif %}
+  {% else %}
+    <form method="get" class="toolbar" action="{{ page_path() }}">
+      <label class="grow">검색 (코드/품목명/분류) <input name="q" value="{{ keyword }}"></label>
+      <button class="btn">조회</button>
+      {{ download(export_url('products')) }}
+    </form>
+    {{ table(plist, 360, '등록된 품목이 없습니다.') }}
+    {% if can_edit_product %}
+    <form method="post" action="{{ url_for('catalog.product_save') }}" class="form">
+      {{ csrf() }}
+      <h3>{{ '✏️ 품목 수정 — ' ~ edit.code if edit.id else '➕ 품목 등록' }}</h3>
+      {% if edit.id %}<input type="hidden" name="id" value="{{ edit.id }}">{% endif %}
+      <div class="form-grid g4">
+        <label>품목코드 * <input name="code" value="{{ edit.code or '' }}" required placeholder="SW-ERP-01"></label>
+        <label class="span2">품목명 * <input name="name" value="{{ edit.name or '' }}" required></label>
+        <label>분류 <input name="category" value="{{ edit.category or '' }}"></label>
+        <label>단위 <input name="unit" value="{{ edit.unit or 'EA' }}"></label>
+        <label>정가(원) <input type="number" name="list_price" min="0" step="1000" value="{{ edit.list_price or 0 }}"></label>
+        <label>과세구분 {{ select('tax_type', tax_types, edit.tax_type or '과세') }}</label>
+        <label>ERP 자재번호 <input name="erp_material" value="{{ edit.erp_material or '' }}" placeholder="비우면 품목코드"></label>
+        <label class="span3">메모 <input name="memo" value="{{ edit.memo or '' }}"></label>
+        <label class="check"><input type="checkbox" name="active" value="1" {{ 'checked' if edit.active }}> 사용</label>
+      </div>
+      <p class="muted small">과세 10% · 영세율 0%(수출 등) · 면세(부가세 없음). 정가를 바꿔도 이미 발송한 견적·등록한 매출 금액은 바뀌지 않습니다.</p>
+      <button class="btn btn-primary">💾 저장</button>
+      {% if edit.id %}<a class="btn" href="{{ url_for('catalog.products') }}">새 품목</a>{% endif %}
+    </form>
+    {% endif %}
+  {% endif %}
+</section>
+{% endblock %}

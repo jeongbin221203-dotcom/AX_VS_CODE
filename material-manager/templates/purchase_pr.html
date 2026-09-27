@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf, table %}
+{% block content %}
+<p><a href="{{ url_for('purchase.index') }}">← 구매요청 목록</a></p>
+<section class="card">
+  <h3>{{ pr.pr_no }} · {{ status }}</h3>
+  <p>창고 {{ pr.wh_code }} · 필요일 {{ pr.need_date or '-' }} · 요청 {{ pr.requested_by }} ({{ pr.requested_at }}) ·
+     금액 ₩{{ "{:,.0f}".format(pr.total_amount) }} · 결재 {{ pr.required_steps }}단계</p>
+  <p class="muted">사유: {{ pr.reason }}</p>
+</section>
+<h3>품목</h3>
+{{ table(items) }}
+<h3>결재 기록</h3>
+{{ table(approvals, "아직 결재 기록이 없습니다.") }}
+
+{% if pr.status == 'PENDING' and can('MANAGER') and not mine %}
+<form class="card row-actions" method="post" action="{{ url_for('purchase.pr_decide', pr_id=pr.id) }}">
+  {{ csrf() }}
+  <span>{{ step }}단계 결재 ({{ role_label(step_role) }})</span>
+  <label class="grow">의견 (반려 시 필수)<input name="comment"></label>
+  <button class="btn btn-primary" name="decision" value="approve">승인</button>
+  <button class="btn btn-danger" name="decision" value="reject">반려</button>
+</form>
+{% endif %}
+
+{% if pr.status == 'APPROVED' and can('MANAGER') and not mine %}
+<form class="card form" method="post" action="{{ url_for('purchase.po_create', pr_id=pr.id) }}">
+  {{ csrf() }}
+  <h3>발주 만들기</h3>
+  <div class="form-grid g3">
+    <label>공급처 *<input name="supplier" required></label>
+    <label>SAP 구매오더 번호 (SAP 연동 시 입고 전기에 필요)<input name="sap_po_no"></label>
+    <label>메모<input name="note"></label>
+  </div>
+  <table class="data">
+    <tr><th>품목</th><th>자재</th><th class="num">수량</th><th class="num">발주단가(원)</th></tr>
+    {% for it in item_rows %}
+      <tr><td>{{ it.line_no }}</td><td>[{{ it.code }}] {{ it.name }}</td><td class="num">{{ "{:,.2f}".format(it.qty) }}</td>
+          <td><input name="price_{{ it.id }}" type="number" min="0" step="any" value="{{ '%g' % it.est_price }}"></td></tr>
+    {% endfor %}
+  </table>
+  <p class="muted small">발주 금액이 승인된 요청 금액보다 10% 넘게 크면 발주도 다른 관리자의 결재를 받아야 입고할 수 있습니다.</p>
+  <div><button class="btn btn-primary">발주</button></div>
+</form>
+{% endif %}
+
+{% if pos %}<p>발주: {% for p in pos %}<a href="{{ url_for('purchase.po_detail', po_id=p.id) }}">{{ p.po_no }}</a> {% endfor %}</p>{% endif %}
+
+{% if pr.status in ('PENDING', 'APPROVED') and (mine or can('MANAGER')) %}
+<details class="card"><summary>구매요청 취소</summary>
+  <form class="row-actions" method="post" action="{{ url_for('purchase.pr_cancel', pr_id=pr.id) }}">
+    {{ csrf() }}<label class="check"><input type="checkbox" required> 이 요청을 취소합니다.</label><button class="btn btn-danger">취소</button>
+  </form>
+</details>
+{% endif %}
+{% endblock %}

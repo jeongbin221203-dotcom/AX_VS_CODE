@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}진단 테스트{% endblock %}
+{% block content %}
+<div class="grid two">
+  <div class="card">
+    <h1>진단 테스트</h1>
+    <p>지금 실력이 어느 등급인지 약 15분 동안 확인합니다. 결과로 나온 추정 점수가 '현재 점수'가 되고,
+      등급 가이드·오늘 할 일·추천 난이도가 그 등급에 맞춰집니다.</p>
+    <table class="small">
+      <thead><tr><th>구성</th><th class="r">문항(약)</th><th>난이도</th></tr></thead>
+      <tbody>
+      {% for part, per in form.items() %}
+        <tr><td>Part {{ part }} {{ PART_INFO[part].name }}</td>
+          <td class="r num">{{ per.values()|sum }}</td>
+          <td>{% for lv in per %}{{ grade_badge(lv) }} {% endfor %}</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    <p class="small muted" style="margin-top:10px">여러 등급 문제를 섞어 냅니다. 어려운 문제를 맞히면 점수에 더 크게 반영됩니다.
+      문항 수가 적어 오차가 크니, 2주 뒤에는 하프 모의고사로 다시 확인하세요.</p>
+    <form method="post">
+      <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+      <button class="btn primary">진단 시작</button>
+    </form>
+  </div>
+  <div class="card">
+    <h2>지난 진단</h2>
+    {% if past %}
+      <table><tbody>
+      {% for s in past %}
+        <tr><td><a href="{{ url_for('quiz.result', sid=s.id) }}">{{ s.finished_at[:10] }}</a></td>
+          <td class="r num"><b>{{ s.total_est }}</b> <span class="muted small">LC {{ s.lc_est }} · RC {{ s.rc_est }}</span></td></tr>
+      {% endfor %}
+      </tbody></table>
+    {% else %}<div class="empty">아직 없습니다.</div>{% endif %}
+  </div>
+</div>
+{% endblock %}

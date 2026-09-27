@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% from "_macros.html" import metric, table, chart, tabs %}
+{% block content %}
+<p class="subtitle">{{ g.ym }} · {{ g.owner_filter or '전사' }}</p>
+
+<div class="metrics m5">
+  {{ metric('당월 매출', k.month_sales|mil, '%+.1f%% MoM'|format(k.mom), 'up' if k.mom >= 0 else 'down') }}
+  {{ metric('목표 달성률', '%.1f%%'|format(k.achievement),
+            ('부족 ' ~ k.gap|mil) if k.gap > 0 else ('초과 ' ~ (-k.gap)|mil), 'down' if k.gap > 0 else 'up') }}
+  {{ metric('파이프라인(가중)', k.weighted_pipeline|mil, '총 ' ~ k.open_amount|mil) }}
+  {{ metric('수주/실주', k.won_cnt ~ ' / ' ~ k.lost_cnt, '승률 %.0f%%'|format(k.win_rate)) }}
+  {{ metric('미수금', k.unpaid|mil, '활동 ' ~ k.activity_cnt ~ '건') }}
+</div>
+
+{% macro chart_card(heading, c, t, note=none) %}
+  <section class="card chart-card">
+    <h3>{{ heading }}</h3>
+    {% if note %}<p class="muted small">{{ note }}</p>{% endif %}
+    {% if c.empty %}<div class="alert alert-info">표시할 데이터가 없습니다.</div>{% else %}{{ chart(c) }}{% endif %}
+    <details><summary>수치 보기</summary>{{ table(t) }}</details>
+  </section>
+{% endmacro %}
+
+<div class="grid-2">
+  {{ chart_card('📈 월별 매출 vs 목표 (최근 12개월)', trend_chart, trend) }}
+  {{ chart_card('🔻 영업 단계별 파이프라인', funnel_chart, funnel) }}
+</div>
+<div class="grid-2">
+  {{ chart_card('👥 담당자별 실적 (' ~ g.ym ~ ')', perf_chart, perf) }}
+  {{ chart_card('🏆 매출 상위 거래처 (' ~ g.ym ~ ')', top_chart, top,
+                '당월 매출이 없어 전체 기간 기준으로 표시합니다.' if top_all else none) }}
+</div>
+
+<section class="card">
+  <h3>🔮 이번 달 예측 요약</h3>
+  <div class="metrics m4">
+    {{ metric('확정 매출', fc.closed|mil, '목표 대비 %.0f%%'|format(fc.attainment)) }}
+    {{ metric('Commit 포함 전망', fc.commit_total|mil, '%.0f%%'|format(fc.commit_attainment)) }}
+    {{ metric('목표 갭', fc.gap|mil, '초과 달성 전망' if fc.gap <= 0 else '추가 확보 필요', 'up' if fc.gap <= 0 else 'down') }}
+    {{ metric('파이프라인 커버리지', '%.1f배'|format(fc.coverage), '건전(3배 이상)' if fc.coverage >= 3 else '부족', 'up' if fc.coverage >= 3 else 'down') }}
+  </div>
+</section>
+
+<section class="card">
+  <h3>🚨 즉시 확인이 필요한 항목</h3>
+  {% set tab = request.args.get('tab', 'soon') %}
+  {{ tabs([('soon', '⏰ 마감 임박 기회 (14일)'), ('stale', '💤 장기 미접촉 거래처 (30일)'), ('upcoming', '📌 예정된 후속 액션 (7일)')], tab) }}
+  {% if tab == 'stale' %}
+    {% if not stale.empty %}<div class="alert alert-warning">{{ stale.total }}개 거래처가 30일 이상 접촉 이력이 없습니다.</div>{% endif %}
+    {{ table(stale, 400) }}
+  {% elif tab == 'upcoming' %}
+    {{ table(upcoming, 400) }}
+  {% else %}
+    {% if not soon.empty %}<div class="alert alert-warning">{{ soon.total }}건의 기회가 마감 임박이거나 이미 마감일을 넘겼습니다.</div>{% endif %}
+    {{ table(soon, 400) }}
+  {% endif %}
+</section>
+{% endblock %}

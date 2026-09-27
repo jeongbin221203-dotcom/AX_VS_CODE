@@ -1,0 +1,13 @@
+# 런타임 데이터 (절대 커밋 금지)
+data/*.db
+data/*.db-wal
+data/*.db-shm
+*.xlsx
+
+# 파이썬
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.streamlit/secrets.toml

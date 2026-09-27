@@ -1,0 +1,78 @@
+<!-- 자재관리 섹션 (2026-09-27 포트폴리오에서 분리 보관 — 최종 단계에서 두 프로젝트를 합칠 때 사용) -->
+<!-- ─────────────── 자재관리 ─────────────── -->
+<article class="project" id="mm" aria-labelledby="mm-title">
+  <div class="p-head">
+    <div>
+      <span class="p-code">MM · 자재관리</span>
+      <h2 id="mm-title">자재관리 시스템</h2>
+      <p class="sum">창고 자재의 입고·출고·실사조정을 기록하고, 재고와 안전재고, 재고금액을 실시간으로 집계하는 웹 애플리케이션입니다.</p>
+    </div>
+    <div class="facts">
+      <div><b>11</b><span>메뉴</span></div>
+      <div><b>32/32</b><span>테스트 통과</span></div>
+      <div><b>3,226</b><span>코드 줄 수</span></div>
+    </div>
+  </div>
+
+  <div class="gallery" data-host="localhost:5002">
+    <div class="tabs" role="tablist" aria-label="자재관리 화면 선택">
+      <button role="tab" id="mm-t1" aria-selected="true" data-img="mm_dash" data-path="/ 대시보드" data-cap="대시보드 — 사용 중 자재, 총 재고금액, 안전재고 미달 품목 수와 최근 30일 입출고 추이를 한 화면에 보여줍니다.">대시보드</button>
+      <button role="tab" id="mm-t2" aria-selected="false" data-img="mm_stock" data-path="/ 재고 현황" data-cap="재고 현황 — 검색·분류 필터와 미달만 보기를 지원하고, 안전재고보다 적은 행은 빨간 배경으로 표시합니다. 엑셀로 내려받을 수 있습니다.">재고 현황</button>
+      <button role="tab" id="mm-t3" aria-selected="false" data-img="mm_tx" data-path="/ 입출고 등록" data-cap="입출고 등록 — 입고·출고·조정을 고르면 선택한 자재의 현재고, 안전재고, 기준단가가 바로 표시되고, 세금계산서 증빙을 함께 첨부할 수 있습니다.">입출고 등록</button>
+    </div>
+    <div class="browser" role="tabpanel" aria-labelledby="mm-t1">
+      <div class="bar"><div class="dots"><i></i><i></i><i></i></div><div class="url">localhost:5002<b>/ 대시보드</b></div></div>
+      <img src="{{IMG_mm_dash}}" alt="대시보드 화면" width="1200" height="750">
+    </div>
+    <p class="cap">대시보드 — 사용 중 자재, 총 재고금액, 안전재고 미달 품목 수와 최근 30일 입출고 추이를 한 화면에 보여줍니다.</p>
+  </div>
+
+  <div class="cols">
+    <div>
+      <h3>재고는 저장하지 않고 거래에서 계산합니다</h3>
+      <p>재고 수량을 컬럼으로 따로 두면 언젠가 거래 장부와 어긋납니다. 그래서 재고는 입고·출고·조정 거래를 합산한 값으로만 계산합니다.</p>
+      <ul>
+        <li><b>동시 출고 방어</b> — 출고를 등록하기 직전에 같은 트랜잭션 안에서 재고를 다시 읽어, 두 사람이 동시에 출고해도 재고가 음수가 되지 않습니다.</li>
+        <li><b>실사조정</b> — 실제로 센 수량을 입력하면 현재고와의 차이만 거래로 기록합니다.</li>
+        <li><b>삭제 대신 사용중지</b> — 자재를 지우지 않아 과거 거래 이력이 깨지지 않습니다.</li>
+        <li><b>삭제 검증</b> — 거래를 지웠을 때 재고가 음수가 되면 삭제를 거부합니다.</li>
+      </ul>
+      <p class="file">core/db.py</p>
+<pre>STOCK_EXPR = <span class="s">"""
+COALESCE(SUM(CASE WHEN t.tx_type = 'IN'  THEN t.qty
+                  WHEN t.tx_type = 'OUT' THEN -t.qty
+                  ELSE t.qty END), 0)
+"""</span></pre>
+      <p class="file">core/services.py · register_transaction()</p>
+<pre><span class="k">with</span> db.transaction() <span class="k">as</span> conn:
+    stock_now = repo.current_stock(conn, material_id)
+    ...
+    <span class="k">if</span> tx_type == <span class="s">"OUT"</span> <span class="k">and</span> qty &gt; stock_now:
+        <span class="k">return</span> Result(<span class="k">False</span>, <span class="s">f"재고 부족: 현재고 {stock_now:,.2f}, ..."</span>)</pre>
+    </div>
+
+    <div>
+      <h3>화면을 바꿔도 규칙이 흔들리지 않는 구조</h3>
+      <p>SQL은 repository에만, 판정은 services에만 둡니다. <code>core</code>는 Flask를 import하지 않으므로 서버를 띄우지 않고 규칙을 테스트할 수 있습니다. Streamlit에서 Flask로 화면을 바꿀 때도 <code>core</code>는 그대로 두었습니다.</p>
+      <div class="layers" aria-label="계층 구조">
+        <div><b>views/</b><span>Flask 블루프린트 · 요청을 읽고 결과를 그릴 뿐, 판정은 services에 위임</span></div>
+        <div class="core"><small>core/ — Flask 비의존</small><b>services.py</b><span>재고 판정, 조정 계산, 업로드 정제</span></div>
+        <div class="core"><b>repository.py</b><span>SQL 전담 — SQL은 이 파일 밖으로 나가지 않음</span></div>
+        <div class="core"><b>db.py</b><span>커넥션, 스키마, 트랜잭션 컨텍스트 · WAL 모드</span></div>
+      </div>
+      <div class="sub">
+        <h3>테스트로 확인한 규칙</h3>
+        <ul class="checks">
+          <li><span class="ok">PASS</span><span>거래 합계로 재고 계산</span></li>
+          <li><span class="ok">PASS</span><span>현재고를 넘는 출고 차단</span></li>
+          <li><span class="ok">PASS</span><span>실사조정은 차이만 기록</span></li>
+          <li><span class="ok">PASS</span><span>안전재고 미달 경고</span></li>
+          <li><span class="ok">PASS</span><span>재고가 음수가 되는 삭제 차단</span></li>
+          <li><span class="ok">PASS</span><span>엑셀 업로드 정제 · 필수 컬럼 누락 · 엑셀 내보내기 · 빈 DB</span></li>
+        </ul>
+        <p class="note"><code>python -m pytest tests -q</code>로 업무 규칙과 화면 구동을 함께 확인합니다. 32개 테스트가 모두 통과합니다.</p>
+      </div>
+    </div>
+  </div>
+</article>
+

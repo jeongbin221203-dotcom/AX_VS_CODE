@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+{% set active_page = 'index' %}
+
+{% block content %}
+<!-- 부드러운 스크롤 이동 및 고정 헤더 가림 방지 스타일 -->
+<style>
+    html { 
+        scroll-behavior: smooth; 
+        scroll-padding-top: 100px; 
+    }
+</style>
+
+<!-- 1. 히로 배너 및 4개 탭 메뉴 -->
+<section class="hero" style="height: 60vh; min-height: 500px; background-image: url('https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1920');">
+    <div class="hero-content left-align">
+        <span class="hero-category">About Us</span>
+        <h1>The First Food for All</h1>
+        <hr class="hero-divider">
+        <p>1947년부터 이어온 대한민국 축산 사료의 기준, 대한사료를 소개합니다.</p>
+        
+        <!-- 4개의 탭 메뉴 -->
+        <div class="hero-tabs" id="aboutTabs">
+            <a href="#overview" class="tab active" onclick="activateTab(this)">기업개요</a>
+            <a href="#ceo" class="tab" onclick="activateTab(this)">CEO 인사말</a>
+            <a href="#history" class="tab" onclick="activateTab(this)">연혁</a>
+            <a href="#location" class="tab" onclick="activateTab(this)">오시는 길</a>
+        </div>
+    </div>
+</section>
+
+<!-- 2. 기업개요 섹션 -->
+<section id="overview" class="bg-light">
+    <div class="section-inner">
+        <h2 class="section-title">기업개요</h2>
+        <p class="section-subtitle">대한사료가 반세기 넘게 지켜온 신뢰의 바탕입니다.</p>
+        <div class="merit-grid">
+            <div class="merit-item">
+                <div class="merit-num">01</div>
+                <div class="merit-text">
+                    <h4>오랜 역사와 신뢰성</h4>
+                    <p>1947년 설립 이후 반세기 넘게 축적된 노하우와 시장 신뢰를 바탕으로 국내 축산 사료 산업의 중심 역할을 수행합니다.</p>
+                </div>
+            </div>
+            <div class="merit-item">
+                <div class="merit-num">02</div>
+                <div class="merit-text">
+                    <h4>전국 유통망과 밀착 컨설팅</h4>
+                    <p>전국 제조·물류 거점과 전문 사양 컨설팅 인력을 기반으로, 농가와 긴밀히 소통하며 실질적인 수익성 분석을 제공합니다.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 3. CEO 인사말 섹션 -->
+<section id="ceo">
+    <div class="section-inner">
+        <h2 class="section-title">CEO 인사말</h2>
+        <p class="section-subtitle">고객과 함께 성장하는 대한사료입니다.</p>
+        <div style="display: flex; gap: 50px; align-items: center; flex-wrap: wrap; margin-top: 3rem;">
+            <div style="flex: 1; min-width: 300px;">
+                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=600" alt="CEO 인사말" style="width: 100%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+            </div>
+            <div style="flex: 1.5; min-width: 300px;">
+                <h3 style="text-align: left; margin-bottom: 25px; font-size: 2.2rem; color: #111;">
+                    자연과 생명을 존중하며,<br>
+                    미래를 키우는 <span style="color: #1e5a22;">대한사료</span>
+                </h3>
+                <p style="font-size: 1.1rem; line-height: 1.8; color: #555; margin-bottom: 20px;">
+                    1947년 창립 이래, 대한사료는 오직 대한민국의 축산업 발전과 건강한 먹거리 문화를 선도하기 위해 한 길만을 걸어왔습니다.
+                </p>
+                <p style="font-size: 1.1rem; line-height: 1.8; color: #555; margin-bottom: 20px;">
+                    <strong>"자연을 이해하고, 생명을 존중하며, 미래를 함께 키웁니다."</strong><br>
+                    저희는 이 확고한 경영 철학을 바탕으로, 동물의 유전 능력을 극대화하는 최고 품질의 사료를 공급할 뿐만 아니라 농가의 수익성 향상을 위한 최적의 파트너가 되고자 합니다.
+                </p>
+                <div style="text-align: right; border-top: 2px solid #1e5a22; padding-top: 20px; margin-top: 30px;">
+                    <span style="font-size: 1.05rem; color: #666;">대한사료 주식회사 대표이사</span>
+                    <strong style="font-size: 1.5rem; color: #111; margin-left: 10px;">박용순</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 4. 연혁 섹션 -->
+<section id="history" class="bg-light">
+    <div class="section-inner" style="max-width: 800px;">
+        <h2 class="section-title">연혁</h2>
+        <p class="section-subtitle">대한민국 축산 사료의 살아있는 역사입니다.</p>
+        
+        <div style="border-left: 3px solid #1e5a22; padding-left: 35px; margin-left: 20px; margin-top: 3rem;">
+            <div style="margin-bottom: 40px; position: relative;">
+                <span style="position: absolute; left: -46px; top: 0; width: 18px; height: 18px; border-radius: 50%; background: #1e5a22; border: 4px solid #f8f9fa;"></span>
+                <h3 style="color: #1e5a22; margin: 0 0 15px 0; font-size: 1.6rem;">2020s</h3>
+                <p style="margin: 0 0 10px 0; color: #444; font-size: 1.05rem;"><strong>2024</strong> - 스마트 팩토리 시스템 고도화</p>
+                <p style="margin: 0; color: #444; font-size: 1.05rem;"><strong>2022</strong> - 친환경 ESG 경영 선포</p>
+            </div>
+            <div style="margin-bottom: 40px; position: relative;">
+                <span style="position: absolute; left: -46px; top: 0; width: 18px; height: 18px; border-radius: 50%; background: #1e5a22; border: 4px solid #f8f9fa;"></span>
+                <h3 style="color: #1e5a22; margin: 0 0 15px 0; font-size: 1.6rem;">2000s</h3>
+                <p style="margin: 0 0 10px 0; color: #444; font-size: 1.05rem;"><strong>2005</strong> - 전 공장 HACCP 및 ISO 인증 획득</p>
+                <p style="margin: 0; color: #444; font-size: 1.05rem;"><strong>2001</strong> - 중앙연구소 확장 이전</p>
+            </div>
+            <div style="position: relative;">
+                <span style="position: absolute; left: -46px; top: 0; width: 18px; height: 18px; border-radius: 50%; background: #1e5a22; border: 4px solid #f8f9fa;"></span>
+                <h3 style="color: #1e5a22; margin: 0 0 15px 0; font-size: 1.6rem;">1947</h3>
+                <p style="margin: 0; color: #444; font-size: 1.05rem;"><strong>1947</strong> - 대한사료 주식회사 창립</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 5. 오시는 길 섹션 (진짜 대한민국 인터랙티브 지도 연동 버전) -->
+<section id="location">
+    <div class="section-inner">
+        <h2 class="section-title">오시는 길</h2>
+        <p class="section-subtitle">대한사료 본사 및 주요 공장 사업장 안내입니다. 아래 카드를 선택해 보세요.</p>
+        
+        <!-- Leaflet 지도 스타일 CSS CDN 추가 -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+        
+        <!-- 실제 대한민국 지도가 렌더링될 영역 -->
+        <div style="width: 100%; height: 480px; border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 3rem; position: relative; z-index: 1;">
+            <div id="realMap" style="width: 100%; height: 100%;"></div>
+        </div>
+        
+        <!-- 사업장 정보 카드 -->
+        <div class="grid-4" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); cursor: pointer;">
+            
+            <!-- 1. 본사(인천공장) -->
+            <div onclick="moveRealMap(37.4785, 126.6025, '본사 (인천공장)', '인천광역시 중구 월미로 13', '032-770-1100', this)" class="loc-card" id="card1" style="padding: 25px; border: 2px solid #1e5a22; border-radius: 12px; background: #f4f8f4; transition: 0.3s;">
+                <h4 style="color: #1e5a22; margin-top: 0; font-size: 1.3rem; margin-bottom: 15px;">📍 본사 (인천공장)</h4>
+                <p style="color: #555; line-height: 1.8; margin: 0;">인천광역시 중구 월미로 13<br><strong>TEL:</strong> 032-770-1100</p>
+            </div>
+
+            <!-- 2. 전주공장 -->
+            <div onclick="moveRealMap(35.8468, 127.1294, '전주공장', '전북특별자치도 전주시 덕진구', '063-210-0000', this)" class="loc-card" id="card2" style="padding: 25px; border: 1px solid #eaeaea; border-radius: 12px; background: #fff; transition: 0.3s;">
+                <h4 style="color: #1e5a22; margin-top: 0; font-size: 1.3rem; margin-bottom: 15px;">📍 전주공장</h4>
+                <p style="color: #555; line-height: 1.8; margin: 0;">전북특별자치도 전주시 덕진구<br><strong>TEL:</strong> 063-210-0000</p>
+            </div>
+
+            <!-- 3. 창원공장 -->
+            <div onclick="moveRealMap(35.2279, 128.5811, '창원공장', '경상남도 창원시 마산회원구', '055-250-0000', this)" class="loc-card" id="card3" style="padding: 25px; border: 1px solid #eaeaea; border-radius: 12px; background: #fff; transition: 0.3s;">
+                <h4 style="color: #1e5a22; margin-top: 0; font-size: 1.3rem; margin-bottom: 15px;">📍 창원공장</h4>
+                <p style="color: #555; line-height: 1.8; margin: 0;">경상남도 창원시 마산회원구<br><strong>TEL:</strong> 055-250-0000</p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- Leaflet 자바스크립트 지도 라이브러리 CDN 추가 -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+    var map, marker;
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // 초기 중심 좌표: 인천 본사 (줌 레벨 11로 대한민국 서쪽 및 수도권 중심 조망)
+        map = L.map('realMap').setView([37.4785, 126.6025], 11);
+
+        // 오픈스트리트맵 타일 레이어 적용 (사진처럼 깔끔한 벡터 지도 화면)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // 초기 마커 생성 및 팝업 설정
+        marker = L.marker([37.4785, 126.6025]).addTo(map)
+            .bindPopup("<b>대한사료 본사 (인천공장)</b><br>인천광역시 중구 월미로 13")
+            .openPopup();
+    });
+
+    function moveRealMap(lat, lng, title, address, tel, element) {
+        // 지도 중심을 해당 좌표로 부드럽게 이동 (줌 레벨 13)
+        map.setView([lat, lng], 13, {
+            animate: true,
+            pan: { duration: 1.2 }
+        });
+
+        // 마커 위치 변경 및 팝업 갱신
+        marker.setLatLng([lat, lng])
+            .setPopupContent("<b>대한사료 " + title + "</b><br>" + address + "<br>TEL: " + tel)
+            .openPopup();
+
+        // 카드 선택 스타일 업데이트
+        var cards = document.querySelectorAll('.loc-card');
+        cards.forEach(c => {
+            c.style.border = '1px solid #eaeaea';
+            c.style.background = '#fff';
+            c.style.boxShadow = 'none';
+        });
+        element.style.border = '2px solid #1e5a22';
+        element.style.background = '#f4f8f4';
+        element.style.boxShadow = '0 5px 15px rgba(0,0,0,0.02)';
+    }
+</script>
+{% endblock %}

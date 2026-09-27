@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% from "_macros.html" import metric, csrf %}
+{% block content %}
+<div class="metrics m3">
+  {{ metric('거래처', '{:,}'.format(cust_cnt)) }}
+  {{ metric('영업기회', '{:,}'.format(deal_cnt)) }}
+  {{ metric('매출 레코드', '{:,}'.format(sale_cnt)) }}
+</div>
+<p class="muted small">DB 파일: <code>{{ db_path }}</code></p>
+
+{% set unlinked_total = unlinked.values()|sum %}
+{% if unlinked_total %}
+  <div class="alert alert-warning">담당자가 사용자 계정과 연결되지 않은 기록이 {{ unlinked_total }}건 있습니다
+    (거래처 {{ unlinked.customers }} · 기회 {{ unlinked.deals }} · 활동 {{ unlinked.activities }} · 매출 {{ unlinked.sales }} · 목표 {{ unlinked.targets }}).
+    이관 데이터의 담당자 이름과 같은 사용자를 등록하면 자동으로 연결되고, 동명이인이면 '조직·사용자 → 담당자 이관'으로 지정하세요.
+    연결 전까지는 임원·관리자만 볼 수 있습니다.</div>
+{% endif %}
+
+<section class="card">
+  <h3>💾 백업</h3>
+  <form method="post" action="{{ url_for('admin.data_action') }}" class="row-actions">
+    {{ csrf() }}
+    <button class="btn btn-primary" name="action" value="backup_db">DB 백업 (원본 그대로)</button>
+    <a class="btn" href="{{ url_for('admin.backup') }}">⬇️ 엑셀로 내보내기 (개인정보 가림)</a>
+  </form>
+  <p class="muted small">백업 폴더: <code>{{ backup_dir }}</code> · 최근 30개 보관. 운영에서는 OS 스케줄러로 매일 실행하세요:<br>
+    <code>python -c "import config; from core import sales_db as db; db.init_db(); print(db.backup_database(config.BACKUP_DIR))"</code></p>
+  {% if backups %}
+    <ul class="small">{% for name, size in backups %}<li>{{ name }} · {{ size }}</li>{% endfor %}</ul>
+  {% endif %}
+</section>
+
+<section class="card">
+  <h3>🏛️ 조직 · 계정 · 예측</h3>
+  <form method="post" action="{{ url_for('admin.data_action') }}" class="row-actions">
+    {{ csrf() }}
+    <button class="btn" name="action" value="seed_org">샘플 조직·계정 생성</button>
+    <button class="btn" name="action" value="snapshot">이번 달 예측 스냅샷 생성</button>
+  </form>
+  <p class="muted small">엑셀·CSV 일괄 등록은 <a href="{{ url_for('io.index') }}">📥 데이터 등록·추출</a> 메뉴를 사용하세요.
+    스냅샷은 주 1회 배치로: <code>python -c "from core import sales_db, enterprise; import datetime; sales_db.init_db(); enterprise.take_snapshot(datetime.date.today().strftime('%Y-%m'))"</code></p>
+</section>
+
+{% if not production %}
+<section class="card">
+  <h3>🧪 샘플 데이터 / 초기화 <span class="env-badge">개발 환경 전용</span></h3>
+  <div class="grid-2">
+    <form method="post" action="{{ url_for('admin.data_action') }}">
+      {{ csrf() }}
+      <button class="btn" name="action" value="seed_demo">샘플 데이터 생성</button>
+    </form>
+    <form method="post" action="{{ url_for('admin.data_action') }}" class="danger-zone">
+      {{ csrf() }}
+      <label class="check"><input type="checkbox" name="confirm" value="1"> 전체 삭제에 동의합니다 (직전에 DB 백업을 만들고, 감사로그는 남깁니다)</label>
+      <button class="btn btn-danger" name="action" value="reset">⚠️ 전체 데이터 초기화</button>
+    </form>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}모의고사{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><h1>모의고사</h1>
+    <div class="muted small">모든 등급 문제를 실제 시험 난이도 분포(쉬움 30% · 중간 35% · 어려움 35%)로 섞어 냅니다.</div></div>
+  <a class="btn" href="{{ url_for('quiz.diagnostic') }}">진단 테스트 (15분)</a>
+</div>
+
+<div class="grid three">
+{% for key, f in forms.items() %}
+  <form method="post" class="card{{ ' sel' if key == selected }}">
+    <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+    <input type="hidden" name="form" value="{{ key }}">
+    <h2>{{ f.name }}{% if key == selected %} <span class="tag ok">추천</span>{% endif %}</h2>
+    <p class="muted small">{{ f.desc }}</p>
+    <table class="small"><tbody>
+      <tr><td>LC</td><td class="r num">P1 {{ f.p1 }} · P2 {{ f.p2 }} · P3 {{ f.p3 }} · P4 {{ f.p4 }}</td></tr>
+      <tr><td>RC</td><td class="r num">P5 {{ f.p5 }} · P6 {{ f.p6 }} · P7 {{ f.p7_single }}+{{ f.p7_double }}이중+{{ f.p7_triple }}삼중</td></tr>
+      <tr><td>RC 제한</td><td class="r num">{{ f.rc_minutes }}분</td></tr>
+    </tbody></table>
+    <button class="btn primary" style="margin-top:10px">시작</button>
+  </form>
+{% endfor %}
+</div>
+<p class="small muted" style="margin-top:10px">문제 은행이 작아서 실전 모의고사는 같은 문제가 다시 나올 수 있고, 모자란 파트는 있는 만큼만 냅니다.</p>
+
+<div class="card" style="margin-top:14px">
+  <h2>지난 모의고사</h2>
+  {% if past %}
+  <div class="table-wrap"><table>
+    <thead><tr><th>날짜</th><th>종류</th><th class="r">정답</th><th class="r">LC</th><th class="r">RC</th><th class="r">추정 점수</th><th class="r">시간</th></tr></thead>
+    <tbody>
+    {% for s in past %}
+      <tr><td><a href="{{ url_for('quiz.result', sid=s.id) }}">{{ s.finished_at[:16].replace('T', ' ') }}</a></td>
+        <td>{{ forms[s.variant].name if s.variant in forms else s.variant }}</td>
+        <td class="r num">{{ s.correct }}/{{ s.total }}</td>
+        <td class="r num">{{ s.lc_est }}</td><td class="r num">{{ s.rc_est }}</td>
+        <td class="r num"><b>{{ s.total_est }}</b></td>
+        <td class="r num">{{ s.duration_sec|mmss }}</td></tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+  {% else %}<div class="empty">아직 없습니다.</div>{% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,165 @@
+"""데이터 관리 화면 (업로드 / 백업 / 샘플).
+
+업로드는 두 단계다: 파일을 올리면 정제 결과를 저장소(uploads/<토큰>.json)에 보관하고
+미리보기를 보여 준다 → '반영'을 누르면 그 토큰의 결과만 DB에 넣고 파일을 지운다.
+저장소를 쓰므로 미리보기와 반영이 서로 다른 서버에서 처리돼도 된다.
+"""
+
+import io
+import re
+import secrets
+import zipfile
+from datetime import datetime
+
+import pandas as pd
+from flask import Blueprint, abort, flash, redirect, request, session, url_for
+
+import config
+from core import audit, db, excel_forms, jobs, repository as repo, seed, services, storage
+from core.utils import to_excel_bytes, xlsx_problem
+from views.helpers import Table, actor, file_response, form_response, render_page, role_required, xlsx_response
+
+bp = Blueprint("data_admin", __name__, url_prefix="/data")
+
+TOKEN_RE = re.compile(r"^[0-9a-f]{32}$")
+PREVIEW_FMT = {"안전재고": "{:,.2f}", "단가": "₩{:,.0f}"}
+
+
+def _page(**ctx):
+    return render_page("data_admin.html", "data", material_cnt=repo.count_materials(),
+                       db_file=not db.is_pg() and config.DB_PATH.exists(), is_pg=db.is_pg(),
+                       storage_name=storage.get().name,
+                       attach_cnt=len(storage.get().keys("attachments/")), **ctx)
+
+
+@bp.get("/")
+@role_required("ADMIN")
+def index():
+    return _page()
+
+
+@bp.get("/template.xlsx")
+@role_required("ADMIN")
+def template():
+    df = pd.DataFrame(
+        [["PKG-100", "샘플 자재", "규격", "EA", "포장재", 10, 1000, "A-10", "공급처명", "PKG100"]],
+        columns=list(config.MATERIAL_COLS.values()),
+    )
+    return form_response("material_template", df, "자재마스터_업로드양식.xlsx")
+
+
+@bp.post("/upload")
+@role_required("ADMIN")
+def upload():
+    uploaded = request.files.get("file")
+    if not uploaded or not uploaded.filename:
+        flash("업로드할 파일을 선택하세요.", "error")
+        return redirect(url_for("data_admin.index"))
+    name = uploaded.filename.lower()
+    if not name.endswith((".xlsx", ".csv")):
+        flash("엑셀(.xlsx) 또는 CSV 파일만 올릴 수 있습니다.", "error")
+        return redirect(url_for("data_admin.index"))
+
+    jobs.run("cleanup_uploads")                 # 주기가 됐으면 오래된 미리보기 정리 (다른 서버가 하는 중이면 건너뜀)
+    data = uploaded.read()
+    if name.endswith(".xlsx"):
+        problem = xlsx_problem(data, config.XLSX_MAX_UNCOMPRESSED, config.XLSX_MAX_RATIO)
+        if problem:
+            flash(problem, "error")
+            return redirect(url_for("data_admin.index"))
+    # 회사 엑셀의 열 이름·머리글 행은 '엑셀 양식' 설정(자재 일괄 업로드)을 따른다
+    raw, problem = excel_forms.read_import("material_upload", data, name, config.UPLOAD_MAX_ROWS)
+    if problem:
+        flash(problem, "error")
+        return redirect(url_for("data_admin.index"))
+    if len(raw) > config.UPLOAD_MAX_ROWS:
+        flash(f"한 번에 {config.UPLOAD_MAX_ROWS:,}행까지 올릴 수 있습니다. 파일을 나눠 올려 주세요.", "error")
+        return redirect(url_for("data_admin.index"))
+
+    result = services.normalize_upload(raw)
+    for err in result.errors:
+        flash(err, "error")
+    if result.errors:
+        return redirect(url_for("data_admin.index"))
+    if result.dropped:
+        flash(f"자재코드 또는 자재명이 비어 있는 {result.dropped}행을 제외했습니다.", "warning")
+    if result.duplicated:
+        flash(f"중복된 자재코드 {result.duplicated}행은 마지막 값만 반영합니다.", "info")
+    if result.df.empty:
+        flash("반영할 유효한 행이 없습니다.", "error")
+        return redirect(url_for("data_admin.index"))
+
+    token = secrets.token_hex(16)
+    session["upload_token"] = token          # 미리보기를 본 사람만 반영할 수 있게 세션에 묶는다
+    storage.get().put(f"uploads/{token}.json",
+                      result.df.to_json(orient="records", force_ascii=False).encode("utf-8"))
+    return _page(preview=Table(result.df.rename(columns=config.MATERIAL_COLS), PREVIEW_FMT),
+                 token=token, preview_cnt=len(result.df), filename=uploaded.filename)
+
+
+@bp.post("/upload/apply")
+@role_required("ADMIN")
+def apply_upload():
+    token = request.form.get("token", "")
+    if not TOKEN_RE.match(token) or not secrets.compare_digest(session.get("upload_token", ""), token):
+        abort(400, "잘못된 업로드 요청입니다. 파일을 다시 올려 주세요.")
+    session.pop("upload_token", None)
+    key = f"uploads/{token}.json"
+    raw = storage.get().get(key)
+    if raw is None:
+        flash("이미 반영했거나 만료된 업로드입니다. 파일을 다시 올려 주세요.", "warning")
+        return redirect(url_for("data_admin.index"))
+    # dtype=False: '001' 같은 코드·규격이 숫자로 바뀌지 않게 저장한 그대로 읽는다
+    df = pd.read_json(io.StringIO(raw.decode("utf-8")), orient="records", dtype=False)[list(config.MATERIAL_COLS)]
+    result = services.import_materials(df, actor())
+    storage.get().delete(key)
+    flash(result.message, "success")
+    return redirect(url_for("data_admin.index"))
+
+
+@bp.get("/backup.db")
+@role_required("ADMIN")
+def backup_db():
+    """SQLite 파일 백업. PostgreSQL은 DB 서버에서 pg_dump·스냅샷으로 백업한다."""
+    if db.is_pg() or not config.DB_PATH.exists():
+        abort(404)
+    audit.log(actor(), "BACKUP", "db", config.DB_PATH.name)
+    return file_response(config.DB_PATH.read_bytes(),
+                         f"materials_backup_{datetime.now():%Y%m%d_%H%M}.db",
+                         "application/octet-stream")
+
+
+@bp.get("/backup.xlsx")
+@role_required("ADMIN")
+def backup_xlsx():
+    audit.log(actor(), "BACKUP", "xlsx", "전체 데이터")
+    return xlsx_response(to_excel_bytes(repo.dump_all()),
+                         f"자재관리_전체백업_{datetime.now():%Y%m%d_%H%M}.xlsx")
+
+
+@bp.get("/backup-attachments.zip")
+@role_required("ADMIN")
+def backup_attachments():
+    """증빙 파일 백업. .db 백업에는 파일이 들어 있지 않으므로 함께 받아 두어야 한다."""
+    audit.log(actor(), "BACKUP", "attachments", "증빙 파일")
+    buf = io.BytesIO()
+    store = storage.get()
+    with zipfile.ZipFile(buf, "w", zipfile.ZIP_STORED) as zf:   # 이미지·PDF는 이미 압축돼 있다
+        for key in store.keys("attachments/"):
+            data = store.get(key)
+            if data is not None:
+                zf.writestr(key.split("/", 1)[1], data)
+    return file_response(buf.getvalue(), f"자재관리_증빙파일_{datetime.now():%Y%m%d_%H%M}.zip",
+                         "application/zip")
+
+
+@bp.post("/seed")
+@role_required("ADMIN")
+def make_seed():
+    if repo.count_materials():
+        flash("샘플 생성은 빈 DB에서만 가능합니다.", "warning")
+    else:
+        seed.seed()
+        audit.log(actor(), "SEED", "material", "", {"materials": repo.count_materials()})
+        flash("샘플 데이터가 생성되었습니다.", "success")
+    return redirect(url_for("data_admin.index"))

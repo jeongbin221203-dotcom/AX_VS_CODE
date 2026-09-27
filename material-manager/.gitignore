@@ -1,0 +1,17 @@
+# 런타임 데이터 (절대 커밋 금지)
+data/*.db
+data/*.db-wal
+data/*.db-shm
+*.xlsx
+
+# 파이썬
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+data/uploads/
+data/attachments/
+
+# 비밀값이 든 설정 파일
+.env

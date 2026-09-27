@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}받아쓰기{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><h1>받아쓰기</h1>
+    <div class="muted small">듣기 문제의 문장을 듣고 그대로 적습니다. 들리지 않은 단어가 빨간색으로 표시됩니다 (대소문자·문장부호는 무시).</div></div>
+  <form class="row" method="get">
+    <select name="part" data-autosubmit aria-label="파트">
+      {% for p in (1, 2, 3, 4) %}<option value="{{ p }}" {{ 'selected' if part == p }}>Part {{ p }} {{ PART_INFO[p].name }}</option>{% endfor %}
+    </select>
+    <select name="level" data-autosubmit aria-label="등급">
+      <option value="">모든 등급</option>
+      {% for gr in GRADES %}<option value="{{ gr.level }}" {{ 'selected' if level == gr.level }}>{{ gr.name }}</option>{% endfor %}
+    </select>
+    <a class="btn" href="{{ request.full_path }}">새 문장</a>
+  </form>
+</div>
+
+{% if lines %}
+<div class="card" style="max-width:760px;margin:0 auto" id="dt">
+  <div class="spread small muted"><span id="dt-prog"></span><span id="dt-score"></span></div>
+  <div class="audio-box" style="margin:12px 0">
+    <button class="btn primary" id="dt-play">▶ 듣기 <span class="kbd">Ctrl+Space</span></button>
+    <button class="btn" id="dt-slow">느리게</button>
+    <span class="status" id="dt-status"></span>
+  </div>
+  <textarea id="dt-input" placeholder="들은 문장을 적으세요. Enter = 확인" autocomplete="off" spellcheck="false"></textarea>
+  <div class="explain hidden diff" id="dt-result"></div>
+  <div class="quiz-foot">
+    <button class="btn" id="dt-check">확인 <span class="kbd">Enter</span></button>
+    <button class="btn primary hidden" id="dt-next">다음 문장 <span class="kbd">Enter</span></button>
+  </div>
+</div>
+<div class="card empty hidden" id="dt-done" style="max-width:760px;margin:0 auto">
+  <h2 id="dt-final"></h2>
+  <a class="btn primary" href="{{ request.full_path }}">새 문장으로 다시</a>
+</div>
+<script type="application/json" id="dt-data">{{ {"lines": lines, "tts": tts}|tojson }}</script>
+{% else %}
+<div class="card empty">이 조건의 문장이 없습니다.</div>
+{% endif %}
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/tts.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dictation.js') }}"></script>
+{% endblock %}

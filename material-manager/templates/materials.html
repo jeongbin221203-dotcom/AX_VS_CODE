@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf, table, tabs as tab_bar, pager as pager_nav %}
+
+{% macro fields(f, lock_code=false, sap_lock=false) %}
+  {% set ro = 'readonly' if sap_lock else '' %}
+  {% if sap_lock %}<div class="alert alert-info">SAP에서 동기화되는 자재입니다({{ f.sap_synced_at }}). 이름·단위·분류·단가·SAP 자재번호는 SAP에서 바꾸세요.</div>{% endif %}
+  <div class="form-grid g3">
+    <label>자재코드 *
+      <input name="code" value="{{ f.code or '' }}" {{ 'disabled' if lock_code else 'required' }} autocomplete="off">
+    </label>
+    <label>자재명 *<input name="name" value="{{ f.name or '' }}" required {{ ro }}></label>
+    <label>규격<input name="spec" value="{{ f.spec or '' }}"></label>
+
+    <label>단위<input name="unit" value="{{ f.unit or 'EA' }}" {{ ro }}></label>
+    <label>분류<input name="category" value="{{ f.category or '미분류' }}" {{ ro }}></label>
+    <label>보관위치<input name="location" value="{{ f.location or '' }}"></label>
+
+    <label>안전재고<input name="safety_stock" type="number" min="0" step="any" value="{{ '%g' % (f.safety_stock or 0)|float }}"></label>
+    <label>기준단가(원)<input name="unit_price" type="number" min="0" step="any" value="{{ '%g' % (f.unit_price or 0)|float }}" {{ ro }}></label>
+    <label>공급처<input name="supplier" value="{{ f.supplier or '' }}"></label>
+
+    <label>SAP 자재번호<input name="sap_matnr" value="{{ f.sap_matnr or '' }}" {{ ro }}>
+      <span class="hint">SAP 플랜트·저장위치는 창고에 둡니다 (플랜트·창고 메뉴)</span></label>
+    <fieldset>
+      <legend>로트 · 유효기한 (거래가 생기면 바꿀 수 없음)</legend>
+      <label class="check"><input type="checkbox" name="lot_managed" value="1" {{ 'checked' if (f.lot_managed or 0)|int }}> 로트(배치) 관리</label>
+      <label class="check"><input type="checkbox" name="expiry_managed" value="1" {{ 'checked' if (f.expiry_managed or 0)|int }}> 유효기한 관리 (선입선출·기한 지난 로트 출고 금지)</label>
+    </fieldset>
+  </div>
+{% endmacro %}
+
+{% block content %}
+{{ tab_bar(tabs, tab) }}
+
+{% if tab == "list" %}
+  <form class="toolbar" method="get">
+    <input type="hidden" name="tab" value="list">
+    <label class="check"><input type="checkbox" name="inactive" value="1" {{ 'checked' if show_inactive }} data-autosubmit> 사용중지 자재 포함</label>
+    <noscript><button class="btn btn-sm">적용</button></noscript>
+  </form>
+  {{ table(grid, "등록된 자재가 없습니다.") }}
+  {{ pager_nav(pager) }}
+  {% if g.wh_ids is not none %}<p class="muted small">현재고는 권한이 있는 창고의 합계입니다.</p>{% endif %}
+
+{% elif tab == "new" %}
+  <form class="card form" method="post" action="{{ url_for('materials.create') }}">
+    {{ csrf() }}
+    {{ fields(form) }}
+    <div><button class="btn btn-primary">등록</button></div>
+  </form>
+
+{% else %}
+  {% if not opts %}
+    <div class="alert alert-info">등록된 자재가 없습니다.</div>
+  {% else %}
+    <form class="toolbar" method="get">
+      <input type="hidden" name="tab" value="edit">
+      <label class="grow">수정할 자재
+        <select name="id" data-autosubmit>
+          {% for k, v in opts.items() %}<option value="{{ k }}" {{ 'selected' if k == mid }}>{{ v }}</option>{% endfor %}
+        </select>
+      </label>
+      <noscript><button class="btn">선택</button></noscript>
+    </form>
+
+    <form class="card form" method="post" action="{{ url_for('materials.update', mid=mid) }}">
+      {{ csrf() }}
+      {{ fields(form, lock_code=true, sap_lock=sap_lock) }}
+      <div><button class="btn btn-primary">저장</button></div>
+    </form>
+
+    <div class="card">
+      <p>상태: <strong>{{ '사용' if is_active else '사용중지' }}</strong> ·
+         현재고: <strong>{{ "{:,.2f}".format(stock_now) }} {{ row.unit }}</strong></p>
+      {% if is_active and stock_now != 0 %}
+        <div class="alert alert-warning">재고가 남아 있는 자재입니다. 사용중지해도 이력은 유지되지만 입출고 등록 목록에서 제외됩니다.</div>
+      {% endif %}
+      <form method="post" action="{{ url_for('materials.set_active', mid=mid) }}">
+        {{ csrf() }}
+        {% if is_active %}
+          <input type="hidden" name="active" value="0">
+          <button class="btn btn-danger">사용중지</button>
+        {% else %}
+          <input type="hidden" name="active" value="1">
+          <button class="btn btn-primary">다시 사용</button>
+        {% endif %}
+      </form>
+    </div>
+  {% endif %}
+{% endif %}
+{% endblock %}

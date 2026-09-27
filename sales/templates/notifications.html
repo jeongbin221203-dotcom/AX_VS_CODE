@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf %}
+{% block content %}
+<div class="card-head">
+  <p class="subtitle">결재 요청·처리, 배치 작업 실패, 매일 아침 요약이 여기에 쌓입니다. 메일·메신저로도 함께 보냅니다(설정된 경우).</p>
+  <form method="post" action="{{ url_for('auth.notifications_read') }}">{{ csrf() }}
+    <button class="btn btn-sm">모두 읽음으로</button></form>
+</div>
+{% if not rows %}
+  <div class="alert alert-info">받은 알림이 없습니다.</div>
+{% else %}
+  <ul class="notif-list">
+    {% for n in rows %}
+      <li class="{{ 'unread' if not n.read_at }}">
+        <div class="notif-head"><strong>{{ n['제목'] }}</strong> <span class="muted small">{{ n['종류'] }} · {{ n['시각'] }}</span></div>
+        {% if n['내용'] %}<div class="notif-body">{{ n['내용'] }}</div>{% endif %}
+        <form method="post" action="{{ url_for('auth.notifications_read') }}" class="inline-form">
+          {{ csrf() }}<input type="hidden" name="id" value="{{ n.id }}">
+          <input type="hidden" name="next" value="{{ n.link or url_for('auth.notifications') }}">
+          <button class="btn btn-sm">{{ '열기' if n.link else '읽음' }}</button>
+        </form>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>대한사료 | 생명을 존중하는 기업</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <div class="header-inner">
+            <a href="/" class="logo">대한사료</a>
+            <nav>
+                <ul class="main-menu">
+                    <li>
+                        <a href="/" class="{% if active_page == 'index' %}active{% endif %}">About</a>
+                        <div class="sub-menu">
+                            <div class="mega-container">
+                                <div class="mega-banner" style="background-image: url('https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=600');">
+                                    <h3>About Us</h3>
+                                    <p>1947년부터 이어온<br>대한민국 축산 사료의 기준</p>
+                                </div>
+                                <div class="mega-links">
+                                    <a href="/#overview">기업개요</a>
+                                    <a href="/#ceo">CEO 인사말</a>
+                                    <a href="/#history">연혁</a>
+                                    <a href="/#location">오시는 길</a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="/sub1" class="{% if active_page == 'sub1' %}active{% endif %}">Products</a>
+                        <div class="sub-menu">
+                            <div class="mega-container">
+                                <div class="mega-banner" style="background-image: url('https://images.unsplash.com/photo-1590682680695-43b964a3ae17?q=80&w=600');">
+                                    <h3>Products</h3>
+                                    <p>축종별 유전 능력을 극대화하는<br>맞춤형 영양 설계</p>
+                                </div>
+                                <div class="mega-links">
+                                    <a href="/sub1#brand">브랜드관</a>
+                                    <a href="/sub1#chicken">양계 사료</a>
+                                    <a href="/sub1#pig">양돈 사료</a>
+                                    <a href="/sub1#cow">축우 사료</a>
+                                    <a href="/sub1#fish">양어 사료</a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="/sub2" class="{% if active_page == 'sub2' %}active{% endif %}">ESG</a>
+                        <div class="sub-menu">
+                            <div class="mega-container">
+                                <div class="mega-banner" style="background-image: url('https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=600');">
+                                    <h3>ESG</h3>
+                                    <p>자연을 이해하고, 생명을 존중하며,<br>미래를 함께 키웁니다.</p>
+                                </div>
+                                <div class="mega-links">
+                                    <a href="/sub2#env">환경경영</a>
+                                    <a href="/sub2#ethics">윤리경영</a>
+                                    <a href="/sub2#social">사회공헌</a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="/sub3" class="{% if active_page == 'sub3' %}active{% endif %}">R&D / Press</a>
+                        <div class="sub-menu">
+                            <div class="mega-container">
+                                <div class="mega-banner" style="background-image: url('https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?q=80&w=600');">
+                                    <h3>R&D / Press</h3>
+                                    <p>중앙연구소의 최신 연구 성과와<br>대내외 소통 활동</p>
+                                </div>
+                                <div class="mega-links">
+                                    <a href="/sub3#lab">중앙연구소</a>
+                                    <a href="/sub3#patents">특허 및 연구</a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="/sub4" class="{% if active_page == 'sub4' %}active{% endif %}">Career</a>
+                        <div class="sub-menu">
+                            <div class="mega-container">
+                                <div class="mega-banner" style="background-image: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=600');">
+                                    <h3>Career</h3>
+                                    <p>자연을 이해하고, 생명을 존중하며,<br>미래를 함께 키웁니다.</p>
+                                </div>
+                                <div class="mega-links">
+                                    <a href="/sub4#talent">인재상</a>
+                                    <a href="/sub4#job">업무분야</a>
+                                    <a href="/sub4#notice">채용공고</a>
+                                    <a href="/sub4#benefit">복리후생</a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    {% block content %}
+    {% endblock %}
+
+    <div class="chatbot-container">
+        <div class="chatbot-window" id="chatWindow">
+            <div class="chat-header"><span>대한사료 고객센터</span><span id="closeChat" style="cursor:pointer;">X</span></div>
+            <div class="chat-body" id="chatMessages">
+                <div class="bot-message">안녕하세요! 대한사료 챗봇입니다.<br>무엇을 도와드릴까요?</div>
+                <div id="chatOptions">
+                    <button class="chat-option" onclick="sendReply(1, '제품 단가 및 견적 문의')">1. 제품 단가 및 견적 문의</button>
+                    <button class="chat-option" onclick="sendReply(2, '가까운 대리점 찾기')">2. 가까운 대리점 찾기</button>
+                    <button class="chat-option" onclick="sendReply(3, '농가 사양 컨설팅 신청')">3. 농가 사양 컨설팅 신청</button>
+                </div>
+            </div>
+        </div>
+        <button class="chatbot-btn" id="chatBtn">고객 상담</button>
+    </div>
+
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-info">
+                <div class="footer-logo">대한사료 주식회사</div>
+                <p><strong>대표자:</strong> 박용순 | <strong>사업자등록번호:</strong> 123-45-67890</p>
+                <p><strong>본사:</strong> 인천광역시 중구 월미로</p>
+                <p><strong>고객센터:</strong> 1588-0000 | <strong>이메일:</strong> contact@daehanfeed.co.kr</p>
+            </div>
+            <div class="footer-links" style="display: flex; flex-direction:column; justify-content:flex-end; text-align:right;">
+                <div style="margin-bottom: 15px;">
+                    <a href="#" style="color: #aaa; margin-right: 15px;">이용약관</a>
+                    <a href="/privacy" style="color:#fff; font-weight:bold;">개인정보처리방침</a>
+                </div>
+                <div class="copyright">&copy; 2026 Daehan Feed. All Rights Reserved.</div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+</body>
+</html>

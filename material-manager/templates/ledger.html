@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% from "_macros.html" import metric, table, download %}
+{% block content %}
+<form class="toolbar" method="get">
+  <label>기준월<input type="month" name="ym" value="{{ ym }}"></label>
+  <label>창고 (비우면 권한 안 전체)
+    <select name="wh" multiple size="3">
+      {% for k, v in wh_opts.items() %}<option value="{{ k }}" {{ 'selected' if k in wh_sel }}>{{ v }}</option>{% endfor %}
+    </select>
+  </label>
+  <button class="btn btn-primary">조회</button>
+</form>
+<p class="muted small">{{ start }} ~ {{ end }} · 기초 + 입고 − 출고 ± 조정 + 이동입고 − 이동출고 = 기말.
+  취소 거래는 해당 항목에서 빠집니다. 금액은 현재 자재 단가 기준(재고 평가액이 아님).
+  {% if closed %}<strong>마감된 달</strong>이라 숫자가 바뀌지 않습니다.{% else %}아직 마감 전이라 숫자가 바뀔 수 있습니다.{% endif %}</p>
+
+<div class="metrics m4">
+  {{ metric("기초", "{:,.2f}".format(totals.opening)) }}
+  {{ metric("입고 / 출고", "{:,.2f} / {:,.2f}".format(totals.in_qty, totals.out_qty)) }}
+  {{ metric("조정 · 이동(입−출)", "{:+,.2f} · {:+,.2f}".format(totals.adj_qty, totals.trf_in - totals.trf_out)) }}
+  {{ metric("기말 (금액)", "{:,.2f}".format(totals.closing), "₩ {:,.0f}".format(totals.closing_value)) }}
+</div>
+{{ table(grid, "이 달에 재고나 움직임이 있는 자재가 없습니다.") }}
+{{ download(url_with(export='xlsx'), '⬇️ 수불부 엑셀 다운로드') }}
+{% endblock %}

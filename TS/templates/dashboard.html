@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% block title %}오늘{% endblock %}
+{% block content %}
+{% set g = plan.grade %}
+<div class="page-head">
+  <div>
+    <div class="muted small">연속 학습 {{ streak }}일</div>
+    <h1>오늘의 토익</h1>
+  </div>
+  <div class="row">
+    <a class="btn" href="{{ url_for('main.guide') }}">내 등급 가이드</a>
+    <a class="btn primary" href="{{ url_for('quiz.mock') }}">모의고사</a>
+  </div>
+</div>
+
+<div class="grid four">
+  <div class="card kpi">
+    <div class="label">현재 점수</div>
+    <div class="value">{{ plan.score if plan.score is not none else '–' }}</div>
+    <div class="sub">{{ grade_badge(g) }} {{ plan.score_source or '진단 테스트를 먼저 보세요' }}</div>
+  </div>
+  <div class="card kpi">
+    <div class="label">목표 점수</div>
+    <div class="value">{{ plan.target }}</div>
+    <div class="sub">{{ grade_badge(plan.target_grade) }}
+      {% if plan.gap is not none %}{% if plan.gap > 0 %}{{ plan.gap }}점 남음{% else %}목표 달성{% endif %}{% endif %}</div>
+  </div>
+  <div class="card kpi">
+    <div class="label">시험일</div>
+    <div class="value">{% if plan.days_left is not none %}D{{ '-' if plan.days_left >= 0 else '+' }}{{ plan.days_left|abs }}{% else %}–{% endif %}</div>
+    <div class="sub">{% if plan.exam %}{{ plan.exam }}{% if plan.weekly_gain %} · 주당 +{{ plan.weekly_gain }}점 필요{% endif %}{% else %}<a href="{{ url_for('main.settings') }}">시험일 설정</a>{% endif %}</div>
+  </div>
+  <div class="card kpi">
+    <div class="label">오늘 푼 문항 / 단어</div>
+    <div class="value">{{ plan.today.questions }} · {{ plan.today.words }}</div>
+    <div class="sub">목표 {{ plan.daily_q }}문항
+      <div class="bar" style="margin-top:6px"><i style="width:{{ [100, (plan.today.questions / plan.daily_q * 100)|round]|min }}%"></i></div></div>
+  </div>
+</div>
+
+<div class="card" style="margin-top:14px">
+  <div class="spread"><h2 style="margin:0">등급 사다리</h2>
+    <span class="small muted">칸을 누르면 그 등급의 학습 가이드</span></div>
+  <div class="ladder" style="margin-top:10px">
+    {% for gr in GRADES %}
+      <a href="{{ url_for('main.guide', level=gr.level) }}" class="step g{{ gr.level }}{{ ' cur' if g and g.level == gr.level }}{{ ' target' if plan.target_grade and plan.target_grade.level == gr.level }}">
+        <b>{{ gr.name }}</b>{{ gr.low }}~{{ gr.high }}
+        {% if g and g.level == gr.level %}<div>현재</div>{% elif plan.target_grade and plan.target_grade.level == gr.level %}<div>목표</div>{% endif %}
+      </a>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="grid two" style="margin-top:14px">
+  <div class="card">
+    <h2>오늘 할 일</h2>
+    <p class="small muted">{{ plan.guide.headline }} · 집중 파트: {% for p in plan.focus %}Part {{ p }}{{ ', ' if not loop.last }}{% endfor %}</p>
+    <ul class="tasks">
+      {% for t in plan.tasks %}
+      <li class="{{ 'done' if t.done }}">
+        <span class="check"></span>
+        <div><div class="t">{{ t.title }}</div><div class="d">{{ t.detail }}</div></div>
+        <a class="btn small go {{ '' if t.done else 'primary' }}" href="{{ t.href }}">{{ '더 하기' if t.done else '시작' }}</a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>파트별 최근 정답률 <span class="small muted">(파트마다 최근 60문항)</span></h2>
+    <table>
+      <tbody>
+      {% for p, info in PART_INFO.items() %}
+        {% set a = acc[p] %}
+        <tr>
+          <td>Part {{ p }} <span class="muted small">{{ info.name }}</span></td>
+          <td style="width:42%">{% if a.n %}<div class="bar {{ 'ok' if a.rate >= 0.75 else ('bad' if a.rate < 0.5) }}"><i style="width:{{ (a.rate * 100)|round }}%"></i></div>{% endif %}</td>
+          <td class="r num">{{ a.rate|pct }} <span class="muted small">({{ a.n }})</span></td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    <div class="row" style="margin-top:10px">
+      <a class="btn small" href="{{ url_for('quiz.review') }}">오답노트 {{ plan.open_notes }}</a>
+      <a class="btn small" href="{{ url_for('vocab.overview') }}">단어 복습 {{ plan.vocab_due }}</a>
+      <a class="btn small" href="{{ url_for('main.stats_page') }}">자세한 통계</a>
+    </div>
+  </div>
+</div>
+
+<div class="grid two" style="margin-top:14px">
+  <div class="card">
+    <h2>점수 추이</h2>
+    {% if history %}
+      <div class="chart-box"><canvas id="score-chart"></canvas></div>
+      <script type="application/json" id="score-data">{{ history|tojson }}</script>
+    {% else %}
+      <div class="empty">진단 테스트나 모의고사를 보면 추정 점수가 여기에 쌓입니다.<br><br>
+        <a class="btn primary" href="{{ url_for('quiz.diagnostic') }}">진단 테스트 보기</a></div>
+    {% endif %}
+  </div>
+  <div class="card">
+    <h2>최근 학습</h2>
+    {% if recent %}
+    <table>
+      <tbody>
+      {% for s in recent %}
+        <tr>
+          <td><a href="{{ url_for('quiz.result', sid=s.id) }}">{{ session_title(s) }}</a><div class="muted small">{{ s.finished_at[:16].replace('T', ' ') }}</div></td>
+          <td class="r num">{{ s.correct }}/{{ s.total }}{% if s.total_est is not none %}<div class="small"><b>{{ s.total_est }}점</b></div>{% endif %}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    <a class="small" href="{{ url_for('main.history') }}">전체 기록 →</a>
+    {% else %}<div class="empty">아직 기록이 없습니다.</div>{% endif %}
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='vendor/chart.umd.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+{% endblock %}

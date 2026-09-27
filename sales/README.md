@@ -1,0 +1,165 @@
+# 영업관리 시스템 (Enterprise Edition) — Flask + PostgreSQL/SQLite
+
+거래처·파이프라인·영업활동·매출을 관리하는 데서 그치지 않고, 대기업·중견기업 영업조직이 실제로 돌리는
+**권한 분리 / 예측 관리 / 다단계 결재 / 감사 추적 / ERP·인사·SSO 연동 / 품목·견적·부가세 / 세금계산서 증빙**과
+**여러 서버 운영(공용 DB·파일 저장소·배치 워커)·모니터링·장애 대비**까지 담은 CRM.
+
+## 1. 실행
+
+```bash
+pip install -r requirements-dev.txt
+python app.py                   # 개발: http://127.0.0.1:5001 (SQLite, 간편 로그인, 스키마 자동 최신화)
+python manage.py worker         # 배치 워커 (알림·ERP 전송·결재 독촉·인사 연동·백업)
+python -m pytest tests -q       # 테스트 65개 (임시 DB·폴더 사용, data/ 는 건드리지 않음)
+# PostgreSQL 로 같은 테스트: SALES_TEST_PG_URL=postgresql://postgres@127.0.0.1:5433/postgres python -m pytest tests -q
+```
+
+**운영** — `SALES_ENV=production` 이면 위험한 설정(간편 로그인, 세션 키 없음, 디버그, OIDC 설정 누락)으로는 서버가 뜨지 않는다.
+```bash
+python manage.py db upgrade     # 배포 단계에서 한 번 (운영 앱은 스키마를 자동으로 올리지 않는다)
+python serve.py                 # waitress WSGI. HTTPS 는 앞단 프록시(nginx·L7)에서
+python manage.py check          # DB·스키마·저장소 점검
+```
+컨테이너 구성(nginx + 앱 2대 + 워커 + PostgreSQL + MinIO + Prometheus)은 [deploy/docker-compose.yml](deploy/docker-compose.yml),
+장애 대응·복구 절차는 [docs/RUNBOOK.md](docs/RUNBOOK.md).
+
+첫 실행 시 사용자가 없으면 **초기 설정** 화면이 열린다(샘플 조직·계정 8개 또는 관리자 1명).
+시연용 계정: `정임원`(임원) / `한팀장`(팀장, 영업1팀) / `김영업`(사원) / `시스템관리자`(사번 9999)
+
+## 2. 폴더 구성
+
+```
+sales/
+├─ app.py · serve.py · manage.py   앱 팩토리 · 운영 서버 · 운영 명령(db/worker/backup/restore/check)
+├─ config.py           환경변수 설정, 운영 모드 기동 검사
+├─ core/               업무 로직 — 화면 의존성 없음
+│  ├─ database.py      연결 계층: SQLite ↔ PostgreSQL(psycopg 풀), SQL 방언 변환, 잠금, Alembic 호출
+│  ├─ sales_db.py      CRUD·집계, 접근범위, 감사로그(해시 체인), Stage Gate, 부가세, 백업
+│  ├─ enterprise.py    조직/권한, 다단계 결재·대결, 예측, 파이프라인 분석, 채권·여신, 담당자 이관
+│  ├─ catalog.py · quotes.py   품목·거래처 특가 · 견적(개정·발송·수락·매출 전환·PDF)
+│  ├─ jobs.py · notify.py      DB 작업 큐·스케줄러(서버 여러 대 안전) · 알림(화면·메일·웹훅)
+│  ├─ storage.py       파일 저장소: 로컬/NAS 또는 S3 호환(MinIO·AWS)
+│  ├─ hr.py · oidc.py · api_keys.py   인사 연동 · OIDC 로그인 · 외부 API 키
+│  ├─ observability.py 요청 ID·JSON 로그·Prometheus 지표·준비 상태·읽기 전용 점검 모드
+│  ├─ dataio.py · excel_forms.py      일괄 등록·추출 · 회사 엑셀 양식(열 매핑·서식 파일)
+│  ├─ auth.py · documents.py · erp.py 인증 · 세금계산서 증빙 · ERP(SAP) 연동
+├─ migrations/         Alembic (0001 기준 → 0006 엑셀 양식). SQLite·PostgreSQL 공용 DDL 도우미
+├─ views/              블루프린트: auth · reports · crm · catalog · finance · io · admin · api
+├─ templates/ static/  Jinja2, CSS, Chart.js·한글 글꼴(로컬 보관 — 사내망에서도 동작)
+├─ deploy/             docker-compose · nginx · Prometheus 수집·경보 규칙 · .env 예시
+├─ docs/RUNBOOK.md     배포·장애 대응·백업/복구(DR) 절차
+└─ tests/              화면·권한 · 코어 · 플랫폼(큐·알림) · 영업 실무 · 연동(HR·OIDC·API) · 운영 · 엑셀 양식
+```
+
+## 3. 통제 장치
+
+### 3.1 권한과 조직 (RBAC)
+모든 조회 쿼리에 접근범위 조건이 자동으로 붙고, 수정·삭제·결재도 서버에서 다시 범위를 확인한다(폼 id 조작 → 403).
+
+| 역할 | 데이터 범위 | 권한 |
+|---|---|---|
+| 영업사원 REP | 본인 담당 건만 | 등록·수정, 견적, 할인 결재 요청 (대결 지정을 받으면 그 기간 결재) |
+| 팀장 MANAGER | 본인 팀 + 하위 조직 | 팀 예측·실적, 거래처 특가, 결재선 1단계 |
+| 임원 EXEC | 전사 | 전사 예측·분석, 결재선 2단계 |
+| 관리자 ADMIN | 전사 | 조직·계정·품목·ERP·API·양식 관리, 감사로그, 결재선 3단계 |
+
+- **담당자는 사용자 id 로 연결**(동명이인 분리). **담당자 이관** — 거래처·진행 기회를 넘기고 실적은 원래 담당자에 남긴다.
+
+### 3.2 영업 프로세스 통제
+- **MEDDIC · Stage Gate** — 단계별 필수 조건 미충족 시 진행 차단. 관리자 우회는 사유 필수·감사로그.
+- **다단계 결재선** — 할인 10% 이하 팀장 / 20% 이하 팀장 → 임원 / 초과 팀장 → 임원 → 관리자.
+  단계마다 그 역할의 사람이 맡고(범위 안에 없을 때만 윗 역할), **한 사람은 한 건에서 한 단계만**, 누구도 자기 요청은 결재 못 한다.
+  단계 기한(`SALES_APPROVAL_SLA_HOURS`, 기본 48시간)을 넘기면 결재자에게 독촉, 윗 역할에 지연 보고(한 번).
+  결재 요청·다음 단계·최종 결과는 알림(화면·메일·웹훅)으로 간다.
+- **대결(위임)** — 출장·휴가 기간에 다른 사람이 대신 결재. 결재 기록에 "원결재자 대결"로 남고, 퇴직 처리 시 자동 취소.
+- **승인 후 조건 변경 → 승인 무효**, 대기 중 변경 → 결재 자동 취소. **삭제 대신 보존**(매출은 사유와 함께 '취소').
+- **동시 수정 충돌 방지** — 거래처·영업기회·견적은 행 버전으로 나중 저장이 앞 저장을 덮어쓰지 못한다.
+
+### 3.3 품목 · 견적 · 부가세
+- **품목 마스터**(정가·단위·과세구분·ERP 자재번호)와 **거래처 특가**(유효기간, 새 특가를 넣으면 앞 특가는 전날로 종료).
+  매출·견적에서 품목을 고르면 **특가 → 정가** 순으로 단가를 채운다.
+- **견적**: 작성중 → 발송 → 수락/거절(유효기한 지나면 만료). 발송 뒤 변경은 **개정(Rev.2…)**, 이전 판은 '대체됨'.
+  영업기회와 연결하면 발송 때 정가·제안가·할인율을 기회에 반영하고, **할인 결재가 없으면 발송을 막는다**.
+  수락된 견적은 품목별 매출로 **한 번만** 전환. 견적서 PDF(한글 글꼴 내장).
+- **부가세**: 매출은 공급가액·부가세·합계로 나눈다(과세 10% 원 미만 절사 / 영세·면세 0).
+  실적·예측은 공급가액, **채권·입금·여신·ERP·증빙 대조는 부가세 포함 합계** 기준.
+
+### 3.4 감사 추적
+- 등록·수정(전·후 값)·삭제·단계변경·결재·대결·로그인/실패·**모든 다운로드**·API 호출 주체(`API:이름`)·인사 연동 반영을 기록.
+- 기록마다 앞 기록의 해시를 잇는 **해시 체인** + DB 트리거로 **수정·삭제·TRUNCATE 금지**(SQLite·PostgreSQL 모두).
+
+### 3.5 인증 · 보안
+| 방식 | 내용 |
+|---|---|
+| `simple` | 목록에서 계정 선택. **개발·시연 전용**, 운영 모드에서는 기동 거부 |
+| `password` | 사번+비밀번호(PBKDF2 31만 회), 복잡도·90일 만료·**5회 실패 15분 잠금** |
+| `sso` | 앞단 프록시가 인증한 사번 헤더. **신뢰 프록시 IP(직접 연결) 에서 온 헤더만** 인정 |
+| `oidc` | 앱이 사내 IdP(Entra ID·Okta·Keycloak)와 직접 OpenID Connect — Authorization Code + **PKCE**, state·nonce·서명 검증. IdP 로그아웃 연동 |
+
+- 세션 30분 미사용/12시간 절대 만료, CSRF, 보안 헤더, 개인정보 기본 마스킹, 엑셀 수식 주입 차단.
+
+## 4. 외부 시스템 연동
+
+### 4.1 ERP(SAP) — 🔗 ERP 연동
+- 매출 → **전송 대기열**(Outbox) → 워커가 5분마다 전송(파일 / S/4HANA OData / 없음). 실패 재시도, 전송된 매출은 금액 고정, 취소는 취소 전표.
+- **입금 대사**: ERP 누적 입금액 파일을 올리면 차액만 입금 등록(여러 번 올려도 이중 입금 없음, 부가세 포함 합계 기준).
+
+### 4.2 인사(HR) — 👥 조직·사용자 → 🔄 인사 연동
+- `SALES_HR_SOURCE`(JSON 파일/URL)에서 조직도·사원을 **조직코드·사번 기준**으로 맞춘다. 매일 03:00 배치 또는 화면에서 **미리보기 → 반영**.
+- 신규 사원은 직위로 역할 추정(`SALES_HR_ROLE_MAP`), 퇴직/피드 누락 사원은 비활성화 + 대결 취소 + **담당 이관 알림**.
+- 안전장치: 피드 인원이 평소의 80% 미만이면 멈춤(잘린 파일), **마지막 관리자는 비활성화하지 않음**, 로컬 계정은 건드리지 않음.
+
+### 4.3 REST API — 🔑 API 연동, 명세 `/api/v1/openapi.json`
+- 그룹웨어·BI·ERP 가 **Bearer API 키**로 거래처·영업기회·매출·품목·견적을 읽고 매출을 등록한다.
+- 키는 해시만 저장(발급 화면에서 한 번만 표시), **권한 범위(scope)**, 대리 사용자의 데이터 범위, 허용 IP(CIDR),
+  **분당 호출 한도(DB 카운터 — 서버 여러 대가 공유)**, 쓰기 요청의 **Idempotency-Key**(재전송해도 한 번만 등록).
+
+### 4.4 회사 엑셀 양식 — 📥 데이터 등록·추출 → 🧾 회사 엑셀 양식 (관리자)
+- **업로드 양식**: 회사가 이미 쓰는 엑셀(ERP 출력물·매출집계표)을 샘플로 올리면 제목·결재란 아래의 **머리글 행을 찾고**,
+  '상호·품명·공급가액·비고' 같은 **열 이름을 시스템 항목에 자동 연결**해 제안한다. 확인 후 저장하면 담당자는 그 파일을 그대로 올린다.
+  시트 지정, **값 변환**(`과세구분: 01=과세, 03=면세`), **병합 셀 이어 쓰기**, '합계·소계' 행 건너뛰기, 오류는 **원래 엑셀 행 번호**로 알린다.
+  변환 뒤에는 표준 업로드와 같은 검증(권한·Stage Gate·중복)을 거친다.
+- **내려받기 양식**: 회사 서식 파일(.xlsx — 로고·제목·결재란·테두리)을 올려 두면 **데이터만 채워** 돌려준다.
+  데이터 시작 행의 서식을 복사하고 아래 합계 줄은 건수만큼 내린다. 셀의 `{{기간}}` `{{추출자}}` `{{건수}}` `{{합계:공급가액}}` 을 값으로 바꾼다.
+  기간·담당자·개인정보 마스킹·다운로드 감사는 표준 추출과 같다. 매크로 파일(.xlsm)은 받지 않는다.
+
+## 5. 세금계산서 · 전자세금계산서 증빙
+- 이미지·PDF·**전자세금계산서 XML**(자동 인식) 첨부, 매직 바이트 판별, 사업자번호·승인번호·세액·**공급가액/세액/합계 각각 매출과 대조**,
+  발급 기한 경고, 중복 차단, SHA-256 위변조 확인(불일치 시 열람 차단), 삭제 대신 '무효'.
+
+## 6. 여러 서버 운영 · 모니터링 · 장애 대비
+
+| 구성 요소 | 내용 |
+|---|---|
+| DB | PostgreSQL(`SALES_DATABASE_URL`, 커넥션 풀) — 개발·테스트는 SQLite. 스키마는 **Alembic 마이그레이션**, 되돌리기(downgrade) 지원 |
+| 파일 | `SALES_STORAGE=s3`(S3·MinIO, 서버 측 암호화) 또는 `local`(NAS 경로) — 증빙·업로드가 어느 서버에서나 보인다 |
+| 배치 | DB 작업 큐(`FOR UPDATE SKIP LOCKED`) + 스케줄러(권고 잠금으로 한 곳만 실행). 워커를 늘려도 작업은 한 번씩, 지수 백오프 재시도 |
+| 모니터링 | `/healthz`(생존) · `/readyz`(DB·스키마·저장소) · `/metrics`(요청 수·지연, 작업 적체·워커 신호·ERP 실패·결재 지연·로그인 실패) + [경보 규칙](deploy/alerts.yml) |
+| 로그 | JSON 한 줄 로그 + **요청 ID**(nginx → 앱 → 응답 헤더) |
+| 점검 | `SALES_READ_ONLY=1` — 조회만 허용, 쓰기·API 쓰기 503, 워커 정지(DB 전환·복구 중) |
+| 백업 | 매일 02:00 `pg_dump`(또는 SQLite 온라인 백업), `manage.py restore <파일> --yes`(복구 직전 안전 백업). 테스트에서 백업→복구 왕복 확인 |
+| CI | [.github/workflows/sales-ci.yml](../.github/workflows/sales-ci.yml) — SQLite·PostgreSQL 매트릭스, 마이그레이션 왕복, 이미지 빌드 |
+
+주요 환경변수 (전체 예시는 [deploy/.env.example](deploy/.env.example))
+
+| 환경변수 | 내용 |
+|---|---|
+| `SALES_ENV` / `SALES_SECRET_KEY` | production 이면 운영 설정 검사 / 세션 서명 키(운영 필수) |
+| `SALES_DATABASE_URL` · `SALES_DB_PATH` | PostgreSQL 주소 · (없으면) SQLite 파일 |
+| `SALES_STORAGE` · `SALES_STORAGE_DIR` · `SALES_S3_BUCKET/_PREFIX/_ENDPOINT/_REGION/_SSE` | 파일 저장소 |
+| `SALES_AUTH_MODE` · `SALES_OIDC_*` · `SALES_SSO_HEADER` · `SALES_TRUSTED_PROXIES` | 인증 |
+| `SALES_HR_SOURCE` · `SALES_HR_TOKEN` · `SALES_HR_ROLE_MAP` · `SALES_HR_MIN_RATIO` | 인사 연동 |
+| `SALES_APPROVAL_SLA_HOURS` | 결재 단계 기한(시간) |
+| `SALES_SMTP_*` · `SALES_NOTIFY_WEBHOOK_URL` | 알림 메일·웹훅 |
+| `SALES_METRICS_ALLOW` · `SALES_METRICS_TOKEN` | `/metrics` 허용 CIDR · Bearer 토큰 |
+| `SALES_PROXY_FIX` | 앞단 프록시 1단계의 X-Forwarded-* 로 실제 IP 복원 (API 허용 IP·로그용) |
+| `SALES_READ_ONLY` · `SALES_LOG_FORMAT` · `SALES_LOG_STDOUT` | 점검 모드 · json/text · 표준출력 |
+| `SALES_ERP_ADAPTER` · `SALES_SAP_*` · `SALES_COMPANY_*` | ERP · 회사 정보(견적서·증빙 공급자 확인) |
+
+## 7. 한계 (아직 하지 않은 것)
+
+- **실시스템 미검증** — SAP OData·OIDC·S3 는 표준 규격과 모의 서버(테스트)로 흐름을 확인했다. 실제 연결 전 각 담당자와
+  판매조직·클레임 이름·버킷 정책을 맞춰야 한다. 컨테이너 구성은 파일로만 제공(이 PC 에는 Docker 가 없어 기동 검증은 하지 않음).
+- **세금계산서 발행·국세청 전송, OCR 은 하지 않는다** — 발행된 증빙을 등록·검증한다.
+- 다중 통화·다법인·회계연도 목표, 다국어·접근성, 앱 자체 2단계 인증(IdP 에서 적용)은 지원하지 않는다.
+- 엑셀 내려받기 양식의 합계 줄 **수식**은 데이터 행 수만큼 범위가 늘어나지 않는다 → `{{합계:열}}` 자리표시자를 쓴다.

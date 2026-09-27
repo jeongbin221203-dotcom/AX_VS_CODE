@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf, table, tabs as tab_bar %}
+{% block content %}
+{{ tab_bar(tabs, tab) }}
+{% if tab == "new" %}
+  <form class="card form" method="post" action="{{ url_for('purchase.pr_create') }}">
+    {{ csrf() }}
+    <div class="form-grid g3">
+      <label>입고 창고 *
+        <select name="warehouse_id" required>{% for k, v in wh_opts.items() %}<option value="{{ k }}">{{ v }}</option>{% endfor %}</select>
+      </label>
+      <label>필요일<input type="date" name="need_date" min="{{ today().isoformat() }}"></label>
+      <label>구매 사유 *<input name="reason" required placeholder="예: 10월 수출 물량 증가"></label>
+    </div>
+    <table class="data">
+      <tr><th>자재</th><th class="num">수량</th><th class="num">예상단가(원)</th></tr>
+      {% for i in rows %}
+      <tr>
+        <td><select name="material_id"><option value="">—</option>{% for k, v in mats.items() %}<option value="{{ k }}">{{ v }}</option>{% endfor %}</select></td>
+        <td><input name="qty" type="number" min="0" step="any"></td>
+        <td><input name="price" type="number" min="0" step="any"></td>
+      </tr>
+      {% endfor %}
+    </table>
+    <p class="muted small">금액에 따라 결재 단계가 정해집니다: 100만 원 이하 1단계(관리자), 1천만 원 이하 2단계(관리자 2명), 그 이상 3단계(+시스템관리자).
+      요청자는 자기 요청을 결재하거나 발주할 수 없습니다.</p>
+    <div><button class="btn btn-primary">구매요청 등록</button></div>
+  </form>
+{% else %}
+  <form class="toolbar" method="get">
+    <input type="hidden" name="tab" value="{{ tab }}">
+    <label>상태
+      <select name="status" data-autosubmit><option value="">전체</option>
+        {% for k, v in statuses.items() %}<option value="{{ k }}" {{ 'selected' if k == status }}>{{ v }}</option>{% endfor %}
+      </select>
+    </label>
+  </form>
+  {{ table(grid, "해당하는 " ~ ('발주가' if tab == 'po' else '구매요청이') ~ " 없습니다.") }}
+  {% if tab == 'pr' and not can('MANAGER') %}<p class="muted small">본인 요청만 보입니다.</p>{% endif %}
+{% endif %}
+{% endblock %}

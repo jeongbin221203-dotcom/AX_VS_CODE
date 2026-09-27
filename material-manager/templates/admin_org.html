@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf %}
+{% block content %}
+<p class="muted small">창고 하나가 SAP의 플랜트 + 저장위치 하나에 해당합니다. SAP 연동 중에는 두 값이 모두 있어야 그 창고로 입출고할 수 있습니다.
+  거래가 있는 플랜트·창고는 지우지 않고 사용중지합니다.</p>
+
+<section class="card">
+  <h3>플랜트 추가</h3>
+  <form class="form-grid g4" method="post" action="{{ url_for('admin.plant_create') }}">
+    {{ csrf() }}
+    <label>코드<input name="code" required placeholder="P2"></label>
+    <label>이름<input name="name" required placeholder="평택 공장"></label>
+    <label>SAP 플랜트<input name="sap_plant" placeholder="2000"></label>
+    <div><button class="btn btn-primary">추가</button></div>
+  </form>
+</section>
+<section class="card">
+  <h3>창고 추가</h3>
+  <form class="form-grid g5" method="post" action="{{ url_for('admin.warehouse_create') }}">
+    {{ csrf() }}
+    <label>플랜트
+      <select name="plant_id" required>{% for p in plants %}<option value="{{ p.id }}">{{ p.code }} {{ p.name }}</option>{% endfor %}</select>
+    </label>
+    <label>코드<input name="code" required placeholder="WH2"></label>
+    <label>이름<input name="name" required placeholder="자재창고 2동"></label>
+    <label>SAP 저장위치<input name="sap_sloc" placeholder="0002"></label>
+    <div><button class="btn btn-primary">추가</button></div>
+  </form>
+</section>
+
+<h3>플랜트</h3>
+<div class="table-wrap"><table class="data">
+  <tr><th>코드</th><th>이름 · SAP 플랜트 · 상태</th></tr>
+  {% for p in plants %}
+  <tr class="{{ 'tone-muted' if not p.active }}">
+    <td>{{ p.code }}</td>
+    <td>
+      <form class="row-actions inline" method="post" action="{{ url_for('admin.plant_update', plant_id=p.id) }}">
+        {{ csrf() }}
+        <input name="name" value="{{ p.name }}">
+        <input name="sap_plant" value="{{ p.sap_plant }}" placeholder="SAP 플랜트">
+        <select name="active"><option value="1" {{ 'selected' if p.active }}>사용</option><option value="0" {{ 'selected' if not p.active }}>중지</option></select>
+        <button class="btn btn-sm">저장</button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+</table></div>
+
+<h3>창고</h3>
+<div class="table-wrap"><table class="data">
+  <tr><th>플랜트</th><th>코드</th><th>이름 · SAP 저장위치 · 상태</th></tr>
+  {% for w in warehouses %}
+  <tr class="{{ 'tone-muted' if not w.active }}">
+    <td>{{ w.plant_code }} (SAP {{ w.sap_plant or '-' }})</td>
+    <td>{{ w.code }}</td>
+    <td>
+      <form class="row-actions inline" method="post" action="{{ url_for('admin.warehouse_update', wh_id=w.id) }}">
+        {{ csrf() }}
+        <input name="name" value="{{ w.name }}">
+        <input name="sap_sloc" value="{{ w.sap_sloc }}" placeholder="SAP 저장위치">
+        <select name="active"><option value="1" {{ 'selected' if w.active }}>사용</option><option value="0" {{ 'selected' if not w.active }}>중지</option></select>
+        <button class="btn btn-sm">저장</button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+</table></div>
+{% endblock %}

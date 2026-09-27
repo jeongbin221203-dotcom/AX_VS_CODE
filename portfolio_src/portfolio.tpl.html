@@ -1,0 +1,437 @@
+<title>업무 시스템 포트폴리오</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@500;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+KR:wght@400;500;700&display=swap">
+<style>
+:root{
+  --ground:#F2F2EE; --surface:#FBFBF9; --ink:#1A1D24; --muted:#5C616B; --line:#D9DAD3; --rule:#1A1D24;
+  --blue:#2747A3; --blue-soft:#E3E8F5; --seal:#C23A2E; --seal-soft:#F6E1DE; --ok:#2F7A4B; --ok-soft:#E0EFE5;
+  --code-bg:#1B1F2A; --code-ink:#DCE0EA; --code-key:#9DB4FF; --code-str:#F0B8A8; --code-com:#7D8595;
+  --display:"Hahmlet","Nanum Myeongjo","AppleMyungjo",serif;
+  --sans:"IBM Plex Sans KR","Pretendard","Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#111318; --surface:#181B22; --ink:#E5E6EA; --muted:#9CA1AC; --line:#2B2F38; --rule:#C9CCD4;
+    --blue:#8EA6EE; --blue-soft:#1E2640; --seal:#EE7B6F; --seal-soft:#3A1F1C; --ok:#7CC79A; --ok-soft:#18301F;
+    --code-bg:#0B0D12;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#111318; --surface:#181B22; --ink:#E5E6EA; --muted:#9CA1AC; --line:#2B2F38; --rule:#C9CCD4;
+  --blue:#8EA6EE; --blue-soft:#1E2640; --seal:#EE7B6F; --seal-soft:#3A1F1C; --ok:#7CC79A; --ok-soft:#18301F;
+  --code-bg:#0B0D12;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.7;word-break:keep-all;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:clamp(16px,4vw,40px);padding-block:0 72px}
+h1,h2,h3,h4{text-wrap:balance;margin:0}
+p{margin:0}
+a{color:var(--blue)}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:2px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.mono{font-family:var(--mono)}
+code{font-family:var(--mono);font-size:.86em;background:var(--blue-soft);color:var(--blue);padding:1px 5px;border-radius:3px}
+
+/* masthead */
+.mast{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(28px,5vw,64px);align-items:start;padding-block:56px 52px;border-bottom:1px solid var(--line)}
+.field{display:flex;align-items:baseline;gap:10px;margin-top:22px;font-size:14px;color:var(--muted)}
+.field .blank{display:inline-block;min-width:11em;border-bottom:1px solid var(--ink);height:1.3em}
+.mast h1{font-family:var(--display);font-weight:700;font-size:clamp(34px,5.2vw,60px);line-height:1.2;letter-spacing:-.02em;margin-top:18px}
+.mast h1 em{font-style:normal;color:var(--blue)}
+.lead{margin-top:22px;max-width:36em;font-size:17.5px;color:var(--muted)}
+.lead strong{color:var(--ink);font-weight:500}
+.jump{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px}
+.jump a{font-size:14px;text-decoration:none;color:var(--ink);border:1px solid var(--line);background:var(--surface);padding:6px 14px;border-radius:4px}
+.jump a:hover{border-color:var(--blue);color:var(--blue)}
+.jump a span{font-family:var(--mono);font-size:11px;color:var(--muted);margin-right:6px}
+
+/* slip (전표) */
+.slip{background:var(--surface);border:1.5px solid var(--rule);font-size:14px}
+.slip-top{display:flex;justify-content:space-between;align-items:stretch;border-bottom:1.5px solid var(--rule)}
+.slip-title{padding:14px 16px}
+.slip-title strong{display:block;font-family:var(--display);font-size:22px;letter-spacing:.3em}
+.slip-title span{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.sign{display:grid;grid-template-columns:repeat(3,58px);border-left:1.5px solid var(--rule)}
+.sign div{display:grid;grid-template-rows:auto 1fr;text-align:center;border-left:1px solid var(--line)}
+.sign div:first-child{border-left:0}
+.sign b{font-weight:500;font-size:11.5px;padding:3px 0;border-bottom:1px solid var(--line);color:var(--muted)}
+.sign i{display:grid;place-items:center;min-height:50px}
+.seal{width:36px;height:36px;border:2px solid var(--seal);border-radius:50%;color:var(--seal);font-style:normal;font-weight:700;font-size:11px;display:grid;place-items:center;transform:rotate(-12deg);opacity:.9}
+.slip dl{margin:0;padding:6px 16px 4px}
+.slip .row{display:flex;justify-content:space-between;gap:16px;padding:8px 0;border-bottom:1px dotted var(--line)}
+.slip .row:last-child{border-bottom:0}
+.slip dt{color:var(--muted)}
+.slip dd{margin:0;font-family:var(--mono);font-size:13px;text-align:right;font-variant-numeric:tabular-nums}
+.slip .foot{border-top:1.5px solid var(--rule);padding:10px 16px;font-size:12.5px;color:var(--muted);line-height:1.6}
+.slip .foot b{color:var(--ink);font-weight:500}
+
+/* sections */
+section.block{padding-block:64px 8px}
+.sec-head{display:grid;grid-template-columns:180px minmax(0,1fr);gap:8px 24px;margin-bottom:28px;align-items:baseline}
+.sec-head h2{font-family:var(--display);font-weight:700;font-size:clamp(26px,3.2vw,36px);line-height:1.2}
+.sec-head p{grid-column:2;color:var(--muted);max-width:42em}
+
+/* skills */
+.skills{border-top:2px solid var(--rule)}
+.skills .r{display:grid;grid-template-columns:180px minmax(0,1fr) minmax(0,1.2fr);gap:8px 24px;padding:14px 0;border-bottom:1px solid var(--line);align-items:baseline}
+.skills h3{font-size:15px;font-weight:700}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-family:var(--mono);font-size:12.5px;padding:2px 9px;border:1px solid var(--line);border-radius:4px;background:var(--surface)}
+.skills p{font-size:14.5px;color:var(--muted)}
+
+/* project */
+.project{padding-block:72px 8px;border-top:1px solid var(--line);margin-top:56px}
+.p-head{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:24px 48px;align-items:end;margin-bottom:28px}
+.p-code{display:inline-block;font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--seal);border:1.5px solid var(--seal);padding:1px 8px;border-radius:3px}
+.p-head h2{font-family:var(--display);font-weight:700;font-size:clamp(30px,4vw,46px);line-height:1.15;margin-top:12px}
+.p-head .sum{color:var(--muted);font-size:16.5px;margin-top:12px;max-width:34em}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:2px solid var(--rule)}
+.facts div{padding:10px 12px 4px 0}
+.facts div + div{padding-left:12px;border-left:1px solid var(--line)}
+.facts b{display:block;font-family:var(--mono);font-size:22px;font-weight:500;font-variant-numeric:tabular-nums}
+.facts span{font-size:12.5px;color:var(--muted)}
+
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.tabs button{font:inherit;font-size:14px;padding:6px 14px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:4px;cursor:pointer}
+.tabs button:hover{border-color:var(--blue)}
+.tabs button[aria-selected="true"]{background:var(--blue);border-color:var(--blue);color:var(--surface)}
+.browser{border:1px solid var(--line);background:var(--surface);border-radius:8px;overflow:hidden;box-shadow:0 18px 40px -26px rgba(20,30,60,.4)}
+.bar{display:flex;align-items:center;gap:12px;padding:9px 14px;border-bottom:1px solid var(--line)}
+.dots{display:flex;gap:6px}.dots i{width:10px;height:10px;border-radius:50%;background:var(--line)}
+.url{flex:1;min-width:0;font-family:var(--mono);font-size:12.5px;color:var(--muted);background:var(--ground);padding:3px 12px;border-radius:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.url b{color:var(--ink);font-weight:500}
+.browser img{display:block;width:100%;max-width:100%;height:auto;aspect-ratio:1200/750}
+.cap{margin-top:10px;font-size:14px;color:var(--muted);min-height:3.4em}
+
+.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(24px,4vw,48px);margin-top:44px;align-items:start}
+.cols h3{font-size:20px;font-weight:700;line-height:1.4}
+.cols h3 + p{margin-top:10px;color:var(--muted)}
+.cols ul{margin:12px 0 0;padding-left:18px;color:var(--muted);font-size:15px}
+.cols li{margin-top:5px}
+.cols li b{color:var(--ink);font-weight:500}
+.sub{margin-top:36px}
+
+pre{margin:14px 0 0;background:var(--code-bg);color:var(--code-ink);font-family:var(--mono);font-size:12.5px;line-height:1.65;padding:14px 16px;border-radius:6px;overflow-x:auto}
+pre .k{color:var(--code-key)} pre .s{color:var(--code-str)} pre .c{color:var(--code-com)}
+.file{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:18px}
+.file + pre{margin-top:6px}
+
+/* layer diagram */
+.layers{display:grid;gap:0;margin-top:16px;border:1.5px solid var(--rule);background:var(--surface)}
+.layers div{display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px;padding:10px 14px;border-top:1px solid var(--line);align-items:baseline}
+.layers div:first-child{border-top:0}
+.layers b{font-family:var(--mono);font-weight:500;font-size:13px}
+.layers span{font-size:14px;color:var(--muted)}
+.layers .core{background:var(--blue-soft)}
+.layers .core b{color:var(--blue)}
+.layers small{grid-column:1/-1;font-family:var(--mono);font-size:11px;color:var(--blue);letter-spacing:.04em}
+
+/* tables */
+.table-wrap{overflow-x:auto;border-top:2px solid var(--rule);margin-top:14px}
+table{width:100%;border-collapse:collapse;font-size:14.5px;min-width:520px}
+th{text-align:left;font-weight:500;font-size:12px;letter-spacing:.04em;color:var(--muted);padding:10px 12px 8px 0;border-bottom:1px solid var(--line)}
+td{padding:11px 12px 11px 0;border-bottom:1px solid var(--line);vertical-align:top}
+td.mono{font-size:13px;white-space:nowrap}
+
+/* stage gate */
+.gate{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));margin-top:16px;border:1.5px solid var(--rule);background:var(--surface)}
+.gate div{padding:10px 10px 12px;border-left:1px solid var(--line);position:relative}
+.gate div:first-child{border-left:0}
+.gate b{display:block;font-size:15px}
+.gate .pct{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.gate .req{display:block;margin-top:8px;font-family:var(--mono);font-size:12px;font-variant-numeric:tabular-nums}
+.meter{display:flex;gap:2px;margin-top:6px}
+.meter i{flex:1;height:6px;background:var(--line);border-radius:1px}
+.meter i.on{background:var(--blue)}
+.gate .won{background:var(--blue-soft)}
+.note{margin-top:10px;font-size:13.5px;color:var(--muted)}
+
+/* deal desk */
+.desk{margin-top:16px}
+.desk-bar{display:grid;grid-template-columns:10fr 10fr 80fr;height:34px;border:1.5px solid var(--rule)}
+.desk-bar div{display:flex;align-items:center;padding-inline:10px;font-size:13px;font-weight:500;border-left:1px solid var(--rule);white-space:nowrap;overflow:hidden}
+.desk-bar div:first-child{border-left:0;background:var(--blue-soft);color:var(--blue)}
+.desk-bar div:nth-child(2){background:var(--seal-soft);color:var(--seal)}
+.desk-bar div:nth-child(3){background:var(--surface)}
+.desk-axis{display:grid;grid-template-columns:10fr 10fr 80fr;font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:4px}
+.desk-axis span:last-child{display:flex;justify-content:space-between}
+
+.checks{list-style:none;padding:0 !important}
+.checks li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:baseline}
+.ok{font-family:var(--mono);font-size:11px;padding:0 6px;border-radius:3px;background:var(--ok-soft);color:var(--ok);white-space:nowrap}
+
+/* approach */
+.approach{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:2px solid var(--rule)}
+.approach div{padding:18px 20px 20px 0}
+.approach div + div{padding-left:20px;border-left:1px solid var(--line)}
+.approach h3{font-size:17px;line-height:1.45}
+.approach p{margin-top:8px;font-size:14.5px;color:var(--muted)}
+
+footer.end{margin-top:72px;padding-top:18px;border-top:1px solid var(--line);font-size:13px;color:var(--muted);display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px}
+
+@media (max-width:860px){
+  .mast,.p-head,.cols{grid-template-columns:1fr}
+  .sec-head{grid-template-columns:1fr}
+  .sec-head p{grid-column:1}
+  .skills .r{grid-template-columns:1fr;gap:6px}
+  .approach{grid-template-columns:1fr}
+  .approach div + div{padding-left:0;border-left:0;border-top:1px solid var(--line)}
+  .gate{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .gate div:nth-child(4){border-left:0}
+  .gate div:nth-child(n+4){border-top:1px solid var(--line)}
+}
+@media (max-width:480px){
+  .slip-top{flex-direction:column}
+  .sign{border-left:0;border-top:1.5px solid var(--rule);grid-template-columns:repeat(3,minmax(0,1fr))}
+  .facts b{font-size:18px}
+  .desk-bar div{font-size:11.5px;padding-inline:4px}
+  .layers div{grid-template-columns:1fr;gap:2px}
+}
+@media (prefers-reduced-motion:no-preference){
+  .browser img{animation:fade .3s ease}
+  @keyframes fade{from{opacity:.5}to{opacity:1}}
+}
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <div>
+    <div class="eyebrow">Portfolio · Python 업무 시스템</div>
+    <div class="field"><span>성명</span><span class="blank" aria-label="이름 미기재"></span></div>
+    <h1>현장의 업무 규칙을 <em>코드의 규칙</em>으로 옮깁니다</h1>
+    <p class="lead">B2B 영업처럼 <strong>장부와 결재로 돌아가는 일</strong>을 Flask와 SQLite로 만들었습니다. 화면보다 먼저 “무엇이 허용되는가”를 정하고, 그 규칙을 화면과 분리해 테스트할 수 있게 짜는 것을 중요하게 생각합니다.</p>
+    <nav class="jump" aria-label="프로젝트 바로가기">
+      <a href="#sl"><span>SL</span>영업관리 시스템</a>
+    </nav>
+  </div>
+
+  <aside class="slip" aria-label="포트폴리오 요약">
+    <div class="slip-top">
+      <div class="slip-title"><strong>요약전표</strong><span>No. PF-2026-09 · 2026.09.27</span></div>
+      <div class="sign" aria-label="담당 범위">
+        <div><b>설계</b><i><span class="seal">확인</span></i></div>
+        <div><b>개발</b><i><span class="seal">확인</span></i></div>
+        <div><b>검증</b><i><span class="seal">확인</span></i></div>
+      </div>
+    </div>
+    <dl>
+      <div class="row"><dt>프로젝트</dt><dd>영업관리 시스템</dd></div>
+      <div class="row"><dt>Python 코드</dt><dd>6,020줄</dd></div>
+      <div class="row"><dt>자동 테스트</dt><dd>37 / 37 통과</dd></div>
+      <div class="row"><dt>ERP 연동</dt><dd>SAP OData · 파일</dd></div>
+      <div class="row"><dt>외부 DB 서버</dt><dd>0개 · SQLite 파일</dd></div>
+    </dl>
+    <p class="foot"><b>공통 스택</b> — Python, Flask, Jinja2, SQLite(WAL), pandas, openpyxl, Chart.js</p>
+  </aside>
+</header>
+
+<section class="block" aria-labelledby="s-skills">
+  <div class="sec-head">
+    <h2 id="s-skills">기술</h2>
+    <p>영업관리 시스템에서 실제로 사용한 기술과, 그 기술로 해결한 문제입니다.</p>
+  </div>
+  <div class="skills">
+    <div class="r"><h3>언어 · 데이터</h3><div class="tags"><span class="tag">Python 3</span><span class="tag">SQL (SQLite)</span><span class="tag">pandas</span></div><p>매출·파이프라인·전환율·채권 같은 집계를 SQL과 DataFrame으로 계산합니다.</p></div>
+    <div class="r"><h3>화면</h3><div class="tags"><span class="tag">Flask</span><span class="tag">Jinja2</span><span class="tag">Chart.js</span></div><p>블루프린트로 메뉴를 나눈 사내용 화면입니다. 저장은 POST 뒤 리다이렉트, 모든 POST는 CSRF 토큰으로 검사합니다.</p></div>
+    <div class="r"><h3>파일 입출력</h3><div class="tags"><span class="tag">openpyxl</span><span class="tag">Excel · CSV</span><span class="tag">이미지 · PDF · XML</span></div><p>엑셀 일괄 업로드는 검증 뒤에 반영하고, 세금계산서 이미지와 전자세금계산서 XML을 파일 내용으로 판별해 받습니다.</p></div>
+    <div class="r"><h3>연동 · 보안</h3><div class="tags"><span class="tag">SAP OData</span><span class="tag">Outbox</span><span class="tag">PBKDF2</span><span class="tag">SSO 헤더</span></div><p>ERP 전송은 대기열로 분리해 ERP 장애가 입력을 막지 않게 하고, 로그인 잠금·세션 만료·개인정보 마스킹을 적용합니다.</p></div>
+    <div class="r"><h3>설계</h3><div class="tags"><span class="tag">계층 분리</span><span class="tag">RBAC</span><span class="tag">해시 체인 감사로그</span><span class="tag">pytest</span></div><p>화면과 업무 규칙을 나누고, 권한·결재·이력을 데이터 계층에서 강제합니다.</p></div>
+  </div>
+</section>
+
+<!-- ─────────────── 영업관리 ─────────────── -->
+<article class="project" id="sl" aria-labelledby="sl-title">
+  <div class="p-head">
+    <div>
+      <span class="p-code">SL · 영업관리</span>
+      <h2 id="sl-title">영업관리 시스템</h2>
+      <p class="sum">거래처·파이프라인·영업활동·매출 관리에 더해, 대기업 영업조직에 필요한 권한 분리, 할인 결재, 위변조를 막는 감사 추적, SAP 연동, 세금계산서 증빙까지 담은 CRM입니다.</p>
+    </div>
+    <div class="facts">
+      <div><b>14</b><span>메뉴</span></div>
+      <div><b>37/37</b><span>테스트 통과</span></div>
+      <div><b>6,020</b><span>코드 줄 수</span></div>
+    </div>
+  </div>
+
+  <div class="gallery" data-host="localhost:5001">
+    <div class="tabs" role="tablist" aria-label="영업관리 화면 선택">
+      <button role="tab" id="sl-t1" aria-selected="true" data-img="sales_dash" data-path="/ 대시보드" data-cap="대시보드 — 임원 계정으로 본 전사 화면입니다. 당월 매출·목표 달성률·가중 파이프라인·미수금과 월별 매출, 단계별 파이프라인을 같은 색·단위 규칙으로 그립니다.">대시보드</button>
+      <button role="tab" id="sl-t2" aria-selected="false" data-img="sales_fc" data-path="/forecast" data-cap="매출예측 — Commit·Best Case·Pipeline으로 예측을 나누고, 목표까지 부족한 금액과 파이프라인 커버리지를 계산해 문장으로 알려줍니다.">매출예측</button>
+      <button role="tab" id="sl-t3" aria-selected="false" data-img="sales_deal" data-path="/deals" data-cap="영업기회 — 단계, 예측구분, 검증점수, 할인율, 승인상태를 한 표에서 보고, 30일 넘게 멈춘 건 수를 경고합니다.">영업기회</button>
+      <button role="tab" id="sl-t4" aria-selected="false" data-img="sales_doc" data-path="/sales?sid=161" data-cap="세금계산서 증빙 — 매출에 세금계산서 이미지와 전자세금계산서 XML을 붙입니다. XML은 승인번호·금액을 자동으로 읽고, 사업자번호·합계·발급 기한을 검증합니다. (샘플 데이터)">세금계산서 증빙</button>
+      <button role="tab" id="sl-t5" aria-selected="false" data-img="sales_erp" data-path="/admin/erp" data-cap="ERP 연동 — 매출은 전송 대기열에 쌓였다가 ERP로 나갑니다. 실패한 건은 원인과 함께 남고, SAP 고객번호가 없는 거래처를 미리 알려줍니다.">ERP 연동</button>
+      <button role="tab" id="sl-t6" aria-selected="false" data-img="sales_audit" data-path="/admin/audit" data-cap="감사로그 — 등록·수정·증빙·다운로드를 모두 남기고, 해시 체인을 다시 계산해 기록이 바뀌지 않았는지 확인합니다.">감사로그</button>
+    </div>
+    <div class="browser" role="tabpanel" aria-labelledby="sl-t1">
+      <div class="bar"><div class="dots"><i></i><i></i><i></i></div><div class="url">localhost:5001<b>/ 대시보드</b></div></div>
+      <img src="{{IMG_sales_dash}}" alt="대시보드 화면" width="1200" height="750">
+    </div>
+    <p class="cap">대시보드 — 임원 계정으로 본 전사 화면입니다. 당월 매출·목표 달성률·가중 파이프라인·미수금과 월별 매출, 단계별 파이프라인을 같은 색·단위 규칙으로 그립니다.</p>
+  </div>
+
+  <div class="cols">
+    <div>
+      <h3>권한은 화면이 아니라 쿼리에서 막습니다</h3>
+      <p>메뉴를 숨기는 것만으로는 데이터가 새어 나갈 수 있습니다. 로그인한 사용자가 볼 수 있는 담당자 id를 <code>ContextVar</code>에 담아, 모든 조회 쿼리에 조건이 자동으로 붙게 했습니다. 수정·삭제·결재도 서버에서 범위를 다시 확인하므로, 폼의 id를 바꿔 다른 팀 데이터를 건드리면 403이 됩니다. 담당자를 이름이 아닌 사용자 id로 묶어 동명이인의 데이터도 섞이지 않습니다.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>역할</th><th>데이터 범위</th><th>할인 결재</th></tr></thead>
+          <tbody>
+            <tr><td>영업사원 <span class="mono">REP</span></td><td>본인 담당 건</td><td>요청만 가능</td></tr>
+            <tr><td>팀장 <span class="mono">MANAGER</span></td><td>본인 팀 + 하위 조직</td><td>10% 이하</td></tr>
+            <tr><td>임원 <span class="mono">EXEC</span></td><td>전사</td><td>20% 이하</td></tr>
+            <tr><td>관리자 <span class="mono">ADMIN</span></td><td>전사 + 조직·계정·ERP·감사로그</td><td>20% 초과 (본인 요청 제외)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="file">core/sales_db.py · _scope_clause()</p>
+<pre>scope = _SCOPE.get()
+<span class="k">if</span> scope <span class="k">is None</span>:
+    <span class="k">return</span> <span class="s">""</span>, []            <span class="c"># 임원·관리자: 전사</span>
+<span class="k">if not</span> scope:
+    <span class="k">return</span> <span class="s">" AND 1=0"</span>, []    <span class="c"># 볼 수 있는 담당자 없음</span>
+<span class="k">return</span> <span class="s">f" AND {prefix}owner_id IN (...)"</span>, list(scope)</pre>
+      <p class="note">샘플 조직으로 확인한 조회 건수: 사원 7건 &lt; 팀장 33건 &lt; 임원 55건. 다른 팀 데이터는 보이지 않았습니다.</p>
+    </div>
+
+    <div>
+      <h3>단계 진행과 할인을 규칙으로 통제합니다</h3>
+      <p>영업기회를 다음 단계로 옮기려면 MEDDIC 검증 항목 등 필수 조건을 채워야 합니다(Stage Gate). “말로만 협상 중”인 건으로 파이프라인이 부풀려지는 것을 막기 위해서입니다.</p>
+      <div class="gate" aria-label="단계별 필수 조건 수">
+        <div><b>리드</b><span class="pct">확률 10%</span><span class="req">조건 0</span><div class="meter"><i></i><i></i><i></i></div></div>
+        <div><b>접촉</b><span class="pct">25%</span><span class="req">조건 0</span><div class="meter"><i></i><i></i><i></i></div></div>
+        <div><b>제안</b><span class="pct">45%</span><span class="req">조건 3</span><div class="meter"><i class="on"></i><i></i><i></i></div></div>
+        <div><b>견적</b><span class="pct">60%</span><span class="req">조건 5</span><div class="meter"><i class="on"></i><i class="on"></i><i></i></div></div>
+        <div><b>협상</b><span class="pct">80%</span><span class="req">조건 7</span><div class="meter"><i class="on"></i><i class="on"></i><i class="on"></i></div></div>
+        <div class="won"><b>수주</b><span class="pct">100%</span><span class="req">조건 9</span><div class="meter"><i class="on"></i><i class="on"></i><i class="on"></i></div></div>
+      </div>
+      <p class="note">조건 = 예상금액, 마감일, MEDDIC 6개 항목, 할인 승인. 수주하려면 9개를 모두 채워야 합니다.</p>
+
+      <div class="desk">
+        <p class="file">할인 결재선 · DISCOUNT_POLICY</p>
+        <div class="desk-bar" role="img" aria-label="할인율 10% 이하 팀장, 20% 이하 임원, 20% 초과 관리자 결재">
+          <div>팀장</div><div>임원</div><div>관리자 결재</div>
+        </div>
+        <div class="desk-axis"><span>0</span><span>10%</span><span><span>20%</span><span>100%</span></span></div>
+      </div>
+      <p class="note">결재 요청 때 정가·제안가·할인율을 결재 기록에 고정합니다. 승인 뒤 금액이나 할인율을 바꾸면 승인이 자동으로 무효가 되고, 수주로 넘길 때 결재 기록과 한 번 더 대조합니다.</p>
+      <p class="file">core/enterprise.py · decide_approval()</p>
+<pre><span class="c"># 직무 분리: 관리자를 포함해 누구도 자기 요청을 결재할 수 없다</span>
+<span class="k">if</span> int(row[<span class="s">"requested_by_id"</span>]) == int(approver[<span class="s">"id"</span>]):
+    <span class="k">raise</span> PermissionError(<span class="s">"본인이 요청한 건은 본인이 결재할 수 없습니다."</span>)
+<span class="c"># 요청 이후 금액·할인율이 바뀌었다면 이 결재는 더 이상 유효하지 않다</span>
+<span class="k">if</span> deal[<span class="s">"amount"</span>] != row[<span class="s">"final_amount"</span>] <span class="k">or</span> ...:
+    <span class="k">raise</span> ValueError(<span class="s">"조건이 바뀌어 결재가 취소되었습니다. 다시 요청하세요."</span>)</pre>
+    </div>
+  </div>
+
+  <div class="cols">
+    <div>
+      <h3>감사로그는 관리자도 지울 수 없습니다</h3>
+      <p>등록·수정(바뀌기 전과 후)·삭제(지우기 전 내용)·결재·로그인 실패·모든 다운로드를 남깁니다. 각 기록은 바로 앞 기록의 해시를 이어 받고, DB 트리거가 수정과 삭제를 막습니다. 누군가 DB 파일을 직접 고치면 무결성 검증이 몇 번 기록에서 끊겼는지 알려줍니다.</p>
+      <p class="file">core/sales_db.py · audit()</p>
+<pre>conn.execute(<span class="s">"BEGIN IMMEDIATE"</span>)   <span class="c"># 체인이 엇갈리지 않게 쓰기 잠금</span>
+prev = <span class="s">"SELECT hash FROM audit_log ... ORDER BY id DESC LIMIT 1"</span>
+digest = sha256(prev + ts + actor + action + detail)
+<span class="c"># + 트리거: BEFORE UPDATE/DELETE ON audit_log → RAISE(ABORT)</span></pre>
+      <ul>
+        <li><b>삭제 대신 보존</b> — 거래가 있던 거래처는 '종료', 매출은 사유를 적어 '취소'. 실적과 채권 집계에서만 빠집니다.</li>
+        <li><b>동시 수정</b> — 행 버전 번호로 나중 저장이 앞 저장을 덮어쓰지 못하게 합니다.</li>
+        <li><b>개인정보</b> — 목록과 추출 파일에서 고객 연락처를 가리고, 원문 추출은 사유를 남겨야 합니다.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>ERP로 보내되, ERP가 멈춰도 영업은 멈추지 않습니다</h3>
+      <p>매출을 저장하는 트랜잭션에서 전송 대기열(Outbox)에 한 줄을 넣고 끝냅니다. 전송은 관리자 화면이나 배치가 따로 합니다. 실패한 건은 원인과 함께 남고 최대 5번까지 다시 보냅니다.</p>
+      <div class="layers" aria-label="ERP 연동 흐름">
+        <div><b>CRM → ERP</b><span>SAP S/4HANA <code>API_SALES_ORDER_SRV</code>로 판매오더 생성 (CSRF 토큰 발급 → POST). 고객 PO 번호에 CRM 매출번호를 넣어 역방향 대사 키로 씁니다.</span></div>
+        <div><b>파일 방식</b><span>EAI · SAP PI/PO가 가져가는 JSON 파일. 반쯤 쓴 파일을 읽지 않도록 임시 이름으로 쓴 뒤 이름을 바꿉니다.</span></div>
+        <div class="core"><b>ERP → CRM</b><span>ERP의 매출별 누적 입금액을 받아 차액만 입금 등록합니다. 같은 파일을 두 번 올려도 이중 입금되지 않습니다.</span></div>
+      </div>
+      <p class="note">SAP 전송은 모의 SAP 서버로 CSRF 토큰·전문·취소(품목 거부사유) 흐름을 테스트했습니다. 실제 SAP 연결은 아직 검증하지 않았습니다.</p>
+    </div>
+  </div>
+
+  <div class="cols">
+    <div>
+      <h3>세금계산서는 확인하고 받습니다</h3>
+      <p>매출마다 세금계산서 이미지, PDF, 전자세금계산서 XML을 붙입니다. 파일 종류는 확장자가 아니라 파일 앞부분(매직 바이트)으로 판별하고, 원본의 SHA-256을 기록합니다. 잘못 올린 증빙은 지우지 않고 사유를 남겨 무효로 돌립니다.</p>
+      <ul class="checks">
+        <li><span class="ok">CHECK</span><span>사업자등록번호 검증번호 (가중치 1·3·7·1·3·7·1·3·5)</span></li>
+        <li><span class="ok">CHECK</span><span>전자세금계산서 승인번호 24자리 · 같은 승인번호 중복 등록 차단</span></li>
+        <li><span class="ok">CHECK</span><span>공급가액 + 세액 = 합계, 매출 금액과 일치, 공급받는자 = 거래처</span></li>
+        <li><span class="ok">WARN</span><span>발급 기한(공급한 달의 다음 달 10일)을 넘긴 작성일자</span></li>
+      </ul>
+      <p class="file">core/documents.py · valid_biz_no()</p>
+<pre>weights = [<span class="s">1, 3, 7, 1, 3, 7, 1, 3, 5</span>]
+total = sum(a * w <span class="k">for</span> a, w <span class="k">in</span> zip(d[:<span class="s">9</span>], weights)) + (d[<span class="s">8</span>] * <span class="s">5</span>) // <span class="s">10</span>
+<span class="k">return</span> (<span class="s">10</span> - total % <span class="s">10</span>) % <span class="s">10</span> == d[<span class="s">9</span>]</pre>
+    </div>
+    <div>
+      <h3>검증한 내용</h3>
+      <ul class="checks">
+        <li><span class="ok">PASS</span><span>역할 4종 × 14개 메뉴 구동, 권한 밖 메뉴 403, 조회 건수 사원 7 &lt; 팀장 33 &lt; 임원 55</span></li>
+        <li><span class="ok">PASS</span><span>승인 뒤 할인율을 올리면 승인 무효 · 수주 차단, 관리자 자기결재 차단, 동명이인 데이터 분리</span></li>
+        <li><span class="ok">PASS</span><span>감사로그 한 줄을 고치거나 지우면 무결성 검증이 해당 번호를 찾아냄</span></li>
+        <li><span class="ok">PASS</span><span>모의 SAP 서버로 판매오더 생성·취소, 입금 대사를 두 번 해도 이중 입금 없음</span></li>
+        <li><span class="ok">PASS</span><span>위장 파일·잘못된 사업자번호·중복 승인번호 거부, 다른 팀 증빙 열람 403</span></li>
+        <li><span class="ok">PASS</span><span>비밀번호 5회 실패 잠금, 신뢰하지 않는 IP의 SSO 헤더 무시, 엑셀 수식 주입 차단</span></li>
+        <li><span class="ok">PASS</span><span>전환 전(Streamlit 판) DB를 건수 변동 없이 새 스키마로 업그레이드</span></li>
+      </ul>
+      <p class="note"><code>python -m pytest tests -q</code> — 임시 DB와 폴더에서 37개 테스트가 모두 통과합니다. 매출예측(Commit·Best Case·커버리지), 전환율·Sales Velocity, 채권 aging 화면도 함께 있습니다.</p>
+    </div>
+  </div>
+</article>
+
+<section class="block" aria-labelledby="s-approach">
+  <div class="sec-head">
+    <h2 id="s-approach">일하는 방식</h2>
+    <p>작업 전체에 적용한 원칙입니다.</p>
+  </div>
+  <div class="approach">
+    <div><h3>규칙을 먼저 정하고, 화면은 나중에</h3><p>“본인 건은 본인이 결재할 수 없다”, “승인 뒤 할인율을 바꾸면 승인은 무효다”처럼 허용 조건을 먼저 코드로 정하고, 화면은 그 결과를 보여주기만 합니다.</p></div>
+    <div><h3>바뀔 곳은 한 곳으로 모읍니다</h3><p>DB 경로·인증 방식·ERP 연결은 환경변수로, 단계·할인 정책은 상단 상수로 모았습니다. 운영 모드에서 위험한 설정이면 서버가 아예 뜨지 않습니다.</p></div>
+    <div><h3>누가 무엇을 했는지 남깁니다</h3><p>거래처는 삭제 대신 종료, 매출은 삭제 대신 취소로 이력을 보존합니다. 감사로그는 해시 체인으로 묶어 나중에 바뀌지 않았는지 확인할 수 있습니다.</p></div>
+  </div>
+</section>
+
+<footer class="end">
+  <span>업무 시스템 포트폴리오 · 2026</span>
+  <span>화면 이미지는 로컬에서 샘플 데이터로 실행해 캡처했습니다.</span>
+</footer>
+</div>
+
+<script>
+(function(){
+  var IMGS = {{IMGS_JSON}};
+  document.querySelectorAll('.gallery').forEach(function(g){
+    var tabs = g.querySelectorAll('[role="tab"]');
+    var panel = g.querySelector('[role="tabpanel"]');
+    var img = panel.querySelector('img');
+    var path = panel.querySelector('.url b');
+    var cap = g.querySelector('.cap');
+    function select(btn){
+      tabs.forEach(function(t){ var on = t === btn; t.setAttribute('aria-selected', on ? 'true' : 'false'); t.tabIndex = on ? 0 : -1; });
+      img.src = IMGS[btn.dataset.img];
+      img.alt = btn.textContent + ' 화면';
+      path.textContent = btn.dataset.path;
+      cap.textContent = btn.dataset.cap;
+      panel.setAttribute('aria-labelledby', btn.id);
+    }
+    tabs.forEach(function(btn, i){
+      btn.tabIndex = i === 0 ? 0 : -1;
+      btn.addEventListener('click', function(){ select(btn); });
+      btn.addEventListener('keydown', function(e){
+        var d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (!d) return;
+        var next = tabs[(i + d + tabs.length) % tabs.length];
+        next.focus(); select(next);
+      });
+    });
+  });
+})();
+</script>

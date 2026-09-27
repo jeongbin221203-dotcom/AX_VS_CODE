@@ -1,0 +1,3 @@
+{% for kind, message in get_flashed_messages(with_categories=true) %}
+  <div class="alert alert-{{ kind }}">{{ message }}</div>
+{% endfor %}

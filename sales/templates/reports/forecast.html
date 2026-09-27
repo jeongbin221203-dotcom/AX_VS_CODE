@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% from "_macros.html" import metric, table, chart, tabs, csrf, download %}
+{% block content %}
+<p class="subtitle">{{ g.ym }} · Commit(반드시 마감) / Best Case(잘 되면 마감) / Pipeline(예측 이전) 으로 나누어
+  주간 단위로 예측하고, 실제 실적과 비교해 예측 신뢰도를 관리합니다.</p>
+
+<div class="metrics m5">
+  {{ metric('목표', fc.target|mil) }}
+  {{ metric('확정 매출', fc.closed|mil, '%.0f%%'|format(fc.attainment)) }}
+  {{ metric('Commit 전망', fc.commit_total|mil, '%.0f%%'|format(fc.commit_attainment)) }}
+  {{ metric('Best Case 전망', fc.best_total|mil) }}
+  {{ metric('커버리지', '%.1f배'|format(fc.coverage), '건전' if fc.coverage >= 3 else '부족', 'up' if fc.coverage >= 3 else 'down') }}
+</div>
+
+{% if fc.gap > 0 %}
+  <div class="alert alert-warning">Commit 기준으로 목표까지 {{ fc.gap|won }} 부족합니다.
+    Best Case {{ fc.best_case|mil }} 중 일부를 Commit 으로 전환하거나 신규 파이프라인 확보가 필요합니다.</div>
+{% else %}
+  <div class="alert alert-success">Commit 기준으로 목표를 {{ (-fc.gap)|won }} 초과 달성할 전망입니다.</div>
+{% endif %}
+
+<section class="card">
+  <h3>📊 예측 구성</h3>
+  {{ chart(comp_chart) }}
+</section>
+
+<section class="card">
+  <div class="card-head"><h3>👥 담당자별 예측 (주간 예측회의용)</h3>{{ download(export_url('by_owner')) }}</div>
+  {{ table(by_owner) }}
+</section>
+
+<section class="card">
+  {{ tabs([('category', '🏷️ 예측구분 지정'), ('snapshot', '📉 주간 스냅샷 추이'), ('accuracy', '🎯 예측 정확도')], tab) }}
+  {% if tab == 'snapshot' %}
+    <div class="card-head">
+      <p class="muted">주 1회 스냅샷을 남기면 파이프라인이 어느 시점에 흔들렸는지 추적할 수 있습니다.</p>
+      {% if can_snapshot %}
+      <form method="post" action="{{ url_for('reports.forecast_snapshot') }}">{{ csrf() }}
+        <button class="btn">📸 오늘자 스냅샷 생성</button></form>
+      {% endif %}
+    </div>
+    {% if trend.empty %}
+      <div class="alert alert-info">아직 스냅샷이 없습니다. 스냅샷을 생성하면 주차별 추이가 표시됩니다.</div>
+    {% else %}
+      {{ chart(trend_chart) }}
+      {{ table(trend) }}
+    {% endif %}
+  {% elif tab == 'accuracy' %}
+    {% if acc.empty %}
+      <div class="alert alert-info">과거 스냅샷이 없어 정확도를 계산할 수 없습니다.</div>
+    {% else %}
+      <p class="muted">월초 Commit 대비 실제 매출 비율. 80~120% 를 정상 범위로 보며,
+        지속적으로 120% 를 넘으면 과소예측, 80% 미만이면 과대예측입니다.</p>
+      {{ chart(acc_chart) }}
+      {{ table(acc) }}
+      <div class="metrics m4">{{ metric('평균 예측 정확도', '%.1f%%'|format(acc_avg),
+            '정상 범위' if 80 <= acc_avg <= 120 else '편차 큼', 'up' if 80 <= acc_avg <= 120 else 'down') }}</div>
+    {% endif %}
+  {% else %}
+    <p class="muted">이번 달 마감 예정 기회의 예측구분을 조정합니다. 예측 책임은 Commit 에 한정됩니다.</p>
+    {% if month_deals.empty %}
+      <div class="alert alert-info">이번 달 마감 예정인 진행 기회가 없습니다.</div>
+    {% else %}
+      <form method="post" action="{{ url_for('reports.forecast_category') }}">
+        {{ csrf() }}
+        {{ table(month_deals, 420) }}
+        <div class="row-actions">
+          <label>변경할 예측구분
+            <select name="category">
+              {% for cat in FORECAST_CATS %}<option>{{ cat }}</option>{% endfor %}
+            </select>
+          </label>
+          <button class="btn btn-primary">선택한 기회에 적용</button>
+        </div>
+      </form>
+    {% endif %}
+  {% endif %}
+</section>
+{% endblock %}

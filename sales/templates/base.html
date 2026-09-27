@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% if title %}{{ title }} · {% endif %}{{ APP_TITLE }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+  <script src="{{ url_for('static', filename='vendor/chart.umd.min.js') }}" defer></script>  {# Chart.js 4.4.1 (MIT) — 사내망에서도 동작하도록 로컬 보관 #}
+  <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+</head>
+<body>
+{% if g.user %}
+<div class="layout">
+  <aside class="sidebar">
+    <a class="brand" href="{{ url_for('reports.dashboard') }}">📈 {{ APP_TITLE }}</a>
+    <div class="me">
+      <strong>{{ g.user.name }}</strong> · {{ ROLE_LABEL.get(g.user.role, g.user.role) }}
+      <div class="muted small">{{ '전사 데이터 조회' if g.scope is none else '조회 범위 ' ~ g.scope|length ~ '명' }}</div>
+      <form method="post" action="{{ url_for('auth.logout') }}" class="me-actions">
+        <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+        <button class="btn btn-sm">로그아웃</button>
+        {% if AUTH_MODE == 'password' %}<a class="btn btn-sm" href="{{ url_for('auth.password') }}">비밀번호 변경</a>{% endif %}
+      </form>
+    </div>
+    <a class="bell {{ 'has-unread' if g.unread }}" href="{{ url_for('auth.notifications') }}">🔔 알림{% if g.unread %} <b>{{ g.unread }}</b>{% endif %}</a>
+    {% if g.pending_cnt %}
+      <a class="pending" href="{{ url_for('finance.approvals') }}">결재 대기 {{ g.pending_cnt }}건</a>
+    {% endif %}
+    <nav class="menu">
+      {% for key, label, endpoint, _ in menus_for(g.user) %}
+        <a href="{{ url_for(endpoint) }}" class="{{ 'active' if key == active }}">{{ label }}</a>
+      {% endfor %}
+    </nav>
+    <form class="filters" method="get" action="{{ page_path() }}">
+      <label>기준월
+        <select name="ym" onchange="this.form.submit()">
+          {% for m in g.months %}<option value="{{ m }}" {{ 'selected' if m == g.ym }}>{{ m }}</option>{% endfor %}
+        </select>
+      </label>
+      {% if g.owner_choices and g.owner_choices|length > 1 %}
+      <label>담당자 필터
+        <select name="owner" onchange="this.form.submit()">
+          <option value="">전체</option>
+          {% for o in g.owner_choices %}<option value="{{ o.id }}" {{ 'selected' if o.id == g.owner_filter }}>{{ o.label }}</option>{% endfor %}
+        </select>
+      </label>
+      {% endif %}
+      {% for k, v in request.args.items() if k not in ('ym', 'owner', 'export', 'page') %}
+        <input type="hidden" name="{{ k }}" value="{{ v }}">
+      {% endfor %}
+      <noscript><button class="btn btn-sm">적용</button></noscript>
+    </form>
+    <div class="muted small foot">오늘: {{ today().isoformat() }}
+      {% if ENV != 'production' %}<br><span class="env-badge">개발 환경</span>{% endif %}</div>
+  </aside>
+  <main class="content">
+    {% if READ_ONLY() %}<div class="alert alert-warning">🛠️ 시스템 점검 중입니다 — 조회만 할 수 있고 저장·변경은 막혀 있습니다.</div>{% endif %}
+    <h1>{{ title }}</h1>
+    {% include "_flashes.html" %}
+    {% block content %}{% endblock %}
+  </main>
+</div>
+{% else %}
+<main class="content narrow">
+  {% include "_flashes.html" %}
+  {% block public %}{% endblock %}
+</main>
+{% endif %}
+</body>
+</html>

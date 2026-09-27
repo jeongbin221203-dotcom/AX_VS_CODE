@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf, table, download %}
+{% block content %}
+<section class="card">
+  <h3>1. 자재 일괄 업로드</h3>
+  {{ download(url_for('data_admin.template'), '⬇️ 업로드 양식 다운로드') }}
+  <p class="muted small">자재코드가 이미 있으면 나머지 항목을 갱신하고, 없으면 신규 등록합니다. (재고는 입출고로만 변경됩니다)</p>
+
+  {% if preview %}
+    <p><strong>{{ filename }}</strong> 미리보기 · 반영 대상 {{ preview_cnt }}건</p>
+    {{ table(preview) }}
+    <div class="row-actions">
+      <form method="post" action="{{ url_for('data_admin.apply_upload') }}">
+        {{ csrf() }}
+        <input type="hidden" name="token" value="{{ token }}">
+        <button class="btn btn-primary">{{ preview_cnt }}건 반영</button>
+      </form>
+      <a class="btn" href="{{ url_for('data_admin.index') }}">취소</a>
+    </div>
+  {% else %}
+    <form class="row-actions" method="post" action="{{ url_for('data_admin.upload') }}" enctype="multipart/form-data">
+      {{ csrf() }}
+      <label>엑셀(.xlsx) 또는 CSV 업로드<input type="file" name="file" accept=".xlsx,.csv" required></label>
+      <button class="btn btn-primary">미리보기</button>
+    </form>
+  {% endif %}
+</section>
+
+<section class="card">
+  <h3>2. 백업</h3>
+  <div class="row-actions">
+    {% if db_file %}{{ download(url_for('data_admin.backup_db'), '⬇️ DB 파일 백업 (.db)') }}{% endif %}
+    {{ download(url_for('data_admin.backup_xlsx'), '⬇️ 전체 데이터 엑셀 백업') }}
+    {{ download(url_for('data_admin.backup_attachments'), '⬇️ 증빙 파일 백업 (.zip, ' ~ attach_cnt ~ '건)') }}
+  </div>
+  <p class="muted small">DB: {{ 'PostgreSQL — DB 서버에서 pg_dump·스냅샷으로 정기 백업하세요' if is_pg else 'SQLite 파일' }} ·
+    파일 저장소: {{ storage_name }}. DB 백업에는 증빙 이미지가 들어 있지 않으니 증빙 파일(.zip)도 함께 받아 두세요
+    ({{ 'S3는 버킷 버전 관리·복제로 보호하는 것을 권장' if storage_name == 's3' else '복원 시 zip을 저장소의 attachments/ 폴더에 풀면 됩니다' }}).</p>
+</section>
+
+<section class="card">
+  <h3>3. 샘플 데이터</h3>
+  {% if material_cnt %}
+    <p class="muted small">현재 자재 {{ material_cnt }}종이 등록되어 있어 샘플 생성은 빈 DB에서만 가능합니다.</p>
+  {% else %}
+    <form method="post" action="{{ url_for('data_admin.make_seed') }}">
+      {{ csrf() }}
+      <button class="btn">샘플 데이터 생성 (포워딩 창고 포장·고박 자재)</button>
+    </form>
+  {% endif %}
+</section>
+{% endblock %}

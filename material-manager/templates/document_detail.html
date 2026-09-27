@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf %}
+{% block content %}
+<p><a href="{{ url_for('documents.index') }}">← 증빙 목록</a></p>
+
+<div class="doc-layout">
+  <section class="card doc-view">
+    {% if file_missing %}
+      <div class="alert alert-error">증빙 파일이 없습니다. 첨부 폴더({{ doc.stored_name }})를 백업에서 복원하세요.</div>
+    {% elif doc.mime == "application/pdf" %}
+      <iframe src="{{ url_for('documents.file', doc_id=doc.id) }}" title="{{ doc.file_name }}"></iframe>
+    {% else %}
+      <a href="{{ url_for('documents.file', doc_id=doc.id) }}" target="_blank" rel="noopener">
+        <img src="{{ url_for('documents.file', doc_id=doc.id) }}" alt="{{ doc_type_label }} {{ doc.file_name }}">
+      </a>
+    {% endif %}
+    <div class="row-actions">
+      <a class="btn btn-sm" href="{{ url_for('documents.file', doc_id=doc.id) }}" target="_blank" rel="noopener">새 창에서 보기</a>
+      <a class="btn btn-sm" href="{{ url_for('documents.file', doc_id=doc.id, download=1) }}">⬇️ 원본 내려받기</a>
+    </div>
+  </section>
+
+  <section class="card">
+    <h3>{{ doc_type_label }} · 증빙 ID {{ doc.id }}</h3>
+    <dl class="kv">
+      <dt>작성일자</dt><dd>{{ doc.issue_date }}</dd>
+      {% if doc.approval_no %}<dt>승인번호</dt><dd class="mono">{{ doc.approval_no }}</dd>{% endif %}
+      <dt>공급자</dt><dd>{{ doc.supplier_name or '-' }}{% if biz_no %} ({{ biz_no }}){% endif %}</dd>
+      <dt>공급가액</dt><dd>₩ {{ "{:,}".format(doc.supply_amount|int) }}</dd>
+      <dt>세액</dt><dd>₩ {{ "{:,}".format(doc.tax_amount|int) }}</dd>
+      <dt>합계</dt><dd><strong>₩ {{ "{:,}".format((doc.supply_amount + doc.tax_amount)|int) }}</strong></dd>
+      {% if doc.note %}<dt>메모</dt><dd>{{ doc.note }}</dd>{% endif %}
+      <dt>파일</dt><dd>{{ doc.file_name }} · {{ "{:,.0f}".format(doc.size / 1024) }}KB</dd>
+      <dt>등록</dt><dd>{{ doc.created_at }}{% if doc.created_by %} · {{ doc.created_by }}{% endif %}</dd>
+    </dl>
+
+    <h3>연결 거래</h3>
+    {% if doc.tx_id is not none %}
+      <p>#{{ doc.tx_id }} · {{ doc.tx_date }} {{ TX_LABEL.get(doc.tx_type, doc.tx_type) }} · [{{ doc.code }}] {{ doc.name }} {{ "{:,.2f}".format(doc.qty) }} {{ doc.unit }}</p>
+    {% else %}
+      <div class="alert alert-warning">아직 거래와 연결되지 않았습니다.</div>
+    {% endif %}
+    {% if can('CLERK') %}
+    <form class="row-actions" method="post" action="{{ url_for('documents.link', doc_id=doc.id) }}">
+      {{ csrf() }}
+      <label class="grow">거래 선택
+        <select name="tx_id">
+          <option value="">연결 해제</option>
+          {% for k, v in tx_opts %}<option value="{{ k }}" {{ 'selected' if k == doc.tx_id }}>{{ v }}</option>{% endfor %}
+        </select>
+      </label>
+      <button class="btn">연결 저장</button>
+    </form>
+    {% endif %}
+
+    {% if can('MANAGER') %}
+    <details>
+      <summary>증빙 삭제</summary>
+      <form class="row-actions" method="post" action="{{ url_for('documents.delete', doc_id=doc.id) }}">
+        {{ csrf() }}
+        <label class="check"><input type="checkbox" name="confirm" value="1" required> 삭제하면 파일도 함께 지워지며 되돌릴 수 없습니다.</label>
+        <button class="btn btn-danger">삭제</button>
+      </form>
+    </details>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<p class="muted small">회사에서 쓰는 엑셀 양식에 맞춥니다. <strong>내려받기</strong>는 회사 양식 파일(.xlsx)을 올리면 그 파일에 데이터를 채워 주고,
+  열 순서·머리글·숫자 서식을 바꿀 수 있습니다. <strong>올리기</strong>는 회사 엑셀의 열 이름을 이 시스템 항목에 연결합니다.
+  양식 안에 {% for p in placeholders %}<code>{{ p }}</code> {% endfor %}를 적어 두면 내려받을 때 채워집니다.</p>
+<div class="table-wrap"><table class="data">
+  <tr><th>양식</th><th>구분</th><th>설정</th><th>회사 양식 파일</th><th>마지막 변경</th></tr>
+  {% for f in forms %}
+  <tr>
+    <td><a href="{{ url_for('admin.form_edit', key=f.key) }}">{{ f.title }}</a></td>
+    <td>{{ f.kind }}</td>
+    <td>{{ '회사 양식' if f.custom else '기본' }}</td>
+    <td>{{ '있음' if f.template else ('-' if f.kind == '올리기' else '없음') }}</td>
+    <td>{{ f.updated or '-' }}{{ ' · ' ~ f.by if f.by }}</td>
+  </tr>
+  {% endfor %}
+</table></div>
+{% endblock %}

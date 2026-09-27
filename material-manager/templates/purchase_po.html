@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf, metric, table %}
+{% block content %}
+<p><a href="{{ url_for('purchase.index', tab='po') }}">← 발주 목록</a></p>
+<section class="card">
+  <h3>{{ po.po_no }} · {{ status }}</h3>
+  <p>공급처 {{ po.supplier }} · 창고 {{ po.wh_code }} · 구매요청 {{ po.pr_no or '-' }} (승인액 ₩{{ "{:,.0f}".format(po.pr_amount or 0) }}) ·
+     발주 {{ po.created_by }} ({{ po.created_at }}){% if po.approved_by %} · 발주 결재 {{ po.approved_by }}{% endif %}</p>
+  <p>SAP 구매오더: <strong>{{ po.sap_po_no or '없음' }}</strong>{% if sap_on and not po.sap_po_no %} — SAP 연동 중에는 입력해야 입고가 SAP로 전기됩니다.{% endif %}</p>
+</section>
+
+<h3>3자 대조 (발주 · 입고 · 세금계산서)</h3>
+<div class="metrics m4">
+  {{ metric("발주 금액", "₩ {:,.0f}".format(match.ordered)) }}
+  {{ metric("입고 금액 (발주 단가)", "₩ {:,.0f}".format(match.received)) }}
+  {{ metric("세금계산서 공급가액", "₩ {:,.0f}".format(match.invoiced), "{}건".format(match.invoice_count)) }}
+  {{ metric("차이 (계산서 − 입고)", "₩ {:+,.0f}".format(match.gap), "일치" if match.gap|abs < 1 else "대조 필요", "up" if match.gap|abs < 1 else "down") }}
+</div>
+<p class="muted small">세금계산서는 이 발주로 입고한 거래에 연결된 증빙(세금계산서·전자세금계산서·계산서)만 셉니다.</p>
+
+<h3>품목 · 입고 현황</h3>
+{{ table(grid) }}
+{% if po.status in ('OPEN', 'PARTIAL') %}<p class="muted small">품목 번호를 누르면 입고 화면으로 갑니다. 입고 화면의 '발주 품목'에서 이 발주를 고르세요.</p>{% endif %}
+
+{% if can('MANAGER') %}
+<div class="grid-2">
+  {% if po.status == 'PENDING_APPROVAL' %}
+  <form class="card row-actions" method="post" action="{{ url_for('purchase.po_approve', po_id=po.id) }}">
+    {{ csrf() }}<span>발주 금액이 요청 승인액을 넘었습니다.</span><button class="btn btn-primary">발주 승인</button>
+  </form>
+  {% endif %}
+  <form class="card row-actions" method="post" action="{{ url_for('purchase.po_sap', po_id=po.id) }}">
+    {{ csrf() }}<label class="grow">SAP 구매오더 번호<input name="sap_po_no" value="{{ po.sap_po_no }}"></label><button class="btn">저장</button>
+  </form>
+  {% if po.status in ('PENDING_APPROVAL', 'OPEN') %}
+  <form class="card row-actions" method="post" action="{{ url_for('purchase.po_cancel', po_id=po.id) }}">
+    {{ csrf() }}<label class="check"><input type="checkbox" required> 발주를 취소합니다 (입고 전만 가능)</label><button class="btn btn-danger">발주 취소</button>
+  </form>
+  {% endif %}
+</div>
+{% endif %}
+{% endblock %}

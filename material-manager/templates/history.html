@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf, metric, table, download, pager as pager_nav %}
+{% block content %}
+<form class="toolbar" method="get">
+  <label>시작일<input type="date" name="start" value="{{ start.isoformat() }}"></label>
+  <label>종료일<input type="date" name="end" value="{{ end.isoformat() }}"></label>
+  <fieldset>
+    <legend>구분</legend>
+    <div class="checks">
+      {% for code, label in TX_LABEL.items() %}
+        <label class="check"><input type="checkbox" name="type" value="{{ code }}" {{ 'checked' if code in types }}> {{ label }}</label>
+      {% endfor %}
+    </div>
+  </fieldset>
+  <label>창고 (비우면 권한 안 전체)
+    <select name="wh" multiple size="3">
+      {% for k, v in wh_opts.items() %}<option value="{{ k }}" {{ 'selected' if k in wh_sel }}>{{ v }}</option>{% endfor %}
+    </select>
+  </label>
+  <label class="grow">자재 (Ctrl/Shift로 여러 개 선택, 비우면 전체)
+    <select name="material" multiple size="3">
+      {% for k, v in opts.items() %}<option value="{{ k }}" {{ 'selected' if k in mats }}>{{ v }}</option>{% endfor %}
+    </select>
+  </label>
+  <button class="btn btn-primary">조회</button>
+</form>
+
+{% if df is not none %}
+  {% if df.empty %}
+    <div class="alert alert-info">조회된 거래가 없습니다.</div>
+  {% else %}
+    <div class="metrics m3">
+      {{ metric("입고 수량 합 (취소 반영)", "{:,.2f}".format(in_qty)) }}
+      {{ metric("출고 수량 합 (취소 반영)", "{:,.2f}".format(out_qty)) }}
+      {{ metric("거래 건수", "{:,} 건".format(total)) }}
+    </div>
+
+    {{ table(grid) }}
+    {{ pager_nav(pager) }}
+    <p class="muted small">증빙이 첨부된 거래는 ID에 링크가 있습니다. 누르면 그 거래의 세금계산서 등 증빙을 봅니다.</p>
+    {{ download(url_with(export='xlsx', page=none), '⬇️ 거래이력 엑셀 다운로드 (조건 전체)') }}
+
+    {% if can('MANAGER') and reversible %}
+    <details class="card">
+      <summary>거래 취소 (잘못 등록한 건 바로잡기)</summary>
+      <p class="muted small">원거래는 지우지 않고, 수량이 반대인 취소 거래를 오늘 일자로 기록합니다. 사유는 감사로그에 남습니다.
+        본인이 등록한 거래는 다른 관리자가 취소해야 합니다(직무 분리). 창고 간 이동은 두 행이 함께 취소됩니다. 이 페이지의 거래만 목록에 나옵니다.
+        {% if g.sap_on %}SAP에 이미 전기된 거래는 취소 전기({{ '102/202 등' }})가 전송됩니다.{% endif %}</p>
+      <form class="row-actions" method="post" action="{{ url_for('history.reverse') }}">
+        {{ csrf() }}
+        <input type="hidden" name="next" value="{{ request.full_path }}">
+        <label>취소할 거래
+          <select name="tx_id">
+            {% for r in reversible %}<option value="{{ r.id }}">#{{ r.id }} · {{ r.tx_date }} {{ r.tx_type }} {{ r.wh_code }} [{{ r.code }}] {{ r.name }} {{ "{:,.2f}".format(r.qty) }}{{ ' (본인 등록)' if r.created_by == g.user.name }}</option>{% endfor %}
+          </select>
+        </label>
+        <label class="grow">취소 사유 *<input name="reason" required placeholder="예: 수량 오입력(100→10)"></label>
+        <button class="btn btn-danger">취소 거래 등록</button>
+      </form>
+    </details>
+    {% endif %}
+  {% endif %}
+{% endif %}
+{% endblock %}

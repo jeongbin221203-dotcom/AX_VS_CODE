@@ -1,0 +1,1885 @@
+[
+ {
+  "id": "p7-001",
+  "level": 1,
+  "kind": "single",
+  "passages": [
+   {
+    "doc_type": "공지",
+    "title": "Notice to All Tenants",
+    "text": "NOTICE TO ALL TENANTS\n\nThe parking lot behind the Harmon Building will be closed on Saturday, May 10, from 7:00 A.M. to 5:00 P.M. Workers will repaint the lines and repair several lights. During this time, tenants may park at the City Garage on Fifth Street at no charge. Please show your building ID card to the garage attendant. The lot will reopen on Sunday morning. If you have any questions, please contact the building office at 555-0142. We are sorry for any inconvenience."
+   }
+  ],
+  "questions": [
+   {
+    "q": "Why will the parking lot be closed?",
+    "choices": [
+     "For painting and repair work",
+     "To add more parking spaces",
+     "For a building event",
+     "For a street festival"
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "두 번째 문장 'Workers will repaint the lines and repair several lights.'에서 주차선 도색과 조명 수리 때문에 폐쇄된다고 했다. 주차 공간 추가, 행사, 거리 축제는 언급되지 않았다."
+   },
+   {
+    "q": "What should tenants show at the City Garage?",
+    "choices": [
+     "A parking receipt",
+     "A driver's license",
+     "A building ID card",
+     "A credit card"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "'Please show your building ID card to the garage attendant.'에서 건물 출입증(ID 카드)을 보여 주라고 했다. 주차 영수증, 운전면허증, 신용카드는 언급되지 않았고 주차는 무료(at no charge)이다."
+   }
+  ],
+  "translation": "입주자 여러분께 알립니다\n\n하먼 빌딩 뒤편 주차장이 5월 10일 토요일 오전 7시부터 오후 5시까지 폐쇄됩니다. 작업자들이 주차선을 다시 칠하고 조명 몇 개를 수리할 예정입니다. 이 시간 동안 입주자분들은 5번가에 있는 시립 주차장에 무료로 주차하실 수 있습니다. 주차장 관리 직원에게 건물 출입증을 보여 주십시오. 주차장은 일요일 아침에 다시 문을 엽니다. 문의 사항이 있으시면 건물 관리 사무소(555-0142)로 연락해 주십시오. 불편을 드려 죄송합니다."
+ },
+ {
+  "id": "p7-002",
+  "level": 1,
+  "kind": "single",
+  "passages": [
+   {
+    "doc_type": "문자 메시지",
+    "title": "Text-message chain",
+    "text": "Kim Dahee (10:02 A.M.): Hi, Paul. Are you still at the printing shop?\nPaul Novak (10:04 A.M.): Yes. The brochures are almost ready.\nKim Dahee (10:05 A.M.): Great. Could you also pick up 200 business cards for Mr. Lee? He ordered them last week.\nPaul Novak (10:06 A.M.): No problem.\nKim Dahee (10:07 A.M.): Thanks. The client meeting starts at 1:00, so please be back by noon. We need time to set up the room.\nPaul Novak (10:08 A.M.): OK. I'll be there by 11:30."
+   }
+  ],
+  "questions": [
+   {
+    "q": "At 10:06 A.M., what does Mr. Novak mean when he writes, “No problem”?",
+    "choices": [
+     "The printing shop is not busy.",
+     "He does not need a ride.",
+     "The brochures have no errors.",
+     "He will pick up the business cards."
+    ],
+    "answer": 3,
+    "type": "의도 파악",
+    "explanation": "바로 앞에서 김다희 씨가 'Could you also pick up 200 business cards for Mr. Lee?'라고 부탁했으므로 'No problem'은 명함을 찾아오겠다는 수락의 뜻이다. 인쇄소가 한가하다거나 브로슈어에 오류가 없다는 뜻이 아니다."
+   },
+   {
+    "q": "By what time will Mr. Novak most likely return?",
+    "choices": [
+     "10:30 A.M.",
+     "11:30 A.M.",
+     "1:00 P.M.",
+     "2:00 P.M."
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "마지막 메시지 'I'll be there by 11:30.'에서 11시 30분까지 돌아오겠다고 했다. 1시는 고객 회의 시작 시각이고, 김다희 씨는 정오까지 오라고 요청했다."
+   }
+  ],
+  "translation": "김다희 (오전 10:02): 안녕하세요, 폴. 아직 인쇄소에 계세요?\n폴 노박 (오전 10:04): 네. 브로슈어가 거의 다 됐어요.\n김다희 (오전 10:05): 잘됐네요. 이 선생님 명함 200장도 찾아와 주실 수 있어요? 지난주에 주문하셨거든요.\n폴 노박 (오전 10:06): 문제없어요.\n김다희 (오전 10:07): 고마워요. 고객 회의가 1시에 시작하니 정오까지는 돌아와 주세요. 회의실을 준비할 시간이 필요해요.\n폴 노박 (오전 10:08): 알겠어요. 11시 30분까지 갈게요."
+ },
+ {
+  "id": "p7-003",
+  "level": 1,
+  "kind": "single",
+  "passages": [
+   {
+    "doc_type": "광고",
+    "title": "Sunrise Café",
+    "text": "Sunrise Café — Now Open on Maple Avenue!\n\nCome and try our fresh bread, sandwiches, and coffee. We are open every day from 6:30 A.M. to 8:00 P.M. For our first month, all customers will receive a free cookie with any drink. We also offer catering for office meetings. Catering orders must be placed at least two days in advance. Call 555-0198 or visit www.sunrisecafe.com to see our full menu. Seating is available both indoors and on our outdoor patio. Free Wi-Fi is available for all guests."
+   }
+  ],
+  "questions": [
+   {
+    "q": "What is being advertised?",
+    "choices": [
+     "A cooking class",
+     "A grocery store",
+     "A new café",
+     "A delivery service"
+    ],
+    "answer": 2,
+    "type": "주제·목적",
+    "explanation": "제목 'Sunrise Café — Now Open on Maple Avenue!'와 빵·샌드위치·커피를 소개하는 내용으로 보아 새로 문을 연 카페 광고이다. 요리 수업이나 식료품점, 배달 서비스 광고가 아니다."
+   },
+   {
+    "q": "What will customers receive during the first month?",
+    "choices": [
+     "A discount on catering",
+     "A free sandwich",
+     "A free cup of coffee",
+     "A free cookie"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "'For our first month, all customers will receive a free cookie with any drink.'에서 첫 달 동안 음료를 사면 쿠키를 무료로 준다고 했다. 커피는 사야 하는 음료이지 무료 품목이 아니다."
+   },
+   {
+    "q": "What is indicated about catering orders?",
+    "choices": [
+     "They must be made two days ahead.",
+     "They are delivered for free.",
+     "They are available only on weekends.",
+     "They must be paid for online."
+    ],
+    "answer": 0,
+    "type": "사실 확인(NOT/TRUE)",
+    "explanation": "'Catering orders must be placed at least two days in advance.'에서 최소 이틀 전에 주문해야 한다고 했다. 무료 배달, 주말 한정, 온라인 결제는 언급되지 않았다."
+   }
+  ],
+  "translation": "선라이즈 카페 — 메이플 가에 새로 문을 열었습니다!\n\n오셔서 갓 구운 빵과 샌드위치, 커피를 맛보세요. 매일 오전 6시 30분부터 오후 8시까지 영업합니다. 개업 첫 달 동안 음료를 주문하시는 모든 손님께 쿠키를 무료로 드립니다. 사무실 회의용 케이터링도 제공합니다. 케이터링 주문은 최소 이틀 전에 해 주셔야 합니다. 전체 메뉴는 555-0198로 전화하시거나 www.sunrisecafe.com을 방문해 확인하세요. 실내와 야외 테라스 모두에 좌석이 마련되어 있습니다. 모든 손님께 무료 와이파이를 제공합니다."
+ },
+ {
+  "id": "p7-004",
+  "level": 1,
+  "kind": "single",
+  "passages": [
+   {
+    "doc_type": "이메일",
+    "title": "From: Laura Chen / To: Marketing Team / Subject: Tomorrow's meeting",
+    "text": "Hi everyone,\n\nTomorrow's team meeting will not be in Room 204. That room is being used for job interviews all day. Instead, we will meet in Room 310 on the third floor. The time has not changed. We will start at 9:30 A.M. as usual. Please bring your sales reports from last month so that we can review them together. Coffee and snacks will be provided. If you cannot attend, please let me know by the end of today.\n\nThank you,\nLaura"
+   }
+  ],
+  "questions": [
+   {
+    "q": "Why was the e-mail written?",
+    "choices": [
+     "To cancel a meeting",
+     "To invite staff to an interview",
+     "To give a new meeting location",
+     "To ask for snack suggestions"
+    ],
+    "answer": 2,
+    "type": "주제·목적",
+    "explanation": "'Tomorrow's team meeting will not be in Room 204... we will meet in Room 310'에서 회의 장소 변경을 알리려는 이메일임을 알 수 있다. 회의는 취소되지 않았고 시간도 그대로이다."
+   },
+   {
+    "q": "What are team members asked to bring?",
+    "choices": [
+     "Sales reports",
+     "Coffee",
+     "Their ID cards",
+     "Job applications"
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "'Please bring your sales reports from last month'에서 지난달 영업 보고서를 가져오라고 했다. 커피와 간식은 제공된다고 했으므로 가져올 필요가 없다."
+   }
+  ],
+  "translation": "보낸 사람: 로라 첸 / 받는 사람: 마케팅팀 / 제목: 내일 회의\n\n여러분 안녕하세요.\n\n내일 팀 회의는 204호에서 하지 않습니다. 그 방은 하루 종일 채용 면접에 사용됩니다. 대신 3층 310호에서 모이겠습니다. 시간은 바뀌지 않았습니다. 평소처럼 오전 9시 30분에 시작합니다. 함께 검토할 수 있도록 지난달 영업 보고서를 가져와 주세요. 커피와 간식이 제공됩니다. 참석하지 못하시면 오늘 중으로 알려 주세요.\n\n감사합니다.\n로라"
+ },
+ {
+  "id": "p7-005",
+  "level": 1,
+  "kind": "single",
+  "passages": [
+   {
+    "doc_type": "일정표",
+    "title": "Riverside Community Center — Spring Class Schedule",
+    "text": "Riverside Community Center\nSpring Class Schedule\n\nClass | Day | Time | Fee\nBeginner Yoga | Monday | 7:00 P.M. | $40\nWatercolor Painting | Wednesday | 6:30 P.M. | $55\nBasic Spanish | Thursday | 7:30 P.M. | $50\nHome Cooking | Saturday | 10:00 A.M. | $65\n\nAll classes run for six weeks and begin the week of April 7. You can register at the front desk or online. Members of the center receive 10 percent off all fees. The fee for the cooking class includes all ingredients."
+   }
+  ],
+  "questions": [
+   {
+    "q": "Which class meets on the weekend?",
+    "choices": [
+     "Beginner Yoga",
+     "Watercolor Painting",
+     "Basic Spanish",
+     "Home Cooking"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "표에서 Home Cooking만 Saturday(토요일)에 열린다. 나머지 수업은 월·수·목요일 저녁에 열린다."
+   },
+   {
+    "q": "How long do the classes last?",
+    "choices": [
+     "Four weeks",
+     "Six weeks",
+     "Eight weeks",
+     "Ten weeks"
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "표 아래 'All classes run for six weeks'에서 모든 수업이 6주 동안 진행된다고 했다."
+   },
+   {
+    "q": "What is true about the Home Cooking class?",
+    "choices": [
+     "It is the least expensive class.",
+     "It meets in the evening.",
+     "Its fee includes ingredients.",
+     "It starts in May."
+    ],
+    "answer": 2,
+    "type": "사실 확인(NOT/TRUE)",
+    "explanation": "마지막 문장 'The fee for the cooking class includes all ingredients.'에서 재료비가 포함된다고 했다. 요리 수업은 $65로 가장 비싸고, 오전 10시에 열리며, 4월 7일 주에 시작한다."
+   }
+  ],
+  "translation": "리버사이드 주민센터\n봄 강좌 일정표\n\n강좌 | 요일 | 시간 | 수강료\n초급 요가 | 월요일 | 오후 7:00 | 40달러\n수채화 | 수요일 | 오후 6:30 | 55달러\n기초 스페인어 | 목요일 | 오후 7:30 | 50달러\n가정 요리 | 토요일 | 오전 10:00 | 65달러\n\n모든 강좌는 6주 동안 진행되며 4월 7일이 있는 주에 시작합니다. 안내 데스크나 온라인으로 등록할 수 있습니다. 센터 회원은 모든 수강료를 10퍼센트 할인받습니다. 요리 강좌 수강료에는 모든 재료비가 포함됩니다."
+ },
+ {
+  "id": "p7-006",
+  "level": 1,
+  "kind": "double",
+  "passages": [
+   {
+    "doc_type": "구인 광고",
+    "title": "Part-Time Office Assistant Wanted",
+    "text": "Part-Time Office Assistant Wanted\n\nGreenleaf Travel is looking for a part-time office assistant. The assistant will answer phone calls, file documents, and help customers book tours. Working hours are Monday to Friday, 1:00 P.M. to 5:00 P.M. Applicants must have basic computer skills. Training will be provided for all new staff. Experience in travel is helpful but not required. The successful applicant will begin work on July 1. To apply, send a résumé to Ms. Rita Gomez at rgomez@greenleaftravel.com by June 15."
+   },
+   {
+    "doc_type": "이메일",
+    "title": "From: Tom Baker / To: Rita Gomez / Date: June 12 / Subject: Office assistant position",
+    "text": "Dear Ms. Gomez,\n\nI am writing to apply for the part-time office assistant position at Greenleaf Travel. I am a university student, and my classes end at noon every weekday, so your working hours are perfect for me. Last summer, I worked at a hotel front desk, where I answered phone calls and helped guests with their plans. I am also good with computers. I would be happy to start on July 1 as stated in your advertisement. My résumé is attached. I hope to hear from you soon.\n\nSincerely,\nTom Baker"
+   }
+  ],
+  "questions": [
+   {
+    "q": "What is one duty of the advertised job?",
+    "choices": [
+     "Leading tours",
+     "Driving customers to the airport",
+     "Writing travel articles",
+     "Answering phone calls"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "광고의 'The assistant will answer phone calls, file documents, and help customers book tours.'에서 전화 응대가 업무 중 하나이다. 투어 인솔이 아니라 투어 '예약'을 돕는 일이다."
+   },
+   {
+    "q": "What is stated about travel experience?",
+    "choices": [
+     "It is required.",
+     "It is helpful but not necessary.",
+     "It must be at least one year.",
+     "It is needed only for full-time work."
+    ],
+    "answer": 1,
+    "type": "사실 확인(NOT/TRUE)",
+    "explanation": "광고의 'Experience in travel is helpful but not required.'에서 여행업 경험은 도움이 되지만 필수는 아니라고 했다."
+   },
+   {
+    "q": "Why did Mr. Baker write the e-mail?",
+    "choices": [
+     "To apply for a job",
+     "To book a tour",
+     "To ask about hotel rooms",
+     "To change his class schedule"
+    ],
+    "answer": 0,
+    "type": "주제·목적",
+    "explanation": "이메일 첫 문장 'I am writing to apply for the part-time office assistant position'에서 구직 지원이 목적임을 알 수 있다. 호텔은 과거 근무처로만 언급되었다."
+   },
+   {
+    "q": "Why are the working hours good for Mr. Baker?",
+    "choices": [
+     "He works at a hotel in the morning.",
+     "His classes finish before the job starts.",
+     "He lives near the office.",
+     "He prefers to work on weekends."
+    ],
+    "answer": 1,
+    "type": "연계 문제",
+    "explanation": "광고에서 근무 시간은 오후 1시~5시이고, 이메일에서 베이커 씨는 'my classes end at noon every weekday'라고 했다. 두 지문을 합치면 수업이 끝난 뒤 일을 시작할 수 있어 시간이 맞는다. 호텔 근무는 지난여름 일이다."
+   },
+   {
+    "q": "What did Mr. Baker send with his e-mail?",
+    "choices": [
+     "His résumé",
+     "A reference letter",
+     "A photo",
+     "His class schedule"
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "이메일의 'My résumé is attached.'에서 이력서를 첨부했음을 알 수 있다. 광고에서도 지원하려면 이력서를 보내라고 했다."
+   }
+  ],
+  "translation": "[구인 광고]\n시간제 사무 보조 구함\n\n그린리프 여행사에서 시간제 사무 보조를 찾습니다. 사무 보조는 전화를 받고, 서류를 정리하고, 고객의 투어 예약을 돕게 됩니다. 근무 시간은 월요일부터 금요일, 오후 1시부터 5시까지입니다. 지원자는 기본적인 컴퓨터 능력이 있어야 합니다. 모든 신입 직원에게 교육이 제공됩니다. 여행업 경험은 도움이 되지만 필수는 아닙니다. 합격자는 7월 1일부터 근무를 시작합니다. 지원하시려면 6월 15일까지 리타 고메즈 씨(rgomez@greenleaftravel.com)에게 이력서를 보내 주십시오.\n\n[이메일]\n보낸 사람: 톰 베이커 / 받는 사람: 리타 고메즈 / 날짜: 6월 12일 / 제목: 사무 보조직\n\n고메즈 님께,\n\n그린리프 여행사의 시간제 사무 보조직에 지원하고자 이 글을 씁니다. 저는 대학생이며 평일에는 매일 정오에 수업이 끝나기 때문에 귀사의 근무 시간이 제게 딱 맞습니다. 지난여름에는 호텔 프런트에서 일하며 전화를 받고 투숙객의 일정을 도왔습니다. 컴퓨터도 잘 다룹니다. 광고에 나온 대로 7월 1일부터 기꺼이 근무를 시작하겠습니다. 이력서를 첨부합니다. 곧 연락 주시기를 바랍니다.\n\n톰 베이커 드림"
+ },
+ {
+  "id": "p7-007",
+  "level": 2,
+  "kind": "single",
+  "passages": [
+   {
+    "doc_type": "회람",
+    "title": "To: All Employees / From: Grace Park, Finance Department / Date: March 3 / Subject: New expense reports",
+    "text": "MEMO\n\nStarting April 1, all employees must submit travel and meal expenses through our new online system, ExpensePro. Paper forms will no longer be accepted. The new system allows you to upload photos of your receipts directly from your phone, so you will not need to keep the original copies.\n\nTo help everyone get used to the system, the Finance Department will hold two training sessions on March 20 in Conference Room B. The morning session begins at 10:00 A.M., and the afternoon session begins at 3:00 P.M. Each session will last about one hour. Please sign up for one session by March 15 by e-mailing me at gpark@lintonco.com.\n\nIf you have expenses from March, please submit them on paper forms by March 31."
+   }
+  ],
+  "questions": [
+   {
+    "q": "What is the purpose of the memo?",
+    "choices": [
+     "To introduce a new way of reporting expenses",
+     "To announce a change in travel destinations",
+     "To request receipts for February",
+     "To explain a new phone plan"
+    ],
+    "answer": 0,
+    "type": "주제·목적",
+    "explanation": "첫 문단에서 4월 1일부터 새 온라인 시스템 ExpensePro로 경비를 제출해야 한다고 알리고 있으므로 새로운 경비 보고 방식을 소개하는 회람이다. 휴대폰은 영수증 사진을 올리는 도구로만 언급되었다."
+   },
+   {
+    "q": "What are employees asked to do by March 15?",
+    "choices": [
+     "Submit paper forms",
+     "Send original receipts",
+     "Register for a training session",
+     "Visit Conference Room B"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "두 번째 문단 'Please sign up for one session by March 15'에서 3월 15일까지 교육 한 회차에 신청하라고 했다. 종이 양식 제출 기한은 3월 31일이고, 회의실 B 방문은 교육 당일(3월 20일)의 일이다."
+   },
+   {
+    "q": "The word “hold” in paragraph 2, line 1, is closest in meaning to",
+    "choices": [
+     "grab",
+     "support",
+     "carry",
+     "conduct"
+    ],
+    "answer": 3,
+    "type": "동의어",
+    "explanation": "'will hold two training sessions'는 교육을 '열다, 실시하다'라는 뜻이므로 conduct가 가장 가깝다. grab(붙잡다), support(지탱하다), carry(나르다)는 물건을 잡거나 드는 의미의 hold에 해당한다."
+   }
+  ],
+  "translation": "회람\n받는 사람: 전 직원 / 보낸 사람: 재무부 그레이스 박 / 날짜: 3월 3일 / 제목: 새 경비 보고서\n\n4월 1일부터 모든 직원은 출장비와 식비를 새 온라인 시스템인 ExpensePro로 제출해야 합니다. 종이 양식은 더 이상 받지 않습니다. 새 시스템에서는 휴대폰으로 영수증 사진을 바로 올릴 수 있으므로 원본을 보관하지 않아도 됩니다.\n\n모두가 시스템에 익숙해질 수 있도록 재무부에서 3월 20일 회의실 B에서 교육을 두 차례 실시합니다. 오전 교육은 오전 10시, 오후 교육은 오후 3시에 시작합니다. 각 교육은 약 한 시간 동안 진행됩니다. 3월 15일까지 gpark@lintonco.com으로 제게 이메일을 보내 한 회차에 신청해 주십시오.\n\n3월에 발생한 경비는 3월 31일까지 종이 양식으로 제출해 주십시오."
+ },
+ {
+  "id": "p7-008",
+  "level": 2,
+  "kind": "single",
+  "passages": [
+   {
+    "doc_type": "온라인 채팅",
+    "title": "Online chat discussion",
+    "text": "Maria Lopez [2:14 P.M.]: Hi, Ken. The projector in Meeting Room A isn't turning on. My client presentation starts at 3:00.\nKen Ito [2:15 P.M.]: Did you check that it's plugged in?\nMaria Lopez [2:16 P.M.]: Yes, twice. The power light doesn't come on at all.\nKen Ito [2:17 P.M.]: Then the lamp might be broken. We ordered new ones, but they haven't arrived yet.\nMaria Lopez [2:18 P.M.]: What should I do?\nKen Ito [2:19 P.M.]: Room C has a large-screen TV. I can connect your laptop to it.\nMaria Lopez [2:20 P.M.]: That would work. Is Room C free at 3:00?\nKen Ito [2:21 P.M.]: I'll check the booking system and get back to you in five minutes.\nMaria Lopez [2:22 P.M.]: Thanks. I'll start gathering my materials."
+   }
+  ],
+  "questions": [
+   {
+    "q": "What problem does Ms. Lopez have?",
+    "choices": [
+     "A projector is not working.",
+     "Her laptop battery is low.",
+     "Her client is late.",
+     "A meeting room is locked."
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "첫 메시지 'The projector in Meeting Room A isn't turning on.'에서 프로젝터가 켜지지 않는 문제가 있음을 알 수 있다. 노트북 배터리나 고객 지각, 잠긴 회의실은 언급되지 않았다."
+   },
+   {
+    "q": "At 2:20 P.M., what does Ms. Lopez mean when she writes, “That would work”?",
+    "choices": [
+     "She thinks the projector will be fixed soon.",
+     "She will work in Room C all afternoon.",
+     "She wants to order a new lamp.",
+     "She accepts Mr. Ito's suggestion."
+    ],
+    "answer": 3,
+    "type": "의도 파악",
+    "explanation": "바로 앞에서 이토 씨가 C실의 대형 TV에 노트북을 연결해 주겠다고 제안했고, 로페즈 씨는 'That would work'라며 그 방법이면 되겠다고 받아들였다. 곧바로 C실이 3시에 비어 있는지 묻는 것도 제안을 수락했다는 근거이다."
+   },
+   {
+    "q": "What will Mr. Ito most likely do next?",
+    "choices": [
+     "Replace the lamp",
+     "Call Ms. Lopez's client",
+     "Check whether a room is available",
+     "Bring a new laptop"
+    ],
+    "answer": 2,
+    "type": "추론",
+    "explanation": "2시 21분에 이토 씨가 'I'll check the booking system and get back to you'라고 했으므로 C실 예약 가능 여부를 확인할 것이다. 새 램프는 아직 도착하지 않아 교체할 수 없다."
+   }
+  ],
+  "translation": "마리아 로페즈 [오후 2:14]: 안녕하세요, 켄. A 회의실 프로젝터가 켜지지 않아요. 고객 발표가 3시에 시작하는데요.\n켄 이토 [오후 2:15]: 전원이 꽂혀 있는지 확인해 보셨어요?\n마리아 로페즈 [오후 2:16]: 네, 두 번이나요. 전원 표시등이 아예 안 들어와요.\n켄 이토 [오후 2:17]: 그럼 램프가 고장 났을 수도 있어요. 새 램프를 주문했는데 아직 안 왔어요.\n마리아 로페즈 [오후 2:18]: 어떻게 하면 될까요?\n켄 이토 [오후 2:19]: C실에 대형 TV가 있어요. 거기에 노트북을 연결해 드릴 수 있어요.\n마리아 로페즈 [오후 2:20]: 그거면 되겠네요. C실이 3시에 비어 있나요?\n켄 이토 [오후 2:21]: 예약 시스템을 확인하고 5분 안에 다시 알려 드릴게요.\n마리아 로페즈 [오후 2:22]: 고마워요. 자료를 챙기기 시작할게요."
+ },
+ {
+  "id": "p7-009",
+  "level": 2,
+  "kind": "single",
+  "passages": [
+   {
+    "doc_type": "기사",
+    "title": "Bright Market Expands to Westfield",
+    "text": "WESTFIELD (May 4) — Bright Market, a grocery chain known for its locally grown produce, will open its fifth store in Westfield next month. [1] The new store will be located on Carver Road, in the building that once housed Delmont Furniture.\n\nThe Westfield location will be larger than the chain's other stores. [2] In addition to fresh fruit and vegetables, it will include a bakery and a small café where shoppers can enjoy coffee and sandwiches. [3]\n\nBright Market plans to hire about 60 workers for the new store. Job fairs will be held on May 18 and 19 at the Westfield Public Library. [4] A grand opening celebration with free samples and live music is scheduled for June 14."
+   }
+  ],
+  "questions": [
+   {
+    "q": "What is the article mainly about?",
+    "choices": [
+     "The closing of a furniture store",
+     "The opening of a new grocery store",
+     "A job fair at a university",
+     "A local music festival"
+    ],
+    "answer": 1,
+    "type": "주제·목적",
+    "explanation": "첫 문장에서 식료품 체인 Bright Market이 웨스트필드에 다섯 번째 매장을 연다고 했고 기사 전체가 새 매장 이야기이다. 가구점은 건물의 예전 입주자로만 언급되었다."
+   },
+   {
+    "q": "What is indicated about the Westfield store?",
+    "choices": [
+     "It will be the chain's first store.",
+     "It will open on May 18.",
+     "It will be bigger than the chain's other stores.",
+     "It will sell furniture."
+    ],
+    "answer": 2,
+    "type": "사실 확인(NOT/TRUE)",
+    "explanation": "두 번째 문단 'The Westfield location will be larger than the chain's other stores.'와 일치한다. 이 매장은 다섯 번째 매장이고, 5월 18일은 채용 박람회 날짜이며, 개점 행사는 6월 14일이다."
+   },
+   {
+    "q": "In which of the positions marked [1], [2], [3], and [4] does the following sentence best belong? “Interested applicants should bring a copy of their résumé.”",
+    "choices": [
+     "[1]",
+     "[2]",
+     "[3]",
+     "[4]"
+    ],
+    "answer": 3,
+    "type": "문장 삽입",
+    "explanation": "주어진 문장은 지원자(applicants)에게 이력서를 가져오라는 내용이므로 채용 박람회를 소개한 'Job fairs will be held on May 18 and 19...' 바로 뒤인 [4]가 알맞다. 다른 위치는 채용과 관련 없는 매장 소개 부분이다."
+   }
+  ],
+  "translation": "브라이트 마켓, 웨스트필드로 확장\n\n웨스트필드 (5월 4일) — 지역에서 재배한 농산물로 알려진 식료품 체인 브라이트 마켓이 다음 달 웨스트필드에 다섯 번째 매장을 연다. [1] 새 매장은 카버 로드에 있는, 예전에 델몬트 가구가 입주해 있던 건물에 들어선다.\n\n웨스트필드 매장은 체인의 다른 매장보다 더 크다. [2] 신선한 과일과 채소 외에도 빵집과, 쇼핑객이 커피와 샌드위치를 즐길 수 있는 작은 카페가 들어선다. [3]\n\n브라이트 마켓은 새 매장을 위해 약 60명을 채용할 계획이다. 채용 박람회는 5월 18일과 19일 웨스트필드 공공도서관에서 열린다. [4] 무료 시식과 라이브 음악이 함께하는 개점 기념 행사는 6월 14일로 예정되어 있다."
+ },
+ {
+  "id": "p7-010",
+  "level": 2,
+  "kind": "single",
+  "passages": [
+   {
+    "doc_type": "후기",
+    "title": "Customer Review — Harbor View Hotel ★★★★☆ / Posted by: J. Morales",
+    "text": "I stayed at the Harbor View Hotel for three nights last week while attending a conference downtown. The location was excellent. The convention center was only a ten-minute walk away, and there were many restaurants nearby.\n\nMy room was clean and quiet, and the bed was very comfortable. The staff at the front desk were friendly and helped me print documents for my presentation. The breakfast buffet had a good variety of hot and cold dishes.\n\nMy only complaint is about the Internet. The Wi-Fi in my room was quite slow, so I often had to work in the lobby, where the connection was better. I mentioned this to the manager, and she said the hotel is planning to upgrade its network soon. I would definitely stay here again on my next business trip."
+   }
+  ],
+  "questions": [
+   {
+    "q": "Why did the reviewer visit the city?",
+    "choices": [
+     "To attend a conference",
+     "To take a vacation",
+     "To visit family members",
+     "To look for an apartment"
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "첫 문장 'while attending a conference downtown'에서 시내 콘퍼런스 참석차 머물렀음을 알 수 있다. 마지막 문장의 'business trip'도 업무 목적임을 뒷받침한다."
+   },
+   {
+    "q": "What did the front desk staff do for the reviewer?",
+    "choices": [
+     "They printed some documents.",
+     "They recommended a restaurant.",
+     "They changed his room.",
+     "They called a taxi."
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "두 번째 문단 'helped me print documents for my presentation'에서 발표 자료 인쇄를 도와주었다고 했다. 식당은 근처에 많다고만 했을 뿐 추천받았다는 말은 없다."
+   },
+   {
+    "q": "What is NOT mentioned as a positive feature of the hotel?",
+    "choices": [
+     "Its location",
+     "Its breakfast",
+     "Its Internet service",
+     "Its beds"
+    ],
+    "answer": 2,
+    "type": "사실 확인(NOT/TRUE)",
+    "explanation": "위치(The location was excellent), 조식(good variety), 침대(very comfortable)는 모두 칭찬했지만, 인터넷은 'My only complaint is about the Internet'이라며 유일한 불만으로 꼽았다."
+   }
+  ],
+  "translation": "고객 후기 — 하버 뷰 호텔 ★★★★☆ / 작성자: J. 모랄레스\n\n지난주 시내에서 열린 콘퍼런스에 참석하느라 하버 뷰 호텔에서 3박을 했습니다. 위치가 아주 좋았습니다. 컨벤션 센터까지 걸어서 10분밖에 안 걸렸고 근처에 식당도 많았습니다.\n\n객실은 깨끗하고 조용했으며 침대가 매우 편안했습니다. 프런트 직원들은 친절했고 제 발표 자료 인쇄를 도와주었습니다. 조식 뷔페에는 따뜻한 요리와 찬 요리가 다양하게 있었습니다.\n\n유일한 불만은 인터넷입니다. 객실 와이파이가 꽤 느려서 연결이 더 잘되는 로비에서 자주 일해야 했습니다. 지배인에게 이 점을 이야기했더니 호텔이 곧 네트워크를 개선할 계획이라고 했습니다. 다음 출장 때도 꼭 이곳에 묵을 것입니다."
+ },
+ {
+  "id": "p7-011",
+  "level": 2,
+  "kind": "double",
+  "passages": [
+   {
+    "doc_type": "공지",
+    "title": "Annual Staff Picnic",
+    "text": "Annual Staff Picnic\n\nDate: Saturday, August 23\nTime: 11:00 A.M. – 4:00 P.M.\nPlace: Lakeside Park, Area 3\n\nAll employees and their families are invited to this year's staff picnic. Lunch will be served at noon, and games for children will begin at 1:30 P.M. The company will provide food and drinks, but employees are welcome to bring a dessert to share. A bus will leave from the main office parking lot at 10:15 A.M. If you plan to take the bus, please tell Sandra Cole in Human Resources by August 15. In case of rain, the picnic will be moved to Saturday, August 30."
+   },
+   {
+    "doc_type": "이메일",
+    "title": "From: Brian Walsh / To: Sandra Cole / Date: August 12 / Subject: Staff picnic",
+    "text": "Hi Sandra,\n\nMy wife and I will be attending the picnic with our two children. We would like to take the company bus, so please save four seats for us. My wife is planning to bake a chocolate cake for everyone.\n\nAlso, I have a question. My daughter has a soccer game on the morning of August 30. If the picnic is postponed, we will probably arrive late. Would it still be possible for us to join in the afternoon?\n\nThanks,\nBrian Walsh\nAccounting Department"
+   }
+  ],
+  "questions": [
+   {
+    "q": "What is the notice mainly about?",
+    "choices": [
+     "A new bus route",
+     "A park renovation",
+     "A company event",
+     "A sports competition"
+    ],
+    "answer": 2,
+    "type": "주제·목적",
+    "explanation": "공지는 직원과 가족을 초대하는 연례 직원 야유회(Annual Staff Picnic)의 날짜·장소·버스 안내를 담고 있으므로 회사 행사에 관한 것이다. 버스는 행사 교통편으로만 언급되었다."
+   },
+   {
+    "q": "What are employees encouraged to bring?",
+    "choices": [
+     "Games for children",
+     "A dessert",
+     "Drinks",
+     "Folding chairs"
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "공지의 'employees are welcome to bring a dessert to share'에서 나눠 먹을 디저트를 가져와도 좋다고 했다. 음식과 음료는 회사가 제공한다."
+   },
+   {
+    "q": "What is one purpose of Mr. Walsh's e-mail?",
+    "choices": [
+     "To volunteer to organize games",
+     "To ask about the lunch menu",
+     "To announce a department change",
+     "To reserve bus seats"
+    ],
+    "answer": 3,
+    "type": "주제·목적",
+    "explanation": "이메일의 'We would like to take the company bus, so please save four seats for us.'에서 버스 좌석 네 개를 예약하려는 목적이 드러난다. 또 다른 목적은 연기될 경우 늦게 합류해도 되는지 묻는 것이다."
+   },
+   {
+    "q": "Under what condition might Mr. Walsh's family arrive late?",
+    "choices": [
+     "If the bus leaves early",
+     "If it rains on August 23",
+     "If lunch is served at noon",
+     "If his daughter's game is canceled"
+    ],
+    "answer": 1,
+    "type": "연계 문제",
+    "explanation": "공지에 따르면 비가 오면 야유회가 8월 30일로 옮겨지고, 이메일에서 월시 씨는 딸의 축구 경기가 8월 30일 오전에 있어 연기되면 늦을 것이라고 했다. 따라서 8월 23일에 비가 오는 경우 늦게 도착할 수 있다."
+   },
+   {
+    "q": "At what time should Mr. Walsh's family be at the main office parking lot on August 23?",
+    "choices": [
+     "By 10:15 A.M.",
+     "By 11:00 A.M.",
+     "By 12:00 P.M.",
+     "By 1:30 P.M."
+    ],
+    "answer": 0,
+    "type": "연계 문제",
+    "explanation": "이메일에서 월시 씨 가족은 회사 버스를 타겠다고 했고, 공지에 버스가 본사 주차장에서 오전 10시 15분에 출발한다고 나와 있다. 11시는 야유회 시작, 정오는 점심, 1시 30분은 어린이 게임 시작 시각이다."
+   }
+  ],
+  "translation": "[공지]\n연례 직원 야유회\n\n날짜: 8월 23일 토요일\n시간: 오전 11:00 – 오후 4:00\n장소: 레이크사이드 공원 3구역\n\n모든 직원과 가족을 올해 직원 야유회에 초대합니다. 점심은 정오에 제공되고, 어린이 게임은 오후 1시 30분에 시작합니다. 음식과 음료는 회사가 제공하지만, 함께 나눠 먹을 디저트를 가져오셔도 좋습니다. 버스가 오전 10시 15분에 본사 주차장에서 출발합니다. 버스를 이용하실 분은 8월 15일까지 인사부 샌드라 콜 씨에게 알려 주십시오. 비가 오면 야유회는 8월 30일 토요일로 옮겨집니다.\n\n[이메일]\n보낸 사람: 브라이언 월시 / 받는 사람: 샌드라 콜 / 날짜: 8월 12일 / 제목: 직원 야유회\n\n안녕하세요, 샌드라.\n\n아내와 저는 두 아이와 함께 야유회에 참석합니다. 회사 버스를 타고 싶으니 네 자리를 맡아 주세요. 아내가 모두를 위해 초콜릿 케이크를 구울 계획입니다.\n\n그리고 질문이 하나 있습니다. 딸아이가 8월 30일 오전에 축구 경기가 있어요. 야유회가 연기되면 저희는 아마 늦게 도착할 겁니다. 그래도 오후에 합류할 수 있을까요?\n\n감사합니다.\n브라이언 월시\n회계부"
+ },
+ {
+  "id": "p7-012",
+  "level": 2,
+  "kind": "triple",
+  "passages": [
+   {
+    "doc_type": "웹페이지",
+    "title": "www.officeplus.com/chairs",
+    "text": "Office Plus — Ergonomic Chairs\n\nModel | Features | Price\nBasic C100 | Adjustable height | $120\nComfort C200 | Adjustable height, armrests | $180\nPro C300 | Adjustable height, armrests, back support | $250\nExecutive C400 | All Pro features, leather seat | $340\n\nFree delivery on all orders over $500. All chairs come with a two-year warranty. Business customers ordering ten or more chairs at once receive a 15 percent discount. Most orders are delivered within one week. For large orders, please contact our sales team."
+   },
+   {
+    "doc_type": "주문 확인서",
+    "title": "Order Confirmation — Order number 58213",
+    "text": "Order Confirmation\nOrder number: 58213\nCustomer: Hanley Design Studio\nOrder date: October 2\n\nItem | Quantity | Unit Price\nPro C300 | 4 | $250\n\nSubtotal: $1,000\nDelivery: Free\nExpected delivery date: October 9\n\nNotes: Assembly instructions are included in each box. Please inspect all items upon arrival and report any damage or defects to customerservice@officeplus.com. Items covered by the warranty will be replaced free of charge, and we will arrange pickup of the defective item. Thank you for shopping with Office Plus."
+   },
+   {
+    "doc_type": "이메일",
+    "title": "From: Olivia Hanley / To: customerservice@officeplus.com / Date: October 10 / Subject: Order 58213",
+    "text": "Hello,\n\nWe received our chairs yesterday as promised, and my designers are very pleased with them. However, one of the chairs has a problem. The back support does not stay in position and slowly moves down during the day. Since the chairs are still under warranty, I would like a replacement. Please let me know when someone can pick up the broken chair.\n\nI am also thinking of ordering six more of the same model for our new employees next month.\n\nOlivia Hanley"
+   }
+  ],
+  "questions": [
+   {
+    "q": "What is indicated about Office Plus?",
+    "choices": [
+     "It charges for all deliveries.",
+     "It offers discounts to some business customers.",
+     "It sells only leather chairs.",
+     "It gives a five-year warranty."
+    ],
+    "answer": 1,
+    "type": "사실 확인(NOT/TRUE)",
+    "explanation": "웹페이지의 'Business customers ordering ten or more chairs at once receive a 15 percent discount.'와 일치한다. 500달러 초과 주문은 무료 배송이고, 보증 기간은 2년이다."
+   },
+   {
+    "q": "What feature does the chair Ms. Hanley ordered have that the Comfort C200 does not?",
+    "choices": [
+     "Adjustable height",
+     "Armrests",
+     "Back support",
+     "A leather seat"
+    ],
+    "answer": 2,
+    "type": "연계 문제",
+    "explanation": "주문 확인서에서 핸리 씨는 Pro C300을 주문했고, 웹페이지 표에서 Pro C300은 Comfort C200의 기능(높이 조절, 팔걸이)에 등받이 지지(back support)가 더해진 모델이다. 가죽 시트는 Executive C400에만 있다."
+   },
+   {
+    "q": "Why was delivery free for Ms. Hanley's order?",
+    "choices": [
+     "She ordered ten or more chairs.",
+     "She is a new customer.",
+     "She used a coupon.",
+     "Her order was over $500."
+    ],
+    "answer": 3,
+    "type": "연계 문제",
+    "explanation": "웹페이지에 500달러 초과 주문은 무료 배송이라고 했고, 주문 확인서의 합계가 1,000달러이다. 의자는 4개만 주문했으므로 10개 이상 조건과는 관계없다."
+   },
+   {
+    "q": "What does Ms. Hanley request in her e-mail?",
+    "choices": [
+     "A refund",
+     "A product catalog",
+     "A replacement chair",
+     "A discount on her next order"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "이메일의 'Since the chairs are still under warranty, I would like a replacement.'에서 보증 기간이므로 교체를 원한다고 했다. 환불이나 할인은 요청하지 않았다."
+   },
+   {
+    "q": "What will Ms. Hanley most likely receive if she places the order mentioned in her e-mail?",
+    "choices": [
+     "A 15 percent discount",
+     "Free delivery",
+     "A free leather seat",
+     "A longer warranty"
+    ],
+    "answer": 1,
+    "type": "연계 문제",
+    "explanation": "이메일에서 같은 모델(Pro C300, 250달러) 6개를 더 주문할 생각이라고 했으므로 합계는 1,500달러로 500달러를 넘어 무료 배송 대상이다. 10개 미만이라 15퍼센트 할인은 받을 수 없다."
+   }
+  ],
+  "translation": "[웹페이지]\n오피스 플러스 — 인체공학 의자\n\n모델 | 기능 | 가격\n베이직 C100 | 높이 조절 | 120달러\n컴포트 C200 | 높이 조절, 팔걸이 | 180달러\n프로 C300 | 높이 조절, 팔걸이, 등받이 지지 | 250달러\n이그제큐티브 C400 | 프로의 모든 기능, 가죽 시트 | 340달러\n\n500달러를 넘는 모든 주문은 무료 배송입니다. 모든 의자는 2년 보증이 제공됩니다. 한 번에 10개 이상 주문하는 기업 고객은 15퍼센트 할인을 받습니다. 대부분의 주문은 일주일 안에 배송됩니다. 대량 주문은 영업팀에 문의해 주십시오.\n\n[주문 확인서]\n주문 확인서\n주문 번호: 58213\n고객: 핸리 디자인 스튜디오\n주문일: 10월 2일\n\n품목 | 수량 | 단가\n프로 C300 | 4 | 250달러\n\n소계: 1,000달러\n배송: 무료\n배송 예정일: 10월 9일\n\n참고: 조립 설명서는 상자마다 들어 있습니다. 도착 즉시 모든 제품을 확인하시고 파손이나 결함이 있으면 customerservice@officeplus.com으로 알려 주십시오. 보증 대상 제품은 무료로 교체해 드리며, 결함 제품의 회수도 저희가 준비합니다. 오피스 플러스를 이용해 주셔서 감사합니다.\n\n[이메일]\n보낸 사람: 올리비아 핸리 / 받는 사람: customerservice@officeplus.com / 날짜: 10월 10일 / 제목: 주문 58213\n\n안녕하세요.\n\n약속대로 어제 의자를 받았고, 저희 디자이너들이 매우 만족하고 있습니다. 그런데 의자 하나에 문제가 있습니다. 등받이 지지대가 제자리에 고정되지 않고 하루 동안 조금씩 내려갑니다. 아직 보증 기간이므로 교체를 원합니다. 고장 난 의자를 언제 가지러 오실 수 있는지 알려 주세요.\n\n또한 다음 달 신입 직원들을 위해 같은 모델을 6개 더 주문할까 생각하고 있습니다.\n\n올리비아 핸리"
+ },
+ {
+  "id": "p7-013",
+  "level": 3,
+  "kind": "single",
+  "passages": [
+   {
+    "doc_type": "편지",
+    "title": "Travel Horizons Magazine / 88 Bristol Lane, Portland, OR 97205 / To: Mr. Daniel Reeves",
+    "text": "Dear Mr. Reeves,\n\nThank you for being a loyal reader of Travel Horizons for the past three years. Our records show that your current subscription will end with the November issue. [1]\n\nIf you renew before October 31, you will pay only $36 for twelve issues, a savings of 40 percent off the newsstand price. [2] Renewing subscribers will also receive a free copy of our new guidebook, Hidden Villages of Europe, which will not be sold in stores until next spring.\n\nStarting in January, every issue will include a special section on budget travel, featuring tips from readers around the world. [3] You can also access all past issues on our Web site at no extra cost.\n\nTo renew, simply complete the enclosed card and return it in the postage-paid envelope. [4] We look forward to sharing many more journeys with you.\n\nSincerely,\nAmanda Brooks\nCirculation Manager"
+   }
+  ],
+  "questions": [
+   {
+    "q": "Why was the letter sent?",
+    "choices": [
+     "To announce a price increase",
+     "To request payment for an overdue bill",
+     "To encourage a reader to renew a subscription",
+     "To advertise a travel agency"
+    ],
+    "answer": 2,
+    "type": "주제·목적",
+    "explanation": "첫 문단에서 구독이 11월호로 끝난다고 알린 뒤 갱신 시 할인 가격과 무료 가이드북을 제시하고 갱신 방법을 안내하므로 구독 갱신을 권유하는 편지이다. 오히려 40퍼센트 할인을 제시하므로 가격 인상 안내가 아니다."
+   },
+   {
+    "q": "What is indicated about Hidden Villages of Europe?",
+    "choices": [
+     "It was written by Ms. Brooks.",
+     "It will be available in stores next spring.",
+     "It is currently sold at newsstands.",
+     "It focuses on budget travel."
+    ],
+    "answer": 1,
+    "type": "사실 확인(NOT/TRUE)",
+    "explanation": "두 번째 문단 'which will not be sold in stores until next spring'은 내년 봄이 되어야 서점에서 판매된다는 뜻이다. 현재는 판매되지 않으며, 저가 여행 특집은 1월부터 잡지에 실리는 별도 코너이다."
+   },
+   {
+    "q": "What will change in January?",
+    "choices": [
+     "The magazine will cost less.",
+     "Past issues will be removed online.",
+     "The magazine will be published twice a month.",
+     "Each issue will include a new section."
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "세 번째 문단 'Starting in January, every issue will include a special section on budget travel'에서 1월부터 매호에 저가 여행 특집 코너가 추가된다고 했다. 지난 호는 웹사이트에서 계속 무료로 볼 수 있다."
+   },
+   {
+    "q": "In which of the positions marked [1], [2], [3], and [4] does the following sentence best belong? “This offer is available only to current subscribers.”",
+    "choices": [
+     "[1]",
+     "[2]",
+     "[3]",
+     "[4]"
+    ],
+    "answer": 1,
+    "type": "문장 삽입",
+    "explanation": "'This offer'가 가리키는 대상이 필요하므로 12개월호 36달러, 40퍼센트 할인이라는 제안 바로 뒤인 [2]가 알맞다. 기존 구독자만 받을 수 있다는 조건도 갱신 할인과 자연스럽게 이어진다."
+   }
+  ],
+  "translation": "트래블 호라이즌스 매거진 / 오리건주 포틀랜드 브리스톨 레인 88 / 받는 사람: 대니얼 리브스 님\n\n리브스 님께,\n\n지난 3년 동안 트래블 호라이즌스를 꾸준히 읽어 주셔서 감사합니다. 저희 기록에 따르면 현재 구독은 11월호로 종료됩니다. [1]\n\n10월 31일 전에 갱신하시면 12개 호를 단 36달러에 받으실 수 있으며, 이는 가판대 가격보다 40퍼센트 저렴합니다. [2] 갱신하시는 구독자께는 저희의 새 가이드북 '유럽의 숨은 마을들'도 무료로 드리는데, 이 책은 내년 봄에야 서점에서 판매됩니다.\n\n1월부터는 매호에 전 세계 독자들의 팁을 담은 저가 여행 특집 코너가 실립니다. [3] 또한 웹사이트에서 지난 호 전체를 추가 비용 없이 보실 수 있습니다.\n\n갱신하시려면 동봉된 카드를 작성하여 우편 요금이 선납된 봉투에 넣어 보내 주시기만 하면 됩니다. [4] 앞으로도 더 많은 여행을 함께하기를 기대합니다.\n\n어맨다 브룩스 드림\n구독 관리 책임자"
+ },
+ {
+  "id": "p7-014",
+  "level": 3,
+  "kind": "single",
+  "passages": [
+   {
+    "doc_type": "문자 메시지",
+    "title": "Text-message chain",
+    "text": "Ryan Cho (8:47 A.M.): Hi, Nadia. I'm stuck in traffic on Route 9. There's been an accident near the bridge.\nNadia Farouk (8:48 A.M.): Oh no. The Delgado Foods representatives are arriving at 9:30.\nRyan Cho (8:50 A.M.): I know. My GPS says I won't get there until 9:45 at the earliest.\nNadia Farouk (8:51 A.M.): I can start the tour of the production line without you. It usually takes about 30 minutes anyway.\nRyan Cho (8:52 A.M.): That would be a big help. The sample packages are on my desk, in the blue box.\nNadia Farouk (8:53 A.M.): Got it. Should I also give them the new price list?\nRyan Cho (8:55 A.M.): Let's hold off on that. I'd like to discuss pricing with them myself after the tour.\nNadia Farouk (8:56 A.M.): Understood. Drive safely."
+   }
+  ],
+  "questions": [
+   {
+    "q": "Why is Mr. Cho late?",
+    "choices": [
+     "He is caught in heavy traffic.",
+     "His car broke down.",
+     "He missed a train.",
+     "He had to pick up samples."
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "첫 메시지 'I'm stuck in traffic on Route 9. There's been an accident near the bridge.'에서 사고로 인한 교통 체증 때문에 늦는다는 것을 알 수 있다. 샘플은 이미 그의 책상 위에 있다."
+   },
+   {
+    "q": "What will Ms. Farouk most likely do at 9:30?",
+    "choices": [
+     "Lead a tour for visitors",
+     "Meet Mr. Cho at the bridge",
+     "Print a price list",
+     "Call Delgado Foods"
+    ],
+    "answer": 0,
+    "type": "추론",
+    "explanation": "델가도 푸드 담당자들이 9시 30분에 도착하고, 파루크 씨가 8시 51분에 'I can start the tour of the production line without you.'라고 제안했으며 조 씨가 수락했다. 따라서 9시 30분에는 방문객에게 생산 라인 견학을 안내할 것이다."
+   },
+   {
+    "q": "At 8:55 A.M., what does Mr. Cho mean when he writes, “Let's hold off on that”?",
+    "choices": [
+     "He wants the tour to be shortened.",
+     "He wants to postpone the meeting until tomorrow.",
+     "He does not want the price list shared yet.",
+     "He wants the samples kept on his desk."
+    ],
+    "answer": 2,
+    "type": "의도 파악",
+    "explanation": "파루크 씨가 새 가격표도 전달할지 묻자 조 씨는 'Let's hold off on that'이라고 한 뒤 견학 후 직접 가격을 논의하겠다고 했다. 즉 가격표 전달을 미루자는 뜻이다."
+   }
+  ],
+  "translation": "라이언 조 (오전 8:47): 안녕하세요, 나디아. 9번 도로에서 차가 막혀 꼼짝 못 하고 있어요. 다리 근처에서 사고가 났대요.\n나디아 파루크 (오전 8:48): 이런. 델가도 푸드 담당자들이 9시 30분에 도착하는데요.\n라이언 조 (오전 8:50): 알아요. 내비게이션으로는 빨라도 9시 45분에나 도착한대요.\n나디아 파루크 (오전 8:51): 제가 먼저 생산 라인 견학을 시작할 수 있어요. 어차피 보통 30분쯤 걸리니까요.\n라이언 조 (오전 8:52): 그러면 정말 큰 도움이 되겠어요. 샘플 패키지는 제 책상 위 파란 상자에 있어요.\n나디아 파루크 (오전 8:53): 알겠어요. 새 가격표도 드릴까요?\n라이언 조 (오전 8:55): 그건 좀 미뤄 두죠. 견학이 끝난 뒤 가격은 제가 직접 이야기하고 싶어요.\n나디아 파루크 (오전 8:56): 알겠어요. 조심히 운전하세요."
+ },
+ {
+  "id": "p7-015",
+  "level": 3,
+  "kind": "single",
+  "passages": [
+   {
+    "doc_type": "웹페이지",
+    "title": "www.norvellbank.com/community",
+    "text": "Norvell Bank Community Partners Program\n\nAt Norvell Bank, we believe that strong communities make strong businesses. Through our Community Partners Program, employees can spend up to sixteen paid hours per year volunteering with approved local organizations.\n\nEligible activities include tutoring students, helping at food banks, and assisting with park clean-ups. Employees who wish to volunteer must submit a request form to their supervisor at least two weeks before the activity date. Requests are generally approved as long as the absence will not affect customer service at the employee's branch.\n\nIn addition, the bank will donate $10 to the organization for every hour an employee volunteers there. Last year, our staff contributed more than 4,200 hours to over 90 organizations across the region.\n\nOrganizations interested in becoming approved partners may apply by completing the online form on this page. Applications are reviewed by our Community Relations team each quarter."
+   }
+  ],
+  "questions": [
+   {
+    "q": "What is the purpose of the Web page?",
+    "choices": [
+     "To describe a volunteer program",
+     "To advertise a new savings account",
+     "To announce a branch opening",
+     "To recruit new bank tellers"
+    ],
+    "answer": 0,
+    "type": "주제·목적",
+    "explanation": "웹페이지는 직원들이 유급으로 지역 단체에서 봉사할 수 있는 Community Partners Program의 내용, 신청 절차, 기부 방식을 설명한다. 금융 상품이나 채용 안내가 아니다."
+   },
+   {
+    "q": "The word “affect” in paragraph 2, line 4, is closest in meaning to",
+    "choices": [
+     "pretend",
+     "receive",
+     "prefer",
+     "influence"
+    ],
+    "answer": 3,
+    "type": "동의어",
+    "explanation": "'as long as the absence will not affect customer service'는 결근이 고객 서비스에 '영향을 주지' 않는 한이라는 뜻이므로 influence가 가장 가깝다."
+   },
+   {
+    "q": "What is NOT mentioned as an eligible activity?",
+    "choices": [
+     "Tutoring students",
+     "Cleaning parks",
+     "Building houses",
+     "Working at food banks"
+    ],
+    "answer": 2,
+    "type": "사실 확인(NOT/TRUE)",
+    "explanation": "두 번째 문단에서 학생 개인 지도(tutoring students), 푸드뱅크 봉사(helping at food banks), 공원 청소(park clean-ups)는 언급되었지만 집 짓기는 나오지 않는다."
+   },
+   {
+    "q": "What can be inferred about Norvell Bank?",
+    "choices": [
+     "It requires all employees to volunteer.",
+     "It gave over $40,000 to organizations last year.",
+     "It reviews partner applications every month.",
+     "It works only with national charities."
+    ],
+    "answer": 1,
+    "type": "추론",
+    "explanation": "봉사 1시간당 10달러를 기부하고 작년 직원 봉사 시간이 4,200시간을 넘었으므로 기부액은 4만 2천 달러 이상이다. 봉사는 희망자만 신청하고, 신청서 검토는 분기마다(each quarter) 하며, 지역 단체와 협력한다."
+   }
+  ],
+  "translation": "www.norvellbank.com/community\n노벨 은행 지역사회 파트너 프로그램\n\n노벨 은행은 튼튼한 지역사회가 튼튼한 기업을 만든다고 믿습니다. 지역사회 파트너 프로그램을 통해 직원들은 1년에 최대 16시간까지 유급으로 승인된 지역 단체에서 봉사할 수 있습니다.\n\n참여 가능한 활동에는 학생 개인 지도, 푸드뱅크 봉사, 공원 청소 지원 등이 있습니다. 봉사를 원하는 직원은 활동일 최소 2주 전에 상사에게 신청서를 제출해야 합니다. 신청은 해당 직원의 부재가 소속 지점의 고객 서비스에 영향을 주지 않는 한 대체로 승인됩니다.\n\n또한 은행은 직원이 봉사한 시간 1시간마다 해당 단체에 10달러를 기부합니다. 작년에 저희 직원들은 지역 내 90개가 넘는 단체에서 4,200시간 이상 봉사했습니다.\n\n승인된 파트너가 되고자 하는 단체는 이 페이지의 온라인 양식을 작성하여 신청하실 수 있습니다. 신청서는 지역사회 관계팀이 분기마다 검토합니다."
+ },
+ {
+  "id": "p7-016",
+  "level": 3,
+  "kind": "single",
+  "passages": [
+   {
+    "doc_type": "이메일",
+    "title": "From: Henry Lau, Crestline Paper Supply / To: Joanna Whitfield / Date: February 6 / Subject: Order #4471",
+    "text": "Dear Ms. Whitfield,\n\nI am writing about your order of 300 boxes of recycled printer paper, which was scheduled to arrive at your office on February 10. [1] Unfortunately, our paper mill has experienced equipment problems, and production has been delayed by about a week. [2]\n\nWe expect to ship your order on February 15, so it should reach you by February 17. If this new date is not acceptable, we can offer two alternatives. First, we could send 100 boxes from our current stock immediately and the remaining 200 once production resumes. [3] Second, we could substitute standard white paper of the same weight, which is in stock, at no extra charge.\n\nPlease let me know which option you prefer by February 8. [4] I apologize for the inconvenience and appreciate your patience.\n\nSincerely,\nHenry Lau\nCustomer Accounts Manager"
+   }
+  ],
+  "questions": [
+   {
+    "q": "Why did Mr. Lau write the e-mail?",
+    "choices": [
+     "To report a delay in an order",
+     "To confirm a price change",
+     "To request an overdue payment",
+     "To introduce a new product"
+    ],
+    "answer": 0,
+    "type": "주제·목적",
+    "explanation": "첫 문단에서 2월 10일 도착 예정이던 주문이 제지 공장 설비 문제로 약 일주일 지연된다고 알리고 있다. 가격 변경이나 결제 요청은 언급되지 않았다."
+   },
+   {
+    "q": "What is one option Mr. Lau offers?",
+    "choices": [
+     "A full refund",
+     "A discount on a future order",
+     "Faster delivery by air",
+     "A different type of paper"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "두 번째 대안 'we could substitute standard white paper of the same weight'에서 재고가 있는 일반 백색 용지로 대체해 주겠다고 했다. 환불, 할인, 항공 배송은 제안하지 않았다."
+   },
+   {
+    "q": "In which of the positions marked [1], [2], [3], and [4] does the following sentence best belong? “There would be no additional delivery fee for the second shipment.”",
+    "choices": [
+     "[1]",
+     "[2]",
+     "[3]",
+     "[4]"
+    ],
+    "answer": 2,
+    "type": "문장 삽입",
+    "explanation": "'the second shipment(두 번째 배송분)'가 성립하려면 앞에 배송을 두 번으로 나누는 내용이 있어야 한다. 100상자를 먼저 보내고 나머지 200상자는 생산 재개 후 보낸다는 첫 번째 대안 바로 뒤인 [3]이 알맞다."
+   }
+  ],
+  "translation": "보낸 사람: 크레스트라인 제지 공급 헨리 라우 / 받는 사람: 조애나 휘트필드 / 날짜: 2월 6일 / 제목: 주문 번호 4471\n\n휘트필드 님께,\n\n2월 10일 귀하의 사무실에 도착할 예정이었던 재생 프린터 용지 300상자 주문과 관련하여 연락드립니다. [1] 안타깝게도 저희 제지 공장에 설비 문제가 생겨 생산이 약 일주일 지연되었습니다. [2]\n\n주문품은 2월 15일에 발송될 예정이며 2월 17일까지는 도착할 것입니다. 이 새 날짜가 곤란하시면 두 가지 대안을 드릴 수 있습니다. 첫째, 현재 재고에서 100상자를 즉시 보내 드리고 나머지 200상자는 생산이 재개되는 대로 보내 드릴 수 있습니다. [3] 둘째, 재고가 있는 같은 무게의 일반 백색 용지로 추가 비용 없이 대체해 드릴 수 있습니다.\n\n어느 방법을 원하시는지 2월 8일까지 알려 주십시오. [4] 불편을 드려 죄송하며 양해해 주셔서 감사합니다.\n\n헨리 라우 드림\n고객 계정 관리자"
+ },
+ {
+  "id": "p7-017",
+  "level": 3,
+  "kind": "double",
+  "passages": [
+   {
+    "doc_type": "광고",
+    "title": "Kenwood Business Writing Workshops",
+    "text": "Kenwood Business Writing Workshops\n\nImprove the way you communicate at work! Our one-day workshops are led by experienced corporate trainers, and each is limited to 15 participants.\n\n• Writing Clear E-mails — Tuesday, March 8\n• Reports and Proposals — Tuesday, March 15\n• Persuasive Presentations — Tuesday, March 22\n• Editing Your Own Work — Tuesday, March 29\n\nAll workshops run from 9:00 A.M. to 4:00 P.M. at the Kenwood Center, 210 Grant Street. The fee is $180 per workshop, which includes lunch and course materials. Companies registering five or more employees for the same workshop receive a group rate of $150 per person. Register at www.kenwoodworkshops.com."
+   },
+   {
+    "doc_type": "이메일",
+    "title": "From: Lisa Tran / To: info@kenwoodworkshops.com / Date: March 1 / Subject: Registration question",
+    "text": "Hello,\n\nI manage the sales team at Pellman Industries. Six of my team members would like to attend your workshop on preparing reports and proposals. However, two of them will be at a trade show in Chicago that week and will not return until March 17. Would it be possible for those two employees to attend the same workshop at a later date? If so, could the group rate still apply to all six people even if they attend on different days?\n\nI would also like to know whether parking is available at the Kenwood Center.\n\nBest regards,\nLisa Tran"
+   }
+  ],
+  "questions": [
+   {
+    "q": "What is stated about the workshops?",
+    "choices": [
+     "They take place over several days.",
+     "They have a limited number of participants.",
+     "They are held online.",
+     "They are free for groups."
+    ],
+    "answer": 1,
+    "type": "사실 확인(NOT/TRUE)",
+    "explanation": "광고의 'each is limited to 15 participants'에서 인원이 15명으로 제한된다고 했다. 워크숍은 하루 과정(one-day)이고 켄우드 센터에서 열리며, 단체는 무료가 아니라 1인당 150달러이다."
+   },
+   {
+    "q": "In the advertisement, the word “run” in paragraph 3, line 1, is closest in meaning to",
+    "choices": [
+     "hurry",
+     "manage",
+     "last",
+     "compete"
+    ],
+    "answer": 2,
+    "type": "동의어",
+    "explanation": "'All workshops run from 9:00 A.M. to 4:00 P.M.'은 워크숍이 오전 9시부터 오후 4시까지 '진행된다, 계속된다'는 뜻이므로 last가 가장 가깝다. hurry(서두르다), manage(운영하다), compete(경쟁하다)는 문맥에 맞지 않는다."
+   },
+   {
+    "q": "On what date do Ms. Tran's team members want to attend a workshop?",
+    "choices": [
+     "March 8",
+     "March 15",
+     "March 22",
+     "March 29"
+    ],
+    "answer": 1,
+    "type": "연계 문제",
+    "explanation": "이메일에서 트랜 씨 팀원들은 보고서·제안서 작성(preparing reports and proposals) 워크숍을 원한다고 했고, 광고에서 Reports and Proposals 워크숍은 3월 15일에 열린다."
+   },
+   {
+    "q": "Why might two of Ms. Tran's employees be unable to attend?",
+    "choices": [
+     "They have already taken the workshop.",
+     "They have to meet clients.",
+     "They will be attending a trade show.",
+     "They will be on vacation."
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "이메일의 'two of them will be at a trade show in Chicago that week'에서 두 명이 그 주에 시카고 무역 박람회에 가 있다고 했다."
+   },
+   {
+    "q": "Why might Ms. Tran's request be difficult to fulfill?",
+    "choices": [
+     "The workshops are already fully booked.",
+     "The group rate requires ten participants.",
+     "The Kenwood Center does not have parking.",
+     "The workshop she wants is scheduled only once in March."
+    ],
+    "answer": 3,
+    "type": "연계 문제",
+    "explanation": "트랜 씨는 두 명이 3월 17일 이후 같은 워크숍을 듣게 해 달라고 요청했지만, 광고 일정상 Reports and Proposals 워크숍은 3월 15일 한 번뿐이다. 단체 요금은 5명 이상이면 되고, 주차 여부는 광고에 나와 있지 않다."
+   }
+  ],
+  "translation": "[광고]\n켄우드 비즈니스 글쓰기 워크숍\n\n직장에서의 소통 방식을 개선하세요! 저희 1일 워크숍은 경험 많은 기업 강사가 진행하며, 회차마다 참가 인원은 15명으로 제한됩니다.\n\n• 명확한 이메일 쓰기 — 3월 8일 화요일\n• 보고서와 제안서 — 3월 15일 화요일\n• 설득력 있는 프레젠테이션 — 3월 22일 화요일\n• 자기 글 편집하기 — 3월 29일 화요일\n\n모든 워크숍은 그랜트 가 210번지 켄우드 센터에서 오전 9시부터 오후 4시까지 진행됩니다. 수강료는 워크숍당 180달러이며 점심과 교재가 포함됩니다. 같은 워크숍에 직원 5명 이상을 등록하는 회사는 1인당 150달러의 단체 요금을 적용받습니다. www.kenwoodworkshops.com에서 등록하세요.\n\n[이메일]\n보낸 사람: 리사 트랜 / 받는 사람: info@kenwoodworkshops.com / 날짜: 3월 1일 / 제목: 등록 문의\n\n안녕하세요.\n\n저는 펠먼 인더스트리의 영업팀을 관리하고 있습니다. 저희 팀원 6명이 보고서·제안서 작성 워크숍에 참석하고 싶어 합니다. 그런데 그중 2명은 그 주에 시카고의 무역 박람회에 가 있어서 3월 17일에야 돌아옵니다. 이 두 직원이 나중에 같은 워크숍을 들을 수 있을까요? 가능하다면 서로 다른 날 참석하더라도 6명 모두에게 단체 요금을 적용받을 수 있을까요?\n\n켄우드 센터에 주차가 가능한지도 알고 싶습니다.\n\n리사 트랜 드림"
+ },
+ {
+  "id": "p7-018",
+  "level": 3,
+  "kind": "triple",
+  "passages": [
+   {
+    "doc_type": "회람",
+    "title": "To: All Staff / From: Facilities Management / Date: June 2 / Subject: Move to the Oakridge Tower",
+    "text": "MEMO\n\nAs announced, our company will relocate to the Oakridge Tower over the next four weeks. Each department will move according to the schedule below. Please pack your personal items and files in the boxes provided by 5:00 P.M. on the Thursday before your move. Movers will transport all boxes and furniture on Friday evening, and your new workspace will be ready the following Monday.\n\nDepartment | Moving date (Friday)\nAccounting | June 13\nMarketing | June 20\nHuman Resources | June 20\nCustomer Support | June 27"
+   },
+   {
+    "doc_type": "이메일",
+    "title": "From: Carlos Mendes / To: Facilities Management / Date: June 10 / Subject: Moving schedule",
+    "text": "Hello,\n\nI'm writing on behalf of the Marketing Department. We are hosting a major product launch event on June 21, and several team members will need access to their files and computers until late on June 20. Our team has been preparing for this launch for several months, and moving the day before would make it very difficult to complete our final preparations. Would it be possible for our department to move with Customer Support instead? We would be happy to pack everything well in advance of that date.\n\nThank you,\nCarlos Mendes\nMarketing Manager"
+   },
+   {
+    "doc_type": "이메일",
+    "title": "From: Irene Walsh / To: Carlos Mendes / Date: June 11 / Subject: RE: Moving schedule",
+    "text": "Dear Mr. Mendes,\n\nThank you for letting us know about your event. We have arranged for your department to move on the same date as Customer Support, as you requested. Please note that the movers will arrive at 6:00 P.M., so all of your boxes must be labeled with your new floor number, 14, before then. Human Resources will still move on its original date.\n\nIf you need additional boxes, please contact my assistant, Paul Diaz, at extension 3310.\n\nBest regards,\nIrene Walsh\nFacilities Management"
+   }
+  ],
+  "questions": [
+   {
+    "q": "What is the purpose of the memo?",
+    "choices": [
+     "To announce a new office manager",
+     "To explain a relocation schedule",
+     "To request volunteers for an event",
+     "To describe new office furniture"
+    ],
+    "answer": 1,
+    "type": "주제·목적",
+    "explanation": "회람은 회사가 오크리지 타워로 이전한다는 사실과 부서별 이사 날짜, 짐 싸기 기한을 안내한다. 따라서 이전 일정 안내가 목적이다."
+   },
+   {
+    "q": "According to the memo, when will employees be able to use their new workspace?",
+    "choices": [
+     "On the Thursday before their move",
+     "On the Friday evening of their move",
+     "On the Monday after their move",
+     "Four weeks after the memo"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "회람의 'your new workspace will be ready the following Monday'에서 이사한 금요일 다음 월요일에 새 업무 공간을 쓸 수 있다고 했다. 목요일은 짐 싸기 기한, 금요일 저녁은 운반 시간이다."
+   },
+   {
+    "q": "Why does Mr. Mendes make his request?",
+    "choices": [
+     "His department needs more boxes.",
+     "He will be on vacation on June 20.",
+     "His team is moving to a different floor.",
+     "His team is preparing for an event."
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "멘데스 씨는 6월 21일 대규모 제품 출시 행사가 있어 팀원들이 6월 20일 늦게까지 파일과 컴퓨터를 써야 한다고 했다. 즉 행사 준비 때문에 이사 날짜 변경을 요청했다."
+   },
+   {
+    "q": "On what date will the Marketing Department move?",
+    "choices": [
+     "June 27",
+     "June 13",
+     "June 20",
+     "June 21"
+    ],
+    "answer": 0,
+    "type": "연계 문제",
+    "explanation": "답장 이메일에서 마케팅부는 고객지원부와 같은 날 이사하게 되었다고 했고, 회람 일정표에서 고객지원부의 이사 날짜는 6월 27일이다. 6월 20일은 원래 날짜이며 인사부는 그대로 이 날 이사한다."
+   },
+   {
+    "q": "By when must the Marketing Department finish packing?",
+    "choices": [
+     "5:00 P.M. on June 19",
+     "5:00 P.M. on June 26",
+     "6:00 P.M. on June 27",
+     "9:00 A.M. on June 30"
+    ],
+    "answer": 1,
+    "type": "연계 문제",
+    "explanation": "회람에 따르면 이사 전 목요일 오후 5시까지 짐을 싸야 하고, 답장에서 마케팅부는 6월 27일(금)에 이사하게 되었다. 따라서 기한은 6월 26일(목) 오후 5시이다. 오후 6시는 이사 업체가 도착하는 시각이다."
+   }
+  ],
+  "translation": "[회람]\n받는 사람: 전 직원 / 보낸 사람: 시설관리부 / 날짜: 6월 2일 / 제목: 오크리지 타워로 이전\n\n공지한 대로 우리 회사는 앞으로 4주에 걸쳐 오크리지 타워로 이전합니다. 각 부서는 아래 일정에 따라 이사합니다. 이사 전 목요일 오후 5시까지 제공된 상자에 개인 물품과 파일을 싸 주십시오. 이사 업체가 금요일 저녁에 모든 상자와 가구를 옮기며, 새 업무 공간은 그다음 월요일에 준비됩니다.\n\n부서 | 이사 날짜(금요일)\n회계부 | 6월 13일\n마케팅부 | 6월 20일\n인사부 | 6월 20일\n고객지원부 | 6월 27일\n\n[이메일 1]\n보낸 사람: 카를로스 멘데스 / 받는 사람: 시설관리부 / 날짜: 6월 10일 / 제목: 이사 일정\n\n안녕하세요.\n\n마케팅부를 대표해 연락드립니다. 저희는 6월 21일에 대규모 제품 출시 행사를 여는데, 팀원 몇 명이 6월 20일 늦게까지 파일과 컴퓨터를 써야 합니다. 저희 팀은 몇 달 동안 이 출시를 준비해 왔는데, 행사 전날 이사하면 마지막 준비를 마치기가 매우 어려워집니다. 저희 부서가 대신 고객지원부와 함께 이사할 수 있을까요? 그 날짜보다 훨씬 전에 모든 짐을 싸 두겠습니다.\n\n감사합니다.\n카를로스 멘데스\n마케팅부장\n\n[이메일 2]\n보낸 사람: 아이린 월시 / 받는 사람: 카를로스 멘데스 / 날짜: 6월 11일 / 제목: 회신: 이사 일정\n\n멘데스 님께,\n\n행사에 대해 알려 주셔서 감사합니다. 요청하신 대로 귀 부서가 고객지원부와 같은 날 이사하도록 조정했습니다. 이사 업체가 오후 6시에 도착하므로, 그 전에 모든 상자에 새 층 번호인 14를 표시해 두셔야 합니다. 인사부는 원래 날짜에 그대로 이사합니다.\n\n상자가 더 필요하시면 제 비서 폴 디아즈(내선 3310)에게 연락해 주십시오.\n\n아이린 월시 드림\n시설관리부"
+ },
+ {
+  "id": "p7-019",
+  "level": 4,
+  "kind": "single",
+  "passages": [
+   {
+    "doc_type": "기사",
+    "title": "Halvorsen Logistics to Acquire Coastal Freight",
+    "text": "OSLO (September 9) — Halvorsen Logistics announced on Monday that it has reached an agreement to acquire Coastal Freight, a regional shipping company based in Bergen, for an undisclosed sum. The deal is expected to be finalized by the end of the year, pending approval from government regulators. [1]\n\nFounded in 1987, Coastal Freight operates a fleet of 40 cargo vessels serving ports along Norway's western coast. [2] Halvorsen, which has traditionally focused on trucking and warehouse services, has been seeking to expand into sea transport for several years. “Combining our road network with Coastal Freight's shipping routes will allow us to offer customers a truly complete service,” said Halvorsen CEO Ingrid Solberg.\n\nCoastal Freight's 650 employees will keep their positions, according to the announcement, and the company will continue to operate under its own name for at least two years. [3] Its current director, Magnus Eide, will join Halvorsen's board.\n\nIndustry analysts reacted positively to the news. [4] “Halvorsen has long been strong on land but vulnerable at sea,” noted Tove Lindqvist of Nordic Market Watch. “This purchase fills that gap.”"
+   }
+  ],
+  "questions": [
+   {
+    "q": "What is the article mainly about?",
+    "choices": [
+     "The opening of a new port",
+     "A business acquisition",
+     "A government decision on shipping rules",
+     "The retirement of a company director"
+    ],
+    "answer": 1,
+    "type": "주제·목적",
+    "explanation": "첫 문장에서 할보르센 로지스틱스가 코스탈 프레이트를 인수하기로 합의했다고 밝히고, 기사 전체가 이 인수 건을 다룬다. 정부 규제 당국은 승인 절차로만 언급되었고, 에이데 대표는 은퇴가 아니라 이사회에 합류한다."
+   },
+   {
+    "q": "The word “finalized” in paragraph 1, line 3, is closest in meaning to",
+    "choices": [
+     "reported",
+     "delayed",
+     "completed",
+     "opposed"
+    ],
+    "answer": 2,
+    "type": "동의어",
+    "explanation": "'The deal is expected to be finalized by the end of the year'는 거래가 연말까지 '마무리될' 것으로 예상된다는 뜻이므로 completed가 가장 가깝다."
+   },
+   {
+    "q": "What is indicated about Coastal Freight?",
+    "choices": [
+     "Its employees will keep their jobs.",
+     "It will immediately change its name.",
+     "It was founded by Ms. Solberg.",
+     "It mainly provides trucking services."
+    ],
+    "answer": 0,
+    "type": "사실 확인(NOT/TRUE)",
+    "explanation": "세 번째 문단 'Coastal Freight's 650 employees will keep their positions'와 일치한다. 최소 2년간 자체 이름을 유지하며, 트럭·창고 사업은 할보르센 쪽의 전통적 주력이고, 솔베르그는 할보르센 CEO이다."
+   },
+   {
+    "q": "In which of the positions marked [1], [2], [3], and [4] does the following sentence best belong? “Shares of Halvorsen rose nearly 6 percent following the announcement.”",
+    "choices": [
+     "[1]",
+     "[2]",
+     "[3]",
+     "[4]"
+    ],
+    "answer": 3,
+    "type": "문장 삽입",
+    "explanation": "주가 상승은 시장의 긍정적 반응을 보여 주는 내용이므로 'Industry analysts reacted positively to the news.' 바로 뒤인 [4]가 가장 자연스럽다. 이어지는 분석가의 호의적 발언과도 흐름이 맞는다."
+   }
+  ],
+  "translation": "할보르센 로지스틱스, 코스탈 프레이트 인수\n\n오슬로 (9월 9일) — 할보르센 로지스틱스는 월요일, 베르겐에 본사를 둔 지역 해운사 코스탈 프레이트를 비공개 금액에 인수하기로 합의했다고 발표했다. 이 거래는 정부 규제 당국의 승인을 거쳐 연말까지 마무리될 것으로 예상된다. [1]\n\n1987년에 설립된 코스탈 프레이트는 화물선 40척을 운영하며 노르웨이 서해안의 항구들을 운항한다. [2] 전통적으로 트럭 운송과 창고 서비스에 주력해 온 할보르센은 수년간 해상 운송 진출을 모색해 왔다. 할보르센의 잉그리드 솔베르그 CEO는 \"우리의 도로망과 코스탈 프레이트의 해운 노선을 결합하면 고객에게 진정으로 완전한 서비스를 제공할 수 있다\"고 말했다.\n\n발표에 따르면 코스탈 프레이트의 직원 650명은 자리를 유지하며, 회사는 최소 2년 동안 기존 이름으로 운영을 계속한다. [3] 현 대표 망누스 에이데는 할보르센 이사회에 합류한다.\n\n업계 분석가들은 이 소식에 긍정적으로 반응했다. [4] 노르딕 마켓 워치의 토베 린드크비스트는 \"할보르센은 오랫동안 육상에서는 강했지만 해상에서는 취약했다\"며 \"이번 인수로 그 공백이 메워진다\"고 말했다."
+ },
+ {
+  "id": "p7-020",
+  "level": 4,
+  "kind": "single",
+  "passages": [
+   {
+    "doc_type": "온라인 채팅",
+    "title": "Online chat discussion",
+    "text": "Grace Kim [11:02 A.M.]: Has anyone heard back from the caterer about the retirement dinner for Mr. Hughes?\nOmar Patel [11:03 A.M.]: They called this morning. They can't do the salmon anymore—their supplier ran short.\nGrace Kim [11:04 A.M.]: That was his favorite dish. Did they suggest an alternative?\nOmar Patel [11:05 A.M.]: Grilled chicken or a vegetable pasta, same price per plate.\nLeah Novak [11:06 A.M.]: What about Bella Marina? They cater too, and seafood is their specialty.\nGrace Kim [11:07 A.M.]: We've already paid a deposit to the current caterer, though.\nLeah Novak [11:08 A.M.]: Good point. How much was it?\nGrace Kim [11:08 A.M.]: Thirty percent of the total. And it's non-refundable.\nOmar Patel [11:10 A.M.]: Then let's go with the chicken. I'll let them know today and ask whether they can add a seafood appetizer instead.\nLeah Novak [11:11 A.M.]: I'll update the menu cards once we hear back."
+   }
+  ],
+  "questions": [
+   {
+    "q": "What are the writers mainly discussing?",
+    "choices": [
+     "Changes to an event menu",
+     "The location of a dinner",
+     "A new supplier for their office",
+     "A replacement for Mr. Hughes"
+    ],
+    "answer": 0,
+    "type": "주제·목적",
+    "explanation": "케이터링 업체가 연어 요리를 제공할 수 없게 되어 은퇴 기념 만찬 메뉴를 어떻게 바꿀지 논의하고 있다. 장소나 휴즈 씨의 후임은 언급되지 않았다."
+   },
+   {
+    "q": "What problem does Mr. Patel report?",
+    "choices": [
+     "The price per plate has increased.",
+     "A restaurant is fully booked.",
+     "A deposit was not received.",
+     "A caterer cannot provide a dish."
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "11시 3분에 파텔 씨가 'They can't do the salmon anymore—their supplier ran short.'라고 했다. 대체 메뉴는 같은 가격이라고 했으므로 가격 인상은 사실이 아니다."
+   },
+   {
+    "q": "At 11:08 A.M., what does Ms. Novak most likely mean when she writes, “Good point”?",
+    "choices": [
+     "She thinks Bella Marina is too expensive.",
+     "She realizes that switching caterers could waste money.",
+     "She wants to request a refund.",
+     "She believes salmon is the best option."
+    ],
+    "answer": 1,
+    "type": "의도 파악",
+    "explanation": "노박 씨가 다른 업체(벨라 마리나)를 제안하자 김 씨가 이미 현재 업체에 계약금을 냈다고 지적했고, 노박 씨는 'Good point'라며 수긍했다. 즉 업체를 바꾸면 계약금을 날릴 수 있다는 점을 인정한 것이며, 뒤이어 금액을 묻는 것도 그 근거이다."
+   },
+   {
+    "q": "What will Mr. Patel most likely do next?",
+    "choices": [
+     "Print the menu cards",
+     "Visit Bella Marina",
+     "Contact the current caterer",
+     "Speak with Mr. Hughes"
+    ],
+    "answer": 2,
+    "type": "추론",
+    "explanation": "11시 10분에 파텔 씨가 'I'll let them know today'라며 현재 업체에 닭고기 요리로 정했다고 알리고 해산물 전채 추가도 문의하겠다고 했다. 메뉴 카드 수정은 노박 씨가 맡았다."
+   }
+  ],
+  "translation": "그레이스 김 [오전 11:02]: 휴즈 씨 은퇴 기념 만찬 건으로 케이터링 업체에서 연락 온 분 있어요?\n오마르 파텔 [오전 11:03]: 오늘 아침에 전화 왔어요. 공급업체 물량이 부족해서 이제 연어 요리는 못 한대요.\n그레이스 김 [오전 11:04]: 그게 그분이 제일 좋아하는 요리였는데. 대안을 제시했어요?\n오마르 파텔 [오전 11:05]: 닭고기 구이나 채소 파스타요. 1인분 가격은 같고요.\n레아 노박 [오전 11:06]: 벨라 마리나는 어때요? 거기도 케이터링을 하고 해산물이 전문이에요.\n그레이스 김 [오전 11:07]: 그런데 지금 업체에 이미 계약금을 냈어요.\n레아 노박 [오전 11:08]: 맞는 말이네요. 얼마였어요?\n그레이스 김 [오전 11:08]: 전체의 30퍼센트요. 그리고 환불이 안 돼요.\n오마르 파텔 [오전 11:10]: 그럼 닭고기로 하죠. 오늘 업체에 알리고 대신 해산물 전채를 추가할 수 있는지 물어볼게요.\n레아 노박 [오전 11:11]: 답을 받으면 제가 메뉴 카드를 수정할게요."
+ },
+ {
+  "id": "p7-021",
+  "level": 4,
+  "kind": "single",
+  "passages": [
+   {
+    "doc_type": "청구서",
+    "title": "Invoice — Brightway Cleaning Services",
+    "text": "INVOICE\nBrightway Cleaning Services\n412 Elm Street, Denver, CO 80203\n\nBill to: Parkside Dental Clinic, 77 Cole Avenue\nInvoice number: BC-2291\nInvoice date: April 30\nPayment due: May 30\n\nDate | Service | Amount\nApril 5 | Standard office cleaning | $220\nApril 12 | Standard office cleaning | $220\nApril 19 | Standard office cleaning + carpet shampoo (waiting room) | $360\nApril 26 | Standard office cleaning | $220\n\nSubtotal: $1,020\nLoyalty discount (5%): –$51\nTotal due: $969\n\nNotes: Payments received after the due date are subject to a $25 late fee. Starting in June, our standard cleaning rate will increase to $235 per visit because of higher supply costs. Clients who sign a twelve-month contract before May 31 will keep their current rate for the full contract period. Please contact our office manager, Dana Ruiz, at 303-555-0167 with any questions."
+   }
+  ],
+  "questions": [
+   {
+    "q": "What additional service did the clinic receive in April?",
+    "choices": [
+     "Carpet cleaning",
+     "Window washing",
+     "Floor waxing",
+     "Furniture repair"
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "4월 19일 항목 'Standard office cleaning + carpet shampoo (waiting room)'에서 대기실 카펫 세척이 추가되었음을 알 수 있다."
+   },
+   {
+    "q": "What can be inferred about Parkside Dental Clinic?",
+    "choices": [
+     "It has paid a late fee before.",
+     "It receives cleaning twice a week.",
+     "It is likely a long-term customer.",
+     "It has signed a twelve-month contract."
+    ],
+    "answer": 2,
+    "type": "추론",
+    "explanation": "청구서에 'Loyalty discount (5%)'가 적용되어 있어 꾸준히 이용해 온 단골 고객임을 추론할 수 있다. 청소는 매주 한 번(5, 12, 19, 26일)이고, 연체료나 12개월 계약 체결 사실은 나오지 않는다."
+   },
+   {
+    "q": "According to the invoice, how can the clinic avoid the price increase?",
+    "choices": [
+     "By paying the invoice early",
+     "By requesting fewer visits",
+     "By calling Ms. Ruiz before June",
+     "By signing a year-long contract by May 31"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "Notes의 'Clients who sign a twelve-month contract before May 31 will keep their current rate'에서 5월 31일 전에 12개월 계약을 맺으면 현재 요금이 유지된다고 했다. 루이즈 씨에게 전화하는 것은 문의 방법일 뿐이다."
+   }
+  ],
+  "translation": "청구서\n브라이트웨이 청소 서비스\n콜로라도주 덴버 엘름 가 412번지 (우편번호 80203)\n\n청구 대상: 파크사이드 치과, 콜 애비뉴 77번지\n청구서 번호: BC-2291\n발행일: 4월 30일\n납부 기한: 5월 30일\n\n날짜 | 서비스 | 금액\n4월 5일 | 기본 사무실 청소 | 220달러\n4월 12일 | 기본 사무실 청소 | 220달러\n4월 19일 | 기본 사무실 청소 + 카펫 세척(대기실) | 360달러\n4월 26일 | 기본 사무실 청소 | 220달러\n\n소계: 1,020달러\n단골 할인(5%): -51달러\n납부 총액: 969달러\n\n참고: 납부 기한 이후 받은 금액에는 25달러의 연체료가 부과됩니다. 6월부터 소모품 비용 상승으로 기본 청소 요금이 방문당 235달러로 인상됩니다. 5월 31일 전에 12개월 계약을 체결하는 고객은 계약 기간 내내 현재 요금을 유지합니다. 문의 사항은 사무장 다나 루이즈(303-555-0167)에게 연락해 주십시오."
+ },
+ {
+  "id": "p7-022",
+  "level": 4,
+  "kind": "single",
+  "passages": [
+   {
+    "doc_type": "이메일",
+    "title": "From: Victor Almeida / To: All Warehouse Supervisors / Date: January 14 / Subject: Revised shift arrangements",
+    "text": "Dear Supervisors,\n\nAs you know, order volume at our Riverside warehouse has grown steadily over the past year, and our current two-shift system is no longer sufficient. [1] Beginning March 3, we will introduce a third shift running from 10:00 P.M. to 6:00 A.M., Monday through Friday.\n\nTo staff the new shift, we will first invite current employees to transfer voluntarily. [2] Those who move to the overnight shift will receive an additional $3 per hour on top of their regular wage. Any remaining positions will be filled through external hiring, which Human Resources expects to begin in early February.\n\nI am asking each of you to discuss this change with your teams before the end of the month and to submit the names of interested employees to me by January 31. [3] Please also let me know if you yourself would consider supervising the new shift, as we will need two supervisors to cover it.\n\nA detailed schedule and revised safety procedures for overnight work will be distributed next week. [4]\n\nRegards,\nVictor Almeida\nDirector of Operations"
+   }
+  ],
+  "questions": [
+   {
+    "q": "What is the main purpose of the e-mail?",
+    "choices": [
+     "To report a decline in orders",
+     "To introduce a new supervisor",
+     "To announce the addition of a work shift",
+     "To explain changes to safety rules"
+    ],
+    "answer": 2,
+    "type": "주제·목적",
+    "explanation": "첫 문단에서 주문량 증가로 3월 3일부터 세 번째 근무조(야간조)를 도입한다고 알리고, 이후 인력 배치 방법을 설명한다. 주문은 감소가 아니라 증가했고, 안전 절차는 다음 주에 배포될 자료로만 언급되었다."
+   },
+   {
+    "q": "The word “sufficient” in paragraph 1, line 2, is closest in meaning to",
+    "choices": [
+     "adequate",
+     "efficient",
+     "popular",
+     "flexible"
+    ],
+    "answer": 0,
+    "type": "동의어",
+    "explanation": "'our current two-shift system is no longer sufficient'는 현재 2교대 체제로는 더 이상 '충분하지' 않다는 뜻이므로 adequate가 가장 가깝다. efficient(효율적인)는 형태가 비슷해 헷갈리기 쉬운 오답이다."
+   },
+   {
+    "q": "What is NOT mentioned as a task for the supervisors?",
+    "choices": [
+     "Talking to their teams about the change",
+     "Submitting the names of interested staff",
+     "Interviewing outside candidates",
+     "Indicating their own interest in a role"
+    ],
+    "answer": 2,
+    "type": "사실 확인(NOT/TRUE)",
+    "explanation": "세 번째 문단에서 감독자에게 팀과 논의하기, 1월 31일까지 희망자 명단 제출하기, 본인의 야간조 감독 의향 알리기를 요청했다. 외부 채용은 인사부가 진행한다고 했을 뿐 감독자의 면접 업무는 언급되지 않았다."
+   },
+   {
+    "q": "In which of the positions marked [1], [2], [3], and [4] does the following sentence best belong? “Priority will be given to those with at least one year of service.”",
+    "choices": [
+     "[1]",
+     "[2]",
+     "[3]",
+     "[4]"
+    ],
+    "answer": 1,
+    "type": "문장 삽입",
+    "explanation": "근속 1년 이상인 사람에게 우선권을 준다는 문장은 기존 직원에게 자발적 전환 기회를 먼저 준다는 'we will first invite current employees to transfer voluntarily' 바로 뒤인 [2]에 들어가야 자연스럽다."
+   }
+  ],
+  "translation": "보낸 사람: 빅터 알메이다 / 받는 사람: 전 창고 감독자 / 날짜: 1월 14일 / 제목: 근무조 편성 변경\n\n감독자 여러분께,\n\n아시다시피 리버사이드 창고의 주문량이 지난 1년간 꾸준히 늘어 현재의 2교대 체제로는 더 이상 충분하지 않습니다. [1] 3월 3일부터 월요일부터 금요일까지 오후 10시부터 오전 6시까지 운영되는 세 번째 근무조를 도입합니다.\n\n새 근무조의 인력을 채우기 위해 먼저 기존 직원들에게 자발적 전환 신청을 받겠습니다. [2] 야간조로 옮기는 직원은 기본 시급에 더해 시간당 3달러를 추가로 받습니다. 남은 자리는 외부 채용으로 채우며, 인사부는 2월 초에 채용을 시작할 예정입니다.\n\n각 감독자께서는 이달 말 전에 팀원들과 이 변경 사항을 논의하고 1월 31일까지 희망 직원 명단을 제게 제출해 주시기 바랍니다. [3] 새 근무조에는 감독자 두 명이 필요하므로, 본인이 직접 야간조 감독을 맡을 의향이 있는지도 알려 주십시오.\n\n자세한 근무표와 야간 작업을 위한 개정 안전 절차는 다음 주에 배포됩니다. [4]\n\n빅터 알메이다\n운영 이사"
+ },
+ {
+  "id": "p7-023",
+  "level": 4,
+  "kind": "double",
+  "passages": [
+   {
+    "doc_type": "기사",
+    "title": "Greenfield Library Launches 'Tech Help' Sessions",
+    "text": "GREENFIELD (October 3) — Beginning this month, the Greenfield Public Library will offer free one-on-one technology help sessions for residents. Trained volunteers will assist participants with tasks such as setting up e-mail accounts, using smartphones, and filling out online job applications.\n\nSessions last 45 minutes and are held on Tuesdays and Thursdays from 2:00 to 6:00 P.M. at the main branch and on Saturday mornings at the Eastside branch. Advance booking is required and can be made by phone or at any circulation desk. Participants are encouraged to bring their own devices, although a limited number of library laptops are available.\n\nThe program is funded by a grant from the Harmon Foundation. Library director Paul Okafor said the library hopes to expand the service to its Northgate branch next year if demand is high. The library is also seeking additional volunteers, particularly those who speak Spanish or Vietnamese."
+   },
+   {
+    "doc_type": "이메일",
+    "title": "From: Mei Tran / To: Paul Okafor / Date: October 12 / Subject: Volunteering",
+    "text": "Dear Mr. Okafor,\n\nI read about the new Tech Help sessions in the Greenfield Gazette and would like to offer my assistance. I recently retired after 25 years as a network technician, and I am comfortable with both computers and mobile devices. I also grew up speaking Vietnamese at home, so I could help residents who are more at ease in that language.\n\nI live close to the Eastside branch, so I would prefer to volunteer there. Unfortunately, I am taking a painting class on Saturday mornings until the end of November, so I would not be able to start until December.\n\nPlease let me know what the next steps would be.\n\nSincerely,\nMei Tran"
+   }
+  ],
+  "questions": [
+   {
+    "q": "What is the article mainly about?",
+    "choices": [
+     "The opening of a new branch",
+     "A new free service at a library",
+     "A fundraising campaign",
+     "A community computer sale"
+    ],
+    "answer": 1,
+    "type": "주제·목적",
+    "explanation": "기사 첫 문장에서 그린필드 공공도서관이 주민을 위한 무료 일대일 기술 도움 세션을 시작한다고 했다. 노스게이트 지점은 확대 가능성으로만 언급되었고, 새 지점 개관 기사가 아니다."
+   },
+   {
+    "q": "According to the article, what is required to participate in a session?",
+    "choices": [
+     "A personal laptop",
+     "A library membership fee",
+     "Proof of residence",
+     "An advance booking"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "기사의 'Advance booking is required'에서 사전 예약이 필수라고 했다. 개인 기기는 가져오도록 권장(encouraged)될 뿐이며 도서관 노트북도 일부 있다."
+   },
+   {
+    "q": "What is suggested about Ms. Tran?",
+    "choices": [
+     "She is currently working as a network technician.",
+     "She works at the Eastside branch.",
+     "She teaches a painting class.",
+     "She speaks a language the library is looking for."
+    ],
+    "answer": 3,
+    "type": "연계 문제",
+    "explanation": "기사에서 도서관은 특히 스페인어나 베트남어를 하는 자원봉사자를 찾는다고 했고, 이메일에서 트랜 씨는 집에서 베트남어를 쓰며 자랐다고 했다. 그녀는 이미 은퇴했고, 그림 수업은 가르치는 것이 아니라 듣는 것이다."
+   },
+   {
+    "q": "When would Ms. Tran most likely be able to volunteer?",
+    "choices": [
+     "On Saturday mornings from December",
+     "On Tuesday afternoons in November",
+     "On Thursday afternoons in October",
+     "At the Northgate branch next year"
+    ],
+    "answer": 0,
+    "type": "연계 문제",
+    "explanation": "기사에 따르면 이스트사이드 지점 세션은 토요일 오전에 열린다. 트랜 씨는 이스트사이드 지점을 원하지만 11월 말까지 토요일 오전에 그림 수업이 있어 12월부터 가능하다고 했다."
+   },
+   {
+    "q": "In the e-mail, the word “comfortable” in paragraph 1, line 2, is closest in meaning to",
+    "choices": [
+     "wealthy",
+     "cozy",
+     "familiar",
+     "quiet"
+    ],
+    "answer": 2,
+    "type": "동의어",
+    "explanation": "'I am comfortable with both computers and mobile devices'는 컴퓨터와 모바일 기기를 '잘 다룬다, 익숙하다'는 뜻이므로 familiar가 가장 가깝다. wealthy(부유한), cozy(아늑한)는 다른 의미의 comfortable이다."
+   }
+  ],
+  "translation": "[기사]\n그린필드 도서관, '기술 도움' 세션 시작\n\n그린필드 (10월 3일) — 이달부터 그린필드 공공도서관이 주민을 위한 무료 일대일 기술 도움 세션을 제공한다. 교육받은 자원봉사자들이 이메일 계정 만들기, 스마트폰 사용, 온라인 구직 지원서 작성 같은 일을 도와준다.\n\n세션은 45분간 진행되며, 본관에서는 화요일과 목요일 오후 2시부터 6시까지, 이스트사이드 지점에서는 토요일 오전에 열린다. 사전 예약이 필수이며 전화나 대출 데스크에서 예약할 수 있다. 참가자는 자신의 기기를 가져오도록 권장되지만, 도서관 노트북도 소수 마련되어 있다.\n\n이 프로그램은 하먼 재단의 보조금으로 운영된다. 폴 오카포 도서관장은 수요가 많으면 내년에 노스게이트 지점까지 서비스를 확대하고 싶다고 말했다. 도서관은 특히 스페인어나 베트남어를 할 줄 아는 자원봉사자를 추가로 모집하고 있다.\n\n[이메일]\n보낸 사람: 메이 트랜 / 받는 사람: 폴 오카포 / 날짜: 10월 12일 / 제목: 자원봉사\n\n오카포 님께,\n\n그린필드 가제트에서 새 기술 도움 세션에 관한 기사를 읽고 도움을 드리고 싶어 연락드립니다. 저는 25년간 네트워크 기술자로 일하다 최근 은퇴했으며, 컴퓨터와 모바일 기기를 모두 잘 다룹니다. 또 집에서 베트남어를 쓰며 자라서 베트남어가 더 편한 주민들을 도울 수 있습니다.\n\n이스트사이드 지점 근처에 살고 있어 그곳에서 봉사하고 싶습니다. 다만 11월 말까지 토요일 오전마다 그림 수업을 듣고 있어서 12월이 되어야 시작할 수 있습니다.\n\n다음 절차를 알려 주시기 바랍니다.\n\n메이 트랜 드림"
+ },
+ {
+  "id": "p7-024",
+  "level": 4,
+  "kind": "triple",
+  "passages": [
+   {
+    "doc_type": "웹페이지",
+    "title": "www.lakeshorehotel.com/meetings",
+    "text": "Lakeshore Conference Hotel — Meeting Packages\n\nPackage | Room capacity | Includes | Price per person\nEssential | Up to 30 | Meeting room, projector, coffee break | $45\nStandard | Up to 60 | Essential items + buffet lunch | $70\nPremium | Up to 120 | Standard items + second coffee break, video recording | $95\n\nAll packages include free Wi-Fi and parking for attendees. Groups booking 20 or more guest rooms for overnight stays receive a complimentary dinner reception. Bookings must be confirmed at least 21 days before the event."
+   },
+   {
+    "doc_type": "이메일",
+    "title": "From: Daniel Frost / To: events@lakeshorehotel.com / Date: April 2 / Subject: Training seminar booking",
+    "text": "Hello,\n\nI would like to book a meeting package for a training seminar on May 14. We expect 55 participants, and lunch will need to be provided. We do not need the session recorded. In addition, 25 of our attendees will be traveling from our regional offices and will need rooms for the night of May 13.\n\nCould you also confirm that there is a vegetarian option at lunch? Several attendees have asked.\n\nBest regards,\nDaniel Frost\nTraining Coordinator, Fairmont Pharmaceuticals"
+   },
+   {
+    "doc_type": "고객 의견서",
+    "title": "Client Feedback Form — Lakeshore Conference Hotel",
+    "text": "Name: Daniel Frost\nEvent date: May 14\nOverall rating: 4/5\n\nComments: The meeting room was spacious, and the technical staff quickly solved a problem with our microphone. The buffet lunch received many compliments, including from our vegetarian attendees. The dinner reception the night before was a wonderful way for our regional staff to get to know each other. My only suggestion is to provide clearer directions to the conference wing, as several participants got lost after parking in the east lot. We plan to hold our autumn seminar here as well."
+   }
+  ],
+  "questions": [
+   {
+    "q": "What is indicated about all of the meeting packages?",
+    "choices": [
+     "They include lunch.",
+     "They accommodate up to 120 people.",
+     "They include free parking.",
+     "They can be booked one week in advance."
+    ],
+    "answer": 2,
+    "type": "사실 확인(NOT/TRUE)",
+    "explanation": "웹페이지의 'All packages include free Wi-Fi and parking for attendees.'와 일치한다. 점심은 Standard 이상, 120명은 Premium만 해당하며, 예약은 최소 21일 전에 확정해야 한다."
+   },
+   {
+    "q": "Which package did Mr. Frost most likely book?",
+    "choices": [
+     "Essential",
+     "Standard",
+     "Premium",
+     "Deluxe"
+    ],
+    "answer": 1,
+    "type": "연계 문제",
+    "explanation": "이메일에서 참가자는 55명이고 점심이 필요하며 녹화는 필요 없다고 했다. 웹페이지 표에서 60명까지 수용하고 뷔페 점심이 포함되며 녹화는 없는 패키지는 Standard이다."
+   },
+   {
+    "q": "By what date did Mr. Frost's booking need to be confirmed?",
+    "choices": [
+     "April 2",
+     "May 7",
+     "April 23",
+     "May 13"
+    ],
+    "answer": 2,
+    "type": "연계 문제",
+    "explanation": "웹페이지에 행사 최소 21일 전까지 예약을 확정해야 한다고 했고, 이메일의 행사일은 5월 14일이다. 5월 14일에서 21일을 빼면 4월 23일이다."
+   },
+   {
+    "q": "Why did Mr. Frost's group most likely receive a dinner reception?",
+    "choices": [
+     "They booked the Premium package.",
+     "They were first-time customers.",
+     "They plan to return in the autumn.",
+     "They reserved more than 20 guest rooms."
+    ],
+    "answer": 3,
+    "type": "연계 문제",
+    "explanation": "웹페이지에 객실을 20개 이상 예약하는 단체는 무료 저녁 리셉션을 받는다고 했고, 이메일에서 25명이 5월 13일 숙박이 필요하다고 했다. 의견서에서도 전날 밤 저녁 리셉션을 언급했다."
+   },
+   {
+    "q": "According to the feedback form, what problem did some participants have?",
+    "choices": [
+     "They could not easily find the conference area.",
+     "Their lunch had no vegetarian food.",
+     "The microphone was never repaired.",
+     "The parking lot was full."
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "의견서의 'several participants got lost after parking in the east lot'에서 일부 참가자가 회의동을 찾지 못해 헤맸음을 알 수 있다. 마이크 문제는 기술 직원이 빠르게 해결했고, 채식 참석자도 점심을 칭찬했다."
+   }
+  ],
+  "translation": "[웹페이지]\n레이크쇼어 콘퍼런스 호텔 — 회의 패키지\n\n패키지 | 수용 인원 | 포함 사항 | 1인당 가격\n에센셜 | 최대 30명 | 회의실, 프로젝터, 커피 브레이크 | 45달러\n스탠더드 | 최대 60명 | 에센셜 항목 + 뷔페 점심 | 70달러\n프리미엄 | 최대 120명 | 스탠더드 항목 + 두 번째 커피 브레이크, 영상 녹화 | 95달러\n\n모든 패키지에는 참석자용 무료 와이파이와 주차가 포함됩니다. 숙박용 객실을 20개 이상 예약하는 단체에는 저녁 리셉션을 무료로 제공합니다. 예약은 행사 최소 21일 전까지 확정해야 합니다.\n\n[이메일]\n보낸 사람: 대니얼 프로스트 / 받는 사람: events@lakeshorehotel.com / 날짜: 4월 2일 / 제목: 교육 세미나 예약\n\n안녕하세요.\n\n5월 14일 교육 세미나를 위한 회의 패키지를 예약하고 싶습니다. 참가자는 55명으로 예상하며 점심이 제공되어야 합니다. 세션 녹화는 필요 없습니다. 또한 참석자 중 25명은 지역 사무소에서 오기 때문에 5월 13일 밤 숙박할 객실이 필요합니다.\n\n점심에 채식 메뉴가 있는지도 확인해 주시겠어요? 여러 참석자가 물어봤습니다.\n\n대니얼 프로스트 드림\n페어몬트 제약 교육 담당\n\n[고객 의견서]\n이름: 대니얼 프로스트\n행사일: 5월 14일\n종합 평점: 4/5\n\n의견: 회의실이 넓었고, 기술 직원들이 마이크 문제를 빠르게 해결해 주었습니다. 뷔페 점심은 채식 참석자들을 포함해 많은 칭찬을 받았습니다. 전날 밤 저녁 리셉션은 지역 사무소 직원들이 서로 알아 가는 데 아주 좋은 자리였습니다. 한 가지 제안하자면, 여러 참가자가 동쪽 주차장에 주차한 뒤 길을 잃었으니 회의동으로 가는 안내를 더 명확하게 해 주시면 좋겠습니다. 가을 세미나도 이곳에서 열 계획입니다."
+ },
+ {
+  "id": "p7-025",
+  "level": 5,
+  "kind": "single",
+  "passages": [
+   {
+    "doc_type": "기사",
+    "title": "Regional Airlines Rethink the Hub Model / By Marcus Heller",
+    "text": "For decades, regional carriers have relied on the so-called hub-and-spoke model, funneling passengers from smaller cities through a handful of major airports before sending them on to their final destinations. [1] The approach allowed airlines to fill larger aircraft and concentrate maintenance operations, but it also meant long layovers and frequent missed connections.\n\nThat model is now being quietly revisited. Several mid-sized carriers, including Tern Air and Coastline Jet, have begun adding direct routes between secondary cities that previously had no nonstop service. The shift has been made possible largely by a new generation of fuel-efficient narrow-body aircraft, which can operate profitably with as few as 90 passengers per flight. [2]\n\nNot everyone is convinced the trend will last. [3] Aviation consultant Rhea Castellano points out that point-to-point routes are highly sensitive to fuel prices and seasonal demand. “When jet fuel costs rise, the first routes to be cut are the ones that depend on thin margins,” she said. “Hubs are not glamorous, but they are resilient.”\n\nFor now, travelers appear to be responding favorably. Tern Air reports that its new Midland–Porterville route operated at 87 percent capacity in its first quarter, well above the airline's network average. [4] Whether such results can be sustained through an economic downturn, however, remains an open question."
+   }
+  ],
+  "questions": [
+   {
+    "q": "What is the article mainly about?",
+    "choices": [
+     "The merger of two regional airlines",
+     "Rising ticket prices at major airports",
+     "New safety rules for narrow-body aircraft",
+     "A shift in some airlines' route strategies"
+    ],
+    "answer": 3,
+    "type": "주제·목적",
+    "explanation": "기사는 허브 앤 스포크 모델이 재검토되고 일부 항공사가 중소 도시 간 직항 노선을 늘리는 흐름과 그 지속 가능성을 다룬다. 턴 에어와 코스트라인 젯은 합병한 것이 아니라 각각 노선을 추가한 사례로 언급되었다."
+   },
+   {
+    "q": "The word “sustained” in paragraph 4, line 3, is closest in meaning to",
+    "choices": [
+     "supported",
+     "suffered",
+     "maintained",
+     "confirmed"
+    ],
+    "answer": 2,
+    "type": "동의어",
+    "explanation": "'Whether such results can be sustained through an economic downturn'은 그런 실적이 경기 침체 동안에도 '유지될' 수 있을지라는 뜻이므로 maintained가 가장 가깝다. supported(떠받치다)는 sustain의 다른 뜻이지만 결과(results)와 어울리지 않는다."
+   },
+   {
+    "q": "What does Ms. Castellano suggest about the hub-and-spoke system?",
+    "choices": [
+     "It is better able to withstand difficult conditions.",
+     "It is becoming more popular with travelers.",
+     "It depends on newer, smaller aircraft.",
+     "It reduces layover times for passengers."
+    ],
+    "answer": 0,
+    "type": "추론",
+    "explanation": "카스텔라노는 연료비가 오르면 수익이 적은 직항 노선이 먼저 없어진다고 하며 'Hubs are not glamorous, but they are resilient.'라고 했다. 즉 허브 방식이 어려운 여건을 더 잘 견딘다는 뜻이다. 긴 대기 시간은 오히려 허브 방식의 단점으로 소개되었다."
+   },
+   {
+    "q": "In which of the positions marked [1], [2], [3], and [4] does the following sentence best belong? “Earlier aircraft of similar size, by contrast, typically required at least 130 passengers to break even.”",
+    "choices": [
+     "[1]",
+     "[2]",
+     "[3]",
+     "[4]"
+    ],
+    "answer": 1,
+    "type": "문장 삽입",
+    "explanation": "'by contrast(그에 비해)'로 이전 세대 항공기와 비교하므로, 새 항공기가 승객 90명만으로도 수익을 낸다는 문장 바로 뒤인 [2]가 알맞다. 90명과 130명의 대비가 자연스럽게 이어진다."
+   }
+  ],
+  "translation": "지역 항공사들, 허브 모델을 재고하다 / 마커스 헬러\n\n수십 년 동안 지역 항공사들은 이른바 허브 앤 스포크 모델에 의존해 왔다. 작은 도시의 승객들을 소수의 대형 공항으로 모은 뒤 최종 목적지로 보내는 방식이다. [1] 이 방식 덕분에 항공사들은 더 큰 항공기를 채우고 정비 업무를 한곳에 모을 수 있었지만, 긴 환승 대기와 잦은 연결편 놓침도 뒤따랐다.\n\n그 모델이 지금 조용히 재검토되고 있다. 턴 에어와 코스트라인 젯을 비롯한 여러 중견 항공사가 그동안 직항편이 없던 중소 도시들 사이에 직항 노선을 추가하기 시작했다. 이러한 변화는 주로 승객이 90명만 되어도 수익을 내며 운항할 수 있는 신세대 고연비 협동체 항공기 덕분에 가능해졌다. [2]\n\n모두가 이 흐름이 지속될 것이라고 확신하는 것은 아니다. [3] 항공 컨설턴트 레아 카스텔라노는 도시 간 직항 노선이 연료 가격과 계절 수요에 매우 민감하다고 지적한다. 그녀는 \"항공유 가격이 오르면 가장 먼저 없어지는 노선이 박한 이윤에 의존하는 노선\"이라며 \"허브는 화려하지 않지만 회복력이 있다\"고 말했다.\n\n현재로서는 여행객들이 호의적으로 반응하는 것으로 보인다. 턴 에어는 새 미들랜드–포터빌 노선이 첫 분기에 좌석 점유율 87퍼센트를 기록해 자사 노선망 평균을 크게 웃돌았다고 밝혔다. [4] 그러나 이런 실적이 경기 침체기에도 유지될 수 있을지는 여전히 미지수이다."
+ },
+ {
+  "id": "p7-026",
+  "level": 5,
+  "kind": "single",
+  "passages": [
+   {
+    "doc_type": "이메일",
+    "title": "From: Sofia Brandt, Velmont Hospital Group / To: Arjun Mehta, Clearwave Medical Supplies / Date: 17 November / Subject: Proposal for supply agreement",
+    "text": "Dear Mr. Mehta,\n\nThank you for your revised proposal of 10 November. Our purchasing committee reviewed it at length on Friday, and while we appreciate the reduced unit prices for surgical gloves and gowns, several concerns remain.\n\nFirst, the proposal commits us to a minimum annual order of 400,000 units across all product lines. Given that two of our five facilities are scheduled to merge next autumn, our combined demand is likely to fall short of that figure. We would ask that the minimum be lowered by roughly a quarter or that it be calculated on a per-facility basis.\n\nSecond, the delivery terms remain unchanged from our current agreement. As you know, three shipments last quarter arrived more than 48 hours late, forcing our Eastbrook facility to purchase emergency stock from another supplier at considerably higher cost. The committee would like to see a penalty clause covering late deliveries.\n\nFinally, we noted that the proposal no longer mentions the quarterly usage reports your team has provided in the past. These have been invaluable to our planning, and their omission, whether intentional or not, should be addressed.\n\nProvided these points can be resolved, we would be prepared to sign a three-year agreement rather than the two-year term originally discussed. I look forward to your response.\n\nKind regards,\nSofia Brandt\nProcurement Director"
+   }
+  ],
+  "questions": [
+   {
+    "q": "Why did Ms. Brandt write the e-mail?",
+    "choices": [
+     "To cancel an existing supply agreement",
+     "To request changes to a proposed agreement",
+     "To complain about the quality of some products",
+     "To announce the merger of two hospital groups"
+    ],
+    "answer": 1,
+    "type": "주제·목적",
+    "explanation": "브랜트 씨는 수정 제안서를 검토한 뒤 최소 주문량, 배송 지연 위약 조항, 사용량 보고서 누락 등 세 가지 우려 사항을 제시하며 수정을 요청하고 있다. 합병은 자사 시설 두 곳의 통합이지 두 병원 그룹의 합병이 아니다."
+   },
+   {
+    "q": "What minimum annual order would Ms. Brandt most likely find acceptable?",
+    "choices": [
+     "About 100,000 units",
+     "About 400,000 units",
+     "About 500,000 units",
+     "About 300,000 units"
+    ],
+    "answer": 3,
+    "type": "추론",
+    "explanation": "두 번째 문단에서 최소 주문량 40만 개를 'roughly a quarter(약 4분의 1)' 낮춰 달라고 했으므로 약 30만 개를 원한다고 추론할 수 있다. 10만 개는 4분의 1만큼 '줄인 양'이지 조정 후 수량이 아니다."
+   },
+   {
+    "q": "What is indicated about the Eastbrook facility?",
+    "choices": [
+     "It will close next autumn.",
+     "It received damaged goods.",
+     "It had to buy costly supplies elsewhere.",
+     "It prepares the quarterly usage reports."
+    ],
+    "answer": 2,
+    "type": "사실 확인(NOT/TRUE)",
+    "explanation": "세 번째 문단 'forcing our Eastbrook facility to purchase emergency stock from another supplier at considerably higher cost'와 일치한다. 내년 가을에는 폐쇄가 아니라 시설 두 곳이 통합되며, 사용량 보고서는 공급업체 측이 제공해 왔다."
+   },
+   {
+    "q": "What does Ms. Brandt offer if her concerns are addressed?",
+    "choices": [
+     "A longer contract period",
+     "A larger minimum order",
+     "Earlier payment of invoices",
+     "Acceptance of higher unit prices"
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "마지막 문단 'we would be prepared to sign a three-year agreement rather than the two-year term originally discussed'에서 문제가 해결되면 2년이 아닌 3년 계약을 맺겠다고 했다. 최소 주문량은 오히려 낮춰 달라고 요청했다."
+   }
+  ],
+  "translation": "보낸 사람: 벨몬트 병원 그룹 소피아 브란트 / 받는 사람: 클리어웨이브 의료용품 아르준 메타 / 날짜: 11월 17일 / 제목: 공급 계약 제안서\n\n메타 님께,\n\n11월 10일자 수정 제안서를 보내 주셔서 감사합니다. 저희 구매위원회가 금요일에 이를 오랫동안 검토했으며, 수술용 장갑과 가운의 단가 인하는 감사하게 생각하지만 몇 가지 우려 사항이 남아 있습니다.\n\n첫째, 제안서는 저희가 모든 제품군을 합쳐 연간 최소 40만 개를 주문하도록 규정하고 있습니다. 저희 시설 다섯 곳 중 두 곳이 내년 가을 통합될 예정이어서 전체 수요가 그 수치에 못 미칠 가능성이 높습니다. 최소 주문량을 약 4분의 1 낮추거나 시설별로 산정해 주시기를 요청합니다.\n\n둘째, 배송 조건이 현재 계약과 달라진 것이 없습니다. 아시다시피 지난 분기에 세 차례 배송이 48시간 넘게 늦게 도착해, 저희 이스트브룩 시설이 다른 공급업체로부터 훨씬 비싼 가격에 긴급 재고를 구입해야 했습니다. 위원회는 배송 지연에 대한 위약 조항이 포함되기를 바랍니다.\n\n마지막으로, 제안서에 귀사 팀이 그동안 제공해 온 분기별 사용량 보고서에 대한 언급이 더 이상 없다는 점을 확인했습니다. 이 보고서는 저희 계획 수립에 매우 귀중했으며, 의도한 것이든 아니든 이 누락은 해결되어야 합니다.\n\n이러한 사항들이 해결된다면, 저희는 원래 논의했던 2년이 아닌 3년 계약을 체결할 준비가 되어 있습니다. 답변을 기다리겠습니다.\n\n소피아 브란트 드림\n구매 이사"
+ },
+ {
+  "id": "p7-027",
+  "level": 5,
+  "kind": "single",
+  "passages": [
+   {
+    "doc_type": "웹페이지",
+    "title": "www.aldencityutilities.gov/notices",
+    "text": "Water Main Replacement Project: Phase 2\n\nAlden City Utilities will begin the second phase of its water main replacement project on July 7. This phase covers the Hillcrest and Old Mill neighborhoods, where many pipes date back more than 80 years. [1]\n\nWork will proceed one block at a time, and each block is expected to take approximately ten working days. Residents will receive a door hanger at least 72 hours before work begins on their street. During that period, water service may be interrupted for up to six hours on any given day, typically between 9:00 A.M. and 3:00 P.M. [2]\n\nOn-street parking will be restricted on affected blocks from 7:00 A.M. to 5:00 P.M. Residents who lack off-street parking may obtain a temporary permit for the Hillcrest Community Center lot by calling our project office. [3] Garbage and recycling collection will continue on the usual schedule, although bins may need to be placed at the end of the block rather than at the curb.\n\nUpon completion of each block, crews will restore road surfaces and sidewalks to their prior condition. [4] Phase 2 is expected to conclude in late November, weather permitting. For updates, subscribe to our text alert service or visit this page, which is refreshed every Monday."
+   }
+  ],
+  "questions": [
+   {
+    "q": "What is the main purpose of the notice?",
+    "choices": [
+     "To announce new water rates",
+     "To inform residents about upcoming construction",
+     "To introduce a recycling program",
+     "To recruit construction workers"
+    ],
+    "answer": 1,
+    "type": "주제·목적",
+    "explanation": "공지는 7월 7일 시작하는 상수도 본관 교체 공사 2단계의 대상 지역, 단수, 주차 제한, 복구 계획 등을 주민에게 안내한다. 쓰레기 수거는 공사 중에도 평소처럼 진행된다는 부수적 안내일 뿐이다."
+   },
+   {
+    "q": "The word “restore” in paragraph 4, line 1, is closest in meaning to",
+    "choices": [
+     "save",
+     "store",
+     "repeat",
+     "return"
+    ],
+    "answer": 3,
+    "type": "동의어",
+    "explanation": "'crews will restore road surfaces and sidewalks to their prior condition'은 도로와 보도를 이전 상태로 '되돌린다, 복구한다'는 뜻이므로 return이 가장 가깝다. store(보관하다)는 철자가 비슷한 오답이다."
+   },
+   {
+    "q": "What is NOT mentioned as something residents may experience?",
+    "choices": [
+     "A change in garbage collection days",
+     "Brief interruptions in water service",
+     "Limits on street parking",
+     "Moving bins to a different spot"
+    ],
+    "answer": 0,
+    "type": "사실 확인(NOT/TRUE)",
+    "explanation": "단수(최대 6시간), 도로변 주차 제한, 쓰레기통을 블록 끝에 내놓아야 할 수 있다는 점은 모두 언급되었다. 그러나 수거는 'will continue on the usual schedule'이라고 했으므로 수거 요일 변경은 해당하지 않는다."
+   },
+   {
+    "q": "In which of the positions marked [1], [2], [3], and [4] does the following sentence best belong? “Permits are limited, so early requests are recommended.”",
+    "choices": [
+     "[1]",
+     "[2]",
+     "[3]",
+     "[4]"
+    ],
+    "answer": 2,
+    "type": "문장 삽입",
+    "explanation": "'Permits'는 커뮤니티 센터 주차장 임시 허가증을 가리키므로, 프로젝트 사무소에 전화해 허가증을 받을 수 있다는 문장 바로 뒤인 [3]이 알맞다. 다른 위치 앞에는 허가증에 관한 언급이 없다."
+   }
+  ],
+  "translation": "www.aldencityutilities.gov/notices\n상수도 본관 교체 공사: 2단계\n\n올던시 공공사업국은 7월 7일 상수도 본관 교체 공사 2단계를 시작합니다. 이번 단계는 힐크레스트와 올드밀 지역으로, 이곳의 상당수 수도관은 80년 이상 된 것입니다. [1]\n\n공사는 한 번에 한 블록씩 진행되며, 블록마다 약 10일(근무일 기준)이 걸릴 것으로 예상됩니다. 주민들은 자신이 사는 거리에서 공사가 시작되기 최소 72시간 전에 문고리 안내문을 받게 됩니다. 공사 기간에는 하루 최대 6시간, 주로 오전 9시에서 오후 3시 사이에 단수될 수 있습니다. [2]\n\n공사 구간 블록에서는 오전 7시부터 오후 5시까지 도로변 주차가 제한됩니다. 도로 밖 주차 공간이 없는 주민은 프로젝트 사무소에 전화하여 힐크레스트 커뮤니티 센터 주차장 임시 허가증을 받을 수 있습니다. [3] 쓰레기와 재활용품 수거는 평소 일정대로 계속되지만, 수거함을 도로변이 아닌 블록 끝에 내놓아야 할 수도 있습니다.\n\n각 블록 공사가 끝나면 작업반이 도로 표면과 보도를 이전 상태로 복구합니다. [4] 2단계는 날씨가 허락하면 11월 말에 끝날 예정입니다. 최신 소식은 문자 알림 서비스를 신청하시거나 매주 월요일에 갱신되는 이 페이지에서 확인하십시오."
+ },
+ {
+  "id": "p7-028",
+  "level": 5,
+  "kind": "single",
+  "passages": [
+   {
+    "doc_type": "온라인 채팅",
+    "title": "Online chat discussion",
+    "text": "Yuna Seo [3:12 P.M.]: Quick update on the Dresner account. Their legal team sent back the contract with edits to the liability section.\nTheo Martins [3:13 P.M.]: Substantial edits?\nYuna Seo [3:14 P.M.]: They want to cap our liability at the value of a single month's service instead of the full annual fee.\nTheo Martins [3:15 P.M.]: That's a big shift. Carla, can finance live with that?\nCarla Jimenez [3:17 P.M.]: Honestly, it's not unusual for clients their size. What concerns me more is the new payment term. Did you see they've changed it from 30 to 60 days?\nYuna Seo [3:18 P.M.]: I missed that. It was buried in an appendix.\nTheo Martins [3:19 P.M.]: We agreed to 60 days with Harlow Group last year, and our cash flow suffered for months.\nCarla Jimenez [3:20 P.M.]: Exactly. I'd push back on that one and let the liability change go.\nYuna Seo [3:21 P.M.]: So accept one, reject the other. I'll draft a response tonight and send it to both of you before it goes out.\nTheo Martins [3:22 P.M.]: Copy Anton as well. He signed off on the original terms."
+   }
+  ],
+  "questions": [
+   {
+    "q": "What is the discussion mainly about?",
+    "choices": [
+     "A late payment from Harlow Group",
+     "Hiring new legal staff",
+     "A client's proposed changes to a contract",
+     "Preparing a sales presentation"
+    ],
+    "answer": 2,
+    "type": "주제·목적",
+    "explanation": "서 씨가 드레스너 측 법무팀이 계약서의 책임 조항을 수정해 보냈다고 알리며 시작하고, 이후 책임 한도와 결제 기한 변경을 받아들일지 논의한다. 할로 그룹은 과거 사례로만 언급되었다."
+   },
+   {
+    "q": "At 3:17 P.M., what does Ms. Jimenez imply when she writes, “Honestly, it's not unusual for clients their size”?",
+    "choices": [
+     "She thinks Dresner is a small company.",
+     "She finds the liability request acceptable.",
+     "She wants the contract to be canceled.",
+     "She plans to call Dresner's lawyers."
+    ],
+    "answer": 1,
+    "type": "의도 파악",
+    "explanation": "책임 한도 변경을 재무팀이 감수할 수 있느냐는 질문에 그 규모의 고객에게는 흔한 일이라고 답하고, 3시 20분에는 'let the liability change go'라고 했다. 따라서 책임 조항 변경은 받아들일 만하다는 뜻이다. 오히려 결제 기한 변경을 더 걱정했다."
+   },
+   {
+    "q": "What is suggested about Harlow Group?",
+    "choices": [
+     "It is no longer a client.",
+     "It referred Dresner to the company.",
+     "It recently replaced its legal team.",
+     "It was given a 60-day payment period."
+    ],
+    "answer": 3,
+    "type": "추론",
+    "explanation": "마틴스 씨가 'We agreed to 60 days with Harlow Group last year, and our cash flow suffered'라고 했으므로 할로 그룹에 60일 결제 기한을 허용했던 적이 있음을 알 수 있다. 현재 거래 여부나 소개 관계는 알 수 없다."
+   },
+   {
+    "q": "What will Ms. Seo do before sending her response to Dresner?",
+    "choices": [
+     "Share her draft with colleagues",
+     "Sign the original contract",
+     "Meet Dresner's legal team",
+     "Rewrite the appendix herself"
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "3시 21분에 서 씨가 'I'll draft a response tonight and send it to both of you before it goes out'이라고 했으므로 발송 전에 초안을 동료들에게 공유할 것이다. 마틴스 씨는 안톤도 참조로 넣으라고 덧붙였다."
+   }
+  ],
+  "translation": "서유나 [오후 3:12]: 드레스너 건 간단히 공유할게요. 그쪽 법무팀이 책임 조항을 수정한 계약서를 보내왔어요.\n테오 마틴스 [오후 3:13]: 수정이 많아요?\n서유나 [오후 3:14]: 우리 책임 한도를 연간 전체 요금이 아니라 한 달 서비스 금액으로 제한하길 원해요.\n테오 마틴스 [오후 3:15]: 큰 변화네요. 카를라, 재무팀에서 감수할 수 있어요?\n카를라 히메네스 [오후 3:17]: 솔직히 그 정도 규모 고객이면 드문 일은 아니에요. 제가 더 걱정되는 건 새 결제 조건이에요. 30일에서 60일로 바꾼 거 보셨어요?\n서유나 [오후 3:18]: 그걸 놓쳤네요. 부록에 묻혀 있었어요.\n테오 마틴스 [오후 3:19]: 작년에 할로 그룹과 60일로 합의했다가 몇 달 동안 현금 흐름이 어려웠잖아요.\n카를라 히메네스 [오후 3:20]: 맞아요. 그건 반대하고 책임 조항 변경은 받아들이는 게 좋겠어요.\n서유나 [오후 3:21]: 그럼 하나는 수용하고 하나는 거절하는 거네요. 오늘 밤 답변 초안을 쓰고 발송 전에 두 분께 보낼게요.\n테오 마틴스 [오후 3:22]: 안톤도 참조로 넣어 주세요. 원래 조건을 승인한 사람이 안톤이에요."
+ },
+ {
+  "id": "p7-029",
+  "level": 5,
+  "kind": "double",
+  "passages": [
+   {
+    "doc_type": "회람",
+    "title": "To: All Employees / From: Deborah Lange, Chief Financial Officer / Date: February 20 / Subject: Revised travel reimbursement policy",
+    "text": "MEMO\n\nEffective March 1, the following changes to our travel policy will apply to all business trips.\n\nAirfare: Economy class is required for flights under six hours. For longer flights, employees may book premium economy with the prior approval of their department head.\n\nLodging: The nightly limit is $180 in most cities and $260 in designated high-cost cities (currently New York, London, Tokyo, and Zurich).\n\nMeals: Employees will receive a flat daily allowance of $65 instead of submitting individual meal receipts. The allowance is reduced by half on days when meals are provided at a conference or client event.\n\nGround transportation: Ride-share and taxi costs are reimbursable with receipts. Rental cars require advance approval unless no reasonable alternative exists.\n\nClaims must be submitted within 30 days of the trip's end date."
+   },
+   {
+    "doc_type": "이메일",
+    "title": "From: Kevin O'Brien / To: Deborah Lange / Date: April 18 / Subject: Question about Tokyo trip claim",
+    "text": "Dear Ms. Lange,\n\nI returned on April 9 from a four-day trip to Tokyo, where I attended the Asia Retail Forum. My flight from Chicago was about thirteen hours, and my department head, Ms. Adeyemi, approved a premium economy seat before I booked it. My hotel cost $240 per night.\n\nThe forum provided lunch and dinner on two of the four days, so I understand my meal allowance will be adjusted for those days. However, one point is unclear to me. On my final day, a train strike made it impossible to reach the airport by public transportation, so I rented a car without advance approval. I have the rental receipt. Will this expense be covered?\n\nI plan to submit my full claim next week.\n\nBest regards,\nKevin O'Brien"
+   }
+  ],
+  "questions": [
+   {
+    "q": "What is the purpose of the memo?",
+    "choices": [
+     "To announce updated rules for travel expenses",
+     "To list approved hotels",
+     "To introduce a new travel agency",
+     "To reduce the number of business trips"
+    ],
+    "answer": 0,
+    "type": "주제·목적",
+    "explanation": "회람은 3월 1일부터 적용되는 항공, 숙박, 식비, 지상 교통, 청구 기한 등 출장비 환급 규정의 변경 사항을 안내한다. 특정 호텔 목록이 아니라 숙박비 한도를 제시했다."
+   },
+   {
+    "q": "What is suggested about Mr. O'Brien's hotel expense?",
+    "choices": [
+     "It exceeds the limit by $60.",
+     "It required approval from Ms. Adeyemi.",
+     "It is within the permitted amount.",
+     "It will not be reimbursed."
+    ],
+    "answer": 2,
+    "type": "연계 문제",
+    "explanation": "회람에서 도쿄는 고비용 도시로 지정되어 1박 한도가 260달러이고, 이메일에서 오브라이언 씨의 호텔비는 1박 240달러이다. 따라서 한도 안에 든다. 일반 도시 한도 180달러를 적용하면 60달러 초과처럼 보이는 함정이다."
+   },
+   {
+    "q": "What total meal allowance should Mr. O'Brien expect for the trip?",
+    "choices": [
+     "$130",
+     "$195",
+     "$260",
+     "$325"
+    ],
+    "answer": 1,
+    "type": "연계 문제",
+    "explanation": "회람에 따르면 식비는 하루 65달러이고 행사에서 식사가 제공된 날은 절반(32.5달러)이다. 이메일에서 4일 중 2일은 포럼이 식사를 제공했으므로 65×2 + 32.5×2 = 195달러이다."
+   },
+   {
+    "q": "Why will Mr. O'Brien's rental car expense most likely be reimbursed?",
+    "choices": [
+     "His department head approved it in advance.",
+     "He used the car for less than one day.",
+     "Rental cars are always reimbursable.",
+     "He had no reasonable alternative."
+    ],
+    "answer": 3,
+    "type": "연계 문제",
+    "explanation": "회람에 렌터카는 사전 승인이 필요하지만 'unless no reasonable alternative exists(합리적인 대안이 없는 경우 제외)'라고 했다. 이메일에서 철도 파업으로 대중교통으로 공항에 갈 수 없었다고 했으므로 예외에 해당한다. 사전 승인은 받지 않았다."
+   },
+   {
+    "q": "What is indicated about Mr. O'Brien's flight?",
+    "choices": [
+     "It was booked in economy class.",
+     "It qualified for a premium economy seat.",
+     "It was paid for by the forum organizers.",
+     "It departed from New York."
+    ],
+    "answer": 1,
+    "type": "연계 문제",
+    "explanation": "회람에서 6시간 이상 비행은 부서장의 사전 승인이 있으면 프리미엄 이코노미를 예약할 수 있다고 했다. 이메일에서 비행은 약 13시간이었고 부서장 아데예미 씨가 예약 전에 승인했으므로 조건을 충족한다. 출발지는 시카고이다."
+   }
+  ],
+  "translation": "[회람]\n받는 사람: 전 직원 / 보낸 사람: 최고재무책임자 데버라 랭 / 날짜: 2월 20일 / 제목: 출장비 환급 규정 개정\n\n3월 1일부터 모든 출장에 다음과 같은 출장 규정 변경 사항이 적용됩니다.\n\n항공: 6시간 미만 비행은 이코노미석을 이용해야 합니다. 그보다 긴 비행은 부서장의 사전 승인을 받아 프리미엄 이코노미석을 예약할 수 있습니다.\n\n숙박: 1박 한도는 대부분의 도시에서 180달러, 지정된 고비용 도시(현재 뉴욕, 런던, 도쿄, 취리히)에서 260달러입니다.\n\n식비: 개별 식사 영수증을 제출하는 대신 하루 65달러의 정액 수당을 받습니다. 콘퍼런스나 고객 행사에서 식사가 제공된 날에는 수당이 절반으로 줄어듭니다.\n\n지상 교통: 차량 공유 서비스와 택시 비용은 영수증이 있으면 환급됩니다. 렌터카는 합리적인 대안이 없는 경우를 제외하고 사전 승인이 필요합니다.\n\n청구는 출장 종료일로부터 30일 이내에 제출해야 합니다.\n\n[이메일]\n보낸 사람: 케빈 오브라이언 / 받는 사람: 데버라 랭 / 날짜: 4월 18일 / 제목: 도쿄 출장비 청구 문의\n\n랭 님께,\n\n저는 아시아 리테일 포럼 참석차 4일간 도쿄에 다녀와 4월 9일에 돌아왔습니다. 시카고에서 출발한 비행은 약 13시간이었고, 부서장이신 아데예미 님이 예약 전에 프리미엄 이코노미석을 승인해 주셨습니다. 호텔 비용은 1박에 240달러였습니다.\n\n포럼에서 4일 중 이틀은 점심과 저녁을 제공했으므로, 그날들의 식비 수당이 조정된다는 점은 이해하고 있습니다. 다만 한 가지가 분명하지 않습니다. 마지막 날 철도 파업으로 대중교통으로는 공항에 갈 수 없어서 사전 승인 없이 차를 빌렸습니다. 렌터카 영수증은 가지고 있습니다. 이 비용도 환급되나요?\n\n다음 주에 전체 청구서를 제출할 계획입니다.\n\n케빈 오브라이언 드림"
+ },
+ {
+  "id": "p7-030",
+  "level": 5,
+  "kind": "triple",
+  "passages": [
+   {
+    "doc_type": "공고",
+    "title": "Harbor City Public Space Design Competition",
+    "text": "Harbor City Public Space Design Competition\n\nThe Harbor City Planning Office invites proposals for the redesign of Lantern Square, a 1.2-hectare plaza in the heart of the Old Port district. Entries should address three priorities: increased shade and greenery, flexible space for markets and performances, and improved access for people with limited mobility.\n\nThe competition is open to licensed landscape architects and to teams that include at least one licensed member. Students may participate only as part of such a team. Submissions, consisting of no more than six presentation boards and a written statement of up to 1,500 words, are due by 5:00 P.M. on August 29. No other materials will be accepted.\n\nA jury of five, chaired by city architect Lena Vogt, will select three finalists in October. Finalists will each receive $15,000 to develop their proposals further, and the winning team will be announced in January. The city reserves the right to combine elements of multiple proposals in the final design."
+   },
+   {
+    "doc_type": "이메일",
+    "title": "From: Samuel Ortiz / To: competition@harborcity.gov / Date: August 22 / Subject: Eligibility question",
+    "text": "Hello,\n\nI am a final-year landscape architecture student at Merriton University, and two classmates and I have been developing a proposal for Lantern Square. Our faculty advisor, Professor Hana Ueda, is a licensed landscape architect and has agreed to join our team formally.\n\nOur written statement is currently about 1,800 words, and we have eight boards. Before we begin cutting, I want to confirm one thing: may we include a short video in addition to the boards? Much of our concept depends on showing how the square changes between daytime and evening use.\n\nThank you,\nSamuel Ortiz"
+   },
+   {
+    "doc_type": "기사",
+    "title": "Finalists Named for Lantern Square Redesign",
+    "text": "HARBOR CITY (October 16) — Three teams have been selected as finalists in the Lantern Square design competition, which drew 64 entries from across the country. The finalists are Brennan & Holt Associates of Glenport; Studio Verde, a local firm; and a team from Merriton University led by Professor Hana Ueda.\n\nJury chair Lena Vogt praised the Merriton proposal in particular for its movable canopy system, which allows the square to shift from a shaded market in the daytime to an open performance space at night. “It is rare for a student-led team to reach this stage,” she noted. Studio Verde's entry was singled out for its extensive tree planting, while Brennan & Holt focused on step-free access throughout the square.\n\nFinal designs are due in December."
+   }
+  ],
+  "questions": [
+   {
+    "q": "What is NOT stated as a priority for the Lantern Square redesign?",
+    "choices": [
+     "Additional parking spaces",
+     "More shade and plants",
+     "Flexible space for events",
+     "Easier access for people with limited mobility"
+    ],
+    "answer": 0,
+    "type": "사실 확인(NOT/TRUE)",
+    "explanation": "공고에서 제시한 세 가지 우선순위는 그늘과 녹지 확대, 시장·공연을 위한 유연한 공간, 이동이 불편한 사람의 접근성 개선이다. 주차 공간 확충은 언급되지 않았다."
+   },
+   {
+    "q": "What is suggested about Mr. Ortiz's team?",
+    "choices": [
+     "It needed special permission to enter.",
+     "It entered without a licensed member.",
+     "It met the eligibility rules by including Professor Ueda.",
+     "It was announced as the winner in October."
+    ],
+    "answer": 2,
+    "type": "연계 문제",
+    "explanation": "공고에 따르면 학생은 면허를 가진 구성원이 한 명 이상 있는 팀의 일원으로만 참가할 수 있다. 이메일에서 면허를 가진 우에다 교수가 팀에 정식 합류했다고 했으므로 참가 자격을 충족한다. 10월에는 우승팀이 아니라 결선 진출팀이 발표되었다."
+   },
+   {
+    "q": "What changes did Mr. Ortiz's team most likely have to make before submitting?",
+    "choices": [
+     "Add more licensed members",
+     "Cut its statement to 1,500 words and use no more than six boards",
+     "Replace its boards with a video",
+     "Request a later deadline"
+    ],
+    "answer": 1,
+    "type": "연계 문제",
+    "explanation": "이메일에서 설명문은 약 1,800단어, 보드는 8장이라고 했지만 공고의 제한은 보드 6장 이하, 설명문 1,500단어 이하이다. 또 공고에 'No other materials will be accepted'라고 했으므로 영상은 제출할 수 없다."
+   },
+   {
+    "q": "What is suggested about the Merriton team's proposal?",
+    "choices": [
+     "It focused mainly on tree planting.",
+     "It was submitted after the deadline.",
+     "It was merged with Studio Verde's design.",
+     "It developed the day-to-evening idea Mr. Ortiz described."
+    ],
+    "answer": 3,
+    "type": "연계 문제",
+    "explanation": "오르티스 씨는 이메일에서 광장이 낮과 저녁에 어떻게 달라지는지가 콘셉트의 핵심이라고 했고, 기사에서 메리턴 팀의 이동식 캐노피는 낮에는 그늘진 시장, 밤에는 공연 공간으로 광장을 바꾼다고 소개되었다. 나무 심기는 스튜디오 베르데의 특징이다."
+   },
+   {
+    "q": "In the article, the phrase “singled out” in paragraph 2, line 5, is closest in meaning to",
+    "choices": [
+     "noted specifically",
+     "separated physically",
+     "rejected",
+     "counted"
+    ],
+    "answer": 0,
+    "type": "동의어",
+    "explanation": "'Studio Verde's entry was singled out for its extensive tree planting'은 스튜디오 베르데의 출품작이 대규모 나무 심기로 '특별히 주목받았다'는 뜻이므로 noted specifically가 가장 가깝다. 탈락(rejected)이나 물리적 분리의 의미가 아니다."
+   }
+  ],
+  "translation": "[공고]\n하버시티 공공 공간 설계 공모전\n\n하버시티 도시계획국은 올드포트 지구 중심부에 있는 1.2헥타르 규모의 광장, 랜턴 스퀘어의 재설계안을 공모합니다. 출품작은 세 가지 우선순위를 다루어야 합니다. 그늘과 녹지 확대, 시장과 공연을 위한 유연한 공간, 이동이 불편한 사람들의 접근성 개선입니다.\n\n공모전에는 면허를 가진 조경 건축가, 그리고 면허 소지자가 한 명 이상 포함된 팀이 참가할 수 있습니다. 학생은 그러한 팀의 일원으로만 참가할 수 있습니다. 제출물은 발표 보드 6장 이하와 1,500단어 이하의 설명문으로 구성되며 8월 29일 오후 5시까지 제출해야 합니다. 그 밖의 자료는 받지 않습니다.\n\n시 건축가 레나 포크트가 위원장을 맡은 5인 심사위원단이 10월에 결선 진출팀 세 팀을 선정합니다. 결선 진출팀은 각각 설계안을 발전시키기 위한 1만 5천 달러를 받으며, 우승팀은 1월에 발표됩니다. 시는 최종 설계에 여러 제안의 요소를 결합할 권리를 가집니다.\n\n[이메일]\n보낸 사람: 새뮤얼 오르티스 / 받는 사람: competition@harborcity.gov / 날짜: 8월 22일 / 제목: 참가 자격 문의\n\n안녕하세요.\n\n저는 메리턴 대학교 조경학과 4학년 학생이며, 동기 두 명과 함께 랜턴 스퀘어 설계안을 준비하고 있습니다. 저희 지도 교수이신 하나 우에다 교수님은 면허를 가진 조경 건축가이시며 저희 팀에 정식으로 합류하기로 하셨습니다.\n\n현재 설명문은 약 1,800단어이고 보드는 8장입니다. 분량을 줄이기 시작하기 전에 한 가지 확인하고 싶습니다. 보드 외에 짧은 영상을 포함해도 될까요? 저희 콘셉트의 상당 부분은 광장이 낮과 저녁 시간대에 어떻게 달라지는지를 보여 주는 데 달려 있습니다.\n\n감사합니다.\n새뮤얼 오르티스\n\n[기사]\n랜턴 스퀘어 재설계 결선 진출팀 발표\n\n하버시티 (10월 16일) — 전국에서 64개 작품이 출품된 랜턴 스퀘어 설계 공모전의 결선 진출팀 세 팀이 선정되었다. 결선 진출팀은 글렌포트의 브레넌 앤드 홀트 어소시에이츠, 지역 업체인 스튜디오 베르데, 그리고 하나 우에다 교수가 이끄는 메리턴 대학교 팀이다.\n\n레나 포크트 심사위원장은 특히 메리턴 팀의 이동식 캐노피 시스템을 높이 평가했다. 이 시스템은 광장을 낮에는 그늘진 시장으로, 밤에는 탁 트인 공연 공간으로 바꿀 수 있게 해 준다. 그녀는 \"학생이 주도한 팀이 이 단계까지 오는 것은 드문 일\"이라고 말했다. 스튜디오 베르데의 출품작은 대규모 나무 심기로 특별히 주목받았고, 브레넌 앤드 홀트는 광장 전체의 계단 없는 접근성에 초점을 맞추었다.\n\n최종 설계안은 12월까지 제출해야 한다."
+ }
+]

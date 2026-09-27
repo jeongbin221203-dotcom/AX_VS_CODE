@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% from "_macros.html" import metric, table, tabs, csrf, select, owner_input, download %}
+
+{% macro deal_form(f, customers, edit, is_admin) %}
+  <div class="form-grid g2">
+    <label>거래처 * {{ select('customer_id', customers.items()|list, f.customer_id or '', blank='선택하세요') }}</label>
+    <label>기회명 * <input name="title" value="{{ f.title or '' }}" placeholder="예) ERP 라이선스 갱신" required></label>
+  </div>
+  <div class="form-grid g3" data-deal-calc>
+    <label>단계 {{ select('stage', STAGES, f.stage) }}</label>
+    <label>정가(원) <input name="list_amount" type="number" min="0" step="1000000" value="{{ (f.list_amount or f.amount or 0)|int }}"></label>
+    <label>할인율(%) <input name="discount_rate" type="number" min="0" max="100" step="0.5" value="{{ f.discount_rate or 0 }}"></label>
+    <label>예상 마감일 <input name="expected_close" type="date" value="{{ (f.expected_close or '')[:10] }}"></label>
+    {{ owner_input('owner_id', f.owner_id) }}
+    <label title="{% for k, v in FORECAST_DESC.items() %}{{ k }}: {{ v }}&#10;{% endfor %}">예측구분 {{ select('forecast_category', FORECAST_CATS, f.forecast_category) }}</label>
+    <label>유입경로 {{ select('source', LEAD_SOURCES, f.source) }}</label>
+    <label>경쟁사 <input name="competitor" value="{{ f.competitor or '' }}"></label>
+    {% if edit %}<label>실주사유 (실주 단계일 때 필수) {{ select('lost_reason', LOST_REASONS, f.lost_reason or '', blank='') }}</label>{% endif %}
+  </div>
+  <p class="muted small" data-deal-preview>제안금액 = 정가 × (1 − 할인율). 할인 10% 이하 팀장 / 20% 이하 임원 / 20% 초과 관리자 승인 필요.</p>
+
+  <fieldset class="meddic">
+    <legend>🔍 MEDDIC 자격검증 — 체크한 항목만 인정되며, 단계 진행 조건과 연결됩니다.</legend>
+    <div class="form-grid g3">
+      {% for field, label in MEDDIC_FIELDS.items() %}
+        {% set parts = label.split(' - ', 1) %}
+        <label class="check" title="{{ parts[1] }}"><input type="checkbox" name="{{ field }}" value="1" {{ 'checked' if f[field] and f[field]|int }}> {{ parts[0] }}</label>
+      {% endfor %}
+    </div>
+  </fieldset>
+  <label>메모 <textarea name="memo" rows="2">{{ f.memo or '' }}</textarea></label>
+  {% if edit %}
+    {% if is_admin %}
+    <fieldset class="force-box">
+      <legend>⚠️ 단계 검증 우회 (관리자 전용 · 감사로그에 사유 기록)</legend>
+      <label class="check"><input type="checkbox" name="force" value="1"> 우회합니다</label>
+      <label>우회 사유 <input name="force_reason" value="{{ f.force_reason or '' }}" placeholder="예) 구 시스템 이관 데이터 보정"></label>
+    </fieldset>
+    {% endif %}
+  {% endif %}
+{% endmacro %}
+
+{% block content %}
+<form method="get" class="toolbar" action="{{ page_path() }}">
+  <label class="grow">검색 (기회명/거래처) <input name="q" value="{{ q }}"></label>
+  <label>단계 {{ select('stage', STAGES, stage, blank='전체') }}</label>
+  <label>예측구분 {{ select('fcat', FORECAST_CATS, fcat, blank='전체') }}</label>
+  <label>범위 {{ select('open', [('1', '진행 중만'), ('0', '전체')], '1' if only_open else '0') }}</label>
+  <button class="btn">조회</button>
+</form>
+
+<div class="metrics m4">
+  {{ metric('건수', '{:,}건'.format(m_count)) }}
+  {{ metric('예상금액 합계', m_total|mil) }}
+  {{ metric('가중 예상금액', m_weighted|mil) }}
+  {{ metric('평균 검증점수', m_score ~ '점', '30일 이상 정체 ' ~ m_stuck ~ '건', 'down' if m_stuck else none) }}
+</div>
+<div class="card-head"><p class="muted">행을 누르면 수정 화면으로 이동합니다.</p>{{ download(export_url('deals')) }}</div>
+{{ table(tbl, 460) }}
+
+<section class="card">
+  {{ tabs([('new', '➕ 기회 등록'), ('edit', '✏️ 수정 / 삭제'), ('move', '🔀 단계 변경'), ('approval', '💳 할인 결재 요청')], tab) }}
+
+  {% if tab == 'edit' %}
+    {% if not options %}
+      <div class="alert alert-info">등록된 영업기회가 없습니다.</div>
+    {% else %}
+      <form method="get" class="toolbar" action="{{ page_path() }}">
+        <input type="hidden" name="tab" value="edit">
+        <label class="grow">수정할 기회 {{ select('id', options.items()|list, edit_id or '', blank='선택하세요') }}</label>
+        <button class="btn">불러오기</button>
+      </form>
+      {% if edit_id and row %}
+        <p class="muted">현재 단계 <strong>{{ row.stage }}</strong> · 승인상태 <strong>{{ row.approval_status }}</strong> ·
+          검증점수 <strong>{{ qual_score }}점</strong></p>
+        {% if row.approval_status in ('승인', '대기') %}
+          <div class="alert alert-info">정가·제안금액·할인율을 바꾸면 기존 할인 {{ row.approval_status }} 건은 무효가 되고 다시 결재를 받아야 합니다.</div>
+        {% endif %}
+        <form method="post" action="{{ url_for('crm.deal_save') }}" class="form">
+          {{ csrf() }}<input type="hidden" name="id" value="{{ edit_id }}">
+          <input type="hidden" name="row_version" value="{{ f.row_version or 0 }}">
+          {{ deal_form(f, customers, true, is_admin) }}
+          <button class="btn btn-primary">💾 저장</button>
+        </form>
+        <form method="post" action="{{ url_for('crm.deal_delete', did=edit_id) }}" class="danger-zone">
+          {{ csrf() }}
+          <label class="check"><input type="checkbox" name="confirm" value="1"> 삭제 확인</label>
+          <button class="btn btn-danger">🗑️ 삭제</button>
+        </form>
+        <details><summary>📜 단계 변경 이력 ({{ history.total }}건)</summary>{{ table(history) }}</details>
+      {% endif %}
+    {% endif %}
+
+  {% elif tab == 'move' %}
+    <p class="muted">단계를 바꾸면 확률·종료일·이력이 자동 정리되고, 필수 조건을 못 갖추면 차단됩니다.</p>
+    {% if move_tbl.empty %}
+      <div class="alert alert-info">진행 중인 기회가 없습니다.</div>
+    {% else %}
+      <form method="post" action="{{ url_for('crm.deal_move') }}">
+        {{ csrf() }}
+        {{ table(move_tbl, 420) }}
+        <div class="row-actions">
+          <label>변경할 단계 {{ select('stage', STAGES, '') }}</label>
+          <label>실주사유 (실주일 때) {{ select('lost_reason', LOST_REASONS, '', blank='') }}</label>
+          <button class="btn btn-primary">선택한 기회에 적용</button>
+        </div>
+      </form>
+    {% endif %}
+
+  {% elif tab == 'approval' %}
+    <p class="muted">할인율 구간별 결재선 — 10% 이하: 팀장 / 20% 이하: 임원 / 20% 초과: 관리자</p>
+    {% if not need %}
+      <div class="alert alert-info">결재를 요청할 건이 없습니다. (할인율이 있고 아직 승인되지 않은 기회가 대상입니다)</div>
+    {% else %}
+      <form method="post" action="{{ url_for('crm.deal_request_approval') }}" class="form">
+        {{ csrf() }}
+        <label>결재 요청할 기회 {{ select('deal_id', need, '') }}</label>
+        <label>요청 사유 * <textarea name="reason" rows="3" required placeholder="예) 경쟁사 대비 가격 열위, 연내 계약 조건으로 할인 요청"></textarea></label>
+        <button class="btn btn-primary">결재 요청</button>
+      </form>
+    {% endif %}
+
+  {% else %}
+    <form method="post" action="{{ url_for('crm.deal_save') }}" class="form">
+      {{ csrf() }}
+      {{ deal_form(f, customers, false, is_admin) }}
+      <button class="btn btn-primary">등록</button>
+    </form>
+  {% endif %}
+</section>
+{% endblock %}

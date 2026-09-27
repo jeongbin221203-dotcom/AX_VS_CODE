@@ -1,0 +1,265 @@
+{% extends "base.html" %}
+{% from "_macros.html" import metric, table, tabs, csrf, select %}
+{% block content %}
+<div class="tabs">
+  <a href="{{ url_for('io.index', entity=entity) }}" class="{{ 'active' if tab == 'import' }}">📤 일괄 등록 (업로드)</a>
+  <a href="{{ url_for('io.export') }}" class="{{ 'active' if tab == 'export' }}">📊 데이터 추출 (다운로드)</a>
+  {% if is_admin %}<a href="{{ url_for('io.forms') }}" class="{{ 'active' if tab == 'forms' }}">🧾 회사 엑셀 양식</a>{% endif %}
+</div>
+
+{% if tab == 'import' %}
+<p class="muted">엑셀/CSV 파일로 대량 등록합니다. 업로드하면 <strong>먼저 검증 결과</strong>를 보여 주고,
+  확인 후에 실제 등록이 진행됩니다. 본인 권한 범위 밖의 담당자로는 등록할 수 없습니다.</p>
+
+<section class="card">
+  <form method="get" action="{{ url_for('io.index') }}" class="toolbar">
+    <label>등록할 항목 <select name="entity" onchange="this.form.submit()">
+      {% for e in entities %}<option {{ 'selected' if e == entity }}>{{ e }}</option>{% endfor %}
+    </select></label>
+    <a class="btn btn-sm" href="{{ url_for('io.template', entity=entity, fmt='csv') }}">⬇️ {{ entity }} 업로드 양식 (CSV)</a>
+    <a class="btn btn-sm" href="{{ url_for('io.template', entity=entity, fmt='xlsx') }}">⬇️ {{ entity }} 업로드 양식 (Excel)</a>
+  </form>
+  {% if import_forms %}
+  <p class="small">회사 양식 빈 파일:
+    {% for f in import_forms %}<a class="btn btn-sm" href="{{ url_for('io.form_template', fid=f.id) }}">⬇️ {{ f.name }}</a>{% endfor %}
+    <span class="muted">— 회사에서 쓰던 엑셀을 그대로 올리면 등록된 열 매핑으로 바꿔 읽습니다.</span></p>
+  {% endif %}
+  <p><strong>필수 컬럼</strong> — {{ spec.required|join(', ') }}<br>
+     <strong>선택 컬럼</strong> — {{ spec.optional|join(', ') or '없음' }}</p>
+  <p class="muted small">날짜는 2026-01-05 / 2026.1.5 / 20260105 형식을 모두 인식하고, 금액은 '3억', '5천만', '1,000,000' 표기를 지원합니다.
+    담당자 칸에는 사번 또는 이름을 넣습니다(동명이인은 사번 필수, 등록된 사용자만 가능).</p>
+  <form method="post" action="{{ url_for('io.import_check') }}" enctype="multipart/form-data" class="toolbar">
+    {{ csrf() }}<input type="hidden" name="entity" value="{{ entity }}">
+    <label>파일 양식
+      <select name="form_id">
+        <option value="">시스템 표준 양식</option>
+        {% for f in import_forms %}<option value="{{ f.id }}" {{ 'selected' if f.id == form_id }}>{{ f.name }} (회사 양식)</option>{% endfor %}
+      </select>
+    </label>
+    <label class="grow">파일 업로드 (CSV 또는 Excel) <input type="file" name="file" accept=".csv,.xlsx,.xls" required></label>
+    <button class="btn btn-primary">검증하기</button>
+  </form>
+</section>
+
+{% if check %}
+<section class="card">
+  <h3>업로드 내용 미리보기 — {{ filename }} · 총 {{ '{:,}'.format(raw_total) }}행</h3>
+  {% if used_form %}<p class="small">회사 양식 <strong>{{ used_form.name }}</strong>으로 변환해 읽었습니다
+    (시트 {{ used_form.sheet_name or '첫 시트' }} · 머리글 {{ used_form.header_row }}행). 오류의 행 번호는 원래 엑셀 행입니다.</p>{% endif %}
+  {{ table(raw_preview) }}
+  {% if raw_total > 5000 %}<div class="alert alert-warning">5,000행이 넘습니다. 파일을 나누어 올리면 오류 확인과 재시도가 쉬워집니다.</div>{% endif %}
+
+  <div class="metrics m3">
+    {{ metric('전체', '{:,}행'.format(check.total)) }}
+    {{ metric('등록 가능', '{:,}행'.format(check.ok)) }}
+    {{ metric('오류', '{:,}행'.format(check.errors|length), none, 'down' if check.errors else none) }}
+  </div>
+
+  {% if check.errors %}
+    <div class="alert alert-error">아래 행은 등록되지 않습니다. 엑셀에서 해당 행을 수정한 뒤 다시 올리십시오.</div>
+    {{ table(errors, 240) }}
+    <a class="btn btn-sm" href="{{ url_for('io.import_errors') }}">⬇️ 오류 목록 내려받기</a>
+  {% endif %}
+
+  {% if check.ok %}
+    <form method="post" action="{{ url_for('io.import_run') }}" class="form">
+      {{ csrf() }}
+      {% if entity == '거래처' %}
+        <fieldset><legend>같은 거래처명이 이미 있을 때</legend>
+          <label class="check"><input type="radio" name="on_duplicate" value="건너뛰기" checked> 건너뛰기</label>
+          <label class="check"><input type="radio" name="on_duplicate" value="덮어쓰기"> 덮어쓰기</label>
+        </fieldset>
+      {% endif %}
+      {% if entity == '영업기회' %}
+        {% if g.user.role == 'ADMIN' %}
+          <div class="alert alert-info">관리자의 영업기회 일괄 등록은 이관 데이터로 보아 단계 검증(Stage Gate)을 적용하지 않습니다. 우회 사실과 건수가 감사로그에 남습니다.</div>
+        {% else %}
+          <div class="alert alert-info">영업기회 일괄 등록에도 화면 입력과 같은 단계 검증(Stage Gate)이 적용됩니다.</div>
+        {% endif %}
+      {% endif %}
+      <label class="check"><input type="checkbox" name="confirm" value="1" required> {{ check.ok }}건을 등록합니다</label>
+      <button class="btn btn-primary">📥 등록 실행</button>
+    </form>
+  {% endif %}
+</section>
+{% endif %}
+
+{% elif tab == 'forms' %}
+<p class="muted">회사에서 이미 쓰는 엑셀(ERP 출력물, 매출집계표, 보고 양식)을 그대로 쓰도록 열을 연결합니다.
+  <strong>업로드 양식</strong>은 그 파일을 올리면 시스템 항목으로 바꿔 읽고(검증 규칙은 표준과 같음),
+  <strong>내려받기 양식</strong>은 회사 서식 파일(로고·제목·결재란·테두리)에 데이터를 채워 돌려줍니다.</p>
+
+<section class="card">
+  <h3>등록된 양식</h3>
+  {{ table(forms, 260, '등록된 회사 양식이 없습니다.') }}
+</section>
+
+{% if editor %}
+{% set fm = editor.form %}
+<section class="card">
+  <h3>{{ '✏️ ' ~ fm.name if fm.id else '➕ 새 양식 — 열 연결' }}</h3>
+  {% if editor.sample_name %}<p class="small">샘플: {{ editor.sample_name }} · 시트 {{ fm.sheet_name or '-' }}{% if fm.sheets %} (파일의 시트: {{ fm.sheets|join(', ') }}){% endif %} · 머리글 {{ fm.header_row }}행으로 인식</p>{% endif %}
+  {% if editor.preview %}<details open><summary>파일 앞부분 (머리글 행 확인)</summary>{{ table(editor.preview, 240) }}</details>{% endif %}
+  <form method="post" action="{{ url_for('io.forms_save') }}" enctype="multipart/form-data" class="form">
+    {{ csrf() }}
+    {% if fm.id %}<input type="hidden" name="id" value="{{ fm.id }}">{% endif %}
+    <input type="hidden" name="direction" value="{{ fm.direction }}"><input type="hidden" name="entity" value="{{ fm.entity }}">
+    <input type="hidden" name="sample_token" value="{{ editor.sample_token }}">
+    <div class="form-grid g4">
+      <label class="span2">양식 이름 * <input name="name" value="{{ fm.name }}" required></label>
+      <label>구분 <input value="{{ directions[fm.direction] }} · {{ fm.entity }}" disabled></label>
+      <label>시트 이름 (비우면 첫 시트) <input name="sheet_name" value="{{ fm.sheet_name or '' }}"></label>
+      <label>머리글 행 <input type="number" name="header_row" min="1" max="100" value="{{ fm.header_row }}"></label>
+      {% if fm.direction == 'export' %}<label>데이터 시작 행 <input type="number" name="data_start_row" min="2" value="{{ fm.data_start_row or fm.header_row + 1 }}"></label>{% endif %}
+    </div>
+
+    <div class="table-wrap">
+      <table class="data">
+        <thead><tr><th>회사 엑셀 열</th><th>시스템 항목</th></tr></thead>
+        <tbody>
+        {% for r in editor.rows %}
+          <tr><td><input name="map_column" value="{{ r.column }}"></td>
+            <td><select name="map_field">
+              <option value="">(사용 안 함)</option>
+              {% for f in editor.fields %}<option value="{{ f }}" {{ 'selected' if f == r.field }}>{{ f }}{{ ' *' if f in editor.required }}</option>{% endfor %}
+            </select></td></tr>
+        {% endfor %}
+        {% for _ in range(3) %}
+          <tr><td><input name="map_column" placeholder="열 추가 (회사 머리글)"></td>
+            <td><select name="map_field"><option value="">(사용 안 함)</option>
+              {% for f in editor.fields %}<option value="{{ f }}">{{ f }}{{ ' *' if f in editor.required }}</option>{% endfor %}
+            </select></td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <p class="muted small">회사 열 이름이 달라도 됩니다(띄어쓰기·괄호는 무시). 흔한 이름(상호·품명·공급가액·비고 …)은 자동으로 골라 두었으니 확인만 하세요.
+      {% if editor.required %}* 는 필수 항목입니다.{% endif %}
+      {% if fm.direction == 'export' %}내려받기는 위 순서대로 열을 채웁니다.{% endif %}</p>
+
+    {% if fm.direction == 'import' %}
+    <div class="form-grid g2">
+      <label>값 변환 (한 줄에 한 항목)
+        <textarea name="value_map" rows="3" placeholder="과세구분: 01=과세, 02=영세, 03=면세&#10;수금상태: Y=입금완료, N=입금대기">{{ editor.value_map_text }}</textarea></label>
+      <div>
+        <fieldset class="checks"><legend>빈 칸이면 위 값 이어 쓰기 (병합 셀)</legend>
+          {% for f in editor.fields %}<label class="check"><input type="checkbox" name="fill_down" value="{{ f }}" {{ 'checked' if f in (fm.fill_down or []) }}> {{ f }}</label>{% endfor %}
+        </fieldset>
+        <label>건너뛸 행 (첫 칸 값, 쉼표) <input name="stop_words" value="{{ (fm.stop_words or [])|join(', ') }}"></label>
+      </div>
+    </div>
+    {% else %}
+    <p class="small">서식 파일 셀에 쓸 수 있는 자리표시자: <code>{{ '{{추출일시}}' }}</code> <code>{{ '{{작성일}}' }}</code> <code>{{ '{{추출자}}' }}</code>
+      <code>{{ '{{기간}}' }}</code> <code>{{ '{{건수}}' }}</code> <code>{{ '{{합계:공급가액}}' }}</code> (합계: 뒤에는 회사 열 이름 또는 시스템 항목).
+      데이터 시작 행의 서식을 아래 행에 복사하고, 그 아래 합계 줄은 데이터 건수만큼 내립니다.</p>
+    {% endif %}
+    <div class="form-grid g2">
+      {% if editor.sample_token %}<label class="check"><input type="checkbox" name="use_sample" value="1" {{ 'checked' if fm.direction == 'export' }}> 올린 샘플 파일을 서식 파일로 저장 (내려받기·빈 양식 제공에 사용)</label>{% endif %}
+      <label>서식 파일 교체 (.xlsx){% if fm.template_name %} — 현재: {{ fm.template_name }}{% endif %} <input type="file" name="template" accept=".xlsx"></label>
+    </div>
+    <label>메모 <input name="memo" value="{{ fm.memo or '' }}" placeholder="예) 회계팀 월말 매출집계표 (2026 개정판)"></label>
+    <button class="btn btn-primary">💾 양식 저장</button>
+  </form>
+  {% if fm.id %}
+  <form method="post" action="{{ url_for('io.forms_delete', fid=fm.id) }}" class="danger-zone">
+    {{ csrf() }}<button class="btn btn-danger">사용 중지</button>
+    <a class="btn" href="{{ url_for('io.form_template', fid=fm.id) }}">⬇️ 양식 파일 받기</a>
+  </form>
+  {% endif %}
+</section>
+{% endif %}
+
+<section class="card">
+  <h3>➕ 회사 파일로 새 양식 만들기</h3>
+  <form method="post" action="{{ url_for('io.forms_inspect') }}" enctype="multipart/form-data" class="form">
+    {{ csrf() }}
+    <div class="form-grid g4">
+      <label>구분 {{ select('direction', directions.items()|list, 'import') }}</label>
+      <label>업로드 항목 {{ select('entity_import', entities, '매출') }}</label>
+      <label>내려받기 항목 {{ select('entity_export', export_sources, '매출') }}</label>
+      <label>양식 이름 <input name="name" placeholder="비우면 파일 이름"></label>
+      <label class="span2">회사 엑셀 파일 (샘플) * <input type="file" name="file" accept=".xlsx,.xls,.csv" required></label>
+      <label>시트 이름 (비우면 첫 시트) <input name="sheet_name"></label>
+      <label>머리글 행 (비우면 자동 찾기) <input type="number" name="header_row" min="1" max="100"></label>
+    </div>
+    <p class="muted small">제목·결재란이 위에 있어도 머리글 행을 자동으로 찾습니다. 구분에 맞는 항목 하나만 사용됩니다.</p>
+    <button class="btn btn-primary">열 읽기 →</button>
+  </form>
+</section>
+
+{% else %}
+<p class="muted">조건을 지정해 필요한 항목만 추출합니다. 추출 범위는 로그인 사용자의 권한을 따릅니다.</p>
+<section class="card">
+  <form method="get" action="{{ url_for('io.export') }}" class="form" id="export-form">
+    <label>추출 프리셋
+      <select name="preset" data-preset>
+        <option value="">직접 선택</option>
+        {% for p in presets %}<option {{ 'selected' if p == ex.preset }}>{{ p }}</option>{% endfor %}
+      </select>
+    </label>
+    <fieldset><legend>추출 항목</legend>
+      <div class="checks">
+        {% for s in ex.available %}
+          <label class="check"><input type="checkbox" name="sources" value="{{ s }}" {{ 'checked' if s in ex.sources }}> {{ s }}</label>
+        {% endfor %}
+      </div>
+    </fieldset>
+    <div class="form-grid g4">
+      <label>시작일 <input type="date" name="from" value="{{ ex.date_from }}"></label>
+      <label>종료일 <input type="date" name="to" value="{{ ex.date_to }}"></label>
+      <label>담당자
+        <select name="owner"><option value="">전체</option>
+          {% for o in g.owner_choices %}<option value="{{ o.id }}" {{ 'selected' if o.id == ex.owner }}>{{ o.label }}</option>{% endfor %}
+        </select></label>
+      <label>기준월 (목표·예측용) {{ select('ym', g.months, ex.ym) }}</label>
+      <label>영업기회 단계 {{ select('stage', stages, ex.stage, blank='전체') }}</label>
+    </div>
+    <fieldset>
+      <legend>개인정보 (고객 연락처·이메일·고객측 담당자명)</legend>
+      <label class="check"><input type="checkbox" name="pii" value="1" {{ 'checked' if ex.pii }}> 가리지 않고 원문으로 내보냄</label>
+      <label>사유 (원문으로 내보낼 때 필수 · 감사로그에 기록) <input name="pii_reason" value="{{ ex.pii_reason }}" placeholder="예) 분기 고객 만족도 조사 발송"></label>
+      <p class="muted small">기본은 가려서(010-****-1234) 내보냅니다. 모든 다운로드는 사용자·조건과 함께 감사로그에 남습니다.</p>
+    </fieldset>
+    <div class="row-actions">
+      <button class="btn">조회</button>
+      <button class="btn btn-primary" name="download" value="xlsx">⬇️ 엑셀로 추출 (다중 시트)</button>
+    </div>
+    {% if export_forms %}
+    <fieldset>
+      <legend>회사 양식으로 받기 (기간·담당자·개인정보 조건은 위와 같게 적용)</legend>
+      <div class="toolbar">
+        <label class="grow">양식
+          <select name="form_id">
+            {% for f in export_forms if f.entity in ex.available %}<option value="{{ f.id }}">{{ f.name }} — {{ f.entity }}{{ ' · 서식 파일' if f.template_key }}</option>{% endfor %}
+          </select></label>
+        <button class="btn btn-primary" name="download" value="form">⬇️ 회사 양식으로 받기</button>
+      </div>
+    </fieldset>
+    {% endif %}
+  </form>
+</section>
+
+{% if sheets is not none %}
+  {% if not sheets %}
+    <div class="alert alert-info">추출할 항목을 선택하세요.</div>
+  {% else %}
+  <section class="card">
+    <h3>추출 결과 요약</h3>
+    {{ table(summary) }}
+  </section>
+  <section class="card">
+    <h3>항목별 미리보기 / 개별 CSV</h3>
+    {% for name, t in sheets.items() %}
+      <details {{ 'open' if loop.first }}>
+        <summary>{{ name }} ({{ '{:,}'.format(t.total) }}행)</summary>
+        {{ table(t, 320) }}
+        {% if not t.empty %}
+          <a class="btn btn-sm" href="{{ request.full_path }}&csv={{ name|urlencode }}">⬇️ {{ name }} CSV</a>
+        {% endif %}
+      </details>
+    {% endfor %}
+  </section>
+  {% endif %}
+{% endif %}
+{% endif %}
+{% endblock %}

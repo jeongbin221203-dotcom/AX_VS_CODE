@@ -1,0 +1,16 @@
+# 운영 의존성 (python manage.py check 로 설치 상태를 확인한다)
+flask>=3.0
+pandas>=2.0
+openpyxl>=3.1
+waitress>=3.0            # 운영 WSGI 서버 (serve.py)
+defusedxml>=0.7          # 전자세금계산서 XML 안전 파싱
+pillow>=10.0             # 증빙 이미지 검증
+psycopg[binary]>=3.2     # PostgreSQL (SALES_DATABASE_URL)
+psycopg-pool>=3.2
+alembic>=1.13            # 스키마 마이그레이션
+sqlalchemy>=2.0          # alembic 연결용
+boto3>=1.34              # S3 호환 파일 저장소 (SALES_STORAGE=s3)
+prometheus-client>=0.20  # /metrics
+authlib>=1.3             # OIDC 로그인
+requests>=2.31           # authlib HTTP 클라이언트
+reportlab>=4.0           # 견적서 PDF

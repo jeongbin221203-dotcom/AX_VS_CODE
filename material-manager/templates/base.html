@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% if title %}{{ title }} · {% endif %}{{ APP_TITLE }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+  <script src="{{ url_for('static', filename='vendor/chart.umd.min.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='vendor/qrcode.min.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+</head>
+<body>
+{% if g.user %}
+<div class="layout">
+  <aside class="sidebar">
+    <a class="brand" href="{{ url_for('dashboard.index') }}">{{ APP_ICON }} 자재관리</a>
+    <div class="me">
+      <strong>{{ g.user.name }}</strong> · {{ role_label(g.user.role) }}
+      <div class="me-actions">
+        {% if g.user.auth_source != 'sso' %}<a href="{{ url_for('auth.password') }}">비밀번호</a>
+        <a href="{{ url_for('auth.mfa_setup') }}">2단계 인증{{ ' ✓' if g.user.totp_enabled }}</a>{% endif %}
+        <form method="post" action="{{ url_for('auth.logout') }}">
+          <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+          <button class="btn btn-sm">로그아웃</button>
+        </form>
+      </div>
+    </div>
+    <nav class="menu">
+      {% for key, label, endpoint, _ in menus_for_user() %}
+        <a href="{{ url_for(endpoint) }}" class="{{ 'active' if key == active }}">{{ label }}</a>
+      {% endfor %}
+    </nav>
+    {% if g.shortage_cnt %}
+      <a class="shortage" href="{{ url_for('stock.index', shortage=1) }}">안전재고 미달 {{ g.shortage_cnt }}종</a>
+    {% endif %}
+    {% if g.pending_approvals %}
+      <a class="shortage pending" href="{{ url_for('approvals.index') }}">결재 대기 {{ g.pending_approvals }}건</a>
+    {% endif %}
+    {% if g.sap_failed %}
+      <a class="shortage" href="{{ url_for('sap.index', status='FAILED') }}">SAP 전송 실패 {{ g.sap_failed }}건</a>
+    {% endif %}
+    <div class="muted small foot">
+      마감: {{ g.closed_through ~ '월까지' if g.closed_through else '없음' }}<br>
+      SAP 연동: {{ 'ON' if g.sap_on else 'OFF' }} · 범위: {{ '전체 창고' if g.wh_ids is none else (g.wh_ids|length) ~ '개 창고' }}<br>
+      DB: {{ DB_NAME }} · 오늘 {{ today().isoformat() }}
+    </div>
+  </aside>
+  <main class="content">
+    <h1>{{ title }}</h1>
+    {% include "_flashes.html" %}
+    {% block content %}{% endblock %}
+  </main>
+</div>
+{% else %}
+<main class="content narrow">
+  <h1>{{ APP_ICON }} {{ APP_TITLE }}</h1>
+  {% include "_flashes.html" %}
+  {% block public %}{% endblock %}
+  {% if code %}<div class="alert alert-error">{{ message }}</div>{% endif %}
+</main>
+{% endif %}
+</body>
+</html>

@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% from "_macros.html" import metric, table, tabs, csrf, download %}
+{% block content %}
+<p class="subtitle">매출은 등록 즉시 전송 대기열에 쌓이고, 여기서(또는 배치 <code>python -m core.erp send</code>) ERP 로 보냅니다.
+  ERP 가 멈춰도 영업 입력은 계속됩니다. 입금은 ERP 가 원장이므로 ERP 의 누적 입금액을 받아 CRM 과 대사합니다.</p>
+
+<div class="metrics m4">
+  {{ metric('연동 방식', {'file': '파일 (EAI·PI/PO·CPI)', 'sap_odata': 'SAP S/4HANA OData', 'none': '사용 안 함'}.get(cfg.adapter, cfg.adapter)) }}
+  {{ metric('전송 대기', '{:,}건'.format(summary.get('대기', 0))) }}
+  {{ metric('전송 실패', '{:,}건'.format(summary.get('실패', 0)), '재시도 필요' if summary.get('실패') else none, 'down' if summary.get('실패') else none) }}
+  {{ metric('전송 완료', '{:,}건'.format(summary.get('전송완료', 0))) }}
+</div>
+{% if missing_codes %}
+  <div class="alert alert-warning">ERP 코드(SAP 고객번호)가 없는 거래처가 {{ missing_codes }}곳 있습니다. 이 거래처의 매출은 전송에 실패합니다 — 거래처 화면에서 입력하세요.</div>
+{% endif %}
+
+<section class="card">
+  {{ tabs([('outbox', '📤 매출 전송 (CRM → ERP)'), ('payments', '📥 입금 대사 (ERP → CRM)'), ('settings', '⚙️ 연동 설정')], tab) }}
+
+  {% if tab == 'payments' %}
+    <p class="muted">ERP(SAP FBL5N 등)에서 매출별 <strong>누적 입금액</strong>을 CSV/Excel 로 받아 올리면 CRM 입금과 비교합니다.
+      ERP 가 더 많은 만큼만 CRM 에 입금 등록하므로 같은 파일을 다시 올려도 이중 반영되지 않습니다.
+      참조번호는 <code>CRM-매출번호</code>(판매오더의 고객 PO 번호) 또는 ERP 전표번호입니다.</p>
+    <div class="toolbar">
+      {{ download(url_for('admin.erp_payment_template'), '⬇️ 입금 대사 양식') }}
+    </div>
+    <form method="post" action="{{ url_for('admin.erp_reconcile') }}" enctype="multipart/form-data" class="toolbar">
+      {{ csrf() }}
+      <label class="grow">ERP 입금 파일 <input type="file" name="file" accept=".csv,.xlsx,.xls" required></label>
+      <button class="btn btn-primary">대사하기 (반영 전 확인)</button>
+    </form>
+    {% if recon %}
+      <h3>대사 결과 — {{ recon_name }}</h3>
+      {{ table(recon, 420) }}
+      {% if not recon_applied and recon_pending %}
+        <form method="post" action="{{ url_for('admin.erp_reconcile') }}" class="row-actions">
+          {{ csrf() }}<input type="hidden" name="apply" value="1">
+          <button class="btn btn-primary">'반영예정' {{ recon_pending }}건 입금 반영</button>
+        </form>
+      {% endif %}
+    {% endif %}
+
+  {% elif tab == 'settings' %}
+    <table class="data">
+      <tbody>
+        <tr><th>어댑터 (SALES_ERP_ADAPTER)</th><td>{{ cfg.adapter }}</td></tr>
+        <tr><th>파일 출력 폴더</th><td><code>{{ cfg.outbound_dir }}</code></td></tr>
+        <tr><th>SAP OData 주소</th><td>{{ cfg.sap_base_url or '(미설정)' }}</td></tr>
+        <tr><th>SAP 클라이언트 / 사용자</th><td>{{ cfg.sap_client or '-' }} / {{ cfg.sap_user or '-' }} (비밀번호는 표시하지 않음)</td></tr>
+        <tr><th>판매조직 / 유통경로 / 제품군 / 오더유형</th><td>{{ cfg.sap_sales_org }} / {{ cfg.sap_dist_channel }} / {{ cfg.sap_division }} / {{ cfg.sap_order_type }}</td></tr>
+        <tr><th>기본 자재번호 / 단위 / 가격조건</th><td>{{ cfg.sap_default_material or '(없음 — 매출에 품목코드 필수)' }} / {{ cfg.sap_unit }} / {{ cfg.sap_price_condition }}</td></tr>
+        <tr><th>취소 시 거부사유 코드</th><td>{{ cfg.sap_reject_reason }}</td></tr>
+      </tbody>
+    </table>
+    <p class="muted small">설정은 서버 환경변수로 바꿉니다(README 참고). SAP 연동은 CSRF 토큰 발급 → 판매오더(A_SalesOrder) 생성 → 고객 PO 번호에 CRM 매출번호를 넣어 역방향 대사 키로 씁니다.</p>
+
+  {% else %}
+    <div class="card-head">
+      <form method="get" action="{{ page_path() }}" class="toolbar">
+        <label>상태 <select name="status" onchange="this.form.submit()">
+          <option value="">전체</option>
+          {% for s in ['대기', '실패', '전송완료', '취소'] %}<option {{ 'selected' if s == status }}>{{ s }}</option>{% endfor %}
+        </select></label>
+      </form>
+      <form method="post" action="{{ url_for('admin.erp_send') }}">
+        {{ csrf() }}<button class="btn btn-primary">대기·실패 건 지금 전송</button>
+      </form>
+    </div>
+    {% if status == '실패' and not queue.empty %}
+      <form method="post" action="{{ url_for('admin.erp_retry') }}">
+        {{ csrf() }}
+        {{ table(queue, 460) }}
+        <div class="row-actions"><button class="btn">선택한 실패 건 재시도 대상으로</button>
+          <span class="muted small">원인(거래처 ERP 코드·품목코드 등)을 고친 뒤 재시도하세요. 최대 5회까지 자동 재시도합니다.</span></div>
+      </form>
+    {% else %}
+      {{ table(queue, 460, '전송 대기열이 비어 있습니다.') }}
+    {% endif %}
+  {% endif %}
+</section>
+{% endblock %}

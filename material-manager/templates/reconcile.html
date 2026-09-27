@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf, table %}
+{% block content %}
+<section class="card">
+  <h3>SAP 재고와 비교</h3>
+  <p class="muted small">SAP 재고 조회 화면(MB52 등)에서 내려받은 엑셀을 올리거나{{ ', 연동 모드에서는 SAP에서 바로 조회합니다' if sap_mode != 'off' }}.
+    필요한 열: <code>SAP자재번호(자재)</code> · <code>플랜트</code> · <code>저장위치</code> · <code>수량(가용재고)</code>.
+    <br>앱 재고에서 아직 SAP에 전기되지 않은 수량(미전기)을 빼서 'SAP 예상'을 만들고, SAP 재고와의 차이만 조사 대상으로 표시합니다.</p>
+  <form class="row-actions" method="post" enctype="multipart/form-data">
+    {{ csrf() }}
+    <label>창고 (비우면 권한 안 전체)
+      <select name="wh" multiple size="3">
+        {% for k, v in wh_opts.items() %}<option value="{{ k }}" {{ 'selected' if k in wh_sel }}>{{ v }}</option>{% endfor %}
+      </select>
+    </label>
+    <label>SAP 재고 파일 (.xlsx / .csv){{ ' — 비우면 SAP에서 조회' if sap_mode != 'off' }}
+      <input type="file" name="file" accept=".xlsx,.csv" {{ 'required' if sap_mode == 'off' }}>
+    </label>
+    <label class="check"><input type="checkbox" name="export" value="1"> 결과를 엑셀로 받기</label>
+    <button class="btn btn-primary">대사 실행</button>
+  </form>
+</section>
+
+{% if grid %}
+  <p>기준: {{ source }} ·
+    {% for k, v in summary.items() %}<span class="badge">{{ k }} {{ v }}</span> {% endfor %}</p>
+  {{ table(grid, "비교할 재고가 없습니다.") }}
+{% endif %}
+{% endblock %}

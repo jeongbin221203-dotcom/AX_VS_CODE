@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% from "_macros.html" import metric, table, chart %}
+{% block content %}
+{% if empty %}
+  <div class="alert alert-info">등록된 자재가 없습니다. <a href="{{ url_for('data_admin.index') }}">데이터 관리</a>에서 샘플 데이터를 생성하거나 <a href="{{ url_for('materials.index', tab='new') }}">자재를 등록</a>하세요.</div>
+{% else %}
+  <div class="metrics m4">
+    {{ metric("사용 중 자재", "{:,} 종".format(material_cnt)) }}
+    {{ metric("총 재고금액", "₩ {:,.0f}".format(stock_value)) }}
+    {{ metric("안전재고 미달", "{:,} 종".format(shortage_cnt),
+              "-" ~ shortage_cnt if shortage_cnt else none, "down") }}
+    {{ metric("이번 달 입고 / 출고", "{} / {} 건".format(month_in, month_out)) }}
+  </div>
+
+  <div class="grid-32">
+    <section class="card">
+      <h3>최근 30일 입출고 수량</h3>
+      {{ chart(trend_chart, "최근 30일 입출고 내역이 없습니다.") }}
+    </section>
+    <section class="card">
+      <h3>분류별 재고금액</h3>
+      {{ chart(cat_chart) }}
+    </section>
+  </div>
+
+  {% if expired_cnt or expiring_cnt %}
+  <h3>⏳ 유효기한 — 지남 {{ expired_cnt }}건 · 30일 이내 {{ expiring_cnt }}건</h3>
+  {{ table(expiry) }}
+  <p class="muted small"><a href="{{ url_for('stock.index', view='lot', expiring=1) }}">로트·유효기한 재고 전체 보기</a></p>
+  {% endif %}
+
+  <h3>🚨 안전재고 미달 자재</h3>
+  {% if shortage.empty %}
+    <div class="alert alert-success">안전재고 미달 자재가 없습니다.</div>
+  {% else %}
+    {{ table(shortage) }}
+  {% endif %}
+{% endif %}
+{% endblock %}

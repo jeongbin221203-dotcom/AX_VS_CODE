@@ -1,0 +1,79 @@
+{# 화면 공통 매크로 #}
+
+{% macro csrf() %}<input type="hidden" name="_csrf" value="{{ csrf_token() }}">{% endmacro %}
+
+{% macro metric(label, value, delta=none, tone=none) %}
+  <div class="metric">
+    <div class="metric-label">{{ label }}</div>
+    <div class="metric-value">{{ value }}</div>
+    {% if delta %}<div class="metric-delta {{ tone or '' }}">{{ delta }}</div>{% endif %}
+  </div>
+{% endmacro %}
+
+{% macro table(t, height=none, empty='표시할 데이터가 없습니다.') %}
+  {% if t.empty %}
+    <div class="alert alert-info">{{ empty }}</div>
+  {% else %}
+    <div class="table-wrap" {% if height %}style="max-height: {{ height }}px"{% endif %}>
+      <table class="data">
+        <thead><tr>
+          {% if t.select_name %}<th class="sel"><input type="checkbox" data-check-all></th>{% endif %}
+          {% for c in t.columns %}<th class="{{ 'num' if c in t.numeric }}">{{ c }}</th>{% endfor %}
+        </tr></thead>
+        <tbody>
+        {% for r in t.rows %}
+          <tr class="{{ 'link' if r.href }} {{ 'tone-' ~ r.tone if r.tone }}" {% if r.href %}data-href="{{ r.href }}"{% endif %}>
+            {% if t.select_name %}<td class="sel"><input type="checkbox" name="{{ t.select_name }}" value="{{ r.value }}"></td>{% endif %}
+            {% for cell in r.cells %}<td class="{{ 'num' if t.columns[loop.index0] in t.numeric }}">{{ cell }}</td>{% endfor %}
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% if t.pages > 1 %}
+      <nav class="pager" aria-label="페이지">
+        <span class="muted small">전체 {{ '{:,}'.format(t.total) }}행 · {{ t.page }}/{{ t.pages }}쪽</span>
+        {% if t.page > 1 %}<a class="btn btn-sm" href="{{ page_url(1) }}">« 처음</a><a class="btn btn-sm" href="{{ page_url(t.page - 1) }}">‹ 이전</a>{% endif %}
+        {% if t.page < t.pages %}<a class="btn btn-sm" href="{{ page_url(t.page + 1) }}">다음 ›</a><a class="btn btn-sm" href="{{ page_url(t.pages) }}">끝 »</a>{% endif %}
+      </nav>
+    {% elif t.rows|length < t.total %}<p class="muted small">{{ t.rows|length }}행까지 표시 · 전체 {{ '{:,}'.format(t.total) }}행</p>{% endif %}
+  {% endif %}
+{% endmacro %}
+
+{% macro chart(c) %}
+  {% if c and not c.empty %}
+    <div class="chart" style="height: {{ c.height }}px"><canvas data-chart='{{ c|tojson }}'></canvas></div>
+  {% endif %}
+{% endmacro %}
+
+{% macro tabs(items, current) %}
+  <div class="tabs">
+    {% for key, label in items %}
+      <a href="{{ tab_url(key) }}" class="{{ 'active' if key == current }}">{{ label }}</a>
+    {% endfor %}
+  </div>
+{% endmacro %}
+
+{% macro select(name, options, value='', blank=none, cls='') %}
+  <select name="{{ name }}" class="{{ cls }}">
+    {% if blank is not none %}<option value="">{{ blank }}</option>{% endif %}
+    {% for o in options %}
+      {% if o is string %}
+        <option value="{{ o }}" {{ 'selected' if o == value|string }}>{{ o }}</option>
+      {% else %}
+        <option value="{{ o[0] }}" {{ 'selected' if o[0]|string == value|string }}>{{ o[1] }}</option>
+      {% endif %}
+    {% endfor %}
+  </select>
+{% endmacro %}
+
+{# 담당자는 등록된 활성 사용자 중에서만 고른다 (자유 입력 → 오타·동명이인 문제 차단) #}
+{% macro owner_input(name='owner_id', value='', label='담당자 *') %}
+  <label>{{ label }}
+    <select name="{{ name }}" required>
+      {% for o in g.assignable %}<option value="{{ o.id }}" {{ 'selected' if o.id|string == value|string }}>{{ o.label }}</option>{% endfor %}
+    </select>
+  </label>
+{% endmacro %}
+
+{% macro download(url, label='⬇️ CSV 다운로드') %}<a class="btn btn-sm" href="{{ url }}">{{ label }}</a>{% endmacro %}

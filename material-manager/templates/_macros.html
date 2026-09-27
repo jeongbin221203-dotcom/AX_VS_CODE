@@ -1,0 +1,96 @@
+{# 화면 공통 매크로 #}
+
+{% macro csrf() %}<input type="hidden" name="_csrf" value="{{ csrf_token() }}">{% endmacro %}
+
+{% macro metric(label, value, delta=none, tone=none) %}
+  <div class="metric">
+    <div class="metric-label">{{ label }}</div>
+    <div class="metric-value">{{ value }}</div>
+    {% if delta %}<div class="metric-delta {{ tone or '' }}">{{ delta }}</div>{% endif %}
+  </div>
+{% endmacro %}
+
+{% macro table(t, empty='표시할 데이터가 없습니다.') %}
+  {% if t.empty %}
+    <div class="alert alert-info">{{ empty }}</div>
+  {% else %}
+    <div class="table-wrap">
+      <table class="data">
+        <thead><tr>
+          {% for c in t.columns %}<th class="{{ 'num' if c in t.numeric }}">{{ c }}</th>{% endfor %}
+        </tr></thead>
+        <tbody>
+        {% for r in t.rows %}
+          <tr class="{{ 'tone-' ~ r.tone if r.tone }}">
+            {% for cell in r.cells %}<td class="{{ 'num' if t.columns[loop.index0] in t.numeric }}">{% if loop.first and r.href %}<a href="{{ r.href }}">{{ cell }}</a>{% else %}{{ cell }}{% endif %}</td>{% endfor %}
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
+{% endmacro %}
+
+{% macro chart(c, empty='표시할 데이터가 없습니다.') %}
+  {% if c and not c.empty %}
+    <div class="chart" data-height="{{ c.height }}"><canvas data-chart='{{ c|tojson }}'></canvas></div>
+  {% else %}
+    <p class="muted small">{{ empty }}</p>
+  {% endif %}
+{% endmacro %}
+
+{% macro tabs(items, current) %}
+  <div class="tabs">
+    {% for key, label in items %}
+      <a href="{{ url_with(tab=key) }}" class="{{ 'active' if key == current }}">{{ label }}</a>
+    {% endfor %}
+  </div>
+{% endmacro %}
+
+{% macro download(url, label='⬇️ 엑셀 다운로드') %}<a class="btn btn-sm" href="{{ url }}">{{ label }}</a>{% endmacro %}
+
+{# 증빙 입력 칸. 입출고 등록 화면과 증빙 등록 화면이 함께 쓴다. #}
+{% macro doc_fields(f, accept, required=true) %}
+  <div class="form-grid g3">
+    <label>증빙 파일{{ ' *' if required }} (JPG·PNG·WEBP·PDF, 10MB 이하)
+      <input type="file" name="doc_file" accept="{{ accept }}" {{ 'required' if required }}>
+    </label>
+    <label>증빙 종류
+      <select name="doc_type">
+        {% for code, label in DOC_TYPES.items() %}<option value="{{ code }}" {{ 'selected' if f.doc_type == code }}>{{ label }}</option>{% endfor %}
+      </select>
+    </label>
+    <label>작성일자<input type="date" name="doc_issue_date" value="{{ f.doc_issue_date or today().isoformat() }}"></label>
+
+    <label>승인번호 (전자세금계산서 24자리)<input name="approval_no" value="{{ f.approval_no or '' }}" inputmode="numeric" placeholder="20260927-41000000-12345678"></label>
+    <label>공급자 사업자등록번호<input name="supplier_biz_no" value="{{ f.supplier_biz_no or '' }}" inputmode="numeric" placeholder="000-00-00000"></label>
+    <label>공급자 상호<input name="supplier_name" value="{{ f.supplier_name or '' }}"></label>
+
+    <label>공급가액(원)<input name="supply_amount" type="number" min="0" step="1" value="{{ f.supply_amount or '' }}"></label>
+    <label>세액(원)<input name="tax_amount" type="number" min="0" step="1" value="{{ f.tax_amount or '' }}"></label>
+    <label>증빙 메모<input name="doc_note" value="{{ f.doc_note or '' }}"></label>
+  </div>
+  <p class="muted small">세금계산서·계산서는 사업자등록번호와 공급가액이 필요합니다. 사업자번호는 검증번호까지 확인합니다.</p>
+{% endmacro %}
+
+{# 페이지 나누기: p = helpers.pager() #}
+{% macro pager(p) %}
+  {% if p.pages > 1 %}
+    <nav class="pager">
+      <span class="muted small">{{ '{:,}'.format(p.first) }}–{{ '{:,}'.format(p.last) }} / 전체 {{ '{:,}'.format(p.total) }}건</span>
+      {% if p.page > 1 %}<a class="btn btn-sm" href="{{ url_with(page=1) }}">« 처음</a><a class="btn btn-sm" href="{{ url_with(page=p.page - 1) }}">‹ 이전</a>{% endif %}
+      <span class="small">{{ p.page }} / {{ p.pages }}</span>
+      {% if p.page < p.pages %}<a class="btn btn-sm" href="{{ url_with(page=p.page + 1) }}">다음 ›</a><a class="btn btn-sm" href="{{ url_with(page=p.pages) }}">끝 »</a>{% endif %}
+    </nav>
+  {% elif p.total %}
+    <p class="muted small">전체 {{ '{:,}'.format(p.total) }}건</p>
+  {% endif %}
+{% endmacro %}
+
+{# 창고 선택 (범위 안의 창고만) #}
+{% macro wh_select(name, options, value='', blank=none, required=false) %}
+  <select name="{{ name }}" {{ 'required' if required }}>
+    {% if blank is not none %}<option value="">{{ blank }}</option>{% endif %}
+    {% for k, v in options.items() %}<option value="{{ k }}" {{ 'selected' if k|string == value|string }}>{{ v }}</option>{% endfor %}
+  </select>
+{% endmacro %}

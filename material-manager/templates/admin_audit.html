@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% from "_macros.html" import table, download, pager as pager_nav %}
+{% block content %}
+<form class="toolbar" method="get">
+  <label>시작일<input type="date" name="start" value="{{ start.isoformat() }}"></label>
+  <label>종료일<input type="date" name="end" value="{{ end.isoformat() }}"></label>
+  <label>사용자
+    <select name="user"><option value="">전체</option>{% for u in users %}<option {{ 'selected' if u == user }}>{{ u }}</option>{% endfor %}</select>
+  </label>
+  <label>행위
+    <select name="action"><option value="">전체</option>{% for code, label in actions.items() %}<option value="{{ code }}" {{ 'selected' if code == action }}>{{ label }}</option>{% endfor %}</select>
+  </label>
+  <label class="grow">내용 검색 (자재코드·거래ID 등)<input name="q" value="{{ keyword }}"></label>
+  <button class="btn btn-primary">조회</button>
+</form>
+<p class="muted small">감사로그는 추가만 가능하며 수정·삭제할 수 없습니다(DB 트리거로 차단). 조회 {{ '{:,}'.format(count) }}건.</p>
+{{ table(grid, "조건에 맞는 기록이 없습니다.") }}
+{{ pager_nav(pager) }}
+{{ download(url_with(export='xlsx', page=none), '⬇️ 감사로그 엑셀 다운로드') }}
+{% endblock %}

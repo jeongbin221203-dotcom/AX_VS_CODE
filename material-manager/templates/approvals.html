@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf, table %}
+{% block content %}
+<div class="tabs">
+  {% for code, label in statuses.items() %}
+    <a href="{{ url_for('approvals.index', status=code) }}" class="{{ 'active' if code == status }}">{{ label }}</a>
+  {% endfor %}
+  <a href="{{ url_for('approvals.index', status='ALL') }}" class="{{ 'active' if status is none }}">전체</a>
+</div>
+<p class="muted small">금액이 결재 기준 이상인 실사 조정은 결재 후 반영됩니다. 요청한 사람은 본인 요청을 처리할 수 없습니다(직무 분리).
+  승인하면 요청 시점에 계산한 차이만큼 조정 거래가 생깁니다.</p>
+
+{% if actionable %}
+<section class="card">
+  <h3>처리할 결재</h3>
+  {% for r in actionable %}
+    <form class="row-actions" method="post" action="{{ url_for('approvals.decide', req_id=r.id) }}">
+      {{ csrf() }}
+      <span><strong>#{{ r.id }}</strong> {{ r.tx_date }} {{ r.wh_code }} [{{ r.code }}] {{ r.name }}
+        {{ "{:+,.2f}".format(r.qty) }} {{ r.unit }} · ₩{{ "{:,.0f}".format(r.amount) }} · 요청 {{ r.requested_by }}</span>
+      <label class="grow">의견 (반려 시 필수)<input name="comment"></label>
+      <button class="btn btn-primary" name="decision" value="approve">승인</button>
+      <button class="btn btn-danger" name="decision" value="reject">반려</button>
+    </form>
+  {% endfor %}
+</section>
+{% endif %}
+
+{{ table(grid, "해당하는 결재가 없습니다.") }}
+{% endblock %}

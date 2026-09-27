@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+{% from "_macros.html" import metric, table, chart, tabs, csrf, select, owner_input, download %}
+{% block content %}
+{{ tabs([('records', '📒 매출 등록/조회'), ('ar', '⏳ 채권(AR) 관리'), ('credit', '🏦 여신 현황')], tab) }}
+
+{% if tab == 'ar' %}
+  <div class="metrics m3">
+    {{ metric('총 미수금', ar_total|mil) }}
+    {{ metric('연체 채권', ar_overdue|mil, ('연체비중 %.0f%%'|format(ar_overdue / ar_total * 100)) if ar_total else '-', 'down') }}
+    {{ metric('연체 건수', '{:,}건'.format(ar_overdue_cnt)) }}
+  </div>
+  <section class="card">
+    <h3>📊 연체구간별 미수금</h3>
+    {{ chart(ar_chart) }}
+    {{ table(ar_summary) }}
+  </section>
+
+  <section class="card">
+    <form method="get" class="card-head" action="{{ page_path() }}">
+      <h3>📋 미수 채권 상세</h3>
+      <input type="hidden" name="tab" value="ar">
+      <label>연체구간 <select name="bucket" onchange="this.form.submit()">
+        <option value="">전체</option>
+        {% for b in buckets %}<option {{ 'selected' if b == bucket }}>{{ b }}</option>{% endfor %}
+      </select></label>
+      {{ download(export_url('ar')) }}
+    </form>
+    {{ table(aging, 320) }}
+  </section>
+
+  <section class="card">
+    <h3>💵 입금 등록</h3>
+    {% if not pay_options %}
+      <div class="alert alert-info">미수 채권이 없습니다.</div>
+    {% else %}
+      <form method="post" action="{{ url_for('finance.sale_payment') }}" class="toolbar" data-payment>
+        {{ csrf() }}
+        <label class="grow">대상 매출
+          <select name="sale_id">
+            {% for sid, remain, label in pay_options %}<option value="{{ sid }}" data-remain="{{ remain }}">{{ label }}</option>{% endfor %}
+          </select>
+        </label>
+        <label>입금액(원) <input type="number" name="amount" min="1" step="100000" value="{{ pay_options[0][1] }}"></label>
+        <button class="btn btn-primary">입금 등록</button>
+      </form>
+    {% endif %}
+  </section>
+
+{% elif tab == 'credit' %}
+  {% if credit_empty %}
+    <div class="alert alert-info">거래처 데이터가 없습니다.</div>
+  {% else %}
+    <div class="metrics m3">
+      {{ metric('여신한도 합계', credit_limit|mil) }}
+      {{ metric('미수 잔액 합계', credit_unpaid|mil) }}
+      {{ metric('한도 초과 거래처', over_cnt ~ '개', none, 'down' if over_cnt else none) }}
+    </div>
+    {% if over_cnt %}
+      <div class="alert alert-error">여신한도를 초과한 거래처가 있습니다. 추가 출고 전 검토가 필요합니다.</div>
+      {{ table(over) }}
+    {% endif %}
+    <section class="card">
+      <h3>거래처별 여신 소진율 (상위 15개)</h3>
+      {{ chart(credit_chart) }}
+      <div class="card-head"><span></span>{{ download(export_url('credit')) }}</div>
+      {{ table(credit, 360) }}
+    </section>
+  {% endif %}
+
+{% else %}
+  <form method="get" class="toolbar" action="{{ page_path() }}">
+    <label>시작월 {{ select('from', g.months, ym_from) }}</label>
+    <label>종료월 {{ select('to', g.months, ym_to) }}</label>
+    <label>상태 {{ select('status', SALE_STATUS + ['취소'], sale_status, blank='전체') }}</label>
+    <button class="btn">조회</button>
+  </form>
+  <div class="metrics m4">
+    {{ metric('기간 매출', m_total|mil, '취소 제외') }}
+    {{ metric('미수금', m_unpaid|mil) }}
+    {{ metric('건수', '{:,}건'.format(m_count)) }}
+    {{ metric('세금계산서 미등록', '{:,}건'.format(m_missing_docs), '부가세 신고 전 확인' if m_missing_docs else '모두 등록됨',
+              'down' if m_missing_docs else 'up') }}
+  </div>
+  <section class="card">
+    <h3>📊 월별 매출</h3>
+    {% if monthly_chart.empty %}<div class="alert alert-info">표시할 데이터가 없습니다.</div>{% else %}{{ chart(monthly_chart) }}{% endif %}
+  </section>
+  <div class="card-head"><p class="muted">행을 누르면 수금상태 변경 · 취소 · 증빙(세금계산서) 화면이 열립니다.</p>{{ download(export_url('sales')) }}</div>
+  {{ table(tbl, 360) }}
+
+  {% if edit_row %}
+  {% set raw = edit_row['raw'] %}
+  <section class="card" id="sale-edit">
+    <h3>✏️ 매출 #{{ raw.id }} · {{ raw.sale_date }} · {{ edit_row['거래처'] }} · {{ raw.item }} · {{ raw.amount|won }} + 부가세 {{ (raw.vat_amount or 0)|won }} = {{ (raw.total_amount or raw.amount)|won }}</h3>
+    <p class="muted small">결제기일 {{ raw.due_date or '-' }} · 입금 {{ (raw.paid_amount or 0)|won }} ·
+      ERP {{ raw.erp_status or '미전송' }}{% if raw.erp_doc_no %} ({{ raw.erp_doc_no }}){% endif %}
+      {% if raw.status == '취소' %} · <strong class="danger-text">취소됨</strong> ({{ raw.cancelled_at }}, 사유: {{ raw.cancel_reason }}){% endif %}</p>
+    {% if raw.status != '취소' %}
+    <form method="post" action="{{ url_for('finance.sale_update', sid=raw.id) }}" class="toolbar">
+      {{ csrf() }}
+      <label>수금상태 {{ select('status', SALE_STATUS, raw.status) }}</label>
+      <label>공급가액(원) <input type="number" name="amount" min="1" step="10000" value="{{ raw.amount|int }}"
+             {% if raw.erp_status == '전송완료' %}readonly title="ERP로 전송된 매출은 금액을 바꿀 수 없습니다"{% endif %}></label>
+      <label>과세구분 {{ select('tax_type', tax_types, raw.tax_type or '과세') }}</label>
+      <label>품목코드 <input name="item_code" value="{{ raw.item_code or '' }}"></label>
+      <button class="btn btn-primary">💾 저장</button>
+    </form>
+    <form method="post" action="{{ url_for('finance.sale_cancel', sid=raw.id) }}" class="danger-zone">
+      {{ csrf() }}
+      <label class="grow">취소 사유 <input name="reason" required placeholder="예) 계약 해지, 중복 입력"></label>
+      <button class="btn btn-danger">매출 취소</button>
+      <span class="muted small">삭제하지 않고 '취소' 로 남깁니다. ERP 로 이미 보낸 건은 취소 전표가 전송됩니다.</span>
+    </form>
+    {% endif %}
+
+    <h3 class="doc-title">🧾 증빙 — 세금계산서 · 전자세금계산서 · 거래명세서</h3>
+    {% if documents %}
+      <div class="doc-grid">
+        {% for d in documents %}
+          <article class="doc-card {{ 'voided' if d.voided_at }}">
+            <a class="doc-thumb" href="{{ url_for('finance.document_file', doc_id=d.id) }}" target="_blank" rel="noopener">
+              {% if d.is_image %}<img src="{{ url_for('finance.document_file', doc_id=d.id) }}" alt="{{ d.doc_type }} 이미지" loading="lazy">
+              {% elif d.mime == 'application/pdf' %}<span class="doc-icon">PDF</span>
+              {% else %}<span class="doc-icon">XML</span>{% endif %}
+            </a>
+            <div class="doc-meta">
+              <strong>{{ d.doc_type }}</strong>{% if d.voided_at %} <span class="danger-text">무효</span>{% endif %}
+              <div class="small">작성일 {{ d.issue_date or '-' }}{% if d.approval_fmt %} · 승인번호 {{ d.approval_fmt }}{% endif %}</div>
+              <div class="small">공급가액 {{ (d.supply_amount or 0)|won }} · 세액 {{ (d.tax_amount or 0)|won }} · 합계 {{ (d.total_amount or 0)|won }}</div>
+              <div class="small muted">{{ d.file_name }} · {{ d.uploaded_by }} · {{ d.uploaded_at }}</div>
+              {% for w in d.warnings %}<div class="small warn-text">⚠ {{ w }}</div>{% endfor %}
+              {% if d.voided_at %}<div class="small muted">무효 사유: {{ d.void_reason }} ({{ d.voided_by }})</div>
+              {% else %}
+                <a class="btn btn-sm" href="{{ url_for('finance.document_file', doc_id=d.id, download=1) }}">원본 받기</a>
+                <form method="post" action="{{ url_for('finance.document_void', doc_id=d.id) }}" class="inline-form">
+                  {{ csrf() }}<input name="reason" placeholder="무효 사유" required>
+                  <button class="btn btn-sm btn-danger">무효</button>
+                </form>
+              {% endif %}
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="alert alert-info">등록된 증빙이 없습니다.</div>
+    {% endif %}
+
+    <form method="post" action="{{ url_for('finance.document_upload', sid=raw.id) }}" enctype="multipart/form-data" class="form doc-form">
+      {{ csrf() }}
+      <div class="form-grid g4">
+        <label>문서 종류 {{ select('doc_type', doc_types, '전자세금계산서') }}</label>
+        <label class="span2">파일 * (JPG·PNG 이미지, PDF, 전자세금계산서 XML · 10MB 이하)
+          <input type="file" name="file" accept=".jpg,.jpeg,.png,.pdf,.xml" required></label>
+        <label>작성일자 <input type="date" name="issue_date"></label>
+        <label>승인번호 (전자 24자리) <input name="approval_no" placeholder="20260927-41000000-00000001"></label>
+        <label>공급자 사업자번호 <input name="supplier_biz_no" placeholder="000-00-00000"></label>
+        <label>공급받는자 사업자번호 <input name="buyer_biz_no" value="{{ customer_biz_no or '' }}" placeholder="000-00-00000"></label>
+        <label>공급가액 <input type="number" name="supply_amount" min="0" data-supply></label>
+        <label>세액 <input type="number" name="tax_amount" min="0" data-tax></label>
+        <label>합계 <input type="number" name="total_amount" min="0" data-total></label>
+        <label class="span2">비고 <input name="memo"></label>
+      </div>
+      <p class="muted small">전자세금계산서 XML(국세청 표준)을 올리면 승인번호·작성일자·금액·사업자번호를 자동으로 읽습니다.
+        이미지·PDF 는 위 항목을 직접 입력하세요. 사업자번호 검증번호, 공급가액+세액=합계, 매출 금액 일치, 발급 기한(다음 달 10일)을 확인합니다.</p>
+      <button class="btn btn-primary">증빙 등록</button>
+    </form>
+  </section>
+  {% endif %}
+
+  <section class="card">
+    <h3>➕ 매출 등록</h3>
+    {% if not customers %}
+      <div class="alert alert-warning">등록된 거래처가 없습니다. 먼저 거래처를 등록하세요.</div>
+    {% else %}
+    <form method="post" action="{{ url_for('finance.sale_add') }}" class="form" data-deal-filter data-sale-calc data-price-url="{{ url_for('catalog.price_lookup') }}">
+      {{ csrf() }}
+      <div class="form-grid g3">
+        <label>거래처 * {{ select('customer_id', customers.items()|list, f.customer_id or '', blank='선택하세요') }}</label>
+        <label>관련 영업기회 (선택)
+          <select name="deal_id">
+            <option value="">(없음)</option>
+            {% for d in deals %}<option value="{{ d.id }}" data-customer="{{ d.customer_id }}" {{ 'selected' if d.id|string == (f.deal_id or '')|string }}>{{ d.label }}</option>{% endfor %}
+          </select>
+        </label>
+        <label>매출일 <input type="date" name="sale_date" value="{{ f.sale_date }}"></label>
+        <label>품목 마스터 (선택)
+          <select name="product_id">
+            <option value="">(직접 입력)</option>
+            {% for p in products %}<option value="{{ p.id }}" {{ 'selected' if p.id|string == (f.product_id or '')|string }}>{{ p.code }} · {{ p.name }} ({{ p.list_price|won }}/{{ p.unit }})</option>{% endfor %}
+          </select>
+          <span class="muted small" data-price-source></span>
+        </label>
+        <label>품목 * <input name="item" value="{{ f.item or '' }}" required></label>
+        <label>품목코드 (ERP 자재번호) <input name="item_code" value="{{ f.item_code or '' }}" placeholder="예) SW-ERP-01"></label>
+        {{ owner_input('owner_id', f.owner_id) }}
+        <label>수금상태 {{ select('status', SALE_STATUS, f.status) }}</label>
+        <label>수량 <input type="number" name="qty" min="1" step="1" value="{{ f.qty }}"></label>
+        <label>단가(원) <input type="number" name="unit_price" min="0" step="10000" value="{{ f.unit_price }}"></label>
+        <label>과세구분 {{ select('tax_type', tax_types, f.tax_type or '과세') }}</label>
+        <label>메모 <input name="memo" value="{{ f.memo or '' }}"></label>
+      </div>
+      <p class="muted small" data-sale-preview>금액 = 수량 × 단가 · 결제기일은 거래처 결제조건으로 자동 계산됩니다.</p>
+      <button class="btn btn-primary">등록</button>
+    </form>
+    {% endif %}
+  </section>
+{% endif %}
+{% endblock %}

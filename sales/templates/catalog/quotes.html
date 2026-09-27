@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% from "_macros.html" import metric, table, csrf, select, download %}
+
+{% macro line_row(it, products, tax_types) %}
+  <tr>
+    <td><select name="product_id">
+      <option value="">(직접 입력)</option>
+      {% for p in products %}<option value="{{ p.id }}" {{ 'selected' if p.id|string == (it.product_id or '')|string }}>{{ p.code }} · {{ p.name }}</option>{% endfor %}
+    </select> <span class="muted small" data-price-source></span></td>
+    <td><input name="item_name" value="{{ it.item_name or '' }}" placeholder="직접 입력 품목명"></td>
+    <td><input type="number" name="qty" min="1" value="{{ it.qty or 1 }}" class="num-sm"></td>
+    <td><input type="number" name="unit_price" min="0" step="1000" value="{{ it.unit_price if it.unit_price is not none else '' }}" placeholder="비우면 특가/정가"></td>
+    <td>{{ select('tax_type', tax_types, it.tax_type or '과세') }}</td>
+    <td class="num" data-line-amount></td>
+    <td><button type="button" class="btn btn-sm" data-remove-line aria-label="행 삭제">✕</button></td>
+  </tr>
+{% endmacro %}
+
+{% block content %}
+<p class="subtitle">견적 흐름: 작성중 → 발송 → 수락/거절 (유효기한이 지나면 만료). 발송 뒤 조건을 바꾸려면 <strong>개정</strong>으로 새 판(Rev.)을 만듭니다.
+  영업기회와 연결하면 발송 시 정가·제안가·할인율이 영업기회에 반영되고, 할인 결재가 없으면 발송이 막힙니다.</p>
+
+<div class="metrics m3">
+  {{ metric('견적', m_count ~ '건') }}
+  {{ metric('발송·회신 대기 합계', m_open|mil) }}
+  {{ metric('수락 합계', m_won|mil) }}
+</div>
+
+<form method="get" class="toolbar" action="{{ page_path() }}">
+  <label>상태 {{ select('status', statuses, status, blank='전체') }}</label>
+  <button class="btn">조회</button>
+  <a class="btn btn-primary" href="{{ url_for('catalog.quotes', new=1) }}">➕ 새 견적</a>
+  {{ download(export_url('quotes')) }}
+</form>
+{{ table(tbl, 360, '견적이 없습니다.') }}
+
+{% if editing %}
+<section class="card">
+  <h3>{{ '✏️ ' ~ form.quote_no ~ ' Rev.' ~ form.revision ~ ' 수정' if form.id else '➕ 새 견적' }}</h3>
+  <form method="post" action="{{ url_for('catalog.quote_save') }}" class="form" data-quote data-deal-filter data-price-url="{{ url_for('catalog.price_lookup') }}">
+    {{ csrf() }}
+    {% if form.id %}<input type="hidden" name="id" value="{{ form.id }}"><input type="hidden" name="row_version" value="{{ form.row_version or 0 }}">{% endif %}
+    <div class="form-grid g3">
+      <label>거래처 * {{ select('customer_id', customers.items()|list, form.customer_id or '', blank='선택하세요') }}</label>
+      <label>영업기회 (선택)
+        <select name="deal_id">
+          <option value="">(없음)</option>
+          {% for d in deals %}<option value="{{ d.id }}" data-customer="{{ d.customer_id }}" {{ 'selected' if d.id|string == (form.deal_id or '')|string }}>{{ d.label }}</option>{% endfor %}
+        </select>
+      </label>
+      <label>건명 <input name="title" value="{{ form.title or '' }}" placeholder="예) 2027 ERP 라이선스 갱신"></label>
+      <label>작성일 <input type="date" name="issue_date" value="{{ form.issue_date }}"></label>
+      <label>유효기한 (비우면 30일) <input type="date" name="valid_until" value="{{ form.valid_until or '' }}"></label>
+      <label>결제·납품 조건 <input name="terms" value="{{ form.terms or '' }}" placeholder="비우면 거래처 결제조건"></label>
+    </div>
+    <div class="table-wrap">
+      <table class="data lines">
+        <thead><tr><th>품목 마스터</th><th>품목명</th><th>수량</th><th>단가(원)</th><th>과세</th><th class="num">공급가액</th><th></th></tr></thead>
+        <tbody data-lines>
+          {% for it in (form['items'] or [{}]) %}{{ line_row(it, products, tax_types) }}{% endfor %}
+        </tbody>
+      </table>
+      <template data-line>{{ line_row({}, products, tax_types) }}</template>
+    </div>
+    <div class="row-actions">
+      <button type="button" class="btn btn-sm" data-add-line>＋ 품목 추가</button>
+      <strong data-quote-total></strong>
+    </div>
+    <label>메모 <textarea name="memo" rows="2">{{ form.memo or '' }}</textarea></label>
+    <p class="muted small">품목 마스터를 고르면 거래처 특가 → 정가 순으로 단가가 채워집니다. 단가를 낮추면 그만큼 할인율로 계산됩니다. 부가세는 과세 품목만 10%(원 단위 절사).</p>
+    <button class="btn btn-primary">💾 저장</button>
+  </form>
+</section>
+{% elif quote %}
+{% set q = quote %}
+<section class="card">
+  <h3>📝 {{ q.quote_no }} Rev.{{ q.revision }} · {{ q.customer_name }}{% if q.title %} · {{ q.title }}{% endif %}
+    <span class="badge">{{ q.effective_status }}</span></h3>
+  <p class="muted small">작성 {{ q.issue_date }} · 유효기한 {{ q.valid_until }} · 담당 {{ q.owner }}
+    {% if q.sent_at %} · 발송 {{ q.sent_at }}{% endif %}{% if q.decided_at %} · 회신 {{ q.decided_at }}{% endif %}
+    {% if q.revisions|length > 1 %} · 판 이력:
+      {% for r in q.revisions %}<a href="{{ url_for('catalog.quotes', qid=r.id) }}">Rev.{{ r.revision }}({{ r.status }})</a>{{ ', ' if not loop.last }}{% endfor %}
+    {% endif %}</p>
+  <div class="table-wrap">
+    <table class="data">
+      <thead><tr><th>No</th><th>품목</th><th>단위</th><th class="num">수량</th><th class="num">정가</th><th class="num">단가</th><th class="num">할인</th><th>과세</th><th class="num">공급가액</th><th class="num">세액</th></tr></thead>
+      <tbody>
+      {% for it in q['items'] %}
+        <tr><td>{{ it.line_no }}</td><td>{{ it.item_name }}{% if it.item_code %} <span class="muted small">{{ it.item_code }}</span>{% endif %}</td>
+          <td>{{ it.unit }}</td><td class="num">{{ it.qty }}</td><td class="num">{{ it.list_price|won }}</td>
+          <td class="num">{{ it.unit_price|won }}</td><td class="num">{{ '%.1f'|format(it.discount_rate or 0) }}%</td>
+          <td>{{ it.tax_type }}</td><td class="num">{{ it.supply_amount|won }}</td><td class="num">{{ it.vat_amount|won }}</td></tr>
+      {% endfor %}
+      </tbody>
+      <tfoot><tr><th colspan="8">정가 합계 {{ q.list_total|won }} · 할인 {{ '%.1f'|format(q.discount_rate or 0) }}%</th>
+        <th class="num">{{ q.supply_amount|won }}</th><th class="num">{{ q.vat_amount|won }}</th></tr>
+        <tr><th colspan="8">합계 (부가세 포함)</th><th class="num" colspan="2">{{ q.total_amount|won }}</th></tr></tfoot>
+    </table>
+  </div>
+  {% if q.terms %}<p class="small">{{ q.terms }}</p>{% endif %}
+  {% if q.memo %}<p class="small muted" style="white-space:pre-line">{{ q.memo }}</p>{% endif %}
+
+  <div class="row-actions">
+    <a class="btn" href="{{ url_for('catalog.quote_pdf', qid=q.id) }}" target="_blank" rel="noopener">📄 견적서 PDF</a>
+    {% if q.status == '작성중' %}
+      <a class="btn" href="{{ url_for('catalog.quotes', qid=q.id, edit=1) }}">✏️ 수정</a>
+      <form method="post" action="{{ url_for('catalog.quote_action', qid=q.id, action='send') }}" class="inline-form">{{ csrf() }}<button class="btn btn-primary">📤 발송 처리</button></form>
+    {% endif %}
+    {% if q.effective_status == '발송' %}
+      <form method="post" action="{{ url_for('catalog.quote_action', qid=q.id, action='accept') }}" class="inline-form">{{ csrf() }}<button class="btn btn-primary">✅ 수락</button></form>
+      <form method="post" action="{{ url_for('catalog.quote_action', qid=q.id, action='reject') }}" class="inline-form">{{ csrf() }}
+        <input name="reason" placeholder="거절 사유" required><button class="btn btn-danger">거절</button></form>
+    {% endif %}
+    {% if q.status in ('발송', '거절') %}
+      <form method="post" action="{{ url_for('catalog.quote_action', qid=q.id, action='revise') }}" class="inline-form">{{ csrf() }}<button class="btn">🔁 개정 (새 판)</button></form>
+    {% endif %}
+    {% if q.status == '수락' and not q.sales %}
+      <form method="post" action="{{ url_for('catalog.quote_action', qid=q.id, action='convert') }}" class="inline-form">{{ csrf() }}
+        <input type="date" name="sale_date" value="{{ today() }}"><button class="btn btn-primary">💰 매출로 전환</button></form>
+    {% endif %}
+  </div>
+  {% if q.sales %}
+    <p class="small">전환된 매출:
+      {% for s in q.sales %}<a href="{{ url_for('finance.sales', sid=s.id) }}">#{{ s.id }} {{ s.item }} {{ (s.total_amount or s.amount)|won }}</a>{{ ', ' if not loop.last }}{% endfor %}</p>
+  {% endif %}
+</section>
+{% endif %}
+{% endblock %}
