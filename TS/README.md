@@ -1,6 +1,6 @@
-# TS — 토익 학습 (개인 공부용)
+# TS — 토익·토플 학습 (개인 공부용)
 
-등급(Orange·Brown·Green·Blue·Gold)과 점수에 맞춰 토익을 공부하는 Flask 앱. 배포하지 않는 개인용.
+토익은 등급(Orange·Brown·Green·Blue·Gold)과 점수, 토플(2026년 1월 개편 형식)은 밴드 1~6에 맞춰 공부하는 Flask 앱. 상단 탭: 토익 · 토플 · 토익스피킹(준비 중) · 오픽(준비 중).
 
 ## 실행
 
@@ -70,3 +70,18 @@ content/toeic/  part1~7.json, vocab.json — 형식은 content/SCHEMA.md
 - 음성은 Microsoft 온라인 음성(edge-tts: 미국 Jenny/Guy, 영국 Sonia/Ryan, 호주 Natasha/William, 한국어 SunHi). 단어·뜻·예문 조각을 처음 필요할 때 받아 `data/audio/clips/`에 보관하고, 이어 붙여 파일을 만든다(`core/audio.py`). 1시간 약 21MB, 처음 만들 때 약 1분.
 - 한 등급처럼 1시간이 안 되는 목록은 순서를 섞어 다시 넣어 길이를 채운다(끌 수 있음).
 - 리눅스 서버(Render)에서도 동작. `gunicorn.conf.py`: 워커 1개 + 스레드 8개(작업 상태가 메모리에 있음).
+
+## 토플 (`/toefl`)
+
+2026년 1월 개편 형식(약 90분, 영역별 1~6 밴드, CEFR 대응). 난이도 5단계 = 목표 밴드 2~6.
+
+| 영역 | 과제 | 문제 수 |
+|---|---|---|
+| Reading | 빈칸 단어 완성 · 일상 글 · 학술 지문 | 40 · 40세트 · 30세트 |
+| Listening | 응답 고르기 · 대화 · 안내·강의 | 100 · 30세트 · 40세트 |
+| Speaking | 듣고 따라 말하기(음성 인식 채점) · 인터뷰(45초 녹음) | 30세트 · 30세트 |
+| Writing | 문장 만들기 · 이메일(7분) · 학술 토론(10분) | 100 · 20 · 20 |
+
+- 밴드 추정: 자동 채점 과제는 난이도별 정답률(65% 이상이면 그 밴드), 쓰기·말하기 서술형은 모범 답안과 비교한 자기 평가(0~5). 종합 = 네 영역 평균을 0.5 단위 반올림.
+- 마이크(녹음·음성 인식)는 https 주소나 127.0.0.1 에서만 켜진다. 음성 인식이 안 되면 스스로 채점.
+- 문제 형식: `content/toefl/SCHEMA.md`, 검사: `python tools/validate_toefl.py`. 코드: `core/toefl.py`, `views/toefl.py`, `static/js/toefl.js`.

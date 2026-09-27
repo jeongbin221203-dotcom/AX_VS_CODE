@@ -1,0 +1,282 @@
+[
+ {
+  "id": "rw-001",
+  "level": 1,
+  "topic": "생물학",
+  "text": "Plants need sunlight to make their own food. The green [[lea|ves]] of a plant [[ta|ke]] in [[li|ght]] from [[t|he]] sun. They also [[u|se]] water from the [[so|il]] and a gas [[cal|led]] carbon dioxide from the [[a|ir]]. With these three [[thi|ngs]], the plant makes [[su|gar]]. This process is called photosynthesis. The sugar gives the plant energy to grow. At the same time, the plant sends oxygen into the air. People and animals need this oxygen to breathe, so plants are very important for all life on Earth.",
+  "translation": "식물은 스스로 양분을 만들기 위해 햇빛이 필요하다. 식물의 초록 잎은 태양에서 오는 빛을 받아들인다. 식물은 또 흙에서 물을, 공기에서 이산화탄소라는 기체를 사용한다. 이 세 가지로 식물은 당을 만든다. 이 과정을 광합성이라고 한다. 당은 식물이 자랄 에너지를 준다. 동시에 식물은 공기 중으로 산소를 내보낸다. 사람과 동물은 숨을 쉬기 위해 이 산소가 필요하므로, 식물은 지구의 모든 생명에게 매우 중요하다."
+ },
+ {
+  "id": "rw-002",
+  "level": 1,
+  "topic": "지질학",
+  "text": "A volcano is an opening in the surface of the Earth. Deep [[un|der]] the ground, it [[i|s]] very hot, and [[ro|ck]] can melt. This [[mel|ted]] rock is called [[ma|gma]]. When pressure [[bui|lds]] up, the magma [[mo|ves]] up and comes [[o|ut]] of the volcano. [[Th|en]] it is called lava. Lava is very hot and [[c|an]] destroy houses and roads. However, volcanoes also help people. Over many years, the ash from a volcano makes the soil rich, so farmers can grow good crops near it.",
+  "translation": "화산은 지구 표면에 난 구멍이다. 땅속 깊은 곳은 매우 뜨거워서 암석이 녹을 수 있다. 이렇게 녹은 암석을 마그마라고 한다. 압력이 커지면 마그마가 위로 올라와 화산 밖으로 나온다. 그러면 그것을 용암이라고 부른다. 용암은 매우 뜨거워서 집과 도로를 파괴할 수 있다. 하지만 화산은 사람들에게 도움도 준다. 오랜 세월에 걸쳐 화산재가 흙을 비옥하게 만들어 농부들이 그 근처에서 좋은 작물을 기를 수 있다."
+ },
+ {
+  "id": "rw-003",
+  "level": 1,
+  "topic": "심리학",
+  "text": "Sleep is important for both the body and the mind. When we [[sl|eep]], our brain [[do|es]] not stop [[wor|king]]. It [[so|rts]] information [[fr|om]] the day [[a|nd]] stores important [[memo|ries]]. For [[th|is]] reason, students who sleep [[we|ll]] often remember [[mo|re]] in class. Without enough sleep, people feel tired and have trouble paying attention. They may also get angry more easily. Doctors say that teenagers need about eight to ten hours of sleep each night. Going to bed at the same time every day can help.",
+  "translation": "잠은 몸과 마음 모두에 중요하다. 우리가 잠을 잘 때 뇌는 일을 멈추지 않는다. 뇌는 하루 동안의 정보를 정리하고 중요한 기억을 저장한다. 이런 이유로 잠을 잘 자는 학생들은 수업 내용을 더 많이 기억하는 경우가 많다. 잠이 부족하면 사람들은 피곤함을 느끼고 집중하기 어려워한다. 또 더 쉽게 화를 낼 수도 있다. 의사들은 십대에게 매일 밤 약 8~10시간의 잠이 필요하다고 말한다. 매일 같은 시간에 잠자리에 드는 것이 도움이 될 수 있다."
+ },
+ {
+  "id": "rw-004",
+  "level": 1,
+  "topic": "경제학",
+  "text": "Long ago, people did not use money to buy things. Instead, [[th|ey]] traded one [[th|ing]] for [[ano|ther]]. For example, a farmer [[wi|th]] extra eggs [[co|uld]] give them [[t|o]] a baker [[f|or]] bread. But this [[sys|tem]] was not always [[ea|sy]]. What if the baker [[d|id]] not want eggs? Because of this problem, people started to use objects that everyone wanted, such as salt, shells, or metal. Later, these objects became coins, and much later, paper money.",
+  "translation": "오래전에는 사람들이 물건을 사는 데 돈을 쓰지 않았다. 대신 한 물건을 다른 물건과 바꾸었다. 예를 들어 달걀이 남는 농부는 빵을 받고 그 달걀을 제빵사에게 줄 수 있었다. 하지만 이 방식이 늘 쉬운 것은 아니었다. 제빵사가 달걀을 원하지 않는다면 어떻게 될까? 이 문제 때문에 사람들은 소금, 조개껍데기, 금속처럼 모두가 원하는 물건을 쓰기 시작했다. 나중에 이런 물건은 동전이 되었고, 훨씬 뒤에는 지폐가 되었다."
+ },
+ {
+  "id": "rw-005",
+  "level": 1,
+  "topic": "천문학",
+  "text": "The Moon is the closest large object to the Earth. It [[do|es]] not make [[i|ts]] own light. [[Ins|tead]], it reflects [[li|ght]] from the [[S|un]]. As the [[Mo|on]] moves around [[t|he]] Earth, we [[s|ee]] different [[pa|rts]] of its bright [[si|de]]. This is why the Moon seems to change its shape during the month. It takes about twenty-nine days to go from one full moon to the next. The Moon also pulls on the oceans and causes the tides.",
+  "translation": "달은 지구에서 가장 가까운 큰 천체이다. 달은 스스로 빛을 내지 않는다. 대신 태양의 빛을 반사한다. 달이 지구 주위를 돌면서 우리는 달의 밝은 면의 서로 다른 부분을 보게 된다. 이 때문에 달은 한 달 동안 모양이 바뀌는 것처럼 보인다. 보름달에서 다음 보름달까지는 약 29일이 걸린다. 달은 또 바다를 끌어당겨 밀물과 썰물을 일으킨다."
+ },
+ {
+  "id": "rw-006",
+  "level": 1,
+  "topic": "역사",
+  "text": "The pyramids of Egypt are some of the oldest buildings in the world. They [[we|re]] built more [[th|an]] four thousand [[ye|ars]] ago. Most [[o|f]] them were [[ma|de]] as tombs [[f|or]] kings, called pharaohs. [[Wor|kers]] cut [[hu|ge]] stones [[a|nd]] moved them [[wit|hout]] modern machines. Some of the stones weighed as much as two cars. Today, scientists still study how the workers did this. Many think they used ramps, ropes, and wooden sleds. Every year, millions of tourists visit the pyramids.",
+  "translation": "이집트의 피라미드는 세계에서 가장 오래된 건축물 가운데 하나이다. 피라미드는 4천여 년 전에 지어졌다. 대부분은 파라오라고 불리는 왕들의 무덤으로 만들어졌다. 일꾼들은 현대적인 기계 없이 거대한 돌을 자르고 옮겼다. 어떤 돌은 자동차 두 대만큼 무거웠다. 오늘날에도 과학자들은 일꾼들이 이것을 어떻게 해냈는지 연구한다. 많은 사람은 그들이 경사로, 밧줄, 나무 썰매를 사용했다고 생각한다. 해마다 수백만 명의 관광객이 피라미드를 찾는다."
+ },
+ {
+  "id": "rw-007",
+  "level": 1,
+  "topic": "언어학",
+  "text": "Children learn their first language very quickly. By the [[a|ge]] of two, [[mo|st]] children can [[s|ay]] about fifty [[wo|rds]]. They learn [[b|y]] listening to [[t|he]] people around [[th|em]] and copying [[wh|at]] they hear. [[Par|ents]] often speak slowly [[a|nd]] repeat words many times, which helps a lot. By the age of five, many children know thousands of words and can tell simple stories. Scientists are still trying to understand how the brain learns so fast.",
+  "translation": "아이들은 모국어를 매우 빨리 배운다. 두 살쯤이 되면 대부분의 아이는 50개 정도의 단어를 말할 수 있다. 아이들은 주변 사람들의 말을 듣고 들은 것을 따라 하면서 배운다. 부모는 흔히 천천히 말하고 단어를 여러 번 반복하는데, 이것이 큰 도움이 된다. 다섯 살이 되면 많은 아이가 수천 개의 단어를 알고 간단한 이야기를 할 수 있다. 과학자들은 뇌가 어떻게 그렇게 빨리 배우는지 아직도 알아내려 하고 있다."
+ },
+ {
+  "id": "rw-008",
+  "level": 1,
+  "topic": "미술",
+  "text": "Artists mix colors to make new ones. There [[a|re]] three main [[col|ors]], called [[pri|mary]] colors: red, blue, [[a|nd]] yellow. If [[y|ou]] mix red with yellow, [[y|ou]] get orange. Blue [[wi|th]] yellow gives [[gr|een]]. Red with blue [[ma|kes]] purple. These [[n|ew]] colors are called secondary colors. Artists also add white to make a color lighter and black to make it darker. By mixing carefully, a painter can create thousands of different colors from just a few tubes of paint.",
+  "translation": "화가들은 색을 섞어 새로운 색을 만든다. 삼원색이라고 불리는 세 가지 주요 색이 있는데, 빨강, 파랑, 노랑이다. 빨강과 노랑을 섞으면 주황이 된다. 파랑과 노랑은 초록을 만든다. 빨강과 파랑은 보라가 된다. 이런 새로운 색을 이차색이라고 한다. 화가들은 또 색을 밝게 하려고 흰색을, 어둡게 하려고 검은색을 더한다. 조심스럽게 섞으면 화가는 몇 개의 물감 튜브만으로 수천 가지 색을 만들어 낼 수 있다."
+ },
+ {
+  "id": "rw-009",
+  "level": 2,
+  "topic": "생물학",
+  "text": "Every autumn, millions of birds leave their summer homes and fly south. This long [[jou|rney]] is called migration. [[Bi|rds]] travel to warmer [[pla|ces]] where they [[c|an]] find enough [[fo|od]] during the [[win|ter]]. Some species [[f|ly]] thousands of [[kilom|eters]] without stopping. [[Scien|tists]] have [[disco|vered]] that birds use several tools to find their way. They follow the position of the sun and stars, and some can even sense the Earth's magnetic field. Young birds often learn the route by traveling with older, experienced members of their group.",
+  "translation": "매년 가을이면 수백만 마리의 새가 여름 서식지를 떠나 남쪽으로 날아간다. 이 긴 여행을 이동(철새 이동)이라고 한다. 새들은 겨울 동안 충분한 먹이를 찾을 수 있는 더 따뜻한 곳으로 간다. 어떤 종은 쉬지 않고 수천 킬로미터를 난다. 과학자들은 새들이 길을 찾기 위해 여러 도구를 쓴다는 것을 발견했다. 새들은 해와 별의 위치를 따르고, 어떤 새는 지구의 자기장까지 감지할 수 있다. 어린 새들은 흔히 경험 많은 나이 든 무리 구성원과 함께 이동하면서 경로를 익힌다."
+ },
+ {
+  "id": "rw-010",
+  "level": 2,
+  "topic": "지질학",
+  "text": "Earthquakes happen when large pieces of the Earth's crust suddenly move. These pieces, [[cal|led]] tectonic plates, [[a|re]] always moving very [[slo|wly]]. Sometimes the edges [[o|f]] two plates get [[st|uck]] together. Pressure [[incr|eases]] over [[ma|ny]] years until [[t|he]] rocks [[fin|ally]] break and the plates [[ju|mp]] forward. This sudden movement sends waves of energy through the ground, which shake buildings and bridges. Engineers in countries such as Japan design structures that can bend without falling down.",
+  "translation": "지진은 지구 지각의 큰 조각들이 갑자기 움직일 때 일어난다. 지각판이라고 불리는 이 조각들은 늘 아주 천천히 움직이고 있다. 때때로 두 판의 가장자리가 서로 맞물려 꼼짝하지 않게 된다. 압력은 수년에 걸쳐 커지다가 마침내 암석이 부서지고 판이 앞으로 튀어 나간다. 이 갑작스러운 움직임은 땅속으로 에너지의 파동을 보내 건물과 다리를 흔든다. 일본 같은 나라의 기술자들은 무너지지 않고 휘어질 수 있는 구조물을 설계한다."
+ },
+ {
+  "id": "rw-011",
+  "level": 2,
+  "topic": "심리학",
+  "text": "Many people believe that making a new habit takes about three weeks. However, research [[sugg|ests]] that the real [[num|ber]] is often much [[lon|ger]]. In one [[st|udy]], participants needed an [[ave|rage]] of sixty-six days [[bef|ore]] a new behavior [[bec|ame]] automatic. The [[ti|me]] depended on how [[diff|icult]] the [[ha|bit]] was. Drinking a glass of water after breakfast became easy quickly, while exercising every day took far longer. The researchers also found that missing a single day did not ruin the process, which is good news for anyone who is trying to change.",
+  "translation": "많은 사람은 새로운 습관을 만드는 데 약 3주가 걸린다고 믿는다. 그러나 연구에 따르면 실제 기간은 훨씬 더 긴 경우가 많다. 한 연구에서 참가자들은 새로운 행동이 자동으로 이루어지기까지 평균 66일이 필요했다. 걸리는 시간은 그 습관이 얼마나 어려운지에 따라 달랐다. 아침 식사 후 물 한 잔 마시기는 금방 쉬워졌지만, 매일 운동하기는 훨씬 오래 걸렸다. 연구자들은 또 하루를 빼먹는다고 과정이 망가지지는 않는다는 것을 발견했는데, 이는 변화하려는 모든 사람에게 좋은 소식이다."
+ },
+ {
+  "id": "rw-012",
+  "level": 2,
+  "topic": "경제학",
+  "text": "The price of a product usually depends on supply and demand. When [[ma|ny]] people want [[some|thing]] but there [[i|s]] only a [[sm|all]] amount of [[i|t]], the price [[go|es]] up. On [[t|he]] other hand, [[wh|en]] there is [[mo|re]] of a product than people want, the [[pr|ice]] falls. For example, fresh strawberries are cheap in early summer because farmers harvest large quantities. In winter, they must be grown in heated greenhouses or shipped from far away, so stores charge much more for them.",
+  "translation": "상품의 가격은 보통 공급과 수요에 따라 결정된다. 많은 사람이 무언가를 원하는데 그 양이 적으면 가격이 오른다. 반대로 사람들이 원하는 것보다 상품이 더 많으면 가격은 떨어진다. 예를 들어 신선한 딸기는 농부들이 많이 수확하는 초여름에 싸다. 겨울에는 난방된 온실에서 기르거나 먼 곳에서 실어 와야 하므로 가게는 훨씬 더 비싸게 판다."
+ },
+ {
+  "id": "rw-013",
+  "level": 2,
+  "topic": "역사",
+  "text": "Around 1440, a German craftsman named Johannes Gutenberg developed a new kind of printing press. Before [[th|is]] invention, most books [[we|re]] copied by [[ha|nd]], which took [[mon|ths]] or even years. [[A|s]] a result, books [[we|re]] rare and [[expe|nsive]]. Gutenberg's [[mac|hine]] used metal letters [[th|at]] could be [[arra|nged]] and used again. Within fifty years, printers across Europe had produced millions of books. Ideas spread faster than ever before, and more ordinary people began learning to read.",
+  "translation": "1440년 무렵 요하네스 구텐베르크라는 독일의 장인이 새로운 종류의 인쇄기를 개발했다. 이 발명 이전에는 대부분의 책을 손으로 베껴 썼는데, 몇 달 또는 몇 년이 걸리기도 했다. 그 결과 책은 드물고 비쌌다. 구텐베르크의 기계는 배열했다가 다시 쓸 수 있는 금속 활자를 사용했다. 50년 안에 유럽 전역의 인쇄업자들은 수백만 권의 책을 찍어 냈다. 생각은 그 어느 때보다 빠르게 퍼졌고, 더 많은 평범한 사람들이 글을 배우기 시작했다."
+ },
+ {
+  "id": "rw-014",
+  "level": 2,
+  "topic": "천문학",
+  "text": "Mars is often called the Red Planet because of its color. The red [[co|mes]] from iron [[i|n]] the soil, [[wh|ich]] has rusted [[ov|er]] millions of [[ye|ars]]. Mars is [[mu|ch]] colder than [[Ea|rth]], and its [[a|ir]] is too [[th|in]] for [[hum|ans]] to breathe. Even so, scientists are very interested in the planet. They have found signs that rivers and lakes once covered parts of its surface. Robots sent by space agencies are now studying rocks there to learn whether simple life ever existed.",
+  "translation": "화성은 그 색 때문에 흔히 붉은 행성이라고 불린다. 붉은색은 흙 속의 철에서 나오는데, 이 철은 수백만 년에 걸쳐 녹슬었다. 화성은 지구보다 훨씬 춥고, 대기가 너무 희박해 사람이 숨을 쉴 수 없다. 그렇지만 과학자들은 이 행성에 큰 관심을 두고 있다. 그들은 한때 강과 호수가 화성 표면의 일부를 덮고 있었다는 흔적을 발견했다. 우주 기관이 보낸 로봇들이 지금 그곳의 암석을 조사하며 단순한 생명체가 존재한 적이 있는지 알아보고 있다."
+ },
+ {
+  "id": "rw-015",
+  "level": 2,
+  "topic": "사회학",
+  "text": "Today, more than half of the world's population lives in cities. This [[i|s]] a big change [[fr|om]] two hundred [[ye|ars]] ago, [[wh|en]] most people [[li|ved]] on farms. [[Peo|ple]] move to cities [[mai|nly]] to find [[jo|bs]], better [[sch|ools]], and [[hosp|itals]]. However, fast growth can also cause problems. Traffic, pollution, and high housing costs are common in large cities. City planners try to solve these problems by building public transportation and creating green spaces where residents can relax.",
+  "translation": "오늘날 세계 인구의 절반 이상이 도시에 산다. 이는 대부분의 사람이 농장에서 살던 200년 전과 비교하면 큰 변화이다. 사람들은 주로 일자리, 더 좋은 학교, 병원을 찾아 도시로 이주한다. 그러나 빠른 성장은 문제를 일으키기도 한다. 교통 체증, 오염, 높은 주거비는 대도시에서 흔하다. 도시 계획가들은 대중교통을 만들고 주민들이 쉴 수 있는 녹지 공간을 조성해 이런 문제를 해결하려 한다."
+ },
+ {
+  "id": "rw-016",
+  "level": 2,
+  "topic": "공학",
+  "text": "Bridges must be strong enough to carry heavy loads safely. Engineers [[cho|ose]] different designs depending [[o|n]] the distance [[a|nd]] the weight [[t|he]] bridge must [[sup|port]]. A beam [[bri|dge]] is the simplest [[ty|pe]]; it is [[ju|st]] a [[fl|at]] piece [[res|ting]] on posts. For longer distances, engineers often build suspension bridges. In these, strong steel cables hang from tall towers and hold up the road. The Golden Gate Bridge in San Francisco is a famous example of this design.",
+  "translation": "다리는 무거운 하중을 안전하게 견딜 만큼 튼튼해야 한다. 기술자들은 거리와 다리가 견뎌야 할 무게에 따라 서로 다른 설계를 고른다. 거더교(보 다리)는 가장 단순한 형태로, 기둥 위에 평평한 판을 얹은 것에 불과하다. 더 먼 거리에는 기술자들이 흔히 현수교를 짓는다. 현수교에서는 튼튼한 강철 케이블이 높은 탑에 매달려 도로를 떠받친다. 샌프란시스코의 금문교가 이 설계의 유명한 예이다."
+ },
+ {
+  "id": "rw-017",
+  "level": 3,
+  "topic": "생물학",
+  "text": "Coral reefs are built by tiny animals called polyps, which live in large colonies. Each [[po|lyp]] forms a hard [[skel|eton]] made of [[cal|cium]] carbonate, and [[ov|er]] centuries these skeletons [[accum|ulate]] into massive [[struc|tures]]. Many corals [[dep|end]] on a close [[partn|ership]] with algae [[liv|ing]] inside their [[tis|sues]]. The algae produce food through photosynthesis, and the coral provides them with shelter. When ocean temperatures rise too high, however, the coral expels the algae and turns white, a process known as bleaching. If conditions do not improve, the coral may die.",
+  "translation": "산호초는 큰 군체를 이루어 사는 폴립이라는 아주 작은 동물들이 만든다. 각 폴립은 탄산칼슘으로 된 단단한 골격을 만들고, 수 세기에 걸쳐 이 골격들이 쌓여 거대한 구조물이 된다. 많은 산호는 자기 조직 안에 사는 조류와의 긴밀한 협력 관계에 의존한다. 조류는 광합성으로 양분을 만들고, 산호는 조류에게 보금자리를 제공한다. 그러나 바다 수온이 너무 높아지면 산호는 조류를 내보내고 하얗게 변하는데, 이 과정을 백화 현상이라고 한다. 상황이 나아지지 않으면 산호는 죽을 수도 있다."
+ },
+ {
+  "id": "rw-018",
+  "level": 3,
+  "topic": "지질학",
+  "text": "Glaciers are enormous masses of ice that move slowly across the land. They [[fo|rm]] in places where [[mo|re]] snow falls [[i|n]] winter than [[me|lts]] in summer. [[Ov|er]] time, the snow [[i|s]] compressed into [[de|nse]] ice. [[Bec|ause]] of their great [[wei|ght]], glaciers gradually [[sl|ide]] downhill and scrape the ground beneath them. This process carves deep valleys and carries rocks over long distances. Many lakes in Canada and northern Europe were created by glaciers during the last ice age, which ended about twelve thousand years ago.",
+  "translation": "빙하는 땅 위를 천천히 움직이는 거대한 얼음 덩어리이다. 빙하는 겨울에 내리는 눈이 여름에 녹는 눈보다 많은 곳에서 생긴다. 시간이 지나면서 눈은 압축되어 밀도 높은 얼음이 된다. 엄청난 무게 때문에 빙하는 서서히 비탈 아래로 미끄러지며 그 아래 땅을 긁어 낸다. 이 과정은 깊은 계곡을 깎아 내고 암석을 먼 거리까지 운반한다. 캐나다와 북유럽의 많은 호수는 약 1만 2천 년 전에 끝난 마지막 빙하기 동안 빙하가 만든 것이다."
+ },
+ {
+  "id": "rw-019",
+  "level": 3,
+  "topic": "심리학",
+  "text": "Confirmation bias is the tendency to notice information that supports what we already believe. For [[exa|mple]], a person who [[thi|nks]] a certain diet [[wo|rks]] will [[reme|mber]] success stories and [[ign|ore]] reports of [[fai|lure]]. This bias [[aff|ects]] [[n|ot]] only ordinary [[peo|ple]] but also [[exp|erts]], including scientists and doctors. One reason it is so common is that challenging our own beliefs feels uncomfortable. To reduce its influence, researchers are trained to look actively for evidence that could prove their ideas wrong.",
+  "translation": "확증 편향은 이미 믿고 있는 것을 뒷받침하는 정보에 주목하는 경향이다. 예를 들어 어떤 식단이 효과가 있다고 생각하는 사람은 성공 사례는 기억하고 실패 보고는 무시한다. 이 편향은 일반인뿐 아니라 과학자와 의사를 포함한 전문가에게도 영향을 미친다. 이것이 흔한 이유 중 하나는 자신의 믿음에 도전하는 일이 불편하게 느껴지기 때문이다. 그 영향을 줄이기 위해 연구자들은 자기 생각이 틀렸음을 증명할 수 있는 증거를 적극적으로 찾도록 훈련받는다."
+ },
+ {
+  "id": "rw-020",
+  "level": 3,
+  "topic": "경제학",
+  "text": "Inflation refers to a general increase in prices across an economy over time. When [[infl|ation]] is high, the [[sa|me]] amount of [[mo|ney]] buys fewer [[go|ods]] [[th|an]] before. [[Mode|rate]] inflation is considered [[nor|mal]], and many central banks [[a|im]] for [[ab|out]] two percent [[p|er]] year. However, when prices rise very quickly, people lose confidence in their currency. In extreme cases, known as hyperinflation, prices can double within days, and savings become almost worthless.",
+  "translation": "인플레이션은 시간이 흐르면서 경제 전반의 물가가 전반적으로 오르는 것을 말한다. 인플레이션이 높으면 같은 금액의 돈으로 이전보다 적은 상품을 산다. 적당한 인플레이션은 정상으로 여겨지며, 많은 중앙은행은 연 2% 정도를 목표로 한다. 그러나 물가가 매우 빠르게 오르면 사람들은 자국 통화에 대한 신뢰를 잃는다. 초인플레이션이라고 불리는 극단적인 경우에는 며칠 만에 물가가 두 배가 되고 저축이 거의 가치를 잃는다."
+ },
+ {
+  "id": "rw-021",
+  "level": 3,
+  "topic": "역사",
+  "text": "The Silk Road was not a single road but a vast network of trade routes connecting China with the Mediterranean. [[Merc|hants]] carried silk, spices, [[a|nd]] precious metals [[acr|oss]] deserts and mountains, [[of|ten]] traveling in large [[gro|ups]] called caravans [[f|or]] protection. [[Go|ods]] rarely traveled the [[ent|ire]] distance; instead, [[th|ey]] passed through [[ma|ny]] hands along the way. Just as important as the goods were the ideas that moved along these routes. Religions, technologies such as papermaking, and artistic styles spread between cultures that had never met directly.",
+  "translation": "실크로드는 하나의 길이 아니라 중국과 지중해를 잇는 방대한 교역로의 연결망이었다. 상인들은 비단, 향신료, 귀금속을 싣고 사막과 산을 건넜으며, 보호를 위해 흔히 대상이라고 불리는 큰 무리를 지어 이동했다. 상품이 전 구간을 이동하는 일은 드물었고, 대신 도중에 여러 사람의 손을 거쳤다. 상품만큼이나 중요한 것은 이 길을 따라 이동한 생각들이었다. 종교, 제지술 같은 기술, 예술 양식이 직접 만난 적 없는 문화들 사이에 퍼졌다."
+ },
+ {
+  "id": "rw-022",
+  "level": 3,
+  "topic": "언어학",
+  "text": "Languages constantly borrow words from one another. English, [[f|or]] instance, has taken [[thou|sands]] of words from French, [[La|tin]], and many other [[lang|uages]]. Words such [[a|s]] \"restaurant\" and \"ballet\" [[ent|ered]] English from French, [[wh|ile]] \"algebra\" came [[origi|nally]] from Arabic. Borrowing usually [[hap|pens]] when speakers of different languages come into [[con|tact]] through trade, travel, or conquest. Over time, borrowed words are often adapted to the sound system of the new language, so native speakers may not even realize their foreign origin.",
+  "translation": "언어들은 끊임없이 서로 단어를 빌려 온다. 예를 들어 영어는 프랑스어, 라틴어 등 여러 언어에서 수천 개의 단어를 가져왔다. 'restaurant'와 'ballet' 같은 단어는 프랑스어에서 영어로 들어왔고, 'algebra'는 원래 아랍어에서 왔다. 차용은 보통 서로 다른 언어의 화자들이 무역, 여행, 정복을 통해 접촉할 때 일어난다. 시간이 지나면서 빌려 온 단어는 새 언어의 소리 체계에 맞게 바뀌는 경우가 많아, 원어민은 그 단어가 외국에서 왔다는 사실조차 모를 수 있다."
+ },
+ {
+  "id": "rw-023",
+  "level": 3,
+  "topic": "미술",
+  "text": "Impressionism was an art movement that began in France in the 1870s. Instead [[o|f]] painting detailed scenes [[i|n]] studios, Impressionist [[art|ists]] often worked outdoors [[t|o]] capture the changing [[eff|ects]] of light. They [[us|ed]] quick, visible brushstrokes [[a|nd]] bright colors, [[wh|ich]] made their paintings [[lo|ok]] unfinished to many [[cri|tics]]. At first, the major art exhibitions in Paris rejected their work. Today, however, painters such as Claude Monet and Pierre-Auguste Renoir are among the most popular artists in the world.",
+  "translation": "인상주의는 1870년대 프랑스에서 시작된 미술 운동이다. 인상주의 화가들은 작업실에서 세밀한 장면을 그리는 대신, 변화하는 빛의 효과를 포착하려고 흔히 야외에서 작업했다. 그들은 빠르고 눈에 보이는 붓질과 밝은 색을 사용했는데, 이 때문에 많은 비평가에게 그들의 그림은 미완성처럼 보였다. 처음에 파리의 주요 미술 전람회는 그들의 작품을 거부했다. 그러나 오늘날 클로드 모네와 피에르오귀스트 르누아르 같은 화가들은 세계에서 가장 인기 있는 화가에 속한다."
+ },
+ {
+  "id": "rw-024",
+  "level": 3,
+  "topic": "공학",
+  "text": "Solar panels convert sunlight directly into electricity. Most [[pan|els]] are [[ma|de]] of silicon, a material that [[rele|ases]] electrons [[wh|en]] it [[abs|orbs]] light. These moving [[elec|trons]] create [[a|n]] electric [[cur|rent]] that can [[po|wer]] homes and [[busin|esses]]. This effect is known as the photovoltaic effect. The cost of solar panels has fallen dramatically over the past two decades. One remaining challenge is storage, since panels produce no power at night, so engineers are developing better batteries. Researchers are also testing new materials that could make panels lighter, cheaper, and more efficient.",
+  "translation": "태양광 패널은 햇빛을 곧바로 전기로 바꾼다. 대부분의 패널은 빛을 흡수하면 전자를 방출하는 물질인 실리콘으로 만들어진다. 이렇게 움직이는 전자가 가정과 사업체에 전력을 공급할 수 있는 전류를 만든다. 이 효과를 광전 효과라고 한다. 태양광 패널의 가격은 지난 20년 동안 극적으로 떨어졌다. 남은 과제 하나는 저장인데, 패널은 밤에 전기를 만들지 못하므로 기술자들은 더 나은 배터리를 개발하고 있다. 연구자들은 또 패널을 더 가볍고 싸고 효율적으로 만들 수 있는 새로운 소재를 시험하고 있다."
+ },
+ {
+  "id": "rw-025",
+  "level": 4,
+  "topic": "생물학",
+  "text": "Epigenetics examines how environmental factors can alter the way genes are expressed without changing the underlying DNA sequence. Chemical [[mar|kers]] attached to DNA [[c|an]] switch [[parti|cular]] genes [[o|n]] or off, influencing [[tra|its]] such as metabolism [[a|nd]] susceptibility to [[dis|ease]]. Remarkably, [[so|me]] of these modifications [[app|ear]] to be [[trans|mitted]] from parents to offspring. Studies of families who endured famine, for instance, suggest that nutritional stress in one generation may affect the health of grandchildren. Such findings complicate the traditional distinction between inherited and acquired characteristics.",
+  "translation": "후성유전학은 환경 요인이 기본 DNA 서열을 바꾸지 않고도 유전자가 발현되는 방식을 어떻게 바꿀 수 있는지 연구한다. DNA에 붙은 화학적 표지는 특정 유전자를 켜거나 꺼서 신진대사나 질병 감수성 같은 형질에 영향을 준다. 놀랍게도 이런 변형 중 일부는 부모에게서 자손에게 전달되는 것으로 보인다. 예를 들어 기근을 겪은 가족에 대한 연구는 한 세대의 영양 스트레스가 손주 세대의 건강에 영향을 줄 수 있음을 시사한다. 이런 발견은 유전 형질과 획득 형질이라는 전통적 구분을 복잡하게 만든다."
+ },
+ {
+  "id": "rw-026",
+  "level": 4,
+  "topic": "지구과학",
+  "text": "Ice cores extracted from Antarctica provide an extraordinary archive of Earth's past climate. As [[sn|ow]] accumulates year [[af|ter]] year, it traps [[ti|ny]] bubbles of air [[th|at]] preserve the composition [[o|f]] the ancient atmosphere. [[B|y]] analyzing these bubbles, [[resea|rchers]] can [[mea|sure]] [[concent|rations]] of carbon dioxide [[stret|ching]] back hundreds of thousands of years. The ratio of oxygen isotopes in the ice also reveals past temperatures. Together, these records demonstrate a close correlation between greenhouse gas levels and global temperature, strengthening projections about future warming.",
+  "translation": "남극에서 채취한 빙하 코어는 지구의 과거 기후에 관한 놀라운 기록 보관소이다. 해마다 눈이 쌓이면서 고대 대기의 조성을 보존하는 작은 공기 방울이 갇힌다. 연구자들은 이 공기 방울을 분석해 수십만 년 전까지 거슬러 올라가는 이산화탄소 농도를 측정할 수 있다. 얼음 속 산소 동위원소의 비율은 과거 기온도 알려 준다. 이 기록들은 함께 온실가스 농도와 지구 기온 사이의 밀접한 상관관계를 보여 주어, 미래 온난화에 관한 예측을 뒷받침한다."
+ },
+ {
+  "id": "rw-027",
+  "level": 4,
+  "topic": "심리학",
+  "text": "Cognitive dissonance describes the mental discomfort people experience when their actions contradict their beliefs. To [[red|uce]] this tension, individuals [[frequ|ently]] adjust their attitudes [[rat|her]] than their behavior. In a [[cla|ssic]] experiment, [[partic|ipants]] who were [[pa|id]] only one dollar [[t|o]] describe a [[ted|ious]] task as enjoyable later [[ra|ted]] it [[mo|re]] positively than those paid twenty dollars. Lacking a sufficient external justification, the poorly paid group apparently convinced themselves that the task had been genuinely interesting.",
+  "translation": "인지 부조화는 행동이 믿음과 모순될 때 사람들이 겪는 정신적 불편함을 말한다. 이 긴장을 줄이기 위해 사람들은 흔히 행동보다는 태도를 바꾼다. 한 고전적인 실험에서 지루한 과제를 재미있다고 설명하는 대가로 1달러만 받은 참가자들은, 20달러를 받은 참가자들보다 나중에 그 과제를 더 긍정적으로 평가했다. 충분한 외적 정당화가 없었기 때문에 적은 돈을 받은 집단은 그 과제가 정말 흥미로웠다고 스스로를 설득한 것으로 보인다."
+ },
+ {
+  "id": "rw-028",
+  "level": 4,
+  "topic": "경제학",
+  "text": "Traditional economic models assume that people make rational decisions to maximize their own benefit. Behavioral [[econo|mists]], however, have [[docum|ented]] numerous systematic [[devia|tions]] from this [[id|eal]]. One [[prom|inent]] example is loss [[aver|sion]], the tendency [[t|o]] feel the pain [[o|f]] a loss more [[inte|nsely]] than the [[plea|sure]] of an equivalent gain. Consequently, investors often hold on to declining stocks for too long, hoping to avoid admitting a loss. Governments and companies increasingly use such insights to design policies, for instance by making retirement savings the default option.",
+  "translation": "전통적인 경제 모델은 사람들이 자신의 이익을 극대화하기 위해 합리적으로 결정한다고 가정한다. 그러나 행동경제학자들은 이 이상에서 체계적으로 벗어나는 수많은 사례를 기록해 왔다. 두드러진 예 하나는 손실 회피로, 같은 크기의 이득에서 얻는 기쁨보다 손실의 고통을 더 강하게 느끼는 경향이다. 그 결과 투자자들은 손실을 인정하지 않으려고 하락하는 주식을 너무 오래 붙들고 있는 경우가 많다. 정부와 기업은 이런 통찰을 정책 설계에 점점 더 활용하는데, 예를 들어 퇴직 저축을 기본 선택 사항으로 만드는 식이다."
+ },
+ {
+  "id": "rw-029",
+  "level": 4,
+  "topic": "역사",
+  "text": "The Black Death, which swept across Europe in the mid-fourteenth century, killed roughly a third of the continent's population. The [[resu|lting]] shortage of labor [[h|ad]] profound economic [[conseq|uences]]. Surviving [[peas|ants]] could demand higher [[wa|ges]], and many [[aban|doned]] their lords' estates [[i|n]] search of better [[condi|tions]]. Attempts [[b|y]] authorities to [[fre|eze]] wages provoked widespread resentment and, eventually, open revolt. Some historians argue that these upheavals accelerated the decline of feudalism, gradually shifting power toward a class of free laborers and landowning farmers.",
+  "translation": "14세기 중반 유럽을 휩쓴 흑사병은 대륙 인구의 약 3분의 1을 죽였다. 그로 인한 노동력 부족은 심대한 경제적 결과를 낳았다. 살아남은 농민들은 더 높은 임금을 요구할 수 있었고, 많은 농민이 더 나은 조건을 찾아 영주의 장원을 떠났다. 당국이 임금을 동결하려 하자 광범위한 반감이 일었고, 결국 공공연한 반란으로 이어졌다. 일부 역사가들은 이러한 격변이 봉건제의 쇠퇴를 앞당겨 권력을 자유 노동자와 토지를 소유한 농민 계층 쪽으로 서서히 옮겨 놓았다고 주장한다."
+ },
+ {
+  "id": "rw-030",
+  "level": 4,
+  "topic": "천문학",
+  "text": "Astronomers have now confirmed the existence of more than five thousand planets orbiting stars beyond our solar system. [[Mo|st]] of [[th|ese]] exoplanets [[we|re]] detected [[us|ing]] the transit [[met|hod]], which [[meas|ures]] the [[sli|ght]] dimming of a star [[wh|en]] a planet [[pas|ses]] in [[fr|ont]] of it. By analyzing the amount of light blocked, scientists can estimate a planet's size, and repeated observations reveal its orbital period. The search increasingly focuses on rocky worlds within the so-called habitable zone, where liquid water could exist.",
+  "translation": "천문학자들은 이제 태양계 밖의 별을 도는 행성이 5천 개 이상 존재함을 확인했다. 이런 외계 행성 대부분은 통과법으로 발견되었는데, 이는 행성이 별 앞을 지나갈 때 별빛이 약간 어두워지는 것을 측정하는 방법이다. 가려진 빛의 양을 분석해 과학자들은 행성의 크기를 추정할 수 있고, 반복 관측으로 공전 주기를 알아낸다. 탐색은 점점 더 액체 상태의 물이 존재할 수 있는 이른바 생명 가능 지대 안의 암석 행성에 집중되고 있다."
+ },
+ {
+  "id": "rw-031",
+  "level": 4,
+  "topic": "사회학",
+  "text": "Sociologists use the term social capital to describe the value created by networks of relationships among people. Communities [[wi|th]] high levels of [[tr|ust]] and cooperation [[te|nd]] to solve collective [[prob|lems]] more effectively. [[Resi|dents]] are more [[lik|ely]] to volunteer, participate [[i|n]] local politics, [[a|nd]] share information [[ab|out]] job [[opport|unities]]. The political scientist Robert Putnam famously argued that declining membership in clubs and associations in the United States signaled an erosion of social capital, though critics contend that new forms of connection have emerged online.",
+  "translation": "사회학자들은 사람들 사이의 관계망이 만들어 내는 가치를 설명하기 위해 사회적 자본이라는 용어를 쓴다. 신뢰와 협력 수준이 높은 공동체는 집단적 문제를 더 효과적으로 해결하는 경향이 있다. 그런 공동체의 주민들은 자원봉사를 하고, 지역 정치에 참여하고, 일자리 기회에 관한 정보를 공유할 가능성이 더 높다. 정치학자 로버트 퍼트넘은 미국에서 클럽과 협회의 회원 수가 줄어든 것이 사회적 자본의 침식을 보여 준다고 주장한 것으로 유명하지만, 비판자들은 온라인에서 새로운 형태의 연결이 생겨났다고 반박한다."
+ },
+ {
+  "id": "rw-032",
+  "level": 4,
+  "topic": "공학",
+  "text": "Concrete is the most widely used construction material on the planet, yet it is prone to cracking over time. Even [[sm|all]] cracks allow water [[a|nd]] chemicals to [[pene|trate]], corroding the steel [[reinfo|rcement]] inside and [[weak|ening]] the structure. [[Resea|rchers]] have [[ther|efore]] developed a [[no|vel]] type of concrete [[conta|ining]] dormant [[bact|eria]]. When water seeps into a crack, the bacteria activate and produce limestone, which gradually seals the gap. Although the technology remains more expensive than conventional methods, it could significantly reduce maintenance costs for bridges and tunnels.",
+  "translation": "콘크리트는 지구에서 가장 널리 쓰이는 건축 자재이지만 시간이 지나면 금이 가기 쉽다. 작은 균열이라도 물과 화학 물질이 스며들게 해 내부의 철근을 부식시키고 구조물을 약하게 만든다. 그래서 연구자들은 휴면 상태의 박테리아를 담은 새로운 종류의 콘크리트를 개발했다. 균열에 물이 스며들면 박테리아가 활성화되어 석회석을 만들고, 이것이 틈을 서서히 메운다. 이 기술은 아직 기존 방식보다 비싸지만, 다리와 터널의 유지 보수 비용을 크게 줄일 수 있다."
+ },
+ {
+  "id": "rw-033",
+  "level": 5,
+  "topic": "생물학",
+  "text": "The endosymbiotic theory holds that mitochondria and chloroplasts were once free-living bacteria engulfed by ancestral cells. Rather [[th|an]] being digested, these [[micr|obes]] persisted within [[th|eir]] hosts, eventually [[beco|ming]] indispensable organelles. [[Compe|lling]] evidence supports [[th|is]] view: both structures [[pos|sess]] their [[o|wn]] circular DNA and [[repl|icate]] independently through a process [[resem|bling]] bacterial division. Initially dismissed as fanciful, the hypothesis gained acceptance largely through the persistence of biologist Lynn Margulis, whose work transformed our understanding of how complex cells originated.",
+  "translation": "세포 내 공생설은 미토콘드리아와 엽록체가 한때 조상 세포에 삼켜진, 독립적으로 살던 세균이었다고 주장한다. 이 미생물들은 소화되지 않고 숙주 안에 남아 결국 없어서는 안 될 세포 소기관이 되었다. 설득력 있는 증거가 이 견해를 뒷받침한다. 두 구조 모두 자신만의 고리 모양 DNA를 가지고 있으며, 세균의 분열과 비슷한 과정을 통해 독립적으로 복제된다. 처음에는 공상적이라며 무시당했지만, 이 가설은 주로 생물학자 린 마굴리스의 끈질긴 노력 덕분에 받아들여졌고, 그녀의 연구는 복잡한 세포의 기원에 대한 우리의 이해를 바꾸어 놓았다."
+ },
+ {
+  "id": "rw-034",
+  "level": 5,
+  "topic": "지질학",
+  "text": "When Alfred Wegener proposed continental drift in 1912, most geologists dismissed the idea as implausible. Although he had [[ama|ssed]] compelling [[evid|ence]], including [[matc|hing]] fossils [[o|n]] widely separated continents, he could [[n|ot]] identify a [[mech|anism]] capable [[o|f]] moving [[su|ch]] enormous landmasses. [[On|ly]] in the 1960s, [[wh|en]] studies of the ocean floor revealed seafloor spreading, did the scientific community embrace what became known as plate tectonics. Wegener's vindication, which came decades after his death, is often cited as a cautionary tale about the scientific establishment's resistance to unconventional ideas.",
+  "translation": "알프레트 베게너가 1912년에 대륙 이동설을 제안했을 때 대부분의 지질학자는 그 생각을 믿기 어렵다며 일축했다. 그는 멀리 떨어진 대륙들에서 일치하는 화석을 포함해 설득력 있는 증거를 모았지만, 그렇게 거대한 땅덩어리를 움직일 수 있는 메커니즘을 밝혀내지 못했다. 1960년대에 해저 연구가 해저 확장을 밝혀내고 나서야 과학계는 판 구조론으로 알려지게 된 이론을 받아들였다. 그가 죽은 지 수십 년 후에야 이루어진 베게너의 명예 회복은 파격적인 생각에 대한 과학계 주류의 저항을 경계하는 교훈으로 자주 인용된다."
+ },
+ {
+  "id": "rw-035",
+  "level": 5,
+  "topic": "심리학",
+  "text": "Over the past decade, psychology has grappled with what is often termed the replication crisis. Large-scale [[eff|orts]] to reproduce influential [[find|ings]] have succeeded [[i|n]] only about half [[o|f]] cases, casting [[do|ubt]] on phenomena once [[rega|rded]] as robust. [[Cri|tics]] attribute the problem [[par|tly]] to questionable [[rese|arch]] practices, such as selectively [[repo|rting]] analyses that yield statistically significant results. In response, many journals now encourage preregistration, in which researchers specify their hypotheses and methods before collecting data, thereby constraining the flexibility that can generate spurious conclusions.",
+  "translation": "지난 10년 동안 심리학은 흔히 재현성 위기라고 불리는 문제와 씨름해 왔다. 영향력 있는 연구 결과를 재현하려는 대규모 시도는 약 절반의 경우에만 성공해, 한때 확고하다고 여겨졌던 현상들에 의문을 던졌다. 비판자들은 그 원인의 일부를 통계적으로 유의한 결과가 나오는 분석만 골라 보고하는 것 같은 의심스러운 연구 관행으로 돌린다. 이에 대응해 많은 학술지는 이제 사전 등록을 권장하는데, 이는 연구자가 데이터를 모으기 전에 가설과 방법을 명시해 허위 결론을 낳을 수 있는 유연성을 제한하는 방식이다."
+ },
+ {
+  "id": "rw-036",
+  "level": 5,
+  "topic": "경제학",
+  "text": "The tragedy of the commons posits that individuals sharing a finite resource will inevitably deplete it by acting in their own self-interest. The economist Elinor Ostrom, [[how|ever]], challenged this [[pessi|mistic]] conclusion. [[Dra|wing]] on extensive [[fiel|dwork]], she [[docum|ented]] numerous communities [[th|at]] had sustainably [[man|aged]] fisheries, forests, [[a|nd]] irrigation systems [[f|or]] centuries [[wit|hout]] either privatization or government control. Crucially, these groups had devised their own rules for monitoring usage and sanctioning violations. Ostrom's research, which earned her a Nobel Prize in 2009, demonstrated that collective self-governance can succeed under the right institutional conditions.",
+  "translation": "공유지의 비극은 한정된 자원을 공유하는 개인들이 각자의 이익을 좇다 보면 결국 그 자원을 고갈시킬 수밖에 없다고 상정한다. 그러나 경제학자 엘리너 오스트롬은 이 비관적인 결론에 이의를 제기했다. 광범위한 현장 연구를 바탕으로 그녀는 사유화나 정부 통제 없이 수 세기 동안 어장, 숲, 관개 시설을 지속 가능하게 관리해 온 수많은 공동체를 기록했다. 결정적으로, 이 집단들은 사용을 감시하고 위반을 제재하는 자신들만의 규칙을 고안해 냈다. 2009년 그녀에게 노벨상을 안겨 준 오스트롬의 연구는 적절한 제도적 조건 아래에서는 집단적 자치가 성공할 수 있음을 보여 주었다."
+ },
+ {
+  "id": "rw-037",
+  "level": 5,
+  "topic": "역사",
+  "text": "For centuries, European scholars assumed that Egyptian hieroglyphs were purely symbolic, each sign representing an abstract idea. This [[miscon|ception]] impeded decipherment [[un|til]] the discovery of [[t|he]] Rosetta Stone in 1799, [[wh|ich]] bore the same [[dec|ree]] in hieroglyphic, Demotic, [[a|nd]] ancient Greek scripts. [[Buil|ding]] on earlier [[wo|rk]], the French [[sch|olar]] Jean-Francois Champollion demonstrated [[i|n]] 1822 that hieroglyphs combined phonetic and ideographic elements. His breakthrough opened three thousand years of Egyptian history to direct study, transforming a field previously dominated by speculation.",
+  "translation": "수 세기 동안 유럽 학자들은 이집트 상형 문자가 순전히 상징적이어서 각 기호가 추상적인 관념을 나타낸다고 여겼다. 이 오해는 1799년 로제타석이 발견될 때까지 해독을 가로막았는데, 이 돌에는 같은 칙령이 상형 문자, 민중 문자, 고대 그리스 문자로 새겨져 있었다. 앞선 연구를 토대로 프랑스 학자 장프랑수아 샹폴리옹은 1822년 상형 문자가 표음 요소와 표의 요소를 결합한 것임을 입증했다. 그의 돌파구는 3천 년에 걸친 이집트 역사를 직접 연구할 수 있게 열어 주었고, 그전까지 추측이 지배하던 분야를 바꾸어 놓았다."
+ },
+ {
+  "id": "rw-038",
+  "level": 5,
+  "topic": "천문학",
+  "text": "Galaxies rotate far more rapidly than the gravitational pull of their visible matter should permit. To [[acc|ount]] for this discrepancy, astronomers [[post|ulate]] the existence [[o|f]] dark matter, an invisible [[subs|tance]] that [[nei|ther]] emits nor [[abs|orbs]] light yet [[exe|rts]] a gravitational [[infl|uence]]. [[Esti|mates]] suggest it [[const|itutes]] roughly eighty-five percent of all matter in the universe. Despite decades of increasingly sensitive experiments, however, no dark matter particle has been directly detected, prompting some physicists to propose modifying the laws of gravity instead.",
+  "translation": "은하들은 눈에 보이는 물질의 중력만으로 허용될 수 있는 것보다 훨씬 빠르게 회전한다. 이 불일치를 설명하기 위해 천문학자들은 암흑 물질, 즉 빛을 내지도 흡수하지도 않지만 중력의 영향을 미치는 보이지 않는 물질의 존재를 상정한다. 추정에 따르면 암흑 물질은 우주 전체 물질의 약 85%를 차지한다. 그러나 수십 년 동안 점점 더 정밀한 실험을 했는데도 암흑 물질 입자는 직접 검출되지 않았고, 이 때문에 일부 물리학자들은 대신 중력 법칙을 수정하자고 제안한다."
+ },
+ {
+  "id": "rw-039",
+  "level": 5,
+  "topic": "언어학",
+  "text": "The hypothesis of linguistic relativity proposes that the structure of a language shapes the way its speakers perceive and categorize the world. In [[i|ts]] strongest form, [[kn|own]] as linguistic determinism, [[t|he]] claim that language [[rig|idly]] constrains thought [[h|as]] been largely discredited. [[Nevert|heless]], experimental studies [[ha|ve]] revealed subtler [[eff|ects]]. Speakers of languages [[th|at]] lack words for left and right, for instance, rely on cardinal directions and display remarkably [[pre|cise]] spatial orientation. Such findings suggest that language may direct attention rather than imprison cognition.",
+  "translation": "언어 상대성 가설은 언어의 구조가 그 언어 사용자가 세상을 지각하고 범주화하는 방식을 형성한다고 제안한다. 언어 결정론으로 알려진 가장 강한 형태, 즉 언어가 사고를 엄격하게 제약한다는 주장은 대체로 신빙성을 잃었다. 그럼에도 실험 연구들은 더 미묘한 효과를 밝혀냈다. 예를 들어 왼쪽과 오른쪽을 가리키는 단어가 없는 언어의 사용자들은 동서남북 방위에 의존하며 놀라울 만큼 정확한 공간 감각을 보인다. 이런 발견은 언어가 인지를 가두기보다는 주의를 이끌 수 있음을 시사한다."
+ },
+ {
+  "id": "rw-040",
+  "level": 5,
+  "topic": "미술사",
+  "text": "The flourishing of Renaissance art in Florence cannot be understood apart from the system of patronage that sustained it. Wealthy [[fami|lies]], most notably the Medici, [[commis|sioned]] paintings, sculptures, [[a|nd]] buildings not merely [[o|ut]] of aesthetic appreciation [[b|ut]] also to [[dis|play]] their power and [[pi|ety]]. [[Cont|racts]] frequently [[stipu|lated]] the [[sub|ject]] matter, dimensions, and even the quantity of expensive pigments such as ultramarine to be used. Artists were thus less autonomous creators than skilled professionals negotiating the demands of their clients.",
+  "translation": "피렌체에서 르네상스 미술이 꽃핀 것은 그것을 떠받친 후원 제도와 떼어 놓고 이해할 수 없다. 부유한 가문들, 특히 메디치 가문은 단지 미적 감상 때문만이 아니라 자신들의 권력과 신앙심을 과시하려고 그림, 조각, 건축물을 주문했다. 계약서에는 흔히 주제, 크기, 심지어 울트라마린 같은 값비싼 안료를 얼마나 쓸지까지 명시되었다. 따라서 화가들은 자율적인 창작자라기보다 고객의 요구를 조율하는 숙련된 전문가에 가까웠다."
+ }
+]

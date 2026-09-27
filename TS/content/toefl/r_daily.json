@@ -1,0 +1,1662 @@
+[
+ {
+  "id": "rd-001",
+  "level": 1,
+  "doc_type": "공지",
+  "title": "Library Closed on Monday",
+  "text": "NOTICE: The Main Library will be closed on Monday, October 14, for a holiday. The library will open again on Tuesday at 8:00 a.m. You can still return books in the book drop next to the front door. If you need help with research, please send an email to help@library.edu.",
+  "questions": [
+   {
+    "q": "When will the library open again?",
+    "choices": [
+     "On Monday at 8:00 a.m.",
+     "On Tuesday at noon",
+     "On Tuesday at 8:00 a.m.",
+     "On Wednesday morning"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "공지에 'The library will open again on Tuesday at 8:00 a.m.'이라고 나와 있다. 월요일은 휴관일이다."
+   },
+   {
+    "q": "What can students do on Monday?",
+    "choices": [
+     "Study in the library",
+     "Talk to a librarian at the front desk",
+     "Borrow new books",
+     "Return books in the book drop"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "월요일에는 도서관이 닫지만 'You can still return books in the book drop'이라고 했다. 도서관 안에서 하는 일은 모두 할 수 없다."
+   }
+  ],
+  "translation": "공지: 중앙도서관은 휴일로 10월 14일 월요일에 문을 닫습니다. 도서관은 화요일 오전 8시에 다시 문을 엽니다. 정문 옆 반납함에는 계속 책을 반납할 수 있습니다. 자료 조사에 도움이 필요하면 help@library.edu로 이메일을 보내 주세요."
+ },
+ {
+  "id": "rd-002",
+  "level": 1,
+  "doc_type": "문자 메시지",
+  "title": "Text from Maya",
+  "text": "Hi Ben! I'm at the coffee shop near the gym, but I forgot my wallet at home. Can you bring me $5 when you come? I'll pay you back tomorrow. Also, our study group is meeting at 4:00 today, not 3:00. See you soon! - Maya",
+  "questions": [
+   {
+    "q": "Why did Maya send this message?",
+    "choices": [
+     "To invite Ben to the gym",
+     "To ask Ben for a small favor",
+     "To cancel the study group",
+     "To tell Ben where he left his wallet"
+    ],
+    "answer": 1,
+    "type": "주제·목적",
+    "explanation": "마야는 지갑을 두고 와서 벤에게 5달러를 가져다 달라고 부탁하고 있다. 스터디 모임은 취소가 아니라 시간이 바뀐 것이다."
+   },
+   {
+    "q": "What time does the study group meet today?",
+    "choices": [
+     "At 4:00",
+     "At 3:00",
+     "At 5:00",
+     "Tomorrow morning"
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "'our study group is meeting at 4:00 today, not 3:00'이라고 했으므로 4시이다. 3시는 원래 시간이다."
+   }
+  ],
+  "translation": "안녕 벤! 나 체육관 근처 커피숍에 있는데 지갑을 집에 두고 왔어. 올 때 5달러 좀 가져다줄 수 있어? 내일 갚을게. 그리고 오늘 스터디 모임은 3시가 아니라 4시야. 이따 봐! - 마야"
+ },
+ {
+  "id": "rd-003",
+  "level": 1,
+  "doc_type": "광고",
+  "title": "Bike for Sale",
+  "text": "FOR SALE: Blue mountain bike, only one year old. It is in very good condition and comes with a new lock and a helmet. Price: $120. I am selling it because I am moving to another city next month. Please call or text Sam at 555-0142 after 5 p.m. on weekdays.",
+  "questions": [
+   {
+    "q": "Why is Sam selling the bike?",
+    "choices": [
+     "He is moving to another city.",
+     "The bike is broken.",
+     "He bought a new bike.",
+     "He needs money for books."
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "'I am selling it because I am moving to another city next month'라고 이유를 밝혔다. 자전거는 상태가 아주 좋다고 했다."
+   },
+   {
+    "q": "What comes with the bike?",
+    "choices": [
+     "A new tire and a lock",
+     "A helmet and a light",
+     "A bag and a lock",
+     "A lock and a helmet"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "'comes with a new lock and a helmet'이라고 했다. 타이어, 전등, 가방은 언급되지 않았다."
+   },
+   {
+    "q": "When should people contact Sam?",
+    "choices": [
+     "Only on weekends",
+     "On weekdays before 5 p.m.",
+     "On weekdays after 5 p.m.",
+     "Any time in the morning"
+    ],
+    "answer": 2,
+    "type": "사실 확인",
+    "explanation": "'after 5 p.m. on weekdays'에 연락하라고 했다. 주말이나 오전은 언급되지 않았다."
+   }
+  ],
+  "translation": "판매: 파란색 산악자전거, 산 지 1년밖에 안 됐습니다. 상태가 아주 좋고 새 자물쇠와 헬멧을 함께 드립니다. 가격: 120달러. 다음 달에 다른 도시로 이사해서 팝니다. 평일 오후 5시 이후에 샘(555-0142)에게 전화나 문자 주세요."
+ },
+ {
+  "id": "rd-004",
+  "level": 1,
+  "doc_type": "일정표",
+  "title": "Campus Gym Hours",
+  "text": "Campus Gym - Fall Hours\nMonday to Friday: 6:00 a.m. - 10:00 p.m.\nSaturday: 8:00 a.m. - 8:00 p.m.\nSunday: 10:00 a.m. - 6:00 p.m.\nSwimming pool: closed on Sundays.\nFree yoga class: Wednesdays, 5:00 p.m., Room 2.\nTowels are available at the front desk.\nPlease bring your student ID card.",
+  "questions": [
+   {
+    "q": "When does the gym open on Saturday?",
+    "choices": [
+     "At 6:00 a.m.",
+     "At 8:00 a.m.",
+     "At 10:00 a.m.",
+     "At 8:00 p.m."
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "토요일은 'Saturday: 8:00 a.m. - 8:00 p.m.'이므로 오전 8시에 연다. 오전 6시는 평일, 오전 10시는 일요일 개장 시간이다."
+   },
+   {
+    "q": "What is true about the swimming pool?",
+    "choices": [
+     "It is not open on Sundays.",
+     "It is open every day.",
+     "It closes at 6:00 p.m. on weekdays.",
+     "It is in Room 2."
+    ],
+    "answer": 0,
+    "type": "사실 확인",
+    "explanation": "'Swimming pool: closed on Sundays'라고 했다. 2번 방은 요가 수업 장소이다."
+   }
+  ],
+  "translation": "캠퍼스 체육관 - 가을 학기 운영 시간\n월~금: 오전 6시 - 오후 10시\n토요일: 오전 8시 - 오후 8시\n일요일: 오전 10시 - 오후 6시\n수영장: 일요일 휴무.\n무료 요가 수업: 매주 수요일 오후 5시, 2번 방.\n수건은 안내 데스크에서 받을 수 있습니다.\n학생증을 지참해 주세요."
+ },
+ {
+  "id": "rd-005",
+  "level": 1,
+  "doc_type": "이메일",
+  "title": "Welcome to Biology 101",
+  "text": "Dear students,\nWelcome to Biology 101! Our first class is on Tuesday at 10:00 a.m. in Room 105 of the Science Building. Please buy the textbook before class. You can find it at the campus bookstore. We will have a short quiz every Friday. I am happy to meet you all!\nProfessor Kim",
+  "questions": [
+   {
+    "q": "What is the main purpose of the email?",
+    "choices": [
+     "To tell students their quiz grades",
+     "To give students information about a class",
+     "To move the class to a new room",
+     "To sell a textbook to students"
+    ],
+    "answer": 1,
+    "type": "주제·목적",
+    "explanation": "첫 수업 시간과 장소, 교재, 퀴즈 일정을 알려 주는 환영 이메일이다. 퀴즈 점수나 강의실 변경 이야기는 없다."
+   },
+   {
+    "q": "How often will students have a quiz?",
+    "choices": [
+     "Every Tuesday",
+     "Once a month",
+     "Every Friday",
+     "Only on the first day"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "'We will have a short quiz every Friday'라고 했다. 화요일은 첫 수업 날이다."
+   }
+  ],
+  "translation": "학생 여러분,\n생물학 101 수업에 오신 것을 환영합니다! 첫 수업은 화요일 오전 10시 과학관 105호에서 합니다. 수업 전에 교재를 사 주세요. 교재는 교내 서점에서 구할 수 있습니다. 매주 금요일에 짧은 퀴즈가 있습니다. 여러분을 만나게 되어 기쁩니다!\n김 교수"
+ },
+ {
+  "id": "rd-006",
+  "level": 1,
+  "doc_type": "안내문",
+  "title": "Laundry Room Rules",
+  "text": "Laundry Room Rules\n1. The machines work with your student card, not coins.\n2. Each wash costs $1.50, and each dry costs $1.00.\n3. Please take your clothes out when the machine stops.\n4. Do not leave bags or boxes on the floor.\nThe laundry room is open from 7:00 a.m. to 11:00 p.m. every day.",
+  "questions": [
+   {
+    "q": "How do students pay for the machines?",
+    "choices": [
+     "With coins",
+     "With cash at the front desk",
+     "With a phone app",
+     "With their student card"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "'The machines work with your student card, not coins'라고 했다. 동전은 쓸 수 없다."
+   },
+   {
+    "q": "How much does it cost to wash and dry one load?",
+    "choices": [
+     "$1.00",
+     "$1.50",
+     "$3.00",
+     "$2.50"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "세탁 1.5달러와 건조 1달러를 더하면 2.5달러이다. 1.5달러는 세탁만 했을 때의 가격이다."
+   }
+  ],
+  "translation": "세탁실 규칙\n1. 기계는 동전이 아니라 학생증으로 작동합니다.\n2. 세탁은 1회 1.5달러, 건조는 1회 1달러입니다.\n3. 기계가 멈추면 옷을 꺼내 주세요.\n4. 바닥에 가방이나 상자를 두지 마세요.\n세탁실은 매일 오전 7시부터 오후 11시까지 엽니다."
+ },
+ {
+  "id": "rd-007",
+  "level": 1,
+  "doc_type": "웹페이지",
+  "title": "Food Truck Week",
+  "text": "Food Truck Week is coming! From May 6 to May 10, five food trucks will park in front of the Student Center. You can try tacos, noodles, pizza, and ice cream. The trucks are open from 11:00 a.m. to 3:00 p.m. Students get 10% off with their ID. Vegetarian meals are available at every truck.",
+  "questions": [
+   {
+    "q": "Where will the food trucks be?",
+    "choices": [
+     "Next to the library",
+     "In the parking lot",
+     "In front of the Student Center",
+     "Inside the gym"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "'five food trucks will park in front of the Student Center'라고 했다. 다른 장소는 언급되지 않았다."
+   },
+   {
+    "q": "Who can get a discount?",
+    "choices": [
+     "Students who show their ID",
+     "Only students who eat vegetarian food",
+     "Everyone who comes before 11:00",
+     "People who buy two meals"
+    ],
+    "answer": 0,
+    "type": "추론",
+    "explanation": "'Students get 10% off with their ID'라고 했으므로 학생증을 보여 주는 학생이 할인을 받는다. 채식 메뉴는 할인과 관계가 없다."
+   }
+  ],
+  "translation": "푸드트럭 주간이 다가옵니다! 5월 6일부터 10일까지 푸드트럭 다섯 대가 학생회관 앞에 섭니다. 타코, 국수, 피자, 아이스크림을 맛볼 수 있습니다. 트럭은 오전 11시부터 오후 3시까지 운영합니다. 학생은 학생증을 보여 주면 10% 할인을 받습니다. 모든 트럭에서 채식 메뉴를 먹을 수 있습니다."
+ },
+ {
+  "id": "rd-008",
+  "level": 1,
+  "doc_type": "공지",
+  "title": "Lost Phone",
+  "text": "LOST: Black phone with a red case. I lost it on Thursday afternoon in the cafeteria or near the bus stop on Oak Street. There is a picture of a dog on the back of the case. If you find it, please take it to the front desk of Hill Hall. Thank you very much! - Emma",
+  "questions": [
+   {
+    "q": "What does the phone case look like?",
+    "choices": [
+     "It is black with a picture of a cat.",
+     "It is red with a picture of a dog.",
+     "It is red with Emma's name on it.",
+     "It is black and has no picture."
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "케이스는 빨간색이고 'There is a picture of a dog on the back of the case'라고 했다. 검은색은 휴대폰 본체의 색이다."
+   },
+   {
+    "q": "What should someone do if they find the phone?",
+    "choices": [
+     "Call Emma on the phone",
+     "Leave it at the cafeteria",
+     "Take it to the front desk of Hill Hall",
+     "Take it to the bus stop"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "'please take it to the front desk of Hill Hall'이라고 부탁했다. 식당과 버스 정류장은 잃어버렸을 수 있는 장소이다."
+   }
+  ],
+  "translation": "분실: 빨간 케이스를 씌운 검은색 휴대폰. 목요일 오후에 식당이나 오크 스트리트 버스 정류장 근처에서 잃어버렸습니다. 케이스 뒷면에 강아지 그림이 있습니다. 찾으시면 힐 홀 안내 데스크에 맡겨 주세요. 정말 감사합니다! - 에마"
+ },
+ {
+  "id": "rd-009",
+  "level": 2,
+  "doc_type": "이메일",
+  "title": "Change to Our Group Meeting",
+  "text": "Hi everyone,\nI'm afraid I have to change our meeting for the history project. I have a doctor's appointment on Wednesday afternoon, so I can't meet at 2:00 as we planned. Could we meet on Thursday at the same time instead? The library study rooms are usually full, so I've already booked Room 3B. Please bring your notes on the second chapter. If Thursday doesn't work for you, let me know by tonight.\nThanks,\nJordan",
+  "questions": [
+   {
+    "q": "Why did Jordan write the email?",
+    "choices": [
+     "To ask for help with a history chapter",
+     "To invite the group to a doctor's appointment",
+     "To complain about the library",
+     "To move a meeting to a different day"
+    ],
+    "answer": 3,
+    "type": "주제·목적",
+    "explanation": "조던은 병원 예약 때문에 수요일 모임을 목요일로 옮기자고 제안한다. 이메일의 목적은 모임 일정 변경이다."
+   },
+   {
+    "q": "What time will the new meeting start?",
+    "choices": [
+     "At 3:00",
+     "At 2:00",
+     "At noon",
+     "In the evening"
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "'Could we meet on Thursday at the same time instead?'라고 했고 원래 시간은 2시였다. 따라서 요일만 바뀌고 시간은 2시 그대로이다."
+   },
+   {
+    "q": "What does Jordan suggest about the library study rooms?",
+    "choices": [
+     "They can be hard to get without a reservation.",
+     "They are closed on Thursdays.",
+     "They are too small for the group.",
+     "They are only for history students."
+    ],
+    "answer": 0,
+    "type": "추론",
+    "explanation": "'The library study rooms are usually full, so I've already booked Room 3B'라는 말에서 예약 없이는 방을 구하기 어렵다는 것을 알 수 있다."
+   }
+  ],
+  "translation": "모두 안녕,\n미안하지만 역사 프로젝트 모임을 바꿔야 할 것 같아. 수요일 오후에 병원 예약이 있어서 계획대로 2시에 만날 수가 없어. 대신 목요일 같은 시간에 만날 수 있을까? 도서관 스터디룸은 보통 꽉 차 있어서 3B호를 미리 예약해 뒀어. 2장에 관한 노트를 가져와 줘. 목요일이 안 되면 오늘 밤까지 알려 줘.\n고마워,\n조던"
+ },
+ {
+  "id": "rd-010",
+  "level": 2,
+  "doc_type": "광고",
+  "title": "Roommate Wanted",
+  "text": "Roommate wanted for a two-bedroom apartment on Maple Avenue, a ten-minute walk from campus. Rent is $450 a month, which includes water and internet. Electricity is shared. The room is furnished with a bed, a desk, and a closet. I'm a quiet graduate student who studies a lot, so I'm looking for someone who doesn't have loud parties. No pets, please. Available from August 1. Email Chris at c.lee@mail.edu.",
+  "questions": [
+   {
+    "q": "What is included in the rent?",
+    "choices": [
+     "Electricity and water",
+     "Internet and parking",
+     "Water and internet",
+     "Electricity only"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "'Rent is $450 a month, which includes water and internet'이라고 했다. 전기 요금은 따로 나눠 낸다."
+   },
+   {
+    "q": "What kind of roommate does Chris probably want?",
+    "choices": [
+     "Someone who owns a pet",
+     "Someone who is quiet and considerate",
+     "Someone who enjoys hosting parties",
+     "Someone who can bring furniture"
+    ],
+    "answer": 1,
+    "type": "추론",
+    "explanation": "크리스는 조용한 대학원생이며 시끄러운 파티를 하지 않는 사람을 찾는다고 했다. 반려동물은 금지이고 방에는 이미 가구가 있다."
+   }
+  ],
+  "translation": "룸메이트 구함: 캠퍼스에서 걸어서 10분 거리인 메이플 애비뉴의 방 두 개짜리 아파트. 월세는 450달러이며 수도와 인터넷이 포함됩니다. 전기 요금은 나눠 냅니다. 방에는 침대, 책상, 옷장이 있습니다. 저는 공부를 많이 하는 조용한 대학원생이라 시끄러운 파티를 하지 않는 분을 찾습니다. 반려동물은 안 됩니다. 8월 1일부터 입주 가능. 크리스에게 c.lee@mail.edu로 이메일 주세요."
+ },
+ {
+  "id": "rd-011",
+  "level": 2,
+  "doc_type": "안내문",
+  "title": "Printing at the Computer Center",
+  "text": "Printing at the Computer Center\nAll students receive 100 free pages at the start of each semester. After that, black-and-white pages cost 10 cents each and color pages cost 50 cents. To print, send your file from any lab computer, then go to a printer and tap your student ID. Your print job will be deleted if you do not collect it within two hours. Unused free pages do not carry over to the next semester.",
+  "questions": [
+   {
+    "q": "What happens if a student does not pick up a print job within two hours?",
+    "choices": [
+     "It is removed from the system.",
+     "It is printed in color.",
+     "The student is charged twice.",
+     "It is sent to the student's email."
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "'Your print job will be deleted if you do not collect it within two hours'라고 했다. delete(삭제)가 remove(제거)로 바뀌어 표현되었다."
+   },
+   {
+    "q": "What is true about the free pages?",
+    "choices": [
+     "Students get 100 of them each month.",
+     "They can be used only for color printing.",
+     "They are given only to new students.",
+     "They cannot be saved for a later semester."
+    ],
+    "answer": 3,
+    "type": "사실 확인",
+    "explanation": "'Unused free pages do not carry over to the next semester'이므로 다음 학기로 넘길 수 없다. 무료 쪽수는 한 달이 아니라 한 학기마다, 모든 학생에게 주어진다."
+   }
+  ],
+  "translation": "컴퓨터 센터 인쇄 안내\n모든 학생은 매 학기 초에 무료 100쪽을 받습니다. 그 후에는 흑백 한 쪽에 10센트, 컬러 한 쪽에 50센트입니다. 인쇄하려면 실습실 컴퓨터에서 파일을 보낸 다음 프린터로 가서 학생증을 대세요. 2시간 안에 찾아가지 않으면 인쇄 작업은 삭제됩니다. 쓰지 않은 무료 쪽수는 다음 학기로 넘어가지 않습니다."
+ },
+ {
+  "id": "rd-012",
+  "level": 2,
+  "doc_type": "일정표",
+  "title": "New Student Orientation",
+  "text": "New Student Orientation - Saturday, August 24\n9:00-9:45 Check-in and breakfast (Student Center lobby)\n10:00-11:00 Welcome talk by the Dean (Main Hall)\n11:15-12:30 Campus tour in small groups\n12:30-1:30 Lunch (Dining Hall, free with orientation badge)\n2:00-3:30 Meet your academic advisor (department offices)\n4:00-6:00 Club fair (Central Lawn)\nWear comfortable shoes for the tour.",
+  "questions": [
+   {
+    "q": "Where will students have breakfast?",
+    "choices": [
+     "In the Dining Hall",
+     "In Main Hall",
+     "On the Central Lawn",
+     "In the Student Center lobby"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "9시 등록 및 아침 식사 장소가 학생회관 로비(Student Center lobby)로 적혀 있다. 학생 식당은 점심 장소이다."
+   },
+   {
+    "q": "Why should students wear comfortable shoes?",
+    "choices": [
+     "They will play sports at the club fair.",
+     "They will walk around the campus.",
+     "The Dean will ask them to stand during the talk.",
+     "The advisor offices are in another town."
+    ],
+    "answer": 1,
+    "type": "추론",
+    "explanation": "'Wear comfortable shoes for the tour'라고 했으므로 캠퍼스 투어에서 많이 걸을 것임을 알 수 있다."
+   },
+   {
+    "q": "What do students need to get a free lunch?",
+    "choices": [
+     "Their orientation badge",
+     "Their student ID card",
+     "A ticket from their advisor",
+     "A coupon from the club fair"
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "점심은 'free with orientation badge'라고 적혀 있다. 학생증은 언급되지 않았다."
+   }
+  ],
+  "translation": "신입생 오리엔테이션 - 8월 24일 토요일\n9:00-9:45 등록 및 아침 식사 (학생회관 로비)\n10:00-11:00 학장 환영사 (본관 강당)\n11:15-12:30 소그룹 캠퍼스 투어\n12:30-1:30 점심 (학생 식당, 오리엔테이션 명찰이 있으면 무료)\n2:00-3:30 지도 교수 면담 (학과 사무실)\n4:00-6:00 동아리 박람회 (중앙 잔디밭)\n투어가 있으니 편한 신발을 신으세요."
+ },
+ {
+  "id": "rd-013",
+  "level": 2,
+  "doc_type": "공지",
+  "title": "Water Shut-Off in Carter Hall",
+  "text": "Attention Carter Hall residents: Because of repairs to the pipes, water will be turned off in the building on Friday from 9:00 a.m. to 1:00 p.m. During this time, you will not be able to use the showers, sinks, or toilets. Restrooms in the nearby Garcia Building will be open for residents. We suggest filling a bottle with drinking water before 9:00. We apologize for the inconvenience.",
+  "questions": [
+   {
+    "q": "What is the notice mainly about?",
+    "choices": [
+     "A new schedule for using the showers",
+     "The opening of the Garcia Building",
+     "A temporary stop in the water service",
+     "A problem with the quality of the drinking water"
+    ],
+    "answer": 2,
+    "type": "주제·목적",
+    "explanation": "배관 수리로 금요일 몇 시간 동안 물이 끊긴다는 공지이다. 가르시아 빌딩은 그동안 쓸 수 있는 화장실로만 언급된다."
+   },
+   {
+    "q": "What are residents advised to do?",
+    "choices": [
+     "Save some drinking water in advance",
+     "Stay in the Garcia Building overnight",
+     "Report any broken pipes to the office",
+     "Take their showers after 9:00 a.m."
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "'We suggest filling a bottle with drinking water before 9:00'라고 권했다. 9시 이후에는 샤워를 할 수 없다."
+   }
+  ],
+  "translation": "카터 홀 거주자 여러분께: 배관 수리로 금요일 오전 9시부터 오후 1시까지 건물의 물 공급이 중단됩니다. 이 시간 동안 샤워기, 세면대, 변기를 사용할 수 없습니다. 근처 가르시아 빌딩의 화장실을 거주자에게 개방합니다. 9시 전에 병에 마실 물을 받아 두시기를 권합니다. 불편을 드려 죄송합니다."
+ },
+ {
+  "id": "rd-014",
+  "level": 2,
+  "doc_type": "웹페이지",
+  "title": "The Writing Center",
+  "text": "The Writing Center helps students at every stage of the writing process, from planning an essay to checking the final draft. Our tutors are experienced graduate students. Sessions last 45 minutes and are free. You can book up to two sessions per week on our website. Please bring your assignment instructions and any drafts you have written. Note that tutors will not edit or proofread your paper for you; instead, they will teach you how to improve it yourself.",
+  "questions": [
+   {
+    "q": "How many sessions can a student book each week?",
+    "choices": [
+     "One",
+     "Three",
+     "As many as they want",
+     "Two"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "'You can book up to two sessions per week'라고 했으므로 일주일에 최대 두 번이다."
+   },
+   {
+    "q": "What would a tutor most likely NOT do?",
+    "choices": [
+     "Help a student plan an essay",
+     "Correct all the mistakes in a student's paper",
+     "Explain how to organize a paragraph",
+     "Look at a student's first draft"
+    ],
+    "answer": 1,
+    "type": "추론",
+    "explanation": "'tutors will not edit or proofread your paper for you'라고 했으므로 실수를 대신 모두 고쳐 주지는 않는다. 구상 돕기, 초안 보기는 센터가 하는 일이다."
+   }
+  ],
+  "translation": "글쓰기 센터는 에세이 구상부터 최종 원고 점검까지 글쓰기의 모든 단계에서 학생을 돕습니다. 튜터는 경험 많은 대학원생입니다. 상담은 45분이며 무료입니다. 웹사이트에서 일주일에 최대 두 번까지 예약할 수 있습니다. 과제 안내문과 써 둔 초안을 가져오세요. 튜터가 여러분의 글을 대신 고치거나 교정해 주지는 않습니다. 대신 스스로 글을 개선하는 방법을 가르쳐 드립니다."
+ },
+ {
+  "id": "rd-015",
+  "level": 2,
+  "doc_type": "문자 메시지",
+  "title": "A Ride to the Airport",
+  "text": "Leo (6:10 p.m.): Hey, are you still driving to the airport tomorrow? Could I get a ride? My flight leaves at 11.\nNina (6:14 p.m.): Sure! I'm leaving at 8:30, though, because I have to return my rental car first. Is that too early?\nLeo (6:15 p.m.): No, that's perfect. I'd rather be early. I'll meet you in front of my dorm.\nNina (6:16 p.m.): Great. Don't forget your passport this time!",
+  "questions": [
+   {
+    "q": "Why is Nina leaving at 8:30?",
+    "choices": [
+     "Her own flight leaves at 11:00.",
+     "She wants to eat breakfast at the airport.",
+     "She has to return a car first.",
+     "Leo asked her to leave early."
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "니나는 'because I have to return my rental car first'라고 이유를 말했다. 11시 비행기는 레오의 것이다."
+   },
+   {
+    "q": "What does Nina's last message suggest about Leo?",
+    "choices": [
+     "He does not have a passport.",
+     "He has forgotten his passport before.",
+     "He is flying abroad for the first time.",
+     "He is often late for meetings."
+    ],
+    "answer": 1,
+    "type": "추론",
+    "explanation": "'Don't forget your passport this time!'에서 this time은 전에 여권을 잊은 적이 있음을 암시한다."
+   }
+  ],
+  "translation": "레오 (오후 6:10): 저기, 내일 공항에 차로 가는 거 맞지? 나 좀 태워 줄 수 있어? 비행기가 11시에 떠.\n니나 (오후 6:14): 물론! 근데 렌터카를 먼저 반납해야 해서 8시 반에 출발할 거야. 너무 이른가?\n레오 (오후 6:15): 아니, 딱 좋아. 일찍 가는 게 나아. 우리 기숙사 앞에서 만나자.\n니나 (오후 6:16): 좋아. 이번엔 여권 잊지 마!"
+ },
+ {
+  "id": "rd-016",
+  "level": 2,
+  "doc_type": "공지",
+  "title": "Textbook Buyback Week",
+  "text": "Textbook Buyback Week: December 9-13\nSell your used textbooks back to the Campus Bookstore and get up to 50% of the original price in cash. Books must be in good condition, with no missing pages and little writing. We can only buy books that will be used in classes next semester, so check the list on our website first. Access codes and workbooks with filled-in answers cannot be returned. Buyback takes place at the side entrance from 10 a.m. to 4 p.m.",
+  "questions": [
+   {
+    "q": "Which book can the bookstore buy?",
+    "choices": [
+     "A book in good condition that is on next semester's list",
+     "A workbook with the answers written in it",
+     "Any book that has no missing pages",
+     "A book that comes with an unused access code"
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "서점은 상태가 좋고 다음 학기 수업에 쓰이는 책만 산다. 빠진 쪽이 없어도 목록에 없으면 살 수 없으므로 'Any book'은 틀리다."
+   },
+   {
+    "q": "The word \"original\" in the notice is closest in meaning to",
+    "choices": [
+     "unusual",
+     "final",
+     "first",
+     "lowest"
+    ],
+    "answer": 2,
+    "type": "어휘",
+    "explanation": "original price는 처음 샀을 때의 가격을 뜻하므로 first와 가장 가깝다. 'original'에는 '독창적인'이라는 뜻도 있지만 여기서는 '원래의'라는 뜻이다."
+   }
+  ],
+  "translation": "교재 되팔기 주간: 12월 9일~13일\n쓰던 교재를 교내 서점에 되팔고 원래 가격의 최대 50%를 현금으로 받으세요. 책은 빠진 쪽이 없고 필기가 거의 없는 좋은 상태여야 합니다. 다음 학기 수업에서 쓰는 책만 살 수 있으니 먼저 웹사이트의 목록을 확인하세요. 접속 코드와 답을 써 넣은 워크북은 반납할 수 없습니다. 되팔기는 옆문에서 오전 10시부터 오후 4시까지 진행합니다."
+ },
+ {
+  "id": "rd-017",
+  "level": 3,
+  "doc_type": "이메일",
+  "title": "Re: Lab Report Extension",
+  "text": "Dear Professor Alvarez,\nThank you for your reply. I understand that extensions are normally given only for medical reasons, and I appreciate you making an exception. As you suggested, I've attached a copy of the email from the conference organizers confirming that I'll be presenting our team's poster in Denver next week. I'll submit the lab report by noon on Monday, March 10, rather than by the original Friday deadline. If you'd prefer that I send a partial draft before I leave, I'd be happy to do so.\nBest regards,\nPriya Nair",
+  "questions": [
+   {
+    "q": "What can be inferred about Priya's request for an extension?",
+    "choices": [
+     "It was rejected by the professor.",
+     "It was sent by the conference organizers.",
+     "It was made because her team's poster was unfinished.",
+     "It was not based on a health problem."
+    ],
+    "answer": 3,
+    "type": "추론",
+    "explanation": "연장은 보통 건강상의 이유로만 허락되는데 교수가 '예외'를 두었다고 했으므로, 프리야의 이유는 건강 문제가 아니라 학회 발표이다."
+   },
+   {
+    "q": "Why did Priya attach an email to her message?",
+    "choices": [
+     "To share a partial draft of her report",
+     "To show a doctor's note",
+     "To explain why her team missed a deadline",
+     "To prove that she will attend a conference"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "학회 주최 측이 그녀의 발표를 확인해 주는 이메일을 첨부했다. 교수가 요청한(As you suggested) 증빙 자료이다."
+   },
+   {
+    "q": "What does Priya offer to do?",
+    "choices": [
+     "Present the poster in class",
+     "Send an early version of her report",
+     "Submit the report on Friday as planned",
+     "Meet the professor in Denver"
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "'If you'd prefer that I send a partial draft before I leave, I'd be happy to do so'라고 제안했다. partial draft를 early version으로 바꾸어 표현했다."
+   }
+  ],
+  "translation": "알바레스 교수님께,\n답장 감사합니다. 기한 연장은 보통 건강상의 이유로만 허락된다는 것을 알고 있으며, 예외를 두어 주셔서 감사드립니다. 말씀하신 대로 다음 주 덴버에서 저희 팀 포스터를 발표한다는 것을 확인해 주는 학회 주최 측 이메일 사본을 첨부했습니다. 실험 보고서는 원래 마감인 금요일 대신 3월 10일 월요일 정오까지 제출하겠습니다. 떠나기 전에 일부 초안을 보내 드리기를 원하시면 기꺼이 그렇게 하겠습니다.\n프리야 나이르 드림"
+ },
+ {
+  "id": "rd-018",
+  "level": 3,
+  "doc_type": "안내문",
+  "title": "New Recycling Guidelines for Residence Halls",
+  "text": "Starting this semester, all residence halls will use a single-stream recycling system. This means paper, cardboard, plastic bottles, and metal cans can go into the same blue bin, so you no longer need to separate them. However, items must be empty and reasonably clean; containers with food left inside can contaminate an entire load, which will then be sent to a landfill. Plastic bags, coffee cups, and pizza boxes with grease stains should go in the regular trash. Please flatten large boxes to save space.",
+  "questions": [
+   {
+    "q": "What is the main purpose of the guidelines?",
+    "choices": [
+     "To explain a change in how recycling works",
+     "To announce that recycling will end",
+     "To ask students to buy their own blue bins",
+     "To complain about students leaving boxes"
+    ],
+    "answer": 0,
+    "type": "주제·목적",
+    "explanation": "이번 학기부터 모든 재활용품을 한 통에 넣는 방식으로 바뀐다는 것과 그 규칙을 설명하는 안내문이다."
+   },
+   {
+    "q": "Why are pizza boxes with grease stains most likely NOT accepted?",
+    "choices": [
+     "They are too large to fit in the bins.",
+     "They are made of plastic.",
+     "They could spoil the other recyclable items.",
+     "They cannot be flattened."
+    ],
+    "answer": 2,
+    "type": "추론",
+    "explanation": "음식이 남은 용기가 전체를 오염시킬 수 있다고 했으므로, 기름이 밴 피자 상자도 같은 이유로 다른 재활용품을 망칠 수 있다고 추론할 수 있다."
+   },
+   {
+    "q": "The word \"contaminate\" in the passage is closest in meaning to",
+    "choices": [
+     "make heavier",
+     "separate",
+     "empty",
+     "make impure"
+    ],
+    "answer": 3,
+    "type": "어휘",
+    "explanation": "contaminate는 '오염시키다'라는 뜻으로 make impure(불순하게 만들다)와 가장 가깝다. 오염된 재활용품이 매립지로 간다는 문맥에서도 알 수 있다."
+   }
+  ],
+  "translation": "이번 학기부터 모든 기숙사는 단일 분리수거 방식을 사용합니다. 종이, 골판지, 플라스틱 병, 금속 캔을 같은 파란 통에 넣을 수 있어 더 이상 나눌 필요가 없습니다. 하지만 물건은 비어 있고 어느 정도 깨끗해야 합니다. 음식이 남은 용기는 한 번에 수거한 전체를 오염시킬 수 있고, 그러면 그 전체가 매립지로 보내집니다. 비닐봉지, 커피 컵, 기름 얼룩이 있는 피자 상자는 일반 쓰레기로 버려야 합니다. 공간을 아끼도록 큰 상자는 납작하게 접어 주세요."
+ },
+ {
+  "id": "rd-019",
+  "level": 3,
+  "doc_type": "광고",
+  "title": "Summer Research Assistants Wanted",
+  "text": "The Department of Psychology seeks two undergraduate research assistants for a summer study on sleep and memory. Assistants will recruit participants, run evening lab sessions, and enter data. Applicants should have completed Introduction to Psychology and be available for at least 15 hours per week from June through August. Previous lab experience is helpful but not required. The position pays $14 per hour. To apply, submit a one-page cover letter and your unofficial transcript to Dr. Okafor by April 15. Interviews will take place in late April.",
+  "questions": [
+   {
+    "q": "What is required of applicants?",
+    "choices": [
+     "Having taken an introductory psychology course",
+     "Having worked in a lab before",
+     "Being available only on weekends",
+     "Being a graduate student"
+    ],
+    "answer": 0,
+    "type": "사실 확인",
+    "explanation": "'Applicants should have completed Introduction to Psychology'가 필수 조건이다. 실험실 경험은 'helpful but not required'이고, 모집 대상은 학부생이다."
+   },
+   {
+    "q": "Why might this job be difficult for a student who takes evening classes in the summer?",
+    "choices": [
+     "Interviews are held in the evening.",
+     "Assistants must run lab sessions in the evening.",
+     "Data must be entered late at night.",
+     "The job requires 40 hours per week."
+    ],
+    "answer": 1,
+    "type": "추론",
+    "explanation": "보조원이 'run evening lab sessions'를 해야 하므로 저녁 수업과 겹칠 수 있다. 주당 시간은 최소 15시간이다."
+   },
+   {
+    "q": "What must applicants send?",
+    "choices": [
+     "Two letters of recommendation",
+     "A resume and a writing sample",
+     "A cover letter and a transcript",
+     "Proof of previous lab work"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "'submit a one-page cover letter and your unofficial transcript'라고 했다. 추천서나 이력서는 요구하지 않았다."
+   }
+  ],
+  "translation": "심리학과에서 수면과 기억에 관한 여름 연구를 도울 학부생 연구 보조원 두 명을 모집합니다. 보조원은 참가자를 모집하고, 저녁 실험 세션을 진행하고, 데이터를 입력합니다. 지원자는 심리학 개론을 이수했어야 하며 6월부터 8월까지 주당 최소 15시간 일할 수 있어야 합니다. 실험실 경험은 있으면 좋지만 필수는 아닙니다. 시급은 14달러입니다. 지원하려면 4월 15일까지 한 쪽짜리 자기소개서와 비공식 성적 증명서를 오카포 박사에게 제출하세요. 면접은 4월 하순에 있습니다."
+ },
+ {
+  "id": "rd-020",
+  "level": 3,
+  "doc_type": "웹페이지",
+  "title": "Counseling Services: FAQ",
+  "text": "Do I need an appointment? For a first visit, we recommend booking online, but same-day drop-in hours are available from 1 to 3 p.m. on weekdays.\nIs counseling confidential? Yes. We will not share information with your professors, family, or anyone else without your written permission, except in rare situations where someone's safety is at risk.\nHow many sessions can I have? Students may attend up to eight individual sessions per academic year at no cost. After that, we can refer you to affordable providers in the community.\nIs there help after hours? Call our 24-hour support line at 555-0199.",
+  "questions": [
+   {
+    "q": "What can a student do without booking in advance?",
+    "choices": [
+     "Receive unlimited free sessions",
+     "Meet a counselor on weekends",
+     "Get a referral from a professor",
+     "Visit during the weekday drop-in hours"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "평일 오후 1~3시에는 'same-day drop-in hours'가 있어 예약 없이 방문할 수 있다."
+   },
+   {
+    "q": "According to the page, when might counselors share information without permission?",
+    "choices": [
+     "When a professor asks for it",
+     "When someone could be in danger",
+     "When a student misses a session",
+     "When a student has used all eight sessions"
+    ],
+    "answer": 1,
+    "type": "사실 확인",
+    "explanation": "'except in rare situations where someone's safety is at risk'라고 했다. 안전이 위험한 경우에만 예외적으로 알릴 수 있다."
+   },
+   {
+    "q": "What will most likely happen after a student's eighth session?",
+    "choices": [
+     "The student may be sent to outside services.",
+     "The student must pay the university directly.",
+     "The student can no longer call the support line.",
+     "The student must book sessions only by phone."
+    ],
+    "answer": 0,
+    "type": "추론",
+    "explanation": "8회 이후에는 'we can refer you to affordable providers in the community'라고 했으므로 학교 밖 기관을 소개받게 된다."
+   }
+  ],
+  "translation": "예약이 필요한가요? 첫 방문은 온라인 예약을 권하지만, 평일 오후 1시부터 3시까지는 예약 없이 당일 방문할 수 있습니다.\n상담 내용은 비밀이 보장되나요? 네. 누군가의 안전이 위험한 드문 경우를 제외하고, 서면 동의 없이 교수, 가족 또는 다른 누구에게도 정보를 알리지 않습니다.\n상담은 몇 번 받을 수 있나요? 학생은 학년마다 개인 상담을 최대 8회까지 무료로 받을 수 있습니다. 그 이후에는 지역 사회의 저렴한 상담 기관을 소개해 드립니다.\n업무 시간 외에도 도움을 받을 수 있나요? 24시간 지원 전화 555-0199로 연락하세요."
+ },
+ {
+  "id": "rd-021",
+  "level": 3,
+  "doc_type": "공지",
+  "title": "Blue Line Shuttle Route Change",
+  "text": "Due to construction on University Avenue, the Blue Line shuttle will follow a temporary route from October 7 until further notice. Buses will no longer stop at the Engineering Building; the nearest stop will be on Pine Street, about a five-minute walk away. To make up for the longer route, buses will run every 12 minutes instead of every 15 during peak hours (7-10 a.m. and 4-7 p.m.). The Red Line is not affected. Real-time bus locations are available in the CampusGo app.",
+  "questions": [
+   {
+    "q": "What change is being made to how often the buses run?",
+    "choices": [
+     "Blue Line buses will run less often all day.",
+     "Red Line buses will run every 12 minutes.",
+     "Blue Line buses will come more often at busy times.",
+     "All buses will stop running at 7 p.m."
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "혼잡 시간에 배차 간격이 15분에서 12분으로 줄어 버스가 더 자주 온다. 레드 라인은 변화가 없다."
+   },
+   {
+    "q": "Who will be most affected by the change?",
+    "choices": [
+     "Students who take the Blue Line to the Engineering Building",
+     "Students who ride only the Red Line",
+     "Students who live on Pine Street",
+     "Students who use the CampusGo app"
+    ],
+    "answer": 0,
+    "type": "추론",
+    "explanation": "블루 라인이 공학관에 서지 않게 되므로 그곳까지 셔틀을 타던 학생들이 5분을 더 걸어야 한다."
+   },
+   {
+    "q": "The phrase \"until further notice\" in the notice means",
+    "choices": [
+     "until the end of October",
+     "until students complain",
+     "until the next morning",
+     "until another announcement is made"
+    ],
+    "answer": 3,
+    "type": "어휘",
+    "explanation": "until further notice는 '다음 공지가 있을 때까지'라는 뜻으로, 끝나는 날짜가 정해지지 않았음을 나타낸다."
+   }
+  ],
+  "translation": "유니버시티 애비뉴 공사로 블루 라인 셔틀은 10월 7일부터 추후 공지가 있을 때까지 임시 노선으로 운행합니다. 버스는 더 이상 공학관에 서지 않으며, 가장 가까운 정류장은 걸어서 약 5분 거리인 파인 스트리트에 있습니다. 길어진 노선을 보완하기 위해 혼잡 시간(오전 7~10시, 오후 4~7시)에는 15분이 아니라 12분 간격으로 운행합니다. 레드 라인은 영향이 없습니다. 실시간 버스 위치는 CampusGo 앱에서 볼 수 있습니다."
+ },
+ {
+  "id": "rd-022",
+  "level": 3,
+  "doc_type": "문자 메시지",
+  "title": "Group Chat: Presentation",
+  "text": "Aiden: Just checked the syllabus. Our presentation is on the 18th, not the 25th!\nSofia: Seriously? That gives us a week less than we thought.\nAiden: Yeah. I can finish the slides by Sunday if someone else handles the data analysis.\nMei: I'll take the data. I already started cleaning it, so it shouldn't take long.\nSofia: OK, then I'll write the script and time it. Should we do a full run-through on Tuesday night?\nAiden: Works for me. Library, 7 p.m.?",
+  "questions": [
+   {
+    "q": "What is the conversation mainly about?",
+    "choices": [
+     "Choosing a topic for their presentation",
+     "Adjusting their plans for an earlier deadline",
+     "Complaining about their professor",
+     "Finding an empty room in the library"
+    ],
+    "answer": 1,
+    "type": "주제·목적",
+    "explanation": "발표일이 예상보다 일주일 빠르다는 것을 알고 역할과 일정을 다시 정하는 대화이다."
+   },
+   {
+    "q": "Who will handle the data analysis?",
+    "choices": [
+     "Aiden",
+     "Sofia",
+     "Mei",
+     "All three students together"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "메이가 'I'll take the data'라고 말했다. 에이든은 슬라이드, 소피아는 대본을 맡는다."
+   },
+   {
+    "q": "What is implied about Mei?",
+    "choices": [
+     "She is unhappy about the new date.",
+     "She will give the whole presentation.",
+     "She cannot come on Tuesday night.",
+     "She has already done part of her task."
+    ],
+    "answer": 3,
+    "type": "추론",
+    "explanation": "'I already started cleaning it'이라는 말에서 메이가 이미 자기 일의 일부를 해 두었음을 알 수 있다."
+   }
+  ],
+  "translation": "에이든: 방금 강의계획서 확인했는데, 우리 발표 25일이 아니라 18일이야!\n소피아: 진짜? 생각보다 일주일이나 적네.\n에이든: 응. 다른 사람이 데이터 분석을 맡아 주면 나는 일요일까지 슬라이드 끝낼 수 있어.\n메이: 데이터는 내가 할게. 이미 정리를 시작해서 오래 안 걸릴 거야.\n소피아: 좋아, 그럼 나는 대본 쓰고 시간 재 볼게. 화요일 밤에 처음부터 끝까지 리허설해 볼까?\n에이든: 난 좋아. 도서관, 저녁 7시?"
+ },
+ {
+  "id": "rd-023",
+  "level": 3,
+  "doc_type": "이메일",
+  "title": "Housing Selection Reminder",
+  "text": "Dear Resident,\nHousing selection for next year opens on February 20. Your selection time is based on the number of credits you have completed, so students with more credits choose first. You will receive your exact time slot by email one week before selection begins. To participate, you must pay a $200 deposit by February 15; this amount will be applied to your fall housing charges. If you plan to live with a roommate, both of you must send each other a request through the housing portal before your time slot.\nOffice of Residential Life",
+  "questions": [
+   {
+    "q": "What determines when a student can choose housing?",
+    "choices": [
+     "When the student paid the deposit",
+     "The student's grade point average",
+     "How many credits the student has completed",
+     "Whether the student has a roommate"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "'Your selection time is based on the number of credits you have completed'라고 했다. 보증금 납부 시점이나 성적은 순서와 관계없다."
+   },
+   {
+    "q": "What is true about the $200 deposit?",
+    "choices": [
+     "It will be returned after selection.",
+     "It will be counted toward housing charges.",
+     "It is due on February 20.",
+     "It must be paid by roommates together."
+    ],
+    "answer": 1,
+    "type": "사실 확인",
+    "explanation": "'this amount will be applied to your fall housing charges'이므로 기숙사비에 포함된다. 납부 기한은 2월 15일이다."
+   }
+  ],
+  "translation": "거주자 여러분께,\n내년도 기숙사 선택이 2월 20일에 시작됩니다. 선택 시간은 이수한 학점 수에 따라 정해지므로 학점이 많은 학생이 먼저 고릅니다. 정확한 선택 시간은 선택 시작 일주일 전에 이메일로 받게 됩니다. 참여하려면 2월 15일까지 200달러의 보증금을 내야 하며, 이 금액은 가을 학기 기숙사비에 반영됩니다. 룸메이트와 함께 살 계획이라면 두 사람 모두 선택 시간 전에 기숙사 포털에서 서로에게 신청을 보내야 합니다.\n주거생활처"
+ },
+ {
+  "id": "rd-024",
+  "level": 3,
+  "doc_type": "일정표",
+  "title": "Science & Society Lecture Series",
+  "text": "Science & Society Lecture Series - Spring Semester\nFeb. 6 | Dr. Helen Park, \"Can Cities Feed Themselves? Urban Farming Today\" | Lang Auditorium\nMar. 5 | Prof. Daniel Ruiz, \"Artificial Intelligence and the Future of Work\" | Lang Auditorium\nApr. 2 | Dr. Amina Yusuf, \"Rewilding: Bringing Wolves Back to Europe\" | Science Center, Room 101 (note change of location)\nAll lectures begin at 6:30 p.m. and are followed by a Q&A session. Free and open to the public; no registration required. Students in BIO 210 will receive extra credit for attending two lectures.",
+  "questions": [
+   {
+    "q": "Which lecture will be held in a different place from the others?",
+    "choices": [
+     "The talk about rewilding",
+     "The talk about urban farming",
+     "The talk about artificial intelligence",
+     "The first lecture of the series"
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "4월 2일 재야생화 강연만 과학관 101호에서 열리며 '(note change of location)'이라고 표시되어 있다."
+   },
+   {
+    "q": "What can be inferred about the lecture series?",
+    "choices": [
+     "Only BIO 210 students may attend.",
+     "Attendees must sign up in advance.",
+     "Each lecture ends by 6:30 p.m.",
+     "People who are not students may attend."
+    ],
+    "answer": 3,
+    "type": "추론",
+    "explanation": "'Free and open to the public'이므로 학생이 아닌 사람도 참석할 수 있다. 등록은 필요 없고, 6시 30분은 시작 시간이다."
+   }
+  ],
+  "translation": "과학과 사회 강연 시리즈 - 봄 학기\n2월 6일 | 헬렌 박 박사, \"도시는 스스로를 먹여 살릴 수 있을까? 오늘날의 도시 농업\" | 랭 강당\n3월 5일 | 대니얼 루이스 교수, \"인공지능과 일의 미래\" | 랭 강당\n4월 2일 | 아미나 유수프 박사, \"재야생화: 유럽에 늑대를 되돌리기\" | 과학관 101호 (장소 변경 유의)\n모든 강연은 오후 6시 30분에 시작하며 이어서 질의응답이 있습니다. 무료이며 누구나 참석할 수 있고 사전 등록은 필요 없습니다. BIO 210 수강생은 강연 두 번에 참석하면 추가 점수를 받습니다."
+ },
+ {
+  "id": "rd-025",
+  "level": 4,
+  "doc_type": "이메일",
+  "title": "Update on Graduate Stipend Payments",
+  "text": "Dear Graduate Teaching Assistants,\nWe are writing to acknowledge the delay in this month's stipend payments, which many of you have brought to our attention. The delay stems from the university's transition to a new payroll system, not from any change to your contracts. Payments are now expected to be deposited by Friday, October 11. We recognize that this may cause genuine hardship, particularly for those with rent due at the start of the month. Students facing immediate financial difficulty may request a short-term, interest-free advance from the Graduate School, which will be deducted from your November payment. We sincerely regret the inconvenience.\nOffice of Graduate Studies",
+  "questions": [
+   {
+    "q": "What is the main purpose of the email?",
+    "choices": [
+     "To announce a reduction in stipends",
+     "To remind students to pay their rent on time",
+     "To explain a late payment and offer temporary help",
+     "To introduce new contracts for assistants"
+    ],
+    "answer": 2,
+    "type": "주제·목적",
+    "explanation": "급여 지연의 원인을 설명하고 무이자 선지급이라는 임시 지원책을 알리는 이메일이다. 급여 삭감이나 새 계약 이야기는 없다."
+   },
+   {
+    "q": "Why does the email mention the assistants' contracts?",
+    "choices": [
+     "To ask readers to sign new agreements",
+     "To reassure readers that their pay terms have not changed",
+     "To explain why stipends will be smaller",
+     "To suggest that the assistants caused the delay"
+    ],
+    "answer": 1,
+    "type": "추론",
+    "explanation": "'not from any change to your contracts'는 지연이 계약 변경 때문이 아니라는 점을 밝혀 조교들을 안심시키려는 표현이다."
+   },
+   {
+    "q": "The phrase \"stems from\" in the email is closest in meaning to",
+    "choices": [
+     "results from",
+     "leads to",
+     "prevents",
+     "continues after"
+    ],
+    "answer": 0,
+    "type": "어휘",
+    "explanation": "stem from은 '~에서 비롯되다'라는 뜻으로 result from과 같다. leads to는 원인과 결과의 방향이 반대이다."
+   }
+  ],
+  "translation": "대학원 조교 여러분께,\n여러분 중 많은 분이 알려 주신 이번 달 급여(장학 지원금) 지급 지연에 대해 말씀드립니다. 지연은 계약 내용의 변경 때문이 아니라 대학이 새 급여 시스템으로 전환하는 과정에서 생겼습니다. 급여는 이제 10월 11일 금요일까지 입금될 예정입니다. 특히 월초에 월세를 내야 하는 분들께 이 일이 실제로 어려움을 줄 수 있음을 잘 알고 있습니다. 당장 경제적으로 어려운 학생은 대학원에 단기 무이자 선지급을 요청할 수 있으며, 이 금액은 11월 급여에서 공제됩니다. 불편을 드려 진심으로 죄송합니다.\n대학원 교무처"
+ },
+ {
+  "id": "rd-026",
+  "level": 4,
+  "doc_type": "안내문",
+  "title": "Academic Integrity: Using AI Tools",
+  "text": "The use of generative AI tools in coursework is governed by each instructor's policy, which should be stated in the syllabus. Where no policy is stated, students should assume that such tools are not permitted for graded assignments. Even when AI use is allowed, students remain responsible for the accuracy of anything they submit and must disclose how the tool was used, for example in a footnote. Submitting AI-generated text as one's own original work, without acknowledgment, constitutes a violation of the Academic Integrity Code, regardless of whether the content is factually correct.",
+  "questions": [
+   {
+    "q": "If a syllabus says nothing about AI, what should students do?",
+    "choices": [
+     "Avoid using AI tools for graded work",
+     "Use AI tools freely but cite them",
+     "Ask classmates what the rule is",
+     "Use AI tools only to check facts"
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "'Where no policy is stated, students should assume that such tools are not permitted for graded assignments'라고 했다. 따라서 점수가 매겨지는 과제에는 쓰지 않아야 한다."
+   },
+   {
+    "q": "Which statement is supported by the passage?",
+    "choices": [
+     "Students are not responsible for errors made by AI tools.",
+     "Accurate AI-written text can still break the rules if it is not acknowledged.",
+     "All instructors must allow AI for some assignments.",
+     "Students must disclose AI use only when the content is incorrect."
+    ],
+    "answer": 1,
+    "type": "사실 확인",
+    "explanation": "'regardless of whether the content is factually correct'라고 했으므로 내용이 정확해도 출처를 밝히지 않으면 위반이다. 오류에 대한 책임은 학생에게 있다."
+   },
+   {
+    "q": "The word \"constitutes\" in the passage is closest in meaning to",
+    "choices": [
+     "prevents",
+     "excuses",
+     "amounts to",
+     "follows"
+    ],
+    "answer": 2,
+    "type": "어휘",
+    "explanation": "constitute a violation은 '위반에 해당하다'라는 뜻이므로 amount to(~에 해당하다)와 가장 가깝다."
+   }
+  ],
+  "translation": "수업 과제에서 생성형 AI 도구를 사용하는 것은 강의계획서에 명시된 각 교수자의 방침을 따릅니다. 방침이 명시되지 않은 경우 학생은 점수가 매겨지는 과제에 그런 도구를 쓸 수 없다고 간주해야 합니다. AI 사용이 허용되는 경우에도 학생은 제출한 모든 내용의 정확성에 책임이 있으며, 예를 들어 각주로 도구를 어떻게 사용했는지 밝혀야 합니다. AI가 만든 글을 출처 표시 없이 자신의 독창적인 작업으로 제출하는 것은 내용이 사실에 맞는지와 관계없이 학문적 정직성 규정 위반에 해당합니다."
+ },
+ {
+  "id": "rd-027",
+  "level": 4,
+  "doc_type": "공지",
+  "title": "Proposed Changes to Dining Plans",
+  "text": "Dining Services is considering replacing the current meal-swipe system with a declining-balance model beginning next fall. Under the proposal, students would receive a dollar amount on their card and pay for each item individually, rather than being charged one swipe per visit regardless of what they eat. Supporters argue that this would reduce waste and benefit students with smaller appetites; critics worry that athletes and others who eat more could end up paying considerably more over a semester. Before making a final decision, Dining Services will hold two open forums and conduct an online survey. Student feedback will be summarized in a report to the Board in March.",
+  "questions": [
+   {
+    "q": "What is the main purpose of the notice?",
+    "choices": [
+     "To announce that meal prices will rise next fall",
+     "To explain why the swipe system was introduced",
+     "To report the results of a student survey",
+     "To inform students of a possible change and invite their views"
+    ],
+    "answer": 3,
+    "type": "주제·목적",
+    "explanation": "아직 검토 중인 식당 결제 방식 변경안을 알리고 토론회와 설문으로 의견을 모으겠다는 공지이다. 설문은 앞으로 할 일이다."
+   },
+   {
+    "q": "Which student would most likely prefer the current system?",
+    "choices": [
+     "A student who eats large meals at every visit",
+     "A student who often skips meals",
+     "A student who usually buys only snacks",
+     "A student who wants to reduce food waste"
+    ],
+    "answer": 0,
+    "type": "추론",
+    "explanation": "현재 방식은 얼마나 먹든 1회만 차감하므로 많이 먹는 학생에게 유리하다. 반대 측도 많이 먹는 학생이 손해를 볼 것을 걱정한다."
+   },
+   {
+    "q": "What is true about the proposal?",
+    "choices": [
+     "It was requested by student athletes.",
+     "It has not been approved yet.",
+     "It will take effect in March.",
+     "It charges a fixed price for each visit."
+    ],
+    "answer": 1,
+    "type": "사실 확인",
+    "explanation": "'Before making a final decision'이라는 표현에서 아직 결정되지 않았음을 알 수 있다. 3월은 보고서 제출 시기이고, 방문당 고정 차감은 현재 방식이다."
+   }
+  ],
+  "translation": "식당 운영팀은 내년 가을부터 현재의 1회 이용권(스와이프) 방식을 잔액 차감 방식으로 바꾸는 것을 검토하고 있습니다. 제안에 따르면 학생들은 무엇을 먹든 방문할 때마다 1회를 차감하는 대신, 카드에 일정 금액을 받아 품목마다 따로 결제하게 됩니다. 찬성하는 쪽은 이 방식이 음식 낭비를 줄이고 적게 먹는 학생에게 유리하다고 주장하고, 반대하는 쪽은 운동선수처럼 많이 먹는 학생들이 한 학기 동안 상당히 더 많은 돈을 내게 될 수 있다고 우려합니다. 최종 결정 전에 식당 운영팀은 공개 토론회 두 번과 온라인 설문을 진행합니다. 학생 의견은 3월에 이사회에 제출할 보고서에 요약됩니다."
+ },
+ {
+  "id": "rd-028",
+  "level": 4,
+  "doc_type": "웹페이지",
+  "title": "Study Abroad: Transferring Credits",
+  "text": "Credits earned abroad do not transfer automatically. Before departure, you must complete a Course Pre-Approval Form for every class you intend to take, obtaining signatures from the relevant departments at our university. Courses approved in advance will appear on your transcript as transfer credit; however, grades from partner institutions are recorded as pass or fail and are not factored into your GPA. If you enroll in a course that was not pre-approved, you may petition for credit upon your return, but approval is not guaranteed and may be granted only as general elective credit. Keep all syllabi and graded work until your credits have been posted.",
+  "questions": [
+   {
+    "q": "What happens to the grades students earn abroad?",
+    "choices": [
+     "They are converted into letter grades.",
+     "They replace earlier grades in the same subject.",
+     "They do not affect the student's GPA.",
+     "They always count as elective credit."
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "'grades from partner institutions are recorded as pass or fail and are not factored into your GPA'라고 했다. 선택 학점 처리는 사전 승인이 없는 경우에만 해당할 수 있다."
+   },
+   {
+    "q": "Why are students told to keep their syllabi and graded work?",
+    "choices": [
+     "They are required to register for next semester.",
+     "Partner schools ask for them before departure.",
+     "They are used to calculate the student's GPA.",
+     "They may be needed to support a request for credit."
+    ],
+    "answer": 3,
+    "type": "추론",
+    "explanation": "사전 승인이 없는 과목은 귀국 후 학점 인정을 신청(petition)해야 하므로, 그때 근거 자료로 강의계획서와 과제가 필요할 것이다."
+   },
+   {
+    "q": "The word \"petition\" in the passage is closest in meaning to",
+    "choices": [
+     "officially refuse",
+     "formally request",
+     "pay extra",
+     "cancel"
+    ],
+    "answer": 1,
+    "type": "어휘",
+    "explanation": "petition for credit은 학점 인정을 '공식적으로 요청하다'라는 뜻이다. 승인이 보장되지 않는다는 뒷문장에서도 요청임을 알 수 있다."
+   }
+  ],
+  "translation": "해외에서 취득한 학점은 자동으로 인정되지 않습니다. 출국 전에 들으려는 모든 과목에 대해 과목 사전 승인서를 작성하고, 우리 대학의 해당 학과에서 서명을 받아야 합니다. 사전 승인된 과목은 성적표에 편입 학점으로 표시되지만, 협정 대학의 성적은 통과/탈락으로만 기록되어 평점(GPA)에 반영되지 않습니다. 사전 승인을 받지 않은 과목을 수강했다면 귀국 후 학점 인정을 신청할 수 있지만, 승인이 보장되지 않으며 일반 선택 학점으로만 인정될 수도 있습니다. 학점이 반영될 때까지 모든 강의계획서와 채점된 과제를 보관하세요."
+ },
+ {
+  "id": "rd-029",
+  "level": 4,
+  "doc_type": "문자 메시지",
+  "title": "Messages between Lab Partners",
+  "text": "Ravi: Did you see Dr. Chen's email? Our spectrometer's booked solid until Thursday.\nHannah: Ugh. So much for running the samples tomorrow. Any chance the physics department would lend us theirs?\nRavi: I asked. They said yes in principle, but someone from their lab has to supervise, and nobody's free before Wednesday.\nHannah: Then Wednesday's our best shot, unless we want to cut it really close to the deadline.\nRavi: Agreed. I'll confirm with them tonight. Can you make sure the samples stay refrigerated until then?\nHannah: On it.",
+  "questions": [
+   {
+    "q": "What does Hannah mean when she writes, \"So much for running the samples tomorrow\"?",
+    "choices": [
+     "She is glad they have more time.",
+     "She wants to run more samples than planned.",
+     "She thinks the samples have been ruined.",
+     "Their original plan is no longer possible."
+    ],
+    "answer": 3,
+    "type": "추론",
+    "explanation": "'So much for ~'는 계획이 틀어졌을 때 쓰는 표현이다. 분광기 예약이 꽉 차서 내일 시료를 돌리려던 계획이 불가능해졌다는 뜻이다."
+   },
+   {
+    "q": "Why can't they use the physics department's equipment right away?",
+    "choices": [
+     "The equipment is broken.",
+     "Dr. Chen has not given permission.",
+     "No one is available to supervise them.",
+     "The physics department refused the request."
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "물리학과는 원칙적으로 허락했지만 'someone from their lab has to supervise, and nobody's free before Wednesday'라고 했다."
+   },
+   {
+    "q": "What will the students most likely do?",
+    "choices": [
+     "Use the physics department's instrument on Wednesday",
+     "Wait until Thursday to use their own spectrometer",
+     "Ask for an extension of the deadline",
+     "Keep the samples at room temperature"
+    ],
+    "answer": 0,
+    "type": "추론",
+    "explanation": "목요일까지 기다리면 마감이 빠듯하므로 'Wednesday's our best shot'이라고 합의했고, 라비가 물리학과와 확정하겠다고 했다."
+   }
+  ],
+  "translation": "라비: 첸 박사님 이메일 봤어? 우리 분광기가 목요일까지 예약이 꽉 찼대.\n해나: 아. 내일 시료 돌리려던 건 물 건너갔네. 물리학과에서 자기네 거 빌려줄 가능성은 없을까?\n라비: 물어봤어. 원칙적으로는 된대. 근데 그쪽 실험실 사람이 감독해야 하는데 수요일 전에는 시간 되는 사람이 없대.\n해나: 그럼 마감에 아슬아슬하게 맞추고 싶은 게 아니라면 수요일이 최선이네.\n라비: 동의해. 오늘 밤에 그쪽이랑 확정할게. 그때까지 시료가 계속 냉장 보관되게 해 줄 수 있어?\n해나: 맡겨 둬."
+ },
+ {
+  "id": "rd-030",
+  "level": 4,
+  "doc_type": "광고",
+  "title": "Innovation Makerspace Membership",
+  "text": "Turn your ideas into prototypes at the Innovation Makerspace. Members gain access to 3D printers, laser cutters, electronics workbenches, and a fully equipped woodshop. Membership is free for enrolled students, but access to certain machines is contingent upon completing a one-hour safety training, offered every Tuesday and Saturday. Materials are sold at cost, and staff technicians are on hand during all open hours to help troubleshoot projects. Faculty and alumni may join for a modest annual fee. Whether you're building a robot for class or crafting a gift for a friend, the Makerspace is your workshop.",
+  "questions": [
+   {
+    "q": "The phrase \"contingent upon\" in the advertisement is closest in meaning to",
+    "choices": [
+     "unrelated to",
+     "limited to",
+     "followed by",
+     "dependent on"
+    ],
+    "answer": 3,
+    "type": "어휘",
+    "explanation": "contingent upon은 '~에 달려 있는, ~을 조건으로 하는'이라는 뜻이다. 안전 교육을 마쳐야 기계를 쓸 수 있다는 의미이다."
+   },
+   {
+    "q": "What can be inferred about the Makerspace?",
+    "choices": [
+     "It is open only to engineering students.",
+     "It offers safety training every day.",
+     "It does not try to make a profit on materials.",
+     "Its technicians build projects for members."
+    ],
+    "answer": 2,
+    "type": "추론",
+    "explanation": "'Materials are sold at cost'는 원가에 판다는 뜻이므로 재료로 이윤을 남기지 않는다. 기술 직원은 문제 해결을 도울 뿐 대신 만들어 주지 않는다."
+   },
+   {
+    "q": "Who has to pay to become a member?",
+    "choices": [
+     "Alumni",
+     "Enrolled students",
+     "Students who finish the safety training",
+     "Students building robots for class"
+    ],
+    "answer": 0,
+    "type": "사실 확인",
+    "explanation": "'Faculty and alumni may join for a modest annual fee'라고 했다. 재학생은 무료이다."
+   }
+  ],
+  "translation": "이노베이션 메이커스페이스에서 아이디어를 시제품으로 만들어 보세요. 회원은 3D 프린터, 레이저 커터, 전자 작업대, 설비를 모두 갖춘 목공실을 이용할 수 있습니다. 재학생은 무료로 가입할 수 있지만, 일부 기계는 매주 화요일과 토요일에 열리는 1시간 안전 교육을 마쳐야 이용할 수 있습니다. 재료는 원가에 판매하며, 운영 시간 내내 기술 직원이 상주해 프로젝트의 문제 해결을 돕습니다. 교직원과 졸업생은 적은 연회비를 내고 가입할 수 있습니다. 수업용 로봇을 만들든 친구에게 줄 선물을 만들든, 메이커스페이스가 여러분의 작업실입니다."
+ },
+ {
+  "id": "rd-031",
+  "level": 4,
+  "doc_type": "공지",
+  "title": "Enforcement of Study Carrel Policy",
+  "text": "In response to repeated complaints, the Library will enforce its policy on reserved study carrels more strictly beginning next Monday. Carrels are assigned to graduate students writing theses, who may leave books and materials on the desk. However, carrels left unoccupied for more than 30 minutes during peak hours may be temporarily used by other patrons, and belongings left unattended overnight in unassigned spaces will be removed and taken to Lost and Found. Library staff will conduct periodic checks. Assigned users who expect a lengthy absence are encouraged to leave a note indicating when they will return.",
+  "questions": [
+   {
+    "q": "What is the main purpose of the notice?",
+    "choices": [
+     "To introduce a new type of study space",
+     "To announce stricter enforcement of an existing rule",
+     "To encourage undergraduates to apply for carrels",
+     "To list items found in the library"
+    ],
+    "answer": 1,
+    "type": "주제·목적",
+    "explanation": "'will enforce its policy ... more strictly'라는 표현에서 이미 있는 규정을 더 엄격히 시행한다는 공지임을 알 수 있다."
+   },
+   {
+    "q": "What problem most likely led to the notice?",
+    "choices": [
+     "Graduate students losing their theses",
+     "Staff members removing books by mistake",
+     "Assigned seats staying empty while others need space",
+     "Undergraduates damaging library materials"
+    ],
+    "answer": 2,
+    "type": "추론",
+    "explanation": "30분 넘게 빈 열람석을 다른 이용자가 쓸 수 있게 한다는 내용으로 보아, 배정된 자리가 비어 있는데 다른 사람이 못 쓰는 것이 민원의 원인이었을 것이다."
+   },
+   {
+    "q": "What are carrel users advised to do if they will be away for a long time?",
+    "choices": [
+     "Leave a note saying when they will return",
+     "Take their books to Lost and Found",
+     "Inform library staff by email",
+     "Give their carrel to another patron"
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "'Assigned users who expect a lengthy absence are encouraged to leave a note indicating when they will return'이라고 했다."
+   }
+  ],
+  "translation": "반복된 민원에 따라 도서관은 다음 주 월요일부터 지정 개인 열람석에 관한 규정을 더 엄격하게 시행합니다. 개인 열람석은 학위 논문을 쓰는 대학원생에게 배정되며, 이들은 책상에 책과 자료를 두고 다닐 수 있습니다. 그러나 이용이 많은 시간대에 30분 넘게 비어 있는 열람석은 다른 이용자가 임시로 쓸 수 있으며, 배정되지 않은 자리에 밤새 방치된 소지품은 치워서 분실물 센터로 보냅니다. 도서관 직원이 수시로 점검합니다. 오래 자리를 비울 예정인 배정자는 언제 돌아올지 적은 메모를 남기시기 바랍니다."
+ },
+ {
+  "id": "rd-032",
+  "level": 4,
+  "doc_type": "일정표",
+  "title": "Undergraduate Research Symposium: Day 2",
+  "text": "Undergraduate Research Symposium - Day 2 (Saturday)\n8:30 Registration and coffee (Atrium)\n9:00 Keynote: Dr. Laura Mendes, \"Failure as Data: What Unsuccessful Experiments Teach Us\" (Hall A)\n10:15 Concurrent sessions: Life Sciences (Rm 201) / Social Sciences (Rm 204) / Humanities (Rm 210)\n12:00 Poster session and lunch (Atrium). Presenters must stand by their posters from 12:00 to 1:00.\n1:30 Panel: Applying to Graduate School (Hall A)\n3:00 Awards ceremony (Hall A)\nPresenters in concurrent sessions: upload your slides to the symposium portal by 9:00 p.m. on Friday. Presenters who upload late cannot be guaranteed a projector slot.",
+  "questions": [
+   {
+    "q": "When must poster presenters be at their posters?",
+    "choices": [
+     "During the keynote speech",
+     "From noon to 1:00 p.m.",
+     "Throughout the afternoon",
+     "Before registration begins"
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "'Presenters must stand by their posters from 12:00 to 1:00'이라고 적혀 있다."
+   },
+   {
+    "q": "What might happen to a session presenter who uploads slides on Saturday morning?",
+    "choices": [
+     "The presenter will be moved to Hall A.",
+     "The presenter will lose the chance to win an award.",
+     "The presenter will have to make a poster instead.",
+     "The presenter may not be able to show the slides."
+    ],
+    "answer": 3,
+    "type": "추론",
+    "explanation": "마감은 금요일 밤 9시이고 늦게 올리면 'cannot be guaranteed a projector slot'이므로 슬라이드를 띄우지 못할 수 있다."
+   },
+   {
+    "q": "What does the keynote title suggest about the talk?",
+    "choices": [
+     "It will explain how to avoid failed experiments.",
+     "It will argue that failed experiments can still be valuable.",
+     "It will explain why some data should be thrown away.",
+     "It will criticize students' research methods."
+    ],
+    "answer": 1,
+    "type": "추론",
+    "explanation": "제목 'Failure as Data: What Unsuccessful Experiments Teach Us'는 실패한 실험도 배울 점이 있는 자료라는 관점을 드러낸다."
+   }
+  ],
+  "translation": "학부생 연구 발표회 - 2일 차 (토요일)\n8:30 등록 및 커피 (아트리움)\n9:00 기조연설: 로라 멘데스 박사, \"데이터로서의 실패: 실패한 실험이 가르쳐 주는 것\" (A홀)\n10:15 동시 세션: 생명과학 (201호) / 사회과학 (204호) / 인문학 (210호)\n12:00 포스터 세션 및 점심 (아트리움). 발표자는 12시부터 1시까지 포스터 옆에 있어야 합니다.\n1:30 패널 토론: 대학원 지원하기 (A홀)\n3:00 시상식 (A홀)\n동시 세션 발표자: 금요일 오후 9시까지 발표 자료를 발표회 포털에 올려 주세요. 늦게 올린 발표자는 프로젝터 사용 시간을 보장받지 못할 수 있습니다."
+ },
+ {
+  "id": "rd-033",
+  "level": 5,
+  "doc_type": "이메일",
+  "title": "From the Provost: Budget Realignment",
+  "text": "Dear Colleagues,\nAs many of you are aware, the state's revised appropriation leaves the university with a shortfall of roughly four percent for the coming fiscal year. Rather than impose uniform cuts across all units, a blunt instrument that tends to penalize efficient departments and spare inefficient ones, we will undertake a targeted review. Each college will be asked to identify savings commensurate with its share of the budget, but deans will retain discretion over how those savings are achieved. Let me be unequivocal on one point: protecting instructional quality and student support services remains our foremost priority, and we do not anticipate layoffs of permanent staff.\nSincerely,\nMargaret Holloway, Provost",
+  "questions": [
+   {
+    "q": "What is the main purpose of the email?",
+    "choices": [
+     "To announce layoffs in several colleges",
+     "To request additional funding from the state",
+     "To outline how the university will respond to a funding gap",
+     "To criticize deans for inefficient spending"
+    ],
+    "answer": 2,
+    "type": "주제·목적",
+    "explanation": "주 정부 예산 감소로 생긴 부족분에 대해 일률 삭감 대신 선별적 검토를 하겠다는 대응 방식을 설명하는 이메일이다. 정규직 해고는 예상하지 않는다고 했다."
+   },
+   {
+    "q": "Why does the provost reject uniform cuts?",
+    "choices": [
+     "They would treat well-run and poorly run units the same way.",
+     "They would require approval from the state.",
+     "They would take too long to carry out.",
+     "They would affect only student services."
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "일률 삭감을 'a blunt instrument that tends to penalize efficient departments and spare inefficient ones'라고 표현했다. 효율과 관계없이 똑같이 깎는 방식이라는 비판이다."
+   },
+   {
+    "q": "The phrase \"commensurate with\" in the email is closest in meaning to",
+    "choices": [
+     "independent of",
+     "greater than",
+     "agreed upon by",
+     "proportional to"
+    ],
+    "answer": 3,
+    "type": "어휘",
+    "explanation": "commensurate with는 '~에 상응하는, ~에 비례하는'이라는 뜻이다. 예산 비중이 클수록 절감액도 크다는 의미이다."
+   }
+  ],
+  "translation": "동료 여러분께,\n많은 분이 아시다시피 주 정부의 수정 예산 배정으로 대학은 다음 회계 연도에 약 4%의 재정 부족을 겪게 되었습니다. 우리는 모든 부서에 일률적으로 예산을 삭감하는 대신 — 이는 효율적인 학과에 불이익을 주고 비효율적인 학과는 봐주는 경향이 있는 무딘 수단입니다 — 선별적 검토를 진행하겠습니다. 각 단과대학은 전체 예산에서 차지하는 비중에 상응하는 절감액을 찾도록 요청받겠지만, 그 절감을 어떻게 이룰지는 학장들이 재량껏 정합니다. 한 가지는 분명히 말씀드립니다. 교육의 질과 학생 지원 서비스를 지키는 것이 여전히 최우선 과제이며, 정규 직원의 해고는 예상하지 않습니다.\n교무처장 마거릿 홀로웨이 드림"
+ },
+ {
+  "id": "rd-034",
+  "level": 5,
+  "doc_type": "안내문",
+  "title": "Guidelines for Human-Subjects Research",
+  "text": "Any study that involves collecting data from living individuals through intervention, interaction, or identifiable private information requires review by the Institutional Review Board (IRB) before recruitment begins. Class projects designed solely for teaching purposes, with results that will not be disseminated beyond the classroom, are generally exempt; however, should a student later wish to publish or present such data, retroactive approval cannot be granted. Consequently, students who anticipate even a remote possibility of sharing their findings publicly are strongly advised to seek IRB approval at the outset. Researchers should allow four to six weeks for review.",
+  "questions": [
+   {
+    "q": "What is the main purpose of the guidelines?",
+    "choices": [
+     "To explain when approval is needed and urge students to seek it early",
+     "To describe how the IRB judges the quality of research",
+     "To discourage students from doing class projects",
+     "To announce a shorter review period"
+    ],
+    "answer": 0,
+    "type": "주제·목적",
+    "explanation": "어떤 연구에 IRB 심의가 필요한지 설명하고, 공개 가능성이 있다면 처음부터 승인을 받으라고 권하는 안내문이다."
+   },
+   {
+    "q": "The word \"disseminated\" in the passage is closest in meaning to",
+    "choices": [
+     "collected",
+     "spread",
+     "evaluated",
+     "concealed"
+    ],
+    "answer": 1,
+    "type": "어휘",
+    "explanation": "disseminate는 '(정보를) 퍼뜨리다, 널리 알리다'라는 뜻이다. 강의실 밖으로 결과가 퍼지지 않는다는 문맥에 맞는 것은 spread이다."
+   },
+   {
+    "q": "Which project would most likely NOT need IRB review?",
+    "choices": [
+     "An interview study planned for a journal article",
+     "A class experiment whose results will be shown at a conference",
+     "A survey of classmates used only for an in-class discussion",
+     "A study that uses identifiable health records"
+    ],
+    "answer": 2,
+    "type": "추론",
+    "explanation": "교육 목적만을 위해 결과가 강의실 밖으로 나가지 않는 프로젝트는 면제된다. 학술지 게재나 학회 발표가 예정된 연구는 심의가 필요하다."
+   }
+  ],
+  "translation": "개입, 상호작용 또는 신원을 알 수 있는 개인 정보를 통해 살아 있는 개인에게서 데이터를 수집하는 모든 연구는 참가자 모집 전에 기관생명윤리위원회(IRB)의 심의를 받아야 합니다. 오직 교육 목적으로 설계되어 결과가 강의실 밖으로 퍼지지 않을 수업 프로젝트는 대체로 면제됩니다. 그러나 학생이 나중에 그런 데이터를 출판하거나 발표하고 싶어지더라도 소급 승인은 받을 수 없습니다. 따라서 결과를 공개적으로 공유할 가능성이 조금이라도 있다고 예상하는 학생은 처음부터 IRB 승인을 받기를 강력히 권합니다. 심의에는 4~6주가 걸린다고 보아야 합니다."
+ },
+ {
+  "id": "rd-035",
+  "level": 5,
+  "doc_type": "웹페이지",
+  "title": "About the Oral History Archive",
+  "text": "Founded in 1978, the Oral History Archive preserves more than 3,000 recorded interviews documenting the experiences of the region's factory workers, immigrant families, and civil rights activists. Unlike written records, which disproportionately reflect the perspectives of those with the education and institutional power to produce them, oral testimony captures voices that might otherwise go unrecorded. Researchers should bear in mind, however, that memory is reconstructive: narrators recount events through the lens of later experience, so interviews are best corroborated with contemporaneous sources. Most recordings are available to stream online; a small number are restricted at the request of narrators or their families.",
+  "questions": [
+   {
+    "q": "According to the page, what is a key strength of oral histories?",
+    "choices": [
+     "They are more accurate than written records.",
+     "They were mostly produced by educated professionals.",
+     "They are all freely available online.",
+     "They include perspectives often missing from written records."
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "문서 기록은 힘 있는 사람들의 관점을 주로 반영하지만 구술 증언은 'voices that might otherwise go unrecorded'를 담는다고 했다. 정확성은 오히려 한계로 언급된다."
+   },
+   {
+    "q": "Why does the page recommend checking interviews against other sources?",
+    "choices": [
+     "Narrators' later experiences may shape how they remember events.",
+     "Many of the recordings have been damaged.",
+     "Written records are always more complete.",
+     "Some narrators asked for their interviews to be restricted."
+    ],
+    "answer": 0,
+    "type": "추론",
+    "explanation": "'memory is reconstructive: narrators recount events through the lens of later experience'라고 했다. 기억이 나중의 경험으로 바뀔 수 있으므로 다른 자료로 확인해야 한다."
+   },
+   {
+    "q": "The word \"contemporaneous\" in the passage is closest in meaning to",
+    "choices": [
+     "modern",
+     "from the same period",
+     "contradictory",
+     "unpublished"
+    ],
+    "answer": 1,
+    "type": "어휘",
+    "explanation": "contemporaneous는 '같은 시대의, 동시대의'라는 뜻으로, 사건이 일어난 당시에 만들어진 자료를 가리킨다. 'contemporary'와 혼동해 modern을 고르지 않도록 주의한다."
+   }
+  ],
+  "translation": "1978년에 설립된 구술사 기록관은 이 지역의 공장 노동자, 이민자 가족, 민권 운동가들의 경험을 기록한 3,000건 이상의 인터뷰 녹음을 보존하고 있습니다. 기록을 남길 교육과 제도적 힘을 가진 사람들의 관점을 지나치게 많이 반영하는 문서 기록과 달리, 구술 증언은 그렇지 않았다면 기록되지 못했을 목소리를 담아냅니다. 그러나 연구자는 기억이 재구성된다는 점을 유념해야 합니다. 구술자는 이후의 경험이라는 렌즈를 통해 사건을 이야기하므로, 인터뷰는 같은 시기의 자료로 확인하는 것이 가장 좋습니다. 대부분의 녹음은 온라인으로 들을 수 있으며, 일부는 구술자나 그 가족의 요청으로 공개가 제한됩니다."
+ },
+ {
+  "id": "rd-036",
+  "level": 5,
+  "doc_type": "공지",
+  "title": "Revised Course Withdrawal Deadline",
+  "text": "Following a review by the Faculty Senate, the deadline to withdraw from a course with a grade of W will move from the tenth to the eighth week of the semester, effective next fall. The change is intended to encourage earlier conversations between struggling students and their instructors, since data indicate that late withdrawals are frequently preceded by weeks of missed work that went unaddressed. Students who experience a documented emergency after the deadline may still petition the Dean of Students for a late withdrawal, though such petitions are evaluated case by case and are not routinely approved. Advisors will discuss the new timeline with students during spring registration.",
+  "questions": [
+   {
+    "q": "What change is being announced?",
+    "choices": [
+     "Withdrawn courses will no longer appear on transcripts.",
+     "Students will be able to withdraw at any point.",
+     "The Dean will approve all late requests.",
+     "Students will have less time to withdraw from a course."
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "철회 마감이 10주 차에서 8주 차로 앞당겨지므로 철회할 수 있는 기간이 짧아진다."
+   },
+   {
+    "q": "What does the Faculty Senate appear to believe?",
+    "choices": [
+     "Students withdraw mainly because of emergencies.",
+     "Instructors are to blame for late withdrawals.",
+     "An earlier deadline may lead students to seek help sooner.",
+     "The W grade should be eliminated."
+    ],
+    "answer": 2,
+    "type": "추론",
+    "explanation": "변경의 목적이 'to encourage earlier conversations between struggling students and their instructors'라고 했다. 마감을 당기면 학생들이 더 일찍 문제를 해결하려 할 것이라는 믿음이다."
+   },
+   {
+    "q": "The word \"routinely\" in the passage is closest in meaning to",
+    "choices": [
+     "as a matter of course",
+     "rarely",
+     "quickly",
+     "by law"
+    ],
+    "answer": 0,
+    "type": "어휘",
+    "explanation": "routinely approved는 '으레, 당연하다는 듯이 승인되는'이라는 뜻이다. not routinely approved는 자동으로 승인되지 않는다는 의미이므로 rarely와 혼동하지 않아야 한다."
+   }
+  ],
+  "translation": "교수 평의회의 검토에 따라, W 성적으로 수강을 철회할 수 있는 마감이 내년 가을부터 학기 10주 차에서 8주 차로 앞당겨집니다. 이 변경은 어려움을 겪는 학생과 교수자가 더 일찍 대화하도록 장려하기 위한 것으로, 자료에 따르면 늦은 수강 철회 전에는 흔히 몇 주 동안 과제를 내지 않았는데도 아무 조치가 없었던 경우가 많았습니다. 마감 이후에 증빙 가능한 긴급 상황을 겪은 학생은 여전히 학생처장에게 늦은 철회를 청원할 수 있지만, 이러한 청원은 사안별로 심사되며 통상적으로 승인되지는 않습니다. 지도 교수들이 봄 학기 수강 신청 기간에 새 일정에 대해 학생들과 이야기할 것입니다."
+ },
+ {
+  "id": "rd-037",
+  "level": 5,
+  "doc_type": "광고",
+  "title": "Call for Submissions: Palimpsest",
+  "text": "Palimpsest, the university's undergraduate journal of the humanities, invites submissions for its spring issue on the theme of \"Erasure.\" We welcome essays that interrogate what is lost, suppressed, or overwritten, whether in texts, archives, landscapes, or collective memory. Submissions should be between 4,000 and 7,000 words, follow Chicago style, and not have been published elsewhere; papers written for coursework are eligible, provided they have been substantially revised. All submissions undergo double-blind peer review by student editors and faculty advisors, so please remove your name and any identifying information from the manuscript. The deadline is January 31.",
+  "questions": [
+   {
+    "q": "Why must authors remove their names from their manuscripts?",
+    "choices": [
+     "Because the journal publishes all essays anonymously",
+     "So reviewers can judge papers without knowing who wrote them",
+     "Because faculty advisors add names later",
+     "Because coursework papers must not be linked to students"
+    ],
+    "answer": 1,
+    "type": "추론",
+    "explanation": "'double-blind peer review'는 심사자와 저자가 서로를 모르는 심사 방식이다. 그래서 신원 정보를 지워야 공정하게 평가할 수 있다."
+   },
+   {
+    "q": "Which of the following submissions would be eligible?",
+    "choices": [
+     "A 3,000-word essay on collective memory",
+     "An article already published in another journal",
+     "An unrevised essay submitted for a course last year",
+     "A class paper that has been significantly reworked"
+    ],
+    "answer": 3,
+    "type": "사실 확인",
+    "explanation": "수업 과제도 'provided they have been substantially revised'이면 지원 가능하다. 3,000단어는 분량 미달이고, 이미 발표된 글은 안 된다."
+   },
+   {
+    "q": "The word \"interrogate\" in the passage is closest in meaning to",
+    "choices": [
+     "question a suspect",
+     "ignore",
+     "critically examine",
+     "celebrate"
+    ],
+    "answer": 2,
+    "type": "어휘",
+    "explanation": "학술적 글에서 interrogate는 '비판적으로 따져 보다'라는 뜻이다. '용의자를 심문하다'는 이 단어의 일상적 의미이지만 문맥에 맞지 않는다."
+   }
+  ],
+  "translation": "대학의 학부생 인문학 학술지 '팰림프세스트'가 '지워짐'을 주제로 한 봄 호 원고를 모집합니다. 텍스트, 기록 보관소, 풍경, 집단 기억 등 어디에서든 잃어버리거나 억압되거나 덧씌워진 것을 비판적으로 탐구하는 글을 환영합니다. 원고는 4,000~7,000단어로 시카고 양식을 따라야 하며 다른 곳에 발표된 적이 없어야 합니다. 수업 과제로 쓴 글도 상당 부분 수정했다면 지원할 수 있습니다. 모든 원고는 학생 편집자와 지도 교수의 이중 맹검 동료 심사를 거치므로 원고에서 이름과 신원을 알 수 있는 정보를 모두 지워 주세요. 마감은 1월 31일입니다."
+ },
+ {
+  "id": "rd-038",
+  "level": 5,
+  "doc_type": "이메일",
+  "title": "Re: Concerns about Group Project Grading",
+  "text": "Dear Tomas,\nThank you for raising your concerns so candidly. I appreciate that the group project grading may seem to disadvantage students who contribute more than their share. To address this, I will introduce confidential peer evaluations, which will account for up to twenty percent of each individual's project grade. That said, I would gently push back on the suggestion that collaborative grading be abandoned altogether. Navigating uneven participation is itself one of the skills the assignment is meant to develop, and I'd encourage your group to discuss expectations openly before the next milestone. If problems persist, please come see me during office hours.\nBest,\nProfessor Lindqvist",
+  "questions": [
+   {
+    "q": "What had Tomas most likely suggested?",
+    "choices": [
+     "Increasing the weight of peer evaluations",
+     "Replacing the project with an exam",
+     "Ending group grading entirely",
+     "Removing a classmate from his group"
+    ],
+    "answer": 2,
+    "type": "추론",
+    "explanation": "교수가 'the suggestion that collaborative grading be abandoned altogether'에 반대한다고 했으므로 토마스는 공동 채점을 없애자고 제안했을 것이다."
+   },
+   {
+    "q": "How will the professor respond to Tomas's concern?",
+    "choices": [
+     "By adding private evaluations from group members",
+     "By grading each member completely separately",
+     "By assigning students to new groups",
+     "By extending the next deadline"
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "'I will introduce confidential peer evaluations'라고 했다. confidential을 private으로 바꾸어 표현했다."
+   },
+   {
+    "q": "The phrase \"push back on\" in the email is closest in meaning to",
+    "choices": [
+     "postpone",
+     "disagree with",
+     "support",
+     "repeat"
+    ],
+    "answer": 1,
+    "type": "어휘",
+    "explanation": "push back on은 '~에 반대하다, 이의를 제기하다'라는 뜻이다. 교수는 공동 채점을 없애자는 제안에 반대하는 이유를 이어서 설명한다."
+   }
+  ],
+  "translation": "토마스에게,\n솔직하게 우려를 말해 주어 고마워요. 조별 과제 채점 방식이 자기 몫보다 더 많이 기여하는 학생에게 불리해 보일 수 있다는 점을 이해합니다. 이 문제를 해결하기 위해 비공개 동료 평가를 도입하고, 이를 각 개인의 과제 점수의 최대 20%까지 반영하겠습니다. 그렇긴 하지만 공동 채점을 아예 없애자는 제안에는 조심스럽게 반대하고 싶어요. 고르지 않은 참여를 조율하는 것 자체가 이 과제가 기르려는 능력 중 하나이니, 다음 중간 점검 전에 조원들과 기대하는 바를 터놓고 이야기해 보길 권합니다. 문제가 계속되면 면담 시간에 찾아오세요.\n린드크비스트 교수"
+ },
+ {
+  "id": "rd-039",
+  "level": 5,
+  "doc_type": "문자 메시지",
+  "title": "Messages between Teaching Assistants",
+  "text": "Grace: Heads-up: Prof. Adeyemi wants the midterms graded by Friday, not Monday.\nOwen: You're kidding. I've barely made a dent in mine.\nGrace: Same, but she's adamant. Apparently the registrar needs midterm grades early this year for the new early-alert system.\nOwen: Fair enough, I suppose. Want to split question 4? It's the one that takes forever to mark.\nGrace: Sure, but let's calibrate first. Last time our scores on that question were all over the place.\nOwen: Good call. I'll pull five sample answers, and we can grade them together tomorrow morning.",
+  "questions": [
+   {
+    "q": "What does Owen mean when he writes, \"I've barely made a dent in mine\"?",
+    "choices": [
+     "He has almost finished grading.",
+     "He damaged some of the exam papers.",
+     "He disagrees with the grading criteria.",
+     "He has graded very few of his exams."
+    ],
+    "answer": 3,
+    "type": "추론",
+    "explanation": "make a dent in은 '(일을) 조금 줄이다'라는 뜻이므로 barely made a dent는 거의 진척이 없다는 의미이다. 종이를 찌그러뜨렸다는 뜻이 아니다."
+   },
+   {
+    "q": "Why does Grace want to calibrate before splitting question 4?",
+    "choices": [
+     "The professor asked them to use a new system.",
+     "Question 4 has been changed since last time.",
+     "They need to confirm the registrar's deadline.",
+     "Their scores on that question were inconsistent last time."
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "'Last time our scores on that question were all over the place'라고 했다. all over the place는 들쭉날쭉하다는 뜻으로, 채점 기준을 먼저 맞추려는 이유이다."
+   },
+   {
+    "q": "What will the two TAs most likely do tomorrow morning?",
+    "choices": [
+     "Grade some sample answers together",
+     "Meet with Professor Adeyemi",
+     "Submit the grades to the registrar",
+     "Rewrite question 4"
+    ],
+    "answer": 0,
+    "type": "추론",
+    "explanation": "오언이 'I'll pull five sample answers, and we can grade them together tomorrow morning'이라고 제안했고 그레이스와의 대화 흐름상 그렇게 할 것이다."
+   }
+  ],
+  "translation": "그레이스: 미리 알려 줄게. 아데예미 교수님이 중간고사 채점을 월요일이 아니라 금요일까지 끝내래.\n오언: 농담이지? 난 거의 손도 못 댔는데.\n그레이스: 나도 그래. 근데 교수님이 단호하셔. 올해는 새 조기 경보 시스템 때문에 학적과에서 중간 성적을 일찍 받아야 한대.\n오언: 뭐, 그럴 만하네. 4번 문제 나눠서 할래? 채점하는 데 한참 걸리는 문제잖아.\n그레이스: 좋아. 근데 먼저 기준부터 맞추자. 지난번에 그 문제 우리 점수가 제각각이었잖아.\n오언: 좋은 생각이야. 내가 샘플 답안 다섯 개 뽑아 올 테니 내일 아침에 같이 채점해 보자."
+ },
+ {
+  "id": "rd-040",
+  "level": 5,
+  "doc_type": "안내문",
+  "title": "Data Management Plan Requirements",
+  "text": "All externally funded research projects must now include a data management plan (DMP) at the proposal stage. The DMP should specify the types of data to be generated, the formats in which they will be stored, and the repository through which they will be made publicly accessible upon the project's completion. Exemptions from public sharing may be justified where data contain sensitive personal information or are subject to proprietary agreements, but such exemptions must be explicitly argued rather than assumed. Proposals lacking an adequate DMP will be returned without review. The Research Data Office offers consultations and a template, and strongly recommends contacting it at least three weeks before submission deadlines.",
+  "questions": [
+   {
+    "q": "What is the main purpose of the passage?",
+    "choices": [
+     "To announce that all research data must now be kept private",
+     "To inform researchers of a new requirement for funding proposals",
+     "To explain how reviewers score proposals",
+     "To advertise a new data storage service"
+    ],
+    "answer": 1,
+    "type": "주제·목적",
+    "explanation": "외부 연구비 제안서에 데이터 관리 계획을 반드시 포함해야 한다는 새 요건을 알리는 안내문이다. 데이터는 원칙적으로 공개해야 한다."
+   },
+   {
+    "q": "What would most likely happen to a proposal that says, without explanation, that its data will not be shared?",
+    "choices": [
+     "It would be approved automatically.",
+     "It would receive a lower score but still be reviewed.",
+     "It could be sent back without being evaluated.",
+     "It would be revised by the Research Data Office."
+    ],
+    "answer": 2,
+    "type": "추론",
+    "explanation": "예외는 'must be explicitly argued rather than assumed'이고, 적절한 DMP가 없는 제안서는 'returned without review'된다. 이유 없이 공유하지 않겠다고 하면 반려될 수 있다."
+   },
+   {
+    "q": "The word \"proprietary\" in the passage is closest in meaning to",
+    "choices": [
+     "temporary",
+     "publicly funded",
+     "privately owned",
+     "experimental"
+    ],
+    "answer": 2,
+    "type": "어휘",
+    "explanation": "proprietary는 '소유권이 있는, 독점의'라는 뜻이다. proprietary agreements는 데이터 소유자가 사용을 제한하는 계약을 말한다."
+   }
+  ],
+  "translation": "이제 외부 연구비를 받는 모든 연구 과제는 제안서 단계에서 데이터 관리 계획(DMP)을 포함해야 합니다. DMP에는 생성될 데이터의 종류, 저장 형식, 그리고 과제 종료 시 데이터를 공개할 저장소를 명시해야 합니다. 데이터에 민감한 개인 정보가 들어 있거나 독점 계약의 적용을 받는 경우에는 공개 공유의 예외가 정당화될 수 있지만, 이러한 예외는 당연하게 여기지 말고 명시적으로 근거를 제시해야 합니다. 적절한 DMP가 없는 제안서는 심사 없이 반려됩니다. 연구데이터실은 상담과 양식을 제공하며, 제출 마감 최소 3주 전에 연락하기를 강력히 권합니다."
+ }
+]

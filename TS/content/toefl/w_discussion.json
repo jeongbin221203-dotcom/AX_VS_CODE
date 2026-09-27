@@ -1,0 +1,463 @@
+[
+ {
+  "id": "wd-001",
+  "level": 1,
+  "course": "Education",
+  "professor": "This week we are talking about study habits. Some students like to study alone in a quiet place. Other students prefer to study with a group of classmates. Both ways have good points and bad points. What do you think? Is it better for students to study alone or in a group? Please explain your answer and give an example from your own experience.",
+  "students": [
+   {
+    "name": "Emma",
+    "post": "I think studying in a group is better. When I don't understand something, my friends can explain it to me right away. Also, studying with other people is more fun, so I can study for a longer time. Last semester, my study group helped me pass my biology exam."
+   },
+   {
+    "name": "Tyler",
+    "post": "I prefer to study alone. In a group, people often start talking about other things, like movies or weekend plans. When I study by myself, I can focus better and choose what to review. I also like to go at my own speed, not too fast and not too slow."
+   }
+  ],
+  "sample": "I understand both Emma and Tyler, but I think the best way is to do both. Students should study alone first and then meet a group later. When I study alone, I can read the textbook carefully and find the parts I don't understand. After that, a study group is very useful, because I can ask my friends clear questions. For example, before my math exam last year, I solved practice problems by myself for three days. Then I met two classmates, and we checked our answers together. They showed me a mistake that I made again and again. If I had studied only alone, I would not have found it. If I had studied only in a group, I would not have been ready to ask good questions. So I think using both ways is the smartest plan.",
+  "sample_ko": "에마와 타일러 둘 다 이해하지만, 저는 둘 다 하는 것이 가장 좋다고 생각합니다. 학생들은 먼저 혼자 공부하고 나중에 그룹으로 모여야 합니다. 혼자 공부하면 교과서를 꼼꼼히 읽고 이해가 안 되는 부분을 찾을 수 있습니다. 그 후에 스터디 그룹이 매우 유용한데, 친구들에게 명확한 질문을 할 수 있기 때문입니다. 예를 들어 작년 수학 시험 전에 저는 사흘 동안 혼자 연습 문제를 풀었습니다. 그다음 반 친구 두 명을 만나 함께 답을 확인했습니다. 친구들은 제가 계속 반복하던 실수를 알려 주었습니다. 혼자만 공부했다면 그 실수를 찾지 못했을 것입니다. 그룹으로만 공부했다면 좋은 질문을 할 준비가 되어 있지 않았을 것입니다. 그래서 두 방법을 모두 쓰는 것이 가장 현명한 계획이라고 생각합니다.",
+  "tips": [
+   "두 학생 의견을 먼저 언급하세요: I understand both A and B, but ~.",
+   "새 아이디어(둘 다 하기)를 내면 두 학생 의견을 그대로 반복하지 않아 좋은 점수를 받습니다.",
+   "For example, ~ 뒤에 내 경험을 순서대로(first → then) 쓰면 쉬운 영어로도 설득력이 생깁니다."
+  ]
+ },
+ {
+  "id": "wd-002",
+  "level": 1,
+  "course": "Health Science",
+  "professor": "Many schools are changing the food in their cafeterias. Some people say schools should sell only healthy food, like fruit, vegetables, and whole grains. They think this will help students stay healthy. Other people say students should be free to choose what they eat, including snacks and soda. What is your opinion? Should schools sell only healthy food? Why or why not?",
+  "students": [
+   {
+    "name": "Olivia",
+    "post": "Yes, schools should sell only healthy food. Many young people eat too much sugar and fast food. If the cafeteria has only healthy choices, students will eat better every day. Good food also helps students focus in class and have more energy."
+   },
+   {
+    "name": "Marcus",
+    "post": "I don't agree. Students are not small children, so they should make their own choices. If the school takes away all snacks, students will just buy them at the store next to the school. I think it is better to teach students about healthy eating."
+   }
+  ],
+  "sample": "I think schools should sell mostly healthy food, but not only healthy food. Olivia is right that many students eat too much sugar. However, Marcus also has a good point, because students can easily buy snacks outside. In my opinion, the price is the most important thing. Schools should make healthy food cheaper than junk food. Students often choose food because of money, not health. For example, at my high school, a salad cost five dollars, but a bag of chips cost only one dollar. Most of my friends bought chips because they did not have much money. If the salad had been cheaper, I think many students would have bought it. So schools do not need to ban snacks. They just need to make the healthy choice the easy choice.",
+  "sample_ko": "저는 학교가 대부분 건강한 음식을 팔아야 하지만, 건강한 음식만 팔 필요는 없다고 생각합니다. 많은 학생이 설탕을 너무 많이 먹는다는 올리비아의 말은 맞습니다. 하지만 학생들이 밖에서 과자를 쉽게 살 수 있으니 마커스의 말에도 일리가 있습니다. 제 생각에는 가격이 가장 중요합니다. 학교는 건강한 음식을 정크푸드보다 싸게 만들어야 합니다. 학생들은 건강보다 돈 때문에 음식을 고르는 경우가 많습니다. 예를 들어 제가 다닌 고등학교에서는 샐러드가 5달러였지만 과자 한 봉지는 1달러였습니다. 친구들 대부분은 돈이 많지 않아서 과자를 샀습니다. 샐러드가 더 쌌다면 많은 학생이 샀을 것입니다. 그러니 학교는 과자를 금지할 필요가 없습니다. 건강한 선택을 쉬운 선택으로 만들기만 하면 됩니다.",
+  "tips": [
+   "A is right that ~. However, B also has a good point ~ 로 두 의견을 균형 있게 언급하세요.",
+   "새로운 관점(가격)을 In my opinion, the most important thing is ~ 로 분명히 제시합니다.",
+   "마지막 문장은 짧고 기억에 남게: make the healthy choice the easy choice."
+  ]
+ },
+ {
+  "id": "wd-003",
+  "level": 1,
+  "course": "Technology and Society",
+  "professor": "Almost every student has a smartphone now. Some teachers let students use their phones in class, for example to look up information or take pictures of the board. Other teachers ask students to put their phones away during the whole class. What do you think? Should students be allowed to use their phones in class? Please give reasons for your answer.",
+  "students": [
+   {
+    "name": "Sofia",
+    "post": "I think students should be allowed to use phones in class. Phones are useful tools. We can look up new words, check facts, and use learning apps. In the real world, adults use their phones at work every day, so students should learn to use them well."
+   },
+   {
+    "name": "Daniel",
+    "post": "I think phones should not be allowed. Even if students plan to use them for learning, they often check social media or play games. This is bad for them, and it also bothers other students. Without phones, everyone pays more attention to the teacher."
+   }
+  ],
+  "sample": "I agree with Sofia that phones can be useful, and I agree with Daniel that they can be distracting. I think the teacher should decide when phones are allowed. For most of the class, phones should stay in students' bags. But at certain times, the teacher can say, \"Now take out your phones for five minutes.\" For example, my English teacher sometimes asked us to use a dictionary app for a short activity. After the activity, we put our phones away again. This worked very well, because we used phones only for learning. Nobody played games, because the time was short and the teacher was watching. This way, students get the good parts of phones without the bad parts. I think this rule is fair for both students and teachers.",
+  "sample_ko": "휴대폰이 유용할 수 있다는 소피아의 말에도, 집중을 방해할 수 있다는 대니얼의 말에도 동의합니다. 저는 휴대폰을 언제 허용할지 선생님이 정해야 한다고 생각합니다. 수업 대부분의 시간에는 휴대폰을 가방에 넣어 두어야 합니다. 하지만 특정 시간에는 선생님이 \"이제 5분 동안 휴대폰을 꺼내세요\"라고 말할 수 있습니다. 예를 들어 제 영어 선생님은 가끔 짧은 활동을 위해 사전 앱을 쓰게 하셨습니다. 활동이 끝나면 다시 휴대폰을 넣었습니다. 이 방법은 아주 효과적이었는데, 휴대폰을 공부에만 썼기 때문입니다. 시간이 짧고 선생님이 지켜보고 있어서 아무도 게임을 하지 않았습니다. 이렇게 하면 학생들은 휴대폰의 나쁜 점 없이 좋은 점만 얻을 수 있습니다. 이 규칙이 학생과 선생님 모두에게 공정하다고 생각합니다.",
+  "tips": [
+   "I agree with A that ~, and I agree with B that ~ 로 두 의견을 한 문장에 연결하세요.",
+   "중간 입장이라도 구체적인 규칙(선생님이 시간을 정함)을 내놓아야 '새 아이디어'가 됩니다.",
+   "This worked very well, because ~ 처럼 예시 뒤에 이유를 붙이면 논리가 분명해집니다."
+  ]
+ },
+ {
+  "id": "wd-004",
+  "level": 1,
+  "course": "Sociology",
+  "professor": "Today's topic is where people live. More and more people are moving from the countryside to big cities. Cities have many jobs, stores, and activities. The countryside is quieter and closer to nature. If you could choose, would you rather live in a big city or in the countryside? Explain your choice and give at least one reason. You can use examples from your own life or from people you know.",
+  "students": [
+   {
+    "name": "Hannah",
+    "post": "I would rather live in a big city. There are more jobs and more chances to meet new people. I also like having restaurants, museums, and concerts near my home. In the countryside, you often need a car to go anywhere, and there is not much to do at night."
+   },
+   {
+    "name": "Leo",
+    "post": "I would choose the countryside. Big cities are crowded, noisy, and expensive. In the countryside, the air is clean and life is slower. I grew up on a farm, and I think people are friendlier there because everyone knows their neighbors."
+   }
+  ],
+  "sample": "Hannah and Leo both give good reasons, but I think the answer depends on a person's age. When people are young, a big city is better. Young people need jobs, and they want to try new things. For example, my older sister moved to Seoul after college. She found a good job and made many friends there. However, when people are older or have children, the countryside can be better. Houses are bigger and cheaper, and children can play outside safely. My grandparents live in a small town, and they are very happy because it is quiet and clean. So I would live in a city now, and maybe move to the countryside later. I don't think people have to choose only one place for their whole life.",
+  "sample_ko": "해나와 레오 모두 좋은 이유를 들었지만, 저는 답이 사람의 나이에 달려 있다고 생각합니다. 젊을 때는 대도시가 더 좋습니다. 젊은 사람들은 일자리가 필요하고 새로운 것을 해 보고 싶어 합니다. 예를 들어 저희 언니는 대학 졸업 후 서울로 이사했습니다. 그곳에서 좋은 직장을 구하고 친구도 많이 사귀었습니다. 하지만 나이가 들거나 아이가 생기면 시골이 더 나을 수 있습니다. 집이 더 크고 싸며, 아이들이 밖에서 안전하게 놀 수 있습니다. 저희 조부모님은 작은 마을에 사시는데, 조용하고 깨끗해서 무척 행복해하십니다. 그래서 저는 지금은 도시에 살고, 나중에 시골로 이사할지도 모릅니다. 사람들이 평생 한 곳만 골라야 한다고 생각하지 않습니다.",
+  "tips": [
+   "'상황에 따라 다르다'는 답은 depends on ~ 뒤에 구체적인 기준(나이)을 넣어야 좋은 답이 됩니다.",
+   "When ~, ... However, when ~, ... 구조로 두 경우를 나누어 설명하세요.",
+   "가족·친구 예시(my older sister, my grandparents)는 쉽고 빠르게 쓸 수 있는 근거입니다."
+  ]
+ },
+ {
+  "id": "wd-005",
+  "level": 2,
+  "course": "Business",
+  "professor": "Since the pandemic, many companies have allowed employees to work from home. Some companies now want workers to return to the office full-time, while others plan to keep remote work permanently. For our discussion this week, I'd like you to consider this question: Is working from home better for employees than working in an office? Support your view with reasons and, if possible, an example.",
+  "students": [
+   {
+    "name": "Rachel",
+    "post": "Working from home is definitely better. Employees save a lot of time and money because they don't have to commute. My mother works from home three days a week, and she says she gets more done because there are fewer interruptions. She is also less stressed."
+   },
+   {
+    "name": "Kevin",
+    "post": "I think the office is better, especially for young employees. When you work from home, it is hard to learn from experienced coworkers. You can't just turn around and ask a quick question. Also, many people feel lonely when they work alone every day."
+   }
+  ],
+  "sample": "Rachel and Kevin both make valid points, but I think the answer depends on the type of task rather than the place. Some work, like writing reports or analyzing data, requires deep concentration, so it is easier to do at home. Other work, such as brainstorming or training new staff, is much more effective face to face. For this reason, I believe companies should organize their schedules around tasks. For example, when I worked part-time at a design company last summer, the team came to the office on Tuesdays and Thursdays for meetings and planning. On the other days, everyone worked from home on individual projects. As a result, our meetings were more focused, and I still had time to learn from senior designers, which addresses Kevin's concern.",
+  "sample_ko": "레이철과 케빈 모두 타당한 지적을 했지만, 저는 답이 장소보다는 업무 종류에 달려 있다고 생각합니다. 보고서 작성이나 데이터 분석 같은 일은 깊은 집중이 필요해서 집에서 하는 것이 더 쉽습니다. 반면 브레인스토밍이나 신입 교육 같은 일은 직접 만나서 할 때 훨씬 효과적입니다. 그래서 저는 회사가 업무를 중심으로 일정을 짜야 한다고 봅니다. 예를 들어 지난여름 디자인 회사에서 아르바이트를 했을 때, 팀은 화요일과 목요일에 회의와 기획을 위해 사무실에 나왔습니다. 나머지 날에는 모두 집에서 개인 프로젝트를 했습니다. 그 결과 회의는 더 집중적이었고, 저는 여전히 선배 디자이너들에게 배울 시간이 있었는데, 이는 케빈의 우려를 해결해 줍니다.",
+  "tips": [
+   "depends on A rather than B 로 논점을 새롭게 틀 짓는 것이 새 아이디어를 내는 쉬운 방법입니다.",
+   "예시 끝에 상대 학생의 우려를 해결한다는 문장(which addresses Kevin's concern)을 넣으면 토론에 참여하는 느낌이 납니다.",
+   "For this reason, / As a result, 같은 연결어를 문장 첫머리에 두어 흐름을 분명히 하세요."
+  ]
+ },
+ {
+  "id": "wd-006",
+  "level": 2,
+  "course": "Environmental Science",
+  "professor": "Plastic waste is one of the biggest environmental problems today. Governments and companies are trying to reduce it, but individuals can also make a difference. In your opinion, what is the most effective thing an ordinary person can do to reduce plastic waste? Explain why you think your choice would have a real impact. Remember that many small actions, when repeated by millions of people, can add up to large changes.",
+  "students": [
+   {
+    "name": "Nina",
+    "post": "The most effective thing is to stop using single-use plastics like water bottles, straws, and shopping bags. These items are used for only a few minutes, but they stay in the environment for hundreds of years. If everyone carried a reusable bottle and bag, the amount of waste would drop a lot."
+   },
+   {
+    "name": "Jacob",
+    "post": "I think recycling correctly is the most important step. Many people put dirty containers or the wrong kinds of plastic in the recycling bin, and then the whole bin gets thrown away. If people learned the rules and cleaned their containers, much more plastic could be reused."
+   }
+  ],
+  "sample": "Nina and Jacob focus on what people do with plastic after they buy it, but I think the most effective action happens earlier: choosing what to buy. When consumers pick products with less packaging, companies notice and change their production. A single reusable bottle helps a little, but a change in buying habits sends a message to businesses. For example, a supermarket near my apartment started selling rice, nuts, and pasta from large bins where customers bring their own containers. At first only a few people used it, but it became so popular that the store expanded the section. Now other stores in the area are doing the same thing. This shows that individual choices can influence companies, which can reduce plastic on a much larger scale than recycling alone.",
+  "sample_ko": "니나와 제이컵은 사람들이 플라스틱을 산 뒤에 무엇을 하는지에 초점을 맞췄지만, 저는 가장 효과적인 행동은 그보다 앞선 단계, 즉 무엇을 살지 고르는 데서 일어난다고 생각합니다. 소비자가 포장이 적은 제품을 고르면 기업은 이를 알아차리고 생산 방식을 바꿉니다. 재사용 병 하나는 조금 도움이 되지만, 구매 습관의 변화는 기업에 메시지를 보냅니다. 예를 들어 우리 아파트 근처 슈퍼마켓은 손님이 자기 용기를 가져와 큰 통에서 쌀, 견과류, 파스타를 담아 가는 판매를 시작했습니다. 처음에는 몇 명만 이용했지만 인기가 많아져서 가게가 그 코너를 넓혔습니다. 이제 이 지역의 다른 가게들도 똑같이 하고 있습니다. 이는 개인의 선택이 기업에 영향을 줄 수 있고, 그 결과 재활용만 할 때보다 훨씬 큰 규모로 플라스틱을 줄일 수 있음을 보여 줍니다.",
+  "tips": [
+   "두 학생의 공통점을 짚고(Both focus on ~) 내가 다른 단계를 본다고 말하면 새 아이디어가 선명해집니다.",
+   "개인 → 기업 → 사회로 영향이 커지는 흐름을 보여 주면 'real impact'라는 질문에 정확히 답하게 됩니다.",
+   "so popular that ~ (너무 ~해서 …하다) 같은 구문으로 문장 수준을 높여 보세요."
+  ]
+ },
+ {
+  "id": "wd-007",
+  "level": 2,
+  "course": "Education Policy",
+  "professor": "Some universities require all first-year students to live in campus dormitories. Supporters say it helps new students adjust to college life and make friends. Critics argue that dorms are expensive and that students should be free to choose where they live. Should universities require first-year students to live on campus? Explain your position, and think about how the rule would affect different types of students.",
+  "students": [
+   {
+    "name": "Grace",
+    "post": "Yes, they should. Living on campus helped me so much during my first year. I met most of my close friends in my dorm, and it was easy to join clubs and study groups. Students who live far away often feel isolated and miss out on campus life."
+   },
+   {
+    "name": "Omar",
+    "post": "No, it should be a choice. Dorms are often more expensive than sharing an apartment, and some students cannot afford them. Also, students who live near the university could save a lot of money by living with their families. Forcing everyone into dorms is unfair."
+   }
+  ],
+  "sample": "Grace is right that dorm life helps students connect, and Omar is right that cost is a serious problem. However, I think universities can solve this in a different way. Instead of requiring students to live in dorms, they could require first-year students to join a \"residential community\" program. Students living off campus would be assigned to a dorm group and could use its study rooms, attend its events, and even eat meals there a few times a week. For example, my cousin's university has a program like this for commuter students. She lived at home to save money, but she still had a dorm group, a resident advisor, and weekly activities. She said she never felt left out. This approach gives students the social benefits of dorm life without the high cost.",
+  "sample_ko": "기숙사 생활이 학생들의 관계 형성에 도움이 된다는 그레이스의 말도, 비용이 심각한 문제라는 오마르의 말도 맞습니다. 하지만 저는 대학이 다른 방식으로 이 문제를 해결할 수 있다고 생각합니다. 기숙사 거주를 의무화하는 대신 1학년에게 '기숙 공동체' 프로그램 참여를 의무화할 수 있습니다. 캠퍼스 밖에 사는 학생도 기숙사 그룹에 배정되어 그곳의 스터디룸을 쓰고, 행사에 참여하며, 일주일에 몇 번은 식사도 할 수 있습니다. 예를 들어 제 사촌의 대학에는 통학생을 위한 이런 프로그램이 있습니다. 사촌은 돈을 아끼려고 집에서 살았지만, 기숙사 그룹과 사감 선배, 매주 활동이 있었습니다. 소외감을 느낀 적이 없다고 했습니다. 이 방식은 높은 비용 없이 기숙사 생활의 사회적 장점을 제공합니다.",
+  "tips": [
+   "찬반이 뚜렷한 질문에서도 두 의견의 장점을 합친 제3의 방안(Instead of ~, they could ~)을 내면 독창적입니다.",
+   "새 제도를 제안할 때는 누가·무엇을 할 수 있는지(could use, attend, eat)를 구체적으로 쓰세요.",
+   "마지막 문장에 without ~ 을 써서 반대 측 걱정도 해결됨을 보여 주세요."
+  ]
+ },
+ {
+  "id": "wd-008",
+  "level": 2,
+  "course": "Psychology",
+  "professor": "Friendship is an important part of our well-being. Some people have a large circle of friends, while others prefer to have just a few very close friends. Research suggests both types of relationships can be valuable. In your view, is it better to have many friends or a few close friends? Why? Feel free to draw on your own experiences, but try to go beyond simply describing your personal preference.",
+  "students": [
+   {
+    "name": "Chloe",
+    "post": "I think it is better to have a few close friends. True friends understand you deeply and will support you when life gets difficult. With many friends, the relationships are often shallow. I would rather have two people I can call at midnight than twenty people I only say hi to."
+   },
+   {
+    "name": "Ethan",
+    "post": "Having many friends is better in my opinion. Different friends bring different experiences and ideas, so you learn more. Also, if you have a wide network, it is easier to find opportunities like part-time jobs or internships. Knowing many people makes life more interesting."
+   }
+  ],
+  "sample": "I think Chloe and Ethan are describing two kinds of friendship that meet different needs, so the real question is balance. However, I would add that the number of friends matters less than how actively we maintain them. Close friendships can fade if we stop making an effort, and a large network is useless if we never contact anyone. For example, when I started university, I lost touch with most of my high school friends because I assumed they would always be there. Only one friendship survived, because we agreed to call each other every Sunday. That small habit kept us close even though we live in different cities. So instead of asking how many friends we should have, we should ask whether we are putting in the time to keep the friendships we already have.",
+  "sample_ko": "저는 클로이와 이선이 서로 다른 필요를 채우는 두 종류의 우정을 설명하고 있어서, 진짜 문제는 균형이라고 생각합니다. 다만 친구의 수보다 우리가 그 관계를 얼마나 적극적으로 유지하느냐가 더 중요하다는 점을 덧붙이고 싶습니다. 가까운 우정도 노력을 멈추면 희미해질 수 있고, 넓은 인맥도 아무에게도 연락하지 않으면 쓸모가 없습니다. 예를 들어 대학에 입학했을 때, 저는 고등학교 친구들이 언제나 곁에 있을 거라 생각해서 대부분과 연락이 끊겼습니다. 매주 일요일에 서로 전화하기로 약속한 한 친구와의 우정만 남았습니다. 그 작은 습관 덕분에 다른 도시에 살면서도 가깝게 지냅니다. 그러니 친구가 몇 명이어야 하는지 묻기보다, 이미 있는 우정을 지키는 데 시간을 들이고 있는지 물어야 합니다.",
+  "tips": [
+   "I would add that ~ 은 두 의견에 새로운 관점을 더할 때 쓰기 좋은 표현입니다.",
+   "질문 자체를 바꾸는 결론(instead of asking A, we should ask B)은 깊이 있는 인상을 줍니다.",
+   "실패 경험(lost touch)과 성공 경험(one friendship survived)을 대비하면 짧은 예시로도 설득력이 큽니다."
+  ]
+ },
+ {
+  "id": "wd-009",
+  "level": 3,
+  "course": "Media Studies",
+  "professor": "A growing number of young people now get most of their news from social media platforms rather than from newspapers, television, or news websites. Some researchers worry that this trend is harmful, while others see benefits. Overall, do you think getting news mainly from social media has a positive or negative effect on how well-informed people are? Support your answer with specific reasons.",
+  "students": [
+   {
+    "name": "Priya",
+    "post": "I think the effect is mostly negative. Social media algorithms show people content that matches what they already believe, so users rarely see opposing views. On top of that, false information spreads faster than corrections. Many of my friends have shared fake stories without checking whether they were true."
+   },
+   {
+    "name": "Lucas",
+    "post": "I see it as positive overall. Social media lets people get news instantly, often directly from the people involved, like eyewitnesses or scientists. It also covers stories that traditional media ignore. Young people who would never buy a newspaper are now at least exposed to current events every day."
+   }
+  ],
+  "sample": "Both Priya and Lucas raise important points, but I think the effect depends less on the platform itself and more on whether users have the skills to evaluate what they see. The same feed can make one person better informed and another more confused. That is why I believe schools should treat media literacy as a core subject, not an optional one. For instance, my high school offered a short unit in which we traced viral posts back to their original sources. I was shocked to discover that a widely shared statistic about climate change actually came from an advertisement. Since then, I automatically check the source before believing or sharing anything. If more young people learned these habits, social media could deliver the speed and variety Lucas describes without the misinformation Priya worries about.",
+  "sample_ko": "프리야와 루커스 모두 중요한 점을 제기했지만, 저는 그 영향이 플랫폼 자체보다 사용자가 보는 것을 평가할 능력이 있는지에 더 달려 있다고 생각합니다. 같은 피드가 어떤 사람은 더 잘 알게 하고 다른 사람은 더 혼란스럽게 할 수 있습니다. 그래서 학교는 미디어 리터러시를 선택이 아닌 핵심 과목으로 다뤄야 한다고 봅니다. 예를 들어 제 고등학교에는 화제가 된 게시물을 원래 출처까지 추적하는 짧은 단원이 있었습니다. 널리 공유된 기후 변화 통계가 사실 광고에서 나왔다는 것을 알고 충격을 받았습니다. 그 뒤로는 무엇이든 믿거나 공유하기 전에 자동으로 출처를 확인합니다. 더 많은 젊은이가 이런 습관을 익힌다면, 소셜 미디어는 프리야가 걱정하는 허위 정보 없이 루커스가 말하는 속도와 다양성을 제공할 수 있을 것입니다.",
+  "tips": [
+   "depends less on A and more on B 구조로 논점을 옮기면 두 학생과 다른 새 관점이 됩니다.",
+   "마지막 문장에서 두 학생의 이름을 모두 넣어 '장점은 살리고 단점은 없애는' 결론을 내 보세요.",
+   "treat A as B, trace A back to B 같은 동사 표현이 B2 수준 어휘를 보여 줍니다."
+  ]
+ },
+ {
+  "id": "wd-010",
+  "level": 3,
+  "course": "Public Health",
+  "professor": "Several cities and countries have introduced taxes on sugary drinks such as soda and sweetened juice. The goal is to reduce consumption and lower rates of obesity and diabetes. However, critics argue that these taxes unfairly burden low-income families and limit personal freedom. Do you think governments should tax sugary drinks? Why or why not? Please consider both the health goals of the policy and its effects on different groups in society.",
+  "students": [
+   {
+    "name": "Aisha",
+    "post": "Yes, I support these taxes. Studies from places like Mexico show that soda sales fell after the tax was introduced. Sugary drinks have no nutritional value, and the health costs of diabetes are paid by everyone through insurance and public health systems. A small tax is a reasonable way to change behavior."
+   },
+   {
+    "name": "Brandon",
+    "post": "I'm against it. Low-income families spend a larger share of their money on food and drinks, so the tax hurts them the most. It also treats adults like children who can't make their own decisions. Education campaigns would be a fairer way to encourage healthier choices."
+   }
+  ],
+  "sample": "I lean toward supporting the tax, but Brandon's concern about fairness is serious, so I think the key issue is how the revenue is used. If the money simply goes into the general budget, the tax does feel like a penalty on poorer households. However, if it is returned directly to the communities that pay it, the policy becomes far more justifiable. For example, some cities in the United States have used soda tax revenue to fund free school breakfasts, public drinking fountains, and sports programs in low-income neighborhoods. In that case, the families who pay slightly more for soda also receive tangible benefits, and healthier alternatives become easier to access. In other words, a well-designed tax could address Aisha's health goals while also responding to Brandon's worry that the burden falls unfairly on the poor.",
+  "sample_ko": "저는 세금에 찬성하는 쪽이지만, 공정성에 대한 브랜던의 우려도 심각하므로 핵심은 세수를 어떻게 쓰느냐라고 생각합니다. 세금이 그냥 일반 예산으로 들어간다면 가난한 가정에 대한 벌금처럼 느껴집니다. 하지만 세금을 낸 지역 사회에 직접 돌려준다면 정책의 정당성이 훨씬 커집니다. 예를 들어 미국의 일부 도시는 탄산음료 세수로 저소득 지역의 무료 학교 아침 식사, 공공 식수대, 스포츠 프로그램을 지원했습니다. 그런 경우 탄산음료에 조금 더 돈을 내는 가정이 눈에 보이는 혜택도 받고, 건강한 대안에 더 쉽게 접근하게 됩니다. 즉 잘 설계된 세금은 아이샤의 건강 목표를 달성하면서 부담이 가난한 사람에게 불공평하게 돌아간다는 브랜던의 걱정에도 답할 수 있습니다.",
+  "tips": [
+   "I lean toward ~ 는 '대체로 ~쪽이다'라는 조심스러운 입장 표현입니다.",
+   "찬반 자체가 아니라 '세수 사용처'라는 새 기준을 제시하면 토론에 새로운 아이디어를 더하게 됩니다.",
+   "If ~, ... However, if ~, ... 대비 구조로 조건에 따라 평가가 달라짐을 보여 주세요."
+  ]
+ },
+ {
+  "id": "wd-011",
+  "level": 3,
+  "course": "History of Communication",
+  "professor": "Throughout history, new technologies have transformed the way people share information: the printing press, the telegraph, the telephone, radio, and the internet, to name a few. Which invention do you believe had the greatest impact on human communication, and why? Please focus on the effects it had on society, not just on how the technology worked. Try to explain what changed for ordinary people.",
+  "students": [
+   {
+    "name": "Sam",
+    "post": "The printing press had the greatest impact. Before it, books were copied by hand and only the rich could own them. After Gutenberg, books became cheaper, literacy spread, and new ideas about science and religion reached ordinary people. Without it, modern education would not exist."
+   },
+   {
+    "name": "Mei",
+    "post": "I would argue for the internet. It allows anyone to publish information and communicate instantly with people across the world, for free. Social movements, online education, and global businesses all depend on it. No other invention has connected so many people so quickly."
+   }
+  ],
+  "sample": "Sam and Mei chose inventions that made information widely available, but I would argue that the telegraph deserves more credit than it usually receives. It was the first technology that separated communication from physical transportation. Before the telegraph, a message could travel only as fast as a horse, a train, or a ship. After it, news could cross a continent in minutes. This had enormous effects on society. Newspapers could report events from distant cities on the same day, which created a shared sense of national news. Businesses could coordinate prices across markets, and governments could manage far larger territories. In a sense, the telegraph introduced the very idea of instant communication that the telephone and the internet later expanded. Without that first breakthrough, Mei's example might never have been imagined.",
+  "sample_ko": "샘과 메이는 정보를 널리 퍼지게 한 발명품을 골랐지만, 저는 전신이 보통 받는 것보다 더 많은 인정을 받아야 한다고 주장하고 싶습니다. 전신은 통신을 물리적 운송에서 분리한 최초의 기술이었습니다. 전신 이전에는 메시지가 말이나 기차, 배만큼만 빨리 이동할 수 있었습니다. 전신 이후에는 소식이 몇 분 만에 대륙을 가로질렀습니다. 이는 사회에 막대한 영향을 미쳤습니다. 신문은 먼 도시의 사건을 같은 날 보도할 수 있게 되었고, 이는 공유된 국가 뉴스라는 감각을 만들었습니다. 기업은 시장 간 가격을 조정할 수 있었고, 정부는 훨씬 넓은 영토를 관리할 수 있었습니다. 어떤 의미에서 전신은 훗날 전화와 인터넷이 확장한 즉각적 통신이라는 개념 자체를 처음 도입했습니다. 그 첫 돌파구가 없었다면 메이가 든 예는 상상조차 되지 않았을 것입니다.",
+  "tips": [
+   "두 학생과 다른 선택지를 고를 때는 deserves more credit than it usually receives 처럼 '과소평가됨'을 강조하면 효과적입니다.",
+   "Before ~ / After ~ 대비로 변화를 선명하게 보여 주세요.",
+   "마지막에 다른 학생의 예를 내 주장 안으로 끌어오면(Mei's example might never have been imagined) 논리가 단단해집니다."
+  ]
+ },
+ {
+  "id": "wd-012",
+  "level": 3,
+  "course": "Urban Planning",
+  "professor": "Some cities, such as Oslo and Madrid, have banned or heavily restricted private cars in their downtown areas. Supporters say this reduces pollution and makes streets safer and more pleasant. Opponents say it hurts local businesses and makes life difficult for people who depend on cars. Should cities ban private cars from their downtown areas? Explain your reasoning, using examples from cities you know if possible.",
+  "students": [
+   {
+    "name": "Isabella",
+    "post": "Yes, cities should ban cars downtown. Cars take up huge amounts of space for roads and parking that could be used for parks, bike lanes, and cafés. Pedestrian areas are also much safer. When my hometown closed its main street to cars, it became the most popular place in the city."
+   },
+   {
+    "name": "Noah",
+    "post": "A complete ban goes too far. Elderly people, people with disabilities, and delivery workers need to reach downtown by car. Also, shop owners often worry that customers will simply drive to suburban malls instead. Cities should reduce traffic, but not eliminate cars entirely."
+   }
+  ],
+  "sample": "I agree with Isabella that car-free centers can be wonderful, but Noah is right that a sudden ban can harm people. I believe the most important factor is not the ban itself but whether public transportation is ready before it happens. If a city removes cars without offering fast, frequent, and affordable alternatives, people will simply stop coming downtown. For example, when my city limited cars in its old district, it first added a free electric shuttle that ran every five minutes and built parking garages at the edge of the zone. Exceptions were also made for delivery vans in the early morning and for residents with disabilities. As a result, visitor numbers actually increased. So rather than debating whether to ban cars, cities should focus on the order of changes: build the alternatives first, then restrict cars.",
+  "sample_ko": "차 없는 도심이 멋질 수 있다는 이사벨라의 말에 동의하지만, 갑작스러운 금지가 사람들에게 해를 끼칠 수 있다는 노아의 말도 옳습니다. 저는 가장 중요한 요소가 금지 자체가 아니라 그 전에 대중교통이 준비되어 있느냐라고 생각합니다. 빠르고 자주 다니며 저렴한 대안 없이 차를 없애면 사람들은 그냥 도심에 오지 않을 것입니다. 예를 들어 우리 도시는 구도심의 차량을 제한할 때, 먼저 5분마다 다니는 무료 전기 셔틀을 추가하고 구역 가장자리에 주차 빌딩을 지었습니다. 이른 아침 배송 차량과 장애가 있는 주민에게는 예외도 두었습니다. 그 결과 방문객 수는 오히려 늘었습니다. 그러니 차를 금지할지 논쟁하기보다 도시는 변화의 순서, 즉 대안을 먼저 만들고 그다음 차를 제한하는 데 집중해야 합니다.",
+  "tips": [
+   "the most important factor is not A but B 는 새 아이디어를 도입하는 강력한 문장 틀입니다.",
+   "예시 안에 반대 측 걱정(장애인·배송)을 해결하는 장치를 넣으면 균형 잡힌 답이 됩니다.",
+   "결론을 rather than debating ~, we should focus on ~ 로 정리하세요."
+  ]
+ },
+ {
+  "id": "wd-013",
+  "level": 4,
+  "course": "Environmental Science",
+  "professor": "Conservation budgets are limited, so organizations must decide how to allocate their resources. One approach focuses on saving specific endangered species, often charismatic animals like pandas or tigers. Another approach focuses on protecting entire habitats or ecosystems, regardless of which species live there. Which approach do you think conservation organizations should prioritize, and why? Consider both ecological and practical factors in your response.",
+  "students": [
+   {
+    "name": "Kelly",
+    "post": "Protecting habitats is clearly the better strategy. If you save a forest or a wetland, you automatically protect thousands of species, including insects and plants that nobody has even studied yet. Focusing on single species is like treating one symptom while ignoring the disease. Habitat loss is the main driver of extinction, after all."
+   },
+   {
+    "name": "Andrew",
+    "post": "I think species-focused campaigns still have an important role. People donate money because they care about specific animals, not abstract ecosystems. Pandas, for instance, have raised enormous sums for conservation. Without these emotional connections, many conservation groups would struggle to survive financially."
+   }
+  ],
+  "sample": "Kelly is correct that habitat loss drives extinction, and Andrew rightly points out that charismatic animals attract funding. However, I would argue that this is a false choice, because the most effective programs use a single species as the public face of habitat protection. Ecologists call these \"umbrella species\": animals whose survival requires such large, healthy territories that protecting them inevitably safeguards countless other organisms. The panda is a good illustration. The Chinese government's panda reserves now cover vast areas of mountain forest, which also shelter golden monkeys, rare pheasants, and hundreds of plant species that would never have inspired donations on their own. In other words, organizations can harness the emotional appeal Andrew describes while achieving the ecosystem-level results Kelly advocates. The real priority, then, should be choosing flagship species strategically.",
+  "sample_ko": "서식지 소실이 멸종을 일으킨다는 켈리의 말은 옳고, 앤드루도 카리스마 있는 동물이 기금을 끌어모은다는 점을 정확히 지적합니다. 그러나 저는 이것이 잘못된 양자택일이라고 주장하고 싶은데, 가장 효과적인 프로그램은 한 종을 서식지 보호의 대외적 얼굴로 활용하기 때문입니다. 생태학자들은 이를 '우산종'이라고 부릅니다. 생존에 넓고 건강한 영역이 필요해서, 그 종을 보호하면 필연적으로 수많은 다른 생물도 보호되는 동물입니다. 판다가 좋은 예입니다. 중국 정부의 판다 보호구역은 이제 광대한 산림을 아우르며, 그곳에는 황금원숭이, 희귀 꿩, 그리고 그 자체로는 결코 기부를 이끌어 내지 못했을 수백 종의 식물도 살고 있습니다. 다시 말해 단체들은 앤드루가 말한 감정적 호소력을 활용하면서 켈리가 주장하는 생태계 수준의 성과를 거둘 수 있습니다. 그렇다면 진짜 우선순위는 대표 종을 전략적으로 선택하는 것이어야 합니다.",
+  "tips": [
+   "this is a false choice(잘못된 양자택일)는 두 입장을 통합하는 새 아이디어를 도입할 때 유용합니다.",
+   "전문 용어(umbrella species)를 쓰면 콜론 뒤에 짧게 정의해 주세요.",
+   "In other words, ~ while ~ 구조로 두 학생의 핵심을 한 문장에 묶어 결론으로 이어 가세요."
+  ]
+ },
+ {
+  "id": "wd-014",
+  "level": 4,
+  "course": "Political Science",
+  "professor": "In countries such as Australia and Belgium, voting is compulsory, and citizens who fail to vote may pay a small fine. Turnout in these countries is typically above 90 percent, compared with around 60 percent in many democracies with voluntary voting. Should voting be made compulsory in democratic countries? Explain your position, considering both the benefits and the potential drawbacks.",
+  "students": [
+   {
+    "name": "Julia",
+    "post": "Compulsory voting makes a democracy more representative. When turnout is low, the people who vote tend to be older and wealthier, so politicians mainly serve their interests. If everyone must vote, governments have to pay attention to young people and low-income citizens as well. A small fine seems a reasonable price for that."
+   },
+   {
+    "name": "Marcus",
+    "post": "Forcing people to vote undermines the very freedom democracy is supposed to protect. Choosing not to vote can itself be a political statement. Moreover, people who have no interest in politics might vote randomly or for whoever appears first on the ballot, which could actually distort the results rather than improve them."
+   }
+  ],
+  "sample": "Julia and Marcus frame the issue as a trade-off between representation and freedom, but I think the more pressing problem is that many non-voters face practical obstacles rather than a lack of interest. Before considering compulsion, governments should make voting effortless. Holding elections on weekends, allowing automatic registration, and offering secure postal voting would likely raise turnout substantially without restricting anyone's choice. Evidence supports this: when Oregon introduced automatic voter registration, hundreds of thousands of new voters were added to the rolls, and many of them were young or low-income, precisely the groups Julia is concerned about. Only if turnout remained stubbornly low after such reforms would compulsory voting be worth serious debate. Even then, including a \"none of the above\" option would address Marcus's point that abstention can be a legitimate political statement.",
+  "sample_ko": "줄리아와 마커스는 이 문제를 대표성과 자유 사이의 절충으로 보지만, 저는 더 시급한 문제가 많은 비투표자가 관심 부족이 아니라 현실적인 장애물에 부딪힌다는 점이라고 생각합니다. 강제를 고려하기 전에 정부는 투표를 아주 쉽게 만들어야 합니다. 주말 선거, 자동 유권자 등록, 안전한 우편 투표를 도입하면 누구의 선택도 제한하지 않고 투표율을 크게 높일 수 있을 것입니다. 근거도 있습니다. 오리건주가 자동 유권자 등록을 도입하자 수십만 명의 새 유권자가 명부에 추가되었고, 그중 상당수는 줄리아가 우려하는 바로 그 집단인 젊은층이나 저소득층이었습니다. 이런 개혁 후에도 투표율이 끈질기게 낮게 유지될 때에만 의무 투표를 진지하게 논의할 가치가 있을 것입니다. 그때에도 '해당 없음' 선택지를 포함하면 기권이 정당한 정치적 의사 표현일 수 있다는 마커스의 지적에 답할 수 있습니다.",
+  "tips": [
+   "frame the issue as ~ 로 두 학생의 논점을 요약한 뒤, the more pressing problem is ~ 로 방향을 바꾸세요.",
+   "Only if ~ would ... 도치 구문은 조건부 입장을 세련되게 표현합니다.",
+   "실제 사례(오리건 자동 등록)는 대략적인 수치(hundreds of thousands)만으로도 충분히 설득력이 있습니다."
+  ]
+ },
+ {
+  "id": "wd-015",
+  "level": 4,
+  "course": "Computer Science and Ethics",
+  "professor": "Generative AI systems can now produce images, music, and text that are difficult to distinguish from human work. This raises a legal and ethical question that courts in several countries are currently facing. Should works created primarily by artificial intelligence be eligible for copyright protection? If so, who should own the rights? If not, why not? Please justify your position.",
+  "students": [
+   {
+    "name": "Daniel",
+    "post": "AI-generated works should not receive copyright. Copyright exists to reward human creativity and encourage people to keep creating. An AI system doesn't need incentives, and granting copyright would allow a few large companies to claim ownership over millions of works produced automatically, which would block human artists."
+   },
+   {
+    "name": "Sophie",
+    "post": "I believe the person who uses the AI should own the copyright. Writing effective prompts, selecting from many outputs, and editing the results require skill and creative judgment. A photographer doesn't build the camera, yet we give them copyright. AI is simply a more advanced tool."
+   }
+  ],
+  "sample": "Daniel and Sophie treat AI-generated works as a single category, but I think the law should distinguish between degrees of human involvement. A simple prompt like \"a cat in the style of Van Gogh\" involves minimal creative choice, so granting copyright would, as Daniel warns, let companies monopolize content they barely shaped. On the other hand, some artists use AI as one step in an extended process, generating dozens of drafts, combining elements, and repainting sections by hand. In that case, Sophie's camera analogy is persuasive. The U.S. Copyright Office has already moved in this direction: in a 2023 decision about a graphic novel, it protected the author's text and arrangement of images but not the individual AI-generated pictures. I believe this layered approach is fairer than an all-or-nothing rule, because it rewards genuine human creativity wherever it appears.",
+  "sample_ko": "대니얼과 소피는 AI 생성물을 하나의 범주로 다루지만, 저는 법이 인간의 관여 정도를 구분해야 한다고 생각합니다. '반 고흐 스타일의 고양이' 같은 단순한 프롬프트에는 창의적 선택이 거의 없으므로, 여기에 저작권을 주면 대니얼이 경고하듯 기업이 거의 손대지 않은 콘텐츠를 독점하게 됩니다. 반면 어떤 예술가는 AI를 긴 작업 과정의 한 단계로 활용해 수십 개의 초안을 만들고, 요소를 결합하고, 일부를 손으로 다시 그립니다. 그런 경우라면 소피의 카메라 비유가 설득력이 있습니다. 미국 저작권청은 이미 이 방향으로 움직였습니다. 2023년 한 그래픽 노블에 대한 결정에서 작가의 글과 이미지 배열은 보호했지만 AI가 생성한 개별 그림은 보호하지 않았습니다. 저는 이런 단계적 접근이 전부 아니면 전무인 규칙보다 공정하다고 생각하는데, 인간의 진정한 창의성이 나타나는 곳이면 어디서든 보상하기 때문입니다.",
+  "tips": [
+   "두 학생이 놓친 구분(degrees of human involvement)을 지적하는 것이 C1 수준의 새 아이디어입니다.",
+   "as Daniel warns, / Sophie's analogy is persuasive 처럼 상대 논리를 내 주장 안에서 부분적으로 인정하세요.",
+   "all-or-nothing, layered approach 같은 대조 표현으로 결론을 선명하게 만드세요."
+  ]
+ },
+ {
+  "id": "wd-016",
+  "level": 4,
+  "course": "Linguistics",
+  "professor": "Linguists estimate that nearly half of the world's roughly 7,000 languages could disappear by the end of this century, as younger generations shift to dominant languages like English, Spanish, or Mandarin. Some governments fund programs to document and revitalize endangered languages, while critics question whether this is a wise use of public money. Should governments invest in preserving endangered languages? Why or why not?",
+  "students": [
+   {
+    "name": "Ana",
+    "post": "Yes, absolutely. Each language contains unique knowledge about local plants, medicine, history, and ways of seeing the world. When a language dies, that knowledge is often lost forever. Preserving languages is similar to protecting historical monuments, and governments already spend money on those."
+   },
+   {
+    "name": "Ryan",
+    "post": "I understand the cultural value, but I question whether government programs can really save a language if the community itself has moved on. Parents often choose dominant languages because they offer better jobs for their children. Public money might be better spent on education or healthcare that directly improves people's lives."
+   }
+  ],
+  "sample": "Ana and Ryan disagree about whether language preservation is worth funding, but I think they overlook a crucial distinction between documentation and revitalization. Documentation, which involves recording speakers, compiling dictionaries, and archiving stories, is relatively inexpensive and permanent. Even if a language stops being spoken, future generations and researchers can still access what it contained, which addresses Ana's concern about lost knowledge. Revitalization, by contrast, only succeeds when a community genuinely wants it, as Ryan suggests. Governments should therefore fund documentation universally, but support revitalization only where local demand is demonstrated. The revival of Hawaiian illustrates this well: it was driven by parents who founded immersion preschools in the 1980s, and state funding followed rather than led. Today thousands of children study in Hawaiian-medium schools, showing that public money is most effective when it amplifies community initiative.",
+  "sample_ko": "아나와 라이언은 언어 보존에 돈을 쓸 가치가 있는지를 두고 의견이 다르지만, 저는 두 사람이 기록과 부흥이라는 중요한 구분을 놓치고 있다고 생각합니다. 화자 녹음, 사전 편찬, 이야기 보관 같은 기록 작업은 비교적 저렴하고 영구적입니다. 언어가 더 이상 쓰이지 않더라도 후손과 연구자가 그 언어에 담긴 것에 접근할 수 있으므로, 지식 소실에 대한 아나의 우려를 해결합니다. 반면 부흥은 라이언의 말처럼 공동체가 진정으로 원할 때만 성공합니다. 따라서 정부는 기록은 보편적으로 지원하되, 부흥은 지역의 수요가 입증된 곳에서만 지원해야 합니다. 하와이어의 부활이 이를 잘 보여 줍니다. 1980년대에 몰입식 유치원을 세운 부모들이 이끌었고, 주 정부의 지원은 앞장서기보다 뒤따랐습니다. 오늘날 수천 명의 아이가 하와이어로 가르치는 학교에서 공부하며, 이는 공적 자금이 공동체의 주도성을 증폭할 때 가장 효과적임을 보여 줍니다.",
+  "tips": [
+   "they overlook a crucial distinction between A and B 는 새 관점을 여는 고급 문장 틀입니다.",
+   "A, by contrast, ~ 로 두 개념을 대비하고 각각 다른 학생의 논점과 연결하세요.",
+   "결론 문장에 followed rather than led, amplifies 같은 정밀한 동사를 쓰면 C1 이상의 인상을 줍니다."
+  ]
+ },
+ {
+  "id": "wd-017",
+  "level": 5,
+  "course": "Philosophy of Science",
+  "professor": "Public funding agencies increasingly ask researchers to demonstrate the practical applications or economic benefits of their work before receiving grants. Supporters argue that taxpayers deserve a clear return on their investment. Critics counter that many transformative discoveries emerged from research with no obvious application at the time. Should scientific research be evaluated primarily by its potential practical applications? Defend your position.",
+  "students": [
+   {
+    "name": "Theo",
+    "post": "Given limited budgets and urgent problems like climate change and pandemics, it is entirely reasonable to prioritize research with foreseeable benefits. Scientists are not entitled to public money simply because they find a question interesting. Requiring researchers to explain potential applications also encourages them to communicate more clearly with society."
+   },
+   {
+    "name": "Lena",
+    "post": "Judging research by its applications is short-sighted. Nobody studying jellyfish fluorescence expected it to revolutionize medical imaging, and number theory seemed useless until it became the foundation of internet encryption. Demanding practical justifications in advance simply rewards researchers who are good at speculating, not those doing the most promising work."
+   }
+  ],
+  "sample": "Theo and Lena both assume that the question concerns individual grants, yet I would contend that the more fruitful unit of evaluation is the research portfolio as a whole. Much as a prudent investor balances predictable bonds with speculative stocks, a funding agency can reserve a fixed share of its budget for curiosity-driven inquiry while directing the remainder toward applied goals. This reframing sidesteps the impossibility, which Lena rightly highlights, of predicting which basic research will prove transformative, while still honoring Theo's insistence on accountability to taxpayers. Crucially, it also changes how success is measured: rather than faulting any single project for lacking applications, agencies would be judged on whether their overall portfolio produced breakthroughs over several decades. Arguably, the mRNA vaccines deployed during the pandemic vindicate this approach, having emerged from decades of unglamorous, largely unfunded basic research.",
+  "sample_ko": "테오와 레나 모두 이 질문이 개별 연구비에 관한 것이라고 가정하지만, 저는 더 유익한 평가 단위가 연구 포트폴리오 전체라고 주장하고 싶습니다. 신중한 투자자가 예측 가능한 채권과 투기적 주식의 균형을 맞추듯, 연구비 기관도 예산의 일정 비율을 호기심 중심 연구에 떼어 두고 나머지를 응용 목표에 쓸 수 있습니다. 이렇게 틀을 바꾸면 레나가 정확히 강조한, 어떤 기초 연구가 혁신적일지 예측하기 불가능하다는 문제를 피하면서도 납세자에 대한 책임이라는 테오의 주장도 존중할 수 있습니다. 결정적으로 성공을 측정하는 방식도 달라집니다. 개별 프로젝트가 응용 가능성이 없다고 탓하는 대신, 기관 전체의 포트폴리오가 수십 년에 걸쳐 돌파구를 만들어 냈는지로 평가받게 됩니다. 팬데믹 때 쓰인 mRNA 백신은 수십 년간 주목받지 못하고 연구비도 거의 받지 못한 기초 연구에서 나왔다는 점에서 이 접근을 입증한다고 볼 수 있습니다.",
+  "tips": [
+   "Both assume that ~, yet I would contend that ~ 은 두 학생이 공유하는 전제를 흔드는 C2 수준의 전개입니다.",
+   "Much as ~, ... (~하듯이) 비유로 추상적 주장을 이해하기 쉽게 만드세요.",
+   "Crucially, / Arguably, 같은 문장 부사로 논증의 강약을 조절하세요.",
+   "mRNA 백신처럼 널리 알려진 사례는 세부 수치 없이도 강한 근거가 됩니다."
+  ]
+ },
+ {
+  "id": "wd-018",
+  "level": 5,
+  "course": "Economics",
+  "professor": "Gross domestic product (GDP) remains the most widely cited indicator of a nation's success, yet it measures only market activity. It ignores unpaid care work, environmental degradation, and the distribution of income. Some economists advocate replacing or supplementing GDP with alternative measures of well-being. Is GDP still a useful measure of national progress, or should governments adopt a different primary indicator? Justify your answer.",
+  "students": [
+   {
+    "name": "Nadia",
+    "post": "GDP is fundamentally misleading as a measure of progress. A country can increase its GDP by cutting down its forests or by people working longer hours and seeing their families less. Measures such as New Zealand's well-being budget, which tracks mental health and child poverty, give a far more accurate picture of whether life is actually improving."
+   },
+   {
+    "name": "Oliver",
+    "post": "GDP has flaws, but its great strength is that it is objective and comparable across countries and decades. Well-being indicators involve subjective choices about what matters, which makes them vulnerable to political manipulation. Rather than replacing GDP, economists should simply interpret it more carefully alongside other statistics."
+   }
+  ],
+  "sample": "Nadia and Oliver debate which number best captures progress, but I suspect the deeper problem lies not in GDP itself but in the political habit of relying on any single headline figure. Whatever indicator dominates public attention inevitably becomes a target, and, as Goodhart's law predicts, a measure that becomes a target ceases to be a good measure. Were well-being indices to replace GDP, governments would soon find ways to inflate them too. A more robust approach would be to require that budgets report a small dashboard of indicators, perhaps GDP per capita, median household income, and a measure of natural capital, alongside one another. Such a dashboard would preserve the comparability Oliver values while exposing the trade-offs Nadia rightly worries about, making it far harder for policymakers to celebrate growth that quietly erodes the foundations of future prosperity.",
+  "sample_ko": "나디아와 올리버는 어떤 숫자가 진보를 가장 잘 포착하는지 논쟁하지만, 저는 더 깊은 문제가 GDP 자체가 아니라 하나의 대표 수치에 의존하는 정치적 습관에 있다고 봅니다. 어떤 지표든 대중의 관심을 독점하면 필연적으로 목표가 되고, 굿하트의 법칙이 예측하듯 목표가 된 지표는 더 이상 좋은 지표가 아닙니다. 웰빙 지수가 GDP를 대체한다면 정부는 곧 그것도 부풀릴 방법을 찾을 것입니다. 더 견고한 방법은 예산안이 1인당 GDP, 가구 중위 소득, 자연 자본 지표 같은 소수의 지표 묶음을 나란히 보고하도록 의무화하는 것입니다. 이런 지표 묶음은 올리버가 중시하는 비교 가능성을 유지하면서 나디아가 정당하게 우려하는 상충 관계를 드러내, 정책 입안자가 미래 번영의 기반을 조용히 갉아먹는 성장을 자축하기 훨씬 어렵게 만들 것입니다.",
+  "tips": [
+   "I suspect the deeper problem lies not in A but in B 로 논쟁의 층위를 한 단계 올리세요.",
+   "Were well-being indices to replace GDP, ~ 같은 가정법 도치는 C2 수준 문법을 자연스럽게 보여 줍니다.",
+   "개념(Goodhart's law)을 인용할 때는 내용을 한 구절로 풀어 설명해야 채점자가 이해도를 확인할 수 있습니다."
+  ]
+ },
+ {
+  "id": "wd-019",
+  "level": 5,
+  "course": "Public Health Policy",
+  "professor": "Governments seeking to improve public health can rely on mandates, such as bans and legal requirements, or on \"nudges\": subtle changes to how choices are presented, like placing fruit at eye level or making organ donation the default option. Nudges preserve freedom of choice, but critics call them manipulative. In your view, are nudges an ethically acceptable and effective tool for public health policy? Explain your reasoning.",
+  "students": [
+   {
+    "name": "Hana",
+    "post": "Nudges are an elegant solution. They respect individual autonomy because nobody is forced to do anything, yet they produce measurable results. Countries that switched to opt-out organ donation, for example, saw registration rates rise dramatically. Since every choice has to be presented in some way, it makes sense to design it thoughtfully."
+   },
+   {
+    "name": "Victor",
+    "post": "Nudges trouble me precisely because they work below the level of conscious reasoning. A mandate is at least transparent: citizens can see it, debate it, and vote against it. Nudges, by contrast, shape behavior without people realizing it, which treats citizens as objects to be managed rather than adults capable of rational decisions."
+   }
+  ],
+  "sample": "Hana and Victor offer compelling arguments, but I believe the ethical status of a nudge hinges on a criterion neither of them mentions: whether it would survive disclosure. A nudge that still works when people are told about it, such as a cafeteria openly explaining why vegetables are displayed first, respects autonomy in a way Victor should find acceptable, since citizens remain free to scrutinize and reject it. Conversely, a nudge that succeeds only because people fail to notice it is manipulative, however benevolent its aims. Encouragingly, research suggests that many effective nudges pass this test; default enrollment in retirement savings, for instance, remains highly effective even when participants are informed of the default. Governments should therefore adopt a publicity requirement, publishing every nudge they employ. This would preserve the effectiveness Hana praises while supplying the democratic accountability Victor rightly demands.",
+  "sample_ko": "해나와 빅터는 설득력 있는 주장을 펼치지만, 저는 넛지의 윤리적 지위가 두 사람 모두 언급하지 않은 기준, 즉 공개되어도 유지되는가에 달려 있다고 생각합니다. 사람들에게 알려도 여전히 효과가 있는 넛지, 예컨대 채소를 왜 앞에 진열하는지 공개적으로 설명하는 식당은 시민이 그것을 따져 보고 거부할 자유가 남아 있으므로 빅터도 수용할 만한 방식으로 자율성을 존중합니다. 반대로 사람들이 알아차리지 못해야만 성공하는 넛지는 목적이 아무리 선하더라도 조작적입니다. 고무적이게도 연구에 따르면 효과적인 넛지 상당수가 이 시험을 통과합니다. 예를 들어 퇴직연금 자동 가입은 참가자가 기본값을 알고 있을 때도 매우 효과적입니다. 따라서 정부는 사용하는 모든 넛지를 공개하는 공개성 요건을 채택해야 합니다. 이는 해나가 칭찬하는 효과를 유지하면서 빅터가 정당하게 요구하는 민주적 책임성을 제공할 것입니다.",
+  "tips": [
+   "hinges on a criterion neither of them mentions 는 새 기준을 제시하며 두 학생을 동시에 넘어서는 표현입니다.",
+   "Conversely, / however benevolent its aims(양보) 같은 구조로 논리의 양면을 정교하게 다루세요.",
+   "마지막 문장에서 while 로 두 학생의 핵심 가치를 모두 충족함을 보여 주면 결론이 강해집니다."
+  ]
+ },
+ {
+  "id": "wd-020",
+  "level": 5,
+  "course": "Museum Studies",
+  "professor": "Many major museums in Europe and North America hold artifacts that were acquired during periods of colonial rule, sometimes through looting or coercion. Countries of origin have increasingly requested their return. Some museums have repatriated objects, while others argue that their collections serve a global audience and ensure preservation. Should museums return such artifacts to their countries of origin? Defend your view with reasoning and, where possible, examples.",
+  "students": [
+   {
+    "name": "Amara",
+    "post": "Artifacts taken through colonial violence should be returned without conditions. These objects were removed without consent, and keeping them perpetuates the injustice. The fact that a museum in London or Paris can preserve an object well does not give it the right to own stolen property. Germany's return of the Benin Bronzes to Nigeria set an important precedent."
+   },
+   {
+    "name": "Felix",
+    "post": "I support returning items that were clearly looted, but blanket repatriation raises difficulties. Some objects were legally purchased, and borders have changed so much that it is sometimes unclear who the rightful owner is. Universal museums also allow millions of visitors to compare cultures side by side, which promotes understanding."
+   }
+  ],
+  "sample": "Amara and Felix both treat repatriation as a question of where an object should physically reside, but I would suggest that ownership and location need not be bundled together. Once legal title is restored to the country or community of origin, as justice surely requires in cases of documented looting, the new owners are free to decide how their heritage is best shared. Some may insist on its immediate return; others may choose to lend it back on long-term, renewable terms, retaining authority while benefiting from the global audience Felix values. Recent agreements, such as Nigeria's arrangements concerning the Benin Bronzes, have explored precisely this kind of flexible stewardship. Separating title from custody also resolves the paternalism implicit in arguments about preservation, since it is the rightful owners, not the former colonial powers, who determine the conditions under which their artifacts are displayed.",
+  "sample_ko": "아마라와 펠릭스는 모두 반환을 유물이 물리적으로 어디에 있어야 하느냐의 문제로 보지만, 저는 소유권과 소재지를 한데 묶을 필요가 없다고 제안하고 싶습니다. 약탈이 기록된 경우 정의가 분명히 요구하듯 법적 소유권이 원래 국가나 공동체에 돌아가면, 새 소유자는 자신의 유산을 어떻게 가장 잘 공유할지 스스로 결정할 수 있습니다. 어떤 곳은 즉시 반환을 요구하겠지만, 다른 곳은 장기적이고 갱신 가능한 조건으로 다시 대여해 권한은 유지하면서 펠릭스가 중시하는 세계적 관람객의 혜택을 누리기로 할 수도 있습니다. 베닌 브론즈를 둘러싼 나이지리아의 협정 같은 최근 합의들은 바로 이런 유연한 관리 방식을 모색해 왔습니다. 소유권과 보관을 분리하면 보존을 내세운 주장에 숨은 온정주의도 해소되는데, 유물이 어떤 조건으로 전시될지 결정하는 주체가 과거 식민 권력이 아니라 정당한 소유자이기 때문입니다.",
+  "tips": [
+   "need not be bundled together 처럼 두 학생이 당연시한 결합을 풀어내는 것이 C2 수준의 새 아이디어입니다.",
+   "as justice surely requires ~ 같은 삽입구로 입장을 분명히 하면서도 문장의 흐름을 유지하세요.",
+   "the paternalism implicit in ~ 처럼 상대 논리에 숨은 전제를 짚으면 비판적 사고가 드러납니다."
+  ]
+ }
+]

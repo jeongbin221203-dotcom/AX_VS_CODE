@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}토플{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <div class="muted small">TOEFL iBT · 2026년 1월 개편 형식 · 약 90분 · 영역별 1~6 밴드</div>
+    <h1>토플</h1>
+  </div>
+  <form class="row" method="post" action="{{ url_for('toefl.set_target') }}">
+    <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+    <label class="small">목표 밴드
+      <select name="target" data-autosubmit>
+        {% for b in [2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6] %}<option value="{{ b }}" {{ 'selected' if target == b }}>{{ b }} ({{ CEFR[b|int] }})</option>{% endfor %}
+      </select></label>
+  </form>
+</div>
+
+<div class="grid four">
+  <div class="card kpi">
+    <div class="label">종합 밴드 (추정)</div>
+    <div class="value">{{ overall if overall is not none else '–' }}</div>
+    <div class="sub">{% if overall %}{{ cefr(overall) }} · 목표 {{ target }}{% if overall < target %} · {{ target - overall }} 남음{% else %} · 목표 달성{% endif %}{% else %}네 영역을 모두 풀면 계산됩니다{% endif %}</div>
+  </div>
+  {% for s in sections %}
+  <div class="card kpi">
+    <div class="label">{{ s.name }} <span class="muted">{{ s.ko }}</span></div>
+    <div class="value">{{ s.band if s.band is not none else '–' }}</div>
+    <div class="sub">{{ cefr(s.band) if s.band else '기록 부족' }}</div>
+  </div>
+  {% endfor %}
+</div>
+
+<div class="card" style="margin-top:14px">
+  <div class="spread"><h2 style="margin:0">밴드 표</h2><span class="small muted">추정 밴드는 난이도별 정답률(쓰기·말하기는 자기 평가)로 계산합니다</span></div>
+  <div class="ladder" style="grid-template-columns:repeat(6,1fr);margin-top:10px">
+    {% for b in range(1, 7) %}
+      <div class="step{{ ' cur' if overall and overall|int == b }}{{ ' target' if target|int == b }}" style="{{ 'outline:2px solid var(--accent)' if overall and overall|int == b }}">
+        <b>{{ b }}</b>{{ CEFR[b] }}<div class="small">예전 {{ BAND_OLD[b] }}</div></div>
+    {% endfor %}
+  </div>
+</div>
+
+{% for s in sections %}
+<div class="card" style="margin-top:14px" id="sec-{{ s.key }}">
+  <div class="spread">
+    <h2 style="margin:0">{{ s.name }} <span class="muted small">{{ s.ko }} · {{ s.time }} · {{ s.note }}</span></h2>
+    <span class="num"><b>{{ s.band if s.band is not none else '–' }}</b> <span class="muted small">밴드</span></span>
+  </div>
+  <div class="table-wrap" style="margin-top:8px">
+  <table>
+    <thead><tr><th>과제</th><th class="r">문제</th><th class="r">내 기록</th><th>연습</th></tr></thead>
+    <tbody>
+    {% for t in s.tasks %}
+      <tr>
+        <td><b>{{ t.name }}</b> <span class="muted small">{{ t.en }}</span><div class="small muted">{{ t.desc }}</div></td>
+        <td class="r num">{{ t.total }}</td>
+        <td class="r num small">{% if t.stat %}{{ t.stat.n }}회 · {{ '평균 ' ~ ((t.stat.avg * 100)|round|int) ~ '%' if t.auto else '자기 평가 ' ~ ((t.stat.avg * 5)|round(1)) ~ '/5' }}{% else %}–{% endif %}</td>
+        <td>
+          <form class="row" method="get" action="{{ url_for('toefl.practice', task=t.key) }}">
+            <select name="level" aria-label="난이도">
+              <option value="">모든 난이도</option>
+              {% for lv in range(1, 6) %}<option value="{{ lv }}" {{ 'selected' if lv == rec_level }}>밴드 {{ LEVEL_BAND[lv] }} ({{ t.counts[lv] }})</option>{% endfor %}
+            </select>
+            <button class="btn small primary" {{ 'disabled' if not t.total }}>풀기</button>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+{% endfor %}
+
+{% if recent %}
+<div class="card" style="margin-top:14px">
+  <h2>최근 기록</h2>
+  <table class="small"><tbody>
+  {% for r in recent %}
+    <tr><td>{{ r.at[:16].replace('T', ' ') }}</td><td>{{ TASKS[r.task].name }}</td><td>밴드 {{ LEVEL_BAND[r.level] }}</td>
+      <td class="r num">{{ ((r.a * 100)|round|int) ~ '%' if TASKS[r.task].auto else ((r.a * 5)|round(1)) ~ '/5' }}</td></tr>
+  {% endfor %}
+  </tbody></table>
+</div>
+{% endif %}
+<p class="small muted" style="margin-top:12px">시험 형식은 2026년 1월 개편(ETS) 기준입니다. 실제 시험은 읽기·듣기가 적응형이라 앞 단계 결과에 따라 난이도가 바뀝니다.</p>
+{% endblock %}

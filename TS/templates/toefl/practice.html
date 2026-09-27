@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}{{ info.name }} · 토플{% endblock %}
+{% block body_class %}quiz-page{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <div class="muted small">{{ sec.name }} · {{ info.en }}</div>
+    <h1>{{ info.name }} {% if level %}<span class="tag">밴드 {{ LEVEL_BAND[level] }} · {{ CEFR[LEVEL_BAND[level]] }}</span>{% endif %}</h1>
+    <div class="muted small">{{ info.desc }}</div>
+  </div>
+  <form class="row" method="get">
+    <select name="level" data-autosubmit aria-label="난이도">
+      <option value="">모든 난이도</option>
+      {% for lv in range(1, 6) %}<option value="{{ lv }}" {{ 'selected' if level == lv }}>밴드 {{ LEVEL_BAND[lv] }} ({{ counts[lv] }})</option>{% endfor %}
+    </select>
+    <a class="btn" href="{{ url_for('toefl.home') }}#sec-{{ info.section }}">토플 홈</a>
+  </form>
+</div>
+
+{% if payload["items"] %}
+<div id="intro" class="card" style="max-width:640px;margin:10px auto">
+  <p>{{ payload["items"]|length }}개 {{ '세트' if info.kind in ('set', 'listen_set', 'repeat', 'interview') else '문제' }}를 풉니다.</p>
+  {% if info.kind in ('repeat', 'interview') %}
+    <p class="small">마이크를 씁니다. 브라우저가 권한을 물으면 허용하세요. 크롬·엣지에서는 말한 내용을 글자로 바꿔 {{ '정확도를 채점' if info.kind == 'repeat' else '보여 줍니다' }}.
+      (마이크는 https 주소나 이 PC(127.0.0.1)에서만 켜집니다)</p>
+  {% elif info.kind in ('email', 'discussion') %}
+    <p class="small">실제 시험처럼 {{ '7' if info.kind == 'email' else '10' }}분 타이머가 돌아갑니다. 다 쓰면 모범 답안과 비교해 0~5점으로 스스로 채점합니다.</p>
+  {% elif info.kind in ('response', 'listen_set') %}
+    <p class="small">듣기 음성은 브라우저 음성 합성으로 재생됩니다. 실제 시험은 한 번만 들을 수 있으니, 먼저 한 번만 듣고 푸는 연습을 하세요.</p>
+  {% endif %}
+  <button class="btn primary" id="start-btn">시작하기</button>
+</div>
+<div id="quiz-main" class="hidden">
+  <div class="quiz-top">
+    <b>{{ info.name }}</b>
+    <span class="progress muted small" id="progress"></span>
+    <span class="timer" id="timer"></span>
+  </div>
+  <div id="stage"></div>
+</div>
+<script type="application/json" id="payload">{{ payload|tojson }}</script>
+{% else %}
+<div class="card empty">이 조건의 문제가 아직 없습니다. 다른 난이도를 골라 보세요.</div>
+{% endif %}
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/tts.js') }}"></script>
+<script src="{{ url_for('static', filename='js/toefl.js') }}"></script>
+{% endblock %}

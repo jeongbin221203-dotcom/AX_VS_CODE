@@ -48,7 +48,7 @@ def exam(key: str):
     if not e:
         abort(404)
     if e["ready"]:
-        return redirect(url_for("main.dashboard"))
+        return redirect(url_for(e["endpoint"]))
     return render_template("exam_soon.html", e=e, key=key)
 
 

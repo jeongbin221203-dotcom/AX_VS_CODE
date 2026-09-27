@@ -4,7 +4,8 @@
 from __future__ import annotations
 
 EXAMS = {
-    "toeic": {"name": "토익", "en": "TOEIC", "ready": True},
+    "toeic": {"name": "토익", "en": "TOEIC", "ready": True, "endpoint": "main.dashboard"},
+    "toefl": {"name": "토플", "en": "TOEFL iBT", "ready": True, "endpoint": "toefl.home"},
     "toeic-speaking": {
         "name": "토익스피킹", "en": "TOEIC Speaking", "ready": False,
         "summary": "컴퓨터로 11문항에 영어로 말하는 시험 · 약 20분 · 0~200점 · 레벨 8단계",
@@ -23,23 +24,6 @@ EXAMS = {
                     "레벨 목표(IM3·IH·AL)별 학습 경로",
                     "자기 평가 체크리스트(발음·유창성·문법·내용)",
                     "녹음 기록과 시간 경과 비교"],
-    },
-    "toefl": {
-        "name": "토플", "en": "TOEFL iBT", "ready": False,
-        "summary": "2026년 1월 개편: 1~6 밴드 점수(0.5 단위) · 기존 0~120점 병기 기간 있음 · 적응형 · 약 1.5~2시간",
-        "note": "개편 직후라 문항 유형·시간이 바뀔 수 있습니다. ETS 공식 자료로 확인한 뒤 만듭니다.",
-        "scale_title": "밴드 (CEFR 대응)",
-        "scale": [("6", "C2"), ("5", "C1"), ("4", "B2"), ("3", "B1"), ("2", "A2"), ("1", "A1")],
-        "sections_title": "영역 구성 (개편 기준)",
-        "sections": [("Reading", "빈칸 단어 완성 · 일상 글 읽기 · 학술 지문 읽기", ""),
-                     ("Listening", "알맞은 응답 고르기 · 대화 · 안내 방송 · 학술 강의", ""),
-                     ("Writing", "문장 만들기 · 이메일 쓰기 · 학술 토론 글쓰기", ""),
-                     ("Speaking", "듣고 따라 말하기 · 인터뷰 답하기", "")],
-        "planned": ["영역별 연습 문제와 밴드별 난이도",
-                    "Writing: 이메일·학술 토론 답안 작성 + 자기 평가 기준표",
-                    "Speaking: 녹음·타이머, 따라 말하기 비교",
-                    "학술 어휘 단어장(듣기 모드 포함)",
-                    "모의고사와 밴드 추정"],
     },
     "opic": {
         "name": "오픽", "en": "OPIc", "ready": False,

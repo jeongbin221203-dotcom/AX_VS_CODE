@@ -10,6 +10,7 @@ from flask import Flask, abort, request, session
 
 import config
 from core import db
+from core import toefl
 from core.content import Bank
 from views import register_blueprints
 from views.helpers import register_template_helpers
@@ -23,6 +24,8 @@ def create_app(test_config: dict | None = None) -> Flask:
 
     db.configure(app.config["DB_PATH"])
     app.extensions["bank"] = Bank(app.config["CONTENT_DIR"])
+    toefl.ensure_schema()
+    app.extensions["toefl_bank"] = toefl.ToeflBank(app.config["TOEFL_CONTENT_DIR"])
 
     register_blueprints(app)
     register_template_helpers(app)

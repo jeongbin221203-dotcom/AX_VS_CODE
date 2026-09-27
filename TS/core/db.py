@@ -152,6 +152,7 @@ DEFAULT_SETTINGS = {
     "daily_questions": "40",
     "tts_rate": "1.0",
     "tts_accent": "mix",        # mix | us | uk | au
+    "toefl_target": "4.5",      # 토플 목표 밴드 (1~6, 0.5 단위)
 }
 
 

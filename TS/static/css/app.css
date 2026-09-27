@@ -253,6 +253,23 @@ body.quiz-page .wrap { max-width: 1240px; }
 .star { background: none; border: 0; font-size: 1.3rem; cursor: pointer; color: var(--ink-3); }
 .star.on { color: var(--g5); }
 
+/* 토플 */
+.tw { white-space: nowrap; }
+.tw-in { font: inherit; font-family: Georgia, serif; padding: 0 3px; border: 0; border-bottom: 2px solid var(--accent); border-radius: 0; background: var(--accent-soft); width: auto; }
+.tw-in.ok { border-color: var(--ok); background: var(--ok-soft); color: var(--ok); }
+.tw-in.bad { border-color: var(--bad); background: var(--bad-soft); color: var(--bad); }
+.tw-fix { color: var(--ok); font-family: "Pretendard", sans-serif; font-weight: 700; margin-left: 2px; }
+.ws-line { min-height: 56px; padding: 10px; border: 2px dashed var(--line); border-radius: 10px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 6px 0 10px; }
+.ws-line.ok { border-color: var(--ok); background: var(--ok-soft); }
+.ws-line.bad { border-color: var(--bad); background: var(--bad-soft); }
+.ws-bank { display: flex; flex-wrap: wrap; gap: 6px; }
+.chunk { font: inherit; padding: 8px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--ink); cursor: pointer; }
+.chunk.on { background: var(--accent-soft); border-color: var(--accent); }
+textarea.wr { min-height: 240px; font-family: Georgia, serif; font-size: 1rem; line-height: 1.6; margin: 12px 0 6px; }
+.rb { display: block; padding: 6px 0; border-bottom: 1px solid var(--line); font-size: .92rem; cursor: pointer; }
+.reveal-d { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 14px; margin-top: 10px; }
+.reveal-d summary { cursor: pointer; font-weight: 700; }
+
 /* 단어 듣기 (운전 모드): 멀리서도 보이게 크게 */
 .listen-card { text-align: center; padding: 28px 20px; }
 .ls-word { font-family: Georgia, serif; font-size: clamp(2.4rem, 8vw, 4.2rem); font-weight: 800; line-height: 1.15; margin-top: 18px; word-break: break-word; }

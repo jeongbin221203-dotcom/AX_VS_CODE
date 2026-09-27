@@ -11,14 +11,21 @@
 <body class="{% block body_class %}{% endblock %}">
 <header class="topbar">
   {% set ep = request.endpoint or '' %}
-  {% set cur_exam = request.view_args.key if ep == 'main.exam' else 'toeic' %}
+  {% set cur_exam = request.view_args.key if ep == 'main.exam' else ('toefl' if ep.startswith('toefl.') else 'toeic') %}
   <a class="brand" href="{{ url_for('main.dashboard') }}"><span class="brand-mark">TS</span></a>
   <nav class="exam-tabs" aria-label="시험">
     {% for k, e in EXAMS.items() %}
-      <a href="{{ url_for('main.dashboard') if e.ready else url_for('main.exam', key=k) }}" class="{{ 'on' if cur_exam == k }}">{{ e.name }}{% if not e.ready %}<small>준비 중</small>{% endif %}</a>
+      <a href="{{ url_for(e.endpoint) if e.ready else url_for('main.exam', key=k) }}" class="{{ 'on' if cur_exam == k }}">{{ e.name }}{% if not e.ready %}<small>준비 중</small>{% endif %}</a>
     {% endfor %}
   </nav>
   <nav class="nav">
+  {% if cur_exam == 'toefl' %}
+    <a href="{{ url_for('toefl.home') }}" class="{{ 'on' if ep == 'toefl.home' }}">토플 홈</a>
+    {% for sk, sname in [('R', 'Reading'), ('L', 'Listening'), ('S', 'Speaking'), ('W', 'Writing')] %}
+      <a href="{{ url_for('toefl.home') }}#sec-{{ sk }}" class="{{ 'on' if ep == 'toefl.practice' and request.view_args.task[0]|upper == sk }}">{{ sname }}</a>
+    {% endfor %}
+    <a href="{{ url_for('main.settings') }}">설정</a>
+  {% else %}
     <a href="{{ url_for('main.dashboard') }}" class="{{ 'on' if ep == 'main.dashboard' }}">오늘</a>
     <a href="{{ url_for('main.guide') }}" class="{{ 'on' if ep == 'main.guide' }}">등급 가이드</a>
     <a href="{{ url_for('quiz.practice') }}" class="{{ 'on' if ep == 'quiz.practice' }}">파트 연습</a>
@@ -28,6 +35,7 @@
     <a href="{{ url_for('quiz.dictation') }}" class="{{ 'on' if ep == 'quiz.dictation' }}">받아쓰기</a>
     <a href="{{ url_for('main.stats_page') }}" class="{{ 'on' if ep in ('main.stats_page', 'main.history') }}">통계</a>
     <a href="{{ url_for('main.settings') }}" class="{{ 'on' if ep == 'main.settings' }}">설정</a>
+  {% endif %}
   </nav>
 </header>
 <main class="wrap">

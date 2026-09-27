@@ -362,7 +362,7 @@ def test_vocab_quiz_size_and_distractors(client):
         assert len(q["options"]) == 4 and len(set(q["options"])) == 4 and q["options"][q["answer"]] == q["meaning"]
 
 
-@pytest.mark.parametrize("key", ["toeic-speaking", "toefl", "opic"])
+@pytest.mark.parametrize("key", ["toeic-speaking", "opic"])
 def test_exam_category_pages(client, key):
     r = client.get(f"/exam/{key}")
     assert r.status_code == 200 and "준비 중" in r.data.decode()
@@ -370,6 +370,93 @@ def test_exam_category_pages(client, key):
 
 def test_exam_tabs(client):
     assert client.get("/exam/toeic").status_code == 302
+    assert client.get("/exam/toefl").headers["Location"].endswith("/toefl/")
     assert client.get("/exam/nope").status_code == 404
     html = client.get("/").data.decode()
     assert all(n in html for n in ("토익스피킹", "토플", "오픽"))
+
+
+# ---- 토플 ----------------------------------------------------------------------------
+
+def _mcq(n):
+    return [{"q": f"Q{i}?", "choices": ["a", "b", "c", "d"], "answer": i % 4, "type": "세부 사항", "explanation": "해설"}
+            for i in range(n)]
+
+
+TOEFL_SAMPLE = {
+    "r_words": [{"id": "rw-001", "level": 3, "topic": "생물", "translation": "번역",
+                 "text": "Bees are important for many plants. " + " ".join(f"[[wor|ds]] filler{i} text and more" for i in range(10)) + " end of text here now."}],
+    "r_daily": [{"id": "rd-001", "level": 2, "doc_type": "공지", "title": "T", "text": "Notice text.", "questions": _mcq(2), "translation": "번역"}],
+    "r_academic": [{"id": "ra-001", "level": 4, "title": "T", "text": " ".join(["word"] * 200), "questions": _mcq(5), "translation": "번역"}],
+    "l_response": [{"id": "lr-001", "level": 1, "voice": "female", "prompt": "Where is it?", "choices": ["a", "b", "c", "d"],
+                    "answer": 0, "explanation": "해설", "translation": "번역"}],
+    "l_conversation": [{"id": "lc-001", "level": 2, "topic": "t", "speakers": {"M": "male", "W": "female"},
+                        "script": [{"s": "W" if i % 2 else "M", "t": "Hello there."} for i in range(6)], "questions": _mcq(2), "translation": "번역"}],
+    "l_talk": [{"id": "lt-001", "level": 3, "kind": "announcement", "topic": "t", "voice": "male", "script": "Attention.", "questions": _mcq(2), "translation": "번역"}],
+    "w_sentence": [{"id": "ws-001", "level": 2, "context": "Done?", "answer": "We still need to add the chart.",
+                    "chunks": ["We", "still need", "to add", "the", "chart"], "explanation": "해설", "translation": "번역"}],
+    "w_email": [{"id": "we-001", "level": 3, "situation": "s", "to": "t", "tasks": ["a", "b", "c"], "sample": "Dear", "sample_ko": "번역", "tips": ["팁"]}],
+    "w_discussion": [{"id": "wd-001", "level": 4, "course": "c", "professor": "p", "students": [{"name": "A", "post": "x"}, {"name": "B", "post": "y"}],
+                      "sample": "s", "sample_ko": "번역", "tips": ["팁"]}],
+    "s_repeat": [{"id": "sr-001", "level": 2, "topic": "t", "voice": "female",
+                  "sentences": [" ".join(["word"] * (4 + i * 2)) + "." for i in range(7)], "translations": ["번역"] * 7}],
+    "s_interview": [{"id": "si-001", "level": 3, "topic": "t", "intro": "Hi", "questions": ["q1", "q2", "q3", "q4"],
+                     "samples": ["a"] * 4, "samples_ko": ["번역"] * 4, "tips": ["팁"]}],
+}
+
+
+@pytest.fixture()
+def tclient(tmp_path):
+    d = tmp_path / "toefl"
+    d.mkdir()
+    for k, v in TOEFL_SAMPLE.items():
+        (d / f"{k}.json").write_text(json.dumps(v, ensure_ascii=False), encoding="utf-8")
+    app = create_app({"TESTING": True, "DB_PATH": tmp_path / "ts.db", "TOEFL_CONTENT_DIR": d})
+    return app.test_client()
+
+
+def test_toefl_sample_passes_validator(tmp_path):
+    from tools import validate_toefl
+    for k, v in TOEFL_SAMPLE.items():
+        f = tmp_path / f"{k}.json"
+        f.write_text(json.dumps(v, ensure_ascii=False), encoding="utf-8")
+        errors, _ = validate_toefl.validate_file(f, set())
+        assert errors == [], errors
+
+
+def test_toefl_real_content_is_valid():
+    from tools import validate_toefl
+    seen = {}
+    for p in validate_toefl.all_files():
+        errors, _ = validate_toefl.validate_file(p, seen.setdefault(validate_toefl.kind_of(p.name), set()))
+        assert errors == [], errors[:5]
+
+
+def test_toefl_pages_and_band(tclient):
+    from core import toefl as T
+    assert tclient.get("/toefl/").status_code == 200
+    for task in T.TASKS:
+        r = tclient.get(f"/toefl/practice/{task}")
+        assert r.status_code == 200 and b'id="payload"' in r.data, task
+    assert tclient.get("/toefl/practice/nope").status_code == 404
+    h = _csrf(tclient)
+    for task, items in TOEFL_SAMPLE.items():
+        r = tclient.post("/toefl/api/attempt", headers=h, json={"task": task, "item_id": items[0]["id"],
+                                                               "results": [{"qidx": 0, "score": 1}, {"qidx": 1, "score": 1}]})
+        assert r.status_code == 200, (task, r.json)
+    bands = T.section_bands()
+    assert all(bands[s] is not None for s in "RLSW")
+    assert T.overall_band(bands) is not None
+    assert tclient.post("/toefl/api/attempt", headers=h, json={"task": "r_daily", "item_id": "nope", "results": [{}]}).status_code == 400
+    html = tclient.get("/toefl/").data.decode()
+    assert "종합 밴드" in html
+
+
+def test_toefl_band_rules():
+    from core.toefl import band_from_levels, overall_band
+    assert band_from_levels({}) is None
+    assert band_from_levels({3: (10, 0.7)}) == 4          # 밴드 4 난이도에서 70% → 4
+    assert band_from_levels({3: (10, 0.5)}) == 3.5
+    assert band_from_levels({2: (10, 0.9), 4: (10, 0.66)}) == 5
+    assert overall_band({"R": 4, "L": 4.5, "S": 3.5, "W": 4}) == 4.0
+    assert overall_band({"R": 4, "L": None, "S": 3.5, "W": 4}) is None
