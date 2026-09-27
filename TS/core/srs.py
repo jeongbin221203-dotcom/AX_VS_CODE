@@ -111,11 +111,13 @@ def cards() -> dict[str, dict]:
         return {r["word_id"]: dict(r) for r in con.execute("SELECT * FROM vocab_cards")}
 
 
-def new_learned_today(today: date | None = None) -> int:
+def new_learned_today(today: date | None = None, ids: set | None = None) -> int:
+    """오늘 새로 본 단어 수. ids 를 주면 그 단어들만 (토익·토플 한도를 따로 센다)."""
     today = today or date.today()
     with db.connect() as con:
-        return con.execute("SELECT COUNT(*) FROM vocab_log WHERE was_new = 1 AND substr(reviewed_at, 1, 10) = ?",
-                           (today.isoformat(),)).fetchone()[0]
+        rows = con.execute("SELECT word_id FROM vocab_log WHERE was_new = 1 AND substr(reviewed_at, 1, 10) = ?",
+                           (today.isoformat(),)).fetchall()
+    return sum(1 for r in rows if ids is None or r[0] in ids)
 
 
 def queue(bank: Bank, level: int | None, daily_new: int, starred_only: bool = False,
@@ -128,7 +130,7 @@ def queue(bank: Bank, level: int | None, daily_new: int, starred_only: bool = Fa
     due = [w for w in words if w["id"] in cs and cs[w["id"]]["reps"] + cs[w["id"]]["lapses"] > 0
            and cs[w["id"]]["due"] <= today.isoformat() and (not starred_only or cs[w["id"]]["starred"])]
     due.sort(key=lambda w: cs[w["id"]]["due"])
-    new_left = max(0, daily_new - new_learned_today(today))
+    new_left = max(0, daily_new - new_learned_today(today, set(bank.vocab_by_id)))
     fresh = [] if starred_only else \
         [w for w in words if w["id"] not in cs or cs[w["id"]]["reps"] + cs[w["id"]]["lapses"] == 0][:new_left]
     if starred_only:

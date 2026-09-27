@@ -3,13 +3,13 @@
 {% block content %}
 <div class="page-head">
   <div>
-    <h1>등급별 단어</h1>
+    <h1>{{ '토플 학술 어휘' if EXAM_NAME == '토플' else '등급별 단어' }}</h1>
     <div class="muted small">간격 반복: 알면 1일 → 4일 → 점점 길게, 모르면 내일 다시. 간격 21일 이상이면 '암기 완료'.</div>
   </div>
   <div class="row">
-    {% if starred %}<a class="btn" href="{{ url_for('vocab.study', starred=1) }}">★ 별표 단어 {{ starred }}</a>{% endif %}
-    <a class="btn" href="{{ url_for('vocab.listen') }}">🔊 듣기 (운전 모드)</a>
-    <a class="btn primary" href="{{ url_for('vocab.study') }}">오늘 학습 (복습 {{ due }} · 새 단어 {{ new }})</a>
+    {% if starred %}<a class="btn" href="{{ url_for('.study', starred=1) }}">★ 별표 단어 {{ starred }}</a>{% endif %}
+    <a class="btn" href="{{ url_for('.listen') }}">🔊 듣기 (운전 모드)</a>
+    <a class="btn primary" href="{{ url_for('.study') }}">오늘 학습 (복습 {{ due }} · 새 단어 {{ new }})</a>
   </div>
 </div>
 
@@ -18,9 +18,9 @@
     <div><h2 style="margin:0">단어 시험</h2>
       <span class="small muted">틀린 단어는 복습 카드에 들어가고, 2번 이상 틀리면 '자주 잊는 단어'로 모입니다.</span></div>
     <div class="row">
-      <a class="btn {{ 'primary' if weak_n }}" href="{{ url_for('vocab.quiz', set='weak', n=30) }}">자주 잊는 단어 시험 ({{ weak_n }})</a>
-      <a class="btn" href="{{ url_for('vocab.quiz', set='missed', n=30) }}">최근 틀린 단어 ({{ missed_n }})</a>
-      <a class="btn" href="{{ url_for('vocab.quiz') }}">전체 시험</a>
+      <a class="btn {{ 'primary' if weak_n }}" href="{{ url_for('.quiz', set='weak', n=30) }}">자주 잊는 단어 시험 ({{ weak_n }})</a>
+      <a class="btn" href="{{ url_for('.quiz', set='missed', n=30) }}">최근 틀린 단어 ({{ missed_n }})</a>
+      <a class="btn" href="{{ url_for('.quiz') }}">전체 시험</a>
     </div>
   </div>
 </div>
@@ -31,19 +31,19 @@
 {% for p in progress %}
   {% set gr = GRADE_BY_LEVEL[p.level] %}
   <div class="card">
-    <div class="spread"><h2 style="margin:0">{{ grade_badge(gr) }} {{ gr.ko }}</h2><span class="muted small">{{ gr.low }}~{{ gr.high }}점</span></div>
+    <div class="spread"><h2 style="margin:0">{{ grade_badge(gr) }} {{ gr.ko }}</h2><span class="muted small">{{ gr.range_text }}</span></div>
     <p class="small muted" style="margin:6px 0 4px">오늘 복습 {{ p.due }} · 학습 시작 {{ p.seen }} / {{ p.total }}</p>
-    {% for t, label, hint in [('core', '필수', '이 점수대에서 꼭 알아야 할 단어'), ('stretch', '도전', '알면 다음 등급에 도전할 만한 단어' if p.level < 5 else '900점 이상 만점권 단어')] %}
+    {% for t, label, hint in [('core', '필수', '이 점수대에서 꼭 알아야 할 단어'), ('stretch', '도전', '알면 다음 등급에 도전할 만한 단어' if p.level < 5 else TOP_STRETCH)] %}
       {% set x = p.tiers[t] %}
       <div style="margin-top:10px">
         <div class="spread small"><span><b>{{ label }} 단어</b> <span class="muted">{{ hint }}</span></span>
           <span class="num">암기 {{ x.mastered }} / {{ x.total }}</span></div>
         <div class="bar {{ 'ok' if t == 'core' }}" style="margin:5px 0" title="암기 완료 비율"><i style="width:{{ ((x.mastered / x.total * 100) if x.total else 0)|round }}%"></i></div>
         <div class="row">
-          <a class="btn small {{ 'primary' if t == 'core' }}" href="{{ url_for('vocab.study', level=p.level, tier=t) }}">카드</a>
-          <a class="btn small" href="{{ url_for('vocab.quiz', level=p.level, tier=t) }}">퀴즈</a>
-          <a class="btn small" href="{{ url_for('vocab.word_list', level=p.level, tier=t) }}">목록</a>
-          <a class="btn small" href="{{ url_for('vocab.listen', level=p.level, tier=t) }}">듣기</a>
+          <a class="btn small {{ 'primary' if t == 'core' }}" href="{{ url_for('.study', level=p.level, tier=t) }}">카드</a>
+          <a class="btn small" href="{{ url_for('.quiz', level=p.level, tier=t) }}">퀴즈</a>
+          <a class="btn small" href="{{ url_for('.word_list', level=p.level, tier=t) }}">목록</a>
+          <a class="btn small" href="{{ url_for('.listen', level=p.level, tier=t) }}">듣기</a>
         </div>
       </div>
     {% endfor %}

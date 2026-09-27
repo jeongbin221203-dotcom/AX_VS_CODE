@@ -6,6 +6,9 @@
     <div class="muted small">TOEFL iBT · 2026년 1월 개편 형식 · 약 90분 · 영역별 1~6 밴드</div>
     <h1>토플</h1>
   </div>
+  <div class="row">
+  <a class="btn primary" href="{{ url_for('toefl.mock') }}">실전 모의고사</a>
+  <a class="btn" href="{{ url_for('tvocab.overview') }}">학술 어휘</a>
   <form class="row" method="post" action="{{ url_for('toefl.set_target') }}">
     <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
     <label class="small">목표 밴드
@@ -13,6 +16,7 @@
         {% for b in [2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6] %}<option value="{{ b }}" {{ 'selected' if target == b }}>{{ b }} ({{ CEFR[b|int] }})</option>{% endfor %}
       </select></label>
   </form>
+  </div>
 </div>
 
 <div class="grid four">

@@ -85,3 +85,10 @@ content/toeic/  part1~7.json, vocab.json — 형식은 content/SCHEMA.md
 - 밴드 추정: 자동 채점 과제는 난이도별 정답률(65% 이상이면 그 밴드), 쓰기·말하기 서술형은 모범 답안과 비교한 자기 평가(0~5). 종합 = 네 영역 평균을 0.5 단위 반올림.
 - 마이크(녹음·음성 인식)는 https 주소나 127.0.0.1 에서만 켜진다. 음성 인식이 안 되면 스스로 채점.
 - 문제 형식: `content/toefl/SCHEMA.md`, 검사: `python tools/validate_toefl.py`. 코드: `core/toefl.py`, `views/toefl.py`, `static/js/toefl.js`.
+
+### 토플 실전 모의고사 (`/toefl/mock`)
+Reading → Listening → Speaking → Writing, 약 75분. 읽기·듣기는 2단계 적응형(1모듈 밴드 4 난이도에서 60% 이상이면 2모듈 밴드 5~6, 아니면 밴드 2~3), 모듈당 15분·14분.
+듣기는 한 번만 재생·되돌아가기 없음, 읽기는 모듈 안에서 앞뒤 이동. 끝나면 쓰기·인터뷰를 모범 답안과 비교해 자기 채점 → 영역별·종합 밴드(`toefl_mocks` 테이블).
+
+### 토플 학술 어휘 (`/toefl/vocab`)
+밴드 2~6 다섯 단계 × 필수·도전, 800단어(`content/toefl/vocab*.json`). 토익 단어와 같은 화면(카드·시험·듣기·1시간 MP3)을 쓴다 — 단어 블루프린트를 `/toefl` 아래에 `tvocab` 이름으로 한 번 더 등록.

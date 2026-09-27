@@ -53,7 +53,7 @@
     busy = true;
     try {
       // 이번 회차에서 '다시'로 되돌아온 카드는 기록을 한 번만 남긴다
-      if (!again.has(cur.id) || g === 0) await TS.post("/api/vocab/review", { word_id: cur.id, grade: g });
+      if (!again.has(cur.id) || g === 0) await TS.post(TS.vbase + "/api/vocab/review", { word_id: cur.id, grade: g });
       queue.shift();
       if (g === 0) { again.add(cur.id); queue.push(cur); }
       else done++;
@@ -66,7 +66,7 @@
   $("vs-say").addEventListener("click", say);
   $("vs-star").addEventListener("click", async () => {
     if (!cur) return;
-    const r = await TS.post("/api/vocab/star", { word_id: cur.id });
+    const r = await TS.post(TS.vbase + "/api/vocab/star", { word_id: cur.id });
     cur.starred = r.starred;
     $("vs-star").classList.toggle("on", r.starred);
   });

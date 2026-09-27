@@ -181,13 +181,24 @@ def s_interview(c, o, w):
     c.strlist(o, w, "tips", lo=1, hi=6)
 
 
-CHECKS = {"r_words": r_words, "r_daily": r_daily, "r_academic": r_academic, "l_response": l_response,
+def vocab(c, o, w):
+    """토익 단어와 같은 형식 (content/SCHEMA.md 의 vocab) + tier."""
+    for k in ("word", "meaning", "example", "example_ko"):
+        c.s(o, w, k)
+    c.s(o, w, "tip", allow_empty=True)
+    if o.get("pos") not in {"n.", "v.", "adj.", "adv.", "prep.", "conj.", "phr."}:
+        c.err(w, "pos 오류")
+    if o.get("tier") not in ("core", "stretch"):
+        c.err(w, "tier core/stretch")
+
+
+CHECKS = {"vocab": vocab, "r_words": r_words, "r_daily": r_daily, "r_academic": r_academic, "l_response": l_response,
           "l_conversation": l_conversation, "l_talk": l_talk, "w_sentence": w_sentence, "w_email": w_email,
           "w_discussion": w_discussion, "s_repeat": s_repeat, "s_interview": s_interview}
 
 
 def kind_of(name: str) -> str | None:
-    m = re.fullmatch(r"([a-z]_[a-z]+)(_[\w-]+)?\.json", name)
+    m = re.fullmatch(r"([a-z]_[a-z]+|vocab)(_[\w-]+)?\.json", name)
     return m.group(1) if m and m.group(1) in CHECKS else None
 
 
@@ -214,6 +225,11 @@ def validate_file(path: Path, seen: set) -> tuple[list[str], Counter]:
             c.err(w, "level 1~5")
         levels[o.get("level")] += 1
         CHECKS[kind_of(path.name)](c, o, w)
+        if kind_of(path.name) == "vocab":            # 단어 중복 (같은 종류 모든 파일)
+            key = "word:" + str(o.get("word", "")).lower().strip()
+            if key in seen:
+                c.err(w, f"단어 중복 '{o.get('word')}'")
+            seen.add(key)
     return c.errors, levels
 
 

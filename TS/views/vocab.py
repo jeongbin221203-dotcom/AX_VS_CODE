@@ -10,9 +10,34 @@ from flask import Blueprint, current_app, flash, jsonify, redirect, render_templ
 from core import audio, db, srs
 from core.content import TIERS
 
-from .helpers import bank
+from .helpers import bank as toeic_bank
+
+
+def is_toefl() -> bool:
+    return request.blueprint == "tvocab"
+
+
+def bank():
+    """토플 단어 화면이면 토플 학술 어휘, 아니면 토익 단어."""
+    if is_toefl():
+        b = current_app.extensions["toefl_bank"]
+        b.refresh_if_changed()
+        return b
+    return toeic_bank()
 
 bp = Blueprint("vocab", __name__)
+
+
+@bp.context_processor
+def exam_context():
+    """토플이면 등급 이름을 밴드로 바꿔 보여 준다 (템플릿은 공용)."""
+    if is_toefl():
+        from core.toefl import VOCAB_GRADES
+        from .helpers import grade_badge_for
+        return {"GRADES": VOCAB_GRADES, "GRADE_BY_LEVEL": {g.level: g for g in VOCAB_GRADES},
+                "grade_badge": grade_badge_for(VOCAB_GRADES), "EXAM_NAME": "토플",
+                "TOP_STRETCH": "밴드 6 최상위 학술 어휘"}
+    return {"EXAM_NAME": "토익", "TOP_STRETCH": "900점 이상 만점권 단어"}
 
 
 def _tier_arg():
@@ -35,7 +60,7 @@ def overview():
     q = srs.queue(b, None, int(st["daily_new_words"] or 0))
     cs = srs.cards()
     return render_template("vocab.html", progress=srs.level_progress(b), due=len(q["due"]), new=len(q["new"]),
-                           new_today=srs.new_learned_today(), daily_new=st["daily_new_words"],
+                           new_today=srs.new_learned_today(ids=set(b.vocab_by_id)), daily_new=st["daily_new_words"],
                            starred=sum(1 for c in cs.values() if c["starred"]),
                            weak_n=len(quiz_pool(None, None, "weak")), missed_n=len(quiz_pool(None, None, "missed")))
 
@@ -255,11 +280,13 @@ def _audio_request(args) -> tuple[list[dict], dict, str]:
                        example=ao["example"], fill=ao["fill"], seed=f"{level}-{which}-{tier}")
     words = files[chunk - 1] if chunk <= len(files) else []
     grade = (bank_grade_name(level) if level else "전체") + (f"_{TIERS[tier]}" if tier else "")
-    name = f"토익단어_{grade}_{ao['minutes']}분_{chunk:02d}.mp3"
+    name = f"{'토플' if is_toefl() else '토익'}단어_{grade}_{ao['minutes']}분_{chunk:02d}.mp3"
     return words, ao, name
 
 
 def bank_grade_name(level: int) -> str:
+    if is_toefl():
+        return f"밴드{level + 1}"
     return {1: "Orange", 2: "Brown", 3: "Green", 4: "Blue", 5: "Gold"}[level]
 
 
@@ -287,8 +314,8 @@ def audio_status(key: str):
 def _job_view(job: dict) -> dict:
     out = {k: job.get(k) for k in ("key", "state", "done", "total", "error", "name", "minutes", "mb")}
     if job["state"] == "done":
-        out["url"] = url_for("vocab.audio_file", key=job["key"])
-        out["download"] = url_for("vocab.audio_file", key=job["key"], dl=1)
+        out["url"] = url_for(".audio_file", key=job["key"])
+        out["download"] = url_for(".audio_file", key=job["key"], dl=1)
     return out
 
 

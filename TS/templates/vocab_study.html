@@ -7,12 +7,12 @@
     <div class="muted small" id="vs-progress"></div>
   </div>
   <div class="seg">
-    <a href="{{ url_for('vocab.study') }}" class="{{ 'on' if not level and not starred }}">전체</a>
-    {% for gr in GRADES %}<a href="{{ url_for('vocab.study', level=gr.level, tier=tier or '') }}" class="{{ 'on' if level == gr.level }}">{{ gr.name }}</a>{% endfor %}
+    <a href="{{ url_for('.study') }}" class="{{ 'on' if not level and not starred }}">전체</a>
+    {% for gr in GRADES %}<a href="{{ url_for('.study', level=gr.level, tier=tier or '') }}" class="{{ 'on' if level == gr.level }}">{{ gr.name }}</a>{% endfor %}
   </div>
   <div class="seg">
-    <a href="{{ url_for('vocab.study', level=level or '') }}" class="{{ 'on' if not tier }}">필수+도전</a>
-    {% for k, v in TIERS.items() %}<a href="{{ url_for('vocab.study', level=level or '', tier=k) }}" class="{{ 'on' if tier == k }}">{{ v }}</a>{% endfor %}
+    <a href="{{ url_for('.study', level=level or '') }}" class="{{ 'on' if not tier }}">필수+도전</a>
+    {% for k, v in TIERS.items() %}<a href="{{ url_for('.study', level=level or '', tier=k) }}" class="{{ 'on' if tier == k }}">{{ v }}</a>{% endfor %}
   </div>
 </div>
 
@@ -39,8 +39,8 @@
 <div class="card empty hidden" id="vs-done">
   <h2>오늘 카드 끝!</h2>
   <p>내일 복습할 카드가 준비됩니다.</p>
-  <a class="btn" href="{{ url_for('vocab.overview') }}">단어 홈</a>
-  <a class="btn primary" href="{{ url_for('vocab.quiz', level=level or '') }}">뜻 고르기 퀴즈</a>
+  <a class="btn" href="{{ url_for('.overview') }}">단어 홈</a>
+  <a class="btn primary" href="{{ url_for('.quiz', level=level or '') }}">뜻 고르기 퀴즈</a>
 </div>
 <script type="application/json" id="vs-data">{{ {"cards": cards, "tts": tts}|tojson }}</script>
 {% else %}
@@ -48,7 +48,7 @@
   <h2>지금 볼 카드가 없습니다</h2>
   <p>오늘 복습은 끝났고, 새 단어 하루 한도도 채웠습니다.</p>
   <a class="btn" href="{{ url_for('main.settings') }}">하루 새 단어 수 바꾸기</a>
-  <a class="btn primary" href="{{ url_for('vocab.quiz', level=level or '') }}">뜻 고르기 퀴즈</a>
+  <a class="btn primary" href="{{ url_for('.quiz', level=level or '') }}">뜻 고르기 퀴즈</a>
 </div>
 {% endif %}
 {% endblock %}

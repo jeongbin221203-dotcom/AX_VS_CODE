@@ -46,6 +46,19 @@ TASKS = {
 }
 
 CEFR = {1: "A1", 2: "A2", 3: "B1", 4: "B2", 5: "C1", 6: "C2"}
+
+
+class VocabGrade:
+    """토플 단어 단계 (토익 Grade 와 같은 속성 이름 — 단어 템플릿 공용)."""
+    def __init__(self, level: int):
+        self.level, self.band = level, level + 1
+        self.name = f"밴드 {self.band}"
+        self.ko = CEFR[self.band]
+        self.range_text = f"CEFR {CEFR[self.band]}"
+        self.low = self.high = self.band
+
+
+VOCAB_GRADES = [VocabGrade(lv) for lv in range(1, 6)]
 BAND_OLD = {1: "0~19", 2: "20~41", 3: "42~71", 4: "72~94", 5: "95~113", 6: "114~120"}   # 기존 0~120점 대응(참고)
 LEVEL_BAND = {1: 2, 2: 3, 3: 4, 4: 5, 5: 6}
 
@@ -104,6 +117,15 @@ class ToeflBank:
             for it in data:
                 by_id[(task, it["id"])] = it
         self.items, self.by_id = items, by_id
+        vocab = []
+        for path in content_files(self.content_dir, "vocab"):
+            try:
+                vocab += [dict(v) for v in json.loads(path.read_text(encoding="utf-8"))]
+            except (OSError, ValueError):
+                continue
+        for v in vocab:
+            v.setdefault("tier", "core")
+        self.vocab, self.vocab_by_id = vocab, {v["id"]: v for v in vocab}
 
     def refresh_if_changed(self) -> None:
         if self._signature() != self._sig:
@@ -224,3 +246,147 @@ def overall_band(bands: dict[str, float | None]) -> float | None:
 
 def cefr(band: float | None) -> str:
     return CEFR.get(int(band), "") if band else ""
+
+
+# ---- 실전 모의고사 ------------------------------------------------------------------
+# 읽기·듣기는 2단계 적응형: 1모듈(중간 난이도) 정답률이 ADAPT_CUT 이상이면 2모듈은 어려운 문제, 아니면 쉬운 문제.
+ADAPT_CUT = 0.6
+M1_LEVELS = [3]            # 밴드 4
+HARD_LEVELS = [4, 5]       # 밴드 5~6
+EASY_LEVELS = [1, 2]       # 밴드 2~3
+
+# (과제, 개수, 담화 종류) — 실제 시험 문항 수를 줄여 한 모듈 15분 안팎
+READ_MODULE = [("r_words", 1, None), ("r_daily", 2, None), ("r_academic", 1, None)]
+LISTEN_MODULE = [("l_response", 6, None), ("l_conversation", 1, None), ("l_talk", 1, "announcement"),
+                 ("l_talk", 1, "academic")]
+MOCK_ORDER = ["R", "L", "S", "W"]       # 개편 시험 순서 (자료에 따라 S·W 순서가 다르게 소개되기도 함)
+
+MOCK_SCHEMA = """
+CREATE TABLE IF NOT EXISTS toefl_mocks (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    created_at  TEXT NOT NULL,
+    finished_at TEXT,
+    plan        TEXT NOT NULL,
+    result      TEXT,
+    r REAL, l REAL, s REAL, w REAL, total REAL
+);
+"""
+
+
+def ensure_mock_schema() -> None:
+    with db.connect() as con:
+        con.executescript(MOCK_SCHEMA)
+
+
+def _pick_kind(bank: ToeflBank, task: str, levels: list[int], n: int, kind: str | None,
+               used: set, rng: random.Random) -> list[dict]:
+    seen = last_seen(task)
+    ok = lambda it: it["id"] not in used and (kind is None or it.get("kind") == kind)
+    pool = [it for it in bank.items.get(task, []) if it["level"] in levels and ok(it)]
+    rng.shuffle(pool)
+    pool.sort(key=lambda it: seen.get(it["id"], ""))
+    if len(pool) < n:                    # 모자라면 가까운 난이도로 채움
+        rest = [it for it in bank.items.get(task, []) if ok(it) and it not in pool]
+        rest.sort(key=lambda it: min(abs(it["level"] - lv) for lv in levels))
+        pool += rest
+    out = pool[:n]
+    used.update(it["id"] for it in out)
+    return out
+
+
+def _module(bank, spec, levels, used, rng) -> list[dict]:
+    items = []
+    for task, n, kind in spec:
+        for it in _pick_kind(bank, task, levels, n, kind, used, rng):
+            items.append({"task": task, "item": it})
+    return items
+
+
+def build_mock(bank: ToeflBank, target: float, rng: random.Random | None = None) -> dict:
+    rng = rng or random.Random()
+    used: set = set()
+    lv = max(1, min(5, int(target + 0.5) - 1))          # 말하기·쓰기 난이도 = 목표 밴드 근처
+    sections = {
+        "R": {"name": "Reading", "minutes_per_module": 15, "modules": [
+            _module(bank, READ_MODULE, M1_LEVELS, used, rng),
+            {"hard": _module(bank, READ_MODULE, HARD_LEVELS, used, rng),
+             "easy": _module(bank, READ_MODULE, EASY_LEVELS, used, rng)}]},
+        "L": {"name": "Listening", "minutes_per_module": 14, "modules": [
+            _module(bank, LISTEN_MODULE, M1_LEVELS, used, rng),
+            {"hard": _module(bank, LISTEN_MODULE, HARD_LEVELS, used, rng),
+             "easy": _module(bank, LISTEN_MODULE, EASY_LEVELS, used, rng)}]},
+        "S": {"name": "Speaking", "items": _module(bank, [("s_repeat", 1, None), ("s_interview", 1, None)], [lv], used, rng)},
+        "W": {"name": "Writing", "items": _module(bank, [("w_sentence", 10, None)], [max(1, lv - 1), lv, min(5, lv + 1)], used, rng)
+              + _module(bank, [("w_email", 1, None), ("w_discussion", 1, None)], [lv], used, rng)},
+    }
+    return {"order": MOCK_ORDER, "sections": sections, "adapt_cut": ADAPT_CUT, "target": target, "level": lv}
+
+
+def create_mock(bank: ToeflBank, target: float) -> int:
+    plan = build_mock(bank, target)
+    with db.connect() as con:
+        cur = con.execute("INSERT INTO toefl_mocks(created_at, plan) VALUES (?, ?)",
+                          (db.now(), json.dumps(plan, ensure_ascii=False)))
+        return int(cur.lastrowid)
+
+
+def get_mock(mid: int) -> dict | None:
+    with db.connect() as con:
+        r = con.execute("SELECT * FROM toefl_mocks WHERE id = ?", (mid,)).fetchone()
+    if not r:
+        return None
+    m = dict(r)
+    m["plan"] = json.loads(m["plan"])
+    m["result"] = json.loads(m["result"]) if m["result"] else None
+    return m
+
+
+def list_mocks(limit: int = 20) -> list[dict]:
+    with db.connect() as con:
+        return [dict(r) for r in con.execute(
+            "SELECT id, created_at, finished_at, r, l, s, w, total FROM toefl_mocks WHERE finished_at IS NOT NULL "
+            "ORDER BY id DESC LIMIT ?", (limit,))]
+
+
+def finish_mock(bank: ToeflBank, mid: int, payload: dict) -> dict:
+    """payload = {"items": [{"task", "item_id", "results": [{qidx, score, response}]}], "routes": {"R": "hard"}}.
+    풀이 기록을 저장하고(연습 밴드에도 반영) 이 시험만으로 영역별 밴드를 계산한다."""
+    m = get_mock(mid)
+    if not m:
+        raise ValueError("모의고사가 없습니다.")
+    if m["finished_at"]:
+        return m
+    auto: dict[str, dict[int, list[float]]] = {s: {} for s in SECTIONS}
+    selfs: dict[str, list[float]] = {s: [] for s in SECTIONS}
+    detail = []
+    for row in payload.get("items", []) or []:
+        task, iid = str(row.get("task")), str(row.get("item_id"))
+        it = bank.by_id.get((task, iid))
+        results = row.get("results") or []
+        if not it or task not in TASKS or not isinstance(results, list) or not results:
+            continue
+        record(task, iid, it["level"], results)
+        sec = TASKS[task]["section"]
+        sc = [max(0.0, min(1.0, float(r.get("score", 0)))) for r in results]
+        if TASKS[task]["auto"]:
+            auto[sec].setdefault(it["level"], []).extend(sc)
+        else:
+            selfs[sec].extend(sc)
+        detail.append({"task": task, "item_id": iid, "level": it["level"], "avg": sum(sc) / len(sc), "n": len(sc)})
+    bands = {}
+    for s in SECTIONS:
+        parts = []
+        if auto[s]:
+            b = band_from_levels({lvl: (len(v), sum(v) / len(v)) for lvl, v in auto[s].items()}, min_n=1)
+            if b is not None:
+                parts.append(b)
+        if selfs[s]:
+            parts.append(round((1 + 5 * sum(selfs[s]) / len(selfs[s])) * 2) / 2)
+        bands[s] = round(sum(parts) / len(parts) * 2) / 2 if parts else None
+    total = overall_band(bands)
+    result = {"bands": bands, "total": total, "routes": payload.get("routes") or {}, "detail": detail,
+              "duration_sec": payload.get("duration_sec")}
+    with db.connect() as con:
+        con.execute("UPDATE toefl_mocks SET finished_at = ?, result = ?, r = ?, l = ?, s = ?, w = ?, total = ? WHERE id = ?",
+                    (db.now(), json.dumps(result, ensure_ascii=False), bands["R"], bands["L"], bands["S"], bands["W"], total, mid))
+    return get_mock(mid)

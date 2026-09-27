@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}토플 모의고사{% endblock %}
+{% block body_class %}quiz-page{% endblock %}
+{% block content %}
+<div id="intro" class="card" style="max-width:640px;margin:20px auto">
+  <h1>토플 실전 모의고사</h1>
+  <p>Reading → Listening → Speaking → Writing 순서로 이어집니다. 영역 사이에만 잠깐 쉴 수 있습니다.</p>
+  <p class="small muted">듣기 음성은 브라우저 음성 합성, 말하기는 마이크를 씁니다. 크롬·엣지를 권장합니다.</p>
+  <button class="btn primary" id="start-btn">시작하기</button>
+</div>
+<div id="quiz-main" class="hidden">
+  <div class="quiz-top">
+    <b id="sec-name"></b>
+    <span class="progress muted small" id="progress"></span>
+    <span class="timer" id="timer"></span>
+  </div>
+  <div class="qnav" id="qnav"></div>
+  <div id="stage"></div>
+</div>
+<script type="application/json" id="payload">{{ payload|tojson }}</script>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/tts.js') }}"></script>
+<script src="{{ url_for('static', filename='js/toefl-mock.js') }}"></script>
+{% endblock %}

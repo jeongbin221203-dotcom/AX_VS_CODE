@@ -39,9 +39,9 @@
   <div id="vq-missed" class="small"></div>
   <div class="row" style="margin-top:14px">
     <button class="btn primary hidden" id="vq-retry">틀린 단어만 다시 풀기</button>
-    <a class="btn" href="{{ url_for('vocab.study') }}">복습 카드로</a>
+    <a class="btn" href="{{ url_for('.study') }}">복습 카드로</a>
     <a class="btn" href="{{ request.full_path }}">새 문제로 다시</a>
-    <a class="btn" href="{{ url_for('vocab.quiz', level=level or '', tier=tier or '', set='weak', n=n) }}">자주 잊는 단어 시험</a>
+    <a class="btn" href="{{ url_for('.quiz', level=level or '', tier=tier or '', set='weak', n=n) }}">자주 잊는 단어 시험</a>
   </div>
 </div>
 <script type="application/json" id="vq-data">{{ questions|tojson }}</script>
@@ -53,7 +53,7 @@
   {% elif which == 'starred' %}별표한 단어가 없습니다. 카드·목록·듣기에서 ★를 누르면 모입니다.
   {% elif which == 'learning' %}학습 중인 단어가 없습니다. 단어 카드로 먼저 공부해 보세요.
   {% else %}조건에 맞는 단어가 없습니다.{% endif %}
-  <div style="margin-top:12px"><a class="btn primary" href="{{ url_for('vocab.quiz', level=level or '', tier=tier or '') }}">전체 단어로 시험</a></div>
+  <div style="margin-top:12px"><a class="btn primary" href="{{ url_for('.quiz', level=level or '', tier=tier or '') }}">전체 단어로 시험</a></div>
 </div>
 {% endif %}
 {% endblock %}

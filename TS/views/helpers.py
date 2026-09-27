@@ -9,6 +9,8 @@ from core import scoring
 from core.content import PART_INFO, Bank
 from core.exams import EXAMS
 
+from .nav import nav_menus
+
 
 def bank() -> Bank:
     return current_app.extensions["bank"]
@@ -25,6 +27,18 @@ def grade_badge(level_or_grade, suffix: str = "") -> Markup:
     if not g:
         return Markup('<span class="badge badge-none">미측정</span>')
     return Markup(f'<span class="badge g{g.level}">{escape(g.name)}{escape(suffix)}</span>')
+
+
+def grade_badge_for(grades):
+    """다른 등급 체계(토플 밴드)용 배지 함수."""
+    by = {g.level: g for g in grades}
+
+    def badge(level_or_grade, suffix: str = "") -> Markup:
+        g = level_or_grade if hasattr(level_or_grade, "level") else by.get(level_or_grade)
+        if not g:
+            return Markup('<span class="badge badge-none">–</span>')
+        return Markup(f'<span class="badge g{g.level}">{escape(g.name)}{escape(suffix)}</span>')
+    return badge
 
 
 def pct(v) -> str:
@@ -60,5 +74,5 @@ def register_template_helpers(app: Flask) -> None:
     app.jinja_env.globals.update(
         csrf_token=csrf_token, grade_badge=grade_badge, GRADES=scoring.GRADES,
         GRADE_BY_LEVEL=scoring.GRADE_BY_LEVEL, PART_INFO=PART_INFO, MODE_LABEL=MODE_LABEL,
-        session_title=session_title, EXAMS=EXAMS)
+        session_title=session_title, EXAMS=EXAMS, nav_menus=nav_menus)
     app.jinja_env.filters.update(pct=pct, mmss=mmss)

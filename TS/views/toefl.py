@@ -93,3 +93,53 @@ def api_attempt():
         return jsonify(error="결과 형식 오류"), 400
     bands = toefl.section_bands()
     return jsonify(saved=n, band=bands[TASKS[task]["section"]])
+
+
+# ---- 실전 모의고사 --------------------------------------------------------------------
+
+def _target() -> float:
+    try:
+        return float(db.get_settings().get("toefl_target") or 4.5)
+    except ValueError:
+        return 4.5
+
+
+@bp.route("/mock", methods=["GET", "POST"])
+def mock():
+    if request.method == "POST":
+        mid = toefl.create_mock(tbank(), _target())
+        return redirect(url_for("toefl.mock_run", mid=mid))
+    return render_template("toefl/mock.html", past=toefl.list_mocks(), target=_target(), CEFR=CEFR,
+                           cut=int(toefl.ADAPT_CUT * 100))
+
+
+@bp.route("/mock/<int:mid>")
+def mock_run(mid: int):
+    m = toefl.get_mock(mid)
+    if not m:
+        abort(404)
+    if m["finished_at"]:
+        return redirect(url_for("toefl.mock_result", mid=mid))
+    st = db.get_settings()
+    payload = {"id": mid, "plan": m["plan"],
+               "tasks": {k: {"name": v["name"], "kind": v["kind"], "section": v["section"]} for k, v in TASKS.items()},
+               "tts": {"rate": float(st["tts_rate"]), "accent": st["tts_accent"]}, "rubric": RUBRIC, "band": LEVEL_BAND}
+    return render_template("toefl/mock_run.html", m=m, payload=payload)
+
+
+@bp.route("/api/mock/<int:mid>/finish", methods=["POST"])
+def api_mock_finish(mid: int):
+    try:
+        toefl.finish_mock(tbank(), mid, request.get_json(silent=True) or {})
+    except ValueError as e:
+        return jsonify(error=str(e)), 400
+    return jsonify(redirect=url_for("toefl.mock_result", mid=mid))
+
+
+@bp.route("/mock/<int:mid>/result")
+def mock_result(mid: int):
+    m = toefl.get_mock(mid)
+    if not m or not m["finished_at"]:
+        abort(404)
+    return render_template("toefl/mock_result.html", m=m, r=m["result"], SECTIONS=SECTIONS, TASKS=TASKS, CEFR=CEFR,
+                           BAND_OLD=BAND_OLD, LEVEL_BAND=LEVEL_BAND, cefr=toefl.cefr, target=_target())

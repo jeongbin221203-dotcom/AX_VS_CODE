@@ -90,7 +90,13 @@
       if (v.voice) { u.voice = v.voice; u.lang = v.voice.lang; } else { u.lang = lang || "en-US"; }
       u.pitch = v.pitch;
       u.rate = rate;
-      u.onend = u.onerror = () => resolve();
+      // 브라우저가 끝났다는 신호(onend)를 안 보내는 경우가 있어, 넉넉한 예상 시간이 지나면 끝난 것으로 본다
+      const words = String(text).split(/\s+/).length;
+      const limit = 4000 + (words * 650 + String(text).length * 40) / Math.max(rate, 0.5);
+      let finished = false;
+      const done = () => { if (!finished) { finished = true; clearTimeout(guard); resolve(); } };
+      const guard = setTimeout(() => { if (synth.speaking) synth.cancel(); done(); }, limit);
+      u.onend = u.onerror = done;
       synth.speak(u);
     });
   }

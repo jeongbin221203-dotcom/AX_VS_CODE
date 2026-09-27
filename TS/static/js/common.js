@@ -3,7 +3,9 @@
   "use strict";
   const token = () => document.querySelector('meta[name="csrf-token"]').content;
 
+  const vb = document.querySelector('meta[name="vocab-base"]');
   window.TS = {
+    vbase: vb ? vb.content : "",          // 토플 단어 화면이면 "/toefl"
     async post(url, body) {
       const res = await fetch(url, {
         method: "POST",
@@ -28,6 +30,41 @@
       return `${m}:${String(s).padStart(2, "0")}`;
     },
   };
+
+  // 머리글(두 줄) 높이를 CSS 변수로 — 풀이 화면 상단 바가 그 아래에 붙도록
+  const setTopbar = () => {
+    const h = document.querySelector(".topbar");
+    if (h) document.documentElement.style.setProperty("--topbar-h", (getComputedStyle(h).position === "sticky" ? h.offsetHeight : 0) + "px");
+  };
+  setTopbar();
+  window.addEventListener("resize", setTopbar);
+
+  // 사이드바: ☰ 로 열고, 바깥·✕·Esc·메뉴 이동 시 닫는다
+  const side = document.getElementById("sidebar"), dim = document.getElementById("side-dim");
+  const openBtn = document.getElementById("menu-open");
+  const setSide = open => {
+    if (!side) return;
+    side.classList.toggle("open", open);
+    side.setAttribute("aria-hidden", open ? "false" : "true");
+    dim.hidden = !open;
+    openBtn?.setAttribute("aria-expanded", open ? "true" : "false");
+    if (open) side.querySelector(".side-items a.on, summary")?.focus();
+  };
+  openBtn?.addEventListener("click", () => setSide(true));
+  document.getElementById("menu-close")?.addEventListener("click", () => setSide(false));
+  dim?.addEventListener("click", () => setSide(false));
+  side?.addEventListener("click", e => { if (e.target.closest("a")) setSide(false); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && side?.classList.contains("open")) setSide(false); });
+
+  // 상단 시험 메뉴: 하나만 펼치고, 바깥을 누르거나 Esc 로 닫는다
+  const menus = () => document.querySelectorAll(".exam-menu");
+  document.addEventListener("toggle", e => {
+    if (e.target.matches?.(".exam-menu") && e.target.open) menus().forEach(m => { if (m !== e.target) m.open = false; });
+  }, true);
+  document.addEventListener("click", e => {
+    if (!e.target.closest(".exam-menu")) menus().forEach(m => { m.open = false; });
+  });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") menus().forEach(m => { m.open = false; }); });
 
   // 자동 제출 select (인라인 이벤트 대신 data 속성)
   document.addEventListener("change", e => {

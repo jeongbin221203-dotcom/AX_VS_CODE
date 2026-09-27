@@ -25,6 +25,7 @@ def create_app(test_config: dict | None = None) -> Flask:
     db.configure(app.config["DB_PATH"])
     app.extensions["bank"] = Bank(app.config["CONTENT_DIR"])
     toefl.ensure_schema()
+    toefl.ensure_mock_schema()
     app.extensions["toefl_bank"] = toefl.ToeflBank(app.config["TOEFL_CONTENT_DIR"])
 
     register_blueprints(app)

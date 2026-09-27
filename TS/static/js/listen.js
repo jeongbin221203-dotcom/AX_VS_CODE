@@ -125,7 +125,7 @@
   $("ls-prev").addEventListener("click", () => jump(-1));
   $("ls-star").addEventListener("click", async () => {
     const w = cur();
-    const r = await TS.post("/api/vocab/star", { word_id: w.id });
+    const r = await TS.post(TS.vbase + "/api/vocab/star", { word_id: w.id });
     w.starred = r.starred;
     $("ls-star").classList.toggle("on", r.starred);
   });
@@ -152,11 +152,11 @@
     const box = row.querySelector(".audio-job");
     btn.disabled = true;
     try {
-      let job = await TS.post("/api/vocab/audio/prepare", { ...D.audio, chunk: Number(btn.dataset.make) });
+      let job = await TS.post(TS.vbase + "/api/vocab/audio/prepare", { ...D.audio, chunk: Number(btn.dataset.make) });
       while (job.state === "running") {
         box.textContent = job.total ? `음성 만드는 중… ${job.done} / ${job.total}` : "준비 중…";
         await new Promise(r => setTimeout(r, 1500));
-        const res = await fetch(`/api/vocab/audio/status/${job.key}`);
+        const res = await fetch(`${TS.vbase}/api/vocab/audio/status/${job.key}`);
         job = await res.json();
         if (!res.ok) throw new Error(job.error || "상태 확인 실패");
       }

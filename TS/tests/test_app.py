@@ -400,6 +400,9 @@ TOEFL_SAMPLE = {
                       "sample": "s", "sample_ko": "번역", "tips": ["팁"]}],
     "s_repeat": [{"id": "sr-001", "level": 2, "topic": "t", "voice": "female",
                   "sentences": [" ".join(["word"] * (4 + i * 2)) + "." for i in range(7)], "translations": ["번역"] * 7}],
+    "vocab": [{"id": f"tv-{i:04d}", "level": 1 + i % 5, "tier": "core" if i % 3 else "stretch", "word": f"word{i}",
+               "pos": "n.", "meaning": f"뜻{i}", "example": f"The word{i} appears here.", "example_ko": "예문", "tip": ""}
+              for i in range(40)],
     "s_interview": [{"id": "si-001", "level": 3, "topic": "t", "intro": "Hi", "questions": ["q1", "q2", "q3", "q4"],
                      "samples": ["a"] * 4, "samples_ko": ["번역"] * 4, "tips": ["팁"]}],
 }
@@ -440,7 +443,7 @@ def test_toefl_pages_and_band(tclient):
         assert r.status_code == 200 and b'id="payload"' in r.data, task
     assert tclient.get("/toefl/practice/nope").status_code == 404
     h = _csrf(tclient)
-    for task, items in TOEFL_SAMPLE.items():
+    for task, items in ((k, v) for k, v in TOEFL_SAMPLE.items() if k != "vocab"):
         r = tclient.post("/toefl/api/attempt", headers=h, json={"task": task, "item_id": items[0]["id"],
                                                                "results": [{"qidx": 0, "score": 1}, {"qidx": 1, "score": 1}]})
         assert r.status_code == 200, (task, r.json)
@@ -460,3 +463,49 @@ def test_toefl_band_rules():
     assert band_from_levels({2: (10, 0.9), 4: (10, 0.66)}) == 5
     assert overall_band({"R": 4, "L": 4.5, "S": 3.5, "W": 4}) == 4.0
     assert overall_band({"R": 4, "L": None, "S": 3.5, "W": 4}) is None
+
+
+def test_toefl_mock_flow(tclient):
+    from core import toefl as T
+    h = _csrf(tclient)
+    assert tclient.get("/toefl/mock").status_code == 200
+    r = tclient.post("/toefl/mock", data={"_csrf": h["X-CSRF-Token"]})
+    mid = int(r.headers["Location"].rsplit("/", 1)[1])
+    page = tclient.get(f"/toefl/mock/{mid}").data.decode()
+    plan = json.loads(re.search(r'id="payload">(.*?)</script>', page, re.S).group(1))["plan"]
+    assert plan["order"] == ["R", "L", "S", "W"]
+    assert set(plan["sections"]["R"]["modules"][1]) == {"hard", "easy"}
+    # 모든 문제를 만점으로 제출
+    items = []
+    def full(task, it):
+        n = len(it["questions"]) if "questions" in it else 1
+        items.append({"task": task, "item_id": it["id"], "results": [{"qidx": q, "score": 1} for q in range(n)]})
+    for k in ("R", "L"):
+        for e in plan["sections"][k]["modules"][0] + plan["sections"][k]["modules"][1]["hard"]:
+            full(e["task"], e["item"])
+    for k in ("S", "W"):
+        for e in plan["sections"][k]["items"]:
+            full(e["task"], e["item"])
+    r = tclient.post(f"/toefl/api/mock/{mid}/finish", headers=h, json={"items": items, "routes": {"R": "hard", "L": "hard"}})
+    assert r.status_code == 200
+    res = tclient.get(r.json["redirect"])
+    assert res.status_code == 200 and "종합 밴드" in res.data.decode()
+    m = T.get_mock(mid)
+    assert all(m["result"]["bands"][s] is not None for s in "RLSW") and m["total"] is not None
+    assert tclient.get(f"/toefl/mock/{mid}").status_code == 302          # 끝난 시험은 결과로
+    assert tclient.get("/toefl/mock").status_code == 200
+
+
+def test_toefl_vocab_pages(tclient):
+    for u in ["/toefl/vocab", "/toefl/vocab/study?level=2", "/toefl/vocab/list?level=3&tier=stretch",
+              "/toefl/vocab/quiz?level=1", "/toefl/vocab/listen?level=2"]:
+        r = tclient.get(u)
+        assert r.status_code == 200, u
+    html = tclient.get("/toefl/vocab").data.decode()
+    assert "토플 학술 어휘" in html and "밴드 2" in html and 'name="vocab-base" content="/toefl"' in html
+    h = _csrf(tclient)
+    assert tclient.post("/toefl/api/vocab/review", headers=h, json={"word_id": "tv-0001", "grade": 4}).status_code == 200
+    assert tclient.post("/toefl/api/vocab/review", headers=h, json={"word_id": "v-0001", "grade": 4}).status_code == 400
+    assert tclient.post("/api/vocab/review", headers=h, json={"word_id": "tv-0001", "grade": 4}).status_code == 400
+    # 토익 단어 화면은 그대로
+    assert "등급별 단어" in tclient.get("/vocab").data.decode()

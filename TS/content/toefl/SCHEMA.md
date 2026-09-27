@@ -117,3 +117,15 @@
  "tips":["..."]}
 ```
 - 질문 정확히 4개, 뒤로 갈수록 추상적(개인 경험 → 의견 → 가정·사회적 쟁점).
+
+## vocab.json · vocab_*.json — 토플 학술 어휘
+
+토익 단어(`content/SCHEMA.md` 의 vocab)와 같은 형식 + `tier`.
+```json
+{"id":"tv-0001","level":3,"tier":"core","word":"hypothesis","pos":"n.","meaning":"가설",
+ "example":"The researchers tested their hypothesis with a series of experiments.",
+ "example_ko":"연구자들은 일련의 실험으로 가설을 검증했다.","tip":"hypothesize v. · hypothetical adj."}
+```
+- level 1~5 = 밴드 2~6. tier: core(그 밴드에서 꼭 알아야 할 단어) | stretch(알면 다음 밴드에 도전할 만한 단어).
+- 학술 강의·교재·캠퍼스 생활에 나오는 어휘 (Academic Word List 계열 + 전공 기초 어휘 + 캠퍼스 표현).
+- meaning 은 소리 내어 읽기 좋게 짧게 (쉼표로 1~3개 뜻). example 은 학술·캠퍼스 문장.

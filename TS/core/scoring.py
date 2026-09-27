@@ -18,6 +18,10 @@ class Grade:
     high: int
     color: str
 
+    @property
+    def range_text(self) -> str:
+        return f"{self.low}~{self.high}점"
+
 
 GRADES = [
     Grade(1, "Orange", "입문", 10, 215, "#E07B24"),

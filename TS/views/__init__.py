@@ -7,3 +7,4 @@ def register_blueprints(app: Flask) -> None:
     app.register_blueprint(toefl.bp)
     app.register_blueprint(quiz.bp)
     app.register_blueprint(vocab.bp)
+    app.register_blueprint(vocab.bp, url_prefix="/toefl", name="tvocab")   # 토플 학술 어휘 (같은 화면)

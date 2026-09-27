@@ -11,7 +11,7 @@
     if (s) return say(s.dataset.say);
     const st = e.target.closest("[data-star]");
     if (st) {
-      const r = await TS.post("/api/vocab/star", { word_id: st.dataset.star });
+      const r = await TS.post(TS.vbase + "/api/vocab/star", { word_id: st.dataset.star });
       st.classList.toggle("on", r.starred);
     }
   });
@@ -52,7 +52,7 @@
     if (ok) score++; else missed.push(q);
     // 첫 회차만 기록 (다시 풀기는 연습이라 두 번 세지 않음)
     if (round === 1) {
-      TS.post("/api/vocab/quiz/answer", { word_id: q.id, correct: ok })
+      TS.post(TS.vbase + "/api/vocab/quiz/answer", { word_id: q.id, correct: ok })
         .then(r => { if (r.scheduled) scheduled++; })
         .catch(e => { $("vq-explain").insertAdjacentHTML("beforeend", `<div class="muted">기록 실패: ${TS.esc(e.message)}</div>`); });
     }
