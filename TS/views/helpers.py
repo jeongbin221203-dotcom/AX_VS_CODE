@@ -7,6 +7,7 @@ from markupsafe import Markup, escape
 
 from core import scoring
 from core.content import PART_INFO, Bank
+from core.exams import EXAMS
 
 
 def bank() -> Bank:
@@ -59,5 +60,5 @@ def register_template_helpers(app: Flask) -> None:
     app.jinja_env.globals.update(
         csrf_token=csrf_token, grade_badge=grade_badge, GRADES=scoring.GRADES,
         GRADE_BY_LEVEL=scoring.GRADE_BY_LEVEL, PART_INFO=PART_INFO, MODE_LABEL=MODE_LABEL,
-        session_title=session_title)
+        session_title=session_title, EXAMS=EXAMS)
     app.jinja_env.filters.update(pct=pct, mmss=mmss)

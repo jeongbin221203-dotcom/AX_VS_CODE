@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}{{ e.name }}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <div class="muted small">{{ e.en }}</div>
+    <h1>{{ e.name }} <span class="tag">준비 중</span></h1>
+    <div class="muted small">{{ e.summary }}</div>
+  </div>
+  <a class="btn" href="{{ url_for('main.dashboard') }}">토익 공부하러 가기</a>
+</div>
+
+{% if e.note %}<div class="flash error">{{ e.note }}</div>{% endif %}
+
+<div class="grid two">
+  <div class="card">
+    <h2>{{ e.scale_title }}</h2>
+    <table><tbody>
+      {% for a, b in e.scale %}<tr><td><b>{{ a }}</b></td><td class="r muted">{{ b }}</td></tr>{% endfor %}
+    </tbody></table>
+  </div>
+  <div class="card">
+    <h2>{{ e.sections_title }}</h2>
+    <table><tbody>
+      {% for a, b, c in e.sections %}<tr><td class="num"><b>{{ a }}</b></td><td>{{ b }}{% if c %}<div class="small muted">{{ c }}</div>{% endif %}</td></tr>{% endfor %}
+    </tbody></table>
+  </div>
+</div>
+
+<div class="card" style="margin-top:14px">
+  <h2>만들 예정인 기능</h2>
+  <ul class="clean">{% for p in e.planned %}<li>{{ p }}</li>{% endfor %}</ul>
+  <p class="small muted" style="margin-top:10px">등급·구성은 공개 자료를 요약한 것으로, 실제 만들 때 시험 주관사 공식 자료로 다시 확인합니다.</p>
+</div>
+{% endblock %}

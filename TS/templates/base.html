@@ -10,9 +10,15 @@
 </head>
 <body class="{% block body_class %}{% endblock %}">
 <header class="topbar">
-  <a class="brand" href="{{ url_for('main.dashboard') }}"><span class="brand-mark">TS</span> TOEIC</a>
+  {% set ep = request.endpoint or '' %}
+  {% set cur_exam = request.view_args.key if ep == 'main.exam' else 'toeic' %}
+  <a class="brand" href="{{ url_for('main.dashboard') }}"><span class="brand-mark">TS</span></a>
+  <nav class="exam-tabs" aria-label="시험">
+    {% for k, e in EXAMS.items() %}
+      <a href="{{ url_for('main.dashboard') if e.ready else url_for('main.exam', key=k) }}" class="{{ 'on' if cur_exam == k }}">{{ e.name }}{% if not e.ready %}<small>준비 중</small>{% endif %}</a>
+    {% endfor %}
+  </nav>
   <nav class="nav">
-    {% set ep = request.endpoint or '' %}
     <a href="{{ url_for('main.dashboard') }}" class="{{ 'on' if ep == 'main.dashboard' }}">오늘</a>
     <a href="{{ url_for('main.guide') }}" class="{{ 'on' if ep == 'main.guide' }}">등급 가이드</a>
     <a href="{{ url_for('quiz.practice') }}" class="{{ 'on' if ep == 'quiz.practice' }}">파트 연습</a>

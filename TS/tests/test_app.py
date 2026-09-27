@@ -360,3 +360,16 @@ def test_vocab_quiz_size_and_distractors(client):
     assert len(qs) == 30 and len({q["id"] for q in qs}) == 30
     for q in qs:
         assert len(q["options"]) == 4 and len(set(q["options"])) == 4 and q["options"][q["answer"]] == q["meaning"]
+
+
+@pytest.mark.parametrize("key", ["toeic-speaking", "toefl", "opic"])
+def test_exam_category_pages(client, key):
+    r = client.get(f"/exam/{key}")
+    assert r.status_code == 200 and "준비 중" in r.data.decode()
+
+
+def test_exam_tabs(client):
+    assert client.get("/exam/toeic").status_code == 302
+    assert client.get("/exam/nope").status_code == 404
+    html = client.get("/").data.decode()
+    assert all(n in html for n in ("토익스피킹", "토플", "오픽"))

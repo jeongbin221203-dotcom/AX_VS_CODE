@@ -6,6 +6,7 @@ from datetime import datetime
 from flask import Blueprint, abort, flash, redirect, render_template, request, url_for
 
 from core import db, planner, scoring, stats
+from core.exams import EXAMS
 from core.content import PART_INFO
 from core.guide import GUIDE, PART_TIPS, TARGET_SEC
 from core.srs import level_progress
@@ -38,6 +39,17 @@ def guide(level: int | None = None):
     return render_template("guide.html", level=level, grade=scoring.GRADE_BY_LEVEL[level], g=GUIDE[level],
                            tips=PART_TIPS, counts=counts, vocab_n={t: sum(1 for w in b.vocab if w["level"] == level and w["tier"] == t)
                                     for t in ("core", "stretch")})
+
+
+@bp.route("/exam/<key>")
+def exam(key: str):
+    """시험 카테고리. 토익 외 시험은 준비 중 안내."""
+    e = EXAMS.get(key)
+    if not e:
+        abort(404)
+    if e["ready"]:
+        return redirect(url_for("main.dashboard"))
+    return render_template("exam_soon.html", e=e, key=key)
 
 
 @bp.route("/stats")
