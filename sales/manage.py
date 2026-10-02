@@ -126,6 +126,19 @@ def cmd_seed_mfg(args) -> int:
     return 0
 
 
+def cmd_seed_sample(args) -> int:
+    if config.PRODUCTION:
+        print("운영(production)에서는 샘플 데이터를 넣지 않습니다.")
+        return 2
+    from app import create_app
+    create_app()
+    from core import sample_industry as si
+    keys = si.INDUSTRY_KEYS if args.industry == "all" else [args.industry]
+    for key, out in si.seed_many(keys, customers=args.customers, months=args.months).items():
+        print(key, out)
+    return 0
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description="영업관리 운영 명령")
     sub = parser.add_subparsers(dest="cmd", required=True)
@@ -151,6 +164,11 @@ def main(argv=None) -> int:
     p.add_argument("--customers", type=int, default=20)
     p.add_argument("--months", type=int, default=12)
     p.set_defaults(func=cmd_seed_mfg)
+    p = sub.add_parser("seed-sample", help="업종별 샘플 데이터 추가 (개발·시연용)")
+    p.add_argument("--industry", default="all", help="제조|유통|건설|IT/SW|의료|교육|금융|공공|all")
+    p.add_argument("--customers", type=int, default=8, help="업종마다 거래처 수")
+    p.add_argument("--months", type=int, default=12)
+    p.set_defaults(func=cmd_seed_sample)
     args = parser.parse_args(argv)
     return args.func(args)
 

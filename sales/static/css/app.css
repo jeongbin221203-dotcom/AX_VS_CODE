@@ -232,3 +232,4 @@ button[data-busy] { opacity: .6; cursor: progress; }
 .brand { display: inline-flex; align-items: center; gap: .5rem; }
 .brand-logo { flex: none; border-radius: 6px; }
 .brand-title { display: flex; align-items: center; gap: .6rem; }
+.stack { display: flex; flex-direction: column; gap: 1rem; }

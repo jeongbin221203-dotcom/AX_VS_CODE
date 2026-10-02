@@ -45,12 +45,23 @@
 <section class="card">
   <h3>🧪 샘플 데이터 / 초기화 <span class="env-badge">개발 환경 전용</span></h3>
   <div class="grid-2">
+    <div class="stack">
     <form method="post" action="{{ url_for('admin.data_action') }}">
       {{ csrf() }}
       <button class="btn" name="action" value="seed_demo">샘플 데이터 생성</button>
-      <label>제조업 거래처 수 <input type="number" name="mfg_count" min="1" max="200" value="20" class="num-sm"></label>
-      <button class="btn" name="action" value="seed_mfg">🏭 제조업 샘플 추가</button>
     </form>
+    <form method="post" action="{{ url_for('admin.data_action') }}">
+      {{ csrf() }}
+      <p class="small muted">업종마다 품목·거래처·영업기회·결제 습관이 다른 샘플을 쌓습니다 (지난 12개월 매출·입금·반품·견적·수주·활동).</p>
+      <label>업종
+        <select name="industry">
+          <option value="all">🌐 전체 업종 골고루 ({{ sample_industries|length }}개)</option>
+          {% for key, label in sample_industries %}<option value="{{ key }}">{{ label }}</option>{% endfor %}
+        </select></label>
+      <label>업종마다 거래처 수 <input type="number" name="sample_count" min="1" max="100" value="8" class="num-sm"></label>
+      <button class="btn" name="action" value="seed_industry">🧪 업종별 샘플 추가</button>
+    </form>
+    </div>
     <form method="post" action="{{ url_for('admin.data_action') }}" class="danger-zone">
       {{ csrf() }}
       <label class="check"><input type="checkbox" name="confirm" value="1"> 전체 삭제에 동의합니다 (직전에 DB 백업을 만들고, 감사로그는 남깁니다)</label>
