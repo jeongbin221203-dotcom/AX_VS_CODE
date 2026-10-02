@@ -26,15 +26,17 @@
     return cfg.datasets.length === 1 && cfg.labels.every(function (l) { return SERIES_COLOR[l]; });
   }
 
-  function drawCharts() {
+  function drawCharts(root) {
     if (!window.Chart) return;
+    root = root || document;
     const css = getComputedStyle(document.documentElement);
     const text = css.getPropertyValue("--muted").trim();
     const line = css.getPropertyValue("--line").trim();
     Chart.defaults.font.family = css.getPropertyValue("--font").trim();
     Chart.defaults.font.size = 12;
 
-    document.querySelectorAll("canvas[data-chart]").forEach(function (el) {
+    root.querySelectorAll("canvas[data-chart]").forEach(function (el) {
+      if (Chart.getChart(el)) return;
       const cfg = JSON.parse(el.dataset.chart);
       const isLine = cfg.type === "line";
       const unit = cfg.money ? moneyUnit(cfg.datasets) : null;
@@ -95,8 +97,9 @@
     }
   });
 
+  function initWidgets(root) {
   // ── 거래처 선택 시 해당 거래처의 영업기회만 보이기 ──────────────────────
-  document.querySelectorAll("form[data-deal-filter]").forEach(function (form) {
+  root.querySelectorAll("form[data-deal-filter]").forEach(function (form) {
     const cust = form.querySelector("[name=customer_id]");
     const deal = form.querySelector("[name=deal_id]");
     if (!cust || !deal) return;
@@ -112,7 +115,7 @@
   });
 
   // ── 영업기회: 제안금액·필요 결재권한 미리보기 ─────────────────────────
-  document.querySelectorAll("[data-deal-calc]").forEach(function (box) {
+  root.querySelectorAll("[data-deal-calc]").forEach(function (box) {
     const form = box.closest("form");
     const out = form.querySelector("[data-deal-preview]");
     const la = form.querySelector("[name=list_amount]");
@@ -142,7 +145,7 @@
     fetch(url + "?" + qs, { credentials: "same-origin" }).then(function (r) { return r.ok ? r.json() : null; })
       .then(function (d) { if (d) done(d); }).catch(function () {});
   }
-  document.querySelectorAll("form[data-sale-calc]").forEach(function (form) {
+  root.querySelectorAll("form[data-sale-calc]").forEach(function (form) {
     const out = form.querySelector("[data-sale-preview]");
     const q = form.querySelector("[name=qty]"), p = form.querySelector("[name=unit_price]");
     const tax = form.querySelector("[name=tax_type]");
@@ -170,7 +173,7 @@
   });
 
   // ── 견적: 품목 행 추가 · 행별 단가 조회 · 합계 미리보기 ───────────────────
-  document.querySelectorAll("form[data-quote]").forEach(function (form) {
+  root.querySelectorAll("form[data-quote]").forEach(function (form) {
     const body = form.querySelector("[data-lines]"), tmpl = form.querySelector("template[data-line]");
     const out = form.querySelector("[data-quote-total]");
     function apply() {
@@ -213,13 +216,13 @@
   });
 
   // ── 입금: 대상을 바꾸면 미수금 전액을 기본값으로 ──────────────────────
-  document.querySelectorAll("form[data-payment]").forEach(function (form) {
+  root.querySelectorAll("form[data-payment]").forEach(function (form) {
     const sel = form.querySelector("[name=sale_id]"), amt = form.querySelector("[name=amount]");
     sel.addEventListener("change", function () { amt.value = sel.selectedOptions[0].dataset.remain; });
   });
 
   // ── 증빙: 공급가액·세액을 넣으면 합계를 채운다 (서버가 다시 검증) ────────
-  document.querySelectorAll("form.doc-form").forEach(function (form) {
+  root.querySelectorAll("form.doc-form").forEach(function (form) {
     const supply = form.querySelector("[data-supply]"), tax = form.querySelector("[data-tax]"),
           total = form.querySelector("[data-total]");
     function apply() {
@@ -232,13 +235,15 @@
   });
 
   // ── 추출 프리셋: 고르면 해당 묶음으로 다시 조회 ───────────────────────
-  document.querySelectorAll("select[data-preset]").forEach(function (sel) {
+  root.querySelectorAll("select[data-preset]").forEach(function (sel) {
     sel.addEventListener("change", function () {
       if (!sel.value) return;
       sel.form.querySelectorAll("[name=sources]").forEach(function (cb) { cb.checked = false; });
       sel.form.submit();
     });
   });
+
+  }
 
   // ── 저장 안전장치 ──────────────────────────────────────────────────────
   //  1) 폼마다 한 번만 쓰는 번호(_submit_id) → 두 번 클릭·응답이 끊겨 다시 보내도 서버가 한 번만 처리
@@ -323,7 +328,8 @@
   window.addEventListener("offline", showNet);
   showNet();
 
-  document.querySelectorAll("form[method=post], form[method=POST]").forEach(function (form) {
+  function initForms(root) {
+  root.querySelectorAll("form[method=post], form[method=POST]").forEach(function (form) {
     const id = document.createElement("input");
     id.type = "hidden"; id.name = "_submit_id"; id.value = newId();
     form.appendChild(id);
@@ -372,6 +378,8 @@
       setTimeout(function () { delete form.dataset.sending; if (btn) btn.removeAttribute("data-busy"); }, 20000);
     });
   });
+  }
+
   // 뒤로 가기로 돌아온 화면(bfcache)은 잠금을 푼다
   window.addEventListener("pageshow", function (e) {
     if (!e.persisted) return;
@@ -379,5 +387,51 @@
     document.querySelectorAll("button[data-busy]").forEach(function (b) { b.removeAttribute("data-busy"); });
   });
 
-  window.addEventListener("load", drawCharts);
+  initWidgets(document);
+  initForms(document);
+  window.addEventListener("load", function () { drawCharts(document); });
+
+  // ── 탭: 화면 이동 없이 본문만 바꾼다 ───────────────────────────────────
+  //  탭을 누르면 같은 주소를 뒤에서 받아 본문(main)만 갈아 끼운다 → 새로고침·스크롤 이동 없음.
+  //  주소창은 바뀌므로 새로고침·즐겨찾기·뒤로 가기는 그대로 동작한다. 실패하면 보통 이동으로 넘어간다.
+  function swapMain(href, push) {
+    const main = document.querySelector("main.content");
+    if (!main || !window.fetch || !window.DOMParser) { window.location = href; return; }
+    main.setAttribute("aria-busy", "true");
+    fetch(href, { credentials: "same-origin", headers: { "X-Requested-With": "fetch" } })
+      .then(function (r) {
+        if (!r.ok || r.redirected) throw new Error("navigate");
+        return r.text();
+      })
+      .then(function (html) {
+        const doc = new DOMParser().parseFromString(html, "text/html");
+        const fresh = doc.querySelector("main.content");
+        if (!fresh) throw new Error("navigate");
+        const y = window.scrollY;
+        main.innerHTML = fresh.innerHTML;
+        main.removeAttribute("aria-busy");
+        if (doc.title) document.title = doc.title;
+        if (push) history.pushState({ swapped: true }, "", href);
+        initWidgets(main);
+        initForms(main);
+        drawCharts(main);
+        window.scrollTo(0, y);
+        const active = main.querySelector(".tabs a.active");
+        if (active) active.focus({ preventScroll: true });
+      })
+      .catch(function () { window.location = href; });
+  }
+  document.addEventListener("click", function (e) {
+    const a = e.target.closest(".tabs a[href]");
+    if (!a || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    if (a.origin !== window.location.origin || a.target) return;
+    e.preventDefault();
+    if (a.classList.contains("active")) return;
+    a.closest(".tabs").querySelectorAll("a").forEach(function (x) { x.classList.toggle("active", x === a); });
+    swapMain(a.href, true);
+  });
+  window.addEventListener("popstate", function (e) {
+    if (e.state && e.state.swapped) swapMain(location.href, false);
+  });
+  history.replaceState({ swapped: true }, "", location.href);
 })();

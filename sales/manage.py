@@ -115,6 +115,17 @@ def cmd_check(args) -> int:
     return 0 if ok else 1
 
 
+def cmd_seed_mfg(args) -> int:
+    if config.PRODUCTION:
+        print("운영(production)에서는 샘플 데이터를 넣지 않습니다.")
+        return 2
+    from app import create_app
+    create_app()
+    from core import sample_mfg
+    print(sample_mfg.seed(customers=args.customers, months=args.months))
+    return 0
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description="영업관리 운영 명령")
     sub = parser.add_subparsers(dest="cmd", required=True)
@@ -136,6 +147,10 @@ def main(argv=None) -> int:
     p.set_defaults(func=cmd_restore)
     p = sub.add_parser("check")
     p.set_defaults(func=cmd_check)
+    p = sub.add_parser("seed-mfg", help="제조업 샘플 데이터 추가 (개발·시연용)")
+    p.add_argument("--customers", type=int, default=20)
+    p.add_argument("--months", type=int, default=12)
+    p.set_defaults(func=cmd_seed_mfg)
     args = parser.parse_args(argv)
     return args.func(args)
 

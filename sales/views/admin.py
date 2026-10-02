@@ -563,7 +563,7 @@ def backup():
 @bp.route("/data/action", methods=["POST"])
 def data_action():
     action = request.form.get("action")
-    if action in ("seed_demo", "reset") and config.PRODUCTION:
+    if action in ("seed_demo", "seed_mfg", "reset") and config.PRODUCTION:
         abort(403, "운영 환경에서는 샘플 데이터 생성과 전체 초기화를 쓸 수 없습니다.")
     try:
         if action == "seed_org":
@@ -578,6 +578,10 @@ def data_action():
         elif action == "seed_demo":
             created = db.seed_demo_data()
             flash("샘플 데이터 생성 완료: " + ", ".join(f"{k} {v}건" for k, v in created.items()), "success")
+        elif action == "seed_mfg":
+            from core import sample_mfg
+            created = sample_mfg.seed(customers=max(1, min(f_int("mfg_count", 20), 200)))
+            flash("제조업 샘플 추가: " + ", ".join(f"{k} {v}" for k, v in created.items() if v), "success")
         elif action == "reset":
             if not f_bool("confirm"):
                 flash("동의 체크 후 실행하세요.", "error")

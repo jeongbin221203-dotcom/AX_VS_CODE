@@ -48,6 +48,8 @@
     <form method="post" action="{{ url_for('admin.data_action') }}">
       {{ csrf() }}
       <button class="btn" name="action" value="seed_demo">샘플 데이터 생성</button>
+      <label>제조업 거래처 수 <input type="number" name="mfg_count" min="1" max="200" value="20" class="num-sm"></label>
+      <button class="btn" name="action" value="seed_mfg">🏭 제조업 샘플 추가</button>
     </form>
     <form method="post" action="{{ url_for('admin.data_action') }}" class="danger-zone">
       {{ csrf() }}
