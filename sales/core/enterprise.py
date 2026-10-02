@@ -33,6 +33,9 @@ def upsert_org(name: str, parent_id: int | None = None, org_type: str = "팀",
                org_id: int | None = None, db_path: str | None = None) -> int:
     if not str(name).strip():
         raise ValueError("조직명은 필수입니다.")
+    dup = db._one("SELECT id FROM orgs WHERE name=? AND id<>?", [name.strip(), int(org_id or 0)], db_path)
+    if dup:
+        raise ValueError(f"'{name.strip()}' 조직이 이미 있습니다.")
     with db.get_conn(db_path) as conn:
         if org_id:
             conn.execute("UPDATE orgs SET name=?, parent_id=?, org_type=? WHERE id=?",
@@ -192,9 +195,13 @@ def seed_org_demo(db_path: str | None = None) -> dict:
     """샘플 조직도와 사용자 생성. 기존 담당자 이름을 사용자로 자동 편입한다."""
     existing = {u["이름"] for _, u in list_users(False, db_path).iterrows()} \
         if not list_users(False, db_path).empty else set()
-    hq = upsert_org("영업본부", None, "본부", db_path=db_path)
-    team1 = upsert_org("영업1팀", hq, "팀", db_path=db_path)
-    team2 = upsert_org("영업2팀", hq, "팀", db_path=db_path)
+    def org(name: str, parent: int | None, kind: str) -> int:      # 이미 있으면 그 조직을 쓴다 (두 번 눌러도 오류 없음)
+        row = db._one("SELECT id FROM orgs WHERE name=?", [name], db_path)
+        return int(row["id"]) if row else upsert_org(name, parent, kind, db_path=db_path)
+
+    hq = org("영업본부", None, "본부")
+    team1 = org("영업1팀", hq, "팀")
+    team2 = org("영업2팀", hq, "팀")
 
     plan = [
         ("2001", "정임원", "EXEC", hq),

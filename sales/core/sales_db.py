@@ -288,8 +288,11 @@ def verify_audit_chain(db_path: str | None = None) -> dict:
         anchor = None
     prev, started = ((anchor or {}).get("last_hash") or ""), bool(anchor and anchor.get("last_hash"))
     result["archived_until"] = int(anchor["last_id"]) if anchor else None
+    def blank(v: Any) -> bool:                # pandas 는 빈 칸(NULL)을 NaN 으로 읽는다
+        return v is None or (isinstance(v, float) and pd.isna(v)) or v == ""
+
     for r in rows.to_dict("records"):
-        if not r["hash"]:
+        if blank(r["hash"]):
             if started:               # 체인 시작 이후에 해시 없는 기록 → 직접 삽입된 것
                 result.update(broken_id=int(r["id"]), reason="해시 없는 기록이 끼어 있음")
                 return result
@@ -302,7 +305,7 @@ def verify_audit_chain(db_path: str | None = None) -> dict:
             else r["detail"]
         expect = _audit_hash(prev, r["ts"], r["actor"], actor_id, r["action"], r["entity"],
                              entity_id, detail)
-        if (r["prev_hash"] or "") != prev:
+        if ("" if blank(r["prev_hash"]) else r["prev_hash"]) != prev:
             result.update(broken_id=int(r["id"]), reason="앞 기록과 연결이 끊김(중간 기록 삭제 의심)")
             return result
         if expect != r["hash"]:
