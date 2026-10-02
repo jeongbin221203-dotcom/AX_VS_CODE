@@ -104,6 +104,9 @@ SITEMAP_SITES = {
     },
 }
 
+UNLIMITED = 10 ** 9        # '0 = 모두'일 때 상한
+RUN_SHARE = 0.85           # 한 번 실행이 쓸 수 있는 시간 = 실행 간격의 85% (다음 실행과 겹치지 않게)
+
 DEFAULT = {
     "enabled": False,
     "interval_hours": 4,
@@ -111,11 +114,11 @@ DEFAULT = {
     "sites": ["saramin", "jobkorea", "linkareer"],
     "pages": 1,                 # 검색어·직무마다 읽을 목록 페이지 수
     "by_category": True,        # 검색어가 없을 때 사이트의 직무 분류를 하나씩 모두 돈다 (끄면 최근 등록순 목록만)
-    "max_new": 30,              # 사이트마다 한 번에 새로 읽을 상세 페이지 수 (직무별로 돌아가며 고름)
+    "max_new": 30,              # 사이트마다 한 번에 새로 읽을 상세 페이지 수 (0 = 모두, 시간 예산까지)
     "max_refresh": 30,          # 한 번에 다시 읽을 저장 공고 수
     "use_api": True,
     "sitemap_sites": ["remember"],
-    "sitemap_max": 500,         # 사이트맵 사이트에서 한 번에 읽을 상세 페이지 수 (3초 간격이면 500건 ≈ 25분)
+    "sitemap_max": 500,         # 사이트맵 사이트에서 한 번에 읽을 상세 페이지 수 (0 = 모두, 시간 예산까지)
 }
 
 
@@ -137,13 +140,12 @@ def save_settings(data: dict) -> dict:
     merged.update({k: v for k, v in data.items() if k in DEFAULT})
     merged["interval_hours"] = min(24, max(1, int(merged["interval_hours"] or 4)))
     merged["pages"] = min(10, max(1, int(merged["pages"] or 1)))
-    merged["max_new"] = min(500, max(1, int(merged["max_new"] or 30)))
+    merged["max_new"] = min(5000, max(0, int(merged["max_new"] or 0)))
     merged["max_refresh"] = min(200, max(0, int(merged["max_refresh"] or 0)))
     merged["sites"] = [s for s in merged["sites"] if s in LIST_SITES]
     merged["sitemap_sites"] = [s for s in merged["sitemap_sites"] if s in SITEMAP_SITES]
-    # 한 번 실행이 다음 실행 시각을 넘지 않게: 상세 수 × 간격 < 실행 간격
-    budget = int((merged["interval_hours"] * 3600 * 0.8) / max(config.CRAWL_DELAY, 0.5))
-    merged["sitemap_max"] = min(budget, 5000, max(0, int(merged["sitemap_max"] or 0)))
+    # 0 = 모두. 한 번 실행은 시간 예산(간격의 85%)에서 멈추므로 다음 실행과 겹치지 않는다
+    merged["sitemap_max"] = min(20000, max(0, int(merged["sitemap_max"] or 0)))
     db.set_setting("crawl", json.dumps(merged, ensure_ascii=False))
     return merged
 
@@ -313,50 +315,98 @@ def run_once(force: bool = False, fetcher: Fetcher | None = None) -> dict | None
 
 
 def _run(s: dict, f: Fetcher) -> dict:
+    """한 번 실행: ① 표시 목록(헤드헌팅) ② 모든 목록·사이트맵에서 새 공고 번호 모으기
+    ③ 사이트를 돌아가며 하나씩 상세 읽기 — 시간 예산(간격의 85%)이 다할 때까지, 남은 것은 다음 실행에
+    ④ 저장 공고 갱신·API·마감 공고 정리."""
     started = _now_iso()
     summary = {"new": 0, "updated": 0, "closed": 0, "errors": [], "sites": {}}
     keywords = s["keywords"] or [""]
+    run_deadline = time.monotonic() + s["interval_hours"] * 3600 * RUN_SHARE
+    # 저장 공고 갱신·API 몫은 남겨 둔다
+    detail_deadline = run_deadline - s["max_refresh"] * max(f.delay, 0.5) * 1.5 - 120
 
     summary["flagged"] = collect_flags(f, s["sites"], summary["errors"])
     from . import profile as profile_mod
     excluded_flags = set(profile_mod.load().get("exclude") or []) & set(FLAG_LISTS)
 
+    queues: dict[str, list[tuple[str, str, dict | None]]] = {}     # 사이트 → [(공고번호, 주소, 목록 보충값)]
+    stats: dict[str, dict] = {}
+
+    # ② 목록
     for site in s["sites"]:
-        ins = upd = 0
         label = ", ".join(k for k in keywords if k) or \
             ("모든 직무(직무별)" if s["by_category"] and LIST_SITES[site].get("categories") else "모든 직무(최신순)")
+        st = stats[site] = {"label": label, "listed": 0, "new": 0, "updated": 0, "errors": []}
         try:
             groups, errors = collect_lists(f, site, s, keywords)
+            st["errors"] += errors
             summary["errors"] += errors
             ids = {i: h for g in groups.values() for i, h in g.items()}
+            st["listed"] = len(ids)
             _fill_missing_from_list(site, ids)
             skip = set().union(*(postings.flagged(site, fl) for fl in excluded_flags)) if excluded_flags else set()
-            new_ids = pick_round_robin(groups, lambda i: i not in skip and not postings.find_id(site, i), s["max_new"])
-            for pid in new_ids:
-                item = _detail(f, site, LIST_SITES[site]["detail"].format(id=pid), ids[pid])
-                if item:
-                    a, b = postings.upsert_many([item])
-                    ins, upd = ins + a, upd + b
-            collect.record(f"crawl:{site}", label, len(ids), ins, upd, "; ".join(errors[:2]) or None)
+            new_ids = pick_round_robin(groups, lambda i: i not in skip and not postings.find_id(site, i),
+                                       s["max_new"] or UNLIMITED)
+            queues[site] = [(i, LIST_SITES[site]["detail"].format(id=i), ids[i]) for i in new_ids]
         except (SourceError, requests.RequestException) as e:
+            st["errors"].append(str(e))
             summary["errors"].append(f"{site}: {e}")
-            collect.record(f"crawl:{site}", label, 0, ins, upd, str(e))
-        summary["sites"][site] = {"new": ins}
-        summary["new"] += ins
 
-    deadline = time.monotonic() + s["interval_hours"] * 3600 * 0.85
     for site in s["sitemap_sites"]:
         try:
-            r = sync_sitemap(f, site, s["sitemap_max"], deadline)
+            info, pending = sitemap_prepare(f, site, s["sitemap_max"] or UNLIMITED)
         except (SourceError, requests.RequestException) as e:
             summary["errors"].append(f"{site} 사이트맵: {e}")
             collect.record(f"crawl:{site}", "사이트맵 전체", 0, 0, 0, str(e))
             continue
-        summary["sites"][site] = r
-        summary["new"] += r["inserted"]
-        summary["updated"] += r["updated"]
-        summary["closed"] += r["gone"]
+        summary["closed"] += info["gone"]
+        stats[site] = {"label": f"사이트맵 전체 {info['total']:,}건", "listed": info["total"], "new": 0, "updated": 0,
+                       "errors": [], "sitemap": info}
+        queues[site] = [(i, SITEMAP_SITES[site]["detail"].format(id=i), None) for i in pending]
 
+    # ③ 상세: 사이트를 돌아가며 하나씩 (한 사이트가 시간을 다 쓰지 않게)
+    fetched = {k: 0 for k in queues}
+    active = [k for k in queues if queues[k]]
+    stopped_by_time = False
+    while active:
+        for site in list(active):
+            if time.monotonic() > detail_deadline:
+                stopped_by_time = True
+                active = []
+                break
+            post_id, url, hint = queues[site].pop(0)
+            try:
+                item, error = _fetch_item(f, site, url, hint)
+            except BlockedError as e:
+                stats[site]["errors"].append(str(e))
+                summary["errors"].append(f"{site}: {e}")
+                active.remove(site)
+                continue
+            if item:
+                a, b = postings.upsert_many([item])
+                stats[site]["new"] += a
+                stats[site]["updated"] += b
+            if site in SITEMAP_SITES:
+                with db.connect() as con:
+                    con.execute("UPDATE sitemap_ids SET fetched_at = ?, fetch_error = ? WHERE site = ? AND post_id = ?",
+                                (db.now(), error, site, post_id))
+            fetched[site] += 1
+            if not queues[site]:
+                active.remove(site)
+
+    for site, st in stats.items():
+        collect.record(f"crawl:{site}", st["label"], st["listed"], st["new"], st["updated"],
+                       "; ".join(st["errors"][:2]) or None)
+        entry = {"new": st["new"], "fetched": fetched.get(site, 0), "left": len(queues.get(site, []))}
+        if "sitemap" in st:
+            entry.update(total=st["sitemap"]["total"], new_ids=st["sitemap"]["new_ids"], inserted=st["new"],
+                         updated=st["updated"], gone=st["sitemap"]["gone"], remaining=_sitemap_remaining(site))
+        summary["sites"][site] = entry
+        summary["new"] += st["new"]
+        summary["updated"] += st["updated"]
+    summary["stopped_by_time"] = stopped_by_time
+
+    # ④ 저장 공고 갱신·API·정리
     r_upd, r_closed, r_err = refresh(f, s["max_refresh"])
     summary["updated"] += r_upd
     summary["closed"] += r_closed
@@ -383,7 +433,27 @@ def _run(s: dict, f: Fetcher) -> dict:
     return summary
 
 
-def sync_sitemap(f: Fetcher, site: str, max_fetch: int, deadline: float | None = None) -> dict:
+def _fetch_item(f: Fetcher, site: str, url: str, hint: dict | None) -> tuple[dict | None, str | None]:
+    """상세 한 건 → (공고, 실패 이유). 사이트가 막으면 BlockedError."""
+    try:
+        res = f.get(url)
+    except BlockedError:
+        raise
+    except SourceError as e:
+        return None, str(e)[:200]
+    if res.status_code in (403, 429):
+        raise BlockedError(f"{site} 가 요청을 막았습니다 (HTTP {res.status_code}) — 이번 실행에서 그 사이트는 멈춤")
+    if res.status_code != 200:
+        return None, f"HTTP {res.status_code}"
+    try:
+        item = linkimport.parse(res.text, url, site)
+    except SourceError as e:
+        return None, str(e)[:200]
+    return (_apply_hint(item, hint) if hint else item), None
+
+
+def sitemap_prepare(f: Fetcher, site: str, max_fetch: int) -> tuple[dict, list[str]]:
+    """사이트맵 한 장을 읽어 번호 목록을 맞추고(빠진 번호는 마감 처리), 아직 안 읽은 번호를 큰(최근) 것부터 돌려준다."""
     cfg = SITEMAP_SITES[site]
     res = f.get(cfg["sitemap"])
     if res.status_code != 200:
@@ -411,39 +481,15 @@ def sync_sitemap(f: Fetcher, site: str, max_fetch: int, deadline: float | None =
         if pid:
             postings.mark_closed(pid)
             closed += 1
+    info = {"total": len(ids), "new_ids": max(0, len(ids) - active_before) if active_before else len(ids),
+            "gone": closed}
+    return info, pending
 
-    ins = upd = done = 0
-    for post_id in pending:
-        if deadline and time.monotonic() > deadline:
-            break                                   # 다음 실행 시각 전에 멈추고 나머지는 다음 번에
-        url = cfg["detail"].format(id=post_id)
-        error = None
-        try:
-            res = f.get(url)
-            if res.status_code in (404, 410):
-                error = f"HTTP {res.status_code}"
-            elif res.status_code != 200:
-                error = f"HTTP {res.status_code}"
-                if res.status_code in (403, 429):
-                    raise SourceError(f"{site} 가 요청을 막았습니다 (HTTP {res.status_code}) — 이번 실행은 여기서 멈춤")
-            else:
-                a, b = postings.upsert_many([linkimport.parse(res.text, url, site)])
-                ins, upd = ins + a, upd + b
-        except SourceError as e:
-            if "막았습니다" in str(e):
-                raise
-            error = str(e)[:200]
-        with db.connect() as con:
-            con.execute("UPDATE sitemap_ids SET fetched_at = ?, fetch_error = ? WHERE site = ? AND post_id = ?",
-                        (db.now(), error, site, post_id))
-        done += 1
 
+def _sitemap_remaining(site: str) -> int:
     with db.connect() as con:
-        remaining = con.execute("SELECT COUNT(*) FROM sitemap_ids WHERE site = ? AND gone = 0 AND fetched_at IS NULL",
-                                (site,)).fetchone()[0]
-    collect.record(f"crawl:{site}", f"사이트맵 전체 {len(ids):,}건", done, ins, upd)
-    return {"total": len(ids), "new_ids": max(0, len(ids) - active_before) if active_before else len(ids),
-            "fetched": done, "inserted": ins, "updated": upd, "gone": closed, "remaining": remaining}
+        return con.execute("SELECT COUNT(*) FROM sitemap_ids WHERE site = ? AND gone = 0 AND fetched_at IS NULL",
+                           (site,)).fetchone()[0]
 
 
 def sitemap_progress() -> list[dict]:
@@ -456,7 +502,10 @@ def sitemap_progress() -> list[dict]:
                 "SUM(fetch_error IS NOT NULL) AS errors FROM sitemap_ids WHERE site = ? AND gone = 0", (site,)).fetchone()
             total, fetched = row["total"] or 0, row["fetched"] or 0
             remaining = total - fetched
-            runs = -(-remaining // s["sitemap_max"]) if s["sitemap_max"] else None
+            # 한 번에 읽는 수: 정해 두었으면 그 수, '모두'면 시간 예산을 사이트 수로 나눈 만큼
+            per_run = s["sitemap_max"] or int(s["interval_hours"] * 3600 * RUN_SHARE / max(config.CRAWL_DELAY, 0.5)
+                                              / (len(s["sites"]) + len(s["sitemap_sites"]) or 1))
+            runs = -(-remaining // per_run) if per_run else None
             out.append({"site": site, "name": linkimport.SITES[site][0], "on": site in s["sitemap_sites"],
                         "total": total, "fetched": fetched, "errors": row["errors"] or 0, "remaining": remaining,
                         "eta_hours": runs * s["interval_hours"] if runs else 0})
@@ -586,22 +635,6 @@ def _fill_missing_from_list(site: str, hints: dict[str, dict]) -> None:
             if hint.get("category"):
                 con.execute("UPDATE postings SET job_category = ? WHERE source = ? AND source_id = ? "
                             "AND (job_category IS NULL OR job_category = '')", (hint["category"], site, post_id))
-
-
-def _detail(f: Fetcher, site: str, url: str, hint: dict) -> dict | None:
-    try:
-        res = f.get(url)
-    except BlockedError:
-        raise
-    except SourceError:
-        return None
-    if res.status_code != 200:
-        return None
-    try:
-        item = linkimport.parse(res.text, url, site)
-    except SourceError:
-        return None
-    return _apply_hint(item, hint)
 
 
 def _apply_hint(item: dict, hint: dict) -> dict:

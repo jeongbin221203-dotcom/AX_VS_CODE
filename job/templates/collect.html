@@ -40,6 +40,8 @@
   </p>
   {% if crawl_status.summary %}{% set sm = crawl_status.summary | fromjson %}
     <p class="small">지난 결과: 새 공고 <b>{{ sm.new }}</b> · 갱신 {{ sm.updated }} · 마감 처리 {{ sm.closed }} · 마감·미저장 삭제 {{ sm.purged or 0 }} · 요청 {{ sm.requests }}회
+    {% if sm.stopped_by_time %}{% set left = sm.sites.values() | map(attribute='left') | select | sum %}
+    <br>시간 예산에서 멈춤 — 남은 새 공고 <b>{{ '{:,}'.format(left) }}</b>건은 다음 실행에서 이어 읽습니다.{% endif %}
     {% if sm.errors %}<br><span class="err-text">{{ sm.errors[:3] | join(' / ') }}</span>{% endif %}</p>
   {% endif %}
   <form method="post" action="{{ url_for('collect.crawl_settings') }}" class="stack">
@@ -62,7 +64,7 @@
     <div class="row">
       <span class="small muted">전체 공고 따라가기 (사이트맵)</span>
       {% for p in sitemap_progress %}<label class="chk"><input type="checkbox" name="sitemap_sites" value="{{ p.site }}" {{ 'checked' if p.on }}> {{ p.name }} 전체</label>{% endfor %}
-      <label class="inl">한 번에 상세 최대 <input type="number" name="sitemap_max" min="0" max="5000" step="50" value="{{ crawl.sitemap_max }}"> 건</label>
+      <label class="inl">한 번에 상세 최대 <input type="number" name="sitemap_max" min="0" max="20000" step="50" value="{{ crawl.sitemap_max }}"> 건 <small class="muted">(0 = 모두)</small></label>
     </div>
     {% for p in sitemap_progress if p.total %}
     <div class="small">
@@ -74,7 +76,7 @@
     {% endfor %}
     <div class="row">
       <label class="inl">목록 <input type="number" name="pages" min="1" max="10" value="{{ crawl.pages }}"> 페이지</label>
-      <label class="inl">사이트당 새 공고 최대 <input type="number" name="max_new" min="1" max="500" value="{{ crawl.max_new }}"></label>
+      <label class="inl">사이트당 새 공고 최대 <input type="number" name="max_new" min="0" max="5000" value="{{ crawl.max_new }}"> <small class="muted">(0 = 모두)</small></label>
       <label class="inl">저장 공고 갱신 최대 <input type="number" name="max_refresh" min="0" max="200" value="{{ crawl.max_refresh }}"></label>
     </div>
     <div class="row">
@@ -84,7 +86,9 @@
   </form>
   <p class="muted small">
     리멤버는 사이트맵(전체 공고 목록) 한 장을 매번 읽어 비교합니다 — 새로 생긴 공고만 상세를 읽고, 목록에서 빠진 공고는 요청 없이 마감 처리합니다.
-    처음에는 최근 공고부터 한 번에 정한 건수씩 채웁니다(3초 간격이라 500건 ≈ 25분). 매번 1만여 건을 모두 다시 읽지는 않습니다.
+    처음에는 최근 공고부터 채우고, 한 번 읽은 공고는 다시 읽지 않습니다.
+    건수를 0(모두)으로 두면 상한 없이 읽되, 한 번 실행은 간격의 85%에서 멈추고 남은 공고는 다음 실행에서 이어 읽습니다.
+    새 공고는 사이트를 돌아가며 하나씩 읽어 한 사이트가 시간을 다 쓰지 않습니다.
     사람인·잡코리아·링커리어는 검색 결과에서 처음 보는 공고만 상세 페이지를 읽습니다. 이미 저장한 공고(고용24·자소설닷컴·잡플래닛 링크 포함)는
     마감 전이면 하루에 한 번 다시 읽어 바뀐 내용을 반영하고, 원문이 사라지면 마감 처리합니다.
     robots.txt 를 따르고 요청 사이를 {{ config.CRAWL_DELAY | int }}초씩 쉽니다. 고용24는 새 공고 찾기는 API로만(링크로 넣은 공고는 갱신됨), 원티드는 프로그램 접근을 막아 제외됩니다.

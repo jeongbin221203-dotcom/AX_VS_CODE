@@ -161,7 +161,8 @@ def test_due_lock_and_settings(app):
 
     s = crawler.save_settings({"interval_hours": 4, "sitemap_max": 99999, "sites": ["saramin", "evil"]})
     assert s["sites"] == ["saramin"]
-    assert s["sitemap_max"] * 3 < 4 * 3600                              # 한 번 실행이 다음 실행 전에 끝남
+    assert s["sitemap_max"] == 20000                                    # 상한만 두고, 시간 예산이 실행을 끊는다
+    assert crawler.save_settings({"max_new": 0, "sitemap_max": 0})["max_new"] == 0      # 0 = 모두
 
 
 def test_refresh_updates_and_closes(app):
@@ -351,3 +352,45 @@ def test_headhunting_flag_list_skips_detail(app):
     assert result["flagged"] == {"헤드헌팅:saramin": 1}
     assert d.format(id=102) not in f.seen and result["new"] == 1
     assert postings.flagged("saramin", "헤드헌팅") == {"102"}
+
+
+
+def _two_site_pages():
+    sar_search = crawler.LIST_SITES["saramin"]["search"].format(kw="%EC%9E%90%EC%9E%AC%EA%B4%80%EB%A6%AC", page=1)
+    jk_search = crawler.LIST_SITES["jobkorea"]["search"].format(kw="%EC%9E%90%EC%9E%AC%EA%B4%80%EB%A6%AC", page=1)
+    sd, jd = crawler.LIST_SITES["saramin"]["detail"], crawler.LIST_SITES["jobkorea"]["detail"]
+    jk_list = "".join(f'<a href="/Recruit/GI_Read/{i}">x</a>' for i in (7, 8, 9))
+    pages = {sar_search: (200, SARAMIN_LIST), jk_search: (200, jk_list),
+             sd.format(id=101): (200, SARAMIN_OG), sd.format(id=102): (200, SARAMIN_OG)}
+    for i in (7, 8, 9):
+        pages[jd.format(id=i)] = (200, detail_page(f"잡코리아 {i}", f"회사{i}"))
+    return pages, sd, jd
+
+
+def test_all_mode_interleaves_sites(app):
+    """'모두'(0)면 상한 없이, 사이트를 돌아가며 하나씩 읽는다."""
+    _settings(keywords=["자재관리"], sites=["saramin", "jobkorea"], max_new=0)
+    pages, sd, jd = _two_site_pages()
+    f = FakeFetcher(pages)
+    result = crawler.run_once(force=True, fetcher=f)
+    assert result["new"] == 5 and not result["stopped_by_time"]
+    details = [u for u in f.seen if u.startswith((sd[:40], jd[:40])) and ("rec_idx" in u or "GI_Read" in u)]
+    assert ["rec_idx" in u for u in details] == [True, False, True, False, False]   # 사람인·잡코리아 번갈아
+
+
+def test_time_budget_stops_and_leaves_rest(app, monkeypatch):
+    """시간 예산이 다하면 상세 읽기를 멈추고, 남은 공고는 다음 실행에서 읽는다."""
+    _settings(keywords=["자재관리"], sites=["saramin", "jobkorea"], max_new=0)
+    pages, sd, jd = _two_site_pages()
+    monkeypatch.setattr(crawler, "RUN_SHARE", 0)
+    result = crawler.run_once(force=True, fetcher=FakeFetcher(pages))
+    assert result["stopped_by_time"] and result["new"] == 0
+    assert result["sites"]["saramin"]["left"] == 2 and result["sites"]["jobkorea"]["left"] == 3
+    monkeypatch.setattr(crawler, "RUN_SHARE", 0.85)
+    assert crawler.run_once(force=True, fetcher=FakeFetcher(pages))["new"] == 5
+
+
+def test_collect_page_shows_carry_over(app, client):
+    db.set_setting("crawl_last_summary", json.dumps({"new": 3, "updated": 0, "closed": 0, "errors": [], "requests": 9,
+        "stopped_by_time": True, "sites": {"saramin": {"new": 3, "left": 1200}, "jobkorea": {"new": 0, "left": 34}}}))
+    assert "1,234" in client.get("/collect").get_data(as_text=True)
