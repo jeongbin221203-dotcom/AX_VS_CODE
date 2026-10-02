@@ -48,7 +48,7 @@ def login():
 
     if mode == "oidc":
         return render_template("login.html", mode=mode, users=[], sso_error=None,
-                               next=request.args.get("next") or "")
+                               next=request.args.get("next") or "", breakglass=core_auth.breakglass_enabled())
 
     if mode == "sso":
         identity = sso_identity()
@@ -59,7 +59,7 @@ def login():
             return _login(user, "SSO")
         if identity:
             db.audit("로그인실패", "사용자", None, {"SSO": identity, "사유": "등록되지 않은 사용자"})
-        return render_template("login.html", mode=mode, users=[],
+        return render_template("login.html", mode=mode, users=[], breakglass=core_auth.breakglass_enabled(),
                                sso_error="SSO 로 확인된 사용자가 이 시스템에 등록되어 있지 않습니다."
                                if identity else "SSO 인증 정보가 없습니다. 사내 포털을 통해 접속하세요.")
 
@@ -80,6 +80,22 @@ def login():
         options = [(int(r.id), f"{r.이름} · {r.역할} · {r.소속 or '미배정'} ({r.사번})")
                    for r in users.itertuples()]
     return render_template("login.html", mode=mode, users=options, sso_error=None)
+
+
+@bp.route("/login/breakglass", methods=["POST"])
+def breakglass():
+    """사내 인증 장애 시 비상 계정 로그인 (SALES_BREAKGLASS_USERS)."""
+    if not core_auth.breakglass_enabled():
+        abort(404)
+    user, message = core_auth.authenticate_breakglass(f_str("emp_no"), request.form.get("password", ""))
+    if not user:
+        flash(message, "error")
+        return redirect(url_for("auth.login"))
+    db.audit("비상로그인", "사용자", user["id"], {"IP": request.remote_addr, "방식": core_auth.AUTH_MODE})
+    from core import notify
+    notify.notify_role("ADMIN", "보안", "비상 계정 로그인", f"{user['name']}({user['emp_no']}) · IP {request.remote_addr}",
+                       "/admin/audit")
+    return _login(user, "비상로그인")
 
 
 # ── OIDC ─────────────────────────────────────────────────────────────────

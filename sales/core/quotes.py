@@ -19,7 +19,9 @@ from . import catalog
 from . import sales_db as db
 
 QUOTE_STATUS = ["작성중", "발송", "수락", "거절", "만료", "대체됨"]
-VALID_DAYS = 30
+def valid_days() -> int:
+    from . import company
+    return int(company.get("quote_valid_days"))
 
 
 # ---------------------------------------------------------------------------
@@ -151,7 +153,7 @@ def save_quote(data: dict, items: list[dict]) -> int:
         if int(deal["customer_id"]) != int(cust["id"]):
             raise ValueError("영업기회의 거래처와 견적 거래처가 다릅니다.")
     issue = db._d(data.get("issue_date")) or date.today().isoformat()
-    valid = db._d(data.get("valid_until")) or (date.fromisoformat(issue) + timedelta(days=VALID_DAYS)).isoformat()
+    valid = db._d(data.get("valid_until")) or (date.fromisoformat(issue) + timedelta(days=valid_days())).isoformat()
     lines, totals = compute(items, int(cust["id"]), issue)
     header = {"customer_id": int(cust["id"]), "deal_id": deal_id, "owner": owner_name, "owner_id": owner_id,
               "title": (data.get("title") or "").strip() or None, "issue_date": issue, "valid_until": valid,
@@ -198,7 +200,7 @@ def revise(quote_id: int) -> int:
             f"INSERT INTO quotes ({', '.join(cols)}, revision, parent_id, status, issue_date, valid_until, "
             f"created_at, updated_at) VALUES ({', '.join('?' * len(cols))}, ?, ?, '작성중', ?, ?, ?, ?)",
             (*[q[c] for c in cols], int(q["revision"]) + 1, q["id"], today,
-             (date.today() + timedelta(days=VALID_DAYS)).isoformat(), db._now(), db._now()))
+             (date.today() + timedelta(days=valid_days())).isoformat(), db._now(), db._now()))
         new_id = int(cur.lastrowid)
         _write_items(conn, new_id, q["items"])
         conn.execute("UPDATE quotes SET status='대체됨', updated_at=? WHERE id=?", (db._now(), q["id"]))
@@ -296,10 +298,10 @@ def pdf(quote_id: int) -> bytes:
     body = ParagraphStyle("b", fontName=regular, fontSize=9.5, leading=14)
     title = ParagraphStyle("t", fontName=bold, fontSize=22, leading=28, alignment=1, spaceAfter=6)
     small = ParagraphStyle("s", fontName=regular, fontSize=8.5, leading=12, textColor=colors.HexColor("#555555"))
-    env = os.environ.get
-    company = {"상호": env("SALES_COMPANY_NAME", "(회사명 설정: SALES_COMPANY_NAME)"),
-               "사업자번호": env("SALES_COMPANY_BIZ_NO", ""), "대표": env("SALES_COMPANY_CEO", ""),
-               "주소": env("SALES_COMPANY_ADDRESS", "")}
+    from . import company as co
+    company = {"상호": co.get("company_name") or "(관리자 > 회사 설정에서 회사명 입력)",
+               "사업자번호": co.get("company_biz_no"), "대표": co.get("company_ceo"),
+               "주소": co.get("company_address")}
     buf = io.BytesIO()
     doc = SimpleDocTemplate(buf, pagesize=A4, leftMargin=16 * mm, rightMargin=16 * mm, topMargin=16 * mm,
                             bottomMargin=16 * mm, title=f"견적서 {q['quote_no']}", author=company["상호"])

@@ -362,6 +362,11 @@ def process_outbox(limit: int = 100, adapter=None, cfg: dict | None = None) -> d
                   "ORDER BY id LIMIT ?", [MAX_ATTEMPTS, int(limit)]).to_dict("records")
     sent = failed = 0
     for row in rows:
+        with db.get_conn() as conn:           # 선점: 다른 워커·관리자 버튼이 같은 건을 동시에 보내지 않게
+            claimed = conn.execute("UPDATE erp_outbox SET status='전송중', sent_at=? WHERE id=? "
+                                   "AND status IN ('대기','실패')", (db._now(), row["id"])).rowcount
+        if not claimed:
+            continue
         try:
             doc = build_document(row, cfg)
             if row["doc_type"] == "매출취소" and not doc.get("erp_doc_no"):
@@ -372,23 +377,38 @@ def process_outbox(limit: int = 100, adapter=None, cfg: dict | None = None) -> d
                              "payload=?, last_error=NULL, sent_at=? WHERE id=?",
                              (number, json.dumps(doc, ensure_ascii=False), db._now(), row["id"]))
                 if row["doc_type"] == "매출취소":
-                    conn.execute("UPDATE sales SET erp_status='취소완료' WHERE id=?", (row["ref_id"],))
+                    conn.execute("UPDATE sales SET erp_status='취소완료', row_version=COALESCE(row_version,0)+1 "
+                                 "WHERE id=?", (row["ref_id"],))
                 else:
-                    conn.execute("UPDATE sales SET erp_status='전송완료', erp_doc_no=? WHERE id=?",
-                                 (number, row["ref_id"]))
+                    conn.execute("UPDATE sales SET erp_status='전송완료', erp_doc_no=?, "
+                                 "row_version=COALESCE(row_version,0)+1 WHERE id=?", (number, row["ref_id"]))
             sent += 1
         except Exception as exc:   # noqa: BLE001 - 한 건 실패가 나머지 전송을 막지 않도록
             with db.get_conn() as conn:
                 conn.execute("UPDATE erp_outbox SET status='실패', attempts=attempts+1, last_error=? WHERE id=?",
                              (str(exc)[:500], row["id"]))
-                conn.execute("UPDATE sales SET erp_status='실패' WHERE id=? AND erp_status IN ('대기','실패')",
-                             (row["ref_id"],))
+                conn.execute("UPDATE sales SET erp_status='실패', row_version=COALESCE(row_version,0)+1 "
+                             "WHERE id=? AND erp_status IN ('대기','실패')", (row["ref_id"],))
             failed += 1
     result = {"sent": sent, "failed": failed, "skipped": 0,
               "adapter": getattr(adapter, "name", type(adapter).__name__)}
     if rows:
         db.audit("ERP전송", "ERP", None, result)
     return result
+
+
+def recover_stuck(minutes: int = 30) -> int:
+    """'전송중' 으로 오래 멈춘 건(전송 도중 서버가 꺼진 경우)을 '실패' 로 돌린다.
+    ERP 에 이미 들어갔을 수 있으므로 자동 재전송하지 않고, 관리자가 ERP 에서 확인한 뒤 재시도한다."""
+    from datetime import timedelta
+    limit = (datetime.now() - timedelta(minutes=minutes)).strftime("%Y-%m-%d %H:%M:%S")
+    with db.get_conn() as conn:
+        n = conn.execute("UPDATE erp_outbox SET status='실패', attempts=? , last_error=? "
+                         "WHERE status='전송중' AND sent_at < ?",
+                         (MAX_ATTEMPTS, "전송 도중 중단됨 — ERP 에 전표가 생겼는지 확인한 뒤 재시도하세요", limit)).rowcount
+    if n:
+        db.audit("ERP전송중단", "ERP", None, {"건수": n})
+    return n
 
 
 def retry(outbox_id: int) -> None:
@@ -466,7 +486,11 @@ def reconcile_payments(df: pd.DataFrame, apply: bool = False) -> pd.DataFrame:
             out.append({**line, "결과": "확인필요", "내용": "ERP 입금이 매출액을 넘음(과입금)"})
         else:
             if apply:
-                ent.record_payment(int(sale["id"]), gap, source="ERP")
+                try:
+                    ent.record_payment(int(sale["id"]), gap, source="ERP", expected_before=crm_paid)
+                except db.ConflictError as exc:
+                    out.append({**line, "결과": "확인필요", "내용": str(exc)})
+                    continue
                 applied_total += gap
             out.append({**line, "결과": "반영" if apply else "반영예정",
                         "내용": " / ".join([f"{gap:,}원 입금 반영", *notes])})
@@ -527,11 +551,13 @@ def receive_ack(ref: str, erp_doc_no: str, ok: bool = True, message: str = "") -
             if not erp_doc_no:
                 raise ValueError("erp_doc_no 가 필요합니다.")
             status = "취소완료" if sale.get("erp_status") == "취소완료" else "전송완료"
-            conn.execute("UPDATE sales SET erp_doc_no=?, erp_status=? WHERE id=?", (erp_doc_no, status, sale["id"]))
+            conn.execute("UPDATE sales SET erp_doc_no=?, erp_status=?, row_version=COALESCE(row_version,0)+1 WHERE id=?",
+                     (erp_doc_no, status, sale["id"]))
             conn.execute("UPDATE erp_outbox SET erp_doc_no=? WHERE ref_id=? AND doc_type='매출' AND status='전송완료'",
                          (erp_doc_no, sale["id"]))
         else:
-            conn.execute("UPDATE sales SET erp_status='실패' WHERE id=?", (sale["id"],))
+            conn.execute("UPDATE sales SET erp_status='실패', row_version=COALESCE(row_version,0)+1 WHERE id=?",
+                     (sale["id"],))
             conn.execute("UPDATE erp_outbox SET status='실패', last_error=? WHERE id = (SELECT MAX(id) FROM erp_outbox "
                          "WHERE ref_id=?)", (f"ERP 회신: {message}"[:500], sale["id"]))
     db.audit("ERP회신", "매출", int(sale["id"]), {"ERP번호": erp_doc_no or None, "성공": ok, "내용": message or None})

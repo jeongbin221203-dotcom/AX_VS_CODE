@@ -6,7 +6,7 @@
     <label>거래처 * {{ select('customer_id', customers.items()|list, f.customer_id or '', blank='선택하세요') }}</label>
     <label>기회명 * <input name="title" value="{{ f.title or '' }}" placeholder="예) ERP 라이선스 갱신" required></label>
   </div>
-  <div class="form-grid g3" data-deal-calc>
+  <div class="form-grid g3" data-deal-calc data-disc-m="{{ DISC_M }}" data-disc-e="{{ DISC_E }}">
     <label>단계 {{ select('stage', STAGES, f.stage) }}</label>
     <label>정가(원) <input name="list_amount" type="number" min="0" step="1000000" value="{{ (f.list_amount or f.amount or 0)|int }}"></label>
     <label>할인율(%) <input name="discount_rate" type="number" min="0" max="100" step="0.5" value="{{ f.discount_rate or 0 }}"></label>
@@ -17,7 +17,7 @@
     <label>경쟁사 <input name="competitor" value="{{ f.competitor or '' }}"></label>
     {% if edit %}<label>실주사유 (실주 단계일 때 필수) {{ select('lost_reason', LOST_REASONS, f.lost_reason or '', blank='') }}</label>{% endif %}
   </div>
-  <p class="muted small" data-deal-preview>제안금액 = 정가 × (1 − 할인율). 할인 10% 이하 팀장 / 20% 이하 임원 / 20% 초과 관리자 승인 필요.</p>
+  <p class="muted small" data-deal-preview>제안금액 = 정가 × (1 − 할인율). 할인 {{ DISC_M|round(1)|string|replace(".0", "") }}% 이하 팀장 / {{ DISC_E|round(1)|string|replace(".0", "") }}% 이하 팀장 → 임원 / 그 이상 관리자까지 결재.</p>
 
   <fieldset class="meddic">
     <legend>🔍 MEDDIC 자격검증 — 체크한 항목만 인정되며, 단계 진행 조건과 연결됩니다.</legend>
@@ -108,7 +108,7 @@
     {% endif %}
 
   {% elif tab == 'approval' %}
-    <p class="muted">할인율 구간별 결재선 — 10% 이하: 팀장 / 20% 이하: 임원 / 20% 초과: 관리자</p>
+    <p class="muted">할인율 구간별 결재선 — {{ DISC_M|round(1)|string|replace(".0", "") }}% 이하: 팀장 / {{ DISC_E|round(1)|string|replace(".0", "") }}% 이하: 팀장 → 임원 / 초과: 팀장 → 임원 → 관리자</p>
     {% if not need %}
       <div class="alert alert-info">결재를 요청할 건이 없습니다. (할인율이 있고 아직 승인되지 않은 기회가 대상입니다)</div>
     {% else %}

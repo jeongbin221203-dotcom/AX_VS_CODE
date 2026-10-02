@@ -8,7 +8,8 @@
   <script src="{{ url_for('static', filename='vendor/chart.umd.min.js') }}" defer></script>  {# Chart.js 4.4.1 (MIT) — 사내망에서도 동작하도록 로컬 보관 #}
   <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
 </head>
-<body>
+<body data-user="{{ g.user.id if g.user else '' }}">
+<div class="net-banner" data-net-banner hidden>⚠️ 서버와 연결이 끊겼습니다. 입력한 내용은 이 브라우저에 보관되며, 연결이 돌아오면 저장 버튼을 다시 누르세요.</div>
 {% if g.user %}
 <div class="layout">
   <aside class="sidebar">
@@ -16,7 +17,7 @@
     <div class="me">
       <strong>{{ g.user.name }}</strong> · {{ ROLE_LABEL.get(g.user.role, g.user.role) }}
       <div class="muted small">{{ '전사 데이터 조회' if g.scope is none else '조회 범위 ' ~ g.scope|length ~ '명' }}</div>
-      <form method="post" action="{{ url_for('auth.logout') }}" class="me-actions">
+      <form method="post" action="{{ url_for('auth.logout') }}" class="me-actions" data-logout>
         <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
         <button class="btn btn-sm">로그아웃</button>
         {% if AUTH_MODE == 'password' %}<a class="btn btn-sm" href="{{ url_for('auth.password') }}">비밀번호 변경</a>{% endif %}

@@ -133,6 +133,8 @@ def run_one(worker: Optional[str] = None) -> bool:
         return False
     fn = HANDLERS.get(job["kind"])
     db.set_context("batch", None)
+    from . import company
+    company.refresh()                               # 관리자가 바꾼 회사 설정을 워커도 따른다
     try:
         if fn is None:
             raise LookupError(f"등록되지 않은 작업 종류입니다: {job['kind']}")
@@ -229,6 +231,11 @@ class Schedule:
         return f"{now:%Y-%m-%d}"
 
 
+def _pii_on() -> bool:
+    from . import company
+    return int(company.get("pii_retention_years") or 0) > 0
+
+
 def _env_on(name: str) -> Callable[[], bool]:
     return lambda: bool(os.environ.get(name))
 
@@ -241,6 +248,8 @@ SCHEDULES: list[Schedule] = [
     Schedule("backup.db", daily="02:00", description="DB 백업"),
     Schedule("hr.sync", daily="03:00", enabled=_env_on("SALES_HR_SOURCE"), description="인사 시스템 동기화"),
     Schedule("jobs.cleanup", daily="04:00", description="오래된 완료 작업 정리"),
+    Schedule("privacy.purge", daily="01:30", enabled=lambda: _pii_on(),
+             description="종료 거래처 고객 연락처 파기 (회사 설정의 보관기간)"),
 ]
 
 
@@ -298,10 +307,17 @@ def schedule_table():
 # ---------------------------------------------------------------------------
 # 기본 작업 처리기
 # ---------------------------------------------------------------------------
+@handler("privacy.purge")
+def _privacy_purge(payload: dict):
+    from . import company
+    return company.purge_pii()
+
+
 @handler("erp.send")
 def _erp_send(payload: dict):
     from . import erp
-    return erp.process_outbox()
+    stuck = erp.recover_stuck()
+    return {**erp.process_outbox(), "stuck": stuck}
 
 
 @handler("forecast.snapshot")
@@ -326,6 +342,8 @@ def _cleanup(payload: dict):
                              ((_now() - timedelta(days=1)).strftime("%Y%m%d%H%M"),)).rowcount
         idem = conn.execute("DELETE FROM api_idempotency WHERE created_at < ?",
                             (_ts(_now() - timedelta(days=7)),)).rowcount
+        idem += conn.execute("DELETE FROM form_submissions WHERE created_at < ?",
+                             (_ts(_now() - timedelta(days=7)),)).rowcount
     return {"deleted": n, "api_usage": usage, "idempotency": idem}
 
 

@@ -11,7 +11,6 @@ UI 의존성이 없으므로 배치/스케줄러에서도 그대로 호출할 �
 """
 from __future__ import annotations
 
-import os
 from datetime import date, datetime, timedelta
 from typing import Any, Optional
 
@@ -254,12 +253,15 @@ def unlinked_counts(db_path: str | None = None) -> dict:
 # ============================================================================
 # 필요권한별 결재선 (순서대로). 한 사람은 한 결재 건에서 한 단계만 결재한다.
 APPROVAL_CHAIN = {"MANAGER": ["MANAGER"], "EXEC": ["MANAGER", "EXEC"], "ADMIN": ["MANAGER", "EXEC", "ADMIN"]}
-STEP_SLA_HOURS = int(os.environ.get("SALES_APPROVAL_SLA_HOURS", "48"))
+def sla_hours() -> int:
+    """결재 단계 기한(시간) — 회사 설정."""
+    from . import company
+    return int(company.get("approval_sla_hours"))
 FMT = "%Y-%m-%d %H:%M:%S"
 
 
 def _due(now: datetime | None = None) -> str:
-    return ((now or datetime.now()) + timedelta(hours=STEP_SLA_HOURS)).strftime(FMT)
+    return ((now or datetime.now()) + timedelta(hours=sla_hours())).strftime(FMT)
 
 
 def active_delegations(on: str | None = None, db_path: str | None = None) -> pd.DataFrame:
@@ -912,16 +914,33 @@ def credit_exposure(db_path: str | None = None) -> pd.DataFrame:
     return df
 
 
-def record_payment(sale_id: int, amount: int, db_path: str | None = None, source: str = "수기") -> int:
+def record_payment(sale_id: int, amount: int, db_path: str | None = None, source: str = "수기",
+                   expected_before: int | None = None) -> int:
     """입금 등록. 전액 입금되면 상태를 자동으로 '입금완료'로 바꾼다. 반영된 금액을 돌려준다.
 
     source: '수기' 또는 'ERP' (ERP 입금 대사로 반영된 경우)
+    expected_before: ERP 대사처럼 '이 입금액을 기준으로 차액을 계산했다'는 값. 그 사이 입금이 바뀌었으면
+                     다시 더하지 않고 오류를 낸다(같은 차액이 두 번 반영되는 것을 막는다).
+    수기 입금은 다른 입금과 겹치면 최신 입금액으로 다시 계산해 최대 3번 시도한다.
     """
+    for attempt in range(3):
+        try:
+            return _record_payment_once(sale_id, amount, db_path, source, expected_before)
+        except db.ConflictError:
+            if expected_before is not None or attempt == 2:
+                raise
+    raise AssertionError("unreachable")
+
+
+def _record_payment_once(sale_id: int, amount: int, db_path: str | None, source: str,
+                         expected_before: int | None) -> int:
     row = db.get_sale(sale_id, db_path)
     db.check_record_scope(row, "매출")
     if row["status"] == db.SALE_CANCELLED:
         raise ValueError("취소된 매출에는 입금을 등록할 수 없습니다.")
     before = int(row.get("paid_amount") or 0)
+    if expected_before is not None and before != int(expected_before):
+        raise db.ConflictError("대사 중 다른 입금이 들어와 이 건은 반영하지 않았습니다. 다시 대사하세요.")
     paid = before + int(amount)
     if paid < 0:
         raise ValueError("입금액 합계가 음수가 될 수 없습니다.")
@@ -931,7 +950,11 @@ def record_payment(sale_id: int, amount: int, db_path: str | None = None, source
                          f"과입금은 별도 반제 처리가 필요합니다.")
     status = "입금완료" if paid >= total else ("부분입금" if paid > 0 else "입금대기")
     with db.get_conn(db_path) as conn:
-        conn.execute("UPDATE sales SET paid_amount=?, status=? WHERE id=?", (paid, status, sale_id))
+        changed = conn.execute("UPDATE sales SET paid_amount=?, status=?, row_version=COALESCE(row_version,0)+1 "
+                               "WHERE id=? AND COALESCE(paid_amount,0)=? AND status <> ?",
+                               (paid, status, sale_id, before, db.SALE_CANCELLED)).rowcount
+        if not changed:
+            raise db.ConflictError("같은 매출에 다른 입금이 동시에 들어왔습니다. 다시 시도하세요.")
     db.audit("입금등록", "매출", sale_id,
              {"입금액": int(amount), "누적": paid, "상태": status, "출처": source}, db_path)
     return int(amount)

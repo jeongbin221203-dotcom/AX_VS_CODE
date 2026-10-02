@@ -97,7 +97,7 @@
       {% if raw.status == '취소' %} · <strong class="danger-text">취소됨</strong> ({{ raw.cancelled_at }}, 사유: {{ raw.cancel_reason }}){% endif %}</p>
     {% if raw.status != '취소' %}
     <form method="post" action="{{ url_for('finance.sale_update', sid=raw.id) }}" class="toolbar">
-      {{ csrf() }}
+      {{ csrf() }}<input type="hidden" name="row_version" value="{{ raw.row_version or 0 }}">
       <label>수금상태 {{ select('status', SALE_STATUS, raw.status) }}</label>
       <label>공급가액(원) <input type="number" name="amount" min="1" step="10000" value="{{ raw.amount|int }}"
              {% if raw.erp_status == '전송완료' %}readonly title="ERP로 전송된 매출은 금액을 바꿀 수 없습니다"{% endif %}></label>

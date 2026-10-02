@@ -83,9 +83,13 @@ def cmd_restore(args) -> int:
 
 
 def cmd_check(args) -> int:
+    from core import offline
     from core import sales_db as db
     from core.storage import get_storage
     ok = True
+    for row in offline.dependencies():
+        if row["위치"] != "사용 안 함":
+            print(f"연결      {row['위치']:<6} {row['연결']} ({row['주소']}) — 끊기면: {row['끊기면']}")
     try:
         db._scalar("SELECT 1")
         print("DB        OK ", database.describe())

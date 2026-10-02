@@ -5,6 +5,7 @@ from datetime import date, timedelta
 
 from flask import Blueprint, abort, flash, g, redirect, request, url_for
 
+from core import company
 from core import dataio
 from core import enterprise as ent
 from core import sales_db as db
@@ -68,7 +69,7 @@ def _customers_page(form: dict | None = None, status: int = 200):
     # 신규 탭은 항상 빈 양식 (수정 중이던 거래처 값이 새 등록으로 새지 않도록)
     base = dict(row) if row and tab == "edit" else {
         "grade": "B", "status": "활성", "industry": db.INDUSTRIES[0],
-        "payment_terms": 30, "credit_limit": 0, "owner_id": g.user["id"]}
+        "payment_terms": company.get("default_payment_terms"), "credit_limit": 0, "owner_id": g.user["id"]}
     if form:
         base.update(form)
 
@@ -101,7 +102,7 @@ def customer_save():
     data["status"] = data["status"] or "활성"
     try:
         data["credit_limit"] = f_int("credit_limit")
-        data["payment_terms"] = f_int("payment_terms", 30)
+        data["payment_terms"] = f_int("payment_terms", company.get("default_payment_terms"))
         data["owner_id"] = f_owner()
         new_id = db.upsert_customer({"id": cid, "row_version": f_str("row_version") or None, **data})
     except ValueError as exc:

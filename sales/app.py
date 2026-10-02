@@ -11,7 +11,7 @@ import secrets
 import sys
 from logging.handlers import RotatingFileHandler
 
-from flask import Flask, abort, jsonify, request, session
+from flask import Flask, abort, flash, g, jsonify, redirect, request, session
 
 import config
 from core import auth as core_auth
@@ -75,7 +75,42 @@ def create_app(test_config: dict | None = None) -> Flask:
             return
         token = session.get("_csrf")
         if not token or not secrets.compare_digest(token, request.form.get("_csrf", "")):
-            abort(400, "요청이 만료되었습니다. 화면을 새로고침한 뒤 다시 시도하세요.")
+            abort(400, "요청이 만료되었습니다. 입력한 내용은 이 브라우저에 보관되어 있으니, 화면을 새로고침한 뒤 "
+                       "'보관된 입력 불러오기'로 되살려 다시 저장하세요.")
+        return _once(request.form.get("_submit_id", ""))
+
+    def _once(submit_id: str):
+        """같은 화면에서 보낸 같은 요청(두 번 클릭, 응답이 끊겨 다시 보냄)은 한 번만 처리한다."""
+        if not submit_id:
+            return None
+        if len(submit_id) > 64 or not submit_id.replace("-", "").isalnum():
+            abort(400, "잘못된 요청입니다.")
+        with database.get_conn() as conn:
+            fresh = conn.execute("INSERT OR IGNORE INTO form_submissions (submit_id, user_id, endpoint, created_at) "
+                                 "VALUES (?,?,?,?)", (submit_id, session.get("user_id"), request.endpoint,
+                                                      db._now())).rowcount
+        if fresh:
+            g.submit_id = submit_id
+            return None
+        flash("이미 처리된 요청입니다 — 같은 내용을 두 번 저장하지 않았습니다. 목록에서 결과를 확인하세요.", "warning")
+        back = request.referrer or "/"
+        return redirect(back if back.startswith(request.host_url) or back.startswith("/") else "/")
+
+    @app.after_request
+    def _release_submit(response):
+        """처리에 실패한 요청(4xx·5xx)은 같은 화면에서 고쳐서 다시 보낼 수 있게 기록을 지운다."""
+        sid = g.pop("submit_id", None)
+        if sid and response.status_code >= 400:
+            with database.get_conn() as conn:
+                conn.execute("DELETE FROM form_submissions WHERE submit_id=?", (sid,))
+        return response
+
+    @app.teardown_request
+    def _release_on_error(exc):
+        sid = g.pop("submit_id", None)
+        if sid and exc is not None:
+            with database.get_conn() as conn:
+                conn.execute("DELETE FROM form_submissions WHERE submit_id=?", (sid,))
 
     @app.after_request
     def security_headers(response):

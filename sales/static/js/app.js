@@ -120,9 +120,10 @@
     function apply() {
       const list = Number(la.value || 0), rate = Number(dr.value || 0);
       const amount = Math.floor(list * (100 - rate) / 100);
-      const role = rate <= 0 ? "" : rate <= 10 ? "팀장" : rate <= 20 ? "임원" : "시스템관리자";
+      const m = Number(box.dataset.discM || 10), e = Number(box.dataset.discE || 20);
+      const role = rate <= 0 ? "" : rate <= m ? "팀장" : rate <= e ? "팀장 → 임원" : "팀장 → 임원 → 관리자";
       out.textContent = "제안금액 " + amount.toLocaleString() + "원" +
-        (role ? " · 할인 " + rate + "% → " + role + " 승인 필요" : "");
+        (role ? " · 할인 " + rate + "% → " + role + " 결재 필요" : "");
     }
     la.addEventListener("input", apply);
     dr.addEventListener("input", apply);
@@ -237,6 +238,145 @@
       sel.form.querySelectorAll("[name=sources]").forEach(function (cb) { cb.checked = false; });
       sel.form.submit();
     });
+  });
+
+  // ── 저장 안전장치 ──────────────────────────────────────────────────────
+  //  1) 폼마다 한 번만 쓰는 번호(_submit_id) → 두 번 클릭·응답이 끊겨 다시 보내도 서버가 한 번만 처리
+  //  2) 보내는 동안 버튼 잠금
+  //  3) 연결이 끊기면 보내지 않고 알림 (입력은 그대로 남음)
+  //  4) 입력 중인 내용을 이 브라우저에 보관 → 세션 만료·연결 끊김·오류 뒤에도 '불러오기'로 되살림
+  //     (비밀번호·파일은 보관하지 않음, 24시간 뒤 자동 삭제, 로그아웃하면 지움)
+  const USER = document.body.dataset.user || "anon";
+  const DRAFT_PREFIX = "sales-draft:" + USER + ":";
+  const DRAFT_TTL = 24 * 3600 * 1000;
+  const SKIP = /^(_csrf|_submit_id|password|new_password|current_password|row_version)$/;
+  function store() { try { return window.localStorage; } catch (e) { return null; } }
+  function newId() {
+    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    return Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 12);
+  }
+  function draftKey(form) { return DRAFT_PREFIX + location.pathname + "|" + (form.getAttribute("action") || location.pathname); }
+  function fields(form) {
+    return Array.prototype.filter.call(form.elements, function (el) {
+      return el.name && !SKIP.test(el.name) && el.type !== "file" && el.type !== "password" &&
+             el.type !== "hidden" && el.type !== "submit" && el.type !== "button";
+    });
+  }
+  function snapshot(form) {
+    const out = [];
+    fields(form).forEach(function (el) {
+      if (el.type === "checkbox" || el.type === "radio") out.push([el.name, el.value, el.checked]);
+      else if (el.multiple) out.push([el.name, Array.prototype.map.call(el.selectedOptions, function (o) { return o.value; }), null]);
+      else out.push([el.name, el.value, null]);
+    });
+    return out;
+  }
+  function restore(form, data) {
+    const used = {};
+    data.forEach(function (row) {
+      const name = row[0], value = row[1], checked = row[2];
+      const list = Array.prototype.filter.call(form.elements, function (el) { return el.name === name; });
+      if (checked !== null) {
+        list.forEach(function (el) { if (el.value === value) el.checked = checked; });
+        return;
+      }
+      const i = used[name] || 0; used[name] = i + 1;
+      const el = list[i];
+      if (!el) return;
+      if (el.multiple && Array.isArray(value)) Array.prototype.forEach.call(el.options, function (o) { o.selected = value.indexOf(o.value) >= 0; });
+      else el.value = value;
+      el.dispatchEvent(new Event("input", { bubbles: true }));
+      el.dispatchEvent(new Event("change", { bubbles: true }));
+    });
+  }
+  function readDraft(key) {
+    const s = store(); if (!s) return null;
+    try {
+      const d = JSON.parse(s.getItem(key) || "null");
+      if (!d || Date.now() - d.at > DRAFT_TTL) { s.removeItem(key); return null; }
+      return d;
+    } catch (e) { return null; }
+  }
+  function writeDraft(key, form, pending) {
+    const s = store(); if (!s) return;
+    try { s.setItem(key, JSON.stringify({ at: Date.now(), pending: !!pending, data: snapshot(form) })); } catch (e) { /* 저장 공간 부족 */ }
+  }
+  function dropDraft(key) { const s = store(); if (s) try { s.removeItem(key); } catch (e) { /* 무시 */ } }
+
+  // 앞 요청이 성공(성공 알림)했다면 보내기 직전에 보관한 입력은 지운다. 실패·만료면 남겨 둔다.
+  (function settlePending() {
+    const s = store(); if (!s) return;
+    const ok = !!document.querySelector(".alert-success") && !document.querySelector(".alert-error");
+    try {
+      Object.keys(s).forEach(function (k) {
+        if (k.indexOf("sales-draft:") !== 0) return;
+        const d = JSON.parse(s.getItem(k) || "null");
+        if (!d || Date.now() - d.at > DRAFT_TTL || (ok && d.pending)) s.removeItem(k);
+      });
+    } catch (e) { /* 무시 */ }
+  })();
+
+  const banner = document.querySelector("[data-net-banner]");
+  function online() { return navigator.onLine !== false; }
+  function showNet() { if (banner) banner.hidden = online(); }
+  window.addEventListener("online", showNet);
+  window.addEventListener("offline", showNet);
+  showNet();
+
+  document.querySelectorAll("form[method=post], form[method=POST]").forEach(function (form) {
+    const id = document.createElement("input");
+    id.type = "hidden"; id.name = "_submit_id"; id.value = newId();
+    form.appendChild(id);
+
+    const keep = form.matches(".form, [data-quote], [data-sale-calc]") && !form.closest(".narrow") &&
+                 !form.hasAttribute("data-no-draft") && fields(form).length > 1;
+    const key = draftKey(form);
+    if (keep) {
+      const d = readDraft(key);
+      if (d && JSON.stringify(d.data) !== JSON.stringify(snapshot(form))) {
+        const bar = document.createElement("div");
+        bar.className = "draft-bar";
+        const text = document.createElement("span");
+        text.textContent = "저장되지 않은 입력이 있습니다 (" + new Date(d.at).toLocaleString() + ").";
+        const load = document.createElement("button"); load.type = "button"; load.className = "btn btn-sm btn-primary"; load.textContent = "보관된 입력 불러오기";
+        const drop = document.createElement("button"); drop.type = "button"; drop.className = "btn btn-sm"; drop.textContent = "버리기";
+        load.addEventListener("click", function () { restore(form, d.data); bar.remove(); });
+        drop.addEventListener("click", function () { dropDraft(key); bar.remove(); });
+        bar.appendChild(text); bar.appendChild(load); bar.appendChild(drop);
+        form.parentNode.insertBefore(bar, form);
+      }
+      let timer = null;
+      form.addEventListener("input", function () {
+        clearTimeout(timer);
+        timer = setTimeout(function () { writeDraft(key, form, false); }, 400);
+      });
+    }
+
+    form.addEventListener("submit", function (e) {
+      if (!online()) {
+        e.preventDefault();
+        if (keep) writeDraft(key, form, false);
+        showNet();
+        return;
+      }
+      if (form.dataset.sending) { e.preventDefault(); return; }       // 두 번 클릭
+      form.dataset.sending = "1";
+      if (keep) writeDraft(key, form, true);
+      if (form.hasAttribute("data-logout")) {                          // 공용 PC: 로그아웃하면 보관 입력을 지운다
+        const s = store();
+        if (s) try { Object.keys(s).forEach(function (k) { if (k.indexOf(DRAFT_PREFIX) === 0) s.removeItem(k); }); } catch (err) { /* 무시 */ }
+      }
+      const btn = e.submitter;
+      if (btn) setTimeout(function () { btn.setAttribute("data-busy", ""); }, 0);
+      // 응답이 오지 않으면(연결 끊김) 20초 뒤 다시 누를 수 있게 푼다 — 서버는 같은 번호를 한 번만 처리한다
+      setTimeout(function () { delete form.dataset.sending; if (btn) btn.removeAttribute("data-busy"); }, 20000);
+    });
+  });
+  // 뒤로 가기로 돌아온 화면(bfcache)은 잠금을 푼다
+  window.addEventListener("pageshow", function (e) {
+    if (!e.persisted) return;
+    document.querySelectorAll("form[data-sending]").forEach(function (f) { delete f.dataset.sending; });
+    document.querySelectorAll("button[data-busy]").forEach(function (b) { b.removeAttribute("data-busy"); });
   });
 
   window.addEventListener("load", drawCharts);

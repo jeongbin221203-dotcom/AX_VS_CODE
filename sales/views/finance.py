@@ -153,6 +153,7 @@ def sale_update(sid: int):
                         "item_code": f_str("item_code") or row.get("item_code"),
                         "qty": int(row["qty"]), "unit_price": int(row["unit_price"]),
                         "amount": f_int("amount"), "owner_id": row["owner_id"], "owner": row["owner"],
+                        "row_version": f_str("row_version") or None,
                         "product_id": row.get("product_id"), "quote_id": row.get("quote_id"),
                         "tax_type": f_str("tax_type") or row.get("tax_type") or "과세",
                         "status": f_str("status"), "memo": row["memo"], "due_date": row["due_date"]})
@@ -315,7 +316,7 @@ def approvals():
         revocable=[(int(r.id), f"{r.원결재자} → {r.대결자} ({r.시작}~{r.종료}, {r.상태})")
                    for r in delegations.itertuples() if r.상태 in ("진행중", "예정")
                    and (is_admin or int(r.from_user_id) == int(user["id"]))] if not delegations.empty else [],
-        is_admin=is_admin, sla_hours=ent.STEP_SLA_HOURS,
+        is_admin=is_admin, sla_hours=ent.sla_hours(),
         user_opts=[(int(u.id), f"{u.이름} ({db.ROLE_LABEL.get(u.역할코드, u.역할코드)})")
                    for u in users.itertuples()] if not users.empty else [],
         today_str=date.today().isoformat(),

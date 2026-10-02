@@ -24,6 +24,23 @@ AUTH_MODE = os.environ.get("SALES_AUTH_MODE", "simple")        # simple | passwo
 SSO_MATCH = os.environ.get("SALES_SSO_MATCH", "emp_no")        # SSO 헤더 값을 사번/이메일 중 무엇과 맞출지
 DEV_SSO_USER_ENV = "SALES_SSO_USER"                             # 개발용: 헤더 없이 이 이름으로 로그인
 
+
+def breakglass_users() -> set[str]:
+    """사내 인증(SSO·OIDC)이 멈췄을 때 사번+비밀번호로 들어올 수 있는 비상 계정 (SALES_BREAKGLASS_USERS=9999,2001).
+    인터넷이나 IdP 가 끊겨도 관리자가 들어와 점검 모드 전환·조치를 할 수 있게 한다. 모든 사용은 감사로그에 남는다."""
+    return {e.strip() for e in os.environ.get("SALES_BREAKGLASS_USERS", "").split(",") if e.strip()}
+
+
+def breakglass_enabled() -> bool:
+    return AUTH_MODE in ("sso", "oidc") and bool(breakglass_users())
+
+
+def authenticate_breakglass(emp_no: str, password: str) -> tuple[Optional[dict], str]:
+    if not breakglass_enabled() or (emp_no or "").strip() not in breakglass_users():
+        db.audit("로그인실패", "사용자", None, {"비상로그인": emp_no, "사유": "비상 계정 아님"})
+        return None, "사번 또는 비밀번호가 올바르지 않습니다."
+    return authenticate_password(emp_no, password)
+
 MAX_FAILED_LOGINS = 5
 LOCK_MINUTES = 15
 PASSWORD_MAX_AGE_DAYS = 90

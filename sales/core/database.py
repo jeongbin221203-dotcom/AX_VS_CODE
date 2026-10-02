@@ -104,7 +104,8 @@ class Cursor:
 
 
 _INSERT_RE = re.compile(r"^\s*INSERT\s+(?:OR\s+IGNORE\s+)?INTO\s+([A-Za-z_]+)", re.I)
-NO_ID_TABLES = {"scheduler_state", "alembic_version", "api_usage", "api_idempotency"}      # id 컬럼이 없는 테이블 (RETURNING id 를 붙이지 않는다)
+NO_ID_TABLES = {"scheduler_state", "alembic_version", "api_usage", "api_idempotency",
+                "company_settings", "form_submissions"}      # id 컬럼이 없는 테이블 (RETURNING id 를 붙이지 않는다)
 _OR_IGNORE_RE = re.compile(r"INSERT\s+OR\s+IGNORE\s+INTO", re.I)
 
 

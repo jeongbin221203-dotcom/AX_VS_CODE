@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% from "_macros.html" import metric, table, tabs, csrf, select, download %}
 {% block content %}
-<p class="subtitle">할인율 구간별 결재선 — 10% 이하: 팀장 / 20% 이하: 팀장 → 임원 / 20% 초과: 팀장 → 임원 → 관리자.
+<p class="subtitle">할인율 구간별 결재선 — {{ DISC_M|round(1)|string|replace(".0", "") }}% 이하: 팀장 / {{ DISC_E|round(1)|string|replace(".0", "") }}% 이하: 팀장 → 임원 / 초과: 팀장 → 임원 → 관리자.
   단계마다 {{ sla_hours }}시간 안에 결재하지 않으면 결재자에게 독촉, 윗선에 지연 보고가 갑니다.
   본인이 요청한 건은 결재할 수 없고, 한 사람은 한 건에서 한 단계만 결재합니다.</p>
 

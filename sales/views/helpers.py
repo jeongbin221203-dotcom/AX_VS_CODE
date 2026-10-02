@@ -15,6 +15,7 @@ from flask import (Flask, abort, current_app, flash, g, redirect, render_templat
 
 import config
 from core import auth as core_auth
+from core import company
 from core import dataio
 from core import enterprise as ent
 from core import notify
@@ -41,11 +42,12 @@ MENUS = [
     ("jobs", "⏱️ 배치 작업", "admin.jobs", "ADMIN"),
     ("api", "🔑 API 연동", "admin.api_clients", "ADMIN"),
     ("audit", "🗂️ 감사로그", "admin.audit", "ADMIN"),
+    ("settings", "🏢 회사 설정", "admin.settings", "ADMIN"),
     ("admin", "⚙️ 데이터 관리", "admin.data", "ADMIN"),
 ]
 
 # 로그인 없이 열 수 있는 엔드포인트
-PUBLIC_ENDPOINTS = {"auth.login", "auth.setup", "auth.oidc_start", "auth.oidc_callback", "static",
+PUBLIC_ENDPOINTS = {"auth.login", "auth.setup", "auth.oidc_start", "auth.oidc_callback", "auth.breakglass", "static",
                     "healthz", "readyz", "metrics"}
 # 비밀번호 변경이 필요한 사용자도 열 수 있는 엔드포인트
 PASSWORD_ENDPOINTS = {"auth.password", "auth.logout", "static", "healthz"}
@@ -79,6 +81,7 @@ def _logout(message: str, kind: str = "warning"):
 def load_context():
     """매 요청마다 사용자와 접근범위를 다시 읽는다 → 권한 변경·비활성화가 즉시 반영된다."""
     g.user = None
+    company.refresh()                                 # 회사 설정 (서버마다 15초 간격으로 다시 읽음)
     if request.endpoint == "static" or request.blueprint == "api":     # API 는 Bearer 키로 따로 인증
         return None
 
@@ -354,6 +357,13 @@ def csrf_token() -> str:
 
 def register_template_helpers(app: Flask) -> None:
     app.jinja_env.filters.update(won=won, mil=mil)
+
+    @app.context_processor
+    def _company():
+        values = company.all_values()
+        return {"APP_TITLE": values["app_title"], "COMPANY": values,
+                "DISC_M": values["discount_manager_max"], "DISC_E": values["discount_exec_max"]}
+
     app.jinja_env.globals.update(
         csrf_token=csrf_token, menus_for=menus_for, export_url=export_url, tab_url=tab_url,
         page_url=page_url, page_path=page_path,
@@ -361,7 +371,7 @@ def register_template_helpers(app: Flask) -> None:
         ACT_TYPES=db.ACT_TYPES, SALE_STATUS=db.SALE_STATUS, LEAD_SOURCES=db.LEAD_SOURCES,
         FORECAST_CATS=db.FORECAST_CATS, FORECAST_DESC=db.FORECAST_DESC,
         LOST_REASONS=db.LOST_REASONS, MEDDIC_FIELDS=db.MEDDIC_FIELDS,
-        ROLE_LABEL=db.ROLE_LABEL, APP_TITLE=config.APP_TITLE, AUTH_MODE=core_auth.AUTH_MODE,
+        ROLE_LABEL=db.ROLE_LABEL, AUTH_MODE=core_auth.AUTH_MODE,
         ENV=config.ENV, today=lambda: date.today(), now=lambda: datetime.now(),
     )
 

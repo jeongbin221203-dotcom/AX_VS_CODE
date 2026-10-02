@@ -947,9 +947,18 @@ def upsert_sale(data: dict, db_path: str | None = None) -> int:
         if money_changed and prev.get("erp_status") == "전송완료":
             raise ValueError("ERP로 전송된 매출은 금액·거래처·일자를 바꿀 수 없습니다. "
                              "매출을 취소한 뒤 다시 등록하세요(ERP에는 취소 전표가 전송됩니다).")
+        sql = (f"UPDATE sales SET {', '.join(f'{f}=?' for f in SALE_FIELDS)}, "
+               f"row_version=COALESCE(row_version,0)+1 WHERE id=? AND status <> ?")
+        params: list = [*values, sid, SALE_CANCELLED]
+        if money_changed:                     # 읽은 뒤 ERP 로 나갔다면 금액을 바꾸지 않는다
+            sql += " AND COALESCE(erp_status,'') NOT IN ('전송완료','취소대기','취소완료')"
+        if data.get("row_version") not in (None, ""):
+            sql += " AND COALESCE(row_version,0)=?"
+            params.append(int(data["row_version"]))
         with get_conn(db_path) as conn:
-            conn.execute(f"UPDATE sales SET {', '.join(f'{f}=?' for f in SALE_FIELDS)} WHERE id=?",
-                         (*values, sid))
+            if conn.execute(sql, params).rowcount == 0:
+                raise ConflictError("그 사이 다른 사용자(또는 입금·ERP 처리)가 이 매출을 바꿨습니다. "
+                                    "새로고침해서 최신 내용을 확인한 뒤 다시 저장하세요.")
         audit("수정", "매출", sid, {"변경": diff(prev, record, SALE_FIELDS)}, db_path)
         return sid
     with get_conn(db_path) as conn:
@@ -973,7 +982,8 @@ def update_sale_status(sale_id: int, status: str, db_path: str | None = None) ->
     if prev["status"] == SALE_CANCELLED:
         raise ValueError("취소된 매출입니다.")
     with get_conn(db_path) as conn:
-        conn.execute("UPDATE sales SET status=? WHERE id=?", (status, sale_id))
+        conn.execute("UPDATE sales SET status=?, row_version=COALESCE(row_version,0)+1 WHERE id=?",
+                     (status, sale_id))
     audit("수금상태변경", "매출", sale_id, {"변경": {"status": [prev["status"], status]}}, db_path)
 
 
@@ -991,6 +1001,8 @@ def cancel_sale(sale_id: int, reason: str, db_path: str | None = None) -> None:
     if int(prev.get("paid_amount") or 0) > 0:
         raise ValueError("입금 내역이 있는 매출은 취소할 수 없습니다. 입금 반제를 먼저 처리하세요.")
     with get_conn(db_path) as conn:
+        if conn.execute("SELECT COUNT(*) FROM erp_outbox WHERE ref_id=? AND status='전송중'", (sale_id,)).fetchone()[0]:
+            raise ValueError("지금 ERP 로 전송하는 중인 매출입니다. 잠시 뒤 다시 취소하세요.")
         erp_status = prev.get("erp_status")
         if erp_status == "전송완료":
             conn.execute("INSERT INTO erp_outbox (doc_type, ref_id, status, created_at) "
@@ -1000,8 +1012,13 @@ def cancel_sale(sale_id: int, reason: str, db_path: str | None = None) -> None:
             conn.execute("UPDATE erp_outbox SET status='취소' WHERE ref_id=? AND doc_type='매출' "
                          "AND status IN ('대기','실패')", (sale_id,))
             erp_status = None
-        conn.execute("UPDATE sales SET status=?, cancelled_at=?, cancel_reason=?, erp_status=? WHERE id=?",
-                     (SALE_CANCELLED, _now(), reason.strip(), erp_status, sale_id))
+        done = conn.execute("UPDATE sales SET status=?, cancelled_at=?, cancel_reason=?, erp_status=?, "
+                            "row_version=COALESCE(row_version,0)+1 WHERE id=? AND status <> ? "
+                            "AND COALESCE(paid_amount,0)=0 AND COALESCE(erp_status,'') = COALESCE(?,'')",
+                            (SALE_CANCELLED, _now(), reason.strip(), erp_status, sale_id, SALE_CANCELLED,
+                             prev.get("erp_status"))).rowcount
+        if not done:
+            raise ConflictError("그 사이 입금·ERP 전송 등으로 매출이 바뀌었습니다. 새로고침 후 다시 취소하세요.")
     audit("취소", "매출", sale_id, {"사유": reason.strip(), "금액": prev["amount"],
                                     "ERP": prev.get("erp_status")}, db_path)
 

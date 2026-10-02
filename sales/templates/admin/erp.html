@@ -83,7 +83,7 @@
       <form method="get" action="{{ page_path() }}" class="toolbar">
         <label>상태 <select name="status" onchange="this.form.submit()">
           <option value="">전체</option>
-          {% for s in ['대기', '실패', '전송완료', '취소'] %}<option {{ 'selected' if s == status }}>{{ s }}</option>{% endfor %}
+          {% for s in ['대기', '전송중', '실패', '전송완료', '취소'] %}<option {{ 'selected' if s == status }}>{{ s }}</option>{% endfor %}
         </select></label>
       </form>
       <form method="post" action="{{ url_for('admin.erp_send') }}">

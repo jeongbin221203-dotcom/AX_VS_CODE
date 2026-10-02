@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% from "_macros.html" import table, csrf %}
+{% block content %}
+<p class="subtitle">회사마다 다른 정책과 코드를 여기서 바꿉니다. 프로그램을 고치지 않아도 되고, 서버가 여러 대여도 15초 안에 모두 반영됩니다.
+  바꾼 내용은 바꾸기 전·후 값과 함께 감사로그에 남습니다.</p>
+
+<section class="card" id="company">
+  <h3>회사 정보</h3>
+  <form method="post" action="{{ url_for('admin.settings_save') }}" class="form">
+    {{ csrf() }}<input type="hidden" name="section" value="company">
+    <div class="form-grid g3">
+      <label>회사명 <input name="company_name" value="{{ v.company_name }}" placeholder="견적서·증빙 확인에 사용"></label>
+      <label>사업자번호 <input name="company_biz_no" value="{{ v.company_biz_no }}" placeholder="000-00-00000"></label>
+      <label>대표자 <input name="company_ceo" value="{{ v.company_ceo }}"></label>
+      <label class="span2">주소 <input name="company_address" value="{{ v.company_address }}"></label>
+      <label>시스템 이름 <input name="app_title" value="{{ v.app_title }}" required></label>
+    </div>
+    <p class="muted small">회사명·사업자번호·대표자·주소는 견적서 PDF의 공급자란에 나오고, 사업자번호는 세금계산서 증빙의 공급자 확인에 씁니다.</p>
+    <button class="btn btn-primary">💾 저장</button>
+  </form>
+</section>
+
+<section class="card" id="policy">
+  <h3>결재·영업 정책</h3>
+  <form method="post" action="{{ url_for('admin.settings_save') }}" class="form">
+    {{ csrf() }}<input type="hidden" name="section" value="policy">
+    <div class="form-grid g3">
+      <label>팀장 결재 한도 (할인율 %) <input type="number" step="0.1" min="0.1" max="99" name="discount_manager_max" value="{{ v.discount_manager_max }}"></label>
+      <label>임원 결재 한도 (할인율 %) <input type="number" step="0.1" min="0.1" max="100" name="discount_exec_max" value="{{ v.discount_exec_max }}"></label>
+      <label>결재 단계 기한 (시간) <input type="number" min="1" max="720" name="approval_sla_hours" value="{{ v.approval_sla_hours }}"></label>
+      <label>견적 유효기간 (일) <input type="number" min="1" max="365" name="quote_valid_days" value="{{ v.quote_valid_days }}"></label>
+      <label>신규 거래처 기본 결제조건 (일) <input type="number" min="0" max="365" name="default_payment_terms" value="{{ v.default_payment_terms }}"></label>
+      <label>종료 거래처 개인정보 보관 (년, 0=파기 안 함) <input type="number" min="0" max="20" name="pii_retention_years" value="{{ v.pii_retention_years }}"></label>
+    </div>
+    <p class="muted small">할인 {{ v.discount_manager_max }}% 이하 팀장 / {{ v.discount_exec_max }}% 이하 팀장 → 임원 / 그 이상 팀장 → 임원 → 관리자.
+      바꾼 구간은 새 결재 요청부터 적용되고, 진행 중인 결재는 요청할 때의 결재선을 그대로 따릅니다.</p>
+    <fieldset>
+      <legend>영업 단계별 확률 (%) — 가중 파이프라인·예측에 사용, 수주 100 · 실주 0 고정</legend>
+      <div class="form-grid g5">
+        {% for s in open_stages %}
+          <label>{{ s }} <input type="number" min="0" max="99" name="prob_{{ s }}" value="{{ v.stage_prob[s] }}"></label>
+        {% endfor %}
+      </div>
+      <p class="muted small">바꾼 확률은 단계를 새로 옮기거나 새로 등록하는 영업기회부터 적용됩니다.</p>
+    </fieldset>
+    <button class="btn btn-primary">💾 저장</button>
+  </form>
+  {% if v.pii_retention_years %}
+  <form method="post" action="{{ url_for('admin.settings_purge') }}" class="danger-zone">
+    {{ csrf() }}
+    <span class="grow">종료한 지 {{ v.pii_retention_years }}년이 지난 거래처의 고객 담당자·연락처·이메일:
+      <strong>{{ pii_preview.purged }}건</strong> 파기 대상 (매일 01:30 자동 파기 · 거래처명과 거래 기록은 남음)</span>
+    <label class="check"><input type="checkbox" name="confirm" value="1"> 지금 파기</label>
+    <button class="btn btn-danger">파기 실행</button>
+  </form>
+  {% endif %}
+</section>
+
+<section class="card" id="codes">
+  <h3>코드 목록</h3>
+  <form method="post" action="{{ url_for('admin.settings_save') }}" class="form">
+    {{ csrf() }}<input type="hidden" name="section" value="codes">
+    <div class="form-grid g4">
+      {% for key, spec in code_lists.items() %}
+        <label>{{ spec[3] }} (한 줄에 하나)
+          <textarea name="{{ key }}" rows="9">{{ v[key]|join('\n') }}</textarea>
+          <span class="muted small">사용 중: {% for code in v[key] if usage[key].get(code) %}{{ code }} {{ usage[key][code] }}{{ ', ' if not loop.last }}{% else %}없음{% endfor %}</span>
+        </label>
+      {% endfor %}
+    </div>
+    <p class="muted small">화면 선택 목록과 엑셀 업로드 검증에 바로 쓰입니다. 데이터에 쓰인 코드는 지울 수 없고, '기타'는 항상 남습니다.</p>
+    <button class="btn btn-primary">💾 저장</button>
+  </form>
+</section>
+
+<section class="card" id="network">
+  <h3>인터넷이 끊겨도 쓸 수 있는지</h3>
+  <p class="muted small">화면(글꼴·차트·스크립트)은 모두 이 서버에서 내려주므로 인터넷 없이 사내망만으로 열립니다.
+    아래는 서버가 밖으로 나가는 연결입니다. <strong>외부 인터넷</strong>으로 표시된 것만 인터넷 장애의 영향을 받습니다.</p>
+  {% if external %}<div class="alert alert-warning">외부 인터넷 연결 {{ external }}개 — 인터넷 장애 시 '끊기면' 칸의 일이 생깁니다. '대비' 칸을 확인하세요.</div>
+  {% else %}<div class="alert alert-success">외부 인터넷에 기대는 연결이 없습니다. 인터넷이 끊겨도 모든 업무가 사내망에서 동작합니다.</div>{% endif %}
+  {{ table(deps) }}
+</section>
+
+<section class="card">
+  <h3>변경 이력</h3>
+  {{ table(history, 260, '아직 바꾼 설정이 없습니다.') }}
+</section>
+{% endblock %}

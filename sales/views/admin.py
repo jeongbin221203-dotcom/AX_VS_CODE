@@ -11,6 +11,8 @@ from flask import Blueprint, abort, flash, g, redirect, request, session, url_fo
 import config
 from core import api_keys
 from core import auth as core_auth
+from core import company
+from pandas import DataFrame as pd_frame
 from core import database
 from core import dataio
 from core import enterprise as ent
@@ -58,7 +60,8 @@ def org():
         users=Table(users, drop=["id", "org_id", "역할코드"], link=("admin.org", "id", "uid")),
         target=target or {"active": 1, "role": "REP"}, roles=list(db.ROLES),
         all_users=all_users, active_users=[(o["id"], o["label"]) for o in g.assignable],
-        password_mode=core_auth.AUTH_MODE == "password",
+        password_mode=core_auth.AUTH_MODE == "password" or bool(
+            target and core_auth.breakglass_enabled() and target.get("emp_no") in core_auth.breakglass_users()),
         locked=bool(target and (target.get("locked_until") or target.get("failed_logins"))),
         **_hr_context(),
     )
@@ -153,7 +156,7 @@ def user_save():
         uid = new_id
         temp = request.form.get("temp_password", "")
         if temp:
-            core_auth.set_password(new_id, temp, must_change=True)
+            core_auth.set_password(new_id, temp, must_change=core_auth.AUTH_MODE == "password")
         flash(f"사용자 '{f_str('name')}' 정보를 저장했습니다."
               + (" 임시 비밀번호를 설정했습니다(첫 로그인 때 변경)." if temp else ""), "success")
     except ValueError as exc:
@@ -325,6 +328,64 @@ def jobs_action():
 # ============================================================================
 # 감사로그
 # ============================================================================
+# ============================================================================
+# 회사 설정 (회사마다 다른 정책·코드)
+# ============================================================================
+@bp.route("/settings")
+def settings():
+    values = company.all_values()
+    history = db._df("SELECT ts AS 일시, actor AS 변경자, detail AS 내용 FROM audit_log "
+                     "WHERE action='설정변경' ORDER BY id DESC LIMIT 20")
+    usage = {key: {row["v"]: int(row["n"]) for row in db._df(
+        f"SELECT {col} AS v, COUNT(*) AS n FROM {table} WHERE {col} IS NOT NULL GROUP BY {col}").to_dict("records")}
+        for key, (_a, table, col, _l) in company.CODE_LISTS.items()}
+    pii_preview = company.purge_pii(dry_run=True)
+    from core import offline
+    deps = pd_frame(offline.dependencies())
+    return render_page("admin/settings.html", "settings", v=values, labels=company.LABELS,
+                       deps=Table(deps, highlight={"위치": {"외부 인터넷": "danger"}}),
+                       external=int((deps["위치"] == "외부 인터넷").sum()) if not deps.empty else 0,
+                       code_lists=company.CODE_LISTS, usage=usage, open_stages=db.OPEN_STAGES,
+                       history=Table(history), pii_preview=pii_preview)
+
+
+@bp.route("/settings/save", methods=["POST"])
+def settings_save():
+    section = f_str("section")
+    form = request.form
+    if section == "company":
+        changes = {k: form[k] for k in ("company_name", "company_biz_no", "company_ceo",
+                                         "company_address", "app_title") if k in form}
+    elif section == "policy":
+        changes = {k: form[k] for k in ("discount_manager_max", "discount_exec_max", "approval_sla_hours",
+                                         "quote_valid_days", "default_payment_terms", "pii_retention_years") if k in form}
+        probs = {s: form[f"prob_{s}"] for s in db.OPEN_STAGES if f"prob_{s}" in form}
+        if probs:
+            changes["stage_prob"] = probs
+    elif section == "codes":
+        changes = {k: form[k] for k in company.CODE_LISTS if k in form}
+    else:
+        abort(400)
+    try:
+        diff = company.save(changes, g.user["name"])
+        flash(f"저장했습니다 ({len(diff)}개 항목 변경). 다른 서버에도 15초 안에 반영됩니다." if diff
+              else "바뀐 값이 없습니다.", "success" if diff else "info")
+    except ValueError as exc:
+        flash(str(exc), "error")
+    return redirect(url_for("admin.settings", _anchor=section))
+
+
+@bp.route("/settings/purge", methods=["POST"])
+def settings_purge():
+    if not f_bool("confirm"):
+        flash("파기 확인에 체크하세요.", "error")
+        return redirect(url_for("admin.settings", _anchor="policy"))
+    result = company.purge_pii()
+    flash(f"고객 연락처 {result['purged']}건을 파기했습니다." if result["purged"] else
+          result.get("message") or "파기할 대상이 없습니다.", "warning" if result["purged"] else "info")
+    return redirect(url_for("admin.settings", _anchor="policy"))
+
+
 # ============================================================================
 # 외부 연동 API 키
 # ============================================================================
