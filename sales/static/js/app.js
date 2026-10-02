@@ -394,9 +394,18 @@
   // ── 탭: 화면 이동 없이 본문만 바꾼다 ───────────────────────────────────
   //  탭을 누르면 같은 주소를 뒤에서 받아 본문(main)만 갈아 끼운다 → 새로고침·스크롤 이동 없음.
   //  주소창은 바뀌므로 새로고침·즐겨찾기·뒤로 가기는 그대로 동작한다. 실패하면 보통 이동으로 넘어간다.
-  function swapMain(href, push) {
+  //  화면 고정: 누른 탭 줄이 화면에서 있던 자리(위에서 몇 px)에 그대로 남도록 맞춘다.
+  //  바뀌는 동안 본문 높이를 잠시 유지해, 새 내용이 짧아도 화면이 위로 끌려 올라가지 않게 한다.
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+  function tabsIndex(main, bar) {
+    return bar ? Array.prototype.indexOf.call(main.querySelectorAll(".tabs"), bar) : -1;
+  }
+  function swapMain(href, push, bar) {
     const main = document.querySelector("main.content");
     if (!main || !window.fetch || !window.DOMParser) { window.location = href; return; }
+    const idx = tabsIndex(main, bar);
+    const barTop = bar ? bar.getBoundingClientRect().top : null;
+    const y = window.scrollY;
     main.setAttribute("aria-busy", "true");
     fetch(href, { credentials: "same-origin", headers: { "X-Requested-With": "fetch" } })
       .then(function (r) {
@@ -407,7 +416,7 @@
         const doc = new DOMParser().parseFromString(html, "text/html");
         const fresh = doc.querySelector("main.content");
         if (!fresh) throw new Error("navigate");
-        const y = window.scrollY;
+        main.style.minHeight = main.offsetHeight + "px";
         main.innerHTML = fresh.innerHTML;
         main.removeAttribute("aria-busy");
         if (doc.title) document.title = doc.title;
@@ -415,9 +424,16 @@
         initWidgets(main);
         initForms(main);
         drawCharts(main);
-        window.scrollTo(0, y);
+        const pin = function () {
+          const nb = idx >= 0 ? main.querySelectorAll(".tabs")[idx] : null;
+          if (nb && barTop !== null) window.scrollBy(0, nb.getBoundingClientRect().top - barTop);
+          else window.scrollTo(0, y);
+        };
+        pin();
         const active = main.querySelector(".tabs a.active");
         if (active) active.focus({ preventScroll: true });
+        // 차트가 그려져 높이가 바뀐 뒤 한 번 더 맞춘다 (높이 유지는 다음 전환까지 둔다 — 풀면 짧은 화면에서 끌려 올라감)
+        requestAnimationFrame(pin);
       })
       .catch(function () { window.location = href; });
   }
@@ -427,8 +443,9 @@
     if (a.origin !== window.location.origin || a.target) return;
     e.preventDefault();
     if (a.classList.contains("active")) return;
-    a.closest(".tabs").querySelectorAll("a").forEach(function (x) { x.classList.toggle("active", x === a); });
-    swapMain(a.href, true);
+    const bar = a.closest(".tabs");
+    bar.querySelectorAll("a").forEach(function (x) { x.classList.toggle("active", x === a); });
+    swapMain(a.href, true, bar);
   });
   window.addEventListener("popstate", function (e) {
     if (e.state && e.state.swapped) swapMain(location.href, false);
