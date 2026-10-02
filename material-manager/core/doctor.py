@@ -125,6 +125,13 @@ def _batch():
     return "ok", "배치 작업이 주기대로 돌고 있습니다"
 
 
+def _ocr():
+    from core import statement_reader
+    if statement_reader.ocr_available():
+        return "ok", f"Tesseract 있음 (언어 {config.OCR_LANG}) — 거래명세서 스캔 읽기 가능"
+    return "off", "Tesseract 없음 — 스캔 이미지는 읽지 않음 (PDF·엑셀·직접 입력은 가능)"
+
+
 def _security():
     problems = []
     if not config.SECRET_KEY_FROM_ENV:
@@ -137,7 +144,7 @@ def _security():
 
 
 CHECKS = [("DB", _db), ("파일 저장소", _storage), ("ERP·SAP", _erp), ("사내 로그인(SSO)", _sso),
-          ("백업", _backup), ("배치", _batch), ("보안 설정", _security)]
+          ("백업", _backup), ("배치", _batch), ("명세서 스캔(OCR)", _ocr), ("보안 설정", _security)]
 
 
 def run() -> list[Check]:

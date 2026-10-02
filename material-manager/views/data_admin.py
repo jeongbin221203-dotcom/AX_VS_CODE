@@ -26,7 +26,8 @@ PREVIEW_FMT = {"안전재고": "{:,.2f}", "단가": "₩{:,.0f}"}
 
 
 def _page(**ctx):
-    return render_page("data_admin.html", "data", material_cnt=repo.count_materials(),
+    from core import seed_mfg
+    return render_page("data_admin.html", "data", material_cnt=repo.count_materials(), mfg_exists=seed_mfg.exists(),
                        db_file=not db.is_pg() and config.DB_PATH.exists(), is_pg=db.is_pg(),
                        storage_name=storage.get().name,
                        attach_cnt=len(storage.get().keys("attachments/")), **ctx)
@@ -169,4 +170,19 @@ def make_seed():
         seed.seed(history=True)                # 지난 11개월 거래·장기 미사용 자재까지
         audit.log(actor(), "SEED", "material", "", {"materials": repo.count_materials()})
         flash("샘플 데이터가 생성되었습니다.", "success")
+    return redirect(url_for("data_admin.index"))
+
+
+@bp.post("/seed-mfg")
+@role_required("ADMIN")
+def make_seed_mfg():
+    """제조 공장 샘플 추가 (다른 데이터가 있어도 한 번만). 운영 DB에서는 쓰지 말 것 — 화면에서 확인 문구를 받는다."""
+    from core import seed_mfg
+    if seed_mfg.exists():
+        flash("제조 샘플은 이미 추가되어 있습니다.", "info")
+        return redirect(url_for("data_admin.index"))
+    counts = seed_mfg.seed_manufacturing()
+    audit.log(actor(), "SEED", "material", "manufacturing", counts)
+    flash(f"제조 샘플을 추가했습니다 — 창원 제조공장 창고 3곳, 자재 {counts['materials']}종, 거래 {counts['transactions']:,}건, "
+          f"거래명세서 {counts['statements']}장.", "success")
     return redirect(url_for("data_admin.index"))

@@ -226,5 +226,9 @@ XLSX_MAX_RATIO = 100                       # 압축률이 이보다 크면 거�
 UPLOAD_KEEP_HOURS = 24                     # 반영하지 않은 업로드 미리보기 파일 보관 시간
 FORM_ONCE_KEEP_HOURS = 48                  # 중복 제출 방지 기록 보관 시간
 
+# 거래명세서 스캔 읽기 (core/statement_reader.py). 서버에 Tesseract OCR + 한국어 데이터(kor)가 있을 때만 쓴다.
+TESSERACT_CMD = os.getenv("MM_TESSERACT_CMD", "")          # 비우면 PATH의 tesseract
+OCR_LANG = os.getenv("MM_OCR_LANG", "kor+eng")
+
 DEFAULT_UNIT = "EA"
 DEFAULT_CATEGORY = "미분류"

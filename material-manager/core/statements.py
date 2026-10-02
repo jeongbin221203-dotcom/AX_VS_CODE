@@ -16,11 +16,12 @@ from __future__ import annotations
 import math
 import re
 from dataclasses import dataclass, field
+from datetime import date
 
 import pandas as pd
 
 import config
-from core import audit, db, documents, org, repository as repo, services
+from core import audit, db, documents, repository as repo, services
 from core.utils import clean_str_series, code_series, now_str
 
 # 엑셀 열: 항목 → 표준 머리글 (별칭은 excel_forms.IMPORT_FORMS['statement_lines'])
@@ -49,6 +50,7 @@ class Line:
     note: str = ""
     material_id: int | None = None
     material_label: str = ""
+    source_warning: str = ""          # PDF·스캔에서 읽은 줄 (core/statement_reader.py)
     errors: list[str] = field(default_factory=list)
     warnings: list[str] = field(default_factory=list)
 
@@ -126,7 +128,7 @@ def check(kind: str, lines: list[Line], overrides: dict[int, int] | None = None)
     overrides = overrides or {}
     with db.get_conn() as conn:
         for ln in lines:
-            ln.errors, ln.warnings = [], []
+            ln.errors, ln.warnings = [], ([ln.source_warning] if ln.source_warning else [])
             if ln.no in overrides:
                 ln.material_id = overrides[ln.no]
                 mat = repo.get_material(ln.material_id, conn)
@@ -276,11 +278,52 @@ def register(header: dict, lines: list[Line], *, actor: dict | None, wh_ids=None
     return Registered(True, msg, statement_id=st_id)
 
 
+def cancel(statement_id: int, reason: str, *, actor: dict | None, wh_ids=None) -> Registered:
+    """명세서 전체 취소: 아직 취소되지 않은 모든 줄을 한 트랜잭션에서 취소 거래로 되돌린다.
+    한 줄이라도 취소할 수 없으면(본인 등록 — 직무 분리, 이후 출고로 재고 음수, 마감, 권한) 아무것도 취소하지 않는다.
+    이미 줄 단위로 취소한 줄은 건너뛴다."""
+    reason = (reason or "").strip()
+    if not reason:
+        return Registered(False, "취소 사유를 입력하세요.")
+    who = services._actor(actor, "")
+    st = get(statement_id)
+    if st is None or not warehouse_ok(st, wh_ids):
+        return Registered(False, "명세서가 없거나 권한 밖입니다.")
+    if st.get("cancelled_at"):
+        return Registered(False, f"이미 취소한 명세서입니다 ({st['cancelled_at']}).")
+    reversed_cnt = 0
+    try:
+        with db.transaction() as conn:
+            db.lock(conn, f"statement:{statement_id}")
+            ids = [int(r["id"]) for r in conn.execute(
+                "SELECT t.id FROM transactions t WHERE t.statement_id = ? AND t.reversal_of IS NULL "
+                "AND NOT EXISTS (SELECT 1 FROM transactions r WHERE r.reversal_of = t.id) ORDER BY t.id DESC",
+                (statement_id,)).fetchall()]
+            for no, tx_id in enumerate(ids, 1):
+                out = services._reverse(conn, who, tx_id, f"거래명세서 #{statement_id} 취소: {reason}",
+                                        date.today().isoformat(), wh_ids)
+                if isinstance(out, services.Result):
+                    raise _LineRejected(tx_id, out.message)
+                reversed_cnt += 1
+            changed = conn.execute("UPDATE statements SET cancelled_at = ?, cancelled_by = ?, cancel_reason = ? "
+                                   "WHERE id = ? AND cancelled_at = ''",
+                                   (now_str(), who["name"], reason, statement_id)).rowcount
+            if changed != 1:
+                raise _LineRejected(0, "다른 사용자가 먼저 취소했습니다.")
+            audit.record(conn, who, "STATEMENT_CANCEL", "statement", statement_id,
+                         {"reason": reason, "reversed": ids})
+    except _LineRejected as exc:
+        where = f"거래 #{exc.no}" if exc.no else "명세서"
+        return Registered(False, f"{where}을(를) 취소할 수 없어 아무것도 취소하지 않았습니다: {exc.message}")
+    return Registered(True, f"거래명세서 #{statement_id}를 취소했습니다 (취소 거래 {reversed_cnt}건).",
+                      statement_id=statement_id)
+
+
 def list_df(wh_ids=None, limit: int = 200) -> pd.DataFrame:
     frag, wp = db.in_clause(wh_ids)
     return db.query_df(f"""
         SELECT s.id, s.tx_date, s.kind, s.partner, s.statement_no, w.code AS wh_code, s.line_count,
-               s.supply_amount, s.tax_amount, s.doc_id, s.created_by, s.created_at
+               s.supply_amount, s.tax_amount, s.doc_id, s.created_by, s.created_at, s.cancelled_at
         FROM statements s JOIN warehouses w ON w.id = s.warehouse_id
         {'WHERE s.warehouse_id' + frag if frag else ''}
         ORDER BY s.id DESC LIMIT ?""", (*wp, limit))

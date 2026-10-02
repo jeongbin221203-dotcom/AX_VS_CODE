@@ -124,7 +124,10 @@ CREATE TABLE IF NOT EXISTS statements (
     note            TEXT    DEFAULT '',
     created_by_id   INTEGER,
     created_by      TEXT    NOT NULL,
-    created_at      TEXT    NOT NULL
+    created_at      TEXT    NOT NULL,
+    cancelled_at    TEXT    DEFAULT '',     -- 명세서 전체 취소 (모든 줄을 한 번에 취소 거래로)
+    cancelled_by    TEXT    DEFAULT '',
+    cancel_reason   TEXT    DEFAULT ''
 );
 
 -- 로트 마스터: 자재별 로트 번호와 유효기한 (첫 입고 때 생긴다)
@@ -406,6 +409,9 @@ MIGRATIONS = [
     ("users", "session_ver", "INTEGER DEFAULT 0"),      # 로그아웃하면 올려 그 전 세션 쿠키를 모두 무효로
     ("users", "suspended_by", "TEXT DEFAULT ''"),       # 중지 주체: admin(관리자) | sso(사내 그룹에서 빠짐)
     ("transactions", "statement_id", "INTEGER"),
+    ("statements", "cancelled_at", "TEXT DEFAULT ''"),
+    ("statements", "cancelled_by", "TEXT DEFAULT ''"),
+    ("statements", "cancel_reason", "TEXT DEFAULT ''"),
 ]
 
 INDEXES = """

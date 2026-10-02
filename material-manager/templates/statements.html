@@ -34,8 +34,9 @@
 
     <h3>2. 품목 — 엑셀로 올리기</h3>
     <div class="form-grid g3">
-      <label>거래명세서 품목 파일 (.xlsx · .csv, {{ max_lines }}줄까지)<input type="file" name="lines_file" accept=".xlsx,.csv"></label>
-      <p class="muted small">자재코드(또는 품명)·수량·단가가 있으면 됩니다. 공급처마다 머리글이 다르면 시스템관리자 → 엑셀 양식의
+      <label>거래명세서 품목 파일 (엑셀·CSV·PDF·이미지, {{ max_lines }}줄까지)<input type="file" name="lines_file" accept=".xlsx,.csv,.pdf,.jpg,.jpeg,.png,.webp"></label>
+      <p class="muted small">자재코드(또는 품명)·수량·단가가 있으면 됩니다. PDF는 표·글자를 읽고, 스캔 이미지는 서버에 OCR이 있을 때
+        {% if ocr %}읽습니다{% else %}읽습니다(지금 서버에는 OCR이 없어 스캔은 읽지 못합니다){% endif %}. 읽은 값은 다음 화면에서 확인합니다. 공급처마다 머리글이 다르면 시스템관리자 → 엑셀 양식의
         '거래명세서 품목'에서 열 이름과 머리글 행을 맞춥니다. 합계·소계 줄은 건너뜁니다.
         <a href="{{ url_for('statements.template') }}">빈 양식 내려받기</a></p>
     </div>
@@ -69,7 +70,7 @@
     <h3>3. 명세서 파일 (선택)</h3>
     <div class="form-grid g3">
       <label>명세서 이미지·PDF (JPG·PNG·WEBP·PDF, 10MB 이하)<input type="file" name="doc_file" accept="{{ accept }}"></label>
-      <p class="muted small">'거래명세서' 증빙으로 저장되고 첫 거래에 연결됩니다. 증빙 화면에서 볼 수 있습니다.</p>
+      <p class="muted small">'거래명세서' 증빙으로 저장되고 첫 거래에 연결됩니다. 품목을 따로 넣지 않으면 이 파일에서 품목을 읽어 봅니다.</p>
     </div>
     <div><button class="btn btn-primary">확인하기</button></div>
   </form>
@@ -131,7 +132,19 @@
     {{ metric("공급가액 · 세액", "₩ {:,.0f}".format(st.supply_amount), "세액 ₩ {:,.0f}".format(st.tax_amount)) }}
   </div>
   {% if st.doc_id == st.doc_id and st.doc_id %}<p><a href="{{ url_for('documents.detail', doc_id=st.doc_id|int) }}">첨부한 명세서 보기</a></p>{% endif %}
+  {% if st.cancelled_at %}
+    <div class="alert alert-warning">취소한 명세서입니다 — {{ st.cancelled_at }} · {{ st.cancelled_by }} · 사유: {{ st.cancel_reason }}</div>
+  {% endif %}
   {{ table(grid) }}
-  <p class="muted small">줄을 취소하려면 거래 이력에서 그 거래를 취소합니다(본인이 등록한 거래는 다른 관리자가 취소). 등록자 {{ st.created_by }} · {{ st.created_at }}</p>
+  <p class="muted small">등록자 {{ st.created_by }} · {{ st.created_at }}</p>
+  {% if not st.cancelled_at and can('MANAGER') %}
+  <form class="card row-actions" method="post" action="{{ url_for('statements.cancel', sid=st.id|int) }}">
+    {{ csrf() }}
+    <label class="grow">명세서 전체 취소 사유 *<input name="reason" required placeholder="예: 공급처 오발행, 반품"></label>
+    <button class="btn btn-danger">명세서 전체 취소</button>
+  </form>
+  <p class="muted small">아직 취소하지 않은 모든 줄을 한 번에 취소 거래로 되돌립니다. 한 줄이라도 취소할 수 없으면(본인이 등록 — 다른 관리자가 취소,
+    이후 출고로 재고가 모자람, 마감) 아무것도 취소하지 않습니다. 한 줄만 취소하려면 거래 이력에서 그 거래를 취소합니다.</p>
+  {% endif %}
 {% endif %}
 {% endblock %}

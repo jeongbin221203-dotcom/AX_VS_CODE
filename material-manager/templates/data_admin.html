@@ -48,5 +48,18 @@
       <button class="btn">샘플 데이터 생성 (포워딩 창고 포장·고박 자재)</button>
     </form>
   {% endif %}
+  <h4>제조 공장 샘플</h4>
+  {% if mfg_exists %}
+    <p class="muted small">제조 샘플(창원 제조공장)이 이미 추가되어 있습니다.</p>
+  {% else %}
+    <form class="row-actions" method="post" action="{{ url_for('data_admin.make_seed_mfg') }}">
+      {{ csrf() }}
+      <label class="check"><input type="checkbox" required> 시연·교육용 DB에 넣습니다 (운영 DB가 아님)</label>
+      <button class="btn">제조 샘플 추가</button>
+    </form>
+    <p class="muted small">창원 제조공장(원자재·부품·화학소모품 창고)과 강판·수지·볼트·베어링·모터·PCB·도료·접착제·절삭유·공구·포장재 20종,
+      지난 12개월 구매 입고·생산팀별 출고·이동·실사 감모, 로트·유효기한(도료·접착제), 지연 발주, 거래명세서 3장, 결재 대기 1건을 추가합니다.
+      지금 있는 데이터는 그대로 두고 한 번만 추가됩니다.</p>
+  {% endif %}
 </section>
 {% endblock %}

@@ -167,3 +167,140 @@ def test_scoped_user_cannot_use_other_warehouse(app):
                                                "tx_date": TODAY, "partner": "X", "code_1": "PKG-001", "qty_1": "1",
                                                "unit_price_1": "1"}, content_type="multipart/form-data")
     assert "권한이 있는 창고만" in res.get_data(as_text=True)
+
+
+# ── 명세서 전체 취소 ─────────────────────────────────────────
+def _registered(kind="IN", no="C-1", rows=None, who=M1):
+    lines, _ = statements.lines_from_frame(frame(rows or [["PKG-001", "", "", 10, 18000, None, None],
+                                                          ["PKG-002", "", "", 4, 9500, None, None]]))
+    statements.check(kind, lines)
+    r = statements.register(header(kind, no), lines, actor=who)
+    assert r.ok, r.message
+    return r.statement_id
+
+
+def test_cancel_whole_statement_all_or_nothing(fresh):
+    from test_advanced import M2
+    before = (stock("PKG-001"), stock("PKG-002"))
+    sid = _registered()
+    r = statements.cancel(sid, "오발행", actor=M1)
+    assert not r.ok and "다른 관리자" in r.message, "본인이 등록한 명세서는 다른 관리자가 취소"
+    assert services.register_transaction(mid("PKG-002"), "OUT", before[1] + 3, TODAY, 9500, actor=M2).ok   # 받은 것보다 더 출고
+    r = statements.cancel(sid, "오발행", actor=M2)
+    assert not r.ok and "아무것도 취소하지" in r.message, "한 줄이라도 재고가 모자라면 전체 거부"
+    assert stock("PKG-001") == before[0] + 10, "앞 줄도 되돌리지 않음"
+    assert services.register_transaction(mid("PKG-002"), "IN", 10, TODAY, 9500, actor=M2).ok
+    r = statements.cancel(sid, "오발행", actor=M2)
+    assert r.ok, r.message
+    assert stock("PKG-001") == before[0]
+    st = statements.get(sid)
+    assert st["cancelled_at"] and st["cancel_reason"] == "오발행"
+    assert not statements.cancel(sid, "다시", actor=M2).ok, "두 번 취소 불가"
+    assert db.scalar("SELECT COUNT(*) FROM audit_log WHERE action = 'STATEMENT_CANCEL'") == 1
+
+
+def test_cancel_skips_lines_already_reversed(fresh):
+    from test_advanced import M2
+    sid = _registered(no="C-2")
+    first = int(db.scalar("SELECT MIN(id) FROM transactions WHERE statement_id = ?", (sid,)))
+    assert services.reverse_transaction(first, "한 줄만", actor=M2).ok
+    r = statements.cancel(sid, "나머지", actor=M2)
+    assert r.ok and "취소 거래 1건" in r.message, r.message
+
+
+# ── PDF · 스캔에서 읽기 ──────────────────────────────────────
+def _pdf(table: bool, scanned: bool = False) -> bytes:
+    import fitz
+    doc = fitz.open()
+    page = doc.new_page(width=595, height=842)
+    rows = [["품번", "품명", "수량", "단가", "공급가액", "세액"],
+            ["PKG-001", "목재 팔레트", "10", "18,000", "180,000", "18,000"],
+            ["PKG-002", "스트레치 필름", "2", "9,500", "19,000", "1,900"],
+            ["", "합계", "", "", "199,000", "19,900"]]
+    x0, y0, widths, h = 40, 80, [70, 140, 50, 70, 80, 70], 24
+    if scanned:
+        pix = fitz.Pixmap(fitz.csRGB, fitz.IRect(0, 0, 200, 100), 0)
+        pix.clear_with(255)
+        page.insert_image(fitz.Rect(40, 40, 240, 140), pixmap=pix)
+        return doc.tobytes()
+    page.insert_text((x0, 60), "거 래 명 세 서   No. DH-77", fontname="korea", fontsize=12)
+    for r, row in enumerate(rows):
+        x = x0
+        for c, w in enumerate(widths):
+            if table:
+                page.draw_rect(fitz.Rect(x, y0 + r * h, x + w, y0 + (r + 1) * h), color=(0, 0, 0), width=0.7)
+            page.insert_text((x + 3, y0 + r * h + 16), row[c], fontname="korea", fontsize=9)
+            x += w
+    return doc.tobytes()
+
+
+def test_pdf_table_and_text_are_read(fresh):
+    from core import statement_reader
+    for table, method in ((True, "pdf-table"), (False, "pdf-text")):
+        lines, errors, how = statement_reader.read(_pdf(table), "명세서.pdf")
+        assert not errors and how == method, (errors, how)
+        assert [(ln.code, ln.qty, ln.unit_price, ln.supply) for ln in lines] == \
+            [("PKG-001", 10, 18000, 180000), ("PKG-002", 2, 9500, 19000)], [ln.to_dict() for ln in lines]
+        statements.check("IN", lines)
+        assert all(not ln.errors for ln in lines) and "확인하세요" in lines[0].warnings[0]
+
+
+def test_scan_needs_ocr_and_ocr_text_is_parsed(fresh, monkeypatch):
+    from core import statement_reader
+    monkeypatch.setattr(statement_reader, "ocr_available", lambda: False)
+    lines, errors, _ = statement_reader.read(_pdf(False, scanned=True), "scan.pdf")
+    assert not lines and "Tesseract" in errors[0], "OCR이 없으면 읽지 않고 안내"
+    lines, errors, _ = statement_reader.read(PNG, "scan.png")
+    assert not lines and "Tesseract" in errors[0]
+
+    monkeypatch.setattr(statement_reader, "ocr_available", lambda: True)
+    monkeypatch.setattr(statement_reader, "_ocr_text", lambda images: (
+        "거래명세서 No.DH-78\n품번 품명 수량 단가 공급가액 세액\n1 PKG-001 목재 팔레트 10 18,000 180,000 18,000\n"
+        "2 스트레치 필름 2 9,500 19,000 1,900\n합 계 199,000 19,900\n"))
+    lines, errors, how = statement_reader.read(PNG, "scan.png")
+    assert how == "ocr" and not errors and len(lines) == 2
+    assert (lines[0].code, lines[0].qty, lines[1].name, lines[1].unit_price) == ("PKG-001", 10, "스트레치 필름", 9500)
+    statements.check("IN", lines)
+    assert lines[1].material_id == mid("PKG-002") and "OCR" in lines[1].warnings[0]
+
+
+def test_screen_reads_pdf_and_allows_two_previews(client):
+    seed.seed()
+    base = {"kind": "IN", "warehouse_id": str(wh("WH1")), "tx_date": TODAY, "partner": "대한팔레트"}
+    res = client.post("/statements/preview", data={**base, "_csrf": csrf(client), "statement_no": "P-1",
+                                                     "doc_file": (io.BytesIO(_pdf(True)), "명세서.pdf")},
+                      content_type="multipart/form-data")
+    html = res.get_data(as_text=True)
+    assert "PDF의 표에서 품목을 읽었습니다" in html and "PKG-002" in html, "품목 없이 명세서 파일만 올려도 읽음"
+    tok1 = re.search(r'name="token" value="([0-9a-f]+)"', html).group(1)
+    res = client.post("/statements/preview", data={**base, "_csrf": csrf(client), "statement_no": "P-2",
+                                                     "code_1": "PKG-003", "qty_1": "1", "unit_price_1": "1200"},
+                      content_type="multipart/form-data")
+    tok2 = re.search(r'name="token" value="([0-9a-f]+)"', res.get_data(as_text=True)).group(1)
+    assert post(client, "/statements/apply", {"token": tok1, "material_1": "PKG-001", "material_2": "PKG-002"}).status_code == 302
+    assert post(client, "/statements/apply", {"token": tok2, "material_1": "PKG-003"}).status_code == 302, "먼저 연 미리보기도 유효"
+    assert db.scalar("SELECT COUNT(*) FROM statements") == 2
+    sid = int(db.scalar("SELECT id FROM statements WHERE statement_no = 'P-1'"))
+    assert db.scalar("SELECT doc_id FROM statements WHERE id = ?", (sid,)), "읽은 PDF는 증빙으로도 첨부"
+    page = client.get(f"/statements/{sid}").get_data(as_text=True)
+    assert "명세서 전체 취소" in page
+
+
+# ── 제조 샘플 ────────────────────────────────────────────────
+def test_manufacturing_sample(client):
+    from core import insights, repository as repo, seed_mfg
+    seed.seed()
+    res = post(client, "/data/seed-mfg")
+    assert res.status_code == 302
+    assert seed_mfg.exists() and int(db.scalar("SELECT COUNT(*) FROM materials WHERE code LIKE 'RM-%'")) == 4
+    assert post(client, "/data/seed-mfg").status_code == 302 and \
+        int(db.scalar("SELECT COUNT(*) FROM plants WHERE code = 'P-CW'")) == 1, "한 번만"
+    neg = db.query_df("SELECT material_id, warehouse_id, lot_no FROM transactions GROUP BY 1,2,3 "
+                      "HAVING SUM(CASE WHEN tx_type='OUT' THEN -qty ELSE qty END) < -1e-9")
+    assert neg.empty, "음수 재고 없음"
+    assert len(insights.monthly_amounts(12).query("출고금액 > 0")) == 12, "12개월 추이"
+    lots = repo.stock_by_lot()
+    assert ((lots["days_left"] < 0) & (lots["stock"] > 0)).any() and ((lots["days_left"].between(0, 30)) & (lots["stock"] > 0)).any()
+    assert db.scalar("SELECT COUNT(*) FROM statements") == 3 and insights.incoming_po().iloc[0]["상태"] == "지연"
+    assert "제조 샘플은 이미" in client.get("/data/").get_data(as_text=True) or "이미 추가되어" in client.get("/data/").get_data(as_text=True)
+    assert client.get("/").status_code == 200

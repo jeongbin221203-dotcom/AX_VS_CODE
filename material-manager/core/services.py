@@ -372,62 +372,71 @@ def reverse_transaction(tx_id: int, reason: str, *, actor: dict | None = None,
     who = _actor(actor, "")
     reverse_date = reverse_date or date.today().isoformat()
     with db.transaction() as conn:
-        problem = periods.date_problem(conn, reverse_date)
-        if problem:
-            return Result(False, problem)
-        tx = repo.get_transaction(conn, tx_id)
-        if tx is None:
-            return Result(False, "거래가 없습니다.")
-        if wh_ids is not None and tx["warehouse_id"] not in wh_ids:
-            return Result(False, "이 창고의 거래를 취소할 권한이 없습니다.")
-        if tx["reversal_of"] is not None:
-            return Result(False, "취소 거래는 다시 취소할 수 없습니다. 필요하면 새로 등록하세요.")
-        if config.SOD_ENFORCE and who.get("id") is not None and tx["created_by_id"] == who["id"]:
-            return Result(False, "본인이 등록한 거래는 다른 관리자가 취소해야 합니다(직무 분리).")
-        legs = repo.transfer_legs(conn, tx["transfer_no"]) if tx["transfer_no"] else [tx]
-        if wh_ids is not None and any(leg["tx_type"] == "OUT" and leg["warehouse_id"] not in wh_ids for leg in legs):
-            return Result(False, "보낸 창고 권한이 있어야 이동을 취소할 수 있습니다.")
-        for leg in legs:
-            done = repo.reversal_id(conn, leg["id"])
-            if done is not None:
-                return Result(False, f"이미 취소된 거래입니다 (취소 거래 #{done}).")
-        db.lock(conn, f"stock:{tx['material_id']}")
-        for po in sorted({leg["po_no"] for leg in legs if leg["po_no"]}):
-            db.lock(conn, f"po:{po}")
-        after = 0.0
-        for leg in legs:
-            effect = leg["qty"] if leg["tx_type"] in ("IN", "ADJ") else -leg["qty"]
-            after = repo.current_stock(conn, leg["material_id"], leg["warehouse_id"],
-                                       leg["lot_no"] if leg["lot_no"] else None) - effect
-            if after < 0:
-                return Result(False, f"취소하면 창고 재고가 {after:,.2f}로 음수가 됩니다. 이후 출고 건을 먼저 취소하세요.")
-        rev_ids = []
-        for leg in legs:
-            rev_id = repo.insert_transaction(conn, {
-                "material_id": leg["material_id"], "tx_type": leg["tx_type"], "qty": -leg["qty"],
-                "unit_price": leg["unit_price"], "tx_date": reverse_date, "ref_no": leg["ref_no"],
-                "partner": leg["partner"], "note": f"취소(#{leg['id']}): {reason}", "created_by": who["name"],
-                "created_by_id": who.get("id"), "reversal_of": leg["id"], "po_no": leg["po_no"],
-                "po_item": leg["po_item"], "cost_center": leg["cost_center"], "warehouse_id": leg["warehouse_id"],
-                "transfer_no": leg["transfer_no"], "lot_no": leg["lot_no"],
-                "movement_type": sap.reversal_movement_type(leg["movement_type"] or ""),
-            })
-            rev_ids.append(rev_id)
-        # SAP: 이동은 출고 쪽만 전기했으므로 출고 쪽 취소만 전송 (로트가 여럿이면 로트마다)
-        statuses = [sap.enqueue(conn, rev_id, reversal_of=leg["id"])
-                    for leg, rev_id in zip(legs, rev_ids)
-                    if sap.enabled() and not (leg["transfer_no"] and leg["tx_type"] == "IN")]
-        sap_status = statuses[0] if statuses else ""
-        for leg in legs:
-            if leg["po_no"]:
-                purchasing.refresh_po_status(conn, leg["po_no"])
-        audit.record(conn, who, "TX_REVERSE", "transaction", tx_id,
-                     {"reversal_tx": rev_ids, "reason": reason, "transfer_no": tx["transfer_no"] or None})
+        out = _reverse(conn, who, tx_id, reason, reverse_date, wh_ids)
+    if isinstance(out, Result):
+        return out
+    tx, rev_ids, sap_status, after = out["tx"], out["rev_ids"], out["sap_status"], out["after"]
     note = {"PENDING": " · SAP 취소 전송 대기", "CANCELLED": " · SAP 전송 전이라 둘 다 전송 안 함"}.get(sap_status, "")
     what = f"이동 {tx['transfer_no']}" if tx["transfer_no"] else f"거래 #{tx_id}"
     return Result(True, f"{what}를 취소했습니다 (취소 거래 #{', #'.join(map(str, rev_ids))}){note}",
                   stock_after=after, tx_id=rev_ids[0])
 
+
+def _reverse(conn, who: dict, tx_id: int, reason: str, reverse_date: str, wh_ids=None):
+    """reverse_transaction의 본문 — 호출하는 쪽 트랜잭션 안에서 돈다(거래명세서 전체 취소는 여러 거래를 한 번에).
+    거부는 Result, 성공은 {"tx", "rev_ids", "sap_status", "after"}."""
+    problem = periods.date_problem(conn, reverse_date)
+    if problem:
+        return Result(False, problem)
+    tx = repo.get_transaction(conn, tx_id)
+    if tx is None:
+        return Result(False, "거래가 없습니다.")
+    if wh_ids is not None and tx["warehouse_id"] not in wh_ids:
+        return Result(False, "이 창고의 거래를 취소할 권한이 없습니다.")
+    if tx["reversal_of"] is not None:
+        return Result(False, "취소 거래는 다시 취소할 수 없습니다. 필요하면 새로 등록하세요.")
+    if config.SOD_ENFORCE and who.get("id") is not None and tx["created_by_id"] == who["id"]:
+        return Result(False, "본인이 등록한 거래는 다른 관리자가 취소해야 합니다(직무 분리).")
+    legs = repo.transfer_legs(conn, tx["transfer_no"]) if tx["transfer_no"] else [tx]
+    if wh_ids is not None and any(leg["tx_type"] == "OUT" and leg["warehouse_id"] not in wh_ids for leg in legs):
+        return Result(False, "보낸 창고 권한이 있어야 이동을 취소할 수 있습니다.")
+    for leg in legs:
+        done = repo.reversal_id(conn, leg["id"])
+        if done is not None:
+            return Result(False, f"이미 취소된 거래입니다 (취소 거래 #{done}).")
+    db.lock(conn, f"stock:{tx['material_id']}")
+    for po in sorted({leg["po_no"] for leg in legs if leg["po_no"]}):
+        db.lock(conn, f"po:{po}")
+    after = 0.0
+    for leg in legs:
+        effect = leg["qty"] if leg["tx_type"] in ("IN", "ADJ") else -leg["qty"]
+        after = repo.current_stock(conn, leg["material_id"], leg["warehouse_id"],
+                                   leg["lot_no"] if leg["lot_no"] else None) - effect
+        if after < 0:
+            return Result(False, f"취소하면 창고 재고가 {after:,.2f}로 음수가 됩니다. 이후 출고 건을 먼저 취소하세요.")
+    rev_ids = []
+    for leg in legs:
+        rev_id = repo.insert_transaction(conn, {
+            "material_id": leg["material_id"], "tx_type": leg["tx_type"], "qty": -leg["qty"],
+            "unit_price": leg["unit_price"], "tx_date": reverse_date, "ref_no": leg["ref_no"],
+            "partner": leg["partner"], "note": f"취소(#{leg['id']}): {reason}", "created_by": who["name"],
+            "created_by_id": who.get("id"), "reversal_of": leg["id"], "po_no": leg["po_no"],
+            "po_item": leg["po_item"], "cost_center": leg["cost_center"], "warehouse_id": leg["warehouse_id"],
+            "transfer_no": leg["transfer_no"], "lot_no": leg["lot_no"],
+            "movement_type": sap.reversal_movement_type(leg["movement_type"] or ""),
+        })
+        rev_ids.append(rev_id)
+    # SAP: 이동은 출고 쪽만 전기했으므로 출고 쪽 취소만 전송 (로트가 여럿이면 로트마다)
+    statuses = [sap.enqueue(conn, rev_id, reversal_of=leg["id"])
+                for leg, rev_id in zip(legs, rev_ids)
+                if sap.enabled() and not (leg["transfer_no"] and leg["tx_type"] == "IN")]
+    sap_status = statuses[0] if statuses else ""
+    for leg in legs:
+        if leg["po_no"]:
+            purchasing.refresh_po_status(conn, leg["po_no"])
+    audit.record(conn, who, "TX_REVERSE", "transaction", tx_id,
+                 {"reversal_tx": rev_ids, "reason": reason, "transfer_no": tx["transfer_no"] or None})
+    return {"tx": tx, "rev_ids": rev_ids, "sap_status": sap_status, "after": after}
 
 # ── 자재 마스터 (감사로그 포함) ─────────────────────────────────
 def create_material(data: dict, actor: dict | None = None) -> Result:

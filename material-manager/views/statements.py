@@ -11,7 +11,7 @@ import pandas as pd
 from flask import Blueprint, abort, flash, g, redirect, request, session, url_for
 
 import config
-from core import documents, excel_forms, org, repository as repo, services, statements, storage
+from core import documents, excel_forms, org, repository as repo, statement_reader, statements, storage
 from core.utils import xlsx_problem
 from views.helpers import Table, actor, f_str, form_response, render_page, role_required
 
@@ -20,7 +20,8 @@ bp = Blueprint("statements", __name__, url_prefix="/statements")
 TABS = [("new", "명세서 등록"), ("list", "등록한 명세서")]
 MANUAL_ROWS = 12
 TOKEN_RE = re.compile(r"^[0-9a-f]{32}$")
-SESSION_KEY = "statement_token"
+SESSION_KEY = "statement_tokens"          # 미리보기 표 (탭 여러 개를 동시에 열 수 있게 최근 10개)
+MAX_PREVIEWS = 10
 
 
 def _header_from_form() -> dict:
@@ -33,7 +34,7 @@ def _new_page(header: dict | None = None, rows: list[dict] | None = None, status
     header = header or {"kind": request.args.get("kind", "IN"), "tx_date": date.today().isoformat()}
     rows = rows or [{} for _ in range(MANUAL_ROWS)]
     return render_page("statements.html", "statements", tabs=TABS, tab="new", h=header, rows=rows,
-                       wh_opts=org.warehouse_options(g.wh_ids), accept=documents.ACCEPT,
+                       wh_opts=org.warehouse_options(g.wh_ids), accept=documents.ACCEPT, ocr=statement_reader.ocr_available(),
                        max_lines=statements.MAX_LINES), status
 
 
@@ -42,13 +43,16 @@ def _new_page(header: dict | None = None, rows: list[dict] | None = None, status
 def index():
     if request.args.get("tab") == "list":
         df = statements.list_df(g.wh_ids)
-        view = df.assign(kind=df["kind"].map(config.TX_LABEL), doc_id=df["doc_id"].map(lambda v: "있음" if pd.notna(v) else ""))
+        view = df.assign(kind=df["kind"].map(config.TX_LABEL), doc_id=df["doc_id"].map(lambda v: "있음" if pd.notna(v) else ""),
+                         cancelled_at=df["cancelled_at"].map(lambda v: "취소됨" if v else ""))
         view = view.rename(columns={"id": "번호", "tx_date": "일자", "kind": "구분", "partner": "거래처", "statement_no": "명세서번호",
                                     "wh_code": "창고", "line_count": "품목 수", "supply_amount": "공급가액", "tax_amount": "세액",
-                                    "doc_id": "파일", "created_by": "등록자", "created_at": "등록일시"})
+                                    "doc_id": "파일", "created_by": "등록자", "created_at": "등록일시",
+                                    "cancelled_at": "상태"})
         return render_page("statements.html", "statements", tabs=TABS, tab="list",
                            grid=Table(view, {"번호": "{}", "공급가액": "₩{:,.0f}", "세액": "₩{:,.0f}"},
-                                      links=[url_for("statements.detail", sid=i) for i in df["id"]]))
+                                      links=[url_for("statements.detail", sid=i) for i in df["id"]],
+                                      tones=["muted" if c else None for c in df["cancelled_at"]]))
     return _new_page()
 
 
@@ -60,27 +64,34 @@ def template():
     return form_response("statement_template", df, "거래명세서_품목_양식.xlsx")
 
 
-def _lines_from_request() -> tuple[list[statements.Line], list[str]]:
-    """엑셀 파일이 있으면 그 파일, 없으면 화면에 입력한 줄."""
+def _lines_from_request(doc_bytes: bytes = b"", doc_name: str = "") -> tuple[list[statements.Line], list[str], str]:
+    """품목 파일(엑셀·CSV·PDF·이미지) → 화면에 입력한 줄 → (둘 다 없으면) 명세서 파일에서 읽기. (줄, 문제, 읽은 방법)"""
     file = request.files.get("lines_file")
     if file and file.filename:
         name = file.filename.lower()
+        if name.endswith((".pdf", *statement_reader.IMAGE_EXT)):
+            return statement_reader.read(file.read(config.DOC_MAX_BYTES + 1), name)
         if not name.endswith((".xlsx", ".csv")):
-            return [], ["품목 파일은 엑셀(.xlsx) 또는 CSV만 올릴 수 있습니다."]
+            return [], ["품목 파일은 엑셀(.xlsx)·CSV·PDF·이미지(JPG·PNG·WEBP)를 올릴 수 있습니다."], ""
         data = file.read()
         if name.endswith(".xlsx"):
             problem = xlsx_problem(data, config.XLSX_MAX_UNCOMPRESSED, config.XLSX_MAX_RATIO)
             if problem:
-                return [], [problem]
+                return [], [problem], ""
         raw, problem = excel_forms.read_import("statement_lines", data, name, statements.MAX_LINES * 2)
         if problem:
-            return [], [problem]
-        return statements.lines_from_frame(raw)
+            return [], [problem], ""
+        return (*statements.lines_from_frame(raw), "excel")
     rows = []
     for i in range(1, MANUAL_ROWS + 1):
         rows.append({c: request.form.get(f"{c}_{i}", "") for c in statements.LINE_COLS})
     df = pd.DataFrame(rows).rename(columns=statements.LINE_COLS)
-    return statements.lines_from_frame(df)
+    lines, errors = statements.lines_from_frame(df)
+    if lines or errors:
+        return lines, errors, "manual"
+    if doc_bytes:                                        # 품목을 따로 안 넣었으면 첨부한 명세서 파일에서 읽어 본다
+        return statement_reader.read(doc_bytes, doc_name)
+    return [], [], ""
 
 
 def _evidence_meta(h: dict, lines: list[statements.Line]) -> dict:
@@ -110,7 +121,9 @@ def _header_problem(h: dict) -> str:
 def preview():
     h = _header_from_form()
     problem = _header_problem(h)
-    lines, errors = _lines_from_request()
+    doc = request.files.get("doc_file")
+    doc_bytes, doc_name = (doc.read(config.DOC_MAX_BYTES + 1), doc.filename) if doc and doc.filename else (b"", "")
+    lines, errors, method = _lines_from_request(doc_bytes, doc_name)
     if problem or errors or not lines:
         flash(problem or (errors[0] if errors else "품목 줄을 한 줄 이상 입력하거나 엑셀 파일을 올리세요."), "error")
         return _new_page(h, [{c: request.form.get(f"{c}_{i}", "") for c in statements.LINE_COLS}
@@ -118,19 +131,20 @@ def preview():
     statements.check(h["kind"], lines)
     dup = statements.duplicate_of(h["kind"], h["partner"], h["statement_no"])
 
-    doc = request.files.get("doc_file")
-    doc_bytes, doc_name = (doc.read(config.DOC_MAX_BYTES + 1), doc.filename) if doc and doc.filename else (b"", "")
     doc_errors = []
     if doc_bytes:
         prepared = documents.prepare(doc_bytes, doc_name, _evidence_meta(h, lines))
         doc_errors = prepared.errors
 
     token = secrets.token_hex(16)
-    session[SESSION_KEY] = token                         # 미리보기를 본 사람만 등록할 수 있게
+    session[SESSION_KEY] = (session.get(SESSION_KEY) or [])[-(MAX_PREVIEWS - 1):] + [token]   # 미리보기를 본 사람만 등록
     storage.get().put(f"uploads/{token}.json", json.dumps({
         "header": h, "lines": [ln.to_dict() for ln in lines], "doc_name": doc_name,
         "doc": base64.b64encode(doc_bytes).decode() if doc_bytes and not doc_errors else "",
     }, ensure_ascii=False).encode("utf-8"))
+    if method in ("pdf-table", "pdf-text", "ocr"):
+        flash({"pdf-table": "PDF의 표에서 품목을 읽었습니다.", "pdf-text": "PDF의 글자에서 품목을 읽었습니다.",
+               "ocr": "스캔(OCR)으로 품목을 읽었습니다."}[method] + " 원본과 비교해 확인한 뒤 등록하세요.", "warning")
     return _preview_page(token, h, lines, dup, doc_name, doc_errors)
 
 
@@ -150,7 +164,7 @@ def _preview_page(token, h, lines, dup, doc_name, doc_errors):
 
 
 def _load(token: str) -> dict:
-    if not TOKEN_RE.match(token) or not secrets.compare_digest(session.get(SESSION_KEY, ""), token):
+    if not TOKEN_RE.match(token) or token not in (session.get(SESSION_KEY) or []):
         abort(400, "미리보기가 만료되었습니다. 명세서를 다시 올려 주세요.")
     raw = storage.get().get(f"uploads/{token}.json")
     if raw is None:
@@ -190,10 +204,19 @@ def apply():
         flash(result.message, "error")
         return _preview_page(token, h, lines, statements.duplicate_of(h["kind"], h["partner"], h["statement_no"]),
                              data.get("doc_name", ""), [])
-    session.pop(SESSION_KEY, None)
+    session[SESSION_KEY] = [t for t in (session.get(SESSION_KEY) or []) if t != token]
     storage.get().delete(f"uploads/{token}.json")
     flash(result.message, "success")
     return redirect(url_for("statements.detail", sid=result.statement_id))
+
+
+@bp.post("/<int:sid>/cancel")
+@role_required("MANAGER")
+def cancel(sid: int):
+    """명세서 전체 취소 (거래 취소와 같은 관리자 권한 · 직무 분리)."""
+    result = statements.cancel(sid, f_str("reason"), actor=actor(), wh_ids=g.wh_ids)
+    flash(result.message, "success" if result.ok else "error")
+    return redirect(url_for("statements.detail", sid=sid))
 
 
 @bp.get("/<int:sid>")
