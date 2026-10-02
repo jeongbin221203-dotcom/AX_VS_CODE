@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}메인{% endblock %}
+{% block content %}
+<div class="page-head hub-head">
+  <div>
+    <div class="muted small">{% if streak %}연속 학습 {{ streak }}일 · {% endif %}시험을 골라 들어가세요</div>
+    <h1>어떤 시험을 공부할까요?</h1>
+  </div>
+</div>
+
+<div class="hub">
+  {% for e in exams %}
+  <section class="card hub-card">
+    <a class="hub-top" href="{{ e.href }}">
+      <span class="hub-mark">{{ e.mark }}</span>
+      <span class="hub-en">{{ e.en }}</span>
+      <h2>{{ e.name }}</h2>
+    </a>
+    <div class="hub-now"><b>{{ e.now }}</b><span class="small muted">{{ e.now_sub }}</span></div>
+    <div class="hub-meta">
+      <span>목표 <b>{{ e.target }}</b></span>
+      <span>{{ e.n }}</span>
+      <span>{% if e.last %}마지막 학습 {{ e.last }}{% else %}아직 기록 없음{% endif %}</span>
+    </div>
+    <div class="hub-links">
+      {% for label, href in e.links %}<a class="btn small" href="{{ href }}">{{ label }}</a>{% endfor %}
+      <a class="btn small primary hub-go" href="{{ e.href }}">들어가기 →</a>
+    </div>
+  </section>
+  {% endfor %}
+</div>
+<p class="small muted" style="margin-top:14px">위쪽 탭(토익·토플·토익스피킹·오픽)으로 언제든 다른 시험으로 바로 옮길 수 있고, <b>TS</b> 로고를 누르면 이 화면으로 돌아옵니다.</p>
+{% endblock %}

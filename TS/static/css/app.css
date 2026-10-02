@@ -109,8 +109,6 @@ p { margin: 0 0 .8em; }
 .settings-link:hover { background: var(--surface-2); text-decoration: none; }
 .settings-link.on { background: var(--accent-soft); color: var(--accent); font-weight: 700; }
 .exam-tabs { display: flex; gap: 4px; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
-.home-set { margin: 0; }
-.home-set .btn { white-space: nowrap; }
 .exam-tabs a { padding: 5px 9px; border-radius: 8px; color: var(--ink-2); font-weight: 700; font-size: .9rem; white-space: nowrap; }
 .exam-tabs a small { font-weight: 400; font-size: .68rem; color: var(--ink-3); margin-left: 3px; }
 .exam-tabs a:hover { background: var(--surface-2); text-decoration: none; }
@@ -365,6 +363,23 @@ ul.clean li { margin: 4px 0; }
 .topic-grid label { display: flex; gap: 6px; align-items: center; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); cursor: pointer; font-size: .92rem; }
 .topic-grid label:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
 .frame { white-space: pre-wrap; font-family: var(--mono); font-size: .88rem; background: var(--surface-2); border-radius: 8px; padding: 10px 12px; margin: 6px 0 0; }
+
+/* 메인: 네 시험 카드 */
+.hub-head { margin-bottom: 18px; }
+.hub > .card { margin-top: 0; }
+.hub { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; }
+.hub-card { display: flex; flex-direction: column; gap: 12px; padding: 0; overflow: hidden; }
+.hub-card .hub-top { display: block; padding: 18px 18px 0; color: var(--ink); }
+.hub-card .hub-top:hover { text-decoration: none; }
+.hub-card .hub-top:hover h2 { color: var(--accent); }
+.hub-card h2 { margin: 2px 0 0; font-size: 1.35rem; }
+.hub-card .hub-en { font-size: .8rem; color: var(--ink-3); letter-spacing: .03em; }
+.hub-card .hub-mark { float: right; font-size: .75rem; padding: 2px 8px; border-radius: 99px; background: var(--accent-soft); color: var(--accent); font-weight: 700; }
+.hub-card .hub-now { display: flex; align-items: baseline; gap: 8px; padding: 0 18px; }
+.hub-card .hub-now b { font-size: 1.7rem; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.hub-card .hub-meta { padding: 0 18px; font-size: .85rem; color: var(--ink-2); display: grid; gap: 2px; }
+.hub-card .hub-links { margin-top: auto; display: flex; flex-wrap: wrap; gap: 6px; padding: 12px 18px 16px; border-top: 1px solid var(--line); background: var(--surface-2); }
+.hub-card .hub-go { margin-left: auto; }
 
 @media (max-width: 640px) {
   .exam-tabs { order: 5; flex-basis: 100%; padding-bottom: 6px; }

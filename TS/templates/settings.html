@@ -5,13 +5,7 @@
 <form method="post" class="grid two">
   <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
   <div class="card">
-    <h2>첫 화면</h2>
-    <label class="field"><span>TS 로고·처음 열 때 보여 줄 시험</span>
-      <select name="home_exam">
-        {% for k, e in EXAMS.items() %}<option value="{{ k }}" {{ 'selected' if s.home_exam == k }}>{{ e.name }}</option>{% endfor %}
-      </select></label>
-    <p class="small muted">각 시험 화면 위쪽 탭 옆의 <b>☆ 첫 화면으로</b> 버튼으로도 바꿀 수 있습니다.</p>
-    <h2 style="margin-top:18px">토익 목표</h2>
+    <h2>토익 목표</h2>
     <label class="field"><span>목표 점수 (10~990)</span><input type="number" name="target_score" min="10" max="990" step="5" value="{{ s.target_score }}" required></label>
     <label class="field"><span>시험일</span><input type="date" name="exam_date" value="{{ s.exam_date }}"></label>
     <label class="field"><span>현재 점수 직접 입력 (비우면 진단·모의고사 추정치 사용)</span>

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <meta name="vocab-base" content="{{ '/toefl' if request.blueprint == 'tvocab' else '' }}">
-  <title>{% block title %}토익 학습{% endblock %} · TS</title>
+  <title>{% block title %}영어 시험 학습{% endblock %} · TS</title>
   <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
   <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" sizes="48x48">
   <link rel="apple-touch-icon" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
@@ -20,17 +20,11 @@
 <header class="topbar">
   <div class="topbar-row">
     <button type="button" class="menu-btn" id="menu-open" aria-label="메뉴 열기" aria-controls="sidebar" aria-expanded="false">☰</button>
-    <a class="brand" href="{{ url_for('main.home') }}" aria-label="첫 화면"><span class="brand-mark">TS</span></a>
+    <a class="brand" href="{{ url_for('main.home') }}" aria-label="메인 화면"><span class="brand-mark">TS</span></a>
     <nav class="exam-tabs" aria-label="시험 바로가기">
-      {% for m in menus %}<a href="{{ m.home }}" class="{{ 'on' if m.on }}" {{ 'aria-current=page' if m.on }}>{{ m.name }}{% if m.is_home %}<small title="첫 화면">★</small>{% endif %}</a>{% endfor %}
+      {% for m in menus %}<a href="{{ m.home }}" class="{{ 'on' if m.on }}" {{ 'aria-current=page' if m.on }}>{{ m.name }}</a>{% endfor %}
     </nav>
     <div class="crumb">{% if cur and cur.active %}<span class="muted">›</span> {{ cur.active }}{% elif ep == 'main.settings' %}<b>설정</b>{% endif %}</div>
-    {% if cur and not cur.is_home %}
-    <form method="post" action="{{ url_for('main.set_home_exam') }}" class="home-set">
-      <input type="hidden" name="_csrf" value="{{ csrf_token() }}"><input type="hidden" name="exam" value="{{ cur.key }}">
-      <button class="btn small ghost" title="TS 로고를 누르면 {{ cur.name }} 화면이 열리게 합니다">☆ 첫 화면으로</button>
-    </form>
-    {% endif %}
     <a class="settings-link{{ ' on' if ep == 'main.settings' }}" href="{{ url_for('main.settings') }}">⚙ 설정</a>
   </div>
 </header>

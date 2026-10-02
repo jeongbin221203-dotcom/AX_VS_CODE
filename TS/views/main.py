@@ -18,22 +18,61 @@ bp = Blueprint("main", __name__)
 
 @bp.route("/")
 def home():
-    """첫 화면: 설정에서 고른 시험의 홈 (기본 토익)."""
-    key = db.get_settings().get("home_exam") or "toeic"
-    if key != "toeic" and key in EXAMS:
-        return redirect(url_for(EXAMS[key]["endpoint"]))
-    return dashboard()
+    """메인: 네 시험(토익·토플·토익스피킹·오픽)으로 들어가는 화면. 시험마다 지금 위치·목표·문제 수·마지막 학습."""
+    from core import speaking as S, toefl as T
+    from flask import current_app
+    st = db.get_settings()
 
+    def last(sql, *args):
+        with db.connect() as con:
+            r = con.execute(sql, args).fetchone()
+        return (r[0] or "")[:10] if r else ""
 
-@bp.route("/home-exam", methods=["POST"])
-def set_home_exam():
-    """상단 탭의 '첫 화면으로' 버튼."""
-    key = request.form.get("exam", "")
-    if key in EXAMS:
-        db.save_settings({"home_exam": key})
-        flash(f"첫 화면을 {EXAMS[key]['name']}(으)로 바꿨습니다. TS 로고를 누르면 이 화면이 열립니다.", "ok")
-        return redirect(url_for(EXAMS[key]["endpoint"]))
-    abort(400)
+    # 토익
+    score, src = planner.current_score(st)
+    grade = scoring.grade_for(score) if score else None
+    tb = bank()
+    toeic_n = sum(tb.count_questions(p) for p in PART_INFO)
+    # 토플
+    fb = current_app.extensions["toefl_bank"]
+    bands = T.section_bands()
+    overall = T.overall_band(bands)
+    toefl_n = sum(len(v) for v in fb.items.values())
+    # 말하기
+    sb = current_app.extensions["speaking_bank"]
+    tsp_est = S.tsp_estimate(S.tsp_task_stats())
+    tsp_lv = S.tsp_level(tsp_est)
+    opic = S.opic_stats()
+    exams = [
+        {"key": "toeic", "href": url_for("main.dashboard"), "mark": "LC·RC",
+         "now": f"{score}점" if score else "–", "now_sub": f"{grade.name} · {src}" if grade else "진단 테스트로 시작",
+         "target": f"{st.get('target_score')}점", "n": f"{toeic_n:,}문항 · 단어 {len(tb.vocab):,}",
+         "last": last("SELECT MAX(created_at) FROM sessions"),
+         "links": [("오늘 할 일", url_for("main.dashboard")), ("파트 연습", url_for("quiz.practice")),
+                   ("모의고사", url_for("quiz.mock")), ("단어", url_for("vocab.overview"))]},
+        {"key": "toefl", "href": url_for("toefl.home"), "mark": "R·L·S·W",
+         "now": f"밴드 {overall}" if overall else "–",
+         "now_sub": T.cefr(overall) if overall else ("영역별 " + " · ".join(f"{k} {v}" for k, v in bands.items() if v) if any(bands.values()) else "네 영역을 풀면 계산"),
+         "target": f"밴드 {st.get('toefl_target')}", "n": f"{toefl_n:,}문제 · 어휘 {len(fb.vocab):,}",
+         "last": last("SELECT MAX(created_at) FROM toefl_attempts"),
+         "links": [("토플 홈", url_for("toefl.home")), ("실전 모의고사", url_for("toefl.mock")),
+                   ("학술 어휘", url_for("tvocab.overview"))]},
+        {"key": "toeic-speaking", "href": url_for("speaking.tsp_home"), "mark": "11문항",
+         "now": f"{tsp_est}점" if tsp_est is not None else "–", "now_sub": tsp_lv[1] if tsp_lv else "다섯 유형을 연습하면 계산",
+         "target": f"{st.get('tsp_target')}점", "n": f"{sum(len(v) for v in sb.tsp.values()):,}문제",
+         "last": last("SELECT MAX(created_at) FROM speaking_attempts WHERE exam = 'tsp'"),
+         "links": [("유형별 연습", url_for("speaking.tsp_home") + "#tasks"), ("실전 모의고사", url_for("speaking.tsp_mock")),
+                   ("답변 틀", url_for("speaking.tsp_guide"))]},
+        {"key": "opic", "href": url_for("speaking.opic_home"), "mark": "NL~AL",
+         "now": opic["grade"] or "–", "now_sub": S.OPIC_GRADE_NAME.get(opic["grade"], "답변 5개를 채점하면 계산"),
+         "target": st.get("opic_target") or "IH", "n": f"{len(sb.opic_q) + 3 * len(sb.opic_rp):,}문항 · 롤플레이 {len(sb.opic_rp)}세트",
+         "last": last("SELECT MAX(created_at) FROM speaking_attempts WHERE exam = 'opic'"),
+         "links": [("설문·난이도", url_for("speaking.opic_survey")), ("주제별 연습", url_for("speaking.opic_home") + "#topics"),
+                   ("실전 모의고사", url_for("speaking.opic_mock"))]},
+    ]
+    for e in exams:
+        e.update(EXAMS[e["key"]])
+    return render_template("home.html", exams=exams, streak=stats.streak())
 
 
 @bp.route("/toeic")
@@ -129,8 +168,6 @@ def settings():
             values["tts_rate"] = str(min(max(rate, 0.6), 1.5))
         except ValueError:
             errors.append("음성 속도 값 오류")
-        home_exam = f.get("home_exam", "toeic")
-        values["home_exam"] = home_exam if home_exam in EXAMS else "toeic"
         accent = f.get("tts_accent", "mix")
         values["tts_accent"] = accent if accent in ("mix", "us", "uk", "au") else "mix"
         if errors:

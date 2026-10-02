@@ -382,7 +382,9 @@ def opic_mock_plan(bank: SpeakingBank, survey: list[str], level: int, rng: rando
     intro = [q for q in bank.opic_q if q["kind"] == "intro"]
     if intro:
         add([rng.choice(intro)])
-    topics = [t for t in survey if t in OPIC_TOPICS and OPIC_TOPICS[t][2]] or [t for t, v in OPIC_TOPICS.items() if v[2]]
+    has_q = {q["topic"] for q in bank.opic_q}                 # 문항이 있는 주제만 (없는 주제를 뽑으면 시험이 짧아짐)
+    topics = ([t for t in survey if t in OPIC_TOPICS and OPIC_TOPICS[t][2] and t in has_q]
+              or [t for t, v in OPIC_TOPICS.items() if v[2] and t in has_q])
     if "home" in topics and rng.random() < 0.6:
         first = ["home"] + rng.sample([t for t in topics if t != "home"] or ["home"], 1)
     else:
