@@ -1,4 +1,4 @@
-"""대기업 보완 — 거래처 중복·병합, 2단계 인증, 감사로그 보관 이관, 첨부, 개인정보 요청, 외화, 법인, 전자세금계산서
+"""대기업 보완 — 거래처 중복·병합, 2단계 인증(0010 에서 제거), 감사로그 보관 이관, 첨부, 개인정보 요청, 외화, 법인, 전자세금계산서
 
   customers        : biz_no_norm(숫자만, 중복 검사용), merged_into(병합된 거래처)
   users            : totp_secret(암호화), totp_enabled_at, totp_last_counter(재사용 방지), recovery_codes(해시)

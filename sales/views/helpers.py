@@ -49,10 +49,10 @@ MENUS = [
 
 # 로그인 없이 열 수 있는 엔드포인트
 PUBLIC_ENDPOINTS = {"auth.login", "auth.setup", "auth.oidc_start", "auth.oidc_callback", "auth.breakglass",
-                    "auth.otp", "static",
+                    "static",
                     "healthz", "readyz", "metrics"}
 # 비밀번호 변경이 필요한 사용자도 열 수 있는 엔드포인트
-PASSWORD_ENDPOINTS = {"auth.password", "auth.logout", "auth.account_mfa", "static", "healthz"}
+PASSWORD_ENDPOINTS = {"auth.password", "auth.logout", "static", "healthz"}
 
 
 def menus_for(user: dict) -> list[tuple]:
@@ -113,11 +113,6 @@ def load_context():
         return None
 
     ent.apply_context(g.user)
-    from core import mfa
-    by_password = core_auth.AUTH_MODE == "password" or str(session.get("login_method", "")).startswith("비상로그인")
-    if by_password and mfa.required(g.user) and not mfa.enabled(g.user) and request.endpoint not in PASSWORD_ENDPOINTS:
-        flash("이 계정은 2단계 인증을 등록해야 계속 사용할 수 있습니다.", "warning")
-        return redirect(url_for("auth.account_mfa"))
     if core_auth.password_expired(g.user) and request.endpoint not in PASSWORD_ENDPOINTS:
         flash("비밀번호를 변경해야 계속 사용할 수 있습니다.", "warning")
         return redirect(url_for("auth.password"))

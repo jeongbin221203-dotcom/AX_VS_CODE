@@ -40,7 +40,6 @@ DEFAULTS: dict[str, Any] = {
     "lost_reasons": list(db.LOST_REASONS),
     "act_types": list(db.ACT_TYPES),
     "pii_retention_years": 0,              # 종료 거래처의 고객 연락처 보관 연수 (0 = 자동 파기 안 함)
-    "mfa_required_roles": ["ADMIN"],       # 2단계 인증 필수 역할 (비밀번호 로그인·비상 계정)
     "audit_retention_years": 0,            # 감사로그 DB 보관 연수 (0 = 계속 보관), 지나면 파일로 이관
     "backup_keep_daily": 30, "backup_keep_monthly": 12, "backup_keep_yearly": 7,
     "fiscal_start_month": 1,               # 회계연도 시작 월 (4 = 4월~다음 해 3월)
@@ -58,7 +57,7 @@ LABELS = {
     "app_title": "시스템 이름", "discount_manager_max": "팀장 결재 한도(%)", "discount_exec_max": "임원 결재 한도(%)",
     "approval_sla_hours": "결재 단계 기한(시간)", "quote_valid_days": "견적 유효기간(일)",
     "default_payment_terms": "기본 결제조건(일)", "stage_prob": "단계별 확률(%)",
-    "pii_retention_years": "개인정보 보관기간(년)", "mfa_required_roles": "2단계 인증 필수 역할",
+    "pii_retention_years": "개인정보 보관기간(년)",
     "audit_retention_years": "감사로그 보관(년)", "backup_keep_daily": "일 백업 보관(개)",
     "backup_keep_monthly": "월말 백업 보관(개월)", "backup_keep_yearly": "연말 백업 보관(년)",
     "fiscal_start_month": "회계연도 시작 월", **{k: v[3] for k, v in CODE_LISTS.items()},
@@ -172,13 +171,6 @@ def validate(changes: dict) -> dict:
                         ("fiscal_start_month", 1, 12)):
         if key in changes:
             out[key] = _number(changes[key], LABELS[key], lo, hi)
-    if "mfa_required_roles" in changes:
-        roles = changes["mfa_required_roles"]
-        roles = [r for r in (roles if isinstance(roles, list) else str(roles).split(",")) if r]
-        bad = [r for r in roles if r not in db.ROLES]
-        if bad:
-            raise ValueError(f"역할 값이 올바르지 않습니다: {bad}")
-        out["mfa_required_roles"] = roles
     if "stage_prob" in changes:
         probs = {s: _number(changes["stage_prob"].get(s, cur["stage_prob"][s]), f"{s} 확률", 0, 99)
                  for s in db.OPEN_STAGES}

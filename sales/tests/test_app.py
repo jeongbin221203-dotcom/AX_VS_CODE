@@ -17,7 +17,7 @@ from core import sales_db as db
 ALL_PAGES = ["/", "/forecast", "/analytics", "/customers", "/deals", "/activities", "/sales",
              "/targets", "/approvals", "/quotes", "/products", "/products?tab=prices", "/data/",
              "/admin/org", "/admin/erp", "/admin/jobs", "/admin/audit", "/admin/data", "/admin/settings",
-             "/admin/privacy", "/account/mfa", "/customers?tab=merge", "/activities?tab=files", "/targets?fy=2026"]
+             "/admin/privacy", "/customers?tab=merge", "/activities?tab=files", "/targets?fy=2026"]
 MANAGER_PAGES: set[str] = set()      # 결재함은 대결자(담당자 포함)도 쓰므로 모든 역할에 열려 있다
 ADMIN_PAGES = {"/admin/org", "/admin/erp", "/admin/jobs", "/admin/audit", "/admin/data", "/admin/settings",
                "/admin/privacy"}
@@ -389,8 +389,6 @@ def test_password_mode_policy_and_lockout(app, monkeypatch):
     db.set_context("system", None)
     core_auth.set_password(user("시스템관리자")["id"], "Admin#Pass2026")
     monkeypatch.setattr(core_auth, "AUTH_MODE", "password")
-    from core import mfa
-    monkeypatch.setattr(mfa, "required", lambda u: False)      # 2단계 인증은 test_security 에서 따로 확인
     assert "/login" in stale.get("/").headers["Location"]     # 인증 방식이 바뀌면 옛 세션은 끊긴다
 
     admin = app.test_client()

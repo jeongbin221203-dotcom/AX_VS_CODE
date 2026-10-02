@@ -63,7 +63,6 @@ def org():
         password_mode=core_auth.AUTH_MODE == "password" or bool(
             target and core_auth.breakglass_enabled() and target.get("emp_no") in core_auth.breakglass_users()),
         locked=bool(target and (target.get("locked_until") or target.get("failed_logins"))),
-        mfa_on=bool(target and target.get("totp_enabled_at")),
         **_hr_context(),
     )
 
@@ -163,20 +162,6 @@ def user_save():
     except ValueError as exc:
         flash(str(exc), "error")
     return redirect(url_for("admin.org", tab="users", **({"uid": uid} if uid else {})))
-
-
-@bp.route("/users/<int:uid>/mfa-reset", methods=["POST"])
-def user_mfa_reset(uid: int):
-    from core import mfa
-    reason = f_str("reason")
-    if not reason:
-        flash("초기화 사유를 입력하세요 (예: 휴대폰 분실, 본인 확인 완료).", "error")
-    elif uid == int(g.user["id"]):
-        flash("본인의 2단계 인증은 다른 관리자가 초기화해야 합니다.", "error")
-    else:
-        mfa.disable(uid, g.user, reason)
-        flash("2단계 인증을 초기화했습니다. 다음 로그인 때 다시 등록합니다.", "warning")
-    return redirect(url_for("admin.org", tab="users", uid=uid))
 
 
 @bp.route("/users/<int:uid>/unlock", methods=["POST"])
@@ -379,8 +364,6 @@ def settings_save():
                                          "quote_valid_days", "default_payment_terms", "pii_retention_years",
                                          "audit_retention_years", "backup_keep_daily", "backup_keep_monthly",
                                          "backup_keep_yearly", "fiscal_start_month") if k in form}
-        if "mfa_present" in form:
-            changes["mfa_required_roles"] = form.getlist("mfa_required_roles")
         probs = {s: form[f"prob_{s}"] for s in db.OPEN_STAGES if f"prob_{s}" in form}
         if probs:
             changes["stage_prob"] = probs

@@ -14,5 +14,3 @@ prometheus-client>=0.20  # /metrics
 authlib>=1.3             # OIDC 로그인
 requests>=2.31           # authlib HTTP 클라이언트
 reportlab>=4.0           # 견적서 PDF
-segno>=1.6               # 2단계 인증 등록 QR
-cryptography>=42         # 2단계 인증 비밀키 암호화

@@ -1,18 +1,16 @@
-"""대기업 보완 — 거래처 중복·병합, 2단계 인증, 감사로그·백업 보관, 첨부, 회계연도, 개인정보 요청, 외화, 법인, 전자세금계산서."""
+"""대기업 보완 — 거래처 중복·병합, 감사로그·백업 보관, 첨부, 회계연도, 개인정보 요청, 외화, 법인, 전자세금계산서."""
 from __future__ import annotations
 
 import io
 import os
 import re
-import time
 import zipfile
 from datetime import datetime, timedelta
 
 import pytest
-from conftest import biz, csrf, login, post, user
+from conftest import biz, login, post, user
 from openpyxl import load_workbook
 
-from core import auth as core_auth
 from core import company
 from core import database
 from core import entities as ent_mod
@@ -20,7 +18,6 @@ from core import erp
 from core import etax
 from core import fiscal
 from core import jobs
-from core import mfa
 from core import privacy
 from core import retention
 from core import sales_db as db
@@ -52,56 +49,6 @@ def test_duplicate_customer_blocked_and_merge(app):
     merged = db.get_customer(src)
     assert merged["merged_into"] == dst and merged["status"] == "종료"
     assert db._one("SELECT id FROM audit_log WHERE action='거래처병합'")
-
-
-# ── 2. 2단계 인증 ──────────────────────────────────────────────────────────
-def _code(secret: str, ahead: int = 0) -> str:
-    return mfa.totp(secret, int(time.time() // mfa.STEP) + ahead)
-
-
-def test_totp_enrollment_login_recovery_and_reset(app, monkeypatch):
-    admin_u = user("시스템관리자")
-    db.set_context("system", None)
-    monkeypatch.setattr(core_auth, "AUTH_MODE", "password")
-    core_auth.set_password(admin_u["id"], "Mfa!Admin2026x")
-    client = app.test_client()
-    client.post("/login", data={"emp_no": "9999", "password": "Mfa!Admin2026x", "_csrf": csrf(client)})
-    gate = client.get("/customers")                                    # 관리자는 등록 전 다른 화면으로 못 감
-    assert gate.status_code == 302 and "/account/mfa" in gate.headers["Location"]
-    page = client.get("/account/mfa").get_data(as_text=True)
-    secret = re.search(r"<code>([A-Z2-7 ]+)</code>", page).group(1).replace(" ", "")
-    assert "data:image/svg+xml" in page                                 # QR
-    res = post(client, "/account/mfa", {"action": "enable", "code": _code(secret)})
-    codes = re.findall(r"\b[0-9A-F]{4}-[0-9A-F]{4}\b", res.get_data(as_text=True))
-    assert len(codes) == 8 and client.get("/customers").status_code == 200
-    assert ent_user(admin_u["id"])["totp_secret"] != secret              # 암호화해 저장
-
-    fresh = app.test_client()
-    res = fresh.post("/login", data={"emp_no": "9999", "password": "Mfa!Admin2026x", "_csrf": csrf(fresh)})
-    assert "/login/otp" in res.headers["Location"] and fresh.get("/customers").status_code == 302
-    post(fresh, "/login/otp", {"code": "000000"})
-    assert fresh.get("/customers").status_code == 302                   # 틀린 코드 → 아직 로그인 아님
-    assert post(fresh, "/login/otp", {"code": _code(secret, 1)}).status_code == 302
-    assert fresh.get("/customers").status_code == 200
-    replay = app.test_client()                                          # 같은 코드 재사용 차단
-    replay.post("/login", data={"emp_no": "9999", "password": "Mfa!Admin2026x", "_csrf": csrf(replay)})
-    post(replay, "/login/otp", {"code": _code(secret, 1)})
-    assert replay.get("/customers").status_code == 302
-    rec = app.test_client()                                             # 복구 코드는 한 번만
-    rec.post("/login", data={"emp_no": "9999", "password": "Mfa!Admin2026x", "_csrf": csrf(rec)})
-    post(rec, "/login/otp", {"code": codes[0]})
-    assert rec.get("/customers").status_code == 200
-    assert not mfa.verify(admin_u["id"], codes[0])[0]
-    # 다른 관리자가 초기화
-    monkeypatch.setattr(mfa, "required", lambda u: False)
-    db.upsert_user if False else None
-    mfa.disable(admin_u["id"], {"name": "보안담당"}, "휴대폰 분실")
-    assert not mfa.enabled(ent_user(admin_u["id"]))
-
-
-def ent_user(uid):
-    from core import enterprise as ent
-    return ent.get_user(user_id=uid)
 
 
 # ── 3. 감사로그 이관 · 백업 세대 ────────────────────────────────────────────

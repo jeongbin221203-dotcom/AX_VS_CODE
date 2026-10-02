@@ -37,23 +37,6 @@
       <label>월말 백업 보관 (개월) <input type="number" min="0" max="120" name="backup_keep_monthly" value="{{ v.backup_keep_monthly }}"></label>
       <label>연말 백업 보관 (년) <input type="number" min="0" max="50" name="backup_keep_yearly" value="{{ v.backup_keep_yearly }}"></label>
     </div>
-    <fieldset class="checks"><legend>2단계 인증 필수 역할 (비밀번호 로그인·비상 계정에 적용, SSO 는 회사 IdP 가 담당)</legend>
-      <input type="hidden" name="mfa_present" value="1">
-      {% for code, label in ROLE_LABEL.items() %}
-        <label class="check"><input type="checkbox" name="mfa_required_roles" value="{{ code }}" {{ 'checked' if code in v.mfa_required_roles }}> {{ label }}</label>
-      {% endfor %}
-    </fieldset>
-    <p class="muted small">할인 {{ v.discount_manager_max }}% 이하 팀장 / {{ v.discount_exec_max }}% 이하 팀장 → 임원 / 그 이상 팀장 → 임원 → 관리자.
-      바꾼 구간은 새 결재 요청부터 적용되고, 진행 중인 결재는 요청할 때의 결재선을 그대로 따릅니다.</p>
-    <fieldset>
-      <legend>영업 단계별 확률 (%) — 가중 파이프라인·예측에 사용, 수주 100 · 실주 0 고정</legend>
-      <div class="form-grid g5">
-        {% for s in open_stages %}
-          <label>{{ s }} <input type="number" min="0" max="99" name="prob_{{ s }}" value="{{ v.stage_prob[s] }}"></label>
-        {% endfor %}
-      </div>
-      <p class="muted small">바꾼 확률은 단계를 새로 옮기거나 새로 등록하는 영업기회부터 적용됩니다.</p>
-    </fieldset>
     <button class="btn btn-primary">💾 저장</button>
   </form>
   {% if v.pii_retention_years %}

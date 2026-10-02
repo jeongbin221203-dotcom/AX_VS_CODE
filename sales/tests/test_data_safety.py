@@ -136,8 +136,7 @@ def test_breakglass_login_when_idp_down(app, monkeypatch):
     assert "올바르지 않습니다" in res.get_data(as_text=True)
     res = post(client, "/login/breakglass", {"emp_no": admin_user["emp_no"], "password": "Break!Glass2026x"})
     assert res.status_code == 302
-    gate = client.get("/admin/settings")                    # 비상 계정도 관리자 → 2단계 인증 등록부터
-    assert gate.status_code == 302 and "/account/mfa" in gate.headers["Location"]
+    assert client.get("/admin/settings").status_code == 200
     assert db._one("SELECT id FROM audit_log WHERE action='비상로그인'")
     monkeypatch.delenv("SALES_BREAKGLASS_USERS")
     assert not core_auth.breakglass_enabled()

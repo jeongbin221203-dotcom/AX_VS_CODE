@@ -250,7 +250,7 @@ footer.end{margin-top:72px;padding-top:18px;border-top:1px solid var(--line);fon
     <div>
       <span class="p-code">SL · 영업관리</span>
       <h2 id="sl-title">영업관리 시스템</h2>
-      <p class="sum">거래처·파이프라인·영업활동·매출 관리에 더해, 대기업 영업조직에 필요한 권한 분리, 품목·견적·부가세·외화, 다단계 할인 결재, 위변조를 막는 감사 추적, 2단계 인증, ERP·인사·사내 로그인 연동, 전자세금계산서 발행, 여러 서버 운영까지 담은 CRM입니다.</p>
+      <p class="sum">거래처·파이프라인·영업활동·매출 관리에 더해, 대기업 영업조직에 필요한 권한 분리, 품목·견적·부가세·외화, 다단계 할인 결재, 위변조를 막는 감사 추적, ERP·인사·사내 로그인 연동, 전자세금계산서 발행, 여러 서버 운영까지 담은 CRM입니다.</p>
     </div>
     <div class="facts">
       <div><b>20</b><span>메뉴</span></div>
@@ -452,7 +452,6 @@ total = sum(a * w <span class="k">for</span> a, w <span class="k">in</span> zip(
         <li><span class="ok">PASS</span><span>동시 입금 8건이 하나도 사라지지 않음, 두 번 클릭해도 매출 1건, 화면을 연 사이 바뀐 매출은 덮어쓰지 않음</span></li>
         <li><span class="ok">PASS</span><span>연결이 끊기면 저장을 막고 입력을 보관, 새로고침 뒤 되살림 (헤드리스 Chrome으로 확인)</span></li>
         <li><span class="ok">PASS</span><span>같은 사업자번호 거래처 등록 거부, 중복 거래처 병합 시 매출·영업기회 이동</span></li>
-        <li><span class="ok">PASS</span><span>관리자 2단계 인증(OTP) 강제 등록, 틀린 코드·같은 코드 재사용 거부, 복구 코드 1회용</span></li>
         <li><span class="ok">PASS</span><span>외화(USD) 매출 원화 환산·ERP 거래통화, 법인별 SAP 판매조직, 전자세금계산서 발행 → 증빙 자동 등록</span></li>
         <li><span class="ok">PASS</span><span>감사로그 한 줄을 고치거나 지우면 무결성 검증이 해당 번호를 찾아냄, 보관기간이 지난 기록은 파일로 옮겨도 체인 유지</span></li>
       </ul>

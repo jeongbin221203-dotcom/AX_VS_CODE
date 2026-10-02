@@ -33,10 +33,10 @@
   `core/offline.py`(외부 연결 사내망/인터넷 분류), 비상 로그인(`SALES_BREAKGLASS_USERS`), 마이그레이션 0007·0008(sales.row_version, form_submissions).
   입금 조건부 갱신(동시 입금 유실 방지, ERP 대사는 expected_before), 매출 수정 충돌 검사, ERP 대기열 선점('전송중', recover_stuck), 폼 `_submit_id` 중복 제출 차단,
   app.js 입력 보관(localStorage `sales-draft:<user>:`)·연결 끊김 배너. 테스트 80(SQLite) / 79+1 skip(PG). 브라우저 동작은 CDP로 확인(scratchpad cdp_drafts.py).
-- 2026-10-02 대기업 보완(마이그레이션 0009): 거래처 중복(biz_no_norm·name_key)·병합(merge_customers), 2단계 인증(core/mfa.py TOTP·복구코드, 비밀키 Fernet SALES_MFA_KEY, 필수 역할=회사설정 mfa_required_roles),
+- 2026-10-02 대기업 보완(마이그레이션 0009): 거래처 중복(biz_no_norm·name_key)·병합(merge_customers),
   감사로그 이관(core/retention.py, audit_archives — 트리거가 이관 범위만 삭제 허용, audit() 은 로그가 비면 이관 last_hash 에서 체인 잇기), 백업 세대(일·월말·연말),
   첨부(core/attachments.py), 회계연도(core/fiscal.py), 개인정보 요청(core/privacy.py, 관리자 메뉴), 법인·환율(core/entities.py), 전자세금계산서 발행(core/etax.py, SALES_ETAX_ADAPTER none|mock|file|rest, 실제 ASP 미검증).
-  기존 테스트 2개는 관리자 2단계 인증 강제로 기대값 변경(test_app password 테스트는 mfa.required 끔). 테스트 89 / PG 88+1.
+  2단계 인증(OTP)은 사용자 요청으로 같은 날 제거(마이그레이션 0010 이 users OTP 열 삭제).
 - 사용자 `data/sales.db`에는 담당자 계정 없이 만든 샘플 데이터(9/27 17:54~56, 여러 번 생성)가 있어 담당자 '미연결' 상태(관리자만 조회).
 - 확인용 서버는 SALES_PORT=5011 + DB 복사본 사용(Windows는 같은 포트에 여러 프로세스가 바인딩됨).
 - 게시된 Artifact: https://claude.ai/artifact/CTxZ4PEpwjc7xMdtveRMNQ (제목 "업무 시스템 포트폴리오". 다른 대화/폴더에서 수정하려면 이 URL을 `url`로 넘겨 업데이트)

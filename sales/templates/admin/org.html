@@ -33,13 +33,6 @@
       </div>
       <button class="btn btn-primary">저장</button>
     </form>
-    {% if target.id and mfa_on %}
-      <form method="post" action="{{ url_for('admin.user_mfa_reset', uid=target.id) }}" class="toolbar" data-no-draft>
-        {{ csrf() }}<span class="grow small">2단계 인증 사용 중 — 휴대폰을 잃어버렸으면 본인 확인 후 초기화합니다.</span>
-        <input name="reason" placeholder="사유 (예: 휴대폰 분실, 본인 확인 완료)" required>
-        <button class="btn btn-sm btn-danger">2단계 인증 초기화</button>
-      </form>
-      {% endif %}
     {% if target.id and locked %}
       <form method="post" action="{{ url_for('admin.user_unlock', uid=target.id) }}" class="toolbar">
         {{ csrf() }}
