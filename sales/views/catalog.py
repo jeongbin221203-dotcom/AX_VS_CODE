@@ -8,6 +8,7 @@ from flask import Blueprint, abort, flash, g, jsonify, redirect, request, send_f
 import io
 
 from core import catalog
+from core import orders as so
 from core import entities as ent_mod
 from core import enterprise as ent
 from core import quotes as qt
@@ -181,6 +182,11 @@ def quote_action(qid: int, action: str):
             target = qt.revise(qid)
             flash("새 판을 만들었습니다. 수정 후 다시 발송하세요.", "success")
             return redirect(url_for("catalog.quotes", qid=target, edit=1))
+        elif action == "order":
+            oid = so.from_quote(qid, {"delivery_date": f_str("delivery_date") or None,
+                                      "customer_po": f_str("customer_po")})
+            flash("수주로 등록했습니다. 납품할 때마다 수량을 골라 매출을 등록하세요.", "success")
+            return redirect(url_for("catalog.orders", oid=oid))
         elif action == "convert":
             ids = qt.convert_to_sales(qid, f_str("sale_date") or None)
             flash(f"매출 {len(ids)}건을 등록했습니다. ERP 전송 대기열에 올라갔습니다.", "success")
@@ -198,3 +204,64 @@ def quote_pdf(qid: int):
     db.audit("다운로드", "견적", qid, {"파일": "PDF", "견적번호": q["quote_no"]})
     return send_file(io.BytesIO(data), mimetype="application/pdf", as_attachment=False,
                      download_name=f"견적서_{q['quote_no']}_Rev{q['revision']}.pdf")
+
+
+# ============================================================================
+# 수주 — 견적 수락 뒤 여러 번 나눠 납품·매출 (수주 잔량)
+# ============================================================================
+@bp.route("/orders")
+def orders():
+    status = a_str("status")
+    df = so.list_orders(status)
+    if request.args.get("export") == "orders":
+        return csv_response(df.drop(columns=["id", "owner_id"], errors="ignore"), "수주목록.csv")
+    oid = a_int("oid")
+    order = None
+    if oid:
+        try:
+            order = so.get(oid)
+        except (TypeError, ValueError):
+            abort(404)
+    return render_page(
+        "catalog/orders.html", "orders", status=status, statuses=so.STATUS,
+        tbl=Table(df, money=["수주금액", "잔량금액"], drop=["owner_id"], link=("catalog.orders", "id", "oid"),
+                  page_size=PAGE_SIZE, highlight={"상태": {"완료": "muted", "취소": "muted"}}),
+        order=order, new=request.args.get("new") == "1",
+        customers=db.customer_options(include_closed=False), products=catalog.product_options(),
+        tax_types=db.TAX_TYPES, m_open=int(df[df["상태"] == "진행"]["잔량금액"].sum()) if not df.empty else 0,
+        m_count=int((df["상태"] == "진행").sum()) if not df.empty else 0,
+    )
+
+
+@bp.route("/orders/save", methods=["POST"])
+def order_save():
+    cid = visible_customer(f_int("customer_id"))
+    try:
+        oid = so.create({"customer_id": cid, "order_date": f_str("order_date"), "delivery_date": f_str("delivery_date"),
+                         "customer_po": f_str("customer_po"), "memo": f_str("memo")}, _items_from_form())
+        flash("수주를 등록했습니다.", "success")
+        return redirect(url_for("catalog.orders", oid=oid))
+    except ValueError as exc:
+        flash(str(exc), "error")
+        return redirect(url_for("catalog.orders", new=1))
+
+
+@bp.route("/orders/<int:oid>/deliver", methods=["POST"])
+def order_deliver(oid: int):
+    qty = {int(k[4:]): int(v) for k, v in request.form.items() if k.startswith("qty_") and str(v).strip().isdigit()}
+    try:
+        ids = so.deliver(oid, qty, f_str("sale_date") or None)
+        flash(f"납품 {len(ids)}건을 매출로 등록했습니다.", "success")
+    except (ValueError, PermissionError) as exc:
+        flash(str(exc), "error")
+    return redirect(url_for("catalog.orders", oid=oid))
+
+
+@bp.route("/orders/<int:oid>/cancel-remaining", methods=["POST"])
+def order_cancel_remaining(oid: int):
+    try:
+        so.cancel_remaining(oid, f_str("reason"))
+        flash("남은 수량을 취소했습니다.", "warning")
+    except ValueError as exc:
+        flash(str(exc), "error")
+    return redirect(url_for("catalog.orders", oid=oid))

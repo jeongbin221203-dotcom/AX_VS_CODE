@@ -17,7 +17,7 @@ from core import sales_db as db
 ALL_PAGES = ["/", "/forecast", "/analytics", "/customers", "/deals", "/activities", "/sales",
              "/targets", "/approvals", "/quotes", "/products", "/products?tab=prices", "/data/",
              "/admin/org", "/admin/erp", "/admin/jobs", "/admin/audit", "/admin/data", "/admin/settings",
-             "/admin/privacy", "/customers?tab=merge", "/activities?tab=files", "/targets?fy=2026"]
+             "/admin/privacy", "/orders", "/orders?new=1", "/approvals?tab=finance", "/customers?tab=merge", "/activities?tab=files", "/targets?fy=2026"]
 MANAGER_PAGES: set[str] = set()      # 결재함은 대결자(담당자 포함)도 쓰므로 모든 역할에 열려 있다
 ADMIN_PAGES = {"/admin/org", "/admin/erp", "/admin/jobs", "/admin/audit", "/admin/data", "/admin/settings",
                "/admin/privacy"}

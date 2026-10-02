@@ -40,9 +40,15 @@ def enabled() -> bool:
     return adapter_name() in ("file", "rest", "mock")
 
 
-def build_xml(sale: dict, customer: dict, supplier: dict, issue_date: str, approval_no: str = "") -> bytes:
-    """국세청 전자세금계산서 표준(KEC) 구조의 XML. 금액은 원화."""
-    type_code = "0101" if (sale.get("tax_type") or "과세") == "과세" else "0102"    # 일반 / 영세율
+MODIFY_CODES = {"반품": "03", "정정": "02"}      # 수정사유: 03 환입(반품), 02 공급가액 변동
+
+
+def build_xml(sale: dict, customer: dict, supplier: dict, issue_date: str, approval_no: str = "",
+              original_approval: str = "") -> bytes:
+    """국세청 전자세금계산서 표준(KEC) 구조의 XML. 금액은 원화. 반품·정정 행이면 수정세금계산서(수정사유·당초 승인번호)."""
+    kind = sale.get("sale_kind") or "매출"
+    modify = MODIFY_CODES.get(kind)
+    type_code = ("0201" if modify else "0101") if (sale.get("tax_type") or "과세") == "과세" else         ("0202" if modify else "0102")                                  # 일반/영세율 · 수정이면 02xx
     d = issue_date.replace("-", "")
     item = escape(str(sale["item"]))[:100]
 
@@ -56,7 +62,9 @@ def build_xml(sale: dict, customer: dict, supplier: dict, issue_date: str, appro
             f'<TaxInvoice xmlns="{NS}">'
             f"<ExchangedDocument><IssueDateTime>{d}{datetime.now():%H%M%S}</IssueDateTime></ExchangedDocument>"
             f"<TaxInvoiceDocument><IssueID>{approval_no}</IssueID><TypeCode>{type_code}</TypeCode>"
-            f"<IssueDateTime>{d}</IssueDateTime><PurposeCode>02</PurposeCode></TaxInvoiceDocument>"
+            f"<IssueDateTime>{d}</IssueDateTime><PurposeCode>02</PurposeCode>"
+            + (f"<AmendmentStatusCode>{modify}</AmendmentStatusCode><OriginalIssueID>{original_approval}</OriginalIssueID>"
+               if modify else "") + "</TaxInvoiceDocument>"
             f"<TaxInvoiceTradeSettlement>"
             f"{party('InvoicerParty', supplier)}"
             f"{party('InvoiceeParty', {'biz_no': customer.get('biz_no'), 'name': customer.get('name'), 'ceo': customer.get('manager'), 'address': customer.get('address')})}"
@@ -95,6 +103,10 @@ def check(sale: dict, customer: dict, supplier: dict) -> list[str]:
         problems.append("거래처 사업자번호가 없거나 올바르지 않습니다 — 거래처 화면에서 입력하세요.")
     if not supplier.get("name"):
         problems.append("공급자 상호가 없습니다.")
+    if (sale.get("sale_kind") or "매출") != "매출":
+        from .returns import original_approval_no
+        if not original_approval_no(int(sale["original_sale_id"])):
+            problems.append("원매출의 전자세금계산서 승인번호가 없습니다 — 수정세금계산서는 당초 승인번호가 있어야 발행됩니다.")
     return problems
 
 
@@ -169,7 +181,7 @@ def process(eid: int) -> dict:
             return {"skipped": True}
     db.set_context("system", None)
     sale, customer, supplier = _context(row["sale_id"])
-    xml = build_xml(sale, customer, supplier, row["issue_date"])
+    xml = build_xml(sale, customer, supplier, row["issue_date"], original_approval=_original(sale))
     try:
         number = _send(int(eid), xml, row)
     except Exception as exc:
@@ -200,8 +212,9 @@ def complete(eid: int, approval_no: str, ok: bool = True, message: str = "") -> 
         raise ValueError("승인번호는 24자리 숫자여야 합니다.")
     db.set_context("system", None)
     sale, customer, supplier = _context(row["sale_id"])
-    xml = build_xml(sale, customer, supplier, row["issue_date"], number)
-    doc_id, warnings = docs.add_document(int(row["sale_id"]), {"doc_type": "전자세금계산서"}, xml,
+    xml = build_xml(sale, customer, supplier, row["issue_date"], number, _original(sale))
+    doc_type = "수정세금계산서" if (sale.get("sale_kind") or "매출") != "매출" else "전자세금계산서"
+    doc_id, warnings = docs.add_document(int(row["sale_id"]), {"doc_type": doc_type}, xml,
                                          f"전자세금계산서_{number}.xml", {"name": "전자세금계산서 발행", "id": None})
     key = docs.get_document(doc_id)["file_path"]
     with db.get_conn() as conn:
@@ -209,6 +222,13 @@ def complete(eid: int, approval_no: str, ok: bool = True, message: str = "") -> 
                      "issued_at=? WHERE id=?", (number, doc_id, key, db._now(), eid))
     db.audit("세금계산서발행", "매출", int(row["sale_id"]), {"요청번호": eid, "승인번호": number, "증빙": doc_id})
     return {"id": eid, "status": "발행완료", "approval_no": number, "document_id": doc_id, "warnings": warnings}
+
+
+def _original(sale: dict) -> str:
+    if (sale.get("sale_kind") or "매출") == "매출" or not sale.get("original_sale_id"):
+        return ""
+    from .returns import original_approval_no
+    return original_approval_no(int(sale["original_sale_id"])) or ""
 
 
 def list_for_sale(sale_id: int) -> list[dict]:

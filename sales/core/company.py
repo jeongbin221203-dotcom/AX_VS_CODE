@@ -43,6 +43,10 @@ DEFAULTS: dict[str, Any] = {
     "audit_retention_years": 0,            # 감사로그 DB 보관 연수 (0 = 계속 보관), 지나면 파일로 이관
     "backup_keep_daily": 30, "backup_keep_monthly": 12, "backup_keep_yearly": 7,
     "fiscal_start_month": 1,               # 회계연도 시작 월 (4 = 4월~다음 해 3월)
+    "writeoff_exec_threshold": 10_000_000, # 대손 금액이 이보다 크면 임원 결재 (이하 팀장)
+    "auto_block_overdue_days": 0,          # 결제기일이 N일 넘게 지난 미수가 있으면 자동 거래정지 (0 = 끔)
+    "auto_block_over_credit": False,       # 미수가 여신한도를 넘으면 자동 거래정지
+    "auto_block_exempt_days": 30,          # 해제 결재 뒤 다시 자동 정지하지 않는 기간
 }
 
 # 코드 목록 → (sales_db 의 리스트, 쓰이는 테이블·컬럼)
@@ -60,7 +64,9 @@ LABELS = {
     "pii_retention_years": "개인정보 보관기간(년)",
     "audit_retention_years": "감사로그 보관(년)", "backup_keep_daily": "일 백업 보관(개)",
     "backup_keep_monthly": "월말 백업 보관(개월)", "backup_keep_yearly": "연말 백업 보관(년)",
-    "fiscal_start_month": "회계연도 시작 월", **{k: v[3] for k, v in CODE_LISTS.items()},
+    "fiscal_start_month": "회계연도 시작 월", "writeoff_exec_threshold": "대손 임원결재 기준(원)",
+    "auto_block_overdue_days": "자동 거래정지 연체일", "auto_block_over_credit": "여신 초과 자동 거래정지",
+    "auto_block_exempt_days": "해제 후 재정지 유예(일)", **{k: v[3] for k, v in CODE_LISTS.items()},
 }
 
 _lock = threading.Lock()
@@ -168,9 +174,12 @@ def validate(changes: dict) -> dict:
                         ("default_payment_terms", 0, 365), ("pii_retention_years", 0, 20),
                         ("audit_retention_years", 0, 30), ("backup_keep_daily", 1, 365),
                         ("backup_keep_monthly", 0, 120), ("backup_keep_yearly", 0, 50),
-                        ("fiscal_start_month", 1, 12)):
+                        ("fiscal_start_month", 1, 12), ("writeoff_exec_threshold", 0, 10**12),
+                        ("auto_block_overdue_days", 0, 3650), ("auto_block_exempt_days", 0, 365)):
         if key in changes:
             out[key] = _number(changes[key], LABELS[key], lo, hi)
+    if "auto_block_over_credit" in changes:
+        out["auto_block_over_credit"] = changes["auto_block_over_credit"] in (True, 1, "1", "on", "true")
     if "stage_prob" in changes:
         probs = {s: _number(changes["stage_prob"].get(s, cur["stage_prob"][s]), f"{s} 확률", 0, 99)
                  for s in db.OPEN_STAGES}
@@ -231,5 +240,7 @@ def purge_pii(dry_run: bool = False) -> dict:
         with db.get_conn() as conn:
             for cid in ids:
                 conn.execute("UPDATE customers SET manager=NULL, phone=NULL, email=NULL WHERE id=?", (cid,))
+                conn.execute("UPDATE customer_contacts SET name='[파기]', phone=NULL, email=NULL, memo=NULL, active=0, "
+                             "is_primary=0 WHERE customer_id=?", (cid,))
         db.audit("개인정보파기", "거래처", None, {"건수": len(ids), "기준": f"종료 후 {years}년", "거래처ID": ids[:200]})
     return {"purged": len(ids), "dry_run": dry_run, "cutoff": cutoff}

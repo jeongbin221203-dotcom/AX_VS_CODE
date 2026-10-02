@@ -24,6 +24,14 @@
           <td>{{ r['고객담당자'] or '' }}</td><td>{{ r['연락처'] or '' }}</td><td>{{ r['이메일'] or '' }}</td><td>{{ r['영업담당'] }}</td></tr>
       {% else %}<tr><td colspan="6" class="muted">없음</td></tr>{% endfor %}</tbody>
     </table></div>
+    <h3>거래처 담당자 목록 ({{ found.contacts|length }}건)</h3>
+    <div class="table-wrap"><table class="data">
+      <thead><tr><th>파기</th><th>거래처</th><th>담당자</th><th>부서</th><th>연락처</th><th>이메일</th></tr></thead>
+      <tbody>{% for r in found.contacts.to_dict('records') %}
+        <tr><td><input type="checkbox" name="tid" value="{{ r.id }}" checked aria-label="파기 선택"></td><td>{{ r['거래처'] }}</td>
+          <td>{{ r['담당자'] }}</td><td>{{ r['부서'] or '' }}</td><td>{{ r['연락처'] or '' }}</td><td>{{ r['이메일'] or '' }}</td></tr>
+      {% else %}<tr><td colspan="6" class="muted">없음</td></tr>{% endfor %}</tbody>
+    </table></div>
     <h3>영업활동 기록 ({{ found.activities|length }}건)</h3>
     <div class="table-wrap"><table class="data">
       <thead><tr><th>파기</th><th>활동일</th><th>거래처</th><th>활동내용</th><th>다음액션</th></tr></thead>

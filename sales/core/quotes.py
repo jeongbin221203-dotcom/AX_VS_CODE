@@ -268,6 +268,8 @@ def convert_to_sales(quote_id: int, sale_date: Optional[str] = None) -> list[int
         raise ValueError("수락된 견적만 매출로 전환할 수 있습니다.")
     if q["sales"]:
         raise ValueError("이미 매출로 전환한 견적입니다.")
+    if db._one("SELECT id FROM sales_orders WHERE quote_id=? AND status <> '취소'", [quote_id]):
+        raise ValueError("이 견적은 수주로 등록되어 있습니다. 수주 화면에서 납품하며 매출을 등록하세요.")
     ids = []
     for line in q["items"]:
         ids.append(db.upsert_sale({

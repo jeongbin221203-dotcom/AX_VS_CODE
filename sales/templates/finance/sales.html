@@ -73,7 +73,33 @@
   </section>
 
   <section class="card">
-    <h3>💵 입금 등록</h3>
+    <h3>🏦 거래처 일괄 입금 (여러 매출 한 번에 · 선수금)</h3>
+    <form method="post" class="toolbar" data-no-draft
+          onsubmit="this.action='{{ url_for('finance.customer_receipt', cid=0) }}'.replace('/0/', '/' + this.customer_id.value + '/')">
+      {{ csrf() }}
+      <label class="grow">거래처 {{ select('customer_id', customers.items()|list, '', blank='선택하세요') }}</label>
+      <label>입금액 <input type="number" name="amount" min="1" required></label>
+      <label>입금일 <input type="date" name="pay_date" value="{{ today().isoformat() }}"></label>
+      <label>방법 {{ select('method', pay_methods, '계좌이체') }}</label>
+      <label>참조번호 <input name="ref_no"></label>
+      <button class="btn btn-primary">입금 배분</button>
+    </form>
+    <p class="muted small">결제기일이 빠른 미수 매출부터 채우고, 남는 금액(계약금·과입금)은 거래처 선수금으로 둡니다. 선수금은 매출 화면에서 배분합니다.</p>
+    <h4>선수금 잔액</h4>
+    {{ table(advances, 200, '선수금이 있는 거래처가 없습니다.') }}
+    {% if adv_options %}
+    <form method="post" class="toolbar" data-no-draft
+          onsubmit="this.action='{{ url_for('finance.customer_refund', cid=0) }}'.replace('/0/', '/' + this.customer_id.value + '/')">
+      {{ csrf() }}
+      <label class="grow">환불할 거래처 {{ select('customer_id', adv_options, '') }}</label>
+      <label>환불액 <input type="number" name="amount" min="1" required></label>
+      <label>환불일 <input type="date" name="pay_date" value="{{ today().isoformat() }}"></label>
+      <label>메모 <input name="memo"></label>
+      <button class="btn btn-danger">선수금 환불</button>
+    </form>
+    {% endif %}
+
+    <h3>💵 입금 등록 (매출 한 건)</h3>
     {% if not pay_options %}
       <div class="alert alert-info">미수 채권이 없습니다.</div>
     {% else %}
@@ -163,6 +189,39 @@
     {% if raw.currency and raw.currency != 'KRW' %}
       <p class="small">외화 거래: {{ raw.currency }} {{ '{:,.2f}'.format(raw.foreign_amount or 0) }} × 환율 {{ raw.fx_rate }} = {{ raw.amount|won }}</p>
     {% endif %}
+    {% if raw.sale_kind and raw.sale_kind != '매출' %}
+      <div class="alert alert-info">{{ raw.sale_kind }} 매출입니다 — 원매출 <a href="{{ url_for('finance.sales', sid=raw.original_sale_id) }}">#{{ raw.original_sale_id }}</a></div>
+    {% endif %}
+    {% if raw.status != '취소' and (raw.sale_kind or '매출') == '매출' %}
+      <h3 class="doc-title">↩️ 반품 · 단가 정정</h3>
+      {% if linked and linked.total %}{{ table(linked) }}{% endif %}
+      <form method="post" action="{{ url_for('finance.sale_return', sid=raw.id) }}" class="toolbar" data-no-draft>
+        {{ csrf() }}
+        <label>구분 <select name="kind"><option>반품</option><option>정정</option></select></label>
+        <label>반품 수량 (남은 {{ returnable }}) <input type="number" name="qty" min="1" max="{{ returnable }}"></label>
+        <label>정정 단가 (지금 {{ raw.unit_price|won }}) <input type="number" name="new_unit_price" min="0"></label>
+        <label>일자 <input type="date" name="return_date" value="{{ today().isoformat() }}"></label>
+        <label class="grow">사유 * <input name="reason" required placeholder="예) 2개 불량 반품, 계약 단가 인하"></label>
+        <button class="btn">등록</button>
+      </form>
+      <p class="muted small">반품·감액은 마이너스 매출로 남고, 원매출 미수에서 빼며 이미 다 받았으면 선수금으로 둡니다. 원매출이 전자세금계산서로 발행됐으면
+        이 행에서 수정세금계산서(반품 03 · 공급가액 변동 02)를 발행합니다. ERP 에는 반품 전표가 갑니다.</p>
+      {% set remain_amt = (raw.total_amount or raw.amount) - (raw.paid_amount or 0) %}
+      {% if remain_amt > 0 %}
+        {% if advance_balance > 0 %}
+        <form method="post" action="{{ url_for('finance.sale_apply_advance', sid=raw.id) }}" class="toolbar" data-no-draft>
+          {{ csrf() }}<span class="grow small">이 거래처 선수금 {{ advance_balance|won }} — 미수 {{ remain_amt|won }}에 배분</span>
+          <label>배분액 <input type="number" name="amount" min="1" value="{{ [advance_balance, remain_amt]|min }}"></label>
+          <button class="btn">선수금 배분</button>
+        </form>
+        {% endif %}
+        <form method="post" action="{{ url_for('finance.sale_writeoff', sid=raw.id) }}" class="toolbar" data-no-draft>
+          {{ csrf() }}<label class="grow">대손 처리 사유 <input name="reason" required placeholder="예) 거래처 파산, 회수 불능 확인"></label>
+          <button class="btn btn-danger">대손 결재 요청 ({{ remain_amt|won }})</button>
+        </form>
+      {% endif %}
+    {% endif %}
+
     <h3 class="doc-title">💵 입금 내역</h3>
     {% for p in payments %}
       <div class="file-row {{ 'voided' if p.reversed_by }}">

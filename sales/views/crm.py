@@ -7,6 +7,8 @@ from flask import Blueprint, abort, flash, g, redirect, request, url_for
 
 from core import attachments as att
 from core import company
+from core import contacts as ct
+from core import credit
 from core import dataio
 from core import enterprise as ent
 from core import sales_db as db
@@ -84,6 +86,9 @@ def _customers_page(form: dict | None = None, status: int = 200):
         ctx["cust_deals"] = Table(db.list_deals(customer_id=edit_id, only_open=True),
                                   money=["예상금액", "가중금액"],
                                   drop=["id", "customer_id", "종료일", "owner_id"])
+        ctx["contacts"] = ct.list_for(edit_id)
+        ctx["contact_roles"] = ct.ROLES
+        ctx["edit_contact"] = next((c for c in ctx["contacts"] if c["id"] == a_int("contact")), {})
         ctx["cust_acts"] = Table(db.list_activities(days=365, customer_id=edit_id).head(10),
                                  drop=["id", "customer_id", "owner_id"])
     if tab == "merge" and ent.has_role(g.user, "ADMIN"):
@@ -94,6 +99,33 @@ def _customers_page(form: dict | None = None, status: int = 200):
         ctx["all_customers"] = [(int(k), v) for k, v in db.customer_options(include_closed=False).items()]
     ctx["is_admin"] = ent.has_role(g.user, "ADMIN")
     return render_page("crm/customers.html", "customers", **ctx), status
+
+
+@bp.route("/customers/<int:cid>/contacts", methods=["POST"])
+def contact_save(cid: int):
+    visible_customer(cid)
+    try:
+        if f_str("action") == "deactivate":
+            ct.deactivate(cid, f_int("contact_id"))
+            flash("담당자를 사용 안 함으로 바꿨습니다(기록은 남습니다).", "warning")
+        else:
+            ct.save(cid, {k: f_str(k) for k in ct.FIELDS} | {"is_primary": f_bool("is_primary")},
+                    f_int("contact_id") or None)
+            flash("담당자를 저장했습니다.", "success")
+    except ValueError as exc:
+        flash(str(exc), "error")
+    return redirect(url_for("crm.customers", tab="edit", id=cid))
+
+
+@bp.route("/customers/<int:cid>/unblock", methods=["POST"])
+def customer_unblock_request(cid: int):
+    visible_customer(cid)
+    try:
+        rid = credit.request_unblock(cid, f_str("reason"), g.user)
+        flash(f"거래정지 해제 결재를 요청했습니다(요청 #{rid}).", "success")
+    except (ValueError, PermissionError) as exc:
+        flash(str(exc), "error")
+    return redirect(url_for("crm.customers", tab="edit", id=cid))
 
 
 @bp.route("/customers/merge", methods=["POST"])

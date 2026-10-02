@@ -36,6 +36,11 @@
       <label>일 백업 보관 (개) <input type="number" min="1" max="365" name="backup_keep_daily" value="{{ v.backup_keep_daily }}"></label>
       <label>월말 백업 보관 (개월) <input type="number" min="0" max="120" name="backup_keep_monthly" value="{{ v.backup_keep_monthly }}"></label>
       <label>연말 백업 보관 (년) <input type="number" min="0" max="50" name="backup_keep_yearly" value="{{ v.backup_keep_yearly }}"></label>
+      <label>대손 임원 결재 기준 (원 초과) <input type="number" min="0" step="1000000" name="writeoff_exec_threshold" value="{{ v.writeoff_exec_threshold }}"></label>
+      <label>자동 거래정지 연체일 (0=끔) <input type="number" min="0" max="3650" name="auto_block_overdue_days" value="{{ v.auto_block_overdue_days }}"></label>
+      <label>해제 후 재정지 유예 (일) <input type="number" min="0" max="365" name="auto_block_exempt_days" value="{{ v.auto_block_exempt_days }}"></label>
+      <input type="hidden" name="auto_block_present" value="1">
+      <label class="check"><input type="checkbox" name="auto_block_over_credit" value="1" {{ 'checked' if v.auto_block_over_credit }}> 미수가 여신한도를 넘으면 자동 거래정지</label>
     </div>
     <button class="btn btn-primary">💾 저장</button>
   </form>

@@ -119,6 +119,9 @@
       <form method="post" action="{{ url_for('catalog.quote_action', qid=q.id, action='revise') }}" class="inline-form">{{ csrf() }}<button class="btn">🔁 개정 (새 판)</button></form>
     {% endif %}
     {% if q.status == '수락' and not q.sales %}
+      <form method="post" action="{{ url_for('catalog.quote_action', qid=q.id, action='order') }}" class="inline-form">{{ csrf() }}
+        <input type="date" name="delivery_date" title="납기"><input name="customer_po" placeholder="고객 발주번호">
+        <button class="btn btn-primary">📑 수주 등록 (나눠 납품)</button></form>
       <form method="post" action="{{ url_for('catalog.quote_action', qid=q.id, action='convert') }}" class="inline-form">{{ csrf() }}
         <input type="date" name="sale_date" value="{{ today() }}"><button class="btn btn-primary">💰 매출로 전환</button></form>
     {% endif %}

@@ -34,6 +34,7 @@ MENUS = [
     ("sales", "💰 매출·채권", "finance.sales", "REP"),
     ("targets", "🎯 목표", "finance.targets", "REP"),
     ("quotes", "📝 견적", "catalog.quotes", "REP"),
+    ("orders", "📑 수주", "catalog.orders", "REP"),
     ("products", "📦 품목·단가", "catalog.products", "REP"),
     ("approvals", "✅ 결재함", "finance.approvals", "REP"),
     ("dataio", "📥 데이터 등록·추출", "io.index", "REP"),
@@ -133,7 +134,9 @@ def load_context():
     ids = {o["id"] for o in g.owner_choices}
     # 영업사원은 본인 데이터만 보이므로 필터가 무의미하다. 범위 밖 id 도 무시한다.
     g.owner_filter = int(owner) if owner.isdigit() and int(owner) in ids and len(ids) > 1 else None
-    g.pending_cnt = len(ent.pending_for(g.user))
+    from core import credit
+    g.pending_cnt = len(ent.pending_for(g.user)) + (len(credit.pending_for(g.user))
+                                                     if ent.has_role(g.user, "MANAGER") else 0)
     g.unread = notify.unread_count(int(g.user["id"]))
     return None
 

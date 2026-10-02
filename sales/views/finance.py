@@ -7,7 +7,10 @@ from datetime import date
 import pandas as pd
 from flask import Blueprint, abort, flash, g, redirect, request, send_file, url_for
 
+from core import advances as adv
 from core import catalog
+from core import credit
+from core import returns as rtn
 from core import entities as ent_mod
 from core import etax
 from core import documents as docs
@@ -116,6 +119,11 @@ def _sales_page(form: dict | None = None, status: int = 200):
         entity_opts=ent_mod.options(), currencies=ent_mod.CURRENCIES,
         etax_rows=etax.list_for_sale(edit_id) if edit_id else [], etax_on=etax.enabled(),
         payments=ent.list_payments(edit_id) if edit_id and edit_row else [], **extra,
+        linked=Table(rtn.linked(edit_id), money=["단가", "공급가액", "부가세", "합계"], drop=["id"]) if edit_row else None,
+        returnable=rtn.returnable_qty(edit_row["raw"]) if edit_row else 0,
+        advance_balance=adv.balance(int(edit_row["raw"]["customer_id"])) if edit_row else 0,
+        advances=Table(adv.balances(), money=["선수금잔액"], drop=["id"]),
+        adv_options=[(int(r.id), f"{r.거래처} · 선수금 {int(r.선수금잔액):,}원") for r in adv.balances().itertuples()],
         # 채권
         ar_total=ar_total, ar_overdue=ar_overdue,
         ar_overdue_cnt=int(overdue["건수"].sum()) if not summary.empty else 0,
@@ -229,6 +237,71 @@ def sale_payment():
         flash(str(exc), "error")
     back = f_str("back")
     return redirect(url_for("finance.sales", sid=int(back)) if back.isdigit() else url_for("finance.sales", tab="ar"))
+
+
+@bp.route("/sales/<int:sid>/return", methods=["POST"])
+def sale_return(sid: int):
+    kind = f_str("kind")
+    try:
+        r = rtn.create(sid, kind, f_str("reason"), qty=f_int("qty") or None,
+                       new_unit_price=f_int("new_unit_price") if f_str("new_unit_price") else None,
+                       day=f_str("return_date") or None)
+        msg = f"{kind} 매출 #{r['sale_id']} ({won(r['total'])})을 등록했습니다."
+        if r.get("채권상계"):
+            msg += f" 원매출 미수에서 {won(r['채권상계'])} 상계."
+        if r.get("선수금"):
+            msg += f" 이미 받은 {won(r['선수금'])}은 선수금으로 남겼습니다."
+        flash(msg, "success")
+    except (ValueError, PermissionError) as exc:
+        flash(str(exc), "error")
+    return redirect(url_for("finance.sales", sid=sid))
+
+
+@bp.route("/sales/<int:sid>/writeoff", methods=["POST"])
+def sale_writeoff(sid: int):
+    try:
+        rid = credit.request_writeoff(sid, f_str("reason"), g.user)
+        flash(f"대손 처리 결재를 요청했습니다(요청 #{rid}). 승인되면 채권에서 빠집니다.", "success")
+    except (ValueError, PermissionError) as exc:
+        flash(str(exc), "error")
+    return redirect(url_for("finance.sales", sid=sid))
+
+
+@bp.route("/sales/<int:sid>/apply-advance", methods=["POST"])
+def sale_apply_advance(sid: int):
+    try:
+        used = adv.apply_to_sale(sid, f_int("amount") or None, f_str("pay_date") or None)
+        flash(f"선수금 {won(used)}을 이 매출에 배분했습니다.", "success")
+    except (ValueError, PermissionError) as exc:
+        flash(str(exc), "error")
+    return redirect(url_for("finance.sales", sid=sid))
+
+
+@bp.route("/customers/<int:cid>/receipt", methods=["POST"])
+def customer_receipt(cid: int):
+    """거래처 일괄 입금 — 미수 매출에 결제기일 순으로 나눠 넣고 남으면 선수금."""
+    visible_customer(cid)
+    try:
+        r = adv.receive(cid, f_int("amount"), f_str("pay_date") or None, f_str("method") or "계좌이체",
+                        f_str("ref_no"), f_str("memo"))
+        flash(f"매출 {len(r['applied'])}건에 배분했습니다." + (f" 남은 {won(r['advance'])}은 선수금으로 두었습니다."
+                                                          if r["advance"] else ""), "success")
+    except (ValueError, PermissionError) as exc:
+        flash(str(exc), "error")
+    return redirect(url_for("finance.sales", tab="ar"))
+
+
+@bp.route("/customers/<int:cid>/refund", methods=["POST"])
+def customer_refund(cid: int):
+    visible_customer(cid)
+    if not ent.has_role(g.user, "MANAGER"):
+        abort(403, "선수금 환불은 팀장 이상이 처리합니다.")
+    try:
+        adv.add(cid, f_int("amount"), "환불", f_str("pay_date") or None, method=f_str("method"), memo=f_str("memo"))
+        flash("선수금을 환불 처리했습니다.", "warning")
+    except ValueError as exc:
+        flash(str(exc), "error")
+    return redirect(url_for("finance.sales", tab="ar"))
 
 
 @bp.route("/payments/<int:pid>/reverse", methods=["POST"])
@@ -394,7 +467,7 @@ def approvals():
     delegations = ent.list_delegations(None if is_admin else int(user["id"]))
     users = ent.list_users(active_only=True)
     return render_page(
-        "finance/approvals.html", "approvals", tab=request.args.get("tab", "mine"),
+        "finance/approvals.html", "approvals", fin_pending=Table(credit.pending_for(user), money=["금액"]), fin_pending_rows=credit.pending_for(user).to_dict("records"), fin_history=Table(credit.history(), money=["금액"], drop=["id"]), tab=request.args.get("tab", "mine"),
         mine_cnt=len(mine), requested_cnt=len(requested),
         mine_total=int(mine["제안가"].sum()) if not mine.empty else 0,
         mine=Table(mine, money=["정가", "제안가"], drop=hidden,
@@ -415,6 +488,17 @@ def approvals():
                    for u in users.itertuples()] if not users.empty else [],
         today_str=date.today().isoformat(),
     )
+
+
+@bp.route("/approvals/finance/<int:rid>/decide", methods=["POST"])
+def finance_request_decide(rid: int):
+    approve = request.form.get("decision") == "approve"
+    try:
+        credit.decide(rid, approve, f_str("comment"), g.user)
+        flash("승인했습니다." if approve else "반려했습니다.", "success" if approve else "warning")
+    except (ValueError, PermissionError) as exc:
+        flash(str(exc), "error")
+    return redirect(url_for("finance.approvals", tab="finance"))
 
 
 @bp.route("/approvals/<int:aid>/decide", methods=["POST"])

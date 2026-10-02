@@ -547,6 +547,10 @@ def upsert_customer(data: dict, db_path: str | None = None, confirm_similar: boo
                 raise ConflictError("다른 사용자가 먼저 이 거래처를 수정했습니다. "
                                     "화면을 새로고침해 최신 내용을 확인한 뒤 다시 저장하세요.")
         _set_biz_norm(cid, record.get("biz_no"), db_path)
+        if db_path is None and (prev.get("manager"), prev.get("phone"), prev.get("email")) != \
+                (record.get("manager"), record.get("phone"), record.get("email")):
+            from . import contacts
+            contacts.sync_from_customer(cid, record.get("manager"), record.get("phone"), record.get("email"))
         audit("수정", "거래처", cid, {"거래처명": record["name"],
                                       "변경": diff(prev, {**record, "owner_id": owner_id},
                                                    CUSTOMER_FIELDS + ["owner_id"])}, db_path)
@@ -559,6 +563,9 @@ def upsert_customer(data: dict, db_path: str | None = None, confirm_similar: boo
         )
         new_id = int(cur.lastrowid)
     _set_biz_norm(new_id, record.get("biz_no"), db_path)
+    if db_path is None and record.get("manager"):
+        from . import contacts
+        contacts.sync_from_customer(new_id, record.get("manager"), record.get("phone"), record.get("email"))
     audit("등록", "거래처", new_id, {"거래처명": record["name"], "담당자": owner_name}, db_path)
     return new_id
 
@@ -1226,6 +1233,10 @@ def cancel_sale(sale_id: int, reason: str, db_path: str | None = None, actor: di
             raise PermissionError("본인이 등록한 매출은 본인이 취소할 수 없습니다(직무 분리). 다른 팀장에게 요청하세요.")
     if int(prev.get("paid_amount") or 0) > 0:
         raise ValueError("입금 내역이 있는 매출은 취소할 수 없습니다. 입금 반제를 먼저 처리하세요.")
+    if (prev.get("sale_kind") or "매출") != "매출":
+        raise ValueError("반품·정정 행은 취소하지 않습니다. 반대 방향 정정으로 바로잡으세요.")
+    if _one("SELECT id FROM sales WHERE original_sale_id=? AND status <> ?", [sale_id, SALE_CANCELLED], db_path):
+        raise ValueError("반품·정정이 있는 매출은 취소할 수 없습니다. 남은 수량을 반품으로 처리하세요.")
     with get_conn(db_path) as conn:
         if conn.execute("SELECT COUNT(*) FROM erp_outbox WHERE ref_id=? AND status='전송중'", (sale_id,)).fetchone()[0]:
             raise ValueError("지금 ERP 로 전송하는 중인 매출입니다. 잠시 뒤 다시 취소하세요.")
@@ -1245,6 +1256,9 @@ def cancel_sale(sale_id: int, reason: str, db_path: str | None = None, actor: di
                              prev.get("erp_status"))).rowcount
         if not done:
             raise ConflictError("그 사이 입금·ERP 전송 등으로 매출이 바뀌었습니다. 새로고침 후 다시 취소하세요.")
+    if prev.get("order_item_id") and db_path is None:      # 수주에서 납품한 매출 → 그 수량은 다시 잔량
+        from . import orders
+        orders.release_cancelled_sale(prev)
     audit("취소", "매출", sale_id, {"사유": reason.strip(), "금액": prev["amount"],
                                     "ERP": prev.get("erp_status")}, db_path)
 

@@ -4,6 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% if title %}{{ title }} · {% endif %}{{ APP_TITLE }}</title>
+  <link rel="icon" href="{{ url_for('static', filename='img/logo.svg') }}" type="image/svg+xml">
+  <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}" sizes="any">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
   <script src="{{ url_for('static', filename='vendor/chart.umd.min.js') }}" defer></script>  {# Chart.js 4.4.1 (MIT) — 사내망에서도 동작하도록 로컬 보관 #}
   <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
@@ -13,7 +16,7 @@
 {% if g.user %}
 <div class="layout">
   <aside class="sidebar">
-    <a class="brand" href="{{ url_for('reports.dashboard') }}">📈 {{ APP_TITLE }}</a>
+    <a class="brand" href="{{ url_for('reports.dashboard') }}"><img src="{{ url_for('static', filename='img/logo.svg') }}" alt="" width="26" height="26" class="brand-logo">{{ APP_TITLE }}</a>
     <div class="me">
       <strong>{{ g.user.name }}</strong> · {{ ROLE_LABEL.get(g.user.role, g.user.role) }}
       <div class="muted small">{{ '전사 데이터 조회' if g.scope is none else '조회 범위 ' ~ g.scope|length ~ '명' }}</div>

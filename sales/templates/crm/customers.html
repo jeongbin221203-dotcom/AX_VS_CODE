@@ -95,6 +95,43 @@
           <button class="btn btn-danger">🗑️ 삭제</button>
         </form>
 
+        {% if f.trade_blocked %}
+          <div class="alert alert-error">⛔ 거래정지 ({{ f.block_source or '수기' }}) — {{ f.block_reason or '사유 없음' }}{% if f.blocked_at %} · {{ f.blocked_at }}{% endif %}</div>
+          {% if f.block_source != 'ERP' %}
+          <form method="post" action="{{ url_for('crm.customer_unblock_request', cid=edit_id) }}" class="toolbar" data-no-draft>
+            {{ csrf() }}<label class="grow">해제 요청 사유 <input name="reason" required placeholder="예) 연체금 회수 약정 체결"></label>
+            <button class="btn">거래정지 해제 결재 요청</button>
+          </form>
+          {% endif %}
+        {% endif %}
+
+        <h3>👥 거래처 담당자</h3>
+        <div class="table-wrap"><table class="data">
+          <thead><tr><th>이름</th><th>부서·직책</th><th>역할</th><th>연락처</th><th>이메일</th><th>대표</th><th></th></tr></thead>
+          <tbody>{% for c in contacts %}
+            <tr><td>{{ c.name }}</td><td>{{ c.dept or '' }} {{ c.title or '' }}</td><td>{{ c.role or '' }}</td>
+              <td>{{ c.phone or '' }}</td><td>{{ c.email or '' }}</td><td>{{ '★' if c.is_primary }}</td>
+              <td><a href="{{ url_for('crm.customers', tab='edit', id=edit_id, contact=c.id) }}">수정</a>
+                <form method="post" action="{{ url_for('crm.contact_save', cid=edit_id) }}" class="inline-form" data-no-draft>
+                  {{ csrf() }}<input type="hidden" name="action" value="deactivate"><input type="hidden" name="contact_id" value="{{ c.id }}">
+                  <button class="btn btn-sm">사용 안 함</button></form></td></tr>
+          {% else %}<tr><td colspan="7" class="muted">등록된 담당자가 없습니다.</td></tr>{% endfor %}</tbody>
+        </table></div>
+        <form method="post" action="{{ url_for('crm.contact_save', cid=edit_id) }}" class="form" data-no-draft>
+          {{ csrf() }}{% if edit_contact.id %}<input type="hidden" name="contact_id" value="{{ edit_contact.id }}">{% endif %}
+          <div class="form-grid g4">
+            <label>이름 * <input name="name" value="{{ edit_contact.name or '' }}" required></label>
+            <label>부서 <input name="dept" value="{{ edit_contact.dept or '' }}"></label>
+            <label>직책 <input name="title" value="{{ edit_contact.title or '' }}"></label>
+            <label>역할 {{ select('role', contact_roles, edit_contact.role or '구매') }}</label>
+            <label>연락처 <input name="phone" value="{{ edit_contact.phone or '' }}"></label>
+            <label>이메일 <input name="email" type="email" value="{{ edit_contact.email or '' }}"></label>
+            <label class="span2">메모 <input name="memo" value="{{ edit_contact.memo or '' }}"></label>
+            <label class="check"><input type="checkbox" name="is_primary" value="1" {{ 'checked' if edit_contact.is_primary }}> 대표 담당자 (목록·견적서에 표시)</label>
+          </div>
+          <button class="btn">{{ '💾 담당자 수정' if edit_contact.id else '➕ 담당자 추가' }}</button>
+        </form>
+
         <h3>📇 이 거래처 요약</h3>
         <div class="grid-2">
           <div><p class="muted small">진행 중 영업기회</p>{{ table(cust_deals) }}</div>

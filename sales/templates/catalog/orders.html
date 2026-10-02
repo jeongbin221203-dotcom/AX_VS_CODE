@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% from "_macros.html" import metric, table, csrf, select, download %}
+{% block content %}
+<p class="subtitle">수주는 견적과 매출 사이의 주문입니다. 한 번 수주한 뒤 납품할 때마다 품목별 수량을 골라 매출을 등록하고, 남은 수량(수주 잔량)을 관리합니다.
+  매출을 취소하면 그 수량은 다시 잔량으로 돌아옵니다. 자재관리와 합치면 납품이 창고 출고와 연결됩니다.</p>
+
+<div class="metrics m3">
+  {{ metric('진행 중 수주', m_count ~ '건') }}
+  {{ metric('수주 잔량 금액 (공급가액)', m_open|mil) }}
+  {{ metric('상태', status or '전체') }}
+</div>
+
+<form method="get" class="toolbar" action="{{ page_path() }}">
+  <label>상태 {{ select('status', statuses, status, blank='전체') }}</label>
+  <button class="btn">조회</button>
+  <a class="btn btn-primary" href="{{ url_for('catalog.orders', new=1) }}">➕ 직접 수주</a>
+  {{ download(export_url('orders')) }}
+</form>
+{{ table(tbl, 320, '수주가 없습니다. 수락된 견적에서 \'수주 등록\'을 누르거나 직접 수주하세요.') }}
+
+{% if new %}
+<section class="card">
+  <h3>➕ 직접 수주</h3>
+  <form method="post" action="{{ url_for('catalog.order_save') }}" class="form" data-quote data-price-url="{{ url_for('catalog.price_lookup') }}">
+    {{ csrf() }}
+    <div class="form-grid g4">
+      <label>거래처 * {{ select('customer_id', customers.items()|list, '', blank='선택하세요') }}</label>
+      <label>수주일 <input type="date" name="order_date" value="{{ today().isoformat() }}"></label>
+      <label>납기 <input type="date" name="delivery_date"></label>
+      <label>고객 발주번호 <input name="customer_po"></label>
+    </div>
+    <div class="table-wrap"><table class="data lines">
+      <thead><tr><th>품목 마스터</th><th>품목명</th><th>수량</th><th>단가(원)</th><th>과세</th><th class="num">공급가액</th></tr></thead>
+      <tbody data-lines>
+        {% for _ in range(3) %}
+        <tr><td><select name="product_id"><option value="">(직접 입력)</option>
+              {% for p in products %}<option value="{{ p.id }}">{{ p.code }} · {{ p.name }}</option>{% endfor %}</select></td>
+          <td><input name="item_name"></td><td><input type="number" name="qty" min="1" class="num-sm"></td>
+          <td><input type="number" name="unit_price" min="0" placeholder="비우면 특가/정가"></td>
+          <td>{{ select('tax_type', tax_types, '과세') }}</td><td class="num" data-line-amount></td></tr>
+        {% endfor %}
+      </tbody>
+    </table></div>
+    <label>메모 <input name="memo"></label>
+    <strong data-quote-total></strong>
+    <button class="btn btn-primary">수주 등록</button>
+  </form>
+</section>
+{% endif %}
+
+{% if order %}
+{% set o = order %}
+<section class="card">
+  <h3>📑 {{ o.order_no }} · {{ o.customer_name }} <span class="badge">{{ o.status }}</span></h3>
+  <p class="muted small">수주일 {{ o.order_date }}{% if o.delivery_date %} · 납기 {{ o.delivery_date }}{% endif %}
+    {% if o.customer_po %} · 고객 발주번호 {{ o.customer_po }}{% endif %} · 담당 {{ o.owner }}
+    {% if o.quote_id %} · <a href="{{ url_for('catalog.quotes', qid=o.quote_id) }}">견적 보기</a>{% endif %}</p>
+  <form method="post" action="{{ url_for('catalog.order_deliver', oid=o.id) }}" class="form" data-no-draft>
+    {{ csrf() }}
+    <div class="table-wrap"><table class="data">
+      <thead><tr><th>No</th><th>품목</th><th class="num">단가</th><th class="num">수주</th><th class="num">납품</th>
+        <th class="num">취소</th><th class="num">잔량</th><th class="num">이번 납품</th></tr></thead>
+      <tbody>{% for it in o['items'] %}
+        <tr><td>{{ it.line_no }}</td><td>{{ it.item_name }}{% if it.item_code %} <span class="muted small">{{ it.item_code }}</span>{% endif %}</td>
+          <td class="num">{{ it.unit_price|won }}</td><td class="num">{{ it.qty }}</td><td class="num">{{ it.delivered_qty }}</td>
+          <td class="num">{{ it.cancelled_qty }}</td><td class="num"><strong>{{ it.remain }}</strong></td>
+          <td class="num">{% if it.remain > 0 and o.status == '진행' %}<input type="number" name="qty_{{ it.id }}" min="0" max="{{ it.remain }}" class="num-sm">{% endif %}</td></tr>
+      {% endfor %}</tbody>
+    </table></div>
+    {% if o.status == '진행' %}
+    <div class="row-actions">
+      <label>매출일 <input type="date" name="sale_date" value="{{ today().isoformat() }}"></label>
+      <button class="btn btn-primary">🚚 납품 → 매출 등록</button>
+    </div>
+    {% endif %}
+  </form>
+  {% if o.status == '진행' %}
+  <form method="post" action="{{ url_for('catalog.order_cancel_remaining', oid=o.id) }}" class="danger-zone" data-no-draft>
+    {{ csrf() }}<label class="grow">남은 수량 취소 사유 <input name="reason" required placeholder="예) 고객 발주 축소"></label>
+    <button class="btn btn-danger">잔량 취소</button>
+  </form>
+  {% endif %}
+  <h4>납품으로 등록된 매출</h4>
+  {% for s in o.sales %}
+    <div class="small"><a href="{{ url_for('finance.sales', sid=s.id) }}">#{{ s.id }}</a> {{ s.sale_date }} · {{ s.item }} × {{ s.qty }} · {{ (s.total_amount or s.amount)|won }} · {{ s.status }}</div>
+  {% else %}<p class="muted small">아직 납품한 매출이 없습니다.</p>{% endfor %}
+  {% if o.memo %}<p class="small muted" style="white-space:pre-line">{{ o.memo }}</p>{% endif %}
+</section>
+{% endif %}
+{% endblock %}

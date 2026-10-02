@@ -43,7 +43,14 @@ def search(term: str) -> dict:
     acts = db._df("SELECT a.id, a.act_date AS 활동일, c.name AS 거래처, a.summary AS 활동내용, a.next_action AS 다음액션, "
                   "a.owner AS 영업담당 FROM activities a JOIN customers c ON c.id = a.customer_id "
                   "WHERE a.summary LIKE ? OR a.next_action LIKE ? ORDER BY a.id", [like, like])
-    return {"term": term, "customers": customers, "activities": acts}
+    ct_sql = ("SELECT t.id, c.name AS 거래처, t.name AS 담당자, t.dept AS 부서, t.phone AS 연락처, t.email AS 이메일 "
+              "FROM customer_contacts t JOIN customers c ON c.id = t.customer_id WHERE t.name LIKE ? OR t.email = ?")
+    ct_params: list[Any] = [like, term]
+    if len(digits) >= 7:
+        ct_sql += " OR REPLACE(REPLACE(REPLACE(COALESCE(t.phone,''), '-', ''), ' ', ''), '.', '') LIKE ?"
+        ct_params.append(f"%{digits}%")
+    contacts = db._df(ct_sql + " ORDER BY t.id", ct_params)
+    return {"term": term, "customers": customers, "activities": acts, "contacts": contacts}
 
 
 def _log(kind: str, term: str, matched: int, requester: str, result: str, actor: str) -> int:
@@ -62,29 +69,41 @@ def export(term: str, requester: str, actor: str) -> tuple[bytes, int]:
     """열람 요청: 찾은 내용을 엑셀로 (요청한 본인에게 전달)."""
     from . import dataio
     found = search(term)
-    n = len(found["customers"]) + len(found["activities"])
+    n = len(found["customers"]) + len(found["activities"]) + len(found["contacts"])
     data = dataio.to_excel({"거래처 고객담당자": found["customers"].drop(columns=["id"], errors="ignore"),
+                            "거래처 담당자 목록": found["contacts"].drop(columns=["id"], errors="ignore"),
                             "영업활동 기록": found["activities"].drop(columns=["id"], errors="ignore")},
                            {"요청": "개인정보 열람", "요청자": requester or "-", "처리자": actor, "처리일시": db._now()})
     _log("열람", term, n, requester, "엑셀 제공", actor)
     return data, n
 
 
-def erase(term: str, requester: str, actor: str, customer_ids: list[int], activity_ids: list[int]) -> dict:
+def erase(term: str, requester: str, actor: str, customer_ids: list[int], activity_ids: list[int],
+          contact_ids: list[int] | None = None) -> dict:
     """삭제 요청: 고른 거래처의 고객 담당자·연락처·이메일을 비우고, 고른 활동 내용에서 해당 부분만 [파기] 로 바꾼다."""
     found = search(term)
     allowed_c = set(int(i) for i in found["customers"]["id"]) if not found["customers"].empty else set()
     allowed_a = set(int(i) for i in found["activities"]["id"]) if not found["activities"].empty else set()
+    allowed_t = set(int(i) for i in found["contacts"]["id"]) if not found["contacts"].empty else set()
     cids = [int(i) for i in customer_ids if int(i) in allowed_c]
     aids = [int(i) for i in activity_ids if int(i) in allowed_a]
-    if not cids and not aids:
+    tids = [int(i) for i in (contact_ids or []) if int(i) in allowed_t]
+    if not cids and not aids and not tids:
         raise ValueError("파기할 항목을 고르세요 (검색 결과에서 체크).")
     patterns = {term}
     for cid in cids:
         row = db.get_customer(cid) or {}
         patterns.update(v for v in (row.get("manager"), row.get("phone"), row.get("email")) if v)
+    for tid in tids:
+        row = db._one("SELECT name, phone, email FROM customer_contacts WHERE id=?", [tid]) or {}
+        patterns.update(v for v in (row.get("name"), row.get("phone"), row.get("email")) if v)
     with db.get_conn() as conn:
+        for tid in tids:
+            conn.execute("UPDATE customer_contacts SET name=?, phone=NULL, email=NULL, memo=NULL, active=0, is_primary=0, "
+                         "updated_at=? WHERE id=?", (MASK, db._now(), tid))
         for cid in cids:
+            conn.execute("UPDATE customer_contacts SET name=?, phone=NULL, email=NULL, memo=NULL, active=0, is_primary=0, "
+                         "updated_at=? WHERE customer_id=? AND is_primary=1", (MASK, db._now(), cid))
             conn.execute("UPDATE customers SET manager=NULL, phone=NULL, email=NULL, updated_at=?, "
                          "row_version=COALESCE(row_version,0)+1 WHERE id=?", (db._now(), cid))
         for aid in aids:
@@ -95,8 +114,9 @@ def erase(term: str, requester: str, actor: str, customer_ids: list[int], activi
                     text = text.replace(pat, MASK) if text else text
                 new.append(text)
             conn.execute("UPDATE activities SET summary=?, next_action=? WHERE id=?", (*new, aid))
-    rid = _log("삭제", term, len(cids) + len(aids), requester, f"거래처 {len(cids)}건 · 활동 {len(aids)}건 파기", actor)
-    return {"request_id": rid, "customers": len(cids), "activities": len(aids)}
+    rid = _log("삭제", term, len(cids) + len(aids) + len(tids), requester,
+               f"거래처 {len(cids)}건 · 담당자 {len(tids)}건 · 활동 {len(aids)}건 파기", actor)
+    return {"request_id": rid, "customers": len(cids), "activities": len(aids), "contacts": len(tids)}
 
 
 def history() -> pd.DataFrame:

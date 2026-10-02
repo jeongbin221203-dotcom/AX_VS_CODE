@@ -12,8 +12,24 @@
 </div>
 
 <section class="card">
-  {{ tabs([('mine', '📥 내 결재 대기'), ('requested', '📤 내 요청 현황'), ('history', '🗃️ 결재 이력'), ('delegation', '🔁 대결 지정')], tab) }}
-  {% if tab == 'delegation' %}
+  {{ tabs([('mine', '📥 내 결재 대기'), ('requested', '📤 내 요청 현황'), ('history', '🗃️ 결재 이력'), ('finance', '💳 대손 · 거래정지 해제'), ('delegation', '🔁 대결 지정')], tab) }}
+  {% if tab == 'finance' %}
+    <p class="muted small">대손 처리는 금액에 따라 팀장 또는 임원, 거래정지 해제는 팀장 이상이 결재합니다. 요청한 사람은 결재할 수 없습니다.</p>
+    {% for r in fin_pending_rows %}
+      <form method="post" action="{{ url_for('finance.finance_request_decide', rid=r.id) }}" class="toolbar" data-no-draft>
+        {{ csrf() }}
+        <span class="grow small"><strong>{{ r['구분'] }}</strong> · {{ r['거래처'] }}{% if r['매출번호'] %} · 매출 #{{ r['매출번호']|int }}{% endif %}
+          · {{ r['금액']|won }} · {{ r['사유'] }} · 요청 {{ r['요청자'] }} ({{ r['요청일시'] }})</span>
+        <input name="comment" placeholder="의견 (반려 시 필수)">
+        <button class="btn btn-sm btn-primary" name="decision" value="approve">승인</button>
+        <button class="btn btn-sm btn-danger" name="decision" value="reject">반려</button>
+      </form>
+    {% else %}
+      <div class="alert alert-success">결재할 대손·거래정지 해제 요청이 없습니다.</div>
+    {% endfor %}
+    <h3>처리 이력</h3>
+    {{ table(fin_history, 280, '요청 이력이 없습니다.') }}
+  {% elif tab == 'delegation' %}
     <p class="muted small">출장·휴가 등으로 자리를 비울 때, 기간 동안 다른 사람이 내 결재를 대신합니다(대결). 결재 기록에는 "OOO 대결" 로 남습니다.</p>
     {{ table(delegations) }}
     <form method="post" action="{{ url_for('finance.delegation_add') }}" class="form">

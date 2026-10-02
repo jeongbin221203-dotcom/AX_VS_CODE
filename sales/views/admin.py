@@ -363,7 +363,10 @@ def settings_save():
         changes = {k: form[k] for k in ("discount_manager_max", "discount_exec_max", "approval_sla_hours",
                                          "quote_valid_days", "default_payment_terms", "pii_retention_years",
                                          "audit_retention_years", "backup_keep_daily", "backup_keep_monthly",
-                                         "backup_keep_yearly", "fiscal_start_month") if k in form}
+                                         "backup_keep_yearly", "fiscal_start_month", "writeoff_exec_threshold",
+                                         "auto_block_overdue_days", "auto_block_exempt_days") if k in form}
+        if "auto_block_present" in form:
+            changes["auto_block_over_credit"] = bool(form.get("auto_block_over_credit"))
         probs = {s: form[f"prob_{s}"] for s in db.OPEN_STAGES if f"prob_{s}" in form}
         if probs:
             changes["stage_prob"] = probs
@@ -433,8 +436,9 @@ def privacy():
             if action == "erase":
                 if not f_bool("confirm"):
                     raise ValueError("파기 확인에 체크하세요. 파기하면 되돌릴 수 없습니다.")
-                r = pv.erase(term, requester, g.user["name"], request.form.getlist("cid"), request.form.getlist("aid"))
-                flash(f"요청 #{r['request_id']}: 거래처 {r['customers']}건 · 활동 {r['activities']}건의 개인정보를 파기했습니다.",
+                r = pv.erase(term, requester, g.user["name"], request.form.getlist("cid"), request.form.getlist("aid"),
+                             request.form.getlist("tid"))
+                flash(f"요청 #{r['request_id']}: 거래처 {r['customers']}건 · 담당자 {r['contacts']}건 · 활동 {r['activities']}건의 개인정보를 파기했습니다.",
                       "warning")
                 return redirect(url_for("admin.privacy"))
         except ValueError as exc:

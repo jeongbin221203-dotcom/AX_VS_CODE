@@ -227,3 +227,8 @@ button[data-busy] { opacity: .6; cursor: progress; }
 /* 첨부 목록 */
 .file-row { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; padding: .35rem 0; border-bottom: 1px dotted var(--line); }
 .file-row.voided { opacity: .6; }
+
+/* 로고 */
+.brand { display: inline-flex; align-items: center; gap: .5rem; }
+.brand-logo { flex: none; border-radius: 6px; }
+.brand-title { display: flex; align-items: center; gap: .6rem; }

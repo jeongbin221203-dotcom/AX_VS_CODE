@@ -119,8 +119,10 @@ def history() -> pd.DataFrame:
 
 def ar_balances(as_of: str) -> pd.DataFrame:
     """as_of(그날 포함) 기준 거래처별 매출 누계(부가세 포함)·입금 누계·잔액·연체(결제기일 지난 잔액)."""
+    # 반품·감액 정정(합계가 음수인 행)은 원매출의 '반품상계' 입금으로 채권에 반영되므로 여기서는 뺀다
     sales = db._df("SELECT s.id, s.customer_id, COALESCE(s.total_amount, s.amount) AS total, s.due_date "
-                   "FROM sales s WHERE s.status <> ? AND s.sale_date <= ?", [db.SALE_CANCELLED, as_of])
+                   "FROM sales s WHERE s.status <> ? AND s.sale_date <= ? AND COALESCE(s.total_amount, s.amount) >= 0",
+                   [db.SALE_CANCELLED, as_of])
     if sales.empty:
         return pd.DataFrame(columns=["customer_id", "sales_total", "paid_total", "balance", "overdue"])
     pays = db._df("SELECT p.sale_id, SUM(p.amount) AS paid FROM payments p JOIN sales s ON s.id = p.sale_id "
@@ -142,28 +144,36 @@ def snapshot_table(ym: str) -> pd.DataFrame:
 
 
 def customer_ledger(customer_id: int, date_from: str, date_to: str) -> tuple[int, pd.DataFrame]:
-    """(기초 잔액, 원장 행). 매출은 부가세 포함 합계로 차변, 입금은 대변."""
+    """(기초 잔액, 원장 행). 매출(반품·정정 포함)은 부가세 포함 합계로 차변, 입금·대손·선수금 입금은 대변.
+
+    잔액이 음수면 거래처에 돌려줄 돈(선수금)이 있다는 뜻. 반품을 원매출 채권에서 빼는 '반품상계'와
+    선수금을 매출로 돌리는 '선수금' 배분은 같은 돈을 옮기는 내부 처리라 원장에 따로 적지 않는다.
+    """
     cust = db.get_customer(int(customer_id))
     db.check_record_scope(cust, "거래처")
-    opening_sales = db._scalar("SELECT COALESCE(SUM(COALESCE(total_amount, amount)), 0) FROM sales "
-                               "WHERE customer_id=? AND status <> ? AND sale_date < ?",
-                               [customer_id, db.SALE_CANCELLED, date_from])
-    opening_paid = db._scalar("SELECT COALESCE(SUM(p.amount), 0) FROM payments p JOIN sales s ON s.id = p.sale_id "
-                              "WHERE s.customer_id=? AND s.status <> ? AND p.pay_date < ?",
-                              [customer_id, db.SALE_CANCELLED, date_from])
-    opening = int(opening_sales - opening_paid)
-    sales = db._df("SELECT sale_date AS 일자, '매출' AS 구분, item AS 적요, id AS 매출번호, "
-                   "COALESCE(total_amount, amount) AS 차변, 0 AS 대변 FROM sales WHERE customer_id=? AND status <> ? "
-                   "AND sale_date BETWEEN ? AND ?", [customer_id, db.SALE_CANCELLED, date_from, date_to])
-    pays = db._df("SELECT p.pay_date AS 일자, CASE WHEN p.amount < 0 THEN '반제' ELSE '입금' END AS 구분, "
-                  "COALESCE(p.method, '') || CASE WHEN p.ref_no IS NOT NULL THEN ' ' || p.ref_no ELSE '' END AS 적요, "
-                  "p.sale_id AS 매출번호, 0 AS 차변, p.amount AS 대변 FROM payments p JOIN sales s ON s.id = p.sale_id "
-                  "WHERE s.customer_id=? AND s.status <> ? AND p.pay_date BETWEEN ? AND ?",
-                  [customer_id, db.SALE_CANCELLED, date_from, date_to])
-    rows = pd.concat([sales, pays], ignore_index=True)
+    hidden = "('반품상계', '선수금')"
+    sales_sql = ("SELECT sale_date AS 일자, COALESCE(sale_kind, '매출') AS 구분, item AS 적요, id AS 매출번호, "
+                 "COALESCE(total_amount, amount) AS 차변, 0 AS 대변 FROM sales WHERE customer_id=? AND status <> ? ")
+    pays_sql = ("SELECT p.pay_date AS 일자, CASE WHEN p.source = '대손' THEN '대손' WHEN p.amount < 0 THEN '반제' "
+                "ELSE '입금' END AS 구분, COALESCE(p.method, '') || CASE WHEN p.ref_no IS NOT NULL THEN ' ' || p.ref_no "
+                "ELSE '' END AS 적요, p.sale_id AS 매출번호, 0 AS 차변, p.amount AS 대변 FROM payments p "
+                f"JOIN sales s ON s.id = p.sale_id WHERE s.customer_id=? AND s.status <> ? "
+                f"AND COALESCE(p.source, '') NOT IN {hidden} ")
+    adv_sql = ("SELECT entry_date AS 일자, '선수금 ' || kind AS 구분, COALESCE(memo, '') AS 적요, sale_id AS 매출번호, "
+               "0 AS 차변, amount AS 대변 FROM advances WHERE customer_id=? AND kind IN ('입금', '환불') ")
+    base = [customer_id, db.SALE_CANCELLED]
+    opening = int(db._scalar(f"SELECT COALESCE(SUM(차변 - 대변), 0) FROM ({sales_sql} AND sale_date < ? "
+                             f"UNION ALL {pays_sql} AND p.pay_date < ? UNION ALL {adv_sql} AND entry_date < ?) x",
+                             [*base, date_from, *base, date_from, customer_id, date_from]))
+    sales = db._df(sales_sql + "AND sale_date BETWEEN ? AND ?", [*base, date_from, date_to])
+    pays = db._df(pays_sql + "AND p.pay_date BETWEEN ? AND ?", [*base, date_from, date_to])
+    advs = db._df(adv_sql + "AND entry_date BETWEEN ? AND ?", [customer_id, date_from, date_to])
+    rows = pd.concat([f for f in (sales, pays, advs) if not f.empty], ignore_index=True) \
+        if not (sales.empty and pays.empty and advs.empty) else pd.DataFrame()
     if rows.empty:
         return opening, pd.DataFrame(columns=["일자", "구분", "적요", "매출번호", "차변", "대변", "잔액"])
-    rows["순서"] = rows["구분"].map({"매출": 0, "입금": 1, "반제": 2})
+    rows["순서"] = rows["구분"].map({"매출": 0, "정정": 1, "반품": 2, "입금": 3, "선수금 입금": 3, "반제": 4,
+                                    "대손": 5, "선수금 환불": 6}).fillna(9)
     rows = rows.sort_values(["일자", "순서", "매출번호"]).drop(columns=["순서"]).reset_index(drop=True)
     rows["잔액"] = opening + (rows["차변"].astype(int) - rows["대변"].astype(int)).cumsum()
     return opening, rows

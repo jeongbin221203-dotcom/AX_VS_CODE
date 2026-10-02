@@ -237,6 +237,11 @@ def _setting_on(key: str) -> bool:
     return int(company.get(key) or 0) > 0
 
 
+def _setting_bool(key: str) -> bool:
+    from . import company
+    return bool(company.get(key))
+
+
 def _pii_on() -> bool:
     from . import company
     return int(company.get("pii_retention_years") or 0) > 0
@@ -256,6 +261,8 @@ SCHEDULES: list[Schedule] = [
     Schedule("jobs.cleanup", daily="04:00", description="오래된 완료 작업 정리"),
     Schedule("audit.archive", daily="01:45", enabled=lambda: _setting_on("audit_retention_years"),
              description="보관기간 지난 감사로그를 파일로 이관 (회사 설정)"),
+    Schedule("credit.autoblock", daily="06:00", enabled=lambda: _setting_on("auto_block_overdue_days") or
+             _setting_bool("auto_block_over_credit"), description="연체·여신초과 거래처 자동 거래정지 (회사 설정)"),
     Schedule("privacy.purge", daily="01:30", enabled=lambda: _pii_on(),
              description="종료 거래처 고객 연락처 파기 (회사 설정의 보관기간)"),
 ]
@@ -319,6 +326,12 @@ def schedule_table():
 def _etax_issue(payload: dict):
     from . import etax
     return etax.process(int(payload["id"]))
+
+
+@handler("credit.autoblock")
+def _credit_autoblock(payload: dict):
+    from . import credit
+    return credit.auto_block()
 
 
 @handler("audit.archive")

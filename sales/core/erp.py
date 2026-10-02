@@ -83,7 +83,18 @@ def settings() -> dict:
 # 전송 문서 만들기
 # ---------------------------------------------------------------------------
 def build_document(outbox: dict, cfg: dict) -> dict:
-    """대기열 한 건 → ERP 중립 문서. 전송 직전 최신 데이터로 만든다."""
+    """대기열 한 건 → ERP 중립 문서. 전송 직전 최신 데이터로 만든다.
+
+    문서종류: 매출 · 매출취소 · 반품(마이너스 매출, 원 ERP 번호 참조) · 대손(결재 승인된 채권 정리)
+    """
+    if outbox["doc_type"] == "대손":
+        req = db._one("SELECT * FROM fin_requests WHERE id=?", [int(outbox["ref_id"])])
+        if not req:
+            raise ValueError("대손 결재 기록이 없습니다.")
+        base = build_document({**outbox, "doc_type": "매출", "ref_id": req["sale_id"]}, cfg)
+        return {**base, "doc_type": "대손", "crm_ref": f"CRM-WO-{req['id']}", "writeoff_amount": int(req["amount"]),
+                "writeoff_reason": req["reason"], "approved_by": req.get("decided_by"),
+                "erp_doc_no": (db.get_sale(int(req["sale_id"])) or {}).get("erp_doc_no")}
     sale = db.get_sale(int(outbox["ref_id"]))
     if not sale:
         raise ValueError("매출이 존재하지 않습니다.")
@@ -116,6 +127,9 @@ def build_document(outbox: dict, cfg: dict) -> dict:
         "foreign_unit_price": (round(int(sale["unit_price"]) / float(sale.get("fx_rate") or 1), 2)
                                if (sale.get("currency") or "KRW") != "KRW" else None),
         **_entity_fields(sale.get("entity_id")),
+        "sale_kind": sale.get("sale_kind") or "매출",
+        "original_erp_doc_no": ((db.get_sale(int(sale["original_sale_id"])) or {}).get("erp_doc_no")
+                                if sale.get("original_sale_id") else None),
         "owner": sale.get("owner"),
         "cancel_reason": sale.get("cancel_reason"),
     }
@@ -168,7 +182,7 @@ class FileAdapter:
 
     def send(self, outbox_id: int, doc: dict) -> str:
         self.folder.mkdir(parents=True, exist_ok=True)
-        kind = "CANCEL" if doc["doc_type"] == "매출취소" else "SALE"
+        kind = {"매출취소": "CANCEL", "반품": "RETURN", "대손": "WRITEOFF"}.get(doc["doc_type"], "SALE")
         stamp = datetime.now().strftime("%Y%m%d%H%M%S")
         tmp = self.folder / f".{kind}_{outbox_id}.tmp"
         final = self.folder / f"{kind}_{stamp}_{outbox_id}.json"
@@ -226,6 +240,19 @@ class SapODataAdapter:
     def send(self, outbox_id: int, doc: dict) -> str:
         if not self.token:
             self._fetch_token()
+        if doc["doc_type"] == "대손":
+            raise ValueError("SAP 판매오더 API 로는 대손(FI) 전표를 보낼 수 없습니다. 재무팀이 FI 에서 처리한 뒤 '재시도' 대신 "
+                             "ERP 수신 API 로 결과를 회신하거나, 대손은 파일·REST 연동으로 보내세요.")
+        if doc["doc_type"] == "반품":
+            payload = sap_sales_order_payload({**doc, "qty": abs(int(doc["qty"]))}, self.cfg)
+            payload["SalesOrderType"] = os.environ.get("SALES_SAP_RETURN_ORDER_TYPE", "CBAR")
+            if doc.get("original_erp_doc_no"):
+                payload["ReferenceSDDocument"] = str(doc["original_erp_doc_no"])
+            _, result = self._call("POST", "/A_SalesOrder", payload, extra={"x-csrf-token": self.token})
+            number = (result.get("d") or {}).get("SalesOrder")
+            if not number:
+                raise RuntimeError("SAP 가 반품오더 번호를 돌려주지 않았습니다.")
+            return str(number)
         if doc["doc_type"] == "매출취소":
             if not doc.get("erp_doc_no"):
                 raise ValueError("취소할 SAP 판매오더 번호가 없습니다.")
@@ -358,7 +385,8 @@ def list_outbox(status: str = "", limit: int = 200) -> pd.DataFrame:
     sql = ("SELECT o.id, o.doc_type AS 문서, o.ref_id AS 매출번호, c.name AS 거래처, COALESCE(s.total_amount, s.amount) AS 금액, "
            'o.status AS 상태, o.attempts AS 시도, o.erp_doc_no AS "ERP번호", o.last_error AS 오류, '
            "o.created_at AS 생성, o.sent_at AS 전송 FROM erp_outbox o "
-           "LEFT JOIN sales s ON s.id = o.ref_id LEFT JOIN customers c ON c.id = s.customer_id WHERE 1=1")
+           "LEFT JOIN sales s ON s.id = CASE WHEN o.doc_type = '대손' THEN (SELECT f.sale_id FROM fin_requests f "
+           "WHERE f.id = o.ref_id) ELSE o.ref_id END LEFT JOIN customers c ON c.id = s.customer_id WHERE 1=1")
     params: list[Any] = []
     if status:
         sql += " AND o.status = ?"
@@ -390,7 +418,9 @@ def process_outbox(limit: int = 100, adapter=None, cfg: dict | None = None) -> d
                 conn.execute("UPDATE erp_outbox SET status='전송완료', attempts=attempts+1, erp_doc_no=?, "
                              "payload=?, last_error=NULL, sent_at=? WHERE id=?",
                              (number, json.dumps(doc, ensure_ascii=False), db._now(), row["id"]))
-                if row["doc_type"] == "매출취소":
+                if row["doc_type"] == "대손":
+                    pass                            # 대손 전표는 매출의 ERP 번호를 바꾸지 않는다
+                elif row["doc_type"] == "매출취소":
                     conn.execute("UPDATE sales SET erp_status='취소완료', row_version=COALESCE(row_version,0)+1 "
                                  "WHERE id=?", (row["ref_id"],))
                 else:
@@ -401,8 +431,9 @@ def process_outbox(limit: int = 100, adapter=None, cfg: dict | None = None) -> d
             with db.get_conn() as conn:
                 conn.execute("UPDATE erp_outbox SET status='실패', attempts=attempts+1, last_error=? WHERE id=?",
                              (str(exc)[:500], row["id"]))
-                conn.execute("UPDATE sales SET erp_status='실패', row_version=COALESCE(row_version,0)+1 "
-                             "WHERE id=? AND erp_status IN ('대기','실패')", (row["ref_id"],))
+                if row["doc_type"] != "대손":
+                    conn.execute("UPDATE sales SET erp_status='실패', row_version=COALESCE(row_version,0)+1 "
+                                 "WHERE id=? AND erp_status IN ('대기','실패')", (row["ref_id"],))
             failed += 1
     result = {"sent": sent, "failed": failed, "skipped": 0,
               "adapter": getattr(adapter, "name", type(adapter).__name__)}
