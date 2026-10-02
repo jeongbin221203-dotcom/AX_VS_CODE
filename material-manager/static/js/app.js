@@ -14,7 +14,7 @@
     return max >= 1e6 ? { div: 1e6, title: "백만원" } : { div: 1, title: "원" };
   }
 
-  function drawCharts() {
+  function drawCharts(root) {
     if (!window.Chart) return;
     const css = getComputedStyle(document.documentElement);
     const text = css.getPropertyValue("--muted").trim();
@@ -22,7 +22,7 @@
     Chart.defaults.font.family = css.getPropertyValue("--font").trim();
     Chart.defaults.font.size = 12;
 
-    document.querySelectorAll("canvas[data-chart]").forEach(function (el) {
+    (root || document).querySelectorAll("canvas[data-chart]").forEach(function (el) {
       const cfg = JSON.parse(el.dataset.chart);
       const unit = cfg.money ? moneyUnit(cfg.datasets) : null;
       new Chart(el, {
@@ -77,11 +77,16 @@
   });
 
   // 차트 높이 (인라인 style 대신 data-height)
-  document.querySelectorAll(".chart[data-height]").forEach(function (el) {
-    el.style.height = el.dataset.height + "px";
-  });
+  function sizeCharts(root) {
+    root.querySelectorAll(".chart[data-height]").forEach(function (el) {
+      el.style.height = el.dataset.height + "px";
+    });
+  }
+  sizeCharts(document);
 
-  window.addEventListener("load", drawCharts);
+  window.addEventListener("load", function () { drawCharts(document); });
+  // 본문만 바꿔 끼웠을 때(아래 화면 전환) 새 본문에 다시 적용
+  window.mmUI = { refresh: function (root) { sizeCharts(root); drawCharts(root); } };
 })();
 
 /* 입력 보호 · 오프라인 입력.
@@ -430,15 +435,26 @@
         && location.pathname !== "/login") drop("localStorage", pending);
     drop("sessionStorage", PENDING);
   }
-  document.querySelectorAll("form").forEach(function (form) {
-    if (!draftable(form)) return;
-    form._mmBase = collect(form);
-    offerDraft(form);
-    let t = null;
-    const later = function () { clearTimeout(t); t = setTimeout(function () { saveDraft(form); }, 400); };
-    form.addEventListener("input", later);
-    form.addEventListener("change", later);
-  });
+  function initForms(root) {
+    root.querySelectorAll("form").forEach(function (form) {
+      if (!draftable(form)) return;
+      form._mmBase = collect(form);
+      offerDraft(form);
+      let t = null;
+      const later = function () { clearTimeout(t); t = setTimeout(function () { saveDraft(form); }, 400); };
+      form.addEventListener("input", later);
+      form.addEventListener("change", later);
+    });
+  }
+  initForms(document);
+  // 본문만 바꿔 끼웠을 때: 새 입력 폼의 임시 저장, 대기열 안내, 연결 끊김 표시를 다시 붙인다
+  net.refresh = function (root) {
+    panel = null;
+    banner = null;
+    initForms(root);
+    renderQueue();
+    setDown(net.down);
+  };
 
   // 서비스 워커: 로그인한 화면에서만 등록, 로그인 화면에서는 보관한 화면을 지운다(다른 사람이 로그인할 수 있으므로)
   if ("serviceWorker" in navigator) {
@@ -450,4 +466,78 @@
   if (USER && mine(loadQueue()).some(function (x) { return x.status === "waiting"; })) {
     ping().then(function (ok) { if (ok) flush(false); });       // 다시 로그인했거나 화면을 새로 열었을 때
   }
+})();
+
+/* 화면 전환: 탭·왼쪽 메뉴를 누르면 새로 고침 없이 본문만 바꾼다.
+   - 같은 주소를 뒤에서 받아 본문(main)과 왼쪽 메뉴(선택 표시·알림 건수)만 갈아 끼운다.
+     왼쪽 메뉴의 스크롤 위치는 그대로 두고, 탭은 누른 탭 줄이 화면의 같은 자리에 남게 맞춘다.
+   - 주소창은 바뀌므로 새로고침·즐겨찾기·뒤로 가기는 그대로 동작한다.
+   - 로그인 만료(다른 주소로 넘어감)·오류·연결 끊김이면 보통 이동으로 넘어간다(서비스 워커가 보관한 화면 등). */
+(function () {
+  "use strict";
+  if (!document.body.dataset.user || !window.fetch || !window.DOMParser) return;
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+  let seq = 0;
+
+  function swap(href, push, bar) {
+    const main = document.querySelector("main.content");
+    const side = document.querySelector(".sidebar");
+    if (!main || !side) { window.location = href; return; }
+    const idx = bar ? Array.prototype.indexOf.call(main.querySelectorAll(".tabs"), bar) : -1;
+    const barTop = bar ? bar.getBoundingClientRect().top : null;
+    const y = window.scrollY, my = ++seq;
+    main.setAttribute("aria-busy", "true");
+    fetch(href, { credentials: "same-origin", headers: { "X-Requested-With": "fetch" } })
+      .then(function (r) {
+        if (!r.ok || r.redirected) throw new Error("navigate");
+        return r.text();
+      })
+      .then(function (html) {
+        if (my !== seq) return;                                  // 그 사이 다른 탭을 눌렀다
+        const doc = new DOMParser().parseFromString(html, "text/html");
+        const fresh = doc.querySelector("main.content"), freshSide = doc.querySelector(".sidebar");
+        if (!fresh || !freshSide) throw new Error("navigate");
+        const sideY = side.scrollTop;
+        main.style.minHeight = bar ? main.offsetHeight + "px" : "";   // 탭: 새 내용이 짧아도 끌려 올라가지 않게
+        main.innerHTML = fresh.innerHTML;
+        main.className = fresh.className;
+        main.removeAttribute("aria-busy");
+        side.innerHTML = freshSide.innerHTML;
+        side.scrollTop = sideY;
+        if (doc.title) document.title = doc.title;
+        if (push) history.pushState({ mm: true }, "", href);
+        if (window.mmUI) window.mmUI.refresh(main);
+        if (window.mmNet && window.mmNet.refresh) window.mmNet.refresh(main);
+        const pin = function () {
+          const nb = idx >= 0 ? main.querySelectorAll(".tabs")[idx] : null;
+          if (nb && barTop !== null) window.scrollBy(0, nb.getBoundingClientRect().top - barTop);
+          else if (bar === undefined) window.scrollTo(0, y);      // 뒤로 가기
+          else window.scrollTo(0, 0);                             // 다른 메뉴: 새 화면의 처음부터
+        };
+        pin();
+        const active = main.querySelector(".tabs a.active");
+        if (active) active.focus({ preventScroll: true });
+        requestAnimationFrame(pin);                               // 차트가 그려져 높이가 바뀐 뒤 한 번 더
+      })
+      .catch(function () { if (my === seq) window.location = href; });
+  }
+
+  document.addEventListener("click", function (e) {
+    const a = e.target.closest(".tabs a[href], .sidebar .menu a[href], .sidebar a.brand, .sidebar a.shortage");
+    if (!a || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    if (a.origin !== window.location.origin || a.target || a.hasAttribute("download")) return;
+    e.preventDefault();
+    const bar = a.closest(".tabs");
+    if (bar) {
+      if (a.classList.contains("active")) return;
+      bar.querySelectorAll("a").forEach(function (x) { x.classList.toggle("active", x === a); });
+    } else {
+      document.querySelectorAll(".sidebar .menu a").forEach(function (x) { x.classList.toggle("active", x === a); });
+    }
+    swap(a.href, true, bar || null);
+  });
+  window.addEventListener("popstate", function (e) {
+    if (e.state && e.state.mm) swap(location.href, false, undefined);
+  });
+  history.replaceState({ mm: true }, "", location.href);
 })();
