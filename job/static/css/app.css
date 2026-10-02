@@ -178,3 +178,7 @@ ul.good, ul.warn { padding-left: 1.2rem; margin: .2rem 0; }
 .pills { display: flex; flex-wrap: wrap; gap: .35rem; margin-bottom: .5rem; }
 .stack-label { display: flex; flex-direction: column; gap: .3rem; font-weight: 600; font-size: .9rem; }
 .brand-logo { width: 28px; height: 28px; display: block; }
+
+/* 평균 연봉 표: 이름·건수를 누르면 그 조건의 공고 목록 */
+.tbl tr.link-row:hover td { background: var(--accent-soft); }
+.tbl tr.link-row td a { font-weight: 600; }

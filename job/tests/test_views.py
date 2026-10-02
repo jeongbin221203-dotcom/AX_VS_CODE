@@ -159,3 +159,23 @@ def test_logo(client):
     assert 'rel="icon" type="image/svg+xml"' in html and 'class="brand-logo"' in html
     res = client.get("/favicon.ico")
     assert res.status_code == 200 and b"<svg" in res.data
+
+
+def test_stats_region_links_open_matching_jobs(app, client):
+    """평균 연봉 표의 지역·구분·출처를 누르면 그 조건의 공고 목록 — '모집 중' 숫자는 열리는 목록 건수와 같다."""
+    import re
+    client.post("/collect/sample")
+    html = client.get("/stats").get_data(as_text=True)
+    assert 'href="/jobs?sido=' in html and 'href="/jobs?career=' in html and 'href="/jobs?source=' in html
+    m = re.search(r'<a href="(/jobs\?sido=[^"]+)">([^<]+)</a></td>\s*<td class="r"><a href="[^"]+">(\d+)</a>', html)
+    assert m, "지역 줄에 링크와 모집 중 건수가 있어야 함"
+    url, name, n = m.group(1).replace("&amp;", "&"), m.group(2), int(m.group(3))
+    listing = client.get(url).get_data(as_text=True)
+    assert f"<option selected>{name}</option>" in listing
+    assert f'<small class="muted">{n}건</small>' in listing          # 모집 중 숫자 = 열린 목록 건수
+    # 근무지를 못 읽은 공고는 '미상' 으로 고를 수 있다
+    pid = postings.all_rows()[0]["id"]
+    with __import__("core.db", fromlist=["connect"]).connect() as con:
+        con.execute("UPDATE postings SET sido = NULL WHERE id = ?", (pid,))
+    rows = postings.search({}, {"sido": "미상", "show_closed": "1", "show_excluded": "1"})
+    assert [p["id"] for p in rows] == [pid]

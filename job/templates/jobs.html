@@ -22,6 +22,7 @@
     <option value="">신입/경력 전체</option>
     <option value="신입" {{ 'selected' if f.career == '신입' }}>신입 지원 가능</option>
     <option value="경력" {{ 'selected' if f.career == '경력' }}>경력 지원 가능</option>
+    <option value="신입·경력" {{ 'selected' if f.career == '신입·경력' }}>신입·경력만</option>
     <option value="무관" {{ 'selected' if f.career == '무관' }}>경력 무관만</option>
   </select>
   <select name="category"><option value="">직무 전체</option>{% for g, n in groups %}<option value="{{ g }}" {{ 'selected' if f.category == g }}>{{ g }} ({{ n }})</option>{% endfor %}</select>

@@ -36,7 +36,7 @@ def index():
     page = max(1, request.args.get("page", 1, type=int))
     per = 30
     return render_template("jobs.html", rows=rows[(page - 1) * per: page * per], total=len(rows), page=page,
-                           pages=max(1, -(-len(rows) // per)), f=f, sidos=SIDO_ORDER,
+                           pages=max(1, -(-len(rows) // per)), f=f, sidos=SIDO_ORDER + ["미상"],
                            sources=postings.sources_in_db(), prof=prof, facets=facets,
                            groups=[(g, facets["groups"].get(g, 0)) for g in jobgroups.NAMES],
                            sub_options=[(s, facets["subs"].get(s, 0)) for s in jobgroups.sub_names(f["category"])],

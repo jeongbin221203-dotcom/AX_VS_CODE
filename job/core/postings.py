@@ -170,7 +170,7 @@ def search(prof: dict, f: dict, today: date | None = None, facets: dict | None =
         if q and q not in " ".join(str(p.get(k) or "") for k in
                                    ("title", "company", "keywords", "job_category")).lower():
             continue
-        if f.get("sido") and p["sido"] != f["sido"]:
+        if f.get("sido") and (p["sido"] or "미상") != f["sido"]:      # 미상 = 근무지를 못 읽은 공고
             continue
         if f.get("career") and not _career_match(p["career_type"], f["career"]):
             continue
@@ -221,6 +221,11 @@ def search(prof: dict, f: dict, today: date | None = None, facets: dict | None =
     else:
         out.sort(key=lambda p: (-p["fit"].score, p["dday"] if p["dday"] is not None else 9999))
     return out
+
+
+def career_match(kind: str | None, want: str) -> bool:
+    """목록의 신입/경력 필터와 같은 기준 (신입 = 신입·신입경력·무관)."""
+    return _career_match(kind, want)
 
 
 def _career_match(kind: str | None, want: str) -> bool:
