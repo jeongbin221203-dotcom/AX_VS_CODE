@@ -140,3 +140,59 @@ def test_jobkorea_max_off_by_10000():
     assert salary.parse(t)[:2] == (6000, 12000)
     t = linkimport._salary({"value": {"minValue": 4000000, "maxValue": 9010000, "unitText": "MONTH"}})
     assert salary.parse(t)[:2] == (4800, 10800)
+
+
+SARAMIN_VIEW = """<html><head><meta property="og:title" content="[가상물산(주)] 각 부문별 직원 채용(D-3) - 사람인"></head><body>
+<div class="jv_cont jv_summary"><h2>핵심 정보</h2><dl><dt>경력</dt><dd>경력무관(신입포함)</dd><dt>학력</dt><dd>학력무관</dd>
+<dt>근무형태</dt><dd>정규직</dd><dd>수습기간 3개월</dd><dt>급여</dt><dd>면접 후 결정</dd><dt>근무지역</dt><dd>경기 화성시</dd><a>지도보기</a></dl><p>조회수</p></div>
+<div class="jv_cont jv_detail"><div class="user_content jobsViewDetail_1"><p>담당업무</p><p>ㆍ전화 CS 클레임 처리</p>
+<p>자격요건</p><p>ㆍ학력사항 : 학력무관</p><p>근무조건</p><p>ㆍ급여조건 : 연봉2800만원~3000만원(경력자 협의 가능)</p></div></div>
+<div class="jv_cont jv_howto"><dt>시작일</dt><dd>2026.09.30 00:00</dd><dt>마감일</dt><dd>2026.10.05 23:59</dd></div>
+<div class="jv_cont jv_company"><h2>기업정보</h2><dt>대표자명</dt><dd>홍길동</dd><dt>기업형태</dt><dd>중소기업</dd><dt>업종</dt><dd>식품 제조업</dd>
+<dt>사원수</dt><dd>8 명</dd><dd>(2026년 기준)</dd><dt>매출액</dt><dd>63억 3,331만원</dd><p>채용정보</p></div></body></html>"""
+
+
+def test_saramin_full_page():
+    import json
+    p = linkimport.parse(SARAMIN_VIEW, "https://www.saramin.co.kr/zf_user/jobs/view?rec_idx=77", "saramin")
+    assert (p["source_id"], p["company"], p["title"]) == ("77", "가상물산(주)", "각 부문별 직원 채용")
+    assert (p["sido"], p["sigungu"], p["employment_type"]) == ("경기", "화성시", "정규직 수습기간 3개월")
+    assert (p["posted_at"], p["deadline"]) == ("2026-09-30", "2026-10-05")
+    assert (p["salary_min"], p["salary_max"]) == (2800, 3000)                  # 요약은 '면접 후 결정' → 본문 금액
+    assert "ㆍ전화 CS 클레임 처리" in p["description"].split("\n")
+    info = json.loads(p["company_info"])
+    assert info["업종"] == "식품 제조업" and info["사원수"] == "8 명 (2026년 기준)" and "대표자명" not in info
+
+
+def test_saramin_detail_url():
+    assert linkimport.detail_url("https://www.saramin.co.kr/zf_user/jobs/relay/view?rec_idx=5&x=1", "saramin") == \
+        "https://www.saramin.co.kr/zf_user/jobs/view?rec_idx=5"
+    assert linkimport.detail_url("https://linkareer.com/activity/9", "linkareer") == "https://linkareer.com/activity/9"
+
+
+def test_keep_existing_and_detail_sections(app, client):
+    from core import postings
+    postings.upsert_many([postings.build("saramin", "77", title="옛 제목", company="가상", location="경기 화성시",
+                                         job_category="생산")])
+    item = linkimport.parse(SARAMIN_VIEW.replace("<dt>근무지역</dt><dd>경기 화성시</dd>", ""),
+                            "https://www.saramin.co.kr/zf_user/jobs/view?rec_idx=77", "saramin")
+    postings.upsert_many([postings.keep_existing(item)])
+    row = postings.get(postings.find_id("saramin", "77"))
+    assert row["title"] == "각 부문별 직원 채용" and row["sido"] == "경기" and row["job_category"] == "생산"
+    html = client.get(f"/jobs/{row['id']}").get_data(as_text=True)
+    assert "기업 정보" in html and "식품 제조업" in html and "상세 내용" in html and "전화 CS 클레임" in html
+
+
+def test_jobkorea_table_overrides_structured_data():
+    import json
+    page = JSONLD_PAGE.replace("</body>", """<div><h3>모집요강</h3><dl><dt>모집분야</dt><dd>물류센터</dd><dt>모집인원</dt><dd>○○</dd><dd>명</dd>
+<dt>고용형태</dt><dd>계약직</dd><dd>(정규직 전환 가능)</dd><dt>급여</dt><dd>연봉 5,020만원</dd><dt>근무시간</dt><dd>요일협의</dd></dl>
+<h3>지원자격</h3><dt>경력</dt><dd>경력무관</dd><dt>학력</dt><dd>학력무관</dd><p>로그인</p>
+<h3>접수기간 · 방법</h3><dt>시작일</dt><dd>2026.08.27(목)</dd><dt>마감일</dt><dd>상시채용</dd>
+<h3>기업 정보</h3><dt>사원수</dt><dd>10,001명 이상</dd><dt>기업구분</dt><dd>대기업 (비상장)</dd><dt>산업(업종)</dt><dd>택배업</dd><a>지도보기</a></div></body>""")
+    p = linkimport.parse(page, "https://www.jobkorea.co.kr/Recruit/GI_Read/1", "jobkorea")
+    assert p["employment_type"] == "계약직 (정규직 전환 가능)"            # 구조화 데이터는 FULL_TIME 이었음
+    assert (p["salary_min"], p["career_type"], p["posted_at"]) == (5020, "무관", "2026-08-27")
+    assert "모집분야: 물류센터" in p["description"] and "모집인원: ○○명" in p["description"]
+    info = json.loads(p["company_info"])
+    assert info == {"기업형태": "대기업 (비상장)", "업종": "택배업", "사원수": "10,001명 이상"}

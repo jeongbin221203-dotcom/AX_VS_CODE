@@ -30,7 +30,10 @@
       <dt>키워드</dt><dd>{{ p.keywords or '-' }}</dd>
       <dt>등록 · 마감</dt><dd>{{ p.posted_at or '-' }} · {{ p.deadline or '상시/채용 시 마감' }}</dd>
     </dl>
-    {% if p.description %}<p class="desc">{{ p.description }}</p>{% endif %}
+    {% if p.company_info %}{% set ci = p.company_info | fromjson %}
+    <h3>기업 정보</h3>
+    <dl class="kv">{% for k, v in ci.items() %}<dt>{{ k }}</dt><dd>{{ v }}</dd>{% endfor %}</dl>
+    {% endif %}
     <div class="row">
       {% if p.url %}<a class="btn" href="{{ p.url }}" target="_blank" rel="noopener noreferrer">원문에서 지원하기 ↗</a>{% else %}<span class="muted small">원문 링크 없음</span>{% endif %}
       <form method="post" action="{{ url_for('jobs.save', pid=p.id) }}">
@@ -58,6 +61,15 @@
     {% if r.missing %}<h3>공고에 없는 내 키워드</h3><p class="muted small">{{ r.missing | join(', ') }} — 자기소개서에서 관련 경험을 보완해 보세요.</p>{% endif %}
   </section>
 </div>
+
+{% if p.description %}
+<section class="card">
+  <h2>상세 내용 <span class="muted small">{{ p.source | source_name }} 원문에서 가져옴 · 정확한 내용은 원문 확인</span></h2>
+  {% if p.description | length > 1200 %}
+  <details class="desc-wrap"><summary>{{ p.description[:400] }}… <b>전체 보기</b></summary><div class="desc">{{ p.description }}</div></details>
+  {% else %}<div class="desc">{{ p.description }}</div>{% endif %}
+</section>
+{% endif %}
 
 <div class="grid2">
   <section class="card">

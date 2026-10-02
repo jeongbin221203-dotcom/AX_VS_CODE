@@ -38,6 +38,8 @@ POSTING_URL = {
     "wanted": r"/wd/(\d+)",
     "remember": r"/job/posting/(\d+)",
 }
+# 상세를 읽을 때 쓰는 주소. 사람인 relay/view 는 빈 껍데기라 요약·본문·기업정보가 다 있는 jobs/view 를 읽는다
+DETAIL_URL = {"saramin": "https://www.saramin.co.kr/zf_user/jobs/view?rec_idx={id}"}
 MAX_LINKS = 20
 BROWSER_UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Safari/537.36"
 
@@ -62,6 +64,11 @@ def posting_id(url: str, site: str) -> str | None:
     return m.group(1) if m else None
 
 
+def detail_url(url: str, site: str) -> str:
+    pid = posting_id(url, site)
+    return DETAIL_URL[site].format(id=pid) if pid and site in DETAIL_URL else url
+
+
 def is_posting_url(url: str, site: str) -> bool:
     return posting_id(url, site) is not None
 
@@ -78,8 +85,8 @@ def fetch(url: str) -> dict:
     if not is_posting_url(url, site):
         raise SourceError(f"{SITES[site][0]} 첫 화면·목록 주소입니다. 공고 하나를 열어 그 주소를 붙여 넣으세요")
     # 일부 사이트는 브라우저가 아닌 요청에 다른 화면을 주므로 일반 브라우저 머리글을 쓴다
-    res = http_get(url.strip(), {}, {"Accept": "text/html", "Accept-Language": "ko-KR,ko;q=0.9",
-                                     "User-Agent": BROWSER_UA})
+    res = http_get(detail_url(url.strip(), site), {}, {"Accept": "text/html", "Accept-Language": "ko-KR,ko;q=0.9",
+                                                      "User-Agent": BROWSER_UA})
     return parse(res.text, url.strip(), site)
 
 
@@ -89,6 +96,8 @@ def parse(page: str, url: str, site: str) -> dict:
         if w:
             sid = posting_id(url, site) or hashlib.sha1(url.encode("utf-8")).hexdigest()[:16]
             return build(site, sid, url=url, **w)
+    if site == "saramin" and "jv_summary" in page:
+        return _saramin(page, url)
     jp = _job_posting(page)
     og = _meta(page)
     title = company = None
@@ -124,14 +133,142 @@ def parse(page: str, url: str, site: str) -> dict:
         desc = "\n\n".join(filter(None, [jp.get("description"), _text(jp.get("qualifications")),
                                           _text(jp.get("preferredQualifications"))])) or desc
 
+    company_info = None
+    if site == "jobkorea" and "모집요강" in page:
+        # 잡코리아 표가 구조화 데이터보다 정확하다 (예: 데이터는 FULL_TIME 인데 표는 '계약직')
+        x = _jobkorea_table(page)
+        emp = x.get("고용형태") or emp
+        if _has_amount(x.get("급여")):
+            salary_text = x["급여"]
+        career, education = x.get("경력") or career, x.get("학력") or education
+        posted, deadline = x.get("시작일") or posted, x.get("마감일") or deadline
+        lines = [f"{k}: {x[k]}" for k in ("모집분야", "모집인원", "고용형태", "급여", "근무시간", "경력", "학력", "우대사항")
+                 if x.get(k)]
+        if lines:
+            desc = "\n".join(["[모집요강]", *lines, "", desc or "", "(상세 본문은 원문에서 확인하세요 — 이미지로 된 경우가 많습니다)"])
+        company_info = {k2: x[k] for k, k2 in (("기업구분", "기업형태"), ("산업(업종)", "업종"), ("사원수", "사원수"),
+                                               ("설립", "설립일"), ("매출액", "매출액"), ("위치", "기업주소")) if x.get(k)} or None
+
     sid = posting_id(url, site) or hashlib.sha1(url.split("#")[0].encode("utf-8")).hexdigest()[:16]
     return build(site, sid, title=title, company=company or "(회사명 확인 필요)", url=url, location=location,
                  career=career, education=education, employment_type=emp, salary_text=salary_text,
                  keywords=keywords, description=desc, deadline=deadline, posted_at=posted,
-                 job_category=_text(jp.get("industry")) if jp else None)
+                 job_category=_text(jp.get("industry")) if jp else None, company_info=company_info)
+
+
+_JK_LABELS = ("모집분야", "모집인원", "고용형태", "급여", "근무시간", "경력", "학력", "우대사항", "시작일", "마감일",
+              "사원수", "기업구분", "산업(업종)", "설립", "매출액", "위치")
+_JK_STOP = ("지원자격", "로그인", "TOP", "궁금해요", "접수기간 · 방법", "기업 정보", "기업정보 더보기", "지도보기",
+            "모집요강", "💌")
+
+
+def _jobkorea_table(page: str) -> dict:
+    """잡코리아 공고 화면의 모집요강·지원자격·접수기간·기업 정보 표 (라벨 → 값)."""
+    toks = _tokens(page)
+    try:
+        start = toks.index("모집요강")
+    except ValueError:
+        return {}
+    out: dict[str, str] = {}
+    cur = None
+    for t in toks[start:start + 200]:
+        if t in _JK_LABELS and t not in out:
+            cur = t
+            out[cur] = ""
+        elif cur and t in _JK_STOP:
+            cur = None
+        elif cur and not t.startswith(("<", "class=")):
+            out[cur] = (out[cur] + " " + t).strip()
+        if "위치" in out and out["위치"] and cur is None:
+            break
+    if out.get("모집인원"):
+        out["모집인원"] = out["모집인원"].replace(" 명", "명")
+    return {k: v for k, v in out.items() if v}
 
 
 # ── 페이지 해석 ─────────────────────────────────────────────
+
+_SAR_SUMMARY = ("경력", "학력", "근무형태", "급여", "근무지역", "근무일시", "직급/직책", "필수사항", "우대사항")
+_SAR_SUMMARY_STOP = ("지도보기", "최저임금계산에 대한 알림", "조회수", "상세보기")
+_SAR_COMPANY = ("대표자명", "기업형태", "업종", "사원수", "설립일", "매출액", "기업주소", "홈페이지")
+_SAR_COMPANY_STOP = ("채용정보", "기업정보 전체보기", "관심기업")
+
+
+def _section(page: str, cls: str, ends: tuple[str, ...]) -> list[str]:
+    i = page.find(f'class="{cls}')
+    if i < 0:
+        return []
+    stops = [j for j in (page.find(e, i + 10) for e in ends) if j > 0]
+    toks = _tokens(page[i:min(stops) if stops else i + 30000])
+    return [t for t in toks if not t.startswith(("class=", "<", "id="))]
+
+
+def _pairs(toks: list[str], labels: tuple[str, ...], stops: tuple[str, ...]) -> dict:
+    out: dict[str, str] = {}
+    cur = None
+    for t in toks:
+        if t in labels:
+            cur = t
+            out.setdefault(cur, "")
+        elif cur and (t in stops or t.startswith("*")):
+            cur = None
+        elif cur:
+            out[cur] = (out[cur] + " " + t).strip()
+    return {k: v for k, v in out.items() if v}
+
+
+def _saramin(page: str, url: str) -> dict:
+    """사람인 jobs/view 페이지: 핵심 정보·본문·접수 기간·기업정보."""
+    og = _meta(page)
+    raw = _strip_site(og.get("og:title") or _title_tag(page) or "")
+    company = _company_from_title(raw, "saramin")
+    title = _clean_title(raw.split(" | ")[0].strip(), company)
+    if not title:
+        raise SourceError("페이지에서 공고 제목을 찾지 못했습니다")
+    s = _pairs(_section(page, "jv_cont jv_summary", ('class="jv_cont ',)), _SAR_SUMMARY, _SAR_SUMMARY_STOP)
+    howto = _section(page, "jv_cont jv_howto", ('class="jv_cont ',))
+    when = {t: howto[i + 1] for i, t in enumerate(howto[:-1]) if t in ("시작일", "마감일")}
+    comp = _pairs(_section(page, "jv_cont jv_company", ('class="jv_cont ', "기업리뷰")), _SAR_COMPANY, _SAR_COMPANY_STOP)
+    body = [t for t in _section(page, "user_content", ('class="jv_cont jv_howto', 'class="jv_cont '))
+            if t not in ("Saramin Recruitment Template",)]
+    text = "\n".join(body)
+    if len(text) < 40:
+        text = (text + "\n" if text else "") + "(본문이 이미지로 되어 있습니다 — 원문에서 확인하세요)"
+    summary = _summary_fields(og.get("og:description"))          # 핵심 정보가 비면 요약문으로 보충
+    salary_text = s.get("급여") or summary.get("salary")
+    if not _has_amount(salary_text):
+        salary_text = _salary_from_body(body) or salary_text      # '면접 후 결정'이어도 본문에 금액이 있으면
+    if not company:
+        company = comp.get("대표자명") and None
+    return build(
+        "saramin", posting_id(url, "saramin") or hashlib.sha1(url.encode("utf-8")).hexdigest()[:16],
+        title=title, company=company or "(회사명 확인 필요)", url=url,
+        location=s.get("근무지역") or summary.get("location"),
+        career=s.get("경력") or summary.get("career"),
+        education=s.get("학력") or summary.get("education"),
+        employment_type=s.get("근무형태") or summary.get("employment"),
+        salary_text=salary_text,
+        keywords=", ".join(filter(None, [s.get("직급/직책")])) or None,
+        description=text,
+        posted_at=when.get("시작일"),
+        deadline=when.get("마감일") or summary.get("deadline"),
+        company_info={k: v for k, v in comp.items() if k != "대표자명"} or None,
+    )
+
+
+def _has_amount(text: str | None) -> bool:
+    from core import salary
+    lo, hi, _ = salary.parse(text)
+    return bool(lo or hi)
+
+
+def _salary_from_body(lines: list[str]) -> str | None:
+    """본문의 '급여조건 : 연봉2800만원~3000만원' 같은 줄에서 금액을 찾는다."""
+    for line in lines:
+        if re.search(r"(급여|연봉|월급|시급|임금)", line) and re.search(r"\d", line) and _has_amount(line):
+            return re.sub(r"^[ㆍ·\-\s]*(급여조건|급여|임금)\s*[:：]?\s*", "", line)[:100]
+    return None
+
 
 def _tokens(page: str) -> list[str]:
     body = re.sub(r"<(script|style)[^>]*>.*?</\1>", " ", page, flags=re.S | re.I)

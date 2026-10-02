@@ -37,6 +37,7 @@ CREATE TABLE IF NOT EXISTS postings (
     salary_max          INTEGER,
     salary_negotiable   INTEGER NOT NULL DEFAULT 0,
     company_avg_salary  INTEGER,                -- 회사 평균연봉(만원, 직접 입력·CSV)
+    company_info        TEXT,                   -- 기업 정보 JSON (업종·사원수·기업형태·설립일·매출액 등, 사람인 상세)
     job_category        TEXT,
     keywords            TEXT,                   -- 쉼표 구분
     description         TEXT,
@@ -118,6 +119,8 @@ def _migrate(con: sqlite3.Connection) -> None:
     cols = {r[1] for r in con.execute("PRAGMA table_info(postings)")}
     if "saved" not in cols:
         con.execute("ALTER TABLE postings ADD COLUMN saved INTEGER NOT NULL DEFAULT 0")
+    if "company_info" not in cols:
+        con.execute("ALTER TABLE postings ADD COLUMN company_info TEXT")
 
 
 @contextmanager

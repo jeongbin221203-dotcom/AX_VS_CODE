@@ -1,6 +1,7 @@
 """공고 저장(중복 제거)·조회·필터·평균 연봉 통계."""
 from __future__ import annotations
 
+import json
 import statistics
 from datetime import date, timedelta
 
@@ -10,14 +11,14 @@ from .normalize import (CAREER_TYPES, SIDO_ORDER, clean, parse_career, parse_edu
 
 FIELDS = ("url", "title", "company", "sido", "sigungu", "location_raw", "career_type", "career_min",
           "career_max", "career_raw", "education", "employment_type", "salary_raw", "salary_min",
-          "salary_max", "salary_negotiable", "company_avg_salary", "job_category", "keywords",
+          "salary_max", "salary_negotiable", "company_avg_salary", "company_info", "job_category", "keywords",
           "description", "posted_at", "deadline")
 
 
 def build(source: str, source_id, *, title, company, url=None, location=None, career=None,
           career_min=None, career_max=None, education=None, employment_type=None, salary_text=None,
           pay_type=None, salary_min=None, salary_max=None, company_avg_salary=None, job_category=None,
-          keywords=None, description=None, posted_at=None, deadline=None) -> dict:
+          keywords=None, description=None, posted_at=None, deadline=None, company_info=None) -> dict:
     """출처 어댑터가 넘긴 값을 공통 공고 dict 로 만든다. 연봉 숫자를 직접 주면 문구 해석보다 우선."""
     sido, sigungu = parse_region(location)
     kind, cmin, cmax = parse_career(career, career_min, career_max)
@@ -48,10 +49,41 @@ def build(source: str, source_id, *, title, company, url=None, location=None, ca
         "company_avg_salary": _int(company_avg_salary),
         "job_category": clean(job_category)[:200] or None,
         "keywords": clean(keywords)[:1000] or None,
-        "description": clean(description)[:5000] or None,
+        "description": _clean_body(description)[:8000] or None,
+        "company_info": json.dumps(company_info, ensure_ascii=False) if company_info else None,
         "posted_at": to_date(posted_at),
         "deadline": to_date(deadline),
     }
+
+
+def _clean_body(text) -> str:
+    """본문은 줄바꿈을 살린다 (공백만 정리)."""
+    if text is None:
+        return ""
+    lines = [clean(line) for line in str(text).replace("\r", "").split("\n")]
+    out, blank = [], False
+    for line in lines:
+        if line:
+            out.append(line)
+            blank = False
+        elif not blank and out:
+            out.append("")
+            blank = True
+    return "\n".join(out).strip()
+
+
+def keep_existing(item: dict) -> dict:
+    """같은 공고를 다시 읽었을 때 새 페이지에 없는 값(목록에서 채운 근무지·직무, 직접 적은 값)은 그대로 둔다."""
+    pid = find_id(item["source"], item["source_id"])
+    if not pid:
+        return item
+    old = get(pid)
+    for k in FIELDS:
+        if item.get(k) in (None, "") and old.get(k) not in (None, ""):
+            item[k] = old[k]
+    if item.get("career_type") == "무관" and not item.get("career_raw") and old.get("career_type") not in (None, "무관"):
+        item["career_type"], item["career_min"], item["career_max"] = old["career_type"], old["career_min"], old["career_max"]
+    return item
 
 
 def upsert_many(items: list[dict]) -> tuple[int, int]:

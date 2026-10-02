@@ -66,8 +66,8 @@ def test_run_reads_only_new_postings_and_fills_location(app):
     _settings()
     search = crawler.LIST_SITES["saramin"]["search"].format(kw="%EC%9E%90%EC%9E%AC%EA%B4%80%EB%A6%AC", page=1)
     d = crawler.LIST_SITES["saramin"]["detail"]
-    # 102 는 이미 저장돼 있음 → 상세를 다시 읽지 않는다
-    postings.upsert_many([postings.build("saramin", "102", title="구매 담당", company="가상")])
+    # 102 는 이미 상세까지 저장돼 있음 → 다시 읽지 않는다
+    postings.upsert_many([postings.build("saramin", "102", title="구매 담당", company="가상", company_info={"업종": "x"})])
     f = FakeFetcher({search: (200, SARAMIN_LIST), d.format(id=101): (200, SARAMIN_OG)})
     result = crawler.run_once(force=True, fetcher=f)
     assert result["new"] == 1
@@ -394,3 +394,18 @@ def test_collect_page_shows_carry_over(app, client):
     db.set_setting("crawl_last_summary", json.dumps({"new": 3, "updated": 0, "closed": 0, "errors": [], "requests": 9,
         "stopped_by_time": True, "sites": {"saramin": {"new": 3, "left": 1200}, "jobkorea": {"new": 0, "left": 34}}}))
     assert "1,234" in client.get("/collect").get_data(as_text=True)
+
+
+
+def test_backfill_saramin_without_details(app):
+    """요약만 읽어 둔 사람인 공고(기업정보 없음)는 새 공고 뒤에 다시 읽어 상세를 채운다. 마감된 것은 빼고."""
+    from tests.test_links import SARAMIN_VIEW
+    _settings(keywords=["자재관리"], sites=["saramin"], max_new=0)
+    postings.upsert_many([postings.build("saramin", "500", title="옛 요약", company="가상", job_category="생산"),
+                          postings.build("saramin", "501", title="마감", company="가상", deadline="2000-01-01")])
+    d = crawler.LIST_SITES["saramin"]["detail"]
+    f = FakeFetcher({d.format(id=500): (200, SARAMIN_VIEW)})
+    crawler.run_once(force=True, fetcher=f)
+    assert d.format(id=500) in f.seen and d.format(id=501) not in f.seen
+    row = postings.get(postings.find_id("saramin", "500"))
+    assert row["company_info"] and row["title"] == "각 부문별 직원 채용" and row["job_category"] == "생산"

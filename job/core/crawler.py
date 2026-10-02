@@ -38,7 +38,7 @@ LIST_SITES = {
         "latest": "https://www.saramin.co.kr/zf_user/jobs/list/domestic?page={page}&sort=RD&page_count=100",
         "link": r'rec_idx=(\d+)',
         "item": r'class="item_recruit"',                       # 공고 한 건의 시작 표시 (보충값을 이 구간에서 읽음)
-        "detail": "https://www.saramin.co.kr/zf_user/jobs/relay/view?rec_idx={id}",
+        "detail": "https://www.saramin.co.kr/zf_user/jobs/view?rec_idx={id}",   # 요약·본문·기업정보가 다 있는 주소
         "category": "https://www.saramin.co.kr/zf_user/jobs/list/job-category?cat_mcls={code}&page={page}&page_count=100&sort=RD",
         "category_pages": 10,
         "categories": [
@@ -105,6 +105,7 @@ SITEMAP_SITES = {
 
 UNLIMITED = 10 ** 9        # '0 = 모두'일 때 상한
 RUN_SHARE = 0.85           # 한 번 실행이 쓸 수 있는 시간 = 실행 간격의 85% (다음 실행과 겹치지 않게)
+BACKFILL_PER_RUN = 300     # 예전에 요약만 읽어 둔 사람인·잡코리아 공고를 한 번에 몇 건까지 다시 읽어 상세를 채울지 (새 공고 뒤에)
 
 DEFAULT = {
     "enabled": False,
@@ -347,6 +348,7 @@ def _run(s: dict, f: Fetcher) -> dict:
             new_ids = pick_round_robin(groups, lambda i: i not in skip and not postings.find_id(site, i),
                                        s["max_new"] or UNLIMITED)
             queues[site] = [(i, LIST_SITES[site]["detail"].format(id=i), ids[i]) for i in new_ids]
+            queues[site] += [(i, LIST_SITES[site]["detail"].format(id=i), None) for i in _needs_backfill(site)]
         except (SourceError, requests.RequestException) as e:
             st["errors"].append(str(e))
             summary["errors"].append(f"{site}: {e}")
@@ -382,7 +384,7 @@ def _run(s: dict, f: Fetcher) -> dict:
                 active.remove(site)
                 continue
             if item:
-                a, b = postings.upsert_many([item])
+                a, b = postings.upsert_many([postings.keep_existing(item)])
                 stats[site]["new"] += a
                 stats[site]["updated"] += b
             if site in SITEMAP_SITES:
@@ -430,6 +432,17 @@ def _run(s: dict, f: Fetcher) -> dict:
     db.set_setting("crawl_last_summary", json.dumps(summary, ensure_ascii=False))
     log.info("crawl done %s", summary)
     return summary
+
+
+def _needs_backfill(site: str) -> list[str]:
+    """요약만 읽어 둔(기업정보가 없는) 마감 전 공고 — 사람인·잡코리아 (상세 표·기업정보를 읽게 된 사이트)."""
+    if site not in ("saramin", "jobkorea"):
+        return []
+    with db.connect() as con:
+        return [r[0] for r in con.execute(
+            "SELECT source_id FROM postings WHERE source = ? AND company_info IS NULL AND hidden = 0 "
+            "AND (deadline IS NULL OR deadline >= ?) ORDER BY id DESC LIMIT ?",
+            (site, date.today().isoformat(), BACKFILL_PER_RUN))]
 
 
 def _fetch_item(f: Fetcher, site: str, url: str, hint: dict | None) -> tuple[dict | None, str | None]:
@@ -672,7 +685,7 @@ def refresh(f: Fetcher, limit: int) -> tuple[int, int, list[str]]:
         if not linkimport.is_posting_url(row["url"], row["source"]):
             continue
         try:
-            res = f.get(row["url"])
+            res = f.get(linkimport.detail_url(row["url"], row["source"]))
         except (SourceError, requests.RequestException) as e:
             errors.append(f"갱신 {row['source']}: {e}")
             continue

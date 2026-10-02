@@ -182,3 +182,7 @@ ul.good, ul.warn { padding-left: 1.2rem; margin: .2rem 0; }
 /* 평균 연봉 표: 이름·건수를 누르면 그 조건의 공고 목록 */
 .tbl tr.link-row:hover td { background: var(--accent-soft); }
 .tbl tr.link-row td a { font-weight: 600; }
+
+.desc-wrap summary { cursor: pointer; white-space: pre-line; color: var(--ink); }
+.desc-wrap summary b { color: var(--accent); }
+.desc-wrap[open] summary { display: none; }
