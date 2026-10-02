@@ -110,17 +110,31 @@ def build_document(outbox: dict, cfg: dict) -> dict:
         "tax_type": sale.get("tax_type") or "과세",
         "vat_amount": int(sale.get("vat_amount") or 0),
         "total_amount": int(sale.get("total_amount") or sale["amount"]),
-        "currency": "KRW",
+        "currency": sale.get("currency") or "KRW",
+        "fx_rate": float(sale.get("fx_rate") or 1),
+        "foreign_amount": sale.get("foreign_amount"),
+        "foreign_unit_price": (round(int(sale["unit_price"]) / float(sale.get("fx_rate") or 1), 2)
+                               if (sale.get("currency") or "KRW") != "KRW" else None),
+        **_entity_fields(sale.get("entity_id")),
         "owner": sale.get("owner"),
         "cancel_reason": sale.get("cancel_reason"),
     }
 
 
+def _entity_fields(entity_id) -> dict:
+    from . import entities as ent_mod
+    sup = ent_mod.info(entity_id)
+    return {"entity_code": sup["code"], "company_code": sup["erp_company_code"], "sap_sales_org": sup["sap_sales_org"],
+            "supplier_biz_no": sup["biz_no"]}
+
+
 def sap_sales_order_payload(doc: dict, cfg: dict) -> dict:
-    """S/4HANA API_SALES_ORDER_SRV A_SalesOrder 생성 본문."""
+    """S/4HANA API_SALES_ORDER_SRV A_SalesOrder 생성 본문. 외화 매출은 거래 통화·외화 단가로 보낸다."""
+    foreign = doc.get("currency", "KRW") != "KRW" and doc.get("foreign_unit_price") is not None
     return {
         "SalesOrderType": cfg["sap_order_type"],
-        "SalesOrganization": cfg["sap_sales_org"],
+        "SalesOrganization": doc.get("sap_sales_org") or cfg["sap_sales_org"],
+        "TransactionCurrency": doc.get("currency", "KRW"),
         "DistributionChannel": cfg["sap_dist_channel"],
         "OrganizationDivision": cfg["sap_division"],
         "SoldToParty": doc["customer_code"],
@@ -134,7 +148,7 @@ def sap_sales_order_payload(doc: dict, cfg: dict) -> dict:
             "RequestedQuantityUnit": cfg["sap_unit"],
             "to_PricingElement": [{
                 "ConditionType": cfg["sap_price_condition"],
-                "ConditionRateValue": str(doc["unit_price"]),
+                "ConditionRateValue": str(doc["foreign_unit_price"] if foreign else doc["unit_price"]),
                 "ConditionCurrency": doc["currency"],
             }],
         }],

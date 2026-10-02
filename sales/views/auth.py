@@ -23,12 +23,90 @@ def _next_url(nxt: str | None = None) -> str:
     return url_for("reports.dashboard")
 
 
+def _password_ok(user: dict, method: str):
+    """비밀번호가 맞은 뒤: 2단계 인증을 켠 사용자는 코드 확인 화면으로."""
+    from core import mfa
+    if mfa.enabled(user):
+        session.clear()
+        session.update(mfa_uid=int(user["id"]), mfa_method=method, mfa_next=_next_url(),
+                       mfa_at=datetime.now().isoformat(timespec="seconds"), mfa_fails=0)
+        return redirect(url_for("auth.otp"))
+    return _login(user, method)
+
+
+@bp.route("/login/otp", methods=["GET", "POST"])
+def otp():
+    from core import mfa
+    uid = session.get("mfa_uid")
+    started = session.get("mfa_at")
+    if not uid or not started or (datetime.now() - datetime.fromisoformat(started)).total_seconds() > 300:
+        session.clear()
+        flash("2단계 인증 시간이 지났습니다. 다시 로그인하세요.", "warning")
+        return redirect(url_for("auth.login"))
+    if request.method == "POST":
+        ok, how = mfa.verify(uid, request.form.get("code", ""))
+        if ok:
+            user = ent.get_user(user_id=uid)
+            method, nxt = session.get("mfa_method", "password"), session.get("mfa_next")
+            return _login(user, f"{method}+{how}", nxt, keep={"mfa_ok": True})
+        session["mfa_fails"] = int(session.get("mfa_fails", 0)) + 1
+        db.audit("로그인실패", "사용자", uid, {"2단계인증": "코드 불일치", "IP": request.remote_addr})
+        if session["mfa_fails"] >= 5:
+            session.clear()
+            flash("인증 코드를 5번 틀렸습니다. 처음부터 다시 로그인하세요.", "error")
+            return redirect(url_for("auth.login"))
+        flash("인증 코드가 맞지 않습니다.", "error")
+    return render_template("login_otp.html", title="2단계 인증", active=None)
+
+
+@bp.route("/account/mfa", methods=["GET", "POST"])
+def account_mfa():
+    """본인 2단계 인증 등록·해제."""
+    from core import mfa
+    user = g.user
+    codes = None
+    if request.method == "POST":
+        action = request.form.get("action")
+        try:
+            if action == "enable":
+                secret = session.get("mfa_setup")
+                if not secret:
+                    raise ValueError("등록 화면을 새로고침한 뒤 다시 시도하세요.")
+                codes = mfa.enable(int(user["id"]), secret, request.form.get("code", ""))
+                session.pop("mfa_setup", None)
+                session["mfa_ok"] = True
+                flash("2단계 인증을 켰습니다. 아래 복구 코드를 안전한 곳에 보관하세요(다시 보여 주지 않습니다).", "success")
+            elif action == "disable":
+                if mfa.required(user):
+                    raise ValueError("이 역할은 2단계 인증이 필수라 끌 수 없습니다. 휴대폰을 바꿨다면 관리자에게 초기화를 요청하세요.")
+                ok, _how = mfa.verify(int(user["id"]), request.form.get("code", ""))
+                if not ok:
+                    raise ValueError("인증 코드가 맞지 않습니다.")
+                mfa.disable(int(user["id"]), user, "본인 해제")
+                flash("2단계 인증을 껐습니다.", "warning")
+                return redirect(url_for("auth.account_mfa"))
+        except ValueError as exc:
+            flash(str(exc), "error")
+        user = ent.get_user(user_id=int(user["id"]))
+    setup = None
+    if not mfa.enabled(user) and codes is None:
+        secret = session.get("mfa_setup") or mfa.new_secret()
+        session["mfa_setup"] = secret
+        from core import company
+        uri = mfa.provisioning_uri(secret, user["emp_no"], company.get("app_title"))
+        setup = {"secret": " ".join(secret[i:i + 4] for i in range(0, len(secret), 4)), "qr": mfa.qr_data_uri(uri)}
+    return render_template("account_mfa.html", title="2단계 인증", active=None, enabled=mfa.enabled(user),
+                           required=mfa.required(user), setup=setup, codes=codes,
+                           applies=core_auth.AUTH_MODE == "password" or core_auth.breakglass_enabled())
+
+
 def _login(user: dict, method: str, nxt: str | None = None, keep: dict | None = None):
     session.clear()                               # 세션 고정 공격 차단: 로그인 때 새 세션
     session.permanent = True                      # PERMANENT_SESSION_LIFETIME(미사용 만료) 적용
     session["user_id"] = user["id"]
     session["login_at"] = datetime.now().isoformat(timespec="seconds")
     session["auth_mode"] = core_auth.AUTH_MODE    # 인증 방식이 바뀌면 옛 세션을 끊기 위해 기록
+    session["login_method"] = method
     session.update(keep or {})
     ent.apply_context(user)
     db.audit("로그인", "사용자", user["id"], {"역할": user["role"], "방식": method, "IP": request.remote_addr})
@@ -71,7 +149,7 @@ def login():
             user = core_auth.authenticate_simple(int(uid)) if uid.isdigit() else None
             message = "로그인에 실패했습니다."
         if user:
-            return _login(user, mode)
+            return _password_ok(user, mode) if mode == "password" else _login(user, mode)
         flash(message, "error")
 
     options = []
@@ -95,7 +173,7 @@ def breakglass():
     from core import notify
     notify.notify_role("ADMIN", "보안", "비상 계정 로그인", f"{user['name']}({user['emp_no']}) · IP {request.remote_addr}",
                        "/admin/audit")
-    return _login(user, "비상로그인")
+    return _password_ok(user, "비상로그인")
 
 
 # ── OIDC ─────────────────────────────────────────────────────────────────

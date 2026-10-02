@@ -61,6 +61,8 @@ def production_problems(auth_mode: str) -> list[str]:
         problems.append("SALES_DEBUG=1 은 운영에서 쓸 수 없습니다 (오류 화면에 코드가 노출됩니다).")
     if os.environ.get("SALES_SAP_VERIFY_TLS", "1") != "1":
         problems.append("SALES_SAP_VERIFY_TLS=0(ERP 인증서 검증 끄기)은 운영에서 쓸 수 없습니다. 사내 CA 인증서를 신뢰 저장소에 넣으세요.")
+    if os.environ.get("SALES_ETAX_ADAPTER") == "mock":
+        problems.append("SALES_ETAX_ADAPTER=mock(가짜 승인번호)은 운영에서 쓸 수 없습니다. file 또는 rest 로 ASP 에 연결하세요.")
     if auth_mode == "oidc":
         from core import oidc
         problems += oidc.problems()

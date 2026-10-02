@@ -223,3 +223,7 @@ fieldset.checks { border: 1px solid var(--line); border-radius: var(--radius); d
 .draft-bar { display: flex; gap: .6rem; align-items: center; flex-wrap: wrap; margin: 0 0 .6rem; padding: .5rem .75rem;
              border: 1px dashed var(--accent); border-radius: var(--radius); background: var(--accent-soft); font-size: .9rem; }
 button[data-busy] { opacity: .6; cursor: progress; }
+
+/* 첨부 목록 */
+.file-row { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; padding: .35rem 0; border-bottom: 1px dotted var(--line); }
+.file-row.voided { opacity: .6; }

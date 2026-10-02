@@ -21,6 +21,7 @@
         <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
         <button class="btn btn-sm">로그아웃</button>
         {% if AUTH_MODE == 'password' %}<a class="btn btn-sm" href="{{ url_for('auth.password') }}">비밀번호 변경</a>{% endif %}
+        {% if AUTH_MODE == 'password' or (session.get('login_method') or '').startswith('비상로그인') %}<a class="btn btn-sm" href="{{ url_for('auth.account_mfa') }}">2단계 인증</a>{% endif %}
       </form>
     </div>
     <a class="bell {{ 'has-unread' if g.unread }}" href="{{ url_for('auth.notifications') }}">🔔 알림{% if g.unread %} <b>{{ g.unread }}</b>{% endif %}</a>

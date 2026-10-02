@@ -231,6 +231,11 @@ class Schedule:
         return f"{now:%Y-%m-%d}"
 
 
+def _setting_on(key: str) -> bool:
+    from . import company
+    return int(company.get(key) or 0) > 0
+
+
 def _pii_on() -> bool:
     from . import company
     return int(company.get("pii_retention_years") or 0) > 0
@@ -248,6 +253,8 @@ SCHEDULES: list[Schedule] = [
     Schedule("backup.db", daily="02:00", description="DB 백업"),
     Schedule("hr.sync", daily="03:00", enabled=_env_on("SALES_HR_SOURCE"), description="인사 시스템 동기화"),
     Schedule("jobs.cleanup", daily="04:00", description="오래된 완료 작업 정리"),
+    Schedule("audit.archive", daily="01:45", enabled=lambda: _setting_on("audit_retention_years"),
+             description="보관기간 지난 감사로그를 파일로 이관 (회사 설정)"),
     Schedule("privacy.purge", daily="01:30", enabled=lambda: _pii_on(),
              description="종료 거래처 고객 연락처 파기 (회사 설정의 보관기간)"),
 ]
@@ -307,6 +314,18 @@ def schedule_table():
 # ---------------------------------------------------------------------------
 # 기본 작업 처리기
 # ---------------------------------------------------------------------------
+@handler("etax.issue")
+def _etax_issue(payload: dict):
+    from . import etax
+    return etax.process(int(payload["id"]))
+
+
+@handler("audit.archive")
+def _audit_archive(payload: dict):
+    from . import retention
+    return retention.archive_audit()
+
+
 @handler("privacy.purge")
 def _privacy_purge(payload: dict):
     from . import company

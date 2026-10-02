@@ -63,6 +63,7 @@ def org():
         password_mode=core_auth.AUTH_MODE == "password" or bool(
             target and core_auth.breakglass_enabled() and target.get("emp_no") in core_auth.breakglass_users()),
         locked=bool(target and (target.get("locked_until") or target.get("failed_logins"))),
+        mfa_on=bool(target and target.get("totp_enabled_at")),
         **_hr_context(),
     )
 
@@ -162,6 +163,20 @@ def user_save():
     except ValueError as exc:
         flash(str(exc), "error")
     return redirect(url_for("admin.org", tab="users", **({"uid": uid} if uid else {})))
+
+
+@bp.route("/users/<int:uid>/mfa-reset", methods=["POST"])
+def user_mfa_reset(uid: int):
+    from core import mfa
+    reason = f_str("reason")
+    if not reason:
+        flash("초기화 사유를 입력하세요 (예: 휴대폰 분실, 본인 확인 완료).", "error")
+    elif uid == int(g.user["id"]):
+        flash("본인의 2단계 인증은 다른 관리자가 초기화해야 합니다.", "error")
+    else:
+        mfa.disable(uid, g.user, reason)
+        flash("2단계 인증을 초기화했습니다. 다음 로그인 때 다시 등록합니다.", "warning")
+    return redirect(url_for("admin.org", tab="users", uid=uid))
 
 
 @bp.route("/users/<int:uid>/unlock", methods=["POST"])
@@ -340,10 +355,13 @@ def settings():
         f"SELECT {col} AS v, COUNT(*) AS n FROM {table} WHERE {col} IS NOT NULL GROUP BY {col}").to_dict("records")}
         for key, (_a, table, col, _l) in company.CODE_LISTS.items()}
     pii_preview = company.purge_pii(dry_run=True)
+    from core import entities as ent_mod
     from core import offline
     deps = pd_frame(offline.dependencies())
     return render_page("admin/settings.html", "settings", v=values, labels=company.LABELS,
                        deps=Table(deps, highlight={"위치": {"외부 인터넷": "danger"}}),
+                       entities=ent_mod.list_entities(active_only=False), currencies=ent_mod.CURRENCIES[1:],
+                       rates=Table(ent_mod.latest_rates()), edit_entity=ent_mod.get(a_int("eid")) or {"active": 1},
                        external=int((deps["위치"] == "외부 인터넷").sum()) if not deps.empty else 0,
                        code_lists=company.CODE_LISTS, usage=usage, open_stages=db.OPEN_STAGES,
                        history=Table(history), pii_preview=pii_preview)
@@ -358,7 +376,11 @@ def settings_save():
                                          "company_address", "app_title") if k in form}
     elif section == "policy":
         changes = {k: form[k] for k in ("discount_manager_max", "discount_exec_max", "approval_sla_hours",
-                                         "quote_valid_days", "default_payment_terms", "pii_retention_years") if k in form}
+                                         "quote_valid_days", "default_payment_terms", "pii_retention_years",
+                                         "audit_retention_years", "backup_keep_daily", "backup_keep_monthly",
+                                         "backup_keep_yearly", "fiscal_start_month") if k in form}
+        if "mfa_present" in form:
+            changes["mfa_required_roles"] = form.getlist("mfa_required_roles")
         probs = {s: form[f"prob_{s}"] for s in db.OPEN_STAGES if f"prob_{s}" in form}
         if probs:
             changes["stage_prob"] = probs
@@ -375,6 +397,30 @@ def settings_save():
     return redirect(url_for("admin.settings", _anchor=section))
 
 
+@bp.route("/settings/entity", methods=["POST"])
+def settings_entity():
+    from core import entities as ent_mod
+    try:
+        ent_mod.upsert({k: request.form.get(k) for k in ("id", "code", "name", "biz_no", "ceo", "address",
+                                                         "erp_company_code", "sap_sales_org")}
+                       | {"active": 1 if request.form.get("active") else 0})
+        flash("법인을 저장했습니다.", "success")
+    except ValueError as exc:
+        flash(str(exc), "error")
+    return redirect(url_for("admin.settings", _anchor="entities"))
+
+
+@bp.route("/settings/fx", methods=["POST"])
+def settings_fx():
+    from core import entities as ent_mod
+    try:
+        ent_mod.set_rate(f_str("currency"), f_str("rate_date"), f_str("rate"), f"수기 ({g.user['name']})")
+        flash("환율을 저장했습니다.", "success")
+    except ValueError as exc:
+        flash(str(exc), "error")
+    return redirect(url_for("admin.settings", _anchor="entities"))
+
+
 @bp.route("/settings/purge", methods=["POST"])
 def settings_purge():
     if not f_bool("confirm"):
@@ -384,6 +430,39 @@ def settings_purge():
     flash(f"고객 연락처 {result['purged']}건을 파기했습니다." if result["purged"] else
           result.get("message") or "파기할 대상이 없습니다.", "warning" if result["purged"] else "info")
     return redirect(url_for("admin.settings", _anchor="policy"))
+
+
+# ============================================================================
+# 개인정보 열람·삭제 요청
+# ============================================================================
+@bp.route("/privacy", methods=["GET", "POST"])
+def privacy():
+    from core import privacy as pv
+    term = (request.form.get("term") or request.args.get("term") or "").strip()
+    requester = f_str("requester")
+    found = None
+    if request.method == "POST":
+        action = request.form.get("action")
+        try:
+            if action == "export":
+                data, n = pv.export(term, requester, g.user["name"])
+                return xlsx_response(data, f"개인정보열람_{date.today():%Y%m%d}.xlsx", rows=n, pii=True)
+            if action == "erase":
+                if not f_bool("confirm"):
+                    raise ValueError("파기 확인에 체크하세요. 파기하면 되돌릴 수 없습니다.")
+                r = pv.erase(term, requester, g.user["name"], request.form.getlist("cid"), request.form.getlist("aid"))
+                flash(f"요청 #{r['request_id']}: 거래처 {r['customers']}건 · 활동 {r['activities']}건의 개인정보를 파기했습니다.",
+                      "warning")
+                return redirect(url_for("admin.privacy"))
+        except ValueError as exc:
+            flash(str(exc), "error")
+    if term:
+        try:
+            found = pv.search(term)
+        except ValueError as exc:
+            flash(str(exc), "error")
+    return render_page("admin/privacy.html", "privacy", term=term, requester=requester, found=found,
+                       history=Table(pv.history()))
 
 
 # ============================================================================
@@ -437,7 +516,36 @@ def audit():
         "admin/audit.html", "audit", actor=actor, entity=entity, limit=limit,
         actors=sorted(set(users["이름"].tolist())) if not users.empty else [],
         entities=AUDIT_ENTITIES, limits=AUDIT_LIMITS, tbl=Table(df, page_size=100),
-        chain=db.verify_audit_chain() if request.args.get("verify") else None)
+        chain=db.verify_audit_chain() if request.args.get("verify") else None,
+        archives=Table(_archives(), drop=["sha256"]), archive_check=_archive_check())
+
+
+def _archives():
+    from core import retention
+    return retention.list_archives()
+
+
+def _archive_check():
+    aid = a_int("verify_archive")
+    if not aid:
+        return None
+    from core import retention
+    try:
+        return {"id": aid, **retention.verify_archive(aid)}
+    except (ValueError, FileNotFoundError) as exc:
+        return {"id": aid, "ok": False, "reason": str(exc)}
+
+
+@bp.route("/audit/archive", methods=["POST"])
+def audit_archive_now():
+    from core import retention
+    try:
+        result = retention.archive_audit(actor=g.user["name"])
+        flash(f"감사로그 {result['archived']:,}건을 파일로 이관했습니다." if result["archived"]
+              else result.get("message", "이관할 기록이 없습니다."), "success" if result["archived"] else "info")
+    except (ValueError, RuntimeError) as exc:
+        flash(str(exc), "error")
+    return redirect(url_for("admin.audit"))
 
 
 # ============================================================================

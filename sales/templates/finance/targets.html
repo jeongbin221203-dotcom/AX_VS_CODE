@@ -28,6 +28,25 @@
 </section>
 
 <section class="card">
+  <h3>🗓️ 회계연도 · 분기 목표와 실적</h3>
+  <form method="get" class="toolbar" action="{{ page_path() }}">
+    <label>회계연도 <select name="fy" data-autosubmit onchange="this.form.submit()">
+      {% for y, lbl in fy_options %}<option value="{{ y }}" {{ 'selected' if y == fy }}>{{ lbl }}</option>{% endfor %}
+    </select></label>
+    <span class="muted small">1분기 = {{ fy_months[0] }} ~ {{ fy_months[2] }} · 시작 월은 회사 설정에서 바꿉니다.</span>
+  </form>
+  {{ table(fy_table, none, '이 회계연도에 목표나 매출이 없습니다.') }}
+  <form method="post" action="{{ url_for('finance.targets_distribute') }}" class="toolbar">
+    {{ csrf() }}<input type="hidden" name="fy" value="{{ fy }}">
+    <label>담당자 <select name="owner_id">{% for owner_id, label, _a in rows %}<option value="{{ owner_id }}">{{ label }}</option>{% endfor %}</select></label>
+    <label>기간 <select name="period"><option value="Y">연간</option><option>Q1</option><option>Q2</option><option>Q3</option><option>Q4</option></select></label>
+    <label>목표금액(원) <input type="number" name="amount" min="0" step="1000000" required></label>
+    <button class="btn">월별로 나눠 저장</button>
+    <span class="muted small">분기는 3개월, 연간은 12개월에 똑같이 나눕니다(나머지는 마지막 달). 그 기간의 월 목표는 덮어씁니다.</span>
+  </form>
+</section>
+
+<section class="card">
   <h3>📌 {{ g.ym }} 목표 대비 실적</h3>
   {% if not perf.empty %}
     {{ chart(perf_chart) }}

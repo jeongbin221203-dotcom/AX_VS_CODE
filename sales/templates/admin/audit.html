@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import metric, table, select, download %}
+{% from "_macros.html" import metric, table, select, download, csrf %}
 {% block content %}
 <p class="subtitle">데이터 변경·로그인·다운로드 이력을 시간순으로 보관합니다. 기록은 앞 기록의 해시를 이어 받는 체인으로 묶여 있고,
   DB 트리거로 수정·삭제가 막혀 있습니다(관리자·초기화로도 지울 수 없음).</p>
@@ -10,6 +10,21 @@
   <button class="btn">조회</button>
   <button class="btn" name="verify" value="1">🔐 무결성 검증</button>
 </form>
+<section class="card">
+  <h3>보관기간이 지나 파일로 옮긴 감사로그</h3>
+  <p class="muted small">회사 설정의 감사로그 보관기간이 지나면 매일 01:45 압축 파일로 옮깁니다. 옮기기 전에 해시 체인을 검증하고,
+    파일의 SHA-256 을 먼저 기록한 범위만 DB 에서 지울 수 있습니다(이관 기록은 고치거나 지울 수 없음).
+    무결성 검증은 마지막 이관 지점부터 이어서 확인합니다.</p>
+  {% if archive_check %}
+    <div class="alert {{ 'alert-success' if archive_check.ok else 'alert-error' }}">이관 #{{ archive_check.id }}:
+      {{ '파일·해시 체인 모두 이관 당시와 같습니다 (' ~ archive_check.rows ~ '건)' if archive_check.ok else archive_check.reason }}</div>
+  {% endif %}
+  {{ table(archives, 200, '아직 옮긴 감사로그가 없습니다.') }}
+  <div class="toolbar">
+    <form method="get" action="{{ page_path() }}" class="inline-form"><input name="verify_archive" placeholder="이관 id"><button class="btn btn-sm">파일 검증</button></form>
+    <form method="post" action="{{ url_for('admin.audit_archive_now') }}" class="inline-form">{{ csrf() }}<button class="btn btn-sm">지금 이관</button></form>
+  </div>
+</section>
 {% if chain %}
   {% if chain.broken_id %}
     <div class="alert alert-error">무결성 이상: 번호 {{ chain.broken_id }} 에서 체인이 끊겼습니다 — {{ chain.reason }}.

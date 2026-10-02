@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% from "_macros.html" import table, csrf %}
+{% block content %}
+<p class="subtitle">고객이 자기 개인정보를 보여 달라거나 지워 달라고 요청하면, 이름·전화번호·이메일로 찾아 처리합니다.
+  거래처명·매출·세금계산서 같은 회사 거래 기록은 법정 보존 대상이라 지우지 않고, 영업활동 내용은 해당 부분만 [파기]로 바꿉니다.
+  처리 내역은 아래 이력과 감사로그에 남습니다(검색어는 가려서 기록).</p>
+
+<section class="card">
+  <form method="get" class="toolbar" action="{{ page_path() }}">
+    <label class="grow">찾을 이름·전화번호·이메일 <input name="term" value="{{ term }}" required></label>
+    <button class="btn btn-primary">찾기</button>
+  </form>
+</section>
+
+{% if found %}
+<section class="card">
+  <form method="post" action="{{ url_for('admin.privacy') }}" class="form" data-no-draft>
+    {{ csrf() }}<input type="hidden" name="term" value="{{ found.term }}">
+    <h3>거래처의 고객 담당자 정보 ({{ found.customers|length }}건)</h3>
+    <div class="table-wrap"><table class="data">
+      <thead><tr><th>파기</th><th>거래처</th><th>고객담당자</th><th>연락처</th><th>이메일</th><th>영업담당</th></tr></thead>
+      <tbody>{% for r in found.customers.to_dict('records') %}
+        <tr><td><input type="checkbox" name="cid" value="{{ r.id }}" checked aria-label="파기 선택"></td><td>{{ r['거래처'] }}</td>
+          <td>{{ r['고객담당자'] or '' }}</td><td>{{ r['연락처'] or '' }}</td><td>{{ r['이메일'] or '' }}</td><td>{{ r['영업담당'] }}</td></tr>
+      {% else %}<tr><td colspan="6" class="muted">없음</td></tr>{% endfor %}</tbody>
+    </table></div>
+    <h3>영업활동 기록 ({{ found.activities|length }}건)</h3>
+    <div class="table-wrap"><table class="data">
+      <thead><tr><th>파기</th><th>활동일</th><th>거래처</th><th>활동내용</th><th>다음액션</th></tr></thead>
+      <tbody>{% for r in found.activities.to_dict('records') %}
+        <tr><td><input type="checkbox" name="aid" value="{{ r.id }}" checked aria-label="파기 선택"></td><td>{{ r['활동일'] }}</td>
+          <td>{{ r['거래처'] }}</td><td>{{ r['활동내용'] }}</td><td>{{ r['다음액션'] or '' }}</td></tr>
+      {% else %}<tr><td colspan="5" class="muted">없음</td></tr>{% endfor %}</tbody>
+    </table></div>
+    <label>요청자 (본인 확인한 정보주체) <input name="requester" value="{{ requester }}" placeholder="예) 홍길동 본인, 2026-10-02 전화 요청"></label>
+    <div class="row-actions">
+      <button class="btn" name="action" value="export">⬇️ 열람 요청 — 엑셀로 내보내기</button>
+      <label class="check"><input type="checkbox" name="confirm" value="1"> 체크한 항목을 파기합니다 (되돌릴 수 없음)</label>
+      <button class="btn btn-danger" name="action" value="erase">삭제 요청 — 파기</button>
+    </div>
+  </form>
+</section>
+{% endif %}
+
+<section class="card">
+  <h3>처리 이력</h3>
+  {{ table(history, 280, '처리한 요청이 없습니다.') }}
+</section>
+{% endblock %}

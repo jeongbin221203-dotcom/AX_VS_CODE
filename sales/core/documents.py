@@ -224,8 +224,8 @@ def validate(meta: dict, sale: dict, customer: dict) -> tuple[list[str], list[st
     if meta.get("buyer_biz_no") and customer.get("biz_no") and \
             digits(customer["biz_no"]) != meta["buyer_biz_no"]:
         warnings.append(f"공급받는자 사업자번호가 거래처 등록 정보({format_biz_no(customer['biz_no'])})와 다릅니다.")
-    from . import company
-    ours = company.get("company_biz_no") or COMPANY_BIZ_NO
+    from . import entities as ent_mod
+    ours = digits(ent_mod.info(sale.get("entity_id"))["biz_no"]) or COMPANY_BIZ_NO   # 매출의 법인 기준
     if ours and meta.get("supplier_biz_no") and meta["supplier_biz_no"] != ours:
         warnings.append("공급자 사업자번호가 우리 회사 번호와 다릅니다 (매입 세금계산서가 아닌지 확인).")
     if is_tax and meta.get("issue_date") and sale.get("sale_date"):

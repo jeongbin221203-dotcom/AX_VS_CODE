@@ -5,6 +5,7 @@ from datetime import date, timedelta
 
 from flask import Blueprint, abort, flash, g, redirect, request, url_for
 
+from core import attachments as att
 from core import company
 from core import dataio
 from core import enterprise as ent
@@ -85,7 +86,30 @@ def _customers_page(form: dict | None = None, status: int = 200):
                                   drop=["id", "customer_id", "종료일", "owner_id"])
         ctx["cust_acts"] = Table(db.list_activities(days=365, customer_id=edit_id).head(10),
                                  drop=["id", "customer_id", "owner_id"])
+    if tab == "merge" and ent.has_role(g.user, "ADMIN"):
+        groups = db.duplicate_groups()
+        for grp in groups:
+            grp["options"] = [(int(c["id"]), f"#{c['id']} {c['name']}") for c in grp["거래처"]]
+        ctx["dup_groups"] = groups
+        ctx["all_customers"] = [(int(k), v) for k, v in db.customer_options(include_closed=False).items()]
+    ctx["is_admin"] = ent.has_role(g.user, "ADMIN")
     return render_page("crm/customers.html", "customers", **ctx), status
+
+
+@bp.route("/customers/merge", methods=["POST"])
+def customer_merge():
+    if not ent.has_role(g.user, "ADMIN"):
+        abort(403, "거래처 병합은 시스템관리자만 할 수 있습니다.")
+    try:
+        result = db.merge_customers(f_int("source_id"), f_int("target_id"), f_str("reason"))
+        moved = ", ".join(f"{k} {v}건" for k, v in result["이동"].items() if v) or "옮길 데이터 없음"
+        flash(f"병합했습니다 — {moved}.", "success")
+        for w in result["경고"]:
+            flash(w, "warning")
+        return redirect(url_for("crm.customers", id=f_int("target_id")))
+    except ValueError as exc:
+        flash(str(exc), "error")
+        return redirect(url_for("crm.customers", tab="merge"))
 
 
 @bp.route("/customers")
@@ -104,7 +128,11 @@ def customer_save():
         data["credit_limit"] = f_int("credit_limit")
         data["payment_terms"] = f_int("payment_terms", company.get("default_payment_terms"))
         data["owner_id"] = f_owner()
-        new_id = db.upsert_customer({"id": cid, "row_version": f_str("row_version") or None, **data})
+        new_id = db.upsert_customer({"id": cid, "row_version": f_str("row_version") or None, **data},
+                                    confirm_similar=f_bool("confirm_similar"))
+    except db.SimilarCustomer as exc:
+        flash(str(exc), "warning")
+        return _customers_page(form={**request.form.to_dict(), "similar": exc.names}, status=409)
     except ValueError as exc:
         flash(str(exc), "error")
         return _customers_page(form=dict(request.form), status=400)
@@ -200,6 +228,7 @@ def _deals_page(form: dict | None = None, status: int = 200):
                   link=("crm.deals", "id", "id"), page_size=PAGE_SIZE),
         options=options, edit_id=edit_id, tab=tab, row=row, f=base,
         customers=db.customer_options(), history=history,
+        deal_files=att.list_for("deal", [edit_id]) if edit_id else [], attach_kinds=att.KINDS,
         qual_score=db.qual_score(base),
         move_tbl=Table(open_df[["id", "거래처", "기회명", "단계", "예상금액", "검증점수",
                                   "예상마감일", "담당자"]] if not open_df.empty else open_df,
@@ -325,6 +354,7 @@ def _activities_page(form: dict | None = None, status: int = 200):
         m_upcoming=len(db.upcoming_actions(7, g.owner_filter)),
         type_chart=chart(by_type, "유형", "건수", money=False),
         tbl=Table(df, drop=["customer_id", "owner_id"], page_size=PAGE_SIZE),
+        act_files=_activity_files(df), attach_kinds=att.KINDS,
         del_options=[(int(r.id), f"{r.활동일} · {r.거래처} · {r.유형} · {str(r.활동내용)[:20]}")
                      for r in df.itertuples()] if not df.empty else [],
         customers=db.customer_options(), deals=deal_choices(), f=base,
@@ -348,7 +378,7 @@ def activity_add():
             if (db.get_deal(deal_id) or {}).get("customer_id") != cid:
                 raise ValueError("선택한 영업기회가 해당 거래처의 기회가 아닙니다.")
         next_action = f_str("next_action")
-        db.add_activity({"customer_id": cid, "deal_id": deal_id,
+        new_act = db.add_activity({"customer_id": cid, "deal_id": deal_id,
                          "act_date": f_str("act_date") or None, "act_type": f_str("act_type"),
                          "owner_id": f_owner(), "summary": f_str("summary"),
                          "next_action": next_action,
@@ -356,8 +386,81 @@ def activity_add():
     except ValueError as exc:
         flash(str(exc), "error")
         return _activities_page(form=dict(request.form), status=400)
-    flash("활동을 등록했습니다.", "success")
+    saved, failed = 0, []
+    for upload in request.files.getlist("files"):
+        if upload and upload.filename:
+            try:
+                att.add("activity", int(new_act), upload.read(), upload.filename, f_str("attach_kind"), "", g.user)
+                saved += 1
+            except ValueError as exc:
+                failed.append(f"{upload.filename}: {exc}")
+    flash("활동을 등록했습니다." + (f" 첨부 {saved}개." if saved else ""), "success")
+    for msg in failed:
+        flash("첨부하지 못한 파일 — " + msg, "warning")
     return redirect(url_for("crm.activities"))
+
+
+def _activity_files(df) -> dict:
+    if df.empty:
+        return {}
+    rows = att.list_for("activity", [int(i) for i in df["id"].head(PAGE_SIZE * 4)])
+    names = {int(r.id): f"{r.활동일} · {r.거래처} · {r.유형}" for r in df.itertuples()}
+    out: dict = {}
+    for r in rows:
+        out.setdefault(names.get(int(r["entity_id"]), f"활동 #{r['entity_id']}"), []).append(r)
+    return out
+
+
+# ── 첨부 ─────────────────────────────────────────────────────────────────
+@bp.route("/attachments/<entity>/<int:eid>", methods=["POST"])
+def attachment_upload(entity: str, eid: int):
+    if entity not in att.ENTITIES:
+        abort(404)
+    back = url_for("crm.deals", tab="edit", id=eid) if entity == "deal" else url_for("crm.activities", tab="files")
+    files = [u for u in request.files.getlist("files") if u and u.filename]
+    if not files:
+        flash("올릴 파일을 고르세요.", "error")
+        return redirect(back)
+    for upload in files:
+        try:
+            att.add(entity, eid, upload.read(), upload.filename, f_str("kind"), f_str("memo"), g.user)
+            flash(f"'{upload.filename}' 을(를) 첨부했습니다.", "success")
+        except ValueError as exc:
+            flash(f"{upload.filename}: {exc}", "error")
+    return redirect(back)
+
+
+@bp.route("/attachments/<int:aid>/file")
+def attachment_file(aid: int):
+    try:
+        row = att.get(aid, with_data=True)
+    except ValueError:
+        abort(404)
+    if not row["intact"]:
+        db.audit("위변조의심", "첨부", aid, {"파일": row["file_name"]})
+        abort(409, "첨부 파일이 올린 당시와 다릅니다(위변조 의심). 관리자에게 알리세요.")
+    inline = row["mime"] in ("application/pdf", "image/jpeg", "image/png") and not request.args.get("download")
+    if not inline:
+        db.audit("다운로드", "첨부", aid, {"파일": row["file_name"]})
+    from flask import send_file
+    import io as _io
+    res = send_file(_io.BytesIO(row["data"]), mimetype=row["mime"], as_attachment=not inline,
+                    download_name=row["file_name"])
+    res.headers["X-Frame-Options"] = "SAMEORIGIN"
+    return res
+
+
+@bp.route("/attachments/<int:aid>/void", methods=["POST"])
+def attachment_void(aid: int):
+    try:
+        row = att.void(aid, f_str("reason"), g.user)
+        flash("첨부를 무효 처리했습니다(기록은 남습니다).", "warning")
+        back = url_for("crm.deals", tab="edit", id=row["entity_id"]) if row["entity"] == "deal" \
+            else url_for("crm.activities", tab="files")
+    except ValueError as exc:
+        flash(str(exc), "error")
+        back = request.referrer or url_for("crm.deals")
+    return redirect(back)
 
 
 @bp.route("/activities/delete", methods=["POST"])

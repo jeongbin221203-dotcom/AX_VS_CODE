@@ -8,6 +8,8 @@ import pandas as pd
 from flask import Blueprint, abort, flash, g, redirect, request, send_file, url_for
 
 from core import catalog
+from core import entities as ent_mod
+from core import etax
 from core import documents as docs
 from core import enterprise as ent
 from core import sales_db as db
@@ -87,6 +89,8 @@ def _sales_page(form: dict | None = None, status: int = 200):
         edit_row=edit_row, documents=documents, doc_types=docs.DOC_TYPES, customer_biz_no=customer_biz_no,
         f=base, customers=db.customer_options(include_closed=False), deals=deal_choices(),
         products=catalog.product_options(), tax_types=db.TAX_TYPES,
+        entity_opts=ent_mod.options(), currencies=ent_mod.CURRENCIES,
+        etax_rows=etax.list_for_sale(edit_id) if edit_id else [], etax_on=etax.enabled(),
         # 채권
         ar_total=ar_total, ar_overdue=ar_overdue,
         ar_overdue_cnt=int(overdue["건수"].sum()) if not summary.empty else 0,
@@ -127,10 +131,14 @@ def sale_add():
         qty, unit_price = f_int("qty", 1), f_int("unit_price")
         if qty < 1 or unit_price < 0:
             raise ValueError("수량은 1 이상, 단가는 0 이상이어야 합니다.")
+        if (f_str("currency") or "KRW") != "KRW" and not f_str("foreign_unit_price"):
+            raise ValueError("외화 매출은 외화 단가를 입력하세요.")
         db.upsert_sale({"customer_id": cid, "deal_id": deal_id,
                         "sale_date": f_str("sale_date") or None, "item": f_str("item"),
                         "item_code": f_str("item_code"), "product_id": f_int("product_id") or None,
                         "tax_type": f_str("tax_type") or "과세",
+                        "entity_id": f_str("entity_id") or None, "currency": f_str("currency") or "KRW",
+                        "fx_rate": f_str("fx_rate") or None, "foreign_unit_price": f_str("foreign_unit_price") or None,
                         "qty": qty, "unit_price": unit_price, "amount": qty * unit_price,
                         "owner_id": f_owner(), "status": f_str("status") or db.SALE_STATUS[0],
                         "memo": f_str("memo")})
@@ -159,6 +167,16 @@ def sale_update(sid: int):
                         "status": f_str("status"), "memo": row["memo"], "due_date": row["due_date"]})
         flash("저장했습니다.", "success")
     except ValueError as exc:
+        flash(str(exc), "error")
+    return redirect(url_for("finance.sales", sid=sid))
+
+
+@bp.route("/sales/<int:sid>/etax", methods=["POST"])
+def sale_etax(sid: int):
+    try:
+        eid = etax.request_issue(sid, f_str("issue_date") or None, g.user)
+        flash(f"전자세금계산서 발행을 요청했습니다(요청 #{eid}). 승인번호가 오면 증빙에 자동으로 붙습니다.", "success")
+    except (ValueError, PermissionError) as exc:
         flash(str(exc), "error")
     return redirect(url_for("finance.sales", sid=sid))
 
@@ -245,8 +263,14 @@ def targets():
     trend = db.monthly_trend(12)
     total_t = int(perf["목표"].sum()) if not perf.empty else 0
     total_s = int(perf["매출"].sum()) if not perf.empty else 0
+    from core import fiscal
+    fy = a_int("fy") or fiscal.current_fy()
+    fy_summary = fiscal.summary(fy)
+    money_cols = [c for c in fy_summary.columns if c not in ("담당자", "달성률(%)")]
     return render_page(
         "finance/targets.html", "targets",
+        fy=fy, fy_label=fiscal.label(fy), fy_options=[(y, fiscal.label(y)) for y in range(fy - 3, fy + 2)],
+        fy_table=Table(fy_summary, money=money_cols), fy_months=fiscal.months(fy),
         rows=[(o["id"], o["label"], target_map.get(o["id"], 0)) for o in g.assignable],
         perf_chart=chart(perf, "담당자", ["매출", "목표"]),
         perf=Table(perf, money=["매출", "목표", "파이프라인"], drop=["owner_id"]),
@@ -255,6 +279,19 @@ def targets():
         trend_chart=chart(trend, "월", ["매출", "목표"]),
         trend=Table(trend, money=["매출", "목표"]),
     )
+
+
+@bp.route("/targets/distribute", methods=["POST"])
+def targets_distribute():
+    from core import fiscal
+    fy, period = f_int("fy"), f_str("period")
+    quarter = int(period[1]) if period in ("Q1", "Q2", "Q3", "Q4") else None
+    try:
+        parts = fiscal.distribute(fy, quarter, f_int("owner_id"), f_int("amount"))
+        flash(f"{fiscal.label(fy)} {period if quarter else '연간'} 목표를 {len(parts)}개월에 나눠 저장했습니다.", "success")
+    except (ValueError, PermissionError) as exc:
+        flash(str(exc), "error")
+    return redirect(url_for("finance.targets", fy=fy))
 
 
 @bp.route("/targets/save", methods=["POST"])

@@ -1,5 +1,21 @@
 {% extends "base.html" %}
 {% from "_macros.html" import metric, table, tabs, csrf, select, owner_input, download %}
+{% macro file_list(files) %}
+  {% for a in files %}
+    <div class="file-row {{ 'voided' if a.voided_at }}">
+      <span class="badge">{{ a.kind }}</span>
+      {% if a.voided_at %}<s>{{ a.file_name }}</s> <span class="muted small">무효: {{ a.void_reason }} ({{ a.voided_by }})</span>
+      {% else %}<a href="{{ url_for('crm.attachment_file', aid=a.id) }}" target="_blank" rel="noopener">{{ a.file_name }}</a>
+        <span class="muted small">{{ (a.size / 1024)|round(0)|int }}KB · {{ a.uploaded_by }} · {{ a.uploaded_at }}{% if a.memo %} · {{ a.memo }}{% endif %}</span>
+        <form method="post" action="{{ url_for('crm.attachment_void', aid=a.id) }}" class="inline-form" data-no-draft>
+          {{ csrf() }}<input name="reason" placeholder="무효 사유" required><button class="btn btn-sm btn-danger">무효</button>
+        </form>
+      {% endif %}
+    </div>
+  {% else %}
+    <p class="muted small">첨부 파일이 없습니다.</p>
+  {% endfor %}
+{% endmacro %}
 
 {% macro deal_form(f, customers, edit, is_admin) %}
   <div class="form-grid g2">
@@ -88,6 +104,17 @@
           <button class="btn btn-danger">🗑️ 삭제</button>
         </form>
         <details><summary>📜 단계 변경 이력 ({{ history.total }}건)</summary>{{ table(history) }}</details>
+        <h3>📎 첨부 — 제안서·견적서·계약서·회의록</h3>
+        {{ file_list(deal_files) }}
+        <form method="post" action="{{ url_for('crm.attachment_upload', entity='deal', eid=edit_id) }}"
+              enctype="multipart/form-data" class="toolbar" data-no-draft>
+          {{ csrf() }}
+          <label>종류 {{ select('kind', attach_kinds, '제안서') }}</label>
+          <label class="grow">파일 (PDF·이미지·워드·엑셀·파워포인트·한글, 20MB 이하)
+            <input type="file" name="files" multiple required accept=".pdf,.jpg,.jpeg,.png,.docx,.xlsx,.pptx,.hwp,.hwpx"></label>
+          <label>메모 <input name="memo"></label>
+          <button class="btn">첨부</button>
+        </form>
       {% endif %}
     {% endif %}
 

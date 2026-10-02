@@ -113,6 +113,25 @@
     </form>
     {% endif %}
 
+    {% if raw.currency and raw.currency != 'KRW' %}
+      <p class="small">외화 거래: {{ raw.currency }} {{ '{:,.2f}'.format(raw.foreign_amount or 0) }} × 환율 {{ raw.fx_rate }} = {{ raw.amount|won }}</p>
+    {% endif %}
+    <h3 class="doc-title">🧾 전자세금계산서 발행</h3>
+    {% for e in etax_rows %}
+      <div class="small">요청 #{{ e.id }} · {{ e.status }} · 작성일 {{ e.issue_date }}{% if e.approval_no %} · 승인번호 {{ e.approval_no }}{% endif %}
+        {% if e.error %}<span class="warn-text"> · {{ e.error }}</span>{% endif %}</div>
+    {% endfor %}
+    {% if etax_on and raw.status != '취소' and not (etax_rows and etax_rows[0].status in ('발행요청', '전송중', '발행완료')) %}
+      <form method="post" action="{{ url_for('finance.sale_etax', sid=raw.id) }}" class="toolbar" data-no-draft>
+        {{ csrf() }}
+        <label>작성일자 <input type="date" name="issue_date" value="{{ raw.sale_date }}"></label>
+        <button class="btn btn-primary">전자세금계산서 발행 요청</button>
+        <span class="muted small">발행 대행(ASP)으로 보내고, 승인번호가 오면 아래 증빙에 자동 등록됩니다. 발급 기한·사업자번호를 먼저 확인합니다.</span>
+      </form>
+    {% elif not etax_on %}
+      <p class="muted small">발행 대행(ASP) 연결이 설정되지 않아 직접 발행은 꺼져 있습니다 (SALES_ETAX_ADAPTER). 발행한 증빙은 아래에서 올리세요.</p>
+    {% endif %}
+
     <h3 class="doc-title">🧾 증빙 — 세금계산서 · 전자세금계산서 · 거래명세서</h3>
     {% if documents %}
       <div class="doc-grid">
@@ -197,6 +216,10 @@
         <label>수량 <input type="number" name="qty" min="1" step="1" value="{{ f.qty }}"></label>
         <label>단가(원) <input type="number" name="unit_price" min="0" step="10000" value="{{ f.unit_price }}"></label>
         <label>과세구분 {{ select('tax_type', tax_types, f.tax_type or '과세') }}</label>
+        {% if entity_opts %}<label>법인 {{ select('entity_id', entity_opts, f.entity_id or '') }}</label>{% endif %}
+        <label>통화 {{ select('currency', currencies, f.currency or 'KRW') }}</label>
+        <label>외화 단가 (외화일 때) <input type="number" step="0.01" min="0" name="foreign_unit_price" value="{{ f.foreign_unit_price or '' }}"></label>
+        <label>환율 (비우면 최근 환율) <input type="number" step="0.0001" min="0" name="fx_rate" value="{{ f.fx_rate or '' }}"></label>
         <label>메모 <input name="memo" value="{{ f.memo or '' }}"></label>
       </div>
       <p class="muted small" data-sale-preview>금액 = 수량 × 단가 · 결제기일은 거래처 결제조건으로 자동 계산됩니다.</p>

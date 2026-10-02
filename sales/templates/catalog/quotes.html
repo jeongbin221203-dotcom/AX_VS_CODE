@@ -52,6 +52,9 @@
       <label>작성일 <input type="date" name="issue_date" value="{{ form.issue_date }}"></label>
       <label>유효기한 (비우면 30일) <input type="date" name="valid_until" value="{{ form.valid_until or '' }}"></label>
       <label>결제·납품 조건 <input name="terms" value="{{ form.terms or '' }}" placeholder="비우면 거래처 결제조건"></label>
+      {% if entity_opts %}<label>공급 법인 {{ select('entity_id', entity_opts, form.entity_id or '') }}</label>{% endif %}
+      <label>견적 통화 {{ select('currency', currencies, form.currency or 'KRW') }}</label>
+      <label>환율 (외화, 비우면 최근 환율) <input type="number" step="0.0001" min="0" name="fx_rate" value="{{ form.fx_rate if form.currency and form.currency != 'KRW' else '' }}"></label>
     </div>
     <div class="table-wrap">
       <table class="data lines">
@@ -94,7 +97,8 @@
       </tbody>
       <tfoot><tr><th colspan="8">정가 합계 {{ q.list_total|won }} · 할인 {{ '%.1f'|format(q.discount_rate or 0) }}%</th>
         <th class="num">{{ q.supply_amount|won }}</th><th class="num">{{ q.vat_amount|won }}</th></tr>
-        <tr><th colspan="8">합계 (부가세 포함)</th><th class="num" colspan="2">{{ q.total_amount|won }}</th></tr></tfoot>
+        <tr><th colspan="8">합계 (부가세 포함)</th><th class="num" colspan="2">{{ q.total_amount|won }}</th></tr>
+        {% if q.currency and q.currency != 'KRW' %}<tr><th colspan="8">외화 합계 (환율 {{ q.fx_rate }})</th><th class="num" colspan="2">{{ q.currency }} {{ '{:,.2f}'.format(q.foreign_amount or 0) }}</th></tr>{% endif %}</tfoot>
     </table>
   </div>
   {% if q.terms %}<p class="small">{{ q.terms }}</p>{% endif %}

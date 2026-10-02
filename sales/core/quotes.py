@@ -155,7 +155,12 @@ def save_quote(data: dict, items: list[dict]) -> int:
     issue = db._d(data.get("issue_date")) or date.today().isoformat()
     valid = db._d(data.get("valid_until")) or (date.fromisoformat(issue) + timedelta(days=valid_days())).isoformat()
     lines, totals = compute(items, int(cust["id"]), issue)
+    from . import entities as ent_mod
+    currency = str(data.get("currency") or "KRW").upper()
+    _x, fx_rate = ent_mod.to_krw(currency, 1, data.get("fx_rate"), issue)
     header = {"customer_id": int(cust["id"]), "deal_id": deal_id, "owner": owner_name, "owner_id": owner_id,
+              "entity_id": ent_mod.resolve(data.get("entity_id")), "currency": currency, "fx_rate": fx_rate,
+              "foreign_amount": round(totals["total_amount"] / fx_rate, 2) if currency != "KRW" else None,
               "title": (data.get("title") or "").strip() or None, "issue_date": issue, "valid_until": valid,
               "terms": data.get("terms") or f"결제조건: 세금계산서 발행 후 {cust.get('payment_terms') or 30}일",
               "memo": data.get("memo"), **totals}
@@ -193,7 +198,8 @@ def revise(quote_id: int) -> int:
     if q["status"] in ("작성중", "대체됨", "수락"):
         raise ValueError(f"'{q['status']}' 상태의 견적은 개정할 수 없습니다.")
     cols = ["quote_no", "customer_id", "deal_id", "owner", "owner_id", "title", "terms", "memo", "list_total",
-            "supply_amount", "vat_amount", "total_amount", "discount_rate"]
+            "supply_amount", "vat_amount", "total_amount", "discount_rate", "entity_id", "currency", "fx_rate",
+            "foreign_amount"]
     today = date.today().isoformat()
     with db.get_conn() as conn:
         cur = conn.execute(
@@ -265,6 +271,7 @@ def convert_to_sales(quote_id: int, sale_date: Optional[str] = None) -> list[int
             "item": line["item_name"], "item_code": line["item_code"], "product_id": line["product_id"],
             "qty": line["qty"], "unit_price": line["unit_price"], "amount": line["supply_amount"],
             "tax_type": line["tax_type"], "owner_id": q["owner_id"], "quote_id": quote_id,
+            "entity_id": q.get("entity_id"), "currency": q.get("currency") or "KRW", "fx_rate": q.get("fx_rate") or 1,
             "memo": f"견적 {q['quote_no']} Rev.{q['revision']}"}))
     db.audit("매출전환", "견적", quote_id, {"견적번호": q["quote_no"], "매출": ids})
     return ids
@@ -298,10 +305,10 @@ def pdf(quote_id: int) -> bytes:
     body = ParagraphStyle("b", fontName=regular, fontSize=9.5, leading=14)
     title = ParagraphStyle("t", fontName=bold, fontSize=22, leading=28, alignment=1, spaceAfter=6)
     small = ParagraphStyle("s", fontName=regular, fontSize=8.5, leading=12, textColor=colors.HexColor("#555555"))
-    from . import company as co
-    company = {"상호": co.get("company_name") or "(관리자 > 회사 설정에서 회사명 입력)",
-               "사업자번호": co.get("company_biz_no"), "대표": co.get("company_ceo"),
-               "주소": co.get("company_address")}
+    from . import entities as ent_mod
+    sup = ent_mod.info(q.get("entity_id"))
+    company = {"상호": sup["name"] or "(관리자 > 회사 설정에서 회사명 입력)",
+               "사업자번호": sup["biz_no"], "대표": sup["ceo"], "주소": sup["address"]}
     buf = io.BytesIO()
     doc = SimpleDocTemplate(buf, pagesize=A4, leftMargin=16 * mm, rightMargin=16 * mm, topMargin=16 * mm,
                             bottomMargin=16 * mm, title=f"견적서 {q['quote_no']}", author=company["상호"])
@@ -337,6 +344,9 @@ def pdf(quote_id: int) -> bytes:
     ]))
     story = [Paragraph("견 적 서", title), head, Spacer(1, 6 * mm), table, Spacer(1, 6 * mm),
              Paragraph(f"거래조건: {q.get('terms') or '-'}", body)]
+    if (q.get("currency") or "KRW") != "KRW":
+        story.append(Paragraph(f"외화 합계: {q['currency']} {float(q.get('foreign_amount') or 0):,.2f} "
+                               f"(환율 {float(q.get('fx_rate') or 1):,.4f}원 적용, 원화 금액이 기준)", body))
     if q.get("memo"):
         story.append(Paragraph(f"비고: {q['memo']}".replace("\n", "<br/>"), body))
     story += [Spacer(1, 8 * mm), Paragraph("위와 같이 견적합니다. 부가세는 과세 품목에 한해 공급가액의 10%(원 미만 절사)입니다.", small)]

@@ -363,6 +363,37 @@ def erp_credit():
     return _erp_result(erp.receive_credit(_items()))
 
 
+@bp.route("/erp/fx", methods=["POST"])
+def erp_fx():
+    """환율 [{currency, rate_date, rate}] — 1 외화당 원."""
+    require("erp:write")
+    from core import entities as ent_mod
+    results = []
+    for i in _items():
+        try:
+            ent_mod.set_rate(i.get("currency"), i.get("rate_date"), i.get("rate"), "ERP")
+            results.append({"currency": i.get("currency"), "result": "반영"})
+        except ValueError as exc:
+            results.append({"currency": i.get("currency"), "result": "오류", "message": str(exc)})
+    return _erp_result(results)
+
+
+@bp.route("/etax/acks", methods=["POST"])
+def etax_acks():
+    """전자세금계산서 발행 결과 회신 [{request_id, approval_no, ok, message}] (ASP·파일 연동)."""
+    require("erp:write")
+    from core import etax
+    results = []
+    for i in _items():
+        try:
+            r = etax.complete(int(i.get("request_id") or 0), str(i.get("approval_no") or ""),
+                              bool(i.get("ok", True)), str(i.get("message") or ""))
+            results.append({"request_id": i.get("request_id"), "result": r["status"], **r})
+        except (ValueError, PermissionError, TypeError) as exc:
+            results.append({"request_id": i.get("request_id"), "result": "오류", "message": str(exc)})
+    return _erp_result(results)
+
+
 @bp.route("/erp/products", methods=["POST"])
 def erp_products():
     """자재(품목) 마스터 [{code, name, unit, list_price, tax_type, category, active}]."""

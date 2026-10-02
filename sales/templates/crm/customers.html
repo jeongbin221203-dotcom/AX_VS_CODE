@@ -19,6 +19,10 @@
     <label>ERP 코드 (SAP 고객번호) <input name="erp_code" value="{{ f.erp_code or '' }}" placeholder="예) C100234"></label>
   </div>
   <label>메모 <textarea name="memo" rows="3">{{ f.memo or '' }}</textarea></label>
+  {% if f.similar %}
+    <label class="check"><input type="checkbox" name="confirm_similar" value="1">
+      비슷한 이름의 거래처({{ f.similar|join(', ') }})와 다른 회사입니다 — 그래도 등록</label>
+  {% endif %}
 {% endmacro %}
 
 {% block content %}
@@ -36,8 +40,32 @@
 {{ table(tbl, 460) }}
 
 <section class="card">
-  {{ tabs([('new', '➕ 신규 등록'), ('edit', '✏️ 수정 / 삭제')], tab) }}
-  {% if tab == 'edit' %}
+  {{ tabs([('new', '➕ 신규 등록'), ('edit', '✏️ 수정 / 삭제')] + ([('merge', '🔀 중복 · 병합')] if is_admin else []), tab) }}
+  {% if tab == 'merge' %}
+    <p class="muted">사업자번호가 같거나 이름이 거의 같은 거래처입니다('(주)대한산업' = '대한산업 주식회사'). 병합하면 없앨 거래처의
+      영업기회·활동·매출·견적·특가가 남길 거래처로 옮겨지고, 없앨 거래처는 '종료(병합됨)'로 남습니다. 되돌릴 수 없으니 사유를 남기세요.</p>
+    {% for grp in dup_groups %}
+      <form method="post" action="{{ url_for('crm.customer_merge') }}" class="toolbar">
+        {{ csrf() }}
+        <span class="grow small"><strong>{{ grp['기준'] }}</strong> {{ grp['값'] }} —
+          {% for c in grp['거래처'] %}#{{ c.id }} {{ c.name }} ({{ c.owner }}{{ ', ' ~ c.biz_no if c.biz_no }}){{ ' · ' if not loop.last }}{% endfor %}</span>
+        <label>없앨 거래처 {{ select('source_id', grp.options, grp['거래처'][1].id) }}</label>
+        <label>남길 거래처 {{ select('target_id', grp.options, grp['거래처'][0].id) }}</label>
+        <label>사유 * <input name="reason" required placeholder="예) 같은 회사 이중 등록"></label>
+        <button class="btn btn-danger">병합</button>
+      </form>
+    {% else %}
+      <div class="alert alert-success">중복으로 보이는 거래처가 없습니다.</div>
+    {% endfor %}
+    <h3>직접 고르기</h3>
+    <form method="post" action="{{ url_for('crm.customer_merge') }}" class="toolbar">
+      {{ csrf() }}
+      <label class="grow">없앨 거래처 {{ select('source_id', all_customers, '', blank='선택') }}</label>
+      <label class="grow">남길 거래처 {{ select('target_id', all_customers, '', blank='선택') }}</label>
+      <label>사유 * <input name="reason" required></label>
+      <button class="btn btn-danger">병합</button>
+    </form>
+  {% elif tab == 'edit' %}
     {% if not options %}
       <div class="alert alert-info">등록된 거래처가 없습니다.</div>
     {% else %}

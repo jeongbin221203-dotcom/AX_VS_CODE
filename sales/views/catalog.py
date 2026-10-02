@@ -8,6 +8,7 @@ from flask import Blueprint, abort, flash, g, jsonify, redirect, request, send_f
 import io
 
 from core import catalog
+from core import entities as ent_mod
 from core import enterprise as ent
 from core import quotes as qt
 from core import sales_db as db
@@ -136,6 +137,7 @@ def quotes():
         quote=None if editing and not quote else quote, editing=editing, form=form,
         customers=db.customer_options(include_closed=False), deals=deal_choices(),
         products=catalog.product_options(), tax_types=db.TAX_TYPES,
+        entity_opts=ent_mod.options(), currencies=ent_mod.CURRENCIES,
     )
 
 
@@ -147,7 +149,9 @@ def quote_save():
         visible_deal(deal_id)
     data = {"id": f_int("id") or None, "customer_id": cid, "deal_id": deal_id, "title": f_str("title"),
             "issue_date": f_str("issue_date"), "valid_until": f_str("valid_until"), "terms": f_str("terms"),
-            "memo": f_str("memo"), "row_version": f_str("row_version")}
+            "memo": f_str("memo"), "row_version": f_str("row_version"),
+            "entity_id": f_str("entity_id") or None, "currency": f_str("currency") or "KRW",
+            "fx_rate": f_str("fx_rate") or None}
     try:
         qid = qt.save_quote(data, _items_from_form())
         flash("견적을 저장했습니다.", "success")

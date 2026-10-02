@@ -31,7 +31,18 @@
       <label>견적 유효기간 (일) <input type="number" min="1" max="365" name="quote_valid_days" value="{{ v.quote_valid_days }}"></label>
       <label>신규 거래처 기본 결제조건 (일) <input type="number" min="0" max="365" name="default_payment_terms" value="{{ v.default_payment_terms }}"></label>
       <label>종료 거래처 개인정보 보관 (년, 0=파기 안 함) <input type="number" min="0" max="20" name="pii_retention_years" value="{{ v.pii_retention_years }}"></label>
+      <label>회계연도 시작 월 <input type="number" min="1" max="12" name="fiscal_start_month" value="{{ v.fiscal_start_month }}"></label>
+      <label>감사로그 DB 보관 (년, 0=계속) <input type="number" min="0" max="30" name="audit_retention_years" value="{{ v.audit_retention_years }}"></label>
+      <label>일 백업 보관 (개) <input type="number" min="1" max="365" name="backup_keep_daily" value="{{ v.backup_keep_daily }}"></label>
+      <label>월말 백업 보관 (개월) <input type="number" min="0" max="120" name="backup_keep_monthly" value="{{ v.backup_keep_monthly }}"></label>
+      <label>연말 백업 보관 (년) <input type="number" min="0" max="50" name="backup_keep_yearly" value="{{ v.backup_keep_yearly }}"></label>
     </div>
+    <fieldset class="checks"><legend>2단계 인증 필수 역할 (비밀번호 로그인·비상 계정에 적용, SSO 는 회사 IdP 가 담당)</legend>
+      <input type="hidden" name="mfa_present" value="1">
+      {% for code, label in ROLE_LABEL.items() %}
+        <label class="check"><input type="checkbox" name="mfa_required_roles" value="{{ code }}" {{ 'checked' if code in v.mfa_required_roles }}> {{ label }}</label>
+      {% endfor %}
+    </fieldset>
     <p class="muted small">할인 {{ v.discount_manager_max }}% 이하 팀장 / {{ v.discount_exec_max }}% 이하 팀장 → 임원 / 그 이상 팀장 → 임원 → 관리자.
       바꾼 구간은 새 결재 요청부터 적용되고, 진행 중인 결재는 요청할 때의 결재선을 그대로 따릅니다.</p>
     <fieldset>
@@ -54,6 +65,43 @@
     <button class="btn btn-danger">파기 실행</button>
   </form>
   {% endif %}
+</section>
+
+<section class="card" id="entities">
+  <h3>법인 · 환율</h3>
+  <p class="muted small">계열사·해외법인처럼 여러 법인의 매출을 한 시스템에서 나눠 관리할 때 등록합니다. 영업기회·견적·매출에 법인을 고르면
+    견적서 공급자란, 세금계산서 공급자 확인, ERP 전송(회사코드·판매조직)이 그 법인 기준이 됩니다. 등록하지 않으면 위 회사 정보를 씁니다.</p>
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th>코드</th><th>법인명</th><th>사업자번호</th><th>ERP 회사코드</th><th>SAP 판매조직</th><th>사용</th><th></th></tr></thead>
+    <tbody>{% for e in entities %}
+      <tr><td>{{ e.code }}</td><td>{{ e.name }}</td><td>{{ e.biz_no or '' }}</td><td>{{ e.erp_company_code or '' }}</td>
+        <td>{{ e.sap_sales_org or '' }}</td><td>{{ '예' if e.active else '아니오' }}</td>
+        <td><a href="{{ url_for('admin.settings', eid=e.id, _anchor='entities') }}">수정</a></td></tr>
+    {% else %}<tr><td colspan="7" class="muted">등록된 법인이 없습니다 (회사 정보 하나로 운영).</td></tr>{% endfor %}</tbody>
+  </table></div>
+  <form method="post" action="{{ url_for('admin.settings_entity') }}" class="form">
+    {{ csrf() }}{% if edit_entity.id %}<input type="hidden" name="id" value="{{ edit_entity.id }}">{% endif %}
+    <div class="form-grid g4">
+      <label>코드 * <input name="code" value="{{ edit_entity.code or '' }}" placeholder="KR01" required></label>
+      <label>법인명 * <input name="name" value="{{ edit_entity.name or '' }}" required></label>
+      <label>사업자번호 <input name="biz_no" value="{{ edit_entity.biz_no or '' }}"></label>
+      <label>대표자 <input name="ceo" value="{{ edit_entity.ceo or '' }}"></label>
+      <label class="span2">주소 <input name="address" value="{{ edit_entity.address or '' }}"></label>
+      <label>ERP 회사코드 <input name="erp_company_code" value="{{ edit_entity.erp_company_code or '' }}" placeholder="예) 1000"></label>
+      <label>SAP 판매조직 <input name="sap_sales_org" value="{{ edit_entity.sap_sales_org or '' }}"></label>
+      <label class="check"><input type="checkbox" name="active" value="1" {{ 'checked' if edit_entity.active }}> 사용</label>
+    </div>
+    <button class="btn btn-primary">{{ '💾 법인 수정' if edit_entity.id else '➕ 법인 등록' }}</button>
+  </form>
+  <h4>환율 (1 외화당 원) — 외화 견적·매출의 원화 환산에 사용, ERP 가 /api/v1/erp/fx 로 보내도 됩니다</h4>
+  {{ table(rates, none, '등록된 환율이 없습니다.') }}
+  <form method="post" action="{{ url_for('admin.settings_fx') }}" class="toolbar">
+    {{ csrf() }}
+    <label>통화 <select name="currency">{% for c in currencies %}<option>{{ c }}</option>{% endfor %}</select></label>
+    <label>기준일 <input type="date" name="rate_date"></label>
+    <label>환율 <input type="number" step="0.0001" min="0" name="rate" required placeholder="예) 1385.5"></label>
+    <button class="btn">환율 저장</button>
+  </form>
 </section>
 
 <section class="card" id="codes">

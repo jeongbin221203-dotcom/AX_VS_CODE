@@ -17,6 +17,7 @@ import hashlib
 import json
 import os
 import random
+import re
 import shutil
 import subprocess
 from contextvars import ContextVar
@@ -249,7 +250,12 @@ def audit(action: str, entity: str, entity_id: int | None = None,
             lock(conn, "audit_chain")               # 해시 체인이 엇갈리지 않도록 쓰기 잠금 (서버 여러 대 공통)
             last = conn.execute("SELECT hash FROM audit_log WHERE hash IS NOT NULL "
                                 "ORDER BY id DESC LIMIT 1").fetchone()
-            prev = last[0] if last else ""
+            if not last:                            # 모두 파일로 이관된 뒤 → 마지막 이관 지점에서 체인을 잇는다
+                try:
+                    last = conn.execute("SELECT last_hash FROM audit_archives ORDER BY last_id DESC LIMIT 1").fetchone()
+                except Exception:   # noqa: BLE001 - 이관 테이블이 없던 옛 DB
+                    last = None
+            prev = (last[0] if last else "") or ""
             digest = _audit_hash(prev, *record.values())
             conn.execute(
                 "INSERT INTO audit_log (ts, actor, actor_id, action, entity, entity_id, detail, "
@@ -264,7 +270,12 @@ def verify_audit_chain(db_path: str | None = None) -> dict:
     rows = _df("SELECT id, ts, actor, actor_id, action, entity, entity_id, detail, prev_hash, hash "
                "FROM audit_log ORDER BY id", (), db_path)
     result = {"total": len(rows), "unsigned": 0, "verified": 0, "broken_id": None, "reason": ""}
-    prev, started = "", False
+    try:                               # 보관기간이 지나 파일로 옮긴 구간이 있으면 그 마지막 해시에서 이어서 검증
+        anchor = _one("SELECT last_id, last_hash FROM audit_archives ORDER BY last_id DESC LIMIT 1", (), db_path)
+    except Exception:   # noqa: BLE001 - 이관 테이블이 없던 옛 DB
+        anchor = None
+    prev, started = ((anchor or {}).get("last_hash") or ""), bool(anchor and anchor.get("last_hash"))
+    result["archived_until"] = int(anchor["last_id"]) if anchor else None
     for r in rows.to_dict("records"):
         if not r["hash"]:
             if started:               # 체인 시작 이후에 해시 없는 기록 → 직접 삽입된 것
@@ -406,13 +417,68 @@ CUSTOMER_FIELDS = ["name", "biz_no", "industry", "grade", "owner", "manager",
                    "credit_limit", "payment_terms", "erp_code"]
 
 
-def upsert_customer(data: dict, db_path: str | None = None) -> int:
+class DuplicateCustomer(ValueError):
+    """같은 사업자번호의 거래처가 이미 있음 — 저장하지 않는다."""
+
+
+class SimilarCustomer(ValueError):
+    """이름이 거의 같은 거래처가 있음 — 확인하면 등록할 수 있다."""
+
+    def __init__(self, message: str, names: list[str]):
+        super().__init__(message)
+        self.names = names
+
+
+_CORP_WORDS = re.compile(r"주식회사|유한회사|유한책임회사|합자회사|\(주\)|\(유\)|㈜|co\.?,?\s*ltd\.?|inc\.?|corp\.?",
+                         re.I)
+
+
+def name_key(name: Any) -> str:
+    """'(주)대한산업', '대한산업 주식회사', '대한 산업' 을 같은 이름으로 본다."""
+    return re.sub(r"[\s\-_.,·()\[\]]", "", _CORP_WORDS.sub("", str(name or ""))).lower()
+
+
+def biz_digits(value: Any) -> str:
+    return re.sub(r"\D", "", str(value or ""))
+
+
+def find_duplicates(name: str, biz_no: str, exclude_id: int | None = None,
+                    db_path: str | None = None) -> tuple[Optional[dict], list[dict]]:
+    """(같은 사업자번호 거래처, 이름이 거의 같은 거래처들). 병합된 거래처는 제외."""
+    digits_ = biz_digits(biz_no)
+    same_biz = None
+    if digits_:
+        same_biz = _one("SELECT id, name, owner, owner_id FROM customers WHERE biz_no_norm=? AND id<>? "
+                        "AND merged_into IS NULL", [digits_, int(exclude_id or 0)], db_path)
+    key = name_key(name)
+    similar = []
+    if key:
+        rows = _df("SELECT id, name, owner, owner_id, biz_no FROM customers WHERE id<>? AND merged_into IS NULL",
+                   [int(exclude_id or 0)], db_path).to_dict("records")
+        similar = [r for r in rows if name_key(r["name"]) == key]
+    return same_biz, similar
+
+
+def upsert_customer(data: dict, db_path: str | None = None, confirm_similar: bool = True) -> int:
     """거래처 신규 등록 또는 수정. data['id'] 가 있으면 수정.
 
     data['row_version'] 을 넘기면 그 사이 다른 사람이 수정했는지 확인한다(동시 수정 충돌 방지).
+    같은 사업자번호는 등록할 수 없다(매출·채권·여신이 두 거래처로 나뉘는 것을 막음).
+    confirm_similar=False 이면 이름이 거의 같은 거래처가 있을 때 SimilarCustomer 로 확인을 받는다.
     """
     if not str(data.get("name", "")).strip():
         raise ValueError("거래처명은 필수입니다.")
+    same_biz, similar = find_duplicates(data["name"], data.get("biz_no"), data.get("id"), db_path)
+    if same_biz:
+        who = (f"'{same_biz['name']}' (담당 {same_biz['owner']})" if in_scope(same_biz.get("owner_id"))
+               else "다른 팀이 담당하는 거래처")
+        raise DuplicateCustomer(f"사업자번호 {data.get('biz_no')} 는 이미 {who}로 등록되어 있습니다. "
+                                f"같은 회사라면 그 거래처를 쓰고, 중복이면 관리자에게 병합을 요청하세요.")
+    if similar and not confirm_similar and not data.get("id"):
+        names = [f"{r['name']} (담당 {r['owner']})" if in_scope(r.get("owner_id")) else "다른 팀 거래처"
+                 for r in similar[:5]]
+        raise SimilarCustomer("이름이 거의 같은 거래처가 이미 있습니다: " + ", ".join(names) +
+                              ". 다른 회사가 맞으면 '그래도 등록'에 체크하고 다시 저장하세요.", names)
     owner_id, owner_name = resolve_owner(data.get("owner_id") or data.get("owner"), db_path)
     record = {f: data.get(f) for f in CUSTOMER_FIELDS}
     record.update(owner=owner_name, name=str(data["name"]).strip(),
@@ -438,6 +504,7 @@ def upsert_customer(data: dict, db_path: str | None = None) -> int:
             if conn.execute(sql, params).rowcount == 0:
                 raise ConflictError("다른 사용자가 먼저 이 거래처를 수정했습니다. "
                                     "화면을 새로고침해 최신 내용을 확인한 뒤 다시 저장하세요.")
+        _set_biz_norm(cid, record.get("biz_no"), db_path)
         audit("수정", "거래처", cid, {"거래처명": record["name"],
                                       "변경": diff(prev, {**record, "owner_id": owner_id},
                                                    CUSTOMER_FIELDS + ["owner_id"])}, db_path)
@@ -449,8 +516,73 @@ def upsert_customer(data: dict, db_path: str | None = None) -> int:
             (*values, owner_id, _now(), _now()),
         )
         new_id = int(cur.lastrowid)
+    _set_biz_norm(new_id, record.get("biz_no"), db_path)
     audit("등록", "거래처", new_id, {"거래처명": record["name"], "담당자": owner_name}, db_path)
     return new_id
+
+
+def _set_biz_norm(cid: int, biz_no: Any, db_path: str | None = None) -> None:
+    with get_conn(db_path) as conn:
+        conn.execute("UPDATE customers SET biz_no_norm=? WHERE id=?", (biz_digits(biz_no) or None, cid))
+
+
+MERGE_TABLES = ("deals", "activities", "sales", "quotes", "customer_prices")
+
+
+def duplicate_groups(db_path: str | None = None) -> list[dict]:
+    """병합 후보: 사업자번호가 같거나 이름이 거의 같은 거래처 묶음."""
+    rows = _df("SELECT id, name, biz_no, biz_no_norm, owner, status FROM customers WHERE merged_into IS NULL "
+               "ORDER BY id", (), db_path).to_dict("records")
+    groups: dict[tuple, list] = {}
+    for r in rows:
+        if r.get("biz_no_norm"):
+            groups.setdefault(("사업자번호", r["biz_no_norm"]), []).append(r)
+        groups.setdefault(("이름", name_key(r["name"])), []).append(r)
+    out, seen = [], set()
+    for (kind, key), items in groups.items():
+        ids = tuple(sorted(i["id"] for i in items))
+        if len(items) > 1 and key and ids not in seen:
+            seen.add(ids)
+            out.append({"기준": kind, "값": key, "거래처": items})
+    return out
+
+
+def merge_customers(source_id: int, target_id: int, reason: str, db_path: str | None = None) -> dict:
+    """source 의 영업기회·활동·매출·견적·특가를 target 으로 옮기고 source 는 '종료'(병합됨)로 남긴다."""
+    if int(source_id) == int(target_id):
+        raise ValueError("같은 거래처끼리는 병합할 수 없습니다.")
+    if not str(reason or "").strip():
+        raise ValueError("병합 사유를 입력하세요.")
+    src, dst = get_customer(int(source_id), db_path), get_customer(int(target_id), db_path)
+    if not src or not dst:
+        raise ValueError("거래처를 찾을 수 없습니다.")
+    if src.get("merged_into") or dst.get("merged_into"):
+        raise ValueError("이미 병합된 거래처입니다.")
+    warnings = []
+    if src.get("erp_code") and dst.get("erp_code") and src["erp_code"] != dst["erp_code"]:
+        warnings.append(f"ERP 코드가 다릅니다({src['erp_code']} → {dst['erp_code']}). "
+                        f"ERP 에 이미 보낸 매출은 ERP 쪽에서도 거래처를 맞춰야 합니다.")
+    moved = {}
+    with get_conn(db_path) as conn:
+        for table in MERGE_TABLES:
+            moved[table] = conn.execute(f"UPDATE {table} SET customer_id=? WHERE customer_id=?",
+                                        (int(target_id), int(source_id))).rowcount
+        fill = {f: src[f] for f in ("biz_no", "erp_code", "manager", "phone", "email", "address", "industry")
+                if not dst.get(f) and src.get(f)}
+        if fill.get("biz_no"):
+            fill["biz_no_norm"] = biz_digits(fill["biz_no"])
+        if fill:
+            conn.execute(f"UPDATE customers SET {', '.join(f'{k}=?' for k in fill)}, updated_at=?, "
+                         f"row_version=COALESCE(row_version,0)+1 WHERE id=?", (*fill.values(), _now(), int(target_id)))
+        conn.execute("UPDATE customers SET status='종료', merged_into=?, biz_no_norm=NULL, updated_at=?, "
+                     "memo=COALESCE(memo,'') || ?, row_version=COALESCE(row_version,0)+1 WHERE id=?",
+                     (int(target_id), _now(), f"\n[병합 → {dst['name']} #{target_id}] {reason.strip()}",
+                      int(source_id)))
+    result = {"이동": moved, "보완": list(fill), "경고": warnings}
+    audit("거래처병합", "거래처", int(target_id),
+          {"원거래처": f"{src['name']} #{source_id}", "대상": f"{dst['name']} #{target_id}", "사유": reason.strip(),
+           **result}, db_path)
+    return result
 
 
 def delete_customer(customer_id: int, db_path: str | None = None) -> None:
@@ -852,10 +984,12 @@ def list_sales(ym_from: str = "", ym_to: str = "", owner_id: int | None = None, 
                (SELECT COUNT(*) FROM sale_documents sd
                  WHERE sd.sale_id = s.id AND sd.voided_at IS NULL) AS 증빙,
                COALESCE(s.erp_status, '') AS "ERP",
-               s.customer_id, d.title AS 관련기회, s.owner_id
+               s.customer_id, d.title AS 관련기회, s.owner_id,
+               COALESCE(e.code, '') AS 법인, COALESCE(s.currency, 'KRW') AS 통화
           FROM sales s
           JOIN customers c ON c.id = s.customer_id
           LEFT JOIN deals d ON d.id = s.deal_id
+          LEFT JOIN entities e ON e.id = s.entity_id
          WHERE 1=1
     """
     params: list[Any] = []
@@ -885,7 +1019,8 @@ def get_sale(sale_id: int, db_path: str | None = None) -> Optional[dict]:
 
 SALE_FIELDS = ["customer_id", "deal_id", "sale_date", "item", "item_code", "qty", "unit_price",
                "amount", "owner", "owner_id", "status", "memo", "due_date", "paid_amount",
-               "product_id", "quote_id", "tax_type", "vat_amount", "total_amount"]
+               "product_id", "quote_id", "tax_type", "vat_amount", "total_amount",
+               "entity_id", "currency", "fx_rate", "foreign_amount"]
 
 
 def vat_for(supply: int, tax_type: str) -> int:
@@ -902,10 +1037,25 @@ def upsert_sale(data: dict, db_path: str | None = None) -> int:
     if not str(data.get("item", "")).strip():
         raise ValueError("품목은 필수입니다.")
     qty = int(data.get("qty") or 0)
+    from . import entities as ent_mod
+    currency = str(data.get("currency") or "KRW").upper()
+    fx_rate, foreign_amount = 1.0, None
+    if currency != "KRW":                 # 외화: 외화 단가 × 환율 = 원화 단가 (집계·채권·부가세는 원화)
+        if data.get("foreign_unit_price") not in (None, ""):
+            foreign_unit = float(str(data["foreign_unit_price"]).replace(",", ""))
+            unit_krw, fx_rate = ent_mod.to_krw(currency, foreign_unit, data.get("fx_rate"), data.get("sale_date"))
+            data = {**data, "unit_price": unit_krw, "amount": None}
+            foreign_amount = round(foreign_unit * qty, 2)
+        else:
+            _x, fx_rate = ent_mod.to_krw(currency, 1, data.get("fx_rate"), data.get("sale_date"))
     unit_price = int(data.get("unit_price") or 0)
     amount = int(data.get("amount") or qty * unit_price)
     if amount <= 0:
         raise ValueError("금액은 0보다 커야 합니다.")
+    if currency != "KRW" and foreign_amount is None:
+        foreign_amount = (float(data["foreign_amount"]) if data.get("foreign_amount") not in (None, "")
+                          else round(amount / fx_rate, 2))
+    entity_id = ent_mod.resolve(data.get("entity_id")) if "entity_id" in data or not data.get("id") else None
     status = data.get("status") or "입금대기"
     if status not in SALE_STATUS:
         raise ValueError(f"수금상태 값이 올바르지 않습니다: {status}")
@@ -930,7 +1080,8 @@ def upsert_sale(data: dict, db_path: str | None = None) -> int:
               "memo": data.get("memo"), "due_date": due_date,
               "paid_amount": int(data.get("paid_amount") or (total if status == "입금완료" else 0)),
               "product_id": data.get("product_id"), "quote_id": data.get("quote_id"),
-              "tax_type": tax_type, "vat_amount": vat, "total_amount": total}
+              "tax_type": tax_type, "vat_amount": vat, "total_amount": total,
+              "entity_id": entity_id, "currency": currency, "fx_rate": fx_rate, "foreign_amount": foreign_amount}
     values = [record[f] for f in SALE_FIELDS]
 
     if data.get("id"):
@@ -939,6 +1090,12 @@ def upsert_sale(data: dict, db_path: str | None = None) -> int:
         check_record_scope(prev, "매출")
         if prev["status"] == SALE_CANCELLED:
             raise ValueError("취소된 매출은 수정할 수 없습니다.")
+        if "entity_id" not in data:              # 수정 화면이 다루지 않는 값은 기존 값 유지
+            record["entity_id"] = prev.get("entity_id")
+        if "currency" not in data:
+            record.update(currency=prev.get("currency") or "KRW", fx_rate=float(prev.get("fx_rate") or 1))
+            record["foreign_amount"] = (round(amount / record["fx_rate"], 2) if record["currency"] != "KRW" else None)
+        values = [record[f] for f in SALE_FIELDS]
         if data.get("paid_amount") is None:      # 수정 화면은 입금액을 다루지 않는다 → 기존 입금액 유지
             record["paid_amount"] = (total if status == "입금완료"
                                      else min(int(prev.get("paid_amount") or 0), total))
@@ -1290,8 +1447,8 @@ def month_options(back: int = 24, forward: int = 6) -> list[str]:
 # ----------------------------------------------------------------------------
 # 내보내기 / 샘플데이터 / 초기화
 # ----------------------------------------------------------------------------
-def backup_database(folder: str | os.PathLike, keep: int = 30, db_path: str | None = None) -> str:
-    """DB 백업. 최근 keep 개만 보관한다.
+def backup_database(folder: str | os.PathLike, keep: int | None = None, db_path: str | None = None) -> str:
+    """DB 백업. keep 을 주면 최근 keep 개만, 주지 않으면 회사 설정의 세대 관리(일·월말·연말)를 따른다.
 
     SQLite     : 온라인 백업 API — 서비스 중에도 일관된 스냅샷
     PostgreSQL : pg_dump 사용자 지정 형식(.dump) — pg_restore 로 복구 (SALES_PG_DUMP 로 실행 파일 지정)
@@ -1319,9 +1476,13 @@ def backup_database(folder: str | os.PathLike, keep: int = 30, db_path: str | No
             dst.close()
             src.close()
         pattern = (".db",)
-    olds = sorted(f for f in os.listdir(folder) if f.startswith("sales_") and f.endswith(pattern))
-    for name in olds[:-keep] if keep else []:
-        os.remove(os.path.join(folder, name))
+    if keep is not None:
+        olds = sorted(f for f in os.listdir(folder) if f.startswith("sales_") and f.endswith(pattern))
+        for name in olds[:-keep] if keep else []:
+            os.remove(os.path.join(folder, name))
+    else:
+        from .retention import prune_backups
+        prune_backups(folder, pattern)
     audit("DB백업", "시스템", None, {"파일": os.path.basename(target)}, db_path)
     return target
 
