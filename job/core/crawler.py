@@ -179,7 +179,10 @@ def release_lock() -> None:
     db.set_setting("crawl_lock", "")
 
 
-# ── HTTP (robots.txt·간격) ────────────────────────────────
+# ── HTTP (robots.txt·간격·재시도) ─────────────────────────
+
+class BlockedError(SourceError):
+    """사이트가 막았거나 연결이 계속 끊김 — 이번 실행에서 그 사이트는 그만 읽는다."""
 
 class Fetcher:
     def __init__(self, delay: float | None = None):
@@ -190,6 +193,7 @@ class Fetcher:
         self._robots: dict[str, urllib.robotparser.RobotFileParser | None] = {}
         self._last = 0.0
         self.requests = 0
+        self._fails: dict[str, int] = {}
 
     def allowed(self, url: str) -> bool:
         host = "{0.scheme}://{0.netloc}".format(urlparse(url))
@@ -207,10 +211,28 @@ class Fetcher:
         rp = self._robots[host]
         return bool(rp and rp.can_fetch("*", url))
 
+    RETRY_WAITS = (10, 30)          # 연결이 끊기면 10초, 30초 쉬고 다시
+    MAX_FAILS = 3                   # 한 사이트에서 연달아 이만큼 실패하면 이번 실행에서는 그 사이트를 그만 읽는다
+
     def get(self, url: str) -> requests.Response:
         if not self.allowed(url):
             raise SourceError(f"robots.txt 가 허용하지 않는 주소: {url}")
-        return self._get(url)
+        host = urlparse(url).netloc
+        if self._fails.get(host, 0) >= self.MAX_FAILS:
+            raise BlockedError(f"{host} 연결이 계속 끊겨 이번 실행에서는 중단")
+        for attempt, wait in enumerate((0, *self.RETRY_WAITS)):
+            if wait:
+                time.sleep(wait)
+            try:
+                res = self._get(url)
+                self._fails[host] = 0
+                return res
+            except (requests.ConnectionError, requests.Timeout) as e:
+                self._fails[host] = self._fails.get(host, 0) + 1
+                log.warning("연결 실패 %s (%d번째): %s", url, attempt + 1, e.__class__.__name__)
+                if self._fails[host] >= self.MAX_FAILS:
+                    raise BlockedError(f"{host} 연결이 계속 끊겨 이번 실행에서는 중단 ({e.__class__.__name__})") from e
+        raise BlockedError(f"{host} 연결 실패")
 
     def _get(self, url: str) -> requests.Response:
         wait = self.delay - (time.monotonic() - self._last)
@@ -450,7 +472,7 @@ def collect_lists(f: Fetcher, site: str, s: dict, keywords: list[str]) -> tuple[
         for page_no in range(1, pages + 1):
             res = f.get(tpl.replace("{page}", str(page_no)))
             if res.status_code in (403, 429):
-                raise SourceError(f"목록 요청이 막혔습니다 (HTTP {res.status_code})")
+                raise BlockedError(f"목록 요청이 막혔습니다 (HTTP {res.status_code})")
             if res.status_code != 200:
                 errors.append(f"{site} {name}: 목록 HTTP {res.status_code}")
                 break
@@ -528,6 +550,8 @@ def _fill_missing_from_list(site: str, hints: dict[str, dict]) -> None:
 def _detail(f: Fetcher, site: str, url: str, hint: dict) -> dict | None:
     try:
         res = f.get(url)
+    except BlockedError:
+        raise
     except SourceError:
         return None
     if res.status_code != 200:

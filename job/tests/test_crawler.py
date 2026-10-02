@@ -300,3 +300,38 @@ def test_run_purges_closed_unsaved(app):
     postings.upsert_many([postings.build("saramin", "x", title="마감", company="가상", deadline=past)])
     result = crawler.run_once(force=True, fetcher=FakeFetcher({}))
     assert result["purged"] == 1 and postings.all_rows() == []
+
+
+class FlakyFetcher(FakeFetcher):
+    """처음 몇 번은 연결이 끊기는 사이트."""
+
+    def __init__(self, pages, fail_times):
+        super().__init__(pages)
+        self.fail_times = fail_times
+        self.RETRY_WAITS = (0, 0)
+
+    def _get(self, url):
+        import requests
+        if not url.endswith("robots.txt") and self.fail_times > 0:
+            self.fail_times -= 1
+            self.requests += 1
+            raise requests.ConnectionError("reset")
+        return super()._get(url)
+
+
+def test_retry_after_connection_reset(app):
+    _settings(keywords=["자재관리"], sites=["saramin"])
+    search = crawler.LIST_SITES["saramin"]["search"].format(kw="%EC%9E%90%EC%9E%AC%EA%B4%80%EB%A6%AC", page=1)
+    d = crawler.LIST_SITES["saramin"]["detail"]
+    f = FlakyFetcher({search: (200, SARAMIN_LIST), d.format(id=101): (200, SARAMIN_OG),
+                      d.format(id=102): (200, SARAMIN_OG)}, fail_times=2)
+    result = crawler.run_once(force=True, fetcher=f)
+    assert result["new"] == 2 and not result["errors"]               # 두 번 끊겨도 다시 시도해 이어 감
+
+
+def test_repeated_failures_stop_site(app):
+    _settings(keywords=["자재관리"], sites=["saramin", "jobkorea"])
+    f = FlakyFetcher({}, fail_times=3)
+    result = crawler.run_once(force=True, fetcher=f)
+    assert any("중단" in e for e in result["errors"])
+    assert any("jobkorea" in u for u in f.seen)                       # 다음 사이트는 계속
