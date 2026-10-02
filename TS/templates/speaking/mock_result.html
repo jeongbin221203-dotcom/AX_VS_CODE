@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}모의고사 결과{% endblock %}
+{% block content %}
+{% set tsp = m.exam == 'tsp' %}
+<div class="page-head">
+  <div>
+    <div class="muted small">{{ '토익스피킹' if tsp else '오픽' }} 실전 모의고사 · {{ m.created_at[:16].replace('T', ' ') }}</div>
+    <h1>결과</h1>
+  </div>
+  <div class="row">
+    <a class="btn primary" href="{{ url_for('speaking.tsp_mock' if tsp else 'speaking.opic_mock') }}">새 모의고사</a>
+    <a class="btn" href="{{ home }}">홈</a>
+  </div>
+</div>
+
+<div class="grid four">
+  {% if tsp %}
+  <div class="card kpi"><div class="label">추정 점수</div><div class="value">{{ r.score }}</div><div class="sub">{{ r.level[1] if r.level else '' }}</div></div>
+  <div class="card kpi"><div class="label">문항 점수 합</div><div class="value">{{ r.raw | round(1) }}</div><div class="sub">만점 {{ r.raw_max }} (Q1~10 3점 · Q11 5점)</div></div>
+  <div class="card kpi"><div class="label">목표</div><div class="value">{{ m.settings.target or '–' }}</div>
+    <div class="sub">{% if m.settings.target %}{{ '달성' if r.score >= m.settings.target else (m.settings.target - r.score) ~ '점 남음' }}{% endif %}</div></div>
+  {% else %}
+  <div class="card kpi"><div class="label">추정 등급</div><div class="value">{{ r.grade or '–' }}</div><div class="sub">{{ r.grade_name }}</div></div>
+  <div class="card kpi"><div class="label">자기 채점 평균</div><div class="value">{{ r.avg | round(1) }}</div><div class="sub">5점 만점 (자기소개 제외)</div></div>
+  <div class="card kpi"><div class="label">목표</div><div class="value">{{ m.settings.target or '–' }}</div>
+    <div class="sub">{% if r.grade and m.settings.target %}{{ '달성' if GRADES.index(r.grade) >= GRADES.index(m.settings.target) else '아직' }} · 난이도 {{ r.level }}{% endif %}</div></div>
+  {% endif %}
+  <div class="card kpi"><div class="label">답변</div><div class="value">{{ r.answered }}/{{ r.total }}</div>
+    <div class="sub">{% if r.words %}평균 {{ r.words | round | int }}단어{% endif %}{% if r.duration %} · {{ r.duration | mmss }}{% endif %}</div></div>
+</div>
+
+{% if tsp and r.by_task %}
+<div class="card" style="margin-top:14px">
+  <h2>유형별</h2>
+  <table><tbody>
+  {% for t, v in TASKS.items() %}
+    <tr><td class="num"><b>{{ v.q }}</b></td><td>{{ v.name }}</td>
+      <td class="r num">{{ ((r.by_task.get(t, 0)) * 100) | round | int }}%</td>
+      <td style="width:40%"><div class="bar"><i style="width:{{ ((r.by_task.get(t, 0)) * 100) | round | int }}%"></i></div></td></tr>
+  {% endfor %}
+  </tbody></table>
+  <p class="small muted">가장 낮은 유형부터 <a href="{{ url_for('speaking.tsp_home') }}#tasks">유형별 연습</a>을 해 보세요.</p>
+</div>
+{% endif %}
+
+<div class="card" style="margin-top:14px">
+  <h2>문항별</h2>
+  {% for s in steps %}
+    <details class="reveal-d">
+      <summary>{{ s.label }} · {{ s.title }} —
+        {% if s.row %}<b>{{ s.row.points | round(1) }}/{{ s.row.max_points | int }}</b>{% if s.row.words is not none %} <span class="muted small">{{ s.row.words }}단어</span>{% endif %}{% else %}<span class="muted">답 없음</span>{% endif %}</summary>
+      {% if s.question_text or s.show.question %}<div class="sentence spk-q">{{ s.question_text or s.show.question }}</div>{% endif %}
+      {% if s.question_ko %}<div class="small muted">{{ s.question_ko }}</div>{% endif %}
+      {% if s.show.kind == 'text' %}<div class="passage">{{ s.show.text }}</div>{% endif %}
+      {% if s.show.kind == 'scene' %}<div class="small">{{ s.show.scene_ko }}</div>{% endif %}
+      {% if s.row and s.row.response %}<div class="explain"><b>내가 한 말</b><div>{{ s.row.response }}</div></div>{% endif %}
+      {% for x in s.samples if x.text %}<div class="explain"><b>{{ x.label }}</b><div class="spk-sample">{{ x.text }}</div>{% if x.ko %}<div class="translation">{{ x.ko }}</div>{% endif %}</div>{% endfor %}
+    </details>
+  {% endfor %}
+</div>
+<p class="small muted" style="margin-top:12px">점수·등급은 스스로 채점한 결과로 계산한 추정치입니다. 실제 채점은 {{ 'ETS' if tsp else 'ACTFL' }} 공인 평가자가 합니다.</p>
+{% endblock %}

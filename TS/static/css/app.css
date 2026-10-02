@@ -341,6 +341,29 @@ body.listening .listen-card { border-color: var(--accent); }
 ul.clean { padding-left: 1.1em; margin: 0; }
 ul.clean li { margin: 4px 0; }
 
+/* 말하기 시험 (토익스피킹·오픽) */
+.spk-main { margin-bottom: 12px; }
+.spk-read { font-size: 1.15rem; line-height: 1.75; }
+.spk-q { font-size: 1.1rem; }
+.spk-el { margin-top: 8px; }
+.spk-info h3 { margin: 0 0 2px; }
+.spk-info table { margin: 10px 0 6px; }
+.spk-info td { border-bottom: 1px solid var(--line); padding: 5px 8px; }
+.spk-opic { display: flex; gap: 14px; align-items: flex-start; }
+.spk-ava { flex: none; width: 56px; height: 56px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; font-weight: 800; }
+.spk-status { justify-content: space-between; }
+.spk-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.spk-live { min-height: 1.4em; margin-top: 8px; font-style: italic; }
+.spk-review { margin-bottom: 14px; }
+.spk-audio { width: 100%; margin: 8px 0; }
+.spk-sample { white-space: pre-wrap; margin: 6px 0; }
+.spk-rubric { margin-top: 12px; border-top: 1px solid var(--line); padding-top: 8px; }
+.spk-rubric .rb input { margin-right: 4px; }
+.topic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+.topic-grid label { display: flex; gap: 6px; align-items: center; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); cursor: pointer; font-size: .92rem; }
+.topic-grid label:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+.frame { white-space: pre-wrap; font-family: var(--mono); font-size: .88rem; background: var(--surface-2); border-radius: 8px; padding: 10px 12px; margin: 6px 0 0; }
+
 @media (max-width: 640px) {
   .topbar { padding: 8px 12px 0; position: static; }
   .topbar-row { flex-wrap: wrap; gap: 8px; }

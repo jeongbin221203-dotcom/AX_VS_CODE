@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block title %}토익스피킹{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <div class="muted small">{{ e.summary }}</div>
+    <h1>토익스피킹</h1>
+  </div>
+  <div class="row">
+    <a class="btn primary" href="{{ url_for('speaking.tsp_mock') }}">실전 모의고사</a>
+    <a class="btn" href="{{ url_for('speaking.tsp_guide') }}">답변 틀·채점 기준</a>
+    <form class="row" method="post" action="{{ url_for('speaking.tsp_target') }}">
+      <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+      <label class="small">목표
+        <select name="target" data-autosubmit>
+          {% for t in TARGETS %}<option value="{{ t }}" {{ 'selected' if target == t }}>{{ t }}점</option>{% endfor %}
+        </select></label>
+    </form>
+  </div>
+</div>
+
+<div class="grid four">
+  <div class="card kpi">
+    <div class="label">추정 점수</div>
+    <div class="value">{{ est if est is not none else '–' }}</div>
+    <div class="sub">{% if est is not none %}{{ level[1] }}{% else %}다섯 유형을 모두 연습하면 계산됩니다{% endif %}</div>
+  </div>
+  <div class="card kpi">
+    <div class="label">목표</div>
+    <div class="value">{{ target }}</div>
+    <div class="sub">{{ target_level[1] }}{% if est is not none %} · {{ '달성' if est >= target else (target - est) ~ '점 남음' }}{% endif %}</div>
+  </div>
+  <div class="card kpi">
+    <div class="label">최근 모의고사</div>
+    <div class="value">{{ mocks[0].score if mocks else '–' }}</div>
+    <div class="sub">{{ mocks[0].created_at[:10] if mocks else '아직 없음' }}</div>
+  </div>
+  <div class="card kpi">
+    <div class="label">답변 기록</div>
+    <div class="value">{{ tasks | map(attribute='stat') | select | map(attribute='n') | sum }}</div>
+    <div class="sub">문항 답변 수 (연습 + 모의고사)</div>
+  </div>
+</div>
+
+<div class="card" style="margin-top:14px">
+  <div class="spread"><h2 style="margin:0">레벨 표</h2><span class="small muted">점수는 스스로 채점한 결과로 추정합니다 (ETS 공식 환산 아님)</span></div>
+  <div class="ladder" style="grid-template-columns:repeat(5,1fr);margin-top:10px">
+    {% for lv, name, low in LEVELS %}
+      <div class="step{{ ' target' if target_level and target_level[0] == lv }}" style="{{ 'outline:2px solid var(--accent)' if level and level[0] == lv }}">
+        <b>{{ name }}</b>{{ low }}{{ '+' if lv == 8 else '~' }}</div>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="card" style="margin-top:14px" id="tasks">
+  <h2>유형별 연습</h2>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>문항</th><th>유형</th><th class="r">문제</th><th class="r">내 기록</th><th>연습</th></tr></thead>
+    <tbody>
+    {% for t in tasks %}
+      <tr>
+        <td class="num"><b>{{ t.q }}</b></td>
+        <td><b>{{ t.name }}</b> <span class="muted small">{{ t.en }}</span><div class="small muted">{{ t.desc }}</div>
+          <div class="small muted">준비 {{ t.prep }}초 · 답변 {{ t.speak | join('/') }}초 · 문항당 0~{{ t.max }}점</div></td>
+        <td class="r num">{{ t.count }}</td>
+        <td class="r num small">{% if t.stat %}{{ t.stat.n }}회 · {{ (t.stat.ratio * 100) | round | int }}%{% if t.stat.words %}<div class="muted">평균 {{ t.stat.words | round | int }}단어</div>{% endif %}{% else %}–{% endif %}</td>
+        <td><a class="btn small primary{{ ' disabled' if not t.count }}" href="{{ url_for('speaking.tsp_practice', task=t.key) }}">연습</a></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+
+{% if mocks %}
+<div class="card" style="margin-top:14px">
+  <h2>모의고사 기록</h2>
+  <table class="small"><tbody>
+  {% for m in mocks %}
+    <tr><td>{{ m.created_at[:16].replace('T', ' ') }}</td><td><b>{{ m.score }}점</b></td>
+      <td>{{ m.result.level[1] if m.result.level else '' }}</td>
+      <td class="r"><a href="{{ url_for('speaking.mock_result', mid=m.id) }}">결과 보기</a></td></tr>
+  {% endfor %}
+  </tbody></table>
+</div>
+{% endif %}
+
+{% if trend %}
+<div class="card" style="margin-top:14px">
+  <h2>날짜별 변화 <span class="small muted">최근 60일 · 자기 채점 평균과 답변 단어 수</span></h2>
+  <table class="small"><thead><tr><th>날짜</th><th class="r">답변</th><th class="r">평균</th><th class="r">평균 단어</th></tr></thead><tbody>
+  {% for d in trend | reverse %}
+    <tr><td>{{ d.d }}</td><td class="r num">{{ d.n }}</td><td class="r num">{{ (d.r * 100) | round | int }}%</td><td class="r num">{{ d.w | round | int if d.w is not none else '–' }}</td></tr>
+  {% endfor %}
+  </tbody></table>
+</div>
+{% endif %}
+
+{% if recent %}
+<div class="card" style="margin-top:14px">
+  <h2>최근 답변</h2>
+  <table class="small"><tbody>
+  {% for r in recent %}
+    {% set t = r.task.split(':')[-1] %}
+    <tr><td>{{ r.created_at[5:16].replace('T', ' ') }}</td><td>{{ TASKS[t].name if t in TASKS else t }}{{ ' · 모의고사' if r.mock_id }}</td>
+      <td class="r num">{{ r.points | round(1) }}/{{ r.max_points | int }}</td>
+      <td class="r num muted">{{ (r.words ~ '단어') if r.words is not none else '' }}{{ (' · ' ~ ((r.accuracy * 100) | round | int) ~ '%') if r.accuracy is not none else '' }}</td></tr>
+  {% endfor %}
+  </tbody></table>
+</div>
+{% endif %}
+<p class="small muted" style="margin-top:12px">시험 형식은 2022년 6월 개편 기준입니다. 문제는 모두 이 앱용으로 새로 쓴 것이며, 사진 묘사는 사진 대신 장면 설명으로 연습합니다.</p>
+{% endblock %}

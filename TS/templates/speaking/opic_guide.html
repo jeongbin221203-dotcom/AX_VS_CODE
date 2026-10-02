@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block title %}오픽 답변 틀{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <div class="muted small">OPIc · 등급 기준 · 문항 유형별 답변 틀 · 목표별 학습 경로</div>
+    <h1>답변 틀·등급 기준</h1>
+  </div>
+  <a class="btn" href="{{ url_for('speaking.opic_home') }}">오픽 홈</a>
+</div>
+
+<div class="card">
+  <h2>목표 등급별 학습 경로 <span class="small muted">지금 목표: {{ st.target }}</span></h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>목표</th><th>평가자가 보는 것</th><th>연습</th></tr></thead>
+    <tbody>
+      <tr{{ ' style=background:var(--accent-soft)' if st.target in ('IM1', 'IM2') }}><td><b>IM1~IM2</b><div class="small muted">난이도 3~4</div></td>
+        <td>문장을 여러 개 이어 질문에 답한다. 현재 시제 위주라도 끊기지 않으면 된다.</td>
+        <td class="small">주제별 묘사·습관 틀 외우기 → 답변 1분 이상 → 기본 답변(IM) 따라 말하기</td></tr>
+      <tr{{ ' style=background:var(--accent-soft)' if st.target == 'IM3' }}><td><b>IM3</b><div class="small muted">난이도 4~5</div></td>
+        <td>답변이 길고(1분 30초 안팎) 경험 문항에서 과거 시제를 대체로 맞게 쓴다.</td>
+        <td class="small">경험(past) 문항 집중 → 시간 순서 연결어(first, after that, finally) → 롤플레이 질문하기</td></tr>
+      <tr{{ ' style=background:var(--accent-soft)' if st.target == 'IH' }}><td><b>IH</b><div class="small muted">난이도 5~6</div></td>
+        <td>문단 단위로 말하고, 현재·과거·미래를 넘나들며 비교·설명한다. 롤플레이 문제 해결을 해낸다.</td>
+        <td class="small">비교(compare) 문항 → 롤플레이 대안 2~3개 → 고득점 답변(IH~AL) 섀도잉 → 모의고사 15문항</td></tr>
+      <tr{{ ' style=background:var(--accent-soft)' if st.target == 'AL' }}><td><b>AL</b><div class="small muted">난이도 5~6</div></td>
+        <td>사건을 생생한 이야기로 풀고(배경 → 사건 → 결과 → 느낌), 사회 이슈에도 자기 생각을 논리적으로 말한다. 끝까지 흐트러지지 않는다.</td>
+        <td class="small">사회 이슈(issue) 문항 → 감정·묘사 형용사 늘리기 → 실수 없이 2분 → 돌발 주제도 같은 수준으로</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<div class="card" style="margin-top:14px">
+  <h2>문항 유형별 답변 틀</h2>
+  <h3>자기소개 <span class="small muted">채점 비중이 낮다는 것이 일반적 견해 — 짧고 자연스럽게</span></h3>
+  <div class="frame">Hi, my name is ... I'm ... years old, and I live in ... with my family.
+These days, I'm ... (요즘 하는 일). In my free time, I enjoy ...
+I'm the kind of person who ... That's a little bit about me.</div>
+
+  <h3>묘사 (describe) — 장소·사람·물건</h3>
+  <div class="frame">서론: Oh, you want to know about my favorite ... Sure.
+전체: It's located in ... / It's a ... with ...
+세부: When you walk in, the first thing you see is ... / There are ...
+느낌: What I like most about it is ... because ...
+마무리: So, that's my favorite ... I really love it.</div>
+
+  <h3>습관·루틴 (routine)</h3>
+  <div class="frame">Usually / Whenever I ..., I first ... Then, I ... After that, ...
+On weekends, it's a little different. ...
+I've been doing this for about ... years, and ...</div>
+
+  <h3>경험 (past) — 가장 중요</h3>
+  <div class="frame">배경: I remember one time, about two years ago, when I ...
+사건: Everything was fine at first, but suddenly ...
+해결: So, I ... and finally ...
+느낌: I was so ... At that moment I realized ...
+마무리: I'll never forget that day.</div>
+
+  <h3>비교·변화 (compare)</h3>
+  <div class="frame">In the past, ... But these days, ...
+One big difference is ... Another change is ...
+I think this happened because ...
+Personally, I like the way it is now / I miss the old days because ...</div>
+
+  <h3>사회 이슈 (issue)</h3>
+  <div class="frame">These days, one of the biggest issues about ... is ...
+Many people are worried that ...
+For example, I recently read/heard that ...
+In my opinion, we should ... / I think it will get better if ...</div>
+
+  <h3>롤플레이</h3>
+  <div class="frame">질문하기 (11번): Hi, I'm calling because ... I have a few questions.
+  First, ...? Also, ...? And ...? Lastly, ...? Thank you so much.
+문제 해결 (12번): Hi, it's me. I'm afraid I have some bad news. ...
+  How about these options? First, we could ... Or, ... If that doesn't work, ...
+  Let me know which one you prefer. Sorry again.
+관련 경험 (13번): '경험' 틀과 같다 — 과거 시제 이야기</div>
+</div>
+
+<div class="card" style="margin-top:14px">
+  <h2>시간 벌기·연결 표현</h2>
+  <div class="grid two">
+    <ul class="clean small">
+      <li>Let me think... / That's a good question.</li>
+      <li>How can I put this... / What else...</li>
+      <li>Oh, I almost forgot to mention that ...</li>
+      <li>Anyway, going back to the question, ...</li>
+    </ul>
+    <ul class="clean small">
+      <li>To be honest, ... / Actually, ...</li>
+      <li>On top of that, ... / Not only that, but ...</li>
+      <li>The thing is, ... / What I mean is ...</li>
+      <li>Long story short, ...</li>
+    </ul>
+  </div>
+</div>
+
+<div class="card" style="margin-top:14px">
+  <h2>자기 채점 기준</h2>
+  <table class="small"><tbody>{% for p, d in RUBRIC %}<tr><td class="num"><b>{{ p }}</b></td><td>{{ d }}</td></tr>{% endfor %}</tbody></table>
+  <p class="small muted">평균 점수와 답변 길이(음성 인식 단어 수)로 NL~AL을 추정합니다. 예: 평균 3점대면 IM, 그중 답변이 평균 110단어 이상이면 IM3. ACTFL 공식 판정 방식이 아닌 학습용 추정입니다.</p>
+</div>
+
+<div class="card" style="margin-top:14px">
+  <h2>녹음 다시 들을 때 체크리스트</h2>
+  <ul class="clean">
+    <li>질문에 맞는 답을 했나? (묘사를 물었는데 경험을 말하지 않았나)</li>
+    <li>경험 문항을 <b>과거 시제</b>로 끝까지 말했나?</li>
+    <li>같은 표현(very, good, like)만 반복하지 않았나?</li>
+    <li>서론 → 본론 → 마무리가 있었나? 마지막 문장이 흐지부지 끝나지 않았나?</li>
+    <li>롤플레이에서 질문을 3~4개 했나? 대안을 2개 이상 냈나?</li>
+  </ul>
+</div>
+{% endblock %}

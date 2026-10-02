@@ -1,0 +1,642 @@
+[
+ {
+  "id": "ra-001",
+  "type": "안내 방송",
+  "text": "Attention, passengers on Flight 482 to Denver. Due to a late aircraft arrival, your departure gate has been changed to Gate 17. Boarding will now begin at three forty p.m. Please have your boarding pass, photo identification, and carry-on bags ready. We apologize for the delay and thank you for your patience.",
+  "marked": "Attention, *passengers* on Flight 482 to *Denver*. / Due to a late *aircraft* arrival, / your departure gate has been changed to *Gate 17*. / Boarding will now begin at *three forty* p.m. / Please have your *boarding pass*, / photo identification, / and carry-on bags ready. / We apologize for the delay / and thank you for your *patience*.",
+  "tricky": [
+   "aircraft — [에어크래프트], 'air'의 r 소리를 혀를 굴려 분명히",
+   "patience — [페이션스], 'ti'는 [쉬] 소리",
+   "identification — 강세는 뒤쪽 [아이덴티피*케*이션], f는 윗니를 아랫입술에"
+  ],
+  "translation": "덴버행 482편 승객 여러분께 안내 말씀드립니다. 항공기 도착 지연으로 출발 탑승구가 17번으로 변경되었습니다. 탑승은 이제 오후 3시 40분에 시작됩니다. 탑승권, 신분증, 기내 휴대 가방을 준비해 주십시오. 지연에 대해 사과드리며 기다려 주셔서 감사합니다.",
+  "tips": [
+   "편명·게이트·시간 같은 숫자는 또박또박 강하게 읽는다",
+   "나열 A, B, and C 는 ↗ ↗ ↘ 억양"
+  ]
+ },
+ {
+  "id": "ra-002",
+  "type": "광고",
+  "text": "Are you looking for a quiet place to study or work? Brookside Library Café offers free wireless internet, comfortable seating, and fresh pastries every morning. We are open from seven a.m. to nine p.m., Monday through Saturday. Stop by this week and enjoy twenty percent off any drink.",
+  "marked": "Are you looking for a *quiet* place to *study* or work? / Brookside Library Café / offers *free* wireless internet, / comfortable seating, / and *fresh* pastries every morning. / We are open from *seven* a.m. / to nine p.m., / Monday through *Saturday*. / Stop by this week / and enjoy *twenty* percent off any drink.",
+  "tricky": [
+   "wireless — [와이어리스], w는 입술을 둥글게 모았다가 펴기",
+   "fresh — f는 윗니를 아랫입술에 대고 [f레쉬], [프레쉬]가 아님",
+   "comfortable — [컴f터블], 3음절로 짧게, 강세는 첫 음절"
+  ],
+  "translation": "공부하거나 일할 조용한 장소를 찾고 계신가요? 브룩사이드 도서관 카페는 무료 무선 인터넷, 편안한 좌석, 그리고 매일 아침 신선한 페이스트리를 제공합니다. 월요일부터 토요일까지 오전 7시부터 오후 9시까지 영업합니다. 이번 주에 들르셔서 모든 음료 20퍼센트 할인을 누리세요.",
+  "tips": [
+   "첫 문장 Yes/No 의문문은 끝을 올린다 ↗",
+   "나열 세 항목은 ↗ ↗ ↘, 마지막 and 앞에서 살짝 쉼"
+  ]
+ },
+ {
+  "id": "ra-003",
+  "type": "뉴스",
+  "text": "In local news, the city of Riverton will open a new public park next Saturday. The park includes walking trails, a children's playground, and an outdoor concert stage. Mayor Helen Ford will attend the opening ceremony at ten a.m. Officials say the project cost about four million dollars and took two years to complete.",
+  "marked": "In local *news*, / the city of Riverton will open a new *public* park / next *Saturday*. / The park includes *walking trails*, / a children's playground, / and an outdoor concert stage. / Mayor Helen *Ford* will attend the opening ceremony / at ten a.m. / Officials say the project cost about *four* million dollars / and took two years to *complete*.",
+  "tricky": [
+   "public — [퍼블릭], p와 b를 구분해 b는 성대를 울려서",
+   "trails — [트레일즈], r 다음 l 소리 구분, 끝 l은 혀끝을 윗잇몸에",
+   "ceremony — 강세는 첫 음절 [*세*러모니]"
+  ],
+  "translation": "지역 소식입니다. 리버턴시가 다음 주 토요일에 새 공원을 엽니다. 공원에는 산책로, 어린이 놀이터, 야외 공연 무대가 있습니다. 헬렌 포드 시장이 오전 10시 개장식에 참석할 예정입니다. 관계자들에 따르면 이 사업에는 약 400만 달러가 들었고 완공까지 2년이 걸렸습니다.",
+  "tips": [
+   "뉴스는 차분하고 일정한 속도로, 문장 끝은 내린다 ↘",
+   "four million dollars 는 숫자 four 에 강세"
+  ]
+ },
+ {
+  "id": "ra-004",
+  "type": "자동 응답 메시지",
+  "text": "Thank you for calling Lakeview Dental Clinic, but our office is currently closed. Our regular hours are eight thirty a.m. to five thirty p.m., Monday through Friday. To schedule an appointment, press one. For billing questions, insurance information, or prescription refills, press two. If this is an emergency, please hang up and call nine one one.",
+  "marked": "Thank you for calling *Lakeview* Dental Clinic, / but our office is currently *closed*. / Our regular hours are eight thirty a.m. / to *five thirty* p.m., / Monday through *Friday*. / To schedule an *appointment*, / press one. / For billing questions, / insurance information, / or prescription refills, / press *two*. / If this is an *emergency*, / please hang up and call nine one one.",
+  "tricky": [
+   "clinic — [클리닉], l을 r처럼 굴리지 않기",
+   "prescription — [프리스크립션], pr과 scr의 r을 분명히",
+   "appointment — 강세는 둘째 음절 [어*포*인먼트], t는 거의 안 들림"
+  ],
+  "translation": "레이크뷰 치과에 전화해 주셔서 감사합니다만, 지금은 업무 시간이 아닙니다. 정규 업무 시간은 월요일부터 금요일, 오전 8시 30분부터 오후 5시 30분까지입니다. 진료 예약은 1번을 눌러 주세요. 진료비, 보험 정보, 처방전 재발급 문의는 2번을 눌러 주세요. 응급 상황이면 전화를 끊고 911에 전화하세요.",
+  "tips": [
+   "press one, press two 의 숫자는 강하게",
+   "시간 표현 eight thirty a.m. 은 한 덩어리로 끊지 말고 읽기"
+  ]
+ },
+ {
+  "id": "ra-005",
+  "type": "소개",
+  "text": "Good evening, everyone, and welcome to tonight's awards dinner. Our first speaker is Dr. Laura Bennett, a professor at Westfield University. She has written three books on marketing, customer behavior, and online advertising. Last year, she received the National Teaching Award. Please join me in giving her a warm welcome.",
+  "marked": "Good evening, everyone, / and welcome to tonight's *awards* dinner. / Our first speaker is Dr. Laura *Bennett*, / a professor at *Westfield* University. / She has written *three* books on *marketing*, / customer behavior, / and online *advertising*. / Last year, / she received the National *Teaching* Award. / Please join me in giving her a *warm* welcome.",
+  "tricky": [
+   "Laura — [로라], l로 시작하므로 혀끝을 윗잇몸에, r과 구분",
+   "behavior — [비헤이비어], v는 윗니를 아랫입술에",
+   "advertising — 강세는 첫 음절 [*애*드버타이징]"
+  ],
+  "translation": "안녕하세요, 여러분. 오늘 밤 시상식 만찬에 오신 것을 환영합니다. 첫 번째 연사는 웨스트필드 대학교 교수인 로라 베넷 박사입니다. 그녀는 마케팅, 고객 행동, 온라인 광고에 관한 책을 세 권 썼습니다. 작년에는 국가 교육상을 받았습니다. 따뜻한 환영 부탁드립니다.",
+  "tips": [
+   "사람 이름과 소속은 천천히, 이름에 강세",
+   "나열 ↗ ↗ ↘ 억양"
+  ]
+ },
+ {
+  "id": "ra-006",
+  "type": "일기 예보",
+  "text": "Good morning, this is Kevin Lee with your weekend weather forecast. Saturday will be sunny and warm, with a high of seventy-eight degrees. On Sunday, expect clouds, strong winds, and heavy rain in the afternoon. Are you planning an outdoor event? If so, Saturday is clearly the better choice.",
+  "marked": "Good morning, / this is *Kevin Lee* with your weekend weather *forecast*. / Saturday will be sunny and *warm*, / with a high of *seventy-eight* degrees. / On Sunday, / expect *clouds*, / strong winds, / and heavy rain in the afternoon. / Are you planning an *outdoor* event? / If so, / Saturday is clearly the *better* choice.",
+  "tricky": [
+   "forecast — 명사는 강세가 앞 [*f포*어캐스트], f 발음 주의",
+   "weather — th는 혀를 이 사이에 [웨더], [웨저]가 아님",
+   "clouds — [클라우즈], cl의 l 소리를 r로 굴리지 않기"
+  ],
+  "translation": "안녕하세요, 주말 일기 예보의 케빈 리입니다. 토요일은 맑고 따뜻하며 최고 기온은 78도입니다. 일요일에는 구름, 강한 바람, 그리고 오후에 많은 비가 예상됩니다. 야외 행사를 계획하고 계신가요? 그렇다면 토요일이 확실히 더 나은 선택입니다.",
+  "tips": [
+   "Are you planning ...? 는 끝을 올린다 ↗",
+   "seventy-eight 의 강세는 eight 쪽, -teen과 -ty 구분"
+  ]
+ },
+ {
+  "id": "ra-007",
+  "type": "교통 정보",
+  "text": "This is your afternoon traffic report. Because of road construction, two lanes on Highway 9 are closed between Elm Street and River Road. Drivers should expect delays of up to thirty minutes. If you're heading downtown, consider taking Maple Avenue, Park Boulevard, or the subway instead. The work should be finished by Thursday.",
+  "marked": "This is your *afternoon* traffic report. / Because of road construction, / two lanes on *Highway 9* are closed / between *Elm* Street and River Road. / Drivers should expect *delays* of up to thirty minutes. / If you're heading *downtown*, / consider taking *Maple* Avenue, / Park Boulevard, / or the subway instead. / The work should be finished by *Thursday*.",
+  "tricky": [
+   "boulevard — [불러바드], 강세는 첫 음절, v 발음",
+   "Thursday — th는 혀를 이 사이에 [써즈데이], [서즈데이]가 아님",
+   "lanes — l로 시작 [레인즈], r과 구분"
+  ],
+  "translation": "오후 교통 정보입니다. 도로 공사로 인해 9번 고속도로의 엘름 가와 리버 로드 사이 2개 차선이 통제됩니다. 운전자들은 최대 30분의 지연을 예상해야 합니다. 시내로 가신다면 메이플 애비뉴, 파크 대로 또는 지하철을 이용해 보세요. 공사는 목요일까지 끝날 예정입니다.",
+  "tips": [
+   "or 로 끝나는 나열도 ↗ ↗ ↘ 억양",
+   "thirty 와 thirteen 혼동 주의: thirty 는 앞 음절 강세"
+  ]
+ },
+ {
+  "id": "ra-008",
+  "type": "행사 안내",
+  "text": "The Greenville Food Festival returns this weekend at Central Park. Visitors can enjoy dishes from more than forty local restaurants, live music, and cooking classes for kids. The festival runs from eleven a.m. to eight p.m. on both Saturday and Sunday. Admission is free, so why not bring the whole family?",
+  "marked": "The *Greenville* Food Festival returns this weekend / at *Central* Park. / Visitors can enjoy dishes from more than *forty* local restaurants, / live music, / and *cooking* classes for kids. / The festival runs from eleven a.m. / to *eight* p.m. / on both Saturday and *Sunday*. / Admission is free, / so why not bring the whole *family*?",
+  "tricky": [
+   "festival — [f페스티벌], f와 v 모두 윗니를 아랫입술에",
+   "restaurants — [레스터런츠], 3음절로 짧게",
+   "Greenville — [그린빌], 끝 v와 l 발음 주의"
+  ],
+  "translation": "그린빌 음식 축제가 이번 주말 센트럴 파크에서 다시 열립니다. 방문객은 40곳이 넘는 지역 식당의 요리, 라이브 음악, 그리고 어린이 요리 교실을 즐길 수 있습니다. 축제는 토요일과 일요일 모두 오전 11시부터 오후 8시까지 열립니다. 입장은 무료이니 온 가족과 함께 오시면 어떨까요?",
+  "tips": [
+   "why not ...? 같은 권유 의문문은 끝을 내려도 자연스럽다 ↘",
+   "Admission is free 의 free 를 강하게"
+  ]
+ },
+ {
+  "id": "ra-009",
+  "type": "안내 방송",
+  "text": "Good afternoon, shoppers. Westgate Mall will be closing in thirty minutes, at nine p.m. Please bring your final purchases to the nearest register, since our customer service desk, food court, and parking office will close at the same time. Did you know that the mall now opens early on Sundays? Visit our website for details.",
+  "marked": "Good afternoon, *shoppers*. / Westgate *Mall* will be closing in *thirty* minutes, / at *nine* p.m. / Please bring your final *purchases* to the nearest register, / since our customer service desk, / food court, / and *parking* office will close at the same time. / Did you know that the mall now opens *early* on Sundays? / Visit our website for *details*.",
+  "tricky": [
+   "purchases — [퍼처시즈], 강세는 첫 음절, ur의 r 발음",
+   "register — [레지스터], 강세는 첫 음절",
+   "early — [얼리], r과 l이 이어지므로 혀를 굴렸다가 윗잇몸에"
+  ],
+  "translation": "쇼핑객 여러분, 안녕하세요. 웨스트게이트 몰은 30분 뒤인 오후 9시에 문을 닫습니다. 마지막 구매 물품은 고객 서비스 데스크, 푸드코트, 주차 사무실도 같은 시각에 문을 닫으니 마지막 구매 물품은 가까운 계산대로 가져와 주십시오. 이제 일요일에는 쇼핑몰이 더 일찍 문을 연다는 사실을 알고 계셨나요? 자세한 내용은 웹사이트를 확인하세요.",
+  "tips": [
+   "Did you know ...? 는 Yes/No 의문문이므로 끝을 올린다 ↗",
+   "나열 ↗ ↗ ↘ 억양"
+  ]
+ },
+ {
+  "id": "ra-010",
+  "type": "광고",
+  "text": "Is your kitchen ready for a change? At Harper Home Design, we offer custom cabinets, modern countertops, and energy-saving lighting at reasonable prices. Our experienced team can finish most projects in just two weeks. Call us today at five five five, two one eight zero to book a free consultation.",
+  "marked": "Is your *kitchen* ready for a change? / At *Harper* Home Design, / we offer custom *cabinets*, / modern *countertops*, / and energy-saving lighting at reasonable prices. / Our experienced team can finish most projects in just *two weeks*. / Call us today at five five five, / *two one eight* zero / to book a *free* consultation.",
+  "tricky": [
+   "cabinets — [캐비닛츠], b와 v 구분, 강세는 첫 음절",
+   "lighting — l로 시작 [라이팅], 미국식은 t가 부드러운 [라이링]에 가까움",
+   "reasonable — [리저너블], r 발음과 강세는 첫 음절"
+  ],
+  "translation": "주방을 바꿀 준비가 되셨나요? 하퍼 홈 디자인에서는 맞춤형 수납장, 현대적인 조리대, 에너지 절약 조명을 합리적인 가격에 제공합니다. 경험 많은 저희 팀은 대부분의 공사를 단 2주 만에 마칠 수 있습니다. 오늘 555-2180으로 전화해 무료 상담을 예약하세요.",
+  "tips": [
+   "전화번호는 세 자리 / 네 자리로 끊어 읽는다",
+   "광고 첫 질문은 밝게 끝을 올린다 ↗"
+  ]
+ },
+ {
+  "id": "ra-011",
+  "type": "뉴스",
+  "text": "Brightline Electronics announced today that it will open a new factory in Springfield next March. The company expects to hire about six hundred workers, including engineers, technicians, and office staff. Chief executive Mark Wilson said the plant will produce batteries for electric vehicles. Construction begins in April.",
+  "marked": "*Brightline* Electronics announced today / that it will open a new *factory* / in Springfield next March. / The company expects to hire about *six hundred* workers, / including engineers, / technicians, / and *office* staff. / Chief executive Mark *Wilson* said the plant will produce batteries / for electric *vehicles*. / Construction begins in *April*.",
+  "tricky": [
+   "vehicles — [비히클즈], h는 거의 약하게, v는 윗니를 아랫입술에",
+   "electronics — 강세는 셋째 음절 [일렉*트*로닉스]",
+   "batteries — [배러리즈], 미국식 t는 부드러운 소리"
+  ],
+  "translation": "브라이트라인 전자는 내년 3월 스프링필드에 새 공장을 연다고 오늘 발표했습니다. 회사는 엔지니어, 기술자, 사무직 직원을 포함해 약 600명을 채용할 예정입니다. 마크 윌슨 최고경영자는 이 공장에서 전기차용 배터리를 생산할 것이라고 말했습니다. 공사는 4월에 시작됩니다.",
+  "tips": [
+   "회사·도시·사람 이름은 고유명사이므로 또렷하게 강세",
+   "including 뒤의 나열은 ↗ ↗ ↘"
+  ]
+ },
+ {
+  "id": "ra-012",
+  "type": "자동 응답 메시지",
+  "text": "You have reached the customer service line for Pacific Internet. All of our representatives are currently busy. Your call is important to us, and the average wait time is about eight minutes. Did you know that you can check your bill, change your plan, or report a problem on our website? Please stay on the line.",
+  "marked": "You have reached the *customer service* line / for *Pacific* Internet. / All of our representatives are currently *busy*. / Your call is important to us, / and the average wait time is about *eight* minutes. / Did you know that you can check your *bill*, / change your *plan*, / or report a *problem* on our website? / Please stay on the line.",
+  "tricky": [
+   "representatives — 강세는 셋째 음절 [레프리*젠*터티브즈], 끝 v",
+   "Pacific — 강세는 둘째 음절 [퍼*시*픽], f 발음",
+   "average — [애버리지], 강세는 첫 음절, v 발음"
+  ],
+  "translation": "퍼시픽 인터넷 고객 서비스 전화입니다. 지금은 모든 상담원이 통화 중입니다. 고객님의 전화는 저희에게 중요하며, 평균 대기 시간은 약 8분입니다. 웹사이트에서 요금 확인, 요금제 변경, 문제 신고를 하실 수 있다는 것을 알고 계셨나요? 끊지 말고 기다려 주십시오.",
+  "tips": [
+   "긴 의문문은 나열 부분을 ↗ ↗ 로 올리다가 problem 에서 끝까지 올린다",
+   "eight minutes 의 숫자를 강하게"
+  ]
+ },
+ {
+  "id": "ra-013",
+  "type": "소개",
+  "text": "Thank you all for coming to this year's sales conference. I'd like to introduce our keynote speaker, Mr. James Carter. Mr. Carter founded Blue River Software in 2012 and now leads a team of over three hundred people. Today, he will talk about teamwork, leadership, and creative problem solving.",
+  "marked": "Thank you all for coming to this year's *sales* conference. / I'd like to introduce our *keynote* speaker, / Mr. James *Carter*. / Mr. Carter founded *Blue River* Software / in *2012* / and now leads a team of over *three hundred* people. / Today, / he will talk about *teamwork*, / leadership, / and *creative* problem solving.",
+  "tricky": [
+   "software — [소f트웨어], f와 w 발음 주의",
+   "leadership — l로 시작 [리더쉽], r과 구분",
+   "creative — 강세는 둘째 음절 [크리*에*이티브], 끝 v"
+  ],
+  "translation": "올해 영업 회의에 와 주신 모든 분께 감사드립니다. 기조연설자인 제임스 카터 씨를 소개하겠습니다. 카터 씨는 2012년에 블루 리버 소프트웨어를 설립했고 현재 300명이 넘는 팀을 이끌고 있습니다. 오늘 그는 팀워크, 리더십, 그리고 창의적인 문제 해결에 대해 이야기할 것입니다.",
+  "tips": [
+   "연도 2012 는 twenty twelve 로 읽는다",
+   "나열 마지막 항목 creative problem solving 에서 내린다 ↘"
+  ]
+ },
+ {
+  "id": "ra-014",
+  "type": "일기 예보",
+  "text": "Here's your weather update for the Portland area. Temperatures will drop sharply tonight, falling to around twenty-five degrees. Tomorrow will bring snow, icy roads, and freezing winds. Do you really need to drive to work? If not, stay home until conditions improve on Friday afternoon.",
+  "marked": "Here's your *weather update* for the *Portland* area. / Temperatures will drop sharply tonight, / falling to around *twenty-five* degrees. / Tomorrow will bring *snow*, / icy roads, / and *freezing* winds. / Do you really need to drive to work? / If not, / stay *home* / until conditions improve on *Friday* afternoon.",
+  "tricky": [
+   "freezing — [f프리징], f 발음과 z 소리",
+   "Portland — [포틀랜드], r과 l이 연속, l은 혀끝을 윗잇몸에",
+   "drive — dr은 [쥬라이브]에 가깝게, 끝 v"
+  ],
+  "translation": "포틀랜드 지역 날씨 소식입니다. 오늘 밤 기온이 급격히 떨어져 약 25도까지 내려갑니다. 내일은 눈, 빙판길, 그리고 차가운 바람이 예상됩니다. 꼭 차를 몰고 출근해야 하나요? 그렇지 않다면 날씨가 나아지는 금요일 오후까지 집에 계세요.",
+  "tips": [
+   "Do you really need ...? 는 끝을 올린다 ↗",
+   "If not, 뒤에서 짧게 쉬고 stay home 을 강하게"
+  ]
+ },
+ {
+  "id": "ra-015",
+  "type": "교통 정보",
+  "text": "Good morning, commuters. Here is the latest traffic news from WKRT Radio. An accident on the Lincoln Bridge has blocked the northbound lanes, so traffic is moving very slowly. Police, firefighters, and tow trucks are on the scene. We recommend using the Jefferson Tunnel until about eight fifteen.",
+  "marked": "Good morning, / commuters. / Here is the latest *traffic* news / from *WKRT* Radio. / An accident on the *Lincoln* Bridge / has blocked the *northbound* lanes, / so traffic is moving very *slowly*. / Police, / firefighters, / and tow trucks are on the *scene*. / We recommend using the *Jefferson* Tunnel / until about *eight fifteen*.",
+  "tricky": [
+   "northbound — th는 혀를 이 사이에 [노th바운드]",
+   "firefighters — f 두 번 모두 윗니를 아랫입술에",
+   "Lincoln — 가운데 l은 발음하지 않음 [링컨]"
+  ],
+  "translation": "통근자 여러분, 좋은 아침입니다. WKRT 라디오의 최신 교통 소식입니다. 링컨 다리의 사고로 북쪽 방면 차선이 막혀 차량이 매우 느리게 움직이고 있습니다. 경찰, 소방관, 견인차가 현장에 출동해 있습니다. 8시 15분쯤까지는 제퍼슨 터널을 이용하시기 바랍니다.",
+  "tips": [
+   "방송국 이름 WKRT 는 알파벳 하나씩 또박또박",
+   "eight fifteen 의 fifteen 은 뒤 음절 강세"
+  ]
+ },
+ {
+  "id": "ra-016",
+  "type": "행사 안내",
+  "text": "Are you interested in photography? The Oakwood Community Center will hold a free workshop on Wednesday, June twelfth. Professional photographer Anna Price will explain lighting, camera settings, and basic photo editing. The session starts at six thirty p.m. Space is limited, so please register at the front desk by Monday.",
+  "marked": "Are you interested in *photography*? / The Oakwood Community Center will hold a free *workshop* / on Wednesday, *June twelfth*. / Professional photographer Anna *Price* will explain lighting, / camera settings, / and basic photo *editing*. / The session starts at six thirty p.m. / Space is *limited*, / so please register at the front desk / by *Monday*.",
+  "tricky": [
+   "photography — 강세는 둘째 음절 [퍼*타*그러피], ph는 f 소리",
+   "twelfth — [트웰f쓰], lf와 th를 모두 살리기",
+   "professional — [프러*f페*셔널], f 발음"
+  ],
+  "translation": "사진에 관심이 있으신가요? 오크우드 주민 센터에서 6월 12일 수요일에 무료 워크숍을 엽니다. 전문 사진작가 애나 프라이스가 조명, 카메라 설정, 기본 사진 편집을 설명할 것입니다. 수업은 오후 6시 30분에 시작합니다. 자리가 한정되어 있으니 월요일까지 안내 데스크에서 등록해 주세요.",
+  "tips": [
+   "날짜 June twelfth 는 서수로 읽는다",
+   "첫 질문은 끝을 올린다 ↗"
+  ]
+ },
+ {
+  "id": "ra-017",
+  "type": "안내 방송",
+  "text": "May I have your attention, please? This is an announcement for all employees. The fire alarm system will be tested tomorrow morning between ten and eleven a.m. During the test, you may hear loud alarms, see flashing lights, and notice brief elevator stops. There is no need to leave the building, but thank you for your cooperation.",
+  "marked": "May I have your attention, please? / This is an announcement for all *employees*. / The *fire alarm* system will be tested / tomorrow morning / between ten and *eleven* a.m. / During the test, / you may hear *loud* alarms, / see flashing *lights*, / and notice brief elevator stops. / There is *no need* to leave the building, / but thank you for your *cooperation*.",
+  "tricky": [
+   "employees — 강세는 끝 [임플로이*이*즈], l 발음",
+   "alarm — [얼람], l과 r이 한 단어에, 구분해서",
+   "cooperation — [코아퍼*레*이션], 강세는 넷째 음절"
+  ],
+  "translation": "잠시 주목해 주시겠습니까? 전 직원께 알려 드립니다. 내일 오전 10시에서 11시 사이에 화재 경보 시스템을 점검합니다. 점검 중에는 큰 경보음이 들리고, 깜박이는 불빛이 보이며, 엘리베이터가 잠시 멈출 수 있습니다. 건물 밖으로 나가실 필요는 없으며, 협조에 감사드립니다.",
+  "tips": [
+   "May I have your attention, please? 는 정중하게 끝을 올린다 ↗",
+   "There is no need 의 no need 를 강조"
+  ]
+ },
+ {
+  "id": "ra-018",
+  "type": "광고",
+  "text": "Planning a summer vacation? Let Sunny Days Travel take care of everything. We book flights, hotels, and guided tours to over fifty destinations around the world. This month only, families of four or more receive a free airport shuttle. Visit our office on Grant Street or book online today.",
+  "marked": "Planning a *summer* vacation? / Let *Sunny Days* Travel take care of everything. / We book flights, / hotels, / and *guided* tours / to over *fifty* destinations / around the world. / This month only, / families of *four* or more / receive a free airport shuttle. / Visit our office on *Grant* Street / or book *online* today.",
+  "tricky": [
+   "flights — [f플라이츠], f와 l 발음",
+   "vacation — [베이케이션], v는 윗니를 아랫입술에",
+   "destinations — 강세는 셋째 음절 [데스티*네*이션즈]"
+  ],
+  "translation": "여름휴가를 계획 중이신가요? 써니 데이즈 여행사가 모든 것을 책임집니다. 전 세계 50곳 이상의 여행지로 가는 항공편, 호텔, 가이드 투어를 예약해 드립니다. 이번 달에만 4인 이상 가족에게 무료 공항 셔틀을 제공합니다. 그랜트 가의 사무실을 방문하시거나 오늘 온라인으로 예약하세요.",
+  "tips": [
+   "Planning ...? 처럼 주어가 생략된 질문도 끝을 올린다 ↗",
+   "This month only, 에서 끊고 강조해서 읽는다"
+  ]
+ },
+ {
+  "id": "ra-019",
+  "type": "뉴스",
+  "text": "Officials at Northgate Airport reported a record number of travelers last month. More than two million passengers passed through the airport in July. To reduce waiting times, the airport has added new security lines, self-service kiosks, and more restaurants. A second runway is also planned for completion in 2028.",
+  "marked": "Officials at *Northgate* Airport / reported a *record* number of travelers last month. / More than two million passengers / passed through the airport in *July*. / To reduce waiting times, / the airport has added *new* security lines, / self-service *kiosks*, / and more restaurants. / A second *runway* is also planned / for completion in *2028*.",
+  "tricky": [
+   "record — 명사는 앞 강세 [*레*커드], 동사는 [리*코*드]",
+   "travelers — [트래블러즈], v와 l 발음",
+   "runway — [런웨이], r은 입술을 둥글게 모으고 시작"
+  ],
+  "translation": "노스게이트 공항 관계자들은 지난달 여행객 수가 사상 최고를 기록했다고 발표했습니다. 7월에 200만 명이 넘는 승객이 공항을 이용했습니다. 대기 시간을 줄이기 위해 공항은 새 보안 검색대, 무인 키오스크, 더 많은 식당을 추가했습니다. 두 번째 활주로도 2028년 완공을 목표로 계획되어 있습니다.",
+  "tips": [
+   "2028 은 twenty twenty-eight 으로 읽는다",
+   "나열 ↗ ↗ ↘, more restaurants 에서 내린다"
+  ]
+ },
+ {
+  "id": "ra-020",
+  "type": "자동 응답 메시지",
+  "text": "Hello, you've reached the office of Rachel Moore at Evergreen Realty. I'm sorry I can't take your call right now. I'm showing properties until four p.m. today. Please leave your name, phone number, and a brief message, and I'll call you back as soon as possible. For urgent matters, please contact my assistant, Tom.",
+  "marked": "Hello, / you've reached the office of *Rachel Moore* / at *Evergreen* Realty. / I'm sorry I can't take your call right now. / I'm showing properties until *four* p.m. today. / Please leave your *name*, / phone number, / and a brief *message*, / and I'll call you back as soon as *possible*. / For urgent matters, / please contact my assistant, *Tom*.",
+  "tricky": [
+   "realty — [리얼티], r과 l이 모두 들어가니 구분",
+   "properties — [프라퍼티즈], 강세는 첫 음절, 미국식 t는 부드럽게",
+   "message — [메시지], 강세는 첫 음절, [메세지]처럼 끝을 길게 끌지 않기"
+  ],
+  "translation": "안녕하세요, 에버그린 부동산의 레이첼 무어 사무실입니다. 지금은 전화를 받을 수 없어 죄송합니다. 오늘은 오후 4시까지 매물을 보여 드리는 중입니다. 성함, 전화번호, 간단한 메시지를 남겨 주시면 최대한 빨리 연락드리겠습니다. 급한 일은 제 비서 톰에게 연락해 주세요.",
+  "tips": [
+   "자동 응답은 친절하고 밝은 톤으로",
+   "name, phone number, and a brief message 는 ↗ ↗ ↘"
+  ]
+ },
+ {
+  "id": "ra-021",
+  "type": "소개",
+  "text": "Welcome to the Harbor City Science Museum. My name is Daniel, and I'll be your guide for the next ninety minutes. We'll begin in the space exhibit, then visit the ocean room and the dinosaur hall. Photography is allowed, but please don't touch the displays. Does anyone have a question before we start?",
+  "marked": "Welcome to the *Harbor City* Science Museum. / My name is *Daniel*, / and I'll be your guide for the next *ninety* minutes. / We'll begin in the *space* exhibit, / then visit the *ocean* room / and the *dinosaur* hall. / Photography is allowed, / but please don't *touch* the displays. / Does anyone have a *question* before we start?",
+  "tricky": [
+   "museum — 강세는 둘째 음절 [뮤*지*엄]",
+   "dinosaur — [다이너소어], 강세는 첫 음절",
+   "allowed — [얼라우드], l 발음, [알로우드]가 아님"
+  ],
+  "translation": "하버 시티 과학관에 오신 것을 환영합니다. 제 이름은 대니얼이고 앞으로 90분 동안 여러분의 안내를 맡겠습니다. 우주 전시관에서 시작해 해양관과 공룡관을 차례로 둘러보겠습니다. 사진 촬영은 가능하지만 전시물은 만지지 말아 주세요. 시작하기 전에 질문 있으신 분 계신가요?",
+  "tips": [
+   "Does anyone have a question ...? 는 끝을 올린다 ↗",
+   "ninety 와 nineteen 구분: ninety 는 앞 강세"
+  ]
+ },
+ {
+  "id": "ra-022",
+  "type": "일기 예보",
+  "text": "And now for the weekly forecast. The heat wave in Phoenix will continue through Wednesday, with temperatures reaching one hundred and five degrees. Please drink plenty of water, wear light clothing, and avoid outdoor exercise in the afternoon. Relief arrives on Thursday, when a cool front brings lower temperatures and a chance of showers.",
+  "marked": "And now for the *weekly* forecast. / The heat wave in Phoenix will continue through *Wednesday*, / with temperatures reaching *one hundred and five* degrees. / Please drink plenty of *water*, / wear light clothing, / and avoid outdoor *exercise* in the afternoon. / Relief arrives on Thursday, / when a cool front brings *lower* temperatures / and a chance of *showers*.",
+  "tricky": [
+   "Phoenix — [f피닉스], ph는 f 소리",
+   "relief — [릴리f], 강세는 둘째 음절, r과 l 구분",
+   "clothing — th는 성대를 울리는 소리 [클로우딩]"
+  ],
+  "translation": "이번 주 일기 예보입니다. 피닉스의 폭염은 수요일까지 이어지며 기온이 105도까지 오르겠습니다. 물을 충분히 마시고, 가벼운 옷을 입고, 오후에는 야외 운동을 피하세요. 목요일에는 찬 공기가 들어와 기온이 내려가고 소나기가 올 가능성도 있어 더위가 한풀 꺾이겠습니다.",
+  "tips": [
+   "one hundred and five 는 한 덩어리로, five 에 강세",
+   "지시 나열 drink, wear, and avoid 는 ↗ ↗ ↘"
+  ]
+ },
+ {
+  "id": "ra-023",
+  "type": "교통 정보",
+  "text": "Attention, subway riders. Starting Monday, the Green Line will run on a reduced schedule for two weeks while workers repair the tracks. Trains will arrive every twelve minutes instead of every six. Riders traveling to City Hall, the stadium, or the university may wish to take the Blue Line. We apologize for any inconvenience.",
+  "marked": "Attention, *subway* riders. / Starting Monday, / the *Green Line* will run on a reduced schedule / for *two weeks* / while workers repair the tracks. / Trains will arrive every *twelve* minutes / instead of every six. / Riders traveling to *City Hall*, / the stadium, / or the university / may wish to take the *Blue Line*. / We apologize for any *inconvenience*.",
+  "tricky": [
+   "schedule — 미국식 [스케줄]",
+   "repair — [리페어], p와 f 구분, r 발음",
+   "inconvenience — [인컨*비*니언스], v 발음과 강세"
+  ],
+  "translation": "지하철 이용객 여러분께 알려 드립니다. 월요일부터 2주 동안 선로 보수를 위해 그린 라인이 감축 운행됩니다. 열차는 6분 간격이 아닌 12분 간격으로 도착합니다. 시청, 경기장, 대학교로 가시는 분들은 블루 라인을 이용하시는 것이 좋습니다. 불편을 드려 죄송합니다.",
+  "tips": [
+   "twelve 와 six 를 대비해서 강하게",
+   "or 나열도 ↗ ↗ ↘"
+  ]
+ },
+ {
+  "id": "ra-024",
+  "type": "행사 안내",
+  "text": "Calling all runners! The annual Riverside Charity Run will take place on Sunday, October fifth. Participants can choose a five-kilometer, ten-kilometer, or half marathon course. All money raised will support the children's hospital. Registration costs thirty dollars and includes a T-shirt, a medal, and a free lunch.",
+  "marked": "Calling all *runners*! / The annual *Riverside* Charity Run will take place / on Sunday, October fifth. / Participants can choose a *five*-kilometer, / *ten*-kilometer, / or *half* marathon course. / All money raised will support the children's hospital. / Registration costs *thirty* dollars / and includes a T-shirt, / a medal, / and a *free* lunch.",
+  "tricky": [
+   "charity — [채러티], 미국식 t는 부드럽게 [채러리]",
+   "marathon — th 소리 [매러θ언], 강세는 첫 음절",
+   "hospital — [하스피럴], 미국식 o는 [아]"
+  ],
+  "translation": "모든 달리기 애호가 여러분! 매년 열리는 리버사이드 자선 달리기 대회가 10월 5일 일요일에 열립니다. 참가자는 5킬로미터, 10킬로미터, 하프 마라톤 코스 중 하나를 고를 수 있습니다. 모금액은 모두 어린이 병원을 돕는 데 쓰입니다. 참가비는 30달러이며 티셔츠, 메달, 무료 점심이 포함됩니다.",
+  "tips": [
+   "나열이 두 번 나오니 둘 다 ↗ ↗ ↘",
+   "October fifth 는 서수로 읽는다"
+  ]
+ },
+ {
+  "id": "ra-025",
+  "type": "안내 방송",
+  "text": "Ladies and gentlemen, welcome aboard the Coastal Express to San Diego. Our next stop will be Oceanside in about twenty minutes. The café car is located in car four and serves sandwiches, snacks, and hot drinks. Please keep your luggage out of the aisles and enjoy the view.",
+  "marked": "Ladies and gentlemen, / welcome aboard the *Coastal Express* / to *San Diego*. / Our next stop will be Oceanside / in about *twenty* minutes. / The café car is located in *car four* / and serves *sandwiches*, / snacks, / and hot drinks. / Please keep your *luggage* out of the aisles / and enjoy the *view*.",
+  "tricky": [
+   "aisles — s는 묵음 [아일즈]",
+   "gentlemen — [젠틀먼], tl 연결을 부드럽게",
+   "view — [v뷰], v는 윗니를 아랫입술에, [뷰]가 아님"
+  ],
+  "translation": "신사 숙녀 여러분, 샌디에이고행 코스탈 익스프레스에 탑승하신 것을 환영합니다. 다음 정차역은 약 20분 뒤 오션사이드입니다. 카페 칸은 4호차에 있으며 샌드위치, 간식, 따뜻한 음료를 판매합니다. 짐은 통로에 두지 마시고 경치를 즐기시기 바랍니다.",
+  "tips": [
+   "지명 San Diego, Oceanside 는 또렷하게",
+   "나열 ↗ ↗ ↘"
+  ]
+ },
+ {
+  "id": "ra-026",
+  "type": "광고",
+  "text": "Tired of slow internet? Switch to RapidNet today and get speeds up to ten times faster. Our monthly plans start at just twenty-nine dollars, with no contracts and no hidden fees, and every new customer receives free installation, a wireless router, and twenty-four-hour support. Why wait? Call RapidNet now.",
+  "marked": "Tired of slow *internet*? / Switch to RapidNet today / and get speeds up to *ten times* faster. / Our monthly plans start at just *twenty-nine* dollars, / with *no* contracts / and no hidden fees, / and every new customer receives *free* installation, / a wireless router, / and *twenty-four*-hour support. / Why wait? / Call *RapidNet* now.",
+  "tricky": [
+   "router — 미국식 [라우터], 강세는 첫 음절, r 발음",
+   "installation — [인스털*레*이션], 강세는 셋째 음절",
+   "Rapid — [래피드], r은 입술을 모으고 시작, l과 구분"
+  ],
+  "translation": "느린 인터넷에 지치셨나요? 오늘 래피드넷으로 바꾸고 최대 10배 빠른 속도를 누리세요. 월 요금제는 단 29달러부터 시작하며 약정도, 숨은 요금도 없으며, 모든 신규 고객은 무료 설치, 무선 공유기, 24시간 지원을 받습니다. 왜 기다리시나요? 지금 래피드넷에 전화하세요.",
+  "tips": [
+   "no contracts and no hidden fees 는 no 를 반복해서 강조",
+   "Why wait? 는 의문사 의문문이라 끝을 내린다 ↘"
+  ]
+ },
+ {
+  "id": "ra-027",
+  "type": "뉴스",
+  "text": "The Lakeside City Council voted last night to build a new public library downtown. The three-story building will feature a computer lab, a children's reading room, and a rooftop garden. Construction will cost about twelve million dollars. Council member Sarah Lopez said, \"Why shouldn't every neighborhood have a great library?\" The library should open in 2027.",
+  "marked": "The *Lakeside* City Council voted last night / to build a new *public library* downtown. / The three-story building will feature a computer lab, / a children's *reading* room, / and a *rooftop* garden. / Construction will cost about *twelve* million dollars. / Council member Sarah Lopez said, / \"Why shouldn't every *neighborhood* have a great library?\" / The library should open in *2027*.",
+  "tricky": [
+   "library — [라이브러리], l과 r이 함께, 'brar'의 r을 빼먹지 않기",
+   "council — [카운슬], 끝 l은 혀끝을 윗잇몸에",
+   "feature — [f피처], f 발음"
+  ],
+  "translation": "레이크사이드 시의회는 어젯밤 시내에 새 공공 도서관을 짓기로 의결했습니다. 3층 건물에는 컴퓨터실, 어린이 열람실, 옥상 정원이 들어섭니다. 공사비는 약 1,200만 달러입니다. 사라 로페즈 시의원은 \"모든 동네에 훌륭한 도서관이 있어야 하지 않을까요?\"라고 말했습니다. 도서관은 2027년에 문을 열 예정입니다.",
+  "tips": [
+   "인용문 속 Why ...? 는 의문사 의문문이라 끝을 내린다 ↘",
+   "twelve million 의 twelve 에 강세"
+  ]
+ },
+ {
+  "id": "ra-028",
+  "type": "자동 응답 메시지",
+  "text": "Thank you for calling Maxwell Auto Repair. We are open Monday through Saturday, from seven a.m. to six p.m. To check the status of your vehicle, press one. To book an oil change, tire rotation, or brake inspection, press two. For directions to our shop on Fifth Avenue, press three.",
+  "marked": "Thank you for calling *Maxwell* Auto Repair. / We are open Monday through *Saturday*, / from *seven* a.m. to six p.m. / To check the status of your *vehicle*, / press one. / To book an oil change, / tire rotation, / or *brake* inspection, / press *two*. / For directions to our shop on Fifth Avenue, / press *three*.",
+  "tricky": [
+   "vehicle — [비히클], h는 약하게, v 발음",
+   "brake — [브레이크], br의 r 발음",
+   "Fifth — [f피f쓰], f 두 번과 th를 모두 살리기"
+  ],
+  "translation": "맥스웰 자동차 정비소에 전화해 주셔서 감사합니다. 저희는 월요일부터 토요일까지 오전 7시부터 오후 6시까지 영업합니다. 차량 수리 진행 상황을 확인하시려면 1번을 누르세요. 엔진오일 교환, 타이어 위치 교환, 브레이크 점검을 예약하시려면 2번을 누르세요. 5번가에 있는 저희 정비소 오시는 길은 3번을 누르세요.",
+  "tips": [
+   "press one, two, three 의 숫자는 강하게",
+   "나열 ↗ ↗ ↘"
+  ]
+ },
+ {
+  "id": "ra-029",
+  "type": "소개",
+  "text": "Good morning, and welcome to your first day at Summit Bank. My name is Linda Park, and I manage the training program. This week, you'll learn about our products, computer systems, and customer service standards. Each afternoon will end with a short quiz. Are there any questions before we begin?",
+  "marked": "Good morning, / and welcome to your *first* day at *Summit* Bank. / My name is *Linda Park*, / and I manage the *training* program. / This week, / you'll learn about our *products*, / computer systems, / and *customer* service standards. / Each afternoon / will end with a short *quiz*. / Are there any questions before we *begin*?",
+  "tricky": [
+   "Summit — [서밋], s와 th 구분, th 아님",
+   "products — 강세는 첫 음절 [*프라*덕츠]",
+   "quiz — [크위즈], qu는 [kw] 소리, z 성대 울림"
+  ],
+  "translation": "좋은 아침입니다. 서밋 은행에서의 첫날을 환영합니다. 저는 교육 프로그램을 담당하는 린다 박입니다. 이번 주에 여러분은 저희 상품, 전산 시스템, 고객 서비스 기준에 대해 배우게 됩니다. 매일 오후는 짧은 퀴즈로 마무리됩니다. 시작하기 전에 질문 있으신가요?",
+  "tips": [
+   "Are there any questions ...? 는 끝을 올린다 ↗",
+   "This week, Each afternoon 같은 시간 표현 뒤에서 짧게 쉰다"
+  ]
+ },
+ {
+  "id": "ra-030",
+  "type": "일기 예보",
+  "text": "Good evening, I'm Jessica Hall with the Channel Seven weather report. A strong storm is moving toward the coast and will arrive around midnight. Residents should expect thunder, lightning, and winds of up to fifty miles per hour. Have you prepared a flashlight and extra batteries? Now is the time.",
+  "marked": "Good evening, / I'm *Jessica Hall* / with the *Channel Seven* weather report. / A strong storm is moving toward the *coast* / and will arrive around *midnight*. / Residents should expect *thunder*, / lightning, / and winds of up to fifty miles per hour. / Have you prepared a *flashlight* and extra *batteries*? / Now is the time.",
+  "tricky": [
+   "thunder — th는 혀를 이 사이에 [θ썬더]",
+   "lightning — [라잇닝], 가운데 e 없음, l 발음",
+   "residents — 강세는 첫 음절 [*레*지던츠]"
+  ],
+  "translation": "안녕하세요, 채널 7 날씨의 제시카 홀입니다. 강한 폭풍이 해안 쪽으로 이동하고 있으며 자정쯤 도착하겠습니다. 주민들은 천둥, 번개, 그리고 최대 시속 50마일의 바람에 대비해야 합니다. 손전등과 여분의 건전지를 준비하셨나요? 지금이 준비할 때입니다.",
+  "tips": [
+   "Have you prepared ...? 는 끝을 올린다 ↗",
+   "fifty 와 fifteen 구분: fifty 는 앞 강세"
+  ]
+ },
+ {
+  "id": "ra-031",
+  "type": "교통 정보",
+  "text": "Here's a traffic update for drivers in the Mountain View area. A truck has broken down on Route 101 near Exit 24, and one lane is blocked. Expect delays of about twenty minutes. Drivers heading to the airport, the shopping center, or the convention center should use Central Expressway instead.",
+  "marked": "Here's a traffic *update* for drivers / in the Mountain View area. / A *truck* has broken down / on *Route 101* near Exit *24*, / and one lane is blocked. / Expect delays of about *twenty* minutes. / Drivers heading to the airport, / the shopping center, / or the *convention* center / should use *Central* Expressway instead.",
+  "tricky": [
+   "route — 미국식 [라우트] 또는 [루트] 둘 다 사용, r 발음",
+   "convention — [컨*벤*션], v 발음과 둘째 음절 강세",
+   "truck — tr은 [츄럭]에 가깝게"
+  ],
+  "translation": "마운틴 뷰 지역 운전자를 위한 교통 소식입니다. 101번 도로 24번 출구 근처에서 트럭이 고장 나 차선 하나가 막혀 있습니다. 약 20분의 지연이 예상됩니다. 공항, 쇼핑센터, 컨벤션 센터로 가시는 분은 센트럴 고속도로를 이용하세요.",
+  "tips": [
+   "Route 101 은 one oh one 으로 읽는다",
+   "나열 ↗ ↗ ↘"
+  ]
+ },
+ {
+  "id": "ra-032",
+  "type": "행사 안내",
+  "text": "The Westbrook Public Library invites you to its annual book sale this weekend. Thousands of novels, cookbooks, and children's books will be available for as little as one dollar each. The sale runs from nine a.m. to four p.m. on Saturday and Sunday. Why not find your next favorite book?",
+  "marked": "The *Westbrook* Public Library invites you / to its annual *book sale* this weekend. / Thousands of *novels*, / cookbooks, / and *children's* books will be available / for as little as *one* dollar each. / The sale runs from *nine* a.m. to *four* p.m. / on Saturday and Sunday. / Why not find your next *favorite* book?",
+  "tricky": [
+   "novels — [나블즈], v와 l 연속, 미국식 o는 [아]",
+   "available — 강세는 둘째 음절 [어*베*일러블], v 발음",
+   "favorite — [f페이버릿], f와 v 모두 주의"
+  ],
+  "translation": "웨스트브룩 공공 도서관이 이번 주말 연례 도서 판매 행사에 여러분을 초대합니다. 소설, 요리책, 어린이 책 수천 권을 한 권에 1달러부터 구입할 수 있습니다. 판매는 토요일과 일요일 오전 9시부터 오후 4시까지 진행됩니다. 다음에 가장 좋아할 책을 찾아보시는 건 어떨까요?",
+  "tips": [
+   "one dollar 의 one 을 강조해 싼 가격을 드러낸다",
+   "Why not ...? 은 끝을 내린다 ↘"
+  ]
+ },
+ {
+  "id": "ra-033",
+  "type": "뉴스",
+  "text": "Greenfield University announced this morning that it has received a gift of fifteen million dollars from local businesswoman Nancy Chen. The money will be used for scholarships, research equipment, and a new science building. University president Robert Hayes called the gift a wonderful opportunity for students across the state.",
+  "marked": "*Greenfield* University announced this morning / that it has received a gift of *fifteen* million dollars / from local businesswoman Nancy *Chen*. / The money will be used for *scholarships*, / research equipment, / and a new *science* building. / University president Robert Hayes called the gift / a *wonderful* opportunity / for students across the *state*.",
+  "tricky": [
+   "scholarships — [스칼러쉽스], l 발음, 미국식 o는 [아]",
+   "research — 명사는 [*리*서치] 또는 [리*서*치], r 발음",
+   "equipment — [이*퀍*먼트], qu는 [kw]"
+  ],
+  "translation": "그린필드 대학교는 오늘 아침 지역 사업가 낸시 첸으로부터 1,500만 달러를 기부받았다고 발표했습니다. 이 돈은 장학금, 연구 장비, 새 과학관 건립에 쓰입니다. 로버트 헤이스 총장은 이 기부가 주 전역의 학생들에게 훌륭한 기회라고 말했습니다.",
+  "tips": [
+   "fifteen 은 뒤 음절 강세, fifty 와 구분",
+   "인물 이름 앞에서 살짝 쉬고 이름은 또렷하게"
+  ]
+ },
+ {
+  "id": "ra-034",
+  "type": "자동 응답 메시지",
+  "text": "You have reached the Grand Plaza Hotel, and if you know your party's extension, please dial it now. For room reservations, press one. For information about our restaurant, fitness center, or spa, press two. Would you like to speak with the front desk? Please press zero or stay on the line.",
+  "marked": "You have reached the *Grand Plaza* Hotel, / and if you know your party's *extension*, / please dial it now. / For room *reservations*, / press *one*. / For information about our restaurant, / fitness center, / or *spa*, / press *two*. / Would you like to speak with the *front desk*? / Please press *zero* / or stay on the line.",
+  "tricky": [
+   "extension — [익스*텐*션], 둘째 음절 강세",
+   "reservations — [레저*베*이션즈], v 발음",
+   "fitness — f 발음 [f피트니스], [피트니스]가 아님"
+  ],
+  "translation": "그랜드 플라자 호텔입니다. 연결하실 분의 내선 번호를 아시면 지금 눌러 주세요. 객실 예약은 1번을 누르세요. 레스토랑, 피트니스 센터, 스파 정보는 2번을 누르세요. 프런트 데스크와 통화하시겠습니까? 0번을 누르시거나 잠시 기다려 주세요.",
+  "tips": [
+   "Would you like ...? 는 끝을 올린다 ↗",
+   "zero 의 z 는 성대를 울려 [지로우]"
+  ]
+ },
+ {
+  "id": "ra-035",
+  "type": "소개",
+  "text": "On tonight's program, we are pleased to welcome chef Maria Lopez, owner of the popular restaurant Olive Tree. Chef Lopez has worked in Italy, France, and Spain, and she has been cooking professionally for over twenty years. Tonight, she'll show us how to make a simple pasta dinner in just thirty minutes.",
+  "marked": "On tonight's *program*, / we are pleased to welcome chef *Maria Lopez*, / owner of the popular restaurant *Olive Tree*. / Chef Lopez has worked in *Italy*, / France, / and *Spain*, / and she has been cooking professionally / for over twenty years. / Tonight, / she'll show us how to make a *simple* pasta dinner / in just *thirty* minutes.",
+  "tricky": [
+   "Olive — [알리브], 미국식 o는 [아], 끝 v",
+   "Italy — 강세는 첫 음절 [*이*럴리], [이탈리]가 아님",
+   "France — [f프랜스], f 발음"
+  ],
+  "translation": "오늘 밤 프로그램에서는 인기 식당 올리브 트리의 주인인 마리아 로페즈 셰프를 반갑게 모십니다. 로페즈 셰프는 이탈리아, 프랑스, 스페인에서 일했으며 20년 넘게 전문 요리사로 활동해 왔습니다. 오늘 밤에는 단 30분 만에 간단한 파스타 저녁을 만드는 방법을 보여 줄 것입니다.",
+  "tips": [
+   "나라 이름 나열 ↗ ↗ ↘",
+   "Italy 는 우리말 '이탈리아'와 강세가 다르니 주의"
+  ]
+ },
+ {
+  "id": "ra-036",
+  "type": "일기 예보",
+  "text": "Good morning, Chicago. It's a cool and cloudy start to the day, with temperatures around fifty degrees. Light rain will begin by noon and continue into the evening. Don't forget your umbrella, raincoat, and warm jacket. The weekend looks much brighter, with sunny skies and highs near sixty-five.",
+  "marked": "Good morning, *Chicago*. / It's a cool and *cloudy* start to the day, / with temperatures around *fifty* degrees. / Light rain will begin by noon / and continue into the *evening*. / Don't forget your umbrella, / raincoat, / and *warm* jacket. / The weekend looks much *brighter*, / with sunny skies / and highs near *sixty-five*.",
+  "tricky": [
+   "Chicago — [쉬카고], ch는 [쉬] 소리, 강세는 둘째 음절",
+   "umbrella — 강세는 둘째 음절 [엄*브렐*러], r과 l 연속",
+   "raincoat — [레인코트], r 발음"
+  ],
+  "translation": "시카고 여러분, 좋은 아침입니다. 기온 50도 안팎으로 서늘하고 흐린 하루가 시작됩니다. 정오쯤 약한 비가 내리기 시작해 저녁까지 이어지겠습니다. 우산, 비옷, 따뜻한 재킷을 잊지 마세요. 주말에는 화창한 하늘에 최고 기온 65도 가까이로 훨씬 밝은 날씨가 예상됩니다.",
+  "tips": [
+   "cool and cloudy 처럼 형용사 두 개는 둘 다 강세",
+   "나열 ↗ ↗ ↘"
+  ]
+ },
+ {
+  "id": "ra-037",
+  "type": "교통 정보",
+  "text": "Good evening. This is the rush hour traffic report for Seattle. Traffic on Interstate 5 is heavy from the airport to downtown, with delays of about forty minutes. Are you planning to attend tonight's baseball game? If so, consider taking the light rail, a city bus, or a water taxi.",
+  "marked": "Good evening. / This is the *rush hour* traffic report / for *Seattle*. / Traffic on Interstate 5 is heavy / from the *airport* to *downtown*, / with delays of about *forty* minutes. / Are you planning to attend tonight's baseball game? / If so, / consider taking the *light rail*, / a city bus, / or a *water taxi*.",
+  "tricky": [
+   "Seattle — [시애를], 미국식 tt는 부드럽게, 끝 l",
+   "light rail — l과 r이 이어지므로 [라잇 레일] 각각 구분",
+   "Interstate — 강세는 첫 음절 [*인*터스테이트]"
+  ],
+  "translation": "안녕하세요. 시애틀 퇴근 시간 교통 정보입니다. 5번 주간 고속도로는 공항에서 시내까지 정체가 심하며 약 40분의 지연이 있습니다. 오늘 밤 야구 경기를 보러 가실 계획인가요? 그렇다면 경전철, 시내버스, 수상 택시를 이용해 보세요.",
+  "tips": [
+   "Are you planning ...? 는 끝을 올린다 ↗",
+   "forty 와 fourteen 구분"
+  ]
+ },
+ {
+  "id": "ra-038",
+  "type": "행사 안내",
+  "text": "Attention, staff members. Our company picnic will be held on Friday, August ninth, at Willow Lake Park. Lunch will be served at noon, followed by games, a talent show, and a prize drawing. Family members are welcome to join. Could you please reply to Karen in Human Resources by Tuesday?",
+  "marked": "Attention, *staff* members. / Our company picnic will be held / on Friday, *August* ninth, / at *Willow* Lake Park. / Lunch will be served at noon, / followed by *games*, / a talent show, / and a prize *drawing*. / Family members are *welcome* to join. / Could you please reply to Karen in Human Resources / by *Tuesday*?",
+  "tricky": [
+   "Willow — [윌로우], w와 l 연속, r처럼 굴리지 않기",
+   "drawing — [드로잉], 단어 사이에 r 소리를 넣지 않기",
+   "Human Resources — [휴먼 *리*소시즈], r 발음"
+  ],
+  "translation": "직원 여러분께 알립니다. 회사 야유회가 8월 9일 금요일 윌로우 호수 공원에서 열립니다. 정오에 점심이 제공되고, 이어서 게임, 장기 자랑, 경품 추첨이 있습니다. 가족도 함께 참여할 수 있습니다. 화요일까지 인사팀 캐런에게 회신해 주시겠어요?",
+  "tips": [
+   "Could you please ...? 는 정중하게 끝을 올린다 ↗",
+   "August ninth 는 서수로 읽는다"
+  ]
+ },
+ {
+  "id": "ra-039",
+  "type": "안내 방송",
+  "text": "Good morning, students. This is Principal Grant with a few quick announcements. Today's soccer practice has been moved to three fifteen in the gym because of the rain. The library will close early at two p.m. Also, please return your field trip forms, lunch money, and permission slips to your teacher by Friday.",
+  "marked": "Good morning, *students*. / This is Principal Grant / with a few *quick* announcements. / Today's *soccer* practice has been moved / to three fifteen in the *gym* / because of the rain. / The library will close early at *two* p.m. / Also, / please return your *field trip* forms, / lunch money, / and permission slips to your teacher / by *Friday*.",
+  "tricky": [
+   "principal — [프린서펄], 강세는 첫 음절, pr의 r",
+   "library — [라이브러리], l과 r 구분",
+   "field — [필드], f 발음과 끝 l"
+  ],
+  "translation": "학생 여러분, 좋은 아침입니다. 교장 그랜트입니다. 몇 가지 간단히 알려 드립니다. 오늘 축구 연습은 비 때문에 3시 15분 체육관으로 옮겨졌습니다. 도서관은 오후 2시에 일찍 문을 닫습니다. 또한 현장 학습 신청서, 점심값, 동의서를 금요일까지 담임 선생님께 내 주세요.",
+  "tips": [
+   "three fifteen 은 한 덩어리로 읽기",
+   "나열 ↗ ↗ ↘"
+  ]
+ },
+ {
+  "id": "ra-040",
+  "type": "광고",
+  "text": "Do you want to get fit this year? Come to Peak Fitness Center, now open on Elm Street. We offer yoga, swimming, and strength training classes for every level. Our gym is open twenty-four hours a day, seven days a week. Sign up before March first and your first month is free.",
+  "marked": "Do you want to get *fit* this year? / Come to *Peak* Fitness Center, / now open on Elm Street. / We offer *yoga*, / swimming, / and *strength* training classes / for every level. / Our gym is open *twenty-four* hours a day, / seven days a week. / Sign up before *March* first / and your first month is *free*.",
+  "tricky": [
+   "strength — [스트렝θ], 끝 th를 혀를 이 사이에 두고",
+   "yoga — [요우가], 강세는 첫 음절",
+   "swimming — sw의 w를 분명히 [스위밍]"
+  ],
+  "translation": "올해 건강해지고 싶으신가요? 엘름 가에 새로 문을 연 피크 피트니스 센터로 오세요. 요가, 수영, 근력 운동 수업을 모든 수준에 맞게 제공합니다. 저희 체육관은 일주일 내내 24시간 운영합니다. 3월 1일 전에 가입하시면 첫 달은 무료입니다.",
+  "tips": [
+   "광고 첫 질문은 밝게 끝을 올린다 ↗",
+   "free 를 마지막에 강하게"
+  ]
+ }
+]

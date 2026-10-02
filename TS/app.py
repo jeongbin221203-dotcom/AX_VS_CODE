@@ -1,4 +1,4 @@
-"""TS 영어 시험 학습 (토익) - Flask 진입점
+"""TS 영어 시험 학습 (토익·토플·토익스피킹·오픽) - Flask 진입점
 
 실행: python app.py   → http://127.0.0.1:5003
 """
@@ -10,7 +10,7 @@ from flask import Flask, abort, request, session
 
 import config
 from core import db
-from core import toefl
+from core import speaking, toefl
 from core.content import Bank
 from views import register_blueprints
 from views.helpers import register_template_helpers
@@ -27,6 +27,8 @@ def create_app(test_config: dict | None = None) -> Flask:
     toefl.ensure_schema()
     toefl.ensure_mock_schema()
     app.extensions["toefl_bank"] = toefl.ToeflBank(app.config["TOEFL_CONTENT_DIR"])
+    speaking.ensure_schema()
+    app.extensions["speaking_bank"] = speaking.SpeakingBank(app.config["SPEAKING_CONTENT_DIR"])
 
     register_blueprints(app)
     register_template_helpers(app)

@@ -362,10 +362,10 @@ def test_vocab_quiz_size_and_distractors(client):
         assert len(q["options"]) == 4 and len(set(q["options"])) == 4 and q["options"][q["answer"]] == q["meaning"]
 
 
-@pytest.mark.parametrize("key", ["toeic-speaking", "opic"])
-def test_exam_category_pages(client, key):
+@pytest.mark.parametrize("key,home", [("toeic-speaking", "/speaking/toeic"), ("opic", "/speaking/opic")])
+def test_exam_category_pages(client, key, home):
     r = client.get(f"/exam/{key}")
-    assert r.status_code == 200 and "준비 중" in r.data.decode()
+    assert r.status_code == 302 and r.headers["Location"].endswith(home)
 
 
 def test_exam_tabs(client):

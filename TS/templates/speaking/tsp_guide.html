@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block title %}토익스피킹 답변 틀{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <div class="muted small">TOEIC Speaking · 유형별 답변 틀 · 채점 기준 · 목표별 학습 경로</div>
+    <h1>답변 틀·채점 기준</h1>
+  </div>
+  <a class="btn" href="{{ url_for('speaking.tsp_home') }}">토익스피킹 홈</a>
+</div>
+
+<div class="card">
+  <h2>목표 점수별 학습 경로 <span class="small muted">지금 목표: {{ target }}점</span></h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>목표</th><th>핵심</th><th>연습 순서</th></tr></thead>
+    <tbody>
+      <tr{{ ' style=background:var(--accent-soft)' if target <= 130 }}><td><b>IM2~IM3</b><div class="small muted">120~130</div></td>
+        <td>모든 문항에 <b>침묵 없이</b> 완전한 문장으로 답한다. 틀을 외워 그대로 쓰는 것으로 충분.</td>
+        <td class="small">① Q5~7 틀 외우기 → ② Q8~10 표 읽는 법 → ③ Q11 이유 1개 + 예시 1개 → ④ 모의고사 주 1회</td></tr>
+      <tr{{ ' style=background:var(--accent-soft)' if 140 <= target <= 150 }}><td><b>IH</b><div class="small muted">140~150</div></td>
+        <td>Q7·Q11에서 <b>이유와 구체적 예시</b>, Q3~4에서 사람·사물·배경을 고르게. 시간을 꽉 채운다.</td>
+        <td class="small">① Q11 이유 2개 구조 → ② Q3~4 위치 표현 8개 → ③ Q1~2 강세·끊어 읽기 → ④ 녹음 듣고 단어 수 늘리기 (Q11 100단어 이상)</td></tr>
+      <tr{{ ' style=background:var(--accent-soft)' if target >= 160 }}><td><b>AL 이상</b><div class="small muted">160~</div></td>
+        <td>틀이 드러나지 않게 <b>자연스러운 연결어·다양한 문장 구조</b>, 문법 실수 최소화, 억양까지.</td>
+        <td class="small">① 고득점 모범 답안 따라 말하기(섀도잉) → ② Q11 반론 인정 후 재반박 → ③ 관계사·분사구문 넣기 → ④ 분당 120~150단어 유지</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<div class="card" style="margin-top:14px">
+  <h2>유형별 답변 틀</h2>
+
+  <h3>Q1~2 문장 읽기 <span class="small muted">준비 45초 · 읽기 45초</span></h3>
+  <ul class="clean small">
+    <li>준비 시간에 <b>소리 내어</b> 한 번 읽는다. 고유명사·숫자 발음을 먼저 정한다.</li>
+    <li>나열 <b>A ↗, B ↗, and C ↘</b> · Yes/No 의문문 ↗ · Wh- 의문문 ↘ · 쉼표·마침표에서 끊기.</li>
+    <li>틀려도 다시 읽지 말고 이어간다. 너무 빨리 읽지 않는다 (45초 안에 여유 있게 끝남).</li>
+  </ul>
+
+  <h3>Q3~4 사진 묘사 <span class="small muted">준비 45초 · 답변 30초</span></h3>
+  <div class="frame">This picture was taken at/in [장소].
+The first thing I see is [가장 눈에 띄는 사람], who is [동작 -ing].
+Next to him/her, [다른 사람] is [동작].
+On the left / On the right side, there is/are [사물].
+In the background, I can see [배경].
+It looks like [느낌·추측].</div>
+
+  <h3>Q5~7 질문에 답하기 <span class="small muted">준비 3초 · 15/15/30초</span></h3>
+  <div class="frame">Q5·Q6 (15초): 질문의 단어를 그대로 살려 첫 문장 + 덧붙임 한 문장
+  "The last time I went to a movie theater was last Saturday, and I went with my sister."
+Q7 (30초): 답 → 이유 1 → 이유 2/예시 → 마무리
+  "I'd prefer A. First, ... Also, ... For example, ... So, I think A is better for me."</div>
+
+  <h3>Q8~10 표 보고 답하기 <span class="small muted">표 45초 · 15/15/30초</span></h3>
+  <div class="frame">45초 동안: 제목·날짜·장소 → 시간순 항목 → 취소·변경·별도 비용 같은 '함정' 확인
+Q8: "The [행사] will be held on [날짜] at [장소], and it starts at [시간]."
+Q9: "I'm sorry, but you have the wrong information. Actually, ..." (잘못 안 정보 바로잡기)
+Q10: "There are two [항목]. First, at [시간], ... will [내용]. After that, at [시간], ..."</div>
+
+  <h3>Q11 의견 말하기 <span class="small muted">준비 45초 · 60초</span></h3>
+  <div class="frame">의견:  I agree that ... / I prefer ... for two reasons.
+이유 1: First, ...
+예시:   For example, when I ..., I was able to ...
+이유 2: Also / On top of that, ...
+마무리: For these reasons, I believe ...</div>
+  <p class="small muted">준비 45초에는 문장을 쓰지 말고 키워드(의견·이유·예시)만 정한다. 예시는 '내 경험'이 가장 말하기 쉽다.</p>
+</div>
+
+<div class="card" style="margin-top:14px">
+  <h2>채점 기준 (자기 채점용)</h2>
+  {% for t, v in TASKS.items() %}
+    <h3>{{ v.q }} {{ v.name }} <span class="small muted">0~{{ v.max }}점</span></h3>
+    <table class="small"><tbody>{% for p, d in RUBRIC[t] %}<tr><td class="num"><b>{{ p }}</b></td><td>{{ d }}</td></tr>{% endfor %}</tbody></table>
+  {% endfor %}
+  <p class="small muted">ETS가 공개한 채점 기준을 학습용으로 풀어 쓴 것입니다. 점수 환산(문항 합 35점 → 200점)은 공식 환산표가 공개되지 않아 비례로 계산한 추정치입니다.</p>
+</div>
+
+<div class="card" style="margin-top:14px">
+  <h2>녹음 다시 들을 때 체크리스트</h2>
+  <ul class="clean">
+    <li><b>발음</b>: r/l, f/p, v/b, th — 음성 인식이 틀리게 받아 적은 단어가 의심 단어</li>
+    <li><b>유창성</b>: 3초 넘는 침묵이 있었나? "어…" 대신 "Well," "Let me see," 로 채웠나?</li>
+    <li><b>문법</b>: 3인칭 단수 -s, 시제(과거 경험은 과거형), 관사 a/the</li>
+    <li><b>내용</b>: 질문에 정확히 답했나? 이유·예시가 구체적인가?</li>
+    <li><b>시간</b>: 답변 시간을 거의 다 썼나? (분당 단어 수가 100보다 낮으면 말이 느리거나 멈춤이 많은 것)</li>
+  </ul>
+</div>
+
+<div class="card" style="margin-top:14px">
+  <h2>레벨 표</h2>
+  <table class="small"><tbody>{% for lv, name, low in LEVELS %}<tr><td><b>{{ name }}</b></td><td class="r muted">{{ low }}{{ '' if lv == 8 else '~' }}</td></tr>{% endfor %}</tbody></table>
+</div>
+{% endblock %}

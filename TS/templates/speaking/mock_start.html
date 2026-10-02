@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}{{ e.name }} 모의고사{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <div class="muted small">{{ e.en }}</div>
+    <h1>{{ e.name }} 실전 모의고사</h1>
+    <div class="muted small">{{ e.summary }}</div>
+  </div>
+  <a class="btn" href="{{ home }}">{{ e.name }} 홈</a>
+</div>
+
+<div class="grid two">
+  <div class="card">
+    <h2>시험 구성</h2>
+    {% if exam == 'tsp' %}
+      <table><tbody>
+        {% for t in TASKS.values() %}<tr><td class="num"><b>{{ t.q }}</b></td><td>{{ t.name }} <span class="small muted">{{ t.en }}</span>
+          <div class="small muted">준비 {{ t.prep }}초 · 답변 {{ t.speak | join('/') }}초</div></td></tr>{% endfor %}
+      </tbody></table>
+      <p class="small muted">안 풀어 본 문제부터 고릅니다. 시험 중에는 준비·답변 시간을 건너뛸 수 없습니다.</p>
+    {% else %}
+      <table><tbody>
+        <tr><td class="num"><b>1</b></td><td>자기소개</td></tr>
+        <tr><td class="num"><b>2~7</b></td><td>설문 주제 콤보 2개 (묘사 → 습관·비교 → 경험)</td></tr>
+        <tr><td class="num"><b>8~10</b></td><td>돌발 주제 콤보</td></tr>
+        <tr><td class="num"><b>11~13</b></td><td>롤플레이 (질문하기 → 문제 해결 → 관련 경험)</td></tr>
+        <tr><td class="num"><b>14~15</b></td><td>비교·사회 이슈 (고난도) <span class="small muted">난이도 1~2는 없음 (13문항)</span></td></tr>
+      </tbody></table>
+      <p class="small muted">전체 {{ minutes }}분 · 질문은 소리로만 나오고 다시 듣기는 한 번. 실제 시험의 7번 뒤 난이도 재조정은 생략합니다.</p>
+    {% endif %}
+  </div>
+  <div class="card">
+    <h2>시작하기</h2>
+    <form method="post">
+      <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+      {% if exam == 'opic' %}
+        <p class="small">설문 주제: {% if st.survey %}{% for t in st.survey %}<span class="tag">{{ TOPICS[t][0] }}</span> {% endfor %}{% else %}<span class="muted">고르지 않음 (모든 주제)</span>{% endif %}
+          · <a href="{{ url_for('speaking.opic_survey') }}">바꾸기</a></p>
+        <label class="small">난이도
+          <select name="level">{% for lv, name in LEVELS.items() %}<option value="{{ lv }}" {{ 'selected' if st.level == lv }}>{{ name }}</option>{% endfor %}</select></label>
+      {% endif %}
+      <ul class="clean small" style="margin:10px 0">
+        <li>조용한 곳에서 이어폰을 끼고 보세요. 마이크 권한을 허용해야 녹음됩니다.</li>
+        <li>끝나면 녹음을 다시 들으며 문항마다 스스로 채점합니다.</li>
+      </ul>
+      <button class="btn primary">모의고사 만들기</button>
+    </form>
+  </div>
+</div>
+
+{% if past %}
+<div class="card" style="margin-top:14px">
+  <h2>지난 모의고사</h2>
+  <table class="small"><tbody>
+  {% for m in past %}
+    <tr><td>{{ m.created_at[:16].replace('T', ' ') }}</td><td><b>{{ m.score or '–' }}{{ '점' if exam == 'tsp' }}</b></td>
+      <td class="muted">{{ m.result.answered }}/{{ m.result.total }}문항{% if m.result.words %} · 평균 {{ m.result.words | round | int }}단어{% endif %}</td>
+      <td class="r"><a href="{{ url_for('speaking.mock_result', mid=m.id) }}">결과</a></td></tr>
+  {% endfor %}
+  </tbody></table>
+</div>
+{% endif %}
+{% endblock %}

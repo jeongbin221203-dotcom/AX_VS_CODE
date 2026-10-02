@@ -1,0 +1,1602 @@
+[
+ {
+  "id": "dp-001",
+  "setting": "사무실",
+  "scene_ko": "창이 큰 밝은 사무실. 한 남자가 책상에 앉아 노트북으로 일하고 있고, 옆 책상의 여자는 전화를 받고 있다. 뒤쪽 창밖으로 도시 건물들이 보인다.",
+  "elements": [
+   {
+    "where": "가운데",
+    "ko": "셔츠를 입은 남자가 노트북 자판을 치고 있다",
+    "en": "A man in a white shirt is typing on a laptop at his desk."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "여자가 수화기를 귀에 대고 메모하고 있다",
+    "en": "On the right, a woman is talking on the phone and taking notes."
+   },
+   {
+    "where": "앞쪽",
+    "ko": "책상 위에 커피잔과 서류 더미가 놓여 있다",
+    "en": "In the foreground, there is a coffee cup next to a pile of documents."
+   },
+   {
+    "where": "왼쪽",
+    "ko": "화분이 서류 캐비닛 위에 있다",
+    "en": "On the left, there is a green plant on top of a filing cabinet."
+   },
+   {
+    "where": "배경",
+    "ko": "큰 창문 밖으로 고층 건물이 보인다",
+    "en": "In the background, I can see tall buildings through a large window."
+   }
+  ],
+  "sample": "This picture was taken in an office. In the middle, a man in a white shirt is typing on a laptop. On the right, a woman is talking on the phone and taking notes. There is a coffee cup and some papers on the desk. In the background, I can see tall buildings through the window. It looks like a busy day.",
+  "sample_ko": "이 사진은 사무실에서 찍은 것입니다. 가운데에 흰 셔츠를 입은 남자가 노트북으로 타자를 치고 있습니다. 오른쪽에는 여자가 전화 통화를 하면서 메모하고 있습니다. 책상 위에는 커피잔과 서류가 있습니다. 뒤쪽 창문으로 높은 건물들이 보입니다. 바쁜 하루인 것 같습니다.",
+  "sample_adv": "This photo was taken in a bright, modern office. The first thing I notice is a man in a crisp white shirt who is typing on his laptop with a serious expression. Right next to him, a woman is holding a phone to her ear while jotting something down on a notepad. In the foreground, a coffee cup is sitting beside a stack of documents, and there is a potted plant on a filing cabinet. Through the large window, I can see some skyscrapers. I guess they are rushing to meet a deadline.",
+  "sample_adv_ko": "이 사진은 밝고 현대적인 사무실에서 찍은 것입니다. 가장 먼저 눈에 띄는 것은 깔끔한 흰 셔츠를 입은 남자로, 진지한 표정으로 노트북을 치고 있습니다. 바로 옆에서는 여자가 전화기를 귀에 대고 메모장에 무언가를 적고 있습니다. 앞쪽에는 서류 더미 옆에 커피잔이 놓여 있고, 서류 캐비닛 위에 화분이 있습니다. 큰 창문으로 고층 건물들이 보입니다. 아마 마감을 맞추려고 서두르는 것 같습니다.",
+  "tips": [
+   "사무실 단골 표현: be typing on a laptop, be talking on the phone, take notes",
+   "사물은 There is ~ next to ~ 로 위치까지 한 번에"
+  ]
+ },
+ {
+  "id": "dp-002",
+  "setting": "회의실",
+  "scene_ko": "회의실에서 다섯 명이 긴 탁자에 둘러앉아 있다. 한 여자가 서서 스크린의 그래프를 가리키며 발표하고 있다. 탁자에는 노트북과 물병이 놓여 있다.",
+  "elements": [
+   {
+    "where": "가운데",
+    "ko": "여자가 서서 스크린의 막대그래프를 가리키고 있다",
+    "en": "A woman is standing and pointing at a bar graph on a screen."
+   },
+   {
+    "where": "앞쪽",
+    "ko": "네 사람이 탁자에 앉아 발표를 듣고 있다",
+    "en": "Four people are sitting around a long table and listening to her."
+   },
+   {
+    "where": "왼쪽",
+    "ko": "남자가 노트북에 무언가를 입력하고 있다",
+    "en": "On the left, a man is typing something on his laptop."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "여자가 고개를 끄덕이며 메모하고 있다",
+    "en": "On the right, a woman is nodding and writing in her notebook."
+   },
+   {
+    "where": "전체",
+    "ko": "탁자 위에 물병과 서류가 흩어져 있다",
+    "en": "There are water bottles and papers on the table."
+   }
+  ],
+  "sample": "This is a picture of a meeting room. In the middle, a woman is standing and pointing at a graph on the screen. Four people are sitting around a long table. A man on the left is using his laptop, and a woman on the right is taking notes. There are water bottles on the table. It seems like an important meeting.",
+  "sample_ko": "회의실 사진입니다. 가운데에서 한 여자가 서서 스크린의 그래프를 가리키고 있습니다. 네 사람이 긴 탁자에 둘러앉아 있습니다. 왼쪽 남자는 노트북을 사용하고, 오른쪽 여자는 메모를 하고 있습니다. 탁자 위에 물병들이 있습니다. 중요한 회의인 것 같습니다.",
+  "sample_adv": "This picture shows a business meeting in a conference room. The person who stands out the most is a woman in a navy suit. She is standing in front of a screen and pointing at a bar graph, so she is probably giving a presentation. Four of her coworkers are seated around a long table. A man on the left is typing on his laptop, and a woman on the right is nodding and writing in her notebook. Water bottles and documents are scattered across the table. I think they are reviewing quarterly sales results.",
+  "sample_adv_ko": "이 사진은 회의실에서의 업무 회의를 보여 줍니다. 가장 눈에 띄는 사람은 남색 정장을 입은 여자입니다. 스크린 앞에 서서 막대그래프를 가리키고 있으니 아마 발표를 하는 중인 것 같습니다. 동료 네 명이 긴 탁자에 둘러앉아 있습니다. 왼쪽 남자는 노트북을 치고 있고, 오른쪽 여자는 고개를 끄덕이며 공책에 적고 있습니다. 탁자에는 물병과 서류가 흩어져 있습니다. 분기 매출 실적을 검토하는 것 같습니다.",
+  "tips": [
+   "발표자는 be giving a presentation, be pointing at ~ 로",
+   "여러 명은 숫자 + be seated around a table 로 묶어서 말하기"
+  ]
+ },
+ {
+  "id": "dp-003",
+  "setting": "식당",
+  "scene_ko": "분주한 식당 안. 종업원이 접시 두 개를 들고 손님 테이블로 가고 있다. 창가 테이블에서는 가족이 메뉴를 보고 있다.",
+  "elements": [
+   {
+    "where": "가운데",
+    "ko": "앞치마를 두른 종업원이 접시 두 개를 나르고 있다",
+    "en": "A waiter wearing an apron is carrying two plates of food."
+   },
+   {
+    "where": "왼쪽",
+    "ko": "창가 테이블에서 가족이 메뉴판을 보고 있다",
+    "en": "On the left, a family is looking at menus at a table by the window."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "두 친구가 웃으며 대화하고 있다",
+    "en": "On the right, two friends are laughing and chatting over lunch."
+   },
+   {
+    "where": "뒤쪽",
+    "ko": "요리사가 주방 카운터 뒤에서 일하고 있다",
+    "en": "In the back, a cook is working behind the kitchen counter."
+   },
+   {
+    "where": "배경",
+    "ko": "벽에 칠판 메뉴가 걸려 있다",
+    "en": "There is a chalkboard menu hanging on the wall."
+   }
+  ],
+  "sample": "This picture was taken in a restaurant. In the center, a waiter is carrying two plates of food. On the left, a family is sitting by the window and looking at the menu. On the right, two friends are talking and laughing. In the back, a cook is working in the kitchen. The restaurant looks very popular.",
+  "sample_ko": "이 사진은 식당에서 찍은 것입니다. 가운데에 종업원이 음식 접시 두 개를 나르고 있습니다. 왼쪽에는 가족이 창가에 앉아 메뉴를 보고 있습니다. 오른쪽에는 두 친구가 이야기하며 웃고 있습니다. 뒤쪽에서는 요리사가 주방에서 일하고 있습니다. 식당이 아주 인기가 많아 보입니다.",
+  "sample_adv": "This scene takes place in a busy restaurant, probably around lunchtime. Right in the middle, a waiter wearing a black apron is carrying two plates of pasta toward a table. On the left side, a family of four is sitting by the window and studying their menus. On the right, two young women are laughing and chatting over their meals. Behind the counter in the back, a cook is preparing food, and a chalkboard menu is hanging on the wall. Overall, the place looks lively, and I guess the food is really good.",
+  "sample_adv_ko": "이 장면은 붐비는 식당이고, 아마 점심시간쯤인 것 같습니다. 바로 가운데에 검은 앞치마를 두른 종업원이 파스타 두 접시를 테이블 쪽으로 나르고 있습니다. 왼쪽에는 4인 가족이 창가에 앉아 메뉴를 자세히 보고 있습니다. 오른쪽에는 젊은 여자 두 명이 식사하며 웃고 이야기하고 있습니다. 뒤쪽 카운터 뒤에서는 요리사가 음식을 준비하고 있고, 벽에는 칠판 메뉴가 걸려 있습니다. 전체적으로 활기차 보이고, 음식이 정말 맛있는 곳 같습니다.",
+  "tips": [
+   "식당 표현: be carrying plates, be looking at the menu, be chatting over a meal",
+   "시간 추측: probably around lunchtime"
+  ]
+ },
+ {
+  "id": "dp-004",
+  "setting": "카페",
+  "scene_ko": "아늑한 카페. 바리스타가 카운터 뒤에서 커피를 만들고 있고, 손님 한 명이 카운터 앞에서 기다리고 있다. 창가 자리에는 대학생이 노트북으로 공부하고 있다.",
+  "elements": [
+   {
+    "where": "가운데",
+    "ko": "바리스타가 커피 기계로 커피를 만들고 있다",
+    "en": "A barista is making coffee with an espresso machine behind the counter."
+   },
+   {
+    "where": "앞쪽",
+    "ko": "남자 손님이 카운터 앞에 서서 기다리고 있다",
+    "en": "In front of the counter, a male customer is waiting for his order."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "학생이 창가에서 헤드폰을 끼고 노트북으로 공부하고 있다",
+    "en": "On the right, a student wearing headphones is studying with a laptop by the window."
+   },
+   {
+    "where": "왼쪽",
+    "ko": "진열장에 빵과 케이크가 있다",
+    "en": "On the left, there are muffins and cakes in a glass display case."
+   },
+   {
+    "where": "배경",
+    "ko": "천장에 둥근 조명이 매달려 있다",
+    "en": "Round lights are hanging from the ceiling."
+   }
+  ],
+  "sample": "This is a picture of a coffee shop. In the middle, a barista is making coffee behind the counter. A man is standing in front of the counter and waiting for his drink. On the right, a student is studying with a laptop by the window. There are cakes in the display case. The cafe looks cozy and quiet.",
+  "sample_ko": "커피숍 사진입니다. 가운데에 바리스타가 카운터 뒤에서 커피를 만들고 있습니다. 한 남자가 카운터 앞에 서서 음료를 기다리고 있습니다. 오른쪽에는 학생이 창가에서 노트북으로 공부하고 있습니다. 진열장에 케이크가 있습니다. 카페가 아늑하고 조용해 보입니다.",
+  "sample_adv": "This picture was taken inside a cozy little cafe. The main focus is a barista with a ponytail who is making coffee with a large espresso machine. A man in a gray jacket is standing at the counter, and it looks like he is waiting for his order. On the right side, a young student wearing headphones is working on a laptop by the window. There is a glass case full of muffins and cakes on the left, and several round lights are hanging from the ceiling. It seems like a perfect place to relax or study.",
+  "sample_adv_ko": "이 사진은 아늑하고 작은 카페 안에서 찍었습니다. 중심에는 머리를 묶은 바리스타가 큰 에스프레소 기계로 커피를 만들고 있습니다. 회색 재킷을 입은 남자가 카운터에 서 있는데, 주문한 것을 기다리는 것 같습니다. 오른쪽에는 헤드폰을 낀 젊은 학생이 창가에서 노트북으로 작업하고 있습니다. 왼쪽에는 머핀과 케이크가 가득한 유리 진열장이 있고, 천장에는 둥근 조명 여러 개가 매달려 있습니다. 쉬거나 공부하기에 딱 좋은 곳 같습니다.",
+  "tips": [
+   "it looks like + 문장 으로 행동의 이유를 추측",
+   "카페 표현: be waiting for an order, glass display case, be hanging from the ceiling"
+  ]
+ },
+ {
+  "id": "dp-005",
+  "setting": "거리",
+  "scene_ko": "맑은 날 도심 거리. 사람들이 횡단보도를 건너고 있고, 자전거를 탄 남자가 신호를 기다린다. 길가에 상점들이 늘어서 있다.",
+  "elements": [
+   {
+    "where": "가운데",
+    "ko": "여러 사람이 횡단보도를 건너고 있다",
+    "en": "Several people are crossing the street at a crosswalk."
+   },
+   {
+    "where": "왼쪽",
+    "ko": "자전거 탄 남자가 신호를 기다리고 있다",
+    "en": "On the left, a man on a bicycle is waiting at the traffic light."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "여자가 유모차를 밀며 인도를 걷고 있다",
+    "en": "On the right, a woman is pushing a stroller along the sidewalk."
+   },
+   {
+    "where": "뒤쪽",
+    "ko": "상점들이 거리를 따라 늘어서 있다",
+    "en": "There are many shops lined up along the street."
+   },
+   {
+    "where": "배경",
+    "ko": "노란 택시가 서 있고 하늘이 맑다",
+    "en": "In the background, a yellow taxi is parked and the sky is clear."
+   }
+  ],
+  "sample": "This picture was taken on a city street. In the middle, several people are crossing the street. On the left, a man on a bike is waiting for the light to change. On the right, a woman is pushing a stroller. There are many shops along the street. The weather looks sunny and nice.",
+  "sample_ko": "이 사진은 도시 거리에서 찍었습니다. 가운데에 여러 사람이 길을 건너고 있습니다. 왼쪽에는 자전거 탄 남자가 신호가 바뀌기를 기다리고 있습니다. 오른쪽에는 여자가 유모차를 밀고 있습니다. 길을 따라 상점이 많이 있습니다. 날씨가 맑고 좋아 보입니다.",
+  "sample_adv": "This photo shows a busy downtown street on a bright, sunny day. In the center, a group of pedestrians is crossing the road at a crosswalk, and some of them are carrying shopping bags. On the left, a man wearing a helmet is sitting on his bicycle and waiting for the traffic light to turn green. On the right, a woman is pushing a stroller along the sidewalk. Behind them, small shops and cafes are lined up along the street, and a yellow taxi is parked by the curb. It looks like a typical weekend afternoon.",
+  "sample_adv_ko": "이 사진은 밝고 화창한 날의 붐비는 도심 거리를 보여 줍니다. 가운데에 보행자 무리가 횡단보도를 건너고 있고, 몇 명은 쇼핑백을 들고 있습니다. 왼쪽에는 헬멧을 쓴 남자가 자전거에 앉아 신호등이 초록불로 바뀌기를 기다리고 있습니다. 오른쪽에는 여자가 인도를 따라 유모차를 밀고 있습니다. 그 뒤로 작은 상점과 카페들이 길을 따라 늘어서 있고, 노란 택시가 길가에 서 있습니다. 전형적인 주말 오후 같습니다.",
+  "tips": [
+   "거리 표현: be crossing the street, wait for the light to change, be lined up along ~",
+   "날씨 한마디로 마무리: The weather looks sunny and nice"
+  ]
+ },
+ {
+  "id": "dp-006",
+  "setting": "시장",
+  "scene_ko": "야외 시장. 과일 가게 상인이 사과를 봉지에 담아 손님에게 건네고 있다. 노점마다 천막이 쳐져 있고 사람들이 구경하고 있다.",
+  "elements": [
+   {
+    "where": "가운데",
+    "ko": "상인이 손님에게 사과 봉지를 건네고 있다",
+    "en": "A vendor is handing a bag of apples to a customer."
+   },
+   {
+    "where": "앞쪽",
+    "ko": "나무 상자에 과일과 채소가 가득 담겨 있다",
+    "en": "In the front, wooden boxes are filled with fruit and vegetables."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "노부부가 토마토를 고르고 있다",
+    "en": "On the right, an elderly couple is picking out some tomatoes."
+   },
+   {
+    "where": "배경",
+    "ko": "줄무늬 천막이 쳐진 노점이 줄지어 있다",
+    "en": "In the background, there is a row of stalls with striped tents."
+   },
+   {
+    "where": "왼쪽",
+    "ko": "가격표가 과일 위에 꽂혀 있다",
+    "en": "On the left, there are small price signs on top of the fruit."
+   }
+  ],
+  "sample": "This is a picture of an outdoor market. In the middle, a vendor is handing a bag of apples to a customer. In the front, there are wooden boxes full of fruit and vegetables. On the right, an old couple is choosing tomatoes. In the background, I can see many stalls with tents. The market looks busy and fun.",
+  "sample_ko": "야외 시장 사진입니다. 가운데에 상인이 손님에게 사과 봉지를 건네고 있습니다. 앞쪽에는 과일과 채소가 가득한 나무 상자들이 있습니다. 오른쪽에는 노부부가 토마토를 고르고 있습니다. 뒤쪽으로 천막을 친 노점이 많이 보입니다. 시장이 붐비고 재미있어 보입니다.",
+  "sample_adv": "This picture was taken at an outdoor farmers market. The first thing that catches my eye is a smiling vendor in a green cap. He is handing a paper bag of apples to a female customer. In the foreground, wooden crates are packed with colorful fruit and vegetables, and small price signs are stuck on top of them. On the right, an elderly couple is carefully picking out some tomatoes. In the background, a long row of stalls with striped tents stretches down the street. The produce looks fresh, so I guess it's a popular market.",
+  "sample_adv_ko": "이 사진은 야외 농산물 시장에서 찍었습니다. 가장 먼저 눈에 들어오는 것은 초록 모자를 쓴 웃는 상인입니다. 여자 손님에게 사과가 든 종이봉투를 건네고 있습니다. 앞쪽에는 나무 상자에 알록달록한 과일과 채소가 가득 담겨 있고, 그 위에 작은 가격표가 꽂혀 있습니다. 오른쪽에는 노부부가 토마토를 꼼꼼히 고르고 있습니다. 뒤쪽에는 줄무늬 천막을 친 노점들이 길을 따라 길게 늘어서 있습니다. 농산물이 신선해 보여서 인기 있는 시장인 것 같습니다.",
+  "tips": [
+   "시장 표현: vendor, stall, be handing A to B, be picking out ~",
+   "The first thing that catches my eye is ~ 로 주인공 소개"
+  ]
+ },
+ {
+  "id": "dp-007",
+  "setting": "공원",
+  "scene_ko": "화창한 공원. 잔디밭에서 가족이 돗자리를 펴고 소풍을 즐기고, 길에서는 여자가 개를 산책시키고 있다. 뒤쪽에 큰 나무와 호수가 있다.",
+  "elements": [
+   {
+    "where": "가운데",
+    "ko": "가족이 잔디 위 돗자리에 앉아 소풍을 하고 있다",
+    "en": "A family is having a picnic on a blanket on the grass."
+   },
+   {
+    "where": "왼쪽",
+    "ko": "여자가 산책로에서 개를 산책시키고 있다",
+    "en": "On the left, a woman is walking her dog along a path."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "남자가 벤치에 앉아 신문을 읽고 있다",
+    "en": "On the right, a man is sitting on a bench and reading a newspaper."
+   },
+   {
+    "where": "앞쪽",
+    "ko": "소풍 바구니와 음료가 놓여 있다",
+    "en": "There is a picnic basket with some drinks in the foreground."
+   },
+   {
+    "where": "배경",
+    "ko": "큰 나무들과 호수가 있다",
+    "en": "In the background, there are tall trees and a small lake."
+   }
+  ],
+  "sample": "This picture was taken in a park on a sunny day. In the middle, a family is having a picnic on the grass. On the left, a woman is walking her dog. On the right, a man is sitting on a bench and reading a newspaper. In the background, there are tall trees and a lake. Everyone looks relaxed and happy.",
+  "sample_ko": "이 사진은 화창한 날 공원에서 찍었습니다. 가운데에 가족이 잔디밭에서 소풍을 하고 있습니다. 왼쪽에는 여자가 개를 산책시키고 있습니다. 오른쪽에는 남자가 벤치에 앉아 신문을 읽고 있습니다. 뒤쪽에는 큰 나무들과 호수가 있습니다. 모두 편안하고 행복해 보입니다.",
+  "sample_adv": "This photo shows a peaceful park on a warm, sunny afternoon. Right in the center, a young family is sitting on a checkered blanket and having a picnic. The parents are pouring drinks, and their little girl is eating a sandwich. On the left, a woman in a sun hat is walking her dog along a winding path. On the right, an older man is sitting on a wooden bench and reading the newspaper. Behind them, there are tall trees and a calm lake. It looks like a perfect day to spend outdoors.",
+  "sample_adv_ko": "이 사진은 따뜻하고 화창한 오후의 평화로운 공원을 보여 줍니다. 바로 가운데에 젊은 가족이 체크무늬 돗자리에 앉아 소풍을 하고 있습니다. 부모는 음료를 따르고 있고, 어린 딸은 샌드위치를 먹고 있습니다. 왼쪽에는 챙 모자를 쓴 여자가 구불구불한 길을 따라 개를 산책시키고 있습니다. 오른쪽에는 나이 든 남자가 나무 벤치에 앉아 신문을 읽고 있습니다. 그 뒤로 큰 나무들과 잔잔한 호수가 있습니다. 야외에서 보내기 딱 좋은 날 같습니다.",
+  "tips": [
+   "공원 표현: have a picnic, walk a dog, sit on a bench",
+   "마무리: It looks like a perfect day to ~"
+  ]
+ },
+ {
+  "id": "dp-008",
+  "setting": "공항",
+  "scene_ko": "공항 체크인 카운터. 여행객들이 여행 가방을 끌고 줄을 서 있다. 직원이 카운터에서 여권을 확인하고 있다.",
+  "elements": [
+   {
+    "where": "가운데",
+    "ko": "직원이 카운터 뒤에서 승객의 여권을 확인하고 있다",
+    "en": "An airline employee is checking a passenger's passport behind the counter."
+   },
+   {
+    "where": "앞쪽",
+    "ko": "여행객들이 가방을 들고 줄을 서 있다",
+    "en": "In the foreground, travelers are standing in line with their suitcases."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "남자가 가방을 저울 위에 올리고 있다",
+    "en": "On the right, a man is lifting his suitcase onto the scale."
+   },
+   {
+    "where": "왼쪽",
+    "ko": "아이가 작은 가방 위에 앉아 있다",
+    "en": "On the left, a child is sitting on top of a small suitcase."
+   },
+   {
+    "where": "배경",
+    "ko": "출발 안내 전광판이 위에 걸려 있다",
+    "en": "In the background, a large departure board is hanging above the counters."
+   }
+  ],
+  "sample": "This picture was taken at an airport. In the middle, an airline worker is checking a passport at the counter. Many travelers are standing in line with their suitcases. On the right, a man is putting his bag on the scale. In the background, there is a big departure board. It looks like a busy travel day.",
+  "sample_ko": "이 사진은 공항에서 찍었습니다. 가운데에 항공사 직원이 카운터에서 여권을 확인하고 있습니다. 많은 여행객이 여행 가방을 들고 줄을 서 있습니다. 오른쪽에는 남자가 가방을 저울 위에 올리고 있습니다. 뒤쪽에 큰 출발 안내판이 있습니다. 여행객이 많은 날 같습니다.",
+  "sample_adv": "This scene is at an airport check-in area. In the middle, an airline employee in a blue uniform is checking a passenger's passport and boarding pass. In front of the counter, a long line of travelers is waiting with their suitcases. On the right, a man is lifting a heavy suitcase onto the scale, and on the left, a little boy is sitting on top of his small carry-on bag. Above the counters, there is a large board showing departure times. Since the line is so long, I think it might be a holiday season.",
+  "sample_adv_ko": "이 장면은 공항 체크인 구역입니다. 가운데에 파란 제복을 입은 항공사 직원이 승객의 여권과 탑승권을 확인하고 있습니다. 카운터 앞에는 여행객들이 여행 가방을 들고 길게 줄을 서 기다리고 있습니다. 오른쪽에는 남자가 무거운 가방을 저울 위로 들어 올리고 있고, 왼쪽에는 어린 남자아이가 작은 기내용 가방 위에 앉아 있습니다. 카운터 위에는 출발 시각을 보여 주는 큰 전광판이 있습니다. 줄이 아주 길어서 휴가철인 것 같습니다.",
+  "tips": [
+   "공항 표현: stand in line, check a passport, departure board, carry-on bag",
+   "Since ~, I think ~ 로 근거 있는 추측"
+  ]
+ },
+ {
+  "id": "dp-009",
+  "setting": "기차역",
+  "scene_ko": "기차역 승강장. 기차가 막 도착해 문이 열려 있고 사람들이 타고 내린다. 한 남자가 벤치에서 휴대폰을 보며 기다리고 있다.",
+  "elements": [
+   {
+    "where": "가운데",
+    "ko": "승객들이 열린 문으로 기차에 오르고 있다",
+    "en": "Passengers are getting on the train through the open doors."
+   },
+   {
+    "where": "왼쪽",
+    "ko": "여자가 큰 가방을 끌고 기차에서 내리고 있다",
+    "en": "On the left, a woman is getting off the train with a large suitcase."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "남자가 벤치에 앉아 휴대폰을 보고 있다",
+    "en": "On the right, a man is sitting on a bench and looking at his phone."
+   },
+   {
+    "where": "앞쪽",
+    "ko": "승강장 바닥에 노란 안전선이 그어져 있다",
+    "en": "There is a yellow safety line painted on the platform."
+   },
+   {
+    "where": "배경",
+    "ko": "천장에 시계와 안내판이 걸려 있다",
+    "en": "A clock and a sign are hanging from the ceiling in the background."
+   }
+  ],
+  "sample": "This is a picture of a train station platform. A train is stopped, and people are getting on through the open doors. On the left, a woman is getting off with a big suitcase. On the right, a man is sitting on a bench and looking at his phone. There is a clock hanging from the ceiling. The station looks busy.",
+  "sample_ko": "기차역 승강장 사진입니다. 기차가 서 있고 사람들이 열린 문으로 타고 있습니다. 왼쪽에는 여자가 큰 가방을 들고 내리고 있습니다. 오른쪽에는 남자가 벤치에 앉아 휴대폰을 보고 있습니다. 천장에 시계가 걸려 있습니다. 역이 붐벼 보입니다.",
+  "sample_adv": "This photo was taken on a platform at a train station. A silver train has just pulled in, and several passengers are getting on through the open doors. On the left, a woman with a large rolling suitcase is stepping off the train carefully. On the right side, a man in a suit is sitting on a bench and checking his phone, so he might be waiting for a different train. There is a yellow safety line along the edge of the platform, and a big clock is hanging from the ceiling. It's probably rush hour in the morning.",
+  "sample_adv_ko": "이 사진은 기차역 승강장에서 찍었습니다. 은색 기차가 막 들어왔고, 승객 여러 명이 열린 문으로 타고 있습니다. 왼쪽에는 큰 바퀴 달린 가방을 든 여자가 조심스럽게 기차에서 내리고 있습니다. 오른쪽에는 정장을 입은 남자가 벤치에 앉아 휴대폰을 확인하고 있는데, 다른 기차를 기다리는 것 같습니다. 승강장 가장자리를 따라 노란 안전선이 있고, 천장에는 큰 시계가 걸려 있습니다. 아마 아침 출근 시간인 것 같습니다.",
+  "tips": [
+   "교통 표현: get on, get off, pull in, platform",
+   "might be ~ / probably ~ 로 추측 한 문장"
+  ]
+ },
+ {
+  "id": "dp-010",
+  "setting": "공사장",
+  "scene_ko": "건물 공사 현장. 안전모를 쓴 인부 두 명이 나무 판자를 옮기고 있다. 뒤쪽에 크레인이 철근을 들어 올리고 있다.",
+  "elements": [
+   {
+    "where": "가운데",
+    "ko": "안전모를 쓴 인부 두 명이 긴 판자를 함께 나르고 있다",
+    "en": "Two workers wearing hard hats are carrying a long wooden board together."
+   },
+   {
+    "where": "왼쪽",
+    "ko": "남자가 설계도를 보며 무전기로 말하고 있다",
+    "en": "On the left, a man is looking at blueprints and talking on a radio."
+   },
+   {
+    "where": "앞쪽",
+    "ko": "벽돌과 공구가 땅에 쌓여 있다",
+    "en": "In the foreground, bricks and tools are piled on the ground."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "외바퀴 손수레가 세워져 있다",
+    "en": "On the right, there is a wheelbarrow next to a pile of sand."
+   },
+   {
+    "where": "배경",
+    "ko": "크레인이 철근을 들어 올리고 있다",
+    "en": "In the background, a tall crane is lifting steel beams."
+   }
+  ],
+  "sample": "This picture was taken at a construction site. In the middle, two workers in hard hats are carrying a long board. On the left, a man is looking at some plans. There are bricks and tools on the ground in front. In the background, a crane is lifting steel beams. They look very busy.",
+  "sample_ko": "이 사진은 공사 현장에서 찍었습니다. 가운데에 안전모를 쓴 인부 두 명이 긴 판자를 나르고 있습니다. 왼쪽에는 남자가 도면을 보고 있습니다. 앞쪽 땅에는 벽돌과 공구가 있습니다. 뒤쪽에는 크레인이 철근을 들어 올리고 있습니다. 모두 아주 바빠 보입니다.",
+  "sample_adv": "This picture shows a construction site where a new building is going up. In the center, two workers wearing yellow hard hats and safety vests are carrying a long wooden board together. On the left, a man who seems to be the supervisor is looking at blueprints while speaking into a radio. In the foreground, bricks and tools are piled on the ground, and there is a wheelbarrow next to a pile of sand. In the background, a tall crane is lifting steel beams. It seems like the project is still in its early stages.",
+  "sample_adv_ko": "이 사진은 새 건물이 올라가고 있는 공사 현장을 보여 줍니다. 가운데에 노란 안전모와 안전 조끼를 입은 인부 두 명이 긴 나무 판자를 함께 나르고 있습니다. 왼쪽에는 현장 감독으로 보이는 남자가 무전기에 말하면서 설계도를 보고 있습니다. 앞쪽에는 벽돌과 공구가 땅에 쌓여 있고, 모래 더미 옆에 외바퀴 수레가 있습니다. 뒤쪽에는 높은 크레인이 철근을 들어 올리고 있습니다. 공사가 아직 초기 단계인 것 같습니다.",
+  "tips": [
+   "공사장 단어: hard hat, safety vest, blueprint, wheelbarrow, crane",
+   "사람 추측: a man who seems to be the supervisor"
+  ]
+ },
+ {
+  "id": "dp-011",
+  "setting": "상점",
+  "scene_ko": "옷가게 안. 여자 손님이 거울 앞에서 재킷을 몸에 대 보고 있고, 점원이 옆에서 다른 옷을 들고 있다. 옷걸이에 옷들이 색깔별로 걸려 있다.",
+  "elements": [
+   {
+    "where": "가운데",
+    "ko": "여자가 거울 앞에서 재킷을 몸에 대 보고 있다",
+    "en": "A woman is holding a jacket up to herself in front of a mirror."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "점원이 셔츠 두 벌을 들고 도와주고 있다",
+    "en": "On the right, a sales clerk is holding two shirts and helping her."
+   },
+   {
+    "where": "왼쪽",
+    "ko": "옷걸이에 옷이 색깔별로 걸려 있다",
+    "en": "On the left, clothes are hanging on racks and sorted by color."
+   },
+   {
+    "where": "앞쪽",
+    "ko": "탁자 위에 개어 놓은 스웨터가 쌓여 있다",
+    "en": "In the front, folded sweaters are stacked on a display table."
+   },
+   {
+    "where": "배경",
+    "ko": "벽에 할인 표지판이 붙어 있다",
+    "en": "In the background, there is a sale sign on the wall."
+   }
+  ],
+  "sample": "This picture was taken in a clothing store. In the middle, a woman is holding a jacket in front of a mirror. On the right, a clerk is holding two shirts and helping her. On the left, many clothes are hanging on racks. There is a sale sign on the wall. I think she is going to buy the jacket.",
+  "sample_ko": "이 사진은 옷가게에서 찍었습니다. 가운데에 여자가 거울 앞에서 재킷을 들고 있습니다. 오른쪽에는 점원이 셔츠 두 벌을 들고 그녀를 돕고 있습니다. 왼쪽에는 옷걸이에 옷이 많이 걸려 있습니다. 벽에 할인 표지판이 있습니다. 그녀가 그 재킷을 살 것 같습니다.",
+  "sample_adv": "This photo was taken inside a clothing store. In the center, a woman with short hair is holding a denim jacket up to herself and checking how it looks in a full-length mirror. Beside her, a friendly sales clerk is holding two more shirts, probably suggesting other options. On the left, clothes are neatly hung on racks and sorted by color, and folded sweaters are stacked on a table in front. There's a big sale sign on the back wall, so I guess the store is having a seasonal sale.",
+  "sample_adv_ko": "이 사진은 옷가게 안에서 찍었습니다. 가운데에 짧은 머리의 여자가 청재킷을 몸에 대고 전신 거울로 어울리는지 보고 있습니다. 옆에서는 친절한 점원이 셔츠 두 벌을 더 들고 있는데, 아마 다른 옷을 권하는 것 같습니다. 왼쪽에는 옷이 옷걸이에 색깔별로 깔끔하게 걸려 있고, 앞쪽 탁자에는 갠 스웨터가 쌓여 있습니다. 뒷벽에 큰 할인 표지판이 있어서 시즌 세일 중인 것 같습니다.",
+  "tips": [
+   "상점 표현: hold A up to oneself, try on, be stacked on a table, sales clerk",
+   "표지판이 보이면 so I guess ~ 로 추측으로 연결"
+  ]
+ },
+ {
+  "id": "dp-012",
+  "setting": "도서관",
+  "scene_ko": "조용한 도서관. 여학생이 책장 앞에서 책을 꺼내고 있고, 긴 책상에는 학생들이 앉아 공부하고 있다. 사서가 안내 데스크에서 컴퓨터를 보고 있다.",
+  "elements": [
+   {
+    "where": "왼쪽",
+    "ko": "여학생이 책장에서 책을 꺼내고 있다",
+    "en": "On the left, a female student is taking a book off a shelf."
+   },
+   {
+    "where": "가운데",
+    "ko": "학생 세 명이 긴 책상에 앉아 공부하고 있다",
+    "en": "Three students are sitting at a long table and studying quietly."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "사서가 안내 데스크에서 컴퓨터 화면을 보고 있다",
+    "en": "On the right, a librarian is looking at a computer screen at the front desk."
+   },
+   {
+    "where": "앞쪽",
+    "ko": "책상 위에 펼친 책과 노트가 있다",
+    "en": "There are open books and notebooks on the table in the foreground."
+   },
+   {
+    "where": "배경",
+    "ko": "높은 책장이 줄지어 서 있다",
+    "en": "In the background, tall bookshelves are lined up in rows."
+   }
+  ],
+  "sample": "This is a picture of a library. On the left, a student is taking a book off the shelf. In the middle, three students are sitting at a long table and studying. On the right, a librarian is working on a computer. In the background, there are many tall bookshelves. It looks very quiet.",
+  "sample_ko": "도서관 사진입니다. 왼쪽에는 학생이 책장에서 책을 꺼내고 있습니다. 가운데에는 학생 세 명이 긴 책상에 앉아 공부하고 있습니다. 오른쪽에는 사서가 컴퓨터로 일하고 있습니다. 뒤쪽에 높은 책장이 많이 있습니다. 아주 조용해 보입니다.",
+  "sample_adv": "This picture was taken in a large public library. On the left, a young woman is reaching up and taking a book off a high shelf. In the middle of the room, three students are sitting at a long wooden table, and they are focusing on their books and laptops. On the right, a librarian is sitting at the front desk and looking at her computer screen. Tall bookshelves are lined up in rows in the background. The atmosphere seems calm, so I think many students come here to prepare for exams.",
+  "sample_adv_ko": "이 사진은 큰 공공 도서관에서 찍었습니다. 왼쪽에는 젊은 여자가 손을 뻗어 높은 칸에서 책을 꺼내고 있습니다. 방 가운데에는 학생 세 명이 긴 나무 책상에 앉아 책과 노트북에 집중하고 있습니다. 오른쪽에는 사서가 안내 데스크에 앉아 컴퓨터 화면을 보고 있습니다. 뒤쪽에는 높은 책장이 줄지어 서 있습니다. 분위기가 차분해서 많은 학생들이 시험 준비하러 오는 곳 같습니다.",
+  "tips": [
+   "도서관 표현: take a book off a shelf, reach up, be focusing on ~",
+   "분위기 형용사: quiet, calm, peaceful"
+  ]
+ },
+ {
+  "id": "dp-013",
+  "setting": "주방",
+  "scene_ko": "식당 주방. 흰 모자를 쓴 요리사가 프라이팬으로 채소를 볶고 있고, 다른 요리사는 도마에서 양파를 썰고 있다. 선반에 냄비와 팬이 걸려 있다.",
+  "elements": [
+   {
+    "where": "가운데",
+    "ko": "요리사가 가스레인지에서 프라이팬을 흔들며 볶고 있다",
+    "en": "A chef is stir-frying vegetables in a pan on the stove."
+   },
+   {
+    "where": "왼쪽",
+    "ko": "다른 요리사가 도마에서 양파를 썰고 있다",
+    "en": "On the left, another cook is chopping onions on a cutting board."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "완성된 접시들이 배식대에 놓여 있다",
+    "en": "On the right, finished dishes are waiting on the counter."
+   },
+   {
+    "where": "뒤쪽",
+    "ko": "벽 선반에 냄비와 팬이 걸려 있다",
+    "en": "In the back, pots and pans are hanging on a metal rack."
+   },
+   {
+    "where": "전체",
+    "ko": "주방 전체가 스테인리스로 되어 있다",
+    "en": "The whole kitchen is made of shiny stainless steel."
+   }
+  ],
+  "sample": "This picture was taken in a restaurant kitchen. In the middle, a chef in a white hat is cooking vegetables in a pan. On the left, another cook is cutting onions. On the right, some dishes are ready on the counter. In the back, pots and pans are hanging on the wall. They look very busy.",
+  "sample_ko": "이 사진은 식당 주방에서 찍었습니다. 가운데에 흰 모자를 쓴 요리사가 팬에 채소를 요리하고 있습니다. 왼쪽에는 다른 요리사가 양파를 썰고 있습니다. 오른쪽에는 요리 몇 개가 카운터에 준비되어 있습니다. 뒤쪽 벽에는 냄비와 팬이 걸려 있습니다. 아주 바빠 보입니다.",
+  "sample_adv": "This scene is set in a professional kitchen. The main person is a chef in a tall white hat who is stir-frying vegetables in a large pan, and I can see a little steam rising from it. To his left, another cook is chopping onions on a cutting board very quickly. On the right, several finished plates are lined up on the counter, waiting to be served. In the back, pots and pans are hanging on a metal rack. It must be dinner time because everyone is moving so fast.",
+  "sample_adv_ko": "이 장면은 전문 주방입니다. 주인공은 높은 흰 모자를 쓴 요리사로, 큰 팬에 채소를 볶고 있고 팬에서 김이 조금 올라오는 게 보입니다. 그 왼쪽에서는 다른 요리사가 도마 위에서 양파를 아주 빠르게 썰고 있습니다. 오른쪽에는 완성된 접시 여러 개가 카운터에 줄지어 나갈 준비를 하고 있습니다. 뒤쪽에는 냄비와 팬이 금속 선반에 걸려 있습니다. 모두 아주 빨리 움직이는 걸 보니 저녁 시간인가 봅니다.",
+  "tips": [
+   "요리 동사: chop, stir-fry, pour, slice, be lined up",
+   "It must be ~ because ~ 로 근거 있는 추측"
+  ]
+ },
+ {
+  "id": "dp-014",
+  "setting": "창고",
+  "scene_ko": "큰 물류 창고. 지게차가 상자가 쌓인 팔레트를 들어 올리고 있고, 직원이 태블릿으로 재고를 확인하고 있다. 높은 선반에 상자가 가득하다.",
+  "elements": [
+   {
+    "where": "가운데",
+    "ko": "지게차가 상자 팔레트를 들어 올리고 있다",
+    "en": "A forklift is lifting a pallet of boxes off the floor."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "조끼를 입은 직원이 태블릿으로 재고를 확인하고 있다",
+    "en": "On the right, a worker in a safety vest is checking inventory on a tablet."
+   },
+   {
+    "where": "왼쪽",
+    "ko": "다른 직원이 상자를 테이프로 포장하고 있다",
+    "en": "On the left, another worker is sealing a box with tape."
+   },
+   {
+    "where": "배경",
+    "ko": "높은 선반에 상자가 가득 쌓여 있다",
+    "en": "In the background, tall shelves are stacked with cardboard boxes."
+   },
+   {
+    "where": "앞쪽",
+    "ko": "바닥에 노란 선이 그어져 있다",
+    "en": "There are yellow lines painted on the floor in the front."
+   }
+  ],
+  "sample": "This is a picture of a large warehouse. In the middle, a forklift is lifting a pallet of boxes. On the right, a worker in a vest is checking something on a tablet. On the left, another worker is putting tape on a box. In the background, there are tall shelves full of boxes. It looks very organized.",
+  "sample_ko": "큰 창고 사진입니다. 가운데에 지게차가 상자 팔레트를 들어 올리고 있습니다. 오른쪽에는 조끼를 입은 직원이 태블릿으로 무언가를 확인하고 있습니다. 왼쪽에는 다른 직원이 상자에 테이프를 붙이고 있습니다. 뒤쪽에는 상자가 가득한 높은 선반이 있습니다. 아주 잘 정리되어 보입니다.",
+  "sample_adv": "This picture was taken inside a huge distribution warehouse. In the center, a forklift driver is lifting a pallet loaded with boxes, maybe to move it onto a higher shelf. On the right, a woman wearing an orange safety vest is scanning items with a tablet, so she is probably checking the inventory. On the left, a man is sealing a box with packing tape. Tall metal shelves stacked with cardboard boxes fill the background. Everything looks well organized, and I guess they are preparing a big shipment.",
+  "sample_adv_ko": "이 사진은 거대한 물류 창고 안에서 찍었습니다. 가운데에서 지게차 기사가 상자를 실은 팔레트를 들어 올리고 있는데, 아마 더 높은 선반으로 옮기려는 것 같습니다. 오른쪽에는 주황색 안전 조끼를 입은 여자가 태블릿으로 물건을 스캔하고 있으니 재고를 확인하는 중일 것입니다. 왼쪽에는 남자가 포장 테이프로 상자를 봉하고 있습니다. 뒤쪽은 종이 상자가 쌓인 높은 금속 선반으로 가득합니다. 모든 것이 잘 정리되어 있고, 큰 출하를 준비하는 것 같습니다.",
+  "tips": [
+   "창고 단어: forklift, pallet, inventory, shipment, seal a box",
+   "행동 뒤에 maybe to ~ 로 목적을 짧게 추측"
+  ]
+ },
+ {
+  "id": "dp-015",
+  "setting": "강의실",
+  "scene_ko": "대학 강의실. 교수가 화이트보드에 수식을 쓰고 있고, 학생들이 계단식 좌석에 앉아 필기하고 있다. 한 학생은 손을 들고 있다.",
+  "elements": [
+   {
+    "where": "앞쪽",
+    "ko": "교수가 화이트보드에 수식을 쓰고 있다",
+    "en": "At the front, a professor is writing an equation on the whiteboard."
+   },
+   {
+    "where": "가운데",
+    "ko": "학생들이 계단식 좌석에 앉아 필기하고 있다",
+    "en": "Students are sitting in rows and taking notes."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "한 학생이 질문하려고 손을 들고 있다",
+    "en": "On the right, a student is raising her hand to ask a question."
+   },
+   {
+    "where": "왼쪽",
+    "ko": "남학생이 노트북으로 녹음하고 있다",
+    "en": "On the left, a male student is recording the lecture on his laptop."
+   },
+   {
+    "where": "배경",
+    "ko": "큰 창문으로 햇빛이 들어온다",
+    "en": "Sunlight is coming in through the large windows."
+   }
+  ],
+  "sample": "This picture was taken in a classroom at a university. At the front, a professor is writing on the whiteboard. Many students are sitting in rows and taking notes. On the right, a student is raising her hand. On the left, a student is using a laptop. Sunlight is coming in through the windows. The class looks interesting.",
+  "sample_ko": "이 사진은 대학 강의실에서 찍었습니다. 앞쪽에서 교수가 화이트보드에 쓰고 있습니다. 많은 학생들이 줄지어 앉아 필기하고 있습니다. 오른쪽에는 학생이 손을 들고 있습니다. 왼쪽에는 학생이 노트북을 사용하고 있습니다. 창문으로 햇빛이 들어옵니다. 수업이 재미있어 보입니다.",
+  "sample_adv": "This photo shows a lecture hall at a university. At the front of the room, a professor with gray hair is writing a long math equation on the whiteboard. About twenty students are sitting in rows and taking notes carefully. On the right, a young woman is raising her hand, so she probably has a question. On the left, a male student is typing on his laptop. Bright sunlight is coming in through the large windows. The students seem very focused, so maybe they have an exam coming up soon.",
+  "sample_adv_ko": "이 사진은 대학 강의실을 보여 줍니다. 강의실 앞에서 회색 머리의 교수가 화이트보드에 긴 수학 공식을 쓰고 있습니다. 스무 명쯤의 학생들이 줄지어 앉아 꼼꼼히 필기하고 있습니다. 오른쪽에는 젊은 여자가 손을 들고 있으니 아마 질문이 있는 것 같습니다. 왼쪽에는 남학생이 노트북으로 타자를 치고 있습니다. 큰 창문으로 밝은 햇빛이 들어옵니다. 학생들이 아주 집중한 걸 보니 곧 시험이 있는 것 같습니다.",
+  "tips": [
+   "수업 표현: take notes, raise one's hand, write on the whiteboard",
+   "사람 수는 About twenty students 처럼 대략으로 말해도 된다"
+  ]
+ },
+ {
+  "id": "dp-016",
+  "setting": "병원 대기실",
+  "scene_ko": "병원 대기실. 환자들이 의자에 앉아 순서를 기다리고 있고, 접수 직원이 한 남자에게 서류를 건네고 있다. 벽에 텔레비전이 걸려 있다.",
+  "elements": [
+   {
+    "where": "오른쪽",
+    "ko": "접수 직원이 남자에게 서류를 건네고 있다",
+    "en": "On the right, a receptionist is handing a form to a man at the desk."
+   },
+   {
+    "where": "가운데",
+    "ko": "여러 사람이 의자에 앉아 기다리고 있다",
+    "en": "Several people are sitting in chairs and waiting for their turn."
+   },
+   {
+    "where": "왼쪽",
+    "ko": "엄마가 아이에게 그림책을 읽어 주고 있다",
+    "en": "On the left, a mother is reading a picture book to her son."
+   },
+   {
+    "where": "앞쪽",
+    "ko": "낮은 탁자 위에 잡지가 놓여 있다",
+    "en": "In the front, there are magazines on a low coffee table."
+   },
+   {
+    "where": "배경",
+    "ko": "벽에 텔레비전이 걸려 있다",
+    "en": "A television is mounted on the wall in the background."
+   }
+  ],
+  "sample": "This picture was taken in the waiting room of a hospital. On the right, a receptionist is giving a form to a man. In the middle, several people are sitting and waiting. On the left, a mother is reading a book to her child. There are magazines on the table. A TV is on the wall. Everyone looks patient.",
+  "sample_ko": "이 사진은 병원 대기실에서 찍었습니다. 오른쪽에는 접수 직원이 남자에게 서류를 주고 있습니다. 가운데에는 여러 사람이 앉아서 기다리고 있습니다. 왼쪽에는 엄마가 아이에게 책을 읽어 주고 있습니다. 탁자에 잡지가 있습니다. 벽에 텔레비전이 있습니다. 모두 차분하게 기다리는 것 같습니다.",
+  "sample_adv": "This scene takes place in a clinic waiting room. At the reception desk on the right, a receptionist in a light blue uniform is handing a clipboard to a man, so he probably needs to fill out a form. In the middle, several patients are sitting in a row of chairs and waiting for their names to be called. On the left, a mother is reading a picture book to her little son. There are some magazines on a low table, and a television is mounted on the wall. It looks like a calm morning at the clinic.",
+  "sample_adv_ko": "이 장면은 병원 대기실입니다. 오른쪽 접수 데스크에서 하늘색 유니폼을 입은 접수 직원이 남자에게 클립보드를 건네고 있으니, 아마 서류를 작성해야 하는 것 같습니다. 가운데에는 환자 여러 명이 줄지은 의자에 앉아 이름이 불리기를 기다리고 있습니다. 왼쪽에는 엄마가 어린 아들에게 그림책을 읽어 주고 있습니다. 낮은 탁자에 잡지가 있고, 벽에는 텔레비전이 걸려 있습니다. 병원의 차분한 아침 같습니다.",
+  "tips": [
+   "병원 표현: fill out a form, wait for one's name to be called, receptionist",
+   "be mounted on the wall 은 벽에 고정된 TV·모니터에 쓰기 좋다"
+  ]
+ },
+ {
+  "id": "dp-017",
+  "setting": "호텔 로비",
+  "scene_ko": "고급 호텔 로비. 부부가 프런트에서 체크인하고 있고, 벨보이가 짐 수레를 밀고 있다. 천장에 큰 샹들리에가 있다.",
+  "elements": [
+   {
+    "where": "가운데",
+    "ko": "부부가 프런트에서 체크인하고 있다",
+    "en": "A couple is checking in at the front desk."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "벨보이가 여행 가방을 실은 수레를 밀고 있다",
+    "en": "On the right, a bellhop is pushing a luggage cart with suitcases."
+   },
+   {
+    "where": "왼쪽",
+    "ko": "남자가 소파에 앉아 노트북을 보고 있다",
+    "en": "On the left, a man is sitting on a sofa and working on his laptop."
+   },
+   {
+    "where": "앞쪽",
+    "ko": "대리석 바닥에 큰 꽃병이 놓여 있다",
+    "en": "There is a large vase of flowers on a table in the foreground."
+   },
+   {
+    "where": "배경",
+    "ko": "천장에 큰 샹들리에가 매달려 있다",
+    "en": "A big crystal chandelier is hanging from the ceiling."
+   }
+  ],
+  "sample": "This is a picture of a hotel lobby. In the middle, a couple is checking in at the front desk. On the right, a hotel worker is pushing a cart with suitcases. On the left, a man is sitting on a sofa with his laptop. There is a big chandelier on the ceiling. The hotel looks very nice.",
+  "sample_ko": "호텔 로비 사진입니다. 가운데에서 부부가 프런트에서 체크인하고 있습니다. 오른쪽에는 호텔 직원이 가방을 실은 수레를 밀고 있습니다. 왼쪽에는 남자가 노트북을 들고 소파에 앉아 있습니다. 천장에 큰 샹들리에가 있습니다. 호텔이 아주 좋아 보입니다.",
+  "sample_adv": "This picture was taken in the lobby of an elegant hotel. In the center, a middle-aged couple is checking in at the front desk, and the clerk is handing them a room key. On the right, a bellhop in a red uniform is pushing a luggage cart loaded with suitcases toward the elevators. On the left, a businessman is sitting on a leather sofa and working on his laptop. There is a large vase of flowers in the foreground, and a crystal chandelier is hanging from the ceiling. It seems like a luxury hotel.",
+  "sample_adv_ko": "이 사진은 고급스러운 호텔 로비에서 찍었습니다. 가운데에서 중년 부부가 프런트에서 체크인하고 있고, 직원이 객실 열쇠를 건네고 있습니다. 오른쪽에는 빨간 제복을 입은 벨보이가 여행 가방을 실은 수레를 엘리베이터 쪽으로 밀고 있습니다. 왼쪽에는 사업가가 가죽 소파에 앉아 노트북으로 일하고 있습니다. 앞쪽에 큰 꽃병이 있고, 천장에는 크리스털 샹들리에가 매달려 있습니다. 고급 호텔 같습니다.",
+  "tips": [
+   "호텔 표현: check in, front desk, bellhop, luggage cart",
+   "toward ~ 로 움직이는 방향까지 말하면 묘사가 풍부해진다"
+  ]
+ },
+ {
+  "id": "dp-018",
+  "setting": "버스 정류장",
+  "scene_ko": "비 오는 날 버스 정류장. 사람들이 우산을 들고 지붕 아래에서 버스를 기다리고 있다. 버스 한 대가 정류장으로 들어오고 있다.",
+  "elements": [
+   {
+    "where": "가운데",
+    "ko": "사람들이 정류장 지붕 아래에서 기다리고 있다",
+    "en": "People are waiting for the bus under the shelter."
+   },
+   {
+    "where": "왼쪽",
+    "ko": "여자가 빨간 우산을 들고 휴대폰을 보고 있다",
+    "en": "On the left, a woman holding a red umbrella is checking her phone."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "버스가 정류장으로 들어오고 있다",
+    "en": "On the right, a city bus is pulling up to the stop."
+   },
+   {
+    "where": "앞쪽",
+    "ko": "인도에 물웅덩이가 있다",
+    "en": "There are puddles on the sidewalk in the foreground."
+   },
+   {
+    "where": "배경",
+    "ko": "자동차들이 젖은 도로를 달리고 있다",
+    "en": "In the background, cars are driving on the wet road."
+   }
+  ],
+  "sample": "This picture was taken at a bus stop on a rainy day. In the middle, people are waiting under the shelter. On the left, a woman with a red umbrella is looking at her phone. On the right, a bus is coming to the stop. There are puddles on the sidewalk. The weather looks cold and wet.",
+  "sample_ko": "이 사진은 비 오는 날 버스 정류장에서 찍었습니다. 가운데에 사람들이 정류장 지붕 아래에서 기다리고 있습니다. 왼쪽에는 빨간 우산을 든 여자가 휴대폰을 보고 있습니다. 오른쪽에는 버스가 정류장으로 오고 있습니다. 인도에 물웅덩이가 있습니다. 날씨가 춥고 축축해 보입니다.",
+  "sample_adv": "This photo shows a bus stop on a gloomy, rainy day. In the middle, about five people are standing under the shelter to stay dry, and a few of them are holding folded umbrellas. On the left, a woman holding a bright red umbrella is checking her phone, maybe looking at the bus schedule. On the right, a city bus is pulling up to the stop. There are puddles on the sidewalk, and cars are driving slowly on the wet road. I guess everyone is on the way to work.",
+  "sample_adv_ko": "이 사진은 우중충하고 비 오는 날의 버스 정류장을 보여 줍니다. 가운데에 다섯 명쯤이 비를 피하려고 정류장 지붕 아래 서 있고, 몇 명은 접은 우산을 들고 있습니다. 왼쪽에는 새빨간 우산을 든 여자가 휴대폰을 보고 있는데, 버스 시간표를 확인하는 것 같습니다. 오른쪽에는 시내버스가 정류장에 들어와 서고 있습니다. 인도에 물웅덩이가 있고, 차들이 젖은 도로를 천천히 달리고 있습니다. 모두 출근하는 길인 것 같습니다.",
+  "tips": [
+   "날씨가 핵심이면 첫 문장에 넣기: on a rainy day",
+   "pull up to ~ = 차가 와서 서다"
+  ]
+ },
+ {
+  "id": "dp-019",
+  "setting": "항구",
+  "scene_ko": "작은 항구. 어부 두 명이 배에서 그물을 끌어 올리고 있다. 부두에는 배들이 묶여 있고 갈매기가 날고 있다.",
+  "elements": [
+   {
+    "where": "가운데",
+    "ko": "어부 두 명이 배 위에서 그물을 끌어 올리고 있다",
+    "en": "Two fishermen are pulling a net onto their boat."
+   },
+   {
+    "where": "앞쪽",
+    "ko": "부두에 생선 상자가 쌓여 있다",
+    "en": "In the foreground, boxes of fish are piled up on the dock."
+   },
+   {
+    "where": "왼쪽",
+    "ko": "남자가 밧줄로 배를 기둥에 묶고 있다",
+    "en": "On the left, a man is tying a boat to a post with a rope."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "작은 배 여러 척이 나란히 정박해 있다",
+    "en": "On the right, several small boats are docked side by side."
+   },
+   {
+    "where": "배경",
+    "ko": "갈매기들이 하늘을 날고 언덕에 집들이 있다",
+    "en": "In the background, seagulls are flying over houses on a hill."
+   }
+  ],
+  "sample": "This is a picture of a small harbor. In the middle, two fishermen are pulling a net onto their boat. On the left, a man is tying a boat with a rope. On the right, many small boats are parked side by side. There are boxes of fish on the dock. In the background, birds are flying in the sky.",
+  "sample_ko": "작은 항구 사진입니다. 가운데에 어부 두 명이 그물을 배 위로 끌어 올리고 있습니다. 왼쪽에는 남자가 밧줄로 배를 묶고 있습니다. 오른쪽에는 작은 배 여러 척이 나란히 정박해 있습니다. 부두에는 생선 상자가 있습니다. 뒤쪽에는 새들이 하늘을 날고 있습니다.",
+  "sample_adv": "This picture was taken at a small fishing harbor early in the morning. In the center, two fishermen in rubber boots are pulling a heavy net onto their boat. On the left, an older man is tying a boat to a wooden post with a thick rope. On the right, several small boats are docked side by side, and boxes of fresh fish are piled up on the dock. In the background, seagulls are flying over colorful houses on a hill. It seems like they had a good catch today.",
+  "sample_adv_ko": "이 사진은 이른 아침 작은 어항에서 찍었습니다. 가운데에서 고무장화를 신은 어부 두 명이 무거운 그물을 배 위로 끌어 올리고 있습니다. 왼쪽에는 나이 든 남자가 굵은 밧줄로 배를 나무 기둥에 묶고 있습니다. 오른쪽에는 작은 배 여러 척이 나란히 정박해 있고, 부두에는 신선한 생선 상자가 쌓여 있습니다. 뒤쪽에는 갈매기들이 언덕 위 알록달록한 집들 위로 날고 있습니다. 오늘 고기가 많이 잡힌 것 같습니다.",
+  "tips": [
+   "항구 표현: dock, be docked side by side, pull a net, tie A to B",
+   "have a good catch = 고기를 많이 잡다"
+  ]
+ },
+ {
+  "id": "dp-020",
+  "setting": "농장",
+  "scene_ko": "넓은 농장. 농부가 밀짚모자를 쓰고 바구니에 딸기를 따 담고 있다. 뒤쪽에 빨간 헛간과 트랙터가 보인다.",
+  "elements": [
+   {
+    "where": "가운데",
+    "ko": "밀짚모자를 쓴 농부가 딸기를 따고 있다",
+    "en": "A farmer in a straw hat is picking strawberries."
+   },
+   {
+    "where": "앞쪽",
+    "ko": "딸기가 가득 든 바구니가 땅에 놓여 있다",
+    "en": "In the front, a basket full of strawberries is sitting on the ground."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "아이가 물뿌리개로 식물에 물을 주고 있다",
+    "en": "On the right, a child is watering plants with a watering can."
+   },
+   {
+    "where": "왼쪽",
+    "ko": "밭고랑이 길게 이어져 있다",
+    "en": "On the left, long rows of plants stretch across the field."
+   },
+   {
+    "where": "배경",
+    "ko": "빨간 헛간과 트랙터가 있다",
+    "en": "In the background, there is a red barn and a green tractor."
+   }
+  ],
+  "sample": "This picture was taken on a farm. In the middle, a farmer in a straw hat is picking strawberries. There is a basket full of strawberries on the ground. On the right, a child is watering plants. In the background, I can see a red barn and a tractor. It looks like a peaceful day.",
+  "sample_ko": "이 사진은 농장에서 찍었습니다. 가운데에 밀짚모자를 쓴 농부가 딸기를 따고 있습니다. 땅에 딸기가 가득 든 바구니가 있습니다. 오른쪽에는 아이가 식물에 물을 주고 있습니다. 뒤쪽에는 빨간 헛간과 트랙터가 보입니다. 평화로운 날 같습니다.",
+  "sample_adv": "This photo shows a large farm in the countryside. In the center, a farmer wearing a straw hat and gloves is kneeling down and picking strawberries. Next to him, a basket filled with ripe red strawberries is sitting on the ground. On the right, a little girl is watering some plants with a small watering can, so she might be the farmer's daughter. Long rows of plants stretch across the field, and there is a red barn and a tractor in the background. It must be harvest season.",
+  "sample_adv_ko": "이 사진은 시골의 넓은 농장을 보여 줍니다. 가운데에 밀짚모자와 장갑을 낀 농부가 무릎을 꿇고 딸기를 따고 있습니다. 그 옆 땅에는 잘 익은 빨간 딸기가 가득 든 바구니가 놓여 있습니다. 오른쪽에는 어린 여자아이가 작은 물뿌리개로 식물에 물을 주고 있는데, 농부의 딸인 것 같습니다. 긴 밭고랑이 들판을 가로질러 이어지고, 뒤쪽에는 빨간 헛간과 트랙터가 있습니다. 수확철인 게 분명합니다.",
+  "tips": [
+   "자세 동사: kneel down, bend over, crouch",
+   "농장 단어: barn, tractor, field, harvest season"
+  ]
+ },
+ {
+  "id": "dp-021",
+  "setting": "해변",
+  "scene_ko": "여름 해변. 아이 둘이 모래성을 쌓고 있고, 파라솔 아래 여자가 책을 읽고 있다. 바다에서는 사람들이 수영을 하고 있다.",
+  "elements": [
+   {
+    "where": "앞쪽",
+    "ko": "아이 둘이 모래성을 쌓고 있다",
+    "en": "In the foreground, two children are building a sandcastle."
+   },
+   {
+    "where": "왼쪽",
+    "ko": "여자가 파라솔 아래 의자에 누워 책을 읽고 있다",
+    "en": "On the left, a woman is lying under a beach umbrella and reading a book."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "남자가 서핑보드를 들고 바다 쪽으로 걸어가고 있다",
+    "en": "On the right, a man is carrying a surfboard toward the water."
+   },
+   {
+    "where": "가운데",
+    "ko": "사람들이 파도 속에서 수영하고 있다",
+    "en": "In the middle, some people are swimming in the waves."
+   },
+   {
+    "where": "배경",
+    "ko": "수평선에 요트가 떠 있다",
+    "en": "There is a sailboat on the horizon in the background."
+   }
+  ],
+  "sample": "This picture was taken at a beach in summer. In the front, two kids are building a sandcastle. On the left, a woman is reading a book under an umbrella. On the right, a man is carrying a surfboard to the water. Some people are swimming in the ocean. It looks like a hot summer day.",
+  "sample_ko": "이 사진은 여름 해변에서 찍었습니다. 앞쪽에서 아이 둘이 모래성을 쌓고 있습니다. 왼쪽에는 여자가 파라솔 아래에서 책을 읽고 있습니다. 오른쪽에는 남자가 서핑보드를 들고 물가로 가고 있습니다. 몇 사람이 바다에서 수영하고 있습니다. 더운 여름날 같습니다.",
+  "sample_adv": "This photo shows a crowded beach on a hot summer day. In the foreground, two young kids are building a sandcastle with plastic buckets and shovels. On the left, a woman in sunglasses is lying on a beach chair under a striped umbrella and reading a novel. On the right, a man in a wetsuit is carrying a surfboard toward the water. In the middle, several people are swimming in the waves, and I can see a sailboat on the horizon. Everyone seems to be enjoying their vacation.",
+  "sample_adv_ko": "이 사진은 무더운 여름날 붐비는 해변을 보여 줍니다. 앞쪽에서 어린아이 둘이 플라스틱 양동이와 삽으로 모래성을 쌓고 있습니다. 왼쪽에는 선글라스를 낀 여자가 줄무늬 파라솔 아래 비치 의자에 누워 소설을 읽고 있습니다. 오른쪽에는 잠수복을 입은 남자가 서핑보드를 들고 물 쪽으로 가고 있습니다. 가운데에는 여러 사람이 파도 속에서 수영하고 있고, 수평선에 요트가 보입니다. 모두 휴가를 즐기는 것 같습니다.",
+  "tips": [
+   "해변 표현: build a sandcastle, lie under a beach umbrella, on the horizon",
+   "seem to be enjoying ~ 으로 마무리하면 자연스럽다"
+  ]
+ },
+ {
+  "id": "dp-022",
+  "setting": "강변 자전거길",
+  "scene_ko": "강을 따라 난 자전거 도로. 헬멧을 쓴 두 사람이 나란히 자전거를 타고 있고, 한 남자는 조깅을 하고 있다. 강 건너편에 다리가 보인다.",
+  "elements": [
+   {
+    "where": "가운데",
+    "ko": "헬멧 쓴 두 사람이 나란히 자전거를 타고 있다",
+    "en": "Two people wearing helmets are riding bikes side by side."
+   },
+   {
+    "where": "왼쪽",
+    "ko": "남자가 이어폰을 끼고 조깅하고 있다",
+    "en": "On the left, a man with earphones is jogging along the path."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "강물이 길을 따라 흐르고 있다",
+    "en": "On the right, a river is running along the bike path."
+   },
+   {
+    "where": "앞쪽",
+    "ko": "길 옆에 벤치와 쓰레기통이 있다",
+    "en": "In the front, there is a bench next to a trash can."
+   },
+   {
+    "where": "배경",
+    "ko": "강을 가로지르는 큰 다리가 있다",
+    "en": "In the background, a large bridge stretches across the river."
+   }
+  ],
+  "sample": "This picture was taken on a bike path next to a river. In the middle, two people with helmets are riding bikes. On the left, a man is jogging. On the right, there is a river. In the background, I can see a big bridge. It looks like a good place to exercise.",
+  "sample_ko": "이 사진은 강 옆 자전거 도로에서 찍었습니다. 가운데에 헬멧을 쓴 두 사람이 자전거를 타고 있습니다. 왼쪽에는 남자가 조깅하고 있습니다. 오른쪽에는 강이 있습니다. 뒤쪽에 큰 다리가 보입니다. 운동하기 좋은 곳 같습니다.",
+  "sample_adv": "This photo was taken along a riverside bike path, probably in the early evening. In the middle, a couple wearing helmets and sportswear is riding bicycles side by side. On the left, a man with earphones is jogging in the opposite direction. The river is running along the right side of the path, and the water looks calm. There is a bench and a trash can in the foreground, and a large bridge stretches across the river in the background. It seems like a popular spot for people who exercise after work.",
+  "sample_adv_ko": "이 사진은 강변 자전거 도로에서 찍었고, 아마 이른 저녁인 것 같습니다. 가운데에 헬멧과 운동복 차림의 커플이 나란히 자전거를 타고 있습니다. 왼쪽에는 이어폰을 낀 남자가 반대 방향으로 조깅하고 있습니다. 길 오른쪽을 따라 강이 흐르고 있고, 물이 잔잔해 보입니다. 앞쪽에 벤치와 쓰레기통이 있고, 뒤쪽에는 큰 다리가 강을 가로지르고 있습니다. 퇴근 후 운동하는 사람들에게 인기 있는 곳 같습니다.",
+  "tips": [
+   "운동 표현: ride a bike, jog, side by side, in the opposite direction",
+   "stretch across ~ = 가로질러 뻗어 있다 (다리·들판)"
+  ]
+ },
+ {
+  "id": "dp-023",
+  "setting": "슈퍼마켓",
+  "scene_ko": "슈퍼마켓 계산대. 계산원이 물건을 바코드 스캐너에 찍고 있고, 손님이 컨베이어에 물건을 올리고 있다. 뒤에 다른 손님들이 카트를 밀며 줄을 서 있다.",
+  "elements": [
+   {
+    "where": "가운데",
+    "ko": "계산원이 물건 바코드를 찍고 있다",
+    "en": "A cashier is scanning items at the checkout counter."
+   },
+   {
+    "where": "앞쪽",
+    "ko": "여자가 컨베이어 벨트에 물건을 올리고 있다",
+    "en": "A woman is putting groceries on the conveyor belt."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "점원이 물건을 봉투에 담고 있다",
+    "en": "On the right, a store clerk is packing items into paper bags."
+   },
+   {
+    "where": "뒤쪽",
+    "ko": "손님들이 카트를 밀며 줄을 서 있다",
+    "en": "Behind them, other customers are waiting in line with shopping carts."
+   },
+   {
+    "where": "배경",
+    "ko": "진열대에 상품이 가득하다",
+    "en": "In the background, the shelves are full of products."
+   }
+  ],
+  "sample": "This picture was taken at a supermarket checkout. In the middle, a cashier is scanning items. A woman is putting her groceries on the belt. On the right, a clerk is putting things into bags. Behind them, other people are waiting in line with carts. The store looks crowded.",
+  "sample_ko": "이 사진은 슈퍼마켓 계산대에서 찍었습니다. 가운데에 계산원이 물건을 찍고 있습니다. 여자가 장 본 물건을 벨트에 올리고 있습니다. 오른쪽에는 점원이 물건을 봉투에 담고 있습니다. 그 뒤로 다른 사람들이 카트를 들고 줄을 서 있습니다. 가게가 붐벼 보입니다.",
+  "sample_adv": "This scene takes place at the checkout area of a big supermarket. In the center, a cashier in a green apron is scanning items one by one. In front of her, a woman is unloading groceries like milk, bread, and vegetables onto the conveyor belt. On the right, a young clerk is packing everything into paper bags. Behind them, several customers are waiting in line with full shopping carts, and the shelves in the background are packed with products. It's probably a weekend, because the line is pretty long.",
+  "sample_adv_ko": "이 장면은 큰 슈퍼마켓의 계산대 구역입니다. 가운데에 초록 앞치마를 두른 계산원이 물건을 하나씩 찍고 있습니다. 그 앞에서 여자가 우유, 빵, 채소 같은 장 본 물건을 컨베이어 벨트에 내려놓고 있습니다. 오른쪽에는 젊은 점원이 모든 물건을 종이봉투에 담고 있습니다. 그 뒤로 손님 여러 명이 가득 찬 카트를 들고 줄을 서 있고, 뒤쪽 진열대에는 상품이 꽉 차 있습니다. 줄이 꽤 긴 걸 보니 아마 주말인 것 같습니다.",
+  "tips": [
+   "계산대 표현: scan items, conveyor belt, pack into bags, wait in line",
+   "물건 나열은 like A, B, and C 로 짧게"
+  ]
+ },
+ {
+  "id": "dp-024",
+  "setting": "체육관",
+  "scene_ko": "헬스장. 여자가 러닝머신에서 달리고 있고, 남자는 트레이너의 도움을 받아 역기를 들고 있다. 벽면이 거울로 되어 있다.",
+  "elements": [
+   {
+    "where": "왼쪽",
+    "ko": "여자가 러닝머신에서 달리고 있다",
+    "en": "On the left, a woman is running on a treadmill."
+   },
+   {
+    "where": "가운데",
+    "ko": "남자가 벤치에 누워 역기를 들고 있다",
+    "en": "In the middle, a man is lying on a bench and lifting weights."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "트레이너가 옆에서 지켜보며 도와주고 있다",
+    "en": "A trainer is standing next to him and helping him."
+   },
+   {
+    "where": "앞쪽",
+    "ko": "바닥에 아령이 줄지어 놓여 있다",
+    "en": "In the front, dumbbells are lined up on a rack."
+   },
+   {
+    "where": "배경",
+    "ko": "벽 전체가 거울로 되어 있다",
+    "en": "There is a large mirror covering the back wall."
+   }
+  ],
+  "sample": "This picture was taken in a gym. On the left, a woman is running on a treadmill. In the middle, a man is lying on a bench and lifting weights. A trainer is standing next to him and helping him. There are many dumbbells in the front. There is a big mirror on the wall. They are working out hard.",
+  "sample_ko": "이 사진은 헬스장에서 찍었습니다. 왼쪽에는 여자가 러닝머신에서 달리고 있습니다. 가운데에는 남자가 벤치에 누워 역기를 들고 있습니다. 트레이너가 옆에 서서 도와주고 있습니다. 앞쪽에 아령이 많이 있습니다. 벽에 큰 거울이 있습니다. 모두 열심히 운동하고 있습니다.",
+  "sample_adv": "This photo shows the inside of a fitness center. On the left, a woman with a ponytail is running on a treadmill and wiping sweat off her face with a towel. In the middle, a muscular man is lying on a bench and lifting a heavy barbell. A personal trainer is standing beside him with his hands ready, just in case. In the foreground, dumbbells of different sizes are lined up on a rack, and a huge mirror covers the back wall. They all look very motivated.",
+  "sample_adv_ko": "이 사진은 피트니스 센터 내부를 보여 줍니다. 왼쪽에는 머리를 묶은 여자가 러닝머신에서 달리며 수건으로 얼굴의 땀을 닦고 있습니다. 가운데에는 근육질 남자가 벤치에 누워 무거운 바벨을 들고 있습니다. 개인 트레이너가 혹시 몰라 손을 대기한 채 옆에 서 있습니다. 앞쪽에는 여러 크기의 아령이 거치대에 줄지어 있고, 큰 거울이 뒷벽을 덮고 있습니다. 모두 의욕이 넘쳐 보입니다.",
+  "tips": [
+   "운동 표현: run on a treadmill, lift weights, work out",
+   "just in case = 혹시 몰라서 — 추측 문장에 유용"
+  ]
+ },
+ {
+  "id": "dp-025",
+  "setting": "미술관",
+  "scene_ko": "미술관 전시실. 관람객들이 큰 그림 앞에 서서 감상하고 있고, 안내원이 그림을 설명하고 있다. 벽에 액자들이 일정한 간격으로 걸려 있다.",
+  "elements": [
+   {
+    "where": "가운데",
+    "ko": "관람객 몇 명이 큰 풍경화 앞에 서 있다",
+    "en": "A group of visitors is standing in front of a large landscape painting."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "안내원이 손짓하며 그림을 설명하고 있다",
+    "en": "On the right, a tour guide is explaining the painting with hand gestures."
+   },
+   {
+    "where": "왼쪽",
+    "ko": "남자가 벤치에 앉아 스케치하고 있다",
+    "en": "On the left, a man is sitting on a bench and sketching in a notebook."
+   },
+   {
+    "where": "배경",
+    "ko": "벽에 액자들이 일정한 간격으로 걸려 있다",
+    "en": "Framed pictures are hanging on the walls at equal distances."
+   },
+   {
+    "where": "전체",
+    "ko": "바닥은 반짝이는 나무 바닥이다",
+    "en": "The room has a shiny wooden floor and bright lights."
+   }
+  ],
+  "sample": "This is a picture of an art museum. In the middle, some visitors are standing in front of a big painting. On the right, a guide is explaining the painting. On the left, a man is sitting on a bench and drawing. There are many paintings on the walls. It looks very quiet and calm.",
+  "sample_ko": "미술관 사진입니다. 가운데에 관람객 몇 명이 큰 그림 앞에 서 있습니다. 오른쪽에는 안내원이 그림을 설명하고 있습니다. 왼쪽에는 남자가 벤치에 앉아 그림을 그리고 있습니다. 벽에 그림이 많이 있습니다. 아주 조용하고 차분해 보입니다.",
+  "sample_adv": "This picture was taken in a gallery at an art museum. In the center, a small group of visitors is standing in front of a huge landscape painting, and they are listening carefully. On the right, a tour guide is explaining the artwork and gesturing toward it with her hand. On the left, a young man is sitting on a bench and sketching in his notebook, so he might be an art student. Framed paintings are hanging evenly on the white walls. The room feels very calm and elegant.",
+  "sample_adv_ko": "이 사진은 미술관 전시실에서 찍었습니다. 가운데에 관람객 몇 명이 거대한 풍경화 앞에 서서 열심히 듣고 있습니다. 오른쪽에는 안내원이 손으로 작품을 가리키며 설명하고 있습니다. 왼쪽에는 젊은 남자가 벤치에 앉아 공책에 스케치하고 있는데, 미술 전공 학생일지도 모릅니다. 하얀 벽에는 액자 그림들이 고르게 걸려 있습니다. 전시실이 아주 차분하고 우아한 느낌입니다.",
+  "tips": [
+   "관람 표현: be standing in front of ~, gesture toward ~, sketch",
+   "느낌 마무리: The room feels calm and elegant."
+  ]
+ },
+ {
+  "id": "dp-026",
+  "setting": "꽃집",
+  "scene_ko": "작은 꽃집. 플로리스트가 작업대에서 꽃다발을 포장하고 있고, 손님이 옆에서 지켜보고 있다. 가게 앞 양동이마다 꽃이 꽂혀 있다.",
+  "elements": [
+   {
+    "where": "가운데",
+    "ko": "플로리스트가 꽃다발을 종이로 포장하고 있다",
+    "en": "A florist is wrapping a bouquet of roses in paper."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "남자 손님이 지갑을 꺼내며 기다리고 있다",
+    "en": "On the right, a male customer is taking out his wallet and waiting."
+   },
+   {
+    "where": "앞쪽",
+    "ko": "양동이마다 다양한 꽃이 꽂혀 있다",
+    "en": "In the foreground, buckets are filled with many kinds of flowers."
+   },
+   {
+    "where": "왼쪽",
+    "ko": "선반 위에 작은 화분들이 놓여 있다",
+    "en": "On the left, small potted plants are arranged on a shelf."
+   },
+   {
+    "where": "배경",
+    "ko": "벽에 마른 꽃 장식이 걸려 있다",
+    "en": "In the background, dried flowers are hanging on the wall."
+   }
+  ],
+  "sample": "This picture was taken in a flower shop. In the middle, a florist is wrapping a bunch of roses. On the right, a man is taking out his wallet. In the front, there are buckets full of colorful flowers. On the left, there are small plants on a shelf. The shop looks very pretty.",
+  "sample_ko": "이 사진은 꽃집에서 찍었습니다. 가운데에 플로리스트가 장미 한 다발을 포장하고 있습니다. 오른쪽에는 남자가 지갑을 꺼내고 있습니다. 앞쪽에는 알록달록한 꽃이 가득한 양동이가 있습니다. 왼쪽 선반에는 작은 식물들이 있습니다. 가게가 아주 예뻐 보입니다.",
+  "sample_adv": "This photo shows a small, charming flower shop. In the center, a florist wearing an apron is wrapping a bouquet of red roses in brown paper at her worktable. On the right, a man in a suit is taking out his wallet, so he is about to pay. In the foreground, metal buckets are filled with tulips, sunflowers, and lilies. On the left, small potted plants are arranged neatly on a wooden shelf. The roses are probably a gift, maybe for an anniversary or a birthday.",
+  "sample_adv_ko": "이 사진은 작고 아기자기한 꽃집을 보여 줍니다. 가운데에 앞치마를 두른 플로리스트가 작업대에서 빨간 장미 꽃다발을 갈색 종이로 포장하고 있습니다. 오른쪽에는 정장을 입은 남자가 지갑을 꺼내고 있으니 곧 계산하려는 것 같습니다. 앞쪽에는 금속 양동이에 튤립, 해바라기, 백합이 가득 꽂혀 있습니다. 왼쪽 나무 선반에는 작은 화분들이 깔끔하게 놓여 있습니다. 장미는 아마 기념일이나 생일 선물일 것입니다.",
+  "tips": [
+   "be about to ~ = 막 ~하려는 참이다",
+   "꽃 이름 나열은 tulips, sunflowers, and lilies 처럼 3개로"
+  ]
+ },
+ {
+  "id": "dp-027",
+  "setting": "실험실",
+  "scene_ko": "연구 실험실. 흰 가운을 입은 연구원이 현미경을 들여다보고 있고, 다른 연구원이 시험관에 액체를 붓고 있다. 선반에 유리병이 가득하다.",
+  "elements": [
+   {
+    "where": "가운데",
+    "ko": "흰 가운을 입은 여자가 현미경을 들여다보고 있다",
+    "en": "A woman in a white lab coat is looking into a microscope."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "남자가 보안경을 쓰고 시험관에 액체를 붓고 있다",
+    "en": "On the right, a man wearing safety glasses is pouring liquid into a test tube."
+   },
+   {
+    "where": "앞쪽",
+    "ko": "실험대 위에 시험관 꽂이가 있다",
+    "en": "In the front, there is a rack of test tubes on the lab bench."
+   },
+   {
+    "where": "왼쪽",
+    "ko": "컴퓨터 모니터에 그래프가 떠 있다",
+    "en": "On the left, a computer monitor is showing some data charts."
+   },
+   {
+    "where": "배경",
+    "ko": "선반에 유리병이 줄지어 있다",
+    "en": "In the background, glass bottles are lined up on the shelves."
+   }
+  ],
+  "sample": "This picture was taken in a laboratory. In the middle, a woman in a white coat is looking into a microscope. On the right, a man with safety glasses is pouring something into a test tube. There is a computer on the left. In the background, many glass bottles are on the shelves. They look very serious.",
+  "sample_ko": "이 사진은 실험실에서 찍었습니다. 가운데에 흰 가운을 입은 여자가 현미경을 들여다보고 있습니다. 오른쪽에는 보안경을 쓴 남자가 시험관에 무언가를 붓고 있습니다. 왼쪽에 컴퓨터가 있습니다. 뒤쪽 선반에는 유리병이 많이 있습니다. 모두 아주 진지해 보입니다.",
+  "sample_adv": "This photo was taken inside a research laboratory. In the center, a female scientist in a white lab coat is looking into a microscope and adjusting it carefully. On the right, her colleague, who is wearing safety glasses and gloves, is pouring a blue liquid into a test tube. On the left, a computer monitor is displaying some charts, and there is a rack of test tubes on the bench. Glass bottles are lined up on the shelves in the back. I think they are testing a new medicine.",
+  "sample_adv_ko": "이 사진은 연구 실험실 안에서 찍었습니다. 가운데에 흰 실험 가운을 입은 여성 과학자가 현미경을 들여다보며 조심스럽게 조절하고 있습니다. 오른쪽에는 보안경과 장갑을 낀 동료가 시험관에 파란 액체를 붓고 있습니다. 왼쪽에는 컴퓨터 모니터에 차트가 떠 있고, 실험대 위에 시험관 꽂이가 있습니다. 뒤쪽 선반에는 유리병이 줄지어 있습니다. 새로운 약을 시험하는 것 같습니다.",
+  "tips": [
+   "실험실 단어: lab coat, microscope, test tube, safety glasses",
+   "관계대명사 who is wearing ~ 로 문장을 길고 자연스럽게"
+  ]
+ },
+ {
+  "id": "dp-028",
+  "setting": "복사실",
+  "scene_ko": "사무실 복사실. 남자가 복합기에 서류를 넣고 버튼을 누르고 있다. 옆에서 여자가 종이 상자를 열어 용지를 꺼내고 있다.",
+  "elements": [
+   {
+    "where": "가운데",
+    "ko": "남자가 복사기 버튼을 누르고 있다",
+    "en": "A man is pressing a button on the copy machine."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "여자가 상자에서 복사 용지를 꺼내고 있다",
+    "en": "On the right, a woman is taking paper out of a box."
+   },
+   {
+    "where": "왼쪽",
+    "ko": "탁자 위에 복사된 서류가 쌓여 있다",
+    "en": "On the left, copies are stacked neatly on a small table."
+   },
+   {
+    "where": "앞쪽",
+    "ko": "바닥에 용지 상자가 쌓여 있다",
+    "en": "There are boxes of paper piled on the floor."
+   },
+   {
+    "where": "배경",
+    "ko": "벽에 게시판이 붙어 있다",
+    "en": "In the background, a bulletin board is hanging on the wall."
+   }
+  ],
+  "sample": "This picture was taken in a copy room in an office. In the middle, a man is pressing a button on the copy machine. On the right, a woman is taking paper out of a box. On the left, there are some copies on a table. There is a bulletin board on the wall. They seem to be preparing for a meeting.",
+  "sample_ko": "이 사진은 사무실 복사실에서 찍었습니다. 가운데에 남자가 복사기 버튼을 누르고 있습니다. 오른쪽에는 여자가 상자에서 종이를 꺼내고 있습니다. 왼쪽 탁자에는 복사된 서류가 있습니다. 벽에 게시판이 있습니다. 회의를 준비하는 것 같습니다.",
+  "sample_adv": "This scene takes place in a small copy room at an office. In the middle, a man with glasses is pressing a button on a large copy machine while holding a document in his other hand. On the right, a woman is kneeling down and taking a pack of paper out of a box, maybe to refill the machine. On the left, freshly printed copies are stacked neatly on a table. A bulletin board covered with notices is hanging on the wall. It looks like they are preparing handouts for an important meeting.",
+  "sample_adv_ko": "이 장면은 사무실의 작은 복사실입니다. 가운데에 안경 쓴 남자가 한 손에 서류를 들고 큰 복사기 버튼을 누르고 있습니다. 오른쪽에는 여자가 무릎을 꿇고 상자에서 종이 한 묶음을 꺼내고 있는데, 아마 복사기에 종이를 채우려는 것 같습니다. 왼쪽 탁자에는 막 출력된 복사본이 깔끔하게 쌓여 있습니다. 공지가 가득 붙은 게시판이 벽에 걸려 있습니다. 중요한 회의 자료를 준비하는 것 같습니다.",
+  "tips": [
+   "사무기기 표현: press a button, copy machine, refill the paper, handouts",
+   "while + ~ing 로 동시 동작 표현"
+  ]
+ },
+ {
+  "id": "dp-029",
+  "setting": "주차장",
+  "scene_ko": "쇼핑몰 야외 주차장. 여자가 차 트렁크에 장 본 봉투를 싣고 있고, 남자가 카트를 반납하고 있다. 차들이 줄지어 주차되어 있다.",
+  "elements": [
+   {
+    "where": "가운데",
+    "ko": "여자가 차 트렁크에 쇼핑백을 싣고 있다",
+    "en": "A woman is loading shopping bags into the trunk of her car."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "남자가 빈 카트를 카트 보관소로 밀고 있다",
+    "en": "On the right, a man is pushing an empty cart back to the cart area."
+   },
+   {
+    "where": "왼쪽",
+    "ko": "차 한 대가 주차 공간에서 빠져나가고 있다",
+    "en": "On the left, a car is backing out of a parking space."
+   },
+   {
+    "where": "앞쪽",
+    "ko": "바닥에 흰 주차선이 그어져 있다",
+    "en": "White parking lines are painted on the ground in the foreground."
+   },
+   {
+    "where": "배경",
+    "ko": "쇼핑몰 건물과 간판이 보인다",
+    "en": "In the background, I can see a shopping mall with a large sign."
+   }
+  ],
+  "sample": "This is a picture of a parking lot. In the middle, a woman is putting shopping bags into the trunk of her car. On the right, a man is pushing an empty cart. On the left, a car is leaving its parking space. In the background, there is a shopping mall. It looks like a busy shopping day.",
+  "sample_ko": "주차장 사진입니다. 가운데에 여자가 차 트렁크에 쇼핑백을 넣고 있습니다. 오른쪽에는 남자가 빈 카트를 밀고 있습니다. 왼쪽에는 차 한 대가 주차 공간에서 나가고 있습니다. 뒤쪽에 쇼핑몰이 있습니다. 쇼핑객이 많은 날 같습니다.",
+  "sample_adv": "This picture was taken in the outdoor parking lot of a shopping mall. In the center, a woman with sunglasses on her head is loading several shopping bags into the trunk of her silver car. On the right, a man is pushing an empty shopping cart back to the cart return area. On the left, a white car is slowly backing out of a parking space. Rows of cars are parked between the white lines, and the mall is in the background. Since almost every space is full, it must be a holiday sale.",
+  "sample_adv_ko": "이 사진은 쇼핑몰 야외 주차장에서 찍었습니다. 가운데에 선글라스를 머리에 얹은 여자가 은색 차 트렁크에 쇼핑백 여러 개를 싣고 있습니다. 오른쪽에는 남자가 빈 카트를 카트 반납 구역으로 밀고 있습니다. 왼쪽에는 흰 차가 주차 공간에서 천천히 후진해 나가고 있습니다. 흰 선 사이에 차들이 줄지어 주차되어 있고, 뒤쪽에 쇼핑몰이 있습니다. 거의 모든 자리가 차 있으니 명절 세일인 게 분명합니다.",
+  "tips": [
+   "차 관련 표현: load A into the trunk, back out of a parking space, be parked",
+   "Since ~, it must be ~ 로 근거와 추측을 한 문장에"
+  ]
+ },
+ {
+  "id": "dp-030",
+  "setting": "야외 카페 테라스",
+  "scene_ko": "거리 옆 카페 테라스. 두 여자가 파라솔 아래 테이블에서 커피를 마시며 이야기하고 있다. 종업원이 옆 테이블을 치우고 있다.",
+  "elements": [
+   {
+    "where": "가운데",
+    "ko": "두 여자가 커피를 마시며 대화하고 있다",
+    "en": "Two women are having coffee and talking at a table under an umbrella."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "종업원이 빈 컵을 쟁반에 담아 테이블을 치우고 있다",
+    "en": "On the right, a server is clearing a table and putting cups on a tray."
+   },
+   {
+    "where": "왼쪽",
+    "ko": "남자가 혼자 앉아 신문을 읽고 있다",
+    "en": "On the left, a man is sitting alone and reading a newspaper."
+   },
+   {
+    "where": "앞쪽",
+    "ko": "화분들이 테라스 가장자리에 놓여 있다",
+    "en": "In the foreground, flower pots are placed along the edge of the patio."
+   },
+   {
+    "where": "배경",
+    "ko": "사람들이 거리를 걸어가고 있다",
+    "en": "In the background, people are walking along the street."
+   }
+  ],
+  "sample": "This picture was taken at an outdoor cafe. In the middle, two women are drinking coffee and talking under an umbrella. On the right, a server is cleaning a table. On the left, a man is reading a newspaper alone. In the background, people are walking on the street. It looks like a relaxing afternoon.",
+  "sample_ko": "이 사진은 야외 카페에서 찍었습니다. 가운데에 두 여자가 파라솔 아래에서 커피를 마시며 이야기하고 있습니다. 오른쪽에는 종업원이 테이블을 치우고 있습니다. 왼쪽에는 남자가 혼자 신문을 읽고 있습니다. 뒤쪽에는 사람들이 거리를 걷고 있습니다. 여유로운 오후 같습니다.",
+  "sample_adv": "This photo shows the outdoor patio of a cafe next to a street. In the middle, two women are sitting at a round table under a large umbrella. They are holding coffee cups and chatting, and one of them is laughing. On the right, a server is clearing a table and putting empty cups on a tray. On the left, a man is sitting by himself and reading a newspaper. Flower pots line the edge of the patio, and pedestrians are passing by in the background. It seems like they are old friends catching up.",
+  "sample_adv_ko": "이 사진은 거리 옆 카페의 야외 테라스를 보여 줍니다. 가운데에 두 여자가 큰 파라솔 아래 둥근 테이블에 앉아 있습니다. 커피잔을 들고 이야기하고 있고, 한 명은 웃고 있습니다. 오른쪽에는 종업원이 테이블을 치우며 빈 컵을 쟁반에 담고 있습니다. 왼쪽에는 남자가 혼자 앉아 신문을 읽고 있습니다. 화분들이 테라스 가장자리를 따라 놓여 있고, 뒤쪽으로 행인들이 지나가고 있습니다. 오랜 친구 사이가 근황을 나누는 것 같습니다.",
+  "tips": [
+   "clear a table = 테이블을 치우다 (토익 빈출)",
+   "catch up = 밀린 이야기를 나누다 — 친구 장면 마무리에"
+  ]
+ },
+ {
+  "id": "dp-031",
+  "setting": "호텔 객실",
+  "scene_ko": "호텔 객실. 청소 직원이 침대 시트를 정리하고 있고, 문 앞에는 청소 카트가 놓여 있다. 창문 밖으로 바다가 보인다.",
+  "elements": [
+   {
+    "where": "가운데",
+    "ko": "청소 직원이 침대에 흰 시트를 펴고 있다",
+    "en": "A housekeeper is spreading a clean white sheet over the bed."
+   },
+   {
+    "where": "왼쪽",
+    "ko": "문 앞에 수건이 쌓인 청소 카트가 있다",
+    "en": "On the left, there is a cleaning cart with towels near the door."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "탁자 위에 램프와 물병이 놓여 있다",
+    "en": "On the right, there is a lamp and a bottle of water on the nightstand."
+   },
+   {
+    "where": "앞쪽",
+    "ko": "바닥에 진공청소기가 놓여 있다",
+    "en": "A vacuum cleaner is standing on the carpet in the foreground."
+   },
+   {
+    "where": "배경",
+    "ko": "큰 창문 밖으로 바다가 보인다",
+    "en": "In the background, the ocean is visible through a large window."
+   }
+  ],
+  "sample": "This picture was taken in a hotel room. In the middle, a hotel worker is making the bed with a white sheet. On the left, there is a cleaning cart with towels. On the right, there is a lamp on a small table. Through the window, I can see the ocean. The room looks clean and comfortable.",
+  "sample_ko": "이 사진은 호텔 객실에서 찍었습니다. 가운데에 호텔 직원이 흰 시트로 침대를 정리하고 있습니다. 왼쪽에는 수건이 실린 청소 카트가 있습니다. 오른쪽 작은 탁자에는 램프가 있습니다. 창문으로 바다가 보입니다. 방이 깨끗하고 편안해 보입니다.",
+  "sample_adv": "This photo was taken in a hotel room with an ocean view. In the center, a housekeeper in a gray uniform is spreading a fresh white sheet over the bed. On the left, near the door, there is a cleaning cart loaded with towels and small bottles of shampoo. On the right, a lamp and a bottle of water are placed on the nightstand, and a vacuum cleaner is standing on the carpet. Through the large window, I can see the blue ocean. I guess she is getting the room ready for new guests.",
+  "sample_adv_ko": "이 사진은 바다 전망 호텔 객실에서 찍었습니다. 가운데에 회색 유니폼을 입은 청소 직원이 침대에 새 흰 시트를 펴고 있습니다. 왼쪽 문 근처에는 수건과 작은 샴푸병이 실린 청소 카트가 있습니다. 오른쪽 협탁에는 램프와 물병이 놓여 있고, 카펫 위에는 진공청소기가 서 있습니다. 큰 창문으로 파란 바다가 보입니다. 새 손님을 위해 방을 준비하는 것 같습니다.",
+  "tips": [
+   "make the bed = 침대를 정리하다, housekeeper = 객실 청소 직원",
+   "be visible through ~ = ~ 너머로 보이다"
+  ]
+ },
+ {
+  "id": "dp-032",
+  "setting": "행사 등록 데스크",
+  "scene_ko": "컨퍼런스 등록 데스크. 직원 두 명이 참가자에게 이름표를 나눠 주고 있다. 참가자들이 줄을 서 있고 뒤에 행사 현수막이 걸려 있다.",
+  "elements": [
+   {
+    "where": "가운데",
+    "ko": "직원이 참가자에게 이름표를 건네고 있다",
+    "en": "A staff member is handing a name tag to an attendee."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "다른 직원이 노트북으로 명단을 확인하고 있다",
+    "en": "On the right, another staff member is checking a list on a laptop."
+   },
+   {
+    "where": "앞쪽",
+    "ko": "참가자들이 줄을 서서 기다리고 있다",
+    "en": "In the foreground, attendees are standing in line and waiting."
+   },
+   {
+    "where": "왼쪽",
+    "ko": "탁자에 안내 책자가 쌓여 있다",
+    "en": "On the left, brochures are piled on the end of the table."
+   },
+   {
+    "where": "배경",
+    "ko": "행사 현수막이 벽에 걸려 있다",
+    "en": "In the background, a large banner for the event is hanging on the wall."
+   }
+  ],
+  "sample": "This picture was taken at a registration desk for a conference. In the middle, a staff member is giving a name tag to a man. On the right, another worker is checking a list on a laptop. In front, people are waiting in line. There is a big banner on the wall. It looks like a big event.",
+  "sample_ko": "이 사진은 컨퍼런스 등록 데스크에서 찍었습니다. 가운데에 직원이 남자에게 이름표를 주고 있습니다. 오른쪽에는 다른 직원이 노트북으로 명단을 확인하고 있습니다. 앞쪽에는 사람들이 줄을 서서 기다리고 있습니다. 벽에 큰 현수막이 있습니다. 큰 행사 같습니다.",
+  "sample_adv": "This scene takes place at the registration desk of a business conference. In the center, a smiling staff member is handing a name tag to an attendee in a dark suit. Next to her, another staff member is checking names on a laptop. In front of the desk, a line of people with badges and coffee cups is waiting for their turn. Brochures are piled on the table, and a large banner with the event logo is hanging on the wall. It seems the conference is about to begin.",
+  "sample_adv_ko": "이 장면은 비즈니스 컨퍼런스의 등록 데스크입니다. 가운데에 웃는 얼굴의 직원이 짙은 정장을 입은 참가자에게 이름표를 건네고 있습니다. 그 옆에서는 다른 직원이 노트북으로 이름을 확인하고 있습니다. 데스크 앞에는 배지와 커피잔을 든 사람들이 줄을 서서 차례를 기다리고 있습니다. 탁자에는 안내 책자가 쌓여 있고, 벽에는 행사 로고가 있는 큰 현수막이 걸려 있습니다. 컨퍼런스가 곧 시작될 것 같습니다.",
+  "tips": [
+   "행사 단어: attendee, name tag, registration desk, banner, brochure",
+   "It seems ~ is about to begin 으로 상황 추측"
+  ]
+ },
+ {
+  "id": "dp-033",
+  "setting": "서점",
+  "scene_ko": "서점 안. 남자가 쪼그려 앉아 아래 칸의 책을 고르고 있고, 여자는 서서 책을 훑어보고 있다. 가운데 진열대에 신간이 놓여 있다.",
+  "elements": [
+   {
+    "where": "왼쪽",
+    "ko": "남자가 쪼그려 앉아 아래 칸에서 책을 고르고 있다",
+    "en": "On the left, a man is crouching down and choosing a book from the bottom shelf."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "여자가 서서 책장을 넘기며 훑어보고 있다",
+    "en": "On the right, a woman is standing and flipping through a book."
+   },
+   {
+    "where": "가운데",
+    "ko": "진열대에 신간 책이 펼쳐져 있다",
+    "en": "In the middle, new books are displayed on a low table."
+   },
+   {
+    "where": "앞쪽",
+    "ko": "추천 도서 표지판이 서 있다",
+    "en": "There is a small sign for recommended books in the foreground."
+   },
+   {
+    "where": "배경",
+    "ko": "계산대에서 점원이 책을 봉투에 넣고 있다",
+    "en": "In the background, a clerk is putting books into a bag at the register."
+   }
+  ],
+  "sample": "This is a picture of a bookstore. On the left, a man is sitting down and choosing a book from the bottom shelf. On the right, a woman is looking through a book. In the middle, there are new books on a table. In the background, a clerk is working at the counter. The bookstore looks quiet and nice.",
+  "sample_ko": "서점 사진입니다. 왼쪽에는 남자가 앉아서 아래 칸의 책을 고르고 있습니다. 오른쪽에는 여자가 책을 훑어보고 있습니다. 가운데에는 탁자에 신간이 있습니다. 뒤쪽에는 점원이 계산대에서 일하고 있습니다. 서점이 조용하고 좋아 보입니다.",
+  "sample_adv": "This picture was taken inside a cozy bookstore. On the left, a man with a backpack is crouching down and searching for a book on the bottom shelf. On the right, a woman in a long coat is flipping through a novel, and she looks really interested in it. In the middle, the latest bestsellers are displayed on a low table with a recommendation sign. In the background, a clerk is putting books into a paper bag at the register. It looks like a nice place to spend a rainy afternoon.",
+  "sample_adv_ko": "이 사진은 아늑한 서점 안에서 찍었습니다. 왼쪽에는 배낭을 멘 남자가 쪼그려 앉아 맨 아래 칸에서 책을 찾고 있습니다. 오른쪽에는 긴 코트를 입은 여자가 소설책을 훑어보고 있는데, 아주 관심 있어 보입니다. 가운데에는 최신 베스트셀러가 추천 표지판과 함께 낮은 탁자에 진열되어 있습니다. 뒤쪽에서는 점원이 계산대에서 책을 종이봉투에 담고 있습니다. 비 오는 오후를 보내기 좋은 곳 같습니다.",
+  "tips": [
+   "flip through = 책장을 훑어보다, crouch down = 쪼그려 앉다",
+   "진열 표현: be displayed on a table"
+  ]
+ },
+ {
+  "id": "dp-034",
+  "setting": "주택 정원",
+  "scene_ko": "주택 앞마당. 남자가 잔디 깎는 기계를 밀고 있고, 여자는 무릎을 꿇고 화단에 꽃을 심고 있다. 하얀 울타리와 집이 뒤에 있다.",
+  "elements": [
+   {
+    "where": "왼쪽",
+    "ko": "남자가 잔디 깎는 기계를 밀고 있다",
+    "en": "On the left, a man is pushing a lawn mower across the grass."
+   },
+   {
+    "where": "가운데",
+    "ko": "여자가 무릎을 꿇고 화단에 꽃을 심고 있다",
+    "en": "In the middle, a woman is kneeling and planting flowers in a garden bed."
+   },
+   {
+    "where": "앞쪽",
+    "ko": "꽃 모종이 담긴 쟁반과 삽이 있다",
+    "en": "In the front, there is a tray of small plants and a shovel."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "정원 호스가 감겨 있다",
+    "en": "On the right, a garden hose is rolled up next to the steps."
+   },
+   {
+    "where": "배경",
+    "ko": "하얀 울타리가 있는 2층 집이 있다",
+    "en": "In the background, there is a two-story house with a white fence."
+   }
+  ],
+  "sample": "This picture was taken in the front yard of a house. On the left, a man is mowing the lawn. In the middle, a woman is planting flowers in the garden. In the front, there are small plants and a shovel. In the background, there is a house with a white fence. It looks like a nice weekend.",
+  "sample_ko": "이 사진은 주택 앞마당에서 찍었습니다. 왼쪽에는 남자가 잔디를 깎고 있습니다. 가운데에는 여자가 정원에 꽃을 심고 있습니다. 앞쪽에는 작은 모종과 삽이 있습니다. 뒤쪽에는 흰 울타리가 있는 집이 있습니다. 즐거운 주말 같습니다.",
+  "sample_adv": "This photo shows the front yard of a house on a sunny day. On the left, a man in a cap is pushing a lawn mower across the grass. In the middle, a woman wearing gardening gloves is kneeling down and planting yellow flowers in a garden bed. In the foreground, there is a tray of young plants and a small shovel, and a garden hose is rolled up on the right. Behind them, there is a two-story house with a white fence. I think they are a couple taking care of their garden together.",
+  "sample_adv_ko": "이 사진은 화창한 날 주택 앞마당을 보여 줍니다. 왼쪽에는 모자를 쓴 남자가 잔디 깎는 기계를 밀고 있습니다. 가운데에는 원예 장갑을 낀 여자가 무릎을 꿇고 화단에 노란 꽃을 심고 있습니다. 앞쪽에는 어린 모종이 담긴 쟁반과 작은 삽이 있고, 오른쪽에는 정원 호스가 감겨 있습니다. 그 뒤로 흰 울타리가 있는 2층 집이 있습니다. 부부가 함께 정원을 가꾸는 것 같습니다.",
+  "tips": [
+   "정원 표현: mow the lawn, plant flowers, garden hose, be rolled up",
+   "two-story house = 2층 집"
+  ]
+ },
+ {
+  "id": "dp-035",
+  "setting": "공장",
+  "scene_ko": "공장 조립 라인. 작업복을 입은 직원들이 컨베이어 벨트를 따라 서서 부품을 조립하고 있다. 관리자가 클립보드를 들고 확인하고 있다.",
+  "elements": [
+   {
+    "where": "가운데",
+    "ko": "직원들이 컨베이어 벨트를 따라 서서 부품을 조립하고 있다",
+    "en": "Workers are standing along a conveyor belt and assembling parts."
+   },
+   {
+    "where": "앞쪽",
+    "ko": "여자가 보호 장갑을 끼고 제품을 검사하고 있다",
+    "en": "In the front, a woman wearing protective gloves is inspecting a product."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "관리자가 클립보드에 무언가를 적고 있다",
+    "en": "On the right, a supervisor is writing something on a clipboard."
+   },
+   {
+    "where": "왼쪽",
+    "ko": "완성품 상자가 쌓여 있다",
+    "en": "On the left, boxes of finished products are stacked up."
+   },
+   {
+    "where": "배경",
+    "ko": "천장에 큰 기계와 조명이 있다",
+    "en": "In the background, there are large machines and bright ceiling lights."
+   }
+  ],
+  "sample": "This picture was taken in a factory. In the middle, workers are standing along a conveyor belt and putting parts together. In the front, a woman with gloves is checking a product. On the right, a manager is writing on a clipboard. On the left, there are boxes. The factory looks clean and busy.",
+  "sample_ko": "이 사진은 공장에서 찍었습니다. 가운데에 직원들이 컨베이어 벨트를 따라 서서 부품을 조립하고 있습니다. 앞쪽에는 장갑을 낀 여자가 제품을 확인하고 있습니다. 오른쪽에는 관리자가 클립보드에 적고 있습니다. 왼쪽에는 상자들이 있습니다. 공장이 깨끗하고 바빠 보입니다.",
+  "sample_adv": "This scene is set on the assembly line of a factory. In the center, several workers in blue uniforms and caps are standing along a conveyor belt and assembling small electronic parts. In the foreground, a woman wearing protective gloves is inspecting a finished product very closely. On the right, a supervisor is walking along the line and writing notes on a clipboard. Boxes of finished products are stacked up on the left. The workplace looks very clean and efficient, so I guess they follow strict quality standards.",
+  "sample_adv_ko": "이 장면은 공장의 조립 라인입니다. 가운데에 파란 작업복과 모자를 쓴 직원 여러 명이 컨베이어 벨트를 따라 서서 작은 전자 부품을 조립하고 있습니다. 앞쪽에는 보호 장갑을 낀 여자가 완성품을 아주 꼼꼼히 검사하고 있습니다. 오른쪽에는 관리자가 라인을 따라 걸으며 클립보드에 메모하고 있습니다. 왼쪽에는 완성품 상자가 쌓여 있습니다. 작업장이 매우 깨끗하고 효율적으로 보여서 엄격한 품질 기준을 지키는 것 같습니다.",
+  "tips": [
+   "공장 표현: assembly line, assemble parts, inspect a product, supervisor",
+   "여러 사람이 같은 일을 하면 Several workers are ~ 한 문장으로 묶기"
+  ]
+ },
+ {
+  "id": "dp-036",
+  "setting": "캠핑장",
+  "scene_ko": "숲속 캠핑장. 남자가 텐트를 치고 있고, 여자는 휴대용 버너로 요리하고 있다. 아이가 모닥불 옆 의자에 앉아 있다.",
+  "elements": [
+   {
+    "where": "왼쪽",
+    "ko": "남자가 텐트 기둥을 세우고 있다",
+    "en": "On the left, a man is setting up a tent."
+   },
+   {
+    "where": "가운데",
+    "ko": "여자가 휴대용 버너로 냄비에 요리하고 있다",
+    "en": "In the middle, a woman is cooking in a pot on a camping stove."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "아이가 접이식 의자에 앉아 마시멜로를 굽고 있다",
+    "en": "On the right, a child is sitting in a folding chair and toasting marshmallows."
+   },
+   {
+    "where": "앞쪽",
+    "ko": "모닥불과 장작 더미가 있다",
+    "en": "In the front, there is a small campfire and a pile of firewood."
+   },
+   {
+    "where": "배경",
+    "ko": "키 큰 소나무들이 둘러싸고 있다",
+    "en": "In the background, tall pine trees surround the campsite."
+   }
+  ],
+  "sample": "This picture was taken at a campsite in the forest. On the left, a man is setting up a tent. In the middle, a woman is cooking on a small stove. On the right, a child is sitting in a chair near the campfire. In the background, there are tall trees. The family looks happy.",
+  "sample_ko": "이 사진은 숲속 캠핑장에서 찍었습니다. 왼쪽에는 남자가 텐트를 치고 있습니다. 가운데에는 여자가 작은 버너로 요리하고 있습니다. 오른쪽에는 아이가 모닥불 근처 의자에 앉아 있습니다. 뒤쪽에는 키 큰 나무들이 있습니다. 가족이 행복해 보입니다.",
+  "sample_adv": "This photo was taken at a campsite deep in the forest. On the left, a man is setting up a green tent and pushing a pole into the ground. In the middle, a woman is stirring soup in a pot on a portable camping stove. On the right, a little boy is sitting in a folding chair and toasting marshmallows over a small campfire. There is a pile of firewood in front, and tall pine trees surround the whole area. It looks like the family just arrived and is getting ready for dinner.",
+  "sample_adv_ko": "이 사진은 깊은 숲속 캠핑장에서 찍었습니다. 왼쪽에는 남자가 초록 텐트를 치면서 기둥을 땅에 박고 있습니다. 가운데에는 여자가 휴대용 캠핑 버너 위 냄비에 수프를 젓고 있습니다. 오른쪽에는 어린 남자아이가 접이식 의자에 앉아 작은 모닥불에 마시멜로를 굽고 있습니다. 앞쪽에 장작 더미가 있고, 키 큰 소나무들이 주변을 둘러싸고 있습니다. 가족이 막 도착해서 저녁 준비를 하는 것 같습니다.",
+  "tips": [
+   "캠핑 표현: set up a tent, campfire, folding chair, firewood",
+   "just arrived 처럼 과거 시제를 섞으면 고득점 답안이 된다"
+  ]
+ },
+ {
+  "id": "dp-037",
+  "setting": "미용실",
+  "scene_ko": "미용실. 미용사가 의자에 앉은 손님의 머리를 가위로 자르고 있다. 옆 자리에서는 다른 손님이 잡지를 읽으며 기다리고 있다.",
+  "elements": [
+   {
+    "where": "가운데",
+    "ko": "미용사가 가위와 빗으로 손님의 머리를 자르고 있다",
+    "en": "A hairstylist is cutting a customer's hair with scissors and a comb."
+   },
+   {
+    "where": "앞쪽",
+    "ko": "손님이 검은 가운을 두르고 거울을 보고 있다",
+    "en": "The customer is wearing a black cape and looking into the mirror."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "다른 손님이 소파에서 잡지를 읽으며 기다리고 있다",
+    "en": "On the right, another customer is reading a magazine while she waits."
+   },
+   {
+    "where": "왼쪽",
+    "ko": "선반에 헤어 제품이 진열되어 있다",
+    "en": "On the left, hair products are displayed on glass shelves."
+   },
+   {
+    "where": "배경",
+    "ko": "벽에 큰 거울들이 나란히 걸려 있다",
+    "en": "In the background, large mirrors are hanging side by side on the wall."
+   }
+  ],
+  "sample": "This picture was taken in a hair salon. In the middle, a hairstylist is cutting a woman's hair with scissors. The customer is wearing a black cape and looking in the mirror. On the right, another woman is reading a magazine and waiting. On the left, there are hair products on the shelves. The salon looks clean and modern.",
+  "sample_ko": "이 사진은 미용실에서 찍었습니다. 가운데에 미용사가 가위로 여자의 머리를 자르고 있습니다. 손님은 검은 가운을 두르고 거울을 보고 있습니다. 오른쪽에는 다른 여자가 잡지를 읽으며 기다리고 있습니다. 왼쪽 선반에는 헤어 제품이 있습니다. 미용실이 깨끗하고 현대적으로 보입니다.",
+  "sample_adv": "This picture was taken inside a modern hair salon. In the center, a hairstylist with tattoos on his arms is carefully trimming a customer's hair with scissors and a comb. The customer is wearing a black cape and watching the process in the mirror. On the right, another woman is sitting on a sofa and reading a magazine while she waits for her turn. Various hair products are displayed on glass shelves on the left. The customer looks satisfied, so I think the stylist is very skilled.",
+  "sample_adv_ko": "이 사진은 현대적인 미용실 안에서 찍었습니다. 가운데에 팔에 문신이 있는 미용사가 가위와 빗으로 손님의 머리를 조심스럽게 다듬고 있습니다. 손님은 검은 가운을 두르고 거울로 그 과정을 지켜보고 있습니다. 오른쪽에는 다른 여자가 소파에 앉아 차례를 기다리며 잡지를 읽고 있습니다. 왼쪽 유리 선반에는 다양한 헤어 제품이 진열되어 있습니다. 손님이 만족스러워 보여서 미용사의 실력이 좋은 것 같습니다.",
+  "tips": [
+   "미용실 표현: cut hair, trim, cape, wait for one's turn",
+   "while she waits 처럼 while 절로 두 행동을 연결"
+  ]
+ },
+ {
+  "id": "dp-038",
+  "setting": "이사 현장",
+  "scene_ko": "주택가 이사 현장. 남자 두 명이 트럭에서 소파를 내리고 있다. 여자가 현관 앞에서 상자를 들고 들어가고 있다.",
+  "elements": [
+   {
+    "where": "가운데",
+    "ko": "남자 두 명이 트럭에서 소파를 내리고 있다",
+    "en": "Two men are carrying a sofa down a ramp from a moving truck."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "여자가 상자를 들고 집 안으로 들어가고 있다",
+    "en": "On the right, a woman is carrying a box into the house."
+   },
+   {
+    "where": "앞쪽",
+    "ko": "인도에 상자와 램프가 놓여 있다",
+    "en": "In the foreground, boxes and a lamp are sitting on the sidewalk."
+   },
+   {
+    "where": "왼쪽",
+    "ko": "트럭 짐칸 문이 열려 있고 가구가 보인다",
+    "en": "On the left, the back of the truck is open, and furniture is inside."
+   },
+   {
+    "where": "배경",
+    "ko": "나무가 늘어선 조용한 주택가다",
+    "en": "In the background, there is a quiet street lined with trees."
+   }
+  ],
+  "sample": "This picture shows people moving into a new house. In the middle, two men are carrying a sofa out of a truck. On the right, a woman is carrying a box into the house. There are some boxes and a lamp on the sidewalk. In the background, there is a quiet street with trees. They look busy but excited.",
+  "sample_ko": "이 사진은 사람들이 새집으로 이사하는 모습입니다. 가운데에 남자 두 명이 트럭에서 소파를 들고 나오고 있습니다. 오른쪽에는 여자가 상자를 들고 집으로 들어가고 있습니다. 인도에 상자 몇 개와 램프가 있습니다. 뒤쪽에는 나무가 있는 조용한 거리가 있습니다. 바쁘지만 설레어 보입니다.",
+  "sample_adv": "This photo shows a moving day in a quiet residential neighborhood. In the center, two movers in matching T-shirts are carrying a large gray sofa down a ramp from the back of a truck. On the right, a young woman is carrying a cardboard box up the front steps of the house. Several boxes and a floor lamp are sitting on the sidewalk, waiting to be moved inside. The street is lined with tall trees. I think she just bought this house, and she seems excited to start a new life here.",
+  "sample_adv_ko": "이 사진은 조용한 주택가의 이삿날을 보여 줍니다. 가운데에 같은 티셔츠를 입은 이삿짐 직원 두 명이 트럭 뒤에서 경사판을 따라 큰 회색 소파를 내리고 있습니다. 오른쪽에는 젊은 여자가 종이 상자를 들고 현관 계단을 올라가고 있습니다. 상자 여러 개와 스탠드 조명이 안으로 옮겨지길 기다리며 인도에 놓여 있습니다. 거리에는 키 큰 나무가 늘어서 있습니다. 그녀가 이 집을 막 산 것 같고, 이곳에서 새 삶을 시작하게 되어 설레는 것 같습니다.",
+  "tips": [
+   "이사 표현: moving truck, mover, carry A into B, be waiting to be moved",
+   "busy but excited 처럼 느낌 두 개를 대비해 마무리"
+  ]
+ },
+ {
+  "id": "dp-039",
+  "setting": "거리 공연",
+  "scene_ko": "광장에서 거리 공연. 남자가 기타를 치며 노래하고 있고, 사람들이 둘러서서 구경하고 있다. 기타 케이스에 동전이 들어 있다.",
+  "elements": [
+   {
+    "where": "가운데",
+    "ko": "남자가 기타를 치며 노래하고 있다",
+    "en": "A street musician is playing the guitar and singing."
+   },
+   {
+    "where": "앞쪽",
+    "ko": "열린 기타 케이스에 동전과 지폐가 있다",
+    "en": "In front of him, there are coins and bills in an open guitar case."
+   },
+   {
+    "where": "왼쪽",
+    "ko": "사람들이 반원으로 서서 구경하고 있다",
+    "en": "On the left, a crowd is standing in a half circle and watching."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "여자가 휴대폰으로 공연을 찍고 있다",
+    "en": "On the right, a woman is recording the performance with her phone."
+   },
+   {
+    "where": "배경",
+    "ko": "분수와 오래된 건물이 있다",
+    "en": "In the background, there is a fountain and some old stone buildings."
+   }
+  ],
+  "sample": "This picture was taken in a city square. In the middle, a man is playing the guitar and singing. There is an open guitar case with coins in front of him. On the left, many people are standing and watching. On the right, a woman is taking a video with her phone. Everyone seems to enjoy the music.",
+  "sample_ko": "이 사진은 도시 광장에서 찍었습니다. 가운데에 남자가 기타를 치며 노래하고 있습니다. 그 앞에 동전이 든 열린 기타 케이스가 있습니다. 왼쪽에는 많은 사람이 서서 구경하고 있습니다. 오른쪽에는 여자가 휴대폰으로 영상을 찍고 있습니다. 모두 음악을 즐기는 것 같습니다.",
+  "sample_adv": "This photo was taken in a lively city square. In the center, a street musician with long hair is playing an acoustic guitar and singing into a microphone. In front of him, his guitar case is open, and people have dropped coins and bills inside. On the left, a crowd is standing in a half circle, and some of them are clapping along. On the right, a woman is recording the performance with her phone. There is a fountain behind them. I think he is pretty talented, because so many people stopped to listen.",
+  "sample_adv_ko": "이 사진은 활기찬 도시 광장에서 찍었습니다. 가운데에 긴 머리의 거리 음악가가 어쿠스틱 기타를 치며 마이크에 대고 노래하고 있습니다. 그의 앞에는 기타 케이스가 열려 있고, 사람들이 동전과 지폐를 넣어 두었습니다. 왼쪽에는 사람들이 반원으로 서 있고, 몇 명은 박수를 치며 따라 하고 있습니다. 오른쪽에는 여자가 휴대폰으로 공연을 녹화하고 있습니다. 그 뒤에 분수가 있습니다. 많은 사람이 멈춰서 듣는 걸 보니 꽤 재능 있는 사람 같습니다.",
+  "tips": [
+   "공연 표현: play the guitar, clap along, record a performance",
+   "현재완료 people have dropped ~ 로 시제를 다양하게"
+  ]
+ },
+ {
+  "id": "dp-040",
+  "setting": "빵집",
+  "scene_ko": "동네 빵집. 제빵사가 오븐에서 갓 구운 빵 쟁반을 꺼내고 있다. 진열대 앞에서 엄마와 딸이 빵을 고르고 있다.",
+  "elements": [
+   {
+    "where": "뒤쪽",
+    "ko": "제빵사가 오븐에서 빵 쟁반을 꺼내고 있다",
+    "en": "In the back, a baker is taking a tray of bread out of the oven."
+   },
+   {
+    "where": "가운데",
+    "ko": "엄마와 딸이 진열대 앞에서 빵을 고르고 있다",
+    "en": "In the middle, a mother and her daughter are choosing pastries at the display case."
+   },
+   {
+    "where": "오른쪽",
+    "ko": "점원이 집게로 크루아상을 봉투에 담고 있다",
+    "en": "On the right, a clerk is putting a croissant into a bag with tongs."
+   },
+   {
+    "where": "앞쪽",
+    "ko": "진열장 안에 케이크와 쿠키가 있다",
+    "en": "There are cakes and cookies inside the glass case in the foreground."
+   },
+   {
+    "where": "왼쪽",
+    "ko": "나무 선반에 식빵이 줄지어 있다",
+    "en": "On the left, loaves of bread are lined up on wooden shelves."
+   }
+  ],
+  "sample": "This picture was taken in a bakery. In the back, a baker is taking bread out of the oven. In the middle, a mother and her daughter are choosing some bread. On the right, a clerk is putting a croissant into a bag. On the left, there is a lot of bread on the shelves. The bread looks delicious.",
+  "sample_ko": "이 사진은 빵집에서 찍었습니다. 뒤쪽에서 제빵사가 오븐에서 빵을 꺼내고 있습니다. 가운데에는 엄마와 딸이 빵을 고르고 있습니다. 오른쪽에는 점원이 크루아상을 봉투에 담고 있습니다. 왼쪽 선반에는 빵이 많이 있습니다. 빵이 맛있어 보입니다.",
+  "sample_adv": "This picture was taken inside a small neighborhood bakery. In the back, a baker wearing a white hat is taking a tray of fresh bread out of a large oven. In the middle, a mother and her young daughter are looking into the display case, and the girl is pointing at a strawberry cake. On the right, a clerk is using tongs to put a croissant into a paper bag. Loaves of bread are lined up on wooden shelves on the left. I can almost smell the bread, and it must be a popular local shop.",
+  "sample_adv_ko": "이 사진은 작은 동네 빵집 안에서 찍었습니다. 뒤쪽에서 흰 모자를 쓴 제빵사가 큰 오븐에서 갓 구운 빵 쟁반을 꺼내고 있습니다. 가운데에는 엄마와 어린 딸이 진열장을 들여다보고 있고, 딸이 딸기 케이크를 가리키고 있습니다. 오른쪽에는 점원이 집게로 크루아상을 종이봉투에 담고 있습니다. 왼쪽 나무 선반에는 빵이 줄지어 있습니다. 빵 냄새가 날 것만 같고, 인기 있는 동네 가게임이 분명합니다.",
+  "tips": [
+   "빵집 표현: take A out of the oven, tongs, loaves of bread, display case",
+   "인상 문장: I can almost smell ~ 으로 생생하게"
+  ]
+ }
+]

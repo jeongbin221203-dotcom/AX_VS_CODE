@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block body_class %}quiz-page{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <div class="muted small">{{ '토익스피킹' if exam == 'tsp' else '오픽' }}{{ ' · 실전 모의고사' if mock }}</div>
+    <h1>{{ title }}</h1>
+    <div class="muted small">{{ sub }}</div>
+  </div>
+  {% if not mock %}
+  <form class="row" method="get">
+    {% if exam == 'opic' %}
+      {% if topic %}<input type="hidden" name="topic" value="{{ topic }}">{% endif %}
+      {% if kind %}<input type="hidden" name="kind" value="{{ kind }}">{% endif %}
+      <label class="small"><input type="checkbox" name="text" value="1" {{ 'checked' if show_text }} data-autosubmit> 질문 글자 보기</label>
+      <input type="hidden" name="text" value="0">
+    {% endif %}
+    <label class="small">개수 <select name="n" data-autosubmit>{% for k in [1, 2, 3, 5, 7, 10] %}<option {{ 'selected' if n == k }}>{{ k }}</option>{% endfor %}</select></label>
+    <a class="btn" href="{{ home }}">돌아가기</a>
+  </form>
+  {% endif %}
+</div>
+
+{% if payload["units"] %}
+<div id="intro" class="card" style="max-width:680px;margin:10px auto">
+  {% if mock %}
+    <p>{% if exam == 'tsp' %}실제 시험과 같은 순서·시간으로 11문항을 봅니다 (약 20분). 시험 중에는 준비·답변 시간을 줄일 수 없습니다.
+      {% else %}질문은 소리로만 나옵니다. 질문이 끝나면 5초 안에 <b>다시 듣기(1회)</b>를 누를 수 있고, 그다음 답변 녹음이 시작됩니다. 다 말했으면 <b>다음</b>을 누르세요. 전체 {{ payload.minutes }}분.{% endif %}</p>
+    <p class="small">모든 문항이 끝나면 녹음을 다시 듣고 모범 답안과 비교해 문항마다 스스로 채점합니다. 그 결과로 {{ '점수(0~200)와 레벨' if exam == 'tsp' else '등급(NL~AL)' }}을 추정합니다.</p>
+  {% else %}
+    <p>{{ payload["units"]|length }}개 문제를 연습합니다. 문제마다 답변이 끝나면 녹음·인식 글자·모범 답안을 보고 스스로 채점합니다.</p>
+  {% endif %}
+  <ul class="clean small">
+    <li>마이크를 씁니다. 브라우저가 권한을 물으면 <b>허용</b>하세요. (https 주소나 이 PC 127.0.0.1 에서만 켜집니다)</li>
+    <li>크롬·엣지는 말한 내용을 글자로 바꿔 단어 수와 말하기 속도를 보여 줍니다.</li>
+    <li>질문 음성은 브라우저 음성 합성입니다. 소리가 안 나면 설정에서 음성 속도를 확인하세요.</li>
+  </ul>
+  <button class="btn primary" id="start-btn">시작하기</button>
+</div>
+<div id="quiz-main" class="hidden">
+  <div class="quiz-top">
+    <b id="step-label"></b>
+    <span class="progress muted small" id="progress"></span>
+    <span class="timer" id="total-timer" hidden></span>
+    <span class="timer" id="timer"></span>
+  </div>
+  <div id="stage"></div>
+</div>
+<script type="application/json" id="payload">{{ payload|tojson }}</script>
+{% else %}
+<div class="card empty">이 조건의 문제가 아직 없습니다. <a href="{{ home }}">돌아가기</a></div>
+{% endif %}
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/tts.js') }}"></script>
+<script src="{{ url_for('static', filename='js/speaking.js') }}"></script>
+{% endblock %}

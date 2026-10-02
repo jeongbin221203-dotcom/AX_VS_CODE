@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% block title %}오픽{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <div class="muted small">{{ e.summary }}</div>
+    <h1>오픽</h1>
+  </div>
+  <div class="row">
+    <a class="btn primary" href="{{ url_for('speaking.opic_mock') }}">실전 모의고사</a>
+    <a class="btn" href="{{ url_for('speaking.opic_survey') }}">설문·난이도</a>
+    <a class="btn" href="{{ url_for('speaking.opic_guide') }}">답변 틀·등급 기준</a>
+  </div>
+</div>
+
+<div class="grid four">
+  <div class="card kpi">
+    <div class="label">추정 등급</div>
+    <div class="value">{{ stats.grade or '–' }}</div>
+    <div class="sub">{% if stats.grade %}{{ GRADE_NAME[stats.grade] }}{% else %}답변을 5개 이상 채점하면 계산됩니다{% endif %}</div>
+  </div>
+  <div class="card kpi">
+    <div class="label">목표 등급</div>
+    <div class="value">{{ st.target }}</div>
+    <div class="sub">{{ GRADE_NAME[st.target] }}</div>
+  </div>
+  <div class="card kpi">
+    <div class="label">설문 난이도</div>
+    <div class="value">{{ st.level }}</div>
+    <div class="sub">{{ LEVELS[st.level] }}</div>
+  </div>
+  <div class="card kpi">
+    <div class="label">답변 기록</div>
+    <div class="value">{{ stats.n }}</div>
+    <div class="sub">{% if stats.words %}최근 평균 {{ stats.words | round | int }}단어 / 답변{% else %}음성 인식 단어 수 기록 없음{% endif %}</div>
+  </div>
+</div>
+
+<div class="card" style="margin-top:14px">
+  <div class="spread"><h2 style="margin:0">등급 표</h2><span class="small muted">등급은 스스로 채점한 결과와 답변 길이로 추정합니다 (ACTFL 공식 판정 아님)</span></div>
+  <div class="ladder" style="grid-template-columns:repeat(9,1fr);margin-top:10px">
+    {% for g in GRADES %}
+      <div class="step{{ ' target' if st.target == g }}" style="{{ 'outline:2px solid var(--accent)' if stats.grade == g }}"><b>{{ g }}</b></div>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="grid two" style="margin-top:14px">
+  <div class="card">
+    <div class="spread"><h2 style="margin:0">내 설문 주제</h2><a class="small" href="{{ url_for('speaking.opic_survey') }}">바꾸기</a></div>
+    {% if st.survey %}
+      <p>{% for t in st.survey %}<a class="tag" href="{{ url_for('speaking.opic_practice', topic=t) }}" style="margin:2px">{{ TOPICS[t][0] }}</a>{% endfor %}</p>
+      <p class="small muted">모의고사의 설문 문항(2~7번, 14~15번)은 이 주제에서 나옵니다. 거주(사는 곳)는 누구나 받습니다.</p>
+    {% else %}
+      <div class="flash error">아직 설문을 하지 않았습니다. <a href="{{ url_for('speaking.opic_survey') }}">설문에서 주제를 고르세요</a> — 고르지 않으면 모든 설문 주제에서 나옵니다.</div>
+    {% endif %}
+  </div>
+  <div class="card">
+    <h2>빠른 연습</h2>
+    <div class="row" style="flex-wrap:wrap">
+      <a class="btn small{{ ' disabled' if not intro_n }}" href="{{ url_for('speaking.opic_practice', kind='intro', n=1) }}">자기소개</a>
+      {% for k in ['describe', 'routine', 'past', 'compare', 'issue'] %}
+        <a class="btn small" href="{{ url_for('speaking.opic_practice', kind=k, n=3) }}">{{ KINDS[k] }} 3문항</a>
+      {% endfor %}
+      <a class="btn small primary{{ ' disabled' if not rp_n }}" href="{{ url_for('speaking.opic_practice', kind='roleplay', n=1) }}">롤플레이 1세트</a>
+    </div>
+    <p class="small muted" style="margin-top:8px">실제 시험은 질문이 소리로만 나옵니다. 연습 화면에서 <b>질문 글자 보기</b>를 끄면 실전처럼 연습할 수 있습니다.</p>
+  </div>
+</div>
+
+<div class="card" style="margin-top:14px" id="topics">
+  <h2>주제별 연습</h2>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>주제</th><th class="r">묘사</th><th class="r">습관</th><th class="r">경험</th><th class="r">비교</th><th class="r">이슈</th><th class="r">롤플레이</th><th class="r">내 기록</th><th>연습</th></tr></thead>
+    <tbody>
+    {% for group in ['거주', '여가', '취미', '운동', '휴가', '돌발'] %}{% set items = rows | selectattr('group', 'equalto', group) | list %}
+      <tr><td colspan="9" class="small muted"><b>{{ group }}</b>{{ ' (설문 없이 나오는 주제)' if group == '돌발' }}</td></tr>
+      {% for t in items %}
+      <tr>
+        <td><b>{{ t.name }}</b>{% if t.picked %} <span class="tag ok">설문</span>{% endif %}</td>
+        {% for k in ['describe', 'routine', 'past', 'compare', 'issue', 'roleplay'] %}<td class="r num small">{{ t.counts.get(k, 0) or '–' }}</td>{% endfor %}
+        <td class="r num small">{% if t.n %}{{ t.n }}회 · {{ t.avg | round(1) }}/5{% else %}–{% endif %}</td>
+        <td class="row" style="flex-wrap:nowrap">
+          <a class="btn small primary{{ ' disabled' if not t.total }}" href="{{ url_for('speaking.opic_practice', topic=t.key) }}">콤보</a>
+          {% if t.counts.get('roleplay') %}<a class="btn small" href="{{ url_for('speaking.opic_practice', topic=t.key, kind='roleplay') }}">롤플레이</a>{% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+
+{% if mocks %}
+<div class="card" style="margin-top:14px">
+  <h2>모의고사 기록</h2>
+  <table class="small"><tbody>
+  {% for m in mocks %}
+    <tr><td>{{ m.created_at[:16].replace('T', ' ') }}</td><td><b>{{ m.score or '–' }}</b></td><td>난이도 {{ m.result.level }}</td>
+      <td class="r"><a href="{{ url_for('speaking.mock_result', mid=m.id) }}">결과 보기</a></td></tr>
+  {% endfor %}
+  </tbody></table>
+</div>
+{% endif %}
+
+{% if trend %}
+<div class="card" style="margin-top:14px">
+  <h2>날짜별 변화 <span class="small muted">최근 60일 · 자기 채점 평균과 답변 단어 수</span></h2>
+  <table class="small"><thead><tr><th>날짜</th><th class="r">답변</th><th class="r">평균</th><th class="r">평균 단어</th></tr></thead><tbody>
+  {% for d in trend | reverse %}
+    <tr><td>{{ d.d }}</td><td class="r num">{{ d.n }}</td><td class="r num">{{ (d.r * 5) | round(1) }}/5</td><td class="r num">{{ d.w | round | int if d.w is not none else '–' }}</td></tr>
+  {% endfor %}
+  </tbody></table>
+</div>
+{% endif %}
+
+{% if recent %}
+<div class="card" style="margin-top:14px">
+  <h2>최근 답변</h2>
+  <table class="small"><tbody>
+  {% for r in recent %}
+    {% set it = by_id.get((r.task, r.item_id)) %}
+    <tr><td>{{ r.created_at[5:16].replace('T', ' ') }}</td>
+      <td>{% if it %}{{ TOPICS[it.topic][0] }} · {{ KINDS[it.kind] if it.kind else KINDS[it.steps[r.qidx].kind] }}{% else %}{{ r.item_id }}{% endif %}{{ ' · 모의고사' if r.mock_id }}</td>
+      <td class="r num">{{ r.points | round(1) }}/5</td><td class="r num muted">{{ (r.words ~ '단어') if r.words is not none else '' }}</td></tr>
+  {% endfor %}
+  </tbody></table>
+</div>
+{% endif %}
+<p class="small muted" style="margin-top:12px">문제는 모두 이 앱용으로 새로 쓴 것입니다. 실제 시험의 진행자 화면·문항 수·난이도 구성은 공개 자료를 바탕으로 재현했습니다.</p>
+{% endblock %}

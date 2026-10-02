@@ -1,4 +1,4 @@
-"""시험 카테고리. 토익 외 시험은 아직 준비 중 — 등급 체계·구성·계획만 보여 준다.
+"""시험 카테고리와 각 시험의 등급 체계·구성 요약 (말하기 시험 가이드 화면에서도 쓴다).
 (등급·구성은 공개 자료 기준 요약이며 시험 주관사 공식 자료로 다시 확인할 것)
 """
 from __future__ import annotations
@@ -7,7 +7,7 @@ EXAMS = {
     "toeic": {"name": "토익", "en": "TOEIC", "ready": True, "endpoint": "main.dashboard"},
     "toefl": {"name": "토플", "en": "TOEFL iBT", "ready": True, "endpoint": "toefl.home"},
     "toeic-speaking": {
-        "name": "토익스피킹", "en": "TOEIC Speaking", "ready": False,
+        "name": "토익스피킹", "en": "TOEIC Speaking", "ready": True, "endpoint": "speaking.tsp_home",
         "summary": "컴퓨터로 11문항에 영어로 말하는 시험 · 약 20분 · 0~200점 · 레벨 8단계",
         "scale_title": "등급 (점수 → 레벨)",
         "scale": [("Advanced High", "200"), ("Advanced Mid", "180~190"), ("Advanced Low", "160~170"),
@@ -26,7 +26,7 @@ EXAMS = {
                     "녹음 기록과 시간 경과 비교"],
     },
     "opic": {
-        "name": "오픽", "en": "OPIc", "ready": False,
+        "name": "오픽", "en": "OPIc", "ready": True, "endpoint": "speaking.opic_home",
         "summary": "1:1 인터뷰형 말하기 시험 · 약 40분 · 12~15문항 · 사전 설문(Background Survey)으로 주제가 정해짐",
         "scale_title": "등급 (높음 → 낮음, 최고 AL)",
         "scale": [("AL", "Advanced Low"), ("IH", "Intermediate High"), ("IM3", "Intermediate Mid 3"),

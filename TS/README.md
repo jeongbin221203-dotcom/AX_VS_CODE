@@ -1,6 +1,6 @@
-# TS — 토익·토플 학습 (개인 공부용)
+# TS — 토익·토플·토익스피킹·오픽 학습 (개인 공부용)
 
-토익은 등급(Orange·Brown·Green·Blue·Gold)과 점수, 토플(2026년 1월 개편 형식)은 밴드 1~6에 맞춰 공부하는 Flask 앱. 상단 탭: 토익 · 토플 · 토익스피킹(준비 중) · 오픽(준비 중).
+토익은 등급(Orange·Brown·Green·Blue·Gold)과 점수, 토플(2026년 1월 개편 형식)은 밴드 1~6에 맞춰 공부하는 Flask 앱. 토익스피킹(0~200점·레벨)과 오픽(NL~AL)은 녹음·음성 인식과 자기 채점으로 연습한다. ☰ 메뉴: 토익 · 토플 · 토익스피킹 · 오픽.
 
 ## 실행
 
@@ -9,6 +9,8 @@ pip install -r requirements.txt
 python app.py            # http://127.0.0.1:5003
 python -m pytest tests -q
 python tools/validate_content.py   # 문제 데이터 형식 검사
+python tools/validate_toefl.py     # 토플
+python tools/validate_speaking.py  # 토익스피킹·오픽
 ```
 
 환경변수: `TS_PORT`(기본 5003), `TS_DB_PATH`(기본 data/ts.db), `TS_CONTENT_DIR`, `TS_SECRET_KEY`, `TS_DEBUG=1`.
@@ -37,9 +39,12 @@ python tools/validate_content.py   # 문제 데이터 형식 검사
 app.py  config.py
 core/     db(SQLite) · content(문제 은행) · scoring(등급·점수) · study(세션·채점·오답노트)
           srs(단어 간격 반복) · planner(오늘 할 일) · stats · guide(등급별 가이드 문구)
-views/    main(대시보드·가이드·통계·설정) · quiz(연습·진단·모의고사·오답·받아쓰기) · vocab
+          toefl(토플) · speaking(토익스피킹·오픽)
+views/    main(대시보드·가이드·통계·설정) · quiz(연습·진단·모의고사·오답·받아쓰기) · vocab · toefl · speaking
 static/js quiz.js(풀이 엔진) · tts.js(음성) · vocab.js · vocab-extra.js · dictation.js · charts.js
 content/toeic/  part1~7.json, vocab.json — 형식은 content/SCHEMA.md
+content/toefl/  토플 (content/toefl/SCHEMA.md)
+content/speaking/{toeic,opic}/  말하기 (content/speaking/SCHEMA.md)
 ```
 
 ## 문제 은행 (content/toeic)
@@ -92,3 +97,34 @@ Reading → Listening → Speaking → Writing, 약 75분. 읽기·듣기는 2�
 
 ### 토플 학술 어휘 (`/toefl/vocab`)
 밴드 2~6 다섯 단계 × 필수·도전, 800단어(`content/toefl/vocab*.json`). 토익 단어와 같은 화면(카드·시험·듣기·1시간 MP3)을 쓴다 — 단어 블루프린트를 `/toefl` 아래에 `tvocab` 이름으로 한 번 더 등록.
+
+## 토익스피킹 (`/speaking/toeic`)
+
+2022년 6월 개편 형식: 11문항 약 20분, 문항 점수 Q1~10 0~3점·Q11 0~5점(합 35) → 0~200점 환산(비례 추정, ETS 공식 환산 아님).
+
+| 문항 | 유형 | 준비·답변 | 문제 수 |
+|---|---|---|---|
+| Q1~2 | 문장 읽기 (끊어 읽기·강세 표시, 음성 인식 일치율) | 45초 · 45초 | 40 |
+| Q3~4 | 사진 묘사 (사진 대신 장면 설명) | 45초 · 30초 | 40 |
+| Q5~7 | 질문에 답하기 | 3초 · 15/15/30초 | 30세트 |
+| Q8~10 | 표 보고 답하기 (표 45초, 10번은 두 번 들려줌) | 3초 · 15/15/30초 | 25세트 |
+| Q11 | 의견 말하기 | 45초 · 60초 | 40 |
+
+- 유형별 연습(준비·답변 건너뛰기 가능) · 실전 모의고사(시간 고정) · 답변 틀·채점 기준·목표별 학습 경로(`/speaking/toeic/guide`).
+- 모범 답안 두 단계: 기본(IM 목표)·고득점(IH~AL 목표) + 한국어 번역.
+- 추정 점수: 다섯 유형을 모두 연습하면 유형별 최근 20개 자기 채점 평균으로 11문항을 채워 환산.
+
+## 오픽 (`/speaking/opic`)
+
+- 설문(`/speaking/opic/survey`): 여가 2·취미 1·운동 1·휴가 1개 이상 + 거주(자동), 난이도 1~6, 목표 등급.
+- 문항: 설문 주제 17개 × 7(묘사 2·습관 1·경험 2·비교 1·이슈 1), 돌발 주제 15개 × 5, 자기소개 3, 롤플레이 20세트(질문하기 → 문제 해결 → 관련 경험).
+- 실전 모의고사 15문항 40분: 자기소개 → 설문 콤보 2 → 돌발 콤보 → 롤플레이 → 비교·이슈 2. 질문은 소리로만, 다시 듣기 1회(5초 안).
+- 등급 추정: 자기 채점 평균(1~5, 자기소개 제외) + 답변 평균 단어 수(IM1~3 구분) → NL~AL (ACTFL 공식 판정 아님).
+
+## 말하기 공통 엔진 (`static/js/speaking.js`)
+
+서버(`core/speaking.py`)가 문제를 '단계' 목록(보여 줄 것·들려줄 질문·준비·답변 시간·채점 기준·모범 답안)으로 만들고, 화면 하나가 차례로 돌린다:
+화면 → (표 읽기) → 질문 듣기 → 준비 → 삐 → 답변(MediaRecorder 녹음 + Web Speech 음성 인식) → 녹음 다시 듣기·인식 글자·모범 답안 → 자기 채점.
+연습은 문제마다, 모의고사는 끝난 뒤 한꺼번에 채점한다. 기록은 `speaking_attempts`(점수·단어 수·말한 시간·읽기 일치율), 모의고사는 `speaking_mocks`.
+녹음 파일은 브라우저 안에서만 듣고 서버에 저장하지 않는다(인식한 글자만 저장).
+

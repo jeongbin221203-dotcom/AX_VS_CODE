@@ -1,0 +1,674 @@
+[
+ {
+  "id": "oq-walking-001",
+  "topic": "walking",
+  "kind": "describe",
+  "level": 1,
+  "question": "You indicated in the survey that you enjoy taking walks. Where do you usually go for a walk? Describe the place in as much detail as possible. What does it look like, and why do you like it?",
+  "question_ko": "설문에서 산책을 즐긴다고 하셨습니다. 보통 어디로 산책을 가나요? 그 장소를 최대한 자세히 묘사해 주세요. 어떻게 생겼고, 왜 그곳을 좋아하나요?",
+  "sample": "Well, I usually go for a walk along the stream near my apartment. It takes about five minutes to get there on foot. There is a long path next to the water, and there are trees on both sides. In spring, there are a lot of cherry blossoms, so it is really pretty. There are also some benches and an outdoor gym area. Many people walk their dogs there in the evening. I like this place because it is quiet and close to my home. Walking there helps me relax after work. So that's the place where I usually walk.",
+  "sample_ko": "음, 저는 보통 아파트 근처 하천을 따라 산책해요. 걸어서 5분쯤 걸려요. 물 옆으로 긴 길이 있고, 양쪽에 나무가 있어요. 봄에는 벚꽃이 아주 많아서 정말 예뻐요. 벤치도 몇 개 있고 야외 운동기구도 있어요. 저녁에는 많은 사람들이 거기서 개를 산책시켜요. 조용하고 집에서 가까워서 이곳을 좋아해요. 거기서 걸으면 퇴근 후에 긴장이 풀려요. 그래서 거기가 제가 보통 산책하는 곳이에요.",
+  "sample_adv": "Oh, I'd love to tell you about my favorite walking spot. It's a stream called Yangjaecheon, and it's only about a five-minute walk from my apartment in southern Seoul. So, let me paint a picture for you. There's a wide walking path that runs right along the water, and it's lined with huge cherry trees on both sides. Next to the walking path, there's a separate lane for bikes, so you don't have to worry about getting hit by a cyclist. Here and there, you'll see wooden benches, little stepping stones across the stream, and even some ducks floating around. In the evening, the whole place is lit up with soft yellow lights, which makes it feel really cozy. Honestly, the reason I love it so much is that it feels like a little escape from the city. I spend all day staring at a computer screen, so when I get there, I can finally breathe. I usually put on my earphones, listen to a podcast, and just walk for about an hour. By the time I get home, I feel completely refreshed. So yeah, that stream is kind of my secret healing spot, and I can't imagine living anywhere without it.",
+  "sample_adv_ko": "아, 제가 제일 좋아하는 산책 장소에 대해 꼭 말씀드리고 싶어요. 양재천이라는 하천인데, 서울 남쪽에 있는 저희 아파트에서 걸어서 5분밖에 안 걸려요. 자, 그림을 그려 드릴게요. 물을 따라 넓은 산책로가 쭉 이어져 있고, 양쪽으로 커다란 벚나무가 줄지어 있어요. 산책로 옆에는 자전거 전용 도로가 따로 있어서 자전거에 부딪힐 걱정을 안 해도 돼요. 군데군데 나무 벤치, 하천을 건너는 작은 징검다리, 그리고 둥둥 떠다니는 오리들도 볼 수 있어요. 저녁에는 은은한 노란 불빛이 켜져서 정말 아늑한 느낌이에요. 솔직히 제가 그곳을 그렇게 좋아하는 이유는 도시에서 잠깐 벗어나는 느낌이 들기 때문이에요. 하루 종일 컴퓨터 화면만 보다가 거기 가면 비로소 숨을 쉴 수 있어요. 보통 이어폰을 끼고 팟캐스트를 들으면서 한 시간쯤 걸어요. 집에 도착할 때쯤이면 완전히 상쾌해져 있어요. 그래서 그 하천은 저만의 비밀 힐링 장소 같은 곳이고, 그곳 없이 사는 건 상상할 수가 없어요.",
+  "tips": [
+   "장소 묘사 순서: 위치·거리 → 길·나무·물 → 시설 → 분위기 → 좋아하는 이유",
+   "lined with ~ (~이 줄지어 있는), here and there (군데군데) 같은 묘사 표현을 써 보세요"
+  ]
+ },
+ {
+  "id": "oq-walking-002",
+  "topic": "walking",
+  "kind": "describe",
+  "level": 2,
+  "question": "I'd like to know about the people you go walking with. Who do you usually walk with? What is that person like, and what do you usually talk about while you walk?",
+  "question_ko": "함께 산책하는 사람에 대해 알고 싶습니다. 보통 누구와 함께 걷나요? 그 사람은 어떤 사람이고, 걸으면서 보통 무슨 이야기를 하나요?",
+  "sample": "Well, I usually walk with my mom. She lives with me, and she likes walking a lot. My mom is very kind and cheerful, and she always talks a lot. She is in her fifties, but she walks faster than me. We usually walk together after dinner, around eight o'clock. While we walk, we talk about our day. Sometimes we talk about our family or about TV dramas. My mom also gives me advice about my job. I really enjoy this time because we are both busy during the day. So walking is a great chance for us to talk.",
+  "sample_ko": "음, 저는 보통 엄마와 함께 걸어요. 엄마는 저와 같이 살고, 걷는 걸 아주 좋아하세요. 엄마는 아주 다정하고 밝으시고, 항상 말씀을 많이 하세요. 50대이신데 저보다 빨리 걸으세요. 저희는 보통 저녁 먹고 8시쯤 같이 걸어요. 걸으면서 하루 동안 있었던 일을 이야기해요. 가끔은 가족이나 TV 드라마 이야기를 해요. 엄마는 제 일에 대해 조언도 해 주세요. 낮에는 둘 다 바빠서 저는 이 시간이 정말 좋아요. 그래서 산책은 저희가 이야기할 수 있는 좋은 기회예요.",
+  "sample_adv": "Sure, the person I walk with most often is actually my best friend, Jiyoon. We've known each other since middle school, so we've been friends for almost fifteen years now. Let me tell you a little about her. She's super energetic and funny, and she's one of those people who can make anything sound interesting. She works as a nurse, so her schedule is pretty crazy, but we try to meet at least twice a week for an evening walk around Seokchon Lake. It's about two and a half kilometers around, and we usually do two laps. So, what do we talk about? Honestly, everything. We complain about work, we talk about our plans for the next vacation, and sometimes we get into really deep conversations about life and the future. Last week, for example, she told me she was thinking about studying abroad, and we talked about it for the whole hour. The funny thing is, I always end up walking faster when we're arguing about something. What I love about walking with her is that it doesn't feel like exercise at all. It feels more like therapy. So yeah, those walks with Jiyoon are definitely one of the best parts of my week.",
+  "sample_adv_ko": "네, 제가 가장 자주 함께 걷는 사람은 사실 제 가장 친한 친구 지윤이에요. 중학교 때부터 알고 지냈으니 거의 15년째 친구예요. 그 친구에 대해 조금 이야기해 드릴게요. 에너지가 넘치고 웃긴 친구인데, 뭐든 재미있게 들리게 만드는 그런 사람이에요. 간호사로 일해서 일정이 꽤 정신없지만, 적어도 일주일에 두 번은 저녁에 석촌호수를 걸으려고 해요. 한 바퀴가 2.5킬로미터 정도인데 보통 두 바퀴를 돌아요. 그럼 무슨 이야기를 하냐고요? 솔직히 전부 다요. 회사 불평도 하고, 다음 휴가 계획도 이야기하고, 가끔은 인생이나 미래에 대해 정말 깊은 대화도 해요. 예를 들어 지난주에는 친구가 유학을 생각 중이라고 해서 한 시간 내내 그 얘기를 했어요. 웃긴 건, 뭔가로 언쟁할 때면 제가 항상 더 빨리 걷게 된다는 거예요. 그 친구와 걷는 게 좋은 이유는 전혀 운동처럼 느껴지지 않는다는 점이에요. 오히려 상담받는 느낌이에요. 그래서 지윤이와의 산책은 분명히 제 한 주에서 가장 좋은 시간 중 하나예요.",
+  "tips": [
+   "사람 묘사: 관계·알게 된 기간 → 성격·직업 → 함께 하는 일 → 감정",
+   "What do we talk about? Honestly, everything. 처럼 스스로 묻고 답하면 자연스러워요"
+  ]
+ },
+ {
+  "id": "oq-walking-003",
+  "topic": "walking",
+  "kind": "routine",
+  "level": 1,
+  "question": "You indicated that you go walking. Tell me about your typical walking routine. When do you usually go, how long do you walk, and what do you do before and after your walk?",
+  "question_ko": "산책을 한다고 하셨습니다. 평소 산책 습관에 대해 말해 주세요. 보통 언제 가고, 얼마나 오래 걷고, 산책 전후에는 무엇을 하나요?",
+  "sample": "Okay, I usually go walking three or four times a week. I normally go in the evening, after dinner, around eight thirty. Before I leave, I change into comfortable clothes and sneakers. I also fill up my water bottle and check the weather. Then I walk for about forty minutes along the river near my house. While I walk, I listen to music or call my friends. After my walk, I take a shower and drink some cold water. Then I watch TV and go to bed. This routine helps me sleep well. So that's my usual walking routine.",
+  "sample_ko": "네, 저는 보통 일주일에 서너 번 산책해요. 주로 저녁 먹고 8시 반쯤 가요. 나가기 전에 편한 옷과 운동화로 갈아입어요. 물병도 채우고 날씨도 확인해요. 그다음 집 근처 강을 따라 40분 정도 걸어요. 걸으면서 음악을 듣거나 친구에게 전화해요. 산책 후에는 샤워하고 시원한 물을 마셔요. 그다음 TV를 보고 자러 가요. 이 습관 덕분에 잠을 잘 자요. 그래서 이게 제 평소 산책 습관이에요.",
+  "sample_adv": "Sure, I'd be happy to walk you through my routine. So, I'm kind of a creature of habit, and I go walking pretty much every weekday evening. My walk usually starts right after dinner, at around eight. Before I head out, I do a few things. First, I change into my workout clothes and put on my favorite running shoes, which are super light. Then I grab my phone and wireless earbuds and pick out a podcast, usually something about economics or history. I also do some quick stretching, because I hurt my ankle once and I don't want that to happen again. Once I'm outside, I walk from my apartment to the Han River park, which takes about fifteen minutes, and then I walk along the river for another half an hour or so. In total, it's about an hour and around eight thousand steps. I check my step count on my smartwatch, and honestly, it's really satisfying to hit my goal. After I get home, I take a warm shower, drink a big glass of water, and write a few lines in my journal. Then I usually fall asleep pretty easily. So that's basically my walking routine, and it really keeps me sane during the busy week.",
+  "sample_adv_ko": "네, 제 루틴을 차근차근 설명해 드릴게요. 저는 습관대로 사는 편이라 거의 평일 저녁마다 산책을 가요. 산책은 보통 저녁 먹고 바로 8시쯤 시작해요. 나가기 전에 몇 가지를 해요. 먼저 운동복으로 갈아입고 아주 가벼운, 제가 제일 좋아하는 러닝화를 신어요. 그다음 휴대폰과 무선 이어폰을 챙기고 팟캐스트를 골라요. 보통 경제나 역사 관련이에요. 간단히 스트레칭도 해요. 한 번 발목을 다친 적이 있어서 다시 그러고 싶지 않거든요. 밖에 나가면 아파트에서 한강공원까지 15분 정도 걷고, 강을 따라 30분쯤 더 걸어요. 다 합치면 한 시간 정도, 8천 보 정도예요. 스마트워치로 걸음 수를 확인하는데, 솔직히 목표를 달성하면 정말 뿌듯해요. 집에 오면 따뜻한 물로 샤워하고, 물을 한 잔 가득 마시고, 일기를 몇 줄 써요. 그러면 보통 꽤 쉽게 잠들어요. 이게 대략 제 산책 루틴이고, 바쁜 한 주 동안 제가 제정신을 유지하게 해 줘요.",
+  "tips": [
+   "순서 연결어: First, Then, Once I'm outside, After I get home 으로 시간 흐름을 보여 주세요",
+   "습관은 현재 시제 + usually, pretty much every 같은 빈도 표현"
+  ]
+ },
+ {
+  "id": "oq-walking-004",
+  "topic": "walking",
+  "kind": "past",
+  "level": 3,
+  "question": "Tell me about a memorable walk you have taken. When and where was it, who were you with, and what happened that made it so special?",
+  "question_ko": "기억에 남는 산책에 대해 말해 주세요. 언제 어디였고, 누구와 함께였으며, 어떤 일이 있어서 그렇게 특별했나요?",
+  "sample": "Let me tell you about a walk I took last fall. It was in October, and I went to Namsan in Seoul with my younger brother. We walked up the trail to N Seoul Tower in the evening. The weather was cool, and the leaves were red and yellow. It was a little hard to climb, but we talked and laughed the whole time. When we got to the top, we saw the city lights. It was so beautiful. We took a lot of pictures and ate hot fish cakes. My brother was going to the army soon, so it was a special night for us. I will never forget that walk.",
+  "sample_ko": "작년 가을에 했던 산책 이야기를 해 드릴게요. 10월이었고, 남동생과 서울 남산에 갔어요. 저녁에 N서울타워까지 산책로를 걸어 올라갔어요. 날씨는 선선했고 나뭇잎은 빨갛고 노랬어요. 올라가기가 조금 힘들었지만 내내 이야기하고 웃었어요. 정상에 도착했을 때 도시의 불빛을 봤어요. 정말 아름다웠어요. 사진을 많이 찍고 따뜻한 어묵을 먹었어요. 동생이 곧 군대에 갈 예정이어서 저희에게는 특별한 밤이었어요. 그 산책은 절대 잊지 못할 거예요.",
+  "sample_adv": "Oh, there's one walk I'll never forget. It happened about two years ago, on New Year's Eve. My friends and I decided to do something different that year, so instead of going to a crowded bar, we went to Busan and walked along the coastal trail from Haeundae to Dalmaji Hill. We started at around eleven at night. It was freezing, maybe minus five degrees, so we were wearing thick padded jackets, gloves, and hats. At first, we were complaining a lot because the wind from the sea was so strong. But as we kept walking, the view got more and more amazing. On our left, there was the dark ocean, and on our right, the city lights were sparkling. Then, right at midnight, fireworks suddenly went off over the beach. We all stopped and just stared at the sky. Nobody said anything for a minute. After that, we hugged each other and shouted Happy New Year. One of my friends even got a little emotional. Later, we found a small convenience store and drank hot coffee to warm up. Looking back, it wasn't a fancy party, but it was the most meaningful New Year's I've ever had. Whenever I see fireworks now, I think of that cold, beautiful night.",
+  "sample_adv_ko": "아, 절대 잊지 못할 산책이 하나 있어요. 2년쯤 전 새해 전날이었어요. 그해에 친구들과 뭔가 색다른 걸 하기로 해서, 붐비는 술집 대신 부산에 가서 해운대에서 달맞이 언덕까지 해안 산책로를 걸었어요. 밤 11시쯤 출발했어요. 영하 5도쯤으로 엄청 추워서 두꺼운 패딩에 장갑, 모자까지 썼어요. 처음에는 바닷바람이 너무 세서 불평을 많이 했어요. 그런데 계속 걸을수록 경치가 점점 더 멋져졌어요. 왼쪽에는 어두운 바다가, 오른쪽에는 도시 불빛이 반짝이고 있었어요. 그러다 정확히 자정에 해변 위로 갑자기 불꽃놀이가 터졌어요. 저희 모두 멈춰서 하늘만 바라봤어요. 1분 동안 아무도 말을 안 했어요. 그다음 서로 껴안고 해피 뉴이어를 외쳤어요. 한 친구는 살짝 울컥하기도 했어요. 나중에 작은 편의점을 찾아서 따뜻한 커피를 마시며 몸을 녹였어요. 돌이켜 보면 화려한 파티는 아니었지만 제가 보낸 새해 중 가장 의미 있는 새해였어요. 지금도 불꽃놀이를 보면 그 춥고 아름다웠던 밤이 생각나요.",
+  "tips": [
+   "과거 경험: 언제·어디·누구 → 처음 상황 → 전환점 → 클라이맥스 → 지금의 느낌",
+   "Looking back, ~ / I'll never forget ~ 으로 마무리하면 고득점 인상"
+  ]
+ },
+ {
+  "id": "oq-walking-005",
+  "topic": "walking",
+  "kind": "past",
+  "level": 3,
+  "question": "Have you ever had an unexpected problem while you were out on a walk? Maybe you got lost, the weather changed, or you got hurt. Tell me what happened and how you dealt with it.",
+  "question_ko": "산책 중에 예상치 못한 문제를 겪은 적이 있나요? 길을 잃었거나, 날씨가 바뀌었거나, 다쳤을 수도 있겠죠. 무슨 일이 있었고 어떻게 해결했는지 말해 주세요.",
+  "sample": "Yes, I had a problem last summer. I went for a walk in a park near my house in the evening. The weather was clear when I left, so I didn't bring an umbrella. But after twenty minutes, it suddenly started to rain very hard. There was thunder and lightning, too. I was really scared. I ran to a small rest area with a roof and waited there. My phone battery was almost dead, but I called my sister. She came to pick me up by car. I was completely wet, but I was okay. After that, I always check the weather before I go out.",
+  "sample_ko": "네, 작년 여름에 문제가 있었어요. 저녁에 집 근처 공원에 산책하러 갔어요. 나갈 때는 날씨가 맑아서 우산을 안 가져갔어요. 그런데 20분 후에 갑자기 비가 아주 세게 내리기 시작했어요. 천둥 번개도 쳤어요. 정말 무서웠어요. 지붕이 있는 작은 쉼터로 뛰어가서 거기서 기다렸어요. 휴대폰 배터리가 거의 없었지만 언니에게 전화했어요. 언니가 차로 데리러 왔어요. 완전히 젖었지만 괜찮았어요. 그 후로는 나가기 전에 항상 날씨를 확인해요.",
+  "sample_adv": "Oh, actually, yes. Something pretty embarrassing happened to me last spring. I was on a business trip in Gyeongju, and I had a free evening, so I decided to take a walk around the old palace area near my hotel. I didn't really plan a route. I just followed the paths that looked pretty. The problem was, it got dark much faster than I expected, and all the paths started to look exactly the same. On top of that, my phone was at about five percent, so I couldn't use the map for long. I'll be honest, I started to panic a little. I walked in circles for about thirty minutes, and my feet were killing me because I was wearing dress shoes. Finally, I saw an older couple walking their dog, and I asked them for directions. They were so kind. They actually walked with me all the way to the main road and even recommended a good restaurant nearby. So in the end, the whole thing turned into a nice memory. But I definitely learned my lesson. Now, whenever I walk somewhere new, I bring a portable charger and I take a screenshot of the map before I go. And I never wear dress shoes for a walk again.",
+  "sample_adv_ko": "아, 사실 네, 있어요. 작년 봄에 꽤 창피한 일이 있었어요. 경주에 출장 중이었는데 저녁에 시간이 비어서 호텔 근처 옛 궁궐 터를 산책하기로 했어요. 경로를 딱히 정하지 않고 그냥 예뻐 보이는 길을 따라갔어요. 문제는 생각보다 훨씬 빨리 어두워졌고, 모든 길이 똑같아 보이기 시작했다는 거예요. 게다가 휴대폰 배터리가 5퍼센트쯤이라 지도를 오래 쓸 수 없었어요. 솔직히 좀 당황하기 시작했어요. 30분 정도 같은 곳을 빙빙 돌았고, 구두를 신고 있어서 발이 너무 아팠어요. 마침내 개를 산책시키던 노부부를 만나서 길을 물어봤어요. 정말 친절하셨어요. 큰길까지 저와 함께 걸어 주시고 근처 맛집까지 추천해 주셨어요. 그래서 결국 그 일은 좋은 추억이 됐어요. 하지만 확실히 교훈을 얻었어요. 이제 새로운 곳을 걸을 때는 보조 배터리를 챙기고 가기 전에 지도를 캡처해 둬요. 그리고 다시는 구두를 신고 산책하지 않아요.",
+  "tips": [
+   "문제 경험: 배경 → 문제 발생 → 감정 → 해결 → 교훈 순서",
+   "On top of that, I'll be honest, In the end 같은 연결어로 이야기에 긴장감을 주세요"
+  ]
+ },
+ {
+  "id": "oq-walking-006",
+  "topic": "walking",
+  "kind": "compare",
+  "level": 5,
+  "question": "How have walking paths and parks in your area changed compared to when you were younger? What were they like in the past, and what are they like now? How do you feel about these changes?",
+  "question_ko": "어렸을 때와 비교해 동네 산책로와 공원은 어떻게 바뀌었나요? 예전에는 어땠고 지금은 어떤가요? 이런 변화에 대해 어떻게 생각하나요?",
+  "sample": "Well, the walking paths in my area have changed a lot. When I was a child, the stream near my house was dirty and smelled bad. There was no real path, just a dirt road, so people didn't walk there much. Now, it is totally different. The city cleaned the water and built a nice path with trees and lights. There are also benches, toilets, and exercise machines. Many people walk there every day, even at night, because it is safe. I think these changes are really good. It is much easier to stay healthy now.",
+  "sample_ko": "음, 저희 동네 산책로는 많이 바뀌었어요. 제가 어렸을 때 집 근처 하천은 더럽고 냄새가 났어요. 제대로 된 길이 없고 흙길뿐이라 사람들이 거기서 별로 걷지 않았어요. 지금은 완전히 달라요. 시에서 물을 깨끗하게 하고 나무와 조명이 있는 좋은 길을 만들었어요. 벤치, 화장실, 운동기구도 있어요. 안전해서 많은 사람들이 매일, 밤에도 거기서 걸어요. 이런 변화는 정말 좋다고 생각해요. 이제 건강을 지키기가 훨씬 쉬워졌어요.",
+  "sample_adv": "That's a great question, because the change has been huge. When I was in elementary school, back in the early two thousands, the stream near my neighborhood was honestly a mess. The water was gray, there was trash everywhere, and it smelled terrible in the summer. There was just a narrow dirt path, and at night it was so dark that my parents told me never to go there alone. So nobody really thought of it as a place for walking. Fast forward to today, and you wouldn't even recognize it. About ten years ago, the city started a big restoration project. They cleaned up the water, planted thousands of flowers and trees, and built a smooth rubber walking path separated from the bike lane. Now there are solar-powered lights, CCTV cameras, public restrooms, and even little libraries in some spots. On weekends, it's full of families, joggers, and people walking their dogs. Personally, I think the change is amazing. It's not just about exercise. It actually brought the community together, because you keep running into your neighbors. If I had to point out one downside, it's that it can get way too crowded now. But overall, I'm really grateful, and I think it's one of the best things the city has done.",
+  "sample_adv_ko": "좋은 질문이에요. 변화가 정말 컸거든요. 제가 초등학생이던 2000년대 초반에 동네 근처 하천은 솔직히 엉망이었어요. 물은 회색이었고, 쓰레기가 곳곳에 있었고, 여름에는 냄새가 지독했어요. 좁은 흙길만 있었고, 밤에는 너무 어두워서 부모님이 절대 혼자 가지 말라고 하셨어요. 그래서 아무도 거기를 산책할 곳으로 생각하지 않았어요. 지금으로 와 보면, 알아보지도 못할 거예요. 10년쯤 전에 시에서 큰 복원 사업을 시작했어요. 물을 정화하고, 꽃과 나무를 수천 그루 심고, 자전거 도로와 분리된 매끄러운 우레탄 산책로를 만들었어요. 지금은 태양광 조명, CCTV, 공중화장실, 곳곳에 작은 도서관까지 있어요. 주말에는 가족, 조깅하는 사람, 개를 산책시키는 사람들로 가득해요. 개인적으로 이 변화는 놀랍다고 생각해요. 단지 운동만의 문제가 아니에요. 이웃을 계속 마주치게 되니까 실제로 동네 사람들을 하나로 묶어 줬어요. 단점을 하나 꼽자면 이제 너무 붐빌 때가 있다는 거예요. 그래도 전체적으로 정말 고맙고, 시가 한 일 중 최고라고 생각해요.",
+  "tips": [
+   "비교 구조: 예전(과거 시제, used to) → 계기 → 지금(현재 시제) → 내 의견·장단점",
+   "Fast forward to today 로 과거에서 현재로 넘어가면 자연스러워요"
+  ]
+ },
+ {
+  "id": "oq-walking-007",
+  "topic": "walking",
+  "kind": "issue",
+  "level": 5,
+  "question": "These days, many people say walking in the city is not as safe or pleasant as it should be. What are some concerns people have about walking in their neighborhoods? What do you think should be done about them?",
+  "question_ko": "요즘 많은 사람들이 도시에서 걷는 것이 생각만큼 안전하거나 쾌적하지 않다고 말합니다. 사람들이 동네에서 걷는 것에 대해 어떤 걱정을 하나요? 이에 대해 무엇을 해야 한다고 생각하나요?",
+  "sample": "Well, people have a few concerns about walking in the city. First, there are many electric scooters on the sidewalks. They go very fast, and sometimes people get hit. Second, some streets are too dark at night, so women and older people feel unsafe. Also, in many alleys there is no sidewalk, so cars and people share the road. I think the city should make clear rules for scooters. They should also put more lights and CCTV cameras on dark streets. If these problems are solved, more people will enjoy walking.",
+  "sample_ko": "음, 사람들은 도시에서 걷는 것에 대해 몇 가지 걱정을 해요. 첫째, 인도에 전동 킥보드가 많아요. 아주 빨리 달려서 가끔 사람들이 부딪혀요. 둘째, 어떤 거리는 밤에 너무 어두워서 여성과 노인들이 불안해해요. 또 많은 골목에는 인도가 없어서 차와 사람이 길을 같이 써요. 시에서 킥보드에 대한 분명한 규칙을 만들어야 한다고 생각해요. 어두운 거리에는 조명과 CCTV도 더 설치해야 해요. 이런 문제가 해결되면 더 많은 사람들이 걷기를 즐길 거예요.",
+  "sample_adv": "That's a really timely question, because I've been seeing a lot of news about this lately. I think there are three main concerns. The biggest one is probably electric scooters and bikes on sidewalks. Shared e-scooters became really popular a few years ago, and now people ride them right next to pedestrians at almost twenty-five kilometers an hour. Just last month, there was a news story about an elderly woman who was seriously injured by a scooter rider, and that really shocked people. The second concern is safety at night. A lot of residential alleys are poorly lit, and there have been some crime reports, so many people, especially women, avoid walking alone after dark. And third, there's the problem of narrow alleys with no sidewalks at all, where delivery motorcycles and cars squeeze past you. Personally, I've almost been hit a couple of times near my apartment. So what should be done? First, I think the government needs stricter rules, like requiring a license for scooters and actually fining people who ride on sidewalks. Second, cities should invest in brighter street lights and safety cameras. And finally, for those narrow alleys, they could set speed limits for cars or make them pedestrian-first zones. Walking should be the easiest and safest way to get around, so I really hope things improve.",
+  "sample_adv_ko": "정말 시의적절한 질문이에요. 요즘 이에 관한 뉴스를 많이 보고 있거든요. 크게 세 가지 걱정이 있다고 생각해요. 가장 큰 건 아마 인도 위의 전동 킥보드와 자전거일 거예요. 몇 년 전 공유 킥보드가 크게 유행했고, 지금은 사람들이 보행자 바로 옆에서 시속 25킬로미터 가까이로 달려요. 바로 지난달에도 한 할머니가 킥보드 운전자에게 크게 다쳤다는 뉴스가 있었고, 사람들이 정말 충격을 받았어요. 두 번째 걱정은 밤의 안전이에요. 주택가 골목 상당수가 조명이 어둡고 범죄 신고도 좀 있어서, 많은 사람들, 특히 여성들이 어두워진 뒤 혼자 걷는 걸 피해요. 셋째로, 인도가 아예 없는 좁은 골목에서 배달 오토바이와 차가 옆을 비집고 지나가는 문제가 있어요. 개인적으로도 저희 아파트 근처에서 두어 번 거의 치일 뻔했어요. 그럼 무엇을 해야 할까요? 먼저 정부가 킥보드 면허를 의무화하고 인도에서 타는 사람에게 실제로 벌금을 매기는 등 더 엄격한 규칙을 만들어야 한다고 생각해요. 둘째, 도시는 더 밝은 가로등과 방범 카메라에 투자해야 해요. 마지막으로 좁은 골목에는 차량 속도 제한을 두거나 보행자 우선 구역으로 만들 수 있어요. 걷기는 가장 쉽고 안전한 이동 방법이어야 하니까 상황이 정말 나아지길 바라요.",
+  "tips": [
+   "이슈 답변: 걱정거리 2~3개(뉴스 예시 하나 포함) → 내 경험 → 해결책 → 바람",
+   "So what should be done? 처럼 스스로 질문을 던져 해결책 파트로 넘어가세요"
+  ]
+ },
+ {
+  "id": "oq-gym-001",
+  "topic": "gym",
+  "kind": "describe",
+  "level": 1,
+  "question": "You indicated in the survey that you go to the gym. Describe the gym you go to. Where is it, what does it look like, and what kinds of equipment does it have?",
+  "question_ko": "설문에서 헬스장에 다닌다고 하셨습니다. 다니는 헬스장을 묘사해 주세요. 어디에 있고, 어떻게 생겼으며, 어떤 운동기구가 있나요?",
+  "sample": "Okay, I go to a gym near my office. It is on the third floor of a big building, right next to the subway station. The gym is quite large and clean. When you walk in, there is a front desk on the left. In the middle, there are a lot of treadmills and bikes. They face big windows, so you can see the street. On the right side, there are weight machines and dumbbells. There are also locker rooms with showers. The gym plays loud music all the time. I like it because it is clean and close to work.",
+  "sample_ko": "네, 저는 회사 근처 헬스장에 다녀요. 지하철역 바로 옆 큰 건물 3층에 있어요. 헬스장은 꽤 넓고 깨끗해요. 들어가면 왼쪽에 안내 데스크가 있어요. 가운데에는 러닝머신과 자전거가 많아요. 큰 창문을 향해 있어서 거리를 볼 수 있어요. 오른쪽에는 웨이트 기구와 덤벨이 있어요. 샤워실이 있는 탈의실도 있어요. 헬스장에서는 항상 음악을 크게 틀어요. 깨끗하고 회사에서 가까워서 좋아요.",
+  "sample_adv": "Sure. The gym I go to is called Power Zone, and it's on the fifth floor of a shopping building just two minutes from Gangnam Station. So let me describe it for you. As soon as you step out of the elevator, you see a reception desk with a smiling staff member and a big screen showing class schedules. To the right, there's the cardio area, with about twenty treadmills and stationary bikes lined up in front of floor-to-ceiling windows. Honestly, running there at night with the city lights in front of you feels pretty cool. Further inside, there's the free weight zone, with racks of dumbbells, barbells, and squat racks, and the whole wall is covered with mirrors. In the back corner, there's a separate studio for yoga and pilates classes, which has a wooden floor and soft lighting. They also have clean locker rooms with saunas, and they give you free towels and workout clothes, which is super convenient. What I like most is that it's open twenty-four hours, so I can go whenever I want, even after a late night at work. It's a little pricey, but I think it's worth every penny.",
+  "sample_adv_ko": "네. 제가 다니는 헬스장은 파워존이라는 곳인데, 강남역에서 2분 거리 쇼핑 건물 5층에 있어요. 그럼 묘사해 드릴게요. 엘리베이터에서 내리자마자 웃으며 맞아 주는 직원이 있는 안내 데스크와 수업 시간표를 보여 주는 큰 화면이 보여요. 오른쪽에는 유산소 구역이 있는데, 러닝머신과 실내 자전거 스무 대 정도가 통유리창 앞에 줄지어 있어요. 솔직히 밤에 도시 불빛을 앞에 두고 달리면 꽤 멋져요. 더 안쪽에는 덤벨, 바벨, 스쿼트 랙이 있는 프리웨이트 구역이 있고, 벽 전체가 거울로 덮여 있어요. 뒤쪽 구석에는 요가와 필라테스 수업을 위한 별도 스튜디오가 있는데, 나무 바닥에 조명이 은은해요. 사우나가 있는 깨끗한 탈의실도 있고, 수건과 운동복을 무료로 줘서 정말 편해요. 가장 좋은 점은 24시간 운영이라 회사에서 늦게 끝난 날에도 언제든 갈 수 있다는 거예요. 조금 비싸지만 돈이 전혀 아깝지 않다고 생각해요.",
+  "tips": [
+   "공간 묘사는 동선대로: 입구 → 오른쪽/왼쪽 → 더 안쪽 → 뒤쪽 구석",
+   "worth every penny (돈이 아깝지 않다), floor-to-ceiling windows (통유리창) 활용"
+  ]
+ },
+ {
+  "id": "oq-gym-002",
+  "topic": "gym",
+  "kind": "describe",
+  "level": 2,
+  "question": "I'd like to know what kind of exercise you do at the gym. What do you usually do there? Which exercise is your favorite, and why do you like it?",
+  "question_ko": "헬스장에서 어떤 운동을 하는지 알고 싶습니다. 거기서 보통 무엇을 하나요? 가장 좋아하는 운동은 무엇이고, 왜 좋아하나요?",
+  "sample": "At the gym, I usually do two kinds of exercise. First, I warm up on the treadmill for about twenty minutes. Then I do weight training. I use machines for my legs, back, and arms. My favorite exercise is the squat. It is hard, but it makes my legs and body strong. I also like it because I can see my progress. When I started, I could only lift twenty kilograms. Now I can lift fifty kilograms. That makes me feel proud. So squats are my favorite exercise at the gym.",
+  "sample_ko": "헬스장에서 저는 보통 두 가지 운동을 해요. 먼저 러닝머신에서 20분 정도 몸을 풀어요. 그다음 웨이트 트레이닝을 해요. 다리, 등, 팔 운동 기구를 써요. 제가 가장 좋아하는 운동은 스쿼트예요. 힘들지만 다리와 몸을 튼튼하게 해 줘요. 발전하는 게 눈에 보여서 좋기도 해요. 처음 시작했을 때는 20킬로그램밖에 못 들었어요. 지금은 50킬로그램을 들 수 있어요. 그래서 뿌듯해요. 그래서 스쿼트가 제가 헬스장에서 가장 좋아하는 운동이에요.",
+  "sample_adv": "Well, I'm pretty serious about my workouts, so I follow a split routine. That means I train different body parts on different days. For example, Monday is chest and shoulders, Wednesday is back and arms, and Friday is legs. No matter what day it is, I always start with ten minutes on the rowing machine to get my heart rate up, and I finish with some stretching on the mats. But if I had to pick a favorite, it would definitely be the deadlift. I know a lot of people are scared of it because it looks dangerous, and to be honest, I was too at first. But I hired a personal trainer for three months, and he taught me the right form step by step. The reason I love it is that it works almost every muscle in your body at once, from your legs to your back to your grip. There's also something really satisfying about picking up a heavy bar from the floor. When I first started, I could barely lift forty kilograms, and last week I hit a hundred for the first time. I actually shouted a little, and some people looked at me, but I didn't care. So yeah, the deadlift is my favorite, because it makes me feel strong both physically and mentally.",
+  "sample_adv_ko": "음, 저는 운동을 꽤 진지하게 해서 분할 루틴을 따라요. 요일마다 다른 부위를 운동한다는 뜻이에요. 예를 들어 월요일은 가슴과 어깨, 수요일은 등과 팔, 금요일은 하체예요. 어떤 요일이든 항상 로잉머신 10분으로 심박수를 올리면서 시작하고, 매트에서 스트레칭으로 마무리해요. 그래도 하나를 꼽자면 확실히 데드리프트예요. 위험해 보여서 많은 사람들이 무서워하는 걸 알고, 솔직히 저도 처음엔 그랬어요. 그런데 석 달 동안 개인 트레이너를 고용했고, 그분이 올바른 자세를 차근차근 가르쳐 줬어요. 제가 데드리프트를 좋아하는 이유는 다리부터 등, 악력까지 몸의 거의 모든 근육을 한 번에 쓰기 때문이에요. 바닥에서 무거운 바를 들어 올리는 데서 오는 뭔가 정말 짜릿한 느낌도 있어요. 처음에는 40킬로그램도 겨우 들었는데, 지난주에 처음으로 100킬로그램을 들었어요. 사실 소리를 살짝 질러서 사람들이 쳐다봤지만 신경 안 썼어요. 그래서 데드리프트가 제일 좋아요. 몸도 마음도 강해진 느낌을 주거든요.",
+  "tips": [
+   "좋아하는 것 + 이유 2개 + 구체적 숫자(무게·기간)로 설득력 있게",
+   "If I had to pick a favorite, it would be ~ 로 선택을 말하세요"
+  ]
+ },
+ {
+  "id": "oq-gym-003",
+  "topic": "gym",
+  "kind": "routine",
+  "level": 1,
+  "question": "You indicated that you work out at the gym. How often do you go, and at what time of day? Tell me step by step what you usually do from the moment you arrive until you leave.",
+  "question_ko": "헬스장에서 운동한다고 하셨습니다. 얼마나 자주, 하루 중 언제 가나요? 도착해서 나올 때까지 보통 무엇을 하는지 단계별로 말해 주세요.",
+  "sample": "I go to the gym four times a week, usually in the morning before work. I get there at about six thirty. First, I scan my membership card at the front desk. Then I go to the locker room and change my clothes. After that, I run on the treadmill for twenty minutes. Next, I do some weight training for about thirty minutes. I usually do push-ups, squats, and some machine exercises. Finally, I stretch and take a quick shower. I leave the gym at around eight and go to work. It is hard to wake up early, but I feel great all day.",
+  "sample_ko": "저는 일주일에 네 번, 보통 출근 전 아침에 헬스장에 가요. 6시 반쯤 도착해요. 먼저 안내 데스크에서 회원 카드를 찍어요. 그다음 탈의실에 가서 옷을 갈아입어요. 그 후에 러닝머신에서 20분 달려요. 다음으로 30분 정도 웨이트 트레이닝을 해요. 보통 팔굽혀펴기, 스쿼트, 기구 운동을 해요. 마지막으로 스트레칭하고 빨리 샤워해요. 8시쯤 헬스장을 나와서 출근해요. 일찍 일어나기는 힘들지만 하루 종일 기분이 좋아요.",
+  "sample_adv": "Sure. I'm a morning person, so I go to the gym five days a week, Monday through Friday, at around six in the morning. I know that sounds crazy, but it's the only time I can guarantee nobody will call me for work. Here's how it usually goes. I get there at about six, tap my phone on the entrance gate, and head straight to the locker room. I change into the gym clothes they provide and fill up my water bottle. Then I start with a ten-minute warm-up, usually a light jog on the treadmill while I watch the morning news on the little screen. After that comes the main workout, which takes about forty minutes. I check my workout app to see what's planned for the day, so I don't waste time wandering around. On busy days, I sometimes have to wait for the squat rack, so I do a different exercise in the meantime. Once I'm done, I stretch for five minutes, especially my hips and lower back, because I sit at a desk all day. Finally, I take a shower, grab a protein shake from the little cafe at the front, and I'm out the door by seven thirty. By the time I get to the office, I'm wide awake and ready to go.",
+  "sample_adv_ko": "네. 저는 아침형 인간이라 월요일부터 금요일까지 일주일에 닷새, 아침 6시쯤 헬스장에 가요. 미친 소리처럼 들리겠지만, 아무도 일 때문에 전화하지 않는다고 확신할 수 있는 유일한 시간이에요. 보통 이렇게 진행돼요. 6시쯤 도착해서 입구 게이트에 휴대폰을 찍고 바로 탈의실로 가요. 헬스장에서 주는 운동복으로 갈아입고 물병을 채워요. 그다음 10분 워밍업으로 시작하는데, 보통 러닝머신에서 작은 화면으로 아침 뉴스를 보면서 가볍게 뛰어요. 그 후에 본 운동이 40분 정도 이어져요. 운동 앱으로 그날 계획을 확인해서 이리저리 돌아다니며 시간 낭비하지 않아요. 붐비는 날에는 스쿼트 랙을 기다려야 할 때가 있어서 그동안 다른 운동을 해요. 끝나면 5분 동안 스트레칭을 하는데, 하루 종일 책상에 앉아 있어서 특히 엉덩이와 허리를 풀어요. 마지막으로 샤워하고 앞쪽 작은 카페에서 단백질 셰이크를 사서 7시 반이면 나가요. 회사에 도착할 때쯤이면 정신이 완전히 맑고 일할 준비가 돼 있어요.",
+  "tips": [
+   "First → Then → After that → Once I'm done → Finally 로 단계를 분명히",
+   "왜 그 시간에 가는지 이유 한 문장을 넣으면 답이 풍부해져요"
+  ]
+ },
+ {
+  "id": "oq-gym-004",
+  "topic": "gym",
+  "kind": "past",
+  "level": 3,
+  "question": "Tell me about the first time you went to a gym. When was it, why did you decide to go, and how did you feel? Was there anything that surprised you?",
+  "question_ko": "처음 헬스장에 갔던 때에 대해 말해 주세요. 언제였고, 왜 가기로 했으며, 기분이 어땠나요? 놀랐던 점이 있었나요?",
+  "sample": "The first time I went to a gym was about five years ago, when I was in university. I gained a lot of weight during my first year, so I decided to exercise. I went to a small gym near my school with my roommate. I was very nervous because I didn't know how to use the machines. Everyone looked so strong. I was surprised that the gym was so noisy. People were dropping weights and the music was really loud. A trainer showed me some easy exercises. The next day, my whole body hurt. But I kept going, and I lost seven kilograms.",
+  "sample_ko": "처음 헬스장에 간 건 5년쯤 전, 대학생 때였어요. 1학년 때 살이 많이 쪄서 운동하기로 했어요. 룸메이트와 학교 근처 작은 헬스장에 갔어요. 기구 사용법을 몰라서 아주 긴장했어요. 다들 너무 힘이 세 보였어요. 헬스장이 너무 시끄러워서 놀랐어요. 사람들이 무게를 내려놓고 음악도 정말 컸어요. 트레이너가 쉬운 운동 몇 가지를 알려 줬어요. 다음 날 온몸이 아팠어요. 하지만 계속 다녔고 7킬로그램을 뺐어요.",
+  "sample_adv": "Oh, I remember it like it was yesterday. It was about six years ago, right after I got my first job. I was sitting at a desk for ten hours a day and eating instant noodles for dinner, and one morning I realized I couldn't even climb the stairs at the subway station without getting out of breath. That was my wake-up call. So I signed up for a three-month membership at a gym near my office. On the first day, I walked in wearing an old T-shirt and basketball shorts, and I immediately felt out of place. Everyone around me had matching workout outfits and huge muscles, and they all seemed to know exactly what they were doing. I didn't want to look like a beginner, so I just jumped on a machine and started pushing. It turned out I was using it completely backwards. A trainer came over, smiled, and gently showed me the right way. I was so embarrassed that my face turned bright red. What surprised me most, though, was how friendly people were. A guy next to me even gave me some tips about breathing. The next day, I was so sore I could barely sit down. But that first awkward day was the start of a habit I've kept for six years now.",
+  "sample_adv_ko": "아, 어제 일처럼 기억나요. 6년쯤 전, 첫 직장에 들어간 직후였어요. 하루 열 시간씩 책상에 앉아 있고 저녁은 라면으로 때웠는데, 어느 날 아침 지하철역 계단도 숨이 차서 못 올라간다는 걸 깨달았어요. 그게 경고 신호였죠. 그래서 회사 근처 헬스장에 석 달 회원권을 끊었어요. 첫날 낡은 티셔츠에 농구 반바지를 입고 들어갔는데, 바로 어색함을 느꼈어요. 주변 사람들은 다 운동복을 맞춰 입고 근육이 엄청났고, 다들 자기가 뭘 하는지 정확히 아는 것 같았어요. 초보처럼 보이기 싫어서 그냥 기구에 올라가서 밀기 시작했어요. 알고 보니 완전히 거꾸로 쓰고 있었어요. 트레이너가 다가와서 웃으며 올바른 방법을 친절하게 알려 줬어요. 너무 창피해서 얼굴이 새빨개졌어요. 그래도 가장 놀라웠던 건 사람들이 정말 친절했다는 거예요. 옆에 있던 남자분은 호흡에 대한 팁까지 줬어요. 다음 날은 너무 아파서 앉기도 힘들었어요. 하지만 그 어색했던 첫날이 지금까지 6년째 이어 온 습관의 시작이었어요.",
+  "tips": [
+   "처음 경험: 계기(wake-up call) → 첫인상·긴장 → 실수나 놀란 점 → 결과",
+   "It turned out ~ (알고 보니 ~였다) 는 반전 이야기에 아주 좋아요"
+  ]
+ },
+ {
+  "id": "oq-gym-005",
+  "topic": "gym",
+  "kind": "past",
+  "level": 3,
+  "question": "Have you ever had a problem at the gym, such as an injury, a broken machine, or a conflict with another person? Tell me what happened, how you handled it, and what you learned from it.",
+  "question_ko": "부상, 고장 난 기구, 다른 사람과의 갈등처럼 헬스장에서 문제를 겪은 적이 있나요? 무슨 일이 있었고, 어떻게 대처했으며, 무엇을 배웠는지 말해 주세요.",
+  "sample": "Yes, I hurt my back at the gym two years ago. I was doing heavy squats, and I wanted to lift more than my friend. I didn't warm up enough, and I used too much weight. Suddenly, I felt a sharp pain in my lower back. I couldn't stand up straight. A trainer helped me sit down and put ice on my back. The next day, I went to the hospital. The doctor told me to rest for a month. It was really boring, and I felt stupid. Now I always warm up first, and I never lift too much just to show off.",
+  "sample_ko": "네, 2년 전에 헬스장에서 허리를 다쳤어요. 무거운 스쿼트를 하고 있었는데 친구보다 더 들고 싶었어요. 준비 운동을 충분히 안 했고 무게도 너무 많이 올렸어요. 갑자기 허리 아래쪽에 날카로운 통증이 왔어요. 똑바로 설 수가 없었어요. 트레이너가 앉는 걸 도와주고 허리에 얼음을 대 줬어요. 다음 날 병원에 갔어요. 의사가 한 달 동안 쉬라고 했어요. 정말 지루했고 제가 바보 같았어요. 이제는 항상 준비 운동부터 하고, 과시하려고 무리하게 들지 않아요.",
+  "sample_adv": "Yeah, actually, I had kind of an awkward situation at the gym last winter. It was around seven in the evening, which is the busiest time, and I was waiting to use the bench press. There was a guy on it who had been there for, I don't know, at least twenty-five minutes. But he wasn't really working out. He was just sitting there, scrolling through his phone and taking selfies between sets. I waited and waited, and I could feel myself getting more and more annoyed. At first, I thought about just complaining to the staff, but I decided to talk to him myself. So I walked over and said, very politely, excuse me, do you mind if I work in with you between your sets? He looked a little surprised, and then he actually apologized. He said he didn't realize how long he'd been there. We ended up taking turns, and we even chatted a bit about our workout plans. It turned out he was pretty nice, and now we say hi every time we see each other. Looking back, I'm glad I didn't lose my temper. I learned that most problems like that can be solved with one polite sentence. Getting angry would've just ruined both of our workouts.",
+  "sample_adv_ko": "네, 사실 지난겨울에 헬스장에서 좀 곤란한 상황이 있었어요. 가장 붐비는 저녁 7시쯤이었고, 벤치프레스를 쓰려고 기다리고 있었어요. 어떤 남자가 적어도 25분은 거기 있었어요. 그런데 운동을 제대로 하는 게 아니었어요. 세트 사이에 그냥 앉아서 휴대폰을 넘기고 셀카를 찍고 있었어요. 기다리고 또 기다리면서 점점 짜증이 나는 게 느껴졌어요. 처음에는 직원에게 불평할까 생각했지만 직접 말하기로 했어요. 그래서 다가가서 아주 정중하게, 실례지만 세트 사이에 번갈아 써도 될까요라고 말했어요. 그 사람은 조금 놀란 것 같더니 실제로 사과했어요. 그렇게 오래 있었는지 몰랐대요. 결국 번갈아 가며 썼고, 운동 계획에 대해 조금 이야기도 나눴어요. 알고 보니 꽤 좋은 사람이어서 지금은 볼 때마다 인사해요. 돌이켜 보면 화를 내지 않아서 다행이에요. 그런 문제는 대부분 정중한 한 문장으로 해결될 수 있다는 걸 배웠어요. 화를 냈다면 둘 다 운동을 망쳤을 거예요.",
+  "tips": [
+   "대화체 인용(I said, excuse me, ~)을 넣으면 생생한 이야기가 돼요",
+   "배운 점: I learned that ~ / Looking back, I'm glad ~ 로 마무리"
+  ]
+ },
+ {
+  "id": "oq-gym-006",
+  "topic": "gym",
+  "kind": "compare",
+  "level": 5,
+  "question": "How are gyms today different from gyms in the past? Think about the facilities, the services, and the kinds of people who go there. What has changed, and why do you think these changes happened?",
+  "question_ko": "요즘 헬스장은 예전 헬스장과 어떻게 다른가요? 시설, 서비스, 이용하는 사람들을 생각해 보세요. 무엇이 바뀌었고, 왜 그런 변화가 생겼다고 생각하나요?",
+  "sample": "Gyms are very different now. In the past, gyms were small and dark, and they were usually in basements. Most of the people there were young men who wanted big muscles. There were only simple machines and weights. These days, gyms are big, bright, and clean. They have many classes like yoga, pilates, and spinning. Many gyms also give you clothes and towels. Now, all kinds of people go to the gym, like women, students, and older people. I think this happened because people care more about health now. Also, people like to post workout photos on social media.",
+  "sample_ko": "요즘 헬스장은 아주 달라요. 예전에는 헬스장이 작고 어두웠고, 보통 지하에 있었어요. 거기 오는 사람들은 대부분 큰 근육을 원하는 젊은 남자였어요. 간단한 기구와 무게만 있었어요. 요즘 헬스장은 크고 밝고 깨끗해요. 요가, 필라테스, 스피닝 같은 수업이 많아요. 옷과 수건을 주는 곳도 많아요. 지금은 여성, 학생, 노인 등 모든 사람이 헬스장에 가요. 사람들이 건강에 더 신경 쓰게 돼서 이렇게 됐다고 생각해요. 또 사람들이 SNS에 운동 사진 올리는 걸 좋아해요.",
+  "sample_adv": "That's an interesting question, because gyms have totally transformed. When I was a kid, I remember my dad going to a gym in the basement of an old building. It was kind of dark, it smelled like sweat, and there was rock music blasting from an old radio. The equipment was really basic, just some rusty barbells and a couple of machines, and almost everyone there was a middle-aged man trying to build muscle. Women hardly ever went, and there definitely weren't any classes. Now, things are completely different. Modern gyms look more like hotels. They're bright and spacious, with smart machines that track your reps and connect to your phone. Most of them offer group classes like pilates, crossfit, and spinning, and some even have personal trainers who make diet plans for you. And the crowd is so diverse now. You'll see college students, office workers, moms, and even people in their seventies doing light exercises. So why did this happen? I think there are a couple of reasons. First, people became much more interested in health, especially after the pandemic. Second, social media played a huge role. People love posting their workout progress on Instagram, so the gym became a kind of lifestyle space. Personally, I think it's a great change, although membership fees have gone up quite a lot.",
+  "sample_adv_ko": "흥미로운 질문이에요. 헬스장은 완전히 탈바꿈했거든요. 제가 어렸을 때 아버지가 오래된 건물 지하 헬스장에 다니시던 게 기억나요. 좀 어둡고 땀 냄새가 났고, 낡은 라디오에서 록 음악이 쾅쾅 울렸어요. 기구는 정말 기본적인 것들, 녹슨 바벨 몇 개와 기계 두어 대뿐이었고, 거기 있는 사람은 거의 다 근육을 키우려는 중년 남성이었어요. 여성은 거의 안 왔고 수업은 당연히 없었어요. 지금은 완전히 달라요. 요즘 헬스장은 호텔에 더 가까워 보여요. 밝고 넓고, 횟수를 기록해 휴대폰과 연결되는 스마트 기구가 있어요. 대부분 필라테스, 크로스핏, 스피닝 같은 그룹 수업을 제공하고, 식단까지 짜 주는 개인 트레이너가 있는 곳도 있어요. 그리고 이용하는 사람들이 정말 다양해졌어요. 대학생, 직장인, 엄마들, 심지어 가벼운 운동을 하는 70대까지 볼 수 있어요. 그럼 왜 이렇게 됐을까요? 몇 가지 이유가 있다고 생각해요. 첫째, 특히 팬데믹 이후 사람들이 건강에 훨씬 관심이 많아졌어요. 둘째, SNS가 큰 역할을 했어요. 사람들이 인스타그램에 운동 성과를 올리는 걸 좋아해서 헬스장이 일종의 라이프스타일 공간이 됐어요. 개인적으로는 좋은 변화라고 생각해요. 회원비가 꽤 많이 오르긴 했지만요.",
+  "tips": [
+   "과거는 기억 하나로 생생하게(I remember my dad ~), 현재는 시설·서비스·사람 세 가지로 비교",
+   "변화의 이유 2개(건강 관심, SNS) + 내 의견으로 마무리"
+  ]
+ },
+ {
+  "id": "oq-gym-007",
+  "topic": "gym",
+  "kind": "issue",
+  "level": 5,
+  "question": "Recently, there have been many complaints about gyms, such as membership problems or safety issues. What kinds of problems do gym users worry about these days? Have you heard any news about this, and what do you think should be done?",
+  "question_ko": "최근 회원권 문제나 안전 문제처럼 헬스장에 대한 불만이 많습니다. 요즘 헬스장 이용자들은 어떤 문제를 걱정하나요? 관련 뉴스를 들은 적이 있나요? 무엇을 해야 한다고 생각하나요?",
+  "sample": "Well, many gym users worry about membership problems. Some gyms sell cheap one-year memberships, and then they suddenly close. People lose their money. I saw this on the news last year. Many people could not get a refund. Another problem is safety. Some trainers do not have enough training, so members can get hurt. I think the government should check gyms more carefully. Also, people should not pay for a long membership at once. It is safer to pay every month. I hope gyms become more honest and safe.",
+  "sample_ko": "음, 많은 헬스장 이용자들이 회원권 문제를 걱정해요. 어떤 헬스장은 1년 회원권을 싸게 팔고 갑자기 문을 닫아요. 사람들은 돈을 잃어요. 작년에 뉴스에서 봤어요. 많은 사람들이 환불을 못 받았어요. 또 다른 문제는 안전이에요. 어떤 트레이너는 교육을 충분히 받지 않아서 회원들이 다칠 수 있어요. 정부가 헬스장을 더 꼼꼼히 점검해야 한다고 생각해요. 또 사람들은 긴 회원권을 한 번에 결제하지 않아야 해요. 매달 내는 게 더 안전해요. 헬스장이 더 정직하고 안전해지길 바라요.",
+  "sample_adv": "Yeah, this has actually been a hot topic in Korea lately. The biggest issue people worry about is what the news calls gym runaways. Basically, a gym offers a huge discount on a one-year or even two-year membership, collects money from hundreds of people, and then the owner suddenly shuts down and disappears. Last year, I read about a gym in Seoul where more than three hundred members lost their money overnight. Some of them had paid over a million won for personal training sessions. And the worst part is that it's really hard to get a refund, because the owner just can't be reached. Another concern is the quality of personal trainers. In Korea, you don't always need a national license to work as a trainer, so some of them don't really know what they're doing, and people get injured. Honestly, one of my coworkers hurt his shoulder because his trainer pushed him way too hard. So what should be done? First, I think the government should require gyms to protect members' payments, maybe through insurance, so people can get their money back if the gym closes. Second, there should be stricter qualifications for trainers. And as consumers, we should be careful too. These days, I only pay month to month, even if it costs a bit more. It's just not worth the risk.",
+  "sample_adv_ko": "네, 이게 사실 요즘 한국에서 뜨거운 주제예요. 사람들이 가장 걱정하는 건 뉴스에서 헬스장 먹튀라고 부르는 문제예요. 간단히 말해, 헬스장이 1년이나 2년 회원권을 크게 할인해서 수백 명에게 돈을 받은 다음, 사장이 갑자기 문을 닫고 사라지는 거예요. 작년에 서울의 한 헬스장에서 회원 300명 넘게 하룻밤 사이에 돈을 잃었다는 기사를 읽었어요. 어떤 사람들은 PT에 백만 원 넘게 냈대요. 최악인 건 사장과 연락이 안 돼서 환불받기가 정말 어렵다는 거예요. 또 다른 걱정은 트레이너의 질이에요. 한국에서는 트레이너로 일하는 데 꼭 국가 자격증이 필요한 게 아니어서, 자기가 뭘 하는지 잘 모르는 사람도 있고 사람들이 다치기도 해요. 솔직히 제 동료 한 명도 트레이너가 너무 무리하게 시켜서 어깨를 다쳤어요. 그럼 무엇을 해야 할까요? 먼저 정부가 헬스장에 보험 등으로 회원 결제금을 보호하도록 의무화해서, 헬스장이 문을 닫아도 돈을 돌려받을 수 있게 해야 한다고 생각해요. 둘째, 트레이너 자격 기준이 더 엄격해야 해요. 그리고 소비자인 우리도 조심해야 해요. 요즘 저는 조금 더 비싸더라도 매달 결제만 해요. 위험을 감수할 가치가 없거든요.",
+  "tips": [
+   "뉴스 예시는 숫자(300명, 백만 원)를 넣어 구체적으로",
+   "해결책은 정부 → 업계 → 개인 순서로 정리하면 논리적이에요"
+  ]
+ },
+ {
+  "id": "oq-bike-001",
+  "topic": "bike",
+  "kind": "describe",
+  "level": 1,
+  "question": "You indicated in the survey that you ride a bike. Tell me about your bike. What does it look like, when did you get it, and why do you like it?",
+  "question_ko": "설문에서 자전거를 탄다고 하셨습니다. 당신의 자전거에 대해 말해 주세요. 어떻게 생겼고, 언제 샀으며, 왜 좋아하나요?",
+  "sample": "Okay, let me tell you about my bike. It is a blue city bike with a basket in the front. It is not very expensive, but it is light and comfortable. The seat is soft, and it has a bell and a small light. I bought it about two years ago at a bike shop near my house. I paid about three hundred thousand won. I ride it to the subway station almost every day. I also ride it along the river on weekends. I like it because it is easy to ride and it saves me time. It is like my best friend.",
+  "sample_ko": "네, 제 자전거에 대해 말씀드릴게요. 앞에 바구니가 달린 파란색 생활 자전거예요. 아주 비싸지는 않지만 가볍고 편해요. 안장은 푹신하고 벨과 작은 조명이 있어요. 2년쯤 전에 집 근처 자전거 가게에서 샀어요. 30만 원 정도 냈어요. 거의 매일 지하철역까지 타고 가요. 주말에는 강을 따라 타기도 해요. 타기 쉽고 시간을 아껴 줘서 좋아요. 제 가장 친한 친구 같아요.",
+  "sample_adv": "Oh, I love talking about my bike, so get ready. It's a road bike, matte black with some small red details on the frame, and it's super light, only about eight kilograms. It has thin tires, drop handlebars, and eighteen gears, so it's really fast on flat roads. I also added a few things myself, like a phone holder, a rear light that blinks, and a bottle cage for my water. I got it about three years ago as a reward for myself after I finished a really tough project at work. To be honest, it was way more expensive than I planned. I went to the store just to look around, and I ended up spending almost two million won. My wife wasn't too happy about that, I have to admit. But I don't regret it at all. Every weekend, I ride it along the Han River bike path from Jamsil all the way to Paldang, which is about forty kilometers round trip. What I love about it is how smooth and quiet it is. When I'm going fast with the wind in my face, I completely forget about work. So yeah, it was a pricey purchase, but it's honestly the best thing I've ever bought for myself.",
+  "sample_adv_ko": "아, 저는 자전거 이야기하는 걸 정말 좋아하니까 각오하세요. 로드 자전거인데, 무광 검정에 프레임에 작은 빨간 디테일이 있고, 8킬로그램 정도로 엄청 가벼워요. 얇은 타이어, 드롭 핸들, 18단 기어가 있어서 평지에서 정말 빨라요. 휴대폰 거치대, 깜빡이는 후미등, 물병 거치대 같은 것들도 제가 직접 달았어요. 3년쯤 전에 회사에서 정말 힘든 프로젝트를 끝내고 나서 제 자신에게 주는 선물로 샀어요. 솔직히 계획보다 훨씬 비쌌어요. 그냥 구경만 하러 매장에 갔다가 결국 거의 2백만 원을 썼어요. 아내가 별로 좋아하지 않았다는 건 인정해야겠네요. 하지만 전혀 후회하지 않아요. 주말마다 한강 자전거길을 따라 잠실에서 팔당까지 타는데, 왕복 40킬로미터 정도예요. 제가 좋아하는 점은 정말 부드럽고 조용하다는 거예요. 바람을 맞으며 빠르게 달릴 때면 회사 일은 완전히 잊어요. 그래서 비싼 구매였지만 솔직히 제가 저에게 사 준 것 중 최고예요.",
+  "tips": [
+   "물건 묘사: 종류·색·크기 → 특징 → 구입 시기·계기 → 쓰는 방법 → 좋아하는 이유",
+   "I ended up ~ing (결국 ~하게 됐다) 로 짧은 에피소드를 넣어 보세요"
+  ]
+ },
+ {
+  "id": "oq-bike-002",
+  "topic": "bike",
+  "kind": "describe",
+  "level": 2,
+  "question": "I'd like to know where you like to ride your bike. Describe your favorite place or route for riding. What can you see along the way, and why do you enjoy riding there?",
+  "question_ko": "자전거를 어디서 타는 걸 좋아하는지 알고 싶습니다. 가장 좋아하는 장소나 코스를 묘사해 주세요. 가는 길에 무엇을 볼 수 있고, 왜 거기서 타는 걸 즐기나요?",
+  "sample": "My favorite place to ride a bike is the Han River bike path. I usually start at Yeouido Park. The path is wide and flat, so it is easy to ride. On one side, there is the river, and on the other side, there are tall buildings. Along the way, I can see bridges, grass fields, and many people having picnics. There are also convenience stores, so I can buy water or ramen. I like riding there because the view is great, especially at sunset. The wind from the river feels so nice. It is the best place in Seoul for biking.",
+  "sample_ko": "제가 자전거 타기 가장 좋아하는 곳은 한강 자전거길이에요. 보통 여의도공원에서 출발해요. 길이 넓고 평평해서 타기 쉬워요. 한쪽에는 강이 있고 다른 쪽에는 높은 빌딩들이 있어요. 가는 길에 다리, 잔디밭, 피크닉하는 많은 사람들을 볼 수 있어요. 편의점도 있어서 물이나 라면을 살 수 있어요. 특히 해 질 녘 경치가 멋져서 거기서 타는 걸 좋아해요. 강바람이 정말 상쾌해요. 서울에서 자전거 타기 가장 좋은 곳이에요.",
+  "sample_adv": "Well, my absolute favorite route is the bike path around Jeju Island, but since I can't go there every weekend, let me tell you about the one I ride most often, which is the Bukhangang bike path outside Seoul. I usually take the subway with my bike to Ungilsan Station, and the route starts right there. The first thing you notice is the old railway bridge. They turned it into a bike and walking bridge, and riding across it with the wide river below you is just breathtaking. After that, the path goes through a series of old train tunnels. They're cool and dark inside, which feels amazing in the middle of summer. Then the path follows the river for a long time, with mountains on both sides and small farms and cafes here and there. In autumn, the whole mountain turns red and orange, and it honestly looks like a painting. My usual stop is a little cafe in Yangpyeong that sells really good sweet potato bread. I always grab a coffee there and just sit by the window for a while. The reason I love this route is that it feels like a mini trip. Within an hour of leaving the city, I'm surrounded by nature, and all my stress just disappears.",
+  "sample_adv_ko": "음, 제가 가장 좋아하는 코스는 제주도 일주 자전거길이지만 매주 갈 수는 없으니, 제가 가장 자주 타는 서울 근교 북한강 자전거길 이야기를 해 드릴게요. 보통 자전거를 가지고 지하철로 운길산역까지 가는데, 코스가 바로 거기서 시작돼요. 가장 먼저 눈에 띄는 건 옛 철교예요. 자전거와 보행자 다리로 바꿔 놨는데, 아래로 넓은 강을 두고 건너가면 정말 숨이 멎을 것 같아요. 그다음 길은 옛 기차 터널 여러 개를 지나가요. 안이 시원하고 어두워서 한여름에 정말 좋아요. 그 후 길은 오랫동안 강을 따라가는데, 양쪽에 산이 있고 군데군데 작은 농장과 카페가 있어요. 가을에는 산 전체가 빨갛고 주황색으로 물들어서 솔직히 그림 같아요. 제가 늘 들르는 곳은 고구마빵이 정말 맛있는 양평의 작은 카페예요. 항상 거기서 커피를 사서 창가에 한동안 앉아 있어요. 이 코스를 좋아하는 이유는 작은 여행 같은 느낌이 들어서예요. 도시를 떠난 지 한 시간 만에 자연에 둘러싸이고, 스트레스가 다 사라져요.",
+  "tips": [
+   "코스 묘사는 출발점 → 처음 보이는 것 → 다음 → 쉬는 곳 순서로 이동하듯 말하세요",
+   "breathtaking, it looks like a painting 같은 감탄 표현으로 감정을 보여 주세요"
+  ]
+ },
+ {
+  "id": "oq-bike-003",
+  "topic": "bike",
+  "kind": "routine",
+  "level": 1,
+  "question": "You indicated that you enjoy biking. How often do you ride, and who do you usually ride with? What do you do to get ready before a ride?",
+  "question_ko": "자전거 타기를 즐긴다고 하셨습니다. 얼마나 자주 타고, 보통 누구와 함께 타나요? 타기 전에 어떤 준비를 하나요?",
+  "sample": "I ride my bike about two or three times a week. On weekdays, I ride alone after work for about an hour. On Sundays, I usually ride with my cousin. We go farther, maybe thirty kilometers. Before I ride, I check my bike first. I check the tires and the brakes. Then I put on my helmet and gloves. I also bring water and a snack, like a banana. If it is hot, I put on sunscreen. After that, I am ready to go. I think checking the bike is very important for safety.",
+  "sample_ko": "저는 일주일에 두세 번 자전거를 타요. 평일에는 퇴근 후 혼자 한 시간 정도 타요. 일요일에는 보통 사촌과 같이 타요. 30킬로미터 정도로 더 멀리 가요. 타기 전에 먼저 자전거를 점검해요. 타이어와 브레이크를 확인해요. 그다음 헬멧과 장갑을 껴요. 물과 바나나 같은 간식도 챙겨요. 더우면 선크림을 발라요. 그러면 출발 준비 끝이에요. 안전을 위해 자전거 점검이 아주 중요하다고 생각해요.",
+  "sample_adv": "Well, I ride pretty regularly, about three or four times a week, depending on the weather. On weekday evenings, I usually ride alone for an hour or so, just around the stream near my apartment. It's more like a quick workout. But on Saturday mornings, I ride with a bike club I joined last year. There are about ten of us, and we're all different ages, from college students to a retired teacher in his sixties. We usually meet at seven a.m. at Banpo Bridge and ride together for about three hours. As for getting ready, I've become kind of a perfectionist about it. The night before, I check the tire pressure with a pump, because flat tires are the worst. I also wipe the chain and put a little oil on it. Then I charge my lights and my bike computer, which tracks my speed and distance. In the morning, I put on my cycling jersey, padded shorts, sunglasses, and of course my helmet. I never ride without a helmet, not even for five minutes. Finally, I fill two water bottles and pack some energy gels. It might sound like a lot, but it only takes about fifteen minutes, and it makes the ride so much more comfortable and safe.",
+  "sample_adv_ko": "음, 저는 날씨에 따라 다르지만 일주일에 서너 번 꽤 규칙적으로 타요. 평일 저녁에는 보통 혼자 아파트 근처 하천을 한 시간쯤 돌아요. 짧은 운동에 가까워요. 하지만 토요일 아침에는 작년에 가입한 자전거 동호회와 함께 타요. 열 명 정도인데 나이가 다 달라서 대학생부터 60대 은퇴한 선생님까지 있어요. 보통 아침 7시에 반포대교에서 만나서 세 시간 정도 같이 타요. 준비에 관해서는 좀 완벽주의자가 됐어요. 전날 밤에 펌프로 타이어 공기압을 확인해요. 펑크가 제일 최악이거든요. 체인도 닦고 오일을 조금 발라요. 그다음 라이트와 속도·거리를 기록하는 자전거 속도계를 충전해요. 아침에는 사이클 저지, 패드 반바지, 선글라스, 그리고 당연히 헬멧을 착용해요. 5분이라도 헬멧 없이는 절대 안 타요. 마지막으로 물병 두 개를 채우고 에너지 젤을 챙겨요. 많아 보이지만 15분이면 끝나고, 훨씬 편하고 안전하게 탈 수 있어요.",
+  "tips": [
+   "평일과 주말을 나눠 말하면 습관 답변이 자연스럽게 길어져요",
+   "As for ~ (~에 관해서는) 로 두 번째 질문으로 넘어가세요"
+  ]
+ },
+ {
+  "id": "oq-bike-004",
+  "topic": "bike",
+  "kind": "past",
+  "level": 3,
+  "question": "Tell me about how you first learned to ride a bike. How old were you, who taught you, and what happened? How did you feel when you finally succeeded?",
+  "question_ko": "처음 자전거 타는 법을 배운 이야기를 해 주세요. 몇 살이었고, 누가 가르쳐 주었으며, 무슨 일이 있었나요? 마침내 성공했을 때 기분이 어땠나요?",
+  "sample": "I learned to ride a bike when I was eight years old. My dad taught me in the park in front of our apartment. At first, my bike had training wheels. Then one day, my dad took them off. I was really scared. My dad held the back of the seat and ran behind me. I fell down many times, and my knees were bleeding. I cried a lot, but my dad told me not to give up. After about a week, I rode by myself. I didn't even know my dad let go. I was so happy and proud. I still remember his big smile.",
+  "sample_ko": "저는 여덟 살 때 자전거 타는 법을 배웠어요. 아빠가 아파트 앞 공원에서 가르쳐 주셨어요. 처음에는 제 자전거에 보조 바퀴가 있었어요. 그러다 어느 날 아빠가 그걸 떼셨어요. 정말 무서웠어요. 아빠가 안장 뒤를 잡고 제 뒤에서 뛰셨어요. 여러 번 넘어져서 무릎에서 피가 났어요. 많이 울었지만 아빠가 포기하지 말라고 하셨어요. 일주일쯤 지나서 혼자 탔어요. 아빠가 손을 놓은 줄도 몰랐어요. 너무 기쁘고 뿌듯했어요. 아빠의 환한 미소가 아직도 기억나요.",
+  "sample_adv": "Actually, I learned to ride a bike pretty late, when I was already in university, so it's kind of a funny story. Growing up, I lived in a hilly neighborhood in Busan, and there was just no flat place to practice, so I never learned. I always made excuses whenever my friends went biking. Then, in my second year of college, my friends planned a bike trip around Jeju Island, and I was too embarrassed to tell them I couldn't ride. So I secretly asked my roommate, Minho, to teach me. For about two weeks, we went to the school soccer field every night after ten, when nobody was around. Minho was a pretty strict teacher. He made me practice just balancing and gliding without pedaling for the first three days. I fell over so many times that my legs were covered in bruises, and people probably thought I'd been in a fight. But then, on one cold night, it suddenly clicked. I started pedaling, and I just kept going around the whole field. I remember shouting, I'm doing it, I'm doing it, like a little kid. Minho was laughing and clapping. And a month later, I actually finished the Jeju trip with my friends. Honestly, it's still one of the proudest moments of my life.",
+  "sample_adv_ko": "사실 저는 대학생이 돼서야 꽤 늦게 자전거를 배워서 좀 웃긴 이야기예요. 저는 부산의 언덕이 많은 동네에서 자랐는데, 연습할 평평한 곳이 전혀 없어서 배우지 못했어요. 친구들이 자전거 타러 갈 때마다 늘 핑계를 댔어요. 그러다 대학교 2학년 때 친구들이 제주도 자전거 여행을 계획했는데, 못 탄다고 말하기가 너무 창피했어요. 그래서 룸메이트 민호에게 몰래 가르쳐 달라고 부탁했어요. 2주 정도 아무도 없는 밤 10시 이후에 매일 학교 축구장에 갔어요. 민호는 꽤 엄한 선생님이었어요. 처음 사흘 동안은 페달 없이 균형 잡고 미끄러지는 연습만 시켰어요. 너무 많이 넘어져서 다리가 멍투성이였고, 사람들은 아마 제가 싸움이라도 한 줄 알았을 거예요. 그런데 어느 추운 밤 갑자기 감이 왔어요. 페달을 밟기 시작했고, 축구장 전체를 계속 돌았어요. 어린아이처럼 된다, 된다 하고 소리쳤던 게 기억나요. 민호는 웃으면서 박수를 쳤어요. 그리고 한 달 뒤 저는 실제로 친구들과 제주 여행을 완주했어요. 솔직히 지금도 제 인생에서 가장 자랑스러운 순간 중 하나예요.",
+  "tips": [
+   "it suddenly clicked (갑자기 감이 왔다) 같은 표현으로 전환점을 표시하세요",
+   "결과(한 달 뒤 완주)까지 말해 이야기를 완결하세요"
+  ]
+ },
+ {
+  "id": "oq-bike-005",
+  "topic": "bike",
+  "kind": "past",
+  "level": 3,
+  "question": "Tell me about a memorable bike ride you have taken recently. Where did you go and who were you with? What happened during the ride that you still remember?",
+  "question_ko": "최근 기억에 남는 자전거 타기에 대해 말해 주세요. 어디에 갔고 누구와 함께였나요? 타는 동안 아직도 기억나는 일이 무엇인가요?",
+  "sample": "Last month, I went on a bike ride with my coworkers. We rode from Seoul to Yangpyeong. It was about fifty kilometers. We started early in the morning, at seven. The weather was perfect, sunny and cool. On the way, we stopped at a small restaurant and ate noodles. They were so delicious. In the afternoon, one of my coworkers got a flat tire. Nobody knew how to fix it. Luckily, a kind man on another bike stopped and helped us. We got home at night. We were tired, but it was a really fun day.",
+  "sample_ko": "지난달에 회사 동료들과 자전거를 탔어요. 서울에서 양평까지 탔어요. 50킬로미터 정도였어요. 아침 일찍 7시에 출발했어요. 날씨는 맑고 선선해서 완벽했어요. 가는 길에 작은 식당에 들러 국수를 먹었어요. 정말 맛있었어요. 오후에 동료 한 명의 타이어에 펑크가 났어요. 아무도 고칠 줄 몰랐어요. 다행히 다른 자전거를 탄 친절한 남자분이 멈춰서 도와주셨어요. 밤에 집에 도착했어요. 피곤했지만 정말 재미있는 하루였어요.",
+  "sample_adv": "Sure, I actually have a pretty recent one. Just two weeks ago, my boyfriend and I rented bikes and rode along the coast in Gangneung. We'd planned this trip for months, so we were super excited. We picked up electric bikes from a rental shop near Gyeongpo Beach at around ten in the morning and headed north along the coastal road. The first hour was just perfect. The sea was this unbelievable shade of blue, the sun was shining, and we stopped every ten minutes to take pictures. We even found a tiny cafe on the beach that made coffee with ocean water salt cream, which sounds weird, but it was amazing. Then, around three o'clock, things got interesting. Dark clouds came out of nowhere, and within five minutes it was pouring. We were completely soaked, and the road got slippery, so we had to slow down a lot. At first I was annoyed, but then my boyfriend started singing loudly in the rain, and I couldn't stop laughing. We ended up hiding in a bus stop for half an hour, sharing a bag of chips and watching the waves crash. Looking back, the rain actually made the trip better. It's the part we talk about the most now.",
+  "sample_adv_ko": "네, 사실 꽤 최근 일이 있어요. 바로 2주 전에 남자 친구와 자전거를 빌려서 강릉 해안을 따라 탔어요. 몇 달 동안 계획한 여행이라 엄청 설렜어요. 아침 10시쯤 경포해변 근처 대여점에서 전기 자전거를 빌려서 해안도로를 따라 북쪽으로 출발했어요. 처음 한 시간은 그냥 완벽했어요. 바다는 믿을 수 없을 만큼 파랬고, 해가 빛났고, 10분마다 멈춰서 사진을 찍었어요. 해변에서 바다 소금 크림 커피를 파는 작은 카페도 찾았는데, 이상하게 들리지만 정말 맛있었어요. 그러다 3시쯤 상황이 재미있어졌어요. 갑자기 먹구름이 몰려오더니 5분 만에 비가 쏟아졌어요. 저희는 흠뻑 젖었고, 길이 미끄러워져서 속도를 많이 줄여야 했어요. 처음엔 짜증이 났는데 남자 친구가 빗속에서 큰 소리로 노래를 부르기 시작해서 웃음을 멈출 수가 없었어요. 결국 버스 정류장에 30분 동안 숨어서 과자 한 봉지를 나눠 먹으며 파도가 부서지는 걸 봤어요. 돌이켜 보면 비 덕분에 여행이 오히려 더 좋아졌어요. 지금 저희가 가장 많이 이야기하는 부분이 그거예요.",
+  "tips": [
+   "좋았던 부분 → Then, things got interesting. → 문제 → 반전 → 의미 순서",
+   "날씨·색깔·소리 같은 감각 묘사를 넣으면 고득점에 유리해요"
+  ]
+ },
+ {
+  "id": "oq-bike-006",
+  "topic": "bike",
+  "kind": "compare",
+  "level": 5,
+  "question": "How has biking culture in your country changed over the years? Compare how people used bikes in the past with how they use them now. What do you think caused these changes?",
+  "question_ko": "당신 나라의 자전거 문화는 몇 년 사이 어떻게 바뀌었나요? 예전에 사람들이 자전거를 어떻게 이용했는지와 지금을 비교해 주세요. 무엇이 이런 변화를 가져왔다고 생각하나요?",
+  "sample": "Biking culture in Korea has changed a lot. In the past, bikes were mostly for kids or for delivery. Adults didn't ride bikes for fun very much. There were not many bike paths, so it was dangerous. Now, many adults ride bikes for exercise and hobbies. There are long bike paths along the rivers. Also, there are public bikes in the city, like Ttareungyi in Seoul. You can rent one with your phone. I think these changes happened because people care about health and the environment. The government also built many bike roads.",
+  "sample_ko": "한국의 자전거 문화는 많이 바뀌었어요. 예전에 자전거는 주로 아이들이나 배달용이었어요. 어른들은 재미로 자전거를 많이 타지 않았어요. 자전거길이 많지 않아서 위험했어요. 지금은 많은 어른들이 운동과 취미로 자전거를 타요. 강을 따라 긴 자전거길도 있어요. 또 서울의 따릉이처럼 도시에 공공 자전거가 있어요. 휴대폰으로 빌릴 수 있어요. 사람들이 건강과 환경에 관심이 많아져서 이런 변화가 생겼다고 생각해요. 정부도 자전거 도로를 많이 만들었어요.",
+  "sample_adv": "That's a great question, because biking culture here has really evolved. When I was little, back in the nineties, bikes were mostly practical tools. My grandfather used his old heavy bike to carry rice sacks from the market, and the local Chinese restaurant delivered noodles by bike. For kids, a bike was something you rode around the apartment complex until you got bored. Adults riding bikes for fun was pretty rare, and if you rode on the road, cars would honk at you like you were crazy. Now, it's a whole different world. Biking has become a real hobby and even a lifestyle. On weekends, the Han River paths are packed with people in colorful cycling outfits riding expensive road bikes. There are cross-country bike routes connecting Seoul to Busan, and people collect stamps along the way like it's a game. And in the city, public bike systems like Ttareungyi are everywhere, so office workers ride them to the subway or even to work. So what caused this? First, the government invested a lot in bike infrastructure about fifteen years ago. Second, people became more health conscious. And third, environmental awareness has grown, so people like the idea of a car-free commute. Personally, I think it's a positive change, although I wish drivers were a bit more respectful of cyclists.",
+  "sample_adv_ko": "좋은 질문이에요. 이곳의 자전거 문화는 정말 발전했거든요. 제가 어렸던 90년대에 자전거는 주로 실용적인 도구였어요. 할아버지는 오래되고 무거운 자전거로 시장에서 쌀 포대를 나르셨고, 동네 중국집은 자전거로 짜장면을 배달했어요. 아이들에게 자전거는 질릴 때까지 아파트 단지를 도는 물건이었어요. 어른이 재미로 자전거를 타는 건 꽤 드물었고, 도로에서 타면 차들이 미친 사람 보듯 경적을 울렸어요. 지금은 완전히 다른 세상이에요. 자전거는 진짜 취미이자 라이프스타일이 됐어요. 주말이면 한강 자전거길이 화려한 사이클복을 입고 비싼 로드 자전거를 탄 사람들로 꽉 차요. 서울과 부산을 잇는 국토 종주 자전거길도 있어서 사람들이 게임처럼 길을 따라 도장을 모아요. 그리고 도시에는 따릉이 같은 공공 자전거가 곳곳에 있어서 직장인들이 지하철역이나 회사까지 타고 가요. 그럼 무엇이 이걸 가져왔을까요? 첫째, 15년쯤 전에 정부가 자전거 인프라에 많이 투자했어요. 둘째, 사람들이 건강을 더 신경 쓰게 됐어요. 셋째, 환경 의식이 커져서 사람들이 차 없는 출퇴근이라는 개념을 좋아해요. 개인적으로 긍정적인 변화라고 생각해요. 운전자들이 자전거 타는 사람을 조금 더 존중해 주면 좋겠지만요.",
+  "tips": [
+   "과거는 가족 기억(할아버지 자전거)으로 구체화, 현재는 취미·국토종주·공공자전거로 대비",
+   "원인은 First, Second, And third 로 정리하세요"
+  ]
+ },
+ {
+  "id": "oq-bike-007",
+  "topic": "bike",
+  "kind": "issue",
+  "level": 5,
+  "question": "There have been many reports about bicycle accidents and conflicts between cyclists, drivers, and pedestrians. What are some of the issues people talk about related to cycling? What do you think could be done to make cycling safer for everyone?",
+  "question_ko": "자전거 사고와 자전거 이용자, 운전자, 보행자 사이의 갈등에 관한 보도가 많습니다. 자전거와 관련해 사람들이 이야기하는 문제는 무엇인가요? 모두에게 더 안전하게 하려면 무엇을 할 수 있다고 생각하나요?",
+  "sample": "People talk about a few problems with cycling. First, some cyclists ride too fast on the bike paths. They are dangerous for children and people walking. Second, many people don't wear helmets, especially when they use public bikes. Third, cars often don't give enough space to bikes on the road. I saw a news report about a cyclist who was hit by a bus last year. I think the city should make more separate bike lanes. Also, people should learn the rules, and everyone should wear a helmet. We need to respect each other.",
+  "sample_ko": "사람들은 자전거와 관련해 몇 가지 문제를 이야기해요. 첫째, 어떤 사람들은 자전거길에서 너무 빨리 달려요. 아이들과 걷는 사람들에게 위험해요. 둘째, 특히 공공 자전거를 탈 때 많은 사람들이 헬멧을 안 써요. 셋째, 도로에서 차들이 자전거에게 충분한 공간을 주지 않을 때가 많아요. 작년에 자전거 탄 사람이 버스에 치였다는 뉴스를 봤어요. 시에서 분리된 자전거 도로를 더 만들어야 한다고 생각해요. 또 사람들은 규칙을 배워야 하고 모두 헬멧을 써야 해요. 서로 존중해야 해요.",
+  "sample_adv": "Yeah, this is something that comes up a lot, especially every spring when more people start riding. I think there are three main issues. The first one is speeding on shared paths. Some cyclists, especially in groups, ride really fast on the Han River paths, like over thirty kilometers an hour, and they shout at pedestrians to move. There was actually a viral video last year of a cyclist crashing into a child who was crossing the path, and people were furious. The second issue is the opposite side, which is pedestrians and dog walkers who wander into the bike lane without looking. So honestly, both sides have some responsibility. The third issue is on regular roads. Korea's roads are really designed for cars, and many drivers don't know that bikes are legally vehicles. A lot of cyclists have had close calls with buses and taxis. I've had one myself, and I was shaking for the rest of the day. So what can we do? Number one, we need physically separated bike lanes, not just a painted line. Number two, speed limits on shared paths should actually be enforced, maybe with cameras. And finally, I think cycling rules should be taught in schools and in driving license tests. If cyclists, drivers, and walkers all understand each other's rules, a lot of these accidents could be avoided.",
+  "sample_adv_ko": "네, 이건 특히 매년 봄 자전거 타는 사람이 늘어날 때 자주 나오는 이야기예요. 크게 세 가지 문제가 있다고 생각해요. 첫째는 공용 길에서의 과속이에요. 일부 자전거 이용자들, 특히 무리 지어 타는 사람들이 한강 길에서 시속 30킬로미터 넘게 아주 빨리 달리면서 보행자에게 비키라고 소리쳐요. 실제로 작년에 자전거가 길을 건너던 아이와 부딪히는 영상이 화제가 됐고 사람들이 분노했어요. 두 번째 문제는 반대편, 즉 보지도 않고 자전거 도로로 들어오는 보행자와 개 산책하는 사람들이에요. 그래서 솔직히 양쪽 모두 책임이 있어요. 세 번째 문제는 일반 도로예요. 한국 도로는 정말 차 위주로 만들어져 있고, 많은 운전자들이 자전거가 법적으로 차라는 걸 몰라요. 많은 자전거 이용자들이 버스와 택시에 아찔한 순간을 겪었어요. 저도 한 번 겪었는데 그날 하루 종일 떨렸어요. 그럼 무엇을 할 수 있을까요? 첫째, 페인트 선만이 아니라 물리적으로 분리된 자전거 도로가 필요해요. 둘째, 공용 길의 제한 속도를 카메라 등으로 실제로 단속해야 해요. 마지막으로 자전거 규칙을 학교와 운전면허 시험에서 가르쳐야 한다고 생각해요. 자전거 이용자, 운전자, 보행자가 모두 서로의 규칙을 이해하면 이런 사고 상당수를 피할 수 있을 거예요.",
+  "tips": [
+   "한쪽만 탓하지 말고 both sides have some responsibility 처럼 균형 잡힌 시각을 보여 주세요",
+   "Number one, Number two, And finally 로 해결책을 정리"
+  ]
+ },
+ {
+  "id": "oq-travel_dom-001",
+  "topic": "travel_dom",
+  "kind": "describe",
+  "level": 1,
+  "question": "You indicated in the survey that you like to travel within your country. Where is your favorite place to travel in your country? Describe it in detail. What is special about it?",
+  "question_ko": "설문에서 국내 여행을 좋아한다고 하셨습니다. 국내에서 가장 좋아하는 여행지는 어디인가요? 자세히 묘사해 주세요. 무엇이 특별한가요?",
+  "sample": "My favorite place to travel in Korea is Jeju Island. It is in the south, and it takes about one hour by plane from Seoul. Jeju has beautiful beaches with clear blue water. There is also a big mountain called Hallasan in the middle of the island. You can see many stone walls and orange farms everywhere. The food is great, too. I love black pork barbecue and fresh seafood. Jeju is special because it feels like a foreign country. The weather is warm, and the nature is amazing. I try to go there every year.",
+  "sample_ko": "제가 한국에서 가장 좋아하는 여행지는 제주도예요. 남쪽에 있고 서울에서 비행기로 한 시간 정도 걸려요. 제주에는 맑고 파란 물이 있는 아름다운 해변이 있어요. 섬 가운데에는 한라산이라는 큰 산도 있어요. 곳곳에서 돌담과 귤 농장을 많이 볼 수 있어요. 음식도 훌륭해요. 저는 흑돼지 구이와 신선한 해산물을 정말 좋아해요. 제주는 외국 같은 느낌이 들어서 특별해요. 날씨가 따뜻하고 자연이 놀라워요. 매년 가려고 해요.",
+  "sample_adv": "Without a doubt, my favorite place to travel in Korea is Gyeongju. It's a small city in the southeast, about two hours from Seoul by KTX. If you've never been there, it's often called a museum without walls, and I think that's the perfect description. Gyeongju was the capital of the Silla Kingdom for about a thousand years, so there are ancient sites literally everywhere you look. In the middle of the city, there are these huge grassy hills, which are actually royal tombs. Walking between them, especially early in the morning when it's foggy, feels really mysterious. Then there's Bulguksa Temple on the mountain, with its beautiful stone stairs and pagodas, and Donggung Palace and Wolji Pond, which look incredible at night when the buildings are lit up and reflected in the water. But what makes Gyeongju special to me isn't just the history. It's the atmosphere. There are no tall buildings, so the sky feels really wide, and the whole city moves at a slower pace. These days, there's also a trendy street called Hwangnidan-gil with cute cafes and bakeries in traditional houses. I've been there five times now, with my family, my friends, and once alone, and every time I discover something new. It's honestly the place where I feel most relaxed.",
+  "sample_adv_ko": "의심할 여지 없이 제가 한국에서 가장 좋아하는 여행지는 경주예요. 남동쪽에 있는 작은 도시로, 서울에서 KTX로 두 시간 정도 걸려요. 가 보신 적이 없다면, 흔히 지붕 없는 박물관이라고 불리는데, 딱 맞는 표현이라고 생각해요. 경주는 약 천 년 동안 신라의 수도였어서 말 그대로 눈 돌리는 곳마다 유적지가 있어요. 도시 한가운데에 커다란 잔디 언덕들이 있는데, 사실 왕릉이에요. 그 사이를 걸으면, 특히 안개 낀 이른 아침에는 정말 신비로운 느낌이 들어요. 그리고 산에는 아름다운 돌계단과 탑이 있는 불국사가 있고, 밤에 건물에 불이 켜져 물에 비치면 엄청나게 아름다운 동궁과 월지가 있어요. 하지만 경주가 제게 특별한 건 역사만이 아니에요. 분위기 때문이에요. 높은 건물이 없어서 하늘이 정말 넓게 느껴지고, 도시 전체가 느린 속도로 움직여요. 요즘에는 한옥 안에 귀여운 카페와 빵집이 있는 황리단길이라는 핫한 거리도 있어요. 가족, 친구들, 그리고 한 번은 혼자, 지금까지 다섯 번 갔는데 갈 때마다 새로운 걸 발견해요. 솔직히 제가 가장 편안함을 느끼는 곳이에요.",
+  "tips": [
+   "여행지 묘사: 위치·가는 법 → 대표 명소 2~3곳 → 분위기 → 개인적 의미",
+   "it's often called ~ (흔히 ~라고 불린다) 로 별명을 소개하면 인상적이에요"
+  ]
+ },
+ {
+  "id": "oq-travel_dom-002",
+  "topic": "travel_dom",
+  "kind": "describe",
+  "level": 2,
+  "question": "I'd like to know what kinds of trips you like to take in your country. Do you prefer the mountains, the beach, or the city? What do you usually like to do there, and why?",
+  "question_ko": "국내에서 어떤 여행을 좋아하는지 알고 싶습니다. 산, 바다, 도시 중 어느 것을 더 좋아하나요? 거기서 보통 무엇을 하는 걸 좋아하고, 왜 그런가요?",
+  "sample": "I like going to the beach the most. I love the sound of the waves and the smell of the sea. When I go to the beach, I usually walk along the sand and take pictures. I also like to eat fresh seafood, like raw fish and grilled clams. In the evening, I sit on the beach with my friends and talk. Sometimes we watch fireworks. I don't like the mountains very much because hiking is too tiring for me. And the city is too busy, like my daily life. The beach helps me relax and feel free.",
+  "sample_ko": "저는 바다에 가는 걸 가장 좋아해요. 파도 소리와 바다 냄새가 정말 좋아요. 바다에 가면 보통 모래사장을 걷고 사진을 찍어요. 회나 조개구이 같은 신선한 해산물을 먹는 것도 좋아해요. 저녁에는 친구들과 해변에 앉아 이야기해요. 가끔 불꽃놀이를 봐요. 등산은 저한테 너무 힘들어서 산은 별로 안 좋아해요. 그리고 도시는 제 일상처럼 너무 바빠요. 바다는 제가 쉬고 자유를 느끼게 해 줘요.",
+  "sample_adv": "Well, it really depends on the season, but if I had to choose, I'd say I'm definitely a mountain person. I know most people pick the beach, but let me explain. I live in Seoul, so I'm surrounded by noise and crowds every single day. When I go to the mountains, especially somewhere deep like Seoraksan or Jirisan, it's the complete opposite. It's quiet, the air is fresh, and my phone usually doesn't even get a signal, which is honestly kind of a blessing. So, what do I like to do there? First of all, I hike, obviously. I'm not a professional or anything, but I try to reach the top of at least one big mountain each season. There's this amazing feeling when you finally reach the peak and see the clouds below you. After hiking, I love staying at a small guesthouse at the bottom of the mountain. The owners usually cook dinner with vegetables they grew themselves, and in the evening, I just sit outside and look at the stars. You can see so many more of them than in the city. And of course, in the fall, the colorful leaves are unbelievable. So for me, mountain trips are like a reset button. I come back feeling healthier and much calmer.",
+  "sample_adv_ko": "음, 계절에 따라 정말 다르지만 하나를 고르라면 저는 확실히 산을 좋아하는 사람이에요. 대부분 바다를 고르는 걸 알지만 설명해 드릴게요. 저는 서울에 살아서 매일 소음과 인파에 둘러싸여 있어요. 산에 가면, 특히 설악산이나 지리산처럼 깊은 곳에 가면 정반대예요. 조용하고 공기가 맑고, 휴대폰이 보통 잘 안 터지는데 솔직히 그게 축복 같아요. 그럼 거기서 뭘 좋아하냐고요? 우선 당연히 등산을 해요. 전문가는 아니지만 계절마다 적어도 큰 산 하나는 정상까지 가려고 해요. 마침내 정상에 올라 발아래 구름을 볼 때 정말 놀라운 느낌이 있어요. 등산 후에는 산 아래 작은 민박에 묵는 걸 좋아해요. 주인분들이 보통 직접 키운 채소로 저녁을 해 주시고, 저녁에는 그냥 밖에 앉아 별을 봐요. 도시보다 훨씬 많은 별을 볼 수 있어요. 그리고 물론 가을에는 단풍이 믿을 수 없을 만큼 아름다워요. 그래서 저에게 산 여행은 리셋 버튼 같아요. 돌아오면 더 건강해지고 훨씬 차분해져요.",
+  "tips": [
+   "선택 질문은 첫 문장에서 바로 고르고, 다른 선택지가 왜 덜 좋은지도 짧게",
+   "like a reset button 같은 비유로 마무리하면 인상적이에요"
+  ]
+ },
+ {
+  "id": "oq-travel_dom-003",
+  "topic": "travel_dom",
+  "kind": "routine",
+  "level": 1,
+  "question": "You indicated that you travel within your country. How do you usually prepare for a domestic trip? Who do you travel with, how do you get there, and what do you pack?",
+  "question_ko": "국내 여행을 한다고 하셨습니다. 국내 여행을 보통 어떻게 준비하나요? 누구와 여행하고, 어떻게 가며, 무엇을 챙기나요?",
+  "sample": "I usually travel with my family two or three times a year. First, we choose a place together. Then I search for hotels and restaurants on the internet. I read a lot of reviews before I book. We usually drive there in my dad's car, because it is easy to carry our bags. Sometimes we take the KTX if the place is far. For packing, I bring comfortable clothes, a phone charger, and some snacks for the car. I also bring my camera. I like preparing for a trip because it makes me excited.",
+  "sample_ko": "저는 보통 1년에 두세 번 가족과 여행해요. 먼저 함께 장소를 정해요. 그다음 인터넷으로 호텔과 식당을 검색해요. 예약하기 전에 후기를 많이 읽어요. 짐을 싣기 쉬워서 보통 아빠 차를 타고 가요. 장소가 멀면 가끔 KTX를 타요. 짐으로는 편한 옷, 휴대폰 충전기, 차에서 먹을 간식을 챙겨요. 카메라도 가져가요. 여행 준비를 하면 설레서 좋아요.",
+  "sample_adv": "Oh, I'm definitely the planner in my group, so I have a pretty set routine. I usually travel with my two closest friends from college, about three times a year, mostly on long weekends. About a month before the trip, we create a group chat and vote on where to go. Once we decide, I make a shared spreadsheet with the schedule, the budget, and a list of restaurants. My friends make fun of me for it, but they always end up using it. Next is transportation. If we're going somewhere like Busan or Yeosu, we book KTX tickets as early as possible, because they sell out really fast on holidays. But if we're going somewhere with lots of small towns, like the east coast, we rent a car so we can move around freely. For accommodation, we usually choose a small pension or a hanok guesthouse instead of a hotel, because it feels more like a real trip. As for packing, I've learned to pack light. I bring just one backpack with two sets of clothes, a portable charger, some medicine, and a small towel. And I always pack a deck of cards, because our best memories usually come from staying up late, playing games, and laughing until two in the morning.",
+  "sample_adv_ko": "아, 저는 확실히 저희 무리에서 계획 담당이라 꽤 정해진 루틴이 있어요. 보통 대학 때 가장 친한 친구 두 명과 1년에 세 번 정도, 주로 연휴에 여행해요. 여행 한 달쯤 전에 단톡방을 만들고 어디 갈지 투표해요. 정해지면 일정, 예산, 식당 목록이 있는 공유 스프레드시트를 만들어요. 친구들은 놀리지만 결국 항상 그걸 써요. 다음은 교통이에요. 부산이나 여수 같은 곳에 가면 연휴에는 표가 정말 빨리 매진되니까 가능한 한 빨리 KTX를 예매해요. 하지만 동해안처럼 작은 마을이 많은 곳에 가면 자유롭게 다닐 수 있게 차를 빌려요. 숙소는 진짜 여행 같은 느낌이 들어서 호텔 대신 보통 작은 펜션이나 한옥 게스트하우스를 골라요. 짐 싸기에 관해서는 가볍게 싸는 법을 배웠어요. 옷 두 벌, 보조 배터리, 약, 작은 수건이 든 배낭 하나만 가져가요. 그리고 항상 카드 한 벌을 챙겨요. 저희의 가장 좋은 추억은 보통 늦게까지 안 자고 게임하며 새벽 2시까지 웃는 데서 나오거든요.",
+  "tips": [
+   "준비 순서: 장소 정하기 → 일정·예산 → 교통 → 숙소 → 짐",
+   "as early as possible, sell out fast 같은 여행 준비 표현을 익혀 두세요"
+  ]
+ },
+ {
+  "id": "oq-travel_dom-004",
+  "topic": "travel_dom",
+  "kind": "past",
+  "level": 3,
+  "question": "Tell me about the most memorable trip you have taken in your country. Where did you go, who did you go with, and what made that trip so unforgettable?",
+  "question_ko": "국내에서 가장 기억에 남는 여행에 대해 말해 주세요. 어디에 갔고, 누구와 갔으며, 무엇 때문에 그 여행이 잊을 수 없었나요?",
+  "sample": "My most memorable trip was to Busan three years ago. I went with my high school friends right after we graduated. We took the KTX from Seoul, and it took about three hours. First, we went to Haeundae Beach and swam in the sea. Then we visited Gamcheon Culture Village. The houses were very colorful, and we took a lot of photos. At night, we ate pork soup and walked along Gwangalli Beach. We saw the bridge with beautiful lights. We talked about our future all night. It was our first trip without our parents, so it was really special.",
+  "sample_ko": "가장 기억에 남는 여행은 3년 전 부산 여행이에요. 고등학교 친구들과 졸업 직후에 갔어요. 서울에서 KTX를 탔는데 3시간 정도 걸렸어요. 먼저 해운대 해변에 가서 바다에서 수영했어요. 그다음 감천문화마을에 갔어요. 집들이 아주 알록달록해서 사진을 많이 찍었어요. 밤에는 돼지국밥을 먹고 광안리 해변을 걸었어요. 아름다운 조명이 켜진 다리를 봤어요. 밤새 미래에 대해 이야기했어요. 부모님 없이 간 첫 여행이라 정말 특별했어요.",
+  "sample_adv": "The trip I remember the most is a trip to Jeonju that I took with my grandmother about four years ago. She'd been feeling a bit lonely after my grandfather passed away, so my mom suggested that I take her somewhere for a few days. Honestly, at first I wasn't that excited. I thought it would be boring and slow. But it turned out to be one of the best trips of my life. We stayed in a traditional hanok guesthouse in the Hanok Village, with a little courtyard and heated floors. On the first day, we rented hanbok, and my grandmother looked so happy in her pink outfit. She kept saying she felt young again. We ate bibimbap at a famous restaurant, and she told me that she and my grandfather had eaten there on their honeymoon fifty years ago. I had no idea about that, and it was really touching. In the evening, we sat in the courtyard drinking tea, and she told me stories about her childhood that I'd never heard before, like how she walked two hours to school every day. I recorded some of them on my phone. Looking back, the places we visited were nice, but what made the trip unforgettable was the time we spent together. I'm so glad I went, and I still listen to those recordings sometimes.",
+  "sample_adv_ko": "제가 가장 기억하는 여행은 4년쯤 전에 할머니와 함께 간 전주 여행이에요. 할아버지가 돌아가신 후 할머니가 좀 외로워하셔서 엄마가 며칠 어디 모시고 다녀오라고 하셨어요. 솔직히 처음에는 그렇게 설레지 않았어요. 지루하고 느릴 거라고 생각했어요. 그런데 알고 보니 제 인생 최고의 여행 중 하나가 됐어요. 한옥마을의 작은 마당과 온돌방이 있는 전통 한옥 게스트하우스에 묵었어요. 첫날 한복을 빌렸는데 할머니가 분홍 한복을 입고 너무 행복해 보이셨어요. 다시 젊어진 기분이라고 계속 말씀하셨어요. 유명한 식당에서 비빔밥을 먹었는데, 할머니가 50년 전 신혼여행 때 할아버지와 거기서 드셨다고 하셨어요. 전혀 몰랐던 이야기라 정말 뭉클했어요. 저녁에는 마당에 앉아 차를 마셨고, 할머니가 매일 두 시간씩 걸어서 학교에 다니셨던 이야기처럼 처음 듣는 어린 시절 이야기를 해 주셨어요. 그중 몇 개를 휴대폰으로 녹음했어요. 돌이켜 보면 방문한 장소들도 좋았지만, 그 여행을 잊을 수 없게 만든 건 함께 보낸 시간이었어요. 다녀와서 정말 다행이고, 지금도 가끔 그 녹음을 들어요.",
+  "tips": [
+   "처음 기대 → 예상 밖 전개(it turned out) → 감동 포인트 → 지금까지 남은 것",
+   "장소 나열보다 사람·감정 중심 이야기가 고득점에 유리해요"
+  ]
+ },
+ {
+  "id": "oq-travel_dom-005",
+  "topic": "travel_dom",
+  "kind": "past",
+  "level": 3,
+  "question": "Have you ever had something go wrong during a trip in your country? Maybe you missed a train, lost something, or had a problem with your accommodation. Tell me what happened and how you solved it.",
+  "question_ko": "국내 여행 중에 일이 잘못된 적이 있나요? 기차를 놓쳤거나, 뭔가를 잃어버렸거나, 숙소에 문제가 있었을 수도 있겠죠. 무슨 일이 있었고 어떻게 해결했는지 말해 주세요.",
+  "sample": "Yes, I had a problem on a trip to Gangneung last winter. I booked a guesthouse online, and I went there with my friend. But when we arrived, the owner said there was no reservation. I showed him my booking on my phone, but he said the website made a mistake. It was ten o'clock at night, and it was very cold. We were really upset. We called many hotels, but most of them were full. Finally, we found a small motel near the station. It was old, but it was warm. The website gave me my money back later.",
+  "sample_ko": "네, 지난겨울 강릉 여행에서 문제가 있었어요. 인터넷으로 게스트하우스를 예약하고 친구와 갔어요. 그런데 도착하니 주인이 예약이 없다고 했어요. 휴대폰으로 예약 내역을 보여 줬지만 웹사이트가 실수했다고 했어요. 밤 10시였고 아주 추웠어요. 정말 화가 났어요. 호텔에 여러 군데 전화했는데 대부분 꽉 찼어요. 마침내 역 근처 작은 모텔을 찾았어요. 낡았지만 따뜻했어요. 나중에 웹사이트에서 돈을 돌려받았어요.",
+  "sample_adv": "Oh, yes. I'll never forget the time I missed the last ferry to Ulleungdo. It was two summers ago, and my brother and I had been planning this trip for months. Ulleungdo is a small island in the East Sea, and you have to take a ferry from Pohang, which takes about three hours. Our ferry was at nine a.m., so we took an early train to Pohang and then a taxi to the port. The problem was, there was a huge traffic jam because of a local festival, and we got to the port about five minutes too late. We literally watched the ferry leave. I couldn't believe it. To make things worse, the next ferry was full, and the weather forecast said the waves would be too high the following day. At first, my brother and I started blaming each other, which didn't help at all. Then we took a deep breath and came up with a plan. We changed our tickets to a ferry from a different port, Hupo, which was about an hour away by bus, and it left that afternoon. We ran to the bus terminal and just made it. We arrived on the island late at night, exhausted but so relieved. Looking back, it was stressful, but it taught us to always leave extra time, especially on holidays.",
+  "sample_adv_ko": "아, 네. 울릉도 가는 배를 놓쳤던 때를 절대 잊지 못할 거예요. 2년 전 여름이었는데, 남동생과 몇 달 동안 계획한 여행이었어요. 울릉도는 동해의 작은 섬인데 포항에서 배를 타야 하고 3시간 정도 걸려요. 배가 아침 9시라 이른 기차로 포항에 가서 택시로 항구에 갔어요. 문제는 지역 축제 때문에 엄청난 교통 체증이 있어서 5분쯤 늦게 항구에 도착했다는 거예요. 말 그대로 배가 떠나는 걸 지켜봤어요. 믿을 수가 없었어요. 설상가상으로 다음 배는 꽉 찼고, 일기 예보에서는 다음 날 파도가 너무 높을 거라고 했어요. 처음에는 동생과 서로를 탓하기 시작했는데 전혀 도움이 안 됐어요. 그러다 심호흡을 하고 계획을 세웠어요. 버스로 한 시간쯤 떨어진 후포라는 다른 항구에서 그날 오후에 떠나는 배로 표를 바꿨어요. 버스 터미널까지 뛰어가서 간신히 탔어요. 밤늦게 섬에 도착했는데 녹초였지만 정말 안도했어요. 돌이켜 보면 스트레스였지만, 특히 연휴에는 항상 시간을 넉넉히 두라는 걸 배웠어요.",
+  "tips": [
+   "To make things worse (설상가상으로), just made it (간신히 성공했다) 로 긴장감을 표현",
+   "감정 변화(당황 → 다툼 → 침착 → 안도)를 보여 주세요"
+  ]
+ },
+ {
+  "id": "oq-travel_dom-006",
+  "topic": "travel_dom",
+  "kind": "compare",
+  "level": 5,
+  "question": "How has domestic travel changed compared to when you were a child? Think about where people go, how they travel, and how they plan their trips. What are the biggest differences?",
+  "question_ko": "어렸을 때와 비교해 국내 여행은 어떻게 바뀌었나요? 사람들이 어디에 가는지, 어떻게 이동하는지, 어떻게 여행을 계획하는지 생각해 보세요. 가장 큰 차이점은 무엇인가요?",
+  "sample": "Domestic travel has changed a lot. When I was a child, my family usually went to famous beaches like Haeundae in summer. We drove for many hours because there were traffic jams. My parents used a paper map and asked people for directions. We stayed at old motels or with relatives. Now, people travel to small towns and nice cafes they see on social media. There is the KTX, so it is much faster. People plan everything with their phones and book hotels online. I think travel is easier and more fun now.",
+  "sample_ko": "국내 여행은 많이 바뀌었어요. 제가 어렸을 때 가족들은 보통 여름에 해운대 같은 유명한 해변에 갔어요. 교통 체증 때문에 몇 시간씩 운전했어요. 부모님은 종이 지도를 쓰고 사람들에게 길을 물으셨어요. 오래된 모텔이나 친척 집에서 묵었어요. 지금은 사람들이 SNS에서 본 작은 마을과 예쁜 카페로 여행해요. KTX가 있어서 훨씬 빨라요. 사람들은 휴대폰으로 모든 걸 계획하고 온라인으로 호텔을 예약해요. 지금 여행이 더 쉽고 재미있다고 생각해요.",
+  "sample_adv": "Oh, it's changed dramatically. When I was a kid in the nineties, domestic travel was basically one big event a year. Every August, my whole family, including my aunts and cousins, would pack into two cars and drive to the east coast. Since everyone took vacation at the same time, the highways were completely jammed, and a trip that should take four hours sometimes took ten. My dad used a thick road atlas, and my mom would read it while yelling directions. We usually stayed in a crowded minbak where we all slept on the floor in one big room, and we brought our own rice and kimchi. Honestly, it was chaotic, but it was fun. Now, things are totally different. First, people travel much more often, not just once a year. Lots of people take short weekend trips or even day trips. Second, the destinations have changed. Instead of only famous beaches, people go to small towns like Gangneung, Yangyang, or Tongyeong because they saw a cool cafe or a surfing spot on Instagram. Third, the planning is all digital. You can compare hotels, check reviews, book train tickets, and find restaurants in a few minutes on your phone. I think the biggest difference is that travel used to be about the family being together, and now it's more about personal experiences and taking nice pictures. Both have their charm, but sometimes I miss the old chaos.",
+  "sample_adv_ko": "아, 극적으로 바뀌었어요. 제가 어렸던 90년대에 국내 여행은 기본적으로 1년에 한 번 있는 큰 행사였어요. 매년 8월이면 고모와 사촌들까지 온 가족이 차 두 대에 꽉 타고 동해안으로 갔어요. 다들 같은 때 휴가를 가니까 고속도로가 완전히 막혀서 네 시간이면 갈 길이 가끔 열 시간 걸렸어요. 아빠는 두꺼운 도로 지도책을 쓰셨고, 엄마는 그걸 읽으며 소리치듯 길을 알려 주셨어요. 보통 붐비는 민박에서 다 같이 큰 방 하나 바닥에서 잤고, 쌀과 김치를 직접 가져갔어요. 솔직히 정신없었지만 재미있었어요. 지금은 완전히 달라요. 첫째, 사람들이 1년에 한 번이 아니라 훨씬 자주 여행해요. 많은 사람들이 짧은 주말여행이나 당일치기도 해요. 둘째, 여행지가 바뀌었어요. 유명한 해변만이 아니라 인스타그램에서 멋진 카페나 서핑 장소를 보고 강릉, 양양, 통영 같은 작은 도시에 가요. 셋째, 계획이 다 디지털이에요. 휴대폰으로 몇 분 만에 호텔 비교, 후기 확인, 기차표 예매, 식당 찾기를 할 수 있어요. 가장 큰 차이는 예전 여행은 가족이 함께하는 것이었다면 지금은 개인적인 경험과 예쁜 사진에 더 가깝다는 점이라고 생각해요. 둘 다 매력이 있지만, 가끔 그 옛날의 정신없음이 그리워요.",
+  "tips": [
+   "과거 습관은 would / used to 로: my family would pack into two cars",
+   "차이점 3개(빈도·여행지·계획 방법) + 가장 큰 차이 한 문장으로 정리"
+  ]
+ },
+ {
+  "id": "oq-travel_dom-007",
+  "topic": "travel_dom",
+  "kind": "issue",
+  "level": 5,
+  "question": "Some popular tourist spots in your country have problems because too many visitors come there. What kinds of problems do local people or travelers talk about? What do you think should be done to solve them?",
+  "question_ko": "국내 인기 관광지 중 일부는 방문객이 너무 많이 와서 문제가 생기고 있습니다. 지역 주민이나 여행객들은 어떤 문제를 이야기하나요? 이를 해결하려면 무엇을 해야 한다고 생각하나요?",
+  "sample": "Some famous places in Korea have problems because of too many tourists. For example, Bukchon Hanok Village in Seoul is a place where people actually live. But many tourists come every day, and they are very noisy. They also take pictures of people's houses. The people living there are very stressed. Another problem is trash on beaches and in mountains. Also, prices at popular places like Jeju have gone up a lot. I think the government should limit visiting hours. Tourists should also be more polite and take their trash home.",
+  "sample_ko": "한국의 일부 유명한 곳은 관광객이 너무 많아서 문제가 있어요. 예를 들어 서울 북촌 한옥마을은 사람들이 실제로 사는 곳이에요. 그런데 매일 많은 관광객이 오고 아주 시끄러워요. 사람들의 집 사진도 찍어요. 거기 사는 사람들은 스트레스가 아주 커요. 또 다른 문제는 해변과 산의 쓰레기예요. 또 제주 같은 인기 지역의 물가가 많이 올랐어요. 정부가 방문 시간을 제한해야 한다고 생각해요. 관광객들도 더 예의 바르게 행동하고 쓰레기를 집에 가져가야 해요.",
+  "sample_adv": "Yeah, this has been in the news a lot recently, and it's actually called overtourism. I think the clearest example in Korea is Bukchon Hanok Village in Seoul. It's a beautiful neighborhood full of traditional houses, but the thing is, real people still live there. Every day, thousands of tourists walk through the narrow alleys, talking loudly, taking selfies in front of people's doors, and sometimes even opening their gates to peek inside. Residents have complained for years that they can't rest, and many of them have actually moved out. Because of that, the city recently started limiting visiting hours and even fining people who go in after a certain time. Another example is Jeju. Some residents say traffic, trash, and rising housing prices are making the island hard to live on, and there was a big debate about whether to charge tourists an environmental fee. And on top of that, there's the problem of trash on popular beaches and hiking trails after holidays. So what should be done? I think limiting hours and the number of visitors in residential areas is a fair start. A small entrance or environmental fee could also work, as long as the money actually goes to the local community. But honestly, the most important thing is the attitude of travelers. If each of us just remembered that we're guests in someone else's home, half of these problems would disappear. I try to keep that in mind whenever I travel.",
+  "sample_adv_ko": "네, 최근 뉴스에 많이 나왔고, 실제로 오버투어리즘이라고 불려요. 한국에서 가장 분명한 예는 서울 북촌 한옥마을이라고 생각해요. 전통 가옥이 가득한 아름다운 동네지만, 문제는 아직 실제로 사람들이 거기 산다는 거예요. 매일 수천 명의 관광객이 좁은 골목을 지나가면서 큰 소리로 떠들고, 남의 집 문 앞에서 셀카를 찍고, 가끔은 안을 들여다보려고 대문을 열기도 해요. 주민들은 쉴 수가 없다고 몇 년째 불만을 제기했고, 실제로 많은 사람들이 이사를 나갔어요. 그래서 시에서 최근 방문 시간을 제한하고 특정 시간 이후에 들어가는 사람에게 과태료까지 매기기 시작했어요. 또 다른 예는 제주예요. 일부 주민들은 교통, 쓰레기, 오르는 집값 때문에 섬에서 살기 힘들어진다고 말하고, 관광객에게 환경 보전 부담금을 걷을지에 대한 큰 논쟁도 있었어요. 게다가 연휴가 지나면 인기 해변과 등산로에 쓰레기 문제도 있어요. 그럼 무엇을 해야 할까요? 주거 지역의 방문 시간과 인원을 제한하는 건 공정한 시작이라고 생각해요. 그 돈이 실제로 지역 사회에 쓰인다면 소액의 입장료나 환경 부담금도 효과가 있을 수 있어요. 하지만 솔직히 가장 중요한 건 여행자의 태도예요. 우리 각자가 남의 집에 온 손님이라는 것만 기억해도 이 문제의 절반은 사라질 거예요. 저도 여행할 때마다 그걸 명심하려고 해요.",
+  "tips": [
+   "overtourism(과잉 관광), residents(주민), environmental fee(환경 부담금) 같은 이슈 어휘 활용",
+   "구체적 장소 2곳 + 정책 뉴스 + 개인의 태도로 마무리"
+  ]
+ },
+ {
+  "id": "oq-travel_abroad-001",
+  "topic": "travel_abroad",
+  "kind": "describe",
+  "level": 1,
+  "question": "You indicated in the survey that you like to travel abroad. Tell me about a country you have visited. What is that country like, and what did you like most about it?",
+  "question_ko": "설문에서 해외여행을 좋아한다고 하셨습니다. 방문했던 나라에 대해 말해 주세요. 그 나라는 어떤 곳이고, 무엇이 가장 좋았나요?",
+  "sample": "I visited Japan last year, and I really liked it. Japan is very close to Korea, so it only takes about two hours by plane. I went to Osaka and Kyoto. The cities are very clean, and the people are kind and polite. The subway is easy to use, too. In Kyoto, there are many old temples and traditional houses. They are really beautiful, especially in autumn. What I liked most was the food. I ate ramen, sushi, and takoyaki every day. Everything was delicious. I want to go back to Japan again soon.",
+  "sample_ko": "작년에 일본에 갔는데 정말 좋았어요. 일본은 한국에서 아주 가까워서 비행기로 2시간밖에 안 걸려요. 오사카와 교토에 갔어요. 도시가 아주 깨끗하고 사람들이 친절하고 예의 발라요. 지하철도 이용하기 쉬워요. 교토에는 오래된 절과 전통 가옥이 많아요. 특히 가을에 정말 아름다워요. 가장 좋았던 건 음식이에요. 매일 라멘, 초밥, 다코야키를 먹었어요. 전부 맛있었어요. 곧 일본에 다시 가고 싶어요.",
+  "sample_adv": "Sure. The country that left the biggest impression on me is Vietnam. I've been there twice, once to Hanoi in the north and once to Da Nang in the center. The first thing you notice when you land is the energy. In Hanoi, the streets are full of motorbikes, literally thousands of them, and at first, crossing the street feels impossible. A local told me the trick is to walk slowly and steadily, and the bikes will go around you. It actually worked, but my heart was pounding. The Old Quarter has narrow streets packed with tiny shops, street food stalls, and people sitting on little plastic stools drinking coffee. Da Nang was totally different, much more relaxed, with long white beaches and fancy resorts. From there, I also visited Hoi An, an old town where the whole street is decorated with colorful lanterns at night. It honestly looked like a scene from a movie. But what I liked most about Vietnam was the food and the people. I had a bowl of pho for breakfast every single day, and it cost less than two dollars. And people were so friendly. A grandmother who ran a noodle stand even taught me how to say thank you properly. So yeah, Vietnam has a special place in my heart, and I'd love to visit the south next time.",
+  "sample_adv_ko": "네. 제게 가장 큰 인상을 남긴 나라는 베트남이에요. 두 번 갔는데, 한 번은 북쪽 하노이, 한 번은 중부 다낭이었어요. 도착하자마자 가장 먼저 느끼는 건 에너지예요. 하노이 거리는 오토바이로 가득한데, 말 그대로 수천 대라서 처음에는 길 건너기가 불가능해 보여요. 현지인이 천천히 일정하게 걸으면 오토바이가 피해 간다는 요령을 알려 줬어요. 실제로 효과가 있었지만 심장이 쿵쾅거렸어요. 구시가지에는 좁은 골목에 작은 가게, 길거리 음식 노점, 작은 플라스틱 의자에 앉아 커피를 마시는 사람들로 꽉 차 있어요. 다낭은 완전히 달랐어요. 훨씬 여유롭고 긴 하얀 해변과 고급 리조트가 있었어요. 거기서 호이안에도 갔는데, 밤이면 거리 전체가 알록달록한 등불로 장식되는 옛 도시예요. 솔직히 영화의 한 장면 같았어요. 하지만 베트남에서 가장 좋았던 건 음식과 사람들이에요. 매일 아침 쌀국수를 먹었는데 2달러도 안 했어요. 그리고 사람들이 정말 친절했어요. 국수 가게를 하시는 할머니가 고맙다는 말을 제대로 하는 법까지 가르쳐 주셨어요. 그래서 베트남은 제 마음속에 특별한 곳이고, 다음에는 남부에 가 보고 싶어요.",
+  "tips": [
+   "나라 묘사: 위치·방문 도시 → 첫인상 → 도시별 특징 → 가장 좋았던 점 → 다음 계획",
+   "The first thing you notice is ~ 로 생생한 첫인상을 전달하세요"
+  ]
+ },
+ {
+  "id": "oq-travel_abroad-002",
+  "topic": "travel_abroad",
+  "kind": "describe",
+  "level": 2,
+  "question": "I'd like to know what you usually like to do when you travel overseas. Do you prefer sightseeing, shopping, food, or relaxing? Tell me what you typically do and why you enjoy it.",
+  "question_ko": "해외여행 할 때 보통 무엇을 하는 걸 좋아하는지 알고 싶습니다. 관광, 쇼핑, 음식, 휴식 중 무엇을 선호하나요? 보통 무엇을 하고 왜 즐기는지 말해 주세요.",
+  "sample": "When I travel overseas, I like trying local food the most. Before I go, I search for famous restaurants and street food. When I get there, I visit local markets in the morning. I try many new things, like fruits I have never seen. For lunch and dinner, I go to small restaurants where local people eat. I also take pictures of all the food. I enjoy this because food tells you a lot about the culture. Also, it is cheaper and more interesting than shopping. Food is the best part of traveling for me.",
+  "sample_ko": "해외여행 할 때 저는 현지 음식 먹어 보는 걸 가장 좋아해요. 가기 전에 유명한 식당과 길거리 음식을 검색해요. 도착하면 아침에 현지 시장에 가요. 처음 보는 과일처럼 새로운 걸 많이 먹어 봐요. 점심과 저녁은 현지인이 먹는 작은 식당에 가요. 모든 음식 사진도 찍어요. 음식은 그 문화에 대해 많은 걸 알려 줘서 즐거워요. 또 쇼핑보다 싸고 더 재미있어요. 저에게 음식은 여행의 가장 좋은 부분이에요.",
+  "sample_adv": "Well, I used to be the type of traveler who tried to see every famous sight in one day, but these days, I'm more into experiencing everyday life like a local. Let me explain what that means. When I arrive in a new city, I usually skip the big tour buses. Instead, I rent a small apartment in a regular neighborhood rather than a hotel downtown. In the morning, I go to the corner bakery or cafe where the locals grab breakfast, and I just watch people go to work. Then I spend the day walking around without a strict plan. I check out local markets, used bookstores, and small parks, and I often take public buses just to see where they go. I also love taking short local classes. For example, in Thailand I took a one-day cooking class, and in Spain I joined a beginner flamenco lesson, which was hilarious because I have zero rhythm. Of course, I still visit a few famous places, but I try to go early in the morning before the crowds. The reason I travel this way is that the memories feel much more real. I don't remember much about the museums I rushed through years ago, but I still remember the old man in Lisbon who shared his table with me and told me about his city. Those moments are what I travel for.",
+  "sample_adv_ko": "음, 예전에는 하루에 유명한 명소를 다 보려는 유형의 여행자였는데, 요즘은 현지인처럼 일상을 경험하는 데 더 빠져 있어요. 그게 무슨 뜻인지 설명해 드릴게요. 새 도시에 도착하면 보통 큰 관광버스는 건너뛰어요. 대신 시내 호텔보다는 평범한 동네의 작은 아파트를 빌려요. 아침에는 현지인들이 아침을 사 가는 동네 빵집이나 카페에 가서 사람들이 출근하는 모습을 그냥 바라봐요. 그다음엔 엄격한 계획 없이 걸어 다니며 하루를 보내요. 현지 시장, 헌책방, 작은 공원을 둘러보고, 어디로 가는지 보려고 시내버스를 타기도 해요. 짧은 현지 수업도 정말 좋아해요. 예를 들어 태국에서는 하루짜리 요리 수업을 들었고, 스페인에서는 초급 플라멩코 수업에 참여했는데, 제가 박자 감각이 전혀 없어서 정말 웃겼어요. 물론 유명한 곳도 몇 군데 가지만, 사람들이 몰리기 전 이른 아침에 가려고 해요. 이렇게 여행하는 이유는 추억이 훨씬 진짜처럼 느껴지기 때문이에요. 몇 년 전 서둘러 지나간 박물관은 별로 기억나지 않지만, 리스본에서 저와 테이블을 나눠 쓰며 자기 도시 이야기를 해 주신 할아버지는 아직도 기억나요. 그런 순간들이 제가 여행하는 이유예요.",
+  "tips": [
+   "I used to ~, but these days ~ 로 취향 변화를 보여 주면 시제 다양성 점수에 좋아요",
+   "나라별 짧은 예시(태국 요리, 스페인 플라멩코)로 구체성을 더하세요"
+  ]
+ },
+ {
+  "id": "oq-travel_abroad-003",
+  "topic": "travel_abroad",
+  "kind": "routine",
+  "level": 2,
+  "question": "You indicated that you travel abroad. What do you usually do to prepare for an overseas trip? Tell me about the steps you take, from planning to packing, before you leave.",
+  "question_ko": "해외여행을 한다고 하셨습니다. 해외여행을 위해 보통 어떤 준비를 하나요? 계획부터 짐 싸기까지, 떠나기 전에 하는 단계를 말해 주세요.",
+  "sample": "Before an overseas trip, I do a lot of things. First, I check my passport. It must be valid for six months. Then I look for cheap flight tickets online, usually two or three months early. After that, I book a hotel near a subway station. I also exchange some money and buy travel insurance. One week before the trip, I make a simple schedule and download some maps and translation apps. Finally, I pack my suitcase the night before. I bring clothes, medicine, a charger, and an adapter. Then I am ready to go.",
+  "sample_ko": "해외여행 전에 저는 많은 걸 해요. 먼저 여권을 확인해요. 유효 기간이 6개월 남아 있어야 해요. 그다음 보통 두세 달 일찍 온라인으로 싼 항공권을 찾아요. 그 후 지하철역 근처 호텔을 예약해요. 돈도 좀 환전하고 여행자 보험도 들어요. 여행 일주일 전에 간단한 일정을 짜고 지도와 번역 앱을 내려받아요. 마지막으로 전날 밤에 캐리어를 싸요. 옷, 약, 충전기, 어댑터를 챙겨요. 그러면 떠날 준비 완료예요.",
+  "sample_adv": "Well, I've traveled abroad maybe fifteen times, so over the years I've developed a pretty solid system. It usually starts about three months before the trip. The first thing I do is set up price alerts on a flight app, because ticket prices change all the time. Once I find a good deal, I book it right away, and I always pick a seat by the aisle so I can stretch my legs. Next, I sort out accommodation. I compare hotels and rental apartments, and I read the most recent reviews, especially the bad ones, because they tell you the real problems, like noise or bugs. About a month before, I deal with the boring but important stuff. I check if I need a visa or an electronic travel permit, I buy travel insurance, and I get a local SIM card or an eSIM so I have data as soon as I land. I learned that the hard way after getting lost in Rome without internet. Then, a week before, I make a rough plan for each day, but I leave plenty of free time. Packing is the last step. I make a checklist on my phone and go through it the night before. My must-haves are a universal adapter, a portable charger, some cold medicine, and copies of my passport. It sounds like a lot, but honestly, this routine makes the trip so much less stressful.",
+  "sample_adv_ko": "음, 해외여행을 열다섯 번쯤 하다 보니 몇 년 사이에 꽤 탄탄한 시스템이 생겼어요. 보통 여행 석 달 전쯤 시작해요. 가장 먼저 항공 앱에 가격 알림을 설정해요. 항공권 가격이 계속 바뀌거든요. 좋은 가격을 찾으면 바로 예약하고, 다리를 뻗을 수 있게 항상 통로 쪽 좌석을 골라요. 다음으로 숙소를 정해요. 호텔과 임대 아파트를 비교하고, 가장 최근 후기를, 특히 나쁜 후기를 읽어요. 소음이나 벌레 같은 진짜 문제를 알려 주거든요. 한 달 전쯤에는 지루하지만 중요한 일을 처리해요. 비자나 전자 여행 허가가 필요한지 확인하고, 여행자 보험에 들고, 도착하자마자 데이터를 쓸 수 있게 현지 유심이나 eSIM을 사요. 로마에서 인터넷 없이 길을 잃은 뒤 힘들게 배운 거예요. 그다음 일주일 전에 하루하루 대략적인 계획을 세우지만 자유 시간을 넉넉히 남겨요. 짐 싸기가 마지막 단계예요. 휴대폰에 체크리스트를 만들어 전날 밤에 하나씩 확인해요. 꼭 챙기는 건 멀티 어댑터, 보조 배터리, 감기약, 여권 사본이에요. 많아 보이지만 솔직히 이 루틴 덕분에 여행 스트레스가 훨씬 줄어요.",
+  "tips": [
+   "시간 순서(three months before → a month before → a week before → the night before)로 구조화",
+   "I learned that the hard way (호되게 배웠다) 로 짧은 경험을 섞으세요"
+  ]
+ },
+ {
+  "id": "oq-travel_abroad-004",
+  "topic": "travel_abroad",
+  "kind": "past",
+  "level": 3,
+  "question": "Tell me about your first trip abroad. Where did you go, who were you with, and what was it like? What do you remember most clearly about that trip?",
+  "question_ko": "첫 해외여행에 대해 말해 주세요. 어디에 갔고, 누구와 함께였으며, 어땠나요? 그 여행에서 가장 또렷이 기억나는 것은 무엇인가요?",
+  "sample": "My first trip abroad was to Hong Kong when I was in high school. I went with my parents and my sister during summer vacation. It was my first time on an airplane, so I was very excited. Hong Kong was very hot and humid. There were so many tall buildings. We rode a tram up to the Peak and saw the whole city. At night, we watched a light show by the harbor. I remember the dim sum the most. It was so delicious that we ate it every day. It was a short trip, but it was really special for me.",
+  "sample_ko": "첫 해외여행은 고등학생 때 간 홍콩이었어요. 여름 방학에 부모님, 언니와 함께 갔어요. 처음 비행기를 타는 거라 너무 신났어요. 홍콩은 아주 덥고 습했어요. 높은 빌딩이 정말 많았어요. 트램을 타고 피크에 올라가 도시 전체를 봤어요. 밤에는 항구에서 조명 쇼를 봤어요. 딤섬이 가장 기억나요. 너무 맛있어서 매일 먹었어요. 짧은 여행이었지만 저에게는 정말 특별했어요.",
+  "sample_adv": "My first trip abroad was a backpacking trip to Europe when I was twenty-two, right after I finished my military service. I went with my best friend, Sungjin, and we had almost no money, so we planned everything as cheaply as possible. We spent three weeks traveling through five countries, starting in London and ending in Rome. I remember almost everything about that trip, but a few moments really stand out. The first one is landing at Heathrow and realizing that my English, which I'd studied for ten years, was nearly useless. The immigration officer asked me something, and I just froze. Sungjin had to answer for both of us. Another moment I'll never forget is in Paris. We couldn't afford a fancy dinner, so we bought a baguette, some cheese, and a cheap bottle of wine and had a picnic in front of the Eiffel Tower at night. When the tower started sparkling, we both just went quiet. It was probably the most beautiful thing I'd ever seen. And of course there were disasters, too. We missed a night train in Germany and had to sleep at the station. But honestly, that trip changed me. It made me want to see the world and, funnily enough, it's the reason I started studying English seriously. I still keep the train tickets from that trip in a box.",
+  "sample_adv_ko": "첫 해외여행은 스물두 살, 군 복무를 막 마친 직후에 간 유럽 배낭여행이었어요. 가장 친한 친구 성진이와 갔는데 돈이 거의 없어서 모든 걸 최대한 싸게 계획했어요. 3주 동안 런던에서 시작해 로마에서 끝나는 다섯 나라를 여행했어요. 그 여행은 거의 다 기억나지만 특히 두드러지는 순간이 몇 개 있어요. 첫 번째는 히드로 공항에 내려서 10년 동안 공부한 제 영어가 거의 쓸모없다는 걸 깨달은 순간이에요. 입국 심사관이 뭔가를 물었는데 그냥 얼어 버렸어요. 성진이가 저희 둘 대신 대답해야 했어요. 절대 잊지 못할 또 다른 순간은 파리에서예요. 비싼 저녁을 먹을 여유가 없어서 바게트, 치즈, 싼 와인 한 병을 사서 밤에 에펠탑 앞에서 피크닉을 했어요. 탑이 반짝이기 시작하자 저희 둘 다 그냥 조용해졌어요. 아마 제가 본 것 중 가장 아름다운 장면이었을 거예요. 물론 사고도 있었어요. 독일에서 야간열차를 놓쳐서 역에서 자야 했어요. 하지만 솔직히 그 여행이 저를 바꿨어요. 세상을 보고 싶게 만들었고, 재미있게도 제가 영어를 진지하게 공부하기 시작한 이유예요. 지금도 그 여행의 기차표를 상자에 보관하고 있어요.",
+  "tips": [
+   "a few moments really stand out 으로 기억나는 장면 2~3개를 차례로 소개",
+   "그 경험이 지금의 나에게 준 영향(that trip changed me)으로 마무리"
+  ]
+ },
+ {
+  "id": "oq-travel_abroad-005",
+  "topic": "travel_abroad",
+  "kind": "past",
+  "level": 3,
+  "question": "Have you ever experienced an unexpected problem while traveling in another country, such as losing your luggage, getting sick, or having a flight canceled? Tell me what happened and how you handled the situation.",
+  "question_ko": "다른 나라를 여행하면서 짐 분실, 아픔, 항공편 취소 같은 예상치 못한 문제를 겪은 적이 있나요? 무슨 일이 있었고 그 상황에 어떻게 대처했는지 말해 주세요.",
+  "sample": "Yes, my luggage got lost when I went to Thailand two years ago. I arrived in Bangkok at night, but my suitcase did not come out. I waited for a long time, and then I went to the airline counter. The staff said my bag was still in Hong Kong, where I transferred. I was really upset because all my clothes were in it. The airline gave me a small bag with a toothbrush and a T-shirt. I bought some clothes at a market the next day. Two days later, my suitcase came to my hotel. After that, I always pack extra clothes in my carry-on bag.",
+  "sample_ko": "네, 2년 전 태국에 갔을 때 짐을 잃어버렸어요. 밤에 방콕에 도착했는데 캐리어가 안 나왔어요. 오래 기다리다가 항공사 카운터에 갔어요. 직원이 제 가방이 환승한 홍콩에 아직 있다고 했어요. 옷이 다 거기 있어서 정말 속상했어요. 항공사에서 칫솔과 티셔츠가 든 작은 가방을 줬어요. 다음 날 시장에서 옷을 좀 샀어요. 이틀 뒤 캐리어가 호텔로 왔어요. 그 후로는 항상 기내용 가방에 여분의 옷을 챙겨요.",
+  "sample_adv": "Oh, yes, and it was pretty scary at the time. About three years ago, I went to Taipei with two friends for a long weekend. On the second night, we ate at a famous night market, and I tried pretty much everything, including some raw oysters. Big mistake. At around three in the morning, I woke up with a terrible stomachache and a high fever. I was shaking and couldn't even stand up straight. My friends were panicking because none of us spoke Chinese, and we had no idea where the nearest hospital was. Luckily, one of my friends remembered that our travel insurance had a twenty-four-hour helpline. She called them, and they connected us with a Korean-speaking interpreter, who found an emergency room just ten minutes away and even talked to the taxi driver for us. At the hospital, the doctor said I had food poisoning and gave me an IV and some medicine. By the next afternoon, I felt a lot better, although I spent the rest of the trip eating only plain rice and drinking sports drinks while my friends ate dumplings in front of me. The good news is that the insurance covered almost everything. Since then, I never travel without insurance, and I'm much more careful about street food, especially seafood in hot weather.",
+  "sample_adv_ko": "아, 네, 그때는 꽤 무서웠어요. 3년쯤 전에 친구 둘과 연휴에 타이베이에 갔어요. 둘째 날 밤에 유명한 야시장에서 먹었는데, 생굴까지 거의 다 먹어 봤어요. 큰 실수였죠. 새벽 3시쯤 심한 복통과 고열로 잠에서 깼어요. 몸이 떨리고 똑바로 서지도 못했어요. 친구들은 아무도 중국어를 못하고 가장 가까운 병원이 어딘지도 몰라서 당황했어요. 다행히 한 친구가 여행자 보험에 24시간 상담 전화가 있다는 걸 기억해 냈어요. 친구가 전화했더니 한국어 통역사를 연결해 줬고, 통역사가 10분 거리 응급실을 찾아 주고 택시 기사와도 대신 이야기해 줬어요. 병원에서 의사가 식중독이라며 수액과 약을 줬어요. 다음 날 오후쯤에는 훨씬 나아졌지만, 남은 여행 내내 친구들이 제 앞에서 만두를 먹는 동안 흰 쌀밥만 먹고 이온 음료만 마셨어요. 다행인 건 보험이 거의 다 보장해 줬다는 거예요. 그 후로는 보험 없이 절대 여행하지 않고, 길거리 음식, 특히 더운 날 해산물은 훨씬 조심해요.",
+  "tips": [
+   "Big mistake. 처럼 짧은 문장으로 복선을 깔면 이야기가 생생해져요",
+   "해결 과정(누가, 무엇을, 어떻게)을 단계별로 말하고 교훈으로 마무리"
+  ]
+ },
+ {
+  "id": "oq-travel_abroad-006",
+  "topic": "travel_abroad",
+  "kind": "compare",
+  "level": 5,
+  "question": "How has traveling abroad changed compared to the past? Think about how people book trips, find information, and get around in foreign countries. What do you think about these changes?",
+  "question_ko": "예전과 비교해 해외여행은 어떻게 바뀌었나요? 사람들이 여행을 예약하고, 정보를 찾고, 외국에서 이동하는 방법을 생각해 보세요. 이런 변화에 대해 어떻게 생각하나요?",
+  "sample": "Traveling abroad has changed a lot. In the past, people usually went abroad with a travel agency. They followed a tour guide and a fixed schedule. People used guidebooks and paper maps to find places. Also, they had to exchange a lot of cash. Now, people plan their trips by themselves on the internet. They book flights and hotels with their phones. They use map apps and translation apps, so it is easy to get around. They can also pay with a card almost everywhere. I think these changes are great because travel is more free now.",
+  "sample_ko": "해외여행은 많이 바뀌었어요. 예전에 사람들은 보통 여행사를 통해 해외에 갔어요. 가이드와 정해진 일정을 따라다녔어요. 장소를 찾을 때 여행 책자와 종이 지도를 썼어요. 또 현금을 많이 환전해야 했어요. 지금은 사람들이 인터넷으로 직접 여행을 계획해요. 휴대폰으로 항공권과 호텔을 예약해요. 지도 앱과 번역 앱을 써서 다니기 쉬워요. 거의 모든 곳에서 카드로 결제할 수도 있어요. 지금 여행이 더 자유로워져서 이런 변화가 좋다고 생각해요.",
+  "sample_adv": "Oh, the difference is huge. When my parents first traveled abroad in the late nineties, going overseas was a big deal, almost like a once-in-a-lifetime event. They booked a package tour through a travel agency in town, and everything was decided for them, the hotels, the restaurants, even the shopping stops. They followed a guide holding a flag, and they had to wake up at six every morning to get on the bus. My mom still laughs about how they visited four countries in eight days and can't remember which castle was in which country. To find information, people relied on thick guidebooks, and they carried a lot of cash and traveler's checks. If you got lost, you had to ask strangers using body language. Now, everything is in your pocket. People compare flights and hotels on apps in minutes, and they make their own schedules based on travel videos and blogs. Once you're there, map apps tell you which bus to take, translation apps can read menus with your camera, and you can pay with your phone almost anywhere. Personally, I think these changes are mostly positive, because travel is cheaper and more personal. But there's a downside too. Since everyone follows the same social media posts, the same spots get crowded, and people sometimes spend more time looking at their screens than at the actual place. So I try to put my phone away for at least a few hours every day when I travel.",
+  "sample_adv_ko": "아, 차이가 엄청나요. 부모님이 90년대 후반 처음 해외여행을 가셨을 때, 해외에 가는 건 일생에 한 번 있을까 말까 한 큰일이었어요. 동네 여행사에서 패키지 여행을 예약하셨고, 호텔, 식당, 쇼핑 장소까지 모든 게 정해져 있었어요. 깃발을 든 가이드를 따라다니셨고, 매일 아침 6시에 일어나 버스를 타야 했어요. 엄마는 8일 동안 4개국을 다녀서 어느 성이 어느 나라에 있었는지 기억이 안 난다며 아직도 웃으세요. 정보를 찾으려면 두꺼운 여행 책자에 의존했고, 현금과 여행자 수표를 많이 들고 다녔어요. 길을 잃으면 몸짓으로 낯선 사람에게 물어봐야 했어요. 지금은 모든 게 주머니 안에 있어요. 사람들은 앱으로 몇 분 만에 항공권과 호텔을 비교하고, 여행 영상과 블로그를 보고 직접 일정을 짜요. 도착하면 지도 앱이 탈 버스를 알려 주고, 번역 앱은 카메라로 메뉴를 읽어 주고, 거의 어디서나 휴대폰으로 결제할 수 있어요. 개인적으로 이런 변화는 대부분 긍정적이라고 생각해요. 여행이 더 싸고 개인 맞춤이 됐으니까요. 하지만 단점도 있어요. 모두가 같은 SNS 게시물을 따라가니 같은 장소가 붐비고, 가끔 사람들이 실제 장소보다 화면을 더 오래 봐요. 그래서 저는 여행할 때 매일 적어도 몇 시간은 휴대폰을 넣어 두려고 해요.",
+  "tips": [
+   "과거 = 부모님 경험(패키지 여행), 현재 = 내 경험(앱)으로 대비시키면 쉬워요",
+   "장점만 말하지 말고 But there's a downside too 로 단점 하나를 넣으세요"
+  ]
+ },
+ {
+  "id": "oq-travel_abroad-007",
+  "topic": "travel_abroad",
+  "kind": "issue",
+  "level": 5,
+  "question": "These days, many people worry about issues related to traveling abroad, such as safety, rising costs, or the impact of tourism on local communities. What concerns have you heard about? How do you think travelers should deal with them?",
+  "question_ko": "요즘 많은 사람들이 안전, 오르는 비용, 관광이 지역 사회에 미치는 영향 등 해외여행과 관련된 문제를 걱정합니다. 어떤 걱정을 들어 보았나요? 여행자들은 이에 어떻게 대처해야 한다고 생각하나요?",
+  "sample": "People have many worries about traveling abroad these days. First, travel is getting more expensive. Flight tickets and hotel prices went up a lot, and the exchange rate is not good. Second, people worry about safety. Sometimes there is news about tourists who lose their bags or get into trouble. Third, some cities have too many tourists, and local people are unhappy. I think travelers should check safety information before they go. They should also travel in the off-season to save money. And they need to respect local rules and people.",
+  "sample_ko": "요즘 사람들은 해외여행에 대해 걱정이 많아요. 첫째, 여행이 점점 비싸지고 있어요. 항공권과 호텔 가격이 많이 올랐고 환율도 좋지 않아요. 둘째, 사람들은 안전을 걱정해요. 가끔 가방을 잃어버리거나 곤란한 일을 겪는 관광객에 대한 뉴스가 나와요. 셋째, 어떤 도시는 관광객이 너무 많아서 현지 사람들이 불만이에요. 여행자들은 가기 전에 안전 정보를 확인해야 한다고 생각해요. 돈을 아끼려면 비수기에 여행해야 해요. 그리고 현지 규칙과 사람들을 존중해야 해요.",
+  "sample_adv": "That's a really relevant question, because I hear about these issues all the time, especially from friends who travel a lot. The first big concern is cost. After the pandemic, flight prices jumped, hotels got more expensive, and on top of that the exchange rate has been pretty bad for Korean travelers. A trip to Europe that cost around two million won a few years ago can easily cost three million now. The second concern is safety. There have been news stories about pickpocketing in famous tourist areas, and some travelers have been targeted by scams, like fake taxi drivers or people offering to help at ticket machines. Plus, natural disasters and political situations can change quickly, so people worry about getting stuck somewhere. The third issue, which I think gets less attention, is the impact on local communities. In cities like Barcelona and Venice, residents have actually protested because rents have gone up and their neighborhoods are full of tourists all year. Some cities now charge entry fees or limit cruise ships. So how should travelers deal with this? For cost, I'd say travel in the off-season and book early. For safety, check the government's travel advisory website and register your trip with the embassy. And as for local communities, I think we should stay in licensed hotels, spend money at local businesses, and follow the rules, even small ones like not eating on church steps. Traveling is a privilege, so we should try to leave places better, not worse.",
+  "sample_adv_ko": "정말 적절한 질문이에요. 특히 여행을 많이 다니는 친구들한테서 이런 문제를 늘 듣거든요. 첫 번째 큰 걱정은 비용이에요. 팬데믹 이후 항공권 가격이 뛰었고, 호텔도 비싸졌고, 게다가 한국 여행자에게 환율이 꽤 나빴어요. 몇 년 전 2백만 원 정도였던 유럽 여행이 지금은 쉽게 3백만 원이 들 수 있어요. 두 번째 걱정은 안전이에요. 유명 관광지 소매치기에 관한 뉴스가 있었고, 가짜 택시 기사나 매표기 앞에서 도와주겠다는 사람 같은 사기의 표적이 된 여행자도 있어요. 또 자연재해나 정치 상황이 빠르게 바뀔 수 있어서 어딘가에 발이 묶일까 걱정해요. 세 번째 문제는 덜 주목받는다고 생각하는데, 지역 사회에 미치는 영향이에요. 바르셀로나나 베네치아 같은 도시에서는 집세가 오르고 동네가 1년 내내 관광객으로 가득해서 주민들이 실제로 시위를 했어요. 이제 일부 도시는 입장료를 받거나 크루즈선을 제한해요. 그럼 여행자는 어떻게 대처해야 할까요? 비용은 비수기에 여행하고 일찍 예약하라고 하고 싶어요. 안전은 정부의 해외 안전 여행 사이트를 확인하고 대사관에 여행을 등록하세요. 그리고 지역 사회에 관해서는 허가받은 숙소에 묵고, 현지 가게에서 돈을 쓰고, 교회 계단에서 음식 먹지 않기 같은 작은 규칙까지 지켜야 한다고 생각해요. 여행은 특권이니까 그곳을 더 나쁘게가 아니라 더 좋게 남기려고 노력해야 해요.",
+  "tips": [
+   "걱정 3가지(비용·안전·지역 사회)를 하나씩 말하고, 해결책도 같은 순서로 짝지어 정리",
+   "on top of that, Plus, as for ~ 로 항목을 매끄럽게 연결하세요"
+  ]
+ },
+ {
+  "id": "oq-staycation-001",
+  "topic": "staycation",
+  "kind": "describe",
+  "level": 1,
+  "question": "You indicated in the survey that you like to spend your vacation at home. Tell me about your home. Which room or space do you like to spend time in during your vacation, and why?",
+  "question_ko": "설문에서 휴가를 집에서 보내는 걸 좋아한다고 하셨습니다. 당신의 집에 대해 말해 주세요. 휴가 동안 어느 방이나 공간에서 시간을 보내는 걸 좋아하고, 왜 그런가요?",
+  "sample": "I live in an apartment with my parents. It has three bedrooms, a living room, and a kitchen. During my vacation, I like spending time in my bedroom the most. My room is not very big, but it is cozy. There is a big bed, a desk, and a bookshelf. Next to the window, there is a soft chair where I read books. I also have a small speaker, so I listen to music all day. I like my room because it is quiet and comfortable. I can relax there without any stress.",
+  "sample_ko": "저는 부모님과 아파트에 살아요. 방 세 개, 거실, 부엌이 있어요. 휴가 동안 저는 제 방에서 시간 보내는 걸 가장 좋아해요. 제 방은 아주 크지는 않지만 아늑해요. 큰 침대, 책상, 책장이 있어요. 창문 옆에는 제가 책을 읽는 푹신한 의자가 있어요. 작은 스피커도 있어서 하루 종일 음악을 들어요. 조용하고 편해서 제 방이 좋아요. 거기서는 아무 스트레스 없이 쉴 수 있어요.",
+  "sample_adv": "Sure. I live in a small two-bedroom apartment on the twelfth floor in Suwon, and I share it with my wife and our cat, Dubu. During a vacation, my favorite spot is definitely our living room, and especially the little corner by the balcony window. Let me describe it. When you walk in, there's a big gray sofa facing a wall-mounted TV, and on the floor there's a thick, fluffy rug that our cat loves more than we do. But the best part is the corner. Last year, we turned it into what we call our reading nook. There's a beanbag chair, a small wooden side table, a floor lamp with warm light, and a shelf full of books and board games. We also put a bunch of plants there, so it feels kind of like a tiny indoor garden. The window is huge, and since we're on a high floor, we can see the mountains in the distance. On a vacation day, I like to sit there in the morning with a cup of coffee, watch the sunlight come in, and read for hours while Dubu sleeps on my lap. In the evening, the whole living room turns into our movie theater. So honestly, that little corner feels like a resort to me. I don't need to go anywhere to feel like I'm on vacation.",
+  "sample_adv_ko": "네. 저는 수원의 12층에 있는 작은 방 두 개짜리 아파트에 아내, 고양이 두부와 함께 살아요. 휴가 동안 제가 가장 좋아하는 곳은 확실히 거실, 특히 베란다 창가의 작은 구석이에요. 묘사해 드릴게요. 들어오면 벽걸이 TV를 마주한 큰 회색 소파가 있고, 바닥에는 저희보다 고양이가 더 좋아하는 두툼하고 푹신한 러그가 있어요. 그런데 가장 좋은 건 그 구석이에요. 작년에 저희가 독서 공간이라고 부르는 곳으로 바꿨어요. 빈백 의자, 작은 나무 협탁, 따뜻한 빛의 플로어 램프, 그리고 책과 보드게임이 가득한 선반이 있어요. 식물도 잔뜩 놔서 작은 실내 정원 같은 느낌이에요. 창문이 아주 크고 높은 층이라 멀리 산이 보여요. 휴가 날에는 아침에 커피 한 잔을 들고 거기 앉아 햇빛이 들어오는 걸 보며 두부가 제 무릎에서 자는 동안 몇 시간씩 책을 읽는 걸 좋아해요. 저녁이면 거실 전체가 저희 영화관이 돼요. 그래서 솔직히 그 작은 구석이 저에게는 리조트 같아요. 휴가 기분을 느끼려고 어디 갈 필요가 없어요.",
+  "tips": [
+   "집 묘사: 집 종류·층·가족 → 좋아하는 공간 → 가구·물건 → 그곳에서 하는 일 → 의미",
+   "feels like a resort to me 처럼 휴가와 연결해 마무리하세요"
+  ]
+ },
+ {
+  "id": "oq-staycation-002",
+  "topic": "staycation",
+  "kind": "describe",
+  "level": 2,
+  "question": "I'd like to know who you usually spend your time with when you stay home on vacation. Tell me about the people you spend your vacation with. What are they like, and what do you enjoy doing together?",
+  "question_ko": "집에서 휴가를 보낼 때 보통 누구와 시간을 보내는지 알고 싶습니다. 휴가를 함께 보내는 사람들에 대해 말해 주세요. 어떤 사람들이고, 함께 무엇을 즐기나요?",
+  "sample": "When I stay home on vacation, I usually spend time with my family. I live with my parents and my younger brother. My dad is quiet and funny, and he loves cooking. My mom is very kind and active. My brother is a college student, and he likes video games. During vacation, we cook special food together, like Korean barbecue or dumplings. We also watch movies in the living room. Sometimes my brother and I play games, and I always lose. I enjoy this time because we are usually too busy to eat together.",
+  "sample_ko": "휴가 때 집에 있으면 보통 가족과 시간을 보내요. 저는 부모님, 남동생과 살아요. 아빠는 조용하고 재미있으시고 요리를 정말 좋아하세요. 엄마는 아주 다정하고 활동적이세요. 동생은 대학생이고 비디오 게임을 좋아해요. 휴가 동안 저희는 삼겹살이나 만두 같은 특별한 음식을 같이 만들어요. 거실에서 영화도 봐요. 가끔 동생과 게임을 하는데 저는 항상 져요. 평소에는 너무 바빠서 같이 밥 먹기도 힘들어서 이 시간이 즐거워요.",
+  "sample_adv": "Well, I live alone, so you might think a staycation would be lonely for me, but it's actually the opposite. The people I spend it with most are my two close friends from my old job, Hana and Jaewon. We all live in the same neighborhood in Mapo, so whenever one of us takes a few days off, the others come over in the evenings. Let me tell you a bit about them. Hana is the most organized person I know. She always brings a plan, like a theme for the night or a new recipe to try. Jaewon is the complete opposite. He's super laid-back, and his only job is to bring snacks and make everyone laugh, which he's really good at. So what do we do together? Our favorite thing is what we call a world food night. Each time, we pick a country, like Mexico or India, and cook a full meal from that country together. Half the time, it turns out kind of strange, but that's part of the fun. After dinner, we usually play board games or watch a whole season of a drama in one night. Last summer, we even set up a small tent on my rooftop and had a little camping night with a portable grill. Honestly, being with them makes staying home feel just as exciting as traveling somewhere.",
+  "sample_adv_ko": "음, 저는 혼자 살아서 집에서 보내는 휴가가 외로울 거라고 생각하실 수 있지만 사실은 그 반대예요. 제가 가장 많이 함께 보내는 사람은 예전 직장에서 만난 친한 친구 두 명, 하나와 재원이에요. 셋 다 마포의 같은 동네에 살아서 누구 하나가 며칠 쉬면 나머지가 저녁에 놀러 와요. 그 친구들에 대해 조금 말씀드릴게요. 하나는 제가 아는 가장 계획적인 사람이에요. 그날 밤 테마나 새로 해 볼 요리법 같은 계획을 항상 가져와요. 재원이는 완전히 반대예요. 아주 느긋하고, 유일한 역할은 간식을 가져오고 모두를 웃기는 건데 그걸 정말 잘해요. 그럼 함께 무엇을 할까요? 가장 좋아하는 건 저희가 세계 음식의 밤이라고 부르는 거예요. 매번 멕시코나 인도 같은 나라를 하나 골라 그 나라 음식을 한 상 같이 만들어요. 반은 좀 이상하게 나오지만 그것도 재미예요. 저녁 후에는 보통 보드게임을 하거나 드라마 한 시즌을 하룻밤에 몰아 봐요. 작년 여름에는 옥상에 작은 텐트까지 치고 휴대용 그릴로 작은 캠핑의 밤을 보냈어요. 솔직히 그 친구들과 함께라면 집에 있는 것도 어딘가 여행 가는 것만큼 신나요.",
+  "tips": [
+   "두 사람을 성격 대비(organized vs laid-back)로 소개하면 묘사가 선명해져요",
+   "you might think ~, but it's actually the opposite 로 흥미로운 첫 문장을 만드세요"
+  ]
+ },
+ {
+  "id": "oq-staycation-003",
+  "topic": "staycation",
+  "kind": "routine",
+  "level": 1,
+  "question": "You indicated that you spend your vacations at home. What do you usually do during a staycation? Describe a typical vacation day at home from morning to night.",
+  "question_ko": "휴가를 집에서 보낸다고 하셨습니다. 집에서 휴가를 보낼 때 보통 무엇을 하나요? 집에서 보내는 평범한 휴가 하루를 아침부터 밤까지 묘사해 주세요.",
+  "sample": "On a typical vacation day at home, I wake up late, around ten o'clock. I don't set an alarm. First, I make coffee and eat toast for breakfast. Then I clean my room and do some laundry. In the afternoon, I watch movies or dramas on Netflix. Sometimes I take a nap on the sofa. In the evening, I order delivery food, like fried chicken or pizza. After dinner, I take a long, hot bath. Then I read a book or play games on my phone. I go to bed at around one in the morning. It is a lazy but happy day.",
+  "sample_ko": "집에서 보내는 평범한 휴가 날에 저는 10시쯤 늦게 일어나요. 알람을 맞추지 않아요. 먼저 커피를 내리고 아침으로 토스트를 먹어요. 그다음 방을 청소하고 빨래를 해요. 오후에는 넷플릭스로 영화나 드라마를 봐요. 가끔 소파에서 낮잠을 자요. 저녁에는 치킨이나 피자 같은 배달 음식을 시켜요. 저녁 먹고 나서 뜨거운 물에 오래 목욕을 해요. 그다음 책을 읽거나 휴대폰으로 게임을 해요. 새벽 1시쯤 자요. 게으르지만 행복한 하루예요.",
+  "sample_adv": "Oh, I actually take my staycations pretty seriously, so I have a little routine that makes it feel like a real vacation instead of just a lazy day off. First of all, I always turn off my work notifications the night before. That's rule number one. In the morning, I sleep in until about nine, and then I make a fancy brunch, something I'd never have time for on a weekday, like French toast with berries or eggs Benedict. I eat it slowly by the window while listening to jazz. After that, I go out for a bit, because staying inside all day can make me feel kind of gloomy. I usually walk to a nearby park or visit a bookstore cafe in my neighborhood and spend a couple of hours reading there. In the afternoon, I come back home and do something that feels like self-care, like a face mask, a long shower, or some yoga with a video. Then in the evening, I treat myself. Sometimes I cook a nice pasta and open a bottle of wine, and other times I order from a restaurant I've been saving for a special occasion. I finish the day with a movie, with the lights off and popcorn, just like at the theater. The best part is that there's no packing, no traffic, and no airport stress, but I still feel completely recharged at the end of the day.",
+  "sample_adv_ko": "아, 저는 사실 집에서 보내는 휴가를 꽤 진지하게 생각해서, 그냥 게으른 쉬는 날이 아니라 진짜 휴가처럼 느끼게 해 주는 작은 루틴이 있어요. 우선 항상 전날 밤에 업무 알림을 꺼요. 그게 첫 번째 규칙이에요. 아침에는 9시쯤까지 늦잠을 자고, 베리를 올린 프렌치토스트나 에그 베네딕트처럼 평일에는 절대 시간 없는 근사한 브런치를 만들어요. 재즈를 들으며 창가에서 천천히 먹어요. 그 후에 잠깐 외출해요. 하루 종일 안에만 있으면 좀 우울해질 수 있거든요. 보통 근처 공원까지 걷거나 동네 북카페에 가서 두어 시간 책을 읽어요. 오후에는 집에 와서 마스크팩, 오래 샤워하기, 영상 보며 요가하기처럼 나를 돌보는 일을 해요. 그리고 저녁에는 제 자신에게 상을 줘요. 가끔은 맛있는 파스타를 만들고 와인 한 병을 따고, 또 어떤 때는 특별한 날을 위해 아껴 둔 식당에서 주문해요. 하루는 영화로 마무리하는데, 극장처럼 불을 끄고 팝콘을 먹어요. 가장 좋은 건 짐 싸기도, 교통 체증도, 공항 스트레스도 없는데 하루가 끝나면 완전히 재충전된다는 거예요.",
+  "tips": [
+   "아침 → 오전 → 오후 → 저녁 → 밤 시간대별로 정리하면 길게 말하기 쉬워요",
+   "rule number one 처럼 나만의 규칙을 말하면 개성이 드러나요"
+  ]
+ },
+ {
+  "id": "oq-staycation-004",
+  "topic": "staycation",
+  "kind": "past",
+  "level": 3,
+  "question": "Tell me about a memorable vacation you spent at home. When was it, why did you decide to stay home, and what did you do? What made it special?",
+  "question_ko": "집에서 보낸 기억에 남는 휴가에 대해 말해 주세요. 언제였고, 왜 집에 있기로 했으며, 무엇을 했나요? 무엇이 특별했나요?",
+  "sample": "A memorable staycation was last Chuseok holiday. I had five days off, but plane tickets were too expensive. So I decided to stay home. My parents went to my grandmother's house, so I was alone. At first, I felt a little bored. But then I started to clean and decorate my room. I moved my bed and bought some plants and lights online. I also learned how to bake bread by watching videos. My first bread was terrible, but my third one was really good. My room looked totally new at the end. It was a simple holiday, but I felt very proud.",
+  "sample_ko": "기억에 남는 집 휴가는 작년 추석 연휴였어요. 5일 쉬었는데 비행기표가 너무 비쌌어요. 그래서 집에 있기로 했어요. 부모님은 할머니 댁에 가셔서 저 혼자였어요. 처음에는 조금 지루했어요. 그런데 방을 청소하고 꾸미기 시작했어요. 침대를 옮기고 인터넷으로 식물과 조명을 샀어요. 영상을 보며 빵 굽는 법도 배웠어요. 첫 빵은 엉망이었지만 세 번째는 정말 맛있었어요. 마지막에는 제 방이 완전히 새것처럼 보였어요. 소박한 휴가였지만 아주 뿌듯했어요.",
+  "sample_adv": "The staycation I remember most is from two winters ago. I'd planned a trip to Sapporo with my sister for the snow festival, and we'd already booked everything. But three days before we were supposed to leave, my sister broke her ankle on an icy street. Obviously, we had to cancel. She was really upset, and honestly, so was I. So I said, okay, if we can't go to Japan, let's bring Japan to us. I took the whole week off anyway and moved into her apartment for five days. Every day, we had a different theme. One day we made ramen from scratch, which took about six hours and made the whole apartment smell like pork bones. Another day, we watched Japanese movies back to back and tried to learn some basic phrases. We even bought some bath salts that were supposed to smell like a hot spring, filled a tub for her feet, and pretended we were at a ryokan. On the last night, it actually snowed in Seoul, and we sat by the window drinking hot sake and watching it fall. My sister said it was better than the real trip, and I kind of agree. We still plan to go to Sapporo one day, but that week reminded me that a vacation is really about who you're with, not where you are.",
+  "sample_adv_ko": "제가 가장 기억하는 집 휴가는 2년 전 겨울이에요. 눈 축제를 보러 언니와 삿포로 여행을 계획했고 이미 다 예약했어요. 그런데 출발 사흘 전에 언니가 빙판길에서 발목이 부러졌어요. 당연히 취소해야 했죠. 언니는 정말 속상해했고 솔직히 저도 그랬어요. 그래서 제가 그랬어요. 좋아, 일본에 못 가면 일본을 우리한테 데려오자. 어차피 일주일 휴가를 냈으니 닷새 동안 언니 집에 들어가 살았어요. 매일 다른 테마가 있었어요. 하루는 라멘을 처음부터 만들었는데 6시간쯤 걸렸고 집 전체에 돼지 뼈 냄새가 났어요. 또 하루는 일본 영화를 연달아 보면서 기본 표현을 배워 보려고 했어요. 온천 냄새가 난다는 입욕제까지 사서 언니 발을 담글 대야를 채우고 료칸에 온 척했어요. 마지막 밤에는 서울에 진짜 눈이 내려서 창가에 앉아 따뜻한 사케를 마시며 눈 오는 걸 봤어요. 언니는 진짜 여행보다 좋았다고 했고, 저도 어느 정도 동의해요. 언젠가 삿포로에 꼭 갈 계획이지만, 그 일주일 덕분에 휴가란 어디에 있느냐가 아니라 누구와 함께하느냐라는 걸 다시 깨달았어요.",
+  "tips": [
+   "집에 있게 된 이유(계획 취소 등)부터 말하면 이야기에 자연스러운 갈등이 생겨요",
+   "마지막 문장에 깨달음(a vacation is really about ~)을 넣으면 고득점 인상"
+  ]
+ },
+ {
+  "id": "oq-staycation-005",
+  "topic": "staycation",
+  "kind": "past",
+  "level": 3,
+  "question": "Think about the last time you took a few days off and stayed home. What did you plan to do, and what did you actually end up doing? Did everything go as planned?",
+  "question_ko": "마지막으로 며칠 쉬면서 집에 있었던 때를 떠올려 보세요. 무엇을 하려고 계획했고, 실제로는 결국 무엇을 했나요? 모든 게 계획대로 됐나요?",
+  "sample": "The last time I stayed home was in August. I took three days off from work. I planned to study English, exercise every morning, and clean my closet. But it did not go as planned. On the first day, I slept until noon. Then I watched a new drama, and it was so interesting. I watched all twelve episodes in two days. I only cleaned my closet on the last day. I felt a little guilty, but I was also very relaxed. Next time, I will make a more realistic plan.",
+  "sample_ko": "마지막으로 집에 있었던 건 8월이었어요. 회사에서 사흘 휴가를 냈어요. 영어 공부, 매일 아침 운동, 옷장 정리를 계획했어요. 그런데 계획대로 되지 않았어요. 첫날 정오까지 잤어요. 그다음 새 드라마를 봤는데 너무 재미있었어요. 이틀 동안 12화를 다 봤어요. 옷장 정리는 마지막 날에야 했어요. 조금 죄책감이 들었지만 아주 편하게 쉬기도 했어요. 다음에는 더 현실적인 계획을 세울 거예요.",
+  "sample_adv": "Ha, that's a funny question, because my last staycation was a perfect example of plans versus reality. It was just last month. I had four days off after finishing a big project, and I was determined to use them productively. I made a whole list. I was going to finally organize the storage room, start running again, finish two books, and learn to make kimchi from my mom's recipe. I even wrote a schedule in my planner with times for everything. Well, here's what actually happened. On the first morning, I woke up at seven, full of energy, went for a run, and cleaned half the storage room. I felt amazing. But that afternoon, I found a box of old photo albums in the storage room, and I spent the next five hours looking through them and texting pictures to my high school friends. That turned into a group video call, and we ended up planning a reunion. The second day, it rained all day, so the run was canceled, and I fell asleep on the sofa reading the first book. The kimchi did happen, though. My mom came over on the third day, and we made a big batch together while she told me family stories. So no, nothing really went as planned. But honestly, I reconnected with old friends and spent quality time with my mom, which is way better than a clean storage room.",
+  "sample_adv_ko": "하, 재미있는 질문이에요. 제 지난 집 휴가가 계획과 현실의 완벽한 예였거든요. 바로 지난달이었어요. 큰 프로젝트를 끝내고 나흘을 쉬게 됐는데, 생산적으로 쓰겠다고 굳게 마음먹었어요. 목록을 한가득 만들었어요. 드디어 창고 방을 정리하고, 다시 달리기를 시작하고, 책 두 권을 끝내고, 엄마 레시피로 김치 담그는 법을 배우려고 했어요. 플래너에 모든 일의 시간까지 적어 놨어요. 자, 실제로는 이렇게 됐어요. 첫날 아침 7시에 에너지 넘치게 일어나 달리기를 하고 창고 방 절반을 치웠어요. 기분이 최고였어요. 그런데 그날 오후 창고 방에서 오래된 사진 앨범 상자를 발견했고, 그다음 다섯 시간 동안 앨범을 보면서 고등학교 친구들에게 사진을 보냈어요. 그게 단체 영상 통화로 이어졌고, 결국 동창 모임까지 계획하게 됐어요. 둘째 날은 하루 종일 비가 와서 달리기는 취소됐고, 첫 번째 책을 읽다가 소파에서 잠들었어요. 그래도 김치는 담갔어요. 셋째 날 엄마가 오셔서 가족 이야기를 해 주시는 동안 같이 잔뜩 담갔어요. 그러니까 아니요, 계획대로 된 건 거의 없어요. 하지만 솔직히 옛 친구들과 다시 연락하고 엄마와 소중한 시간을 보냈으니 깨끗한 창고 방보다 훨씬 나아요.",
+  "tips": [
+   "계획(was going to ~) vs 실제(here's what actually happened) 대비 구조",
+   "예상 밖 결과를 긍정적으로 마무리하면 이야기 완성도가 높아져요"
+  ]
+ },
+ {
+  "id": "oq-staycation-006",
+  "topic": "staycation",
+  "kind": "compare",
+  "level": 5,
+  "question": "How has the way people spend their vacations at home changed over the years? Compare how people stayed home during holidays in the past with how they do it now. Why do you think it has changed?",
+  "question_ko": "사람들이 집에서 휴가를 보내는 방식은 몇 년 사이 어떻게 바뀌었나요? 예전에 휴일에 집에 있던 방식과 지금을 비교해 주세요. 왜 바뀌었다고 생각하나요?",
+  "sample": "The way people spend vacations at home has changed a lot. In the past, staying home on vacation meant you had no money or no plans. People just watched TV and slept. Many families visited relatives instead. Now, staying home is a popular choice. People call it a staycation. They decorate their homes, cook special food, and watch movies with streaming services. Some people also book a nice hotel in their own city. I think it changed because travel is expensive and people are tired. Also, homes have more entertainment now.",
+  "sample_ko": "사람들이 집에서 휴가를 보내는 방식은 많이 바뀌었어요. 예전에 휴가 때 집에 있다는 건 돈이 없거나 계획이 없다는 뜻이었어요. 사람들은 그냥 TV를 보고 잤어요. 많은 가족들은 대신 친척 집에 갔어요. 지금은 집에 있는 게 인기 있는 선택이에요. 사람들은 그걸 스테이케이션이라고 불러요. 집을 꾸미고, 특별한 음식을 만들고, 스트리밍 서비스로 영화를 봐요. 자기 도시의 좋은 호텔을 예약하는 사람들도 있어요. 여행이 비싸고 사람들이 지쳐서 바뀌었다고 생각해요. 또 지금은 집에 즐길 거리가 더 많아요.",
+  "sample_adv": "That's an interesting question, because the whole idea of a staycation is pretty new here. When I was growing up, if you stayed home during a holiday, it usually meant something had gone wrong. Maybe your family couldn't afford a trip, or your parents had to work. People would just lie around, watch whatever was on the three main TV channels, and maybe go to a nearby park or a public bath. During big holidays like Chuseok, home was actually the busiest place, full of relatives, cooking, and endless chores, so it didn't feel like a vacation at all, especially for the moms. These days, it's a totally different story. Staying home has become a deliberate choice, and people actually plan it like a trip. They buy nice candles and new bedding, cook restaurant-style meals with meal kits, or binge a series on Netflix with a projector. There's also the hotel staycation, where people book a hotel in their own city just to enjoy the pool and room service. On social media, you'll see tons of posts with the hashtag hocance, which is a mix of hotel and vacance. So why the change? I think there are three reasons. First, travel costs have gone up a lot. Second, people are just exhausted and want real rest instead of a packed schedule. And third, the pandemic taught everyone how to enjoy being at home. Personally, I think it's a healthy change, because rest doesn't have to be far away to be meaningful.",
+  "sample_adv_ko": "흥미로운 질문이에요. 스테이케이션이라는 개념 자체가 여기선 꽤 새롭거든요. 제가 자랄 때는 휴일에 집에 있으면 보통 뭔가 잘못됐다는 뜻이었어요. 가족이 여행할 형편이 안 되거나 부모님이 일해야 했던 거죠. 사람들은 그냥 뒹굴면서 주요 TV 채널 세 개에서 나오는 걸 보고, 근처 공원이나 대중목욕탕에 가는 정도였어요. 추석 같은 큰 명절에는 집이 오히려 가장 바쁜 곳이었어요. 친척, 요리, 끝없는 집안일로 가득해서 특히 엄마들에게는 전혀 휴가 같지 않았어요. 요즘은 완전히 다른 이야기예요. 집에 있는 게 의도적인 선택이 됐고, 사람들은 실제로 여행처럼 계획해요. 좋은 향초와 새 침구를 사고, 밀키트로 식당 같은 요리를 하고, 프로젝터로 넷플릭스 시리즈를 몰아 봐요. 수영장과 룸서비스를 즐기려고 자기 도시의 호텔을 예약하는 호텔 스테이케이션도 있어요. SNS에서는 호텔과 바캉스를 합친 호캉스라는 해시태그 게시물을 엄청 볼 수 있어요. 그럼 왜 바뀌었을까요? 세 가지 이유가 있다고 생각해요. 첫째, 여행 비용이 많이 올랐어요. 둘째, 사람들이 너무 지쳐서 빡빡한 일정 대신 진짜 휴식을 원해요. 셋째, 팬데믹이 모두에게 집에 있는 걸 즐기는 법을 가르쳐 줬어요. 개인적으로 건강한 변화라고 생각해요. 휴식이 의미 있으려면 꼭 멀리 있어야 하는 건 아니니까요.",
+  "tips": [
+   "과거: 집에 있다 = 부정적 의미, 현재: 의도적인 선택 이라는 대비로 시작",
+   "hocance(호캉스), deliberate choice, binge 같은 요즘 표현을 활용하세요"
+  ]
+ },
+ {
+  "id": "oq-staycation-007",
+  "topic": "staycation",
+  "kind": "issue",
+  "level": 5,
+  "question": "Many people today say they feel more tired after a vacation than before, and some experts say people don't know how to rest properly. What do people worry about when it comes to rest and vacations? What do you think is the best way to truly recharge?",
+  "question_ko": "요즘 많은 사람들이 휴가 후에 오히려 더 피곤하다고 말하고, 일부 전문가들은 사람들이 제대로 쉬는 법을 모른다고 합니다. 휴식과 휴가에 관해 사람들은 무엇을 걱정하나요? 진정으로 재충전하는 가장 좋은 방법은 무엇이라고 생각하나요?",
+  "sample": "Many people feel tired after a vacation these days. One reason is that they make very busy travel plans. They try to see everything in a short time. Another reason is work. Many people check work emails and messages during their vacation, so they cannot really rest. Also, people spend too much time on their phones, even at home. I saw a news report that said many Korean workers can't use all their vacation days. I think the best way to recharge is to turn off your phone and sleep well. Simple things like walking and reading help a lot.",
+  "sample_ko": "요즘 많은 사람들이 휴가 후에 피곤해해요. 한 가지 이유는 아주 바쁜 여행 계획을 세우기 때문이에요. 짧은 시간에 모든 걸 보려고 해요. 또 다른 이유는 일이에요. 많은 사람들이 휴가 중에도 업무 이메일과 메시지를 확인해서 제대로 쉴 수 없어요. 또 사람들은 집에서도 휴대폰을 너무 오래 봐요. 많은 한국 직장인들이 휴가를 다 못 쓴다는 뉴스를 봤어요. 재충전하는 가장 좋은 방법은 휴대폰을 끄고 잘 자는 거라고 생각해요. 산책이나 독서 같은 단순한 일이 많이 도움이 돼요.",
+  "sample_adv": "Yeah, I totally relate to that, and I think a lot of Korean office workers do too. There are a few things people worry about. The first is what some people call vacation burnout. We get so few days off that we try to squeeze everything into them. You fly somewhere on Friday night, visit ten places in three days, post everything on Instagram, and land on Sunday night just in time to go to work on Monday. You come back more exhausted than before. The second issue is that we never really disconnect. I read a survey last year saying that more than half of Korean workers check work messages during their vacation, and many feel guilty if they don't. Bosses message you on KakaoTalk, and you feel like you have to reply. The third concern is screen time. Even on a staycation, people just scroll on their phones for hours, and experts say that kind of passive rest doesn't actually refresh your brain. So what's the best way to recharge? From my own experience, I'd say three things. First, set clear boundaries. Turn on an out-of-office message and actually mute your work chat. Second, plan less, not more. Leave empty time in your day. And third, choose active rest, like walking in nature, cooking, or meeting a friend face to face. I also think companies need to change their culture, so that taking a real break is seen as normal, not lazy.",
+  "sample_adv_ko": "네, 정말 공감되고, 많은 한국 직장인들도 그럴 거라고 생각해요. 사람들이 걱정하는 게 몇 가지 있어요. 첫째는 일부에서 휴가 번아웃이라고 부르는 거예요. 쉬는 날이 너무 적어서 그 안에 모든 걸 몰아넣으려고 해요. 금요일 밤에 어딘가로 날아가서 사흘 동안 열 군데를 가고, 인스타그램에 전부 올리고, 일요일 밤에 딱 맞춰 도착해서 월요일에 출근해요. 전보다 더 지쳐서 돌아오죠. 두 번째 문제는 우리가 진짜로 연결을 끊지 못한다는 거예요. 작년에 한국 직장인 절반 이상이 휴가 중에 업무 메시지를 확인하고, 확인하지 않으면 죄책감을 느끼는 사람도 많다는 설문을 읽었어요. 상사가 카카오톡으로 메시지를 보내면 답해야 할 것 같은 기분이 들어요. 세 번째 걱정은 화면 보는 시간이에요. 집에서 쉬는 휴가에도 사람들은 몇 시간씩 휴대폰만 넘기는데, 전문가들은 그런 수동적인 휴식은 실제로 뇌를 회복시키지 못한다고 해요. 그럼 재충전하는 가장 좋은 방법은 뭘까요? 제 경험으로는 세 가지예요. 첫째, 경계를 분명히 하세요. 부재중 메시지를 켜고 업무 채팅방을 실제로 음소거하세요. 둘째, 더 많이가 아니라 더 적게 계획하세요. 하루에 빈 시간을 남겨 두세요. 셋째, 자연 속 걷기, 요리, 친구 직접 만나기 같은 능동적인 휴식을 고르세요. 회사도 문화를 바꿔서 제대로 쉬는 게 게으른 게 아니라 당연한 일로 여겨지게 해야 한다고 생각해요.",
+  "tips": [
+   "burnout, disconnect, set boundaries, active rest 같은 이슈 어휘를 미리 익혀 두세요",
+   "걱정 3개 → From my own experience 로 해결책 3개 → 사회·회사 차원 한 문장"
+  ]
+ }
+]

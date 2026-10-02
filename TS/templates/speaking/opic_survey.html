@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}오픽 설문{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <div class="muted small">OPIc · Background Survey + Self Assessment</div>
+    <h1>설문·난이도</h1>
+    <div class="muted small">실제 시험 전에 하는 설문을 그대로 연습합니다. 고른 주제에서 모의고사 문항이 나옵니다.</div>
+  </div>
+  <a class="btn" href="{{ url_for('speaking.opic_home') }}">오픽 홈</a>
+</div>
+
+<form method="post">
+  <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+  <div class="card">
+    <h2>1. 주제 고르기 (Background Survey)</h2>
+    <p class="small muted">실제 설문은 직업·학생 여부·거주 형태를 묻고, 여가·취미·운동·휴가에서 합계 12개 이상을 고릅니다.
+      흔히 쓰는 전략은 <b>"일 경험 없음 · 학생 아님 · 가족과 함께 거주"</b>로 답해 직장·학교 질문을 피하고, 서로 이어지는 주제(예: 공원 가기 · 걷기 · 조깅)를 묶어 고르는 것입니다.
+      이 앱은 연습할 주제만 고르면 됩니다.</p>
+    {% for group, need in GROUPS.items() %}
+      <h3 style="margin:14px 0 6px">{{ group }} <span class="small muted">{{ need }}개 이상</span></h3>
+      <div class="topic-grid">
+        {% for key, v in TOPICS.items() if v[1] == group and v[2] %}
+          <label><input type="checkbox" name="topic" value="{{ key }}" {{ 'checked' if key in st.survey }}> {{ v[0] }}</label>
+        {% endfor %}
+      </div>
+    {% endfor %}
+    <p class="small muted" style="margin-top:10px">거주(사는 곳·집) 주제는 누구나 받으므로 자동으로 포함됩니다.</p>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <h2>2. 난이도 (Self Assessment)</h2>
+    <p class="small muted">실제 시험은 처음에 1~6단계를 고르고, 7번 문항 뒤에 "쉽게 / 비슷하게 / 어렵게"로 한 번 더 조정합니다.
+      난이도가 높을수록 비교·사회 이슈·롤플레이 문제 해결이 많이 나옵니다. IH·AL을 노리면 5~6단계를 고르는 경우가 많습니다(수험 커뮤니티의 일반적인 조언).</p>
+    <div class="topic-grid">
+      {% for lv, name in LEVELS.items() %}<label><input type="radio" name="level" value="{{ lv }}" {{ 'checked' if st.level == lv }}> {{ name }}</label>{% endfor %}
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <h2>3. 목표 등급</h2>
+    <div class="topic-grid">
+      {% for g in TARGETS %}<label><input type="radio" name="target" value="{{ g }}" {{ 'checked' if st.target == g }}> <b>{{ g }}</b>&nbsp;<span class="small muted">{{ GRADE_NAME[g] }}</span></label>{% endfor %}
+    </div>
+  </div>
+
+  <div class="quiz-foot"><span></span><button class="btn primary">저장</button></div>
+</form>
+{% endblock %}
