@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="잡핏">
+  <!-- 잡핏 로고: 서류 가방(일자리) + 체크(나에게 맞음) -->
+  <rect width="32" height="32" rx="8" fill="#2f5bd3"/>
+  <path d="M12 10.5V8.6A1.6 1.6 0 0 1 13.6 7h4.8A1.6 1.6 0 0 1 20 8.6v1.9" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+  <rect x="5.5" y="10.5" width="21" height="15" rx="3.2" fill="#fff"/>
+  <path d="M11 18.2l3.4 3.3L21.2 14.6" fill="none" stroke="#2f5bd3" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

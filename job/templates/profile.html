@@ -57,8 +57,18 @@
     <input name="skills" value="{{ prof.skills | join(', ') }}" placeholder="Python, SQL, 엑셀, ERP, 전산회계 1급"></label>
   <label class="wide">희망 직무 키워드
     <input name="interests" value="{{ prof.interests | join(', ') }}" placeholder="자재관리, 구매, 데이터 분석"></label>
-  <label class="wide">제외 단어 <small class="muted">공고에 있으면 '지원 불가'로 표시</small>
-    <input name="exclude" value="{{ prof.exclude | join(', ') }}" placeholder="교대근무, 텔레마케팅, 파견"></label>
+  <fieldset class="wide">
+    <legend>제외 항목 <span class="muted small">걸린 공고는 목록·요약에서 숨깁니다 (공고 목록의 '제외 공고 보기'로 확인 가능)</span></legend>
+    <div class="pills">
+      {% for name, terms in exclude_presets.items() %}
+      <label class="pill" title="{{ terms | join(', ') }}"><input type="checkbox" name="exclude_presets" value="{{ name }}" {{ 'checked' if name in prof.exclude }}> {{ name }}</label>
+      {% endfor %}
+    </div>
+    <label class="stack-label">그 밖의 제외 단어 <small class="muted">쉼표로 구분 · 제목·회사·키워드에서 찾음 (띄어쓰기 무시)</small>
+      <input name="exclude" value="{{ prof.exclude | reject('in', exclude_presets) | join(', ') }}" placeholder="예: 콜센터, 야간"></label>
+    <p class="muted small">헤드헌팅: 사람인·잡코리아 헤드헌팅 목록에 있는 공고와 '헤드헌터·서치펌·채용대행' 표시 공고 ·
+       수리기사: 수리 엔지니어·수리 서비스·A/S기사·출장 수리 등</p>
+  </fieldset>
   <div class="wide"><button class="btn">저장</button></div>
 </form>
 {% endblock %}

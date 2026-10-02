@@ -85,6 +85,15 @@ LIST_SITES = {
 # 고용24 상세는 infoTypeCd 등 붙은 원래 주소로 읽어야 내용이 나온다 — 저장된 링크를 그대로 쓴다.
 REFRESH_SITES = ("saramin", "jobkorea", "work24", "linkareer", "jasoseol", "jobplanet", "remember")
 API_SITES = ("saramin", "work24")
+# 사이트가 따로 모아 둔 목록 → 공고 표시. 제외 항목에 같은 이름이 있으면 그 공고는 상세를 읽지도 않는다
+FLAG_LISTS = {
+    "헤드헌팅": [
+        ("saramin", "https://www.saramin.co.kr/zf_user/jobs/list/headhunting?page={page}&page_count=100&sort=RD",
+         r"rec_idx=(\d+)", 10),
+        ("jobkorea", "https://www.jobkorea.co.kr/Headhunting/", r"/Recruit/GI_Read/(\d+)", 1),
+        ("jobkorea", "https://www.jobkorea.co.kr/recruit/joblist?menucode=headhunting", r"/Recruit/GI_Read/(\d+)", 1),
+    ],
+}
 # 사이트맵에 전체 공고를 올려 두는 사이트: 매번 사이트맵 한 장만 읽어 비교하고, 새 번호만 상세를 읽는다.
 # 사이트맵에서 빠진 번호는 요청 없이 마감 처리. 처음 채울 때는 번호가 큰(최근) 공고부터 sitemap_max 건씩.
 SITEMAP_SITES = {
@@ -308,6 +317,10 @@ def _run(s: dict, f: Fetcher) -> dict:
     summary = {"new": 0, "updated": 0, "closed": 0, "errors": [], "sites": {}}
     keywords = s["keywords"] or [""]
 
+    summary["flagged"] = collect_flags(f, s["sites"], summary["errors"])
+    from . import profile as profile_mod
+    excluded_flags = set(profile_mod.load().get("exclude") or []) & set(FLAG_LISTS)
+
     for site in s["sites"]:
         ins = upd = 0
         label = ", ".join(k for k in keywords if k) or \
@@ -317,7 +330,8 @@ def _run(s: dict, f: Fetcher) -> dict:
             summary["errors"] += errors
             ids = {i: h for g in groups.values() for i, h in g.items()}
             _fill_missing_from_list(site, ids)
-            new_ids = pick_round_robin(groups, lambda i: not postings.find_id(site, i), s["max_new"])
+            skip = set().union(*(postings.flagged(site, fl) for fl in excluded_flags)) if excluded_flags else set()
+            new_ids = pick_round_robin(groups, lambda i: i not in skip and not postings.find_id(site, i), s["max_new"])
             for pid in new_ids:
                 item = _detail(f, site, LIST_SITES[site]["detail"].format(id=pid), ids[pid])
                 if item:
@@ -446,6 +460,33 @@ def sitemap_progress() -> list[dict]:
             out.append({"site": site, "name": linkimport.SITES[site][0], "on": site in s["sitemap_sites"],
                         "total": total, "fetched": fetched, "errors": row["errors"] or 0, "remaining": remaining,
                         "eta_hours": runs * s["interval_hours"] if runs else 0})
+    return out
+
+
+def collect_flags(f: Fetcher, sites: list[str], errors: list[str]) -> dict:
+    """헤드헌팅 같은 사이트 목록을 읽어 공고 번호에 표시를 남긴다. 사이트가 막으면 그 표시만 건너뛴다."""
+    out: dict[str, int] = {}
+    for flag, lists in FLAG_LISTS.items():
+        for site, tpl, pat, pages in lists:
+            if site not in sites:
+                continue
+            ids: list[str] = []
+            try:
+                for page_no in range(1, pages + 1):
+                    res = f.get(tpl.replace("{page}", str(page_no)))
+                    if res.status_code != 200:
+                        break
+                    found = [i for i in dict.fromkeys(re.findall(pat, res.text)) if i not in ids]
+                    if not found:
+                        break
+                    ids += found
+                    if "{page}" not in tpl:
+                        break
+            except SourceError as e:
+                errors.append(f"{flag} 목록 {site}: {e}")
+            if ids:
+                postings.add_flags(site, ids, flag)
+                out[f"{flag}:{site}"] = out.get(f"{flag}:{site}", 0) + len(ids)
     return out
 
 

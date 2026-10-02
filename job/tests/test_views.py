@@ -152,3 +152,10 @@ def test_unsorted_sub():
     assert jobgroups.subs_of(p, "IT·개발·데이터") == {jobgroups.UNSORTED}
     assert jobgroups.sub_names("IT·개발·데이터")[-1] == jobgroups.UNSORTED
     assert jobgroups.sub_names("기타") == []
+
+
+def test_logo(client):
+    html = client.get("/").get_data(as_text=True)
+    assert 'rel="icon" type="image/svg+xml"' in html and 'class="brand-logo"' in html
+    res = client.get("/favicon.ico")
+    assert res.status_code == 200 and b"<svg" in res.data

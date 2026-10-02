@@ -123,8 +123,22 @@ def set_hidden(pid: int, hidden: bool) -> None:
         con.execute("UPDATE postings SET hidden = ? WHERE id = ?", (1 if hidden else 0, pid))
 
 
-_SELECT = """SELECT p.*, a.status AS app_status, a.memo AS app_memo, a.applied_at, a.next_at
+_SELECT = """SELECT p.*, a.status AS app_status, a.memo AS app_memo, a.applied_at, a.next_at,
+                    (SELECT group_concat(flag, ',') FROM post_flags g
+                     WHERE g.source = p.source AND g.source_id = p.source_id) AS flags
              FROM postings p LEFT JOIN applications a ON a.posting_id = p.id"""
+
+
+def add_flags(source: str, ids, flag: str) -> int:
+    with db.connect() as con:
+        return con.executemany("INSERT OR REPLACE INTO post_flags(source, source_id, flag, seen_at) VALUES(?, ?, ?, ?)",
+                               [(source, str(i), flag, db.now()) for i in ids]).rowcount
+
+
+def flagged(source: str, flag: str) -> set[str]:
+    with db.connect() as con:
+        return {r[0] for r in con.execute("SELECT source_id FROM post_flags WHERE source = ? AND flag = ?",
+                                          (source, flag))}
 
 
 def all_rows(include_hidden: bool = False) -> list[dict]:
@@ -183,6 +197,10 @@ def search(prof: dict, f: dict, today: date | None = None, facets: dict | None =
             if subs and not p_subs.intersection(subs):
                 continue
         r = fit.evaluate(p, prof, today)
+        if r.excluded and f.get("show_excluded") != "1":
+            if facets is not None:
+                facets["excluded"] = facets.get("excluded", 0) + 1
+            continue
         if f.get("eligible") == "1" and not r.eligible:
             continue
         min_fit = _int(f.get("min_fit"))

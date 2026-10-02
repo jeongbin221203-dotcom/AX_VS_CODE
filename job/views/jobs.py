@@ -13,7 +13,7 @@ from core.normalize import CAREER_TYPES, EDUCATION_LEVELS, SIDO_ORDER
 
 bp = Blueprint("jobs", __name__, url_prefix="/jobs")
 
-FILTER_KEYS = ("q", "sido", "career", "source", "category", "saved", "new", "min_salary", "min_fit", "eligible", "salary_known",
+FILTER_KEYS = ("q", "sido", "career", "source", "category", "saved", "new", "show_excluded", "min_salary", "min_fit", "eligible", "salary_known",
                "show_closed", "hidden", "sort")
 
 

@@ -38,6 +38,7 @@
   <label class="chk"><input type="checkbox" name="eligible" value="1" {{ 'checked' if f.eligible == '1' }}> 지원 가능만</label>
   <label class="chk"><input type="checkbox" name="salary_known" value="1" {{ 'checked' if f.salary_known == '1' }}> 연봉 공개만</label>
   <label class="chk"><input type="checkbox" name="show_closed" value="1" {{ 'checked' if f.show_closed == '1' }}> 마감 포함</label>
+  <label class="chk" title="내 조건의 제외 항목에 걸린 공고"><input type="checkbox" name="show_excluded" value="1" {{ 'checked' if f.show_excluded == '1' }}> 제외 공고 보기{% if facets.excluded and f.show_excluded != '1' %} <small class="muted">({{ facets.excluded }}건 숨김)</small>{% endif %}</label>
   <label class="chk"><input type="checkbox" name="hidden" value="1" {{ 'checked' if f.hidden == '1' }}> 숨긴 공고</label>
   <button class="btn sm">적용</button>
   <a class="muted" href="{{ url_for('jobs.index', saved=f.saved or None) }}">초기화</a>

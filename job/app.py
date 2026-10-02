@@ -36,6 +36,11 @@ def create_app(test_config: dict | None = None) -> Flask:
         if not token or not secrets.compare_digest(token, sent):
             abort(400, "요청이 만료되었습니다. 화면을 새로고침한 뒤 다시 시도하세요.")
 
+    @app.get("/favicon.ico")
+    def favicon():
+        """브라우저가 기본으로 찾는 주소 — SVG 로고를 준다."""
+        return app.send_static_file("favicon.svg")
+
     @app.after_request
     def headers(response):
         response.headers.setdefault("X-Content-Type-Options", "nosniff")

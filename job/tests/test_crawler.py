@@ -335,3 +335,19 @@ def test_repeated_failures_stop_site(app):
     result = crawler.run_once(force=True, fetcher=f)
     assert any("중단" in e for e in result["errors"])
     assert any("jobkorea" in u for u in f.seen)                       # 다음 사이트는 계속
+
+
+def test_headhunting_flag_list_skips_detail(app):
+    """헤드헌팅 목록의 공고는 표시하고, 제외 항목에 헤드헌팅이 있으면 상세를 읽지 않는다."""
+    from core import profile
+    profile.save({"career_type": "모두", "education": "무관", "exclude": ["헤드헌팅"]})
+    _settings(keywords=["자재관리"], sites=["saramin"])
+    hh = crawler.FLAG_LISTS["헤드헌팅"][0][1]
+    search = crawler.LIST_SITES["saramin"]["search"].format(kw="%EC%9E%90%EC%9E%AC%EA%B4%80%EB%A6%AC", page=1)
+    d = crawler.LIST_SITES["saramin"]["detail"]
+    f = FakeFetcher({hh.format(page=1): (200, '<a href="/zf_user/jobs/relay/view?rec_idx=102">헤드헌팅</a>'),
+                     search: (200, SARAMIN_LIST), d.format(id=101): (200, SARAMIN_OG)})
+    result = crawler.run_once(force=True, fetcher=f)
+    assert result["flagged"] == {"헤드헌팅:saramin": 1}
+    assert d.format(id=102) not in f.seen and result["new"] == 1
+    assert postings.flagged("saramin", "헤드헌팅") == {"102"}

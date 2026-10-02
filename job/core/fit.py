@@ -23,6 +23,7 @@ class FitResult:
     blockers: list = field(default_factory=list)     # 지원 불가 사유
     matched: list = field(default_factory=list)
     missing: list = field(default_factory=list)
+    excluded: list = field(default_factory=list)     # 걸린 제외 항목 (목록에서 숨김)
 
     @property
     def eligible(self) -> bool:
@@ -187,10 +188,11 @@ def evaluate(p: dict, prof: dict, today: date | None = None) -> FitResult:
         score -= 10
         r.warnings.append(f"고용형태가 희망과 다름: {emp}")
 
-    hits = [w for w in (prof.get("exclude") or []) if w and w.lower() in text]
-    if hits:
+    from .exclude import matches
+    r.excluded = matches(p, prof.get("exclude") or [])
+    if r.excluded:
         score = min(score, 10)
-        r.blockers.append("제외 단어 포함: " + ", ".join(hits))
+        r.blockers.append("제외 항목: " + ", ".join(r.excluded))
 
     dl = p.get("deadline")
     if dl:

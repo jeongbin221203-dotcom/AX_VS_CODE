@@ -81,6 +81,15 @@ CREATE TABLE IF NOT EXISTS sitemap_ids (
     PRIMARY KEY (site, post_id)
 );
 
+-- 사이트가 따로 모아 둔 목록에 있던 공고 표시 (예: 사람인·잡코리아 헤드헌팅 목록 → '헤드헌팅')
+CREATE TABLE IF NOT EXISTS post_flags (
+    source     TEXT NOT NULL,
+    source_id  TEXT NOT NULL,
+    flag       TEXT NOT NULL,
+    seen_at    TEXT NOT NULL,
+    PRIMARY KEY (source, source_id, flag)
+);
+
 CREATE TABLE IF NOT EXISTS fetch_runs (
     id           INTEGER PRIMARY KEY AUTOINCREMENT,
     source       TEXT NOT NULL,

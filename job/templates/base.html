@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}채용공고 적합성{% endblock %} · 잡핏</title>
-  <link rel="icon" href="data:,">
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
 </head>
 <body>
 {% set ep = request.endpoint or '' %}
 <header class="topbar">
   <div class="topbar-row">
-    <a class="brand" href="{{ url_for('main.dashboard') }}"><span class="brand-mark">잡</span>잡핏</a>
+    <a class="brand" href="{{ url_for('main.dashboard') }}"><img class="brand-logo" src="{{ url_for('static', filename='favicon.svg') }}" alt="" width="28" height="28">잡핏</a>
     <nav class="nav">
       <a href="{{ url_for('main.dashboard') }}" class="{{ 'on' if ep == 'main.dashboard' }}">요약</a>
       <a href="{{ url_for('jobs.index') }}" class="{{ 'on' if ep.startswith('jobs.') and request.args.get('saved') != '1' }}">공고</a>

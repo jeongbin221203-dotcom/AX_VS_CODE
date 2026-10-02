@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 
 from . import db, jobgroups
+from .exclude import PRESETS
 from .normalize import EDUCATION_LEVELS, split_keywords
 
 DEFAULT = {
@@ -61,7 +62,8 @@ def from_form(form) -> dict:
         "education": edu if edu in EDUCATION_LEVELS else "대졸",
         "skills": split_keywords(form.get("skills", ""))[:40],
         "interests": split_keywords(form.get("interests", ""))[:40],
-        "exclude": split_keywords(form.get("exclude", ""))[:40],
+        "exclude": list(dict.fromkeys([w for w in form.getlist("exclude_presets") if w in PRESETS]
+                                      + split_keywords(form.get("exclude", ""))))[:40],
         "employment_types": [t for t in form.getlist("employment_types") if t in EMPLOYMENT_TYPES],
         "job_groups": [g for g in form.getlist("job_groups") if g in jobgroups.NAMES],
         "job_subs": [s for s in form.getlist("job_subs")

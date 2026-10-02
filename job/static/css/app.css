@@ -175,3 +175,6 @@ ul.good, ul.warn { padding-left: 1.2rem; margin: .2rem 0; }
 .chip.new { background: var(--bad); color: #fff; }
 .fresh { border-left: 4px solid var(--bad); }
 .fit-mini { display: inline-block; min-width: 2.2rem; text-align: center; font-weight: 800; color: var(--g-a); }
+.pills { display: flex; flex-wrap: wrap; gap: .35rem; margin-bottom: .5rem; }
+.stack-label { display: flex; flex-direction: column; gap: .3rem; font-weight: 600; font-size: .9rem; }
+.brand-logo { width: 28px; height: 28px; display: block; }

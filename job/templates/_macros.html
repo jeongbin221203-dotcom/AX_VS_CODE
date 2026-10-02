@@ -10,7 +10,7 @@
   <article class="job{{ ' blocked' if not p.fit.eligible }}">
     <div class="job-fit">{{ fit_badge(p.fit) }}</div>
     <div class="job-main">
-      <a class="job-title" href="{{ url_for('jobs.detail', pid=p.id) }}">{{ p.title }}</a>{% if p.is_new %} <span class="chip new">NEW</span>{% endif %}
+      <a class="job-title" href="{{ url_for('jobs.detail', pid=p.id) }}">{{ p.title }}</a>{% if p.is_new %} <span class="chip new">NEW</span>{% endif %}{% if p.flags and '헤드헌팅' in p.flags %} <span class="chip closed">헤드헌팅</span>{% endif %}
       <div class="job-co">{{ p.company }} <span class="src">{{ p.source | source_name }}</span>
         {% if p.app_status %}<span class="status s-{{ STATUSES.index(p.app_status) }}">{{ p.app_status }}</span>{% endif %}</div>
       <div class="job-meta">

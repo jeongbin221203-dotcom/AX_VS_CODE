@@ -18,4 +18,4 @@ def edit():
     groups = [{"name": g, "subs": jobgroups.sub_names(g)} for g in jobgroups.NAMES]
     return render_template("profile.html", prof=profile.load(), sidos=SIDO_ORDER[:-1],
                            edus=EDUCATION_LEVELS, emp_types=profile.EMPLOYMENT_TYPES,
-                           salary_steps=profile.SALARY_STEPS, groups=groups)
+                           salary_steps=profile.SALARY_STEPS, groups=groups, exclude_presets=profile.PRESETS)

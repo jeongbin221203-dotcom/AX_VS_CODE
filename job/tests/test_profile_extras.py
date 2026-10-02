@@ -65,3 +65,30 @@ def test_new_matching_postings(app, client):
     html = client.get("/").get_data(as_text=True)
     assert "새로 들어온 맞는 공고가 없습니다" in html
     assert "가상새회사" not in client.get("/jobs?new=1").get_data(as_text=True)
+
+
+def test_exclude_presets_and_hiding(app, client):
+    from core import exclude
+    rows = [build("saramin", "1", title="서울/경기 노트북 출장 수리 엔지니어 모집", company="가상A"),
+            build("saramin", "2", title="전동공구 수리 서비스 경력직원", company="가상B"),
+            build("saramin", "3", title="[코스피 중견] 구매팀장", company="가상서치"),
+            build("saramin", "4", title="백엔드 개발자", company="가상D"),
+            build("saramin", "5", title="HTML 퍼블리셔", company="가상E")]
+    assert exclude.matches(rows[0], ["수리기사"]) == ["수리기사"]
+    assert exclude.matches(rows[1], ["수리기사"]) == ["수리기사"]
+    assert exclude.matches(rows[3], ["수리기사", "헤드헌팅"]) == []
+    assert exclude.matches(rows[4], ["텔레마케팅"]) == []                       # 'HTML' 안의 TM 은 아님
+    assert exclude.matches({"title": "A/S 접수 사무", "description": "수리 엔지니어"}, ["수리기사"]) == []  # 설명은 안 봄
+    postings.upsert_many(rows)
+    postings.add_flags("saramin", ["3"], "헤드헌팅")
+    client.post("/profile", data={"career_type": "모두", "education": "무관",
+                                  "exclude_presets": ["헤드헌팅", "수리기사", "없는항목"], "exclude": "야간, 헤드헌팅"})
+    assert profile.load()["exclude"] == ["헤드헌팅", "수리기사", "야간"]
+    html = client.get("/jobs").get_data(as_text=True)
+    assert "가상D" in html and "가상A" not in html and "가상B" not in html and "가상서치" not in html
+    assert "(3건 숨김)" in html
+    html = client.get("/jobs?show_excluded=1").get_data(as_text=True)
+    assert "가상서치" in html and "헤드헌팅</span>" in html and "가상A" in html
+    page = client.get("/profile").get_data(as_text=True)
+    assert 'value="헤드헌팅" checked' in page and 'value="수리기사" checked' in page
+    assert 'name="exclude" value="야간"' in page                                # 프리셋은 체크로, 나머지만 글칸에
