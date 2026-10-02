@@ -87,11 +87,10 @@ REFRESH_SITES = ("saramin", "jobkorea", "work24", "linkareer", "jasoseol", "jobp
 API_SITES = ("saramin", "work24")
 # 사이트가 따로 모아 둔 목록 → 공고 표시. 제외 항목에 같은 이름이 있으면 그 공고는 상세를 읽지도 않는다
 FLAG_LISTS = {
+    # 잡코리아 헤드헌팅 화면은 사이트 공통 광고·추천 공고 링크가 같은 모양으로 섞여 있어(S-OIL 공채 등) 쓰지 않는다
     "헤드헌팅": [
         ("saramin", "https://www.saramin.co.kr/zf_user/jobs/list/headhunting?page={page}&page_count=100&sort=RD",
          r"rec_idx=(\d+)", 10),
-        ("jobkorea", "https://www.jobkorea.co.kr/Headhunting/", r"/Recruit/GI_Read/(\d+)", 1),
-        ("jobkorea", "https://www.jobkorea.co.kr/recruit/joblist?menucode=headhunting", r"/Recruit/GI_Read/(\d+)", 1),
     ],
 }
 # 사이트맵에 전체 공고를 올려 두는 사이트: 매번 사이트맵 한 장만 읽어 비교하고, 새 번호만 상세를 읽는다.
