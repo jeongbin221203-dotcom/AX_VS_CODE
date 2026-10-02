@@ -2,7 +2,7 @@
 
 - 미리 정한 항목(PRESETS)은 같은 뜻의 여러 표현을 함께 찾는다. 예) 수리기사 → '출장 수리 엔지니어', 'A/S기사'.
 - 그 밖의 단어는 그 단어 자체를 찾는다.
-- 제목·회사·키워드·직무 이름·사이트 표시(헤드헌팅 목록 등)만 본다. 긴 설명까지 보면 'A/S 접수'처럼
+- 제목·회사·키워드·고용형태·사이트 표시(헤드헌팅 목록 등)만 본다. 긴 설명까지 보면 'A/S 접수'처럼
   업무 설명에 스친 단어로 엉뚱하게 걸린다. 띄어쓰기는 무시한다.
 """
 from __future__ import annotations
@@ -29,8 +29,10 @@ def matches(p: dict, words: list[str]) -> list[str]:
     """공고가 걸린 제외 항목 이름들."""
     if not words:
         return []
+    # 사이트 직무 이름은 보지 않는다: 사람인은 한 공고를 여러 직무에 올려 '고객상담·TM' 목록의 건설 공고가
+    # 텔레마케팅으로 걸린다
     text = _norm(" ".join(str(p.get(k) or "") for k in
-                          ("title", "company", "keywords", "job_category", "employment_type", "flags")))
+                          ("title", "company", "keywords", "employment_type", "flags")))
     hits = []
     for w in words:
         terms = PRESETS.get(w, (w,))

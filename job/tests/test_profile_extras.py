@@ -92,3 +92,11 @@ def test_exclude_presets_and_hiding(app, client):
     page = client.get("/profile").get_data(as_text=True)
     assert 'value="헤드헌팅" checked' in page and 'value="수리기사" checked' in page
     assert 'name="exclude" value="야간"' in page                                # 프리셋은 체크로, 나머지만 글칸에
+
+
+def test_exclude_ignores_site_category_name():
+    """사이트 직무 이름('고객상담·TM')만으로는 텔레마케팅으로 걸리지 않는다."""
+    from core import exclude
+    p = build("saramin", "1", title="건설 경력사원 공개채용", company="가상", job_category="고객상담·TM")
+    assert exclude.matches(p, ["텔레마케팅"]) == []
+    assert exclude.matches(build("saramin", "2", title="중고차 TM 상담원", company="가상"), ["텔레마케팅"]) == ["텔레마케팅"]
