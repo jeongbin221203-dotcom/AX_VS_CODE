@@ -3,12 +3,13 @@ from __future__ import annotations
 
 from flask import request, url_for
 
+from core import db
 from core.exams import EXAMS
 
 # (이름, endpoint, url 인자, 이 항목으로 볼 endpoint 목록)
 MENUS = {
     "toeic": [
-        ("오늘", "main.dashboard", {}, ["main.dashboard"]),
+        ("오늘", "main.dashboard", {}, ["main.dashboard", "main.home"]),
         ("등급 가이드", "main.guide", {}, ["main.guide"]),
         ("파트 연습", "quiz.practice", {}, ["quiz.practice", "quiz.practice_start", "quiz.quiz"]),
         ("모의고사", "quiz.mock", {}, ["quiz.mock", "quiz.diagnostic", "quiz.result"]),
@@ -75,6 +76,7 @@ def current_exam(ep: str) -> str:
 def nav_menus() -> list[dict]:
     ep = request.endpoint or ""
     cur = current_exam(ep)
+    home_exam = db.get_settings().get("home_exam") or "toeic"
     out = []
     for key, e in EXAMS.items():
         items = []
@@ -88,5 +90,6 @@ def nav_menus() -> list[dict]:
         active = next((i["label"] for i in items if i["on"]), "")
         home = url_for(e["endpoint"]) if e["ready"] else url_for("main.exam", key=key)
         out.append({"key": key, "name": e["name"], "ready": e["ready"], "on": key == cur, "items": items, "home": home,
+                    "is_home": key == home_exam,
                     "active": active if e["ready"] else ""})
     return out

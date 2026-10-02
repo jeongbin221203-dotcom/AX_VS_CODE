@@ -520,3 +520,25 @@ def test_all_python_files_compile_and_gunicorn_config():
     conf = {}
     exec((ROOT / "gunicorn.conf.py").read_text(encoding="utf-8"), conf)
     assert conf["workers"] == 1 and conf["worker_class"] == "gthread" and conf["threads"] >= 2
+
+
+def test_home_exam_setting_and_tabs(client):
+    """첫 화면 시험 고르기 + 상단 시험 탭."""
+    html = client.get("/").data.decode()
+    assert 'class="exam-tabs"' in html and "오늘의 토익" in html
+    for href in ("/toeic", "/toefl/", "/speaking/toeic", "/speaking/opic"):
+        assert f'href="{href}"' in html
+    assert "☆ 첫 화면으로" not in html                       # 토익이 이미 첫 화면
+    tok = re.search(r'name="csrf-token" content="([^"]+)"', html).group(1)
+    assert "☆ 첫 화면으로" in client.get("/speaking/opic").data.decode()
+    r = client.post("/home-exam", data={"_csrf": tok, "exam": "opic"})
+    assert r.status_code == 302 and r.headers["Location"].endswith("/speaking/opic")
+    assert client.get("/").headers["Location"].endswith("/speaking/opic")
+    assert client.get("/toeic").status_code == 200              # 토익 탭은 그대로 토익
+    assert "☆ 첫 화면으로" not in client.get("/speaking/opic").data.decode()
+    assert client.post("/home-exam", data={"_csrf": tok, "exam": "nope"}).status_code == 400
+    # 설정 화면에서도 바꿀 수 있다
+    form = {"_csrf": tok, "target_score": "800", "daily_new_words": "20", "daily_questions": "40",
+            "tts_rate": "1.0", "tts_accent": "mix", "home_exam": "toefl"}
+    assert client.post("/settings", data=form).status_code == 302
+    assert client.get("/").headers["Location"].endswith("/toefl/")

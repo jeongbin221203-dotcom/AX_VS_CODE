@@ -17,6 +17,26 @@ bp = Blueprint("main", __name__)
 
 
 @bp.route("/")
+def home():
+    """첫 화면: 설정에서 고른 시험의 홈 (기본 토익)."""
+    key = db.get_settings().get("home_exam") or "toeic"
+    if key != "toeic" and key in EXAMS:
+        return redirect(url_for(EXAMS[key]["endpoint"]))
+    return dashboard()
+
+
+@bp.route("/home-exam", methods=["POST"])
+def set_home_exam():
+    """상단 탭의 '첫 화면으로' 버튼."""
+    key = request.form.get("exam", "")
+    if key in EXAMS:
+        db.save_settings({"home_exam": key})
+        flash(f"첫 화면을 {EXAMS[key]['name']}(으)로 바꿨습니다. TS 로고를 누르면 이 화면이 열립니다.", "ok")
+        return redirect(url_for(EXAMS[key]["endpoint"]))
+    abort(400)
+
+
+@bp.route("/toeic")
 def dashboard():
     settings = db.get_settings()
     plan = planner.build(bank(), settings)
@@ -109,6 +129,8 @@ def settings():
             values["tts_rate"] = str(min(max(rate, 0.6), 1.5))
         except ValueError:
             errors.append("음성 속도 값 오류")
+        home_exam = f.get("home_exam", "toeic")
+        values["home_exam"] = home_exam if home_exam in EXAMS else "toeic"
         accent = f.get("tts_accent", "mix")
         values["tts_accent"] = accent if accent in ("mix", "us", "uk", "au") else "mix"
         if errors:

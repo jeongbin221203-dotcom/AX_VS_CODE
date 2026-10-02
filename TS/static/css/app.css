@@ -108,7 +108,9 @@ p { margin: 0 0 .8em; }
 .settings-link { margin-left: auto; padding: 6px 10px; border-radius: 8px; color: var(--ink-2); white-space: nowrap; }
 .settings-link:hover { background: var(--surface-2); text-decoration: none; }
 .settings-link.on { background: var(--accent-soft); color: var(--accent); font-weight: 700; }
-.exam-tabs { display: flex; gap: 4px; flex-wrap: wrap; }
+.exam-tabs { display: flex; gap: 4px; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+.home-set { margin: 0; }
+.home-set .btn { white-space: nowrap; }
 .exam-tabs a { padding: 5px 9px; border-radius: 8px; color: var(--ink-2); font-weight: 700; font-size: .9rem; white-space: nowrap; }
 .exam-tabs a small { font-weight: 400; font-size: .68rem; color: var(--ink-3); margin-left: 3px; }
 .exam-tabs a:hover { background: var(--surface-2); text-decoration: none; }
@@ -365,6 +367,9 @@ ul.clean li { margin: 4px 0; }
 .frame { white-space: pre-wrap; font-family: var(--mono); font-size: .88rem; background: var(--surface-2); border-radius: 8px; padding: 10px 12px; margin: 6px 0 0; }
 
 @media (max-width: 640px) {
+  .exam-tabs { order: 5; flex-basis: 100%; padding-bottom: 6px; }
+  .exam-tabs a { flex: 1; text-align: center; }
+  .crumb { display: none; }
   .topbar { padding: 8px 12px 0; position: static; }
   .topbar-row { flex-wrap: wrap; gap: 8px; }
   .nav { flex-wrap: wrap; overflow: visible; }
