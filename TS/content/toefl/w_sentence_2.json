@@ -1,0 +1,1519 @@
+[
+ {
+  "id": "ws-101",
+  "level": 1,
+  "context": "I left my umbrella at home again.",
+  "answer": "Do you want to borrow mine?",
+  "chunks": [
+   "Do you",
+   "want",
+   "to borrow",
+   "mine"
+  ],
+  "explanation": "Do + 주어 + 동사원형 어순의 의문문입니다. want 뒤에는 to부정사(to borrow)가 옵니다.",
+  "translation": "A: 또 우산을 집에 두고 왔어. / B: 내 거 빌릴래?"
+ },
+ {
+  "id": "ws-102",
+  "level": 1,
+  "context": "The math quiz starts in ten minutes.",
+  "answer": "Where is the quiz going to be?",
+  "chunks": [
+   "Where",
+   "is",
+   "the quiz",
+   "going to be"
+  ],
+  "explanation": "의문사 + be동사 + 주어 어순입니다. be going to 는 정해진 계획을 나타냅니다.",
+  "translation": "A: 수학 퀴즈가 10분 뒤에 시작해. / B: 퀴즈는 어디서 봐?"
+ },
+ {
+  "id": "ws-103",
+  "level": 1,
+  "context": "I just moved into the new dorm.",
+  "answer": "How do you like your room?",
+  "chunks": [
+   "How",
+   "do you",
+   "like",
+   "your room"
+  ],
+  "explanation": "How do you like ~? 는 '~은 어때?'라는 뜻의 의문문입니다. do 뒤에 주어와 동사원형이 옵니다.",
+  "translation": "A: 새 기숙사로 막 이사했어. / B: 방은 어때?"
+ },
+ {
+  "id": "ws-104",
+  "level": 1,
+  "context": "Is the bookstore open today?",
+  "answer": "Yes, but it closes early on Sundays.",
+  "chunks": [
+   "Yes,",
+   "but",
+   "it closes",
+   "early",
+   "on Sundays"
+  ],
+  "explanation": "주어 it 이 3인칭 단수라 closes 를 씁니다. 요일 앞에는 on 을 씁니다.",
+  "translation": "A: 오늘 서점 열어? / B: 응, 근데 일요일에는 일찍 닫아."
+ },
+ {
+  "id": "ws-105",
+  "level": 1,
+  "context": "What did you have for lunch?",
+  "answer": "I had a sandwich at the student center.",
+  "chunks": [
+   "I had",
+   "a sandwich",
+   "at",
+   "the student",
+   "center"
+  ],
+  "explanation": "주어 + 동사 + 목적어 + 장소 순서입니다. 과거 일이므로 had 를 씁니다.",
+  "translation": "A: 점심 뭐 먹었어? / B: 학생회관에서 샌드위치 먹었어."
+ },
+ {
+  "id": "ws-106",
+  "level": 1,
+  "context": "Which bus goes to the stadium?",
+  "answer": "The number five bus goes there.",
+  "chunks": [
+   "The",
+   "number five",
+   "bus",
+   "goes",
+   "there"
+  ],
+  "explanation": "주어(The number five bus) + 동사(goes) + 장소 부사(there) 순서입니다.",
+  "translation": "A: 어느 버스가 경기장에 가? / B: 5번 버스가 거기 가."
+ },
+ {
+  "id": "ws-107",
+  "level": 1,
+  "context": "I need a quiet place to study.",
+  "answer": "The library is quieter than the cafe.",
+  "chunks": [
+   "The library",
+   "is",
+   "quieter",
+   "than",
+   "the cafe"
+  ],
+  "explanation": "비교급 quieter + than 구문입니다. 짧은 형용사는 -er 을 붙여 비교급을 만듭니다.",
+  "translation": "A: 공부할 조용한 곳이 필요해. / B: 도서관이 카페보다 조용해."
+ },
+ {
+  "id": "ws-108",
+  "level": 1,
+  "context": "Have you seen the new art exhibit?",
+  "answer": "Yes, I saw it last weekend.",
+  "chunks": [
+   "Yes,",
+   "I",
+   "saw it",
+   "last",
+   "weekend"
+  ],
+  "explanation": "last weekend 처럼 과거 시점이 있으면 현재완료가 아니라 과거형(saw)을 씁니다.",
+  "translation": "A: 새 미술 전시 봤어? / B: 응, 지난 주말에 봤어."
+ },
+ {
+  "id": "ws-109",
+  "level": 1,
+  "context": "Can you help me with this homework?",
+  "answer": "Sure, what part is hard for you?",
+  "chunks": [
+   "Sure,",
+   "what part",
+   "is",
+   "hard",
+   "for you"
+  ],
+  "explanation": "what part 가 의문사구로 주어 역할을 하므로 바로 동사 is 가 옵니다.",
+  "translation": "A: 이 숙제 좀 도와줄래? / B: 그래, 어느 부분이 어려워?"
+ },
+ {
+  "id": "ws-110",
+  "level": 1,
+  "context": "Who is the woman at the front desk?",
+  "answer": "She is the new office manager.",
+  "chunks": [
+   "She is",
+   "the",
+   "new",
+   "office",
+   "manager"
+  ],
+  "explanation": "관사 the + 형용사 new + 명사구 office manager 순서입니다.",
+  "translation": "A: 안내 데스크에 있는 여자분 누구야? / B: 새로 온 사무실 관리자야."
+ },
+ {
+  "id": "ws-111",
+  "level": 1,
+  "context": "Why are you so tired today?",
+  "answer": "I studied until two in the morning.",
+  "chunks": [
+   "I studied",
+   "until",
+   "two",
+   "in the",
+   "morning"
+  ],
+  "explanation": "until 은 '~까지'(계속)를 뜻합니다. 시각 + in the morning 순서입니다.",
+  "translation": "A: 오늘 왜 이렇게 피곤해? / B: 새벽 두 시까지 공부했어."
+ },
+ {
+  "id": "ws-112",
+  "level": 1,
+  "context": "Are you taking the history class?",
+  "answer": "No, I am taking art instead.",
+  "chunks": [
+   "No,",
+   "I am",
+   "taking",
+   "art",
+   "instead"
+  ],
+  "explanation": "현재진행형 am taking 으로 이번 학기 계획을 말합니다. instead 는 문장 끝에 둡니다.",
+  "translation": "A: 역사 수업 들어? / B: 아니, 대신 미술 들어."
+ },
+ {
+  "id": "ws-113",
+  "level": 1,
+  "context": "The printer in the lab is broken.",
+  "answer": "You can print in the library.",
+  "chunks": [
+   "You",
+   "can",
+   "print",
+   "in",
+   "the library"
+  ],
+  "explanation": "조동사 can 뒤에는 동사원형 print 가 옵니다.",
+  "translation": "A: 실습실 프린터가 고장 났어. / B: 도서관에서 출력하면 돼."
+ },
+ {
+  "id": "ws-114",
+  "level": 1,
+  "context": "I want to join a sports club.",
+  "answer": "The tennis club is looking for members.",
+  "chunks": [
+   "The tennis club",
+   "is",
+   "looking",
+   "for",
+   "members"
+  ],
+  "explanation": "현재진행형 is looking 에 look for(찾다)가 이어집니다.",
+  "translation": "A: 운동 동아리에 들고 싶어. / B: 테니스 동아리가 회원을 모집하고 있어."
+ },
+ {
+  "id": "ws-115",
+  "level": 1,
+  "context": "When does the semester end?",
+  "answer": "It ends in the middle of May.",
+  "chunks": [
+   "It ends",
+   "in",
+   "the middle",
+   "of",
+   "May"
+  ],
+  "explanation": "in the middle of + 달 은 '~월 중순'이라는 뜻입니다.",
+  "translation": "A: 학기가 언제 끝나? / B: 5월 중순에 끝나."
+ },
+ {
+  "id": "ws-116",
+  "level": 1,
+  "context": "This coffee is too sweet.",
+  "answer": "You should ask for less sugar.",
+  "chunks": [
+   "You",
+   "should",
+   "ask for",
+   "less",
+   "sugar"
+  ],
+  "explanation": "should + 동사원형으로 조언합니다. less 는 셀 수 없는 명사(sugar) 앞에 씁니다.",
+  "translation": "A: 이 커피 너무 달아. / B: 설탕을 덜 넣어 달라고 해."
+ },
+ {
+  "id": "ws-117",
+  "level": 1,
+  "context": "Did you bring your student ID?",
+  "answer": "Yes, it is in my wallet.",
+  "chunks": [
+   "Yes,",
+   "it",
+   "is",
+   "in my",
+   "wallet"
+  ],
+  "explanation": "be동사 + 장소 전치사구(in my wallet)로 위치를 말합니다.",
+  "translation": "A: 학생증 가져왔어? / B: 응, 지갑에 있어."
+ },
+ {
+  "id": "ws-118",
+  "level": 1,
+  "context": "How was your first week here?",
+  "answer": "It was busy but very fun.",
+  "chunks": [
+   "It was",
+   "busy",
+   "but",
+   "very",
+   "fun"
+  ],
+  "explanation": "형용사 두 개(busy, fun)를 but 으로 연결합니다. very 는 형용사 앞에 둡니다.",
+  "translation": "A: 여기서 첫 주 어땠어? / B: 바빴지만 아주 재미있었어."
+ },
+ {
+  "id": "ws-119",
+  "level": 1,
+  "context": "Is there a gym on campus?",
+  "answer": "There is one next to the pool.",
+  "chunks": [
+   "There is",
+   "one",
+   "next",
+   "to",
+   "the pool"
+  ],
+  "explanation": "There is + 단수 명사 구문입니다. next to 는 '~옆에'라는 뜻입니다.",
+  "translation": "A: 캠퍼스에 체육관 있어? / B: 수영장 옆에 하나 있어."
+ },
+ {
+  "id": "ws-120",
+  "level": 1,
+  "context": "I forgot the name of our textbook.",
+  "answer": "It is written on the syllabus.",
+  "chunks": [
+   "It is",
+   "written",
+   "on",
+   "the",
+   "syllabus"
+  ],
+  "explanation": "be + 과거분사(written) 수동태입니다. '강의계획서에 적혀 있다'는 뜻입니다.",
+  "translation": "A: 교재 이름을 잊어버렸어. / B: 강의계획서에 적혀 있어."
+ },
+ {
+  "id": "ws-121",
+  "level": 2,
+  "context": "I'm looking for the career center.",
+  "answer": "Do you know which building it is in?",
+  "chunks": [
+   "Do you know",
+   "which",
+   "building",
+   "it is",
+   "in"
+  ],
+  "explanation": "간접의문문은 의문사 + 주어 + 동사 어순입니다(which building it is in). 전치사 in 은 끝에 남습니다.",
+  "translation": "A: 취업 지원 센터를 찾고 있어. / B: 어느 건물에 있는지 알아?"
+ },
+ {
+  "id": "ws-122",
+  "level": 2,
+  "context": "The lecture hall was really cold today.",
+  "answer": "The heating has not been fixed yet.",
+  "chunks": [
+   "The heating",
+   "has not",
+   "been",
+   "fixed",
+   "yet"
+  ],
+  "explanation": "현재완료 수동태 has (not) been + 과거분사입니다. yet 은 부정문 끝에 씁니다.",
+  "translation": "A: 오늘 강의실 정말 추웠어. / B: 난방이 아직 안 고쳐졌어."
+ },
+ {
+  "id": "ws-123",
+  "level": 2,
+  "context": "Who should I talk to about my schedule?",
+  "answer": "You should see the advisor who handles registration.",
+  "chunks": [
+   "You should",
+   "see",
+   "the advisor",
+   "who handles",
+   "registration"
+  ],
+  "explanation": "관계대명사 who 가 the advisor 를 꾸밉니다. 선행사가 단수라 handles 입니다.",
+  "translation": "A: 시간표 문제는 누구랑 얘기해야 해? / B: 수강신청 담당 지도교수님을 만나 봐."
+ },
+ {
+  "id": "ws-124",
+  "level": 2,
+  "context": "Is the online course harder than the regular one?",
+  "answer": "It is just as hard as the regular course.",
+  "chunks": [
+   "It is",
+   "just as",
+   "hard",
+   "as",
+   "the regular course"
+  ],
+  "explanation": "as + 원급 + as 동등 비교입니다. just 는 as 앞에 놓여 '꼭 그만큼'을 뜻합니다.",
+  "translation": "A: 온라인 강좌가 일반 강좌보다 어려워? / B: 일반 강좌랑 딱 똑같이 어려워."
+ },
+ {
+  "id": "ws-125",
+  "level": 2,
+  "context": "How long have you worked at the cafe?",
+  "answer": "I have worked there for about a year.",
+  "chunks": [
+   "I have worked",
+   "there",
+   "for",
+   "about",
+   "a year"
+  ],
+  "explanation": "현재완료 have worked + for(기간)로 지금까지 계속된 일을 말합니다.",
+  "translation": "A: 카페에서 얼마나 일했어? / B: 거기서 1년쯤 일했어."
+ },
+ {
+  "id": "ws-126",
+  "level": 2,
+  "context": "I missed the announcement in class.",
+  "answer": "Can you tell me what the professor said?",
+  "chunks": [
+   "Can you",
+   "tell me",
+   "what",
+   "the professor",
+   "said"
+  ],
+  "explanation": "간접의문문 what + 주어 + 동사(the professor said) 어순입니다. did 를 쓰지 않습니다.",
+  "translation": "A: 수업 시간 공지를 놓쳤어. / B: 교수님이 뭐라고 하셨는지 알려 줄래?"
+ },
+ {
+  "id": "ws-127",
+  "level": 2,
+  "context": "Why is the parking lot closed?",
+  "answer": "It is being repaved this week.",
+  "chunks": [
+   "It is",
+   "being",
+   "repaved",
+   "this",
+   "week"
+  ],
+  "explanation": "진행형 수동태 is being + 과거분사로 '지금 포장 공사 중'임을 나타냅니다.",
+  "translation": "A: 주차장이 왜 닫혀 있어? / B: 이번 주에 재포장하는 중이야."
+ },
+ {
+  "id": "ws-128",
+  "level": 2,
+  "context": "Should I take biology or chemistry?",
+  "answer": "If you like labs, you will enjoy chemistry.",
+  "chunks": [
+   "If you",
+   "like labs,",
+   "you",
+   "will enjoy",
+   "chemistry"
+  ],
+  "explanation": "실제 가능한 조건문: If + 현재형, 주어 + will + 동사원형 입니다.",
+  "translation": "A: 생물 들을까 화학 들을까? / B: 실험 좋아하면 화학이 재미있을 거야."
+ },
+ {
+  "id": "ws-129",
+  "level": 2,
+  "context": "I can't open the course website.",
+  "answer": "You might have to log in again.",
+  "chunks": [
+   "You",
+   "might",
+   "have to",
+   "log in",
+   "again"
+  ],
+  "explanation": "might + have to 로 '~해야 할지도 모른다'는 추측을 나타냅니다.",
+  "translation": "A: 강의 웹사이트가 안 열려. / B: 다시 로그인해야 할 수도 있어."
+ },
+ {
+  "id": "ws-130",
+  "level": 2,
+  "context": "Did you like the guest speaker?",
+  "answer": "She was more interesting than I thought.",
+  "chunks": [
+   "She was",
+   "more",
+   "interesting",
+   "than",
+   "I thought"
+  ],
+  "explanation": "긴 형용사는 more + 원급으로 비교급을 만듭니다. than 뒤에 절(I thought)이 옵니다.",
+  "translation": "A: 초청 연사 괜찮았어? / B: 생각보다 더 흥미로웠어."
+ },
+ {
+  "id": "ws-131",
+  "level": 2,
+  "context": "Where did you get that poster?",
+  "answer": "It was given out at the club fair.",
+  "chunks": [
+   "It was",
+   "given out",
+   "at",
+   "the club",
+   "fair"
+  ],
+  "explanation": "과거 수동태 was + 과거분사(given out)입니다. '동아리 박람회에서 나눠 줬다'는 뜻입니다.",
+  "translation": "A: 그 포스터 어디서 났어? / B: 동아리 박람회에서 나눠 준 거야."
+ },
+ {
+  "id": "ws-132",
+  "level": 2,
+  "context": "Are you coming to the study group?",
+  "answer": "I will come if I finish work early.",
+  "chunks": [
+   "I will come",
+   "if",
+   "I",
+   "finish",
+   "work early"
+  ],
+  "explanation": "조건절 if 안에서는 미래라도 현재형(finish)을 씁니다.",
+  "translation": "A: 스터디 모임 올 거야? / B: 일이 일찍 끝나면 갈게."
+ },
+ {
+  "id": "ws-133",
+  "level": 2,
+  "context": "Which dorm do you recommend?",
+  "answer": "The one that faces the lake is nice.",
+  "chunks": [
+   "The one",
+   "that faces",
+   "the lake",
+   "is",
+   "nice"
+  ],
+  "explanation": "관계대명사 that 절(that faces the lake)이 주어 The one 을 꾸미고, 동사 is 가 뒤에 옵니다.",
+  "translation": "A: 어느 기숙사를 추천해? / B: 호수 쪽을 향한 곳이 좋아."
+ },
+ {
+  "id": "ws-134",
+  "level": 2,
+  "context": "I don't know how to cite this website.",
+  "answer": "You could ask the librarian how to do it.",
+  "chunks": [
+   "You could",
+   "ask",
+   "the librarian",
+   "how",
+   "to do it"
+  ],
+  "explanation": "ask + 사람 + how to 동사원형 구조입니다. could 는 부드러운 제안입니다.",
+  "translation": "A: 이 웹사이트를 어떻게 인용하는지 모르겠어. / B: 사서에게 어떻게 하는지 물어봐도 돼."
+ },
+ {
+  "id": "ws-135",
+  "level": 2,
+  "context": "Is the shuttle running today?",
+  "answer": "No, it has been canceled because of snow.",
+  "chunks": [
+   "No,",
+   "it has been",
+   "canceled",
+   "because of",
+   "snow"
+  ],
+  "explanation": "현재완료 수동태 has been canceled 입니다. because of 뒤에는 명사(snow)가 옵니다.",
+  "translation": "A: 오늘 셔틀 운행해? / B: 아니, 눈 때문에 취소됐어."
+ },
+ {
+  "id": "ws-136",
+  "level": 2,
+  "context": "Have you ever been to the science museum?",
+  "answer": "I have been there twice with my roommate.",
+  "chunks": [
+   "I have been",
+   "there",
+   "twice",
+   "with",
+   "my roommate"
+  ],
+  "explanation": "경험을 나타내는 현재완료 have been there 입니다. 횟수 twice 는 그 뒤에 둡니다.",
+  "translation": "A: 과학 박물관 가 본 적 있어? / B: 룸메이트랑 두 번 가 봤어."
+ },
+ {
+  "id": "ws-137",
+  "level": 2,
+  "context": "My essay is only half done.",
+  "answer": "When do you have to turn it in?",
+  "chunks": [
+   "When",
+   "do you",
+   "have to",
+   "turn it",
+   "in"
+  ],
+  "explanation": "의문사 + do + 주어 + 동사원형 어순입니다. turn in 의 목적어가 대명사이면 turn it in 처럼 가운데 둡니다.",
+  "translation": "A: 에세이가 반밖에 안 됐어. / B: 언제 내야 해?"
+ },
+ {
+  "id": "ws-138",
+  "level": 2,
+  "context": "This dining hall is always crowded.",
+  "answer": "It is the cheapest place on campus.",
+  "chunks": [
+   "It is",
+   "the cheapest",
+   "place",
+   "on",
+   "campus"
+  ],
+  "explanation": "최상급 the + -est 형태입니다. on campus 는 관사 없이 씁니다.",
+  "translation": "A: 이 식당은 항상 붐벼. / B: 캠퍼스에서 제일 싼 곳이거든."
+ },
+ {
+  "id": "ws-139",
+  "level": 2,
+  "context": "I heard the exam was moved.",
+  "answer": "Do you know when it will be held?",
+  "chunks": [
+   "Do you know",
+   "when",
+   "it",
+   "will be",
+   "held"
+  ],
+  "explanation": "간접의문문 when + 주어 + 동사 어순이고, will be held 는 미래 수동태입니다.",
+  "translation": "A: 시험 날짜가 바뀌었다고 들었어. / B: 언제 치르는지 알아?"
+ },
+ {
+  "id": "ws-140",
+  "level": 2,
+  "context": "The professor wants a longer paper.",
+  "answer": "We must write at least ten pages.",
+  "chunks": [
+   "We",
+   "must write",
+   "at least",
+   "ten",
+   "pages"
+  ],
+  "explanation": "must + 동사원형으로 의무를 나타냅니다. at least 는 숫자 앞에 둡니다.",
+  "translation": "A: 교수님이 더 긴 리포트를 원하셔. / B: 적어도 10쪽은 써야 해."
+ },
+ {
+  "id": "ws-141",
+  "level": 3,
+  "context": "I still haven't heard back about my scholarship.",
+  "answer": "Have you asked the office when decisions will be announced?",
+  "chunks": [
+   "Have you asked",
+   "the office",
+   "when",
+   "decisions",
+   "will be",
+   "announced"
+  ],
+  "explanation": "현재완료 의문문 안에 간접의문문(when + 주어 + will be announced)이 들어갑니다. 간접의문문은 평서문 어순입니다.",
+  "translation": "A: 장학금 결과를 아직 못 들었어. / B: 결과가 언제 발표되는지 사무실에 물어봤어?"
+ },
+ {
+  "id": "ws-142",
+  "level": 3,
+  "context": "Why was the field trip moved to Friday?",
+  "answer": "The bus they had reserved was no longer available.",
+  "chunks": [
+   "The bus",
+   "they had reserved",
+   "was",
+   "no longer",
+   "available"
+  ],
+  "explanation": "목적격 관계대명사가 생략된 절(they had reserved)이 The bus 를 꾸밉니다. 과거완료 had reserved 는 더 이전의 일입니다.",
+  "translation": "A: 현장 학습이 왜 금요일로 옮겨졌어? / B: 예약해 둔 버스를 더는 쓸 수 없었대."
+ },
+ {
+  "id": "ws-143",
+  "level": 3,
+  "context": "Are you going to the career fair?",
+  "answer": "I would go if I had a better résumé.",
+  "chunks": [
+   "I would go",
+   "if",
+   "I had",
+   "a better",
+   "résumé"
+  ],
+  "explanation": "현재 사실 반대 가정(가정법 과거): would + 동사원형, if + 과거형 입니다.",
+  "translation": "A: 취업 박람회 갈 거야? / B: 이력서가 더 좋으면 갈 텐데."
+ },
+ {
+  "id": "ws-144",
+  "level": 3,
+  "context": "The new lab equipment looks expensive.",
+  "answer": "It was paid for by a grant from the city.",
+  "chunks": [
+   "It was",
+   "paid for",
+   "by",
+   "a grant",
+   "from the city"
+  ],
+  "explanation": "수동태 was paid for 에서 전치사 for 가 동사에 붙어 남습니다. 행위자는 by 로 나타냅니다.",
+  "translation": "A: 새 실험 장비 비싸 보인다. / B: 시에서 받은 보조금으로 산 거야."
+ },
+ {
+  "id": "ws-145",
+  "level": 3,
+  "context": "I can't decide on a topic for my presentation.",
+  "answer": "Why not choose something you already know well?",
+  "chunks": [
+   "Why not",
+   "choose",
+   "something",
+   "you already",
+   "know well"
+  ],
+  "explanation": "Why not + 동사원형 은 제안 표현입니다. something 뒤에 관계절(you already know well)이 붙습니다.",
+  "translation": "A: 발표 주제를 못 정하겠어. / B: 이미 잘 아는 걸로 고르는 게 어때?"
+ },
+ {
+  "id": "ws-146",
+  "level": 3,
+  "context": "How was the midterm?",
+  "answer": "It was far more difficult than the practice test.",
+  "chunks": [
+   "It was",
+   "far more",
+   "difficult",
+   "than",
+   "the practice test"
+  ],
+  "explanation": "far 는 비교급을 강조합니다(훨씬). far more difficult than 순서입니다.",
+  "translation": "A: 중간고사 어땠어? / B: 연습 시험보다 훨씬 어려웠어."
+ },
+ {
+  "id": "ws-147",
+  "level": 3,
+  "context": "Did Professor Kim reply to your email?",
+  "answer": "She must not have seen it yet.",
+  "chunks": [
+   "She",
+   "must not",
+   "have seen",
+   "it",
+   "yet"
+  ],
+  "explanation": "must not have + 과거분사는 '~하지 않았음이 틀림없다'는 과거 추측입니다.",
+  "translation": "A: 김 교수님이 이메일 답장하셨어? / B: 아직 못 보셨나 봐."
+ },
+ {
+  "id": "ws-148",
+  "level": 3,
+  "context": "Is this the right form for dropping a class?",
+  "answer": "I'm not sure whether that form is still used.",
+  "chunks": [
+   "I'm not sure",
+   "whether",
+   "that form",
+   "is still",
+   "used"
+  ],
+  "explanation": "whether 간접의문문(주어 + 동사 어순)이고, is still used 는 현재 수동태입니다.",
+  "translation": "A: 수강 취소하려면 이 양식 맞아? / B: 그 양식을 아직 쓰는지 잘 모르겠어."
+ },
+ {
+  "id": "ws-149",
+  "level": 3,
+  "context": "What did you think of the documentary?",
+  "answer": "It was the most moving film I have seen this year.",
+  "chunks": [
+   "It was",
+   "the most",
+   "moving film",
+   "I have seen",
+   "this year"
+  ],
+  "explanation": "최상급 the most + 형용사 + 명사 뒤에 현재완료 관계절(I have seen)이 이어집니다.",
+  "translation": "A: 그 다큐멘터리 어땠어? / B: 올해 본 영화 중에 가장 감동적이었어."
+ },
+ {
+  "id": "ws-150",
+  "level": 3,
+  "context": "The recycling bins are always full.",
+  "answer": "They should be emptied more often than they are.",
+  "chunks": [
+   "They",
+   "should be",
+   "emptied",
+   "more often",
+   "than they are"
+  ],
+  "explanation": "조동사 수동태 should be + 과거분사 입니다. than they are 는 현재 상태와 비교합니다.",
+  "translation": "A: 재활용 통이 항상 가득 차 있어. / B: 지금보다 더 자주 비워야 해."
+ },
+ {
+  "id": "ws-151",
+  "level": 3,
+  "context": "Are you living in the dorm next year?",
+  "answer": "I have been thinking about renting an apartment instead.",
+  "chunks": [
+   "I have been",
+   "thinking about",
+   "renting",
+   "an apartment",
+   "instead"
+  ],
+  "explanation": "현재완료진행 have been thinking 으로 계속 고민 중임을 나타냅니다. about 뒤에는 동명사(renting)가 옵니다.",
+  "translation": "A: 내년에도 기숙사 살아? / B: 대신 아파트를 빌릴까 계속 생각 중이야."
+ },
+ {
+  "id": "ws-152",
+  "level": 3,
+  "context": "I missed the review session yesterday.",
+  "answer": "The notes that were shared afterward cover everything.",
+  "chunks": [
+   "The notes",
+   "that were shared",
+   "afterward",
+   "cover",
+   "everything"
+  ],
+  "explanation": "수동 관계절 that were shared 가 The notes 를 꾸밉니다. 주어가 복수라 동사는 cover 입니다.",
+  "translation": "A: 어제 복습 시간을 놓쳤어. / B: 끝나고 공유된 노트에 다 나와 있어."
+ },
+ {
+  "id": "ws-153",
+  "level": 3,
+  "context": "Do you need the projector for your talk?",
+  "answer": "I'd appreciate it if you could set it up.",
+  "chunks": [
+   "I'd appreciate it",
+   "if",
+   "you could",
+   "set it",
+   "up"
+  ],
+  "explanation": "I'd appreciate it if you could ~ 는 공손한 부탁입니다. set up 의 목적어 대명사는 가운데(set it up) 둡니다.",
+  "translation": "A: 발표에 프로젝터 필요해? / B: 설치해 주면 고맙겠어."
+ },
+ {
+  "id": "ws-154",
+  "level": 3,
+  "context": "How do you get to campus so early?",
+  "answer": "I take the first train, which leaves at six.",
+  "chunks": [
+   "I take",
+   "the first train,",
+   "which",
+   "leaves",
+   "at six"
+  ],
+  "explanation": "계속적 용법 관계대명사 , which 가 앞 명사(the first train)를 보충 설명합니다.",
+  "translation": "A: 어떻게 그렇게 일찍 학교에 와? / B: 6시에 출발하는 첫 기차를 타."
+ },
+ {
+  "id": "ws-155",
+  "level": 3,
+  "context": "The group project is behind schedule.",
+  "answer": "We should have divided the tasks much earlier.",
+  "chunks": [
+   "We",
+   "should have",
+   "divided",
+   "the tasks",
+   "much earlier"
+  ],
+  "explanation": "should have + 과거분사는 '~했어야 했는데(안 했다)'는 과거 후회입니다.",
+  "translation": "A: 조별 과제가 일정보다 늦어지고 있어. / B: 일을 훨씬 일찍 나눴어야 했어."
+ },
+ {
+  "id": "ws-156",
+  "level": 3,
+  "context": "Did you get a seat for the concert?",
+  "answer": "All the tickets had been sold before I logged on.",
+  "chunks": [
+   "All the tickets",
+   "had been",
+   "sold",
+   "before",
+   "I logged on"
+  ],
+  "explanation": "과거완료 수동태 had been sold 는 로그인한 과거 시점보다 더 먼저 일어난 일입니다.",
+  "translation": "A: 콘서트 자리 구했어? / B: 내가 접속하기 전에 표가 다 팔렸어."
+ },
+ {
+  "id": "ws-157",
+  "level": 3,
+  "context": "I can't find the article for our seminar.",
+  "answer": "Do you remember who posted the link?",
+  "chunks": [
+   "Do you remember",
+   "who",
+   "posted",
+   "the link"
+  ],
+  "explanation": "who 가 주어인 간접의문문은 who + 동사(posted) 어순이 그대로 유지됩니다.",
+  "translation": "A: 세미나 논문을 못 찾겠어. / B: 누가 링크 올렸는지 기억나?"
+ },
+ {
+  "id": "ws-158",
+  "level": 3,
+  "context": "Should we meet in the library or the cafe?",
+  "answer": "Whichever is closer to the bus stop is fine.",
+  "chunks": [
+   "Whichever",
+   "is closer",
+   "to",
+   "the bus stop",
+   "is fine"
+  ],
+  "explanation": "Whichever 가 이끄는 명사절이 주어입니다. 그래서 동사 is 가 두 번 나옵니다.",
+  "translation": "A: 도서관에서 만날까 카페에서 만날까? / B: 버스 정류장에서 더 가까운 곳이면 어디든 좋아."
+ },
+ {
+  "id": "ws-159",
+  "level": 3,
+  "context": "The professor extended the deadline.",
+  "answer": "That gives us enough time to revise our draft.",
+  "chunks": [
+   "That gives us",
+   "enough time",
+   "to revise",
+   "our draft"
+  ],
+  "explanation": "enough + 명사 + to부정사 순서입니다. give + 사람 + 사물 4형식 구조입니다.",
+  "translation": "A: 교수님이 마감을 연장해 주셨어. / B: 그럼 초안을 고칠 시간이 충분해."
+ },
+ {
+  "id": "ws-160",
+  "level": 3,
+  "context": "Why didn't you sign up for the trip?",
+  "answer": "It would have cost more than I could afford.",
+  "chunks": [
+   "It would have",
+   "cost",
+   "more than",
+   "I could",
+   "afford"
+  ],
+  "explanation": "would have + 과거분사로 '(갔다면) ~했을 것이다'라는 과거 가정의 결과를 말합니다.",
+  "translation": "A: 여행은 왜 신청 안 했어? / B: 내가 감당할 수 있는 것보다 돈이 더 들었을 거야."
+ },
+ {
+  "id": "ws-161",
+  "level": 4,
+  "context": "The survey results came out really strange.",
+  "answer": "I suspect the questions were worded too vaguely.",
+  "chunks": [
+   "I suspect",
+   "the questions",
+   "were worded",
+   "too",
+   "vaguely"
+  ],
+  "explanation": "suspect 뒤에 that 이 생략된 명사절이 옵니다. were worded 는 과거 수동태, too vaguely 는 부사구입니다.",
+  "translation": "A: 설문 결과가 정말 이상하게 나왔어. / B: 질문이 너무 모호하게 쓰인 것 같아."
+ },
+ {
+  "id": "ws-162",
+  "level": 4,
+  "context": "Should I mention the funding problems in my report?",
+  "answer": "I would leave them out unless they affect your conclusions.",
+  "chunks": [
+   "I would",
+   "leave them out",
+   "unless",
+   "they affect",
+   "your conclusions"
+  ],
+  "explanation": "unless 는 '~하지 않는 한'입니다. leave out 의 목적어 대명사는 가운데(leave them out) 둡니다.",
+  "translation": "A: 보고서에 자금 문제를 언급해야 할까? / B: 결론에 영향을 주지 않는다면 빼겠어."
+ },
+ {
+  "id": "ws-163",
+  "level": 4,
+  "context": "Do you know why the lecture was recorded?",
+  "answer": "It was so that students who were ill could watch it.",
+  "chunks": [
+   "It was",
+   "so that",
+   "students",
+   "who were ill",
+   "could",
+   "watch it"
+  ],
+  "explanation": "so that + 주어 + could 는 목적('~할 수 있도록')을 나타내고, who were ill 이 students 를 꾸밉니다.",
+  "translation": "A: 강의를 왜 녹화했는지 알아? / B: 아픈 학생들이 볼 수 있게 하려고였어."
+ },
+ {
+  "id": "ws-164",
+  "level": 4,
+  "context": "Was the experiment successful?",
+  "answer": "It would have worked had the temperature stayed constant.",
+  "chunks": [
+   "It would have",
+   "worked",
+   "had",
+   "the temperature",
+   "stayed",
+   "constant"
+  ],
+  "explanation": "if 를 생략하고 had + 주어 + 과거분사로 도치한 가정법 과거완료입니다.",
+  "translation": "A: 실험 성공했어? / B: 온도가 일정하게 유지됐더라면 됐을 거야."
+ },
+ {
+  "id": "ws-165",
+  "level": 4,
+  "context": "The new policy seems pretty strict.",
+  "answer": "The stricter the rules are, the fewer students will follow them.",
+  "chunks": [
+   "The stricter",
+   "the rules are,",
+   "the fewer students",
+   "will",
+   "follow them"
+  ],
+  "explanation": "The + 비교급 ~, the + 비교급 ~ 은 '~할수록 더 ~하다' 구문입니다.",
+  "translation": "A: 새 정책은 꽤 엄격해 보여. / B: 규칙이 엄격할수록 지키는 학생은 줄어들 거야."
+ },
+ {
+  "id": "ws-166",
+  "level": 4,
+  "context": "How did the debate team do this year?",
+  "answer": "They performed better than anyone had predicted.",
+  "chunks": [
+   "They performed",
+   "better",
+   "than",
+   "anyone",
+   "had predicted"
+  ],
+  "explanation": "than 뒤 과거완료 had predicted 는 결과보다 앞선 예상을 나타냅니다.",
+  "translation": "A: 토론팀 올해 성적 어땠어? / B: 누구 예상보다도 잘했어."
+ },
+ {
+  "id": "ws-167",
+  "level": 4,
+  "context": "I don't understand the second assignment.",
+  "answer": "It's not clear what we are supposed to analyze.",
+  "chunks": [
+   "It's not clear",
+   "what",
+   "we are",
+   "supposed to",
+   "analyze"
+  ],
+  "explanation": "가주어 It 과 진주어인 간접의문문(what + 주어 + 동사)입니다. be supposed to 는 '~하기로 되어 있다'.",
+  "translation": "A: 두 번째 과제를 이해 못 하겠어. / B: 우리가 뭘 분석해야 하는지 분명하지 않아."
+ },
+ {
+  "id": "ws-168",
+  "level": 4,
+  "context": "Who wrote the article we read for class?",
+  "answer": "It was written by a researcher whose work focuses on oceans.",
+  "chunks": [
+   "It was written",
+   "by",
+   "a researcher",
+   "whose work",
+   "focuses on",
+   "oceans"
+  ],
+  "explanation": "whose + 명사(work)는 소유격 관계대명사입니다. 관계절의 주어 whose work 가 단수라 focuses 입니다.",
+  "translation": "A: 수업 때 읽은 글 누가 썼어? / B: 해양을 주로 연구하는 연구자가 썼어."
+ },
+ {
+  "id": "ws-169",
+  "level": 4,
+  "context": "Are you still planning to study abroad?",
+  "answer": "I might have gone this year if I had saved more money.",
+  "chunks": [
+   "I might have gone",
+   "this year",
+   "if",
+   "I had saved",
+   "more money"
+  ],
+  "explanation": "가정법 과거완료: if + had + 과거분사, 주어 + might have + 과거분사 입니다.",
+  "translation": "A: 아직 유학 갈 계획이야? / B: 돈을 더 모아 뒀다면 올해 갔을지도 몰라."
+ },
+ {
+  "id": "ws-170",
+  "level": 4,
+  "context": "Why is the east wing of the library closed?",
+  "answer": "The shelves are being reorganized according to a new system.",
+  "chunks": [
+   "The shelves",
+   "are being",
+   "reorganized",
+   "according to",
+   "a new system"
+  ],
+  "explanation": "진행형 수동태 are being + 과거분사입니다. according to 는 '~에 따라'입니다.",
+  "translation": "A: 도서관 동관이 왜 닫혀 있어? / B: 새 체계에 따라 서가를 재정리하는 중이래."
+ },
+ {
+  "id": "ws-171",
+  "level": 4,
+  "context": "Did the committee approve our proposal?",
+  "answer": "They wanted to know how the budget would be managed.",
+  "chunks": [
+   "They wanted",
+   "to know",
+   "how",
+   "the budget",
+   "would be",
+   "managed"
+  ],
+  "explanation": "간접의문문 how + 주어 + would be managed 어순이며, 시제 일치로 would 를 씁니다.",
+  "translation": "A: 위원회가 우리 제안을 승인했어? / B: 예산을 어떻게 관리할 건지 알고 싶어 했어."
+ },
+ {
+  "id": "ws-172",
+  "level": 4,
+  "context": "I'm worried my thesis is too long.",
+  "answer": "Length matters less than how clearly you present your argument.",
+  "chunks": [
+   "Length",
+   "matters less",
+   "than",
+   "how clearly",
+   "you present",
+   "your argument"
+  ],
+  "explanation": "less 비교 뒤에 간접의문문(how clearly + 주어 + 동사)이 비교 대상으로 옵니다.",
+  "translation": "A: 논문이 너무 길까 봐 걱정이야. / B: 길이보다 주장을 얼마나 명확하게 제시하느냐가 더 중요해."
+ },
+ {
+  "id": "ws-173",
+  "level": 4,
+  "context": "Is the lab report due tomorrow?",
+  "answer": "It was supposed to be, but it has been postponed.",
+  "chunks": [
+   "It was",
+   "supposed to be,",
+   "but",
+   "it has been",
+   "postponed"
+  ],
+  "explanation": "was supposed to be 는 원래 예정이었다는 뜻이고, 이어서 현재완료 수동태 has been postponed 로 변경을 말합니다.",
+  "translation": "A: 실험 보고서 내일까지야? / B: 원래 그랬는데 미뤄졌어."
+ },
+ {
+  "id": "ws-174",
+  "level": 4,
+  "context": "Our data doesn't match the published results.",
+  "answer": "We may have made an error while entering the numbers.",
+  "chunks": [
+   "We",
+   "may have made",
+   "an error",
+   "while",
+   "entering",
+   "the numbers"
+  ],
+  "explanation": "may have + 과거분사는 과거에 대한 약한 추측입니다. while 뒤에 동명사(entering)가 와 '~하는 동안'.",
+  "translation": "A: 우리 데이터가 발표된 결과와 안 맞아. / B: 숫자를 입력하다가 실수했을 수도 있어."
+ },
+ {
+  "id": "ws-175",
+  "level": 4,
+  "context": "What's the best way to prepare for the oral exam?",
+  "answer": "Practicing out loud is more helpful than rereading notes.",
+  "chunks": [
+   "Practicing",
+   "out loud",
+   "is",
+   "more helpful",
+   "than",
+   "rereading notes"
+  ],
+  "explanation": "동명사구(Practicing out loud)가 주어이고, 비교 대상도 동명사(rereading notes)로 맞춥니다.",
+  "translation": "A: 구술시험 준비는 어떻게 하는 게 제일 좋아? / B: 노트를 다시 읽는 것보다 소리 내어 연습하는 게 더 도움이 돼."
+ },
+ {
+  "id": "ws-176",
+  "level": 4,
+  "context": "Why did you change your major?",
+  "answer": "I realized that I had never really enjoyed accounting.",
+  "chunks": [
+   "I realized",
+   "that",
+   "I had",
+   "never really",
+   "enjoyed",
+   "accounting"
+  ],
+  "explanation": "과거 realized 보다 앞선 기간을 과거완료 had never enjoyed 로 나타냅니다.",
+  "translation": "A: 전공을 왜 바꿨어? / B: 회계를 진심으로 좋아한 적이 없었다는 걸 깨달았어."
+ },
+ {
+  "id": "ws-177",
+  "level": 4,
+  "context": "The guest lecture was canceled again.",
+  "answer": "I wonder if the speaker was ever actually confirmed.",
+  "chunks": [
+   "I wonder",
+   "if",
+   "the speaker",
+   "was ever",
+   "actually",
+   "confirmed"
+  ],
+  "explanation": "I wonder if 뒤에 평서문 어순(주어 + 동사)의 간접의문문이 옵니다. was confirmed 는 과거 수동태입니다.",
+  "translation": "A: 초청 강연이 또 취소됐어. / B: 연사가 정말 확정되긴 했었는지 궁금해."
+ },
+ {
+  "id": "ws-178",
+  "level": 4,
+  "context": "Should we include the interview data?",
+  "answer": "Only the parts that support our main claim should be included.",
+  "chunks": [
+   "Only",
+   "the parts",
+   "that support",
+   "our main claim",
+   "should be",
+   "included"
+  ],
+  "explanation": "Only 가 주어 명사구를 한정하고, 관계절 뒤에 조동사 수동태 should be included 가 옵니다.",
+  "translation": "A: 인터뷰 자료도 넣어야 할까? / B: 우리 주장을 뒷받침하는 부분만 넣어야 해."
+ },
+ {
+  "id": "ws-179",
+  "level": 4,
+  "context": "How is the new teaching assistant?",
+  "answer": "She explains things in a way that even beginners understand.",
+  "chunks": [
+   "She explains",
+   "things",
+   "in a way",
+   "that",
+   "even beginners",
+   "understand"
+  ],
+  "explanation": "in a way that ~ 은 '~하는 방식으로'입니다. that 절 안의 주어가 even beginners 입니다.",
+  "translation": "A: 새 조교는 어때? / B: 초보자도 이해할 수 있게 설명해 줘."
+ },
+ {
+  "id": "ws-180",
+  "level": 4,
+  "context": "Did you finish reading the novel?",
+  "answer": "I would have, had my shifts not changed this week.",
+  "chunks": [
+   "I would have,",
+   "had",
+   "my shifts",
+   "not changed",
+   "this week"
+  ],
+  "explanation": "if 생략 도치 had + 주어 + not + 과거분사 로 과거 사실 반대를 가정합니다. would have 뒤의 finished 는 생략됐습니다.",
+  "translation": "A: 그 소설 다 읽었어? / B: 이번 주 근무 시간이 안 바뀌었더라면 다 읽었을 거야."
+ },
+ {
+  "id": "ws-181",
+  "level": 5,
+  "context": "The committee rejected the proposal without comment.",
+  "answer": "What remains unclear is whether they read it at all.",
+  "chunks": [
+   "What remains",
+   "unclear",
+   "is",
+   "whether",
+   "they read it",
+   "at all"
+  ],
+  "explanation": "What 이 이끄는 명사절이 주어이고, 보어로 whether 간접의문문이 옵니다. at all 은 부정·의문 강조입니다.",
+  "translation": "A: 위원회가 아무 말 없이 제안을 거절했어. / B: 불분명한 건 그들이 그걸 읽기라도 했는지야."
+ },
+ {
+  "id": "ws-182",
+  "level": 5,
+  "context": "Do you think the theory will be accepted?",
+  "answer": "Not before the findings have been independently replicated.",
+  "chunks": [
+   "Not before",
+   "the findings",
+   "have been",
+   "independently",
+   "replicated"
+  ],
+  "explanation": "Not before ~ 는 '~하기 전에는 아니다'라는 축약 응답입니다. 시간 접속사 뒤 현재완료 수동태가 미래 완료를 나타냅니다.",
+  "translation": "A: 그 이론이 받아들여질까? / B: 결과가 독립적으로 재현되기 전에는 안 될 거야."
+ },
+ {
+  "id": "ws-183",
+  "level": 5,
+  "context": "The author's argument seemed weak to me.",
+  "answer": "Weak though it may seem, it is supported by extensive data.",
+  "chunks": [
+   "Weak though",
+   "it may seem,",
+   "it is",
+   "supported by",
+   "extensive data"
+  ],
+  "explanation": "형용사 + though + 주어 + 동사 는 양보 도치 구문('~하긴 하지만')입니다.",
+  "translation": "A: 저자의 주장은 약해 보였어. / B: 약해 보일지 몰라도 방대한 자료가 뒷받침해."
+ },
+ {
+  "id": "ws-184",
+  "level": 5,
+  "context": "Why didn't the department hire more staff?",
+  "answer": "Were they to hire more, tuition would have to rise.",
+  "chunks": [
+   "Were they",
+   "to hire more,",
+   "tuition",
+   "would have to",
+   "rise"
+  ],
+  "explanation": "Were + 주어 + to부정사 는 if 를 생략한 가정법 미래 도치('만약 ~한다면')입니다.",
+  "translation": "A: 학과는 왜 직원을 더 안 뽑았어? / B: 더 뽑는다면 등록금을 올려야 할 거야."
+ },
+ {
+  "id": "ws-185",
+  "level": 5,
+  "context": "The interview transcripts are nearly complete.",
+  "answer": "Only once they have been coded can we begin the analysis.",
+  "chunks": [
+   "Only once",
+   "they have been",
+   "coded",
+   "can we",
+   "begin",
+   "the analysis"
+  ],
+  "explanation": "Only + 부사절이 문두에 오면 주절이 도치됩니다(can we begin).",
+  "translation": "A: 인터뷰 녹취록이 거의 다 됐어. / B: 코딩이 끝나야만 분석을 시작할 수 있어."
+ },
+ {
+  "id": "ws-186",
+  "level": 5,
+  "context": "Was the conference worth attending?",
+  "answer": "Seldom have I met so many people working on similar problems.",
+  "chunks": [
+   "Seldom",
+   "have I met",
+   "so many people",
+   "working on",
+   "similar problems"
+  ],
+  "explanation": "부정 부사 Seldom 이 문두에 오면 have I met 처럼 조동사와 주어가 도치됩니다.",
+  "translation": "A: 학회 갈 만했어? / B: 비슷한 문제를 연구하는 사람을 그렇게 많이 만난 적은 드물어."
+ },
+ {
+  "id": "ws-187",
+  "level": 5,
+  "context": "I can't tell which version of the essay is better.",
+  "answer": "The latter is the more persuasive of the two.",
+  "chunks": [
+   "The latter",
+   "is",
+   "the more",
+   "persuasive",
+   "of the two"
+  ],
+  "explanation": "둘 중 비교에서는 최상급 대신 the + 비교급 + of the two 를 씁니다.",
+  "translation": "A: 에세이의 어느 판이 더 나은지 모르겠어. / B: 둘 중 뒤의 것이 더 설득력 있어."
+ },
+ {
+  "id": "ws-188",
+  "level": 5,
+  "context": "Did the lab manager approve the new procedure?",
+  "answer": "She insisted that it be reviewed by the safety board first.",
+  "chunks": [
+   "She insisted",
+   "that",
+   "it be",
+   "reviewed by",
+   "the safety board",
+   "first"
+  ],
+  "explanation": "insist 뒤 that 절에서 동사원형(be)을 쓰는 가정법 현재이며, be reviewed 는 수동태입니다.",
+  "translation": "A: 실험실 관리자가 새 절차를 승인했어? / B: 먼저 안전위원회 검토를 받아야 한다고 했어."
+ },
+ {
+  "id": "ws-189",
+  "level": 5,
+  "context": "The new model predicts the data perfectly.",
+  "answer": "That it fits so well makes me suspect overfitting.",
+  "chunks": [
+   "That",
+   "it fits",
+   "so well",
+   "makes me",
+   "suspect",
+   "overfitting"
+  ],
+  "explanation": "That 절이 주어로 쓰였습니다(That it fits so well). make + 목적어 + 동사원형 사역 구문이 이어집니다.",
+  "translation": "A: 새 모델이 데이터를 완벽하게 예측해. / B: 그렇게 잘 맞는다는 게 오히려 과적합을 의심하게 해."
+ },
+ {
+  "id": "ws-190",
+  "level": 5,
+  "context": "How did the historian respond to the critics?",
+  "answer": "She conceded few of the points that had been raised.",
+  "chunks": [
+   "She conceded",
+   "few of",
+   "the points",
+   "that had been",
+   "raised"
+  ],
+  "explanation": "과거완료 수동 관계절 that had been raised 가 the points 를 꾸밉니다. few of 는 '거의 ~않다'.",
+  "translation": "A: 그 역사학자는 비판에 어떻게 답했어? / B: 제기된 지적 중 인정한 건 거의 없었어."
+ },
+ {
+  "id": "ws-191",
+  "level": 5,
+  "context": "Should we publish the preliminary results now?",
+  "answer": "I'd rather we waited until the full sample is in.",
+  "chunks": [
+   "I'd rather",
+   "we waited",
+   "until",
+   "the full sample",
+   "is in"
+  ],
+  "explanation": "would rather + 주어 + 과거형 은 현재·미래에 대한 바람을 나타냅니다.",
+  "translation": "A: 예비 결과를 지금 발표할까? / B: 전체 표본이 모일 때까지 기다렸으면 해."
+ },
+ {
+  "id": "ws-192",
+  "level": 5,
+  "context": "The two studies seem to contradict each other.",
+  "answer": "The more closely you compare them, the less they differ.",
+  "chunks": [
+   "The more closely",
+   "you compare them,",
+   "the less",
+   "they",
+   "differ"
+  ],
+  "explanation": "The + 비교급 ~, the + 비교급 ~ 구문입니다. 부사 비교급 more closely 와 the less 가 짝을 이룹니다.",
+  "translation": "A: 두 연구가 서로 모순되는 것 같아. / B: 자세히 비교할수록 차이가 줄어들어."
+ },
+ {
+  "id": "ws-193",
+  "level": 5,
+  "context": "Is the archive open to undergraduates?",
+  "answer": "Access is granted only to those whose projects require it.",
+  "chunks": [
+   "Access",
+   "is granted",
+   "only to",
+   "those",
+   "whose projects",
+   "require it"
+  ],
+  "explanation": "is granted 는 현재 수동태이고, those whose ~ 는 '~한 사람들'을 뜻하는 소유격 관계절입니다.",
+  "translation": "A: 기록 보관소를 학부생도 쓸 수 있어? / B: 연구에 필요한 사람에게만 허용돼."
+ },
+ {
+  "id": "ws-194",
+  "level": 5,
+  "context": "Why was the policy reversed so quickly?",
+  "answer": "It had scarcely been announced when the complaints began.",
+  "chunks": [
+   "It had",
+   "scarcely",
+   "been announced",
+   "when",
+   "the complaints",
+   "began"
+  ],
+  "explanation": "had scarcely + 과거분사 ~ when ... 은 '~하자마자 …했다'는 뜻입니다.",
+  "translation": "A: 그 정책은 왜 그렇게 빨리 철회됐어? / B: 발표되자마자 항의가 시작됐거든."
+ },
+ {
+  "id": "ws-195",
+  "level": 5,
+  "context": "Do you agree with the reviewer's comments?",
+  "answer": "Not entirely, though some of them are worth considering.",
+  "chunks": [
+   "Not entirely,",
+   "though",
+   "some of them",
+   "are",
+   "worth",
+   "considering"
+  ],
+  "explanation": "worth + 동명사(considering)는 '~할 가치가 있다'입니다. though 는 양보 접속사입니다.",
+  "translation": "A: 심사자 의견에 동의해? / B: 전부는 아니지만 일부는 고려할 만해."
+ },
+ {
+  "id": "ws-196",
+  "level": 5,
+  "context": "The library's rare books collection is closed.",
+  "answer": "It is to remain closed until the climate system is upgraded.",
+  "chunks": [
+   "It is",
+   "to remain",
+   "closed",
+   "until",
+   "the climate system",
+   "is upgraded"
+  ],
+  "explanation": "be + to부정사(is to remain)는 공식적인 예정·지시를 나타냅니다. until 절에서는 현재형 수동태로 미래를 표현합니다.",
+  "translation": "A: 도서관 희귀본 소장실이 닫혀 있어. / B: 항온항습 시스템이 개선될 때까지 닫혀 있을 예정이야."
+ },
+ {
+  "id": "ws-197",
+  "level": 5,
+  "context": "Did the sample size affect your conclusions?",
+  "answer": "Had it been any smaller, the effect would not have appeared.",
+  "chunks": [
+   "Had it been",
+   "any smaller,",
+   "the effect",
+   "would not have",
+   "appeared"
+  ],
+  "explanation": "Had + 주어 + 과거분사 도치 가정법 과거완료입니다. any + 비교급 은 '조금이라도 더 ~'.",
+  "translation": "A: 표본 크기가 결론에 영향을 줬어? / B: 조금이라도 더 작았다면 효과가 나타나지 않았을 거야."
+ },
+ {
+  "id": "ws-198",
+  "level": 5,
+  "context": "What did the dean say about the budget cuts?",
+  "answer": "She said that no program would be spared entirely.",
+  "chunks": [
+   "She said",
+   "that",
+   "no program",
+   "would be",
+   "spared",
+   "entirely"
+  ],
+  "explanation": "간접화법에서 시제 일치로 would be spared(과거 기준 미래 수동태)를 씁니다.",
+  "translation": "A: 학장이 예산 삭감에 대해 뭐라고 했어? / B: 완전히 제외되는 프로그램은 없을 거라고 했어."
+ },
+ {
+  "id": "ws-199",
+  "level": 5,
+  "context": "I'm not sure the translation is accurate.",
+  "answer": "Nor am I, which is why I compared it with the original.",
+  "chunks": [
+   "Nor am I,",
+   "which is why",
+   "I compared it",
+   "with",
+   "the original"
+  ],
+  "explanation": "Nor + 조동사 + 주어 도치로 부정에 동의합니다. , which is why 는 앞 내용 전체를 받는 관계절입니다.",
+  "translation": "A: 번역이 정확한지 모르겠어. / B: 나도 그래서 원문이랑 비교해 봤어."
+ },
+ {
+  "id": "ws-200",
+  "level": 5,
+  "context": "The results surprised everyone in the lab.",
+  "answer": "Nobody could have predicted that the effect would be reversed.",
+  "chunks": [
+   "Nobody",
+   "could have",
+   "predicted",
+   "that",
+   "the effect",
+   "would be reversed"
+  ],
+  "explanation": "could have + 과거분사는 과거 가능성입니다. that 절 안에서 시제 일치로 would be reversed 를 씁니다.",
+  "translation": "A: 결과가 실험실 모두를 놀라게 했어. / B: 효과가 뒤집힐 거라고 아무도 예측할 수 없었을 거야."
+ }
+]

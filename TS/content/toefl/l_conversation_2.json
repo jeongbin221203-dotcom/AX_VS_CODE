@@ -1,0 +1,2318 @@
+[
+ {
+  "id": "lc-031",
+  "level": 1,
+  "topic": "우편실 소포 찾기",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "M",
+    "t": "Hi. I got an email that I have a package here."
+   },
+   {
+    "s": "W",
+    "t": "Okay. What's your name and room number?"
+   },
+   {
+    "s": "M",
+    "t": "David Kim. I live in room two fourteen in Oak Hall."
+   },
+   {
+    "s": "W",
+    "t": "Let me check. Yes, there's a big box for you."
+   },
+   {
+    "s": "M",
+    "t": "Great. It's probably the lamp I ordered."
+   },
+   {
+    "s": "W",
+    "t": "Please sign here. And next time, you can pick up packages until seven at night."
+   },
+   {
+    "s": "M",
+    "t": "Oh, good. I usually have class until five."
+   },
+   {
+    "s": "W",
+    "t": "Then you'll have plenty of time. Here you go."
+   }
+  ],
+  "questions": [
+   {
+    "q": "Why does the man go to the mailroom?",
+    "choices": [
+     "To pick up a package",
+     "To send a letter",
+     "To buy a lamp",
+     "To change his room"
+    ],
+    "answer": 0,
+    "type": "주제·목적",
+    "explanation": "정답은 (A)입니다. 남자는 소포가 와 있다는 이메일을 받았다고 말합니다. 편지를 보내거나 방을 바꾸려는 것이 아닙니다."
+   },
+   {
+    "q": "Until what time can students pick up packages?",
+    "choices": [
+     "Five o'clock",
+     "Seven o'clock",
+     "Six o'clock",
+     "Nine o'clock"
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "정답은 (B)입니다. 직원은 저녁 7시까지 소포를 찾아갈 수 있다고 말합니다. 5시는 남자의 수업이 끝나는 시간입니다."
+   }
+  ],
+  "translation": "M: 안녕하세요. 여기 소포가 와 있다는 이메일을 받았어요.\nW: 네. 이름과 방 번호가 어떻게 되세요?\nM: 데이비드 김이에요. 오크 홀 214호에 살아요.\nW: 확인해 볼게요. 네, 큰 상자가 하나 있네요.\nM: 좋네요. 아마 제가 주문한 스탠드일 거예요.\nW: 여기 서명해 주세요. 그리고 다음부터는 저녁 7시까지 소포를 찾아가실 수 있어요.\nM: 아, 잘됐네요. 저는 보통 5시까지 수업이 있거든요.\nW: 그럼 시간이 충분하겠네요. 여기 있어요."
+ },
+ {
+  "id": "lc-032",
+  "level": 1,
+  "topic": "컴퓨터실 인쇄",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "W",
+    "t": "Excuse me. The printer isn't printing my paper."
+   },
+   {
+    "s": "M",
+    "t": "Did you log in with your student number?"
+   },
+   {
+    "s": "W",
+    "t": "Yes, I did. Then I pressed print."
+   },
+   {
+    "s": "M",
+    "t": "Let me look. Ah, your print balance is zero."
+   },
+   {
+    "s": "W",
+    "t": "Oh no. How do I add money?"
+   },
+   {
+    "s": "M",
+    "t": "You can use the machine by the door. It takes cards."
+   },
+   {
+    "s": "W",
+    "t": "Okay. I'll add five dollars now."
+   }
+  ],
+  "questions": [
+   {
+    "q": "What is the woman's problem?",
+    "choices": [
+     "Her computer is broken.",
+     "She forgot her student number.",
+     "She cannot print her paper.",
+     "She lost her card."
+    ],
+    "answer": 2,
+    "type": "주제·목적",
+    "explanation": "정답은 (C)입니다. 여자는 프린터가 리포트를 인쇄하지 않는다고 말합니다. 원인은 인쇄 잔액이 0이기 때문입니다."
+   },
+   {
+    "q": "What will the woman probably do next?",
+    "choices": [
+     "Add money to her account",
+     "Go home",
+     "Call her professor",
+     "Use another printer"
+    ],
+    "answer": 0,
+    "type": "다음 할 일",
+    "explanation": "정답은 (A)입니다. 여자는 마지막에 지금 5달러를 충전하겠다고 말합니다. 그래서 문 옆 기계로 갈 것입니다."
+   }
+  ],
+  "translation": "W: 실례합니다. 프린터가 제 리포트를 인쇄하지 않아요.\nM: 학번으로 로그인하셨어요?\nW: 네, 했어요. 그러고 나서 인쇄를 눌렀어요.\nM: 제가 볼게요. 아, 인쇄 잔액이 0이네요.\nW: 이런. 돈은 어떻게 충전해요?\nM: 문 옆에 있는 기계를 쓰시면 돼요. 카드도 돼요.\nW: 알겠어요. 지금 5달러 충전할게요."
+ },
+ {
+  "id": "lc-033",
+  "level": 1,
+  "topic": "분실물 센터 우산",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "M",
+    "t": "Hello. Is this the lost and found?"
+   },
+   {
+    "s": "W",
+    "t": "Yes, it is. What did you lose?"
+   },
+   {
+    "s": "M",
+    "t": "My umbrella. I left it in the lecture hall this morning."
+   },
+   {
+    "s": "W",
+    "t": "What color is it?"
+   },
+   {
+    "s": "M",
+    "t": "It's green with a black handle."
+   },
+   {
+    "s": "W",
+    "t": "Hmm, we have a blue one and a red one, but no green one."
+   },
+   {
+    "s": "M",
+    "t": "That's too bad. Can I leave my phone number?"
+   },
+   {
+    "s": "W",
+    "t": "Sure. Write it on this card, and we'll call you if it comes in."
+   }
+  ],
+  "questions": [
+   {
+    "q": "Where did the man leave his umbrella?",
+    "choices": [
+     "In the library",
+     "On the bus",
+     "In a lecture hall",
+     "In the cafeteria"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "정답은 (C)입니다. 남자는 오늘 아침 강의실에 우산을 두고 왔다고 말합니다. 도서관이나 버스는 언급되지 않습니다."
+   },
+   {
+    "q": "What will the woman do if the umbrella is found?",
+    "choices": [
+     "Mail it to the man",
+     "Call the man",
+     "Leave it at his dorm",
+     "Send him an email"
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "정답은 (B)입니다. 여자는 우산이 들어오면 전화하겠다고 말합니다. 그래서 남자에게 전화번호를 카드에 적어 달라고 합니다."
+   }
+  ],
+  "translation": "M: 안녕하세요. 여기가 분실물 센터인가요?\nW: 네, 맞아요. 뭘 잃어버리셨어요?\nM: 우산이요. 오늘 아침에 강의실에 두고 왔어요.\nW: 무슨 색이에요?\nM: 초록색이고 손잡이가 검은색이에요.\nW: 음, 파란색이랑 빨간색은 있는데 초록색은 없네요.\nM: 아쉽네요. 제 전화번호를 남겨도 될까요?\nW: 그럼요. 이 카드에 적어 주시면 들어올 때 전화드릴게요."
+ },
+ {
+  "id": "lc-034",
+  "level": 1,
+  "topic": "학교 서점 교환",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "W",
+    "t": "Hi. I bought this sweatshirt yesterday, but it's too small."
+   },
+   {
+    "s": "M",
+    "t": "Do you have the receipt?"
+   },
+   {
+    "s": "W",
+    "t": "Yes, here it is."
+   },
+   {
+    "s": "M",
+    "t": "Thanks. Would you like a refund or a bigger size?"
+   },
+   {
+    "s": "W",
+    "t": "A bigger size, please. Do you have a large?"
+   },
+   {
+    "s": "M",
+    "t": "Not in gray. We have a large in navy blue."
+   },
+   {
+    "s": "W",
+    "t": "Navy is fine. I like that color too."
+   },
+   {
+    "s": "M",
+    "t": "Great. I'll get one from the back."
+   }
+  ],
+  "questions": [
+   {
+    "q": "Why does the woman want to exchange the sweatshirt?",
+    "choices": [
+     "It has a hole.",
+     "She does not like the color.",
+     "It is too small.",
+     "It was too expensive."
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "정답은 (C)입니다. 여자는 어제 산 맨투맨이 너무 작다고 말합니다. 색깔은 오히려 남색도 좋다고 합니다."
+   },
+   {
+    "q": "What color sweatshirt will the woman get?",
+    "choices": [
+     "Navy blue",
+     "Black",
+     "Gray",
+     "Green"
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "정답은 (A)입니다. 회색 라지는 없고 남색 라지가 있다고 하자 여자가 남색도 괜찮다고 합니다. 회색은 원래 산 색입니다."
+   }
+  ],
+  "translation": "W: 안녕하세요. 어제 이 맨투맨을 샀는데 너무 작아요.\nM: 영수증 있으세요?\nW: 네, 여기 있어요.\nM: 감사합니다. 환불을 원하세요, 아니면 큰 사이즈로 바꾸시겠어요?\nW: 큰 사이즈로 주세요. 라지 있어요?\nM: 회색은 없어요. 남색은 라지가 있어요.\nW: 남색도 괜찮아요. 그 색도 좋아해요.\nM: 좋아요. 창고에서 하나 가져올게요."
+ },
+ {
+  "id": "lc-035",
+  "level": 1,
+  "topic": "캠퍼스 셔틀버스",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "M",
+    "t": "Excuse me. Does this bus go to the train station?"
+   },
+   {
+    "s": "W",
+    "t": "No, this one goes to the north campus. You need the orange bus."
+   },
+   {
+    "s": "M",
+    "t": "Oh. Where does the orange bus stop?"
+   },
+   {
+    "s": "W",
+    "t": "Right here, at the same stop. It comes every twenty minutes."
+   },
+   {
+    "s": "M",
+    "t": "Do I need to pay?"
+   },
+   {
+    "s": "W",
+    "t": "Not if you show your student card. It's free for students."
+   },
+   {
+    "s": "M",
+    "t": "Perfect. Thanks for your help."
+   }
+  ],
+  "questions": [
+   {
+    "q": "Where does the man want to go?",
+    "choices": [
+     "The train station",
+     "The north campus",
+     "The library",
+     "The bus office"
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "정답은 (A)입니다. 남자는 이 버스가 기차역에 가는지 묻습니다. 북쪽 캠퍼스는 지금 서 있는 버스의 목적지입니다."
+   },
+   {
+    "q": "What does the woman say about the orange bus?",
+    "choices": [
+     "It does not run today.",
+     "It stops at a different place.",
+     "It comes every hour.",
+     "Students can ride it for free."
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "정답은 (D)입니다. 여자는 학생증을 보여 주면 학생은 무료라고 말합니다. 같은 정류장에 20분마다 온다고 했습니다."
+   }
+  ],
+  "translation": "M: 실례합니다. 이 버스가 기차역에 가나요?\nW: 아니요, 이건 북쪽 캠퍼스로 가요. 주황색 버스를 타셔야 해요.\nM: 아. 주황색 버스는 어디에 서요?\nW: 바로 여기, 같은 정류장이에요. 20분마다 와요.\nM: 요금을 내야 하나요?\nW: 학생증을 보여 주면 안 내요. 학생은 무료예요.\nM: 잘됐네요. 도와주셔서 고마워요."
+ },
+ {
+  "id": "lc-036",
+  "level": 1,
+  "topic": "스터디 모임 시간 정하기",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "W",
+    "t": "Hey, are you free to study for the biology quiz this week?"
+   },
+   {
+    "s": "M",
+    "t": "Sure. How about Tuesday afternoon?"
+   },
+   {
+    "s": "W",
+    "t": "I have work on Tuesday. What about Wednesday?"
+   },
+   {
+    "s": "M",
+    "t": "Wednesday is good. After three o'clock?"
+   },
+   {
+    "s": "W",
+    "t": "Yes. Let's meet at the library café."
+   },
+   {
+    "s": "M",
+    "t": "Okay. I'll bring my notes from last week."
+   },
+   {
+    "s": "W",
+    "t": "Great. I'll bring some snacks."
+   }
+  ],
+  "questions": [
+   {
+    "q": "When will the speakers study together?",
+    "choices": [
+     "Wednesday afternoon",
+     "Tuesday afternoon",
+     "Monday morning",
+     "Friday evening"
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "정답은 (A)입니다. 여자가 화요일에는 일이 있다고 하자 수요일 3시 이후로 정합니다. 화요일은 남자가 처음 제안한 날입니다."
+   },
+   {
+    "q": "What will the man bring?",
+    "choices": [
+     "Snacks",
+     "A laptop",
+     "A textbook",
+     "His notes"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "정답은 (D)입니다. 남자는 지난주 필기를 가져가겠다고 말합니다. 간식은 여자가 가져오기로 했습니다."
+   }
+  ],
+  "translation": "W: 야, 이번 주에 생물학 쪽지시험 공부 같이 할 시간 있어?\nM: 물론이지. 화요일 오후 어때?\nW: 화요일엔 일이 있어. 수요일은?\nM: 수요일 좋아. 3시 이후에?\nW: 응. 도서관 카페에서 만나자.\nM: 알았어. 지난주 필기 가져갈게.\nW: 좋아. 나는 간식 좀 가져갈게."
+ },
+ {
+  "id": "lc-037",
+  "level": 2,
+  "topic": "도서관 스터디룸 예약",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "M",
+    "t": "Hi. I'd like to reserve a study room for my group tomorrow."
+   },
+   {
+    "s": "W",
+    "t": "How many people are in your group?"
+   },
+   {
+    "s": "M",
+    "t": "Six. We're preparing a presentation, so we need a screen."
+   },
+   {
+    "s": "W",
+    "t": "The rooms with screens are on the third floor. Let me see what's open."
+   },
+   {
+    "s": "W",
+    "t": "Room three oh five is free from one to three."
+   },
+   {
+    "s": "M",
+    "t": "Could we have it longer? We might need four hours."
+   },
+   {
+    "s": "W",
+    "t": "Sorry, the limit is two hours per group per day. But you could book another room in the evening."
+   },
+   {
+    "s": "M",
+    "t": "Hmm, I'll check with my group first and come back."
+   },
+   {
+    "s": "W",
+    "t": "Okay, but rooms fill up fast during exam week."
+   }
+  ],
+  "questions": [
+   {
+    "q": "Why does the man need a room with a screen?",
+    "choices": [
+     "To prepare a presentation",
+     "To watch a film for class",
+     "To take an online exam",
+     "To hold a club meeting"
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "정답은 (A)입니다. 남자는 조가 발표를 준비하고 있어서 화면이 필요하다고 말합니다. 영화나 온라인 시험은 언급되지 않습니다."
+   },
+   {
+    "q": "What will the man probably do next?",
+    "choices": [
+     "Book room three oh five for four hours",
+     "Talk to his group members",
+     "Go to the third floor",
+     "Reserve a room for the evening"
+    ],
+    "answer": 1,
+    "type": "다음 할 일",
+    "explanation": "정답은 (B)입니다. 남자는 조원들에게 먼저 물어보고 다시 오겠다고 말합니다. 아직 어떤 방도 예약하지 않았습니다."
+   }
+  ],
+  "translation": "M: 안녕하세요. 내일 저희 조가 쓸 스터디룸을 예약하고 싶어요.\nW: 조원이 몇 명이에요?\nM: 여섯 명이요. 발표 준비를 해서 화면이 필요해요.\nW: 화면이 있는 방은 3층에 있어요. 빈 방을 볼게요.\nW: 305호가 1시부터 3시까지 비어 있네요.\nM: 더 오래 쓸 수 있을까요? 네 시간 정도 필요할 것 같아요.\nW: 죄송하지만 조당 하루 두 시간이 한도예요. 대신 저녁에 다른 방을 예약할 수는 있어요.\nM: 음, 조원들한테 먼저 물어보고 다시 올게요.\nW: 알겠어요. 그런데 시험 주간에는 방이 금방 차요."
+ },
+ {
+  "id": "lc-038",
+  "level": 2,
+  "topic": "보건소 진료 예약",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "W",
+    "t": "Hello, Student Health Center. How can I help you?"
+   },
+   {
+    "s": "M",
+    "t": "Hi. I've had a sore throat for three days, and it's getting worse."
+   },
+   {
+    "s": "W",
+    "t": "Do you have a fever?"
+   },
+   {
+    "s": "M",
+    "t": "A little, I think. I don't have a thermometer."
+   },
+   {
+    "s": "W",
+    "t": "Okay. The doctor can see you at two thirty this afternoon."
+   },
+   {
+    "s": "M",
+    "t": "I have a lab then. Is there anything later?"
+   },
+   {
+    "s": "W",
+    "t": "There's a four fifteen opening with a nurse practitioner."
+   },
+   {
+    "s": "M",
+    "t": "That works. Do I need to bring anything?"
+   },
+   {
+    "s": "W",
+    "t": "Just your student ID and your insurance card."
+   }
+  ],
+  "questions": [
+   {
+    "q": "Why does the man call the health center?",
+    "choices": [
+     "To ask about insurance",
+     "To buy a thermometer",
+     "To cancel a lab session",
+     "To make an appointment for a sore throat"
+    ],
+    "answer": 3,
+    "type": "주제·목적",
+    "explanation": "정답은 (D)입니다. 남자는 사흘째 목이 아프다며 진료를 받으려고 전화합니다. 보험 카드는 가져올 물건으로만 언급됩니다."
+   },
+   {
+    "q": "Why can't the man come at two thirty?",
+    "choices": [
+     "He feels too sick.",
+     "He has to work.",
+     "He has an exam.",
+     "He has a lab."
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "정답은 (D)입니다. 남자는 2시 반에 실험 수업이 있다고 말합니다. 그래서 4시 15분으로 예약합니다."
+   }
+  ],
+  "translation": "W: 안녕하세요, 학생 보건소입니다. 무엇을 도와드릴까요?\nM: 안녕하세요. 사흘째 목이 아픈데 점점 심해져요.\nW: 열이 있으세요?\nM: 조금 있는 것 같아요. 체온계가 없어서요.\nW: 알겠어요. 오늘 오후 2시 반에 진료 가능해요.\nM: 그때 실험 수업이 있어요. 더 늦은 시간은 없나요?\nW: 4시 15분에 전문 간호사 진료가 비어 있어요.\nM: 그게 좋겠어요. 뭘 가져가야 하나요?\nW: 학생증하고 보험 카드만 가져오세요."
+ },
+ {
+  "id": "lc-039",
+  "level": 2,
+  "topic": "도서관 아르바이트 근무 변경",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "M",
+    "t": "Hi, Ms. Lopez. Do you have a minute?"
+   },
+   {
+    "s": "W",
+    "t": "Sure, Tom. What's up?"
+   },
+   {
+    "s": "M",
+    "t": "I just joined the swim team, and practice is on Monday and Thursday evenings."
+   },
+   {
+    "s": "W",
+    "t": "And you work the evening shelving shift on those days, right?"
+   },
+   {
+    "s": "M",
+    "t": "Exactly. Could I switch to mornings?"
+   },
+   {
+    "s": "W",
+    "t": "Mornings are pretty full. But Saturday afternoons are open."
+   },
+   {
+    "s": "M",
+    "t": "Saturday would be fine. Could I start this week?"
+   },
+   {
+    "s": "W",
+    "t": "Let's start next week. I need to find someone for your Monday shift first."
+   },
+   {
+    "s": "M",
+    "t": "Of course. Thank you so much."
+   }
+  ],
+  "questions": [
+   {
+    "q": "Why does the man want to change his work schedule?",
+    "choices": [
+     "He has a new class.",
+     "He joined a sports team.",
+     "He wants more hours.",
+     "He is moving off campus."
+    ],
+    "answer": 1,
+    "type": "주제·목적",
+    "explanation": "정답은 (B)입니다. 남자는 수영팀에 들어가 월요일과 목요일 저녁에 연습이 있다고 말합니다. 그래서 근무 시간을 바꾸려 합니다."
+   },
+   {
+    "q": "When will the man start working on Saturdays?",
+    "choices": [
+     "This week",
+     "After the swim season",
+     "Next month",
+     "Next week"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "정답은 (D)입니다. 선생님은 월요일 대타를 먼저 찾아야 한다며 다음 주부터 시작하자고 합니다. 남자는 이번 주를 원했지만 바뀌었습니다."
+   }
+  ],
+  "translation": "M: 안녕하세요, 로페즈 선생님. 잠깐 시간 있으세요?\nW: 그럼, 톰. 무슨 일이야?\nM: 제가 수영팀에 들어갔는데 연습이 월요일과 목요일 저녁이에요.\nW: 그리고 그날 저녁에 서가 정리 근무를 하지?\nM: 맞아요. 오전으로 바꿀 수 있을까요?\nW: 오전은 꽤 찼어. 그런데 토요일 오후는 비어 있어.\nM: 토요일 괜찮아요. 이번 주부터 시작해도 될까요?\nW: 다음 주부터 하자. 먼저 네 월요일 근무를 대신할 사람을 찾아야 하거든.\nM: 물론이죠. 정말 감사합니다."
+ },
+ {
+  "id": "lc-040",
+  "level": 2,
+  "topic": "등산 동아리 여행 신청",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "W",
+    "t": "Hi. Is there still room on the hiking club's mountain trip?"
+   },
+   {
+    "s": "M",
+    "t": "Let me check the list. Yes, we have three spots left."
+   },
+   {
+    "s": "W",
+    "t": "Great. How much does it cost?"
+   },
+   {
+    "s": "M",
+    "t": "Forty dollars. That covers the bus and two nights at the cabin."
+   },
+   {
+    "s": "W",
+    "t": "What about food?"
+   },
+   {
+    "s": "M",
+    "t": "We cook together, so everyone brings food for one dinner."
+   },
+   {
+    "s": "W",
+    "t": "That sounds fun. Do I need special boots?"
+   },
+   {
+    "s": "M",
+    "t": "Regular sneakers are okay, but bring a warm jacket. It gets cold at night."
+   },
+   {
+    "s": "W",
+    "t": "Got it. Can I pay by card?"
+   },
+   {
+    "s": "M",
+    "t": "Sure. Just fill out this form first."
+   }
+  ],
+  "questions": [
+   {
+    "q": "What does the forty-dollar fee include?",
+    "choices": [
+     "Food for the whole trip",
+     "Boots and a jacket",
+     "Transportation and lodging",
+     "A club T-shirt"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "정답은 (C)입니다. 남자는 40달러에 버스와 오두막 2박이 포함된다고 말합니다. 음식은 각자 가져와야 합니다."
+   },
+   {
+    "q": "What does the man tell the woman to bring?",
+    "choices": [
+     "Special hiking boots",
+     "Cooking tools",
+     "A sleeping bag",
+     "A warm jacket"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "정답은 (D)입니다. 남자는 밤에 추워지니 따뜻한 재킷을 챙기라고 말합니다. 등산화는 일반 운동화로도 괜찮다고 했습니다."
+   }
+  ],
+  "translation": "W: 안녕하세요. 등산 동아리 산 여행에 아직 자리가 있나요?\nM: 명단을 볼게요. 네, 세 자리 남았어요.\nW: 잘됐네요. 비용이 얼마예요?\nM: 40달러예요. 버스랑 오두막 2박이 포함돼요.\nW: 음식은요?\nM: 다 같이 요리해서 각자 저녁 한 끼 분량의 음식을 가져와요.\nW: 재밌겠네요. 특별한 등산화가 필요해요?\nM: 일반 운동화도 괜찮은데 따뜻한 재킷은 챙기세요. 밤에 추워져요.\nW: 알겠어요. 카드로 내도 돼요?\nM: 그럼요. 먼저 이 양식만 작성해 주세요."
+ },
+ {
+  "id": "lc-041",
+  "level": 2,
+  "topic": "교수 면담: 결석한 수업 내용",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "M",
+    "t": "Professor Hayes, I missed class on Monday because I was sick."
+   },
+   {
+    "s": "W",
+    "t": "I hope you're feeling better now."
+   },
+   {
+    "s": "M",
+    "t": "Yes, thanks. I wanted to ask what I missed."
+   },
+   {
+    "s": "W",
+    "t": "We covered chapter six, and I explained the new essay assignment."
+   },
+   {
+    "s": "M",
+    "t": "Are the slides online?"
+   },
+   {
+    "s": "W",
+    "t": "The slides are, but the essay instructions are only on paper. Here's a copy."
+   },
+   {
+    "s": "M",
+    "t": "Thank you. When is the essay due?"
+   },
+   {
+    "s": "W",
+    "t": "In two weeks. I'd also borrow someone's notes. I said some things that aren't on the slides."
+   },
+   {
+    "s": "M",
+    "t": "Okay, I'll ask my lab partner."
+   }
+  ],
+  "questions": [
+   {
+    "q": "Why does the man go to see the professor?",
+    "choices": [
+     "To ask for an extension",
+     "To return an essay",
+     "To find out what he missed in class",
+     "To ask about his grade"
+    ],
+    "answer": 2,
+    "type": "주제·목적",
+    "explanation": "정답은 (C)입니다. 남자는 아파서 빠진 수업에서 무엇을 놓쳤는지 묻고 싶다고 말합니다. 마감 연장은 요청하지 않습니다."
+   },
+   {
+    "q": "Why does the professor suggest borrowing a classmate's notes?",
+    "choices": [
+     "The slides are not online.",
+     "The man missed two classes.",
+     "The essay instructions were lost.",
+     "Some information was not on the slides."
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "정답은 (D)입니다. 교수는 슬라이드에 없는 내용도 말했다며 필기를 빌리라고 합니다. 슬라이드 자체는 온라인에 있습니다."
+   }
+  ],
+  "translation": "M: 헤이스 교수님, 월요일에 아파서 수업에 빠졌어요.\nW: 지금은 괜찮아졌길 바라요.\nM: 네, 감사합니다. 제가 무엇을 놓쳤는지 여쭤보고 싶었어요.\nW: 6장을 다뤘고, 새 에세이 과제를 설명했어요.\nM: 슬라이드가 온라인에 있나요?\nW: 슬라이드는 있지만 에세이 안내문은 종이로만 있어요. 여기 한 부 있어요.\nM: 감사합니다. 에세이는 언제까지예요?\nW: 2주 뒤예요. 다른 학생 필기도 빌려 보세요. 슬라이드에 없는 내용도 말했거든요.\nM: 알겠어요. 실험 짝한테 부탁할게요."
+ },
+ {
+  "id": "lc-042",
+  "level": 2,
+  "topic": "학적과: 성적 증명서 발급",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "W",
+    "t": "Hi. I need an official transcript for a summer program application."
+   },
+   {
+    "s": "M",
+    "t": "Sure. Do you need a paper copy or an electronic one?"
+   },
+   {
+    "s": "W",
+    "t": "The program says they accept electronic copies."
+   },
+   {
+    "s": "M",
+    "t": "Then that's faster. You can order it online through the student portal."
+   },
+   {
+    "s": "W",
+    "t": "How long does it take?"
+   },
+   {
+    "s": "M",
+    "t": "Usually one business day. But there's a hold on your account right now."
+   },
+   {
+    "s": "W",
+    "t": "A hold? Why?"
+   },
+   {
+    "s": "M",
+    "t": "It says you have an unpaid library fine of twelve dollars."
+   },
+   {
+    "s": "W",
+    "t": "Oh, I forgot about that book. I'll pay it right away."
+   }
+  ],
+  "questions": [
+   {
+    "q": "Why does the woman need a transcript?",
+    "choices": [
+     "To apply to a summer program",
+     "To apply for a job",
+     "To transfer to another school",
+     "To get a library card"
+    ],
+    "answer": 0,
+    "type": "주제·목적",
+    "explanation": "정답은 (A)입니다. 여자는 여름 프로그램 지원에 공식 성적 증명서가 필요하다고 말합니다. 취업이나 편입은 언급되지 않습니다."
+   },
+   {
+    "q": "What must the woman do before getting her transcript?",
+    "choices": [
+     "Request a paper copy",
+     "Visit the program office",
+     "Pay a library fine",
+     "Wait one week"
+    ],
+    "answer": 2,
+    "type": "다음 할 일",
+    "explanation": "정답은 (C)입니다. 미납 도서관 연체료 때문에 계정에 보류가 걸려 있습니다. 여자는 바로 내겠다고 말합니다."
+   }
+  ],
+  "translation": "W: 안녕하세요. 여름 프로그램 지원에 공식 성적 증명서가 필요해요.\nM: 네. 종이로 필요하세요, 전자 문서로 필요하세요?\nW: 프로그램에서 전자 문서도 받는다고 했어요.\nM: 그럼 그게 더 빨라요. 학생 포털에서 온라인으로 신청하시면 돼요.\nW: 얼마나 걸려요?\nM: 보통 영업일 하루요. 그런데 지금 계정에 보류가 걸려 있네요.\nW: 보류요? 왜요?\nM: 도서관 연체료 12달러가 미납이라고 나와요.\nW: 아, 그 책을 깜빡했네요. 바로 낼게요."
+ },
+ {
+  "id": "lc-043",
+  "level": 3,
+  "topic": "학적과: 수강 철회 마감 이후",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "M",
+    "t": "Hi. I'd like to drop my statistics course, but the website won't let me."
+   },
+   {
+    "s": "W",
+    "t": "That's because the drop deadline passed last Friday. After that, it's called a withdrawal."
+   },
+   {
+    "s": "M",
+    "t": "What's the difference?"
+   },
+   {
+    "s": "W",
+    "t": "If you drop, the course disappears from your record. If you withdraw, a W appears on your transcript."
+   },
+   {
+    "s": "M",
+    "t": "Does a W hurt my GPA?"
+   },
+   {
+    "s": "W",
+    "t": "No, it doesn't count in your GPA. But you'd drop to nine credits, which is below full time."
+   },
+   {
+    "s": "M",
+    "t": "Oh. I have a scholarship that requires full-time status."
+   },
+   {
+    "s": "W",
+    "t": "Then I'd talk to the financial aid office before you do anything. Withdrawing could affect your award."
+   },
+   {
+    "s": "M",
+    "t": "Maybe I should talk to my professor too. I'm only failing because of one bad exam."
+   },
+   {
+    "s": "W",
+    "t": "That's a good idea. There may be a way to improve your grade instead."
+   }
+  ],
+  "questions": [
+   {
+    "q": "What is true about a withdrawal?",
+    "choices": [
+     "It lowers the student's GPA.",
+     "It is not shown on the transcript.",
+     "A W appears on the transcript.",
+     "It must be done before the drop deadline."
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "정답은 (C)입니다. 직원은 철회하면 성적표에 W가 남지만 평점에는 들어가지 않는다고 설명합니다. 기록에서 사라지는 것은 마감 전 취소입니다."
+   },
+   {
+    "q": "What can be inferred about the man?",
+    "choices": [
+     "He wants to change his major.",
+     "He has already lost his scholarship.",
+     "He may decide to stay in the course.",
+     "He has never failed an exam before."
+    ],
+    "answer": 2,
+    "type": "추론",
+    "explanation": "정답은 (C)입니다. 남자는 장학금 문제를 알게 된 뒤 교수와 상담하겠다고 하고, 직원도 성적을 올릴 방법이 있을 수 있다고 말합니다. 따라서 수업을 계속 들을 가능성이 있습니다."
+   }
+  ],
+  "translation": "M: 안녕하세요. 통계학 수업을 취소하고 싶은데 웹사이트에서 안 돼요.\nW: 지난 금요일에 취소 마감이 지나서 그래요. 그 이후로는 '수강 철회'라고 해요.\nM: 차이가 뭐예요?\nW: 취소하면 수업이 기록에서 사라져요. 철회하면 성적표에 W가 남아요.\nM: W가 평점에 영향을 줘요?\nW: 아니요, 평점에는 들어가지 않아요. 그런데 9학점으로 내려가서 전일제 기준 아래가 돼요.\nM: 아. 전일제여야 하는 장학금을 받고 있어요.\nW: 그럼 무엇을 하기 전에 재정 지원 사무소와 먼저 상담하세요. 철회하면 장학금에 영향이 있을 수 있어요.\nM: 교수님과도 이야기해 봐야겠어요. 시험 한 번을 망쳐서 낙제 중인 거거든요.\nW: 좋은 생각이에요. 대신 성적을 올릴 방법이 있을지도 몰라요."
+ },
+ {
+  "id": "lc-044",
+  "level": 3,
+  "topic": "주거 사무소: 여름 방학 짐 보관",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "W",
+    "t": "Hi. I'm going home for the summer, and I can't take all my things on the plane."
+   },
+   {
+    "s": "M",
+    "t": "A lot of students have that problem. We have a storage program in the basement of Miller Hall."
+   },
+   {
+    "s": "W",
+    "t": "How does it work?"
+   },
+   {
+    "s": "M",
+    "t": "You can store up to five boxes. It's twenty dollars a box for the whole summer."
+   },
+   {
+    "s": "W",
+    "t": "What about my mini fridge? It's not really a box."
+   },
+   {
+    "s": "M",
+    "t": "Large items count as two boxes. And the fridge has to be completely clean and dry."
+   },
+   {
+    "s": "W",
+    "t": "That makes sense. When do I bring everything?"
+   },
+   {
+    "s": "M",
+    "t": "Drop-off is during finals week, but you have to sign up for a time slot online."
+   },
+   {
+    "s": "W",
+    "t": "My last exam is on Thursday, and my flight is Friday morning."
+   },
+   {
+    "s": "M",
+    "t": "Then I'd sign up today. The Thursday slots go first."
+   }
+  ],
+  "questions": [
+   {
+    "q": "How much would it cost the woman to store four boxes and her fridge?",
+    "choices": [
+     "One hundred twenty dollars",
+     "One hundred dollars",
+     "Eighty dollars",
+     "Forty dollars"
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "정답은 (A)입니다. 상자는 하나에 20달러이고 냉장고 같은 큰 물건은 상자 두 개로 칩니다. 따라서 상자 여섯 개 값인 120달러입니다."
+   },
+   {
+    "q": "Why does the man suggest signing up today?",
+    "choices": [
+     "The program is almost full.",
+     "Popular time slots fill up quickly.",
+     "The price will go up next week.",
+     "The office closes during finals."
+    ],
+    "answer": 1,
+    "type": "화자 의도",
+    "explanation": "정답은 (B)입니다. 남자는 목요일 시간대가 가장 먼저 찬다고 말합니다. 여자가 목요일에 맡겨야 하므로 서두르라는 뜻입니다."
+   }
+  ],
+  "translation": "W: 안녕하세요. 여름에 집에 가는데 짐을 다 비행기에 실을 수가 없어요.\nM: 많은 학생이 그래요. 밀러 홀 지하에 보관 프로그램이 있어요.\nW: 어떻게 하는 거예요?\nM: 상자 다섯 개까지 보관할 수 있어요. 여름 내내 상자 하나에 20달러예요.\nW: 미니 냉장고는요? 상자는 아니잖아요.\nM: 큰 물건은 상자 두 개로 쳐요. 그리고 냉장고는 완전히 깨끗하고 말라 있어야 해요.\nW: 그렇겠네요. 언제 가져오면 돼요?\nM: 기말고사 주간에 맡기는데, 온라인으로 시간대를 신청해야 해요.\nW: 마지막 시험이 목요일이고 비행기는 금요일 아침이에요.\nM: 그럼 오늘 신청하세요. 목요일 시간대가 제일 먼저 차요."
+ },
+ {
+  "id": "lc-045",
+  "level": 3,
+  "topic": "교수 면담: 실험 보고서 형식",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "M",
+    "t": "Dr. Patel, I got my first lab report back, and I lost a lot of points on format."
+   },
+   {
+    "s": "W",
+    "t": "Yes. Your results were actually quite good, but they were mixed in with your discussion."
+   },
+   {
+    "s": "M",
+    "t": "I thought it would be easier to explain each number right after I gave it."
+   },
+   {
+    "s": "W",
+    "t": "That's natural in an essay, but scientific reports separate what you found from what it means."
+   },
+   {
+    "s": "M",
+    "t": "So the results section should just be data?"
+   },
+   {
+    "s": "W",
+    "t": "Data, tables, and short descriptions of patterns. Save the why for the discussion."
+   },
+   {
+    "s": "M",
+    "t": "Okay. Is there an example I could look at?"
+   },
+   {
+    "s": "W",
+    "t": "I posted a model report from last year on the course page. Look at how the tables are labeled, too."
+   },
+   {
+    "s": "M",
+    "t": "Can I revise this one for some points back?"
+   },
+   {
+    "s": "W",
+    "t": "Not this one, but the next report is worth twice as much, so it's a good chance to apply this."
+   }
+  ],
+  "questions": [
+   {
+    "q": "What was the main problem with the man's lab report?",
+    "choices": [
+     "His data were incorrect.",
+     "He mixed results with interpretation.",
+     "He submitted it late.",
+     "He did not include any tables."
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "정답은 (B)입니다. 교수는 결과가 고찰 부분과 섞여 있었다고 지적합니다. 결과 자체는 꽤 좋았다고 했습니다."
+   },
+   {
+    "q": "What does the professor imply when she mentions the next report?",
+    "choices": [
+     "The man should not worry about this grade.",
+     "The man's grade can still improve meaningfully.",
+     "The next report will be easier.",
+     "The man should drop the course."
+    ],
+    "answer": 1,
+    "type": "화자 의도",
+    "explanation": "정답은 (B)입니다. 교수는 이번 보고서는 수정할 수 없지만 다음 보고서가 배점이 두 배라고 말합니다. 배운 것을 적용하면 성적을 충분히 올릴 수 있다는 뜻입니다."
+   }
+  ],
+  "translation": "M: 파텔 교수님, 첫 실험 보고서를 돌려받았는데 형식에서 점수가 많이 깎였어요.\nW: 그래요. 결과 자체는 꽤 좋았는데 고찰 부분과 섞여 있었어요.\nM: 숫자를 제시하자마자 바로 설명하는 게 더 쉬울 것 같았어요.\nW: 에세이에선 자연스럽지만 과학 보고서는 발견한 것과 그 의미를 분리해요.\nM: 그럼 결과 부분에는 데이터만 있어야 하나요?\nW: 데이터, 표, 그리고 경향에 대한 짧은 설명이요. '왜'는 고찰에 남겨 두세요.\nM: 알겠습니다. 참고할 만한 예시가 있을까요?\nW: 작년 모범 보고서를 강의 페이지에 올려 두었어요. 표에 제목을 다는 방식도 보세요.\nM: 이번 것을 고쳐서 점수를 일부 돌려받을 수 있을까요?\nW: 이번 건 안 되지만 다음 보고서가 배점이 두 배라서 이걸 적용할 좋은 기회예요."
+ },
+ {
+  "id": "lc-046",
+  "level": 3,
+  "topic": "튜터링 센터 아르바이트 교육",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "W",
+    "t": "Welcome to the tutoring center, Jake. Since this is your first shift, let's go over a few things."
+   },
+   {
+    "s": "M",
+    "t": "Sure. I'm tutoring calculus, right?"
+   },
+   {
+    "s": "W",
+    "t": "Mostly. The biggest rule is that you don't solve homework problems for students."
+   },
+   {
+    "s": "M",
+    "t": "Then what do I do if someone is completely stuck?"
+   },
+   {
+    "s": "W",
+    "t": "Find a similar problem in the textbook and work through that one together. Then let them try theirs."
+   },
+   {
+    "s": "M",
+    "t": "That makes sense. What if they get frustrated?"
+   },
+   {
+    "s": "W",
+    "t": "It happens. Ask them to explain what they've tried. Often they figure it out while talking."
+   },
+   {
+    "s": "M",
+    "t": "Okay. And how do I record the sessions?"
+   },
+   {
+    "s": "W",
+    "t": "After each student, fill in the log on the tablet: course, topic, and how long you met."
+   },
+   {
+    "s": "M",
+    "t": "Got it. Should I start with the student waiting over there?"
+   },
+   {
+    "s": "W",
+    "t": "Go ahead. I'll be at the front desk if you need me."
+   }
+  ],
+  "questions": [
+   {
+    "q": "According to the woman, what should tutors do when a student is stuck?",
+    "choices": [
+     "Give the student the answer",
+     "Send the student to the professor",
+     "Work through a similar problem together",
+     "Skip that problem"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "정답은 (C)입니다. 여자는 교과서에서 비슷한 문제를 찾아 함께 풀고 그다음 학생이 자기 문제를 풀게 하라고 말합니다. 답을 대신 풀어 주는 것은 금지된 일입니다."
+   },
+   {
+    "q": "What will the man probably do next?",
+    "choices": [
+     "Fill in a session log",
+     "Help a waiting student",
+     "Go to the front desk",
+     "Read the calculus textbook"
+    ],
+    "answer": 1,
+    "type": "다음 할 일",
+    "explanation": "정답은 (B)입니다. 남자가 기다리는 학생부터 시작해도 되냐고 묻자 여자가 그렇게 하라고 합니다. 기록은 수업이 끝난 뒤에 합니다."
+   }
+  ],
+  "translation": "W: 튜터링 센터에 온 걸 환영해요, 제이크. 첫 근무니까 몇 가지 짚고 넘어갈게요.\nM: 네. 저는 미적분을 가르치는 거죠?\nW: 주로요. 가장 중요한 규칙은 학생 대신 숙제 문제를 풀어 주지 않는 거예요.\nM: 그럼 누가 완전히 막혀 있으면 어떻게 해요?\nW: 교과서에서 비슷한 문제를 찾아 같이 풀어 보세요. 그다음 자기 문제를 풀게 하세요.\nM: 그렇겠네요. 학생이 답답해하면요?\nW: 그럴 때가 있죠. 지금까지 뭘 해 봤는지 설명해 달라고 하세요. 말하다가 스스로 알아내는 경우가 많아요.\nM: 알겠어요. 수업 기록은 어떻게 해요?\nW: 학생마다 끝난 뒤 태블릿에 기록하세요. 과목, 주제, 시간이요.\nM: 알겠어요. 저기 기다리는 학생부터 시작할까요?\nW: 그렇게 하세요. 필요하면 안내 데스크에 있을게요."
+ },
+ {
+  "id": "lc-047",
+  "level": 3,
+  "topic": "도서관: 참고문헌 관리 프로그램",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "M",
+    "t": "Hi. My professor said the library can help with citation software."
+   },
+   {
+    "s": "W",
+    "t": "Yes. We support a free program that saves your sources and formats your bibliography."
+   },
+   {
+    "s": "M",
+    "t": "That sounds great. I have about forty sources for my history paper, and I've been typing everything by hand."
+   },
+   {
+    "s": "W",
+    "t": "Forty by hand? That's a lot of chances for mistakes."
+   },
+   {
+    "s": "M",
+    "t": "Tell me about it. Can it change the style too? My professor wants Chicago style."
+   },
+   {
+    "s": "W",
+    "t": "With one click. But it's only as good as the information you put in, so check each entry."
+   },
+   {
+    "s": "M",
+    "t": "Is there someone who can show me how to set it up?"
+   },
+   {
+    "s": "W",
+    "t": "We have a forty-minute workshop every Tuesday at noon. It's in the computer lab on the second floor."
+   },
+   {
+    "s": "M",
+    "t": "My paper is due Monday, though."
+   },
+   {
+    "s": "W",
+    "t": "Then I can give you a quick start guide now, and you can try it this weekend."
+   }
+  ],
+  "questions": [
+   {
+    "q": "What does the woman warn the man about?",
+    "choices": [
+     "The software is expensive.",
+     "He must check the information in each entry.",
+     "Chicago style is not supported.",
+     "The workshop is already full."
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "정답은 (B)입니다. 여자는 프로그램이 입력한 정보만큼만 정확하니 항목마다 확인하라고 말합니다. 시카고 양식은 클릭 한 번으로 바꿀 수 있습니다."
+   },
+   {
+    "q": "Why does the woman offer the man a quick start guide?",
+    "choices": [
+     "The workshop is too late for his deadline.",
+     "The computer lab is closed.",
+     "He already knows the software.",
+     "The workshop is only for graduate students."
+    ],
+    "answer": 0,
+    "type": "추론",
+    "explanation": "정답은 (A)입니다. 워크숍은 화요일인데 남자의 리포트 마감은 월요일입니다. 그래서 여자는 주말에 혼자 해 볼 수 있도록 안내서를 줍니다."
+   }
+  ],
+  "translation": "M: 안녕하세요. 교수님이 도서관에서 참고문헌 관리 프로그램을 도와준다고 하셨어요.\nW: 네. 출처를 저장하고 참고문헌 목록 형식을 맞춰 주는 무료 프로그램을 지원해요.\nM: 좋네요. 역사 리포트 출처가 40개쯤 되는데 전부 손으로 입력하고 있었어요.\nW: 40개를 손으로요? 실수할 여지가 많겠네요.\nM: 그러니까요. 양식도 바꿀 수 있나요? 교수님이 시카고 양식을 원하세요.\nW: 클릭 한 번이면 돼요. 하지만 입력한 정보만큼만 정확하니까 항목마다 확인하세요.\nM: 설치하는 걸 보여 줄 사람이 있나요?\nW: 매주 화요일 정오에 40분짜리 워크숍이 있어요. 2층 컴퓨터실에서 해요.\nM: 그런데 리포트 마감이 월요일이에요.\nW: 그럼 지금 빠른 시작 안내서를 드릴 테니 이번 주말에 해 보세요."
+ },
+ {
+  "id": "lc-048",
+  "level": 3,
+  "topic": "음악 동아리: 공연 장소 예산",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "W",
+    "t": "So, the student activities office approved eight hundred dollars for our spring concert."
+   },
+   {
+    "s": "M",
+    "t": "That's less than we asked for. The theater alone costs six hundred."
+   },
+   {
+    "s": "W",
+    "t": "Right. And we still need to pay for sound equipment and posters."
+   },
+   {
+    "s": "M",
+    "t": "What about the student center lounge? It's free for clubs."
+   },
+   {
+    "s": "W",
+    "t": "It only holds about eighty people, though. We had a hundred and fifty last year."
+   },
+   {
+    "s": "M",
+    "t": "We could do two shows, one on Friday and one on Saturday."
+   },
+   {
+    "s": "W",
+    "t": "Hmm. That's more work for the performers, but it might actually bring in more people overall."
+   },
+   {
+    "s": "M",
+    "t": "And we'd have money left for a better sound system."
+   },
+   {
+    "s": "W",
+    "t": "Let's not decide yet. I'll ask the members at Thursday's meeting if they can commit to both nights."
+   }
+  ],
+  "questions": [
+   {
+    "q": "What is the main problem the speakers discuss?",
+    "choices": [
+     "The concert date conflicts with exams.",
+     "Too few members can perform.",
+     "Their budget is too small for the theater and other costs.",
+     "The posters were not approved."
+    ],
+    "answer": 2,
+    "type": "주제·목적",
+    "explanation": "정답은 (C)입니다. 승인된 800달러로는 600달러짜리 극장과 음향 장비·포스터 비용을 다 감당하기 어렵습니다. 그래서 무료 라운지를 대안으로 이야기합니다."
+   },
+   {
+    "q": "What will the woman do at Thursday's meeting?",
+    "choices": [
+     "Book the theater",
+     "Design the posters",
+     "Request more money",
+     "Ask members about performing on two nights"
+    ],
+    "answer": 3,
+    "type": "다음 할 일",
+    "explanation": "정답은 (D)입니다. 여자는 목요일 모임에서 회원들이 이틀 모두 공연할 수 있는지 묻겠다고 말합니다. 아직 장소를 예약하지는 않았습니다."
+   }
+  ],
+  "translation": "W: 학생활동처에서 봄 공연 예산으로 800달러를 승인해 줬어.\nM: 요청한 것보다 적네. 극장만 600달러인데.\nW: 맞아. 그리고 음향 장비랑 포스터 비용도 남아 있어.\nM: 학생회관 라운지는 어때? 동아리는 무료잖아.\nW: 그런데 80명 정도밖에 안 들어가. 작년엔 150명이 왔잖아.\nM: 금요일, 토요일 두 번 공연하면 되지.\nW: 음. 연주자들은 더 힘들겠지만 전체적으로는 관객이 더 많아질 수도 있겠다.\nM: 그리고 더 좋은 음향 장비에 쓸 돈도 남고.\nW: 아직 결정하지 말자. 목요일 모임에서 회원들이 이틀 다 참여할 수 있는지 물어볼게."
+ },
+ {
+  "id": "lc-049",
+  "level": 4,
+  "topic": "교수 면담: 중간 에세이 논지",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "M",
+    "t": "Professor Grant, I was surprised by my midterm essay grade. I thought I covered everything."
+   },
+   {
+    "s": "W",
+    "t": "You did cover everything. That's partly the problem."
+   },
+   {
+    "s": "M",
+    "t": "I'm not sure I follow."
+   },
+   {
+    "s": "W",
+    "t": "The question asked whether the New Deal mainly helped workers or businesses. You listed programs that helped each group, but you never took a position."
+   },
+   {
+    "s": "M",
+    "t": "I thought staying neutral would look more balanced."
+   },
+   {
+    "s": "W",
+    "t": "Balance means considering the other side, not avoiding a conclusion. A strong essay says which side the evidence favors and why."
+   },
+   {
+    "s": "M",
+    "t": "So I should have argued one side and then answered the strongest objection?"
+   },
+   {
+    "s": "W",
+    "t": "Exactly. Your research was solid. Honestly, you had enough evidence to argue either way."
+   },
+   {
+    "s": "M",
+    "t": "Would it help to write a one-paragraph outline of my argument before the final essay?"
+   },
+   {
+    "s": "W",
+    "t": "Bring it to my office hours. I'd much rather see it early than read another catalog of facts."
+   }
+  ],
+  "questions": [
+   {
+    "q": "Why did the man receive a lower grade than he expected?",
+    "choices": [
+     "He failed to take a clear position.",
+     "He did not include enough evidence.",
+     "He misunderstood the time period.",
+     "He ignored the other side."
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "정답은 (A)입니다. 교수는 학생이 각 집단을 도운 정책을 나열했지만 입장을 정하지 않았다고 지적합니다. 조사는 탄탄했다고 칭찬했습니다."
+   },
+   {
+    "q": "What does the professor mean when she says, \"I'd much rather see it early than read another catalog of facts\"?",
+    "choices": [
+     "She is too busy to read outlines.",
+     "She will not accept late essays.",
+     "She thinks his facts were wrong.",
+     "She wants to check his argument before the final essay."
+    ],
+    "answer": 3,
+    "type": "화자 의도",
+    "explanation": "정답은 (D)입니다. 교수는 개요를 면담 시간에 가져오라고 하며 또 사실만 나열한 글을 읽고 싶지 않다고 말합니다. 기말 에세이 전에 주장을 미리 점검해 주겠다는 뜻입니다."
+   }
+  ],
+  "translation": "M: 그랜트 교수님, 중간 에세이 점수에 놀랐어요. 다 다뤘다고 생각했거든요.\nW: 다 다루긴 했죠. 그게 문제의 일부예요.\nM: 무슨 말씀인지 잘 모르겠어요.\nW: 문제는 뉴딜이 주로 노동자를 도왔는지 기업을 도왔는지였어요. 학생은 각 집단을 도운 정책을 나열했지만 입장을 정하지 않았어요.\nM: 중립을 지키는 게 더 균형 있어 보일 거라 생각했어요.\nW: 균형이란 반대편을 고려하는 거지 결론을 피하는 게 아니에요. 좋은 에세이는 증거가 어느 쪽을 지지하는지, 그리고 왜 그런지 말해요.\nM: 그럼 한쪽을 주장하고 가장 강한 반론에 답했어야 했나요?\nW: 바로 그거예요. 조사는 탄탄했어요. 솔직히 어느 쪽이든 주장할 만한 증거가 충분했어요.\nM: 기말 에세이 전에 주장을 한 문단 개요로 써 보면 도움이 될까요?\nW: 면담 시간에 가져와요. 또 사실 목록을 읽느니 미리 보는 게 훨씬 나아요."
+ },
+ {
+  "id": "lc-050",
+  "level": 4,
+  "topic": "취업 지원 센터: 인턴십과 계절 학기",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "W",
+    "t": "I got an internship offer from an engineering firm, but there's a complication."
+   },
+   {
+    "s": "M",
+    "t": "Congratulations first. What's the complication?"
+   },
+   {
+    "s": "W",
+    "t": "I was planning to take thermodynamics this summer so I could graduate on time. The internship runs the whole summer."
+   },
+   {
+    "s": "M",
+    "t": "Is thermodynamics offered in the fall?"
+   },
+   {
+    "s": "W",
+    "t": "Only in the spring, and that semester is already packed with required courses."
+   },
+   {
+    "s": "M",
+    "t": "Have you looked at whether another university offers it online? Some credits transfer."
+   },
+   {
+    "s": "W",
+    "t": "I hadn't thought of that. But would my department accept it?"
+   },
+   {
+    "s": "M",
+    "t": "You'd need approval from your advisor before enrolling, not after. I've seen students lose credits that way."
+   },
+   {
+    "s": "W",
+    "t": "And if it doesn't work out?"
+   },
+   {
+    "s": "M",
+    "t": "Then ask the firm whether you could start two weeks late. Companies are more flexible than students assume, especially for a top candidate."
+   },
+   {
+    "s": "W",
+    "t": "That's encouraging. I'll email my advisor this afternoon."
+   }
+  ],
+  "questions": [
+   {
+    "q": "Why is the woman unsure about accepting the internship?",
+    "choices": [
+     "The pay is too low.",
+     "Her advisor disapproves of it.",
+     "The firm is too far from campus.",
+     "It conflicts with a course she needs to graduate on time."
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "정답은 (D)입니다. 여자는 제때 졸업하려면 여름에 열역학을 들어야 하는데 인턴십이 여름 내내라고 말합니다. 지도교수의 반대는 언급되지 않습니다."
+   },
+   {
+    "q": "Why does the man mention students who lost credits?",
+    "choices": [
+     "To stress the importance of getting approval in advance",
+     "To discourage her from taking online courses",
+     "To criticize her department",
+     "To suggest she delay graduation"
+    ],
+    "answer": 0,
+    "type": "화자 의도",
+    "explanation": "정답은 (A)입니다. 남자는 등록 전에 승인을 받아야 한다고 말하면서 그렇지 않아 학점을 잃은 사례를 듭니다. 사전 승인이 중요하다는 점을 강조하려는 것입니다."
+   }
+  ],
+  "translation": "W: 엔지니어링 회사에서 인턴십 제안을 받았는데 복잡한 문제가 있어요.\nM: 우선 축하해요. 어떤 문제죠?\nW: 제때 졸업하려고 이번 여름에 열역학을 들을 계획이었어요. 인턴십은 여름 내내예요.\nM: 열역학이 가을에도 열리나요?\nW: 봄에만 열려요. 그리고 그 학기는 이미 필수 과목으로 꽉 찼어요.\nM: 다른 대학에서 온라인으로 여는지 알아봤어요? 학점이 인정되는 경우도 있어요.\nW: 그건 생각 못 했어요. 그런데 학과에서 인정해 줄까요?\nM: 등록하기 전에 지도교수 승인을 받아야 해요. 나중이 아니라요. 그렇게 해서 학점을 잃은 학생들을 봤어요.\nW: 만약 안 되면요?\nM: 그럼 회사에 2주 늦게 시작해도 되는지 물어보세요. 회사들은 학생들 생각보다 유연해요. 특히 우수한 지원자라면요.\nW: 힘이 되네요. 오늘 오후에 지도교수님께 이메일을 보낼게요."
+ },
+ {
+  "id": "lc-051",
+  "level": 4,
+  "topic": "주거 사무소: 기숙사 사감(RA) 지원",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "M",
+    "t": "Hi, I'm thinking about applying to be a resident assistant next year, and I have some questions."
+   },
+   {
+    "s": "W",
+    "t": "Sure. What would you like to know?"
+   },
+   {
+    "s": "M",
+    "t": "Mainly, how much time it takes. I'm a pre-med student, so my schedule is pretty heavy."
+   },
+   {
+    "s": "W",
+    "t": "Officially it's about fifteen hours a week, plus one weekend on duty each month. In September, though, it's closer to twenty-five."
+   },
+   {
+    "s": "M",
+    "t": "Because of move-in and orientation?"
+   },
+   {
+    "s": "W",
+    "t": "That, and first-year students tend to have the most problems early on. Roommate conflicts, homesickness, that sort of thing."
+   },
+   {
+    "s": "M",
+    "t": "The free room is a big reason I'm interested. It would really help with costs."
+   },
+   {
+    "s": "W",
+    "t": "It's a real benefit. But I'll be honest: the RAs who struggle are usually the ones who take it only for the room."
+   },
+   {
+    "s": "M",
+    "t": "I see. I did enjoy being a peer mentor in high school."
+   },
+   {
+    "s": "W",
+    "t": "Then mention that in your application. And talk to a current RA in your building. They'll tell you what the job is actually like."
+   }
+  ],
+  "questions": [
+   {
+    "q": "Why does the RA job take more time in September?",
+    "choices": [
+     "RAs must take a training course.",
+     "RAs help with course registration.",
+     "There are more weekend duties.",
+     "New students have the most problems then."
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "정답은 (D)입니다. 직원은 입주와 오리엔테이션 외에도 1학년들이 초반에 문제가 가장 많다고 말합니다. 그래서 9월에는 주 25시간 가까이 됩니다."
+   },
+   {
+    "q": "What does the woman imply about the man's interest in the job?",
+    "choices": [
+     "He should not apply because he is pre-med.",
+     "His high school experience is not relevant.",
+     "Wanting free housing alone may not be enough motivation.",
+     "He is likely to be hired."
+    ],
+    "answer": 2,
+    "type": "추론",
+    "explanation": "정답은 (C)입니다. 직원은 힘들어하는 RA가 대개 숙소 때문에만 지원한 사람들이라고 솔직하게 말합니다. 무료 숙소만으로는 동기가 부족할 수 있다는 뜻입니다."
+   }
+  ],
+  "translation": "M: 안녕하세요. 내년에 기숙사 사감(RA)에 지원하려고 하는데 몇 가지 궁금한 게 있어요.\nW: 네. 무엇이 궁금하세요?\nM: 주로 시간이 얼마나 드는지요. 의예과라서 일정이 꽤 빡빡하거든요.\nW: 공식적으로는 주 15시간 정도에 한 달에 주말 한 번 당직이에요. 그런데 9월에는 25시간 가까이 돼요.\nM: 입주랑 오리엔테이션 때문인가요?\nW: 그것도 있고, 1학년들이 초반에 문제가 제일 많아요. 룸메이트 갈등, 향수병 같은 거요.\nM: 무료 숙소가 관심을 갖는 큰 이유예요. 비용에 정말 도움이 될 것 같아요.\nW: 실제로 좋은 혜택이죠. 하지만 솔직히 말하면, 힘들어하는 RA는 대개 숙소 때문에만 지원한 사람들이에요.\nM: 그렇군요. 고등학교 때 또래 멘토 활동을 정말 즐겼어요.\nW: 그럼 지원서에 그걸 쓰세요. 그리고 지금 사는 건물의 RA와 이야기해 보세요. 실제로 어떤 일인지 알려 줄 거예요."
+ },
+ {
+  "id": "lc-052",
+  "level": 4,
+  "topic": "교환학생 사무소: 학점 인정",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "W",
+    "t": "I'm going to Spain next spring, and I want to make sure my courses there will count toward my major."
+   },
+   {
+    "s": "M",
+    "t": "Good that you're starting early. Which university?"
+   },
+   {
+    "s": "W",
+    "t": "The University of Granada. I found three economics courses I'd like to take."
+   },
+   {
+    "s": "M",
+    "t": "Let me check our database. Two of them have been approved before, so those should be fine."
+   },
+   {
+    "s": "W",
+    "t": "And the third? It's on development economics."
+   },
+   {
+    "s": "M",
+    "t": "That one's new. You'll need to send the syllabus to the economics department for review."
+   },
+   {
+    "s": "W",
+    "t": "The website only has a short course description in Spanish."
+   },
+   {
+    "s": "M",
+    "t": "That usually isn't enough. Departments want to see the reading list and how students are graded. Try emailing the professor in Granada directly."
+   },
+   {
+    "s": "W",
+    "t": "What if it isn't approved before I leave?"
+   },
+   {
+    "s": "M",
+    "t": "You could still take it, but it might only count as a general elective. I'd pick a backup course just in case."
+   }
+  ],
+  "questions": [
+   {
+    "q": "What is the problem with the third course?",
+    "choices": [
+     "It is taught only in Spanish.",
+     "It conflicts with another course.",
+     "It has not been reviewed by the department before.",
+     "It is not offered in the spring."
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "정답은 (C)입니다. 직원은 세 번째 수업은 처음이라 경제학과의 검토가 필요하다고 말합니다. 스페인어 설명은 자료가 부족하다는 점에서 언급될 뿐입니다."
+   },
+   {
+    "q": "What does the man suggest the woman do?",
+    "choices": [
+     "Drop the third course",
+     "Translate the course description herself",
+     "Choose a different university",
+     "Contact the professor in Granada for more information"
+    ],
+    "answer": 3,
+    "type": "다음 할 일",
+    "explanation": "정답은 (D)입니다. 직원은 학과가 읽기 목록과 평가 방식을 보고 싶어 하니 그라나다 교수에게 직접 이메일을 보내라고 합니다. 대체 과목은 만일을 대비한 추가 조언입니다."
+   }
+  ],
+  "translation": "W: 내년 봄에 스페인에 가는데, 거기서 듣는 수업이 전공 학점으로 인정되는지 확인하고 싶어요.\nM: 일찍 시작하셔서 다행이에요. 어느 대학이죠?\nW: 그라나다 대학교요. 듣고 싶은 경제학 수업을 세 개 찾았어요.\nM: 데이터베이스를 확인해 볼게요. 두 개는 전에 승인된 적이 있어서 괜찮을 거예요.\nW: 세 번째는요? 개발경제학 수업이에요.\nM: 그건 처음이네요. 경제학과에 강의계획서를 보내서 검토를 받아야 해요.\nW: 웹사이트에는 스페인어로 된 짧은 강의 설명밖에 없어요.\nM: 보통 그걸로는 부족해요. 학과에서는 읽기 목록과 평가 방식을 보고 싶어 해요. 그라나다 교수에게 직접 이메일을 보내 보세요.\nW: 출국 전에 승인이 안 나면요?\nM: 그래도 들을 수는 있지만 일반 선택 학점으로만 인정될 수도 있어요. 만일을 대비해 대체 과목을 골라 두세요."
+ },
+ {
+  "id": "lc-053",
+  "level": 4,
+  "topic": "학생회: 자전거 공유 제안",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "M",
+    "t": "So, what did the dean say about our bike-sharing proposal?"
+   },
+   {
+    "s": "W",
+    "t": "She liked the idea, but she's worried about cost. She asked who pays when bikes are stolen or damaged."
+   },
+   {
+    "s": "M",
+    "t": "We put a maintenance budget in the proposal."
+   },
+   {
+    "s": "W",
+    "t": "For repairs, yes. But not for replacing bikes. At another school, a third of the bikes disappeared in the first year."
+   },
+   {
+    "s": "M",
+    "t": "A third? That's a lot. Did they use the kind that unlock with a phone app?"
+   },
+   {
+    "s": "W",
+    "t": "No, they used simple combination locks. That's actually the point I want to make next time."
+   },
+   {
+    "s": "M",
+    "t": "Right. With the app, every ride is linked to a student account. Nobody's anonymous."
+   },
+   {
+    "s": "W",
+    "t": "The app system costs more up front, though. We'd have to cut the number of bikes from a hundred to sixty."
+   },
+   {
+    "s": "M",
+    "t": "Sixty bikes that stay around beat a hundred that vanish."
+   },
+   {
+    "s": "W",
+    "t": "That's a good line. Let's revise the numbers and get back to her by Friday."
+   }
+  ],
+  "questions": [
+   {
+    "q": "What was the dean's main concern about the proposal?",
+    "choices": [
+     "Students would not use the bikes.",
+     "The cost of replacing lost or damaged bikes",
+     "There is no place to park the bikes.",
+     "The phone app is difficult to use."
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "정답은 (B)입니다. 여자는 학장이 도난·파손 시 누가 비용을 내는지 물었다고 전합니다. 제안서에는 수리비만 있고 교체 비용이 없었습니다."
+   },
+   {
+    "q": "What does the man mean when he says, \"Sixty bikes that stay around beat a hundred that vanish\"?",
+    "choices": [
+     "The school needs more than a hundred bikes.",
+     "The app system is too expensive.",
+     "A smaller, more secure program is the better choice.",
+     "Most students prefer their own bikes."
+    ],
+    "answer": 2,
+    "type": "화자 의도",
+    "explanation": "정답은 (C)입니다. 남자는 앱 방식 때문에 자전거 수가 줄더라도 도난이 적다면 그게 낫다고 말합니다. 규모가 작아도 안전한 방식을 지지하는 것입니다."
+   }
+  ],
+  "translation": "M: 그래서 우리 자전거 공유 제안에 대해 학장님이 뭐라고 하셨어?\nW: 아이디어는 좋아하셨는데 비용을 걱정하셔. 자전거가 도난당하거나 망가지면 누가 내느냐고 물으셨어.\nM: 제안서에 유지보수 예산을 넣었잖아.\nW: 수리비는 넣었지. 그런데 교체 비용은 아니야. 다른 학교에서는 첫해에 자전거의 3분의 1이 사라졌대.\nM: 3분의 1? 많네. 거기는 휴대폰 앱으로 잠금 해제하는 방식이었어?\nW: 아니, 단순한 번호 자물쇠였어. 그게 바로 다음에 내가 강조하고 싶은 점이야.\nM: 맞아. 앱을 쓰면 모든 이용이 학생 계정과 연결돼. 아무도 익명이 아니지.\nW: 그런데 앱 방식은 초기 비용이 더 들어. 자전거를 100대에서 60대로 줄여야 할 거야.\nM: 남아 있는 60대가 사라지는 100대보다 낫지.\nW: 그 말 좋다. 숫자를 고쳐서 금요일까지 다시 학장님께 가자."
+ },
+ {
+  "id": "lc-054",
+  "level": 4,
+  "topic": "글쓰기 센터: 바꿔 쓰기와 표절",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "W",
+    "t": "I'm worried about my psychology paper. My friend said some of my sentences look too close to the original article."
+   },
+   {
+    "s": "M",
+    "t": "Let's take a look. Can you show me one?"
+   },
+   {
+    "s": "W",
+    "t": "This one. The article said 'sleep loss impairs memory consolidation,' and I wrote 'losing sleep damages the consolidation of memory.'"
+   },
+   {
+    "s": "M",
+    "t": "You cited it, which is good. But you mostly swapped words for synonyms. The structure is the same."
+   },
+   {
+    "s": "W",
+    "t": "So even with a citation, that's a problem?"
+   },
+   {
+    "s": "M",
+    "t": "Many instructors would call it patchwriting. It's not as serious as copying, but it shows you haven't fully processed the idea."
+   },
+   {
+    "s": "W",
+    "t": "How do I avoid it?"
+   },
+   {
+    "s": "M",
+    "t": "Read the passage, close the article, and explain the idea as if you were telling a friend. Then check the original for accuracy."
+   },
+   {
+    "s": "W",
+    "t": "Something like, 'when people don't sleep enough, their brains have trouble storing what they learned that day'?"
+   },
+   {
+    "s": "M",
+    "t": "Much better. That's your sentence now. Still cite it, of course."
+   },
+   {
+    "s": "W",
+    "t": "Okay. I'll go through the whole paper that way tonight."
+   }
+  ],
+  "questions": [
+   {
+    "q": "What is the problem with the woman's sentence?",
+    "choices": [
+     "She forgot to cite the source.",
+     "She kept the original structure and only changed some words.",
+     "She misunderstood the article.",
+     "She quoted the article without quotation marks."
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "정답은 (B)입니다. 튜터는 인용 표시는 했지만 단어만 동의어로 바꾸고 구조는 똑같다고 지적합니다. 출처 표시를 빠뜨린 것은 아닙니다."
+   },
+   {
+    "q": "Why does the man say, \"That's your sentence now\"?",
+    "choices": [
+     "To show that the new version reflects her own understanding",
+     "To tell her she no longer needs a citation",
+     "To suggest she should quote the article directly",
+     "To criticize her first draft"
+    ],
+    "answer": 0,
+    "type": "화자 의도",
+    "explanation": "정답은 (A)입니다. 여자가 원문을 보지 않고 자기 말로 설명하자 튜터는 이제 학생의 문장이라고 말합니다. 바로 뒤에 인용 표시는 계속 하라고 덧붙이므로 출처가 필요 없다는 뜻은 아닙니다."
+   }
+  ],
+  "translation": "W: 심리학 리포트가 걱정돼요. 친구가 제 문장 몇 개가 원래 논문과 너무 비슷해 보인다고 했어요.\nM: 같이 봐요. 하나 보여 줄래요?\nW: 이거요. 논문에는 '수면 부족은 기억 공고화를 손상시킨다'라고 돼 있고, 저는 '잠을 잃는 것은 기억의 공고화를 해친다'라고 썼어요.\nM: 인용 표시를 한 건 좋아요. 하지만 대부분 단어만 동의어로 바꿨어요. 구조가 똑같아요.\nW: 그럼 인용 표시를 해도 문제가 되나요?\nM: 많은 강사들이 이걸 '짜깁기 쓰기'라고 불러요. 베끼는 것만큼 심각하진 않지만 생각을 충분히 소화하지 않았다는 걸 보여 줘요.\nW: 어떻게 피할 수 있어요?\nM: 단락을 읽고, 논문을 덮고, 친구에게 말하듯 설명해 보세요. 그다음 원문과 비교해 정확한지 확인하고요.\nW: '사람들이 잠을 충분히 자지 못하면 뇌가 그날 배운 것을 저장하는 데 어려움을 겪는다' 같은 식으로요?\nM: 훨씬 나아요. 이제 그건 학생의 문장이에요. 물론 인용 표시는 계속 해야 하고요.\nW: 알겠어요. 오늘 밤 리포트 전체를 그렇게 고쳐 볼게요."
+ },
+ {
+  "id": "lc-055",
+  "level": 5,
+  "topic": "교수 면담: 설문 결과 해석",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "M",
+    "t": "Professor Ruiz, I finished analyzing the survey data for my sociology project, but I'm not sure how to interpret one result."
+   },
+   {
+    "s": "W",
+    "t": "Go ahead."
+   },
+   {
+    "s": "M",
+    "t": "Students who live off campus reported feeling less connected to the university. I was going to argue that commuting causes isolation."
+   },
+   {
+    "s": "W",
+    "t": "That's one possibility. But think about who chooses to live off campus in the first place."
+   },
+   {
+    "s": "M",
+    "t": "Older students, maybe. Students who work or have families."
+   },
+   {
+    "s": "W",
+    "t": "Right. So their weaker connection might come from those commitments, not from the commute itself."
+   },
+   {
+    "s": "M",
+    "t": "So the relationship could be real but not causal."
+   },
+   {
+    "s": "W",
+    "t": "Exactly. Did your survey ask about age or work hours?"
+   },
+   {
+    "s": "M",
+    "t": "It asked about work hours, actually. I just haven't used that question yet."
+   },
+   {
+    "s": "W",
+    "t": "Then compare off-campus students who work a lot with those who don't. If the gap mostly disappears, that tells you something."
+   },
+   {
+    "s": "M",
+    "t": "And if it doesn't, my original idea might hold up after all."
+   },
+   {
+    "s": "W",
+    "t": "Either way, your paper gets stronger. You'll have tested your claim instead of just asserting it."
+   }
+  ],
+  "questions": [
+   {
+    "q": "What is the professor's main point about the student's interpretation?",
+    "choices": [
+     "The survey sample is too small.",
+     "Commuting has no effect on students.",
+     "Off-campus students answered dishonestly.",
+     "Another factor may explain the connection he found."
+    ],
+    "answer": 3,
+    "type": "주제·목적",
+    "explanation": "정답은 (D)입니다. 교수는 캠퍼스 밖에 사는 학생들의 일이나 가족 같은 책임이 유대감 차이를 설명할 수 있다고 지적합니다. 상관관계를 곧바로 인과로 보지 말라는 것이 핵심입니다."
+   },
+   {
+    "q": "Why does the professor say, \"Either way, your paper gets stronger\"?",
+    "choices": [
+     "To suggest that the result of the comparison does not matter to the grade",
+     "To encourage him to test his claim regardless of the outcome",
+     "To tell him his original idea is correct",
+     "To point out that the paper is already finished"
+    ],
+    "answer": 1,
+    "type": "화자 의도",
+    "explanation": "정답은 (B)입니다. 교수는 비교 결과가 어떻게 나오든 주장을 검증하게 되므로 리포트가 탄탄해진다고 말합니다. 결과와 상관없이 분석을 해 보라고 격려하는 것입니다."
+   }
+  ],
+  "translation": "M: 루이스 교수님, 사회학 프로젝트 설문 자료 분석을 끝냈는데 한 결과를 어떻게 해석해야 할지 모르겠어요.\nW: 말해 보세요.\nM: 캠퍼스 밖에 사는 학생들이 대학과의 유대감이 더 낮다고 응답했어요. 통학이 고립을 낳는다고 주장하려고 했어요.\nW: 그것도 한 가지 가능성이죠. 그런데 애초에 누가 캠퍼스 밖에 살기로 선택하는지 생각해 보세요.\nM: 나이 많은 학생들이겠죠. 일을 하거나 가족이 있는 학생들이요.\nW: 맞아요. 그러니 유대감이 약한 건 통학 자체가 아니라 그런 책임들 때문일 수도 있어요.\nM: 그럼 관계는 실재하지만 인과는 아닐 수 있다는 거네요.\nW: 그렇죠. 설문에서 나이나 근무 시간을 물었나요?\nM: 사실 근무 시간은 물었어요. 아직 그 문항을 쓰지 않았을 뿐이에요.\nW: 그럼 캠퍼스 밖에 사는 학생 중 일을 많이 하는 학생과 그렇지 않은 학생을 비교해 보세요. 차이가 대부분 사라지면 의미 있는 결과죠.\nM: 만약 안 사라지면 제 원래 생각이 결국 맞을 수도 있겠네요.\nW: 어느 쪽이든 리포트는 더 탄탄해져요. 주장을 그냥 내세우는 대신 검증한 셈이니까요."
+ },
+ {
+  "id": "lc-056",
+  "level": 5,
+  "topic": "연구 윤리 심의: 인터뷰 연구 승인",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "W",
+    "t": "Dr. Okafor, I want to interview international students about their experiences with campus mental health services. Do I really need ethics board approval for a class project?"
+   },
+   {
+    "s": "M",
+    "t": "For most class projects, no. But you're planning to present this at the undergraduate research conference, right?"
+   },
+   {
+    "s": "W",
+    "t": "Yes, if it goes well."
+   },
+   {
+    "s": "M",
+    "t": "Once results are shared outside the classroom, it counts as research. And mental health is considered a sensitive topic, so you'd go through full review, not the quick version."
+   },
+   {
+    "s": "W",
+    "t": "How long does full review take?"
+   },
+   {
+    "s": "M",
+    "t": "The board meets once a month, and applications often come back with revisions. Six weeks wouldn't be unusual."
+   },
+   {
+    "s": "W",
+    "t": "The conference deadline is in eight weeks. That leaves almost no time for the interviews."
+   },
+   {
+    "s": "M",
+    "t": "There's another option. You could ask about their experiences with academic advising instead. It's still meaningful, and it would likely qualify for expedited review."
+   },
+   {
+    "s": "W",
+    "t": "But the mental health question is the reason I got interested in this."
+   },
+   {
+    "s": "M",
+    "t": "I understand. Then the honest answer is that it may not be ready for this conference. It could make an excellent senior thesis next year, though, with proper time."
+   },
+   {
+    "s": "W",
+    "t": "Let me think about which matters more to me. Could I draft the application anyway, just to see what's involved?"
+   },
+   {
+    "s": "M",
+    "t": "Absolutely. Send it to me first, and I'll point out what the board usually questions."
+   }
+  ],
+  "questions": [
+   {
+    "q": "Why would the woman's project require full ethics review?",
+    "choices": [
+     "She is interviewing professors.",
+     "The project is part of a senior thesis.",
+     "She plans to pay the participants.",
+     "The results will be shared publicly and the topic is sensitive."
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "정답은 (D)입니다. 교수는 결과가 강의실 밖에서 발표되면 연구로 간주되고, 정신 건강이 민감한 주제라 정식 심의가 필요하다고 설명합니다. 졸업 논문은 내년의 가능성으로만 언급됩니다."
+   },
+   {
+    "q": "What can be inferred about the professor's suggestion to study academic advising?",
+    "choices": [
+     "He thinks mental health is not a serious issue.",
+     "He wants her to change her major.",
+     "He is offering a way to meet the conference deadline.",
+     "He believes the board will reject any project on international students."
+    ],
+    "answer": 2,
+    "type": "추론",
+    "explanation": "정답은 (C)입니다. 학업 상담 주제는 신속 심의 대상이 될 가능성이 크다고 말합니다. 정식 심의 6주와 학회 마감 8주 사이의 시간 문제를 해결하려는 제안입니다."
+   }
+  ],
+  "translation": "W: 오카포 교수님, 유학생들의 교내 정신 건강 서비스 이용 경험을 인터뷰하고 싶어요. 수업 프로젝트인데도 윤리 심의 승인이 꼭 필요한가요?\nM: 대부분의 수업 프로젝트는 아니에요. 그런데 학부 연구 학회에서 발표할 계획이죠?\nW: 네, 잘되면요.\nM: 결과가 강의실 밖으로 공유되면 연구로 간주돼요. 그리고 정신 건강은 민감한 주제라서 간단 심의가 아니라 정식 심의를 거쳐야 해요.\nW: 정식 심의는 얼마나 걸려요?\nM: 위원회가 한 달에 한 번 모이고, 신청서가 수정 요청과 함께 돌아오는 일이 많아요. 6주도 드문 일이 아니에요.\nW: 학회 마감이 8주 뒤예요. 그러면 인터뷰할 시간이 거의 없네요.\nM: 다른 방법도 있어요. 대신 학업 상담 경험에 대해 물어볼 수 있어요. 여전히 의미 있고, 신속 심의 대상이 될 가능성이 커요.\nW: 하지만 제가 이 주제에 관심을 갖게 된 이유가 정신 건강 문제인데요.\nM: 이해해요. 그럼 솔직히 말해 이번 학회에는 준비가 어려울 수 있어요. 하지만 충분한 시간을 들이면 내년에 훌륭한 졸업 논문이 될 수 있어요.\nW: 제게 뭐가 더 중요한지 생각해 볼게요. 어떤 과정인지 알아보게 일단 신청서 초안을 써 봐도 될까요?\nM: 물론이죠. 먼저 저에게 보내면 위원회가 주로 문제 삼는 부분을 짚어 줄게요."
+ },
+ {
+  "id": "lc-057",
+  "level": 5,
+  "topic": "박물관 인턴: 전시 설명문 논쟁",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "M",
+    "t": "Ms. Chen, I finished the draft labels for the textile exhibit, but I'm stuck on the one for the wedding blanket."
+   },
+   {
+    "s": "W",
+    "t": "What's the issue?"
+   },
+   {
+    "s": "M",
+    "t": "The museum's old records say it was made by an unknown weaver in the eighteen nineties. But a family visited last month and said it was made by their great-grandmother."
+   },
+   {
+    "s": "W",
+    "t": "Did they bring anything to support that?"
+   },
+   {
+    "s": "M",
+    "t": "A family story, and a photograph of a woman standing near a loom. The blanket isn't clearly visible in it."
+   },
+   {
+    "s": "W",
+    "t": "So the evidence is suggestive but not conclusive."
+   },
+   {
+    "s": "M",
+    "t": "Right. If I write 'unknown weaver,' I'm ignoring them. If I name her, I might be stating something we can't prove."
+   },
+   {
+    "s": "W",
+    "t": "Labels don't have to choose one version. We often write something like 'attributed by the maker's descendants to,' followed by the name."
+   },
+   {
+    "s": "M",
+    "t": "That sounds fair. It's honest about where the information comes from."
+   },
+   {
+    "s": "W",
+    "t": "And it acknowledges that family knowledge is a kind of evidence, even if it isn't written down. Museums have overlooked that for a long time."
+   },
+   {
+    "s": "M",
+    "t": "Should I contact the family before the exhibit opens?"
+   },
+   {
+    "s": "W",
+    "t": "Yes. Show them the wording. If they're comfortable with it, we'll invite them to the opening."
+   }
+  ],
+  "questions": [
+   {
+    "q": "Why is the man having trouble writing the label?",
+    "choices": [
+     "The blanket was damaged.",
+     "The family wants the blanket returned.",
+     "The records and the family's account disagree about the maker.",
+     "He cannot read the old records."
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "정답은 (C)입니다. 박물관 기록은 무명의 직조공이라고 하는데 한 가족은 증조할머니가 만들었다고 주장합니다. 남자는 어느 쪽으로 써야 할지 고민합니다."
+   },
+   {
+    "q": "What is the woman's attitude toward family knowledge as evidence?",
+    "choices": [
+     "She believes it deserves recognition even without written proof.",
+     "She thinks it is unreliable and should be ignored.",
+     "She thinks it should replace museum records.",
+     "She considers it useful only with photographs."
+    ],
+    "answer": 0,
+    "type": "추론",
+    "explanation": "정답은 (A)입니다. 여자는 기록되지 않았더라도 집안의 지식이 일종의 증거이며 박물관들이 오랫동안 간과해 왔다고 말합니다. 그렇다고 기록을 대체해야 한다고 하지는 않습니다."
+   }
+  ],
+  "translation": "M: 첸 선생님, 직물 전시 설명문 초안을 끝냈는데 혼례용 담요 설명에서 막혔어요.\nW: 무엇이 문제예요?\nM: 박물관의 옛 기록에는 1890년대 무명의 직조공이 만들었다고 돼 있어요. 그런데 지난달 한 가족이 와서 증조할머니가 만든 것이라고 했어요.\nW: 그걸 뒷받침할 만한 걸 가져왔나요?\nM: 집안에 전해지는 이야기와 베틀 옆에 서 있는 여성의 사진이요. 사진에서 담요가 뚜렷이 보이지는 않아요.\nW: 그럼 증거가 암시적이긴 하지만 결정적이진 않네요.\nM: 네. '무명의 직조공'이라고 쓰면 그 가족을 무시하는 거고, 이름을 쓰면 증명할 수 없는 걸 단정하는 걸 수도 있어요.\nW: 설명문이 한 가지만 골라야 하는 건 아니에요. 우리는 종종 '제작자의 후손들은 누구의 작품으로 본다'라고 쓰고 이름을 붙여요.\nM: 공정하게 들리네요. 정보가 어디서 왔는지 솔직하게 밝히는 거니까요.\nW: 그리고 기록되지 않았더라도 집안의 지식 역시 일종의 증거라는 걸 인정하는 거죠. 박물관들은 오랫동안 그걸 간과해 왔어요.\nM: 전시가 열리기 전에 그 가족에게 연락해야 할까요?\nW: 네. 문구를 보여 드리세요. 괜찮다고 하시면 개막식에 초대할 거예요."
+ },
+ {
+  "id": "lc-058",
+  "level": 5,
+  "topic": "교수 면담: 개별 연구 과목 제안",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "W",
+    "t": "Professor Lindqvist, I'd like to propose an independent study next semester on urban heat islands."
+   },
+   {
+    "s": "M",
+    "t": "Interesting. What would you do that our climate course doesn't already cover?"
+   },
+   {
+    "s": "W",
+    "t": "I want to collect my own temperature data around campus. Parking lots, the quad, the area near the new green roof."
+   },
+   {
+    "s": "M",
+    "t": "Fieldwork is good. What's your research question, though? 'Parking lots are hotter than grass' isn't going to surprise anyone."
+   },
+   {
+    "s": "W",
+    "t": "Fair. Maybe whether the green roof actually cools the surrounding sidewalk, not just the roof itself."
+   },
+   {
+    "s": "M",
+    "t": "Now that's a question. The university spent a lot on that roof, and nobody has measured its effect at street level."
+   },
+   {
+    "s": "W",
+    "t": "Would one semester be enough?"
+   },
+   {
+    "s": "M",
+    "t": "That's my concern. Spring here goes from freezing to mild. You'd miss the hot months when the effect is strongest."
+   },
+   {
+    "s": "W",
+    "t": "I'm staying for a summer research job anyway. Could I keep collecting data through July?"
+   },
+   {
+    "s": "M",
+    "t": "If you do, I'd structure it so the spring credit covers designing the study and a pilot. The real analysis would happen over the summer."
+   },
+   {
+    "s": "W",
+    "t": "That works. Should I write up a formal proposal?"
+   },
+   {
+    "s": "M",
+    "t": "Two pages, with your question, methods, and a timeline. And contact facilities about getting access to the roof before you promise anything."
+   }
+  ],
+  "questions": [
+   {
+    "q": "Why does the professor say, \"'Parking lots are hotter than grass' isn't going to surprise anyone\"?",
+    "choices": [
+     "To push her to develop a more original research question",
+     "To suggest that she choose a different topic",
+     "To point out that her data will be inaccurate",
+     "To show that he already knows the results"
+    ],
+    "answer": 0,
+    "type": "화자 의도",
+    "explanation": "정답은 (A)입니다. 교수는 너무 뻔한 결론이 나올 질문이라며 연구 질문이 무엇인지 되묻습니다. 그러자 학생이 옥상 정원이 주변 보도를 식히는지라는 더 독창적인 질문을 내놓습니다."
+   },
+   {
+    "q": "What is the professor's concern about doing the project in one semester?",
+    "choices": [
+     "The equipment is too expensive.",
+     "She lacks experience with fieldwork.",
+     "The green roof is closed to students.",
+     "The weather during spring is not hot enough to show the full effect."
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "정답은 (D)입니다. 교수는 봄 날씨가 영하에서 온화한 정도라 효과가 가장 큰 더운 달을 놓친다고 걱정합니다. 그래서 여름까지 자료 수집을 이어 가는 방식을 제안합니다."
+   }
+  ],
+  "translation": "W: 린드크비스트 교수님, 다음 학기에 도시 열섬 현상에 관한 개별 연구 과목을 제안하고 싶어요.\nM: 흥미롭네요. 기후 수업에서 이미 다루지 않는 무엇을 할 건가요?\nW: 캠퍼스 곳곳에서 직접 기온 자료를 모으고 싶어요. 주차장, 중앙 잔디밭, 새 옥상 정원 근처요.\nM: 현장 조사는 좋아요. 그런데 연구 질문이 뭔가요? '주차장이 잔디보다 덥다'는 누구도 놀라게 하지 않을 거예요.\nW: 맞는 말씀이에요. 옥상 자체만이 아니라 주변 보도까지 실제로 식히는지를 보면 어떨까요.\nM: 그게 바로 질문이죠. 학교가 그 옥상에 많은 돈을 들였는데 거리 높이에서 효과를 측정한 사람은 없어요.\nW: 한 학기로 충분할까요?\nM: 그게 걱정이에요. 여기 봄은 영하에서 온화한 날씨로 바뀌어요. 효과가 가장 큰 더운 달을 놓치게 될 거예요.\nW: 어차피 여름 연구 아르바이트로 남아 있을 거예요. 7월까지 계속 자료를 모아도 될까요?\nM: 그렇다면 봄 학기 학점은 연구 설계와 예비 조사로 하고, 본격적인 분석은 여름에 하도록 구성하겠어요.\nW: 좋아요. 정식 제안서를 써야 할까요?\nM: 두 쪽으로, 질문과 방법, 일정을 넣어요. 그리고 무엇을 약속하기 전에 시설과에 옥상 출입 허가부터 문의하세요."
+ },
+ {
+  "id": "lc-059",
+  "level": 5,
+  "topic": "지속가능성 사무소: 퇴비화 사업 비용",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "M",
+    "t": "Thanks for meeting with me. I'm writing about the composting program for the student newspaper, and the numbers confuse me."
+   },
+   {
+    "s": "W",
+    "t": "Happy to help. Which numbers?"
+   },
+   {
+    "s": "M",
+    "t": "The program costs about ninety thousand dollars a year, but it only saves about thirty thousand in landfill fees. Critics say it's losing money."
+   },
+   {
+    "s": "W",
+    "t": "On that narrow comparison, they're right. But landfill fees aren't the only thing it affects."
+   },
+   {
+    "s": "M",
+    "t": "What else is there?"
+   },
+   {
+    "s": "W",
+    "t": "The compost goes to the grounds crew. Before the program, they bought soil and fertilizer for about forty thousand a year."
+   },
+   {
+    "s": "M",
+    "t": "So that's seventy thousand in total savings. Still less than ninety."
+   },
+   {
+    "s": "W",
+    "t": "It is. I won't pretend it pays for itself. The remaining gap is what the university decided it was willing to spend to meet its emissions goals."
+   },
+   {
+    "s": "M",
+    "t": "That's more candid than I expected."
+   },
+   {
+    "s": "W",
+    "t": "The program's critics aren't wrong to ask questions. I'd just like the article to compare the full costs and benefits, not one line of the budget."
+   },
+   {
+    "s": "M",
+    "t": "Could you send me the grounds crew figures? My editor will want a source."
+   },
+   {
+    "s": "W",
+    "t": "I'll email you the budget reports this afternoon."
+   }
+  ],
+  "questions": [
+   {
+    "q": "According to the woman, how much does the program save in total each year?",
+    "choices": [
+     "Thirty thousand dollars",
+     "Seventy thousand dollars",
+     "Forty thousand dollars",
+     "Ninety thousand dollars"
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "정답은 (B)입니다. 매립 비용 3만 달러에 조경팀의 흙·비료 구입비 4만 달러 절감을 더하면 7만 달러입니다. 9만 달러는 연간 사업비입니다."
+   },
+   {
+    "q": "What does the man mean when he says, \"That's more candid than I expected\"?",
+    "choices": [
+     "He thinks the woman is hiding information.",
+     "He is surprised she admits the program does not fully pay for itself.",
+     "He believes the critics are wrong.",
+     "He finds the budget too complicated."
+    ],
+    "answer": 1,
+    "type": "화자 의도",
+    "explanation": "정답은 (B)입니다. 여자가 사업이 비용을 스스로 충당하지 못한다고 인정하자 남자가 이 말을 합니다. 담당자가 약점을 솔직하게 인정해서 놀랐다는 뜻입니다."
+   }
+  ],
+  "translation": "M: 만나 주셔서 감사합니다. 학생 신문에 퇴비화 사업에 관한 기사를 쓰고 있는데 숫자가 헷갈려서요.\nW: 기꺼이 도울게요. 어떤 숫자요?\nM: 사업비가 연간 9만 달러쯤인데 매립 비용 절감은 3만 달러 정도예요. 비판하는 사람들은 적자라고 해요.\nW: 그 좁은 비교로는 맞아요. 하지만 매립 비용만 영향을 받는 게 아니에요.\nM: 다른 건 뭐가 있죠?\nW: 퇴비는 조경팀으로 가요. 사업 전에는 조경팀이 흙과 비료를 사는 데 연간 4만 달러쯤 썼어요.\nM: 그럼 총 절감액은 7만 달러네요. 여전히 9만보다 적어요.\nW: 맞아요. 비용을 스스로 충당한다고 둘러대지 않을게요. 나머지 차이는 대학이 탄소 배출 목표를 맞추려고 쓰기로 결정한 금액이에요.\nM: 생각보다 솔직하시네요.\nW: 비판하는 사람들이 질문하는 건 잘못이 아니에요. 다만 기사가 예산 한 줄이 아니라 전체 비용과 편익을 비교했으면 해요.\nM: 조경팀 수치를 보내 주실 수 있나요? 편집장이 출처를 원할 거예요.\nW: 오늘 오후에 예산 보고서를 이메일로 보내 드릴게요."
+ },
+ {
+  "id": "lc-060",
+  "level": 5,
+  "topic": "조교 회의: 채점 기준 불일치",
+  "speakers": {
+   "M": "male",
+   "W": "female"
+  },
+  "script": [
+   {
+    "s": "W",
+    "t": "Marcus, can we talk about the essay grades? Students in my section are comparing scores with students in yours."
+   },
+   {
+    "s": "M",
+    "t": "Let me guess. My section's average is higher."
+   },
+   {
+    "s": "W",
+    "t": "By almost eight points. A few of my students say they'd have gotten a B plus in your section instead of a B minus."
+   },
+   {
+    "s": "M",
+    "t": "We used the same rubric, though."
+   },
+   {
+    "s": "W",
+    "t": "We did, but we may be reading the 'analysis' category differently. I only gave full marks when students explained why the evidence supports their claim."
+   },
+   {
+    "s": "M",
+    "t": "And I gave full marks if they used relevant evidence at all. I suppose that's a big difference."
+   },
+   {
+    "s": "W",
+    "t": "Honestly, I think my reading is closer to what Professor Adams intended. But I don't want to be the one who lowers everyone's grades."
+   },
+   {
+    "s": "M",
+    "t": "Nor should you. The essays are already returned, so regrading downward would be unfair."
+   },
+   {
+    "s": "W",
+    "t": "Agreed. What if I regrade only my section, applying your standard where it would raise a score?"
+   },
+   {
+    "s": "M",
+    "t": "That fixes the unfairness for this essay. But we still need to agree before the next one."
+   },
+   {
+    "s": "W",
+    "t": "Let's bring three sample essays to Professor Adams and grade them together at the start of the meeting."
+   },
+   {
+    "s": "M",
+    "t": "Good. That way the standard comes from her, not from either of us."
+   }
+  ],
+  "questions": [
+   {
+    "q": "What caused the difference in grades between the two sections?",
+    "choices": [
+     "The TAs used different rubrics.",
+     "The TAs interpreted one rubric category differently.",
+     "One section wrote a different essay.",
+     "One TA graded late submissions more harshly."
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "정답은 (B)입니다. 두 조교는 같은 기준표를 썼지만 '분석' 항목을 다르게 해석했습니다. 여자는 설명까지 요구했고 남자는 관련 증거만 있으면 만점을 줬습니다."
+   },
+   {
+    "q": "What will the TAs most likely do before the next essay?",
+    "choices": [
+     "Grade sample essays with the professor to agree on a standard",
+     "Ask students to compare their scores",
+     "Lower the grades in the man's section",
+     "Write a new rubric on their own"
+    ],
+    "answer": 0,
+    "type": "다음 할 일",
+    "explanation": "정답은 (A)입니다. 여자는 샘플 에세이 세 편을 교수에게 가져가 함께 채점하자고 하고 남자도 동의합니다. 점수를 낮추는 재채점은 불공정하다고 둘 다 반대했습니다."
+   }
+  ],
+  "translation": "W: 마커스, 에세이 점수 얘기 좀 할 수 있을까? 내 분반 학생들이 네 분반 학생들과 점수를 비교하고 있어.\nM: 맞혀 볼게. 우리 분반 평균이 더 높지?\nW: 거의 8점 차이야. 몇몇 학생은 네 분반이었으면 B마이너스가 아니라 B플러스를 받았을 거래.\nM: 그래도 같은 채점 기준표를 썼잖아.\nW: 그렇긴 한데 '분석' 항목을 다르게 읽은 것 같아. 나는 증거가 왜 주장을 뒷받침하는지 설명했을 때만 만점을 줬어.\nM: 나는 관련 있는 증거를 쓰기만 하면 만점을 줬어. 그게 큰 차이겠네.\nW: 솔직히 내 해석이 애덤스 교수님 의도에 더 가깝다고 생각해. 그렇다고 내가 모두의 점수를 깎는 사람이 되고 싶진 않아.\nM: 그래서도 안 되지. 에세이를 이미 돌려줬으니 점수를 낮추는 재채점은 불공정해.\nW: 동의해. 내 분반만 다시 채점하면서 네 기준을 적용해 점수가 오르는 경우만 반영하면 어때?\nM: 그러면 이번 에세이의 불공정은 해결되겠다. 그래도 다음 에세이 전에는 합의해야 해.\nW: 샘플 에세이 세 편을 애덤스 교수님께 가져가서 회의 시작할 때 같이 채점해 보자.\nM: 좋아. 그러면 기준이 우리 중 누구가 아니라 교수님에게서 나오는 거니까."
+ }
+]

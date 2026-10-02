@@ -1,0 +1,362 @@
+[
+ {
+  "id": "we-021",
+  "level": 1,
+  "situation": "You left your blue jacket in Room 204 of the science building after your biology class yesterday. When you went back this morning, it was not there.",
+  "to": "Building manager, Mr. Collins",
+  "tasks": [
+   "explain what you lost",
+   "describe the item",
+   "ask how you can get it back"
+  ],
+  "sample": "Dear Mr. Collins,\n\nMy name is Minji Park, and I am a first-year student. Yesterday I had a biology class in Room 204 of the science building, and I think I left my jacket there. I went back this morning to look for it, but it was not in the room.\n\nThe jacket is dark blue with a white zipper. It has a small hood, and there is a green key chain in the left pocket. My student ID card is also in the right pocket, so it is very important to me.\n\nCould you please tell me if someone brought it to a lost-and-found box in the building? If so, when can I come to pick it up? I am free every afternoon after two o'clock.\n\nThank you very much for your help.\n\nSincerely,\nMinji Park",
+  "sample_ko": "콜린스 관리자님께,\n\n저는 1학년 박민지입니다. 어제 과학관 204호에서 생물학 수업을 들었는데 그곳에 재킷을 두고 온 것 같습니다. 오늘 아침에 다시 가 보았지만 강의실에 없었습니다.\n\n재킷은 남색이고 흰색 지퍼가 달려 있습니다. 작은 모자가 있고, 왼쪽 주머니에 초록색 열쇠고리가 있습니다. 오른쪽 주머니에는 학생증도 들어 있어서 저에게 아주 중요합니다.\n\n혹시 누군가 건물의 분실물 보관함에 가져다 놓았는지 알려 주실 수 있을까요? 그렇다면 언제 찾으러 가면 될까요? 저는 매일 오후 2시 이후에 시간이 됩니다.\n\n도와주셔서 정말 감사합니다.\n\n박민지 드림",
+  "tips": [
+   "물건 묘사는 색 → 모양 → 특징 순서로: It is dark blue with ~. It has ~.",
+   "요청은 Could you please tell me if ~? 로 공손하게 시작하세요.",
+   "가능한 시간(I am free every afternoon after ~)을 적으면 상대가 답하기 쉬워집니다."
+  ]
+ },
+ {
+  "id": "we-022",
+  "level": 1,
+  "situation": "Last weekend you stayed with a local host family for two days as part of your university's cultural exchange program. They cooked for you and showed you around their town.",
+  "to": "Your host family, the Millers",
+  "tasks": [
+   "thank them for the visit",
+   "describe your favorite moment",
+   "invite them to visit your campus"
+  ],
+  "sample": "Dear Mr. and Mrs. Miller,\n\nThank you so much for welcoming me into your home last weekend. It was my first time staying with an American family, and I felt very comfortable from the first minute.\n\nMy favorite moment was Saturday evening. We made pizza together in your kitchen, and your son Tommy taught me how to throw the dough in the air. Mine fell on the floor twice, but we all laughed a lot. I also loved the walk by the lake on Sunday morning.\n\nI would like to show you my campus, too. Our international festival is on October 20, and there will be food and music from many countries. Would you like to come? I can give you a tour of the library and the student center.\n\nThank you again for everything.\n\nWarm wishes,\nSeojun Lee",
+  "sample_ko": "밀러 씨 부부께,\n\n지난 주말 저를 댁에 맞아 주셔서 정말 감사합니다. 미국 가정에서 지내는 것은 처음이었는데 첫 순간부터 아주 편안했습니다.\n\n가장 좋았던 순간은 토요일 저녁이었습니다. 부엌에서 함께 피자를 만들었는데, 아드님 토미가 반죽을 공중에 던지는 법을 가르쳐 주었지요. 제 반죽은 두 번이나 바닥에 떨어졌지만 다 같이 많이 웃었습니다. 일요일 아침 호숫가 산책도 정말 좋았습니다.\n\n저도 저희 캠퍼스를 보여 드리고 싶습니다. 10월 20일에 국제 축제가 열리는데 여러 나라의 음식과 음악이 있을 거예요. 오시겠어요? 도서관과 학생회관을 안내해 드릴 수 있습니다.\n\n모든 것에 다시 한번 감사드립니다.\n\n따뜻한 마음을 담아, 이서준",
+  "tips": [
+   "감사 표현: Thank you so much for ~ing / I felt very comfortable.",
+   "'가장 좋았던 순간'은 구체적인 장면 하나(피자 만들기)를 골라 짧은 이야기로 쓰면 생생합니다.",
+   "초대는 날짜 + 행사 + Would you like to come? 세 가지를 갖추세요."
+  ]
+ },
+ {
+  "id": "we-023",
+  "level": 1,
+  "situation": "You ordered a textbook for your statistics class from the campus bookstore website. When the package arrived, it was the wrong edition, and your class starts using the book next Monday.",
+  "to": "Campus bookstore customer service",
+  "tasks": [
+   "explain what you ordered",
+   "describe the problem",
+   "ask what you should do"
+  ],
+  "sample": "Dear Bookstore Staff,\n\nI am writing about an order I made on your website last week. I ordered the textbook Introduction to Statistics for my class, STAT 101. My order number is 48213.\n\nThe package arrived yesterday, but the book is the third edition. My professor told us to buy the fifth edition, because the chapters and the practice problems are different. I have not opened the plastic cover, so the book is still new.\n\nOur class will start using the book next Monday. Can I exchange it for the correct edition at the store this week? Or do I need to send it back by mail? If the fifth edition is not in stock, please let me know how long it will take to arrive.\n\nThank you for your help.\n\nBest regards,\nJiwoo Kim",
+  "sample_ko": "서점 직원분들께,\n\n지난주 웹사이트에서 한 주문에 대해 연락드립니다. STAT 101 수업을 위해 『통계학 입문』 교재를 주문했고, 주문 번호는 48213입니다.\n\n어제 소포가 도착했는데 책이 3판이었습니다. 교수님께서는 단원과 연습 문제가 다르기 때문에 5판을 사라고 하셨습니다. 비닐 포장을 뜯지 않아서 책은 아직 새것입니다.\n\n수업에서 다음 주 월요일부터 책을 쓰기 시작합니다. 이번 주에 매장에서 올바른 판으로 교환할 수 있을까요? 아니면 우편으로 돌려보내야 하나요? 5판 재고가 없다면 도착까지 얼마나 걸리는지 알려 주세요.\n\n도와주셔서 감사합니다.\n\n김지우 드림",
+  "tips": [
+   "주문 문의는 첫 문단에 주문 번호·상품명을 넣으세요: My order number is ~.",
+   "문제 설명 뒤에 '아직 새것'처럼 상대가 교환을 쉽게 받아 줄 근거를 덧붙이세요.",
+   "선택지를 묻는 질문: Can I ~? Or do I need to ~?"
+  ]
+ },
+ {
+  "id": "we-024",
+  "level": 1,
+  "situation": "You have a chemistry quiz next Friday. Your classmate Daniel sits next to you in class, and you think studying together would help both of you.",
+  "to": "Your classmate, Daniel",
+  "tasks": [
+   "say why you are writing",
+   "suggest a time and place to study",
+   "explain how you can help each other"
+  ],
+  "sample": "Hi Daniel,\n\nThis is Hana from chemistry class. I sit next to you on the left side of the room. As you know, we have a quiz next Friday, and I am a little worried about it.\n\nWould you like to study together this week? I am free on Wednesday after four o'clock. We could meet on the second floor of the library, because there are big tables and it is quiet there. If Wednesday is not good for you, Thursday evening also works for me.\n\nI think we can help each other a lot. You always answer the professor's questions about chemical formulas, and that part is hard for me. On the other hand, I am good at the math problems, so I can show you some quick ways to solve them.\n\nLet me know what you think!\n\nSee you in class,\nHana",
+  "sample_ko": "안녕 대니얼,\n\n화학 수업 듣는 하나야. 강의실 왼쪽에 네 옆자리에 앉아. 알다시피 다음 주 금요일에 퀴즈가 있는데 조금 걱정돼.\n\n이번 주에 같이 공부할래? 나는 수요일 4시 이후에 시간이 돼. 도서관 2층에서 만나면 어떨까? 큰 테이블이 있고 조용하거든. 수요일이 안 되면 목요일 저녁도 괜찮아.\n\n우리가 서로 많이 도울 수 있을 것 같아. 너는 화학식에 관한 교수님 질문에 늘 대답하잖아. 그 부분이 나한테는 어려워. 반면에 나는 계산 문제를 잘하니까 빨리 푸는 방법을 보여 줄 수 있어.\n\n어떻게 생각하는지 알려 줘!\n\n수업에서 봐, 하나",
+  "tips": [
+   "친구에게는 Hi + 이름, 맺음말은 See you in class 처럼 가볍게 써도 됩니다.",
+   "제안 표현: Would you like to ~? / We could meet ~ because ~.",
+   "On the other hand 로 '너는 이걸, 나는 저걸 잘한다'는 대비를 만들면 세 번째 과제가 자연스럽습니다."
+  ]
+ },
+ {
+  "id": "we-025",
+  "level": 2,
+  "situation": "The city recently changed the route of the bus that you take to campus. The new route takes 25 minutes longer, and you have been late for your 8 a.m. class three times this month.",
+  "to": "City transportation office",
+  "tasks": [
+   "explain how the change affects you",
+   "describe the effect on other students",
+   "suggest a solution"
+  ],
+  "sample": "Dear Transportation Office,\n\nI am a student at Riverside University, and I take the Number 12 bus to campus every morning. Since the route changed on September 1, the bus no longer goes along Main Street. Instead, it goes through the shopping district, and the trip now takes about 25 minutes longer.\n\nBecause of this, I have been late for my 8 a.m. class three times this month, even though I leave home at the same time as before. My professor counts lateness as half an absence, so this is starting to affect my grade.\n\nI am not the only one with this problem. Many students who live in the east neighborhood ride this bus, and the bus is so crowded now that some people cannot get on at all.\n\nWould it be possible to add one express bus in the morning that uses the old route? Even one trip at 7:15 would solve the problem for many of us.\n\nThank you for considering my request.\n\nSincerely,\nDoyun Choi",
+  "sample_ko": "교통과 담당자분께,\n\n저는 리버사이드 대학교 학생이고 매일 아침 12번 버스를 타고 학교에 갑니다. 9월 1일 노선이 바뀐 뒤로 버스가 더 이상 메인 스트리트를 지나지 않습니다. 대신 상가 지역을 지나가서 이동 시간이 약 25분 더 걸립니다.\n\n이 때문에 예전과 같은 시각에 집을 나서는데도 이번 달에 오전 8시 수업에 세 번 지각했습니다. 교수님께서 지각을 결석 반으로 계산하셔서 성적에도 영향이 생기기 시작했습니다.\n\n이 문제를 겪는 사람은 저만이 아닙니다. 동쪽 동네에 사는 많은 학생이 이 버스를 타는데, 지금은 너무 붐벼서 아예 타지 못하는 사람도 있습니다.\n\n아침에 예전 노선으로 다니는 급행버스를 한 대 추가할 수 있을까요? 7시 15분에 한 번만 운행해도 많은 학생의 문제가 해결될 것입니다.\n\n요청을 검토해 주셔서 감사합니다.\n\n최도윤 드림",
+  "tips": [
+   "변화 전후 비교: Since the route changed, ~ no longer ~. Instead, ~.",
+   "'나만의 문제가 아니다'는 I am not the only one with this problem. 으로 시작하세요.",
+   "해결책은 작고 구체적일수록 받아들여지기 쉽습니다: Even one trip at 7:15 would ~."
+  ]
+ },
+ {
+  "id": "we-026",
+  "level": 2,
+  "situation": "The campus writing center is hiring student tutors to help first-year students with their essays. You received an A in Academic Writing last year and want to apply.",
+  "to": "Writing center director, Dr. Hughes",
+  "tasks": [
+   "say which position you are applying for",
+   "describe your qualifications",
+   "explain your availability"
+  ],
+  "sample": "Dear Dr. Hughes,\n\nI saw the notice on the student portal that the Writing Center is looking for peer tutors for first-year students. I would like to apply for this position.\n\nI am a sophomore majoring in political science. Last year I took Academic Writing with Professor Grant and received an A. In that class, we reviewed each other's drafts every week, and I discovered that I really enjoy helping classmates organize their ideas. I also volunteered as an English homework helper at a middle school last summer, so I have experience explaining grammar in simple language.\n\nI am available on Monday and Wednesday afternoons from one to five, and on Friday mornings. I could also work some evenings during the busy weeks before midterm and final papers are due.\n\nI have attached my résumé and a short writing sample. Thank you for considering my application.\n\nSincerely,\nYuna Jang",
+  "sample_ko": "휴즈 박사님께,\n\n학생 포털에서 글쓰기 센터가 1학년 학생을 위한 또래 튜터를 모집한다는 공지를 보았습니다. 이 자리에 지원하고 싶습니다.\n\n저는 정치학을 전공하는 2학년입니다. 작년에 그랜트 교수님의 학술 글쓰기 수업을 듣고 A를 받았습니다. 그 수업에서 매주 서로의 초안을 검토했는데, 동기들이 생각을 정리하도록 돕는 일이 정말 즐겁다는 것을 알게 되었습니다. 또 지난여름 중학교에서 영어 숙제 도우미로 봉사해서 문법을 쉬운 말로 설명해 본 경험도 있습니다.\n\n월요일과 수요일 오후 1시부터 5시, 금요일 오전에 근무할 수 있습니다. 중간·기말 리포트 마감 전 바쁜 주에는 저녁 근무도 가능합니다.\n\n이력서와 짧은 글 샘플을 첨부했습니다. 지원을 검토해 주셔서 감사합니다.\n\n장유나 드림",
+  "tips": [
+   "지원 이메일 첫 문장: I saw the notice ~. I would like to apply for this position.",
+   "자격은 '성적 + 경험 + 그 경험에서 알게 된 점' 순서로 쓰면 설득력이 생깁니다.",
+   "첨부 언급(I have attached ~)으로 마무리하면 실제 업무 이메일처럼 보입니다."
+  ]
+ },
+ {
+  "id": "we-027",
+  "level": 2,
+  "situation": "The heater in your dormitory room stopped working four days ago. You submitted an online repair request, but nobody has come, and the nights are getting very cold.",
+  "to": "Residence hall maintenance office",
+  "tasks": [
+   "describe the problem",
+   "explain what you have already done",
+   "ask for quick action"
+  ],
+  "sample": "Dear Maintenance Staff,\n\nI live in Room 315 of Maple Hall. The heater in my room stopped working on Monday night. It makes a clicking sound when I turn it on, but no warm air comes out. The temperature in the room was only 14 degrees Celsius this morning.\n\nI submitted an online repair request on Tuesday morning, and I received an automatic reply with the number R-2291. However, no one has come to check the heater yet, and I have not received any other message. I also told my resident advisor, and she suggested that I write to you directly.\n\nThe weather forecast says it will be below freezing this weekend. Could someone please come to fix the heater by Friday? If that is not possible, could you lend me a portable heater until the repair is done? I am usually in my room after 3 p.m.\n\nThank you for your help.\n\nBest regards,\nJunho Yoon",
+  "sample_ko": "시설 관리 직원분들께,\n\n저는 메이플 홀 315호에 살고 있습니다. 월요일 밤에 방 난방기가 고장 났습니다. 켜면 딸깍거리는 소리는 나지만 따뜻한 바람이 나오지 않습니다. 오늘 아침 방 온도가 섭씨 14도밖에 되지 않았습니다.\n\n화요일 아침에 온라인 수리 요청을 접수했고, R-2291 번호가 적힌 자동 답장을 받았습니다. 하지만 아직 아무도 난방기를 보러 오지 않았고 다른 연락도 받지 못했습니다. 기숙사 사감에게도 말했더니 직접 이메일을 보내 보라고 했습니다.\n\n일기 예보에 따르면 이번 주말에 영하로 떨어진다고 합니다. 금요일까지 수리하러 와 주실 수 있을까요? 그게 어렵다면 수리가 끝날 때까지 휴대용 난방기를 빌려주실 수 있을까요? 저는 보통 오후 3시 이후에 방에 있습니다.\n\n도와주셔서 감사합니다.\n\n윤준호 드림",
+  "tips": [
+   "고장 묘사는 소리·증상·수치로: It makes a clicking sound / only 14 degrees.",
+   "이미 한 일은 접수 번호처럼 확인 가능한 정보를 넣어 쓰세요.",
+   "1안이 어려우면 2안을 함께 제시: If that is not possible, could you ~?"
+  ]
+ },
+ {
+  "id": "we-028",
+  "level": 2,
+  "situation": "When you checked your student account, you saw that you were charged twice for the same $45 lab fee. The payment was taken from your bank account both times.",
+  "to": "Student accounts office",
+  "tasks": [
+   "explain the billing mistake",
+   "provide details about the payments",
+   "ask for a refund and a confirmation"
+  ],
+  "sample": "Dear Student Accounts Office,\n\nI am writing because I think there is a mistake on my student account. My student ID number is 2025-0874.\n\nWhen I checked my account online yesterday, I saw that I was charged the $45 laboratory fee for Chemistry 110 two times. Both charges are dated September 3, and the money was taken from my bank account twice. I am enrolled in only one section of this lab, so I should pay the fee only once. I have attached a screenshot of my account page and my bank statement.\n\nCould you please refund the extra $45 to my bank account? Since I pay for my own living expenses, this money is important to me. I would also appreciate it if you could send me an email when the refund has been processed, so that I can check my balance.\n\nThank you for your time.\n\nSincerely,\nEunbi Shin",
+  "sample_ko": "학생 회계팀께,\n\n제 학생 계정에 실수가 있는 것 같아 연락드립니다. 제 학번은 2025-0874입니다.\n\n어제 온라인으로 계정을 확인했는데 화학 110 실험비 45달러가 두 번 청구되어 있었습니다. 두 건 모두 9월 3일 자이고, 제 은행 계좌에서도 두 번 빠져나갔습니다. 저는 이 실험 분반 하나만 수강하므로 한 번만 내면 됩니다. 계정 화면 캡처와 은행 거래 내역을 첨부했습니다.\n\n추가로 나간 45달러를 제 계좌로 환불해 주실 수 있을까요? 생활비를 스스로 마련하고 있어서 이 돈이 저에게 중요합니다. 또 환불이 처리되면 잔액을 확인할 수 있도록 이메일을 보내 주시면 감사하겠습니다.\n\n시간 내 주셔서 감사합니다.\n\n신은비 드림",
+  "tips": [
+   "돈 문제는 학번·금액·날짜를 숫자로 정확히 적으세요.",
+   "주장 근거: I am enrolled in only one section, so I should pay ~ only once.",
+   "확인 요청: I would appreciate it if you could ~ so that I can ~."
+  ]
+ },
+ {
+  "id": "we-029",
+  "level": 3,
+  "situation": "You need Introduction to Microeconomics to graduate on time, but the only section that fits your schedule is full. You are fifth on the waiting list, and the add/drop period ends on Friday.",
+  "to": "Professor Alvarez, who teaches the course",
+  "tasks": [
+   "explain why you need the course this semester",
+   "describe your situation on the waiting list",
+   "ask whether an exception is possible"
+  ],
+  "sample": "Dear Professor Alvarez,\n\nMy name is Taeyang Kwon, and I am a junior majoring in international relations. I am writing to ask about enrolling in your Introduction to Microeconomics course, Section 2.\n\nThis course is a requirement for my major, and I need to complete it this semester in order to take Trade Policy, which is offered only in the spring. If I cannot register now, my graduation will be delayed by a full year.\n\nUnfortunately, Section 2 is full, and I am currently fifth on the waiting list. I checked the other sections, but they meet at the same time as my required seminar. I have been attending your lectures this week and completing the readings so that I will not fall behind if a seat opens.\n\nWould you be willing to sign an override form so that I can join the class? I understand that classroom space is limited, and I would be happy to sit anywhere available.\n\nThank you for considering my request.\n\nRespectfully,\nTaeyang Kwon",
+  "sample_ko": "알바레스 교수님께,\n\n저는 국제관계학을 전공하는 3학년 권태양입니다. 교수님의 미시경제학 입문 2분반 수강 신청에 관해 여쭙고자 연락드립니다.\n\n이 과목은 전공 필수이고, 봄 학기에만 열리는 무역 정책을 들으려면 이번 학기에 꼭 이수해야 합니다. 지금 등록하지 못하면 졸업이 꼬박 1년 늦어집니다.\n\n안타깝게도 2분반은 정원이 찼고 저는 대기자 명단 5번입니다. 다른 분반도 확인했지만 제 필수 세미나와 시간이 겹칩니다. 자리가 나더라도 뒤처지지 않도록 이번 주 강의에 출석하고 읽기 과제도 하고 있습니다.\n\n수업에 들어갈 수 있도록 정원 초과 승인서에 서명해 주실 수 있을까요? 강의실 공간이 한정된 것은 이해하며, 빈자리 어디에든 앉겠습니다.\n\n요청을 검토해 주셔서 감사합니다.\n\n권태양 올림",
+  "tips": [
+   "예외를 요청할 때는 '왜 지금이어야 하는지'를 인과로: If I cannot ~, my graduation will be delayed ~.",
+   "다른 방법을 이미 확인했다는 문장(I checked the other sections, but ~)이 신뢰를 줍니다.",
+   "상대 사정 인정: I understand that ~, and I would be happy to ~."
+  ]
+ },
+ {
+  "id": "we-030",
+  "level": 3,
+  "situation": "You spent last semester on an exchange program in Spain. Two of the four courses you completed there do not appear on your transcript, even though your advisor approved them before you left.",
+  "to": "Study abroad office coordinator, Ms. Becker",
+  "tasks": [
+   "explain the problem with your transcript",
+   "describe the approval you received",
+   "ask what steps will fix the problem"
+  ],
+  "sample": "Dear Ms. Becker,\n\nI returned last month from a semester at the University of Valencia through the university's exchange program. When I checked my transcript this week, I noticed that only two of my four courses appear on it. Spanish Art History and Mediterranean Ecology are missing.\n\nBefore I left, my academic advisor, Dr. Lin, approved all four courses on the course equivalency form, and your office stamped it on January 10. I passed both missing courses, and Valencia has already sent an official transcript listing all four.\n\nWithout these credits, I am six credits short of full-time status, so I am worried about my scholarship for next semester.\n\nCould you let me know whether this is a processing delay or whether I need to submit additional documents? I can bring the approval form and the Valencia transcript to your office at any time.\n\nThank you for your assistance.\n\nKind regards,\nNari Song",
+  "sample_ko": "베커 코디네이터님께,\n\n저는 학교 교환 프로그램으로 발렌시아 대학교에서 한 학기를 보내고 지난달 돌아왔습니다. 이번 주 성적 증명서를 확인해 보니 네 과목 중 두 과목만 올라가 있었습니다. 스페인 미술사와 지중해 생태학이 빠져 있습니다.\n\n출국 전에 지도 교수님이신 린 박사님께서 학점 인정 신청서에 네 과목 모두 승인해 주셨고, 1월 10일 귀 사무실에서 도장을 받았습니다. 빠진 두 과목 모두 통과했고, 발렌시아 측은 네 과목이 모두 적힌 공식 성적 증명서를 이미 보냈습니다.\n\n이 학점이 없으면 전일제 학생 기준에서 6학점이 모자라서, 다음 학기 장학금이 걱정됩니다.\n\n처리 지연 때문인지, 아니면 추가 서류를 내야 하는지 알려 주실 수 있을까요? 승인서와 발렌시아 성적 증명서는 언제든 사무실로 가져갈 수 있습니다.\n\n도와주셔서 감사합니다.\n\n송나리 드림",
+  "tips": [
+   "문제 → 근거(누가 언제 승인) → 결과(장학금 위험) 순서로 쓰면 7분 안에 논리가 섭니다.",
+   "두 가능성을 묻는 질문: whether ~ or whether ~.",
+   "증빙을 언급(I can bring the approval form ~)하면 상대가 바로 처리할 수 있습니다."
+  ]
+ },
+ {
+  "id": "we-031",
+  "level": 3,
+  "situation": "Your student volunteer club is organizing a 5-kilometer charity run to raise money for a children's hospital. You want a popular local sporting goods store to sponsor the event.",
+  "to": "Store manager, Mr. Grayson",
+  "tasks": [
+   "introduce the event and its purpose",
+   "explain what kind of support you need",
+   "describe how the store would benefit"
+  ],
+  "sample": "Dear Mr. Grayson,\n\nI am the events coordinator of Helping Hands, a student volunteer club at Lakeview College. On Saturday, April 18, we are holding our first 5K Charity Run around the campus lake. All of the money raised will go to the children's wing of Lakeview General Hospital, which needs new equipment for its play therapy room.\n\nWe are hoping that Peak Sports would consider becoming our main sponsor. Specifically, we are looking for a donation of $500 to cover printing and safety costs, or, alternatively, prizes such as running shoes or gift cards for the top finishers.\n\nIn return, your store's logo would appear on all 300 race T-shirts, on our posters, and on the club's social media pages, which have about 4,000 followers. We would also be glad to give you a table at the finish line where you could introduce your products to runners.\n\nI would be happy to meet at your convenience to discuss the details.\n\nSincerely,\nGayoung Han",
+  "sample_ko": "그레이슨 점장님께,\n\n저는 레이크뷰 칼리지 학생 봉사 동아리 '헬핑 핸즈'의 행사 담당자입니다. 4월 18일 토요일, 캠퍼스 호수를 도는 첫 번째 5킬로미터 자선 달리기를 엽니다. 모금액은 전액 레이크뷰 종합 병원 어린이 병동에 전달되며, 놀이 치료실에 새 장비가 필요한 곳입니다.\n\n피크 스포츠가 주 후원사가 되어 주시기를 바랍니다. 구체적으로 인쇄비와 안전 비용을 충당할 500달러 기부, 또는 상위 완주자를 위한 운동화나 상품권 같은 상품을 부탁드립니다.\n\n그 대가로 매장 로고를 대회 티셔츠 300장, 포스터, 그리고 팔로워가 약 4,000명인 동아리 소셜 미디어에 넣어 드리겠습니다. 결승선에 테이블을 마련해 달리기 참가자들에게 제품을 소개하실 수도 있습니다.\n\n편하신 때에 만나 세부 사항을 의논하면 좋겠습니다.\n\n한가영 드림",
+  "tips": [
+   "후원 요청은 '목적 → 구체적 요청 → 상대 이익' 세 덩어리로 나누세요.",
+   "Specifically, ~ / alternatively, ~ 로 요청을 정확하고 유연하게 만드세요.",
+   "In return, ~ 은 상대의 이익을 꺼낼 때 쓰는 대표 표현입니다."
+  ]
+ },
+ {
+  "id": "we-032",
+  "level": 3,
+  "situation": "You moved out of your off-campus apartment six weeks ago and left it clean and undamaged. Your lease says the deposit will be returned within 30 days, but you have not received it.",
+  "to": "Your former landlord, Mrs. Patterson",
+  "tasks": [
+   "remind her of the situation",
+   "refer to the terms of the lease",
+   "request the deposit by a specific date"
+  ],
+  "sample": "Dear Mrs. Patterson,\n\nI hope you are doing well. I am writing about the security deposit for Apartment 3B at 72 Elm Street, where I lived until August 15.\n\nWhen I moved out, I cleaned the apartment thoroughly and returned both keys to you in person. We walked through the rooms together, and you mentioned that everything looked in good condition. I also took photos of each room that day.\n\nAccording to Section 7 of our lease, the deposit of $900 is to be returned within 30 days after the end of the lease. It has now been six weeks, and I have not received the payment or any explanation of deductions.\n\nI would be grateful if you could send the deposit to my new address, 15 Birch Road, by October 15. If there is a reason for the delay or a charge I am not aware of, please let me know so that we can resolve it.\n\nThank you for your attention to this matter.\n\nSincerely,\nHyunwoo Lim",
+  "sample_ko": "패터슨 씨께,\n\n잘 지내고 계시길 바랍니다. 제가 8월 15일까지 살았던 엘름 스트리트 72번지 3B호의 보증금에 관해 연락드립니다.\n\n이사 나갈 때 집을 꼼꼼히 청소했고 열쇠 두 개를 직접 돌려드렸습니다. 함께 방을 둘러보았고, 모든 것이 상태가 좋아 보인다고 말씀하셨습니다. 그날 각 방의 사진도 찍어 두었습니다.\n\n임대 계약서 7조에 따르면 보증금 900달러는 계약 종료 후 30일 안에 돌려받기로 되어 있습니다. 지금은 6주가 지났는데, 돈도 공제 내역에 대한 설명도 받지 못했습니다.\n\n10월 15일까지 새 주소인 버치 로드 15번지로 보증금을 보내 주시면 감사하겠습니다. 지연 이유나 제가 모르는 비용이 있다면 해결할 수 있도록 알려 주세요.\n\n이 문제에 신경 써 주셔서 감사합니다.\n\n임현우 드림",
+  "tips": [
+   "항의 이메일도 첫 문장은 정중하게: I hope you are doing well.",
+   "계약 근거 인용: According to Section 7 of our lease, ~ is to be returned within ~.",
+   "기한을 정하되 대화 여지를 남기세요: If there is a reason for the delay, please let me know."
+  ]
+ },
+ {
+  "id": "we-033",
+  "level": 4,
+  "situation": "You received 68 out of 100 on your sociology midterm. When you added up the points written on each section, the total came to 78. You also think one short answer was marked wrong unfairly.",
+  "to": "Teaching assistant, Mr. Okafor",
+  "tasks": [
+   "identify the calculation error",
+   "explain your concern about one answer",
+   "request a meeting to review the exam"
+  ],
+  "sample": "Dear Mr. Okafor,\n\nThank you for returning our Sociology 210 midterms so quickly. While reviewing my exam, I noticed two issues that I would like to bring to your attention.\n\nFirst, there appears to be an addition error. The scores written on the four sections are 22, 19, 25, and 12, which add up to 78, but the total on the cover page is 68. I have double-checked the numbers, and I have attached a photo of each page.\n\nSecond, I would appreciate clarification on short-answer question 3. My answer defined \"social capital\" as the resources people gain through their networks of relationships, which closely follows the definition in Chapter 4 of our textbook. However, it received zero points, and there is no comment explaining why. It is entirely possible that I misunderstood what the question required, so I would value your feedback.\n\nWould you be available to meet during your office hours this week? I am free on Tuesday or Thursday afternoon.\n\nThank you for your time.\n\nBest regards,\nSora Baek",
+  "sample_ko": "오카포 조교님께,\n\n사회학 210 중간고사를 빨리 돌려주셔서 감사합니다. 시험지를 다시 보다가 말씀드리고 싶은 점 두 가지를 발견했습니다.\n\n첫째, 합산 오류가 있는 것 같습니다. 네 영역에 적힌 점수는 22, 19, 25, 12점으로 합이 78점인데, 표지의 총점은 68점입니다. 숫자를 다시 확인했고 각 페이지 사진을 첨부했습니다.\n\n둘째, 단답형 3번에 대해 설명을 듣고 싶습니다. 저는 '사회적 자본'을 사람들이 관계망을 통해 얻는 자원이라고 정의했는데, 이는 교재 4장의 정의와 거의 같습니다. 하지만 0점을 받았고 이유를 설명하는 코멘트가 없습니다. 제가 문제의 요구를 잘못 이해했을 수도 있으니 피드백을 주시면 큰 도움이 되겠습니다.\n\n이번 주 면담 시간에 뵐 수 있을까요? 화요일이나 목요일 오후에 시간이 됩니다.\n\n시간 내 주셔서 감사합니다.\n\n백소라 드림",
+  "tips": [
+   "성적 이의는 감정 대신 사실: there appears to be an addition error.",
+   "확실한 오류(합산)와 불확실한 우려(채점 기준)를 First/Second 로 나눠 어조를 달리하세요.",
+   "It is entirely possible that I misunderstood ~ 같은 겸손한 완충 표현이 C1 수준의 공손함입니다."
+  ]
+ },
+ {
+  "id": "we-034",
+  "level": 4,
+  "situation": "A paper you wrote with your professor has been accepted for presentation at an international conference in Canada. The department's travel fund has a deadline that has already passed, and you cannot afford the trip yourself.",
+  "to": "Department chair, Dr. Nakamura",
+  "tasks": [
+   "share the news about the conference",
+   "explain why you missed the funding deadline",
+   "request funding and offer something in return"
+  ],
+  "sample": "Dear Dr. Nakamura,\n\nI am pleased to share that the paper I co-wrote with Professor Ellis on urban heat islands has been accepted for an oral presentation at the International Geography Conference in Montreal this June.\n\nI am writing to ask whether the department might still consider supporting my travel. I am aware that the deadline for the student travel fund was March 1. Unfortunately, the conference did not announce its decisions until March 20, so I had no way of applying with an acceptance letter in time.\n\nThe total cost, including airfare, registration, and three nights of shared accommodation, is about $1,400. I have already secured $400 from the graduate student association, so I am requesting $1,000, or whatever portion the department is able to provide.\n\nIn return, I would be happy to give a talk at the department's research seminar in the fall and to write a short report for the newsletter.\n\nThank you for considering this request.\n\nRespectfully,\nKyungmin Oh",
+  "sample_ko": "나카무라 학과장님께,\n\n엘리스 교수님과 함께 쓴 도시 열섬 논문이 올해 6월 몬트리올 국제 지리학회 구두 발표로 채택되었다는 소식을 전해 드립니다.\n\n학과에서 출장 지원을 아직 검토해 주실 수 있는지 여쭙고자 합니다. 학생 출장 기금 마감이 3월 1일이었다는 것은 알고 있습니다. 하지만 학회가 3월 20일에야 결과를 발표해서 제때 채택 통지서를 첨부해 신청할 방법이 없었습니다.\n\n항공료, 등록비, 3박 공동 숙박을 포함한 총비용은 약 1,400달러입니다. 대학원생 협의회에서 이미 400달러를 확보해서 1,000달러, 또는 학과에서 가능한 만큼을 요청드립니다.\n\n그 대신 가을 학과 연구 세미나에서 발표하고 소식지에 짧은 보고서를 쓰겠습니다.\n\n요청을 검토해 주셔서 감사합니다.\n\n오경민 올림",
+  "tips": [
+   "예외 요청 전에 규칙을 알고 있음을 먼저 인정: I am aware that the deadline was ~.",
+   "이미 확보한 돈을 밝히고 나머지만 요청하면 '노력한 지원자'로 보입니다.",
+   "In return, I would be happy to ~ 로 학과가 얻는 것을 제시하세요."
+  ]
+ },
+ {
+  "id": "we-035",
+  "level": 4,
+  "situation": "The university has announced that the campus shuttle will stop running after 7 p.m. to save money. Many students who live off campus or work in labs late in the evening rely on it.",
+  "to": "Director of campus transportation, Ms. Fairbanks",
+  "tasks": [
+   "explain who will be affected and how",
+   "point out a safety concern",
+   "propose a cost-saving alternative"
+  ],
+  "sample": "Dear Ms. Fairbanks,\n\nI am writing in response to the announcement that the campus shuttle will no longer run after 7 p.m. beginning next month. While I understand the need to reduce costs, I am concerned about the students this change will affect.\n\nMany of us work in research labs or attend evening seminars that end at nine or ten o'clock. For students who live off campus, the shuttle is the only affordable way to reach the bus terminal at night. Without it, they will have to walk nearly two kilometers along a poorly lit road, which raises serious safety concerns, particularly in winter.\n\nInstead of cancelling evening service altogether, would the department consider an on-demand system? Students could request a ride through an app, and a single van could serve requests between 7 and 11 p.m. Similar universities that use this model report savings of about 60 percent.\n\nSincerely,\nJaewon Seo",
+  "sample_ko": "페어뱅크스 국장님께,\n\n다음 달부터 오후 7시 이후 캠퍼스 셔틀 운행을 중단한다는 공지에 대해 연락드립니다. 비용 절감의 필요성은 이해하지만, 이 변화로 영향을 받을 학생들이 걱정됩니다.\n\n저희 중 다수가 연구실에서 일하거나 밤 9시, 10시에 끝나는 저녁 세미나에 참석합니다. 캠퍼스 밖에 사는 학생에게 셔틀은 밤에 버스 터미널까지 갈 수 있는 유일한 저렴한 방법입니다. 셔틀이 없으면 조명이 부족한 길을 2킬로미터 가까이 걸어야 해서, 특히 겨울에는 심각한 안전 문제가 생깁니다.\n\n저녁 운행을 완전히 없애는 대신 호출형 방식을 검토해 주실 수 있을까요? 학생들이 앱으로 탑승을 요청하고, 오후 7시부터 11시까지 승합차 한 대가 요청을 처리하는 방식입니다. 이 모델을 쓰는 비슷한 대학들은 약 60퍼센트를 절약했다고 합니다.\n\n서재원 드림",
+  "tips": [
+   "반대 의견의 정석: While I understand the need to ~, I am concerned that ~.",
+   "안전 문제는 구체적 거리·조건(poorly lit road, in winter)으로 보여 주세요.",
+   "Instead of ~ing altogether, would you consider ~? 로 '중단 대신 축소'라는 타협안을 내세요."
+  ]
+ },
+ {
+  "id": "we-036",
+  "level": 4,
+  "situation": "You are president of the Korean Culture Club. The student government has cut your annual budget by 40 percent, saying the club's events have low attendance. You believe they used outdated numbers.",
+  "to": "Student government finance committee",
+  "tasks": [
+   "respond to the reason given for the cut",
+   "provide evidence of the club's recent activity",
+   "request a reconsideration and suggest a compromise"
+  ],
+  "sample": "Dear Members of the Finance Committee,\n\nI am writing on behalf of the Korean Culture Club regarding the 40 percent reduction in our annual budget. According to your letter, the decision was based on low attendance at our events. I respectfully believe that this assessment relies on figures from two years ago, when the club had just been restarted after the pandemic.\n\nOur recent records tell a different story. This year, our monthly cooking nights have averaged 55 participants, and our Lunar New Year festival drew more than 400 students and community members. Our weekly language exchange also fills its sign-up sheet every week.\n\nWe therefore ask the committee to review the decision using this year's attendance data, which I have attached. If a full restoration is not possible, we would propose a 15 percent reduction instead, which we could manage by charging a small fee for the festival and seeking a local restaurant sponsor.\n\nThank you for your time and reconsideration.\n\nRespectfully,\nDahye Moon\nPresident, Korean Culture Club",
+  "sample_ko": "재정 위원회 위원님들께,\n\n한국 문화 동아리를 대표해 연간 예산 40퍼센트 삭감에 관해 연락드립니다. 보내 주신 편지에 따르면 행사 참석률이 낮다는 이유로 결정되었다고 합니다. 송구하지만 이 평가는 동아리가 팬데믹 이후 막 다시 시작했던 2년 전 수치에 근거한 것으로 보입니다.\n\n최근 기록은 다른 이야기를 보여 줍니다. 올해 월간 요리의 밤은 평균 55명이 참가했고, 설날 축제에는 학생과 지역 주민 400명 이상이 왔습니다. 주간 언어 교환도 매주 신청표가 꽉 찹니다.\n\n따라서 첨부한 올해 참석 자료로 결정을 다시 검토해 주시기를 요청드립니다. 전액 복원이 어렵다면 15퍼센트 삭감을 제안드리며, 이는 축제에 소액 참가비를 받고 지역 식당 후원을 구해 감당할 수 있습니다.\n\n시간을 내어 재검토해 주셔서 감사합니다.\n\n문다혜 올림\n한국 문화 동아리 회장",
+  "tips": [
+   "상대 근거를 정중히 반박: I respectfully believe that this assessment relies on ~.",
+   "Our recent records tell a different story. 처럼 반박 문단의 첫 문장을 요약문으로 쓰세요.",
+   "타협안은 '얼마나' + '어떻게 감당할지'까지 제시해야 현실적으로 들립니다."
+  ]
+ },
+ {
+  "id": "we-037",
+  "level": 5,
+  "situation": "Last week you presented a research poster at a regional conference on behalf of your lab. Afterward, you discovered that one of the graphs on the poster used an incorrect data set, which makes one of the conclusions appear stronger than the evidence supports.",
+  "to": "Your research supervisor, Dr. Whitfield",
+  "tasks": [
+   "explain the error and how you found it",
+   "assess how serious its consequences are",
+   "propose specific corrective steps"
+  ],
+  "sample": "Dear Dr. Whitfield,\n\nI need to bring to your attention an error I discovered in the poster I presented at the Midwest Neuroscience Conference last Thursday.\n\nWhile preparing our journal draft, I noticed that Figure 3 on the poster was generated from the preliminary data set, which still included six participants we later excluded. When I reran the analysis with the correct data, the effect of sleep restriction on reaction time remained significant, but it was roughly a third smaller than the poster suggested.\n\nIn my view, the error does not overturn our main finding, but it does overstate its strength, and around forty people visited the poster. I take full responsibility for not verifying the file before printing.\n\nI would propose three steps: asking the organizers to replace the archived PDF with a corrected version, emailing the two researchers who requested our data, and adding a file-version check to our lab checklist. I have drafted a correction notice for your review.\n\nSincerely,\nYerin Jung",
+  "sample_ko": "휫필드 박사님께,\n\n지난 목요일 중서부 신경과학 학회에서 발표한 포스터에서 발견한 오류를 알려 드려야 합니다.\n\n학술지 초고를 준비하다가, 포스터의 그림 3이 나중에 제외한 참가자 6명이 아직 들어 있는 예비 데이터 세트로 만들어졌다는 것을 알았습니다. 올바른 자료로 분석을 다시 돌리니 수면 제한이 반응 시간에 미치는 효과는 여전히 유의했지만, 포스터에 나온 것보다 약 3분의 1 작았습니다.\n\n제 판단으로는 이 오류가 주요 결과를 뒤집지는 않지만 효과의 크기를 과장하며, 포스터를 찾은 사람은 40명 정도였습니다. 인쇄 전에 파일을 확인하지 않은 것은 전적으로 제 책임입니다.\n\n세 가지 조치를 제안드립니다. 주최 측에 자료실 PDF를 수정본으로 바꿔 달라고 요청하고, 저희 자료를 요청한 연구자 두 명에게 이메일을 보내고, 연구실 점검표에 파일 버전 확인을 추가하는 것입니다. 검토하실 수 있도록 정정 공지 초안을 써 두었습니다.\n\n정예린 드림",
+  "tips": [
+   "나쁜 소식은 첫 문장에서 바로: I need to bring to your attention an error ~.",
+   "심각도 평가는 양면으로: does not overturn ~, but it does overstate ~ (강조의 does).",
+   "책임 인정 + 이미 해 둔 일(I have drafted ~)을 함께 쓰면 C2 수준의 성숙한 글이 됩니다."
+  ]
+ },
+ {
+  "id": "we-038",
+  "level": 5,
+  "situation": "The dean has announced that, starting next year, in-person office hours for large introductory courses will be replaced by an AI chatbot trained on course materials, with human teaching assistants available only by appointment.",
+  "to": "Dean of undergraduate studies, Dr. Hollis",
+  "tasks": [
+   "acknowledge the potential benefits of the plan",
+   "explain what students would lose",
+   "recommend a modified approach"
+  ],
+  "sample": "Dear Dr. Hollis,\n\nAs a peer mentor for first-year students, I am writing about the plan to replace office hours in introductory courses with an AI assistant. I recognize the appeal of the proposal: a chatbot is available at midnight before a deadline, and it could reduce the long queues that currently make office hours frustrating.\n\nHowever, my experience mentoring new students suggests that office hours serve purposes that a chatbot cannot easily replicate. Many first-years do not yet know what to ask; they arrive confused rather than with a precise question, and a teaching assistant can diagnose the misunderstanding behind that confusion. Requiring an appointment adds a barrier that falls hardest on students who are already hesitant to seek help.\n\nI would therefore recommend a hybrid model: use the chatbot for routine questions about deadlines and formatting, but preserve at least two drop-in sessions per week for each course. A one-semester pilot comparing both formats would allow the decision to rest on evidence.\n\nRespectfully,\nMinseo Ahn",
+  "sample_ko": "홀리스 학장님께,\n\n1학년 또래 멘토로서, 입문 과목의 면담 시간을 AI 도우미로 대체한다는 계획에 대해 연락드립니다. 이 제안의 매력은 알고 있습니다. 챗봇은 마감 전날 자정에도 이용할 수 있고, 지금 면담 시간을 답답하게 만드는 긴 대기 줄을 줄일 수 있습니다.\n\n하지만 신입생을 멘토링한 경험으로 보면, 면담 시간은 챗봇이 쉽게 대신할 수 없는 역할을 합니다. 많은 1학년은 아직 무엇을 물어야 할지 모릅니다. 정확한 질문보다 혼란을 안고 오며, 조교는 그 혼란 뒤의 오해를 진단할 수 있습니다. 예약을 요구하면 이미 도움 요청을 망설이는 학생에게 가장 무거운 장벽이 생깁니다.\n\n따라서 혼합 모델을 권해 드립니다. 마감·형식 같은 일상적 질문은 챗봇이 맡고, 과목마다 일주일에 최소 두 번의 자유 방문 면담은 유지하는 것입니다. 두 방식을 비교하는 한 학기 시범 운영을 하면 근거에 기반해 결정할 수 있을 것입니다.\n\n안민서 올림",
+  "tips": [
+   "양보 → 반론 구조: I recognize the appeal of ~. However, my experience suggests ~.",
+   "falls hardest on ~ (가장 큰 부담을 지우다), rest on evidence (근거에 기반하다) 같은 고급 연어를 활용하세요.",
+   "결론에서 '시범 운영'을 제안하면 상대의 체면을 살리면서 결정을 바꿀 여지를 줍니다."
+  ]
+ },
+ {
+  "id": "we-039",
+  "level": 5,
+  "situation": "You are in the final year of your undergraduate honors thesis. Your thesis advisor has just accepted a position at another university and will leave in January, four months before your thesis is due.",
+  "to": "Department chair, Professor Lindqvist",
+  "tasks": [
+   "explain the situation and its impact on your thesis",
+   "describe what continuity you need",
+   "propose a specific arrangement"
+  ],
+  "sample": "Dear Professor Lindqvist,\n\nAs you may know, Dr. Abara will be leaving the department in January to join the faculty at Westbrook University. While I am delighted for her, her departure comes at a critical stage of my honors thesis on wage gaps in rural labor markets, which is due on May 1.\n\nMy concern is not simply administrative. Dr. Abara designed the interview protocol with me and holds the ethics approval under which my data were collected, so a new advisor would need to be added to the approval before I can complete my final round of interviews in February.\n\nI have discussed this with Dr. Abara, and she is willing to remain an external co-advisor through monthly video meetings. I would propose that Professor Reyes, whose research overlaps with my topic, serve as the official on-campus advisor and be added to the ethics protocol before January 15.\n\nCould we meet before the winter break to confirm this arrangement?\n\nSincerely,\nJihoon Ryu",
+  "sample_ko": "린드크비스트 학과장님께,\n\n아시다시피 아바라 박사님께서 1월에 학과를 떠나 웨스트브룩 대학교 교수진으로 가십니다. 박사님께는 기쁜 일이지만, 5월 1일이 마감인 제 농촌 노동 시장의 임금 격차에 관한 우등 졸업 논문이 중요한 단계에 있을 때 떠나시게 되었습니다.\n\n제 걱정은 단순히 행정적인 것이 아닙니다. 아바라 박사님은 저와 함께 면담 절차를 설계하셨고, 제 자료를 수집한 근거인 연구 윤리 승인을 보유하고 계십니다. 그래서 2월 마지막 면담을 마치려면 새 지도 교수님이 승인에 추가되어야 합니다.\n\n아바라 박사님과 이미 이야기했고, 박사님은 월 1회 화상 회의로 외부 공동 지도 교수를 계속 맡겠다고 하셨습니다. 연구 분야가 제 주제와 겹치는 레예스 교수님께서 공식 교내 지도 교수를 맡고, 1월 15일 전에 윤리 승인 절차에 추가되시는 방안을 제안드립니다.\n\n이 방안을 확정하기 위해 겨울 방학 전에 뵐 수 있을까요?\n\n류지훈 드림",
+  "tips": [
+   "While I am delighted for her, ~ 처럼 개인적 축하와 문제 제기를 한 문장에 담으세요.",
+   "My concern is not simply administrative. 로 문제의 무게를 강조한 뒤 구체적 이유를 대세요.",
+   "제안에는 사람·역할·기한(by January 15)을 모두 넣어야 결정을 내리기 쉽습니다."
+  ]
+ },
+ {
+  "id": "we-040",
+  "level": 5,
+  "situation": "You volunteer as a weekend guide at the city history museum. The city council plans to end the museum's free-admission Sunday, which mainly benefits low-income families and school groups, to cover a budget shortfall.",
+  "to": "City council member, Ms. Delgado",
+  "tasks": [
+   "describe who benefits from free Sundays",
+   "challenge the financial reasoning behind the plan",
+   "suggest an alternative way to close the budget gap"
+  ],
+  "sample": "Dear Councilmember Delgado,\n\nI have volunteered as a guide at the Harbor City History Museum every weekend for two years, and I am writing to urge the council to reconsider ending Free Admission Sundays.\n\nFrom what I observe, free Sundays attract a very different audience from the rest of the week. On a typical Sunday I guide families making their only museum visit of the year, recent immigrants, and school groups that cannot afford tickets. These are precisely the residents a public museum exists to serve.\n\nThe financial case also seems weaker than it appears. Many Sunday visitors would simply not come if they had to pay, so the projected revenue assumes attendance that is unlikely to materialize. Sunday visitors also spend money in the café and gift shop.\n\nA more targeted option would be to keep Sundays free for city residents while charging admission to tourists. A modest corporate sponsorship could cover the remaining gap.\n\nRespectfully,\nSoyeon Hwang",
+  "sample_ko": "델가도 시의원님께,\n\n저는 2년간 매 주말 하버 시티 역사 박물관에서 안내 봉사를 해 왔으며, 시의회가 '무료 입장 일요일' 폐지를 재고해 주시기를 촉구하고자 편지를 씁니다.\n\n제가 보기에 무료 일요일은 다른 요일과 전혀 다른 관람객을 끌어들입니다. 평소 일요일에 저는 1년에 한 번 박물관을 찾는 가족들, 새로 온 이민자들, 입장료를 낼 여유가 없는 학교 단체를 안내합니다. 이들이야말로 공공 박물관이 존재하는 이유인 시민들입니다.\n\n재정 논리도 보이는 것만큼 탄탄하지 않습니다. 일요일 관람객 다수는 돈을 내야 한다면 아예 오지 않을 것이므로, 예상 수입은 실현되기 어려운 관람객 수를 전제로 합니다. 게다가 일요일 관람객은 카페와 기념품점에서도 돈을 씁니다.\n\n더 정밀한 방안은 시민에게는 일요일을 무료로 유지하고, 관광객에게는 입장료를 받는 것입니다. 일요일 프로그램에 기업 후원을 조금 받으면 남은 부족분을 메울 수 있을 것입니다.\n\n황소연 올림",
+  "tips": [
+   "관찰 → 가치 판단: These are precisely the residents a public museum exists to serve.",
+   "상대의 숫자 논리를 공격할 때: the projected revenue assumes ~ that is unlikely to materialize.",
+   "대안은 '대상 구분(targeted)'과 '외부 재원'처럼 서로 다른 두 축으로 제시하면 C2 답안답게 탄탄합니다."
+  ]
+ }
+]

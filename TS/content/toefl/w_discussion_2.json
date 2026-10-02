@@ -1,0 +1,462 @@
+[
+ {
+  "id": "wd-021",
+  "level": 1,
+  "course": "Leisure Studies",
+  "professor": "This week we are studying how people use their free time. When students have a long vacation, some like to travel to new places. Others prefer to stay home, rest, and spend time with family and friends. Which do you think is a better way to spend a long vacation: traveling or staying home? Explain why, and give an example from your own life.",
+  "students": [
+   {
+    "name": "Mia",
+    "post": "I think traveling is better. When you visit a new place, you see new things, try new food, and meet new people. Last summer I went to the beach with my cousins, and I still remember every day of that trip. You cannot get memories like that at home."
+   },
+   {
+    "name": "Ethan",
+    "post": "I prefer staying home. During the semester, I am always busy and tired. A vacation is my only chance to sleep well and relax. Also, traveling costs a lot of money, and it can be stressful when buses are late or hotels are full."
+   }
+  ],
+  "sample": "I understand Ethan's point about rest, but I agree with Mia that traveling is a better way to spend a long vacation. My main reason is that travel teaches us things we cannot learn in a classroom. For example, last winter my family visited a small town in the mountains. I had to ask for directions, read a train schedule, and order food by myself. I felt more confident after that trip. Also, travel does not have to be expensive. Students can visit a nearby city by bus and stay with friends. Finally, a long vacation is long enough for both. We can travel for one week and still rest at home for the other weeks. So I think travel is the best choice.",
+  "sample_ko": "휴식에 대한 이선의 말도 이해하지만, 저는 긴 방학을 보내는 더 좋은 방법이 여행이라는 미아의 의견에 동의합니다. 가장 큰 이유는 여행이 교실에서 배울 수 없는 것을 가르쳐 주기 때문입니다. 예를 들어 지난겨울 우리 가족은 산속 작은 마을을 방문했습니다. 저는 혼자 길을 묻고, 기차 시간표를 읽고, 음식을 주문해야 했습니다. 그 여행 뒤로 자신감이 커졌습니다. 또 여행이 꼭 비쌀 필요는 없습니다. 학생들은 버스로 가까운 도시에 가서 친구 집에 머물 수 있습니다. 마지막으로 긴 방학은 둘 다 하기에 충분히 깁니다. 일주일은 여행하고 나머지 주에는 집에서 쉴 수 있습니다. 그래서 저는 여행이 가장 좋은 선택이라고 생각합니다.",
+  "tips": [
+   "첫 문장: I understand A's point, but I agree with B that ~ 로 두 학생을 모두 언급하세요.",
+   "My main reason is that ~ → For example, ~ → Also, ~ → Finally, ~ 순서면 레벨 1에서도 구조가 분명합니다.",
+   "상대 학생의 걱정(비용)에 짧게 답하면(travel does not have to be expensive) 점수가 올라갑니다."
+  ]
+ },
+ {
+  "id": "wd-022",
+  "level": 1,
+  "course": "Nutrition",
+  "professor": "Today we are talking about meals. Some students cook most of their meals at home. Other students usually eat at restaurants, cafés, or the campus dining hall. Both choices have good and bad points for health, money, and free time. In your opinion, is it better for college students to cook their own meals or to eat out? Why?",
+  "students": [
+   {
+    "name": "Grace",
+    "post": "Cooking at home is better. You can choose healthy food and control how much salt and oil you use. It is also much cheaper. I spend about thirty dollars a week on groceries, but my friends who eat out spend more than one hundred dollars."
+   },
+   {
+    "name": "Noah",
+    "post": "I think eating out is better for students. We have classes, homework, and part-time jobs, so we do not have time to shop, cook, and wash dishes every day. The dining hall is close to my classes, and the food there is not bad."
+   }
+  ],
+  "sample": "In my opinion, college students should cook their own meals when they can. First, I agree with Grace that it saves a lot of money. Students usually have small budgets, and the money they save can pay for books or a trip. Second, cooking is an important life skill. After graduation, we will not have a dining hall, so it is good to learn now. Noah says students have no time, but cooking does not have to take long. For example, my roommate and I cook a big pot of soup or curry on Sunday. Then we eat it for three or four days, and we only need ten minutes to heat it up. This way we eat healthy food, save money, and still have time to study.",
+  "sample_ko": "제 생각에 대학생은 가능할 때 스스로 요리해야 합니다. 첫째, 돈을 많이 아낄 수 있다는 그레이스의 말에 동의합니다. 학생은 보통 예산이 적고, 아낀 돈으로 책이나 여행 비용을 낼 수 있습니다. 둘째, 요리는 중요한 생활 기술입니다. 졸업하면 학생 식당이 없으니 지금 배워 두는 것이 좋습니다. 노아는 학생들이 시간이 없다고 하지만, 요리가 꼭 오래 걸릴 필요는 없습니다. 예를 들어 룸메이트와 저는 일요일에 수프나 카레를 큰 냄비로 끓입니다. 그러면 사나흘 동안 먹고, 데우는 데 10분이면 됩니다. 이렇게 하면 건강하게 먹고, 돈을 아끼고, 공부할 시간도 남습니다.",
+  "tips": [
+   "First, ~ / Second, ~ 로 이유 두 개를 나누면 짧은 시간에 쓰기 쉽습니다.",
+   "반대 학생의 이유를 인용한 뒤 반박: Noah says ~, but ~.",
+   "구체적인 내 경험(일요일에 카레 만들기)이 '시간이 없다'는 반론에 대한 증거가 됩니다."
+  ]
+ },
+ {
+  "id": "wd-023",
+  "level": 1,
+  "course": "Communication",
+  "professor": "This week's topic is how we keep in touch with friends. Some people like to send text messages because they are quick and easy. Others prefer to call or video chat because they can hear the other person's voice and share feelings more easily. Which way of communicating with friends do you prefer, texting or calling? Give reasons for your answer.",
+  "students": [
+   {
+    "name": "Sofia",
+    "post": "I like texting more. I can answer when I have time, even during a short break between classes. I can also think before I write, so I do not say something silly. Calling feels a little stressful to me because I have to answer right away."
+   },
+   {
+    "name": "James",
+    "post": "Calling is better for me. When I text, people sometimes misunderstand my jokes or think I am angry when I am not. When we talk, my friends can hear that I am laughing. Also, one five-minute call can replace fifty short messages."
+   }
+  ],
+  "sample": "Both Sofia and James make good points, but I prefer calling my friends, especially for important conversations. The biggest reason is that a voice shows feelings much better than words on a screen. For example, last month my best friend sent me a short text that said, \"Fine.\" I thought she was upset with me, and I worried all evening. When I finally called her, I found out she was just very tired. If we had talked on the phone first, there would have been no problem. I still use texting for simple things, like asking what time a class starts. However, when I want to really share my day or solve a problem, a call is faster and warmer.",
+  "sample_ko": "소피아와 제임스 모두 좋은 점을 말했지만, 저는 특히 중요한 대화일 때 친구에게 전화하는 것을 더 좋아합니다. 가장 큰 이유는 목소리가 화면 속 글자보다 감정을 훨씬 잘 보여 주기 때문입니다. 예를 들어 지난달 가장 친한 친구가 \"괜찮아.\"라는 짧은 문자를 보냈습니다. 저는 친구가 저에게 화가 났다고 생각해서 저녁 내내 걱정했습니다. 마침내 전화해 보니 친구는 그냥 많이 피곤했던 것이었습니다. 처음부터 통화했다면 아무 문제가 없었을 것입니다. 수업이 몇 시에 시작하는지 묻는 것처럼 간단한 일에는 여전히 문자를 씁니다. 하지만 하루를 진짜로 나누거나 문제를 풀고 싶을 때는 전화가 더 빠르고 따뜻합니다.",
+  "tips": [
+   "If we had ~, there would have been ~ (가정법 과거완료)는 짧은 이야기를 마무리하기 좋은 문장입니다.",
+   "한쪽을 고르면서도 다른 쪽을 쓰는 경우를 인정하면(I still use texting for ~) 균형 잡힌 글이 됩니다.",
+   "인용은 큰따옴표: a short text that said, \"Fine.\""
+  ]
+ },
+ {
+  "id": "wd-024",
+  "level": 1,
+  "course": "Physical Education",
+  "professor": "We have been learning about the benefits of exercise. Some people enjoy team sports, such as soccer, basketball, or volleyball. Other people prefer to exercise alone, for example by running, swimming, or going to the gym on their own schedule. Which kind of exercise do you think is better for college students: team sports or exercising alone? Explain your choice.",
+  "students": [
+   {
+    "name": "Liam",
+    "post": "Team sports are better. When you play with a team, you have fun and make friends at the same time. Also, your teammates expect you to come to practice, so you do not skip it. When I exercise alone, I often stay in bed instead."
+   },
+   {
+    "name": "Chloe",
+    "post": "I think exercising alone is better for busy students. You can go running at six in the morning or swim at ten at night. With a team, everyone has to find the same free time, and that is very hard during exam season."
+   }
+  ],
+  "sample": "I agree with Liam that team sports are a better choice for most college students. First, they help new students make friends. When I started college, I did not know anyone, so I joined the intramural volleyball team. After two weeks, I had ten new friends, and we still eat dinner together after every game. Second, a team keeps you motivated. If I plan to run alone and it is raining, I usually stay home. But I never miss volleyball because my team needs six players. Chloe is right that schedules can be a problem, but many campus teams play only once a week in the evening. So I think team sports give students exercise and friendship at the same time.",
+  "sample_ko": "저는 대부분의 대학생에게 단체 운동이 더 좋다는 리엄의 의견에 동의합니다. 첫째, 단체 운동은 신입생이 친구를 사귀는 데 도움이 됩니다. 저는 대학에 처음 왔을 때 아는 사람이 없어서 교내 배구 팀에 들어갔습니다. 2주 뒤 새 친구가 열 명 생겼고, 지금도 매 경기 후에 함께 저녁을 먹습니다. 둘째, 팀은 동기를 계속 유지하게 해 줍니다. 혼자 달리기로 계획했는데 비가 오면 저는 보통 집에 있습니다. 하지만 배구는 팀에 선수 여섯 명이 필요해서 절대 빠지지 않습니다. 일정이 문제가 될 수 있다는 클로이의 말은 맞지만, 캠퍼스 팀 중 다수는 일주일에 한 번 저녁에만 경기합니다. 그래서 저는 단체 운동이 학생에게 운동과 우정을 동시에 준다고 생각합니다.",
+  "tips": [
+   "A is right that ~, but ~ 는 상대 의견을 인정하면서 반박하는 가장 쉬운 틀입니다.",
+   "If I plan to ~, I usually ~ 처럼 습관을 나타내는 현재형 조건문으로 예시를 만들어 보세요.",
+   "마지막 문장에서 이유 두 개(exercise and friendship)를 다시 묶어 결론을 내세요."
+  ]
+ },
+ {
+  "id": "wd-025",
+  "level": 2,
+  "course": "Fine Arts",
+  "professor": "Many high schools are cutting art and music classes so that students can spend more time on subjects like math, science, and English. School leaders say these subjects are more important for students' future careers. Others argue that art and music are essential for every student's education. Should high schools require all students to take art or music classes? Why or why not?",
+  "students": [
+   {
+    "name": "Olivia",
+    "post": "Yes, they should. Art and music help students express feelings that are hard to put into words. For many teenagers, the art room is the only place in school where they feel relaxed. Removing these classes would make school more stressful for everyone."
+   },
+   {
+    "name": "Ryan",
+    "post": "I don't think they should be required. Students who love art can join clubs or take lessons outside school. Time in school is limited, and students who want to become engineers or doctors need as much math and science as possible."
+   }
+  ],
+  "sample": "I believe high schools should require at least one art or music class. Ryan argues that time is limited, but I think creative classes actually support other subjects. Learning music, for instance, requires counting rhythms and recognizing patterns, which are basic math skills. More importantly, art teaches students that there is often more than one right answer. In my high school, I had to take a design class even though I planned to study engineering. We built models from cardboard and redesigned them again and again after getting feedback. That experience taught me to accept mistakes and improve my ideas, which helps me in my engineering projects now. Also, not every family can pay for private lessons, so school may be a student's only chance to try art.",
+  "sample_ko": "저는 고등학교가 미술이나 음악 수업을 최소 하나는 필수로 해야 한다고 믿습니다. 라이언은 시간이 한정되어 있다고 주장하지만, 저는 창의적인 수업이 오히려 다른 과목을 돕는다고 생각합니다. 예를 들어 음악을 배우려면 박자를 세고 패턴을 알아봐야 하는데, 이는 기초 수학 능력입니다. 더 중요한 것은 미술이 정답이 하나 이상인 경우가 많다는 것을 가르친다는 점입니다. 저는 공학을 공부할 계획이었지만 고등학교에서 디자인 수업을 들어야 했습니다. 우리는 판지로 모형을 만들고 피드백을 받은 뒤 몇 번이고 다시 설계했습니다. 그 경험으로 실수를 받아들이고 아이디어를 개선하는 법을 배웠고, 지금 공학 프로젝트에 도움이 됩니다. 또 모든 가정이 개인 레슨비를 낼 수 있는 것은 아니어서, 학교가 학생이 미술을 접할 유일한 기회일 수도 있습니다.",
+  "tips": [
+   "상대 주장을 뒤집기: A argues that ~, but I think ~ actually supports ~.",
+   "공학 지망생이 미술 수업에서 배운 점처럼, 반대 측의 관심사(진로)와 연결된 예시가 가장 설득력 있습니다.",
+   "More importantly, ~ 로 두 번째 이유에 무게를 실어 보세요."
+  ]
+ },
+ {
+  "id": "wd-026",
+  "level": 2,
+  "course": "Transportation Studies",
+  "professor": "Some cities have made buses and subways completely free for everyone. They hope more people will leave their cars at home, which would reduce traffic and air pollution. However, free public transportation is very expensive for city governments, and the money must come from taxes paid by all residents. Do you think cities should make public transportation free? Explain your opinion.",
+  "students": [
+   {
+    "name": "Hannah",
+    "post": "Yes, I think it is a great idea. Many low-income workers spend a large part of their salary on bus fares. Free transportation would help them and also make the air cleaner. The money spent would be worth it because people would be healthier."
+   },
+   {
+    "name": "Marcus",
+    "post": "I disagree. People who drive cars usually do so because buses are slow or do not go where they need to go. Making the bus free will not change that. The city should spend the money on more routes and faster service instead."
+   }
+  ],
+  "sample": "Although free buses sound attractive, I agree with Marcus that cities should first spend the money on better service. In my hometown, the bus is cheap, only about one dollar, but almost nobody rides it because it comes every forty minutes and stops running at nine p.m. Even if the bus were free, my parents would still drive to work, since the trip takes twenty minutes by car and over an hour by bus. If the city added more buses and special bus lanes, people would switch because it would save them time. That said, Hannah makes a fair point about low-income workers. A good compromise would be free or discounted passes only for students, seniors, and people with low incomes.",
+  "sample_ko": "무료 버스는 매력적으로 들리지만, 저는 도시가 먼저 더 나은 서비스에 돈을 써야 한다는 마커스의 의견에 동의합니다. 제 고향에서는 버스 요금이 1달러 정도로 싸지만, 40분마다 오고 밤 9시면 끊겨서 거의 아무도 타지 않습니다. 버스가 무료라 해도 부모님은 여전히 차로 출근하실 텐데, 차로는 20분, 버스로는 한 시간 넘게 걸리기 때문입니다. 시가 버스를 늘리고 버스 전용 차로를 만든다면 시간이 절약되니 사람들이 바꿀 것입니다. 그렇긴 해도 저소득 노동자에 대한 해나의 말은 일리가 있습니다. 좋은 절충안은 학생, 노인, 저소득층에게만 무료 또는 할인 이용권을 주는 것입니다.",
+  "tips": [
+   "Even if ~ were free, ~ would still ~ (가정법)로 '무료여도 바뀌지 않는다'는 논리를 보여 주세요.",
+   "That said, A makes a fair point about ~. 는 반대 의견을 인정하며 절충안으로 넘어가는 표현입니다.",
+   "숫자(40분, 1달러, 20분 대 1시간)를 넣으면 짧은 예시도 구체적으로 보입니다."
+  ]
+ },
+ {
+  "id": "wd-027",
+  "level": 2,
+  "course": "Library Science",
+  "professor": "Libraries now offer both printed books and e-books, and many students read on tablets or laptops. Some people believe printed books will slowly disappear, while others think they will always be important for learning and study. For students, which is a better way to read for classes: printed books or e-books? Support your answer with reasons and examples.",
+  "students": [
+   {
+    "name": "Aiden",
+    "post": "E-books are better for students. They are often cheaper, and I can carry all my textbooks on one tablet instead of a heavy backpack. I can also search for a word in seconds, which is very useful when I am reviewing for an exam."
+   },
+   {
+    "name": "Zoe",
+    "post": "I prefer printed books for studying. When I read on a screen, I get distracted by messages and websites. With a paper book, I can focus for a long time, write notes in the margins, and remember where on the page I saw important information."
+   }
+  ],
+  "sample": "I agree with Zoe that printed books are better for serious studying, although e-books are useful in some situations. The main problem with e-books is distraction. Last semester I read my history textbook on my laptop, and I kept checking my email and social media without even noticing. When I switched to a used paper copy, I finished each chapter much faster. Also, writing notes by hand in the margins helps me remember ideas, because I have to think about what is important. Aiden is right that e-books are lighter and easy to search, so I use them for reference books that I only need to check quickly. But for chapters I need to understand deeply, paper is still the best choice for me.",
+  "sample_ko": "저는 진지하게 공부할 때는 종이책이 더 좋다는 조이의 의견에 동의하지만, 전자책도 어떤 상황에서는 유용합니다. 전자책의 가장 큰 문제는 주의 분산입니다. 지난 학기에 저는 역사 교과서를 노트북으로 읽었는데, 저도 모르게 계속 이메일과 소셜 미디어를 확인했습니다. 중고 종이책으로 바꾸자 각 장을 훨씬 빨리 끝냈습니다. 또 여백에 손으로 메모하면 무엇이 중요한지 생각해야 하므로 내용을 기억하는 데 도움이 됩니다. 전자책이 가볍고 검색이 쉽다는 에이든의 말은 맞아서, 빨리 확인만 하면 되는 참고 도서는 전자책을 씁니다. 하지만 깊이 이해해야 하는 장은 여전히 종이가 제게 가장 좋은 선택입니다.",
+  "tips": [
+   "although ~ 를 첫 문장에 넣어 '조건부 동의'를 보여 주면 단순한 찬반보다 성숙해 보입니다.",
+   "When I switched to ~, I ~ much faster. 처럼 전후 비교 경험이 강한 증거가 됩니다.",
+   "용도에 따라 나누는 결론(for reference books ~ / for chapters I need to understand ~)을 연습해 보세요."
+  ]
+ },
+ {
+  "id": "wd-028",
+  "level": 2,
+  "course": "Tourism Management",
+  "professor": "Popular destinations such as Venice and Barcelona now receive millions of tourists each year. Local residents complain about crowds, noise, and rising rents. Some cities have started to limit the number of visitors or charge an entrance fee to the city center. Do you think cities should limit the number of tourists? Why or why not? Use specific reasons in your answer.",
+  "students": [
+   {
+    "name": "Ava",
+    "post": "Yes. When too many tourists come, the city stops being a place to live. Rents go up because apartments become hotels, and local shops are replaced by souvenir stores. Limits protect the people who actually live there and keep the city alive for the next generation."
+   },
+   {
+    "name": "Lucas",
+    "post": "I don't agree with limits. Tourism brings jobs and money that many cities need. Also, a limit would make travel possible only for rich people who can book early or pay high fees. Everyone should have the chance to see famous places."
+   }
+  ],
+  "sample": "I think cities should limit tourists, but in a fair way. I agree with Ava that too many visitors can ruin daily life for residents. When I visited a famous old town last year, the streets were so crowded that local people could hardly walk to the bakery, and the guide told us that many families had moved away. However, Lucas has a good point that limits should not be only for the rich. Instead of high fees, cities could use a free online reservation system with a daily limit, like many national parks do. They could also encourage tourists to visit in winter or explore less famous neighborhoods. This way, residents can keep their homes, and tourism money can still support the local economy.",
+  "sample_ko": "저는 도시가 관광객을 제한해야 하지만, 공정한 방식이어야 한다고 생각합니다. 너무 많은 방문객이 주민의 일상을 망칠 수 있다는 에이바의 말에 동의합니다. 작년에 유명한 구시가지를 방문했을 때 거리가 너무 붐벼서 주민들이 빵집까지 걸어가기도 힘들었고, 가이드는 많은 가족이 이사를 나갔다고 말해 주었습니다. 하지만 제한이 부자만을 위한 것이 되어서는 안 된다는 루커스의 지적도 일리가 있습니다. 비싼 요금 대신, 도시는 많은 국립 공원처럼 하루 정원이 있는 무료 온라인 예약제를 쓸 수 있습니다. 또 관광객이 겨울에 방문하거나 덜 유명한 동네를 둘러보도록 장려할 수도 있습니다. 이렇게 하면 주민은 집을 지키고, 관광 수입은 여전히 지역 경제를 도울 수 있습니다.",
+  "tips": [
+   "'찬성하지만 방식은 이렇게'(but in a fair way)로 시작하면 두 학생의 의견을 모두 활용할 수 있습니다.",
+   "Instead of ~, cities could ~, like ~ do. 로 다른 분야의 사례(국립 공원)를 빌려 오세요.",
+   "This way, ~ and ~. 로 양쪽의 이익을 모두 챙기는 결론을 내 보세요."
+  ]
+ },
+ {
+  "id": "wd-029",
+  "level": 3,
+  "course": "Agricultural Science",
+  "professor": "Scientists can now grow meat in laboratories from animal cells, without raising and slaughtering animals. Supporters claim that lab-grown meat could greatly reduce land use, greenhouse gas emissions, and animal suffering. Critics question whether it is safe, affordable, and acceptable to consumers, and they worry about its impact on farmers. Should governments invest public money in developing lab-grown meat? Explain your position.",
+  "students": [
+   {
+    "name": "Emily",
+    "post": "Governments should definitely invest. Livestock farming produces a huge share of global emissions and uses enormous amounts of land and water. Private companies alone are moving too slowly, and public funding could make lab-grown meat cheap enough for ordinary people within a decade."
+   },
+   {
+    "name": "Daniel",
+    "post": "I'm skeptical. We don't yet know the long-term health effects of eating cultured meat, and the technology still requires expensive growth materials. Public money would be better spent helping farmers adopt more sustainable practices that we already know work, like rotational grazing."
+   }
+  ],
+  "sample": "I think governments should invest in lab-grown meat, but as part of a broader strategy rather than a single solution. Emily is right that the environmental cost of livestock is too large to ignore, and new technologies rarely become affordable without early public support. Solar panels are a good example: government research funding and subsidies helped reduce their price dramatically over twenty years. At the same time, Daniel's concern about safety is reasonable, which is exactly why public funding matters. If only private companies develop this meat, their safety research may remain secret. Government-funded studies, by contrast, would be published and independently reviewed. Finally, part of the budget could help livestock farmers retrain or produce the cells that this industry needs, so rural communities are not left behind.",
+  "sample_ko": "저는 정부가 배양육에 투자해야 하지만, 유일한 해결책이 아니라 더 넓은 전략의 일부로 해야 한다고 생각합니다. 축산업의 환경 비용이 무시하기엔 너무 크다는 에밀리의 말은 옳고, 새로운 기술은 초기 공공 지원 없이 저렴해지는 경우가 드뭅니다. 태양광 패널이 좋은 예입니다. 정부 연구 자금과 보조금이 20년에 걸쳐 가격을 크게 낮추는 데 도움을 주었습니다. 동시에 안전에 대한 대니얼의 우려는 타당한데, 바로 그래서 공공 자금이 중요합니다. 민간 기업만 이 고기를 개발하면 안전성 연구가 비공개로 남을 수 있습니다. 반면 정부 지원 연구는 공개되고 독립적으로 검토될 것입니다. 마지막으로 예산 일부는 축산 농가가 재교육을 받거나 이 산업에 필요한 세포를 생산하도록 도와, 농촌 지역이 뒤처지지 않게 할 수 있습니다.",
+  "tips": [
+   "상대의 걱정을 내 주장의 근거로 바꾸기: ~ is reasonable, which is exactly why ~ matters.",
+   "다른 기술의 역사(태양광 패널)를 비유로 쓰면 B2 수준의 근거가 됩니다.",
+   "by contrast, rather than, at the same time 같은 연결어로 문장 사이 관계를 분명히 하세요."
+  ]
+ },
+ {
+  "id": "wd-030",
+  "level": 3,
+  "course": "Architecture",
+  "professor": "As cities grow, they face a difficult choice about old buildings. Historic buildings give a city its character and connect people to the past, but they are often expensive to maintain and may not meet modern needs. Replacing them with new buildings can provide more housing and office space. When a city needs more space, should it preserve its old buildings or replace them with new ones? Explain your view.",
+  "students": [
+   {
+    "name": "Isabella",
+    "post": "Cities should preserve them. Once a historic building is torn down, it is gone forever. Old buildings attract tourists and make neighborhoods unique. If every city replaced its old buildings with glass towers, all cities around the world would look exactly the same."
+   },
+   {
+    "name": "Kevin",
+    "post": "Replacing them is often the better choice. Many old buildings are poorly insulated and waste energy, and they lack elevators, which makes them inaccessible for elderly and disabled people. A city's first duty is to give residents safe and affordable places to live."
+   }
+  ],
+  "sample": "In my view, the best approach is neither to freeze old buildings in place nor to tear them down, but to reuse them. Isabella is right that historic architecture gives a neighborhood its identity, while Kevin correctly points out that many old buildings do not serve modern residents. Adaptive reuse can address both concerns. In my city, an abandoned textile factory from the 1920s was converted into apartments, a public library, and small studios. The brick walls and large windows were kept, but engineers added insulation, solar panels, and elevators. The building now houses about two hundred people and has become a popular gathering place. Moreover, reusing a structure usually produces far less carbon than demolishing it and building from scratch, so it can be the more environmentally responsible option as well.",
+  "sample_ko": "제 생각에 가장 좋은 방법은 오래된 건물을 그대로 얼려 두는 것도, 허무는 것도 아닌 재활용하는 것입니다. 역사적 건축물이 동네의 정체성을 준다는 이사벨라의 말은 옳고, 케빈은 많은 오래된 건물이 현대 주민에게 맞지 않는다는 점을 정확히 지적합니다. 용도 변경 재활용은 두 우려를 모두 해결할 수 있습니다. 제 도시에서는 1920년대에 지은 버려진 섬유 공장이 아파트, 공공 도서관, 작은 작업실로 바뀌었습니다. 벽돌 벽과 큰 창문은 남기고, 기술자들이 단열재, 태양광 패널, 엘리베이터를 더했습니다. 이 건물에는 지금 약 200명이 살고 있으며 인기 있는 모임 장소가 되었습니다. 게다가 건물을 재사용하면 보통 철거 후 새로 짓는 것보다 탄소 배출이 훨씬 적어서, 환경적으로도 더 책임 있는 선택이 될 수 있습니다.",
+  "tips": [
+   "neither A nor B, but C 구조로 '제3의 길'을 제시하면 두 학생과 겹치지 않는 답이 됩니다.",
+   "A is right that ~, while B correctly points out that ~. 한 문장으로 두 학생을 모두 정리하세요.",
+   "adaptive reuse, from scratch, gathering place 같은 주제 어휘를 미리 익혀 두세요."
+  ]
+ },
+ {
+  "id": "wd-031",
+  "level": 3,
+  "course": "Labor Economics",
+  "professor": "Several companies and even some governments have experimented with a four-day work week, in which employees work 32 hours instead of 40 while keeping the same pay. Some trials reported higher productivity and happier workers, but critics doubt that the model works in every industry. Do you think a four-day work week should become the standard for most jobs? Why or why not?",
+  "students": [
+   {
+    "name": "Natalie",
+    "post": "Yes. Studies show that people are not truly productive for eight hours a day anyway. With an extra day off, employees rest better, spend time with their families, and come back more focused. Companies also benefit because fewer people quit."
+   },
+   {
+    "name": "Brandon",
+    "post": "It sounds nice, but it won't work for many jobs. Hospitals, restaurants, and schools need people every day. If nurses work only four days, hospitals must hire more staff, which costs a lot. The model fits office jobs, not the whole economy."
+   }
+  ],
+  "sample": "I support moving toward a four-day week, but I agree with Brandon that it cannot be one rule for every job. For office workers, Natalie's argument is convincing. My aunt's software company switched to a four-day schedule last year, and her team cut unnecessary meetings so sharply that they finished projects on time with less stress. On the other hand, a hospital cannot simply close on Fridays. However, that does not mean these workers should be excluded. Hospitals could offer shorter shifts or rotating schedules, so that each nurse still gets an extra day off even though the hospital stays open all week. Governments could encourage this gradually with tax benefits rather than legal requirements. In short, the goal of shorter working time is worth pursuing, even if the method has to differ by industry.",
+  "sample_ko": "저는 주 4일제로 나아가는 것을 지지하지만, 모든 직업에 하나의 규칙이 될 수는 없다는 브랜던의 의견에 동의합니다. 사무직에게는 내털리의 주장이 설득력 있습니다. 이모가 다니는 소프트웨어 회사는 작년에 주 4일제로 바꿨는데, 팀이 불필요한 회의를 크게 줄여서 스트레스는 덜 받으면서 프로젝트를 제때 끝냈습니다. 반면 병원은 금요일에 그냥 문을 닫을 수 없습니다. 하지만 그렇다고 이런 노동자를 제외해야 한다는 뜻은 아닙니다. 병원은 더 짧은 교대나 순환 근무를 도입해, 병원은 일주일 내내 열면서도 간호사마다 하루를 더 쉬게 할 수 있습니다. 정부는 법적 의무보다 세제 혜택으로 이를 점진적으로 장려할 수 있습니다. 요컨대 근로 시간 단축이라는 목표는 추구할 가치가 있으며, 방법은 업종마다 달라도 됩니다.",
+  "tips": [
+   "However, that does not mean ~. 은 상대 주장에서 나온 잘못된 결론을 막는 유용한 문장입니다.",
+   "so ~ that ~ (so sharply that they finished ~)으로 원인과 결과를 한 문장에 담아 보세요.",
+   "In short, A is worth pursuing, even if B has to differ ~ 로 원칙과 방법을 나눠 결론을 내세요."
+  ]
+ },
+ {
+  "id": "wd-032",
+  "level": 3,
+  "course": "Sports Management",
+  "professor": "College athletes in popular sports such as football and basketball can generate millions of dollars for their universities through ticket sales, television contracts, and merchandise. Traditionally, these athletes received scholarships but no salary. Some people argue that this is unfair and that athletes should be paid like employees. Others believe paying them would damage the idea of amateur student sports. Should universities pay their athletes a salary? Explain.",
+  "students": [
+   {
+    "name": "Rachel",
+    "post": "Yes. These athletes train more than forty hours a week and risk serious injuries, while coaches earn millions from their work. A scholarship is not enough, especially since many athletes come from low-income families and cannot afford basic living expenses."
+   },
+   {
+    "name": "Tyler",
+    "post": "No. College is supposed to be about education. Paying athletes would turn universities into professional sports clubs. It would also be unfair to athletes in less popular sports like swimming or fencing, who train just as hard but bring in no money."
+   }
+  ],
+  "sample": "I believe universities should compensate athletes, although not necessarily through equal salaries. Rachel makes a strong point: when a university earns millions from a basketball team while its players struggle to pay for groceries, the system is clearly unbalanced. However, Tyler's concern about fairness is also valid, so I would propose a two-part system. First, every athlete, whether a football player or a fencer, should receive a monthly living allowance and lifetime medical coverage for injuries suffered during college sports. Second, athletes should be allowed to earn money from their own name and image, for example through sponsorship deals or online content. This approach rewards athletes who attract attention without turning every team into a payroll, and it keeps education at the center by tying the allowance to academic progress.",
+  "sample_ko": "저는 대학이 선수에게 보상을 해야 하지만, 꼭 똑같은 급여로 할 필요는 없다고 믿습니다. 레이철의 지적은 강력합니다. 대학이 농구 팀으로 수백만 달러를 버는 동안 선수들이 식비를 내기도 힘들다면 그 제도는 분명 불균형합니다. 하지만 공정성에 대한 타일러의 우려도 타당하므로 두 부분으로 된 제도를 제안합니다. 첫째, 미식축구 선수든 펜싱 선수든 모든 선수가 매달 생활비와, 대학 운동 중 입은 부상에 대한 평생 의료 보장을 받아야 합니다. 둘째, 선수가 후원 계약이나 온라인 콘텐츠처럼 자기 이름과 이미지로 돈을 벌 수 있게 해야 합니다. 이 방식은 모든 팀을 급여 대상으로 만들지 않으면서도 주목받는 선수에게 보상하고, 생활비를 학업 진척과 연결해 교육을 중심에 둡니다.",
+  "tips": [
+   "compensate(보상하다)와 pay a salary(급여를 주다)를 구별하면 논점이 정교해집니다.",
+   "I would propose a two-part system. First, ~ Second, ~ 로 해결책을 구조화하세요.",
+   "whether A or B 로 '종목과 상관없이'를 간결하게 표현할 수 있습니다."
+  ]
+ },
+ {
+  "id": "wd-033",
+  "level": 4,
+  "course": "Space Policy",
+  "professor": "National space agencies spend billions of dollars each year on missions to the Moon and Mars, space telescopes, and research into the origins of the universe. Critics argue that this money would be better spent addressing urgent problems on Earth, such as poverty, disease, and climate change. Supporters counter that space research produces scientific and technological benefits that improve life on Earth. Is public spending on space exploration justified? Take a position and defend it.",
+  "students": [
+   {
+    "name": "Jasmine",
+    "post": "I find it hard to justify. Millions of people lack clean water and basic healthcare. Sending a rover to Mars is impressive, but it does nothing for a child who is going hungry today. Governments have a moral obligation to prioritize urgent human needs over scientific curiosity."
+   },
+   {
+    "name": "Owen",
+    "post": "Space spending is a tiny fraction of most national budgets, yet it has given us weather satellites, GPS, and advances in materials and medical imaging. Cancelling it would not end poverty, but it would slow innovation that benefits everyone, including the poorest."
+   }
+  ],
+  "sample": "I find Owen's argument more persuasive, largely because Jasmine's position rests on a false trade-off. Space budgets are typically less than one percent of government spending, so cutting them would barely affect poverty programs, while the long-term returns can be enormous. Perhaps the clearest example is climate science itself. Much of what we know about melting ice sheets, rising sea levels, and deforestation comes from Earth-observation satellites built by space agencies. In other words, space research is not a distraction from the problems Jasmine mentions; it is often the tool we use to measure and address them. That said, I think agencies should be held to a higher standard of public accountability. Missions that directly support climate monitoring or disaster response deserve priority over prestige projects whose main purpose is national pride.",
+  "sample_ko": "저는 오언의 주장이 더 설득력 있다고 보는데, 주로 재스민의 입장이 잘못된 양자택일에 기대고 있기 때문입니다. 우주 예산은 보통 정부 지출의 1퍼센트도 안 되므로 이를 깎아도 빈곤 대책에는 거의 영향이 없는 반면, 장기적 효과는 엄청날 수 있습니다. 가장 분명한 예는 아마 기후 과학 자체일 것입니다. 빙상이 녹고 해수면이 오르고 숲이 사라지는 것에 대해 우리가 아는 것의 상당 부분은 우주 기관이 만든 지구 관측 위성에서 나옵니다. 다시 말해 우주 연구는 재스민이 말하는 문제에서 관심을 돌리는 것이 아니라, 그 문제를 측정하고 해결하는 데 쓰는 도구인 경우가 많습니다. 그렇긴 해도 우주 기관은 더 높은 공적 책임 기준을 지켜야 한다고 생각합니다. 기후 감시나 재난 대응을 직접 돕는 임무는 국가적 자존심이 주목적인 과시성 사업보다 우선해야 합니다.",
+  "tips": [
+   "상대 논리의 전제를 공격하기: ~'s position rests on a false trade-off.",
+   "In other words, A is not ~; it is ~. 는 C1 답안에서 핵심 주장을 다시 정의할 때 씁니다.",
+   "That said, ~ should be held to a higher standard ~ 로 내 입장의 한계도 인정하면 균형이 생깁니다."
+  ]
+ },
+ {
+  "id": "wd-034",
+  "level": 4,
+  "course": "Criminal Justice",
+  "professor": "Prison systems around the world differ greatly in their goals. Some focus mainly on punishment and keeping dangerous people away from society. Others, such as those in Norway, emphasize rehabilitation through education, job training, and therapy, and they report much lower rates of reoffending. Critics argue that comfortable prisons are unfair to victims and may not deter crime. Should prisons prioritize rehabilitation over punishment? Explain your reasoning.",
+  "students": [
+   {
+    "name": "Sophie",
+    "post": "Rehabilitation should come first. Almost all prisoners are eventually released, so the real question is what kind of neighbors they will be. If they leave prison with job skills and treatment for addiction, they are far less likely to commit new crimes, which protects everyone."
+   },
+   {
+    "name": "Marcus",
+    "post": "Rehabilitation is important, but punishment matters too. Victims and their families need to see that serious crimes have serious consequences. If prison feels like a training center, it sends the message that crime has no real cost, and some people may not be deterred."
+   }
+  ],
+  "sample": "I would argue that rehabilitation should be the priority, largely for the practical reason Sophie raises. Since most prisoners return to society, a system that releases them angrier and less employable simply postpones the next crime. Marcus is right that victims deserve acknowledgment, but I am not convinced that harsh conditions provide it. Research on deterrence suggests that people considering a crime are influenced far more by the likelihood of being caught than by how unpleasant prison will be. Moreover, punishment and rehabilitation are not mutually exclusive: losing one's freedom is itself a serious penalty, regardless of whether the prison offers classes. One reform worth considering is restorative justice programs, in which offenders meet victims who agree to participate and take responsibility for the harm. These programs address victims' needs directly, which a longer or harsher sentence rarely does.",
+  "sample_ko": "저는 주로 소피가 제기한 현실적인 이유로 교화가 우선이어야 한다고 주장하고 싶습니다. 대부분의 수감자가 사회로 돌아오므로, 그들을 더 화나고 더 취업하기 어려운 상태로 내보내는 제도는 다음 범죄를 미룰 뿐입니다. 피해자가 인정을 받아야 한다는 마커스의 말은 옳지만, 가혹한 환경이 그것을 제공한다고는 생각하지 않습니다. 억제 효과 연구에 따르면 범죄를 고민하는 사람은 교도소가 얼마나 불쾌한지보다 잡힐 가능성에 훨씬 더 큰 영향을 받습니다. 게다가 처벌과 교화는 서로 배타적이지 않습니다. 교도소가 수업을 제공하든 아니든 자유를 잃는 것 자체가 무거운 형벌입니다. 고려할 만한 개혁 하나는 회복적 사법 프로그램으로, 범죄자가 참여에 동의한 피해자를 만나 피해에 대한 책임을 지는 것입니다. 이 프로그램은 피해자의 필요를 직접 다루는데, 더 길거나 가혹한 형량은 좀처럼 그렇게 하지 못합니다.",
+  "tips": [
+   "I am not convinced that ~ 은 상대 학생을 공손하게 반박하는 C1 표현입니다.",
+   "A and B are not mutually exclusive 로 양자택일 구도를 깨 보세요.",
+   "연구 결과를 일반적으로 언급(Research on deterrence suggests ~)하되 숫자를 지어내지 않는 것이 안전합니다."
+  ]
+ },
+ {
+  "id": "wd-035",
+  "level": 4,
+  "course": "Marine Biology",
+  "professor": "The deep seabed contains large deposits of metals such as cobalt and nickel, which are needed for electric vehicle batteries and other clean energy technologies. Mining companies argue that deep-sea mining could reduce the need for destructive mining on land. However, marine scientists warn that deep-sea ecosystems are poorly understood and could take thousands of years to recover from damage. Should deep-sea mining be allowed? Explain your position.",
+  "students": [
+   {
+    "name": "Leah",
+    "post": "It should be banned, at least for now. We have explored only a tiny portion of the deep ocean, and new species are discovered on almost every expedition. Destroying habitats we have not even studied would be reckless, especially when the damage may be permanent."
+   },
+   {
+    "name": "Jacob",
+    "post": "We need these metals to move away from fossil fuels, and land mining has serious costs too: deforestation, polluted rivers, and dangerous working conditions. If deep-sea mining can be done carefully, it might actually cause less total harm than expanding mines on land."
+   }
+  ],
+  "sample": "Although Jacob raises a serious point about the costs of land mining, I believe a temporary ban on deep-sea mining is the wiser policy. The central problem is that we cannot regulate damage we are unable to measure. Before a factory is built on land, scientists can survey the area and predict its effects, but much of the deep seabed has never been observed, so any environmental assessment would largely be guesswork. Given that these ecosystems may need millennia to recover, the risk of an irreversible mistake outweighs the benefit of faster access to metals. In addition, the demand side deserves attention. Battery recycling and new battery chemistries that rely less on cobalt are improving rapidly. A ban of perhaps ten years would give researchers time to map these habitats while these alternatives mature.",
+  "sample_ko": "제이컵이 육상 채굴의 비용에 대해 중요한 점을 제기했지만, 저는 심해 채굴을 일시적으로 금지하는 것이 더 현명한 정책이라고 믿습니다. 핵심 문제는 측정할 수 없는 피해는 규제할 수 없다는 것입니다. 육지에 공장을 짓기 전에는 과학자들이 그 지역을 조사하고 영향을 예측할 수 있지만, 심해저의 상당 부분은 한 번도 관찰된 적이 없어서 어떤 환경 평가도 대부분 추측일 것입니다. 이 생태계가 회복에 수천 년이 걸릴 수 있다는 점을 고려하면, 돌이킬 수 없는 실수의 위험이 금속을 더 빨리 얻는 이익보다 큽니다. 또 수요 쪽도 주목할 필요가 있습니다. 배터리 재활용과 코발트에 덜 의존하는 새로운 배터리 화학은 빠르게 발전하고 있습니다. 10년 정도의 금지 기간은 이런 대안이 성숙하는 동안 연구자들이 서식지를 지도로 만들 시간을 줄 것입니다.",
+  "tips": [
+   "The central problem is that ~ 으로 내 주장의 핵심 논리를 한 문장에 담으세요.",
+   "Given that ~, the risk of ~ outweighs the benefit of ~. 는 위험·이익 비교의 대표 구문입니다.",
+   "공급(채굴)만이 아니라 수요(재활용·대체 기술)를 언급하면 두 학생에게 없는 새 관점이 됩니다."
+  ]
+ },
+ {
+  "id": "wd-036",
+  "level": 4,
+  "course": "Educational Psychology",
+  "professor": "Some universities have experimented with replacing letter grades in first-year courses with a simple pass/fail system. Supporters say grades create excessive stress and encourage students to choose easy courses instead of challenging ones. Opponents argue that grades motivate students to work hard and give employers and graduate schools useful information. Should universities adopt pass/fail grading for first-year courses? Explain your view.",
+  "students": [
+   {
+    "name": "Amelia",
+    "post": "I strongly support it. The first year is an adjustment period, and many students struggle with living alone, managing money, or homesickness. A bad grade in that year can follow them for their whole academic career. Pass/fail would let them focus on learning instead of competing."
+   },
+   {
+    "name": "Nathan",
+    "post": "I think it would backfire. Without grades, many students would do only the minimum needed to pass. Grades also give feedback: an A or a C tells me how well I understood the material. Removing them would leave students unsure about whether they are ready for advanced courses."
+   }
+  ],
+  "sample": "I believe pass/fail grading for first-year courses is a sound idea, provided that it is paired with detailed feedback. Nathan is right that grades provide information, but a single letter is actually a rather crude signal. A \"B\" does not tell a student whether the problem was weak writing, poor time management, or a misunderstanding of key concepts. If instructors replaced letter grades with brief written comments on specific skills, students would receive more useful feedback, not less. As for motivation, I suspect the minimum-effort problem is smaller than Nathan fears. When my high school introduced ungraded exploration courses, many classmates took subjects such as philosophy and computer programming that they would otherwise have avoided out of fear of lowering their averages. Several later chose majors in those fields. Removing the pressure of grades encouraged intellectual risk-taking, which is exactly what the first year should cultivate.",
+  "sample_ko": "저는 자세한 피드백과 함께한다면 1학년 과목의 통과/낙제 평가가 타당한 생각이라고 믿습니다. 성적이 정보를 준다는 네이선의 말은 맞지만, 글자 하나는 사실 꽤 거친 신호입니다. 'B'는 문제가 약한 글쓰기인지, 시간 관리 부족인지, 핵심 개념 오해인지 알려 주지 않습니다. 교수자가 문자 성적 대신 구체적 능력에 대한 짧은 서면 코멘트를 준다면, 학생은 더 적은 것이 아니라 더 유용한 피드백을 받을 것입니다. 동기에 관해서는, 최소 노력 문제가 네이선이 걱정하는 것보다 작다고 봅니다. 제 고등학교가 성적 없는 탐색 과목을 도입했을 때, 많은 친구가 평균이 떨어질까 봐 피했을 철학이나 컴퓨터 프로그래밍 같은 과목을 들었습니다. 그중 몇 명은 나중에 그 분야를 전공으로 택했습니다. 성적 압박을 없애자 지적 모험이 장려되었고, 그것이야말로 1학년이 길러야 할 것입니다.",
+  "tips": [
+   "provided that ~ (~라는 조건이라면)으로 조건부 찬성을 표현하세요.",
+   "상대의 근거(정보 제공)를 받아 '더 나은 정보'로 뒤집으면 강한 반박이 됩니다: more useful feedback, not less.",
+   "As for ~, I suspect ~ 로 두 번째 반론에 넘어가는 문장을 연습해 보세요."
+  ]
+ },
+ {
+  "id": "wd-037",
+  "level": 5,
+  "course": "Bioethics",
+  "professor": "Gene-editing technologies such as CRISPR have made it possible, at least in principle, to alter the DNA of human embryos. Such edits could prevent serious inherited diseases, but they would also be passed on to future generations who cannot consent. Some ethicists argue for a permanent global ban on heritable gene editing; others believe it should be permitted under strict regulation for preventing severe disease. Where should society draw the line? Defend your position.",
+  "students": [
+   {
+    "name": "Clara",
+    "post": "A permanent ban is the only responsible option. Once we accept editing embryos to prevent disease, the boundary between therapy and enhancement will inevitably erode, and wealthy parents will start selecting for height or intelligence. The risk of creating new forms of inequality is simply too great."
+   },
+   {
+    "name": "Victor",
+    "post": "Banning it forever would condemn families to pass on devastating illnesses that we could prevent. We already allow embryo screening during fertility treatment, which is also a form of selection. The sensible approach is strict oversight limited to serious, well-understood single-gene disorders, not a blanket prohibition."
+   }
+  ],
+  "sample": "While Clara's fear of a slide toward enhancement is understandable, a permanent ban strikes me as the wrong instrument for preventing it. Prohibitions that ignore genuine medical need tend to push research into less regulated jurisdictions rather than stopping it, which would leave us with the very outcome Clara fears and none of the oversight. I am therefore closer to Victor's position, but I would add a condition he does not mention. For most families affected by inherited disorders, embryo screening already offers a way to avoid passing on the disease, so heritable editing should be permitted only for the rare cases in which screening cannot help, such as when both parents carry the same recessive condition. Framing the rule around that narrow gap, and subjecting each case to international review, would allow medicine to act where it is truly needed while keeping enhancement firmly off the table.",
+  "sample_ko": "클라라가 유전자 강화로 미끄러질까 두려워하는 것은 이해하지만, 영구 금지는 그것을 막는 잘못된 수단이라고 생각합니다. 실제 의학적 필요를 무시하는 금지는 연구를 멈추기보다 규제가 느슨한 국가로 밀어내는 경향이 있어서, 감독은 전혀 없이 클라라가 걱정하는 바로 그 결과를 남길 것입니다. 그래서 저는 빅터의 입장에 더 가깝지만, 그가 언급하지 않은 조건 하나를 덧붙이겠습니다. 유전 질환을 가진 대부분의 가족에게는 배아 선별 검사가 이미 질병을 물려주지 않는 방법을 제공합니다. 따라서 유전되는 편집은 부모 모두가 같은 열성 질환을 가진 경우처럼 선별 검사로 도울 수 없는 드문 경우에만 허용되어야 합니다. 규칙을 그 좁은 틈에 맞춰 짜고 사례마다 국제 심사를 거치게 하면, 의학이 정말 필요한 곳에서 행동하면서도 강화는 확실히 배제할 수 있을 것입니다.",
+  "tips": [
+   "상대의 목표는 인정하고 수단을 비판: ~ strikes me as the wrong instrument for ~.",
+   "the very outcome A fears (A가 두려워하는 바로 그 결과)는 C2 수준의 강한 반박 표현입니다.",
+   "I am closer to B's position, but I would add a condition he does not mention. 처럼 동의하면서 새 조건을 더해 독창성을 보이세요."
+  ]
+ },
+ {
+  "id": "wd-038",
+  "level": 5,
+  "course": "Sociology of Work",
+  "professor": "Advances in artificial intelligence and robotics may automate a significant share of current jobs, including many white-collar positions once considered secure. Some economists propose a universal basic income (UBI), a regular cash payment to every adult regardless of employment, as a response. Others argue that governments should instead invest heavily in retraining programs that help workers move into new occupations. Which approach better prepares society for widespread automation? Justify your answer.",
+  "students": [
+   {
+    "name": "Hiroshi",
+    "post": "Universal basic income is the more realistic answer. Retraining programs have a poor track record; many displaced factory workers never found comparable jobs. A guaranteed income would give people security and the freedom to pursue education, caregiving, or entrepreneurship on their own terms."
+   },
+   {
+    "name": "Laura",
+    "post": "UBI would be enormously expensive and could weaken the social value of work, which gives many people purpose and community. Retraining, if properly funded and designed with employers, keeps people connected to the labor market. The failures Hiroshi mentions reflect poor implementation, not a flawed idea."
+   }
+  ],
+  "sample": "Framing this as a choice between income and retraining obscures the fact that each addresses a different failure. Laura is correct that work provides identity and social connection, but retraining assumes that new jobs will appear at roughly the pace old ones disappear, an assumption automation may well undermine. Conversely, Hiroshi's case for income security is compelling, yet a universal payment large enough to live on would be fiscally staggering and would direct much of its funding to people who do not need it. A more defensible design would be a targeted income guarantee for displaced workers, conditioned not on job searching but on participation in some form of learning or community service. Such a model borrows the stability that makes UBI attractive while preserving the structure Laura values, and it remains affordable precisely because it is aimed at those whom automation actually displaces.",
+  "sample_ko": "이 문제를 소득과 재교육 사이의 선택으로 보면 각각이 서로 다른 실패를 다룬다는 사실이 가려집니다. 일이 정체성과 사회적 연결을 준다는 로라의 말은 옳지만, 재교육은 옛 일자리가 사라지는 속도와 비슷하게 새 일자리가 생긴다고 가정하는데, 자동화는 바로 그 가정을 무너뜨릴 수 있습니다. 반대로 소득 보장에 대한 히로시의 주장은 설득력 있지만, 생활이 가능할 만큼 큰 보편 지급은 재정적으로 감당하기 어렵고 그 재원의 상당 부분이 필요 없는 사람에게 갈 것입니다. 더 타당한 설계는 일자리를 잃은 노동자를 위한 선별적 소득 보장으로, 구직 활동이 아니라 어떤 형태의 학습이나 지역 봉사 참여를 조건으로 하는 것입니다. 이런 모델은 기본 소득을 매력적으로 만드는 안정성을 빌리면서 로라가 중시하는 구조도 지키고, 자동화로 실제 밀려난 사람을 겨냥하기 때문에 감당 가능한 비용으로 유지됩니다.",
+  "tips": [
+   "Framing this as a choice between A and B obscures ~ 로 질문 자체의 틀을 문제 삼으면 C2 답안의 첫 문장이 됩니다.",
+   "Conversely, ~ is compelling, yet ~ 로 두 학생을 차례로 평가하세요.",
+   "conditioned not on A but on B, precisely because ~ 같은 정밀한 구문이 논리를 압축해 줍니다."
+  ]
+ },
+ {
+  "id": "wd-039",
+  "level": 5,
+  "course": "Law and Technology",
+  "professor": "In some jurisdictions, individuals can request that search engines remove links to outdated or irrelevant personal information, a principle known as the \"right to be forgotten.\" Advocates say it allows people to move on from past mistakes. Critics contend that it lets individuals rewrite the public record and places private companies in the role of judging what the public may know. Should the right to be forgotten be widely adopted? Defend your view.",
+  "students": [
+   {
+    "name": "Amara",
+    "post": "It should be adopted broadly. Before the internet, an embarrassing incident would fade from public memory. Now a single article from twenty years ago can appear at the top of every search, costing someone jobs and relationships. People deserve the chance to be judged by who they are now."
+   },
+   {
+    "name": "Felix",
+    "post": "I worry about how it will be abused. Politicians and business leaders could use it to hide past misconduct that voters and customers have a right to know about. And search companies, which are not courts, would end up deciding these requests mostly behind closed doors."
+   }
+  ],
+  "sample": "I find both concerns legitimate, which suggests the real question is not whether the right should exist but who should decide how it applies. Amara rightly observes that search engines have abolished the gradual forgetting that once allowed people to rebuild their lives. Felix, however, identifies the more troubling flaw in current practice: delegating these judgments to private companies that have every incentive to approve requests quietly in order to avoid legal risk. My position, therefore, is that the right should be adopted, but adjudicated by an independent public authority under transparent criteria. Requests from people in public life concerning their professional conduct should be presumed invalid, whereas private individuals seeking to remove minor, decades-old matters should generally succeed. Published, anonymized decisions would also let the public scrutinize how the balance between privacy and accountability is actually being struck.",
+  "sample_ko": "두 우려 모두 정당하다고 보며, 이는 진짜 질문이 그 권리가 있어야 하느냐가 아니라 그 적용을 누가 결정하느냐임을 시사합니다. 아마라는 검색 엔진이 한때 사람들이 삶을 다시 세울 수 있게 해 주던 점진적 망각을 없애 버렸다고 정확히 지적합니다. 하지만 펠릭스는 현재 관행의 더 심각한 결함을 짚습니다. 법적 위험을 피하려고 요청을 조용히 승인할 유인이 큰 민간 기업에 이런 판단을 맡긴다는 점입니다. 따라서 제 입장은 이 권리를 도입하되, 투명한 기준 아래 독립적인 공공 기관이 판정해야 한다는 것입니다. 공적 인물이 직업적 행위에 관해 낸 요청은 무효로 추정하고, 사소하고 수십 년 지난 일을 지우려는 일반인은 대체로 받아들여져야 합니다. 판정을 익명화해 공개하면 사생활과 책임 사이의 균형이 실제로 어떻게 잡히는지 대중이 검토할 수도 있습니다.",
+  "tips": [
+   "the real question is not whether ~ but who ~ 로 논점을 옮기면 두 학생을 모두 넘어서는 답이 됩니다.",
+   "presumed invalid / should generally succeed 처럼 기준을 대비시키면 정책 제안이 구체적으로 보입니다.",
+   "rightly observes, identifies the more troubling flaw 같은 평가 동사로 학생 의견을 품위 있게 다루세요."
+  ]
+ },
+ {
+  "id": "wd-040",
+  "level": 5,
+  "course": "History",
+  "professor": "Historians often debate whether figures from the past should be judged by the moral standards of their own time or by those of today. For example, many celebrated leaders, scientists, and writers held views or took actions that we now regard as deeply unjust. Some argue that applying modern standards is anachronistic and unfair; others insist that certain moral truths are timeless. How should historians and the public evaluate historical figures? Explain your view.",
+  "students": [
+   {
+    "name": "Daniela",
+    "post": "We should judge them by the standards of their era. It is too easy to condemn people from the comfortable position of the present. Most of us would probably have shared the common beliefs of our time, so holding historical figures to modern standards is both unfair and a little arrogant."
+   },
+   {
+    "name": "Samuel",
+    "post": "Some things were wrong then and are wrong now. Slavery, for instance, was opposed by many people at the time, including the enslaved themselves. Saying \"everyone thought that way\" erases those voices. We can understand the context without excusing the injustice."
+   }
+  ],
+  "sample": "Daniela's caution against moral arrogance is valuable, but I think Samuel identifies the decisive weakness in her position: the standards of an era were never unified. Whenever we say a practice was acceptable at the time, we usually mean acceptable to the people who held power, while those who suffered from it often left clear evidence of their objections. Judging figures by the standards of their time, then, frequently means adopting the perspective of the winners. A more rigorous approach is to ask what alternatives were actually available and articulated in that society. A leader who defended an injustice while respected contemporaries were publicly arguing against it bears greater responsibility than one who lived before such arguments existed. This method avoids crude condemnation, yet it also refuses to treat historical context as a blanket excuse, allowing us to admire genuine achievements while acknowledging real wrongs.",
+  "sample_ko": "도덕적 오만을 경계하는 다니엘라의 태도는 가치 있지만, 사무엘이 그 입장의 결정적 약점을 짚었다고 생각합니다. 한 시대의 기준은 결코 하나로 통일된 적이 없다는 것입니다. 어떤 관행이 당시에는 용인되었다고 말할 때, 우리는 보통 권력을 가진 사람들에게 용인되었다는 뜻으로 말하지만, 그 관행으로 고통받은 사람들은 반대의 분명한 증거를 남긴 경우가 많습니다. 따라서 인물을 그 시대의 기준으로 판단하는 것은 종종 승자의 관점을 받아들이는 것을 뜻합니다. 더 엄밀한 방법은 그 사회에서 실제로 존재하고 표명된 대안이 무엇이었는지 묻는 것입니다. 존경받는 동시대인들이 공개적으로 반대하는데도 불의를 옹호한 지도자는, 그런 주장이 나오기 전에 살았던 사람보다 더 큰 책임을 집니다. 이 방법은 거친 단죄를 피하면서도 역사적 맥락을 만능 변명으로 쓰지 않아, 진정한 업적은 존경하면서 실제 잘못도 인정할 수 있게 해 줍니다.",
+  "tips": [
+   "A's caution is valuable, but B identifies the decisive weakness in her position: ~ 으로 콜론 뒤에 핵심을 한 번에 제시하세요.",
+   "then 을 문장 중간에 넣으면(Judging ~, then, frequently means ~) 앞 논리의 결론임을 세련되게 표시합니다.",
+   "평가 기준을 새로 제안(what alternatives were actually available)하는 것이 C2 답안의 독창성입니다."
+  ]
+ }
+]

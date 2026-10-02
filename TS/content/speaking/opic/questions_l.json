@@ -1,0 +1,914 @@
+[
+ {
+  "id": "oq-recycling-201",
+  "topic": "recycling",
+  "kind": "routine",
+  "level": 2,
+  "question": "Tell me about the things you do to reduce waste in your daily life. Do you use reusable items like a tumbler or a shopping bag? What do you usually do when you go shopping or order food?",
+  "question_ko": "일상에서 쓰레기를 줄이려고 하는 일에 대해 말해 주세요. 텀블러나 장바구니 같은 다회용품을 쓰나요? 장을 보거나 음식을 주문할 때 보통 어떻게 하나요?",
+  "sample": "Well, I try to make less trash these days. First, I always carry a tumbler in my bag. When I go to a cafe, I ask them to use my tumbler, and I get a small discount. Also, I keep a cloth shopping bag in my car, so I don't need plastic bags at the supermarket. When I order food, I check the box that says no spoons or chopsticks. I have enough at home. It's not a big thing, but I feel good about it. So these are my small habits.",
+  "sample_ko": "음, 요즘 저는 쓰레기를 덜 만들려고 해요. 먼저 가방에 항상 텀블러를 넣고 다녀요. 카페에 가면 텀블러에 담아 달라고 하고 작은 할인도 받아요. 그리고 차에 천 장바구니를 두어서 마트에서 비닐봉지가 필요 없어요. 음식을 주문할 때는 숟가락·젓가락 필요 없음 칸에 체크해요. 집에 충분히 있거든요. 큰일은 아니지만 기분이 좋아요. 이게 제 작은 습관들이에요.",
+  "sample_adv": "Oh, that's something I've been working on for the past couple of years. Honestly, I used to throw away a lot without thinking, but one day I saw how much plastic piled up at my apartment's recycling area after just one weekend, and it kind of shocked me. So I started with small habits. First, I always carry a stainless steel tumbler. I drink coffee two or three times a day, so that alone saves a lot of paper cups, and most cafes give me a three hundred won discount. Second, I keep two folded cloth bags in my backpack, so I never have to buy plastic bags at the convenience store. When I order delivery, I always choose the option for no disposable utensils, and I try to order from restaurants that use reusable containers. And when I go grocery shopping, I pick vegetables that aren't wrapped in plastic. Of course, I'm not perfect. Sometimes I forget my tumbler and feel a little guilty. But I think small habits really add up over a year.",
+  "sample_adv_ko": "아, 그건 제가 지난 2년 정도 노력해 온 일이에요. 솔직히 예전에는 생각 없이 많이 버렸는데, 어느 날 주말 한 번 지났을 뿐인데 아파트 분리수거장에 플라스틱이 얼마나 쌓였는지 보고 좀 충격을 받았어요. 그래서 작은 습관부터 시작했어요. 첫째, 항상 스테인리스 텀블러를 가지고 다녀요. 하루에 커피를 두세 잔 마시니까 그것만으로도 종이컵을 많이 아끼고, 대부분 카페에서 300원 할인도 해 줘요. 둘째, 백팩에 접은 천 가방을 두 개 넣고 다녀서 편의점에서 비닐봉지를 살 일이 없어요. 배달을 시킬 때는 항상 일회용 수저 안 받기를 선택하고, 다회용기를 쓰는 식당에서 주문하려고 해요. 장을 볼 때는 비닐로 포장되지 않은 채소를 골라요. 물론 완벽하진 않아요. 가끔 텀블러를 잊고 나와서 좀 죄책감을 느껴요. 그래도 작은 습관이 1년이면 정말 크게 쌓인다고 생각해요.",
+  "tips": [
+   "습관 질문은 First, Second, And when ... 로 행동을 나열하고 마지막에 솔직한 한 문장 추가",
+   "carry a tumbler, reusable containers, disposable utensils, add up 활용"
+  ]
+ },
+ {
+  "id": "oq-recycling-202",
+  "topic": "recycling",
+  "kind": "past",
+  "level": 3,
+  "question": "Have you ever reused, repaired, or given away something instead of throwing it away? Tell me what the item was, what you did with it, and how you felt afterward.",
+  "question_ko": "물건을 버리는 대신 다시 쓰거나, 고치거나, 남에게 준 적이 있나요? 그 물건이 무엇이었고, 어떻게 했고, 그 뒤에 어떤 기분이었는지 말해 주세요.",
+  "sample": "Yes, I have. Last spring, I cleaned my closet and found many clothes I didn't wear anymore. Some of them were still new. I didn't want to throw them away. So I put the good ones on a secondhand app, and I sold five jackets and some shirts. The rest I took to a donation box near my apartment. I also fixed an old lamp by changing the switch. It took only twenty minutes. I felt really proud. I saved money, and I made less trash.",
+  "sample_ko": "네, 있어요. 작년 봄에 옷장을 정리하다가 더 이상 안 입는 옷을 많이 발견했어요. 몇 개는 아직 새것이었어요. 버리고 싶지 않았어요. 그래서 괜찮은 옷은 중고 거래 앱에 올려서 재킷 다섯 벌과 셔츠 몇 장을 팔았어요. 나머지는 아파트 근처 의류 수거함에 가져갔어요. 오래된 스탠드도 스위치를 바꿔서 고쳤어요. 20분밖에 안 걸렸어요. 정말 뿌듯했어요. 돈도 아끼고 쓰레기도 줄였으니까요.",
+  "sample_adv": "Yes, actually, I had a pretty satisfying experience like that last year. I was moving to a smaller apartment, so I had to get rid of a lot of stuff. At first, I was just going to put everything in big trash bags, but my sister stopped me. She said, why don't you try selling some of it first? So I took photos of my old bookshelf, a rice cooker, and about ten pieces of clothing, and posted them on a neighborhood secondhand app. To my surprise, almost everything was gone within three days. A college student bought the bookshelf, and she was so happy because she had just moved into a dorm. There was also an old wooden chair with a loose leg. Instead of throwing it out, I watched a video online, bought some wood glue, and fixed it myself. It's still in my kitchen now. Looking back, I made about two hundred thousand won, but the best part was knowing my things were still useful to someone. Since then, I always think twice before throwing anything away.",
+  "sample_adv_ko": "네, 사실 작년에 꽤 만족스러운 경험을 했어요. 더 작은 집으로 이사하게 돼서 물건을 많이 정리해야 했어요. 처음에는 전부 큰 쓰레기봉투에 넣으려고 했는데 언니가 말렸어요. 일단 몇 개는 팔아 보는 게 어떠냐고요. 그래서 오래된 책장, 밥솥, 옷 열 벌 정도를 사진 찍어서 동네 중고 거래 앱에 올렸어요. 놀랍게도 사흘 만에 거의 다 팔렸어요. 책장은 대학생이 사 갔는데 막 기숙사에 들어가서 정말 좋아했어요. 다리가 흔들리는 오래된 나무 의자도 있었어요. 버리는 대신 온라인 영상을 보고 목공용 풀을 사서 직접 고쳤어요. 지금도 부엌에 있어요. 돌아보면 20만 원 정도 벌었는데, 가장 좋았던 건 제 물건이 누군가에게 여전히 쓸모 있다는 걸 안 거예요. 그 뒤로는 뭘 버리기 전에 항상 한 번 더 생각해요.",
+  "tips": [
+   "과거 경험: 계기 → 한 일 → 의외의 결과 → 느낀 점 순서",
+   "get rid of, to my surprise, think twice 로 이야기에 리듬을 준다"
+  ]
+ },
+ {
+  "id": "oq-recycling-203",
+  "topic": "recycling",
+  "kind": "issue",
+  "level": 5,
+  "question": "Some cities have started charging a deposit on disposable cups or banning plastic straws and bags. What do people in your country think about these rules? Do you think they really help the environment? Why or why not?",
+  "question_ko": "일부 도시에서는 일회용 컵에 보증금을 받거나 플라스틱 빨대·봉투를 금지하기 시작했습니다. 당신 나라 사람들은 이런 규칙을 어떻게 생각하나요? 정말 환경에 도움이 된다고 생각하나요? 그 이유는요?",
+  "sample": "In Korea, there are rules like this too. For example, big stores don't give plastic bags, and many cafes use paper straws now. Some people like these rules because they protect the environment. But other people complain. They say paper straws get soft quickly, and the cup deposit system is confusing. Store owners also say it takes a lot of time. I think the rules help a little. But they work better if the rules are simple and the same everywhere. So the government should explain them clearly.",
+  "sample_ko": "한국에도 이런 규칙이 있어요. 예를 들어 대형 마트는 비닐봉지를 주지 않고, 많은 카페가 이제 종이 빨대를 써요. 어떤 사람들은 환경을 보호하니까 이 규칙을 좋아해요. 하지만 불평하는 사람도 있어요. 종이 빨대는 금방 눅눅해지고 컵 보증금 제도는 헷갈린다고요. 가게 주인들도 시간이 많이 든다고 해요. 저는 규칙이 조금은 도움이 된다고 생각해요. 하지만 규칙이 단순하고 어디서나 같아야 더 효과가 있어요. 그래서 정부가 분명하게 설명해야 해요.",
+  "sample_adv": "That's a hot topic in Korea, actually. A few years ago, large supermarkets stopped giving out plastic bags, and cafes were told they couldn't use disposable cups for customers drinking inside. More recently, some cities tested a cup deposit system, where you pay about three hundred won extra and get it back when you return the cup. Opinions are really mixed. A lot of people, especially younger people, support these rules because they can see how much trash we produce. On the other hand, small cafe owners say the deposit system creates extra work, like washing and storing returned cups, and customers get annoyed when they can't return a cup at a different shop. And honestly, nobody I know likes paper straws. Personally, I think these rules do help, but only if they're consistent. When a rule starts in one city, stops in another, and changes every year, people just stop caring. So I believe the key is a simple nationwide system, plus real support for small businesses. Otherwise, it feels like the burden falls only on shop owners.",
+  "sample_adv_ko": "사실 한국에서 뜨거운 주제예요. 몇 년 전에 대형 마트가 비닐봉지를 주지 않기 시작했고, 카페는 매장 안에서 마시는 손님에게 일회용 컵을 쓰지 말라는 지침을 받았어요. 최근에는 일부 도시에서 컵 보증금 제도를 시범 운영했는데, 300원 정도를 더 내고 컵을 돌려주면 돌려받는 방식이에요. 의견은 정말 엇갈려요. 많은 사람들, 특히 젊은 사람들은 우리가 쓰레기를 얼마나 만드는지 보이니까 이런 규칙을 지지해요. 반면 작은 카페 사장님들은 보증금 제도 때문에 반납된 컵을 씻고 보관하는 등 일이 늘어난다고 하고, 손님들은 다른 가게에 컵을 반납할 수 없으면 짜증을 내요. 그리고 솔직히 종이 빨대를 좋아하는 사람은 제 주변에 없어요. 개인적으로 이런 규칙이 도움은 된다고 생각하지만 일관성이 있어야 해요. 규칙이 어떤 도시에서는 시작하고 다른 데선 멈추고 매년 바뀌면 사람들은 그냥 관심을 끊어요. 그래서 핵심은 단순한 전국 공통 제도와 소상공인에 대한 실질적인 지원이라고 생각해요. 그렇지 않으면 부담이 가게 주인에게만 가는 느낌이에요.",
+  "tips": [
+   "이슈 답변: 현황 → 찬성 측 → 반대 측 → 내 의견과 조건",
+   "Opinions are really mixed / On the other hand / The key is ... 로 균형 있게"
+  ]
+ },
+ {
+  "id": "oq-bank-201",
+  "topic": "bank",
+  "kind": "routine",
+  "level": 2,
+  "question": "Tell me how you manage your money every month. Do you make a budget or save a certain amount? How do you keep track of what you spend?",
+  "question_ko": "매달 돈을 어떻게 관리하는지 말해 주세요. 예산을 세우거나 일정 금액을 저축하나요? 지출은 어떻게 기록하나요?",
+  "sample": "Well, I try to manage my money carefully. When I get my salary, I first send some money to my savings account. It's about twenty percent. I do this on payday, so I don't spend it. Then I use the rest for rent, food, and my phone bill. I use a budget app on my phone. It shows how much I spend on food or shopping. I check it every Sunday night. If I spend too much, I try to cook at home more the next week. It really helps me.",
+  "sample_ko": "음, 저는 돈을 신중하게 관리하려고 해요. 월급을 받으면 먼저 저축 계좌로 일부를 보내요. 20퍼센트 정도예요. 월급날 바로 해서 써 버리지 않게 해요. 그다음 나머지로 월세, 식비, 휴대폰 요금을 내요. 휴대폰에서 가계부 앱을 써요. 식비나 쇼핑에 얼마 쓰는지 보여 줘요. 매주 일요일 밤에 확인해요. 너무 많이 쓰면 다음 주에는 집에서 더 많이 요리하려고 해요. 정말 도움이 돼요.",
+  "sample_adv": "Sure. I'm not a financial expert, but I've built a simple system that works for me. On payday, which is the twenty-fifth, money moves automatically from my main account to two other accounts. About twenty percent goes into a savings account that I never touch, and about ten percent goes into an emergency fund for things like hospital bills or a broken laptop. That way, I never even see that money, so I'm not tempted to spend it. With what's left, I pay fixed costs first, like rent, my phone bill, and insurance. Then I use a budget app that connects to my card, so every coffee and taxi ride shows up right away. Every Sunday night, I spend about ten minutes checking the categories. Honestly, food delivery is always my weakest point. If it goes over my limit, I try to cook more and bring lunch to work the following week. It sounds a bit strict, but it actually gives me peace of mind, because I always know where I stand.",
+  "sample_adv_ko": "네. 제가 금융 전문가는 아니지만 저한테 맞는 간단한 방식을 만들었어요. 월급날인 25일에 주 계좌에서 다른 두 계좌로 자동 이체가 돼요. 약 20퍼센트는 절대 손대지 않는 저축 계좌로, 약 10퍼센트는 병원비나 노트북 고장 같은 일을 위한 비상금 통장으로 가요. 그러면 그 돈은 아예 안 보이니까 쓰고 싶은 유혹이 없어요. 남은 돈으로 먼저 월세, 휴대폰 요금, 보험 같은 고정비를 내요. 그다음 카드와 연결된 가계부 앱을 써서 커피 한 잔, 택시 한 번까지 바로 나타나요. 매주 일요일 밤에 10분 정도 항목별로 확인해요. 솔직히 배달 음식이 항상 제 약점이에요. 한도를 넘으면 다음 주에는 요리를 더 하고 도시락을 싸 가려고 해요. 좀 엄격하게 들리지만 제 상황을 항상 알 수 있어서 오히려 마음이 편해요.",
+  "tips": [
+   "돈 관리 표현: payday, automatic transfer, emergency fund, fixed costs, go over my limit",
+   "순서대로 말하기: On payday → With what's left → Every Sunday"
+  ]
+ },
+ {
+  "id": "oq-bank-202",
+  "topic": "bank",
+  "kind": "past",
+  "level": 3,
+  "question": "Have you ever made a mistake with money, such as sending money to the wrong account or paying a bill twice? Tell me what happened and how you fixed the problem.",
+  "question_ko": "돈과 관련해 실수한 적이 있나요? 예를 들어 다른 계좌로 송금하거나 요금을 두 번 낸 적 말이에요. 무슨 일이 있었고 어떻게 해결했는지 말해 주세요.",
+  "sample": "Yes, I made a big mistake two years ago. I wanted to send money to my friend for a concert ticket. But I typed one wrong number, and the money went to a stranger's account. It was about one hundred thousand won. I was so worried. I called my bank right away. They said they would contact the other person. It took about a week, but the person agreed, and I got my money back. Since then, I always check the name before I send money.",
+  "sample_ko": "네, 2년 전에 큰 실수를 했어요. 콘서트 티켓값으로 친구에게 돈을 보내려고 했어요. 그런데 숫자 하나를 잘못 입력해서 돈이 모르는 사람 계좌로 갔어요. 10만 원 정도였어요. 너무 걱정됐어요. 바로 은행에 전화했어요. 은행에서 상대방에게 연락하겠다고 했어요. 일주일 정도 걸렸지만 그 사람이 동의해서 돈을 돌려받았어요. 그 뒤로는 송금 전에 항상 이름을 확인해요.",
+  "sample_adv": "Oh, yes, and I still remember how my heart dropped. It was about two years ago. My friend had bought concert tickets for both of us, so I wanted to pay her back, about one hundred twenty thousand won. I was on a crowded subway, typing her account number with one hand. I pressed send, and a second later I noticed that the name on the screen was not hers. It was a completely different name. I had typed one digit wrong. I panicked, got off at the next station, and called my bank's customer center. The agent was really calm. She explained that the bank couldn't just take the money back, but they would contact the receiver and ask for permission to return it. For three days I heard nothing, and I was sure the money was gone. But on the fourth day, I got a text saying the money had been returned. The stranger had agreed right away, apparently. I was so relieved. Since then, I never send money while I'm in a hurry, and I always read the receiver's name twice.",
+  "sample_adv_ko": "아, 네, 그때 가슴이 철렁했던 게 아직도 기억나요. 2년 전쯤이었어요. 친구가 우리 둘 콘서트 티켓을 사 줘서 12만 원 정도를 갚으려고 했어요. 붐비는 지하철에서 한 손으로 친구 계좌번호를 입력하고 있었어요. 보내기를 눌렀는데 1초 뒤에 화면의 이름이 친구 이름이 아닌 걸 알았어요. 전혀 다른 이름이었어요. 숫자 하나를 잘못 친 거예요. 당황해서 다음 역에서 내려 은행 고객센터에 전화했어요. 상담원은 정말 침착했어요. 은행이 돈을 그냥 되찾을 수는 없지만, 받은 사람에게 연락해 반환 동의를 구하겠다고 설명해 줬어요. 사흘 동안 아무 소식이 없어서 돈은 날아갔다고 확신했어요. 그런데 나흘째에 돈이 반환됐다는 문자가 왔어요. 그분이 바로 동의해 줬나 봐요. 정말 안심했어요. 그 뒤로는 급할 때 절대 송금하지 않고 받는 사람 이름을 항상 두 번 읽어요.",
+  "tips": [
+   "my heart dropped, I panicked, I was so relieved 로 감정 변화를 보여 준다",
+   "은행 용어: wrong account, customer center, receiver, return the money"
+  ]
+ },
+ {
+  "id": "oq-bank-203",
+  "topic": "bank",
+  "kind": "issue",
+  "level": 5,
+  "question": "Many bank branches are closing because people use mobile banking, and some stores no longer accept cash. What problems does this cause, and who has the most difficulty? What do you think banks or the government should do?",
+  "question_ko": "사람들이 모바일 뱅킹을 쓰면서 많은 은행 지점이 문을 닫고, 일부 가게는 현금을 받지 않습니다. 이것이 어떤 문제를 일으키고 누가 가장 어려움을 겪나요? 은행이나 정부는 무엇을 해야 한다고 생각하나요?",
+  "sample": "These days, many bank branches are closing in Korea. Most young people use banking apps, so they don't need branches. Some cafes also only take cards. But this is a problem for older people. My grandmother can't use apps well, and the bank near her house closed last year. Now she has to take a bus for thirty minutes. I think banks should keep some small branches. They can also teach older people how to use the apps. And stores should still accept cash.",
+  "sample_ko": "요즘 한국에서 많은 은행 지점이 문을 닫고 있어요. 대부분 젊은 사람들은 은행 앱을 써서 지점이 필요 없어요. 어떤 카페는 카드만 받기도 해요. 하지만 이건 노인들에게 문제예요. 저희 할머니는 앱을 잘 못 쓰시는데 작년에 집 근처 은행이 문을 닫았어요. 이제 버스를 30분 타셔야 해요. 은행이 작은 지점을 일부 남겨야 한다고 생각해요. 노인들에게 앱 쓰는 법을 가르쳐 줄 수도 있어요. 그리고 가게도 현금을 계속 받아야 해요.",
+  "sample_adv": "This is becoming a real issue in Korea. Over the last few years, hundreds of bank branches have closed, because banks say very few customers visit in person anymore. For people my age, that's not a big deal. I honestly can't remember the last time I went inside a bank. But it's a serious problem for elderly people, people in rural towns, and anyone who isn't comfortable with smartphones. My grandmother is a good example. Her local branch closed last year, so now she takes a bus for half an hour just to update her bankbook, and she's too worried about scams to use an app. On top of that, some cafes and kiosks don't take cash at all, so she sometimes can't even buy a cup of coffee by herself. I don't think we can stop the digital change, but I believe banks have a responsibility not to leave people behind. For example, they could share small branches with other banks, or run mobile bank buses in rural areas. The government could also require stores to accept cash. Convenience is great, but not if it only works for some people.",
+  "sample_adv_ko": "한국에서 실제 문제가 되고 있어요. 지난 몇 년간 은행들이 직접 찾아오는 고객이 거의 없다며 수백 개 지점을 닫았어요. 제 또래에게는 별일 아니에요. 솔직히 은행 안에 마지막으로 들어간 게 언제인지 기억도 안 나요. 하지만 노인, 시골 마을 사람들, 스마트폰이 익숙하지 않은 사람에게는 심각한 문제예요. 저희 할머니가 좋은 예예요. 동네 지점이 작년에 닫아서 이제 통장 정리를 하려고 버스를 30분 타시고, 사기가 걱정돼서 앱은 쓰지 않으세요. 게다가 일부 카페와 키오스크는 현금을 아예 안 받아서 혼자 커피 한 잔도 못 사실 때가 있어요. 디지털 변화를 멈출 수는 없다고 생각하지만, 은행은 사람들을 뒤처지게 하지 않을 책임이 있다고 봐요. 예를 들어 다른 은행과 작은 지점을 함께 쓰거나 시골에 이동 점포 버스를 운영할 수 있어요. 정부도 가게가 현금을 받도록 의무화할 수 있고요. 편리함은 좋지만 일부 사람에게만 통한다면 의미가 없어요.",
+  "tips": [
+   "구체적인 사람 예시를 하나 넣으면 이슈 답변이 생생해진다",
+   "leave people behind, in person, on top of that, I don't think we can ... but ... 활용"
+  ]
+ },
+ {
+  "id": "oq-hotel-201",
+  "topic": "hotel",
+  "kind": "routine",
+  "level": 2,
+  "question": "Tell me how you usually choose and book a hotel when you travel. What websites or apps do you use? What do you check before you make a reservation?",
+  "question_ko": "여행할 때 보통 호텔을 어떻게 고르고 예약하는지 말해 주세요. 어떤 웹사이트나 앱을 쓰나요? 예약하기 전에 무엇을 확인하나요?",
+  "sample": "When I travel, I usually book a hotel on a travel app. I like it because I can compare prices easily. First, I check the location. I want a hotel near a subway station. Second, I read the reviews, especially about cleanliness. I don't like dirty rooms. Third, I check if breakfast is included. Finally, I look at the cancellation policy. Plans can change, so free cancellation is important for me. I usually book about one month before my trip.",
+  "sample_ko": "여행할 때 보통 여행 앱으로 호텔을 예약해요. 가격을 쉽게 비교할 수 있어서 좋아요. 먼저 위치를 확인해요. 지하철역 근처 호텔을 원해요. 둘째, 후기를 읽어요, 특히 청결에 관해서요. 더러운 방은 싫어요. 셋째, 조식 포함인지 확인해요. 마지막으로 취소 규정을 봐요. 계획이 바뀔 수 있으니 무료 취소가 저한테 중요해요. 보통 여행 한 달 전쯤 예약해요.",
+  "sample_adv": "I'm actually a little obsessive when it comes to booking hotels. I usually start about a month before the trip, and I open two or three travel apps at the same time, because the same room can have different prices on each one. The first thing I check is the location. I always look at the map to see how far it is from the nearest subway station, because walking fifteen minutes with a suitcase is no fun. Next, I read the reviews, but only the recent ones from the last few months, and I focus on the negative ones. If several people mention noise or a bad smell, I skip that hotel right away. I also zoom in on the guests' photos, because the official pictures always look much nicer than reality. Then I check whether breakfast is included and whether there's free cancellation until a day or two before. Once I've found the one, I sometimes visit the hotel's own website, since it occasionally offers a small discount or a free upgrade for booking directly. It takes time, but I've rarely been disappointed.",
+  "sample_adv_ko": "사실 저는 호텔 예약에 좀 집착하는 편이에요. 보통 여행 한 달 전쯤 시작하고, 같은 방도 앱마다 가격이 달라서 여행 앱 두세 개를 동시에 열어요. 가장 먼저 위치를 확인해요. 캐리어를 끌고 15분 걷는 건 힘드니까 항상 지도에서 가장 가까운 지하철역까지 얼마나 먼지 봐요. 다음으로 후기를 읽는데 최근 몇 달 것만, 그리고 부정적인 후기 위주로 봐요. 여러 사람이 소음이나 나쁜 냄새를 언급하면 그 호텔은 바로 넘겨요. 투숙객 사진도 확대해서 보는데, 공식 사진은 항상 실제보다 훨씬 좋아 보이거든요. 그다음 조식 포함 여부와 하루 이틀 전까지 무료 취소가 되는지 확인해요. 마음에 드는 곳을 찾으면 가끔 호텔 자체 웹사이트에 들어가 보는데, 직접 예약하면 약간의 할인이나 무료 업그레이드를 줄 때가 있거든요. 시간이 걸리지만 실망한 적은 거의 없어요.",
+  "tips": [
+   "확인 순서 표현: The first thing I check is ... / Next / Then / Once I've found the one",
+   "free cancellation, breakfast included, book directly, zoom in on photos"
+  ]
+ },
+ {
+  "id": "oq-hotel-202",
+  "topic": "hotel",
+  "kind": "past",
+  "level": 3,
+  "question": "Tell me about the first time you stayed at a hotel. How old were you, and who were you with? What do you remember most about that stay?",
+  "question_ko": "처음으로 호텔에 묵었던 때에 대해 말해 주세요. 몇 살이었고 누구와 함께였나요? 그때 가장 기억나는 것은 무엇인가요?",
+  "sample": "The first time I stayed at a hotel, I was about ten years old. I went to Busan with my parents and my little brother for summer vacation. The hotel was near Haeundae Beach. I remember the big lobby with a fountain. Our room was on the fifteenth floor, and I could see the ocean. My brother and I jumped on the beds and laughed a lot. In the morning, we had a buffet breakfast. I ate too many pancakes. It was a really happy memory.",
+  "sample_ko": "처음 호텔에 묵은 건 열 살쯤이었어요. 여름 방학에 부모님, 남동생과 부산에 갔어요. 호텔은 해운대 해수욕장 근처였어요. 분수가 있는 큰 로비가 기억나요. 우리 방은 15층이었고 바다가 보였어요. 동생이랑 침대에서 뛰면서 많이 웃었어요. 아침에는 뷔페 조식을 먹었어요. 팬케이크를 너무 많이 먹었어요. 정말 행복한 기억이에요.",
+  "sample_adv": "Oh, I remember it really clearly, even though it was more than fifteen years ago. I was about ten, and my dad had just gotten a promotion, so he surprised us with a summer trip to Busan. Before that, we had only stayed at my grandparents' house or at small family pensions, so a real hotel felt like a palace to me. When we walked into the lobby, there was a huge glass chandelier and a fountain in the middle, and I just stood there with my mouth open. Our room was on the fifteenth floor, and when my dad opened the curtains, the whole of Haeundae Beach was right in front of us. My little brother and I immediately started jumping on the beds, and my mom kept telling us to stop, but she was laughing too. The highlight, though, was the breakfast buffet the next morning. I had never seen so much food in one place, and I went back for pancakes four times. Looking back, it wasn't a luxury hotel at all, but for me it felt like the fanciest place in the world.",
+  "sample_adv_ko": "아, 15년도 더 지났지만 정말 생생하게 기억나요. 열 살쯤이었는데 아빠가 막 승진하셔서 깜짝 선물로 부산 여름 여행을 가게 됐어요. 그전에는 조부모님 댁이나 작은 가족 펜션에서만 자 봤기 때문에 진짜 호텔은 저한테 궁전 같았어요. 로비에 들어갔을 때 거대한 유리 샹들리에와 가운데 분수가 있어서 입을 벌린 채 서 있었어요. 방은 15층이었는데 아빠가 커튼을 열자 해운대 해수욕장 전체가 바로 눈앞에 있었어요. 동생과 저는 바로 침대에서 뛰기 시작했고, 엄마는 계속 그만하라고 하셨지만 엄마도 웃고 계셨어요. 그래도 최고는 다음 날 아침 뷔페였어요. 한곳에 그렇게 많은 음식을 본 적이 없어서 팬케이크를 네 번이나 가지러 갔어요. 돌아보면 전혀 고급 호텔이 아니었는데 저한테는 세상에서 가장 멋진 곳 같았어요.",
+  "tips": [
+   "어린 시절 경험은 그때의 감정 표현이 핵심: felt like a palace, with my mouth open",
+   "The highlight, though, was ... 로 가장 기억나는 장면을 강조"
+  ]
+ },
+ {
+  "id": "oq-hotel-203",
+  "topic": "hotel",
+  "kind": "compare",
+  "level": 5,
+  "question": "Compare different kinds of places to stay when people travel, such as hotels, guesthouses, and rental homes. How are they different, and which do people in your country prefer these days? Which do you prefer and why?",
+  "question_ko": "여행할 때 묵는 다양한 숙소, 예를 들어 호텔·게스트하우스·숙박 공유 집을 비교해 주세요. 어떻게 다르고, 요즘 당신 나라 사람들은 어느 것을 더 좋아하나요? 당신은 어느 쪽을 좋아하고 왜 그런가요?",
+  "sample": "There are many kinds of places to stay. Hotels are clean and safe, and the service is good. But they are usually expensive. Guesthouses are cheap, and you can meet other travelers. But you often share a bathroom. Rental homes are good for families or groups because they have a kitchen and more space. These days, many young Koreans like rental homes and nice pensions. Personally, I prefer hotels when I travel alone. I feel safe, and I don't need to clean.",
+  "sample_ko": "숙소에는 여러 종류가 있어요. 호텔은 깨끗하고 안전하고 서비스가 좋아요. 하지만 보통 비싸요. 게스트하우스는 싸고 다른 여행자를 만날 수 있어요. 하지만 화장실을 같이 쓰는 경우가 많아요. 숙박 공유 집은 부엌과 공간이 넓어서 가족이나 단체에 좋아요. 요즘 많은 한국 젊은이들은 공유 숙소와 예쁜 펜션을 좋아해요. 개인적으로 저는 혼자 여행할 때 호텔이 좋아요. 안전하고 청소할 필요가 없거든요.",
+  "sample_adv": "Each type of accommodation has its own personality, I think. Hotels are the most predictable. You know the room will be clean, there's someone at the front desk all night, and you don't have to worry about anything. The downside is the price, especially in popular cities during peak season. Guesthouses are almost the opposite. They're cheap and friendly, and you often end up having breakfast with travelers from all over the world, which can be a lot of fun. But you might share a bathroom with ten people, and it can get noisy. Rental homes are somewhere in the middle. You get a kitchen, a living room, and a local neighborhood feel, so they're great for families or a group of friends. In Korea, I'd say the trend has changed a lot. When I was young, families mostly stayed at hotels or simple pensions. Now, young people love stylish private stays with a small pool or a view, mainly because they look great on social media. For me, it depends on who I'm with. Alone, I choose a hotel for safety and quiet. With friends, a rental house is much more fun.",
+  "sample_adv_ko": "숙소마다 각자의 성격이 있다고 생각해요. 호텔은 가장 예측 가능해요. 방이 깨끗할 거라는 걸 알고, 밤새 프런트에 누군가 있고, 아무것도 걱정할 필요가 없어요. 단점은 가격인데, 특히 성수기 인기 도시에서 그래요. 게스트하우스는 거의 정반대예요. 싸고 분위기가 친근하고, 세계 각지 여행자들과 아침을 같이 먹게 되는 경우가 많아서 재미있을 수 있어요. 하지만 열 명과 화장실을 같이 쓸 수도 있고 시끄러울 수 있어요. 공유 숙소는 그 중간쯤이에요. 부엌, 거실, 동네 느낌까지 있어서 가족이나 친구 무리에게 좋아요. 한국에서는 흐름이 많이 바뀌었다고 생각해요. 제가 어릴 때 가족들은 주로 호텔이나 소박한 펜션에 묵었어요. 지금 젊은 사람들은 작은 수영장이나 전망이 있는 감성 독채 숙소를 아주 좋아하는데, 주로 SNS에서 예쁘게 보이기 때문이에요. 저는 누구와 가느냐에 따라 달라요. 혼자면 안전과 조용함 때문에 호텔을, 친구들과는 집 한 채를 빌리는 게 훨씬 재미있어요.",
+  "tips": [
+   "세 가지 비교: 각각 장점 → 단점 → 어울리는 사람, 마지막에 내 선택",
+   "The downside is ... / almost the opposite / somewhere in the middle / it depends on who I'm with"
+  ]
+ },
+ {
+  "id": "oq-phone-201",
+  "topic": "phone",
+  "kind": "describe",
+  "level": 2,
+  "question": "Tell me about an app on your phone that you use the most. What is it, and what does it do? Why do you find it so useful?",
+  "question_ko": "휴대폰에서 가장 많이 쓰는 앱에 대해 말해 주세요. 무슨 앱이고 무엇을 하는 앱인가요? 왜 그렇게 유용하다고 생각하나요?",
+  "sample": "The app I use the most is a map app. I use it almost every day. It shows me the fastest way to go somewhere by bus, subway, or car. It also tells me when the next bus is coming, so I don't wait outside for a long time. When I go to a new restaurant, I search for it on the app and read reviews. I think it's really useful because I'm bad with directions. Without this app, I would get lost all the time.",
+  "sample_ko": "제가 가장 많이 쓰는 앱은 지도 앱이에요. 거의 매일 써요. 버스, 지하철, 차로 어딘가에 가는 가장 빠른 길을 알려 줘요. 다음 버스가 언제 오는지도 알려 줘서 밖에서 오래 기다리지 않아요. 새 식당에 갈 때는 앱에서 검색해서 후기를 읽어요. 제가 길치라서 정말 유용하다고 생각해요. 이 앱이 없으면 항상 길을 잃을 거예요.",
+  "sample_adv": "Without a doubt, the app I open the most is a map app. I probably check it ten times a day. Basically, it does three things for me. First, it gives me directions. I type in where I want to go, and it shows me every option, like bus, subway, taxi, or walking, with the exact time each one takes. Second, it shows real-time arrival information. So before I even leave my apartment, I know the bus will come in seven minutes, and I can finish my coffee instead of standing at the bus stop in the cold. And third, I use it to find places. If I'm meeting friends in an area I don't know, I search for cafes nearby, check the photos and reviews, and even save my favorite spots with little star marks. The reason it's so useful is that I have a terrible sense of direction. Honestly, before smartphones, I used to get lost all the time and call my friends to ask where I was. Now I feel confident going anywhere, even in a city I've never visited.",
+  "sample_adv_ko": "의심할 여지 없이 제가 가장 많이 여는 앱은 지도 앱이에요. 아마 하루에 열 번은 확인할 거예요. 기본적으로 세 가지를 해 줘요. 첫째, 길 안내를 해 줘요. 가고 싶은 곳을 입력하면 버스, 지하철, 택시, 도보 같은 모든 방법을 각각 정확한 소요 시간과 함께 보여 줘요. 둘째, 실시간 도착 정보를 보여 줘요. 그래서 집을 나서기도 전에 버스가 7분 뒤에 온다는 걸 알고, 추운 정류장에 서 있는 대신 커피를 다 마실 수 있어요. 셋째, 장소를 찾을 때 써요. 모르는 동네에서 친구를 만나면 근처 카페를 검색해서 사진과 후기를 보고, 좋아하는 곳은 별표로 저장까지 해요. 이렇게 유용한 이유는 제가 지독한 길치이기 때문이에요. 솔직히 스마트폰 전에는 맨날 길을 잃어서 친구에게 전화해 제가 어디 있는지 물어봤어요. 이제는 처음 가는 도시에서도 자신 있게 어디든 가요.",
+  "tips": [
+   "앱 묘사: 무슨 앱 → 기능 2~3가지 → 내게 유용한 이유",
+   "real-time, a terrible sense of direction, without a doubt 활용"
+  ]
+ },
+ {
+  "id": "oq-phone-202",
+  "topic": "phone",
+  "kind": "past",
+  "level": 3,
+  "question": "Have you ever had to spend a whole day without your phone? Maybe the battery died or you left it at home. Tell me what happened and how you felt during that day.",
+  "question_ko": "하루 종일 휴대폰 없이 지낸 적이 있나요? 배터리가 나갔거나 집에 두고 나왔을 수도 있어요. 무슨 일이 있었고 그날 어떤 기분이었는지 말해 주세요.",
+  "sample": "Yes, it happened last month. I was in a hurry in the morning, and I left my phone on the kitchen table. I noticed it on the subway. I couldn't go back because I had an important meeting. At first, I felt very nervous. I couldn't check my messages or my schedule. At lunch, I couldn't pay with my phone, but luckily I had my card. In the afternoon, I actually felt calm. I talked with my coworkers more. When I got home, I had forty messages.",
+  "sample_ko": "네, 지난달에 그런 일이 있었어요. 아침에 서두르다가 휴대폰을 식탁에 두고 나왔어요. 지하철에서 알았어요. 중요한 회의가 있어서 돌아갈 수 없었어요. 처음에는 정말 불안했어요. 메시지도 일정도 확인할 수 없었어요. 점심때는 휴대폰으로 결제할 수 없었는데 다행히 카드가 있었어요. 오후에는 오히려 마음이 편했어요. 동료들과 이야기를 더 많이 했어요. 집에 와 보니 메시지가 40개 있었어요.",
+  "sample_adv": "Yes, and it turned out to be a strangely interesting day. It was a Monday about two months ago. I overslept, rushed out the door, and only realized on the subway that my phone was still charging next to my bed. There was no time to go back because I had a nine o'clock meeting. For the first hour, I felt almost naked. I kept reaching into my pocket out of habit, and I had no idea what was on my schedule, so I had to ask a coworker to check the meeting room for me. Lunch was another challenge, because I usually pay with my phone. Luckily, I found an old credit card at the bottom of my bag. But something changed in the afternoon. Since I couldn't check messages every five minutes, I actually finished a report much faster than usual. On the way home, instead of watching videos, I just looked out the window and listened to people talking. When I finally picked up my phone that night, there were forty-two messages, and almost none of them were important. It made me realize how much time I waste on my phone.",
+  "sample_adv_ko": "네, 그리고 묘하게 흥미로운 하루였어요. 두 달쯤 전 월요일이었어요. 늦잠을 자서 허둥지둥 나왔는데 지하철에서야 휴대폰이 아직 침대 옆에서 충전 중이라는 걸 알았어요. 9시 회의가 있어서 돌아갈 시간이 없었어요. 첫 한 시간은 거의 벌거벗은 느낌이었어요. 습관적으로 계속 주머니에 손을 넣었고, 일정이 뭔지 몰라서 동료에게 회의실을 확인해 달라고 부탁해야 했어요. 점심도 문제였어요. 보통 휴대폰으로 결제하거든요. 다행히 가방 맨 아래에서 오래된 신용카드를 찾았어요. 그런데 오후에 뭔가 달라졌어요. 5분마다 메시지를 확인할 수 없으니 보고서를 평소보다 훨씬 빨리 끝냈어요. 집에 가는 길에는 영상을 보는 대신 그냥 창밖을 보고 사람들 이야기를 들었어요. 그날 밤 드디어 휴대폰을 들었을 때 메시지가 42개 있었는데 중요한 건 거의 없었어요. 제가 휴대폰에 얼마나 많은 시간을 낭비하는지 깨달았어요.",
+  "tips": [
+   "감정 변화를 시간 순서로: For the first hour → Lunch → in the afternoon → that night",
+   "out of habit, felt almost naked, It made me realize ... 로 마무리"
+  ]
+ },
+ {
+  "id": "oq-phone-203",
+  "topic": "phone",
+  "kind": "compare",
+  "level": 5,
+  "question": "How has the way people communicate by phone changed? Compare how people kept in touch in the past with how they do it today. Do you think these changes are good or bad?",
+  "question_ko": "사람들이 전화로 소통하는 방식은 어떻게 바뀌었나요? 과거에 연락하던 방식과 오늘날의 방식을 비교해 주세요. 이런 변화가 좋다고 생각하나요, 나쁘다고 생각하나요?",
+  "sample": "Communication has changed a lot. In the past, people made phone calls or sent short text messages. Texts were expensive, so people wrote short messages. Now, people mostly use messenger apps. We send photos, videos, and emojis for free. We also make video calls. These days, many young people don't like phone calls. They prefer texting. I think the change is mostly good because it's cheap and fast. But sometimes I miss hearing my friends' voices.",
+  "sample_ko": "소통 방식은 많이 바뀌었어요. 예전에는 사람들이 전화를 하거나 짧은 문자를 보냈어요. 문자가 비싸서 짧게 썼어요. 지금은 대부분 메신저 앱을 써요. 사진, 영상, 이모티콘을 공짜로 보내요. 영상 통화도 해요. 요즘 많은 젊은 사람들은 전화 통화를 싫어하고 문자를 더 좋아해요. 저는 싸고 빨라서 변화가 대체로 좋다고 생각해요. 하지만 가끔 친구 목소리를 듣던 게 그리워요.",
+  "sample_adv": "It's changed completely, even in my lifetime. When I was in middle school, I had a folder phone, and every text message cost money. So we counted characters and wrote things like see u at 5 to save space. If you wanted to really talk, you called, and the conversation had a clear beginning and end. Now, almost everything happens in messenger apps. We're in ten group chats at once, we send photos and voice messages for free, and we can video call a friend on the other side of the world without thinking twice. One interesting change is that a lot of people my age actually feel anxious about phone calls. If my phone rings with an unknown number, I usually don't answer, and even with friends, we text first to ask, can I call you? I think the change is mostly positive. It's cheaper, faster, and it's easier to stay close to people who live far away. But there's a downside. Because we're always connected, we expect instant replies, and if someone doesn't answer for an hour, we start worrying. So in a way, communication got easier, but also more stressful.",
+  "sample_adv_ko": "제 인생 안에서도 완전히 바뀌었어요. 중학생 때 폴더폰을 썼는데 문자 한 통마다 돈이 들었어요. 그래서 글자 수를 세고 공간을 아끼려고 see u at 5 같은 식으로 썼어요. 제대로 이야기하고 싶으면 전화를 했고, 대화에는 분명한 시작과 끝이 있었어요. 지금은 거의 모든 게 메신저 앱에서 이뤄져요. 단체 대화방 열 개에 동시에 들어가 있고, 사진과 음성 메시지를 공짜로 보내고, 지구 반대편 친구와도 아무 고민 없이 영상 통화를 해요. 흥미로운 변화 하나는 제 또래 많은 사람이 실제로 전화 통화를 불안해한다는 거예요. 모르는 번호로 전화가 오면 보통 안 받고, 친구끼리도 먼저 전화해도 돼? 하고 문자로 물어요. 변화는 대체로 긍정적이라고 생각해요. 더 싸고 빠르고, 멀리 사는 사람과 가깝게 지내기 쉬워요. 하지만 단점도 있어요. 항상 연결돼 있으니 즉각적인 답을 기대하고, 누가 한 시간 답이 없으면 걱정하기 시작해요. 그러니까 어떤 면에서는 소통이 쉬워졌지만 더 스트레스가 되기도 해요.",
+  "tips": [
+   "비교: 과거 구체적 장면 → 현재 장면 → 흥미로운 변화 하나 → 장단점 평가",
+   "in my lifetime, without thinking twice, in a way 활용"
+  ]
+ },
+ {
+  "id": "oq-tech-201",
+  "topic": "tech",
+  "kind": "describe",
+  "level": 2,
+  "question": "Tell me about a website or online service that you use often. What is it, and what can you do with it? How did you start using it?",
+  "question_ko": "자주 이용하는 웹사이트나 온라인 서비스에 대해 말해 주세요. 무엇이고 무엇을 할 수 있나요? 어떻게 쓰기 시작했나요?",
+  "sample": "I often use a video streaming service. I pay about ten thousand won a month. With this service, I can watch movies, dramas, and documentaries on my phone, laptop, or TV. I can also download shows and watch them on the subway. I started using it three years ago. My friend recommended a Korean drama, and it was only on that service. So I signed up for a free trial. Now I watch something almost every night before bed. It's my favorite way to relax.",
+  "sample_ko": "저는 영상 스트리밍 서비스를 자주 이용해요. 한 달에 만 원 정도 내요. 이 서비스로 휴대폰, 노트북, TV에서 영화, 드라마, 다큐멘터리를 볼 수 있어요. 프로그램을 내려받아 지하철에서 볼 수도 있어요. 3년 전에 쓰기 시작했어요. 친구가 한국 드라마를 추천했는데 그 서비스에만 있었어요. 그래서 무료 체험에 가입했어요. 지금은 거의 매일 밤 자기 전에 뭔가를 봐요. 제가 가장 좋아하는 휴식 방법이에요.",
+  "sample_adv": "The online service I use most often is probably a cloud storage service. It might sound boring, but it's honestly saved my life more than once. Basically, it's a place on the internet where I can keep all my files, like photos, work documents, and even scanned copies of my passport and contracts. Whatever I save on my laptop automatically appears on my phone and my work computer too. So if I'm at a cafe and suddenly need a file, I can open it in a few seconds. I can also share a folder with my coworkers or family, and we can all edit the same document at the same time. I started using it about four years ago, after a pretty painful experience. My old laptop suddenly died the night before a big presentation, and I lost the whole file, plus two years of photos. I stayed up all night redoing the slides. After that, a friend who works in IT told me about cloud storage, and I signed up the next day. Now I pay a small monthly fee for extra space, and I never worry about losing anything.",
+  "sample_adv_ko": "제가 가장 자주 쓰는 온라인 서비스는 아마 클라우드 저장 서비스일 거예요. 지루하게 들릴 수 있지만 솔직히 한 번 이상 저를 살려 줬어요. 기본적으로 사진, 업무 문서, 여권이나 계약서 스캔본까지 모든 파일을 보관할 수 있는 인터넷 공간이에요. 노트북에 저장한 건 무엇이든 휴대폰과 회사 컴퓨터에도 자동으로 나타나요. 그래서 카페에 있다가 갑자기 파일이 필요해도 몇 초 만에 열 수 있어요. 동료나 가족과 폴더를 공유해서 같은 문서를 동시에 편집할 수도 있어요. 4년쯤 전에 꽤 괴로운 경험을 하고 나서 쓰기 시작했어요. 중요한 발표 전날 밤 예전 노트북이 갑자기 고장 나서 파일 전체와 2년 치 사진을 잃었어요. 밤새 슬라이드를 다시 만들었어요. 그 뒤 IT 일을 하는 친구가 클라우드 저장소를 알려 줘서 다음 날 가입했어요. 지금은 추가 공간 때문에 매달 적은 요금을 내고, 뭘 잃어버릴까 걱정하지 않아요.",
+  "tips": [
+   "서비스 묘사: 무엇인지 → 할 수 있는 일 2~3개 → 쓰게 된 계기 이야기",
+   "It might sound boring, but ... 로 시작하면 자연스럽고 흥미를 끈다"
+  ]
+ },
+ {
+  "id": "oq-tech-202",
+  "topic": "tech",
+  "kind": "past",
+  "level": 3,
+  "question": "Tell me about a time when technology really helped you in a difficult situation. What was the situation, what technology did you use, and how did it help you?",
+  "question_ko": "기술이 어려운 상황에서 정말 도움이 되었던 때에 대해 말해 주세요. 어떤 상황이었고, 어떤 기술을 썼고, 어떻게 도움이 되었나요?",
+  "sample": "Last year, I traveled to Japan alone. On the second day, I got sick at night. I had a high fever, and I didn't speak Japanese. So I used a translation app on my phone. I typed my symptoms, and the app translated them into Japanese. Then I showed it to the hotel staff. They called a taxi to a hospital. At the hospital, I used the app again to talk with the doctor. Without that app, I would have been really scared and lost.",
+  "sample_ko": "작년에 혼자 일본 여행을 갔어요. 둘째 날 밤에 아팠어요. 열이 많이 났는데 일본어를 못 했어요. 그래서 휴대폰의 번역 앱을 썼어요. 증상을 입력하니 앱이 일본어로 번역해 줬어요. 그걸 호텔 직원에게 보여 줬어요. 직원이 병원 가는 택시를 불러 줬어요. 병원에서도 앱으로 의사와 이야기했어요. 그 앱이 없었다면 정말 무섭고 막막했을 거예요.",
+  "sample_adv": "There's one experience I'll never forget. About a year ago, I was traveling alone in a small town in Japan, and on the second night, I woke up around midnight with a terrible stomachache and a high fever. I was really frightened, because I don't speak any Japanese, and the town was too small for English signs. So I grabbed my phone and opened a translation app. I typed in, I have a high fever and a sharp pain in my stomach, I need a hospital, and it instantly translated it into Japanese. I went down to the front desk and showed the screen to the night staff. He read it, nodded, and called a taxi for me right away. At the emergency room, things got even better. The app has a conversation mode, so the doctor spoke into my phone in Japanese, and I heard it in Korean a second later. It wasn't perfect, but it was good enough for her to understand my symptoms. It turned out to be food poisoning, and I felt fine two days later. Looking back, a few years ago that situation would have been a nightmare.",
+  "sample_adv_ko": "절대 잊지 못할 경험이 하나 있어요. 1년쯤 전에 일본의 작은 마을을 혼자 여행하고 있었는데, 둘째 날 밤 자정쯤 심한 복통과 고열로 깼어요. 일본어를 전혀 못 하고, 마을이 너무 작아서 영어 표지판도 없어서 정말 무서웠어요. 그래서 휴대폰을 집어 번역 앱을 열었어요. 열이 많이 나고 배가 찌르듯 아파요, 병원이 필요해요 라고 입력하니 바로 일본어로 번역됐어요. 프런트로 내려가 야간 직원에게 화면을 보여 줬어요. 그는 읽고 고개를 끄덕이더니 바로 택시를 불러 줬어요. 응급실에서는 더 좋았어요. 앱에 대화 모드가 있어서 의사가 제 휴대폰에 일본어로 말하면 1초 뒤에 한국어로 들렸어요. 완벽하진 않았지만 제 증상을 이해하기에는 충분했어요. 결국 식중독이었고 이틀 뒤에 괜찮아졌어요. 돌아보면 몇 년 전이었다면 그 상황은 악몽이었을 거예요.",
+  "tips": [
+   "어려운 상황 → 기술 사용 장면 → 결과 → 과거였다면? 으로 마무리",
+   "It turned out to be ..., would have been a nightmare 같은 시제 표현으로 고득점"
+  ]
+ },
+ {
+  "id": "oq-tech-203",
+  "topic": "tech",
+  "kind": "issue",
+  "level": 5,
+  "question": "Many apps and websites collect personal information such as our location, search history, and shopping habits. What concerns do people have about this? What do you do to protect your personal information?",
+  "question_ko": "많은 앱과 웹사이트가 위치, 검색 기록, 쇼핑 습관 같은 개인 정보를 수집합니다. 사람들은 이에 대해 어떤 걱정을 하나요? 당신은 개인 정보를 보호하기 위해 무엇을 하나요?",
+  "sample": "These days, many apps collect our information. For example, a shopping app knows what I buy, and a map app knows where I go. Some people think this is convenient because they get useful ads and recommendations. But many people are worried. There were news stories about companies losing customers' data to hackers. Then people get scam messages. To protect my information, I don't allow location access for most apps. I also change my passwords often. I think companies should be more careful.",
+  "sample_ko": "요즘 많은 앱이 우리 정보를 수집해요. 예를 들어 쇼핑 앱은 제가 무엇을 사는지, 지도 앱은 제가 어디 가는지 알아요. 유용한 광고와 추천을 받으니 편리하다고 생각하는 사람도 있어요. 하지만 많은 사람이 걱정해요. 회사가 고객 정보를 해커에게 유출했다는 뉴스가 있었어요. 그러면 사람들이 사기 문자를 받아요. 제 정보를 지키려고 대부분 앱에 위치 접근을 허용하지 않아요. 비밀번호도 자주 바꿔요. 회사들이 더 조심해야 한다고 생각해요.",
+  "sample_adv": "This is something more and more people are talking about. Honestly, it's a little scary how much apps know about us. Last week, I talked with a friend about buying a camping chair, and the next morning, my social media was full of camping chair ads. Whether that's a coincidence or not, it shows how closely our habits are tracked. People have two main concerns. The first is data leaks. In Korea, there have been several big incidents where millions of customers' names, phone numbers, and addresses were stolen from large companies. After that, people started getting suspicious calls and text messages that used their real names. The second concern is that we don't really know what we agree to. Every app shows a long privacy policy, and almost nobody reads it. We just tap agree. For my part, I try to be a bit more careful now. I turn off location access unless I'm actually using a map, I use different passwords for important accounts, and I turn on two-step login for banking. But personally, I think individuals can only do so much. Companies should collect only what they really need, and face serious penalties when they lose it.",
+  "sample_adv_ko": "점점 더 많은 사람이 이야기하는 주제예요. 솔직히 앱이 우리에 대해 얼마나 많이 아는지 좀 무서워요. 지난주에 친구와 캠핑 의자를 살까 이야기했는데, 다음 날 아침 SNS가 캠핑 의자 광고로 가득했어요. 우연이든 아니든, 우리 습관이 얼마나 밀접하게 추적되는지 보여 줘요. 사람들의 걱정은 크게 두 가지예요. 첫째는 정보 유출이에요. 한국에서는 대기업에서 수백만 명의 이름, 전화번호, 주소가 도난당한 큰 사건이 여러 번 있었어요. 그 뒤 사람들은 실명을 부르는 수상한 전화와 문자를 받기 시작했어요. 둘째 걱정은 우리가 무엇에 동의하는지 잘 모른다는 거예요. 모든 앱이 긴 개인정보 처리방침을 보여 주는데 거의 아무도 안 읽어요. 그냥 동의를 눌러요. 저는 요즘 좀 더 조심하려고 해요. 지도를 실제로 쓸 때가 아니면 위치 접근을 끄고, 중요한 계정은 다른 비밀번호를 쓰고, 은행은 2단계 로그인을 켜요. 하지만 개인적으로 개인이 할 수 있는 건 한계가 있다고 생각해요. 회사는 정말 필요한 것만 수집하고, 유출하면 무거운 처벌을 받아야 해요.",
+  "tips": [
+   "걱정 두 가지를 The first ... / The second concern ... 로 나누고 내 실천 → 의견",
+   "data leak, privacy policy, tap agree, individuals can only do so much"
+  ]
+ },
+ {
+  "id": "oq-transport-201",
+  "topic": "transport",
+  "kind": "describe",
+  "level": 2,
+  "question": "Tell me about the trains or express buses people use to travel between cities in your country. What are they like inside, and how do people buy tickets? Which one do you prefer?",
+  "question_ko": "당신 나라에서 도시 사이를 이동할 때 이용하는 기차나 고속버스에 대해 말해 주세요. 내부는 어떻고 표는 어떻게 사나요? 당신은 어느 쪽을 더 좋아하나요?",
+  "sample": "In Korea, people often use the KTX train or express buses to go to other cities. The KTX is very fast. It takes about two and a half hours from Seoul to Busan. Inside, the seats are comfortable, and it's quiet. Express buses are cheaper. Some premium buses have big seats that lean back a lot. People usually buy tickets on an app. During holidays, tickets sell out very quickly. I prefer the KTX because it's fast and there are no traffic jams.",
+  "sample_ko": "한국에서는 다른 도시에 갈 때 KTX 기차나 고속버스를 많이 이용해요. KTX는 아주 빨라요. 서울에서 부산까지 2시간 반 정도 걸려요. 안은 좌석이 편하고 조용해요. 고속버스는 더 싸요. 어떤 프리미엄 버스는 많이 젖혀지는 큰 좌석이 있어요. 사람들은 보통 앱으로 표를 사요. 명절에는 표가 아주 빨리 매진돼요. 저는 빠르고 교통 체증이 없어서 KTX를 더 좋아해요.",
+  "sample_adv": "In Korea, getting from one city to another is actually really easy. The two most popular options are the KTX, which is the high-speed train, and express buses. The KTX can go about three hundred kilometers an hour, so from Seoul to Busan takes only around two and a half hours. Inside, it looks a bit like an airplane, with rows of seats facing the same direction, a small table, and outlets for charging your phone. It's usually very quiet, because people are expected to take phone calls in the area between the cars. Express buses are a bit slower and depend on traffic, but they're cheaper and they go to many small towns the train doesn't reach. My favorite is the premium bus, which has only three seats in each row, so every seat is wide and leans back almost like a bed, and there's even a little curtain for privacy. These days, almost everyone books tickets through an app, and you just show a QR code when you get on. The only stressful time is before big holidays, when tickets sell out within minutes. Personally, I take the KTX for business trips, but for long trips at night, I love the premium bus.",
+  "sample_adv_ko": "한국에서는 도시 간 이동이 정말 쉬워요. 가장 인기 있는 두 가지는 고속철도인 KTX와 고속버스예요. KTX는 시속 약 300킬로미터로 달려서 서울에서 부산까지 2시간 반 정도밖에 안 걸려요. 안은 비행기와 좀 비슷한데, 같은 방향을 보는 좌석 줄과 작은 테이블, 휴대폰 충전 콘센트가 있어요. 통화는 객차 사이 공간에서 하는 게 예절이라 보통 아주 조용해요. 고속버스는 좀 느리고 교통 상황에 따라 달라지지만, 더 싸고 기차가 안 가는 작은 마을까지 많이 가요. 제가 가장 좋아하는 건 프리미엄 버스인데, 한 줄에 좌석이 세 개뿐이라 자리가 넓고 거의 침대처럼 젖혀지고 개인 공간을 위한 작은 커튼까지 있어요. 요즘은 거의 다 앱으로 표를 예매하고 탈 때 QR 코드만 보여 주면 돼요. 스트레스받는 때는 큰 명절 전뿐인데, 표가 몇 분 만에 매진돼요. 개인적으로 출장은 KTX를 타지만, 밤에 먼 길을 갈 때는 프리미엄 버스가 정말 좋아요.",
+  "tips": [
+   "교통수단 묘사: 종류 → 속도·시간 → 내부 모습 → 예매 방법 → 내 선택",
+   "lean back, sell out, depend on traffic, outlets for charging 표현"
+  ]
+ },
+ {
+  "id": "oq-transport-202",
+  "topic": "transport",
+  "kind": "past",
+  "level": 3,
+  "question": "Tell me about the first time you learned to drive or the first time you rode a bike or scooter by yourself. Who taught you, and what was difficult? How did you feel when you first did it alone?",
+  "question_ko": "처음으로 운전을 배운 때나 혼자 자전거·스쿠터를 처음 탄 때에 대해 말해 주세요. 누가 가르쳐 줬고 무엇이 어려웠나요? 처음 혼자 했을 때 기분이 어땠나요?",
+  "sample": "I learned to drive when I was twenty-three. I went to a driving school for about two weeks. The teacher was strict, but kind. The most difficult part was parking. I hit the cone many times. I failed my first road test because I didn't stop at a stop line. I was so embarrassed. But I passed the second time. The first time I drove alone, I went to a supermarket near my house. My hands were sweating, but I felt really free and proud.",
+  "sample_ko": "스물세 살에 운전을 배웠어요. 2주 정도 운전 학원에 다녔어요. 선생님은 엄격했지만 친절했어요. 가장 어려운 건 주차였어요. 콘을 여러 번 쳤어요. 정지선에서 안 멈춰서 첫 도로 주행 시험에 떨어졌어요. 너무 창피했어요. 하지만 두 번째에 붙었어요. 처음 혼자 운전했을 때는 집 근처 마트에 갔어요. 손에 땀이 났지만 정말 자유롭고 뿌듯했어요.",
+  "sample_adv": "I learned to drive right after I graduated from college, and it was a lot harder than I expected. My dad first tried to teach me in an empty parking lot, but that lasted exactly one day. He kept grabbing the door handle and shouting, brake, brake, and we both came home angry. So I signed up for a driving school instead. My instructor was a calm man in his fifties who had probably seen every possible mistake. The hardest part for me was parallel parking. I hit the orange cones so many times that he started calling me the cone hunter. Then on my first road test, I was so nervous that I rolled right past a stop line, and the test ended immediately. I was really embarrassed, especially because my younger cousin had passed on her first try. Two weeks later, I passed. The first time I drove completely alone, I only went to a supermarket ten minutes away, but my hands were sweating the whole time and I didn't even turn on the radio. When I parked successfully, I sat in the car for a minute and smiled. It felt like a small step into being a real adult.",
+  "sample_adv_ko": "대학 졸업 직후에 운전을 배웠는데 생각보다 훨씬 어려웠어요. 처음엔 아빠가 빈 주차장에서 가르쳐 주려 했는데 딱 하루 만에 끝났어요. 아빠는 계속 문 손잡이를 잡고 브레이크, 브레이크 하고 외치셨고, 둘 다 화가 나서 집에 왔어요. 그래서 대신 운전 학원에 등록했어요. 강사님은 아마 온갖 실수를 다 봤을 것 같은 차분한 50대 남자분이었어요. 저한테 가장 어려웠던 건 평행 주차였어요. 주황색 콘을 너무 많이 쳐서 강사님이 저를 콘 사냥꾼이라고 부르기 시작하셨어요. 그리고 첫 도로 주행 시험에서 너무 긴장해서 정지선을 그냥 지나쳤고 시험은 바로 끝났어요. 정말 창피했어요, 특히 사촌 동생은 한 번에 붙었거든요. 2주 뒤에 합격했어요. 처음 완전히 혼자 운전했을 때는 10분 거리 마트에만 갔는데 내내 손에 땀이 나서 라디오도 안 켰어요. 주차에 성공했을 때 차 안에 1분 동안 앉아서 웃었어요. 진짜 어른이 되는 작은 한 걸음 같았어요.",
+  "tips": [
+   "실패 → 재도전 → 성공 구조는 과거 경험 문제에서 가장 말하기 쉽다",
+   "on my first try, roll past, parallel parking, That lasted exactly one day 같은 재미있는 표현"
+  ]
+ },
+ {
+  "id": "oq-transport-203",
+  "topic": "transport",
+  "kind": "compare",
+  "level": 5,
+  "question": "Compare public transportation in your country with public transportation in another country you have visited or heard about. What are the differences in cost, convenience, and safety? What could your country learn from the other country?",
+  "question_ko": "당신 나라의 대중교통과 방문했거나 들어 본 다른 나라의 대중교통을 비교해 주세요. 요금, 편리함, 안전 면에서 어떤 차이가 있나요? 당신 나라가 그 나라에서 배울 점은 무엇인가요?",
+  "sample": "I visited London two years ago, so I can compare it with Seoul. In Seoul, the subway is cheap, clean, and has Wi-Fi. You can transfer between the bus and the subway for free. In London, the subway is very old and small, and it's much more expensive. But London has many night buses, so people can get home late at night. In Seoul, it's hard to go home after midnight. I think Seoul could learn from London and run more buses at night.",
+  "sample_ko": "2년 전에 런던에 가 봐서 서울과 비교할 수 있어요. 서울은 지하철이 싸고 깨끗하고 와이파이가 돼요. 버스와 지하철 사이 환승이 무료예요. 런던은 지하철이 아주 오래되고 작고 훨씬 비싸요. 하지만 런던은 심야 버스가 많아서 밤늦게도 집에 갈 수 있어요. 서울은 자정 넘으면 집에 가기 어려워요. 서울이 런던에게 배워서 밤에 버스를 더 운행하면 좋겠어요.",
+  "sample_adv": "I spent about a week in London two years ago, and comparing it with Seoul was actually one of the most interesting parts of the trip. In terms of cost, Seoul wins easily. A subway ride in Seoul costs around one and a half thousand won, and you can transfer to a bus for free. In London, a single ride cost me almost five times that, and taxis were shockingly expensive. Seoul is also more comfortable. The trains are new, air-conditioned, and you get Wi-Fi and phone signal even deep underground, whereas the London Underground felt narrow, hot, and noisy. On the other hand, London impressed me in a few ways. First, the night bus network is huge, so people can get home at three in the morning without paying for a taxi. In Seoul, after the last subway, you often have to fight for a taxi. Second, there were clear step-free routes for wheelchairs and strollers marked on every map. And people were very polite about lining up. So overall, I think Seoul has the better system, but it could learn from London's night service and accessibility. That would make it almost perfect.",
+  "sample_adv_ko": "2년 전 런던에서 일주일쯤 지냈는데, 서울과 비교하는 게 사실 여행에서 가장 흥미로운 부분 중 하나였어요. 비용 면에서는 서울이 쉽게 이겨요. 서울 지하철은 1,500원 정도이고 버스로 무료 환승이 돼요. 런던에서는 한 번 타는 데 거의 다섯 배가 들었고 택시는 충격적으로 비쌌어요. 서울이 더 편하기도 해요. 열차가 새것이고 냉방이 되며 땅속 깊은 곳에서도 와이파이와 휴대폰 신호가 잡히는데, 런던 지하철은 좁고 덥고 시끄러웠어요. 반면에 런던은 몇 가지 면에서 인상적이었어요. 첫째, 심야 버스 노선이 엄청 많아서 새벽 3시에도 택시비 없이 집에 갈 수 있어요. 서울은 막차 이후에 택시 잡기 전쟁을 해야 할 때가 많아요. 둘째, 휠체어와 유모차를 위한 계단 없는 경로가 모든 지도에 분명히 표시돼 있었어요. 그리고 사람들이 줄 서는 데 아주 예의 발랐어요. 그래서 전체적으로 서울 시스템이 더 낫다고 생각하지만, 런던의 심야 운행과 접근성은 배울 만해요. 그러면 거의 완벽해질 거예요.",
+  "tips": [
+   "비교 기준을 정해서 하나씩: In terms of cost → comfort → On the other hand → 배울 점",
+   "whereas, wins easily, step-free, accessibility 로 고급 비교 표현"
+  ]
+ },
+ {
+  "id": "oq-furniture-201",
+  "topic": "furniture",
+  "kind": "describe",
+  "level": 2,
+  "question": "Describe the desk or table where you usually work or study at home. What does it look like, and what do you keep on it? Is it comfortable for you?",
+  "question_ko": "집에서 보통 일하거나 공부하는 책상이나 탁자를 묘사해 주세요. 어떻게 생겼고 그 위에 무엇을 두나요? 쓰기에 편한가요?",
+  "sample": "I usually work at a white desk in my bedroom. It's next to the window, so I get a lot of sunlight. The desk is not very big, but it's long enough for my laptop and a monitor. On the desk, there is a small lamp, a plant, and a cup with pens. I also have a calendar on the wall above it. My chair is gray and has wheels. It's quite comfortable, but my back hurts after long hours, so I want a better chair.",
+  "sample_ko": "저는 보통 침실에 있는 하얀 책상에서 일해요. 창문 옆이라 햇빛이 많이 들어요. 책상은 아주 크진 않지만 노트북과 모니터를 놓기에 충분히 길어요. 책상 위에는 작은 스탠드, 화분, 펜꽂이 컵이 있어요. 그 위 벽에는 달력도 있어요. 의자는 회색이고 바퀴가 달렸어요. 꽤 편하지만 오래 앉아 있으면 허리가 아파서 더 좋은 의자를 사고 싶어요.",
+  "sample_adv": "My desk is basically my little office at home, so I'm pretty particular about it. It sits right next to the window in my bedroom, which means I get natural light in the morning, and I can look outside when I need a break. The desk itself is a simple white one with light wooden legs, about one hundred forty centimeters long. I bought it two years ago when I started working from home twice a week. On the left, I have a monitor on a small stand, and my laptop sits next to it, so I can use two screens. On the right side, there's a desk lamp with warm light, a small green plant my friend gave me, and a mug full of pens I never actually use. I also keep a little tray for my phone and earphones, so they don't get lost. Is it comfortable? Mostly, yes. The height is perfect for typing. The only problem is my chair. It looked nice in the store, but after three or four hours, my lower back starts to complain. So my next big purchase is definitely going to be a good office chair.",
+  "sample_adv_ko": "제 책상은 사실상 집 안의 작은 사무실이라 꽤 신경 써요. 침실 창문 바로 옆에 있어서 아침에 자연광이 들고, 쉬고 싶을 때 밖을 볼 수 있어요. 책상 자체는 밝은 나무 다리가 달린 단순한 하얀 책상이고 길이는 140센티미터쯤이에요. 일주일에 두 번 재택근무를 시작하면서 2년 전에 샀어요. 왼쪽에는 작은 받침대 위에 모니터가 있고 그 옆에 노트북을 둬서 화면 두 개를 쓸 수 있어요. 오른쪽에는 따뜻한 빛의 스탠드, 친구가 준 작은 초록 화분, 실제로는 거의 안 쓰는 펜이 가득한 머그컵이 있어요. 휴대폰과 이어폰을 잃어버리지 않도록 작은 트레이도 둬요. 편하냐고요? 대체로 네. 높이는 타이핑하기에 딱 좋아요. 유일한 문제는 의자예요. 매장에서는 좋아 보였는데 서너 시간 지나면 허리가 아프기 시작해요. 그래서 다음 큰 지출은 분명 좋은 사무용 의자가 될 거예요.",
+  "tips": [
+   "물건 묘사: 위치 → 생김새·크기 → 왼쪽/오른쪽 물건 → 장단점",
+   "I'm pretty particular about it, my back starts to complain 같은 생생한 표현"
+  ]
+ },
+ {
+  "id": "oq-furniture-202",
+  "topic": "furniture",
+  "kind": "past",
+  "level": 3,
+  "question": "Tell me about a piece of furniture from your childhood home that you still remember. What was it, and what did it look like? Why is it special to you?",
+  "question_ko": "어린 시절 집에 있던 가구 중 아직 기억나는 것에 대해 말해 주세요. 무엇이었고 어떻게 생겼나요? 왜 당신에게 특별한가요?",
+  "sample": "I still remember a big wooden table in my grandparents' house. It was low, so we sat on the floor around it. It was dark brown and had some scratches. Every holiday, my whole family ate together at that table. My grandmother put so many dishes on it. I also did my homework there when I visited. When my grandparents moved, my parents took the table. Now it's in their living room. It's special because it reminds me of my family's happy times.",
+  "sample_ko": "조부모님 댁에 있던 큰 나무 상이 아직 기억나요. 낮아서 바닥에 둘러앉았어요. 짙은 갈색이었고 긁힌 자국이 좀 있었어요. 명절마다 온 가족이 그 상에서 같이 밥을 먹었어요. 할머니가 그 위에 음식을 정말 많이 차리셨어요. 놀러 가면 거기서 숙제도 했어요. 조부모님이 이사하실 때 부모님이 그 상을 가져오셨어요. 지금은 부모님 댁 거실에 있어요. 우리 가족의 행복한 시간을 떠올리게 해서 특별해요.",
+  "sample_adv": "The piece I remember most is an old wooden chest of drawers that stood in my parents' bedroom when I was a kid. It was really tall, at least compared to me back then, and made of dark, heavy wood with little brass handles shaped like flowers. My mom said it was part of her wedding furniture, so it was already old when I was born. I have so many memories connected to it. The bottom drawer was where my mom kept our winter blankets, and it always smelled like mothballs. When I played hide and seek with my brother, I once tried to squeeze inside it and got stuck, and my dad had to pull me out. There was also a pencil line on the side where my parents marked my height every birthday. When we moved apartments about ten years ago, my parents decided it was too big and gave it away. I was really upset, but I didn't say anything. I wish I had at least taken a photo of the height marks. To me, that chest wasn't just furniture. It was like a diary of my childhood.",
+  "sample_adv_ko": "가장 기억나는 건 어릴 때 부모님 침실에 있던 오래된 나무 서랍장이에요. 정말 컸어요, 적어도 그때의 저에 비해서는요. 짙고 무거운 나무로 만들었고 꽃 모양의 작은 놋쇠 손잡이가 있었어요. 엄마가 혼수 가구였다고 하셔서 제가 태어났을 때 이미 오래된 거였어요. 그 서랍장과 연결된 기억이 정말 많아요. 맨 아래 서랍은 엄마가 겨울 이불을 넣어 두던 곳이라 항상 좀약 냄새가 났어요. 오빠랑 숨바꼭질을 할 때 한번은 그 안에 들어가려다 끼어서 아빠가 꺼내 주셔야 했어요. 옆면에는 생일마다 부모님이 제 키를 표시한 연필 선도 있었어요. 10년쯤 전에 이사할 때 부모님이 너무 크다고 남에게 줘 버리셨어요. 정말 속상했지만 아무 말도 안 했어요. 키 표시라도 사진으로 찍어 둘걸 그랬어요. 저한테 그 서랍장은 그냥 가구가 아니었어요. 제 어린 시절 일기장 같았어요.",
+  "tips": [
+   "물건 + 추억 2~3개 + 그 물건의 결말 + 의미 한 문장",
+   "I wish I had ..., It was like a diary of ... 로 감성적인 마무리"
+  ]
+ },
+ {
+  "id": "oq-furniture-203",
+  "topic": "furniture",
+  "kind": "issue",
+  "level": 5,
+  "question": "These days, many people buy and sell used furniture through online apps instead of buying new furniture. Why has this become popular? What are the good points and the problems of buying used furniture?",
+  "question_ko": "요즘 많은 사람이 새 가구를 사는 대신 온라인 앱으로 중고 가구를 사고팝니다. 왜 이것이 인기를 얻었나요? 중고 가구를 사는 것의 좋은 점과 문제점은 무엇인가요?",
+  "sample": "Buying used furniture is very popular in Korea now. There are apps where you can buy things from people in your neighborhood. I think it's popular because new furniture is expensive, and people move often. Students and young workers don't want to spend a lot. The good point is the price. You can get a nice desk for half price. It's also good for the environment. But there are problems. Sometimes the furniture is dirty or broken. Also, moving it yourself is hard.",
+  "sample_ko": "요즘 한국에서는 중고 가구 구매가 아주 인기예요. 동네 사람에게 물건을 살 수 있는 앱이 있어요. 새 가구는 비싸고 사람들이 이사를 자주 해서 인기라고 생각해요. 학생과 젊은 직장인은 돈을 많이 쓰고 싶어 하지 않아요. 좋은 점은 가격이에요. 좋은 책상을 반값에 살 수 있어요. 환경에도 좋아요. 하지만 문제도 있어요. 가끔 가구가 더럽거나 망가져 있어요. 또 직접 옮기는 게 힘들어요.",
+  "sample_adv": "Yes, this has really taken off in Korea over the last few years, mainly because of neighborhood secondhand apps. You open the app, and you can see furniture that people living within a few kilometers are selling, sometimes for almost nothing. I think there are three reasons it became so popular. First, prices for everything have gone up, so people want to save money wherever they can. Second, many young people live in small studios and move every year or two because of their rental contracts, so it doesn't make sense to buy expensive furniture. And third, people care more about the environment, and reusing a bookshelf feels better than sending it to a landfill. The advantages are obvious. You can get decent furniture for a third of the price, and sellers get rid of things without paying disposal fees. But there are some real problems too. Photos can hide stains, bugs, or broken parts, and once you've carried a sofa home, it's almost impossible to return it. Some people have also had trouble with sellers who don't show up. Moving heavy items is another headache if you don't have a car. So I'd say it's a great option, but you have to check everything carefully in person.",
+  "sample_adv_ko": "네, 지난 몇 년 동안 한국에서 정말 크게 유행했는데 주로 동네 중고 거래 앱 덕분이에요. 앱을 열면 몇 킬로미터 안에 사는 사람들이 파는 가구를 볼 수 있고, 가끔은 거의 공짜예요. 이렇게 인기를 끈 이유가 세 가지라고 생각해요. 첫째, 모든 물가가 올라서 사람들이 아낄 수 있는 데서 아끼고 싶어 해요. 둘째, 많은 젊은 사람이 작은 원룸에 살고 임대 계약 때문에 1~2년마다 이사해서 비싼 가구를 사는 게 맞지 않아요. 셋째, 사람들이 환경에 더 신경 써서, 책장을 매립지로 보내는 것보다 다시 쓰는 게 기분이 좋아요. 장점은 분명해요. 괜찮은 가구를 3분의 1 가격에 살 수 있고, 판매자는 폐기 비용 없이 물건을 정리해요. 하지만 실제 문제도 있어요. 사진으로는 얼룩, 벌레, 망가진 부분을 숨길 수 있고, 소파를 집에 옮기고 나면 반품은 거의 불가능해요. 약속 장소에 안 나오는 판매자 때문에 곤란했던 사람들도 있어요. 차가 없으면 무거운 물건을 옮기는 것도 골칫거리예요. 그래서 좋은 선택이지만 직접 꼼꼼히 확인해야 한다고 생각해요.",
+  "tips": [
+   "이유 세 가지 → 장점 → 문제점 → 조건부 결론 구조",
+   "has really taken off, it doesn't make sense to ..., another headache 활용"
+  ]
+ },
+ {
+  "id": "oq-weather-201",
+  "topic": "weather",
+  "kind": "describe",
+  "level": 2,
+  "question": "What kind of weather do you like the most? Describe that weather and tell me what you usually like to do when the weather is like that.",
+  "question_ko": "어떤 날씨를 가장 좋아하나요? 그 날씨를 묘사하고, 날씨가 그럴 때 보통 무엇을 하는 걸 좋아하는지 말해 주세요.",
+  "sample": "My favorite weather is a sunny day in autumn. The sky is clear and blue, and there are almost no clouds. It's not too hot and not too cold. It's about twenty degrees. The air is dry and fresh, and the leaves turn red and yellow. On days like this, I like to go for a walk along the river near my house. Sometimes I ride my bike or have a picnic with my friends. Weather like this always puts me in a good mood.",
+  "sample_ko": "제가 가장 좋아하는 날씨는 가을의 맑은 날이에요. 하늘이 맑고 파랗고 구름이 거의 없어요. 너무 덥지도 춥지도 않아요. 20도 정도예요. 공기는 건조하고 상쾌하고 나뭇잎이 빨갛고 노랗게 물들어요. 이런 날에는 집 근처 강을 따라 산책하는 걸 좋아해요. 가끔 자전거를 타거나 친구들과 소풍을 가요. 이런 날씨는 항상 기분을 좋게 해 줘요.",
+  "sample_adv": "Oh, this is an easy one for me. My favorite weather is a crisp, clear day in mid-October. In Korea, that's when the summer humidity is completely gone, and the sky turns this deep, almost unreal shade of blue. The temperature is around eighteen to twenty degrees in the afternoon, so you can wear a light jacket or just a long-sleeved shirt. There's usually a soft breeze, and the air smells a little like dry leaves. The best part is that the trees on the mountains start changing color, so everything looks red, orange, and gold. On days like that, I can't stay inside. I usually pack a sandwich and a thermos of coffee and ride my bike along the Han River for an hour or two. Sometimes I stop at a park, lie on a mat, and just read a book under a tree. If my friends are free, we go hiking at a mountain near the city and take way too many photos of the leaves. Honestly, I think autumn weather is the reason Korea is so beautiful, and it never lasts long enough.",
+  "sample_adv_ko": "아, 이건 쉬워요. 제가 가장 좋아하는 날씨는 10월 중순의 상쾌하고 맑은 날이에요. 한국에서는 그때 여름 습기가 완전히 사라지고 하늘이 비현실적일 만큼 짙은 파란색이 돼요. 오후 기온이 18도에서 20도쯤이라 가벼운 재킷이나 긴소매 셔츠만 입으면 돼요. 보통 부드러운 바람이 불고 공기에서 마른 잎 냄새가 살짝 나요. 가장 좋은 건 산의 나무들이 물들기 시작해서 온 세상이 빨강, 주황, 금빛으로 보인다는 거예요. 그런 날에는 집에 있을 수가 없어요. 보통 샌드위치와 보온병 커피를 챙겨서 한강을 따라 한두 시간 자전거를 타요. 가끔 공원에 멈춰 돗자리에 누워 나무 아래서 그냥 책을 읽어요. 친구들이 시간 되면 도시 근처 산에 등산을 가서 단풍 사진을 너무 많이 찍어요. 솔직히 가을 날씨가 한국이 이렇게 아름다운 이유라고 생각하고, 늘 너무 짧게 지나가요.",
+  "tips": [
+   "날씨 묘사: 시기 → 하늘·기온·공기 → 풍경 → 그날 하는 일",
+   "crisp, humidity, soft breeze, shade of blue, it never lasts long enough"
+  ]
+ },
+ {
+  "id": "oq-weather-202",
+  "topic": "weather",
+  "kind": "past",
+  "level": 3,
+  "question": "Tell me about a day when the weather was perfect and you really enjoyed being outside. Where were you, who were you with, and what did you do?",
+  "question_ko": "날씨가 완벽해서 밖에 있는 게 정말 즐거웠던 날에 대해 말해 주세요. 어디에 있었고, 누구와 함께였고, 무엇을 했나요?",
+  "sample": "Last May, I had a perfect day with my friends. We went to a lake outside Seoul. The weather was warm and sunny, and the sky was very clear. We rented bikes and rode around the lake for about two hours. Then we had lunch on the grass. We ate kimbap and fried chicken. After lunch, we took a nap under a big tree. In the evening, we watched the sunset by the water. It was simple, but it was one of my best days last year.",
+  "sample_ko": "작년 5월에 친구들과 완벽한 하루를 보냈어요. 서울 밖에 있는 호수에 갔어요. 날씨가 따뜻하고 화창하고 하늘이 아주 맑았어요. 자전거를 빌려 호수 둘레를 두 시간쯤 탔어요. 그다음 잔디밭에서 점심을 먹었어요. 김밥과 치킨을 먹었어요. 점심 후엔 큰 나무 아래서 낮잠을 잤어요. 저녁에는 물가에서 노을을 봤어요. 단순했지만 작년 최고의 날 중 하나였어요.",
+  "sample_adv": "One day that really stands out is a Saturday last May. For about two weeks before that, it had been rainy and full of fine dust, so I'd been stuck inside. Then on Friday night, my friend texted me a weather screenshot showing a big sun icon and clean air, and said, we have to go somewhere tomorrow. So three of us took an early train to a small town about an hour from Seoul that has a big lake. When we stepped out of the station, it was exactly twenty-two degrees, with a light breeze and not a single cloud. We rented bikes and rode all the way around the lake, which took almost two hours because we kept stopping to take photos of the fields of yellow flowers. Around one, we spread a mat under a huge tree and ate the kimbap we'd bought at the station. I remember lying there and watching the leaves move, and nobody wanted to check their phone. Later we found a tiny cafe with an outdoor terrace and stayed until the sun went down behind the hills. It wasn't a special event at all, but somehow it felt like a real vacation.",
+  "sample_adv_ko": "정말 기억에 남는 날은 작년 5월의 어느 토요일이에요. 그 전 2주 정도 비가 오고 미세먼지가 심해서 집에만 갇혀 있었어요. 그런데 금요일 밤에 친구가 큰 해 아이콘과 깨끗한 공기가 나온 날씨 화면을 캡처해 보내며 내일 꼭 어디 가야 해 라고 했어요. 그래서 셋이서 서울에서 한 시간쯤 떨어진, 큰 호수가 있는 작은 마을로 아침 일찍 기차를 탔어요. 역에서 나오니 딱 22도에 바람이 살랑 불고 구름 한 점 없었어요. 자전거를 빌려 호수를 한 바퀴 돌았는데, 노란 꽃밭 사진을 찍느라 계속 멈춰서 거의 두 시간이 걸렸어요. 1시쯤 큰 나무 아래 돗자리를 펴고 역에서 산 김밥을 먹었어요. 거기 누워서 나뭇잎이 흔들리는 걸 보던 게 기억나는데, 아무도 휴대폰을 보고 싶어 하지 않았어요. 나중에 야외 테라스가 있는 작은 카페를 찾아서 해가 언덕 뒤로 질 때까지 있었어요. 특별한 행사는 전혀 아니었는데 왠지 진짜 휴가 같았어요.",
+  "tips": [
+   "앞뒤 대비로 시작: 비·미세먼지로 갇혀 있다가 → 완벽한 날",
+   "stands out, not a single cloud, somehow it felt like ... 로 감정 표현"
+  ]
+ },
+ {
+  "id": "oq-weather-203",
+  "topic": "weather",
+  "kind": "compare",
+  "level": 5,
+  "question": "How have the ways people check and prepare for the weather changed over the years? Compare how people found out about the weather in the past with how they do it now.",
+  "question_ko": "사람들이 날씨를 확인하고 대비하는 방식은 수년간 어떻게 바뀌었나요? 과거에 날씨를 알아보던 방법과 지금 방법을 비교해 주세요.",
+  "sample": "In the past, people watched the weather forecast on TV news every evening. My parents also listened to the radio in the morning. The forecast was only for the whole city, so it was often wrong. Now, people check weather apps on their phones. Apps show the weather every hour and even the air quality. We also get emergency alerts for heavy rain or heat waves. I think forecasts are much more accurate now. People can prepare better, for example, by taking an umbrella.",
+  "sample_ko": "예전에는 사람들이 매일 저녁 TV 뉴스로 일기 예보를 봤어요. 부모님은 아침에 라디오도 들으셨어요. 예보가 도시 전체 기준이라 자주 틀렸어요. 지금은 휴대폰 날씨 앱을 확인해요. 앱은 시간별 날씨와 공기 질까지 보여 줘요. 폭우나 폭염 때는 긴급 알림도 받아요. 지금 예보가 훨씬 정확하다고 생각해요. 예를 들어 우산을 챙기는 등 사람들이 더 잘 대비할 수 있어요.",
+  "sample_adv": "The change has been huge. When I was a kid, the only way my family found out about the weather was the forecast at the end of the nine o'clock news. A weather reporter stood in front of a big map and told us whether it would rain tomorrow in the whole central region. My grandmother had her own method too. She would look at the sky in the evening and say, my knees hurt, so it'll rain tomorrow, and honestly, she was right pretty often. Forecasts back then were quite general, so people just carried umbrellas on cloudy days to be safe. Now, everything is personal and in real time. I check an app that tells me there's a seventy percent chance of rain in my neighborhood between three and four p.m., so I know exactly when to leave the office. It also shows fine dust levels, the UV index, and even what to wear. On top of that, the government sends emergency text alerts when there's heavy rain, a typhoon, or a heat wave. I think we're much better prepared now. The funny thing is, people still complain when the app is wrong, even though it's right most of the time.",
+  "sample_adv_ko": "변화가 엄청 커요. 제가 어릴 때 우리 가족이 날씨를 아는 유일한 방법은 9시 뉴스 끝의 일기 예보였어요. 기상 캐스터가 큰 지도 앞에서 내일 중부 지방 전체에 비가 올지 알려 줬어요. 할머니만의 방법도 있었어요. 저녁에 하늘을 보시고 무릎이 쑤시니까 내일 비 오겠다 하셨는데, 솔직히 꽤 자주 맞으셨어요. 그때 예보는 꽤 대략적이라 사람들은 흐린 날엔 혹시 몰라 우산을 들고 다녔어요. 지금은 모든 게 개인 맞춤이고 실시간이에요. 저는 우리 동네에 오후 3시에서 4시 사이 비 올 확률이 70퍼센트라고 알려 주는 앱을 봐서 정확히 언제 퇴근할지 알아요. 미세먼지, 자외선 지수, 심지어 뭘 입을지도 보여 줘요. 게다가 폭우, 태풍, 폭염 때는 정부가 긴급 재난 문자를 보내요. 지금 훨씬 잘 대비하고 있다고 생각해요. 재미있는 건, 앱이 대부분 맞는데도 틀리면 사람들이 여전히 불평한다는 거예요.",
+  "tips": [
+   "과거 장면(9시 뉴스·할머니 무릎) → 현재 장면(동네별 시간별 앱) 대비로 생생하게",
+   "chance of rain, UV index, emergency alert, to be safe"
+  ]
+ },
+ {
+  "id": "oq-holiday-201",
+  "topic": "holiday",
+  "kind": "routine",
+  "level": 2,
+  "question": "What do you usually do to get ready for a big holiday? Tell me about the things you buy, the plans you make, and the people you contact before the holiday.",
+  "question_ko": "큰 명절을 앞두고 보통 무엇을 준비하나요? 명절 전에 사는 것, 세우는 계획, 연락하는 사람에 대해 말해 주세요.",
+  "sample": "Before a big holiday like Chuseok, I'm usually busy. First, I buy gifts for my family. I often buy fruit, like apples or pears, or a gift set of ham or shampoo. Second, I book a train ticket to my hometown early because tickets sell out fast. I also call my grandparents to say I'm coming. A few days before, I help my mom buy food at the market. We need meat, fish, and vegetables for many dishes. It's tiring, but I like the busy feeling.",
+  "sample_ko": "추석 같은 큰 명절 전에는 보통 바빠요. 먼저 가족 선물을 사요. 사과나 배 같은 과일이나 햄이나 샴푸 선물 세트를 자주 사요. 둘째, 표가 빨리 매진되니까 고향 가는 기차표를 일찍 예매해요. 조부모님께 간다고 전화도 드려요. 며칠 전에는 엄마를 도와 시장에서 음식 재료를 사요. 여러 음식을 하려면 고기, 생선, 채소가 필요해요. 힘들지만 그 분주한 느낌이 좋아요.",
+  "sample_adv": "Getting ready for Chuseok or Lunar New Year is almost like a project in my family. It usually starts about a month before, when train tickets go on sale. I set an alarm, log in right at seven a.m., and try to grab two seats to my hometown in Daegu. If I miss it, I'm stuck in traffic on the highway for six hours, so I take it very seriously. About two weeks before, I start thinking about gifts. For my grandparents, I usually get a box of good pears or some red ginseng, and for my younger cousins, I prepare some cash in clean, new bills, because that's what they look forward to the most. I also order a gift set online for my boss, usually something practical like olive oil or premium tuna. Then, a few days before the holiday, I go to the traditional market with my mom to buy fish, beef, and vegetables for the holiday dishes. It's crowded and chaotic, but the energy is great. Finally, I send a holiday greeting message to my friends and coworkers. It's exhausting, but the preparation is honestly part of the fun.",
+  "sample_adv_ko": "추석이나 설 준비는 우리 가족에게는 거의 프로젝트 같아요. 보통 기차표 예매가 열리는 한 달 전쯤 시작해요. 알람을 맞추고 아침 7시 정각에 로그인해서 고향 대구행 좌석 두 개를 잡으려고 해요. 놓치면 고속도로에서 여섯 시간 막히니까 아주 진지하게 해요. 2주 전쯤에는 선물을 생각하기 시작해요. 조부모님께는 보통 좋은 배 한 상자나 홍삼을 드리고, 어린 사촌들에게는 빳빳한 새 지폐로 용돈을 준비해요. 그게 아이들이 가장 기다리는 거니까요. 상사에게는 올리브유나 고급 참치처럼 실용적인 선물 세트를 온라인으로 주문해요. 그리고 명절 며칠 전에 엄마와 전통시장에 가서 명절 음식용 생선, 소고기, 채소를 사요. 붐비고 정신없지만 활기가 정말 좋아요. 마지막으로 친구와 동료에게 명절 인사 메시지를 보내요. 지치지만 솔직히 준비하는 것도 재미의 일부예요.",
+  "tips": [
+   "시간 순서로: a month before → two weeks before → a few days before → Finally",
+   "go on sale, look forward to, crowded and chaotic, part of the fun"
+  ]
+ },
+ {
+  "id": "oq-holiday-202",
+  "topic": "holiday",
+  "kind": "past",
+  "level": 3,
+  "question": "Have you ever had a problem while traveling during a holiday, such as terrible traffic or a canceled ticket? Tell me what happened and how you finally reached your destination.",
+  "question_ko": "명절에 이동하다가 끔찍한 교통 체증이나 표 취소 같은 문제를 겪은 적이 있나요? 무슨 일이 있었고 결국 목적지에 어떻게 도착했는지 말해 주세요.",
+  "sample": "Yes, three years ago, I had a terrible trip during Lunar New Year. I couldn't get a train ticket, so I drove to my hometown with my brother. Usually it takes four hours. But that day, there was heavy snow and a lot of traffic. We moved very slowly on the highway. We stopped at a rest area to eat and use the restroom, but it was so crowded. In the end, it took ten hours. We arrived at midnight, very tired. But my mom was waiting with hot soup.",
+  "sample_ko": "네, 3년 전 설날에 끔찍한 이동을 했어요. 기차표를 못 구해서 형이랑 차로 고향에 갔어요. 보통 네 시간 걸려요. 그런데 그날은 눈이 많이 오고 차가 정말 많았어요. 고속도로에서 아주 천천히 움직였어요. 휴게소에 들러 밥을 먹고 화장실에 갔는데 너무 붐볐어요. 결국 열 시간이 걸렸어요. 아주 지쳐서 자정에 도착했어요. 하지만 엄마가 따뜻한 국을 끓여 놓고 기다리고 계셨어요.",
+  "sample_adv": "Oh, I'll never forget the Lunar New Year three years ago. I'd planned everything perfectly. I had a KTX ticket for the morning before the holiday. But two days before, my team leader asked me to stay late for an urgent project, so I had to cancel my ticket, and of course, every other train was sold out. My only option was to drive with my older brother. We left at six in the morning, thinking we'd beat the traffic. We were wrong. About an hour in, it started snowing heavily, and the highway turned into a giant parking lot. At one point, we didn't move for forty minutes, and the navigation app kept adding more time to our arrival. When we finally reached a rest area, the line for the restroom was so long that we just bought some hot snacks and got back in the car. We took turns driving, sang along to old songs, and called our mom every hour with updates. Ten hours later, a little after midnight, we finally pulled into our parents' driveway. My mom was standing outside in her coat with a bowl of rice cake soup ready. Somehow, that soup made the whole trip worth it.",
+  "sample_adv_ko": "아, 3년 전 설날은 절대 못 잊어요. 모든 걸 완벽하게 계획했어요. 명절 전날 아침 KTX 표가 있었어요. 그런데 이틀 전에 팀장님이 급한 프로젝트로 늦게까지 남아 달라고 하셔서 표를 취소해야 했고, 당연히 다른 기차는 전부 매진이었어요. 유일한 방법은 형과 차로 가는 거였어요. 차가 막히기 전에 가자고 아침 6시에 출발했어요. 착각이었죠. 한 시간쯤 지나 눈이 펑펑 오기 시작했고 고속도로가 거대한 주차장이 됐어요. 한번은 40분 동안 꼼짝도 안 했고 내비게이션 앱은 도착 시간을 계속 늘렸어요. 마침내 휴게소에 도착했을 때 화장실 줄이 너무 길어서 따뜻한 간식만 사서 다시 차에 탔어요. 번갈아 운전하고, 옛날 노래를 따라 부르고, 매시간 엄마에게 전화해 상황을 알렸어요. 열 시간 뒤 자정을 조금 넘겨 드디어 부모님 집 앞에 들어섰어요. 엄마가 코트를 입고 밖에 서서 떡국을 준비해 두고 계셨어요. 왠지 그 떡국 하나로 모든 고생이 보상받은 것 같았어요.",
+  "tips": [
+   "계획 → 꼬임 → 고생 장면 2~3개 → 도착 → 따뜻한 마무리",
+   "We were wrong., turned into a giant parking lot, made the whole trip worth it"
+  ]
+ },
+ {
+  "id": "oq-holiday-203",
+  "topic": "holiday",
+  "kind": "compare",
+  "level": 5,
+  "question": "Compare a major holiday in your country with a holiday in another country that you know about. How are the traditions, food, and activities different? Are there any similarities?",
+  "question_ko": "당신 나라의 큰 명절과 알고 있는 다른 나라의 명절을 비교해 주세요. 전통, 음식, 활동이 어떻게 다른가요? 비슷한 점도 있나요?",
+  "sample": "I want to compare Korean Chuseok and American Thanksgiving. Both are harvest holidays in the fall. On both holidays, families get together and eat a big meal. In Korea, we eat songpyeon, which are small rice cakes, and we visit our ancestors' graves. In America, people eat turkey and pumpkin pie, and they watch football on TV. Also, Chuseok is three days long, but Thanksgiving is usually one day. I think both holidays are about family and saying thank you.",
+  "sample_ko": "한국의 추석과 미국의 추수감사절을 비교하고 싶어요. 둘 다 가을의 수확 명절이에요. 두 명절 모두 가족이 모여 푸짐한 식사를 해요. 한국에서는 작은 떡인 송편을 먹고 조상님 산소에 가요. 미국에서는 칠면조와 호박 파이를 먹고 TV로 미식축구를 봐요. 또 추석은 사흘이지만 추수감사절은 보통 하루예요. 두 명절 모두 가족과 감사에 관한 날이라고 생각해요.",
+  "sample_adv": "I'd like to compare Chuseok in Korea with Thanksgiving in the United States, because I actually spent one Thanksgiving with my friend's family when I was an exchange student. The biggest similarity is the meaning. Both are harvest festivals in autumn, and both are about family coming home, eating too much, and being thankful. The atmosphere at my friend's house reminded me a lot of my grandmother's place on Chuseok. People were crowded in the kitchen, kids were running around, and there was way too much food. But the details are quite different. On Chuseok, many families hold a memorial ceremony for their ancestors in the morning, with a table of fruit, rice cakes, and fish arranged in a traditional order, and then visit the family graves. Thanksgiving felt more relaxed and less formal. Instead of a ceremony, everyone went around the table and said one thing they were thankful for, which I found really touching. The food is different too, songpyeon and jeon in Korea versus turkey, mashed potatoes, and pumpkin pie in America. And after dinner, my friend's family watched football, while my family usually plays a card game called hwatu. In the end, though, both holidays left me with the same warm feeling.",
+  "sample_adv_ko": "한국의 추석과 미국의 추수감사절을 비교하고 싶어요. 교환학생 때 친구 가족과 추수감사절을 보낸 적이 있거든요. 가장 큰 공통점은 의미예요. 둘 다 가을 추수 명절이고, 가족이 집에 모여 과식하고 감사하는 날이에요. 친구 집 분위기가 추석 때 할머니 댁과 많이 비슷했어요. 부엌에 사람들이 북적이고, 아이들이 뛰어다니고, 음식이 너무 많았어요. 하지만 세부 사항은 꽤 달라요. 추석에는 많은 가족이 아침에 과일, 떡, 생선을 전통 순서대로 차린 상으로 차례를 지내고 산소에 가요. 추수감사절은 더 편안하고 덜 격식 있었어요. 의식 대신 모두 돌아가며 감사한 일 하나씩을 말했는데 정말 감동적이었어요. 음식도 달라서, 한국은 송편과 전, 미국은 칠면조, 으깬 감자, 호박 파이예요. 그리고 저녁 식사 뒤 친구 가족은 미식축구를 봤고, 우리 가족은 보통 화투를 쳐요. 그래도 결국 두 명절 모두 저에게 같은 따뜻한 느낌을 남겼어요.",
+  "tips": [
+   "공통점 먼저 → 차이점(의식·음식·활동) → 결론은 다시 공통된 느낌으로",
+   "versus, reminded me a lot of, less formal, In the end, though"
+  ]
+ },
+ {
+  "id": "oq-health-201",
+  "topic": "health",
+  "kind": "describe",
+  "level": 2,
+  "question": "Tell me about a hospital or clinic that you or your family go to. Where is it, and what does it look like inside? What are the doctors and staff like?",
+  "question_ko": "당신이나 가족이 다니는 병원이나 의원에 대해 말해 주세요. 어디에 있고 안은 어떻게 생겼나요? 의사와 직원들은 어떤가요?",
+  "sample": "My family usually goes to a small clinic near our apartment. It's on the third floor of a building with a pharmacy on the first floor. Inside, there is a waiting room with sofas and a TV. There is a reception desk near the door, and you check in with your name. The doctor is about sixty years old. He is very kind and explains things clearly. The nurses are friendly too. Sometimes we wait a long time, but I trust this doctor.",
+  "sample_ko": "우리 가족은 보통 아파트 근처 작은 의원에 다녀요. 1층에 약국이 있는 건물 3층에 있어요. 안에는 소파와 TV가 있는 대기실이 있어요. 문 근처에 접수대가 있어서 이름으로 접수해요. 의사 선생님은 예순 살쯤이에요. 아주 친절하고 설명을 분명하게 해 주세요. 간호사들도 친절해요. 가끔 오래 기다리지만 저는 이 선생님을 믿어요.",
+  "sample_adv": "The place my whole family goes to is a small internal medicine clinic about five minutes from my parents' apartment. It's on the third floor of a busy building, and like most clinics in Korea, there's a pharmacy right on the first floor, so you can get your medicine immediately after you see the doctor. When you walk in, there's a reception desk with two staff members, and you give them your name and date of birth. The waiting room is pretty simple, with a few rows of chairs, a water dispenser, and a TV that's always showing the news a little too loudly. There are also posters on the walls about flu shots and blood pressure. The doctor has been running the clinic for over twenty years, so he knows our whole family's history. He's in his sixties, wears glasses, and speaks very slowly and calmly. What I like most is that he never rushes. Even when the waiting room is full, he explains the results and asks about my parents. The only downside is the waiting time. On Monday mornings, you can wait an hour, so I always try to go right when it opens.",
+  "sample_adv_ko": "우리 온 가족이 다니는 곳은 부모님 아파트에서 5분 거리의 작은 내과 의원이에요. 붐비는 건물 3층에 있고, 한국 대부분의 의원처럼 1층에 약국이 있어서 진료 직후 바로 약을 받을 수 있어요. 들어가면 직원 두 명이 있는 접수대가 있고 이름과 생년월일을 말해요. 대기실은 꽤 단순해서 의자 몇 줄, 정수기, 늘 뉴스를 좀 크게 틀어 놓은 TV가 있어요. 벽에는 독감 예방 접종과 혈압에 관한 포스터도 있어요. 의사 선생님은 20년 넘게 의원을 운영하셔서 우리 가족 병력을 다 아세요. 60대이시고 안경을 쓰시고 아주 천천히 차분하게 말씀하세요. 가장 좋은 건 절대 서두르지 않으신다는 거예요. 대기실이 꽉 차도 결과를 설명해 주시고 부모님 안부를 물으세요. 유일한 단점은 대기 시간이에요. 월요일 아침에는 한 시간을 기다릴 수 있어서 항상 문 열자마자 가려고 해요.",
+  "tips": [
+   "장소 묘사: 위치 → 들어가면 보이는 것 → 대기실 → 사람(의사) → 장단점",
+   "internal medicine clinic, reception desk, never rushes, right when it opens"
+  ]
+ },
+ {
+  "id": "oq-health-202",
+  "topic": "health",
+  "kind": "past",
+  "level": 3,
+  "question": "Tell me about a time when you changed one of your habits to become healthier. What was the habit, why did you decide to change it, and was it difficult?",
+  "question_ko": "더 건강해지려고 습관 하나를 바꿨던 때에 대해 말해 주세요. 어떤 습관이었고, 왜 바꾸기로 했고, 어려웠나요?",
+  "sample": "Two years ago, I decided to stop drinking sugary drinks. I used to drink two or three cans of soda every day, and I also loved sweet coffee. At my health checkup, the doctor said my blood sugar was a little high. That scared me. So I started drinking water and plain tea instead. The first two weeks were really hard. I had headaches, and I wanted soda every afternoon. But after a month, I didn't miss it. Now I feel lighter and I sleep better.",
+  "sample_ko": "2년 전에 단 음료를 끊기로 했어요. 예전엔 매일 탄산음료를 두세 캔 마셨고 달달한 커피도 정말 좋아했어요. 건강 검진에서 의사가 혈당이 조금 높다고 했어요. 그게 무서웠어요. 그래서 대신 물과 무가당 차를 마시기 시작했어요. 처음 2주는 정말 힘들었어요. 머리가 아팠고 오후마다 탄산음료가 마시고 싶었어요. 하지만 한 달 뒤엔 생각이 안 났어요. 지금은 몸이 가볍고 잠도 더 잘 자요.",
+  "sample_adv": "About two years ago, I made one big change, and that was cutting out late-night snacks. Back then, I worked until around eight, got home exhausted, and ordered fried chicken or ramen almost every night around eleven while watching videos. It felt like my reward for a hard day. But slowly, I noticed I was always tired in the morning, my stomach felt heavy, and I'd gained about seven kilos in a year. The turning point was my annual health checkup. The doctor showed me my cholesterol numbers and said, if you keep this up, you'll be taking medicine before you're forty. That really hit me. So I made a simple rule, no food after nine p.m. The first few weeks were tough. I'd stare at delivery apps and almost order something, so I deleted them from my phone. I also started eating a proper dinner earlier and drinking a cup of herbal tea at night when I felt hungry. After about a month, the cravings mostly disappeared. Six months later, my numbers were back to normal, and I'd lost five kilos. More than that, I wake up with energy now. It's honestly one of the best decisions I've made.",
+  "sample_adv_ko": "2년쯤 전에 큰 변화 하나를 만들었는데 바로 야식을 끊은 거예요. 그때는 8시쯤까지 일하고 지쳐서 집에 와서, 거의 매일 밤 11시쯤 영상을 보며 치킨이나 라면을 시켰어요. 힘든 하루의 보상 같았어요. 그런데 점점 아침마다 피곤하고 속이 더부룩하고 1년에 7킬로그램 정도 쪘다는 걸 알게 됐어요. 전환점은 연례 건강 검진이었어요. 의사가 콜레스테롤 수치를 보여 주며 이대로 가면 마흔 전에 약을 먹게 될 거라고 했어요. 그 말이 정말 와닿았어요. 그래서 밤 9시 이후엔 아무것도 먹지 않는다는 단순한 규칙을 만들었어요. 처음 몇 주는 힘들었어요. 배달 앱을 들여다보다 주문할 뻔해서 휴대폰에서 앱을 지웠어요. 저녁을 일찍 제대로 먹고, 밤에 배고프면 허브차를 한 잔 마시기 시작했어요. 한 달쯤 지나니 먹고 싶은 마음이 거의 사라졌어요. 6개월 뒤 수치는 정상으로 돌아왔고 5킬로그램이 빠졌어요. 그보다 지금은 아침에 기운 있게 일어나요. 솔직히 제가 한 최고의 결정 중 하나예요.",
+  "tips": [
+   "예전 습관 → 계기(turning point) → 실천 방법 → 힘든 점 → 결과",
+   "cut out, That really hit me, cravings, back to normal"
+  ]
+ },
+ {
+  "id": "oq-health-203",
+  "topic": "health",
+  "kind": "issue",
+  "level": 5,
+  "question": "Many people get health information from social media and take vitamins or health supplements. What problems can this cause? How do you decide which health information to trust?",
+  "question_ko": "많은 사람이 SNS에서 건강 정보를 얻고 비타민이나 건강 보조제를 먹습니다. 이것이 어떤 문제를 일으킬 수 있나요? 당신은 어떤 건강 정보를 믿을지 어떻게 정하나요?",
+  "sample": "These days, many people watch health videos on social media. Some videos are helpful, but some give wrong information. For example, some people say one kind of juice can cure many diseases. People believe it and spend a lot of money. Also, many Koreans take a lot of supplements, like vitamins and red ginseng. But taking too many can be bad for your liver. When I hear health information, I check if a real doctor said it. I also ask my doctor before taking something new.",
+  "sample_ko": "요즘 많은 사람이 SNS에서 건강 영상을 봐요. 도움이 되는 영상도 있지만 틀린 정보를 주는 영상도 있어요. 예를 들어 어떤 주스 하나가 여러 병을 고친다고 말하는 사람도 있어요. 사람들은 그걸 믿고 돈을 많이 써요. 또 많은 한국인이 비타민이나 홍삼 같은 보조제를 많이 먹어요. 하지만 너무 많이 먹으면 간에 안 좋을 수 있어요. 저는 건강 정보를 들으면 진짜 의사가 한 말인지 확인해요. 새로운 걸 먹기 전엔 담당 의사에게도 물어봐요.",
+  "sample_adv": "This is a growing issue, I think. Social media is full of health content now, and a lot of it looks very professional. Someone in a white coat says that a certain powder will burn belly fat or that you should never eat rice after six p.m. The problem is that you can't always tell whether the person is a real expert or just selling a product. In fact, many of these videos end with a discount code. I've seen people around me spend hundreds of thousands of won on products that do almost nothing. Supplements are another example. In Korea, it's very common to take five or six pills every morning, like vitamins, omega-three, probiotics, and red ginseng. My coworker was doing that, plus a diet supplement, and her liver test came back with bad results. Her doctor told her to stop most of them. So I've become more careful. When I see health advice online, I ask myself three questions. Who is saying it, is it a real doctor or an official health organization? Are they selling something? And can I find the same information from a hospital website? If the answer is unclear, I just ask my doctor at my next visit.",
+  "sample_adv_ko": "점점 커지는 문제라고 생각해요. 요즘 SNS에는 건강 콘텐츠가 넘쳐나고 상당수가 아주 전문적으로 보여요. 흰 가운을 입은 사람이 어떤 가루가 뱃살을 태운다거나 오후 6시 이후엔 절대 밥을 먹지 말라고 해요. 문제는 그 사람이 진짜 전문가인지 그냥 제품을 파는 건지 항상 알 수는 없다는 거예요. 실제로 이런 영상 상당수는 할인 코드로 끝나요. 제 주변에서도 거의 효과 없는 제품에 수십만 원을 쓰는 사람을 봤어요. 보조제도 또 다른 예예요. 한국에서는 아침마다 비타민, 오메가3, 유산균, 홍삼 등 대여섯 알을 먹는 게 아주 흔해요. 제 동료가 그렇게 먹으면서 다이어트 보조제까지 먹었는데 간 수치 검사 결과가 나쁘게 나왔어요. 의사가 대부분 끊으라고 했대요. 그래서 저는 더 조심하게 됐어요. 온라인에서 건강 조언을 보면 세 가지를 스스로 물어요. 누가 말하는지, 진짜 의사나 공식 보건 기관인지? 뭔가 팔고 있는지? 병원 웹사이트에서도 같은 정보를 찾을 수 있는지? 답이 분명하지 않으면 다음 진료 때 의사에게 물어봐요.",
+  "tips": [
+   "문제 예시 2개(SNS 정보·보조제) → 내 판단 기준 세 가지로 정리",
+   "you can't always tell whether ..., I ask myself three questions"
+  ]
+ },
+ {
+  "id": "oq-food-201",
+  "topic": "food",
+  "kind": "describe",
+  "level": 2,
+  "question": "Tell me about your favorite restaurant. Where is it, and what does it look like? What kind of food does it serve, and what do you usually order there?",
+  "question_ko": "가장 좋아하는 식당에 대해 말해 주세요. 어디에 있고 어떻게 생겼나요? 어떤 음식을 팔고 거기서 보통 무엇을 주문하나요?",
+  "sample": "My favorite restaurant is a small noodle restaurant near my office. It's in an old alley, and it has only six tables. The inside is simple, with wooden tables and a big menu on the wall. The owner is an old woman, and she makes the noodles by hand. I usually order kalguksu. It's noodle soup with clams and zucchini. The soup is hot and clear, and the kimchi is really good. It's cheap, only eight thousand won. I go there almost every week.",
+  "sample_ko": "제가 가장 좋아하는 식당은 회사 근처 작은 국숫집이에요. 오래된 골목에 있고 테이블이 여섯 개뿐이에요. 안은 나무 테이블과 벽의 큰 메뉴판으로 단순해요. 주인은 할머니인데 면을 손으로 직접 만드세요. 저는 보통 칼국수를 시켜요. 바지락과 애호박이 들어간 국수예요. 국물이 뜨겁고 맑고 김치가 정말 맛있어요. 8천 원밖에 안 해서 싸요. 거의 매주 가요.",
+  "sample_adv": "My favorite place is a tiny kalguksu restaurant hidden in an old alley behind my office. You'd never find it unless someone told you about it. There's no real sign, just a faded cloth curtain over the door. Inside, there are only six wooden tables, and at lunchtime, office workers line up outside, even in winter. The walls are covered with handwritten menus and old photos of the owner's family. The owner is a grandmother in her seventies who has run the place for over thirty years. She still makes the noodle dough by hand every morning, and you can hear her chopping vegetables in the kitchen. I always order the same thing, the clam kalguksu. The broth is clear but rich, with lots of fresh clams, zucchini, and soft, thick noodles. It comes with two kinds of kimchi, and the fresh one is so spicy and crunchy that I usually ask for more. A bowl costs just eight thousand won, which is rare these days. It's not fancy at all, but whenever I've had a stressful morning, a bowl of that soup makes everything feel okay.",
+  "sample_adv_ko": "제가 가장 좋아하는 곳은 회사 뒤 오래된 골목에 숨은 작은 칼국숫집이에요. 누가 알려 주지 않으면 절대 못 찾을 거예요. 제대로 된 간판도 없고 문에 색 바랜 천 가림막만 있어요. 안에는 나무 테이블이 여섯 개뿐이고, 점심때는 겨울에도 직장인들이 밖에 줄을 서요. 벽은 손으로 쓴 메뉴와 주인 가족의 옛날 사진으로 가득해요. 주인은 30년 넘게 가게를 해 온 70대 할머니세요. 아직도 매일 아침 반죽을 손으로 만드시고, 부엌에서 채소 써는 소리가 들려요. 저는 항상 바지락 칼국수를 시켜요. 국물은 맑지만 깊고, 신선한 바지락, 애호박, 부드럽고 굵은 면이 듬뿍 들어 있어요. 김치가 두 종류 나오는데 겉절이가 너무 맵고 아삭해서 보통 더 달라고 해요. 한 그릇에 8천 원밖에 안 하는데 요즘 보기 드물어요. 전혀 고급스럽지 않지만, 스트레스받은 아침을 보낸 날엔 그 국물 한 그릇이면 다 괜찮아져요.",
+  "tips": [
+   "식당 묘사: 위치·찾는 법 → 내부 → 주인 → 메뉴 맛 묘사 → 가격 → 내게 의미",
+   "맛 표현: clear but rich, spicy and crunchy, soft and thick"
+  ]
+ },
+ {
+  "id": "oq-food-202",
+  "topic": "food",
+  "kind": "past",
+  "level": 3,
+  "question": "Tell me about a bad experience you had at a restaurant. Maybe the food was wrong, the service was slow, or something unexpected happened. What happened, and how did the restaurant deal with it?",
+  "question_ko": "식당에서 겪은 나쁜 경험에 대해 말해 주세요. 음식이 잘못 나왔거나, 서비스가 느렸거나, 예상치 못한 일이 있었을 수도 있어요. 무슨 일이 있었고 식당은 어떻게 대처했나요?",
+  "sample": "Last year, I went to a famous pasta restaurant with my girlfriend for her birthday. We waited thirty minutes for a table. Then we ordered two pastas and a salad. But the food didn't come for almost an hour. When it came, my pasta was cold, and there was a long hair in the salad. I called the manager. He said sorry many times. He gave us new food and didn't charge us for the salad. He also gave us a free dessert. But the birthday dinner was a little ruined.",
+  "sample_ko": "작년에 여자 친구 생일이라 유명한 파스타 식당에 갔어요. 자리 나기를 30분 기다렸어요. 그리고 파스타 두 개와 샐러드를 시켰어요. 그런데 음식이 거의 한 시간 동안 안 나왔어요. 나왔을 때 제 파스타는 식어 있었고 샐러드에 긴 머리카락이 있었어요. 매니저를 불렀어요. 매니저가 여러 번 사과했어요. 새 음식을 주고 샐러드값은 받지 않았어요. 디저트도 무료로 줬어요. 하지만 생일 저녁은 좀 망쳤어요.",
+  "sample_adv": "I had a pretty disappointing experience last spring. It was my best friend's thirtieth birthday, so I booked a table at a popular Italian restaurant that had great reviews online. I even called ahead and asked them to bring out a small cake with a candle after dinner. Things went wrong from the start. Even though we had a reservation, we waited twenty minutes because they'd given our table to someone else. Then, after we ordered, nothing came for fifty minutes. When I asked, the server said the kitchen was just busy. Finally, the food arrived, but one of the pastas had shrimp in it, and my friend is allergic to shrimp. I had told them that twice. At that point, I asked to speak to the manager. To be fair, she handled it really well. She apologized sincerely, had the kitchen make a new dish right away, took the pasta off the bill, and gave us a bottle of sparkling wine for free. And the birthday cake came out with the whole staff singing, which made my friend laugh. So in the end, it turned into a funny story, but I learned to always double-check allergy requests.",
+  "sample_adv_ko": "작년 봄에 꽤 실망스러운 경험을 했어요. 가장 친한 친구의 서른 번째 생일이라 온라인 후기가 좋은 인기 이탈리아 식당을 예약했어요. 미리 전화해서 식사 후에 초를 꽂은 작은 케이크를 내 달라고 부탁까지 했어요. 처음부터 일이 꼬였어요. 예약했는데도 우리 자리를 다른 사람에게 줘서 20분을 기다렸어요. 그리고 주문 후 50분 동안 아무것도 안 나왔어요. 물어보니 직원은 주방이 바쁘다고만 했어요. 마침내 음식이 나왔는데 파스타 하나에 새우가 들어 있었어요. 친구는 새우 알레르기가 있고 저는 그걸 두 번이나 말했거든요. 그때 매니저와 이야기하고 싶다고 했어요. 공정하게 말하면 매니저는 정말 잘 대처했어요. 진심으로 사과하고, 주방에 바로 새 요리를 만들게 하고, 그 파스타는 계산서에서 빼고, 스파클링 와인 한 병을 무료로 줬어요. 그리고 생일 케이크가 직원 모두의 노래와 함께 나와서 친구가 웃었어요. 그래서 결국 재미있는 이야기가 됐지만, 알레르기 요청은 항상 다시 확인해야 한다는 걸 배웠어요.",
+  "tips": [
+   "문제 여러 개를 점점 심해지게 배치 → 대처 → 결과 → 교훈",
+   "To be fair, ..., took it off the bill, double-check 으로 균형 잡힌 이야기"
+  ]
+ },
+ {
+  "id": "oq-food-203",
+  "topic": "food",
+  "kind": "issue",
+  "level": 5,
+  "question": "More and more people eat alone these days, and convenience store meals and meal kits are very popular. Why do you think this is happening? What effects does it have on people's health and lifestyle?",
+  "question_ko": "요즘 혼자 밥을 먹는 사람이 점점 늘고 편의점 도시락과 밀키트가 아주 인기입니다. 왜 이런 일이 일어난다고 생각하나요? 사람들의 건강과 생활 방식에 어떤 영향을 미치나요?",
+  "sample": "In Korea, eating alone is very common now. Many people live alone, and they are busy with work. So they eat quick meals from convenience stores. Convenience store lunch boxes are cheap and taste good. Meal kits are also popular because you can cook easily in fifteen minutes. These are convenient, but there are problems. Convenience store food often has a lot of salt. Also, eating alone every day can make people feel lonely. I think people should try to eat with others sometimes.",
+  "sample_ko": "한국에서는 이제 혼자 밥 먹는 게 아주 흔해요. 혼자 사는 사람이 많고 일로 바빠요. 그래서 편의점에서 간단히 먹어요. 편의점 도시락은 싸고 맛있어요. 밀키트도 15분이면 쉽게 요리할 수 있어서 인기예요. 편리하지만 문제도 있어요. 편의점 음식은 소금이 많은 경우가 많아요. 또 매일 혼자 먹으면 외로울 수 있어요. 가끔은 다른 사람과 같이 먹으려고 노력해야 한다고 생각해요.",
+  "sample_adv": "There's even a word for it in Korean, honbap, which means eating alone. Ten years ago, people used to feel embarrassed eating by themselves in a restaurant. Now, many restaurants have counter seats just for solo diners, and nobody looks twice. I think there are a few reasons behind this. First, the number of single-person households has grown a lot. About one in three homes in Korea now has only one person. Second, people are busier and more tired than before, so they want something fast and easy. And third, food prices have gone up, so a five thousand won convenience store lunch box looks pretty attractive. Meal kits fill the gap in between. You get pre-cut vegetables and sauces, and you can make a decent stew in fifteen minutes. These changes definitely make life easier, but they come with some costs. Convenience food is usually high in salt and low in vegetables, so eating it every day isn't great for your health. Socially, meals used to be the main time families and coworkers talked. When everyone eats alone in front of a screen, people can become more isolated. So personally, I enjoy eating alone sometimes, but I try to have at least a few meals a week with other people.",
+  "sample_adv_ko": "한국어에는 이걸 가리키는 혼밥이라는 말까지 있어요. 10년 전만 해도 사람들은 식당에서 혼자 먹는 걸 창피해했어요. 지금은 많은 식당에 혼자 오는 손님을 위한 카운터석이 있고 아무도 쳐다보지 않아요. 몇 가지 이유가 있다고 생각해요. 첫째, 1인 가구가 크게 늘었어요. 지금 한국 집 세 곳 중 한 곳 정도가 1인 가구예요. 둘째, 사람들이 예전보다 바쁘고 피곤해서 빠르고 쉬운 걸 원해요. 셋째, 물가가 올라서 5천 원짜리 편의점 도시락이 꽤 매력적으로 보여요. 밀키트는 그 사이를 채워요. 손질된 채소와 소스가 들어 있어서 15분이면 괜찮은 찌개를 만들 수 있어요. 이런 변화는 분명 삶을 편하게 하지만 대가도 있어요. 간편식은 보통 염분이 높고 채소가 적어서 매일 먹으면 건강에 좋지 않아요. 사회적으로도 식사는 예전엔 가족과 동료가 대화하는 주요 시간이었어요. 모두가 화면 앞에서 혼자 먹으면 더 고립될 수 있어요. 그래서 저는 가끔 혼자 먹는 걸 즐기지만, 일주일에 적어도 몇 끼는 다른 사람과 먹으려고 해요.",
+  "tips": [
+   "한국 고유 단어(honbap)를 영어로 설명하면 인상적인 도입",
+   "이유 세 가지 → 장점 → 건강·사회적 영향 → 내 균형 잡힌 실천"
+  ]
+ },
+ {
+  "id": "oq-friends-201",
+  "topic": "friends",
+  "kind": "routine",
+  "level": 2,
+  "question": "What do you and your friends usually do for each other's birthdays? Tell me about how you celebrate, what gifts you give, and how you plan the day.",
+  "question_ko": "당신과 친구들은 서로의 생일에 보통 무엇을 하나요? 어떻게 축하하고, 어떤 선물을 주고, 그날을 어떻게 계획하는지 말해 주세요.",
+  "sample": "My friends and I always celebrate each other's birthdays. We have a group chat, and one person plans the day. Usually, we meet for dinner at a nice restaurant. The birthday person doesn't pay. After dinner, we go to a cafe and have cake. We sing happy birthday and take a lot of photos. For gifts, we often use a gift app. Each person sends something small, like a coffee coupon or cosmetics. Sometimes we put money together and buy one big gift.",
+  "sample_ko": "저와 친구들은 항상 서로의 생일을 축하해요. 단체 대화방이 있어서 한 명이 그날을 계획해요. 보통 좋은 식당에서 만나서 저녁을 먹어요. 생일인 사람은 돈을 안 내요. 저녁 후에 카페에 가서 케이크를 먹어요. 생일 축하 노래를 부르고 사진을 많이 찍어요. 선물은 선물하기 앱을 자주 써요. 각자 커피 쿠폰이나 화장품 같은 작은 걸 보내요. 가끔은 돈을 모아서 큰 선물 하나를 사요.",
+  "sample_adv": "In my friend group, birthdays are kind of a big deal. There are five of us who've been friends since high school, and we have a simple system. About two weeks before someone's birthday, the other four make a secret group chat without that person. In that chat, we choose a restaurant and decide on a gift. Usually, we collect about thirty thousand won each and buy something the birthday person has been talking about, like wireless earphones or a nice perfume. On the actual birthday, at midnight, everyone sends a message, and it's almost a competition to be the first. Then on the weekend, we have a birthday dinner. The birthday person never pays, and we always bring a cake, even though we're all in our thirties now and nobody really wants to eat cake after a big meal. After dinner, we usually end up at a cafe or someone's apartment, playing board games and talking until late. Honestly, the best part isn't the gift. It's the long, silly letter we write together and read out loud. It's embarrassing, but everyone secretly keeps them.",
+  "sample_adv_ko": "제 친구 무리에서 생일은 꽤 큰 행사예요. 고등학교 때부터 친구인 다섯 명인데 간단한 방식이 있어요. 누군가의 생일 2주쯤 전에 나머지 네 명이 그 사람을 뺀 비밀 단체 대화방을 만들어요. 거기서 식당을 고르고 선물을 정해요. 보통 각자 3만 원 정도 모아서 생일인 친구가 말하던 무선 이어폰이나 좋은 향수 같은 걸 사요. 생일 당일 자정에는 모두 메시지를 보내는데 거의 누가 먼저 보내나 경쟁이에요. 그리고 주말에 생일 저녁을 먹어요. 생일인 사람은 절대 돈을 안 내고, 이제 다 30대라 배부른 식사 뒤에 케이크를 먹고 싶어 하는 사람이 없는데도 항상 케이크를 가져가요. 저녁 뒤에는 보통 카페나 누군가의 집에 가서 보드게임을 하며 늦게까지 이야기해요. 솔직히 가장 좋은 건 선물이 아니에요. 같이 쓴 길고 유치한 편지를 소리 내어 읽는 거예요. 민망하지만 다들 몰래 간직해요.",
+  "tips": [
+   "루틴: 준비(2주 전) → 당일 자정 → 주말 모임 → 가장 좋은 부분",
+   "a big deal, end up at, read out loud, secretly keep"
+  ]
+ },
+ {
+  "id": "oq-friends-202",
+  "topic": "friends",
+  "kind": "past",
+  "level": 3,
+  "question": "Tell me about a time when a friend helped you through a difficult situation. What was the problem, what did your friend do, and how did it change your friendship?",
+  "question_ko": "친구가 어려운 상황을 이겨 내도록 도와준 때에 대해 말해 주세요. 어떤 문제였고, 친구가 무엇을 했고, 그 일로 우정이 어떻게 바뀌었나요?",
+  "sample": "When I was looking for a job three years ago, I failed many interviews. I felt very depressed, and I didn't want to meet anyone. But my friend Minji called me every few days. She came to my house with food and helped me practice for interviews. She also checked my resume and gave me good advice. A few months later, I finally got a job. I called her first. After that, we became even closer. Now, when she has a problem, I try to help her too.",
+  "sample_ko": "3년 전 취업 준비할 때 면접에서 여러 번 떨어졌어요. 너무 우울해서 아무도 만나고 싶지 않았어요. 그런데 친구 민지가 며칠마다 전화해 줬어요. 음식을 들고 집에 와서 면접 연습도 도와줬어요. 이력서도 봐 주고 좋은 조언을 해 줬어요. 몇 달 뒤 드디어 취업했어요. 제일 먼저 민지에게 전화했어요. 그 뒤로 더 가까워졌어요. 지금은 민지에게 문제가 있으면 저도 도우려고 해요.",
+  "sample_adv": "The hardest time in my life so far was about three years ago, right after I graduated. I applied to over forty companies, and for six months, I got rejection after rejection. At some point, I stopped answering messages and spent most days in my room, feeling like a failure. Most of my friends gave me space, which I understand. But one friend, Jiwon, didn't. She texted me every other day, even when I didn't reply. Then one Saturday, she just showed up at my door with tteokbokki and said, we're not talking about jobs, let's just watch a movie. That night really helped. A week later, she offered to help me prepare for an interview. She works in HR, so she pretended to be the interviewer and asked me really tough questions, and afterward she gave me honest feedback. She even rewrote parts of my cover letter with me until two in the morning. Two months later, I got an offer from a company I really liked. The first thing I did was call her, and we both cried on the phone. Since then, she's not just a friend. She's more like family. I learned that real friends show up even when you push them away.",
+  "sample_adv_ko": "지금까지 인생에서 가장 힘들었던 때는 3년 전쯤 졸업 직후였어요. 40곳 넘게 지원했는데 6개월 동안 계속 떨어졌어요. 어느 순간 메시지에 답을 안 하고 대부분 방에서 지내며 실패자 같다고 느꼈어요. 친구들 대부분은 저를 혼자 있게 해 줬는데 이해해요. 그런데 지원이라는 친구는 달랐어요. 제가 답을 안 해도 이틀에 한 번 문자를 보냈어요. 그러다 어느 토요일, 떡볶이를 들고 그냥 우리 집 문 앞에 나타나서 취업 얘기는 안 해, 그냥 영화 보자 라고 했어요. 그날 밤이 정말 도움이 됐어요. 일주일 뒤 친구가 면접 준비를 도와주겠다고 했어요. 인사팀에서 일해서 면접관인 척하며 정말 어려운 질문을 했고, 끝나고 솔직한 피드백을 줬어요. 새벽 2시까지 제 자기소개서 일부를 같이 고쳐 주기도 했어요. 두 달 뒤 정말 마음에 드는 회사에서 합격 연락을 받았어요. 제일 먼저 친구에게 전화했고 둘 다 전화로 울었어요. 그 뒤로 그 친구는 그냥 친구가 아니라 가족에 더 가까워요. 진짜 친구는 밀어내도 곁에 와 준다는 걸 배웠어요.",
+  "tips": [
+   "힘든 상황 → 친구의 구체적 행동 2~3개 → 결과 → 관계 변화와 교훈",
+   "rejection after rejection, gave me space, showed up at my door, push them away"
+  ]
+ },
+ {
+  "id": "oq-friends-203",
+  "topic": "friends",
+  "kind": "issue",
+  "level": 5,
+  "question": "Some people say that social media makes people compare their lives with their friends' lives and feel unhappy. Do you agree? How does social media affect friendships these days?",
+  "question_ko": "SNS 때문에 사람들이 자신의 삶을 친구의 삶과 비교하며 불행해진다고 말하는 사람들이 있습니다. 동의하나요? 요즘 SNS는 우정에 어떤 영향을 미치나요?",
+  "sample": "I partly agree. On social media, people only post good things, like trips, nice restaurants, and new cars. When I see my friends' photos, I sometimes feel my life is boring. Some people even feel jealous or sad. But social media also has good points. I can see what my old friends are doing and send them a message easily. I keep in touch with friends who live abroad. I think the problem is using it too much. So I try to check it only once a day.",
+  "sample_ko": "부분적으로 동의해요. SNS에는 여행, 좋은 식당, 새 차처럼 좋은 것만 올라와요. 친구들 사진을 보면 가끔 제 삶이 지루하게 느껴져요. 질투나 슬픔을 느끼는 사람도 있어요. 하지만 SNS에는 좋은 점도 있어요. 옛 친구들이 뭘 하는지 보고 쉽게 메시지를 보낼 수 있어요. 해외에 사는 친구들과도 연락해요. 문제는 너무 많이 쓰는 거라고 생각해요. 그래서 하루에 한 번만 확인하려고 해요.",
+  "sample_adv": "I think there's a lot of truth in that. The thing about social media is that it's basically everyone's highlight reel. Nobody posts a photo of themselves stuck in traffic or crying after a bad day at work. You see one friend on a beach in Bali, another one who just got promoted, and another who bought an apartment, all within thirty seconds. Even if you know it's not the full picture, it's hard not to compare. I've definitely had nights when I scrolled for an hour and felt worse about my own life, even though nothing was actually wrong. Some of my friends have even stopped posting because they feel pressure to look perfect. That said, I don't think social media is all bad for friendships. It helps me stay connected with friends from school who now live in different cities or countries. A quick comment on a photo can start a conversation that turns into a real meetup. The real problem, I think, is when likes replace actual conversations. So I've made some rules for myself. I muted accounts that make me feel bad, and when I see a friend's post that interests me, I send a real message instead of just tapping like.",
+  "sample_adv_ko": "상당 부분 맞는 말이라고 생각해요. SNS는 기본적으로 모두의 하이라이트 영상이에요. 차가 막혀 꼼짝 못 하거나 회사에서 힘든 하루를 보내고 우는 사진은 아무도 안 올려요. 30초 만에 발리 해변에 있는 친구, 막 승진한 친구, 아파트를 산 친구를 다 봐요. 그게 전부가 아니라는 걸 알아도 비교하지 않기가 어려워요. 저도 실제로 아무 문제가 없는데 한 시간 스크롤하고 제 삶이 더 초라하게 느껴진 밤이 분명 있었어요. 완벽해 보여야 한다는 압박 때문에 게시를 그만둔 친구도 있어요. 그렇긴 해도 SNS가 우정에 전부 나쁘다고는 생각하지 않아요. 지금 다른 도시나 나라에 사는 학창 시절 친구들과 연결돼 있게 해 줘요. 사진에 단 짧은 댓글이 대화로 이어져 실제 만남이 되기도 해요. 진짜 문제는 좋아요가 실제 대화를 대신할 때라고 생각해요. 그래서 저만의 규칙을 만들었어요. 기분이 나빠지는 계정은 숨김 처리했고, 관심 가는 친구 게시물을 보면 좋아요만 누르는 대신 진짜 메시지를 보내요.",
+  "tips": [
+   "동의 이유(예시) → 반대 측면(That said) → 진짜 문제 정의 → 내 규칙",
+   "highlight reel, the full picture, it's hard not to compare, mute accounts"
+  ]
+ },
+ {
+  "id": "oq-appointment-201",
+  "topic": "appointment",
+  "kind": "routine",
+  "level": 2,
+  "question": "How do you usually prepare for an important appointment, such as a job interview or a meeting with a client? Tell me what you do the day before and on the day of the appointment.",
+  "question_ko": "면접이나 고객 미팅 같은 중요한 약속을 보통 어떻게 준비하나요? 약속 전날과 당일에 무엇을 하는지 말해 주세요.",
+  "sample": "When I have an important appointment, I prepare carefully. The day before, I check the time and the address again. I look at the map and decide how to get there. I also prepare my clothes and iron my shirt. If it's an interview, I practice answers out loud. I go to bed early. On the day, I leave home very early. I want to arrive about twenty minutes before. Then I go to a cafe nearby and review my notes. This helps me feel calm.",
+  "sample_ko": "중요한 약속이 있으면 꼼꼼하게 준비해요. 전날에는 시간과 주소를 다시 확인해요. 지도를 보고 어떻게 갈지 정해요. 옷도 준비하고 셔츠를 다려요. 면접이면 답변을 소리 내어 연습해요. 일찍 자요. 당일에는 아주 일찍 집을 나서요. 20분쯤 먼저 도착하고 싶어요. 그다음 근처 카페에 가서 메모를 다시 봐요. 이렇게 하면 마음이 차분해져요.",
+  "sample_adv": "I'm someone who gets nervous easily, so I have a pretty fixed routine for important appointments. The day before, I double-check everything. I reread the email with the time and address, and I look up the building on a map, including which subway exit is closest. If it's a client meeting, I print out the documents, put them in a folder, and go over the key numbers one more time. If it's an interview, I research the company's recent news and practice my answers out loud in front of a mirror, which feels silly, but it really helps. Then I pick out my clothes, iron them, and put them on a hanger by the door, along with my bag and charger, so I don't forget anything in the morning. I try to be in bed by eleven, although I don't always fall asleep right away. On the day itself, I leave about forty minutes earlier than the map app suggests, because there's always some delay. Once I arrive in the area, I go to a nearby cafe, use the restroom, check my appearance, and read through my notes one last time. Then I walk in exactly ten minutes early. That routine takes away most of my nerves.",
+  "sample_adv_ko": "저는 쉽게 긴장하는 편이라 중요한 약속에는 꽤 정해진 루틴이 있어요. 전날에는 모든 걸 다시 확인해요. 시간과 주소가 적힌 이메일을 다시 읽고, 가장 가까운 지하철 출구까지 포함해서 건물을 지도로 찾아봐요. 고객 미팅이면 자료를 출력해서 폴더에 넣고 핵심 숫자를 한 번 더 훑어봐요. 면접이면 회사의 최근 뉴스를 조사하고 거울 앞에서 답변을 소리 내어 연습하는데, 좀 우스꽝스럽지만 정말 도움이 돼요. 그다음 옷을 골라 다려서 가방, 충전기와 함께 현관 옆 옷걸이에 걸어 두어 아침에 아무것도 잊지 않게 해요. 바로 잠들지는 못해도 11시까지는 누우려고 해요. 당일에는 항상 지연이 생기니까 지도 앱이 알려 주는 것보다 40분쯤 일찍 나가요. 그 동네에 도착하면 근처 카페에 가서 화장실을 쓰고, 옷매무새를 확인하고, 메모를 마지막으로 읽어요. 그리고 정확히 10분 일찍 들어가요. 그 루틴이 긴장을 거의 없애 줘요.",
+  "tips": [
+   "The day before → On the day itself → Once I arrive 로 시간 흐름 정리",
+   "double-check, go over, look up, take away my nerves"
+  ]
+ },
+ {
+  "id": "oq-appointment-202",
+  "topic": "appointment",
+  "kind": "past",
+  "level": 3,
+  "question": "Tell me about a time when someone was very late for an appointment with you or did not show up at all. What happened, how did you feel, and what did you do?",
+  "question_ko": "누군가 당신과의 약속에 아주 늦었거나 아예 나타나지 않았던 때에 대해 말해 주세요. 무슨 일이 있었고, 기분이 어땠고, 어떻게 했나요?",
+  "sample": "Last winter, I planned to meet my friend in front of a movie theater at seven. I arrived ten minutes early. But my friend didn't come. I called her, but she didn't answer. It was very cold, and the movie started without us. I was angry and worried at the same time. About forty minutes later, she called me. She said she fell asleep after work. She said sorry many times. I was upset, but I forgave her. She bought me dinner the next week.",
+  "sample_ko": "지난겨울에 친구와 7시에 영화관 앞에서 만나기로 했어요. 저는 10분 일찍 도착했어요. 그런데 친구가 오지 않았어요. 전화했는데 받지 않았어요. 너무 추웠고 영화는 우리 없이 시작했어요. 화도 나고 걱정도 됐어요. 40분쯤 뒤에 친구가 전화했어요. 퇴근하고 잠이 들었대요. 여러 번 미안하다고 했어요. 속상했지만 용서했어요. 친구가 다음 주에 저녁을 샀어요.",
+  "sample_adv": "This happened about a year ago, and I can laugh about it now, but I definitely wasn't laughing at the time. A friend from university was visiting Seoul, and we hadn't seen each other in almost three years. We'd planned to meet at a famous barbecue restaurant at seven, and since it doesn't take reservations, I went early to line up. I waited outside for thirty minutes in the freezing cold, and when our turn came, she still wasn't there. I let two groups go ahead of me. I called her five times, but her phone was off. By eight, I went from annoyed to really worried, because she didn't know the city well. I even started checking the news for accidents. Finally, at eight thirty, I got a message from an unknown number. It was her, using a stranger's phone. Her phone had died on the subway, she'd gotten off at the wrong station, and she couldn't remember the restaurant's name. I was so relieved that I couldn't stay mad. I told her to wait where she was and went to pick her up. We ended up eating at a small restaurant near that station, and it was actually one of the best nights we've had.",
+  "sample_adv_ko": "1년쯤 전 일인데 지금은 웃을 수 있지만 그때는 전혀 웃기지 않았어요. 대학 친구가 서울에 놀러 왔는데 거의 3년 만이었어요. 유명한 고깃집에서 7시에 만나기로 했고, 예약을 안 받는 곳이라 제가 먼저 가서 줄을 섰어요. 엄청 추운 날 밖에서 30분을 기다렸는데 우리 차례가 왔는데도 친구가 없었어요. 두 팀을 먼저 들여보냈어요. 다섯 번 전화했는데 휴대폰이 꺼져 있었어요. 8시가 되자 짜증에서 진짜 걱정으로 바뀌었어요. 친구가 서울을 잘 모르니까요. 사고 뉴스까지 찾아보기 시작했어요. 드디어 8시 반에 모르는 번호로 메시지가 왔어요. 친구가 낯선 사람 휴대폰을 빌린 거였어요. 지하철에서 휴대폰이 꺼졌고, 다른 역에서 내렸고, 식당 이름도 기억이 안 났대요. 너무 안심이 돼서 화를 낼 수가 없었어요. 거기서 기다리라고 하고 데리러 갔어요. 결국 그 역 근처 작은 식당에서 먹었는데 오히려 우리가 보낸 최고의 밤 중 하나였어요.",
+  "tips": [
+   "감정의 변화: annoyed → really worried → relieved 를 시간과 함께 보여 준다",
+   "I can laugh about it now, but ..., couldn't stay mad, ended up ..."
+  ]
+ },
+ {
+  "id": "oq-appointment-203",
+  "topic": "appointment",
+  "kind": "compare",
+  "level": 5,
+  "question": "How do attitudes toward being on time differ between people or between countries? Compare how strictly people in your country keep appointments with another culture you know. Has this changed over time?",
+  "question_ko": "시간 약속을 대하는 태도는 사람이나 나라에 따라 어떻게 다른가요? 당신 나라 사람들이 약속을 얼마나 엄격하게 지키는지 알고 있는 다른 문화와 비교해 주세요. 시간이 지나면서 이것이 바뀌었나요?",
+  "sample": "In Korea, being on time is important at work. If you are late for a meeting or an interview, people think you are not serious. But with friends, being ten minutes late is often okay. In Germany, I heard that people are very strict about time, even with friends. In some countries in South America, people are more relaxed. I think Korea has changed. In the past, people were often late because there were no phones. Now, people send a message if they are late.",
+  "sample_ko": "한국에서는 직장에서 시간을 지키는 게 중요해요. 회의나 면접에 늦으면 진지하지 않다고 생각해요. 하지만 친구끼리는 10분 늦는 건 괜찮을 때가 많아요. 독일 사람들은 친구 사이에서도 시간을 아주 엄격하게 지킨다고 들었어요. 남미 일부 나라에서는 사람들이 더 느긋해요. 한국도 바뀌었다고 생각해요. 예전엔 휴대폰이 없어서 자주 늦었어요. 지금은 늦으면 메시지를 보내요.",
+  "sample_adv": "It really depends on the culture, and also on the situation. In Korea, I'd say we have two different standards. At work, punctuality is taken very seriously. Showing up late to a meeting with a client or a job interview is almost unforgivable, and most people arrive ten minutes early. But with friends, it's much looser. If we say seven, people often show up at seven ten, and nobody minds as long as you send a message like, sorry, I'm five minutes away. My German coworker found this really confusing. She told me that in Germany, being late even to a casual dinner without a good reason is considered rude, and people plan their trips down to the minute. On the other hand, a friend who lived in Brazil said that if a party starts at eight, arriving at eight is actually a bit strange. As for change over time, I think smartphones changed everything. In my parents' generation, people waited at a meeting spot for an hour because there was no way to contact each other, so they were more careful. Now, being late feels less serious, because you can just text an apology. Ironically, technology made us more relaxed, but maybe a little less punctual.",
+  "sample_adv_ko": "정말 문화와 상황에 따라 달라요. 한국은 두 가지 기준이 있다고 생각해요. 직장에서는 시간 엄수를 아주 중요하게 여겨요. 고객 미팅이나 면접에 늦는 건 거의 용서가 안 되고, 대부분 10분 일찍 도착해요. 하지만 친구끼리는 훨씬 느슨해요. 7시라고 하면 7시 10분쯤 오는 경우가 많고, 미안 5분 남았어 같은 메시지만 보내면 아무도 신경 안 써요. 독일인 동료는 이게 정말 헷갈렸대요. 독일에서는 편한 저녁 자리라도 이유 없이 늦으면 무례하다고 여기고, 이동 계획을 분 단위로 세운대요. 반면 브라질에 살았던 친구는 파티가 8시에 시작하면 8시에 도착하는 게 오히려 좀 이상하다고 했어요. 시간에 따른 변화를 보면 스마트폰이 모든 걸 바꿨다고 생각해요. 부모님 세대는 서로 연락할 방법이 없어서 약속 장소에서 한 시간을 기다렸으니 더 조심했어요. 지금은 사과 문자를 보내면 되니 늦는 게 덜 심각하게 느껴져요. 아이러니하게도 기술이 우리를 더 여유롭게 했지만 시간은 조금 덜 지키게 만든 것 같아요.",
+  "tips": [
+   "한국 안의 두 기준(직장/친구) → 다른 나라 두 예 → 시간에 따른 변화 → 아이러니한 결론",
+   "punctuality, unforgivable, down to the minute, Ironically, ..."
+  ]
+ },
+ {
+  "id": "oq-fashion-201",
+  "topic": "fashion",
+  "kind": "describe",
+  "level": 2,
+  "question": "What do people usually wear to work or school in your country? Describe the typical clothes, and tell me whether there are any rules about what people can wear.",
+  "question_ko": "당신 나라에서는 직장이나 학교에 보통 무엇을 입고 가나요? 일반적인 옷차림을 묘사하고, 입을 수 있는 옷에 대한 규칙이 있는지 말해 주세요.",
+  "sample": "In Korea, it depends on the job. In banks and government offices, men usually wear a suit and a tie, and women wear a blouse and a skirt or pants. But at many IT companies, people wear casual clothes, like jeans and sweatshirts. Most middle and high school students wear school uniforms. There are rules about skirt length and hair color at some schools. At my office, we have business casual. I usually wear slacks and a shirt without a tie.",
+  "sample_ko": "한국에서는 직업에 따라 달라요. 은행이나 관공서에서는 남자는 보통 정장에 넥타이를, 여자는 블라우스에 치마나 바지를 입어요. 하지만 많은 IT 회사에서는 청바지나 맨투맨 같은 캐주얼한 옷을 입어요. 대부분의 중고등학생은 교복을 입어요. 어떤 학교는 치마 길이나 머리 색깔에 대한 규칙이 있어요. 저희 회사는 비즈니스 캐주얼이에요. 저는 보통 넥타이 없이 슬랙스에 셔츠를 입어요.",
+  "sample_adv": "It really depends on where you work or study. Traditionally, Korean offices were very formal. When my father started working in the nineties, every man wore a dark suit, a white shirt, and a tie, every single day, even in the middle of summer. You can still see that style in banks, law firms, and government offices. But in the last ten years, things have relaxed a lot. Many big companies now have a business casual policy, which usually means slacks or chinos, a collared shirt or a knit, and clean shoes, but no tie. And at startups and IT companies, almost anything goes. People wear hoodies, jeans, and sneakers, and the CEO might be wearing a T-shirt too. As for schools, most middle and high school students wear uniforms, usually a blazer, a shirt, and pants or a skirt in the school's colors. Some schools are still strict about hair color, makeup, or how short a skirt can be, although many have become more flexible because students complained. At my company, the only real rule is to dress formally when we meet clients. So I keep a jacket hanging at my desk, just in case.",
+  "sample_adv_ko": "정말 어디서 일하거나 공부하느냐에 따라 달라요. 전통적으로 한국 사무실은 아주 격식을 차렸어요. 아버지가 90년대에 일을 시작하셨을 때는 모든 남자가 한여름에도 매일 짙은 정장, 흰 셔츠, 넥타이를 했어요. 은행, 로펌, 관공서에서는 아직도 그런 스타일을 볼 수 있어요. 하지만 지난 10년간 많이 자유로워졌어요. 지금 많은 대기업은 비즈니스 캐주얼 정책이 있는데, 보통 슬랙스나 치노 바지, 칼라 셔츠나 니트, 깔끔한 신발이고 넥타이는 안 해요. 스타트업과 IT 회사는 거의 뭐든 괜찮아요. 후드티, 청바지, 운동화를 입고 대표도 티셔츠를 입고 있을 수 있어요. 학교는 대부분의 중고등학생이 교복을 입는데, 보통 학교 색깔의 블레이저, 셔츠, 바지나 치마예요. 일부 학교는 아직 머리 색, 화장, 치마 길이에 엄격하지만, 학생들이 불만을 제기해서 많은 학교가 더 유연해졌어요. 저희 회사의 유일한 규칙은 고객을 만날 때 정장을 입는 거예요. 그래서 혹시 몰라 책상에 재킷을 하나 걸어 둬요.",
+  "tips": [
+   "직장 종류별(공공·대기업·IT) → 학교 교복·규칙 → 우리 회사 이야기",
+   "business casual, almost anything goes, collared shirt, just in case"
+  ]
+ },
+ {
+  "id": "oq-fashion-202",
+  "topic": "fashion",
+  "kind": "past",
+  "level": 3,
+  "question": "Tell me about the first time you bought clothes with your own money. How old were you, what did you buy, and where did you get the money? How did you feel when you wore it?",
+  "question_ko": "처음으로 자기 돈으로 옷을 산 때에 대해 말해 주세요. 몇 살이었고, 무엇을 샀고, 돈은 어디서 났나요? 그 옷을 입었을 때 기분이 어땠나요?",
+  "sample": "The first time I bought clothes with my own money, I was fifteen. I saved my allowance and holiday money for about four months. Then I went to a big shopping street with my friend. I bought a navy hoodie from a popular brand. It was about sixty thousand won. That was a lot of money for me. I wore it to school the next day, and my friends said it looked cool. I felt so proud and grown up. I wore that hoodie almost every weekend.",
+  "sample_ko": "처음 제 돈으로 옷을 산 건 열다섯 살 때였어요. 용돈과 명절에 받은 돈을 4개월쯤 모았어요. 그리고 친구와 큰 쇼핑 거리에 갔어요. 인기 브랜드의 남색 후드티를 샀어요. 6만 원쯤이었어요. 저한테는 큰돈이었어요. 다음 날 학교에 입고 갔더니 친구들이 멋있다고 했어요. 정말 뿌듯하고 어른이 된 것 같았어요. 그 후드티를 거의 주말마다 입었어요.",
+  "sample_adv": "I remember it really well, because it took me so long to save up. I was in my second year of middle school, and everyone in my class suddenly started wearing the same brand of padded winter jacket. It was really expensive, almost three hundred thousand won, and my parents said absolutely not. They told me if I wanted it that badly, I should pay for it myself. So I did. I saved my weekly allowance, skipped buying snacks after school, and even helped my uncle at his small restaurant on weekends, washing dishes and folding boxes. On Lunar New Year, I got some money from relatives, and finally, after about five months, I had enough. I went to the department store with my mom, and I remember counting the cash at the counter, which was a little embarrassing. When I wore it to school the next Monday, honestly, nobody really noticed, because by then everyone already had one. But I didn't care. Every time I zipped it up, I felt proud, because I knew exactly how hard I'd worked for it. Looking back, I think that jacket taught me the value of money more than anything my parents said.",
+  "sample_adv_ko": "모으는 데 너무 오래 걸려서 정말 잘 기억나요. 중학교 2학년 때였는데 반 아이들이 갑자기 다 같은 브랜드의 패딩 점퍼를 입기 시작했어요. 정말 비싸서 30만 원 가까이 했고 부모님은 절대 안 된다고 하셨어요. 그렇게 갖고 싶으면 직접 사라고 하셨어요. 그래서 그렇게 했어요. 주간 용돈을 모으고, 하교 후 간식을 끊고, 주말엔 삼촌의 작은 식당에서 설거지하고 상자를 접으며 돕기까지 했어요. 설날에 친척들한테 용돈을 받았고, 5개월쯤 지나 드디어 돈이 모였어요. 엄마와 백화점에 가서 계산대에서 현금을 세던 게 기억나는데 좀 창피했어요. 다음 월요일에 학교에 입고 갔는데, 솔직히 그땐 다들 이미 하나씩 있어서 아무도 별로 눈치채지 못했어요. 하지만 상관없었어요. 지퍼를 올릴 때마다 얼마나 열심히 일해서 산 건지 알아서 뿌듯했어요. 돌아보면 그 점퍼가 부모님의 어떤 말보다 돈의 가치를 더 많이 가르쳐 준 것 같아요.",
+  "tips": [
+   "원하게 된 이유 → 돈 모은 방법 → 사는 장면 → 반전(아무도 몰랐음) → 교훈",
+   "save up, that badly, skipped, taught me the value of money"
+  ]
+ },
+ {
+  "id": "oq-fashion-203",
+  "topic": "fashion",
+  "kind": "issue",
+  "level": 5,
+  "question": "In some countries, young people feel a lot of pressure about their appearance and spend a lot of money on expensive brands. Why do you think this happens? What problems can it cause?",
+  "question_ko": "어떤 나라에서는 젊은 사람들이 외모에 대해 큰 압박을 느끼고 비싼 브랜드에 많은 돈을 씁니다. 왜 이런 일이 일어난다고 생각하나요? 어떤 문제를 일으킬 수 있나요?",
+  "sample": "In Korea, many young people care a lot about how they look. They see celebrities and influencers on social media every day, and they want to look like them. Some students buy expensive padded jackets or bags because all their friends have them. If they don't have them, they feel left out. This can cause problems. Some parents spend too much money. Some young people use credit cards and get into debt. I think people should buy what they really need and like.",
+  "sample_ko": "한국에서는 많은 젊은 사람이 외모에 신경을 많이 써요. 매일 SNS에서 연예인과 인플루언서를 보고 그들처럼 보이고 싶어 해요. 어떤 학생들은 친구들이 다 가지고 있어서 비싼 패딩이나 가방을 사요. 없으면 소외감을 느껴요. 이것은 문제를 일으킬 수 있어요. 어떤 부모는 돈을 너무 많이 써요. 어떤 젊은이는 신용카드를 써서 빚을 져요. 정말 필요하고 좋아하는 걸 사야 한다고 생각해요.",
+  "sample_adv": "I think this is a pretty serious issue in Korea. There are a few reasons behind it. First, Korean society has always valued appearance. People often say first impressions matter a lot, even in job interviews. Second, social media has made it much stronger. Every day, young people see influencers with perfect skin, luxury bags, and designer sneakers, and those images start to feel normal. And third, there's a strong group culture. When I was in high school, there was one brand of padded jacket that almost everyone wore. Students who didn't have one were teased, so parents felt they had no choice but to buy it, even though it cost several hundred thousand won. Nowadays, I see people in their twenties buying luxury bags with their first salary or paying in twelve monthly installments. The problems are pretty clear. Some young people get into credit card debt, and some parents struggle to keep up. Beyond the money, constantly comparing yourself can hurt your self-esteem. I've seen friends feel ashamed to go out because they didn't have the right clothes. I think we need to talk more openly about this, and celebrities could help by showing that style isn't about price tags.",
+  "sample_adv_ko": "한국에서는 꽤 심각한 문제라고 생각해요. 몇 가지 이유가 있어요. 첫째, 한국 사회는 늘 외모를 중시해 왔어요. 면접에서도 첫인상이 아주 중요하다고들 해요. 둘째, SNS가 그걸 훨씬 강하게 만들었어요. 젊은이들은 매일 완벽한 피부, 명품 가방, 디자이너 운동화를 가진 인플루언서를 보고, 그 이미지가 평범하게 느껴지기 시작해요. 셋째, 집단 문화가 강해요. 제가 고등학생 때 거의 모두가 입던 패딩 브랜드가 하나 있었어요. 없는 학생은 놀림을 받아서, 부모님들은 수십만 원이 들어도 사 줄 수밖에 없다고 느꼈어요. 요즘은 20대가 첫 월급으로 명품 가방을 사거나 12개월 할부로 결제하는 걸 봐요. 문제는 꽤 분명해요. 어떤 젊은이는 카드 빚을 지고, 어떤 부모는 따라가기 힘들어해요. 돈 문제 말고도 끊임없이 비교하면 자존감이 상할 수 있어요. 맞는 옷이 없어서 외출하기 부끄러워하는 친구도 봤어요. 이 문제를 더 터놓고 이야기해야 하고, 연예인들도 스타일이 가격표가 아니라는 걸 보여 주면 도움이 될 것 같아요.",
+  "tips": [
+   "원인 세 가지(사회·SNS·집단 문화) → 구체적 예 → 문제(돈·자존감) → 해결 제안",
+   "no choice but to, monthly installments, keep up, self-esteem"
+  ]
+ },
+ {
+  "id": "oq-housework-201",
+  "topic": "housework",
+  "kind": "describe",
+  "level": 2,
+  "question": "Tell me about the home appliances you use to do housework, such as a washing machine, a vacuum cleaner, or a dishwasher. What do they look like, and how do they make housework easier?",
+  "question_ko": "세탁기, 청소기, 식기세척기처럼 집안일에 쓰는 가전제품에 대해 말해 주세요. 어떻게 생겼고 어떻게 집안일을 쉽게 해 주나요?",
+  "sample": "At home, I use a few appliances for housework. The most useful one is my robot vacuum. It's round and black, and it cleans the floor by itself. I turn it on with my phone app when I go to work. I also have a washing machine and a dryer in the laundry room. The dryer is great because I don't need to hang my clothes. I don't have a dishwasher yet, but I want to buy one. These machines save me a lot of time every week.",
+  "sample_ko": "집에서 집안일에 가전 몇 개를 써요. 가장 유용한 건 로봇 청소기예요. 둥글고 까만데 혼자서 바닥을 청소해요. 출근할 때 휴대폰 앱으로 켜요. 다용도실에 세탁기와 건조기도 있어요. 건조기는 빨래를 널 필요가 없어서 정말 좋아요. 식기세척기는 아직 없는데 사고 싶어요. 이 기계들 덕분에 매주 시간을 많이 아껴요.",
+  "sample_adv": "I'd say my apartment runs on three machines. The first one, and my favorite, is my robot vacuum. It's a flat, round, dark gray machine about the size of a large pizza. I usually start it from an app on my phone when I leave for work, and by the time I get home, the floors are clean and it's back on its charging station. It even empties its own dust bin, so I only have to change the bag once every couple of months. The second is my washer and dryer, which are stacked on top of each other in a small laundry room. The dryer changed my life, honestly. In the past, I had to hang clothes all over the living room for a whole day, and in the rainy season they'd smell damp. Now, everything comes out soft and dry in about two hours. The third one is a small dishwasher I bought last year. It fits on the counter next to the sink, and it holds dishes for about two people. I was skeptical at first, but now I can't imagine washing everything by hand again. All together, these machines save me maybe five or six hours a week.",
+  "sample_adv_ko": "제 집은 세 대의 기계로 돌아간다고 말할 수 있어요. 첫 번째이자 가장 좋아하는 건 로봇 청소기예요. 큰 피자 크기만 한 납작하고 둥근 진회색 기계예요. 보통 출근할 때 휴대폰 앱으로 켜 두면 퇴근할 때쯤 바닥이 깨끗하고 청소기는 충전대에 돌아가 있어요. 먼지통도 스스로 비워서 두어 달에 한 번만 봉투를 갈면 돼요. 두 번째는 작은 다용도실에 위아래로 쌓아 둔 세탁기와 건조기예요. 솔직히 건조기가 제 삶을 바꿨어요. 예전엔 하루 종일 거실 곳곳에 빨래를 널어야 했고 장마철엔 꿉꿉한 냄새가 났어요. 지금은 두 시간쯤이면 모든 게 보송보송하게 나와요. 세 번째는 작년에 산 소형 식기세척기예요. 싱크대 옆 조리대에 들어가고 두 사람 정도 식기를 넣을 수 있어요. 처음엔 의심했는데 이제는 다시 전부 손으로 설거지하는 건 상상할 수 없어요. 다 합치면 이 기계들이 일주일에 대여섯 시간은 아껴 주는 것 같아요.",
+  "tips": [
+   "물건 3개: The first one → The second → The third, 각각 생김새 + 쓰는 법 + 좋은 점",
+   "by the time I get home, I was skeptical at first, can't imagine ..."
+  ]
+ },
+ {
+  "id": "oq-housework-202",
+  "topic": "housework",
+  "kind": "past",
+  "level": 3,
+  "question": "Tell me about the first time you had to do all the housework by yourself, for example when you first lived alone. What was hard for you, and what mistakes did you make?",
+  "question_ko": "처음으로 집안일을 전부 혼자 해야 했던 때, 예를 들어 처음 혼자 살게 된 때에 대해 말해 주세요. 무엇이 힘들었고 어떤 실수를 했나요?",
+  "sample": "I first lived alone when I started university in another city. Before that, my mom did almost all the housework. So everything was new to me. The hardest thing was laundry. One day, I washed a red T-shirt with my white shirts, and all my shirts turned pink. I also forgot to take out the trash, and my room smelled bad. I didn't know how to cook, so I ate instant noodles a lot. Now I can do everything, and I really thank my mom.",
+  "sample_ko": "다른 도시에서 대학을 다니기 시작하면서 처음 혼자 살았어요. 그전엔 엄마가 거의 모든 집안일을 하셨어요. 그래서 모든 게 처음이었어요. 가장 힘든 건 빨래였어요. 하루는 빨간 티셔츠를 흰 셔츠들과 같이 빨아서 셔츠가 전부 분홍색이 됐어요. 쓰레기 버리는 것도 잊어서 방에서 나쁜 냄새가 났어요. 요리할 줄 몰라서 라면을 많이 먹었어요. 지금은 다 할 수 있고 엄마께 정말 감사해요.",
+  "sample_adv": "That would be when I moved into a tiny studio apartment for my first job, about five years ago. Until then, I'd lived with my parents, and to be honest, my mom did almost everything. I thought housework would be easy. I was very wrong. In the first week, I put my favorite wool sweater in the washing machine on a hot cycle, and it came out small enough for a ten-year-old. Then I discovered that Korean apartments have very strict rules about separating trash and food waste. I didn't know food waste needed a special bag, so I put it in the regular trash, and a few days later, I found a polite but firm note from the building manager taped to my door. My biggest disaster was the refrigerator. I bought lots of vegetables, thinking I'd cook every night, but I was always too tired after work. Two weeks later, I opened the vegetable drawer and found something green and furry. After that, I called my mom almost every night for advice. Slowly, I made a weekly routine, and now I'm actually pretty good at it. It definitely made me appreciate my parents a lot more.",
+  "sample_adv_ko": "5년쯤 전 첫 직장 때문에 작은 원룸으로 이사했을 때예요. 그때까지 부모님과 살았는데, 솔직히 엄마가 거의 모든 걸 하셨어요. 집안일이 쉬울 줄 알았어요. 완전히 착각이었어요. 첫 주에 제일 좋아하는 울 스웨터를 세탁기 온수 코스에 넣었더니 열 살짜리가 입을 만큼 작아져서 나왔어요. 그리고 한국 아파트는 쓰레기와 음식물 분리에 아주 엄격한 규칙이 있다는 걸 알게 됐어요. 음식물 쓰레기에 전용 봉투가 필요한 줄 몰라서 일반 쓰레기에 넣었더니, 며칠 뒤 관리인이 문에 붙여 놓은 정중하지만 단호한 쪽지를 발견했어요. 가장 큰 참사는 냉장고였어요. 매일 밤 요리할 생각으로 채소를 잔뜩 샀는데 퇴근하면 늘 너무 피곤했어요. 2주 뒤 채소 칸을 열었더니 초록색 털이 난 무언가가 있었어요. 그 뒤로 거의 매일 밤 엄마에게 전화해 조언을 구했어요. 천천히 주간 루틴을 만들었고 지금은 꽤 잘해요. 확실히 부모님께 훨씬 더 감사하게 됐어요.",
+  "tips": [
+   "실수 에피소드 3개를 점점 커지게 → 해결 → 느낀 점",
+   "I was very wrong., polite but firm note, My biggest disaster was ... 로 유머 있게"
+  ]
+ },
+ {
+  "id": "oq-housework-203",
+  "topic": "housework",
+  "kind": "compare",
+  "level": 5,
+  "question": "Compare how housework was done in your home when you lived with your parents with how it is done in your home now. Who does the chores, and what tools or services do you use differently?",
+  "question_ko": "부모님과 살 때 집에서 집안일을 하던 방식과 지금 집에서 하는 방식을 비교해 주세요. 누가 집안일을 하고, 어떤 도구나 서비스를 다르게 쓰나요?",
+  "sample": "When I lived with my parents, my mom did most of the housework. She cooked three meals a day and cleaned the house every morning. My dad sometimes took out the trash. We children only cleaned our own rooms. Now I live with my husband, and we share the chores. He does the dishes and laundry, and I cook and clean the bathroom. We also use a robot vacuum and a dishwasher. Sometimes we order meal kits. I think housework is easier and fairer now.",
+  "sample_ko": "부모님과 살 때는 엄마가 집안일을 대부분 하셨어요. 하루 세끼를 요리하고 매일 아침 집을 청소하셨어요. 아빠는 가끔 쓰레기를 버리셨어요. 우리 아이들은 자기 방만 청소했어요. 지금은 남편과 살고 집안일을 나눠요. 남편은 설거지와 빨래를, 저는 요리와 화장실 청소를 해요. 로봇 청소기와 식기세척기도 써요. 가끔 밀키트도 주문해요. 지금 집안일이 더 쉽고 공평하다고 생각해요.",
+  "sample_adv": "The difference is honestly like night and day. Growing up, my mom was in charge of basically everything at home, even though she also worked part-time. She got up at six to make breakfast, packed lunches, did laundry every other day, and hand-washed delicate clothes in the bathroom. My dad's main job was taking out the recycling on Wednesday nights, and my brother and I were only expected to keep our rooms tidy. Back then, nobody really questioned it. Now I live with my partner, and we split things much more evenly. We actually have a shared chore list on our phones. I usually cook and handle the grocery shopping, and he does the dishes, the laundry, and cleans the bathroom on weekends. The tools are completely different too. My mom used a heavy vacuum with a long cord and dried clothes on a rack on the balcony. We have a robot vacuum, a dryer, and a dishwasher, and when we're busy, we pay for a cleaning service once a month or order meal kits. The interesting thing is, even with all these machines, we still sometimes argue about whose turn it is. But overall, I think housework is much fairer than it was in my parents' home.",
+  "sample_adv_ko": "차이는 솔직히 밤과 낮처럼 달라요. 제가 자랄 때 엄마는 시간제로 일하시면서도 집안의 거의 모든 걸 맡으셨어요. 6시에 일어나 아침을 차리고, 도시락을 싸고, 이틀에 한 번 빨래하고, 섬세한 옷은 욕실에서 손빨래하셨어요. 아빠의 주된 일은 수요일 밤 재활용 쓰레기를 내놓는 거였고, 오빠와 저는 방만 정리하면 됐어요. 그때는 아무도 그걸 이상하게 여기지 않았어요. 지금은 파트너와 사는데 훨씬 고르게 나눠요. 실제로 휴대폰에 공유 집안일 목록이 있어요. 저는 보통 요리와 장보기를 하고, 파트너는 설거지와 빨래, 주말 화장실 청소를 해요. 도구도 완전히 달라요. 엄마는 긴 선이 달린 무거운 청소기를 쓰고 베란다 건조대에 빨래를 말리셨어요. 우리는 로봇 청소기, 건조기, 식기세척기가 있고, 바쁠 땐 한 달에 한 번 청소 서비스를 부르거나 밀키트를 주문해요. 재미있는 건 이렇게 기계가 많아도 여전히 가끔 누구 차례인지로 다툰다는 거예요. 그래도 전반적으로 부모님 집보다 집안일이 훨씬 공평하다고 생각해요.",
+  "tips": [
+   "비교 두 축: 누가 하는지(역할) + 무엇으로 하는지(도구·서비스)",
+   "like night and day, in charge of, split things evenly, whose turn it is"
+  ]
+ },
+ {
+  "id": "oq-neighborhood-201",
+  "topic": "neighborhood",
+  "kind": "describe",
+  "level": 2,
+  "question": "Tell me about a favorite store or small business in your neighborhood. What kind of place is it, and what does it look like? Why do you like going there?",
+  "question_ko": "동네에서 좋아하는 가게나 작은 상점에 대해 말해 주세요. 어떤 곳이고 어떻게 생겼나요? 왜 거기 가는 걸 좋아하나요?",
+  "sample": "My favorite place in my neighborhood is a small bakery. It's on the corner near the bus stop. It has a big window, so you can see the bread from outside. Inside, there are wooden shelves with many kinds of bread and a few small tables. The owners are a young couple. They bake everything early in the morning, so the whole street smells like bread. I usually buy a salt bread and a croissant. I like it because the bread is fresh and the owners are friendly.",
+  "sample_ko": "우리 동네에서 제가 가장 좋아하는 곳은 작은 빵집이에요. 버스 정류장 근처 모퉁이에 있어요. 큰 창이 있어서 밖에서 빵이 보여요. 안에는 여러 종류의 빵이 놓인 나무 선반과 작은 테이블 몇 개가 있어요. 주인은 젊은 부부예요. 이른 아침에 모든 빵을 구워서 거리 전체에서 빵 냄새가 나요. 저는 보통 소금빵과 크루아상을 사요. 빵이 신선하고 주인이 친절해서 좋아요.",
+  "sample_adv": "There's a little bakery on the corner of my street that I honestly think of as the heart of the neighborhood. It opened about three years ago in a space that used to be a phone shop, and it completely changed the feel of the block. From the outside, it has a big glass window and a green door, and in the mornings there's usually a small chalkboard sign showing what just came out of the oven. Inside, it's small and warm. There are wooden shelves along one wall, piled with salt bread, croissants, and some Korean-style breads with red bean or sweet potato. There are only four little tables by the window, and they're always taken by older neighbors chatting over coffee. It's run by a young couple who quit their office jobs to open it. The husband bakes from five a.m., and the wife handles the counter, and she remembers almost every regular customer's order. When I come in, she'll say, two salt breads, right? What I like most is the atmosphere. It's not just a shop. People actually talk to each other there, which is rare in a big city. On weekend mornings, buying bread there has become one of my favorite little rituals.",
+  "sample_adv_ko": "우리 거리 모퉁이에 있는 작은 빵집은 솔직히 동네의 심장 같은 곳이라고 생각해요. 3년쯤 전에 원래 휴대폰 가게였던 자리에 생겼는데 그 블록의 분위기를 완전히 바꿨어요. 밖에서 보면 큰 유리창과 초록색 문이 있고, 아침마다 방금 오븐에서 나온 빵을 적은 작은 칠판 간판이 있어요. 안은 작고 따뜻해요. 한쪽 벽을 따라 나무 선반이 있고 소금빵, 크루아상, 팥이나 고구마가 든 한국식 빵이 쌓여 있어요. 창가에 작은 테이블이 네 개뿐인데 커피를 마시며 수다를 떠는 동네 어르신들로 항상 차 있어요. 회사를 그만두고 가게를 연 젊은 부부가 운영해요. 남편은 새벽 5시부터 빵을 굽고 아내는 계산대를 맡는데, 단골손님 주문을 거의 다 기억해요. 제가 들어가면 소금빵 두 개 맞죠? 하고 말해요. 가장 좋은 건 분위기예요. 그냥 가게가 아니에요. 사람들이 실제로 서로 이야기하는 곳인데 대도시에서는 드문 일이에요. 주말 아침에 거기서 빵을 사는 게 제가 좋아하는 작은 의식이 됐어요.",
+  "tips": [
+   "가게 묘사: 위치·역사 → 겉모습 → 안 → 주인 → 분위기와 의미",
+   "the heart of the neighborhood, regular customer, little ritual"
+  ]
+ },
+ {
+  "id": "oq-neighborhood-202",
+  "topic": "neighborhood",
+  "kind": "past",
+  "level": 3,
+  "question": "Tell me about an unexpected event that happened in your neighborhood, such as a power outage, a fire, a festival, or a big construction project. What happened, and how did people in the neighborhood react?",
+  "question_ko": "동네에서 일어난 예상치 못한 일, 예를 들어 정전, 화재, 축제, 큰 공사 같은 일에 대해 말해 주세요. 무슨 일이 있었고 동네 사람들은 어떻게 반응했나요?",
+  "sample": "Last summer, there was a big power outage in my apartment complex. It happened on a very hot evening around eight o'clock. Suddenly, all the lights and air conditioners went off. The elevators stopped too. It was dark and very hot. Many people came out of their apartments and sat in the playground. Some neighbors shared cold water and fans. The management office said it was a problem with the electric system. The power came back after about four hours. I talked with my neighbors more than ever that night.",
+  "sample_ko": "작년 여름에 우리 아파트 단지에 큰 정전이 있었어요. 아주 더운 저녁 8시쯤 일어났어요. 갑자기 모든 불과 에어컨이 꺼졌어요. 엘리베이터도 멈췄어요. 어둡고 정말 더웠어요. 많은 사람이 집에서 나와 놀이터에 앉아 있었어요. 어떤 이웃은 찬물과 부채를 나눠 줬어요. 관리사무소는 전기 설비 문제라고 했어요. 전기는 네 시간쯤 뒤에 들어왔어요. 그날 밤 이웃들과 그 어느 때보다 많이 이야기했어요.",
+  "sample_adv": "Last August, during one of the hottest weeks of the year, our whole apartment complex lost power. It was about eight in the evening, and I was cooking dinner when everything just went silent. The air conditioner, the fridge, the lights, all of it. At first, I thought it was only my apartment, but when I looked out the window, every building was dark. Then I heard people shouting in the hallway, because two elevators had stopped between floors with people inside. Luckily, the security staff and firefighters got everyone out within about thirty minutes. Since it was boiling inside, people started coming down to the playground and the benches outside, holding phone flashlights. It was actually kind of amazing. One family brought out a big cooler of ice water and gave cups to everyone. A grandmother from the first floor handed out frozen popsicles from her freezer before they melted. Kids ran around playing tag in the dark, and I ended up talking for an hour with neighbors I'd only ever nodded to in the elevator. The power came back around midnight, and everyone cheered. It was uncomfortable, but somehow it made our complex feel like a real community for one night.",
+  "sample_adv_ko": "작년 8월, 1년 중 가장 더운 주에 우리 아파트 단지 전체가 정전됐어요. 저녁 8시쯤 저녁을 하고 있었는데 모든 게 그냥 조용해졌어요. 에어컨, 냉장고, 불, 전부요. 처음엔 우리 집만 그런 줄 알았는데 창밖을 보니 모든 동이 깜깜했어요. 그러다 복도에서 사람들이 소리치는 게 들렸는데, 엘리베이터 두 대가 사람이 탄 채 층 사이에 멈췄기 때문이에요. 다행히 경비원과 소방관이 30분쯤 만에 모두 구출했어요. 집 안이 찜통이라 사람들이 휴대폰 손전등을 들고 놀이터와 밖의 벤치로 내려오기 시작했어요. 사실 좀 놀라운 광경이었어요. 한 가족은 큰 아이스박스에 얼음물을 가져와 모두에게 컵으로 나눠 줬어요. 1층 할머니는 녹기 전에 냉동실의 아이스크림을 나눠 주셨어요. 아이들은 어둠 속에서 술래잡기를 했고, 저는 엘리베이터에서 고개만 끄덕이던 이웃들과 한 시간이나 이야기하게 됐어요. 자정쯤 전기가 들어오자 모두 환호했어요. 불편했지만 왠지 그날 밤 하루는 우리 단지가 진짜 공동체처럼 느껴졌어요.",
+  "tips": [
+   "사건 발생 → 혼란 → 사람들의 행동 2~3개 → 해결 → 느낀 점",
+   "went silent, boiling inside, only ever nodded to, a real community"
+  ]
+ },
+ {
+  "id": "oq-neighborhood-203",
+  "topic": "neighborhood",
+  "kind": "issue",
+  "level": 5,
+  "question": "In many cities, old neighborhoods are being redeveloped, and rents are going up. Some local shops and residents have to move out. What do you think about this issue? What are the good and bad sides of redevelopment?",
+  "question_ko": "많은 도시에서 오래된 동네가 재개발되고 임대료가 오르고 있습니다. 일부 동네 가게와 주민은 떠나야 합니다. 이 문제에 대해 어떻게 생각하나요? 재개발의 좋은 면과 나쁜 면은 무엇인가요?",
+  "sample": "In Korea, many old neighborhoods are being redeveloped. Old houses are replaced with tall apartment buildings. There are good sides. The new buildings are safer and cleaner, and there are new parks and parking lots. But there are bad sides too. Rents go up a lot, so old residents and small shops can't stay. Some famous streets became popular, and then the original cafes had to leave. I think redevelopment is necessary, but the city should help people who have to move.",
+  "sample_ko": "한국에서는 많은 오래된 동네가 재개발되고 있어요. 오래된 집이 높은 아파트로 바뀌어요. 좋은 면이 있어요. 새 건물은 더 안전하고 깨끗하고 새 공원과 주차장도 생겨요. 하지만 나쁜 면도 있어요. 임대료가 많이 올라서 원래 주민과 작은 가게들이 머물 수 없어요. 어떤 유명한 거리는 인기가 생긴 뒤 원래 있던 카페들이 떠나야 했어요. 재개발은 필요하지만 도시가 이사해야 하는 사람들을 도와야 한다고 생각해요.",
+  "sample_adv": "This is a really complicated issue in Korea, and I have mixed feelings about it. On the positive side, a lot of old neighborhoods really do need work. Some houses are over fifty years old, with narrow alleys that fire trucks can't get through, poor heating, and no parking at all. When an area is redeveloped, people get safer buildings, new parks, better roads, and usually the property value goes up, which is great for owners. But the people who benefit are often not the people who lived there. Tenants, especially elderly people and small shop owners, usually can't afford the new rents, so they're pushed out to cheaper areas far from their friends and their customers. There's also a pattern people call gentrification. A quiet street with cheap rent attracts young artists and unique cafes, it becomes trendy on social media, and then rents double, and the very shops that made it special have to leave. Eventually, it's full of the same chain stores you can find anywhere. I don't think we should stop redevelopment. But I believe cities should protect long-term tenants, for example by limiting rent increases or offering affordable units in the new buildings. Otherwise, we end up with nice buildings but no neighborhood.",
+  "sample_adv_ko": "한국에서는 정말 복잡한 문제이고 저도 복합적인 감정이 들어요. 긍정적인 면에서는 많은 오래된 동네가 정말 손볼 필요가 있어요. 어떤 집은 50년이 넘었고, 소방차가 못 들어가는 좁은 골목, 부실한 난방, 주차 공간 전무 같은 문제가 있어요. 재개발되면 더 안전한 건물, 새 공원, 더 좋은 도로가 생기고 보통 집값이 올라서 소유자에게는 좋아요. 하지만 혜택을 보는 사람은 대개 거기 살던 사람이 아니에요. 세입자, 특히 노인과 작은 가게 주인은 새 임대료를 감당하지 못해서 친구와 손님에게서 먼 더 싼 동네로 밀려나요. 젠트리피케이션이라고 부르는 패턴도 있어요. 임대료가 싼 조용한 거리에 젊은 예술가와 개성 있는 카페가 모이고, SNS에서 뜨고, 임대료가 두 배가 되면 그 거리를 특별하게 만든 바로 그 가게들이 떠나야 해요. 결국 어디서나 볼 수 있는 똑같은 체인점으로 가득 차요. 재개발을 멈춰야 한다고는 생각하지 않아요. 하지만 도시는 임대료 인상을 제한하거나 새 건물에 저렴한 주택을 제공하는 식으로 오래 산 세입자를 보호해야 한다고 생각해요. 그렇지 않으면 멋진 건물은 있는데 동네는 없어지게 돼요.",
+  "tips": [
+   "좋은 면 → 누가 혜택을 보는가 → 젠트리피케이션 패턴 설명 → 해결 조건",
+   "mixed feelings, pushed out, can't afford, gentrification, Otherwise, ..."
+  ]
+ },
+ {
+  "id": "oq-library-201",
+  "topic": "library",
+  "kind": "describe",
+  "level": 2,
+  "question": "What rules do people need to follow at libraries in your country? Tell me about the rules for noise, food, phones, and borrowing books. Do you think these rules are reasonable?",
+  "question_ko": "당신 나라 도서관에서는 사람들이 어떤 규칙을 지켜야 하나요? 소음, 음식, 휴대폰, 책 대출에 관한 규칙을 말해 주세요. 이 규칙들이 합리적이라고 생각하나요?",
+  "sample": "Libraries in Korea have several rules. First, you have to be quiet. In the reading room, you can't talk at all, and you should put your phone on silent. If you need to make a call, you go out to the hallway. Second, you can't eat food inside. You can only drink water. Third, you can borrow about five books for two weeks. If you return them late, you can't borrow books for a few days. I think these rules are reasonable because everyone needs a quiet place to study.",
+  "sample_ko": "한국 도서관에는 몇 가지 규칙이 있어요. 첫째, 조용히 해야 해요. 열람실에서는 아예 말을 하면 안 되고 휴대폰은 무음으로 해야 해요. 통화해야 하면 복도로 나가요. 둘째, 안에서 음식을 먹으면 안 돼요. 물만 마실 수 있어요. 셋째, 책은 5권 정도를 2주 동안 빌릴 수 있어요. 늦게 반납하면 며칠 동안 책을 빌릴 수 없어요. 모두에게 조용히 공부할 곳이 필요하니까 합리적인 규칙이라고 생각해요.",
+  "sample_adv": "Libraries in Korea have pretty clear rules, and most people follow them strictly. The biggest one is noise. Many public libraries have a separate reading room just for studying, and it's almost completely silent. You're not supposed to talk, and even typing loudly on a laptop can earn you an annoyed look. Some libraries have a separate laptop zone for that reason. Phones must be on silent, and if a call comes in, you're expected to go out to the hallway. Food is generally not allowed except in a lounge area, though most places let you bring water in a bottle with a lid. For borrowing, you need a library card, and you can usually take out five to seven books for two weeks, with one chance to extend online. If you return books late, you're not fined money like in some countries. Instead, you're banned from borrowing for the same number of days you were late. Reading room seats are also managed by a machine, so you have to check in and out, and you can't save a seat with your bag for hours. I think the rules are mostly reasonable. The only one I find a bit strict is the silent rule in some lounges, where people should be able to talk quietly.",
+  "sample_adv_ko": "한국 도서관은 규칙이 꽤 분명하고 대부분 엄격하게 지켜요. 가장 큰 건 소음이에요. 많은 공공 도서관에는 공부만 하는 별도 열람실이 있는데 거의 완전한 정적이에요. 말을 하면 안 되고, 노트북 타자를 세게 치기만 해도 짜증 난 눈빛을 받을 수 있어요. 그래서 노트북 존을 따로 둔 도서관도 있어요. 휴대폰은 무음이어야 하고 전화가 오면 복도로 나가야 해요. 음식은 휴게 공간 말고는 보통 안 되지만, 대부분 뚜껑 있는 병에 담긴 물은 허용해요. 대출하려면 도서관 회원증이 필요하고, 보통 5~7권을 2주 동안 빌릴 수 있고 온라인으로 한 번 연장할 수 있어요. 늦게 반납하면 어떤 나라처럼 벌금을 내지 않아요. 대신 늦은 날짜만큼 대출이 정지돼요. 열람실 좌석은 기계로 관리돼서 입실과 퇴실을 찍어야 하고, 가방으로 몇 시간씩 자리를 맡아 둘 수 없어요. 규칙은 대부분 합리적이라고 생각해요. 조금 엄격하다고 느끼는 건 일부 휴게 공간의 정숙 규칙인데, 거기서는 작게 이야기할 수 있어야 한다고 봐요.",
+  "tips": [
+   "규칙 묘사: 소음 → 휴대폰 → 음식 → 대출·연체 → 좌석, 마지막에 내 평가",
+   "You're not supposed to ..., you're expected to ..., banned from borrowing"
+  ]
+ },
+ {
+  "id": "oq-library-202",
+  "topic": "library",
+  "kind": "past",
+  "level": 3,
+  "question": "Tell me about a time when you studied hard at a library to prepare for an exam or a big project. How long did you study there, who were you with, and how did it turn out?",
+  "question_ko": "시험이나 큰 과제를 준비하려고 도서관에서 열심히 공부했던 때에 대해 말해 주세요. 얼마나 오래 공부했고, 누구와 함께였고, 결과는 어땠나요?",
+  "sample": "When I was a university senior, I prepared for a big certificate exam. For about two months, I went to the university library every day. I usually arrived at nine in the morning and left at ten at night. My friend studied with me, so we had lunch and dinner together. It was hard, especially in the summer, because the library was crowded. Sometimes I fell asleep at my desk. But it was worth it. I passed the exam, and it helped me get my job.",
+  "sample_ko": "대학교 4학년 때 큰 자격증 시험을 준비했어요. 두 달쯤 매일 대학 도서관에 갔어요. 보통 아침 9시에 도착해서 밤 10시에 나왔어요. 친구가 같이 공부해서 점심과 저녁을 함께 먹었어요. 특히 여름에는 도서관이 붐벼서 힘들었어요. 가끔 책상에서 잠들기도 했어요. 하지만 그럴 만한 가치가 있었어요. 시험에 붙었고 취업에도 도움이 됐어요.",
+  "sample_adv": "The most intense library period of my life was the winter before I graduated, when I was preparing for the national accounting certificate exam. I'd failed it once already, so I was determined. For about ten weeks, the university library basically became my second home. My alarm went off at six thirty, and I tried to be at the door when it opened at eight, because the good seats by the window disappeared fast. I studied with my friend Hyunwoo, who was taking the same exam. We had strict rules. No phones on the desk, a ten-minute break every hour and a half, and lunch at exactly twelve thirty in the student cafeteria. After dinner, we'd quiz each other in the hallway for twenty minutes, then go back in until the library closed at eleven. There were definitely bad days. Once, I fell asleep on my textbook and woke up with ink on my face, and Hyunwoo took a photo that he still sends me every year. Some nights I walked home in the snow, wondering if it was worth it. But in the end, we both passed, and I scored in the top ten percent. Even now, whenever I smell old books, I remember that winter.",
+  "sample_adv_ko": "제 인생에서 가장 치열했던 도서관 시기는 졸업 전 겨울, 국가 회계 자격증 시험을 준비할 때였어요. 이미 한 번 떨어져서 각오가 단단했어요. 10주쯤 대학 도서관이 사실상 제 두 번째 집이 됐어요. 6시 반에 알람이 울렸고, 창가 좋은 자리가 금방 사라져서 8시 문 열 때 입구에 있으려고 했어요. 같은 시험을 보는 친구 현우와 같이 공부했어요. 엄격한 규칙이 있었어요. 책상 위 휴대폰 금지, 한 시간 반마다 10분 휴식, 점심은 정확히 12시 반 학생 식당. 저녁 먹고 나면 복도에서 20분 동안 서로 문제를 내고 다시 들어가 11시 도서관이 닫을 때까지 있었어요. 힘든 날도 분명 있었어요. 한번은 교재 위에서 잠들었다가 얼굴에 잉크가 묻은 채 깼는데 현우가 사진을 찍어서 아직도 매년 보내요. 어떤 밤에는 눈 속을 걸어 집에 가며 이게 가치가 있을까 생각했어요. 하지만 결국 둘 다 합격했고 저는 상위 10퍼센트 점수를 받았어요. 지금도 오래된 책 냄새를 맡으면 그 겨울이 떠올라요.",
+  "tips": [
+   "목표·이유 → 하루 루틴(시간) → 함께한 사람·규칙 → 힘든 에피소드 → 결과",
+   "became my second home, I was determined, in the end"
+  ]
+ },
+ {
+  "id": "oq-library-203",
+  "topic": "library",
+  "kind": "compare",
+  "level": 5,
+  "question": "In some countries, many students now study at paid study cafes instead of public libraries. Compare libraries and study cafes. What are the differences, and why do some people choose one over the other?",
+  "question_ko": "어떤 나라에서는 이제 많은 학생이 공공 도서관 대신 유료 스터디 카페에서 공부합니다. 도서관과 스터디 카페를 비교해 주세요. 어떤 차이가 있고, 왜 어떤 사람은 한쪽을 더 선택하나요?",
+  "sample": "In Korea, study cafes are very popular now. Libraries are free, and they have a lot of books. But they close early, around ten p.m., and they are closed on Mondays. Also, it's hard to get a seat during exam season. Study cafes cost money, about two or three thousand won an hour. But many are open twenty-four hours, and the seats and lights are very comfortable. You can also drink coffee. I usually go to the library to save money, but I use a study cafe before exams.",
+  "sample_ko": "한국에서는 요즘 스터디 카페가 아주 인기예요. 도서관은 무료이고 책이 많아요. 하지만 밤 10시쯤 일찍 닫고 월요일에 휴관해요. 시험 기간에는 자리 잡기도 어려워요. 스터디 카페는 돈이 들어요, 한 시간에 2~3천 원 정도요. 하지만 많은 곳이 24시간이고 좌석과 조명이 아주 편해요. 커피도 마실 수 있어요. 저는 돈을 아끼려고 보통 도서관에 가지만 시험 전에는 스터디 카페를 이용해요.",
+  "sample_adv": "Study cafes have exploded in Korea over the last few years. In my neighborhood alone, there are at least five within walking distance. The biggest difference is obviously cost. Public libraries are free, while study cafes charge by the hour or by the month. A monthly pass can be over one hundred thousand won, which adds up for students. Libraries also have something study cafes don't, which is actual books, plus free events and a real sense of public space. But study cafes have some big advantages. Most of them are open twenty-four hours, seven days a week, while libraries usually close by ten and shut down once a week. You can reserve your exact seat with an app, so you never have to line up at eight a.m. like at a library during exam season. The furniture is often better too, with comfortable chairs, adjustable lights, power outlets at every desk, and free coffee or snacks. And they're usually closer to home. So I think the choice depends on your situation. Students on a tight budget, or people who enjoy browsing books, prefer libraries. Office workers studying late at night, or people who need a fixed seat, choose study cafes. I use both, depending on the week.",
+  "sample_adv_ko": "지난 몇 년 동안 한국에서 스터디 카페가 폭발적으로 늘었어요. 우리 동네에만 걸어갈 거리에 최소 다섯 곳이 있어요. 가장 큰 차이는 당연히 비용이에요. 공공 도서관은 무료이고 스터디 카페는 시간이나 월 단위로 돈을 받아요. 월 이용권은 10만 원이 넘을 수 있어서 학생에겐 부담이 쌓여요. 도서관에는 스터디 카페에 없는 것도 있는데, 바로 실제 책과 무료 행사, 그리고 진짜 공공장소라는 느낌이에요. 하지만 스터디 카페에도 큰 장점이 있어요. 대부분 연중무휴 24시간인데, 도서관은 보통 10시면 닫고 일주일에 하루 쉬어요. 앱으로 정확한 자리를 예약할 수 있어서 시험 기간 도서관처럼 아침 8시에 줄 설 필요가 없어요. 가구도 대개 더 좋아서 편한 의자, 조절되는 조명, 책상마다 콘센트, 무료 커피나 간식이 있어요. 그리고 보통 집에서 더 가까워요. 그래서 상황에 따라 선택이 달라진다고 생각해요. 예산이 빠듯한 학생이나 책 구경을 좋아하는 사람은 도서관을, 밤늦게 공부하는 직장인이나 고정 좌석이 필요한 사람은 스터디 카페를 골라요. 저는 주마다 상황에 따라 둘 다 써요.",
+  "tips": [
+   "비교 기준: 비용 → 운영 시간 → 좌석·시설 → 위치 → 누구에게 맞는지",
+   "have exploded, charge by the hour, adds up, on a tight budget"
+  ]
+ },
+ {
+  "id": "oq-geography-201",
+  "topic": "geography",
+  "kind": "describe",
+  "level": 2,
+  "question": "Tell me about a city or region in your country that you would recommend to a foreign visitor. Where is it, and what is the land like there? What can visitors see and do?",
+  "question_ko": "외국인 방문객에게 추천하고 싶은 당신 나라의 도시나 지역에 대해 말해 주세요. 어디에 있고 그곳 지형은 어떤가요? 방문객은 무엇을 보고 할 수 있나요?",
+  "sample": "I would recommend Gangneung. It's a city on the east coast of Korea. It takes about two hours from Seoul by KTX. Gangneung has both mountains and the sea. On one side, there are high mountains, and on the other side, there are long sandy beaches. Visitors can swim in the summer, walk along the beach, and watch the sunrise. Gangneung is also famous for coffee. There is a street full of cafes by the sea. You can also try fresh seafood and tofu dishes there.",
+  "sample_ko": "저는 강릉을 추천하고 싶어요. 한국 동해안에 있는 도시예요. 서울에서 KTX로 두 시간쯤 걸려요. 강릉에는 산과 바다가 다 있어요. 한쪽엔 높은 산이, 다른 쪽엔 긴 모래 해변이 있어요. 방문객은 여름에 수영하고, 해변을 걷고, 해돋이를 볼 수 있어요. 강릉은 커피로도 유명해요. 바닷가에 카페로 가득한 거리가 있어요. 신선한 해산물과 두부 요리도 맛볼 수 있어요.",
+  "sample_adv": "If a foreign friend asked me where to go besides Seoul, I'd definitely say Gangneung. It's a mid-sized city on the east coast, and since the high-speed train opened, you can get there from Seoul in about two hours. What makes it special is the geography. Right behind the city, there's a long mountain range called Taebaeksan, which runs down the whole east side of Korea, and in front of the city, there's the East Sea, which is deep, clear, and a really intense blue. So in one day, you can hike in the mountains in the morning and sit on a sandy beach in the afternoon. There's also a big lagoon called Gyeongpo Lake, with a flat walking and biking path around it, and it's covered with cherry blossoms in April. Visitors usually love three things. First, the sunrise. People gather on Jeongdongjin Beach before dawn to watch the sun come up over the water. Second, the coffee street by Anmok Beach, which has dozens of cafes with ocean views. And third, the food, especially a soft tofu made with seawater, and fresh raw fish at the harbor market. It's relaxed, beautiful, and much less crowded than Busan.",
+  "sample_adv_ko": "외국인 친구가 서울 말고 어디 가면 좋냐고 물으면 저는 꼭 강릉이라고 할 거예요. 동해안의 중간 크기 도시이고, 고속철도가 생긴 뒤로 서울에서 두 시간쯤이면 가요. 특별한 건 지형이에요. 도시 바로 뒤에 한국 동쪽 전체를 따라 내려오는 태백산맥이라는 긴 산줄기가 있고, 도시 앞에는 깊고 맑고 정말 진한 파란색의 동해가 있어요. 그래서 하루에 아침엔 산에서 등산하고 오후엔 모래 해변에 앉아 있을 수 있어요. 경포호라는 큰 석호도 있는데, 둘레에 평평한 산책로와 자전거 길이 있고 4월엔 벚꽃으로 뒤덮여요. 방문객들이 보통 좋아하는 게 세 가지 있어요. 첫째, 해돋이요. 사람들이 새벽 전에 정동진 해변에 모여 바다 위로 해가 뜨는 걸 봐요. 둘째, 안목 해변의 커피 거리인데 바다가 보이는 카페가 수십 곳 있어요. 셋째, 음식이에요, 특히 바닷물로 만든 순두부와 항구 시장의 싱싱한 회요. 여유롭고 아름답고 부산보다 훨씬 덜 붐벼요.",
+  "tips": [
+   "지역 소개: 위치·가는 법 → 지형(산·바다·호수) → 할 것 세 가지 → 한 줄 평",
+   "mountain range, lagoon, before dawn, much less crowded than ..."
+  ]
+ },
+ {
+  "id": "oq-geography-202",
+  "topic": "geography",
+  "kind": "past",
+  "level": 3,
+  "question": "Tell me about a time when you traveled to a region of your country where the dialect, food, or way of life felt different from your hometown. What surprised you the most?",
+  "question_ko": "사투리, 음식, 생활 방식이 고향과 다르게 느껴졌던 당신 나라의 지역을 여행한 때에 대해 말해 주세요. 무엇이 가장 놀라웠나요?",
+  "sample": "I'm from Seoul, and two years ago I visited Jeju Island for a week. Jeju felt very different. First, the land is volcanic, so there are black stones everywhere, even in the walls around the fields. Second, older people spoke the Jeju dialect, and I couldn't understand them at all. It sounded like a different language. The food was also different. I tried black pork barbecue and a soup made with seaweed and fish. The thing that surprised me most was the dialect. Now I want to learn some words.",
+  "sample_ko": "저는 서울 출신인데 2년 전에 제주도에 일주일 갔어요. 제주는 아주 다르게 느껴졌어요. 첫째, 땅이 화산 지형이라 밭 둘레 담까지 어디에나 검은 돌이 있어요. 둘째, 어르신들이 제주 사투리를 쓰셨는데 하나도 못 알아들었어요. 다른 언어처럼 들렸어요. 음식도 달랐어요. 흑돼지 구이와 해초와 생선으로 만든 국을 먹어 봤어요. 가장 놀라운 건 사투리였어요. 이제 몇 단어 배워 보고 싶어요.",
+  "sample_adv": "I grew up in Seoul, so for a long time I assumed the rest of Korea was basically a smaller version of it. That changed when I spent five days in a small fishing village in South Jeolla Province for a volunteer program in college. The first surprise was the language. The grandmothers in the village spoke a strong Jeolla dialect, and on the first day, I could only catch maybe half of what they said. When one of them told me to eat more, it sounded almost like she was scolding me, but she was actually being incredibly kind. The second surprise was the food. Jeolla is famous for its food, and it's true. At a simple lunch, there were at least twelve side dishes on the table, and nobody thought it was special. I also tried fermented skate, which has a very strong smell, like ammonia. I could only manage one bite. And finally, the rhythm of life was completely different. People got up at four to go out on the boats, and by eight p.m., the whole village was asleep. There was no rush and no subway noise. It made me realize how diverse such a small country really is.",
+  "sample_adv_ko": "저는 서울에서 자라서 오랫동안 한국의 나머지 지역은 기본적으로 서울의 작은 버전이라고 생각했어요. 그 생각은 대학 때 봉사 프로그램으로 전라남도의 작은 어촌에서 닷새를 보내면서 바뀌었어요. 첫 번째 놀라움은 말이었어요. 마을 할머니들이 강한 전라도 사투리를 쓰셔서 첫날엔 절반 정도밖에 못 알아들었어요. 한 분이 더 먹으라고 하셨을 때는 거의 혼내시는 것처럼 들렸는데 사실은 엄청 다정하게 말씀하신 거였어요. 두 번째 놀라움은 음식이었어요. 전라도는 음식으로 유명한데 정말이었어요. 소박한 점심인데도 반찬이 적어도 열두 가지였고 아무도 특별하게 생각하지 않았어요. 암모니아 같은 아주 강한 냄새가 나는 삭힌 홍어도 먹어 봤어요. 한 입밖에 못 먹었어요. 마지막으로 생활 리듬이 완전히 달랐어요. 사람들은 새벽 4시에 배를 타러 나갔고 저녁 8시면 온 마을이 잠들었어요. 서두름도 지하철 소음도 없었어요. 그렇게 작은 나라가 실제로 얼마나 다양한지 깨달았어요.",
+  "tips": [
+   "예전 생각 → 계기 → 놀라움 세 가지(말·음식·생활) → 깨달음",
+   "I could only catch half of ..., I could only manage one bite, It made me realize ..."
+  ]
+ },
+ {
+  "id": "oq-geography-203",
+  "topic": "geography",
+  "kind": "compare",
+  "level": 5,
+  "question": "Compare the geography of your country with the geography of another country you know. How are the land, climate, and size different? How do these differences affect the way people live?",
+  "question_ko": "당신 나라의 지형을 알고 있는 다른 나라의 지형과 비교해 주세요. 땅, 기후, 크기가 어떻게 다른가요? 이런 차이가 사람들의 생활 방식에 어떤 영향을 주나요?",
+  "sample": "I want to compare Korea and Australia. Korea is small, and about seventy percent of the land is mountains. So most people live in big cities, and many people live in tall apartment buildings. Korea has four clear seasons. Australia is very big, and the middle of the country is mostly dry desert. Most people live near the coast. The weather is warm, and many people have houses with yards. Because of this, Australians spend a lot of time outdoors, like at the beach.",
+  "sample_ko": "한국과 호주를 비교하고 싶어요. 한국은 작고 땅의 70퍼센트 정도가 산이에요. 그래서 대부분 큰 도시에 살고 많은 사람이 높은 아파트에 살아요. 한국은 사계절이 뚜렷해요. 호주는 아주 크고 나라 한가운데는 대부분 건조한 사막이에요. 대부분 사람들은 해안 근처에 살아요. 날씨가 따뜻하고 많은 사람이 마당 있는 집에 살아요. 그래서 호주 사람들은 해변 같은 야외에서 시간을 많이 보내요.",
+  "sample_adv": "I'd like to compare Korea with Canada, because my cousin has lived in Vancouver for ten years, and I visited her twice. The first obvious difference is size. Canada is about a hundred times bigger than South Korea, but its population is actually smaller. In Korea, around seventy percent of the land is mountains, so there isn't much flat space, and about half of the population lives in and around Seoul. That's why we have so many high-rise apartments and such crowded subways. In Canada, even near the cities, people have big houses with yards, and driving two hours to the next town is completely normal. The climate is different too. Korea has four distinct seasons, with a hot, humid summer and a dry, cold winter. Canada's weather depends a lot on the region. Vancouver is mild and rainy almost all year, but in other parts, winter can be brutally cold for months. These differences really shape daily life. Koreans live fast, close together, and rely on public transportation. My cousin's family drives everywhere, spends weekends camping in huge national parks, and plans life around the long winter. Each place has its charm, but I definitely noticed how much space changes people's lifestyle.",
+  "sample_adv_ko": "사촌이 10년째 밴쿠버에 살고 있고 제가 두 번 가 봐서 한국과 캐나다를 비교하고 싶어요. 첫 번째 분명한 차이는 크기예요. 캐나다는 한국보다 약 백 배 크지만 인구는 오히려 더 적어요. 한국은 땅의 약 70퍼센트가 산이라 평지가 많지 않고, 인구의 절반 정도가 서울과 그 주변에 살아요. 그래서 고층 아파트가 많고 지하철이 그렇게 붐벼요. 캐나다는 도시 근처에서도 사람들이 마당 있는 큰 집에 살고, 다음 마을까지 두 시간 운전하는 게 아주 평범해요. 기후도 달라요. 한국은 사계절이 뚜렷해서 여름은 덥고 습하고 겨울은 건조하고 추워요. 캐나다 날씨는 지역에 따라 많이 달라요. 밴쿠버는 거의 1년 내내 온화하고 비가 많지만, 다른 지역은 겨울이 몇 달 동안 혹독하게 추울 수 있어요. 이런 차이가 일상생활을 정말 많이 좌우해요. 한국인은 빠르게, 가까이 모여 살고 대중교통에 의존해요. 사촌 가족은 어디든 차로 다니고, 주말엔 거대한 국립공원에서 캠핑하고, 긴 겨울에 맞춰 생활을 계획해요. 각자 매력이 있지만, 공간이 사람들의 생활 방식을 얼마나 바꾸는지 확실히 느꼈어요.",
+  "tips": [
+   "비교 순서: 크기·인구 → 지형 → 기후 → 생활 방식에 미친 영향",
+   "about a hundred times bigger, four distinct seasons, brutally cold, shape daily life"
+  ]
+ },
+ {
+  "id": "oq-industry-201",
+  "topic": "industry",
+  "kind": "describe",
+  "level": 2,
+  "question": "Tell me about the industry you work in or the industry you would like to work in. What kinds of companies are in that industry, and what do people in that field do every day?",
+  "question_ko": "당신이 일하는 업계나 일하고 싶은 업계에 대해 말해 주세요. 그 업계에는 어떤 회사들이 있고, 그 분야 사람들은 매일 무슨 일을 하나요?",
+  "sample": "I work in the food industry. My company makes snacks and drinks, and we sell them in supermarkets and convenience stores. There are many big food companies in Korea, and some of them also sell products abroad. In my field, people do many different jobs. Some people develop new products in the lab. Some people work in factories. I work in sales, so I visit stores and talk with managers every day. I also check how our products are selling. It's busy, but I like it.",
+  "sample_ko": "저는 식품 업계에서 일해요. 우리 회사는 과자와 음료를 만들어서 마트와 편의점에 팔아요. 한국에는 큰 식품 회사가 많고, 일부는 해외에서도 제품을 팔아요. 제 분야에서 사람들은 여러 가지 일을 해요. 어떤 사람은 연구실에서 신제품을 개발해요. 어떤 사람은 공장에서 일해요. 저는 영업을 해서 매일 매장을 방문하고 점장들과 이야기해요. 우리 제품이 얼마나 팔리는지도 확인해요. 바쁘지만 좋아요.",
+  "sample_adv": "I work in the animal feed industry, which most people have never really thought about, but it's actually a huge part of the food chain. Basically, companies in this industry produce feed for pigs, cattle, chickens, and fish, and also pet food. Some are large companies with factories all over the country, and others are small regional producers that supply local farms. The work is more varied than people expect. Nutrition researchers design feed formulas, balancing things like protein, vitamins, and cost, depending on the animal's age. Purchasing teams buy raw materials like corn and soybeans, mostly imported, so they have to watch global prices and exchange rates very closely. Factory teams run the production lines, and quality control staff test every batch. I work in sales and support, so on a typical day, I visit farms, listen to farmers' concerns, check how the animals are growing, and then report back to the office. Sometimes I'm in a suit in a meeting room, and a few hours later I'm wearing boots in a pig barn. What I like is that it's very real. If our product is good, farmers see the results quickly, and that feels rewarding.",
+  "sample_adv_ko": "저는 사료 업계에서 일하는데, 대부분 사람이 별로 생각해 본 적 없는 분야지만 사실 먹이사슬의 큰 부분이에요. 기본적으로 이 업계 회사들은 돼지, 소, 닭, 물고기 사료와 반려동물 사료를 생산해요. 전국에 공장이 있는 대기업도 있고, 지역 농장에 공급하는 작은 지역 업체도 있어요. 일은 사람들이 생각하는 것보다 다양해요. 영양 연구원은 동물 나이에 따라 단백질, 비타민, 비용 등을 맞춰 사료 배합을 설계해요. 구매팀은 옥수수와 대두 같은 원료를 사는데 대부분 수입이라 세계 가격과 환율을 아주 꼼꼼히 봐야 해요. 공장팀은 생산 라인을 운영하고, 품질 관리 직원은 모든 생산분을 검사해요. 저는 영업과 지원을 맡아서, 보통 하루에 농장을 방문해 농민들의 고민을 듣고, 가축이 어떻게 크는지 확인한 뒤 사무실에 보고해요. 정장을 입고 회의실에 있다가 몇 시간 뒤엔 장화를 신고 돈사에 있기도 해요. 좋은 점은 아주 현실적이라는 거예요. 우리 제품이 좋으면 농민들이 결과를 빨리 보고, 그게 보람 있어요.",
+  "tips": [
+   "업계 소개: 무엇을 만드는지 → 어떤 회사들 → 직무별 하는 일 → 내 하루 → 보람",
+   "raw materials, quality control, batch, exchange rates, rewarding"
+  ]
+ },
+ {
+  "id": "oq-industry-202",
+  "topic": "industry",
+  "kind": "past",
+  "level": 3,
+  "question": "Tell me about a part-time job or internship you had. What kind of company or business was it, what did you do there, and what did you learn about that industry?",
+  "question_ko": "했던 아르바이트나 인턴십에 대해 말해 주세요. 어떤 회사나 사업체였고, 거기서 무엇을 했고, 그 업계에 대해 무엇을 배웠나요?",
+  "sample": "When I was in university, I did a two-month internship at a small logistics company. The company stored products in a big warehouse and delivered them to stores. I worked in the office. I checked delivery schedules and answered phone calls from customers. Sometimes I helped in the warehouse too. I learned that logistics is very busy and every minute is important. If one truck is late, many stores have problems. It was hard work, but I learned a lot about teamwork.",
+  "sample_ko": "대학생 때 작은 물류 회사에서 두 달 동안 인턴을 했어요. 회사는 큰 창고에 제품을 보관하고 매장으로 배송했어요. 저는 사무실에서 일했어요. 배송 일정을 확인하고 고객 전화를 받았어요. 가끔 창고 일도 도왔어요. 물류는 아주 바쁘고 1분 1초가 중요하다는 걸 배웠어요. 트럭 한 대가 늦으면 여러 매장에 문제가 생겨요. 힘들었지만 팀워크에 대해 많이 배웠어요.",
+  "sample_adv": "The summer before my last year of university, I did a two-month internship at a mid-sized logistics company outside Seoul. I'd chosen it kind of randomly, but it ended up teaching me more than any class. The company ran a huge warehouse, about the size of three soccer fields, and stored products for online shopping malls, things like clothes, kitchen goods, and cosmetics. When a customer ordered something, our team had to find it, pack it, and get it onto a truck, often within a few hours. I was placed on the operations team. In the mornings, I helped update the inventory system and checked that the numbers on the screen matched what was actually on the shelves, which, surprisingly, they often didn't. In the afternoons, I handled calls from drivers and store managers when deliveries were delayed. There was one crazy week before a big online sale when orders tripled, and everyone, even the managers, went down to the floor to pack boxes until midnight. What I learned is that logistics is invisible when it works and a disaster when it doesn't. I also realized how much data and planning goes into getting one package to someone's door the next morning.",
+  "sample_adv_ko": "대학 마지막 해 전 여름에 서울 근교의 중견 물류 회사에서 두 달 동안 인턴을 했어요. 좀 아무렇게나 골랐는데 결국 어떤 수업보다 많은 걸 가르쳐 줬어요. 회사는 축구장 세 개만 한 거대한 창고를 운영하며 옷, 주방용품, 화장품 같은 온라인 쇼핑몰 제품을 보관했어요. 고객이 주문하면 우리 팀이 몇 시간 안에 찾아서 포장해 트럭에 실어야 했어요. 저는 운영팀에 배치됐어요. 오전엔 재고 시스템 업데이트를 돕고 화면 숫자가 실제 선반에 있는 것과 맞는지 확인했는데, 놀랍게도 자주 안 맞았어요. 오후엔 배송이 늦어질 때 기사님과 매장 관리자들의 전화를 처리했어요. 큰 온라인 할인 행사 전 주문이 세 배로 뛴 정신없는 한 주가 있었는데, 관리자까지 모두가 현장에 내려가 자정까지 상자를 포장했어요. 제가 배운 건 물류는 잘 돌아가면 보이지 않고 안 돌아가면 재앙이라는 거예요. 택배 하나를 다음 날 아침 누군가의 문 앞에 보내는 데 얼마나 많은 데이터와 계획이 들어가는지도 깨달았어요.",
+  "tips": [
+   "회사 소개 → 내 업무(오전·오후) → 가장 바빴던 에피소드 → 업계에 대한 깨달음",
+   "inventory, operations team, orders tripled, invisible when it works"
+  ]
+ },
+ {
+  "id": "oq-industry-203",
+  "topic": "industry",
+  "kind": "issue",
+  "level": 5,
+  "question": "Many companies are using robots, automation, and artificial intelligence to do jobs that people used to do. What concerns do workers have about this? How do you think companies and workers should prepare for these changes?",
+  "question_ko": "많은 회사가 사람이 하던 일을 로봇, 자동화, 인공지능으로 하고 있습니다. 근로자들은 이에 대해 어떤 걱정을 하나요? 회사와 근로자는 이런 변화에 어떻게 대비해야 한다고 생각하나요?",
+  "sample": "These days, many companies use robots and AI. In factories, robots do the heavy and dangerous work. In restaurants, robots carry food to tables. Many workers are worried that they will lose their jobs. Older workers are especially worried because learning new skills is hard. But automation also creates new jobs, like managing and repairing machines. I think companies should train their workers for new jobs. Workers also need to keep learning, for example, by taking online classes about new technology.",
+  "sample_ko": "요즘 많은 회사가 로봇과 AI를 써요. 공장에서는 로봇이 무겁고 위험한 일을 해요. 식당에서는 로봇이 테이블로 음식을 날라요. 많은 근로자가 일자리를 잃을까 봐 걱정해요. 새로운 기술을 배우기 어려워서 나이 든 근로자가 특히 걱정해요. 하지만 자동화는 기계를 관리하고 수리하는 일 같은 새 일자리도 만들어요. 회사가 직원들을 새 일에 맞게 교육해야 한다고 생각해요. 근로자도 예를 들어 신기술에 관한 온라인 강의를 듣는 등 계속 배워야 해요.",
+  "sample_adv": "This is probably one of the biggest worries people have about the future of work. In Korea, you can already see automation everywhere. Car and electronics factories have had robots on their assembly lines for years, but now it's spreading to places you'd never expect, like serving robots in restaurants, ordering kiosks at fast food chains, and AI chatbots answering customer service calls. Workers have a few main concerns. The obvious one is job loss, especially for repetitive jobs like assembly, data entry, or cashiers. Another concern is that the jobs that remain may become more stressful, because workers have to keep up with the speed of machines or are monitored by software. And older workers worry that they're too old to retrain. Personally, I think the change is unavoidable, so the real question is how we manage it. Companies that save money through automation should invest part of it in retraining their own staff, for example, teaching factory workers to maintain and program the robots instead of replacing them. The government could also support career changes with free courses and income support. And as individuals, we need to focus on skills machines aren't good at, like judgment, communication, and building trust with people.",
+  "sample_adv_ko": "아마 일의 미래에 대해 사람들이 가장 크게 걱정하는 것 중 하나일 거예요. 한국에서는 이미 어디서나 자동화를 볼 수 있어요. 자동차와 전자 공장은 수년 전부터 조립 라인에 로봇이 있었지만, 이제는 식당의 서빙 로봇, 패스트푸드점 주문 키오스크, 고객센터 전화를 받는 AI 챗봇처럼 예상치 못한 곳까지 퍼지고 있어요. 근로자들의 걱정은 몇 가지예요. 분명한 건 일자리 감소인데, 특히 조립, 데이터 입력, 계산원처럼 반복적인 일이에요. 또 남는 일자리가 더 스트레스가 될 수 있다는 걱정도 있어요. 기계 속도를 따라가야 하거나 소프트웨어로 감시받으니까요. 그리고 나이 든 근로자는 재교육받기엔 너무 늦었다고 걱정해요. 개인적으로 변화는 피할 수 없다고 생각해서, 진짜 문제는 어떻게 관리하느냐예요. 자동화로 돈을 아낀 회사는 그 일부를 자기 직원 재교육에 투자해야 해요. 예를 들어 공장 근로자를 대체하는 대신 로봇을 유지 보수하고 프로그래밍하도록 가르치는 거예요. 정부도 무료 강좌와 소득 지원으로 직업 전환을 도울 수 있어요. 그리고 개인으로서는 판단력, 소통, 사람들과의 신뢰 쌓기처럼 기계가 잘 못하는 기술에 집중해야 해요.",
+  "tips": [
+   "현황 예시 → 걱정 세 가지 → 내 관점(피할 수 없다) → 회사·정부·개인 대책",
+   "unavoidable, the real question is ..., retrain, keep up with"
+  ]
+ }
+]

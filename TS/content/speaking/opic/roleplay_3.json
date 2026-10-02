@@ -1,0 +1,942 @@
+[
+ {
+  "id": "rp-046",
+  "topic": "library",
+  "level": 4,
+  "situation_ko": "그룹 과제를 위해 도서관 스터디룸 예약을 문의하는 상황 → 예약한 방이 중복 예약되어 팀원에게 대안 제시 → 예약이 꼬였던 경험",
+  "steps": [
+   {
+    "kind": "ask",
+    "question": "I'd like to give you a situation and ask you to act it out. You and your classmates need a room at the library for a group project meeting. Call the library and ask three or four questions about reserving a study room.",
+    "question_ko": "상황을 드릴 테니 연기해 보세요. 당신과 반 친구들은 조별 과제 회의를 위해 도서관 방이 필요합니다. 도서관에 전화해 스터디룸 예약에 관해 서너 가지 질문을 하세요.",
+    "sample": "Hello, I'm a student, and I'd like to reserve a study room for a group meeting. There are five people in my group. First, do you have a room for five or six people? Second, how long can we use the room? We need about three hours. Also, does the room have a screen or a whiteboard? We need to practice our presentation. Lastly, how can I make a reservation? Can I do it online? Okay, thank you very much for your help.",
+    "sample_ko": "안녕하세요, 학생인데 조 모임을 위해 스터디룸을 예약하고 싶어요. 우리 조는 다섯 명이에요. 먼저, 대여섯 명이 쓸 수 있는 방이 있나요? 둘째, 방을 얼마나 오래 쓸 수 있나요? 세 시간 정도 필요해요. 그리고 방에 화면이나 화이트보드가 있나요? 발표 연습을 해야 하거든요. 마지막으로 어떻게 예약하나요? 온라인으로 할 수 있나요? 네, 도와주셔서 정말 감사합니다.",
+    "sample_adv": "Hi, good afternoon. I'm a member of the library, and I'm calling because my classmates and I have a big group presentation next Friday, and we need a quiet place to prepare. I heard you have study rooms, so I have a few questions. First of all, what sizes are the rooms? There are five of us, and we'll have laptops and a lot of papers, so we'd like something a little bigger if possible. Second, is there a time limit? We were hoping to use it from two to six on Wednesday afternoon. Next, what equipment is in the room? Ideally, we need a large monitor or a projector we can connect a laptop to, and a whiteboard for brainstorming. Is Wi-Fi available too? And finally, how does the reservation work? Do all five of us need library cards, and is there a deposit or a cancellation rule? Great, that's very clear. I'll book it online tonight. Thanks so much for your help.",
+    "sample_adv_ko": "안녕하세요. 도서관 회원인데, 다음 주 금요일에 반 친구들과 큰 조별 발표가 있어서 준비할 조용한 장소가 필요해 전화드렸어요. 스터디룸이 있다고 들어서 몇 가지 여쭤볼게요. 우선 방 크기가 어떻게 되나요? 다섯 명이고 노트북과 서류가 많아서 가능하면 조금 큰 방이면 좋겠어요. 둘째, 이용 시간 제한이 있나요? 수요일 오후 2시부터 6시까지 쓰고 싶어요. 다음으로 방에 어떤 장비가 있나요? 노트북을 연결할 큰 모니터나 프로젝터, 아이디어 회의용 화이트보드가 있으면 좋겠어요. 와이파이도 되나요? 마지막으로 예약은 어떻게 하나요? 다섯 명 모두 회원증이 필요한지, 보증금이나 취소 규정이 있는지 궁금해요. 좋아요, 아주 명확하네요. 오늘 밤 온라인으로 예약할게요. 도와주셔서 정말 감사해요.",
+    "tips": [
+     "ask 구조: 인사·신분 → 상황 설명 → 질문 4개(크기·시간·장비·예약 방법) → 감사",
+     "Ideally, we need ... / Is there a time limit? / How does the reservation work?"
+    ]
+   },
+   {
+    "kind": "solve",
+    "question": "I'm sorry, but there is a problem I need you to resolve. When your group arrives at the library, you find out that the room was double-booked and another group is already using it. Call one of your group members who is on the way, explain the situation, and suggest two or three alternatives.",
+    "question_ko": "죄송하지만 해결해야 할 문제가 있습니다. 조원들과 도서관에 도착해 보니 방이 중복 예약되어 다른 조가 이미 쓰고 있습니다. 오고 있는 조원 한 명에게 전화해 상황을 설명하고 두세 가지 대안을 제시하세요.",
+    "sample": "Hi, Jisoo, it's me. Are you on the way? I'm at the library now, but there's a problem. Another group is using our study room. The staff said the room was booked twice by mistake. I'm really sorry. So I have some ideas. First, there's a cafe across the street with a big table. We can go there. Second, the staff said a small room will be free at four. We can wait for two hours. Or we can meet online tonight. What do you think? Let me know.",
+    "sample_ko": "지수야, 나야. 오는 중이야? 나 지금 도서관인데 문제가 생겼어. 다른 조가 우리 스터디룸을 쓰고 있어. 직원 말로는 실수로 방이 두 번 예약됐대. 정말 미안해. 그래서 몇 가지 생각이 있어. 첫째, 길 건너에 큰 테이블이 있는 카페가 있어. 거기로 가도 돼. 둘째, 직원이 4시에 작은 방이 빈대. 두 시간 기다릴 수 있어. 아니면 오늘 밤 온라인으로 만나도 돼. 어떻게 생각해? 알려 줘.",
+    "sample_adv": "Hey, Jisoo, it's me. Sorry to call while you're on the bus, but I need to give you a heads-up before you get here. I just arrived at the library, and there's already another group in our study room. I checked with the front desk, and apparently the system double-booked the room. They gave it to both of us by mistake, and the other group had checked in first. The staff apologized, but there are no other big rooms free today. So I've been thinking about what we can do. Option one, there's a study cafe two blocks away that rents group rooms by the hour. I just called, and they have a six-person room with a TV screen available from three. It's about five thousand won each, but I can ask the library if they'll cover it since it's their mistake. Option two, the library has a small four-person room opening up at four, so we could split up, two of us working on slides now and joining everyone later. Or option three, we just go home and do a video call tonight, then rehearse in person tomorrow morning. Personally, I like the first idea best. Could you ask the others and text me back?",
+    "sample_adv_ko": "지수야, 나야. 버스 타고 있는데 전화해서 미안, 도착하기 전에 미리 알려 줘야 할 게 있어서. 방금 도서관에 왔는데 우리 스터디룸에 이미 다른 조가 있어. 안내 데스크에 확인했더니 시스템이 방을 중복 예약했대. 실수로 두 조 모두에게 줬는데 그 조가 먼저 입실했어. 직원은 사과했지만 오늘은 다른 큰 방이 없대. 그래서 어떻게 할지 생각해 봤어. 첫 번째, 두 블록 떨어진 곳에 시간 단위로 단체실을 빌려주는 스터디 카페가 있어. 방금 전화했는데 3시부터 TV 화면 있는 6인실이 비어 있대. 1인당 5천 원 정도인데 도서관 실수니까 비용을 내줄 수 있는지 물어볼게. 두 번째, 도서관에 4시에 4인용 작은 방이 비니까, 나눠서 두 명은 지금 슬라이드를 만들고 나중에 합류해도 돼. 아니면 세 번째, 그냥 집에 가서 오늘 밤 영상 통화하고 내일 아침에 직접 리허설을 해도 돼. 개인적으로는 첫 번째가 제일 좋아. 다른 애들한테 물어보고 문자 줄래?",
+    "tips": [
+     "give you a heads-up 으로 시작 → 원인 설명(double-booked) → Option one/two/three → 내 추천",
+     "비용 문제는 since it's their mistake 처럼 근거를 붙여 제안"
+    ]
+   },
+   {
+    "kind": "exp",
+    "question": "That's the end of the situation. Have you ever had a problem with a reservation, such as a booking that disappeared or got mixed up? Tell me what happened and how you dealt with it.",
+    "question_ko": "상황이 끝났습니다. 예약이 사라지거나 뒤섞이는 등 예약 문제를 겪은 적이 있나요? 무슨 일이 있었고 어떻게 대처했는지 말해 주세요.",
+    "sample": "Yes, last year I had a problem with a restaurant reservation. It was my parents' anniversary, and I booked a table at a nice Korean restaurant two weeks before. But when we arrived, the staff said they didn't have my name. I showed them the confirmation text on my phone. They checked again and found that they wrote the wrong date. The restaurant was full, but the manager gave us a private room upstairs. They also gave us free dessert. It worked out well in the end.",
+    "sample_ko": "네, 작년에 식당 예약 문제가 있었어요. 부모님 결혼기념일이라 2주 전에 좋은 한식당 테이블을 예약했어요. 그런데 도착하니 직원이 제 이름이 없다고 했어요. 휴대폰의 예약 확인 문자를 보여 줬어요. 다시 확인하더니 날짜를 잘못 적었다는 걸 알았어요. 식당이 꽉 찼는데 매니저가 위층 개별실을 내줬어요. 디저트도 무료로 줬어요. 결국 잘 해결됐어요.",
+    "sample_adv": "Yes, I had a really stressful one a couple of years ago. My friends and I planned a weekend trip to Gyeongju, and I was in charge of booking the guesthouse. I reserved a room for four people on a travel app and paid in advance. When we arrived at around nine at night after a long drive, the owner looked at his list and said he had no reservation under my name. I showed him the confirmation screen, and he made a phone call. It turned out the app had a system error, and my booking never reached him. The worst part was that his place was fully booked, and it was peak season, so every place nearby was full too. My friends were tired and hungry, and I felt terrible because it was my job. I called the app's customer center, explained calmly, and insisted that they find us a room since it was their error. After about forty minutes, they found a hotel fifteen minutes away and paid the difference, which was actually a nicer place. Since then, I always call the place directly a day before to confirm my reservation.",
+    "sample_adv_ko": "네, 2년쯤 전에 정말 스트레스받는 일이 있었어요. 친구들과 경주로 주말여행을 계획했는데 제가 게스트하우스 예약을 맡았어요. 여행 앱으로 4인실을 예약하고 미리 결제했어요. 오래 운전해서 밤 9시쯤 도착했는데 주인이 명단을 보더니 제 이름으로 된 예약이 없다고 했어요. 확인 화면을 보여 주자 주인이 전화를 걸었어요. 알고 보니 앱에 시스템 오류가 있어서 예약이 주인에게 전달되지 않은 거였어요. 최악은 그 숙소가 꽉 찼고 성수기라 근처 숙소도 다 찼다는 거였어요. 친구들은 피곤하고 배고팠고 제 담당이라 너무 미안했어요. 앱 고객센터에 전화해서 차분하게 설명하고, 그쪽 오류니까 방을 찾아 달라고 강하게 요구했어요. 40분쯤 뒤 15분 거리의 호텔을 찾아 줬고 차액도 내 줬는데 오히려 더 좋은 곳이었어요. 그 뒤로는 항상 하루 전에 숙소에 직접 전화해서 예약을 확인해요.",
+    "tips": [
+     "경험: 상황 → 문제 발견 → 원인 → 내 대처(insisted) → 결과 → 교훈",
+     "It turned out ..., I was in charge of ..., paid the difference"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "rp-047",
+  "topic": "bank",
+  "level": 5,
+  "situation_ko": "해외에 사는 친구에게 송금하려고 은행에 해외 송금을 문의하는 상황 → 보낸 돈이 도착하지 않아 은행에 대안 요청 → 돈 문제로 곤란했던 경험",
+  "steps": [
+   {
+    "kind": "ask",
+    "question": "I'd like to give you a situation and ask you to act it out. You need to send money to a friend who lives in another country. Call your bank and ask three or four questions about sending money overseas.",
+    "question_ko": "상황을 드릴 테니 연기해 보세요. 다른 나라에 사는 친구에게 돈을 보내야 합니다. 은행에 전화해 해외 송금에 관해 서너 가지 질문을 하세요.",
+    "sample": "Hello, I have an account at your bank, and I want to send money to my friend in Canada. I have a few questions. First, how much is the fee for an overseas transfer? Second, how long does it take for the money to arrive? Third, what information do I need about my friend's account? And lastly, can I do it on the banking app, or do I need to visit a branch? Okay, I understand. Thank you for your help.",
+    "sample_ko": "안녕하세요, 이 은행에 계좌가 있는데 캐나다에 있는 친구에게 돈을 보내고 싶어요. 몇 가지 질문이 있어요. 첫째, 해외 송금 수수료는 얼마인가요? 둘째, 돈이 도착하는 데 얼마나 걸리나요? 셋째, 친구 계좌에 대해 어떤 정보가 필요한가요? 마지막으로 은행 앱으로 할 수 있나요, 아니면 지점에 가야 하나요? 네, 알겠습니다. 도와주셔서 감사합니다.",
+    "sample_adv": "Hi, good morning. I've had a checking account with you for a few years, but I've never sent money abroad before, so I'd like to ask some questions first. My friend in Toronto is getting married next month, and a group of us collected money for her wedding gift, about one point five million won. First, what's the total cost of sending it? I'm asking about both the transfer fee and the exchange rate, because I heard banks sometimes add a margin to the rate. Second, how long will it take to reach her account? The wedding is on the twentieth, so I want to be sure it arrives at least a week before. Third, what details do I need from her? I know her name and account number, but do I also need a SWIFT code or her bank's address? And finally, is there a limit on how much I can send through the app, or do I have to come into a branch with my ID for this amount? Perfect, that's really helpful. I'll get the details from her tonight and send it tomorrow.",
+    "sample_adv_ko": "안녕하세요. 몇 년째 입출금 계좌를 쓰고 있는데 해외로 돈을 보내 본 적이 없어서 먼저 몇 가지 여쭤보고 싶어요. 토론토에 있는 친구가 다음 달에 결혼하는데 친구 몇 명이 축의금으로 150만 원 정도를 모았어요. 첫째, 보내는 데 총비용이 얼마나 드나요? 송금 수수료와 환율 둘 다 여쭤보는 건데, 은행이 환율에 마진을 붙이기도 한다고 들었거든요. 둘째, 친구 계좌에 도착하는 데 얼마나 걸리나요? 결혼식이 20일이라 적어도 일주일 전에는 도착했으면 해요. 셋째, 친구에게서 어떤 정보를 받아야 하나요? 이름과 계좌번호는 아는데 스위프트 코드나 은행 주소도 필요한가요? 마지막으로 앱으로 보낼 수 있는 금액에 한도가 있나요, 아니면 이 금액이면 신분증을 들고 지점에 가야 하나요? 좋아요, 정말 도움이 됐어요. 오늘 밤 친구에게 정보를 받아서 내일 보낼게요.",
+    "tips": [
+     "금융 질문 표현: transfer fee, exchange rate, SWIFT code, limit on the app",
+     "배경(축의금·날짜)을 먼저 말하면 질문이 자연스럽게 이어진다"
+    ]
+   },
+   {
+    "kind": "solve",
+    "question": "I'm sorry, but there is a problem I need you to resolve. A week after you sent the money, your friend says it still hasn't arrived, and the wedding is in three days. Call the bank, explain the situation, and suggest two or three ways to solve the problem.",
+    "question_ko": "죄송하지만 해결해야 할 문제가 있습니다. 돈을 보내고 일주일이 지났는데 친구가 아직 돈이 안 왔다고 하고, 결혼식은 사흘 뒤입니다. 은행에 전화해 상황을 설명하고 문제를 해결할 두세 가지 방법을 제안하세요.",
+    "sample": "Hello, I sent money to my friend in Canada last Monday through your app. It was one point five million won. You said it would take three to five days. But my friend says the money hasn't arrived yet. Her wedding is in three days, so I'm really worried. Can you check where the money is now? If there is a problem, can you send it again quickly? Or can you cancel the transfer and give my money back? Then I can use another service. Please call me back today.",
+    "sample_ko": "안녕하세요, 지난 월요일에 앱으로 캐나다에 있는 친구에게 돈을 보냈어요. 150만 원이었어요. 3~5일 걸린다고 하셨어요. 그런데 친구가 아직 돈이 안 왔대요. 친구 결혼식이 사흘 뒤라 정말 걱정돼요. 지금 돈이 어디 있는지 확인해 주실 수 있나요? 문제가 있으면 빨리 다시 보내 주실 수 있나요? 아니면 송금을 취소하고 돈을 돌려주실 수 있나요? 그러면 다른 서비스를 이용할게요. 오늘 다시 전화 주세요.",
+    "sample_adv": "Hello, I'm calling about an overseas transfer I made last Monday. The reference number is T two zero four one. I sent one point five million won to a bank in Toronto, and the app said it would arrive within three to five business days. It's now been seven days, and my friend says nothing has come in. Her wedding is this Saturday, so the timing is really important. The money left my account on the same day, so it must be stuck somewhere. Could you trace the transfer and tell me exactly where it is? If there's a problem with the information, for example, the SWIFT code or the spelling of her name, I can correct it right now. That's my first request. Second, if the money is stuck at an intermediary bank, could you ask them to speed it up and waive the extra fees, since I followed every step correctly? And if it can't arrive by Friday, I'd like you to cancel it and return the full amount, including the fee. Then I can use a fast international money service instead. Could you please call me back by this afternoon? I really appreciate your help.",
+    "sample_adv_ko": "안녕하세요, 지난 월요일에 한 해외 송금 때문에 전화드려요. 참조 번호는 T2041이에요. 토론토의 은행으로 150만 원을 보냈고 앱에는 영업일 기준 3~5일 안에 도착한다고 나왔어요. 지금 7일이 지났는데 친구 말로는 아무것도 안 들어왔대요. 친구 결혼식이 이번 토요일이라 시기가 정말 중요해요. 돈은 당일에 제 계좌에서 빠져나갔으니 어딘가에 걸려 있는 게 분명해요. 송금을 추적해서 정확히 어디에 있는지 알려 주실 수 있나요? 스위프트 코드나 친구 이름 철자 같은 정보에 문제가 있으면 지금 바로 고칠 수 있어요. 그게 첫 번째 요청이에요. 둘째, 중개 은행에 걸려 있다면, 제가 모든 단계를 제대로 했으니 처리를 서둘러 달라고 하고 추가 수수료는 면제해 주실 수 있나요? 그리고 금요일까지 도착할 수 없다면 수수료를 포함해 전액 취소·환불해 주세요. 그러면 빠른 국제 송금 서비스를 대신 이용할게요. 오늘 오후까지 다시 전화 주실 수 있을까요? 도와주셔서 정말 감사해요.",
+    "tips": [
+     "참조 번호 → 날짜·금액 → 문제 → 마감(결혼식) → 요청 1·2·3 → 회신 기한",
+     "trace the transfer, intermediary bank, waive the fees, business days"
+    ]
+   },
+   {
+    "kind": "exp",
+    "question": "That's the end of the situation. Have you ever had a problem with money, such as a payment that didn't go through or a card that suddenly stopped working? Tell me what happened and how it was solved.",
+    "question_ko": "상황이 끝났습니다. 결제가 안 되거나 카드가 갑자기 작동하지 않는 등 돈 문제를 겪은 적이 있나요? 무슨 일이 있었고 어떻게 해결됐는지 말해 주세요.",
+    "sample": "Yes, it happened when I traveled to Thailand two years ago. On the third day, I tried to pay for dinner with my credit card, but it didn't work. I tried again, and it still didn't work. I didn't have much cash, so I was very embarrassed. My friend paid for me. That night, I called my card company. They said they blocked my card because the overseas payment looked strange. They unlocked it after I confirmed my identity. Now I always tell my card company before I travel.",
+    "sample_ko": "네, 2년 전 태국 여행 때 그런 일이 있었어요. 셋째 날 신용카드로 저녁값을 내려고 했는데 결제가 안 됐어요. 다시 해 봐도 안 됐어요. 현금이 별로 없어서 너무 창피했어요. 친구가 대신 내 줬어요. 그날 밤 카드사에 전화했어요. 해외 결제가 이상해 보여서 카드를 막았다고 했어요. 본인 확인을 하고 나서 풀어 줬어요. 이제는 여행 전에 항상 카드사에 알려요.",
+    "sample_adv": "Yes, and it happened at the worst possible moment. About two years ago, I was on a business trip in Vietnam, and on the last night, I took my team's local partners out for dinner to thank them. There were eight of us, and the bill was quite large. When I handed my company credit card to the waiter, he came back a minute later and said it was declined. I tried my personal card too, and that was declined as well. I could feel my face turning red, because everyone was watching. Luckily, one of my coworkers had enough cash, so she covered it, and I promised to pay her back. As soon as I got back to the hotel, I called both card companies. It turned out that the company card had hit its monthly limit because of the hotel and flights, and my personal card was blocked by the fraud system because it was being used in a new country. They unblocked my personal card in about ten minutes after asking some security questions. Since then, I always set a travel notice in my card app and carry some emergency cash, just in case.",
+    "sample_adv_ko": "네, 그것도 최악의 순간에 일어났어요. 2년쯤 전 베트남 출장 중이었는데, 마지막 날 밤 감사의 뜻으로 현지 협력사 사람들에게 저녁을 대접했어요. 여덟 명이라 계산서가 꽤 컸어요. 웨이터에게 법인 카드를 건넸는데 1분 뒤 돌아와서 승인이 거절됐다고 했어요. 개인 카드도 냈는데 그것도 거절됐어요. 다들 보고 있어서 얼굴이 빨개지는 게 느껴졌어요. 다행히 동료 한 명이 현금이 충분해서 대신 냈고 저는 갚겠다고 약속했어요. 호텔에 돌아오자마자 두 카드사에 전화했어요. 알고 보니 법인 카드는 호텔과 항공권 때문에 월 한도를 넘었고, 개인 카드는 새로운 나라에서 쓰여서 부정 사용 탐지 시스템이 막은 거였어요. 개인 카드는 보안 질문 몇 개를 확인하고 10분쯤 만에 풀어 줬어요. 그 뒤로는 항상 카드 앱에 해외여행 알림을 설정하고 혹시 몰라 비상금을 챙겨요.",
+    "tips": [
+     "창피했던 순간을 생생하게(my face turning red) → 원인 두 가지 → 해결 → 지금의 습관",
+     "declined, hit its monthly limit, fraud system, travel notice"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "rp-048",
+  "topic": "hotel",
+  "level": 4,
+  "situation_ko": "호텔에 늦은 체크아웃과 짐 보관을 문의하는 상황 → 체크아웃 후 객실에 물건을 두고 와서 호텔에 대안 요청 → 물건을 두고 온 경험",
+  "steps": [
+   {
+    "kind": "ask",
+    "question": "I'd like to give you a situation and ask you to act it out. You are staying at a hotel, and your flight home leaves late in the evening on your last day. Go to the front desk and ask three or four questions about checking out late and storing your luggage.",
+    "question_ko": "상황을 드릴 테니 연기해 보세요. 호텔에 묵고 있는데 마지막 날 귀국 비행기가 저녁 늦게 출발합니다. 프런트에 가서 늦은 체크아웃과 짐 보관에 관해 서너 가지 질문을 하세요.",
+    "sample": "Hi, I'm staying in room eight-oh-five, and I check out tomorrow. My flight is at ten p.m., so I have a few questions. First, can I check out late, maybe at two o'clock? Is there an extra charge? Second, if I can't, can you keep my luggage after I check out? Third, is there a place where I can take a shower before I go to the airport? And lastly, how can I get to the airport from here? Okay, thank you so much.",
+    "sample_ko": "안녕하세요, 805호에 묵고 있고 내일 체크아웃해요. 비행기가 밤 10시라 몇 가지 여쭤볼게요. 첫째, 2시쯤 늦게 체크아웃할 수 있나요? 추가 요금이 있나요? 둘째, 안 된다면 체크아웃 후에 짐을 맡아 주실 수 있나요? 셋째, 공항 가기 전에 샤워할 수 있는 곳이 있나요? 마지막으로 여기서 공항까지 어떻게 가나요? 네, 정말 감사합니다.",
+    "sample_adv": "Hi there. I'm in room eight-oh-five, and I'm checking out tomorrow, but my flight doesn't leave until ten forty at night, so I'm trying to figure out the best plan for the day. I have a few questions. First, is it possible to extend my checkout time? I know the normal time is eleven, but I'd love to keep the room until three or four in the afternoon. If there's a fee, how much would that be? Second, if late checkout isn't available, do you offer luggage storage? I have two big suitcases and a backpack, and I'd like to spend the afternoon shopping downtown. Is it safe, and do I need to pick them up by a certain time? Third, I'll probably be sweaty after walking around all day. Do you have a shower room or a lounge guests can use after checkout, maybe at the gym? And finally, what's the easiest way to get to the airport around seven p.m.? Is there a shuttle bus, or would you recommend a taxi? Great, thank you. That helps me plan my last day.",
+    "sample_adv_ko": "안녕하세요. 805호인데 내일 체크아웃하지만 비행기가 밤 10시 40분에야 떠나서 하루를 어떻게 보낼지 계획 중이에요. 몇 가지 여쭤볼게요. 첫째, 체크아웃 시간을 연장할 수 있나요? 보통 11시인 건 알지만 오후 3~4시까지 방을 쓰고 싶어요. 요금이 있다면 얼마인가요? 둘째, 늦은 체크아웃이 안 되면 짐 보관을 해 주시나요? 큰 캐리어 두 개와 백팩이 있고 오후에 시내에서 쇼핑하고 싶어요. 안전한가요, 그리고 정해진 시간까지 찾아가야 하나요? 셋째, 하루 종일 돌아다니면 땀이 날 것 같아요. 체크아웃 후 투숙객이 쓸 수 있는 샤워실이나 라운지가 있나요, 헬스장 같은 데요? 마지막으로 저녁 7시쯤 공항까지 가장 쉬운 방법은 뭔가요? 셔틀버스가 있나요, 아니면 택시를 추천하시나요? 좋아요, 감사합니다. 마지막 날 계획에 도움이 됐어요.",
+    "tips": [
+     "호텔 표현: extend my checkout, late checkout fee, luggage storage, shuttle bus",
+     "I'm trying to figure out ... 로 상황 설명 후 질문"
+    ]
+   },
+   {
+    "kind": "solve",
+    "question": "I'm sorry, but there is a problem I need you to resolve. You are already at the airport when you realize that you left your laptop charger and a jacket in the hotel room. Call the hotel, explain the situation, and suggest two or three ways to get your things back.",
+    "question_ko": "죄송하지만 해결해야 할 문제가 있습니다. 이미 공항에 있는데 호텔 방에 노트북 충전기와 재킷을 두고 왔다는 걸 알았습니다. 호텔에 전화해 상황을 설명하고 물건을 돌려받을 두세 가지 방법을 제안하세요.",
+    "sample": "Hello, my name is Kim Minho. I stayed in room eight-oh-five, and I checked out this afternoon. I'm at the airport now, but I left my laptop charger and a black jacket in the room. I think the jacket is in the closet. My flight leaves in two hours, so I can't go back. Could you check the room for me? If you find them, can you send them to my home address in Korea? I can pay for the shipping. Or my friend lives here, so she can pick them up. Thank you.",
+    "sample_ko": "안녕하세요, 김민호입니다. 805호에 묵었고 오늘 오후에 체크아웃했어요. 지금 공항인데 방에 노트북 충전기와 검은 재킷을 두고 왔어요. 재킷은 옷장에 있을 거예요. 비행기가 두 시간 뒤라 돌아갈 수 없어요. 방을 확인해 주실 수 있나요? 찾으시면 한국 집 주소로 보내 주실 수 있나요? 배송비는 제가 낼게요. 아니면 여기 사는 친구가 찾으러 갈 수 있어요. 감사합니다.",
+    "sample_adv": "Hello, this is Kim Minho. I was a guest in room eight-oh-five until about three o'clock today. I'm calling from the airport because I just opened my bag at the check-in counter and realized I left two things behind. One is my laptop charger. It's a white charger, and I think it's still plugged in behind the desk. The other is a navy blue down jacket, which should be hanging in the closet by the door. I know it's my fault, and I'm sorry for the trouble. My flight boards in an hour and a half, so going back isn't an option. Could you ask housekeeping to check the room before the next guest arrives? If they find the items, here's what I'm thinking. First, could you ship them to my address in Seoul? I'm happy to pay for international shipping and any handling fee by card over the phone. Second, my coworker is coming to this city on business next week, and she could pick them up from the front desk, if you can keep them until then. Or third, if it's quicker, you could send them by a courier to the airport, if it arrives within an hour. Could you text me once you've checked? Thank you so much.",
+    "sample_adv_ko": "안녕하세요, 김민호입니다. 오늘 3시쯤까지 805호에 묵었어요. 공항 체크인 카운터에서 가방을 열어 보고 두 가지를 두고 온 걸 알아서 공항에서 전화드려요. 하나는 노트북 충전기예요. 흰색이고 아마 책상 뒤에 아직 꽂혀 있을 거예요. 다른 하나는 남색 패딩 재킷인데 문 옆 옷장에 걸려 있을 거예요. 제 잘못인 거 알고 번거롭게 해 드려 죄송해요. 탑승이 한 시간 반 뒤라 돌아가는 건 불가능해요. 다음 손님이 오기 전에 객실 청소팀에 방을 확인해 달라고 해 주실 수 있나요? 물건을 찾으면 이렇게 생각하고 있어요. 첫째, 서울 주소로 보내 주실 수 있나요? 국제 배송비와 처리 수수료는 전화로 카드 결제할게요. 둘째, 다음 주에 동료가 출장으로 이 도시에 오는데, 그때까지 맡아 주시면 프런트에서 찾아갈 수 있어요. 아니면 셋째, 그게 더 빠르다면 한 시간 안에 도착하는 경우 퀵으로 공항에 보내 주셔도 돼요. 확인하시면 문자 주실 수 있나요? 정말 감사합니다.",
+    "tips": [
+     "물건 묘사를 구체적으로(색·위치) → 내 잘못 인정 → 대안 3개 → 연락 방법",
+     "left two things behind, housekeeping, ship them, isn't an option"
+    ]
+   },
+   {
+    "kind": "exp",
+    "question": "That's the end of the situation. Have you ever left something important behind somewhere, such as at a hotel, on a bus, or in a restaurant? Tell me what you left, where, and whether you got it back.",
+    "question_ko": "상황이 끝났습니다. 호텔, 버스, 식당 등 어딘가에 중요한 물건을 두고 온 적이 있나요? 무엇을 어디에 두고 왔고 돌려받았는지 말해 주세요.",
+    "sample": "Yes, I left my wallet in a taxi last year. I was going home from a company dinner late at night. I was very tired, so I fell asleep in the taxi. When I got home, I couldn't find my wallet. It had my ID, my cards, and some cash. I was so worried. I called the taxi company, but I didn't know the taxi number. Luckily, I paid with my card, so the card company found the taxi. The driver brought my wallet the next day. I gave him a small thank-you gift.",
+    "sample_ko": "네, 작년에 택시에 지갑을 두고 내렸어요. 늦은 밤 회식 끝나고 집에 가는 중이었어요. 너무 피곤해서 택시에서 잠들었어요. 집에 와 보니 지갑이 없었어요. 신분증, 카드, 현금이 좀 들어 있었어요. 너무 걱정됐어요. 택시 회사에 전화했는데 택시 번호를 몰랐어요. 다행히 카드로 결제해서 카드사가 택시를 찾아 줬어요. 기사님이 다음 날 지갑을 가져다주셨어요. 작은 감사 선물을 드렸어요.",
+    "sample_adv": "Oh, yes. The most stressful one was when I left my backpack on an express bus about three years ago. I was going home to Gwangju for the holidays, and I'd put the backpack on the rack above my seat. I was half asleep when we arrived, and I grabbed my shopping bag with gifts, got off, and walked straight to my parents' car. About twenty minutes later, I reached for my phone charger and realized the backpack was gone. My laptop was in it, with all my work files, and my passport too, since I had a trip the next week. My heart was pounding. My dad drove me back to the terminal right away. The ticket office told me the bus had already left for the garage. They called the driver for me, and he checked and found it exactly where I'd left it. The problem was that it was a holiday, so the lost and found office was closed. The staff were really kind, though. The driver brought it back on his next trip that evening, and I waited at the terminal for two hours. When I finally got it, everything was inside. I bought the driver a box of snacks, and I never put bags on the overhead rack anymore.",
+    "sample_adv_ko": "아, 네. 가장 스트레스받았던 건 3년쯤 전에 고속버스에 백팩을 두고 내린 일이에요. 명절이라 고향 광주에 가는 중이었고 백팩을 좌석 위 선반에 올려 뒀어요. 도착했을 때 반쯤 졸고 있어서 선물이 든 쇼핑백만 들고 내려 곧장 부모님 차로 갔어요. 20분쯤 뒤 충전기를 꺼내려다 백팩이 없다는 걸 알았어요. 업무 파일이 다 든 노트북과, 다음 주 출장 때문에 여권까지 들어 있었어요. 심장이 쿵쾅거렸어요. 아빠가 바로 터미널로 다시 데려다주셨어요. 매표소에서 버스가 이미 차고지로 떠났다고 했어요. 직원이 기사님께 전화해 줬고, 기사님이 확인해 보니 제가 둔 그 자리에 그대로 있었어요. 문제는 명절이라 분실물 센터가 문을 닫았다는 거였어요. 그래도 직원들이 정말 친절했어요. 기사님이 그날 저녁 다음 운행 때 가져다주셨고 저는 터미널에서 두 시간을 기다렸어요. 드디어 받았을 때 안에 전부 그대로 있었어요. 기사님께 과자 한 상자를 사 드렸고, 이제는 절대 선반에 가방을 올리지 않아요.",
+    "tips": [
+     "무엇이 들어 있었는지 말하면 긴장감이 생긴다 → 찾는 과정 → 결과 → 바뀐 습관",
+     "My heart was pounding, lost and found, exactly where I'd left it"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "rp-049",
+  "topic": "health",
+  "level": 4,
+  "situation_ko": "치통 때문에 치과에 전화해 진료 예약을 문의하는 상황 → 급한 출장으로 예약일에 갈 수 없어 치과에 대안 제시 → 치과나 병원에서 겪은 기억에 남는 경험",
+  "steps": [
+   {
+    "kind": "ask",
+    "question": "I'd like to give you a situation and ask you to act it out. You have had a toothache for a few days. Call a dental clinic near your home and ask three or four questions to make an appointment.",
+    "question_ko": "상황을 드릴 테니 연기해 보세요. 며칠째 이가 아픕니다. 집 근처 치과에 전화해 예약을 하기 위해 서너 가지 질문을 하세요.",
+    "sample": "Hello, I'd like to make an appointment. I've had a toothache for three days. It hurts when I drink something cold. First, do you have any time this week? I'm free after six p.m. Second, are you open on Saturdays? Third, how long does the first visit take? And finally, how much does a checkup and an X-ray cost? I don't know if my insurance covers it. Okay, I'll come on Thursday at six thirty. Thank you.",
+    "sample_ko": "안녕하세요, 예약하고 싶어요. 사흘째 이가 아파요. 차가운 걸 마시면 아파요. 먼저 이번 주에 시간이 있나요? 저는 저녁 6시 이후에 시간이 돼요. 둘째, 토요일에도 하시나요? 셋째, 첫 진료는 얼마나 걸리나요? 마지막으로 검진과 엑스레이 비용은 얼마인가요? 보험이 되는지 모르겠어요. 네, 목요일 6시 반에 갈게요. 감사합니다.",
+    "sample_adv": "Hi, good morning. I'm calling because I'd like to see a dentist as soon as possible. For about three days, one of my back teeth on the lower right side has been hurting, especially when I drink something cold or chew on that side. Last night it actually woke me up, so I don't want to wait too long. I have a few questions. First, do you have any openings this week? I work until six, so evenings would be best, but if it's urgent, I could take a long lunch break. Second, I've never been to your clinic before. Do I need to bring anything, like my ID or previous dental records? Third, if the doctor finds a cavity, is it possible to treat it on the same day, or will I need to come back? I'm trying to figure out how much time to take off work. And finally, could you give me a rough idea of the cost? I have national health insurance, but I know some treatments aren't covered. Great, Wednesday at six thirty works perfectly. I'll see you then.",
+    "sample_adv_ko": "안녕하세요. 가능한 한 빨리 치과 진료를 받고 싶어서 전화드려요. 사흘 정도 오른쪽 아래 어금니 하나가 아픈데, 특히 찬 걸 마시거나 그쪽으로 씹을 때 그래요. 어젯밤엔 아파서 깨기까지 해서 너무 오래 기다리고 싶지 않아요. 몇 가지 여쭤볼게요. 첫째, 이번 주에 빈 시간이 있나요? 6시까지 일해서 저녁이 가장 좋지만, 급하면 점심시간을 길게 쓸 수도 있어요. 둘째, 그 치과는 처음인데 신분증이나 예전 치과 기록 같은 걸 가져가야 하나요? 셋째, 충치가 있으면 당일에 치료할 수 있나요, 아니면 다시 와야 하나요? 회사를 얼마나 비워야 할지 알고 싶어서요. 마지막으로 대략적인 비용을 알려 주실 수 있나요? 건강보험은 있지만 일부 치료는 보험이 안 되는 걸로 알아요. 좋아요, 수요일 6시 반이 딱 좋아요. 그때 뵐게요.",
+    "tips": [
+     "증상 설명 → 질문(시간·준비물·당일 치료·비용) → 예약 확정",
+     "openings, cavity, take time off work, covered by insurance"
+    ]
+   },
+   {
+    "kind": "solve",
+    "question": "I'm sorry, but there is a problem I need you to resolve. Your company suddenly sends you on a business trip on the day of your dental appointment, but your tooth still hurts. Call the clinic, explain the situation, and suggest two or three alternatives.",
+    "question_ko": "죄송하지만 해결해야 할 문제가 있습니다. 회사에서 갑자기 치과 예약일에 출장을 보내는데 이는 여전히 아픕니다. 치과에 전화해 상황을 설명하고 두세 가지 대안을 제시하세요.",
+    "sample": "Hello, this is Park Jiyoung. I have an appointment on Wednesday at six thirty. I'm sorry, but I can't come because my company is sending me on a business trip. I'll be away from Wednesday to Friday. But my tooth still hurts a lot. So, can I come tomorrow morning before work? I can come at eight thirty if you're open. Or can I come on Saturday? If there's no time, can you give me some medicine for the pain until I come back? Thank you.",
+    "sample_ko": "안녕하세요, 박지영입니다. 수요일 6시 반에 예약이 있어요. 죄송하지만 회사에서 출장을 보내서 갈 수 없어요. 수요일부터 금요일까지 없어요. 그런데 이가 아직 많이 아파요. 그래서 내일 아침 출근 전에 가도 될까요? 문을 여시면 8시 반에 갈 수 있어요. 아니면 토요일에 가도 될까요? 시간이 없으면 돌아올 때까지 먹을 진통제를 처방해 주실 수 있나요? 감사합니다.",
+    "sample_adv": "Hi, this is Park Jiyoung calling. I have an appointment with Dr. Lee this Wednesday at six thirty for a toothache. I'm really sorry for the short notice, but my manager just told me I have to go to Busan for a client meeting from Wednesday morning until Friday night, and I can't get out of it. The problem is that the pain has actually gotten worse. I took a painkiller last night, and it only helped for a few hours. So I'm a bit worried about traveling like this. I have a few ideas. First, is there any chance the doctor could see me tomorrow, even for fifteen minutes, just to check what's wrong? I could come before work, or during my lunch break, and I'm happy to wait if someone cancels. Second, if tomorrow is completely full, could you put me on the waiting list and also book me for Saturday morning, as early as possible? And third, if neither works, could you recommend a dental clinic in Busan that takes emergency patients, and maybe send them my X-ray if I need treatment there? Thank you so much for understanding. Please call me back at this number.",
+    "sample_adv_ko": "안녕하세요, 박지영입니다. 이번 수요일 6시 반에 치통으로 이 선생님께 예약이 있어요. 갑자기 연락드려 정말 죄송한데, 방금 팀장님이 수요일 아침부터 금요일 밤까지 고객 미팅으로 부산에 가야 한다고 하셨고 빠질 수가 없어요. 문제는 통증이 오히려 심해졌다는 거예요. 어젯밤 진통제를 먹었는데 몇 시간만 효과가 있었어요. 그래서 이 상태로 출장 가는 게 좀 걱정돼요. 몇 가지 생각이 있어요. 첫째, 내일 15분이라도 선생님이 봐 주실 수 있을까요? 뭐가 문제인지만 확인하게요. 출근 전이나 점심시간에 갈 수 있고, 누가 취소하면 기다릴게요. 둘째, 내일이 완전히 찼다면 대기 명단에 올려 주시고 토요일 아침 가능한 한 이른 시간으로도 예약해 주실 수 있나요? 셋째, 둘 다 안 되면 부산에서 응급 환자를 받는 치과를 추천해 주시고, 거기서 치료가 필요하면 제 엑스레이를 보내 주실 수 있을까요? 이해해 주셔서 정말 감사해요. 이 번호로 다시 전화 주세요.",
+    "tips": [
+     "사과 + 이유 → 증상이 악화됐다는 점 강조 → 대안 3개(내일·대기·출장지 병원)",
+     "short notice, can't get out of it, waiting list, emergency patients"
+    ]
+   },
+   {
+    "kind": "exp",
+    "question": "That's the end of the situation. Tell me about a memorable experience you had at a dentist or a hospital. What was the problem, what happened during the visit, and how did you feel?",
+    "question_ko": "상황이 끝났습니다. 치과나 병원에서 겪은 기억에 남는 경험에 대해 말해 주세요. 어떤 문제였고, 진료 중 무슨 일이 있었고, 기분이 어땠나요?",
+    "sample": "I remember when I had my wisdom tooth taken out. I was twenty-four. My wisdom tooth was growing sideways, and it pushed my other teeth. The dentist said I had to remove it. I was really scared. During the surgery, I didn't feel pain because of the shot, but I could hear the sound of the tools. It took about forty minutes. After that, my face was swollen for three days, and I could only eat porridge. But I felt much better after a week.",
+    "sample_ko": "사랑니를 뺐을 때가 기억나요. 스물네 살이었어요. 사랑니가 옆으로 자라서 다른 이를 밀고 있었어요. 치과 의사가 빼야 한다고 했어요. 정말 무서웠어요. 수술 중엔 마취 주사 때문에 아프진 않았지만 기구 소리가 들렸어요. 40분 정도 걸렸어요. 그 뒤로 사흘 동안 얼굴이 부었고 죽만 먹을 수 있었어요. 하지만 일주일 뒤엔 훨씬 좋아졌어요.",
+    "sample_adv": "The most memorable one was getting my wisdom teeth removed, all four at once, when I was a university student. I'd been putting it off for years because I was terrified of dentists, but one of the bottom teeth was growing sideways and started pushing my front teeth out of line. My dentist finally said, if you wait any longer, it'll get infected. So I booked the surgery during my winter break. On the day, my hands were literally shaking in the waiting room. The nurse was really kind and kept talking to me about dramas to distract me. The shots in my gums were the worst part, honestly. After that, I didn't feel pain, but I could hear cracking sounds, which was pretty creepy. The whole thing took about an hour. Afterward, I looked like a hamster for almost a week. My cheeks were so swollen that my little brother took photos and posted them in our family chat. I lived on porridge and ice cream. But looking back, it was worth it. My teeth are straight again, and I'm not as scared of dentists as I used to be.",
+    "sample_adv_ko": "가장 기억에 남는 건 대학생 때 사랑니 네 개를 한꺼번에 뺀 일이에요. 치과가 너무 무서워서 몇 년 동안 미뤄 왔는데, 아래쪽 하나가 옆으로 자라면서 앞니를 밀어 줄이 틀어지기 시작했어요. 치과 의사가 결국 더 기다리면 염증이 생긴다고 했어요. 그래서 겨울 방학에 수술을 예약했어요. 당일 대기실에서 손이 말 그대로 떨렸어요. 간호사가 정말 친절해서 제 정신을 딴 데로 돌리려고 계속 드라마 이야기를 해 줬어요. 솔직히 잇몸에 놓는 주사가 최악이었어요. 그 뒤로는 아프지 않았지만 뭔가 부서지는 소리가 들려서 꽤 섬뜩했어요. 전체가 한 시간쯤 걸렸어요. 그 뒤 거의 일주일 동안 햄스터 같았어요. 볼이 너무 부어서 남동생이 사진을 찍어 가족 단톡방에 올렸어요. 죽과 아이스크림으로 버텼어요. 하지만 돌아보면 그럴 가치가 있었어요. 이가 다시 가지런해졌고 예전만큼 치과가 무섭지 않아요.",
+    "tips": [
+     "미룬 이유 → 계기 → 당일 감정 → 가장 힘든 순간 → 회복(유머) → 의미",
+     "put it off, terrified of, distract me, I looked like a hamster"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "rp-050",
+  "topic": "food",
+  "level": 5,
+  "situation_ko": "회사 행사용 단체 음식(케이터링) 주문을 위해 업체에 문의하는 상황 → 배달된 음식 일부가 빠져 업체에 대안 요청 → 음식 주문이나 행사 준비가 잘못됐던 경험",
+  "steps": [
+   {
+    "kind": "ask",
+    "question": "I'd like to give you a situation and ask you to act it out. You are organizing a lunch party for about thirty coworkers at your office. Call a catering company and ask three or four questions about ordering food for the event.",
+    "question_ko": "상황을 드릴 테니 연기해 보세요. 사무실에서 동료 30명 정도가 참석하는 점심 파티를 준비하고 있습니다. 케이터링 업체에 전화해 행사 음식 주문에 관해 서너 가지 질문을 하세요.",
+    "sample": "Hello, I'm calling from Hanbit Company. We're having a lunch party for about thirty people next Friday, and I'd like to order food. First, what kinds of menus do you have? We want Korean food and some salads. Second, how much is it per person? Third, do you deliver and set up the food? Our office is on the tenth floor. And lastly, do you have vegetarian options? Two people don't eat meat. Okay, please send me a menu by email. Thank you.",
+    "sample_ko": "안녕하세요, 한빛 회사입니다. 다음 주 금요일에 30명 정도 점심 파티가 있어서 음식을 주문하고 싶어요. 첫째, 어떤 메뉴가 있나요? 한식과 샐러드를 원해요. 둘째, 1인당 얼마인가요? 셋째, 배달하고 세팅까지 해 주시나요? 사무실이 10층이에요. 마지막으로 채식 메뉴가 있나요? 두 명이 고기를 안 먹어요. 네, 메뉴를 이메일로 보내 주세요. 감사합니다.",
+    "sample_adv": "Hi, good afternoon. My name is Yoon Seojin, and I'm with the planning team at Hanbit Logistics. We're celebrating our department's tenth anniversary next Friday with a buffet lunch in our office, and a colleague recommended your company. There'll be about thirty people, maybe thirty-two. I have a few questions before I place the order. First, what kinds of packages do you offer? We're thinking of a mix of Korean dishes, like japchae and bulgogi, plus some lighter options such as salads and fruit. Second, what's the price range per person, and does that include drinks and disposable plates, or are those extra? Third, how does delivery and setup work? We're on the tenth floor of a building in Gangnam, and lunch starts at twelve sharp, so the food would need to be ready by eleven forty-five. Would your staff stay to serve, or just set up and leave? And finally, we have a few dietary needs. Two people are vegetarian, and one person is allergic to peanuts. Can you prepare separate dishes and label them clearly? Wonderful. Could you email me a quote by Monday? Thank you.",
+    "sample_adv_ko": "안녕하세요. 저는 한빛물류 기획팀 윤서진입니다. 다음 주 금요일에 우리 부서 창립 10주년을 맞아 사무실에서 뷔페 점심을 하는데, 동료가 그쪽 업체를 추천해 줬어요. 30명, 많으면 32명 정도예요. 주문하기 전에 몇 가지 여쭤볼게요. 첫째, 어떤 구성이 있나요? 잡채나 불고기 같은 한식에 샐러드와 과일 같은 가벼운 메뉴를 섞으려고 해요. 둘째, 1인당 가격대가 어떻게 되고, 음료와 일회용 접시가 포함인지 별도인지 궁금해요. 셋째, 배달과 세팅은 어떻게 되나요? 강남 건물 10층이고 점심이 12시 정각에 시작해서 11시 45분까지 음식이 준비돼야 해요. 직원분이 남아서 서빙해 주시나요, 아니면 세팅만 하고 가시나요? 마지막으로 식단 요청이 몇 가지 있어요. 두 명은 채식주의자이고 한 명은 땅콩 알레르기가 있어요. 따로 음식을 준비해서 분명하게 표시해 주실 수 있나요? 좋아요. 월요일까지 견적서를 이메일로 보내 주실 수 있나요? 감사합니다.",
+    "tips": [
+     "회사·행사 소개 → 질문(구성·가격 포함 범위·배달 시간·식단) → 견적 요청",
+     "package, price range per person, dietary needs, quote"
+    ]
+   },
+   {
+    "kind": "solve",
+    "question": "I'm sorry, but there is a problem I need you to resolve. On the day of the party, the food arrives, but several dishes are missing, including the vegetarian meals, and the party starts in thirty minutes. Call the catering company, explain the problem, and suggest two or three solutions.",
+    "question_ko": "죄송하지만 해결해야 할 문제가 있습니다. 파티 당일 음식이 도착했는데 채식 메뉴를 포함해 여러 음식이 빠졌고, 파티는 30분 뒤 시작합니다. 케이터링 업체에 전화해 문제를 설명하고 두세 가지 해결책을 제시하세요.",
+    "sample": "Hello, this is Yoon Seojin from Hanbit Logistics. Your staff just delivered our lunch, but some food is missing. We ordered six dishes, but only four came. The salad and the vegetarian meals are not here. Our party starts in thirty minutes, so this is a big problem. Can you send the missing food right now by quick delivery? If you can't, can you give us a discount for the missing dishes? Then I can buy salads from a store nearby. Please call me back quickly.",
+    "sample_ko": "안녕하세요, 한빛물류 윤서진입니다. 방금 직원분이 점심을 배달했는데 음식이 일부 빠졌어요. 여섯 가지를 주문했는데 네 가지만 왔어요. 샐러드와 채식 메뉴가 없어요. 파티가 30분 뒤에 시작해서 큰 문제예요. 빠진 음식을 지금 바로 퀵으로 보내 주실 수 있나요? 안 되면 빠진 음식만큼 할인해 주실 수 있나요? 그러면 근처 가게에서 샐러드를 살게요. 빨리 다시 전화 주세요.",
+    "sample_adv": "Hi, this is Yoon Seojin from Hanbit Logistics. Your delivery team just set up our buffet, and I really appreciate that they came on time, but when I checked the order against the invoice, a few things are missing. We ordered six main dishes, plus a salad bar and three vegetarian lunch boxes. What we got is four main dishes, no salads, and no vegetarian boxes at all. The driver said he only had what was on his list, so I think it may have been left at your kitchen. Our party starts in thirty minutes, and our CEO is giving a speech, so I really need this fixed quickly. Here are some options. First, if the food is ready at your kitchen, could you send it by motorbike courier right away? Even if it arrives twenty minutes late, that's okay. Second, if that's not possible, the vegetarian boxes are the most important, because those two people won't be able to eat anything else. Could you at least get those here? And third, for anything you can't deliver, please take it off the bill and give us a refund, and I'll buy salads from the deli downstairs. Please let me know within five minutes which option works.",
+    "sample_adv_ko": "안녕하세요, 한빛물류 윤서진입니다. 배달팀이 방금 뷔페를 세팅해 줬고 제시간에 와 주셔서 정말 감사한데, 거래명세서와 대조해 보니 몇 가지가 빠졌어요. 메인 요리 여섯 가지, 샐러드 바, 채식 도시락 세 개를 주문했어요. 받은 건 메인 네 가지뿐이고 샐러드와 채식 도시락은 전혀 없어요. 기사님은 목록에 있는 것만 가져왔다고 하셔서 주방에 남아 있는 것 같아요. 파티가 30분 뒤에 시작하고 대표님이 연설을 하셔서 빨리 해결돼야 해요. 몇 가지 방법이 있어요. 첫째, 주방에 음식이 준비돼 있으면 바로 오토바이 퀵으로 보내 주실 수 있나요? 20분 늦게 와도 괜찮아요. 둘째, 그게 안 되면 채식 도시락이 가장 중요해요. 그 두 분은 다른 걸 아무것도 못 드시거든요. 최소한 그것만이라도 보내 주실 수 있나요? 셋째, 배달 못 하는 건 계산서에서 빼고 환불해 주세요. 아래층 델리에서 샐러드를 살게요. 어떤 방법이 되는지 5분 안에 알려 주세요.",
+    "tips": [
+     "먼저 감사 한마디(on time) → 주문 대비 누락 항목 → 시간 압박 → 우선순위가 있는 대안",
+     "checked the order against the invoice, take it off the bill, motorbike courier"
+    ]
+   },
+   {
+    "kind": "exp",
+    "question": "That's the end of the situation. Have you ever had a problem while preparing food for an event or ordering food for a group? Tell me what happened and how you handled it.",
+    "question_ko": "상황이 끝났습니다. 행사 음식을 준비하거나 단체 음식을 주문하다가 문제를 겪은 적이 있나요? 무슨 일이 있었고 어떻게 대처했는지 말해 주세요.",
+    "sample": "Yes, last year I ordered pizza for my friend's surprise birthday party. I ordered five large pizzas for fifteen people. But the delivery was one hour late because it was raining. The guests were very hungry, and the birthday girl arrived before the pizza. So we sang the birthday song with only cake. It was a little funny. When the pizza finally came, it was cold. The restaurant said sorry and gave us a coupon. Next time, I'll order earlier.",
+    "sample_ko": "네, 작년에 친구 깜짝 생일 파티 때 피자를 주문했어요. 15명이 먹을 라지 피자 다섯 판을 시켰어요. 그런데 비가 와서 배달이 한 시간 늦었어요. 손님들은 너무 배고팠고 주인공이 피자보다 먼저 도착했어요. 그래서 케이크만 놓고 생일 노래를 불렀어요. 좀 웃겼어요. 피자가 마침내 왔을 때는 식어 있었어요. 가게에서 사과하고 쿠폰을 줬어요. 다음엔 더 일찍 주문할 거예요.",
+    "sample_adv": "Yes, I have a funny one from my cousin's engagement party last year. My aunt asked me to handle the food because I'm good with apps. About forty people were coming to her house, so I ordered a big platter of Korean pancakes, two trays of kimbap, and a large order of fried chicken from three different restaurants, all timed to arrive at six. That was my mistake, actually. The chicken arrived at five fifteen, way too early, so it was cold and soggy by the time guests came. Then the kimbap order was canceled automatically because the restaurant got too busy, and I didn't notice the notification. And the pancakes came with the wrong sauce. At six, half the guests were there, and the table looked pretty empty. I was panicking, but my aunt stayed calm. We reheated the chicken in the oven, my uncle drove to a nearby kimbap shop and bought twenty rolls, and my mom quickly made a dipping sauce from soy sauce and vinegar. In the end, nobody even noticed anything was wrong, and the party was great. But I learned to order from one place and to call the restaurant an hour before to confirm.",
+    "sample_adv_ko": "네, 작년 사촌 약혼 파티 때 웃긴 일이 있었어요. 제가 앱을 잘 써서 이모가 음식을 맡겼어요. 40명 정도가 이모 집에 오기로 해서, 세 식당에서 전 모둠 큰 접시, 김밥 두 판, 치킨 대량 주문을 모두 6시 도착으로 맞춰 주문했어요. 사실 그게 실수였어요. 치킨이 5시 15분에 너무 일찍 와서 손님이 올 때쯤엔 식고 눅눅했어요. 그다음 김밥 주문은 식당이 너무 바빠 자동 취소됐는데 제가 알림을 못 봤어요. 그리고 전은 엉뚱한 소스와 함께 왔어요. 6시가 되자 손님 절반이 왔는데 상이 꽤 휑했어요. 저는 당황했는데 이모는 침착하셨어요. 치킨은 오븐에 데우고, 이모부가 근처 김밥집에 차를 몰고 가서 스무 줄을 사 오셨고, 엄마는 간장과 식초로 재빨리 찍어 먹을 소스를 만드셨어요. 결국 아무도 뭔가 잘못된 걸 눈치채지 못했고 파티는 훌륭했어요. 하지만 한 곳에서 주문하고 한 시간 전에 식당에 전화해 확인해야 한다는 걸 배웠어요.",
+    "tips": [
+     "문제 세 가지를 차례로 → 당황 → 가족의 해결 → 결과 → 교훈",
+     "soggy, That was my mistake, actually., nobody even noticed"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "rp-051",
+  "topic": "friends",
+  "level": 4,
+  "situation_ko": "다른 도시에 사는 친구가 주말에 놀러 오기로 해서 친구에게 일정과 취향을 묻는 상황 → 내가 아파서 안내를 못 하게 되어 친구에게 대안 제시 → 친구와의 계획이 바뀌었던 경험",
+  "steps": [
+   {
+    "kind": "ask",
+    "question": "I'd like to give you a situation and ask you to act it out. A friend who lives in another city is coming to visit you this weekend. Call your friend and ask three or four questions to plan the weekend together.",
+    "question_ko": "상황을 드릴 테니 연기해 보세요. 다른 도시에 사는 친구가 이번 주말에 놀러 옵니다. 친구에게 전화해 주말을 함께 계획하기 위해 서너 가지 질문을 하세요.",
+    "sample": "Hi, Sumin! I'm so excited you're coming this weekend. I want to plan everything, so I have some questions. First, what time does your train arrive on Saturday? I'll pick you up at the station. Second, what do you want to do here? We can go to a museum, go shopping, or walk by the river. Third, is there any food you don't like? I know a great seafood restaurant. And lastly, when do you go back on Sunday? Okay, I can't wait to see you!",
+    "sample_ko": "수민아! 이번 주말에 온다니 너무 신나. 다 계획하고 싶어서 몇 가지 물어볼게. 첫째, 토요일에 기차가 몇 시에 도착해? 역으로 데리러 갈게. 둘째, 여기서 뭐 하고 싶어? 박물관에 가거나, 쇼핑하거나, 강가를 걸어도 돼. 셋째, 싫어하는 음식 있어? 정말 맛있는 해산물 식당을 알아. 마지막으로 일요일에 언제 돌아가? 좋아, 빨리 보고 싶다!",
+    "sample_adv": "Hey, Sumin! I just saw your message that you booked the train. I'm so happy. It's been, what, almost a year since we last hung out? I want to make this weekend really fun, so let me ask you a few things. First, what time exactly do you get in on Saturday, and which station? If it's Seoul Station, I'll come meet you at the gate, and we can drop your bag at my place first. Second, what are you in the mood for? I was thinking we could do something relaxing, like a walk along the palace walls and a nice cafe, or if you want something more exciting, there's a night market by the river that just opened. Totally up to you. Third, about food, are you still not eating spicy stuff? Because there's a famous barbecue place near me, but it's really spicy, so I want to check. And last thing, what time is your train back on Sunday? I want to plan brunch so you're not rushing. Okay, perfect. I'll send you a rough plan tonight. See you Saturday!",
+    "sample_adv_ko": "수민아! 방금 기차 예매했다는 메시지 봤어. 너무 좋다. 마지막으로 논 지 거의 1년 됐나? 이번 주말을 정말 재미있게 만들고 싶어서 몇 가지 물어볼게. 첫째, 토요일에 정확히 몇 시에, 어느 역에 도착해? 서울역이면 개찰구로 마중 나가서 먼저 우리 집에 가방을 두자. 둘째, 뭐가 당겨? 궁궐 돌담길 산책하고 좋은 카페에 가는 것처럼 여유로운 걸 생각했는데, 좀 더 신나는 걸 원하면 강가에 새로 생긴 야시장도 있어. 완전히 네 마음대로야. 셋째, 음식 말인데, 아직도 매운 거 안 먹어? 우리 집 근처에 유명한 고깃집이 있는데 정말 매워서 확인하고 싶어. 마지막으로 일요일에 돌아가는 기차가 몇 시야? 서두르지 않게 브런치를 계획하고 싶어서. 좋아, 완벽해. 오늘 밤에 대략적인 계획 보내 줄게. 토요일에 보자!",
+    "tips": [
+     "친구에게는 가벼운 말투: Hey, what are you in the mood for?, Totally up to you",
+     "질문마다 내 제안을 붙이면 자연스럽고 길어진다"
+    ]
+   },
+   {
+    "kind": "solve",
+    "question": "I'm sorry, but there is a problem I need you to resolve. The day before your friend arrives, you come down with a bad cold and a fever, and you can't show your friend around. Call your friend, explain the situation, and suggest two or three alternatives.",
+    "question_ko": "죄송하지만 해결해야 할 문제가 있습니다. 친구가 도착하기 전날, 당신은 심한 감기와 열이 나서 친구를 안내할 수 없게 됐습니다. 친구에게 전화해 상황을 설명하고 두세 가지 대안을 제시하세요.",
+    "sample": "Hi, Sumin. I'm so sorry, but I have bad news. I got a terrible cold yesterday, and now I have a fever. The doctor said I should rest for a few days. So I can't show you around this weekend. I feel really bad. Here are some ideas. First, you can still come and stay at my place, and my sister can show you around. Second, you can change your train ticket to next weekend. Or we can meet next month when I visit your city. What do you think?",
+    "sample_ko": "수민아, 정말 미안한데 안 좋은 소식이 있어. 어제 지독한 감기에 걸려서 지금 열이 나. 의사가 며칠 쉬어야 한대. 그래서 이번 주말에 구경시켜 줄 수가 없어. 너무 미안해. 몇 가지 생각이 있어. 첫째, 그래도 와서 우리 집에 머물면 우리 언니가 구경시켜 줄 수 있어. 둘째, 기차표를 다음 주말로 바꿔도 돼. 아니면 다음 달에 내가 너희 도시에 갈 때 만나도 되고. 어떻게 생각해?",
+    "sample_adv": "Hi, Sumin, it's me. Sorry, my voice sounds terrible. I really hate making this call, but I think I have to. I woke up yesterday with a sore throat, and by last night I had a fever of thirty-eight point five. I went to the clinic this morning, and the doctor said it's a bad flu and I should stay home for at least three or four days. I'm so disappointed, because I'd planned everything, and I definitely don't want you to catch it. So let me give you a few options, and you can choose whatever is easiest for you. First, if you can change your train ticket without a big fee, how about moving the trip to the weekend after next? I'll be totally healthy by then, and the cherry blossoms should be out. Second, if you still want to come this weekend, my roommate offered to show you around on Saturday. She's really fun, and I'd send you the full plan with all the places and restaurants. You could stay at a hotel nearby, and I'd pay for one night as an apology. Or third, I could come to your city next month instead, and you can be the tour guide. Again, I'm really sorry. Let me know what you think.",
+    "sample_adv_ko": "수민아, 나야. 목소리가 엉망이라 미안. 이 전화 정말 하기 싫었는데 해야 할 것 같아. 어제 아침에 목이 아파서 깼는데 어젯밤엔 열이 38.5도까지 올랐어. 오늘 아침 병원에 갔더니 독감이 심하니 최소 사나흘은 집에 있어야 한대. 다 계획해 놨는데 너무 아쉽고, 너한테 옮기면 절대 안 되잖아. 그래서 몇 가지 선택지를 줄 테니 제일 편한 걸로 골라. 첫째, 큰 수수료 없이 기차표를 바꿀 수 있으면 다다음 주말로 미루는 게 어때? 그때면 완전히 나았을 거고 벚꽃도 피어 있을 거야. 둘째, 그래도 이번 주말에 오고 싶으면 내 룸메이트가 토요일에 구경시켜 주겠대. 정말 재미있는 애고, 장소랑 식당을 다 적은 전체 계획을 보내 줄게. 근처 호텔에 묵으면 사과의 의미로 하룻밤은 내가 낼게. 아니면 셋째, 다음 달에 내가 너희 도시로 가서 네가 가이드를 해 줘도 돼. 다시 한번 정말 미안해. 어떻게 생각하는지 알려 줘.",
+    "tips": [
+     "친구 사이 solve: 진심 어린 사과 → 증상·의사 말 → 선택지 3개 → 사과의 표시 제안",
+     "I really hate making this call, as an apology, whatever is easiest for you"
+    ]
+   },
+   {
+    "kind": "exp",
+    "question": "That's the end of the situation. Have you ever had to change or cancel plans with a friend because of an unexpected problem? Tell me what happened and how you and your friend handled it.",
+    "question_ko": "상황이 끝났습니다. 예상치 못한 문제 때문에 친구와의 계획을 바꾸거나 취소해야 했던 적이 있나요? 무슨 일이 있었고 당신과 친구는 어떻게 대처했는지 말해 주세요.",
+    "sample": "Yes, last summer my friend and I planned a trip to Busan. We booked a hotel and train tickets. But two days before the trip, my friend's grandmother was in the hospital. So my friend had to stay home. She was very sorry, but of course I understood. We canceled the hotel and got most of our money back. Two months later, we went to Busan together. The weather was cooler, and the beach was less crowded. In the end, it was a better trip.",
+    "sample_ko": "네, 작년 여름에 친구와 부산 여행을 계획했어요. 호텔과 기차표를 예약했어요. 그런데 여행 이틀 전에 친구 할머니가 입원하셨어요. 그래서 친구는 집에 있어야 했어요. 친구는 정말 미안해했지만 저는 당연히 이해했어요. 호텔을 취소하고 돈은 대부분 돌려받았어요. 두 달 뒤에 같이 부산에 갔어요. 날씨가 더 선선했고 해변도 덜 붐볐어요. 결국 더 좋은 여행이 됐어요.",
+    "sample_adv": "Yes, a couple of years ago, I had to cancel on my best friend at the very last minute, and I still feel a little guilty about it. We'd planned a two-night camping trip in Gangwon Province for months. We'd bought a new tent together and even made a playlist for the drive. But the night before we were supposed to leave, my manager called and said a major client had found a serious error in our report, and I had to come in on Saturday to fix it. I tried to get out of it, but there was no one else who knew the project. I called my friend around eleven p.m., and I could hear how disappointed she was. To be honest, she was a little upset at first, and the call was kind of awkward. But the next morning, she texted me and said, let's just do it next weekend and make it three nights. I worked all Saturday, and then the following Friday, I took a day off, and we went. And actually, the weather was much better that weekend. I bought her dinner on the first night to say sorry. Since then, we joke that every trip needs a backup date.",
+    "sample_adv_ko": "네, 2년쯤 전에 가장 친한 친구와의 약속을 마지막 순간에 취소해야 했는데 아직도 좀 미안해요. 몇 달 동안 강원도 2박 캠핑을 계획했어요. 새 텐트도 같이 사고 운전할 때 들을 플레이리스트까지 만들었어요. 그런데 떠나기 전날 밤 팀장님이 전화해서 큰 고객사가 우리 보고서에서 심각한 오류를 찾았으니 토요일에 나와서 고쳐야 한다고 했어요. 빠져 보려 했지만 그 프로젝트를 아는 사람이 저밖에 없었어요. 밤 11시쯤 친구에게 전화했는데 얼마나 실망했는지 느껴졌어요. 솔직히 처음엔 친구가 좀 서운해해서 통화가 어색했어요. 그런데 다음 날 아침 친구가 그냥 다음 주말에 가자, 3박으로 하자 라고 문자를 보냈어요. 토요일 내내 일하고, 그다음 금요일에 연차를 내서 갔어요. 그리고 사실 그 주말 날씨가 훨씬 좋았어요. 미안한 마음에 첫날 저녁은 제가 샀어요. 그 뒤로 우리는 모든 여행에 예비 날짜가 필요하다고 농담해요.",
+    "tips": [
+     "준비 과정 → 갑작스러운 문제 → 어색한 통화(솔직한 감정) → 화해·대안 → 웃긴 마무리",
+     "cancel on someone, at the very last minute, get out of it, backup date"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "rp-052",
+  "topic": "tech",
+  "level": 5,
+  "situation_ko": "고장 난 노트북 수리를 위해 서비스 센터에 문의하는 상황 → 수리비가 너무 비싸고 데이터가 지워질 수 있다는 말을 듣고 서비스 센터에 대안 제시 → 기기 고장으로 중요한 걸 잃을 뻔한 경험",
+  "steps": [
+   {
+    "kind": "ask",
+    "question": "I'd like to give you a situation and ask you to act it out. Your laptop suddenly stopped turning on. Call the manufacturer's service center and ask three or four questions about getting it repaired.",
+    "question_ko": "상황을 드릴 테니 연기해 보세요. 노트북이 갑자기 켜지지 않습니다. 제조사 서비스 센터에 전화해 수리에 관해 서너 가지 질문을 하세요.",
+    "sample": "Hello, I have a problem with my laptop. Yesterday it was working fine, but this morning it doesn't turn on. The power light doesn't come on at all. I bought it about a year and a half ago. First, is it still under warranty? Second, do I need to make an appointment, or can I just visit the service center? Third, how long does a repair usually take? I need it for work. And lastly, will my files be safe during the repair? Okay, thank you.",
+    "sample_ko": "안녕하세요, 노트북에 문제가 있어요. 어제는 잘 됐는데 오늘 아침에 안 켜져요. 전원 불이 아예 안 들어와요. 1년 반쯤 전에 샀어요. 첫째, 아직 보증 기간인가요? 둘째, 예약해야 하나요, 아니면 그냥 서비스 센터에 가도 되나요? 셋째, 수리는 보통 얼마나 걸리나요? 업무에 필요해서요. 마지막으로 수리하는 동안 파일은 안전한가요? 네, 감사합니다.",
+    "sample_adv": "Hi, I'm calling about my laptop. It's a fourteen-inch model I bought from your official online store about eighteen months ago. Last night it was working perfectly, and I shut it down normally, but this morning, it won't turn on at all. When I press the power button, nothing happens. No lights, no fan noise, nothing. I've already tried a different charger and held the power button for thirty seconds, like the website suggests, but it didn't help. So I have a few questions. First, is it still covered by the warranty? I think the standard warranty is two years, but I'm not sure if it covers this kind of problem. Second, what's the fastest way to get it checked? Can I walk into the service center near Gangnam Station today, or do I need a reservation? Third, if it needs a new part, how long would the repair take? I'm a freelancer, and all my work is on this laptop, so I can't be without it for long. And finally, and this is the most important, will the technicians try to keep my data? I have client files that aren't fully backed up. Okay, I'll book a two o'clock visit. Thank you.",
+    "sample_adv_ko": "안녕하세요, 노트북 때문에 전화드려요. 18개월쯤 전에 공식 온라인 스토어에서 산 14인치 모델이에요. 어젯밤엔 완벽하게 됐고 정상적으로 껐는데, 오늘 아침엔 아예 안 켜져요. 전원 버튼을 눌러도 아무 반응이 없어요. 불도, 팬 소리도, 아무것도요. 웹사이트에서 알려 준 대로 다른 충전기도 써 보고 전원 버튼을 30초 눌러 봤는데 소용없었어요. 그래서 몇 가지 여쭤볼게요. 첫째, 아직 보증이 되나요? 기본 보증이 2년인 것 같은데 이런 문제도 포함되는지 모르겠어요. 둘째, 점검받는 가장 빠른 방법은 뭔가요? 오늘 강남역 근처 서비스 센터에 그냥 가도 되나요, 예약이 필요한가요? 셋째, 부품 교체가 필요하면 수리는 얼마나 걸리나요? 프리랜서라 모든 일이 이 노트북에 있어서 오래 없으면 안 돼요. 마지막으로, 이게 가장 중요한데, 기사님들이 데이터를 보존하려고 해 주시나요? 백업이 다 안 된 고객 파일이 있어요. 네, 2시 방문으로 예약할게요. 감사합니다.",
+    "tips": [
+     "증상 → 이미 해 본 조치 → 질문(보증·방문 방법·기간·데이터) 순서",
+     "covered by the warranty, walk into, backed up, technician"
+    ]
+   },
+   {
+    "kind": "solve",
+    "question": "I'm sorry, but there is a problem I need you to resolve. The service center tells you that the main board needs to be replaced, the repair is expensive because the warranty does not cover it, and your data might be deleted. Call the service center back, explain your concerns, and suggest two or three alternatives.",
+    "question_ko": "죄송하지만 해결해야 할 문제가 있습니다. 서비스 센터에서 메인보드를 교체해야 하는데 보증이 안 돼 수리비가 비싸고 데이터가 지워질 수도 있다고 합니다. 서비스 센터에 다시 전화해 걱정을 설명하고 두세 가지 대안을 제시하세요.",
+    "sample": "Hello, I left my laptop at your center this afternoon. The technician said the main board needs to be changed. He said it costs six hundred thousand won and the warranty doesn't cover it. That's very expensive. Also, he said my files might be deleted. I really need my files. So, can you first save my data on a hard drive before the repair? I can pay for that. Second, can you give me a discount? The laptop is not even two years old. Or I can buy a new laptop if you give me my data.",
+    "sample_ko": "안녕하세요, 오늘 오후에 센터에 노트북을 맡겼어요. 기사님이 메인보드를 바꿔야 한대요. 60만 원이고 보증이 안 된대요. 너무 비싸요. 또 파일이 지워질 수도 있대요. 제 파일이 꼭 필요해요. 그래서 먼저 수리 전에 데이터를 하드 드라이브에 저장해 주실 수 있나요? 그 비용은 낼게요. 둘째, 할인해 주실 수 있나요? 노트북이 2년도 안 됐어요. 아니면 데이터만 주시면 새 노트북을 살 수도 있어요.",
+    "sample_adv": "Hi, this is the customer who dropped off the silver fourteen-inch laptop this afternoon. The technician called me about an hour ago, and I'd like to talk about the options, because I'm honestly a bit shocked. He said the main board has failed and needs to be replaced, and because there's a small mark of liquid near the keyboard, the warranty won't cover it. The quote was six hundred fifty thousand won, which is almost half the price of a new laptop. On top of that, he mentioned the storage is built into the board, so my data could be lost. I have two main concerns, so here's what I'd like to suggest. First, before anything else, could your team try to recover my data and copy it to an external drive? I'm willing to pay a reasonable fee for that, because those client files are worth more to me than the laptop. Second, about the liquid mark, I've never spilled anything on it, so could a senior technician take another look? If it's really a manufacturing defect, it should be covered. And third, if the cost stays the same, I'd like to ask for a partial discount, or a trade-in deal toward a new model from your store. Could you get back to me by tomorrow morning?",
+    "sample_adv_ko": "안녕하세요, 오늘 오후에 은색 14인치 노트북을 맡긴 고객이에요. 한 시간쯤 전에 기사님이 전화를 주셨는데, 솔직히 좀 충격받아서 선택지에 대해 이야기하고 싶어요. 메인보드가 고장 나서 교체해야 하고, 키보드 근처에 액체 흔적이 조금 있어서 보증이 안 된다고 하셨어요. 견적이 65만 원인데 새 노트북 가격의 거의 절반이에요. 게다가 저장 장치가 보드에 붙어 있어서 데이터가 날아갈 수 있다고 하셨어요. 걱정이 크게 두 가지라 이렇게 제안드리고 싶어요. 첫째, 무엇보다 먼저 팀에서 데이터를 복구해 외장 드라이브에 복사해 주실 수 있나요? 그 고객 파일이 저한테는 노트북보다 더 소중해서 합리적인 비용은 낼 의향이 있어요. 둘째, 액체 흔적 말인데, 저는 뭘 쏟은 적이 없어요. 선임 기사님이 다시 봐 주실 수 있을까요? 정말 제조 결함이라면 보증이 돼야 하니까요. 셋째, 비용이 그대로라면 일부 할인이나, 매장의 새 모델로 보상 판매를 요청하고 싶어요. 내일 아침까지 연락 주실 수 있을까요?",
+    "tips": [
+     "들은 내용 정리 → 걱정 두 가지 → 제안(데이터 우선·재검사·할인/보상 판매) → 회신 요청",
+     "quote, recover my data, manufacturing defect, trade-in deal"
+    ]
+   },
+   {
+    "kind": "exp",
+    "question": "That's the end of the situation. Have you ever lost important files, photos, or data because a device broke or something went wrong? Tell me what happened and whether you were able to get them back.",
+    "question_ko": "상황이 끝났습니다. 기기가 고장 나거나 뭔가 잘못돼서 중요한 파일, 사진, 데이터를 잃은 적이 있나요? 무슨 일이 있었고 되찾을 수 있었는지 말해 주세요.",
+    "sample": "Yes, I lost many photos three years ago. I dropped my phone in the sea when I was on a boat in Jeju. I didn't back up my photos, so I lost about two thousand pictures. There were photos of my graduation and my trip to Japan. I was so sad. I went to a data recovery shop, but they said they couldn't do anything because of the salt water. After that, my friends sent me some photos they had. Now I always back up my photos to the cloud.",
+    "sample_ko": "네, 3년 전에 사진을 많이 잃었어요. 제주에서 배를 타다가 휴대폰을 바다에 빠뜨렸어요. 사진을 백업하지 않아서 2천 장 정도를 잃었어요. 졸업식 사진과 일본 여행 사진이 있었어요. 정말 슬펐어요. 데이터 복구 업체에 갔는데 바닷물 때문에 아무것도 할 수 없다고 했어요. 그 뒤 친구들이 가지고 있던 사진을 몇 장 보내 줬어요. 이제는 항상 클라우드에 사진을 백업해요.",
+    "sample_adv": "Yes, and it was one of the worst feelings I've ever had. About four years ago, I was writing my graduation thesis, and I kept everything on a small USB drive, because I moved between the library computers and my laptop. One week before the deadline, I plugged it in, and the computer said the drive needed to be formatted. All my chapters, my data tables, and months of interview notes were on it, and I'd only saved a copy on my laptop about a month earlier. I literally sat on the library floor and couldn't move. My professor suggested a data recovery company, so I took it there the next morning. They said the chip was damaged and it would cost three hundred thousand won with no guarantee. I paid anyway, because I had no choice. For four days, I tried to rewrite what I could remember from the old version, barely sleeping. Then they called and said they'd recovered about ninety percent of the files. I almost cried on the phone. I finished the thesis on time, but since then I'm almost obsessive about backups. Everything important goes to two clouds and an external drive.",
+    "sample_adv_ko": "네, 제가 느껴 본 최악의 기분 중 하나였어요. 4년쯤 전에 졸업 논문을 쓰고 있었는데, 도서관 컴퓨터와 노트북을 오가며 작업해서 모든 걸 작은 USB에 저장했어요. 마감 일주일 전에 꽂았더니 컴퓨터가 포맷이 필요하다고 했어요. 모든 장, 데이터 표, 몇 달 치 인터뷰 기록이 거기 있었고, 노트북에는 한 달쯤 전에 저장한 사본뿐이었어요. 말 그대로 도서관 바닥에 주저앉아 움직일 수가 없었어요. 교수님이 데이터 복구 업체를 추천해 주셔서 다음 날 아침에 가져갔어요. 칩이 손상돼서 30만 원이 들고 복구 보장은 없다고 했어요. 선택지가 없어서 그래도 냈어요. 나흘 동안 거의 잠도 못 자고 예전 버전에서 기억나는 걸 다시 썼어요. 그러다 파일의 90퍼센트 정도를 복구했다는 전화가 왔어요. 전화하면서 거의 울 뻔했어요. 논문은 제때 끝냈지만 그 뒤로 백업에 거의 집착해요. 중요한 건 다 클라우드 두 곳과 외장 드라이브에 저장해요.",
+    "tips": [
+     "무엇을 잃었는지 구체적으로 → 절망 장면 → 복구 시도 → 결과 → 지금의 습관",
+     "with no guarantee, I had no choice, obsessive about backups"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "rp-053",
+  "topic": "transport",
+  "level": 4,
+  "situation_ko": "여행지에서 렌터카를 빌리려고 업체에 문의하는 상황 → 운전 중 타이어가 펑크 나 렌터카 업체에 대안 요청 → 차나 교통수단이 고장 났던 경험",
+  "steps": [
+   {
+    "kind": "ask",
+    "question": "I'd like to give you a situation and ask you to act it out. You are planning a three-day trip and want to rent a car. Call a car rental company and ask three or four questions about renting a car.",
+    "question_ko": "상황을 드릴 테니 연기해 보세요. 사흘 여행을 계획하고 있고 차를 빌리고 싶습니다. 렌터카 회사에 전화해 차 대여에 관해 서너 가지 질문을 하세요.",
+    "sample": "Hello, I'd like to rent a car for three days next week, from Friday to Sunday. There are four people, so we need a medium-sized car. First, what cars do you have, and how much is it per day? Second, is insurance included in the price? Third, can I pick up the car at the airport? Our flight arrives at ten a.m. And lastly, do I need to return the car with a full tank of gas? Okay, I'd like to book it. Thank you.",
+    "sample_ko": "안녕하세요, 다음 주 금요일부터 일요일까지 사흘 동안 차를 빌리고 싶어요. 네 명이라 중형차가 필요해요. 첫째, 어떤 차가 있고 하루에 얼마인가요? 둘째, 보험이 가격에 포함돼 있나요? 셋째, 공항에서 차를 받을 수 있나요? 비행기가 오전 10시에 도착해요. 마지막으로 기름을 가득 채워서 반납해야 하나요? 네, 예약할게요. 감사합니다.",
+    "sample_adv": "Hi there. I'm planning a trip to Jeju with my family next month, and I'd like to rent a car for three days, from the twelfth to the fifteenth. There will be four adults and a lot of luggage, so I'm looking for something comfortable, like a mid-sized SUV. I have a few questions. First, what models are available for those dates, and what's the total price, including taxes? I'd also like to know whether you have electric cars, because I heard they're cheaper to charge than gas. Second, what kind of insurance is included? I'd really prefer full coverage, so that if there's a scratch or a small accident, I don't have to pay anything extra. Is that a separate fee? Third, how does pickup work? Our flight lands at nine forty in the morning. Do you have a counter inside the airport, or is there a shuttle to your office? And finally, are there any rules I should know about, like an age limit for drivers, or adding my brother as a second driver? Great. Please send me the reservation details by text. Thanks a lot.",
+    "sample_adv_ko": "안녕하세요. 다음 달에 가족과 제주 여행을 계획 중인데 12일부터 15일까지 사흘 동안 차를 빌리고 싶어요. 성인 네 명에 짐이 많아서 중형 SUV처럼 편한 차를 찾고 있어요. 몇 가지 여쭤볼게요. 첫째, 그 날짜에 어떤 모델이 가능하고 세금 포함 총액은 얼마인가요? 충전비가 기름값보다 싸다고 들어서 전기차가 있는지도 알고 싶어요. 둘째, 어떤 보험이 포함되나요? 긁히거나 작은 사고가 나도 추가로 낼 게 없도록 완전 자차 보험이면 좋겠어요. 별도 요금인가요? 셋째, 차는 어떻게 받나요? 비행기가 오전 9시 40분에 착륙해요. 공항 안에 카운터가 있나요, 아니면 사무실까지 셔틀이 있나요? 마지막으로 운전자 나이 제한이나 남동생을 제2 운전자로 추가하는 것처럼 알아야 할 규칙이 있나요? 좋아요. 예약 내용을 문자로 보내 주세요. 정말 감사해요.",
+    "tips": [
+     "렌터카 표현: full coverage, pickup, second driver, total price including taxes",
+     "날짜·인원·짐 → 원하는 차 → 질문 4개"
+    ]
+   },
+   {
+    "kind": "solve",
+    "question": "I'm sorry, but there is a problem I need you to resolve. On the second day of your trip, the rental car gets a flat tire on a country road far from the city. Call the rental company, explain the situation, and suggest two or three ways they could help you.",
+    "question_ko": "죄송하지만 해결해야 할 문제가 있습니다. 여행 둘째 날 도시에서 먼 시골길에서 렌터카 타이어가 펑크 났습니다. 렌터카 회사에 전화해 상황을 설명하고 도와줄 수 있는 두세 가지 방법을 제안하세요.",
+    "sample": "Hello, I rented a white SUV from your company yesterday. My name is Lee Junho. We have a problem. We're on a small road near a farm, and the front tire is flat. We can't drive. My family is with me, and it's getting dark. Can you send someone to change the tire? If that takes a long time, can you send another car? Or can you call a taxi for my family and fix the car later? Please help us quickly. I'll send you our location now.",
+    "sample_ko": "안녕하세요, 어제 이 회사에서 흰색 SUV를 빌렸어요. 이준호입니다. 문제가 생겼어요. 농장 근처 작은 길에 있는데 앞 타이어가 펑크 났어요. 운전을 못 해요. 가족이 같이 있고 날이 어두워지고 있어요. 타이어를 바꿔 줄 사람을 보내 주실 수 있나요? 오래 걸리면 다른 차를 보내 주실 수 있나요? 아니면 가족을 위해 택시를 불러 주시고 차는 나중에 고쳐 주실 수 있나요? 빨리 도와주세요. 지금 위치를 보낼게요.",
+    "sample_adv": "Hello, this is Lee Junho. I picked up a white SUV from your airport branch yesterday, and the reservation number is J five five eight. We've got a problem. About ten minutes ago, we heard a loud bang, and now the front right tire is completely flat. We're on a narrow country road on the east side of the island, between some tangerine farms, and there's almost no traffic here. Everyone is safe, and I've turned on the hazard lights and put out the warning triangle. But it's already five thirty and it'll be dark soon, and my parents are with me, so I'd like to solve this as quickly as possible. I checked the trunk, and there's no spare tire, just a repair kit, and honestly, I don't know how to use it. So here are a few options. First, could you send roadside assistance to change or fix the tire here? If they can arrive within an hour, we'll wait in the car. Second, if that takes too long, could you bring a replacement car and tow this one? Or third, if neither is possible tonight, could you arrange a taxi to take us to our hotel, and we'll pick up a new car tomorrow morning? I'll share my location with you right now.",
+    "sample_adv_ko": "안녕하세요, 이준호입니다. 어제 공항 지점에서 흰색 SUV를 받았고 예약 번호는 J558이에요. 문제가 생겼어요. 10분쯤 전에 큰 펑 소리가 났고 지금 오른쪽 앞 타이어가 완전히 주저앉았어요. 섬 동쪽의 좁은 시골길, 귤 농장들 사이에 있는데 지나가는 차가 거의 없어요. 다들 안전하고 비상등을 켜고 삼각대도 세웠어요. 하지만 벌써 5시 반이라 곧 어두워질 거고 부모님이 함께 계셔서 최대한 빨리 해결하고 싶어요. 트렁크를 확인했는데 스페어타이어는 없고 수리 키트만 있는데, 솔직히 쓸 줄 몰라요. 그래서 몇 가지 방법을 말씀드릴게요. 첫째, 긴급 출동 서비스를 보내 여기서 타이어를 갈거나 수리해 주실 수 있나요? 한 시간 안에 오신다면 차에서 기다릴게요. 둘째, 그게 너무 오래 걸리면 대체 차량을 가져오고 이 차는 견인해 주실 수 있나요? 아니면 셋째, 오늘 밤 둘 다 안 되면 호텔까지 택시를 잡아 주시고 내일 아침에 새 차를 받으면 어떨까요? 지금 바로 위치를 공유할게요.",
+    "tips": [
+     "예약 번호 → 무슨 일(bang, flat) → 위치 → 안전 조치 → 이미 확인한 것 → 대안 3개",
+     "hazard lights, warning triangle, roadside assistance, tow"
+    ]
+   },
+   {
+    "kind": "exp",
+    "question": "That's the end of the situation. Have you ever had a problem with a car, bus, or train that broke down or stopped while you were traveling? Tell me what happened and how you got to your destination.",
+    "question_ko": "상황이 끝났습니다. 이동 중에 차, 버스, 기차가 고장 나거나 멈춘 적이 있나요? 무슨 일이 있었고 목적지까지 어떻게 갔는지 말해 주세요.",
+    "sample": "Yes, last winter the subway I was on stopped between two stations. It was in the morning, and the train was very crowded. The announcement said there was a power problem. We waited in the dark tunnel for about thirty minutes. It was hot, and some people felt sick. Finally, the train moved slowly to the next station. I was one hour late for work, so I called my boss. The subway company gave us a delay certificate, so my boss understood.",
+    "sample_ko": "네, 지난겨울 제가 탄 지하철이 두 역 사이에서 멈췄어요. 아침이었고 열차가 아주 붐볐어요. 안내 방송에서 전력 문제가 있다고 했어요. 어두운 터널에서 30분쯤 기다렸어요. 덥고 몸이 안 좋아진 사람도 있었어요. 마침내 열차가 천천히 다음 역으로 움직였어요. 회사에 한 시간 늦어서 상사에게 전화했어요. 지하철 회사에서 지연 증명서를 줘서 상사도 이해해 줬어요.",
+    "sample_adv": "Yes, one time stands out. About three years ago, I was driving my old car to my friend's wedding in Daejeon, which is about two hours from Seoul. I was wearing a suit, and I'd left with just enough time. Halfway there, on the highway, a warning light came on, and a few minutes later white smoke started coming from under the hood. I pulled over onto the shoulder, and when I opened the hood, the engine was way too hot. It turned out the coolant had leaked. I called my insurance company, and a tow truck came after about forty minutes. The driver took the car to a repair shop, but they said it would take a day to fix. The wedding started in an hour and a half. So I asked the tow truck driver to drop me at the nearest highway bus stop, and I caught an express bus to Daejeon. Then I took a taxi straight to the wedding hall. I walked in just as the ceremony was ending, a bit sweaty, but I made it for the photos. The next day, I took a train back to pick up my car. Since then, I always get my car checked before long trips.",
+    "sample_adv_ko": "네, 기억에 남는 일이 한 번 있어요. 3년쯤 전에 서울에서 두 시간 거리인 대전으로 친구 결혼식에 가려고 옛날 차를 운전하고 있었어요. 정장을 입었고 딱 맞게 출발했어요. 고속도로에서 절반쯤 갔을 때 경고등이 켜지더니 몇 분 뒤 보닛 아래에서 흰 연기가 나기 시작했어요. 갓길에 차를 세우고 보닛을 열었더니 엔진이 너무 뜨거웠어요. 알고 보니 냉각수가 샌 거였어요. 보험사에 전화했고 40분쯤 뒤 견인차가 왔어요. 기사님이 정비소로 차를 가져갔는데 고치는 데 하루가 걸린대요. 결혼식은 한 시간 반 뒤에 시작이었어요. 그래서 견인차 기사님께 가장 가까운 고속도로 버스 정류장에 내려 달라고 해서 대전행 고속버스를 탔어요. 그다음 택시를 타고 곧장 예식장으로 갔어요. 땀을 좀 흘린 채 식이 끝나갈 때 들어갔지만 사진 촬영은 함께했어요. 다음 날 기차를 타고 가서 차를 찾아왔어요. 그 뒤로는 장거리 운전 전에 항상 차를 점검받아요.",
+    "tips": [
+     "목적·시간 압박 → 고장 장면(경고등·연기) → 견인 → 다른 교통수단으로 이동 → 결과 → 교훈",
+     "pulled over onto the shoulder, tow truck, I made it"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "rp-054",
+  "topic": "furniture",
+  "level": 4,
+  "situation_ko": "중고 거래 앱에서 본 소파에 대해 판매자에게 문의하는 상황 → 소파가 현관문을 통과하지 못해 옮기기를 도와주기로 한 친구에게 대안 제시 → 가구를 사거나 옮기다 생긴 문제 경험",
+  "steps": [
+   {
+    "kind": "ask",
+    "question": "I'd like to give you a situation and ask you to act it out. You found a used sofa you like on a secondhand app. Call the seller and ask three or four questions about the sofa before you buy it.",
+    "question_ko": "상황을 드릴 테니 연기해 보세요. 중고 거래 앱에서 마음에 드는 소파를 찾았습니다. 사기 전에 판매자에게 전화해 소파에 관해 서너 가지 질문을 하세요.",
+    "sample": "Hello, I saw your gray sofa on the secondhand app. I'm interested in buying it. I have a few questions. First, how old is the sofa? Second, are there any stains or damage? The photos look good, but I want to check. Third, what is the exact size? My living room is small. And lastly, can I pick it up this Saturday? Is there an elevator in your building? Okay, I'll come at two o'clock on Saturday. Thank you.",
+    "sample_ko": "안녕하세요, 중고 거래 앱에서 회색 소파를 봤어요. 사고 싶어요. 몇 가지 여쭤볼게요. 첫째, 소파가 얼마나 됐나요? 둘째, 얼룩이나 손상이 있나요? 사진은 좋아 보이는데 확인하고 싶어요. 셋째, 정확한 크기가 어떻게 되나요? 거실이 작아요. 마지막으로 이번 토요일에 가지러 가도 될까요? 건물에 엘리베이터가 있나요? 네, 토요일 2시에 갈게요. 감사합니다.",
+    "sample_adv": "Hi, I'm calling about the gray three-seat sofa you posted on the neighborhood app yesterday. I just moved into a new apartment, and it looks exactly like what I've been looking for, so I wanted to ask a few things before someone else grabs it. First, how long have you had it, and why are you selling it? I'm just curious whether there's any problem with it. Second, the photos look great, but are there any stains, scratches, or places where the cushion has gone flat? Also, do you have pets or does anyone smoke in the house? I'm a little sensitive to smells. Third, could you tell me the exact measurements, especially the width and the depth? My living room wall is about two meters long, and my front door is quite narrow, so I need to be sure it'll fit. And finally, about pickup, I'm planning to borrow a van and come with a friend on Saturday. Is there an elevator in your building, and would you be able to help us carry it down? Okay, great. If it's all fine, could you hold it for me until Saturday? I can send a small deposit now.",
+    "sample_adv_ko": "안녕하세요, 어제 동네 앱에 올리신 회색 3인용 소파 때문에 전화드려요. 새 아파트로 막 이사했는데 제가 찾던 것과 똑같아 보여서, 다른 사람이 사기 전에 몇 가지 여쭤보고 싶었어요. 첫째, 얼마나 쓰셨고 왜 파시나요? 혹시 문제가 있는지 궁금해서요. 둘째, 사진은 아주 좋아 보이는데 얼룩, 긁힘, 쿠션이 꺼진 곳이 있나요? 그리고 반려동물을 키우시거나 집에서 담배 피우는 분이 있나요? 냄새에 좀 예민해서요. 셋째, 정확한 치수, 특히 폭과 깊이를 알려 주실 수 있나요? 거실 벽이 2미터 정도이고 현관문이 꽤 좁아서 들어갈지 확실히 알아야 해요. 마지막으로 가져가는 건, 토요일에 승합차를 빌려서 친구와 갈 계획이에요. 건물에 엘리베이터가 있고, 내리는 걸 도와주실 수 있나요? 네, 좋아요. 다 괜찮으면 토요일까지 맡아 주실 수 있나요? 지금 계약금을 조금 보낼게요.",
+    "tips": [
+     "중고 거래 질문: 사용 기간·판매 이유 → 상태(얼룩·냄새) → 치수 → 운반",
+     "before someone else grabs it, measurements, hold it for me, deposit"
+    ]
+   },
+   {
+    "kind": "solve",
+    "question": "I'm sorry, but there is a problem I need you to resolve. When you and your friend bring the sofa to your apartment, you find that it is too big to fit through your front door. Talk to your friend, explain the situation, and suggest two or three alternatives.",
+    "question_ko": "죄송하지만 해결해야 할 문제가 있습니다. 친구와 소파를 아파트로 가져왔는데 너무 커서 현관문을 통과하지 못합니다. 친구에게 상황을 설명하고 두세 가지 대안을 제시하세요.",
+    "sample": "Oh no, Minsu, look at this. The sofa doesn't fit through the door. I measured the door, but I forgot about the arms of the sofa. I'm so sorry. You came all the way here to help me. Let's think. First, maybe we can take off the legs and turn the sofa on its side. Second, if that doesn't work, I can call the seller and ask if I can return it. Or I can sell it again on the app. Let's try the first idea. Then I'll buy you dinner.",
+    "sample_ko": "어떡해, 민수야, 이것 좀 봐. 소파가 문을 통과 못 해. 문 치수는 쟀는데 소파 팔걸이를 깜빡했어. 정말 미안해. 나 도와주러 여기까지 왔는데. 생각해 보자. 첫째, 다리를 떼고 소파를 옆으로 세워 볼 수 있을 것 같아. 둘째, 그래도 안 되면 판매자에게 전화해서 반품해도 되는지 물어볼게. 아니면 앱에 다시 팔 수도 있어. 첫 번째 방법부터 해 보자. 그다음 내가 저녁 살게.",
+    "sample_adv": "Okay, Minsu, hold on, put it down for a second. I think we've got a problem. It's stuck. The doorframe is about five centimeters too narrow, and the arms won't squeeze through no matter how we tilt it. I'm really sorry. I measured the width of the sofa, but I completely forgot that my door opens inward and the door itself takes up space. You've been carrying this thing for an hour, and now this. Let me think about what we can do. First, let's try taking the door off its hinges. It's just three screws, and I have a screwdriver inside. That would give us an extra five or six centimeters, which might be just enough. Second, if that doesn't work, the legs and maybe the arms might come off. A lot of sofas have bolts underneath, so let's flip it over and check. And third, if it's really impossible, I'll call the seller and explain. Maybe she'd take it back for a partial refund, or I could post it on the app again tonight and sell it to someone with a bigger door. Either way, you've done more than enough. After this, dinner and drinks are on me.",
+    "sample_adv_ko": "민수야, 잠깐, 잠깐 내려놔 봐. 문제가 생긴 것 같아. 걸렸어. 문틀이 5센티미터쯤 좁아서 아무리 기울여도 팔걸이가 안 들어가. 정말 미안해. 소파 폭은 쟀는데 우리 문이 안쪽으로 열려서 문짝 자체가 공간을 차지한다는 걸 완전히 잊었어. 한 시간이나 이걸 들고 왔는데 이렇게 되다니. 어떻게 할지 생각해 볼게. 첫째, 문을 경첩에서 떼 보자. 나사 세 개뿐이고 안에 드라이버가 있어. 그러면 5~6센티미터가 더 생기니까 딱 맞을 수도 있어. 둘째, 그래도 안 되면 다리랑 어쩌면 팔걸이도 분리될 수 있어. 많은 소파가 밑에 볼트가 있으니까 뒤집어서 확인해 보자. 셋째, 정말 불가능하면 판매자에게 전화해서 설명할게. 일부 환불로 다시 가져갈 수도 있고, 아니면 오늘 밤 앱에 다시 올려서 문이 더 큰 사람에게 팔 수도 있어. 어쨌든 넌 할 만큼 했어. 이거 끝나면 저녁이랑 술은 내가 쏠게.",
+    "tips": [
+     "현장에서 말하듯: hold on, put it down → 원인 → 미안함 → 시도 순서대로 대안",
+     "doorframe, hinges, flip it over, dinner is on me"
+    ]
+   },
+   {
+    "kind": "exp",
+    "question": "That's the end of the situation. Have you ever had a problem when you bought or moved furniture or a large item? Tell me what happened and how you solved it.",
+    "question_ko": "상황이 끝났습니다. 가구나 큰 물건을 사거나 옮기다가 문제가 생긴 적이 있나요? 무슨 일이 있었고 어떻게 해결했는지 말해 주세요.",
+    "sample": "Yes, when I moved two years ago, I bought a new bed online. It came in a big box, and I had to put it together myself. The instructions were only pictures, and they were hard to understand. I worked for three hours, but at the end, I had four extra screws. I didn't know where they should go. That night, the bed made a loud noise when I moved. The next day, my brother came and helped me fix it. Now I always ask for help first.",
+    "sample_ko": "네, 2년 전 이사할 때 온라인으로 새 침대를 샀어요. 큰 상자로 와서 직접 조립해야 했어요. 설명서가 그림뿐이라 이해하기 어려웠어요. 세 시간 동안 작업했는데 마지막에 나사가 네 개 남았어요. 어디에 넣어야 할지 몰랐어요. 그날 밤 움직일 때마다 침대에서 큰 소리가 났어요. 다음 날 남동생이 와서 고치는 걸 도와줬어요. 이제는 항상 먼저 도움을 청해요.",
+    "sample_adv": "Yes, I have a story that my family still laughs about. When I moved into my first apartment, my parents gave me their old piano, because I'd played it as a kid. It's an upright piano, so it's incredibly heavy, around two hundred kilograms. I thought I could save money by asking a regular moving company instead of piano specialists. That was a big mistake. On moving day, the movers took one look at it and said the elevator in my building was too small, and they weren't allowed to carry it up the stairs. My apartment was on the sixth floor. So the piano sat in the parking lot for an hour while I made frantic phone calls. Finally, I found a company with a ladder truck, which is basically a lift that goes up the outside of the building, and they could come the same day for an extra two hundred thousand won. I watched my childhood piano slowly rise past the windows, and all the neighbors came out to watch too. It went in through my balcony. It cost more than if I'd booked the specialists in the first place, but now I know. Always check the elevator size first.",
+    "sample_adv_ko": "네, 가족들이 아직도 웃는 이야기가 있어요. 첫 아파트로 이사할 때 어릴 때 제가 치던 피아노를 부모님이 주셨어요. 업라이트 피아노라서 200킬로그램 정도로 엄청 무거워요. 피아노 전문 업체 대신 일반 이사 업체에 맡기면 돈을 아낄 수 있을 거라 생각했어요. 큰 실수였어요. 이삿날 기사님들이 피아노를 한 번 보더니 건물 엘리베이터가 너무 작고 계단으로 옮기는 건 안 된다고 했어요. 제 집은 6층이었어요. 그래서 제가 정신없이 전화를 돌리는 동안 피아노는 한 시간 동안 주차장에 있었어요. 마침내 사다리차, 그러니까 건물 바깥으로 올라가는 리프트가 있는 업체를 찾았는데 20만 원을 더 내면 당일에 올 수 있었어요. 어린 시절 피아노가 창문들을 지나 천천히 올라가는 걸 지켜봤고 이웃들도 다 나와서 구경했어요. 베란다로 들어갔어요. 처음부터 전문 업체를 불렀을 때보다 돈이 더 들었지만 이제는 알아요. 항상 엘리베이터 크기부터 확인해야 해요.",
+    "tips": [
+     "아낀다고 한 선택 → 문제 → 해결(사다리차) → 웃긴 장면 → 교훈",
+     "took one look at it, frantic phone calls, in the first place"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "rp-055",
+  "topic": "weather",
+  "level": 5,
+  "situation_ko": "친구들과 스키 여행을 위해 스키장에 시설과 상황을 문의하는 상황 → 폭설로 도로가 통제되어 친구들에게 대안 제시 → 날씨 때문에 여행 계획을 바꿨던 경험",
+  "steps": [
+   {
+    "kind": "ask",
+    "question": "I'd like to give you a situation and ask you to act it out. You and your friends are planning a ski trip next weekend. Call the ski resort and ask three or four questions about the conditions and services there.",
+    "question_ko": "상황을 드릴 테니 연기해 보세요. 친구들과 다음 주말 스키 여행을 계획하고 있습니다. 스키장에 전화해 그곳 상황과 서비스에 관해 서너 가지 질문을 하세요.",
+    "sample": "Hello, my friends and I are planning to visit your ski resort next Saturday. There are four of us. I have some questions. First, how is the snow these days? Are all the slopes open? Second, can we rent skis and clothes there? How much does it cost? Third, two of my friends are beginners. Do you have lessons for beginners? And lastly, is there a shuttle bus from Seoul? Okay, thank you very much. We'll see you next week.",
+    "sample_ko": "안녕하세요, 친구들과 다음 주 토요일에 스키장에 가려고 해요. 네 명이에요. 몇 가지 여쭤볼게요. 첫째, 요즘 눈 상태는 어떤가요? 슬로프가 다 열려 있나요? 둘째, 거기서 스키와 옷을 빌릴 수 있나요? 얼마인가요? 셋째, 친구 두 명이 초보자예요. 초보자 강습이 있나요? 마지막으로 서울에서 가는 셔틀버스가 있나요? 네, 정말 감사합니다. 다음 주에 뵐게요.",
+    "sample_adv": "Hi, good afternoon. My friends and I are planning a two-day ski trip to your resort next weekend, arriving Saturday morning and leaving Sunday afternoon. There are five of us, and our skill levels are pretty mixed, so I want to check a few things. First, what are the snow conditions like right now? I saw on your website that some upper slopes were closed last week because there wasn't enough snow. Are they open now, and do you expect them to be open next weekend? Second, about equipment, three of us need to rent everything, skis, boots, helmets, and ski wear. Is there a package price for the whole set, and do we need to reserve it in advance, or can we just show up? Third, two of my friends have never skied before. Do you offer group lessons for complete beginners, and how long is each lesson? Ideally, they'd take a two-hour lesson on Saturday morning while the rest of us ski. And finally, what's the best way to get there from Seoul? Is there a shuttle bus, and does it run even when there's heavy snow? Great, that's everything. Thanks so much for your help.",
+    "sample_adv_ko": "안녕하세요. 친구들과 다음 주말에 스키장으로 1박 2일 스키 여행을 계획하고 있어요. 토요일 아침에 도착해서 일요일 오후에 떠나요. 다섯 명인데 실력이 꽤 제각각이라 몇 가지 확인하고 싶어요. 첫째, 지금 설질은 어떤가요? 웹사이트에서 지난주에 눈이 부족해서 상단 슬로프 일부가 닫혔다고 봤어요. 지금은 열려 있나요, 다음 주말에도 열려 있을 것 같나요? 둘째, 장비 말인데, 세 명은 스키, 부츠, 헬멧, 스키복까지 다 빌려야 해요. 전체 세트 패키지 가격이 있나요, 미리 예약해야 하나요, 그냥 가도 되나요? 셋째, 친구 두 명은 스키를 처음 타요. 완전 초보자를 위한 단체 강습이 있나요, 한 번에 얼마나 하나요? 가능하면 나머지가 타는 동안 그 둘은 토요일 아침에 두 시간 강습을 받으면 좋겠어요. 마지막으로 서울에서 가는 가장 좋은 방법은 뭔가요? 셔틀버스가 있나요, 눈이 많이 와도 운행하나요? 좋아요, 그게 다예요. 도와주셔서 정말 감사해요.",
+    "tips": [
+     "스키 표현: snow conditions, slopes, rental package, beginner lesson, shuttle",
+     "일정·인원·실력 차이를 먼저 말하면 질문이 자연스럽다"
+    ]
+   },
+   {
+    "kind": "solve",
+    "question": "I'm sorry, but there is a problem I need you to resolve. The night before your trip, a heavy snowstorm warning is issued, and the roads to the ski resort are expected to close. Call one of your friends, explain the situation, and suggest two or three alternatives.",
+    "question_ko": "죄송하지만 해결해야 할 문제가 있습니다. 여행 전날 밤 대설 경보가 내려지고 스키장으로 가는 도로가 통제될 예정입니다. 친구 한 명에게 전화해 상황을 설명하고 두세 가지 대안을 제시하세요.",
+    "sample": "Hi, Hyejin, did you see the news? There's a heavy snow warning for tomorrow. The news says the roads to the ski resort might close. The shuttle bus is also canceled. I'm really disappointed, but I think it's dangerous to go. So I have some ideas. First, we can go next weekend instead. I'll call the resort and change our reservation. Second, we can go to an indoor ski place near Seoul. Or we can just have a party at my house tomorrow. What do you think?",
+    "sample_ko": "혜진아, 뉴스 봤어? 내일 대설 경보래. 뉴스에서 스키장 가는 길이 통제될 수도 있대. 셔틀버스도 취소됐어. 정말 아쉽지만 가는 건 위험할 것 같아. 그래서 몇 가지 생각이 있어. 첫째, 대신 다음 주말에 가도 돼. 내가 스키장에 전화해서 예약을 바꿀게. 둘째, 서울 근처 실내 스키장에 가도 돼. 아니면 내일 그냥 우리 집에서 파티해도 되고. 어떻게 생각해?",
+    "sample_adv": "Hey, Hyejin, sorry to call so late. Have you checked the weather news? They just issued a heavy snow warning for the whole Gangwon area starting at midnight. They're saying up to thirty centimeters, and the highway near the resort will probably be closed tomorrow morning. I also got a text from the shuttle bus company saying all trips are canceled. Honestly, I'm really disappointed. We've been talking about this trip for a month. But I don't think it's worth risking an accident, especially with snow chains we've never used. So let's figure out a plan B. First option, we postpone. I already checked, and the resort lets us move the lodge reservation to next weekend for free if we change it by tomorrow noon. The forecast for next weekend looks clear. Second, if everyone still wants to do something tomorrow, there's an indoor snow park about forty minutes from Seoul. It's not real skiing, but our beginner friends could actually practice there first. And third, we could just turn it into a cozy night at my place, order food, and watch movies while it snows. Can you ask the group chat which one they prefer? I'll call the resort first thing in the morning.",
+    "sample_adv_ko": "혜진아, 늦게 전화해서 미안. 날씨 뉴스 확인했어? 방금 자정부터 강원도 전역에 대설 경보가 내려졌대. 30센티미터까지 온다고 하고, 스키장 근처 고속도로는 내일 아침에 아마 통제될 거래. 셔틀버스 회사에서도 모든 운행이 취소됐다는 문자가 왔어. 솔직히 정말 아쉬워. 한 달 동안 이 여행 얘기만 했잖아. 그래도 특히 한 번도 안 써 본 스노체인을 달고 사고 위험을 감수할 가치는 없는 것 같아. 그러니까 플랜 B를 짜 보자. 첫 번째, 미루는 거야. 벌써 확인했는데 내일 정오까지 바꾸면 숙소 예약을 다음 주말로 무료로 옮겨 준대. 다음 주말 예보는 맑아. 둘째, 그래도 다들 내일 뭔가 하고 싶으면 서울에서 40분 거리에 실내 스노파크가 있어. 진짜 스키는 아니지만 초보 친구들이 거기서 먼저 연습할 수 있어. 셋째, 그냥 우리 집에서 아늑한 밤으로 바꿔서, 음식 시키고 눈 오는 거 보면서 영화 보는 거야. 단톡방에 어떤 게 좋은지 물어봐 줄래? 아침 일찍 스키장에 전화할게.",
+    "tips": [
+     "뉴스 내용 전달(warning, closed, canceled) → 감정 → 안전 이유 → plan B 세 가지 → 다음 행동",
+     "not worth risking, postpone, first thing in the morning"
+    ]
+   },
+   {
+    "kind": "exp",
+    "question": "That's the end of the situation. Have you ever had to change your travel plans because of bad weather? Tell me where you were going, what the weather was like, and what you did instead.",
+    "question_ko": "상황이 끝났습니다. 나쁜 날씨 때문에 여행 계획을 바꿔야 했던 적이 있나요? 어디에 가려고 했고, 날씨가 어땠고, 대신 무엇을 했는지 말해 주세요.",
+    "sample": "Yes, two summers ago, I planned a beach trip to Busan with my family. But a typhoon came that week. There was strong wind and heavy rain, and the beaches were closed. We didn't want to cancel the whole trip, so we changed our plans. We visited an aquarium and a big shopping mall. We also tried many restaurants and a famous fish market. On the last day, the weather got better, so we walked on the beach for one hour. It wasn't what we planned, but it was still fun.",
+    "sample_ko": "네, 재작년 여름에 가족과 부산 해변 여행을 계획했어요. 그런데 그 주에 태풍이 왔어요. 바람이 세고 비가 많이 와서 해수욕장이 통제됐어요. 여행 전체를 취소하고 싶진 않아서 계획을 바꿨어요. 아쿠아리움과 큰 쇼핑몰에 갔어요. 여러 식당과 유명한 수산 시장에도 갔어요. 마지막 날 날씨가 좋아져서 해변을 한 시간 걸었어요. 계획한 대로는 아니었지만 그래도 재미있었어요.",
+    "sample_adv": "Yes, the most dramatic time was a trip to Jeju about three years ago. My best friend and I had planned it for months. We were going to hike Hallasan Mountain on the second day and spend the rest of the time at the beaches. But the day we landed, a typhoon changed course and headed straight for the island. By the evening, the wind was so strong that palm trees were bending sideways, and the hiking trails and beaches were all closed. Worse, the news said flights might be canceled for two days. At first, we were really frustrated, and we just sat in our hotel room watching the rain hit the window. But then we decided to make the best of it. We rented a car and found indoor places, a tea museum, an art gallery built inside an old bunker, and a lot of small local restaurants we'd never have found otherwise. One night, the power went out at our guesthouse, and the owner brought out candles and homemade tangerine wine, and we ended up talking with other travelers until two a.m. Our flight was delayed a day, but honestly, it became one of my favorite trips, just not the one I'd planned.",
+    "sample_adv_ko": "네, 가장 극적이었던 건 3년쯤 전 제주 여행이에요. 가장 친한 친구와 몇 달 동안 계획했어요. 둘째 날 한라산에 오르고 나머지는 해변에서 보낼 예정이었어요. 그런데 도착한 날 태풍이 진로를 바꿔 섬으로 곧장 향했어요. 저녁이 되자 야자수가 옆으로 휠 만큼 바람이 셌고 등산로와 해변이 모두 통제됐어요. 더 나쁜 건 이틀 동안 항공편이 결항될 수 있다는 뉴스였어요. 처음엔 정말 답답해서 호텔 방에 앉아 창문을 때리는 비만 봤어요. 그러다 최대한 즐기기로 했어요. 차를 빌려 실내 장소를 찾았어요. 차 박물관, 옛 벙커 안에 만든 미술관, 그리고 아니었으면 절대 몰랐을 작은 동네 식당들이요. 하룻밤은 게스트하우스가 정전됐는데 주인이 초와 직접 담근 귤 술을 내와서 다른 여행자들과 새벽 2시까지 이야기했어요. 비행기는 하루 늦어졌지만, 솔직히 계획한 여행은 아니었어도 제가 가장 좋아하는 여행 중 하나가 됐어요.",
+    "tips": [
+     "원래 계획 → 날씨 변화(생생한 묘사) → 실망 → make the best of it → 뜻밖의 좋은 경험",
+     "changed course, bending sideways, make the best of it, just not the one I'd planned"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "rp-056",
+  "topic": "appointment",
+  "level": 4,
+  "situation_ko": "미용실에 전화해 커트와 염색 예약을 문의하는 상황 → 늦잠을 자서 예약 시간에 늦게 되어 미용실에 대안 제시 → 약속 시간에 늦어서 곤란했던 경험",
+  "steps": [
+   {
+    "kind": "ask",
+    "question": "I'd like to give you a situation and ask you to act it out. You want to get a haircut and change your hair color before an important event. Call a hair salon and ask three or four questions to make an appointment.",
+    "question_ko": "상황을 드릴 테니 연기해 보세요. 중요한 행사 전에 머리를 자르고 염색을 하고 싶습니다. 미용실에 전화해 예약을 위해 서너 가지 질문을 하세요.",
+    "sample": "Hello, I'd like to make an appointment for a haircut and hair coloring. My friend's wedding is next Sunday, so I want to do it this weekend. First, do you have time on Saturday morning? Second, how long does a cut and color take? Third, how much does it cost? My hair is a little long, below my shoulders. And lastly, can I choose a designer? My friend recommended a designer named Jina. Okay, Saturday at ten is perfect. Thank you.",
+    "sample_ko": "안녕하세요, 커트와 염색 예약을 하고 싶어요. 다음 주 일요일이 친구 결혼식이라 이번 주말에 하고 싶어요. 첫째, 토요일 오전에 시간 있나요? 둘째, 커트와 염색은 얼마나 걸리나요? 셋째, 얼마인가요? 머리가 어깨 아래로 좀 길어요. 마지막으로 디자이너를 고를 수 있나요? 친구가 지나라는 디자이너를 추천했어요. 네, 토요일 10시가 딱 좋아요. 감사합니다.",
+    "sample_adv": "Hi, I'd like to book an appointment, please. My best friend's wedding is next Sunday, and I'm giving a short speech, so I want to look my best. I'm thinking of a trim and a new color, maybe a soft brown, since my hair is pretty dark right now. I have a few questions. First, do you have any availability this Saturday, preferably in the morning? I have a family dinner in the evening. Second, how long would a cut plus color take for medium-long hair? It's a little below my shoulders and fairly thick, so I'm guessing it might take a while. Third, could you give me a rough price? I've seen different prices on your website for color, depending on the length and the type of dye, so I'm a bit confused. And lastly, my coworker recommended a designer named Jina. Is she available, and could I talk with her about the color before she starts? I'd like to bring some reference photos. Perfect, ten a.m. on Saturday with Jina. Could you send me a confirmation text? Thank you.",
+    "sample_adv_ko": "안녕하세요, 예약하고 싶어요. 다음 주 일요일이 가장 친한 친구 결혼식인데 짧은 축사를 해서 최대한 예쁘게 하고 싶어요. 지금 머리가 꽤 어두워서 다듬고 부드러운 갈색 같은 새 색으로 바꿀까 해요. 몇 가지 여쭤볼게요. 첫째, 이번 토요일, 가능하면 오전에 자리가 있나요? 저녁에 가족 식사가 있어서요. 둘째, 중간 길이 머리 커트와 염색은 얼마나 걸리나요? 어깨 조금 아래이고 숱이 꽤 많아서 오래 걸릴 것 같아요. 셋째, 대략적인 가격을 알려 주실 수 있나요? 웹사이트에 염색 가격이 길이와 염색약 종류에 따라 달라서 좀 헷갈려요. 마지막으로 동료가 지나라는 디자이너를 추천했어요. 그분 시간이 되나요, 시작 전에 색에 대해 상담할 수 있나요? 참고 사진을 가져가고 싶어요. 좋아요, 토요일 오전 10시 지나 디자이너님으로요. 확인 문자 보내 주실 수 있나요? 감사합니다.",
+    "tips": [
+     "목적(결혼식 축사) → 원하는 스타일 → 질문(시간·소요·가격·디자이너) → 확인 문자 요청",
+     "availability, trim, reference photos, confirmation text"
+    ]
+   },
+   {
+    "kind": "solve",
+    "question": "I'm sorry, but there is a problem I need you to resolve. On the morning of your appointment, you oversleep and realize you will be at least forty minutes late. Call the hair salon, explain the situation, and suggest two or three alternatives.",
+    "question_ko": "죄송하지만 해결해야 할 문제가 있습니다. 예약 당일 아침 늦잠을 자서 최소 40분은 늦을 것 같습니다. 미용실에 전화해 상황을 설명하고 두세 가지 대안을 제시하세요.",
+    "sample": "Hello, this is Choi Yuna. I have an appointment with Jina at ten o'clock. I'm so sorry, but I overslept. I just woke up, and I'll be about forty minutes late. I know it's my fault. Is it okay if I come at ten forty? If Jina has another customer, maybe she can only cut my hair today, and I can come back for the color tomorrow. Or I can change my appointment to this afternoon. Please tell me what's possible. Again, I'm really sorry.",
+    "sample_ko": "안녕하세요, 최유나입니다. 10시에 지나 디자이너님께 예약이 있어요. 정말 죄송한데 늦잠을 잤어요. 방금 일어나서 40분 정도 늦을 것 같아요. 제 잘못인 거 알아요. 10시 40분에 가도 괜찮을까요? 지나 디자이너님이 다른 손님이 있으시면 오늘은 커트만 하고 염색은 내일 다시 와도 돼요. 아니면 오늘 오후로 예약을 바꿔도 돼요. 가능한 걸 알려 주세요. 다시 한번 정말 죄송해요.",
+    "sample_adv": "Hi, good morning. This is Choi Yuna, and I have a ten o'clock appointment with Jina for a cut and color. I'm calling because I'm really embarrassed. My alarm didn't go off, and I just woke up five minutes ago. Even if I leave right now and take a taxi, I won't get there until about ten forty. I completely understand if that causes problems for her schedule, and I'm sorry for the trouble. I still really need to get my hair done before tomorrow's wedding, so I'm hoping we can work something out. Here are a few ideas. First, if Jina doesn't have a client right after me, could she start at ten forty and just run a bit later? I'm happy to pay any late fee. Second, if her schedule is tight, she could do the color first, since that takes the longest, and another designer could do the trim while the color is setting. And third, if today morning just won't work, is there any opening later today, even in the evening? I can move my family dinner if I have to. Please let me know which option works, and I'll head out immediately.",
+    "sample_adv_ko": "안녕하세요. 최유나입니다. 지나 디자이너님께 10시 커트·염색 예약이 있어요. 정말 부끄러운 일로 전화드려요. 알람이 안 울려서 5분 전에 일어났어요. 지금 바로 나가서 택시를 타도 10시 40분쯤에야 도착할 거예요. 그분 일정에 문제가 생긴다면 충분히 이해하고, 번거롭게 해 드려서 죄송해요. 그래도 내일 결혼식 전에 꼭 머리를 해야 해서 방법을 찾아보고 싶어요. 몇 가지 생각이 있어요. 첫째, 제 다음에 바로 손님이 없으시면 10시 40분에 시작해서 조금 늦게까지 해 주실 수 있을까요? 지각 비용이 있다면 낼게요. 둘째, 일정이 빡빡하시면 가장 오래 걸리는 염색을 먼저 하고, 염색약이 들어가는 동안 다른 디자이너분이 다듬어 주실 수도 있어요. 셋째, 오늘 오전이 정말 안 되면 오늘 늦게, 저녁이라도 빈 시간이 있나요? 필요하면 가족 저녁은 옮길 수 있어요. 어떤 방법이 되는지 알려 주시면 바로 출발할게요.",
+    "tips": [
+     "솔직한 사과와 이유 → 도착 시간 → 상대 입장 이해 → 대안 3개 → 바로 출발",
+     "My alarm didn't go off, work something out, late fee, head out"
+    ]
+   },
+   {
+    "kind": "exp",
+    "question": "That's the end of the situation. Have you ever been late for something important? Tell me what it was, why you were late, and what happened as a result.",
+    "question_ko": "상황이 끝났습니다. 중요한 일에 늦은 적이 있나요? 무엇이었고, 왜 늦었고, 그 결과 어떻게 됐는지 말해 주세요.",
+    "sample": "Yes, I was late for my university entrance interview. It was eight years ago. I left home early, but the subway stopped for twenty minutes because of a problem on the tracks. I was so nervous. When I got off, I ran to the university. I arrived ten minutes late, and I was sweating a lot. I explained the situation to the staff. They let me go last. I did the interview, and I passed. But I still remember how scared I was that day.",
+    "sample_ko": "네, 대학 입학 면접에 늦었어요. 8년 전이었어요. 집에서 일찍 나왔는데 선로 문제로 지하철이 20분 동안 멈췄어요. 너무 긴장됐어요. 내리자마자 대학까지 뛰어갔어요. 10분 늦게 도착했고 땀을 많이 흘렸어요. 직원에게 상황을 설명했어요. 마지막 순서로 보게 해 줬어요. 면접을 봤고 합격했어요. 하지만 그날 얼마나 무서웠는지 아직도 기억나요.",
+    "sample_adv": "Yes, and it was probably the most important day to be on time in my whole life, my first day at my current job. I'd prepared everything the night before. My clothes were ironed, my bag was packed, and I even did a practice commute the week before to time it. But that morning, there was a huge accident on the bridge my bus takes, and traffic just stopped. For twenty minutes, the bus didn't move at all. I started panicking, because my orientation started at nine sharp, and the HR manager had told us that punctuality was very important at the company. So I got off the bus in the middle of the traffic, walked to the nearest subway station, which took fifteen minutes, and transferred twice. I called the HR office to explain and apologize, and the person on the phone was surprisingly relaxed. I finally arrived at nine twenty-five, completely out of breath. And guess what? Three other new employees were late too, because of the same accident. The manager just laughed and said, welcome to Seoul traffic. Now, five years later, I still leave thirty minutes earlier than I need to, just in case.",
+    "sample_adv_ko": "네, 아마 인생에서 시간을 지키는 게 가장 중요했던 날일 거예요. 지금 회사 첫 출근 날이었어요. 전날 밤 모든 걸 준비했어요. 옷을 다리고, 가방을 싸고, 일주일 전에는 시간을 재려고 출근 연습까지 했어요. 그런데 그날 아침 제가 타는 버스가 지나가는 다리에서 큰 사고가 나서 교통이 그냥 멈췄어요. 20분 동안 버스가 전혀 안 움직였어요. 오리엔테이션이 9시 정각이었고 인사팀장님이 회사에서 시간 엄수가 아주 중요하다고 했기 때문에 당황하기 시작했어요. 그래서 막힌 도로 한가운데서 버스에서 내려 15분 걸리는 가장 가까운 지하철역까지 걸어가서 두 번 갈아탔어요. 인사팀에 전화해서 설명하고 사과했는데 전화 받은 분이 의외로 느긋했어요. 결국 완전히 숨이 찬 채로 9시 25분에 도착했어요. 그런데 있잖아요? 다른 신입 사원 세 명도 같은 사고 때문에 늦었어요. 팀장님은 그냥 웃으면서 서울 교통에 온 걸 환영한다고 했어요. 5년이 지난 지금도 혹시 몰라서 필요보다 30분 일찍 나와요.",
+    "tips": [
+     "철저한 준비 → 예상 못 한 사고 → 내가 한 행동(내려서 걷고 갈아탐) → 반전 → 지금의 습관",
+     "nine sharp, out of breath, And guess what?, just in case"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "rp-057",
+  "topic": "fashion",
+  "level": 5,
+  "situation_ko": "결혼식에 입을 정장 수선을 위해 수선집에 문의하는 상황 → 수선한 바지가 너무 짧게 잘려 수선집에 대안 요청 → 옷이 망가지거나 잘못돼서 곤란했던 경험",
+  "steps": [
+   {
+    "kind": "ask",
+    "question": "I'd like to give you a situation and ask you to act it out. You bought a suit to wear to your brother's wedding, but it needs to be altered. Visit a tailor shop and ask three or four questions about the alterations.",
+    "question_ko": "상황을 드릴 테니 연기해 보세요. 형의 결혼식에 입으려고 정장을 샀는데 수선이 필요합니다. 수선집에 가서 수선에 관해 서너 가지 질문을 하세요.",
+    "sample": "Hello, I bought this suit for my brother's wedding, but it's a little big. The pants are too long, and the jacket sleeves are long too. Can you fix them? First, how much does it cost to shorten the pants and the sleeves? Second, how long will it take? The wedding is in ten days. Third, do I need to try it on again after you finish? And lastly, can you also make the waist a little smaller? Okay, I'll come back next Monday. Thank you.",
+    "sample_ko": "안녕하세요, 형 결혼식 때 입으려고 이 정장을 샀는데 좀 커요. 바지가 너무 길고 재킷 소매도 길어요. 고쳐 주실 수 있나요? 첫째, 바지와 소매를 줄이는 데 얼마인가요? 둘째, 얼마나 걸리나요? 결혼식이 열흘 뒤예요. 셋째, 다 되면 다시 입어 봐야 하나요? 마지막으로 허리도 조금 줄여 주실 수 있나요? 네, 다음 주 월요일에 다시 올게요. 감사합니다.",
+    "sample_adv": "Hi, good afternoon. I just bought this navy suit at a department store for my older brother's wedding, and it fits pretty well in the shoulders, but a few things need adjusting, so I was hoping you could help. I'm actually the best man, so I'll be standing next to him in all the photos, and I really want it to look sharp. First, the pants are about four or five centimeters too long. I'd like them to just touch the top of my shoes, with no break. How much would that cost, and would you keep the original hem style? Second, the jacket sleeves cover my whole shirt cuff. I think about two centimeters shorter would be right. Is that difficult with these buttons? Third, the waist of the pants is a little loose. Could you take it in slightly, maybe by two centimeters? And finally, about timing, the wedding is on the twenty-first, ten days from now. Could everything be ready by next Friday, so that I have time for a final fitting in case anything needs fixing? Great, I'll put it on now so you can pin it. Thank you.",
+    "sample_adv_ko": "안녕하세요. 형 결혼식 때 입으려고 백화점에서 남색 정장을 막 샀는데, 어깨는 꽤 잘 맞지만 몇 군데 손봐야 해서 도와주셨으면 해요. 사실 제가 들러리라 모든 사진에서 형 옆에 서 있을 거라 정말 깔끔해 보이고 싶어요. 첫째, 바지가 4~5센티미터 정도 길어요. 구두 윗부분에 딱 닿게, 주름이 생기지 않게 하고 싶어요. 얼마인가요, 원래 밑단 스타일을 유지해 주시나요? 둘째, 재킷 소매가 셔츠 소맷부리를 다 덮어요. 2센티미터 정도 짧으면 맞을 것 같아요. 이 단추들 때문에 어렵나요? 셋째, 바지 허리가 조금 헐렁해요. 2센티미터 정도 살짝 줄여 주실 수 있나요? 마지막으로 시간 말인데, 결혼식이 21일, 열흘 뒤예요. 혹시 고칠 게 있으면 최종 가봉할 시간이 있도록 다음 주 금요일까지 다 될까요? 좋아요, 지금 입을 테니 핀으로 표시해 주세요. 감사합니다.",
+    "tips": [
+     "수선 표현: shorten, take in, hem, sleeves, final fitting, pin it",
+     "부위별로 원하는 치수까지 말하면 고득점 ask가 된다"
+    ]
+   },
+   {
+    "kind": "solve",
+    "question": "I'm sorry, but there is a problem I need you to resolve. When you pick up the suit, you find that the pants were cut much too short, and the wedding is in three days. Explain the problem to the tailor and suggest two or three ways to solve it.",
+    "question_ko": "죄송하지만 해결해야 할 문제가 있습니다. 정장을 찾으러 갔는데 바지가 너무 짧게 잘렸고, 결혼식은 사흘 뒤입니다. 수선사에게 문제를 설명하고 해결할 두세 가지 방법을 제안하세요.",
+    "sample": "Excuse me, I just tried on the pants, but there's a problem. They are too short now. Look, you can see my socks. I asked you to make them four centimeters shorter, but I think you cut about eight centimeters. The wedding is in three days. Is there any extra fabric inside? If there is, can you make them longer again? If not, can you order new pants in the same color from the brand? Or can you pay for new pants? I really need them by Saturday.",
+    "sample_ko": "저기요, 방금 바지를 입어 봤는데 문제가 있어요. 이제 너무 짧아요. 보세요, 양말이 보여요. 4센티미터 줄여 달라고 했는데 8센티미터 정도 자르신 것 같아요. 결혼식이 사흘 뒤예요. 안에 여유 천이 있나요? 있으면 다시 늘려 주실 수 있나요? 없으면 브랜드에서 같은 색 바지를 새로 주문해 주실 수 있나요? 아니면 새 바지값을 내 주실 수 있나요? 토요일까지 꼭 필요해요.",
+    "sample_adv": "Hi, I'm sorry, but I just tried the pants on in your fitting room, and there's a real problem. When I stand normally, the hem is above my ankle, and you can see my socks clearly. Here's the ticket. It says shorten by four centimeters, but it looks like around nine were taken off. I'm sure it was just a mix-up with another order, but as you know, the wedding is this Saturday, and I'm the best man, so I can't really walk down the aisle like this. I'd like to find a solution together. First, could you check if there's any extra fabric folded inside the hem? If there's even three or four centimeters, maybe you could let it out and use a hem tape so it still looks clean. Second, if that's not possible, the suit is from a well-known brand, so could you call the store and see if they can sell just a matching pair of pants in my size? I'd expect the shop to cover that cost, since the mistake happened here. And third, as a last option, if the pants can't be fixed or replaced in time, I'd ask for a refund for the alteration and the cost of the pants, so I can rent a suit instead. Which one sounds possible to you?",
+    "sample_adv_ko": "안녕하세요, 죄송하지만 방금 탈의실에서 바지를 입어 봤는데 진짜 문제가 있어요. 똑바로 서면 밑단이 발목 위로 올라가고 양말이 다 보여요. 여기 수선표 보세요. 4센티미터 줄임이라고 써 있는데 9센티미터 정도 자른 것 같아요. 분명 다른 주문과 착오가 있었던 거겠지만, 아시다시피 결혼식이 이번 토요일이고 제가 들러리라 이렇게 입장할 수는 없어요. 같이 해결책을 찾고 싶어요. 첫째, 밑단 안쪽에 접힌 여유 천이 있는지 확인해 주실 수 있나요? 3~4센티미터만 있어도 늘리고 밑단 테이프를 써서 깔끔하게 보이게 할 수 있을 것 같아요. 둘째, 그게 안 되면 유명 브랜드 정장이니까 매장에 전화해서 제 사이즈의 같은 바지만 따로 살 수 있는지 알아봐 주실 수 있나요? 실수가 여기서 생겼으니 그 비용은 가게에서 부담해 주셨으면 해요. 셋째, 마지막 방법으로 제때 바지를 고치거나 바꿀 수 없다면, 정장을 빌릴 수 있게 수선비와 바지값을 환불해 주셨으면 해요. 어떤 게 가능할 것 같으세요?",
+    "tips": [
+     "증거(수선표) 제시 → 상대 실수를 부드럽게(a mix-up) → 해결 우선순위 → 비용 책임 명확히",
+     "let it out, a mix-up, walk down the aisle, cover that cost"
+    ]
+   },
+   {
+    "kind": "exp",
+    "question": "That's the end of the situation. Have you ever had a problem with clothes right before an important event, such as a stain, a rip, or something that didn't fit? Tell me what happened and how you dealt with it.",
+    "question_ko": "상황이 끝났습니다. 중요한 행사 직전에 얼룩, 찢어짐, 맞지 않는 옷 같은 옷 문제를 겪은 적이 있나요? 무슨 일이 있었고 어떻게 대처했는지 말해 주세요.",
+    "sample": "Yes, on the day of my job interview, I spilled coffee on my white shirt. It was on the subway, and someone bumped into me. There was a big brown stain on the front. I had only thirty minutes before the interview. I got off the subway and ran to a store near the station. Luckily, I found a white shirt and bought it. I changed in the restroom. I was a little late, but I passed the interview. Now I never drink coffee before interviews.",
+    "sample_ko": "네, 면접 날 흰 셔츠에 커피를 쏟았어요. 지하철에서 누군가 저와 부딪혔어요. 앞쪽에 큰 갈색 얼룩이 생겼어요. 면접까지 30분밖에 없었어요. 지하철에서 내려 역 근처 가게로 뛰어갔어요. 다행히 흰 셔츠를 찾아서 샀어요. 화장실에서 갈아입었어요. 좀 늦었지만 면접에 붙었어요. 이제 면접 전엔 절대 커피를 안 마셔요.",
+    "sample_adv": "Oh, yes. The worst one was at my cousin's wedding about two years ago. I was wearing a light blue dress that I'd bought specially for it, and I was helping at the reception desk, greeting guests and collecting gift envelopes. About thirty minutes before the ceremony, I sat down for a second, and when I stood up, I heard a ripping sound. The seam on the side of the dress had split open, about ten centimeters, right where everyone could see. I was horrified. I couldn't go home, because the ceremony was about to start, and I didn't have anything else to wear. So I grabbed my aunt, and we ran to the bride's waiting room. Luckily, the wedding hall staff had a small sewing kit, and one of the staff members quickly stitched it closed for me. It wasn't perfect, so my aunt lent me her cardigan to cover it. I wore that cardigan all day, even though it was a little warm, and in the end, nobody noticed. Since then, I always carry safety pins in my bag for special events. They've actually saved two of my friends since then too.",
+    "sample_adv_ko": "아, 네. 최악은 2년쯤 전 사촌 결혼식이었어요. 그날을 위해 특별히 산 하늘색 원피스를 입고 축의금 접수대에서 하객을 맞고 봉투를 받는 일을 돕고 있었어요. 식 30분 전쯤 잠깐 앉았다가 일어나는데 찢어지는 소리가 났어요. 원피스 옆 솔기가 10센티미터쯤 터졌는데 모두가 볼 수 있는 자리였어요. 너무 당황했어요. 식이 곧 시작해서 집에 갈 수도 없고 다른 입을 옷도 없었어요. 그래서 이모를 붙잡고 신부 대기실로 달려갔어요. 다행히 예식장 직원에게 작은 반짇고리가 있어서 한 직원분이 재빨리 꿰매 주셨어요. 완벽하지 않아서 이모가 가디건을 빌려줘서 가렸어요. 좀 더웠지만 하루 종일 그 가디건을 입었고 결국 아무도 눈치채지 못했어요. 그 뒤로 특별한 행사엔 항상 가방에 옷핀을 챙겨요. 그 뒤로 실제로 친구 두 명도 그걸로 살렸어요.",
+    "tips": [
+     "상황(내 역할) → 사고 순간(소리·위치) → 당황 → 해결 도움 → 결과 → 지금의 습관",
+     "the seam split open, I was horrified, sewing kit, nobody noticed"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "rp-058",
+  "topic": "housework",
+  "level": 4,
+  "situation_ko": "비싼 패딩 점퍼 세탁을 위해 세탁소에 문의하는 상황 → 찾아온 점퍼가 줄어들고 얼룩이 남아 세탁소에 대안 요청 → 빨래나 청소를 하다 물건을 망친 경험",
+  "steps": [
+   {
+    "kind": "ask",
+    "question": "I'd like to give you a situation and ask you to act it out. You want to have your expensive winter jacket cleaned at a dry cleaner. Call the dry cleaner and ask three or four questions about cleaning it.",
+    "question_ko": "상황을 드릴 테니 연기해 보세요. 비싼 겨울 점퍼를 세탁소에 맡기려고 합니다. 세탁소에 전화해 세탁에 관해 서너 가지 질문을 하세요.",
+    "sample": "Hello, I'd like to get my winter jacket cleaned. It's a long down jacket, and it's quite expensive. There's a small coffee stain on the sleeve. I have some questions. First, can you clean down jackets? Second, can you remove the coffee stain? Third, how much does it cost, and how long does it take? And lastly, do you have a pickup and delivery service? I don't have a car. Okay, please come to my apartment tomorrow morning. Thank you.",
+    "sample_ko": "안녕하세요, 겨울 점퍼를 세탁하고 싶어요. 긴 패딩인데 꽤 비싸요. 소매에 작은 커피 얼룩이 있어요. 몇 가지 여쭤볼게요. 첫째, 패딩 세탁이 되나요? 둘째, 커피 얼룩을 지울 수 있나요? 셋째, 얼마이고 얼마나 걸리나요? 마지막으로 수거·배달 서비스가 있나요? 차가 없어서요. 네, 내일 아침에 저희 아파트로 와 주세요. 감사합니다.",
+    "sample_adv": "Hi, good morning. I'm calling because I'd like to get my winter jacket cleaned before I put it away for the season. It's a long goose down jacket from a pretty expensive outdoor brand, so I'm a little nervous about it. I've never had it cleaned professionally before. I have a few questions. First, how do you usually clean down jackets? The label says it can be washed with special detergent, but not dry-cleaned, so I want to make sure you follow that, because I've heard dry cleaning can ruin the feathers. Second, there's a coffee stain on the right cuff and some dark marks around the collar from makeup. Do you think those can come out completely? Third, what's the price, and how long would it take? I don't need it back until autumn, so there's no rush, but I'd like to know. And finally, if something goes wrong, for example, if it shrinks or gets damaged, what's your policy? Do you have insurance or compensation? Okay, that sounds reassuring. Could someone pick it up from my apartment this afternoon? Thank you.",
+    "sample_adv_ko": "안녕하세요. 이번 시즌 보관하기 전에 겨울 점퍼를 세탁하고 싶어서 전화드려요. 꽤 비싼 아웃도어 브랜드의 롱 구스다운 점퍼라서 좀 걱정돼요. 전문 세탁을 맡겨 본 적이 없어요. 몇 가지 여쭤볼게요. 첫째, 패딩은 보통 어떻게 세탁하세요? 라벨에 전용 세제로 물세탁은 되지만 드라이클리닝은 안 된다고 돼 있어서 그대로 해 주시는지 확인하고 싶어요. 드라이클리닝하면 털이 망가질 수 있다고 들었거든요. 둘째, 오른쪽 소맷부리에 커피 얼룩이 있고 깃 주변에 화장품 때문에 생긴 거뭇한 자국이 있어요. 완전히 지워질 것 같나요? 셋째, 가격과 기간은 어떻게 되나요? 가을까지 필요 없어서 급하진 않지만 알고 싶어요. 마지막으로 줄어들거나 손상되는 등 문제가 생기면 어떤 방침이 있나요? 보험이나 보상이 있나요? 네, 안심이 되네요. 오늘 오후에 저희 아파트로 수거하러 와 주실 수 있나요? 감사합니다.",
+    "tips": [
+     "옷 정보(종류·브랜드·라벨) → 얼룩 위치 → 가격·기간 → 사고 시 보상 정책",
+     "care label, dry-clean, cuff, collar, compensation"
+    ]
+   },
+   {
+    "kind": "solve",
+    "question": "I'm sorry, but there is a problem I need you to resolve. When the jacket comes back, it has shrunk, the feathers are clumped together, and the coffee stain is still there. Call the dry cleaner, explain the problem, and suggest two or three solutions.",
+    "question_ko": "죄송하지만 해결해야 할 문제가 있습니다. 점퍼가 돌아왔는데 줄어들었고, 털이 뭉쳤고, 커피 얼룩도 그대로입니다. 세탁소에 전화해 문제를 설명하고 두세 가지 해결책을 제시하세요.",
+    "sample": "Hello, I got my down jacket back from your shop today. But there are some problems. First, the jacket is smaller now. The sleeves are shorter. Second, the feathers are in lumps, so it's not warm. And the coffee stain is still on the sleeve. I'm very disappointed because it's an expensive jacket. Can you clean it again and fix the feathers? If you can't fix it, can you pay for the jacket? Or can you send it to the brand's repair center? Please call me back.",
+    "sample_ko": "안녕하세요, 오늘 세탁소에서 패딩을 돌려받았어요. 그런데 문제가 몇 가지 있어요. 첫째, 점퍼가 작아졌어요. 소매가 짧아졌어요. 둘째, 털이 뭉쳐서 따뜻하지 않아요. 그리고 커피 얼룩이 아직 소매에 있어요. 비싼 점퍼라 너무 실망스러워요. 다시 세탁하고 털을 고쳐 주실 수 있나요? 고칠 수 없으면 점퍼값을 보상해 주실 수 있나요? 아니면 브랜드 수선 센터로 보내 주실 수 있나요? 다시 전화 주세요.",
+    "sample_adv": "Hi, this is the customer from apartment building three who sent you a long black down jacket last week. It was delivered this afternoon, and I'm afraid there are some serious problems. When I put it on, the sleeves were about three centimeters shorter than before, and the whole jacket feels tight across the back. It has definitely shrunk. Also, when I press the padding, the down is stuck together in hard lumps, especially in the lower part, so it's flat in some places and lumpy in others. And on top of that, the coffee stain on the cuff is still clearly visible. When I dropped it off, I specifically pointed out the care label and asked for a gentle wash, not dry cleaning, so I'm really disappointed. I'd like to resolve this fairly. First, could you have the jacket checked by the brand's official repair center? They can tell us whether it can be restored, and I'd expect your shop to cover that cost. Second, if it can be restored, I'd like a full refund of the cleaning fee. And third, if it can't be fixed, I'd ask for compensation based on the purchase price. I still have the receipt from last year. When can we discuss this?",
+    "sample_adv_ko": "안녕하세요, 지난주에 검은색 롱 패딩을 맡긴 3동 고객이에요. 오늘 오후에 배달됐는데 유감스럽게도 심각한 문제가 있어요. 입어 보니 소매가 전보다 3센티미터 정도 짧아졌고 점퍼 전체가 등 쪽이 끼어요. 분명히 줄어들었어요. 또 충전재를 눌러 보면 특히 아랫부분에서 털이 딱딱하게 뭉쳐서, 어떤 데는 납작하고 어떤 데는 울퉁불퉁해요. 게다가 소맷부리 커피 얼룩도 여전히 선명하게 보여요. 맡길 때 라벨을 콕 집어 보여 드리고 드라이클리닝이 아니라 순한 물세탁을 부탁드렸기 때문에 정말 실망스러워요. 공정하게 해결하고 싶어요. 첫째, 브랜드 공식 수선 센터에서 점퍼를 검사받게 해 주실 수 있나요? 복원 가능한지 알려 줄 거고, 그 비용은 세탁소에서 부담해 주셨으면 해요. 둘째, 복원이 된다면 세탁비는 전액 환불해 주셨으면 해요. 셋째, 고칠 수 없다면 구매 가격을 기준으로 보상을 요청할게요. 작년 영수증도 아직 있어요. 언제 이야기할 수 있을까요?",
+    "tips": [
+     "문제 세 가지를 구체적으로(치수·촉감·얼룩) → 맡길 때 요청한 내용 상기 → 단계별 해결책",
+     "I'm afraid ..., shrunk, in lumps, specifically pointed out, compensation"
+    ]
+   },
+   {
+    "kind": "exp",
+    "question": "That's the end of the situation. Have you ever ruined something while doing laundry or cleaning at home? Tell me what happened and what you did about it.",
+    "question_ko": "상황이 끝났습니다. 집에서 빨래나 청소를 하다가 뭔가를 망친 적이 있나요? 무슨 일이 있었고 어떻게 했는지 말해 주세요.",
+    "sample": "Yes, last year I ruined my wife's favorite sweater. It was a soft wool sweater. I wanted to help with the laundry, so I put everything in the washing machine together. I didn't check the labels. When I took it out, the sweater was very small, like a child's sweater. My wife was surprised and a little upset. I said sorry many times. The next weekend, I bought her a new sweater. Now I always read the labels before I wash clothes.",
+    "sample_ko": "네, 작년에 아내가 제일 좋아하는 스웨터를 망쳤어요. 부드러운 울 스웨터였어요. 빨래를 돕고 싶어서 전부 세탁기에 같이 넣었어요. 라벨을 확인하지 않았어요. 꺼내 보니 스웨터가 아이 옷처럼 아주 작아져 있었어요. 아내가 놀라고 좀 속상해했어요. 여러 번 사과했어요. 다음 주말에 새 스웨터를 사 줬어요. 이제는 빨래하기 전에 항상 라벨을 읽어요.",
+    "sample_adv": "Oh, I have a pretty embarrassing one. A few years ago, I decided to deep clean my bathroom because my parents were visiting the next day. There was some black mold on the tiles and around the bathtub, so I bought two strong cleaning products. One was a bleach spray, and the other was a different cleaner for soap scum. I thought, if one works, two will work even better, so I used them together. Within a minute, there was a really sharp smell, and my eyes and throat started burning. I had no idea that mixing certain cleaners can create a toxic gas. I ran out of the bathroom, opened every window, and turned on the fan. Then I called my sister, who's a nurse, and she told me to stay outside the apartment for a while and drink water. I sat on the stairs for an hour feeling like an idiot. Luckily, I was fine. On top of that, the bleach had splashed onto my bath mat and a gray towel, so they ended up with white spots all over. When my parents came, the bathroom was clean, but my mom immediately asked why the towels looked spotted. Since then, I read every warning label very carefully.",
+    "sample_adv_ko": "아, 꽤 창피한 일이 있어요. 몇 년 전 다음 날 부모님이 오신다고 해서 욕실을 대청소하기로 했어요. 타일과 욕조 주변에 검은 곰팡이가 있어서 강한 세제를 두 개 샀어요. 하나는 락스 스프레이, 다른 하나는 물때 제거용 세제였어요. 하나로 되면 두 개는 더 잘되겠지 하고 같이 썼어요. 1분도 안 돼서 정말 톡 쏘는 냄새가 났고 눈과 목이 따가워지기 시작했어요. 어떤 세제를 섞으면 유독 가스가 생긴다는 걸 전혀 몰랐어요. 욕실에서 뛰쳐나와 창문을 다 열고 환풍기를 켰어요. 그다음 간호사인 언니에게 전화했더니 한동안 집 밖에 있으면서 물을 마시라고 했어요. 한 시간 동안 계단에 앉아 바보가 된 기분이었어요. 다행히 괜찮았어요. 게다가 락스가 욕실 매트와 회색 수건에 튀어서 온통 하얀 얼룩이 생겼어요. 부모님이 오셨을 때 욕실은 깨끗했지만 엄마가 바로 수건이 왜 얼룩덜룩하냐고 물으셨어요. 그 뒤로는 모든 경고 문구를 아주 꼼꼼히 읽어요.",
+    "tips": [
+     "목적 → 잘못된 생각(if one works, two will work better) → 사고 → 대처 → 웃긴 결말 → 교훈",
+     "black mold, soap scum, feeling like an idiot, warning label"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "rp-059",
+  "topic": "neighborhood",
+  "level": 5,
+  "situation_ko": "동네 주민센터의 봉사 활동 프로그램에 참여하려고 담당자에게 문의하는 상황 → 봉사 당일 회사 일정과 겹쳐 담당자에게 대안 제시 → 동네에서 봉사하거나 이웃을 도왔던 경험",
+  "steps": [
+   {
+    "kind": "ask",
+    "question": "I'd like to give you a situation and ask you to act it out. Your local community center is looking for volunteers to help elderly neighbors. Call the community center and ask three or four questions about the volunteer program.",
+    "question_ko": "상황을 드릴 테니 연기해 보세요. 동네 주민센터에서 어르신 이웃을 도울 봉사자를 찾고 있습니다. 주민센터에 전화해 봉사 프로그램에 관해 서너 가지 질문을 하세요.",
+    "sample": "Hello, I saw a poster about the volunteer program for elderly people. I live in this neighborhood, and I'd like to join. I have a few questions. First, what kind of work do volunteers do? Second, how often do I need to come? I work on weekdays, so I'm free only on weekends. Third, do I need any training or experience? And lastly, how can I sign up? Do I need to visit the center? Okay, I'll come on Saturday. Thank you.",
+    "sample_ko": "안녕하세요, 어르신 봉사 프로그램 포스터를 봤어요. 이 동네에 사는데 참여하고 싶어요. 몇 가지 여쭤볼게요. 첫째, 봉사자는 어떤 일을 하나요? 둘째, 얼마나 자주 와야 하나요? 평일엔 일해서 주말에만 시간이 돼요. 셋째, 교육이나 경험이 필요한가요? 마지막으로 어떻게 신청하나요? 센터에 가야 하나요? 네, 토요일에 갈게요. 감사합니다.",
+    "sample_adv": "Hi, good afternoon. I saw your poster in the elevator of my apartment building about the volunteer program for elderly residents, and I'm interested in joining. I moved to this neighborhood about a year ago, and to be honest, I don't know many people here yet, so I thought this would be a nice way to get involved. I have a few questions. First, what exactly do volunteers do? The poster mentioned home visits and meal deliveries, but I'm curious what a typical day looks like. Second, what's the time commitment? I work full-time on weekdays, so I could probably help two Saturday mornings a month. Would that be enough, or do you need people more regularly? Third, is there any training before we start? I've never done this kind of volunteering, and I'd want to know how to talk with older people who might have health issues or live alone. And finally, how do I sign up, and do I need to submit any documents, like a background check? Okay, that sounds great. I'll fill out the form online tonight and come to the orientation next Saturday. Thank you so much.",
+    "sample_adv_ko": "안녕하세요. 아파트 엘리베이터에서 어르신 주민을 위한 봉사 프로그램 포스터를 보고 참여하고 싶어서 전화드려요. 1년쯤 전에 이 동네로 이사 왔는데 솔직히 아직 아는 사람이 별로 없어서, 동네 일에 참여하는 좋은 방법이 될 것 같았어요. 몇 가지 여쭤볼게요. 첫째, 봉사자는 정확히 무슨 일을 하나요? 포스터에 가정 방문과 도시락 배달이라고 돼 있던데 보통 하루가 어떤지 궁금해요. 둘째, 시간은 얼마나 내야 하나요? 평일엔 종일 일해서 한 달에 토요일 오전 두 번 정도 도울 수 있을 것 같아요. 그 정도면 충분한가요, 더 정기적으로 할 사람이 필요한가요? 셋째, 시작 전에 교육이 있나요? 이런 봉사는 처음이라, 건강이 안 좋거나 혼자 사시는 어르신과 어떻게 이야기해야 할지 알고 싶어요. 마지막으로 어떻게 신청하고, 신원 조회 같은 서류를 내야 하나요? 네, 좋네요. 오늘 밤 온라인으로 신청서를 작성하고 다음 주 토요일 오리엔테이션에 갈게요. 정말 감사합니다.",
+    "tips": [
+     "참여 동기(이사 와서 아는 사람이 없음) → 질문(업무·시간·교육·신청 절차)",
+     "get involved, time commitment, background check, orientation"
+    ]
+   },
+   {
+    "kind": "solve",
+    "question": "I'm sorry, but there is a problem I need you to resolve. You signed up to deliver meals to elderly neighbors this Saturday, but your company suddenly schedules an important event that day. Call the volunteer coordinator, explain the situation, and suggest two or three alternatives.",
+    "question_ko": "죄송하지만 해결해야 할 문제가 있습니다. 이번 토요일에 어르신 이웃에게 도시락을 배달하기로 신청했는데, 회사가 갑자기 그날 중요한 행사를 잡았습니다. 봉사 담당자에게 전화해 상황을 설명하고 두세 가지 대안을 제시하세요.",
+    "sample": "Hello, this is Kang Dohyun. I signed up to deliver meals this Saturday morning. I'm very sorry, but my company has an important event on Saturday, and I have to go. I know the grandparents are waiting for their meals, so I want to help. Here are some ideas. First, I can ask my roommate to go instead. He's free on Saturday. Second, I can deliver the meals on Friday evening after work. Or I can work two Saturdays next month. Please tell me which one is best.",
+    "sample_ko": "안녕하세요, 강도현입니다. 이번 토요일 오전 도시락 배달을 신청했어요. 정말 죄송한데 회사에 토요일에 중요한 행사가 있어서 가야 해요. 어르신들이 도시락을 기다리시는 걸 알아서 돕고 싶어요. 몇 가지 생각이 있어요. 첫째, 룸메이트에게 대신 가 달라고 부탁할 수 있어요. 토요일에 시간이 돼요. 둘째, 금요일 퇴근 후 저녁에 도시락을 배달할 수 있어요. 아니면 다음 달에 토요일 두 번 할게요. 어떤 게 가장 좋은지 알려 주세요.",
+    "sample_adv": "Hi, Ms. Han, this is Kang Dohyun, one of the new volunteers. I'm calling about this Saturday. I'm scheduled to deliver lunch boxes to the five homes on the east side of the neighborhood from ten to twelve. I'm really sorry to tell you this so late, but my company just announced a client event this Saturday, and as the project manager, I'm required to be there. I tried to get out of it, but there was no way. I know some of the residents on my route, like Mr. Oh on the fourth floor, really look forward to the visits, and I don't want to leave you short-handed. So let me suggest a few things. First, my roommate actually came to the orientation with me and finished the training, but he hasn't signed up for a date yet. He said he'd be happy to take my route this Saturday, if that's okay with you. Second, if the meals can be prepared a day early, I could deliver them on Friday evening between seven and eight, and maybe just call the residents on Saturday to check on them. And third, if neither works, I'll take two extra shifts next month to make up for it. Again, I'm really sorry. Which option would work best?",
+    "sample_adv_ko": "안녕하세요, 한 선생님, 새로 온 봉사자 강도현입니다. 이번 토요일 일로 전화드려요. 저는 10시부터 12시까지 동네 동쪽 다섯 가구에 도시락을 배달하기로 돼 있어요. 이렇게 늦게 말씀드려 정말 죄송한데, 회사에서 방금 이번 토요일에 고객 행사를 발표했고 프로젝트 매니저라 꼭 참석해야 해요. 빠져 보려 했지만 방법이 없었어요. 4층 오 할아버지처럼 제 담당 어르신 중에 방문을 정말 기다리시는 분들이 있는 걸 알아서, 일손이 모자라게 하고 싶지 않아요. 그래서 몇 가지 제안드릴게요. 첫째, 제 룸메이트가 저와 오리엔테이션에 와서 교육을 다 받았는데 아직 날짜를 신청하지 않았어요. 괜찮으시다면 이번 토요일에 제 구역을 맡겠대요. 둘째, 도시락을 하루 일찍 준비할 수 있다면 금요일 저녁 7시에서 8시 사이에 배달하고, 토요일에는 어르신들께 전화로 안부를 여쭐 수 있어요. 셋째, 둘 다 안 되면 다음 달에 두 번 더 해서 보충할게요. 다시 한번 정말 죄송해요. 어떤 방법이 가장 좋을까요?",
+    "tips": [
+     "담당 업무 확인 → 사과와 이유 → 어르신 입장 배려 → 대안(대타·전날 배달·보충)",
+     "short-handed, take my route, check on them, make up for it"
+    ]
+   },
+   {
+    "kind": "exp",
+    "question": "That's the end of the situation. Have you ever volunteered or helped a neighbor in your community? Tell me what you did, who you helped, and how the experience made you feel.",
+    "question_ko": "상황이 끝났습니다. 동네에서 봉사하거나 이웃을 도운 적이 있나요? 무엇을 했고, 누구를 도왔고, 그 경험이 어떤 느낌이었는지 말해 주세요.",
+    "sample": "Yes, last winter there was a lot of snow in my neighborhood. The next morning, I saw an old woman trying to walk to the bus stop. The road was very icy. I helped her walk there slowly. After that, I and some neighbors cleaned the snow in front of our building together. One neighbor brought hot coffee for everyone. It was cold and tiring, but it felt really good. Now I say hello to those neighbors every time I see them.",
+    "sample_ko": "네, 지난겨울 우리 동네에 눈이 많이 왔어요. 다음 날 아침 할머니 한 분이 버스 정류장까지 걸어가려고 하시는 걸 봤어요. 길이 아주 미끄러웠어요. 천천히 거기까지 모셔다드렸어요. 그 뒤 이웃 몇 명과 건물 앞 눈을 같이 치웠어요. 한 이웃이 모두에게 따뜻한 커피를 가져왔어요. 춥고 힘들었지만 정말 기분이 좋았어요. 이제는 그 이웃들을 볼 때마다 인사해요.",
+    "sample_adv": "Yes, there's one experience I think about a lot. About two years ago, an elderly man named Mr. Choi lived alone on the floor below me. I only knew him from the elevator, where he'd always comment on the weather. One evening, I noticed his newspapers were piling up outside his door for three days, which wasn't like him. I knocked, and I heard a weak voice inside. He'd fallen in the bathroom and hurt his hip, and he couldn't get up to reach his phone. I called an ambulance and the management office, and they opened the door. He spent two weeks in the hospital. His only daughter lived in Australia, so after he came home, I started dropping by twice a week to bring groceries and just chat. He taught me how to make proper doenjang stew, and I helped him set up video calls with his grandchildren. Eventually, I signed him up for the community center's meal delivery program, and that's actually how I started volunteering there myself. Mr. Choi moved to his daughter's place last year, but he still sends me a message on my birthday. That experience taught me that paying a little attention to the people around you can really matter.",
+    "sample_adv_ko": "네, 자주 생각하는 경험이 하나 있어요. 2년쯤 전에 최 할아버지라는 분이 제 아래층에 혼자 사셨어요. 엘리베이터에서 늘 날씨 이야기를 하시던 분이라는 것만 알았어요. 어느 날 저녁, 할아버지 문 앞에 신문이 사흘째 쌓여 있는 걸 봤는데 평소 같지 않았어요. 문을 두드리니 안에서 힘없는 목소리가 들렸어요. 욕실에서 넘어져 엉덩이를 다치셔서 일어나 전화기를 잡지 못하셨던 거예요. 구급차와 관리사무소에 전화했고 그분들이 문을 열었어요. 할아버지는 2주 동안 입원하셨어요. 외동딸이 호주에 살아서, 퇴원하신 뒤로 일주일에 두 번 장 본 걸 가져다드리고 그냥 이야기를 나누러 들르기 시작했어요. 할아버지는 제대로 된 된장찌개 끓이는 법을 알려 주셨고, 저는 손주들과 영상 통화하는 걸 설정해 드렸어요. 결국 할아버지를 주민센터 도시락 배달 프로그램에 신청해 드렸는데, 사실 그게 제가 거기서 봉사를 시작한 계기예요. 최 할아버지는 작년에 따님 댁으로 가셨지만 아직도 제 생일에 메시지를 보내 주세요. 그 경험으로 주변 사람에게 조금 관심을 기울이는 게 정말 중요할 수 있다는 걸 배웠어요.",
+    "tips": [
+     "이웃 소개 → 이상한 낌새(newspapers piling up) → 도움 → 이후 관계 → 교훈",
+     "wasn't like him, drop by, paying a little attention ... can really matter"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "rp-060",
+  "topic": "holiday",
+  "level": 5,
+  "situation_ko": "명절에 가족을 집으로 초대해서 장보기 배송 서비스에 문의하는 상황 → 배송이 명절 이후로 늦어져 형제에게 대안 제시 → 명절이나 기념일 준비가 꼬였던 경험",
+  "steps": [
+   {
+    "kind": "ask",
+    "question": "I'd like to give you a situation and ask you to act it out. This year, you are hosting your whole family at your home for a big holiday. Call an online grocery delivery service and ask three or four questions about ordering food for the holiday.",
+    "question_ko": "상황을 드릴 테니 연기해 보세요. 올해는 큰 명절에 온 가족을 집에 초대합니다. 온라인 장보기 배송 서비스에 전화해 명절 음식 재료 주문에 관해 서너 가지 질문을 하세요.",
+    "sample": "Hello, I'm hosting my family for Chuseok this year, and I want to order groceries from your service. About twelve people are coming. First, what is the last day I can order before the holiday? Second, can you deliver on the day before Chuseok? Third, do you sell holiday food sets, like meat and fish for the holiday table? And lastly, is there a delivery fee for big orders? Okay, I'll order tonight. Thank you very much.",
+    "sample_ko": "안녕하세요, 올해 추석에 가족을 초대해서 이 서비스로 장을 보고 싶어요. 열두 명 정도 와요. 첫째, 명절 전 마지막 주문일이 언제인가요? 둘째, 추석 전날에 배달해 주실 수 있나요? 셋째, 차례상용 고기와 생선 같은 명절 음식 세트를 파나요? 마지막으로 대량 주문에도 배송비가 있나요? 네, 오늘 밤 주문할게요. 정말 감사합니다.",
+    "sample_adv": "Hi, good morning. This is the first year I'm hosting the Lunar New Year at my place. My parents usually do it, but they're getting older, so my wife and I offered. There'll be about fifteen people, including my aunts, uncles, and cousins' kids, so I need to order a lot of groceries, and I'd rather not fight the crowds at the market. I have a few questions. First, what's your delivery schedule around the holiday? The holiday starts on Monday, so ideally, I'd like everything to arrive on Saturday morning, because we'll spend Sunday cooking. When's the deadline to order for that? Second, do you have ready-made holiday packages, for example, prepared pancake batter, marinated beef for galbi, or a fruit set for the ancestral table? That would save us a lot of time. Third, since it's a big order, how do you keep the meat and fish fresh during delivery? Do you use ice packs or a refrigerated truck? And finally, if something is out of stock, do you substitute it automatically, or do you contact me first? Great, I'll place the order today. Thank you.",
+    "sample_adv_ko": "안녕하세요. 올해 처음으로 우리 집에서 설을 치러요. 보통은 부모님이 하시는데 연세가 드셔서 아내와 제가 하겠다고 했어요. 이모, 삼촌, 사촌 아이들까지 열다섯 명 정도라 장볼 게 많은데 시장 인파와 씨름하고 싶지 않아요. 몇 가지 여쭤볼게요. 첫째, 명절 전후 배송 일정이 어떻게 되나요? 명절이 월요일에 시작해서 일요일엔 음식을 해야 하니까 토요일 아침에 다 도착하면 좋겠어요. 그러려면 주문 마감이 언제인가요? 둘째, 손질된 전 반죽, 양념 갈비, 차례상용 과일 세트 같은 명절 패키지가 있나요? 그러면 시간이 많이 절약될 거예요. 셋째, 주문이 크니까 배송 중 고기와 생선은 어떻게 신선하게 유지하나요? 아이스팩이나 냉장 차량을 쓰시나요? 마지막으로 품절인 상품은 자동으로 대체하나요, 아니면 먼저 연락 주시나요? 좋아요, 오늘 주문할게요. 감사합니다.",
+    "tips": [
+     "처음 명절을 치르는 배경 → 질문(배송 마감·명절 패키지·신선도·품절 대체)",
+     "host, deadline to order, ancestral table, substitute, out of stock"
+    ]
+   },
+   {
+    "kind": "solve",
+    "question": "I'm sorry, but there is a problem I need you to resolve. Two days before the holiday, the delivery company tells you that your groceries will not arrive until after the holiday because of a warehouse problem. Call your brother or sister, explain the situation, and suggest two or three alternatives.",
+    "question_ko": "죄송하지만 해결해야 할 문제가 있습니다. 명절 이틀 전 배송 업체에서 창고 문제로 장본 물건이 명절 이후에야 도착한다고 알려 왔습니다. 형제자매에게 전화해 상황을 설명하고 두세 가지 대안을 제시하세요.",
+    "sample": "Hi, Jiwoo, it's me. I have bad news. The delivery company just called. They said our groceries can't come until after the holiday because of a problem at their warehouse. I'm so stressed. Everyone is coming in two days. So I have some ideas. First, can you go to the traditional market with me tomorrow morning? We can buy everything there. Second, we can buy some food that's already cooked, like pancakes, from a shop. Or we can ask Mom to make a few dishes. What do you think?",
+    "sample_ko": "지우야, 나야. 안 좋은 소식이 있어. 방금 배송 업체에서 전화 왔는데 창고 문제로 우리 장본 게 명절 이후에야 올 수 있대. 너무 스트레스받아. 이틀 뒤면 다 오는데. 그래서 몇 가지 생각이 있어. 첫째, 내일 아침에 나랑 전통시장에 같이 가 줄래? 거기서 다 살 수 있어. 둘째, 전 같은 이미 만든 음식을 가게에서 살 수 있어. 아니면 엄마한테 몇 가지만 해 달라고 부탁할 수도 있고. 어떻게 생각해?",
+    "sample_adv": "Hey, Jiwoo, are you busy? I need your help. I just got a call from the grocery delivery company, and there's been a fire alarm and some kind of system shutdown at their warehouse. They said every order in our area is delayed, and ours won't arrive until next Wednesday. That's two days after the holiday. I've already asked for a refund, so at least the money's coming back, but the problem is we have nothing for the holiday, and fifteen people are coming on Monday. I really don't want Mom to find out and start worrying. So here's what I'm thinking. First, could you come with me to the big traditional market early tomorrow morning? If we get there by seven, before the crowds, and split the list, we can buy the meat, fish, and vegetables in about two hours. You're much better at choosing fish than I am anyway. Second, to save time on cooking, we could order the pancakes and some side dishes from that famous banchan shop near your office. They take holiday orders until tomorrow night. And third, for the fruit and rice cakes, we could stop by a supermarket on Sunday. If we divide everything up, I think we can still pull it off. Can you make it tomorrow?",
+    "sample_adv_ko": "지우야, 바빠? 도움이 필요해. 방금 장보기 배송 업체에서 전화가 왔는데 창고에 화재 경보가 울리고 무슨 시스템이 멈췄대. 우리 지역 주문이 전부 지연돼서 우리 건 다음 주 수요일에야 온대. 명절 이틀 뒤야. 이미 환불은 요청해서 돈은 돌아오는데, 문제는 명절에 쓸 게 하나도 없고 월요일에 열다섯 명이 온다는 거야. 엄마가 알고 걱정하시는 건 정말 싫어. 그래서 이렇게 생각하고 있어. 첫째, 내일 아침 일찍 큰 전통시장에 같이 가 줄래? 사람 몰리기 전 7시까지 가서 목록을 나누면 고기, 생선, 채소를 두 시간 안에 살 수 있어. 어차피 생선 고르는 건 네가 나보다 훨씬 잘하잖아. 둘째, 요리 시간을 줄이려면 너희 회사 근처 유명한 반찬 가게에서 전이랑 반찬 몇 가지를 주문할 수 있어. 내일 밤까지 명절 주문을 받는대. 셋째, 과일과 떡은 일요일에 마트에 들르면 돼. 다 나눠서 하면 그래도 해낼 수 있을 것 같아. 내일 시간 돼?",
+    "tips": [
+     "배송 업체가 알려 준 원인 전달 → 이미 한 조치(환불) → 핵심 문제 → 역할을 나눈 대안",
+     "split the list, pull it off, stop by, divide everything up"
+    ]
+   },
+   {
+    "kind": "exp",
+    "question": "That's the end of the situation. Have you ever had something go wrong while preparing for a holiday or a family celebration? Tell me what happened and how your family handled it.",
+    "question_ko": "상황이 끝났습니다. 명절이나 가족 행사를 준비하다가 일이 잘못된 적이 있나요? 무슨 일이 있었고 가족이 어떻게 대처했는지 말해 주세요.",
+    "sample": "Yes, on my grandfather's eightieth birthday, we had a problem. My family ordered a big cake and booked a restaurant. But on the day, the restaurant called and said their kitchen had a gas problem, so they had to close. About twenty people were coming. We were really worried. Then my aunt said we could have the party at her house. We ordered Chinese food and set up tables in her living room. My grandfather said it was the best birthday because it felt like home.",
+    "sample_ko": "네, 할아버지 팔순 때 문제가 있었어요. 가족이 큰 케이크를 주문하고 식당을 예약했어요. 그런데 당일에 식당에서 주방 가스 문제로 문을 닫아야 한다고 전화가 왔어요. 스무 명 정도 올 예정이었어요. 정말 걱정됐어요. 그때 이모가 자기 집에서 하자고 했어요. 중국 음식을 시키고 이모 집 거실에 상을 차렸어요. 할아버지는 집 같은 느낌이라 최고의 생일이었다고 하셨어요.",
+    "sample_adv": "Yes, the most chaotic one was the Chuseok when I was about sixteen. That year, my mom had made dozens of songpyeon, the half-moon rice cakes, and a huge amount of jeon the day before, and everything was stored on the balcony because the fridge was full. The next morning, we woke up to find that our neighbor's cat had gotten onto our balcony through the gap between the buildings, and it had knocked over two trays and eaten part of the fish pancakes. My mom almost cried, because the relatives were arriving in three hours, and the ancestral ceremony needed everything to be perfect. But my grandmother, who was staying with us, just laughed and took charge. She sent my dad and me to the market to buy more fish and flour, and she and my mom started cooking again immediately. My younger sister's job was to wash the trays and guard the balcony door. By the time the relatives came, the table was full again, just with slightly smaller pancakes. Everyone heard the story and laughed through the whole meal. Now, every Chuseok, someone in the family asks, did anyone check on the cat? It's become a family joke.",
+    "sample_adv_ko": "네, 가장 정신없었던 건 제가 열여섯 살쯤 때의 추석이에요. 그해 엄마가 전날 반달 모양 떡인 송편 수십 개와 전을 엄청 많이 만드셨는데, 냉장고가 꽉 차서 전부 베란다에 두었어요. 다음 날 아침 일어나 보니 옆집 고양이가 건물 사이 틈으로 우리 베란다에 들어와 쟁반 두 개를 엎고 생선전 일부를 먹어 버렸어요. 친척들이 세 시간 뒤에 오고 차례상은 모든 게 완벽해야 해서 엄마가 거의 울 뻔하셨어요. 그런데 우리 집에 와 계시던 할머니가 그냥 웃으시더니 지휘를 맡으셨어요. 아빠와 저를 시장에 보내 생선과 밀가루를 더 사 오게 하시고, 할머니와 엄마는 바로 다시 요리를 시작하셨어요. 여동생은 쟁반을 씻고 베란다 문을 지키는 일을 맡았어요. 친척들이 왔을 때는 전이 조금 작아졌을 뿐 상이 다시 가득 찼어요. 모두 이야기를 듣고 식사 내내 웃었어요. 지금도 추석마다 가족 중 누군가 고양이 확인했어? 하고 물어요. 가족 농담이 됐어요.",
+    "tips": [
+     "준비 상황 → 뜻밖의 사고(고양이) → 위기감 → 누가 어떻게 해결(역할 분담) → 지금의 가족 농담",
+     "took charge, knocked over, by the time ..., a family joke"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "rp-061",
+  "topic": "geography",
+  "level": 6,
+  "situation_ko": "외국인 거래처 손님들을 데리고 화산 지형 탐방을 하려고 관광 안내소에 문의하는 상황 → 기상 악화로 탐방로가 폐쇄되어 손님들에게 대안 제시 → 자연환경이나 지형 때문에 계획이 바뀌었던 경험",
+  "steps": [
+   {
+    "kind": "ask",
+    "question": "I'd like to give you a situation and ask you to act it out. Some foreign business partners are visiting, and you want to take them to see a famous volcanic area in your country. Call the tourist information center and ask three or four questions to plan the visit.",
+    "question_ko": "상황을 드릴 테니 연기해 보세요. 외국인 거래처 사람들이 방문해서 당신 나라의 유명한 화산 지형에 데려가고 싶습니다. 관광 안내소에 전화해 방문 계획을 위해 서너 가지 질문을 하세요.",
+    "sample": "Hello, I'm planning a trip to Jeju for three guests from Germany next Thursday. I want to show them a volcanic area, like Seongsan Ilchulbong. I have some questions. First, how long does it take to walk to the top? Two of my guests are over sixty. Second, do you have English guides or audio guides? Third, how much are the tickets, and do we need to book in advance? And lastly, are there any other volcanic places nearby that are easy to visit? Thank you very much.",
+    "sample_ko": "안녕하세요, 다음 주 목요일에 독일에서 오는 손님 세 분과 제주 여행을 계획하고 있어요. 성산일출봉 같은 화산 지형을 보여 드리고 싶어요. 몇 가지 여쭤볼게요. 첫째, 정상까지 걸어서 얼마나 걸리나요? 손님 중 두 분이 60세가 넘으세요. 둘째, 영어 가이드나 오디오 가이드가 있나요? 셋째, 입장료는 얼마이고 미리 예약해야 하나요? 마지막으로 근처에 쉽게 갈 수 있는 다른 화산 명소가 있나요? 정말 감사합니다.",
+    "sample_adv": "Hello, good morning. I work for a trading company in Seoul, and next Thursday I'm hosting three business partners from Germany in Jeju. They have one free day after our meetings, and they specifically asked to see Jeju's volcanic landscape, since they've read about it being a UNESCO site. So I'd like to plan something meaningful but not too exhausting. First, I'm thinking about Seongsan Ilchulbong and the lava tube at Manjanggul. How long would each visit take, and how physically demanding are they? Two of my guests are in their sixties, and one has a bad knee, so I need to know about steep stairs or uneven ground. Second, are there professional guides who can explain the geology in English or German? They're engineers, so they'll probably ask detailed questions about how the island was formed. Third, are there any closures or restrictions I should know about? I heard some trails close for protection or during bad weather. And finally, could you recommend a good route that connects these places, maybe with a restaurant serving local food in between? Excellent. Could you email me the guide's contact information and a map? I really appreciate it.",
+    "sample_adv_ko": "안녕하세요. 서울의 무역 회사에서 일하는데 다음 주 목요일에 독일 거래처 세 분을 제주에서 맞이해요. 회의 후 하루 자유 일정이 있는데, 유네스코 지정지라는 걸 읽고 제주 화산 지형을 꼭 보고 싶다고 하셨어요. 그래서 의미 있지만 너무 힘들지 않은 일정을 짜고 싶어요. 첫째, 성산일출봉과 만장굴 용암 동굴을 생각하고 있어요. 각각 얼마나 걸리고 체력적으로 얼마나 힘든가요? 손님 중 두 분이 60대이고 한 분은 무릎이 안 좋으셔서 가파른 계단이나 울퉁불퉁한 길이 있는지 알아야 해요. 둘째, 영어나 독일어로 지질을 설명해 줄 전문 가이드가 있나요? 엔지니어들이라 섬이 어떻게 만들어졌는지 자세히 물어볼 거예요. 셋째, 알아야 할 폐쇄나 제한이 있나요? 보호를 위해서나 날씨가 나쁠 때 닫는 탐방로가 있다고 들었어요. 마지막으로 이 장소들을 잇고 중간에 향토 음식점이 있는 좋은 동선을 추천해 주실 수 있나요? 훌륭해요. 가이드 연락처와 지도를 이메일로 보내 주실 수 있나요? 정말 감사합니다.",
+    "tips": [
+     "업무 손님 배경 → 원하는 장소 → 체력 조건 → 전문 가이드 → 폐쇄 여부 → 동선 추천",
+     "physically demanding, uneven ground, geology, lava tube, closures"
+    ]
+   },
+   {
+    "kind": "solve",
+    "question": "I'm sorry, but there is a problem I need you to resolve. On the morning of the tour, strong winds and heavy rain close the volcanic trails and the lava cave, and your guests only have this one free day. Explain the situation to your guests and suggest two or three alternatives.",
+    "question_ko": "죄송하지만 해결해야 할 문제가 있습니다. 탐방 당일 아침 강풍과 폭우로 화산 탐방로와 용암 동굴이 폐쇄되었고, 손님들에게는 이 하루뿐인 자유 일정입니다. 손님들에게 상황을 설명하고 두세 가지 대안을 제시하세요.",
+    "sample": "Good morning, everyone. I'm sorry, but I have some bad news. Because of the strong wind and rain, the volcanic trails and the lava cave are closed today. It's not safe to go. I know you really wanted to see them. So I have some ideas. First, we can visit a museum about Jeju's nature and volcanoes. It's indoors, and there are English explanations. Second, we can go to a tea farm and a local market. Or we can wait until the afternoon and see if the weather gets better.",
+    "sample_ko": "여러분, 좋은 아침입니다. 죄송하지만 안 좋은 소식이 있어요. 강한 바람과 비 때문에 오늘 화산 탐방로와 용암 동굴이 폐쇄됐어요. 가는 건 안전하지 않아요. 정말 보고 싶어 하셨던 거 알아요. 그래서 몇 가지 생각이 있어요. 첫째, 제주 자연과 화산에 관한 박물관에 갈 수 있어요. 실내이고 영어 설명이 있어요. 둘째, 차 농장과 전통시장에 갈 수 있어요. 아니면 오후까지 기다려서 날씨가 좋아지는지 볼 수도 있어요.",
+    "sample_adv": "Good morning, everyone. I hope you slept well despite the noise of the wind last night. Unfortunately, I have some disappointing news. I just spoke with the park office, and because of the storm warning, both Seongsan Ilchulbong and the lava cave are closed for the whole day. The wind on the crater rim is over twenty meters per second right now, so it's really not safe, and they don't expect to reopen until tomorrow. I know this was the part of the trip you were most looking forward to, and I'm sorry, but I've put together a few alternatives so we can still make the most of the day. First, there's an excellent natural history museum in Jeju City with a large section on how the island formed from volcanic eruptions. It has models, rock samples, and explanations in English, and I've arranged for a geology researcher there to give us a private talk at eleven. Second, in the afternoon, we could visit a green tea plantation built on volcanic soil. Inside their visitor center, they explain why the soil here is so special, and the rain actually makes the fields look beautiful. And third, if the weather clears by four, there's a small crater called Sangumburi that sometimes reopens earlier, and it's an easy flat walk. What do you think? We'll leave whenever you're ready.",
+    "sample_adv_ko": "여러분, 좋은 아침입니다. 어젯밤 바람 소리에도 잘 주무셨길 바라요. 유감스럽게도 아쉬운 소식이 있어요. 방금 공원 관리소와 통화했는데, 기상 특보 때문에 성산일출봉과 용암 동굴 둘 다 하루 종일 폐쇄됐어요. 지금 분화구 능선 바람이 초속 20미터가 넘어서 정말 안전하지 않고, 내일까지는 다시 열지 않을 거래요. 이번 여행에서 가장 기대하신 부분이라는 걸 알기에 죄송하지만, 오늘을 최대한 활용할 수 있게 몇 가지 대안을 마련했어요. 첫째, 제주시에 섬이 화산 폭발로 어떻게 생겼는지를 다룬 큰 전시관이 있는 훌륭한 자연사 박물관이 있어요. 모형, 암석 표본, 영어 설명이 있고, 11시에 그곳 지질 연구원이 우리만을 위한 설명을 해 주기로 해 뒀어요. 둘째, 오후에는 화산토 위에 만든 녹차 농장에 갈 수 있어요. 방문자 센터에서 이곳 흙이 왜 특별한지 설명해 주고, 비가 오면 오히려 밭이 더 아름다워 보여요. 셋째, 4시까지 날씨가 개면 가끔 더 일찍 다시 여는 산굼부리라는 작은 분화구가 있는데 평탄하고 쉬운 산책로예요. 어떻게 생각하세요? 준비되시면 언제든 출발할게요.",
+    "tips": [
+     "고객 응대 solve: 정중한 인사 → 확인한 사실(수치) → 공감·사과 → 이미 준비한 대안(주제 유지)",
+     "make the most of the day, I've arranged for ..., crater rim, volcanic soil"
+    ]
+   },
+   {
+    "kind": "exp",
+    "question": "That's the end of the situation. Have you ever had to change your plans because of nature or the land, such as a closed mountain trail, a flooded road, or rough seas? Tell me what happened and what you did instead.",
+    "question_ko": "상황이 끝났습니다. 등산로 폐쇄, 도로 침수, 거친 바다처럼 자연이나 지형 때문에 계획을 바꿔야 했던 적이 있나요? 무슨 일이 있었고 대신 무엇을 했는지 말해 주세요.",
+    "sample": "Yes, three years ago I went to Ulleungdo Island with my friends. We wanted to stay there for three days. But on the last day, the waves were very high, and all the ferries were canceled. We couldn't go home. We had to stay two more days. At first, we were worried because we had to work. We called our offices and explained. Then we decided to enjoy it. We hiked, ate fresh squid, and met friendly local people. It was stressful, but it became a special memory.",
+    "sample_ko": "네, 3년 전에 친구들과 울릉도에 갔어요. 사흘 머물 계획이었어요. 그런데 마지막 날 파도가 아주 높아서 배가 전부 결항됐어요. 집에 갈 수 없었어요. 이틀을 더 있어야 했어요. 처음엔 출근해야 해서 걱정했어요. 회사에 전화해서 설명했어요. 그다음 즐기기로 했어요. 등산하고, 싱싱한 오징어를 먹고, 친절한 주민들을 만났어요. 스트레스였지만 특별한 추억이 됐어요.",
+    "sample_adv": "Yes, I had an unforgettable one on Ulleungdo, a small volcanic island in the East Sea. It's about three hours from the mainland by ferry, and the sea there is famous for being rough. My friends and I went for a long weekend in October. The first two days were amazing. We hiked to the top of Seonginbong Peak and saw cliffs dropping straight into the bright blue water. But on Sunday morning, when we got to the port, there was a sign saying all ferries were canceled because the waves were over four meters high. Nobody could tell us when the next one would leave. I was supposed to give a presentation at work on Monday, so I was really anxious. I called my manager, and luckily he moved the presentation and let me join the meeting online. In the end, we were stuck for two extra days. We moved to a tiny guesthouse run by a fisherman's family, and they took us out in a small boat once the sea calmed a bit and cooked the squid we caught. Looking back, I realized how much nature still controls life on islands like that. The locals just shrugged and said, the sea decides.",
+    "sample_adv_ko": "네, 동해의 작은 화산섬 울릉도에서 잊지 못할 일이 있었어요. 육지에서 배로 세 시간쯤 걸리고 바다가 거칠기로 유명한 곳이에요. 10월 연휴에 친구들과 갔어요. 처음 이틀은 정말 멋졌어요. 성인봉 정상까지 올라가서 밝고 파란 바다로 곧장 떨어지는 절벽을 봤어요. 그런데 일요일 아침 항구에 가 보니 파도가 4미터가 넘어서 모든 배가 결항됐다는 안내문이 있었어요. 다음 배가 언제 뜰지 아무도 몰랐어요. 월요일에 회사에서 발표를 해야 해서 정말 초조했어요. 팀장님께 전화했는데 다행히 발표를 미뤄 주시고 회의는 온라인으로 참석하게 해 주셨어요. 결국 이틀을 더 갇혀 있었어요. 어부 가족이 운영하는 작은 민박으로 옮겼는데, 바다가 조금 잔잔해지자 작은 배에 태워 주셨고 우리가 잡은 오징어를 요리해 주셨어요. 돌아보면 그런 섬에서는 아직도 자연이 생활을 얼마나 좌우하는지 깨달았어요. 주민들은 그냥 어깨를 으쓱하며 바다가 정한다고 했어요.",
+    "tips": [
+     "장소의 지형 소개 → 좋았던 부분 → 자연 때문에 막힘 → 현실 문제 해결 → 뜻밖의 경험 → 깨달음",
+     "rough seas, stuck for two extra days, once the sea calmed, the sea decides"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "rp-062",
+  "topic": "industry",
+  "level": 6,
+  "situation_ko": "관심 있는 업계의 채용 박람회에 참가하려고 주최 측에 문의하는 상황 → 기차 지연으로 예약한 현장 면접 시간에 못 가게 되어 채용 담당자에게 대안 제시 → 일이나 업계와 관련해 기억에 남는 경험",
+  "steps": [
+   {
+    "kind": "ask",
+    "question": "I'd like to give you a situation and ask you to act it out. A big job fair for the industry you are interested in is being held next week. Call the organizers and ask three or four questions about attending the job fair.",
+    "question_ko": "상황을 드릴 테니 연기해 보세요. 관심 있는 업계의 큰 채용 박람회가 다음 주에 열립니다. 주최 측에 전화해 박람회 참가에 관해 서너 가지 질문을 하세요.",
+    "sample": "Hello, I'm calling about the food industry job fair next week. I'm looking for a job in this industry, and I'd like to attend. I have some questions. First, do I need to register before the fair? Is it free? Second, which companies are coming? Third, can I have an interview with companies on the same day? And lastly, what should I bring? Should I print my resume? Okay, I'll register online today. Thank you for your help.",
+    "sample_ko": "안녕하세요, 다음 주 식품 산업 채용 박람회 때문에 전화드려요. 이 업계에서 일자리를 찾고 있어서 참가하고 싶어요. 몇 가지 여쭤볼게요. 첫째, 박람회 전에 등록해야 하나요? 무료인가요? 둘째, 어떤 회사들이 오나요? 셋째, 당일에 회사와 면접을 볼 수 있나요? 마지막으로 무엇을 가져가야 하나요? 이력서를 출력해야 하나요? 네, 오늘 온라인으로 등록할게요. 도와주셔서 감사합니다.",
+    "sample_adv": "Hello, good afternoon. I'm calling about the agriculture and food industry job fair at the convention center next Wednesday. I graduated in animal science last year, and I've been working at a small lab, but I'd really like to move into a bigger company in the feed or food processing field, so this fair sounds perfect for me. I have a few questions. First, how does registration work? Is it free for job seekers, and is there a deadline? I saw two different links online, so I want to make sure I use the right one. Second, is there a list of participating companies and the positions they're hiring for? I'm especially interested in research and development, quality control, and technical sales. Third, I heard some companies hold on-site interviews. How do I sign up for those? Do I need to apply in advance, and how long is each interview? And finally, are there any other programs, like resume consulting or talks by people working in the industry? I'd love to hear about real career paths. That's great. Could you send me the schedule by email? Thank you.",
+    "sample_adv_ko": "안녕하세요. 다음 주 수요일 컨벤션 센터에서 열리는 농식품 산업 채용 박람회 때문에 전화드려요. 작년에 동물자원학과를 졸업하고 작은 연구소에서 일하고 있는데, 사료나 식품 가공 분야의 더 큰 회사로 꼭 옮기고 싶어서 이 박람회가 딱 맞는 것 같아요. 몇 가지 여쭤볼게요. 첫째, 등록은 어떻게 하나요? 구직자는 무료인지, 마감이 있는지 궁금해요. 온라인에서 링크를 두 개 봐서 맞는 걸 쓰고 싶어요. 둘째, 참가 회사와 채용 직무 목록이 있나요? 저는 특히 연구 개발, 품질 관리, 기술 영업에 관심이 있어요. 셋째, 일부 회사가 현장 면접을 한다고 들었어요. 어떻게 신청하나요? 미리 지원해야 하나요, 면접은 한 번에 얼마나 걸리나요? 마지막으로 이력서 컨설팅이나 현직자 강연 같은 다른 프로그램이 있나요? 실제 경력 경로를 꼭 듣고 싶어요. 좋네요. 일정을 이메일로 보내 주실 수 있나요? 감사합니다.",
+    "tips": [
+     "내 경력과 목표를 먼저 → 질문(등록·참가 기업·현장 면접·부대 프로그램)",
+     "job seeker, participating companies, on-site interview, career paths"
+    ]
+   },
+   {
+    "kind": "solve",
+    "question": "I'm sorry, but there is a problem I need you to resolve. You booked an on-site interview with a company you really want to join, but your train is delayed by two hours, and you will miss your interview time. Call the company's recruiter, explain the situation, and suggest two or three alternatives.",
+    "question_ko": "죄송하지만 해결해야 할 문제가 있습니다. 정말 들어가고 싶은 회사와 현장 면접을 예약했는데 기차가 두 시간 지연되어 면접 시간을 놓치게 됐습니다. 그 회사 채용 담당자에게 전화해 상황을 설명하고 두세 가지 대안을 제시하세요.",
+    "sample": "Hello, this is Han Seoyeon. I have an interview with your company at the job fair today at eleven. I'm very sorry, but my train from Daegu stopped because of a signal problem. It will be two hours late. I left early, but I can't arrive on time. I really want to work at your company. Can I have my interview in the afternoon? If you're busy, can I do the interview online today or tomorrow? Or I can visit your office next week. Thank you for understanding.",
+    "sample_ko": "안녕하세요, 한서연입니다. 오늘 11시에 박람회에서 귀사 면접이 있어요. 정말 죄송한데 대구에서 오는 기차가 신호 문제로 멈췄어요. 두 시간 늦어질 거래요. 일찍 출발했는데 제시간에 도착할 수가 없어요. 귀사에서 정말 일하고 싶어요. 오후에 면접을 볼 수 있을까요? 바쁘시면 오늘이나 내일 온라인으로 면접을 봐도 될까요? 아니면 다음 주에 사무실로 찾아갈 수도 있어요. 이해해 주셔서 감사합니다.",
+    "sample_adv": "Hello, Ms. Jung? This is Han Seoyeon. I'm scheduled for an on-site interview at your booth at eleven fifteen today for the quality control position. First of all, I'm really sorry to call like this. I took the seven a.m. train from Daegu to make sure I'd arrive early, but there was a signal failure near Daejeon, and the train has been stopped for over an hour. The conductor just announced that we'll arrive in Seoul around one p.m., so there's no way I can make my time slot. I'm attaching a screenshot of the delay notice from the rail company to your email, just so you have it. Your company is honestly my first choice, so I'd be very grateful for another opportunity. Here are a few options that might work for you. First, if there are any open slots this afternoon, I could come straight to your booth from the station. I'll be there by one thirty at the latest. Second, if the afternoon is fully booked, I'd be happy to do a video interview this evening or tomorrow, whenever is convenient for your team. And third, if you prefer meeting in person, I could visit your headquarters any day next week. Thank you so much for considering this.",
+    "sample_adv_ko": "안녕하세요, 정 선생님이세요? 한서연입니다. 오늘 11시 15분에 품질 관리 직무로 부스에서 현장 면접이 잡혀 있어요. 우선 이렇게 전화드려 정말 죄송해요. 일찍 도착하려고 대구에서 오전 7시 기차를 탔는데, 대전 근처에서 신호 장애가 나서 기차가 한 시간 넘게 멈춰 있어요. 방금 승무원이 서울에 오후 1시쯤 도착한다고 안내해서 제 시간대는 도저히 맞출 수가 없어요. 참고하시도록 철도 회사의 지연 안내 화면을 캡처해 이메일로 보내 드릴게요. 귀사가 솔직히 제 1지망이라 다시 기회를 주신다면 정말 감사하겠습니다. 가능할 만한 방법을 몇 가지 말씀드릴게요. 첫째, 오늘 오후에 빈 시간이 있다면 역에서 바로 부스로 갈게요. 늦어도 1시 반까지는 도착해요. 둘째, 오후가 꽉 찼다면 오늘 저녁이나 내일, 팀에서 편하신 때에 화상 면접을 봐도 좋아요. 셋째, 직접 만나는 걸 선호하시면 다음 주 아무 날이나 본사로 찾아뵐 수 있어요. 고려해 주셔서 정말 감사합니다.",
+    "tips": [
+     "면접 일정 확인 → 사과 → 원인과 증빙(screenshot) → 회사에 대한 의지 → 상대 편의에 맞춘 대안",
+     "there's no way I can make it, my first choice, at the latest, whenever is convenient"
+    ]
+   },
+   {
+    "kind": "exp",
+    "question": "That's the end of the situation. Tell me about a memorable experience related to work or your industry, such as an important interview, a big project, or a mistake you learned from. What happened, and what did you learn?",
+    "question_ko": "상황이 끝났습니다. 중요한 면접, 큰 프로젝트, 교훈을 얻은 실수처럼 일이나 업계와 관련된 기억에 남는 경험에 대해 말해 주세요. 무슨 일이 있었고 무엇을 배웠나요?",
+    "sample": "I remember my first big project at work. It was two years ago. My team had to make a new product catalog for our customers. I was in charge of checking all the prices. But I made a mistake, and one product had the wrong price. We printed five hundred catalogs. My manager found the mistake before we sent them. I felt terrible. We put small stickers with the right price on every catalog. It took all night. I learned to always check things twice.",
+    "sample_ko": "회사에서 첫 큰 프로젝트가 기억나요. 2년 전이었어요. 우리 팀은 고객용 새 제품 카탈로그를 만들어야 했어요. 저는 모든 가격 확인을 맡았어요. 그런데 실수를 해서 제품 하나 가격이 틀렸어요. 카탈로그를 500부 인쇄했어요. 보내기 전에 팀장님이 실수를 찾았어요. 정말 괴로웠어요. 모든 카탈로그에 맞는 가격 스티커를 붙였어요. 밤새 걸렸어요. 항상 두 번 확인해야 한다는 걸 배웠어요.",
+    "sample_adv": "One experience that really shaped me happened in my first year at a feed company. I was in technical sales, and one of our biggest pig farm customers called, very angry. He said his pigs had stopped eating well after switching to our new feed, and he was going to cancel his contract. My manager was on a business trip, so I had to handle it myself. Honestly, I was terrified. I drove to the farm the next morning with one of our nutritionists. Instead of defending our product, I just listened for about an hour while the farmer showed us everything, the feeders, the water lines, the records. In the end, we found that the problem wasn't the feed itself. The farm had changed the feeder settings at the same time, so the feed was coming out too slowly. We helped adjust it, and I visited again a week later. The pigs were eating normally, and the farmer actually increased his order. What I learned is that in this industry, customers don't just want a product. They want someone who will come and stand in the barn with them and solve the real problem. That changed the way I do my job.",
+    "sample_adv_ko": "저를 정말 성장시킨 경험은 사료 회사 입사 첫해에 있었어요. 저는 기술 영업을 했는데, 가장 큰 양돈 농장 고객 한 분이 몹시 화가 나서 전화했어요. 우리 신제품 사료로 바꾼 뒤 돼지들이 잘 먹지 않는다며 계약을 해지하겠다고 했어요. 팀장님이 출장 중이라 제가 직접 처리해야 했어요. 솔직히 너무 무서웠어요. 다음 날 아침 영양사 한 분과 농장으로 차를 몰고 갔어요. 제품을 변호하는 대신, 농장주가 급이기, 급수 라인, 기록까지 모든 걸 보여 주는 동안 한 시간 정도 그냥 들었어요. 결국 문제는 사료 자체가 아니었어요. 농장에서 같은 시기에 급이기 설정을 바꿔서 사료가 너무 천천히 나오고 있었어요. 조정을 도와드렸고 일주일 뒤 다시 방문했어요. 돼지들은 정상적으로 먹고 있었고 농장주는 오히려 주문을 늘렸어요. 제가 배운 건 이 업계에서 고객은 제품만 원하는 게 아니라는 거예요. 축사에 함께 서서 진짜 문제를 해결해 줄 사람을 원해요. 그게 제가 일하는 방식을 바꿨어요.",
+    "tips": [
+     "위기 상황 → 내 선택(변호 대신 경청) → 원인 발견 → 결과 → 업계에 대한 교훈",
+     "shaped me, Instead of defending ..., That changed the way I do my job"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "rp-063",
+  "topic": "travel_dom",
+  "level": 5,
+  "situation_ko": "국내 캠핑장에 전화해 시설과 예약을 문의하는 상황 → 도착해 보니 예약이 누락되고 자리가 없어 캠핑장 관리인에게 대안 요청 → 국내 여행 중 숙소 문제가 생겼던 경험",
+  "steps": [
+   {
+    "kind": "ask",
+    "question": "I'd like to give you a situation and ask you to act it out. You are planning a camping trip with your family. Call a campsite and ask three or four questions about the site and how to make a reservation.",
+    "question_ko": "상황을 드릴 테니 연기해 보세요. 가족과 캠핑 여행을 계획하고 있습니다. 캠핑장에 전화해 시설과 예약 방법에 관해 서너 가지 질문을 하세요.",
+    "sample": "Hello, I'm planning a camping trip with my family next month. There are four of us, including two children. I have some questions. First, do you have any sites available on the second weekend? Second, what facilities do you have? Are there showers and a place to wash dishes? Third, can we rent a tent there? We don't have one. And lastly, is there a store nearby where we can buy food? Okay, I'd like to make a reservation. Thank you.",
+    "sample_ko": "안녕하세요, 다음 달에 가족과 캠핑을 계획하고 있어요. 아이 둘을 포함해 네 명이에요. 몇 가지 여쭤볼게요. 첫째, 둘째 주 주말에 빈자리가 있나요? 둘째, 어떤 시설이 있나요? 샤워실과 설거지할 곳이 있나요? 셋째, 거기서 텐트를 빌릴 수 있나요? 저희는 없어요. 마지막으로 근처에 음식을 살 수 있는 가게가 있나요? 네, 예약하고 싶어요. 감사합니다.",
+    "sample_adv": "Hi, good afternoon. I found your campsite on a camping app, and the photos of the valley looked beautiful. My family is planning our first real camping trip, two nights from the fourteenth to the sixteenth of next month. It'll be my wife, me, and our two kids, who are six and nine. So I have a few questions. First, do you have any sites available for those dates? If possible, we'd like one near the stream but not too far from the restrooms, because of the kids. Second, what are the facilities like? Are the showers hot, and is there electricity at each site? We were hoping to bring a small electric heater, since it might get cold at night. Third, since this is our first time, we don't have much equipment. Do you rent tents, sleeping bags, or a barbecue grill, or do you offer a glamping option with everything set up? And finally, are there any rules we should know about, like quiet hours, campfires, or whether we can bring our dog? Great, that all sounds perfect. I'd like to book site number seven. Could you text me the payment details? Thank you.",
+    "sample_adv_ko": "안녕하세요. 캠핑 앱에서 캠핑장을 찾았는데 계곡 사진이 정말 예뻤어요. 우리 가족이 처음으로 제대로 된 캠핑을 계획하고 있는데 다음 달 14일부터 16일까지 2박이에요. 아내와 저, 그리고 여섯 살, 아홉 살 아이 둘이에요. 몇 가지 여쭤볼게요. 첫째, 그 날짜에 빈자리가 있나요? 가능하면 계곡 근처이면서 아이들 때문에 화장실에서 너무 멀지 않은 자리면 좋겠어요. 둘째, 시설은 어떤가요? 샤워실에 온수가 나오고, 사이트마다 전기가 되나요? 밤에 추울 수도 있어서 작은 전기 히터를 가져가려고요. 셋째, 처음이라 장비가 별로 없어요. 텐트, 침낭, 바비큐 그릴을 빌려주시나요, 아니면 다 설치된 글램핑 옵션이 있나요? 마지막으로 소등 시간, 모닥불, 강아지를 데려가도 되는지 같은 알아야 할 규칙이 있나요? 좋아요, 다 완벽하네요. 7번 사이트로 예약할게요. 결제 정보를 문자로 보내 주실 수 있나요? 감사합니다.",
+    "tips": [
+     "캠핑 질문: 날짜·자리 위치 → 시설(온수·전기) → 장비 대여·글램핑 → 규칙(quiet hours·campfire·pets)",
+     "site, facilities, rent equipment, quiet hours"
+    ]
+   },
+   {
+    "kind": "solve",
+    "question": "I'm sorry, but there is a problem I need you to resolve. When you arrive at the campsite with your family in the evening, the manager says there is no record of your reservation, and all the sites are full. Explain the situation to the manager and suggest two or three solutions.",
+    "question_ko": "죄송하지만 해결해야 할 문제가 있습니다. 저녁에 가족과 캠핑장에 도착했는데 관리인이 예약 기록이 없고 자리가 다 찼다고 합니다. 관리인에게 상황을 설명하고 두세 가지 해결책을 제시하세요.",
+    "sample": "Excuse me, I made a reservation here three weeks ago. I booked site number seven for two nights, and I paid by bank transfer. Here is the text message you sent me. But you say there is no reservation, and all the sites are full. My kids are tired, and it's getting dark. Can you check again? If there's no site, can we use a small space near the parking lot tonight? Or can you find another campsite nearby for us? And please give me a full refund.",
+    "sample_ko": "저기요, 3주 전에 여기 예약했어요. 7번 사이트를 2박으로 예약했고 계좌 이체로 결제했어요. 여기 보내 주신 문자 메시지예요. 그런데 예약이 없고 자리가 다 찼다고 하시네요. 아이들이 지쳤고 날이 어두워지고 있어요. 다시 확인해 주실 수 있나요? 자리가 없으면 오늘 밤 주차장 근처 작은 공간을 써도 될까요? 아니면 근처 다른 캠핑장을 찾아 주실 수 있나요? 그리고 전액 환불해 주세요.",
+    "sample_adv": "Excuse me, I think there's been a mistake. I booked site number seven for two nights, tonight and tomorrow, about three weeks ago. I spoke with someone on the phone, and I transferred the full payment the same day. Here, this is the confirmation text from your campsite's number, and this is my bank transfer record, showing one hundred twenty thousand won. So I'm sure the booking was made. I understand that mistakes happen, maybe it was written in a different notebook or under my wife's name, so could you check one more time? The thing is, we've driven three hours, it's almost seven, and my kids are exhausted and hungry. So if it really can't be found, here's what I'd like to suggest. First, is there any extra space, like the grass area by the office or an empty glamping tent that's not being used tonight? We'd be fine with a less ideal spot for one night. Second, if there's truly nothing here, could you call nearby campsites or pensions and help us find a place within thirty minutes? And third, in any case, I'd expect a full refund, and if the other place costs more, I think the campsite should cover the difference, since we did everything correctly.",
+    "sample_adv_ko": "저기요, 착오가 있는 것 같아요. 3주쯤 전에 오늘과 내일 2박으로 7번 사이트를 예약했어요. 전화로 어떤 분과 통화했고 당일에 전액을 이체했어요. 여기 캠핑장 번호로 온 확인 문자이고, 이건 12만 원 이체 내역이에요. 그러니 예약은 분명히 됐어요. 실수는 생길 수 있다는 거 이해해요. 다른 장부에 적혔거나 아내 이름으로 돼 있을 수도 있으니 한 번만 더 확인해 주시겠어요? 문제는 저희가 세 시간을 운전해 왔고, 거의 7시이고, 아이들이 지치고 배고프다는 거예요. 그래서 정말 못 찾으시면 이렇게 제안드리고 싶어요. 첫째, 관리동 옆 잔디밭이나 오늘 밤 안 쓰는 빈 글램핑 텐트 같은 여유 공간이 있나요? 하룻밤은 덜 좋은 자리라도 괜찮아요. 둘째, 여기에 정말 아무것도 없다면 근처 캠핑장이나 펜션에 전화해서 30분 안에 갈 수 있는 곳을 찾아 주실 수 있나요? 셋째, 어떤 경우든 전액 환불을 기대하고, 다른 곳이 더 비싸면 저희는 다 제대로 했으니 차액은 캠핑장에서 부담해 주셔야 한다고 생각해요.",
+    "tips": [
+     "증거 두 가지(문자·이체 내역) → 상대 실수를 이해하는 말투 → 상황의 급박함 → 대안 + 비용 책임",
+     "I think there's been a mistake, The thing is, ..., cover the difference"
+    ]
+   },
+   {
+    "kind": "exp",
+    "question": "That's the end of the situation. Have you ever had a problem with a place you stayed while traveling in your country? Tell me where you were, what went wrong, and how it turned out.",
+    "question_ko": "상황이 끝났습니다. 국내 여행 중 묵은 곳에서 문제를 겪은 적이 있나요? 어디였고, 무엇이 잘못됐고, 어떻게 됐는지 말해 주세요.",
+    "sample": "Yes, last summer I stayed at a pension in Gapyeong with my friends. The photos online looked great, with a pool and a big living room. But when we arrived, the pool was dirty and closed. The air conditioner in our room didn't work well, and it was very hot. We called the owner. He came and tried to fix the air conditioner, but it didn't work. So he gave us a bigger room and a discount. We still had fun, but now I always read many reviews.",
+    "sample_ko": "네, 작년 여름에 친구들과 가평 펜션에 묵었어요. 온라인 사진은 수영장과 큰 거실이 있어서 아주 좋아 보였어요. 그런데 도착해 보니 수영장이 더럽고 닫혀 있었어요. 방 에어컨도 잘 안 돼서 너무 더웠어요. 주인에게 전화했어요. 주인이 와서 에어컨을 고쳐 보려 했지만 안 됐어요. 그래서 더 큰 방을 주고 할인해 줬어요. 그래도 재미있었지만 이제는 항상 후기를 많이 읽어요.",
+    "sample_adv": "Yes, I had a pretty unpleasant surprise in Gyeongju a couple of years ago. My parents' thirtieth wedding anniversary was coming up, so my sister and I booked them a traditional hanok guesthouse for two nights as a gift, and we went along too. The listing showed a beautiful wooden house with a courtyard, heated floors, and a private bathroom for each room. When we arrived, the courtyard was lovely, but our parents' room had a bathroom that was shared with two other rooms, and it was outside, across the yard. It was November, so walking outside at night was freezing. Also, the heated floor in my room only warmed up one corner. I talked to the owner politely and showed him the listing on my phone. At first, he said the photos were of a different building. But I pointed out that the listing clearly said private bathroom. In the end, he apologized and moved my parents to the best room in the main house, which had its own bathroom, and he gave us a fifteen percent refund. My parents actually loved the new room. But I learned to always check the room type and ask questions before booking.",
+    "sample_adv_ko": "네, 2년쯤 전 경주에서 꽤 불쾌한 일을 겪었어요. 부모님 결혼 30주년이 다가와서 언니와 제가 선물로 전통 한옥 게스트하우스를 2박 예약해 드렸고 우리도 같이 갔어요. 숙소 소개에는 마당이 있는 아름다운 목조 가옥에 온돌, 방마다 개별 욕실이 있다고 돼 있었어요. 도착해 보니 마당은 예뻤지만, 부모님 방 욕실은 다른 방 두 개와 같이 쓰는 데다 마당 건너편 바깥에 있었어요. 11월이라 밤에 밖으로 걷는 건 몹시 추웠어요. 또 제 방 온돌은 한쪽 구석만 따뜻했어요. 주인에게 정중하게 이야기하고 휴대폰으로 숙소 소개를 보여 드렸어요. 처음엔 사진이 다른 건물이라고 했어요. 하지만 소개에 분명히 개별 욕실이라고 적혀 있다고 짚었어요. 결국 주인이 사과하고 부모님을 본채에서 욕실이 딸린 가장 좋은 방으로 옮겨 드렸고, 15퍼센트를 환불해 줬어요. 부모님은 오히려 새 방을 아주 좋아하셨어요. 하지만 예약 전에 항상 객실 유형을 확인하고 질문해야 한다는 걸 배웠어요.",
+    "tips": [
+     "여행 목적 → 기대(소개 내용) → 현실(문제 2~3개) → 정중하지만 근거 있는 항의 → 결과 → 교훈",
+     "listing, pointed out that ..., In the end, he apologized"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "rp-064",
+  "topic": "pets",
+  "level": 4,
+  "situation_ko": "여행 기간 동안 반려견을 맡기려고 애견 호텔에 문의하는 상황 → 출발 전날 반려견이 아파 애견 호텔에 대안 제시 → 반려동물이 아프거나 다쳤던 경험",
+  "steps": [
+   {
+    "kind": "ask",
+    "question": "I'd like to give you a situation and ask you to act it out. You are going on a trip for five days, and you need someone to take care of your dog. Call a pet hotel and ask three or four questions about leaving your dog there.",
+    "question_ko": "상황을 드릴 테니 연기해 보세요. 닷새 동안 여행을 가는데 반려견을 돌봐 줄 곳이 필요합니다. 애견 호텔에 전화해 반려견을 맡기는 것에 관해 서너 가지 질문을 하세요.",
+    "sample": "Hello, I'm going on a trip for five days next month, and I'd like to leave my dog at your pet hotel. He's a three-year-old poodle. I have some questions. First, how much is it per night? Second, how often do you take the dogs for a walk? Third, can I bring his own food and his favorite toy? He eats special food. And lastly, can you send me photos or videos while I'm away? I'll miss him a lot. Okay, I'll book it. Thank you.",
+    "sample_ko": "안녕하세요, 다음 달에 닷새 동안 여행을 가서 강아지를 애견 호텔에 맡기고 싶어요. 세 살 푸들이에요. 몇 가지 여쭤볼게요. 첫째, 하룻밤에 얼마인가요? 둘째, 강아지들을 얼마나 자주 산책시켜 주시나요? 셋째, 강아지 사료와 좋아하는 장난감을 가져가도 되나요? 특별한 사료를 먹어요. 마지막으로 제가 없는 동안 사진이나 영상을 보내 주실 수 있나요? 많이 보고 싶을 거예요. 네, 예약할게요. 감사합니다.",
+    "sample_adv": "Hi, good morning. I'm traveling abroad for my friend's wedding next month, from the third to the eighth, and I'm looking for a safe place for my dog to stay. His name is Bori, and he's a four-year-old mixed breed, around eight kilos. This will be his first time staying away from home, so I'm a little anxious. I have a few questions. First, how are the dogs kept? Do they stay in individual rooms, or do they play together in a group during the day? Bori is friendly but gets nervous around big dogs, so I'd like to know. Second, what's the daily routine like? How many walks do they get, and is someone there overnight? Third, Bori has a sensitive stomach, so he eats a special prescription food twice a day. Can I bring his food, and will the staff follow a feeding schedule exactly? And finally, how do you handle emergencies? Is there a vet you work with nearby, and will you contact me right away if something happens? Oh, and can you send me photos every day? Okay, that sounds great. I'd like to come and see the place this weekend before I book.",
+    "sample_adv_ko": "안녕하세요. 다음 달 3일부터 8일까지 친구 결혼식 때문에 해외에 가는데 강아지가 지낼 안전한 곳을 찾고 있어요. 이름은 보리이고 네 살 믹스견, 8킬로그램 정도예요. 집을 떠나 지내는 건 처음이라 좀 걱정돼요. 몇 가지 여쭤볼게요. 첫째, 강아지들은 어떻게 지내나요? 개별 방에 있나요, 낮에는 다 같이 어울려 노나요? 보리는 순하지만 큰 개 옆에서는 긴장해서 알고 싶어요. 둘째, 하루 일과는 어떤가요? 산책은 몇 번 하고, 밤에도 누가 있나요? 셋째, 보리가 장이 예민해서 하루 두 번 처방 사료를 먹어요. 사료를 가져가도 되고, 직원분들이 급여 시간을 정확히 지켜 주시나요? 마지막으로 응급 상황은 어떻게 대처하시나요? 근처에 협력 동물병원이 있고, 무슨 일이 생기면 바로 연락 주시나요? 아, 그리고 매일 사진 보내 주실 수 있나요? 네, 좋네요. 예약 전에 이번 주말에 가서 시설을 보고 싶어요.",
+    "tips": [
+     "반려견 소개(나이·크기·성격·건강) → 질문(지내는 방식·일과·사료·응급 대처)",
+     "individual rooms, prescription food, feeding schedule, vet"
+    ]
+   },
+   {
+    "kind": "solve",
+    "question": "I'm sorry, but there is a problem I need you to resolve. The night before your trip, your dog suddenly gets sick, and the vet says he needs medicine three times a day. Call the pet hotel, explain the situation, and suggest two or three alternatives.",
+    "question_ko": "죄송하지만 해결해야 할 문제가 있습니다. 여행 전날 밤 반려견이 갑자기 아프고, 수의사가 하루 세 번 약을 먹여야 한다고 합니다. 애견 호텔에 전화해 상황을 설명하고 두세 가지 대안을 제시하세요.",
+    "sample": "Hello, this is Bori's owner. I'm supposed to bring Bori tomorrow morning. But he got sick tonight. He threw up many times, and I took him to the vet. The vet said it's a stomach problem, and he needs medicine three times a day. I'm worried. Can your staff give him the medicine? I can pay extra. If that's difficult, can you recommend a pet hotel inside an animal hospital? Or maybe my sister can take care of him, and I'll cancel my booking. Please let me know.",
+    "sample_ko": "안녕하세요, 보리 보호자예요. 내일 아침에 보리를 데려가기로 했는데 오늘 밤에 아팠어요. 여러 번 토해서 동물병원에 데려갔어요. 수의사가 위장 문제라서 하루 세 번 약을 먹어야 한대요. 걱정돼요. 직원분들이 약을 먹여 주실 수 있나요? 추가 비용은 낼게요. 어렵다면 동물병원 안에 있는 애견 호텔을 추천해 주실 수 있나요? 아니면 언니가 돌봐 주고 예약은 취소할 수도 있어요. 알려 주세요.",
+    "sample_adv": "Hi, sorry to call so late. This is Bori's owner. I booked a five-night stay starting tomorrow morning. I'm calling because Bori got sick this evening. He threw up four times and wouldn't eat, so I rushed him to the twenty-four-hour animal hospital. The vet said it's gastritis, probably from something he ate on our walk, and it's not serious, but he needs liquid medicine three times a day, at eight, two, and eight, and he has to eat a special soft diet for the next five days. He also said Bori should be watched closely in case he vomits again. So I wanted to talk with you honestly before bringing him. First, would your staff be able to give him the medicine on schedule and feed him the diet food I'll provide? I'm happy to pay an extra care fee for that. Second, if you're worried that's too much responsibility, would it be possible to keep him in a quieter private room close to the staff area, so he's easier to monitor? And third, if you think it's better for him not to stay there, I'd like to cancel without a penalty, and I'll ask my sister to stay at my apartment with him instead. What do you think is best for Bori?",
+    "sample_adv_ko": "안녕하세요, 늦게 전화드려 죄송해요. 보리 보호자예요. 내일 아침부터 5박을 예약했어요. 보리가 오늘 저녁에 아파서 전화드려요. 네 번 토하고 먹지를 않아서 24시 동물병원에 급히 데려갔어요. 수의사 말로는 산책하다 뭘 주워 먹어서 생긴 위염 같은데 심각하진 않지만, 8시, 2시, 8시에 하루 세 번 물약을 먹고 앞으로 닷새 동안 부드러운 처방식을 먹어야 한대요. 다시 토할 수 있으니 잘 지켜봐야 한다고도 했어요. 그래서 데려가기 전에 솔직하게 말씀드리고 싶었어요. 첫째, 직원분들이 시간 맞춰 약을 먹이고 제가 드릴 처방식을 먹여 주실 수 있나요? 그에 대한 추가 관리비는 기꺼이 낼게요. 둘째, 책임이 너무 부담되신다면 직원 공간 가까운 조용한 개별 방에 두어 더 쉽게 지켜볼 수 있을까요? 셋째, 거기 있지 않는 게 낫다고 보시면 위약금 없이 취소하고, 언니에게 우리 집에서 보리와 지내 달라고 부탁할게요. 보리에게 뭐가 가장 좋을까요?",
+    "tips": [
+     "증상 → 수의사 진단과 지시(시간·식단) → 솔직한 상의 → 대안(투약·관찰 쉬운 방·위약금 없는 취소)",
+     "threw up, gastritis, on schedule, without a penalty"
+    ]
+   },
+   {
+    "kind": "exp",
+    "question": "That's the end of the situation. Have you or someone you know ever had a pet that got sick or hurt? Tell me what happened and how the pet got better.",
+    "question_ko": "상황이 끝났습니다. 당신이나 아는 사람의 반려동물이 아프거나 다친 적이 있나요? 무슨 일이 있었고 반려동물이 어떻게 나아졌는지 말해 주세요.",
+    "sample": "Yes, my cat got hurt last year. She jumped from the top of the refrigerator and landed badly. After that, she couldn't walk well on her back leg. I was very worried, so I took her to the animal hospital right away. The vet took an X-ray. Luckily, it wasn't broken, but the muscle was hurt. She had to rest in a small cage for two weeks and take medicine. It was hard because she didn't like the cage. But now she's healthy and jumps again.",
+    "sample_ko": "네, 작년에 고양이가 다쳤어요. 냉장고 위에서 뛰어내리다 잘못 착지했어요. 그 뒤로 뒷다리로 잘 걷지 못했어요. 너무 걱정돼서 바로 동물병원에 데려갔어요. 수의사가 엑스레이를 찍었어요. 다행히 부러지진 않았지만 근육을 다쳤어요. 2주 동안 작은 케이지에서 쉬면서 약을 먹어야 했어요. 케이지를 싫어해서 힘들었어요. 하지만 지금은 건강하고 다시 뛰어올라요.",
+    "sample_adv": "Yes, it happened to my family's dog, Kongi, a small white Maltese, when I was in high school. One evening, we were having a barbecue on the balcony, and someone dropped a piece of meat with a small bone. Before anyone noticed, Kongi grabbed it and swallowed it. At first, he seemed fine, but later that night, he kept trying to throw up and was crying in pain. We rushed him to an emergency animal hospital, and the X-ray showed that the bone was stuck in his throat. The vet said he needed a procedure right away, and my mom was crying in the waiting room. I remember feeling so guilty, because I was the one cooking. The procedure took about an hour, and thankfully, they removed the bone without surgery. He had to stay at the hospital overnight and eat only soft food for a week. We took turns feeding him small spoonfuls of rice porridge. Within two weeks, he was running around and stealing socks again. After that, our family made a strict rule, no bones anywhere near the dog. Kongi lived until he was fifteen, and that night is a story we still tell.",
+    "sample_adv_ko": "네, 제가 고등학생 때 우리 가족 강아지인 하얀 몰티즈 콩이에게 일어난 일이에요. 어느 저녁 베란다에서 바비큐를 하는데 누가 작은 뼈가 붙은 고기 조각을 떨어뜨렸어요. 아무도 알아채기 전에 콩이가 물어서 삼켰어요. 처음엔 괜찮아 보였는데 그날 밤늦게 계속 토하려고 하고 아파서 낑낑거렸어요. 급히 응급 동물병원에 데려갔더니 엑스레이에 뼈가 목에 걸린 게 보였어요. 수의사가 바로 시술이 필요하다고 했고 엄마는 대기실에서 우셨어요. 고기를 굽던 사람이 저라서 너무 죄책감이 들었던 게 기억나요. 시술은 한 시간쯤 걸렸고 다행히 수술 없이 뼈를 빼냈어요. 하룻밤 입원하고 일주일 동안 부드러운 음식만 먹어야 했어요. 우리는 돌아가며 쌀죽을 작은 숟가락으로 먹였어요. 2주 안에 콩이는 다시 뛰어다니며 양말을 훔쳤어요. 그 뒤로 우리 가족은 강아지 근처에 뼈는 절대 금지라는 엄격한 규칙을 만들었어요. 콩이는 열다섯 살까지 살았고 그날 밤은 아직도 우리가 이야기하는 추억이에요.",
+    "tips": [
+     "반려동물 소개 → 사고 원인 → 증상 → 병원·치료 → 회복(귀여운 장면) → 가족 규칙",
+     "swallowed, rushed him to, took turns, stealing socks again"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "rp-065",
+  "topic": "park",
+  "level": 3,
+  "situation_ko": "친구들과 소풍을 가려고 공원 관리 사무소에 피크닉 장소 대여를 문의하는 상황 → 소풍 당일 공원 공사로 그 장소를 쓸 수 없어 친구에게 대안 제시 → 공원에서 있었던 기억에 남는 일",
+  "steps": [
+   {
+    "kind": "ask",
+    "question": "I'd like to give you a situation and ask you to act it out. You want to have a picnic with your friends at a big park in your city. Call the park office and ask three or four questions about using the picnic area.",
+    "question_ko": "상황을 드릴 테니 연기해 보세요. 친구들과 도시의 큰 공원에서 소풍을 하고 싶습니다. 공원 관리 사무소에 전화해 피크닉 장소 이용에 관해 서너 가지 질문을 하세요.",
+    "sample": "Hello, I want to have a picnic with my friends at your park next Saturday. There are about eight people. I have some questions. First, do I need to reserve a picnic table? Second, is it free, or do I need to pay? Third, can we cook food there, like a barbecue? And lastly, is there a parking lot near the picnic area? Some of my friends will drive. Okay, I'll reserve a table for eleven o'clock. Thank you very much.",
+    "sample_ko": "안녕하세요, 다음 주 토요일에 친구들과 공원에서 소풍을 하고 싶어요. 여덟 명 정도예요. 몇 가지 여쭤볼게요. 첫째, 피크닉 테이블을 예약해야 하나요? 둘째, 무료인가요, 돈을 내야 하나요? 셋째, 거기서 바비큐처럼 음식을 해 먹을 수 있나요? 마지막으로 피크닉 장소 근처에 주차장이 있나요? 친구 몇 명이 차를 가져와요. 네, 11시로 테이블을 예약할게요. 정말 감사합니다.",
+    "sample_adv": "Hi, good morning. My friends and I are planning a picnic at your park next Saturday, and I'd like to ask a few questions before we go. There will be about eight or nine of us, and one friend is bringing her two little kids. First, do you have picnic tables or a covered area we can use? If so, do we need to reserve them in advance, and how long can we stay? We'd like to be there from about eleven until four. Second, are there any fees for using the picnic area or for parking? Third, what are the rules about food? We were hoping to bring a small portable grill to cook some sausages and meat. Is that allowed, or can we only bring food that's already cooked? And also, is there a place to throw away trash and wash our hands? And lastly, is there a playground or a place where the kids can run around safely near the picnic area? That would make it easier for the parents to relax. Okay, perfect. I'll book the table under the big tree for Saturday. Thank you so much.",
+    "sample_adv_ko": "안녕하세요. 친구들과 다음 주 토요일에 공원으로 소풍을 가려고 하는데 가기 전에 몇 가지 여쭤보고 싶어요. 여덟아홉 명 정도이고 친구 한 명은 어린아이 둘을 데려와요. 첫째, 쓸 수 있는 피크닉 테이블이나 지붕 있는 공간이 있나요? 있다면 미리 예약해야 하나요, 얼마나 있을 수 있나요? 11시쯤부터 4시까지 있고 싶어요. 둘째, 피크닉 장소 이용료나 주차비가 있나요? 셋째, 음식 규칙은 어떤가요? 작은 휴대용 그릴을 가져가서 소시지와 고기를 구우려고 했는데 되나요, 아니면 이미 조리된 음식만 가져와야 하나요? 그리고 쓰레기를 버리고 손을 씻을 곳이 있나요? 마지막으로 피크닉 장소 근처에 아이들이 안전하게 뛰어놀 놀이터나 공간이 있나요? 그러면 부모들이 더 편하게 쉴 수 있을 거예요. 네, 완벽해요. 토요일에 큰 나무 아래 테이블로 예약할게요. 정말 감사합니다.",
+    "tips": [
+     "level 3 ask: 인원·날짜 → 예약 여부 → 비용 → 음식 규칙 → 편의 시설",
+     "Do we need to reserve ...?, Is that allowed?, covered area"
+    ]
+   },
+   {
+    "kind": "solve",
+    "question": "I'm sorry, but there is a problem I need you to resolve. On the morning of the picnic, you find out that the picnic area is closed because of construction work. Call one of your friends, explain the situation, and suggest two or three other plans.",
+    "question_ko": "죄송하지만 해결해야 할 문제가 있습니다. 소풍 당일 아침, 공사 때문에 피크닉 장소가 폐쇄된 것을 알게 됐습니다. 친구 한 명에게 전화해 상황을 설명하고 두세 가지 다른 계획을 제시하세요.",
+    "sample": "Hi, Minji, it's me. I'm at the park now, but there's a problem. The picnic area is closed today because of construction. There's a big fence, and we can't use the tables. I'm sorry. So let's think. First, there's a big grass field on the other side of the park. We can bring mats and sit there. Second, there's another park twenty minutes away by car. Or we can go to my apartment and have the picnic on my rooftop. Which one do you like?",
+    "sample_ko": "민지야, 나야. 지금 공원인데 문제가 있어. 공사 때문에 오늘 피크닉 장소가 닫혔어. 큰 울타리가 있어서 테이블을 못 써. 미안해. 그러니까 생각해 보자. 첫째, 공원 반대편에 넓은 잔디밭이 있어. 돗자리를 가져와서 거기 앉으면 돼. 둘째, 차로 20분 거리에 다른 공원이 있어. 아니면 우리 아파트에 가서 옥상에서 소풍을 해도 돼. 어떤 게 좋아?",
+    "sample_adv": "Hey, Minji, good morning. Are you on your way yet? I came early to set up, but I've got some bad news. The whole picnic area is fenced off with a sign that says the area is closed for construction until next month. I checked with a park worker, and he said they're fixing the drainage, and they posted a notice on the website two days ago. I didn't see it, so that's my fault. I'm really sorry. But don't worry, I have a few ideas. First, there's a big lawn near the lake on the north side of the park. There are no tables, but there's lots of shade, and people are allowed to sit on mats there. We just can't use the grill, so I could pick up some fried chicken and kimbap on the way. Second, if you want to keep the barbecue plan, there's another park about twenty minutes away by car with a barbecue zone. I just called, and they still have a spot at noon. Or third, my building has a rooftop garden with tables, and we could have a smaller party there. Can you tell everyone in the group chat? I'll wait for your answer.",
+    "sample_adv_ko": "민지야, 좋은 아침. 아직 오는 중이야? 준비하려고 일찍 왔는데 안 좋은 소식이 있어. 피크닉 장소 전체에 울타리가 쳐져 있고 다음 달까지 공사로 폐쇄라는 안내판이 있어. 공원 직원한테 확인했더니 배수 시설을 고치는 중이고 이틀 전에 웹사이트에 공지를 올렸대. 내가 그걸 못 봤으니 내 잘못이야. 정말 미안해. 그래도 걱정 마, 몇 가지 생각이 있어. 첫째, 공원 북쪽 호수 근처에 넓은 잔디밭이 있어. 테이블은 없지만 그늘이 많고 돗자리 깔고 앉는 건 돼. 그릴은 못 쓰니까 오는 길에 내가 치킨이랑 김밥을 사 갈게. 둘째, 바비큐 계획을 지키고 싶으면 차로 20분 거리에 바비큐 구역이 있는 다른 공원이 있어. 방금 전화했는데 12시에 자리가 아직 있대. 아니면 셋째, 우리 건물에 테이블 있는 옥상 정원이 있어서 거기서 좀 작게 파티해도 돼. 단톡방에 다들한테 말해 줄래? 답 기다릴게.",
+    "tips": [
+     "무엇을 봤는지(fence, sign) → 확인한 내용 → 내 잘못 인정 → 대안 3개 → 단톡방 전달 부탁",
+     "fenced off, closed for construction, my fault, Can you tell everyone ...?"
+    ]
+   },
+   {
+    "kind": "exp",
+    "question": "That's the end of the situation. Tell me about a memorable day you had at a park. Who were you with, what did you do, and why do you remember that day?",
+    "question_ko": "상황이 끝났습니다. 공원에서 보낸 기억에 남는 하루에 대해 말해 주세요. 누구와 함께였고, 무엇을 했고, 왜 그날이 기억나나요?",
+    "sample": "I remember a day at Olympic Park in Seoul two years ago. I went there with my family on my mom's birthday. It was a warm day in May. We rented bikes and rode around the park. Then we had a picnic on the grass with sandwiches and fruit my sister made. In the afternoon, there was a free outdoor concert, so we listened to music. My mom said it was her best birthday. I remember it because my whole family was together and happy.",
+    "sample_ko": "2년 전 서울 올림픽공원에서의 하루가 기억나요. 엄마 생신에 가족과 거기 갔어요. 5월의 따뜻한 날이었어요. 자전거를 빌려 공원을 돌았어요. 그다음 언니가 만든 샌드위치와 과일로 잔디밭에서 소풍을 했어요. 오후에는 무료 야외 공연이 있어서 음악을 들었어요. 엄마가 최고의 생일이었다고 하셨어요. 온 가족이 함께 행복했기 때문에 기억나요.",
+    "sample_adv": "The day I remember most is a Sunday in October about three years ago at the Han River park near my old apartment. My best friend from high school had just come back to Korea after living in Canada for five years, and we hadn't seen each other since. Instead of meeting at a restaurant, we decided to do something very Korean. We rented one of those big picnic tents by the river, ordered fried chicken and beer to be delivered right to our spot, which she couldn't believe was possible, and just talked for hours. Around sunset, the whole sky turned orange and pink over the bridges, and people around us started taking photos. Then a little boy's kite got stuck in a tree near us, and my friend, who's really tall, climbed up and got it for him. His parents gave us a bag of tangerines to say thanks. Later, we rented bikes and rode under the bridges with the city lights coming on. Nothing special really happened, but it felt like five years disappeared in one afternoon. Whenever I go back to that park, I still think about that day.",
+    "sample_adv_ko": "가장 기억나는 날은 3년쯤 전 10월의 어느 일요일, 예전 집 근처 한강 공원에서예요. 고등학교 때 가장 친한 친구가 캐나다에서 5년 살다가 막 한국에 돌아왔는데 그동안 한 번도 못 만났어요. 식당에서 만나는 대신 아주 한국적인 걸 하기로 했어요. 강가에 큰 피크닉 텐트를 빌리고, 우리 자리로 치킨과 맥주를 배달시켰는데 친구는 그게 가능하다는 걸 믿지 못했어요. 그리고 몇 시간 동안 이야기만 했어요. 해 질 무렵 다리 위로 하늘 전체가 주황색과 분홍색으로 물들었고 주변 사람들이 사진을 찍기 시작했어요. 그때 근처 나무에 남자아이의 연이 걸렸는데, 키가 아주 큰 친구가 올라가서 꺼내 줬어요. 아이 부모님이 고맙다며 귤 한 봉지를 주셨어요. 나중엔 자전거를 빌려 도시 불빛이 켜지는 다리 밑을 달렸어요. 특별한 일은 없었지만 오후 한나절에 5년이 사라진 것 같았어요. 그 공원에 다시 갈 때마다 아직도 그날이 생각나요.",
+    "tips": [
+     "누구와 왜 → 한 일 순서(텐트·배달·대화·노을·작은 사건) → 그날의 의미",
+     "to be delivered right to our spot, Nothing special really happened, but ..."
+    ]
+   }
+  ]
+ }
+]

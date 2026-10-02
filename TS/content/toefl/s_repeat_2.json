@@ -1,0 +1,722 @@
+[
+ {
+  "id": "sr-031",
+  "level": 1,
+  "topic": "캠퍼스 우편 센터 안내",
+  "voice": "female",
+  "sentences": [
+   "This is the mail center.",
+   "Every student has a mailbox here.",
+   "Your box number is on your student card.",
+   "Large packages are kept behind the front desk.",
+   "We will send you an email when a package arrives.",
+   "Please bring your student card when you come to pick it up.",
+   "The center is open from nine to five on weekdays and closed on Sundays."
+  ],
+  "translations": [
+   "여기가 우편 센터입니다.",
+   "모든 학생은 이곳에 우편함이 있습니다.",
+   "우편함 번호는 학생증에 적혀 있습니다.",
+   "큰 소포는 안내 데스크 뒤에 보관합니다.",
+   "소포가 도착하면 이메일을 보내 드립니다.",
+   "찾으러 오실 때는 학생증을 가져오세요.",
+   "센터는 평일 9시부터 5시까지 열고 일요일에는 쉽니다."
+  ]
+ },
+ {
+  "id": "sr-032",
+  "level": 1,
+  "topic": "컴퓨터실 안내",
+  "voice": "male",
+  "sentences": [
+   "This is the computer lab.",
+   "Any student can use these computers.",
+   "Log in with your school email and password.",
+   "The printers are in the small room on the left.",
+   "Each student can print fifty pages for free every week.",
+   "Please do not eat or drink anything near the computers.",
+   "If a computer is not working, write the number on a note and tell the staff."
+  ],
+  "translations": [
+   "여기가 컴퓨터실입니다.",
+   "학생이라면 누구나 이 컴퓨터를 쓸 수 있습니다.",
+   "학교 이메일과 비밀번호로 로그인하세요.",
+   "프린터는 왼쪽 작은 방에 있습니다.",
+   "학생마다 매주 50쪽까지 무료로 인쇄할 수 있습니다.",
+   "컴퓨터 근처에서는 아무것도 먹거나 마시지 마세요.",
+   "컴퓨터가 작동하지 않으면 번호를 메모에 적어 직원에게 알려 주세요."
+  ]
+ },
+ {
+  "id": "sr-033",
+  "level": 1,
+  "topic": "학생 건강 센터 안내",
+  "voice": "female",
+  "sentences": [
+   "Welcome to the health center.",
+   "We are here to help you.",
+   "You can see a nurse without an appointment.",
+   "To see a doctor, please call us a day before.",
+   "Most visits are free for students who live on campus.",
+   "We also have free cold medicine and bandages at the front desk.",
+   "If you feel very sick at night, call the number on the back of your card."
+  ],
+  "translations": [
+   "건강 센터에 오신 것을 환영합니다.",
+   "저희는 여러분을 돕기 위해 있습니다.",
+   "예약 없이 간호사를 만날 수 있습니다.",
+   "의사 진료를 받으려면 하루 전에 전화해 주세요.",
+   "캠퍼스에 사는 학생은 대부분의 진료가 무료입니다.",
+   "안내 데스크에는 무료 감기약과 붕대도 있습니다.",
+   "밤에 많이 아프면 학생증 뒷면에 있는 번호로 전화하세요."
+  ]
+ },
+ {
+  "id": "sr-034",
+  "level": 1,
+  "topic": "캠퍼스 주차 안내",
+  "voice": "male",
+  "sentences": [
+   "Let's talk about parking.",
+   "Students need a parking pass.",
+   "You can buy one online for one semester.",
+   "Student cars must park in the blue lots only.",
+   "The green lots near the main office are for teachers and staff.",
+   "If you park in the wrong place, you will have to pay a fine.",
+   "On weekends, you can park in any lot except the one next to the hospital."
+  ],
+  "translations": [
+   "주차에 대해 이야기해 봅시다.",
+   "학생은 주차권이 필요합니다.",
+   "온라인에서 한 학기용 주차권을 살 수 있습니다.",
+   "학생 차량은 파란색 주차장에만 주차해야 합니다.",
+   "본관 근처 초록색 주차장은 교수와 직원용입니다.",
+   "잘못된 곳에 주차하면 벌금을 내야 합니다.",
+   "주말에는 병원 옆 주차장을 빼고 어느 주차장에나 주차할 수 있습니다."
+  ]
+ },
+ {
+  "id": "sr-035",
+  "level": 1,
+  "topic": "분실물 센터 안내",
+  "voice": "female",
+  "sentences": [
+   "This is the lost and found.",
+   "Did you lose something on campus?",
+   "Many people lose umbrellas and water bottles.",
+   "We keep most items here for thirty days.",
+   "Phones and wallets are kept in a locked box in the office.",
+   "To get your item back, tell us what it looks like.",
+   "You can also fill out a short form online, and we will call you if we find it."
+  ],
+  "translations": [
+   "여기가 분실물 센터입니다.",
+   "캠퍼스에서 무언가를 잃어버리셨나요?",
+   "많은 사람이 우산과 물병을 잃어버립니다.",
+   "대부분의 물건은 이곳에 30일 동안 보관합니다.",
+   "휴대폰과 지갑은 사무실의 잠긴 상자에 보관합니다.",
+   "물건을 돌려받으려면 어떻게 생겼는지 말씀해 주세요.",
+   "온라인으로 짧은 양식을 작성하셔도 되고, 물건을 찾으면 전화해 드립니다."
+  ]
+ },
+ {
+  "id": "sr-036",
+  "level": 1,
+  "topic": "미술 실습실 첫 수업",
+  "voice": "male",
+  "sentences": [
+   "Welcome to the art studio.",
+   "This is where we paint.",
+   "Brushes and paper are on the back shelf.",
+   "Please wear an apron because the paint can stain clothes.",
+   "Wash your brushes in the big sink after every class.",
+   "You can leave your unfinished work on the drying rack by the window.",
+   "The studio is also open on Saturday mornings if you want more time to practice."
+  ],
+  "translations": [
+   "미술 실습실에 오신 것을 환영합니다.",
+   "여기가 우리가 그림을 그리는 곳입니다.",
+   "붓과 종이는 뒤쪽 선반에 있습니다.",
+   "물감이 옷에 묻을 수 있으니 앞치마를 입어 주세요.",
+   "수업이 끝날 때마다 큰 싱크대에서 붓을 씻으세요.",
+   "완성하지 못한 작품은 창가 건조대에 두어도 됩니다.",
+   "연습 시간이 더 필요하면 토요일 오전에도 실습실을 엽니다."
+  ]
+ },
+ {
+  "id": "sr-037",
+  "level": 2,
+  "topic": "학생 상담 센터 소개",
+  "voice": "female",
+  "sentences": [
+   "Thanks for stopping by today.",
+   "This is the student counseling center.",
+   "Our services are free and completely private.",
+   "Many students come here when they feel stressed about classes.",
+   "You can book a one-hour meeting with a counselor on our website.",
+   "We also run small group sessions on topics like sleep and time management.",
+   "If you are worried about a friend, you are welcome to come in and talk with us as well."
+  ],
+  "translations": [
+   "오늘 들러 주셔서 감사합니다.",
+   "여기는 학생 상담 센터입니다.",
+   "저희 서비스는 무료이며 비밀이 철저히 지켜집니다.",
+   "많은 학생이 수업 때문에 스트레스를 받을 때 이곳을 찾습니다.",
+   "웹사이트에서 상담사와 한 시간 상담을 예약할 수 있습니다.",
+   "수면과 시간 관리 같은 주제로 소규모 그룹 모임도 운영합니다.",
+   "친구가 걱정된다면 그 경우에도 언제든 오셔서 저희와 이야기하셔도 됩니다."
+  ]
+ },
+ {
+  "id": "sr-038",
+  "level": 2,
+  "topic": "글쓰기 센터 안내",
+  "voice": "male",
+  "sentences": [
+   "Welcome to the writing center.",
+   "Our tutors are experienced graduate students.",
+   "They can help with essays, reports, and applications.",
+   "Each session lasts thirty minutes, so bring specific questions.",
+   "Please remember that tutors will not correct every mistake for you.",
+   "Instead, they will show you patterns in your writing so you can improve on your own.",
+   "Appointments fill up quickly before final exams, so try to book at least a week in advance."
+  ],
+  "translations": [
+   "글쓰기 센터에 오신 것을 환영합니다.",
+   "저희 튜터는 경험 많은 대학원생입니다.",
+   "에세이, 보고서, 지원서를 도와드릴 수 있습니다.",
+   "한 번의 상담은 30분이므로 구체적인 질문을 가져오세요.",
+   "튜터가 모든 실수를 대신 고쳐 주지는 않는다는 점을 기억하세요.",
+   "대신 글에서 반복되는 패턴을 보여 주어 스스로 나아질 수 있게 돕습니다.",
+   "기말고사 전에는 예약이 빨리 차니 적어도 일주일 전에 예약하도록 하세요."
+  ]
+ },
+ {
+  "id": "sr-039",
+  "level": 2,
+  "topic": "음악관 연습실 안내",
+  "voice": "female",
+  "sentences": [
+   "This floor has practice rooms.",
+   "Each room has a piano and a music stand.",
+   "Music majors can reserve rooms up to two weeks ahead.",
+   "Other students may use any empty room after six in the evening.",
+   "The rooms are soundproof, but please keep the doors closed while you play.",
+   "Drums and other loud instruments are allowed only in the large room at the end of the hall.",
+   "If you notice that a piano is out of tune, please report it at the front office so we can fix it."
+  ],
+  "translations": [
+   "이 층에는 연습실이 있습니다.",
+   "각 방에는 피아노와 보면대가 있습니다.",
+   "음악 전공생은 2주 전까지 미리 방을 예약할 수 있습니다.",
+   "다른 학생은 저녁 6시 이후 비어 있는 방을 아무 곳이나 쓸 수 있습니다.",
+   "방은 방음이 되지만 연주하는 동안에는 문을 닫아 주세요.",
+   "드럼과 다른 큰 소리의 악기는 복도 끝 큰 방에서만 허용됩니다.",
+   "피아노 음이 맞지 않으면 고칠 수 있도록 앞쪽 사무실에 알려 주세요."
+  ]
+ },
+ {
+  "id": "sr-040",
+  "level": 2,
+  "topic": "대학 농장 견학",
+  "voice": "male",
+  "sentences": [
+   "This is our university farm.",
+   "Students run it with help from two staff members.",
+   "We grow vegetables for the campus dining halls.",
+   "In the spring, we plant tomatoes, beans, and several kinds of lettuce.",
+   "The chickens over there give us about two hundred eggs every week.",
+   "Volunteers are always welcome, and you do not need any farming experience to join.",
+   "Just make sure to wear closed shoes and bring a hat, because there is very little shade in the fields."
+  ],
+  "translations": [
+   "여기가 우리 대학 농장입니다.",
+   "학생들이 직원 두 명의 도움을 받아 운영합니다.",
+   "캠퍼스 식당에 쓸 채소를 기릅니다.",
+   "봄에는 토마토, 콩, 여러 종류의 상추를 심습니다.",
+   "저기 있는 닭들이 매주 약 200개의 달걀을 줍니다.",
+   "자원봉사자는 언제나 환영이며 참여하는 데 농사 경험은 필요 없습니다.",
+   "밭에는 그늘이 거의 없으니 앞이 막힌 신발을 신고 모자를 꼭 챙겨 오세요."
+  ]
+ },
+ {
+  "id": "sr-041",
+  "level": 2,
+  "topic": "동아리 박람회 안내",
+  "voice": "female",
+  "sentences": [
+   "Welcome to the club fair.",
+   "There are over eighty clubs here today.",
+   "Sports clubs are set up near the main entrance.",
+   "Music, art, and theater groups are in the center of the hall.",
+   "You can write your name on as many sign-up sheets as you like.",
+   "Most clubs will send you information about their first meeting by email next week.",
+   "Before you leave, stop by the information table to pick up a free map and a list of all the clubs."
+  ],
+  "translations": [
+   "동아리 박람회에 오신 것을 환영합니다.",
+   "오늘 이곳에는 80개가 넘는 동아리가 나와 있습니다.",
+   "운동 동아리는 정문 근처에 자리하고 있습니다.",
+   "음악, 미술, 연극 모임은 홀 가운데에 있습니다.",
+   "원하는 만큼 여러 가입 명단에 이름을 적을 수 있습니다.",
+   "대부분의 동아리가 다음 주에 첫 모임 정보를 이메일로 보내 줄 것입니다.",
+   "떠나기 전에 안내 테이블에 들러 무료 지도와 전체 동아리 목록을 받아 가세요."
+  ]
+ },
+ {
+  "id": "sr-042",
+  "level": 2,
+  "topic": "교환학생 환영 모임",
+  "voice": "male",
+  "sentences": [
+   "Hello, and welcome, exchange students.",
+   "We're happy to have you here.",
+   "This semester we have students from fifteen countries.",
+   "Each of you will be matched with a local student partner.",
+   "Your partner can help you open a bank account and find your classes.",
+   "We also plan a weekend trip to the mountains at the end of this month.",
+   "If you have any questions about your visa or housing, our office in the international center is open every afternoon."
+  ],
+  "translations": [
+   "안녕하세요, 교환학생 여러분 환영합니다.",
+   "여러분이 와 주셔서 기쁩니다.",
+   "이번 학기에는 15개국에서 온 학생들이 있습니다.",
+   "여러분은 각자 현지 학생 파트너와 짝이 됩니다.",
+   "파트너가 은행 계좌 개설과 강의실 찾기를 도와줄 수 있습니다.",
+   "이번 달 말에는 산으로 주말 여행도 계획하고 있습니다.",
+   "비자나 숙소에 관해 궁금한 점이 있으면 국제 센터에 있는 저희 사무실이 매일 오후에 열려 있습니다."
+  ]
+ },
+ {
+  "id": "sr-043",
+  "level": 3,
+  "topic": "언어학 음성 연구실 소개",
+  "voice": "female",
+  "sentences": [
+   "This is the phonetics lab.",
+   "We study how people produce speech sounds.",
+   "The booth behind me blocks almost all outside noise.",
+   "Participants read short word lists while we record their voices.",
+   "The software then displays each sound as a pattern of frequencies on the screen.",
+   "By comparing these patterns, we can see how accents differ from one region to another.",
+   "Right now we're recruiting bilingual speakers for a study, and participants receive a small payment for one hour of their time."
+  ],
+  "translations": [
+   "여기가 음성학 연구실입니다.",
+   "우리는 사람들이 말소리를 어떻게 내는지 연구합니다.",
+   "제 뒤의 부스는 바깥 소음을 거의 모두 차단합니다.",
+   "참가자들이 짧은 단어 목록을 읽는 동안 목소리를 녹음합니다.",
+   "그다음 소프트웨어가 각 소리를 화면에 주파수 패턴으로 보여 줍니다.",
+   "이 패턴들을 비교하면 지역마다 억양이 어떻게 다른지 알 수 있습니다.",
+   "지금 연구에 참여할 이중 언어 화자를 모집하고 있으며, 참가자는 한 시간에 대해 소정의 사례비를 받습니다."
+  ]
+ },
+ {
+  "id": "sr-044",
+  "level": 3,
+  "topic": "로봇공학 연구실 견학",
+  "voice": "male",
+  "sentences": [
+   "Welcome to the robotics lab.",
+   "Please stay behind the yellow line.",
+   "Some of these robots move faster than you might expect.",
+   "The arm on the left is learning to sort objects by shape and color.",
+   "It improves a little each time it makes a mistake and receives feedback.",
+   "Our students design both the physical parts and the programs that control them.",
+   "Next year, the team hopes to test a small delivery robot that can carry books between the library and the dormitories."
+  ],
+  "translations": [
+   "로봇공학 연구실에 오신 것을 환영합니다.",
+   "노란 선 뒤에 서 계세요.",
+   "이 로봇 중 일부는 생각보다 빠르게 움직입니다.",
+   "왼쪽 로봇 팔은 모양과 색으로 물건을 분류하는 법을 배우고 있습니다.",
+   "실수하고 피드백을 받을 때마다 조금씩 나아집니다.",
+   "우리 학생들은 기계 부품과 그것을 제어하는 프로그램을 모두 설계합니다.",
+   "내년에 팀은 도서관과 기숙사 사이에 책을 나를 수 있는 작은 배달 로봇을 시험해 보려고 합니다."
+  ]
+ },
+ {
+  "id": "sr-045",
+  "level": 3,
+  "topic": "대학 신문사 견학",
+  "voice": "female",
+  "sentences": [
+   "This is the newsroom.",
+   "Our paper is written entirely by students.",
+   "We publish online every day and in print once a week.",
+   "Editors meet every Monday morning to decide which stories to cover.",
+   "Every article is checked by at least two people before it is published.",
+   "Reporters must confirm important facts with more than one reliable source.",
+   "You don't need to be a journalism major to join, and many of our best photographers actually study engineering."
+  ],
+  "translations": [
+   "여기가 편집국입니다.",
+   "우리 신문은 전부 학생들이 씁니다.",
+   "온라인으로는 매일, 종이 신문으로는 일주일에 한 번 발행합니다.",
+   "편집자들은 매주 월요일 아침에 모여 어떤 기사를 다룰지 결정합니다.",
+   "모든 기사는 발행 전에 최소 두 사람이 확인합니다.",
+   "기자는 중요한 사실을 믿을 만한 출처 둘 이상으로 확인해야 합니다.",
+   "가입하는 데 언론학 전공일 필요는 없으며, 실제로 우리 최고의 사진기자 중 다수는 공학을 공부합니다."
+  ]
+ },
+ {
+  "id": "sr-046",
+  "level": 3,
+  "topic": "대학 수목원 산책 안내",
+  "voice": "male",
+  "sentences": [
+   "Welcome to the university arboretum.",
+   "It covers about forty acres of land.",
+   "More than three hundred tree species grow here.",
+   "Each tree has a small metal tag showing its scientific name.",
+   "The oldest oak along this path was planted shortly after the university opened.",
+   "Biology classes use the arboretum to study how trees respond to changes in the seasons.",
+   "Please stay on the marked trails, because walking on the roots can damage trees that have taken decades to grow."
+  ],
+  "translations": [
+   "대학 수목원에 오신 것을 환영합니다.",
+   "면적은 약 40에이커입니다.",
+   "이곳에는 300종이 넘는 나무가 자랍니다.",
+   "각 나무에는 학명이 적힌 작은 금속 표지가 달려 있습니다.",
+   "이 길을 따라 있는 가장 오래된 참나무는 대학이 문을 연 직후에 심어졌습니다.",
+   "생물학 수업에서는 나무가 계절 변화에 어떻게 반응하는지 연구하는 데 수목원을 활용합니다.",
+   "자라는 데 수십 년이 걸린 나무가 뿌리를 밟으면 다칠 수 있으니 표시된 길로만 다녀 주세요."
+  ]
+ },
+ {
+  "id": "sr-047",
+  "level": 3,
+  "topic": "극장 무대 뒤 투어",
+  "voice": "female",
+  "sentences": [
+   "Let's go backstage now.",
+   "Watch your step on these stairs.",
+   "This is where the sets are built and painted.",
+   "A single production can take our crew about six weeks to prepare.",
+   "Above the stage, there are ropes and pulleys that lift scenery up and down.",
+   "The lighting team controls more than two hundred lights from a booth at the back of the theater.",
+   "Students from any department can work on the crew, and it's a great way to learn practical skills while meeting new people."
+  ],
+  "translations": [
+   "이제 무대 뒤로 가 보겠습니다.",
+   "이 계단에서는 발밑을 조심하세요.",
+   "여기서 무대 세트를 만들고 칠합니다.",
+   "작품 하나를 준비하는 데 제작진이 약 6주가 걸리기도 합니다.",
+   "무대 위에는 배경 세트를 올리고 내리는 밧줄과 도르래가 있습니다.",
+   "조명팀은 극장 뒤쪽 부스에서 200개가 넘는 조명을 조종합니다.",
+   "어느 학과 학생이든 제작진으로 일할 수 있으며, 새로운 사람들을 만나면서 실용적인 기술을 배우기에 아주 좋은 방법입니다."
+  ]
+ },
+ {
+  "id": "sr-048",
+  "level": 3,
+  "topic": "역사학과 도심 걷기 투어",
+  "voice": "male",
+  "sentences": [
+   "Our walking tour begins here.",
+   "This square was once the town market.",
+   "Farmers sold grain and livestock here every Saturday.",
+   "The brick building on the corner served as the first town hall.",
+   "When the railroad arrived in the eighteen fifties, the town grew rapidly toward the river.",
+   "Many of the warehouses you'll see later have since been turned into apartments and restaurants.",
+   "As we walk, try to notice how the width of the streets changes, because it tells us which neighborhoods were planned and which grew naturally."
+  ],
+  "translations": [
+   "걷기 투어는 여기서 시작합니다.",
+   "이 광장은 한때 마을 시장이었습니다.",
+   "농부들은 매주 토요일 이곳에서 곡물과 가축을 팔았습니다.",
+   "모퉁이의 벽돌 건물은 최초의 시청으로 쓰였습니다.",
+   "1850년대에 철도가 들어오자 도시는 강 쪽으로 빠르게 성장했습니다.",
+   "나중에 보게 될 창고 중 다수는 이후 아파트와 식당으로 바뀌었습니다.",
+   "걸으면서 길의 폭이 어떻게 달라지는지 눈여겨보세요. 어느 동네가 계획되었고 어느 동네가 자연스럽게 생겨났는지 알려 주기 때문입니다."
+  ]
+ },
+ {
+  "id": "sr-049",
+  "level": 4,
+  "topic": "메이커스페이스 안전 교육",
+  "voice": "female",
+  "sentences": [
+   "Before anyone touches the equipment, let's review safety.",
+   "Safety glasses are required beyond this point.",
+   "The laser cutters must never be left running unattended.",
+   "Certain plastics release toxic fumes when cut, so check the approved materials list first.",
+   "Our 3D printers can run overnight, but only after a staff member has inspected the first few layers.",
+   "Anyone who wants to use the woodworking tools must first complete a separate hands-on training session.",
+   "If something goes wrong, press the red emergency button on the wall, which cuts power to every machine in the room at once."
+  ],
+  "translations": [
+   "누구든 장비를 만지기 전에 안전 수칙을 검토합시다.",
+   "이 지점부터는 보안경 착용이 필수입니다.",
+   "레이저 절단기는 절대로 지켜보는 사람 없이 작동시켜 두면 안 됩니다.",
+   "일부 플라스틱은 자를 때 유독 가스를 내므로 먼저 승인된 재료 목록을 확인하세요.",
+   "3D 프린터는 밤새 돌릴 수 있지만, 직원이 처음 몇 층을 점검한 뒤에만 가능합니다.",
+   "목공 도구를 쓰려는 사람은 먼저 별도의 실습 교육을 이수해야 합니다.",
+   "문제가 생기면 벽에 있는 빨간 비상 버튼을 누르세요. 방 안 모든 기계의 전원이 한꺼번에 차단됩니다."
+  ]
+ },
+ {
+  "id": "sr-050",
+  "level": 4,
+  "topic": "조류 행동 연구 현장 안내",
+  "voice": "male",
+  "sentences": [
+   "Welcome to the field station.",
+   "Please keep your voices low from here on.",
+   "The birds we study are extremely sensitive to human presence.",
+   "Researchers observe them from that wooden blind using high-powered binoculars.",
+   "Several adults have been fitted with lightweight tracking devices that record their daily movements.",
+   "So far, the data suggest that pairs return to almost exactly the same nesting site every spring.",
+   "What we're trying to determine now is whether rising temperatures are shifting the timing of their migration earlier each year."
+  ],
+  "translations": [
+   "현장 연구소에 오신 것을 환영합니다.",
+   "여기서부터는 목소리를 낮춰 주세요.",
+   "우리가 연구하는 새들은 사람의 존재에 매우 민감합니다.",
+   "연구자들은 저 나무 은신처에서 고배율 쌍안경으로 새들을 관찰합니다.",
+   "성체 몇 마리에는 일상적인 이동을 기록하는 가벼운 추적 장치를 달았습니다.",
+   "지금까지의 자료는 쌍들이 매년 봄 거의 정확히 같은 둥지 자리로 돌아온다는 것을 보여 줍니다.",
+   "지금 밝히려는 것은 기온 상승이 해마다 이들의 이동 시기를 앞당기고 있는지 여부입니다."
+  ]
+ },
+ {
+  "id": "sr-051",
+  "level": 4,
+  "topic": "의대 시뮬레이션 센터 견학",
+  "voice": "female",
+  "sentences": [
+   "This is our clinical simulation center.",
+   "It looks like a real hospital ward.",
+   "The patients, however, are computer-controlled mannequins.",
+   "They can breathe, speak, and even show changes in heart rate and blood pressure.",
+   "Instructors watch from behind that mirror and adjust the patient's condition in real time.",
+   "This allows nursing and medical students to practice handling emergencies without putting anyone at risk.",
+   "After each scenario, the team watches a recording of their performance and discusses what they could have done differently."
+  ],
+  "translations": [
+   "여기가 임상 시뮬레이션 센터입니다.",
+   "실제 병동처럼 보입니다.",
+   "하지만 환자는 컴퓨터로 제어되는 마네킹입니다.",
+   "숨을 쉬고 말을 하며 심박수와 혈압 변화까지 보여 줄 수 있습니다.",
+   "강사들은 저 거울 뒤에서 지켜보며 환자의 상태를 실시간으로 조절합니다.",
+   "덕분에 간호학과 의학 전공생들이 누구도 위험하게 하지 않고 응급 상황 대처를 연습할 수 있습니다.",
+   "각 시나리오가 끝나면 팀은 자신들의 수행을 녹화한 영상을 보고 무엇을 다르게 할 수 있었는지 토론합니다."
+  ]
+ },
+ {
+  "id": "sr-052",
+  "level": 4,
+  "topic": "기록보관소 디지털화 프로젝트",
+  "voice": "male",
+  "sentences": [
+   "Let me show you our digitization project.",
+   "These boxes contain letters from early students.",
+   "Some of the paper is so fragile it can crack if handled carelessly.",
+   "Each page is photographed under carefully controlled lighting to avoid fading the ink.",
+   "Volunteers then transcribe the handwriting so the text can be searched by keyword online.",
+   "Older handwriting styles can be surprisingly difficult to read, even for people who have done this for years.",
+   "Once the collection is complete, historians anywhere in the world will be able to study these documents without ever visiting the campus."
+  ],
+  "translations": [
+   "우리의 디지털화 프로젝트를 보여 드리겠습니다.",
+   "이 상자들에는 초기 학생들의 편지가 들어 있습니다.",
+   "일부 종이는 너무 약해서 부주의하게 다루면 갈라질 수 있습니다.",
+   "잉크가 바래지 않도록 각 쪽을 세심하게 조절한 조명 아래에서 촬영합니다.",
+   "그다음 자원봉사자들이 손글씨를 옮겨 적어 온라인에서 키워드로 검색할 수 있게 합니다.",
+   "오래된 필체는 이 일을 몇 년 해 온 사람에게도 의외로 읽기 어려울 수 있습니다.",
+   "자료가 완성되면 전 세계 어디서든 역사학자들이 캠퍼스를 방문하지 않고도 이 문서들을 연구할 수 있게 됩니다."
+  ]
+ },
+ {
+  "id": "sr-053",
+  "level": 4,
+  "topic": "화석 처리 실험실 견학",
+  "voice": "female",
+  "sentences": [
+   "This is the fossil preparation lab.",
+   "Most fossils arrive still encased in rock.",
+   "Our job is to remove that rock without damaging the bone.",
+   "For delicate areas, preparators use tiny air-powered tools under a microscope.",
+   "A single vertebra from a large dinosaur can take several weeks of careful work to expose.",
+   "Through this window, visitors can watch the process and ask the preparators questions about their work.",
+   "The specimen on the main table was discovered by a graduate student last summer and may turn out to be a previously unknown species."
+  ],
+  "translations": [
+   "여기가 화석 처리 실험실입니다.",
+   "대부분의 화석은 아직 암석에 싸인 채로 도착합니다.",
+   "우리 일은 뼈를 손상하지 않고 그 암석을 제거하는 것입니다.",
+   "섬세한 부분에는 처리 담당자가 현미경 아래에서 공기압으로 작동하는 작은 도구를 씁니다.",
+   "큰 공룡의 척추뼈 하나를 드러내는 데 몇 주의 세심한 작업이 걸리기도 합니다.",
+   "방문객은 이 창을 통해 작업 과정을 지켜보고 처리 담당자에게 작업에 관해 질문할 수 있습니다.",
+   "중앙 테이블의 표본은 지난여름 한 대학원생이 발견한 것으로, 이전에 알려지지 않은 종으로 밝혀질 수도 있습니다."
+  ]
+ },
+ {
+  "id": "sr-054",
+  "level": 4,
+  "topic": "풍력 에너지 연구 시설",
+  "voice": "male",
+  "sentences": [
+   "Welcome to the wind energy test facility.",
+   "That tunnel generates winds of controlled speed.",
+   "We use it to test scaled-down models of turbine blades.",
+   "Small changes in a blade's curve can significantly affect how much power it produces.",
+   "Sensors along each blade measure vibration, since excessive vibration shortens a turbine's lifespan.",
+   "One current project is examining whether blade designs inspired by whale fins can reduce noise.",
+   "Noise is actually one of the main reasons communities object to wind farms, so solving it could make new projects far easier to approve."
+  ],
+  "translations": [
+   "풍력 에너지 시험 시설에 오신 것을 환영합니다.",
+   "저 터널은 속도를 조절한 바람을 만들어 냅니다.",
+   "그것으로 터빈 날개의 축소 모형을 시험합니다.",
+   "날개 곡선의 작은 변화가 발전량에 상당한 영향을 줄 수 있습니다.",
+   "과도한 진동은 터빈 수명을 줄이므로 각 날개를 따라 설치된 센서가 진동을 측정합니다.",
+   "현재 한 프로젝트는 고래 지느러미에서 영감을 얻은 날개 설계이 소음을 줄일 수 있는지 살펴보고 있습니다.",
+   "소음은 사실 지역 사회가 풍력 단지에 반대하는 주된 이유 중 하나이므로, 이를 해결하면 새 사업의 승인이 훨씬 쉬워질 수 있습니다."
+  ]
+ },
+ {
+  "id": "sr-055",
+  "level": 5,
+  "topic": "인간 대상 연구 윤리 교육",
+  "voice": "female",
+  "sentences": [
+   "Informed consent is the foundation of ethical research.",
+   "Participants must understand exactly what they are agreeing to.",
+   "Consent forms should therefore avoid technical jargon wherever possible.",
+   "Participants are entitled to withdraw at any point without having to justify their decision.",
+   "Any study involving minors or other vulnerable groups requires an additional layer of review by the board.",
+   "Data must be stored in an anonymized form, and identifying information should be kept separately under restricted access.",
+   "Bear in mind that even seemingly harmless questions can cause distress, so you should be prepared to refer participants to support services if necessary."
+  ],
+  "translations": [
+   "충분한 설명에 근거한 동의는 윤리적 연구의 토대입니다.",
+   "참가자는 자신이 무엇에 동의하는지 정확히 이해해야 합니다.",
+   "따라서 동의서는 가능한 한 전문 용어를 피해야 합니다.",
+   "참가자는 결정의 이유를 밝힐 필요 없이 언제든 참여를 철회할 권리가 있습니다.",
+   "미성년자나 다른 취약 집단이 관련된 연구는 위원회의 추가 심사를 거쳐야 합니다.",
+   "자료는 익명화된 형태로 저장해야 하며, 신원을 알 수 있는 정보는 접근을 제한해 따로 보관해야 합니다.",
+   "겉보기에 무해한 질문도 고통을 줄 수 있음을 명심하고, 필요하면 참가자를 지원 서비스로 안내할 준비를 해 두어야 합니다."
+  ]
+ },
+ {
+  "id": "sr-056",
+  "level": 5,
+  "topic": "입자 물리 실험 시설 견학",
+  "voice": "male",
+  "sentences": [
+   "You are now standing above the detector.",
+   "It sits roughly thirty meters beneath our feet.",
+   "The surrounding rock shields it from most cosmic radiation.",
+   "Particles collide at nearly the speed of light, producing showers of short-lived fragments.",
+   "The detector records millions of these events every second, far more than could ever be stored.",
+   "Sophisticated algorithms therefore decide almost instantaneously which collisions are worth keeping for further analysis.",
+   "Ironically, the most significant discoveries often emerge not from dramatic signals but from tiny statistical deviations that accumulate over years of painstaking observation."
+  ],
+  "translations": [
+   "여러분은 지금 검출기 바로 위에 서 있습니다.",
+   "그것은 우리 발아래 약 30미터 지점에 있습니다.",
+   "주변 암반이 대부분의 우주 방사선으로부터 검출기를 차단해 줍니다.",
+   "입자들이 거의 빛의 속도로 충돌해 수명이 짧은 파편들을 쏟아 냅니다.",
+   "검출기는 매초 이런 사건을 수백만 건 기록하는데, 이는 저장할 수 있는 양을 훨씬 넘어섭니다.",
+   "그래서 정교한 알고리즘이 어떤 충돌을 추가 분석을 위해 남길지 거의 즉시 결정합니다.",
+   "역설적으로 가장 중요한 발견은 극적인 신호가 아니라 수년간의 고된 관측 끝에 쌓인 미세한 통계적 편차에서 나오는 경우가 많습니다."
+  ]
+ },
+ {
+  "id": "sr-057",
+  "level": 5,
+  "topic": "유전체 분석 센터 브리핑",
+  "voice": "female",
+  "sentences": [
+   "This facility sequences thousands of genomes annually.",
+   "Contamination is our single greatest concern.",
+   "Even a trace of foreign DNA can invalidate an entire batch of samples.",
+   "For that reason, sample preparation and analysis take place in physically separate rooms.",
+   "Air pressure in the clean room is kept slightly higher than in the corridor to keep particles out.",
+   "The sequencers themselves are remarkably fast, but interpreting the resulting data remains the real bottleneck.",
+   "Distinguishing a genuinely harmful mutation from harmless natural variation requires not only computational power but also careful judgment informed by clinical evidence."
+  ],
+  "translations": [
+   "이 시설은 해마다 수천 개의 유전체를 해독합니다.",
+   "오염이 우리의 가장 큰 걱정거리입니다.",
+   "외부 DNA가 극미량만 있어도 시료 한 묶음 전체가 무효가 될 수 있습니다.",
+   "그런 이유로 시료 준비와 분석은 물리적으로 분리된 방에서 이루어집니다.",
+   "입자가 들어오지 않도록 청정실의 기압은 복도보다 약간 높게 유지됩니다.",
+   "해독 장비 자체는 놀라울 만큼 빠르지만, 그 결과 자료를 해석하는 일이 여전히 진짜 병목입니다.",
+   "실제로 해로운 돌연변이를 무해한 자연 변이와 구별하려면 계산 능력뿐 아니라 임상 증거에 바탕을 둔 신중한 판단도 필요합니다."
+  ]
+ },
+ {
+  "id": "sr-058",
+  "level": 5,
+  "topic": "고문서 보존 처리실",
+  "voice": "male",
+  "sentences": [
+   "Conservation is fundamentally about restraint.",
+   "Our aim is to stabilize objects, not to make them look new.",
+   "Every intervention we make must be reversible by future conservators.",
+   "This manuscript, for instance, suffered water damage during a flood in the nineteenth century.",
+   "Rather than replacing the missing fragments, we've reinforced the edges with thin Japanese tissue and a wheat starch paste.",
+   "Those materials were chosen precisely because they can be removed with moisture, leaving the original paper unharmed.",
+   "Some earlier restorations, by contrast, relied on adhesives that have since yellowed and become brittle, and undoing that well-intentioned damage now accounts for much of our work."
+  ],
+  "translations": [
+   "보존 처리는 근본적으로 절제에 관한 일입니다.",
+   "우리의 목표는 물건을 새것처럼 보이게 하는 것이 아니라 안정시키는 것입니다.",
+   "우리가 하는 모든 처리는 미래의 보존가가 되돌릴 수 있어야 합니다.",
+   "예를 들어 이 필사본은 19세기의 홍수 때 물에 손상되었습니다.",
+   "떨어져 나간 조각을 대체하는 대신 얇은 일본 화지와 밀 전분 풀로 가장자리를 보강했습니다.",
+   "그 재료들은 바로 습기로 제거할 수 있어 원래 종이를 손상하지 않기 때문에 선택되었습니다.",
+   "반면 일부 이전 복원은 그 후 누렇게 변하고 부서지기 쉬워진 접착제에 의존했으며, 그 선의의 손상을 되돌리는 일이 지금 우리 작업의 상당 부분을 차지합니다."
+  ]
+ },
+ {
+  "id": "sr-059",
+  "level": 5,
+  "topic": "수중 고고학 잠수 브리핑",
+  "voice": "female",
+  "sentences": [
+   "Today's dive targets the eastern section of the wreck.",
+   "Visibility is expected to be poor this morning.",
+   "Each team must remain within arm's reach of its partner at all times.",
+   "Nothing is to be lifted from the seabed until its position has been photographed and recorded.",
+   "An artifact removed from its context loses much of its value as evidence, however impressive it may look.",
+   "Wooden objects in particular must be kept submerged in fresh water until they reach the lab, or they'll warp as they dry.",
+   "Should anyone experience equipment trouble or disorientation, signal your partner immediately and ascend slowly together, regardless of how much work remains unfinished."
+  ],
+  "translations": [
+   "오늘 잠수는 난파선 동쪽 구역을 대상으로 합니다.",
+   "오늘 아침에는 시야가 나쁠 것으로 예상됩니다.",
+   "각 팀은 항상 짝과 팔이 닿는 거리 안에 있어야 합니다.",
+   "해저의 어떤 물건도 위치를 촬영하고 기록하기 전에는 들어 올려서는 안 됩니다.",
+   "맥락에서 떨어져 나온 유물은 겉보기에 아무리 인상적이어도 증거로서의 가치를 상당 부분 잃습니다.",
+   "특히 나무 유물은 실험실에 도착할 때까지 민물에 담가 두어야 하며, 그렇지 않으면 마르면서 뒤틀립니다.",
+   "장비 문제나 방향 감각 상실을 겪는다면 남은 작업이 얼마나 되든 즉시 짝에게 신호하고 함께 천천히 상승하세요."
+  ]
+ },
+ {
+  "id": "sr-060",
+  "level": 5,
+  "topic": "학회 발표 준비 워크숍",
+  "voice": "male",
+  "sentences": [
+   "Conference talks are not miniature papers.",
+   "Audiences retain remarkably little from a fifteen-minute presentation.",
+   "You should therefore build your talk around a single central claim.",
+   "Resist the temptation to include every robustness check you conducted during the project.",
+   "Those details belong in an appendix or in your answers to questions, not on crowded slides that nobody can read.",
+   "When you receive a hostile question, acknowledge its legitimate core before explaining why your conclusion still holds.",
+   "Finally, rehearse in front of colleagues outside your specialty, because if they can follow your argument, experts in the audience almost certainly will as well."
+  ],
+  "translations": [
+   "학회 발표는 축소판 논문이 아닙니다.",
+   "청중은 15분 발표에서 놀라울 만큼 적은 것만 기억합니다.",
+   "따라서 하나의 핵심 주장을 중심으로 발표를 구성해야 합니다.",
+   "프로젝트 중에 실시한 모든 견고성 검증을 넣고 싶은 유혹을 참으세요.",
+   "그런 세부 사항은 아무도 읽지 못하는 빽빽한 슬라이드가 아니라 부록이나 질의응답에 들어가야 합니다.",
+   "공격적인 질문을 받으면 왜 여전히 결론이 유효한지 설명하기 전에 그 질문의 타당한 핵심을 인정하세요.",
+   "마지막으로 전공이 다른 동료들 앞에서 리허설하세요. 그들이 여러분의 논지를 따라갈 수 있다면 청중 속 전문가들도 거의 확실히 따라올 것입니다."
+  ]
+ }
+]

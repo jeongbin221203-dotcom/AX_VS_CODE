@@ -1,0 +1,2210 @@
+[
+ {
+  "id": "p4-086",
+  "level": 1,
+  "topic": "미용실 예약 시간 변경 요청 전화",
+  "talk_type": "전화 메시지",
+  "voice": "female",
+  "script": "Hi, this is Amy from Bella Hair Salon. I'm calling for Ms. Laura Chen. You have an appointment for a haircut with Nina tomorrow at ten a.m. I'm sorry, but Nina is sick today, and she won't be at work tomorrow morning. She can see you at three p.m. instead. If that time is not good for you, our other stylist, Mark, is free at ten. Please call us back today and tell us which you'd like. Our number is 555-0187. Thank you!",
+  "graphic": null,
+  "questions": [
+   {
+    "q": "Why is the speaker calling?",
+    "choices": [
+     "To offer a new job",
+     "To sell a hair product",
+     "To ask for a payment",
+     "To change an appointment"
+    ],
+    "answer": 3,
+    "type": "주제·목적",
+    "explanation": "내일 오전 10시 예약 담당자 Nina가 아파서 오후 3시로 바꾸거나 다른 미용사를 고르라고 하므로 예약 변경이 목적이다. 제품 판매나 결제 이야기는 없다."
+   },
+   {
+    "q": "What is the problem?",
+    "choices": [
+     "The salon is closed tomorrow.",
+     "The listener was late.",
+     "The price has changed.",
+     "A stylist is sick."
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "'Nina is sick today, and she won't be at work tomorrow morning'에서 미용사가 아프다는 것이 문제다. 미용실이 문을 닫는다는 말은 없다."
+   },
+   {
+    "q": "What does the speaker ask the listener to do?",
+    "choices": [
+     "Visit the Web site",
+     "Come in early",
+     "Bring a photo",
+     "Call the salon back"
+    ],
+    "answer": 3,
+    "type": "요청·제안",
+    "explanation": "'Please call us back today'라고 했으므로 미용실에 다시 전화해 달라는 요청이다."
+   }
+  ],
+  "translation": "안녕하세요, 벨라 헤어 살롱의 에이미입니다. 로라 첸 님께 전화드렸습니다. 내일 오전 10시에 니나에게 커트 예약이 되어 있는데요. 죄송하지만 니나가 오늘 아파서 내일 오전에 출근하지 못합니다. 대신 오후 3시에는 봐 드릴 수 있습니다. 그 시간이 괜찮지 않으시면 다른 미용사인 마크가 10시에 비어 있습니다. 오늘 중으로 다시 전화 주셔서 어느 쪽이 좋으신지 알려 주세요. 번호는 555-0187입니다. 감사합니다!"
+ },
+ {
+  "id": "p4-087",
+  "level": 1,
+  "topic": "백화점 아동용품 할인 행사 안내 방송",
+  "talk_type": "안내 방송",
+  "voice": "male",
+  "script": "Good afternoon, shoppers, and welcome to Parkview Department Store. Today only, we are having a big sale on children's clothes and toys. Everything is thirty percent off until six p.m. You can find the sale in our children's section. Also, there is a free face-painting event for kids next to the sale area. It starts at two o'clock. If you need a shopping cart or a stroller, please ask at the information desk near the main entrance. Thank you for shopping with us!",
+  "graphic": {
+   "title": "Parkview Department Store Directory",
+   "rows": [
+    [
+     "Floor",
+     "Section"
+    ],
+    [
+     "1st Floor",
+     "Shoes & Bags"
+    ],
+    [
+     "2nd Floor",
+     "Women's Clothing"
+    ],
+    [
+     "3rd Floor",
+     "Children's Clothing & Toys"
+    ],
+    [
+     "4th Floor",
+     "Home Goods"
+    ]
+   ]
+  },
+  "questions": [
+   {
+    "q": "What is on sale today?",
+    "choices": [
+     "Shoes",
+     "Kitchen items",
+     "Books",
+     "Children's goods"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "'a big sale on children's clothes and toys'라고 했으므로 아동복과 장난감이 할인 대상이다. 신발이나 주방용품은 언급되지 않았다."
+   },
+   {
+    "q": "Look at the graphic. Where is the sale?",
+    "choices": [
+     "On the 1st floor",
+     "On the 2nd floor",
+     "On the 4th floor",
+     "On the 3rd floor"
+    ],
+    "answer": 3,
+    "type": "시각 자료 연계",
+    "explanation": "할인 행사는 아동 코너(children's section)에서 열린다. 안내도에서 아동복·장난감은 3층이므로 정답은 3층이다."
+   },
+   {
+    "q": "What will happen at two o'clock?",
+    "choices": [
+     "The store will close.",
+     "A prize will be given.",
+     "A new store will open.",
+     "A face-painting event will start."
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "'a free face-painting event for kids ... It starts at two o'clock'이라고 했다. 가게는 6시까지 할인하며 문을 닫는다는 말은 없다."
+   }
+  ],
+  "translation": "쇼핑객 여러분, 안녕하세요. 파크뷰 백화점에 오신 것을 환영합니다. 오늘 하루만 아동복과 장난감 대할인 행사를 합니다. 오후 6시까지 전 품목 30퍼센트 할인입니다. 할인 행사는 아동 코너에서 찾으실 수 있습니다. 또 할인 매장 옆에서 어린이를 위한 무료 페이스 페인팅 행사가 있습니다. 2시에 시작합니다. 쇼핑 카트나 유모차가 필요하시면 정문 근처 안내 데스크에 문의해 주세요. 저희 매장을 이용해 주셔서 감사합니다!"
+ },
+ {
+  "id": "p4-088",
+  "level": 1,
+  "topic": "새 사원증 배부 안내",
+  "talk_type": "회의 발췌",
+  "voice": "male",
+  "script": "OK, everyone, before we start today's meeting, I have some news. Next Monday, we are changing our security system, so all of you will get a new staff ID card. The old cards will not open the doors after Monday. You can pick up your new card at the security office on the first floor. The office is open from eight a.m. to five p.m. this Thursday and Friday. Please bring your old card with you, and give it to the security staff. Thanks. Now, let's talk about this week's schedule.",
+  "graphic": null,
+  "questions": [
+   {
+    "q": "What is the speaker mainly talking about?",
+    "choices": [
+     "A holiday party",
+     "A new office",
+     "A training class",
+     "New ID cards"
+    ],
+    "answer": 3,
+    "type": "주제·목적",
+    "explanation": "보안 시스템을 바꾸면서 모두 새 사원증(new staff ID card)을 받게 된다는 안내가 중심이다. 사무실 이전이나 교육 이야기는 아니다."
+   },
+   {
+    "q": "Where can the listeners get their cards?",
+    "choices": [
+     "At the front desk",
+     "At the security office",
+     "In the meeting room",
+     "At the cafeteria"
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "'You can pick up your new card at the security office on the first floor'라고 했다. 1층 보안실이 정답이다."
+   },
+   {
+    "q": "What should the listeners bring?",
+    "choices": [
+     "A photo",
+     "A signed form",
+     "Some money",
+     "Their old card"
+    ],
+    "answer": 3,
+    "type": "요청·제안",
+    "explanation": "'Please bring your old card with you'라고 했으므로 예전 카드를 가져와야 한다. 사진이나 서류는 언급되지 않았다."
+   }
+  ],
+  "translation": "자, 여러분, 오늘 회의를 시작하기 전에 알려 드릴 소식이 있습니다. 다음 주 월요일에 보안 시스템을 바꾸기 때문에 모두 새 사원증을 받게 됩니다. 예전 카드로는 월요일 이후 문이 열리지 않습니다. 새 카드는 1층 보안실에서 받으실 수 있습니다. 보안실은 이번 주 목요일과 금요일 오전 8시부터 오후 5시까지 엽니다. 예전 카드를 가져오셔서 보안 직원에게 반납해 주세요. 감사합니다. 이제 이번 주 일정 이야기를 해 봅시다."
+ },
+ {
+  "id": "p4-089",
+  "level": 1,
+  "topic": "자전거 가게 봄맞이 할인 광고",
+  "talk_type": "광고",
+  "voice": "male",
+  "script": "Spring is here, so it's time to ride! Come to Wheel World, the biggest bike shop in Greenville. This week only, all adult bikes are twenty percent off. Do you already have a bike? Bring it in, and we'll check it for free. We also sell helmets, lights, and bike bags. Wheel World is on Oak Street, across from the city park. We're open from ten to eight every day. Visit us this week and enjoy the spring sunshine on a new bike!",
+  "graphic": null,
+  "questions": [
+   {
+    "q": "What kind of business is being advertised?",
+    "choices": [
+     "A sports center",
+     "A car shop",
+     "A park",
+     "A bicycle store"
+    ],
+    "answer": 3,
+    "type": "주제·목적",
+    "explanation": "'Wheel World, the biggest bike shop in Greenville'이라고 했으므로 자전거 가게 광고다. 공원은 가게의 위치를 설명할 때만 나온다."
+   },
+   {
+    "q": "What does the business offer for free?",
+    "choices": [
+     "A helmet",
+     "A riding lesson",
+     "A bike bag",
+     "A bike check"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "'Bring it in, and we'll check it for free'라고 했으므로 무료 자전거 점검이다. 헬멧과 가방은 판매하는 물건이다."
+   },
+   {
+    "q": "Where is the business located?",
+    "choices": [
+     "Near a train station",
+     "Next to a school",
+     "Inside a mall",
+     "Across from a park"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "'on Oak Street, across from the city park'라고 했으므로 공원 맞은편에 있다."
+   }
+  ],
+  "translation": "봄이 왔으니 자전거를 탈 때입니다! 그린빌에서 가장 큰 자전거 가게, 휠 월드로 오세요. 이번 주에만 성인용 자전거 전 제품이 20퍼센트 할인됩니다. 이미 자전거가 있으신가요? 가져오시면 무료로 점검해 드립니다. 헬멧, 라이트, 자전거 가방도 판매합니다. 휠 월드는 오크 스트리트, 시립 공원 맞은편에 있습니다. 매일 10시부터 8시까지 영업합니다. 이번 주에 방문하셔서 새 자전거로 봄 햇살을 즐기세요!"
+ },
+ {
+  "id": "p4-090",
+  "level": 1,
+  "topic": "시립 야외 수영장 여름 개장 지역 뉴스",
+  "talk_type": "방송·뉴스",
+  "voice": "female",
+  "script": "And now for some local news. The Fairfield outdoor pool will open for the summer this Saturday. The pool was closed for two months because workers were painting it and fixing the showers. Now everything is ready. The pool will be open every day from nine a.m. to seven p.m. until the end of August. Children under six can swim for free. The city also says the parking lot is small, so people should walk or take the bus if they can. For more information, visit the city's Web site.",
+  "graphic": null,
+  "questions": [
+   {
+    "q": "Why was the pool closed?",
+    "choices": [
+     "Because of bad weather",
+     "Because it had no staff",
+     "Because of a festival",
+     "Because of repair work"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "'workers were painting it and fixing the showers'라고 했으므로 보수 공사 때문에 닫혀 있었다. 날씨나 직원 부족 이야기는 없다."
+   },
+   {
+    "q": "Who can swim for free?",
+    "choices": [
+     "Older people",
+     "City workers",
+     "Students",
+     "Young children"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "'Children under six can swim for free'라고 했으므로 6세 미만 어린이가 무료다."
+   },
+   {
+    "q": "What are people asked to do?",
+    "choices": [
+     "Bring their own towels",
+     "Arrive early",
+     "Buy tickets online",
+     "Walk or take the bus"
+    ],
+    "answer": 3,
+    "type": "요청·제안",
+    "explanation": "주차장이 작아서 'people should walk or take the bus if they can'이라고 했다. 걸어오거나 버스를 타라는 요청이다."
+   }
+  ],
+  "translation": "이어서 지역 소식입니다. 페어필드 야외 수영장이 이번 주 토요일에 여름 개장을 합니다. 수영장은 작업자들이 페인트칠을 하고 샤워 시설을 고치느라 두 달 동안 문을 닫았습니다. 이제 모든 준비가 끝났습니다. 수영장은 8월 말까지 매일 오전 9시부터 오후 7시까지 운영합니다. 6세 미만 어린이는 무료로 수영할 수 있습니다. 시는 또 주차장이 작으니 가능하면 걸어오거나 버스를 이용해 달라고 당부했습니다. 자세한 내용은 시 웹사이트를 참고하세요."
+ },
+ {
+  "id": "p4-091",
+  "level": 1,
+  "topic": "중고 도서 바자회 자원봉사자 환영 인사",
+  "talk_type": "연설·소개",
+  "voice": "female",
+  "script": "Good morning, everyone, and thank you for coming. My name is Grace, and I'm the manager of this year's used book sale. We have more than five thousand books this year, so we really need your help. This morning, some of you will put books on the tables, and others will work at the cash desks. The doors open to the public at ten. Lunch will be in the staff room at one o'clock. Before we start, please take a green T-shirt from the box by the door. That way, shoppers will know you're a volunteer.",
+  "graphic": null,
+  "questions": [
+   {
+    "q": "Who most likely are the listeners?",
+    "choices": [
+     "Book writers",
+     "Teachers",
+     "Store owners",
+     "Volunteers"
+    ],
+    "answer": 3,
+    "type": "화자 정보(직업·장소)",
+    "explanation": "화자는 바자회 책임자이고, 쇼핑객이 'you're a volunteer'임을 알 수 있도록 티셔츠를 입으라고 하므로 청자는 자원봉사자다."
+   },
+   {
+    "q": "What time will the doors open to the public?",
+    "choices": [
+     "At nine",
+     "At one",
+     "At ten",
+     "At eleven"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "'The doors open to the public at ten'이라고 했다. 1시는 점심시간이다."
+   },
+   {
+    "q": "What are the listeners asked to do?",
+    "choices": [
+     "Sign a form",
+     "Bring some books",
+     "Pay at the desk",
+     "Wear a T-shirt"
+    ],
+    "answer": 3,
+    "type": "요청·제안",
+    "explanation": "'please take a green T-shirt from the box by the door'라고 하며 입으라고 했다. 티셔츠를 입는 것이 요청 사항이다."
+   }
+  ],
+  "translation": "여러분, 좋은 아침입니다. 와 주셔서 감사합니다. 저는 그레이스이고 올해 중고 도서 바자회 책임자입니다. 올해는 책이 5,000권이 넘어서 여러분의 도움이 정말 필요합니다. 오늘 오전에 몇 분은 테이블에 책을 진열하고, 다른 분들은 계산대에서 일하시게 됩니다. 일반 손님에게는 10시에 문을 엽니다. 점심은 1시에 직원 휴게실에서 드립니다. 시작하기 전에 문 옆 상자에서 초록색 티셔츠를 하나씩 가져가 주세요. 그래야 손님들이 여러분이 자원봉사자라는 것을 알 수 있습니다."
+ },
+ {
+  "id": "p4-092",
+  "level": 1,
+  "topic": "치즈 농장 견학",
+  "talk_type": "관광·견학 안내",
+  "voice": "male",
+  "script": "Hello, everyone, and welcome to Hilltop Cheese Farm. I'm Peter, and I'll be your guide today. First, we'll visit the barn and meet our cows. Then we'll go to the kitchen, where you can watch us make cheese. After that, you'll have time to taste five different kinds of cheese. Please don't touch the machines in the kitchen. They are very hot. At the end of the tour, you can buy cheese at our farm shop. OK, please follow me to the barn.",
+  "graphic": {
+   "title": "Hilltop Cheese Farm Tour",
+   "rows": [
+    [
+     "Time",
+     "Activity"
+    ],
+    [
+     "10:00",
+     "Meet the cows"
+    ],
+    [
+     "10:30",
+     "Cheese-making kitchen"
+    ],
+    [
+     "11:00",
+     "Cheese tasting"
+    ],
+    [
+     "11:30",
+     "Farm shop"
+    ]
+   ]
+  },
+  "questions": [
+   {
+    "q": "Who is the speaker?",
+    "choices": [
+     "A shop owner",
+     "A cook",
+     "A farmer's customer",
+     "A tour guide"
+    ],
+    "answer": 3,
+    "type": "화자 정보(직업·장소)",
+    "explanation": "'I'm Peter, and I'll be your guide today'라고 했으므로 견학 안내원이다."
+   },
+   {
+    "q": "Look at the graphic. When will the listeners watch cheese being made?",
+    "choices": [
+     "At 10:00",
+     "At 10:30",
+     "At 11:00",
+     "At 11:30"
+    ],
+    "answer": 1,
+    "type": "시각 자료 연계",
+    "explanation": "치즈 만드는 것은 부엌(kitchen)에서 본다. 일정표에서 Cheese-making kitchen은 10:30이다. 11:00은 시식 시간이다."
+   },
+   {
+    "q": "Why should the listeners not touch the machines?",
+    "choices": [
+     "They are new.",
+     "They are expensive.",
+     "They are dirty.",
+     "They are very hot."
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "'Please don't touch the machines ... They are very hot'이라고 했으므로 뜨겁기 때문이다."
+   }
+  ],
+  "translation": "여러분, 안녕하세요. 힐탑 치즈 농장에 오신 것을 환영합니다. 저는 피터이고 오늘 여러분의 안내를 맡았습니다. 먼저 헛간에 가서 젖소들을 만나 보겠습니다. 그다음 부엌으로 가서 치즈 만드는 모습을 보시게 됩니다. 그 후에는 다섯 가지 치즈를 맛볼 시간이 있습니다. 부엌에 있는 기계는 만지지 마세요. 아주 뜨겁습니다. 견학이 끝나면 농장 매장에서 치즈를 사실 수 있습니다. 자, 헛간으로 저를 따라오세요."
+ },
+ {
+  "id": "p4-093",
+  "level": 1,
+  "topic": "소파 배송 시간 확인 전화",
+  "talk_type": "전화 메시지",
+  "voice": "male",
+  "script": "Hello, this message is for Mr. Robert Kim. This is Sam from Comfort Home Furniture. Your new sofa is ready, and we will deliver it this Wednesday. Our truck will arrive between one and three p.m. Someone needs to be at home to sign for it. Also, please make sure the doorway is clear, because the sofa is quite large. If Wednesday doesn't work for you, please call me at 555-0163 before Tuesday. Thank you for shopping with us.",
+  "graphic": null,
+  "questions": [
+   {
+    "q": "What will be delivered?",
+    "choices": [
+     "A bed",
+     "A table",
+     "A desk",
+     "A sofa"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "'Your new sofa is ready'라고 했으므로 소파가 배송된다."
+   },
+   {
+    "q": "What does the speaker ask the listener to do?",
+    "choices": [
+     "Clear the doorway",
+     "Pay in cash",
+     "Pick up the item",
+     "Open the garage"
+    ],
+    "answer": 0,
+    "type": "요청·제안",
+    "explanation": "소파가 크기 때문에 'please make sure the doorway is clear'라고 했다. 출입구를 비워 달라는 요청이다."
+   },
+   {
+    "q": "When should the listener call if Wednesday is not good?",
+    "choices": [
+     "Before Monday",
+     "Before Friday",
+     "On Wednesday",
+     "Before Tuesday"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "'please call me at 555-0163 before Tuesday'라고 했으므로 화요일 전에 전화해야 한다."
+   }
+  ],
+  "translation": "안녕하세요, 로버트 김 님께 남기는 메시지입니다. 컴포트 홈 가구의 샘입니다. 새 소파가 준비되어 이번 주 수요일에 배송해 드릴 예정입니다. 저희 트럭은 오후 1시에서 3시 사이에 도착합니다. 수령 서명을 하실 분이 집에 계셔야 합니다. 또 소파가 꽤 크니 출입구를 꼭 비워 두세요. 수요일이 안 되시면 화요일 전에 555-0163으로 저에게 전화 주세요. 저희 매장을 이용해 주셔서 감사합니다."
+ },
+ {
+  "id": "p4-094",
+  "level": 2,
+  "topic": "박물관 폐관 30분 전 안내",
+  "talk_type": "안내 방송",
+  "voice": "female",
+  "script": "Attention, visitors. The Lakeside History Museum will close in thirty minutes, at five o'clock. Please begin making your way toward the main exit on the first floor. The special exhibit on the second floor, Ships of the Great Lakes, has already closed for the day. However, our gift shop will stay open until five thirty, so you still have time to pick up a souvenir. If you left a coat or bag in the lockers, please remember to collect it before you leave. We hope you enjoyed your visit, and we look forward to seeing you again.",
+  "graphic": null,
+  "questions": [
+   {
+    "q": "Where is the announcement being made?",
+    "choices": [
+     "At a library",
+     "At a museum",
+     "At a shopping mall",
+     "At a theater"
+    ],
+    "answer": 1,
+    "type": "화자 정보(직업·장소)",
+    "explanation": "'The Lakeside History Museum will close in thirty minutes'라고 했으므로 박물관에서 하는 방송이다."
+   },
+   {
+    "q": "What does the speaker say about the special exhibit?",
+    "choices": [
+     "It is free today.",
+     "It has moved to the first floor.",
+     "It will open next month.",
+     "It is closed for the day."
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "'has already closed for the day'라고 했으므로 특별 전시는 오늘 이미 마감되었다."
+   },
+   {
+    "q": "What does the speaker remind listeners to do?",
+    "choices": [
+     "Take their items from the lockers",
+     "Buy tickets for tomorrow",
+     "Fill out a survey",
+     "Return their audio guides"
+    ],
+    "answer": 0,
+    "type": "요청·제안",
+    "explanation": "'If you left a coat or bag in the lockers, please remember to collect it'라고 했으므로 사물함의 물건을 챙기라는 당부다. 설문이나 오디오 가이드는 언급되지 않았다."
+   }
+  ],
+  "translation": "관람객 여러분께 알려 드립니다. 레이크사이드 역사박물관은 30분 후인 5시에 문을 닫습니다. 1층 정문 출구 쪽으로 이동해 주시기 바랍니다. 2층 특별 전시 '오대호의 배들'은 오늘 이미 관람이 끝났습니다. 다만 기념품점은 5시 30분까지 영업하므로 아직 기념품을 사실 시간이 있습니다. 사물함에 코트나 가방을 두셨다면 나가시기 전에 꼭 챙겨 가세요. 즐거운 관람이 되셨기를 바라며, 다시 뵙기를 기대합니다."
+ },
+ {
+  "id": "p4-095",
+  "level": 2,
+  "topic": "주차장 도색 공사로 주차 구역 변경",
+  "talk_type": "회의 발췌",
+  "voice": "male",
+  "script": "One more thing before we finish. The company is repainting the lines in our parking lot next week. They'll work on one area at a time, so we'll have to park in different places for a few days. On Monday and Tuesday, Area A will be closed, and the work moves to Area B on Wednesday. Our team usually parks in Area A, so for the first two days, please use the visitor lot behind the building. You'll need a temporary pass to park there. I'll put the passes on your desks this afternoon.",
+  "graphic": {
+   "title": "Parking Lot Repainting Schedule",
+   "rows": [
+    [
+     "Day",
+     "Closed Area"
+    ],
+    [
+     "Monday",
+     "Area A"
+    ],
+    [
+     "Tuesday",
+     "Area A"
+    ],
+    [
+     "Wednesday",
+     "Area B"
+    ],
+    [
+     "Thursday",
+     "Area C"
+    ]
+   ]
+  },
+  "questions": [
+   {
+    "q": "What will happen next week?",
+    "choices": [
+     "Parking lines will be repainted.",
+     "A building will be cleaned.",
+     "New parking fees will start.",
+     "The office will be closed."
+    ],
+    "answer": 0,
+    "type": "주제·목적",
+    "explanation": "'The company is repainting the lines in our parking lot next week'라고 했으므로 주차선 도색 공사가 있다. 주차 요금 이야기는 없다."
+   },
+   {
+    "q": "Look at the graphic. On which day can the listeners park in their usual area again?",
+    "choices": [
+     "Monday",
+     "Tuesday",
+     "Wednesday",
+     "Saturday"
+    ],
+    "answer": 2,
+    "type": "시각 자료 연계",
+    "explanation": "청자들은 보통 A구역에 주차하는데 표에서 A구역은 월·화요일에만 닫힌다. 따라서 수요일부터 다시 평소 구역을 쓸 수 있다."
+   },
+   {
+    "q": "What will the speaker do this afternoon?",
+    "choices": [
+     "Call the painting company",
+     "Move his car",
+     "Send an e-mail",
+     "Hand out parking passes"
+    ],
+    "answer": 3,
+    "type": "다음 할 일",
+    "explanation": "'I'll put the passes on your desks this afternoon'이라고 했으므로 임시 주차권을 나눠 줄 것이다."
+   }
+  ],
+  "translation": "끝내기 전에 한 가지 더 있습니다. 다음 주에 회사가 주차장 주차선을 다시 칠합니다. 한 구역씩 작업하기 때문에 며칠 동안은 다른 곳에 주차해야 합니다. 월요일과 화요일에는 A구역이 닫히고, 수요일에는 작업이 B구역으로 옮겨 갑니다. 우리 팀은 보통 A구역에 주차하니까 처음 이틀 동안은 건물 뒤 방문객 주차장을 이용해 주세요. 거기에 주차하려면 임시 주차권이 필요합니다. 오늘 오후에 주차권을 여러분 책상에 놓아 두겠습니다."
+ },
+ {
+  "id": "p4-096",
+  "level": 2,
+  "topic": "사진관 가족사진 촬영 광고",
+  "talk_type": "광고",
+  "voice": "female",
+  "script": "When was the last time your whole family had a photo taken together? At Brightside Photo Studio, we make it easy. Our professional photographers will help everyone look their best, even the little ones who won't sit still. Each session lasts one hour, and you can change clothes as many times as you like. This month, every family session comes with a free framed print. Sessions fill up fast, especially on weekends, so book online at brightsidephoto.com today. Brightside Photo Studio, where memories last forever.",
+  "graphic": null,
+  "questions": [
+   {
+    "q": "What is being advertised?",
+    "choices": [
+     "A photo studio",
+     "A camera store",
+     "A clothing shop",
+     "An art class"
+    ],
+    "answer": 0,
+    "type": "주제·목적",
+    "explanation": "'At Brightside Photo Studio, we make it easy'라며 가족사진 촬영을 홍보하므로 사진관 광고다. 카메라를 파는 가게가 아니다."
+   },
+   {
+    "q": "What is included this month?",
+    "choices": [
+     "A framed picture",
+     "A second session",
+     "A family album",
+     "A discount on cameras"
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "'every family session comes with a free framed print'라고 했으므로 액자에 넣은 사진이 포함된다."
+   },
+   {
+    "q": "Why does the speaker recommend booking soon?",
+    "choices": [
+     "The price will go up.",
+     "The studio is moving.",
+     "A photographer is leaving.",
+     "Sessions are popular."
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "'Sessions fill up fast, especially on weekends'라고 했으므로 예약이 빨리 차기 때문에, 즉 인기가 많기 때문이다."
+   }
+  ],
+  "translation": "가족 모두가 함께 사진을 찍은 게 언제였나요? 브라이트사이드 사진관에서는 쉽게 해결됩니다. 전문 사진작가들이 가만히 앉아 있지 못하는 어린아이들까지 모두 가장 멋진 모습으로 나오도록 도와드립니다. 촬영은 한 번에 한 시간이며 옷은 원하시는 만큼 갈아입으실 수 있습니다. 이번 달에는 모든 가족 촬영에 액자 사진 한 장을 무료로 드립니다. 촬영 예약은 특히 주말에 빨리 차니 오늘 brightsidephoto.com에서 온라인으로 예약하세요. 추억이 영원히 남는 곳, 브라이트사이드 사진관입니다."
+ },
+ {
+  "id": "p4-097",
+  "level": 2,
+  "topic": "새 공항 버스 노선 개통 지역 뉴스",
+  "talk_type": "방송·뉴스",
+  "voice": "male",
+  "script": "In local news, a new bus line between downtown Westport and the airport will start running on Monday. Route 50 will leave from City Hall and make only two stops before reaching the airport, so the trip will take about forty minutes. City officials say the new route will reduce traffic and give travelers a cheaper way to get to their flights. A one-way ticket will cost three dollars, the same as a regular city bus. Riders can pay with cash or a city transit card, but drivers will not be able to give change.",
+  "graphic": {
+   "title": "Route 50 Weekday Departures from City Hall",
+   "rows": [
+    [
+     "First Bus",
+     "Last Bus",
+     "Frequency"
+    ],
+    [
+     "5:30 A.M.",
+     "11:00 P.M.",
+     "Every 20 minutes"
+    ]
+   ]
+  },
+  "questions": [
+   {
+    "q": "What is the news report mainly about?",
+    "choices": [
+     "A new bus route",
+     "A new airport building",
+     "Higher taxi fares",
+     "A road closure"
+    ],
+    "answer": 0,
+    "type": "주제·목적",
+    "explanation": "도심과 공항을 잇는 새 버스 노선(Route 50)이 운행을 시작한다는 소식이다. 공항 건물이나 택시 요금 이야기는 아니다."
+   },
+   {
+    "q": "How long will the trip take?",
+    "choices": [
+     "Twenty minutes",
+     "Thirty minutes",
+     "Fifty minutes",
+     "Forty minutes"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "'the trip will take about forty minutes'라고 했다. 20분은 배차 간격이고 50은 노선 번호다."
+   },
+   {
+    "q": "What does the speaker say about paying?",
+    "choices": [
+     "Drivers cannot give change.",
+     "Only cards are accepted.",
+     "Tickets must be bought online.",
+     "Children ride for free."
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "'drivers will not be able to give change'라고 했으므로 운전기사가 거스름돈을 줄 수 없다. 현금도 받으므로 카드만 된다는 말은 틀리다."
+   }
+  ],
+  "translation": "지역 소식입니다. 웨스트포트 도심과 공항을 잇는 새 버스 노선이 월요일부터 운행을 시작합니다. 50번 버스는 시청에서 출발해 공항에 도착하기 전까지 두 곳에만 정차하므로 약 40분이 걸립니다. 시 관계자들은 새 노선이 교통량을 줄이고 여행객들에게 더 저렴하게 비행기를 타러 갈 방법을 제공할 것이라고 말했습니다. 편도 요금은 일반 시내버스와 같은 3달러입니다. 현금이나 시 교통카드로 낼 수 있지만, 운전기사가 거스름돈을 드릴 수는 없습니다."
+ },
+ {
+  "id": "p4-098",
+  "level": 2,
+  "topic": "사내 안전 교육 강사 소개",
+  "talk_type": "연설·소개",
+  "voice": "female",
+  "script": "Good morning, everyone. As you know, all warehouse staff must complete safety training once a year, and today's session will focus on lifting heavy boxes safely. I'm happy to introduce our trainer, Daniel Ortiz. Daniel worked in our shipping department for ten years before he became a safety instructor, so he knows our warehouse very well. He'll begin with a short video, and then you'll practice in small groups. The training will take about two hours. When it's finished, please sign the attendance sheet at the back of the room so we have a record.",
+  "graphic": null,
+  "questions": [
+   {
+    "q": "What is the topic of the training?",
+    "choices": [
+     "Lifting things safely",
+     "Using new software",
+     "Driving a forklift",
+     "Packing orders quickly"
+    ],
+    "answer": 0,
+    "type": "주제·목적",
+    "explanation": "'today's session will focus on lifting heavy boxes safely'라고 했으므로 무거운 상자를 안전하게 드는 방법이 주제다."
+   },
+   {
+    "q": "What is mentioned about Daniel Ortiz?",
+    "choices": [
+     "He used to work in the shipping department.",
+     "He wrote a book about safety.",
+     "He is a new manager.",
+     "He works for another company."
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "'Daniel worked in our shipping department for ten years'라고 했으므로 예전에 배송 부서에서 일했다."
+   },
+   {
+    "q": "What should the listeners do after the training?",
+    "choices": [
+     "Watch a video",
+     "Take a test",
+     "Return their equipment",
+     "Sign a sheet"
+    ],
+    "answer": 3,
+    "type": "요청·제안",
+    "explanation": "'please sign the attendance sheet at the back of the room'이라고 했다. 영상은 교육 시작 때 본다."
+   }
+  ],
+  "translation": "여러분, 좋은 아침입니다. 아시다시피 모든 창고 직원은 1년에 한 번 안전 교육을 이수해야 하는데요, 오늘 교육은 무거운 상자를 안전하게 드는 방법에 초점을 맞춥니다. 우리 강사 다니엘 오르티즈 씨를 소개하게 되어 기쁩니다. 다니엘 씨는 안전 강사가 되기 전에 우리 배송 부서에서 10년 동안 일했기 때문에 우리 창고를 아주 잘 압니다. 먼저 짧은 영상을 보신 다음 소그룹으로 실습하게 됩니다. 교육은 약 두 시간 걸립니다. 끝나면 기록을 위해 강의실 뒤쪽에 있는 출석부에 서명해 주세요."
+ },
+ {
+  "id": "p4-099",
+  "level": 2,
+  "topic": "동물원 야간 투어",
+  "talk_type": "관광·견학 안내",
+  "voice": "male",
+  "script": "Good evening, and welcome to the Night Safari at Riverside Zoo. Many of our animals sleep during the day and become active after dark, so tonight you'll see things that daytime visitors never get to see. We'll start at the owl house and finish at the bat cave. Now, I know many of you have your phones out. Well, the animals' eyes are very sensitive to light. So please turn off your camera flash for the whole tour. The walk takes about an hour. Stay close to the group, because some paths are quite dark.",
+  "graphic": null,
+  "questions": [
+   {
+    "q": "What is special about the tour?",
+    "choices": [
+     "It is free tonight.",
+     "It is led by a scientist.",
+     "It includes a meal.",
+     "It takes place at night."
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "'Night Safari'이며 해가 진 뒤 활동하는 동물을 보는 투어이므로 밤에 진행된다는 점이 특별하다."
+   },
+   {
+    "q": "Why does the speaker say, \"I know many of you have your phones out\"?",
+    "choices": [
+     "To ask people to call a number",
+     "To suggest downloading a map",
+     "To introduce a rule about photos",
+     "To complain about noise"
+    ],
+    "answer": 2,
+    "type": "의도 파악",
+    "explanation": "이 말 뒤에 동물 눈이 빛에 민감하니 카메라 플래시를 끄라고 한다. 사진 촬영 규칙을 꺼내기 위한 말이다."
+   },
+   {
+    "q": "Where will the tour end?",
+    "choices": [
+     "At the owl house",
+     "At the main gate",
+     "At the gift shop",
+     "At the bat cave"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "'We'll start at the owl house and finish at the bat cave'라고 했으므로 박쥐 동굴에서 끝난다."
+   }
+  ],
+  "translation": "안녕하세요, 리버사이드 동물원 나이트 사파리에 오신 것을 환영합니다. 많은 동물이 낮에는 자고 해가 진 뒤에 활동하기 때문에, 오늘 밤 여러분은 낮 관람객은 절대 보지 못하는 모습을 보시게 됩니다. 올빼미 사육장에서 시작해 박쥐 동굴에서 끝납니다. 자, 많은 분들이 휴대폰을 꺼내 들고 계신 걸 압니다. 그런데 동물들의 눈은 빛에 아주 민감합니다. 그러니 투어 내내 카메라 플래시를 꺼 주세요. 걷는 시간은 약 한 시간입니다. 일부 길은 꽤 어두우니 일행 가까이 계세요."
+ },
+ {
+  "id": "p4-100",
+  "level": 2,
+  "topic": "호텔 객실 무료 업그레이드 안내 전화",
+  "talk_type": "전화 메시지",
+  "voice": "female",
+  "script": "Hello, Ms. Sato. This is Rachel calling from the front desk of the Harbor View Hotel. You're booked with us for three nights starting this Friday. I'm calling because there's a problem with the air conditioning in the room you reserved, and it won't be fixed in time. But here's the good news. We've moved you to a suite on the top floor at no extra charge. It has a much better view of the harbor. Your check-in time is still three p.m. If you have any questions, just call the front desk.",
+  "graphic": null,
+  "questions": [
+   {
+    "q": "Who most likely is the speaker?",
+    "choices": [
+     "A hotel employee",
+     "A travel agent",
+     "A repair worker",
+     "A tour guide"
+    ],
+    "answer": 0,
+    "type": "화자 정보(직업·장소)",
+    "explanation": "'Rachel calling from the front desk of the Harbor View Hotel'이라고 했으므로 호텔 직원이다."
+   },
+   {
+    "q": "What problem does the speaker mention?",
+    "choices": [
+     "A room has a broken air conditioner.",
+     "A reservation was canceled.",
+     "The hotel is fully booked.",
+     "A payment did not go through."
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "'there's a problem with the air conditioning in the room you reserved'라고 했으므로 예약한 방의 에어컨이 고장 났다."
+   },
+   {
+    "q": "What does the speaker imply when she says, \"But here's the good news\"?",
+    "choices": [
+     "The listener can check in early.",
+     "The repair is already finished.",
+     "The listener will get a better room.",
+     "The price has been reduced."
+    ],
+    "answer": 2,
+    "type": "의도 파악",
+    "explanation": "이 말 뒤에 추가 요금 없이 꼭대기 층 스위트룸으로 옮겨 드렸다고 하므로 더 좋은 방을 받게 된다는 뜻이다. 체크인 시간은 그대로 3시다."
+   }
+  ],
+  "translation": "안녕하세요, 사토 님. 하버 뷰 호텔 프런트 데스크의 레이첼입니다. 이번 주 금요일부터 3박 예약이 되어 있으신데요. 예약하신 객실의 에어컨에 문제가 있는데 그때까지 수리가 끝나지 않을 것 같아 전화드렸습니다. 하지만 좋은 소식이 있습니다. 추가 요금 없이 꼭대기 층 스위트룸으로 옮겨 드렸습니다. 항구 전망이 훨씬 좋습니다. 체크인 시간은 그대로 오후 3시입니다. 궁금한 점이 있으시면 프런트 데스크로 전화 주세요."
+ },
+ {
+  "id": "p4-101",
+  "level": 2,
+  "topic": "새 복합기 사용 방법 안내",
+  "talk_type": "회의 발췌",
+  "voice": "female",
+  "script": "Before we get into today's agenda, I want to tell you about the new copy machine. It was installed by the kitchen yesterday. It's much faster than the old one, and it can scan documents straight to your e-mail. To use it, you'll need to tap your staff ID card on the reader first. That way, we can see how much each department prints. If the machine runs out of paper, extra paper is in the cabinet below it. And if it stops working, please don't try to fix it yourself. Just call Kevin in IT at extension 214.",
+  "graphic": null,
+  "questions": [
+   {
+    "q": "Where is the new machine?",
+    "choices": [
+     "In the lobby",
+     "Near the kitchen",
+     "In the IT office",
+     "Next to the meeting room"
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "'It was installed by the kitchen yesterday'라고 했으므로 탕비실 옆에 있다."
+   },
+   {
+    "q": "Why do listeners have to use their ID cards?",
+    "choices": [
+     "To unlock the office door",
+     "To get free paper",
+     "To track printing by department",
+     "To order supplies"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "카드를 대야 'we can see how much each department prints'라고 했다. 부서별 인쇄량을 확인하기 위해서다."
+   },
+   {
+    "q": "What should listeners do if the machine breaks?",
+    "choices": [
+     "Contact the IT department",
+     "Use the old machine",
+     "Call the manufacturer",
+     "Write a report"
+    ],
+    "answer": 0,
+    "type": "요청·제안",
+    "explanation": "'please don't try to fix it yourself. Just call Kevin in IT'라고 했으므로 IT 부서에 연락해야 한다."
+   }
+  ],
+  "translation": "오늘 안건에 들어가기 전에 새 복사기에 대해 말씀드리겠습니다. 어제 탕비실 옆에 설치되었습니다. 예전 것보다 훨씬 빠르고 문서를 바로 이메일로 스캔할 수 있습니다. 사용하려면 먼저 사원증을 리더기에 대야 합니다. 그래야 부서별로 얼마나 인쇄하는지 알 수 있습니다. 용지가 떨어지면 여분 용지는 복사기 아래 캐비닛에 있습니다. 그리고 고장 나면 직접 고치려고 하지 마세요. IT팀 케빈에게 내선 214번으로 전화하시면 됩니다."
+ },
+ {
+  "id": "p4-102",
+  "level": 3,
+  "topic": "온라인 장보기 배달 앱 광고",
+  "talk_type": "광고",
+  "voice": "female",
+  "script": "Tired of spending your Saturday mornings in long checkout lines? Let FreshCart do the shopping for you. With the FreshCart app, you can choose from over ten thousand grocery items, from fresh fruit to household cleaners, and have them delivered to your door in as little as two hours. Our shoppers carefully pick every item, and if something you ordered is out of stock, they'll text you to suggest a replacement before checking out. And here's a tip: the more you order, the less you pay for delivery. Download FreshCart today and use the code FIRST to get your first delivery absolutely free.",
+  "graphic": {
+   "title": "FreshCart Delivery Fees",
+   "rows": [
+    [
+     "Order Amount",
+     "Delivery Fee"
+    ],
+    [
+     "Under $30",
+     "$7.99"
+    ],
+    [
+     "$30 - $59",
+     "$4.99"
+    ],
+    [
+     "$60 - $99",
+     "$2.99"
+    ],
+    [
+     "$100 or more",
+     "Free"
+    ]
+   ]
+  },
+  "questions": [
+   {
+    "q": "What does FreshCart do when an item is unavailable?",
+    "choices": [
+     "It cancels the whole order.",
+     "It gives a full refund automatically.",
+     "It sends a message to the customer.",
+     "It delivers the item the next day."
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "품절이면 'they'll text you to suggest a replacement'라고 했으므로 고객에게 문자를 보낸다. 주문 전체 취소나 자동 환불은 언급되지 않았다."
+   },
+   {
+    "q": "Look at the graphic. How much would a new customer using the code pay for delivery on a $45 order?",
+    "choices": [
+     "$7.99",
+     "$4.99",
+     "$2.99",
+     "Nothing"
+    ],
+    "answer": 3,
+    "type": "시각 자료 연계",
+    "explanation": "표에 따르면 45달러 주문은 보통 4.99달러지만, 코드 FIRST를 쓰면 'your first delivery absolutely free'라고 했다. 신규 고객은 배달비를 내지 않는다."
+   },
+   {
+    "q": "What is mentioned about the delivery fee?",
+    "choices": [
+     "It is the same for every order.",
+     "It is higher on weekends.",
+     "It goes down as orders get larger.",
+     "It depends on the customer's location."
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "'the more you order, the less you pay for delivery'라고 했으므로 주문 금액이 커질수록 배달비가 내려간다. 표의 내용과도 일치한다."
+   }
+  ],
+  "translation": "토요일 아침마다 긴 계산대 줄에서 시간을 보내는 게 지겨우신가요? 프레시카트가 대신 장을 봐 드립니다. 프레시카트 앱으로 신선한 과일부터 생활용 세제까지 1만 가지가 넘는 식료품 중에서 고르시면, 빠르면 두 시간 안에 문 앞까지 배달해 드립니다. 저희 쇼퍼들이 모든 상품을 꼼꼼하게 고르며, 주문하신 상품이 품절이면 계산하기 전에 문자로 대체 상품을 제안해 드립니다. 그리고 팁을 하나 드리자면, 많이 주문할수록 배달비가 줄어듭니다. 오늘 프레시카트를 내려받고 코드 FIRST를 입력하시면 첫 배달이 완전히 무료입니다."
+ },
+ {
+  "id": "p4-103",
+  "level": 3,
+  "topic": "지역 단편 영화제 개최 뉴스",
+  "talk_type": "방송·뉴스",
+  "voice": "male",
+  "script": "This is Channel 8 Evening News. The Millbrook Short Film Festival returns this weekend for its fifth year, and organizers say it's bigger than ever. More than ninety films from twelve countries will be shown at three theaters downtown. Last year, nearly every screening sold out. Tickets for this year went on sale Monday morning. The festival director, Hannah Price, says this year's highlight is a new competition for student filmmakers, with the winner receiving funding for their next project. In addition, all Sunday screenings at the public library will be free of charge. A full schedule is available on the festival's Web site.",
+  "graphic": null,
+  "questions": [
+   {
+    "q": "How many years has the festival been held, including this year?",
+    "choices": [
+     "Five",
+     "Three",
+     "Eight",
+     "Twelve"
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "'returns this weekend for its fifth year'라고 했으므로 올해가 다섯 번째다. 12는 참가 국가 수다."
+   },
+   {
+    "q": "Why does the speaker say, \"Last year, nearly every screening sold out\"?",
+    "choices": [
+     "To suggest that listeners buy tickets soon",
+     "To explain why the festival moved",
+     "To complain about ticket prices",
+     "To announce a new theater"
+    ],
+    "answer": 0,
+    "type": "의도 파악",
+    "explanation": "작년에 거의 매진되었다는 말 바로 뒤에 올해 표가 이미 판매 중이라고 하므로, 서둘러 표를 사라는 뜻을 전하려는 것이다."
+   },
+   {
+    "q": "What is new at this year's festival?",
+    "choices": [
+     "Films from other countries",
+     "Screenings at a library",
+     "A contest for students",
+     "Online ticket sales"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "'this year's highlight is a new competition for student filmmakers'라고 했으므로 학생 경연이 새로 생겼다. 도서관 상영은 무료라는 정보일 뿐 새로운 것이라고 하지 않았다."
+   }
+  ],
+  "translation": "채널 8 저녁 뉴스입니다. 밀브룩 단편 영화제가 다섯 번째를 맞아 이번 주말 다시 열리는데, 주최 측은 그 어느 때보다 규모가 크다고 말합니다. 12개국 90편이 넘는 영화가 도심의 극장 세 곳에서 상영됩니다. 작년에는 거의 모든 상영이 매진되었습니다. 올해 표는 월요일 아침부터 판매가 시작되었습니다. 영화제 감독 한나 프라이스는 올해의 하이라이트는 학생 영화 제작자를 위한 새로운 경연이며, 우승자는 다음 작품 제작비를 지원받는다고 말했습니다. 또한 일요일에 공공 도서관에서 열리는 상영은 모두 무료입니다. 전체 일정은 영화제 웹사이트에서 볼 수 있습니다."
+ },
+ {
+  "id": "p4-104",
+  "level": 3,
+  "topic": "사내 멘토링 프로그램 시작 발표",
+  "talk_type": "연설·소개",
+  "voice": "female",
+  "script": "Thank you all for joining this lunch session. I'm Monica Reyes from Human Resources, and I'm excited to announce the launch of our new mentoring program. Starting in March, every employee who joined the company within the past year will be paired with an experienced colleague from a different department. We think working with someone outside your own team will give you a broader view of how the company operates. Mentors and mentees will meet at least twice a month, and the company will cover the cost of lunch for those meetings. If you'd like to be a mentor, please complete the short form on the HR page by February fifteenth.",
+  "graphic": null,
+  "questions": [
+   {
+    "q": "Who will be paired with mentors?",
+    "choices": [
+     "Department managers",
+     "Employees changing teams",
+     "Summer interns",
+     "Recently hired employees"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "'every employee who joined the company within the past year'라고 했으므로 최근 1년 안에 입사한 직원이 대상이다."
+   },
+   {
+    "q": "According to the speaker, why will mentors come from different departments?",
+    "choices": [
+     "To reduce costs",
+     "To fill open positions",
+     "To help employees understand the company better",
+     "To improve customer service"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "'will give you a broader view of how the company operates'라고 했으므로 회사 운영을 더 넓게 이해하도록 돕기 위해서다."
+   },
+   {
+    "q": "What are interested mentors asked to do?",
+    "choices": [
+     "Attend a training session",
+     "Send an e-mail to their manager",
+     "Fill out a form online",
+     "Meet with HR in March"
+    ],
+    "answer": 2,
+    "type": "요청·제안",
+    "explanation": "'please complete the short form on the HR page by February fifteenth'라고 했으므로 온라인 양식을 작성해야 한다. 3월은 프로그램 시작 시기다."
+   }
+  ],
+  "translation": "이번 점심 모임에 와 주셔서 모두 감사합니다. 인사팀의 모니카 레이예스입니다. 새 멘토링 프로그램을 시작하게 되었음을 알려 드리게 되어 기쁩니다. 3월부터 지난 1년 안에 입사한 모든 직원은 다른 부서의 경험 많은 동료와 짝을 이루게 됩니다. 자기 팀 밖의 사람과 함께 일하면 회사가 어떻게 운영되는지 더 넓게 볼 수 있을 것이라고 생각합니다. 멘토와 멘티는 한 달에 최소 두 번 만나고, 그 만남의 점심 비용은 회사가 부담합니다. 멘토가 되고 싶으신 분은 2월 15일까지 인사팀 페이지의 간단한 양식을 작성해 주세요."
+ },
+ {
+  "id": "p4-105",
+  "level": 3,
+  "topic": "도자기 공방 견학",
+  "talk_type": "관광·견학 안내",
+  "voice": "male",
+  "script": "Welcome to Stonebridge Pottery. This workshop has been making plates, bowls, and cups by hand since 1952, and many of our pieces are sold in restaurants across the region. In a moment, you'll see our potters shaping clay on the wheel. Then we'll pass through the glazing room, where the colors are added, and finish at the kilns, the large ovens where everything is fired. The kilns reach over a thousand degrees, so please stay behind the yellow line in that area. Afterward, you're welcome to try the wheel yourself. Aprons are hanging by the door, so grab one before you sit down. Your clothes will thank you.",
+  "graphic": null,
+  "questions": [
+   {
+    "q": "What is mentioned about the business?",
+    "choices": [
+     "It was founded recently.",
+     "It has several locations.",
+     "It uses machines to make cups.",
+     "It sells products to restaurants."
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "'many of our pieces are sold in restaurants across the region'이라고 했다. 1952년부터 손으로 만들어 왔으므로 최근 설립이나 기계 생산은 틀리다."
+   },
+   {
+    "q": "Why are the listeners asked to stay behind a line?",
+    "choices": [
+     "The kilns are very hot.",
+     "Photography is not allowed.",
+     "The floor is wet.",
+     "Workers need space."
+    ],
+    "answer": 0,
+    "type": "요청·제안",
+    "explanation": "가마가 1,000도가 넘으니 'please stay behind the yellow line'이라고 했다. 뜨거움 때문이다."
+   },
+   {
+    "q": "What are the listeners encouraged to do before using the wheel?",
+    "choices": [
+     "Wash their hands",
+     "Watch a video",
+     "Put on an apron",
+     "Pay a small fee"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "'Aprons are hanging by the door, so grab one before you sit down'이라고 했으므로 앞치마를 입으라고 권한다."
+   }
+  ],
+  "translation": "스톤브리지 도자기 공방에 오신 것을 환영합니다. 이 공방은 1952년부터 접시, 그릇, 컵을 손으로 만들어 왔으며, 저희 제품 상당수가 지역 곳곳의 식당에 팔리고 있습니다. 잠시 후 도예가들이 물레 위에서 흙을 빚는 모습을 보시게 됩니다. 그다음 색을 입히는 유약실을 지나, 모든 작품을 굽는 커다란 오븐인 가마에서 마칩니다. 가마는 1,000도가 넘게 올라가니 그 구역에서는 노란 선 뒤에 계세요. 그 후에는 직접 물레를 돌려 보셔도 됩니다. 문 옆에 앞치마가 걸려 있으니 앉기 전에 하나씩 챙기세요. 옷이 고마워할 겁니다."
+ },
+ {
+  "id": "p4-106",
+  "level": 3,
+  "topic": "출장 항공편 결항과 대체편 안내 전화",
+  "talk_type": "전화 메시지",
+  "voice": "female",
+  "script": "Hi, Mr. Walsh, this is Tina from Globe Corporate Travel. I'm calling about your trip to Denver on Thursday. The airline has just canceled your eight-fifteen flight because of a crew shortage. I've looked at the other options, and since your meeting in Denver begins at two in the afternoon, the noon flight wouldn't get you there in time. So I've held a seat for you on the earliest one. It doesn't cost anything extra, but the hold will only last until five p.m. today. Please call me back to confirm, and I'll send you the new ticket right away.",
+  "graphic": {
+   "title": "Thursday Flights to Denver",
+   "rows": [
+    [
+     "Departure",
+     "Arrival",
+     "Fare"
+    ],
+    [
+     "6:40 A.M.",
+     "8:10 A.M.",
+     "$310"
+    ],
+    [
+     "9:30 A.M.",
+     "11:00 A.M.",
+     "$345"
+    ],
+    [
+     "12:00 P.M.",
+     "1:30 P.M.",
+     "$290"
+    ]
+   ]
+  },
+  "questions": [
+   {
+    "q": "Why was the original flight canceled?",
+    "choices": [
+     "Bad weather",
+     "A mechanical problem",
+     "Not enough staff",
+     "Low ticket sales"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "'because of a crew shortage'라고 했으므로 승무원 부족, 즉 인력이 모자라서다."
+   },
+   {
+    "q": "Look at the graphic. When will the listener's new flight depart?",
+    "choices": [
+     "At 6:40 A.M.",
+     "At 9:30 A.M.",
+     "At 12:00 P.M.",
+     "At 8:15 A.M."
+    ],
+    "answer": 0,
+    "type": "시각 자료 연계",
+    "explanation": "화자는 'the earliest one'에 좌석을 잡아 두었다고 했다. 표에서 가장 이른 출발은 오전 6시 40분이다. 8시 15분은 결항된 원래 항공편이다."
+   },
+   {
+    "q": "What does the speaker ask the listener to do?",
+    "choices": [
+     "Call her by a certain time",
+     "Pay an extra fee",
+     "Book a hotel room",
+     "Contact the airline"
+    ],
+    "answer": 0,
+    "type": "요청·제안",
+    "explanation": "좌석 확보는 오늘 5시까지만 유지되니 'Please call me back to confirm'이라고 했다. 정해진 시간까지 전화해 달라는 요청이다. 추가 요금은 없다."
+   }
+  ],
+  "translation": "안녕하세요, 월시 님. 글로브 기업 출장 여행사의 티나입니다. 목요일 덴버 출장 건으로 전화드렸습니다. 항공사가 승무원 부족으로 8시 15분 항공편을 방금 결항시켰습니다. 다른 편을 살펴봤는데, 덴버 회의가 오후 2시에 시작하니 정오 항공편으로는 제시간에 도착하지 못합니다. 그래서 가장 이른 항공편에 좌석을 잡아 두었습니다. 추가 비용은 없지만 좌석 보류는 오늘 오후 5시까지만 유지됩니다. 확인 전화를 주시면 바로 새 항공권을 보내 드리겠습니다."
+ },
+ {
+  "id": "p4-107",
+  "level": 3,
+  "topic": "쇼핑센터 화재 경보 점검 안내 방송",
+  "talk_type": "안내 방송",
+  "voice": "male",
+  "script": "Good morning, shoppers and store staff. This is an announcement from Maple Grove Shopping Center management. Between ten and eleven this morning, we'll be testing the fire alarm system throughout the building. During this time, you may hear the alarm several times, and some lights may flash. There's no need to leave the building. However, the elevators on the east side will be stopped during the test, so please use the escalators or the west elevators instead. Store managers, please let your customers know about the test if they seem concerned. Thank you for your understanding.",
+  "graphic": null,
+  "questions": [
+   {
+    "q": "What is the purpose of the announcement?",
+    "choices": [
+     "To explain a scheduled test",
+     "To report an emergency",
+     "To announce new store hours",
+     "To introduce a new store"
+    ],
+    "answer": 0,
+    "type": "주제·목적",
+    "explanation": "오전 10시~11시에 화재 경보 시스템을 점검한다고 미리 알리는 방송이다. 실제 비상 상황이 아니므로 대피할 필요가 없다고 했다."
+   },
+   {
+    "q": "What are listeners told about the east elevators?",
+    "choices": [
+     "They are being replaced.",
+     "They will not be working for a while.",
+     "They are for staff only.",
+     "They will be crowded."
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "'the elevators on the east side will be stopped during the test'라고 했으므로 점검 동안 운행하지 않는다."
+   },
+   {
+    "q": "What are store managers asked to do?",
+    "choices": [
+     "Close their stores early",
+     "Lead customers outside",
+     "Inform worried customers",
+     "Turn off their lights"
+    ],
+    "answer": 2,
+    "type": "요청·제안",
+    "explanation": "'please let your customers know about the test if they seem concerned'라고 했으므로 걱정하는 손님에게 점검 사실을 알려야 한다."
+   }
+  ],
+  "translation": "쇼핑객과 매장 직원 여러분, 안녕하세요. 메이플 그로브 쇼핑센터 관리사무소에서 알려 드립니다. 오늘 오전 10시부터 11시 사이에 건물 전체의 화재 경보 시스템을 점검합니다. 이 시간 동안 경보음이 여러 번 울릴 수 있고 일부 조명이 깜박일 수 있습니다. 건물 밖으로 나가실 필요는 없습니다. 다만 점검 중에는 동쪽 엘리베이터가 멈추므로 에스컬레이터나 서쪽 엘리베이터를 이용해 주세요. 매장 관리자분들께서는 손님이 걱정하시는 것 같으면 점검 중이라고 알려 주시기 바랍니다. 양해해 주셔서 감사합니다."
+ },
+ {
+  "id": "p4-108",
+  "level": 3,
+  "topic": "직원 건강 검진 일정 안내",
+  "talk_type": "회의 발췌",
+  "voice": "female",
+  "script": "Next, I want to remind everyone about this year's free health checkups. A medical team will be here in the training room for four days next month, and each department has been given a specific date. Please check the schedule I just shared on the screen. If you can't attend on your department's day, you may come on another day, but you'll need to e-mail Ms. Gordon in HR in advance so she can make sure there's room. Also, the checkup includes a blood test, so please don't eat anything after midnight the night before. Coffee and a light breakfast will be provided right after your test.",
+  "graphic": {
+   "title": "Health Checkup Schedule (Training Room)",
+   "rows": [
+    [
+     "Date",
+     "Department"
+    ],
+    [
+     "May 6",
+     "Sales"
+    ],
+    [
+     "May 7",
+     "Marketing"
+    ],
+    [
+     "May 8",
+     "Accounting"
+    ],
+    [
+     "May 9",
+     "Engineering"
+    ]
+   ]
+  },
+  "questions": [
+   {
+    "q": "What is the speaker mainly discussing?",
+    "choices": [
+     "A new insurance plan",
+     "A training program",
+     "Health checkups for employees",
+     "A change in office hours"
+    ],
+    "answer": 2,
+    "type": "주제·목적",
+    "explanation": "'this year's free health checkups'에 대해 일정과 주의사항을 안내하므로 직원 건강 검진이 주제다."
+   },
+   {
+    "q": "Look at the graphic. The listeners work in Marketing. When is their checkup scheduled?",
+    "choices": [
+     "May 6",
+     "May 7",
+     "May 8",
+     "May 9"
+    ],
+    "answer": 1,
+    "type": "시각 자료 연계",
+    "explanation": "표에서 Marketing 부서의 날짜는 5월 7일이다."
+   },
+   {
+    "q": "What should listeners do the night before the checkup?",
+    "choices": [
+     "Avoid eating after midnight",
+     "Get enough sleep",
+     "Fill out a form",
+     "Drink plenty of water"
+    ],
+    "answer": 0,
+    "type": "요청·제안",
+    "explanation": "혈액 검사가 있어 'please don't eat anything after midnight the night before'라고 했다. 자정 이후 금식이 정답이다."
+   }
+  ],
+  "translation": "다음으로 올해 무료 건강 검진에 대해 다시 알려 드리겠습니다. 다음 달에 의료진이 나흘 동안 이곳 교육실에 오고, 부서마다 정해진 날짜가 있습니다. 방금 화면에 띄운 일정표를 확인해 주세요. 자기 부서 날짜에 올 수 없으면 다른 날에 와도 되지만, 자리가 있는지 확인할 수 있도록 미리 인사팀 고든 씨에게 이메일을 보내야 합니다. 또 검진에 혈액 검사가 포함되어 있으니 전날 밤 자정 이후에는 아무것도 드시지 마세요. 검사 직후에 커피와 가벼운 아침 식사가 제공됩니다."
+ },
+ {
+  "id": "p4-109",
+  "level": 3,
+  "topic": "지역 기업 합동 채용 박람회 뉴스",
+  "talk_type": "방송·뉴스",
+  "voice": "female",
+  "script": "Good morning. If you're looking for work, you may want to head to the Carlton Convention Center this Thursday. More than sixty local employers will be at the city's annual job fair, which runs from nine a.m. to four p.m. Organizers say this year there's especially strong demand for workers in health care and logistics, as two new hospitals and a large distribution center are opening in the area. Visitors are advised to bring several copies of their résumé and to dress professionally, since some companies plan to hold interviews on the spot. Admission is free, but registering online in advance will let you skip the line at the entrance.",
+  "graphic": null,
+  "questions": [
+   {
+    "q": "What is the report mainly about?",
+    "choices": [
+     "A hospital opening",
+     "A job fair",
+     "A business conference",
+     "A college graduation"
+    ],
+    "answer": 1,
+    "type": "주제·목적",
+    "explanation": "60곳 넘는 지역 기업이 참여하는 'the city's annual job fair'를 안내하는 소식이다. 병원 개원은 수요가 많은 이유로만 나온다."
+   },
+   {
+    "q": "Why are health care workers in high demand?",
+    "choices": [
+     "Many workers are retiring.",
+     "Salaries have increased.",
+     "New facilities are opening.",
+     "A government program has started."
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "'two new hospitals and a large distribution center are opening in the area'라고 했으므로 새 시설이 문을 열기 때문이다."
+   },
+   {
+    "q": "What is a benefit of registering online?",
+    "choices": [
+     "A free gift",
+     "Avoiding a line",
+     "A guaranteed interview",
+     "Free parking"
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "'registering online in advance will let you skip the line at the entrance'라고 했다. 입장 줄을 서지 않아도 된다는 것이 이점이다."
+   }
+  ],
+  "translation": "좋은 아침입니다. 일자리를 찾고 계시다면 이번 주 목요일 칼턴 컨벤션 센터에 가 보시는 게 좋겠습니다. 오전 9시부터 오후 4시까지 열리는 시의 연례 채용 박람회에 60곳이 넘는 지역 기업이 참여합니다. 주최 측은 올해 지역에 새 병원 두 곳과 대형 물류센터가 문을 열면서 특히 의료와 물류 분야 인력 수요가 많다고 말합니다. 일부 기업은 현장에서 면접을 볼 계획이므로 이력서를 여러 부 가져오고 단정한 복장을 하라고 권합니다. 입장은 무료이지만 미리 온라인으로 등록하면 입구에서 줄을 서지 않아도 됩니다."
+ },
+ {
+  "id": "p4-110",
+  "level": 4,
+  "topic": "웹사이트 개편 사용자 테스트 결과 회의",
+  "talk_type": "회의 발췌",
+  "voice": "male",
+  "script": "Let's turn to the results from last week's user testing of the redesigned Web site. Overall, the feedback was encouraging. Testers found the new menu much easier to navigate, and most of them were able to locate products in under a minute. The one area that caused real trouble was checkout. Seven of the ten testers didn't notice the button for entering a discount code, and three gave up before completing their purchase. Now, our launch date is three weeks away. So I'd like the design team to focus entirely on the checkout page this week and have a revised version ready for a second round of testing by Friday.",
+  "graphic": null,
+  "questions": [
+   {
+    "q": "What did testers like about the new Web site?",
+    "choices": [
+     "Its faster loading speed",
+     "Its easier menu",
+     "Its lower prices",
+     "Its new colors"
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "'Testers found the new menu much easier to navigate'라고 했으므로 메뉴가 쉬워진 점을 좋아했다."
+   },
+   {
+    "q": "What problem did the testing reveal?",
+    "choices": [
+     "Product photos were missing.",
+     "The site crashed often.",
+     "Users had trouble at checkout.",
+     "Search results were inaccurate."
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "'The one area that caused real trouble was checkout'이라며 할인 코드 버튼을 못 찾고 구매를 포기했다고 했다. 결제 단계 문제다."
+   },
+   {
+    "q": "Why does the speaker say, \"our launch date is three weeks away\"?",
+    "choices": [
+     "To suggest postponing the launch",
+     "To stress that the problem must be fixed quickly",
+     "To praise the team for being ahead of schedule",
+     "To announce a new project"
+    ],
+    "answer": 1,
+    "type": "의도 파악",
+    "explanation": "이 말 뒤에 디자인팀이 이번 주 결제 페이지에만 집중해 금요일까지 수정본을 준비하라고 한다. 시간이 많지 않으니 빨리 고쳐야 한다는 점을 강조하려는 것이다."
+   }
+  ],
+  "translation": "지난주 개편 웹사이트 사용자 테스트 결과로 넘어가겠습니다. 전반적으로 반응은 고무적이었습니다. 테스트 참여자들은 새 메뉴가 훨씬 쉽게 이동할 수 있다고 느꼈고, 대부분 1분 안에 제품을 찾았습니다. 정말 문제가 된 한 부분은 결제였습니다. 열 명 중 일곱 명이 할인 코드 입력 버튼을 알아채지 못했고, 세 명은 구매를 마치기 전에 포기했습니다. 자, 출시일이 3주 남았습니다. 그래서 디자인팀은 이번 주에 결제 페이지에만 집중해서 금요일까지 2차 테스트용 수정본을 준비해 주셨으면 합니다."
+ },
+ {
+  "id": "p4-111",
+  "level": 4,
+  "topic": "법인 차량 장기 리스 서비스 광고",
+  "talk_type": "광고",
+  "voice": "male",
+  "script": "Running a business means keeping your team on the road, but owning a fleet of vehicles ties up capital and creates endless paperwork. That's where Meridian Fleet Leasing comes in. We provide cars, vans, and light trucks on flexible two- to four-year leases, with maintenance, insurance, and roadside assistance all bundled into a single monthly payment. Our online dashboard lets you track fuel use and service schedules for every vehicle in real time. And if your needs change mid-lease, you can swap vehicles without penalty. Companies that switched to Meridian last year cut their transportation costs by an average of eighteen percent. Call today to schedule a free fleet review with one of our consultants.",
+  "graphic": null,
+  "questions": [
+   {
+    "q": "What is included in the monthly payment?",
+    "choices": [
+     "Fuel costs",
+     "Driver training",
+     "Vehicle insurance",
+     "Parking fees"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "'maintenance, insurance, and roadside assistance all bundled into a single monthly payment'라고 했으므로 보험이 포함된다. 연료비는 대시보드로 추적할 수 있을 뿐 포함된다고 하지 않았다."
+   },
+   {
+    "q": "According to the advertisement, what can customers do during a lease?",
+    "choices": [
+     "Exchange vehicles",
+     "Cancel at any time",
+     "Buy the vehicle at a discount",
+     "Add drivers for free"
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "'you can swap vehicles without penalty'라고 했으므로 차량을 바꿀 수 있다. 언제든 해지할 수 있다는 말은 없다."
+   },
+   {
+    "q": "What are listeners invited to do?",
+    "choices": [
+     "Visit a showroom",
+     "Arrange a free consultation",
+     "Download a mobile app",
+     "Take a test drive"
+    ],
+    "answer": 1,
+    "type": "요청·제안",
+    "explanation": "'Call today to schedule a free fleet review with one of our consultants'라고 했으므로 무료 상담(점검) 예약을 권한다."
+   }
+  ],
+  "translation": "사업을 운영하려면 직원들이 계속 이동할 수 있어야 하지만, 차량을 여러 대 소유하면 자금이 묶이고 서류 작업이 끝이 없습니다. 바로 그럴 때 메리디안 플릿 리스가 필요합니다. 저희는 승용차, 밴, 소형 트럭을 2~4년의 유연한 리스로 제공하며, 정비·보험·긴급 출동 서비스가 모두 월 1회 납부금에 포함됩니다. 온라인 대시보드로 모든 차량의 연료 사용량과 정비 일정을 실시간으로 확인할 수 있습니다. 그리고 리스 도중 필요가 달라지면 위약금 없이 차량을 바꿀 수 있습니다. 작년에 메리디안으로 바꾼 기업들은 운송비를 평균 18퍼센트 줄였습니다. 오늘 전화하셔서 저희 컨설턴트와 무료 차량 운영 점검 일정을 잡으세요."
+ },
+ {
+  "id": "p4-112",
+  "level": 4,
+  "topic": "지역 소매업체 온라인 판매 확대 경제 뉴스",
+  "talk_type": "방송·뉴스",
+  "voice": "female",
+  "script": "In business news, Hartwell's, the family-owned department store chain with eleven locations across the state, announced today that it will invest twenty million dollars over the next two years to expand its online operations. The company says online orders made up just eight percent of its sales last year, well below the industry average. Part of the investment will go toward converting the upper floor of its downtown flagship store into a distribution hub, allowing same-day delivery within the city. Company president Alan Hartwell said no stores will close as a result of the plan. In fact, the company expects to hire about one hundred and fifty additional workers, mostly in warehouse and customer service roles.",
+  "graphic": null,
+  "questions": [
+   {
+    "q": "What did Hartwell's announce?",
+    "choices": [
+     "A merger with another chain",
+     "A plan to grow its online business",
+     "The closing of several stores",
+     "A change in leadership"
+    ],
+    "answer": 1,
+    "type": "주제·목적",
+    "explanation": "'invest twenty million dollars ... to expand its online operations'라고 했으므로 온라인 사업 확대 계획이다. 매장을 닫지 않는다고 분명히 말했다."
+   },
+   {
+    "q": "What will happen to part of the flagship store?",
+    "choices": [
+     "It will be rented to other businesses.",
+     "It will become a distribution center.",
+     "It will be turned into a restaurant.",
+     "It will be renovated for shoppers."
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "'converting the upper floor of its downtown flagship store into a distribution hub'라고 했으므로 위층이 물류 거점이 된다."
+   },
+   {
+    "q": "What does the company expect to do?",
+    "choices": [
+     "Reduce prices",
+     "Open new stores in other states",
+     "Hire more employees",
+     "Sell its warehouse"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "'the company expects to hire about one hundred and fifty additional workers'라고 했으므로 직원을 더 채용할 것이다."
+   }
+  ],
+  "translation": "경제 소식입니다. 주 전역에 매장 11곳을 둔 가족 경영 백화점 체인 하트웰스가 앞으로 2년간 2,000만 달러를 투자해 온라인 사업을 확대하겠다고 오늘 발표했습니다. 회사에 따르면 작년 온라인 주문은 매출의 8퍼센트에 불과해 업계 평균보다 한참 낮았습니다. 투자금 일부는 도심 대표 매장의 위층을 물류 거점으로 바꾸는 데 쓰여 시내 당일 배송이 가능해집니다. 앨런 하트웰 사장은 이 계획으로 문을 닫는 매장은 없을 것이라고 말했습니다. 오히려 회사는 주로 창고와 고객 서비스 분야에서 약 150명을 추가로 채용할 것으로 예상합니다."
+ },
+ {
+  "id": "p4-113",
+  "level": 4,
+  "topic": "업계 시상식 공로상 수상자 소개",
+  "talk_type": "연설·소개",
+  "voice": "male",
+  "script": "Our final award this evening recognizes someone whose influence on this industry is hard to overstate. When Dr. Evelyn Marsh founded her small packaging lab thirty years ago, few people believed that food containers could be made from plant fibers at a reasonable cost. Today, the methods she developed are used by manufacturers on four continents, and her lab has trained more than two hundred engineers, many of whom are in this room tonight. Dr. Marsh has also been a generous advocate for young researchers, funding scholarships through her own foundation. It is my great honor to present this year's Lifetime Achievement Award to Dr. Evelyn Marsh. Please join me in welcoming her to the stage.",
+  "graphic": null,
+  "questions": [
+   {
+    "q": "What field has Dr. Marsh worked in?",
+    "choices": [
+     "Food packaging",
+     "Agriculture",
+     "Restaurant management",
+     "Medical research"
+    ],
+    "answer": 0,
+    "type": "화자 정보(직업·장소)",
+    "explanation": "소규모 포장 연구소를 세워 식물 섬유로 식품 용기를 만드는 방법을 개발했다고 하므로 식품 포장 분야다. 식물 섬유가 나온다고 농업 분야는 아니다."
+   },
+   {
+    "q": "What does the speaker say about many people in the audience?",
+    "choices": [
+     "They were trained at Dr. Marsh's lab.",
+     "They received scholarships.",
+     "They traveled from other continents.",
+     "They nominated Dr. Marsh."
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "'her lab has trained more than two hundred engineers, many of whom are in this room tonight'라고 했으므로 청중 다수가 그 연구소에서 교육받았다."
+   },
+   {
+    "q": "What will most likely happen next?",
+    "choices": [
+     "A video will be shown.",
+     "Dr. Marsh will come to the stage.",
+     "The audience will have dinner.",
+     "Another award will be presented."
+    ],
+    "answer": 1,
+    "type": "다음 할 일",
+    "explanation": "'Please join me in welcoming her to the stage'라고 했으므로 마시 박사가 무대에 오를 것이다. 이번 상이 오늘 밤 마지막 상이다."
+   }
+  ],
+  "translation": "오늘 저녁 마지막 상은 이 업계에 끼친 영향을 아무리 강조해도 지나치지 않은 분께 드립니다. 에블린 마시 박사가 30년 전 작은 포장 연구소를 세웠을 때, 식품 용기를 합리적인 비용으로 식물 섬유로 만들 수 있다고 믿은 사람은 거의 없었습니다. 오늘날 박사가 개발한 방법은 네 개 대륙의 제조업체들이 사용하고 있고, 박사의 연구소는 200명이 넘는 엔지니어를 길러 냈으며 그중 상당수가 오늘 밤 이 자리에 계십니다. 마시 박사는 또한 자신의 재단을 통해 장학금을 지원하며 젊은 연구자들을 아낌없이 후원해 왔습니다. 올해의 평생 공로상을 에블린 마시 박사께 드리게 되어 큰 영광입니다. 함께 박사님을 무대로 맞아 주십시오."
+ },
+ {
+  "id": "p4-114",
+  "level": 4,
+  "topic": "식품 회사 시험 주방 견학",
+  "talk_type": "관광·견학 안내",
+  "voice": "female",
+  "script": "Welcome to the Northfield Foods test kitchen. This is where every new product we sell, from frozen pizzas to snack bars, is developed and tasted before it reaches store shelves. Our chefs typically test a recipe thirty or forty times before it's approved. Today you'll get to take part in that process. You'll be tasting samples from our upcoming soup line and rating each one on the cards you were given at reception. Your feedback really does matter; last year, visitor ratings led us to cancel two products entirely. Since you're the afternoon group, you'll begin with the soups first and then move on to the dessert samples. Please let a staff member know if you have any food allergies before we begin.",
+  "graphic": {
+   "title": "Visitor Tasting Schedule",
+   "rows": [
+    [
+     "Group",
+     "First Tasting",
+     "Second Tasting"
+    ],
+    [
+     "Morning",
+     "Snack bars",
+     "Soups"
+    ],
+    [
+     "Afternoon",
+     "Soups",
+     "Desserts"
+    ],
+    [
+     "Evening",
+     "Desserts",
+     "Frozen pizzas"
+    ]
+   ]
+  },
+  "questions": [
+   {
+    "q": "What does the speaker say about the chefs?",
+    "choices": [
+     "They test recipes many times.",
+     "They trained in other countries.",
+     "They will lead a cooking class.",
+     "They designed the kitchen."
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "'Our chefs typically test a recipe thirty or forty times before it's approved'라고 했으므로 레시피를 여러 번 시험한다."
+   },
+   {
+    "q": "Why does the speaker mention that two products were canceled?",
+    "choices": [
+     "To apologize for a mistake",
+     "To show that visitors' opinions are important",
+     "To explain why the tour is shorter",
+     "To introduce a new product line"
+    ],
+    "answer": 1,
+    "type": "주제·목적",
+    "explanation": "'Your feedback really does matter' 바로 뒤에 방문객 평가로 제품 두 개를 없앴다는 예를 든다. 방문객 의견이 실제로 중요하다는 것을 보여 주려는 것이다."
+   },
+   {
+    "q": "Look at the graphic. What will the listeners taste second?",
+    "choices": [
+     "Snack bars",
+     "Soups",
+     "Desserts",
+     "Frozen pizzas"
+    ],
+    "answer": 2,
+    "type": "시각 자료 연계",
+    "explanation": "청자는 오후 그룹(afternoon group)이다. 표에서 오후 그룹의 두 번째 시식은 Desserts다. 수프는 첫 번째다."
+   }
+  ],
+  "translation": "노스필드 식품 시험 주방에 오신 것을 환영합니다. 냉동 피자부터 스낵바까지 저희가 판매하는 모든 신제품은 매장 진열대에 오르기 전에 이곳에서 개발되고 맛 평가를 거칩니다. 저희 셰프들은 보통 레시피 하나를 승인받기까지 30~40번 시험합니다. 오늘은 여러분도 그 과정에 참여하시게 됩니다. 곧 출시될 수프 제품군의 샘플을 맛보시고, 접수처에서 받으신 카드에 하나씩 점수를 매기시면 됩니다. 여러분의 의견은 정말로 중요합니다. 작년에는 방문객 평가 때문에 제품 두 개를 아예 취소하기도 했습니다. 여러분은 오후 그룹이니 수프를 먼저 맛보신 다음 디저트 샘플로 넘어가겠습니다. 시작하기 전에 음식 알레르기가 있으시면 직원에게 알려 주세요."
+ },
+ {
+  "id": "p4-115",
+  "level": 4,
+  "topic": "인쇄소의 카탈로그 용지 품절과 대체 용지 제안 전화",
+  "talk_type": "전화 메시지",
+  "voice": "male",
+  "script": "Hi, Ms. Delgado, it's Victor from Precision Print. I'm calling about the spring catalog order for your garden supply company. Unfortunately, our supplier just told us the paper you selected, the Classic Gloss, is out of stock until next month. I know the catalog has to be in customers' mailboxes before your March sale. So rather than wait, I'd suggest switching to a comparable paper. I'd recommend the one with the matte finish, since it's actually a little cheaper than what you chose and the photos of your plants will still look sharp. I've put a sample of it in the mail today. Once you've had a look, just let me know, and we can start printing right away.",
+  "graphic": {
+   "title": "Paper Options (per 1,000 pages)",
+   "rows": [
+    [
+     "Paper",
+     "Finish",
+     "Price"
+    ],
+    [
+     "Classic Gloss",
+     "Glossy",
+     "$48"
+    ],
+    [
+     "Premium Silk",
+     "Semi-gloss",
+     "$52"
+    ],
+    [
+     "Natural Matte",
+     "Matte",
+     "$44"
+    ],
+    [
+     "Eco Recycled",
+     "Matte",
+     "$50"
+    ]
+   ]
+  },
+  "questions": [
+   {
+    "q": "What problem does the speaker mention?",
+    "choices": [
+     "A deadline was missed.",
+     "A printing machine is broken.",
+     "Some paper is not available.",
+     "A payment has not been received."
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "고객이 고른 Classic Gloss 용지가 'out of stock until next month'라고 했으므로 용지를 구할 수 없는 것이 문제다."
+   },
+   {
+    "q": "Why does the speaker say, \"I know the catalog has to be in customers' mailboxes before your March sale\"?",
+    "choices": [
+     "To explain why waiting is not a good idea",
+     "To ask for a later delivery date",
+     "To remind the listener to pay",
+     "To suggest canceling the order"
+    ],
+    "answer": 0,
+    "type": "의도 파악",
+    "explanation": "이 말 뒤에 'So rather than wait'라며 다른 용지로 바꾸자고 제안한다. 3월 할인 전에 도착해야 하므로 다음 달까지 기다리면 안 된다는 뜻이다."
+   },
+   {
+    "q": "Look at the graphic. Which paper does the speaker recommend?",
+    "choices": [
+     "Classic Gloss",
+     "Premium Silk",
+     "Natural Matte",
+     "Eco Recycled"
+    ],
+    "answer": 2,
+    "type": "시각 자료 연계",
+    "explanation": "무광(matte)이면서 원래 고른 Classic Gloss(48달러)보다 조금 싼 용지라고 했다. 무광 용지 중 48달러보다 싼 것은 Natural Matte(44달러)다. Eco Recycled는 무광이지만 50달러로 더 비싸다."
+   }
+  ],
+  "translation": "안녕하세요, 델가도 님. 프리시전 프린트의 빅터입니다. 귀사 원예용품 회사의 봄 카탈로그 주문 건으로 전화드렸습니다. 아쉽게도 공급업체에서 방금 고르신 클래식 글로스 용지가 다음 달까지 품절이라고 알려 왔습니다. 카탈로그가 3월 할인 행사 전에 고객 우편함에 도착해야 한다는 것을 알고 있습니다. 그래서 기다리기보다는 비슷한 용지로 바꾸시길 제안드립니다. 무광 마감 용지를 추천하는데, 고르신 것보다 실제로 조금 더 저렴하고 식물 사진도 여전히 선명하게 나옵니다. 오늘 샘플을 우편으로 보내 드렸습니다. 보시고 알려 주시면 바로 인쇄를 시작할 수 있습니다."
+ },
+ {
+  "id": "p4-116",
+  "level": 4,
+  "topic": "무역 박람회 셔틀버스 운행 변경 안내 방송",
+  "talk_type": "안내 방송",
+  "voice": "female",
+  "script": "Attention, all exhibitors and visitors to the International Home Products Expo. Due to road construction on Harbor Boulevard, the shuttle bus stop at the Bayside Hotel has been moved to the hotel's rear entrance on Pine Street, effective immediately. In addition, because of higher demand than expected, we've added extra buses during the evening rush. Shuttles will now leave the convention center more frequently after five o'clock. Please note that the last shuttle of the day departs at nine p.m. Exhibitors who need to stay later to pack up their booths can request a taxi voucher at the organizer's office in Hall C.",
+  "graphic": {
+   "title": "Expo Shuttle Service (from Convention Center)",
+   "rows": [
+    [
+     "Time",
+     "Frequency"
+    ],
+    [
+     "8:00 A.M. - 12:00 P.M.",
+     "Every 15 minutes"
+    ],
+    [
+     "12:00 P.M. - 5:00 P.M.",
+     "Every 30 minutes"
+    ],
+    [
+     "5:00 P.M. - 9:00 P.M.",
+     "Every 10 minutes"
+    ]
+   ]
+  },
+  "questions": [
+   {
+    "q": "Why has a shuttle stop been moved?",
+    "choices": [
+     "A hotel is being renovated.",
+     "There is road construction.",
+     "The expo has changed locations.",
+     "There is not enough parking."
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "'Due to road construction on Harbor Boulevard'라고 했으므로 도로 공사 때문이다. 호텔 공사는 아니다."
+   },
+   {
+    "q": "Look at the graphic. How often will shuttles run at 6 P.M.?",
+    "choices": [
+     "Every 10 minutes",
+     "Every 15 minutes",
+     "Every 30 minutes",
+     "Every hour"
+    ],
+    "answer": 0,
+    "type": "시각 자료 연계",
+    "explanation": "오후 6시는 표의 5:00 P.M.~9:00 P.M. 구간에 해당하므로 10분 간격이다. 저녁에 버스를 늘렸다는 방송 내용과도 맞다."
+   },
+   {
+    "q": "What can exhibitors who stay late do?",
+    "choices": [
+     "Use a staff parking lot",
+     "Store items in Hall C",
+     "Get a voucher for a taxi",
+     "Take a later shuttle"
+    ],
+    "answer": 2,
+    "type": "요청·제안",
+    "explanation": "늦게까지 남는 전시업체는 'can request a taxi voucher at the organizer's office in Hall C'라고 했다. 마지막 셔틀은 9시라 더 늦은 셔틀은 없다."
+   }
+  ],
+  "translation": "국제 홈 제품 박람회의 모든 전시업체와 방문객 여러분께 알려 드립니다. 하버 대로의 도로 공사로 인해 베이사이드 호텔 셔틀버스 정류장이 지금부터 파인 스트리트 쪽 호텔 후문으로 옮겨졌습니다. 또한 예상보다 이용객이 많아 저녁 혼잡 시간대에 버스를 추가했습니다. 이제 5시 이후에는 컨벤션 센터에서 셔틀이 더 자주 출발합니다. 그날의 마지막 셔틀은 오후 9시에 출발한다는 점에 유의해 주세요. 부스 정리 때문에 더 늦게 남아야 하는 전시업체는 C홀 주최 측 사무실에서 택시 쿠폰을 요청하실 수 있습니다."
+ },
+ {
+  "id": "p4-117",
+  "level": 4,
+  "topic": "출장비 규정 변경 설명",
+  "talk_type": "회의 발췌",
+  "voice": "male",
+  "script": "I've got an update on the travel policy that takes effect on the first of next month. Finance reviewed last year's expenses and found that hotel costs were about twenty percent over budget, mostly because people were booking on their own at the last minute. So from now on, all hotel reservations must go through the company's booking portal, where we've negotiated lower rates with several chains. Meal allowances, on the other hand, are going up slightly, to sixty dollars a day. I realize the portal will take some getting used to. That's why Finance is holding two short online demonstrations next week. I'd strongly encourage anyone who travels regularly to attend one of them.",
+  "graphic": null,
+  "questions": [
+   {
+    "q": "According to the speaker, why is the policy changing?",
+    "choices": [
+     "Airline prices have risen.",
+     "Hotel spending was too high.",
+     "Employees requested more meal money.",
+     "A new travel agency was hired."
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "'hotel costs were about twenty percent over budget'라고 했으므로 호텔 비용이 너무 많이 나왔기 때문이다."
+   },
+   {
+    "q": "What is mentioned about meal allowances?",
+    "choices": [
+     "They will be removed.",
+     "They will stay the same.",
+     "They will increase a little.",
+     "They will be paid in advance."
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "'Meal allowances, on the other hand, are going up slightly, to sixty dollars a day'라고 했으므로 조금 오른다."
+   },
+   {
+    "q": "What does the speaker encourage frequent travelers to do?",
+    "choices": [
+     "Book hotels early",
+     "Attend a demonstration",
+     "Submit receipts weekly",
+     "Use a company credit card"
+    ],
+    "answer": 1,
+    "type": "요청·제안",
+    "explanation": "포털 사용 시연회가 열린다며 'I'd strongly encourage anyone who travels regularly to attend one of them'이라고 했다."
+   }
+  ],
+  "translation": "다음 달 1일부터 시행되는 출장 규정에 대해 알려 드릴 것이 있습니다. 재무팀이 작년 경비를 검토한 결과, 호텔 비용이 예산을 약 20퍼센트 초과했는데, 주로 직원들이 막판에 각자 예약했기 때문이었습니다. 그래서 앞으로 모든 호텔 예약은 회사 예약 포털을 통해야 하며, 포털에서는 여러 호텔 체인과 협상한 더 낮은 요금을 이용할 수 있습니다. 반면 식비 수당은 하루 60달러로 조금 오릅니다. 포털에 익숙해지려면 시간이 좀 걸린다는 건 압니다. 그래서 재무팀이 다음 주에 짧은 온라인 시연회를 두 번 엽니다. 출장을 자주 다니는 분들은 꼭 둘 중 하나에 참석하시길 강력히 권합니다."
+ },
+ {
+  "id": "p4-118",
+  "level": 5,
+  "topic": "신임 CEO의 첫 타운홀 연설",
+  "talk_type": "연설·소개",
+  "voice": "female",
+  "script": "Thank you all for being here, both in person and online. I've now spent my first six weeks as CEO visiting our plants and offices, and I want to share what I've heard. Over and over, people told me that good ideas get stuck because approvals take too long. One engineer in Leeds described waiting four months for permission to buy a forty-dollar part. Now, I'm not going to stand here and promise to fix everything overnight. What I will do is this: starting next quarter, managers will be able to approve purchases of up to five thousand dollars without sending them to headquarters. We'll review how that works in six months, and if it's successful, we'll go further. I'll also be holding open question sessions like this one every quarter, so please keep the feedback coming.",
+  "graphic": null,
+  "questions": [
+   {
+    "q": "What has the speaker been doing for the past six weeks?",
+    "choices": [
+     "Visiting company facilities",
+     "Hiring new managers",
+     "Negotiating with suppliers",
+     "Reviewing financial reports"
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "'visiting our plants and offices'라고 했으므로 회사 시설을 방문했다. 공장과 사무실이 'facilities'로 바꿔 표현되었다."
+   },
+   {
+    "q": "Why does the speaker mention an engineer in Leeds?",
+    "choices": [
+     "To praise an outstanding employee",
+     "To illustrate a common complaint",
+     "To announce a new office",
+     "To explain a budget cut"
+    ],
+    "answer": 1,
+    "type": "주제·목적",
+    "explanation": "승인이 너무 오래 걸린다는 의견을 반복해 들었다고 한 뒤, 40달러짜리 부품을 사는 데 넉 달을 기다린 사례를 든다. 흔한 불만의 구체적인 예다."
+   },
+   {
+    "q": "What does the speaker imply when she says, \"I'm not going to stand here and promise to fix everything overnight\"?",
+    "choices": [
+     "She disagrees with the employees' feedback.",
+     "She plans to make changes gradually.",
+     "She will leave the decision to managers.",
+     "She needs more time before taking any action."
+    ],
+    "answer": 1,
+    "type": "의도 파악",
+    "explanation": "이 말 뒤에 우선 관리자 승인 한도를 5,000달러로 올리고 6개월 뒤 검토해 성공하면 더 나아가겠다고 한다. 단계적으로 바꾸겠다는 뜻이다. 다음 분기에 바로 실행하므로 아무 조치도 미룬다는 해석은 틀리다."
+   }
+  ],
+  "translation": "현장과 온라인으로 함께해 주신 모든 분께 감사드립니다. CEO로서 첫 6주 동안 우리 공장과 사무실을 방문했는데, 들은 이야기를 공유하고 싶습니다. 승인이 너무 오래 걸려서 좋은 아이디어가 막힌다는 말을 계속해서 들었습니다. 리즈의 한 엔지니어는 40달러짜리 부품을 사기 위해 허가를 넉 달 동안 기다렸다고 했습니다. 자, 저는 여기 서서 하룻밤 사이에 모든 걸 고치겠다고 약속하지는 않겠습니다. 대신 이렇게 하겠습니다. 다음 분기부터 관리자는 5,000달러까지의 구매를 본사로 보내지 않고 승인할 수 있습니다. 6개월 뒤 그 결과를 검토하고, 성공적이면 더 나아가겠습니다. 또 이런 공개 질의응답 시간을 분기마다 열 테니 계속 의견을 보내 주십시오."
+ },
+ {
+  "id": "p4-119",
+  "level": 5,
+  "topic": "물류센터 자동화와 지역 고용 영향 뉴스",
+  "talk_type": "방송·뉴스",
+  "voice": "male",
+  "script": "Turning to business, Corvant Logistics confirmed this morning that its distribution center outside Fairmont will be largely automated by the end of next year, with robotic systems taking over much of the sorting and packing currently done by hand. The announcement had raised concerns in a town where the center is the largest private employer. However, the company insists that no permanent staff will be laid off. Instead, it plans to reduce its reliance on seasonal temporary workers and to retrain about three hundred existing employees as equipment technicians through a partnership with Fairmont Community College. Local officials have cautiously welcomed the plan, though some economists point out that the loss of seasonal jobs could still hit students and part-time workers hard. We'll have more on this story at six.",
+  "graphic": null,
+  "questions": [
+   {
+    "q": "What did Corvant Logistics confirm?",
+    "choices": [
+     "It will relocate its distribution center.",
+     "It will automate much of its operations.",
+     "It will build a new college campus.",
+     "It will be acquired by a competitor."
+    ],
+    "answer": 1,
+    "type": "주제·목적",
+    "explanation": "물류센터가 'largely automated by the end of next year'라고 확인했다. 이전이나 인수 이야기는 없다."
+   },
+   {
+    "q": "How will the company handle its permanent employees?",
+    "choices": [
+     "It will offer them early retirement.",
+     "It will transfer them to another city.",
+     "It will train them for new roles.",
+     "It will reduce their working hours."
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "'retrain about three hundred existing employees as equipment technicians'라고 했으므로 새 역할을 위해 재교육한다. 정규직 해고는 없다고 했다."
+   },
+   {
+    "q": "What concern do some economists raise?",
+    "choices": [
+     "Robots may be too expensive.",
+     "The college lacks instructors.",
+     "Temporary job losses could affect certain groups.",
+     "The town may lose tax revenue."
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "일부 경제학자들은 'the loss of seasonal jobs could still hit students and part-time workers hard'라고 지적했다. 계절직 감소가 학생·시간제 근로자에게 타격을 줄 수 있다는 우려다."
+   }
+  ],
+  "translation": "경제 소식으로 넘어가겠습니다. 코반트 로지스틱스는 페어몬트 외곽 물류센터를 내년 말까지 대부분 자동화해 현재 사람 손으로 하는 분류와 포장 작업 상당 부분을 로봇 시스템이 맡게 될 것이라고 오늘 아침 확인했습니다. 이 발표는 물류센터가 지역 최대 민간 고용주인 이 도시에서 우려를 낳았습니다. 그러나 회사는 정규직 직원은 한 명도 해고하지 않을 것이라고 강조합니다. 대신 계절성 임시직 의존도를 줄이고, 페어몬트 커뮤니티 칼리지와 협력해 기존 직원 약 300명을 장비 기술자로 재교육할 계획입니다. 지역 관계자들은 이 계획을 조심스럽게 환영했지만, 일부 경제학자들은 계절직 일자리가 사라지면 여전히 학생과 시간제 근로자가 큰 타격을 받을 수 있다고 지적합니다. 이 소식은 6시에 자세히 전해 드리겠습니다."
+ },
+ {
+  "id": "p4-120",
+  "level": 5,
+  "topic": "콜센터 위탁업체 재계약 검토 회의",
+  "talk_type": "회의 발췌",
+  "voice": "female",
+  "script": "As you know, our contract with our current call center provider expires in June, so we asked three firms, including the current one, to submit proposals. I've summarized the key figures on this slide. On cost alone, the choice is obvious. But cost isn't the only factor. Our customer satisfaction scores dropped last year, and the main complaint was that agents couldn't resolve problems on the first call. With that in mind, I'm recommending the firm with the highest first-call resolution rate, even though it's not the cheapest option. Its satisfaction score is also the strongest of the three. Before we take this to the board, though, I'd like Raj to contact two of that firm's current clients and ask about their experience.",
+  "graphic": {
+   "title": "Call Center Proposals",
+   "rows": [
+    [
+     "Provider",
+     "Annual Cost",
+     "First-Call Resolution",
+     "Satisfaction Score"
+    ],
+    [
+     "Clearline (current)",
+     "$1.2M",
+     "68%",
+     "3.6"
+    ],
+    [
+     "VoxAssist",
+     "$0.9M",
+     "71%",
+     "3.8"
+    ],
+    [
+     "Nexus Support",
+     "$1.4M",
+     "84%",
+     "4.5"
+    ]
+   ]
+  },
+  "questions": [
+   {
+    "q": "What does the speaker mean when she says, \"On cost alone, the choice is obvious\"?",
+    "choices": [
+     "The current provider is the most affordable.",
+     "One provider is clearly the cheapest.",
+     "All providers charge similar prices.",
+     "The budget has already been approved."
+    ],
+    "answer": 1,
+    "type": "의도 파악",
+    "explanation": "비용만 보면 한 업체가 분명히 가장 싸다는 뜻이며, 바로 'But cost isn't the only factor'라며 다른 기준을 꺼낸다. 표에서 가장 싼 곳은 현재 업체가 아니라 VoxAssist다."
+   },
+   {
+    "q": "Look at the graphic. Which provider does the speaker recommend?",
+    "choices": [
+     "Clearline",
+     "VoxAssist",
+     "Nexus Support",
+     "None of them"
+    ],
+    "answer": 2,
+    "type": "시각 자료 연계",
+    "explanation": "가장 싸지는 않지만 첫 통화 해결률이 가장 높은 업체를 추천했다. 표에서 해결률이 84%로 가장 높고 만족도도 4.5로 가장 높은 곳은 Nexus Support다."
+   },
+   {
+    "q": "What is Raj asked to do?",
+    "choices": [
+     "Prepare a presentation for the board",
+     "Negotiate a lower price",
+     "Speak with some of the provider's clients",
+     "Extend the current contract"
+    ],
+    "answer": 2,
+    "type": "요청·제안",
+    "explanation": "'I'd like Raj to contact two of that firm's current clients and ask about their experience'라고 했으므로 그 업체의 고객사와 이야기해 보라는 요청이다. 이사회 보고는 그 이후 단계다."
+   }
+  ],
+  "translation": "아시다시피 현재 콜센터 위탁업체와의 계약이 6월에 끝나서, 현재 업체를 포함한 세 회사에 제안서를 요청했습니다. 주요 수치를 이 슬라이드에 정리했습니다. 비용만 보면 선택은 뻔합니다. 하지만 비용만이 기준은 아닙니다. 작년에 고객 만족도 점수가 떨어졌는데, 가장 큰 불만은 상담원이 첫 통화에서 문제를 해결하지 못한다는 것이었습니다. 그 점을 고려해, 가장 싼 선택은 아니지만 첫 통화 해결률이 가장 높은 업체를 추천합니다. 만족도 점수도 세 곳 중 가장 높습니다. 다만 이사회에 올리기 전에 라지 씨가 그 업체의 현재 고객사 두 곳에 연락해서 경험을 물어봐 주셨으면 합니다."
+ },
+ {
+  "id": "p4-121",
+  "level": 5,
+  "topic": "기업용 보안 인식 교육 프로그램 광고",
+  "talk_type": "광고",
+  "voice": "male",
+  "script": "Most data breaches don't begin with sophisticated hacking. They begin with an employee clicking a link in an e-mail that looks perfectly legitimate. Firewalls and antivirus software can only do so much; ultimately, your staff are your first line of defense. SecureMind's training platform turns that weakness into a strength. Instead of a single annual seminar that people forget by the following week, we deliver five-minute lessons each month, along with realistic simulated phishing e-mails tailored to your industry. Managers receive detailed reports showing which departments are most at risk, so you can target follow-up training where it's needed most. Clients typically see a sixty percent drop in risky clicks within the first six months. Visit securemind.com to request a free pilot for up to fifty employees.",
+  "graphic": null,
+  "questions": [
+   {
+    "q": "According to the speaker, how do most data breaches start?",
+    "choices": [
+     "Through outdated software",
+     "Through employee mistakes",
+     "Through stolen laptops",
+     "Through weak passwords"
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "'They begin with an employee clicking a link in an e-mail'이라고 했으므로 직원의 실수에서 시작된다. 비밀번호나 노트북 도난은 언급되지 않았다."
+   },
+   {
+    "q": "How is SecureMind's approach different from traditional training?",
+    "choices": [
+     "It is delivered in short, regular sessions.",
+     "It is taught by former hackers.",
+     "It is offered only to managers.",
+     "It replaces antivirus software."
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "연 1회 세미나 대신 'five-minute lessons each month'를 제공한다고 했으므로 짧고 정기적인 교육이 차별점이다. 백신 소프트웨어를 대신한다는 말은 없다."
+   },
+   {
+    "q": "What does SecureMind offer potential clients?",
+    "choices": [
+     "A discount on annual plans",
+     "A free security audit",
+     "A trial for a limited number of staff",
+     "A consultation with an expert"
+    ],
+    "answer": 2,
+    "type": "요청·제안",
+    "explanation": "'request a free pilot for up to fifty employees'라고 했으므로 최대 50명 대상 무료 시범 운영을 제공한다. 'pilot'이 'trial'로 바뀌어 표현되었다."
+   }
+  ],
+  "translation": "대부분의 데이터 유출은 정교한 해킹으로 시작되지 않습니다. 완벽하게 정상으로 보이는 이메일 속 링크를 직원이 클릭하는 데서 시작됩니다. 방화벽과 백신 소프트웨어가 할 수 있는 일에는 한계가 있습니다. 결국 직원이 첫 번째 방어선입니다. 시큐어마인드의 교육 플랫폼은 그 약점을 강점으로 바꿔 드립니다. 다음 주면 잊어버리는 연 1회 세미나 대신, 매달 5분짜리 강의와 함께 귀사 업종에 맞춘 실제 같은 모의 피싱 이메일을 보내 드립니다. 관리자는 어느 부서가 가장 위험한지 보여 주는 상세 보고서를 받아, 가장 필요한 곳에 후속 교육을 집중할 수 있습니다. 고객사들은 보통 처음 6개월 안에 위험한 클릭이 60퍼센트 줄어듭니다. securemind.com에서 최대 50명까지 무료 시범 운영을 신청하세요."
+ },
+ {
+  "id": "p4-122",
+  "level": 5,
+  "topic": "사무실 임대차 계약 갱신 협상 관련 중개인 메시지",
+  "talk_type": "전화 메시지",
+  "voice": "female",
+  "script": "Hello, Mr. Whitaker, this is Diane Fowler from Crestview Commercial Realty. I've just finished talking with your landlord about renewing the lease on your office space. As expected, they're proposing a seven percent rent increase, which they say reflects current market rates in the area. Now, I checked recent deals in comparable buildings nearby, and frankly, they're overstating things a bit. I think there's room to push back. My suggestion is that we offer to sign a longer, five-year term in exchange for keeping the increase to around three percent. Landlords generally value that kind of stability. That said, it does commit you to the space for longer, so you'll want to consider your company's growth plans. Could we set up a call before Thursday? That's when they're expecting our response.",
+  "graphic": null,
+  "questions": [
+   {
+    "q": "Who most likely is the speaker?",
+    "choices": [
+     "A property owner",
+     "A real estate agent",
+     "A company accountant",
+     "A building manager"
+    ],
+    "answer": 1,
+    "type": "화자 정보(직업·장소)",
+    "explanation": "부동산 회사(Crestview Commercial Realty) 소속으로 청자 대신 임대인과 협상하고 있으므로 부동산 중개인이다. 건물주(landlord)는 협상 상대다."
+   },
+   {
+    "q": "What does the speaker imply when she says, \"they're overstating things a bit\"?",
+    "choices": [
+     "The landlord's increase is higher than the market justifies.",
+     "The office space is smaller than advertised.",
+     "The landlord has made errors in the contract.",
+     "Nearby buildings are in better condition."
+    ],
+    "answer": 0,
+    "type": "의도 파악",
+    "explanation": "인근 비슷한 건물의 최근 거래를 확인했다며 이 말을 하고 'there's room to push back'이라고 이어 간다. 7% 인상이 시세보다 과하다는 뜻이다."
+   },
+   {
+    "q": "What does the speaker suggest the listener consider?",
+    "choices": [
+     "Moving to a different building",
+     "Paying the rent in advance",
+     "His company's plans for expansion",
+     "Hiring a lawyer to review the lease"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "5년 계약은 공간에 더 오래 묶이므로 'you'll want to consider your company's growth plans'라고 했다. 회사의 성장(확장) 계획을 고려하라는 것이다."
+   }
+  ],
+  "translation": "안녕하세요, 휘태커 님. 크레스트뷰 상업 부동산의 다이앤 파울러입니다. 방금 사무실 임대차 계약 갱신 건으로 임대인과 이야기를 마쳤습니다. 예상대로 임대인은 7퍼센트 임대료 인상을 제안하고 있으며, 그것이 이 지역의 현재 시세를 반영한 것이라고 말합니다. 그런데 제가 근처 비슷한 건물의 최근 거래를 확인해 보니, 솔직히 좀 부풀려 말하고 있습니다. 반박할 여지가 있다고 봅니다. 제 제안은 인상률을 3퍼센트 정도로 유지하는 대신 5년의 더 긴 계약을 맺겠다고 제시하는 것입니다. 임대인들은 대체로 그런 안정성을 중요하게 여깁니다. 다만 그렇게 하면 그 공간에 더 오래 묶이게 되니 회사의 성장 계획을 고려해 보셔야 합니다. 목요일 전에 통화할 수 있을까요? 그날 임대인이 저희 답변을 기다리고 있습니다."
+ },
+ {
+  "id": "p4-123",
+  "level": 5,
+  "topic": "해상 풍력 단지 운영 센터 견학",
+  "talk_type": "관광·견학 안내",
+  "voice": "male",
+  "script": "Good morning, and welcome to the operations center for the Northgate Offshore Wind Farm. The eighty turbines you saw from the ferry this morning are located about twenty kilometers out to sea, and together they generate enough electricity for roughly three hundred thousand homes. Because the turbines are so remote, almost everything is monitored from this building. The large screen ahead of you displays real-time data from every turbine, including wind speed and output. If a component shows signs of wear, our engineers can often schedule repairs weeks before it actually fails, which means fewer costly emergency trips by boat. In a moment, we'll go upstairs to the control room. Space is limited there, so I'll split you into two groups of ten. Please keep your voices low, as the operators are on duty.",
+  "graphic": null,
+  "questions": [
+   {
+    "q": "How did the listeners most likely travel earlier today?",
+    "choices": [
+     "By helicopter",
+     "By boat",
+     "By train",
+     "By bus"
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "'The eighty turbines you saw from the ferry this morning'이라고 했으므로 오늘 아침 배(여객선)를 타고 왔다."
+   },
+   {
+    "q": "According to the speaker, what is an advantage of the monitoring system?",
+    "choices": [
+     "It allows problems to be found early.",
+     "It increases the speed of the turbines.",
+     "It reduces the number of staff needed.",
+     "It lowers electricity prices for homes."
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "부품 마모 징후가 보이면 'schedule repairs weeks before it actually fails'라고 했으므로 문제를 미리 발견할 수 있다는 것이 장점이다."
+   },
+   {
+    "q": "Why will the listeners be divided into groups?",
+    "choices": [
+     "The tour has two different routes.",
+     "The control room is small.",
+     "Some visitors are leaving early.",
+     "Operators will lead each group."
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "관제실은 'Space is limited there'라서 열 명씩 두 그룹으로 나눈다고 했다. 공간이 좁기 때문이다."
+   }
+  ],
+  "translation": "좋은 아침입니다. 노스게이트 해상 풍력 단지 운영 센터에 오신 것을 환영합니다. 오늘 아침 여객선에서 보신 터빈 80기는 바다로 약 20킬로미터 나가 있으며, 모두 합쳐 약 30만 가구가 쓸 전기를 생산합니다. 터빈이 아주 멀리 떨어져 있기 때문에 거의 모든 것을 이 건물에서 감시합니다. 앞에 있는 대형 화면에는 풍속과 발전량을 포함해 모든 터빈의 실시간 데이터가 표시됩니다. 어떤 부품에 마모 징후가 보이면 엔지니어들이 실제로 고장 나기 몇 주 전에 수리 일정을 잡을 수 있는 경우가 많아, 비용이 많이 드는 긴급 출동 배편을 줄일 수 있습니다. 잠시 후 위층 관제실로 올라가겠습니다. 그곳은 공간이 좁아서 열 명씩 두 그룹으로 나누겠습니다. 운영 요원들이 근무 중이니 목소리를 낮춰 주세요."
+ },
+ {
+  "id": "p4-124",
+  "level": 5,
+  "topic": "국제공항 환승객 보안 검색 절차 변경 안내",
+  "talk_type": "안내 방송",
+  "voice": "female",
+  "script": "Attention, all connecting passengers. Due to a scheduled upgrade of the screening equipment in Terminal 2, the transfer security checkpoint near Gate B4 is temporarily closed. Passengers connecting to international flights should now use the checkpoint next to the duty-free area, while those connecting to domestic flights should proceed to the checkpoint at the end of the moving walkway. Please be aware that waiting times at both checkpoints are currently longer than usual. If your connecting flight departs within the next forty-five minutes, please don't join the regular line. Instead, speak to any staff member wearing a green vest, who can direct you to a priority lane. We apologize for the inconvenience.",
+  "graphic": {
+   "title": "Terminal 2 Transfer Checkpoints",
+   "rows": [
+    [
+     "Checkpoint",
+     "Location",
+     "Status"
+    ],
+    [
+     "T1",
+     "Near Gate B4",
+     "Closed"
+    ],
+    [
+     "T2",
+     "Next to duty-free area",
+     "Open"
+    ],
+    [
+     "T3",
+     "End of moving walkway",
+     "Open"
+    ],
+    [
+     "T4",
+     "Near Gate C10",
+     "Staff only"
+    ]
+   ]
+  },
+  "questions": [
+   {
+    "q": "Why is a checkpoint closed?",
+    "choices": [
+     "Equipment is being upgraded.",
+     "There are not enough staff.",
+     "A gate is being renovated.",
+     "A security problem occurred."
+    ],
+    "answer": 0,
+    "type": "주제·목적",
+    "explanation": "'Due to a scheduled upgrade of the screening equipment'라고 했으므로 검색 장비 교체(업그레이드) 때문이다."
+   },
+   {
+    "q": "Look at the graphic. Which checkpoint should a passenger connecting to a domestic flight use?",
+    "choices": [
+     "T1",
+     "T2",
+     "T3",
+     "T4"
+    ],
+    "answer": 2,
+    "type": "시각 자료 연계",
+    "explanation": "국내선 환승객은 'the checkpoint at the end of the moving walkway'로 가라고 했다. 표에서 무빙워크 끝에 있는 곳은 T3다. T2는 국제선 환승객용이다."
+   },
+   {
+    "q": "What should passengers with a flight leaving soon do?",
+    "choices": [
+     "Go directly to their gate",
+     "Talk to a staff member",
+     "Call their airline",
+     "Use the staff-only checkpoint"
+    ],
+    "answer": 1,
+    "type": "요청·제안",
+    "explanation": "45분 안에 출발하는 승객은 'speak to any staff member wearing a green vest'라고 했다. 직원이 우선 통로로 안내해 준다. 직원 전용 검색대를 쓰라는 말은 없다."
+   }
+  ],
+  "translation": "환승객 여러분께 알려 드립니다. 제2터미널 검색 장비의 정기 교체로 인해 B4 게이트 근처 환승 보안 검색대가 임시로 폐쇄되었습니다. 국제선으로 환승하시는 승객은 이제 면세 구역 옆 검색대를, 국내선으로 환승하시는 승객은 무빙워크 끝에 있는 검색대를 이용해 주십시오. 현재 두 검색대 모두 대기 시간이 평소보다 길다는 점에 유의해 주십시오. 연결 항공편이 45분 안에 출발하는 경우 일반 줄에 서지 마십시오. 대신 초록색 조끼를 입은 직원에게 말씀하시면 우선 통로로 안내해 드립니다. 불편을 드려 죄송합니다."
+ },
+ {
+  "id": "p4-125",
+  "level": 5,
+  "topic": "원격 근무 주제 패널 토론 사회자 개회",
+  "talk_type": "연설·소개",
+  "voice": "male",
+  "script": "Good afternoon, and welcome to the final panel of this year's Workplace Futures Conference. I'm Thomas Greer, and I'll be moderating today's discussion on the long-term effects of remote work on company culture. Our three panelists come at this question from very different angles. Priya Natarajan leads a software firm that has been fully remote for a decade. Martin Cole runs operations for a manufacturer where, for obvious reasons, most employees can't work from home. And Dr. Sofia Lindqvist has spent five years studying how hybrid teams communicate. I suspect they won't agree on everything, and frankly, I hope they don't. Each panelist will begin with a five-minute statement. After that, I'll put a few questions to them, and we'll save the last twenty minutes for questions from you. There are microphones in both aisles.",
+  "graphic": null,
+  "questions": [
+   {
+    "q": "What is the topic of the panel?",
+    "choices": [
+     "Hiring software engineers",
+     "Remote work and company culture",
+     "Improving factory safety",
+     "Managing international teams"
+    ],
+    "answer": 1,
+    "type": "주제·목적",
+    "explanation": "'the long-term effects of remote work on company culture'라고 했으므로 원격 근무가 회사 문화에 미치는 영향이 주제다."
+   },
+   {
+    "q": "What does the speaker imply about Martin Cole's company?",
+    "choices": [
+     "It recently moved to remote work.",
+     "Its work must be done on-site.",
+     "It is a competitor of Ms. Natarajan's firm.",
+     "It sponsored the conference."
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "제조업체이고 'for obvious reasons, most employees can't work from home'이라고 했으므로 대부분 현장에서 일해야 하는 회사다."
+   },
+   {
+    "q": "Why does the speaker say, \"frankly, I hope they don't\"?",
+    "choices": [
+     "He wants the panel to end quickly.",
+     "He thinks a variety of opinions will make the discussion interesting.",
+     "He disagrees with all of the panelists.",
+     "He is worried that the panelists are not prepared."
+    ],
+    "answer": 1,
+    "type": "의도 파악",
+    "explanation": "패널들이 모든 점에 동의하지 않을 것 같다는 말에 이어 '솔직히 그러지 않기를 바란다'고 했다. 서로 다른 관점이 토론을 더 흥미롭게 만들기를 기대한다는 뜻이다."
+   }
+  ],
+  "translation": "안녕하십니까, 올해 워크플레이스 퓨처스 콘퍼런스의 마지막 패널 토론에 오신 것을 환영합니다. 저는 토머스 그리어이고, 오늘 원격 근무가 회사 문화에 미치는 장기적 영향에 관한 토론의 사회를 맡았습니다. 세 패널은 이 질문에 아주 다른 각도에서 접근합니다. 프리야 나타라잔 씨는 10년째 완전 원격으로 운영되는 소프트웨어 회사를 이끌고 있습니다. 마틴 콜 씨는 당연한 이유로 대부분의 직원이 재택근무를 할 수 없는 제조업체의 운영을 책임지고 있습니다. 그리고 소피아 린드크비스트 박사는 하이브리드 팀이 어떻게 소통하는지를 5년 동안 연구해 왔습니다. 세 분이 모든 점에 동의하지는 않을 것 같은데, 솔직히 그러지 않기를 바랍니다. 각 패널이 먼저 5분씩 발언하겠습니다. 그 후 제가 몇 가지 질문을 드리고, 마지막 20분은 여러분의 질문을 받겠습니다. 양쪽 통로에 마이크가 있습니다."
+ }
+]

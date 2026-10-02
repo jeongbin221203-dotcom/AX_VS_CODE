@@ -1,0 +1,1698 @@
+[
+ {
+  "id": "rd-041",
+  "level": 1,
+  "doc_type": "공지",
+  "title": "Pool Closed for Cleaning",
+  "text": "NOTICE: The swimming pool in the Recreation Center will be closed from Wednesday to Friday this week for cleaning. It will open again on Saturday at 9:00 a.m. The weight room and the basketball courts will stay open as usual. Swim classes this week will meet in Room 104 for a short talk about water safety.",
+  "questions": [
+   {
+    "q": "Why is the pool closed?",
+    "choices": [
+     "It is being cleaned.",
+     "There is a swim contest.",
+     "It is a holiday.",
+     "The water is too cold."
+    ],
+    "answer": 0,
+    "type": "주제·목적",
+    "explanation": "공지 첫 문장에 'will be closed ... for cleaning'이라고 나온다. 대회나 휴일 때문이 아니다."
+   },
+   {
+    "q": "Where will swim classes meet this week?",
+    "choices": [
+     "In the weight room",
+     "At the basketball courts",
+     "At an outdoor pool",
+     "In Room 104"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "'Swim classes this week will meet in Room 104'라고 했다. 그곳에서 물 안전에 관한 짧은 강의를 듣는다."
+   }
+  ],
+  "translation": "공지: 레크리에이션 센터 수영장이 이번 주 수요일부터 금요일까지 청소로 문을 닫습니다. 토요일 오전 9시에 다시 엽니다. 웨이트룸과 농구장은 평소대로 운영합니다. 이번 주 수영 수업은 104호에서 모여 물 안전에 관한 짧은 강의를 듣습니다."
+ },
+ {
+  "id": "rd-042",
+  "level": 1,
+  "doc_type": "문자 메시지",
+  "title": "Saving a Seat",
+  "text": "Leo: Hi! I'm at the Blue Cup Café now. I got a table by the window.\nNina: Great! I'm still on the bus. I'll be there in ten minutes.\nLeo: No problem. Do you want me to order for you?\nNina: Yes, please. A small hot chocolate. I'll pay you back.\nLeo: OK. Don't forget your history notes!",
+  "questions": [
+   {
+    "q": "Where is Leo now?",
+    "choices": [
+     "On the bus",
+     "At the library",
+     "At a café",
+     "In history class"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "레오가 'I'm at the Blue Cup Café now'라고 썼다. 버스에 있는 사람은 니나이다."
+   },
+   {
+    "q": "What will Nina probably bring?",
+    "choices": [
+     "A small hot chocolate",
+     "Her history notes",
+     "Money for the bus",
+     "A new table"
+    ],
+    "answer": 1,
+    "type": "추론",
+    "explanation": "레오가 마지막에 'Don't forget your history notes!'라고 했으므로 니나는 역사 노트를 가져올 것이다. 핫초코는 레오가 주문해 준다."
+   }
+  ],
+  "translation": "레오: 안녕! 나 지금 블루컵 카페야. 창가 자리 잡았어.\n니나: 좋아! 난 아직 버스야. 10분 뒤에 도착해.\n레오: 괜찮아. 네 것도 주문해 줄까?\n니나: 응, 부탁해. 작은 핫초코로. 돈은 갚을게.\n레오: 알았어. 역사 노트 잊지 마!"
+ },
+ {
+  "id": "rd-043",
+  "level": 1,
+  "doc_type": "광고",
+  "title": "Spring Plant Sale",
+  "text": "SPRING PLANT SALE! The Garden Club is selling small plants in front of the Student Center this Thursday from 11 a.m. to 3 p.m. Desk plants are $4, and flowers are $3. Every plant comes with a care card. We only take cash. All money will help pay for our new campus garden.",
+  "questions": [
+   {
+    "q": "How much is a flower?",
+    "choices": [
+     "$1",
+     "$3",
+     "$4",
+     "$11"
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "'flowers are $3'라고 나온다. 4달러는 책상용 화분 가격이다."
+   },
+   {
+    "q": "What is true about the sale?",
+    "choices": [
+     "It is inside the library.",
+     "Students can pay by card.",
+     "It lasts all week.",
+     "Each plant has a care card."
+    ],
+    "answer": 3,
+    "type": "사실 확인",
+    "explanation": "'Every plant comes with a care card'라고 했다. 현금만 받으며 목요일 하루만 열린다."
+   },
+   {
+    "q": "What will the club do with the money?",
+    "choices": [
+     "Buy new books",
+     "Pay for a trip",
+     "Build a new campus garden",
+     "Open a flower shop"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "마지막 문장 'All money will help pay for our new campus garden'에 목적이 나온다."
+   }
+  ],
+  "translation": "봄 화분 판매! 원예 동아리가 이번 목요일 오전 11시부터 오후 3시까지 학생회관 앞에서 작은 화분을 팝니다. 책상용 화분은 4달러, 꽃은 3달러입니다. 모든 화분에 관리 카드가 함께 있습니다. 현금만 받습니다. 모든 수익은 새 캠퍼스 정원을 만드는 데 쓰입니다."
+ },
+ {
+  "id": "rd-044",
+  "level": 1,
+  "doc_type": "일정표",
+  "title": "Friday Movie Nights",
+  "text": "FRIDAY MOVIE NIGHTS - Wilson Hall, Room 10\nSept. 6: The Lost River (comedy)\nSept. 13: Night Train (mystery)\nSept. 20: No movie - building closed\nSept. 27: Star Farm (family)\nAll movies start at 7:30 p.m. Free popcorn for the first 30 people. Bring your student ID.",
+  "questions": [
+   {
+    "q": "What will happen on September 20?",
+    "choices": [
+     "A comedy will be shown.",
+     "There will be no movie.",
+     "The movie will start late.",
+     "Popcorn will not be free."
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "일정표에 'Sept. 20: No movie - building closed'라고 적혀 있다. 그날은 건물이 문을 닫는다."
+   },
+   {
+    "q": "What should students bring?",
+    "choices": [
+     "Their student ID",
+     "A ticket",
+     "Their own popcorn",
+     "A chair"
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "마지막 줄에 'Bring your student ID'라고 했다. 팝콘은 선착순 30명에게 무료로 준다."
+   }
+  ],
+  "translation": "금요일 영화의 밤 - 윌슨 홀 10호\n9월 6일: 잃어버린 강 (코미디)\n9월 13일: 야간열차 (미스터리)\n9월 20일: 상영 없음 - 건물 휴관\n9월 27일: 별 농장 (가족)\n모든 영화는 오후 7시 30분에 시작합니다. 선착순 30명에게 팝콘 무료. 학생증을 가져오세요."
+ },
+ {
+  "id": "rd-045",
+  "level": 1,
+  "doc_type": "이메일",
+  "title": "Floor Meeting Tonight",
+  "text": "To: All Third-Floor Residents\nFrom: Sam Ortiz, Resident Assistant\n\nHi everyone,\nWe will have a short floor meeting tonight at 8:00 in the lounge. I will talk about quiet hours and the new kitchen rules. It will take about 20 minutes. There will be pizza! If you can't come, please send me a message, and I will tell you what you missed.\nSam",
+  "questions": [
+   {
+    "q": "Why did Sam write this email?",
+    "choices": [
+     "To change quiet hours",
+     "To order pizza for a party",
+     "To ask for help in the kitchen",
+     "To invite residents to a meeting"
+    ],
+    "answer": 3,
+    "type": "주제·목적",
+    "explanation": "오늘 밤 라운지에서 층 회의가 있다고 알리는 이메일이다. 피자는 회의에 곁들여 나오는 것이다."
+   },
+   {
+    "q": "What should residents do if they cannot come?",
+    "choices": [
+     "Go to the lounge later",
+     "Read the kitchen rules",
+     "Send Sam a message",
+     "Call the front desk"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "'If you can't come, please send me a message'라고 했다. 그러면 샘이 놓친 내용을 알려 준다."
+   }
+  ],
+  "translation": "받는 사람: 3층 거주 학생 전원\n보낸 사람: 샘 오티즈, 기숙사 사감 학생\n\n안녕하세요, 여러분.\n오늘 밤 8시에 라운지에서 짧은 층 회의를 합니다. 조용한 시간과 새 주방 규칙에 대해 이야기할게요. 20분 정도 걸립니다. 피자도 있어요! 못 오시면 메시지를 보내 주세요. 놓친 내용을 알려 드릴게요.\n샘"
+ },
+ {
+  "id": "rd-046",
+  "level": 1,
+  "doc_type": "안내문",
+  "title": "Picking Up Packages",
+  "text": "HOW TO PICK UP A PACKAGE\n1. Wait for an email from the Mail Center. It will have a pickup number.\n2. Come to the Mail Center window between 10 a.m. and 6 p.m.\n3. Show your student ID and your pickup number.\nPackages stay here for 14 days. After that, we send them back. Your friends cannot pick up packages for you.",
+  "questions": [
+   {
+    "q": "What do students need to get a package?",
+    "choices": [
+     "A friend's ID",
+     "Their student ID and a pickup number",
+     "A letter from the post office",
+     "A key to the mailbox"
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "3번 항목에 'Show your student ID and your pickup number'라고 나온다."
+   },
+   {
+    "q": "What happens to a package after 14 days?",
+    "choices": [
+     "It is sent back.",
+     "It is given to a friend.",
+     "It is moved to the library.",
+     "It is opened."
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "'Packages stay here for 14 days. After that, we send them back'이라고 했다. 친구는 대신 찾아갈 수 없다."
+   }
+  ],
+  "translation": "택배 찾는 방법\n1. 우편 센터의 이메일을 기다리세요. 수령 번호가 들어 있습니다.\n2. 오전 10시에서 오후 6시 사이에 우편 센터 창구로 오세요.\n3. 학생증과 수령 번호를 보여 주세요.\n택배는 이곳에 14일 동안 보관됩니다. 그 뒤에는 반송합니다. 친구가 대신 찾아갈 수 없습니다."
+ },
+ {
+  "id": "rd-047",
+  "level": 1,
+  "doc_type": "웹페이지",
+  "title": "Campus Bike Share",
+  "text": "CAMPUS BIKE SHARE\nNeed a bike? Use the Green Wheels app to rent one. There are bike stations near the library, the gym, and the train stop. The first 30 minutes are free. After that, it costs $1 for every 30 minutes. Please return bikes to a station, not to a tree or a fence. Helmets are free at the gym front desk.",
+  "questions": [
+   {
+    "q": "How much does a 30-minute ride cost?",
+    "choices": [
+     "$30",
+     "$1",
+     "$2",
+     "It is free."
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "'The first 30 minutes are free'라고 했으므로 30분까지는 무료이다. 그 이후 30분마다 1달러가 든다."
+   },
+   {
+    "q": "Where can students get a helmet?",
+    "choices": [
+     "At the train stop",
+     "At the library",
+     "At the gym front desk",
+     "In the app"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "마지막 문장 'Helmets are free at the gym front desk'에 나온다."
+   }
+  ],
+  "translation": "캠퍼스 자전거 공유\n자전거가 필요하세요? 그린휠 앱으로 빌리세요. 자전거 정거장은 도서관, 체육관, 기차역 근처에 있습니다. 처음 30분은 무료입니다. 그 뒤로는 30분마다 1달러입니다. 자전거는 나무나 울타리가 아닌 정거장에 반납해 주세요. 헬멧은 체육관 안내 데스크에서 무료로 빌릴 수 있습니다."
+ },
+ {
+  "id": "rd-048",
+  "level": 1,
+  "doc_type": "공지",
+  "title": "Fire Alarm Test",
+  "text": "FIRE ALARM TEST: There will be a fire alarm test in Baker Hall on Tuesday morning between 9:00 and 9:30. The alarm will ring for a few minutes. You do not need to leave the building. Classes will continue as usual. If you hear the alarm at any other time, leave the building right away.",
+  "questions": [
+   {
+    "q": "What should people do during the test?",
+    "choices": [
+     "Leave the building quickly",
+     "Stay in the building",
+     "Call the fire department",
+     "Go home early"
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "'You do not need to leave the building'이라고 했고 수업도 그대로 진행된다. 다른 시간에 경보가 울릴 때만 즉시 나가야 한다."
+   },
+   {
+    "q": "In the notice, the phrase \"right away\" is closest in meaning to",
+    "choices": [
+     "immediately",
+     "slowly",
+     "quietly",
+     "carefully"
+    ],
+    "answer": 0,
+    "type": "어휘",
+    "explanation": "right away는 '즉시, 곧바로'라는 뜻으로 immediately와 같다."
+   }
+  ],
+  "translation": "화재경보 시험: 화요일 오전 9시에서 9시 30분 사이에 베이커 홀에서 화재경보 시험이 있습니다. 경보가 몇 분 동안 울립니다. 건물 밖으로 나갈 필요는 없습니다. 수업은 평소처럼 진행됩니다. 다른 시간에 경보가 울리면 즉시 건물을 떠나세요."
+ },
+ {
+  "id": "rd-049",
+  "level": 2,
+  "doc_type": "이메일",
+  "title": "Tutoring Session Moved",
+  "text": "Subject: Thursday tutoring session\n\nHi Daniel,\nI'm sorry, but I have to move our math tutoring session on Thursday. My department scheduled a meeting at the same time. Could we meet on Friday at 2:00 instead? We can use the same room in the Learning Center. If Friday doesn't work for you, you can choose another time on the online booking page. Please bring the practice problems from Chapter 6 that you had trouble with.\nBest,\nAlicia",
+  "questions": [
+   {
+    "q": "Why is Alicia changing the session?",
+    "choices": [
+     "Daniel asked for a new time.",
+     "The Learning Center is closed.",
+     "She is feeling sick.",
+     "She has a department meeting."
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "'My department scheduled a meeting at the same time'이라고 이유를 밝혔다. 다니엘이 요청한 것이 아니다."
+   },
+   {
+    "q": "What can Daniel do if Friday is not convenient?",
+    "choices": [
+     "Call the math department",
+     "Meet Alicia on Thursday",
+     "Pick a time on the booking page",
+     "Go to a different room"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "'you can choose another time on the online booking page'라고 했다. 장소는 그대로 학습 센터이다."
+   },
+   {
+    "q": "What does Alicia ask Daniel to bring?",
+    "choices": [
+     "His textbook for Chapter 7",
+     "Problems he found difficult",
+     "A booking confirmation",
+     "His meeting notes"
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "'the practice problems from Chapter 6 that you had trouble with'을 가져오라고 했다. had trouble with는 '어려워했다'는 뜻이다."
+   }
+  ],
+  "translation": "제목: 목요일 튜터링 시간\n\n다니엘에게,\n미안하지만 목요일 수학 튜터링 시간을 옮겨야 해요. 같은 시간에 학과 회의가 잡혔거든요. 대신 금요일 2시에 만날 수 있을까요? 학습 센터의 같은 방을 쓰면 돼요. 금요일이 어려우면 온라인 예약 페이지에서 다른 시간을 고를 수 있어요. 6장 연습 문제 중 어려웠던 것들을 가져와 주세요.\n알리시아"
+ },
+ {
+  "id": "rd-050",
+  "level": 2,
+  "doc_type": "공지",
+  "title": "Parking Lot C Repaving",
+  "text": "PARKING NOTICE\nParking Lot C will be closed from June 3 to June 14 while the surface is repaved. During this time, students with a Lot C permit may park in Lot F, next to the football stadium, at no extra cost. A free shuttle will run from Lot F to the main campus every 15 minutes from 7 a.m. to 7 p.m. Cars left in Lot C after 6 a.m. on June 3 will be towed.",
+  "questions": [
+   {
+    "q": "What is the main purpose of the notice?",
+    "choices": [
+     "To explain a temporary parking change",
+     "To announce a new parking fee",
+     "To advertise a football game",
+     "To introduce a new shuttle route for visitors"
+    ],
+    "answer": 0,
+    "type": "주제·목적",
+    "explanation": "C 주차장이 포장 공사로 2주간 닫히는 동안 F 주차장을 쓰라는 임시 변경 안내이다. 추가 요금은 없다."
+   },
+   {
+    "q": "What will happen to cars in Lot C after 6 a.m. on June 3?",
+    "choices": [
+     "They will be moved to Lot F for free.",
+     "Their owners will receive a warning.",
+     "They will be repainted.",
+     "They will be towed."
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "마지막 문장 'Cars left in Lot C after 6 a.m. on June 3 will be towed'에 나온다. tow는 '견인하다'이다."
+   }
+  ],
+  "translation": "주차 안내\nC 주차장은 노면 재포장 공사로 6월 3일부터 14일까지 폐쇄됩니다. 이 기간 동안 C 주차장 허가증이 있는 학생은 추가 비용 없이 미식축구 경기장 옆 F 주차장에 주차할 수 있습니다. 오전 7시부터 오후 7시까지 15분마다 F 주차장에서 본 캠퍼스로 가는 무료 셔틀이 운행합니다. 6월 3일 오전 6시 이후 C 주차장에 남아 있는 차량은 견인됩니다."
+ },
+ {
+  "id": "rd-051",
+  "level": 2,
+  "doc_type": "광고",
+  "title": "Now Hiring: Campus Coffee Bar",
+  "text": "NOW HIRING!\nThe Daily Grind coffee bar in the Engineering Building is looking for student baristas. No experience is needed - we will train you. Shifts are 3 to 4 hours long, and you can work around your class schedule. Pay starts at $15 an hour, plus free drinks during your shift. To apply, fill out a form at the counter or visit our page on the student jobs website. Applications close on Friday.",
+  "questions": [
+   {
+    "q": "What is true about the job?",
+    "choices": [
+     "Applicants must have experience.",
+     "Workers must work in the morning.",
+     "Training is provided.",
+     "It is a full-time position."
+    ],
+    "answer": 2,
+    "type": "사실 확인",
+    "explanation": "'No experience is needed - we will train you'라고 했다. 근무 시간은 수업 일정에 맞출 수 있다."
+   },
+   {
+    "q": "In the advertisement, the phrase \"work around\" is closest in meaning to",
+    "choices": [
+     "stay close to",
+     "arrange to fit",
+     "finish early",
+     "complain about"
+    ],
+    "answer": 1,
+    "type": "어휘",
+    "explanation": "work around your class schedule은 '수업 일정에 맞춰 일정을 조정한다'는 뜻이다. 따라서 arrange to fit이 가장 가깝다."
+   }
+  ],
+  "translation": "직원 모집!\n공학관의 데일리 그라인드 커피 바에서 학생 바리스타를 찾습니다. 경험은 필요 없습니다. 저희가 교육해 드립니다. 근무는 3~4시간 단위이며 수업 일정에 맞춰 일할 수 있습니다. 시급은 15달러부터 시작하고 근무 중 음료는 무료입니다. 지원하려면 계산대에서 지원서를 작성하거나 학생 일자리 웹사이트의 저희 페이지를 방문하세요. 지원은 금요일에 마감합니다."
+ },
+ {
+  "id": "rd-052",
+  "level": 2,
+  "doc_type": "일정표",
+  "title": "Fall Career Fair",
+  "text": "FALL CAREER FAIR - Main Gym, Wednesday, October 9\n10:00-10:45  Workshop: Writing a Strong Resume (Room 201)\n11:00-2:00   Employer booths open (more than 60 companies)\n12:30-1:15   Panel: Internships for First- and Second-Year Students (Room 201)\n2:00-3:00    Free resume checks with Career Center staff\nProfessional clothing is recommended but not required. Bring several printed copies of your resume.",
+  "questions": [
+   {
+    "q": "When can students talk to companies?",
+    "choices": [
+     "From 10:00 to 10:45",
+     "From 11:00 to 2:00",
+     "From 12:30 to 1:15",
+     "From 2:00 to 3:00"
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "'11:00-2:00 Employer booths open'이라고 적혀 있다. 기업 부스가 열리는 시간이다."
+   },
+   {
+    "q": "Who would most likely attend the 12:30 panel?",
+    "choices": [
+     "A graduate student looking for a full-time job",
+     "A professor hiring a research assistant",
+     "A company representative",
+     "A first-year student interested in an internship"
+    ],
+    "answer": 3,
+    "type": "추론",
+    "explanation": "패널 제목이 'Internships for First- and Second-Year Students'이므로 인턴십에 관심 있는 1학년 학생이 가장 적합하다."
+   },
+   {
+    "q": "What is stated about clothing?",
+    "choices": [
+     "Students must wear suits.",
+     "Casual clothing is not allowed.",
+     "Professional clothing is suggested.",
+     "Clothing will be provided."
+    ],
+    "answer": 2,
+    "type": "사실 확인",
+    "explanation": "'Professional clothing is recommended but not required'라고 했다. 권장일 뿐 필수는 아니다."
+   }
+  ],
+  "translation": "가을 취업 박람회 - 대체육관, 10월 9일 수요일\n10:00-10:45 워크숍: 좋은 이력서 쓰기 (201호)\n11:00-2:00 기업 부스 운영 (60개 이상 기업)\n12:30-1:15 패널: 1·2학년을 위한 인턴십 (201호)\n2:00-3:00 취업 센터 직원의 무료 이력서 점검\n정장 차림을 권장하지만 필수는 아닙니다. 이력서를 여러 부 인쇄해 오세요."
+ },
+ {
+  "id": "rd-053",
+  "level": 2,
+  "doc_type": "안내문",
+  "title": "Reserving a Group Study Room",
+  "text": "GROUP STUDY ROOMS - HOW TO RESERVE\nGroup study rooms on the second floor are for groups of 3 to 8 students. You can reserve a room online up to 7 days in advance, for a maximum of 2 hours per day. If your group does not arrive within 15 minutes of the start time, the reservation will be canceled and the room will be open to others. Please erase the whiteboard and take all trash with you when you leave.",
+  "questions": [
+   {
+    "q": "Who can use the group study rooms?",
+    "choices": [
+     "Any single student",
+     "Groups of three or more students",
+     "Only graduate students",
+     "Library staff"
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "'for groups of 3 to 8 students'라고 했다. 혼자서는 예약할 수 없다."
+   },
+   {
+    "q": "What happens if a group is 20 minutes late?",
+    "choices": [
+     "Their reservation is canceled.",
+     "They must pay a fine.",
+     "They get an extra hour.",
+     "They must reserve again for next week."
+    ],
+    "answer": 0,
+    "type": "추론",
+    "explanation": "15분 안에 오지 않으면 예약이 취소되고 다른 사람이 쓸 수 있다고 했으므로 20분 늦으면 예약이 취소된다."
+   }
+  ],
+  "translation": "그룹 스터디룸 예약 방법\n2층 그룹 스터디룸은 3~8명 그룹용입니다. 최대 7일 전부터 온라인으로 예약할 수 있으며 하루 최대 2시간까지입니다. 시작 시각 15분 안에 그룹이 오지 않으면 예약이 취소되고 다른 사람이 사용할 수 있습니다. 나갈 때 화이트보드를 지우고 쓰레기를 모두 가져가 주세요."
+ },
+ {
+  "id": "rd-054",
+  "level": 2,
+  "doc_type": "웹페이지",
+  "title": "Enrollment Verification Letters",
+  "text": "INTERNATIONAL STUDENT OFFICE - Enrollment Letters\nMany students need a letter that shows they are enrolled, for example to open a bank account or to rent an apartment. To request one, log in to the student portal and choose \"Enrollment Verification.\" Letters are usually ready in 2 business days. You can download a PDF or pick up a signed paper copy at our office. If you need a letter for a visa application, please make an appointment with an advisor instead.",
+  "questions": [
+   {
+    "q": "According to the web page, why might a student need an enrollment letter?",
+    "choices": [
+     "To register for classes",
+     "To change their major",
+     "To apply for a library card",
+     "To open a bank account"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "'to open a bank account or to rent an apartment'를 예로 들었다. 수강 신청이나 전공 변경은 언급되지 않았다."
+   },
+   {
+    "q": "What should a student do if the letter is for a visa?",
+    "choices": [
+     "Request it through the portal",
+     "Wait two business days",
+     "Make an appointment with an advisor",
+     "Download a PDF"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "마지막 문장에서 비자 신청용이면 'make an appointment with an advisor instead'라고 했다. 포털 신청과는 다른 절차이다."
+   }
+  ],
+  "translation": "국제학생처 - 재학 증명서\n많은 학생이 은행 계좌 개설이나 아파트 임대 등을 위해 재학 사실을 보여 주는 증명서가 필요합니다. 신청하려면 학생 포털에 로그인해 '재학 증명'을 선택하세요. 증명서는 보통 영업일 기준 2일 안에 준비됩니다. PDF로 내려받거나 저희 사무실에서 서명된 종이 사본을 받을 수 있습니다. 비자 신청용 증명서가 필요하면 대신 상담사와 약속을 잡아 주세요."
+ },
+ {
+  "id": "rd-055",
+  "level": 2,
+  "doc_type": "문자 메시지",
+  "title": "Missed Class Notes",
+  "text": "Priya: Hey, did you go to economics this morning? I overslept.\nMarcus: Yeah. You didn't miss much, but she moved the quiz to next Monday.\nPriya: Oh, good. Can I see your notes?\nMarcus: Sure. My handwriting is terrible, though. I'll take photos and send them tonight.\nPriya: Thanks! I'll buy you lunch tomorrow.\nMarcus: Deal. Also, she said Chapter 4 won't be on the quiz.",
+  "questions": [
+   {
+    "q": "Why did Priya miss class?",
+    "choices": [
+     "She was sick.",
+     "She slept too late.",
+     "She had a quiz in another class.",
+     "She was eating lunch."
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "'I overslept'라고 했다. oversleep은 '늦잠 자다'라는 뜻이다."
+   },
+   {
+    "q": "What will Marcus do tonight?",
+    "choices": [
+     "Send photos of his notes",
+     "Take the quiz",
+     "Study Chapter 4",
+     "Buy Priya lunch"
+    ],
+    "answer": 0,
+    "type": "추론",
+    "explanation": "'I'll take photos and send them tonight'라고 했다. 점심은 내일 프리야가 산다."
+   },
+   {
+    "q": "What is true about the quiz?",
+    "choices": [
+     "It was given this morning.",
+     "It is on Chapter 4 only.",
+     "It was canceled.",
+     "It will not include Chapter 4."
+    ],
+    "answer": 3,
+    "type": "사실 확인",
+    "explanation": "마커스가 'Chapter 4 won't be on the quiz'라고 했고, 퀴즈는 다음 주 월요일로 옮겨졌다."
+   }
+  ],
+  "translation": "프리야: 야, 오늘 아침 경제학 수업 갔어? 나 늦잠 잤어.\n마커스: 응. 별로 놓친 건 없는데 교수님이 퀴즈를 다음 주 월요일로 옮기셨어.\n프리야: 오, 다행이다. 노트 좀 볼 수 있을까?\n마커스: 물론. 근데 내 글씨가 엉망이야. 오늘 밤에 사진 찍어서 보내 줄게.\n프리야: 고마워! 내일 점심 살게.\n마커스: 좋아. 그리고 4장은 퀴즈에 안 나온대."
+ },
+ {
+  "id": "rd-056",
+  "level": 2,
+  "doc_type": "광고",
+  "title": "Volunteers Needed: River Cleanup",
+  "text": "VOLUNTEERS NEEDED!\nJoin the Environmental Action Club for our yearly River Cleanup on Saturday, April 12, from 8 a.m. to noon. We will meet at the Oak Street bridge. Gloves, bags, and water will be provided, but please wear old shoes that can get wet. Volunteers will earn 4 hours of community service credit. Sign up by April 9 so we know how many supplies to bring.",
+  "questions": [
+   {
+    "q": "What should volunteers bring or wear?",
+    "choices": [
+     "Gloves",
+     "Trash bags",
+     "Old shoes",
+     "Water bottles"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "장갑·봉투·물은 제공되고 'please wear old shoes that can get wet'라고 했다."
+   },
+   {
+    "q": "Why does the club ask people to sign up by April 9?",
+    "choices": [
+     "To arrange a bus",
+     "To prepare enough supplies",
+     "To give prizes to volunteers",
+     "To reserve the bridge"
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "'so we know how many supplies to bring'라고 이유를 밝혔다. 준비물을 얼마나 가져올지 알기 위해서이다."
+   }
+  ],
+  "translation": "자원봉사자 모집!\n4월 12일 토요일 오전 8시부터 정오까지 열리는 환경 행동 동아리의 연례 강 청소에 함께하세요. 오크 스트리트 다리에서 모입니다. 장갑, 봉투, 물은 제공되지만 젖어도 되는 낡은 신발을 신고 오세요. 자원봉사자는 지역 봉사 4시간을 인정받습니다. 준비물 수량을 알 수 있도록 4월 9일까지 신청해 주세요."
+ },
+ {
+  "id": "rd-057",
+  "level": 3,
+  "doc_type": "이메일",
+  "title": "Geology Field Trip Forms",
+  "text": "Subject: Field trip to Granite Ridge - action required\n\nDear GEOL 110 students,\nOur field trip to Granite Ridge is scheduled for Saturday, March 8. Before then, each of you must submit a signed liability form through the course website; students who have not done so by March 5 will not be allowed on the bus. The department covers transportation, but you will need to pay $12 for park entry, which can be paid online or in cash on the day. Since we will be hiking over uneven ground for several hours, sturdy boots are essential. If you have a health condition that might make the hike difficult, please contact me privately so we can arrange an alternative assignment.\nProf. Haddad",
+  "questions": [
+   {
+    "q": "What is the main purpose of the email?",
+    "choices": [
+     "To tell students what they must do before the trip",
+     "To announce that the trip has been canceled",
+     "To ask students to vote on a trip location",
+     "To explain the grading of a field report"
+    ],
+    "answer": 0,
+    "type": "주제·목적",
+    "explanation": "제목의 'action required'처럼 서류 제출, 입장료, 신발 등 출발 전에 해야 할 일을 알리는 이메일이다."
+   },
+   {
+    "q": "What will happen to a student who submits the form on March 6?",
+    "choices": [
+     "They will pay an extra fee.",
+     "They will get an alternative assignment.",
+     "They will have to sign it again on the day.",
+     "They will not be able to ride the bus."
+    ],
+    "answer": 3,
+    "type": "추론",
+    "explanation": "3월 5일까지 내지 않으면 'will not be allowed on the bus'라고 했다. 3월 6일 제출은 기한을 넘긴 것이다."
+   },
+   {
+    "q": "What is NOT paid for by the department?",
+    "choices": [
+     "The bus",
+     "Transportation to the ridge",
+     "Park entry",
+     "Travel back to campus"
+    ],
+    "answer": 2,
+    "type": "사실 확인",
+    "explanation": "학과는 교통비만 부담하고 공원 입장료 12달러는 학생이 내야 한다. 나머지 선택지는 모두 교통에 해당한다."
+   }
+  ],
+  "translation": "제목: 그래나이트 리지 현장 학습 - 조치 필요\n\nGEOL 110 수강생 여러분,\n그래나이트 리지 현장 학습은 3월 8일 토요일로 예정되어 있습니다. 그 전에 각자 서명한 책임 면제 서류를 강의 웹사이트로 제출해야 합니다. 3월 5일까지 제출하지 않은 학생은 버스에 탈 수 없습니다. 교통비는 학과가 부담하지만 공원 입장료 12달러는 직접 내야 하며, 온라인이나 당일 현금으로 낼 수 있습니다. 몇 시간 동안 고르지 않은 땅을 걸을 것이므로 튼튼한 등산화가 꼭 필요합니다. 건강 문제로 산행이 어려울 수 있다면 대체 과제를 마련할 수 있도록 저에게 따로 연락해 주세요.\n하다드 교수"
+ },
+ {
+  "id": "rd-058",
+  "level": 3,
+  "doc_type": "안내문",
+  "title": "Chemistry Lab Safety Rules",
+  "text": "CHEMISTRY TEACHING LABS - SAFETY REQUIREMENTS\nSafety goggles must be worn at all times once experiments begin, even if you are only recording data. Long hair must be tied back, and open-toed shoes are not permitted under any circumstances. Food and drinks, including water bottles, must remain in the lockers outside the lab. Any spill, however small, should be reported to the teaching assistant immediately rather than cleaned up on your own. Students who arrive without proper clothing will be asked to leave and will receive a zero for that session's lab work.",
+  "questions": [
+   {
+    "q": "What should a student do after spilling a small amount of a chemical?",
+    "choices": [
+     "Wipe it up quickly",
+     "Tell the teaching assistant at once",
+     "Leave the lab",
+     "Write it in the data record"
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "'Any spill, however small, should be reported to the teaching assistant immediately rather than cleaned up on your own'이라고 했다. 직접 치우지 말아야 한다."
+   },
+   {
+    "q": "What can be inferred about a student who comes to lab in sandals?",
+    "choices": [
+     "They will lose points for that day's lab.",
+     "They can only record data.",
+     "They will be given goggles.",
+     "They must store their shoes in a locker."
+    ],
+    "answer": 0,
+    "type": "추론",
+    "explanation": "샌들은 발가락이 드러나는 신발로 금지되며, 적절한 복장이 아니면 퇴실하고 그날 실험 점수가 0점이 된다."
+   },
+   {
+    "q": "In the notice, the phrase \"under any circumstances\" is closest in meaning to",
+    "choices": [
+     "in rare cases",
+     "in the morning",
+     "with permission",
+     "in any situation"
+    ],
+    "answer": 3,
+    "type": "어휘",
+    "explanation": "not permitted under any circumstances는 '어떤 경우에도 허용되지 않는다'는 뜻이다. 따라서 in any situation과 가깝다."
+   }
+  ],
+  "translation": "화학 교육 실험실 - 안전 수칙\n실험이 시작되면 데이터만 기록하더라도 항상 보안경을 써야 합니다. 긴 머리는 묶어야 하며 발가락이 드러나는 신발은 어떤 경우에도 허용되지 않습니다. 물병을 포함한 음식과 음료는 실험실 밖 사물함에 두어야 합니다. 아무리 적은 양이라도 쏟은 것은 직접 치우지 말고 즉시 조교에게 알려야 합니다. 적절한 복장 없이 온 학생은 퇴실 요청을 받고 그 회차 실험 점수를 0점 받습니다."
+ },
+ {
+  "id": "rd-059",
+  "level": 3,
+  "doc_type": "공지",
+  "title": "Elevator Replacement in Morgan Library",
+  "text": "FACILITIES NOTICE\nBeginning November 4, the elevator in Morgan Library will be replaced, a project expected to take approximately six weeks. During construction, the second and third floors will be reachable only by stairs. Patrons who are unable to use the stairs may request materials from those floors at the first-floor service desk; staff will retrieve items within 30 minutes. In addition, two accessible study rooms have been set up on the first floor and can be reserved online. We apologize for the inconvenience and appreciate your patience.",
+  "questions": [
+   {
+    "q": "What is the notice mainly about?",
+    "choices": [
+     "A new study room policy",
+     "Changes to library hours",
+     "Construction that limits access to upper floors",
+     "A move of the service desk"
+    ],
+    "answer": 2,
+    "type": "주제·목적",
+    "explanation": "엘리베이터 교체 공사 기간 동안 2·3층을 계단으로만 갈 수 있다는 내용이 중심이다. 대체 서비스는 그에 따른 조치이다."
+   },
+   {
+    "q": "How can a student who uses a wheelchair get a book from the third floor?",
+    "choices": [
+     "Use the elevator in another building",
+     "Ask staff at the first-floor desk to bring it",
+     "Wait six weeks",
+     "Reserve a third-floor study room"
+    ],
+    "answer": 1,
+    "type": "추론",
+    "explanation": "계단을 이용할 수 없는 이용자는 1층 서비스 데스크에 요청하면 직원이 30분 안에 가져다준다고 했다."
+   },
+   {
+    "q": "In the notice, the word \"retrieve\" is closest in meaning to",
+    "choices": [
+     "bring back",
+     "return",
+     "repair",
+     "check"
+    ],
+    "answer": 0,
+    "type": "어휘",
+    "explanation": "retrieve items는 '자료를 찾아서 가져오다'라는 뜻이다. bring back이 가장 가깝다."
+   }
+  ],
+  "translation": "시설 안내\n11월 4일부터 모건 도서관 엘리베이터 교체 공사가 시작되며 약 6주가 걸릴 예정입니다. 공사 기간에는 2층과 3층을 계단으로만 갈 수 있습니다. 계단을 이용할 수 없는 이용자는 1층 서비스 데스크에서 해당 층의 자료를 요청할 수 있으며, 직원이 30분 안에 가져다 드립니다. 또한 1층에 접근성이 좋은 스터디룸 두 곳을 마련했으며 온라인으로 예약할 수 있습니다. 불편을 드려 죄송하며 양해해 주셔서 감사합니다."
+ },
+ {
+  "id": "rd-060",
+  "level": 3,
+  "doc_type": "웹페이지",
+  "title": "Campus Food Pantry",
+  "text": "THE CAMPUS FOOD PANTRY\nThe Food Pantry provides free groceries to any currently enrolled student - no proof of income is required. Students may visit once a week and choose up to 15 items, including fresh produce donated by local farms. We are located in the basement of Lincoln Hall and are open Tuesdays and Thursdays from noon to 6 p.m. Students who cannot visit during these hours can fill out an online request and pick up a pre-packed bag at the Student Center. All visits are confidential; we record only the number of visitors, not names.",
+  "questions": [
+   {
+    "q": "Who can use the Food Pantry?",
+    "choices": [
+     "Only students with low income",
+     "Students who live in Lincoln Hall",
+     "Local farmers",
+     "Any student who is currently enrolled"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "'to any currently enrolled student - no proof of income is required'라고 했다. 소득 증명이 필요 없다."
+   },
+   {
+    "q": "What option is available for students who are busy on Tuesdays and Thursdays?",
+    "choices": [
+     "Visiting twice in one week",
+     "Having groceries delivered to their dorm",
+     "Picking up a bag at the Student Center",
+     "Choosing more than 15 items"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "운영 시간에 올 수 없으면 온라인 신청 후 'pick up a pre-packed bag at the Student Center'할 수 있다."
+   },
+   {
+    "q": "Why does the pantry mention that it records only the number of visitors?",
+    "choices": [
+     "To show that it is popular",
+     "To reassure students about their privacy",
+     "To ask for more donations",
+     "To explain why it is closed some days"
+    ],
+    "answer": 1,
+    "type": "추론",
+    "explanation": "방문이 비밀로 유지되며 이름을 기록하지 않는다고 밝혀 학생들이 부담 없이 이용하도록 안심시키려는 것이다."
+   }
+  ],
+  "translation": "캠퍼스 푸드 팬트리\n푸드 팬트리는 재학 중인 모든 학생에게 무료로 식료품을 제공합니다. 소득 증명은 필요 없습니다. 학생은 일주일에 한 번 방문해 지역 농장이 기부한 신선 농산물을 포함해 최대 15개 품목을 고를 수 있습니다. 링컨 홀 지하에 있으며 화요일과 목요일 정오부터 오후 6시까지 운영합니다. 이 시간에 올 수 없는 학생은 온라인으로 신청한 뒤 학생회관에서 미리 담아 둔 봉투를 받아 갈 수 있습니다. 모든 방문은 비밀이 보장되며, 저희는 이름이 아니라 방문자 수만 기록합니다."
+ },
+ {
+  "id": "rd-061",
+  "level": 3,
+  "doc_type": "광고",
+  "title": "Become a Peer Mentor",
+  "text": "BECOME A PEER MENTOR\nRemember how confusing your first semester was? Help new students find their way by joining the First-Year Mentor Program. Mentors meet with a small group of four to six first-year students every other week to talk about study habits, campus resources, and adjusting to college life. Applicants must be sophomores or above with a GPA of at least 2.8. Mentors receive a $600 stipend per semester and complete a two-day training before classes start. Applications, including one recommendation from a faculty member, are due February 20.",
+  "questions": [
+   {
+    "q": "How often do mentors meet with their groups?",
+    "choices": [
+     "Every two weeks",
+     "Every week",
+     "Once a month",
+     "Twice a semester"
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "'every other week'는 '격주로', 즉 2주에 한 번이라는 뜻이다."
+   },
+   {
+    "q": "Which student is NOT eligible to apply?",
+    "choices": [
+     "A junior with a 3.0 GPA",
+     "A senior with a 2.8 GPA",
+     "A first-year student with a 3.9 GPA",
+     "A sophomore with a 3.2 GPA"
+    ],
+    "answer": 2,
+    "type": "추론",
+    "explanation": "지원자는 2학년(sophomore) 이상이어야 하므로 학점이 높아도 1학년은 지원할 수 없다."
+   },
+   {
+    "q": "What must be included in the application?",
+    "choices": [
+     "A training certificate",
+     "A record of volunteer work",
+     "A recommendation from a professor",
+     "A letter from a first-year student"
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "'including one recommendation from a faculty member'라고 했다. faculty member는 교수진을 말한다."
+   }
+  ],
+  "translation": "또래 멘토가 되어 주세요\n첫 학기가 얼마나 혼란스러웠는지 기억나나요? 신입생 멘토 프로그램에 참여해 신입생들이 길을 찾도록 도와주세요. 멘토는 격주로 4~6명의 신입생 소그룹을 만나 공부 습관, 캠퍼스 지원 서비스, 대학 생활 적응에 대해 이야기합니다. 지원자는 2학년 이상이고 평점이 2.8 이상이어야 합니다. 멘토는 학기당 600달러의 장려금을 받으며 개강 전 이틀간 교육을 이수합니다. 교수 추천서 1부를 포함한 지원서는 2월 20일까지 제출해야 합니다."
+ },
+ {
+  "id": "rd-062",
+  "level": 3,
+  "doc_type": "일정표",
+  "title": "Finals Week Library Schedule",
+  "text": "HAYES LIBRARY - FINALS WEEK SCHEDULE (Dec. 9-15)\nMon.-Thu.: Open 24 hours\nFri.: 7 a.m. - midnight\nSat.: 9 a.m. - 9 p.m.\nSun.: 9 a.m. - 6 p.m. (closes early for the winter break)\nNotes: During 24-hour operation, only students with a valid ID may enter after 11 p.m. The fourth floor will be a silent zone all week. Free coffee will be served in the lobby from 10 p.m. to 2 a.m., Monday through Thursday.",
+  "questions": [
+   {
+    "q": "When does the library close on Friday?",
+    "choices": [
+     "At 6 p.m.",
+     "At midnight",
+     "At 9 p.m.",
+     "It does not close."
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "일정표에 'Fri.: 7 a.m. - midnight'라고 나온다. 24시간 운영은 월~목요일이다."
+   },
+   {
+    "q": "What can be inferred about a visitor without a student ID?",
+    "choices": [
+     "They cannot enter after 11 p.m. on Tuesday.",
+     "They can enter at any time.",
+     "They cannot use the fourth floor.",
+     "They must pay for coffee."
+    ],
+    "answer": 0,
+    "type": "추론",
+    "explanation": "24시간 운영 기간(월~목) 동안 오후 11시 이후에는 유효한 학생증이 있는 학생만 들어올 수 있다."
+   },
+   {
+    "q": "Why does the library close early on Sunday?",
+    "choices": [
+     "Exams have ended for the semester.",
+     "There are not enough staff.",
+     "The fourth floor is being cleaned.",
+     "The winter break is starting."
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "일요일 옆에 '(closes early for the winter break)'라고 이유가 적혀 있다."
+   }
+  ],
+  "translation": "헤이즈 도서관 - 기말고사 주간 운영 시간 (12월 9~15일)\n월~목: 24시간 운영\n금: 오전 7시 - 자정\n토: 오전 9시 - 오후 9시\n일: 오전 9시 - 오후 6시 (겨울 방학으로 일찍 닫음)\n참고: 24시간 운영 중 오후 11시 이후에는 유효한 학생증이 있는 학생만 입장할 수 있습니다. 4층은 일주일 내내 완전 정숙 구역입니다. 월요일부터 목요일까지 오후 10시부터 새벽 2시까지 로비에서 무료 커피를 제공합니다."
+ },
+ {
+  "id": "rd-063",
+  "level": 3,
+  "doc_type": "문자 메시지",
+  "title": "Planning a Bake Sale",
+  "text": "Hana: Quick update - the Student Center said we can have a table on Wednesday, but not Tuesday.\nJordan: Wednesday works. Did they say anything about selling homemade food?\nHana: Yeah, that's the catch. Everything has to come from a store or a licensed kitchen.\nJordan: Ugh. So much for my grandma's cookie recipe.\nHana: I know. Maybe we could ask the bakery on Main Street for a discount?\nJordan: Good idea. I'll stop by after my lab and ask.",
+  "questions": [
+   {
+    "q": "What does Hana mean when she writes, \"that's the catch\"?",
+    "choices": [
+     "That is the best part of the plan.",
+     "That is the reason for the date.",
+     "That is a hidden problem.",
+     "That is a joke."
+    ],
+    "answer": 2,
+    "type": "어휘",
+    "explanation": "the catch는 '숨은 문제, 함정'이라는 뜻이다. 집에서 만든 음식을 팔 수 없다는 제약을 가리킨다."
+   },
+   {
+    "q": "Why is Jordan disappointed?",
+    "choices": [
+     "The sale must be held on Tuesday.",
+     "He cannot sell his grandmother's cookies.",
+     "The bakery refused to help.",
+     "He has a lab on Wednesday."
+    ],
+    "answer": 1,
+    "type": "추론",
+    "explanation": "모든 음식이 가게나 허가받은 주방에서 와야 하므로 할머니 레시피로 만든 쿠키를 팔 수 없게 되었다. 'So much for ~'는 '~는 물 건너갔다'는 뜻이다."
+   },
+   {
+    "q": "What will Jordan do next?",
+    "choices": [
+     "Visit a bakery to ask about a discount",
+     "Reserve a table for Tuesday",
+     "Bake cookies at home",
+     "Call the Student Center"
+    ],
+    "answer": 0,
+    "type": "추론",
+    "explanation": "'I'll stop by after my lab and ask'라고 했다. 메인 스트리트 빵집에 할인을 물어보러 들르겠다는 뜻이다."
+   }
+  ],
+  "translation": "하나: 잠깐 업데이트 - 학생회관에서 수요일엔 테이블을 써도 되는데 화요일은 안 된대.\n조던: 수요일 괜찮아. 집에서 만든 음식 파는 거에 대해선 뭐라고 했어?\n하나: 응, 그게 문제야. 전부 가게나 허가받은 주방에서 만든 거여야 한대.\n조던: 아. 우리 할머니 쿠키 레시피는 물 건너갔네.\n하나: 그러게. 메인 스트리트 빵집에 할인해 달라고 부탁해 볼까?\n조던: 좋은 생각이야. 실험 끝나고 들러서 물어볼게."
+ },
+ {
+  "id": "rd-064",
+  "level": 3,
+  "doc_type": "이메일",
+  "title": "Timesheet Deadline Reminder",
+  "text": "Subject: Student employee timesheets\n\nHello,\nThis is a reminder that timesheets for the pay period ending October 15 must be submitted and approved by your supervisor no later than noon on October 17. Because the payroll system is being upgraded this month, late timesheets cannot be processed until the following pay period, which means you would not be paid for those hours until November 15. Please double-check that you have entered the correct department code; incorrect codes were the most common reason for delays last semester.\nThank you,\nStudent Payroll Office",
+  "questions": [
+   {
+    "q": "What is the main purpose of the email?",
+    "choices": [
+     "To announce an increase in pay",
+     "To explain how to apply for a campus job",
+     "To introduce a new supervisor",
+     "To remind student workers about a timesheet deadline"
+    ],
+    "answer": 3,
+    "type": "주제·목적",
+    "explanation": "10월 15일까지의 근무 기록을 10월 17일 정오까지 제출·승인받으라는 마감 알림이다."
+   },
+   {
+    "q": "What will happen if a timesheet is submitted late?",
+    "choices": [
+     "The student will lose those hours.",
+     "The supervisor will be fined.",
+     "The student will be paid a month later.",
+     "The department code will change."
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "늦은 근무 기록은 다음 지급 기간에 처리되어 11월 15일에야 지급된다고 했다. 시간이 사라지는 것은 아니다."
+   },
+   {
+    "q": "According to the email, what caused many delays last semester?",
+    "choices": [
+     "The payroll system upgrade",
+     "Incorrect department codes",
+     "Supervisors who forgot to approve timesheets",
+     "Students working too many hours"
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "'incorrect codes were the most common reason for delays last semester'라고 했다. 시스템 업그레이드는 이번 달의 일이다."
+   }
+  ],
+  "translation": "제목: 학생 근로자 근무 기록\n\n안녕하세요.\n10월 15일에 끝나는 지급 기간의 근무 기록은 늦어도 10월 17일 정오까지 제출되어 담당자의 승인을 받아야 함을 알려 드립니다. 이번 달 급여 시스템 업그레이드 때문에 늦은 근무 기록은 다음 지급 기간까지 처리할 수 없으며, 그러면 해당 시간의 급여는 11월 15일에야 지급됩니다. 학과 코드를 정확히 입력했는지 다시 확인해 주세요. 지난 학기 지연의 가장 흔한 원인이 잘못된 코드였습니다.\n감사합니다.\n학생 급여 사무실"
+ },
+ {
+  "id": "rd-065",
+  "level": 4,
+  "doc_type": "이메일",
+  "title": "Re: Waitlist for PSYC 340",
+  "text": "Subject: Re: Waitlist for PSYC 340\n\nDear Ms. Kowalski,\nThank you for your message. I understand your frustration at being twelfth on the waitlist for Cognitive Psychology. Unfortunately, the enrollment cap is set by the fire code for the room, so I am not able to grant individual overrides. That said, we typically see eight to ten students drop the course during the first week, and waitlisted students are enrolled automatically in the order they joined. I would also point out that the course is offered again in the spring with two sections, so if you are not admitted this term, you will not fall behind in the major. In the meantime, I would encourage you to attend the first two lectures so that you will not have missed material if a seat opens.\nSincerely,\nDr. Bernard Liu, Department Chair",
+  "questions": [
+   {
+    "q": "Why can't Dr. Liu let Ms. Kowalski into the course right away?",
+    "choices": [
+     "The room's size limit is set by safety regulations.",
+     "She has not completed a required course.",
+     "The department has stopped offering the course.",
+     "Overrides are only given to graduate students."
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "수강 인원 상한이 'set by the fire code for the room'이라 개별 예외를 줄 수 없다고 했다. 즉 안전 규정에 따른 강의실 정원 때문이다."
+   },
+   {
+    "q": "What does Dr. Liu imply about Ms. Kowalski's chances of getting into the course?",
+    "choices": [
+     "They are very low, so she should give up.",
+     "They depend on her grades.",
+     "They are guaranteed if she attends class.",
+     "They are uncertain but not unrealistic."
+    ],
+    "answer": 3,
+    "type": "추론",
+    "explanation": "첫 주에 보통 8~10명이 취소하는데 그녀는 대기 12번이다. 확실하지는 않지만 가능성이 꽤 있다는 뜻이며, 수업 참석이 등록을 보장하지는 않는다."
+   },
+   {
+    "q": "Why does Dr. Liu mention the spring semester?",
+    "choices": [
+     "To explain why the cap is so low",
+     "To suggest that she change her major",
+     "To reassure her that she can still progress in her major",
+     "To ask her to teach a section"
+    ],
+    "answer": 2,
+    "type": "추론",
+    "explanation": "봄 학기에 두 분반이 다시 열리므로 이번에 못 들어가도 'you will not fall behind in the major'라고 안심시키려는 것이다."
+   }
+  ],
+  "translation": "제목: 회신: PSYC 340 대기자 명단\n\n코왈스키 학생에게,\n메시지 고마워요. 인지심리학 대기 명단 12번이라 답답한 마음은 이해합니다. 안타깝게도 수강 인원 상한은 강의실 소방 규정에 따라 정해지므로 개별적으로 예외를 허가할 수 없습니다. 다만 보통 첫 주에 8~10명이 수강을 취소하고, 대기 학생은 등록한 순서대로 자동 등록됩니다. 또한 이 과목은 봄 학기에 두 분반으로 다시 개설되므로 이번 학기에 들어오지 못하더라도 전공 이수가 늦어지지는 않을 겁니다. 그 사이 자리가 나면 놓친 내용이 없도록 처음 두 번의 강의에 출석하기를 권합니다.\n버나드 류 학과장"
+ },
+ {
+  "id": "rd-066",
+  "level": 4,
+  "doc_type": "안내문",
+  "title": "Interlibrary Loan Policies",
+  "text": "INTERLIBRARY LOAN (ILL): WHAT TO EXPECT\nIf our library does not own an item you need, ILL can borrow it from another institution on your behalf. Journal articles are usually delivered electronically within three business days; books generally take one to two weeks, depending on the lending library. Loan periods are determined by the lender, not by us, and renewals are not guaranteed, so plan accordingly. Note that rare materials, theses from certain universities, and recently published textbooks are often unavailable through ILL. Users who fail to return borrowed items on time will have their ILL privileges suspended, as late returns jeopardize our relationships with partner libraries.",
+  "questions": [
+   {
+    "q": "According to the guide, who decides how long a student may keep an ILL book?",
+    "choices": [
+     "The student's professor",
+     "The library that lends the book",
+     "The student's own library",
+     "The ILL office director"
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "'Loan periods are determined by the lender, not by us'라고 했다. 빌려주는 도서관이 대출 기간을 정한다."
+   },
+   {
+    "q": "Why does the guide advise users to \"plan accordingly\"?",
+    "choices": [
+     "Because users may not be able to extend a loan",
+     "Because ILL is only available during certain months",
+     "Because articles take longer than books",
+     "Because ILL charges a fee"
+    ],
+    "answer": 0,
+    "type": "추론",
+    "explanation": "바로 앞에 'renewals are not guaranteed'가 있다. 연장이 안 될 수 있으니 미리 일정을 세우라는 뜻이다."
+   },
+   {
+    "q": "In the guide, the word \"jeopardize\" is closest in meaning to",
+    "choices": [
+     "strengthen",
+     "define",
+     "replace",
+     "endanger"
+    ],
+    "answer": 3,
+    "type": "어휘",
+    "explanation": "jeopardize는 '위태롭게 하다'라는 뜻이다. 늦은 반납이 협력 도서관과의 관계를 해친다는 의미로 endanger와 같다."
+   }
+  ],
+  "translation": "상호대차(ILL): 알아 두실 점\n우리 도서관에 필요한 자료가 없으면 상호대차로 다른 기관에서 대신 빌려 드립니다. 학술지 논문은 보통 영업일 3일 안에 전자 파일로 전달되고, 책은 빌려주는 도서관에 따라 대체로 1~2주가 걸립니다. 대출 기간은 저희가 아니라 빌려주는 기관이 정하며 연장이 보장되지 않으므로 그에 맞게 계획하세요. 희귀 자료, 일부 대학의 학위 논문, 최근 출간된 교재는 상호대차로 구할 수 없는 경우가 많습니다. 빌린 자료를 제때 반납하지 않으면 늦은 반납이 협력 도서관과의 관계를 위태롭게 하므로 상호대차 이용이 정지됩니다."
+ },
+ {
+  "id": "rd-067",
+  "level": 4,
+  "doc_type": "공지",
+  "title": "Network Maintenance and Login Changes",
+  "text": "IT SERVICES NOTICE\nOn Saturday, January 18, from 1 a.m. to 7 a.m., all campus network services, including email, Wi-Fi, and the learning management system, will be unavailable for scheduled maintenance. We chose this window because it historically has the lowest usage of the year. Following the maintenance, all accounts will be required to use the new single sign-on page. Your password will remain the same; however, you will be prompted to register a recovery phone number the first time you log in. Students who are traveling and expect to have limited access to their phones should register in advance through the IT Services portal before January 17.",
+  "questions": [
+   {
+    "q": "Why was January 18 chosen for the maintenance?",
+    "choices": [
+     "Classes do not start until then.",
+     "The new system was ready that day.",
+     "Few people use the network at that time.",
+     "Students are required to be on campus."
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "'it historically has the lowest usage of the year'라고 했다. 1년 중 사용량이 가장 적은 시간대이다."
+   },
+   {
+    "q": "What will change for users after the maintenance?",
+    "choices": [
+     "They will need a new password.",
+     "They will log in through a new page.",
+     "They will lose access to old emails.",
+     "They will no longer need Wi-Fi."
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "점검 후 'all accounts will be required to use the new single sign-on page'라고 했다. 비밀번호는 그대로이다."
+   },
+   {
+    "q": "What is suggested about a student who will be abroad without phone service in January?",
+    "choices": [
+     "They should register a recovery number early.",
+     "They will be unable to use email all semester.",
+     "They must return to campus by January 17.",
+     "They should change their password."
+    ],
+    "answer": 0,
+    "type": "추론",
+    "explanation": "여행 중 휴대폰 사용이 어려운 학생은 1월 17일 전에 포털에서 미리 등록하라고 했다. 첫 로그인 때 복구 번호 등록이 필요하기 때문이다."
+   }
+  ],
+  "translation": "IT 서비스 안내\n1월 18일 토요일 새벽 1시부터 오전 7시까지 정기 점검으로 이메일, 와이파이, 학습 관리 시스템을 포함한 모든 캠퍼스 네트워크 서비스를 사용할 수 없습니다. 이 시간대는 예년 기록상 1년 중 사용량이 가장 적어 선택했습니다. 점검 후에는 모든 계정이 새 통합 로그인 페이지를 사용해야 합니다. 비밀번호는 그대로이지만, 처음 로그인할 때 복구용 전화번호 등록을 요청받게 됩니다. 여행 중이라 휴대폰 사용이 제한될 것 같은 학생은 1월 17일 전에 IT 서비스 포털에서 미리 등록하세요."
+ },
+ {
+  "id": "rd-068",
+  "level": 4,
+  "doc_type": "웹페이지",
+  "title": "Green Campus Fund: Grant Guidelines",
+  "text": "GREEN CAMPUS FUND - GRANT GUIDELINES\nFunded entirely by a $5 sustainability fee that students voted to adopt in 2021, the Green Campus Fund awards grants of up to $10,000 for projects that reduce the university's environmental impact. Proposals must be led by at least one current student, although partnerships with faculty or staff are strongly encouraged. Successful applications typically include measurable outcomes - for example, estimated reductions in energy use or waste - and a plan for maintaining the project after the grant ends. Projects that primarily benefit a single department or that duplicate existing campus programs are unlikely to be funded. The committee reviews proposals twice a year, in October and March.",
+  "questions": [
+   {
+    "q": "Where does the money for the fund come from?",
+    "choices": [
+     "A donation from a former student",
+     "Faculty research grants",
+     "The city government",
+     "A fee paid by students"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "'Funded entirely by a $5 sustainability fee that students voted to adopt'라고 했다. 학생이 내는 부담금으로 운영된다."
+   },
+   {
+    "q": "Which proposal would most likely be rejected?",
+    "choices": [
+     "A student-led plan to install water refill stations across campus",
+     "A student and staff plan to track food waste in dining halls",
+     "A project to add recycling bins only in the chemistry building",
+     "A project with clear estimates of energy saved"
+    ],
+    "answer": 2,
+    "type": "추론",
+    "explanation": "한 학과에만 주로 이익이 되는 사업은 지원받기 어렵다고 했다. 화학관에만 재활용함을 두는 계획이 이에 해당한다."
+   },
+   {
+    "q": "What is NOT mentioned as a feature of successful applications?",
+    "choices": [
+     "Measurable results",
+     "A large number of student volunteers",
+     "A plan to continue the project",
+     "Estimated reductions in waste"
+    ],
+    "answer": 1,
+    "type": "사실 확인",
+    "explanation": "측정 가능한 결과, 지원 종료 후 유지 계획, 폐기물 감소 추정치는 언급되었지만 많은 학생 자원봉사자는 언급되지 않았다."
+   }
+  ],
+  "translation": "그린 캠퍼스 기금 - 지원 안내\n2021년 학생 투표로 도입한 5달러 지속가능성 부담금으로만 운영되는 그린 캠퍼스 기금은 대학의 환경 영향을 줄이는 사업에 최대 1만 달러를 지원합니다. 제안서는 최소 한 명의 재학생이 주도해야 하며, 교수나 직원과의 협력을 적극 권장합니다. 선정된 신청서는 보통 에너지 사용량이나 폐기물 감소 추정치 같은 측정 가능한 성과와 지원 종료 후 사업을 유지할 계획을 담고 있습니다. 주로 한 학과에만 이익이 되거나 기존 캠퍼스 프로그램과 겹치는 사업은 지원받기 어렵습니다. 위원회는 10월과 3월, 1년에 두 번 제안서를 심사합니다."
+ },
+ {
+  "id": "rd-069",
+  "level": 4,
+  "doc_type": "광고",
+  "title": "Paid Research Participants Wanted",
+  "text": "PARTICIPANTS NEEDED: Sleep and Memory Study\nThe Cognitive Neuroscience Lab is seeking healthy adults aged 18-30 for a study examining how sleep affects memory. Participation involves two evening sessions in the lab, one week apart, each lasting about 90 minutes, as well as wearing a wrist sleep monitor at home for five nights. Participants will be compensated $80 upon completing all parts of the study; those who withdraw early will receive partial payment based on the sessions completed. Individuals who work night shifts or take medication that affects sleep are not eligible. This study has been approved by the university's ethics board.",
+  "questions": [
+   {
+    "q": "What does participation in the study require?",
+    "choices": [
+     "Two lab visits and wearing a device at home",
+     "Sleeping in the lab for five nights",
+     "One long daytime session",
+     "Taking a sleep medication"
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "실험실 저녁 세션 2번과 집에서 5일 밤 동안 손목 수면 측정기를 착용하는 것이 참여 내용이다."
+   },
+   {
+    "q": "What happens if a participant leaves the study after the first session?",
+    "choices": [
+     "They receive nothing.",
+     "They receive the full $80.",
+     "They must repeat the session later.",
+     "They are paid for part of the study."
+    ],
+    "answer": 3,
+    "type": "추론",
+    "explanation": "중간에 그만두면 'partial payment based on the sessions completed'를 받는다고 했다."
+   },
+   {
+    "q": "Who would NOT be eligible for the study?",
+    "choices": [
+     "A 19-year-old college student",
+     "A 28-year-old graduate student",
+     "A 25-year-old nurse who works overnight",
+     "A 22-year-old who exercises daily"
+    ],
+    "answer": 2,
+    "type": "추론",
+    "explanation": "야간 근무를 하는 사람은 참여할 수 없다고 했다. 밤샘 근무를 하는 간호사가 이에 해당한다."
+   }
+  ],
+  "translation": "참가자 모집: 수면과 기억 연구\n인지신경과학 연구실에서 수면이 기억에 미치는 영향을 조사하는 연구에 참여할 18~30세 건강한 성인을 찾습니다. 참여 내용은 일주일 간격으로 실험실에서 각 90분 정도의 저녁 세션 2번, 그리고 집에서 5일 밤 동안 손목 수면 측정기 착용입니다. 모든 과정을 마치면 80달러를 지급하며, 중간에 그만두면 마친 세션에 따라 일부를 지급합니다. 야간 근무자나 수면에 영향을 주는 약을 복용하는 사람은 참여할 수 없습니다. 이 연구는 대학 윤리위원회의 승인을 받았습니다."
+ },
+ {
+  "id": "rd-070",
+  "level": 4,
+  "doc_type": "일정표",
+  "title": "Conference Travel Grant Timeline",
+  "text": "GRADUATE CONFERENCE TRAVEL GRANTS - SPRING CYCLE\nFeb. 1: Online application opens\nFeb. 28: Applications due (proof that your paper or poster was accepted is required)\nMar. 15: Award decisions sent by email\nAfter travel: Submit original receipts within 30 days of returning\nNotes: Awards cover up to $750 for domestic and $1,200 for international conferences. Students may receive only one award per academic year. Applicants whose acceptance is still pending by the due date may apply in the fall cycle for conferences taking place before December.",
+  "questions": [
+   {
+    "q": "What must applicants include by February 28?",
+    "choices": [
+     "Original receipts",
+     "Proof of acceptance to the conference",
+     "A letter from the conference organizer",
+     "Their travel tickets"
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "마감일 항목에 '(proof that your paper or poster was accepted is required)'라고 나온다. 영수증은 여행 후에 낸다."
+   },
+   {
+    "q": "What can be inferred about a student who won a grant last fall in the same academic year?",
+    "choices": [
+     "They cannot receive another award this spring.",
+     "They can receive up to $1,200 this spring.",
+     "They must apply before February 1.",
+     "They need to return the previous award."
+    ],
+    "answer": 0,
+    "type": "추론",
+    "explanation": "'Students may receive only one award per academic year'라고 했으므로 같은 학년도에 이미 받았다면 이번 봄에는 받을 수 없다."
+   },
+   {
+    "q": "What should a student do if they have not heard whether their paper was accepted by February 28?",
+    "choices": [
+     "Apply anyway and send proof later",
+     "Contact the award committee in March",
+     "Pay for the trip and request reimbursement",
+     "Apply in the fall cycle"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "마감일까지 채택 여부가 정해지지 않은 지원자는 12월 전에 열리는 학회라면 가을 차수에 지원할 수 있다고 했다."
+   }
+  ],
+  "translation": "대학원생 학회 출장 지원금 - 봄 차수\n2월 1일: 온라인 신청 시작\n2월 28일: 신청 마감 (논문이나 포스터가 채택되었다는 증빙 필요)\n3월 15일: 선정 결과 이메일 발송\n출장 후: 귀국 후 30일 안에 영수증 원본 제출\n참고: 국내 학회는 최대 750달러, 해외 학회는 최대 1,200달러를 지원합니다. 학생은 학년도당 한 번만 받을 수 있습니다. 마감일까지 채택 여부가 정해지지 않은 지원자는 12월 이전에 열리는 학회라면 가을 차수에 지원할 수 있습니다."
+ },
+ {
+  "id": "rd-071",
+  "level": 4,
+  "doc_type": "문자 메시지",
+  "title": "Messages about a Dorm Leak",
+  "text": "Ethan (RA): Hey Ms. Park, there's water coming through the ceiling in room 214. Looks like it's from the bathroom above.\nMs. Park (Housing): Thanks for flagging it. Is anyone's stuff damaged?\nEthan (RA): Some books and a laptop bag got wet. The residents moved the rest to the hallway.\nMs. Park (Housing): OK. Maintenance is on its way. Can you shut off the water to 314 in the meantime? The valve's behind the toilet.\nEthan (RA): Done. Should the 214 residents stay somewhere else tonight?\nMs. Park (Housing): Let's see what maintenance says first. Ask them to photograph anything damaged - they'll need it for a claim.",
+  "questions": [
+   {
+    "q": "In the messages, the word \"flagging\" is closest in meaning to",
+    "choices": [
+     "fixing",
+     "ignoring",
+     "reporting",
+     "cleaning"
+    ],
+    "answer": 2,
+    "type": "어휘",
+    "explanation": "flag it은 '문제를 알리다, 짚어 주다'라는 뜻이다. 누수를 보고해 줘서 고맙다는 의미이므로 reporting과 같다."
+   },
+   {
+    "q": "Where does the leak most likely come from?",
+    "choices": [
+     "Room 214's bathroom",
+     "A bathroom in room 314",
+     "The hallway",
+     "The building's roof"
+    ],
+    "answer": 1,
+    "type": "추론",
+    "explanation": "이선이 '위층 화장실'에서 오는 것 같다고 했고, 박 선생님이 314호의 물을 잠그라고 했으므로 314호 화장실이 원인이다."
+   },
+   {
+    "q": "Why does Ms. Park want the residents to take photos?",
+    "choices": [
+     "To support a request for compensation",
+     "To show maintenance where to work",
+     "To post on social media",
+     "To decide on a new room"
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "'they'll need it for a claim'이라고 했다. claim은 피해 보상 청구를 말한다."
+   }
+  ],
+  "translation": "이선(사감 학생): 박 선생님, 214호 천장에서 물이 새요. 위층 화장실에서 오는 것 같아요.\n박 선생님(주거팀): 알려 줘서 고마워요. 누구 물건이 상했나요?\n이선: 책 몇 권하고 노트북 가방이 젖었어요. 나머지는 학생들이 복도로 옮겼어요.\n박 선생님: 알겠어요. 시설팀이 가는 중이에요. 그동안 314호 물을 잠가 줄 수 있어요? 밸브는 변기 뒤에 있어요.\n이선: 잠갔어요. 214호 학생들은 오늘 밤 다른 곳에서 지내야 할까요?\n박 선생님: 시설팀 얘기를 먼저 들어 봐요. 상한 물건은 사진을 찍어 두라고 해 주세요. 보상 청구할 때 필요할 거예요."
+ },
+ {
+  "id": "rd-072",
+  "level": 4,
+  "doc_type": "공지",
+  "title": "Open Textbook Initiative",
+  "text": "ANNOUNCEMENT: Open Textbook Initiative\nBeginning next fall, eleven high-enrollment introductory courses will replace commercial textbooks with open educational resources - materials that are free to access online and may be printed at low cost. Faculty participating in the initiative received summer stipends to review and adapt existing open materials. The change is projected to save students roughly $400,000 per year. Critics have expressed concern that some open textbooks lack the supplementary materials, such as online homework systems, that publishers provide; the Center for Teaching will therefore offer support to instructors who wish to build their own practice sets. Students may continue to purchase commercial editions if they prefer.",
+  "questions": [
+   {
+    "q": "What is the main purpose of the announcement?",
+    "choices": [
+     "To ask faculty to write new textbooks",
+     "To introduce a new online homework system",
+     "To announce higher textbook prices",
+     "To describe a plan to replace paid textbooks in some courses"
+    ],
+    "answer": 3,
+    "type": "주제·목적",
+    "explanation": "수강생이 많은 입문 과목 11개에서 상업 교재를 무료 개방형 교재로 바꾼다는 계획을 알리는 공지이다."
+   },
+   {
+    "q": "What concern has been raised about open textbooks?",
+    "choices": [
+     "They are too expensive to print.",
+     "They are not allowed in introductory courses.",
+     "They may not include extra resources like online homework.",
+     "They are difficult to find online."
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "비판자들은 일부 개방형 교재에 출판사가 제공하는 온라인 숙제 시스템 같은 'supplementary materials'가 없다는 점을 우려했다."
+   },
+   {
+    "q": "Why does the announcement mention the Center for Teaching?",
+    "choices": [
+     "To name the office that chose the courses",
+     "To explain how the concern will be addressed",
+     "To show where students can buy books",
+     "To announce a new course"
+    ],
+    "answer": 1,
+    "type": "글의 구조",
+    "explanation": "'therefore'로 이어지며 교수학습센터가 연습 문제 제작을 돕겠다고 했다. 앞서 나온 우려에 대한 대응책을 제시한 것이다."
+   }
+  ],
+  "translation": "공지: 개방형 교재 도입 계획\n내년 가을부터 수강생이 많은 입문 과목 11개가 상업 교재 대신 개방형 교육 자료를 사용합니다. 이는 온라인에서 무료로 볼 수 있고 저렴하게 인쇄할 수도 있는 자료입니다. 참여 교수들은 여름 동안 장려금을 받고 기존 개방형 자료를 검토하고 수정했습니다. 이 변화로 학생들은 해마다 약 40만 달러를 절약할 것으로 예상됩니다. 일부 개방형 교재에는 출판사가 제공하는 온라인 숙제 시스템 같은 보조 자료가 없다는 우려도 제기되었습니다. 그래서 교수학습센터는 자체 연습 문제를 만들고자 하는 교수들을 지원할 예정입니다. 원하는 학생은 계속 상업 교재를 구입할 수 있습니다."
+ },
+ {
+  "id": "rd-073",
+  "level": 5,
+  "doc_type": "이메일",
+  "title": "Re: Composition of Your Thesis Committee",
+  "text": "Subject: Re: Composition of your thesis committee\n\nDear Mr. Abara,\nI have reviewed your proposed committee. While I appreciate your rationale for including Dr. Wen, whose work on coastal sediment transport is clearly germane to your project, Graduate School policy stipulates that at least two of the three members hold appointments in our department; Dr. Wen, as an adjunct, does not count toward that requirement. You therefore have two options: you may retain Dr. Wen as a fourth, non-voting member, or you may petition the Graduate Committee for an exception, though I should caution that such petitions are seldom granted absent compelling circumstances. Whichever route you choose, please notify me by April 1 so that your proposal defense is not delayed.\nRegards,\nDr. Ingrid Solheim, Director of Graduate Studies",
+  "questions": [
+   {
+    "q": "Why is Mr. Abara's proposed committee a problem?",
+    "choices": [
+     "It does not include enough members from the department.",
+     "Dr. Wen's research is unrelated to his project.",
+     "It has more than four members.",
+     "Dr. Wen has refused to serve."
+    ],
+    "answer": 0,
+    "type": "세부 사항",
+    "explanation": "규정상 세 명 중 최소 두 명이 학과 소속이어야 하는데 겸임인 웬 박사는 여기에 포함되지 않는다. 연구 분야는 오히려 관련이 깊다(germane)고 했다."
+   },
+   {
+    "q": "In the email, the word \"germane\" is closest in meaning to",
+    "choices": [
+     "unfamiliar",
+     "opposed",
+     "superior",
+     "relevant"
+    ],
+    "answer": 3,
+    "type": "어휘",
+    "explanation": "germane는 '밀접한 관련이 있는'이라는 뜻이다. 웬 박사의 연구가 프로젝트와 분명히 관련 있다는 의미로 relevant와 같다."
+   },
+   {
+    "q": "What does Dr. Solheim imply about petitioning for an exception?",
+    "choices": [
+     "It is the option she recommends most.",
+     "It is required before April 1.",
+     "It is unlikely to succeed without strong reasons.",
+     "It will delay the proposal defense."
+    ],
+    "answer": 2,
+    "type": "추론",
+    "explanation": "'such petitions are seldom granted absent compelling circumstances'라고 경고했다. 설득력 있는 사정이 없으면 거의 받아들여지지 않는다는 뜻이다."
+   }
+  ],
+  "translation": "제목: 회신: 학위논문 심사위원회 구성\n\n아바라 학생에게,\n제안한 위원회 구성을 검토했습니다. 연안 퇴적물 이동에 관한 연구가 학생의 프로젝트와 분명히 관련 있는 웬 박사를 포함하려는 이유는 이해합니다. 하지만 대학원 규정상 세 명 중 최소 두 명은 우리 학과 소속이어야 하며, 겸임 교수인 웬 박사는 이 요건에 포함되지 않습니다. 따라서 선택지는 두 가지입니다. 웬 박사를 의결권 없는 네 번째 위원으로 두거나, 대학원 위원회에 예외를 청원하는 것입니다. 다만 그런 청원은 설득력 있는 사정이 없으면 거의 받아들여지지 않는다는 점을 미리 말해 둡니다. 어느 쪽을 택하든 계획서 심사가 늦어지지 않도록 4월 1일까지 알려 주세요.\n잉그리드 솔하임, 대학원 과정 책임자"
+ },
+ {
+  "id": "rd-074",
+  "level": 5,
+  "doc_type": "안내문",
+  "title": "Copyright and Course Materials",
+  "text": "USING COPYRIGHTED MATERIAL IN COURSES: GUIDANCE FOR INSTRUCTORS\nThe fair use provision of copyright law permits limited use of protected works for teaching without the owner's permission, but it is not a blanket exemption for education. Whether a particular use is fair depends on several factors, including the proportion of the work used and whether the use undermines the market for the original. Posting a single chapter to a password-protected course site for one semester is generally defensible; posting the same chapter every term, or compiling excerpts that collectively substitute for purchasing a book, is far less so. When in doubt, link to library-licensed electronic copies, which sidesteps the question entirely, or consult the Copyright Office before the term begins.",
+  "questions": [
+   {
+    "q": "What is the main point of the first sentence?",
+    "choices": [
+     "Educational use of copyrighted works is always allowed.",
+     "Fair use allows some educational use but has limits.",
+     "Instructors must always ask permission from owners.",
+     "Copyright law does not apply to universities."
+    ],
+    "answer": 1,
+    "type": "주제·목적",
+    "explanation": "공정 이용은 허락 없이 제한적인 교육 이용을 허용하지만 'not a blanket exemption for education'이라고 했다. 교육용이라고 무조건 면제되는 것은 아니다."
+   },
+   {
+    "q": "Which use would most likely be considered LEAST defensible?",
+    "choices": [
+     "Posting excerpts that together replace buying the book",
+     "Linking to a library-licensed e-book",
+     "Posting one chapter for a single semester",
+     "Consulting the Copyright Office"
+    ],
+    "answer": 0,
+    "type": "추론",
+    "explanation": "발췌문을 모아 책 구매를 대신하게 만드는 것은 'far less so', 즉 정당화하기 훨씬 어렵다고 했다. 원저작물 시장을 해치기 때문이다."
+   },
+   {
+    "q": "Why does the guide recommend linking to library-licensed copies?",
+    "choices": [
+     "They are cheaper for students to print.",
+     "They are required by the Copyright Office.",
+     "They are updated more often.",
+     "They avoid the fair use question altogether."
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "도서관 라이선스 전자본에 링크하면 'sidesteps the question entirely'라고 했다. 공정 이용 여부를 따질 필요 자체가 없어진다는 뜻이다."
+   }
+  ],
+  "translation": "강의에서 저작물 이용하기: 교수자 안내\n저작권법의 공정 이용 조항은 소유자의 허락 없이 보호받는 저작물을 교육에 제한적으로 이용하는 것을 허용하지만, 교육이라고 해서 전면적으로 면제되는 것은 아닙니다. 특정 이용이 공정한지는 이용한 분량의 비율, 원저작물의 시장을 해치는지 등 여러 요소에 달려 있습니다. 비밀번호로 보호되는 강의 사이트에 한 장(章)을 한 학기 동안 올리는 것은 대체로 정당화할 수 있지만, 같은 장을 학기마다 올리거나 모아 보면 책 구매를 대신하게 되는 발췌문을 엮는 것은 훨씬 정당화하기 어렵습니다. 확신이 서지 않으면 도서관이 라이선스를 가진 전자본에 링크하세요. 그러면 이 문제를 완전히 피할 수 있습니다. 또는 학기 시작 전에 저작권 사무실에 문의하세요."
+ },
+ {
+  "id": "rd-075",
+  "level": 5,
+  "doc_type": "공지",
+  "title": "Temporary Pause on New Student Organizations",
+  "text": "NOTICE FROM THE OFFICE OF STUDENT LIFE\nEffective immediately, the registration of new student organizations is suspended until the end of the semester. This pause is not a response to any particular group's conduct; rather, it follows an internal audit revealing that nearly a third of the 410 registered organizations have been inactive for over a year while continuing to hold reserved meeting space and access to activity funds. During the pause, we will contact every organization to confirm its current leadership and activity. Groups that do not respond by November 30 will be designated inactive, though they may be reinstated later. Students hoping to form a new organization are encouraged to submit a statement of interest now so that their applications can be prioritized when registration reopens.",
+  "questions": [
+   {
+    "q": "Why has the registration of new organizations been paused?",
+    "choices": [
+     "A student group broke university rules.",
+     "The office is moving to a new building.",
+     "Many existing groups are inactive but still use resources.",
+     "There is no more activity funding this year."
+    ],
+    "answer": 2,
+    "type": "세부 사항",
+    "explanation": "감사 결과 등록 단체의 거의 3분의 1이 1년 넘게 활동이 없는데도 회의 공간과 활동비를 계속 보유하고 있었기 때문이다. 특정 단체의 행동 때문이 아니라고 분명히 밝혔다."
+   },
+   {
+    "q": "What will happen to an organization that does not respond by November 30?",
+    "choices": [
+     "It will be permanently dissolved.",
+     "It will be classified as inactive.",
+     "Its leaders will face discipline.",
+     "It will lose its funding for five years."
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "'will be designated inactive, though they may be reinstated later'라고 했다. 영구 해산이 아니라 나중에 복원될 수 있다."
+   },
+   {
+    "q": "Why does the notice encourage students to submit a statement of interest now?",
+    "choices": [
+     "To gain priority when registration reopens",
+     "To avoid being designated inactive",
+     "To reserve meeting space for this semester",
+     "To take part in the audit"
+    ],
+    "answer": 0,
+    "type": "추론",
+    "explanation": "지금 관심 표명서를 내면 'their applications can be prioritized when registration reopens'라고 했다. 등록 재개 시 우선 처리를 받기 위해서이다."
+   }
+  ],
+  "translation": "학생생활처 공지\n지금부터 학기 말까지 신규 학생 단체 등록을 중단합니다. 이번 중단은 특정 단체의 행동 때문이 아닙니다. 내부 감사 결과 등록된 410개 단체 중 거의 3분의 1이 1년 넘게 활동하지 않으면서도 예약된 회의 공간과 활동비 이용 권한을 계속 갖고 있는 것으로 드러났기 때문입니다. 중단 기간 동안 모든 단체에 연락해 현재 대표와 활동 여부를 확인할 예정입니다. 11월 30일까지 답하지 않는 단체는 휴면 단체로 지정되지만 나중에 복원될 수 있습니다. 새 단체를 만들려는 학생은 등록이 재개될 때 우선 처리될 수 있도록 지금 관심 표명서를 제출하기를 권합니다."
+ },
+ {
+  "id": "rd-076",
+  "level": 5,
+  "doc_type": "웹페이지",
+  "title": "The Ombuds Office: What We Do",
+  "text": "THE OMBUDS OFFICE\nThe Ombuds Office offers a confidential, impartial, and informal space for students, faculty, and staff to discuss workplace or academic concerns. Unlike formal grievance channels, we do not conduct investigations, keep records that identify visitors, or advocate for any party; our role is to help you clarify your options and, where appropriate, facilitate communication. It is important to understand, however, that speaking with an ombuds does not constitute notice to the university. If you wish the institution to take formal action - for instance, regarding discrimination - you must report the matter through the appropriate office. The sole exception to our confidentiality is a situation involving an imminent risk of serious harm.",
+  "questions": [
+   {
+    "q": "What is NOT something the Ombuds Office does?",
+    "choices": [
+     "Helps people understand their options",
+     "Facilitates communication between parties",
+     "Listens to concerns confidentially",
+     "Conducts investigations into complaints"
+    ],
+    "answer": 3,
+    "type": "사실 확인",
+    "explanation": "'we do not conduct investigations'라고 분명히 밝혔다. 선택지 정리, 소통 지원, 비밀 상담은 하는 일이다."
+   },
+   {
+    "q": "What can be inferred about a student who tells only the ombuds about discrimination by a professor?",
+    "choices": [
+     "The university will automatically begin an investigation.",
+     "The ombuds will act as the student's advocate.",
+     "The university will not be formally informed of the problem.",
+     "The professor will be notified immediately."
+    ],
+    "answer": 2,
+    "type": "추론",
+    "explanation": "옴부즈와 이야기하는 것은 'does not constitute notice to the university'라고 했다. 공식 조치를 원하면 해당 부서에 따로 신고해야 한다."
+   },
+   {
+    "q": "In the passage, the word \"imminent\" is closest in meaning to",
+    "choices": [
+     "widely known",
+     "about to happen",
+     "past",
+     "imagined"
+    ],
+    "answer": 1,
+    "type": "어휘",
+    "explanation": "imminent는 '임박한, 곧 일어날'이라는 뜻이다. about to happen과 같다."
+   }
+  ],
+  "translation": "옴부즈 사무실\n옴부즈 사무실은 학생, 교수, 직원이 업무나 학업상의 고민을 이야기할 수 있는 비밀이 보장되고 중립적이며 비공식적인 공간을 제공합니다. 공식 고충 처리 경로와 달리 저희는 조사를 하지 않고, 방문자를 식별할 수 있는 기록을 남기지 않으며, 어느 쪽도 대변하지 않습니다. 저희의 역할은 여러분이 선택지를 정리하도록 돕고 적절한 경우 소통을 돕는 것입니다. 다만 옴부즈와 이야기하는 것이 대학에 공식적으로 알린 것이 되지는 않는다는 점을 꼭 알아 두세요. 예를 들어 차별 문제로 대학이 공식 조치를 하길 원한다면 해당 부서를 통해 신고해야 합니다. 비밀 유지의 유일한 예외는 심각한 위해가 임박한 상황입니다."
+ },
+ {
+  "id": "rd-077",
+  "level": 5,
+  "doc_type": "광고",
+  "title": "Science Journalism Fellowship",
+  "text": "THE HARTWELL FELLOWSHIP IN SCIENCE JOURNALISM\nAre you a doctoral student who can explain your research to your grandparents? The Hartwell Fellowship places graduate students in the science sections of national newsrooms for a ten-week summer residency, during which fellows report and write under the guidance of an editor. No journalism experience is required; indeed, past fellows have included a soil microbiologist and a topologist. What we look for is an ability to translate complex ideas without distorting them. Applicants should submit two pieces of no more than 800 words each, written for a general audience, at least one of which addresses a topic outside their own field. Fellows receive a $9,000 stipend plus housing.",
+  "questions": [
+   {
+    "q": "Why does the advertisement mention a soil microbiologist and a topologist?",
+    "choices": [
+     "To show that applicants need not have a journalism background",
+     "To list the fields the fellowship prefers",
+     "To name the editors who guide the fellows",
+     "To describe the topics fellows will cover"
+    ],
+    "answer": 0,
+    "type": "글의 구조",
+    "explanation": "'No journalism experience is required' 뒤에 'indeed'로 이어 언론과 무관한 전공자도 선발되었다는 예를 든 것이다."
+   },
+   {
+    "q": "What quality is the fellowship mainly seeking?",
+    "choices": [
+     "Experience working in a newsroom",
+     "Strong editing skills",
+     "Expertise in more than one scientific field",
+     "The ability to explain difficult ideas accurately and simply"
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "'an ability to translate complex ideas without distorting them'이라고 했다. 왜곡 없이 쉽게 설명하는 능력이다."
+   },
+   {
+    "q": "Which application would fail to meet the requirements?",
+    "choices": [
+     "Two 700-word articles, one about an unfamiliar field",
+     "Two 800-word articles for general readers",
+     "Two articles written only about the applicant's own research",
+     "Two articles, one about astronomy by a biology student"
+    ],
+    "answer": 2,
+    "type": "추론",
+    "explanation": "두 글 중 최소 하나는 자기 분야 밖의 주제를 다뤄야 한다. 둘 다 자기 연구만 다루면 요건을 충족하지 못한다."
+   }
+  ],
+  "translation": "하트웰 과학 저널리즘 펠로십\n자신의 연구를 조부모님께 설명할 수 있는 박사과정생인가요? 하트웰 펠로십은 대학원생을 전국 언론사 과학 부서에 배치해 10주간 여름 체류 근무를 하게 하며, 그동안 펠로는 편집자의 지도 아래 취재하고 기사를 씁니다. 언론 경험은 필요 없습니다. 실제로 지난 펠로 중에는 토양 미생물학자와 위상수학자도 있었습니다. 저희가 찾는 것은 복잡한 개념을 왜곡하지 않고 풀어내는 능력입니다. 지원자는 일반 독자를 위해 쓴 800단어 이하의 글 두 편을 제출해야 하며, 그중 최소 한 편은 자기 분야 밖의 주제를 다뤄야 합니다. 펠로는 9,000달러의 장려금과 숙소를 받습니다."
+ },
+ {
+  "id": "rd-078",
+  "level": 5,
+  "doc_type": "일정표",
+  "title": "Doctoral Defense Procedures",
+  "text": "DOCTORAL DISSERTATION DEFENSE - REQUIRED TIMELINE\n6 weeks before defense: Distribute complete draft to all committee members\n4 weeks before: Committee members confirm in writing that the draft is defensible\n3 weeks before: Submit defense announcement to the Graduate School (defenses are open to the public)\nDefense day: Public presentation (45 min.), followed by closed examination\nWithin 60 days after: Submit final, corrected dissertation\nNotes: If any member judges the draft not yet defensible, the defense must be rescheduled; it may not proceed with conditional approval. Students who miss the 60-day deadline must re-register for one credit to retain student status.",
+  "questions": [
+   {
+    "q": "What must happen four weeks before the defense?",
+    "choices": [
+     "The student announces the defense publicly.",
+     "Committee members confirm in writing that the draft is ready to defend.",
+     "The student submits the final dissertation.",
+     "The committee receives the complete draft."
+    ],
+    "answer": 1,
+    "type": "세부 사항",
+    "explanation": "'4 weeks before: Committee members confirm in writing that the draft is defensible'이라고 나온다. 초안 배포는 6주 전이다."
+   },
+   {
+    "q": "What would happen if one committee member thought the draft was not ready?",
+    "choices": [
+     "The student would have to postpone the defense.",
+     "The defense would go ahead with conditions.",
+     "The member would be replaced.",
+     "The defense would be closed to the public."
+    ],
+    "answer": 0,
+    "type": "추론",
+    "explanation": "한 명이라도 아직 심사 불가라고 판단하면 'the defense must be rescheduled'라고 했고, 조건부 승인으로 진행할 수 없다."
+   },
+   {
+    "q": "What is true about a student who submits the corrected dissertation 75 days after the defense?",
+    "choices": [
+     "Their degree will be canceled.",
+     "They must defend again.",
+     "They will need new committee members.",
+     "They must register for one credit to keep student status."
+    ],
+    "answer": 3,
+    "type": "사실 확인",
+    "explanation": "60일 기한을 넘기면 'must re-register for one credit to retain student status'라고 했다. 75일은 기한을 넘긴 경우이다."
+   }
+  ],
+  "translation": "박사학위 논문 심사 - 필수 일정\n심사 6주 전: 모든 심사위원에게 완성된 초안 배포\n4주 전: 심사위원이 초안이 심사 가능한 수준임을 서면으로 확인\n3주 전: 대학원에 심사 공고 제출 (심사는 일반에 공개)\n심사 당일: 공개 발표(45분) 후 비공개 질의\n심사 후 60일 이내: 수정한 최종 논문 제출\n참고: 심사위원 중 한 명이라도 초안이 아직 심사 가능한 수준이 아니라고 판단하면 일정을 다시 잡아야 하며, 조건부 승인으로 진행할 수 없습니다. 60일 기한을 넘긴 학생은 학생 신분을 유지하려면 1학점을 다시 등록해야 합니다."
+ },
+ {
+  "id": "rd-079",
+  "level": 5,
+  "doc_type": "문자 메시지",
+  "title": "Messages between Co-authors",
+  "text": "Mira: Just read the reviewers' comments. Reviewer 2 is not pulling any punches.\nTheo: I saw. Honestly, though, most of it is fair. The sample size critique stings, but it's legitimate.\nMira: Agreed. Which brings me to something awkward - if we rerun the analysis with the new data, you'd be doing most of the work. Should we revisit the author order?\nTheo: I appreciate you raising it. But you designed the study and wrote the bulk of the paper. I don't think one more round of analysis changes that.\nMira: That's generous. How about we make it explicit in the contribution statement, then?\nTheo: Works for me. Let's draft the response letter first and settle the details on Thursday.",
+  "questions": [
+   {
+    "q": "What does Mira mean when she writes that Reviewer 2 \"is not pulling any punches\"?",
+    "choices": [
+     "The reviewer agreed with every point.",
+     "The reviewer did not finish reading the paper.",
+     "The reviewer criticized the paper very directly.",
+     "The reviewer asked for a fight."
+    ],
+    "answer": 2,
+    "type": "어휘",
+    "explanation": "not pull any punches는 '사정을 봐주지 않고 직설적으로 말하다'라는 뜻이다. 심사위원 2가 매우 날카롭게 비판했다는 의미이다."
+   },
+   {
+    "q": "Why does Mira suggest revisiting the author order?",
+    "choices": [
+     "Theo designed the study.",
+     "Theo would do most of the new analysis.",
+     "Reviewer 2 recommended it.",
+     "She wants to withdraw from the paper."
+    ],
+    "answer": 1,
+    "type": "추론",
+    "explanation": "새 데이터로 분석을 다시 하면 'you'd be doing most of the work'라고 했다. 테오의 기여가 커지므로 저자 순서를 다시 생각해 보자는 것이다."
+   },
+   {
+    "q": "What will the co-authors most likely do before Thursday?",
+    "choices": [
+     "Write the response letter to the reviewers",
+     "Collect a larger sample",
+     "Change the author order",
+     "Submit the paper to another journal"
+    ],
+    "answer": 0,
+    "type": "추론",
+    "explanation": "테오가 'Let's draft the response letter first and settle the details on Thursday'라고 제안했고 미라도 동의하는 흐름이다."
+   }
+  ],
+  "translation": "미라: 방금 심사평 읽었어. 심사위원 2는 하나도 봐주지 않네.\n테오: 나도 봤어. 근데 솔직히 대부분 맞는 말이야. 표본 크기 지적은 아프지만 타당해.\n미라: 동의해. 그래서 좀 어색한 얘기인데, 새 데이터로 분석을 다시 돌리면 일은 대부분 네가 하게 될 거야. 저자 순서를 다시 생각해 봐야 할까?\n테오: 먼저 얘기해 줘서 고마워. 하지만 연구 설계도 네가 했고 논문도 대부분 네가 썼잖아. 분석 한 번 더 한다고 그게 바뀌진 않는다고 생각해.\n미라: 마음 써 줘서 고마워. 그럼 기여 명세에 분명히 적는 건 어때?\n테오: 좋아. 답변서 초안부터 쓰고 세부 사항은 목요일에 정하자."
+ },
+ {
+  "id": "rd-080",
+  "level": 5,
+  "doc_type": "이메일",
+  "title": "Journal Subscription Review",
+  "text": "Subject: Proposed journal cancellations - faculty input requested\n\nDear colleagues,\nSubscription costs for academic journals have risen by an average of 6 percent annually, while the library's acquisitions budget has remained flat for four years. As a result, we must reduce our serials spending by $310,000 next year. Our initial list of candidates for cancellation is based on cost per use, but we recognize that usage data alone can be misleading: a title consulted rarely may nonetheless be indispensable to a small research group. Accordingly, before any decisions are finalized, we invite faculty to review the attached list and to identify titles that are critical to their teaching or research, along with a brief justification. Please note that titles available through our consortium's shared access agreement are not on the list.\nRegards,\nCollections Strategy Team, University Libraries",
+  "questions": [
+   {
+    "q": "Why must the library cancel some subscriptions?",
+    "choices": [
+     "Faculty requested fewer journals.",
+     "Many journals have stopped publishing.",
+     "The consortium agreement has ended.",
+     "Costs are rising while the budget has not increased."
+    ],
+    "answer": 3,
+    "type": "세부 사항",
+    "explanation": "구독료는 해마다 평균 6%씩 오르는데 도서 구입 예산은 4년째 그대로이기 때문이다."
+   },
+   {
+    "q": "Why does the library acknowledge that usage data can be misleading?",
+    "choices": [
+     "To justify raising the budget",
+     "To criticize the journals' publishers",
+     "To explain why it is asking for faculty input",
+     "To show that the list is final"
+    ],
+    "answer": 2,
+    "type": "글의 구조",
+    "explanation": "이용률이 낮아도 소규모 연구 그룹에는 필수일 수 있다고 인정한 뒤 'Accordingly'로 교수진 의견을 요청한다. 의견 요청의 근거를 제시한 것이다."
+   },
+   {
+    "q": "In the email, the word \"indispensable\" is closest in meaning to",
+    "choices": [
+     "outdated",
+     "essential",
+     "expensive",
+     "optional"
+    ],
+    "answer": 1,
+    "type": "어휘",
+    "explanation": "indispensable은 '없어서는 안 될, 필수적인'이라는 뜻이다. essential과 같다."
+   }
+  ],
+  "translation": "제목: 학술지 구독 해지안 - 교수진 의견 요청\n\n교수님들께,\n학술지 구독료는 해마다 평균 6%씩 올랐지만 도서관 자료 구입 예산은 4년째 그대로입니다. 그 결과 내년에는 연속간행물 지출을 31만 달러 줄여야 합니다. 해지 후보 1차 목록은 이용 1회당 비용을 기준으로 했지만, 이용 자료만으로는 오해가 생길 수 있음을 알고 있습니다. 거의 이용되지 않는 학술지라도 소규모 연구 그룹에는 없어서는 안 될 수 있기 때문입니다. 따라서 최종 결정 전에 교수님들께서 첨부 목록을 검토하시고, 강의나 연구에 꼭 필요한 학술지를 간단한 사유와 함께 알려 주시기 바랍니다. 컨소시엄 공동 이용 협정으로 볼 수 있는 학술지는 목록에 없습니다.\n대학도서관 장서전략팀"
+ }
+]
