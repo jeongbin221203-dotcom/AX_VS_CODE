@@ -13,6 +13,7 @@
 """
 from __future__ import annotations
 
+import calendar
 import hashlib
 import json
 import os
@@ -93,7 +94,7 @@ SALE_CANCELLED = "취소"                 # 수금상태와 별개인 매출 취
 TAX_TYPES = ["과세", "영세", "면세"]       # 과세 10%, 영세율 0%(수출 등), 면세(계산서 발행)
 VAT_RATE = {"과세": 0.10, "영세": 0.0, "면세": 0.0}
 ACTIVE_SALE = "status <> '취소'"         # 실적·채권 집계에서 취소 매출 제외
-AR_BUCKETS = ["정상", "30일 초과", "60일 초과", "90일 초과"]
+AR_BUCKETS = ["정상", "1~30일", "31~60일", "61~90일", "90일 초과"]   # 결제기일 경과일 (enterprise.ar_aging)
 PAYMENT_TERMS = [0, 15, 30, 45, 60, 90]
 
 
@@ -153,6 +154,14 @@ def set_context(actor: str = "system", owner_scope: Optional[Iterable[int]] = No
     _ACTOR.set(actor or "system")
     _ACTOR_ID.set(actor_id)
     _SCOPE.set(None if owner_scope is None else tuple(int(i) for i in owner_scope))
+
+
+_IP: ContextVar[Optional[str]] = ContextVar("sales_ip", default=None)
+
+
+def set_ip(ip: Optional[str]) -> None:
+    """요청을 보낸 IP — 감사로그 내용에 함께 남긴다(자재관리 감사로그와 같은 항목)."""
+    _IP.set(ip)
 
 
 def current_actor() -> str:
@@ -243,6 +252,9 @@ def audit(action: str, entity: str, entity_id: int | None = None,
     """
     text = (json.dumps(detail, ensure_ascii=False, default=str)
             if not isinstance(detail, (str, type(None))) else detail)
+    ip = _IP.get()
+    if ip and isinstance(detail, (dict, type(None))):
+        text = json.dumps({**(detail or {}), "접속IP": ip}, ensure_ascii=False, default=str)
     record = {"ts": _now(), "actor": _ACTOR.get(), "actor_id": _ACTOR_ID.get(), "action": action,
               "entity": entity, "entity_id": entity_id, "detail": text}
     try:
@@ -438,6 +450,23 @@ def name_key(name: Any) -> str:
     return re.sub(r"[\s\-_.,·()\[\]]", "", _CORP_WORDS.sub("", str(name or ""))).lower()
 
 
+def valid_biz_no(value: Any) -> bool:
+    """사업자등록번호 10자리 검증번호 (국세청 가중치 1,3,7,1,3,7,1,3,5). documents.valid_biz_no 와 같은 규칙."""
+    d = [int(c) for c in biz_digits(value)]
+    if len(d) != 10:
+        return False
+    total = sum(a * w for a, w in zip(d[:9], [1, 3, 7, 1, 3, 7, 1, 3, 5])) + (d[8] * 5) // 10
+    return (10 - total % 10) % 10 == d[9]
+
+
+def _with_check_digit(raw: str) -> str:
+    """샘플용: 앞 9자리는 그대로 두고 마지막 자리를 검증번호로 맞춘다 (xxx-xx-xxxxx)."""
+    d = [int(c) for c in biz_digits(raw)][:9]
+    total = sum(a * w for a, w in zip(d, [1, 3, 7, 1, 3, 7, 1, 3, 5])) + (d[8] * 5) // 10
+    full = "".join(map(str, d)) + str((10 - total % 10) % 10)
+    return f"{full[:3]}-{full[3:5]}-{full[5:]}"
+
+
 def biz_digits(value: Any) -> str:
     return re.sub(r"\D", "", str(value or ""))
 
@@ -459,7 +488,10 @@ def find_duplicates(name: str, biz_no: str, exclude_id: int | None = None,
     return same_biz, similar
 
 
-def upsert_customer(data: dict, db_path: str | None = None, confirm_similar: bool = True) -> int:
+ERP_LOCKED_FIELDS = ("name", "biz_no", "erp_code", "payment_terms", "credit_limit")
+
+
+def upsert_customer(data: dict, db_path: str | None = None, confirm_similar: bool = True, source: str = "화면") -> int:
     """거래처 신규 등록 또는 수정. data['id'] 가 있으면 수정.
 
     data['row_version'] 을 넘기면 그 사이 다른 사람이 수정했는지 확인한다(동시 수정 충돌 방지).
@@ -468,6 +500,12 @@ def upsert_customer(data: dict, db_path: str | None = None, confirm_similar: boo
     """
     if not str(data.get("name", "")).strip():
         raise ValueError("거래처명은 필수입니다.")
+    new_biz = str(data.get("biz_no") or "").strip()
+    if new_biz and not valid_biz_no(new_biz):
+        # 이미 저장된 번호를 그대로 두고 다른 항목만 고치는 것은 막지 않는다 (예전 데이터 수정 가능하게)
+        old = _one("SELECT biz_no FROM customers WHERE id=?", [int(data["id"])], db_path) if data.get("id") else None
+        if not old or biz_digits(old.get("biz_no")) != biz_digits(new_biz):
+            raise ValueError(f"사업자번호 {new_biz} 가 올바르지 않습니다 (10자리·검증번호를 확인하세요).")
     same_biz, similar = find_duplicates(data["name"], data.get("biz_no"), data.get("id"), db_path)
     if same_biz:
         who = (f"'{same_biz['name']}' (담당 {same_biz['owner']})" if in_scope(same_biz.get("owner_id"))
@@ -494,6 +532,10 @@ def upsert_customer(data: dict, db_path: str | None = None, confirm_similar: boo
         cid = int(data["id"])
         prev = get_customer(cid, db_path)
         check_record_scope(prev, "거래처")
+        if prev.get("erp_synced_at") and source != "ERP":
+            changed = [f for f in ERP_LOCKED_FIELDS if str(prev.get(f) or "") != str(record.get(f) or "")]
+            if changed:
+                raise ValueError("ERP 에서 받아 온 거래처라 이 항목은 ERP 에서 고쳐야 합니다: " + ", ".join(changed))
         with get_conn(db_path) as conn:
             sql = (f"UPDATE customers SET {', '.join(f'{f}=?' for f in CUSTOMER_FIELDS)}, owner_id=?, "
                    f"updated_at=?, row_version=COALESCE(row_version,0)+1 WHERE id=?")
@@ -1064,9 +1106,13 @@ def upsert_sale(data: dict, db_path: str | None = None) -> int:
     total = amount + vat
     cust = get_customer(int(data["customer_id"]), db_path)
     check_record_scope(cust, "거래처")
+    if cust.get("trade_blocked") and not data.get("id"):
+        raise ValueError(f"'{cust['name']}' 은(는) 거래정지 거래처라 새 매출을 등록할 수 없습니다 (ERP·관리자 설정).")
     owner_id, owner_name = resolve_owner(data.get("owner_id") or data.get("owner"), db_path)
 
     sale_date = _d(data.get("sale_date")) or _d(TODAY())
+    from . import periods
+    periods.check(sale_date)
     due_date = _d(data.get("due_date"))
     if not due_date:                      # 거래처 결제조건(일)을 반영해 자동 계산
         terms = int(cust.get("payment_terms") or 30)
@@ -1090,6 +1136,7 @@ def upsert_sale(data: dict, db_path: str | None = None) -> int:
         check_record_scope(prev, "매출")
         if prev["status"] == SALE_CANCELLED:
             raise ValueError("취소된 매출은 수정할 수 없습니다.")
+        periods.check(prev["sale_date"])
         if "entity_id" not in data:              # 수정 화면이 다루지 않는 값은 기존 값 유지
             record["entity_id"] = prev.get("entity_id")
         if "currency" not in data:
@@ -1116,19 +1163,33 @@ def upsert_sale(data: dict, db_path: str | None = None) -> int:
             if conn.execute(sql, params).rowcount == 0:
                 raise ConflictError("그 사이 다른 사용자(또는 입금·ERP 처리)가 이 매출을 바꿨습니다. "
                                     "새로고침해서 최신 내용을 확인한 뒤 다시 저장하세요.")
+        _sync_payment_rows(sid, int(prev.get("paid_amount") or 0), int(record["paid_amount"]), "수금상태변경", db_path)
         audit("수정", "매출", sid, {"변경": diff(prev, record, SALE_FIELDS)}, db_path)
         return sid
     with get_conn(db_path) as conn:
         cur = conn.execute(
-            f"INSERT INTO sales ({', '.join(SALE_FIELDS)}, erp_status, created_at) "
-            f"VALUES ({', '.join('?' * len(SALE_FIELDS))}, '대기', ?)",
-            (*values, _now()),
+            f"INSERT INTO sales ({', '.join(SALE_FIELDS)}, erp_status, created_by_id, created_at) "
+            f"VALUES ({', '.join('?' * len(SALE_FIELDS))}, '대기', ?, ?)",
+            (*values, current_actor_id(), _now()),
         )
         new_id = int(cur.lastrowid)
         conn.execute("INSERT INTO erp_outbox (doc_type, ref_id, status, created_at) "
                      "VALUES ('매출', ?, '대기', ?)", (new_id, _now()))
+    _sync_payment_rows(new_id, 0, int(record["paid_amount"]), "등록시입금완료", db_path, sale_date)
     audit("등록", "매출", new_id, {"금액": amount, "품목": record["item"], "담당자": owner_name}, db_path)
     return new_id
+
+
+def _sync_payment_rows(sale_id: int, before: int, after: int, source: str, db_path: str | None = None,
+                       pay_date: str | None = None) -> None:
+    """수금상태를 '입금완료'로 바꿔 입금액이 바뀐 경우에도 입금 내역 합계 = 입금액이 되도록 한 줄 남긴다."""
+    if after == before:
+        return
+    with get_conn(db_path) as conn:
+        conn.execute("INSERT INTO payments (sale_id, pay_date, amount, method, source, memo, created_by, created_by_id, "
+                     "created_at) VALUES (?,?,?,?,?,?,?,?,?)",
+                     (sale_id, pay_date or _d(TODAY()), after - before, "기타", source,
+                      "수금상태 변경으로 맞춘 입금액", current_actor(), current_actor_id(), _now()))
 
 
 def update_sale_status(sale_id: int, status: str, db_path: str | None = None) -> None:
@@ -1144,7 +1205,7 @@ def update_sale_status(sale_id: int, status: str, db_path: str | None = None) ->
     audit("수금상태변경", "매출", sale_id, {"변경": {"status": [prev["status"], status]}}, db_path)
 
 
-def cancel_sale(sale_id: int, reason: str, db_path: str | None = None) -> None:
+def cancel_sale(sale_id: int, reason: str, db_path: str | None = None, actor: dict | None = None) -> None:
     """매출 취소. 기록은 지우지 않고 '취소' 상태로 남긴다(회계·감사 추적).
 
     ERP 로 이미 전송된 매출이면 취소 전표를 전송 대기열에 올린다.
@@ -1155,6 +1216,14 @@ def cancel_sale(sale_id: int, reason: str, db_path: str | None = None) -> None:
     check_record_scope(prev, "매출")
     if prev["status"] == SALE_CANCELLED:
         raise ValueError("이미 취소된 매출입니다.")
+    from . import periods
+    periods.check(prev["sale_date"])
+    if actor is not None and prev.get("erp_status") in ("전송완료", "취소대기"):
+        # 직무 분리: ERP 에 전기된 매출은 등록자 본인이 아닌 팀장 이상이 취소한다
+        if ROLES.get(actor.get("role"), 0) < ROLES["MANAGER"]:
+            raise PermissionError("ERP 로 전송된 매출은 팀장 이상만 취소할 수 있습니다.")
+        if prev.get("created_by_id") and int(prev["created_by_id"]) == int(actor.get("id") or 0):
+            raise PermissionError("본인이 등록한 매출은 본인이 취소할 수 없습니다(직무 분리). 다른 팀장에게 요청하세요.")
     if int(prev.get("paid_amount") or 0) > 0:
         raise ValueError("입금 내역이 있는 매출은 취소할 수 없습니다. 입금 반제를 먼저 처리하세요.")
     with get_conn(db_path) as conn:
@@ -1281,9 +1350,13 @@ def kpi_summary(yyyymm: str, owner_id: int | None = None, db_path: str | None = 
     month_sales = _scalar(
         f"SELECT SUM(amount) FROM sales WHERE {ACTIVE_SALE} AND substr(sale_date, 1, 7)=?{oc}",
         [yyyymm, *op], db_path)
+    # 이번 달이면 전월도 같은 날짜까지만 더한다 (월초에 '-95% MoM'처럼 보이는 것을 막는다)
+    partial = yyyymm == TODAY().strftime("%Y-%m")
+    prev_cut = f"{prev}-{min(TODAY().day, calendar.monthrange(int(prev[:4]), int(prev[5:]))[1]):02d}"
     prev_sales = _scalar(
-        f"SELECT SUM(amount) FROM sales WHERE {ACTIVE_SALE} AND substr(sale_date, 1, 7)=?{oc}",
-        [prev, *op], db_path)
+        f"SELECT SUM(amount) FROM sales WHERE {ACTIVE_SALE} AND substr(sale_date, 1, 7)=?"
+        f"{' AND sale_date <= ?' if partial else ''}{oc}",
+        [prev, *([prev_cut] if partial else []), *op], db_path)
     target = _scalar(
         f"SELECT SUM(target_amount) FROM targets WHERE yyyymm=?{oc}",
         [yyyymm, *op], db_path)
@@ -1317,6 +1390,7 @@ def kpi_summary(yyyymm: str, owner_id: int | None = None, db_path: str | None = 
         "month_sales": int(month_sales),
         "prev_sales": int(prev_sales),
         "mom": (month_sales - prev_sales) / prev_sales * 100 if prev_sales else 0.0,
+        "mom_partial": partial,
         "target": int(target),
         "achievement": month_sales / target * 100 if target else 0.0,
         "gap": int(target - month_sales),
@@ -1525,7 +1599,7 @@ def seed_demo_data(db_path: str | None = None, seed: int = 42) -> dict:
         owner = rng.choice(sales_owners)
         name = f"{rng.choice(prefix)}{rng.choice(suffix)}"
         cid = upsert_customer({
-            "name": f"{name}{i+1:02d}", "biz_no": f"{rng.randint(100,999)}-{rng.randint(10,99)}-{rng.randint(10000,99999)}",
+            "name": f"{name}{i+1:02d}", "biz_no": _with_check_digit(f"{rng.randint(100,999)}-{rng.randint(10,99)}-{rng.randint(10000,99999)}"),
             "industry": rng.choice(INDUSTRIES), "grade": rng.choices(GRADES, [1, 3, 4, 2])[0],
             "owner": owner, "manager": f"{rng.choice('김이박최정강조윤장임')}{rng.choice(['과장','대리','부장','팀장','차장'])}",
             "phone": f"010-{rng.randint(1000,9999)}-{rng.randint(1000,9999)}",
@@ -1626,6 +1700,8 @@ def seed_demo_data(db_path: str | None = None, seed: int = 42) -> dict:
         }, db_path)
         created["sales"] += 1
 
+    created["products"] = _seed_fixups(first_sale_id, seed, today, db_path)
+
     # 샘플 매출은 ERP 로 보낼 대상이 아니므로 이번에 만든 건만 전송 대기열에서 뺀다
     with get_conn(db_path) as conn:
         conn.execute("DELETE FROM erp_outbox WHERE doc_type='매출' AND ref_id > ?", (first_sale_id,))
@@ -1667,10 +1743,62 @@ def seed_demo_data(db_path: str | None = None, seed: int = 42) -> dict:
                             (snap, ym, owner, owner_ids[owner], str(owner_ids[owner]), cat,
                              rng.randint(1, 6), amt, int(amt * 0.6)))
                         created["snapshots"] += 1
-    if db_path is None:                     # 품목 마스터 샘플 (기본 DB 에만)
-        from . import catalog
-        created["products"] = catalog.seed_products()
     return created
+
+
+# 샘플 매출 품목명 → 품목 코드 (catalog.seed_products, 모두 과세라 매출의 부가세와 맞는다)
+SEED_ITEM_PRODUCT = {"ERP 라이선스": "SW-ERP-01", "유지보수 계약": "SV-MNT-01", "설비 공급": "HW-SRV-01",
+                     "클라우드 구독": "SW-CLD-01", "컨설팅": "SV-CON-01", "부품 납품": "HW-PRT-01",
+                     "교육 서비스": "SV-TRN-01", "커스터마이징 개발": "SV-DEV-01"}
+
+
+def _seed_fixups(first_sale_id: int, seed: int, today: date, db_path: str | None) -> int:
+    """샘플 데이터가 실제 업무와 어긋나지 않게 보정한다 (기존 난수 순서는 건드리지 않도록 따로 돌린다).
+    - '부분입금' 매출에 실제 입금액(합계의 20~80%)을 넣는다 (상태만 부분입금이고 입금액 0이던 문제)
+    - 매출을 품목 마스터에 연결한다 (품목군별 매출이 '품목 미지정'만 나오던 문제) — 기본 DB 에만
+    - 매출이 하나도 없는 '수주' 기회에 매출을 만든다 (수주했는데 매출이 없던 문제)
+    돌려주는 값: 새로 만든 품목 수."""
+    rng = random.Random(seed + 1000)
+    products = 0
+    with get_conn(db_path) as conn:
+        partial = conn.execute("SELECT id, COALESCE(total_amount, amount) AS total FROM sales WHERE id > ? "
+                               "AND status = '부분입금' AND COALESCE(paid_amount, 0) = 0", (first_sale_id,)).fetchall()
+        for r in partial:
+            paid = int(round(int(r["total"]) * rng.uniform(0.2, 0.8), -4))
+            conn.execute("UPDATE sales SET paid_amount = ? WHERE id = ?", (paid, int(r["id"])))
+            # 입금 내역 합계 = 입금액 (payments 가 원장, paid_amount 는 합계를 담아 둔 값)
+            conn.execute("INSERT INTO payments (sale_id, pay_date, amount, method, source, memo, created_by, created_at) "
+                         "SELECT id, COALESCE(due_date, sale_date), ?, '계좌이체', '샘플', '샘플 데이터 부분입금', 'system', ? "
+                         "FROM sales WHERE id = ?", (paid, _now(), int(r["id"])))
+    if db_path is None:
+        from . import catalog
+        products = catalog.seed_products()
+        with get_conn(db_path) as conn:
+            ids = {r["code"]: int(r["id"]) for r in conn.execute("SELECT id, code FROM products").fetchall()}
+            for item, code in SEED_ITEM_PRODUCT.items():
+                if code in ids:
+                    conn.execute("UPDATE sales SET product_id = ? WHERE id > ? AND item = ? AND product_id IS NULL",
+                                 (ids[code], first_sale_id, item))
+    # 수주 기회 금액 = 연결된 매출 합계 (샘플 매출을 기회에 무작위로 붙여 금액이 크게 어긋나던 문제). 정가는 할인율로 역산
+    with get_conn(db_path) as conn:
+        won = conn.execute("SELECT d.id, d.discount_rate, SUM(s.amount) AS total FROM deals d "
+                           "JOIN sales s ON s.deal_id = d.id AND s.status <> '취소' "
+                           "WHERE d.stage = ? AND d.memo = '샘플 기회' GROUP BY d.id, d.discount_rate",
+                           (STAGE_WON,)).fetchall()
+        for r in won:
+            amount = int(r["total"])
+            list_amount = int(round(amount * 100 / (100 - float(r["discount_rate"] or 0))))
+            conn.execute("UPDATE deals SET amount = ?, list_amount = ? WHERE id = ?", (amount, list_amount, int(r["id"])))
+    orphans = _df("SELECT d.id, d.customer_id, d.owner, d.amount, d.title, d.closed_at FROM deals d "
+                  f"WHERE d.stage = '{STAGE_WON}' AND NOT EXISTS (SELECT 1 FROM sales s WHERE s.deal_id = d.id)",
+                  (), db_path)
+    for r in orphans.itertuples():
+        sale_date = _d(r.closed_at) or _d(today)
+        upsert_sale({"customer_id": int(r.customer_id), "deal_id": int(r.id), "sale_date": sale_date,
+                     "item": str(r.title).replace(" 건", ""), "qty": 1, "unit_price": int(r.amount),
+                     "amount": int(r.amount), "owner": r.owner, "status": SALE_STATUS[0], "memo": "수주 기회 매출"},
+                    db_path)
+    return products
 
 
 if __name__ == "__main__":  # 간단한 CLI: python -m core.sales_db --seed

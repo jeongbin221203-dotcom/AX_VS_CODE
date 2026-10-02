@@ -83,6 +83,7 @@ def _logout(message: str, kind: str = "warning"):
 def load_context():
     """매 요청마다 사용자와 접근범위를 다시 읽는다 → 권한 변경·비활성화가 즉시 반영된다."""
     g.user = None
+    db.set_ip(request.remote_addr)
     company.refresh()                                 # 회사 설정 (서버마다 15초 간격으로 다시 읽음)
     if request.endpoint == "static" or request.blueprint == "api":     # API 는 Bearer 키로 따로 인증
         return None

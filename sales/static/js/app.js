@@ -11,7 +11,7 @@
   const SERIES_COLOR = {
     "매출": BLUE, "금액": BLUE, "목표": AMBER, "가중금액": AMBER,
     "Commit": BLUE, "Best Case": AMBER, "Pipeline": GREEN, "Omitted": GRAY,
-    "확정 매출": "#16275E",
+    "확정 매출": "#16275E", "미수금": AMBER,
   };
   const FALLBACK = [BLUE, AMBER, GREEN, GRAY];
 

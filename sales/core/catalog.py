@@ -12,11 +12,11 @@ import pandas as pd
 
 from . import sales_db as db
 
-PRODUCT_FIELDS = ["code", "name", "category", "unit", "list_price", "tax_type", "erp_material", "active", "memo"]
+PRODUCT_FIELDS = ["code", "name", "spec", "category", "unit", "list_price", "tax_type", "erp_material", "active", "memo"]
 
 
 def list_products(keyword: str = "", active_only: bool = False) -> pd.DataFrame:
-    sql = ("SELECT id, code AS 품목코드, name AS 품목명, category AS 분류, unit AS 단위, list_price AS 정가, "
+    sql = ("SELECT id, code AS 품목코드, name AS 품목명, spec AS 규격, category AS 분류, unit AS 단위, list_price AS 정가, "
            'tax_type AS 과세구분, erp_material AS "ERP자재", active AS 사용, updated_at AS 수정일 FROM products WHERE 1=1')
     params: list[Any] = []
     if keyword:
@@ -49,7 +49,8 @@ def upsert_product(data: dict) -> int:
     price = int(data.get("list_price") or 0)
     if price < 0:
         raise ValueError("정가는 0 이상이어야 합니다.")
-    record = {"code": code, "name": name, "category": (data.get("category") or "").strip() or None,
+    record = {"code": code, "name": name, "spec": (str(data.get("spec") or "").strip() or None),
+              "category": (data.get("category") or "").strip() or None,
               "unit": (data.get("unit") or "EA").strip() or "EA", "list_price": price, "tax_type": tax_type,
               "erp_material": (data.get("erp_material") or "").strip() or code,
               "active": int(data.get("active", 1)), "memo": data.get("memo")}
@@ -140,7 +141,8 @@ def price_for(customer_id: Optional[int], product_id: int, on: Optional[str] = N
     return {"unit_price": int(special["unit_price"]) if special else int(product["list_price"]),
             "list_price": int(product["list_price"]), "source": "특가" if special else "정가",
             "tax_type": product["tax_type"], "unit": product["unit"], "code": product["code"],
-            "name": product["name"], "erp_material": product.get("erp_material") or product["code"]}
+            "name": product["name"], "spec": product.get("spec"),
+            "erp_material": product.get("erp_material") or product["code"]}
 
 
 def seed_products() -> int:
@@ -149,7 +151,13 @@ def seed_products() -> int:
                ("SV-MNT-01", "유지보수(월)", "서비스", "월", 1_500_000, "과세"),
                ("HW-SRV-01", "서버 장비", "하드웨어", "대", 8_500_000, "과세"),
                ("SV-EDU-01", "사용자 교육(일)", "서비스", "일", 900_000, "면세"),
-               ("EX-PKG-01", "수출용 패키지", "하드웨어", "식", 20_000_000, "영세")]
+               ("EX-PKG-01", "수출용 패키지", "하드웨어", "식", 20_000_000, "영세"),
+               # 샘플 매출의 품목명과 맞춘 과세 품목 (sales_db.seed_demo_data 가 매출에 연결)
+               ("SW-CLD-01", "클라우드 구독(월)", "소프트웨어", "월", 2_000_000, "과세"),
+               ("SV-CON-01", "컨설팅(일)", "서비스", "일", 1_200_000, "과세"),
+               ("HW-PRT-01", "부품 납품", "하드웨어", "식", 3_000_000, "과세"),
+               ("SV-DEV-01", "커스터마이징 개발", "서비스", "식", 15_000_000, "과세"),
+               ("SV-TRN-01", "교육 서비스(기업)", "서비스", "식", 2_500_000, "과세")]
     created = 0
     for code, name, cat, unit, price, tax in samples:
         if not db._one("SELECT id FROM products WHERE code=?", [code]):

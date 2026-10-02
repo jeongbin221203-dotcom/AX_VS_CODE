@@ -60,6 +60,7 @@ def _server_error(err):
 @bp.before_request
 def _authenticate():
     g.api_started = time.perf_counter()
+    db.set_ip(request.remote_addr)
     if request.endpoint in ("api.openapi",):
         return None
     header = request.headers.get("Authorization", "")
@@ -392,6 +393,14 @@ def etax_acks():
         except (ValueError, PermissionError, TypeError) as exc:
             results.append({"request_id": i.get("request_id"), "result": "오류", "message": str(exc)})
     return _erp_result(results)
+
+
+@bp.route("/erp/customers", methods=["POST"])
+def erp_customers():
+    """거래처(고객) 마스터 — ERP 코드 기준 등록·수정, 거래정지."""
+    require("erp:write")
+    from core import erp
+    return _erp_result(erp.receive_customers(_items()))
 
 
 @bp.route("/erp/products", methods=["POST"])

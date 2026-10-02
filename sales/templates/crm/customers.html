@@ -19,6 +19,14 @@
     <label>ERP 코드 (SAP 고객번호) <input name="erp_code" value="{{ f.erp_code or '' }}" placeholder="예) C100234"></label>
   </div>
   <label>메모 <textarea name="memo" rows="3">{{ f.memo or '' }}</textarea></label>
+  {% if f.erp_synced_at %}
+    <p class="small">🔗 ERP 에서 받아 온 거래처입니다({{ f.erp_synced_at }}). 거래처명·사업자번호·ERP 코드·결제조건·여신한도는 ERP 에서 고칩니다.</p>
+  {% endif %}
+  {% if edit %}
+    <input type="hidden" name="trade_blocked_present" value="1">
+    <label class="check"><input type="checkbox" name="trade_blocked" value="1" {{ 'checked' if f.trade_blocked }}
+      {{ 'disabled' if f.erp_synced_at }}> 거래정지 — 새 매출 등록·견적 발송을 막습니다 (팀장 이상{{ ', ERP 연동 거래처는 ERP 가 정함' if f.erp_synced_at }})</label>
+  {% endif %}
   {% if f.similar %}
     <label class="check"><input type="checkbox" name="confirm_similar" value="1">
       비슷한 이름의 거래처({{ f.similar|join(', ') }})와 다른 회사입니다 — 그래도 등록</label>

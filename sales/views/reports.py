@@ -5,6 +5,7 @@ import pandas as pd
 from flask import Blueprint, abort, flash, g, redirect, request, url_for
 
 from core import enterprise as ent
+from core import erp, insights
 from core import sales_db as db
 
 from .helpers import Table, a_int, chart, csv_response, f_ids, f_str, render_page
@@ -28,6 +29,16 @@ def dashboard():
     soon = db.deals_closing_soon(14, owner)
     stale = db.stale_customers(30, owner)
     upcoming = db.upcoming_actions(7, owner)
+    # 자재관리 대시보드와 맞춘 항목: 최근 30일 일별 흐름 · 분류(품목군)별 구성 · 기한 임박 · 결재 대기 · 연계 실패
+    daily = insights.daily_sales(30, owner)
+    by_cat = insights.category_sales(ym, owner)
+    aging = ent.ar_aging()
+    overdue = aging[aging["연체구간"] != "정상"].drop(columns=["id"]) if not aging.empty else aging
+    expiring = insights.quotes_expiring(7, owner)
+    pending = ent.pending_for(g.user)
+    manager = ent.has_role(g.user, "MANAGER")
+    erp_failed = erp.list_outbox("실패", 50) if manager else pd.DataFrame()
+    empty = not db._scalar("SELECT COUNT(*) FROM customers") and not db._scalar("SELECT COUNT(*) FROM sales")
 
     return render_page(
         "reports/dashboard.html", "dashboard",
@@ -40,6 +51,15 @@ def dashboard():
         perf=Table(perf, money=["매출", "목표", "파이프라인"], drop=["owner_id"]),
         top_chart=chart(top, "거래처", "매출"), top=Table(top, money=["매출"]), top_all=top_all,
         soon=Table(soon, money=["예상금액"]), stale=Table(stale), upcoming=Table(upcoming),
+        daily_chart=chart(daily, "일자", "매출"), daily=Table(daily, money=["매출"]),
+        cat_chart=chart(by_cat, "품목군", "매출"), cat=Table(by_cat, money=["매출"]),
+        overdue=Table(overdue, money=["청구액(VAT포함)", "입금액", "미수금"],
+                      highlight={"연체구간": {"90일 초과": "danger", "61~90일": "warn"}}),
+        overdue_amount=int(overdue["미수금"].sum()) if not overdue.empty else 0,
+        expiring=Table(expiring, money=["합계"]),
+        pending=Table(pending, money=[c for c in ("금액", "예상금액") if c in pending.columns],
+                      drop=[c for c in pending.columns if c == "id" or c.endswith("_id")]),
+        erp_failed=Table(erp_failed, money=["금액"], drop=["id"]), manager=manager, empty=empty,
     )
 
 

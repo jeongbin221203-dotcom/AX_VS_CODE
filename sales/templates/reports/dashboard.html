@@ -2,13 +2,19 @@
 {% from "_macros.html" import metric, table, chart, tabs %}
 {% block content %}
 <p class="subtitle">{{ g.ym }} · {{ g.owner_filter or '전사' }}</p>
+{% if empty %}
+<div class="alert alert-info">아직 거래처·매출이 없습니다. 거래처와 영업기회를 등록하거나{% if g.user.role == 'ADMIN' %}
+  <a href="{{ url_for('admin.data') }}">데이터 관리</a>에서 샘플 데이터를 만들어 보세요{% endif %}.</div>
+{% endif %}
 
 <div class="metrics m5">
-  {{ metric('당월 매출', k.month_sales|mil, '%+.1f%% MoM'|format(k.mom), 'up' if k.mom >= 0 else 'down') }}
+  {{ metric('당월 매출', k.month_sales|mil, ('%+.1f%% 전월 같은 기간 대비' if k.mom_partial else '%+.1f%% MoM')|format(k.mom),
+            'up' if k.mom >= 0 else 'down') }}
   {{ metric('목표 달성률', '%.1f%%'|format(k.achievement),
             ('부족 ' ~ k.gap|mil) if k.gap > 0 else ('초과 ' ~ (-k.gap)|mil), 'down' if k.gap > 0 else 'up') }}
-  {{ metric('파이프라인(가중)', k.weighted_pipeline|mil, '총 ' ~ k.open_amount|mil) }}
-  {{ metric('수주/실주', k.won_cnt ~ ' / ' ~ k.lost_cnt, '승률 %.0f%%'|format(k.win_rate)) }}
+  {{ metric('파이프라인(가중)', k.weighted_pipeline|mil, '총 ' ~ k.open_amount|mil ~ (' · 마감일 지난 기회 ' ~ k.overdue_deals ~ '건' if k.overdue_deals else ''),
+            'down' if k.overdue_deals else none) }}
+  {{ metric('수주/실주', k.won_cnt ~ ' / ' ~ k.lost_cnt, '승률 %.0f%%'|format(k.win_rate) ~ ' · 신규 거래처 ' ~ k.new_customers) }}
   {{ metric('미수금', k.unpaid|mil, '활동 ' ~ k.activity_cnt ~ '건') }}
 </div>
 
@@ -24,6 +30,10 @@
 <div class="grid-2">
   {{ chart_card('📈 월별 매출 vs 목표 (최근 12개월)', trend_chart, trend) }}
   {{ chart_card('🔻 영업 단계별 파이프라인', funnel_chart, funnel) }}
+</div>
+<div class="grid-2">
+  {{ chart_card('📆 최근 30일 일별 매출', daily_chart, daily) }}
+  {{ chart_card('📦 품목군별 매출 (' ~ g.ym ~ ')', cat_chart, cat, '매출에 연결한 품목의 분류 기준. 품목 없이 입력한 매출은 \'품목 미지정\'.') }}
 </div>
 <div class="grid-2">
   {{ chart_card('👥 담당자별 실적 (' ~ g.ym ~ ')', perf_chart, perf) }}
@@ -44,8 +54,26 @@
 <section class="card">
   <h3>🚨 즉시 확인이 필요한 항목</h3>
   {% set tab = request.args.get('tab', 'soon') %}
-  {{ tabs([('soon', '⏰ 마감 임박 기회 (14일)'), ('stale', '💤 장기 미접촉 거래처 (30일)'), ('upcoming', '📌 예정된 후속 액션 (7일)')], tab) }}
-  {% if tab == 'stale' %}
+  {% set items = [('soon', '⏰ 마감 임박 기회 (14일) ' ~ soon.total), ('stale', '💤 장기 미접촉 거래처 (30일) ' ~ stale.total),
+                  ('upcoming', '📌 예정된 후속 액션 (7일) ' ~ upcoming.total), ('overdue', '🧾 연체 미수금 ' ~ overdue.total),
+                  ('quotes', '📄 견적 만료 임박 (7일) ' ~ expiring.total), ('approvals', '✅ 내 결재 대기 ' ~ pending.total)] %}
+  {% if manager %}{% set items = items + [('erp', '🔗 ERP 전송 실패 ' ~ erp_failed.total)] %}{% endif %}
+  {{ tabs(items, tab) }}
+  {% if tab == 'overdue' %}
+    {% if not overdue.empty %}<div class="alert alert-warning">결제기일이 지난 미수금 {{ overdue_amount|mil }} ({{ overdue.total }}건, 부가세 포함 청구액 기준).
+      <a href="{{ url_for('finance.sales', tab='ar') }}">채권 화면</a></div>{% endif %}
+    {{ table(overdue, 400) }}
+  {% elif tab == 'quotes' %}
+    <p class="muted small">발송했지만 답이 없는 견적 중 유효기한이 7일 안에 끝나는 것 — 연락하거나 개정판을 보내세요.
+      <a href="{{ url_for('catalog.quotes') }}">견적 화면</a></p>
+    {{ table(expiring, 400) }}
+  {% elif tab == 'approvals' %}
+    <p class="muted small">지금 내 차례인 할인 결재입니다. <a href="{{ url_for('finance.approvals') }}">결재함에서 처리</a></p>
+    {{ table(pending, 400) }}
+  {% elif tab == 'erp' %}
+    <p class="muted small"><a href="{{ url_for('admin.erp') }}">ERP 연동 화면에서 원인 확인 후 재전송</a></p>
+    {{ table(erp_failed, 400) }}
+  {% elif tab == 'stale' %}
     {% if not stale.empty %}<div class="alert alert-warning">{{ stale.total }}개 거래처가 30일 이상 접촉 이력이 없습니다.</div>{% endif %}
     {{ table(stale, 400) }}
   {% elif tab == 'upcoming' %}

@@ -42,6 +42,8 @@ def compute(items: list[dict], customer_id: Optional[int], on: Optional[str] = N
             list_price = price["list_price"]
             unit_price = int(raw["unit_price"]) if str(raw.get("unit_price") or "").strip() else price["unit_price"]
             name, code, unit, tax = price["name"], price["code"], price["unit"], price["tax_type"]
+            if price.get("spec"):
+                name = f"{name} ({price['spec']})"
         else:
             unit_price = int(raw.get("unit_price") or 0)
             list_price = int(raw.get("list_price") or unit_price)
@@ -232,6 +234,8 @@ def send(quote_id: int) -> None:
     q = get_quote(quote_id)
     if q["status"] != "작성중":
         raise ValueError(f"'{q['status']}' 상태의 견적은 발송할 수 없습니다.")
+    if (db.get_customer(int(q["customer_id"])) or {}).get("trade_blocked"):
+        raise ValueError("거래정지 거래처에는 견적을 발송할 수 없습니다.")
     if q["deal_id"]:
         deal = _sync_deal(q)
         role = db.required_approval_role(deal.get("discount_rate"))

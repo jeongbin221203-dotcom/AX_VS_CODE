@@ -136,6 +136,13 @@ def customer_save():
     except ValueError as exc:
         flash(str(exc), "error")
         return _customers_page(form=dict(request.form), status=400)
+    if cid and f_str("trade_blocked_present") and ent.has_role(g.user, "MANAGER"):
+        cur = db.get_customer(new_id)
+        want = 1 if f_bool("trade_blocked") else 0
+        if not cur.get("erp_synced_at") and int(cur.get("trade_blocked") or 0) != want:
+            with db.get_conn() as conn:
+                conn.execute("UPDATE customers SET trade_blocked=? WHERE id=?", (want, new_id))
+            db.audit("거래정지" if want else "거래정지해제", "거래처", new_id, {"거래처명": cur["name"]})
     flash("저장했습니다." if cid else f"'{data['name']}' 거래처를 등록했습니다.", "success")
     return redirect(url_for("crm.customers", id=new_id))
 

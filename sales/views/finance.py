@@ -15,7 +15,7 @@ from core import enterprise as ent
 from core import sales_db as db
 
 from .crm import deal_choices, visible_customer, visible_deal
-from .helpers import (Table, a_int, a_str, chart, csv_response, f_int, f_owner, f_str,
+from .helpers import (xlsx_response, Table, a_int, a_str, chart, csv_response, f_int, f_owner, f_str,
                       render_page, won)
 
 bp = Blueprint("finance", __name__)
@@ -54,6 +54,30 @@ def _sales_page(form: dict | None = None, status: int = 200):
     active = df[df["수금상태"] != db.SALE_CANCELLED] if not df.empty else df
     monthly = (active.assign(월=active["매출일"].str[:7]).groupby("월")["공급가액"].sum().reset_index()
                if not active.empty else active)
+    from core import periods
+    extra: dict = {"closed_through": periods.closed_through(), "pay_methods": ent.PAY_METHODS}
+    if tab == "ledger":
+        cust_id = a_int("customer_id")
+        today_ = date.today()
+        lf = a_str("from") or today_.replace(month=1, day=1).isoformat()
+        lt = a_str("to") or today_.isoformat()
+        extra.update(ledger_customer=cust_id, ledger_from=lf, ledger_to=lt, ledger=None)
+        if cust_id:
+            visible_customer(cust_id)
+            opening, rows = periods.customer_ledger(cust_id, lf, lt)
+            if request.args.get("export") == "ledger":
+                name = (db.get_customer(cust_id) or {}).get("name", "")
+                from core import dataio
+                return xlsx_response(dataio.to_excel({"거래처원장": rows}, {"거래처": name, "기간": f"{lf} ~ {lt}",
+                                                                          "기초잔액": f"{opening:,}"}),
+                                     f"거래처원장_{name}_{lf}_{lt}.xlsx", rows=len(rows))
+            extra.update(ledger=Table(rows, money=["차변", "대변", "잔액"]), ledger_opening=opening,
+                         ledger_closing=int(rows["잔액"].iloc[-1]) if not rows.empty else opening)
+    if tab == "close":
+        snap_ym = a_str("snap") or extra["closed_through"]
+        extra.update(next_closable=periods.next_closable(), close_history=Table(periods.history()),
+                     snap_ym=snap_ym, snapshot=Table(periods.snapshot_table(snap_ym), money=["매출누계", "입금누계", "월말잔액", "연체잔액"])
+                     if snap_ym else None, is_admin=ent.has_role(g.user, "ADMIN"))
     edit_id = a_int("sid")
     edit_row, documents, customer_biz_no = None, [], None
     if edit_id:
@@ -91,6 +115,7 @@ def _sales_page(form: dict | None = None, status: int = 200):
         products=catalog.product_options(), tax_types=db.TAX_TYPES,
         entity_opts=ent_mod.options(), currencies=ent_mod.CURRENCIES,
         etax_rows=etax.list_for_sale(edit_id) if edit_id else [], etax_on=etax.enabled(),
+        payments=ent.list_payments(edit_id) if edit_id and edit_row else [], **extra,
         # 채권
         ar_total=ar_total, ar_overdue=ar_overdue,
         ar_overdue_cnt=int(overdue["건수"].sum()) if not summary.empty else 0,
@@ -98,7 +123,7 @@ def _sales_page(form: dict | None = None, status: int = 200):
         if not summary.empty and summary["미수금"].sum() > 0 else None,
         ar_summary=Table(summary, money=["미수금"]),
         bucket=bucket, buckets=db.AR_BUCKETS,
-        aging=Table(aging_view, money=["매출액", "입금액", "미수금"], drop=["id"], page_size=PAGE_SIZE),
+        aging=Table(aging_view, money=["청구액(VAT포함)", "입금액", "미수금"], drop=["id"], page_size=PAGE_SIZE),
         pay_options=[(int(r.id), int(r.미수금),
                       f"{r.거래처} · {r.품목} · 미수 {int(r.미수금):,}원 "
                       f"(기일 {r.결제기일}, {int(r.경과일)}일 경과)")
@@ -184,9 +209,9 @@ def sale_etax(sid: int):
 @bp.route("/sales/<int:sid>/cancel", methods=["POST"])
 def sale_cancel(sid: int):
     try:
-        db.cancel_sale(sid, f_str("reason"))
+        db.cancel_sale(sid, f_str("reason"), actor=g.user)
         flash("매출을 취소했습니다. 기록은 '취소' 상태로 남습니다.", "warning")
-    except ValueError as exc:
+    except (ValueError, PermissionError) as exc:
         flash(str(exc), "error")
     return redirect(url_for("finance.sales", sid=sid))
 
@@ -197,11 +222,43 @@ def sale_payment():
         amount = f_int("amount")
         if amount <= 0:
             raise ValueError("입금액은 0보다 커야 합니다.")
-        ent.record_payment(f_int("sale_id"), amount)
+        ent.record_payment(f_int("sale_id"), amount, pay_date=f_str("pay_date") or None,
+                           method=f_str("method") or "계좌이체", ref_no=f_str("ref_no"), memo=f_str("memo"))
         flash(f"{won(amount)} 입금 처리했습니다.", "success")
     except ValueError as exc:
         flash(str(exc), "error")
-    return redirect(url_for("finance.sales", tab="ar"))
+    back = f_str("back")
+    return redirect(url_for("finance.sales", sid=int(back)) if back.isdigit() else url_for("finance.sales", tab="ar"))
+
+
+@bp.route("/payments/<int:pid>/reverse", methods=["POST"])
+def payment_reverse(pid: int):
+    pay = db._one("SELECT sale_id FROM payments WHERE id=?", [pid])
+    if not pay:
+        abort(404)
+    try:
+        ent.reverse_payment(pid, f_str("reason"))
+        flash("입금을 반제했습니다(원래 입금은 남고, 같은 금액의 반제가 추가됩니다).", "warning")
+    except ValueError as exc:
+        flash(str(exc), "error")
+    return redirect(url_for("finance.sales", sid=pay["sale_id"]))
+
+
+@bp.route("/sales/close", methods=["POST"])
+def sales_close():
+    if not ent.has_role(g.user, "ADMIN"):
+        abort(403, "월 마감은 시스템관리자가 합니다.")
+    from core import periods
+    try:
+        if f_str("action") == "reopen":
+            ym = periods.reopen(f_str("reason"), g.user)
+            flash(f"{ym} 마감을 해제했습니다.", "warning")
+        else:
+            r = periods.close_month(f_str("ym"), g.user)
+            flash(f"{r['ym']} 마감 — 거래처 {r['customers']}곳 월말 채권 {won(r['balance'])} 을 스냅샷으로 남겼습니다.", "success")
+    except ValueError as exc:
+        flash(str(exc), "error")
+    return redirect(url_for("finance.sales", tab="close"))
 
 
 # ── 증빙 (세금계산서 · 전자세금계산서) ─────────────────────────────────────

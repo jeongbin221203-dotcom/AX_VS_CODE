@@ -55,7 +55,7 @@ def products():
 def product_save():
     try:
         pid = catalog.upsert_product({
-            "id": f_int("id") or None, "code": f_str("code"), "name": f_str("name"),
+            "id": f_int("id") or None, "code": f_str("code"), "name": f_str("name"), "spec": f_str("spec"),
             "category": f_str("category"), "unit": f_str("unit"), "list_price": f_int("list_price"),
             "tax_type": f_str("tax_type"), "erp_material": f_str("erp_material"),
             "active": 1 if request.form.get("active") else 0, "memo": f_str("memo")})

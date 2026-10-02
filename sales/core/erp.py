@@ -501,7 +501,10 @@ def reconcile_payments(df: pd.DataFrame, apply: bool = False) -> pd.DataFrame:
         else:
             if apply:
                 try:
-                    ent.record_payment(int(sale["id"]), gap, source="ERP", expected_before=crm_paid)
+                    pay_day = (str(row.get("입금일"))[:10] if "입금일" in df.columns and pd.notna(row.get("입금일"))
+                               and str(row.get("입금일")).strip() else None)
+                    ent.record_payment(int(sale["id"]), gap, source="ERP", expected_before=crm_paid,
+                                       pay_date=pay_day, method="계좌이체", ref_no=erp_no or "")
                 except db.ConflictError as exc:
                     out.append({**line, "결과": "확인필요", "내용": str(exc)})
                     continue
@@ -545,7 +548,8 @@ def test_connection(cfg: dict | None = None) -> tuple[bool, str]:
 def receive_payments(items: list[dict]) -> list[dict]:
     """ERP 누적 입금액 [{ref, erp_doc_no, paid_total, sale_total?}] → 차액만 반영 (같은 값을 다시 보내도 멱등)."""
     rows = [{"참조번호": str(i.get("ref") or ""), "ERP전표번호": str(i.get("erp_doc_no") or ""),
-             "누적입금액": i.get("paid_total"), **({"매출액": i["sale_total"]} if i.get("sale_total") is not None else {})}
+             "누적입금액": i.get("paid_total"), "입금일": i.get("pay_date"),
+             **({"매출액": i["sale_total"]} if i.get("sale_total") is not None else {})}
             for i in items]
     frame = pd.DataFrame(rows, columns=["참조번호", "ERP전표번호", "누적입금액", "매출액"])
     result = reconcile_payments(frame, apply=True)
@@ -604,6 +608,45 @@ def receive_credit(items: list[dict]) -> list[dict]:
             db.audit("ERP여신", "거래처", int(cust["id"]), {"거래처": cust["name"], "변경": [before, limit]})
         out.append({"erp_code": code, "customer_id": int(cust["id"]),
                     "result": "변경" if before != limit else "일치", "message": ""})
+    return out
+
+
+CUSTOMER_MASTER_FIELDS = {"name": "name", "biz_no": "biz_no", "payment_terms": "payment_terms",
+                          "credit_limit": "credit_limit", "address": "address"}
+
+
+def receive_customers(items: list[dict]) -> list[dict]:
+    """ERP 거래처(고객) 마스터 [{erp_code, name, biz_no, payment_terms, credit_limit, address, blocked, owner_emp_no}].
+
+    자재관리의 SAP 자재 마스터 동기화와 같은 규칙: ERP 코드로 맞추고, 받은 항목은 ERP 가 원본이 되어 화면에서 고칠 수 없다.
+    영업 담당자·등급·메모처럼 CRM 만의 항목은 건드리지 않는다. 새 거래처의 담당자는 owner_emp_no, 없으면 API 대리 사용자.
+    blocked=true 이면 거래정지(새 매출·견적 발송 불가).
+    """
+    from . import enterprise as ent_mod
+    out = []
+    for i in items:
+        code = str(i.get("erp_code") or "").strip()
+        try:
+            if not code or not str(i.get("name") or "").strip():
+                raise ValueError("erp_code 와 name 은 필수입니다.")
+            prev = db._one("SELECT * FROM customers WHERE erp_code=? AND merged_into IS NULL", [code])
+            data = {k: i[src] for src, k in CUSTOMER_MASTER_FIELDS.items() if i.get(src) not in (None, "")}
+            if prev:
+                db.check_record_scope(prev, "거래처")
+                cid = db.upsert_customer({**prev, **data, "id": prev["id"], "row_version": None}, source="ERP")
+                result = "수정"
+            else:
+                owner = (ent_mod.get_user(emp_no=str(i["owner_emp_no"])) or {}).get("id") if i.get("owner_emp_no") \
+                    else db.current_actor_id()
+                cid = db.upsert_customer({**data, "erp_code": code, "owner_id": owner, "grade": "B", "status": "활성"},
+                                         source="ERP")
+                result = "등록"
+            with db.get_conn() as conn:
+                conn.execute("UPDATE customers SET erp_synced_at=?, trade_blocked=? WHERE id=?",
+                             (db._now(), 1 if i.get("blocked") else 0, cid))
+            out.append({"erp_code": code, "customer_id": cid, "result": result, "message": "거래정지" if i.get("blocked") else ""})
+        except (ValueError, PermissionError, TypeError) as exc:
+            out.append({"erp_code": code, "result": "오류", "message": str(exc)})
     return out
 
 

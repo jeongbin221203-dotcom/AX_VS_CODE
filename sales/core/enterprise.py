@@ -863,12 +863,12 @@ def ar_aging(db_path: str | None = None) -> pd.DataFrame:
     scope_sql, scope_params = db._scope_clause("s")
     df = db._df(
         f"SELECT s.id, s.sale_date AS 매출일, s.due_date AS 결제기일, c.name AS 거래처, "
-        f"s.item AS 품목, COALESCE(s.total_amount, s.amount) AS 매출액, COALESCE(s.paid_amount,0) AS 입금액, "
+        f"s.item AS 품목, COALESCE(s.total_amount, s.amount) AS \"청구액(VAT포함)\", COALESCE(s.paid_amount,0) AS 입금액, "
         f"COALESCE(s.total_amount, s.amount) - COALESCE(s.paid_amount,0) AS 미수금, s.owner AS 담당자, "
         f"s.status AS 상태, "
         f"{db.days_since('s.due_date')} AS 경과일 "
         f"FROM sales s JOIN customers c ON c.id = s.customer_id "
-        f"WHERE s.status NOT IN ('입금완료','취소') AND s.amount > COALESCE(s.paid_amount,0){scope_sql} "
+        f"WHERE s.status NOT IN ('입금완료','취소') AND COALESCE(s.total_amount, s.amount) > COALESCE(s.paid_amount,0){scope_sql} "
         f"ORDER BY 경과일 DESC", scope_params, db_path)
     if df.empty:
         return df
@@ -878,9 +878,11 @@ def ar_aging(db_path: str | None = None) -> pd.DataFrame:
         if d <= 0:
             return "정상"
         if d <= 30:
-            return "30일 초과"
+            return "1~30일"
         if d <= 60:
-            return "60일 초과"
+            return "31~60일"
+        if d <= 90:
+            return "61~90일"
         return "90일 초과"
 
     df["연체구간"] = df["경과일"].map(bucket)
@@ -914,8 +916,12 @@ def credit_exposure(db_path: str | None = None) -> pd.DataFrame:
     return df
 
 
+PAY_METHODS = ["계좌이체", "어음", "카드", "현금", "상계", "기타"]
+
+
 def record_payment(sale_id: int, amount: int, db_path: str | None = None, source: str = "수기",
-                   expected_before: int | None = None) -> int:
+                   expected_before: int | None = None, pay_date: str | None = None, method: str = "계좌이체",
+                   ref_no: str = "", memo: str = "") -> int:
     """입금 등록. 전액 입금되면 상태를 자동으로 '입금완료'로 바꾼다. 반영된 금액을 돌려준다.
 
     source: '수기' 또는 'ERP' (ERP 입금 대사로 반영된 경우)
@@ -925,7 +931,8 @@ def record_payment(sale_id: int, amount: int, db_path: str | None = None, source
     """
     for attempt in range(3):
         try:
-            return _record_payment_once(sale_id, amount, db_path, source, expected_before)
+            return _record_payment_once(sale_id, amount, db_path, source, expected_before,
+                                        {"pay_date": pay_date, "method": method, "ref_no": ref_no, "memo": memo})
         except db.ConflictError:
             if expected_before is not None or attempt == 2:
                 raise
@@ -933,7 +940,11 @@ def record_payment(sale_id: int, amount: int, db_path: str | None = None, source
 
 
 def _record_payment_once(sale_id: int, amount: int, db_path: str | None, source: str,
-                         expected_before: int | None) -> int:
+                         expected_before: int | None, info: dict | None = None, reversal_of: int | None = None) -> int:
+    from . import periods
+    info = info or {}
+    pay_date = db._d(info.get("pay_date")) or date.today().isoformat()
+    periods.check(pay_date, "입금")
     row = db.get_sale(sale_id, db_path)
     db.check_record_scope(row, "매출")
     if row["status"] == db.SALE_CANCELLED:
@@ -955,6 +966,39 @@ def _record_payment_once(sale_id: int, amount: int, db_path: str | None, source:
                                (paid, status, sale_id, before, db.SALE_CANCELLED)).rowcount
         if not changed:
             raise db.ConflictError("같은 매출에 다른 입금이 동시에 들어왔습니다. 다시 시도하세요.")
-    db.audit("입금등록", "매출", sale_id,
-             {"입금액": int(amount), "누적": paid, "상태": status, "출처": source}, db_path)
+        method = info.get("method") if info.get("method") in PAY_METHODS else ("기타" if info.get("method") else "계좌이체")
+        conn.execute("INSERT INTO payments (sale_id, pay_date, amount, method, source, ref_no, memo, reversal_of, "
+                     "created_by, created_by_id, created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+                     (sale_id, pay_date, int(amount), method, source, (info.get("ref_no") or "").strip() or None,
+                      (info.get("memo") or "").strip() or None, reversal_of, db.current_actor(),
+                      db.current_actor_id(), db._now()))
+    db.audit("입금반제" if reversal_of else "입금등록", "매출", sale_id,
+             {"입금액": int(amount), "입금일": pay_date, "누적": paid, "상태": status, "출처": source,
+              "반제대상": reversal_of}, db_path)
     return int(amount)
+
+
+def reverse_payment(payment_id: int, reason: str, db_path: str | None = None) -> int:
+    """반제: 잘못 넣은 입금을 지우지 않고 같은 금액의 음수 입금으로 되돌린다(오늘 날짜)."""
+    if not str(reason or "").strip():
+        raise ValueError("반제 사유를 입력하세요.")
+    pay = db._one("SELECT * FROM payments WHERE id=?", [int(payment_id)], db_path)
+    if not pay or int(pay["amount"]) <= 0 or pay.get("reversal_of"):
+        raise ValueError("반제할 수 있는 입금이 아닙니다.")
+    if db._one("SELECT id FROM payments WHERE reversal_of=?", [int(payment_id)], db_path):
+        raise ValueError("이미 반제한 입금입니다.")
+    for attempt in range(3):
+        try:
+            return _record_payment_once(int(pay["sale_id"]), -int(pay["amount"]), db_path, "반제", None,
+                                        {"method": pay.get("method"), "ref_no": pay.get("ref_no"),
+                                         "memo": f"반제: {reason.strip()}"}, reversal_of=int(payment_id))
+        except db.ConflictError:
+            if attempt == 2:
+                raise
+    raise AssertionError("unreachable")
+
+
+def list_payments(sale_id: int, db_path: str | None = None) -> list[dict]:
+    rows = db._df("SELECT p.*, (SELECT id FROM payments r WHERE r.reversal_of = p.id) AS reversed_by "
+                  "FROM payments p WHERE p.sale_id=? ORDER BY p.id", [int(sale_id)], db_path)
+    return rows.to_dict("records")

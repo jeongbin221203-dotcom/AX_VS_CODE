@@ -133,6 +133,7 @@ def run_one(worker: Optional[str] = None) -> bool:
         return False
     fn = HANDLERS.get(job["kind"])
     db.set_context("batch", None)
+    db.set_ip(None)
     from . import company
     company.refresh()                               # 관리자가 바꾼 회사 설정을 워커도 따른다
     try:

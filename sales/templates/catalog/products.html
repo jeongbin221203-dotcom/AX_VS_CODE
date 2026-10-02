@@ -45,6 +45,7 @@
       <div class="form-grid g4">
         <label>품목코드 * <input name="code" value="{{ edit.code or '' }}" required placeholder="SW-ERP-01"></label>
         <label class="span2">품목명 * <input name="name" value="{{ edit.name or '' }}" required></label>
+        <label>규격 <input name="spec" value="{{ edit.spec or '' }}" placeholder="예) 1100x1100, 20L"></label>
         <label>분류 <input name="category" value="{{ edit.category or '' }}"></label>
         <label>단위 <input name="unit" value="{{ edit.unit or 'EA' }}"></label>
         <label>정가(원) <input type="number" name="list_price" min="0" step="1000" value="{{ edit.list_price or 0 }}"></label>
