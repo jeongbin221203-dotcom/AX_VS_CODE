@@ -259,3 +259,21 @@ def test_fresh_items_first(client):
     for _ in range(3):
         nxt = _payload(client, "/speaking/opic/practice?kind=describe&n=1")["units"][0]
         assert nxt["item_id"] != first["item_id"]
+
+
+def test_weak_items_practice(client):
+    h = _csrf(client)
+    assert "약한 문항이 없습니다" in client.get("/speaking/toeic/practice/opinion?weak=1").data.decode()
+    st = _payload(client, "/speaking/toeic/practice/opinion")["units"][0]["steps"]
+    client.post("/speaking/api/attempt", headers=h, json={"exam": "tsp", "rows": [{**s["ref"], "points": 1} for s in st]})
+    p = _payload(client, "/speaking/toeic/practice/opinion?weak=1")
+    assert [u["item_id"] for u in p["units"]] == ["op-001"]
+    assert "약한 문항 1" in client.get("/speaking/toeic").data.decode()
+    # 다시 풀어 잘하면 빠진다 (마지막 회차 기준)
+    client.post("/speaking/api/attempt", headers=h, json={"exam": "tsp", "rows": [{**s["ref"], "points": 5} for s in st]})
+    assert S.weak_items("tsp", "tsp:opinion") == {}
+    q = _payload(client, "/speaking/opic/practice?kind=past&n=1")["units"][0]
+    client.post("/speaking/api/attempt", headers=h, json={"exam": "opic", "rows": [{**q["steps"][0]["ref"], "points": 2}]})
+    p = _payload(client, "/speaking/opic/practice?weak=1")
+    assert [u["item_id"] for u in p["units"]] == [q["item_id"]]
+    assert "약한 문항 1개 다시" in client.get("/speaking/opic").data.decode()

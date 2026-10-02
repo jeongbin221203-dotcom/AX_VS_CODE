@@ -105,12 +105,13 @@ OPIC_TOPICS = {
     "movie": ("영화 보기", "여가", True), "concert": ("공연·콘서트 보기", "여가", True),
     "park": ("공원 가기", "여가", True), "beach": ("해변 가기", "여가", True),
     "cafe": ("카페 가기", "여가", True), "shopping": ("쇼핑하기", "여가", True),
-    "tv": ("TV·리얼리티 쇼 보기", "여가", True),
+    "tv": ("TV·리얼리티 쇼 보기", "여가", True), "games": ("게임하기", "여가", True),
     # 취미
-    "music": ("음악 감상", "취미", True), "cooking": ("요리하기", "취미", True),
+    "music": ("음악 감상", "취미", True), "cooking": ("요리하기", "취미", True), "pets": ("반려동물 기르기", "취미", True),
     # 운동
     "jogging": ("조깅", "운동", True), "walking": ("걷기", "운동", True),
     "gym": ("헬스", "운동", True), "bike": ("자전거 타기", "운동", True),
+    "swimming": ("수영", "운동", True), "hiking": ("하이킹·등산", "운동", True),
     # 휴가·출장
     "travel_dom": ("국내 여행", "휴가", True), "travel_abroad": ("해외 여행", "휴가", True),
     "staycation": ("집에서 보내는 휴가", "휴가", True),
@@ -121,7 +122,8 @@ OPIC_TOPICS = {
     "holiday": ("명절·기념일", "돌발", False), "health": ("건강", "돌발", False),
     "food": ("음식·외식", "돌발", False), "friends": ("가족·친구", "돌발", False),
     "appointment": ("약속", "돌발", False), "fashion": ("패션", "돌발", False),
-    "housework": ("집안일", "돌발", False),
+    "housework": ("집안일", "돌발", False), "neighborhood": ("동네·이웃", "돌발", False),
+    "library": ("도서관", "돌발", False), "geography": ("지형·나라", "돌발", False), "industry": ("산업·회사", "돌발", False),
     # 자기소개
     "intro": ("자기소개", "자기소개", False),
 }
@@ -297,10 +299,15 @@ def tsp_steps(task: str, it: dict, qno: int | None = None) -> list[dict]:
     raise KeyError(task)
 
 
-def tsp_practice(bank: SpeakingBank, task: str, n: int, rng: random.Random | None = None) -> list[dict]:
-    """연습: 문제 n개 → [{task, item_id, steps}]"""
+def tsp_practice(bank: SpeakingBank, task: str, n: int, rng: random.Random | None = None, weak: bool = False) -> list[dict]:
+    """연습: 문제 n개 → [{task, item_id, steps}]. weak=True 면 마지막 점수가 낮았던 문제만 (낮은 것부터)."""
     rng = rng or random.Random()
-    items = _fresh_first(bank.tsp.get(task, []), f"tsp:{task}", rng)[:n]
+    pool = bank.tsp.get(task, [])
+    if weak:
+        ids = weak_items("tsp", f"tsp:{task}")
+        pool = sorted((it for it in pool if it["id"] in ids), key=lambda it: ids[it["id"]])
+        return [{"task": task, "item_id": it["id"], "steps": tsp_steps(task, it)} for it in pool[:n]]
+    items = _fresh_first(pool, f"tsp:{task}", rng)[:n]
     return [{"task": task, "item_id": it["id"], "steps": tsp_steps(task, it)} for it in items]
 
 
@@ -407,8 +414,14 @@ def opic_mock_plan(bank: SpeakingBank, survey: list[str], level: int, rng: rando
 
 
 def opic_practice(bank: SpeakingBank, topic: str | None, kind: str | None, n: int, show_text: bool,
-                  rng: random.Random | None = None) -> list[dict]:
+                  rng: random.Random | None = None, weak: bool = False) -> list[dict]:
     rng = rng or random.Random()
+    if weak:                                     # 마지막 점수가 낮았던 문항 (점수 낮은 것부터)
+        ids = weak_items("opic", "opic_q")
+        pool = sorted((q for q in bank.opic_q if q["id"] in ids and (not topic or q["topic"] == topic)),
+                      key=lambda q: ids[q["id"]])[:n]
+        return [{"task": "opic_q", "item_id": q["id"], "steps": [opic_q_step(q, f"질문 {i + 1} / {len(pool)}", show_text)]}
+                for i, q in enumerate(pool)]
     if kind == "roleplay":
         pool = [r for r in bank.opic_rp if not topic or r["topic"] == topic]
         pool = _fresh_first(pool, "opic_rp", rng)[:max(1, min(n, 3))]
@@ -514,6 +527,19 @@ def record(bank: SpeakingBank, exam: str, rows: list, mock_id: int | None = None
                          row["accuracy"], mock_id, row["response"]))
             saved.append(row)
     return saved
+
+
+def weak_items(exam: str, task: str) -> dict[str, float]:
+    """마지막으로 답한 회차의 점수 비율(세트는 평균)이 낮은 문제 → {item_id: 비율}.
+    토익스피킹은 만점의 60% 미만, 오픽은 3점(IM) 이하."""
+    with db.connect() as con:
+        rows = con.execute(
+            "SELECT a.item_id, AVG(a.points / a.max_points) r FROM speaking_attempts a "
+            "JOIN (SELECT item_id, MAX(created_at) at FROM speaking_attempts WHERE exam = ? AND task = ? GROUP BY item_id) m "
+            "ON a.item_id = m.item_id AND a.created_at = m.at WHERE a.exam = ? AND a.task = ? GROUP BY a.item_id",
+            (exam, task, exam, task)).fetchall()
+    cut = (lambda r: r <= 0.6) if exam == "opic" else (lambda r: r < 0.6)
+    return {r[0]: r[1] for r in rows if cut(r[1])}
 
 
 def last_seen(task: str) -> dict[str, str]:

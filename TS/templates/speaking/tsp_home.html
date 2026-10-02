@@ -65,7 +65,8 @@
           <div class="small muted">준비 {{ t.prep }}초 · 답변 {{ t.speak | join('/') }}초 · 문항당 0~{{ t.max }}점</div></td>
         <td class="r num">{{ t.count }}</td>
         <td class="r num small">{% if t.stat %}{{ t.stat.n }}회 · {{ (t.stat.ratio * 100) | round | int }}%{% if t.stat.words %}<div class="muted">평균 {{ t.stat.words | round | int }}단어</div>{% endif %}{% else %}–{% endif %}</td>
-        <td><a class="btn small primary{{ ' disabled' if not t.count }}" href="{{ url_for('speaking.tsp_practice', task=t.key) }}">연습</a></td>
+        <td class="row" style="flex-wrap:nowrap"><a class="btn small primary{{ ' disabled' if not t.count }}" href="{{ url_for('speaking.tsp_practice', task=t.key) }}">연습</a>
+          {% if t.weak %}<a class="btn small" href="{{ url_for('speaking.tsp_practice', task=t.key, weak=1, n=[t.weak, 10] | min) }}" title="마지막 자기 채점이 60% 미만">약한 문항 {{ t.weak }}</a>{% endif %}</td>
       </tr>
     {% endfor %}
     </tbody>

@@ -10,6 +10,7 @@
   </div>
   {% if not mock %}
   <form class="row" method="get">
+    {% if weak %}<input type="hidden" name="weak" value="1">{% endif %}
     {% if exam == 'opic' %}
       {% if topic %}<input type="hidden" name="topic" value="{{ topic }}">{% endif %}
       {% if kind %}<input type="hidden" name="kind" value="{{ kind }}">{% endif %}
@@ -49,7 +50,7 @@
 </div>
 <script type="application/json" id="payload">{{ payload|tojson }}</script>
 {% else %}
-<div class="card empty">이 조건의 문제가 아직 없습니다. <a href="{{ home }}">돌아가기</a></div>
+<div class="card empty">{% if weak %}다시 풀 약한 문항이 없습니다. 자기 채점이 낮았던 문항(토익스피킹 60% 미만, 오픽 3점 이하)이 여기에 모입니다.{% else %}이 조건의 문제가 아직 없습니다.{% endif %} <a href="{{ home }}">돌아가기</a></div>
 {% endif %}
 {% endblock %}
 {% block scripts %}

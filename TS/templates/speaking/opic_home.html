@@ -63,6 +63,7 @@
         <a class="btn small" href="{{ url_for('speaking.opic_practice', kind=k, n=3) }}">{{ KINDS[k] }} 3문항</a>
       {% endfor %}
       <a class="btn small primary{{ ' disabled' if not rp_n }}" href="{{ url_for('speaking.opic_practice', kind='roleplay', n=1) }}">롤플레이 1세트</a>
+      {% if weak_n %}<a class="btn small" href="{{ url_for('speaking.opic_practice', weak=1, n=[weak_n, 10] | min) }}" title="마지막 자기 채점이 3점 이하">약한 문항 {{ weak_n }}개 다시</a>{% endif %}
     </div>
     <p class="small muted" style="margin-top:8px">실제 시험은 질문이 소리로만 나옵니다. 연습 화면에서 <b>질문 글자 보기</b>를 끄면 실전처럼 연습할 수 있습니다.</p>
   </div>

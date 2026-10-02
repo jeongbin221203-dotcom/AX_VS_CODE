@@ -1,0 +1,450 @@
+[
+ {
+  "id": "oq-games-001",
+  "topic": "games",
+  "kind": "describe",
+  "level": 1,
+  "question": "You indicated in the survey that you enjoy playing games. What kinds of games do you like to play? Which one is your favorite, and why do you like it so much?",
+  "question_ko": "설문에서 게임하는 것을 좋아한다고 하셨습니다. 어떤 종류의 게임을 즐겨 하나요? 가장 좋아하는 게임은 무엇이고, 왜 그렇게 좋아하나요?",
+  "sample": "I like playing games a lot. I usually play mobile games and computer games. My favorite game is a soccer game on my computer. In this game, I can make my own team and play against other people online. I like it because it is exciting and fast. Also, I love real soccer, so the game feels very familiar to me. I play it with my friends, and we talk a lot during the game. It helps me relax after work. So that's why it is my favorite game.",
+  "sample_ko": "저는 게임하는 것을 정말 좋아해요. 보통 모바일 게임과 컴퓨터 게임을 해요. 가장 좋아하는 게임은 컴퓨터로 하는 축구 게임이에요. 이 게임에서는 제 팀을 직접 만들어서 온라인으로 다른 사람들과 경기할 수 있어요. 신나고 빠르기 때문에 좋아해요. 또 실제 축구를 좋아해서 게임이 아주 친숙하게 느껴져요. 친구들과 같이 하는데, 게임하면서 이야기도 많이 해요. 퇴근 후에 쉬는 데 도움이 돼요. 그래서 이게 제가 가장 좋아하는 게임이에요.",
+  "sample_adv": "Well, I'm kind of a gamer, so I play a lot of different games. On my phone, I play simple puzzle games when I'm on the subway, and on my computer, I play online games with my friends. But my absolute favorite is an online soccer game called FC Online. A lot of Korean guys my age play it. Basically, you build your own dream team with real players, like Son Heung-min, and then you compete against other players in real time. The reason I love it is pretty simple. I've been a huge soccer fan since I was a kid, but I'm not that good at playing real soccer. In the game, though, I can be the coach and the player at the same time. It's also really social. Every Friday night, my college friends and I log on together, put on our headsets, and play until midnight. We tease each other, we celebrate goals like crazy, and it feels like we're hanging out in the same room, even though we all live in different cities now. So for me, it's not just a game. It's actually how I stay close to my friends.",
+  "sample_adv_ko": "음, 저는 약간 게이머라서 여러 가지 게임을 많이 해요. 휴대폰으로는 지하철에서 간단한 퍼즐 게임을 하고, 컴퓨터로는 친구들과 온라인 게임을 해요. 그런데 제가 제일 좋아하는 건 FC 온라인이라는 온라인 축구 게임이에요. 제 또래 한국 남자들이 많이 해요. 기본적으로 손흥민 같은 실제 선수들로 나만의 드림팀을 만들고, 다른 플레이어들과 실시간으로 겨루는 게임이에요. 좋아하는 이유는 꽤 간단해요. 어릴 때부터 축구 광팬이었는데 실제 축구는 그렇게 잘하지 못해요. 하지만 게임에서는 감독과 선수를 동시에 할 수 있어요. 또 아주 사교적이에요. 매주 금요일 밤에 대학 친구들과 같이 접속해서 헤드셋을 끼고 자정까지 게임해요. 서로 놀리기도 하고, 골이 들어가면 미친 듯이 좋아하고, 지금은 다 다른 도시에 살지만 같은 방에서 노는 것 같은 기분이 들어요. 그래서 저한테는 그냥 게임이 아니에요. 사실 친구들과 가깝게 지내는 방법이에요.",
+  "tips": [
+   "게임 종류 → 가장 좋아하는 게임 소개 → 좋아하는 이유 2개 순서",
+   "It's not just a game. It's how I … — 마무리에 의미를 붙이면 고득점에 유리"
+  ]
+ },
+ {
+  "id": "oq-games-002",
+  "topic": "games",
+  "kind": "describe",
+  "level": 2,
+  "question": "I'd like to know where you usually play games. Describe the place in detail. What does it look like, and why do you like playing games there?",
+  "question_ko": "보통 어디에서 게임을 하는지 알고 싶습니다. 그 장소를 자세히 묘사해 주세요. 어떻게 생겼고, 왜 그곳에서 게임하는 것을 좋아하나요?",
+  "sample": "I usually play games in my room at home. My room is not very big, but it is cozy. There is a desk next to the window, and on the desk, I have a computer with two monitors. I also have a comfortable gaming chair. It was a little expensive, but it is good for my back. Next to my desk, there is a small shelf with snacks and drinks. I like playing games in my room because it is quiet and nobody bothers me. I can play anytime I want.",
+  "sample_ko": "저는 보통 집에 있는 제 방에서 게임을 해요. 방이 아주 크지는 않지만 아늑해요. 창문 옆에 책상이 있고, 책상 위에는 모니터 두 대가 달린 컴퓨터가 있어요. 편한 게이밍 의자도 있어요. 조금 비쌌지만 허리에 좋아요. 책상 옆에는 과자와 음료를 두는 작은 선반이 있어요. 조용하고 아무도 방해하지 않아서 제 방에서 게임하는 걸 좋아해요. 원할 때 언제든지 할 수 있어요.",
+  "sample_adv": "Most of the time, I play games in my own room, but once in a while, I go to a PC bang near my apartment, so let me talk about both. My room is small, but I've set it up like a little gaming station. When you walk in, the first thing you notice is my desk by the window. On it, there's a desktop computer with two monitors, a mechanical keyboard that makes a loud clicking sound, and a pair of noise canceling headphones. I spent almost two months' salary on that setup, so I'm pretty proud of it. There's also a mini fridge under the desk, full of soda. On the other hand, the PC bang is a totally different vibe. It's a big, dark room with rows and rows of computers and colorful LED lights everywhere. The best part is that you can order ramyeon and fried rice right from your seat. I go there when my friends want to play together, because it's more fun when we sit side by side and shout at each other. But honestly, I still prefer my room, because it's quiet, comfortable, and I don't have to pay by the hour.",
+  "sample_adv_ko": "대부분은 제 방에서 게임을 하지만 가끔 아파트 근처 PC방에도 가서 둘 다 말씀드릴게요. 제 방은 작지만 작은 게임 공간처럼 꾸며 놨어요. 들어오면 가장 먼저 창가의 책상이 보여요. 그 위에 모니터 두 대가 달린 데스크톱, 딸깍딸깍 소리가 큰 기계식 키보드, 노이즈 캔슬링 헤드폰이 있어요. 그 장비에 거의 두 달 치 월급을 써서 꽤 자랑스러워요. 책상 아래에는 탄산음료가 가득한 미니 냉장고도 있어요. 반면에 PC방은 분위기가 완전히 달라요. 컴퓨터가 줄줄이 놓인 크고 어두운 방이고 곳곳에 화려한 LED 조명이 있어요. 가장 좋은 점은 자리에서 바로 라면이랑 볶음밥을 주문할 수 있다는 거예요. 친구들이 같이 하고 싶어 할 때 가는데, 나란히 앉아서 서로 소리 지르면서 하면 더 재미있거든요. 하지만 솔직히 저는 여전히 제 방이 더 좋아요. 조용하고 편하고, 시간당 돈을 낼 필요가 없으니까요.",
+  "tips": [
+   "장소 묘사: 들어가면 처음 보이는 것 → 주요 물건 → 분위기 → 좋아하는 이유",
+   "PC bang, ramyeon 같은 한국 고유 소재는 짧게 설명을 붙인다"
+  ]
+ },
+ {
+  "id": "oq-games-003",
+  "topic": "games",
+  "kind": "routine",
+  "level": 2,
+  "question": "Tell me about your usual routine when you play games. When do you usually play, and who do you play with? What do you do before and after playing?",
+  "question_ko": "게임할 때 평소 하는 일과에 대해 말해 주세요. 보통 언제 게임을 하고, 누구와 하나요? 게임 전후에는 무엇을 하나요?",
+  "sample": "I usually play games on weekday nights and on weekends. On weekdays, I play for about one hour after dinner. I usually play alone, but on Saturday nights, I play online with my friends. Before I play, I finish my chores, like washing the dishes. Then I get some snacks and turn on my computer. While I play, I talk with my friends through a headset. After I finish, I take a shower and go to bed. I try not to play too late because I have to work the next day.",
+  "sample_ko": "저는 보통 평일 밤과 주말에 게임을 해요. 평일에는 저녁 먹고 한 시간쯤 해요. 보통 혼자 하지만 토요일 밤에는 친구들과 온라인으로 해요. 게임 전에는 설거지 같은 집안일을 끝내요. 그다음 간식을 챙기고 컴퓨터를 켜요. 게임하는 동안 헤드셋으로 친구들과 이야기해요. 끝나면 샤워하고 자러 가요. 다음 날 출근해야 해서 너무 늦게까지 하지 않으려고 해요.",
+  "sample_adv": "Well, I have a pretty fixed routine, because if I don't set rules, I end up playing until two in the morning. On weekdays, I give myself one hour, usually from nine to ten at night. Before I start, I make sure everything is done. I wash the dishes, prepare my lunch box for the next day, and reply to any work messages. Then I grab a can of soda and a bag of chips and sit down at my desk. On weekdays, I mostly play alone, something light like a strategy game on my phone. Weekends are a different story. Every Saturday at ten, my old high school friends and I have a regular online meeting, kind of like a club. We play a team shooting game called Overwatch for two or three hours. We actually set an alarm, because once we start, we totally lose track of time. When we finish, we usually spend a few minutes talking about our week, which is honestly my favorite part. After that, I stretch my back and neck, take a warm shower, and go to bed. It's a simple routine, but it keeps gaming fun without ruining my sleep.",
+  "sample_adv_ko": "음, 저는 꽤 고정된 일과가 있어요. 규칙을 정하지 않으면 새벽 두 시까지 하게 되거든요. 평일에는 한 시간만 허락하는데, 보통 밤 9시부터 10시까지예요. 시작하기 전에 할 일을 다 끝냈는지 확인해요. 설거지하고, 다음 날 도시락을 싸고, 업무 메시지에 답장해요. 그다음 탄산음료 한 캔과 과자 한 봉지를 들고 책상에 앉아요. 평일에는 주로 휴대폰으로 하는 전략 게임처럼 가벼운 걸 혼자 해요. 주말은 얘기가 달라요. 매주 토요일 10시에 고등학교 친구들과 동호회처럼 정기 온라인 모임을 가져요. 오버워치라는 팀 슈팅 게임을 두세 시간 해요. 한번 시작하면 시간 가는 줄 몰라서 실제로 알람을 맞춰 둬요. 끝나면 보통 몇 분 동안 한 주가 어땠는지 이야기하는데, 솔직히 그게 제일 좋은 부분이에요. 그다음 허리와 목을 스트레칭하고 따뜻한 물로 샤워하고 자요. 단순한 일과지만 잠을 망치지 않으면서 게임을 즐겁게 해 줘요.",
+  "tips": [
+   "routine 은 현재 시제 + usually / every Saturday / before ~ / after ~ 로 시간 순서",
+   "평일 vs 주말로 나누면 내용이 자연스럽게 길어진다"
+  ]
+ },
+ {
+  "id": "oq-games-004",
+  "topic": "games",
+  "kind": "past",
+  "level": 3,
+  "question": "Tell me about the first time you played a game. How old were you, and what game was it? Who taught you how to play, and how did you feel?",
+  "question_ko": "처음 게임을 했던 때에 대해 말해 주세요. 몇 살이었고, 어떤 게임이었나요? 누가 하는 법을 가르쳐 줬고, 어떤 느낌이었나요?",
+  "sample": "The first time I played a game was when I was about eight years old. My uncle visited our house during Chuseok, and he brought a small game machine. The game was Tetris. He showed me how to move and turn the blocks. At first, I was very slow, and the game ended quickly. But I kept trying, and after a few hours, I got much better. I was so excited when I cleared four lines at once. I didn't want to give the machine back. That was the start of my love for games.",
+  "sample_ko": "처음 게임을 한 건 여덟 살쯤이었어요. 추석에 삼촌이 우리 집에 오셨는데, 작은 게임기를 가져오셨어요. 게임은 테트리스였어요. 삼촌이 블록을 옮기고 돌리는 법을 보여 주셨어요. 처음엔 아주 느려서 게임이 금방 끝났어요. 하지만 계속 해 보니 몇 시간 뒤에는 훨씬 잘하게 됐어요. 네 줄을 한 번에 없앴을 때 정말 신났어요. 게임기를 돌려주고 싶지 않았어요. 그게 게임을 좋아하게 된 시작이었어요.",
+  "sample_adv": "Oh, I remember it very clearly, because it was kind of a big moment for me. I was about eight years old, and it was Chuseok, so the whole family had gathered at my grandmother's house in Daegu. My uncle, who was in his twenties back then, pulled out a small handheld game console from his bag. All of us cousins crowded around him. The game was Tetris. He sat me on his lap and explained how to rotate the blocks and drop them quickly. Honestly, I was terrible at first. The blocks piled up to the top in less than a minute, and my older cousin laughed at me, which made me really upset. So I refused to give the console back. While the adults were making songpyeon in the kitchen, I sat in the corner and played for almost three hours straight. By the evening, I had beaten my cousin's score, and I remember running around the house shouting about it. My uncle was so impressed that he actually let me keep the console. I think that day taught me something more than a game. It showed me that if I practice, I can get better at anything.",
+  "sample_adv_ko": "아, 아주 또렷하게 기억해요. 저한테는 꽤 큰 순간이었거든요. 여덟 살쯤이었고 추석이라서 온 가족이 대구 할머니 댁에 모였어요. 그때 20대였던 삼촌이 가방에서 작은 휴대용 게임기를 꺼냈어요. 사촌들이 다 삼촌 주위로 몰려들었어요. 게임은 테트리스였어요. 삼촌이 저를 무릎에 앉히고 블록을 돌리고 빨리 떨어뜨리는 법을 설명해 줬어요. 솔직히 처음엔 정말 못했어요. 1분도 안 돼서 블록이 꼭대기까지 쌓였고, 사촌 형이 저를 비웃어서 정말 속상했어요. 그래서 게임기를 돌려주지 않겠다고 버텼어요. 어른들이 부엌에서 송편을 빚는 동안 저는 구석에 앉아서 거의 세 시간 내내 했어요. 저녁쯤엔 사촌 형 점수를 넘었고, 그걸 외치면서 집 안을 뛰어다닌 기억이 나요. 삼촌이 너무 감탄해서 그 게임기를 아예 저한테 줬어요. 그날은 게임 이상의 걸 가르쳐 준 것 같아요. 연습하면 무엇이든 더 잘할 수 있다는 걸 알려 줬어요.",
+  "tips": [
+   "처음 경험: 나이·때 → 누가 → 처음엔 서툴렀다 → 나아졌다 → 지금 의미",
+   "I was terrible at first / By the evening, I had … — 과거완료로 변화를 보여 준다"
+  ]
+ },
+ {
+  "id": "oq-games-005",
+  "topic": "games",
+  "kind": "past",
+  "level": 3,
+  "question": "Tell me about a memorable experience you had while playing a game. What happened, and who were you with? Why was it so memorable?",
+  "question_ko": "게임하면서 겪은 기억에 남는 경험에 대해 말해 주세요. 무슨 일이 있었고, 누구와 함께였나요? 왜 그렇게 기억에 남나요?",
+  "sample": "One memorable experience happened last winter. My friends and I joined an online game tournament. There were five people on our team, and we practiced every night for two weeks. On the day of the tournament, we met at a PC bang. We won the first two games easily. But in the final game, our best player's computer suddenly stopped. We had to play with only four people. We were very nervous, but we won by a small score. We screamed and hugged each other. It was the best moment.",
+  "sample_ko": "기억에 남는 경험은 지난겨울에 있었어요. 친구들과 온라인 게임 대회에 나갔어요. 팀은 다섯 명이었고, 2주 동안 매일 밤 연습했어요. 대회 날 PC방에서 만났어요. 처음 두 경기는 쉽게 이겼어요. 그런데 결승에서 우리 팀 에이스의 컴퓨터가 갑자기 멈췄어요. 네 명만으로 경기해야 했어요. 정말 긴장했지만 작은 점수 차로 이겼어요. 소리 지르면서 서로 껴안았어요. 최고의 순간이었어요.",
+  "sample_adv": "The most memorable experience I've had with games was a small amateur tournament my friends and I joined last December. It was organized by a PC bang in Sinchon, and the prize was a hundred thousand won in game credits, so nothing huge, but we took it really seriously. There were five of us, all college friends, and for two weeks we practiced every single night after work, studying strategies on YouTube like we were preparing for an exam. On the day of the tournament, we showed up wearing matching black hoodies, which was kind of embarrassing, but also fun. We won the first two rounds without much trouble. Then came the final. Right in the middle of the game, the computer of our best player, Minjun, just froze. The staff said they couldn't restart it in time, so we had to keep going with four people against five. I was so nervous my hands were shaking. But somehow, we stayed calm and played as a team, and we won by just a few points. The whole PC bang started clapping. We didn't care about the prize at all. What I'll never forget is the feeling of not giving up together.",
+  "sample_adv_ko": "게임과 관련해 가장 기억에 남는 경험은 작년 12월에 친구들과 나간 작은 아마추어 대회예요. 신촌의 한 PC방에서 연 대회였고, 상품은 게임 포인트 10만 원어치라서 대단한 건 아니었지만 우리는 정말 진지했어요. 다섯 명 모두 대학 친구였고, 2주 동안 매일 밤 퇴근 후에 연습했는데, 시험 준비하듯 유튜브로 전략을 공부했어요. 대회 날에는 똑같은 검은 후드티를 맞춰 입고 갔는데, 좀 민망하기도 했지만 재미있었어요. 처음 두 라운드는 별 어려움 없이 이겼어요. 그리고 결승이 왔어요. 경기 한가운데에서 우리 팀 에이스인 민준이의 컴퓨터가 그냥 멈춰 버렸어요. 직원이 제시간에 재부팅할 수 없다고 해서 다섯 명을 상대로 네 명이 계속해야 했어요. 너무 긴장해서 손이 떨렸어요. 그런데 어떻게든 침착하게 팀으로 움직였고, 몇 점 차로 이겼어요. PC방 전체가 박수를 쳤어요. 상품은 전혀 신경 쓰지 않았어요. 제가 절대 잊지 못할 건 함께 포기하지 않았던 그 느낌이에요.",
+  "tips": [
+   "사건 이야기: 배경 → 준비 → 문제 발생 Right in the middle of … → 해결 → 느낌",
+   "What I'll never forget is … — 마무리 문장으로 활용"
+  ]
+ },
+ {
+  "id": "oq-games-006",
+  "topic": "games",
+  "kind": "compare",
+  "level": 5,
+  "question": "Games have changed a lot over the years. Compare the games people played when you were young with the games people play today. What are the biggest differences, and how do you feel about these changes?",
+  "question_ko": "게임은 수년간 많이 바뀌었습니다. 어렸을 때 사람들이 하던 게임과 요즘 사람들이 하는 게임을 비교해 주세요. 가장 큰 차이는 무엇이고, 이런 변화에 대해 어떻게 생각하나요?",
+  "sample": "Games have changed a lot since I was young. When I was a kid, most people played games on a computer at home or at a PC bang. The graphics were simple, and we had to buy game CDs. These days, almost everyone plays games on their smartphone. The graphics look very real, and many games are free. But a lot of free games make people pay for items. I think the changes are mostly good because games are easier to enjoy now. However, I worry that people spend too much money on items.",
+  "sample_ko": "제가 어렸을 때 이후로 게임은 많이 바뀌었어요. 어릴 때는 대부분 집 컴퓨터나 PC방에서 게임을 했어요. 그래픽은 단순했고 게임 CD를 사야 했어요. 요즘은 거의 모두 스마트폰으로 게임을 해요. 그래픽은 아주 진짜 같고, 무료 게임도 많아요. 하지만 무료 게임 중 많은 게임이 아이템을 사게 만들어요. 지금은 게임을 즐기기가 더 쉬워져서 변화는 대체로 좋다고 생각해요. 그래도 사람들이 아이템에 돈을 너무 많이 쓰는 건 걱정돼요.",
+  "sample_adv": "That's a great question, because I've basically grown up with these changes. When I was in elementary school, in the early two thousands, gaming was something you did in one specific place. You either went to a PC bang with your friends after school, or you played on the family computer, and only after your mom said it was okay. We bought games on CDs, and once you paid for a game, that was it. You owned the whole thing. The graphics were blocky, but honestly, we didn't care. Fast forward to today, and things are completely different. First of all, games are everywhere. People play on their phones on the subway, during lunch, even in line at the bank. Second, the graphics are amazing, almost like movies. But the biggest change, in my opinion, is the business model. Most popular games are free to download now, but they make money by selling random item boxes, and some people end up spending hundreds of thousands of won a month. So how do I feel about it? Mixed feelings, really. I love that gaming is more accessible, but I kind of miss the days when a game was just a game, not a shop.",
+  "sample_adv_ko": "좋은 질문이에요. 저는 기본적으로 이런 변화와 함께 자랐거든요. 2000년대 초 초등학생 때 게임은 정해진 한 장소에서 하는 거였어요. 방과 후에 친구들과 PC방에 가거나, 엄마가 허락해야만 가족 컴퓨터로 했어요. 게임은 CD로 샀고, 한 번 돈을 내면 그걸로 끝이었어요. 게임 전체가 내 것이었죠. 그래픽은 각졌지만 솔직히 신경 쓰지 않았어요. 오늘날로 오면 완전히 달라요. 우선 게임이 어디에나 있어요. 사람들이 지하철에서, 점심시간에, 심지어 은행 줄에서도 휴대폰으로 게임을 해요. 둘째, 그래픽이 놀라울 정도로 영화 같아요. 하지만 제 생각에 가장 큰 변화는 수익 방식이에요. 요즘 인기 게임은 대부분 무료로 내려받지만, 확률형 아이템 상자를 팔아서 돈을 벌고, 어떤 사람들은 한 달에 수십만 원을 쓰기도 해요. 그래서 어떻게 생각하냐고요? 솔직히 복잡한 마음이에요. 게임을 쉽게 할 수 있게 된 건 좋지만, 게임이 상점이 아니라 그냥 게임이던 시절이 좀 그리워요.",
+  "tips": [
+   "비교: 예전 When I was … → 지금 Fast forward to today → 가장 큰 변화 → 내 생각",
+   "First of all / Second / But the biggest change is … 로 차이를 정리"
+  ]
+ },
+ {
+  "id": "oq-games-007",
+  "topic": "games",
+  "kind": "issue",
+  "level": 5,
+  "question": "Many people are concerned about game addiction, especially among young people. Tell me about this issue. Why are people worried, and what do you think should be done about it?",
+  "question_ko": "많은 사람이 특히 젊은이들의 게임 중독을 걱정합니다. 이 문제에 대해 말해 주세요. 사람들은 왜 걱정하고, 어떻게 해야 한다고 생각하나요?",
+  "sample": "Game addiction is a big issue in Korea. Many students play games for many hours every day. Some of them stay up all night and can't focus in class. Parents are worried because their children's grades go down, and they don't exercise or talk with family. I think playing games is not bad, but people need limits. Parents should talk with their kids and make rules together. Also, game companies should show warning messages after long play time. If we work together, we can reduce the problem.",
+  "sample_ko": "게임 중독은 한국에서 큰 문제예요. 많은 학생이 매일 몇 시간씩 게임을 해요. 어떤 학생들은 밤을 새우고 수업에 집중하지 못해요. 부모들은 아이들 성적이 떨어지고 운동도 안 하고 가족과 대화도 안 해서 걱정해요. 저는 게임하는 게 나쁜 건 아니지만 한도가 필요하다고 생각해요. 부모가 아이들과 대화해서 함께 규칙을 정해야 해요. 또 게임 회사는 오래 하면 경고 메시지를 보여 줘야 해요. 함께 노력하면 문제를 줄일 수 있어요.",
+  "sample_adv": "Game addiction has been a hot topic in Korea for a long time. I remember a few years ago, there was a news story about a college student who played an online game for almost twenty hours a day and ended up dropping out of school. Stories like that really worry people, and I can understand why. First, there's the health side. When teenagers play until three in the morning, they don't get enough sleep or exercise, and their eyes and backs suffer. Second, there's the social side. Some kids spend so much time in the game world that they stop talking to their families or making real friends. And recently, a new concern has come up, which is spending. Many games sell random item boxes, which work a lot like gambling, and some teenagers secretly use their parents' credit cards. So what should be done? In my opinion, simply banning games doesn't work. Korea actually tried a shutdown law that blocked teenagers from playing after midnight, and it was removed because kids just used their parents' accounts. I think education is the key. Schools should teach students how to manage their time, and game companies should be more transparent about item probabilities. Games can be healthy if people stay in control.",
+  "sample_adv_ko": "게임 중독은 한국에서 오랫동안 뜨거운 주제였어요. 몇 년 전에 하루 거의 20시간씩 온라인 게임을 하다가 결국 학교를 그만둔 대학생에 대한 뉴스가 있었던 기억이 나요. 그런 이야기는 사람들을 정말 걱정하게 만들고, 저도 이해가 돼요. 첫째, 건강 문제가 있어요. 십 대들이 새벽 세 시까지 게임하면 잠도 운동도 부족하고 눈과 허리가 나빠져요. 둘째, 사회적인 문제가 있어요. 어떤 아이들은 게임 세계에서 너무 많은 시간을 보내서 가족과 대화하거나 진짜 친구를 사귀지 않게 돼요. 그리고 최근에는 새로운 걱정이 생겼는데, 바로 돈 쓰는 거예요. 많은 게임이 도박과 아주 비슷한 확률형 아이템 상자를 팔고, 어떤 십 대들은 몰래 부모 신용카드를 써요. 그럼 어떻게 해야 할까요? 제 생각에 게임을 그냥 금지하는 건 효과가 없어요. 한국은 실제로 자정 이후 청소년 게임을 막는 셧다운제를 시도했는데, 아이들이 부모 계정을 쓰는 바람에 폐지됐어요. 저는 교육이 핵심이라고 생각해요. 학교는 학생들에게 시간 관리법을 가르치고, 게임 회사는 아이템 확률을 더 투명하게 공개해야 해요. 스스로 조절만 한다면 게임은 건강할 수 있어요.",
+  "tips": [
+   "이슈: 뉴스 사례 → 걱정하는 이유 2~3개 → 내 의견·해결책 → 한 줄 결론",
+   "In my opinion, simply banning … doesn't work. I think … is the key. — 의견 표현"
+  ]
+ },
+ {
+  "id": "oq-pets-001",
+  "topic": "pets",
+  "kind": "describe",
+  "level": 1,
+  "question": "You indicated in the survey that you have a pet. Tell me about your pet. What kind of animal is it, and what does it look like? What is its personality like?",
+  "question_ko": "설문에서 반려동물을 기른다고 하셨습니다. 반려동물에 대해 말해 주세요. 어떤 동물이고 어떻게 생겼나요? 성격은 어떤가요?",
+  "sample": "I have a dog, and her name is Bori. She is a white Maltese, and she is four years old. She is very small, so I can hold her with one arm. She has big black eyes and soft, curly hair. Bori is very friendly and loves people. When I come home, she runs to the door and jumps up and down. But she is also a little scared of loud sounds, like thunder. She is like a family member to me, and I love her so much.",
+  "sample_ko": "저는 강아지를 키우는데, 이름은 보리예요. 하얀 몰티즈이고 네 살이에요. 아주 작아서 한 팔로 안을 수 있어요. 크고 까만 눈과 부드러운 곱슬 털을 가졌어요. 보리는 아주 다정하고 사람을 좋아해요. 제가 집에 오면 문으로 뛰어와서 위아래로 점프해요. 하지만 천둥처럼 큰 소리는 조금 무서워해요. 저한테는 가족 같은 존재고, 정말 많이 사랑해요.",
+  "sample_adv": "Sure, I'd love to talk about my pet, because she's honestly the boss of our house. I have a dog named Bori, which means barley in Korean. We named her that because her fur was a light golden color when she was a puppy, just like barley. She's a mixed breed, probably half Maltese and half poodle, and she's about five years old now. She's small, around four kilograms, with curly cream colored fur, a pink nose, and big round eyes that make it impossible to say no to her. As for her personality, she's a total mix of opposites. On one hand, she's super friendly. When anyone rings the doorbell, she runs to the door wagging her tail like they're her best friend. On the other hand, she's a huge scaredy cat. Whenever there's thunder or fireworks, she hides under my bed and won't come out until it's over. She's also really smart. She knows exactly what time I come home from work, and my mom says she starts waiting by the door around seven every evening. To be honest, Bori isn't just a pet to me. She's my little sister, and she makes every day a little brighter.",
+  "sample_adv_ko": "물론이에요. 기꺼이 말씀드릴게요. 솔직히 우리 집 대장이거든요. 보리라는 강아지를 키우는데, 한국어로 곡물 보리라는 뜻이에요. 강아지 때 털이 보리처럼 연한 금빛이어서 그렇게 이름을 지었어요. 믹스견인데 아마 몰티즈 반, 푸들 반일 거고, 지금 다섯 살쯤 됐어요. 4킬로그램 정도로 작고, 크림색 곱슬 털에 분홍 코, 그리고 거절할 수 없게 만드는 크고 동그란 눈을 가졌어요. 성격은 완전히 정반대가 섞여 있어요. 한편으로는 엄청 다정해요. 누가 초인종을 누르면 마치 제일 친한 친구가 온 것처럼 꼬리를 흔들며 문으로 달려가요. 다른 한편으로는 엄청난 겁쟁이예요. 천둥이 치거나 불꽃놀이를 하면 제 침대 밑에 숨어서 끝날 때까지 안 나와요. 또 정말 똑똑해요. 제가 퇴근하는 시간을 정확히 알아서, 엄마 말로는 매일 저녁 7시쯤부터 문 앞에서 기다린대요. 솔직히 보리는 저한테 그냥 반려동물이 아니에요. 제 막내 여동생이고, 매일을 조금 더 밝게 만들어 줘요.",
+  "tips": [
+   "외모: 종류·나이 → 크기 → 털·눈 / 성격: On one hand … On the other hand …",
+   "이름의 뜻을 설명하면 자연스럽게 길이와 개성이 생긴다"
+  ]
+ },
+ {
+  "id": "oq-pets-002",
+  "topic": "pets",
+  "kind": "describe",
+  "level": 2,
+  "question": "I'd like to know about the place where your pet usually stays in your home. What does that space look like, and what things do you have there for your pet?",
+  "question_ko": "집에서 반려동물이 주로 지내는 공간에 대해 알고 싶습니다. 그 공간은 어떻게 생겼고, 반려동물을 위해 무엇을 두었나요?",
+  "sample": "My cat, Nabi, usually stays in the living room. There is a big window there, and she loves to sit by it in the sun. Next to the window, there is a tall cat tower. It has three levels and a small house at the top. Nabi sleeps there most of the day. In the corner, there are her food bowl and water fountain. Her litter box is in the bathroom. We also have a basket full of toys, like balls and feather sticks. It is her favorite place in our home.",
+  "sample_ko": "우리 고양이 나비는 주로 거실에 있어요. 거기에 큰 창문이 있는데, 햇빛 받으면서 창가에 앉아 있는 걸 좋아해요. 창문 옆에는 높은 캣타워가 있어요. 3층이고 꼭대기에 작은 집이 있어요. 나비는 하루 대부분을 거기서 자요. 구석에는 밥그릇과 정수기가 있어요. 화장실은 욕실에 있어요. 공이나 깃털 막대 같은 장난감이 가득한 바구니도 있어요. 우리 집에서 나비가 제일 좋아하는 곳이에요.",
+  "sample_adv": "Well, technically my cat Nabi can go anywhere in the apartment, but her kingdom is definitely the living room, so let me describe that. Our living room faces south, so it gets a lot of sunlight in the afternoon. Right next to the big window, there's a tall cat tower that almost touches the ceiling. It has four levels, with scratching posts wrapped in rope, a little hammock in the middle, and a round cave at the very top. That cave is her favorite spot. She curls up in there and sleeps for hours, and sometimes she just watches the birds outside like a little security guard. On the floor beside the tower, there's a ceramic food bowl and a water fountain, because cats like moving water. We actually bought the fountain after she refused to drink from a normal bowl. There's also a basket overflowing with toys, like feather wands, crinkle balls, and a toy mouse that she has chewed half of. And of course, there's the cardboard box. We spent a lot of money on that tower, but she still loves the free box from a delivery more than anything else. That's cats for you. Anyway, that sunny corner is the coziest place in our home.",
+  "sample_adv_ko": "음, 엄밀히 말하면 우리 고양이 나비는 집 어디든 갈 수 있지만, 나비의 왕국은 확실히 거실이라서 거기를 묘사할게요. 우리 집 거실은 남향이라 오후에 햇빛이 많이 들어와요. 큰 창문 바로 옆에 천장에 거의 닿을 만큼 높은 캣타워가 있어요. 4층이고, 밧줄을 감은 스크래처 기둥, 가운데 작은 해먹, 맨 꼭대기에 동그란 동굴이 있어요. 그 동굴이 나비가 제일 좋아하는 자리예요. 그 안에 몸을 말고 몇 시간씩 자고, 가끔은 작은 경비원처럼 바깥 새들을 지켜봐요. 캣타워 옆 바닥에는 도자기 밥그릇과 정수기가 있어요. 고양이는 흐르는 물을 좋아하거든요. 사실 나비가 일반 그릇에 든 물을 안 마셔서 정수기를 샀어요. 깃털 낚싯대, 바스락 공, 그리고 반쯤 씹어 먹은 쥐 인형 같은 장난감이 넘쳐나는 바구니도 있어요. 그리고 물론 종이 상자도 있어요. 캣타워에 돈을 많이 썼는데도 나비는 여전히 택배로 온 공짜 상자를 제일 좋아해요. 고양이가 원래 그래요. 어쨌든 그 햇살 드는 구석이 우리 집에서 가장 아늑한 곳이에요.",
+  "tips": [
+   "공간 묘사: 위치·햇빛 → 가장 큰 물건 → 바닥의 물건 → 재미있는 일화",
+   "That's cats for you. — 웃음 포인트로 자연스러움을 보여 준다"
+  ]
+ },
+ {
+  "id": "oq-pets-003",
+  "topic": "pets",
+  "kind": "routine",
+  "level": 1,
+  "question": "Tell me about the things you do every day to take care of your pet. What do you do in the morning and in the evening? Who in your family helps you?",
+  "question_ko": "반려동물을 돌보기 위해 매일 하는 일에 대해 말해 주세요. 아침과 저녁에는 무엇을 하나요? 가족 중 누가 도와주나요?",
+  "sample": "I do many things every day for my dog, Choco. In the morning, I wake up at seven and give him food and fresh water. Then I take him for a short walk around my apartment. In the evening, after work, we take a longer walk in the park for about thirty minutes. When we come back, I clean his paws and brush his hair. My younger brother helps me a lot. He feeds Choco lunch because he comes home early from school. Taking care of a pet is hard work, but it is worth it.",
+  "sample_ko": "저는 우리 강아지 초코를 위해 매일 많은 일을 해요. 아침에는 7시에 일어나서 사료와 깨끗한 물을 줘요. 그다음 아파트 주변을 짧게 산책시켜요. 저녁에는 퇴근 후에 공원에서 30분쯤 더 길게 산책해요. 돌아오면 발을 닦아 주고 털을 빗겨 줘요. 남동생이 많이 도와줘요. 학교에서 일찍 오니까 초코 점심을 챙겨 줘요. 반려동물을 돌보는 건 힘든 일이지만 그럴 가치가 있어요.",
+  "sample_adv": "Taking care of my dog, Choco, is basically the first and last thing I do every day. My alarm goes off at six thirty, but honestly, Choco usually wakes me up before that by licking my face. First, I give him breakfast, which is a scoop of dry food mixed with a little boiled chicken, and I refill his water bowl. Then I put on his harness and take him out for a quick fifteen minute walk around the apartment complex, mainly so he can do his business. After that, I rush to get ready for work. During the day, my mom is home, so she gives him a snack and lets him nap on the sofa, which I'm not supposed to know about. In the evening, the main event happens. Around eight, we go to Yeouido Han River Park, which is about ten minutes away, and walk for forty minutes. He loves sniffing every tree and saying hi to other dogs. When we get home, I wipe his paws with a wet towel, brush his fur, and check his ears. Twice a week, I also brush his teeth. It sounds like a lot of work, and it is, but seeing him so happy makes it completely worth it.",
+  "sample_adv_ko": "우리 강아지 초코를 돌보는 건 기본적으로 제가 매일 처음이자 마지막으로 하는 일이에요. 알람은 6시 반에 울리지만, 솔직히 보통 그 전에 초코가 제 얼굴을 핥아서 깨워요. 먼저 아침밥을 주는데, 건사료 한 스쿱에 삶은 닭고기를 조금 섞어 주고 물그릇을 다시 채워요. 그다음 하네스를 채우고 아파트 단지를 15분 정도 빠르게 산책하는데, 주로 볼일을 보게 하려는 거예요. 그 후에는 서둘러 출근 준비를 해요. 낮에는 엄마가 집에 계셔서 간식을 주고 소파에서 낮잠을 자게 해 주시는데, 그건 제가 모르는 척해야 해요. 저녁에 본 행사가 있어요. 8시쯤 10분 거리에 있는 여의도 한강공원에 가서 40분 동안 걸어요. 초코는 나무마다 냄새를 맡고 다른 강아지들한테 인사하는 걸 아주 좋아해요. 집에 오면 젖은 수건으로 발을 닦고, 털을 빗기고, 귀를 확인해요. 일주일에 두 번은 양치도 해 줘요. 일이 많아 보이고 실제로도 많지만, 초코가 그렇게 행복해하는 걸 보면 충분히 그럴 가치가 있어요.",
+  "tips": [
+   "아침 → 낮 → 저녁 → 자기 전 순서로 시간 표현을 바꿔 가며 말한다",
+   "do his business, harness, wipe his paws — 반려동물 돌보기 필수 표현"
+  ]
+ },
+ {
+  "id": "oq-pets-004",
+  "topic": "pets",
+  "kind": "past",
+  "level": 3,
+  "question": "Tell me about the day you first brought your pet home. Where did you get it, and how did you feel? What happened during the first few days?",
+  "question_ko": "반려동물을 처음 집에 데려온 날에 대해 말해 주세요. 어디서 데려왔고, 어떤 느낌이었나요? 처음 며칠 동안 무슨 일이 있었나요?",
+  "sample": "I brought my cat home about three years ago. I adopted her from an animal shelter in my city. She was only three months old and very tiny. On the way home, she cried a lot in the carrier, so I was worried. When we got home, she hid under the sofa and didn't come out for a whole day. I put food and water near the sofa and waited. On the third day, she finally came out and sat on my lap. I was so happy that I almost cried. Now she is my best friend.",
+  "sample_ko": "저는 3년쯤 전에 고양이를 집에 데려왔어요. 우리 시의 동물 보호소에서 입양했어요. 겨우 3개월이었고 아주 작았어요. 집에 오는 길에 이동장에서 많이 울어서 걱정됐어요. 집에 도착하니 소파 밑에 숨어서 하루 종일 나오지 않았어요. 소파 근처에 밥과 물을 두고 기다렸어요. 셋째 날 드디어 나와서 제 무릎에 앉았어요. 너무 행복해서 거의 울 뻔했어요. 지금은 제 가장 친한 친구예요.",
+  "sample_adv": "I'll never forget that day. It was a rainy Saturday in April, about three years ago. I had been thinking about getting a cat for months, and I decided that I wanted to adopt rather than buy one from a pet shop. So I visited an animal shelter in Suwon. There were so many cats, but one tiny gray kitten in the corner just stared at me without blinking, and I knew right away she was the one. The staff told me she had been found in a box near a subway station. After filling out a lot of paperwork, I put her in a carrier and took a taxi home. She cried the whole way, and I felt so guilty, like I was kidnapping her. When we got to my apartment, the moment I opened the carrier, she shot out and disappeared under the sofa. She stayed there for two full days. I even slept on the living room floor so she wouldn't feel alone. Then, on the third night, I woke up and found her curled up right next to my face, purring. I actually teared up. I named her Haru, because that night felt like the start of a new day for both of us.",
+  "sample_adv_ko": "그날은 절대 잊지 못할 거예요. 3년쯤 전 4월의 비 오는 토요일이었어요. 몇 달 동안 고양이를 키울까 생각하다가, 펫숍에서 사는 것보다 입양하기로 했어요. 그래서 수원의 한 동물 보호소에 갔어요. 고양이가 정말 많았는데, 구석에 있던 작은 회색 새끼 고양이 한 마리가 눈도 깜빡이지 않고 저를 빤히 쳐다봐서 바로 이 아이라는 걸 알았어요. 직원이 지하철역 근처 상자에서 발견된 아이라고 했어요. 서류를 잔뜩 작성한 뒤 이동장에 넣고 택시를 타고 집에 왔어요. 오는 내내 울어서 마치 납치하는 것처럼 너무 미안했어요. 집에 도착해서 이동장을 열자마자 휙 뛰쳐나가서 소파 밑으로 사라졌어요. 꼬박 이틀을 거기 있었어요. 혼자라고 느끼지 않게 저는 거실 바닥에서 자기까지 했어요. 그런데 셋째 날 밤에 깨 보니 그 아이가 제 얼굴 바로 옆에 몸을 말고 골골거리고 있었어요. 정말 눈물이 났어요. 그날 밤이 우리 둘 모두에게 새로운 하루의 시작 같아서 이름을 하루라고 지었어요.",
+  "tips": [
+   "입양 이야기: 결심 → 첫 만남 → 데려오는 길 → 적응 과정 → 감동의 순간",
+   "I knew right away she was the one / I actually teared up — 감정 표현"
+  ]
+ },
+ {
+  "id": "oq-pets-005",
+  "topic": "pets",
+  "kind": "past",
+  "level": 3,
+  "question": "Tell me about a time when something unexpected or difficult happened with your pet. What happened, and how did you deal with it? How did it turn out in the end?",
+  "question_ko": "반려동물과 관련해 예상치 못했거나 힘든 일이 있었던 때에 대해 말해 주세요. 무슨 일이 있었고, 어떻게 대처했나요? 결국 어떻게 되었나요?",
+  "sample": "Last summer, my dog got lost in the park. I was talking on the phone, and the leash slipped out of my hand. A big motorcycle made a loud noise, and he ran away very fast. I looked for him everywhere for two hours, but I couldn't find him. I was so scared. I posted his picture on a local online community. That night, a woman called me. She found my dog near a convenience store. I ran there and hugged him. Since then, I always hold the leash tightly.",
+  "sample_ko": "작년 여름에 우리 강아지가 공원에서 길을 잃었어요. 제가 통화하다가 목줄이 손에서 빠졌어요. 큰 오토바이가 시끄러운 소리를 내서 강아지가 아주 빨리 도망갔어요. 두 시간 동안 사방을 찾았지만 못 찾았어요. 너무 무서웠어요. 동네 온라인 커뮤니티에 사진을 올렸어요. 그날 밤 한 여자분이 전화했어요. 편의점 근처에서 우리 강아지를 찾았대요. 거기로 달려가서 안아 줬어요. 그 이후로 항상 목줄을 꽉 잡아요.",
+  "sample_adv": "The scariest day of my life was actually because of my dog, Dubu. It happened last July. We were walking along the stream near my apartment in the evening, and I was answering a work call. I wasn't paying attention, and the leash slipped out of my hand. Right at that moment, a delivery motorcycle zoomed past us with a really loud engine, and Dubu panicked and ran off into the dark. I chased him, but he was way too fast. For the next three hours, my whole family searched the neighborhood with flashlights, calling his name. My heart was pounding the entire time, and I kept imagining the worst. Then my sister had a smart idea. She posted his photo on our neighborhood's online community, the one people use to buy and sell used stuff. Within thirty minutes, dozens of people shared it, and around midnight, a woman messaged me. She had found a little white dog shaking behind a convenience store, three blocks away. I ran there in my slippers, and when Dubu saw me, he jumped into my arms. I cried like a baby. After that, I bought him a GPS tag and registered his microchip, and I never take work calls on our walks anymore.",
+  "sample_adv_ko": "제 인생에서 가장 무서웠던 날은 사실 우리 강아지 두부 때문이었어요. 작년 7월에 있었던 일이에요. 저녁에 아파트 근처 하천을 따라 걷고 있었는데, 제가 업무 전화를 받고 있었어요. 신경을 안 쓰다가 목줄이 손에서 빠졌어요. 바로 그 순간 배달 오토바이가 엄청 큰 엔진 소리를 내며 휙 지나갔고, 두부가 겁에 질려 어둠 속으로 달아났어요. 쫓아갔지만 너무 빨랐어요. 그 후 세 시간 동안 온 가족이 손전등을 들고 이름을 부르며 동네를 찾아다녔어요. 내내 심장이 쿵쾅거렸고 계속 최악의 상황이 떠올랐어요. 그때 언니가 좋은 생각을 했어요. 사람들이 중고 물건을 사고파는 동네 온라인 커뮤니티에 두부 사진을 올렸어요. 30분 만에 수십 명이 공유했고, 자정쯤 한 여자분이 메시지를 보냈어요. 세 블록 떨어진 편의점 뒤에서 떨고 있는 작은 흰 강아지를 찾았대요. 슬리퍼 바람으로 달려갔는데, 두부가 저를 보더니 품에 뛰어들었어요. 아기처럼 울었어요. 그 후로 GPS 태그를 사 주고 마이크로칩도 등록했고, 이제 산책 중에는 절대 업무 전화를 받지 않아요.",
+  "tips": [
+   "문제 경험: 상황 → 사건 Right at that moment … → 대처 → 결과 → 교훈",
+   "My heart was pounding / I kept imagining the worst — 긴장감 표현"
+  ]
+ },
+ {
+  "id": "oq-pets-006",
+  "topic": "pets",
+  "kind": "compare",
+  "level": 5,
+  "question": "The way people in your country treat pets has changed over the years. How did people take care of pets in the past, and how is it different now? What do you think caused these changes?",
+  "question_ko": "당신 나라 사람들이 반려동물을 대하는 방식은 수년간 바뀌었습니다. 예전에는 반려동물을 어떻게 돌봤고, 지금은 어떻게 다른가요? 무엇이 이런 변화를 가져왔다고 생각하나요?",
+  "sample": "In the past, many Korean families kept dogs outside the house. The dogs usually lived in the yard and ate leftover food. People called them pets, but they were more like guards. These days, things are very different. Most people live in apartments, so pets live inside with the family. People buy special food, clothes, and toys for them. There are also pet cafes, pet hotels, and even pet insurance. I think this changed because more people live alone now, and they see pets as family members.",
+  "sample_ko": "예전에는 많은 한국 가정이 개를 집 밖에서 키웠어요. 개들은 보통 마당에 살면서 남은 음식을 먹었어요. 사람들은 반려동물이라고 했지만 사실 지킴이에 더 가까웠어요. 요즘은 아주 달라요. 대부분 아파트에 살아서 반려동물이 가족과 함께 집 안에서 지내요. 전용 사료, 옷, 장난감도 사 줘요. 애견 카페, 애견 호텔, 심지어 펫 보험도 있어요. 혼자 사는 사람이 늘고 반려동물을 가족으로 보기 때문에 바뀌었다고 생각해요.",
+  "sample_adv": "The change has been huge, and I can see it just by comparing my grandparents' generation with mine. When my dad was a kid in the countryside, almost every house had a dog, but it lived outside, tied up in the yard. Its main job was to bark when strangers came, and it ate whatever was left over from the family's meals. Nobody took it to the vet unless it was seriously sick, and people even used the word pet animal, not companion animal. Now, it's almost the opposite. Most Koreans live in apartments, so dogs and cats live inside, sleep on the sofa, and sometimes even on the bed. The pet industry is enormous. There are organic pet food brands, pet strollers, dog kindergartens, pet funeral services, and even TV shows about training problem dogs. Also, the term has officially changed to companion animal, which shows how people's attitudes have shifted. I think there are a few reasons. First, there are many more single person households now, and people want a companion. Second, Korea has a low birth rate, so some couples raise pets instead of children. Overall, I think it's a positive change, although sometimes I feel people spend more on their dogs than on themselves.",
+  "sample_adv_ko": "변화가 엄청 커요. 우리 조부모 세대와 제 세대를 비교만 해도 알 수 있어요. 아빠가 시골에서 어렸을 때는 거의 모든 집에 개가 있었는데, 마당에 묶여서 밖에서 살았어요. 주된 일은 낯선 사람이 오면 짖는 거였고, 가족이 먹고 남은 음식을 먹었어요. 심하게 아프지 않으면 아무도 동물병원에 데려가지 않았고, 사람들은 반려동물이 아니라 애완동물이라는 말을 썼어요. 지금은 거의 정반대예요. 한국인 대부분이 아파트에 살아서 개와 고양이가 집 안에서 지내고, 소파에서, 때로는 침대에서도 자요. 반려동물 산업은 엄청나요. 유기농 사료 브랜드, 펫 유모차, 강아지 유치원, 반려동물 장례 서비스, 문제견 훈련 TV 프로그램까지 있어요. 또 용어도 공식적으로 반려동물로 바뀌었는데, 사람들의 태도가 얼마나 바뀌었는지 보여 줘요. 몇 가지 이유가 있다고 생각해요. 첫째, 지금은 1인 가구가 훨씬 많아서 사람들이 동반자를 원해요. 둘째, 한국은 출산율이 낮아서 어떤 부부는 아이 대신 반려동물을 키워요. 전반적으로 긍정적인 변화라고 생각하지만, 가끔은 사람들이 자기보다 개한테 돈을 더 쓰는 것 같기도 해요.",
+  "tips": [
+   "비교: 윗세대 예시 → Now, it's almost the opposite → 구체적 예 → 원인 2개 → 내 생각",
+   "pet animal vs companion animal — 용어 변화를 언급하면 고급 답변"
+  ]
+ },
+ {
+  "id": "oq-pets-007",
+  "topic": "pets",
+  "kind": "issue",
+  "level": 5,
+  "question": "In many countries, abandoned pets have become a serious social problem. Tell me about this issue in your country. Why do people abandon their pets, and what can be done to solve this problem?",
+  "question_ko": "많은 나라에서 유기 동물이 심각한 사회 문제가 되었습니다. 당신 나라의 이 문제에 대해 말해 주세요. 사람들은 왜 반려동물을 버리고, 이 문제를 해결하려면 무엇을 할 수 있을까요?",
+  "sample": "Abandoned pets are a big problem in Korea. Every year, many dogs and cats are left on the street. Many of them are abandoned in summer, when people go on vacation. Some people buy a cute puppy without thinking carefully. Later, they find out that a pet needs a lot of time and money, so they give up. I think we need stronger rules. People who abandon pets should pay a big fine. Also, I think people should adopt from shelters instead of buying pets from shops.",
+  "sample_ko": "유기 동물은 한국에서 큰 문제예요. 매년 많은 개와 고양이가 길에 버려져요. 사람들이 휴가를 가는 여름에 많이 버려져요. 어떤 사람들은 깊이 생각하지 않고 귀여운 강아지를 사요. 나중에 반려동물이 시간과 돈이 많이 든다는 걸 알게 되면 포기해요. 더 강한 규칙이 필요하다고 생각해요. 반려동물을 버린 사람은 큰 벌금을 내야 해요. 또 가게에서 사기보다 보호소에서 입양해야 한다고 생각해요.",
+  "sample_adv": "This is something I really care about, because my own cat came from a shelter. In Korea, more than a hundred thousand animals are found abandoned every year, and the news always says the number goes up during summer vacation season. People take their dogs to the countryside or to a beach on Jeju Island and simply leave them there. It's heartbreaking. So why does this happen? In my opinion, the biggest reason is impulse buying. You walk past a pet shop, see a tiny puppy in the window, and buy it on the spot for a million won. But a few months later, the puppy grows bigger, barks at night, chews the furniture, and needs expensive vet visits. People realize they weren't ready, and they give up. Another reason is that some owners move to a new apartment that doesn't allow pets, or they get sick and can't take care of them anymore. To solve this, I think we need a few things. First, the government should enforce the fines more strictly and make microchip registration mandatory for cats as well. Second, there should be a short education course before anyone can get a pet, kind of like a license. Most importantly, people should adopt, don't shop. A pet is a fifteen year promise, not a cute toy.",
+  "sample_adv_ko": "이건 제가 정말 신경 쓰는 문제예요. 우리 고양이도 보호소에서 왔거든요. 한국에서는 매년 10만 마리 넘는 동물이 버려진 채 발견되고, 뉴스에서는 여름휴가철에 그 수가 늘어난다고 항상 말해요. 사람들이 개를 시골이나 제주도 해변에 데려가서 그냥 두고 와요. 가슴이 아파요. 그럼 왜 이런 일이 생길까요? 제 생각에 가장 큰 이유는 충동구매예요. 펫숍 앞을 지나가다 창문 안의 작은 강아지를 보고 그 자리에서 백만 원에 사는 거예요. 그런데 몇 달 뒤 강아지가 커지고, 밤에 짖고, 가구를 물어뜯고, 비싼 병원비가 필요해져요. 사람들은 준비가 안 됐다는 걸 깨닫고 포기해요. 또 다른 이유는 반려동물 금지 아파트로 이사 가거나, 아파서 더 이상 돌볼 수 없게 되는 경우예요. 이를 해결하려면 몇 가지가 필요하다고 생각해요. 첫째, 정부가 벌금을 더 엄격하게 집행하고 고양이도 마이크로칩 등록을 의무화해야 해요. 둘째, 누구든 반려동물을 들이기 전에 일종의 자격증처럼 짧은 교육 과정이 있어야 해요. 가장 중요한 건, 사지 말고 입양하는 거예요. 반려동물은 귀여운 장난감이 아니라 15년의 약속이에요.",
+  "tips": [
+   "이슈: 개인적 연결 → 뉴스·통계 → 원인 2개 → 해결책 2~3개 → 강한 한 줄 결론",
+   "adopt, don't shop / impulse buying / make … mandatory — 사회 이슈 핵심 표현"
+  ]
+ },
+ {
+  "id": "oq-swimming-001",
+  "topic": "swimming",
+  "kind": "describe",
+  "level": 1,
+  "question": "You indicated in the survey that you like swimming. Where do you usually go swimming? Describe the place in detail. What does it look like?",
+  "question_ko": "설문에서 수영을 좋아한다고 하셨습니다. 보통 어디로 수영하러 가나요? 그 장소를 자세히 묘사해 주세요. 어떻게 생겼나요?",
+  "sample": "I usually go swimming at a public sports center near my home. It takes about ten minutes by bus. The pool is on the first floor. It is a big indoor pool with eight lanes. Two lanes are for beginners, and the others are for people who can swim well. The water is clean and a little cold. There is a big window on one side, so the pool is bright during the day. There are also locker rooms and showers. The fee is cheap, so I like it.",
+  "sample_ko": "저는 보통 집 근처 구민 체육센터에서 수영해요. 버스로 10분쯤 걸려요. 수영장은 1층에 있어요. 레인이 여덟 개인 큰 실내 수영장이에요. 두 레인은 초보자용이고, 나머지는 수영을 잘하는 사람들용이에요. 물은 깨끗하고 조금 차가워요. 한쪽에 큰 창문이 있어서 낮에는 수영장이 밝아요. 탈의실과 샤워실도 있어요. 요금이 저렴해서 좋아요.",
+  "sample_adv": "I usually swim at the public sports center in my neighborhood, which is run by the district office. It's about a ten minute walk from my apartment, so it's super convenient. When you walk in, there's a front desk where you scan your membership card, and then you go down to the locker rooms. In Korea, you have to take a full shower before you get in the pool, so the shower room is always busy and steamy. The pool itself is a twenty five meter indoor pool with six lanes. The lanes are divided by level. The one closest to the wall is for walking and beginners, the middle lanes are for intermediate swimmers like me, and the far lane is for the really fast people who swim like dolphins. One whole side of the pool is glass, so in the morning, sunlight comes in and makes the water sparkle. It smells a bit like chlorine, of course, but it's very clean. There's also a small hot tub in the corner, and honestly, sitting in there for five minutes after swimming is my favorite part. The monthly fee is only about sixty thousand won, so it's a great deal.",
+  "sample_adv_ko": "저는 보통 구청에서 운영하는 우리 동네 구민 체육센터에서 수영해요. 아파트에서 걸어서 10분쯤이라 엄청 편해요. 들어가면 회원 카드를 찍는 안내 데스크가 있고, 그다음 탈의실로 내려가요. 한국에서는 수영장에 들어가기 전에 꼭 샤워를 다 해야 해서 샤워실은 항상 붐비고 김이 서려 있어요. 수영장 자체는 레인이 여섯 개인 25미터 실내 수영장이에요. 레인은 실력별로 나뉘어요. 벽에 가장 가까운 레인은 걷기와 초보자용이고, 가운데 레인은 저 같은 중급자용, 맨 끝 레인은 돌고래처럼 수영하는 정말 빠른 사람들용이에요. 수영장 한쪽 면 전체가 유리라서 아침에는 햇빛이 들어와 물이 반짝여요. 물론 소독약 냄새가 조금 나지만 아주 깨끗해요. 구석에는 작은 온탕도 있는데, 솔직히 수영 후에 거기 5분 앉아 있는 게 제일 좋아요. 한 달 요금이 6만 원 정도밖에 안 해서 정말 이득이에요.",
+  "tips": [
+   "장소 묘사: 위치·거리 → 들어가는 순서 → 수영장 구조 → 분위기 → 좋아하는 점",
+   "The lanes are divided by level — 구조 설명에 유용"
+  ]
+ },
+ {
+  "id": "oq-swimming-002",
+  "topic": "swimming",
+  "kind": "describe",
+  "level": 2,
+  "question": "I'd like to know why you enjoy swimming. What do you like most about it, and what are the benefits of swimming for you?",
+  "question_ko": "왜 수영을 즐기는지 알고 싶습니다. 수영에서 가장 좋은 점은 무엇이고, 수영이 당신에게 주는 이점은 무엇인가요?",
+  "sample": "I enjoy swimming for many reasons. First, it is good for my health. I work at a desk all day, so my back and shoulders often hurt. After I started swimming, the pain went away. Second, swimming helps me relax. When I am in the water, I can't check my phone, so I can forget about my stress. I only think about my breathing. Also, I sleep much better on the days I swim. For these reasons, swimming is my favorite exercise.",
+  "sample_ko": "저는 여러 이유로 수영을 즐겨요. 첫째, 건강에 좋아요. 하루 종일 책상에서 일해서 허리와 어깨가 자주 아파요. 수영을 시작한 후에 통증이 사라졌어요. 둘째, 수영은 긴장을 푸는 데 도움이 돼요. 물속에서는 휴대폰을 볼 수 없어서 스트레스를 잊을 수 있어요. 호흡만 생각해요. 또 수영한 날에는 잠을 훨씬 잘 자요. 이런 이유로 수영은 제가 가장 좋아하는 운동이에요.",
+  "sample_adv": "There are so many things I love about swimming, but let me pick the top three. The first one is definitely the health benefits. I'm an office worker, and I sit in front of a computer for about nine hours a day. A couple of years ago, my lower back got so bad that I had to see a doctor, and he recommended swimming because it doesn't put pressure on your joints. Within three months of swimming, the pain was almost gone, and my posture got much better too. The second reason is mental. When I'm underwater, the world goes completely quiet. There are no messages, no notifications, no boss calling me. I just focus on my strokes and my breathing, and it's almost like meditation. I've heard people call it moving meditation, and I totally agree. The third thing I love is the sense of progress. When I started, I couldn't even swim one lap without stopping. Now I can swim a kilometer, and last month I finally learned the butterfly stroke, which felt like a huge achievement. So overall, swimming keeps my body healthy, my mind calm, and it gives me small goals to look forward to every week.",
+  "sample_adv_ko": "수영의 좋은 점이 정말 많지만 세 가지만 꼽을게요. 첫 번째는 확실히 건강상의 이점이에요. 저는 회사원이라 하루 아홉 시간쯤 컴퓨터 앞에 앉아 있어요. 2년 전쯤 허리가 너무 안 좋아져서 병원에 가야 했는데, 의사가 관절에 부담을 주지 않는다며 수영을 추천했어요. 수영한 지 석 달 만에 통증이 거의 사라졌고 자세도 훨씬 좋아졌어요. 두 번째 이유는 정신적인 거예요. 물속에 있으면 세상이 완전히 조용해져요. 메시지도, 알림도, 상사 전화도 없어요. 그냥 팔 동작과 호흡에만 집중하는데, 거의 명상 같아요. 사람들이 움직이는 명상이라고 부르는 걸 들었는데 완전히 동의해요. 세 번째로 좋은 건 발전하는 느낌이에요. 처음 시작했을 때는 한 바퀴도 쉬지 않고 못 갔어요. 지금은 1킬로미터를 수영할 수 있고, 지난달에는 드디어 접영을 배웠는데 큰 성취처럼 느껴졌어요. 그래서 전반적으로 수영은 몸을 건강하게, 마음을 차분하게 해 주고, 매주 기대할 작은 목표를 줘요.",
+  "tips": [
+   "이유 3개: The first one is … / The second reason is … / The third thing I love is …",
+   "moving meditation, doesn't put pressure on your joints — 수영 장점 표현"
+  ]
+ },
+ {
+  "id": "oq-swimming-003",
+  "topic": "swimming",
+  "kind": "routine",
+  "level": 2,
+  "question": "Tell me about your usual routine when you go swimming. How often do you go, and what do you do from the moment you arrive until you leave?",
+  "question_ko": "수영하러 갈 때 보통 하는 일과에 대해 말해 주세요. 얼마나 자주 가고, 도착해서 나올 때까지 무엇을 하나요?",
+  "sample": "I go swimming three times a week, on Monday, Wednesday, and Friday mornings. I take a class from six to seven before work. When I arrive at the pool, I go to the locker room and change my clothes. Then I take a shower. After that, I do some stretching with the other people in my class. The teacher tells us what to practice, and we swim for about fifty minutes. After class, I take a shower again and dry my hair. Then I go to work feeling fresh.",
+  "sample_ko": "저는 일주일에 세 번, 월·수·금 아침에 수영하러 가요. 출근 전 6시부터 7시까지 강습을 들어요. 수영장에 도착하면 탈의실에 가서 옷을 갈아입어요. 그다음 샤워해요. 그 후 반 사람들과 스트레칭을 해요. 선생님이 연습할 걸 알려 주면 50분쯤 수영해요. 강습이 끝나면 다시 샤워하고 머리를 말려요. 그리고 상쾌한 기분으로 출근해요.",
+  "sample_adv": "I'm part of a morning swim class, so my routine is pretty much the same every time. I go three times a week, on Mondays, Wednesdays, and Fridays, from six to seven in the morning. That means I wake up at five twenty, which was really painful at first, but now my body is used to it. I pack my bag the night before, with my swimsuit, cap, goggles, and a towel, so I can just grab it and go. When I get to the sports center, I scan my card, go to the locker room, and take a quick shower. Then I put on my swimsuit and cap and head to the pool. Our class starts with five minutes of stretching together on the pool deck. After that, we warm up by swimming four easy laps. Then our coach, who is a retired national swimmer, gives us drills for the day, like kicking with a board or practicing breathing on both sides. The last ten minutes are usually the hardest, because he makes us do sprints. After class, I take a long hot shower, dry my hair, and grab a protein shake from the cafe downstairs. I get to the office by eight, and I honestly feel more awake than anyone else there.",
+  "sample_adv_ko": "저는 아침 수영 강습반에 다녀서 일과가 매번 거의 똑같아요. 일주일에 세 번, 월·수·금 아침 6시부터 7시까지 가요. 그러려면 5시 20분에 일어나야 하는데, 처음엔 정말 괴로웠지만 지금은 몸이 익숙해졌어요. 수영복, 수모, 수경, 수건을 전날 밤에 가방에 챙겨 둬서 그냥 들고 나가면 돼요. 체육센터에 도착하면 카드를 찍고 탈의실에 가서 빠르게 샤워해요. 그다음 수영복과 수모를 쓰고 수영장으로 가요. 강습은 수영장 바닥에서 다 같이 5분 스트레칭하는 걸로 시작해요. 그 후 네 바퀴를 가볍게 돌면서 몸을 풀어요. 그다음 은퇴한 국가대표 출신 코치님이 그날의 훈련을 줘요. 킥판 잡고 발차기하기나 양쪽 호흡 연습 같은 거요. 마지막 10분이 보통 제일 힘든데, 코치님이 전력 질주를 시키거든요. 강습이 끝나면 뜨거운 물로 오래 샤워하고, 머리를 말리고, 아래층 카페에서 단백질 셰이크를 사요. 8시까지 사무실에 도착하는데, 솔직히 거기 있는 누구보다 정신이 맑아요.",
+  "tips": [
+   "전날 밤 → 도착 → 샤워 → 스트레칭 → 강습 → 마무리 순서, 현재 시제 유지",
+   "pack my bag, warm up, do drills, sprints — 운동 일과 표현"
+  ]
+ },
+ {
+  "id": "oq-swimming-004",
+  "topic": "swimming",
+  "kind": "past",
+  "level": 3,
+  "question": "Tell me about how you first learned to swim. When and where did you learn, and who taught you? Was it difficult at first?",
+  "question_ko": "처음 수영을 배운 과정에 대해 말해 주세요. 언제 어디서 배웠고, 누가 가르쳐 줬나요? 처음에는 어려웠나요?",
+  "sample": "I learned to swim when I was twenty five years old. I was afraid of water for a long time because I almost drowned in a river when I was a child. But I wanted to go on a trip to Bali, so I signed up for a beginner class at a sports center. My teacher was very kind and patient. At first, it was very difficult. I couldn't even put my face in the water. After one month, I could float, and after three months, I could swim freestyle. I was so proud of myself.",
+  "sample_ko": "저는 스물다섯 살에 수영을 배웠어요. 어렸을 때 강에서 물에 빠질 뻔해서 오랫동안 물을 무서워했어요. 하지만 발리로 여행 가고 싶어서 체육센터 초급반에 등록했어요. 선생님은 아주 친절하고 참을성이 많았어요. 처음엔 정말 어려웠어요. 얼굴을 물에 넣지도 못했어요. 한 달 뒤에는 뜰 수 있었고, 석 달 뒤에는 자유형을 할 수 있었어요. 제 자신이 너무 자랑스러웠어요.",
+  "sample_adv": "Actually, I learned to swim pretty late, and there's a story behind it. When I was seven, I was playing in a valley stream near Gapyeong with my cousins, and I slipped into a deep spot. My uncle pulled me out within a few seconds, but after that, I was terrified of water. For almost twenty years, whenever my friends went to the beach or a water park, I just sat on the sand and watched their bags. Then, three years ago, my friends planned a trip to Bali and said they were going snorkeling. I didn't want to miss out again, so I finally signed up for an adult beginner class at the sports center near my office. On the first day, I was the oldest person in the class, and I was shaking just standing in the shallow end. My instructor, a woman in her fifties, noticed and spent the whole first lesson teaching me only one thing, how to breathe out bubbles underwater. It sounds silly, but that really helped. Little by little, I learned to float, then kick, then swim freestyle. After three months, I swam my first full lap, and everyone in class clapped for me. And yes, I went snorkeling in Bali, and it was absolutely magical.",
+  "sample_adv_ko": "사실 저는 수영을 꽤 늦게 배웠는데, 거기에 사연이 있어요. 일곱 살 때 가평 근처 계곡에서 사촌들과 놀다가 깊은 곳으로 미끄러졌어요. 삼촌이 몇 초 만에 꺼내 줬지만, 그 후로 물이 너무 무서워졌어요. 거의 20년 동안 친구들이 해변이나 워터파크에 갈 때마다 저는 모래사장에 앉아 가방만 지켰어요. 그러다 3년 전에 친구들이 발리 여행을 계획하면서 스노클링을 하겠다고 했어요. 또 놓치고 싶지 않아서 드디어 회사 근처 체육센터 성인 초급반에 등록했어요. 첫날 저는 반에서 제일 나이가 많았고, 얕은 쪽에 서 있기만 해도 떨렸어요. 50대 여자 강사님이 그걸 알아채고 첫 수업 내내 딱 한 가지, 물속에서 숨을 내쉬어 거품 내는 법만 가르쳐 주셨어요. 우습게 들리지만 그게 정말 도움이 됐어요. 조금씩 뜨는 법, 그다음 발차기, 그다음 자유형을 배웠어요. 석 달 뒤 처음으로 한 바퀴를 완주했고, 반 사람들이 다 박수를 쳐 줬어요. 그리고 네, 발리에서 스노클링을 했고 정말 환상적이었어요.",
+  "tips": [
+   "배운 과정: 계기·두려움 → 등록 → 첫날 → 조금씩 나아짐 Little by little → 결과",
+   "I didn't want to miss out again — 동기를 말할 때 유용"
+  ]
+ },
+ {
+  "id": "oq-swimming-005",
+  "topic": "swimming",
+  "kind": "past",
+  "level": 3,
+  "question": "Tell me about a memorable experience you had while swimming. Where were you, and what happened? Why do you still remember it?",
+  "question_ko": "수영하면서 겪은 기억에 남는 경험에 대해 말해 주세요. 어디에 있었고, 무슨 일이 있었나요? 왜 아직도 기억하나요?",
+  "sample": "My most memorable swimming experience was at Hyeopjae Beach on Jeju Island two years ago. I went there with my family in August. The water was clear and blue, like in a picture. I swam far from the beach, and I saw small fish under me. It was beautiful. But suddenly, a big wave came, and I drank a lot of salty water. A lifeguard came quickly and helped me back to the beach. I was embarrassed, but I learned that the sea is very different from a pool.",
+  "sample_ko": "가장 기억에 남는 수영 경험은 2년 전 제주도 협재 해변에서였어요. 8월에 가족과 함께 갔어요. 물이 사진처럼 맑고 파랬어요. 해변에서 멀리까지 헤엄쳐 갔는데 발밑으로 작은 물고기들이 보였어요. 아름다웠어요. 그런데 갑자기 큰 파도가 와서 짠 물을 많이 먹었어요. 안전요원이 빠르게 와서 해변으로 돌아가게 도와줬어요. 창피했지만 바다는 수영장과 아주 다르다는 걸 배웠어요.",
+  "sample_adv": "The swimming experience I remember most happened two summers ago, during a family trip to Jeju Island. We were staying near Hyeopjae Beach, which is famous for its emerald colored water and white sand. By then, I had been swimming at the pool for about a year, and I was feeling pretty confident, maybe a little too confident. So on the second day, I told my family I was going to swim out to the buoy line, which looked close from the beach. At first, it was amazing. The water was so clear that I could see little silver fish swimming right below me, and the sound of the waves was so peaceful. But when I reached the buoys and turned around, I realized the beach was much farther than I thought. On top of that, the wind picked up, and the waves started hitting my face. I swallowed a lot of salt water and started to panic. Luckily, I remembered what my coach always said. If you get tired, just flip over and float on your back. So I did that, calmed down, and waved my arm. A lifeguard on a paddleboard came over and guided me back. It was embarrassing, but it taught me to respect the ocean.",
+  "sample_adv_ko": "가장 기억에 남는 수영 경험은 2년 전 여름, 가족과 간 제주도 여행에서 있었어요. 에메랄드빛 물과 하얀 모래로 유명한 협재 해변 근처에 묵고 있었어요. 그때 저는 수영장에서 1년쯤 수영한 상태라 꽤 자신감이 있었는데, 아마 지나치게 있었던 것 같아요. 그래서 둘째 날 가족에게 해변에서 가까워 보이는 부표 줄까지 헤엄쳐 가겠다고 했어요. 처음엔 정말 멋졌어요. 물이 너무 맑아서 바로 아래로 작은 은빛 물고기들이 헤엄치는 게 보였고 파도 소리도 아주 평화로웠어요. 그런데 부표에 도착해서 돌아보니 해변이 생각보다 훨씬 멀었어요. 게다가 바람이 세지면서 파도가 얼굴을 때리기 시작했어요. 바닷물을 많이 삼키고 당황하기 시작했어요. 다행히 코치님이 늘 하던 말이 생각났어요. 지치면 그냥 뒤집어서 등으로 떠 있으라고요. 그래서 그렇게 해서 진정하고 팔을 흔들었어요. 패들보드를 탄 안전요원이 와서 저를 데리고 돌아갔어요. 창피했지만 바다를 존중하는 법을 배웠어요.",
+  "tips": [
+   "경험 이야기: 장소 소개 → 처음엔 좋았다 → But … 위기 → 해결 → 교훈",
+   "On top of that / Luckily, I remembered … — 이야기 전개 연결어"
+  ]
+ },
+ {
+  "id": "oq-swimming-006",
+  "topic": "swimming",
+  "kind": "compare",
+  "level": 5,
+  "question": "Compare swimming in a pool with swimming in the ocean or a river. How are they different? Also, tell me how your swimming habits have changed compared to when you first started.",
+  "question_ko": "수영장에서 수영하는 것과 바다나 강에서 수영하는 것을 비교해 주세요. 어떻게 다른가요? 또 처음 시작했을 때와 비교해 수영 습관이 어떻게 바뀌었는지 말해 주세요.",
+  "sample": "Swimming in a pool and swimming in the ocean are very different. A pool is safe and calm. The water is clean, and there are lanes, so I can practice easily. The ocean is more exciting, but it is harder. There are waves, and the water is salty. Also, you can't see the bottom. My swimming habits have also changed. When I first started, I swam only once a week and only in the beginner lane. Now I swim three times a week, and I sometimes swim in the sea in summer.",
+  "sample_ko": "수영장에서 수영하는 것과 바다에서 수영하는 건 아주 달라요. 수영장은 안전하고 잔잔해요. 물이 깨끗하고 레인이 있어서 쉽게 연습할 수 있어요. 바다는 더 신나지만 더 어려워요. 파도가 있고 물이 짜요. 또 바닥이 안 보여요. 제 수영 습관도 바뀌었어요. 처음 시작했을 때는 일주일에 한 번, 초보 레인에서만 했어요. 지금은 일주일에 세 번 수영하고, 여름에는 가끔 바다에서도 수영해요.",
+  "sample_adv": "Pool swimming and open water swimming feel like two completely different sports to me. In a pool, everything is controlled. The water temperature is always around twenty eight degrees, there are clear lane lines, and you can see the black line on the bottom, so it's easy to swim straight and count your laps. It's perfect for training technique. In the ocean, though, nothing is predictable. There are waves and currents pushing you around, the water can be freezing, and since you can't see the bottom, you have to lift your head every few strokes to check where you're going. It's mentally much tougher, but it also feels more free and adventurous. As for how my habits have changed, it's like night and day. When I started four years ago, I went once a week at most, I always stayed in the slowest lane, and I would stop at the wall every single lap to catch my breath. Back then, swimming was just a way to lose weight. Now I swim three or four times a week, I track my distance with a smartwatch, and last year I even joined a small open water swimming club that trains at Gwangalli Beach in Busan during summer. So swimming has gone from a chore to a real passion.",
+  "sample_adv_ko": "수영장 수영과 바다 수영은 저한테 완전히 다른 두 스포츠처럼 느껴져요. 수영장에서는 모든 게 통제돼요. 수온은 항상 28도 정도이고, 레인 줄이 분명하고, 바닥의 검은 선이 보여서 똑바로 가고 바퀴 수를 세기 쉬워요. 기술을 연습하기에 완벽해요. 하지만 바다에서는 예측할 수 있는 게 없어요. 파도와 조류가 이리저리 밀고, 물이 얼음장 같을 수 있고, 바닥이 안 보여서 몇 번 저을 때마다 고개를 들어 방향을 확인해야 해요. 정신적으로 훨씬 힘들지만 더 자유롭고 모험적인 느낌도 들어요. 제 습관이 어떻게 바뀌었냐면, 낮과 밤처럼 달라요. 4년 전 시작했을 때는 많아야 일주일에 한 번 갔고, 항상 가장 느린 레인에 있었고, 한 바퀴마다 벽에서 멈춰 숨을 돌렸어요. 그때 수영은 그냥 살 빼는 수단이었어요. 지금은 일주일에 서너 번 수영하고, 스마트워치로 거리를 기록하고, 작년에는 여름에 부산 광안리 해변에서 훈련하는 작은 바다 수영 동호회에도 들어갔어요. 그래서 수영은 해야 하는 일에서 진짜 열정으로 바뀌었어요.",
+  "tips": [
+   "두 장소 비교: In a pool, … / In the ocean, though, … → 습관 변화 Back then … Now …",
+   "It's like night and day / has gone from a chore to a real passion — 변화 강조 표현"
+  ]
+ },
+ {
+  "id": "oq-swimming-007",
+  "topic": "swimming",
+  "kind": "issue",
+  "level": 5,
+  "question": "Every summer, there are news reports about water safety accidents at beaches, rivers, and pools. Tell me about this issue. Why do these accidents happen, and what can people do to prevent them?",
+  "question_ko": "매년 여름 해변, 강, 수영장에서 일어나는 물놀이 안전사고 뉴스가 나옵니다. 이 문제에 대해 말해 주세요. 이런 사고는 왜 일어나고, 사람들은 예방하기 위해 무엇을 할 수 있을까요?",
+  "sample": "Every summer in Korea, there is news about water accidents. Many accidents happen in valleys and rivers, not at beaches. Some people drink alcohol and then go swimming. Others swim in places with no lifeguards. Also, some people don't wear life jackets because they think they can swim well. I think people should always wear a life jacket and never swim after drinking. Parents should watch their children all the time. The government should also put more lifeguards and warning signs in dangerous places.",
+  "sample_ko": "한국에서는 매년 여름 물놀이 사고 뉴스가 나와요. 많은 사고가 해변이 아니라 계곡과 강에서 일어나요. 어떤 사람들은 술을 마시고 수영하러 가요. 안전요원이 없는 곳에서 수영하는 사람도 있어요. 또 수영을 잘한다고 생각해서 구명조끼를 안 입는 사람도 있어요. 사람들은 항상 구명조끼를 입고 술 마신 후에는 절대 수영하면 안 된다고 생각해요. 부모는 아이들을 항상 지켜봐야 해요. 정부도 위험한 곳에 안전요원과 경고 표지판을 더 많이 둬야 해요.",
+  "sample_adv": "Water safety is a serious issue in Korea, especially during the monsoon season and summer vacation. Every July and August, the news reports dozens of drowning accidents, and what's surprising is that most of them don't happen at popular beaches like Haeundae. They happen in valleys and rivers, places like Gapyeong or the streams in Gangwon Province, where there are no lifeguards. I think there are three main reasons. The first is overconfidence. Many people think, I can swim, so I'll be fine, but a river current or a sudden drop in depth is completely different from a pool. The second is alcohol. It's common for groups of friends to have a barbecue with soju by the water and then jump in, which is really dangerous. The third reason is the weather. After heavy rain, the water level in valleys can rise in minutes, and people get trapped. So what can we do? Personally, I always wear a life jacket in open water, even though I'm a decent swimmer. I also think everyone should learn basic CPR. Some companies and schools in Korea now offer free survival swimming classes, and I think that should be required in every elementary school. Prevention is really about respecting the water.",
+  "sample_adv_ko": "물놀이 안전은 한국에서, 특히 장마철과 여름휴가철에 심각한 문제예요. 매년 7월과 8월에 뉴스에서 수십 건의 익사 사고를 보도하는데, 놀라운 건 대부분이 해운대 같은 유명 해변에서 일어나지 않는다는 거예요. 가평이나 강원도 계곡처럼 안전요원이 없는 계곡과 강에서 일어나요. 세 가지 주된 이유가 있다고 생각해요. 첫째는 과신이에요. 많은 사람이 수영할 줄 아니까 괜찮겠지 생각하지만, 강의 물살이나 갑자기 깊어지는 곳은 수영장과 완전히 달라요. 둘째는 술이에요. 친구들끼리 물가에서 소주와 바비큐를 먹고 물에 뛰어드는 일이 흔한데, 정말 위험해요. 셋째 이유는 날씨예요. 폭우 후에는 계곡 수위가 몇 분 만에 올라서 사람들이 고립돼요. 그럼 우리는 무엇을 할 수 있을까요? 저는 개인적으로 수영을 꽤 하는데도 야외 물에서는 항상 구명조끼를 입어요. 또 모두가 기본 심폐소생술을 배워야 한다고 생각해요. 요즘 한국의 일부 회사와 학교에서 무료 생존 수영 수업을 하는데, 모든 초등학교에서 필수가 돼야 한다고 생각해요. 예방은 결국 물을 존중하는 거예요.",
+  "tips": [
+   "이슈: 뉴스 → 의외의 사실 what's surprising is … → 원인 3개 → 개인 실천 + 제도 제안",
+   "overconfidence, life jacket, survival swimming, CPR — 안전 이슈 핵심 어휘"
+  ]
+ },
+ {
+  "id": "oq-hiking-001",
+  "topic": "hiking",
+  "kind": "describe",
+  "level": 1,
+  "question": "You indicated in the survey that you go hiking. Tell me about a mountain you like to go to. Where is it, and what does it look like?",
+  "question_ko": "설문에서 하이킹을 한다고 하셨습니다. 좋아하는 산에 대해 말해 주세요. 어디에 있고, 어떻게 생겼나요?",
+  "sample": "My favorite mountain is Bukhansan. It is in the north part of Seoul, so it is easy to get there by subway and bus. The mountain is very big and has many hiking trails. There are tall trees, big rocks, and small streams. The highest peak is Baegundae. It is about eight hundred meters high. From the top, you can see the whole city of Seoul. The view is amazing, especially in autumn, when the leaves turn red and yellow. That's why I love Bukhansan.",
+  "sample_ko": "제가 가장 좋아하는 산은 북한산이에요. 서울 북쪽에 있어서 지하철과 버스로 가기 쉬워요. 산이 아주 크고 등산로가 많아요. 큰 나무와 큰 바위, 작은 개울이 있어요. 가장 높은 봉우리는 백운대예요. 높이가 800미터쯤 돼요. 정상에서는 서울 시내 전체가 보여요. 특히 잎이 빨갛고 노랗게 물드는 가을에 경치가 정말 멋져요. 그래서 북한산을 좋아해요.",
+  "sample_adv": "The mountain I love the most is Bukhansan, which is in the northern part of Seoul. What's amazing about it is that it's a national park, but you can get there by subway. I usually take line three to Gupabal Station and then a short bus ride to the trailhead. So in less than an hour, I go from busy city streets to a completely different world. The mountain itself is really impressive. It's made of huge granite peaks, so from a distance, it looks gray and kind of rugged, but once you're inside, the trails are surrounded by thick pine and oak trees, and there are little streams where people rest and dip their feet. The highest peak is called Baegundae, and it's about eight hundred and thirty six meters high. The last part to the top is a steep rock with metal railings, so it's a little scary, but totally worth it. When you get to the top, you can see the whole of Seoul spread out below you, and on a clear day, you can even see the Han River shining. There are also old temples and parts of an ancient fortress wall along the trails. To me, Bukhansan is the perfect mix of nature, history, and city life.",
+  "sample_adv_ko": "제가 가장 좋아하는 산은 서울 북쪽에 있는 북한산이에요. 놀라운 점은 국립공원인데도 지하철로 갈 수 있다는 거예요. 저는 보통 3호선을 타고 구파발역까지 가서 버스를 잠깐 타고 등산로 입구로 가요. 그래서 한 시간도 안 돼서 북적이는 도시에서 완전히 다른 세상으로 가요. 산 자체도 정말 인상적이에요. 거대한 화강암 봉우리로 이루어져 있어서 멀리서 보면 회색이고 좀 험해 보이지만, 안으로 들어가면 등산로가 울창한 소나무와 참나무로 둘러싸여 있고, 사람들이 쉬면서 발을 담그는 작은 개울도 있어요. 가장 높은 봉우리는 백운대인데 높이가 836미터 정도예요. 정상까지 마지막 구간은 쇠 난간이 있는 가파른 바위라서 조금 무섭지만 완전히 그럴 가치가 있어요. 정상에 오르면 서울 전체가 발아래 펼쳐지고, 맑은 날에는 반짝이는 한강까지 보여요. 등산로를 따라 오래된 절과 옛 산성 성벽도 있어요. 저한테 북한산은 자연, 역사, 도시 생활이 완벽하게 섞인 곳이에요.",
+  "tips": [
+   "산 묘사: 위치·가는 법 → 멀리서 본 모습 → 안의 모습 → 정상 → 특별한 점",
+   "What's amazing about it is … / spread out below you — 묘사 고급 표현"
+  ]
+ },
+ {
+  "id": "oq-hiking-002",
+  "topic": "hiking",
+  "kind": "describe",
+  "level": 2,
+  "question": "I'd like to know what you usually bring when you go hiking. What items do you pack, and why are they important? Who do you usually go hiking with?",
+  "question_ko": "하이킹 갈 때 보통 무엇을 가져가는지 알고 싶습니다. 어떤 물건을 챙기고, 왜 중요한가요? 보통 누구와 하이킹을 가나요?",
+  "sample": "When I go hiking, I bring a small backpack. In my bag, I always pack a big bottle of water, some snacks like chocolate and nuts, and gimbap for lunch. I also bring a light jacket because it is cold and windy at the top. I wear good hiking shoes because the rocks can be slippery. I also take my phone and a power bank for emergencies. I usually go hiking with my dad. He loves mountains, and we talk a lot while we walk.",
+  "sample_ko": "하이킹 갈 때는 작은 배낭을 메요. 가방에는 항상 큰 물병, 초콜릿과 견과류 같은 간식, 점심으로 먹을 김밥을 챙겨요. 정상은 춥고 바람이 불어서 가벼운 재킷도 가져가요. 바위가 미끄러울 수 있어서 좋은 등산화를 신어요. 비상시를 대비해 휴대폰과 보조 배터리도 가져가요. 보통 아빠와 하이킹을 가요. 아빠는 산을 정말 좋아하시고, 걸으면서 이야기를 많이 해요.",
+  "sample_adv": "Packing is actually a big part of hiking for me, because I learned the hard way that forgetting one thing can ruin the whole day. I use a twenty liter backpack, and there are a few things I never leave without. First, water. I bring at least one liter, and in summer, I freeze a second bottle the night before so it stays cold. Second, food. Hiking in Korea is basically a picnic on a mountain, so I pack gimbap from the shop near the trailhead, a boiled egg, and some energy bars. My dad always brings a thermos of hot coffee and cucumbers, which is a classic Korean hiking snack. Third, layers. Even in spring, it can be really windy at the summit, so I always pack a thin windbreaker. I also bring a small first aid kit with bandages and pain relief spray, because I once twisted my ankle on Gwanaksan and had nothing with me. And of course, a fully charged phone and a power bank. As for who I go with, it's usually my dad. He retired last year and has become a hiking fanatic. Honestly, walking up a mountain side by side is the only time we really have long, deep conversations, so those trips mean a lot to me.",
+  "sample_adv_ko": "짐 싸기는 저한테 하이킹의 큰 부분이에요. 하나만 빠뜨려도 하루 전체를 망칠 수 있다는 걸 힘들게 배웠거든요. 저는 20리터 배낭을 쓰는데, 절대 빼먹지 않는 게 몇 가지 있어요. 첫째, 물이에요. 최소 1리터를 가져가고, 여름에는 시원하게 유지되도록 두 번째 병을 전날 밤에 얼려요. 둘째, 음식이에요. 한국에서 등산은 기본적으로 산 위의 소풍이라서 등산로 입구 가게에서 김밥, 삶은 달걀, 에너지바를 챙겨요. 아빠는 항상 뜨거운 커피를 담은 보온병과 오이를 가져오시는데, 오이는 한국의 대표 등산 간식이에요. 셋째, 겹옷이에요. 봄에도 정상은 바람이 정말 셀 수 있어서 항상 얇은 바람막이를 챙겨요. 예전에 관악산에서 발목을 삐었는데 아무것도 없었던 적이 있어서 붕대와 진통 스프레이가 든 작은 구급상자도 가져가요. 그리고 물론 완충된 휴대폰과 보조 배터리도요. 누구와 가냐면, 보통 아빠예요. 작년에 은퇴하시고 등산 마니아가 되셨어요. 솔직히 나란히 산을 오를 때가 우리가 길고 깊은 대화를 나누는 유일한 시간이라서 그 산행들이 저한테 아주 소중해요.",
+  "tips": [
+   "물건 나열: First, water. Second, food. Third, … — 짧은 명사로 시작하면 구조가 분명하다",
+   "I learned the hard way — 경험을 녹이는 고급 표현"
+  ]
+ },
+ {
+  "id": "oq-hiking-003",
+  "topic": "hiking",
+  "kind": "routine",
+  "level": 1,
+  "question": "Tell me about what you usually do on a hiking day. When do you leave home, and how long do you hike? What do you do after you come down the mountain?",
+  "question_ko": "하이킹하는 날 보통 무엇을 하는지 말해 주세요. 언제 집을 나서고, 얼마나 오래 걷나요? 산에서 내려온 후에는 무엇을 하나요?",
+  "sample": "I usually go hiking on Saturday mornings. I wake up at six and eat a simple breakfast. Then I leave home at seven and take the subway to the mountain. I start hiking around eight. It usually takes about two hours to get to the top. At the top, I take pictures and eat some snacks. Then I come down slowly. After hiking, I go to a restaurant near the mountain with my friends. We eat pajeon and drink makgeolli. Then I go home and take a long nap.",
+  "sample_ko": "저는 보통 토요일 아침에 하이킹을 가요. 6시에 일어나서 간단히 아침을 먹어요. 그다음 7시에 집을 나서서 지하철을 타고 산으로 가요. 8시쯤 걷기 시작해요. 정상까지 보통 두 시간쯤 걸려요. 정상에서 사진을 찍고 간식을 먹어요. 그다음 천천히 내려와요. 하이킹 후에는 친구들과 산 근처 식당에 가요. 파전을 먹고 막걸리를 마셔요. 그다음 집에 가서 낮잠을 길게 자요.",
+  "sample_adv": "My hiking days usually follow the same pattern, and honestly, the routine is part of what I love about it. I go hiking about twice a month, usually on a Saturday. The night before, I check the weather app and pack my bag, so I don't have to think in the morning. I wake up around six, eat a banana and some yogurt, and leave the house by six forty. The reason I go so early is simple. Popular mountains like Bukhansan get really crowded after nine, and I like the trails when they're quiet and the air is cool. I meet my two hiking buddies from work at the subway station, and we start walking at around seven thirty. Going up usually takes about two and a half hours. We take short breaks every forty minutes or so, drink some water, and share snacks. At the summit, we take the classic photo next to the peak stone, then find a flat rock to sit on and eat our gimbap. Coming down is faster, but it's harder on the knees, so we take it slow. And then comes the best part. At the bottom, there's always a little restaurant selling pajeon and makgeolli, and we sit there laughing and talking for an hour. By the time I get home, it's mid afternoon, and I take the best nap of my week.",
+  "sample_adv_ko": "제 하이킹 날은 보통 같은 패턴인데, 솔직히 그 일과 자체가 하이킹을 좋아하는 이유 중 하나예요. 저는 한 달에 두 번쯤, 보통 토요일에 가요. 전날 밤 날씨 앱을 확인하고 가방을 싸 둬서 아침에 생각할 필요가 없어요. 6시쯤 일어나 바나나와 요거트를 먹고 6시 40분까지 집을 나서요. 그렇게 일찍 가는 이유는 간단해요. 북한산 같은 인기 있는 산은 9시가 넘으면 정말 붐비는데, 저는 조용하고 공기가 시원할 때의 등산로가 좋아요. 회사 등산 친구 두 명을 지하철역에서 만나서 7시 반쯤 걷기 시작해요. 올라가는 데 보통 두 시간 반쯤 걸려요. 40분쯤마다 잠깐 쉬면서 물을 마시고 간식을 나눠 먹어요. 정상에서는 정상석 옆에서 정석 사진을 찍고, 평평한 바위를 찾아 앉아서 김밥을 먹어요. 내려오는 건 더 빠르지만 무릎에 더 무리가 가서 천천히 내려와요. 그리고 가장 좋은 부분이 와요. 산 아래에는 항상 파전과 막걸리를 파는 작은 식당이 있어서 거기 앉아 한 시간 동안 웃고 떠들어요. 집에 도착하면 오후 중반이고, 한 주 중 최고의 낮잠을 자요.",
+  "tips": [
+   "하루 일과: 전날 밤 → 출발 → 오르기 → 정상 → 하산 → 뒤풀이 순서",
+   "The reason I go so early is simple. — 이유를 붙여 문장을 늘리는 방법"
+  ]
+ },
+ {
+  "id": "oq-hiking-004",
+  "topic": "hiking",
+  "kind": "past",
+  "level": 3,
+  "question": "Tell me about the most memorable hiking trip you have ever had. Where did you go, and who did you go with? What happened that made it so special?",
+  "question_ko": "지금까지 가장 기억에 남는 하이킹 여행에 대해 말해 주세요. 어디에 갔고, 누구와 갔나요? 무슨 일이 있어서 그렇게 특별했나요?",
+  "sample": "My most memorable hiking trip was to Jirisan last October. I went with three friends from college. We planned to hike for two days and sleep in a mountain shelter. On the first day, we walked for almost eight hours. It was very hard, and my legs hurt a lot. At night, we cooked ramyeon at the shelter and looked at the stars. There were so many stars. The next morning, we woke up at four and watched the sunrise from Cheonwangbong. It was the most beautiful view I have ever seen.",
+  "sample_ko": "가장 기억에 남는 하이킹 여행은 작년 10월 지리산이었어요. 대학 친구 세 명과 갔어요. 이틀 동안 걷고 산장에서 자기로 계획했어요. 첫날 거의 여덟 시간을 걸었어요. 아주 힘들었고 다리가 많이 아팠어요. 밤에는 산장에서 라면을 끓여 먹고 별을 봤어요. 별이 정말 많았어요. 다음 날 아침 4시에 일어나서 천왕봉에서 일출을 봤어요. 제가 본 것 중 가장 아름다운 경치였어요.",
+  "sample_adv": "Without a doubt, my most memorable hike was a two day trip across Jirisan last October. Jirisan is the biggest mountain on the Korean mainland, and hiking the main ridge is kind of a bucket list thing for Korean hikers. I went with three of my college friends. We had been talking about it for years, and we finally booked a night at Jangteomok Shelter, which you have to reserve online weeks in advance. On the first day, we started at Seongsamjae and walked for almost nine hours along the ridge. The autumn leaves were incredible, like the whole mountain was on fire with red and orange. But it was exhausting. By the afternoon, my knees were screaming, and one of my friends wanted to quit. We kept each other going by singing old songs from our school days, which was pretty funny. That night at the shelter, we cooked ramyeon on a tiny gas stove, and when we stepped outside, the sky was full of stars, more than I had ever seen in Seoul. The next morning, we woke up at four and climbed to Cheonwangbong in the dark with headlamps. Then the sun slowly rose above a sea of clouds. Nobody said a word. We just stood there. I'll remember that moment for the rest of my life.",
+  "sample_adv_ko": "의심할 여지 없이 가장 기억에 남는 산행은 작년 10월 지리산을 가로지른 1박 2일 여행이에요. 지리산은 한반도 내륙에서 가장 큰 산이고, 주 능선 종주는 한국 등산객들에게 일종의 버킷리스트예요. 대학 친구 세 명과 갔어요. 몇 년 동안 말만 하다가 드디어 몇 주 전에 온라인으로 예약해야 하는 장터목 대피소 1박을 잡았어요. 첫날 성삼재에서 출발해 능선을 따라 거의 아홉 시간을 걸었어요. 단풍이 믿을 수 없을 정도였는데, 산 전체가 빨강과 주황으로 불타는 것 같았어요. 하지만 정말 지쳤어요. 오후쯤엔 무릎이 비명을 질렀고 친구 한 명은 그만두고 싶어 했어요. 학창 시절 옛날 노래를 부르면서 서로 힘을 북돋웠는데 꽤 웃겼어요. 그날 밤 대피소에서 작은 가스버너로 라면을 끓였고, 밖으로 나가 보니 하늘에 서울에서 본 것보다 훨씬 많은 별이 가득했어요. 다음 날 아침 4시에 일어나 헤드랜턴을 켜고 어둠 속에서 천왕봉에 올랐어요. 그러자 해가 구름바다 위로 천천히 떠올랐어요. 아무도 말을 하지 않았어요. 그냥 거기 서 있었어요. 그 순간은 평생 기억할 거예요.",
+  "tips": [
+   "여행 경험: 어디·누구 → 준비 → 힘든 순간 → 극복 → 절정 장면 → 평생 기억",
+   "Nobody said a word. We just stood there. — 짧은 문장으로 감동을 표현"
+  ]
+ },
+ {
+  "id": "oq-hiking-005",
+  "topic": "hiking",
+  "kind": "past",
+  "level": 3,
+  "question": "Have you ever had a problem or an unexpected situation while hiking? Tell me what happened, how you handled it, and what you learned from it.",
+  "question_ko": "하이킹 중에 문제나 예상치 못한 상황을 겪은 적이 있나요? 무슨 일이 있었고, 어떻게 대처했고, 무엇을 배웠는지 말해 주세요.",
+  "sample": "Yes, I once got lost on a mountain. It was two years ago, on Gwanaksan. I went hiking alone in the afternoon. On the way down, I took a different path because it looked shorter. But the path became narrow, and I couldn't see any signs. Soon it started to get dark. I was really scared. I opened a map app on my phone and found the main trail. I walked slowly and finally came down at eight. I learned that I should start early and stay on the main trail.",
+  "sample_ko": "네, 산에서 길을 잃은 적이 있어요. 2년 전 관악산에서였어요. 오후에 혼자 하이킹을 갔어요. 내려오는 길에 더 짧아 보여서 다른 길로 갔어요. 그런데 길이 좁아지고 표지판이 하나도 안 보였어요. 곧 어두워지기 시작했어요. 정말 무서웠어요. 휴대폰 지도 앱을 열어서 주 등산로를 찾았어요. 천천히 걸어서 8시에 드디어 내려왔어요. 일찍 출발하고 주 등산로로 다녀야 한다는 걸 배웠어요.",
+  "sample_adv": "Yes, and it's actually a little embarrassing to talk about. About two years ago, I went hiking alone on Gwanaksan on a Sunday afternoon in November. I started late, around two, because I thought it was a small mountain and I'd be fine. I reached the top at around four, took some photos, and then decided to take a different route down because it looked shorter on the signboard. That was my first mistake. After about thirty minutes, the trail got narrower and narrower, and I realized I hadn't seen a trail marker in a while. Then the sun went down, and in November, it gets dark really fast, around five thirty. Suddenly, I was alone on a rocky slope with no light except my phone, and my battery was at fifteen percent. My heart was racing. I tried to stay calm and opened a hiking app that shows trails offline, and I saw that the main trail was about two hundred meters to my left. I walked very slowly, using my phone light, and finally reached it. I got to the bottom around seven thirty, tired and cold, but safe. Since then, I always start early, carry a headlamp and a power bank, and I never take shortcuts on unfamiliar trails.",
+  "sample_adv_ko": "네, 사실 말하기 좀 창피한 일이에요. 2년쯤 전 11월 일요일 오후에 혼자 관악산에 갔어요. 작은 산이라 괜찮겠지 생각해서 2시쯤 늦게 출발했어요. 4시쯤 정상에 올라 사진을 찍고, 안내판에서 더 짧아 보여서 다른 길로 내려가기로 했어요. 그게 첫 번째 실수였어요. 30분쯤 지나자 길이 점점 좁아졌고, 한동안 등산로 표식을 못 봤다는 걸 깨달았어요. 그러다 해가 졌는데, 11월에는 5시 반쯤이면 정말 빨리 어두워져요. 갑자기 휴대폰 말고는 불빛 하나 없는 바위 비탈에 혼자 있었고, 배터리는 15퍼센트였어요. 심장이 마구 뛰었어요. 침착하려고 애쓰면서 오프라인으로 등산로를 보여 주는 등산 앱을 열었더니, 주 등산로가 왼쪽으로 200미터쯤에 있었어요. 휴대폰 불빛에 의지해 아주 천천히 걸어서 마침내 도착했어요. 7시 반쯤 산 아래에 도착했는데, 지치고 추웠지만 무사했어요. 그 후로 저는 항상 일찍 출발하고, 헤드랜턴과 보조 배터리를 챙기고, 낯선 등산로에서는 절대 지름길로 가지 않아요.",
+  "tips": [
+   "문제 상황: 배경 → 실수 That was my first mistake → 위기 → 대처 → 교훈 Since then …",
+   "trail marker, shortcut, headlamp — 등산 사고 이야기 필수 어휘"
+  ]
+ },
+ {
+  "id": "oq-hiking-006",
+  "topic": "hiking",
+  "kind": "compare",
+  "level": 5,
+  "question": "Hiking culture in Korea has changed over the years. Compare the people who went hiking in the past with the people who go hiking these days. What changes have you noticed, and why do you think they happened?",
+  "question_ko": "한국의 등산 문화는 수년간 바뀌었습니다. 예전에 등산하던 사람들과 요즘 등산하는 사람들을 비교해 주세요. 어떤 변화를 느꼈고, 왜 그런 변화가 생겼다고 생각하나요?",
+  "sample": "In the past, hiking was mostly a hobby for middle aged people in Korea. On weekends, the mountains were full of people in their fifties and sixties. They wore colorful, expensive outdoor jackets and hiked in big groups. These days, many young people also go hiking. They wear simple, stylish clothes and often hike with one or two friends. They take a lot of pictures and post them on social media. I think this changed because of COVID. People couldn't go to gyms, so they went to mountains instead.",
+  "sample_ko": "예전에 한국에서 등산은 주로 중년층의 취미였어요. 주말이면 산이 50~60대 사람들로 가득했어요. 화려하고 비싼 아웃도어 재킷을 입고 큰 무리로 등산했어요. 요즘은 젊은 사람들도 많이 등산해요. 단순하고 세련된 옷을 입고 보통 친구 한두 명과 가요. 사진을 많이 찍어서 SNS에 올려요. 코로나 때문에 바뀌었다고 생각해요. 사람들이 헬스장에 못 가서 대신 산으로 갔거든요.",
+  "sample_adv": "Hiking culture in Korea has changed a lot, and I've seen it with my own eyes. When I was a kid, I sometimes followed my parents to the mountains, and back then, hiking was definitely a middle aged hobby. The trails were full of people in their fifties and sixties, usually in big groups from work or church. Everyone wore the same kind of outfit, a bright red or neon yellow outdoor jacket from an expensive brand, even on easy trails. It was almost like a uniform. At the summit, people would spread out a mat and eat a full meal with makgeolli, and it was very loud and social. These days, the picture is totally different. Especially since around twenty twenty, the number of young hikers in their twenties and thirties has exploded. They hike in small groups or even alone, and they wear simple, stylish clothes like leggings and fleece jackets. The goal has changed too. Many young people hike for the perfect summit photo for Instagram, or to collect certification badges from the hundred famous mountains challenge. I think there are two main reasons. First, during COVID, gyms and indoor places were closed, so people looked for outdoor activities. Second, social media made hiking look trendy and cool. Personally, I think it's great, because mountains are now for everyone.",
+  "sample_adv_ko": "한국의 등산 문화는 많이 바뀌었고, 저는 그걸 제 눈으로 봤어요. 어렸을 때 가끔 부모님을 따라 산에 갔는데, 그때 등산은 확실히 중년층의 취미였어요. 등산로는 50~60대 사람들로 가득했고, 보통 회사나 교회에서 온 큰 무리였어요. 다들 쉬운 등산로에서도 비싼 브랜드의 새빨간 색이나 형광 노란색 아웃도어 재킷처럼 똑같은 옷을 입었어요. 거의 유니폼 같았어요. 정상에서는 돗자리를 펴고 막걸리와 함께 제대로 된 식사를 했고, 아주 시끌벅적하고 사교적이었어요. 요즘은 풍경이 완전히 달라요. 특히 2020년쯤부터 20~30대 젊은 등산객 수가 폭발적으로 늘었어요. 소규모로 혹은 혼자 등산하고, 레깅스와 플리스 재킷처럼 단순하고 세련된 옷을 입어요. 목적도 바뀌었어요. 많은 젊은이가 인스타그램용 완벽한 정상 사진을 위해, 혹은 100대 명산 챌린지 인증 배지를 모으려고 등산해요. 두 가지 주된 이유가 있다고 생각해요. 첫째, 코로나 때 헬스장과 실내 장소가 닫혀서 사람들이 야외 활동을 찾았어요. 둘째, SNS가 등산을 유행이고 멋진 것으로 보이게 만들었어요. 개인적으로 산이 이제 모두를 위한 곳이 돼서 정말 좋다고 생각해요.",
+  "tips": [
+   "비교: back then 사람·옷·분위기 → These days 같은 항목으로 대비 → 원인 2개 → 내 의견",
+   "It was almost like a uniform / has exploded — 변화를 생생하게"
+  ]
+ },
+ {
+  "id": "oq-hiking-007",
+  "topic": "hiking",
+  "kind": "issue",
+  "level": 5,
+  "question": "As hiking has become more popular, some people are worried about problems on mountains, such as crowded trails, trash, and damage to nature. Tell me about these concerns. What do you think hikers and the government should do?",
+  "question_ko": "하이킹이 인기를 끌면서 붐비는 등산로, 쓰레기, 자연 훼손 같은 산의 문제를 걱정하는 사람들이 있습니다. 이런 걱정에 대해 말해 주세요. 등산객과 정부는 무엇을 해야 한다고 생각하나요?",
+  "sample": "These days, many mountains in Korea are very crowded, especially on weekends in autumn. On Bukhansan, people wait in long lines to take a picture at the top. Some hikers leave trash like bottles and snack bags on the trails. Some people also leave the main trail, and this damages plants and soil. I think hikers should take their trash home and stay on the trails. The government should also limit the number of people on very popular trails and put more trash cans at the entrance.",
+  "sample_ko": "요즘 한국의 많은 산이 특히 가을 주말에 아주 붐벼요. 북한산에서는 정상에서 사진을 찍으려고 사람들이 긴 줄을 서요. 어떤 등산객들은 병이나 과자 봉지 같은 쓰레기를 등산로에 버려요. 또 주 등산로를 벗어나는 사람들도 있는데, 이게 식물과 흙을 훼손해요. 등산객들은 쓰레기를 집으로 가져가고 등산로로만 다녀야 한다고 생각해요. 정부도 아주 인기 있는 등산로의 인원을 제한하고 입구에 쓰레기통을 더 둬야 해요.",
+  "sample_adv": "This has become a real issue in Korea, and I've noticed it myself. Last autumn, I hiked Bukhansan on a Saturday in late October, and honestly, it felt more like a subway at rush hour than a mountain. Near Baegundae, there was a line of people waiting almost an hour just to take a photo at the peak stone, and on the narrow rocky sections, people were pushing each other, which is actually dangerous. Crowding is just one problem, though. Trash is another big one. Even though most national parks in Korea removed their trash cans years ago to encourage people to take their garbage home, you still see plastic bottles, tissues, and makgeolli bottles behind rocks. And then there's damage to nature. When trails get crowded, people step off the path to pass others or to find a better photo spot, and over time, that wears away the soil and kills plants. I also read that some rare plants on Hallasan are disappearing because of this. So what should be done? For hikers, it's simple. Carry your trash out, stay on marked trails, and try hiking on weekdays or less famous mountains. For the government, I think a reservation system for the most popular peaks during peak season, like Hallasan already has, would really help. Mountains are shared spaces, so everyone has to protect them.",
+  "sample_adv_ko": "이건 한국에서 실제 문제가 됐고, 저도 직접 느꼈어요. 작년 가을 10월 말 토요일에 북한산에 갔는데, 솔직히 산이라기보다 출근 시간 지하철 같았어요. 백운대 근처에는 정상석에서 사진 한 장 찍으려고 거의 한 시간 동안 줄 선 사람들이 있었고, 좁은 바위 구간에서는 사람들이 서로 밀었는데 사실 위험한 일이에요. 그런데 붐비는 건 문제 중 하나일 뿐이에요. 쓰레기도 큰 문제예요. 한국 국립공원 대부분이 사람들이 쓰레기를 집에 가져가도록 몇 년 전에 쓰레기통을 없앴는데도 여전히 바위 뒤에 플라스틱 병, 휴지, 막걸리병이 보여요. 그리고 자연 훼손도 있어요. 등산로가 붐비면 사람들이 다른 사람을 지나치거나 더 좋은 사진 자리를 찾으려고 길을 벗어나는데, 시간이 지나면 그게 흙을 깎아 내고 식물을 죽여요. 이 때문에 한라산의 일부 희귀 식물이 사라지고 있다는 기사도 읽었어요. 그럼 어떻게 해야 할까요? 등산객은 간단해요. 쓰레기는 가져가고, 표시된 등산로로만 다니고, 평일이나 덜 유명한 산에 가 보는 거예요. 정부는 한라산이 이미 하는 것처럼 성수기에 가장 인기 있는 봉우리에 예약제를 두면 정말 도움이 될 거라고 생각해요. 산은 함께 쓰는 공간이니까 모두가 지켜야 해요.",
+  "tips": [
+   "이슈 3가지: Crowding is just one problem, though. / … is another big one. / And then there's …",
+   "등산객 vs 정부로 해결책을 나눠 말하면 구조가 분명하다"
+  ]
+ }
+]

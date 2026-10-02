@@ -269,6 +269,50 @@
     return { step: s, ...got };
   }
 
+  // ------------------------------------------------------------ 모범 답안 듣기·따라 말하기 (채점 화면)
+  const sayTexts = [];
+  let shadowing = null;
+  /* 음성 인식만으로 sec 초 동안 듣는다 (녹음 없이) */
+  function hear(sec, liveEl) {
+    return new Promise(resolve => {
+      const rec = new SR();
+      rec.lang = "en-US"; rec.continuous = true; rec.interimResults = true;
+      let fin = "", mid = "", done = false;
+      rec.onresult = e => {
+        mid = "";
+        for (let i = e.resultIndex; i < e.results.length; i++) {
+          if (e.results[i].isFinal) fin += e.results[i][0].transcript + " "; else mid += e.results[i][0].transcript;
+        }
+        liveEl.textContent = (fin + mid).trim();
+      };
+      const end = () => { if (done) return; done = true; try { rec.stop(); } catch (e) { /* 무시 */ } setTimeout(() => resolve((fin + mid).trim()), 400); };
+      rec.onerror = () => end();
+      rec.onend = () => end();
+      try { rec.start(); } catch (e) { return resolve(""); }
+      setTimeout(end, sec * 1000);
+      shadowing = end;
+    });
+  }
+  stage.addEventListener("click", async e => {
+    const say1 = e.target.closest("[data-say]");
+    if (say1) { TTS.stop(); say([{ text: sayTexts[+say1.dataset.say], gender: "female" }]); return; }
+    const sh = e.target.closest("[data-shadow]");
+    if (!sh) return;
+    if (shadowing) { shadowing(); return; }                 // 다시 누르면 일찍 끝내기
+    const k = +sh.dataset.shadow, text = sayTexts[k], box = stage.querySelector(`[data-shres="${k}"]`);
+    TTS.stop();
+    const secs = Math.max(8, Math.ceil(countWords(text) * 0.45) + 4);
+    sh.textContent = "■ 끝내기";
+    box.innerHTML = `<div class="small muted">🎤 말하세요 (최대 ${secs}초)</div><div class="small spk-live" data-l></div>`;
+    const heard = await hear(secs, box.querySelector("[data-l]"));
+    shadowing = null;
+    sh.textContent = "🎤 다시 따라 말하기";
+    const t = wordsOf(text), m = lcs(t, wordsOf(heard));
+    const acc = t.length ? m.match / t.length : 0;
+    box.innerHTML = heard ? `<div class="explain diff"><span class="verdict ${acc >= 0.8 ? "ok" : "bad"}">${Math.round(acc * 100)}%</span>` +
+      t.map((w, i) => `<span class="${m.hit.has(i) ? "ok" : "miss"}">${esc(w.raw)}</span>`).join(" ") + `</div>` : `<div class="small muted">인식된 말이 없습니다.</div>`;
+  });
+
   // ------------------------------------------------------------ 채점 화면
   function suggest(a) {
     const s = a.step;
@@ -296,11 +340,16 @@
     const q = s.question_text || (s.show && s.show.question) || "";
     const rub = P.rubrics[s.rubric] || [];
     const sug = suggest(a);
-    const samples = (s.samples || []).filter(x => x.text).map((x, i) =>
-      `<details class="reveal-d" ${!MOCK && i === 0 ? "open" : ""}><summary>${esc(x.label)}</summary><div class="spk-sample">${esc(x.text)}</div>${x.ko ? `<div class="translation">${esc(x.ko)}</div>` : ""}</details>`).join("");
+    const samples = (s.samples || []).filter(x => x.text).map((x, i) => {
+      const n = sayTexts.push(x.text.replace(/[*\/]/g, " ").replace(/\s+/g, " ").trim()) - 1;
+      return `<details class="reveal-d" ${!MOCK && i === 0 ? "open" : ""}><summary>${esc(x.label)}</summary><div class="spk-sample">${esc(x.text)}</div>${x.ko ? `<div class="translation">${esc(x.ko)}</div>` : ""}
+        <div class="row spk-shadow"><button type="button" class="btn small" data-say="${n}">🔊 듣기</button>${SR ? `<button type="button" class="btn small" data-shadow="${n}">🎤 따라 말하기</button>` : ""}<span class="small muted">모범 답안을 듣고 그대로 말해 보세요 (섀도잉)</span></div>
+        <div data-shres="${n}"></div></details>`;
+    }).join("");
+    const qn = q ? sayTexts.push(q) - 1 : -1;
     return `<div class="card spk-review" data-k="${k}">
       <div class="spread"><b>${esc(s.label)} · ${esc(s.title)}</b><span class="small muted">${a.seconds ? `${Math.round(a.seconds)}초` : ""}${words != null ? ` · ${words}단어` : ""}${wpm ? ` · 분당 ${wpm}단어` : ""}</span></div>
-      ${q ? `<div class="sentence spk-q" style="margin:8px 0 2px">${esc(q)}</div>` : ""}${s.question_ko ? `<div class="small muted">${esc(s.question_ko)}</div>` : ""}
+      ${q ? `<div class="sentence spk-q" style="margin:8px 0 2px">${esc(q)} <button type="button" class="btn small ghost" data-say="${qn}" title="질문 다시 듣기">🔊</button></div>` : ""}${s.question_ko ? `<div class="small muted">${esc(s.question_ko)}</div>` : ""}
       ${a.url ? `<audio controls src="${a.url}" class="spk-audio"></audio>` : `<div class="small muted">녹음 없음 (마이크 권한을 확인하세요)</div>`}
       ${mine}
       ${s.notes && s.notes.length ? `<details class="reveal-d"><summary>${s.rubric === "describe_picture" ? "장면 영어 표현" : s.rubric === "read_aloud" ? "발음 주의 단어" : "답변 뼈대"}</summary><ul class="clean">${s.notes.map(n => `<li>${esc(n)}</li>`).join("")}</ul></details>` : ""}

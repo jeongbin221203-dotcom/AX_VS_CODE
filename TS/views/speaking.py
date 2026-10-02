@@ -60,7 +60,8 @@ def tsp_home():
     stats = S.tsp_task_stats()
     est = S.tsp_estimate(stats)
     target = _tsp_target()
-    tasks = [{"key": t, **v, "count": len(b.tsp.get(t, [])), "stat": stats.get(t)} for t, v in S.TSP_TASKS.items()]
+    tasks = [{"key": t, **v, "count": len(b.tsp.get(t, [])), "stat": stats.get(t),
+              "weak": len(S.weak_items("tsp", f"tsp:{t}"))} for t, v in S.TSP_TASKS.items()]
     return render_template("speaking/tsp_home.html", tasks=tasks, est=est, level=S.tsp_level(est), target=target,
                            target_level=S.tsp_level(target), LEVELS=S.TSP_LEVELS, TARGETS=S.TSP_TARGETS,
                            mocks=S.list_mocks("tsp", 5), recent=S.recent("tsp", 12), TASKS=S.TSP_TASKS,
@@ -85,12 +86,14 @@ def tsp_practice(task: str):
     if task not in S.TSP_TASKS:
         abort(404)
     n = _int_arg("n", 2 if S.TSP_TASKS[task]["n"] == 2 else 1, 1, 10)
-    units = S.tsp_practice(sbank(), task, n)
+    weak = request.args.get("weak") == "1"
+    units = S.tsp_practice(sbank(), task, n, weak=weak)
     info = S.TSP_TASKS[task]
     payload = {"exam": "tsp", "mode": "practice", "units": units, "tts": _tts(), "rubrics": _rubrics(),
                "home": url_for("speaking.tsp_home")}
-    return render_template("speaking/run.html", payload=payload, title=f"{info['q']} {info['name']}",
-                           sub=f"{info['en']} · {info['desc']}", exam="tsp", n=n, task=task, home=url_for("speaking.tsp_home"))
+    return render_template("speaking/run.html", payload=payload, title=f"{info['q']} {info['name']}" + (" · 약한 문항" if weak else ""),
+                           sub=f"{info['en']} · {info['desc']}", exam="tsp", n=n, task=task, weak=weak,
+                           home=url_for("speaking.tsp_home"))
 
 
 @bp.route("/toeic/mock", methods=["GET", "POST"])
@@ -141,6 +144,7 @@ def opic_home():
                            GRADES=S.OPIC_GRADES, GRADE_NAME=S.OPIC_GRADE_NAME, LEVELS=S.OPIC_LEVELS, KINDS=S.OPIC_KINDS,
                            TOPICS=S.OPIC_TOPICS, recent=S.recent("opic", 12), by_id=b.by_id, rp_n=len(b.opic_rp),
                            intro_n=sum(1 for q in b.opic_q if q["kind"] == "intro"), trend=S.trend("opic"),
+                           weak_n=len(S.weak_items("opic", "opic_q")),
                            e=EXAMS["opic"])
 
 
@@ -189,15 +193,19 @@ def opic_practice():
     if topic == "intro":
         topic, kind = None, "intro"
     show_text = request.args.get("text", "1") == "1"
+    weak = request.args.get("weak") == "1"
     n = _int_arg("n", 1 if kind == "roleplay" else (3 if not topic else 5), 1, 10)
-    units = S.opic_practice(sbank(), topic, kind, n, show_text)
+    units = S.opic_practice(sbank(), topic, kind, n, show_text, weak=weak)
     name = S.OPIC_TOPICS[topic][0] if topic else "전체 주제"
     kname = "롤플레이" if kind == "roleplay" else S.OPIC_KINDS.get(kind, "콤보 (묘사 → 습관 → 경험)" if topic else "섞어서")
+    if weak:
+        kname = "약한 문항 다시"
     payload = {"exam": "opic", "mode": "practice", "units": units, "tts": _tts(), "rubrics": _rubrics(),
                "home": url_for("speaking.opic_home"), "show_text": show_text}
     return render_template("speaking/run.html", payload=payload, title=f"{name} · {kname}",
                            sub="질문을 듣고 바로 답합니다. 준비 시간은 없고, 다시 듣기는 한 번만 됩니다 (실제 시험처럼).",
-                           exam="opic", n=n, topic=topic, kind=kind, show_text=show_text, home=url_for("speaking.opic_home"))
+                           exam="opic", n=n, topic=topic, kind=kind, show_text=show_text, weak=weak,
+                           home=url_for("speaking.opic_home"))
 
 
 @bp.route("/opic/mock", methods=["GET", "POST"])

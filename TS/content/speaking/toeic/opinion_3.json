@@ -1,0 +1,882 @@
+[
+ {
+  "id": "op-041",
+  "topic": "직장",
+  "question": "Do you agree or disagree with the following statement? Companies should allow employees to choose their own working hours. Give specific reasons and examples to support your opinion.",
+  "question_ko": "다음 말에 동의합니까, 동의하지 않습니까? 회사는 직원들이 스스로 근무 시간을 정하도록 허용해야 한다. 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 동의",
+   "이유 1: 사람마다 집중이 잘 되는 시간이 다름",
+   "예시: 아침형인 나 — 7시 출근 후 오후에 일찍 퇴근, 실수 감소",
+   "이유 2: 병원·가족 일 처리가 쉬워 스트레스 감소",
+   "마무리: 그래서 근무 시간 선택에 찬성"
+  ],
+  "sample": "I agree that companies should let employees choose their own working hours. First, people focus best at different times of the day. For example, I am a morning person. At my last job, I asked my manager if I could start at seven and leave at four. She said yes. After that, I finished my reports faster, and I made fewer mistakes because the office was quiet in the morning. Also, flexible hours make life less stressful. If I need to see a doctor or pick up a family member, I can just change my schedule. I don't have to take a whole day off. So, for these reasons, I think flexible working hours are good for both workers and companies.",
+  "sample_ko": "저는 회사가 직원들이 스스로 근무 시간을 정하게 해야 한다는 데 동의합니다. 첫째, 사람마다 가장 집중이 잘 되는 시간이 다릅니다. 예를 들어 저는 아침형 인간입니다. 지난 직장에서 매니저에게 7시에 출근해서 4시에 퇴근해도 되는지 물었습니다. 매니저는 허락해 주었습니다. 그 후로 아침에는 사무실이 조용해서 보고서를 더 빨리 끝냈고 실수도 줄었습니다. 또한 유연한 근무 시간은 생활의 스트레스를 줄여 줍니다. 병원에 가거나 가족을 데리러 가야 할 때 일정만 바꾸면 됩니다. 하루 종일 휴가를 낼 필요가 없습니다. 그래서 이런 이유로 저는 유연 근무 시간이 직원과 회사 모두에게 좋다고 생각합니다.",
+  "sample_adv": "I definitely agree with this statement. The main reason is that everyone has a different rhythm, and people do their best work when they can follow it. Let me give you a personal example. I'm a real morning person, but at my previous job, everyone had to work from nine to six. By late afternoon, I was always tired and kept making small mistakes in my reports. Last year, I asked my manager if I could start at seven and leave at four, and she agreed to try it for a month. The difference was amazing. The office was quiet in the early morning, so I could concentrate, and my reports were finished on time with almost no errors. On top of that, flexible hours make it much easier to handle personal things, like a doctor's appointment or a parent's visit, without taking a full day off. As long as the team agrees on a few core hours for meetings, I believe flexible schedules make employees both happier and more productive.",
+  "sample_adv_ko": "저는 이 말에 확실히 동의합니다. 가장 큰 이유는 사람마다 리듬이 다르고, 그 리듬을 따를 수 있을 때 가장 일을 잘하기 때문입니다. 제 경험을 하나 말씀드리겠습니다. 저는 완전한 아침형 인간인데, 이전 직장에서는 모두가 9시부터 6시까지 일해야 했습니다. 늦은 오후가 되면 늘 피곤해서 보고서에 자잘한 실수를 계속했습니다. 작년에 매니저에게 7시에 출근해서 4시에 퇴근해도 되는지 물었고, 매니저는 한 달 동안 시험해 보자고 했습니다. 차이는 놀라웠습니다. 이른 아침에는 사무실이 조용해서 집중할 수 있었고, 보고서는 거의 실수 없이 제때 끝났습니다. 게다가 유연한 근무 시간은 병원 예약이나 부모님 방문 같은 개인 일을 하루 휴가 없이 처리하기 훨씬 쉽게 해 줍니다. 팀이 회의를 위한 핵심 시간 몇 시간만 정해 둔다면, 유연한 근무 일정은 직원을 더 행복하고 더 생산적으로 만든다고 생각합니다.",
+  "tips": [
+   "'I'm a morning person' 처럼 자기 성향을 먼저 밝히면 예시가 자연스럽게 이어진다",
+   "전과 후를 비교(Before … / After that …)하면 이유가 분명해진다",
+   "고득점: 'As long as …' 로 조건을 붙여 균형 잡힌 결론을 만든다"
+  ]
+ },
+ {
+  "id": "op-042",
+  "topic": "직장",
+  "question": "Which do you prefer, working in an open office where everyone shares one space or working in a private office? Give specific reasons and examples to support your opinion.",
+  "question_ko": "모두가 한 공간을 함께 쓰는 개방형 사무실에서 일하는 것과 개인 사무실에서 일하는 것 중 어느 쪽을 선호합니까? 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 개인 사무실",
+   "이유 1: 소음이 적어 집중이 잘 됨",
+   "예시: 개방형 사무실 시절 통화 소리 때문에 이어폰 — 회의실 빌려 일함",
+   "이유 2: 고객 전화·비밀 서류를 다루기 좋음",
+   "마무리: 그래서 개인 사무실 선호"
+  ],
+  "sample": "I prefer working in a private office. The main reason is that I can concentrate better when it is quiet. For example, at my first company, about thirty people worked in one big room. People talked on the phone all day, and someone was always laughing or eating. I wore earphones, but it didn't help much. Sometimes I booked a meeting room just to finish my work. Now I share a small office with only one coworker, and I get much more done. Also, a private office is better for phone calls with customers and for private documents. So, for these reasons, I would choose a private office over an open office.",
+  "sample_ko": "저는 개인 사무실에서 일하는 것을 선호합니다. 가장 큰 이유는 조용할 때 더 잘 집중할 수 있기 때문입니다. 예를 들어 제 첫 회사에서는 서른 명 정도가 큰 방 하나에서 일했습니다. 사람들이 하루 종일 전화 통화를 했고, 누군가는 늘 웃거나 뭔가를 먹고 있었습니다. 이어폰을 꼈지만 별 도움이 되지 않았습니다. 가끔은 일을 끝내려고 회의실을 예약하기도 했습니다. 지금은 동료 한 명과 작은 사무실을 함께 쓰는데, 일을 훨씬 많이 해냅니다. 또한 개인 사무실은 고객과 통화하거나 비밀 서류를 다루기에도 더 좋습니다. 그래서 이런 이유로 저는 개방형 사무실보다 개인 사무실을 고르겠습니다.",
+  "sample_adv": "Personally, I would much rather work in a private office. Some people say open offices improve teamwork, but in my experience, they mostly create noise and interruptions. At my first job, around thirty of us sat in one huge room without any walls. The sales team was on the phone constantly, people stopped by my desk to chat, and I could hear every conversation around me. I tried noise canceling headphones, but I still lost my focus every few minutes. Honestly, there were days when I booked an empty meeting room just so I could finish a single report. A couple of years ago, I moved to a company where I share a small office with one coworker, and my productivity has improved a lot. Another advantage is privacy. When I talk to clients about contracts or prices, I don't have to worry about other people listening. Of course, teamwork is important, but we can always meet in a meeting room when we need to.",
+  "sample_adv_ko": "개인적으로 저는 개인 사무실에서 일하는 것을 훨씬 선호합니다. 개방형 사무실이 팀워크를 높인다고 말하는 사람도 있지만, 제 경험상 그것은 대부분 소음과 방해만 만들어 냅니다. 첫 직장에서 서른 명 정도가 벽 하나 없는 거대한 방에 앉아 있었습니다. 영업팀은 쉴 새 없이 통화했고, 사람들은 제 자리에 들러 수다를 떨었으며, 주변의 모든 대화가 다 들렸습니다. 소음 차단 헤드폰도 써 봤지만 몇 분마다 집중이 깨졌습니다. 솔직히 보고서 하나를 끝내려고 빈 회의실을 예약한 날도 있었습니다. 2년쯤 전에 동료 한 명과 작은 사무실을 함께 쓰는 회사로 옮겼는데, 생산성이 많이 좋아졌습니다. 또 다른 장점은 사생활입니다. 고객과 계약이나 가격 이야기를 할 때 다른 사람이 들을까 걱정할 필요가 없습니다. 물론 팀워크도 중요하지만, 필요할 때는 언제든 회의실에서 만나면 됩니다.",
+  "tips": [
+   "선택 문제는 첫 문장에서 하나를 분명히 고른다: 'I prefer A.'",
+   "반대 의견을 먼저 인정하고 반박(Some people say …, but …)하면 고득점에 유리하다",
+   "소음 묘사 표현: talk on the phone constantly, stop by my desk, lose my focus"
+  ]
+ },
+ {
+  "id": "op-043",
+  "topic": "직장",
+  "question": "What are the advantages and disadvantages of changing jobs several times early in your career? Give specific reasons and examples to support your opinion.",
+  "question_ko": "경력 초기에 여러 번 직장을 옮기는 것의 장점과 단점은 무엇입니까? 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 장점이 더 크지만 단점도 있음",
+   "장점: 다양한 업무 경험 → 맞는 일을 찾음",
+   "예시: 사촌 — 은행, 광고 회사 거쳐 지금은 만족하는 데이터 분석 일",
+   "단점: 회사가 끈기 없다고 볼 수 있음, 깊은 전문성 부족",
+   "마무리: 이유 있는 이직은 괜찮다"
+  ],
+  "sample": "Changing jobs early in your career has both advantages and disadvantages. The biggest advantage is that you can try different kinds of work and find what you really like. For example, my cousin worked at a bank for one year and then at an advertising company for two years. She didn't enjoy either job. Now she works as a data analyst, and she loves it. She says she couldn't have found this job without those experiences. However, there are also disadvantages. Some companies may think you can't stay in one place for long. Also, you may not build deep skills in one area. So, I think changing jobs is fine if you have a clear reason.",
+  "sample_ko": "경력 초기에 직장을 옮기는 것은 장점과 단점이 모두 있습니다. 가장 큰 장점은 여러 종류의 일을 해 보고 정말 좋아하는 일을 찾을 수 있다는 것입니다. 예를 들어 제 사촌은 은행에서 1년, 광고 회사에서 2년 일했습니다. 두 일 모두 즐겁지 않았습니다. 지금은 데이터 분석가로 일하는데 아주 만족합니다. 그 경험들이 없었다면 이 일을 찾지 못했을 거라고 말합니다. 하지만 단점도 있습니다. 어떤 회사들은 한곳에 오래 있지 못하는 사람이라고 생각할 수 있습니다. 또 한 분야에서 깊은 실력을 쌓지 못할 수도 있습니다. 그래서 저는 분명한 이유가 있다면 이직은 괜찮다고 생각합니다.",
+  "sample_adv": "I think changing jobs a few times early in your career has clear advantages, but it also comes with some risks. On the positive side, it's one of the best ways to discover what kind of work actually suits you. When you're in your twenties, it's hard to know that just from a job description. My cousin is a good example. Right after college, she joined a bank, but she found the work too repetitive. Then she spent two years at an advertising agency, where she realized she enjoyed working with numbers more than writing slogans. That led her to her current job as a data analyst, and she's been happy there for five years now. On the other hand, there are definite downsides. Some hiring managers see a short work history as a warning sign, and moving too often means you don't develop deep expertise. So my conclusion is that changing jobs is worthwhile as long as each move teaches you something and you can explain why you made it.",
+  "sample_adv_ko": "저는 경력 초기에 몇 번 직장을 옮기는 것이 분명한 장점이 있지만 위험도 따른다고 생각합니다. 좋은 점은 어떤 일이 자신에게 맞는지 알아내는 가장 좋은 방법 중 하나라는 것입니다. 20대에는 직무 설명만 보고 그것을 알기 어렵습니다. 제 사촌이 좋은 예입니다. 대학을 졸업하자마자 은행에 들어갔지만 일이 너무 반복적이라고 느꼈습니다. 그 뒤 광고 대행사에서 2년을 보냈는데, 거기서 광고 문구를 쓰는 것보다 숫자를 다루는 일을 더 좋아한다는 것을 깨달았습니다. 그 덕분에 지금의 데이터 분석가 일을 하게 되었고, 벌써 5년째 만족하며 일하고 있습니다. 반면 분명한 단점도 있습니다. 어떤 채용 담당자는 짧은 경력을 경고 신호로 보고, 너무 자주 옮기면 깊은 전문성을 쌓지 못합니다. 그래서 제 결론은 이직할 때마다 배우는 것이 있고 왜 옮겼는지 설명할 수 있다면 이직은 가치가 있다는 것입니다.",
+  "tips": [
+   "장단점 문제는 'On the positive side … / On the other hand …' 로 둘을 확실히 나눈다",
+   "주변 사람 예시는 시간 순서(Right after college → Then → That led her to)로 말하면 쉽다",
+   "마무리에서 어느 쪽이 더 큰지 한 문장으로 정리한다"
+  ]
+ },
+ {
+  "id": "op-044",
+  "topic": "직장",
+  "question": "When choosing a job, what is the most important factor: a high salary, friendly coworkers, or opportunities to learn new skills? Give specific reasons and examples to support your opinion.",
+  "question_ko": "직장을 고를 때 가장 중요한 요소는 무엇입니까: 높은 연봉, 친절한 동료, 새로운 기술을 배울 기회? 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 배울 기회",
+   "이유 1: 실력이 늘면 연봉은 따라옴",
+   "예시: 첫 직장 연봉 낮았지만 엑셀·발표 교육 → 2년 뒤 더 좋은 조건으로 이직",
+   "이유 2: 일이 지루하지 않고 성장하는 느낌",
+   "마무리: 그래서 배울 기회가 가장 중요"
+  ],
+  "sample": "I think opportunities to learn new skills are the most important factor. First, if you learn a lot, a higher salary will come later. For example, my first job did not pay very well. But the company gave me training in data analysis and presentations. I also worked on many different projects. After two years, I moved to a bigger company with a much better salary because of those skills. Second, learning makes work more interesting. When I learn something new, I don't feel bored, and I feel like I am growing. A high salary is nice, but it doesn't make me happy every day. So, for these reasons, I believe learning opportunities matter most.",
+  "sample_ko": "저는 새로운 기술을 배울 기회가 가장 중요한 요소라고 생각합니다. 첫째, 많이 배우면 높은 연봉은 나중에 따라옵니다. 예를 들어 제 첫 직장은 월급이 그리 많지 않았습니다. 하지만 회사에서 데이터 분석과 발표 교육을 해 주었습니다. 여러 다양한 프로젝트에도 참여했습니다. 2년 뒤 저는 그 기술들 덕분에 훨씬 좋은 연봉을 받고 더 큰 회사로 옮겼습니다. 둘째, 배우면 일이 더 재미있어집니다. 새로운 것을 배우면 지루하지 않고 성장하고 있다는 느낌이 듭니다. 높은 연봉도 좋지만 매일 저를 행복하게 해 주지는 않습니다. 그래서 이런 이유로 저는 배울 기회가 가장 중요하다고 생각합니다.",
+  "sample_adv": "For me, the opportunity to learn new skills is by far the most important factor, especially at the beginning of a career. The reason is simple. Salary is something you get today, but skills are something that keep paying you for years. My own experience proves this. My first job was at a small logistics company, and honestly, the pay was lower than what my friends were earning. However, my manager let me join all kinds of projects, and the company paid for courses in data analysis and business English. Within two years, I could build reports that saved the team hours every week. Because of that, I was able to move to a much larger company with a salary almost thirty percent higher. In addition, when I'm learning, I stay motivated. I look forward to Monday instead of dreading it. Friendly coworkers make the day pleasant, of course, but they can't guarantee your future. That's why I'd always choose growth first.",
+  "sample_adv_ko": "제게는 새로운 기술을 배울 기회가 단연 가장 중요한 요소이고, 특히 경력 초기에는 더 그렇습니다. 이유는 간단합니다. 연봉은 오늘 받는 것이지만 기술은 몇 년 동안 계속 보상을 가져다주는 것입니다. 제 경험이 이를 증명합니다. 제 첫 직장은 작은 물류 회사였는데, 솔직히 월급이 친구들이 받는 것보다 적었습니다. 하지만 매니저가 온갖 프로젝트에 참여하게 해 주었고, 회사가 데이터 분석과 비즈니스 영어 강좌 비용을 대 주었습니다. 2년도 안 되어 저는 팀의 시간을 매주 몇 시간씩 아껴 주는 보고서를 만들 수 있게 되었습니다. 그 덕분에 연봉이 거의 30퍼센트 높은 훨씬 큰 회사로 옮길 수 있었습니다. 게다가 배우고 있을 때는 의욕이 유지됩니다. 월요일이 두렵지 않고 오히려 기다려집니다. 물론 친절한 동료는 하루를 즐겁게 해 주지만 미래를 보장해 주지는 못합니다. 그래서 저는 언제나 성장을 먼저 고르겠습니다.",
+  "tips": [
+   "세 가지 중 고르는 문제는 하나만 골라 끝까지 밀고 나간다",
+   "'Salary is something you get today, but skills …' 같은 대조 문장이 인상적인 이유가 된다",
+   "마지막에 나머지 선택지를 짧게 언급(Friendly coworkers …, but …)하면 완성도가 높아진다"
+  ]
+ },
+ {
+  "id": "op-045",
+  "topic": "교육",
+  "question": "Do you agree or disagree with the following statement? All university students should be required to take a public speaking class. Give specific reasons and examples to support your opinion.",
+  "question_ko": "다음 말에 동의합니까, 동의하지 않습니까? 모든 대학생은 발표·말하기 수업을 의무적으로 들어야 한다. 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 동의",
+   "이유 1: 어떤 직업이든 발표·면접에서 말하기가 필요",
+   "예시: 발표 수업 전엔 손이 떨렸지만 매주 3분 발표 → 면접에서 자신감",
+   "이유 2: 자신감이 생겨 수업 참여도 늘어남",
+   "마무리: 그래서 필수 과목에 찬성"
+  ],
+  "sample": "I agree that all university students should take a public speaking class. First, almost every job needs speaking skills. People give presentations at meetings, and they also have to speak well in job interviews. For example, before I took a speaking class, my hands shook whenever I spoke in front of people. In the class, we gave a three minute speech every week. It was hard at first, but I slowly became more comfortable. Later, in my job interview, I felt calm and answered clearly. Second, a speaking class builds confidence. After the class, I asked more questions in my other classes too. So, I think this class should be required for everyone.",
+  "sample_ko": "저는 모든 대학생이 발표 수업을 들어야 한다는 데 동의합니다. 첫째, 거의 모든 직업에 말하기 능력이 필요합니다. 사람들은 회의에서 발표를 하고, 취업 면접에서도 말을 잘해야 합니다. 예를 들어 발표 수업을 듣기 전에 저는 사람들 앞에서 말할 때마다 손이 떨렸습니다. 그 수업에서는 매주 3분짜리 발표를 했습니다. 처음에는 힘들었지만 조금씩 편해졌습니다. 나중에 취업 면접에서 저는 침착했고 분명하게 대답했습니다. 둘째, 발표 수업은 자신감을 길러 줍니다. 수업 후에 저는 다른 수업에서도 질문을 더 많이 했습니다. 그래서 저는 이 수업이 모두에게 필수여야 한다고 생각합니다.",
+  "sample_adv": "I strongly agree with this idea. No matter what major students choose, they will eventually need to explain their ideas in front of other people, whether it's in a job interview, a team meeting, or a presentation to clients. Unfortunately, many students never practice this skill until it's too late. I was one of them. In my first two years of university, I avoided any class that involved presentations because I got so nervous that my hands literally shook. Then, in my third year, I had to take a public speaking course to graduate. Every week, we gave a three minute speech and received feedback from classmates. It was painful at the beginning, but by the end of the semester, I could speak without reading from my notes. A year later, during my job interviews, I noticed that I was much calmer than the other candidates. Beyond careers, the class also gave me the confidence to share my opinions in other classes. So I really think every university should make it a requirement.",
+  "sample_adv_ko": "저는 이 생각에 강하게 동의합니다. 학생들이 어떤 전공을 고르든, 결국에는 취업 면접이든 팀 회의든 고객 앞 발표든 다른 사람들 앞에서 자기 생각을 설명해야 합니다. 안타깝게도 많은 학생이 너무 늦을 때까지 이 능력을 연습하지 않습니다. 저도 그중 한 명이었습니다. 대학 첫 2년 동안 저는 발표가 있는 수업을 모두 피했는데, 너무 긴장해서 손이 정말로 떨렸기 때문입니다. 그러다 3학년 때 졸업하려면 발표 수업을 들어야 했습니다. 매주 3분짜리 발표를 하고 친구들에게 피드백을 받았습니다. 처음에는 괴로웠지만, 학기 말에는 메모를 보지 않고도 말할 수 있었습니다. 1년 뒤 취업 면접을 볼 때 저는 다른 지원자들보다 훨씬 침착하다는 것을 느꼈습니다. 직업 외에도 그 수업은 다른 수업에서 제 의견을 말할 자신감을 주었습니다. 그래서 저는 모든 대학이 이 수업을 필수로 해야 한다고 정말 생각합니다.",
+  "tips": [
+   "'No matter what …' 으로 시작하면 모든 사람에게 해당된다는 점을 강조할 수 있다",
+   "자신의 약점이 고쳐진 이야기(before → class → after)는 찬성 근거로 강력하다",
+   "긴장 표현: my hands shook, I got so nervous, I felt calm"
+  ]
+ },
+ {
+  "id": "op-046",
+  "topic": "교육",
+  "question": "Which do you prefer, taking classes online or taking classes in a classroom? Give specific reasons and examples to support your opinion.",
+  "question_ko": "온라인으로 수업을 듣는 것과 교실에서 수업을 듣는 것 중 어느 쪽을 선호합니까? 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 교실 수업",
+   "이유 1: 바로 질문하고 답을 들을 수 있음",
+   "예시: 온라인 회계 강의 — 혼자 막혀서 포기 / 교실 수업은 끝까지 들음",
+   "이유 2: 친구들과 함께라 동기 부여",
+   "마무리: 그래서 교실 수업 선호"
+  ],
+  "sample": "I prefer taking classes in a classroom. The first reason is that I can ask questions right away. For example, last year I signed up for an online accounting course. When I didn't understand something, I had to send an email and wait two or three days for an answer. I got stuck many times, and finally I gave up. Later, I took the same subject at a local academy. Whenever I was confused, I just raised my hand. I finished the whole course. The second reason is motivation. When I study with classmates, I don't want to fall behind, so I work harder. For these reasons, I think classroom classes are better for me.",
+  "sample_ko": "저는 교실에서 수업 듣는 것을 선호합니다. 첫 번째 이유는 바로 질문할 수 있기 때문입니다. 예를 들어 작년에 저는 온라인 회계 강의를 신청했습니다. 이해가 안 되는 것이 있으면 이메일을 보내고 답을 받기까지 2~3일을 기다려야 했습니다. 여러 번 막혔고 결국 포기했습니다. 나중에 같은 과목을 동네 학원에서 들었습니다. 헷갈릴 때마다 그냥 손을 들면 됐습니다. 저는 과정을 끝까지 마쳤습니다. 두 번째 이유는 동기 부여입니다. 친구들과 함께 공부하면 뒤처지기 싫어서 더 열심히 합니다. 이런 이유로 저는 교실 수업이 저에게 더 낫다고 생각합니다.",
+  "sample_adv": "Although online classes are convenient, I personally prefer learning in a real classroom. The biggest reason is that I can get help the moment I need it. A good example is what happened last spring. I signed up for an online accounting course because it was cheaper and I could watch it at night. But every time I got confused, I had to post a question on the course website and wait a couple of days for a reply. By then, I had already lost interest, and I ended up quitting halfway through. A few months later, I took a similar course at an academy near my office. Whenever something didn't make sense, I simply raised my hand, and the teacher explained it again with a different example. I not only finished the course, but I also passed a certification exam. Another reason is that classmates keep me motivated. When I see others working hard, I feel I should do the same. So for me, the classroom is worth the extra time and money.",
+  "sample_adv_ko": "온라인 수업이 편리하긴 하지만, 저는 개인적으로 실제 교실에서 배우는 것을 선호합니다. 가장 큰 이유는 필요한 순간에 바로 도움을 받을 수 있기 때문입니다. 지난봄에 있었던 일이 좋은 예입니다. 저는 더 싸고 밤에 볼 수 있어서 온라인 회계 강의를 신청했습니다. 하지만 헷갈릴 때마다 강의 사이트에 질문을 올리고 며칠 동안 답을 기다려야 했습니다. 그때쯤이면 이미 흥미를 잃었고, 결국 중간에 그만두었습니다. 몇 달 뒤 회사 근처 학원에서 비슷한 강좌를 들었습니다. 이해가 안 되는 것이 있으면 그냥 손을 들었고, 선생님은 다른 예를 들어 다시 설명해 주었습니다. 저는 과정을 마쳤을 뿐 아니라 자격증 시험에도 합격했습니다. 또 다른 이유는 같이 듣는 사람들이 동기를 준다는 것입니다. 다른 사람들이 열심히 하는 것을 보면 저도 그래야겠다는 생각이 듭니다. 그래서 저에게는 교실 수업이 추가 시간과 비용을 들일 가치가 있습니다.",
+  "tips": [
+   "같은 과목을 두 방식으로 들어 본 비교 예시는 선택 문제에 아주 효과적이다",
+   "'Although A is convenient, I prefer B' 로 시작하면 반대쪽도 인정하는 세련된 첫 문장이 된다",
+   "'not only … but also …' 로 결과를 두 가지 말하면 고득점 문장이 된다"
+  ]
+ },
+ {
+  "id": "op-047",
+  "topic": "교육",
+  "question": "What are the advantages of studying in another country for a year while you are a university student? Give specific reasons and examples to support your opinion.",
+  "question_ko": "대학생 때 1년 동안 다른 나라에서 공부하는 것의 장점은 무엇입니까? 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 장점이 많음",
+   "장점 1: 외국어 실력이 빠르게 늚",
+   "예시: 캐나다 교환학생 — 장보기·병원·조별 과제를 영어로",
+   "장점 2: 혼자 문제를 해결하며 독립심이 생김",
+   "마무리: 기회가 있다면 꼭 추천"
+  ],
+  "sample": "There are many advantages to studying in another country for a year. First, your language skills improve very quickly. For example, I was an exchange student in Canada for one year. At first, I was afraid to speak English. But I had to use it everywhere, at the supermarket, at the bank, and in group projects. After six months, I could talk with my classmates without any problems. Second, you become more independent. In Canada, I had to solve every problem by myself, like finding an apartment and opening a bank account. That made me more confident. So, if students have the chance, I strongly recommend studying abroad.",
+  "sample_ko": "1년 동안 다른 나라에서 공부하는 것에는 많은 장점이 있습니다. 첫째, 외국어 실력이 아주 빨리 늡니다. 예를 들어 저는 1년 동안 캐나다에서 교환학생으로 지냈습니다. 처음에는 영어로 말하는 것이 두려웠습니다. 하지만 슈퍼마켓에서도, 은행에서도, 조별 과제에서도 어디서나 영어를 써야 했습니다. 6개월 뒤에는 친구들과 아무 문제 없이 이야기할 수 있었습니다. 둘째, 더 독립적인 사람이 됩니다. 캐나다에서는 집을 구하고 은행 계좌를 여는 것처럼 모든 문제를 혼자 해결해야 했습니다. 그 덕분에 더 자신감이 생겼습니다. 그래서 기회가 있다면 저는 유학을 강력히 추천합니다.",
+  "sample_adv": "In my opinion, spending a year studying abroad is one of the most valuable experiences a university student can have. The first advantage, and probably the most obvious one, is that your language skills improve much faster than they would at home. I learned this firsthand when I spent my third year as an exchange student in Vancouver. During the first month, I barely spoke because I was afraid of making mistakes. However, I had no choice. I had to explain my symptoms to a doctor, argue about a phone bill, and lead a group presentation, all in English. By the end of the year, I was even dreaming in English sometimes. The second advantage is independence. Back home, my parents had always taken care of things like paperwork and bills. In Canada, I had to find an apartment, manage a monthly budget, and deal with problems on my own. Those experiences made me much more confident and responsible. So if students get the chance, I'd tell them not to hesitate.",
+  "sample_adv_ko": "제 생각에 1년 동안 외국에서 공부하는 것은 대학생이 할 수 있는 가장 값진 경험 중 하나입니다. 첫 번째이자 아마 가장 분명한 장점은 국내에 있을 때보다 언어 실력이 훨씬 빨리 는다는 것입니다. 저는 3학년 때 밴쿠버에서 교환학생으로 지내며 이것을 직접 깨달았습니다. 첫 한 달 동안은 실수할까 봐 거의 말을 하지 않았습니다. 하지만 선택의 여지가 없었습니다. 의사에게 증상을 설명하고, 휴대폰 요금 때문에 따지고, 조별 발표를 이끄는 것까지 모두 영어로 해야 했습니다. 1년이 끝날 무렵에는 가끔 영어로 꿈을 꾸기도 했습니다. 두 번째 장점은 독립심입니다. 한국에 있을 때는 서류나 요금 같은 일을 늘 부모님이 처리해 주셨습니다. 캐나다에서는 집을 구하고, 한 달 예산을 관리하고, 문제를 스스로 처리해야 했습니다. 그런 경험이 저를 훨씬 더 자신감 있고 책임감 있는 사람으로 만들었습니다. 그래서 학생들에게 기회가 온다면 망설이지 말라고 말하고 싶습니다.",
+  "tips": [
+   "장점만 묻는 문제는 장점 두 개를 'The first advantage … The second advantage …' 로 분명히 나눈다",
+   "구체적 상황 세 가지 나열(at the supermarket, at the bank, and in group projects)이 예시를 생생하게 만든다",
+   "'I learned this firsthand when …' 은 경험 예시로 넘어가는 좋은 연결 표현이다"
+  ]
+ },
+ {
+  "id": "op-048",
+  "topic": "교육",
+  "question": "What is the most important quality for a teacher to have: patience, deep knowledge of the subject, or the ability to make lessons interesting? Give specific reasons and examples to support your opinion.",
+  "question_ko": "교사에게 가장 중요한 자질은 무엇입니까: 인내심, 과목에 대한 깊은 지식, 수업을 재미있게 만드는 능력? 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 수업을 재미있게 만드는 능력",
+   "이유 1: 흥미가 있어야 집중하고 기억함",
+   "예시: 중학교 역사 선생님 — 역할극·퀴즈로 수업, 성적과 흥미 상승",
+   "이유 2: 재미있으면 스스로 더 공부함",
+   "마무리: 그래서 재미가 가장 중요"
+  ],
+  "sample": "I think the ability to make lessons interesting is the most important quality for a teacher. First, students only learn when they pay attention. If a class is boring, students look at their phones or fall asleep. For example, in middle school, I didn't like history at all. But then I had a teacher who used role plays and quiz games in every class. We acted out famous events and competed in teams. I started to look forward to history class, and my grades went up a lot. Second, when a subject is fun, students study more on their own. I even read history books at home. So, for these reasons, I believe interesting lessons matter most.",
+  "sample_ko": "저는 수업을 재미있게 만드는 능력이 교사에게 가장 중요한 자질이라고 생각합니다. 첫째, 학생들은 집중할 때만 배웁니다. 수업이 지루하면 학생들은 휴대폰을 보거나 잠이 듭니다. 예를 들어 중학교 때 저는 역사를 전혀 좋아하지 않았습니다. 그런데 매 수업 역할극과 퀴즈 게임을 하는 선생님을 만났습니다. 우리는 유명한 사건을 연기하고 팀별로 경쟁했습니다. 저는 역사 시간을 기다리게 되었고 성적도 많이 올랐습니다. 둘째, 과목이 재미있으면 학생들이 스스로 더 공부합니다. 저는 집에서 역사책까지 읽었습니다. 그래서 이런 이유로 저는 재미있는 수업이 가장 중요하다고 생각합니다.",
+  "sample_adv": "Of the three qualities, I believe the ability to make lessons interesting is the most important. Patience and knowledge are definitely valuable, but they don't mean much if students have stopped listening. When a lesson is engaging, students naturally focus, and they remember the material much longer. I can say this from my own experience. When I was in middle school, history was my least favorite subject because it felt like memorizing endless dates. In my second year, though, a new teacher completely changed my attitude. Instead of just lecturing, she turned historical events into role plays, and every Friday we had a team quiz game with small prizes. I'll never forget playing a king who had to make a difficult decision. Not only did my grades improve from a C to an A, but I also started reading history books for fun. That's the real power of an interesting class. It makes students want to keep learning even after the bell rings. So, in my view, this ability matters more than anything else.",
+  "sample_adv_ko": "세 가지 자질 가운데 저는 수업을 재미있게 만드는 능력이 가장 중요하다고 생각합니다. 인내심과 지식도 분명 소중하지만, 학생들이 듣기를 멈춰 버렸다면 큰 의미가 없습니다. 수업이 흥미로우면 학생들은 자연스럽게 집중하고 내용을 훨씬 오래 기억합니다. 제 경험으로 이렇게 말할 수 있습니다. 중학생 때 역사는 끝없이 연도를 외우는 것 같아서 제가 가장 싫어하는 과목이었습니다. 그런데 2학년 때 새로 오신 선생님이 제 태도를 완전히 바꿔 놓았습니다. 선생님은 강의만 하는 대신 역사적 사건을 역할극으로 만들었고, 매주 금요일에는 작은 상품을 걸고 팀 퀴즈 게임을 했습니다. 어려운 결정을 내려야 하는 왕 역할을 했던 것은 절대 잊지 못할 겁니다. 제 성적이 C에서 A로 올랐을 뿐 아니라, 재미로 역사책을 읽기 시작하기까지 했습니다. 그것이 재미있는 수업의 진짜 힘입니다. 수업 종이 울린 뒤에도 계속 배우고 싶게 만들어 줍니다. 그래서 제 생각에는 이 능력이 그 무엇보다 중요합니다.",
+  "tips": [
+   "'Of the three qualities, I believe …' 로 시작하면 선택지 문제의 첫 문장이 깔끔하다",
+   "나머지 두 선택지를 한 문장으로 인정하고 넘어가면(Patience and knowledge are valuable, but …) 논리가 탄탄해진다",
+   "도치 'Not only did my grades improve, but …' 는 고득점용 문장이다"
+  ]
+ },
+ {
+  "id": "op-049",
+  "topic": "기술",
+  "question": "Do you agree or disagree with the following statement? People should stop using social media for at least one day every week. Give specific reasons and examples to support your opinion.",
+  "question_ko": "다음 말에 동의합니까, 동의하지 않습니까? 사람들은 매주 적어도 하루는 소셜 미디어 사용을 멈춰야 한다. 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 동의",
+   "이유 1: 쉬는 시간을 더 의미 있게 씀",
+   "예시: 일요일 SNS 안 하기 — 책 한 권, 가족과 산책",
+   "이유 2: 남과 비교하는 스트레스 감소",
+   "마무리: 그래서 일주일에 하루 쉬기 찬성"
+  ],
+  "sample": "I agree that people should take a break from social media one day a week. First, we can use our free time better. For example, a few months ago, I decided not to use social media on Sundays. At first, it was difficult, and I kept picking up my phone. But soon I found that I had a lot more time. Now I read a book, go hiking, or take a walk with my family on Sundays. I even finished three novels last month. Second, social media can be stressful. People only post their best moments, so we compare ourselves to them. On my day off, I feel much calmer. So I think a weekly break is a great idea.",
+  "sample_ko": "저는 사람들이 일주일에 하루는 소셜 미디어를 쉬어야 한다는 데 동의합니다. 첫째, 자유 시간을 더 잘 쓸 수 있습니다. 예를 들어 몇 달 전 저는 일요일에는 소셜 미디어를 하지 않기로 했습니다. 처음에는 어려워서 자꾸 휴대폰을 집어 들었습니다. 하지만 곧 시간이 훨씬 많아졌다는 것을 알게 되었습니다. 이제 일요일에는 책을 읽거나 등산을 가거나 가족과 산책을 합니다. 지난달에는 소설을 세 권이나 다 읽었습니다. 둘째, 소셜 미디어는 스트레스가 될 수 있습니다. 사람들은 가장 좋은 순간만 올리기 때문에 우리는 자신을 그들과 비교하게 됩니다. 쉬는 날에는 마음이 훨씬 차분합니다. 그래서 저는 일주일에 한 번 쉬는 것이 좋은 생각이라고 봅니다.",
+  "sample_adv": "I completely agree with this statement. Social media is useful for staying in touch, but most of us spend far more time on it than we realize, and a weekly break helps us take that time back. I started doing this myself about four months ago. I noticed that my phone's screen time report showed almost three hours of social media a day, which honestly shocked me. So I made a simple rule: no social media apps on Sundays. The first two weekends were tough. I kept reaching for my phone out of habit, so I moved the apps off my home screen. After that, things got much easier. Now my Sundays look completely different. I cook brunch with my family, go to the park, and read. I've finished more books this year than in the previous three years combined. Besides that, I feel less anxious because I'm not comparing my life to the perfect photos other people post. One day a week is a small change, but it makes a big difference.",
+  "sample_adv_ko": "저는 이 말에 전적으로 동의합니다. 소셜 미디어는 연락을 유지하는 데 유용하지만, 우리 대부분은 생각보다 훨씬 많은 시간을 거기에 쓰고 있고, 일주일에 한 번 쉬면 그 시간을 되찾을 수 있습니다. 저도 넉 달쯤 전부터 직접 이렇게 하기 시작했습니다. 휴대폰 사용 시간 보고서를 보니 소셜 미디어를 하루에 거의 세 시간이나 쓰고 있었는데, 솔직히 충격이었습니다. 그래서 간단한 규칙을 만들었습니다. 일요일에는 소셜 미디어 앱 금지. 처음 두 주말은 힘들었습니다. 습관적으로 계속 휴대폰에 손이 가서 앱을 첫 화면에서 치워 버렸습니다. 그 뒤로는 훨씬 쉬워졌습니다. 이제 제 일요일은 완전히 달라졌습니다. 가족과 브런치를 만들고, 공원에 가고, 책을 읽습니다. 올해 읽은 책이 앞선 3년 동안 읽은 것을 다 합친 것보다 많습니다. 그 밖에도 다른 사람들이 올리는 완벽한 사진과 제 삶을 비교하지 않으니 불안감이 줄었습니다. 일주일에 하루는 작은 변화지만 큰 차이를 만듭니다.",
+  "tips": [
+   "직접 해 본 규칙(no social media on Sundays)과 결과를 말하면 설득력이 높다",
+   "숫자(three hours a day, three novels)로 변화를 보여 준다",
+   "마지막 문장 'a small change, but a big difference' 는 여러 주제에 쓸 수 있는 마무리"
+  ]
+ },
+ {
+  "id": "op-050",
+  "topic": "기술",
+  "question": "Which do you prefer, paying for things with a mobile phone or paying with cash or a card? Give specific reasons and examples to support your opinion.",
+  "question_ko": "휴대폰으로 결제하는 것과 현금이나 카드로 결제하는 것 중 어느 쪽을 선호합니까? 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 휴대폰 결제",
+   "이유 1: 지갑 없이 빠르고 편함",
+   "예시: 지갑을 집에 두고 출근 — 커피·점심·버스를 휴대폰으로 해결",
+   "이유 2: 사용 내역이 자동 기록되어 지출 관리 쉬움",
+   "마무리: 그래서 휴대폰 결제 선호"
+  ],
+  "sample": "I prefer paying with my mobile phone. First, it is fast and convenient. I always have my phone with me, so I don't need to carry a wallet. For example, last month I left my wallet at home by mistake. In the past, that would have been a big problem. But that day, I paid for my coffee, my lunch, and even the bus with my phone. I didn't notice that my wallet was missing until I got home. Second, mobile payment apps keep a record of everything I buy. I can easily check how much I spent each week, so it helps me save money. For these reasons, I think paying with a phone is the best choice.",
+  "sample_ko": "저는 휴대폰으로 결제하는 것을 선호합니다. 첫째, 빠르고 편리합니다. 휴대폰은 늘 가지고 다니니 지갑을 들고 다닐 필요가 없습니다. 예를 들어 지난달 저는 실수로 지갑을 집에 두고 나왔습니다. 예전 같으면 큰 문제였을 것입니다. 하지만 그날 저는 커피, 점심, 심지어 버스 요금까지 휴대폰으로 냈습니다. 집에 돌아올 때까지 지갑이 없다는 것도 몰랐습니다. 둘째, 모바일 결제 앱은 제가 사는 모든 것을 기록해 줍니다. 매주 얼마를 썼는지 쉽게 확인할 수 있어서 돈을 아끼는 데 도움이 됩니다. 이런 이유로 저는 휴대폰 결제가 최선의 선택이라고 생각합니다.",
+  "sample_adv": "These days, I definitely prefer paying with my mobile phone rather than with cash or a physical card. The first reason is convenience. My phone is the one thing I never leave home without, so being able to pay with it means I can carry one less item. Actually, I had a funny experience last month that proves this point. I was in such a hurry one morning that I left my wallet on the kitchen table. I bought coffee on the way to work, had lunch with coworkers, took the bus home, and even picked up some groceries, all with my phone. I only realized my wallet was missing when I got home and saw it sitting there. The second reason is that payment apps make budgeting much easier. Every purchase is recorded automatically and sorted into categories, so at the end of the week, I can see exactly how much I spent on food or transportation. With cash, I would have no idea where my money went. That's why mobile payment fits my lifestyle best.",
+  "sample_adv_ko": "요즘 저는 현금이나 실물 카드보다 휴대폰으로 결제하는 것을 확실히 선호합니다. 첫 번째 이유는 편리함입니다. 휴대폰은 집을 나설 때 절대 두고 가지 않는 물건이라서, 휴대폰으로 결제할 수 있으면 들고 다닐 물건이 하나 줄어듭니다. 사실 지난달에 이를 증명하는 재미있는 일이 있었습니다. 어느 날 아침 너무 서두르다가 지갑을 부엌 식탁에 두고 나왔습니다. 출근길에 커피를 사고, 동료들과 점심을 먹고, 버스를 타고 집에 왔고, 장까지 봤는데 모두 휴대폰으로 했습니다. 집에 와서 지갑이 거기 놓여 있는 것을 보고서야 없었다는 것을 알았습니다. 두 번째 이유는 결제 앱 덕분에 예산 관리가 훨씬 쉬워진다는 것입니다. 모든 결제가 자동으로 기록되고 항목별로 분류되어서, 주말이 되면 식비나 교통비로 정확히 얼마를 썼는지 볼 수 있습니다. 현금이라면 돈이 어디로 갔는지 전혀 알 수 없을 겁니다. 그래서 모바일 결제가 제 생활 방식에 가장 잘 맞습니다.",
+  "tips": [
+   "'I didn't notice … until …' / 'I only realized … when …' 은 재미있는 경험 예시에 잘 맞는다",
+   "하루 동안 한 일을 나열(coffee, lunch, the bus)하면 편리함이 바로 보인다",
+   "선택 문제 마무리: 'That's why A fits my lifestyle best.'"
+  ]
+ },
+ {
+  "id": "op-051",
+  "topic": "기술",
+  "question": "What are the advantages and disadvantages of using artificial intelligence tools to help with work or schoolwork? Give specific reasons and examples to support your opinion.",
+  "question_ko": "일이나 학교 공부에 인공지능 도구를 활용하는 것의 장점과 단점은 무엇입니까? 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 장점이 크지만 주의할 점이 있음",
+   "장점: 반복 작업 시간을 크게 줄여 줌",
+   "예시: 회의록 요약에 1시간 → 10분, 남은 시간에 고객 응대",
+   "단점: 틀린 정보, 스스로 생각하는 힘이 약해질 수 있음",
+   "마무리: 도구로 쓰되 꼭 확인할 것"
+  ],
+  "sample": "Using AI tools for work or school has both advantages and disadvantages. The biggest advantage is that AI saves a lot of time. For example, at my office, I used to spend about an hour writing a summary after every meeting. Now I use an AI tool, and it takes only ten minutes. I just check the summary and fix a few things. With the extra time, I can focus on more important work, like talking with customers. However, there are also disadvantages. AI sometimes gives wrong information, so we always have to check it. Also, students may stop thinking for themselves if they use AI too much. So I think AI is helpful, but we should use it carefully.",
+  "sample_ko": "일이나 학교 공부에 AI 도구를 쓰는 것에는 장점과 단점이 모두 있습니다. 가장 큰 장점은 AI가 시간을 많이 아껴 준다는 것입니다. 예를 들어 저희 사무실에서 저는 회의가 끝날 때마다 요약을 쓰는 데 한 시간 정도를 썼습니다. 지금은 AI 도구를 쓰는데 10분밖에 걸리지 않습니다. 요약을 확인하고 몇 가지만 고치면 됩니다. 남는 시간에는 고객과 이야기하는 것처럼 더 중요한 일에 집중할 수 있습니다. 하지만 단점도 있습니다. AI는 가끔 틀린 정보를 주기 때문에 항상 확인해야 합니다. 또 학생들이 AI를 너무 많이 쓰면 스스로 생각하지 않게 될 수도 있습니다. 그래서 저는 AI가 도움이 되지만 조심해서 써야 한다고 생각합니다.",
+  "sample_adv": "I think AI tools offer huge advantages, but they also come with some real risks that people should keep in mind. On the plus side, AI is excellent at handling repetitive tasks that used to eat up a lot of time. For instance, part of my job is writing meeting notes and sending summaries to the whole team. Before, this took me almost an hour after every meeting. Since my company started using an AI assistant, it takes about ten minutes. I just review the draft, correct a few names and numbers, and send it. That gives me more time for work that actually needs a human, like solving customer problems. On the other hand, AI isn't always accurate. Once, it confidently listed a deadline that was completely wrong, and I only caught it because I double checked. For students, there's another danger. If they let AI write their essays, they'll never develop their own thinking and writing skills. So my view is that AI should be treated like a smart assistant, not a replacement for our own brains.",
+  "sample_adv_ko": "저는 AI 도구가 큰 장점을 주지만 사람들이 염두에 둬야 할 실제 위험도 따른다고 생각합니다. 좋은 점은 AI가 예전에 시간을 많이 잡아먹던 반복 작업을 아주 잘 처리한다는 것입니다. 예를 들어 제 업무 중 하나는 회의록을 쓰고 팀 전체에 요약을 보내는 것입니다. 예전에는 회의가 끝날 때마다 거의 한 시간이 걸렸습니다. 회사에서 AI 비서를 쓰기 시작한 뒤로는 10분 정도 걸립니다. 초안을 검토하고 이름과 숫자 몇 개를 고친 다음 보내면 됩니다. 덕분에 고객 문제 해결처럼 정말 사람이 필요한 일에 더 많은 시간을 씁니다. 반면 AI가 항상 정확한 것은 아닙니다. 한번은 AI가 완전히 틀린 마감일을 자신 있게 적어 놓았는데, 제가 다시 확인했기 때문에 겨우 잡아냈습니다. 학생들에게는 또 다른 위험이 있습니다. AI에게 에세이를 쓰게 하면 자신의 사고력과 글쓰기 실력을 절대 기르지 못할 것입니다. 그래서 제 생각은 AI를 우리 머리를 대신하는 것이 아니라 똑똑한 비서처럼 대해야 한다는 것입니다.",
+  "tips": [
+   "장점 예시는 '전에는 1시간 → 지금은 10분' 처럼 시간 비교로 말하면 쉽다",
+   "단점도 실제 겪은 일(틀린 마감일)로 말하면 고득점 답변이 된다",
+   "마무리 비유: 'a smart assistant, not a replacement'"
+  ]
+ },
+ {
+  "id": "op-052",
+  "topic": "기술",
+  "question": "What is the most important technology skill for young people to learn: basic coding, protecting personal information online, or using office software? Give specific reasons and examples to support your opinion.",
+  "question_ko": "젊은 사람들이 배워야 할 가장 중요한 기술 능력은 무엇입니까: 기초 코딩, 온라인 개인 정보 보호, 사무용 소프트웨어 사용? 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 개인 정보 보호",
+   "이유 1: 누구나 매일 인터넷을 쓰므로 모두에게 필요",
+   "예시: 동생이 가짜 택배 문자 링크 클릭 → 계정 해킹, 비밀번호 전부 변경",
+   "이유 2: 한 번 유출되면 되돌리기 어려움",
+   "마무리: 그래서 개인 정보 보호가 가장 중요"
+  ],
+  "sample": "I think protecting personal information online is the most important skill for young people. First, everyone uses the internet every day, but not everyone needs coding. For example, last year my younger brother got a text message about a package delivery. He clicked the link and typed his password. The next day, someone used his game account and his email. We had to change all of his passwords, and it took a whole weekend. If he had known some basic safety rules, this wouldn't have happened. Second, once your information is stolen, it is very hard to fix the problem. So, for these reasons, I believe this skill matters most.",
+  "sample_ko": "저는 온라인에서 개인 정보를 보호하는 것이 젊은 사람들에게 가장 중요한 능력이라고 생각합니다. 첫째, 모든 사람이 매일 인터넷을 쓰지만 모두에게 코딩이 필요한 것은 아닙니다. 예를 들어 작년에 제 남동생이 택배 배송에 관한 문자를 받았습니다. 동생은 링크를 누르고 비밀번호를 입력했습니다. 다음 날 누군가 동생의 게임 계정과 이메일을 사용했습니다. 우리는 동생의 비밀번호를 모두 바꿔야 했고 주말 내내 걸렸습니다. 기본적인 안전 규칙을 알았다면 이런 일은 없었을 것입니다. 둘째, 한번 정보를 도둑맞으면 문제를 해결하기가 매우 어렵습니다. 그래서 이런 이유로 저는 이 능력이 가장 중요하다고 생각합니다.",
+  "sample_adv": "Among these three, I'd say protecting personal information online is the most essential skill. Coding and office software are useful for certain careers, but online safety affects every single person who owns a smartphone, which today means almost everyone. My younger brother learned this the hard way last year. He received a text message saying a package couldn't be delivered, with a link to update his address. It looked completely real, so he clicked it and entered his login details. Within a day, someone had taken over his email and his gaming account, and they even tried to buy items with his saved card. Our family spent an entire weekend resetting passwords and calling customer service. If he had learned a few simple habits, like checking web addresses and using two step verification, none of this would have happened. What makes this skill so important is that the damage is hard to undo. You can always learn coding later, but you can't take back stolen information.",
+  "sample_adv_ko": "이 세 가지 중에서 저는 온라인에서 개인 정보를 보호하는 것이 가장 필수적인 능력이라고 말하겠습니다. 코딩과 사무용 소프트웨어는 특정 직업에 유용하지만, 온라인 안전은 스마트폰을 가진 모든 사람, 즉 오늘날 거의 모든 사람에게 영향을 줍니다. 제 남동생은 작년에 이것을 호되게 배웠습니다. 택배를 배달할 수 없다며 주소를 수정하라는 링크가 담긴 문자를 받았습니다. 완전히 진짜처럼 보여서 동생은 링크를 누르고 로그인 정보를 입력했습니다. 하루도 안 되어 누군가 동생의 이메일과 게임 계정을 빼앗았고, 저장된 카드로 물건을 사려고까지 했습니다. 우리 가족은 주말 내내 비밀번호를 재설정하고 고객 센터에 전화했습니다. 동생이 웹 주소를 확인하고 2단계 인증을 쓰는 것 같은 간단한 습관 몇 가지만 배웠더라면 이런 일은 하나도 일어나지 않았을 것입니다. 이 능력이 그렇게 중요한 이유는 피해를 되돌리기 어렵기 때문입니다. 코딩은 나중에 언제든 배울 수 있지만, 도둑맞은 정보는 되찾을 수 없습니다.",
+  "tips": [
+   "가정법 과거완료 'If he had known …, this wouldn't have happened.' 는 고득점 문법 포인트",
+   "'모두에게 필요하다 vs 일부에게만 필요하다' 비교로 선택 이유를 만든다",
+   "마무리 대조: 'You can always learn A later, but you can't take back B.'"
+  ]
+ },
+ {
+  "id": "op-053",
+  "topic": "생활",
+  "question": "Do you agree or disagree with the following statement? It is better to plan your weekend activities in advance than to decide what to do on the day. Give specific reasons and examples to support your opinion.",
+  "question_ko": "다음 말에 동의합니까, 동의하지 않습니까? 주말에 할 일을 그날 정하는 것보다 미리 계획하는 것이 더 낫다. 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 동의",
+   "이유 1: 계획이 없으면 시간을 흘려보냄",
+   "예시: 계획 없던 토요일은 휴대폰·TV로 끝 / 미리 캠핑 예약한 주말은 알찬 추억",
+   "이유 2: 인기 있는 곳은 예약이 필요",
+   "마무리: 그래서 미리 계획하는 편이 낫다"
+  ],
+  "sample": "I agree that it is better to plan weekend activities in advance. First, without a plan, I usually waste my time. For example, when I don't plan anything, I sleep late, watch TV, and look at my phone all day. On Sunday night, I feel like I did nothing. But last month, I planned a camping trip with my friends two weeks before. We booked a campsite and decided who would bring food. It was one of the best weekends I've had this year. Second, popular places are often full. Good restaurants and campsites need a reservation, so if you decide on the day, you can't go. For these reasons, I think planning ahead is better.",
+  "sample_ko": "저는 주말 활동을 미리 계획하는 것이 더 낫다는 데 동의합니다. 첫째, 계획이 없으면 보통 시간을 낭비합니다. 예를 들어 아무 계획이 없을 때 저는 늦잠을 자고, TV를 보고, 하루 종일 휴대폰을 봅니다. 일요일 밤이 되면 아무것도 안 한 것 같은 기분이 듭니다. 하지만 지난달에는 2주 전에 친구들과 캠핑 여행을 계획했습니다. 캠핑장을 예약하고 누가 음식을 가져올지 정했습니다. 올해 보낸 주말 중 최고였습니다. 둘째, 인기 있는 곳은 자리가 없는 경우가 많습니다. 좋은 식당이나 캠핑장은 예약이 필요해서 그날 정하면 갈 수가 없습니다. 이런 이유로 저는 미리 계획하는 것이 더 낫다고 생각합니다.",
+  "sample_adv": "I agree with this statement, even though I know some people enjoy being spontaneous. In my experience, weekends without a plan tend to disappear before I even notice. A typical unplanned Saturday for me goes like this. I wake up late, tell myself I'll decide what to do after breakfast, and then end up scrolling through my phone and watching a few episodes of a drama. Suddenly it's Sunday evening, and I feel a little disappointed in myself. Compare that to last month, when my friends and I planned a camping trip two weeks ahead. We reserved a campsite by a lake, made a shopping list, and split up who would bring what. That weekend was full of great moments, like grilling dinner and talking under the stars, and I came back to work feeling truly refreshed. Another practical reason is that the best places fill up quickly. Popular restaurants, campsites, and even concerts often require reservations days in advance. So, while a little flexibility is nice, I think planning ahead makes weekends far more rewarding.",
+  "sample_adv_ko": "어떤 사람들은 즉흥적인 것을 즐긴다는 것을 알지만, 저는 이 말에 동의합니다. 제 경험상 계획 없는 주말은 알아채기도 전에 사라져 버립니다. 저의 전형적인 계획 없는 토요일은 이렇습니다. 늦게 일어나서 아침을 먹고 뭘 할지 정하자고 생각하고는, 결국 휴대폰을 넘겨 보고 드라마 몇 편을 봅니다. 어느새 일요일 저녁이 되고 저 자신에게 조금 실망합니다. 그것을 지난달과 비교해 보세요. 그때 친구들과 저는 2주 전에 캠핑 여행을 계획했습니다. 호숫가 캠핑장을 예약하고, 장보기 목록을 만들고, 누가 무엇을 가져올지 나눴습니다. 그 주말은 저녁을 구워 먹고 별 아래서 이야기를 나누는 것 같은 멋진 순간으로 가득했고, 저는 정말 재충전된 기분으로 회사에 돌아왔습니다. 또 다른 현실적인 이유는 좋은 곳은 금방 찬다는 것입니다. 인기 있는 식당, 캠핑장, 심지어 공연도 며칠 전에 예약해야 하는 경우가 많습니다. 그래서 약간의 융통성도 좋지만, 미리 계획하는 것이 주말을 훨씬 더 보람 있게 만든다고 생각합니다.",
+  "tips": [
+   "계획 없는 주말 vs 계획한 주말을 나란히 비교하면 예시 하나로 충분하다",
+   "'A typical … goes like this.' 는 평소 모습을 묘사할 때 쓰기 좋은 표현",
+   "'Compare that to …' 로 대조 예시로 넘어간다"
+  ]
+ },
+ {
+  "id": "op-054",
+  "topic": "생활",
+  "question": "Which do you prefer, getting up early in the morning to do your activities or staying up late at night to do them? Give specific reasons and examples to support your opinion.",
+  "question_ko": "아침 일찍 일어나서 할 일을 하는 것과 밤늦게까지 깨어 있으면서 하는 것 중 어느 쪽을 선호합니까? 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 아침 일찍",
+   "이유 1: 머리가 맑고 방해가 없음",
+   "예시: 6시 기상 → 출근 전 1시간 영어 공부 — 6개월 만에 시험 점수 상승",
+   "이유 2: 밤에 일찍 자니 건강해짐",
+   "마무리: 그래서 아침형 선호"
+  ],
+  "sample": "I prefer getting up early in the morning. The main reason is that my mind is clear, and nobody bothers me. For example, last year I wanted to study English for a test. At first, I studied at night after work, but I was always too tired, so I couldn't focus. Then I started waking up at six and studying for one hour before work. The house was quiet, and I didn't get any messages. After six months, my test score went up a lot. Another reason is health. Because I wake up early, I also go to bed early, so I sleep better. For these reasons, I think the morning is the best time for me.",
+  "sample_ko": "저는 아침 일찍 일어나는 것을 선호합니다. 가장 큰 이유는 머리가 맑고 아무도 저를 방해하지 않기 때문입니다. 예를 들어 작년에 저는 시험 때문에 영어 공부를 하고 싶었습니다. 처음에는 퇴근 후 밤에 공부했지만 늘 너무 피곤해서 집중할 수 없었습니다. 그래서 6시에 일어나서 출근 전에 한 시간씩 공부하기 시작했습니다. 집은 조용했고 메시지도 오지 않았습니다. 6개월 뒤 시험 점수가 많이 올랐습니다. 또 다른 이유는 건강입니다. 일찍 일어나니까 일찍 자게 되어서 잠을 더 잘 잡니다. 이런 이유로 저에게는 아침이 가장 좋은 시간이라고 생각합니다.",
+  "sample_adv": "I'm definitely someone who prefers getting up early. I know many people feel more creative late at night, but for me, the early morning is the most productive time of the day. First of all, my mind is fresh, and there are no distractions. Nobody is calling me, my group chats are silent, and the house is completely quiet. I discovered this last year when I was preparing for an English test. At first, I tried studying after work, from around ten to midnight. But I was exhausted, and I often read the same page three times without understanding it. So I switched my routine. I started waking up at six and studying for an hour before I left for work. It was hard for the first week, but after that, it became a habit. Six months later, my score had improved by more than one hundred points. On top of that, waking up early forces me to go to bed early, so I sleep more regularly and feel healthier overall. That's why I'd always choose mornings.",
+  "sample_adv_ko": "저는 확실히 일찍 일어나는 것을 선호하는 사람입니다. 많은 사람이 밤늦게 더 창의적이라고 느낀다는 것을 알지만, 저에게는 이른 아침이 하루 중 가장 생산적인 시간입니다. 우선 머리가 상쾌하고 방해 요소가 없습니다. 아무도 전화하지 않고, 단체 채팅방도 조용하고, 집은 완전히 고요합니다. 저는 작년에 영어 시험을 준비하면서 이것을 알게 되었습니다. 처음에는 퇴근 후 10시부터 자정까지 공부해 봤습니다. 하지만 너무 지쳐서 같은 페이지를 세 번 읽고도 이해하지 못하는 일이 많았습니다. 그래서 일과를 바꿨습니다. 6시에 일어나서 출근하기 전에 한 시간 동안 공부하기 시작했습니다. 첫 주는 힘들었지만 그 뒤로는 습관이 되었습니다. 6개월 뒤 제 점수는 100점 넘게 올랐습니다. 게다가 일찍 일어나다 보니 일찍 자게 되어서 더 규칙적으로 자고 전반적으로 더 건강해졌습니다. 그래서 저는 언제나 아침을 고르겠습니다.",
+  "tips": [
+   "방해 요소 없음을 세 가지로 묘사(Nobody is calling, chats are silent, the house is quiet)하면 생생하다",
+   "밤 공부 실패 → 아침 공부 성공 순서로 말하면 선택 이유가 자연스럽게 증명된다",
+   "과거완료 'my score had improved' 로 시간 흐름을 표현한다"
+  ]
+ },
+ {
+  "id": "op-055",
+  "topic": "생활",
+  "question": "What are the advantages and disadvantages of having a pet? Give specific reasons and examples to support your opinion.",
+  "question_ko": "반려동물을 키우는 것의 장점과 단점은 무엇입니까? 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 장점이 더 큼, 하지만 책임이 따름",
+   "장점: 외로움이 줄고 생활이 규칙적·활동적",
+   "예시: 혼자 살며 강아지 입양 — 하루 두 번 산책, 이웃과 친해짐",
+   "단점: 돈과 시간, 여행이 어려움",
+   "마무리: 책임질 준비가 되었을 때 추천"
+  ],
+  "sample": "Having a pet has both advantages and disadvantages. The biggest advantage is that pets make us less lonely and more active. For example, I live alone, and two years ago I adopted a small dog. Before that, I often felt lonely when I came home from work. Now my dog is always waiting for me at the door. I also walk him twice a day, so I exercise much more than before. I even became friends with other dog owners in my neighborhood. However, there are disadvantages too. Pets cost a lot of money, especially when they get sick. Also, traveling is difficult because I have to find someone to take care of him. Still, I think the advantages are bigger.",
+  "sample_ko": "반려동물을 키우는 것에는 장점과 단점이 모두 있습니다. 가장 큰 장점은 반려동물이 우리를 덜 외롭고 더 활동적으로 만들어 준다는 것입니다. 예를 들어 저는 혼자 사는데 2년 전에 작은 강아지를 입양했습니다. 그전에는 퇴근하고 집에 오면 자주 외로웠습니다. 지금은 강아지가 항상 현관에서 저를 기다립니다. 하루에 두 번 산책도 시키니 예전보다 운동을 훨씬 많이 합니다. 동네의 다른 견주들과 친구가 되기도 했습니다. 하지만 단점도 있습니다. 반려동물은 특히 아플 때 돈이 많이 듭니다. 또 강아지를 돌봐 줄 사람을 찾아야 해서 여행하기가 어렵습니다. 그래도 저는 장점이 더 크다고 생각합니다.",
+  "sample_adv": "In my view, having a pet brings wonderful advantages, but it also requires a lot of responsibility. The greatest benefit is emotional. Pets give you company and a reason to stay active. I can speak from experience here. I moved into my own apartment about three years ago, and to be honest, coming home to an empty, silent room every night was pretty depressing. So I adopted a small dog from a local shelter. My life changed almost immediately. Now, someone is always excited to see me when I open the door. Because he needs two walks a day, I get up earlier and spend more time outside, and I've even gotten to know several neighbors who walk their dogs in the same park. That said, there are clear disadvantages. Vet bills can be surprisingly expensive. Last winter, he swallowed a toy, and the surgery cost me nearly a month's rent. Traveling is also complicated because I have to arrange a pet sitter. So I'd recommend getting a pet, but only if you're truly ready for the commitment.",
+  "sample_adv_ko": "제 생각에 반려동물을 키우면 멋진 장점이 있지만 큰 책임도 필요합니다. 가장 큰 이점은 정서적인 것입니다. 반려동물은 곁에 있어 주고 활동적으로 지낼 이유를 줍니다. 이건 제 경험으로 말할 수 있습니다. 저는 3년쯤 전에 혼자 사는 아파트로 이사했는데, 솔직히 매일 밤 텅 빈 조용한 방에 돌아오는 게 꽤 우울했습니다. 그래서 동네 보호소에서 작은 강아지를 입양했습니다. 제 삶은 거의 바로 바뀌었습니다. 이제는 문을 열면 늘 누군가 반갑게 맞아 줍니다. 강아지가 하루에 두 번 산책해야 해서 더 일찍 일어나고 밖에서 더 많은 시간을 보내며, 같은 공원에서 개를 산책시키는 이웃 몇 명과 알게 되기도 했습니다. 그렇긴 해도 분명한 단점이 있습니다. 동물 병원비는 놀랄 만큼 비쌀 수 있습니다. 지난겨울 강아지가 장난감을 삼켜서 수술비가 거의 한 달 월세만큼 들었습니다. 펫시터를 구해야 해서 여행도 복잡합니다. 그래서 저는 반려동물을 추천하지만, 정말 책임질 준비가 되었을 때만 그렇습니다.",
+  "tips": [
+   "장단점 문제에서도 마지막에 어느 쪽이 더 큰지 자기 의견을 밝힌다",
+   "'That said, …' 는 장점에서 단점으로 넘어갈 때 쓰는 자연스러운 연결어",
+   "단점도 구체적 사건(장난감을 삼켜 수술)으로 말하면 고득점에 유리하다"
+  ]
+ },
+ {
+  "id": "op-056",
+  "topic": "생활",
+  "question": "What is the most important factor for having a good vacation: the place you visit, the people you travel with, or the amount of money you spend? Give specific reasons and examples to support your opinion.",
+  "question_ko": "좋은 휴가를 보내는 데 가장 중요한 요소는 무엇입니까: 방문하는 장소, 함께 여행하는 사람, 쓰는 돈의 액수? 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 함께 여행하는 사람",
+   "이유 1: 좋은 사람과 함께면 문제가 생겨도 즐거움",
+   "예시: 대학 친구들과 비 오는 부산 여행 — 숙소에서 보드게임, 최고의 추억",
+   "이유 2: 반대로 멋진 곳도 안 맞는 사람과는 피곤",
+   "마무리: 그래서 사람이 가장 중요"
+  ],
+  "sample": "I think the people you travel with are the most important factor for a good vacation. First, with good people, even problems can be fun. For example, last summer I went to Busan with my college friends. It rained for three days, so we couldn't go to the beach at all. But we stayed in our guesthouse, played board games, and cooked dinner together. We laughed all night. It is still one of my favorite trips. Second, even a beautiful place is not fun with the wrong people. I once traveled to a famous island with a coworker, but we argued about everything. So, for these reasons, I believe the people matter most.",
+  "sample_ko": "저는 함께 여행하는 사람이 좋은 휴가를 위한 가장 중요한 요소라고 생각합니다. 첫째, 좋은 사람들과 함께면 문제가 생겨도 즐거울 수 있습니다. 예를 들어 지난여름 저는 대학 친구들과 부산에 갔습니다. 사흘 내내 비가 와서 해변에는 전혀 가지 못했습니다. 하지만 숙소에 머물며 보드게임을 하고 함께 저녁을 만들었습니다. 밤새도록 웃었습니다. 그 여행은 아직도 제가 가장 좋아하는 여행 중 하나입니다. 둘째, 아무리 아름다운 곳이라도 맞지 않는 사람과 함께면 재미가 없습니다. 한번은 동료와 유명한 섬으로 여행을 갔는데 모든 일에 대해 다퉜습니다. 그래서 이런 이유로 저는 사람이 가장 중요하다고 생각합니다.",
+  "sample_adv": "For me, the people I travel with matter far more than the destination or the budget. A vacation is really about the shared moments, and the right companions can turn even a disaster into a great memory. Let me tell you about a trip I took last summer. Four of my college friends and I went to Busan, mainly to spend time at the beach. Unfortunately, a storm arrived the day we got there, and it rained for three straight days. We never even saw the ocean properly. But instead of complaining, we went to a local market, bought fresh seafood, and cooked a huge dinner at our guesthouse. Then we played board games and talked until three in the morning. Strangely, that trip is the one we still talk about the most. On the other hand, I once went to a beautiful island resort with a coworker I didn't know well, and we disagreed about everything, from meals to schedules. The view was amazing, but I couldn't wait to go home. That's why I believe companions are the key to a good vacation.",
+  "sample_adv_ko": "저에게는 함께 여행하는 사람이 목적지나 예산보다 훨씬 더 중요합니다. 휴가는 결국 함께 나누는 순간에 관한 것이고, 마음 맞는 동행은 엉망이 된 상황도 멋진 추억으로 바꿀 수 있습니다. 지난여름 제가 다녀온 여행 이야기를 하겠습니다. 대학 친구 네 명과 저는 주로 해변에서 시간을 보내려고 부산에 갔습니다. 안타깝게도 도착한 날 폭풍이 와서 사흘 연속 비가 내렸습니다. 바다를 제대로 보지도 못했습니다. 하지만 불평하는 대신 우리는 시장에 가서 신선한 해산물을 사고, 숙소에서 푸짐한 저녁을 차렸습니다. 그런 다음 새벽 3시까지 보드게임을 하며 이야기를 나눴습니다. 이상하게도 그 여행이 지금도 우리가 가장 많이 이야기하는 여행입니다. 반대로 한번은 잘 모르는 동료와 아름다운 섬 리조트에 갔는데, 식사부터 일정까지 모든 것에 의견이 맞지 않았습니다. 경치는 놀라웠지만 빨리 집에 가고 싶었습니다. 그래서 저는 동행이 좋은 휴가의 핵심이라고 생각합니다.",
+  "tips": [
+   "좋은 예(비 온 부산)와 나쁜 예(맞지 않는 동료)를 함께 들면 이유가 두 배로 강해진다",
+   "'Unfortunately … But instead of complaining, …' 으로 반전 있는 이야기를 만든다",
+   "'Strangely, …' 같은 감정 부사는 이야기를 자연스럽게 만든다"
+  ]
+ },
+ {
+  "id": "op-057",
+  "topic": "사회",
+  "question": "Do you agree or disagree with the following statement? Drivers over the age of seventy should be required to take a driving test every few years. Give specific reasons and examples to support your opinion.",
+  "question_ko": "다음 말에 동의합니까, 동의하지 않습니까? 70세가 넘은 운전자는 몇 년마다 운전 시험을 다시 보도록 해야 한다. 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 동의",
+   "이유 1: 나이가 들면 시력·반응 속도가 떨어짐 → 모두의 안전",
+   "예시: 할아버지 — 주차장 접촉 사고 후 검사, 야간 운전만 그만둠",
+   "이유 2: 시험은 운전을 빼앗는 게 아니라 안전하게 계속하게 해 줌",
+   "마무리: 그래서 정기 시험 찬성"
+  ],
+  "sample": "I agree that drivers over seventy should take a driving test every few years. First, as people get older, their eyesight and reaction speed often get worse. This is about safety for everyone on the road. For example, my grandfather is seventy five. Last year, he hit another car in a parking lot because he didn't see it. Nobody was hurt, but our family was worried. He took a test, and the doctor said his eyes were weak at night. Now he only drives during the day. Second, a test doesn't mean taking away their licenses. It just helps them drive safely for longer. So I think regular tests are a good idea.",
+  "sample_ko": "저는 70세가 넘은 운전자가 몇 년마다 운전 시험을 봐야 한다는 데 동의합니다. 첫째, 사람은 나이가 들수록 시력과 반응 속도가 나빠지는 경우가 많습니다. 이것은 도로 위 모든 사람의 안전에 관한 문제입니다. 예를 들어 제 할아버지는 일흔다섯이십니다. 작년에 주차장에서 다른 차를 보지 못해 부딪히셨습니다. 다친 사람은 없었지만 가족들은 걱정했습니다. 할아버지는 검사를 받으셨고, 의사는 밤에 시력이 약하다고 했습니다. 지금은 낮에만 운전하십니다. 둘째, 시험이 면허를 빼앗는다는 뜻은 아닙니다. 오히려 더 오래 안전하게 운전하도록 도와줍니다. 그래서 저는 정기적인 시험이 좋은 생각이라고 봅니다.",
+  "sample_adv": "I agree with this statement, as long as the tests are fair and focus on actual driving ability rather than age alone. The main reason is safety. Our eyesight, hearing, and reaction time naturally decline as we get older, and when someone is driving a two ton vehicle, even a small delay can be dangerous for pedestrians and other drivers. My own family went through this recently. My grandfather is seventy five and has been driving for over fifty years, so he was very confident. But last spring, he backed into another car in a supermarket parking lot because he simply didn't see it. Fortunately, nobody was hurt. After that, he agreed to a medical check and a driving evaluation. It turned out his vision was fine during the day but quite poor at night. Now he only drives in daylight, and everyone in the family feels relieved. The important point is that the test didn't take his independence away. Instead, it showed him how to keep driving safely. That's why I support regular testing for older drivers.",
+  "sample_adv_ko": "시험이 공정하고 나이만이 아니라 실제 운전 능력에 초점을 맞춘다면, 저는 이 말에 동의합니다. 가장 큰 이유는 안전입니다. 나이가 들면 시력, 청력, 반응 속도가 자연히 떨어지는데, 2톤짜리 차를 운전할 때는 아주 작은 지연도 보행자와 다른 운전자에게 위험할 수 있습니다. 저희 가족도 최근에 이런 일을 겪었습니다. 할아버지는 일흔다섯이시고 50년 넘게 운전하셔서 자신감이 대단하셨습니다. 그런데 지난봄 마트 주차장에서 후진하다가 다른 차를 보지 못하고 부딪히셨습니다. 다행히 아무도 다치지 않았습니다. 그 뒤 할아버지는 건강 검진과 운전 평가를 받기로 하셨습니다. 알고 보니 낮에는 시력이 괜찮지만 밤에는 꽤 좋지 않았습니다. 지금은 낮에만 운전하시고, 가족 모두 안심하고 있습니다. 중요한 점은 시험이 할아버지의 독립을 빼앗지 않았다는 것입니다. 오히려 안전하게 계속 운전하는 방법을 알려 주었습니다. 그래서 저는 고령 운전자의 정기 시험을 지지합니다.",
+  "tips": [
+   "민감한 주제는 'as long as the tests are fair' 처럼 조건을 붙여 균형을 잡는다",
+   "가족 사례는 사건 → 검사 → 결과 순서로 짧게 말한다",
+   "반대 측 걱정(면허를 빼앗긴다)을 미리 반박하면 설득력이 높아진다"
+  ]
+ },
+ {
+  "id": "op-058",
+  "topic": "사회",
+  "question": "Which do you think is better for young adults, living with their parents until they get married or moving out to live on their own early? Give specific reasons and examples to support your opinion.",
+  "question_ko": "젊은 성인에게 결혼할 때까지 부모님과 함께 사는 것과 일찍 독립해서 혼자 사는 것 중 어느 쪽이 더 낫다고 생각합니까? 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 일찍 독립",
+   "이유 1: 요리·청소·돈 관리 등 생활 능력을 배움",
+   "예시: 취업 후 원룸 독립 — 첫 달 생활비 초과 → 가계부 쓰며 저축",
+   "이유 2: 스스로 결정하며 책임감·자신감",
+   "마무리: 그래서 일찍 독립하는 게 낫다"
+  ],
+  "sample": "I think it is better for young adults to move out early. First, they can learn important life skills like cooking, cleaning, and managing money. For example, I moved into a small studio apartment when I got my first job. In the first month, I spent too much money on food delivery, and I couldn't pay all my bills easily. So I started writing down all my spending and cooking at home. Now I save some money every month. If I had stayed with my parents, I wouldn't have learned this. Second, living alone makes people more responsible because they make their own decisions. For these reasons, I think moving out early is better.",
+  "sample_ko": "저는 젊은 성인이 일찍 독립하는 것이 더 낫다고 생각합니다. 첫째, 요리, 청소, 돈 관리 같은 중요한 생활 능력을 배울 수 있습니다. 예를 들어 저는 첫 직장을 구했을 때 작은 원룸으로 이사했습니다. 첫 달에 배달 음식에 돈을 너무 많이 써서 각종 요금을 내기가 빠듯했습니다. 그래서 모든 지출을 적고 집에서 요리하기 시작했습니다. 지금은 매달 돈을 조금씩 모읍니다. 부모님과 계속 살았다면 이것을 배우지 못했을 것입니다. 둘째, 혼자 살면 스스로 결정을 내리기 때문에 더 책임감이 생깁니다. 이런 이유로 저는 일찍 독립하는 것이 더 낫다고 생각합니다.",
+  "sample_adv": "I understand why many young people stay with their parents to save money, but I believe moving out early is the better choice in the long run. The biggest reason is that living alone teaches practical skills you simply can't learn when someone else is taking care of everything. I learned this the hard way. When I started my first job, I rented a small studio near my office. I had never paid a bill or cooked a proper meal in my life. By the end of the first month, I had spent almost half my salary on delivery food and coffee, and I was nervous about paying rent. That was a real wake up call. I downloaded a budgeting app, started cooking simple meals, and set a weekly spending limit. A year later, I had built up a small emergency fund on my own. Beyond money, living independently means making my own decisions and dealing with the results, which has made me much more confident. Those lessons are worth more than the money I could have saved at home.",
+  "sample_adv_ko": "돈을 아끼려고 부모님과 사는 젊은 사람이 많은 이유는 이해하지만, 저는 길게 보면 일찍 독립하는 것이 더 나은 선택이라고 생각합니다. 가장 큰 이유는 혼자 살면 다른 사람이 모든 것을 챙겨 줄 때는 도저히 배울 수 없는 실용적인 능력을 배우기 때문입니다. 저는 이것을 호되게 배웠습니다. 첫 직장을 시작할 때 회사 근처에 작은 원룸을 얻었습니다. 저는 평생 요금을 내 보거나 제대로 된 식사를 만들어 본 적이 없었습니다. 첫 달이 끝날 무렵 월급의 거의 절반을 배달 음식과 커피에 써 버려서 월세 낼 일이 걱정되었습니다. 정말 정신이 번쩍 드는 일이었습니다. 저는 가계부 앱을 내려받고, 간단한 요리를 시작하고, 일주일 지출 한도를 정했습니다. 1년 뒤에는 혼자 힘으로 비상금을 조금 모았습니다. 돈 문제 말고도, 독립해서 산다는 것은 스스로 결정하고 그 결과를 감당한다는 뜻이라서 저는 훨씬 자신감이 생겼습니다. 그런 교훈은 집에 있었으면 아낄 수 있었던 돈보다 더 값집니다.",
+  "tips": [
+   "실패 → 깨달음(a wake up call) → 변화 → 결과 순서의 이야기는 고득점 예시의 기본 틀",
+   "가정법 'If I had stayed with my parents, I wouldn't have learned this.' 를 활용한다",
+   "반대 측 이유(돈을 아낀다)를 첫 문장에서 인정하면 균형 잡힌 답변이 된다"
+  ]
+ },
+ {
+  "id": "op-059",
+  "topic": "사회",
+  "question": "What are the advantages and disadvantages of restaurants and stores using self-service kiosks instead of human staff? Give specific reasons and examples to support your opinion.",
+  "question_ko": "식당과 상점이 직원 대신 무인 주문기를 쓰는 것의 장점과 단점은 무엇입니까? 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 장점과 단점이 분명함",
+   "장점: 줄이 짧아지고 주문 실수가 줄어듦",
+   "예시: 점심시간 햄버거 가게 — 키오스크로 대기 시간 단축",
+   "단점: 어르신 등 기계에 익숙하지 않은 사람이 불편, 일자리 감소",
+   "마무리: 도움 줄 직원 한 명은 꼭 있어야 함"
+  ],
+  "sample": "Self-service kiosks have both advantages and disadvantages. The main advantage is speed. For example, there is a burger restaurant near my office. Before, there was always a long line at lunchtime, and sometimes staff made mistakes with orders. Last year, the restaurant put in four kiosks. Now I can order in one minute, and my order is always correct. However, there are also disadvantages. Some people, especially older people, find kiosks difficult to use. Once I saw an elderly man who couldn't find the right button, and there was no staff to help him. I helped him order. Also, kiosks can take away jobs. So I think stores should keep at least one person to help customers.",
+  "sample_ko": "무인 주문기에는 장점과 단점이 모두 있습니다. 가장 큰 장점은 속도입니다. 예를 들어 제 회사 근처에 햄버거 가게가 있습니다. 예전에는 점심시간마다 줄이 길었고 가끔 직원이 주문을 잘못 받기도 했습니다. 작년에 그 가게에 키오스크 네 대가 생겼습니다. 이제는 1분 만에 주문할 수 있고 주문도 늘 정확합니다. 하지만 단점도 있습니다. 어떤 사람들, 특히 어르신들은 키오스크를 쓰기 어려워합니다. 한번은 어떤 할아버지가 맞는 버튼을 찾지 못하고 계셨는데 도와줄 직원이 없었습니다. 제가 주문을 도와드렸습니다. 또 키오스크는 일자리를 줄일 수 있습니다. 그래서 저는 가게에 손님을 도울 사람이 적어도 한 명은 있어야 한다고 생각합니다.",
+  "sample_adv": "Self-service kiosks have become common everywhere, and I think they bring real benefits, but they also create some serious problems. On the positive side, they make ordering faster and more accurate. A burger place near my office is a perfect example. It used to be packed at lunchtime, and I often waited fifteen minutes just to place an order. Sometimes the cashier even got my order wrong. After the restaurant installed several kiosks last year, the line moves much faster, and I can see exactly what I ordered on the screen before I pay. On the negative side, kiosks can shut out people who aren't comfortable with technology. A few months ago, I noticed an elderly man standing in front of a kiosk for several minutes, pressing buttons and looking frustrated. There wasn't a single employee nearby, so I stepped in to help him. There's also the concern that fewer staff means fewer jobs for students and part-time workers. So, in my opinion, kiosks are fine, but every store should keep at least one employee available to help.",
+  "sample_adv_ko": "무인 주문기는 어디서나 흔해졌는데, 저는 이것이 실제 이점을 주지만 심각한 문제도 만든다고 생각합니다. 좋은 점은 주문이 더 빠르고 정확해진다는 것입니다. 회사 근처 햄버거 가게가 완벽한 예입니다. 예전에는 점심시간마다 붐벼서 주문 하나 하려고 15분씩 기다리는 일이 많았습니다. 가끔은 계산원이 주문을 잘못 받기도 했습니다. 작년에 가게에 키오스크 여러 대를 설치한 뒤로는 줄이 훨씬 빨리 줄고, 결제하기 전에 화면에서 무엇을 주문했는지 정확히 볼 수 있습니다. 나쁜 점은 키오스크가 기술에 익숙하지 않은 사람들을 소외시킬 수 있다는 것입니다. 몇 달 전 어떤 할아버지가 키오스크 앞에서 몇 분 동안 버튼을 누르며 답답해하시는 것을 보았습니다. 근처에 직원이 한 명도 없어서 제가 나서서 도와드렸습니다. 직원이 줄면 학생과 아르바이트생의 일자리가 줄어든다는 걱정도 있습니다. 그래서 제 생각에 키오스크는 괜찮지만, 모든 가게는 도와줄 직원을 적어도 한 명은 두어야 합니다.",
+  "tips": [
+   "'On the positive side … / On the negative side …' 로 장단점을 선명하게 나눈다",
+   "직접 목격한 장면(할아버지를 도와드림)은 단점 예시로 아주 효과적이다",
+   "마무리에 해결책(직원 한 명은 두기)을 제시하면 의견이 분명해진다"
+  ]
+ },
+ {
+  "id": "op-060",
+  "topic": "사회",
+  "question": "What should a government spend the most money on: education, healthcare, or public safety? Give specific reasons and examples to support your opinion.",
+  "question_ko": "정부는 어디에 가장 많은 돈을 써야 합니까: 교육, 의료, 치안? 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 교육",
+   "이유 1: 교육은 미래 세대·경제의 기반",
+   "예시: 무료 방과후 코딩 교실에 다닌 친구 → 지금 개발자, 세금도 냄",
+   "이유 2: 교육이 좋아지면 건강·범죄 문제도 줄어듦",
+   "마무리: 그래서 교육이 최우선"
+  ],
+  "sample": "I think the government should spend the most money on education. First, education is an investment in the future. Children who get a good education can find good jobs later, and that helps the whole economy. For example, when I was in middle school, my friend joined a free after school coding class paid for by the city. His family couldn't afford private classes. Now he works as a software developer at a big company, and he pays a lot of taxes. Second, good education can reduce other problems. Educated people usually take better care of their health and are less likely to commit crimes. So, I believe education should come first.",
+  "sample_ko": "저는 정부가 교육에 가장 많은 돈을 써야 한다고 생각합니다. 첫째, 교육은 미래에 대한 투자입니다. 좋은 교육을 받은 아이들은 나중에 좋은 직업을 구할 수 있고, 그것은 경제 전체에 도움이 됩니다. 예를 들어 제가 중학생일 때 제 친구는 시에서 비용을 대는 무료 방과후 코딩 교실에 다녔습니다. 친구네 집은 사교육을 시킬 형편이 안 됐습니다. 지금 그 친구는 큰 회사에서 소프트웨어 개발자로 일하고 세금도 많이 냅니다. 둘째, 좋은 교육은 다른 문제들을 줄일 수 있습니다. 교육받은 사람들은 대개 건강을 더 잘 챙기고 범죄를 저지를 가능성도 낮습니다. 그래서 저는 교육이 우선이어야 한다고 생각합니다.",
+  "sample_adv": "All three are important, of course, but if I had to choose one, I'd say the government should spend the most on education. My main reason is that education is the foundation for almost everything else. When young people receive a good education, they find better jobs, earn more, and contribute more to society through taxes and new ideas. I've seen this happen with one of my closest friends. He grew up in a family that struggled financially, so private tutoring was never an option. In middle school, though, he joined a free after school coding program that the city government funded. He fell in love with programming and kept studying on his own. Today, he's a software engineer at a major tech company, and he even volunteers to teach coding to kids from similar backgrounds. Without that program, his life might have been completely different. Beyond individual stories, education also reduces the need for spending in other areas, because well educated citizens tend to make healthier choices and are less involved in crime. So investing in education is really investing in everything else.",
+  "sample_adv_ko": "물론 세 가지 모두 중요하지만, 하나만 골라야 한다면 저는 정부가 교육에 가장 많이 써야 한다고 말하겠습니다. 가장 큰 이유는 교육이 거의 모든 것의 기반이기 때문입니다. 젊은 사람들이 좋은 교육을 받으면 더 좋은 직장을 구하고, 더 많이 벌고, 세금과 새로운 아이디어로 사회에 더 많이 기여합니다. 저는 가장 친한 친구에게서 이런 일을 보았습니다. 그 친구는 형편이 어려운 집에서 자라서 과외는 꿈도 꿀 수 없었습니다. 그런데 중학생 때 시청이 지원하는 무료 방과후 코딩 프로그램에 들어갔습니다. 프로그래밍에 푹 빠져서 혼자서도 계속 공부했습니다. 지금 그는 큰 IT 회사의 소프트웨어 엔지니어이고, 비슷한 환경의 아이들에게 코딩을 가르치는 봉사까지 하고 있습니다. 그 프로그램이 없었다면 그의 인생은 완전히 달랐을지도 모릅니다. 개인의 이야기를 넘어서, 교육은 다른 분야의 지출 필요도 줄여 줍니다. 교육을 잘 받은 시민은 더 건강한 선택을 하고 범죄에 덜 연루되는 경향이 있기 때문입니다. 그래서 교육에 투자하는 것은 사실상 다른 모든 것에 투자하는 것입니다.",
+  "tips": [
+   "'All three are important, but if I had to choose one, …' 은 선택지 문제의 만능 첫 문장",
+   "공공 지원의 수혜자 예시(무료 코딩 교실 → 개발자)는 사회 주제에 잘 맞는다",
+   "마무리 문장 'Investing in A is really investing in everything else.' 로 강하게 끝낸다"
+  ]
+ },
+ {
+  "id": "op-061",
+  "topic": "리더십",
+  "question": "Do you agree or disagree with the following statement? A manager should try to be friends with the members of his or her team. Give specific reasons and examples to support your opinion.",
+  "question_ko": "다음 말에 동의합니까, 동의하지 않습니까? 관리자는 팀원들과 친구처럼 지내려고 노력해야 한다. 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 동의하지 않음 — 친절하되 친구는 아님",
+   "이유 1: 너무 친하면 공정한 평가·지적이 어려움",
+   "예시: 전 매니저가 친한 직원 실수를 봐줌 → 다른 팀원 불만",
+   "이유 2: 존중과 친절만으로도 신뢰는 충분",
+   "마무리: 그래서 적당한 거리가 필요"
+  ],
+  "sample": "I disagree with this statement. A manager should be kind, but not a close friend. First, if a manager is too close to some team members, it is hard to be fair. For example, my old manager was best friends with one of my coworkers. They had lunch together every day. When that coworker made mistakes, the manager didn't say anything. But when other people made the same mistakes, he got angry. Many of us felt it was unfair, and two people left the team. Second, a manager can build trust with respect and kindness. Being friends is not necessary. So I think a manager should keep a little distance.",
+  "sample_ko": "저는 이 말에 동의하지 않습니다. 관리자는 친절해야 하지만 친한 친구일 필요는 없습니다. 첫째, 관리자가 일부 팀원과 너무 가까우면 공정하기 어렵습니다. 예를 들어 제 예전 매니저는 동료 한 명과 아주 친한 친구였습니다. 둘은 매일 같이 점심을 먹었습니다. 그 동료가 실수를 하면 매니저는 아무 말도 하지 않았습니다. 하지만 다른 사람이 같은 실수를 하면 화를 냈습니다. 많은 사람이 불공평하다고 느꼈고, 두 명이 팀을 떠났습니다. 둘째, 관리자는 존중과 친절로 신뢰를 쌓을 수 있습니다. 친구가 될 필요는 없습니다. 그래서 저는 관리자가 약간의 거리를 둬야 한다고 생각합니다.",
+  "sample_adv": "I actually disagree with this statement. Of course, a manager should be friendly and approachable, but trying to become real friends with team members can cause problems. The biggest issue is fairness. A manager has to evaluate people, give honest feedback, and sometimes make tough decisions, and that's very hard to do with a close friend. I saw this happen at my previous company. My manager and one of my coworkers had joined the company together, and they were basically best friends. They ate lunch together and even went on vacation together. Whenever that coworker missed a deadline, the manager just let it go. But if anyone else was late, we got a serious warning. Over time, the whole team lost trust in the manager, and two talented people eventually quit. What I've learned is that respect is more important than friendship. A manager who listens, treats everyone equally, and shows appreciation will earn trust without becoming anyone's best friend. That's why I think a little professional distance is healthy.",
+  "sample_adv_ko": "저는 사실 이 말에 동의하지 않습니다. 물론 관리자는 친근하고 다가가기 쉬워야 하지만, 팀원들과 진짜 친구가 되려고 하면 문제가 생길 수 있습니다. 가장 큰 문제는 공정성입니다. 관리자는 사람들을 평가하고, 솔직한 피드백을 주고, 때로는 어려운 결정을 내려야 하는데, 친한 친구에게는 그러기가 매우 어렵습니다. 저는 이전 회사에서 이런 일을 보았습니다. 제 매니저와 동료 한 명은 같이 입사해서 사실상 단짝이었습니다. 둘은 점심도 같이 먹고 휴가도 같이 갔습니다. 그 동료가 마감을 놓칠 때마다 매니저는 그냥 넘어갔습니다. 하지만 다른 사람이 늦으면 우리는 엄중한 경고를 받았습니다. 시간이 지나면서 팀 전체가 매니저에 대한 신뢰를 잃었고, 결국 유능한 두 사람이 그만두었습니다. 제가 배운 것은 우정보다 존중이 더 중요하다는 것입니다. 잘 들어 주고, 모두를 똑같이 대하고, 고마움을 표현하는 관리자는 누구의 단짝이 되지 않아도 신뢰를 얻습니다. 그래서 저는 약간의 업무상 거리가 건강하다고 생각합니다.",
+  "tips": [
+   "반대 의견도 좋다: 'I disagree. A manager should be kind, but not a close friend.' 처럼 기준을 분명히",
+   "불공평한 대우 예시는 '그 사람에게는 … / 다른 사람에게는 …' 대비로 말한다",
+   "'What I've learned is that …' 은 마무리 직전 교훈을 말할 때 유용하다"
+  ]
+ },
+ {
+  "id": "op-062",
+  "topic": "리더십",
+  "question": "Which type of manager do you prefer, one who gives detailed instructions or one who lets you decide how to do your work? Give specific reasons and examples to support your opinion.",
+  "question_ko": "자세한 지시를 주는 관리자와 일하는 방식을 스스로 정하게 해 주는 관리자 중 어느 유형을 선호합니까? 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 스스로 정하게 해 주는 관리자",
+   "이유 1: 내 방식대로 하면 더 효율적이고 책임감",
+   "예시: 행사 준비를 맡겨 준 팀장 — 온라인 신청서 도입, 참가자 두 배",
+   "이유 2: 새로운 아이디어를 시도하며 성장",
+   "마무리: 다만 신입 때는 자세한 지시도 필요"
+  ],
+  "sample": "I prefer a manager who lets me decide how to do my work. First, when I can choose my own way, I work faster and feel more responsible. For example, last year my team leader asked me to organize a company event. She only told me the goal and the budget. I decided to use an online sign up form instead of paper. Because of that, it was easier for people to join, and twice as many employees came compared to the year before. I felt really proud. Second, freedom helps me grow because I can try new ideas. Of course, new employees may need detailed instructions. But for me, freedom is better.",
+  "sample_ko": "저는 일하는 방식을 스스로 정하게 해 주는 관리자를 선호합니다. 첫째, 제 방식을 고를 수 있으면 더 빨리 일하고 책임감도 더 느낍니다. 예를 들어 작년에 팀장님이 회사 행사 준비를 맡기셨습니다. 팀장님은 목표와 예산만 알려 주셨습니다. 저는 종이 대신 온라인 신청서를 쓰기로 했습니다. 그 덕분에 사람들이 참여하기 쉬워졌고, 전년보다 두 배 많은 직원이 왔습니다. 정말 뿌듯했습니다. 둘째, 자유가 있으면 새로운 아이디어를 시도할 수 있어서 성장에 도움이 됩니다. 물론 신입 직원에게는 자세한 지시가 필요할 수 있습니다. 하지만 저에게는 자유가 더 낫습니다.",
+  "sample_adv": "Personally, I much prefer a manager who trusts me to decide how to do my work. When I'm given the freedom to choose my own approach, I feel a real sense of ownership, and that makes me work harder and more carefully. A great example is an event I organized last year. My team leader asked me to plan our company's annual sports day, but she only gave me the goal, the date, and the budget. Everything else was up to me. In previous years, people had signed up on paper forms, and attendance was always low. So I tried something new. I created a simple online sign up page and let people vote on the activities. As a result, participation doubled, and many coworkers told me it was the best event we'd ever had. If my leader had given me a step by step plan, I probably would have just repeated the old system. That said, I think detailed instructions are helpful when someone is brand new. But once people understand the basics, freedom brings out their best work.",
+  "sample_adv_ko": "개인적으로 저는 일하는 방식을 제가 정하도록 믿어 주는 관리자를 훨씬 선호합니다. 제 방식을 고를 자유가 주어지면 진짜 주인 의식이 생기고, 그래서 더 열심히 더 꼼꼼하게 일하게 됩니다. 작년에 제가 준비한 행사가 좋은 예입니다. 팀장님이 회사의 연례 체육 대회 기획을 맡기셨는데, 목표와 날짜와 예산만 주셨습니다. 나머지는 모두 제게 맡기셨습니다. 이전에는 종이 신청서로 신청을 받아서 참석률이 늘 낮았습니다. 그래서 새로운 것을 시도했습니다. 간단한 온라인 신청 페이지를 만들고 사람들이 종목에 투표하게 했습니다. 그 결과 참여가 두 배로 늘었고, 많은 동료가 역대 최고의 행사였다고 말해 주었습니다. 팀장님이 단계별 계획을 주셨다면 저는 아마 예전 방식을 그대로 반복했을 것입니다. 그렇긴 해도 완전히 새로 온 사람에게는 자세한 지시가 도움이 된다고 생각합니다. 하지만 기본을 이해하고 나면 자유가 그 사람의 최고의 성과를 끌어냅니다.",
+  "tips": [
+   "'She only gave me the goal and the budget. Everything else was up to me.' 로 자유를 구체적으로 보여 준다",
+   "결과를 숫자로(participation doubled) 말하면 예시가 강해진다",
+   "마무리 전 예외(신입에게는 지시 필요)를 인정하면 고득점용 균형 잡힌 답변"
+  ]
+ },
+ {
+  "id": "op-063",
+  "topic": "리더십",
+  "question": "What are the advantages of having leadership experience, such as being a club president or team captain, while you are a student? Give specific reasons and examples to support your opinion.",
+  "question_ko": "학생 때 동아리 회장이나 팀 주장처럼 리더 경험을 해 보는 것의 장점은 무엇입니까? 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 장점이 많음",
+   "장점 1: 갈등 조정·소통 능력을 배움",
+   "예시: 대학 사진 동아리 회장 — 전시회 장소로 회원끼리 다툼, 투표로 해결",
+   "장점 2: 취업 면접에서 말할 구체적 경험이 생김",
+   "마무리: 그래서 학생 때 리더 경험 추천"
+  ],
+  "sample": "There are many advantages to having leadership experience as a student. First, you learn how to handle conflicts and communicate with people. For example, I was the president of a photography club in university. Once, we had to choose a place for our photo exhibition, and the members had very different opinions. Some people got angry. I listened to everyone and suggested a vote. In the end, everyone accepted the result, and the exhibition was a success. Second, this kind of experience helps in job interviews. Interviewers often ask about teamwork, and I could tell them this story. So I think students should try to be leaders.",
+  "sample_ko": "학생 때 리더 경험을 하는 것에는 많은 장점이 있습니다. 첫째, 갈등을 다루고 사람들과 소통하는 법을 배웁니다. 예를 들어 저는 대학에서 사진 동아리 회장이었습니다. 한번은 사진 전시회 장소를 정해야 했는데 회원들의 의견이 아주 달랐습니다. 화를 내는 사람도 있었습니다. 저는 모두의 이야기를 듣고 투표를 제안했습니다. 결국 모두가 결과를 받아들였고 전시회는 성공적이었습니다. 둘째, 이런 경험은 취업 면접에 도움이 됩니다. 면접관들은 팀워크에 대해 자주 묻는데, 저는 이 이야기를 할 수 있었습니다. 그래서 저는 학생들이 리더가 되어 보려고 해야 한다고 생각합니다.",
+  "sample_adv": "I believe leadership experience as a student offers several valuable advantages that are hard to get anywhere else. The first is that it teaches you how to work with people who don't agree with you. I learned this as the president of my university's photography club. In my third year, we were planning our annual exhibition, and the members split into two groups. One group wanted to rent a gallery downtown, while the other wanted to use a hall on campus to save money. The discussion became so heated that a few members threatened to quit. Instead of making the decision myself, I asked each group to present a short plan with costs, and then we held a vote. Even the people who lost the vote accepted it because the process felt fair, and the exhibition attracted more visitors than ever. The second advantage is that these experiences give you real stories for job interviews. When interviewers asked how I handle conflict, I didn't need to make anything up. So I'd strongly encourage students to take on leadership roles.",
+  "sample_adv_ko": "저는 학생 때의 리더 경험이 다른 곳에서는 얻기 어려운 여러 값진 장점을 준다고 생각합니다. 첫 번째는 나와 생각이 다른 사람들과 일하는 법을 가르쳐 준다는 것입니다. 저는 대학 사진 동아리 회장을 하면서 이것을 배웠습니다. 3학년 때 연례 전시회를 준비하는데 회원들이 두 편으로 갈렸습니다. 한쪽은 시내 갤러리를 빌리자고 했고, 다른 쪽은 돈을 아끼려고 교내 강당을 쓰자고 했습니다. 토론이 너무 격해져서 몇몇 회원은 그만두겠다고까지 했습니다. 저는 혼자 결정하는 대신 각 그룹에 비용을 포함한 짧은 계획을 발표하게 하고 투표를 했습니다. 과정이 공정하다고 느꼈기 때문에 투표에서 진 사람들까지 결과를 받아들였고, 전시회에는 역대 가장 많은 관람객이 왔습니다. 두 번째 장점은 이런 경험이 취업 면접에서 쓸 진짜 이야기를 준다는 것입니다. 면접관이 갈등을 어떻게 다루느냐고 물었을 때 저는 아무것도 지어낼 필요가 없었습니다. 그래서 저는 학생들에게 리더 역할을 맡아 보라고 강력히 권하고 싶습니다.",
+  "tips": [
+   "갈등 해결 이야기: 문제 → 내가 한 행동 → 결과 순서로 말한다",
+   "'Instead of making the decision myself, I …' 는 리더십을 보여 주는 좋은 문장",
+   "두 번째 장점은 짧게 말해도 된다 — 시간 배분은 첫 번째 예시에 집중"
+  ]
+ },
+ {
+  "id": "op-064",
+  "topic": "리더십",
+  "question": "What is the most important thing a manager can do to keep employees motivated: giving praise, offering bonuses, or providing chances for promotion? Give specific reasons and examples to support your opinion.",
+  "question_ko": "관리자가 직원들의 의욕을 유지시키기 위해 할 수 있는 가장 중요한 일은 무엇입니까: 칭찬하기, 보너스 주기, 승진 기회 주기? 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 칭찬",
+   "이유 1: 노력을 알아봐 주면 계속 열심히 하고 싶어짐",
+   "예시: 팀장이 회의에서 내 보고서를 공개적으로 칭찬 → 다음 프로젝트 자원",
+   "이유 2: 돈이 안 들고 매일 할 수 있음, 보너스 효과는 짧음",
+   "마무리: 그래서 칭찬이 가장 중요"
+  ],
+  "sample": "I think giving praise is the most important thing a manager can do. First, when people feel that their hard work is noticed, they want to keep working hard. For example, a few months ago I wrote a long report about our customers. At the team meeting, my manager said in front of everyone that it was excellent work. I was so happy that I volunteered for the next big project. Second, praise doesn't cost anything, and managers can do it every day. Bonuses are nice, but the good feeling only lasts a short time. A kind word from a manager can make every day better. So I believe praise is the most important.",
+  "sample_ko": "저는 칭찬이 관리자가 할 수 있는 가장 중요한 일이라고 생각합니다. 첫째, 사람들은 자기 노력을 누군가 알아본다고 느끼면 계속 열심히 하고 싶어집니다. 예를 들어 몇 달 전에 저는 고객에 관한 긴 보고서를 썼습니다. 팀 회의에서 매니저가 모두 앞에서 훌륭한 작업이라고 말해 주었습니다. 너무 기뻐서 다음 큰 프로젝트에 자원했습니다. 둘째, 칭찬은 돈이 들지 않고 관리자가 매일 할 수 있습니다. 보너스도 좋지만 좋은 기분은 잠깐만 갑니다. 관리자의 친절한 한마디는 매일을 더 좋게 만들 수 있습니다. 그래서 저는 칭찬이 가장 중요하다고 생각합니다.",
+  "sample_adv": "Bonuses and promotions definitely matter, but I believe sincere praise is the most powerful way to keep people motivated day to day. Everyone wants to feel that their effort is seen and valued, and praise delivers that message immediately. I experienced this myself earlier this year. I spent about three weeks analyzing customer survey data and writing a detailed report, often staying late to finish it. Honestly, I wasn't sure anyone would even read it. But at our next team meeting, my manager put the report on the screen and explained to everyone how my findings would change our marketing plan. She also thanked me by name. That moment meant more to me than any bonus I've received. In fact, the very next week, I volunteered to lead a new project, which I never would have done before. Another advantage is that praise is free and can happen anytime, while bonuses come once or twice a year and their effect fades quickly. So if I were a manager, praise would be my first tool for motivation.",
+  "sample_adv_ko": "보너스와 승진도 분명 중요하지만, 저는 진심 어린 칭찬이 매일매일 의욕을 유지시키는 가장 강력한 방법이라고 생각합니다. 누구나 자기 노력이 눈에 띄고 인정받는다고 느끼고 싶어 하는데, 칭찬은 그 메시지를 즉시 전해 줍니다. 저는 올해 초에 이것을 직접 경험했습니다. 3주 정도 고객 설문 데이터를 분석하고 자세한 보고서를 쓰느라 자주 늦게까지 남았습니다. 솔직히 누가 읽기나 할지 확신이 없었습니다. 그런데 다음 팀 회의에서 매니저가 보고서를 화면에 띄우고, 제 분석 결과가 우리 마케팅 계획을 어떻게 바꿀지 모두에게 설명해 주었습니다. 제 이름을 부르며 고맙다는 말도 했습니다. 그 순간은 제가 받아 본 어떤 보너스보다 큰 의미였습니다. 실제로 바로 다음 주에 저는 새 프로젝트를 이끌겠다고 자원했는데, 예전 같으면 절대 하지 않았을 일입니다. 또 다른 장점은 칭찬은 공짜이고 언제든 할 수 있는 반면, 보너스는 1년에 한두 번이고 효과가 금방 사라진다는 것입니다. 그래서 제가 관리자라면 칭찬을 동기 부여의 첫 번째 도구로 쓰겠습니다.",
+  "tips": [
+   "'That moment meant more to me than any bonus.' 처럼 다른 선택지와 직접 비교한다",
+   "칭찬받은 결과로 행동이 바뀐 이야기(자원함)가 동기 부여의 증거가 된다",
+   "가정법 마무리: 'If I were a manager, …'"
+  ]
+ },
+ {
+  "id": "op-065",
+  "topic": "소비",
+  "question": "Do you agree or disagree with the following statement? People should wait at least one day before buying something expensive. Give specific reasons and examples to support your opinion.",
+  "question_ko": "다음 말에 동의합니까, 동의하지 않습니까? 사람들은 비싼 물건을 사기 전에 적어도 하루는 기다려야 한다. 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 동의",
+   "이유 1: 충동구매를 막아 줌",
+   "예시: 매장에서 바로 산 비싼 커피 머신 — 몇 번 쓰고 방치 / 하루 기다린 노트북은 더 싸게 삼",
+   "이유 2: 가격 비교·후기 확인할 시간",
+   "마무리: 그래서 하루 기다리기 찬성"
+  ],
+  "sample": "I agree that people should wait at least one day before buying something expensive. First, waiting helps us avoid buying things we don't really need. For example, two years ago I saw a fancy coffee machine at a department store. The salesperson was very friendly, so I bought it right away for five hundred dollars. But I only used it a few times. Now it just sits in my kitchen. Second, waiting gives us time to compare prices and read reviews. Last month, I wanted a new laptop. I waited a few days, compared prices online, and found the same model for one hundred dollars less. So I think waiting one day is a smart habit.",
+  "sample_ko": "저는 비싼 물건을 사기 전에 적어도 하루는 기다려야 한다는 데 동의합니다. 첫째, 기다리면 정말 필요하지 않은 물건을 사는 것을 막을 수 있습니다. 예를 들어 2년 전 저는 백화점에서 멋진 커피 머신을 보았습니다. 점원이 아주 친절해서 그 자리에서 500달러를 주고 샀습니다. 하지만 몇 번밖에 쓰지 않았습니다. 지금은 그냥 부엌에 놓여만 있습니다. 둘째, 기다리면 가격을 비교하고 후기를 읽을 시간이 생깁니다. 지난달 저는 새 노트북을 사고 싶었습니다. 며칠 기다리며 온라인으로 가격을 비교했고, 같은 모델을 100달러 싸게 찾았습니다. 그래서 저는 하루 기다리는 것이 현명한 습관이라고 생각합니다.",
+  "sample_adv": "I completely agree with this idea. In my experience, the excitement of seeing something new in a store often makes us forget whether we actually need it, and a single day of waiting is usually enough to bring us back to reality. I learned this lesson with a coffee machine. About two years ago, I was walking through a department store when a salesperson made me a perfect latte with a beautiful, expensive machine. I was so impressed that I bought it on the spot for around five hundred dollars. At home, though, I realized it took a long time to clean, and I only used it maybe five times. Now it's just collecting dust. Since then, I've followed a twenty four hour rule for anything over two hundred dollars. When I wanted a new laptop last month, I waited, read several reviews, and compared prices online. I ended up buying the same model a hundred dollars cheaper, and I'm sure it was the right choice. So a short wait really protects both our wallets and our homes from clutter.",
+  "sample_adv_ko": "저는 이 생각에 전적으로 동의합니다. 제 경험상 매장에서 새로운 물건을 볼 때의 설렘은 그것이 정말 필요한지 잊게 만드는 경우가 많은데, 하루만 기다려도 대개 현실로 돌아오기에 충분합니다. 저는 커피 머신으로 이 교훈을 배웠습니다. 2년쯤 전에 백화점을 걷고 있는데, 점원이 멋지고 비싼 기계로 완벽한 라테를 만들어 주었습니다. 너무 감탄해서 그 자리에서 500달러 정도를 주고 샀습니다. 하지만 집에 와서 보니 청소하는 데 시간이 오래 걸렸고, 아마 다섯 번 정도밖에 쓰지 않았습니다. 지금은 먼지만 쌓이고 있습니다. 그 뒤로 저는 200달러가 넘는 물건에는 24시간 규칙을 지킵니다. 지난달 새 노트북을 사고 싶었을 때 기다리면서 후기를 여러 개 읽고 온라인으로 가격을 비교했습니다. 결국 같은 모델을 100달러 싸게 샀고, 옳은 선택이었다고 확신합니다. 그래서 잠깐 기다리는 것은 정말로 우리 지갑과 집을 잡동사니로부터 지켜 줍니다.",
+  "tips": [
+   "실패한 구매 → 규칙을 만듦 → 성공한 구매 순서로 두 예시를 이어 말한다",
+   "'on the spot', 'collecting dust', 'bring us back to reality' 같은 생생한 표현을 써 본다",
+   "금액을 구체적으로 말하면(five hundred dollars, a hundred dollars cheaper) 예시가 믿음직하다"
+  ]
+ },
+ {
+  "id": "op-066",
+  "topic": "소비",
+  "question": "Which do you prefer, buying used items or buying new items? Give specific reasons and examples to support your opinion.",
+  "question_ko": "중고 물건을 사는 것과 새 물건을 사는 것 중 어느 쪽을 선호합니까? 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 중고",
+   "이유 1: 같은 물건을 훨씬 싸게 삼",
+   "예시: 중고 앱으로 거의 새 자전거를 정가의 3분의 1에 구입 — 2년째 출퇴근",
+   "이유 2: 버려질 물건을 다시 써서 환경에 좋음",
+   "마무리: 전자 제품 등은 새것, 나머지는 중고 선호"
+  ],
+  "sample": "I prefer buying used items. The first reason is that I can save a lot of money. For example, last year I wanted a bicycle to ride to work. A new one was about six hundred dollars. Instead, I found a used bike on a secondhand app for two hundred dollars. The owner had only ridden it a few times, so it was almost new. I have used it every day for two years, and it still works perfectly. The second reason is the environment. When I buy used things, they don't end up in the trash, and fewer new products need to be made. Of course, I buy some things new, but usually I choose used items.",
+  "sample_ko": "저는 중고 물건을 사는 것을 선호합니다. 첫 번째 이유는 돈을 많이 아낄 수 있기 때문입니다. 예를 들어 작년에 저는 출퇴근용 자전거를 갖고 싶었습니다. 새것은 600달러 정도였습니다. 대신 중고 거래 앱에서 200달러짜리 중고 자전거를 찾았습니다. 주인이 몇 번밖에 타지 않아서 거의 새것이었습니다. 2년 동안 매일 탔는데 아직도 완벽하게 잘 굴러갑니다. 두 번째 이유는 환경입니다. 중고 물건을 사면 그 물건이 쓰레기가 되지 않고, 새 제품을 덜 만들어도 됩니다. 물론 어떤 물건은 새것으로 사지만, 대개는 중고를 고릅니다.",
+  "sample_adv": "Whenever it makes sense, I prefer buying used items rather than new ones. The most obvious reason is the price. Many things lose a big part of their value the moment they leave the store, even if they're barely used. My bicycle is a perfect example. Last spring, I decided to start biking to work, and the model I wanted cost about six hundred dollars new. Before buying it, I checked a secondhand app and found the exact same model for two hundred dollars. The seller explained that he had bought it for exercise but only ridden it a handful of times. When I saw it in person, it looked brand new. I've now been riding it to the office almost every day for two years without a single problem. Besides saving money, buying used is better for the planet. Every item that gets a second life is one less thing in a landfill. That said, I still buy some things new, like mattresses and phones, for hygiene and battery reasons. But for most items, used is my first choice.",
+  "sample_adv_ko": "합리적일 때는 언제나 저는 새 물건보다 중고 물건을 사는 것을 선호합니다. 가장 분명한 이유는 가격입니다. 많은 물건이 거의 쓰지 않았는데도 매장을 떠나는 순간 가치의 큰 부분을 잃습니다. 제 자전거가 완벽한 예입니다. 지난봄 저는 자전거로 출근하기로 했는데, 원하는 모델이 새것으로 600달러 정도였습니다. 사기 전에 중고 거래 앱을 확인했더니 똑같은 모델이 200달러에 나와 있었습니다. 판매자는 운동하려고 샀지만 몇 번밖에 타지 않았다고 설명했습니다. 직접 보니 새것처럼 보였습니다. 이제 2년 동안 거의 매일 그 자전거로 출근하는데 문제가 한 번도 없었습니다. 돈을 아끼는 것 외에도 중고를 사는 것은 지구에 더 좋습니다. 두 번째 삶을 얻는 물건 하나하나가 매립지에 갈 물건 하나를 줄여 줍니다. 그렇긴 해도 매트리스나 휴대폰처럼 위생이나 배터리 때문에 새것으로 사는 물건도 있습니다. 하지만 대부분의 물건은 중고가 저의 첫 번째 선택입니다.",
+  "tips": [
+   "가격 비교(six hundred vs two hundred)는 중고를 고르는 가장 빠른 근거",
+   "'one less thing in a landfill' 처럼 환경 이유는 한두 문장으로 짧게 덧붙인다",
+   "예외(새로 사는 물건)를 하나 말하면 현실적이고 균형 잡힌 답변이 된다"
+  ]
+ },
+ {
+  "id": "op-067",
+  "topic": "소비",
+  "question": "What are the advantages and disadvantages of paying for monthly subscription services, such as streaming or delivery memberships? Give specific reasons and examples to support your opinion.",
+  "question_ko": "스트리밍이나 배달 멤버십 같은 월 구독 서비스에 돈을 내는 것의 장점과 단점은 무엇입니까? 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 편리하지만 관리가 필요",
+   "장점: 적은 돈으로 많은 콘텐츠·혜택, 편리함",
+   "예시: 음악 스트리밍 — 앨범 사던 때보다 싸고 다양한 음악",
+   "단점: 안 쓰는 구독이 쌓여 돈 낭비 — 카드 내역 확인 후 3개 해지",
+   "마무리: 몇 달마다 점검하며 쓰자"
+  ],
+  "sample": "Subscription services have both advantages and disadvantages. The main advantage is that we can enjoy a lot for a small price. For example, I pay about ten dollars a month for a music streaming service. In the past, I bought albums one by one, and that was much more expensive. Now I can listen to almost any song anytime. However, the biggest disadvantage is that it's easy to forget about subscriptions. Last month, I checked my credit card statement and found five subscriptions. I was only using two of them. I was wasting about thirty dollars every month. So I canceled three of them. I think subscriptions are useful, but we should check them regularly.",
+  "sample_ko": "구독 서비스에는 장점과 단점이 모두 있습니다. 가장 큰 장점은 적은 돈으로 많은 것을 즐길 수 있다는 것입니다. 예를 들어 저는 음악 스트리밍 서비스에 한 달에 10달러 정도를 냅니다. 예전에는 앨범을 하나씩 샀는데 그게 훨씬 비쌌습니다. 지금은 거의 모든 노래를 언제든지 들을 수 있습니다. 하지만 가장 큰 단점은 구독을 잊어버리기 쉽다는 것입니다. 지난달 신용카드 명세서를 확인해 보니 구독이 다섯 개나 있었습니다. 실제로 쓰는 것은 두 개뿐이었습니다. 매달 30달러 정도를 낭비하고 있었습니다. 그래서 세 개를 해지했습니다. 저는 구독이 유용하지만 정기적으로 확인해야 한다고 생각합니다.",
+  "sample_adv": "Subscription services can be a great deal, but they can also quietly drain your bank account if you're not careful. On the positive side, they give you access to a huge amount of content or convenience for a fairly low price. Take music, for example. When I was a teenager, I used to spend about fifteen dollars on a single album. Now, for around ten dollars a month, I can stream almost any song in the world, discover new artists, and download playlists for my commute. That's an incredible value. On the negative side, subscriptions are designed to be easy to forget. Because the payments are small and automatic, you stop noticing them. A few weeks ago, I finally sat down and went through my credit card statements. I found five different subscriptions, including a video service I hadn't opened in months and a fitness app from a New Year's resolution. Together, I was wasting more than thirty dollars a month. I canceled three on the spot. So my advice is to enjoy subscriptions, but review them every few months.",
+  "sample_adv_ko": "구독 서비스는 아주 이득일 수 있지만, 조심하지 않으면 은행 잔고를 조용히 빼 갈 수도 있습니다. 좋은 점은 꽤 낮은 가격에 엄청난 양의 콘텐츠나 편리함을 누릴 수 있다는 것입니다. 음악을 예로 들어 보겠습니다. 10대 때 저는 앨범 한 장에 15달러 정도를 쓰곤 했습니다. 지금은 한 달에 10달러 정도로 세상의 거의 모든 노래를 듣고, 새로운 가수를 발견하고, 출퇴근용 재생 목록을 내려받을 수 있습니다. 엄청난 가치입니다. 나쁜 점은 구독이 잊어버리기 쉽게 만들어져 있다는 것입니다. 결제 금액이 작고 자동이어서 신경을 안 쓰게 됩니다. 몇 주 전 저는 드디어 앉아서 신용카드 명세서를 살펴보았습니다. 몇 달 동안 열어 보지도 않은 동영상 서비스와 새해 결심으로 가입한 운동 앱을 포함해 구독이 다섯 개나 있었습니다. 다 합쳐 한 달에 30달러 넘게 낭비하고 있었습니다. 저는 그 자리에서 세 개를 해지했습니다. 그래서 제 조언은 구독을 즐기되 몇 달마다 점검하라는 것입니다.",
+  "tips": [
+   "'Take music, for example.' 은 예시로 넘어가는 짧고 자연스러운 표현",
+   "장점 예시는 과거와 현재 가격 비교, 단점 예시는 명세서를 확인한 경험으로",
+   "마무리를 조언 형태(my advice is to …)로 하면 장단점 문제를 깔끔하게 정리할 수 있다"
+  ]
+ },
+ {
+  "id": "op-068",
+  "topic": "소비",
+  "question": "When you buy clothes, what is the most important factor: the price, the style, or the quality of the material? Give specific reasons and examples to support your opinion.",
+  "question_ko": "옷을 살 때 가장 중요한 요소는 무엇입니까: 가격, 스타일, 소재의 품질? 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 소재의 품질",
+   "이유 1: 오래 입을 수 있어 결국 경제적",
+   "예시: 유행 따라 산 싼 니트 — 한 번 빨고 늘어남 / 좋은 울 코트 5년째",
+   "이유 2: 피부에 편하고 하루 종일 기분 좋음",
+   "마무리: 그래서 품질이 가장 중요"
+  ],
+  "sample": "When I buy clothes, quality is the most important factor for me. First, good quality clothes last much longer, so they are cheaper in the end. For example, a few years ago, I bought a trendy sweater because it was on sale for twenty dollars. After I washed it once, it got stretched and had small holes. I never wore it again. On the other hand, I bought a good wool coat five years ago. It was expensive, but I still wear it every winter, and it looks great. Second, good material feels comfortable on my skin, so I feel better all day. For these reasons, I always check the quality first.",
+  "sample_ko": "옷을 살 때 저에게 가장 중요한 요소는 품질입니다. 첫째, 품질 좋은 옷은 훨씬 오래가서 결국 더 쌉니다. 예를 들어 몇 년 전 저는 유행하는 스웨터를 20달러에 할인하길래 샀습니다. 한 번 빨았더니 늘어나고 작은 구멍이 생겼습니다. 다시는 입지 않았습니다. 반면에 5년 전에는 좋은 울 코트를 샀습니다. 비쌌지만 지금도 겨울마다 입고 있고 여전히 멋져 보입니다. 둘째, 좋은 소재는 피부에 편해서 하루 종일 기분이 더 좋습니다. 이런 이유로 저는 항상 품질을 먼저 확인합니다.",
+  "sample_adv": "When I shop for clothes, the quality of the material is definitely the most important factor for me. Price and style matter too, but a cheap, stylish item isn't a good deal if it falls apart after a few washes. I learned this through a couple of contrasting experiences. A few years ago, I grabbed a trendy knit sweater at a fast fashion store because it was only twenty dollars. It looked great in the fitting room, but after the very first wash, the neck stretched out and the fabric started pilling. I wore it maybe twice. Around the same time, I saved up and bought a wool coat that cost almost three hundred dollars. I hesitated a lot because of the price, but I've worn it every single winter for five years, and people still compliment me on it. If you divide the price by the number of times I've worn it, the coat was actually much cheaper. Good fabric also feels more comfortable and keeps its shape. So these days, I always check the label and touch the material before anything else.",
+  "sample_adv_ko": "옷을 살 때 저에게 가장 중요한 요소는 단연 소재의 품질입니다. 가격과 스타일도 중요하지만, 싸고 멋진 옷이라도 몇 번 빨고 망가진다면 좋은 거래가 아닙니다. 저는 서로 대조되는 두 경험으로 이것을 배웠습니다. 몇 년 전 저는 패스트 패션 매장에서 20달러밖에 안 하는 유행 니트를 집어 들었습니다. 탈의실에서는 멋져 보였지만, 처음 빨자마자 목이 늘어나고 보풀이 일기 시작했습니다. 아마 두 번 입었을 겁니다. 비슷한 시기에 저는 돈을 모아 거의 300달러짜리 울 코트를 샀습니다. 가격 때문에 많이 망설였지만, 5년 동안 매년 겨울 입었고 사람들은 아직도 코트가 멋지다고 말해 줍니다. 가격을 입은 횟수로 나누면 그 코트가 사실 훨씬 쌌던 것입니다. 좋은 원단은 더 편하고 모양도 잘 유지됩니다. 그래서 요즘 저는 무엇보다 먼저 라벨을 확인하고 소재를 만져 봅니다.",
+  "tips": [
+   "싼 옷 실패 vs 좋은 옷 성공을 나란히 비교하면 품질의 이유가 한눈에 보인다",
+   "'If you divide the price by the number of times I've worn it …' 은 고득점용 논리 표현",
+   "옷 관련 표현: stretched out, pilling, keeps its shape, fall apart"
+  ]
+ },
+ {
+  "id": "op-069",
+  "topic": "건강",
+  "question": "Do you agree or disagree with the following statement? Schools should not sell sugary drinks or snacks to students. Give specific reasons and examples to support your opinion.",
+  "question_ko": "다음 말에 동의합니까, 동의하지 않습니까? 학교는 학생들에게 단 음료나 과자를 팔아서는 안 된다. 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 동의",
+   "이유 1: 쉽게 살 수 있으면 매일 먹게 됨 → 건강 문제",
+   "예시: 고등학교 매점 탄산음료 매일 → 체중 증가 / 매점 메뉴 바뀐 뒤 물·우유",
+   "이유 2: 학교는 좋은 습관을 가르치는 곳",
+   "마무리: 그래서 판매 금지 찬성"
+  ],
+  "sample": "I agree that schools should not sell sugary drinks or snacks. First, if these foods are easy to buy, students eat them every day. For example, when I was in high school, there was a snack shop right next to my classroom. I bought a soda and chocolate almost every day after lunch. I gained a lot of weight that year, and I often felt sleepy in class. In my last year, the school stopped selling soda and started selling water, milk, and fruit. I changed my habits, and I felt much better. Second, schools should teach good habits, not only math and science. So I think schools should stop selling unhealthy snacks.",
+  "sample_ko": "저는 학교가 단 음료나 과자를 팔아서는 안 된다는 데 동의합니다. 첫째, 이런 음식을 쉽게 살 수 있으면 학생들은 매일 먹게 됩니다. 예를 들어 제가 고등학생일 때 교실 바로 옆에 매점이 있었습니다. 저는 거의 매일 점심을 먹고 탄산음료와 초콜릿을 샀습니다. 그해 몸무게가 많이 늘었고, 수업 시간에 자주 졸렸습니다. 마지막 학년에 학교가 탄산음료 판매를 멈추고 물, 우유, 과일을 팔기 시작했습니다. 저는 습관을 바꿨고 몸이 훨씬 좋아졌습니다. 둘째, 학교는 수학과 과학뿐 아니라 좋은 습관도 가르쳐야 합니다. 그래서 저는 학교가 건강에 나쁜 간식 판매를 멈춰야 한다고 생각합니다.",
+  "sample_adv": "I strongly agree with this statement. Students spend most of their day at school, so what's available there has a huge impact on their eating habits. When sugary drinks and snacks are just a few steps away, it's very hard for teenagers to resist them. I know this from personal experience. In my first two years of high school, there was a small shop on the first floor that sold soda, candy, and chips. Almost every day after lunch, my friends and I bought a large soda and a chocolate bar. By the end of my second year, I had gained about eight kilograms, and I was often sleepy and unfocused during afternoon classes. Then, in my final year, the school replaced those products with water, milk, fruit, and whole grain snacks. At first, we complained, but within a couple of months, I stopped craving soda, and I had more energy in class. Besides, schools are supposed to teach students how to live well, not just pass exams. So removing sugary products is a simple but important step.",
+  "sample_adv_ko": "저는 이 말에 강하게 동의합니다. 학생들은 하루의 대부분을 학교에서 보내기 때문에, 학교에서 무엇을 살 수 있느냐가 식습관에 큰 영향을 줍니다. 단 음료와 과자가 몇 걸음 거리에 있으면 10대가 참기는 정말 어렵습니다. 저는 개인적인 경험으로 이것을 압니다. 고등학교 첫 2년 동안 1층에 탄산음료, 사탕, 과자를 파는 작은 매점이 있었습니다. 거의 매일 점심 후에 친구들과 저는 큰 탄산음료와 초콜릿 바를 샀습니다. 2학년이 끝날 무렵 저는 8킬로그램 정도 쪘고, 오후 수업 시간에는 자주 졸리고 집중이 안 됐습니다. 그러다 마지막 학년에 학교가 그 제품들을 물, 우유, 과일, 통곡물 간식으로 바꿨습니다. 처음에는 불평했지만 두어 달 만에 탄산음료가 당기지 않게 되었고 수업 시간에 기운도 더 났습니다. 게다가 학교는 시험 통과만이 아니라 잘 사는 법을 가르치는 곳입니다. 그래서 단 제품을 없애는 것은 간단하지만 중요한 첫걸음입니다.",
+  "tips": [
+   "학교가 바뀌기 전과 후의 내 모습을 비교하면 찬성 이유가 바로 증명된다",
+   "'just a few steps away', 'hard to resist', 'stopped craving' 같은 표현을 활용한다",
+   "결론에서 학교의 역할(좋은 습관 교육)로 범위를 넓히면 고득점 마무리가 된다"
+  ]
+ },
+ {
+  "id": "op-070",
+  "topic": "건강",
+  "question": "Which do you prefer, exercising in the morning or exercising in the evening? Give specific reasons and examples to support your opinion.",
+  "question_ko": "아침에 운동하는 것과 저녁에 운동하는 것 중 어느 쪽을 선호합니까? 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 저녁 운동",
+   "이유 1: 하루 스트레스를 풀고 푹 잠",
+   "예시: 아침 조깅 시도 — 늦잠으로 자꾸 빠짐 / 퇴근 후 헬스장은 석 달 꾸준히",
+   "이유 2: 몸이 풀려 있어 다칠 위험이 적고 기록이 좋음",
+   "마무리: 그래서 저녁 운동 선호"
+  ],
+  "sample": "I prefer exercising in the evening. First, it is a great way to relieve stress after work. For example, last year I tried to go jogging at six in the morning. But I was always sleepy, and I skipped it many times. After two weeks, I gave up. Then I joined a gym near my office and started working out after work. Running on the treadmill helped me forget about my stressful day. I went three times a week for three months without missing. Second, my body feels warmer and more flexible in the evening, so I can exercise harder and I don't get hurt easily. For these reasons, evening exercise is better for me.",
+  "sample_ko": "저는 저녁에 운동하는 것을 선호합니다. 첫째, 퇴근 후 스트레스를 푸는 데 아주 좋습니다. 예를 들어 작년에 저는 아침 6시에 조깅을 하려고 해 봤습니다. 하지만 늘 졸려서 여러 번 빠졌습니다. 2주 뒤에 포기했습니다. 그래서 회사 근처 헬스장에 등록하고 퇴근 후에 운동을 시작했습니다. 러닝머신에서 달리면 스트레스 많은 하루를 잊을 수 있었습니다. 석 달 동안 일주일에 세 번 한 번도 빠지지 않고 갔습니다. 둘째, 저녁에는 몸이 더 따뜻하고 유연해서 더 세게 운동할 수 있고 잘 다치지도 않습니다. 이런 이유로 저에게는 저녁 운동이 더 낫습니다.",
+  "sample_adv": "Although many health experts recommend morning workouts, I personally prefer exercising in the evening. The main reason is that it's the perfect way to release the stress that builds up during the workday. I actually tried both routines last year, so I can compare them clearly. At first, I set my alarm for six and planned to jog around my neighborhood before work. The problem was that I'm not a morning person at all. I kept hitting the snooze button, and even on the days I went out, I felt heavy and slow. After two weeks, I quit. Then I signed up for a gym right next to my office. Now, after work, I spend about an hour running and lifting weights. By the time I finish, my frustrations from meetings and emails are completely gone, and I sleep much more deeply at night. I've kept this routine for over three months. Another benefit is that my muscles are already warmed up in the evening, so I perform better and rarely get injured. That's why evenings work best for me.",
+  "sample_adv_ko": "많은 건강 전문가가 아침 운동을 권하지만, 저는 개인적으로 저녁에 운동하는 것을 선호합니다. 가장 큰 이유는 근무 시간 동안 쌓인 스트레스를 푸는 완벽한 방법이기 때문입니다. 사실 저는 작년에 두 가지 일과를 다 해 봐서 분명하게 비교할 수 있습니다. 처음에는 알람을 6시에 맞추고 출근 전에 동네를 조깅하려고 했습니다. 문제는 제가 전혀 아침형 인간이 아니라는 것이었습니다. 알람을 계속 미뤘고, 나간 날에도 몸이 무겁고 느렸습니다. 2주 뒤에 그만두었습니다. 그래서 회사 바로 옆 헬스장에 등록했습니다. 이제는 퇴근 후 한 시간 정도 달리기와 근력 운동을 합니다. 운동을 마칠 때쯤이면 회의와 이메일로 쌓인 답답함이 완전히 사라지고, 밤에는 훨씬 깊이 잡니다. 이 일과를 석 달 넘게 지키고 있습니다. 또 다른 장점은 저녁에는 근육이 이미 풀려 있어서 운동이 더 잘 되고 거의 다치지 않는다는 것입니다. 그래서 저에게는 저녁이 가장 잘 맞습니다.",
+  "tips": [
+   "두 가지를 다 해 본 경험('I actually tried both')은 선택 문제에서 가장 강력한 예시",
+   "'hitting the snooze button', 'release stress', 'warmed up' 같은 운동·생활 표현",
+   "'Although many experts recommend A, I prefer B' 로 시작하면 세련된 첫 문장이 된다"
+  ]
+ },
+ {
+  "id": "op-071",
+  "topic": "건강",
+  "question": "What are the advantages of using a smartwatch or a phone app to keep track of your health? Give specific reasons and examples to support your opinion.",
+  "question_ko": "스마트워치나 휴대폰 앱으로 건강을 기록하고 관리하는 것의 장점은 무엇입니까? 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 장점이 많음",
+   "장점 1: 숫자로 보이니 동기 부여",
+   "예시: 하루 걸음 수 3천 보 → 목표 8천 보, 계단 이용·점심 산책",
+   "장점 2: 수면·심박 변화를 일찍 알아챔",
+   "마무리: 그래서 건강 앱 추천"
+  ],
+  "sample": "There are many advantages to using a smartwatch or an app to track your health. First, it motivates you because you can see your progress in numbers. For example, when I got a smartwatch last year, I found out that I walked only about three thousand steps a day. I was surprised. So I set a goal of eight thousand steps. I started taking the stairs and walking after lunch. Now I reach my goal almost every day, and I lost four kilograms. Second, these devices can show changes in your sleep or heart rate. Then you can notice health problems early. For these reasons, I think health apps are very useful.",
+  "sample_ko": "스마트워치나 앱으로 건강을 기록하는 것에는 많은 장점이 있습니다. 첫째, 진행 상황을 숫자로 볼 수 있어서 동기 부여가 됩니다. 예를 들어 작년에 스마트워치를 샀을 때, 저는 하루에 3천 걸음 정도밖에 걷지 않는다는 것을 알게 되었습니다. 놀랐습니다. 그래서 하루 8천 걸음을 목표로 정했습니다. 계단을 이용하고 점심 후에 산책을 하기 시작했습니다. 지금은 거의 매일 목표를 달성하고 4킬로그램을 뺐습니다. 둘째, 이런 기기는 수면이나 심박수의 변화를 보여 줍니다. 그러면 건강 문제를 일찍 알아챌 수 있습니다. 이런 이유로 저는 건강 앱이 아주 유용하다고 생각합니다.",
+  "sample_adv": "I think health tracking devices and apps have some really practical advantages. The biggest one is that they turn vague goals into clear numbers, and that makes it much easier to stay motivated. Before I bought a smartwatch last year, I honestly believed I was a fairly active person. Then, after the first week, the watch showed that I was averaging only about three thousand steps a day. That was a real shock. So I set a daily goal of eight thousand steps and made small changes, like taking the stairs instead of the elevator and walking around the block after lunch. Watching the progress bar fill up became almost like a game. Six months later, I was hitting my goal most days, and I had lost about four kilograms without going on a diet. Another advantage is early warning. My watch tracks my sleep and heart rate, so when my sleep got worse during a stressful project, I noticed it right away and adjusted my schedule. For these reasons, I'd recommend these tools to almost anyone.",
+  "sample_adv_ko": "저는 건강 기록 기기와 앱에 정말 실용적인 장점이 있다고 생각합니다. 가장 큰 장점은 막연한 목표를 분명한 숫자로 바꿔 주어서 의욕을 유지하기가 훨씬 쉬워진다는 것입니다. 작년에 스마트워치를 사기 전에 저는 솔직히 제가 꽤 활동적인 사람이라고 믿었습니다. 그런데 첫 주가 지나자 시계는 제가 하루 평균 3천 걸음 정도밖에 걷지 않는다고 보여 주었습니다. 정말 충격이었습니다. 그래서 하루 8천 걸음을 목표로 정하고 엘리베이터 대신 계단을 쓰고 점심 후에 동네 한 바퀴를 걷는 것 같은 작은 변화를 주었습니다. 진행 막대가 채워지는 것을 보는 게 거의 게임처럼 느껴졌습니다. 6개월 뒤에는 대부분의 날 목표를 달성했고, 다이어트를 하지 않고도 4킬로그램 정도를 뺐습니다. 또 다른 장점은 미리 경고해 준다는 것입니다. 시계가 수면과 심박수를 기록해서, 스트레스 많은 프로젝트 기간에 잠이 나빠지자 바로 알아채고 일정을 조정했습니다. 이런 이유로 저는 이런 도구를 거의 누구에게나 추천하겠습니다.",
+  "tips": [
+   "'I was surprised / That was a real shock' 처럼 숫자를 보고 놀란 순간이 이야기의 시작점이 된다",
+   "작은 변화 두 가지(stairs, walking after lunch)를 나열하면 예시가 구체적이다",
+   "장점만 묻는 문제는 장점 2개면 충분 — 첫 번째에 시간을 많이 쓴다"
+  ]
+ },
+ {
+  "id": "op-072",
+  "topic": "건강",
+  "question": "What is the most effective thing a company can do to improve its employees' health: providing free gym memberships, serving healthy meals, or allowing short breaks during the day? Give specific reasons and examples to support your opinion.",
+  "question_ko": "회사가 직원 건강을 개선하기 위해 할 수 있는 가장 효과적인 일은 무엇입니까: 무료 헬스장 이용권 제공, 건강한 식사 제공, 근무 중 짧은 휴식 허용? 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 짧은 휴식 허용",
+   "이유 1: 모든 직원이 매일 바로 효과를 봄",
+   "예시: 2시간마다 10분 휴식 제도 — 목·허리 통증 줄고 오후 집중력 상승",
+   "이유 2: 헬스장 이용권은 바쁜 사람은 안 씀",
+   "마무리: 그래서 휴식이 가장 효과적"
+  ],
+  "sample": "I think allowing short breaks during the day is the most effective thing. First, every employee can use breaks every day. For example, my company started a new rule last year. Every two hours, we take a ten minute break to stretch or walk around. Before that, I sat at my desk for hours, and my neck and back always hurt. Now the pain is much better, and I can focus better in the afternoon. Second, a free gym membership sounds nice, but busy people don't use it. My friend's company gives free gym passes, but he has gone only twice this year. So I believe short breaks help the most.",
+  "sample_ko": "저는 근무 중 짧은 휴식을 허용하는 것이 가장 효과적이라고 생각합니다. 첫째, 모든 직원이 매일 휴식을 쓸 수 있습니다. 예를 들어 저희 회사는 작년에 새로운 규칙을 시작했습니다. 두 시간마다 10분씩 쉬면서 스트레칭을 하거나 걸어 다닙니다. 그전에는 몇 시간씩 책상에 앉아 있어서 목과 허리가 늘 아팠습니다. 지금은 통증이 훨씬 나아졌고 오후에 더 잘 집중할 수 있습니다. 둘째, 무료 헬스장 이용권은 좋게 들리지만 바쁜 사람들은 쓰지 않습니다. 제 친구 회사는 무료 헬스장 이용권을 주는데 친구는 올해 두 번밖에 안 갔습니다. 그래서 저는 짧은 휴식이 가장 도움이 된다고 생각합니다.",
+  "sample_adv": "Of these three options, I believe allowing short breaks during the day would make the biggest difference. Gyms and healthy meals are nice benefits, but breaks help every single employee, every single day, without requiring any extra time or effort. My own company is a good example. Until last year, most of us sat in front of our computers from morning until lunch and then again until evening. Many people, including me, complained about stiff necks, back pain, and tired eyes. Then the company introduced a simple policy. Every two hours, a reminder pops up, and we take a ten minute break to stretch, walk, or get some fresh air. It felt strange at first, but within a month, my back pain was noticeably better, and I stopped feeling exhausted by three o'clock. On the other hand, a friend of mine gets a free gym membership from his employer, yet he admits he's only gone twice this year because he works late. That's why I think regular breaks are the most realistic and effective choice.",
+  "sample_adv_ko": "이 세 가지 중에서 저는 근무 중 짧은 휴식을 허용하는 것이 가장 큰 차이를 만들 것이라고 생각합니다. 헬스장과 건강식도 좋은 혜택이지만, 휴식은 추가 시간이나 노력 없이 모든 직원을 매일 돕습니다. 저희 회사가 좋은 예입니다. 작년까지 우리 대부분은 아침부터 점심까지, 그리고 다시 저녁까지 컴퓨터 앞에 앉아 있었습니다. 저를 포함한 많은 사람이 목이 뻣뻣하고 허리가 아프고 눈이 피곤하다고 불평했습니다. 그러다 회사가 간단한 정책을 도입했습니다. 두 시간마다 알림이 뜨면 10분 동안 쉬면서 스트레칭을 하거나 걷거나 바람을 쐽니다. 처음에는 어색했지만 한 달 만에 허리 통증이 눈에 띄게 나아졌고, 오후 3시만 되면 녹초가 되던 일도 없어졌습니다. 반면 제 친구는 회사에서 무료 헬스장 이용권을 받지만, 야근 때문에 올해 두 번밖에 못 갔다고 인정합니다. 그래서 저는 정기적인 휴식이 가장 현실적이고 효과적인 선택이라고 생각합니다.",
+  "tips": [
+   "'every single employee, every single day' 처럼 반복 강조로 이유를 인상 깊게 만든다",
+   "내 회사(효과 있음) vs 친구 회사(이용권을 안 씀) 대비로 다른 선택지를 자연스럽게 반박한다",
+   "통증 표현: stiff neck, back pain, tired eyes, feel exhausted"
+  ]
+ },
+ {
+  "id": "op-073",
+  "topic": "환경",
+  "question": "Do you agree or disagree with the following statement? Cafes should charge customers extra money for disposable cups. Give specific reasons and examples to support your opinion.",
+  "question_ko": "다음 말에 동의합니까, 동의하지 않습니까? 카페는 일회용 컵을 쓰는 손님에게 추가 요금을 받아야 한다. 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 동의",
+   "이유 1: 작은 돈이라도 습관을 바꿈",
+   "예시: 단골 카페 컵 보증금 제도 → 텀블러를 가방에 넣고 다님, 한 달 20개 컵 절약",
+   "이유 2: 일회용 컵은 재활용이 어려워 쓰레기 문제 큼",
+   "마무리: 그래서 추가 요금 찬성"
+  ],
+  "sample": "I agree that cafes should charge extra for disposable cups. First, even a small charge can change people's habits. For example, the cafe near my office started charging fifty cents for a paper cup last year. At first, I didn't like it. But I didn't want to pay extra every day, so I started carrying a tumbler in my bag. Now I use it every morning. I counted, and I save about twenty paper cups a month. Many of my coworkers do the same thing now. Second, disposable cups are hard to recycle because of the plastic coating inside. Most of them end up in the trash. So I think this charge is a good idea.",
+  "sample_ko": "저는 카페가 일회용 컵에 추가 요금을 받아야 한다는 데 동의합니다. 첫째, 적은 요금이라도 사람들의 습관을 바꿀 수 있습니다. 예를 들어 회사 근처 카페가 작년부터 종이컵에 50센트를 받기 시작했습니다. 처음에는 싫었습니다. 하지만 매일 돈을 더 내고 싶지 않아서 가방에 텀블러를 넣고 다니기 시작했습니다. 지금은 매일 아침 텀블러를 씁니다. 세어 보니 한 달에 종이컵 20개 정도를 아낍니다. 이제 많은 동료들도 똑같이 합니다. 둘째, 일회용 컵은 안쪽의 플라스틱 코팅 때문에 재활용하기 어렵습니다. 대부분은 쓰레기가 됩니다. 그래서 저는 이 요금이 좋은 생각이라고 봅니다.",
+  "sample_adv": "I agree with this idea. Most people know that disposable cups are bad for the environment, but knowing isn't enough to change a habit. A small extra charge gives people a practical reason to act. I've seen this work in my own life. Last year, the cafe in my office building started charging fifty cents for every paper cup. I was a bit annoyed at first, because I buy coffee there almost every morning. But paying extra every day started to feel silly, so I bought a stainless tumbler and kept it in my bag. Within a few weeks, it became completely natural. By my count, I now avoid around twenty paper cups a month. What surprised me more was that many of my coworkers made the same switch, and the trash bins in our office are noticeably emptier. It's also important to know that paper cups have a thin plastic lining, so they're rarely recycled. That's why I think a small fee is a fair and effective solution.",
+  "sample_adv_ko": "저는 이 생각에 동의합니다. 대부분의 사람은 일회용 컵이 환경에 나쁘다는 것을 알지만, 아는 것만으로는 습관을 바꾸기에 충분하지 않습니다. 작은 추가 요금은 사람들에게 행동할 현실적인 이유를 줍니다. 저는 제 생활에서 이것이 효과를 내는 것을 보았습니다. 작년에 회사 건물 카페가 종이컵마다 50센트를 받기 시작했습니다. 거의 매일 아침 그곳에서 커피를 사기 때문에 처음에는 조금 짜증이 났습니다. 하지만 매일 돈을 더 내는 것이 바보 같다는 생각이 들어 스테인리스 텀블러를 사서 가방에 넣고 다녔습니다. 몇 주 만에 완전히 자연스러워졌습니다. 세어 보니 지금은 한 달에 종이컵 20개 정도를 안 씁니다. 더 놀라웠던 것은 많은 동료도 똑같이 바꿨고, 사무실 쓰레기통이 눈에 띄게 비었다는 것입니다. 또 종이컵에는 얇은 플라스틱 막이 있어서 재활용되는 경우가 드물다는 점도 알아야 합니다. 그래서 저는 작은 요금이 공정하고 효과적인 해결책이라고 생각합니다.",
+  "tips": [
+   "'knowing isn't enough to change a habit' 처럼 문제의 핵심을 한 문장으로 짚고 시작한다",
+   "처음엔 불편 → 습관이 됨 → 주변도 바뀜 순서로 예시를 발전시킨다",
+   "숫자(fifty cents, twenty cups a month)로 효과를 보여 준다"
+  ]
+ },
+ {
+  "id": "op-074",
+  "topic": "환경",
+  "question": "Which do you think is a better way to teach children about protecting the environment, lessons in the classroom or hands-on activities such as planting trees? Give specific reasons and examples to support your opinion.",
+  "question_ko": "아이들에게 환경 보호를 가르치는 더 좋은 방법은 교실 수업과 나무 심기 같은 직접 체험 활동 중 어느 쪽이라고 생각합니까? 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 직접 체험 활동",
+   "이유 1: 직접 해 보면 오래 기억함",
+   "예시: 초등학교 때 하천 쓰레기 줍기 — 비닐·캔 수십 개, 지금도 분리수거 철저",
+   "이유 2: 재미있어서 스스로 관심을 가짐",
+   "마무리: 교실 수업은 기초, 체험이 더 효과적"
+  ],
+  "sample": "I think hands-on activities are a better way to teach children about the environment. First, children remember things much longer when they do them themselves. For example, when I was in elementary school, my class cleaned up a small river near our school. We found so many plastic bags, cans, and bottles. I was shocked, and I still remember that day clearly. Since then, I have always separated my recycling carefully. I don't remember any of my environment classes, but I remember the river. Second, activities like planting trees are fun, so children become interested on their own. For these reasons, I think hands-on activities are better.",
+  "sample_ko": "저는 직접 체험 활동이 아이들에게 환경을 가르치는 더 좋은 방법이라고 생각합니다. 첫째, 아이들은 직접 해 볼 때 훨씬 오래 기억합니다. 예를 들어 초등학생 때 우리 반은 학교 근처 작은 하천을 청소했습니다. 비닐봉지, 캔, 병이 정말 많이 나왔습니다. 충격을 받았고, 그날을 지금도 생생히 기억합니다. 그 후로 저는 늘 분리수거를 꼼꼼히 합니다. 환경 수업은 하나도 기억나지 않지만 그 하천은 기억합니다. 둘째, 나무 심기 같은 활동은 재미있어서 아이들이 스스로 관심을 갖게 됩니다. 이런 이유로 저는 체험 활동이 더 낫다고 생각합니다.",
+  "sample_adv": "In my opinion, hands-on activities are a far more effective way to teach children about the environment. Classroom lessons can explain the facts, but real experiences create feelings, and feelings are what change behavior. I can still recall a perfect example from my own childhood. When I was about ten, my teacher took our class to clean up a small stream behind our school. We expected it to be easy, but within an hour, we had filled more than ten large bags with plastic wrappers, cans, and even an old bicycle tire. I remember standing there feeling shocked and a little angry that people would treat nature like that. Honestly, I can't remember a single thing from my environmental science textbook, but that afternoon stayed with me. Even now, I sort my recycling carefully and pick up litter when I go hiking. Another advantage is that activities like planting trees or growing vegetables are fun, so children become curious and want to learn more on their own. That's why I believe experience is the best teacher.",
+  "sample_adv_ko": "제 생각에 직접 체험 활동이 아이들에게 환경을 가르치는 훨씬 효과적인 방법입니다. 교실 수업은 사실을 설명할 수 있지만, 실제 경험은 감정을 만들고, 행동을 바꾸는 것은 바로 감정입니다. 저는 제 어린 시절의 완벽한 예를 아직도 기억합니다. 열 살쯤 되었을 때 선생님이 우리 반을 데리고 학교 뒤 작은 개울을 청소하러 갔습니다. 쉬울 줄 알았는데 한 시간도 안 되어 비닐 포장지, 캔, 심지어 낡은 자전거 타이어까지 큰 봉투 열 개 이상을 채웠습니다. 사람들이 자연을 이렇게 대한다는 것에 충격을 받고 조금 화가 나서 그 자리에 서 있던 것이 기억납니다. 솔직히 환경 과학 교과서 내용은 하나도 기억나지 않지만, 그날 오후는 제 마음에 남았습니다. 지금도 저는 분리수거를 꼼꼼히 하고 등산할 때 쓰레기를 줍습니다. 또 다른 장점은 나무 심기나 채소 기르기 같은 활동이 재미있어서 아이들이 호기심을 갖고 스스로 더 배우고 싶어 한다는 것입니다. 그래서 저는 경험이 최고의 선생님이라고 믿습니다.",
+  "tips": [
+   "'Lessons explain facts, but experiences create feelings' 같은 대조 문장으로 이유를 압축한다",
+   "어릴 때 경험 → 지금의 습관으로 연결하면 효과가 오래간다는 증거가 된다",
+   "마무리 속담형 문장: 'Experience is the best teacher.'"
+  ]
+ },
+ {
+  "id": "op-075",
+  "topic": "환경",
+  "question": "What are the advantages and disadvantages of driving an electric car instead of a gasoline car? Give specific reasons and examples to support your opinion.",
+  "question_ko": "휘발유 차 대신 전기차를 타는 것의 장점과 단점은 무엇입니까? 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 장점이 크지만 충전이 문제",
+   "장점: 배기가스 없음, 연료비 절약",
+   "예시: 삼촌 전기차 — 한 달 연료비 절반 이하, 조용함",
+   "단점: 충전소 부족·충전 시간 — 명절 고속도로 휴게소에서 40분 대기",
+   "마무리: 충전 시설이 늘면 더 좋아질 것"
+  ],
+  "sample": "Driving an electric car has both advantages and disadvantages. The biggest advantage is that it is better for the environment and cheaper to run. For example, my uncle bought an electric car two years ago. He says he now spends less than half of what he used to spend on gas every month. The car is also very quiet. However, there is one big disadvantage, and that is charging. Last holiday, our family drove to my grandmother's house in his car. At a highway rest area, we had to wait forty minutes for a charger because many people were waiting. So I think electric cars are great, but we need more charging stations.",
+  "sample_ko": "전기차를 타는 것에는 장점과 단점이 모두 있습니다. 가장 큰 장점은 환경에 더 좋고 유지비가 싸다는 것입니다. 예를 들어 제 삼촌은 2년 전에 전기차를 샀습니다. 지금은 매달 예전에 기름값으로 쓰던 돈의 절반도 안 쓴다고 하십니다. 차도 아주 조용합니다. 하지만 큰 단점이 하나 있는데, 바로 충전입니다. 지난 명절에 우리 가족은 삼촌 차로 할머니 댁에 갔습니다. 고속도로 휴게소에서 기다리는 사람이 많아서 충전기를 40분이나 기다려야 했습니다. 그래서 저는 전기차가 훌륭하지만 충전소가 더 많이 필요하다고 생각합니다.",
+  "sample_adv": "Electric cars offer some impressive advantages, but in my opinion, they still have one major weakness that people should think about before buying one. On the positive side, they don't produce any exhaust, so they help reduce air pollution in cities, and they're much cheaper to run. My uncle switched to an electric car about two years ago, and he told me his monthly fuel cost dropped to less than half of what he used to pay for gasoline. He also loves how quiet and smooth it is, especially in traffic. On the other hand, charging can be a real headache, especially on long trips. Last Lunar New Year, our family drove to my grandmother's house in his car. When we stopped at a highway rest area, every charger was taken, and we waited about forty minutes before we could even plug in. Some people in line looked really frustrated. So overall, I think electric cars are the right direction, but the charging network needs to grow much faster.",
+  "sample_adv_ko": "전기차는 인상적인 장점이 있지만, 제 생각에는 사기 전에 고려해야 할 큰 약점이 아직 하나 있습니다. 좋은 점은 배기가스가 전혀 나오지 않아 도시의 대기 오염을 줄이는 데 도움이 되고, 유지비가 훨씬 싸다는 것입니다. 제 삼촌은 2년쯤 전에 전기차로 바꾸셨는데, 한 달 연료비가 예전 휘발유값의 절반 이하로 떨어졌다고 하셨습니다. 특히 막히는 길에서 아주 조용하고 부드럽게 달리는 것도 좋아하십니다. 반면 충전은 특히 장거리 여행에서 정말 골칫거리가 될 수 있습니다. 지난 설날에 우리 가족은 삼촌 차로 할머니 댁에 갔습니다. 고속도로 휴게소에 들렀을 때 충전기가 모두 사용 중이어서, 충전기를 꽂기까지 40분 정도를 기다렸습니다. 줄을 선 몇몇 사람은 정말 답답해 보였습니다. 그래서 전반적으로 저는 전기차가 옳은 방향이지만 충전망이 훨씬 빨리 늘어나야 한다고 생각합니다.",
+  "tips": [
+   "장점과 단점 각각 하나씩 구체적 사례(연료비 절반, 휴게소 40분)를 붙인다",
+   "'a real headache' 는 단점을 말할 때 쓰기 좋은 구어 표현",
+   "마무리: 'A is the right direction, but B needs to …' 로 균형 잡힌 결론"
+  ]
+ },
+ {
+  "id": "op-076",
+  "topic": "환경",
+  "question": "What is the most important thing a city can do to protect the environment: planting more trees, improving the recycling system, or building more bicycle lanes? Give specific reasons and examples to support your opinion.",
+  "question_ko": "도시가 환경을 보호하기 위해 할 수 있는 가장 중요한 일은 무엇입니까: 나무를 더 심기, 재활용 체계 개선, 자전거 도로 확충? 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 자전거 도로 확충",
+   "이유 1: 차 이용이 줄어 공기 오염·교통 체증 감소",
+   "예시: 우리 동네에 자전거 도로 생긴 뒤 버스 대신 자전거 출근 20분",
+   "이유 2: 시민 건강에도 좋음",
+   "마무리: 그래서 자전거 도로가 가장 중요"
+  ],
+  "sample": "I think building more bicycle lanes is the most important thing a city can do. First, when there are safe bike lanes, more people ride bikes instead of driving. This reduces air pollution and traffic. For example, two years ago my city built a bike lane along the river near my apartment. Before that, I took a crowded bus to work. The roads felt too dangerous for biking. Now I ride my bike to the office in twenty minutes. Many of my neighbors do the same thing. Second, cycling is good for people's health. I feel much healthier since I started riding to work. So I believe bike lanes are the best choice.",
+  "sample_ko": "저는 자전거 도로를 더 만드는 것이 도시가 할 수 있는 가장 중요한 일이라고 생각합니다. 첫째, 안전한 자전거 도로가 있으면 더 많은 사람이 차 대신 자전거를 탑니다. 이것은 대기 오염과 교통 체증을 줄여 줍니다. 예를 들어 2년 전 우리 시는 제 아파트 근처 강을 따라 자전거 도로를 만들었습니다. 그전에는 붐비는 버스를 타고 출근했습니다. 도로가 자전거를 타기에 너무 위험하게 느껴졌습니다. 지금은 자전거로 20분 만에 회사에 갑니다. 많은 이웃도 똑같이 합니다. 둘째, 자전거 타기는 사람들의 건강에 좋습니다. 자전거로 출근하기 시작한 뒤로 훨씬 건강해진 느낌입니다. 그래서 저는 자전거 도로가 최선의 선택이라고 생각합니다.",
+  "sample_adv": "All three are helpful, but I believe building more bicycle lanes would have the greatest impact. Trees and recycling are important, but they don't deal with one of the biggest sources of pollution in cities, which is car traffic. Safe bike lanes give people a real alternative to driving. I've seen this happen in my own neighborhood. Until about two years ago, there was no safe way to cycle to the business district, so I squeezed onto a packed bus every morning or sometimes took a taxi when I was late. Then the city built a protected bike lane along the river, separated from the cars by a low wall. I decided to give it a try, and now I ride to work almost every day. It takes just twenty minutes, and it's honestly the most relaxing part of my day. I've noticed that the bike racks near my office are full now, which was never the case before. On top of that, cycling keeps people healthy. So in my view, bike lanes solve several problems at once.",
+  "sample_adv_ko": "세 가지 모두 도움이 되지만, 저는 자전거 도로를 더 만드는 것이 가장 큰 효과를 낼 것이라고 생각합니다. 나무와 재활용도 중요하지만, 도시 오염의 가장 큰 원인 중 하나인 자동차 교통은 해결하지 못합니다. 안전한 자전거 도로는 사람들에게 운전을 대신할 진짜 대안을 줍니다. 저는 우리 동네에서 이런 일이 일어나는 것을 보았습니다. 2년쯤 전까지는 업무 지구까지 자전거로 안전하게 갈 방법이 없어서, 매일 아침 꽉 찬 버스에 몸을 밀어 넣거나 늦을 때는 가끔 택시를 탔습니다. 그러다 시에서 강을 따라 낮은 벽으로 차와 분리된 자전거 전용 도로를 만들었습니다. 한번 타 보기로 했고, 지금은 거의 매일 자전거로 출근합니다. 20분밖에 걸리지 않고, 솔직히 하루 중 가장 여유로운 시간입니다. 회사 근처 자전거 거치대가 이제 꽉 차 있는 것도 보았는데, 예전에는 전혀 그렇지 않았습니다. 게다가 자전거 타기는 사람들을 건강하게 해 줍니다. 그래서 제 생각에 자전거 도로는 여러 문제를 한 번에 해결합니다.",
+  "tips": [
+   "다른 두 선택지의 한계를 한 문장으로 짚으면(they don't deal with car traffic) 선택 이유가 분명해진다",
+   "주변 변화(자전거 거치대가 꽉 참)를 관찰한 문장을 넣으면 개인 예시가 사회적 근거로 확장된다",
+   "마무리: 'A solves several problems at once.'"
+  ]
+ },
+ {
+  "id": "op-077",
+  "topic": "지역 사회",
+  "question": "Do you agree or disagree with the following statement? Neighborhoods should hold community events, such as festivals or outdoor markets, on a regular basis. Give specific reasons and examples to support your opinion.",
+  "question_ko": "다음 말에 동의합니까, 동의하지 않습니까? 동네에서는 축제나 야외 장터 같은 지역 행사를 정기적으로 열어야 한다. 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 동의",
+   "이유 1: 이웃끼리 알게 되어 동네가 따뜻해짐",
+   "예시: 매달 첫 토요일 아파트 단지 장터 — 옆집 부부와 친해져 서로 택배 받아 줌",
+   "이유 2: 동네 가게·주민 판매자에게 도움",
+   "마무리: 그래서 정기 행사 찬성"
+  ],
+  "sample": "I agree that neighborhoods should hold community events regularly. First, these events help neighbors get to know each other. For example, my apartment complex has a small outdoor market on the first Saturday of every month. People sell homemade food, plants, and used books. At the market last spring, I met the couple who live next door. Before that, we only said hello in the elevator. Now we are good friends, and we even pick up each other's packages. Second, these events help local businesses and residents who sell things. They can make some extra money. For these reasons, I think regular community events are a great idea.",
+  "sample_ko": "저는 동네에서 지역 행사를 정기적으로 열어야 한다는 데 동의합니다. 첫째, 이런 행사는 이웃들이 서로 알게 도와줍니다. 예를 들어 우리 아파트 단지에서는 매달 첫째 토요일에 작은 야외 장터가 열립니다. 사람들이 집에서 만든 음식, 화분, 헌책을 팝니다. 지난봄 장터에서 저는 옆집에 사는 부부를 만났습니다. 그전에는 엘리베이터에서 인사만 했습니다. 지금은 좋은 친구가 되어 서로 택배를 받아 주기도 합니다. 둘째, 이런 행사는 동네 가게와 물건을 파는 주민들에게 도움이 됩니다. 돈을 조금 더 벌 수 있습니다. 이런 이유로 저는 정기적인 지역 행사가 아주 좋은 생각이라고 생각합니다.",
+  "sample_adv": "I strongly agree with this statement. These days, many people live in the same building for years without ever learning their neighbors' names, and regular community events are one of the easiest ways to change that. My own apartment complex is a good example. About two years ago, the residents' association started an outdoor market on the first Saturday of every month. Neighbors set up small tables to sell homemade kimchi, baked goods, plants, and secondhand books, and there's usually some live music from local students. At one of these markets, I started chatting with the couple who live right next door. Until then, we had only nodded at each other in the elevator. It turned out we had a lot in common, and now we have dinner together every few weeks and look after each other's packages and plants when someone travels. Besides building friendships, these events also support small local businesses and give residents a chance to earn a little extra income. So I think every neighborhood would benefit from regular events like this.",
+  "sample_adv_ko": "저는 이 말에 강하게 동의합니다. 요즘 많은 사람이 같은 건물에 몇 년씩 살면서도 이웃의 이름조차 모르는데, 정기적인 지역 행사는 그것을 바꾸는 가장 쉬운 방법 중 하나입니다. 우리 아파트 단지가 좋은 예입니다. 2년쯤 전에 입주민 모임에서 매달 첫째 토요일에 야외 장터를 열기 시작했습니다. 이웃들이 작은 탁자를 펴고 직접 담근 김치, 빵과 과자, 화분, 헌책을 팔고, 보통 동네 학생들의 라이브 음악도 있습니다. 한 장터에서 저는 바로 옆집에 사는 부부와 이야기를 나누기 시작했습니다. 그때까지 우리는 엘리베이터에서 고개만 끄덕이는 사이였습니다. 알고 보니 공통점이 많았고, 지금은 몇 주에 한 번 함께 저녁을 먹고 누가 여행을 가면 서로 택배와 화분을 봐 줍니다. 우정을 쌓는 것 외에도 이런 행사는 작은 동네 가게를 돕고 주민들에게 용돈 벌이 기회도 줍니다. 그래서 저는 모든 동네가 이런 정기 행사로 득을 볼 것이라고 생각합니다.",
+  "tips": [
+   "'Until then, we had only nodded at each other in the elevator.' 처럼 전과 후 관계 변화를 보여 준다",
+   "장터 묘사는 파는 물건 3~4가지 나열로 생생하게",
+   "두 번째 이유(동네 경제)는 짧게 덧붙이고 마무리한다"
+  ]
+ },
+ {
+  "id": "op-078",
+  "topic": "지역 사회",
+  "question": "Which do you prefer to have in your neighborhood, small locally owned shops or large chain stores? Give specific reasons and examples to support your opinion.",
+  "question_ko": "동네에 작은 개인 상점과 대형 체인점 중 어느 쪽이 있는 것을 선호합니까? 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 작은 동네 가게",
+   "이유 1: 주인이 손님을 기억하고 친절한 서비스",
+   "예시: 동네 빵집 사장님 — 내 취향 기억, 비 오는 날 우산 빌려줌",
+   "이유 2: 번 돈이 동네에 남아 지역 경제에 도움, 동네만의 개성",
+   "마무리: 그래서 작은 가게 선호"
+  ],
+  "sample": "I prefer having small, locally owned shops in my neighborhood. First, they give more personal and friendly service. For example, there is a small bakery near my house. The owner remembers that I like whole wheat bread, so she sometimes saves one for me. Once, it suddenly started raining when I was leaving, and she lent me her umbrella. A big chain store would never do that. Second, when we shop at local stores, the money stays in our community. It helps our neighbors make a living. Also, small shops make a neighborhood special, while chain stores look the same everywhere. For these reasons, I prefer small local shops.",
+  "sample_ko": "저는 동네에 작은 개인 상점이 있는 것을 선호합니다. 첫째, 더 개인적이고 친절한 서비스를 해 줍니다. 예를 들어 우리 집 근처에 작은 빵집이 있습니다. 사장님은 제가 통밀빵을 좋아한다는 것을 기억해서 가끔 하나를 남겨 두십니다. 한번은 제가 나가려는데 갑자기 비가 와서 사장님이 우산을 빌려주셨습니다. 대형 체인점이라면 절대 그러지 않았을 겁니다. 둘째, 동네 가게에서 물건을 사면 그 돈이 우리 지역에 남습니다. 이웃들이 생계를 꾸리는 데 도움이 됩니다. 또 작은 가게들은 동네를 특별하게 만들지만 체인점은 어디나 똑같아 보입니다. 이런 이유로 저는 작은 동네 가게를 선호합니다.",
+  "sample_adv": "Although chain stores are often a little cheaper, I much prefer having small, locally owned shops in my neighborhood. The biggest reason is the personal connection. At a chain store, employees change often and treat every customer the same way, but local shop owners get to know you. There's a family run bakery two blocks from my apartment that I've been going to for about four years. The owner knows that I always buy whole wheat bread on Saturday mornings, so when it's almost sold out, she sets one aside for me. Last summer, a sudden storm started just as I was leaving, and she insisted that I take her umbrella, saying I could bring it back whenever. Small moments like that make me feel like I truly belong to the neighborhood. Another reason is that money spent at local shops tends to stay in the community, supporting families who live there. Small shops also give a neighborhood its own character, while chain stores look exactly the same in every city. That's why I'd choose local shops every time.",
+  "sample_adv_ko": "체인점이 대개 조금 더 싸긴 하지만, 저는 동네에 작은 개인 상점이 있는 것을 훨씬 선호합니다. 가장 큰 이유는 사람 사이의 유대감입니다. 체인점에서는 직원이 자주 바뀌고 모든 손님을 똑같이 대하지만, 동네 가게 주인은 손님을 알아 갑니다. 우리 아파트에서 두 블록 떨어진 곳에 가족이 운영하는 빵집이 있는데 4년쯤 다니고 있습니다. 사장님은 제가 토요일 아침마다 늘 통밀빵을 산다는 것을 알아서, 거의 다 팔리면 하나를 따로 빼 두십니다. 지난여름에는 제가 나서려는 순간 갑자기 폭우가 쏟아졌는데, 사장님이 아무 때나 돌려주면 된다며 우산을 꼭 가져가라고 하셨습니다. 그런 작은 순간들 덕분에 저는 정말 이 동네의 일원이라고 느낍니다. 또 다른 이유는 동네 가게에서 쓴 돈은 지역에 남아 그곳에 사는 가족들을 돕는 경향이 있다는 것입니다. 작은 가게들은 동네에 고유한 개성도 주지만, 체인점은 어느 도시에서나 똑같아 보입니다. 그래서 저는 언제나 동네 가게를 고르겠습니다.",
+  "tips": [
+   "'Although A is cheaper, I prefer B' 로 상대 장점을 인정하며 시작한다",
+   "단골 가게의 구체적 장면(빵을 남겨 둠, 우산을 빌려줌)이 '친절한 서비스'를 증명한다",
+   "'feel like I truly belong to the neighborhood' 는 지역 사회 주제에 두루 쓸 수 있다"
+  ]
+ },
+ {
+  "id": "op-079",
+  "topic": "지역 사회",
+  "question": "What are the advantages of community centers offering free classes, such as cooking, computer skills, or exercise, to local residents? Give specific reasons and examples to support your opinion.",
+  "question_ko": "주민 센터가 요리, 컴퓨터, 운동 같은 무료 강좌를 지역 주민에게 제공하는 것의 장점은 무엇입니까? 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 장점이 많음",
+   "장점 1: 돈 걱정 없이 새로운 기술을 배움",
+   "예시: 어머니 무료 스마트폰 교실 — 영상 통화·온라인 장보기 스스로",
+   "장점 2: 비슷한 동네 사람들과 친구가 됨",
+   "마무리: 그래서 무료 강좌는 좋은 투자"
+  ],
+  "sample": "There are several advantages to community centers offering free classes. First, people can learn new skills without worrying about money. For example, my mother is in her sixties, and she wasn't good with smartphones. She often asked me for help, even for simple things. Last year, she took a free smartphone class at our community center. Now she can make video calls, send photos, and even order groceries online by herself. She is very proud of it. Second, these classes help neighbors make friends. My mother met several women in the class, and now they go walking together every week. For these reasons, I think free classes are very valuable.",
+  "sample_ko": "주민 센터가 무료 강좌를 제공하는 것에는 여러 장점이 있습니다. 첫째, 사람들이 돈 걱정 없이 새로운 기술을 배울 수 있습니다. 예를 들어 제 어머니는 60대이신데 스마트폰을 잘 다루지 못하셨습니다. 간단한 것도 자주 저에게 도움을 청하셨습니다. 작년에 어머니는 주민 센터의 무료 스마트폰 강좌를 들으셨습니다. 이제는 혼자서 영상 통화도 하고, 사진도 보내고, 온라인으로 장도 보십니다. 아주 뿌듯해하십니다. 둘째, 이런 강좌는 이웃들이 친구를 사귀게 도와줍니다. 어머니는 수업에서 여러 분을 만나셨고, 지금은 매주 함께 산책을 하십니다. 이런 이유로 저는 무료 강좌가 매우 가치 있다고 생각합니다.",
+  "sample_adv": "I think free classes at community centers offer some wonderful advantages, especially for people who might not be able to afford private lessons. The first advantage is that they give everyone an equal chance to learn practical skills. My mother is a great example. She's in her sixties, and until recently, she found her smartphone really confusing. Every time she wanted to send a photo or book a doctor's appointment online, she had to call me, and sometimes she just gave up. Last year, she signed up for a free eight week smartphone class at our local community center. The instructor was patient, and the class was small, so she could ask as many questions as she wanted. Now she video calls her grandchildren, orders groceries online, and even helps her friends with their phones. The second advantage is social connection. Through that class, my mother met a group of women from the neighborhood, and they now meet every Wednesday for a long walk and coffee. So these classes improve both skills and relationships.",
+  "sample_adv_ko": "저는 주민 센터의 무료 강좌가 특히 개인 레슨을 받을 형편이 안 되는 사람들에게 멋진 장점을 준다고 생각합니다. 첫 번째 장점은 모든 사람에게 실용적인 기술을 배울 공평한 기회를 준다는 것입니다. 제 어머니가 좋은 예입니다. 어머니는 60대이신데, 최근까지 스마트폰을 정말 어려워하셨습니다. 사진을 보내거나 온라인으로 병원 예약을 하고 싶을 때마다 저에게 전화하셔야 했고, 가끔은 그냥 포기하셨습니다. 작년에 어머니는 동네 주민 센터의 8주짜리 무료 스마트폰 강좌에 등록하셨습니다. 강사는 참을성이 있었고 수업 인원이 적어서 원하는 만큼 질문할 수 있었습니다. 이제 어머니는 손주들과 영상 통화를 하고, 온라인으로 장을 보고, 친구분들의 휴대폰 문제까지 도와주십니다. 두 번째 장점은 사회적 연결입니다. 그 수업을 통해 어머니는 동네 여성분들을 알게 되셨고, 지금은 매주 수요일에 만나 오래 걷고 커피를 마십니다. 그래서 이런 강좌는 기술과 관계를 모두 좋게 만들어 줍니다.",
+  "tips": [
+   "가족 예시는 '전에는 못 함 → 수업 → 지금은 혼자 함' 구조로 짧고 분명하게",
+   "할 수 있게 된 일을 세 가지 나열(video call, order groceries, help friends)하면 효과가 잘 보인다",
+   "마무리에서 두 장점을 한 문장으로 묶는다: 'both skills and relationships'"
+  ]
+ },
+ {
+  "id": "op-080",
+  "topic": "지역 사회",
+  "question": "What is the most important thing to improve in your local area: public transportation, parking spaces, or sidewalks and street lights? Give specific reasons and examples to support your opinion.",
+  "question_ko": "당신이 사는 지역에서 가장 개선해야 할 것은 무엇입니까: 대중교통, 주차 공간, 인도와 가로등? 구체적인 이유와 예를 들어 의견을 뒷받침하세요.",
+  "outline": [
+   "의견: 인도와 가로등",
+   "이유 1: 걷는 사람 모두의 안전 문제",
+   "예시: 집 가는 골목 가로등 고장·인도 없음 — 밤에 차에 치일 뻔함",
+   "이유 2: 밝고 넓은 길이면 더 많이 걷고 동네 가게도 활기",
+   "마무리: 그래서 인도·가로등이 가장 시급"
+  ],
+  "sample": "I think sidewalks and street lights are the most important things to improve in my area. First, it is a safety issue for everyone who walks. For example, the street between the subway station and my apartment has no sidewalk, and two of the street lights have been broken for months. Last winter, I was walking home at night, and a car almost hit me because the driver couldn't see me. I was really scared. Now I always take a longer way home. Second, if streets are bright and safe, more people will walk, and local shops will be busier. So I believe sidewalks and lights should come first.",
+  "sample_ko": "저는 우리 지역에서 가장 개선해야 할 것이 인도와 가로등이라고 생각합니다. 첫째, 걷는 모든 사람의 안전 문제입니다. 예를 들어 지하철역과 우리 아파트 사이 길에는 인도가 없고, 가로등 두 개가 몇 달째 고장 나 있습니다. 지난겨울 밤에 집으로 걸어가는데, 운전자가 저를 보지 못해서 차에 치일 뻔했습니다. 정말 무서웠습니다. 지금은 늘 더 먼 길로 돌아갑니다. 둘째, 길이 밝고 안전하면 더 많은 사람이 걷게 되고 동네 가게도 더 붐빌 것입니다. 그래서 저는 인도와 가로등이 우선이어야 한다고 생각합니다.",
+  "sample_adv": "In my local area, I believe improving sidewalks and street lights should be the top priority. Public transportation and parking are important, but they're mostly about convenience, while sidewalks and lighting are about basic safety for everyone, including children and older people. I have a personal reason for feeling strongly about this. The shortest route from the subway station to my apartment is a narrow road with no sidewalk at all, and two of the street lights there have been broken since last summer. One night last winter, I was walking home after working late, wearing a dark coat. A car turned the corner quickly, and the driver clearly didn't see me until the last second. I had to jump to the side, and my heart was pounding for several minutes. Since then, I've been taking a much longer route that's better lit. Beyond safety, bright and comfortable sidewalks encourage people to walk more, which brings more customers to local shops and cafes. That's why I think sidewalks and lights deserve attention first.",
+  "sample_adv_ko": "우리 지역에서는 인도와 가로등을 개선하는 것이 최우선이어야 한다고 생각합니다. 대중교통과 주차도 중요하지만 주로 편리함의 문제인 반면, 인도와 조명은 아이들과 어르신을 포함한 모든 사람의 기본적인 안전 문제입니다. 제가 이 문제를 강하게 느끼는 데는 개인적인 이유가 있습니다. 지하철역에서 우리 아파트로 가는 가장 짧은 길은 인도가 아예 없는 좁은 도로인데, 그곳 가로등 두 개가 지난여름부터 고장 나 있습니다. 지난겨울 어느 밤, 야근을 하고 어두운 코트를 입은 채 집으로 걸어가고 있었습니다. 차 한 대가 빠르게 모퉁이를 돌았는데, 운전자는 분명 마지막 순간까지 저를 보지 못했습니다. 저는 옆으로 뛰어 피해야 했고, 몇 분 동안 심장이 쿵쾅거렸습니다. 그 뒤로 저는 더 밝은 훨씬 먼 길로 다닙니다. 안전 말고도, 밝고 편안한 인도는 사람들이 더 많이 걷게 해 주어 동네 가게와 카페에 손님을 더 데려옵니다. 그래서 저는 인도와 가로등에 먼저 관심을 기울여야 한다고 생각합니다.",
+  "tips": [
+   "'A and B are about convenience, while C is about safety' 로 선택지들을 한 번에 비교한다",
+   "위험했던 순간은 시간·장소·옷차림까지 구체적으로 말하면 긴박감이 산다",
+   "감정 표현: my heart was pounding, I was really scared"
+  ]
+ }
+]

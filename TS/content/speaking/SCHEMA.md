@@ -98,8 +98,8 @@ UTF-8 JSON 배열. 검사: `python tools/validate_speaking.py` (TS 폴더에서)
 ## 오픽 `content/speaking/opic/`
 
 주제 key 는 `core/speaking.py` 의 `OPIC_TOPICS` 에 있는 것만 쓴다.
-- 설문 주제: home movie concert park beach cafe shopping tv music cooking jogging walking gym bike travel_dom travel_abroad staycation
-- 돌발 주제: recycling bank hotel phone tech transport furniture weather holiday health food friends appointment fashion housework
+- 설문 주제: home movie concert park beach cafe shopping tv games music cooking pets jogging walking gym bike swimming hiking travel_dom travel_abroad staycation
+- 돌발 주제: recycling bank hotel phone tech transport furniture weather holiday health food friends appointment fashion housework neighborhood library geography industry
 - 자기소개: intro
 
 ### questions.json · questions_*.json — 단일 문항

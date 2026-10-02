@@ -1,0 +1,2577 @@
+[
+{
+ "id": "ri-026",
+ "doc_type": "행사 일정표",
+ "voice": "female",
+ "info": {
+  "title": "Harborview Book Fair",
+  "subtitle": "Saturday, October 10 · Harborview Library Plaza · Admission: $5, children free",
+  "rows": [
+   [
+    "10:00 – 10:30 A.M.",
+    "Welcome Speech",
+    "Library Director Helen Ward"
+   ],
+   [
+    "10:30 – 11:30 A.M.",
+    "Author Talk: Writing Mystery Novels",
+    "Victor Hale"
+   ],
+   [
+    "11:30 A.M. – 12:30 P.M.",
+    "Children's Story Time",
+    "Reading Room"
+   ],
+   [
+    "12:30 – 1:30 P.M.",
+    "Lunch Break",
+    "Café, 1st Floor"
+   ],
+   [
+    "1:30 – 2:30 P.M.",
+    "Author Talk: Travel Writing",
+    "Olivia Reyes"
+   ],
+   [
+    "2:30 – 4:00 P.M.",
+    "Book Signing",
+    "Victor Hale and Olivia Reyes"
+   ],
+   [
+    "4:00 – 5:00 P.M.",
+    "Used Book Sale",
+    "Main Lobby"
+   ]
+  ],
+  "notes": [
+   "All author talks are held in the Lecture Hall."
+  ]
+ },
+ "intro": "Hi, this is Grace. I'm planning to visit the book fair with my kids this weekend. Could you answer a few questions for me?",
+ "questions": [
+  "What date is the book fair, and how much is admission?",
+  "I heard the book signing is in the morning. Is that right?",
+  "I enjoy hearing writers speak. Could you tell me about all the author talks?"
+ ],
+ "questions_ko": [
+  "도서 박람회는 며칠이고, 입장료는 얼마인가요?",
+  "사인회가 오전에 있다고 들었는데, 맞나요?",
+  "저는 작가들의 이야기를 듣는 걸 좋아해요. 작가 강연을 모두 알려 주시겠어요?"
+ ],
+ "samples": [
+  "The book fair is on Saturday, October 10th, at the Harborview Library Plaza. Admission is five dollars, but children get in for free.",
+  "Actually, that's not correct. The book signing is in the afternoon, from 2:30 to 4 P.M. Both Victor Hale and Olivia Reyes will sign their books.",
+  "Sure. There are two author talks, and both are in the Lecture Hall. First, from 10:30 to 11:30 A.M., Victor Hale will talk about writing mystery novels. Then, from 1:30 to 2:30 P.M., Olivia Reyes will give a talk on travel writing."
+ ],
+ "samples_ko": [
+  "도서 박람회는 10월 10일 토요일에 하버뷰 도서관 광장에서 열립니다. 입장료는 5달러지만, 어린이는 무료입니다.",
+  "사실 그건 맞지 않아요. 사인회는 오후 2시 30분부터 4시까지입니다. 빅터 헤일 씨와 올리비아 레예스 씨 두 분 모두 책에 사인해 줍니다.",
+  "네. 작가 강연은 두 개이고, 둘 다 강연장에서 열립니다. 먼저 오전 10시 30분부터 11시 30분까지 빅터 헤일 씨가 추리 소설 쓰기에 대해 이야기합니다. 그다음 오후 1시 30분부터 2시 30분까지 올리비아 레예스 씨가 여행 글쓰기 강연을 합니다."
+ ],
+ "tips": [
+  "입장료처럼 조건이 붙은 정보는 'but children get in for free' 처럼 예외까지 함께 말한다",
+  "Q10 은 표 아래 notes(장소)까지 한 문장 덧붙이면 정보가 풍부해진다"
+ ]
+},
+
+{
+ "id": "ri-027",
+ "doc_type": "행사 일정표",
+ "voice": "male",
+ "info": {
+  "title": "Northgate Foods Company Picnic",
+  "subtitle": "Sunday, June 21 · Lakeside Park, Pavilion 2 · Families welcome",
+  "rows": [
+   [
+    "11:00 A.M.",
+    "Welcome and Team Photo",
+    "Pavilion 2"
+   ],
+   [
+    "11:30 A.M.",
+    "Barbecue Lunch",
+    "Picnic Area"
+   ],
+   [
+    "1:00 P.M.",
+    "Soccer Game",
+    "Field A"
+   ],
+   [
+    "1:00 P.M.",
+    "Kids' Craft Corner",
+    "Pavilion 2"
+   ],
+   [
+    "2:30 P.M.",
+    "Volleyball Tournament",
+    "Sand Court"
+   ],
+   [
+    "3:30 P.M.",
+    "Prize Drawing",
+    "Pavilion 2"
+   ]
+  ],
+  "notes": [
+   "The boat race has been cancelled because of dock repairs.",
+   "Free parking in Lot C."
+  ]
+ },
+ "intro": "Hello, this is Ryan from the accounting team. I'm bringing my family to the company picnic on Sunday. Can I ask you some questions?",
+ "questions": [
+  "Where is the picnic being held, and what time does it start?",
+  "My son is excited about the boat race. It's still on the schedule, right?",
+  "I'd like to play some sports. Could you tell me about all the sports events?"
+ ],
+ "questions_ko": [
+  "야유회는 어디에서 열리고, 몇 시에 시작하나요?",
+  "아들이 보트 경주를 기대하고 있어요. 아직 일정에 있는 거죠?",
+  "운동을 좀 하고 싶어요. 스포츠 행사를 모두 알려 주시겠어요?"
+ ],
+ "samples": [
+  "The picnic is at Lakeside Park, in Pavilion 2. It starts at 11 A.M. on Sunday, June 21st, with a welcome and a team photo.",
+  "Actually, I'm sorry, but the boat race has been cancelled because of dock repairs. But there's a kids' craft corner at 1 P.M. in Pavilion 2, so your son can enjoy that.",
+  "Sure. There are two sports events. First, at 1 P.M., there's a soccer game on Field A. Then, at 2:30 P.M., there's a volleyball tournament at the Sand Court. So you can join both of them."
+ ],
+ "samples_ko": [
+  "야유회는 레이크사이드 공원 2번 정자에서 열립니다. 6월 21일 일요일 오전 11시에 환영 인사와 단체 사진으로 시작합니다.",
+  "사실 죄송하지만 보트 경주는 선착장 수리 때문에 취소되었어요. 하지만 오후 1시에 2번 정자에서 어린이 공작 코너가 있으니 아드님이 그걸 즐길 수 있을 거예요.",
+  "네. 스포츠 행사는 두 개입니다. 먼저 오후 1시에 A 운동장에서 축구 경기가 있습니다. 그다음 오후 2시 30분에 모래 코트에서 배구 대회가 있습니다. 그러니 둘 다 참가하실 수 있어요."
+ ],
+ "tips": [
+  "취소 소식은 'I'm sorry, but ... has been cancelled because of ...' 로 이유까지 말한다",
+  "취소 후에는 표에 있는 다른 행사를 대안으로 제시하면 자연스럽다"
+ ]
+},
+
+{
+ "id": "ri-028",
+ "doc_type": "행사 일정표",
+ "voice": "female",
+ "info": {
+  "title": "Career Day — Eastbrook Technical College",
+  "subtitle": "Thursday, March 26 · Student Center, Main Hall · Free for students and graduates",
+  "rows": [
+   [
+    "9:00 – 9:30 A.M.",
+    "Opening Remarks",
+    "Dean Robert Fields"
+   ],
+   [
+    "9:30 – 10:30 A.M.",
+    "Resume Writing Workshop",
+    "Room 104"
+   ],
+   [
+    "10:30 A.M. – 12:00 P.M.",
+    "Company Booths: IT and Engineering",
+    "Main Hall"
+   ],
+   [
+    "12:00 – 1:00 P.M.",
+    "Lunch",
+    "Student Cafeteria"
+   ],
+   [
+    "1:00 – 2:00 P.M.",
+    "Mock Interview Workshop",
+    "Room 104"
+   ],
+   [
+    "2:00 – 3:30 P.M.",
+    "Company Booths: Healthcare and Retail",
+    "Main Hall"
+   ],
+   [
+    "3:30 – 4:00 P.M.",
+    "Networking Session",
+    "Main Hall"
+   ]
+  ],
+  "notes": [
+   "Bring at least ten copies of your resume."
+  ]
+ },
+ "intro": "Hi, I'm Hannah. I'm graduating this spring, and I'd like to go to the career day. Can you help me with some information?",
+ "questions": [
+  "What day is the career day, and does it cost anything?",
+  "I heard the resume writing workshop is in the afternoon. Is that correct?",
+  "I want to meet as many companies as possible. Can you tell me about all the company booth sessions?"
+ ],
+ "questions_ko": [
+  "취업 박람회는 무슨 요일이고, 비용이 드나요?",
+  "이력서 작성 워크숍이 오후에 있다고 들었는데, 맞나요?",
+  "가능한 한 많은 회사를 만나고 싶어요. 기업 부스 시간을 모두 알려 주시겠어요?"
+ ],
+ "samples": [
+  "Career day is on Thursday, March 26th, in the Main Hall of the Student Center. It's free for students and graduates, so you don't have to pay anything.",
+  "Actually, that's not right. The resume writing workshop is in the morning, from 9:30 to 10:30 A.M., in Room 104. In the afternoon, there's a mock interview workshop instead.",
+  "Sure. There are two sessions with company booths, both in the Main Hall. First, from 10:30 A.M. to noon, IT and engineering companies will have booths. Then, from 2 to 3:30 P.M., healthcare and retail companies will be there. Don't forget to bring at least ten copies of your resume."
+ ],
+ "samples_ko": [
+  "취업 박람회는 3월 26일 목요일에 학생회관 대강당에서 열립니다. 재학생과 졸업생은 무료라서 비용을 내지 않으셔도 됩니다.",
+  "사실 그렇지 않아요. 이력서 작성 워크숍은 오전 9시 30분부터 10시 30분까지 104호에서 열립니다. 오후에는 대신 모의 면접 워크숍이 있어요.",
+  "네. 기업 부스 시간은 두 번이고, 둘 다 대강당에서 열립니다. 먼저 오전 10시 30분부터 정오까지 IT·공학 기업들이 부스를 엽니다. 그다음 오후 2시부터 3시 30분까지 의료·유통 기업들이 참여합니다. 이력서를 최소 10부 가져오는 것 잊지 마세요."
+ ],
+ "tips": [
+  "Q9 에서 '오전/오후'를 바로잡을 때는 정확한 시간과 장소를 함께 말한다",
+  "notes 의 준비물(이력서 10부)은 Q10 마지막에 'Don't forget to ...' 로 덧붙인다"
+ ]
+},
+
+{
+ "id": "ri-029",
+ "doc_type": "행사 일정표",
+ "voice": "male",
+ "info": {
+  "title": "Pinecrest Mall Grand Opening Week",
+  "subtitle": "Monday, November 2 – Sunday, November 8 · Pinecrest Mall, 200 Elm Road · Free admission",
+  "rows": [
+   [
+    "Mon, Nov 2",
+    "Ribbon Cutting Ceremony",
+    "10:00 A.M., Main Entrance"
+   ],
+   [
+    "Tue, Nov 3",
+    "Cooking Show with Chef Marco Bell",
+    "2:00 P.M., Food Court"
+   ],
+   [
+    "Wed, Nov 4",
+    "Fashion Show",
+    "6:00 P.M., Center Court"
+   ],
+   [
+    "Thu, Nov 5",
+    "Kids' Magic Show",
+    "4:00 P.M., Center Court"
+   ],
+   [
+    "Fri, Nov 6",
+    "Live Jazz Concert",
+    "7:00 P.M., Food Court"
+   ],
+   [
+    "Sat, Nov 7",
+    "Free Gift Card Drawing",
+    "3:00 P.M., Center Court"
+   ],
+   [
+    "Sun, Nov 8",
+    "Family Movie Night",
+    "6:30 P.M., Rooftop Garden"
+   ]
+  ],
+  "notes": [
+   "The first 100 shoppers each day receive a free tote bag."
+  ]
+ },
+ "intro": "Hi, this is Martin. I live near the new Pinecrest Mall, and I want to check out the grand opening events. Can I ask a few questions?",
+ "questions": [
+  "When does the grand opening week start, and what happens on the first day?",
+  "I heard the jazz concert is on Saturday night. Is that right?",
+  "I'm busy during the day, so I can only go in the evening. Which events are at six P.M. or later?"
+ ],
+ "questions_ko": [
+  "개장 주간은 언제 시작하고, 첫날에는 무엇이 있나요?",
+  "재즈 콘서트가 토요일 밤에 있다고 들었는데, 맞나요?",
+  "낮에는 바빠서 저녁에만 갈 수 있어요. 오후 6시 이후 행사는 무엇인가요?"
+ ],
+ "samples": [
+  "The grand opening week starts on Monday, November 2nd. On the first day, there's a ribbon cutting ceremony at 10 A.M. at the main entrance.",
+  "Actually, the jazz concert isn't on Saturday. It's on Friday, November 6th, at 7 P.M. in the Food Court. On Saturday, there's a free gift card drawing at 3 P.M.",
+  "Sure. There are three evening events. First, on Wednesday, November 4th, there's a fashion show at 6 P.M. in Center Court. Next, on Friday, there's a live jazz concert at 7 P.M. in the Food Court. Finally, on Sunday, there's a family movie night at 6:30 P.M. in the Rooftop Garden."
+ ],
+ "samples_ko": [
+  "개장 주간은 11월 2일 월요일에 시작합니다. 첫날에는 오전 10시에 정문에서 개장 테이프 커팅식이 있습니다.",
+  "사실 재즈 콘서트는 토요일이 아니에요. 11월 6일 금요일 오후 7시에 푸드코트에서 열립니다. 토요일에는 오후 3시에 상품권 무료 추첨이 있어요.",
+  "네. 저녁 행사는 세 개입니다. 먼저 11월 4일 수요일 오후 6시에 센터 코트에서 패션쇼가 있습니다. 다음으로 금요일 오후 7시에 푸드코트에서 재즈 라이브 콘서트가 있습니다. 마지막으로 일요일 오후 6시 30분에 옥상 정원에서 가족 영화의 밤이 열립니다."
+ ],
+ "tips": [
+  "요일별 표는 'on + 요일, 날짜' → 행사 → 'at + 시간' → 'in + 장소' 순서로 말한다",
+  "조건 질문(6시 이후)은 먼저 개수를 말하고 First, Next, Finally 로 나열한다"
+ ]
+},
+
+{
+ "id": "ri-030",
+ "doc_type": "면접 일정",
+ "voice": "female",
+ "info": {
+  "title": "Interview Schedule — Graphic Designer",
+  "subtitle": "Tuesday, April 7 · Crestline Media, 3rd Floor, Room 301 · Interviewer: Diane Foster",
+  "rows": [
+   [
+    "9:00 A.M.",
+    "Kelly Brooks",
+    "Current job: Northwind Advertising"
+   ],
+   [
+    "10:00 A.M.",
+    "Samuel Ortiz",
+    "Current job: Freelance Designer"
+   ],
+   [
+    "11:00 A.M.",
+    "Rebecca Liu",
+    "Current job: Blue Arrow Studio — CANCELLED"
+   ],
+   [
+    "1:30 P.M.",
+    "Jonathan Price",
+    "Current job: Freelance Designer"
+   ],
+   [
+    "2:30 P.M.",
+    "Mia Thompson",
+    "Current job: Sunrise Magazine"
+   ],
+   [
+    "3:30 P.M.",
+    "Owen Clarke",
+    "Current job: Northwind Advertising"
+   ]
+  ],
+  "notes": [
+   "Each interview lasts 45 minutes."
+  ]
+ },
+ "intro": "Hi, this is Diane Foster. I'm interviewing candidates for the graphic designer position tomorrow, but I left the schedule at the office. Can you help me?",
+ "questions": [
+  "Where will the interviews take place, and what time is the first one?",
+  "I think I'm meeting Rebecca Liu at eleven. Is that right?",
+  "I'm interested in candidates with freelance experience. Can you tell me about all of them?"
+ ],
+ "questions_ko": [
+  "면접은 어디에서 하고, 첫 면접은 몇 시인가요?",
+  "11시에 레베카 리우 씨를 만나는 걸로 아는데, 맞나요?",
+  "프리랜서 경력이 있는 지원자에게 관심이 있어요. 그런 지원자를 모두 알려 주시겠어요?"
+ ],
+ "samples": [
+  "The interviews will be in Room 301 on the third floor. The first interview starts at 9 A.M. with Kelly Brooks, who currently works at Northwind Advertising.",
+  "Actually, Rebecca Liu cancelled her interview, so you don't have an interview at 11 A.M. Your next interview after 10 A.M. is with Jonathan Price at 1:30 P.M.",
+  "Sure. Two candidates currently work as freelance designers. First, Samuel Ortiz has an interview at 10 A.M. Second, Jonathan Price will be interviewed at 1:30 P.M. Each interview lasts 45 minutes."
+ ],
+ "samples_ko": [
+  "면접은 3층 301호에서 진행됩니다. 첫 면접은 오전 9시에 켈리 브룩스 씨와 시작하는데, 현재 노스윈드 광고에서 일하고 있습니다.",
+  "사실 레베카 리우 씨가 면접을 취소해서 오전 11시에는 면접이 없습니다. 오전 10시 다음 면접은 오후 1시 30분 조너선 프라이스 씨입니다.",
+  "네. 현재 프리랜서 디자이너로 일하는 지원자는 두 명입니다. 먼저 새뮤얼 오티즈 씨가 오전 10시에 면접을 봅니다. 두 번째로 조너선 프라이스 씨는 오후 1시 30분에 면접을 봅니다. 면접은 각각 45분입니다."
+ ],
+ "tips": [
+  "표에 CANCELLED 가 보이면 Q9 에서 거의 확실히 묻는다 — 취소 후 '다음 일정'까지 말해 준다",
+  "면접 일정표는 시간 → 이름 → 현 직장 순서로 한 문장에 담는다"
+ ]
+},
+
+{
+ "id": "ri-031",
+ "doc_type": "면접 일정",
+ "voice": "female",
+ "info": {
+  "title": "Interview Schedule — Nursing Staff",
+  "subtitle": "Friday, August 14 · Maplewood General Hospital, Building B, 2nd Floor · Panel: Dr. Carol Webb, Head Nurse Ian Ford",
+  "rows": [
+   [
+    "9:00 A.M.",
+    "Natalie Rivera",
+    "Emergency Room Nurse",
+    "4 years"
+   ],
+   [
+    "9:45 A.M.",
+    "Brian Walsh",
+    "Children's Nurse",
+    "2 years"
+   ],
+   [
+    "10:30 A.M.",
+    "Yuna Seo",
+    "Emergency Room Nurse",
+    "6 years"
+   ],
+   [
+    "11:15 A.M.",
+    "Ethan Cole",
+    "Surgery Nurse",
+    "3 years"
+   ],
+   [
+    "1:00 P.M.",
+    "Lily Chang",
+    "Emergency Room Nurse",
+    "1 year"
+   ],
+   [
+    "1:45 P.M.",
+    "Marcus Reed",
+    "Children's Nurse",
+    "5 years"
+   ]
+  ],
+  "notes": [
+   "The 1:00 P.M. interview will be held by video call."
+  ]
+ },
+ "intro": "Hello, this is Dr. Carol Webb. I'm on the interview panel this Friday, and I'd like to confirm a few details about the schedule.",
+ "questions": [
+  "Where will the interviews be held, and who else is on the panel?",
+  "I believe all the interviews will be held in person. Is that right?",
+  "We really need emergency room nurses. Can you tell me about all the candidates for that position?"
+ ],
+ "questions_ko": [
+  "면접은 어디에서 열리고, 면접관은 또 누가 있나요?",
+  "모든 면접이 대면으로 진행되는 걸로 아는데, 맞나요?",
+  "응급실 간호사가 정말 필요해요. 그 자리에 지원한 사람을 모두 알려 주시겠어요?"
+ ],
+ "samples": [
+  "The interviews will be held on the second floor of Building B at Maplewood General Hospital. Head Nurse Ian Ford will be on the panel with you.",
+  "Actually, not all of them. The 1 P.M. interview with Lily Chang will be held by video call. The other interviews are in person.",
+  "Sure. There are three candidates for the emergency room nurse position. First, Natalie Rivera has four years of experience, and her interview is at 9 A.M. Next, Yuna Seo, with six years of experience, is at 10:30 A.M. Finally, Lily Chang has one year of experience, and her interview is at 1 P.M. by video call."
+ ],
+ "samples_ko": [
+  "면접은 메이플우드 종합병원 B동 2층에서 진행됩니다. 이언 포드 수간호사님이 함께 면접관으로 참여합니다.",
+  "사실 전부는 아니에요. 오후 1시 릴리 챙 씨의 면접은 화상 통화로 진행됩니다. 나머지 면접은 대면입니다.",
+  "네. 응급실 간호사 지원자는 세 명입니다. 먼저 나탈리 리베라 씨는 경력 4년이고 면접은 오전 9시입니다. 다음으로 경력 6년의 유나 서 씨는 오전 10시 30분입니다. 마지막으로 릴리 챙 씨는 경력 1년이고 면접은 오후 1시 화상 통화입니다."
+ ],
+ "tips": [
+  "'all ... right?' 질문에는 'Actually, not all of them.' 으로 시작해 예외 하나를 정확히 말한다",
+  "경력은 'has four years of experience' 또는 'with six years of experience' 로 바꿔 가며 말한다"
+ ]
+},
+
+{
+ "id": "ri-032",
+ "doc_type": "면접 일정",
+ "voice": "male",
+ "info": {
+  "title": "Second-Round Interviews — Sales Representative",
+  "subtitle": "Wednesday, May 20 · Orion Motors Head Office, Room 7B · Interviewer: Frank Dalton, HR Manager",
+  "rows": [
+   [
+    "10:00 A.M.",
+    "Victoria Lane",
+    "Sales Associate, City Cars"
+   ],
+   [
+    "10:40 A.M.",
+    "Henry Boyd",
+    "Store Manager, Prime Furniture"
+   ],
+   [
+    "11:20 A.M.",
+    "Chloe Martin",
+    "Cashier, Fresh Mart"
+   ],
+   [
+    "1:00 P.M.",
+    "Isaac Turner",
+    "Sales Associate, City Cars"
+   ],
+   [
+    "1:40 P.M.",
+    "Ava Morgan",
+    "Rental Agent, Speedy Car Rentals"
+   ],
+   [
+    "2:20 P.M.",
+    "Noah Fischer",
+    "Sales Associate, Valley Motors"
+   ]
+  ],
+  "notes": [
+   "Location changed from Room 5A to Room 7B.",
+   "Candidates take a 20-minute product quiz after the interview."
+  ]
+ },
+ "intro": "Hi, this is Frank Dalton. I'm running the second-round interviews for the sales representative job on Wednesday. Could you answer a few questions?",
+ "questions": [
+  "What date are the interviews, and who is the first candidate?",
+  "The interviews are in Room 5A, aren't they?",
+  "I'd like to know about the candidates who already sell cars. Who are they?"
+ ],
+ "questions_ko": [
+  "면접은 며칠이고, 첫 지원자는 누구인가요?",
+  "면접은 5A호에서 하는 거죠?",
+  "이미 자동차를 판매하고 있는 지원자에 대해 알고 싶어요. 누구누구인가요?"
+ ],
+ "samples": [
+  "The interviews are on Wednesday, May 20th, at the Orion Motors head office. The first candidate is Victoria Lane at 10 A.M. She's a sales associate at City Cars.",
+  "Actually, the location has changed. The interviews will now be held in Room 7B, not Room 5A. Also, each candidate will take a 20-minute product quiz after the interview.",
+  "Sure. Three candidates currently sell cars. First, Victoria Lane, a sales associate at City Cars, is at 10 A.M. Next, Isaac Turner, who also works at City Cars, is at 1 P.M. Finally, Noah Fischer from Valley Motors has his interview at 2:20 P.M."
+ ],
+ "samples_ko": [
+  "면접은 5월 20일 수요일, 오리온 모터스 본사에서 있습니다. 첫 지원자는 오전 10시 빅토리아 레인 씨입니다. 시티 카스의 영업 사원입니다.",
+  "사실 장소가 바뀌었어요. 면접은 이제 5A호가 아니라 7B호에서 진행됩니다. 또 지원자마다 면접 후에 20분간 제품 퀴즈를 봅니다.",
+  "네. 현재 자동차를 판매하는 지원자는 세 명입니다. 먼저 시티 카스 영업 사원 빅토리아 레인 씨가 오전 10시입니다. 다음으로 같은 시티 카스에서 일하는 아이작 터너 씨가 오후 1시입니다. 마지막으로 밸리 모터스의 노아 피셔 씨가 오후 2시 20분에 면접을 봅니다."
+ ],
+ "tips": [
+  "장소 변경은 'The interviews will now be held in A, not B.' 로 새 정보를 먼저 말한다",
+  "조건(자동차 판매)에 맞는 줄을 고를 때 회사 이름을 보고 판단한다 — 렌터카 직원은 판매가 아니다"
+ ]
+},
+
+{
+ "id": "ri-033",
+ "doc_type": "출장 일정",
+ "voice": "female",
+ "info": {
+  "title": "Business Trip Itinerary — Ms. Erin Walsh",
+  "subtitle": "Toronto Supplier Visit · September 7 – 9 · Hotel: Lakeshore Grand Hotel",
+  "rows": [
+   [
+    "Mon, Sept 7",
+    "7:30 A.M.",
+    "Depart New York, Flight NA 302"
+   ],
+   [
+    "Mon, Sept 7",
+    "2:00 P.M.",
+    "Factory tour, Lumen Electronics"
+   ],
+   [
+    "Mon, Sept 7",
+    "7:00 P.M.",
+    "Dinner with Mr. Wei Tan, Harbor Grill"
+   ],
+   [
+    "Tue, Sept 8",
+    "9:00 A.M.",
+    "Meeting with purchasing team, Lumen Electronics"
+   ],
+   [
+    "Tue, Sept 8",
+    "1:30 P.M.",
+    "Meeting with Kepler Packaging"
+   ],
+   [
+    "Wed, Sept 9",
+    "10:00 A.M.",
+    "Visit to new warehouse site"
+   ],
+   [
+    "Wed, Sept 9",
+    "4:15 P.M.",
+    "Return flight, Flight NA 309"
+   ]
+  ]
+ },
+ "intro": "Hi, this is Erin Walsh. I'm leaving for Toronto next week, but I don't have my itinerary with me. Could you check a few things for me?",
+ "questions": [
+  "What time is my flight to Toronto, and where am I staying?",
+  "I think my dinner with Mr. Tan is on Tuesday. Is that right?",
+  "Can you tell me about all the meetings I have on Tuesday?"
+ ],
+ "questions_ko": [
+  "토론토행 비행기는 몇 시이고, 숙소는 어디인가요?",
+  "탄 씨와의 저녁 식사가 화요일인 것 같은데, 맞나요?",
+  "화요일에 있는 회의를 모두 알려 주시겠어요?"
+ ],
+ "samples": [
+  "Your flight to Toronto leaves New York at 7:30 A.M. on Monday, September 7th. It's Flight NA 302. You'll be staying at the Lakeshore Grand Hotel.",
+  "Actually, your dinner with Mr. Wei Tan isn't on Tuesday. It's on Monday, September 7th, at 7 P.M. at Harbor Grill, after your factory tour.",
+  "Sure. You have two meetings on Tuesday, September 8th. First, at 9 A.M., you'll meet with the purchasing team at Lumen Electronics. Then, at 1:30 P.M., you have a meeting with Kepler Packaging. That's all for Tuesday."
+ ],
+ "samples_ko": [
+  "토론토행 비행기는 9월 7일 월요일 오전 7시 30분에 뉴욕에서 출발합니다. NA 302편입니다. 숙소는 레이크쇼어 그랜드 호텔입니다.",
+  "사실 웨이 탄 씨와의 저녁 식사는 화요일이 아니에요. 9월 7일 월요일 오후 7시, 공장 견학 후에 하버 그릴에서 있습니다.",
+  "네. 9월 8일 화요일에는 회의가 두 개 있습니다. 먼저 오전 9시에 루멘 일렉트로닉스 구매팀과 회의합니다. 그다음 오후 1시 30분에 케플러 패키징과 회의가 있습니다. 화요일 일정은 그게 전부입니다."
+ ],
+ "tips": [
+  "출장 일정은 질문자 본인의 일정 — 'you'll ...', 'you have ...' 로 2인칭으로 말한다",
+  "마무리로 'That's all for Tuesday.' 처럼 한 문장 정리하면 답이 깔끔하다"
+ ]
+},
+
+{
+ "id": "ri-034",
+ "doc_type": "출장 일정",
+ "voice": "male",
+ "info": {
+  "title": "Business Trip — Mr. Simon Baker",
+  "subtitle": "Seattle Branch Inspection · February 16 – 18 · Hotel: Pine Street Inn",
+  "rows": [
+   [
+    "Feb 16",
+    "8:00 A.M.",
+    "Flight to Seattle, Coastal Air 512"
+   ],
+   [
+    "Feb 16",
+    "1:00 P.M.",
+    "Meeting with branch manager Olga Petrov"
+   ],
+   [
+    "Feb 16",
+    "3:30 P.M.",
+    "Inspection of customer service center"
+   ],
+   [
+    "Feb 17",
+    "9:00 A.M.",
+    "Staff training session"
+   ],
+   [
+    "Feb 17",
+    "12:00 P.M.",
+    "Lunch with regional sales team"
+   ],
+   [
+    "Feb 17",
+    "3:00 P.M.",
+    "Site visit, new store location — CANCELLED"
+   ],
+   [
+    "Feb 18",
+    "11:00 A.M.",
+    "Flight to Denver, Coastal Air 517"
+   ]
+  ],
+  "notes": [
+   "A rental car is reserved at the Seattle airport."
+  ]
+ },
+ "intro": "Hello, this is Simon Baker. I'm going to Seattle next month to inspect our branch. Can you go over my schedule with me?",
+ "questions": [
+  "When do I fly to Seattle, and which hotel am I staying at?",
+  "On the seventeenth, I'm visiting the new store location in the afternoon, right?",
+  "What do I have scheduled after I arrive on the first day?"
+ ],
+ "questions_ko": [
+  "시애틀에는 언제 가고, 어느 호텔에 묵나요?",
+  "17일 오후에 새 매장 부지를 방문하는 거죠?",
+  "첫날 도착한 다음에는 어떤 일정이 있나요?"
+ ],
+ "samples": [
+  "You fly to Seattle on February 16th at 8 A.M. on Coastal Air flight 512. You'll stay at the Pine Street Inn, and a rental car is reserved for you at the airport.",
+  "Actually, that site visit has been cancelled. So on the afternoon of February 17th, you're free after lunch with the regional sales team.",
+  "After you arrive on February 16th, you have two things on your schedule. First, at 1 P.M., you'll meet with the branch manager, Olga Petrov. Then, at 3:30 P.M., you'll inspect the customer service center."
+ ],
+ "samples_ko": [
+  "2월 16일 오전 8시 코스털 항공 512편으로 시애틀에 갑니다. 숙소는 파인 스트리트 인이고, 공항에 렌터카가 예약되어 있습니다.",
+  "사실 그 부지 방문은 취소되었어요. 그래서 2월 17일 오후에는 지역 영업팀과 점심을 먹은 뒤로 일정이 없습니다.",
+  "2월 16일 도착 후에는 일정이 두 개 있습니다. 먼저 오후 1시에 올가 페트로프 지점장과 만납니다. 그다음 오후 3시 30분에 고객 서비스 센터를 점검합니다."
+ ],
+ "tips": [
+  "취소된 일정 뒤에는 'So ... you're free ...' 로 그 결과를 알려 주면 좋다",
+  "'after I arrive' 같은 조건이 있으면 비행 일정 자체는 빼고 그 뒤 항목만 말한다"
+ ]
+},
+
+{
+ "id": "ri-035",
+ "doc_type": "출장 일정",
+ "voice": "female",
+ "info": {
+  "title": "Travel Itinerary — Ms. Angela Ruiz, Purchasing Director",
+  "subtitle": "Milan Furniture Fair · April 13 – 16 · Hotel: Hotel Duomo View",
+  "rows": [
+   [
+    "Apr 13",
+    "Arrive in Milan",
+    "Flight IT 604, 10:20 A.M."
+   ],
+   [
+    "Apr 14",
+    "Furniture Fair, Day 1",
+    "Hall 5, 9:00 A.M. – 5:00 P.M."
+   ],
+   [
+    "Apr 14",
+    "Dinner with Casa Verde designers",
+    "7:30 P.M., Ristorante Luna"
+   ],
+   [
+    "Apr 15",
+    "Furniture Fair, Day 2",
+    "Hall 8, 9:00 A.M. – 1:00 P.M."
+   ],
+   [
+    "Apr 15",
+    "Meeting with Bianchi Lighting",
+    "3:00 P.M., Bianchi showroom"
+   ],
+   [
+    "Apr 16",
+    "Return flight",
+    "Flight IT 611, 2:45 P.M."
+   ]
+  ],
+  "notes": [
+   "Fair entry badges are picked up at the North Gate."
+  ]
+ },
+ "intro": "Hi, this is Angela Ruiz. I'm going to the furniture fair in Milan next month. I'd like to check some details of my trip.",
+ "questions": [
+  "When do I arrive in Milan, and where am I staying?",
+  "I think I'm visiting Hall 5 on both days of the fair. Is that right?",
+  "Besides the fair, what other appointments do I have?"
+ ],
+ "questions_ko": [
+  "밀라노에는 언제 도착하고, 숙소는 어디인가요?",
+  "박람회 이틀 모두 5번 홀을 방문하는 걸로 아는데, 맞나요?",
+  "박람회 말고 다른 약속은 무엇이 있나요?"
+ ],
+ "samples": [
+  "You arrive in Milan on April 13th on Flight IT 604 at 10:20 A.M. You'll be staying at the Hotel Duomo View.",
+  "Actually, no. You'll visit Hall 5 on April 14th, but on April 15th you'll be in Hall 8, from 9 A.M. to 1 P.M. You can pick up your badge at the North Gate.",
+  "You have two other appointments. First, on April 14th at 7:30 P.M., you'll have dinner with the Casa Verde designers at Ristorante Luna. Second, on April 15th at 3 P.M., you have a meeting with Bianchi Lighting at their showroom."
+ ],
+ "samples_ko": [
+  "4월 13일 오전 10시 20분에 IT 604편으로 밀라노에 도착합니다. 숙소는 호텔 두오모 뷰입니다.",
+  "사실 아니에요. 4월 14일에는 5번 홀이지만, 4월 15일에는 오전 9시부터 오후 1시까지 8번 홀에 갑니다. 출입증은 북문에서 받으시면 됩니다.",
+  "다른 약속은 두 개입니다. 먼저 4월 14일 오후 7시 30분에 리스토란테 루나에서 카사 베르데 디자이너들과 저녁 식사를 합니다. 두 번째로 4월 15일 오후 3시에 비안키 라이팅 쇼룸에서 회의가 있습니다."
+ ],
+ "tips": [
+  "반만 맞는 정보는 'A is right, but B is different' 구조로 — 'You'll visit Hall 5 on ..., but on ... you'll be in Hall 8'",
+  "'Besides ~' 질문은 제외할 항목을 빼고 남은 줄만 고른다"
+ ]
+},
+
+{
+ "id": "ri-036",
+ "doc_type": "출장 일정",
+ "voice": "male",
+ "info": {
+  "title": "Business Trip Schedule — Mr. Raj Mehta, Engineering Manager",
+  "subtitle": "Sydney Client Visits · August 3 – 6 · Hotel: Wattle Street Hotel",
+  "rows": [
+   [
+    "Mon, Aug 3",
+    "Arrive in Sydney",
+    "6:40 A.M., Flight QS 21"
+   ],
+   [
+    "Mon, Aug 3",
+    "Hotel check-in",
+    "From 12:00 P.M."
+   ],
+   [
+    "Tue, Aug 4",
+    "Client meeting, Bondi Water Systems",
+    "10:00 A.M."
+   ],
+   [
+    "Tue, Aug 4",
+    "Client meeting, Southern Rail Co.",
+    "2:00 P.M."
+   ],
+   [
+    "Wed, Aug 5",
+    "Product demonstration",
+    "11:00 A.M., Sydney office"
+   ],
+   [
+    "Wed, Aug 5",
+    "Client meeting, Pacific Health Group",
+    "3:00 P.M."
+   ],
+   [
+    "Thu, Aug 6",
+    "Return flight",
+    "11:15 A.M., Flight QS 22"
+   ]
+  ],
+  "notes": [
+   "The product demonstration was moved from Tuesday to Wednesday."
+  ]
+ },
+ "intro": "Hello, this is Raj Mehta. I'm visiting clients in Sydney soon, and I need to check my travel schedule. Can you help me?",
+ "questions": [
+  "When does my flight arrive in Sydney, and when can I check in at the hotel?",
+  "My product demonstration is on Tuesday, right?",
+  "Could you tell me about all of my client meetings?"
+ ],
+ "questions_ko": [
+  "시드니에는 언제 도착하고, 호텔 체크인은 언제 할 수 있나요?",
+  "제품 시연은 화요일이죠?",
+  "고객 회의를 모두 알려 주시겠어요?"
+ ],
+ "samples": [
+  "Your flight, QS 21, arrives in Sydney at 6:40 A.M. on Monday, August 3rd. You can check in at the Wattle Street Hotel from 12 P.M.",
+  "Actually, the product demonstration was moved. It's now on Wednesday, August 5th, at 11 A.M. at the Sydney office, not on Tuesday.",
+  "Sure. You have three client meetings. First, on Tuesday at 10 A.M., you'll meet with Bondi Water Systems. Then, that same day at 2 P.M., you'll meet with Southern Rail Company. Finally, on Wednesday at 3 P.M., you have a meeting with Pacific Health Group."
+ ],
+ "samples_ko": [
+  "QS 21편은 8월 3일 월요일 오전 6시 40분에 시드니에 도착합니다. 와틀 스트리트 호텔에는 낮 12시부터 체크인할 수 있습니다.",
+  "사실 제품 시연은 옮겨졌어요. 화요일이 아니라 8월 5일 수요일 오전 11시, 시드니 사무소에서 합니다.",
+  "네. 고객 회의는 세 개입니다. 먼저 화요일 오전 10시에 본다이 워터 시스템즈와 만납니다. 그다음 같은 날 오후 2시에 서던 레일과 만납니다. 마지막으로 수요일 오후 3시에 퍼시픽 헬스 그룹과 회의가 있습니다."
+ ],
+ "tips": [
+  "일정 변경은 'It's now on ..., not on ...' 으로 새 날짜를 먼저 말한다",
+  "같은 날 두 번째 항목은 'that same day' 로 이어 말하면 자연스럽다"
+ ]
+},
+
+{
+ "id": "ri-037",
+ "doc_type": "이력서",
+ "voice": "male",
+ "info": {
+  "title": "Emily Watson",
+  "subtitle": "Applying for: Customer Service Team Leader · Interview: Monday, 10:00 A.M.",
+  "rows": [
+   [
+    "Education",
+    "2015 – 2019",
+    "B.A. in Communications, Lakewood University"
+   ],
+   [
+    "Career",
+    "2022 – Present",
+    "Customer Service Supervisor, Brightline Telecom"
+   ],
+   [
+    "Career",
+    "2019 – 2022",
+    "Call Center Agent, Brightline Telecom"
+   ],
+   [
+    "Career",
+    "2018 – 2019",
+    "Part-time Sales Clerk, Greenway Bookstore"
+   ],
+   [
+    "Skills",
+    "Languages",
+    "Fluent in English and Spanish"
+   ],
+   [
+    "Skills",
+    "Computer",
+    "Customer service software, data reports"
+   ],
+   [
+    "Award",
+    "2023",
+    "Employee of the Year, Brightline Telecom"
+   ]
+  ]
+ },
+ "intro": "Hi, this is Gary from HR. I'm interviewing Emily Watson soon, but I don't have her resume with me. Can you help me?",
+ "questions": [
+  "Where did Emily go to school, and what did she study?",
+  "I heard she has never worked as a supervisor. Is that right?",
+  "Can you tell me about all her work experience?"
+ ],
+ "questions_ko": [
+  "에밀리는 어느 학교를 다녔고, 무엇을 전공했나요?",
+  "그녀가 관리자로 일한 적이 없다고 들었는데, 맞나요?",
+  "그녀의 경력을 모두 알려 주시겠어요?"
+ ],
+ "samples": [
+  "Emily went to Lakewood University from 2015 to 2019. She got a bachelor's degree in communications there.",
+  "Actually, that's not true. She has been a customer service supervisor at Brightline Telecom since 2022. Before that, she was a call center agent there.",
+  "Sure. She has three jobs on her resume. First, from 2018 to 2019, she was a part-time sales clerk at Greenway Bookstore. Then, from 2019 to 2022, she worked as a call center agent at Brightline Telecom. Since 2022, she has been a customer service supervisor at the same company."
+ ],
+ "samples_ko": [
+  "에밀리는 2015년부터 2019년까지 레이크우드 대학교를 다녔습니다. 그곳에서 커뮤니케이션 학사 학위를 받았습니다.",
+  "사실 그렇지 않아요. 그녀는 2022년부터 브라이트라인 텔레콤에서 고객 서비스 관리자로 일하고 있습니다. 그 전에는 같은 곳에서 콜센터 상담원이었습니다.",
+  "네. 이력서에는 경력이 세 개 있습니다. 먼저 2018년부터 2019년까지 그린웨이 서점에서 시간제 판매원으로 일했습니다. 그다음 2019년부터 2022년까지 브라이트라인 텔레콤에서 콜센터 상담원으로 일했습니다. 2022년부터는 같은 회사에서 고객 서비스 관리자로 일하고 있습니다."
+ ],
+ "tips": [
+  "이력서의 Present 는 현재완료 'has been ... since 2022' 로 말한다",
+  "B.A. 는 'a bachelor's degree in ~' 으로 풀어 읽는다",
+  "경력 나열은 오래된 것부터 시간 순서로 말하면 흐름이 자연스럽다"
+ ]
+},
+
+{
+ "id": "ri-038",
+ "doc_type": "이력서",
+ "voice": "female",
+ "info": {
+  "title": "Andrew Novak",
+  "subtitle": "Applying for: Warehouse Operations Manager · Interview: Thursday, 3:00 P.M., Room 12",
+  "rows": [
+   [
+    "Education",
+    "2010 – 2014",
+    "B.S. in Business Logistics, Carver State University"
+   ],
+   [
+    "Training",
+    "2020",
+    "Certificate in Supply Chain Management, online course"
+   ],
+   [
+    "Career",
+    "2019 – Present",
+    "Assistant Warehouse Manager, Quickship Logistics"
+   ],
+   [
+    "Career",
+    "2014 – 2019",
+    "Inventory Specialist, Hilltop Foods"
+   ],
+   [
+    "Skills",
+    "License",
+    "Forklift operator license"
+   ],
+   [
+    "Skills",
+    "Computer",
+    "Inventory management software, Excel"
+   ],
+   [
+    "Skills",
+    "Languages",
+    "English and Polish"
+   ]
+  ]
+ },
+ "intro": "Hello, this is Nancy Lim. I'm going to interview Andrew Novak on Thursday for the warehouse manager position. Could you give me some information from his resume?",
+ "questions": [
+  "What time is the interview, and where will it be?",
+  "I think he doesn't have a forklift license. Is that correct?",
+  "Can you tell me about his education and training?"
+ ],
+ "questions_ko": [
+  "면접은 몇 시이고, 어디에서 하나요?",
+  "그에게 지게차 면허가 없는 것 같은데, 맞나요?",
+  "그의 학력과 교육 이수 내용을 알려 주시겠어요?"
+ ],
+ "samples": [
+  "The interview is on Thursday at 3 P.M. It will be held in Room 12.",
+  "Actually, he does have one. His resume says he has a forklift operator license. He can also use inventory management software and Excel.",
+  "Sure. First, from 2010 to 2014, he studied at Carver State University and got a bachelor's degree in business logistics. Then, in 2020, he earned a certificate in supply chain management through an online course."
+ ],
+ "samples_ko": [
+  "면접은 목요일 오후 3시입니다. 12호실에서 진행됩니다.",
+  "사실 면허가 있어요. 이력서에 지게차 운전 면허가 있다고 적혀 있습니다. 재고 관리 프로그램과 엑셀도 다룰 수 있습니다.",
+  "네. 먼저 2010년부터 2014년까지 카버 주립대학교에서 공부해 비즈니스 물류 학사 학위를 받았습니다. 그다음 2020년에 온라인 과정으로 공급망 관리 수료증을 받았습니다."
+ ],
+ "tips": [
+  "부정문으로 잘못 안 경우는 'Actually, he does have one.' 처럼 강조 do 로 바로잡는다",
+  "'His resume says ...' 로 근거를 대면 Q9 답이 설득력 있다"
+ ]
+},
+
+{
+ "id": "ri-039",
+ "doc_type": "이력서",
+ "voice": "male",
+ "info": {
+  "title": "Sofia Alvarez",
+  "subtitle": "Applying for: Music Teacher, Sunnyside Elementary School · Interview: Wednesday, 4:30 P.M.",
+  "rows": [
+   [
+    "Education",
+    "2012 – 2016",
+    "Bachelor of Music Education, Westbrook College"
+   ],
+   [
+    "Education",
+    "2016 – 2018",
+    "Master of Music, Ridgeview University"
+   ],
+   [
+    "Career",
+    "2021 – Present",
+    "Music Teacher, Oakdale Middle School"
+   ],
+   [
+    "Career",
+    "2018 – 2021",
+    "Private Piano Instructor"
+   ],
+   [
+    "Activities",
+    "2022 – Present",
+    "Director, Oakdale Children's Choir"
+   ],
+   [
+    "Skills",
+    "Instruments",
+    "Piano, violin, guitar"
+   ]
+  ]
+ },
+ "intro": "Hi, this is Howard Green, the principal of Sunnyside Elementary. I'm interviewing Sofia Alvarez for our music teacher job. Can you answer a few questions?",
+ "questions": [
+  "Where did she get her master's degree, and when did she finish it?",
+  "I heard she only plays the piano. Is that right?",
+  "Can you tell me about everything she has done since she finished graduate school?"
+ ],
+ "questions_ko": [
+  "그녀는 석사 학위를 어디에서 받았고, 언제 마쳤나요?",
+  "그녀가 피아노만 연주한다고 들었는데, 맞나요?",
+  "대학원을 마친 이후에 한 일을 모두 알려 주시겠어요?"
+ ],
+ "samples": [
+  "She got her master of music degree from Ridgeview University. She studied there from 2016 and finished in 2018.",
+  "Actually, she plays more than the piano. Her resume says she also plays the violin and the guitar.",
+  "Sure. After finishing her master's degree, she worked as a private piano instructor from 2018 to 2021. Since 2021, she has been a music teacher at Oakdale Middle School. Also, since 2022, she has directed the Oakdale Children's Choir."
+ ],
+ "samples_ko": [
+  "그녀는 리지뷰 대학교에서 음악 석사 학위를 받았습니다. 2016년부터 그곳에서 공부했고 2018년에 마쳤습니다.",
+  "사실 피아노만 하는 게 아니에요. 이력서에 바이올린과 기타도 연주한다고 적혀 있습니다.",
+  "네. 석사 학위를 마친 뒤 2018년부터 2021년까지 개인 피아노 강사로 일했습니다. 2021년부터는 오크데일 중학교 음악 교사로 일하고 있습니다. 또 2022년부터 오크데일 어린이 합창단 지휘를 맡고 있습니다."
+ ],
+ "tips": [
+  "'only ~' 오해는 'Actually, she ... more than ~. She also ...' 로 바로잡는다",
+  "Activities 칸도 경력처럼 'has directed ... since 2022' 로 말할 수 있다"
+ ]
+},
+
+{
+ "id": "ri-040",
+ "doc_type": "이력서",
+ "voice": "female",
+ "info": {
+  "title": "Tyler Nash",
+  "subtitle": "Applying for: IT Support Specialist · Interview: Friday, 11:00 A.M., by video call",
+  "rows": [
+   [
+    "Education",
+    "2017 – 2019",
+    "Associate Degree in Computer Networking, Bayside Community College"
+   ],
+   [
+    "Career",
+    "2023 – Present",
+    "IT Help Desk Technician, Clearwater Bank"
+   ],
+   [
+    "Career",
+    "2021 – 2023",
+    "Computer Repair Technician, FixIt Computers"
+   ],
+   [
+    "Career",
+    "2019 – 2021",
+    "Customer Support Agent, Nexa Internet"
+   ],
+   [
+    "Certificate",
+    "2020",
+    "Network Support Certificate"
+   ],
+   [
+    "Certificate",
+    "2024",
+    "Cloud Security Basics Certificate"
+   ],
+   [
+    "Skills",
+    "Languages",
+    "English and Korean"
+   ]
+  ]
+ },
+ "intro": "Hi, this is Olivia from the IT department. I'm interviewing Tyler Nash on Friday, but I can't open his resume file. Could you help me?",
+ "questions": [
+  "How will the interview be held, and what time does it start?",
+  "I heard he has a bachelor's degree in computer science. Is that right?",
+  "Can you tell me about the certificates he has?"
+ ],
+ "questions_ko": [
+  "면접은 어떤 방식으로 진행되고, 몇 시에 시작하나요?",
+  "그가 컴퓨터 공학 학사 학위가 있다고 들었는데, 맞나요?",
+  "그가 가진 자격증을 알려 주시겠어요?"
+ ],
+ "samples": [
+  "The interview will be held by video call on Friday. It starts at 11 A.M.",
+  "Actually, that's not right. He has an associate degree in computer networking from Bayside Community College. He studied there from 2017 to 2019.",
+  "Sure. He has two certificates. First, he earned a network support certificate in 2020. Then, in 2024, he got a cloud security basics certificate. He also speaks English and Korean."
+ ],
+ "samples_ko": [
+  "면접은 금요일에 화상 통화로 진행됩니다. 오전 11시에 시작합니다.",
+  "사실 그렇지 않아요. 그는 베이사이드 커뮤니티 칼리지에서 컴퓨터 네트워크 전문 학사 학위를 받았습니다. 2017년부터 2019년까지 그곳에서 공부했습니다.",
+  "네. 자격증은 두 개입니다. 먼저 2020년에 네트워크 지원 자격증을 땄습니다. 그다음 2024년에 클라우드 보안 기초 자격증을 받았습니다. 또 영어와 한국어를 할 수 있습니다."
+ ],
+ "tips": [
+  "학위 종류(associate / bachelor's / master's)를 정확히 구분해 말한다",
+  "자격증은 'earned / got a ~ certificate in + 연도' 로 말한다"
+ ]
+},
+
+{
+ "id": "ri-041",
+ "doc_type": "수업 시간표",
+ "voice": "male",
+ "info": {
+  "title": "Winter Classes — Oakridge Art Center",
+  "subtitle": "January 5 – February 27 · Fee: $120 per class · All materials included",
+  "rows": [
+   [
+    "Monday",
+    "6:00 – 8:00 P.M.",
+    "Watercolor Painting",
+    "Mina Song"
+   ],
+   [
+    "Tuesday",
+    "10:00 A.M. – 12:00 P.M.",
+    "Pottery for Beginners",
+    "Carl Weber"
+   ],
+   [
+    "Wednesday",
+    "6:00 – 8:00 P.M.",
+    "Digital Photography",
+    "Ruth Adams"
+   ],
+   [
+    "Thursday",
+    "10:00 A.M. – 12:00 P.M.",
+    "Drawing Basics",
+    "Mina Song"
+   ],
+   [
+    "Friday",
+    "7:00 – 9:00 P.M.",
+    "Pottery Wheel Workshop",
+    "Carl Weber"
+   ],
+   [
+    "Saturday",
+    "1:00 – 3:00 P.M.",
+    "Kids' Art Club",
+    "Ruth Adams"
+   ]
+  ],
+  "notes": [
+   "Students must bring their own camera for Digital Photography."
+  ]
+ },
+ "intro": "Hi, my name is Aaron. I just moved to the area, and I'm interested in taking a class at the art center this winter. Could I ask you some questions?",
+ "questions": [
+  "When do the winter classes start and end?",
+  "I heard the fee is one hundred dollars per class. Is that right?",
+  "I work during the day, so I can only take evening classes. Can you tell me about all the evening classes?"
+ ],
+ "questions_ko": [
+  "겨울 수업은 언제 시작해서 언제 끝나나요?",
+  "수강료가 한 과목에 100달러라고 들었는데, 맞나요?",
+  "낮에는 일을 해서 저녁 수업만 들을 수 있어요. 저녁 수업을 모두 알려 주시겠어요?"
+ ],
+ "samples": [
+  "The winter classes start on January 5th and end on February 27th. Classes are held from Monday to Saturday.",
+  "Actually, the fee is one hundred twenty dollars per class. But the good news is that all materials are included, so you don't need to buy anything extra.",
+  "Sure. There are three evening classes. First, on Mondays from 6 to 8 P.M., Mina Song teaches watercolor painting. Next, on Wednesdays from 6 to 8 P.M., there's digital photography with Ruth Adams. You need your own camera for that one. Finally, on Fridays from 7 to 9 P.M., Carl Weber teaches a pottery wheel workshop."
+ ],
+ "samples_ko": [
+  "겨울 수업은 1월 5일에 시작해서 2월 27일에 끝납니다. 수업은 월요일부터 토요일까지 있습니다.",
+  "사실 수강료는 한 과목에 120달러입니다. 하지만 좋은 소식은 재료가 모두 포함되어 있어서 따로 살 필요가 없다는 거예요.",
+  "네. 저녁 수업은 세 개입니다. 먼저 월요일 오후 6시부터 8시까지 미나 송 선생님이 수채화를 가르칩니다. 다음으로 수요일 오후 6시부터 8시까지 루스 애덤스 선생님의 디지털 사진 수업이 있습니다. 그 수업은 카메라를 직접 가져와야 해요. 마지막으로 금요일 오후 7시부터 9시까지 칼 웨버 선생님이 물레 도예 워크숍을 가르칩니다."
+ ],
+ "tips": [
+  "금액 바로잡기 뒤에 'But the good news is ...' 로 긍정 정보를 덧붙이면 좋은 인상을 준다",
+  "매주 반복되는 수업은 'on Mondays' 처럼 요일에 s 를 붙인다"
+ ]
+},
+
+{
+ "id": "ri-042",
+ "doc_type": "수업 시간표",
+ "voice": "female",
+ "info": {
+  "title": "Evening Courses — Hillcrest Language School",
+  "subtitle": "Spring Term: March 9 – May 29 · Classes meet twice a week · Fee: $250 per course",
+  "rows": [
+   [
+    "Spanish 1",
+    "Mon & Wed",
+    "6:30 – 8:00 P.M.",
+    "Room 201"
+   ],
+   [
+    "Spanish 2",
+    "Tue & Thu",
+    "6:30 – 8:00 P.M.",
+    "Room 201"
+   ],
+   [
+    "German 1",
+    "Mon & Wed",
+    "6:00 – 7:30 P.M.",
+    "CANCELLED"
+   ],
+   [
+    "Japanese 1",
+    "Mon & Wed",
+    "7:00 – 8:30 P.M.",
+    "Room 105"
+   ],
+   [
+    "Chinese 1",
+    "Tue & Thu",
+    "7:00 – 8:30 P.M.",
+    "Room 108"
+   ],
+   [
+    "French 1",
+    "Tue & Thu",
+    "6:00 – 7:30 P.M.",
+    "Room 104"
+   ],
+   [
+    "French Conversation",
+    "Saturday",
+    "10:00 – 11:30 A.M.",
+    "Room 104"
+   ]
+  ]
+ },
+ "intro": "Hi, this is Fiona. I'd like to take a language course at your school this spring. Can you give me some information?",
+ "questions": [
+  "When does the spring term start, and how much does one course cost?",
+  "I want to take German 1 on Mondays and Wednesdays. That's still offered, right?",
+  "I can only come on Tuesdays and Thursdays. Which courses meet on those days?"
+ ],
+ "questions_ko": [
+  "봄 학기는 언제 시작하고, 한 과목 수강료는 얼마인가요?",
+  "월·수요일 독일어 1을 듣고 싶어요. 아직 개설되어 있죠?",
+  "화요일과 목요일에만 갈 수 있어요. 그 요일에 있는 수업은 무엇인가요?"
+ ],
+ "samples": [
+  "The spring term starts on March 9th and ends on May 29th. Each course costs two hundred fifty dollars, and classes meet twice a week.",
+  "Actually, I'm sorry, but German 1 has been cancelled this term. If you'd like another class on Mondays and Wednesdays, Japanese 1 meets from 7 to 8:30 P.M.",
+  "There are three courses on Tuesdays and Thursdays. First, French 1 meets from 6 to 7:30 P.M. in Room 104. Then, Spanish 2 is from 6:30 to 8 P.M. in Room 201. Finally, Chinese 1 meets from 7 to 8:30 P.M. in Room 108."
+ ],
+ "samples_ko": [
+  "봄 학기는 3월 9일에 시작해서 5월 29일에 끝납니다. 한 과목에 250달러이고, 수업은 일주일에 두 번 있습니다.",
+  "사실 죄송하지만 독일어 1은 이번 학기에 폐강되었어요. 월·수요일에 다른 수업을 원하시면 일본어 1이 오후 7시부터 8시 30분까지 있습니다.",
+  "화·목요일 수업은 세 개입니다. 먼저 프랑스어 1이 오후 6시부터 7시 30분까지 104호에서 있습니다. 그다음 스페인어 2는 오후 6시 30분부터 8시까지 201호입니다. 마지막으로 중국어 1은 오후 7시부터 8시 30분까지 108호입니다."
+ ],
+ "tips": [
+  "Q10 은 표의 순서가 아니라 시작 시간 순서로 정리해 말하면 듣기 편하다",
+  "폐강·취소 뒤에는 같은 요일의 다른 수업을 대안으로 제시한다"
+ ]
+},
+
+{
+ "id": "ri-043",
+ "doc_type": "수업 시간표",
+ "voice": "male",
+ "info": {
+  "title": "Weekend Classes — Cedar Valley Cooking School",
+  "subtitle": "Saturdays, October 3 – November 21 · Fee: $45 per class · 10% off for 3 or more classes",
+  "rows": [
+   [
+    "Oct 3",
+    "Italian Pasta Basics",
+    "10:00 A.M. – 1:00 P.M.",
+    "Chef Paolo Rossi"
+   ],
+   [
+    "Oct 10",
+    "Korean Home Cooking",
+    "10:00 A.M. – 1:00 P.M.",
+    "Chef Jiwoo Han"
+   ],
+   [
+    "Oct 17",
+    "Easy Bread Baking",
+    "2:00 – 5:00 P.M.",
+    "Chef Amy Collins"
+   ],
+   [
+    "Oct 24",
+    "Thai Curry Dishes",
+    "10:00 A.M. – 1:00 P.M.",
+    "Chef Niran Somchai"
+   ],
+   [
+    "Nov 7",
+    "Holiday Desserts",
+    "2:00 – 5:00 P.M.",
+    "Chef Amy Collins"
+   ],
+   [
+    "Nov 14",
+    "Vegetarian Meals",
+    "10:00 A.M. – 1:00 P.M.",
+    "Chef Jiwoo Han"
+   ],
+   [
+    "Nov 21",
+    "Pie and Tart Baking",
+    "2:00 – 5:00 P.M.",
+    "Chef Amy Collins"
+   ]
+  ],
+  "notes": [
+   "No class on October 31."
+  ]
+ },
+ "intro": "Hello, this is Dennis. My wife and I want to take some cooking classes together this fall. Can you answer a few questions?",
+ "questions": [
+  "How much is each class, and is there any discount?",
+  "I heard there's a class on October thirty-first. Is that right?",
+  "My wife loves baking, and we're only free in the afternoons. Could you tell me about all the afternoon classes?"
+ ],
+ "questions_ko": [
+  "수업은 한 번에 얼마이고, 할인이 있나요?",
+  "10월 31일에 수업이 있다고 들었는데, 맞나요?",
+  "아내가 빵 굽기를 좋아하고, 저희는 오후에만 시간이 돼요. 오후 수업을 모두 알려 주시겠어요?"
+ ],
+ "samples": [
+  "Each class is forty-five dollars. But if you take three or more classes, you get ten percent off.",
+  "Actually, there's no class on October 31st. After the Thai curry class on October 24th, the next class is Holiday Desserts on November 7th.",
+  "Sure. There are three afternoon classes, all from 2 to 5 P.M. with Chef Amy Collins. First, on October 17th, there's Easy Bread Baking. Next, on November 7th, she teaches Holiday Desserts. Finally, on November 21st, there's Pie and Tart Baking."
+ ],
+ "samples_ko": [
+  "수업은 한 번에 45달러입니다. 하지만 세 개 이상 들으시면 10퍼센트 할인을 받습니다.",
+  "사실 10월 31일에는 수업이 없어요. 10월 24일 태국 카레 수업 다음 수업은 11월 7일 홀리데이 디저트입니다.",
+  "네. 오후 수업은 세 개이고, 모두 오후 2시부터 5시까지 에이미 콜린스 셰프가 가르칩니다. 먼저 10월 17일에 쉬운 빵 굽기가 있습니다. 다음으로 11월 7일에 홀리데이 디저트를 가르칩니다. 마지막으로 11월 21일에 파이·타르트 굽기가 있습니다."
+ ],
+ "tips": [
+  "공통점(시간·강사)이 같으면 처음에 한 번만 말하고 날짜와 수업 이름만 나열한다",
+  "할인 조건은 'if you take three or more classes, you get ten percent off' 로 말한다"
+ ]
+},
+
+{
+ "id": "ri-044",
+ "doc_type": "예약표",
+ "voice": "male",
+ "info": {
+  "title": "Appointments — Studio Bloom Hair Salon",
+  "subtitle": "Saturday, March 14 · Stylists: Kate, Diego, Hana",
+  "rows": [
+   [
+    "9:00 A.M.",
+    "Ms. Patricia Gomez",
+    "Haircut",
+    "Kate"
+   ],
+   [
+    "9:30 A.M.",
+    "Mr. Leon Yates",
+    "Haircut and shave",
+    "Diego"
+   ],
+   [
+    "10:30 A.M.",
+    "Ms. Amy Chen",
+    "Hair coloring",
+    "Hana"
+   ],
+   [
+    "11:00 A.M.",
+    "Ms. Rosa Lee — CANCELLED",
+    "Haircut",
+    "Kate"
+   ],
+   [
+    "1:00 P.M.",
+    "Mr. Ivan Kovac",
+    "Haircut",
+    "Diego"
+   ],
+   [
+    "2:00 P.M.",
+    "Ms. Julie Moss",
+    "Hair coloring",
+    "Kate"
+   ],
+   [
+    "3:30 P.M.",
+    "Ms. Diana Hope",
+    "Perm",
+    "Hana"
+   ]
+  ]
+ },
+ "intro": "Hi, this is Ken, the salon manager. I'm running late this morning, so I'd like to check Saturday's appointments with you.",
+ "questions": [
+  "What time is the first appointment, and who is it with?",
+  "Kate has a customer at eleven, right?",
+  "Can you tell me about all the hair coloring appointments?"
+ ],
+ "questions_ko": [
+  "첫 예약은 몇 시이고, 누구인가요?",
+  "케이트는 11시에 손님이 있죠?",
+  "염색 예약을 모두 알려 주시겠어요?"
+ ],
+ "samples": [
+  "The first appointment is at 9 A.M. with Ms. Patricia Gomez. She's getting a haircut with Kate.",
+  "Actually, the 11 A.M. appointment with Ms. Rosa Lee was cancelled. So Kate is free at that time. Her next customer is Ms. Julie Moss at 2 P.M.",
+  "Sure. There are two hair coloring appointments. First, at 10:30 A.M., Ms. Amy Chen will have her hair colored by Hana. Then, at 2 P.M., Ms. Julie Moss has a hair coloring appointment with Kate."
+ ],
+ "samples_ko": [
+  "첫 예약은 오전 9시 퍼트리샤 고메스 씨입니다. 케이트에게 커트를 받습니다.",
+  "사실 오전 11시 로사 리 씨 예약은 취소되었어요. 그래서 케이트는 그 시간에 비어 있습니다. 다음 손님은 오후 2시 줄리 모스 씨입니다.",
+  "네. 염색 예약은 두 건입니다. 먼저 오전 10시 30분에 에이미 첸 씨가 하나에게 염색을 받습니다. 그다음 오후 2시에 줄리 모스 씨가 케이트와 염색 예약이 있습니다."
+ ],
+ "tips": [
+  "예약표는 시간 → 손님 → 서비스 → 담당자 순서로 말한다",
+  "취소 뒤 'So Kate is free at that time.' 처럼 결과를 한 문장 덧붙인다"
+ ]
+},
+
+{
+ "id": "ri-045",
+ "doc_type": "예약표",
+ "voice": "female",
+ "info": {
+  "title": "Service Appointments — Metro Auto Care",
+  "subtitle": "Tuesday, July 7 · Open 8:00 A.M. – 6:00 P.M.",
+  "rows": [
+   [
+    "8:00 A.M.",
+    "Mr. Brad Owens",
+    "Oil change",
+    "Bay 1"
+   ],
+   [
+    "9:00 A.M.",
+    "Ms. Joan Pierce",
+    "Tire replacement",
+    "Bay 2"
+   ],
+   [
+    "10:30 A.M.",
+    "Mr. Felix Romero",
+    "Brake inspection",
+    "Bay 1"
+   ],
+   [
+    "12:00 P.M.",
+    "Ms. Tina Wells",
+    "Oil change",
+    "Bay 3"
+   ],
+   [
+    "1:30 P.M.",
+    "Mr. Omar Saleh",
+    "Engine check",
+    "Bay 2"
+   ],
+   [
+    "3:00 P.M.",
+    "Ms. Kara Lund",
+    "Oil change",
+    "Bay 1"
+   ],
+   [
+    "4:30 P.M.",
+    "Mr. Dean Archer",
+    "Tire rotation",
+    "Bay 3"
+   ]
+  ],
+  "notes": [
+   "Bay 2 closes at 12:00 P.M. for repairs. Afternoon Bay 2 jobs move to Bay 3."
+  ]
+ },
+ "intro": "Hi, this is Carla, a mechanic at Metro Auto Care. I'm planning my work for Tuesday. Can I ask you a few questions about the appointments?",
+ "questions": [
+  "What are the shop hours on Tuesday, and what is the first appointment?",
+  "Mr. Saleh's engine check at one thirty is in Bay 2, isn't it?",
+  "I'm handling the oil changes. Can you tell me about all of them?"
+ ],
+ "questions_ko": [
+  "화요일 영업시간은 어떻게 되고, 첫 예약은 무엇인가요?",
+  "1시 30분 살레 씨의 엔진 점검은 2번 작업대에서 하는 거죠?",
+  "제가 오일 교환을 맡았어요. 오일 교환 예약을 모두 알려 주시겠어요?"
+ ],
+ "samples": [
+  "On Tuesday, July 7th, the shop is open from 8 A.M. to 6 P.M. The first appointment is an oil change for Mr. Brad Owens at 8 A.M. in Bay 1.",
+  "Actually, Bay 2 closes at noon for repairs. So Mr. Omar Saleh's engine check at 1:30 P.M. will be moved to Bay 3.",
+  "Sure. There are three oil changes. First, at 8 A.M., there's Mr. Brad Owens in Bay 1. Next, at 12 P.M., Ms. Tina Wells is in Bay 3. Finally, at 3 P.M., Ms. Kara Lund is also in Bay 1."
+ ],
+ "samples_ko": [
+  "7월 7일 화요일에는 오전 8시부터 오후 6시까지 영업합니다. 첫 예약은 오전 8시 1번 작업대에서 브래드 오언스 씨의 오일 교환입니다.",
+  "사실 2번 작업대는 수리 때문에 정오에 닫습니다. 그래서 오후 1시 30분 오마르 살레 씨의 엔진 점검은 3번 작업대로 옮겨집니다.",
+  "네. 오일 교환은 세 건입니다. 먼저 오전 8시 1번 작업대에서 브래드 오언스 씨입니다. 다음으로 낮 12시 3번 작업대에서 티나 웰스 씨입니다. 마지막으로 오후 3시에 카라 런드 씨도 1번 작업대입니다."
+ ],
+ "tips": [
+  "notes 의 변경 사항(작업대 이동)은 표의 내용보다 우선한다 — Q9 에서 자주 묻는다",
+  "부가의문문 'isn't it?' 질문에도 'Actually, ...' 로 바로 정정한다"
+ ]
+},
+
+{
+ "id": "ri-046",
+ "doc_type": "예약표",
+ "voice": "male",
+ "info": {
+  "title": "Guest Arrivals — Seaside Inn",
+  "subtitle": "Friday, August 28 · Check-in from 3:00 P.M. · Breakfast: 7:00 – 10:00 A.M.",
+  "rows": [
+   [
+    "Mr. and Mrs. Ellis",
+    "Ocean View Double",
+    "2 nights",
+    "Arriving 4:00 P.M."
+   ],
+   [
+    "Ms. Nora Quinn",
+    "Standard Single",
+    "1 night",
+    "Arriving 6:30 P.M."
+   ],
+   [
+    "The Bauer Family",
+    "Family Suite",
+    "3 nights",
+    "Arriving 2:00 P.M., early check-in"
+   ],
+   [
+    "Mr. Hugo Brandt",
+    "Standard Single",
+    "2 nights",
+    "Arriving 9:00 P.M."
+   ],
+   [
+    "Ms. Elena Popova",
+    "Ocean View Double",
+    "4 nights",
+    "Arriving 5:00 P.M."
+   ],
+   [
+    "Mr. and Mrs. Tanaka",
+    "Family Suite",
+    "1 night",
+    "Arriving 3:30 P.M."
+   ]
+  ],
+  "notes": [
+   "Early check-in costs $20.",
+   "Ocean View rooms include free breakfast."
+  ]
+ },
+ "intro": "Hello, this is Rick from the front desk. I'm starting my shift soon, and I need to check today's arrivals. Could you help me?",
+ "questions": [
+  "What time can guests check in, and when is breakfast served?",
+  "I heard early check-in is free for the Bauer family. Is that right?",
+  "Can you tell me about all the guests staying in Ocean View rooms?"
+ ],
+ "questions_ko": [
+  "손님은 몇 시부터 체크인할 수 있고, 아침 식사는 언제 제공되나요?",
+  "바우어 가족은 얼리 체크인이 무료라고 들었는데, 맞나요?",
+  "오션뷰 객실에 묵는 손님을 모두 알려 주시겠어요?"
+ ],
+ "samples": [
+  "Guests can check in from 3 P.M. today, Friday, August 28th. Breakfast is served from 7 to 10 A.M.",
+  "Actually, early check-in isn't free. It costs twenty dollars. The Bauer family is arriving at 2 P.M., so they'll need to pay that fee.",
+  "Sure. Two guests are staying in Ocean View Double rooms. First, Mr. and Mrs. Ellis will arrive at 4 P.M. and stay for two nights. Next, Ms. Elena Popova will arrive at 5 P.M. and stay for four nights. Both rooms include free breakfast."
+ ],
+ "samples_ko": [
+  "손님은 오늘 8월 28일 금요일 오후 3시부터 체크인할 수 있습니다. 아침 식사는 오전 7시부터 10시까지 제공됩니다.",
+  "사실 얼리 체크인은 무료가 아니에요. 20달러입니다. 바우어 가족은 오후 2시에 도착하니까 그 요금을 내야 합니다.",
+  "네. 오션뷰 더블룸에 묵는 손님은 두 팀입니다. 먼저 엘리스 부부가 오후 4시에 도착해서 2박 합니다. 다음으로 엘레나 포포바 씨가 오후 5시에 도착해서 4박 합니다. 두 객실 모두 아침 식사가 무료로 포함됩니다."
+ ],
+ "tips": [
+  "요금 정정은 'isn't free. It costs ~.' 처럼 짧은 두 문장으로 말한다",
+  "숙박 기간은 'stay for two nights' 로 말한다"
+ ]
+},
+
+{
+ "id": "ri-047",
+ "doc_type": "예약표",
+ "voice": "male",
+ "info": {
+  "title": "Tennis Court Reservations — Greenfield Sports Park",
+  "subtitle": "Sunday, May 17 · Courts 1 – 4 · Fee: $12 per hour",
+  "rows": [
+   [
+    "8:00 – 9:00 A.M.",
+    "Court 1",
+    "Ray Dixon"
+   ],
+   [
+    "8:00 – 10:00 A.M.",
+    "Court 3",
+    "Lisa Monroe"
+   ],
+   [
+    "9:00 – 11:00 A.M.",
+    "Court 2",
+    "Weekend Tennis Club"
+   ],
+   [
+    "11:00 A.M. – 12:00 P.M.",
+    "Court 4",
+    "Closed for maintenance"
+   ],
+   [
+    "1:00 – 3:00 P.M.",
+    "Court 1",
+    "Youth Lesson, Coach Wanda Fox"
+   ],
+   [
+    "2:00 – 3:00 P.M.",
+    "Court 2",
+    "Ray Dixon"
+   ],
+   [
+    "4:00 – 6:00 P.M.",
+    "Court 3",
+    "Lisa Monroe"
+   ]
+  ],
+  "notes": [
+   "Rackets can be rented for $3."
+  ]
+ },
+ "intro": "Hi, this is Ray Dixon. I booked a tennis court at Greenfield Sports Park for this Sunday, but I forgot the details. Can you help me?",
+ "questions": [
+  "How much does it cost to use a court, and can I rent a racket?",
+  "I think my morning reservation is on Court 4. Is that right?",
+  "My friend Lisa Monroe is also playing that day. Can you tell me about her reservations?"
+ ],
+ "questions_ko": [
+  "코트 사용료는 얼마이고, 라켓을 빌릴 수 있나요?",
+  "제 오전 예약이 4번 코트인 것 같은데, 맞나요?",
+  "제 친구 리사 먼로도 그날 테니스를 쳐요. 그녀의 예약을 알려 주시겠어요?"
+ ],
+ "samples": [
+  "It costs twelve dollars per hour to use a court. And yes, you can rent a racket for three dollars.",
+  "Actually, your morning reservation is on Court 1, from 8 to 9 A.M. Court 4 is closed for maintenance from 11 A.M. to noon.",
+  "Sure. Lisa Monroe has two reservations on Sunday, and both are on Court 3. The first one is in the morning, from 8 to 10 A.M. The second one is in the afternoon, from 4 to 6 P.M."
+ ],
+ "samples_ko": [
+  "코트 사용료는 시간당 12달러입니다. 그리고 네, 라켓은 3달러에 빌릴 수 있습니다.",
+  "사실 오전 예약은 1번 코트, 오전 8시부터 9시까지입니다. 4번 코트는 오전 11시부터 정오까지 정비 때문에 닫혀 있어요.",
+  "네. 리사 먼로 씨는 일요일에 예약이 두 건 있고, 둘 다 3번 코트입니다. 첫 번째는 오전 8시부터 10시까지입니다. 두 번째는 오후 4시부터 6시까지입니다."
+ ],
+ "tips": [
+  "사람 이름으로 묻는 Q10 은 표에서 그 이름이 있는 줄을 모두 찾는다",
+  "'per hour', 'for three dollars' 처럼 요금 단위를 빠뜨리지 않는다"
+ ]
+},
+
+{
+ "id": "ri-048",
+ "doc_type": "여행 일정",
+ "voice": "female",
+ "info": {
+  "title": "Kyoto Culture Tour",
+  "subtitle": "Blue Sky Travel · November 3 – 6 · Hotel: Kamo River Inn · Price: $980 per person",
+  "rows": [
+   [
+    "Nov 3",
+    "Arrive at Kansai Airport, bus to Kyoto",
+    "Afternoon"
+   ],
+   [
+    "Nov 4",
+    "Golden Temple and Bamboo Forest",
+    "9:00 A.M. – 3:00 P.M."
+   ],
+   [
+    "Nov 4",
+    "Traditional tea ceremony",
+    "4:30 P.M."
+   ],
+   [
+    "Nov 5",
+    "Day trip to Nara Park",
+    "8:30 A.M. – 4:00 P.M."
+   ],
+   [
+    "Nov 5",
+    "Traditional Japanese dinner",
+    "7:00 P.M., hotel restaurant"
+   ],
+   [
+    "Nov 6",
+    "Free morning for shopping",
+    "Until 12:00 P.M."
+   ],
+   [
+    "Nov 6",
+    "Bus to Kansai Airport",
+    "1:00 P.M."
+   ]
+  ],
+  "notes": [
+   "Lunch is not included in the price.",
+   "The tea ceremony costs an extra $30."
+  ]
+ },
+ "intro": "Hi, this is Wendy. I booked the Kyoto tour with your travel agency, and I'd like to check a few details before I go.",
+ "questions": [
+  "What are the dates of the tour, and where will we stay?",
+  "I was told all meals are included in the tour price. Is that correct?",
+  "Can you tell me about everything we're doing on November fifth?"
+ ],
+ "questions_ko": [
+  "여행 날짜는 언제이고, 어디에서 묵나요?",
+  "모든 식사가 여행 요금에 포함되어 있다고 들었는데, 맞나요?",
+  "11월 5일에 하는 일정을 모두 알려 주시겠어요?"
+ ],
+ "samples": [
+  "The tour runs from November 3rd to 6th. You'll stay at the Kamo River Inn for the whole trip.",
+  "Actually, that's not quite right. Lunch is not included in the price, so you'll need to pay for lunch yourself. Also, the tea ceremony costs an extra thirty dollars.",
+  "Sure. On November 5th, there are two activities. First, you'll take a day trip to Nara Park from 8:30 A.M. to 4 P.M. Then, at 7 P.M., you'll have a traditional Japanese dinner at the hotel restaurant."
+ ],
+ "samples_ko": [
+  "여행은 11월 3일부터 6일까지입니다. 여행 내내 카모 리버 인에 묵습니다.",
+  "사실 꼭 그렇지는 않아요. 점심은 요금에 포함되지 않아서 직접 내셔야 합니다. 또 다도 체험은 30달러가 추가로 듭니다.",
+  "네. 11월 5일에는 일정이 두 개 있습니다. 먼저 오전 8시 30분부터 오후 4시까지 나라 공원으로 당일 여행을 갑니다. 그다음 오후 7시에 호텔 식당에서 일본 전통 저녁 식사를 합니다."
+ ],
+ "tips": [
+  "'not quite right' 는 일부만 틀렸을 때 부드럽게 바로잡는 표현",
+  "추가 요금은 'costs an extra ~ dollars' 로 말한다"
+ ]
+},
+
+{
+ "id": "ri-049",
+ "doc_type": "여행 일정",
+ "voice": "male",
+ "info": {
+  "title": "Canadian Rockies Adventure",
+  "subtitle": "Summit Tours · July 20 – 24 · Lodge: Moraine Pines Lodge · Price: $1,450 per person",
+  "rows": [
+   [
+    "Day 1, July 20",
+    "Arrive in Calgary, drive to Banff",
+    "Welcome dinner, 7:00 P.M."
+   ],
+   [
+    "Day 2, July 21",
+    "Lake Louise canoe trip",
+    "8:00 A.M."
+   ],
+   [
+    "Day 3, July 22",
+    "Glacier hike",
+    "7:30 A.M., hiking boots required"
+   ],
+   [
+    "Day 4, July 23",
+    "Hot springs and free afternoon",
+    "10:00 A.M."
+   ],
+   [
+    "Day 4, July 23",
+    "Wildlife watching tour",
+    "6:00 P.M."
+   ],
+   [
+    "Day 5, July 24",
+    "Drive to Calgary, departure",
+    "9:00 A.M."
+   ]
+  ],
+  "notes": [
+   "The Day 3 gondola ride has been cancelled and replaced by the glacier hike."
+  ]
+ },
+ "intro": "Hello, this is Gordon. My family signed up for the Canadian Rockies tour in July, and I have a few questions about the itinerary.",
+ "questions": [
+  "Where does the tour start, and what happens on the first evening?",
+  "I heard we're taking a gondola ride on the third day. Is that right?",
+  "My kids love outdoor activities. Which activities start before nine in the morning?"
+ ],
+ "questions_ko": [
+  "여행은 어디에서 시작하고, 첫날 저녁에는 무엇을 하나요?",
+  "셋째 날에 곤돌라를 탄다고 들었는데, 맞나요?",
+  "아이들이 야외 활동을 좋아해요. 아침 9시 전에 시작하는 활동은 무엇인가요?"
+ ],
+ "samples": [
+  "The tour starts in Calgary on July 20th. From there, you'll drive to Banff, and there's a welcome dinner at 7 P.M. that evening.",
+  "Actually, the gondola ride has been cancelled. It was replaced by a glacier hike on Day 3, July 22nd, at 7:30 A.M. Hiking boots are required, so please bring them.",
+  "There are two activities that start before 9 A.M. First, on Day 2, July 21st, there's a canoe trip on Lake Louise at 8 A.M. Second, on Day 3, July 22nd, there's a glacier hike at 7:30 A.M. Don't forget your hiking boots."
+ ],
+ "samples_ko": [
+  "여행은 7월 20일 캘거리에서 시작합니다. 거기서 밴프로 이동하고, 그날 저녁 7시에 환영 만찬이 있습니다.",
+  "사실 곤돌라는 취소되었어요. 대신 셋째 날인 7월 22일 오전 7시 30분에 빙하 하이킹이 있습니다. 등산화가 꼭 필요하니 챙겨 오세요.",
+  "아침 9시 전에 시작하는 활동은 두 개입니다. 먼저 둘째 날인 7월 21일 오전 8시에 루이스 호수 카누 여행이 있습니다. 두 번째로 셋째 날인 7월 22일 오전 7시 30분에 빙하 하이킹이 있습니다. 등산화 잊지 마세요."
+ ],
+ "tips": [
+  "'before 9' 조건이면 정확히 9시에 시작하는 항목(마지막 날 출발)은 빼야 한다",
+  "'replaced by ~' 로 취소된 일정의 대체 활동을 알려 준다"
+ ]
+},
+
+{
+ "id": "ri-050",
+ "doc_type": "여행 일정",
+ "voice": "female",
+ "info": {
+  "title": "Barcelona Food and Culture Tour",
+  "subtitle": "Sol Travel · May 22 – 25 · Hotel: Hotel Mar Azul · Meeting point: hotel lobby",
+  "rows": [
+   [
+    "Fri, May 22",
+    "2:00 P.M.",
+    "Hotel check-in"
+   ],
+   [
+    "Fri, May 22",
+    "6:00 P.M.",
+    "Walking tour of the Gothic Quarter"
+   ],
+   [
+    "Sat, May 23",
+    "10:00 A.M.",
+    "Visit to the Sagrada Familia"
+   ],
+   [
+    "Sat, May 23",
+    "1:00 P.M.",
+    "Paella cooking class"
+   ],
+   [
+    "Sun, May 24",
+    "9:30 A.M.",
+    "Food tour of La Boqueria Market"
+   ],
+   [
+    "Sun, May 24",
+    "8:00 P.M.",
+    "Flamenco show"
+   ],
+   [
+    "Mon, May 25",
+    "11:00 A.M.",
+    "Hotel check-out"
+   ]
+  ],
+  "notes": [
+   "Sagrada Familia tickets are included.",
+   "The flamenco show was moved from Saturday to Sunday."
+  ]
+ },
+ "intro": "Hi, this is Irene. I'm joining the Barcelona tour next month, and I'd like to confirm some details. Do you have a minute?",
+ "questions": [
+  "What time can we check in at the hotel, and where do we meet the group?",
+  "I heard the flamenco show is on Saturday night. Is that right?",
+  "I'm really interested in food. Could you tell me about all the food activities?"
+ ],
+ "questions_ko": [
+  "호텔에는 몇 시에 체크인할 수 있고, 일행과는 어디에서 만나나요?",
+  "플라멩코 공연이 토요일 밤이라고 들었는데, 맞나요?",
+  "저는 음식에 관심이 정말 많아요. 음식 관련 활동을 모두 알려 주시겠어요?"
+ ],
+ "samples": [
+  "You can check in at Hotel Mar Azul at 2 P.M. on Friday, May 22nd. The group meets in the hotel lobby.",
+  "Actually, the flamenco show was moved from Saturday to Sunday. It's now on Sunday, May 24th, at 8 P.M.",
+  "Sure. There are two food activities. First, on Saturday, May 23rd, at 1 P.M., there's a paella cooking class. Then, on Sunday, May 24th, at 9:30 A.M., you'll go on a food tour of La Boqueria Market."
+ ],
+ "samples_ko": [
+  "5월 22일 금요일 오후 2시에 호텔 마르 아술에 체크인할 수 있습니다. 일행은 호텔 로비에서 만납니다.",
+  "사실 플라멩코 공연은 토요일에서 일요일로 옮겨졌어요. 이제 5월 24일 일요일 오후 8시입니다.",
+  "네. 음식 관련 활동은 두 개입니다. 먼저 5월 23일 토요일 오후 1시에 파에야 요리 수업이 있습니다. 그다음 5월 24일 일요일 오전 9시 30분에 라 보케리아 시장 음식 투어를 합니다."
+ ],
+ "tips": [
+  "'moved from A to B' 를 그대로 활용해 정정하고 새 시간을 덧붙인다",
+  "음식처럼 주제로 묻는 Q10 은 제목의 핵심 단어(cooking, food)로 줄을 찾는다"
+ ]
+},
+
+{
+ "id": "ri-051",
+ "doc_type": "강연 일정",
+ "voice": "male",
+ "info": {
+  "title": "Green Living Talks — Brookfield Community Hall",
+  "subtitle": "Tuesdays, 6:30 – 8:00 P.M. · Room A · Free for residents, $10 for non-residents",
+  "rows": [
+   [
+    "April 7",
+    "Composting at Home",
+    "Dr. Margaret Lin"
+   ],
+   [
+    "April 14",
+    "Saving Energy All Year Round",
+    "Jake Dorsey"
+   ],
+   [
+    "April 21",
+    "Growing Vegetables on a Balcony",
+    "Dr. Margaret Lin"
+   ],
+   [
+    "April 28",
+    "Reducing Plastic in Your Kitchen",
+    "Sana Malik"
+   ],
+   [
+    "May 5",
+    "Electric Cars: Are They Right for You?",
+    "Jake Dorsey"
+   ],
+   [
+    "May 12",
+    "Rainwater Collection — CANCELLED",
+    "Sana Malik"
+   ]
+  ]
+ },
+ "intro": "Hi, this is Neil. I'm interested in the green living talks at the community hall. Could you give me some information?",
+ "questions": [
+  "What time do the talks start, and how much do they cost?",
+  "I heard the last talk is about rainwater collection on May twelfth. Is that right?",
+  "I really enjoyed a talk by Dr. Margaret Lin before. Can you tell me about all of her talks?"
+ ],
+ "questions_ko": [
+  "강연은 몇 시에 시작하고, 비용은 얼마인가요?",
+  "마지막 강연이 5월 12일 빗물 모으기라고 들었는데, 맞나요?",
+  "전에 마거릿 린 박사의 강연이 정말 좋았어요. 그분의 강연을 모두 알려 주시겠어요?"
+ ],
+ "samples": [
+  "The talks are on Tuesdays. They start at 6:30 P.M. and end at 8 P.M. They're free for residents, but they cost ten dollars for non-residents.",
+  "Actually, the May 12th talk on rainwater collection has been cancelled. So the last talk will be on May 5th. Jake Dorsey will talk about electric cars.",
+  "Sure. Dr. Margaret Lin is giving two talks. First, on April 7th, she will talk about composting at home. Then, on April 21st, her talk is about growing vegetables on a balcony. Both talks are in Room A."
+ ],
+ "samples_ko": [
+  "강연은 화요일마다 있습니다. 오후 6시 30분에 시작해서 8시에 끝납니다. 주민은 무료지만, 주민이 아니면 10달러입니다.",
+  "사실 5월 12일 빗물 모으기 강연은 취소되었어요. 그래서 마지막 강연은 5월 5일입니다. 제이크 도시 씨가 전기차에 대해 이야기합니다.",
+  "네. 마거릿 린 박사님은 강연을 두 번 합니다. 먼저 4월 7일에 가정 퇴비 만들기에 대해 이야기합니다. 그다음 4월 21일 강연은 베란다에서 채소 기르기입니다. 두 강연 모두 A실에서 열립니다."
+ ],
+ "tips": [
+  "'the last ~' 를 물으면 취소된 항목을 빼고 실제 마지막 항목을 알려 준다",
+  "강연 주제는 'talk about ~ / her talk is about ~' 로 말한다"
+ ]
+},
+
+{
+ "id": "ri-052",
+ "doc_type": "강연 일정",
+ "voice": "female",
+ "info": {
+  "title": "Healthy Aging Lecture Series — Riverbend Medical Center",
+  "subtitle": "Saturdays, 10:00 – 11:30 A.M. · Auditorium, 1st Floor · Registration required, $5 per lecture",
+  "rows": [
+   [
+    "September 12",
+    "Eating Well After Fifty",
+    "Dr. Paula Greene, Nutritionist"
+   ],
+   [
+    "September 19",
+    "Keeping Your Heart Healthy",
+    "Dr. Arthur Bloom, Heart Specialist"
+   ],
+   [
+    "September 26",
+    "Better Sleep, Better Life",
+    "Dr. Nadia Karimi, Sleep Specialist"
+   ],
+   [
+    "October 3",
+    "Simple Exercises for Strong Bones",
+    "Mark Delaney, Physical Therapist"
+   ],
+   [
+    "October 10",
+    "Memory Tips for Everyday Life",
+    "Dr. Nadia Karimi"
+   ],
+   [
+    "October 17",
+    "Managing Stress",
+    "Dr. Arthur Bloom"
+   ]
+  ],
+  "notes": [
+   "The October 3 lecture will be held in the Fitness Room, 2nd Floor."
+  ]
+ },
+ "intro": "Hello, my name is Martha. My father and I want to attend the lecture series at your medical center. Can I ask you a few questions?",
+ "questions": [
+  "What time are the lectures, and do we need to register?",
+  "All the lectures are held in the auditorium, right?",
+  "My father is interested in Dr. Nadia Karimi. Can you tell me about all of her lectures?"
+ ],
+ "questions_ko": [
+  "강연은 몇 시에 있고, 등록해야 하나요?",
+  "모든 강연이 강당에서 열리는 거죠?",
+  "아버지가 나디아 카리미 박사님에게 관심이 있어요. 그분의 강연을 모두 알려 주시겠어요?"
+ ],
+ "samples": [
+  "The lectures are on Saturdays from 10 to 11:30 A.M. And yes, you need to register. It costs five dollars per lecture.",
+  "Actually, not all of them. The October 3rd lecture, Simple Exercises for Strong Bones, will be held in the Fitness Room on the second floor. The others are in the auditorium.",
+  "Sure. Dr. Nadia Karimi is a sleep specialist, and she's giving two lectures. First, on September 26th, she'll talk about better sleep for a better life. Then, on October 10th, her lecture is about memory tips for everyday life."
+ ],
+ "samples_ko": [
+  "강연은 토요일 오전 10시부터 11시 30분까지입니다. 그리고 네, 등록하셔야 합니다. 강연 한 번에 5달러입니다.",
+  "사실 전부는 아니에요. 10월 3일 '튼튼한 뼈를 위한 간단한 운동' 강연은 2층 체력 단련실에서 열립니다. 나머지는 강당에서 합니다.",
+  "네. 나디아 카리미 박사님은 수면 전문의이고, 강연을 두 번 합니다. 먼저 9월 26일에 더 나은 삶을 위한 숙면에 대해 이야기합니다. 그다음 10월 10일 강연은 일상 속 기억력 요령입니다."
+ ],
+ "tips": [
+  "Yes/No 질문은 'And yes, ...' 로 먼저 답하고 세부 정보를 덧붙인다",
+  "강연자의 직함(sleep specialist)을 함께 말하면 답이 풍부해진다"
+ ]
+},
+
+{
+ "id": "ri-053",
+ "doc_type": "강연 일정",
+ "voice": "male",
+ "info": {
+  "title": "Tech Futures Speaker Series — Northbay Innovation Hub",
+  "subtitle": "Thursdays, 7:00 – 8:30 P.M. · Hub Theater · Tickets: $15, students $8",
+  "rows": [
+   [
+    "Feb 5",
+    "AI Tools for Small Businesses",
+    "Rita Okafor, CEO, Brightmind Labs"
+   ],
+   [
+    "Feb 12",
+    "The Future of Online Shopping",
+    "Liam Doyle, Retail Analyst"
+   ],
+   [
+    "Feb 19",
+    "Cybersecurity for Everyone",
+    "Zoe Haddad, Security Engineer"
+   ],
+   [
+    "Feb 26",
+    "Robots in Farming",
+    "Dr. Hiro Sato, Agricultural Engineer"
+   ],
+   [
+    "Mar 5",
+    "Building Apps Without Coding",
+    "Rita Okafor"
+   ],
+   [
+    "Mar 12",
+    "Smart Cities and Transportation",
+    "Dr. Hiro Sato"
+   ]
+  ],
+  "notes": [
+   "Tickets for the Feb 5 talk are sold out."
+  ]
+ },
+ "intro": "Hi, this is Carlos. I'm a university student, and I'd like to attend some talks at the innovation hub. Can I ask you a few questions?",
+ "questions": [
+  "How much are the tickets, and where are the talks held?",
+  "I'm planning to buy a ticket for the talk on February fifth. There are still tickets available, right?",
+  "I'm studying engineering. Can you tell me about all the talks given by engineers?"
+ ],
+ "questions_ko": [
+  "표는 얼마이고, 강연은 어디에서 열리나요?",
+  "2월 5일 강연 표를 사려고 해요. 아직 남아 있죠?",
+  "저는 공학을 공부해요. 엔지니어가 하는 강연을 모두 알려 주시겠어요?"
+ ],
+ "samples": [
+  "Tickets are fifteen dollars, but students pay only eight dollars. The talks are held in the Hub Theater on Thursdays from 7 to 8:30 P.M.",
+  "Actually, I'm sorry, but tickets for the February 5th talk are sold out. But Rita Okafor is speaking again on March 5th, about building apps without coding.",
+  "Sure. There are three talks by engineers. First, on February 19th, security engineer Zoe Haddad will talk about cybersecurity for everyone. Next, on February 26th, Dr. Hiro Sato, an agricultural engineer, will speak about robots in farming. Finally, on March 12th, Dr. Sato will talk about smart cities and transportation."
+ ],
+ "samples_ko": [
+  "표는 15달러지만 학생은 8달러만 내면 됩니다. 강연은 목요일 오후 7시부터 8시 30분까지 허브 극장에서 열립니다.",
+  "사실 죄송하지만 2월 5일 강연 표는 매진되었어요. 하지만 리타 오카포 씨가 3월 5일에 코딩 없이 앱 만들기를 주제로 다시 강연합니다.",
+  "네. 엔지니어 강연은 세 개입니다. 먼저 2월 19일에 보안 엔지니어 조이 하다드 씨가 모두를 위한 사이버 보안에 대해 이야기합니다. 다음으로 2월 26일에 농업 엔지니어 히로 사토 박사가 농업용 로봇에 대해 강연합니다. 마지막으로 3월 12일에 사토 박사가 스마트 시티와 교통에 대해 이야기합니다."
+ ],
+ "tips": [
+  "매진 소식 뒤에는 같은 강연자의 다른 날짜를 대안으로 알려 준다",
+  "직업 조건(engineer)은 이름 옆 직함을 보고 찾는다 — 두 번째 등장 때는 직함이 생략될 수 있다"
+ ]
+},
+
+{
+ "id": "ri-054",
+ "doc_type": "회의 안건",
+ "voice": "male",
+ "info": {
+  "title": "Quarterly Sales Review — Pinnacle Home Appliances",
+  "subtitle": "Thursday, July 9 · 9:00 – 11:00 A.M. · Board Room, 6th Floor",
+  "rows": [
+   [
+    "9:00 – 9:15",
+    "Welcome and Goals",
+    "Sharon Blake, Sales Director"
+   ],
+   [
+    "9:15 – 9:45",
+    "Second Quarter Sales Results",
+    "Alex Morrow, Sales Analyst"
+   ],
+   [
+    "9:45 – 10:15",
+    "New Product Launch: Smart Refrigerator",
+    "Priya Desai, Product Manager"
+   ],
+   [
+    "10:15 – 10:30",
+    "Coffee Break",
+    "Lounge"
+   ],
+   [
+    "10:30 – 10:45",
+    "Customer Feedback Report",
+    "Priya Desai"
+   ],
+   [
+    "10:45 – 11:00",
+    "Third Quarter Sales Targets",
+    "Sharon Blake"
+   ]
+  ],
+  "notes": [
+   "The budget discussion has been moved to the August meeting."
+  ]
+ },
+ "intro": "Hi, this is Gavin from the Denver office. I'll be joining the quarterly sales review, but I don't have the agenda. Could you help me?",
+ "questions": [
+  "When and where is the meeting?",
+  "I heard we're going to discuss the budget at this meeting. Is that right?",
+  "Can you tell me about all the items that Priya Desai is presenting?"
+ ],
+ "questions_ko": [
+  "회의는 언제, 어디에서 하나요?",
+  "이번 회의에서 예산을 논의한다고 들었는데, 맞나요?",
+  "프리야 데사이 씨가 발표하는 안건을 모두 알려 주시겠어요?"
+ ],
+ "samples": [
+  "The meeting is on Thursday, July 9th, from 9 to 11 A.M. It will be held in the Board Room on the sixth floor.",
+  "Actually, the budget discussion has been moved to the August meeting. So we won't talk about the budget this time.",
+  "Sure. Priya Desai, the product manager, is presenting two items. First, from 9:45 to 10:15, she'll talk about the new product launch, the smart refrigerator. Then, after the coffee break, from 10:30 to 10:45, she'll present the customer feedback report."
+ ],
+ "samples_ko": [
+  "회의는 7월 9일 목요일 오전 9시부터 11시까지입니다. 6층 회의실에서 열립니다.",
+  "사실 예산 논의는 8월 회의로 옮겨졌어요. 그래서 이번에는 예산 이야기를 하지 않습니다.",
+  "네. 제품 관리자 프리야 데사이 씨는 안건 두 개를 발표합니다. 먼저 9시 45분부터 10시 15분까지 신제품 출시, 스마트 냉장고에 대해 이야기합니다. 그다음 휴식 시간 후 10시 30분부터 10시 45분까지 고객 의견 보고서를 발표합니다."
+ ],
+ "tips": [
+  "표에 없는 안건을 물으면 notes 를 확인 — 'has been moved to ~' 로 답한다",
+  "'after the coffee break' 처럼 표의 다른 줄을 기준점으로 쓰면 자연스럽다"
+ ]
+},
+
+{
+ "id": "ri-055",
+ "doc_type": "회의 안건",
+ "voice": "female",
+ "info": {
+  "title": "Annual Planning Meeting — Lakeside Public Library",
+  "subtitle": "Monday, January 19 · 1:00 – 4:00 P.M. · Community Room",
+  "rows": [
+   [
+    "1:00 P.M.",
+    "Review of Last Year's Programs",
+    "Director Frances Lowe"
+   ],
+   [
+    "1:30 P.M.",
+    "New Children's Reading Program",
+    "Megan Cruz"
+   ],
+   [
+    "2:15 P.M.",
+    "Building Repairs Update",
+    "Walter Hayes, Facilities"
+   ],
+   [
+    "2:45 P.M.",
+    "Break",
+    "Snacks in the staff lounge"
+   ],
+   [
+    "3:00 P.M.",
+    "Volunteer Program Changes",
+    "Megan Cruz"
+   ],
+   [
+    "3:30 P.M.",
+    "Budget for New Computers",
+    "Director Frances Lowe"
+   ]
+  ],
+  "notes": [
+   "Staff on the evening shift may join by video call."
+  ]
+ },
+ "intro": "Hi, this is Joyce. I'm a librarian at Lakeside, but I missed the email about the planning meeting. Can you give me some details?",
+ "questions": [
+  "What day is the meeting, and what time does it start?",
+  "I heard the meeting will be held in the staff lounge. Is that right?",
+  "Which topics will Director Frances Lowe cover at the meeting?"
+ ],
+ "questions_ko": [
+  "회의는 무슨 요일이고, 몇 시에 시작하나요?",
+  "회의가 직원 휴게실에서 열린다고 들었는데, 맞나요?",
+  "프랜시스 로 관장님은 회의에서 어떤 주제를 다루나요?"
+ ],
+ "samples": [
+  "The meeting is on Monday, January 19th. It starts at 1 P.M. and ends at 4 P.M.",
+  "Actually, the meeting is in the Community Room. The staff lounge is just where snacks will be served during the break at 2:45 P.M.",
+  "Director Frances Lowe will cover two topics. First, at 1 P.M., she'll review last year's programs. Then, at 3:30 P.M., at the end of the meeting, she'll talk about the budget for new computers."
+ ],
+ "samples_ko": [
+  "회의는 1월 19일 월요일입니다. 오후 1시에 시작해서 4시에 끝납니다.",
+  "사실 회의는 커뮤니티 룸에서 열립니다. 직원 휴게실은 오후 2시 45분 휴식 시간에 간식이 나오는 곳일 뿐이에요.",
+  "프랜시스 로 관장님은 두 가지 주제를 다룹니다. 먼저 오후 1시에 작년 프로그램을 검토합니다. 그다음 회의 마지막인 오후 3시 30분에 새 컴퓨터 예산에 대해 이야기합니다."
+ ],
+ "tips": [
+  "표에 나온 다른 장소(휴게실)와 헷갈리게 만든 함정 — 두 장소의 역할을 구분해 말한다",
+  "'at the end of the meeting' 같은 위치 표현으로 순서를 보여 준다"
+ ]
+},
+
+{
+ "id": "ri-056",
+ "doc_type": "회의 안건",
+ "voice": "male",
+ "info": {
+  "title": "Product Launch Meeting — Zephyr Sportswear",
+  "subtitle": "Wednesday, March 4 · 3:00 – 5:00 P.M. · Online meeting · Host: Derek Shaw",
+  "rows": [
+   [
+    "3:00 – 3:10",
+    "Introduction",
+    "Derek Shaw, Marketing Director"
+   ],
+   [
+    "3:10 – 3:40",
+    "Running Shoe Design Review",
+    "Mei Okada, Designer"
+   ],
+   [
+    "3:40 – 4:00",
+    "Pricing Plan",
+    "Ross Avery, Finance"
+   ],
+   [
+    "4:00 – 4:20",
+    "Advertising Campaign",
+    "Jill Navarro, Advertising Team"
+   ],
+   [
+    "4:20 – 4:40",
+    "Store Display Ideas",
+    "Jill Navarro"
+   ],
+   [
+    "4:40 – 5:00",
+    "Launch Date Decision",
+    "Derek Shaw"
+   ]
+  ],
+  "notes": [
+   "Presenter change: Ross Avery will replace Gina Wu for the Pricing Plan."
+  ]
+ },
+ "intro": "Hello, this is Brandon from the sales team. I'm joining the product launch meeting on Wednesday, and I have a few questions about the agenda.",
+ "questions": [
+  "What time does the meeting start, and is it in person?",
+  "I think Gina Wu is presenting the pricing plan. Is that correct?",
+  "I'm interested in marketing. Could you tell me about the items presented by Jill Navarro?"
+ ],
+ "questions_ko": [
+  "회의는 몇 시에 시작하고, 대면 회의인가요?",
+  "지나 우 씨가 가격 계획을 발표하는 걸로 아는데, 맞나요?",
+  "저는 마케팅에 관심이 있어요. 질 나바로 씨가 발표하는 안건을 알려 주시겠어요?"
+ ],
+ "samples": [
+  "The meeting starts at 3 P.M. on Wednesday, March 4th, and ends at 5 P.M. It's not in person. It's an online meeting hosted by Derek Shaw.",
+  "Actually, there's been a change. Ross Avery from finance will present the pricing plan instead of Gina Wu. It's from 3:40 to 4 P.M.",
+  "Sure. Jill Navarro from the advertising team has two items. First, from 4 to 4:20 P.M., she'll talk about the advertising campaign. Then, from 4:20 to 4:40 P.M., she'll share some store display ideas."
+ ],
+ "samples_ko": [
+  "회의는 3월 4일 수요일 오후 3시에 시작해서 5시에 끝납니다. 대면 회의가 아니라 데릭 쇼 씨가 진행하는 온라인 회의입니다.",
+  "사실 변경 사항이 있어요. 지나 우 씨 대신 재무팀 로스 에이버리 씨가 가격 계획을 발표합니다. 오후 3시 40분부터 4시까지입니다.",
+  "네. 광고팀 질 나바로 씨는 안건이 두 개입니다. 먼저 오후 4시부터 4시 20분까지 광고 캠페인에 대해 이야기합니다. 그다음 오후 4시 20분부터 4시 40분까지 매장 진열 아이디어를 공유합니다."
+ ],
+ "tips": [
+  "발표자 변경은 'A will present ... instead of B' 로 말한다",
+  "'Actually, there's been a change.' 는 어떤 변경에도 쓸 수 있는 첫 문장"
+ ]
+},
+
+{
+ "id": "ri-057",
+ "doc_type": "회의 안건",
+ "voice": "female",
+ "info": {
+  "title": "Safety Committee Meeting — Redstone Manufacturing",
+  "subtitle": "Friday, October 23 · 7:30 – 9:00 A.M. · Training Room B · Breakfast provided",
+  "rows": [
+   [
+    "7:30 A.M.",
+    "Breakfast and Sign-in",
+    "Training Room B"
+   ],
+   [
+    "7:45 A.M.",
+    "Accident Report: Third Quarter",
+    "Plant Manager Hugo Lindqvist"
+   ],
+   [
+    "8:05 A.M.",
+    "New Safety Gloves and Helmets",
+    "Rosa Diaz, Safety Officer"
+   ],
+   [
+    "8:25 A.M.",
+    "Fire Drill Results",
+    "Rosa Diaz"
+   ],
+   [
+    "8:40 A.M.",
+    "Forklift Training Schedule",
+    "Curtis Lyle, Warehouse Supervisor"
+   ],
+   [
+    "8:55 A.M.",
+    "Closing",
+    "Plant Manager Hugo Lindqvist"
+   ]
+  ],
+  "notes": [
+   "Members who cannot attend should send a substitute."
+  ]
+ },
+ "intro": "Hi, this is Monique from the packaging line. I'm joining the safety committee meeting this week for the first time. Could you answer some questions?",
+ "questions": [
+  "Where is the meeting, and will food be provided?",
+  "I heard the meeting starts at eight o'clock. Is that right?",
+  "Can you tell me about all the items presented by the safety officer?"
+ ],
+ "questions_ko": [
+  "회의는 어디에서 하고, 음식이 제공되나요?",
+  "회의가 8시에 시작한다고 들었는데, 맞나요?",
+  "안전 담당자가 발표하는 안건을 모두 알려 주시겠어요?"
+ ],
+ "samples": [
+  "The meeting is in Training Room B on Friday, October 23rd. And yes, breakfast is provided. Breakfast and sign-in start at 7:30 A.M.",
+  "Actually, the meeting starts earlier, at 7:30 A.M. First there's breakfast and sign-in, and then the first presentation begins at 7:45 A.M.",
+  "Sure. Rosa Diaz, the safety officer, will present two items. First, at 8:05 A.M., she'll talk about the new safety gloves and helmets. Then, at 8:25 A.M., she'll share the fire drill results."
+ ],
+ "samples_ko": [
+  "회의는 10월 23일 금요일 B 교육실에서 합니다. 그리고 네, 아침 식사가 제공됩니다. 아침 식사와 출석 확인은 오전 7시 30분에 시작합니다.",
+  "사실 회의는 더 일찍, 오전 7시 30분에 시작합니다. 먼저 아침 식사와 출석 확인이 있고, 그다음 오전 7시 45분에 첫 발표가 시작됩니다.",
+  "네. 안전 담당자 로사 디아즈 씨가 안건 두 개를 발표합니다. 먼저 오전 8시 5분에 새 안전 장갑과 안전모에 대해 이야기합니다. 그다음 오전 8시 25분에 소방 훈련 결과를 공유합니다."
+ ],
+ "tips": [
+  "시간 정정은 'starts earlier, at ~' / 'starts later, at ~' 로 비교를 담는다",
+  "직함(safety officer)으로 묻는 질문은 이름을 찾아 함께 말한다"
+ ]
+},
+
+{
+ "id": "ri-058",
+ "doc_type": "교육 일정",
+ "voice": "male",
+ "info": {
+  "title": "Customer Service Training — Horizon Airlines",
+  "subtitle": "Tuesday, June 2 – Wednesday, June 3 · Training Center, Room 210 · For new check-in staff",
+  "rows": [
+   [
+    "June 2",
+    "9:00 A.M. – 12:00 P.M.",
+    "Airline Check-in System",
+    "Melissa Yoon"
+   ],
+   [
+    "June 2",
+    "1:00 – 3:00 P.M.",
+    "Handling Difficult Customers",
+    "Darius Lowry"
+   ],
+   [
+    "June 2",
+    "3:15 – 5:00 P.M.",
+    "Baggage Rules and Fees",
+    "Melissa Yoon"
+   ],
+   [
+    "June 3",
+    "9:00 – 11:00 A.M.",
+    "Safety and Security Procedures",
+    "Captain Ruth Barnes"
+   ],
+   [
+    "June 3",
+    "11:00 A.M. – 12:00 P.M.",
+    "Airport Tour",
+    "Meet at Gate 4"
+   ],
+   [
+    "June 3",
+    "1:00 – 3:00 P.M.",
+    "Role-Play Practice",
+    "Darius Lowry"
+   ],
+   [
+    "June 3",
+    "3:00 – 3:30 P.M.",
+    "Final Quiz",
+    "Room 210"
+   ]
+  ],
+  "notes": [
+   "Lunch is provided in the staff cafeteria on both days.",
+   "Wear your uniform on June 3."
+  ]
+ },
+ "intro": "Hi, this is Jordan. I'm a new check-in agent at Horizon Airlines, and I start training next week. Can I ask you some questions?",
+ "questions": [
+  "When is the training, and where will it be held?",
+  "I heard I have to bring my own lunch. Is that true?",
+  "Can you tell me about all the sessions led by Melissa Yoon?"
+ ],
+ "questions_ko": [
+  "교육은 언제이고, 어디에서 열리나요?",
+  "점심을 직접 싸 와야 한다고 들었는데, 사실인가요?",
+  "멜리사 윤 씨가 진행하는 교육을 모두 알려 주시겠어요?"
+ ],
+ "samples": [
+  "The training is on Tuesday, June 2nd, and Wednesday, June 3rd. It will be held in Room 210 at the Training Center.",
+  "Actually, you don't need to bring lunch. Lunch is provided in the staff cafeteria on both days. Also, remember to wear your uniform on June 3rd.",
+  "Sure. Melissa Yoon leads two sessions, and both are on June 2nd. First, from 9 A.M. to noon, she'll teach the airline check-in system. Then, from 3:15 to 5 P.M., she'll cover baggage rules and fees."
+ ],
+ "samples_ko": [
+  "교육은 6월 2일 화요일과 6월 3일 수요일에 있습니다. 교육 센터 210호에서 진행됩니다.",
+  "사실 점심은 가져오지 않으셔도 됩니다. 이틀 모두 직원 식당에서 점심이 제공됩니다. 또 6월 3일에는 유니폼을 꼭 입으세요.",
+  "네. 멜리사 윤 씨는 교육 두 개를 진행하고, 둘 다 6월 2일입니다. 먼저 오전 9시부터 정오까지 항공사 체크인 시스템을 가르칩니다. 그다음 오후 3시 15분부터 5시까지 수하물 규정과 요금을 다룹니다."
+ ],
+ "tips": [
+  "'Is that true?' 에는 'Actually, you don't need to ~' 로 안심시키며 정정한다",
+  "12:00 P.M. 은 'noon' 으로 읽으면 더 자연스럽다"
+ ]
+},
+
+{
+ "id": "ri-059",
+ "doc_type": "교육 일정",
+ "voice": "female",
+ "info": {
+  "title": "Leadership Workshop for New Managers — Vantage Bank",
+  "subtitle": "Fridays, September 4 – October 9 · 2:00 – 5:00 P.M. · Head Office, 9th Floor · Online option available",
+  "rows": [
+   [
+    "Sept 4",
+    "Your Role as a New Manager",
+    "Lydia Marsh"
+   ],
+   [
+    "Sept 11",
+    "Giving Useful Feedback",
+    "Omar Rahimi"
+   ],
+   [
+    "Sept 18",
+    "Running Effective Meetings",
+    "Lydia Marsh"
+   ],
+   [
+    "Sept 25",
+    "No session",
+    "Company sports day"
+   ],
+   [
+    "Oct 2",
+    "Managing Your Time",
+    "Omar Rahimi"
+   ],
+   [
+    "Oct 9",
+    "Handling Conflict on Your Team",
+    "Lydia Marsh"
+   ]
+  ],
+  "notes": [
+   "Certificates will be given out after the last session."
+  ]
+ },
+ "intro": "Hi, this is Teresa. I was just promoted to branch manager, and I signed up for the leadership workshop. Could you help me with a few questions?",
+ "questions": [
+  "What day of the week are the sessions, and what time do they start?",
+  "I think there's a session on September twenty-fifth. Is that right?",
+  "Can you tell me about all the sessions taught by Lydia Marsh?"
+ ],
+ "questions_ko": [
+  "교육은 무슨 요일에 있고, 몇 시에 시작하나요?",
+  "9월 25일에 교육이 있는 것 같은데, 맞나요?",
+  "리디아 마시 씨가 가르치는 교육을 모두 알려 주시겠어요?"
+ ],
+ "samples": [
+  "The sessions are on Fridays. They start at 2 P.M. and finish at 5 P.M. at the head office on the ninth floor. There's also an online option.",
+  "Actually, there's no session on September 25th because of the company sports day. The next session after September 18th is on October 2nd.",
+  "Sure. Lydia Marsh teaches three sessions. First, on September 4th, she'll talk about your role as a new manager. Next, on September 18th, she'll teach running effective meetings. Finally, on October 9th, the last session, she'll cover handling conflict on your team."
+ ],
+ "samples_ko": [
+  "교육은 금요일마다 있습니다. 본사 9층에서 오후 2시에 시작해 5시에 끝납니다. 온라인으로 들을 수도 있습니다.",
+  "사실 9월 25일에는 회사 체육대회 때문에 교육이 없어요. 9월 18일 다음 교육은 10월 2일입니다.",
+  "네. 리디아 마시 씨는 세 번 가르칩니다. 먼저 9월 4일에 신임 관리자의 역할에 대해 이야기합니다. 다음으로 9월 18일에 효과적인 회의 진행법을 가르칩니다. 마지막으로 마지막 교육인 10월 9일에 팀 내 갈등 다루기를 다룹니다."
+ ],
+ "tips": [
+  "'No session' 줄은 'because of ~' 로 이유를 함께 말하고 다음 일정을 알려 준다",
+  "세 항목은 First → Next → Finally 로 날짜 순서대로"
+ ]
+},
+
+{
+ "id": "ri-060",
+ "doc_type": "교육 일정",
+ "voice": "male",
+ "info": {
+  "title": "Food Safety Certification Course — Metro Restaurant Association",
+  "subtitle": "Saturday, November 14 · 8:30 A.M. – 4:30 P.M. · Oakwood Hotel, Maple Room · Fee: $95, textbook included",
+  "rows": [
+   [
+    "8:30 – 9:00 A.M.",
+    "Registration",
+    "Hotel lobby"
+   ],
+   [
+    "9:00 – 10:30 A.M.",
+    "Food Storage and Temperature",
+    "Chef Lena Moretti"
+   ],
+   [
+    "10:45 A.M. – 12:00 P.M.",
+    "Cleaning and Sanitizing",
+    "Inspector Roy Bishop"
+   ],
+   [
+    "12:00 – 1:00 P.M.",
+    "Lunch",
+    "Not included"
+   ],
+   [
+    "1:00 – 2:30 P.M.",
+    "Food Allergies in the Kitchen",
+    "Chef Lena Moretti"
+   ],
+   [
+    "2:45 – 3:45 P.M.",
+    "Review Session",
+    "Inspector Roy Bishop"
+   ],
+   [
+    "3:45 – 4:30 P.M.",
+    "Certification Exam",
+    "Maple Room"
+   ]
+  ],
+  "notes": [
+   "Bring a photo ID for the exam."
+  ]
+ },
+ "intro": "Hello, this is Hector. I own a small restaurant, and I'd like to take the food safety course. Could I ask a few questions?",
+ "questions": [
+  "When is the course, and how much does it cost?",
+  "I heard lunch is included in the course fee. Is that correct?",
+  "Can you tell me about all the sessions with Inspector Roy Bishop?"
+ ],
+ "questions_ko": [
+  "교육 과정은 언제이고, 비용은 얼마인가요?",
+  "점심이 수강료에 포함되어 있다고 들었는데, 맞나요?",
+  "로이 비숍 검사관이 진행하는 시간을 모두 알려 주시겠어요?"
+ ],
+ "samples": [
+  "The course is on Saturday, November 14th, from 8:30 A.M. to 4:30 P.M. It costs ninety-five dollars, and that includes the textbook.",
+  "Actually, lunch is not included. There's a lunch break from noon to 1 P.M., but you'll need to buy your own lunch.",
+  "Sure. Inspector Roy Bishop leads two sessions. First, from 10:45 A.M. to noon, he'll teach cleaning and sanitizing. Then, from 2:45 to 3:45 P.M., he'll lead a review session right before the certification exam. Remember to bring a photo ID for the exam."
+ ],
+ "samples_ko": [
+  "교육은 11월 14일 토요일 오전 8시 30분부터 오후 4시 30분까지입니다. 비용은 95달러이고, 교재가 포함되어 있습니다.",
+  "사실 점심은 포함되지 않아요. 정오부터 오후 1시까지 점심시간이 있지만, 점심은 직접 사 드셔야 합니다.",
+  "네. 로이 비숍 검사관은 두 시간을 진행합니다. 먼저 오전 10시 45분부터 정오까지 청소와 소독을 가르칩니다. 그다음 오후 2시 45분부터 3시 45분까지 자격 시험 바로 전에 복습 시간을 진행합니다. 시험에는 사진이 있는 신분증을 꼭 가져오세요."
+ ],
+ "tips": [
+  "포함 여부 질문은 'that includes ~' / '~ is not included' 로 답한다",
+  "Q10 끝에 notes 의 준비물을 'Remember to ~' 로 덧붙이면 좋다"
+ ]
+}
+]
