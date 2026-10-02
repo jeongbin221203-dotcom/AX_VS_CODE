@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% from "_macros.html" import fit_badge, dday_chip %}
+{% block title %}{{ p.company }} · {{ p.title }}{% endblock %}
+{% block content %}
+<a class="muted small" href="{{ url_for('jobs.index') }}">← 공고 목록</a>
+<div class="detail-head">
+  <div>
+    <div class="job-co">{{ p.company }} <span class="src">{{ p.source | source_name }}</span> {{ dday_chip(p.dday) }}</div>
+    <h1>{{ p.title }}</h1>
+  </div>
+  {{ fit_badge(r) }}
+</div>
+
+{% if p.deadline and p.dday is not none and p.dday < 0 %}
+<div class="flash warn">마감된 공고입니다 ({{ p.deadline }}). {{ '저장해 두어 다시 볼 수 있습니다.' if p.saved else '저장하지 않으면 곧 지워집니다.' }}</div>
+{% endif %}
+{% if r.blockers %}<div class="flash err">⛔ 지원 전 확인: {{ r.blockers | join(' · ') }}</div>
+{% else %}<div class="flash ok">✓ 지원 가능 — {{ r.grade }} ({{ r.score }}점)</div>{% endif %}
+
+<div class="grid2">
+  <section class="card">
+    <h2>공고 정보</h2>
+    <dl class="kv">
+      <dt>지역</dt><dd>{{ p.sido or '미상' }} {{ p.sigungu or '' }}{% if p.location_raw %} <span class="muted small">({{ p.location_raw }})</span>{% endif %}</dd>
+      <dt>신입/경력</dt><dd>{{ p.career_type }}{% if p.career_min %} · {{ p.career_min }}년{% if p.career_max %}~{{ p.career_max }}년{% else %} 이상{% endif %}{% endif %}{% if p.career_raw %} <span class="muted small">({{ p.career_raw }})</span>{% endif %}</dd>
+      <dt>연봉</dt><dd><b>{{ p | salary_range }}</b>{% if p.salary_raw %} <span class="muted small">원문: {{ p.salary_raw }}</span>{% endif %}</dd>
+      <dt>학력</dt><dd>{{ p.education or '무관' }}</dd>
+      <dt>고용형태</dt><dd>{{ p.employment_type or '-' }}</dd>
+      <dt>직무</dt><dd>{{ p.job_category or '-' }}</dd>
+      <dt>키워드</dt><dd>{{ p.keywords or '-' }}</dd>
+      <dt>등록 · 마감</dt><dd>{{ p.posted_at or '-' }} · {{ p.deadline or '상시/채용 시 마감' }}</dd>
+    </dl>
+    {% if p.description %}<p class="desc">{{ p.description }}</p>{% endif %}
+    <div class="row">
+      {% if p.url %}<a class="btn" href="{{ p.url }}" target="_blank" rel="noopener noreferrer">원문에서 지원하기 ↗</a>{% else %}<span class="muted small">원문 링크 없음</span>{% endif %}
+      <form method="post" action="{{ url_for('jobs.save', pid=p.id) }}">
+        <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+        <input type="hidden" name="saved" value="{{ '0' if p.saved else '1' }}">
+        <button class="btn {{ 'saved' if p.saved else 'ghost' }}">{{ '★ 저장됨 (풀기)' if p.saved else '☆ 저장 — 마감 뒤에도 보관' }}</button>
+      </form>
+      <form method="post" action="{{ url_for('jobs.hide', pid=p.id) }}">
+        <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+        <input type="hidden" name="hidden" value="{{ '0' if p.hidden else '1' }}">
+        <button class="btn ghost">{{ '숨김 해제' if p.hidden else '관심 없음(숨기기)' }}</button>
+      </form>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>적합성 {{ r.score }}점</h2>
+    <table class="tbl">
+      {% for name, part in r.parts.items() %}
+      <tr><td>{{ name }}</td><td class="bar-cell"><span class="bar" style="width: {{ (part[0] * 4) }}%"></span></td><td class="r">{{ part[0] }}/25</td><td class="muted small">{{ part[1] }}</td></tr>
+      {% endfor %}
+    </table>
+    {% if r.reasons %}<h3>좋은 점</h3><ul class="good">{% for x in r.reasons %}<li>{{ x }}</li>{% endfor %}</ul>{% endif %}
+    {% if r.warnings %}<h3>확인할 점</h3><ul class="warn">{% for x in r.warnings %}<li>{{ x }}</li>{% endfor %}</ul>{% endif %}
+    {% if r.missing %}<h3>공고에 없는 내 키워드</h3><p class="muted small">{{ r.missing | join(', ') }} — 자기소개서에서 관련 경험을 보완해 보세요.</p>{% endif %}
+  </section>
+</div>
+
+<div class="grid2">
+  <section class="card">
+    <h2>연봉 비교 <span class="muted small">(수집한 공고의 연봉 범위 가운데 값 기준)</span></h2>
+    {% macro diff_cell(v) %}<td class="r {{ 'up' if (v or 0) > 0 else ('down' if (v or 0) < 0 else '') }}">{{ v | signed }}</td>{% endmacro %}
+    <table class="tbl">
+      <tr><th>기준</th><th class="r">평균</th><th class="r">이 공고와 차이</th></tr>
+      <tr><td>이 공고</td><td class="r"><b>{{ cmp.mid | won }}</b></td><td></td></tr>
+      <tr><td>같은 지역({{ p.sido or '미상' }}) · {{ cmp.region_n }}건</td><td class="r">{{ cmp.region_avg | won }}</td>{{ diff_cell(cmp.diff_region) }}</tr>
+      <tr><td>같은 구분({{ p.career_type }}) · {{ cmp.career_n }}건</td><td class="r">{{ cmp.career_avg | won }}</td>{{ diff_cell(cmp.diff_career) }}</tr>
+      <tr><td>지역 + 구분</td><td class="r">{{ cmp.both_avg | won }}</td><td></td></tr>
+      <tr><td>전체 공고</td><td class="r">{{ cmp.overall_avg | won }}</td>{{ diff_cell(cmp.diff_overall) }}</tr>
+    </table>
+    <form class="row" method="post" action="{{ url_for('jobs.company_avg', pid=p.id) }}">
+      <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+      <label class="inl">회사 평균연봉 <input type="number" name="company_avg_salary" min="0" step="10" value="{{ p.company_avg_salary or '' }}" placeholder="만원"></label>
+      <button class="btn sm ghost">저장</button>
+    </form>
+    <p class="muted small">회사 평균연봉은 사람인·잡코리아 기업정보(국민연금 가입자 기준 추정)나 잡플래닛에서 확인해 적어 두세요.</p>
+  </section>
+
+  <section class="card">
+    <h2>지원 기록</h2>
+    <form method="post" action="{{ url_for('jobs.apply', pid=p.id) }}" class="stack">
+      <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+      <div class="seg">
+        {% for s in STATUSES %}<label><input type="radio" name="status" value="{{ s }}" {{ 'checked' if (p.app_status or '관심') == s }}><span>{{ s }}</span></label>{% endfor %}
+      </div>
+      <div class="row">
+        <label class="inl">지원일 <input type="date" name="applied_at" value="{{ p.applied_at or '' }}"></label>
+        <label class="inl">다음 일정 <input type="date" name="next_at" value="{{ p.next_at or '' }}"></label>
+      </div>
+      <textarea name="memo" rows="3" placeholder="메모 (제출 서류, 담당자, 면접 질문 등)">{{ p.app_memo or '' }}</textarea>
+      <input type="text" name="note" placeholder="이번 변경에 남길 한 줄 (선택)">
+      <div class="row"><button class="btn">저장</button>
+      {% if p.app_status %}<button class="btn ghost danger" name="remove" value="1" data-confirm="지원 기록을 지울까요?">기록 지우기</button>{% endif %}</div>
+    </form>
+    {% if events %}
+    <h3>변경 이력</h3>
+    <ul class="timeline">{% for e in events %}<li><span class="muted small">{{ e.created_at }}</span> <b>{{ e.status }}</b> {{ e.note }}</li>{% endfor %}</ul>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

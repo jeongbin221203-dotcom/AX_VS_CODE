@@ -1,0 +1,604 @@
+"""정기 크롤링 (기본 4시간마다).
+
+한 번 실행하면:
+  1) 저장한 검색어로 사람인·잡코리아·링커리어 검색 결과 페이지를 읽어 공고 번호를 모은다.
+  2) 처음 보는 공고만 상세 페이지를 읽어(linkimport.parse) 저장한다. 목록에만 있는 근무지·경력 등은 보충값으로 쓴다.
+  3) 이미 저장한 공고 중 아직 마감 전인 것을 다시 읽어 내용·마감을 갱신하고, 사라진 공고(404·410)는 마감 처리한다.
+  4) API 키가 있으면 사람인·고용24 Open API 도 같은 검색어로 받는다.
+
+예의 규칙: robots.txt 를 따르고, 요청 사이에 config.CRAWL_DELAY 초를 쉬며, 사이트마다 한 번에 읽는 상세 페이지 수를 제한한다.
+여러 프로세스가 동시에 돌지 않도록 DB 잠금(settings.crawl_lock)을 쓴다.
+"""
+from __future__ import annotations
+
+import html
+import json
+import logging
+import re
+import time
+import urllib.robotparser
+from datetime import date, datetime, timedelta
+from urllib.parse import quote, urlparse
+
+import requests
+
+import config
+
+from . import collect, db, postings
+from .normalize import SIDO_ORDER, clean
+from .sources import FetchQuery, SourceError, linkimport, registry
+
+log = logging.getLogger("job.crawler")
+
+# 검색 결과 페이지에서 공고 번호를 모을 수 있는 사이트 (자소설닷컴·잡플래닛·리멤버는 목록을 브라우저에서 그려 제외)
+LIST_SITES = {
+    "saramin": {
+        "search": "https://www.saramin.co.kr/zf_user/search/recruit?searchword={kw}&recruitPage={page}&recruitSort=reg_dt",
+        # 검색어 없는 검색은 페이지를 넘겨도 같은 20건만 나와서, 모든 직무일 때는 채용정보 목록(페이지당 약 70건)을 쓴다
+        "latest": "https://www.saramin.co.kr/zf_user/jobs/list/domestic?page={page}&sort=RD&page_count=100",
+        "link": r'rec_idx=(\d+)',
+        "item": r'class="item_recruit"',                       # 공고 한 건의 시작 표시 (보충값을 이 구간에서 읽음)
+        "detail": "https://www.saramin.co.kr/zf_user/jobs/relay/view?rec_idx={id}",
+        "category": "https://www.saramin.co.kr/zf_user/jobs/list/job-category?cat_mcls={code}&page={page}&page_count=100&sort=RD",
+        "category_pages": 10,
+        "categories": [
+            ("2", "IT개발·데이터"), ("3", "회계·세무·재무"), ("4", "총무·법무·사무"), ("5", "인사·노무·HRD"),
+            ("6", "의료"), ("7", "운전·운송·배송"), ("8", "영업·판매·무역"), ("9", "연구·R&D"), ("10", "서비스"),
+            ("11", "생산"), ("12", "상품기획·MD"), ("13", "미디어·문화·스포츠"), ("14", "마케팅·홍보·조사"),
+            ("15", "디자인"), ("16", "기획·전략"), ("17", "금융·보험"), ("18", "구매·자재·물류"), ("19", "교육"),
+            ("20", "공공·복지"), ("21", "고객상담·TM"), ("22", "건설·건축"),
+        ],
+    },
+    "jobkorea": {
+        "search": "https://www.jobkorea.co.kr/Search/?stext={kw}&tabType=recruit&Page_No={page}&Ord=RegDtDesc",
+        "link": r'/Recruit/GI_Read/(\d+)',
+        "item": None,
+        "detail": "https://www.jobkorea.co.kr/Recruit/GI_Read/{id}",
+        # 직무 목록은 페이지 번호를 바꿔도 결과가 거의 같아 직무마다 1페이지(약 170건)만 읽는다
+        "category": "https://www.jobkorea.co.kr/recruit/joblist?menucode=duty&dutyCtgr={code}",
+        "category_pages": 1,
+        "categories": [
+            ("10026", "기획·전략"), ("10027", "법무·사무·총무"), ("10028", "인사·HR"), ("10029", "회계·세무"),
+            ("10030", "마케팅·광고·MD"), ("10031", "AI·개발·데이터"), ("10032", "디자인"), ("10033", "물류·무역"),
+            ("10034", "운전·운송·배송"), ("10035", "영업"), ("10036", "고객상담·TM"), ("10037", "금융·보험"),
+            ("10038", "식·음료"), ("10039", "고객서비스·리테일"), ("10040", "엔지니어링·설계"), ("10041", "제조·생산"),
+            ("10042", "교육"), ("10043", "건축·시설"), ("10044", "의료·바이오"), ("10045", "미디어·문화·스포츠"),
+            ("10046", "공공·복지"),
+        ],
+    },
+    "linkareer": {
+        "search": "https://linkareer.com/list/recruit?filterType=CATEGORY&page={page}&filterBy_q={kw}",
+        "link": r'/activity/(\d+)',
+        "item": None,
+        "detail": "https://linkareer.com/activity/{id}",
+        "category": "https://linkareer.com/list/recruit?filterType=CATEGORY&page={page}&filterBy_categoryIDs={code}",
+        "category_pages": 10,
+        "categories": [
+            ("100001", "기획/경영"), ("100002", "마케팅/광고"), ("100003", "IT/개발"), ("100004", "디자인"),
+            ("100005", "영업/CS"), ("100006", "생산/제조"), ("100007", "연구·엔지니어링"), ("100008", "금융"),
+            ("100009", "미디어/콘텐츠"), ("100010", "물류/유통"), ("100011", "건설"), ("100012", "의료/바이오"),
+            ("100013", "교육"), ("100014", "기타"),
+        ],
+    },
+}
+# 이미 저장한 공고를 다시 읽어 갱신할 수 있는 사이트 (원티드는 프로그램 요청을 막아 제외).
+# 고용24 상세는 infoTypeCd 등 붙은 원래 주소로 읽어야 내용이 나온다 — 저장된 링크를 그대로 쓴다.
+REFRESH_SITES = ("saramin", "jobkorea", "work24", "linkareer", "jasoseol", "jobplanet", "remember")
+API_SITES = ("saramin", "work24")
+# 사이트맵에 전체 공고를 올려 두는 사이트: 매번 사이트맵 한 장만 읽어 비교하고, 새 번호만 상세를 읽는다.
+# 사이트맵에서 빠진 번호는 요청 없이 마감 처리. 처음 채울 때는 번호가 큰(최근) 공고부터 sitemap_max 건씩.
+SITEMAP_SITES = {
+    "remember": {
+        "sitemap": "https://career.rememberapp.co.kr/sitemap-jobs.xml",
+        "link": r"/job/posting/(\d+)",
+        "detail": "https://career.rememberapp.co.kr/job/posting/{id}",
+    },
+}
+
+DEFAULT = {
+    "enabled": False,
+    "interval_hours": 4,
+    "keywords": [],
+    "sites": ["saramin", "jobkorea", "linkareer"],
+    "pages": 1,                 # 검색어·직무마다 읽을 목록 페이지 수
+    "by_category": True,        # 검색어가 없을 때 사이트의 직무 분류를 하나씩 모두 돈다 (끄면 최근 등록순 목록만)
+    "max_new": 30,              # 사이트마다 한 번에 새로 읽을 상세 페이지 수 (직무별로 돌아가며 고름)
+    "max_refresh": 30,          # 한 번에 다시 읽을 저장 공고 수
+    "use_api": True,
+    "sitemap_sites": ["remember"],
+    "sitemap_max": 500,         # 사이트맵 사이트에서 한 번에 읽을 상세 페이지 수 (3초 간격이면 500건 ≈ 25분)
+}
+
+
+# ── 설정·상태 ─────────────────────────────────────────────
+
+def load_settings() -> dict:
+    data = dict(DEFAULT)
+    raw = db.get_setting("crawl")
+    if raw:
+        try:
+            data.update(json.loads(raw))
+        except json.JSONDecodeError:
+            pass
+    return data
+
+
+def save_settings(data: dict) -> dict:
+    merged = dict(DEFAULT)
+    merged.update({k: v for k, v in data.items() if k in DEFAULT})
+    merged["interval_hours"] = min(24, max(1, int(merged["interval_hours"] or 4)))
+    merged["pages"] = min(10, max(1, int(merged["pages"] or 1)))
+    merged["max_new"] = min(500, max(1, int(merged["max_new"] or 30)))
+    merged["max_refresh"] = min(200, max(0, int(merged["max_refresh"] or 0)))
+    merged["sites"] = [s for s in merged["sites"] if s in LIST_SITES]
+    merged["sitemap_sites"] = [s for s in merged["sitemap_sites"] if s in SITEMAP_SITES]
+    # 한 번 실행이 다음 실행 시각을 넘지 않게: 상세 수 × 간격 < 실행 간격
+    budget = int((merged["interval_hours"] * 3600 * 0.8) / max(config.CRAWL_DELAY, 0.5))
+    merged["sitemap_max"] = min(budget, 5000, max(0, int(merged["sitemap_max"] or 0)))
+    db.set_setting("crawl", json.dumps(merged, ensure_ascii=False))
+    return merged
+
+
+def status() -> dict:
+    s = load_settings()
+    last = db.get_setting("crawl_last_run")
+    nxt = None
+    if s["enabled"]:
+        nxt = (datetime.fromisoformat(last) + timedelta(hours=s["interval_hours"])).strftime("%Y-%m-%d %H:%M") \
+            if last else "곧"
+    lock = db.get_setting("crawl_lock", "")
+    running = bool(lock) and lock > _now_iso()
+    return {"last": (last or "")[:16].replace("T", " ") or None, "next": nxt, "running": running,
+            "summary": db.get_setting("crawl_last_summary")}
+
+
+def due() -> bool:
+    s = load_settings()
+    if not s["enabled"]:
+        return False
+    last = db.get_setting("crawl_last_run")
+    return not last or datetime.now() >= datetime.fromisoformat(last) + timedelta(hours=s["interval_hours"])
+
+
+# ── 잠금 (여러 프로세스 중 하나만 실행) ─────────────────────
+
+def _now_iso() -> str:
+    return datetime.now().isoformat(timespec="seconds")
+
+
+def acquire_lock(minutes: int = 60) -> bool:
+    until = (datetime.now() + timedelta(minutes=minutes)).isoformat(timespec="seconds")
+    with db.connect() as con:
+        cur = con.execute("INSERT INTO settings(key, value) VALUES('crawl_lock', ?) "
+                          "ON CONFLICT(key) DO UPDATE SET value = excluded.value WHERE settings.value < ?",
+                          (until, _now_iso()))
+        return cur.rowcount == 1
+
+
+def release_lock() -> None:
+    db.set_setting("crawl_lock", "")
+
+
+# ── HTTP (robots.txt·간격) ────────────────────────────────
+
+class Fetcher:
+    def __init__(self, delay: float | None = None):
+        self.delay = config.CRAWL_DELAY if delay is None else delay
+        self.session = requests.Session()
+        self.session.headers.update({"User-Agent": linkimport.BROWSER_UA, "Accept-Language": "ko-KR,ko;q=0.9",
+                                     "Accept": "text/html,application/xhtml+xml"})
+        self._robots: dict[str, urllib.robotparser.RobotFileParser | None] = {}
+        self._last = 0.0
+        self.requests = 0
+
+    def allowed(self, url: str) -> bool:
+        host = "{0.scheme}://{0.netloc}".format(urlparse(url))
+        if host not in self._robots:
+            rp = urllib.robotparser.RobotFileParser()
+            try:
+                res = self._get(host + "/robots.txt")
+                if res.status_code >= 500:
+                    self._robots[host] = None           # robots.txt 를 못 읽으면 이번에는 그 사이트를 건너뛴다
+                else:
+                    rp.parse(res.text.splitlines() if res.status_code < 400 else [])
+                    self._robots[host] = rp
+            except requests.RequestException:
+                self._robots[host] = None
+        rp = self._robots[host]
+        return bool(rp and rp.can_fetch("*", url))
+
+    def get(self, url: str) -> requests.Response:
+        if not self.allowed(url):
+            raise SourceError(f"robots.txt 가 허용하지 않는 주소: {url}")
+        return self._get(url)
+
+    def _get(self, url: str) -> requests.Response:
+        wait = self.delay - (time.monotonic() - self._last)
+        if wait > 0:
+            time.sleep(wait)
+        try:
+            return self.session.get(url, timeout=config.HTTP_TIMEOUT)
+        finally:
+            self._last = time.monotonic()
+            self.requests += 1
+
+
+# ── 목록 해석 ─────────────────────────────────────────────
+
+_EMP = ("정규직", "계약직", "인턴", "파견직", "프리랜서", "아르바이트", "전환형 인턴")
+
+
+def list_items(site: str, page: str) -> list[dict]:
+    """검색 결과 페이지 → [{'id', 'hint': {location, career, employment, deadline}}] (나온 순서, 중복 제거)."""
+    cfg = LIST_SITES[site]
+    out, seen = [], set()
+    matches = list(re.finditer(cfg["link"], page))
+    for i, m in enumerate(matches):
+        pid = m.group(1)
+        if pid in seen:
+            continue
+        seen.add(pid)
+        # 다음 공고 링크 전까지(최대 3,000자)를 이 공고의 목록 정보로 본다
+        end = min(len(page), m.end() + 3000)
+        for n in matches[i + 1:]:
+            if n.group(1) != pid:
+                end = min(end, n.start())
+                break
+        out.append({"id": pid, "hint": _hints(page[m.start():end])})
+    return out
+
+
+def _hints(block: str) -> dict:
+    text = html.unescape(re.sub(r"<[^>]+>", "|", block))
+    tokens = [t.strip() for t in re.split(r"\|", text) if t.strip()]
+    hint: dict = {}
+    for t in tokens:
+        if len(t) > 40:
+            continue
+        if "location" not in hint and any(re.match(rf"^{s}(\s|전체|$)", t) for s in SIDO_ORDER):
+            hint["location"] = t.replace("전체", "").strip()          # 사람인 목록: '서울전체'
+        elif "career" not in hint and re.match(r"^(신입|경력|경력무관|신입\s*[·/,]\s*경력|\d+년\s*↑?$)", t):
+            hint["career"] = t
+        elif "employment" not in hint and any(t.startswith(e) for e in _EMP):
+            hint["employment"] = t
+        elif "education" not in hint and re.match(r"^(학력무관|고졸|초대졸|대졸|석사|박사)", t):
+            hint["education"] = t
+    return hint
+
+
+# ── 실행 ─────────────────────────────────────────────────
+
+def run_once(force: bool = False, fetcher: Fetcher | None = None) -> dict | None:
+    """정해진 시각이 되었거나 force 이면 한 번 실행한다. 다른 프로세스가 실행 중이면 None."""
+    if not force and not due():
+        return None
+    s = load_settings()
+    if not acquire_lock(minutes=s["interval_hours"] * 60):
+        return None
+    try:
+        return _run(s, fetcher or Fetcher())
+    finally:
+        release_lock()
+
+
+def _run(s: dict, f: Fetcher) -> dict:
+    started = _now_iso()
+    summary = {"new": 0, "updated": 0, "closed": 0, "errors": [], "sites": {}}
+    keywords = s["keywords"] or [""]
+
+    for site in s["sites"]:
+        ins = upd = 0
+        label = ", ".join(k for k in keywords if k) or \
+            ("모든 직무(직무별)" if s["by_category"] and LIST_SITES[site].get("categories") else "모든 직무(최신순)")
+        try:
+            groups, errors = collect_lists(f, site, s, keywords)
+            summary["errors"] += errors
+            ids = {i: h for g in groups.values() for i, h in g.items()}
+            _fill_missing_from_list(site, ids)
+            new_ids = pick_round_robin(groups, lambda i: not postings.find_id(site, i), s["max_new"])
+            for pid in new_ids:
+                item = _detail(f, site, LIST_SITES[site]["detail"].format(id=pid), ids[pid])
+                if item:
+                    a, b = postings.upsert_many([item])
+                    ins, upd = ins + a, upd + b
+            collect.record(f"crawl:{site}", label, len(ids), ins, upd, "; ".join(errors[:2]) or None)
+        except (SourceError, requests.RequestException) as e:
+            summary["errors"].append(f"{site}: {e}")
+            collect.record(f"crawl:{site}", label, 0, ins, upd, str(e))
+        summary["sites"][site] = {"new": ins}
+        summary["new"] += ins
+
+    deadline = time.monotonic() + s["interval_hours"] * 3600 * 0.85
+    for site in s["sitemap_sites"]:
+        try:
+            r = sync_sitemap(f, site, s["sitemap_max"], deadline)
+        except (SourceError, requests.RequestException) as e:
+            summary["errors"].append(f"{site} 사이트맵: {e}")
+            collect.record(f"crawl:{site}", "사이트맵 전체", 0, 0, 0, str(e))
+            continue
+        summary["sites"][site] = r
+        summary["new"] += r["inserted"]
+        summary["updated"] += r["updated"]
+        summary["closed"] += r["gone"]
+
+    r_upd, r_closed, r_err = refresh(f, s["max_refresh"])
+    summary["updated"] += r_upd
+    summary["closed"] += r_closed
+    summary["errors"] += r_err
+
+    if s["use_api"]:
+        ready = [x["key"] for x in registry() if x["ready"] and x["key"] in API_SITES]
+        for kw in keywords:                            # '' = 최근 공고 전체
+            if not ready:
+                break
+            for r in collect.run(ready, FetchQuery(keyword=kw, pages=1)):
+                if r["ok"]:
+                    summary["new"] += r["inserted"]
+                    summary["updated"] += r["updated"]
+                else:
+                    summary["errors"].append(f"{r['name']} API: {r['error']}")
+
+    # 마감된 공고 중 저장·지원 기록이 없는 것은 지운다
+    summary["purged"] = postings.purge_closed()
+    summary["requests"] = f.requests
+    db.set_setting("crawl_last_run", started)
+    db.set_setting("crawl_last_summary", json.dumps(summary, ensure_ascii=False))
+    log.info("crawl done %s", summary)
+    return summary
+
+
+def sync_sitemap(f: Fetcher, site: str, max_fetch: int, deadline: float | None = None) -> dict:
+    cfg = SITEMAP_SITES[site]
+    res = f.get(cfg["sitemap"])
+    if res.status_code != 200:
+        raise SourceError(f"사이트맵 HTTP {res.status_code}")
+    ids = list(dict.fromkeys(re.findall(cfg["link"], res.text)))
+    now = datetime.now().isoformat(timespec="microseconds")        # 이번 실행 표시 (빠진 번호 = 이보다 옛날)
+    with db.connect() as con:
+        active_before = con.execute("SELECT COUNT(*) FROM sitemap_ids WHERE site = ? AND gone = 0", (site,)).fetchone()[0]
+        con.executemany(
+            "INSERT INTO sitemap_ids(site, post_id, first_seen, last_seen) VALUES(?, ?, ?, ?) "
+            "ON CONFLICT(site, post_id) DO UPDATE SET last_seen = excluded.last_seen, gone = 0",
+            [(site, i, now, now) for i in ids])
+        # 사이트맵이 갑자기 크게 줄었으면(오류 페이지 등) 빠진 번호를 마감 처리하지 않는다
+        gone_ids = []
+        if ids and len(ids) >= active_before * 0.8:
+            gone_ids = [r[0] for r in con.execute(
+                "SELECT post_id FROM sitemap_ids WHERE site = ? AND gone = 0 AND last_seen < ?", (site, now))]
+            con.execute("UPDATE sitemap_ids SET gone = 1 WHERE site = ? AND gone = 0 AND last_seen < ?", (site, now))
+        pending = [r[0] for r in con.execute(
+            "SELECT post_id FROM sitemap_ids WHERE site = ? AND gone = 0 AND fetched_at IS NULL "
+            "ORDER BY CAST(post_id AS INTEGER) DESC LIMIT ?", (site, max_fetch))]
+    closed = 0
+    for pid_ in gone_ids:
+        pid = postings.find_id(site, pid_)
+        if pid:
+            postings.mark_closed(pid)
+            closed += 1
+
+    ins = upd = done = 0
+    for post_id in pending:
+        if deadline and time.monotonic() > deadline:
+            break                                   # 다음 실행 시각 전에 멈추고 나머지는 다음 번에
+        url = cfg["detail"].format(id=post_id)
+        error = None
+        try:
+            res = f.get(url)
+            if res.status_code in (404, 410):
+                error = f"HTTP {res.status_code}"
+            elif res.status_code != 200:
+                error = f"HTTP {res.status_code}"
+                if res.status_code in (403, 429):
+                    raise SourceError(f"{site} 가 요청을 막았습니다 (HTTP {res.status_code}) — 이번 실행은 여기서 멈춤")
+            else:
+                a, b = postings.upsert_many([linkimport.parse(res.text, url, site)])
+                ins, upd = ins + a, upd + b
+        except SourceError as e:
+            if "막았습니다" in str(e):
+                raise
+            error = str(e)[:200]
+        with db.connect() as con:
+            con.execute("UPDATE sitemap_ids SET fetched_at = ?, fetch_error = ? WHERE site = ? AND post_id = ?",
+                        (db.now(), error, site, post_id))
+        done += 1
+
+    with db.connect() as con:
+        remaining = con.execute("SELECT COUNT(*) FROM sitemap_ids WHERE site = ? AND gone = 0 AND fetched_at IS NULL",
+                                (site,)).fetchone()[0]
+    collect.record(f"crawl:{site}", f"사이트맵 전체 {len(ids):,}건", done, ins, upd)
+    return {"total": len(ids), "new_ids": max(0, len(ids) - active_before) if active_before else len(ids),
+            "fetched": done, "inserted": ins, "updated": upd, "gone": closed, "remaining": remaining}
+
+
+def sitemap_progress() -> list[dict]:
+    s = load_settings()
+    out = []
+    with db.connect() as con:
+        for site in SITEMAP_SITES:
+            row = con.execute(
+                "SELECT COUNT(*) AS total, SUM(fetched_at IS NOT NULL) AS fetched, "
+                "SUM(fetch_error IS NOT NULL) AS errors FROM sitemap_ids WHERE site = ? AND gone = 0", (site,)).fetchone()
+            total, fetched = row["total"] or 0, row["fetched"] or 0
+            remaining = total - fetched
+            runs = -(-remaining // s["sitemap_max"]) if s["sitemap_max"] else None
+            out.append({"site": site, "name": linkimport.SITES[site][0], "on": site in s["sitemap_sites"],
+                        "total": total, "fetched": fetched, "errors": row["errors"] or 0, "remaining": remaining,
+                        "eta_hours": runs * s["interval_hours"] if runs else 0})
+    return out
+
+
+def collect_lists(f: Fetcher, site: str, s: dict, keywords: list[str]) -> tuple[dict, list[str]]:
+    """목록 페이지들을 읽어 {묶음 이름: {공고번호: 보충값}} 으로 돌려준다.
+    검색어가 있으면 검색어별, 없으면 직무별(by_category) 또는 최근 등록순 하나."""
+    cfg = LIST_SITES[site]
+    jobs: list[tuple[str, str, int, str | None]] = []           # (묶음 이름, 주소 틀, 페이지 수, 직무 이름)
+    if any(keywords):
+        for kw in keywords:
+            if kw:
+                jobs.append((kw, cfg["search"].replace("{kw}", quote(kw)), s["pages"], None))
+    elif s["by_category"] and cfg.get("categories"):
+        pages = min(s["pages"], cfg.get("category_pages", 1))
+        for code, name in cfg["categories"]:
+            jobs.append((name, cfg["category"].replace("{code}", code), pages, name))
+    else:
+        jobs.append(("최신", (cfg.get("latest") or cfg["search"]).replace("{kw}", ""), s["pages"], None))
+
+    groups: dict[str, dict] = {}
+    errors: list[str] = []
+    for name, tpl, pages, category in jobs:
+        group = groups.setdefault(name, {})
+        for page_no in range(1, pages + 1):
+            res = f.get(tpl.replace("{page}", str(page_no)))
+            if res.status_code in (403, 429):
+                raise SourceError(f"목록 요청이 막혔습니다 (HTTP {res.status_code})")
+            if res.status_code != 200:
+                errors.append(f"{site} {name}: 목록 HTTP {res.status_code}")
+                break
+            found = list_items(site, res.text)
+            fresh = [it for it in found if it["id"] not in group]
+            for it in fresh:
+                if category:
+                    it["hint"]["category"] = category
+                group[it["id"]] = it["hint"]
+            if not fresh:
+                break                                 # 다음 페이지가 같은 내용이면 그만 읽는다
+    _drop_promoted_category(site, groups)
+    return groups, errors
+
+
+PROMOTED_MIN_GROUPS = 3
+
+
+def _drop_promoted_category(site: str, groups: dict[str, dict]) -> None:
+    """여러 직무 목록에 똑같이 끼는 광고(TOP100·인기 배너)는 직무를 알 수 없으므로 직무 이름을 붙이지 않는다.
+    예전에 첫 목록의 직무로 잘못 붙은 값도 지운다."""
+    if len(groups) < PROMOTED_MIN_GROUPS:
+        return
+    count: dict[str, int] = {}
+    for g in groups.values():
+        for i in g:
+            count[i] = count.get(i, 0) + 1
+    promoted = [i for i, n in count.items() if n >= PROMOTED_MIN_GROUPS]
+    for g in groups.values():
+        for i in promoted:
+            if i in g:
+                g[i].pop("category", None)
+    names = [n for _, n in LIST_SITES[site].get("categories", [])]
+    if promoted and names:
+        with db.connect() as con:
+            con.executemany(
+                f"UPDATE postings SET job_category = NULL WHERE source = ? AND source_id = ? "
+                f"AND job_category IN ({','.join('?' * len(names))})",
+                [(site, i, *names) for i in promoted])
+
+
+def pick_round_robin(groups: dict[str, dict], keep, limit: int) -> list[str]:
+    """묶음(직무)마다 돌아가며 하나씩 골라 한 직무가 상한을 다 쓰지 않게 한다. 중복 번호는 한 번만."""
+    queues = [[i for i in g if keep(i)] for g in groups.values()]
+    out, seen = [], set()
+    while len(out) < limit and any(queues):
+        for q in queues:
+            while q and q[0] in seen:
+                q.pop(0)
+            if q:
+                i = q.pop(0)
+                seen.add(i)
+                out.append(i)
+                if len(out) >= limit:
+                    break
+    return out
+
+
+def _fill_missing_from_list(site: str, hints: dict[str, dict]) -> None:
+    """이미 저장했지만 근무지·직무가 비어 있는 공고는 목록 값으로 채운다 (상세를 다시 읽지 않음)."""
+    from .normalize import parse_region
+    with db.connect() as con:
+        for post_id, hint in hints.items():
+            if hint.get("location"):
+                sido, sigungu = parse_region(hint["location"])
+                if sido:
+                    con.execute("UPDATE postings SET sido = ?, sigungu = ?, location_raw = COALESCE(location_raw, ?) "
+                                "WHERE source = ? AND source_id = ? AND sido IS NULL",
+                                (sido, sigungu, hint["location"], site, post_id))
+            if hint.get("category"):
+                con.execute("UPDATE postings SET job_category = ? WHERE source = ? AND source_id = ? "
+                            "AND (job_category IS NULL OR job_category = '')", (hint["category"], site, post_id))
+
+
+def _detail(f: Fetcher, site: str, url: str, hint: dict) -> dict | None:
+    try:
+        res = f.get(url)
+    except SourceError:
+        return None
+    if res.status_code != 200:
+        return None
+    try:
+        item = linkimport.parse(res.text, url, site)
+    except SourceError:
+        return None
+    return _apply_hint(item, hint)
+
+
+def _apply_hint(item: dict, hint: dict) -> dict:
+    """상세 페이지에 없던 값만 목록 정보로 채운다 (사람인 상세에는 근무지가 없음)."""
+    from .normalize import parse_career, parse_education, parse_region
+    if not item.get("sido") and hint.get("location"):
+        item["sido"], item["sigungu"] = parse_region(hint["location"])
+        item["location_raw"] = clean(hint["location"])
+    if item.get("career_type") in (None, "무관") and not item.get("career_raw") and hint.get("career"):
+        item["career_type"], item["career_min"], item["career_max"] = parse_career(hint["career"])
+        item["career_raw"] = hint["career"]
+    if item.get("education") in (None, "무관") and hint.get("education"):
+        item["education"] = parse_education(hint["education"])
+    if not item.get("employment_type") and hint.get("employment"):
+        item["employment_type"] = hint["employment"]
+    if not item.get("job_category") and hint.get("category"):
+        item["job_category"] = hint["category"]
+    return item
+
+
+def refresh(f: Fetcher, limit: int) -> tuple[int, int, list[str]]:
+    """저장한 공고 중 마감 전인 것을 오래된 순으로 다시 읽는다. (갱신 수, 마감 처리 수, 오류)."""
+    if limit <= 0:
+        return 0, 0, []
+    today = date.today().isoformat()
+    cutoff = (datetime.now() - timedelta(hours=20)).strftime("%Y-%m-%d %H:%M:%S")
+    marks = ",".join("?" * len(REFRESH_SITES))
+    with db.connect() as con:
+        rows = [dict(r) for r in con.execute(
+            f"SELECT * FROM postings WHERE source IN ({marks}) AND url IS NOT NULL AND hidden = 0 "
+            "AND (deadline IS NULL OR deadline >= ?) AND updated_at < ? ORDER BY updated_at LIMIT ?",
+            (*REFRESH_SITES, today, cutoff, limit))]
+    updated = closed = 0
+    errors: list[str] = []
+    for row in rows:
+        if not linkimport.is_posting_url(row["url"], row["source"]):
+            continue
+        try:
+            res = f.get(row["url"])
+        except (SourceError, requests.RequestException) as e:
+            errors.append(f"갱신 {row['source']}: {e}")
+            continue
+        if res.status_code in (404, 410):
+            postings.mark_closed(row["id"])
+            closed += 1
+            continue
+        if res.status_code != 200:
+            continue
+        try:
+            item = linkimport.parse(res.text, row["url"], row["source"])
+        except SourceError:
+            continue
+        # 새로 읽은 페이지에 없는 값(목록에서 채운 근무지, 직접 적은 값 등)은 그대로 둔다
+        for k in postings.FIELDS:
+            if item.get(k) in (None, "") and row.get(k) not in (None, ""):
+                item[k] = row[k]
+        if item.get("career_type") == "무관" and row.get("career_type") not in (None, "무관") and not item.get("career_raw"):
+            item["career_type"], item["career_min"], item["career_max"] = \
+                row["career_type"], row["career_min"], row["career_max"]
+        item["source_id"] = row["source_id"]
+        postings.upsert_many([item])
+        updated += 1
+    if rows:
+        collect.record("crawl:refresh", "", len(rows), 0, updated, "; ".join(errors[:3]) or None)
+    return updated, closed, errors

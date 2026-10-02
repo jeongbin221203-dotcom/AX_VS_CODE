@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% from "_macros.html" import posting_row %}
+{% block title %}공고{% endblock %}
+{% block content %}
+<div class="sec-head">
+  <h1>{{ '저장한 공고' if f.saved == '1' else '공고' }} <small class="muted">{{ total }}건</small></h1>
+  <div class="row">
+    <a class="btn ghost sm" href="{{ url_for('jobs.export', **f) }}">CSV 내보내기</a>
+    <a class="btn sm" href="{{ url_for('jobs.new') }}">＋ 직접 등록</a>
+  </div>
+</div>
+<nav class="tabs">
+  <a href="{{ url_for('jobs.index') }}" class="{{ '' if f.saved == '1' else 'on' }}">진행 중 공고</a>
+  <a href="{{ url_for('jobs.index', saved='1') }}" class="{{ 'on' if f.saved == '1' }}">★ 저장한 공고 <small>{{ saved_n }}</small></a>
+</nav>
+{% if f.saved == '1' %}<p class="muted small">저장한 공고는 마감돼도 지워지지 않고 여기 남습니다. 저장하지 않은 공고는 마감일이 지나면 자동으로 지워집니다.</p>{% endif %}
+<form class="filters card" method="get" data-autosubmit>
+  {% if f.saved == '1' %}<input type="hidden" name="saved" value="1">{% endif %}
+  <input type="search" name="q" value="{{ f.q }}" placeholder="회사·제목·키워드 검색">
+  <select name="sido"><option value="">지역 전체</option>{% for s in sidos %}<option {{ 'selected' if f.sido == s }}>{{ s }}</option>{% endfor %}</select>
+  <select name="career">
+    <option value="">신입/경력 전체</option>
+    <option value="신입" {{ 'selected' if f.career == '신입' }}>신입 지원 가능</option>
+    <option value="경력" {{ 'selected' if f.career == '경력' }}>경력 지원 가능</option>
+    <option value="무관" {{ 'selected' if f.career == '무관' }}>경력 무관만</option>
+  </select>
+  <select name="category"><option value="">직무 전체</option>{% for g, n in groups %}<option value="{{ g }}" {{ 'selected' if f.category == g }}>{{ g }} ({{ n }})</option>{% endfor %}</select>
+  <select name="source"><option value="">출처 전체</option>{% for s in sources %}<option value="{{ s }}" {{ 'selected' if f.source == s }}>{{ s | source_name }}</option>{% endfor %}</select>
+  <select name="min_salary"><option value="">연봉 전체</option>{% for v in salary_steps %}<option value="{{ v }}" {{ 'selected' if f.min_salary == v | string }}>{{ '{:,}'.format(v) }}만원 이상</option>{% endfor %}</select>
+  <label class="inl">적합도 <input type="number" name="min_fit" value="{{ f.min_fit }}" min="0" max="100" step="10" placeholder="0"> 점↑</label>
+  <select name="sort">
+    <option value="fit" {{ 'selected' if f.sort in ('', 'fit') }}>적합도순</option>
+    <option value="salary" {{ 'selected' if f.sort == 'salary' }}>연봉순</option>
+    <option value="deadline" {{ 'selected' if f.sort == 'deadline' }}>마감 임박순</option>
+    <option value="new" {{ 'selected' if f.sort == 'new' }}>최신 등록순</option>
+  </select>
+  <label class="chk"><input type="checkbox" name="new" value="1" {{ 'checked' if f.new == '1' }}> 새 공고만</label>
+  <label class="chk"><input type="checkbox" name="eligible" value="1" {{ 'checked' if f.eligible == '1' }}> 지원 가능만</label>
+  <label class="chk"><input type="checkbox" name="salary_known" value="1" {{ 'checked' if f.salary_known == '1' }}> 연봉 공개만</label>
+  <label class="chk"><input type="checkbox" name="show_closed" value="1" {{ 'checked' if f.show_closed == '1' }}> 마감 포함</label>
+  <label class="chk"><input type="checkbox" name="hidden" value="1" {{ 'checked' if f.hidden == '1' }}> 숨긴 공고</label>
+  <button class="btn sm">적용</button>
+  <a class="muted" href="{{ url_for('jobs.index', saved=f.saved or None) }}">초기화</a>
+  {% if f.category and sub_options %}
+  <fieldset class="subs">
+    <legend>{{ f.category }} 세부 직무 <span class="muted small">여러 개 고르면 하나라도 맞는 공고 · 비우면 전체</span></legend>
+    {% for s, n in sub_options %}
+      <label class="pill {{ 'on' if s in f.sub }} {{ 'zero' if not n }}"><input type="checkbox" name="sub" value="{{ s }}" {{ 'checked' if s in f.sub }}> {{ s }} <small>{{ n }}</small></label>
+    {% endfor %}
+  </fieldset>
+  {% endif %}
+</form>
+<p class="muted small">적합성 = 지역 25 + 연봉 25 + 경력 25 + 직무·기술 25 (학력·고용형태 감점). 기준은 <a href="{{ url_for('profile.edit') }}">내 조건</a>에서 바꿉니다.</p>
+{% set back = request.full_path %}
+{% for p in rows %}{{ posting_row(p, back) }}{% else %}
+  <div class="card empty"><p>조건에 맞는 공고가 없습니다.</p><a class="btn" href="{{ url_for('collect.index') }}">공고 수집</a></div>
+{% endfor %}
+{% if pages > 1 %}
+<nav class="pager">
+  {% for n in range(1, pages + 1) %}
+    <a class="{{ 'on' if n == page }}" href="{{ url_for('jobs.index', page=n, **f) }}">{{ n }}</a>
+  {% endfor %}
+</nav>
+{% endif %}
+{% endblock %}

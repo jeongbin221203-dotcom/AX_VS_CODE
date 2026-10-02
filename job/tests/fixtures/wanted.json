@@ -1,0 +1,7 @@
+{"data": [
+  {"id": 300001, "position": "데이터 분석가 (SQL)", "company": {"id": 1, "name": "원티드샘플"},
+   "address": {"country": "한국", "location": "서울", "district": "마포구", "full_location": "서울 마포구"},
+   "due_time": null, "annual_from": 2, "annual_to": 5, "category_tags": [{"id": 1, "title": "데이터 분석"}]},
+  {"id": 300002, "position": "주니어 프론트엔드", "company": {"name": "원티드샘플2"},
+   "address": {"location": "경기", "district": "성남시"}, "due_time": "2099-12-31", "annual_from": 0, "annual_to": 1}
+], "links": {}}

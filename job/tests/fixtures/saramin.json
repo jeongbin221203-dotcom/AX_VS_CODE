@@ -1,0 +1,18 @@
+{"jobs": {"count": 2, "start": 0, "total": "2", "job": [
+  {"url": "https://www.saramin.co.kr/zf_user/jobs/relay/view?rec_idx=111", "active": 1,
+   "company": {"detail": {"href": "https://www.saramin.co.kr", "name": "테스트소프트"}},
+   "position": {"title": "Python 백엔드 개발자", "industry": {"code": "301", "name": "솔루션·SI·ERP·CRM"},
+     "location": {"code": "101050", "name": "서울 &gt; 강남구"}, "job-type": {"code": "1", "name": "정규직"},
+     "job-mid-code": {"code": "2", "name": "IT개발·데이터"}, "job-code": {"code": "84", "name": "백엔드/서버개발"},
+     "experience-level": {"code": 2, "min": 3, "max": 0, "name": "경력 3년↑"},
+     "required-education-level": {"code": "8", "name": "대학교졸업(4년)이상"}},
+   "keyword": "Python, Django, AWS", "salary": {"code": "13", "name": "4,000~4,500만원"},
+   "id": "111", "posting-timestamp": "1790000000", "expiration-timestamp": "1893423599", "close-type": {"code": "1", "name": "접수마감일"}},
+  {"url": "https://www.saramin.co.kr/zf_user/jobs/relay/view?rec_idx=222", "active": 1,
+   "company": {"detail": {"name": "샘플물류"}},
+   "position": {"title": "자재관리 신입 사원", "location": {"name": "경기 &gt; 화성시"}, "job-type": {"name": "정규직"},
+     "experience-level": {"code": 1, "min": 0, "max": 0, "name": "신입"},
+     "required-education-level": {"name": "학력무관"}},
+   "keyword": "자재관리, ERP", "salary": {"code": "99", "name": "면접후 결정"},
+   "id": "222", "posting-timestamp": "1790000000", "expiration-timestamp": "1893423599", "close-type": {"code": "3", "name": "상시"}}
+]}}

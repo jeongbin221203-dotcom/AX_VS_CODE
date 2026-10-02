@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}평균 연봉{% endblock %}
+{% block content %}
+<h1>평균 연봉</h1>
+<p class="muted">수집한 공고 {{ st.total }}건 중 연봉을 공개한 {{ st.disclosed }}건의 연봉 범위 가운데 값으로 계산했습니다.
+   월급·시급은 연봉으로 환산(월 × 12, 시급 × 209시간 × 12)했고 '회사내규·면접 후 결정'은 뺐습니다.</p>
+
+<div class="kpis">
+  <div class="kpi accent"><b>{{ st.overall.avg | won }}</b><span>공고 평균</span></div>
+  <div class="kpi"><b>{{ st.overall.median | won }}</b><span>중앙값</span></div>
+  <div class="kpi"><b>{{ st.overall.min | won }} ~ {{ st.overall.max | won }}</b><span>범위</span></div>
+  <div class="kpi"><b>{{ st.company_avg.avg | won }}</b><span>회사 평균연봉 평균 ({{ st.company_avg.n }}곳 입력)</span></div>
+</div>
+
+<div class="grid2">
+  <section class="card">
+    <h2>지역별</h2>
+    <table class="tbl">
+      <tr><th>지역</th><th class="r">공고</th><th class="r">공개</th><th class="bar-cell">평균</th><th class="r">평균</th><th class="r">중앙값</th></tr>
+      {% for r in st.regions %}
+      <tr><td>{{ r.name }}</td><td class="r">{{ r.count }}</td><td class="r">{{ r.n }}</td>
+          <td class="bar-cell">{% if r.avg %}<span class="bar" style="width: {{ (r.avg / peak * 100) | round | int }}%"></span>{% endif %}</td>
+          <td class="r">{{ r.avg | won }}</td><td class="r">{{ r.median | won }}</td></tr>
+      {% endfor %}
+    </table>
+  </section>
+  <section>
+    <div class="card">
+      <h2>신입/경력별</h2>
+      <table class="tbl">
+        <tr><th>구분</th><th class="r">공개</th><th class="r">평균</th><th class="r">중앙값</th><th class="r">최저~최고</th></tr>
+        {% for c in st.careers %}<tr><td>{{ c.name }}</td><td class="r">{{ c.n }}</td><td class="r">{{ c.avg | won }}</td><td class="r">{{ c.median | won }}</td><td class="r small">{{ c.min | won }} ~ {{ c.max | won }}</td></tr>{% endfor %}
+      </table>
+    </div>
+    <div class="card">
+      <h2>출처별</h2>
+      <table class="tbl">
+        <tr><th>출처</th><th class="r">공개</th><th class="r">평균</th><th class="r">중앙값</th></tr>
+        {% for s in st.sources %}<tr><td>{{ s.name | source_name }}</td><td class="r">{{ s.n }}</td><td class="r">{{ s.avg | won }}</td><td class="r">{{ s.median | won }}</td></tr>{% endfor %}
+      </table>
+    </div>
+  </section>
+</div>
+
+<section class="card">
+  <h2>연봉 구간별 공고 수 <span class="muted small">500만원 단위 · 연봉 공개 공고 {{ st.disclosed }}건</span></h2>
+  <table class="tbl">
+    <tr><th>연봉 (범위 가운데 값)</th><th class="bar-cell"></th><th class="r">공고</th><th class="r">비율</th><th></th></tr>
+    {% set bmax = (st.bands | map(attribute='count') | max) or 1 %}
+    {% for b in st.bands %}
+    <tr><td>{{ b.name }}</td><td class="bar-cell"><span class="bar" style="width: {{ (b.count / bmax * 100) | round | int }}%"></span></td>
+        <td class="r">{{ b.count }}</td><td class="r">{{ b.pct }}%</td>
+        <td class="small">{% if not loop.first %}<a href="{{ url_for('jobs.index', min_salary=3000 + (loop.index0 - 1) * 500) }}">이상 공고 보기</a>{% endif %}</td></tr>
+    {% endfor %}
+  </table>
+</section>
+
+{% if careers %}
+<section class="card">
+  <h2>지역 × 신입/경력 평균</h2>
+  <div class="scroll-x">
+  <table class="tbl">
+    <tr><th>지역</th>{% for c in careers %}<th class="r">{{ c }}</th>{% endfor %}</tr>
+    {% for r in regions %}
+    <tr><td>{{ r }}</td>{% for c in careers %}<td class="r">{{ st.matrix.get(r ~ '|' ~ c) | won }}</td>{% endfor %}</tr>
+    {% endfor %}
+  </table>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

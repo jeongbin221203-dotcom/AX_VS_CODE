@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+{% block title %}공고 수집{% endblock %}
+{% block content %}
+<h1>공고 수집</h1>
+
+{% if results %}
+<section class="card">
+  <h2>수집 결과</h2>
+  {% for r in results %}
+    {% if r.ok and r.pid %}<div class="flash ok">{{ r.name }}: <a href="{{ url_for('jobs.detail', pid=r.pid) }}">{{ r.title }}</a> ({{ '새 공고' if r.inserted else '갱신' }})</div>
+    {% elif r.ok %}<div class="flash ok">{{ r.name }}: 받은 공고 {{ r.fetched }}건 (새 공고 {{ r.inserted }}, 갱신 {{ r.updated }})</div>
+    {% else %}<div class="flash err">{{ r.name }}: {{ r.error }}</div>{% endif %}
+  {% endfor %}
+  <a class="btn" href="{{ url_for('jobs.index') }}">공고 보러 가기 →</a>
+</section>
+{% endif %}
+
+<section class="card">
+  <h2>사이트별 수집 방법</h2>
+  <div class="scroll-x">
+  <table class="tbl">
+    <tr><th>사이트</th><th>받는 방법</th><th>참고</th><th class="r">모은 공고</th></tr>
+    {% for key, name, how, note, home in methods %}
+    <tr><td><a href="{{ home }}" target="_blank" rel="noopener noreferrer"><b>{{ name }}</b> ↗</a></td><td>{{ how }}</td><td class="muted small">{{ note }}</td>
+        <td class="r">{% if key in in_db %}<a href="{{ url_for('jobs.index', source=key) }}">보기</a>{% else %}-{% endif %}</td></tr>
+    {% endfor %}
+  </table>
+  </div>
+  <p class="muted small">사이트 이름을 눌러 공고를 찾고, 관심 공고를 열어 그 주소를 아래에 붙여 넣으세요. 첫 화면·목록 주소는 공고가 아니라서 받지 않습니다.
+     공개 API가 없는 사이트는 목록을 대량으로 긁지 않습니다(이용약관·차단 위험).</p>
+</section>
+
+<section class="card" id="crawl">
+  <div class="sec-head"><h2>자동 수집 (크롤링)</h2>
+    <span class="chip {{ 'ok' if crawl.enabled }}">{{ ('켜짐 · ' ~ crawl.interval_hours ~ '시간마다') if crawl.enabled else '꺼짐' }}</span></div>
+  <p class="small">
+    마지막 실행 <b>{{ crawl_status.last or '없음' }}</b>
+    {% if crawl.enabled %} · 다음 실행 <b>{{ crawl_status.next }}</b>{% endif %}
+    {% if crawl_status.running %} · <span class="chip hot">실행 중</span>{% endif %}
+  </p>
+  {% if crawl_status.summary %}{% set sm = crawl_status.summary | fromjson %}
+    <p class="small">지난 결과: 새 공고 <b>{{ sm.new }}</b> · 갱신 {{ sm.updated }} · 마감 처리 {{ sm.closed }} · 마감·미저장 삭제 {{ sm.purged or 0 }} · 요청 {{ sm.requests }}회
+    {% if sm.errors %}<br><span class="err-text">{{ sm.errors[:3] | join(' / ') }}</span>{% endif %}</p>
+  {% endif %}
+  <form method="post" action="{{ url_for('collect.crawl_settings') }}" class="stack">
+    <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+    <div class="row">
+      <label class="chk"><input type="checkbox" name="enabled" value="1" {{ 'checked' if crawl.enabled }}> 자동 수집 켜기</label>
+      <label class="inl">간격 <input type="number" name="interval_hours" min="1" max="24" value="{{ crawl.interval_hours }}"> 시간</label>
+    </div>
+    <label class="inl" style="white-space: normal">검색어 (쉼표로, 10개까지 · 비우면 모든 직무 최신순)
+      <input name="keywords" value="{{ crawl.keywords | join(', ') }}" placeholder="자재관리, 구매, 데이터 분석" style="flex: 1; min-width: 220px"></label>
+    <div class="row">
+      <span class="small muted">검색 결과를 읽을 사이트</span>
+      {% for key, name in crawl_sites %}<label class="chk"><input type="checkbox" name="sites" value="{{ key }}" {{ 'checked' if key in crawl.sites }}> {{ name }}</label>{% endfor %}
+      <label class="chk"><input type="checkbox" name="use_api" value="1" {{ 'checked' if crawl.use_api }}> API 키가 있으면 사람인·고용24 API도</label>
+    </div>
+    <div class="row">
+      <label class="chk"><input type="checkbox" name="by_category" value="1" {{ 'checked' if crawl.by_category }}> 검색어가 없으면 직무별로 모두 돌기</label>
+      <span class="muted small">사람인 21개 · 잡코리아 21개 · 링커리어 14개 직무. 새 공고는 직무마다 돌아가며 골라 한쪽으로 쏠리지 않습니다.</span>
+    </div>
+    <div class="row">
+      <span class="small muted">전체 공고 따라가기 (사이트맵)</span>
+      {% for p in sitemap_progress %}<label class="chk"><input type="checkbox" name="sitemap_sites" value="{{ p.site }}" {{ 'checked' if p.on }}> {{ p.name }} 전체</label>{% endfor %}
+      <label class="inl">한 번에 상세 최대 <input type="number" name="sitemap_max" min="0" max="5000" step="50" value="{{ crawl.sitemap_max }}"> 건</label>
+    </div>
+    {% for p in sitemap_progress if p.total %}
+    <div class="small">
+      <b>{{ p.name }}</b> 사이트맵 {{ '{:,}'.format(p.total) }}건 중 {{ '{:,}'.format(p.fetched) }}건 읽음
+      <span class="bar-wrap"><span class="bar" style="width: {{ (p.fetched / p.total * 100) | round | int }}%"></span></span>
+      {% if p.remaining %}남은 {{ '{:,}'.format(p.remaining) }}건 · 지금 설정이면 약 {{ p.eta_hours }}시간 뒤 모두 읽음{% else %}모두 읽음 — 이제 새로 올라온 공고만 읽습니다{% endif %}
+      {% if p.errors %} · 읽기 실패 {{ p.errors }}건{% endif %}
+    </div>
+    {% endfor %}
+    <div class="row">
+      <label class="inl">목록 <input type="number" name="pages" min="1" max="10" value="{{ crawl.pages }}"> 페이지</label>
+      <label class="inl">사이트당 새 공고 최대 <input type="number" name="max_new" min="1" max="500" value="{{ crawl.max_new }}"></label>
+      <label class="inl">저장 공고 갱신 최대 <input type="number" name="max_refresh" min="0" max="200" value="{{ crawl.max_refresh }}"></label>
+    </div>
+    <div class="row">
+      <button class="btn">설정 저장</button>
+      <button class="btn ghost" formaction="{{ url_for('collect.crawl_run') }}">지금 실행</button>
+    </div>
+  </form>
+  <p class="muted small">
+    리멤버는 사이트맵(전체 공고 목록) 한 장을 매번 읽어 비교합니다 — 새로 생긴 공고만 상세를 읽고, 목록에서 빠진 공고는 요청 없이 마감 처리합니다.
+    처음에는 최근 공고부터 한 번에 정한 건수씩 채웁니다(3초 간격이라 500건 ≈ 25분). 매번 1만여 건을 모두 다시 읽지는 않습니다.
+    사람인·잡코리아·링커리어는 검색 결과에서 처음 보는 공고만 상세 페이지를 읽습니다. 이미 저장한 공고(고용24·자소설닷컴·잡플래닛 링크 포함)는
+    마감 전이면 하루에 한 번 다시 읽어 바뀐 내용을 반영하고, 원문이 사라지면 마감 처리합니다.
+    robots.txt 를 따르고 요청 사이를 {{ config.CRAWL_DELAY | int }}초씩 쉽니다. 고용24는 새 공고 찾기는 API로만(링크로 넣은 공고는 갱신됨), 원티드는 프로그램 접근을 막아 제외됩니다.
+    앱이 켜져 있을 때만 돕니다 — 꺼 두는 PC라면 <code>python crawl.py</code>를 작업 스케줄러에 1시간마다 등록하세요.
+  </p>
+</section>
+
+<section class="card" id="links">
+  <h2>공고 링크로 가져오기</h2>
+  <p class="muted small">{{ link_sites | join(' · ') }} 공고 주소를 한 줄에 하나씩 (한 번에 20개까지).
+     페이지의 채용 구조화 데이터(JSON-LD)를 읽고, 없으면 제목·설명만 가져옵니다. 빠진 항목(연봉·경력 등)은 공고 상세에서 확인하세요.</p>
+  <form method="post" action="{{ url_for('collect.links') }}" class="stack">
+    <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+    <textarea name="links" rows="4" placeholder="https://www.saramin.co.kr/zf_user/jobs/relay/view?rec_idx=...&#10;https://www.jobkorea.co.kr/Recruit/GI_Read/...&#10;https://career.rememberapp.co.kr/job/posting/...&#10;https://linkareer.com/activity/..."></textarea>
+    <div class="row"><button class="btn">링크 가져오기</button>
+      <span class="muted small">로그인해야 보이는 공고는 읽히지 않습니다 → <a href="{{ url_for('jobs.new') }}">직접 등록</a></span></div>
+  </form>
+</section>
+
+<div class="grid2">
+  <section class="card">
+    <h2>API로 받아오기</h2>
+    <form method="post" action="{{ url_for('collect.run') }}" class="stack">
+      <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+      {% for s in sources %}
+      <label class="src-row {{ '' if s.ready else 'off' }}">
+        <input type="checkbox" name="sources" value="{{ s.key }}" {{ 'checked' if s.ready else 'disabled' }}>
+        <span><b>{{ s.name }}</b> <span class="muted small">{{ s.kind }}</span>
+          {% if s.ready %}<span class="chip ok">사용 가능</span>{% else %}<br><span class="muted small">설정 필요: {{ s.need }}</span>{% endif %}</span>
+      </label>
+      {% endfor %}
+      <div class="row">
+        <input name="keyword" placeholder="검색어 (예: 자재관리, Python)">
+        <select name="sido"><option value="">전국</option>{% for s in sidos %}<option>{{ s }}</option>{% endfor %}</select>
+        <select name="career"><option value="">신입/경력 전체</option><option>신입</option><option>경력</option></select>
+        <label class="inl">페이지 <input type="number" name="pages" value="1" min="1" max="5"></label>
+      </div>
+      <button class="btn">수집 실행</button>
+      <p class="muted small">같은 공고는 출처·공고번호로 합쳐져 다시 받아도 중복되지 않습니다. 사람인은 하루 호출 수 제한이 있어 페이지 수를 적게 두세요.</p>
+    </form>
+  </section>
+
+  <section class="card" id="file">
+    <h2>CSV·엑셀 가져오기</h2>
+    <p class="muted small">관심 공고를 표로 정리해 한꺼번에 올립니다. '출처' 열에 사람인·잡코리아·링커리어·자소설닷컴·잡플래닛·원티드를 적으면 사이트별로 구분됩니다. 열: 출처, 회사, 제목, 지역, 연봉, 경력, 학력, 고용형태, 마감일, 링크, 키워드, 직무, 회사평균연봉.</p>
+    <form method="post" action="{{ url_for('collect.upload') }}" enctype="multipart/form-data" class="stack">
+      <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+      <input type="file" name="file" accept=".csv,.xlsx" required>
+      <label class="inl">'출처' 열이 없을 때
+        <select name="site"><option value="saramin">사람인</option><option value="jobkorea">잡코리아</option><option value="linkareer">링커리어</option><option value="jasoseol">자소설닷컴</option><option value="jobplanet">잡플래닛</option><option value="wanted">원티드</option><option value="remember">리멤버</option><option value="csv" selected>기타</option></select></label>
+      <div class="row"><button class="btn">가져오기</button><a class="btn ghost" href="{{ url_for('collect.template') }}">양식 CSV 받기</a></div>
+    </form>
+    <hr>
+    <h2>샘플 공고</h2>
+    <p class="muted small">API 키 없이 기능을 둘러볼 수 있는 가상 공고 40건입니다(회사 이름에 '(가상)' 표시).</p>
+    <form method="post" action="{{ url_for('collect.sample') }}">
+      <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+      <button class="btn ghost">샘플 공고 넣기</button>
+    </form>
+    {% if in_db %}
+    <hr>
+    <h2>출처별 공고 지우기</h2>
+    <form method="post" action="{{ url_for('collect.delete_source') }}" class="row">
+      <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+      <select name="source">{% for s in in_db %}<option value="{{ s }}">{{ s | source_name }}</option>{% endfor %}</select>
+      <button class="btn ghost danger" data-confirm="이 출처의 공고와 지원 기록을 모두 지울까요?">지우기</button>
+    </form>
+    {% endif %}
+  </section>
+</div>
+
+<section class="card">
+  <h2>수집 기록</h2>
+  <table class="tbl">
+    <tr><th>시각</th><th>출처</th><th>조건</th><th class="r">받음</th><th class="r">새로</th><th class="r">갱신</th><th>오류</th></tr>
+    {% for h in history %}
+    <tr><td class="small">{{ h.started_at }}</td><td>{{ h.source | source_name }}</td><td>{{ h.query }}</td>
+        <td class="r">{{ h.fetched }}</td><td class="r">{{ h.inserted }}</td><td class="r">{{ h.updated }}</td>
+        <td class="small err-text">{{ h.error or '' }}</td></tr>
+    {% else %}<tr><td colspan="7" class="muted">기록 없음</td></tr>{% endfor %}
+  </table>
+</section>
+{% endblock %}

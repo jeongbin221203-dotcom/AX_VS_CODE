@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% from "_macros.html" import posting_row, dday_chip %}
+{% block title %}요약{% endblock %}
+{% block content %}
+<h1>오늘의 구직 요약</h1>
+{% if total == 0 %}
+  <section class="card empty">
+    <h2>아직 모은 공고가 없습니다</h2>
+    <p>사람인·고용24 Open API 키를 넣고 수집하거나, 잡코리아 등 다른 사이트 공고를 CSV/엑셀로 가져오세요.
+       키가 없다면 샘플(가상) 공고로 먼저 둘러볼 수 있습니다.</p>
+    <div class="row">
+      <a class="btn" href="{{ url_for('collect.index') }}">공고 수집하러 가기</a>
+      <form method="post" action="{{ url_for('collect.sample') }}">
+        <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+        <button class="btn ghost">샘플 공고 넣기</button>
+      </form>
+    </div>
+  </section>
+{% else %}
+  {% if profile_empty %}<div class="flash warn">내 조건을 아직 저장하지 않았습니다. 희망 지역·연봉·직무를 정하면 맞는 공고가 위로 옵니다. <a href="{{ url_for('profile.edit') }}">내 조건 적기 →</a></div>{% endif %}
+  <div class="kpis">
+    <div class="kpi"><b>{{ total }}</b><span>진행 중 공고</span></div>
+    <div class="kpi"><b>{{ eligible_n }}</b><span>지원 가능</span></div>
+    <div class="kpi accent"><b>{{ good_n }}</b><span>적합 (80점↑)</span></div>
+    <div class="kpi"><b>{{ stats.overall.avg | won }}</b><span>공고 평균 연봉 ({{ stats.disclosed }}건 공개)</span></div>
+    <div class="kpi"><b>{{ counts.get('지원 완료', 0) + counts.get('서류 합격', 0) + counts.get('면접', 0) }}</b><span>지원 진행 중</span></div>
+  </div>
+
+  <section class="card fresh">
+    <div class="sec-head">
+      <h2>새로 들어온 맞는 공고 <span class="chip new">{{ fresh_n }}</span></h2>
+      <div class="row">
+        {% if fresh_n %}<a href="{{ url_for('jobs.index', new='1', eligible='1', min_fit=new_min_fit) }}">모두 보기 →</a>{% endif %}
+        <form method="post" action="{{ url_for('main.mark_seen') }}">
+          <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+          <button class="btn sm ghost">모두 확인함</button>
+        </form>
+      </div>
+    </div>
+    <p class="muted small">{{ seen[:16] }} 이후 수집된 공고 중 지원 가능하고 적합도 {{ new_min_fit }}점 이상인 공고입니다.</p>
+    {% for p in fresh %}
+      <div class="mini"><span class="fit-mini">{{ p.fit.score }}</span> <a href="{{ url_for('jobs.detail', pid=p.id) }}">{{ p.company }} · {{ p.title }}</a>
+        <span class="muted small">{{ p.sido or '' }} · {{ p | salary_range }} · {{ p.dday | dday }}</span></div>
+    {% else %}<p class="muted">새로 들어온 맞는 공고가 없습니다.</p>{% endfor %}
+  </section>
+
+  <div class="grid2">
+    <section>
+      <div class="sec-head"><h2>나에게 맞는 공고</h2><a href="{{ url_for('jobs.index', eligible='1') }}">전체 보기 →</a></div>
+      {% for p in top %}{{ posting_row(p, url_for('main.dashboard')) }}{% else %}<p class="muted">지원 가능한 공고가 없습니다. 조건을 넓혀 보세요.</p>{% endfor %}
+    </section>
+    <section>
+      <div class="sec-head"><h2>마감 임박 (7일 이내)</h2></div>
+      <div class="card">
+        {% for p in closing %}
+          <div class="mini">{{ dday_chip(p.dday) }} <a href="{{ url_for('jobs.detail', pid=p.id) }}">{{ p.company }} · {{ p.title }}</a> <span class="muted">{{ p.fit.score }}점</span></div>
+        {% else %}<p class="muted">7일 안에 마감되는 적합 공고가 없습니다.</p>{% endfor %}
+      </div>
+      <div class="sec-head"><h2>지원 현황</h2><a href="{{ url_for('apps.board') }}">현황판 →</a></div>
+      <div class="card">
+        <div class="pipeline">
+          {% for s in STATUSES %}<div><b>{{ counts.get(s, 0) }}</b><span>{{ s }}</span></div>{% endfor %}
+        </div>
+      </div>
+      <div class="sec-head"><h2>지역별 평균 연봉</h2><a href="{{ url_for('main.stats') }}">통계 →</a></div>
+      <div class="card">
+        <table class="tbl compact">
+          <tr><th>지역</th><th class="r">공고</th><th class="r">평균</th></tr>
+          {% for r in stats.regions[:8] %}<tr><td>{{ r.name }}</td><td class="r">{{ r.count }}</td><td class="r">{{ r.avg | won }}</td></tr>{% endfor %}
+        </table>
+      </div>
+    </section>
+  </div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,37 @@
+{% macro fit_badge(r) -%}
+  <span class="fit {{ r.grade | grade_class }}" title="적합성 {{ r.score }}점">{{ r.score }}<small>{{ r.grade }}</small></span>
+{%- endmacro %}
+
+{% macro dday_chip(d) -%}
+  <span class="chip {{ 'hot' if d is not none and 0 <= d <= 3 }}{{ ' closed' if d is not none and d < 0 }}">{{ d | dday }}</span>
+{%- endmacro %}
+
+{% macro posting_row(p, back) -%}
+  <article class="job{{ ' blocked' if not p.fit.eligible }}">
+    <div class="job-fit">{{ fit_badge(p.fit) }}</div>
+    <div class="job-main">
+      <a class="job-title" href="{{ url_for('jobs.detail', pid=p.id) }}">{{ p.title }}</a>{% if p.is_new %} <span class="chip new">NEW</span>{% endif %}
+      <div class="job-co">{{ p.company }} <span class="src">{{ p.source | source_name }}</span>
+        {% if p.app_status %}<span class="status s-{{ STATUSES.index(p.app_status) }}">{{ p.app_status }}</span>{% endif %}</div>
+      <div class="job-meta">
+        <span>📍 {{ p.sido or '지역 미상' }}{% if p.sigungu %} {{ p.sigungu }}{% endif %}</span>
+        <span>💼 {{ p.career_type }}{% if p.career_min %} {{ p.career_min }}년↑{% endif %}</span>
+        <span>💰 {{ p | salary_range }}</span>
+        {% if p.company_avg_salary %}<span title="회사 평균연봉">🏢 평균 {{ p.company_avg_salary | won }}</span>{% endif %}
+        {% if p.employment_type %}<span>{{ p.employment_type }}</span>{% endif %}
+      </div>
+      {% if p.fit.blockers %}<div class="job-warn">⛔ {{ p.fit.blockers | join(' · ') }}</div>
+      {% elif p.fit.matched %}<div class="job-ok">✓ {{ p.fit.matched[:5] | join(', ') }}</div>{% endif %}
+    </div>
+    <div class="job-side">
+      {{ dday_chip(p.dday) }}
+      {% if p.url %}<a class="btn sm" href="{{ p.url }}" target="_blank" rel="noopener noreferrer">원문</a>{% endif %}
+      <form method="post" action="{{ url_for('jobs.save', pid=p.id) }}">
+        <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+        <input type="hidden" name="back" value="{{ back }}">
+        <input type="hidden" name="saved" value="{{ '0' if p.saved else '1' }}">
+        <button class="btn sm {{ 'saved' if p.saved else 'ghost' }}" title="{{ '저장 풀기' if p.saved else '저장하면 마감 뒤에도 다시 볼 수 있음' }}">{{ '★ 저장됨' if p.saved else '☆ 저장' }}</button>
+      </form>
+    </div>
+  </article>
+{%- endmacro %}

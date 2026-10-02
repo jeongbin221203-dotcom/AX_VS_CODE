@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% from "_macros.html" import dday_chip %}
+{% block title %}지원 현황{% endblock %}
+{% block content %}
+<h1>지원 현황</h1>
+<p class="muted">지원은 각 사이트 원문에서 하고, 여기서는 단계·일정·메모를 관리합니다. 공고 상세에서 단계를 바꿀 수 있습니다.</p>
+<div class="board">
+  {% for s in active %}
+  <section class="lane">
+    <h2>{{ s }} <small class="muted">{{ board[s] | length }}</small></h2>
+    {% for a in board[s] %}
+    <a class="lane-card" href="{{ url_for('jobs.detail', pid=a.posting_id) }}">
+      <div class="row between"><b>{{ a.company }}</b>{{ dday_chip(a.dday) }}</div>
+      <div>{{ a.title }}</div>
+      <div class="muted small">{{ a.sido or '' }} · {{ a.career_type }} · {{ a | salary_range }}</div>
+      {% if a.next_at %}<div class="small">📅 다음 일정 {{ a.next_at }}</div>{% endif %}
+      {% if a.applied_at %}<div class="muted small">지원일 {{ a.applied_at }}</div>{% endif %}
+      {% if a.memo %}<div class="memo small">{{ a.memo | truncate(80) }}</div>{% endif %}
+    </a>
+    {% else %}<p class="muted small">없음</p>{% endfor %}
+  </section>
+  {% endfor %}
+</div>
+<section class="card">
+  <h2>끝난 지원</h2>
+  <table class="tbl">
+    <tr><th>결과</th><th>회사</th><th>공고</th><th>지원일</th><th>메모</th></tr>
+    {% for s in done %}{% for a in board[s] %}
+    <tr><td><span class="status s-{{ STATUSES.index(s) }}">{{ s }}</span></td><td>{{ a.company }}</td>
+        <td><a href="{{ url_for('jobs.detail', pid=a.posting_id) }}">{{ a.title }}</a></td><td>{{ a.applied_at or '-' }}</td>
+        <td class="small">{{ a.memo | truncate(60) }}</td></tr>
+    {% endfor %}{% endfor %}
+  </table>
+</section>
+{% endblock %}

@@ -1,0 +1,141 @@
+"""SQLite 저장소. 수집한 공고, 지원 현황, 내 조건(설정), 수집 기록을 보관한다."""
+from __future__ import annotations
+
+import sqlite3
+from contextlib import contextmanager
+from datetime import datetime
+from pathlib import Path
+from typing import Iterator
+
+_db_path: Path | None = None
+
+SCHEMA = """
+CREATE TABLE IF NOT EXISTS settings (
+    key   TEXT PRIMARY KEY,
+    value TEXT NOT NULL
+);
+
+-- 출처별 공고를 공통 형태로 맞춰 저장. (source, source_id) 로 중복 제거
+CREATE TABLE IF NOT EXISTS postings (
+    id                  INTEGER PRIMARY KEY AUTOINCREMENT,
+    source              TEXT NOT NULL,          -- saramin / work24 / wanted / csv / manual / sample
+    source_id           TEXT NOT NULL,
+    url                 TEXT,
+    title               TEXT NOT NULL,
+    company             TEXT NOT NULL,
+    sido                TEXT,                   -- 서울·경기 … (짧은 이름), 재택·해외·전국
+    sigungu             TEXT,
+    location_raw        TEXT,
+    career_type         TEXT,                   -- 신입 / 경력 / 신입·경력 / 무관
+    career_min          INTEGER,                -- 경력 최소 년수
+    career_max          INTEGER,
+    career_raw          TEXT,
+    education           TEXT,                   -- 무관 / 고졸 / 초대졸 / 대졸 / 석사 / 박사
+    employment_type     TEXT,                   -- 정규직·계약직 …
+    salary_raw          TEXT,
+    salary_min          INTEGER,                -- 연봉 환산, 만원
+    salary_max          INTEGER,
+    salary_negotiable   INTEGER NOT NULL DEFAULT 0,
+    company_avg_salary  INTEGER,                -- 회사 평균연봉(만원, 직접 입력·CSV)
+    job_category        TEXT,
+    keywords            TEXT,                   -- 쉼표 구분
+    description         TEXT,
+    posted_at           TEXT,                   -- YYYY-MM-DD
+    deadline            TEXT,                   -- YYYY-MM-DD, NULL = 상시·채용 시 마감
+    fetched_at          TEXT NOT NULL,
+    updated_at          TEXT NOT NULL,
+    hidden              INTEGER NOT NULL DEFAULT 0,
+    saved               INTEGER NOT NULL DEFAULT 0,   -- 저장한 공고: 마감돼도 지우지 않고 다시 볼 수 있음
+    UNIQUE (source, source_id)
+);
+CREATE INDEX IF NOT EXISTS idx_postings_deadline ON postings(deadline);
+CREATE INDEX IF NOT EXISTS idx_postings_sido ON postings(sido);
+
+-- 공고 하나에 지원 기록 하나
+CREATE TABLE IF NOT EXISTS applications (
+    posting_id   INTEGER PRIMARY KEY REFERENCES postings(id) ON DELETE CASCADE,
+    status       TEXT NOT NULL,
+    memo         TEXT NOT NULL DEFAULT '',
+    applied_at   TEXT,
+    next_at      TEXT,                          -- 다음 일정(면접 등) YYYY-MM-DD
+    updated_at   TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS application_events (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    posting_id  INTEGER NOT NULL REFERENCES postings(id) ON DELETE CASCADE,
+    status      TEXT NOT NULL,
+    note        TEXT NOT NULL DEFAULT '',
+    created_at  TEXT NOT NULL
+);
+
+-- 사이트맵으로 전체를 따라가는 사이트(리멤버)의 공고 번호 목록. 새로 생긴 번호만 상세를 읽는다
+CREATE TABLE IF NOT EXISTS sitemap_ids (
+    site        TEXT NOT NULL,
+    post_id     TEXT NOT NULL,
+    first_seen  TEXT NOT NULL,
+    last_seen   TEXT NOT NULL,
+    fetched_at  TEXT,                       -- 상세를 읽은 시각 (실패해도 기록해 무한 재시도 방지)
+    fetch_error TEXT,
+    gone        INTEGER NOT NULL DEFAULT 0, -- 사이트맵에서 빠짐 = 내려간 공고
+    PRIMARY KEY (site, post_id)
+);
+
+CREATE TABLE IF NOT EXISTS fetch_runs (
+    id           INTEGER PRIMARY KEY AUTOINCREMENT,
+    source       TEXT NOT NULL,
+    query        TEXT NOT NULL DEFAULT '',
+    started_at   TEXT NOT NULL,
+    finished_at  TEXT,
+    fetched      INTEGER NOT NULL DEFAULT 0,
+    inserted     INTEGER NOT NULL DEFAULT 0,
+    updated      INTEGER NOT NULL DEFAULT 0,
+    error        TEXT
+);
+"""
+
+
+def configure(path: Path | str) -> None:
+    global _db_path
+    _db_path = Path(path)
+    _db_path.parent.mkdir(parents=True, exist_ok=True)
+    with connect() as con:
+        con.executescript(SCHEMA)
+        _migrate(con)
+
+
+def _migrate(con: sqlite3.Connection) -> None:
+    """예전에 만든 DB 에 새 열을 더한다."""
+    cols = {r[1] for r in con.execute("PRAGMA table_info(postings)")}
+    if "saved" not in cols:
+        con.execute("ALTER TABLE postings ADD COLUMN saved INTEGER NOT NULL DEFAULT 0")
+
+
+@contextmanager
+def connect() -> Iterator[sqlite3.Connection]:
+    if _db_path is None:
+        raise RuntimeError("db.configure() 를 먼저 호출하세요")
+    con = sqlite3.connect(_db_path)
+    con.row_factory = sqlite3.Row
+    con.execute("PRAGMA foreign_keys = ON")
+    try:
+        yield con
+        con.commit()
+    finally:
+        con.close()
+
+
+def now() -> str:
+    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+
+def get_setting(key: str, default: str | None = None) -> str | None:
+    with connect() as con:
+        row = con.execute("SELECT value FROM settings WHERE key = ?", (key,)).fetchone()
+    return row["value"] if row else default
+
+
+def set_setting(key: str, value: str) -> None:
+    with connect() as con:
+        con.execute("INSERT INTO settings(key, value) VALUES(?, ?) "
+                    "ON CONFLICT(key) DO UPDATE SET value = excluded.value", (key, value))

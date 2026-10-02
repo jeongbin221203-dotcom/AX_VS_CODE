@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}내 조건{% endblock %}
+{% block content %}
+<h1>내 조건</h1>
+<p class="muted">공고마다 이 조건과 비교해 적합성 점수를 매깁니다. 비워 둔 항목은 점수에서 '조건 없음'(만점)으로 봅니다.</p>
+<form class="card form" method="post">
+  <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+  <label>이름(선택)<input name="name" value="{{ prof.name }}"></label>
+  <label>희망 최저 연봉
+    <select name="min_salary">
+      <option value="0" {{ 'selected' if not prof.min_salary }}>상관없음</option>
+      {% for v in salary_steps %}<option value="{{ v }}" {{ 'selected' if prof.min_salary == v }}>{{ '{:,}'.format(v) }}만원 이상</option>{% endfor %}
+      {% if prof.min_salary and prof.min_salary not in salary_steps %}<option value="{{ prof.min_salary }}" selected>{{ '{:,}'.format(prof.min_salary) }}만원 이상</option>{% endif %}
+    </select></label>
+
+  <fieldset class="wide">
+    <legend>희망 지역 (여러 개 선택, 비우면 지역 무관)</legend>
+    <div class="checks">
+      {% for s in sidos %}<label class="chk"><input type="checkbox" name="regions" value="{{ s }}" {{ 'checked' if s in prof.regions }}> {{ s }}</label>{% endfor %}
+    </div>
+    <label class="chk"><input type="checkbox" name="remote_ok" value="1" {{ 'checked' if prof.remote_ok }}> 재택 공고는 지역 조건을 충족한 것으로 봄</label>
+  </fieldset>
+
+  <fieldset>
+    <legend>신입/경력</legend>
+    <label class="chk"><input type="radio" name="career_type" value="모두" {{ 'checked' if prof.career_type == '모두' }}> 신입·경력 모두</label>
+    <label class="chk"><input type="radio" name="career_type" value="신입" {{ 'checked' if prof.career_type == '신입' }}> 신입</label>
+    <label class="chk"><input type="radio" name="career_type" value="경력" {{ 'checked' if prof.career_type == '경력' }}> 경력</label>
+    <label class="inl">경력 년수 <input type="number" name="years" min="0" max="50" value="{{ prof.years }}"></label>
+    <p class="muted small">'신입·경력 모두'는 경력 조건으로 점수를 깎거나 지원 불가로 표시하지 않습니다.</p>
+  </fieldset>
+  <label>최종 학력
+    <select name="education">{% for e in edus %}<option {{ 'selected' if prof.education == e }}>{{ e }}</option>{% endfor %}</select></label>
+
+  <fieldset class="wide">
+    <legend>희망 고용형태 (비우면 무관)</legend>
+    {% for t in emp_types %}<label class="chk"><input type="checkbox" name="employment_types" value="{{ t }}" {{ 'checked' if t in prof.employment_types }}> {{ t }}</label>{% endfor %}
+  </fieldset>
+
+  <fieldset class="wide">
+    <legend>희망 직무 <span class="muted small">비우면 모든 직무 · 직무를 고르고 세부 직무까지 고르면 그 안에서만 · 직무·기술 점수의 절반</span></legend>
+    <div class="groups">
+      {% for g in groups %}
+      <details class="group" {{ 'open' if g.name in prof.job_groups }}>
+        <summary><label class="chk"><input type="checkbox" name="job_groups" value="{{ g.name }}" {{ 'checked' if g.name in prof.job_groups }}> {{ g.name }}</label></summary>
+        {% if g.subs %}<div class="pills">
+          {% for s in g.subs %}{% set key = g.name ~ '/' ~ s %}
+          <label class="pill {{ 'on' if key in prof.job_subs }}"><input type="checkbox" name="job_subs" value="{{ key }}" {{ 'checked' if key in prof.job_subs }}> {{ s }}</label>
+          {% endfor %}
+        </div>{% endif %}
+      </details>
+      {% endfor %}
+    </div>
+  </fieldset>
+
+  <label class="wide">보유 기술·자격 <small class="muted">쉼표로 구분 — 공고 제목·키워드·내용에 있으면 가산</small>
+    <input name="skills" value="{{ prof.skills | join(', ') }}" placeholder="Python, SQL, 엑셀, ERP, 전산회계 1급"></label>
+  <label class="wide">희망 직무 키워드
+    <input name="interests" value="{{ prof.interests | join(', ') }}" placeholder="자재관리, 구매, 데이터 분석"></label>
+  <label class="wide">제외 단어 <small class="muted">공고에 있으면 '지원 불가'로 표시</small>
+    <input name="exclude" value="{{ prof.exclude | join(', ') }}" placeholder="교대근무, 텔레마케팅, 파견"></label>
+  <div class="wide"><button class="btn">저장</button></div>
+</form>
+{% endblock %}

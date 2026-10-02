@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}공고 직접 등록{% endblock %}
+{% block content %}
+<h1>공고 직접 등록</h1>
+<p class="muted">링크로 읽히지 않는 공고(로그인 필요 등)를 옮겨 적습니다. 보통은 <a href="{{ url_for('collect.index') }}#links">링크로 가져오기</a>가 빠릅니다. 여러 건이면 <a href="{{ url_for('collect.index') }}#file">CSV/엑셀 가져오기</a>가 편합니다.</p>
+<form class="card form" method="post">
+  <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+  <label>사이트
+    <select name="site">
+      {% for k, n in [('saramin','사람인'), ('jobkorea','잡코리아'), ('linkareer','링커리어'), ('jasoseol','자소설닷컴'), ('jobplanet','잡플래닛'), ('wanted','원티드'), ('remember','리멤버'), ('incruit','인크루트'), ('work24','고용24'), ('manual','기타')] %}
+      <option value="{{ k }}" {{ 'selected' if form.get('site') == k }}>{{ n }}</option>{% endfor %}
+    </select></label>
+  <label>회사 *<input name="company" required value="{{ form.get('company', '') }}"></label>
+  <label class="wide">공고 제목 *<input name="title" required value="{{ form.get('title', '') }}"></label>
+  <label class="wide">원문 링크<input type="url" name="url" value="{{ form.get('url', '') }}" placeholder="https://"></label>
+  <label>근무지<input name="location" value="{{ form.get('location', '') }}" placeholder="서울 강남구"></label>
+  <label>연봉<input name="salary_text" value="{{ form.get('salary_text', '') }}" placeholder="3,200~3,600만원 / 월 280만원 / 회사내규"></label>
+  <label>신입/경력<input name="career" value="{{ form.get('career', '') }}" placeholder="신입 / 경력 3년 이상 / 경력무관"></label>
+  <label>학력<input name="education" value="{{ form.get('education', '') }}" placeholder="대졸 이상"></label>
+  <label>고용형태<input name="employment_type" value="{{ form.get('employment_type', '') }}" placeholder="정규직"></label>
+  <label>마감일<input type="date" name="deadline" value="{{ form.get('deadline', '') }}"></label>
+  <label>직무<input name="job_category" value="{{ form.get('job_category', '') }}"></label>
+  <label>회사 평균연봉(만원)<input type="number" name="company_avg_salary" min="0" value="{{ form.get('company_avg_salary', '') }}"></label>
+  <label class="wide">키워드·기술<input name="keywords" value="{{ form.get('keywords', '') }}" placeholder="쉼표로 구분: Python, SQL, ERP"></label>
+  <label class="wide">자격 요건·업무 내용<textarea name="description" rows="5">{{ form.get('description', '') }}</textarea></label>
+  <div class="wide"><button class="btn">등록</button></div>
+</form>
+{% endblock %}

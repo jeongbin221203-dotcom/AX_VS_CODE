@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wantedRoot>
+  <total>1</total><startPage>1</startPage><display>100</display>
+  <wanted>
+    <wantedAuthNo>K151612609300001</wantedAuthNo>
+    <company>한결정밀</company>
+    <title>품질관리 사원 모집</title>
+    <salTpNm>월급</salTpNm>
+    <sal>250만원 ~ 300만원</sal>
+    <minSal>2500000</minSal>
+    <maxSal>3000000</maxSal>
+    <region>충북 청주시 흥덕구</region>
+    <holidayTpNm>주5일근무</holidayTpNm>
+    <minEdubg>고졸</minEdubg>
+    <career>관계없음</career>
+    <regDt>26-09-20</regDt>
+    <closeDt>26-10-31</closeDt>
+    <wantedInfoUrl>https://www.work24.go.kr/wk/a/b/1500/empDetailAuthView.do?wantedAuthNo=K151612609300001</wantedInfoUrl>
+    <empTpCd>10</empTpCd>
+    <jobsNm>품질관리 사무원</jobsNm>
+  </wanted>
+</wantedRoot>
