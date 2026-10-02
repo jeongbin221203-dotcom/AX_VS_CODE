@@ -44,6 +44,17 @@ def save(data: dict) -> dict:
     return merged
 
 
+def _exclude_from_form(form) -> list[str]:
+    """체크한 제외 항목 + 글칸 단어. 글칸에 항목 이름('파견·도급')을 적어도 '·' 에서 쪼개지 않고 항목으로 본다."""
+    words = [w for w in form.getlist("exclude_presets") if w in PRESETS]
+    text = form.get("exclude", "")
+    for name in PRESETS:
+        if name in text:
+            words.append(name)
+            text = text.replace(name, ",")
+    return list(dict.fromkeys(words + split_keywords(text)))[:40]
+
+
 def from_form(form) -> dict:
     def num(name: str) -> int:
         try:
@@ -62,8 +73,7 @@ def from_form(form) -> dict:
         "education": edu if edu in EDUCATION_LEVELS else "대졸",
         "skills": split_keywords(form.get("skills", ""))[:40],
         "interests": split_keywords(form.get("interests", ""))[:40],
-        "exclude": list(dict.fromkeys([w for w in form.getlist("exclude_presets") if w in PRESETS]
-                                      + split_keywords(form.get("exclude", ""))))[:40],
+        "exclude": _exclude_from_form(form),
         "employment_types": [t for t in form.getlist("employment_types") if t in EMPLOYMENT_TYPES],
         "job_groups": [g for g in form.getlist("job_groups") if g in jobgroups.NAMES],
         "job_subs": [s for s in form.getlist("job_subs")

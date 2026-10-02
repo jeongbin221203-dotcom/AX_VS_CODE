@@ -100,3 +100,9 @@ def test_exclude_ignores_site_category_name():
     p = build("saramin", "1", title="건설 경력사원 공개채용", company="가상", job_category="고객상담·TM")
     assert exclude.matches(p, ["텔레마케팅"]) == []
     assert exclude.matches(build("saramin", "2", title="중고차 TM 상담원", company="가상"), ["텔레마케팅"]) == ["텔레마케팅"]
+
+
+def test_exclude_preset_name_in_text_box(client):
+    """글칸에 '파견·도급'을 적어도 '파견'·'도급' 으로 쪼개지 않고 항목으로 저장한다."""
+    client.post("/profile", data={"career_type": "모두", "education": "무관", "exclude": "파견·도급, 강사, 컴퓨터 수리"})
+    assert profile.load()["exclude"] == ["파견·도급", "강사", "컴퓨터 수리"]
