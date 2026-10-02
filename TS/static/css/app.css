@@ -384,3 +384,5 @@ ul.clean li { margin: 4px 0; }
   .quiz-top .btn.small { min-height: 36px; }
   .choice { padding: 11px 12px; }
 }
+
+.ladder .step b { overflow-wrap: anywhere; }

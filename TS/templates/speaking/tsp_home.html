@@ -44,7 +44,7 @@
 
 <div class="card" style="margin-top:14px">
   <div class="spread"><h2 style="margin:0">레벨 표</h2><span class="small muted">점수는 스스로 채점한 결과로 추정합니다 (ETS 공식 환산 아님)</span></div>
-  <div class="ladder" style="grid-template-columns:repeat(5,1fr);margin-top:10px">
+  <div class="ladder" style="grid-template-columns:repeat(auto-fill,minmax(110px,1fr));margin-top:10px">
     {% for lv, name, low in LEVELS %}
       <div class="step{{ ' target' if target_level and target_level[0] == lv }}" style="{{ 'outline:2px solid var(--accent)' if level and level[0] == lv }}">
         <b>{{ name }}</b>{{ low }}{{ '+' if lv == 8 else '~' }}</div>
