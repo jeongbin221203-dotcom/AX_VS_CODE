@@ -196,7 +196,9 @@ def test_upload_normalization() -> None:
     assert list(r.df["unit"]) == ["EA", "EA"], list(r.df["unit"])
     assert (r.df["unit_price"] >= 0).all() and (r.df["safety_stock"] >= 0).all()
 
-    repo.upsert_materials(list(r.df.itertuples(index=False, name=None)))
+    assert r.bad_numbers == 1                 # 남은 NEW-001(마지막 행)의 안전재고 'abc'
+    assert "safety_stock" in r.df["_blank"].iloc[1]
+    services.import_materials(r.df)
     saved = repo.list_materials()
     assert len(saved) == 2 and saved["code"].notna().all()
 

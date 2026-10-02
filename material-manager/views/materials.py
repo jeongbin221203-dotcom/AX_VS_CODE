@@ -111,7 +111,7 @@ def update(mid: int):
     except ValueError as exc:
         flash(str(exc), "error")
         return _edit_page(mid, form={**row, **request.form.to_dict()})
-    result = services.update_material(mid, data, actor())
+    result = services.update_material(mid, data, actor(), expected_updated_at=f_str("updated_at") or None)
     flash(result.message, "success" if result.ok else "error")
     if not result.ok:
         return _edit_page(mid, form={**row, **request.form.to_dict()})

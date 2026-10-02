@@ -1,4 +1,4 @@
-"""고급 기능: 2단계 인증 · 사내 SSO(OIDC) · 재고 평가 · 로트/유효기한 · 구매요청/발주 · SAP 마스터 동기화.
+"""고급 기능: 사내 SSO(OIDC) · 재고 평가 · 로트/유효기한 · 구매요청/발주 · SAP 마스터 동기화.
 
 SQLite(기본)와 PostgreSQL(MM_DATABASE_URL=...mm_test) 모두에서 돌린다.
 """
@@ -20,7 +20,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import pytest  # noqa: E402
 
 import config  # noqa: E402
-from core import (auth, db, master_sync, mfa, org, periods, purchasing, repository as repo, sap,  # noqa: E402
+from core import (auth, db, master_sync, org, periods, purchasing, repository as repo, sap,  # noqa: E402
                   seed, services, sso, valuation)
 from test_app import DOC, PNG, PW, app, client, csrf, login, post  # noqa: E402,F401
 
@@ -58,43 +58,6 @@ def lot_material(code="CHM-1", expiry=True) -> int:
     assert services.create_material({"code": code, "name": "방청제", "unit": "L", "unit_price": 12000,
                                      "lot_managed": 1, "expiry_managed": 1 if expiry else 0}).ok
     return mid(code)
-
-
-# ── 2단계 인증 ───────────────────────────────────────────────
-def test_totp_enable_verify_replay_recovery(fresh):
-    u = auth.create_user("otp", "오티피", "CLERK", PW, None, must_change_pw=False).user
-    secret = mfa.new_secret()
-    assert not mfa.enable(u["id"], secret, "000000", CLERK)[0]
-    ok, _, codes = mfa.enable(u["id"], secret, mfa.now_code(secret), CLERK)
-    assert ok and len(codes) == 10
-    assert not mfa.verify(u["id"], mfa.now_code(secret))[0], "등록에 쓴 코드는 다시 못 쓴다(재전송 방어)"
-    assert mfa.verify(u["id"], codes[0])[0], "복구 코드"
-    assert not mfa.verify(u["id"], codes[0])[0], "복구 코드는 한 번만"
-    stored = db.scalar("SELECT totp_secret FROM users WHERE id = ?", (u["id"],))
-    assert secret not in stored, "비밀키는 암호화해 저장"
-    for _ in range(config.LOGIN_MAX_FAILS - 1):
-        mfa.verify(u["id"], "123456")
-    assert "잠겼" in mfa.verify(u["id"], "123456")[1]
-
-
-def test_login_with_mfa_and_required_role(app):
-    admin = auth.get_user(int(db.scalar("SELECT id FROM users WHERE username = 'admin'")))
-    secret = mfa.new_secret()
-    mfa.enable(admin["id"], secret, mfa.now_code(secret, time.time() - 30), ADMIN)
-    c = app.test_client()
-    res = post(c, "/login", {"username": "admin", "password": PW})
-    assert res.headers["Location"].endswith("/login/mfa")
-    assert c.get("/stock/").status_code == 302, "2단계 전에는 로그인 안 됨"
-    res = post(c, "/login/mfa", {"code": mfa.now_code(secret)})
-    assert res.status_code == 302 and c.get("/stock/").status_code == 200
-
-    config.MFA_REQUIRED_ROLES = {"MANAGER"}
-    try:
-        m = login(app.test_client(), "manager")
-        assert m.get("/stock/").headers["Location"].endswith("/mfa"), "필수 역할은 등록 전까지 등록 화면만"
-        assert m.get("/mfa").status_code == 200
-    finally:
-        config.MFA_REQUIRED_ROLES = set()
 
 
 # ── 사내 SSO (가짜 IdP) ──────────────────────────────────────
@@ -336,12 +299,11 @@ def test_new_screens_render(client):
     pr = purchasing.create_pr(wh(), [(mid("PKG-002"), 5, 1000)], TODAY, "테스트", CLERK).id
     for url in ("/purchase/", "/purchase/?tab=new", "/purchase/?tab=po", f"/purchase/pr/{pr}",
                 f"/reports/valuation?ym={TODAY[:7]}", f"/reports/valuation?ym={TODAY[:7]}&method=FIFO",
-                "/stock/?view=lot", "/mfa", "/sap/", "/admin/users",
+                "/stock/?view=lot", "/sap/", "/admin/users",
                 f"/transactions/?type=IN&material={mid('CHM-1')}", f"/transactions/?type=OUT&material={mid('CHM-1')}"):
         res = client.get(url)
         assert res.status_code == 200, url
-    html = client.get("/mfa").get_data(as_text=True)
-    assert "otpauth://totp/" in html and "data-qr" in html
+    assert client.get("/mfa").status_code == 404 and client.get("/login/mfa").status_code == 404, "2단계 인증 삭제"
 
 
 def test_purchase_ui_flow(app, client):

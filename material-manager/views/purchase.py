@@ -155,7 +155,7 @@ def po_approve(po_id: int):
 @bp.post("/po/<int:po_id>/sap")
 @role_required("MANAGER")
 def po_sap(po_id: int):
-    result = purchasing.set_sap_po_no(po_id, f_str("sap_po_no"), actor(), g.wh_ids)
+    result = purchasing.set_sap_po_no(po_id, f_str("sap_po_no"), actor(), g.wh_ids, expected=f_str("_ver") or None)
     flash(result.message, "success" if result.ok else "error")
     return redirect(url_for("purchase.po_detail", po_id=po_id))
 

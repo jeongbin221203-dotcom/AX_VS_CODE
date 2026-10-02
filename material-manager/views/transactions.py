@@ -2,10 +2,10 @@
 
 from datetime import date, timedelta
 
-from flask import Blueprint, abort, flash, g, redirect, request, url_for
+from flask import Blueprint, abort, flash, g, jsonify, redirect, request, url_for
 
 import config
-from core import db, documents, org, periods, purchasing, repository as repo, services
+from core import audit, db, documents, org, periods, purchasing, repository as repo, services
 from core.utils import month_end
 from views.documents import meta_from_form, uploaded_file
 from views.helpers import a_int, actor, f_float, f_str, render_page, role_required
@@ -131,3 +131,51 @@ def transfer():
     if not result.ok:
         return _page("TRF", mid, wh, form=request.form)
     return redirect(url_for("transactions.index", type="TRF", material=mid, wh=wh))
+
+
+@bp.post("/queue")
+@role_required("CLERK")
+def queue():
+    """오프라인 대기열 반영 (static/js/app.js가 연결이 돌아오면 입력한 순서대로 한 건씩 보낸다).
+
+    화면 등록과 같은 규칙(재고·권한·마감·결재·SAP 매핑)으로 판정한다 — 끊긴 동안 받은 출고도 재고가 모자라면 거부된다.
+    같은 입력은 한 번 쓰는 표(_once, 브라우저가 입력할 때 만든 값)로 두 번 반영되지 않는다(core/once.py).
+    증빙 파일은 대기열에 담지 않는다.
+    """
+    kind = f_str("kind")
+    captured_at = f_str("captured_at")[:30]
+    mid, wh = _ids()
+    try:
+        qty = f_float("qty")
+        tx_date = date.fromisoformat(f_str("tx_date") or date.today().isoformat()).isoformat()
+    except ValueError:
+        return jsonify(ok=False, message="수량·일자 형식이 올바르지 않습니다.")
+    if kind == "TRF":
+        try:
+            to_wh = int(f_str("to_warehouse_id"))
+        except ValueError:
+            return jsonify(ok=False, message="받는 창고를 확인하세요.")
+        result = services.transfer(mid, wh, to_wh, qty, tx_date, actor=actor(), ref_no=f_str("ref_no"),
+                                   note=f_str("note"), wh_ids=g.wh_ids, lot_no=f_str("lot_no"))
+    else:
+        tx_type = f_str("tx_type")
+        if tx_type not in config.TX_LABEL:
+            return jsonify(ok=False, message=f"알 수 없는 거래 유형: {tx_type}")
+        try:
+            price = f_float("unit_price")
+        except ValueError:
+            return jsonify(ok=False, message="단가 형식이 올바르지 않습니다.")
+        po_no, po_item = f_str("po_no"), f_str("po_item")
+        if "|" in f_str("po_line"):
+            po_no, po_item = f_str("po_line").split("|", 1)
+        result = services.register_transaction(
+            material_id=mid, tx_type=tx_type, qty_input=qty, tx_date=tx_date, unit_price=price,
+            ref_no=f_str("ref_no"), partner=f_str("partner"), note=f_str("note"), actor=actor(),
+            po_no=po_no, po_item=po_item, cost_center=f_str("cost_center"), warehouse_id=wh, wh_ids=g.wh_ids,
+            lot_no=f_str("lot_no"), expiry_date=f_str("expiry_date"))
+    if result.ok:
+        g.once_done = True                              # JSON 응답이어도 '처리 완료'로 남긴다 (재전송 시 두 번 반영 금지)
+        audit.log(actor(), "OFFLINE_SYNC", "transaction", result.tx_id or "",
+                  {"captured_at": captured_at, "kind": kind or f_str("tx_type"), "pending": result.pending})
+    return jsonify(ok=result.ok, message=result.message, tx_id=result.tx_id, pending=result.pending,
+                   warning=result.warning)

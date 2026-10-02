@@ -14,7 +14,7 @@ from datetime import datetime, timedelta
 import pandas as pd
 
 import config
-from core import audit, db
+from core import audit, db, version
 from core.utils import now_str
 
 USERNAME_RE = re.compile(r"^[A-Za-z0-9._-]{3,30}$")
@@ -116,7 +116,7 @@ def count_users() -> int:
 
 def users_df() -> pd.DataFrame:
     return db.query_df(
-        "SELECT id, username, name, role, active, auth_source, totp_enabled, all_warehouses, must_change_pw, "
+        "SELECT id, username, name, role, active, auth_source, all_warehouses, must_change_pw, "
         "failed_count, locked_until, "
         "last_login_at, created_at FROM users ORDER BY active DESC, role DESC, username"
     )
@@ -203,7 +203,8 @@ def _active_admins(conn, excluding: int) -> int:
                         (excluding,)).fetchone()[0]
 
 
-def update_user(user_id: int, name: str, role: str, active: bool, actor: dict | None) -> AuthResult:
+def update_user(user_id: int, name: str, role: str, active: bool, actor: dict | None,
+                expected: str | None = None) -> AuthResult:
     if role not in config.ROLES or not name.strip():
         return AuthResult(False, "이름과 역할을 확인하세요.")
     if actor and actor.get("id") == user_id:
@@ -212,6 +213,8 @@ def update_user(user_id: int, name: str, role: str, active: bool, actor: dict | 
         before = _row(conn, "SELECT * FROM users WHERE id = ?", (user_id,))
         if before is None:
             return AuthResult(False, "사용자가 없습니다.")
+        if version.stale("users", before, expected):
+            return AuthResult(False, version.STALE)
         after = {"name": name.strip(), "role": role, "active": 1 if active else 0}
         losing_admin = before["role"] == "ADMIN" and before["active"] and (role != "ADMIN" or not active)
         if losing_admin and _active_admins(conn, user_id) == 0:

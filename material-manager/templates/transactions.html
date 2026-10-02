@@ -24,7 +24,7 @@
     {% endfor %}
   </div>
 
-  <form class="toolbar" method="get">
+  <form class="toolbar" method="get" data-offline-select>
     <input type="hidden" name="type" value="{{ tx_type }}">
     <label>{{ '보내는 창고' if tx_type == 'TRF' else '창고' }}
       <select name="wh" data-autosubmit>
@@ -39,6 +39,8 @@
     <noscript><button class="btn">선택</button></noscript>
   </form>
 
+  <div class="offline-note alert alert-warning" hidden>오프라인 입력 중 — 자재·창고를 바꿔도 현재고·로트·발주 정보는 바뀌지 않습니다.
+    입력은 이 브라우저 대기열에 저장되고, 연결되면 서버가 재고·권한·마감을 확인한 뒤 반영합니다(모자라면 거부).</div>
   <div class="metrics m3">
     {{ metric(warehouse.code ~ " 현재고", "{:,.2f} {}".format(stock_now, mat.unit)) }}
     {{ metric("안전재고 (자재 전체)", "{:,.2f} {}".format(mat.safety_stock, mat.unit)) }}
@@ -60,7 +62,8 @@
   <datalist id="known-lots">{% for l in known_lots %}<option value="{{ l.lot_no }}">{{ l.expiry_date }}</option>{% endfor %}</datalist>
 
   {% if tx_type == "TRF" %}
-  <form class="card form" method="post" action="{{ url_for('transactions.transfer') }}">
+  <form class="card form" method="post" action="{{ url_for('transactions.transfer') }}" data-offline="TRF"
+        data-label="이동 · {{ opts[mid] }} · {{ warehouse.code }}">
     {{ csrf() }}
     <input type="hidden" name="material_id" value="{{ mid }}">
     <input type="hidden" name="warehouse_id" value="{{ wh }}">
@@ -83,7 +86,8 @@
     <div><button class="btn btn-primary">이동 등록</button></div>
   </form>
   {% else %}
-  <form class="card form" method="post" action="{{ url_for('transactions.create') }}" enctype="multipart/form-data">
+  <form class="card form" method="post" action="{{ url_for('transactions.create') }}" enctype="multipart/form-data"
+        data-offline="TX" data-label="{{ TX_LABEL[tx_type] }} · {{ opts[mid] }} · {{ warehouse.code }}">
     {{ csrf() }}
     <input type="hidden" name="tx_type" value="{{ tx_type }}">
     <input type="hidden" name="material_id" value="{{ mid }}">

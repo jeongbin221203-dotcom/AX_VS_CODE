@@ -10,7 +10,7 @@ from dataclasses import dataclass
 
 import pandas as pd
 
-from core import audit, db
+from core import audit, db, version
 from core.utils import now_str
 
 CODE_RE = re.compile(r"^[A-Z0-9_-]{1,20}$")
@@ -74,7 +74,7 @@ def user_scope(user_id: int) -> tuple[set[int], set[int]]:
 
 
 def set_user_scope(user_id: int, all_warehouses: bool, plant_ids: list[int], warehouse_ids: list[int],
-                   actor: dict | None) -> OrgResult:
+                   actor: dict | None, expected: str | None = None) -> OrgResult:
     if actor and actor.get("id") == user_id:
         return OrgResult(False, "본인의 데이터 범위는 다른 관리자가 바꿔야 합니다.")
     if not all_warehouses and not plant_ids and not warehouse_ids:
@@ -82,6 +82,8 @@ def set_user_scope(user_id: int, all_warehouses: bool, plant_ids: list[int], war
     with db.transaction() as conn:
         if conn.execute("SELECT 1 FROM users WHERE id = ?", (user_id,)).fetchone() is None:
             return OrgResult(False, "사용자가 없습니다.")
+        if expected and version.scope_now(conn, user_id) != expected:
+            return OrgResult(False, version.STALE)
         conn.execute("DELETE FROM user_scopes WHERE user_id = ?", (user_id,))
         if not all_warehouses:
             conn.executemany("INSERT INTO user_scopes (user_id, plant_id, warehouse_id) VALUES (?, ?, ?)",
@@ -129,11 +131,14 @@ def create_warehouse(plant_id: int, code: str, name: str, sap_sloc: str, actor: 
     return OrgResult(True, f"창고 {code} {name} 등록")
 
 
-def update_plant(plant_id: int, name: str, sap_plant: str, active: bool, actor: dict | None) -> OrgResult:
+def update_plant(plant_id: int, name: str, sap_plant: str, active: bool, actor: dict | None,
+                 expected: str | None = None) -> OrgResult:
     with db.transaction() as conn:
         before = conn.execute("SELECT * FROM plants WHERE id = ?", (plant_id,)).fetchone()
         if before is None:
             return OrgResult(False, "플랜트가 없습니다.")
+        if version.stale("plants", before, expected):
+            return OrgResult(False, version.STALE)
         after = {"name": name.strip() or before["name"], "sap_plant": sap_plant.strip().upper(), "active": int(active)}
         if not active and _last_active_warehouse(conn, exclude_plant=plant_id):
             return OrgResult(False, "사용 중인 창고가 모두 없어지므로 중지할 수 없습니다.")
@@ -143,11 +148,14 @@ def update_plant(plant_id: int, name: str, sap_plant: str, active: bool, actor: 
     return OrgResult(True, "플랜트를 저장했습니다.")
 
 
-def update_warehouse(warehouse_id: int, name: str, sap_sloc: str, active: bool, actor: dict | None) -> OrgResult:
+def update_warehouse(warehouse_id: int, name: str, sap_sloc: str, active: bool, actor: dict | None,
+                     expected: str | None = None) -> OrgResult:
     with db.transaction() as conn:
         before = conn.execute("SELECT * FROM warehouses WHERE id = ?", (warehouse_id,)).fetchone()
         if before is None:
             return OrgResult(False, "창고가 없습니다.")
+        if version.stale("warehouses", before, expected):
+            return OrgResult(False, version.STALE)
         after = {"name": name.strip() or before["name"], "sap_sloc": sap_sloc.strip().upper(), "active": int(active)}
         if not active and _last_active_warehouse(conn, exclude_wh=warehouse_id):
             return OrgResult(False, "마지막으로 남은 사용 창고는 중지할 수 없습니다.")

@@ -1,0 +1,65 @@
+{
+  "_설명": "기타 ERP REST 연결 예시. 회사 ERP의 API 문서에 맞춰 경로·필드 이름·코드만 바꾼다. 형식 설명은 erp_maps/README.md",
+  "headers": {"X-Company-Code": "1000"},
+  "idempotency_header": "X-Request-Id",
+
+  "post": {
+    "method": "POST",
+    "path": "/api/v1/inventory/movements",
+    "body": {
+      "extKey": "{idempotencyKey}",
+      "docDate": {"$date": "postingDate", "format": "%Y%m%d"},
+      "ioType": {"$map": "transactionType", "values": {"IN": "I", "OUT": "O", "ADJ": "A"}},
+      "moveCode": {"$map": "movementType", "values": {"101": "PO-GR", "501": "GR", "201": "GI", "701": "ADJ+", "702": "ADJ-", "311": "TRF", "301": "TRF"}, "default": "ETC"},
+      "itemCode": "{material}",
+      "whCode": "{storageLocation}",
+      "toWhCode": "{receivingStorageLocation}",
+      "qty": "{quantity}",
+      "unit": "{unit}",
+      "lotNo": "{batch}",
+      "poNo": "{purchaseOrder}",
+      "poSeq": "{purchaseOrderItem}",
+      "deptCode": "{costCenter}",
+      "remark": "MM {reference}",
+      "userName": "{enteredBy}"
+    }
+  },
+  "cancel": {
+    "method": "POST",
+    "path": "/api/v1/inventory/movements/{originalDocument}/cancel",
+    "body": {"extKey": "{idempotencyKey}", "cancelDate": {"$date": "postingDate", "format": "%Y%m%d"}, "reason": "{reason}"}
+  },
+  "lookup": {
+    "method": "GET",
+    "path": "/api/v1/inventory/movements?extKey={idempotencyKey}",
+    "document_field": "data.0.docNo"
+  },
+
+  "success_field": "success",
+  "error_field": "message",
+  "document_field": "data.docNo",
+  "year_field": "",
+
+  "ping": {"method": "GET", "path": "/api/v1/health"},
+
+  "master": {
+    "materials": {
+      "path": "/api/v1/items?modifiedFrom={since}",
+      "list_field": "data",
+      "fields": {
+        "material": "itemCode", "description": "itemName", "unit": "unit", "materialGroup": "itemGroup",
+        "standardPrice": "stdCost", "deleted": {"field": "useYn", "equals": "N"}, "batchManaged": {"field": "lotYn", "equals": "Y"}
+      }
+    },
+    "cost_centers": {
+      "path": "/api/v1/departments",
+      "list_field": "data",
+      "fields": {"costCenter": "deptCode", "name": "deptName", "active": {"field": "useYn", "equals": "Y"}}
+    }
+  },
+  "stock": {
+    "path": "/api/v1/inventory/stock?plants={plants}",
+    "list_field": "data",
+    "fields": {"material": "itemCode", "plant": "plantCode", "storageLocation": "whCode", "quantity": "qty"}
+  }
+}

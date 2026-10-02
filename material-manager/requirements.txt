@@ -2,7 +2,6 @@ flask>=3.0
 pandas>=2.1
 openpyxl>=3.1
 defusedxml>=0.7            # openpyxl이 엑셀 XML을 읽을 때 XXE·XML 폭탄을 막는다
-cryptography>=42           # 2단계 인증 비밀키 암호화
 joserfc>=1.0               # 사내 SSO(OIDC) ID 토큰 서명 검증
 
 # 여러 서버 운영 (MM_DATABASE_URL=postgresql://...)
@@ -14,3 +13,6 @@ boto3>=1.34
 
 # 운영 WSGI 서버 (Windows·Linux 공통)
 waitress>=3.0
+
+# SAP ECC·S/4HANA RFC 직접 연결(MM_ERP_MODE=sap_rfc)일 때만: SAP NW RFC SDK 설치 후
+# pyrfc>=3.3

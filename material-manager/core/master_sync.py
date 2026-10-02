@@ -1,4 +1,5 @@
-"""SAP 마스터 자동 동기화: 자재(MATMAS)와 원가센터를 SAP(또는 사내 연계서버)에서 받아온다.
+"""ERP·SAP 마스터 자동 동기화: 자재(MATMAS)와 원가센터를 ERP에서 받아온다.
+연결 방식별 조회(연계서버·S/4HANA OData·기타 ERP REST·파일)는 core/erp.py의 fetch_master.
 
 - 배치 작업 `sap_master_sync`(1시간)가 마지막 동기화 이후 바뀐 것만 받는다(changedSince).
 - 자재는 SAP 자재번호로 맞춘다. 있으면 이름·단위·자재그룹(분류)·표준단가·삭제표시를 갱신하고, 없으면 새로 만든다.
@@ -14,12 +15,8 @@
       → [{"costCenter", "name", "active"}]
 """
 
-import json
-import urllib.parse
-import urllib.request
-
 import config
-from core import audit, db, sap
+from core import audit, db, erp, sap
 from core.utils import now_str
 
 # mock 모드용 SAP 마스터 (시연·테스트)
@@ -53,18 +50,8 @@ def cost_center_problem(conn, code: str) -> str:
     return ""
 
 
-def _get(path: str, since: str) -> list[dict]:
-    sap.HttpClient._check_endpoint()
-    url = f"{config.SAP_ENDPOINT.rstrip('/')}{path}?{urllib.parse.urlencode({'changedSince': since})}"
-    headers = {"Authorization": f"Bearer {config.SAP_TOKEN}"} if config.SAP_TOKEN else {}
-    with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=config.SAP_TIMEOUT) as res:
-        return json.loads(res.read().decode() or "[]")
-
-
 def fetch(since: str) -> tuple[list[dict], list[dict]]:
-    if config.SAP_MODE == "mock":
-        return MOCK_MATERIALS, MOCK_COST_CENTERS
-    return _get("/master/materials", since), _get("/master/cost-centers", since)
+    return erp.connector().fetch_master(since)
 
 
 def _setting(conn, key: str) -> str:
@@ -85,10 +72,15 @@ def sync(actor: dict | None = None) -> dict:
             if not matnr:
                 counts["skipped"] += 1
                 continue
+            # ERP가 주지 않은 항목(None)은 건드리지 않는다 (예: S/4 OData 자재 API에는 표준단가가 없다)
             fields = {"name": str(m.get("description") or matnr).strip(), "unit": str(m.get("unit") or "EA").strip(),
                       "category": str(m.get("materialGroup") or config.DEFAULT_CATEGORY).strip(),
                       "unit_price": max(float(m.get("standardPrice") or 0), 0.0),
                       "active": 0 if m.get("deleted") else 1}
+            if m.get("standardPrice") in (None, ""):
+                fields.pop("unit_price")
+            if m.get("materialGroup") in (None, ""):
+                fields.pop("category")
             row = conn.execute("SELECT * FROM materials WHERE sap_matnr = ?", (matnr,)).fetchone()
             if row is None:
                 if m.get("deleted"):
@@ -99,7 +91,8 @@ def sync(actor: dict | None = None) -> dict:
                 conn.execute(
                     "INSERT INTO materials (code, name, unit, category, unit_price, sap_matnr, lot_managed, "
                     "expiry_managed, active, sap_synced_at, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?)",
-                    (code, fields["name"], fields["unit"], fields["category"], fields["unit_price"], matnr,
+                    (code, fields["name"], fields["unit"], fields.get("category", config.DEFAULT_CATEGORY),
+                     fields.get("unit_price", 0.0), matnr,
                      1 if m.get("batchManaged") else 0, 1 if m.get("shelfLifeManaged") else 0, started, started, started))
                 counts["created"] += 1
                 continue

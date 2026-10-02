@@ -11,7 +11,7 @@
 | pandas / NumPy | 3.0.5 / 2.5.3 | BSD-3-Clause (NumPy 일부 0BSD·MIT·Zlib) | 표 계산 |
 | openpyxl | 3.1.5 | MIT | 엑셀 읽기·쓰기 |
 | defusedxml | 0.7.1 | PSF License | 엑셀 XML 공격 방어 |
-| cryptography | 50.0.1 | Apache-2.0 또는 BSD-3-Clause | 2단계 인증 비밀키 암호화 |
+| cryptography | 50.0.1 | Apache-2.0 또는 BSD-3-Clause | joserfc(SSO 토큰 서명 검증)가 사용 |
 | joserfc | 1.7.5 | BSD-3-Clause | 사내 SSO ID 토큰 검증 |
 | **psycopg / psycopg-binary / psycopg-pool** | 3.3.6 / 3.3.6 / 3.3.3 | **LGPL-3.0-only** | PostgreSQL 연결 (여러 서버 운영 시) |
 | boto3 | 1.43.103 | Apache-2.0 | S3 호환 파일 저장소 (선택) |
@@ -27,10 +27,7 @@ SQLite만 쓰는 한 서버 구성에서는 psycopg가 필요 없다.
 ### Chart.js 4.4.1 — MIT License
 https://github.com/chartjs/Chart.js · Copyright (c) 2014-2022 Chart.js Contributors
 
-### qrcode-generator 1.4.4 — MIT License
-https://github.com/kazuhikoarase/qrcode-generator · Copyright (c) 2009 Kazuhiko Arase
-
-두 라이브러리에 적용되는 MIT License 전문:
+MIT License 전문:
 
 ```
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
@@ -46,5 +43,3 @@ WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEM
 COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ```
-
-"QR Code" is a registered trademark of DENSO WAVE INCORPORATED.

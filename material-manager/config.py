@@ -12,14 +12,27 @@
   MM_TRUST_PROXY     1이면 리버스 프록시가 넘긴 X-Forwarded-For/Proto를 믿는다 (프록시 뒤에 둘 때만)
   MM_IDLE_MINUTES    이 시간 동안 아무 요청이 없으면 자동 로그아웃 (기본 30분)
   MM_PW_ITERATIONS   비밀번호 해시 반복 횟수 (테스트에서만 낮춘다)
-  MM_SAP_MODE        off | mock | http   SAP 전송 방식 (core/sap.py)
-  MM_SAP_ENDPOINT    http 모드에서 전송할 사내 연계서버(EAI · SAP Integration Suite 등) 주소
-  MM_SAP_TOKEN       http 모드 인증 토큰 (Authorization: Bearer)
+  MM_ERP_MODE        off | mock | http | sap_odata | sap_rfc | rest | file   ERP·SAP 연결 방식 (core/erp.py,
+                     예전 이름 MM_SAP_MODE도 읽는다). 방식별 설정(MM_SAP_* · MM_ERP_*)은 .env.example
+  MM_BACKUP_DIR      자동 백업 폴더 (기본: DB 옆 backups — 운영은 다른 디스크·NAS 권장)
+  MM_BACKUP_HOURS / MM_BACKUP_KEEP   자동 백업 주기(시간, 0이면 끔) · 보관 개수
+  MM_PG_DUMP / MM_PG_RESTORE   PostgreSQL 백업에 쓸 pg_dump · pg_restore 경로 (비우면 PATH)
+  MM_STORAGE_SPOOL_DIR   s3 저장소에 연결할 수 없을 때 파일을 임시로 두는 이 서버의 폴더
 """
 
 import os
 import secrets
+import shutil
 from pathlib import Path
+
+
+def _int_env(name: str, default: int) -> int:
+    """숫자 환경변수. 잘못 넣으면 기동이 멈추지 않게 기본값을 쓴다."""
+    try:
+        return int(os.getenv(name, "") or default)
+    except ValueError:
+        return default
+
 
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / "data"
@@ -37,6 +50,17 @@ S3_BUCKET = os.getenv("MM_S3_BUCKET", "")
 S3_PREFIX = os.getenv("MM_S3_PREFIX", "material-manager/")
 S3_ENDPOINT = os.getenv("MM_S3_ENDPOINT", "") or None
 S3_REGION = os.getenv("MM_S3_REGION", "ap-northeast-2")
+# s3에 연결할 수 없을 때(인터넷·클라우드 장애) 파일을 이 서버에 잠시 두고, 배치(storage_flush)가 나중에 올린다
+STORAGE_SPOOL_DIR = Path(os.getenv("MM_STORAGE_SPOOL_DIR", DB_PATH.parent / "spool"))
+
+# ── 자동 백업 (SQLite) ────────────────────────────────────────
+# 배치(db_backup)가 주기마다 DB를 온라인 백업 API로 복사하고 무결성을 확인한다. PostgreSQL은 DB 서버의 pg_dump·스냅샷.
+BACKUP_DIR = Path(os.getenv("MM_BACKUP_DIR", DB_PATH.parent / "backups"))
+BACKUP_HOURS = _int_env("MM_BACKUP_HOURS", 24)
+BACKUP_KEEP = max(_int_env("MM_BACKUP_KEEP", 14), 1)
+# PostgreSQL 백업: pg_dump · pg_restore 경로 (비우면 PATH에서 찾는다, 없으면 PostgreSQL 백업은 건너뜀)
+PG_DUMP = os.getenv("MM_PG_DUMP") or shutil.which("pg_dump") or ""
+PG_RESTORE = os.getenv("MM_PG_RESTORE") or shutil.which("pg_restore") or ""
 
 APP_TITLE = "자재관리 시스템"
 APP_ICON = "📦"
@@ -89,10 +113,41 @@ MATERIAL_COLS = {
 }
 
 # ── SAP 연동 ──────────────────────────────────────────────────
-SAP_MODE = os.getenv("MM_SAP_MODE", "off")           # off | mock | http
-SAP_ENDPOINT = os.getenv("MM_SAP_ENDPOINT", "")
-SAP_TOKEN = os.getenv("MM_SAP_TOKEN", "")
-SAP_TIMEOUT = 15
+# 연결 방식 (core/erp.py): off | mock | http(사내 연계서버) | sap_odata(S/4HANA API) | sap_rfc(BAPI) | rest(기타 ERP) | file
+SAP_MODE = os.getenv("MM_ERP_MODE") or os.getenv("MM_SAP_MODE", "off")
+SAP_ENDPOINT = os.getenv("MM_SAP_ENDPOINT", "")                 # http: 사내 연계서버 주소
+SAP_TOKEN = os.getenv("MM_SAP_TOKEN", "")                       # http: Bearer 토큰
+SAP_TIMEOUT = _int_env("MM_ERP_TIMEOUT", 15)
+# SAP 직접 연결 (sap_odata · sap_rfc 공통)
+SAP_CLIENT = os.getenv("MM_SAP_CLIENT", "")                     # SAP 클라이언트(맨더트), 예: 100
+SAP_USER = os.getenv("MM_SAP_USER", "")                         # 통신 사용자(RFC·Basic 인증)
+SAP_PASSWORD = os.getenv("MM_SAP_PASSWORD", "")
+SAP_LANGUAGE = os.getenv("MM_SAP_LANGUAGE", "KO")
+# sap_odata: S/4HANA (온프레미스는 https://s4.사내:44300, 클라우드는 https://my000000-api.s4hana.cloud.sap)
+SAP_ODATA_URL = os.getenv("MM_SAP_ODATA_URL", "")
+SAP_OAUTH_TOKEN_URL = os.getenv("MM_SAP_OAUTH_TOKEN_URL", "")    # 있으면 OAuth2 클라이언트 자격 증명, 없으면 Basic
+SAP_OAUTH_CLIENT_ID = os.getenv("MM_SAP_OAUTH_CLIENT_ID", "")
+SAP_OAUTH_CLIENT_SECRET = os.getenv("MM_SAP_OAUTH_CLIENT_SECRET", "")
+SAP_ODATA_PRODUCT_PATH = os.getenv("MM_SAP_ODATA_PRODUCT_PATH", "/sap/opu/odata/sap/API_PRODUCT_SRV/A_Product")
+SAP_ODATA_COSTCENTER_PATH = os.getenv("MM_SAP_ODATA_COSTCENTER_PATH", "/sap/opu/odata/sap/API_COSTCENTER_SRV/A_CostCenter")
+SAP_ODATA_STOCK_PATH = os.getenv("MM_SAP_ODATA_STOCK_PATH", "/sap/opu/odata/sap/API_MATERIAL_STOCK_SRV/A_MatlStkInAcctMod")
+SAP_CONTROLLING_AREA = os.getenv("MM_SAP_CONTROLLING_AREA", "")
+# sap_rfc: ECC · S/4HANA (pyrfc + SAP NW RFC SDK). 앱 서버 직접(ASHOST+SYSNR) 또는 로드밸런싱(MSHOST+SYSID+GROUP)
+SAP_RFC_ASHOST = os.getenv("MM_SAP_RFC_ASHOST", "")
+SAP_RFC_SYSNR = os.getenv("MM_SAP_RFC_SYSNR", "")
+SAP_RFC_MSHOST = os.getenv("MM_SAP_RFC_MSHOST", "")
+SAP_RFC_SYSID = os.getenv("MM_SAP_RFC_SYSID", "")
+SAP_RFC_GROUP = os.getenv("MM_SAP_RFC_GROUP", "")
+# rest: 기타 ERP (Oracle · Dynamics · 더존 · 영림원 · 자체 ERP). 필드·주소는 매핑 파일(erp_maps/)
+ERP_REST_URL = os.getenv("MM_ERP_REST_URL", "")
+ERP_REST_MAP = os.getenv("MM_ERP_REST_MAP", "")                 # 예: erp_maps/generic_example.json
+ERP_REST_AUTH = os.getenv("MM_ERP_REST_AUTH", "")               # bearer:토큰 | basic:아이디:비번 | header:이름:값
+# file: 공유 폴더 파일 연계
+ERP_FILE_DIR = os.getenv("MM_ERP_FILE_DIR", "")
+ERP_FILE_FORMAT = os.getenv("MM_ERP_FILE_FORMAT", "json")       # json | csv
+# 단위 코드 변환 (이 시스템 → ERP). 예: MM_ERP_UNIT_MAP="EA:ST,BOX:KAR"
+ERP_UNIT_MAP = {k.strip(): v.strip() for k, v in
+                (p.split(":", 1) for p in os.getenv("MM_ERP_UNIT_MAP", "").split(",") if ":" in p)}
 SAP_MAX_ATTEMPTS = 5                                  # 자동 재시도 한도. 넘으면 FAILED → 수동 재전송
 # 이동유형은 회사 SAP 설정(커스터마이징)마다 다를 수 있다 → SAP 담당 팀과 확인 후 여기만 바꾼다.
 SAP_MOVEMENT_TYPES = {
@@ -104,6 +159,9 @@ SAP_MOVEMENT_TYPES = {
     "TRF_SLOC": "311",   # 같은 플랜트 안 저장위치 이전
     "TRF_PLANT": "301",  # 플랜트 간 이전
 }
+# 이동유형 → SAP 거래 코드(GM_CODE): 01 구매오더 입고 · 03 출고 · 04 이전 · 05 기타 입고 · 06 취소
+SAP_GM_CODES = {"101": "01", "501": "05", "201": "03", "701": "05", "702": "03", "311": "04", "301": "04",
+                "561": "05", "551": "03"}
 SAP_REVERSAL_TYPES = {"101": "102", "501": "502", "201": "202", "701": "702", "702": "701",
                       "311": "312", "301": "302"}
 SAP_STATUS = {
@@ -125,7 +183,7 @@ PR_APPROVAL_TIERS = [(1_000_000, 1), (10_000_000, 2), (float("inf"), 3)]
 PO_OVER_PR_TOLERANCE = 0.10          # 발주 금액이 요청 승인 금액보다 10% 넘게 크면 발주도 결재
 GR_OVER_TOLERANCE = 0.0              # 발주 수량 초과 입고 허용 비율
 
-# ── 사내 SSO (OIDC) · 2단계 인증 ─────────────────────────────
+# ── 사내 SSO (OIDC) ───────────────────────────────────────────
 SSO_ENABLED = os.getenv("MM_SSO_ENABLED", "0") == "1"
 SSO_ISSUER = os.getenv("MM_SSO_ISSUER", "")                 # 예: https://login.microsoftonline.com/<tenant>/v2.0
 SSO_CLIENT_ID = os.getenv("MM_SSO_CLIENT_ID", "")
@@ -136,10 +194,9 @@ SSO_GROUPS_CLAIM = os.getenv("MM_SSO_GROUPS_CLAIM", "groups")
 SSO_ROLE_MAP = dict(kv.split("=", 1) for kv in os.getenv("MM_SSO_ROLE_MAP", "").split(",") if "=" in kv)
 SSO_ONLY = os.getenv("MM_SSO_ONLY", "0") == "1"             # 1이면 비밀번호 로그인은 비상용 시스템관리자만
 SSO_REQUIRE_MFA = os.getenv("MM_SSO_REQUIRE_MFA", "0") == "1"   # 1이면 ID 토큰 amr에 mfa가 있어야 로그인
+SSO_OUTAGE_MAX_HOURS = 24                   # SSO 장애 모드(비밀번호 로그인 임시 허용) 최대 시간
 # 새 사용자(직접 등록·SSO 첫 로그인)의 창고 범위. 기본은 '없음' → 관리자가 범위를 줘야 데이터가 보인다.
 NEW_USER_ALL_WAREHOUSES = os.getenv("MM_NEW_USER_ALL_WAREHOUSES", "0") == "1"
-MFA_REQUIRED_ROLES = set(filter(None, os.getenv("MM_MFA_REQUIRED_ROLES", "ADMIN").split(",")))
-TOTP_ISSUER = "자재관리"
 
 # ── 직무 분리 · 결재 ──────────────────────────────────────────
 SOD_ENFORCE = os.getenv("MM_SOD_ENFORCE", "1") == "1"          # 본인 등록 거래 취소 금지 등
@@ -167,6 +224,7 @@ UPLOAD_MAX_ROWS = 20000                    # 자재 일괄 업로드 최대 행 
 XLSX_MAX_UNCOMPRESSED = 100 * 1024 * 1024  # 엑셀(zip) 압축 해제 후 최대 크기 — 압축 폭탄 방어
 XLSX_MAX_RATIO = 100                       # 압축률이 이보다 크면 거부
 UPLOAD_KEEP_HOURS = 24                     # 반영하지 않은 업로드 미리보기 파일 보관 시간
+FORM_ONCE_KEEP_HOURS = 48                  # 중복 제출 방지 기록 보관 시간
 
 DEFAULT_UNIT = "EA"
 DEFAULT_CATEGORY = "미분류"

@@ -44,6 +44,8 @@ EXPORT_FORMS: dict[str, tuple[str, list[str]]] = {
                               "SAP 예상", "SAP 재고", "차이"]),
     "audit": ("감사로그", ["ID", "일시", "사용자", "행위", "대상", "대상ID", "내용", "IP"]),
     "material_template": ("자재 업로드 양식 (빈 양식)", list(config.MATERIAL_COLS.values())),
+    "statement_template": ("거래명세서 품목 양식 (빈 양식)", ["자재코드", "품명", "규격", "수량", "단가", "공급가액", "세액",
+                                                         "로트", "유효기한", "발주번호", "발주품목", "비고"]),
 }
 
 # 회사 양식에서 흔히 쓰는 이름 → 이 시스템 항목 (양식을 올리면 열을 자동으로 맞출 때, 올리기 기본 별칭에 쓴다)
@@ -77,6 +79,21 @@ IMPORT_FORMS: dict[str, tuple[str, dict[str, tuple[str, list[str]]]]] = {
         "plant": ("플랜트", ["Plant", "WERKS"]),
         "sloc": ("저장위치", ["저장 위치", "Storage Location", "SLoc", "LGORT"]),
         "sap_qty": ("수량", ["가용재고", "제한없는 사용", "Unrestricted", "LABST", "Quantity"]),
+    }),
+    # 거래명세서 품목 줄 (core/statements.py). 회사·공급처 명세서마다 머리글이 달라 별칭을 넉넉히 둔다.
+    "statement_lines": ("거래명세서 품목 (거래명세서 입출고)", {
+        "code": ("자재코드", ["품번", "품목코드", "자재번호", "코드", "Item Code", "Part No", "SAP자재번호"]),
+        "name": ("품명", ["자재명", "품목명", "품목", "상품명", "Description", "Item Name"]),
+        "spec": ("규격", ["사양", "스펙", "Spec"]),
+        "qty": ("수량", ["Qty", "Quantity", "입고수량", "출고수량"]),
+        "unit_price": ("단가", ["단위가격", "Price", "Unit Price"]),
+        "supply": ("공급가액", ["공급가", "금액", "Amount"]),
+        "tax": ("세액", ["부가세", "VAT", "Tax"]),
+        "lot_no": ("로트", ["배치", "LOT", "Batch", "로트번호"]),
+        "expiry_date": ("유효기한", ["사용기한", "Expiry"]),
+        "po_no": ("발주번호", ["PO", "PO번호", "구매오더"]),
+        "po_item": ("발주품목", ["PO품목", "품목번호"]),
+        "note": ("비고", ["메모", "적요"]),
     }),
 }
 

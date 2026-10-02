@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 {% block public %}
+{% if sso_outage %}
+<div class="alert alert-warning">사내 로그인(SSO) 장애 모드입니다 — {{ sso_outage }}까지 비밀번호 계정으로 로그인할 수 있습니다.</div>
+{% endif %}
 {% if sso %}
 <section class="card">
   <form method="post" action="{{ url_for('auth.sso_login') }}">
@@ -7,7 +10,7 @@
     <input type="hidden" name="next" value="{{ next }}">
     <button class="btn btn-primary" type="submit">사내 계정으로 로그인 (SSO)</button>
   </form>
-  <p class="muted small">회사 계정·2단계 인증으로 로그인합니다. 권한은 사내 그룹에 따라 자동으로 정해집니다.</p>
+  <p class="muted small">회사 계정으로 로그인합니다. 권한은 사내 그룹에 따라 자동으로 정해집니다.</p>
 </section>
 {% endif %}
 <form class="card form" method="post" action="{{ url_for('auth.login') }}">

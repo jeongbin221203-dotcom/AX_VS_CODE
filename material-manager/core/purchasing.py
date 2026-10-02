@@ -13,7 +13,7 @@ from datetime import date
 import pandas as pd
 
 import config
-from core import audit, auth, db, org
+from core import audit, auth, db, org, version
 from core.utils import now_str
 
 PR_STATUS = {"PENDING": "결재 중", "APPROVED": "승인", "REJECTED": "반려", "ORDERED": "발주 완료", "CANCELLED": "취소"}
@@ -188,7 +188,7 @@ def approve_po(po_id: int, actor: dict, wh_ids=None) -> PResult:
     return PResult(True, f"발주 {po['po_no']} 승인 — 입고할 수 있습니다.", po_id)
 
 
-def set_sap_po_no(po_id: int, sap_po_no: str, actor: dict, wh_ids=None) -> PResult:
+def set_sap_po_no(po_id: int, sap_po_no: str, actor: dict, wh_ids=None, expected: str | None = None) -> PResult:
     sap_po_no = sap_po_no.strip()
     with db.transaction() as conn:
         po = conn.execute("SELECT * FROM purchase_orders WHERE id = ?", (po_id,)).fetchone()
@@ -196,6 +196,8 @@ def set_sap_po_no(po_id: int, sap_po_no: str, actor: dict, wh_ids=None) -> PResu
             return PResult(False, "발주가 없거나 권한 밖입니다.")
         if po["status"] == "CANCELLED":
             return PResult(False, "취소된 발주는 바꿀 수 없습니다.")
+        if version.stale("purchase_orders", po, expected):
+            return PResult(False, version.STALE, po_id)
         conn.execute("UPDATE purchase_orders SET sap_po_no = ? WHERE id = ?", (sap_po_no, po_id))
         audit.record(conn, actor, "PO_UPDATE", "purchase_order", po_id, {"sap_po_no": [po["sap_po_no"], sap_po_no]})
     return PResult(True, "SAP 구매오더 번호를 저장했습니다.", po_id)

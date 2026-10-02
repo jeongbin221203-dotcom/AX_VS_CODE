@@ -1,10 +1,10 @@
-"""SAP 연동 현황 · 지금 전송 · 재전송 (관리자)."""
+"""ERP·SAP 연동 현황 · 연결 확인 · 지금 전송 · 재전송 · 마스터 동기화 (관리자)."""
 
 import pandas as pd
 from flask import Blueprint, abort, flash, g, redirect, request, url_for
 
 import config
-from core import audit, master_sync, sap
+from core import audit, erp, master_sync, sap
 from views.helpers import Table, actor, page_arg, pager, render_page, role_required
 
 bp = Blueprint("sap", __name__, url_prefix="/sap")
@@ -27,7 +27,7 @@ def index():
     view = view[list(COLS)].rename(columns=COLS)
     tones = [{"FAILED": "danger", "ERROR": "danger", "CANCELLED": "muted"}.get(s) for s in df["status"]]
     retryable = df[df["status"].isin(["ERROR", "FAILED"])][["id", "tx_id", "last_error"]].to_dict("records")
-    return render_page("sap.html", "sap", mode=config.SAP_MODE, endpoint=config.SAP_ENDPOINT,
+    return render_page("sap.html", "sap", mode=config.SAP_MODE, settings=erp.settings_view(), modes=erp.MODES,
                        summary=sap.summary(g.wh_ids), statuses=statuses, retryable=retryable, pager=pager(total, page_arg()),
                        movement=config.SAP_MOVEMENT_TYPES, reversal=config.SAP_REVERSAL_TYPES,
                        master=master_sync.status(), master_on=master_sync.enabled(),
@@ -41,12 +41,30 @@ def run():
     if g.wh_ids is not None:
         abort(403, "SAP 전송은 회사 전체 대기열을 보내므로 모든 창고 권한이 있는 관리자만 할 수 있습니다.")
     if not sap.enabled():
-        flash("SAP 연동이 꺼져 있습니다 (MM_SAP_MODE=off).", "warning")
+        flash("ERP 연동이 꺼져 있습니다 (MM_ERP_MODE=off).", "warning")
         return redirect(url_for("sap.index"))
     counts = sap.process_outbox()
     audit.log(actor(), "SAP_RUN", "sap_outbox", "", counts)
+    if counts.get("config_error"):
+        flash(f"연결 설정 오류로 보내지 못했습니다: {counts['config_error']}", "error")
+        return redirect(url_for("sap.index"))
     flash(f"전송 결과 — 완료 {counts['sent']} · 재시도 예정 {counts['error']} · 실패 {counts['failed']} · "
           f"원거래 대기 {counts['waiting']}", "success" if not counts["failed"] else "warning")
+    return redirect(url_for("sap.index"))
+
+
+@bp.post("/test")
+@role_required("MANAGER")
+def test_connection():
+    """설정만 확인하고 거래는 보내지 않는다."""
+    if g.wh_ids is not None:
+        abort(403, "연결 확인은 모든 창고 권한이 있는 관리자만 할 수 있습니다.")
+    if not sap.enabled():
+        flash("ERP 연동이 꺼져 있습니다 (MM_ERP_MODE=off).", "warning")
+        return redirect(url_for("sap.index"))
+    result = erp.ping()
+    audit.log(actor(), "ERP_TEST", "erp", config.SAP_MODE, {"ok": result.ok, "message": result.message[:200]})
+    flash(("연결 확인: " if result.ok else "연결 실패: ") + result.message, "success" if result.ok else "error")
     return redirect(url_for("sap.index"))
 
 
@@ -64,14 +82,17 @@ def master_sync_now():
     if g.wh_ids is not None:
         abort(403, "자재 마스터는 회사 전체 데이터라 모든 창고 권한이 있는 관리자만 동기화할 수 있습니다.")
     if not master_sync.enabled():
-        flash("SAP 마스터 동기화가 꺼져 있습니다 (MM_SAP_MASTER_SYNC=1).", "warning")
+        flash("ERP 마스터 동기화가 꺼져 있습니다 (MM_SAP_MASTER_SYNC=1).", "warning")
         return redirect(url_for("sap.index"))
     try:
         counts = master_sync.sync(actor())
+    except erp.ErpError as exc:
+        flash(f"ERP 마스터를 가져오지 못했습니다: {exc}", "error")
+        return redirect(url_for("sap.index"))
     except Exception:
         from flask import current_app
-        current_app.logger.exception("SAP 마스터 동기화 실패")
-        flash("SAP 마스터를 가져오지 못했습니다. 연계서버 상태를 확인하세요.", "error")
+        current_app.logger.exception("ERP 마스터 동기화 실패")
+        flash("ERP 마스터를 가져오지 못했습니다. 연결 상태를 확인하세요.", "error")
         return redirect(url_for("sap.index"))
     flash(f"마스터 동기화 — 신규 {counts['created']} · 갱신 {counts['updated']} · 사용중지 {counts['deactivated']} · "
           f"원가센터 {counts['cost_centers']}", "success")

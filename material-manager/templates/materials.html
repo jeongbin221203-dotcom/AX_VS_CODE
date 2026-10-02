@@ -64,7 +64,7 @@
     </form>
 
     <form class="card form" method="post" action="{{ url_for('materials.update', mid=mid) }}">
-      {{ csrf() }}
+      {{ csrf() }}<input type="hidden" name="updated_at" value="{{ row.updated_at }}">
       {{ fields(form, lock_code=true, sap_lock=sap_lock) }}
       <div><button class="btn btn-primary">저장</button></div>
     </form>

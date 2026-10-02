@@ -6,7 +6,7 @@ from datetime import date, timedelta
 from flask import Blueprint, abort, flash, redirect, request, url_for
 
 import config
-from core import audit, auth, jobs, org, repository as repo
+from core import audit, auth, doctor, jobs, org, repository as repo, sso, version
 from views.helpers import (Table, a_date, actor, f_str, form_response, log_export, page_arg, pager, render_page,
                            role_required, xlsx_response)
 
@@ -25,6 +25,7 @@ def users():
     for u in records:
         p, w = org.user_scope(u["id"])
         u["scope_plants"], u["scope_whs"] = p, w
+        u["scope_ver"] = version.of_scope(u["all_warehouses"], p, w)
         u["scope_label"] = ("전체" if u["role"] == "ADMIN" or u["all_warehouses"] else
                             ", ".join([plant_name.get(i, "?") + "(플랜트)" for i in sorted(p)]
                                       + [wh_name.get(i, "?") for i in sorted(w)]) or "없음")
@@ -35,14 +36,29 @@ def users():
     view["locked_until"] = view["locked_until"].fillna("")
     view["all_warehouses"] = [u["scope_label"] for u in records]
     view["auth_source"] = view["auth_source"].map({"sso": "SSO", "local": "비밀번호"}).fillna("비밀번호")
-    view["totp_enabled"] = view["totp_enabled"].map({1: "사용", 0: ""}).fillna("")
-    view = view.drop(columns=["failed_count"]).rename(columns={"auth_source": "로그인", "totp_enabled": "2단계",
+    view = view.drop(columns=["failed_count"]).rename(columns={"auth_source": "로그인",
         "id": "ID", "username": "아이디", "name": "이름", "role": "역할", "active": "상태", "all_warehouses": "데이터 범위",
         "must_change_pw": "비밀번호", "locked_until": "잠김 해제", "last_login_at": "최근 로그인",
         "created_at": "등록일시"})
     return render_page("admin_users.html", "users", grid=Table(view, {"ID": "{}"},
                        tones=["muted" if a == 0 else None for a in df["active"]]),
-                       users=records, plants=plants.to_dict("records"), warehouses=whs.to_dict("records"))
+                       users=records, plants=plants.to_dict("records"), warehouses=whs.to_dict("records"),
+                       sso_on=sso.enabled(), sso_outage=sso.outage_until() if sso.outage_active() else "",
+                       outage_max=config.SSO_OUTAGE_MAX_HOURS)
+
+
+@bp.post("/sso-outage")
+@role_required("ADMIN")
+def sso_outage():
+    """사내 로그인 서버(IdP) 장애 때 비밀번호 계정 로그인을 정해진 시간만 허용한다."""
+    try:
+        hours = float(f_str("hours") or 0)
+    except ValueError:
+        abort(400, "시간을 숫자로 입력하세요.")
+    until = sso.set_outage(hours, actor())
+    flash(f"SSO 장애 모드를 {until}까지 켰습니다. 비밀번호 계정으로 로그인할 수 있습니다." if until
+          else "SSO 장애 모드를 껐습니다.", "warning" if until else "success")
+    return redirect(url_for("admin.users"))
 
 
 @bp.post("/users")
@@ -58,7 +74,8 @@ def create_user():
 @bp.post("/users/<int:user_id>")
 @role_required("ADMIN")
 def update_user(user_id: int):
-    result = auth.update_user(user_id, f_str("name"), f_str("role"), request.form.get("active") == "1", actor())
+    result = auth.update_user(user_id, f_str("name"), f_str("role"), request.form.get("active") == "1", actor(),
+                              expected=f_str("_ver") or None)
     flash(result.message, "success" if result.ok else "error")
     return redirect(url_for("admin.users"))
 
@@ -68,21 +85,8 @@ def update_user(user_id: int):
 def user_scope(user_id: int):
     result = org.set_user_scope(user_id, request.form.get("all") == "1",
                                 repo.ids_in(request.form.getlist("plant")),
-                                repo.ids_in(request.form.getlist("warehouse")), actor())
+                                repo.ids_in(request.form.getlist("warehouse")), actor(), expected=f_str("_ver") or None)
     flash(result.message, "success" if result.ok else "error")
-    return redirect(url_for("admin.users"))
-
-
-@bp.post("/users/<int:user_id>/mfa-reset")
-@role_required("ADMIN")
-def mfa_reset(user_id: int):
-    """휴대폰 분실 등: 2단계 인증을 지워 다시 등록하게 한다 (본인 것은 못 함)."""
-    from core import mfa
-    if user_id == actor()["id"]:
-        flash("본인의 2단계 인증은 다른 시스템관리자가 초기화해야 합니다.", "error")
-    else:
-        mfa.disable(user_id, actor(), reason=f_str("reason") or "관리자 초기화")
-        flash("2단계 인증을 초기화했습니다. 다음 로그인 때 다시 등록합니다.", "success")
     return redirect(url_for("admin.users"))
 
 
@@ -113,7 +117,8 @@ def plant_create():
 @bp.post("/org/plant/<int:plant_id>")
 @role_required("ADMIN")
 def plant_update(plant_id: int):
-    result = org.update_plant(plant_id, f_str("name"), f_str("sap_plant"), request.form.get("active") == "1", actor())
+    result = org.update_plant(plant_id, f_str("name"), f_str("sap_plant"), request.form.get("active") == "1", actor(),
+                              expected=f_str("_ver") or None)
     flash(result.message, "success" if result.ok else "error")
     return redirect(url_for("admin.org_page"))
 
@@ -131,7 +136,8 @@ def warehouse_create():
 @bp.post("/org/warehouse/<int:wh_id>")
 @role_required("ADMIN")
 def warehouse_update(wh_id: int):
-    result = org.update_warehouse(wh_id, f_str("name"), f_str("sap_sloc"), request.form.get("active") == "1", actor())
+    result = org.update_warehouse(wh_id, f_str("name"), f_str("sap_sloc"), request.form.get("active") == "1", actor(),
+                                  expected=f_str("_ver") or None)
     flash(result.message, "success" if result.ok else "error")
     return redirect(url_for("admin.org_page"))
 
@@ -139,13 +145,22 @@ def warehouse_update(wh_id: int):
 # ── 배치 ─────────────────────────────────────────────────────
 @bp.get("/jobs")
 @role_required("ADMIN")
-def jobs_page():
+def jobs_page(checks=None):
     status = jobs.status_df()
     runs = jobs.runs_df().rename(columns={"id": "ID", "name": "작업", "holder": "실행 서버", "started_at": "시작",
                                           "finished_at": "종료", "status": "결과", "message": "메시지"})
     return render_page("admin_jobs.html", "jobs", status=status.to_dict("records"), worker=jobs.worker_id(),
-                       lease=config.JOB_LEASE_SECONDS,
+                       lease=config.JOB_LEASE_SECONDS, checks=checks, check_label=doctor.LABEL,
                        runs=Table(runs, {"ID": "{}"}, tones=["danger" if s == "ERROR" else None for s in runs["결과"]]))
+
+
+@bp.post("/doctor")
+@role_required("ADMIN")
+def doctor_run():
+    """운영 점검: 실제 DB·저장소·ERP·SSO·백업·배치 연결 확인 (거래는 보내지 않음)."""
+    checks = doctor.run()
+    audit.log(actor(), "DOCTOR", "system", "", {c.name: c.status for c in checks})
+    return jobs_page(checks)
 
 
 @bp.post("/jobs/<name>")

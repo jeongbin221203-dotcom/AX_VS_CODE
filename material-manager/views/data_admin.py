@@ -88,12 +88,16 @@ def upload():
     if result.df.empty:
         flash("반영할 유효한 행이 없습니다.", "error")
         return redirect(url_for("data_admin.index"))
+    if result.bad_numbers:
+        flash(f"숫자가 아닌 안전재고·단가 {result.bad_numbers}칸은 반영하지 않습니다(기존 자재는 기존 값 유지, 새 자재는 0).",
+              "warning")
+    flash("이미 있는 자재는 파일에 값이 있는 칸만 바꿉니다. 빈 칸·파일에 없는 열은 기존 값을 그대로 둡니다.", "info")
 
     token = secrets.token_hex(16)
     session["upload_token"] = token          # 미리보기를 본 사람만 반영할 수 있게 세션에 묶는다
     storage.get().put(f"uploads/{token}.json",
                       result.df.to_json(orient="records", force_ascii=False).encode("utf-8"))
-    return _page(preview=Table(result.df.rename(columns=config.MATERIAL_COLS), PREVIEW_FMT),
+    return _page(preview=Table(result.df.drop(columns="_blank").rename(columns=config.MATERIAL_COLS), PREVIEW_FMT),
                  token=token, preview_cnt=len(result.df), filename=uploaded.filename)
 
 
@@ -110,7 +114,10 @@ def apply_upload():
         flash("이미 반영했거나 만료된 업로드입니다. 파일을 다시 올려 주세요.", "warning")
         return redirect(url_for("data_admin.index"))
     # dtype=False: '001' 같은 코드·규격이 숫자로 바뀌지 않게 저장한 그대로 읽는다
-    df = pd.read_json(io.StringIO(raw.decode("utf-8")), orient="records", dtype=False)[list(config.MATERIAL_COLS)]
+    df = pd.read_json(io.StringIO(raw.decode("utf-8")), orient="records", dtype=False)
+    if "_blank" not in df.columns:                  # 이 기능 전에 만든 미리보기
+        df["_blank"] = ""
+    df = df[[*config.MATERIAL_COLS, "_blank"]]
     result = services.import_materials(df, actor())
     storage.get().delete(key)
     flash(result.message, "success")
@@ -159,7 +166,7 @@ def make_seed():
     if repo.count_materials():
         flash("샘플 생성은 빈 DB에서만 가능합니다.", "warning")
     else:
-        seed.seed()
+        seed.seed(history=True)                # 지난 11개월 거래·장기 미사용 자재까지
         audit.log(actor(), "SEED", "material", "", {"materials": repo.count_materials()})
         flash("샘플 데이터가 생성되었습니다.", "success")
     return redirect(url_for("data_admin.index"))

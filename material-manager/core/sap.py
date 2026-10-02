@@ -1,47 +1,33 @@
-"""SAP 연동 (자재 이동 전기).
+"""ERP·SAP 연동 (자재 이동 전기) — 전송 대기열. 연결 방식(SAP OData·RFC·연계서버·기타 ERP REST·파일)은 core/erp.py.
 
 흐름
   1) 입출고·취소를 등록할 때 같은 DB 트랜잭션에서 sap_outbox에 '전송 대기'를 넣는다(enqueue).
   2) process_outbox()가 대기 건을 '전송 중'으로 선점한 뒤 SAP(또는 사내 연계서버)로 보낸다.
-     화면의 '지금 전송' 버튼, 또는 `python sap_sync.py --loop 60` 같은 주기 실행으로 돌린다.
+     화면의 '지금 전송' 버튼, 또는 배치(`flask --app app batch --loop`)의 sap_sync 작업이 돌린다.
   3) 성공하면 SAP 자재문서번호를 저장한다. 일시 오류는 점점 간격을 늘려 자동 재시도하고,
      업무 오류(자재 없음·재고 부족 등)나 재시도 한도 초과는 FAILED로 두어 사람이 조치 후 재전송한다.
 
 중복 전기 방지: 모든 요청에 멱등키(MM-TX-<거래ID>)를 붙인다. 응답을 못 받아 다시 보내더라도
 받는 쪽이 같은 키를 한 번만 처리하면 두 번 전기되지 않는다.
 
-전송 방식(config.SAP_MODE)
-  off   전송하지 않는다(대기열도 만들지 않음).
-  mock  실제 SAP 없이 자재문서번호를 흉내 낸다(시연·테스트용). SAP 자재번호가 'FAIL'로 시작하면 업무 오류를 낸다.
-  http  config.SAP_ENDPOINT로 이 모듈의 중립 JSON을 보낸다. 사내 연계서버(EAI, SAP Integration Suite 등)가
-        받아 BAPI_GOODSMVT_CREATE / 자재문서 OData API 등으로 변환하는 구성을 가정한다.
-        (이 저장소에는 실제 SAP 시스템에 붙여 검증한 코드가 없다. 연계서버 규격은 SAP 담당 팀과 맞춰야 한다.)
+전송 방식(config.SAP_MODE, 환경변수 MM_ERP_MODE): off · mock · http · sap_odata · sap_rfc · rest · file
+  → 방식별 설명은 core/erp.py. 이 모듈이 만드는 '중립 JSON'(build_payload)을 각 방식이 ERP 형식으로 바꿔 보낸다.
 """
 
-import hashlib
 import json
-import urllib.error
-import urllib.parse
-import urllib.request
-from dataclasses import dataclass
 from datetime import datetime, timedelta
 
 import config
-from core import audit, db
+from core import audit, db, erp
+from core.erp import ErpError as SapError, Posted  # noqa: F401 (예전 이름 유지)
 from core.utils import now_str
 
 SOURCE_SYSTEM = "MATERIAL-MANAGER"
 STALE_SENDING_MINUTES = 10          # '전송 중'인 채로 이보다 오래되면 중단된 것으로 보고 다시 보낸다
 
 
-class SapError(Exception):
-    def __init__(self, message: str, retryable: bool):
-        super().__init__(message)
-        self.retryable = retryable
-
-
 def enabled() -> bool:
-    return config.SAP_MODE in ("mock", "http")
+    return erp.enabled()
 
 
 # ── 이동유형 ─────────────────────────────────────────────────
@@ -111,7 +97,7 @@ def enqueue(conn, tx_id: int, reversal_of: int | None = None) -> str:
 
 
 TX_WITH_MAPPING = """
-    SELECT t.*, m.code, m.unit, m.sap_matnr, w.sap_sloc AS sloc, p.sap_plant AS plant
+    SELECT t.*, m.code, m.unit, m.sap_matnr, w.sap_sloc AS sloc, w.code AS wh_code, p.sap_plant AS plant
     FROM transactions t JOIN materials m ON m.id = t.material_id
     JOIN warehouses w ON w.id = t.warehouse_id JOIN plants p ON p.id = w.plant_id
     WHERE t.id = ?
@@ -133,11 +119,13 @@ def build_payload(conn, tx_id: int) -> tuple[dict | None, str]:
         if orig["status"] != "SENT":
             return None, "WAIT"
         return {"idempotencyKey": key, "action": "CANCEL", "sourceSystem": SOURCE_SYSTEM,
-                "postingDate": t["tx_date"], "movementType": t["movement_type"],
+                "postingDate": t["tx_date"], "movementType": t["movement_type"], "transactionType": t["tx_type"],
+                "originalKey": f"MM-TX-{t['reversal_of']}",
                 "originalDocument": orig["sap_doc_no"], "originalYear": orig["sap_doc_year"],
                 "reason": t["note"]}, ""
     payload = {"idempotencyKey": key, "action": "POST", "sourceSystem": SOURCE_SYSTEM,
                "postingDate": t["tx_date"], "documentDate": t["tx_date"], "movementType": t["movement_type"],
+               "transactionType": t["tx_type"], "itemCode": t["code"], "warehouseCode": t["wh_code"],
                "material": t["sap_matnr"], "plant": t["plant"], "storageLocation": t["sloc"],
                "quantity": abs(float(t["qty"])), "unit": t["unit"],
                "purchaseOrder": t["po_no"], "purchaseOrderItem": t["po_item"], "costCenter": t["cost_center"],
@@ -161,60 +149,13 @@ def build_payload(conn, tx_id: int) -> tuple[dict | None, str]:
     return payload, ""
 
 
-# ── 전송 방식 ────────────────────────────────────────────────
-@dataclass
-class Posted:
-    doc_no: str
-    year: str
-
-
-class MockClient:
-    """SAP 없이 동작을 확인하는 모의 전송. 같은 멱등키에는 항상 같은 문서번호를 돌려준다."""
-
-    def send(self, payload: dict) -> Posted:
-        if payload["action"] == "POST" and str(payload.get("material", "")).upper().startswith("FAIL"):
-            raise SapError("(모의) M7 021: 자재가 플랜트에 없습니다", retryable=False)
-        n = int(hashlib.sha1(payload["idempotencyKey"].encode(), usedforsecurity=False).hexdigest()[:8], 16) % 10**8
-        return Posted(f"49{n:08d}", payload["postingDate"][:4])
-
-
-class HttpClient:
-    """사내 연계서버로 JSON을 보낸다. 응답 형식: {"materialDocument": "...", "year": "2026"}"""
-
-    @staticmethod
-    def _check_endpoint() -> None:
-        if not config.SAP_ENDPOINT:
-            raise SapError("MM_SAP_ENDPOINT가 설정되지 않았습니다.", retryable=False)
-        host = urllib.parse.urlsplit(config.SAP_ENDPOINT).hostname or ""
-        if not config.SAP_ENDPOINT.startswith("https://") and host not in ("127.0.0.1", "localhost", "::1"):
-            # 인증 토큰과 거래 내용이 평문으로 나가지 않게 한다 (같은 PC의 테스트 서버만 예외)
-            raise SapError("SAP 연계서버 주소는 https:// 여야 합니다.", retryable=False)
-
-    def send(self, payload: dict) -> Posted:
-        self._check_endpoint()
-        req = urllib.request.Request(
-            config.SAP_ENDPOINT.rstrip("/") + "/goods-movements",
-            data=json.dumps(payload, ensure_ascii=False).encode(),
-            headers={"Content-Type": "application/json", "Idempotency-Key": payload["idempotencyKey"],
-                     **({"Authorization": f"Bearer {config.SAP_TOKEN}"} if config.SAP_TOKEN else {})},
-            method="POST")
-        try:
-            with urllib.request.urlopen(req, timeout=config.SAP_TIMEOUT) as res:
-                body = json.loads(res.read().decode() or "{}")
-        except urllib.error.HTTPError as exc:
-            detail = exc.read().decode(errors="replace")[:300]
-            # 4xx = 보낸 내용이 잘못됨(재시도해도 같음), 5xx = 상대 서버 문제(재시도)
-            raise SapError(f"HTTP {exc.code}: {detail}", retryable=exc.code >= 500 or exc.code == 429) from exc
-        except (urllib.error.URLError, TimeoutError, OSError) as exc:
-            raise SapError(f"연결 실패: {exc}", retryable=True) from exc
-        doc = str(body.get("materialDocument") or "")
-        if not doc:
-            raise SapError(f"응답에 자재문서번호가 없습니다: {str(body)[:200]}", retryable=False)
-        return Posted(doc, str(body.get("year") or payload["postingDate"][:4]))
+# ── 전송 방식 (core/erp.py) ─────────────────────────────────
+MockClient = erp.MockConnector          # 예전 이름
+HttpClient = erp.EaiConnector
 
 
 def client():
-    return MockClient() if config.SAP_MODE == "mock" else HttpClient()
+    return erp.connector()
 
 
 # ── 처리 ─────────────────────────────────────────────────────
@@ -227,6 +168,14 @@ def process_outbox(limit: int = 50) -> dict:
     counts = {"sent": 0, "error": 0, "failed": 0, "waiting": 0}
     if not enabled():
         return counts
+    try:
+        sender = client()
+    except SapError as exc:                         # 설정 누락 등 → 대기열은 그대로 두고 알린다
+        counts["config_error"] = str(exc)
+        return counts
+    if hasattr(sender, "collect_acks"):             # 파일 연계: ERP가 남긴 처리 결과부터 반영
+        with db.transaction() as conn:
+            counts.update(sender.collect_acks(conn))
     now = now_str()
     stale = (datetime.now() - timedelta(minutes=STALE_SENDING_MINUTES)).strftime("%Y-%m-%d %H:%M:%S")
     with db.transaction() as conn:
@@ -254,11 +203,10 @@ def process_outbox(limit: int = 50) -> dict:
                          (json.dumps(payload, ensure_ascii=False), now, r["id"]))
             claimed.append((r, payload))
 
-    sender = client()
     for r, payload in claimed:                      # 네트워크 호출은 DB 잠금 밖에서 한다
         attempts = r["attempts"] + 1
         try:
-            posted = sender.send(payload)
+            posted = sender.send(payload, attempts)
         except SapError as exc:
             final = not exc.retryable or attempts >= config.SAP_MAX_ATTEMPTS
             with db.transaction() as conn:

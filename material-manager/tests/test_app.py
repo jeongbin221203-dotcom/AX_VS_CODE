@@ -39,7 +39,6 @@ PAGES = ["/", "/materials/", "/materials/?tab=new", "/materials/?tab=edit",
 def app():
     """테스트마다 빈 DB에서 시작한다 (test_core 와 같은 임시 DB를 공유하므로 매번 초기화)."""
     config.SAP_MODE = "off"
-    config.MFA_REQUIRED_ROLES = set()          # 2단계 인증 필수는 test_enterprise의 전용 테스트에서 확인
     config.NEW_USER_ALL_WAREHOUSES = True      # 테스트 사용자는 전체 범위 (기본값 '없음'은 전용 테스트에서 확인)
     db.reset_database()
     application = create_app({"TESTING": True})
@@ -93,7 +92,6 @@ def actions() -> list[str]:
 
 # ── 로그인 · 권한 ────────────────────────────────────────────
 def test_first_run_setup_then_login():
-    config.MFA_REQUIRED_ROLES = set()
     db.reset_database()
     application = create_app({"TESTING": True})
     code = application.config["SETUP_CODE"]

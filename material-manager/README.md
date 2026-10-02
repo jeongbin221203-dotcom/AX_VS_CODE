@@ -1,11 +1,12 @@
 # 자재관리 시스템 (Flask · SQLite/PostgreSQL)
 
 창고 자재의 **구매요청 → 발주 → 입고 / 출고 / 실사조정 / 창고 간 이동**을 기록하고, 플랜트·창고·로트별 재고와
-수불부·재고 평가(이동평균·선입선출)를 집계하는 웹 애플리케이션. 사내 SSO·2단계 인증, 역할·데이터 범위 권한,
-직무 분리와 결재, 감사로그, 취소 거래(역분개), 월 마감, 세금계산서 증빙, SAP 전송·마스터 동기화·재고 대사를 갖췄다.
+수불부·재고 평가(이동평균·선입선출)를 집계하는 웹 애플리케이션. 사내 SSO, 역할·데이터 범위 권한,
+직무 분리와 결재, 감사로그, 취소 거래(역분개), 월 마감, 세금계산서 증빙, **ERP·SAP 전송·마스터 동기화·재고 대사**를 갖췄다.
+ERP 연결은 SAP S/4HANA(OData API)·SAP ECC(RFC/BAPI)·사내 연계서버(EAI)·기타 ERP REST(매핑 파일)·파일 연계 중에서 고른다.
 
-**용도**: (A) SAP가 있는 회사의 현장 입력 창구(`MM_SAP_MODE=http`, 재고 원장은 SAP) 또는
-(B) SAP가 없는 법인·공장의 독립 재고 시스템(`MM_SAP_MODE=off`). 한 서버(SQLite)부터 여러 서버(PostgreSQL)까지 같은 코드.
+**용도**: (A) ERP·SAP가 있는 회사의 현장 입력 창구(`MM_ERP_MODE=sap_odata` 등, 재고 원장은 ERP) 또는
+(B) ERP가 없는 법인·공장의 독립 재고 시스템(`MM_ERP_MODE=off`). 한 서버(SQLite)부터 여러 서버(PostgreSQL)까지 같은 코드.
 
 ## 빠른 시작
 
@@ -46,7 +47,7 @@ MM_SECRET_KEY=아무-긴-문자열 python app.py
 - 비밀번호: 8자 이상 영문+숫자, PBKDF2-SHA256 해시. 5번 연속 실패하면 15분 잠금.
 - 매 요청마다 사용자를 다시 읽으므로 역할 변경·계정 중지가 즉시 반영된다. 마지막 시스템관리자는 강등·중지할 수 없다.
 
-## 로그인: 사내 SSO · 2단계 인증
+## 로그인: 사내 SSO · 비밀번호
 
 - **사내 SSO (OpenID Connect)** — Entra ID(Azure AD)·Okta·Keycloak·Google Workspace 등. `MM_SSO_ENABLED=1`,
   `MM_SSO_ISSUER`, `MM_SSO_CLIENT_ID`, `MM_SSO_CLIENT_SECRET`, `MM_SSO_REDIRECT_URI`, `MM_SSO_ROLE_MAP="그룹=역할,…"`.
@@ -55,10 +56,8 @@ MM_SECRET_KEY=아무-긴-문자열 python app.py
     그룹에서 빠지면 로그인이 거부되고 계정이 중지된다 → 퇴사·부서이동이 IdP에서 바로 반영.
   - 같은 아이디의 로컬 계정과는 자동으로 합치지 않는다(계정 탈취 방지). SSO 계정은 비밀번호 로그인 불가.
   - `MM_SSO_ONLY=1`이면 비밀번호 로그인은 비상용 시스템관리자만. `MM_SSO_REQUIRE_MFA=1`이면 IdP에서 2단계 인증을 거친 토큰(amr=mfa)만.
-- **2단계 인증 (TOTP)** — 비밀번호 계정용. Microsoft/Google Authenticator 등. 사이드바 '2단계 인증'에서 QR로 등록.
-  - `MM_MFA_REQUIRED_ROLES`(기본 `ADMIN`) 역할은 등록해야만 시스템을 쓸 수 있다.
-  - 비밀키는 암호화 저장(`MM_MFA_KEY`, 없으면 세션 키에서 만든다 → 운영에서는 따로 지정), 같은 코드 재사용 금지,
-    복구 코드 10개(64비트, 코드별 소금 해시, 한 번씩), 실패는 비밀번호 실패와 같은 잠금에 합산. 휴대폰 분실 시 다른 시스템관리자가 초기화.
+- 이 시스템 자체의 2단계 인증(인증 앱 코드)은 2026-10-02 삭제했다. 2단계 인증이 필요하면 사내 SSO(IdP)의 정책으로 건다.
+  예전 DB에 남은 2단계 인증 비밀키·복구 코드는 앱이 시작할 때 지운다.
 
 ## 구매요청 → 결재 → 발주 → 입고 (구매 메뉴)
 
@@ -132,7 +131,7 @@ MM_SECRET_KEY=아무-긴-문자열 python app.py
 
 | 위협 | 대응 |
 |---|---|
-| 비인가 접근 | 로그인 필수(**사내 SSO**·**2단계 인증**), 역할별 메뉴·서버 검사(403), **플랜트·창고 데이터 범위**, 최초 설정은 콘솔 코드 필요 |
+| 비인가 접근 | 로그인 필수(**사내 SSO** 또는 비밀번호, 실패 잠금), 역할별 메뉴·서버 검사(403), **플랜트·창고 데이터 범위**, 최초 설정은 콘솔 코드 필요 |
 | 비밀번호 추측 | PBKDF2-SHA256 60만 회, 계정 5회 실패 시 15분 잠금, **IP 단위 15분 20회 실패 시 차단** |
 | 계정 존재 확인 | 없는 아이디도 같은 시간 해시 계산, 실패 문구 통일, 중지 계정은 비밀번호가 맞을 때만 안내 |
 | 세션 탈취 | HttpOnly·SameSite 쿠키, 로그인 시 세션 교체, **비밀번호가 바뀌거나 로그아웃하면 서버에서 이전 세션 전부 무효**(복사된 쿠키도 못 씀), 30분 무활동 로그아웃, 최대 8시간 |
@@ -167,27 +166,47 @@ DB·첨부 폴더는 서버 계정만 읽을 수 있게 파일 권한을 제한�
 (SAP 자재번호, 플랜트, 저장위치) 단위로 **앱 재고 − 미전기 수량 = SAP 예상 재고**를 만들어 SAP 재고와 비교하므로,
 '아직 전송이 안 돼서 생긴 차이'와 '진짜 차이(SAP에서 직접 처리한 거래, 기초 재고 차이 등)'가 나뉜다.
 
-## SAP 연동 (`core/sap.py`)
+## ERP·SAP 연동 (`core/erp.py` 연결 방식 · `core/sap.py` 전송 대기열)
 
-| 모드 (`MM_SAP_MODE`) | 동작 |
-|---|---|
-| `off` (기본) | 전송하지 않음 |
-| `mock` | SAP 없이 자재문서번호를 흉내 냄(시연·테스트). SAP 자재번호가 `FAIL`로 시작하면 업무 오류 |
-| `http` | `MM_SAP_ENDPOINT` + `/goods-movements`로 JSON POST (`MM_SAP_TOKEN`은 Bearer 인증) |
+| 방식 (`MM_ERP_MODE`, 예전 이름 `MM_SAP_MODE`) | 대상 | 동작 |
+|---|---|---|
+| `off` (기본) | — | 전송하지 않음 |
+| `mock` | 시연·테스트 | 문서번호를 흉내 냄. ERP 품목코드가 `FAIL`로 시작하면 업무 오류 |
+| `http` | 사내 연계서버 (EAI · SAP Integration Suite · MuleSoft 등) | `MM_SAP_ENDPOINT/goods-movements`로 중립 JSON (`Idempotency-Key` 헤더, Bearer `MM_SAP_TOKEN`) |
+| `sap_odata` | **SAP S/4HANA** (온프레미스·클라우드) | `API_MATERIAL_DOCUMENT_SRV` 자재문서 생성·`Cancel`, CSRF 토큰·쿠키, Basic 또는 OAuth2, `sap-client` |
+| `sap_rfc` | **SAP ECC · S/4HANA** | `BAPI_GOODSMVT_CREATE`/`CANCEL` + `BAPI_TRANSACTION_COMMIT`, 오류면 ROLLBACK, 번호 ALPHA 변환. `pip install pyrfc`(SAP NW RFC SDK 필요) |
+| `rest` | **기타 ERP** (Oracle · Dynamics · 더존 · 영림원 · 자체 ERP) | 매핑 파일(`MM_ERP_REST_MAP`, [erp_maps/](erp_maps/README.md))로 주소·필드·코드 변환·인증을 맞춤 — 코드 수정 없음 |
+| `file` | API가 없는 ERP (야간 일괄 반영 등) | 공유 폴더(`MM_ERP_FILE_DIR`)에 거래마다 JSON/CSV, ERP가 남긴 `.ack.json`으로 문서번호·오류 반영 |
+
+| 기능 | http | sap_odata | sap_rfc | rest | file |
+|---|---|---|---|---|---|
+| 입고·출고·조정·이동 전기 / 취소 | ✓ | ✓ | ✓ | ✓ | ✓ |
+| 재시도 전 중복 확인(멱등키) | 받는 쪽 | 헤더 텍스트로 조회 | MKPF 조회 | `lookup` 설정 시 | 같은 파일 이름 |
+| 마스터 동기화 (자재·원가센터) | ✓ | API_PRODUCT_SRV · API_COSTCENTER_SRV | — | `master` 설정 시 | 마스터 파일 |
+| 재고 대사용 ERP 재고 | ✓ | API_MATERIAL_STOCK_SRV | MARD | `stock` 설정 시 | 재고 파일 |
+
+```bash
+# 예: S/4HANA 직접
+export MM_ERP_MODE=sap_odata MM_SAP_ODATA_URL=https://s4.사내:44300 MM_SAP_CLIENT=100
+export MM_SAP_USER=통신사용자 MM_SAP_PASSWORD=...          # 또는 MM_SAP_OAUTH_TOKEN_URL + CLIENT_ID/SECRET
+flask --app app erp test                                   # 연결 확인 (화면: ERP·SAP 연동 → 연결 확인)
+```
+모든 설정 이름은 [.env.example](.env.example)과 `config.py`에 있다. 화면에는 비밀번호·토큰 대신 '설정됨'만 보인다.
+주소는 https만 허용한다(같은 PC의 테스트 서버 제외).
 
 - **매핑**: 자재 마스터에 SAP 자재번호, 창고에 SAP 플랜트·저장위치, 입고에 구매오더·품목, 출고에 원가센터.
   연동이 켜져 있으면 매핑 없는 자재·원가센터 없는 출고는 등록 단계에서 거부한다.
 - **이동유형**: 입고 101(PO) / 501(무PO), 출고 201, 실사 701·702, 취소 102·502·202. 회사 설정에 맞게 `config.py`에서 바꾼다.
-- **전송 대기열**: 거래와 같은 트랜잭션에서 `sap_outbox`에 넣는다. `python batch.py --loop`의 `sap_sync` 작업(또는 화면의 "지금 전송")이 보낸다.
+- **전송 대기열**: 거래와 같은 트랜잭션에서 `sap_outbox`에 넣는다. 배치(`flask --app app batch --loop`)의 `sap_sync` 작업(또는 화면의 "지금 전송")이 보낸다.
   - 모든 요청에 멱등키 `MM-TX-<거래ID>` → 다시 보내도 받는 쪽이 한 번만 전기하면 중복이 없다.
   - PostgreSQL에서는 대기열을 `FOR UPDATE SKIP LOCKED`로 가져가므로 배치 서버가 여러 대여도 같은 건을 두 번 보내지 않는다.
   - 연결 실패·5xx는 간격을 늘려 자동 재시도(최대 5회), 4xx·업무 오류는 **실패(조치 필요)** → 원인을 고친 뒤 재전송.
   - 취소 거래는 원거래가 전기된 뒤 원 자재문서를 지정해 취소 전송. 원거래가 아직 전송 전이면 둘 다 보내지 않는다.
   - SAP 연동 중에는 그 달 거래가 모두 전기돼야 월 마감할 수 있다.
 - **이동유형 추가**: 창고 간 이동 311/301, 취소 312/302.
-- **한계**: 이 저장소에는 실제 SAP에 붙여 검증한 코드가 없다. `http` 모드는 사내 연계서버(EAI, SAP Integration Suite 등)가
-  이 JSON을 받아 BAPI/OData로 바꾸는 구성을 가정한다. 규격과 이동유형은 SAP 담당 팀과 확정해야 한다.
-  자재 마스터를 SAP에서 자동으로 받아오는 기능(MATMAS 등)은 아직 없다 — 엑셀 업로드(SAP 컬럼 포함)로 맞춘다.
+- **한계**: 실제 SAP·ERP에 붙여 검증하지 않았다(가짜 OData 서버·가짜 pyrfc·가짜 REST 서버로 요청 형식과 흐름만 검증).
+  이동유형·거래 코드(`SAP_GM_CODES`)·단위 코드(`MM_ERP_UNIT_MAP`)·API 경로는 ERP 담당 팀과 확정한다.
+  실사 조정 701/702는 SAP에서 보통 재고실사 문서로 처리하므로, 자재문서 API로 보낼지(예: 551/561로 바꿈) 담당 팀과 정한다.
 
 ## 증빙 (세금계산서 · 전자세금계산서 이미지)
 
@@ -200,13 +219,44 @@ DB·첨부 폴더는 서버 계정만 읽을 수 있게 파일 권한을 제한�
 - **거래와의 관계**: 증빙이 잘못되면 거래도 등록하지 않는다. 거래를 취소해도 증빙 연결은 남는다.
 - **백업**: `.db` 백업에는 파일이 없다. 데이터 관리 화면의 "증빙 파일 백업(.zip)"을 함께 받는다.
 
+## 장애·실수 대비 (인터넷 끊김 · 두 번 제출 · 데이터 보존)
+
+**인터넷이 끊겨도 사내망(앱 서버 ↔ 사용자 PC)이 살아 있으면 업무는 계속된다.** 화면은 외부 CDN·글꼴을 쓰지 않는다(Chart.js도 `static/vendor`).
+
+| 끊긴 것 | 동작 | 복구되면 |
+|---|---|---|
+| ERP·SAP (외부·클라우드) | 입출고·취소는 그대로 등록되고 전송 대기열에 쌓인다(재고 판정은 이 시스템 장부 기준) | 배치 `sap_sync`가 1분마다 다시 보낸다(멱등키로 두 번 전기 없음, SAP 취소도 이미 취소됐는지 먼저 확인) |
+| S3 저장소 | 증빙·업로드 파일을 이 서버의 임시 폴더(`MM_STORAGE_SPOOL_DIR`)에 둔다. `/health`는 `degraded`(200)라 로드밸런서에서 빠지지 않는다 | 배치 `storage_flush`(5분)가 올린다. 수동: `flask --app app storage-flush` |
+| 사내 로그인(SSO·IdP) | SSO 시작이 실패하면 안내 문구를 보여 준다. 시스템관리자가 **SSO 장애 모드**(사용자 화면 또는 `flask --app app sso-outage --hours 4`)를 켜면 정해진 시간(최대 24시간) 동안 비밀번호 계정으로 로그인 | 시간이 지나면 저절로 꺼진다. 켜고 끈 기록은 감사로그 |
+| 사용자 PC ↔ 서버 | 화면 위에 '서버에 연결할 수 없습니다' 알림, 등록 버튼을 눌러도 보내지 않고 입력은 브라우저에 임시 저장 | 알림이 사라지면 다시 등록. 다른 화면에 갔다 와도 '입력 되살리기'로 복원 |
+
+- 사용자 PC ↔ 서버가 끊긴 상태에서 거래를 브라우저에 쌓아 두었다가 나중에 일괄 반영하는 방식은 **하지 않는다** —
+  재고 확인(음수 재고 방지)·결재·마감 확인을 서버가 하므로, 끊긴 동안 받은 출고를 나중에 넣으면 재고가 맞지 않을 수 있다.
+  사내망 장애에 대비하려면 앱 서버를 현장(공장) 사내망 안에 두고, 서버가 여러 대면 위 '여러 서버로 운영하기' 구성을 쓴다.
+- SSO만 쓰던 직원은 비밀번호가 없으므로, 장애 대비 비밀번호 계정을 창고 담당자마다 미리 만들어 둔다.
+
+**저장한 내용이 바뀌거나 사라지지 않게**
+
+| 위험 | 막는 방법 |
+|---|---|
+| 등록 버튼 두 번 클릭 · 느린 네트워크에서 다시 누름 · 브라우저 재전송 | 모든 폼에 한 번 쓰는 표(`_once`, `core/once.py`). 같은 표가 다시 오면 처리하지 않고 첫 결과 화면을 보여 준다. 입력 오류로 화면을 다시 그리면 표를 지워 고쳐서 다시 보낼 수 있다. 서버가 처리 중 죽어 결과가 불분명하면 다시 처리하지 않고 내역 확인을 요청한다(중복 등록보다 안전). 브라우저도 5초 안의 두 번째 제출을 막는다 |
+| 세션 만료·네트워크 오류로 입력을 잃음 | 화면 입력은 이 브라우저(localStorage)에 임시 저장 → 다시 열면 '입력 되살리기'. 등록 성공 화면에서 지운다. 비밀번호·파일·숨은 값은 저장하지 않고 3일 뒤 버린다 |
+| 엑셀 일괄 업로드가 기존 값을 덮어씀 | 이미 있는 자재는 **파일에 값이 있는 칸만** 바꾼다. 빈 칸·없는 열·숫자가 아닌 숫자 칸은 기존 값 유지. SAP 동기화 자재의 SAP 항목은 업로드로도 안 바뀜 |
+| 두 사람이 같은 자재를 동시에 수정 | 화면을 연 시각(`updated_at`)과 저장 직전 값이 다르면 저장하지 않고 '먼저 바꿨습니다' 안내(나중 저장이 먼저 저장을 조용히 덮지 않음) |
+| 정전·서버 다운 | SQLite는 WAL + `synchronous=FULL`(커밋이 디스크에 기록된 뒤 끝남). 거래·감사로그는 트리거로 수정·삭제 금지, 정정은 취소 거래 |
+| 디스크 고장·실수로 파일 삭제 | 배치 `db_backup`이 `MM_BACKUP_HOURS`(기본 24)마다 온라인 백업 API로 사본을 만들고 `quick_check`를 통과한 것만 `MM_BACKUP_KEEP`(기본 14)개 보관 + 로컬 증빙 새 파일 복사. **`MM_BACKUP_DIR`은 다른 디스크·NAS로**. 수동: `flask --app app backup` |
+| SQLite를 네트워크 폴더에 둠 | 파일 잠금이 보장되지 않아 DB가 깨질 수 있다 → 기동 때 경고. 로컬 디스크 또는 PostgreSQL |
+
+복원(SQLite): 앱·배치를 멈추고 → 지금 DB 파일(`-wal`·`-shm` 포함)을 다른 이름으로 옮겨 두고 → 백업 파일을 `MM_DB_PATH` 이름으로 복사 → 다시 시작.
+분기마다 한 번은 백업 파일로 복원해 열리는지 확인한다(복원해 본 적 없는 백업은 백업이 아니다).
+
 ## 여러 서버로 운영하기
 
 ```
                  ┌──────── 로드밸런서 (HTTPS, /health 로 상태 확인) ────────┐
                  │                                                          │
           앱 서버 1 (waitress)                                     앱 서버 N (waitress)
-          + batch.py --loop                                        + batch.py --loop
+          + flask batch --loop                                     + flask batch --loop
                  │                                                          │
                  ├───────────── PostgreSQL (MM_DATABASE_URL) ───────────────┤
                  └───────────── 파일 저장소 (S3 또는 공유 NAS) ──────────────┘
@@ -215,11 +265,11 @@ DB·첨부 폴더는 서버 계정만 읽을 수 있게 파일 권한을 제한�
 | 구성 요소 | 한 서버 | 여러 서버 | 여러 서버에서 안전한 이유 |
 |---|---|---|---|
 | DB | SQLite 파일 | **PostgreSQL** (`MM_DATABASE_URL`) | 재고를 바꾸는 작업은 자재별 잠금(`pg_advisory_xact_lock`)으로 줄 세운다 → 동시 출고에도 음수 재고 없음. 서버마다 커넥션 풀 |
-| 파일(증빙·업로드) | 로컬 폴더 | **S3 호환**(`MM_STORAGE=s3`) 또는 공유 NAS 경로(`MM_STORAGE_DIR`) | 업로드 미리보기와 반영이 다른 서버에서 처리돼도 같은 파일을 본다. S3는 서버 쪽 암호화(SSE) |
+| 파일(증빙·업로드) | 로컬 폴더 | **S3 호환**(`MM_STORAGE=s3`) 또는 공유 NAS 경로(`MM_STORAGE_DIR`) | 업로드 미리보기와 반영이 다른 서버에서 처리돼도 같은 파일을 본다. S3는 서버 쪽 암호화(SSE). S3 장애 중 임시 폴더에 둔 파일은 올라가기 전까지 그 서버에서만 보인다 → `MM_STORAGE_SPOOL_DIR`를 공유 폴더로 두거나 고정 세션 |
 | 세션 | 서명 쿠키 | 그대로 (모든 서버에 같은 `MM_SECRET_KEY`) | 세션이 쿠키에 있어 어느 서버로 가도 된다(고정 세션 불필요) |
-| 배치 | `batch.py --loop` | 모든 서버에서 켜도 됨 | 작업마다 DB 임대(lease) 잠금 → 한 서버만 실행, 죽으면 임대가 끝난 뒤 다른 서버가 이어받음 |
+| 배치 | `flask --app app batch --loop` | 모든 서버에서 켜도 됨 | 작업마다 DB 임대(lease) 잠금 → 한 서버만 실행, 죽으면 임대가 끝난 뒤 다른 서버가 이어받음 |
 | 최초 설정 코드 | 콘솔 | DB(`app_settings`)에 한 번만 생성 | 어느 서버 콘솔에 찍힌 코드든 같다 |
-| 상태 점검 | `/health` | 로드밸런서가 호출 | DB·저장소 둘 다 되면 200, 아니면 503. 로그인 없이 열리며 내부 정보는 내보내지 않는다 |
+| 상태 점검 | `/health` | 로드밸런서가 호출 | DB·저장소 둘 다 되면 200, 아니면 503. S3만 끊기고 임시 폴더로 일하는 중이면 `degraded`(200). 로그인 없이 열리며 내부 정보는 내보내지 않는다 |
 
 실행 예 (각 서버):
 ```bash
@@ -227,9 +277,9 @@ export MM_DATABASE_URL=postgresql://mm:비밀번호@db.사내:5432/materials
 export MM_STORAGE=s3 MM_S3_BUCKET=mm-evidence          # 인증은 서버 역할(IAM) 또는 AWS_* 환경변수
 export MM_SECRET_KEY=모든-서버-같은-긴-값 MM_COOKIE_SECURE=1 MM_TRUST_PROXY=1
 waitress-serve --port=5002 --call app:create_app        # 웹
-python batch.py --loop                                  # 배치 (서비스로 등록)
+flask --app app batch --loop                            # 배치 (서비스로 등록)
 ```
-배치 작업: `sap_sync`(60초, SAP 전송), `sap_master_sync`(1시간, SAP 마스터), `cleanup_uploads`(1시간, 반영 안 한 업로드 미리보기 정리). 시스템관리자 → 배치 화면에서
+배치 작업: `sap_sync`(60초, SAP 전송), `sap_master_sync`(1시간, SAP 마스터), `cleanup_uploads`(1시간, 반영 안 한 업로드 미리보기·중복 제출 기록 정리), `db_backup`(24시간, SQLite 백업), `storage_flush`(5분, S3 장애 때 임시 보관한 파일 올리기). 시스템관리자 → 배치 화면에서
 실행 서버·결과·기록을 보고 '지금 실행'할 수 있다. 작업 추가는 `core/jobs.py`의 `JOBS`에 한 줄.
 
 **페이지 나누기**: 자재·재고·거래 이력·증빙·SAP 대기열·감사로그는 100건씩 나눠 보여 주고(합계는 조건 전체 기준),
@@ -240,28 +290,32 @@ python batch.py --loop                                  # 배치 (서비스로 �
 ```
 material-manager/
 ├── app.py              앱 생성 · CSRF · 보안 헤더 · /health
-├── batch.py            배치 실행기 (여러 서버에서 켜도 작업마다 한 대만)
-├── config.py           DB·저장소·역할·SAP·결재 기준 등 설정 (환경변수로 override)
+├── cli.py              운영 명령: flask --app app init-db · batch · erp (status/test/send/master-sync) · backup · storage-flush · sso-outage
+├── config.py           DB·저장소·역할·ERP·결재 기준 등 설정 (환경변수로 override)
+├── erp_maps/           기타 ERP REST 매핑 파일 (예시·설명)
 ├── core/               업무 로직 — Flask 비의존
 │   ├── db.py           SQLite/PostgreSQL 공용 연결 · 스키마 · 마이그레이션 · 잠금
-│   ├── storage.py      파일 저장소 (local / s3)
+│   ├── storage.py      파일 저장소 (local / s3, S3 장애 때 임시 폴더)
+│   ├── once.py         같은 화면 제출을 두 번 처리하지 않기
+│   ├── backup.py       SQLite 자동 백업 · 보관 개수
 │   ├── repository.py   자재 · 창고별 재고 · 수불부 · 거래 · 증빙 조회 (페이지 나누기)
 │   ├── services.py     입출고 · 이동 · 취소 · 자재 변경 규칙
 │   ├── approvals.py    결재 (금액이 큰 실사 조정)
 │   ├── purchasing.py   구매요청 · 결재 단계 · 발주 · 입고 확인 · 3자 대조
 │   ├── valuation.py    재고 평가 (이동평균 · 선입선출, 마감 스냅샷)
-│   ├── master_sync.py  SAP 자재 · 원가센터 동기화
-│   ├── sso.py · mfa.py 사내 SSO(OIDC) · 2단계 인증(TOTP)
+│   ├── master_sync.py  ERP 자재 · 원가센터 동기화
+│   ├── sso.py          사내 SSO(OIDC)
 │   ├── excel_forms.py  회사 엑셀 양식 (내려받기 채우기 · 올리기 열 연결)
 │   ├── org.py          플랜트 · 창고 · 사용자 데이터 범위
 │   ├── periods.py      월 마감 · 월말 스냅샷
-│   ├── reconcile.py    재고 대사 (앱 ↔ SAP)
-│   ├── sap.py          SAP 이동유형 · 전송 대기열 · mock/http
+│   ├── reconcile.py    재고 대사 (앱 ↔ ERP)
+│   ├── sap.py          이동유형 · 전송 대기열 · 재시도 (중립 JSON)
+│   ├── erp.py          ERP 연결 방식: mock · http · sap_odata · sap_rfc · rest · file
 │   ├── jobs.py         배치 작업 · 임대 잠금
 │   ├── auth.py · audit.py · documents.py · utils.py · seed.py
 ├── views/              화면 (블루프린트 14개 + helpers.py)
 ├── templates/ · static/ (Chart.js는 static/vendor)
-└── tests/              test_core · test_app · test_enterprise · test_advanced · test_forms · test_review (SQLite·PostgreSQL 둘 다)
+└── tests/              test_core · test_app · test_enterprise · test_advanced · test_forms · test_review · test_erp · test_resilience (SQLite·PostgreSQL 둘 다)
 ```
 
 ## 설계 원칙
@@ -279,21 +333,22 @@ material-manager/
 
 ```bash
 pip install -r requirements-dev.txt
-python -m pytest tests -q                                                    # SQLite, 90개
+python -m pytest tests -q                                                    # SQLite 121 + 1 건너뜀(PostgreSQL pg_dump 전용). PostgreSQL은 120 + 2 건너뜀(SQLite 전용)
 MM_DATABASE_URL=postgresql://user@host:5432/mm_test python -m pytest tests -q  # PostgreSQL (DB 이름에 test 필수)
 ```
 테스트는 임시 DB만 쓴다(운영 SQLite 파일과 이름에 test가 없는 PostgreSQL DB는 초기화를 거부).
-S3는 moto로, 사내 SSO는 테스트 안의 가짜 IdP(RSA 서명 토큰)로 흉내 낸다.
+S3는 moto로, 사내 SSO는 테스트 안의 가짜 IdP(RSA 서명 토큰)로, SAP·ERP는 가짜 OData·REST 서버와 가짜 pyrfc로 흉내 낸다.
 
 ## 운영 메모
 
 - **세션 키**: `MM_SECRET_KEY`를 꼭 지정하고 모든 서버에 같은 값을 쓴다.
-- **백업**: SQLite는 화면의 `.db` 백업 또는 파일 복사. PostgreSQL은 DB 서버에서 `pg_dump`·스냅샷.
+- **백업**: SQLite는 배치 `db_backup`(자동, `MM_BACKUP_DIR`) · `flask --app app backup` · 화면의 `.db` 백업. PostgreSQL은 DB 서버에서 `pg_dump`·스냅샷.
   증빙은 저장소 쪽에서(S3 버전 관리·복제, NAS 백업) + 화면의 증빙 zip. `.db`·덤프에는 비밀번호 해시가 들어 있으므로 보관에 주의.
 - **환경변수**: `MM_DATABASE_URL`, `MM_DB_PATH`, `MM_DB_POOL_SIZE`, `MM_STORAGE`, `MM_STORAGE_DIR`, `MM_S3_*`,
-  `MM_SECRET_KEY`, `MM_COOKIE_SECURE`, `MM_TRUST_PROXY`, `MM_IDLE_MINUTES`, `MM_SAP_MODE` / `MM_SAP_ENDPOINT` / `MM_SAP_TOKEN`,
+  `MM_SECRET_KEY`, `MM_COOKIE_SECURE`, `MM_TRUST_PROXY`, `MM_IDLE_MINUTES`, `MM_ERP_MODE`(`MM_SAP_MODE`) · `MM_SAP_*` · `MM_ERP_*` (ERP 연결, .env.example 참고),
   `MM_ADJ_APPROVAL_AMOUNT`, `MM_SOD_ENFORCE`, `MM_SETUP_CODE`, `MM_HOST` / `MM_PORT` / `MM_DEBUG`,
-  `MM_SSO_*`, `MM_MFA_REQUIRED_ROLES`, `MM_MFA_KEY`, `MM_VALUATION`, `MM_SAP_MASTER_SYNC`, `MM_SAP_MASTER_READONLY`.
+  `MM_SSO_*`, `MM_VALUATION`, `MM_SAP_MASTER_SYNC`, `MM_SAP_MASTER_READONLY`,
+  `MM_BACKUP_DIR` / `MM_BACKUP_HOURS` / `MM_BACKUP_KEEP`, `MM_STORAGE_SPOOL_DIR`.
 - **포트 중복 주의(Windows)**: 개발 서버는 같은 포트에 여러 개가 동시에 떠도 오류가 나지 않는다. 확인용 서버는 다른 포트를 쓴다.
-- **아직 없는 것**: 실제 SAP·IdP·오브젝트 스토리지와의 연결 검증(모두 모의·가짜 서버로만 검증), SAML 직접 연동(IdP의 OIDC 사용),
+- **아직 없는 것**: 실제 SAP·ERP·IdP·오브젝트 스토리지와의 연결 검증(모두 모의·가짜 서버로만 검증), SAML 직접 연동(IdP의 OIDC 사용),
   SCIM 사용자 자동 등록(로그인 시 생성·동기화는 됨), 모바일 바코드 입력 화면, 표준원가 평가.

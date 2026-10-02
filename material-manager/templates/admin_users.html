@@ -1,6 +1,23 @@
 {% extends "base.html" %}
 {% from "_macros.html" import csrf, table %}
 {% block content %}
+{% if sso_on %}
+<section class="card">
+  <h3>SSO 장애 모드</h3>
+  {% if sso_outage %}
+    <div class="alert alert-warning">켜져 있습니다 — {{ sso_outage }}까지 비밀번호 계정으로 로그인할 수 있습니다.</div>
+    <form method="post" action="{{ url_for('admin.sso_outage') }}">{{ csrf() }}<input type="hidden" name="hours" value="0">
+      <button class="btn">지금 끄기</button></form>
+  {% else %}
+    <form class="toolbar" method="post" action="{{ url_for('admin.sso_outage') }}">{{ csrf() }}
+      <label>허용 시간(시간, 최대 {{ outage_max }})<input name="hours" type="number" min="1" max="{{ outage_max }}" value="4" required></label>
+      <button class="btn">장애 모드 켜기</button>
+    </form>
+  {% endif %}
+  <p class="muted small">사내 로그인 서버(IdP)나 인터넷이 끊겨 SSO로 로그인할 수 없을 때, 정해진 시간 동안 비밀번호 계정으로 로그인하게 합니다.
+    SSO로만 쓰던 직원은 비밀번호가 없으므로, 장애 대비용 비밀번호 계정을 창고 담당자마다 미리 만들어 두세요. 켜고 끈 기록은 감사로그에 남습니다.</p>
+</section>
+{% endif %}
 <section class="card">
   <h3>사용자 추가</h3>
   <form class="form-grid g4" method="post" action="{{ url_for('admin.create_user') }}">
@@ -24,7 +41,7 @@
 <details class="card">
   <summary>{{ u.name }} ({{ u.username }}) · {{ role_label(u.role) }}{{ ' · 중지' if not u.active }}</summary>
   <form class="row-actions" method="post" action="{{ url_for('admin.update_user', user_id=u.id) }}">
-    {{ csrf() }}
+    {{ csrf() }}<input type="hidden" name="_ver" value="{{ ver('users', u) }}">
     <label>이름<input name="name" value="{{ u.name }}" required></label>
     <label>역할
       <select name="role">{% for code, (lv, label) in ROLES.items() %}<option value="{{ code }}" {{ 'selected' if code == u.role }}>{{ label }}</option>{% endfor %}</select>
@@ -36,7 +53,7 @@
   </form>
   {% if u.role != 'ADMIN' %}
   <form class="form" method="post" action="{{ url_for('admin.user_scope', user_id=u.id) }}">
-    {{ csrf() }}
+    {{ csrf() }}<input type="hidden" name="_ver" value="{{ u.scope_ver }}">
     <fieldset>
       <legend>데이터 범위 (지금: {{ u.scope_label }})</legend>
       <label class="check"><input type="checkbox" name="all" value="1" {{ 'checked' if u.all_warehouses }}> 모든 창고</label>
@@ -49,13 +66,6 @@
       <p class="muted small">'모든 창고'를 끄면 고른 플랜트(그 아래 창고 전체, 나중에 생긴 창고 포함)와 창고만 보고 처리합니다. 시스템관리자는 항상 전체입니다.</p>
       <div><button class="btn">범위 저장</button></div>
     </fieldset>
-  </form>
-  {% endif %}
-  {% if u.totp_enabled %}
-  <form class="row-actions" method="post" action="{{ url_for('admin.mfa_reset', user_id=u.id) }}">
-    {{ csrf() }}
-    <label class="grow">2단계 인증 초기화 사유 (휴대폰 분실 등)<input name="reason" required></label>
-    <button class="btn">2단계 인증 초기화</button>
   </form>
   {% endif %}
   {% if u.auth_source != 'sso' %}

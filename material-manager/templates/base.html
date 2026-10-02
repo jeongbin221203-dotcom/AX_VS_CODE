@@ -4,22 +4,21 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% if title %}{{ title }} · {% endif %}{{ APP_TITLE }}</title>
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='logo.svg') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
   <script src="{{ url_for('static', filename='vendor/chart.umd.min.js') }}" defer></script>
-  <script src="{{ url_for('static', filename='vendor/qrcode.min.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
 </head>
-<body>
+<body data-user="{{ g.user.id if g.user else '' }}">
 {% if g.user %}
 <div class="layout">
   <aside class="sidebar">
-    <a class="brand" href="{{ url_for('dashboard.index') }}">{{ APP_ICON }} 자재관리</a>
+    <a class="brand" href="{{ url_for('dashboard.index') }}"><img class="brand-logo" src="{{ url_for('static', filename='logo.svg') }}" alt=""> 자재관리</a>
     <div class="me">
       <strong>{{ g.user.name }}</strong> · {{ role_label(g.user.role) }}
       <div class="me-actions">
-        {% if g.user.auth_source != 'sso' %}<a href="{{ url_for('auth.password') }}">비밀번호</a>
-        <a href="{{ url_for('auth.mfa_setup') }}">2단계 인증{{ ' ✓' if g.user.totp_enabled }}</a>{% endif %}
-        <form method="post" action="{{ url_for('auth.logout') }}">
+        {% if g.user.auth_source != 'sso' %}<a href="{{ url_for('auth.password') }}">비밀번호</a>{% endif %}
+        <form method="post" action="{{ url_for('auth.logout') }}" data-logout>
           <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
           <button class="btn btn-sm">로그아웃</button>
         </form>
@@ -53,7 +52,7 @@
 </div>
 {% else %}
 <main class="content narrow">
-  <h1>{{ APP_ICON }} {{ APP_TITLE }}</h1>
+  <h1 class="brand-title"><img class="brand-logo lg" src="{{ url_for('static', filename='logo.svg') }}" alt=""> {{ APP_TITLE }}</h1>
   {% include "_flashes.html" %}
   {% block public %}{% endblock %}
   {% if code %}<div class="alert alert-error">{{ message }}</div>{% endif %}

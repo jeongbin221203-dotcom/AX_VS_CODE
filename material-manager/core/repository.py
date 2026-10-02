@@ -335,12 +335,13 @@ def ledger_df(start: str, end: str, wh_ids=None) -> pd.DataFrame:
 # ── 거래 ────────────────────────────────────────────────────
 TX_FIELDS = ("material_id", "tx_type", "qty", "unit_price", "tx_date", "ref_no", "partner", "note",
              "created_by", "reversal_of", "po_no", "po_item", "cost_center", "movement_type",
-             "warehouse_id", "transfer_no", "created_by_id", "approved_by", "lot_no")
+             "warehouse_id", "transfer_no", "created_by_id", "approved_by", "lot_no", "statement_id")
 
 
 def insert_transaction(conn: Conn, payload: dict) -> int:
     defaults = {"reversal_of": None, "po_no": "", "po_item": "", "cost_center": "", "movement_type": "",
-                "warehouse_id": None, "transfer_no": "", "created_by_id": None, "approved_by": "", "lot_no": ""}
+                "warehouse_id": None, "transfer_no": "", "created_by_id": None, "approved_by": "", "lot_no": "",
+                "statement_id": None}
     data = {**defaults, **payload}
     if data["warehouse_id"] is None:
         data["warehouse_id"] = default_warehouse_id(conn)

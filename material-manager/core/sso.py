@@ -34,6 +34,34 @@ def enabled() -> bool:
     return config.SSO_ENABLED and bool(config.SSO_ISSUER and config.SSO_CLIENT_ID)
 
 
+# ── SSO 장애 모드 ────────────────────────────────────────────
+# 사내 로그인 서버(IdP)가 클라우드에 있으면 인터넷이 끊길 때 아무도 로그인하지 못한다.
+# MM_SSO_ONLY=1이어도 시스템관리자가 장애 모드를 켜면 정해진 시간 동안 비밀번호 계정(로컬 계정)으로 로그인할 수 있다.
+# 끝나는 시각이 지나면 저절로 꺼진다. 켜고 끈 기록은 감사로그에 남는다.
+def outage_until() -> str:
+    with db.get_conn() as conn:
+        row = conn.execute("SELECT value FROM app_settings WHERE key = 'sso_outage_until'").fetchone()
+    return row["value"] if row else ""
+
+
+def outage_active() -> bool:
+    until = outage_until()
+    return bool(until) and until > now_str()
+
+
+def set_outage(hours: float, actor: dict | None) -> str:
+    """hours > 0이면 그 시간(최대 SSO_OUTAGE_MAX_HOURS) 동안 켜고, 0이면 끈다. 끝나는 시각을 돌려준다."""
+    from datetime import datetime, timedelta
+    hours = max(0.0, min(float(hours), float(config.SSO_OUTAGE_MAX_HOURS)))
+    until = (datetime.now() + timedelta(hours=hours)).strftime("%Y-%m-%d %H:%M:%S") if hours else ""
+    with db.transaction() as conn:
+        conn.execute("INSERT INTO app_settings (key, value) VALUES ('sso_outage_until', ?) "
+                     "ON CONFLICT (key) DO UPDATE SET value = excluded.value", (until,))
+        audit.record(conn, actor, "SSO_OUTAGE", "settings", "sso_outage_until",
+                     {"until": until or "해제", "hours": hours})
+    return until
+
+
 # ── HTTP (테스트에서 바꿔 끼운다) ────────────────────────────
 def _require_https(url: str) -> str:
     """IdP와의 통신(발견 문서·공개키·토큰)은 https만. 같은 PC의 테스트 IdP만 예외."""

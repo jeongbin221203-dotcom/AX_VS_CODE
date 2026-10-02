@@ -36,7 +36,7 @@
     <td>{{ p.code }}</td>
     <td>
       <form class="row-actions inline" method="post" action="{{ url_for('admin.plant_update', plant_id=p.id) }}">
-        {{ csrf() }}
+        {{ csrf() }}<input type="hidden" name="_ver" value="{{ ver('plants', p) }}">
         <input name="name" value="{{ p.name }}">
         <input name="sap_plant" value="{{ p.sap_plant }}" placeholder="SAP 플랜트">
         <select name="active"><option value="1" {{ 'selected' if p.active }}>사용</option><option value="0" {{ 'selected' if not p.active }}>중지</option></select>
@@ -56,7 +56,7 @@
     <td>{{ w.code }}</td>
     <td>
       <form class="row-actions inline" method="post" action="{{ url_for('admin.warehouse_update', wh_id=w.id) }}">
-        {{ csrf() }}
+        {{ csrf() }}<input type="hidden" name="_ver" value="{{ ver('warehouses', w) }}">
         <input name="name" value="{{ w.name }}">
         <input name="sap_sloc" value="{{ w.sap_sloc }}" placeholder="SAP 저장위치">
         <select name="active"><option value="1" {{ 'selected' if w.active }}>사용</option><option value="0" {{ 'selected' if not w.active }}>중지</option></select>

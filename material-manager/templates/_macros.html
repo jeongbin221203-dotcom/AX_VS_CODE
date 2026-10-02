@@ -1,6 +1,7 @@
 {# 화면 공통 매크로 #}
 
-{% macro csrf() %}<input type="hidden" name="_csrf" value="{{ csrf_token() }}">{% endmacro %}
+{# _once: 같은 제출을 두 번 처리하지 않게 하는 한 번 쓰는 표 (core/once.py) #}
+{% macro csrf() %}<input type="hidden" name="_csrf" value="{{ csrf_token() }}"><input type="hidden" name="_once" value="{{ once_token() }}">{% endmacro %}
 
 {% macro metric(label, value, delta=none, tone=none) %}
   <div class="metric">

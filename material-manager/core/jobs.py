@@ -5,7 +5,7 @@
   바뀐 행이 1개면 내가 잡은 것, 0개면 다른 서버가 돌리는 중이거나 아직 때가 아닌 것.
   서버가 작업 중 죽어도 lease_until이 지나면 다른 서버가 이어받는다.
 
-실행: `python batch.py --loop` (모든 서버에서 켜 두어도 된다) 또는 화면의 '지금 실행'.
+실행: `flask --app app batch --loop` (모든 서버에서 켜 두어도 된다) 또는 화면의 '지금 실행'.
 """
 
 import logging
@@ -20,7 +20,7 @@ from typing import Callable
 import pandas as pd
 
 import config
-from core import db, sap, storage
+from core import backup, db, once, sap, storage
 from core.utils import now_str
 
 
@@ -51,7 +51,16 @@ def _cleanup_uploads() -> str:
         except Exception:                          # 한 파일 실패로 정리를 멈추지 않는다 (다음 주기에 다시)
             logging.getLogger(__name__).warning("업로드 임시파일 정리 실패: %s", key, exc_info=True)
             continue
-    return f"삭제 {removed}건"
+    removed_once = once.cleanup()
+    return f"삭제 {removed}건 · 중복 제출 기록 정리 {removed_once}건"
+
+
+def _storage_flush() -> str:
+    return storage.get().flush()
+
+
+def _backup() -> str:
+    return backup.run()
 
 
 def _master_sync() -> str:
@@ -66,14 +75,18 @@ def _master_enabled() -> bool:
 
 
 JOBS = {
-    "sap_sync": Job("sap_sync", "SAP 전송", 60, _sap_sync, enabled=sap.enabled),
-    "sap_master_sync": Job("sap_master_sync", "SAP 마스터 동기화", 3600, _master_sync, enabled=_master_enabled),
+    "sap_sync": Job("sap_sync", "ERP·SAP 전송", 60, _sap_sync, enabled=sap.enabled),
+    "sap_master_sync": Job("sap_master_sync", "ERP·SAP 마스터 동기화", 3600, _master_sync, enabled=_master_enabled),
     "cleanup_uploads": Job("cleanup_uploads", "업로드 임시파일 정리", 3600, _cleanup_uploads),
+    "db_backup": Job("db_backup", "DB 자동 백업", max(config.BACKUP_HOURS, 1) * 3600, _backup, enabled=backup.enabled),
+    "storage_flush": Job("storage_flush", "S3 임시 보관 파일 올리기", 300, _storage_flush,
+                         enabled=lambda: config.STORAGE == "s3"),
 }
 
 
 def worker_id() -> str:
-    return f"{socket.gethostname()}:{os.getpid()}"
+    """배치 잠금·실행 기록에 남는 서버 이름. MM_WORKER_ID로 정할 수 있다(컨테이너는 이름이 매번 바뀌므로 'app-01'처럼)."""
+    return f"{os.getenv('MM_WORKER_ID') or socket.gethostname()}:{os.getpid()}"
 
 
 def _ts(dt: datetime) -> str:

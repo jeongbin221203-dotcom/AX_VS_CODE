@@ -14,13 +14,14 @@ import pandas as pd
 from flask import Flask, abort, flash, g, redirect, render_template, request, send_file, session, url_for
 
 import config
-from core import approvals, audit, auth, mfa, org, periods, repository as repo, sap
+from core import approvals, audit, auth, org, periods, repository as repo, sap
 
 # 메뉴 (키, 표시명, 엔드포인트, 최소 역할)
 MENUS = [
     ("dashboard", "📊 대시보드", "dashboard.index", "VIEWER"),
     ("materials", "🗂️ 자재 마스터", "materials.index", "VIEWER"),
     ("transactions", "🔄 입출고 등록", "transactions.index", "CLERK"),
+    ("statements", "🧾 거래명세서 입출고", "statements.index", "CLERK"),
     ("stock", "📦 재고 현황", "stock.index", "VIEWER"),
     ("history", "🧾 거래 이력", "history.index", "VIEWER"),
     ("documents", "📎 증빙 (세금계산서)", "documents.index", "VIEWER"),
@@ -30,7 +31,7 @@ MENUS = [
     ("valuation", "💴 재고 평가", "reports.valuation_view", "MANAGER"),
     ("reconcile", "⚖️ 재고 대사", "reports.reconcile_view", "MANAGER"),
     ("periods", "🔒 월 마감", "periods.index", "MANAGER"),
-    ("sap", "🔗 SAP 연동", "sap.index", "MANAGER"),
+    ("sap", "🔗 ERP·SAP 연동", "sap.index", "MANAGER"),
     ("data", "🛠️ 데이터 관리", "data_admin.index", "ADMIN"),
     ("org", "🏭 플랜트·창고", "admin.org_page", "ADMIN"),
     ("users", "👥 사용자", "admin.users", "ADMIN"),
@@ -42,8 +43,7 @@ MENUS = [
 PUBLIC_ENDPOINTS = {"auth.login", "auth.setup", "static", "health"}
 # 비밀번호를 바꿔야 하는 사용자가 열 수 있는 화면
 PASSWORD_ENDPOINTS = {"auth.password", "auth.logout", "static"}
-MFA_SETUP_ENDPOINTS = {"auth.mfa_setup", "auth.logout", "static"}
-PUBLIC_ENDPOINTS |= {"auth.login_mfa", "auth.sso_login", "auth.sso_callback"}
+PUBLIC_ENDPOINTS |= {"auth.sso_login", "auth.sso_callback"}
 
 XLSX = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 
@@ -51,7 +51,7 @@ XLSX = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 def load_context():
     """매 요청마다 사용자를 다시 읽는다 → 역할 변경·계정 중지가 즉시 반영된다."""
     g.user = None
-    if request.endpoint in ("static", "health"):
+    if request.endpoint in ("static", "health", "service_worker", "favicon"):
         return None
     uid = session.get("user_id")
     if uid:
@@ -81,9 +81,6 @@ def load_context():
     if g.user["must_change_pw"] and request.endpoint not in PASSWORD_ENDPOINTS:
         flash("임시 비밀번호입니다. 새 비밀번호로 바꿔 주세요.", "warning")
         return redirect(url_for("auth.password"))
-    if mfa.required(g.user) and not g.user["totp_enabled"] and request.endpoint not in MFA_SETUP_ENDPOINTS:
-        flash("2단계 인증을 등록해야 계속 쓸 수 있습니다.", "warning")
-        return redirect(url_for("auth.mfa_setup"))
 
     g.wh_ids = org.allowed_warehouses(g.user)      # None = 모든 창고
     g.closed_through = periods.closed_through()
@@ -284,8 +281,9 @@ def csrf_token() -> str:
 
 
 def register_template_helpers(app: Flask) -> None:
+    from core import once, version
     app.jinja_env.globals.update(
-        csrf_token=csrf_token, url_with=url_with, menus_for_user=menus_for_user, can=can, scope_all=scope_all,
+        csrf_token=csrf_token, once_token=once.new_token, ver=version.of_row, url_with=url_with, menus_for_user=menus_for_user, can=can, scope_all=scope_all,
         role_label=auth.role_label, ROLES=config.ROLES, SAP_STATUS=config.SAP_STATUS,
         LOGIN_MAX_FAILS=config.LOGIN_MAX_FAILS, LOGIN_LOCK_MINUTES=config.LOGIN_LOCK_MINUTES,
         APP_TITLE=config.APP_TITLE, APP_ICON=config.APP_ICON, TX_LABEL=config.TX_LABEL,

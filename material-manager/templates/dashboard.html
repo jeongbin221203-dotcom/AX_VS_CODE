@@ -1,39 +1,83 @@
 {% extends "base.html" %}
-{% from "_macros.html" import metric, table, chart %}
+{% from "_macros.html" import metric, table, chart, tabs %}
+{% macro chart_card(heading, c, t, note=none) %}
+  <section class="card">
+    <h3>{{ heading }}</h3>
+    {% if note %}<p class="muted small">{{ note }}</p>{% endif %}
+    {{ chart(c) }}
+    <details><summary class="muted small">수치 보기</summary>{{ table(t) }}</details>
+  </section>
+{% endmacro %}
 {% block content %}
 {% if empty %}
   <div class="alert alert-info">등록된 자재가 없습니다. <a href="{{ url_for('data_admin.index') }}">데이터 관리</a>에서 샘플 데이터를 생성하거나 <a href="{{ url_for('materials.index', tab='new') }}">자재를 등록</a>하세요.</div>
 {% else %}
+  <form class="toolbar" method="get">
+    <label>기준월
+      <select name="ym" data-autosubmit>{% for m in months %}<option value="{{ m }}" {{ 'selected' if m == ym }}>{{ m }}</option>{% endfor %}</select>
+    </label>
+    <input type="hidden" name="tab" value="{{ tab }}">
+    <span class="muted small">범위: {{ '전체 창고' if g.wh_ids is none else (g.wh_ids|length) ~ '개 창고' }} · 재고는 오늘 기준</span>
+    <noscript><button class="btn">조회</button></noscript>
+  </form>
+
   <div class="metrics m4">
     {{ metric("사용 중 자재", "{:,} 종".format(material_cnt)) }}
-    {{ metric("총 재고금액", "₩ {:,.0f}".format(stock_value)) }}
+    {{ metric("총 재고금액 (기준단가)", "₩ {:,.0f}".format(stock_value),
+              ("재고평가(" ~ val_label ~ ") ₩ {:,.0f}".format(valued)) if valued is not none else "기준단가 × 현재고") }}
     {{ metric("안전재고 미달", "{:,} 종".format(shortage_cnt),
               "-" ~ shortage_cnt if shortage_cnt else none, "down") }}
-    {{ metric("이번 달 입고 / 출고", "{} / {} 건".format(month_in, month_out)) }}
+    {{ metric(cover_days ~ "일 안에 소진 예상", "{:,} 종".format(cover_cnt),
+              "최근 30일 출고 기준" if cover_cnt else none, "down" if cover_cnt else none) }}
+  </div>
+  <div class="metrics m4">
+    {% set basis = '전월 같은 기간 대비' if same_period else '전월 대비' %}
+    {% macro mom2(v, n) %}{{ n }}건{% if v is not none %} · {{ '%+.1f%%'|format(v) }} {{ basis }}{% endif %}{% endmacro %}
+    {{ metric(ym ~ (" 입고금액 (오늘까지)" if same_period else " 입고금액"), "₩ {:,.0f}".format(cur['입고금액']),
+              mom2(in_mom, cur['IN']), "up" if (in_mom or 0) >= 0 else "down") }}
+    {{ metric(ym ~ (" 출고금액 (오늘까지)" if same_period else " 출고금액"), "₩ {:,.0f}".format(cur['출고금액']),
+              mom2(out_mom, cur['OUT']), "up" if (out_mom or 0) >= 0 else "down") }}
+    {{ metric(ym ~ " 실사조정 금액", "₩ {:,.0f}".format(cur['조정금액']),
+              "{}건 · 음수는 감모(재고 손실)".format(cur['ADJ']) if cur['ADJ'] else "조정 없음",
+              "down" if cur['조정금액'] < 0 else none) }}
+    {{ metric(dead_days ~ "일 미사용 재고", "₩ {:,.0f}".format(dead_value), "{:,} 종".format(dead_cnt) if dead_cnt else none,
+              "down" if dead_cnt else none) }}
   </div>
 
   <div class="grid-32">
+    {{ chart_card("최근 30일 입고·출고·조정 금액", trend_chart, trend) }}
+    {{ chart_card("분류별 재고금액 (기준단가)", cat_chart, cat) }}
+  </div>
+  <div class="grid-2">
+    {{ chart_card("📈 월별 입고·출고 금액 (" ~ ym ~ "까지 12개월)", month_chart, month) }}
+    {{ chart_card("🏭 창고별 재고금액 (기준단가)", wh_chart, wh) }}
+  </div>
+  <div class="grid-2">
+    {{ chart_card("🏆 출고 금액 상위 자재 (" ~ ym ~ ")", top_chart, top,
+                  "기준월 출고가 없어 전체 기간 기준으로 표시합니다." if top_all else none) }}
     <section class="card">
-      <h3>최근 30일 입출고 수량</h3>
-      {{ chart(trend_chart, "최근 30일 입출고 내역이 없습니다.") }}
-    </section>
-    <section class="card">
-      <h3>분류별 재고금액</h3>
-      {{ chart(cat_chart) }}
+      <h3>읽는 법</h3>
+      <p class="muted small">금액은 거래 단가 × 수량이고 취소 거래는 상계합니다(단위가 다른 자재를 수량으로 더하지 않으려고 금액으로 봅니다).
+        이번 달은 전월의 같은 날짜까지와 비교합니다. 실사조정이 음수면 감모(재고 손실)입니다. 창고 간 이동은 입출고 실적에서 뺍니다.
+        소진 예상은 최근 30일 하루 평균 출고로 지금 재고가 며칠 버티는지 계산합니다(계절성·발주 잔량은 반영하지 않음).
+        장기 미사용은 재고가 있는데 {{ dead_days }}일 동안 출고가 없는 자재입니다.
+        재고금액은 자재 마스터의 기준단가 × 현재고이고, 회계용 금액은 '재고 평가'(이동평균·선입선출) 화면 기준입니다 —
+        입고 단가가 기준단가와 다르면 두 금액이 다릅니다.</p>
     </section>
   </div>
 
-  {% if expired_cnt or expiring_cnt %}
-  <h3>⏳ 유효기한 — 지남 {{ expired_cnt }}건 · 30일 이내 {{ expiring_cnt }}건</h3>
-  {{ table(expiry) }}
-  <p class="muted small"><a href="{{ url_for('stock.index', view='lot', expiring=1) }}">로트·유효기한 재고 전체 보기</a></p>
-  {% endif %}
-
-  <h3>🚨 안전재고 미달 자재</h3>
-  {% if shortage.empty %}
-    <div class="alert alert-success">안전재고 미달 자재가 없습니다.</div>
-  {% else %}
-    {{ table(shortage) }}
-  {% endif %}
+  <section class="card">
+    <h3>즉시 확인할 항목</h3>
+    {{ tabs(checks, tab) }}
+    {% if tab == 'cover' %}<p class="muted small">최근 30일 하루 평균 출고로 계산한 소진 예상입니다. 발주 잔량은 포함하지 않습니다.</p>
+    {% elif tab == 'dead' %}<p class="muted small">재고가 있는데 {{ dead_days }}일 동안 출고가 없는 자재 — 처분·반품·안전재고 조정을 검토하세요.</p>
+    {% elif tab == 'incoming' %}<p class="muted small">잔량이 남은 발주 중 구매요청 필요일이 {{ incoming_days }}일 안이거나 지난 품목입니다.
+      <a href="{{ url_for('purchase.index', tab='po') }}">발주 목록</a></p>
+    {% elif tab == 'approvals' %}<p class="muted small"><a href="{{ url_for('approvals.index') }}">결재함에서 처리</a></p>
+    {% elif tab == 'erp' %}<p class="muted small"><a href="{{ url_for('sap.index', status='FAILED') }}">ERP·SAP 연동 화면에서 원인 확인 후 재전송</a></p>
+    {% elif tab == 'expiry' %}<p class="muted small"><a href="{{ url_for('stock.index', view='lot', expiring=1) }}">로트·유효기한 재고 전체 보기</a></p>
+    {% endif %}
+    {{ table(check_table, "해당 항목이 없습니다.") }}
+  </section>
 {% endif %}
 {% endblock %}

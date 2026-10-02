@@ -13,7 +13,7 @@ import pandas as pd
 
 import config
 from core import approvals, audit, db, master_sync, org, periods, purchasing, repository as repo, sap
-from core.utils import clean_str_series, code_series
+from core.utils import clean_str_series, code_series, now_str
 
 
 @dataclass
@@ -37,6 +37,11 @@ class UploadResult:
     dropped: int = 0
     duplicated: int = 0
     errors: list[str] = field(default_factory=list)
+    bad_numbers: int = 0          # 숫자가 아닌 안전재고·단가 칸 (기존 값 유지)
+
+
+# 업로드에서 비어 있으면 기존 자재의 값을 그대로 두는 항목 (자재코드·자재명은 필수)
+UPLOAD_OPTIONAL = ("spec", "unit", "category", "safety_stock", "unit_price", "location", "supplier", "sap_matnr")
 
 
 def _actor(actor: dict | None, created_by: str) -> dict:
@@ -84,100 +89,114 @@ def register_transaction(material_id: int, tx_type: str, qty_input: float, tx_da
         cost_center = ""
 
     with db.transaction() as conn:
-        wh_id = warehouse_id or repo.default_warehouse_id(conn)
-        wh = org.get_warehouse(wh_id, conn)
-        problem = _warehouse_problem(wh, wh_ids) or periods.date_problem(conn, tx_date)
-        if problem:
-            return Result(False, problem)
-        mat = repo.get_material(material_id, conn)
-        if mat is None or not mat["active"]:
-            return Result(False, "사용 중인 자재가 아닙니다.")
-        lot_managed = bool(mat["lot_managed"])
-        if not lot_managed:
-            lot_no = expiry_date = ""
-        problem = (master_sync.cost_center_problem(conn, cost_center) if tx_type == "OUT" else "")
-        if not problem and sap.enabled():
-            problem = sap.mapping_problem(mat, tx_type, cost_center, po_no, po_item, warehouse=wh)
-        if problem:
-            return Result(False, problem)
-
-        db.lock(conn, f"stock:{material_id}")
-        allocations: list[tuple[str, float]]
-        if tx_type == "IN":
-            qty = qty_input
-            if qty <= 0:
-                return Result(False, "수량은 0보다 커야 합니다.")
-            if lot_managed:
-                problem = _lot_problem(conn, mat, lot_no, expiry_date, tx_date, receiving=True)
-                if problem:
-                    return Result(False, problem)
-            if po_no:
-                db.lock(conn, f"po:{po_no}")
-                problem = purchasing.receipt_problem(conn, po_no, po_item, material_id, wh_id, qty)
-                if problem:
-                    return Result(False, problem)
-            allocations = [(lot_no, qty)]
-        elif tx_type == "OUT":
-            qty = qty_input
-            if qty <= 0:
-                return Result(False, "수량은 0보다 커야 합니다.")
-            if lot_managed:
-                allocations, problem = _allocate(conn, mat, wh_id, qty, lot_no or None, tx_date)
-                if problem:
-                    return Result(False, problem)
-            else:
-                _, avail = repo.balance_window(conn, material_id, wh_id, None, tx_date)
-                if qty > avail + 1e-9:
-                    return Result(False, f"재고 부족: {wh['code']} {tx_date} 이후 출고 가능 {avail:,.2f}, "
-                                         f"출고 요청 {qty:,.2f}")
-                allocations = [("", qty)]
-        else:                                               # ADJ
-            if qty_input < 0:
-                return Result(False, "실사수량은 0 이상이어야 합니다.")
-            if lot_managed:
-                if not lot_no:
-                    return Result(False, "로트 관리 자재는 로트별로 실사수량을 입력하세요.")
-                problem = _lot_problem(conn, mat, lot_no, expiry_date, tx_date, receiving=False)
-                if problem:
-                    return Result(False, problem)
-            stock_now, low = repo.balance_window(conn, material_id, wh_id, lot_no if lot_managed else None, tx_date)
-            qty = qty_input - stock_now                    # 실사일 말 장부수량과의 차이
-            if abs(qty) < 1e-9:
-                return Result(False, "실사수량이 장부수량과 같아 조정할 내용이 없습니다.")
-            if low + qty < -1e-9:
-                return Result(False, f"{tx_date} 이후 출고가 있어 이 조정을 넣으면 재고가 음수가 됩니다. "
-                                     "실사일을 확인하세요.")
-            # 결재 기준 금액은 자재 마스터 단가로 계산한다 (화면 단가를 낮춰 결재를 피할 수 없게)
-            amount = abs(qty) * max(float(mat["unit_price"] or 0), float(unit_price or 0), 0.0)
-            if config.ADJ_APPROVAL_AMOUNT and amount >= config.ADJ_APPROVAL_AMOUNT:
-                req_id = approvals.create(conn, "ADJ", material_id, wh_id, tx_date, qty, amount, who, {
-                    "book_qty": stock_now, "counted_qty": qty_input, "unit_price": max(float(unit_price), 0.0),
-                    "ref_no": ref_no.strip(), "partner": partner.strip(), "note": note.strip(), "lot_no": lot_no})
-                return Result(True, f"조정 금액 ₩{amount:,.0f}이 결재 기준(₩{config.ADJ_APPROVAL_AMOUNT:,})을 넘어 "
-                                    f"결재 요청 #{req_id}로 올렸습니다. 관리자가 승인하면 반영됩니다.",
-                              qty=qty, stock_after=stock_now, pending=True)
-            allocations = [(lot_no, qty)]
-
-        tx_ids = []
-        for lot, q in allocations:
-            tx_ids.append(_insert(conn, who, {
-                "material_id": material_id, "tx_type": tx_type, "qty": q, "warehouse_id": wh_id,
-                "unit_price": max(float(unit_price), 0.0), "tx_date": tx_date, "lot_no": lot,
-                "ref_no": ref_no.strip(), "partner": partner.strip(), "note": note.strip(),
-                "po_no": po_no, "po_item": po_item, "cost_center": cost_center,
-                "movement_type": sap.movement_type(tx_type, q, po_no),
-            }, mat["code"]))
-        if po_no:
-            purchasing.refresh_po_status(conn, po_no)
-        qty = sum(q for _, q in allocations)
-        stock_after = repo.current_stock(conn, material_id, wh_id)
-        sap_status = conn.execute("SELECT status FROM sap_outbox WHERE tx_id = ?", (tx_ids[0],)).fetchone()
+        out = _register(conn, who, material_id, tx_type, qty_input, tx_date, unit_price, ref_no, partner, note,
+                        po_no, po_item, cost_center, warehouse_id, wh_ids, lot_no, expiry_date)
+    if isinstance(out, Result):
+        return out
+    mat, qty, stock_after, tx_ids = out["mat"], out["qty"], out["stock_after"], out["tx_ids"]
+    wh, sap_status, allocations, lot_managed = out["wh"], out["sap_status"], out["allocations"], out["lot_managed"]
 
     result = _done(mat, tx_type, qty, stock_after, tx_ids[0], wh, sap_status)
     if lot_managed:
         result.message += " · 로트 " + ", ".join(f"{lot} {q:,.2f}" for lot, q in allocations)
     return result
 
+
+def _register(conn, who: dict, material_id: int, tx_type: str, qty_input: float, tx_date: str, unit_price: float,
+              ref_no: str, partner: str, note: str, po_no: str, po_item: str, cost_center: str,
+              warehouse_id: int | None, wh_ids, lot_no: str, expiry_date: str, statement_id: int | None = None):
+    """register_transaction의 본문 — 호출하는 쪽의 트랜잭션 안에서 돈다(거래명세서는 여러 줄을 한 트랜잭션에).
+    실패·결재 대기는 Result, 성공은 결과 dict."""
+    wh_id = warehouse_id or repo.default_warehouse_id(conn)
+    wh = org.get_warehouse(wh_id, conn)
+    problem = _warehouse_problem(wh, wh_ids) or periods.date_problem(conn, tx_date)
+    if problem:
+        return Result(False, problem)
+    mat = repo.get_material(material_id, conn)
+    if mat is None or not mat["active"]:
+        return Result(False, "사용 중인 자재가 아닙니다.")
+    lot_managed = bool(mat["lot_managed"])
+    if not lot_managed:
+        lot_no = expiry_date = ""
+    problem = (master_sync.cost_center_problem(conn, cost_center) if tx_type == "OUT" else "")
+    if not problem and sap.enabled():
+        problem = sap.mapping_problem(mat, tx_type, cost_center, po_no, po_item, warehouse=wh)
+    if problem:
+        return Result(False, problem)
+
+    db.lock(conn, f"stock:{material_id}")
+    allocations: list[tuple[str, float]]
+    if tx_type == "IN":
+        qty = qty_input
+        if qty <= 0:
+            return Result(False, "수량은 0보다 커야 합니다.")
+        if lot_managed:
+            problem = _lot_problem(conn, mat, lot_no, expiry_date, tx_date, receiving=True)
+            if problem:
+                return Result(False, problem)
+        if po_no:
+            db.lock(conn, f"po:{po_no}")
+            problem = purchasing.receipt_problem(conn, po_no, po_item, material_id, wh_id, qty)
+            if problem:
+                return Result(False, problem)
+        allocations = [(lot_no, qty)]
+    elif tx_type == "OUT":
+        qty = qty_input
+        if qty <= 0:
+            return Result(False, "수량은 0보다 커야 합니다.")
+        if lot_managed:
+            allocations, problem = _allocate(conn, mat, wh_id, qty, lot_no or None, tx_date)
+            if problem:
+                return Result(False, problem)
+        else:
+            _, avail = repo.balance_window(conn, material_id, wh_id, None, tx_date)
+            if qty > avail + 1e-9:
+                return Result(False, f"재고 부족: {wh['code']} {tx_date} 이후 출고 가능 {avail:,.2f}, "
+                                     f"출고 요청 {qty:,.2f}")
+            allocations = [("", qty)]
+    else:                                               # ADJ
+        if qty_input < 0:
+            return Result(False, "실사수량은 0 이상이어야 합니다.")
+        if lot_managed:
+            if not lot_no:
+                return Result(False, "로트 관리 자재는 로트별로 실사수량을 입력하세요.")
+            problem = _lot_problem(conn, mat, lot_no, expiry_date, tx_date, receiving=False)
+            if problem:
+                return Result(False, problem)
+        stock_now, low = repo.balance_window(conn, material_id, wh_id, lot_no if lot_managed else None, tx_date)
+        qty = qty_input - stock_now                    # 실사일 말 장부수량과의 차이
+        if abs(qty) < 1e-9:
+            return Result(False, "실사수량이 장부수량과 같아 조정할 내용이 없습니다.")
+        if low + qty < -1e-9:
+            return Result(False, f"{tx_date} 이후 출고가 있어 이 조정을 넣으면 재고가 음수가 됩니다. "
+                                 "실사일을 확인하세요.")
+        # 결재 기준 금액은 자재 마스터 단가로 계산한다 (화면 단가를 낮춰 결재를 피할 수 없게)
+        amount = abs(qty) * max(float(mat["unit_price"] or 0), float(unit_price or 0), 0.0)
+        if config.ADJ_APPROVAL_AMOUNT and amount >= config.ADJ_APPROVAL_AMOUNT:
+            req_id = approvals.create(conn, "ADJ", material_id, wh_id, tx_date, qty, amount, who, {
+                "book_qty": stock_now, "counted_qty": qty_input, "unit_price": max(float(unit_price), 0.0),
+                "ref_no": ref_no.strip(), "partner": partner.strip(), "note": note.strip(), "lot_no": lot_no})
+            return Result(True, f"조정 금액 ₩{amount:,.0f}이 결재 기준(₩{config.ADJ_APPROVAL_AMOUNT:,})을 넘어 "
+                                f"결재 요청 #{req_id}로 올렸습니다. 관리자가 승인하면 반영됩니다.",
+                          qty=qty, stock_after=stock_now, pending=True)
+        allocations = [(lot_no, qty)]
+
+    tx_ids = []
+    for lot, q in allocations:
+        tx_ids.append(_insert(conn, who, {
+            "material_id": material_id, "tx_type": tx_type, "qty": q, "warehouse_id": wh_id,
+            "unit_price": max(float(unit_price), 0.0), "tx_date": tx_date, "lot_no": lot,
+            "ref_no": ref_no.strip(), "partner": partner.strip(), "note": note.strip(),
+            "po_no": po_no, "po_item": po_item, "cost_center": cost_center,
+            "movement_type": sap.movement_type(tx_type, q, po_no), "statement_id": statement_id,
+        }, mat["code"]))
+    if po_no:
+        purchasing.refresh_po_status(conn, po_no)
+    qty = sum(q for _, q in allocations)
+    stock_after = repo.current_stock(conn, material_id, wh_id)
+    sap_status = conn.execute("SELECT status FROM sap_outbox WHERE tx_id = ?", (tx_ids[0],)).fetchone()
+    return {"mat": mat, "qty": qty, "stock_after": stock_after, "tx_ids": tx_ids, "wh": wh,
+            "sap_status": sap_status, "allocations": allocations, "lot_managed": lot_managed}
 
 def _lot_problem(conn, mat: dict, lot_no: str, expiry_date: str, tx_date: str, receiving: bool) -> str:
     """로트 입력 검사. 입고면 로트 마스터를 만들거나 유효기한이 같은지 확인한다."""
@@ -424,13 +443,18 @@ def create_material(data: dict, actor: dict | None = None) -> Result:
     return Result(True, f"자재 [{data['code']}] {data['name']} 등록 완료", tx_id=mid)
 
 
-def update_material(material_id: int, data: dict, actor: dict | None = None) -> Result:
+def update_material(material_id: int, data: dict, actor: dict | None = None,
+                    expected_updated_at: str | None = None) -> Result:
+    """expected_updated_at: 화면을 열 때의 수정 시각. 그 사이 다른 사람이 고쳤으면 덮어쓰지 않는다."""
     if not data.get("name"):
         return Result(False, "자재명은 필수입니다.")
     with db.transaction() as conn:
         before = repo.get_material(material_id, conn)
         if before is None:
             return Result(False, "자재를 찾을 수 없습니다.")
+        if expected_updated_at and str(before["updated_at"]) != expected_updated_at:
+            return Result(False, "화면을 연 뒤 다른 사용자(또는 SAP 동기화)가 이 자재를 먼저 바꿨습니다"
+                                 f"({before['updated_at']}). 최신 내용을 확인한 뒤 다시 저장하세요.")
         data = {"lot_managed": int(before["lot_managed"] or 0), "expiry_managed": int(before["expiry_managed"] or 0),
                 **data}
         diff = audit.changes(before, data, repo.MATERIAL_FIELDS[1:])
@@ -460,15 +484,41 @@ def set_material_active(material_id: int, active: bool, actor: dict | None = Non
 
 
 def import_materials(df: pd.DataFrame, actor: dict | None = None) -> Result:
-    """정제된 업로드 결과를 반영한다. 신규/갱신 건수와 코드 목록을 감사로그에 남긴다."""
-    codes = df["code"].tolist()
-    existing = repo.codes_existing(codes)
+    """정제된 업로드 결과를 반영한다. 신규/갱신 건수와 코드 목록을 감사로그에 남긴다.
+
+    기존 자재는 파일에 값이 있는 칸만 바꾼다 — 빈 칸·파일에 없는 열은 기존 값을 그대로 둔다
+    (일부 열만 담은 엑셀로 단가·안전재고·SAP 번호가 0이나 빈 값으로 덮어써지지 않게).
+    SAP 마스터 동기화 자재의 SAP 항목은 업로드로도 바꾸지 않는다(화면 수정과 같은 규칙).
+    """
+    rows = df.to_dict("records")
+    new, updated, sap_kept = [], [], []
+    ts = now_str()
     with db.transaction() as conn:
-        repo.upsert_materials(list(df[list(repo.UPLOAD_FIELDS)].itertuples(index=False, name=None)), conn)
+        for r in rows:
+            blank = set(filter(None, str(r.get("_blank") or "").split(",")))
+            data = {f: r[f] for f in repo.UPLOAD_FIELDS}
+            cur = conn.execute("SELECT id, sap_synced_at FROM materials WHERE code = ?", (data["code"],)).fetchone()
+            if cur is None:
+                repo.insert_material(data, conn)
+                new.append(data["code"])
+                continue
+            changes = {f: data[f] for f in repo.UPLOAD_FIELDS[1:] if f not in blank}
+            if cur["sap_synced_at"] and config.SAP_MASTER_READONLY:
+                locked = [f for f in SAP_OWNED_FIELDS if f in changes]
+                for f in locked:
+                    changes.pop(f)
+                if locked:
+                    sap_kept.append(data["code"])
+            if changes:
+                conn.execute(f"UPDATE materials SET {', '.join(f'{f} = ?' for f in changes)}, updated_at = ? "
+                             "WHERE id = ?", (*changes.values(), ts, cur["id"]))
+            updated.append(data["code"])
         audit.record(conn, actor, "MATERIAL_IMPORT", "material", "",
-                     {"new": [c for c in codes if c not in existing][:200],
-                      "updated": [c for c in codes if c in existing][:200], "count": len(codes)})
-    return Result(True, f"{len(codes)}건 반영 완료 (신규 {len(codes) - len(existing)} · 갱신 {len(existing)})")
+                     {"new": new[:200], "updated": updated[:200], "count": len(rows), "sap_kept": sap_kept[:200]})
+    msg = f"{len(rows)}건 반영 완료 (신규 {len(new)} · 갱신 {len(updated)})"
+    if sap_kept:
+        msg += f" · SAP 동기화 자재 {len(sap_kept)}건은 SAP 항목(이름·단위·분류·단가·SAP번호)을 바꾸지 않았습니다"
+    return Result(True, msg)
 
 
 def normalize_upload(raw: pd.DataFrame) -> UploadResult:
@@ -495,15 +545,23 @@ def normalize_upload(raw: pd.DataFrame) -> UploadResult:
     df = df.drop_duplicates(subset="code", keep="last")
     duplicated = before_dedup - len(df)
 
+    # 빈 칸(또는 숫자가 아닌 숫자 칸)은 기존 자재의 값을 유지한다 → 행마다 빈 항목을 적어 둔다
+    blank = {c: clean_str_series(df[c]) == "" for c in UPLOAD_OPTIONAL}
+    bad_numbers = 0
     for col in ("safety_stock", "unit_price"):
-        df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0).clip(lower=0)
+        num = pd.to_numeric(df[col], errors="coerce")
+        bad = num.isna() & ~blank[col]
+        bad_numbers += int(bad.sum())
+        blank[col] = blank[col] | bad
+        df[col] = num.fillna(0).clip(lower=0)
     for col in ("spec", "location", "supplier"):
         df[col] = clean_str_series(df[col])
     df["sap_matnr"] = code_series(df["sap_matnr"]).str.upper()
     df["unit"] = clean_str_series(df["unit"], default=config.DEFAULT_UNIT)
     df["category"] = clean_str_series(df["category"], default=config.DEFAULT_CATEGORY)
+    df["_blank"] = [",".join(c for c in UPLOAD_OPTIONAL if blank[c].iloc[i]) for i in range(len(df))]
 
-    return UploadResult(df.reset_index(drop=True), dropped=dropped, duplicated=duplicated)
+    return UploadResult(df.reset_index(drop=True), dropped=dropped, duplicated=duplicated, bad_numbers=bad_numbers)
 
 
 def stock_display(df: pd.DataFrame) -> pd.DataFrame:

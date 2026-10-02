@@ -104,7 +104,27 @@ CREATE TABLE IF NOT EXISTS transactions (
     transfer_no    TEXT    DEFAULT '',     -- 창고 간 이동: 출고·입고 두 행이 같은 번호
     created_by_id  INTEGER,
     approved_by    TEXT    DEFAULT '',     -- 결재를 거친 거래의 승인자
-    lot_no         TEXT    DEFAULT ''      -- 로트(배치) 번호. 로트 관리 자재만
+    lot_no         TEXT    DEFAULT '',     -- 로트(배치) 번호. 로트 관리 자재만
+    statement_id   INTEGER                 -- 거래명세서로 한꺼번에 등록한 거래 (statements.id)
+);
+
+-- 거래명세서: 공급처(입고)·납품처(출고) 명세서 한 장 = 여러 품목 거래. 품목 줄은 transactions.statement_id로 묶인다.
+CREATE TABLE IF NOT EXISTS statements (
+    id              {ID},
+    kind            TEXT    NOT NULL CHECK (kind IN ('IN', 'OUT')),
+    statement_no    TEXT    DEFAULT '',     -- 명세서 번호 (공급처가 붙인 번호)
+    partner         TEXT    NOT NULL,       -- 공급처 또는 납품처
+    partner_biz_no  TEXT    DEFAULT '',
+    warehouse_id    INTEGER NOT NULL REFERENCES warehouses(id),
+    tx_date         TEXT    NOT NULL,
+    supply_amount   {REAL}  DEFAULT 0,
+    tax_amount      {REAL}  DEFAULT 0,
+    line_count      INTEGER DEFAULT 0,
+    doc_id          INTEGER,                -- 첨부한 명세서 이미지·PDF (documents.id)
+    note            TEXT    DEFAULT '',
+    created_by_id   INTEGER,
+    created_by      TEXT    NOT NULL,
+    created_at      TEXT    NOT NULL
 );
 
 -- 로트 마스터: 자재별 로트 번호와 유효기한 (첫 입고 때 생긴다)
@@ -153,11 +173,7 @@ CREATE TABLE IF NOT EXISTS users (
     updated_at      TEXT    NOT NULL,
     all_warehouses  INTEGER DEFAULT 1,     -- 1이면 모든 창고, 0이면 user_scopes에 준 플랜트·창고만
     auth_source     TEXT    DEFAULT 'local',   -- local | sso
-    sso_subject     TEXT    DEFAULT '',        -- IdP의 사용자 고유값(sub)
-    totp_secret     TEXT    DEFAULT '',        -- 2단계 인증 비밀키 (암호화해 저장)
-    totp_enabled    INTEGER DEFAULT 0,
-    totp_last_step  BIGINT  DEFAULT 0,         -- 같은 코드를 두 번 쓰지 못하게
-    recovery_codes  TEXT    DEFAULT ''         -- 복구 코드 해시 목록(JSON)
+    sso_subject     TEXT    DEFAULT ''         -- IdP의 사용자 고유값(sub)
 );
 
 -- 사용자별 데이터 범위: 플랜트를 주면 그 플랜트의 모든 창고(나중에 생긴 창고 포함), 창고를 주면 그 창고만
@@ -342,6 +358,15 @@ CREATE TABLE IF NOT EXISTS job_locks (
     last_message   TEXT DEFAULT ''
 );
 
+-- 화면 제출 한 번 쓰는 표 (core/once.py): 같은 제출을 두 번 처리하지 않게
+CREATE TABLE IF NOT EXISTS form_once (
+    token       TEXT PRIMARY KEY,
+    user_id     INTEGER,
+    status      TEXT NOT NULL,              -- RUN | DONE
+    location    TEXT DEFAULT '',
+    created_at  TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS job_runs (
     id           {ID},
     name         TEXT NOT NULL,
@@ -353,7 +378,8 @@ CREATE TABLE IF NOT EXISTS job_runs (
 );
 """
 
-NO_ID_TABLES = {"inventory_snapshots", "valuation_snapshots", "app_settings", "job_locks", "cost_centers", "excel_forms"}
+NO_ID_TABLES = {"inventory_snapshots", "valuation_snapshots", "app_settings", "job_locks", "cost_centers", "excel_forms",
+                "form_once"}
 
 # 예전 DB에 없던 컬럼 (CREATE TABLE IF NOT EXISTS는 기존 테이블에 컬럼을 더하지 않는다)
 MIGRATIONS = [
@@ -377,12 +403,9 @@ MIGRATIONS = [
     ("transactions", "lot_no", "TEXT DEFAULT ''"),
     ("users", "auth_source", "TEXT DEFAULT 'local'"),
     ("users", "sso_subject", "TEXT DEFAULT ''"),
-    ("users", "totp_secret", "TEXT DEFAULT ''"),
-    ("users", "totp_enabled", "INTEGER DEFAULT 0"),
-    ("users", "totp_last_step", "BIGINT DEFAULT 0"),
-    ("users", "recovery_codes", "TEXT DEFAULT ''"),
     ("users", "session_ver", "INTEGER DEFAULT 0"),      # 로그아웃하면 올려 그 전 세션 쿠키를 모두 무효로
     ("users", "suspended_by", "TEXT DEFAULT ''"),       # 중지 주체: admin(관리자) | sso(사내 그룹에서 빠짐)
+    ("transactions", "statement_id", "INTEGER"),
 ]
 
 INDEXES = """
@@ -402,6 +425,9 @@ CREATE INDEX IF NOT EXISTS idx_tx_lot      ON transactions(material_id, warehous
 CREATE INDEX IF NOT EXISTS idx_tx_po       ON transactions(po_no, po_item);
 CREATE INDEX IF NOT EXISTS idx_pr_status   ON purchase_requests(status);
 CREATE INDEX IF NOT EXISTS idx_po_status   ON purchase_orders(status);
+CREATE INDEX IF NOT EXISTS idx_once_at     ON form_once(created_at);
+CREATE INDEX IF NOT EXISTS idx_tx_statement ON transactions(statement_id);
+CREATE UNIQUE INDEX IF NOT EXISTS uq_statement_no ON statements(kind, partner, statement_no) WHERE statement_no <> '';
 CREATE UNIQUE INDEX IF NOT EXISTS uq_user_sso ON users(sso_subject) WHERE sso_subject <> '';
 CREATE UNIQUE INDEX IF NOT EXISTS uq_doc_approval ON documents(approval_no) WHERE approval_no <> '';
 CREATE UNIQUE INDEX IF NOT EXISTS uq_tx_reversal  ON transactions(reversal_of) WHERE reversal_of IS NOT NULL;
@@ -564,6 +590,7 @@ def connect_sqlite() -> sqlite3.Connection:
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")
     conn.execute("PRAGMA journal_mode = WAL")
+    conn.execute("PRAGMA synchronous = FULL")      # 커밋이 디스크에 기록된 뒤 끝난다 (정전 때 마지막 거래를 잃지 않게)
     return conn
 
 
@@ -757,6 +784,10 @@ def _init(conn: Conn) -> None:
     _migrate_snapshots(conn, wh)
     conn.executescript(INDEXES)
     conn.executescript(PG_TRIGGERS if conn.pg else SQLITE_TRIGGERS)
+    # 2단계 인증 기능은 2026-10-02 삭제했다. 예전 DB에 남은 비밀키·복구 코드는 지운다(칸은 그대로 둔다).
+    if "totp_secret" in _columns(conn, "users"):
+        conn.execute("UPDATE users SET totp_secret = '', totp_enabled = 0, totp_last_step = 0, recovery_codes = '' "
+                     "WHERE totp_secret <> '' OR recovery_codes <> '' OR totp_enabled <> 0")
 
 
 def reset_database() -> None:

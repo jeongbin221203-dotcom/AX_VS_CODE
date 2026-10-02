@@ -8,13 +8,11 @@
 SAP 재고는 (1) SAP 재고 조회 화면(MB52 등)에서 내려받은 엑셀을 올리거나 (2) 연동 모드에서 조회한다.
 """
 
-import json
-import urllib.request
 
 import pandas as pd
 
 import config
-from core import db, repository as repo
+from core import db, erp, repository as repo
 from core.utils import code_series
 
 # 업로드 엑셀 헤더 → 표준 이름 (SAP 한글/영문 화면에서 흔한 이름들)
@@ -61,7 +59,25 @@ def unsent_df(wh_ids=None) -> pd.DataFrame:
         """, wp)
 
 
+def scope_pairs(wh_ids) -> set[tuple[str, str]]:
+    """권한 있는 창고의 (SAP 플랜트, 저장위치). 창고 범위가 정해진 사용자에게 다른 창고의 SAP 재고가 보이지 않게 한다."""
+    frag, wp = db.in_clause(wh_ids)
+    df = db.query_df("SELECT p.sap_plant, w.sap_sloc FROM warehouses w JOIN plants p ON p.id = w.plant_id "
+                     f"WHERE p.sap_plant <> ''{' AND w.id' + frag if frag else ''}", wp)
+    return {(str(a).strip().upper(), str(b).strip().upper()) for a, b in zip(df["sap_plant"], df["sap_sloc"])}
+
+
+def restrict(sap_stock: pd.DataFrame, wh_ids) -> pd.DataFrame:
+    """wh_ids가 None(전체 권한)이면 그대로, 아니면 권한 있는 (플랜트, 저장위치) 행만 남긴다."""
+    if wh_ids is None or sap_stock.empty:
+        return sap_stock
+    pairs = scope_pairs(wh_ids)
+    keep = [(p, s) in pairs for p, s in zip(sap_stock["plant"], sap_stock["sloc"])]
+    return sap_stock[keep].reset_index(drop=True)
+
+
 def compare(sap_stock: pd.DataFrame, wh_ids=None) -> pd.DataFrame:
+    sap_stock = restrict(sap_stock, wh_ids)
     app = repo.stock_by_wh(wh_ids=wh_ids, include_inactive=True)
     unsent = unsent_df(wh_ids)
     app = app.merge(unsent, on=["material_id", "warehouse_id"], how="left")
@@ -111,17 +127,20 @@ def fetch_sap_stock(wh_ids=None) -> tuple[pd.DataFrame, str]:
             """, wp)
         return normalize_sap_stock(df.rename(columns={"sap_matnr": "SAP자재번호", "plant": "플랜트",
                                                       "sloc": "저장위치", "sap_qty": "수량"}))
-    if config.SAP_MODE == "http":
-        from core import sap
-        sap.HttpClient._check_endpoint()
-        req = urllib.request.Request(config.SAP_ENDPOINT.rstrip("/") + "/stock",
-                                     headers={"Authorization": f"Bearer {config.SAP_TOKEN}"} if config.SAP_TOKEN else {})
-        with urllib.request.urlopen(req, timeout=config.SAP_TIMEOUT) as res:
-            rows = json.loads(res.read().decode() or "[]")
+    if erp.enabled():
+        plants = sorted({p for p, _ in scope_pairs(wh_ids)})
+        if wh_ids is not None and not plants:
+            # 빈 목록으로 조회하면 ERP가 회사 전체 재고를 돌려준다 → 범위가 정해진 사용자는 조회하지 않는다
+            return pd.DataFrame(), "권한 있는 창고에 SAP 플랜트가 지정되어 있지 않아 ERP 재고를 조회할 수 없습니다."
+        try:
+            rows = erp.connector().fetch_stock(plants)
+        except erp.ErpError as exc:
+            return pd.DataFrame(), f"ERP 재고를 가져오지 못했습니다: {exc}"
         df = pd.DataFrame(rows).rename(columns={"material": "SAP자재번호", "plant": "플랜트",
                                                "storageLocation": "저장위치", "quantity": "수량"})
-        return normalize_sap_stock(df)
-    return pd.DataFrame(), "SAP 연동이 꺼져 있습니다. SAP 재고 엑셀을 올려 비교하세요."
+        df, problem = normalize_sap_stock(df)
+        return restrict(df, wh_ids), problem
+    return pd.DataFrame(), "ERP 연동이 꺼져 있습니다. ERP 재고 엑셀을 올려 비교하세요."
 
 
 def display(df: pd.DataFrame) -> pd.DataFrame:

@@ -22,9 +22,9 @@ from .helpers import load_context
 
 def register_blueprints(app: Flask) -> None:
     from . import (admin, approvals, auth, dashboard, data_admin, documents, history, materials, periods,
-                   purchase, reports, sap, stock, transactions)
+                   purchase, reports, sap, statements, stock, transactions)
 
-    for module in (auth, dashboard, materials, transactions, stock, history, documents, purchase, approvals,
+    for module in (auth, dashboard, materials, transactions, statements, stock, history, documents, purchase, approvals,
                    reports, periods, sap, data_admin, admin):
         app.register_blueprint(module.bp)
     app.before_request(load_context)

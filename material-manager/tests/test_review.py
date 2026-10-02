@@ -16,7 +16,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 
 import config  # noqa: E402
-from core import auth, db, mfa, org, periods, purchasing, sap, services, valuation  # noqa: E402
+from core import auth, db, org, periods, purchasing, sap, services, valuation  # noqa: E402
 from core.utils import prev_month  # noqa: E402
 from test_advanced import CLERK, M1, M2, fresh, idp, mid, sso_login, stock, wh  # noqa: E402,F401
 from test_app import PW, app, client, login, post  # noqa: E402,F401
@@ -159,7 +159,7 @@ def test_logout_ends_session_on_server(app):
 
 def test_get_request_does_not_log_out(app):
     c = login(app.test_client(), "clerk")
-    c.get("/login/mfa")
+    c.get("/login")
     assert c.get("/stock/").status_code == 200
 
 
@@ -178,14 +178,3 @@ def test_admin_suspension_survives_sso_login(app, idp):
     sso_login(app.test_client(), idp, {**claims, "groups": ["other"]})
     sso_login(app.test_client(), idp, claims)                                   # 그룹에 다시 들면 살아난다
     assert db.scalar("SELECT active FROM users WHERE id = ?", (uid,)) == 1
-
-
-def test_recovery_codes_are_strong_and_salted(fresh):
-    u = auth.create_user("otp2", "오티피", "CLERK", PW, None, must_change_pw=False).user
-    secret = mfa.new_secret()
-    ok, _, codes = mfa.enable(u["id"], secret, mfa.now_code(secret), CLERK)
-    assert ok and all(len(c.replace("-", "")) == 16 for c in codes), "64비트"
-    stored = db.scalar("SELECT recovery_codes FROM users WHERE id = ?", (u["id"],))
-    assert stored.count("$") == 10, "코드마다 소금"
-    assert mfa.verify(u["id"], codes[3].lower())[0]
-    assert db.scalar("SELECT COUNT(*) FROM audit_log WHERE action = 'MFA_RECOVERY'") == 1

@@ -2,13 +2,29 @@
 {% from "_macros.html" import csrf, metric, table, pager as pager_nav %}
 {% block content %}
 {% if mode == 'off' %}
-  <div class="alert alert-info">SAP 연동이 꺼져 있습니다. 서버를 <code>MM_SAP_MODE=mock</code>(시연) 또는
-    <code>MM_SAP_MODE=http MM_SAP_ENDPOINT=...</code>(사내 연계서버)로 실행하면 입출고가 전송 대기열에 쌓입니다.</div>
-{% else %}
-  <div class="alert alert-{{ 'warning' if mode == 'mock' else 'info' }}">
-    전송 방식: <strong>{{ 'mock (모의 전송 — 실제 SAP에 전기되지 않음)' if mode == 'mock' else 'http → ' ~ endpoint }}</strong>
-  </div>
+  <div class="alert alert-info">ERP 연동이 꺼져 있습니다. 서버를 <code>MM_ERP_MODE=</code> 아래 방식 중 하나로 실행하면
+    입출고가 전송 대기열에 쌓이고 배치가 ERP로 보냅니다.</div>
+{% elif mode == 'mock' %}
+  <div class="alert alert-warning">모의 전송 중입니다 — 실제 ERP에 전기되지 않습니다.</div>
 {% endif %}
+
+<section class="card">
+  <h3>연결 설정</h3>
+  <table class="data">
+    {% for k, v in settings %}<tr><th>{{ k }}</th><td>{{ v }}</td></tr>{% endfor %}
+  </table>
+  {% if mode != 'off' %}
+  <form method="post" action="{{ url_for('sap.test_connection') }}">{{ csrf() }}<button class="btn">연결 확인</button></form>
+  {% endif %}
+  <details>
+    <summary class="muted small">지원하는 연결 방식 (MM_ERP_MODE)</summary>
+    <table class="data">
+      {% for k, v in modes.items() %}<tr><td><code>{{ k }}</code></td><td>{{ v }}</td></tr>{% endfor %}
+    </table>
+    <p class="muted small">SAP가 아닌 ERP(Oracle · Dynamics · 더존 · 영림원 · 자체 ERP)는 <code>rest</code>(매핑 파일 <code>erp_maps/</code>)
+      또는 <code>file</code>(공유 폴더)로 붙입니다. 설정 방법은 README의 "ERP·SAP 연동".</p>
+  </details>
+</section>
 
 <div class="metrics m4">
   {{ metric("전송 대기", "{:,} 건".format(summary.get('PENDING', 0) + summary.get('ERROR', 0))) }}
@@ -21,7 +37,7 @@
   <form method="post" action="{{ url_for('sap.run') }}">
     {{ csrf() }}<button class="btn btn-primary" {{ 'disabled' if mode == 'off' }}>지금 전송</button>
   </form>
-  <span class="muted small">운영에서는 <code>python batch.py --loop</code>가 1분마다 자동 전송합니다(여러 서버에서 켜도 한 대만 실행).</span>
+  <span class="muted small">운영에서는 배치(<code>flask --app app batch --loop</code>)가 1분마다 자동 전송합니다(여러 서버에서 켜도 한 대만 실행).</span>
 </div>
 
 <form class="toolbar" method="get">
@@ -41,7 +57,7 @@
 {% if retryable %}
 <section class="card">
   <h3>재전송</h3>
-  <p class="muted small">자재 마스터의 SAP 매핑 등 원인을 고친 뒤 재전송하세요. 같은 거래는 멱등키(MM-TX-거래ID)로 한 번만 전기됩니다.</p>
+  <p class="muted small">자재 마스터의 ERP 매핑 등 원인을 고친 뒤 재전송하세요. 같은 거래는 멱등키(MM-TX-거래ID)로 한 번만 전기됩니다.</p>
   {% for r in retryable %}
     <form class="row-actions" method="post" action="{{ url_for('sap.retry', outbox_id=r.id) }}">
       {{ csrf() }}
@@ -53,11 +69,11 @@
 {% endif %}
 
 <section class="card">
-  <h3>SAP 마스터 동기화 (자재 · 원가센터)</h3>
-  <p class="muted small">{% if master_on %}배치가 1시간마다 SAP에서 바뀐 자재·원가센터를 받아옵니다. 마지막 동기화: {{ master.synced_at or '아직 없음' }} ·
+  <h3>ERP 마스터 동기화 (자재 · 원가센터)</h3>
+  <p class="muted small">{% if master_on %}배치가 1시간마다 ERP에서 바뀐 자재·원가센터를 받아옵니다. 마지막 동기화: {{ master.synced_at or '아직 없음' }} ·
     동기화 자재 {{ master.synced_materials }}종 · 사용 가능한 원가센터 {{ master.cost_centers }}개.
     동기화된 자재의 이름·단위·분류·단가·SAP 번호는 SAP가 원본이라 여기서 고칠 수 없습니다.
-    {% else %}꺼져 있습니다. <code>MM_SAP_MASTER_SYNC=1</code>로 켜면 자재 마스터를 SAP에서 받아옵니다.{% endif %}</p>
+    {% else %}꺼져 있습니다. <code>MM_SAP_MASTER_SYNC=1</code>로 켜면 자재 마스터를 ERP에서 받아옵니다.{% endif %}</p>
   {% if master_on %}
   <form method="post" action="{{ url_for('sap.master_sync_now') }}">{{ csrf() }}<button class="btn">지금 동기화</button></form>
   {% endif %}
