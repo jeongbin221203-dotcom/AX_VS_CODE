@@ -24,9 +24,14 @@
     <nav class="exam-tabs" aria-label="시험 바로가기">
       {% for m in menus %}<a href="{{ m.home }}" class="{{ 'on' if m.on }}" {{ 'aria-current=page' if m.on }}>{{ m.name }}</a>{% endfor %}
     </nav>
-    <div class="crumb">{% if cur and cur.active %}<span class="muted">›</span> {{ cur.active }}{% elif ep == 'main.settings' %}<b>설정</b>{% endif %}</div>
+    <div class="crumb">{% if ep == 'main.settings' %}<b>설정</b>{% endif %}</div>
     <a class="settings-link{{ ' on' if ep == 'main.settings' }}" href="{{ url_for('main.settings') }}">⚙ 설정</a>
   </div>
+  {% if cur %}
+  <nav class="sub-nav nav" aria-label="{{ cur.name }} 메뉴" id="sub-nav">
+    {% for it in cur['items'] %}<a href="{{ it.href }}" class="{{ 'on' if it.on }}" {{ 'aria-current=page' if it.on }}>{{ it.label }}</a>{% endfor %}
+  </nav>
+  {% endif %}
 </header>
 <div class="side-dim" id="side-dim" hidden></div>
 <aside class="sidebar" id="sidebar" aria-label="메뉴" aria-hidden="true">
@@ -35,6 +40,7 @@
     <button type="button" class="menu-btn" id="menu-close" aria-label="메뉴 닫기">✕</button>
   </div>
   <nav class="side-nav">
+    <a class="side-main{{ ' on' if ep == 'main.home' }}" href="{{ url_for('main.home') }}">메인 화면</a>
     {% for m in menus %}
       <details class="side-group{{ ' on' if m.on }}" {{ 'open' if m.on }}>
         <summary><a class="cat-link" href="{{ m.home }}">{{ m.name }}{% if not m.ready %}<small>준비 중</small>{% endif %}</a><span class="caret" title="탭 펼치기">▾</span></summary>

@@ -56,6 +56,15 @@
   side?.addEventListener("click", e => { if (e.target.closest("a")) setSide(false); });
   document.addEventListener("keydown", e => { if (e.key === "Escape" && side?.classList.contains("open")) setSide(false); });
 
+  // 사이드바 시험 묶음: 한 번에 하나만 펼친다
+  document.addEventListener("toggle", e => {
+    if (e.target.matches?.(".side-group") && e.target.open)
+      document.querySelectorAll(".side-group").forEach(g => { if (g !== e.target) g.open = false; });
+  }, true);
+  // 세부 메뉴 줄: 휴대폰처럼 좁으면 지금 항목이 보이게 가로로 밀어 둔다
+  const subOn = document.querySelector("#sub-nav a.on");
+  if (subOn) { const n = subOn.parentElement; n.scrollLeft = subOn.offsetLeft - (n.clientWidth - subOn.offsetWidth) / 2; }
+
   // 상단 시험 메뉴: 하나만 펼치고, 바깥을 누르거나 Esc 로 닫는다
   const menus = () => document.querySelectorAll(".exam-menu");
   document.addEventListener("toggle", e => {

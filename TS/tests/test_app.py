@@ -542,7 +542,7 @@ def test_every_exam_home_menu_is_named_home(client):
     """시험마다 첫 메뉴 이름을 '홈'으로 통일 (위쪽 경로 표시 '› 홈')."""
     for url in ("/toeic", "/toefl/", "/speaking/toeic", "/speaking/opic"):
         html = client.get(url).data.decode()
-        assert '<span class="muted">›</span> 홈</div>' in html, url
+        assert 'class="on" aria-current=page>홈</a>' in html.split('id="sub-nav"')[1].split("</nav>")[0], url
 
 
 def test_settings_for_every_exam_and_hub_dday(client):
@@ -564,3 +564,17 @@ def test_settings_for_every_exam_and_hub_dday(client):
     bad = client.post("/settings", data={**form, "tsp_target": "999", "opic_level": "9", "toefl_target": "7"}).data.decode()
     assert "토익스피킹 목표 점수" in bad and "오픽 난이도" in bad and "토플 목표 밴드" in bad
     assert db.get_settings()["tsp_target"] == "160"
+
+
+def test_sub_nav_lists_current_exam_items(client):
+    """상단 둘째 줄: 지금 시험의 세부 메뉴를 옆으로 나열, 지금 화면 강조. 메인 화면에는 없음."""
+    html = client.get("/toeic").data.decode()
+    sub = html.split('id="sub-nav"')[1].split("</nav>")[0]
+    for label in ("홈", "등급 가이드", "파트 연습", "모의고사", "오답노트", "단어", "받아쓰기", "통계"):
+        assert f">{label}</a>" in sub
+    stats = client.get("/stats").data.decode().split('id="sub-nav"')[1].split("</nav>")[0]
+    assert 'class="on" aria-current=page>통계</a>' in stats
+    opic = client.get("/speaking/opic/survey").data.decode().split('id="sub-nav"')[1].split("</nav>")[0]
+    assert 'class="on" aria-current=page>설문·난이도</a>' in opic and ">실전 모의고사</a>" in opic
+    assert 'id="sub-nav"' not in client.get("/").data.decode()
+    assert 'class="side-main' in client.get("/toeic").data.decode()

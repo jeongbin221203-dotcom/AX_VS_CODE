@@ -83,6 +83,8 @@ p { margin: 0 0 .8em; }
 .side-settings { display: block; margin-top: 10px; padding: 11px 12px; border-top: 1px solid var(--line); color: var(--ink-2); }
 .side-settings.on { color: var(--accent); font-weight: 700; }
 .sub-nav { padding: 6px 0 8px; margin: 0 -4px; border-top: 1px solid var(--line); }
+.side-main { display: block; padding: 11px 12px; margin-bottom: 6px; border-bottom: 1px solid var(--line); font-weight: 700; color: var(--ink); }
+.side-main.on { color: var(--accent); }
 .brand { font-weight: 800; color: var(--ink); letter-spacing: .02em; white-space: nowrap; }
 .brand:hover { text-decoration: none; }
 .brand-mark { display: inline-block; background: var(--accent); color: #fff; border-radius: 6px; padding: 1px 6px; margin-right: 4px; }
@@ -393,6 +395,7 @@ ul.clean li { margin: 4px 0; }
   .topbar { padding: 8px 12px 0; position: static; }
   .topbar-row { flex-wrap: wrap; gap: 8px; }
   .nav { flex-wrap: wrap; overflow: visible; }
+  .sub-nav.nav { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }
   .topbar { flex-direction: row; flex-wrap: wrap; align-items: center; }
   .exam-menus { order: 3; flex-basis: 100%; }
   .exam-menu > summary { padding: 7px 10px; }
