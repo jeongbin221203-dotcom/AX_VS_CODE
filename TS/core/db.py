@@ -153,6 +153,9 @@ DEFAULT_SETTINGS = {
     "tts_rate": "1.0",
     "tts_accent": "mix",        # mix | us | uk | au
     "toefl_target": "4.5",      # 토플 목표 밴드 (1~6, 0.5 단위)
+    "toefl_exam_date": "",      # 시험일 (YYYY-MM-DD) — 메인 카드에 D-day
+    "tsp_exam_date": "",
+    "opic_exam_date": "",
     "tsp_target": "140",        # 토익스피킹 목표 점수
     "opic_target": "IH",        # 오픽 목표 등급
     "opic_level": "4",          # 오픽 설문 난이도 (1~6)

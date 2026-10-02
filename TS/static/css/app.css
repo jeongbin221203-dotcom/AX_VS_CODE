@@ -378,8 +378,13 @@ ul.clean li { margin: 4px 0; }
 .hub-card .hub-now { display: flex; align-items: baseline; gap: 8px; padding: 0 18px; }
 .hub-card .hub-now b { font-size: 1.7rem; line-height: 1.1; font-variant-numeric: tabular-nums; }
 .hub-card .hub-meta { padding: 0 18px; font-size: .85rem; color: var(--ink-2); display: grid; gap: 2px; }
-.hub-card .hub-links { margin-top: auto; display: flex; flex-wrap: wrap; gap: 6px; padding: 12px 18px 16px; border-top: 1px solid var(--line); background: var(--surface-2); }
-.hub-card .hub-go { margin-left: auto; }
+.hub-card .hub-links { margin-top: auto; display: grid; gap: 8px; padding: 12px 14px 14px; border-top: 1px solid var(--line); background: var(--surface-2); }
+.hub-card .hub-quick { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.hub-card .hub-quick .btn { padding-left: 4px; padding-right: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center; justify-content: center; }
+.hub-card .hub-go { width: 100%; justify-content: center; text-align: center; }
+.hub-card .hub-dday { background: var(--bad-soft); color: var(--bad); }
+.settings-save { margin-top: 14px; display: flex; justify-content: flex-end; }
+.settings-save .btn { min-width: 160px; justify-content: center; }
 
 @media (max-width: 640px) {
   .exam-tabs { order: 5; flex-basis: 100%; padding-bottom: 6px; }

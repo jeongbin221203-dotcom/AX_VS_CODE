@@ -536,3 +536,31 @@ def test_main_hub_and_tabs(client):
     # 기록이 생기면 카드에 추정치가 나온다
     from core import speaking as S
     assert S.tsp_level(S.tsp_score(35))[1] == "Advanced High"
+
+
+def test_every_exam_home_menu_is_named_home(client):
+    """시험마다 첫 메뉴 이름을 '홈'으로 통일 (위쪽 경로 표시 '› 홈')."""
+    for url in ("/toeic", "/toefl/", "/speaking/toeic", "/speaking/opic"):
+        html = client.get(url).data.decode()
+        assert '<span class="muted">›</span> 홈</div>' in html, url
+
+
+def test_settings_for_every_exam_and_hub_dday(client):
+    """설정: 네 시험 목표·시험일 → 메인 카드에 D-day. 잘못된 값은 저장하지 않는다."""
+    from datetime import date, timedelta
+    html = client.get("/settings").data.decode()
+    for name in ("toefl_target", "tsp_target", "opic_target", "opic_level", "toefl_exam_date", "tsp_exam_date", "opic_exam_date"):
+        assert f'name="{name}"' in html
+    tok = re.search(r'name="csrf-token" content="([^"]+)"', html).group(1)
+    soon = (date.today() + timedelta(days=12)).isoformat()
+    form = {"_csrf": tok, "target_score": "800", "daily_new_words": "20", "daily_questions": "40", "tts_rate": "1.0",
+            "tts_accent": "mix", "exam_date": "", "toefl_target": "5.5", "toefl_exam_date": soon, "tsp_target": "160",
+            "tsp_exam_date": "", "opic_target": "AL", "opic_level": "6", "opic_exam_date": ""}
+    assert client.post("/settings", data=form).status_code == 302
+    st = db.get_settings()
+    assert (st["toefl_target"], st["tsp_target"], st["opic_target"], st["opic_level"], st["toefl_exam_date"]) == ("5.5", "160", "AL", "6", soon)
+    home = client.get("/").data.decode()
+    assert "D-12" in home and "밴드 5.5" in home and "160점" in home and home.count("들어가기 →") == 4
+    bad = client.post("/settings", data={**form, "tsp_target": "999", "opic_level": "9", "toefl_target": "7"}).data.decode()
+    assert "토익스피킹 목표 점수" in bad and "오픽 난이도" in bad and "토플 목표 밴드" in bad
+    assert db.get_settings()["tsp_target"] == "160"

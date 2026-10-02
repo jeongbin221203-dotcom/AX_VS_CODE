@@ -8,7 +8,7 @@ from core.exams import EXAMS
 # (이름, endpoint, url 인자, 이 항목으로 볼 endpoint 목록)
 MENUS = {
     "toeic": [
-        ("오늘", "main.dashboard", {}, ["main.dashboard"]),
+        ("홈", "main.dashboard", {}, ["main.dashboard"]),
         ("등급 가이드", "main.guide", {}, ["main.guide"]),
         ("파트 연습", "quiz.practice", {}, ["quiz.practice", "quiz.practice_start", "quiz.quiz"]),
         ("모의고사", "quiz.mock", {}, ["quiz.mock", "quiz.diagnostic", "quiz.result"]),
@@ -18,7 +18,7 @@ MENUS = {
         ("통계", "main.stats_page", {}, ["main.stats_page", "main.history"]),
     ],
     "toefl": [
-        ("토플 홈", "toefl.home", {}, ["toefl.home"]),
+        ("홈", "toefl.home", {}, ["toefl.home"]),
         ("Reading", "toefl.home", {"_anchor": "sec-R"}, ["toefl.practice:r_"]),
         ("Listening", "toefl.home", {"_anchor": "sec-L"}, ["toefl.practice:l_"]),
         ("Speaking", "toefl.home", {"_anchor": "sec-S"}, ["toefl.practice:s_"]),

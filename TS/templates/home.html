@@ -12,7 +12,8 @@
   {% for e in exams %}
   <section class="card hub-card">
     <a class="hub-top" href="{{ e.href }}">
-      <span class="hub-mark">{{ e.mark }}</span>
+      {% if e.dday is not none %}<span class="hub-mark {{ 'hub-dday' if e.dday >= 0 }}">{{ ('D-' ~ e.dday) if e.dday > 0 else ('D-DAY' if e.dday == 0 else '시험 끝') }}</span>
+      {% else %}<span class="hub-mark">{{ e.mark }}</span>{% endif %}
       <span class="hub-en">{{ e.en }}</span>
       <h2>{{ e.name }}</h2>
     </a>
@@ -21,10 +22,11 @@
       <span>목표 <b>{{ e.target }}</b></span>
       <span>{{ e.n }}</span>
       <span>{% if e.last %}마지막 학습 {{ e.last }}{% else %}아직 기록 없음{% endif %}</span>
+      <span>{% if e.date %}시험일 {{ e.date }}{% else %}<a href="{{ url_for('main.settings') }}">시험일 정하기</a>{% endif %}</span>
     </div>
     <div class="hub-links">
-      {% for label, href in e.links %}<a class="btn small" href="{{ href }}">{{ label }}</a>{% endfor %}
-      <a class="btn small primary hub-go" href="{{ e.href }}">들어가기 →</a>
+      <div class="hub-quick">{% for label, href in e.links %}<a class="btn small" href="{{ href }}">{{ label }}</a>{% endfor %}</div>
+      <a class="btn primary hub-go" href="{{ e.href }}">{{ e.name }} 들어가기 →</a>
     </div>
   </section>
   {% endfor %}
