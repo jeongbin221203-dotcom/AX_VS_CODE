@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from datetime import datetime
 
-from flask import Blueprint, abort, flash, redirect, render_template, request, url_for
+from flask import Blueprint, abort, current_app, flash, redirect, render_template, request, send_from_directory, url_for
 
 from core import db, planner, scoring, stats
 from core.exams import EXAMS
@@ -23,6 +23,12 @@ def dashboard():
     return render_template("dashboard.html", plan=plan, streak=stats.streak(),
                            acc=stats.part_accuracy(last_n=60), recent=stats.recent_sessions(5),
                            history=stats.score_history(10))
+
+
+@bp.route("/favicon.ico")
+def favicon():
+    """브라우저가 /favicon.ico 를 직접 찾을 때 (북마크·옛 브라우저)."""
+    return send_from_directory(current_app.static_folder, "favicon.ico", mimetype="image/vnd.microsoft.icon")
 
 
 @bp.route("/guide")
