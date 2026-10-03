@@ -41,7 +41,11 @@ def read_sheets(data, filename):
             dialect = csv.Sniffer().sniff(text[:4096], delimiters=',;\t')
         except csv.Error:
             dialect = csv.excel
-        rows = [[_csv_value(v) for v in row] for _, row in zip(range(MAX_ROWS + 50), csv.reader(io.StringIO(text), dialect))]
+        try:
+            rows = [[_csv_value(v) for v in row[:MAX_COLS]]
+                    for _, row in zip(range(MAX_ROWS + 50), csv.reader(io.StringIO(text), dialect))]
+        except csv.Error as e:
+            raise xlsx.BadFile(f'CSV 를 읽을 수 없습니다: {e}')
         return [('CSV', rows)]
     if not name.endswith(('.xlsx', '.xlsm')):
         raise xlsx.BadFile('.xlsx · .xlsm · .csv 파일만 올릴 수 있습니다.')
@@ -52,19 +56,26 @@ def read_sheets(data, filename):
     except Exception as e:  # noqa: BLE001
         raise xlsx.BadFile(f'파일을 열 수 없습니다: {type(e).__name__}')
     out = []
-    for ws in wb.worksheets:
-        rows = []
-        for i, row in enumerate(ws.iter_rows(values_only=True)):
-            if i >= MAX_ROWS + 50:
-                break
-            rows.append(list(row[:MAX_COLS]))
-        out.append((ws.title, rows))
-    wb.close()
+    try:
+        for ws in wb.worksheets:
+            rows = []
+            for i, row in enumerate(ws.iter_rows(values_only=True)):
+                if i >= MAX_ROWS + 50:
+                    break
+                rows.append(list(row[:MAX_COLS]))
+            out.append((ws.title, rows))
+    except Exception as e:  # noqa: BLE001 — 깨진 시트 XML 등
+        raise xlsx.BadFile(f'시트를 읽을 수 없습니다: {type(e).__name__}')
+    finally:
+        wb.close()
     return out
 
 
+ILLEGAL = re.compile(r'[\x00-\x08\x0b\x0c\x0e-\x1f]')
+
+
 def _csv_value(s):
-    s = s.strip()
+    s = ILLEGAL.sub('', s).strip()
     if s == '':
         return None
     n = s.replace(',', '')
@@ -137,7 +148,7 @@ def to_table(sheet_name, rows):
                 elif isinstance(v, float) and v == int(v):
                     out.append(str(int(v)))
                 else:
-                    out.append(str(v).strip())
+                    out.append(ILLEGAL.sub('', str(v)).strip())
         clean.append(out)
     return {'sheet': sheet_name, 'columns': cols, 'rows': clean, 'head_row': head_i + 1,
             'truncated': len(body) >= MAX_ROWS}

@@ -86,7 +86,7 @@ def view(uid):
         charts[f'cat{i}'] = {'labels': [str(k) for k, _, _ in cc['items']],
                              'series': [{'name': '건수', 'values': [v for _, v, _ in cc['items']]}]}
     return render_template('analyze_view.html', uid=uid, doc=doc, table=table, cols=cols, d=dash, aggs=an.AGGS,
-                           charts_json=json.dumps(charts, ensure_ascii=False))
+                           charts_json=json.dumps(charts, ensure_ascii=False).replace('</', '<\\/'))
 
 
 @bp.route('/<uid>/export')

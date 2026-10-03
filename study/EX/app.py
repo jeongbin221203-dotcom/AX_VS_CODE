@@ -63,7 +63,7 @@ def create_app(config=None):
         session.setdefault('csrf', secrets.token_urlsafe(24))
         if request.method in ('POST', 'PUT', 'DELETE') and not app.config.get('TESTING_NO_CSRF'):
             token = request.headers.get('X-CSRF-Token') or request.form.get('_csrf', '')
-            if not secrets.compare_digest(token, session['csrf']):
+            if not secrets.compare_digest(token.encode('utf-8'), session['csrf'].encode('utf-8')):
                 abort(400, '페이지를 새로 고친 뒤 다시 시도해 주세요.')
 
     @app.after_request
@@ -110,7 +110,7 @@ def create_app(config=None):
     def owner_login(token):
         """개인 링크: 이 기기에서 내 교재·공식 예제 자료를 보이게 한다(비밀번호 대신 긴 무작위 주소)."""
         want = os.environ.get('EX_OWNER_TOKEN') or app.config.get('OWNER_TOKEN')
-        if not want or not secrets.compare_digest(token, want):
+        if not want or not secrets.compare_digest(token.encode('utf-8'), want.encode('utf-8')):
             abort(404)
         session['owner'] = True
         session.permanent = True

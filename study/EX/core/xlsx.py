@@ -9,8 +9,10 @@ from openpyxl.worksheet.formula import ArrayFormula
 
 from . import formula as fx
 
-MAX_UNZIPPED = 150 * 1024 * 1024
-MAX_RATIO = 200
+MAX_UNZIPPED = 40 * 1024 * 1024        # 압축을 푼 전체 크기
+MAX_SHEET_XML = 20 * 1024 * 1024       # 시트 하나의 XML
+MAX_RATIO = 100                        # 압축률(정상 엑셀은 보통 10배 안팎)
+MAX_CELLS = 400_000                    # 시트 하나의 칸 수(dimension 기준)
 
 
 class BadFile(ValueError):
@@ -24,8 +26,20 @@ def check_zip(data):
         raise BadFile('엑셀(.xlsx) 파일이 아닙니다. .xls 는 Excel 에서 .xlsx 로 다시 저장해 주세요.')
     total = sum(i.file_size for i in zf.infolist())
     packed = sum(i.compress_size for i in zf.infolist()) or 1
-    if total > MAX_UNZIPPED or total / packed > MAX_RATIO and total > 10 * 1024 * 1024:
-        raise BadFile('압축을 풀면 너무 큰 파일입니다.')
+    if total > MAX_UNZIPPED or (total > 2 * 1024 * 1024 and total / packed > MAX_RATIO):
+        raise BadFile('압축을 풀면 너무 큰 파일입니다(연습용 파일은 보통 몇 MB 이하입니다).')
+    for info in zf.infolist():
+        if not re.match(r'xl/worksheets/sheet\d+\.xml$', info.filename):
+            continue
+        if info.file_size > MAX_SHEET_XML:
+            raise BadFile('시트가 너무 큽니다.')
+        head = zf.open(info).read(4096).decode('utf-8', 'replace')
+        m = re.search(r'<dimension ref="([A-Z]+)(\d+)(?::([A-Z]+)(\d+))?"', head)
+        if m and m.group(3):
+            rows = int(m.group(4)) - int(m.group(2)) + 1
+            cols = fx.col_num(m.group(3)) - fx.col_num(m.group(1)) + 1
+            if rows * cols > MAX_CELLS:
+                raise BadFile(f'시트가 너무 큽니다({rows:,}행 × {cols}열).')
 
 
 def load(data, data_only):

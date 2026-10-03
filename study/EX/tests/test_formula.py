@@ -164,3 +164,29 @@ def test_excel_escaped_number_formats():
     assert fx.format_value(d, 'yyyy"년"\ m"월"\ d"일"') == '2026년 10월 3일'
     assert fx.format_value(d, 'yyyy\.mm\.dd\(aaa\)') == '2026.10.03(토)'
     assert fx.format_value(1234, '#,##0\원') == '1,234원'
+
+
+# 2026-10-03 실제 Excel(COM)로 계산해 확인한 값
+@pytest.fixture
+def book3():
+    cells = {(1, 1): 70, (2, 1): 85, (3, 1): 92, (4, 1): 60, (5, 1): 78, (1, 3): 70, (2, 3): 80, (3, 3): 90,
+             (1, 5): 'abc', (2, 5): '5', (3, 5): True}
+    return fx.Book([fx.Sheet('S', cells)])
+
+
+@pytest.mark.parametrize('text,want', [
+    ('=PMT(0.05/12,36,10000000)', -299708.971046656), ('=FV(0.03/12,24,-100000)', 2470281.77047911),
+    ('=PV(0.05,10,-1000)', 7721.73492918482), ('=NPV(0.1,-10000,3000,4200,6800)', 1188.44341233522),
+    ('=NPER(0.01,-100,1000)', 10.5886444594232), ('=RATE(36,-299708.931,10000000)', 0.00416665923373203),
+    ('=WEEKNUM(DATE(2026,12,31),2)', 53), ('=DAYS360(DATE(2026,2,28),DATE(2026,3,31))', 30),
+    ('=MROUND(2.5,0.5)', 2.5), ('=INDEX(FREQUENCY(A1:A5,C1:C3),1)', 2), ('=YEARFRAC(DATE(2026,1,15),DATE(2027,3,1),1)', 1.12328767123288),
+    ('=PERCENTRANK.INC(A1:A5,80)', 0.571), ('=GEOMEAN(A1:A5)', 76.1570528491007),
+    ('=SUM(E2)', 0), ('=SUM(E3)', 0), ('=COUNT(E2)', 0), ('=AVERAGE(A1,E1)', 70), ('=SUMIF(A1:A5,">70",C1)', 170),
+    ('=VLOOKUP(85,A1:A5,1,)', 85), ('=TEXT(1234567,"#,##0,")', '1,235'), ('=TEXT(1.5,"[h]:mm")', '36:00'),
+    ('=TEXT(TIME(13,5,0),"h:mm AM/PM")', '1:05 PM'), ('=TEXT(1,"#.##")', '1.'), ('=TEXT(12345678,"0.00E+00")', '1.23E+07'),
+    ('=WEEKDAY(DATE(2026,10,3),12)', 5), ('=VALUE("10:30")', 0.4375), ('=COUNTIF(A1:A5,">20%")', 5),
+    ('=TIMEVALUE("6:45 PM")', 0.78125), ('=ADDRESS(2,3,4)', 'C2'),
+])
+def test_matches_real_excel(book3, text, want):
+    got = fx.evaluate_text(text, book3, 'S', 20, 10)
+    assert fx.same_value(got, want, 1e-9), f'{text}: {got!r}'

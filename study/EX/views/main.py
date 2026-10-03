@@ -28,11 +28,13 @@ def home():
                         {'name': '오답', 'values': [d['bad'] for d in dash['daily']]}]}
     return render_template('dashboard.html', d=dash, missions=missions, uploads=uploads, exams=exams,
                            msg=request.args.get('msg'),
-                           chart_json=json.dumps(chart, ensure_ascii=False))
+                           chart_json=json.dumps(chart, ensure_ascii=False).replace('</', '<\\/'))
 
 
 @bp.route('/api/backup')
 def api_backup():
+    if request.args.get('only') == 'counts':
+        return jsonify({'counts': backup.quick_counts()})
     data = backup.export()
     return jsonify({'counts': backup.counts(data), 'data': data})
 

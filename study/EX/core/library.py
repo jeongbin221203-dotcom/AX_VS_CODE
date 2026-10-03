@@ -6,9 +6,14 @@
 import datetime as dt
 import hashlib
 import json
+import os
 import re
 import shutil
+import threading
 from pathlib import Path
+
+_INDEX_LOCK = threading.RLock()
+DISK_BUDGET = 300 * 1024 * 1024        # 공개 서버에서 방문자들이 올린 실습 파일 전체 한도
 
 from . import compare
 
@@ -102,7 +107,8 @@ def import_folder(root, dest):
                      'extras': [e.name for e in p['extras']], 'source_root': str(root),
                      'imported': dt.datetime.now().isoformat(timespec='seconds')}
     items = sorted(have.values(), key=lambda x: (x['group'], _natural(x['title'])))
-    (dest / 'index.json').write_text(json.dumps(items, ensure_ascii=False, indent=1), encoding='utf-8')
+    with _INDEX_LOCK:
+        _write_index(dest, items)
     return len(found)
 
 
@@ -112,7 +118,24 @@ def _natural(s):
 
 def load_index(dest):
     p = Path(dest) / 'index.json'
-    return json.loads(p.read_text(encoding='utf-8')) if p.exists() else []
+    if not p.exists():
+        return []
+    try:
+        data = json.loads(p.read_text(encoding='utf-8'))
+    except (json.JSONDecodeError, UnicodeDecodeError, OSError):
+        return []
+    return data if isinstance(data, list) else []
+
+
+def _write_index(dest, items):
+    p = Path(dest) / 'index.json'
+    tmp = p.with_suffix(f'.{os.getpid()}.{threading.get_ident()}.tmp')
+    tmp.write_text(json.dumps(items, ensure_ascii=False, indent=1), encoding='utf-8')
+    os.replace(tmp, p)
+
+
+def _dir_size(path):
+    return sum(f.stat().st_size for f in Path(path).rglob('*') if f.is_file())
 
 
 def get(dest, iid):
@@ -133,9 +156,10 @@ def grade(dest, item, user_bytes):
 
 
 def remove(dest, iid):
-    items = [x for x in load_index(dest) if x['id'] != iid]
-    shutil.rmtree(Path(dest) / iid, ignore_errors=True)
-    (Path(dest) / 'index.json').write_text(json.dumps(items, ensure_ascii=False, indent=1), encoding='utf-8')
+    with _INDEX_LOCK:
+        items = [x for x in load_index(dest) if x['id'] != iid]
+        shutil.rmtree(Path(dest) / iid, ignore_errors=True)
+        _write_index(dest, items)
 
 
 SAFE = re.compile(r'[^\w가-힣 .()\[\]_-]+')
@@ -156,6 +180,16 @@ def add_pair(dest, title, group, practice, answer, extras=(), owner=None, limit=
         xlsx.load(data, data_only=True)                 # 압축 폭탄·손상 파일 검사
     dest = Path(dest)
     dest.mkdir(parents=True, exist_ok=True)
+    if owner is not None and _dir_size(dest) > DISK_BUDGET:
+        raise xlsx.BadFile('서버 저장 공간이 부족합니다. 잠시 뒤 다시 시도해 주세요.')
+    _INDEX_LOCK.acquire()
+    try:
+        return _add_locked(dest, title, group, practice, answer, extras, owner, limit)
+    finally:
+        _INDEX_LOCK.release()
+
+
+def _add_locked(dest, title, group, practice, answer, extras, owner, limit):
     items = load_index(dest)
     if owner is not None and limit:
         mine = [x for x in items if x.get('owner') == owner]
@@ -180,7 +214,7 @@ def add_pair(dest, title, group, practice, answer, extras=(), owner=None, limit=
                   'level': _level(title + ' ' + (group or '')), 'category': category(title + ' ' + (group or '')),
                   'practice': p_name, 'answer': a_name, 'extras': ex_names, 'owner': owner,
                   'imported': dt.datetime.now().isoformat(timespec='seconds')})
-    (dest / 'index.json').write_text(json.dumps(items, ensure_ascii=False, indent=1), encoding='utf-8')
+    _write_index(dest, items)
     return iid
 
 

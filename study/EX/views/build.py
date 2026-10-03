@@ -74,4 +74,9 @@ def result(rid):
     if not row:
         abort(404)
     m = _mission(row['task'])
-    return render_template('build_result.html', m=m, row=row, res=json.loads(row['detail']))
+    try:
+        res = json.loads(row['detail'])
+        assert isinstance(res, dict) and {'score', 'total', 'items'} <= set(res)
+    except (ValueError, TypeError, AssertionError):
+        abort(404)
+    return render_template('build_result.html', m=m, row=row, res=res)

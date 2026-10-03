@@ -33,6 +33,17 @@ NA, VALUE, REF, DIV0, NUM, NAME = (XLErr(c) for c in ('#N/A', '#VALUE!', '#REF!'
 ERRORS = {e.code: e for e in (NA, VALUE, REF, DIV0, NUM, NAME, XLErr('#NULL!'), XLErr('#SPILL!'), XLErr('#CALC!'))}
 
 
+class _Empty:
+    """=VLOOKUP(a,b,2,) 처럼 쉼표 뒤가 빈 인수. '생략'과 달리 0/FALSE/"" 로 쓰인다."""
+    __slots__ = ()
+
+    def __repr__(self):
+        return 'EMPTY'
+
+
+EMPTY = _Empty()
+
+
 class FormulaError(ValueError):
     """수식을 읽을 수 없을 때(문법 오류·지원하지 않는 기능)."""
 
@@ -86,15 +97,41 @@ def serial_date(n):
         raise XLErr('#VALUE!')
 
 
+NUM_RE = re.compile(r'[-+]?(\d+\.?\d*|\.\d+)([eE][-+]?\d+)?')
+TIME_RE = re.compile(r'(?:(오전|오후)\s*)?(\d{1,2}):(\d{2})(?::(\d{2}(?:\.\d+)?))?\s*(AM|PM|A|P|오전|오후)?', re.I)
+
+
+def _time_part(t):
+    m = TIME_RE.fullmatch(t.strip())
+    if not m:
+        return None
+    h, mi = int(m.group(2)), int(m.group(3))
+    sec = float(m.group(4) or 0)
+    ampm = (m.group(1) or m.group(5) or '').upper()
+    if ampm in ('PM', 'P', '오후') and h < 12:
+        h += 12
+    if ampm in ('AM', 'A', '오전') and h == 12:
+        h = 0
+    if mi > 59 or sec >= 60:
+        return None
+    return (h * 3600 + mi * 60 + sec) / 86400
+
+
 def parse_date_text(s):
+    """'2026-10-03', '2026년 10월 3일', '10:30', '2026-10-03 10:30' → 일련번호(아니면 None)."""
     s = s.strip()
-    m = re.fullmatch(r'(\d{4})[-./년 ]\s*(\d{1,2})[-./월 ]\s*(\d{1,2})일?', s)
+    m = re.fullmatch(r'(\d{4})[-./년 ]\s*(\d{1,2})[-./월 ]\s*(\d{1,2})일?(?:\s+(.+))?', s)
     if m:
         try:
-            return date_serial(dt.date(*map(int, m.groups())))
+            base = date_serial(dt.date(int(m.group(1)), int(m.group(2)), int(m.group(3))))
         except ValueError:
             return None
-    return None
+        if m.group(4):
+            t = _time_part(m.group(4))
+            return None if t is None else base + t
+        return base
+    t = _time_part(s)
+    return t
 
 
 # ---------------------------------------------------------- 시트·통합문서 ----
@@ -424,8 +461,13 @@ def parse(text):
     t = clean_input(text)
     if not t:
         raise FormulaError('수식이 비어 있습니다')
+    if len(t) > 8000:
+        raise FormulaError('수식이 너무 깁니다')
     p = Parser(tokenize(t))
-    node = p.expr()
+    try:
+        node = p.expr()
+    except RecursionError:
+        raise FormulaError('괄호가 너무 깊게 겹쳐 있습니다')
     if p.peek()[0] != 'end':
         tok = p.peek()
         raise FormulaError(f"'{tok[1]}' 근처에서 수식이 잘못되었습니다")
@@ -565,9 +607,21 @@ def ev(node, ctx):
         fn, lazy = spec
         if lazy:
             return fn(node[2], ctx)
-        args = [ev(a, ctx) for a in node[2]]
-        return fn(*args)
+        return fn(*eval_args(node[2], ctx))
     raise FormulaError(f'알 수 없는 노드 {kind}')
+
+
+def eval_args(nodes, ctx):
+    out = []
+    for a in nodes:
+        if a[0] == 'ref':
+            s = ctx.sheet_obj(a[1])
+            out.append(Arr([[s.get(a[2], a[3])]], origin=(s.name, a[2], a[3])))
+        elif a[0] == 'empty':
+            out.append(EMPTY)
+        else:
+            out.append(ev(a, ctx))
+    return out
 
 
 def elementwise(fn, v):
@@ -674,6 +728,8 @@ def compare(a, b):
 
 # ------------------------------------------------------------ 변환 -----------
 def scalar(v, ctx=None):
+    if v is EMPTY:
+        return None
     if isinstance(v, Arr):
         if v.h == 1 and v.w == 1:
             return v.rows[0][0]
@@ -704,13 +760,12 @@ def to_num(v):
         pct = s.endswith('%')
         if pct:
             s = s[:-1]
-        try:
-            n = float(s)
-        except ValueError:
+        if not NUM_RE.fullmatch(s):
             d = parse_date_text(v)
             if d is None:
                 raise VALUE
             return d
+        n = float(s)
         n = n / 100 if pct else n
         return int(n) if n == int(n) and abs(n) < 1e15 else n
     raise VALUE
@@ -724,12 +779,13 @@ def fmt_general(n):
     if isinstance(n, bool):
         return 'TRUE' if n else 'FALSE'
     if isinstance(n, int):
-        return str(n)
+        return str(n) if abs(n) < 10 ** 15 else fmt_general(float(n))
     if n == int(n) and abs(n) < 1e15:
         return str(int(n))
     s = f'{n:.15g}'
     if 'e' in s:
-        s = f'{n:.10E}'.replace('E+', 'E+')
+        mant, exp = s.split('e')
+        s = f"{mant}E{'+' if int(exp) >= 0 else '-'}{abs(int(exp)):02d}"
     return s
 
 
@@ -849,11 +905,14 @@ def make_crit(c, prefix=False):
 
 
 def _num_or_none(s):
-    try:
-        n = float(str(s).strip().replace(',', ''))
-    except ValueError:
+    t = str(s).strip().replace(',', '')
+    pct = t.endswith('%')
+    if pct:
+        t = t[:-1]
+    if not NUM_RE.fullmatch(t):
         return None
-    return int(n) if n == int(n) else n
+    n = float(t) / (100 if pct else 1)
+    return int(n) if n == int(n) and abs(n) < 1e15 else n
 
 
 def _cmp_op(op, a, b):
@@ -1098,13 +1157,32 @@ def f_sumproduct(*arrs):
 
 
 # 조건 집계
-@fn('SUMIF')
+def _resize(rng, other, ctx):
+    """SUMIF(범위, 조건, 합계 범위): 합계 범위는 왼쪽 위 칸에서 조건 범위 크기만큼."""
+    if other is None or other is EMPTY:
+        return rng
+    other = as_arr(other)
+    if other.origin and (other.h, other.w) != (rng.h, rng.w):
+        sh, r0, c0 = other.origin
+        return area(sh, r0, c0, r0 + rng.h - 1, c0 + rng.w - 1, ctx)
+    return other
+
+
+@fn('SUMIF', lazy=True)
+def f_sumif_lazy(args, ctx):
+    if len(args) not in (2, 3):
+        raise VALUE
+    vals = eval_args(args, ctx)
+    rng = as_arr(vals[0])
+    return f_sumif(rng, vals[1], _resize(rng, vals[2] if len(vals) > 2 else None, ctx))
+
+
 def f_sumif(rng, crit, sum_rng=None):
     rng = as_arr(rng)
-    sr = as_arr(sum_rng) if sum_rng is not None else rng
-    cr = make_crit(crit)
     if isinstance(crit, Arr) and crit.origin is None and (crit.h > 1 or crit.w > 1):
         return crit.map(lambda c: f_sumif(rng, c, sum_rng))
+    sr = as_arr(sum_rng) if sum_rng is not None else rng
+    cr = make_crit(crit)
     total = 0
     for i, row in enumerate(rng.rows):
         for j, v in enumerate(row):
@@ -1144,9 +1222,19 @@ def f_countifs(*pairs):
     return sum(mask)
 
 
-@fn('AVERAGEIF')
+@fn('AVERAGEIF', lazy=True)
+def f_averageif_lazy(args, ctx):
+    if len(args) not in (2, 3):
+        raise VALUE
+    vals = eval_args(args, ctx)
+    rng = as_arr(vals[0])
+    return f_averageif(rng, vals[1], _resize(rng, vals[2] if len(vals) > 2 else None, ctx))
+
+
 def f_averageif(rng, crit, avg_rng=None):
     rng = as_arr(rng)
+    if isinstance(crit, Arr) and crit.origin is None and (crit.h > 1 or crit.w > 1):
+        return crit.map(lambda c: f_averageif(rng, c, avg_rng))
     ar = as_arr(avg_rng) if avg_rng is not None else rng
     cr = make_crit(crit)
     xs = []
@@ -1426,7 +1514,7 @@ def f_rounddown(x, digits=None):
 
 @fn('TRUNC')
 def f_trunc(x, digits=None):
-    return _round(x, digits, ROUND_DOWN)
+    return elementwise(lambda v: _round(v, digits, ROUND_DOWN), x)
 
 
 @fn('INT')
@@ -1484,21 +1572,47 @@ def f_sign(x):
     return (v > 0) - (v < 0)
 
 
-@fn('CEILING', 'CEILING.MATH')
+@fn('CEILING')
 def f_ceiling(x, sig=None):
     v = to_num(x)
     s = to_num(sig) if sig is not None else 1
     if s == 0:
         return 0
+    if v > 0 and s < 0:
+        raise NUM
     return fix(math.ceil(v / s) * s)
 
 
-@fn('FLOOR', 'FLOOR.MATH')
+@fn('FLOOR')
 def f_floor(x, sig=None):
     v = to_num(x)
     s = to_num(sig) if sig is not None else 1
     if s == 0:
         raise DIV0
+    if v > 0 and s < 0:
+        raise NUM
+    return fix(math.floor(v / s) * s)
+
+
+@fn('CEILING.MATH')
+def f_ceiling_math(x, sig=None, mode=None):
+    v = to_num(x)
+    s = abs(to_num(sig)) if sig is not None else 1
+    if s == 0:
+        return 0
+    if v < 0 and mode is not None and to_num(mode) != 0:
+        return fix(-math.ceil(-v / s) * s)
+    return fix(math.ceil(v / s) * s)
+
+
+@fn('FLOOR.MATH')
+def f_floor_math(x, sig=None, mode=None):
+    v = to_num(x)
+    s = abs(to_num(sig)) if sig is not None else 1
+    if s == 0:
+        return 0
+    if v < 0 and mode is not None and to_num(mode) != 0:
+        return fix(-math.floor(-v / s) * s)
     return fix(math.floor(v / s) * s)
 
 
@@ -1637,6 +1751,8 @@ def f_substitute(t, old, new, inst=None):
     if inst is None:
         return s.replace(o, nw)
     k = to_int(inst)
+    if k < 1:
+        raise VALUE
     idx = -1
     for _ in range(k):
         idx = s.find(o, idx + 1)
@@ -1697,7 +1813,7 @@ def _clean_codes(fmt):
             out.append(part)
             continue
         part = re.sub(r'\[\$([^\]-]*)(?:-[0-9A-Fa-f]+)?\]', lambda m: '"' + m.group(1) + '"' if m.group(1) else '', part)
-        part = re.sub(r'\[[^\]]*\]', '', part)
+        part = re.sub(r'\[(?![hHmMsS]+\])[^\]]*\]', '', part)     # [h]·[mm]·[ss] 경과 시간은 남김
         part = re.sub(r'_.', '', part)
         part = re.sub(r'\*.', '', part)
         out.append(part)
@@ -1708,7 +1824,7 @@ def format_value(v, fmt):
     """TEXT 함수 서식: 날짜(yyyy mm dd aaa…)와 숫자(0 # , . %) 기본 형식."""
     if isinstance(v, XLErr):
         raise v
-    if fmt in ('@', ''):
+    if fmt in ('@', '') or fmt.strip().lower() in ('general', 'g/표준'):
         return to_str(v)
     # 엑셀이 저장할 때 붙이는 \ 이스케이프(\ 공백, \. \( 등)는 따옴표 글자와 같다
     fmt = re.sub(r'\\(.)', lambda m: '"' + m.group(1) + '"', fmt)
@@ -1733,11 +1849,45 @@ def _format_date(x, fmt):
     d = serial_date(x)
     frac = x - math.floor(x)
     secs = int(round(frac * 86400))
+    total_secs = int(round(x * 86400))
     hh, mm, ss = secs // 3600, secs // 60 % 60, secs % 60
-    tokens = re.findall(r'"[^"]*"|yyyy|yy|mmmm|mmm|mm|m|dddd|ddd|dd|d|aaaa|aaa|hh|h|ss|s|AM/PM|.', fmt, re.I)
+    tokens = re.findall(r'"[^"]*"|\[h+\]|\[m+\]|\[s+\]|yyyy|yy|mmmm|mmm|mm|m|dddd|ddd|dd|d|aaaa|aaa|hh|h|ss|s|AM/PM|A/P|.',
+                        fmt, re.I)
+    ampm = any(t.upper() in ('AM/PM', 'A/P') for t in tokens)
+    # m/mm 뒤(':' 건너뛰고)에 초가 오면 분
+    minute_at = set()
+    for i, t in enumerate(tokens):
+        if t.lower() in ('m', 'mm'):
+            k = i + 1
+            while k < len(tokens) and tokens[k] in (':', ' ', '.'):
+                k += 1
+            if k < len(tokens) and tokens[k].lower() in ('s', 'ss'):
+                minute_at.add(i)
     out, prev_h = [], False
-    for t in tokens:
+    for i, t in enumerate(tokens):
         lo = t.lower()
+        if lo.startswith('[h'):
+            out.append(str(total_secs // 3600).rjust(len(lo) - 2, '0'))
+            prev_h = True
+            continue
+        if lo.startswith('[m'):
+            out.append(str(total_secs // 60).rjust(len(lo) - 2, '0'))
+            continue
+        if lo.startswith('[s'):
+            out.append(str(total_secs).rjust(len(lo) - 2, '0'))
+            continue
+        if lo in ('am/pm', 'a/p'):
+            pm = hh >= 12
+            out.append(('PM' if pm else 'AM') if lo == 'am/pm' else ('P' if pm else 'A'))
+            continue
+        if lo in ('hh', 'h') and ampm:
+            h12 = hh % 12 or 12
+            out.append(f'{h12:02d}' if lo == 'hh' else str(h12))
+            prev_h = True
+            continue
+        if lo in ('mm', 'm') and i in minute_at:
+            out.append(f'{mm:02d}' if lo == 'mm' else str(mm))
+            continue
         if t.startswith('"'):
             out.append(t[1:-1])
         elif lo == 'yyyy':
@@ -1779,24 +1929,33 @@ def _format_date(x, fmt):
 def _format_number(x, fmt):
     parts = re.split(r'("[^"]*")', fmt)
     plain = ''.join(p for p in parts if not p.startswith('"'))
-    m = re.search(r'[#0,]*[#0](?:\.[#0]+)?', plain)
+    me = re.search(r'([#0]*)(?:\.([#0]*))?[eE]([+-])(0+)', plain)
+    if me:                                            # 지수 표기 0.00E+00
+        nd = len(me.group(2) or '')
+        mant, exp = f'{x:.{nd}E}'.split('E')
+        e = int(exp)
+        shown = f"{mant}E{'+' if e >= 0 else '-'}{abs(e):0{len(me.group(4))}d}"
+        return plain.replace(me.group(0), shown, 1)
+    m = re.search(r'[#0,]*[#0](?:\.[#0]*)?,*', plain)
     if not m:
         return ''.join(p[1:-1] if p.startswith('"') else p for p in parts)
     spec = m.group(0)
+    scale = len(spec) - len(spec.rstrip(','))       # 끝의 쉼표 하나마다 1000 으로 나눔
+    core_spec = spec.rstrip(',')
     pct = '%' in plain
-    val = x * 100 if pct else x
+    val = (x * 100 if pct else x) / (1000 ** scale)
     if abs(val) >= 1e15:  # 엑셀도 15자리 넘으면 지수 표기
         return f'{val:.5E}'.replace('E+', 'E+')
-    dec = spec.split('.')[1] if '.' in spec else ''
+    dec = core_spec.split('.')[1] if '.' in core_spec else ''
     nd = len(dec)
     rounded = Decimal(repr(float(val))).quantize(Decimal(1).scaleb(-nd), rounding=ROUND_HALF_UP)
     neg = rounded < 0
     rounded = abs(rounded)
     int_part, _, frac = f'{rounded:f}'.partition('.')
-    min_int = spec.split('.')[0].replace(',', '').count('0')
+    min_int = core_spec.split('.')[0].replace(',', '').count('0')
     int_part = int_part.lstrip('0') or ''
     int_part = int_part.rjust(min_int, '0') if min_int else int_part
-    if ',' in spec.split('.')[0] and int_part:
+    if ',' in core_spec.split('.')[0] and int_part:
         int_part = f'{int(int_part):,}'.rjust(len(int_part), '0') if int_part.isdigit() else int_part
     if nd:
         frac = frac.ljust(nd, '0')[:nd]
@@ -1804,11 +1963,11 @@ def _format_number(x, fmt):
         if trailing:
             keep = nd - trailing
             frac = frac[:keep] + frac[keep:].rstrip('0')
-        num = int_part + ('.' + frac if frac else '')
+        num = int_part + '.' + frac                  # 엑셀은 소수 자리가 비어도 점은 찍는다(#.## → 1.)
     else:
         num = int_part
     if not num:
-        num = '0' if '0' in spec else ''
+        num = '0' if '0' in core_spec else ''
     num = ('-' if neg else '') + num
     out, done = [], False
     for p in parts:
@@ -1826,10 +1985,7 @@ def _format_number(x, fmt):
 def _date_of(v):
     v = scalar(v)
     if isinstance(v, str):
-        d = parse_date_text(v)
-        if d is None:
-            raise VALUE
-        return serial_date(d)
+        return serial_date(to_num(v))
     n = to_num(v)
     if n < 0:
         raise NUM
@@ -1843,7 +1999,12 @@ def f_date(y, m, d):
         yy += 1900
     yy += (mm - 1) // 12
     mm = (mm - 1) % 12 + 1
-    return date_serial(dt.date(yy, mm, 1)) + dd - 1
+    if not 1900 <= yy <= 9999:
+        raise NUM
+    n = date_serial(dt.date(yy, mm, 1)) + dd - 1
+    if n < 0 or n > 2958465:
+        raise NUM
+    return n
 
 
 FUNCS['YEAR'] = (_txt(lambda v: _date_of(v).year), False)
@@ -1859,10 +2020,12 @@ def f_weekday(v, kind=None):
         wd = d.weekday()  # 월=0
         if k == 1 or k == 17:
             return (wd + 1) % 7 + 1
-        if k == 2 or k == 11:
+        if k == 2:
             return wd + 1
         if k == 3:
             return wd
+        if 11 <= k <= 16:                 # 11=월요일 시작 … 16=토요일 시작
+            return (wd - (k - 11)) % 7 + 1
         raise NUM
     return elementwise(w, v) if isinstance(v, Arr) and not (v.h == 1 and v.w == 1) else w(v)
 
@@ -2082,7 +2245,10 @@ def f_match(v, arr, kind=None):
     v = scalar(v)
     if isinstance(v, XLErr):
         raise v
-    vals = as_arr(arr).vector()
+    try:
+        vals = as_arr(arr).vector()
+    except XLErr:
+        raise NA
     k = 1 if kind is None else to_int(kind)
     if k == 0:
         for i, x in enumerate(vals):
@@ -2233,7 +2399,15 @@ def f_indirect(args, ctx):
         sheet = (m.group(1) or '').replace("''", "'") or m.group(2)
         text = m.group(3)
     try:
-        if a1:
+        if a1 and re.fullmatch(r'\$?[A-Za-z]{1,3}:\$?[A-Za-z]{1,3}', text):
+            a, b = text.replace('$', '').split(':')
+            s_ = ctx.sheet_obj(sheet or ctx.sheet)
+            r1, r2, c1, c2 = 1, max(s_.max_row, 1), col_num(a), col_num(b)
+        elif a1 and re.fullmatch(r'\$?\d+:\$?\d+', text):
+            a, b = text.replace('$', '').split(':')
+            s_ = ctx.sheet_obj(sheet or ctx.sheet)
+            r1, r2, c1, c2 = int(a), int(b), 1, max(s_.max_col, 1)
+        elif a1:
             parts = text.replace('$', '').split(':')
             r1, c1 = parse_addr(parts[0])
             r2, c2 = parse_addr(parts[-1])
@@ -2573,3 +2747,318 @@ def unparse(node, parent_prec=0):
         s = unparse(node[2], p) + node[1] + unparse(node[3], p + 1)
         return '(' + s + ')' if p < parent_prec else s
     raise FormulaError(kind)
+
+
+# ------------------------------------------------------------ 추가 함수(컴활·실무) --
+@fn('FREQUENCY')
+def f_frequency(data, bins):
+    """구간별 개수: bins 의 각 값 이하(앞 구간 초과), 마지막 칸은 가장 큰 구간 초과."""
+    xs = nums_from([as_arr(data)])
+    bs = sorted(nums_from([as_arr(bins)]))
+    out, prev = [], None
+    for b in bs:
+        out.append([sum(1 for x in xs if (prev is None or x > prev) and x <= b)])
+        prev = b
+    out.append([sum(1 for x in xs if prev is None or x > prev)])
+    return Arr(out)
+
+
+def _tvm_type(t):
+    return 1 if t is not None and to_num(t) != 0 else 0
+
+
+@fn('PMT')
+def f_pmt(rate, nper, pv, fv=None, kind=None):
+    r, n, p = to_num(rate), to_num(nper), to_num(pv)
+    f = to_num(fv) if fv is not None else 0
+    t = _tvm_type(kind)
+    if n == 0:
+        raise NUM
+    if r == 0:
+        return fix(-(p + f) / n)
+    q = (1 + r) ** n
+    return fix(-(r * (p * q + f)) / ((1 + r * t) * (q - 1)))
+
+
+@fn('FV')
+def f_fv(rate, nper, pmt, pv=None, kind=None):
+    r, n, m = to_num(rate), to_num(nper), to_num(pmt)
+    p = to_num(pv) if pv is not None else 0
+    t = _tvm_type(kind)
+    if r == 0:
+        return fix(-(p + m * n))
+    q = (1 + r) ** n
+    return fix(-(p * q + m * (1 + r * t) * (q - 1) / r))
+
+
+@fn('PV')
+def f_pv(rate, nper, pmt, fv=None, kind=None):
+    r, n, m = to_num(rate), to_num(nper), to_num(pmt)
+    f = to_num(fv) if fv is not None else 0
+    t = _tvm_type(kind)
+    if r == 0:
+        return fix(-(f + m * n))
+    q = (1 + r) ** n
+    return fix(-(f + m * (1 + r * t) * (q - 1) / r) / q)
+
+
+@fn('NPER')
+def f_nper(rate, pmt, pv, fv=None, kind=None):
+    r, m, p = to_num(rate), to_num(pmt), to_num(pv)
+    f = to_num(fv) if fv is not None else 0
+    t = _tvm_type(kind)
+    if r == 0:
+        if m == 0:
+            raise NUM
+        return fix(-(p + f) / m)
+    a = m * (1 + r * t) / r
+    try:
+        return fix(math.log((a - f) / (a + p)) / math.log(1 + r))
+    except (ValueError, ZeroDivisionError):
+        raise NUM
+
+
+@fn('RATE')
+def f_rate(nper, pmt, pv, fv=None, kind=None, guess=None):
+    n, m, p = to_num(nper), to_num(pmt), to_num(pv)
+    f = to_num(fv) if fv is not None else 0
+    t = _tvm_type(kind)
+    r = to_num(guess) if guess is not None else 0.1
+
+    def g(x):
+        if abs(x) < 1e-12:
+            return p + m * n + f
+        q = (1 + x) ** n
+        return p * q + m * (1 + x * t) * (q - 1) / x + f
+    for _ in range(100):                           # 엑셀처럼 반복 계산(뉴턴 방법)
+        y = g(r)
+        dy = (g(r + 1e-7) - y) / 1e-7
+        if dy == 0:
+            break
+        nr = r - y / dy
+        if abs(nr - r) < 1e-10:
+            return fix(nr)
+        r = nr
+    raise NUM
+
+
+@fn('NPV')
+def f_npv(rate, *values):
+    r = to_num(rate)
+    xs = nums_from(values)
+    return fix(math.fsum(v / (1 + r) ** (i + 1) for i, v in enumerate(xs)))
+
+
+@fn('WEEKNUM')
+def f_weeknum(v, kind=None):
+    d = _date_of(v)
+    k = to_int(kind) if kind is not None else 1
+    if k == 21:                                     # ISO 주
+        return d.isocalendar()[1]
+    start = {1: 6, 2: 0, 11: 0, 12: 1, 13: 2, 14: 3, 15: 4, 16: 5, 17: 6}.get(k)   # 주 시작 요일(월=0)
+    if start is None:
+        raise NUM
+    jan1 = dt.date(d.year, 1, 1)
+    offset = (jan1.weekday() - start) % 7
+    return ((d - jan1).days + offset) // 7 + 1
+
+
+@fn('DAYS360')
+def f_days360(start, end, method=None):
+    a, b = _date_of(start), _date_of(end)
+    eu = method is not None and to_bool(method)
+    d1, d2 = a.day, b.day
+    if eu:
+        d1, d2 = min(d1, 30), min(d2, 30)
+    else:
+        def last_feb(d):
+            return d.month == 2 and (d + dt.timedelta(1)).month == 3
+        if d1 == 31 or last_feb(a):
+            d1 = 30
+        if d2 == 31 and d1 >= 30:
+            d2 = 30
+    return (b.year - a.year) * 360 + (b.month - a.month) * 30 + (d2 - d1)
+
+
+@fn('YEARFRAC')
+def f_yearfrac(start, end, basis=None):
+    a, b = sorted([_date_of(start), _date_of(end)])
+    k = to_int(basis) if basis is not None else 0
+    if k == 0:
+        return fix(f_days360(date_serial(a), date_serial(b)) / 360)
+    if k == 1:
+        days = (b - a).days
+        yrs = range(a.year, b.year + 1)
+        avg = sum(366 if calendar.isleap(y) else 365 for y in yrs) / len(yrs)
+        return fix(days / avg)
+    if k == 2:
+        return fix((b - a).days / 360)
+    if k == 3:
+        return fix((b - a).days / 365)
+    if k == 4:
+        return fix(f_days360(date_serial(a), date_serial(b), True) / 360)
+    raise NUM
+
+
+@fn('MROUND')
+def f_mround(x, m):
+    v, mm = to_num(x), to_num(m)
+    if mm == 0:
+        return 0
+    if v * mm < 0:
+        raise NUM
+    q = Decimal(repr(float(v))) / Decimal(repr(float(mm)))
+    return fix(float(q.quantize(Decimal(1), rounding=ROUND_HALF_UP) * Decimal(repr(float(mm)))))
+
+
+@fn('FACT')
+def f_fact(x):
+    n = to_int(x)
+    if n < 0 or n > 170:
+        raise NUM
+    return math.factorial(n)
+
+
+@fn('EXP')
+def f_exp(x):
+    try:
+        return fix(math.exp(to_num(x)))
+    except OverflowError:
+        raise NUM
+
+
+@fn('LN')
+def f_ln(x):
+    v = to_num(x)
+    if v <= 0:
+        raise NUM
+    return fix(math.log(v))
+
+
+@fn('LOG')
+def f_log(x, base=None):
+    v = to_num(x)
+    b = to_num(base) if base is not None else 10
+    if v <= 0 or b <= 0 or b == 1:
+        raise NUM
+    return fix(math.log(v, b))
+
+
+@fn('LOG10')
+def f_log10(x):
+    return f_log(x, 10)
+
+
+@fn('EVEN')
+def f_even(x):
+    v = to_num(x)
+    n = math.ceil(abs(v) / 2) * 2
+    return n if v >= 0 else -n
+
+
+@fn('ODD')
+def f_odd(x):
+    v = to_num(x)
+    n = math.ceil(abs(v))
+    if n % 2 == 0:
+        n += 1
+    return n if v >= 0 else -n
+
+
+@fn('ISNONTEXT')
+def f_isnontext(v):
+    return not isinstance(scalar(v), str)
+
+
+@fn('TYPE')
+def f_type(v):
+    if isinstance(v, Arr) and not (v.h == 1 and v.w == 1):
+        return 64
+    v = scalar(v)
+    if isinstance(v, XLErr):
+        return 16
+    if isinstance(v, bool):
+        return 4
+    if isinstance(v, str):
+        return 2
+    return 1
+
+
+@fn('TIMEVALUE')
+def f_timevalue(t):
+    n = parse_date_text(to_str(t))
+    if n is None:
+        raise VALUE
+    return fix(n - math.floor(n))
+
+
+@fn('RAND')
+def f_rand():
+    import random
+    return random.random()
+
+
+@fn('RANDBETWEEN')
+def f_randbetween(a, b):
+    import random
+    lo, hi = math.ceil(to_num(a)), math.floor(to_num(b))
+    if lo > hi:
+        raise NUM
+    return random.randint(lo, hi)
+
+
+@fn('GEOMEAN')
+def f_geomean(*args):
+    xs = nums_from(args)
+    if not xs or any(x <= 0 for x in xs):
+        raise NUM
+    return fix(math.exp(math.fsum(math.log(x) for x in xs) / len(xs)))
+
+
+@fn('HARMEAN')
+def f_harmean(*args):
+    xs = nums_from(args)
+    if not xs or any(x <= 0 for x in xs):
+        raise NUM
+    return fix(len(xs) / math.fsum(1 / x for x in xs))
+
+
+@fn('ADDRESS')
+def f_address(row, col, abs_num=None, a1=None, sheet=None):
+    r, c = to_int(row), to_int(col)
+    k = to_int(abs_num) if abs_num is not None else 1
+    if r < 1 or c < 1 or k not in (1, 2, 3, 4):
+        raise VALUE
+    ra, ca = k in (1, 2), k in (1, 3)
+    text = ('$' if ca else '') + col_name(c) + ('$' if ra else '') + str(r)
+    if sheet is not None:
+        text = _sheet_prefix(to_str(sheet)) + text
+    return text
+
+
+@fn('MMULT')
+def f_mmult(a, b):
+    A, B = as_arr(a), as_arr(b)
+    if A.w != B.h:
+        raise VALUE
+    return Arr([[fix(math.fsum(to_num(A.rows[i][k]) * to_num(B.rows[k][j]) for k in range(A.w)))
+                 for j in range(B.w)] for i in range(A.h)])
+
+
+@fn('PERCENTRANK', 'PERCENTRANK.INC')
+def f_percentrank(arr, x, sig=None):
+    xs = sorted(nums_from([as_arr(arr)]))
+    v = to_num(x)
+    digits = to_int(sig) if sig is not None else 3
+    if not xs or v < xs[0] or v > xs[-1]:
+        raise NA
+    n = len(xs)
+    below = sum(1 for t in xs if t < v)
+    if v in xs:
+        r = below / (n - 1) if n > 1 else 1
+    else:
+        lo = max(t for t in xs if t < v)
+        hi = min(t for t in xs if t > v)
+        r = (below - 1 + (v - lo) / (hi - lo)) / (n - 1)
+    q = Decimal(repr(r)).quantize(Decimal(1).scaleb(-digits), rounding=ROUND_DOWN)
+    return fix(float(q))

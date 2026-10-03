@@ -67,9 +67,16 @@ def problem(pid):
                            data_json=json.dumps(data, ensure_ascii=False).replace('</', r'<\/'))
 
 
+def _body():
+    body = request.get_json(silent=True)
+    if not isinstance(body, dict):
+        abort(400, '요청 형식이 잘못되었습니다.')
+    return body
+
+
 @bp.route('/api/check', methods=['POST'])
 def check():
-    body = request.get_json(silent=True) or {}
+    body = _body()
     p = content.get(str(body.get('pid', '')))
     if not p:
         abort(404)
@@ -94,7 +101,7 @@ def check():
 
 @bp.route('/api/star', methods=['POST'])
 def star():
-    body = request.get_json(silent=True) or {}
+    body = _body()
     pid = str(body.get('pid', ''))
     if not content.get(pid):
         abort(404)

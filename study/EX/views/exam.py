@@ -95,4 +95,9 @@ def result(rid):
     if not row:
         abort(404)
     e = _exam(row['exam'])
-    return render_template('exam_result.html', e=e, row=row, res=json.loads(row['detail']), ex=ex)
+    try:
+        res = json.loads(row['detail'])
+        assert isinstance(res, dict) and {'score', 'total', 'tasks', 'sections'} <= set(res)
+    except (ValueError, TypeError, AssertionError):
+        abort(404)
+    return render_template('exam_result.html', e=e, row=row, res=res, ex=ex)

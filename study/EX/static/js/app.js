@@ -127,13 +127,22 @@
 
   /* 공개 서버: 기록을 이 브라우저에 자동 보관 → 서버가 다시 시작돼 기록이 비면 복원 제안 */
   if (document.querySelector('meta[name="ex-autobackup"]')) {
-    fetch('/api/backup', { credentials: 'same-origin' }).then(function (r) { return r.json(); }).then(function (b) {
+    fetch('/api/backup?only=counts', { credentials: 'same-origin' }).then(function (r) { return r.json(); }).then(function (b) {
       var total = 0;
       Object.keys(b.counts).forEach(function (k) { total += b.counts[k]; });
       var saved = null;
       try { saved = JSON.parse(localStorage.getItem('ex-backup') || 'null'); } catch (e) { saved = null; }
       if (total > 0) {
-        try { localStorage.setItem('ex-backup', JSON.stringify(b.data)); } catch (e) { /* 저장 공간 부족 */ }
+        var key = JSON.stringify(b.counts);              // 바뀐 게 있을 때만 전체를 받아 저장
+        var last = null;
+        try { last = localStorage.getItem('ex-backup-counts'); } catch (e) { last = null; }
+        if (key === last && saved) return;
+        fetch('/api/backup', { credentials: 'same-origin' }).then(function (r) { return r.json(); }).then(function (full) {
+          try {
+            localStorage.setItem('ex-backup', JSON.stringify(full.data));
+            localStorage.setItem('ex-backup-counts', key);
+          } catch (e) { /* 저장 공간 부족 */ }
+        });
         return;
       }
       if (!saved) return;

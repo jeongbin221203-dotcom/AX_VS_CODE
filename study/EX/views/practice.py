@@ -179,7 +179,12 @@ def result(rid):
         abort(404)
     kind, iid = row['exam'].split(':', 1)
     info, *_ = _resolve(kind, iid)
-    return render_template('practice_result.html', kind=kind, info=info, row=row, res=json.loads(row['detail']))
+    try:
+        res = json.loads(row['detail'])
+        assert isinstance(res, dict) and {'score', 'total', 'sheets', 'sections'} <= set(res)
+    except (ValueError, TypeError, AssertionError):
+        abort(404)
+    return render_template('practice_result.html', kind=kind, info=info, row=row, res=res)
 
 
 @bp.route('/library/add', methods=['POST'])
