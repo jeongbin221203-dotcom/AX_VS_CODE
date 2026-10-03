@@ -84,7 +84,11 @@ def sources(xlsm_bytes):
     if not ole.exists(f'{root}/dir'):
         return {}
     out = {}
-    for mod, offset in _modules(ole.openstream(f'{root}/dir').read()):
+    try:
+        mods = _modules(ole.openstream(f'{root}/dir').read())
+    except (ValueError, IndexError, struct.error):
+        mods = []
+    for mod, offset in mods:
         path = f'{root}/{mod}'
         if not ole.exists(path):
             continue
@@ -93,7 +97,29 @@ def sources(xlsm_bytes):
             out[mod] = decompress(raw[offset:]).decode('cp949', 'replace')
         except (ValueError, IndexError):
             continue
+    if not out:
+        # dir 해석이 안 될 때(ActiveX 참조 등): 모듈 스트림에서 압축 소스 시작 위치를 찾는다
+        for parts in ole.listdir():
+            if len(parts) != 2 or parts[0] != root or parts[1] in ('dir', '_VBA_PROJECT') or parts[1].startswith('__SRP'):
+                continue
+            src = _scan_source(ole.openstream('/'.join(parts)).read())
+            if src is not None:
+                out[parts[1]] = src
     return out
+
+
+def _scan_source(raw):
+    """모듈 스트림 안에서 'Attribute VB_Name' 으로 풀리는 압축 덩어리를 찾는다(뒤에서부터 — 소스는 끝에 있다)."""
+    for i in range(len(raw) - 3, -1, -1):
+        if raw[i] != 1 or (raw[i + 2] & 0x70) != 0x30:      # 서명 1 + 덩어리 머리 0b011
+            continue
+        try:
+            text = decompress(raw[i:])
+        except (ValueError, IndexError, struct.error):
+            continue
+        if text.startswith(b'Attribute VB_'):
+            return text.decode('cp949', 'replace')
+    return None
 
 
 PROC_RE = re.compile(r'^\s*(?:Public\s+|Private\s+)?(Sub|Function)\s+([^\s(]+)\s*\(', re.I | re.M)
@@ -129,4 +155,16 @@ def buttons(xlsm_bytes):
             macro = macro.group(1).strip() if macro else ''
             macro = re.sub(r'^\[\d+\]!', '', macro).split('!')[-1]
             out.append((re.sub(r'\s+', ' ', label), macro))
+    # 도형(사각형: 빗면 등)에 매크로를 지정한 경우 — drawingN.xml 의 xdr:sp macro="[0]!이름"
+    for n in z.namelist():
+        if not re.search(r'drawings/drawing\d*\.xml$', n):
+            continue
+        text = z.read(n).decode('utf-8', 'replace')
+        for sp in re.findall(r'<xdr:sp\b.*?</xdr:sp>', text, re.S):
+            m = re.match(r'<xdr:sp\b[^>]*\bmacro="([^"]*)"', sp)
+            if not m or not m.group(1):
+                continue
+            label = ''.join(re.findall(r'<a:t>([^<]*)</a:t>', sp))
+            macro = re.sub(r'^\[\d+\]!', '', m.group(1)).split('!')[-1]
+            out.append((re.sub(r'\s+', ' ', label).strip(), macro))
     return out

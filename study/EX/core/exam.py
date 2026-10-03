@@ -776,13 +776,19 @@ def _series_name(s, book):
     return _norm_text(getattr(s.tx, 'v', '') or '')
 
 
-def describe_charts(ctx, sheet):
+def _axis_title(part, which):
+    axis = getattr(part, which, None)
+    return _rich_text(axis.title) if axis is not None and axis.title else None
+
+
+def describe_charts(ctx, sheet, charts=None):
     ws = ctx.ws(sheet)
     out = []
-    for ch in ws._charts:
+    for ch in (ws._charts if charts is None else charts):
         parts = [ch] + [x for x in getattr(ch, '_charts', []) if x is not ch]
         series, kinds = [], set()
-        first_ax = parts[0].y_axis.axId if parts else None
+        ax = lambda part: getattr(getattr(part, 'y_axis', None), 'axId', None)  # noqa: E731 — 원형은 축 없음
+        first_ax = ax(parts[0]) if parts else None
         for part in parts:
             kind = CHART_TYPES.get(part.tagname, part.tagname)
             if kind == 'col' and getattr(part, 'barDir', 'col') == 'bar':
@@ -792,13 +798,12 @@ def describe_charts(ctx, sheet):
                 name = _series_name(s, ctx.book)
                 if any(x['name'] == name for x in series):
                     continue
-                series.append({'name': name, 'kind': kind, 'secondary': part.y_axis.axId != first_ax,
+                series.append({'name': name, 'kind': kind, 'secondary': ax(part) != first_ax,
                                'labels': bool(s.dLbls and (s.dLbls.showVal or s.dLbls.showPercent or s.dLbls.showCatName)),
                                'trend': bool(s.trendline), 'val': s.val.numRef.f if s.val and s.val.numRef else ''})
         out.append({'kinds': kinds, 'title': _rich_text(ch.title), 'series': series,
-                    'y_title': _rich_text(parts[0].y_axis.title) if parts[0].y_axis.title else None,
-                    'x_title': _rich_text(parts[0].x_axis.title) if getattr(parts[0], 'x_axis', None) is not None
-                    and parts[0].x_axis.title else None,
+                    'y_title': _axis_title(parts[0], 'y_axis'),
+                    'x_title': _axis_title(parts[0], 'x_axis'),
                     'legend': ch.legend.position if ch.legend is not None else None,
                     'grouping': getattr(parts[0], 'grouping', None)})
     return out

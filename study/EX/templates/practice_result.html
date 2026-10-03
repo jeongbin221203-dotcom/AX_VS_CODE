@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}채점 결과 · {{ info.title }}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><div class="crumb"><a href="{{ url_for('practice.index') }}">컴활 실기 실습</a> › <a href="{{ url_for('practice.item', kind=kind, iid=info.id) }}">{{ info.title }}</a> ›</div>
+    <h1>채점 결과</h1><p>{{ row.file_name }} · {{ row.created_at }}{% if row.seconds %} · {{ row.seconds // 60 }}분 {{ row.seconds % 60 }}초{% endif %}</p></div>
+  <a class="btn primary" href="{{ url_for('practice.item', kind=kind, iid=info.id) }}">다시 풀기</a>
+</div>
+<div class="grid g4">
+  <div class="kpi"><div class="label">점수(추정)</div><div class="value">{{ res.score|num }}<small> / {{ res.total|num }}</small></div>
+    <div class="sub">{% if res.level %}{% if res.passed %}<span class="st ok">✓</span> 합격선 이상{% else %}<span class="st bad">✕</span> 합격선 70점 미달{% endif %}{% else %}일치한 항목 비율{% endif %}</div></div>
+  {% for s in res.sections %}
+  <div class="kpi"><div class="label">{{ s.name }}</div><div class="value">{{ s.got|num }}<small> / {{ s.points|num }}</small></div>
+    <div class="meter" style="margin-top:8px" aria-hidden="true"><span style="width:{{ (100 * s.got / s.points)|round|int if s.points else 0 }}%"></span></div></div>
+  {% endfor %}
+</div>
+<section class="card" style="margin-top:14px">
+  {% for s in res.sheets if s['items'] %}
+  {% set ok_n = s['items']|selectattr('ok')|list|length %}
+  <div class="check-item">
+    <div class="head">
+      {% if ok_n == s['items']|length %}<span class="st ok">✓</span>{% elif ok_n %}<span class="st new">△</span>{% else %}<span class="st bad">✕</span>{% endif %}
+      <b>{{ s.name }}</b> <span class="small muted">{{ ok_n }} / {{ s['items']|length }} 항목 · {{ s.got|num }} / {{ s.points|num }}점</span>
+    </div>
+    <ul class="list" style="margin-left:32px">
+      {% for it in s['items'] %}
+      <li><span class="st {{ 'ok' if it.ok else 'bad' }}">{{ '✓' if it.ok else '✕' }}</span>
+        <div class="grow"><div>{{ it.label }}</div>
+          {% if not it.ok and it.msgs %}<div class="small" style="color:var(--bad)">{{ it.msgs|join(' · ') }}</div>{% endif %}
+          {% if not it.ok and (it.hint or it.code) %}<details><summary>힌트</summary>
+            {% if it.hint %}<div class="small mono" style="white-space:pre-wrap">{{ it.hint }}</div>{% endif %}
+            {% if it.code %}<pre class="small mono code-hint">{{ it.code }}</pre>{% endif %}</details>{% endif %}</div></li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endfor %}
+</section>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}{{ info.title }} · 컴활 실기 실습{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><div class="crumb"><a href="{{ url_for('practice.index') }}">컴활 실기 실습</a> › {{ info.group }}</div>
+    <h1>{{ info.title }}</h1>
+    <p>{% if info.level %}{{ TRACKS[info.level] }} · {% endif %}실습 파일을 풀어 올리면 정답 파일과 비교합니다.</p></div>
+  <div class="btns">
+    {% if info.pdf %}<a class="btn" href="{{ url_for('practice.file', kind=kind, iid=info.id, name=info.pdf, view=1) }}" target="_blank" rel="noopener">문제지 PDF</a>{% endif %}
+    <a class="btn primary" href="{{ url_for('practice.file', kind=kind, iid=info.id, name=practice) }}">실습 파일 받기</a>
+  </div>
+</div>
+{% if error %}<div class="alert" role="alert">{{ error }}</div>{% endif %}
+
+<section class="card exam-bar" data-exam-timer="{{ 40 if info.level == 'c2' else 45 }}" data-exam-id="{{ kind }}-{{ info.id }}">
+  <div class="timer" aria-live="polite"><span class="small muted">시간</span> <b data-timer-text>{{ 40 if info.level == 'c2' else 45 }}:00</b></div>
+  <div class="btns">
+    <button class="btn" type="button" data-timer-start>시작</button>
+    <button class="btn ghost" type="button" data-timer-reset>초기화</button>
+  </div>
+  <form class="exam-upload" method="post" action="{{ url_for('practice.submit', kind=kind, iid=info.id) }}" enctype="multipart/form-data" data-once>
+    <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+    <input type="hidden" name="seconds" value="" data-timer-seconds>
+    <input type="file" name="file" accept=".xlsx,.xlsm" aria-label="내 답안 파일">
+    <button class="btn primary" type="submit">제출·채점</button>
+  </form>
+</section>
+{% if info.extras %}<p class="small">함께 쓰는 파일: {% for e in info.extras %}<a href="{{ url_for('practice.file', kind=kind, iid=info.id, name=e) }}">{{ e }}</a>{{ ', ' if not loop.last }}{% endfor %}</p>{% endif %}
+
+<section class="card">
+  <h2>해야 할 일 <span class="small muted" style="font-weight:400">정답 파일과 실습 파일의 차이에서 뽑음 · 힌트는 눌러서 보기</span></h2>
+  {% for s in tasks %}
+  <h3 style="margin-top:14px">{{ s.name }}{% if s.points %} <span class="small muted" style="font-weight:400">{{ s.points|num(1) if s.points != s.points|int else s.points|int }}점</span>{% endif %}</h3>
+  <ul class="list">
+    {% for t in s['items'] %}
+    <li><div class="grow">{{ t.label }}
+      {% if t.hint or t.code %}<details><summary>힌트</summary>
+        {% if t.hint %}<div class="small mono" style="white-space:pre-wrap">{{ t.hint }}</div>{% endif %}
+        {% if t.code %}<pre class="small mono code-hint">{{ t.code }}</pre>{% endif %}
+      </details>{% endif %}</div></li>
+    {% endfor %}
+  </ul>
+  {% else %}<div class="empty">정답 파일과 다른 점을 찾지 못했습니다.</div>{% endfor %}
+  <p class="small muted" style="margin-bottom:0">점수는 공식 배점(시트별)을 항목 수로 나눈 추정치입니다. 정답 파일과 다른 방법으로 같은 결과를 낸 경우 일부 항목이 다르게 나올 수 있습니다.
+    <a href="{{ url_for('practice.file', kind=kind, iid=info.id, name=answer) }}" data-confirm-link>정답 파일 받기</a></p>
+</section>
+
+<section class="card">
+  <h2>제출 기록</h2>
+  {% if history %}
+  <ul class="list">{% for h in history %}<li><div class="grow"><a href="{{ url_for('practice.result', rid=h.id) }}"><b>{{ h.score|num }}</b> / {{ h.total|num }}</a>
+    <span class="small muted">{{ h.file_name }}</span></div><span class="small muted nowrap">{{ h.created_at[5:16] }}</span></li>{% endfor %}</ul>
+  {% else %}<div class="empty">아직 없습니다.</div>{% endif %}
+</section>
+{% endblock %}

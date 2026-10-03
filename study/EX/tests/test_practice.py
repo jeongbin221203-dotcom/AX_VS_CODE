@@ -1,0 +1,106 @@
+"""실기 실습: 두 파일 비교 채점·교재 폴더 가져오기·공식 예제 받기(네트워크 대신 가짜 zip).
+
+출판사·대한상공회의소 파일은 저장소에 넣을 수 없어, 우리 모의고사의 문제 파일과 Excel 로 만든 정답 파일을
+'실습/정답' 짝으로 쓴다.
+"""
+import io
+import zipfile
+from pathlib import Path
+
+import openpyxl
+import pytest
+
+from core import compare, exam, library, official
+
+FIX = Path(__file__).parent / 'fixtures'
+
+
+@pytest.fixture(scope='module')
+def pair():
+    e = exam.get('c2-01')
+    return exam.problem_workbook(e), (FIX / 'c2-01_answer_excel.xlsx').read_bytes()
+
+
+def test_compare_answer_full_problem_zero(pair):
+    src, ans = pair
+    assert compare.grade(src, ans, ans)['score'] == 100
+    assert compare.grade(src, ans, src)['score'] == 0
+
+
+def test_compare_partial_and_messages(pair):
+    src, ans = pair
+    wb = openpyxl.load_workbook(io.BytesIO(ans))
+    ws = wb['계산작업']
+    for r in range(4, 12):
+        ws[f'F{r}'] = '우수'                                  # 수식 대신 값
+    wb['기본작업-3'].conditional_formatting = type(wb['기본작업-3'].conditional_formatting)()
+    bio = io.BytesIO()
+    wb.save(bio)
+    res = compare.grade(src, ans, bio.getvalue())
+    assert 0 < res['score'] < 100
+    items = {(s['name'], i['label']): i for s in res['sheets'] for i in s['items']}
+    f = next(v for (sh, lab), v in items.items() if sh == '계산작업' and lab.startswith(('수식 결과', '셀 내용')) and 'F4' in lab)
+    assert not f['ok'] and '수식이 아니라 값' in f['msgs'][0] and '정답 수식' in f['hint']
+    cf = next(v for (sh, lab), v in items.items() if sh == '기본작업-3' and '조건부 서식' in lab)
+    assert not cf['ok'] and cf['hint'].startswith('규칙: =')
+
+
+def _make_folder(root, src, ans):
+    (root / '교재' / '실습').mkdir(parents=True)
+    (root / '교재' / '정답').mkdir(parents=True)
+    (root / '교재' / '실습' / '제01회 모의.xlsx').write_bytes(src)
+    (root / '교재' / '정답' / '제1회 모의(정답).xlsx').write_bytes(ans)
+    (root / '교재' / '실습' / '자료.txt').write_text('a,b', encoding='utf-8')
+    (root / '교재' / '실습' / '짝없음.xlsx').write_bytes(src)
+
+
+def test_library_scan_and_import(tmp_path, pair):
+    src, ans = pair
+    _make_folder(tmp_path / 'in', src, ans)
+    found = library.scan(tmp_path / 'in')
+    assert len(found) == 1 and found[0]['category'] == '모의고사' and [e.name for e in found[0]['extras']] == ['자료.txt']
+    assert library.import_folder(tmp_path / 'in', tmp_path / 'lib') == 1
+    it = library.load_index(tmp_path / 'lib')[0]
+    assert library.grade(tmp_path / 'lib', it, ans)['score'] == 100
+
+
+def _fake_zip(src, ans):
+    bio = io.BytesIO()
+    with zipfile.ZipFile(bio, 'w') as z:
+        for kind in ('A', 'B'):
+            base = f'예제/2급/2급 엑셀 {kind}형/'
+            z.writestr(base + f'2급 {kind}형 문제.pdf', b'%PDF-1.4')
+            z.writestr(base + f'2급 {kind}형 소스.xlsx', src)
+            z.writestr(base + f'2급 {kind}형 정답.xlsm', ans)
+    return bio.getvalue()
+
+
+def test_official_download_and_grade(tmp_path, pair, monkeypatch):
+    src, ans = pair
+    data = _fake_zip(src, ans)
+    monkeypatch.setattr(official, 'SETS', [s for s in official.SETS if s[0] in ('c2-A', 'c2-B')])
+    monkeypatch.setattr(official, '_fetch', lambda pkg: data)
+    assert official.download(tmp_path) == ['c2-A', 'c2-B']
+    s = official.get(tmp_path, 'c2-A')
+    assert s['gradable'] and s['meta']['files']['pdf'] == '2급 A형 문제.pdf'
+    assert official.self_check(tmp_path, 'c2-A') == (100, 0)
+
+
+def test_practice_pages(client, app, tmp_path, pair):
+    src, ans = pair
+    _make_folder(tmp_path / 'in', src, ans)
+    assert client.get('/practice/').status_code == 200
+    r = client.post('/practice/library/import', data={'_csrf': client.csrf, 'folder': str(tmp_path / 'in')})
+    assert '1%EC%8C%8D' in r.headers['Location'] or '1쌍' in r.headers['Location']
+    it = library.load_index(Path(app.config['DATA_DIR']) / 'library')[0]
+    page = client.get(f"/practice/lib/{it['id']}").get_data(as_text=True)
+    assert '해야 할 일' in page and '조건부 서식' in page and '피벗 테이블' in page
+    r = client.post(f"/practice/lib/{it['id']}/submit",
+                    data={'_csrf': client.csrf, 'file': (io.BytesIO(ans), '내답안.xlsx')})
+    page = client.get(r.headers['Location']).get_data(as_text=True)
+    assert '100' in page
+    assert client.get(f"/practice/lib/{it['id']}/file/{it['practice']}").status_code == 200
+    assert client.get(f"/practice/lib/{it['id']}/file/..%2Fapp.py").status_code == 404
+    r = client.post('/practice/library/import', data={'_csrf': client.csrf, 'folder': str(tmp_path / 'none')},
+                    follow_redirects=True)
+    assert '찾을 수 없습니다' in r.get_data(as_text=True)

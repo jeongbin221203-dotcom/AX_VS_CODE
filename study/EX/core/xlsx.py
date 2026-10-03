@@ -1,6 +1,7 @@
 """올린 엑셀 파일을 안전하게 읽기(압축 폭탄·크기 제한)와 계산기 통합문서로 바꾸기."""
 import datetime as dt
 import io
+import re
 import zipfile
 
 import openpyxl
@@ -68,6 +69,11 @@ def to_book(wb_f, wb_v, today=None):
                 v = cell.value
                 if v is None:
                     continue
+                if type(v).__name__ == 'DataTableFormula':      # 데이터 표 칸: 엑셀이 저장한 값
+                    cached = wv.cell(cell.row, cell.column).value if wv is not None else None
+                    if cached is not None:
+                        cells[(cell.row, cell.column)] = plain(cached)
+                    continue
                 f = formula_text(v)
                 if f:
                     cached = wv.cell(cell.row, cell.column).value if wv is not None else None
@@ -98,4 +104,61 @@ def _defined_names(wb):
         if not text or name.startswith('_xlnm') or '#REF!' in text:
             continue
         out.append((name, '=' + text))
+    return out
+
+
+def _rels(z, part):
+    """part 의 관계 파일 → {rId: 대상 경로(zip 안)}"""
+    folder, name = part.rsplit('/', 1)
+    path = f'{folder}/_rels/{name}.rels'
+    if path not in z.namelist():
+        return {}
+    text = z.read(path).decode('utf-8', 'replace')
+    out = {}
+    for m in re.finditer(r'<Relationship\b([^>]*)/?>', text):
+        attrs = dict(re.findall(r'(\w+)="([^"]*)"', m.group(1)))
+        target = attrs.get('Target', '')
+        if target.startswith('/'):
+            full = target.lstrip('/')
+        else:
+            parts = folder.split('/')
+            for seg in target.split('/'):
+                if seg == '..':
+                    parts.pop()
+                elif seg != '.':
+                    parts.append(seg)
+            full = '/'.join(parts)
+        out[attrs.get('Id')] = (full, attrs.get('Type', ''))
+    return out
+
+
+def raw_charts(data):
+    """openpyxl 이 놓치는 차트(그룹 안 차트 등)까지: {시트 이름: [openpyxl 차트 객체]} — 파일의 차트 XML 을 직접 읽는다."""
+    from openpyxl.chart.chartspace import ChartSpace
+    from openpyxl.chart.reader import read_chart
+    from openpyxl.xml.functions import fromstring
+    out = {}
+    try:
+        z = zipfile.ZipFile(io.BytesIO(data))
+        wbx = z.read('xl/workbook.xml').decode('utf-8', 'replace')
+    except (zipfile.BadZipFile, KeyError):
+        return out
+    rels = _rels(z, 'xl/workbook.xml')
+    for m in re.finditer(r'<sheet\b([^>]*)/>', wbx):
+        attrs = dict(re.findall(r'([\w:]+)="([^"]*)"', m.group(1)))
+        name = attrs.get('name', '').replace('&amp;', '&')
+        sheet_part = rels.get(attrs.get('r:id'), (None,))[0]
+        if not sheet_part or sheet_part not in z.namelist():
+            continue
+        charts = []
+        for target, kind in _rels(z, sheet_part).values():
+            if not kind.endswith('/drawing') or target not in z.namelist():
+                continue
+            for ctarget, ckind in _rels(z, target).values():
+                if ckind.endswith('/chart') and ctarget in z.namelist():
+                    try:
+                        charts.append(read_chart(ChartSpace.from_tree(fromstring(z.read(ctarget)))))
+                    except Exception:  # noqa: BLE001 — 읽을 수 없는 차트는 건너뜀
+                        continue
+        out[name] = charts
     return out

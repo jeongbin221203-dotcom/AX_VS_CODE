@@ -37,6 +37,11 @@
     var t = ev.target;
     if (t.matches('[data-autosubmit]')) t.form.submit();
   });
+  /* 정답 파일 같은 링크는 한 번 묻고 연다 */
+  document.addEventListener('click', function (ev) {
+    var a = ev.target.closest('[data-confirm-link]');
+    if (a && !window.confirm('정답 파일을 받으면 답이 모두 보입니다. 받을까요?')) ev.preventDefault();
+  });
   /* 확인 후 제출 */
   document.addEventListener('submit', function (ev) {
     var msg = ev.target.getAttribute('data-confirm');
