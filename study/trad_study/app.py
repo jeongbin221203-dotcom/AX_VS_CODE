@@ -1,7 +1,8 @@
-"""무역연습실 — single-user, loopback-only Flask study application."""
+"""무역연습실 — single-user Flask study application (local 127.0.0.1:5090, or one Render web service)."""
 import base64
 import io
 import json
+import os
 import re
 import secrets
 import sqlite3
@@ -15,21 +16,36 @@ from pathlib import Path
 import fitz
 from flask import Flask, abort, g, jsonify, render_template, request, send_file, session
 from werkzeug.exceptions import HTTPException
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 ROOT = Path(__file__).resolve().parent
 SUBJECTS = ['무역규범', '무역결제', '무역계약', '무역영어']
 YEARS = {59: 2024, 60: 2024, 61: 2025, 62: 2025, 63: 2025, 64: 2025, 65: 2026}
+DEFAULT_PORT = 5090
+
+
+def env_config():
+    """Deployment settings from the environment. Local runs need none of them."""
+    hosts = ['localhost', '127.0.0.1', '[::1]']
+    hosts += [h.strip() for h in os.environ.get('TRADE_HOSTS', '').split(',') if h.strip()]
+    if os.environ.get('RENDER_EXTERNAL_HOSTNAME'):
+        hosts.append(os.environ['RENDER_EXTERNAL_HOSTNAME'])
+    proxy = os.environ.get('TRADE_PROXY') == '1'
+    return {'SECRET_KEY': os.environ.get('TRADE_SECRET_KEY') or secrets.token_hex(32),
+            'TRUSTED_HOSTS': hosts, 'PROXY': proxy, 'SESSION_COOKIE_SECURE': proxy}
 
 
 def create_app(config=None):
     app = Flask(__name__)
-    app.config.update(SECRET_KEY=secrets.token_hex(32),
-                      DATABASE=str(ROOT / 'instance' / 'study.sqlite3'),
+    app.config.update(DATABASE=str(ROOT / 'instance' / 'study.sqlite3'),
                       CATALOG=str(ROOT / 'data' / 'catalog.sqlite3'),
                       SESSION_COOKIE_HTTPONLY=True, SESSION_COOKIE_SAMESITE='Strict',
-                      MAX_CONTENT_LENGTH=100_000, TRUSTED_HOSTS=['localhost', '127.0.0.1', '[::1]'])
+                      MAX_CONTENT_LENGTH=100_000, **env_config())
     if config:
         app.config.update(config)
+    if app.config['PROXY']:
+        # Render terminates HTTPS; trust one proxy hop so host_url matches the https Origin header.
+        app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
     Path(app.config['DATABASE']).parent.mkdir(parents=True, exist_ok=True)
     with sqlite3.connect(app.config['DATABASE']) as db:
         db.executescript((ROOT / 'schema.sql').read_text(encoding='utf-8'))
@@ -209,6 +225,10 @@ def create_app(config=None):
              '제공된 공식 정답을 기준으로 설명하되 모순이 있으면 솔직히 밝히세요. '
              '출제 연도 기준과 현재 기준을 혼동하지 말고, 법령의 최신성이나 조문 번호를 확인했다고 주장하지 마세요. '
              '모르는 근거는 만들지 말고 확인이 필요한 점을 명시하세요.')
+
+    @app.get('/healthz')
+    def healthz():
+        return jsonify(ok=True)
 
     @app.get('/')
     def index():
@@ -443,7 +463,7 @@ def create_app(config=None):
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('--port', type=int, default=5000)
+    parser.add_argument('--port', type=int, default=int(os.environ.get('TRADE_PORT', DEFAULT_PORT)))
     args = parser.parse_args()
     print(f'\n무역연습실 → http://127.0.0.1:{args.port}\n종료: Ctrl+C\n')
     create_app().run(host='127.0.0.1', port=args.port, debug=False)

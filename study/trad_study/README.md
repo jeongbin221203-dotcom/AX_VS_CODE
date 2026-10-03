@@ -18,7 +18,7 @@ py -3 -m venv .venv
 .\.venv\Scripts\python.exe app.py
 ```
 
-4. 브라우저에서 **http://127.0.0.1:5000** 을 엽니다.
+4. 브라우저에서 **http://127.0.0.1:5090** 을 엽니다.
 5. 종료하려면 터미널에서 `Ctrl+C`를 누릅니다.
 
 가상환경 활성화 스크립트를 쓰지 않으므로 PowerShell 실행 정책을 바꿀 필요가 없습니다. Python 설치 시 `py` 실행기를 설치하지 않았다면 첫 명령의 `py -3` 대신 `python`을 사용하세요.
@@ -37,13 +37,15 @@ python3 -m venv .venv
 
 또는 `sh start.sh`로 실행할 수 있습니다. Linux에서 venv 관련 오류가 나면 해당 OS의 Python venv 패키지를 설치해 주세요.
 
-### 5000번 포트가 사용 중일 때
+### 5090번 포트가 사용 중일 때
+
+기본 포트는 **5090**입니다(같은 PC의 다른 Flask 앱이 쓰는 5000번과 겹치지 않게). 다른 번호로 실행하려면:
 
 ```powershell
-.\.venv\Scripts\python.exe app.py --port 5001
+.\.venv\Scripts\python.exe app.py --port 5091
 ```
 
-이 경우 http://127.0.0.1:5001 에 접속합니다.
+이 경우 http://127.0.0.1:5091 에 접속합니다. 환경변수 `TRADE_PORT`로도 바꿀 수 있습니다.
 
 ## 구현된 기능
 
@@ -162,8 +164,25 @@ macOS/Linux에서는 `.venv/bin/python`으로 바꿔 실행하세요.
 .\.venv\Scripts\python.exe scripts/build_catalog.py
 ```
 
+## 온라인 배포 (Render)
+
+GitHub 브랜치 `trad_study`를 Render 웹 서비스로 배포합니다.
+
+| 항목 | 값 |
+|---|---|
+| Root Directory | `study/trad_study` |
+| Build | `pip install -r requirements.txt` |
+| Start | `gunicorn --workers 1 --threads 8 --timeout 120 --bind 0.0.0.0:$PORT wsgi:app` |
+| Health Check | `/healthz` |
+| 환경변수 | `TRADE_PROXY=1`(HTTPS 프록시 신뢰·보안 쿠키), `TRADE_SECRET_KEY`(세션 서명 키), `PYTHON_VERSION` |
+
+- 워커는 **1개**여야 합니다. API 키 보관함과 세션이 한 프로세스 메모리에 있습니다.
+- 접속 주소(`RENDER_EXTERNAL_HOSTNAME`)는 허용 호스트에 자동으로 들어갑니다. 다른 도메인은 `TRADE_HOSTS=a.com,b.com`.
+- **무료 플랜은 디스크가 휘발성**입니다. 일정 시간 접속이 없어 잠들거나 재배포하면 풀이 기록·메모·AI 해설이 지워집니다. 남길 기록은 `학습 기록 백업`으로 내려받으세요.
+- 로그인이 없으므로 주소를 아는 사람은 같은 학습 기록을 보고 바꿀 수 있습니다. AI 키만 브라우저 세션별로 따로 보관합니다.
+
 ## 사용 범위
 
-이 버전은 로그인 없는 **한 사람의 로컬 학습**을 전제로 하며 `127.0.0.1`에서만 실행됩니다. 같은 서버에 접속하는 브라우저는 동일한 학습 기록을 사용합니다. API 키만 브라우저 세션별로 구분합니다. 여러 사람에게 공개할 때는 사용자별 데이터 분리·인증·운영용 배포 구성이 추가로 필요합니다.
+이 버전은 로그인 없는 **한 사람의 학습**을 전제로 하며, 로컬 실행은 `127.0.0.1`에서만 접속을 받습니다. 같은 서버에 접속하는 브라우저는 동일한 학습 기록을 사용합니다. API 키만 브라우저 세션별로 구분합니다. 여러 사람에게 공개할 때는 사용자별 데이터 분리·인증·운영용 배포 구성이 추가로 필요합니다.
 
 기출문제와 정답표의 출처는 사용자가 제공한 국제무역사 1급 시험 PDF이며, 그 권리는 원 저작권자에게 있습니다. Noto Sans KR 글꼴을 포함하며 글꼴 라이선스는 `static/fonts/OFL.txt`에 있습니다.

@@ -142,3 +142,18 @@ def test_full_round(client):
     aid=start(client,round=65,subject=-1)
     a=client.get(f'/api/attempts/{aid}').json
     assert len(a['questions'])==120 and len({q['subject'] for q in a['questions']})==4
+
+
+def test_behind_https_proxy(tmp_path, monkeypatch):
+    monkeypatch.setenv('TRADE_PROXY', '1')
+    monkeypatch.setenv('RENDER_EXTERNAL_HOSTNAME', 'trade.onrender.com')
+    app = create_app({'TESTING': True, 'DATABASE': str(tmp_path / 'study.sqlite3')})
+    c = app.test_client()
+    fwd = {'X-Forwarded-Proto': 'https', 'X-Forwarded-For': '1.2.3.4'}
+    base = 'http://trade.onrender.com'
+    assert c.get('/healthz', base_url=base).json == {'ok': True}
+    token = c.get('/api/bootstrap', base_url=base, headers=fwd).json['csrf']
+    r = c.post('/api/attempts', base_url=base, json={'round': 59, 'subject': 0},
+               headers={**fwd, 'X-CSRF-Token': token, 'Origin': 'https://trade.onrender.com'})
+    assert r.status_code == 201
+    assert c.get('/api/dashboard', base_url='http://evil.example', headers=fwd).status_code == 400
