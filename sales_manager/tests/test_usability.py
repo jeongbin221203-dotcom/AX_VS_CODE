@@ -4,6 +4,8 @@ from __future__ import annotations
 import re
 import sqlite3
 
+import pytest
+
 from conftest import csrf, login, post
 
 from core import database
@@ -55,7 +57,7 @@ def test_board_hides_other_reps_deals(app):
     ids = {int(x) for x in re.findall(r'class="deal-card"[^>]*data-id="(\d+)"', html)}
     visible = set(db.deal_options())
     assert ids <= visible
-    hidden = database.scalar("SELECT id FROM deals WHERE owner_id <> (SELECT id FROM users WHERE name='김영업') "
+    hidden = database.scalar("SELECT id FROM deals WHERE owner_id <> (SELECT MIN(id) FROM users WHERE name='김영업') "
                              "AND stage='리드' LIMIT 1")
     if hidden and int(hidden) not in visible:
         assert c.post("/deals/stage", data={"_csrf": csrf(c), "id": int(hidden), "stage": "접촉"}).status_code == 404
@@ -111,6 +113,8 @@ def test_demo_daily_reset_hour():
 
 
 def test_demo_reset_restores_sample_and_sidebar(app, isolated_db, monkeypatch, tmp_path):
+    if database.is_pg():
+        pytest.skip("시연 서버(샘플로 되돌리기)는 SQLite 전용")
     import config
     from core import demo_data
     from core import enterprise as ent
@@ -142,3 +146,13 @@ def test_demo_reset_restores_sample_and_sidebar(app, isolated_db, monkeypatch, t
         conn.execute("UPDATE customers SET name = '방문자가 바꿈' WHERE id = 1")
     assert app.test_client().post("/demo/reset", data={}).status_code in (302, 400, 404)   # 시연 서버가 아니면 로그인으로
     assert db._df("SELECT name FROM customers WHERE id = 1")["name"][0] == "방문자가 바꿈"
+
+
+def test_money_inputs_accept_any_amount():
+    """금액 칸에 큰 step(예: 100000)이 있으면 브라우저가 1,234,567 같은 금액을 보내지 않는다 — 모두 step 1."""
+    import glob
+    bad = []
+    for path in glob.glob(database.BASE_DIR + "/templates/**/*.html", recursive=True):
+        text = open(path, encoding="utf-8").read()
+        bad += [f"{path}:{m.group(0)}" for m in re.finditer(r'step="(\d{2,})"', text)]
+    assert not bad, bad

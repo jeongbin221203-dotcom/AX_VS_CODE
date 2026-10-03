@@ -9,7 +9,7 @@
     </select> <span class="muted small" data-price-source></span></td>
     <td><input name="item_name" value="{{ it.item_name or '' }}" placeholder="직접 입력 품목명"></td>
     <td><input type="number" name="qty" min="1" value="{{ it.qty or 1 }}" class="num-sm"></td>
-    <td><input type="number" name="unit_price" min="0" step="1000" value="{{ it.unit_price if it.unit_price is not none else '' }}" placeholder="비우면 특가/정가"></td>
+    <td><input type="number" name="unit_price" min="0" step="1" value="{{ it.unit_price if it.unit_price is not none else '' }}" placeholder="비우면 특가/정가"></td>
     <td>{{ select('tax_type', tax_types, it.tax_type or '과세') }}</td>
     <td class="num" data-line-amount></td>
     <td><button type="button" class="btn btn-sm" data-remove-line aria-label="행 삭제">✕</button></td>
@@ -28,6 +28,7 @@
 
 <form method="get" class="toolbar" action="{{ page_path() }}">
   <label>상태 {{ select('status', statuses, status, blank='전체') }}</label>
+  <label class="check"><input type="checkbox" name="ready" value="1" {{ 'checked' if request.args.get('ready') == '1' }}> 수주 전 (수락했지만 아직 수주·매출 없음)</label>
   <button class="btn">조회</button>
   <a class="btn btn-primary" href="{{ url_for('catalog.quotes', new=1) }}">➕ 새 견적</a>
   {{ download(export_url('quotes')) }}

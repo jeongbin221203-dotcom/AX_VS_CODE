@@ -8,6 +8,7 @@ from __future__ import annotations
 import logging
 import os
 import secrets
+import time
 import sys
 from logging.handlers import RotatingFileHandler
 
@@ -64,6 +65,9 @@ def create_app(test_config: dict | None = None) -> Flask:
                                f"배포 단계에서 'python manage.py db upgrade' 를 먼저 실행하세요.")
     observability.init_app(app)            # 요청 ID·지표·읽기 전용 점검 — 다른 요청 훅보다 먼저
     register_blueprints(app)
+    if not app.config.get("TESTING"):
+        from core.storage import start_flusher
+        start_flusher()                             # S3 장애 때 이 서버가 임시 보관한 파일을 복구되면 올림
     register_template_helpers(app)
     if not app.config.get("TESTING"):
         _setup_logging(app)
@@ -100,8 +104,10 @@ def create_app(test_config: dict | None = None) -> Flask:
     def _bump_data_version(response):
         """저장(POST 성공)이 있으면 화면 집계 캐시(views.helpers.cached)를 새로 계산하게 한다."""
         if request.method == "POST" and response.status_code < 400:
-            from views.helpers import bump_data_version
+            from views.helpers import CACHE_SECONDS, bump_data_version
             bump_data_version()
+            # 서버가 여러 대면 다음 화면이 다른 서버로 갈 수 있다 → 저장한 사람은 잠시 캐시 없이 (본인 저장은 바로 보이게)
+            session["_fresh_until"] = time.time() + CACHE_SECONDS
         return response
 
     @app.after_request

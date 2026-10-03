@@ -16,13 +16,13 @@
   {% if tab == 'finance' %}
     <p class="muted small">대손 처리는 금액에 따라 팀장 또는 임원, 거래정지 해제는 팀장 이상이 결재합니다. 요청한 사람은 결재할 수 없습니다.</p>
     {% for r in fin_pending_rows %}
-      <form method="post" action="{{ url_for('finance.finance_request_decide', rid=r.id) }}" class="toolbar" data-no-draft data-confirm="'반려' — 되돌리기 어렵습니다. 계속할까요?">
+      <form method="post" action="{{ url_for('finance.finance_request_decide', rid=r.id) }}" class="toolbar" data-no-draft>
         {{ csrf() }}
         <span class="grow small"><strong>{{ r['구분'] }}</strong> · {{ r['거래처'] }}{% if r['매출번호'] %} · 매출 #{{ r['매출번호']|int }}{% endif %}
           · {{ r['금액']|won }} · {{ r['사유'] }} · 요청 {{ r['요청자'] }} ({{ r['요청일시'] }})</span>
         <input name="comment" placeholder="의견 (반려 시 필수)">
         <button class="btn btn-sm btn-primary" name="decision" value="approve">승인</button>
-        <button class="btn btn-sm btn-danger" name="decision" value="reject">반려</button>
+        <button data-confirm="'반려' — 되돌리기 어렵습니다. 계속할까요?" class="btn btn-sm btn-danger" name="decision" value="reject">반려</button>
       </form>
     {% else %}
       <div class="alert alert-success">결재할 대손·거래정지 해제 요청이 없습니다.</div>
@@ -73,12 +73,12 @@
       {% if picked %}
         <div class="alert alert-info">요청자 <strong>{{ picked['요청자'] }}</strong> · 요청사유: {{ picked['사유'] or '(미기재)' }}<br>
           결재선: {{ picked['결재선'] }} · 내 차례: {{ picked['내 차례'] }}</div>
-        <form method="post" action="{{ url_for('finance.approval_decide', aid=pick) }}" class="form" data-confirm="'반려' — 되돌리기 어렵습니다. 계속할까요?">
+        <form method="post" action="{{ url_for('finance.approval_decide', aid=pick) }}" class="form">
           {{ csrf() }}
           <label>결재 의견 <textarea name="comment" rows="3" placeholder="반려 시 필수"></textarea></label>
           <div class="row-actions">
             <button class="btn btn-primary" name="decision" value="approve">✅ 승인</button>
-            <button class="btn btn-danger" name="decision" value="reject">❌ 반려</button>
+            <button data-confirm="'반려' — 되돌리기 어렵습니다. 계속할까요?" class="btn btn-danger" name="decision" value="reject">❌ 반려</button>
           </div>
         </form>
       {% endif %}

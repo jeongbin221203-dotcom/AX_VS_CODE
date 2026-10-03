@@ -119,12 +119,15 @@ def prepare() -> str:
     return seeded_on(path)
 
 
-_lock = threading.Lock()
+_lock = threading.Lock()              # 새 샘플 만들기 (오래 걸림)
+_swap_lock = threading.Lock()         # DB 경로·원본 바꾸기와 되돌리기 (짧음)
 
 
 def reset() -> str:
     """샘플로 되돌리기: 처음 샘플을 지금 DB 에 다시 넣는다. 반환: 샘플 기준일."""
-    with _lock:
+    if database.is_pg():
+        raise ValueError("샘플로 되돌리기는 SQLite 시연 서버에서만 됩니다 (PostgreSQL 은 백업에서 복구하세요).")
+    with _swap_lock:                                     # 새 샘플을 만드는 중이어도 기다리지 않는다
         _copy_db(PRISTINE, database.DB_PATH)
     return seeded_on(database.DB_PATH)
 
@@ -144,8 +147,9 @@ def refresh_if_stale(now: datetime | None = None) -> bool:
         live = os.path.join(folder, f"live_{today}.db")                # 방문자가 쓰는 사본
         _remove_db(live)
         _copy_db(pristine, live)
-        old, old_pristine = database.DB_PATH, PRISTINE
-        PRISTINE, database.DB_PATH = pristine, live                     # 다음 요청부터 새 DB
+        with _swap_lock:
+            old, old_pristine = database.DB_PATH, PRISTINE
+            PRISTINE, database.DB_PATH = pristine, live                 # 다음 요청부터 새 DB
         print(f"시연 데이터 새로 만듦 {seconds:.1f}초 (기준일 {today}) → {live}", flush=True)
         time.sleep(30)                                  # 진행 중이던 요청이 끝난 뒤 옛 파일 정리
         for p in (old, old_pristine):

@@ -18,7 +18,10 @@ class Index:
     """한 번의 업로드 동안 쓰는 이름 색인 (거래처 1만 곳도 수 ms)."""
 
     def __init__(self, db_path: str | None = None):
-        rows = db._df("SELECT id, name, biz_no_norm FROM customers WHERE merged_into IS NULL", (), db_path)
+        rows = db._df("SELECT id, name, biz_no_norm, owner_id FROM customers WHERE merged_into IS NULL", (), db_path)
+        scope = db.current_scope()                   # 추천(비슷한 이름 안내)은 볼 수 있는 거래처만 — 다른 팀 거래처 이름이 새지 않게
+        self.visible = None if scope is None else {int(r.id) for r in rows.itertuples()
+                                                   if r.owner_id is not None and int(r.owner_id) in set(scope)}
         self.by_name: dict[str, int] = {}
         self.by_key: dict[str, list[int]] = {}
         self.by_biz: dict[str, int] = {}
@@ -30,6 +33,10 @@ class Index:
             self.by_key.setdefault(db.name_key(r.name), []).append(cid)
             if r.biz_no_norm:
                 self.by_biz.setdefault(str(r.biz_no_norm), cid)
+        self.grams: dict[str, set[str]] = {}         # 2글자 묶음 → 이름 키 (비슷한 이름 후보를 빨리 좁힘)
+        for k in self.by_key:
+            for g in {k[i:i + 2] for i in range(max(len(k) - 1, 1))}:
+                self.grams.setdefault(g, set()).add(k)
         aliases = db._df("SELECT a.alias_key, a.customer_id FROM customer_aliases a "
                          "JOIN customers c ON c.id = a.customer_id WHERE c.merged_into IS NULL", (), db_path)
         self.by_alias = {r.alias_key: int(r.customer_id) for r in aliases.itertuples()}
@@ -55,9 +62,13 @@ class Index:
         key = db.name_key(name)
         if not key:
             return []
+        candidates: set[str] = set()
+        for g in {key[i:i + 2] for i in range(max(len(key) - 1, 1))}:
+            candidates |= self.grams.get(g, set())
         scored = []
-        for k, ids in self.by_key.items():
-            if not k:
+        for k in candidates:
+            ids = [cid for cid in self.by_key[k] if self.visible is None or cid in self.visible]
+            if not k or not ids:
                 continue
             ratio = 0.95 if (key in k or k in key) else difflib.SequenceMatcher(None, key, k).ratio()
             if ratio >= 0.6:
@@ -110,8 +121,12 @@ def add_alias(customer_id: int, alias: str, actor: str = "", db_path: str | None
         raise ValueError("거래처나 이름이 올바르지 않습니다.")
     if key == db.name_key(cust["name"]):
         return False                                 # 정식 이름과 같은 표기 — 따로 둘 필요 없음
-    other = db._one("SELECT a.customer_id, c.name FROM customer_aliases a JOIN customers c ON c.id = a.customer_id "
-                    "WHERE a.alias_key = ?", [key], db_path)
+    other = db._one("SELECT a.customer_id, COALESCE(c.name, '(삭제된 거래처)') AS name FROM customer_aliases a "
+                    "LEFT JOIN customers c ON c.id = a.customer_id WHERE a.alias_key = ?", [key], db_path)
+    if other and not db._one("SELECT 1 FROM customers WHERE id = ?", [int(other["customer_id"])], db_path):
+        with db.get_conn(db_path) as conn:          # 지워진 거래처에 남은 다른 이름은 정리하고 새로 쓴다
+            conn.execute("DELETE FROM customer_aliases WHERE alias_key = ?", (key,))
+        other = None
     clash = [r for r in db._df("SELECT id, name FROM customers WHERE merged_into IS NULL AND id <> ?",
                                [int(customer_id)], db_path).itertuples() if db.name_key(r.name) == key]
     if other and int(other["customer_id"]) == int(customer_id):

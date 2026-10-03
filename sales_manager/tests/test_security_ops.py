@@ -69,21 +69,23 @@ def test_doctor_page_and_checks(app):
     with app.test_request_context():
         checks = {c.name: c for c in doctor.run()}
     assert checks["연결"].status == "ok" and checks["구조(리비전)"].status == "ok" and checks["저장소"].status == "ok"
-    assert checks["SQLite 안전 설정"].status == "ok"             # WAL + synchronous=FULL
+    assert checks["SQLite 안전 설정"].status == ("off" if database.is_pg() else "ok")   # WAL + synchronous=FULL
     html = login(app, "시스템관리자").get("/admin/doctor").get_data(as_text=True)
     assert "🩺 운영 점검" in html and "배치 워커" in html and "점검(읽기 전용) 모드" in html
     assert login(app, "김영업").get("/admin/doctor").status_code == 403
-    with database.get_conn() as conn:
-        assert conn.execute("PRAGMA synchronous").fetchone()[0] == 2
+    if not database.is_pg():
+        with database.get_conn() as conn:
+            assert conn.execute("PRAGMA synchronous").fetchone()[0] == 2
 
 
 def test_backup_is_verified(app, tmp_path):
     db.set_context("system", None)
     path = db.backup_database(tmp_path / "bk", keep=3)
-    import sqlite3
-    conn = sqlite3.connect(path)
-    assert conn.execute("PRAGMA quick_check").fetchone()[0] == "ok"
-    conn.close()
+    if not database.is_pg():                                    # PostgreSQL 은 pg_restore --list 로 검증 (.dump)
+        import sqlite3
+        conn = sqlite3.connect(path)
+        assert conn.execute("PRAGMA quick_check").fetchone()[0] == "ok"
+        conn.close()
     detail = json.loads(database.rows("SELECT detail FROM audit_log WHERE action='DB백업' ORDER BY id DESC LIMIT 1")[0]["detail"])
     assert detail["검증"] == "통과"
 
@@ -201,3 +203,48 @@ def test_audit_stdout_for_demo_logs(app, monkeypatch, capsys):
     db.audit("시험", "시스템", None, {"a": 1})
     out = capsys.readouterr().out
     assert "AUDIT {" in out and '"action": "시험"' in out
+
+
+def test_review_fixes(app, monkeypatch):
+    """코드 검토에서 찾은 것: 지운 거래처의 다른 이름 · 기본 웹훅 재시도 중복 · 링크 인자 500 · 사무실 IP 예외 · 없는 단계 · 수주 전 견적."""
+    db.set_context("system", None)
+    # 지운 거래처에 남은 다른 이름이 같은 이름 재사용을 막지 않는다
+    cid = db.upsert_customer({"name": "삭제될상사", "owner": "김영업"}, confirm_similar=False)
+    db.upsert_customer({"id": cid, "name": "삭제될상사2", "owner": "김영업"}, confirm_similar=False)
+    db.delete_customer(cid)
+    other = db.upsert_customer({"name": "남는상사", "owner": "김영업"}, confirm_similar=False)
+    assert cn.add_alias(other, "삭제될상사", "t") is True
+    # 기본 웹훅: 재시도해도 한 번만
+    calls = []
+    from core import notify
+    monkeypatch.setenv("SALES_NOTIFY_WEBHOOK_URL", "https://hook.example/x")
+    monkeypatch.setattr(notify, "post_webhook", lambda text: calls.append(text))
+    nids = notify.notify([user("김영업")["id"]], "요약", "웹훅 한 번", "", "/", deliver=False)
+    notify.deliver(nids)
+    with db.get_conn() as conn:
+        conn.execute("UPDATE notifications SET email_status='대기' WHERE id=?", (nids[0],))
+    notify.deliver(nids)
+    assert len(calls) == 1
+    # 목록 링크에 이상한 인자가 와도 500 이 아니다
+    admin = login(app, "시스템관리자")
+    for bad in ("/deals?endpoint=x", "/deals?_scheme=x", "/customers?_external=1"):
+        assert admin.get(bad).status_code == 200, bad
+    # 사무실 IP 는 IP 차단에서 뺀다
+    monkeypatch.setenv("SALES_IP_ALLOWLIST", "10.0.0.0/8")
+    for _ in range(core_auth.IP_MAX_FAILURES + 1):
+        core_auth.record_ip_failure("10.1.2.3")
+    assert not core_auth.ip_blocked("10.1.2.3")
+    # 없는 단계 이름은 데이터 점검에 잡힌다
+    from core import quality
+    deal = int(database.scalar("SELECT MIN(id) FROM deals"))
+    old = db.get_deal(deal)["stage"]
+    with db.get_conn() as conn:
+        conn.execute("UPDATE deals SET stage='옛단계' WHERE id=?", (deal,))
+    try:
+        assert quality.unknown_stage()["count"] >= 1
+    finally:
+        with db.get_conn() as conn:
+            conn.execute("UPDATE deals SET stage=? WHERE id=?", (old, deal))
+    # 수주 전 견적 필터
+    html = admin.get("/quotes?ready=1").get_data(as_text=True)
+    assert "수주 전" in html

@@ -127,12 +127,15 @@
     sel.setAttribute("aria-hidden", "true");
     input.disabled = sel.disabled;
     let shown = [], active = -1;
+    let timer = null, seq = 0;                           // 서버 검색: 입력이 멈추면 한 번, 늦은 응답은 버림
 
     function label() {
       const o = sel.options[sel.selectedIndex];
       return o && o.value !== "" ? o.text : "";
     }
     function close() {
+      clearTimeout(timer);
+      seq++;                                              // 늦게 오는 서버 검색 결과가 닫힌 목록을 다시 열지 않게
       list.hidden = true;
       input.setAttribute("aria-expanded", "false");
     }
@@ -143,9 +146,9 @@
       items.forEach(function (li, k) { li.classList.toggle("active", k === active); });
       items[active].scrollIntoView({ block: "nearest" });
     }
-    let timer = null, seq = 0;
     function render(q, found) {
       const words = (q || "").trim().toLowerCase().split(/\s+/).filter(Boolean);
+      if (remote && !words.length) { clearTimeout(timer); seq++; }
       if (remote && words.length && !found) {                // 서버 검색 (입력이 멈추면 한 번)
         clearTimeout(timer);
         const my = ++seq;
@@ -905,7 +908,10 @@
 /* 확인이 필요한 폼(data-confirm): 보내기 전에 한 번 묻는다. 다른 제출 처리(중복 방지 등)보다 먼저 — capture 단계. */
 document.addEventListener("submit", function (e) {
   const form = e.target;
-  if (form.dataset && form.dataset.confirm && !window.confirm(form.dataset.confirm)) {
+  // 버튼이 여러 개인 폼(승인/반려 등)은 누른 버튼의 data-confirm 을, 아니면 폼의 data-confirm 을 묻는다
+  const btn = e.submitter && e.submitter.dataset && e.submitter.dataset.confirm ? e.submitter : null;
+  const message = btn ? btn.dataset.confirm : (form.dataset && form.dataset.confirm);
+  if (message && !window.confirm(message)) {
     e.preventDefault();
     e.stopImmediatePropagation();
   }

@@ -13,7 +13,7 @@
     <label>고객측 담당자 <input name="manager" value="{{ f.manager or '' }}"></label>
     <label>연락처 <input name="phone" value="{{ f.phone or '' }}"></label>
     <label>이메일 <input name="email" type="email" value="{{ f.email or '' }}"></label>
-    <label>여신한도(원) <input name="credit_limit" type="number" min="0" step="10000000" value="{{ f.credit_limit or 0 }}"></label>
+    <label>여신한도(원) <input name="credit_limit" type="number" min="0" step="1" value="{{ f.credit_limit or 0 }}"></label>
     <label>결제조건(일) <input name="payment_terms" type="number" min="0" value="{{ f.payment_terms if f.payment_terms is not none else COMPANY.default_payment_terms }}"></label>
     <label>주소 <input name="address" value="{{ f.address or '' }}"></label>
     <label>ERP 코드 (SAP 고객번호) <input name="erp_code" value="{{ f.erp_code or '' }}" placeholder="예) C100234"></label>

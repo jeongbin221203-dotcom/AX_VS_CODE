@@ -175,6 +175,28 @@ class SpoolingStorage:
 
 _storage = None
 _lock = threading.Lock()
+_flusher_started = False
+
+
+def start_flusher(every_seconds: int = 300) -> None:
+    """S3 임시 보관은 그 파일을 받은 서버의 폴더에 있다 → 웹 서버마다 이 스레드가 자기 임시 보관을 올린다
+    (배치 워커의 storage.flush 는 워커 자신의 것만 볼 수 있으므로). 프로세스당 한 번."""
+    global _flusher_started
+    if _flusher_started or os.environ.get("SALES_STORAGE") != "s3":
+        return
+    _flusher_started = True
+
+    def loop():
+        import time
+        while True:
+            time.sleep(every_seconds)
+            try:
+                st = get_storage()
+                if hasattr(st, "flush") and st.spooled_count():
+                    st.flush()
+            except Exception:                        # noqa: BLE001 - 다음 주기에 다시
+                pass
+    threading.Thread(target=loop, name="storage-flush", daemon=True).start()
 
 
 def get_storage():

@@ -200,7 +200,11 @@ def demo_reset():
     if not config.DEMO_AUTOLOGIN:
         abort(404)
     from core import demo_data
-    day = demo_data.reset()
+    try:
+        day = demo_data.reset()
+    except ValueError as exc:
+        flash(str(exc), "error")
+        return redirect(url_for("reports.dashboard"))
     user = demo_user()
     if user:
         demo_login(user)                                # 되돌린 DB 의 시연 관리자로 다시 들어온다

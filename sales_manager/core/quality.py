@@ -109,6 +109,16 @@ def overpaid() -> dict:
                   df, link=("finance.sales", {}, "sid"))
 
 
+def unknown_stage() -> dict:
+    marks = ",".join("?" * len(db.STAGES))
+    df = _df(f"""SELECT d.id, c.name AS 거래처, d.title AS 기회명, d.stage AS 단계, d.owner AS 담당자
+                 FROM deals d LEFT JOIN customers c ON c.id = d.customer_id
+                 WHERE d.stage NOT IN ({marks}) ORDER BY d.id""", tuple(db.STAGES))
+    return _check("unknown_stage", "없는 단계 이름", "high",
+                  "회사 설정의 단계 이름에 없는 단계라 보드·깔때기·매출예측 어디에도 나오지 않습니다. 수정 화면에서 단계를 다시 고르세요.",
+                  df, link=("crm.deals", {"tab": "edit"}, "id"))
+
+
 def lost_without_reason() -> dict:
     df = _df("""SELECT d.id, c.name AS 거래처, d.title AS 기회명, d.closed_at AS 종료일, d.owner AS 담당자
                 FROM deals d LEFT JOIN customers c ON c.id = d.customer_id
@@ -139,7 +149,7 @@ def unlinked_owner() -> dict:
                   fix_label="이름이 같은 사용자에게 연결 (동명이인은 제외)")
 
 
-CHECKS = [duplicate_customers, bad_biz_no, paid_mismatch, won_without_sales, overpaid, unlinked_owner,
+CHECKS = [duplicate_customers, bad_biz_no, paid_mismatch, unknown_stage, won_without_sales, overpaid, unlinked_owner,
           date_inverted, closed_mismatch, lost_without_reason, stale_open]
 
 

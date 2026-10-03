@@ -10,7 +10,7 @@
 pip install -r requirements-dev.txt
 python app.py                   # 개발: http://127.0.0.1:5001 (SQLite, 간편 로그인, 스키마 자동 최신화)
 python manage.py worker         # 배치 워커 (알림·ERP 전송·결재 독촉·인사 연동·백업)
-python -m pytest tests -q       # 테스트 149개 (임시 DB·폴더 사용, data/ 는 건드리지 않음)
+python -m pytest tests -q       # 테스트 151개 (임시 DB·폴더 사용, data/ 는 건드리지 않음)
 # PostgreSQL 로 같은 테스트: SALES_TEST_PG_URL=postgresql://postgres@127.0.0.1:5433/postgres python -m pytest tests -q
 ```
 
@@ -198,6 +198,7 @@ sales/
 | 백업·저장 안전 | 백업마다 검증(quick_check · pg_restore --list), 같은 디스크 경고, SQLite synchronous=FULL, S3 장애 때 임시 보관 + storage.flush |
 | 거래처 이름 맞추기 | 업로드에서 '(주)'·띄어쓰기 무시·다른 이름(customer_aliases)·사업자번호로 찾기, 못 찾은 이름은 거래처 > 🏷️ 이름 정리, 이름 변경·병합 때 예전 이름 자동 보존 (core/customer_names.py) |
 | 기타 | 위험한 버튼 확인 창, 사용자별 메신저 ID, 시연 감사로그 표준출력(SALES_AUDIT_STDOUT), docs/SECURITY.md · CI bandit·pip-audit (마이그레이션 0016) |
+| 2026-10-03 밤 점검 | 금액 칸이 1,234,567 같은 값을 못 보내던 문제(step) 수정, 승인/반려가 한 폼인 곳은 누른 버튼에만 확인 창, 견적 '수주 전' 필터(`?ready=1`)·시연 샘플에 수주 전 수락 견적 2건, 사무실 NAT IP 는 `SALES_IP_ALLOWLIST` 로 IP 차단 예외, 저장한 사람은 서버가 여러 대여도 바로 최신 화면, 기본 웹훅 재시도 중복 방지, 지운 거래처의 다른 이름 정리, 데이터 점검 '없는 단계 이름', 비슷한 이름 추천은 볼 수 있는 거래처만 |
 
 ## 8. 세금계산서 · 전자세금계산서 증빙
 - 이미지·PDF·**전자세금계산서 XML**(자동 인식) 첨부, 매직 바이트 판별, 사업자번호·승인번호·세액·**공급가액/세액/합계 각각 매출과 대조**,

@@ -14,7 +14,7 @@
 
 {% if found %}
 <section class="card">
-  <form method="post" action="{{ url_for('admin.privacy') }}" class="form" data-no-draft data-confirm="'삭제 요청 — 파기' — 되돌리기 어렵습니다. 계속할까요?">
+  <form method="post" action="{{ url_for('admin.privacy') }}" class="form" data-no-draft>
     {{ csrf() }}<input type="hidden" name="term" value="{{ found.term }}">
     <h3>거래처의 고객 담당자 정보 ({{ found.customers|length }}건)</h3>
     <div class="table-wrap"><table class="data">
@@ -44,7 +44,7 @@
     <div class="row-actions">
       <button class="btn" name="action" value="export">⬇️ 열람 요청 — 엑셀로 내보내기</button>
       <label class="check"><input type="checkbox" name="confirm" value="1"> 체크한 항목을 파기합니다 (되돌릴 수 없음)</label>
-      <button class="btn btn-danger" name="action" value="erase">삭제 요청 — 파기</button>
+      <button data-confirm="'파기' — 되돌리기 어렵습니다. 계속할까요?" class="btn btn-danger" name="action" value="erase">삭제 요청 — 파기</button>
     </div>
   </form>
 </section>

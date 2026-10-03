@@ -221,15 +221,35 @@ def end_all_sessions(user_id: int, actor_reason: str = "") -> None:
 # ---------------------------------------------------------------------------
 # IP 단위 로그인 차단 — 여러 계정을 돌아가며 시도하는 공격(계정 잠금만으로는 못 막음)
 # ---------------------------------------------------------------------------
+def _ip_exempt(ip: str) -> bool:
+    """SALES_IP_ALLOWLIST(쉼표, CIDR 가능 — 예: 10.0.0.0/8,121.130.1.2): 회사 NAT 처럼 여러 사람이 한 IP 를 쓰면
+    오타 몇 번으로 회사 전체가 막히지 않게 IP 차단에서 뺀다 (계정 잠금은 그대로)."""
+    import ipaddress
+    raw = os.environ.get("SALES_IP_ALLOWLIST", "").strip()
+    if not raw:
+        return False
+    try:
+        addr = ipaddress.ip_address(ip)
+    except ValueError:
+        return False
+    for part in raw.split(","):
+        try:
+            if addr in ipaddress.ip_network(part.strip(), strict=False):
+                return True
+        except ValueError:
+            continue
+    return False
+
+
 def ip_blocked(ip: str) -> bool:
-    if not ip:
+    if not ip or _ip_exempt(ip):
         return False
     since = (datetime.now() - timedelta(minutes=IP_WINDOW_MINUTES)).strftime("%Y-%m-%d %H:%M:%S")
     return int(db._scalar("SELECT COUNT(*) FROM login_ip_failures WHERE ip=? AND at>=?", [ip, since]) or 0) >= IP_MAX_FAILURES
 
 
 def record_ip_failure(ip: str) -> None:
-    if not ip:
+    if not ip or _ip_exempt(ip):
         return
     now = datetime.now()
     with db.get_conn() as conn:

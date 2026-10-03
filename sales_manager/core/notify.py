@@ -130,13 +130,27 @@ def deliver(ids: list[int]) -> dict:
             skipped += 1
         with db.get_conn() as conn:
             conn.execute("UPDATE notifications SET email_status=?, sent_at=? WHERE id=?", (status, db._now(), r["id"]))
+    webhook_error = None
     if os.environ.get("SALES_NOTIFY_WEBHOOK_URL") and not rows.empty:
         first = rows.iloc[0]
-        extra = f" 외 {len(rows) - 1}명" if len(rows) > 1 else ""
-        post_webhook(f"[영업관리] {first['title']} → {first['name']}{extra}\n{first['body'] or ''}\n"
-                     f"{_base_url()}{first['link'] or ''}")
+        nid = int(first["id"])
+        done = db._scalar("SELECT COUNT(*) FROM notify_log WHERE channel_id = 0 AND notification_id = ? AND status = '발송'",
+                          [nid])
+        if not done:                                 # 작업이 재시도돼도 같은 알림을 두 번 올리지 않는다 (channel_id 0 = 기본 웹훅)
+            extra = f" 외 {len(rows) - 1}명" if len(rows) > 1 else ""
+            try:
+                post_webhook(f"[영업관리] {first['title']} → {first['name']}{extra}\n{first['body'] or ''}\n"
+                             f"{_base_url()}{first['link'] or ''}")
+                status, err = "발송", None
+            except Exception as exc:                 # noqa: BLE001 - 메신저 채널은 계속 보낸다
+                status, err, webhook_error = "실패", str(exc)[:500], exc
+            with db.get_conn() as conn:
+                conn.execute("INSERT INTO notify_log (channel_id, notification_id, target, status, error, sent_at) "
+                             "VALUES (0, ?, '', ?, ?, ?)", (nid, status, err, db._now()))
     from . import messenger                         # 잔디·네이버웍스·카카오워크·Slack·Teams (관리자 > 알림 채널)
     chat = messenger.deliver(rows.to_dict("records"), _base_url()) if not rows.empty else {"sent": 0}
+    if webhook_error:
+        raise RuntimeError(f"기본 웹훅 발송 실패: {webhook_error}")
     return {"email": sent, "skipped": skipped, "messenger": chat.get("sent", 0)}
 
 

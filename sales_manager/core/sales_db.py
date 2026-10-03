@@ -302,7 +302,7 @@ def audit(action: str, entity: str, entity_id: int | None = None,
     except Exception as exc:   # noqa: BLE001 - 감사 기록 실패가 업무를 막지 않되 파일에 남긴다
         _audit_fallback(record, exc)
         return
-    if os.environ.get("SALES_AUDIT_STDOUT") == "1":
+    if os.environ.get("SALES_AUDIT_STDOUT") == "1" and not database.SQLITE_FAST:   # 샘플 대량 생성 중에는 찍지 않음
         # 시연 서버처럼 DB 가 재시작마다 초기화되는 곳: 서버 로그(Render 로그)에도 한 줄 JSON 으로 남겨 방문자 행동을 확인
         print("AUDIT " + json.dumps(record, ensure_ascii=False, default=str), flush=True)
 
@@ -690,6 +690,7 @@ def delete_customer(customer_id: int, db_path: str | None = None) -> None:
             raise ValueError("영업기회·활동·매출 이력이 있는 거래처는 삭제할 수 없습니다 "
                              f"(기회 {used['deals']} · 활동 {used['activities']} · 매출 {used['sales']}건). "
                              "상태를 '종료'로 바꾸세요.")
+        conn.execute("DELETE FROM customer_aliases WHERE customer_id = ?", (customer_id,))   # 남으면 같은 이름을 못 씀
         conn.execute("DELETE FROM customers WHERE id = ?", (customer_id,))
     audit("삭제", "거래처", customer_id, {"삭제 전": prev}, db_path)
 
@@ -810,6 +811,14 @@ DEAL_FIELDS = ["customer_id", "title", "owner", "stage", "amount", "probability"
 COMMERCIAL_FIELDS = ("list_amount", "amount", "discount_rate")
 
 
+def _fresh_stage_names(db_path: str | None = None) -> None:
+    """단계 이름은 회사 설정에서 바뀔 수 있다 — 서버가 여러 대면 다른 서버의 15초 캐시 사이에 옛 이름이 저장될 수 있어,
+    단계를 쓰기 직전에는 설정을 다시 읽는다 (옛 이름이면 STAGES 검사에서 거부된다)."""
+    if db_path is None and not database.SQLITE_FAST:      # 샘플 대량 생성 중에는 설정이 바뀌지 않으므로 생략
+        from . import company
+        company.refresh(max_age=2)                  # 2초 안에 읽은 설정이면 그대로 (저장마다 DB 를 읽지 않게)
+
+
 def upsert_deal(data: dict, db_path: str | None = None, force: bool = False,
                 force_reason: str = "") -> int:
     """영업기회 등록/수정.
@@ -822,6 +831,7 @@ def upsert_deal(data: dict, db_path: str | None = None, force: bool = False,
         raise ValueError("거래처를 선택하세요.")
     if not str(data.get("title", "")).strip():
         raise ValueError("기회명은 필수입니다.")
+    _fresh_stage_names(db_path)
     stage = data.get("stage") or OPEN_STAGES[0]
     if stage not in STAGES:
         raise ValueError(f"단계 값이 올바르지 않습니다: {stage}")
@@ -926,6 +936,7 @@ def upsert_deal(data: dict, db_path: str | None = None, force: bool = False,
 def change_stage(deal_id: int, stage: str, db_path: str | None = None,
                  force: bool = False, lost_reason: str | None = None) -> None:
     """단계 변경. 확률/종료일/단계진입일/이력/감사로그를 함께 정리한다."""
+    _fresh_stage_names(db_path)
     if stage not in STAGES:
         raise ValueError(f"단계 값이 올바르지 않습니다: {stage}")
     deal = get_deal(deal_id, db_path)

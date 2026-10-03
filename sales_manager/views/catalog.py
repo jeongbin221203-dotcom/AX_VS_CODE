@@ -8,6 +8,7 @@ from flask import Blueprint, abort, flash, g, jsonify, redirect, request, send_f
 import io
 
 from core import catalog
+from core import database
 from core import orders as so
 from core import entities as ent_mod
 from core import enterprise as ent
@@ -116,7 +117,13 @@ def _visible_quote(qid: int) -> dict:
 @bp.route("/quotes")
 def quotes():
     status = a_str("status")
-    df = qt.list_quotes(status, owner_id=g.owner_filter)
+    ready = a_str("ready") == "1"                    # 수주 전: 수락했지만 아직 수주·매출로 넘어가지 않은 견적
+    df = qt.list_quotes("수락" if ready else status, owner_id=g.owner_filter)
+    if ready and not df.empty:
+        done = {int(r["quote_id"]) for r in database.rows(
+            "SELECT quote_id FROM sales_orders WHERE quote_id IS NOT NULL "
+            "UNION SELECT quote_id FROM sales WHERE quote_id IS NOT NULL")}
+        df = df[~df["id"].isin(done)]
     if request.args.get("export") == "quotes":
         return csv_response(df.drop(columns=["id", "owner_id", "customer_id"], errors="ignore"), "견적목록.csv")
     qid = a_int("qid")

@@ -159,6 +159,8 @@ def user_save():
         temp = request.form.get("temp_password", "")
         if temp:
             core_auth.set_password(new_id, temp, must_change=core_auth.AUTH_MODE == "password")
+            if new_id == g.user["id"]:                    # 본인 계정이면 지금 화면은 이어서
+                session["sv"] = core_auth.session_version(ent.get_user(user_id=new_id))
         flash(f"사용자 '{f_str('name')}' 정보를 저장했습니다."
               + (" 임시 비밀번호를 설정했습니다(첫 로그인 때 변경)." if temp else ""), "success")
     except ValueError as exc:
@@ -617,7 +619,7 @@ def doctor():
     from core import doctor as dr
     checks = dr.run()
     db.audit("운영점검", "시스템", None, dr.summary(checks))
-    return render_page("admin/doctor.html", "jobs", checks=checks, summary=dr.summary(checks),
+    return render_page("admin/doctor.html", "jobs", title="🩺 운영 점검", checks=checks, summary=dr.summary(checks),
                        maintenance=company.get("maintenance") or {}, sso_until=core_auth.sso_outage_until(),
                        auth_mode=core_auth.AUTH_MODE, env_read_only=os.environ.get("SALES_READ_ONLY") == "1")
 

@@ -227,6 +227,7 @@ def cmd_demo_init(args) -> int:
             print(key, out)
         sample_industry.backdate_customers(rnd_seed=DEMO_SEED)   # 기본 샘플 거래처도 첫 거래보다 먼저 등록된 것으로
         sample_industry.realign_targets(rnd_seed=DEMO_SEED)      # 목표를 담당자별 평균 매출에 맞춤 (달성률이 수백 %로 튀지 않게)
+        print("수주 전 수락 견적:", sample_industry.ready_for_demo())   # 시연 안내 '수락된 견적 → 수주 등록'을 바로 해 볼 수 있게
     print(f"시연 데이터 준비 {time.time() - started:.1f}초 (기준일 {__import__('datetime').date.today()})")
     return 0
 

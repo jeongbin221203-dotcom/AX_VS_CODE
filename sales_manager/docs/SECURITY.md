@@ -8,7 +8,7 @@
 | 위협 | 대응 | 위치 |
 |---|---|---|
 | 비인가 접근 | 로그인 필수(비밀번호 · 사내 SSO 헤더 · OIDC), 역할별 메뉴·서버 검사(403), 담당자·조직 데이터 범위 | `core/auth.py`, `views/helpers.py`, `core/enterprise.visible_owners` |
-| 비밀번호 추측 | PBKDF2-SHA256 31만 회, 계정 5회 실패 시 15분 잠금, **IP 단위 15분 20회 실패 시 차단** | `core/auth.py` (`login_ip_failures`) |
+| 비밀번호 추측 | PBKDF2-SHA256 31만 회, 계정 5회 실패 시 15분 잠금, **IP 단위 15분 20회 실패 시 차단** (회사 NAT 처럼 여럿이 한 IP 면 `SALES_IP_ALLOWLIST` 로 IP 차단만 예외 — 계정 잠금은 그대로) | `core/auth.py` (`login_ip_failures`) |
 | 계정 존재 확인 | 없는 계정도 같은 시간 해시 계산, 실패 문구 통일 | `core/auth.authenticate_password` |
 | 세션 탈취 | HttpOnly·SameSite 쿠키, 로그인 때 세션 교체, 무활동 만료 + 최대 시간, **비밀번호 변경·로그아웃 때 다른 세션 모두 무효**(`users.session_version`), 관리자 '모든 세션 끊기' | `views/auth.py`, `views/helpers.load_context` |
 | 위조 요청(CSRF) | 모든 POST 에 세션 토큰, 같은 제출 두 번 처리 안 함(`_submit_id`) | `app.py` |

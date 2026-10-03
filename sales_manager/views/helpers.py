@@ -226,8 +226,8 @@ def bump_data_version() -> None:
 
 
 def cached(name: str, parts: tuple, compute):
-    if current_app.config.get("TESTING"):
-        return compute()
+    if current_app.config.get("TESTING") or session.get("_fresh_until", 0) > time.time():
+        return compute()                             # 방금 저장한 사람은 (다른 서버의 캐시라도) 최신으로
     key = (name, database.DB_PATH, _DATA_VERSION[0], date.today().isoformat(), *parts)
     hit = _CACHE.get(key)
     if hit and time.monotonic() - hit[0] < CACHE_SECONDS:
@@ -349,7 +349,8 @@ class Table:
                 endpoint, key, arg, *more = link
                 extra = dict(more[0]) if more else {}
                 if endpoint == request.endpoint:        # 같은 화면: 검색어·쪽 등 조회 조건을 유지한 채 그 건만 고른다
-                    keep = {k: v for k, v in request.args.items() if k not in ("export", "new", arg, *extra)}
+                    keep = {k: v for k, v in request.args.to_dict(flat=False).items()
+                            if k not in ("export", "new", "endpoint", arg, *extra) and not k.startswith("_")}
                     row["href"] = url_for(endpoint, **keep, **extra, **{arg: rec[key]})
                 else:
                     row["href"] = url_for(endpoint, **extra, **{arg: rec[key]})
@@ -484,7 +485,8 @@ def render_page(template: str, active: str, **ctx):
     endpoint = next((m[2] for m in MENUS if m[0] == active), None)
     if endpoint:
         g.page_path = url_for(endpoint)
-    return render_template(template, active=active, title=menu_label(active), **ctx)
+    title = ctx.pop("title", None) or menu_label(active)     # 메뉴에 없는 화면(운영 점검 등)은 제목을 따로
+    return render_template(template, active=active, title=title, **ctx)
 
 
 # ----------------------------------------------------------------------------

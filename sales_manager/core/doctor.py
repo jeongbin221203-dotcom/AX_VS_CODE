@@ -164,6 +164,8 @@ def _messenger():
 
 
 def _backup():
+    if config.DEMO:
+        return "off", "시연 서버 — 매일 새벽 샘플로 초기화하므로 백업하지 않음"
     folder = Path(config.BACKUP_DIR)
     files = sorted([*folder.glob("sales_*.db"), *folder.glob("sales_*.dump")], key=lambda f: f.stat().st_mtime) \
         if folder.exists() else []
@@ -179,6 +181,8 @@ def _backup():
 
 
 def _worker():
+    if config.DEMO:
+        return "off", "시연 서버 — 배치 워커를 띄우지 않음 (알림·ERP 전송은 대기열에만 쌓임)"
     from . import jobs
     w = jobs.workers()
     if w.empty:

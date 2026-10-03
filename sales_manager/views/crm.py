@@ -232,7 +232,7 @@ def unknown_dismiss():
 @bp.route("/customers/merge", methods=["POST"])
 def customer_merge():
     if not ent.has_role(g.user, "SUPPORT"):
-        abort(403, "거래처 병합은 시스템관리자만 할 수 있습니다.")
+        abort(403, "거래처 병합은 영업지원·시스템관리자만 할 수 있습니다.")
     try:
         result = db.merge_customers(f_int("source_id"), f_int("target_id"), f_str("reason"))
         moved = ", ".join(f"{k} {v}건" for k, v in result["이동"].items() if v) or "옮길 데이터 없음"

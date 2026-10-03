@@ -496,6 +496,24 @@ def backdate_customers(rnd_seed: Optional[int] = None) -> int:
     return len(rows)
 
 
+def ready_for_demo(count: int = 2) -> int:
+    """시연 안내 2번('수락된 견적 → 수주 등록')을 바로 해 볼 수 있게, 협상 단계 기회의 최근 견적 몇 건을 '수락'(아직 수주 전)으로.
+    바꾼 수."""
+    rows = db._df(
+        "SELECT q.id FROM quotes q JOIN deals d ON d.id = q.deal_id "
+        "WHERE q.status IN ('작성중', '발송') AND d.stage = ? "
+        "AND NOT EXISTS (SELECT 1 FROM sales_orders o WHERE o.quote_id = q.id) "
+        "AND NOT EXISTS (SELECT 1 FROM sales s WHERE s.quote_id = q.id) ORDER BY q.issue_date DESC, q.id DESC LIMIT ?",
+        [db.OPEN_STAGES[4], int(count)])
+    now = date.today()
+    with db.get_conn() as conn:
+        for qid in rows["id"].tolist():
+            conn.execute("UPDATE quotes SET status='수락', sent_at=?, decided_at=? WHERE id=?",
+                         (f"{(now - timedelta(days=3)).isoformat()} 10:00:00", f"{(now - timedelta(days=1)).isoformat()} 15:00:00",
+                          int(qid)))
+    return len(rows)
+
+
 def seed_many(industries: list[str] | None = None, customers: int = 8, months: int = 12,
               rnd_seed: Optional[int] = None) -> dict:
     """여러 업종을 한 번에 — 업종마다 customers 곳. 결과는 업종별 건수."""

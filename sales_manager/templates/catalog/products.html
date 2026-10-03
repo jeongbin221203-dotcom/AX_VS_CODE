@@ -21,7 +21,7 @@
       <div class="form-grid g3">
         <label>거래처 * {{ pick('customer_id', customers, cust_id or '', blank='선택하세요', open_only=true) }}</label>
         <label>품목 * {{ select('product_id', product_opts, '', blank='선택하세요') }}</label>
-        <label>특가(원) * <input type="number" name="unit_price" min="1" step="1000" required></label>
+        <label>특가(원) * <input type="number" name="unit_price" min="1" step="1" required></label>
         <label>시작일 <input type="date" name="valid_from" value="{{ today_str }}"></label>
         <label>종료일 (비우면 계속) <input type="date" name="valid_to"></label>
         <label>메모 <input name="memo" placeholder="예) 2026 연간계약"></label>
@@ -48,7 +48,7 @@
         <label>규격 <input name="spec" value="{{ edit.spec or '' }}" placeholder="예) 1100x1100, 20L"></label>
         <label>분류 <input name="category" value="{{ edit.category or '' }}"></label>
         <label>단위 <input name="unit" value="{{ edit.unit or 'EA' }}"></label>
-        <label>정가(원) <input type="number" name="list_price" min="0" step="1000" value="{{ edit.list_price or 0 }}"></label>
+        <label>정가(원) <input type="number" name="list_price" min="0" step="1" value="{{ edit.list_price or 0 }}"></label>
         <label>과세구분 {{ select('tax_type', tax_types, edit.tax_type or '과세') }}</label>
         <label>ERP 자재번호 <input name="erp_material" value="{{ edit.erp_material or '' }}" placeholder="비우면 품목코드"></label>
         <label class="span3">메모 <input name="memo" value="{{ edit.memo or '' }}"></label>

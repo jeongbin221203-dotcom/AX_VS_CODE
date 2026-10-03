@@ -112,9 +112,9 @@ def _apply(values: dict) -> None:
                              (float(values["discount_exec_max"]), "EXEC"), (100.0, "ADMIN")]
 
 
-def refresh(force: bool = False) -> dict:
-    """CACHE_SECONDS 가 지났거나 force 면 DB 에서 다시 읽는다. 요청 시작·작업 시작 때 부른다."""
-    if not force and time.monotonic() - _state["loaded_at"] < CACHE_SECONDS:
+def refresh(force: bool = False, max_age: float | None = None) -> dict:
+    """CACHE_SECONDS(또는 max_age)가 지났거나 force 면 DB 에서 다시 읽는다. 요청 시작·작업 시작 때 부른다."""
+    if not force and time.monotonic() - _state["loaded_at"] < (CACHE_SECONDS if max_age is None else max_age):
         return _state["values"]
     with _lock:
         values = {**DEFAULTS, **_read_db()}

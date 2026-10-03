@@ -24,7 +24,7 @@
   </div>
   <div class="form-grid g3" data-deal-calc data-disc-m="{{ DISC_M }}" data-disc-e="{{ DISC_E }}">
     <label>단계 {{ select('stage', STAGES, f.stage) }}</label>
-    <label>정가(원) <input name="list_amount" type="number" min="0" step="1000000" value="{{ (f.list_amount or f.amount or 0)|int }}"></label>
+    <label>정가(원) <input name="list_amount" type="number" min="0" step="1" value="{{ (f.list_amount or f.amount or 0)|int }}"></label>
     <label>할인율(%) <input name="discount_rate" type="number" min="0" max="100" step="0.5" value="{{ f.discount_rate or 0 }}"></label>
     <label>예상 마감일 <input name="expected_close" type="date" value="{{ (f.expected_close or '')[:10] }}"></label>
     {{ owner_input('owner_id', f.owner_id) }}
