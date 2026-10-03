@@ -66,3 +66,20 @@ def test_education_and_date():
     assert to_date("2026.10.31") == "2026-10-31"
     assert to_date("20261031") == "2026-10-31"
     assert to_date("채용시까지") is None
+
+
+def test_negotiable_text_with_address_numbers_is_not_salary():
+    """'회사 내규에 따름 근무지주소 … 서초대로 301, 16~18F' 의 주소 숫자를 금액으로 읽지 않는다."""
+    assert salary.parse("회사 내규에 따름 근무지주소 대한민국 서울특별시 서초구 서초대로 301, 16~18F") == (None, None, True)
+    assert salary.parse("면접 후 결정 (주 5일, 09~18시)") == (None, None, True)
+    assert salary.parse("연봉 2800만원~3000만원(경력자 협의 가능)")[:2] == (2800, 3000)
+    assert salary.parse("회사 내규에 따름 (3,000만원 이상)")[:2] == (3000, None)
+
+
+def test_region_with_country_prefix():
+    assert parse_region("대한민국 서울특별시 서초구 서초대로 301, 16~18F") == ("서울", "서초구")
+    assert parse_region("한국 경기도 성남시 분당구") == ("경기", "성남시 분당구")
+
+
+def test_negotiable_with_unitless_big_amount_keeps_amount():
+    assert salary.parse("회사 내규에 따름(연봉 : 25,882,560)")[:2] == (2588, 2588)

@@ -12,6 +12,7 @@ import json
 import re
 from urllib.parse import urlparse
 
+from core.normalize import parse_region
 from core.postings import build
 
 from . import SourceError, http_get
@@ -142,11 +143,15 @@ def parse(page: str, url: str, site: str) -> dict:
         # 잡코리아 표가 구조화 데이터보다 정확하다 (예: 데이터는 FULL_TIME 인데 표는 '계약직')
         x = _jobkorea_table(page)
         emp = x.get("고용형태") or emp
-        if _has_amount(x.get("급여")):
-            salary_text = x["급여"]
+        if _has_amount(x.get("급여")) or (x.get("급여") and not salary_text):
+            salary_text = x["급여"]                          # 금액이 있거나, 다른 데서 못 읽었으면 표의 문구 그대로
         career, education = x.get("경력") or career, x.get("학력") or education
+        # 구조화 데이터의 주소에서 시·도를 못 읽었으면 표의 근무지로
+        if not parse_region(location)[0] and (x.get("근무지주소") or x.get("근무지역")):
+            location = x.get("근무지주소") or x.get("근무지역")
         posted, deadline = x.get("시작일") or posted, x.get("마감일") or deadline
-        lines = [f"{k}: {x[k]}" for k in ("모집분야", "모집인원", "고용형태", "급여", "근무시간", "경력", "학력", "우대사항")
+        lines = [f"{k}: {x[k]}" for k in ("모집분야", "모집인원", "고용형태", "급여", "근무지주소", "근무시간", "근무요일",
+                                          "경력", "학력", "우대사항")
                  if x.get(k)]
         if lines:
             desc = "\n".join(["[모집요강]", *lines, "", desc or "", "(상세 본문은 원문에서 확인하세요 — 이미지로 된 경우가 많습니다)"])
@@ -162,7 +167,8 @@ def parse(page: str, url: str, site: str) -> dict:
                  job_category=_text(jp.get("industry")) if jp else None, company_info=company_info)
 
 
-_JK_LABELS = ("모집분야", "모집인원", "고용형태", "급여", "근무시간", "경력", "학력", "우대사항", "시작일", "마감일",
+_JK_LABELS = ("모집분야", "모집인원", "고용형태", "급여", "근무지주소", "근무지역", "근무시간", "근무요일", "경력", "학력",
+              "우대사항", "시작일", "마감일",
               "사원수", "기업구분", "산업(업종)", "설립", "매출액", "위치")
 _JK_STOP = ("지원자격", "로그인", "TOP", "궁금해요", "접수기간 · 방법", "기업 정보", "기업정보 더보기", "지도보기",
             "모집요강", "💌")

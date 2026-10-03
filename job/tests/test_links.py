@@ -254,3 +254,13 @@ def test_detail_read_marks_done_and_flags(app):
     empty = postings.build("linkareer", "5", title="t", company="c", company_info={})
     postings.upsert_many([empty])
     assert postings.get(postings.find_id("linkareer", "5"))["company_info"] == "{}"
+
+
+def test_jobkorea_salary_not_merged_with_address():
+    page = JSONLD_PAGE.replace("</body>", """<div><h3>모집요강</h3><dt>모집분야</dt><dd>Sales Leader</dd><dt>고용형태</dt><dd>정규직</dd>
+<dt>급여</dt><dd>회사 내규에 따름</dd><dt>근무지주소</dt><dd>대한민국 서울특별시 서초구 서초대로 301, 16~18F</dd><a>지도보기</a>
+<h3>지원자격</h3><dt>경력</dt><dd>경력</dd><dd>(5년이상)</dd></div></body>""").replace('"maxValue": 36000000', '"maxValue": 0')
+    page = page.replace('"baseSalary"', '"x_baseSalary"')
+    p = linkimport.parse(page, "https://www.jobkorea.co.kr/Recruit/GI_Read/2", "jobkorea")
+    assert p["salary_raw"] == "회사 내규에 따름" and p["salary_min"] is None and p["salary_negotiable"] == 1
+    assert "근무지주소: 대한민국 서울특별시 서초구" in p["description"]

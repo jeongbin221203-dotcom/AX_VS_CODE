@@ -23,6 +23,12 @@ def parse(text, pay_type: str | None = None) -> tuple[int | None, int | None, bo
     hint = clean(pay_type)
     if not raw:
         return None, None, False
+    # '회사 내규에 따름 … 서초대로 301, 16~18F' 처럼 협의 문구에 붙은 숫자(주소·층)는 금액이 아니다:
+    # 협의 문구가 있고 돈 단위(원·만원·억)가 없으면 협의로 본다
+    # (단위 없이 '25,882,560' 처럼 쓴 백만 단위 이상 금액은 돈으로 본다 — 주소·층 숫자는 작다)
+    has_money = re.search(r"\d[\d,.]*\s*(억|천만|만\s*원|만|원)", raw) or re.search(r"\d{1,3}(,\d{3}){2,}|\d{7,}", raw)
+    if any(w in raw for w in NEGOTIABLE_WORDS) and not has_money:
+        return None, None, True
     groups = _amount_groups(raw)
     if not groups:
         return None, None, any(w in raw for w in NEGOTIABLE_WORDS)

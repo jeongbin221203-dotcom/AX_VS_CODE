@@ -49,6 +49,7 @@ def parse_region(text) -> tuple[str | None, str | None]:
     text = clean(text)
     if not text:
         return None, None
+    text = re.sub(r"^(대한민국|한국|South\s*Korea|Korea)\s*", "", text, flags=re.I)   # '대한민국 서울특별시 …'
     first = re.split(r"[,/|·]| 외 ", text)[0].replace(">", " ")
     first = re.sub(r"\s+", " ", first).strip()
     for key in _SIDO_KEYS:
