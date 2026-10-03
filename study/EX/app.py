@@ -65,8 +65,8 @@ def create_app(config=None):
         resp.headers['Referrer-Policy'] = 'same-origin'
         return resp
 
-    from views import analyze, build, functions, learn, main
-    for bp in (main.bp, learn.bp, functions.bp, analyze.bp, build.bp):
+    from views import analyze, build, exam, functions, learn, main
+    for bp in (main.bp, learn.bp, functions.bp, analyze.bp, build.bp, exam.bp):
         app.register_blueprint(bp)
 
     @app.template_filter('num')

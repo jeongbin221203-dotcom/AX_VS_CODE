@@ -83,6 +83,43 @@
     });
   });
 
+  /* 모의고사 시간: [시험 시작]을 누른 시각을 기억(새로 고쳐도 이어짐), 제출할 때 걸린 시간을 함께 보냄 */
+  document.querySelectorAll('[data-exam-timer]').forEach(function (box) {
+    var minutes = parseInt(box.getAttribute('data-exam-timer'), 10);
+    var key = 'ex-exam-start:' + box.getAttribute('data-exam-id');
+    var text = box.querySelector('[data-timer-text]');
+    var wrap = box.querySelector('.timer');
+    var secondsInput = box.querySelector('[data-timer-seconds]');
+    var startBtn = box.querySelector('[data-timer-start]');
+    function getStart() { try { return parseInt(localStorage.getItem(key) || '0', 10); } catch (e) { return 0; } }
+    function pad(n) { return (n < 10 ? '0' : '') + n; }
+    function tick() {
+      var start = getStart();
+      if (!start) { text.textContent = minutes + ':00'; startBtn.disabled = false; wrap.classList.remove('over'); return; }
+      startBtn.disabled = true;
+      var used = Math.floor((Date.now() - start) / 1000);
+      var left = minutes * 60 - used;
+      wrap.classList.toggle('over', left < 0);
+      var a = Math.abs(left);
+      text.textContent = (left < 0 ? '시간 초과 +' : '') + Math.floor(a / 60) + ':' + pad(a % 60);
+      if (secondsInput) secondsInput.value = used;
+    }
+    startBtn.addEventListener('click', function () {
+      try { localStorage.setItem(key, String(Date.now())); } catch (e) { /* 저장 불가면 이 화면에서만 */ }
+      tick();
+    });
+    box.querySelector('[data-timer-reset]').addEventListener('click', function () {
+      try { localStorage.removeItem(key); } catch (e) { /* 무시 */ }
+      tick();
+    });
+    box.querySelector('form').addEventListener('submit', function () {
+      tick();
+      try { localStorage.removeItem(key); } catch (e) { /* 무시 */ }
+    });
+    tick();
+    setInterval(tick, 1000);
+  });
+
   /* 별표 */
   document.querySelectorAll('[data-star]').forEach(function (b) {
     b.addEventListener('click', function () {

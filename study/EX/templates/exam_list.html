@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}컴활 실기 모의고사 · 엑셀 연습장{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><h1>컴활 실기 모의고사</h1>
+    <p>실제 시험과 같은 구성·배점·지시문 형식으로 새로 만든 문제입니다. 문제 파일을 내려받아 Excel 에서 풀고, 저장한 파일을 올리면 항목별로 채점합니다.</p></div>
+</div>
+{% for g in groups %}
+<h2 style="margin-top:18px">{{ g.name }} <span class="small muted" style="font-weight:400">
+  {% if g.level == 'c2' %}엑셀 40분 · 기본 20 · 계산 40 · 분석 20 · 기타 20{% else %}엑셀 45분 · 기본 15 · 계산 30 · 분석 20 · 기타 35{% endif %} · 70점 이상 합격</span></h2>
+<div class="grid g3">
+  {% for e in g['items'] %}
+  {% set b = best.get(e.id) %}
+  <a class="card cat-card" href="{{ url_for('exam.paper', eid=e.id) }}">
+    <div class="top-line"><h3 style="margin:0">{{ e.title }}</h3><span class="small muted">{{ e.minutes }}분</span></div>
+    <p>{% for s, pts in ex.section_points(e).items() if pts %}{{ s }} {{ pts }}{{ ' · ' if not loop.last }}{% endfor %}</p>
+    <div class="small">{% if b %}최고 <b>{{ b.score|num }}점</b> · {{ b.n }}번 응시 {% if b.passed %}<span class="badge work">합격선 통과</span>{% endif %}
+      {% else %}<span class="muted">아직 응시하지 않음</span>{% endif %}</div>
+  </a>
+  {% else %}<div class="empty">준비 중입니다.</div>{% endfor %}
+</div>
+{% endfor %}
+<section class="card" style="margin-top:16px">
+  <h2>채점 방식</h2>
+  <ul class="small" style="margin:0;padding-left:1.2em">
+    <li>수식은 값과 함께 지시된 함수를 썼는지, 배열 수식인지까지 봅니다. 값만 쳐 넣으면 오답입니다.</li>
+    <li>조건부 서식·고급 필터는 규칙 수식을 행마다 계산해서 서식/추출 대상이 맞는지 비교하므로, 같은 뜻의 다른 수식도 정답입니다.</li>
+    <li>피벗·부분합·시나리오·데이터 표·목표값 찾기·차트·페이지 설정·시트 보호·유효성 검사는 파일 속 설정을 읽어 확인합니다.</li>
+    <li>매크로·VBA 는 .xlsm 으로 저장해야 코드와 단추를 확인할 수 있습니다. VBA 는 지시한 코드가 들어 있는지(문자 패턴)만 봅니다.</li>
+    <li>실제 시험 기출 문제가 아니며, 실제 시험의 채점 기준과 다를 수 있습니다.</li>
+  </ul>
+</section>
+{% endblock %}

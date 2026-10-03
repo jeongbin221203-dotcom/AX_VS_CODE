@@ -1,2 +1,3 @@
 -r requirements.txt
 pytest>=8
+pywin32>=306; platform_system == "Windows"

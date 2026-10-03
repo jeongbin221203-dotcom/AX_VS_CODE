@@ -157,3 +157,10 @@ def test_references_names_dfunc(book2, text, want):
 
 def test_korean_function_name_parses():
     assert 'FN비고' in fx.functions_used(fx.parse('=fn비고(D4,E4)'))
+
+
+def test_excel_escaped_number_formats():
+    d = fx.parse_date_text('2026-10-03')
+    assert fx.format_value(d, 'yyyy"년"\ m"월"\ d"일"') == '2026년 10월 3일'
+    assert fx.format_value(d, 'yyyy\.mm\.dd\(aaa\)') == '2026.10.03(토)'
+    assert fx.format_value(1234, '#,##0\원') == '1,234원'

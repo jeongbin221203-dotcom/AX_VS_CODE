@@ -1,0 +1,442 @@
+{
+ "id": "zz-test",
+ "level": "c1",
+ "round": 99,
+ "title": "test",
+ "minutes": 45,
+ "pass": 70,
+ "sheets": [
+  {
+   "name": "S1",
+   "at": "A3",
+   "rows": [
+    [
+     "사번",
+     "이름",
+     "부서",
+     "직급",
+     "실적",
+     "급여"
+    ],
+    [
+     "A1",
+     "가",
+     "영업",
+     "사원",
+     80,
+     3000
+    ],
+    [
+     "A2",
+     "나",
+     "총무",
+     "대리",
+     95,
+     3500
+    ],
+    [
+     "A3",
+     "다",
+     "영업",
+     "과장",
+     70,
+     4200
+    ],
+    [
+     "A4",
+     "라",
+     "기획",
+     "사원",
+     88,
+     2900
+    ],
+    [
+     "A5",
+     "마",
+     "영업",
+     "대리",
+     91,
+     3600
+    ],
+    [
+     "A6",
+     "바",
+     "총무",
+     "과장",
+     60,
+     4100
+    ]
+   ]
+  },
+  {
+   "name": "S2",
+   "rows": [
+    [
+     "기본",
+     1000
+    ],
+    [
+     "인상률",
+     0.1
+    ],
+    [
+     "결과",
+     "=B1*(1+B2)"
+    ]
+   ],
+   "blocks": [
+    {
+     "at": "D1",
+     "rows": [
+      [
+       "=B3",
+       0.1,
+       0.2,
+       0.3
+      ],
+      [
+       1000,
+       null,
+       null,
+       null
+      ],
+      [
+       2000,
+       null,
+       null,
+       null
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "name": "S3",
+   "rows": [
+    [
+     "1월",
+     null
+    ],
+    [
+     "품목",
+     "수량"
+    ],
+    [
+     "A",
+     10
+    ],
+    [
+     "B",
+     20
+    ]
+   ],
+   "blocks": [
+    {
+     "at": "D1",
+     "rows": [
+      [
+       "2월",
+       null
+      ],
+      [
+       "품목",
+       "수량"
+      ],
+      [
+       "A",
+       5
+      ],
+      [
+       "C",
+       7
+      ]
+     ]
+    },
+    {
+     "at": "A10",
+     "rows": [
+      [
+       "코드,이름,수량"
+      ],
+      [
+       "X1,사과,3"
+      ],
+      [
+       "X2,배,5"
+      ]
+     ]
+    }
+   ]
+  }
+ ],
+ "tasks": [
+  {
+   "no": "1-1",
+   "section": "기본작업",
+   "title": "filter",
+   "sheet": "S1",
+   "text": "t",
+   "checks": [
+    {
+     "kind": "filter",
+     "label": "f",
+     "points": 10,
+     "source": "A3:F9",
+     "answer": "=AND(C4=\"영업\",E4>=80)",
+     "out": "A15",
+     "columns": [
+      "이름",
+      "부서",
+      "실적"
+     ],
+     "criteria_at": "H3"
+    },
+    {
+     "kind": "dv",
+     "label": "dv",
+     "points": 10,
+     "range": "E4:E9",
+     "type": "whole",
+     "operator": "between",
+     "formula1": "0",
+     "formula2": "100",
+     "error_title": "오류",
+     "error": "0~100"
+    },
+    {
+     "kind": "comment",
+     "label": "c",
+     "points": 5,
+     "cell": "B4",
+     "text": "신입"
+    },
+    {
+     "kind": "page",
+     "label": "p",
+     "points": 10,
+     "orientation": "landscape",
+     "center_h": true,
+     "title_rows": "$3:$3",
+     "footer_center": "&P / &N"
+    },
+    {
+     "kind": "protect",
+     "label": "pr",
+     "points": 5,
+     "unlocked": "E4:E9"
+    }
+   ],
+   "answer": [
+    {
+     "op": "advfilter",
+     "source": "A3:F9",
+     "criteria": {
+      "at": "H3",
+      "rows": [
+       [
+        "부서",
+        "실적"
+       ],
+       [
+        "영업",
+        ">=80"
+       ]
+      ]
+     },
+     "out": "A15",
+     "columns": [
+      "이름",
+      "부서",
+      "실적"
+     ]
+    },
+    {
+     "op": "dv",
+     "range": "E4:E9",
+     "type": "whole",
+     "operator": "between",
+     "formula1": "0",
+     "formula2": "100",
+     "error_title": "오류",
+     "error": "0~100"
+    },
+    {
+     "op": "comment",
+     "cell": "B4",
+     "text": "신입"
+    },
+    {
+     "op": "page",
+     "orientation": "landscape",
+     "center_h": true,
+     "title_rows": "$3:$3",
+     "footer_center": "&P / &N"
+    },
+    {
+     "op": "protect",
+     "unlocked": "E4:E9"
+    }
+   ]
+  },
+  {
+   "no": "3-1",
+   "section": "분석작업",
+   "title": "what-if",
+   "sheet": "S2",
+   "text": "t",
+   "checks": [
+    {
+     "kind": "datatable",
+     "label": "dt",
+     "points": 10,
+     "range": "E2:G3",
+     "row_input": "B2",
+     "col_input": "B1"
+    },
+    {
+     "kind": "scenario",
+     "label": "sc",
+     "points": 10,
+     "changing": "B2",
+     "scenarios": [
+      [
+       "상",
+       [
+        0.3
+       ]
+      ],
+      [
+       "하",
+       [
+        0.05
+       ]
+      ]
+     ],
+     "summary_before": "S2"
+    },
+    {
+     "kind": "goalseek",
+     "label": "gs",
+     "points": 10,
+     "cell": "B3",
+     "value": 1500,
+     "changing": "B1"
+    }
+   ],
+   "answer": [
+    {
+     "op": "datatable",
+     "range": "D1:G3",
+     "row_input": "B2",
+     "col_input": "B1"
+    },
+    {
+     "op": "scenario",
+     "changing": "B2",
+     "scenarios": [
+      [
+       "상",
+       [
+        0.3
+       ]
+      ],
+      [
+       "하",
+       [
+        0.05
+       ]
+      ]
+     ],
+     "result": "B3"
+    },
+    {
+     "op": "goalseek",
+     "cell": "B3",
+     "value": 1500,
+     "changing": "B1"
+    }
+   ]
+  },
+  {
+   "no": "3-2",
+   "section": "분석작업",
+   "title": "cons",
+   "sheet": "S3",
+   "text": "t",
+   "checks": [
+    {
+     "kind": "values",
+     "label": "cons",
+     "points": 20,
+     "range": "G2:H5",
+     "expect": [
+      [
+       "품목",
+       "수량"
+      ],
+      [
+       "A",
+       15
+      ],
+      [
+       "B",
+       20
+      ],
+      [
+       "C",
+       7
+      ]
+     ]
+    },
+    {
+     "kind": "values",
+     "label": "split",
+     "points": 10,
+     "range": "A10:C12",
+     "expect": [
+      [
+       "코드",
+       "이름",
+       "수량"
+      ],
+      [
+       "X1",
+       "사과",
+       3
+      ],
+      [
+       "X2",
+       "배",
+       5
+      ]
+     ]
+    }
+   ],
+   "answer": [
+    {
+     "op": "values",
+     "range": "G2",
+     "values": [
+      [
+       "품목"
+      ]
+     ]
+    },
+    {
+     "op": "consolidate",
+     "target": "G2",
+     "sources": [
+      "'S3'!$A$2:$B$4",
+      "'S3'!$D$2:$E$4"
+     ],
+     "func": "sum"
+    },
+    {
+     "op": "textsplit",
+     "range": "A10:A12",
+     "delimiter": ","
+    }
+   ]
+  }
+ ]
+}

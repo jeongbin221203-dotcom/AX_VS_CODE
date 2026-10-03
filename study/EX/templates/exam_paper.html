@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %}{{ e.title }} · 엑셀 연습장{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><div class="crumb"><a href="{{ url_for('exam.index') }}">컴활 실기 모의고사</a> ›</div>
+    <h1>{{ e.title }}</h1>
+    <p>{{ ex.LEVELS[e.level] }} · 시험 시간 {{ e.minutes }}분 · 100점 만점 {{ e.pass }}점 이상 합격</p></div>
+  <div class="btns">
+    <a class="btn primary" href="{{ url_for('exam.download', eid=e.id) }}">문제 파일 내려받기</a>
+  </div>
+</div>
+{% if error %}<div class="alert" role="alert">{{ error }}</div>{% endif %}
+
+<section class="card exam-bar" data-exam-timer="{{ e.minutes }}" data-exam-id="{{ e.id }}">
+  <div class="timer" aria-live="polite"><span class="small muted">남은 시간</span> <b data-timer-text>{{ e.minutes }}:00</b></div>
+  <div class="btns">
+    <button class="btn" type="button" data-timer-start>시험 시작</button>
+    <button class="btn ghost" type="button" data-timer-reset>시간 초기화</button>
+  </div>
+  <form class="exam-upload" method="post" action="{{ url_for('exam.submit', eid=e.id) }}" enctype="multipart/form-data" data-once>
+    <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+    <input type="hidden" name="seconds" value="" data-timer-seconds>
+    <input type="file" name="file" accept=".xlsx,.xlsm" aria-label="답안 파일">
+    <button class="btn primary" type="submit">답안 제출·채점</button>
+  </form>
+</section>
+{% if e.intro %}<p class="small muted">{{ e.intro }}</p>{% endif %}
+
+{% for s in sections %}
+<section class="card exam-section">
+  <h2>문제 {{ loop.index }} {{ s.name }} <span class="small muted" style="font-weight:400">({{ s.points }}점)</span></h2>
+  {% for t in s.tasks %}
+  <div class="exam-task">
+    <h3>{{ loop.index }}. {{ t.title }} <span class="small muted" style="font-weight:400">({{ ex.task_points(t) }}점)</span></h3>
+    <p class="prompt">{{ t.text }}</p>
+    {% if tables.get(t.no) %}
+    <div class="table-wrap" style="max-width:780px"><table class="t sheet-like">
+      <thead><tr><th></th>{% for v in tables[t.no][0] %}<th>{{ 'ABCDEFGHIJKL'[loop.index0] }}</th>{% endfor %}</tr></thead>
+      <tbody>{% for row in tables[t.no] %}<tr><th>{{ loop.index }}</th>{% for v in row %}<td>{{ v }}</td>{% endfor %}</tr>{% endfor %}</tbody>
+    </table></div>
+    {% endif %}
+    {% if t.get('items') %}
+    <ol class="exam-items">{% for it in t.get('items') %}<li><span class="num">{{ circled[loop.index0] if t.get('items')|length > 1 and not it.startswith('▶') else '▶' }}</span> {{ it }}</li>{% endfor %}</ol>
+    {% endif %}
+  </div>
+  {% endfor %}
+</section>
+{% endfor %}
+
+<section class="card">
+  <h2>응시 기록</h2>
+  {% if history %}
+  <div class="table-wrap"><table class="t">
+    <thead><tr><th>시각</th><th class="r">점수</th><th>결과</th><th class="r">걸린 시간</th><th>파일</th></tr></thead>
+    <tbody>{% for h in history %}<tr>
+      <td class="nowrap"><a href="{{ url_for('exam.result', rid=h.id) }}">{{ h.created_at[5:16] }}</a></td>
+      <td class="r"><b>{{ h.score|num }}</b> / {{ h.total|num }}</td>
+      <td>{% if h.passed %}<span class="st ok">✓</span> 합격선{% else %}<span class="st bad">✕</span> 미달{% endif %}</td>
+      <td class="r">{{ (h.seconds // 60)|string + '분' if h.seconds else '–' }}</td>
+      <td class="small muted">{{ h.file_name }}</td></tr>{% endfor %}</tbody>
+  </table></div>
+  {% else %}<div class="empty">아직 제출한 답안이 없습니다.</div>{% endif %}
+</section>
+{% endblock %}

@@ -66,6 +66,16 @@
       {% else %}<div class="empty">마지막에 틀린 문제가 없습니다.</div>{% endif %}
     </section>
     <section class="card">
+      <h2>컴활 실기 모의고사</h2>
+      <ul class="list">
+        {% for x in exams %}
+        <li><div class="grow"><a class="title" href="{{ url_for('exam.paper', eid=x.e.id) }}">{{ x.e.title }}</a>
+          <div class="small muted">{{ x.e.minutes }}분 · 합격 {{ x.e.pass }}점</div></div>
+          <span class="nowrap small">{% if x.best %}최고 <b>{{ x.best.score|num }}점</b>{% if x.best.passed %} <span class="st ok">✓</span>{% endif %}{% else %}<span class="muted">미응시</span>{% endif %}</span></li>
+        {% else %}<li class="muted">준비 중</li>{% endfor %}
+      </ul>
+    </section>
+    <section class="card">
       <h2>대시보드 만들기 실습</h2>
       <ul class="list">
         {% for x in missions %}

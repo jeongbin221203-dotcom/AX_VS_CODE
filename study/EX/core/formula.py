@@ -1692,6 +1692,8 @@ def format_value(v, fmt):
         raise v
     if fmt in ('@', ''):
         return to_str(v)
+    # 엑셀이 저장할 때 붙이는 \ 이스케이프(\ 공백, \. \( 등)는 따옴표 글자와 같다
+    fmt = re.sub(r'\\(.)', lambda m: '"' + m.group(1) + '"', fmt)
     if isinstance(v, str):
         try:
             v = to_num(v)

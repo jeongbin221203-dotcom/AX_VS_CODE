@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}채점 결과 · {{ e.title }}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><div class="crumb"><a href="{{ url_for('exam.index') }}">컴활 실기 모의고사</a> › <a href="{{ url_for('exam.paper', eid=e.id) }}">{{ e.title }}</a> ›</div>
+    <h1>채점 결과</h1><p>{{ row.file_name }} · {{ row.created_at }}{% if row.seconds %} · {{ row.seconds // 60 }}분 {{ row.seconds % 60 }}초{% endif %}</p></div>
+  <a class="btn primary" href="{{ url_for('exam.paper', eid=e.id) }}">문제지로</a>
+</div>
+<div class="grid g4">
+  <div class="kpi"><div class="label">점수</div><div class="value">{{ res.score|num }}<small> / {{ res.total|num }}</small></div>
+    <div class="sub">{% if res.passed %}<span class="st ok">✓</span> 합격선({{ e.pass }}점) 이상{% else %}<span class="st bad">✕</span> 합격선 {{ e.pass }}점 미달{% endif %}</div></div>
+  {% for s in res.sections %}
+  <div class="kpi"><div class="label">{{ s.name }}</div><div class="value">{{ s.got|num }}<small> / {{ s.points|num }}</small></div>
+    <div class="meter" style="margin-top:8px" aria-hidden="true"><span style="width:{{ (100 * s.got / s.points)|round|int if s.points else 0 }}%"></span></div></div>
+  {% endfor %}
+</div>
+{% if not res.has_vba and res.tasks|selectattr('section', 'equalto', '기타작업')|list %}
+<p class="small muted">이 파일에는 매크로(VBA)가 없습니다. 매크로 문제는 Excel 매크로 사용 통합 문서(.xlsm)로 저장해야 채점됩니다.</p>
+{% endif %}
+<section class="card" style="margin-top:14px">
+  {% for t in res.tasks %}
+  <div class="check-item">
+    <div class="head">
+      {% if t.got == t.points %}<span class="st ok">✓</span>{% elif t.got > 0 %}<span class="st new">△</span>{% else %}<span class="st bad">✕</span>{% endif %}
+      <b>{{ t.section }} {{ t.no }} {{ t.title }}</b> <span class="small muted">{{ t.got|num }} / {{ t.points|num }}점</span>
+    </div>
+    <ul class="list" style="margin-left:32px">
+      {% for it in t['items'] %}
+      <li><span class="st {{ 'ok' if it.ok else 'bad' }}">{{ '✓' if it.ok else '✕' }}</span>
+        <div class="grow"><div>{{ it.label }} <span class="small muted">{{ it.points|num }}점</span></div>
+          {% if not it.ok and it.msgs %}<div class="small" style="color:var(--bad)">{{ it.msgs|join(' · ') }}</div>{% endif %}</div></li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endfor %}
+</section>
+{% endblock %}

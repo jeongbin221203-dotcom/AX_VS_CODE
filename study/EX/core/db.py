@@ -39,6 +39,18 @@ CREATE TABLE IF NOT EXISTS build_results (
     created_at TEXT NOT NULL DEFAULT (datetime('now', 'localtime'))
 );
 
+CREATE TABLE IF NOT EXISTS exam_results (
+    id INTEGER PRIMARY KEY,
+    exam TEXT NOT NULL,
+    score REAL NOT NULL,
+    total REAL NOT NULL,
+    passed INTEGER NOT NULL,
+    seconds INTEGER,
+    detail TEXT,
+    file_name TEXT,
+    created_at TEXT NOT NULL DEFAULT (datetime('now', 'localtime'))
+);
+
 CREATE TABLE IF NOT EXISTS settings (
     key TEXT PRIMARY KEY,
     value TEXT
@@ -53,8 +65,12 @@ def connect(path):
 
 
 def init(path):
-    with connect(path) as conn:
+    conn = connect(path)          # sqlite3 의 with 는 커밋만 하고 닫지 않으므로 직접 닫는다
+    try:
         conn.executescript(SCHEMA)
+        conn.commit()
+    finally:
+        conn.close()
 
 
 def get():
