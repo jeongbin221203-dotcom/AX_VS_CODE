@@ -97,7 +97,8 @@ def prepare() -> None:
     ensure_user()
     if not repo.count_materials():
         from core import seed, seed_demo, seed_mfg
-        seed.seed(history=True)                  # 부산 포장·고박 자재
-        seed_mfg.seed_manufacturing()            # 창원 제조공장
-        seed_demo.seed_large()                   # 인천·평택 + 담당자 · 1년 치 거래 · 구매 · 월 마감
+        with audit.quiet():                      # 샘플 생성 기록은 서버 로그에 쏟지 않는다
+            seed.seed(history=True)              # 부산 포장·고박 자재
+            seed_mfg.seed_manufacturing()        # 창원 제조공장
+            seed_demo.seed_large()               # 인천·평택 + 담당자 · 1년 치 거래 · 구매 · 월 마감
         _mark_today()

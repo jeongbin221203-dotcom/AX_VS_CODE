@@ -8,6 +8,7 @@ actor(행위자)는 {"id": 사용자ID|None, "name": 이름, "role": 역할, "ip
 
 import json
 import sys
+from contextlib import contextmanager
 from typing import Any
 
 import pandas as pd
@@ -53,8 +54,21 @@ def record(conn, actor: dict | None, action: str, entity: str = "",
          "" if entity_id is None else str(entity_id),
          json.dumps(detail, ensure_ascii=False, default=str) if detail else "", actor.get("ip", "")),
     )
-    if config.AUDIT_STDOUT:
+    if config.AUDIT_STDOUT and not _quiet["n"]:
         _emit(actor, action, entity, entity_id, detail)
+
+
+_quiet = {"n": 0}
+
+
+@contextmanager
+def quiet():
+    """이 안의 기록은 서버 로그로 내보내지 않는다 (샘플 생성처럼 수백 줄이 방문자 기록을 덮을 때). DB 기록은 그대로."""
+    _quiet["n"] += 1
+    try:
+        yield
+    finally:
+        _quiet["n"] -= 1
 
 
 def _emit(actor: dict, action: str, entity: str, entity_id: Any, detail: dict | None) -> None:
