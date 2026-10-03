@@ -341,7 +341,7 @@ def _guess(name: str) -> str:
     return ""
 
 
-def list_df(q: str = "", include_inactive: bool = False) -> pd.DataFrame:
+def list_df(q: str = "", include_inactive: bool = False, wh_ids=None) -> pd.DataFrame:
     """거래처 목록 + 거래 실적(다른 이름으로 적은 지난 거래 포함)."""
     df = db.query_df("SELECT * FROM partners" + ("" if include_inactive else " WHERE active = 1") + " ORDER BY name")
     if df.empty:
@@ -352,7 +352,7 @@ def list_df(q: str = "", include_inactive: bool = False) -> pd.DataFrame:
                                     (f"%{k}%",))["partner_id"].astype(int))
         df = df[df["name_key"].str.contains(k, regex=False) | df["code"].str.contains(q.strip().upper(), regex=False)
                 | df["biz_no"].str.contains(biz_digits(q) or "§", regex=False) | df["id"].isin(alias_hit)]
-    stats = activity()
+    stats = activity(wh_ids)
     df = df.merge(stats, how="left", left_on="id", right_index=True)
     for c in ("in_amt", "out_amt", "tx_cnt"):
         df[c] = df[c].fillna(0)
@@ -362,7 +362,7 @@ def list_df(q: str = "", include_inactive: bool = False) -> pd.DataFrame:
     return df.reset_index(drop=True)
 
 
-def activity() -> pd.DataFrame:
+def activity(wh_ids=None) -> pd.DataFrame:
     """거래처별 입고 금액·출고 금액·거래 수·마지막 거래일. DB에서 묶어 계산한다:
     partner_id 가 있는 거래는 그 거래처로, 없는(마스터 전에 적은) 거래는 이름 → 이름·다른 이름으로 맞춘다.
     취소 거래는 원거래와 상쇄된다(금액은 부호가 반대, 건수는 원거래만)."""
@@ -371,16 +371,19 @@ def activity() -> pd.DataFrame:
              SUM(CASE WHEN t.tx_type = 'OUT' THEN t.qty * t.unit_price ELSE 0 END) AS out_amt,
              SUM(CASE WHEN t.reversal_of IS NULL THEN 1 ELSE 0 END) AS tx_cnt, MAX(t.tx_date) AS last_tx"""
     cond = PARTNER_TX_SQL.format(t="t")
+    wfrag, wp = db.in_clause(None if wh_ids is None else (list(wh_ids) or [-1]))
+    if wfrag:                                                    # 창고 범위 사용자는 자기 창고 거래 실적만
+        cond += f" AND t.warehouse_id{wfrag}"
     by_id = db.query_df(f"""
         SELECT COALESCE(t.partner_id, o.partner_id) AS pid, {agg}
         FROM transactions t LEFT JOIN transactions o ON o.id = t.reversal_of
         WHERE COALESCE(t.partner_id, o.partner_id) IS NOT NULL AND {cond}
-        GROUP BY COALESCE(t.partner_id, o.partner_id)""")
+        GROUP BY COALESCE(t.partner_id, o.partner_id)""", wp)
     by_name = db.query_df(f"""
         SELECT t.partner AS name, {agg}
         FROM transactions t LEFT JOIN transactions o ON o.id = t.reversal_of
         WHERE t.partner <> '' AND t.partner_id IS NULL AND o.partner_id IS NULL AND {cond}
-        GROUP BY t.partner""")
+        GROUP BY t.partner""", wp)
     if not by_name.empty:
         known = _key_map()
         by_name["pid"] = by_name["name"].map(lambda n: known.get(key(n)))
@@ -481,7 +484,7 @@ def aliases_df(partner_id: int) -> pd.DataFrame:
                        (partner_id,))
 
 
-def recent_tx(partner_id: int, limit: int = 50) -> pd.DataFrame:
+def recent_tx(partner_id: int, limit: int = 50, wh_ids=None) -> pd.DataFrame:
     """이 거래처의 최근 거래 (partner_id 로 남은 것 + 마스터 전에 이 이름·다른 이름으로 적은 것)."""
     p = get(partner_id)
     if p is None:
@@ -491,12 +494,14 @@ def recent_tx(partner_id: int, limit: int = 50) -> pd.DataFrame:
              ["partner"] if key(n) in keys]
     frag, params = db.in_clause(names)
     pfrag, pparams = db.in_clause([partner_id, *merged_ids(partner_id)])
+    wfrag, wp = db.in_clause(None if wh_ids is None else (list(wh_ids) or [-1]))
     return db.query_df(f"""
         SELECT t.id, t.tx_date, t.tx_type, m.code, m.name, t.qty, m.unit, t.unit_price, t.qty * t.unit_price AS amount,
                t.partner, t.partner_id, t.ref_no, w.code AS wh_code
         FROM transactions t JOIN materials m ON m.id = t.material_id LEFT JOIN warehouses w ON w.id = t.warehouse_id
         WHERE (t.partner_id{pfrag} OR (t.partner_id IS NULL AND t.partner{frag})) AND {PARTNER_TX_SQL.format(t="t")}
-        ORDER BY t.tx_date DESC, t.id DESC LIMIT ?""", (*pparams, *params, limit))
+              {('AND t.warehouse_id' + wfrag) if wfrag else ''}
+        ORDER BY t.tx_date DESC, t.id DESC LIMIT ?""", (*pparams, *params, *wp, limit))
 
 
 def seed_from_data(actor: dict | None = None) -> int:

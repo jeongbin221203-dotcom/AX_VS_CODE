@@ -129,7 +129,12 @@
       && !form.querySelector("input[type=password]");
   }
   function draftKey(form) {
-    return DRAFT + USER + ":" + location.pathname + location.search + "#" + (form.getAttribute("action") || "");
+    // 같은 주소로 보내는 폼이 줄마다 있으면(결재함 줄마다 승인·반려 등) 숨은 번호 칸으로 줄을 구분한다
+    const ids = Array.prototype.filter.call(form.elements, function (el) {
+      return el.type === "hidden" && /^(id|kind|req_id|item|tx_id|pid)$/.test(el.name) && el.value;
+    }).map(function (el) { return el.name + "=" + el.value; }).join("&");
+    return DRAFT + USER + ":" + location.pathname + location.search + "#" + (form.getAttribute("action") || "") +
+      (ids ? "?" + ids : "");
   }
 
   function collect(form, withHidden) {
@@ -425,15 +430,24 @@
     if (net.down || navigator.onLine === false) {
       e.preventDefault();
       const submitter = e.submitter;
+      form.dataset.declined = "";
       ping().then(function (ok) {
+        if (form.dataset.declined === "1") { form.dataset.declined = ""; return; }   // 확인 창에서 '취소'
         if (!ok) { if (form.hasAttribute("data-offline")) offlineSubmit(form); return; }
         form.dataset.bypass = "1";
+        form.dataset.confirmed = "1";                       // 이미 확인 창에 답했다 → 다시 묻지 않음 (ui.js)
         if (form.requestSubmit) form.requestSubmit(submitter || undefined); else form.submit();
       });
       return;
     }
     markSubmitting(form);
   }, true);
+  // 확인 창에서 '취소'(ui.js) → 보내지 않았으므로 '보내는 중' 표시·두 번 클릭 막기를 바로 푼다
+  document.addEventListener("mm:declined", function (e) {
+    const form = e.target;
+    setTimeout(function () { form.dataset.submitting = ""; form.classList.remove("is-submitting"); }, 0);
+    drop("sessionStorage", PENDING);
+  });
   window.addEventListener("pageshow", function () {           // 뒤로 가기로 돌아온 화면
     document.querySelectorAll("form.is-submitting").forEach(function (f) {
       f.dataset.submitting = ""; f.classList.remove("is-submitting");

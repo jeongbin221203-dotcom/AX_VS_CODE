@@ -2,7 +2,7 @@
 규칙은 core/partners.py. 보기는 모두, 바꾸기는 관리자 이상."""
 
 import pandas as pd
-from flask import Blueprint, abort, flash, redirect, request, url_for
+from flask import Blueprint, abort, flash, g, redirect, request, url_for
 
 from core import audit, bulk, partners
 from views import bulk_ui
@@ -38,7 +38,7 @@ def index():
                            options=partners.list_df()[["id", "name", "code"]].to_dict("records"))
     q = request.args.get("q", "").strip()[:60]
     inactive = request.args.get("inactive") == "1"
-    df = partners.list_df(q, include_inactive=inactive)
+    df = partners.list_df(q, include_inactive=inactive, wh_ids=g.wh_ids)
     view = _view(df)
     if request.args.get("export") == "xlsx":
         log_export("partners", len(view))
@@ -68,7 +68,7 @@ def _view(df):
 @bp.get("/<int:pid>")
 def detail(pid: int):
     p = partners.get(pid) or abort(404)
-    recent = partners.recent_tx(pid)
+    recent = partners.recent_tx(pid, wh_ids=g.wh_ids)
     view = recent.rename(columns={"id": "ID", "tx_date": "일자", "tx_type": "구분", "code": "자재코드", "name": "자재명",
                                   "qty": "수량", "unit": "단위", "unit_price": "단가", "amount": "금액", "partner": "적힌 이름",
                                   "ref_no": "문서번호", "wh_code": "창고"})

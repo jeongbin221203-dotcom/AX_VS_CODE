@@ -307,6 +307,8 @@ def _issue(conn, who: dict, pid: int, quantities: dict[int, float], tx_date: str
                      "WHERE p.id = ?", (pid,)).fetchone()
     if p is None or p["status"] not in ("PLANNED", "RELEASED"):
         return services.Result(False, "자재를 투입할 수 있는 작업지시가 아닙니다 (완료·취소됨).")
+    if _scope_problem(p, wh_ids):
+        return services.Result(False, _scope_problem(p, wh_ids))
     for comp, q, wh in extra:
         if not q:
             continue
@@ -342,10 +344,12 @@ def _issue(conn, who: dict, pid: int, quantities: dict[int, float], tx_date: str
             if back > float(ln["issued_qty"]) + 1e-9:
                 return services.Result(False, f"{ln['code']} — 투입한 {float(ln['issued_qty']):,.4g}보다 많이 반납할 수 없습니다.")
             price = float(ln["issued_cost"]) / float(ln["issued_qty"]) if float(ln["issued_qty"]) else 0.0
-            out = services._register(conn, who, int(ln["component_id"]), "IN", back, tx_date, price, ref, "",
-                                     f"생산 반납 {p['prod_no']}", "", "", "", int(ln["wh_id"]), wh_ids, "", "", production_id=pid)
-            if isinstance(out, services.Result):
-                return services.Result(False, f"{ln['code']} 반납 — {out.message}")
+            for lot, part in _return_lots(conn, pid, int(ln["component_id"]), int(ln["wh_id"]), back):
+                out = services._register(conn, who, int(ln["component_id"]), "IN", part, tx_date, price, ref, "",
+                                         f"생산 반납 {p['prod_no']}", "", "", "", int(ln["wh_id"]), wh_ids, lot, "",
+                                         production_id=pid)
+                if isinstance(out, services.Result):
+                    return services.Result(False, f"{ln['code']} 반납 — {out.message}")
             cost = -back * price
         conn.execute("UPDATE production_lines SET issued_qty = issued_qty + ?, issued_cost = issued_cost + ? WHERE id = ?",
                      (q, cost, lid))
@@ -358,12 +362,44 @@ def _issue(conn, who: dict, pid: int, quantities: dict[int, float], tx_date: str
     return f"{moved}줄 투입·반납 (재공 ₩{float(total):,.0f})"
 
 
+def _return_lots(conn, pid: int, material_id: int, wh_id: int, qty: float) -> list[tuple[str, float]]:
+    """반납을 어느 로트로: 로트 관리 자재면 이 작업지시가 투입하고 아직 반납하지 않은 로트에서, 마지막에 투입한 로트부터.
+    로트 관리가 아니면 [('', 수량)]."""
+    if not conn.execute("SELECT lot_managed FROM materials WHERE id = ?", (material_id,)).fetchone()[0]:
+        return [("", qty)]
+    rows = conn.execute("""
+        SELECT lot_no, SUM(CASE WHEN tx_type = 'OUT' THEN qty ELSE -qty END) AS net, MAX(id) AS last_id
+        FROM transactions WHERE production_id = ? AND material_id = ? AND warehouse_id = ? AND tx_type IN ('IN', 'OUT')
+        GROUP BY lot_no ORDER BY MAX(id) DESC""", (pid, material_id, wh_id)).fetchall()
+    out, rest = [], qty
+    for r in rows:
+        take = min(rest, float(r["net"] or 0))
+        if take > 1e-9 and r["lot_no"]:
+            out.append((r["lot_no"], round(take, 6)))
+            rest -= take
+        if rest <= 1e-9:
+            break
+    if rest > 1e-9:                                   # 기록과 맞지 않으면 등록 단계에서 '로트 번호' 오류가 난다
+        out.append(("", round(rest, 6)))
+    return out
+
+
+def _scope_problem(p, wh_ids) -> str:
+    """작업지시의 부품·입고 창고가 사용자 범위 안인가 (범위 밖 작업지시는 완료·취소·실적 입력 불가)."""
+    if wh_ids is None or p is None:
+        return ""
+    whs = {int(w) for w in (p["issue_wh_id"], p["receipt_wh_id"]) if w is not None}
+    return "" if whs <= {int(w) for w in wh_ids} else "이 작업지시의 창고 권한이 없습니다."
+
+
 def _complete(conn, who: dict, pid: int, good_qty: float, scrap_qty: float, tx_date: str, wh_ids, *,
               backflush: bool, lot_no: str = "", expiry_date: str = "") -> str | services.Result:
     """완료: (선택) 미투입분 자동 투입(백플러시) → 양품 입고(단가 = 실제 투입 금액 ÷ 양품) → 완료."""
     p = conn.execute("SELECT * FROM productions WHERE id = ?", (pid,)).fetchone()
     if p is None or p["status"] not in ("PLANNED", "RELEASED"):
         return services.Result(False, "완료할 수 있는 작업지시가 아닙니다.")
+    if _scope_problem(p, wh_ids):
+        return services.Result(False, _scope_problem(p, wh_ids))
     if not services._finite(good_qty, scrap_qty) or good_qty < 0 or scrap_qty < 0 or good_qty + scrap_qty <= 0:
         return services.Result(False, "양품·불량 수량을 확인하세요 (합이 0보다 커야 함).")
     if backflush:
@@ -438,15 +474,17 @@ def issue(pid: int, quantities: dict[int, float], tx_date: str, *, actor: dict |
 
 
 def report_operation(pid: int, op_id: int, good: float, scrap: float, minutes: float, worker: str, note: str,
-                     actor: dict | None) -> services.Result:
+                     actor: dict | None, wh_ids=None) -> services.Result:
     if not services._finite(good, scrap, minutes) or min(good, scrap, minutes) < 0:
         return services.Result(False, "수량·시간은 0 이상이어야 합니다.")
     who = _who(actor)
     with db.transaction() as conn:
-        p = conn.execute("SELECT prod_no, status FROM productions WHERE id = ?", (pid,)).fetchone()
+        p = conn.execute("SELECT prod_no, status, issue_wh_id, receipt_wh_id FROM productions WHERE id = ?", (pid,)).fetchone()
         op = conn.execute("SELECT * FROM wo_operations WHERE id = ? AND production_id = ?", (op_id, pid)).fetchone()
         if p is None or op is None or p["status"] in ("DONE", "CANCELLED"):
             return services.Result(False, "실적을 넣을 수 있는 공정이 아닙니다.")
+        if _scope_problem(p, wh_ids):
+            return services.Result(False, _scope_problem(p, wh_ids))
         conn.execute("UPDATE wo_operations SET good_qty = ?, scrap_qty = ?, minutes = ?, worker = ?, note = ?, status = 'DONE', "
                      "done_at = ? WHERE id = ?", (good, scrap, minutes, worker.strip() or who["name"], note.strip(), now_str(), op_id))
         audit.record(conn, who, "WO_OPERATION", "production", pid,
@@ -509,6 +547,8 @@ def cancel(prod_id: int, reason: str, *, actor: dict | None, wh_ids=None) -> ser
         return services.Result(False, f"이미 취소한 작업지시입니다 ({p['cancelled_at']}).")
     if not (reason or "").strip():
         return services.Result(False, "취소 사유를 입력하세요.")
+    if _scope_problem(p, wh_ids):
+        return services.Result(False, _scope_problem(p, wh_ids))
     has_tx = db.scalar("SELECT COUNT(*) FROM transactions WHERE production_id = ? AND reversal_of IS NULL", (prod_id,))
     if not has_tx:
         who = _who(actor)

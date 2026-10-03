@@ -49,8 +49,15 @@ def add_demand(plant_id: int, material_id: int, qty: float, due_date: str, note:
     return services.Result(True, f"수요 등록: {m['code']} {qty:,.4g} · 납기 {due_date}", tx_id=did)
 
 
-def close_demand(demand_id: int, actor: dict | None) -> services.Result:
+def close_demand(demand_id: int, actor: dict | None, wh_ids=None) -> services.Result:
     with db.transaction() as conn:
+        d = conn.execute("SELECT plant_id, active FROM mrp_demands WHERE id = ?", (demand_id,)).fetchone()
+        if d is None or not d["active"]:
+            return services.Result(False, "열린 수요가 아닙니다.")
+        if wh_ids is not None:
+            frag, wp = db.in_clause(list(wh_ids) or [-1])
+            if not conn.execute(f"SELECT 1 FROM warehouses WHERE plant_id = ? AND id{frag}", (d["plant_id"], *wp)).fetchone():
+                return services.Result(False, "이 플랜트의 권한이 없습니다.")
         conn.execute("UPDATE mrp_demands SET active = 0 WHERE id = ?", (demand_id,))
         audit.record(conn, actor, "MRP_DEMAND", "mrp", demand_id, {"closed": True})
     return services.Result(True, "수요를 닫았습니다 (다음 MRP부터 빠짐).")
@@ -134,7 +141,8 @@ def run(plant_id: int, actor: dict | None, horizon_days: int = 90) -> services.R
             events[int(r["material_id"])].append((max(r["due"], t0), float(r["qty"]), f"구매요청 {r['pr_no']}"))
         # 진행 중 작업지시: 완제품은 공급, 아직 투입 안 한 부품은 수요
         for p in conn.execute(f"SELECT * FROM productions WHERE status IN ('PLANNED', 'RELEASED') AND issue_wh_id{frag}", wp):
-            events[int(p["product_id"])].append((max(p["due_date"] or t0, t0), float(p["qty"]), f"작업지시 {p['prod_no']}"))
+            if p["receipt_wh_id"] is not None:                       # 입고 창고가 없으면 완제품이 재고로 들어오지 않는다
+                events[int(p["product_id"])].append((max(p["due_date"] or t0, t0), float(p["qty"]), f"작업지시 {p['prod_no']}"))
             for ln in conn.execute("SELECT component_id, planned_qty - issued_qty AS rest FROM production_lines "
                                    "WHERE production_id = ?", (p["id"],)):
                 if float(ln["rest"]) > 1e-9:

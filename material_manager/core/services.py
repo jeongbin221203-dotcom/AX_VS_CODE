@@ -493,6 +493,14 @@ def transfer(material_id: int, from_wh: int, to_wh: int, qty: float, tx_date: st
                   qty=qty, stock_after=stock_after, tx_id=out_id)
 
 
+def single_cancel_problem(tx) -> str:
+    """한 줄만 취소하면 안 되는 거래: 생산(작업지시) 거래 — 투입 누계·재공 금액·완료 상태가 거래와 어긋난다."""
+    if tx is not None and tx["production_id"] is not None:
+        return ("생산(작업지시)으로 등록한 거래는 한 줄만 취소할 수 없습니다 — 생산 화면에서 작업지시 전체를 취소하거나, "
+                "투입한 자재는 '반납'으로 되돌리세요.")
+    return ""
+
+
 def reverse_transaction(tx_id: int, reason: str, *, actor: dict | None = None,
                         reverse_date: str | None = None, wh_ids=None) -> Result:
     """거래 취소. 원거래는 그대로 두고, 수량 부호가 반대인 취소 거래를 오늘(열린 기간) 일자로 남긴다.
@@ -507,6 +515,9 @@ def reverse_transaction(tx_id: int, reason: str, *, actor: dict | None = None,
     who = _actor(actor, "")
     reverse_date = reverse_date or date.today().isoformat()
     with db.transaction() as conn:
+        problem = single_cancel_problem(conn.execute("SELECT production_id FROM transactions WHERE id = ?", (tx_id,)).fetchone())
+        if problem:
+            return Result(False, problem)
         out = _reverse(conn, who, tx_id, reason, reverse_date, wh_ids)
     if isinstance(out, Result):
         return out

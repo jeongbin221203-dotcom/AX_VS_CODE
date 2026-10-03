@@ -314,6 +314,9 @@ export MM_BASE_URL=https://mm.사내     # 알림 속 링크 앞부분
 - **간편 생산 투입**: 작업지시를 만들고 투입·완료까지 한 번에(실제 투입량·불량을 고쳐 넣을 수 있음).
 - **공정(라우팅)**: BOM 화면에서 제품마다 공정·작업장·표준 시간. 작업지시를 만들면 복사된다.
 - **재공품** 탭: 투입했지만 완료하지 않은 작업지시와 금액(완료 예정이 지난 것은 빨간 줄).
+- 작업지시로 생긴 거래는 거래 이력에서 **한 줄만 취소할 수 없다**(투입 누계·재공 금액·완료 상태가 어긋나므로) — 작업지시 전체 취소 또는 반납.
+  로트 관리 부품을 반납하면 그 작업지시가 투입한 로트로(마지막에 투입한 로트부터) 되돌린다.
+- 작업지시 완료·취소·공정 실적·MRP 수요 닫기도 창고(플랜트) 범위를 확인하고, 거래처 상세·목록의 실적은 내 창고 거래만 보인다.
 
 ## MRP (메뉴 '📅 MRP', `core/mrp.py`)
 
@@ -370,7 +373,7 @@ flask --app app db upgrade [리비전]
 flask --app app db downgrade 0001 --yes    # 되돌리기 (그 뒤 리비전의 표·칸이 지워진다 — 먼저 백업)
 ```
 
-`0001` = 기준선(이 도구 전 구조), `0002` = 단위 환산·작업지시·MRP·메신저 알림. CI가 upgrade → downgrade → upgrade 왕복을 매번 확인한다.
+`0001` = 기준선(이 도구 전 구조), `0002` = 단위 환산·작업지시·MRP·메신저 알림, `0003` = 알림함·대결·거래처 병합·API 키, `0004` = 감사로그 대상 색인(변경 이력). CI가 upgrade → downgrade → upgrade 왕복을 매번 확인한다.
 
 ## 결재함 · 알림함 · 대결 (`core/workflow.py`, `core/delegation.py`)
 
@@ -545,8 +548,8 @@ material_manager/
 
 ```bash
 pip install -r requirements-dev.txt
-python -m pytest tests -q                                                    # SQLite 221 통과 + 1 건너뜀(PostgreSQL pg_dump 전용)
-MM_DATABASE_URL=postgresql://user@host:5432/mm_test python -m pytest tests -q  # PostgreSQL 220 통과 + 2 건너뜀 (DB 이름에 test 필수)
+python -m pytest tests -q                                                    # SQLite 231 통과 + 1 건너뜀(PostgreSQL pg_dump 전용)
+MM_DATABASE_URL=postgresql://user@host:5432/mm_test python -m pytest tests -q  # PostgreSQL 230 통과 + 2 건너뜀 (DB 이름에 test 필수)
 ```
 테스트는 임시 DB만 쓴다(운영 SQLite 파일과 이름에 test가 없는 PostgreSQL DB는 초기화를 거부).
 S3는 moto로, 사내 SSO는 테스트 안의 가짜 IdP(RSA 서명 토큰)로, SAP·ERP는 가짜 OData·REST 서버와 가짜 pyrfc로 흉내 낸다.

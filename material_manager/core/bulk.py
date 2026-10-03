@@ -11,6 +11,7 @@ BOM      제품코드별로 묶어 그 제품의 BOM 전체를 파일 내용으�
 from __future__ import annotations
 
 import math
+import numbers
 from dataclasses import dataclass, field
 
 import pandas as pd
@@ -24,7 +25,7 @@ BOM_COLS = {"product": "제품코드", "base_qty": "기준수량", "component": 
             "wh": "출고창고", "note": "메모"}
 KIND_WORDS = {"공급처": "SUPPLIER", "공급": "SUPPLIER", "매입": "SUPPLIER", "SUPPLIER": "SUPPLIER",
               "납품처": "CUSTOMER", "납품": "CUSTOMER", "매출": "CUSTOMER", "고객": "CUSTOMER", "CUSTOMER": "CUSTOMER",
-              "공급·납품": "BOTH", "공급납품": "BOTH", "둘다": "BOTH", "BOTH": "BOTH", "": "SUPPLIER"}
+              "공급·납품": "BOTH", "공급납품": "BOTH", "둘다": "BOTH", "BOTH": "BOTH", "": ""}   # 빈 칸: 갱신은 그대로, 등록은 공급처
 MAX_ROWS = 5000
 
 
@@ -125,7 +126,7 @@ def apply_partners(rows: list[dict], actor: dict | None) -> services.Result:
                     cur = dict(conn.execute("SELECT * FROM partners WHERE id = ?", (r["id"],)).fetchone())
                     before = dict(cur)
                     merged = {f: (data[f] if data[f] else cur[f]) for f in partners.FIELDS}
-                    merged["kind"] = data["kind"] or cur["kind"]
+                    merged["kind"] = data["kind"] or cur["kind"]           # 빈 칸이면 지금 구분 그대로
                     if partners.key(merged["name"]) == cur["name_key"]:
                         merged["name"] = cur["name"]                  # 표기만 다른 같은 이름이면 정식 이름은 그대로
                     d, problem = partners._clean(merged)
@@ -143,6 +144,7 @@ def apply_partners(rows: list[dict], actor: dict | None) -> services.Result:
                     if partners.key(d["name"]) != cur["name_key"]:     # 코드로 찾아 이름을 바꿨으면 예전 이름은 다른 이름으로
                         partners._add_alias(conn, pid, cur["name"], who)
                 else:
+                    data["kind"] = data["kind"] or "SUPPLIER"
                     d, problem = partners._clean(data)
                     problem = problem or partners._conflict(conn, d, None)
                     if problem:
@@ -218,6 +220,29 @@ def preview_boms(raw: pd.DataFrame) -> Preview:
         _, problem = production.check_bom(int(mats[p].id), g["base"] or 1, lines)
         if problem:
             out.errors.append(f"제품 {p} ({g['first']}번 줄부터): {problem}")
+    # 순환: 지금 BOM 에 이 파일의 BOM 을 덮어쓴 그림에서 제품 → … → 자기 자신이 되면 반영할 때 거부되므로 미리 알린다
+    graph: dict[int, set[int]] = {}
+    for r in db.query_df("SELECT b.product_id, i.component_id FROM boms b JOIN bom_items i ON i.bom_id = b.id "
+                         "WHERE b.active = 1").itertuples():
+        graph.setdefault(int(r.product_id), set()).add(int(r.component_id))
+    names = {int(m.id): code for code, m in mats.items()}
+    for p, g in groups.items():
+        if p in mats and all(r["component"] in mats for r in g["lines"]):
+            graph[int(mats[p].id)] = {int(mats[r["component"]].id) for r in g["lines"]}
+    for p, g in groups.items():
+        if p not in mats:
+            continue
+        start, stack, seen_ = int(mats[p].id), [(int(mats[p].id), [p])], set()
+        while stack:
+            node, path = stack.pop()
+            hit = next((c for c in graph.get(node, ()) if c == start), None)
+            if hit is not None:
+                out.errors.append(f"제품 {p}: BOM이 순환합니다 ({' → '.join(path + [p])}).")
+                break
+            for c in graph.get(node, ()):
+                if c not in seen_ and len(path) < 25:
+                    seen_.add(c)
+                    stack.append((c, path + [names.get(c, str(c))]))
     out.summary = f"제품 {len(groups)}개 · 부품 줄 {len(out.rows)}개 (제품마다 BOM 전체를 이 내용으로 바꿉니다)"
     return out
 
@@ -295,6 +320,10 @@ def preview_units(raw: pd.DataFrame) -> Preview:
         for r in out.rows:
             if not r["barcode"] or not r["factor"] or r["material_id"] is None:
                 continue
+            own = mats.get(r["code"])
+            if own is not None and r["barcode"] in {own.code.upper(), str(own.barcode or "").upper(), str(own.sap_matnr or "").upper()}:
+                r["problem"] = (r["problem"] + " 바코드가 이 자재의 코드·바코드·SAP 번호와 같습니다 (스캔하면 자재 1개로 잡힘).").strip()
+                continue
             hit = conn.execute("SELECT code FROM materials WHERE id <> ? AND (barcode = ? OR UPPER(code) = ? OR UPPER(sap_matnr) = ?)",
                                (r["material_id"], r["barcode"], r["barcode"], r["barcode"])).fetchone()
             if hit:
@@ -327,6 +356,10 @@ def apply_units(rows: list[dict], actor: dict | None) -> services.Result:
                     continue
                 if r["barcode"]:
                     problem = services.barcode_problem(conn, r["barcode"], r["material_id"])
+                    own = conn.execute("SELECT code, barcode, sap_matnr FROM materials WHERE id = ?", (r["material_id"],)).fetchone()
+                    if not problem and r["barcode"] in {str(own["code"]).upper(), str(own["barcode"] or "").upper(),
+                                                         str(own["sap_matnr"] or "").upper()}:
+                        problem = f"바코드 {r['barcode']}가 이 자재의 코드·바코드·SAP 번호와 같습니다."
                     row = conn.execute("SELECT m.code, u.unit FROM material_units u JOIN materials m ON m.id = u.material_id "
                                        "WHERE u.barcode = ?", (r["barcode"],)).fetchone()
                     if not problem and row:
@@ -365,6 +398,17 @@ def boms_export() -> pd.DataFrame:
     return df
 
 
+def _excel_date(v):
+    """엑셀 날짜 칸: 날짜·'2026-11-20' 문자열·일련번호(46300 = 2026-10-05, '일반' 서식) 모두 날짜로. 못 읽으면 NaT."""
+    if isinstance(v, str) and v.strip().replace(".0", "").isdigit():
+        v = float(v)
+    if isinstance(v, numbers.Number) and not isinstance(v, bool):           # numpy 숫자 포함
+        if v == v and 20000 <= v <= 80000:
+            return pd.Timestamp("1899-12-30") + pd.Timedelta(days=int(v))
+        return pd.NaT
+    return pd.to_datetime(v, errors="coerce")
+
+
 # ── MRP 수요 ─────────────────────────────────────────────────
 DEMAND_COLS = {"code": "제품코드", "qty": "수량", "due": "납기", "note": "메모"}
 
@@ -387,7 +431,7 @@ def preview_demands(raw: pd.DataFrame, plant_id: int, replace: bool) -> Preview:
         q = _num(df["qty"].iloc[i])
         if q is None or q != q or q <= 0:
             problems.append("수량은 0보다 큰 숫자.")
-        due = pd.to_datetime(df["due"].iloc[i], errors="coerce")
+        due = _excel_date(df["due"].iloc[i])
         if pd.isna(due):
             problems.append("납기 날짜를 확인하세요 (예: 2026-11-20).")
             due_s = ""

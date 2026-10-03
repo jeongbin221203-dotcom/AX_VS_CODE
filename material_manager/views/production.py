@@ -317,7 +317,8 @@ def wo_operation(prod_id: int, op_id: int):
     except ValueError:
         flash("수량·시간은 숫자로 입력하세요.", "error")
         return redirect(url_for("production.detail", prod_id=prod_id))
-    r = production.report_operation(prod_id, op_id, good, scrap, minutes, f_str("worker"), f_str("note"), actor())
+    r = production.report_operation(prod_id, op_id, good, scrap, minutes, f_str("worker"), f_str("note"), actor(),
+                                     wh_ids=g.wh_ids)
     flash(r.message, "success" if r.ok else "error")
     return redirect(url_for("production.detail", prod_id=prod_id))
 

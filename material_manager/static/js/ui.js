@@ -77,9 +77,14 @@
   // ── 제출 전 확인 ──
   window.addEventListener("submit", function (e) {
     const form = e.target;
+    if (form.dataset.confirmed === "1") { delete form.dataset.confirmed; return; }   // 끊김 확인 뒤 다시 제출 (app.js)
     const btn = e.submitter;
     const msg = (btn && btn.dataset.confirm) || form.dataset.confirm;
-    if (msg && !window.confirm(msg)) { e.preventDefault(); e.stopImmediatePropagation(); }
+    if (msg && !window.confirm(msg)) {
+      e.preventDefault(); e.stopImmediatePropagation();
+      form.dataset.declined = "1";                        // app.js 가 연결 확인 뒤 다시 보내지 않게
+      form.dispatchEvent(new CustomEvent("mm:declined", { bubbles: true }));   // '보내는 중' 표시를 풀게 (app.js)
+    }
   }, true);
 
   // ── 모두 선택 ──

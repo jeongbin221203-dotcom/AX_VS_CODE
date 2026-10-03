@@ -6,7 +6,7 @@
    서비스 워커는 HTTPS(또는 이 PC의 localhost)에서만 동작한다. */
 "use strict";
 
-const CACHE = "mm-offline-v1";
+const CACHE = "mm-offline-v1";   // 이름을 바꾸면 예전 보관본은 쓰지 않는다
 
 self.addEventListener("install", function () { self.skipWaiting(); });
 self.addEventListener("activate", function (e) { e.waitUntil(self.clients.claim()); });
@@ -29,7 +29,9 @@ self.addEventListener("fetch", function (e) {
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
   const isStatic = url.pathname.startsWith("/static/");
-  const isPage = req.mode === "navigate" && url.pathname.startsWith("/transactions/");
+  // 메뉴·탭으로 연 화면(app.js 가 fetch 로 받아 본문만 바꿈, X-Requested-With: fetch)도 같은 주소로 보관한다
+  const swapped = req.headers.get("X-Requested-With") === "fetch";
+  const isPage = (req.mode === "navigate" || swapped) && url.pathname.startsWith("/transactions/");
   if (!isStatic && !isPage) return;
 
   e.respondWith(fetch(req).then(function (res) {

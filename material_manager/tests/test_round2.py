@@ -281,8 +281,8 @@ def test_bom_bulk_all_or_nothing(fresh):
     assert production.get_bom(fg)["base_qty"] == 2 and len(production.bom_items_df(production.get_bom(fg)["id"])) == 2
     bad = ok_rows + [["SA-1", "", "FG-1", 1, "", "", ""]]                  # 순환
     pv = bulk.preview_boms(pd.DataFrame(bad, columns=cols))
-    assert pv.ok                                                           # 파일만 보면 문제 없음 → 반영 때 거부
-    r = bulk.apply_boms(pv.rows, M1)
+    assert not pv.ok and any("순환" in e for e in pv.errors)               # 지금 BOM + 파일로 미리보기에서 순환을 알림
+    r = bulk.apply_boms(pv.rows, M1)                                       # 그래도 반영을 부르면 거부
     assert not r.ok and "순환" in r.message
     assert len(production.bom_items_df(production.get_bom(sa)["id"])) == 1  # 아무것도 바뀌지 않음
     pv = bulk.preview_boms(pd.DataFrame([["FG-1", "", "없는것", 1, "", "", ""], ["FG-1", "", "SA-1", 0, "", "XX", ""]], columns=cols))

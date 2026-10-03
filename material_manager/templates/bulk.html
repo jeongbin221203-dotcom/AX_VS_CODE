@@ -49,7 +49,7 @@
       <thead><tr><th class="num">줄</th><th>처리</th><th>코드</th><th>거래처명</th><th>구분</th><th>사업자번호</th><th>담당자·연락처</th><th>다른 이름</th><th>문제</th></tr></thead>
       <tbody>{% for r in preview.rows[:500] %}
         <tr class="{{ 'tone-danger' if r.problem }}"><td class="num">{{ r.line }}</td><td>{{ r.action }}</td><td>{{ r.code }}</td><td>{{ r.name }}</td>
-          <td>{{ PARTNER_KINDS.get(r.kind, '?') }}</td><td>{{ r.biz_no }}</td><td>{{ r.contact }} {{ r.phone }} {{ r.email }}</td>
+          <td>{{ PARTNER_KINDS.get(r.kind) or ('(그대로)' if r.action == '갱신' else PARTNER_KINDS['SUPPLIER']) }}</td><td>{{ r.biz_no }}</td><td>{{ r.contact }} {{ r.phone }} {{ r.email }}</td>
           <td>{{ r.aliases|join(', ') }}</td><td>{{ r.problem }}</td></tr>{% endfor %}</tbody>
     {% elif kind == "units" %}
       <thead><tr><th class="num">줄</th><th>처리</th><th>자재코드</th><th>단위</th><th class="num">배수</th><th>단위바코드</th><th>문제</th></tr></thead>

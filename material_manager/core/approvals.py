@@ -56,6 +56,8 @@ def request_cancel(tx_id: int, reason: str, requester: dict, wh_ids=None):
             return services.Result(False, "거래가 없거나 권한 밖입니다.")
         if tx["reversal_of"] is not None:
             return services.Result(False, "취소 거래는 다시 취소할 수 없습니다.")
+        if services.single_cancel_problem(tx):
+            return services.Result(False, services.single_cancel_problem(tx))
         if conn.execute("SELECT 1 FROM transactions WHERE reversal_of = ?", (tx_id,)).fetchone():
             return services.Result(False, "이미 취소된 거래입니다.")
         dup = conn.execute("SELECT id FROM approval_requests WHERE kind = 'CANCEL' AND status = 'PENDING' AND payload LIKE ?",

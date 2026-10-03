@@ -73,7 +73,7 @@ def demand_add():
 @bp.post("/demand/<int:did>/close")
 @role_required("CLERK")
 def demand_close(did: int):
-    r = mrp.close_demand(did, actor())
+    r = mrp.close_demand(did, actor(), wh_ids=g.wh_ids)
     flash(r.message, "success" if r.ok else "error")
     return redirect(url_for("mrp.index", plant=_plant(), tab="demand"))
 
