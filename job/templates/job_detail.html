@@ -30,7 +30,8 @@
       <dt>키워드</dt><dd>{{ p.keywords or '-' }}</dd>
       <dt>등록 · 마감</dt><dd>{{ p.posted_at or '-' }} · {{ p.deadline or '상시/채용 시 마감' }}</dd>
     </dl>
-    {% if p.company_info %}{% set ci = p.company_info | fromjson %}
+    {% set ci = (p.company_info | fromjson) if p.company_info else {} %}
+    {% if ci %}
     <h3>기업 정보</h3>
     <dl class="kv">{% for k, v in ci.items() %}<dt>{{ k }}</dt><dd>{{ v }}</dd>{% endfor %}</dl>
     {% endif %}

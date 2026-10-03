@@ -105,7 +105,8 @@ SITEMAP_SITES = {
 
 UNLIMITED = 10 ** 9        # '0 = 모두'일 때 상한
 RUN_SHARE = 0.85           # 한 번 실행이 쓸 수 있는 시간 = 실행 간격의 85% (다음 실행과 겹치지 않게)
-BACKFILL_PER_RUN = 300     # 예전에 요약만 읽어 둔 사람인·잡코리아 공고를 한 번에 몇 건까지 다시 읽어 상세를 채울지 (새 공고 뒤에)
+DETAIL_SITES = ("saramin", "jobkorea", "linkareer", "remember")     # 상세(본문·기업정보)까지 읽는 사이트
+BACKFILL_PER_RUN = 5000    # 예전에 요약만 읽어 둔 공고를 한 번에 몇 건까지 다시 읽어 상세를 채울지 (새 공고 뒤에)
 
 DEFAULT = {
     "enabled": False,
@@ -373,6 +374,7 @@ def _run(s: dict, f: Fetcher) -> dict:
         stats[site] = {"label": f"사이트맵 전체 {info['total']:,}건", "listed": info["total"], "new": 0, "updated": 0,
                        "errors": [], "sitemap": info}
         queues[site] = [(i, SITEMAP_SITES[site]["detail"].format(id=i), None) for i in pending]
+        queues[site] += [(i, SITEMAP_SITES[site]["detail"].format(id=i), None) for i in _needs_backfill(site)]
 
     # ③ 상세: 사이트를 돌아가며 하나씩 (한 사이트가 시간을 다 쓰지 않게)
     fetched = {k: 0 for k in queues}
@@ -447,8 +449,8 @@ def _run(s: dict, f: Fetcher) -> dict:
 
 
 def _needs_backfill(site: str) -> list[str]:
-    """요약만 읽어 둔(기업정보가 없는) 마감 전 공고 — 사람인·잡코리아 (상세 표·기업정보를 읽게 된 사이트)."""
-    if site not in ("saramin", "jobkorea"):
+    """상세를 아직 안 읽은(company_info 가 NULL 인) 마감 전 공고 — 상세 읽기를 갖춘 사이트."""
+    if site not in DETAIL_SITES:
         return []
     with db.connect() as con:
         return [r[0] for r in con.execute(
@@ -540,7 +542,7 @@ def backlog_status() -> dict:
                                       (site, since, base)).fetchone()[0]
                 backfill = con.execute(
                     "SELECT COUNT(*) FROM postings WHERE source = ? AND company_info IS NULL AND hidden = 0 "
-                    "AND (deadline IS NULL OR deadline >= ?)", (site, date.today().isoformat())).fetchone()[0]                     if site in ("saramin", "jobkorea") else 0
+                    "AND (deadline IS NULL OR deadline >= ?)", (site, date.today().isoformat())).fetchone()[0]                     if site in DETAIL_SITES else 0
             done = (last.get("sites", {}).get(site) or {}).get("fetched", 0)
             rows.append({"site": site, "name": linkimport.SITES[site][0], "left": left, "backfill": backfill,
                          "last_fetched": done, "new_day": new_day,

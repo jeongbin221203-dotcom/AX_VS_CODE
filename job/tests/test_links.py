@@ -196,3 +196,61 @@ def test_jobkorea_table_overrides_structured_data():
     assert "모집분야: 물류센터" in p["description"] and "모집인원: ○○명" in p["description"]
     info = json.loads(p["company_info"])
     assert info == {"기업형태": "대기업 (비상장)", "업종": "택배업", "사원수": "10,001명 이상"}
+
+
+def _next_page(data):
+    return f'<html><script id="__NEXT_DATA__" type="application/json">{json.dumps(data, ensure_ascii=False)}</script></html>'
+
+
+REMEMBER_DATA = {"props": {"pageProps": {"dehydratedState": {"queries": [{"queryKey": ["/job_postings/9"], "state": {"data": {"data": {
+    "id": 9, "title": "[글로벌 보험사] 해외영업", "jobPostingType": "internal_headhunter", "jobDescription": "- 신규 고객 발굴",
+    "qualifications": "- 학사 이상", "preferredQualifications": "- 상경계열", "introduction": "글로벌 보험사입니다.",
+    "recruitingProcess": "서류 → 면접", "minSalary": 5000, "maxSalary": 7000, "educationRequirement": "bachelor",
+    "minExperience": 3, "maxExperience": None, "startsAt": "2026-10-01T00:00:00.000+09:00",
+    "endsAt": "2026-10-12T23:59:59.000+09:00", "explicitDue": True, "companyDescription": "글로벌 보험사",
+    "jobCategories": [{"level1": "영업", "level2": "해외B2B영업"}], "industries": [{"level1": "금융", "level2": "보험"}],
+    "normalizedAddress": {"level1": "서울", "level2": "종로구"},
+    "organization": {"name": "(주)가상써치", "headhunter": True, "applicationResponseMetrics": {"responseRate": 97}},
+    "desiredProfileCondition": {"skills": [{"name": "B2B 영업"}]}}}}}]}}}}
+
+LINKAREER_DATA = {"props": {"pageProps": {
+    "data": {"activityData": {"activity": {
+        "id": "77", "title": "[가상기획] 번역 사무 채용", "organizationName": "가상기획", "jobTypes": ["CONTRACT"],
+        "educationTypes": [], "isSalaryDecidedByCompanyPolicy": True, "recruitStartAt": "1790780400000",
+        "recruitCloseAt": "1791125999999", "regions": [{"name": "서울"}], "regionDistricts": [{"name": "마포구"}],
+        "addresses": [{"address": "서울 마포구 상암동 1606", "detailAddress": "가상센터"}], "organizationType": "중견기업",
+        "rootCategories": [{"name": "기획/경영"}], "categories": [{"name": "사무/문서관리"}],
+        "applyTypes": [{"name": "이메일"}]}}},
+    "__APOLLO_STATE__": {"Activity:77": {"detailText": {"__ref": "ActivityText:1"}},
+                         "ActivityText:1": {"text": "<p>1.&nbsp;모집부문</p><p>담당업무 : 자막 번역</p><ul><li>꼼꼼한 분</li></ul>"}}}}}
+
+
+def test_remember_next_data():
+    import json as _j
+    p = linkimport.parse(_next_page(REMEMBER_DATA), "https://career.rememberapp.co.kr/job/posting/9", "remember")
+    assert (p["company"], p["sido"], p["sigungu"]) == ("글로벌 보험사", "서울", "종로구")      # 헤드헌터 공고는 실제 회사 설명
+    assert (p["career_type"], p["career_min"], p["education"]) == ("경력", 3, "대졸")
+    assert (p["salary_min"], p["salary_max"], p["deadline"], p["posted_at"]) == (5000, 7000, "2026-10-12", "2026-10-01")
+    assert "[담당 업무]\n- 신규 고객 발굴" in p["description"] and "B2B 영업" in p["keywords"]
+    assert p["_flags"] == ["헤드헌팅"] and _j.loads(p["company_info"])["올린 곳"] == "(주)가상써치 (헤드헌터)"
+
+
+def test_linkareer_next_data():
+    import json as _j
+    p = linkimport.parse(_next_page(LINKAREER_DATA), "https://linkareer.com/activity/77", "linkareer")
+    assert (p["company"], p["title"], p["employment_type"]) == ("가상기획", "번역 사무 채용", "계약직")
+    assert (p["sido"], p["sigungu"], p["salary_negotiable"]) == ("서울", "마포구", 1)
+    assert (p["posted_at"], p["deadline"]) == ("2026-10-01", "2026-10-04")
+    assert "담당업무 : 자막 번역" in p["description"] and "· 꼼꼼한 분" in p["description"]
+    assert _j.loads(p["company_info"]) == {"기업형태": "중견기업"}
+
+
+def test_detail_read_marks_done_and_flags(app):
+    """상세를 읽으면 기업정보가 비어도 '읽음'({}), 리멤버 헤드헌터는 헤드헌팅 표시."""
+    from core import postings
+    p = linkimport.parse(_next_page(REMEMBER_DATA), "https://career.rememberapp.co.kr/job/posting/9", "remember")
+    postings.upsert_many([p])
+    assert postings.flagged("remember", "헤드헌팅") == {"9"}
+    empty = postings.build("linkareer", "5", title="t", company="c", company_info={})
+    postings.upsert_many([empty])
+    assert postings.get(postings.find_id("linkareer", "5"))["company_info"] == "{}"

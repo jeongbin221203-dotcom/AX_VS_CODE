@@ -443,7 +443,7 @@ def test_queue_persists_between_runs(app, monkeypatch):
         assert con.execute("SELECT COUNT(*) FROM crawl_queue").fetchone()[0] == 0
     st = crawler.backlog_status()
     assert sum(b["left"] for b in st["sites"]) == 0 and {b["site"] for b in st["sites"]} == {"saramin", "jobkorea"}
-    assert st["left"] == 5                     # 시험용 페이지엔 기업정보가 없어 5건이 '상세 보충 대기'로 남음
+    assert st["left"] == 0                     # 상세 페이지를 읽었으면 기업정보가 없어도 '읽음' — 다시 채우기 대상 아님
 
 
 def test_new_list_items_go_to_front(app):

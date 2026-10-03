@@ -50,7 +50,8 @@ def build(source: str, source_id, *, title, company, url=None, location=None, ca
         "job_category": clean(job_category)[:200] or None,
         "keywords": clean(keywords)[:1000] or None,
         "description": _clean_body(description)[:8000] or None,
-        "company_info": json.dumps(company_info, ensure_ascii=False) if company_info else None,
+        # None = 상세를 아직 안 읽음, '{}' = 읽었지만 기업정보가 없는 사이트·공고
+        "company_info": json.dumps(company_info, ensure_ascii=False) if company_info is not None else None,
         "posted_at": to_date(posted_at),
         "deadline": to_date(deadline),
     }
@@ -89,6 +90,9 @@ def keep_existing(item: dict) -> dict:
 def upsert_many(items: list[dict]) -> tuple[int, int]:
     """저장하고, 저장한 공고의 점수·직무를 바로 계산해 둔다."""
     ins, upd = _upsert(items)
+    for it in items:
+        for flag in it.get("_flags") or []:
+            add_flags(it["source"], [it["source_id"]], flag)
     ids = [i for i in (find_id(it["source"], it["source_id"]) for it in items) if i]
     if ids:
         recompute(ids)

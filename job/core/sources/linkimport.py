@@ -98,6 +98,10 @@ def parse(page: str, url: str, site: str) -> dict:
             return build(site, sid, url=url, **w)
     if site == "saramin" and "jv_summary" in page:
         return _saramin(page, url)
+    if site in ("remember", "linkareer") and "__NEXT_DATA__" in page:
+        item = (_remember if site == "remember" else _linkareer)(page, url)
+        if item:
+            return item
     jp = _job_posting(page)
     og = _meta(page)
     title = company = None
@@ -147,8 +151,10 @@ def parse(page: str, url: str, site: str) -> dict:
         if lines:
             desc = "\n".join(["[모집요강]", *lines, "", desc or "", "(상세 본문은 원문에서 확인하세요 — 이미지로 된 경우가 많습니다)"])
         company_info = {k2: x[k] for k, k2 in (("기업구분", "기업형태"), ("산업(업종)", "업종"), ("사원수", "사원수"),
-                                               ("설립", "설립일"), ("매출액", "매출액"), ("위치", "기업주소")) if x.get(k)} or None
+                                               ("설립", "설립일"), ("매출액", "매출액"), ("위치", "기업주소")) if x.get(k)}
 
+    if company_info is None:
+        company_info = {}                    # 공고 페이지를 읽었다는 표시 (기업정보가 없는 사이트도 다시 채우기에서 빠지게)
     sid = posting_id(url, site) or hashlib.sha1(url.split("#")[0].encode("utf-8")).hexdigest()[:16]
     return build(site, sid, title=title, company=company or "(회사명 확인 필요)", url=url, location=location,
                  career=career, education=education, employment_type=emp, salary_text=salary_text,
@@ -252,7 +258,7 @@ def _saramin(page: str, url: str) -> dict:
         description=text,
         posted_at=when.get("시작일"),
         deadline=when.get("마감일") or summary.get("deadline"),
-        company_info={k: v for k, v in comp.items() if k != "대표자명"} or None,
+        company_info={k: v for k, v in comp.items() if k != "대표자명"},
     )
 
 
@@ -268,6 +274,142 @@ def _salary_from_body(lines: list[str]) -> str | None:
         if re.search(r"(급여|연봉|월급|시급|임금)", line) and re.search(r"\d", line) and _has_amount(line):
             return re.sub(r"^[ㆍ·\-\s]*(급여조건|급여|임금)\s*[:：]?\s*", "", line)[:100]
     return None
+
+
+def _next_data(page: str) -> dict | None:
+    m = re.search(r'<script id="__NEXT_DATA__"[^>]*>(.*?)</script>', page, re.S)
+    if not m:
+        return None
+    try:
+        return json.loads(m.group(1))
+    except json.JSONDecodeError:
+        return None
+
+
+def _html_text(s: str | None) -> str:
+    """본문 HTML → 줄바꿈을 살린 글."""
+    if not s:
+        return ""
+    s = re.sub(r"(?i)<br\s*/?>|</p>|</li>|</div>|</h\d>|</tr>", "\n", s)
+    s = re.sub(r"(?i)<li[^>]*>", "· ", s)
+    s = html.unescape(re.sub(r"<[^>]+>", "", s)).replace("\xa0", " ")
+    return "\n".join(line.strip() for line in s.splitlines())
+
+
+def _ms_date(v) -> str | None:
+    try:
+        from datetime import datetime
+        return datetime.fromtimestamp(int(v) / 1000).strftime("%Y-%m-%d")
+    except (TypeError, ValueError, OSError):
+        return None
+
+
+_EDU_CODES = {"high_school": "고졸", "associate": "초대졸", "college": "초대졸", "bachelor": "대졸",
+              "university": "대졸", "master": "석사", "doctor": "박사", "phd": "박사", "none": "무관", "no_limit": "무관"}
+_JOB_TYPES = {"CONTRACT": "계약직", "FULL_TIME": "정규직", "PERMANENT": "정규직", "REGULAR": "정규직", "INTERN": "인턴",
+              "PART_TIME": "파트타임", "FREELANCER": "프리랜서", "DISPATCH": "파견직", "TEMPORARY": "계약직"}
+
+
+def _remember(page: str, url: str) -> dict | None:
+    """리멤버 공고 페이지의 Next.js 데이터 (담당업무·자격요건·우대·회사 소개·전형 절차·연봉·업종)."""
+    d = _next_data(page)
+    try:
+        queries = d["props"]["pageProps"]["dehydratedState"]["queries"]
+    except (KeyError, TypeError):
+        return None
+    data = next((q["state"]["data"]["data"] for q in queries
+                 if isinstance(q.get("state", {}).get("data"), dict)
+                 and isinstance(q["state"]["data"].get("data"), dict)
+                 and "jobDescription" in q["state"]["data"]["data"]), None)
+    if not data:
+        return None
+    org = data.get("organization") or {}
+    lo, hi = data.get("minExperience"), data.get("maxExperience")
+    career = "신입" if lo in (0, "0") and not hi else (f"경력 {lo}~{hi}년" if lo and hi else (f"경력 {lo}년 이상" if lo else None))
+    smin, smax = data.get("minSalary"), data.get("maxSalary")
+    salary_text = (f"{smin}~{smax}만원" if smin and smax else (f"{smin}만원 이상" if smin else (f"~{smax}만원" if smax else None)))
+    addr = data.get("normalizedAddress") or {}
+    cats = [" ".join(filter(None, [c.get("level1"), c.get("level2")])) for c in data.get("jobCategories") or []]
+    inds = [c.get("level3") or c.get("level2") or c.get("level1") for c in data.get("industries") or []]
+    skills = [s.get("name") for s in (data.get("desiredProfileCondition") or {}).get("skills") or [] if s.get("name")]
+    parts = [("회사 소개", data.get("introduction")), ("담당 업무", data.get("jobDescription")),
+             ("자격 요건", data.get("qualifications")), ("우대 사항", data.get("preferredQualifications")),
+             ("전형 절차", data.get("recruitingProcess")), ("기타", data.get("additionalInformation"))]
+    desc = "\n\n".join(f"[{k}]\n{v.strip()}" for k, v in parts if v and str(v).strip())
+    headhunter = bool(org.get("headhunter")) or data.get("jobPostingType") == "internal_headhunter"
+    info = {k: v for k, v in (
+        ("업종", ", ".join(dict.fromkeys(filter(None, inds)))),
+        ("회사 설명", data.get("companyDescription")),
+        ("올린 곳", (org.get("name") or "") + (" (헤드헌터)" if headhunter else "")),
+        ("응답률", f"{org['applicationResponseMetrics']['responseRate']}%"
+         if (org.get("applicationResponseMetrics") or {}).get("responseRate") is not None else None),
+        ("홈페이지", org.get("url")),
+    ) if v}
+    item = build(
+        "remember", posting_id(url, "remember") or str(data.get("id")),
+        title=data.get("title"), company=(data.get("companyDescription") if headhunter else None) or org.get("name"),
+        url=url, location=" ".join(filter(None, [addr.get("level1"), addr.get("level2")])) or None,
+        career=career, education=_EDU_CODES.get(str(data.get("educationRequirement") or "").lower()),
+        salary_text=salary_text, pay_type="연봉", job_category=", ".join(cats) or None,
+        keywords=", ".join(dict.fromkeys(skills + [c.get("level2") for c in data.get("jobCategories") or []
+                                                   if c.get("level2")])) or None,
+        description=desc, posted_at=data.get("startsAt"),
+        deadline=data.get("endsAt") if data.get("explicitDue") is not False else None,
+        company_info=info)
+    if headhunter:
+        item["_flags"] = ["헤드헌팅"]
+    return item
+
+
+def _linkareer(page: str, url: str) -> dict | None:
+    """링커리어 공고 페이지의 Next.js 데이터 (본문·고용형태·학력·급여·접수 기간·주소·직무)."""
+    d = _next_data(page)
+    try:
+        props = d["props"]["pageProps"]
+        a = props["data"]["activityData"]["activity"]
+    except (KeyError, TypeError):
+        return None
+    if not a or not a.get("title"):
+        return None
+    state = props.get("__APOLLO_STATE__") or {}
+    body = ""
+    ref = ((state.get(f"Activity:{a.get('id')}") or {}).get("detailText") or {}).get("__ref")
+    if ref and state.get(ref):
+        body = state[ref].get("text") or ""
+    if not body:                                   # 참조가 없으면 가장 긴 본문
+        texts = [v.get("text") or "" for k, v in state.items() if k.startswith("ActivityText")]
+        body = max(texts, key=len) if texts else ""
+    regions = [r.get("name") for r in a.get("regions") or [] if r.get("name")]
+    districts = [r.get("name") for r in a.get("regionDistricts") or [] if r.get("name")]
+    addr = (a.get("addresses") or [{}])[0] or {}
+    location = " ".join(filter(None, [regions[0] if regions else None, districts[0] if districts else None])) \
+        or addr.get("address")
+    if a.get("isSalaryDecidedByCompanyPolicy"):
+        salary_text = "회사내규에 따름"
+    elif a.get("isSalaryDecidedAfterInterview"):
+        salary_text = "면접 후 결정"
+    else:
+        lo, hi = a.get("minSalary"), a.get("maxSalary")
+        unit = "원" if max(int(lo or 0), int(hi or 0)) >= 100000 else "만원"
+        pre = {"YEARLY": "연봉 ", "MONTHLY": "월 ", "HOURLY": "시급 "}.get(a.get("salaryType") or "", "")
+        salary_text = (pre + (f"{lo}{unit}~{hi}{unit}" if lo and hi else f"{lo or hi}{unit}")) if (lo or hi) else None
+    emp = ", ".join(dict.fromkeys(_JOB_TYPES.get(t, t) for t in a.get("jobTypes") or [])) or None
+    edu = [_EDU_CODES.get(str(e).lower(), str(e)) for e in a.get("educationTypes") or []]
+    cats = [c.get("name") for c in (a.get("rootCategories") or []) + (a.get("categories") or []) if c.get("name")]
+    text = _html_text(body)
+    extra = [("근무지", " ".join(filter(None, [addr.get("address"), addr.get("detailAddress")]))),
+             ("지원 방법", ", ".join(t.get("name") for t in a.get("applyTypes") or [] if t.get("name"))),
+             ("혜택", a.get("additionalBenefit"))]
+    desc = text + ("\n\n" + "\n".join(f"{k}: {v}" for k, v in extra if v) if any(v for _, v in extra) else "")
+    info = {k: v for k, v in (("기업형태", a.get("organizationType")), ("홈페이지", a.get("homepageURL"))) if v}
+    return build(
+        "linkareer", posting_id(url, "linkareer") or str(a.get("id")),
+        title=_clean_title(a.get("title") or "", a.get("organizationName")), company=a.get("organizationName"),
+        url=url, location=location, education=min(edu, key=len) if edu else None,
+        employment_type=emp, salary_text=salary_text, job_category=", ".join(dict.fromkeys(cats)) or None,
+        keywords=", ".join(s.get("name") for s in a.get("skills") or [] if isinstance(s, dict) and s.get("name")) or None,
+        description=desc or None, posted_at=_ms_date(a.get("recruitStartAt")),
+        deadline=_ms_date(a.get("recruitCloseAt")), company_info=info)
 
 
 def _tokens(page: str) -> list[str]:
