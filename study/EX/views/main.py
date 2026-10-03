@@ -15,11 +15,13 @@ def home():
     dash = study.dashboard(track or None)
     conn = db.get()
     best = {r['task']: r for r in conn.execute(
-        'SELECT task, MAX(score) score, total, COUNT(*) n FROM build_results GROUP BY task')}
+        'SELECT task, MAX(score) score, total, COUNT(*) n FROM build_results WHERE user=? GROUP BY task',
+        (db.user_id(),))}
     missions = [{'m': m, 'best': best.get(k)} for k, m in build.MISSIONS.items()]
-    uploads = conn.execute('SELECT * FROM uploads ORDER BY created_at DESC LIMIT 4').fetchall()
+    uploads = conn.execute('SELECT * FROM uploads WHERE user=? ORDER BY created_at DESC LIMIT 4', (db.user_id(),)).fetchall()
     ebest = {r['exam']: r for r in conn.execute(
-        'SELECT exam, MAX(score) score, total, COUNT(*) n, MAX(passed) passed FROM exam_results GROUP BY exam')}
+        'SELECT exam, MAX(score) score, total, COUNT(*) n, MAX(passed) passed FROM exam_results WHERE user=? '
+        'GROUP BY exam', (db.user_id(),))}
     exams = [{'e': e, 'best': ebest.get(e['id'])} for e in exam.exams()]
     chart = {'labels': [d['label'] for d in dash['daily']],
              'series': [{'name': '정답', 'values': [d['ok'] for d in dash['daily']]},

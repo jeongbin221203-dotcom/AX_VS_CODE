@@ -4,6 +4,8 @@ from openpyxl import Workbook
 
 from core import build, content
 
+FIX = __import__('pathlib').Path(__file__).parent / 'fixtures'
+
 
 def post_json(client, url, body):
     return client.post(url, json=body, headers={'X-CSRF-Token': client.csrf})
@@ -118,3 +120,35 @@ def test_build_rejects_wrong_workbook(client):
     r = client.post('/build/hr/submit', data={'_csrf': client.csrf, 'file': (io.BytesIO(bio.getvalue()), 'x.xlsx')},
                     follow_redirects=True)
     assert '시트가 있어야 합니다' in r.get_data(as_text=True)
+
+
+def _public_app(tmp_path):
+    from app import create_app
+    return create_app({'DATA_DIR': str(tmp_path), 'DATABASE': str(tmp_path / 'ex.db'), 'SECRET_KEY': 't',
+                       'PUBLIC': True, 'OWNER_TOKEN': 'k' * 40, 'TESTING_NO_CSRF': True})
+
+
+def test_public_users_are_isolated(tmp_path):
+    app = _public_app(tmp_path)
+    a, b = app.test_client(), app.test_client()
+    a.post('/api/check', json={'pid': 'basic-001', 'answer': '=SUM(G2:G16)'})
+    a.post('/analyze/sample')
+    r = a.post('/exam/c2-01/submit', data={'file': (open(FIX / 'c2-01_answer_excel.xlsx', 'rb'), 'x.xlsx')})
+    result_url = r.headers['Location']
+    a.post('/track', data={'track': 'c1'})
+    assert '1<small> / ' in a.get('/').get_data(as_text=True) or '푼 문제' in a.get('/').get_data(as_text=True)
+    page_b = b.get('/').get_data(as_text=True)
+    assert '샘플_상반기매출' not in page_b and '최고 <b>94점</b>' not in page_b
+    assert b.get(result_url).status_code == 404
+    assert '샘플_상반기매출' not in b.get('/analyze/').get_data(as_text=True)
+    assert 'selected>컴활 1급' not in b.get('/learn').get_data(as_text=True).replace('" selected', ' selected')
+
+
+def test_owner_devices_share_records(tmp_path):
+    app = _public_app(tmp_path)
+    phone, pc = app.test_client(), app.test_client()
+    phone.get('/me/' + 'k' * 40)
+    pc.get('/me/' + 'k' * 40)
+    phone.post('/api/check', json={'pid': 'basic-004', 'answer': 1})
+    assert '참조 전환 키' not in pc.get('/review').get_data(as_text=True)          # 맞혀서 오답 노트에 없음
+    assert '1<small> / ' in pc.get('/').get_data(as_text=True)                    # 푼 문제 1

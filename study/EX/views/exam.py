@@ -14,7 +14,7 @@ CIRCLED = '①②③④⑤⑥⑦⑧⑨⑩'
 
 def _best():
     rows = db.get().execute('SELECT exam, MAX(score) score, total, COUNT(*) n, MAX(passed) passed '
-                            'FROM exam_results GROUP BY exam').fetchall()
+                            'FROM exam_results WHERE user=? GROUP BY exam', (db.user_id(),)).fetchall()
     return {r['exam']: r for r in rows}
 
 
@@ -36,7 +36,7 @@ def _exam(eid):
 def paper(eid):
     e = _exam(eid)
     history = db.get().execute('SELECT id, score, total, passed, seconds, file_name, created_at FROM exam_results '
-                               'WHERE exam=? ORDER BY id DESC LIMIT 10', (eid,)).fetchall()
+                               'WHERE exam=? AND user=? ORDER BY id DESC LIMIT 10', (eid, db.user_id())).fetchall()
     sections = []
     for s in ex.SECTIONS:
         tasks = [t for t in e['tasks'] if t['section'] == s]
@@ -81,17 +81,17 @@ def submit(eid):
         return redirect(url_for('.paper', eid=eid, error=str(err)))
     seconds = request.form.get('seconds', type=int)
     conn = db.get()
-    cur = conn.execute('INSERT INTO exam_results(exam, score, total, passed, seconds, detail, file_name) '
-                       'VALUES(?, ?, ?, ?, ?, ?, ?)',
+    cur = conn.execute('INSERT INTO exam_results(exam, score, total, passed, seconds, detail, file_name, user) '
+                       'VALUES(?, ?, ?, ?, ?, ?, ?, ?)',
                        (eid, res['score'], res['total'], int(res['passed']), seconds,
-                        json.dumps(res, ensure_ascii=False), f.filename[:200]))
+                        json.dumps(res, ensure_ascii=False), f.filename[:200], db.user_id()))
     conn.commit()
     return redirect(url_for('.result', rid=cur.lastrowid))
 
 
 @bp.route('/result/<int:rid>')
 def result(rid):
-    row = db.get().execute('SELECT * FROM exam_results WHERE id=?', (rid,)).fetchone()
+    row = db.get().execute('SELECT * FROM exam_results WHERE id=? AND user=?', (rid, db.user_id())).fetchone()
     if not row:
         abort(404)
     e = _exam(row['exam'])

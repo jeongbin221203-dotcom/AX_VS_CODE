@@ -80,7 +80,10 @@ def date_serial(d):
 
 
 def serial_date(n):
-    return EPOCH + dt.timedelta(days=int(math.floor(n)))
+    try:
+        return EPOCH + dt.timedelta(days=int(math.floor(n)))
+    except (OverflowError, ValueError):
+        raise XLErr('#VALUE!')
 
 
 def parse_date_text(s):

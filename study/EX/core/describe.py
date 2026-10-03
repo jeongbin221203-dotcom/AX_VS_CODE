@@ -65,9 +65,11 @@ def header_row(ws, r, c1, c2):
     """r 행이 속한 표의 머리글 행: 위로 올라가며 글자가 절반 이상이고 바로 아래 행에 숫자·날짜가 있는 행."""
     width = c2 - c1 + 1
     for rr in range(r, max(0, r - 60), -1):
+        vals = [ws.cell(rr, c).value for c in range(c1, c2 + 1)]
         texts = sum(1 for c in range(c1, c2 + 1) if _text(ws, rr, c))
+        numbers = sum(1 for v in vals if isinstance(v, (int, float)) and not isinstance(v, bool) or hasattr(v, 'year'))
         below = [ws.cell(rr + 1, c).value for c in range(c1, c2 + 1)]
-        if texts * 2 >= width and texts >= 2 and any(not isinstance(v, str) and v is not None for v in below):
+        if texts * 2 >= width and texts >= 2 and not numbers and                 any(not isinstance(v, str) and v is not None for v in below):
             return rr
     return None
 
@@ -239,37 +241,99 @@ def _subtotal_task(sheet, ws_a, comp):
             'refs': _span(comp)}
 
 
+def _table_rows(ws, r1, r2, c1, c2):
+    """덩어리가 걸친 표의 데이터 행 전체(머리글 아래 ~ 빈 행 전까지)."""
+    hr = header_row(ws, r1, c1, c2)
+    top = hr + 1 if hr else r1
+    bottom = r2
+    while any(ws.cell(bottom + 1, c).value not in (None, '') for c in range(c1, c2 + 1)) and bottom < r2 + 500:
+        bottom += 1
+    return top, bottom, hr
+
+
 def _sort_task(sheet, ws_s, ws_a, wv_a, comp):
     """원본 행을 재배열한 결과면 정렬 기준을 추정한다."""
     r1 = min(r for r, _ in comp)
     r2 = max(r for r, _ in comp)
     c1 = min(c for _, c in comp)
     c2 = max(c for _, c in comp)
-    if r2 - r1 < 2 or ws_s is None:
+    if ws_s is None:
+        return None
+    r1, r2, hr = _table_rows(ws_s, r1, r2, c1, c2)
+    if hr:                                            # 표 너비 = 머리글이 있는 열
+        while c1 > 1 and _text(ws_s, hr, c1 - 1):
+            c1 -= 1
+        while _text(ws_s, hr, c2 + 1):
+            c2 += 1
+    if r2 - r1 < 1:
         return None
     src = [tuple(ws_s.cell(r, c).value for c in range(c1, c2 + 1)) for r in range(r1, r2 + 1)]
-    ans = [tuple(ws_a.cell(r, c).value for c in range(c1, c2 + 1)) for r in range(r1, r2 + 1)]
+    ans = [tuple(wv_a.cell(r, c).value for c in range(c1, c2 + 1)) for r in range(r1, r2 + 1)]   # 값으로 비교
     if sorted(map(str, src)) != sorted(map(str, ans)) or src == ans:
         return None
-    keys = []
-    rows = ans
-    for k in range(c2 - c1 + 1):
-        col = [row[k] for row in rows]
+    name = lambda k: (_text(ws_a, hr, c1 + k) if hr else None) or fx.col_name(c1 + k)  # noqa: E731
+
+    def order(col):
         try:
-            asc = all(not (a is not None and b is not None and a > b) for a, b in zip(col, col[1:]))
-            desc = all(not (a is not None and b is not None and a < b) for a, b in zip(col, col[1:]))
+            if all(a is None or b is None or a <= b for a, b in zip(col, col[1:])):
+                return '오름차순'
+            if all(a is None or b is None or a >= b for a, b in zip(col, col[1:])):
+                return '내림차순'
         except TypeError:
-            continue
-        if asc or desc:
-            keys.append((header_of(ws_a, r1, c1 + k) or fx.col_name(c1 + k), '오름차순' if asc else '내림차순'))
+            return None
+        return None
+
+    def runs(col):
+        """같은 값이 한 덩어리로 모여 있으면 덩어리 순서, 아니면 None."""
+        out = []
+        for v in col:
+            if not out or out[-1] != v:
+                if v in out:
+                    return None
+                out.append(v)
+        return out
+
+    keys = []
+    for k in range(c2 - c1 + 1):                    # 첫째 기준: 전체가 정렬된 열(값이 여러 가지인 열 우선)
+        col = [row[k] for row in ans]
+        filled = sum(1 for v in col if v not in (None, ''))
+        o = order(col)
+        if o and len(set(map(str, col))) > 1 and filled >= 0.8 * len(col):
+            keys.append((name(k), o, k))
             break
+    if not keys:                                      # 사용자 지정 목록: 값이 덩어리로 모였지만 가나다순은 아님
+        for k in range(c2 - c1 + 1):
+            rs = runs([row[k] for row in ans])
+            if rs and 2 <= len(rs) <= 10 and len(rs) < len(ans):
+                keys.append((name(k), f"사용자 지정 목록 {q(', '.join(str(x) for x in rs))} 순서로", k))
+                break
+    if keys:                                          # 둘째 기준: 첫째 기준이 같은 묶음 안에서 정렬된 열
+        k0 = keys[0][2]
+        groups = {}
+        for row in ans:
+            groups.setdefault(str(row[k0]), []).append(row)
+        multi = [g for g in groups.values() if len(g) > 1]
+        if multi:
+            for k in range(c2 - c1 + 1):
+                if k == k0:
+                    continue
+                vals = [row[k] for g in multi for row in g]
+                if sum(1 for v in vals if v not in (None, '')) < 0.8 * len(vals):
+                    continue
+                os_ = {order([row[k] for row in g]) for g in multi}
+                if len(os_) == 1 and None not in os_ and any(len(set(str(r[k]) for r in g)) > 1 for g in multi):
+                    keys.append((name(k), os_.pop(), k))
+                    break
     if not keys:
         first = header_of(ws_a, r1, c1)
         return {'text': f"{q(sheet)} 시트의 [{_span(comp)}] 영역을 정답과 같은 순서로 정렬하시오(사용자 지정 목록 또는 여러 기준 — 힌트 참조).",
                 'refs': _span(comp), 'items': [f'첫 열 {q(first)} 의 순서를 확인하세요.'] if first else []}
-    name, how = keys[0]
-    return {'text': f"{q(sheet)} 시트의 데이터를 {j(q(name), '을/를')} 기준으로 {how} 정렬하시오.",
-            'items': ['같은 값이 있으면 둘째 기준이 있을 수 있습니다(힌트·정답과 비교).'], 'refs': _span(comp)}
+    first = f"{j(q(keys[0][0]), '을/를')} 기준으로 {keys[0][1]}"
+    if len(keys) > 1:
+        first += f", {j(q(keys[0][0]), '이/가')} 같으면 {j(q(keys[1][0]), '을/를')} 기준으로 {keys[1][1]}"
+    span = f"{fx.addr(r1, c1)}:{fx.addr(r2, c2)}"
+    return {'text': f"{q(sheet)} 시트의 [{span}] 영역 데이터를 {first} 정렬하시오.", 'refs': span, 'kind': 'sort',
+            'items': [] if len(keys) > 1 else ['정답과 순서가 다르면 사용자 지정 목록이나 둘째 기준을 확인하세요(힌트).']}
 
 
 def _criteria_text(ws, r, c, h, w):
@@ -358,6 +422,51 @@ def _autofilter_task(sheet, ws_s, ws_a):
         return None
     return {'text': f"{q(sheet)} 시트의 [{af.ref}] 영역에서 자동 필터를 이용하여 {' 이고 '.join(conds)}인 데이터만 표시하시오.",
             'refs': af.ref}
+
+
+def _textsplit_task(sheet, ws_s, wv_a, comp):
+    """한 열에 붙어 있던 글자가 여러 열로 나뉜 경우."""
+    if ws_s is None:
+        return None
+    c1 = min(c for _, c in comp)
+    c2 = max(c for _, c in comp)
+    rows = sorted({r for r, _ in comp})
+    if c2 == c1:
+        return None
+    src_first = [ws_s.cell(r, c1).value for r in rows]
+    src_rest = [ws_s.cell(r, c).value for r in rows for c in range(c1 + 1, c2 + 1)]
+    if not all(isinstance(v, str) for v in src_first if v is not None) or any(v not in (None, '') for v in src_rest):
+        return None
+    joined = ' '.join(v for v in src_first if v)
+    for d, name in ((',', '쉼표'), (';', '세미콜론'), ('\t', '탭'), ('/', '/'), ('-', '-'), (' ', '공백')):
+        if d in joined:
+            how = f"구분 기호 {q(name)}로 분리되어 있음"
+            break
+    else:
+        how = "너비가 일정함"
+    return {'text': f"{q(sheet)} 시트의 [{fx.addr(rows[0], c1)}:{fx.addr(rows[-1], c1)}] 영역의 데이터를 텍스트 나누기를 이용하여 "
+                    f"각 열로 구분하시오.", 'items': [f"원본 데이터 형식: {how}", '열 구분 결과는 정답과 같게(제외할 열이 있으면 힌트 참조)'],
+            'refs': _span(comp)}
+
+
+def _paste_op_task(sheet, ws_s, wv_a, comp):
+    """모든 숫자가 같은 값만큼 더해지거나 곱해진 경우 → 선택하여 붙여넣기(연산)."""
+    if ws_s is None or len(comp) < 2:
+        return None
+    pairs = [(ws_s.cell(r, c).value, wv_a.cell(r, c).value) for r, c in comp]
+    if not all(isinstance(a, (int, float)) and isinstance(b, (int, float)) for a, b in pairs):
+        return None
+    diffs = {round(b - a, 9) for a, b in pairs}
+    if len(diffs) == 1:
+        d = diffs.pop()
+        verb = f"{fx.display(abs(d))}을(를) {'더하시오' if d > 0 else '빼시오'}"
+    else:
+        ratios = {round(b / a, 9) for a, b in pairs if a}
+        if len(ratios) != 1:
+            return None
+        verb = f"{fx.display(ratios.pop())}을(를) 곱하시오"
+    return {'text': f"{q(sheet)} 시트의 [{_span(comp)}] 영역의 모든 값에 {verb}.",
+            'items': ["'선택하여 붙여넣기'의 '연산' 기능을 사용하시오."], 'refs': _span(comp)}
 
 
 def _goalseek_task(sheet, ws_s, ws_a, wv_a, comp):
@@ -466,10 +575,14 @@ def _style_tasks(sheet, ws_s, ws_a, wv_a):
                     sample = 1234.5
                 try:
                     shown = fx.format_value(xlsx.plain(sample), cell.number_format)
-                except Exception:  # noqa: BLE001
+                except (Exception, fx.XLErr):  # noqa: BLE001
                     shown = cell.number_format
-                shown_in = (fx.format_value(sample, 'yyyy-mm-dd') if re.search(r'[yd]', re.sub(r'"[^"]*"', '', cell.number_format.lower()))
-                            else fx.display(xlsx.plain(sample)))
+                try:
+                    shown_in = (fx.format_value(sample, 'yyyy-mm-dd')
+                                if re.search(r'[yd]', re.sub(r'"[^"]*"', '', cell.number_format.lower()))
+                                else fx.display(xlsx.plain(sample)))
+                except (fx.XLErr, OverflowError, ValueError):
+                    shown_in = fx.display(xlsx.plain(sample))
                 phrase = f"표시 형식 [표시 예: {shown_in} → {shown.strip()}]"
             else:
                 phrase = STYLE_PHRASE.get(k, lambda x: f'{k} {x}')(v)
@@ -803,11 +916,17 @@ def describe(src_bytes, ans_bytes):
             if nform * 2 >= len(comp):
                 tasks.append(_formula_task(sheet, ws_a, comp))
                 continue
-            srt = _sort_task(sheet, ws_s, ws_a, wv_a, comp)
+            srt = _sort_task(sheet, src.wv(sheet), ws_a, wv_a, comp)
             if srt:
                 tasks.append(srt)
             elif _is_empty_in(ws_s, comp):
                 tasks.append(_input_task(sheet, wv_a, comp))
+            elif (ts := _textsplit_task(sheet, ws_s, wv_a, comp)):
+                tasks.append(ts)
+            elif (op := _paste_op_task(sheet, ws_s, wv_a, comp)):
+                tasks.append(op)
+            elif all(wv_a.cell(r, c).value in (None, '') for r, c in comp):
+                tasks.append({'text': f"[{_span(comp)}] 영역의 내용을 지우시오.", 'refs': _span(comp)})
             elif (gs := _goalseek_task(sheet, ws_s, ws_a, wv_a, comp)):
                 tasks.append(gs)
             elif len(comp) <= 3 and all(isinstance(wv_a.cell(r, c).value, str) for r, c in comp):
@@ -828,7 +947,12 @@ def describe(src_bytes, ans_bytes):
         tasks += _pivot_tasks(sheet, ans)
         tasks += _chart_tasks(sheet, src, ans)
         tasks += _misc_tasks(sheet, ws_s, ws_a)
-        out.append({'sheet': sheet, 'tasks': tasks})
+        seen, uniq = set(), []                       # 한 표가 여러 덩어리로 나뉘어 같은 지문이 나오면 하나만
+        for t in tasks:
+            if t['text'] not in seen:
+                seen.add(t['text'])
+                uniq.append(t)
+        out.append({'sheet': sheet, 'tasks': uniq})
     # 통합 문서: 이름 정의, 매크로·VBA
     book = []
     for n, ref in names_a.items():

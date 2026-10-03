@@ -18,9 +18,10 @@ def _folder():
 def _store(data, name):
     uid, table = an.save_upload(_folder(), data, name)
     conn = db.get()
-    conn.execute('INSERT INTO uploads(id, name, sheet, rows, cols) VALUES(?, ?, ?, ?, ?)',
-                 (uid, name[:200], table['sheet'], len(table['rows']), len(table['columns'])))
-    for row in conn.execute('SELECT id FROM uploads ORDER BY created_at DESC, rowid DESC LIMIT -1 OFFSET ?', (KEEP,)):
+    conn.execute('INSERT INTO uploads(id, name, sheet, rows, cols, user) VALUES(?, ?, ?, ?, ?, ?)',
+                 (uid, name[:200], table['sheet'], len(table['rows']), len(table['columns']), db.user_id()))
+    for row in conn.execute('SELECT id FROM uploads WHERE user=? ORDER BY created_at DESC, rowid DESC LIMIT -1 OFFSET ?',
+                            (db.user_id(), KEEP)):
         an.delete_upload(_folder(), row['id'])
         conn.execute('DELETE FROM uploads WHERE id=?', (row['id'],))
     conn.commit()
@@ -29,7 +30,8 @@ def _store(data, name):
 
 @bp.route('/')
 def index():
-    uploads = db.get().execute('SELECT * FROM uploads ORDER BY created_at DESC, rowid DESC').fetchall()
+    uploads = db.get().execute('SELECT * FROM uploads WHERE user=? ORDER BY created_at DESC, rowid DESC',
+                               (db.user_id(),)).fetchall()
     return render_template('analyze.html', uploads=uploads, error=request.args.get('error'))
 
 
@@ -58,6 +60,8 @@ def sample_download():
 
 
 def _table(uid):
+    if not db.get().execute('SELECT 1 FROM uploads WHERE id=? AND user=?', (uid, db.user_id())).fetchone():
+        abort(404)
     doc = an.load_upload(_folder(), uid)
     if not doc:
         abort(404)
@@ -96,8 +100,10 @@ def export(uid):
 
 @bp.route('/<uid>/delete', methods=['POST'])
 def delete(uid):
-    an.delete_upload(_folder(), uid)
     conn = db.get()
+    if not conn.execute('SELECT 1 FROM uploads WHERE id=? AND user=?', (uid, db.user_id())).fetchone():
+        abort(404)
+    an.delete_upload(_folder(), uid)
     conn.execute('DELETE FROM uploads WHERE id=?', (uid,))
     conn.commit()
     return redirect(url_for('.index'))

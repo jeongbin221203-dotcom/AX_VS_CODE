@@ -1,7 +1,10 @@
 """SQLite 연결. 요청마다 연결하고 요청이 끝나면 닫는다."""
+import secrets
 import sqlite3
 
-from flask import current_app, g
+from flask import current_app, g, has_request_context, session
+
+USER_TABLES = ('attempts', 'stars', 'uploads', 'build_results', 'exam_results')
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS attempts (
@@ -16,7 +19,7 @@ CREATE INDEX IF NOT EXISTS ix_attempts_pid ON attempts(pid);
 CREATE INDEX IF NOT EXISTS ix_attempts_day ON attempts(created_at);
 
 CREATE TABLE IF NOT EXISTS stars (
-    pid TEXT PRIMARY KEY,
+    pid TEXT NOT NULL,
     created_at TEXT NOT NULL DEFAULT (datetime('now', 'localtime'))
 );
 
@@ -68,9 +71,27 @@ def init(path):
     conn = connect(path)          # sqlite3 의 with 는 커밋만 하고 닫지 않으므로 직접 닫는다
     try:
         conn.executescript(SCHEMA)
+        for table in USER_TABLES:  # 예전 DB: 사용자 열 추가(기존 기록은 PC 사용자 '')
+            cols = [r[1] for r in conn.execute(f'PRAGMA table_info({table})')]
+            if 'user' not in cols:
+                conn.execute(f"ALTER TABLE {table} ADD COLUMN user TEXT NOT NULL DEFAULT ''")
+        conn.execute('CREATE INDEX IF NOT EXISTS ix_attempts_user ON attempts(user, pid)')
+        conn.execute('CREATE UNIQUE INDEX IF NOT EXISTS ux_stars ON stars(user, pid)')
         conn.commit()
     finally:
         conn.close()
+
+
+def user_id():
+    """현재 사용자. PC 실행은 '' 하나, 공개 서버는 개인 링크로 연결한 기기 'owner', 그 밖은 브라우저마다 무작위."""
+    if not has_request_context() or not current_app.config.get('PUBLIC'):
+        return ''
+    if session.get('owner'):
+        return 'owner'
+    if 'uid' not in session:
+        session['uid'] = secrets.token_hex(12)
+        session.permanent = True
+    return session['uid']
 
 
 def get():
@@ -85,13 +106,18 @@ def close(_exc=None):
         conn.close()
 
 
+def _skey(key):
+    u = user_id()
+    return f'{u}:{key}' if u else key
+
+
 def setting(key, default=None):
-    row = get().execute('SELECT value FROM settings WHERE key=?', (key,)).fetchone()
+    row = get().execute('SELECT value FROM settings WHERE key=?', (_skey(key),)).fetchone()
     return row['value'] if row else default
 
 
 def set_setting(key, value):
     conn = get()
     conn.execute('INSERT INTO settings(key, value) VALUES(?, ?) ON CONFLICT(key) DO UPDATE SET value=excluded.value',
-                 (key, value))
+                 (_skey(key), value))
     conn.commit()

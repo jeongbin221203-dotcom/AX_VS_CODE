@@ -6,32 +6,35 @@ from . import content, db
 
 def record(problem, ok, answer):
     conn = db.get()
-    conn.execute('INSERT INTO attempts(pid, category, ok, answer) VALUES(?, ?, ?, ?)',
-                 (problem['id'], problem['category'], 1 if ok else 0, (answer or '')[:500]))
+    conn.execute('INSERT INTO attempts(pid, category, ok, answer, user) VALUES(?, ?, ?, ?, ?)',
+                 (problem['id'], problem['category'], 1 if ok else 0, (answer or '')[:500], db.user_id()))
     conn.commit()
 
 
 def status_map():
     """문제별 상태: solved(한 번이라도 맞힘), last_ok(마지막 풀이), tries, wrong."""
     rows = db.get().execute(
-        'SELECT pid, COUNT(*) tries, SUM(ok) oks, SUM(1-ok) wrongs, MAX(id) last_id FROM attempts GROUP BY pid').fetchall()
+        'SELECT pid, COUNT(*) tries, SUM(ok) oks, SUM(1-ok) wrongs, MAX(id) last_id FROM attempts WHERE user=? '
+        'GROUP BY pid', (db.user_id(),)).fetchall()
     last = {r['pid']: r['ok'] for r in db.get().execute(
-        'SELECT a.pid, a.ok FROM attempts a JOIN (SELECT pid, MAX(id) mid FROM attempts GROUP BY pid) m ON a.id = m.mid')}
+        'SELECT a.pid, a.ok FROM attempts a JOIN (SELECT pid, MAX(id) mid FROM attempts WHERE user=? GROUP BY pid) m '
+        'ON a.id = m.mid', (db.user_id(),))}
     return {r['pid']: {'tries': r['tries'], 'solved': r['oks'] > 0, 'wrong': r['wrongs'],
                        'last_ok': bool(last.get(r['pid']))} for r in rows}
 
 
 def stars():
-    return {r['pid'] for r in db.get().execute('SELECT pid FROM stars')}
+    return {r['pid'] for r in db.get().execute('SELECT pid FROM stars WHERE user=?', (db.user_id(),))}
 
 
 def toggle_star(pid):
     conn = db.get()
-    if conn.execute('SELECT 1 FROM stars WHERE pid=?', (pid,)).fetchone():
-        conn.execute('DELETE FROM stars WHERE pid=?', (pid,))
+    u = db.user_id()
+    if conn.execute('SELECT 1 FROM stars WHERE pid=? AND user=?', (pid, u)).fetchone():
+        conn.execute('DELETE FROM stars WHERE pid=? AND user=?', (pid, u))
         on = False
     else:
-        conn.execute('INSERT INTO stars(pid) VALUES(?)', (pid,))
+        conn.execute('INSERT INTO stars(pid, user) VALUES(?, ?)', (pid, u))
         on = True
     conn.commit()
     return on
@@ -43,7 +46,8 @@ def _days(today, n):
 
 def streak(today=None):
     today = today or dt.date.today()
-    days = {r['d'] for r in db.get().execute("SELECT DISTINCT substr(created_at, 1, 10) d FROM attempts")}
+    days = {r['d'] for r in db.get().execute("SELECT DISTINCT substr(created_at, 1, 10) d FROM attempts WHERE user=?",
+                                              (db.user_id(),))}
     n, d = 0, today
     if d.isoformat() not in days:
         d -= dt.timedelta(days=1)
@@ -62,7 +66,7 @@ def dashboard(track=None, today=None):
 
     solved = sum(1 for p in probs if st.get(p['id'], {}).get('solved'))
     tried = sum(1 for p in probs if p['id'] in st)
-    rows = conn.execute('SELECT pid, ok, created_at FROM attempts ORDER BY id').fetchall()
+    rows = conn.execute('SELECT pid, ok, created_at FROM attempts WHERE user=? ORDER BY id', (db.user_id(),)).fetchall()
     rows = [r for r in rows if r['pid'] in ids]
     first_try = {}
     for r in rows:
@@ -102,7 +106,8 @@ def dashboard(track=None, today=None):
     wrong_now = [p for p in probs if p['id'] in st and not st[p['id']]['last_ok']]
     nxt = next((p for p in probs if p['id'] not in st), None)
     today_n = per_day[today.isoformat()]
-    recent = conn.execute('SELECT pid, ok, created_at FROM attempts ORDER BY id DESC LIMIT 8').fetchall()
+    recent = conn.execute('SELECT pid, ok, created_at FROM attempts WHERE user=? ORDER BY id DESC LIMIT 8',
+                          (db.user_id(),)).fetchall()
     recent = [{'pid': r['pid'], 'ok': r['ok'], 'at': r['created_at'][5:16], 'p': content.get(r['pid'])}
               for r in recent if content.get(r['pid'])]
     return {'total': len(probs), 'solved': solved, 'tried': tried, 'acc': acc, 'cats': cats, 'daily': daily,

@@ -316,3 +316,12 @@ table.sheet-like th { text-align: center; color: var(--ink-3); font-weight: 500;
 
 .add-pair { background: var(--surface-2); margin-bottom: 12px; }
 .add-pair input[type=text] { min-width: 180px; }
+
+/* 좁은 화면: 제목 옆 설명은 줄을 바꾸고, 시트 모양 표는 글자를 접지 않고 옆으로 밀어 보기 */
+.card h2 { flex-wrap: wrap; row-gap: 2px; }
+.card h2 > span { flex-basis: auto; }
+table.sheet-like td, table.sheet-like th { white-space: nowrap; }
+@media (max-width: 760px) {
+  .card h2 > span.small { flex-basis: 100%; }
+  .exam-items li > div { min-width: 0; }
+}

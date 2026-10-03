@@ -14,7 +14,8 @@ XLSX = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 def index():
     conn = db.get()
     best = {r['task']: r for r in conn.execute(
-        'SELECT task, MAX(score) score, total, COUNT(*) n, MAX(created_at) last FROM build_results GROUP BY task')}
+        'SELECT task, MAX(score) score, total, COUNT(*) n, MAX(created_at) last FROM build_results WHERE user=? '
+        'GROUP BY task', (db.user_id(),))}
     return render_template('build.html', missions=build.MISSIONS.values(), best=best)
 
 
@@ -28,8 +29,8 @@ def _mission(key):
 @bp.route('/<key>')
 def task(key):
     m = _mission(key)
-    history = db.get().execute('SELECT id, score, total, file_name, created_at FROM build_results WHERE task=? '
-                               'ORDER BY id DESC LIMIT 10', (key,)).fetchall()
+    history = db.get().execute('SELECT id, score, total, file_name, created_at FROM build_results WHERE task=? AND user=? '
+                               'ORDER BY id DESC LIMIT 10', (key, db.user_id())).fetchall()
     return render_template('build_task.html', m=m, history=history, error=request.args.get('error'))
 
 
@@ -60,15 +61,16 @@ def submit(key):
     except xlsx.BadFile as e:
         return redirect(url_for('.task', key=key, error=str(e)))
     conn = db.get()
-    cur = conn.execute('INSERT INTO build_results(task, score, total, detail, file_name) VALUES(?, ?, ?, ?, ?)',
-                       (key, res['score'], res['total'], json.dumps(res, ensure_ascii=False), f.filename[:200]))
+    cur = conn.execute('INSERT INTO build_results(task, score, total, detail, file_name, user) VALUES(?, ?, ?, ?, ?, ?)',
+                       (key, res['score'], res['total'], json.dumps(res, ensure_ascii=False), f.filename[:200],
+                        db.user_id()))
     conn.commit()
     return redirect(url_for('.result', rid=cur.lastrowid))
 
 
 @bp.route('/result/<int:rid>')
 def result(rid):
-    row = db.get().execute('SELECT * FROM build_results WHERE id=?', (rid,)).fetchone()
+    row = db.get().execute('SELECT * FROM build_results WHERE id=? AND user=?', (rid, db.user_id())).fetchone()
     if not row:
         abort(404)
     m = _mission(row['task'])

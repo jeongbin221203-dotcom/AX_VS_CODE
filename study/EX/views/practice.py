@@ -20,17 +20,14 @@ def _library_dir():
 
 
 def _best(prefix):
-    rows = db.get().execute("SELECT exam, MAX(score) score, COUNT(*) n FROM exam_results WHERE exam LIKE ? GROUP BY exam",
-                            (prefix + '%',)).fetchall()
+    rows = db.get().execute("SELECT exam, MAX(score) score, COUNT(*) n FROM exam_results WHERE exam LIKE ? AND user=? "
+                            "GROUP BY exam", (prefix + '%', db.user_id())).fetchall()
     return {r['exam'][len(prefix):]: r for r in rows}
 
 
 def _owner():
-    """공개 서버: 브라우저마다 다른 보관함(올린 파일은 그 브라우저에서만 보인다)."""
-    if 'lib_owner' not in session:
-        session['lib_owner'] = secrets.token_hex(12)
-        session.permanent = True
-    return session['lib_owner']
+    """공개 서버의 보관함 주인 = 사용자 id (개인 링크로 연결한 기기는 모두 'owner')."""
+    return db.user_id()
 
 
 def _is_owner():
@@ -40,8 +37,8 @@ def _is_owner():
 def _items():
     public = current_app.config.get('PUBLIC')
     items = library.load_index(_library_dir())
-    if public and session.get('owner'):          # 개인 링크로 연결한 기기: 내 자료 + 이 브라우저에서 올린 것
-        return [x for x in items if x.get('owner') in (None, _owner())]
+    if public and session.get('owner'):          # 개인 링크로 연결한 기기: 내 자료(PC 에서 가져온 것) + 직접 올린 것
+        return [x for x in items if x.get('owner') in (None, 'owner')]
     return library.visible(items, _owner() if public else None, public)
 
 
@@ -138,7 +135,7 @@ def _problem(folder, practice, answer):
 def item(kind, iid):
     info, folder, practice, answer, key = _resolve(kind, iid)
     history = db.get().execute('SELECT id, score, total, passed, file_name, created_at FROM exam_results WHERE exam=? '
-                               'ORDER BY id DESC LIMIT 10', (key,)).fetchall()
+                               'AND user=? ORDER BY id DESC LIMIT 10', (key, db.user_id())).fetchall()
     return render_template('practice_item.html', kind=kind, info=info, practice=practice, answer=answer,
                            tasks=_tasks(folder, practice, answer), history=history,
                            problem=_problem(folder, practice, answer) if kind == 'lib' else [],
@@ -167,17 +164,17 @@ def submit(kind, iid):
     except xlsx.BadFile as e:
         return redirect(url_for('.item', kind=kind, iid=iid, error=str(e)))
     conn = db.get()
-    cur = conn.execute('INSERT INTO exam_results(exam, score, total, passed, seconds, detail, file_name) '
-                       'VALUES(?, ?, ?, ?, ?, ?, ?)',
+    cur = conn.execute('INSERT INTO exam_results(exam, score, total, passed, seconds, detail, file_name, user) '
+                       'VALUES(?, ?, ?, ?, ?, ?, ?, ?)',
                        (key, res['score'], res['total'], int(res['passed']), request.form.get('seconds', type=int),
-                        json.dumps(res, ensure_ascii=False), f.filename[:200]))
+                        json.dumps(res, ensure_ascii=False), f.filename[:200], db.user_id()))
     conn.commit()
     return redirect(url_for('.result', rid=cur.lastrowid))
 
 
 @bp.route('/result/<int:rid>')
 def result(rid):
-    row = db.get().execute('SELECT * FROM exam_results WHERE id=?', (rid,)).fetchone()
+    row = db.get().execute('SELECT * FROM exam_results WHERE id=? AND user=?', (rid, db.user_id())).fetchone()
     if not row or ':' not in row['exam']:
         abort(404)
     kind, iid = row['exam'].split(':', 1)
