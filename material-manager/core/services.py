@@ -4,6 +4,7 @@
 따라서 이 파일의 규칙은 단위 테스트로 그대로 검증 가능하다.
 """
 
+import math
 import re
 import secrets
 from dataclasses import dataclass, field
@@ -83,7 +84,7 @@ def register_transaction(material_id: int, tx_type: str, qty_input: float, tx_da
     lot_no, expiry_date = lot_no.strip().upper(), expiry_date.strip()
     if tx_type != "IN":
         po_no = po_item = ""
-    if po_item.isdigit():
+    if po_item.isascii() and po_item.isdigit():
         po_item = str(int(po_item))                    # '010'과 '10'을 같은 품목으로 (입고 누계가 새지 않게)
     if tx_type != "OUT":
         cost_center = ""
@@ -107,6 +108,8 @@ def _register(conn, who: dict, material_id: int, tx_type: str, qty_input: float,
               warehouse_id: int | None, wh_ids, lot_no: str, expiry_date: str, statement_id: int | None = None):
     """register_transaction의 본문 — 호출하는 쪽의 트랜잭션 안에서 돈다(거래명세서는 여러 줄을 한 트랜잭션에).
     실패·결재 대기는 Result, 성공은 결과 dict."""
+    if not _finite(qty_input, unit_price):
+        return Result(False, "수량·단가를 숫자로 다시 입력하세요.")
     wh_id = warehouse_id or repo.default_warehouse_id(conn)
     wh = org.get_warehouse(wh_id, conn)
     problem = _warehouse_problem(wh, wh_ids) or periods.date_problem(conn, tx_date)
@@ -304,6 +307,14 @@ def post_approved_adjustment(conn, req: dict, approver: dict) -> Result:
                   stock_after=now + qty)
 
 
+def _finite(*values) -> bool:
+    """nan·무한대·터무니없이 큰 값은 거래로 받지 않는다 (오프라인 대기열 JSON도 여기로 들어온다)."""
+    try:
+        return all(v is None or (math.isfinite(float(v)) and abs(float(v)) <= 1e15) for v in values)
+    except (TypeError, ValueError):
+        return False
+
+
 def transfer(material_id: int, from_wh: int, to_wh: int, qty: float, tx_date: str, *,
              actor: dict | None = None, ref_no: str = "", note: str = "", wh_ids=None, lot_no: str = "") -> Result:
     """창고 간 이동: 보내는 창고 출고 + 받는 창고 입고를 같은 이동번호로 한 번에 기록한다.
@@ -312,6 +323,8 @@ def transfer(material_id: int, from_wh: int, to_wh: int, qty: float, tx_date: st
     who = _actor(actor, "")
     if from_wh == to_wh:
         return Result(False, "보내는 창고와 받는 창고가 같습니다.")
+    if not _finite(qty):
+        return Result(False, "수량을 숫자로 다시 입력하세요.")
     if qty <= 0:
         return Result(False, "수량은 0보다 커야 합니다.")
     with db.transaction() as conn:

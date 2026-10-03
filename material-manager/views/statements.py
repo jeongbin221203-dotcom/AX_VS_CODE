@@ -105,7 +105,7 @@ def _evidence_meta(h: dict, lines: list[statements.Line]) -> dict:
 def _header_problem(h: dict) -> str:
     if h["kind"] not in ("IN", "OUT"):
         return "입고 또는 출고를 고르세요."
-    if not h["warehouse_id"].isdigit() or int(h["warehouse_id"]) not in org.warehouse_options(g.wh_ids):
+    if not (h["warehouse_id"].isascii() and h["warehouse_id"].isdigit()) or int(h["warehouse_id"]) not in org.warehouse_options(g.wh_ids):
         return "창고를 고르세요 (권한이 있는 창고만)."
     try:
         date.fromisoformat(h["tx_date"])

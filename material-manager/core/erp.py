@@ -141,7 +141,7 @@ def dig(obj, path: str):
     for part in path.split("."):
         if isinstance(obj, dict):
             obj = obj.get(part)
-        elif isinstance(obj, list) and part.isdigit() and int(part) < len(obj):
+        elif isinstance(obj, list) and part.isascii() and part.isdigit() and int(part) < len(obj):
             obj = obj[int(part)]
         else:
             return None

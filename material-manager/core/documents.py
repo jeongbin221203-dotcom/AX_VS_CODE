@@ -77,8 +77,11 @@ def _amount(raw, label: str, errors: list[str]) -> int:
         return 0
     try:
         value = int(float(text))
-    except ValueError:
-        errors.append(f"{label}은(는) 숫자로 입력하세요 ({text})")
+    except (ValueError, OverflowError):                  # 'abc', 'nan', '1e309'
+        errors.append(f"{label}은(는) 숫자로 입력하세요 ({text[:30]})")
+        return 0
+    if value > 10 ** 15:
+        errors.append(f"{label}이(가) 너무 큽니다 ({text[:30]})")
         return 0
     if value < 0:
         errors.append(f"{label}은(는) 0 이상이어야 합니다.")
@@ -137,7 +140,7 @@ def prepare(data: bytes, filename: str, meta: dict) -> Prepared:
         warnings.append("계산서(면세)는 보통 세액이 0원입니다. 증빙 종류를 확인해 주세요.")
 
     tx_raw = str(meta.get("tx_id") or "").strip()
-    tx_id = int(tx_raw) if tx_raw.isdigit() else None
+    tx_id = int(tx_raw) if tx_raw.isascii() and tx_raw.isdigit() and len(tx_raw) <= 18 else None
     if tx_raw and tx_id is None:
         errors.append("연결할 거래 ID가 올바르지 않습니다.")
 

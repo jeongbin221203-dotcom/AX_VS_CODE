@@ -6,6 +6,7 @@
 - SAP 연동 중이면 그 달 거래가 모두 SAP에 전기된 뒤에만 마감할 수 있다.
 """
 
+import re
 from dataclasses import dataclass
 from datetime import date
 
@@ -53,6 +54,8 @@ def next_closable(conn=None) -> str:
 
 def close_month(ym: str, actor: dict | None) -> PeriodResult:
     this_month = date.today().strftime("%Y-%m")
+    if not re.fullmatch(r"\d{4}-(0[1-9]|1[0-2])", ym or ""):
+        return PeriodResult(False, "마감할 달을 선택하세요 (예: 2026-08).")
     if ym >= this_month:
         return PeriodResult(False, "진행 중이거나 미래인 달은 마감할 수 없습니다.")
     end = month_end(ym)

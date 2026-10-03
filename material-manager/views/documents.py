@@ -9,7 +9,7 @@ from flask import Blueprint, abort, flash, g, redirect, request, send_file, url_
 
 import config
 from core import db, documents, repository as repo
-from views.helpers import Table, a_date, a_int, actor, can, f_str, page_arg, pager, render_page, role_required
+from views.helpers import Table, a_date, a_int, actor, as_id, can, f_str, page_arg, pager, render_page, role_required
 
 bp = Blueprint("documents", __name__, url_prefix="/documents")
 
@@ -78,7 +78,7 @@ def _tx_in_scope(raw: str) -> bool:
     if not raw or g.wh_ids is None:
         return True
     with db.get_conn() as conn:
-        tx = repo.get_transaction(conn, int(raw)) if raw.isdigit() else None
+        tx = repo.get_transaction(conn, as_id(raw)) if as_id(raw) else None
     return tx is not None and tx["warehouse_id"] in g.wh_ids
 
 
@@ -152,10 +152,10 @@ def link(doc_id: int):
                                               and int(doc["created_by_id"]) == g.user["id"]):
         flash("연결 해제는 관리자나 증빙을 올린 사람만 할 수 있습니다.", "error")
         return redirect(url_for("documents.detail", doc_id=doc_id))
-    if raw and not raw.isdigit():
+    if raw and as_id(raw) is None:
         flash("거래 ID는 숫자로 입력하세요.", "error")
         return redirect(url_for("documents.detail", doc_id=doc_id))
-    saved = documents.link(doc_id, int(raw) if raw else None, actor(), wh_ids=g.wh_ids)
+    saved = documents.link(doc_id, as_id(raw), actor(), wh_ids=g.wh_ids)
     flash(saved.message, "success" if saved.ok else "error")
     return redirect(url_for("documents.detail", doc_id=doc_id))
 

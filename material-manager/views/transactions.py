@@ -8,7 +8,7 @@ import config
 from core import audit, db, documents, org, periods, purchasing, repository as repo, services
 from core.utils import month_end
 from views.documents import meta_from_form, uploaded_file
-from views.helpers import a_int, actor, f_float, f_str, render_page, role_required
+from views.helpers import a_int, actor, f_float, f_id, f_str, render_page, role_required
 
 bp = Blueprint("transactions", __name__, url_prefix="/transactions")
 
@@ -56,7 +56,7 @@ def index():
 
 def _ids() -> tuple[int, int]:
     try:
-        return int(f_str("material_id")), int(f_str("warehouse_id"))
+        return f_id("material_id"), f_id("warehouse_id")
     except ValueError:
         abort(400, "자재와 창고를 선택하세요.")
 
@@ -119,7 +119,7 @@ def create():
 def transfer():
     mid, wh = _ids()
     try:
-        to_wh = int(f_str("to_warehouse_id"))
+        to_wh = f_id("to_warehouse_id")
         qty = f_float("qty")
         tx_date = date.fromisoformat(f_str("tx_date") or date.today().isoformat())
     except ValueError:
@@ -152,7 +152,7 @@ def queue():
         return jsonify(ok=False, message="수량·일자 형식이 올바르지 않습니다.")
     if kind == "TRF":
         try:
-            to_wh = int(f_str("to_warehouse_id"))
+            to_wh = f_id("to_warehouse_id")
         except ValueError:
             return jsonify(ok=False, message="받는 창고를 확인하세요.")
         result = services.transfer(mid, wh, to_wh, qty, tx_date, actor=actor(), ref_no=f_str("ref_no"),

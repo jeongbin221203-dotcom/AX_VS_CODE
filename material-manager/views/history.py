@@ -7,7 +7,7 @@ from flask import Blueprint, flash, g, redirect, request, url_for
 
 import config
 from core import org, repository as repo, services
-from views.helpers import (Table, a_date, actor, f_str, form_response, log_export, page_arg, pager, render_page,
+from views.helpers import (Table, a_date, actor, as_id, f_str, form_response, log_export, page_arg, pager, render_page,
                            role_required, safe_next)
 
 bp = Blueprint("history", __name__, url_prefix="/history")
@@ -84,9 +84,9 @@ def reverse():
     """잘못 등록한 거래 취소. 원거래는 남기고 반대 거래를 오늘 일자로 기록한다."""
     back = safe_next(f_str("next"), url_for("history.index"), prefix="/history")
     tx_id = f_str("tx_id")
-    if not tx_id.isdigit():
+    if as_id(tx_id) is None:
         flash("취소할 거래를 선택하세요.", "error")
         return redirect(back)
-    result = services.reverse_transaction(int(tx_id), f_str("reason"), actor=actor(), wh_ids=g.wh_ids)
+    result = services.reverse_transaction(as_id(tx_id), f_str("reason"), actor=actor(), wh_ids=g.wh_ids)
     flash(result.message, "success" if result.ok else "error")
     return redirect(back)

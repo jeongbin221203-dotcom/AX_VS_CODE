@@ -50,11 +50,13 @@
         {{ csrf() }}
         <input type="hidden" name="next" value="{{ request.full_path }}">
         <label>취소할 거래
-          <select name="tx_id">
-            {% for r in reversible %}<option value="{{ r.id }}">#{{ r.id }} · {{ r.tx_date }} {{ r.tx_type }} {{ r.wh_code }} [{{ r.code }}] {{ r.name }} {{ "{:,.2f}".format(r.qty) }}{{ ' (본인 등록)' if r.created_by == g.user.name }}</option>{% endfor %}
+          <select name="tx_id" required>
+            <option value="">— 취소할 거래를 고르세요 —</option>
+            {% for r in reversible %}{% set mine = r.created_by == g.user.name %}<option value="{{ r.id }}"{{ ' disabled' if mine }}>#{{ r.id }} · {{ r.tx_date }} {{ r.tx_type }} {{ r.wh_code }} [{{ r.code }}] {{ r.name }} {{ "{:,.2f}".format(r.qty) }}{{ ' (본인 등록 — 다른 관리자가 취소)' if mine }}</option>{% endfor %}
           </select>
         </label>
         <label class="grow">취소 사유 *<input name="reason" required placeholder="예: 수량 오입력(100→10)"></label>
+        <label class="check"><input type="checkbox" required> 고른 거래를 취소합니다(되돌릴 수 없음)</label>
         <button class="btn btn-danger">취소 거래 등록</button>
       </form>
     </details>

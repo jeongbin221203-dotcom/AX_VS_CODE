@@ -582,4 +582,4 @@ def recent_tx_options(limit: int = 200, wh_ids=None) -> list[tuple[int, str]]:
 
 
 def ids_in(values: Iterable) -> list[int]:
-    return [int(v) for v in values if str(v).isdigit()]
+    return [int(v) for v in values if str(v).isascii() and str(v).isdigit() and len(str(v)) <= 18]

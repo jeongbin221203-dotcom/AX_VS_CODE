@@ -499,6 +499,10 @@
         if (!fresh || !freshSide) throw new Error("navigate");
         const sideY = side.scrollTop;
         main.style.minHeight = bar ? main.offsetHeight + "px" : "";   // 탭: 새 내용이 짧아도 끌려 올라가지 않게
+        if (window.Chart) main.querySelectorAll("canvas").forEach(function (c) {   // 이전 차트를 정리(메모리·크기 감시 해제)
+          const ch = window.Chart.getChart(c);
+          if (ch) ch.destroy();
+        });
         main.innerHTML = fresh.innerHTML;
         main.className = fresh.className;
         main.removeAttribute("aria-busy");

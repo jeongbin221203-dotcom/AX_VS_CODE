@@ -1,10 +1,12 @@
 """구매 화면: 구매요청 → 결재 → 발주 → 입고 · 3자 대조."""
 
+import math
+
 from flask import Blueprint, abort, flash, g, redirect, request, url_for
 
 import config
 from core import org, purchasing, services
-from views.helpers import Table, actor, can, f_str, render_page, role_required
+from views.helpers import Table, actor, as_id, can, f_str, render_page, role_required
 
 bp = Blueprint("purchase", __name__, url_prefix="/purchase")
 
@@ -55,17 +57,32 @@ def index():
 @bp.post("/pr")
 @role_required("CLERK")
 def pr_create():
-    items = []
-    for m, q, p in zip(request.form.getlist("material_id"), request.form.getlist("qty"), request.form.getlist("price")):
-        if not m or not q:
+    items, problems = [], []
+    rows = zip(request.form.getlist("material_id"), request.form.getlist("qty"), request.form.getlist("price"))
+    for no, (m, q, p) in enumerate(rows, start=1):
+        m, q, p = m.strip(), q.strip().replace(",", ""), p.strip().replace(",", "")
+        if not m and not q and not p:
+            continue                                     # 빈 줄
+        if not m:
+            problems.append(f"{no}번째 줄: 자재를 선택하세요.")
+            continue
+        if not q or not p:                               # 단가를 비우면 0원으로 계산돼 결재 단계가 낮아진다 → 받지 않는다
+            problems.append(f"{no}번째 줄: " + ("수량" if not q else "예상단가") + "을(를) 입력하세요.")
             continue
         try:
-            items.append((int(m), float(q.replace(",", "")), float((p or "0").replace(",", ""))))
+            qty, price = float(q), float(p)
         except ValueError:
-            flash("수량·단가는 숫자로 입력하세요.", "error")
-            return redirect(url_for("purchase.index", tab="new"))
+            problems.append(f"{no}번째 줄: 수량·예상단가는 숫자로 입력하세요.")
+            continue
+        if as_id(m) is None or not (math.isfinite(qty) and math.isfinite(price)) or max(abs(qty), abs(price)) > 1e15:
+            problems.append(f"{no}번째 줄: 값을 다시 확인하세요.")
+            continue
+        items.append((as_id(m), qty, price))
+    if problems:
+        flash(" / ".join(problems) + " (입력은 '입력 되살리기'로 다시 불러올 수 있습니다)", "error")
+        return redirect(url_for("purchase.index", tab="new"))
     raw = f_str("warehouse_id")
-    result = purchasing.create_pr(int(raw) if raw.isdigit() else 0, items, f_str("need_date"), f_str("reason"),
+    result = purchasing.create_pr(as_id(raw) or 0, items, f_str("need_date"), f_str("reason"),
                                   actor(), wh_ids=g.wh_ids)
     flash(result.message, "success" if result.ok else "error")
     return redirect(url_for("purchase.pr_detail", pr_id=result.id) if result.ok else url_for("purchase.index", tab="new"))
@@ -114,7 +131,7 @@ def pr_cancel(pr_id: int):
 def po_create(pr_id: int):
     prices = {}
     for key, value in request.form.items():
-        if key.startswith("price_") and key[6:].isdigit() and value.strip():
+        if key.startswith("price_") and key[6:].isascii() and key[6:].isdigit() and len(key) < 24 and value.strip():
             try:
                 prices[int(key[6:])] = float(value.replace(",", ""))
             except ValueError:

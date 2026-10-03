@@ -167,8 +167,9 @@ def dead_stock(stock: pd.DataFrame, wh_ids=None, days: int = 90) -> pd.DataFrame
         """, wp)
     last_map = last.set_index("material_id")["last_out"] if not last.empty else pd.Series(dtype=object)
     cutoff = (date.today() - timedelta(days=days)).isoformat()
-    df = stock[stock["stock"] > 1e-9].assign(last_out=lambda d: d["id"].map(last_map))
-    df = df[df["last_out"].isna() | (df["last_out"] < cutoff)].sort_values("stock_value", ascending=False)
+    # 출고가 한 건도 없으면 map 결과가 숫자형(NaN)이 되어 날짜 글자와 비교할 수 없다 → 글자로 맞춘다 ("" = 출고 없음)
+    df = stock[stock["stock"] > 1e-9].assign(last_out=lambda d: d["id"].map(last_map).astype(object))
+    df = df[df["last_out"].fillna("").astype(str) < cutoff].sort_values("stock_value", ascending=False)
     df["last_out"] = df["last_out"].fillna("출고 이력 없음")
     return (df[["code", "name", "stock", "unit", "stock_value", "last_out"]]
             .rename(columns={"code": "자재코드", "name": "자재명", "stock": "현재고", "unit": "단위",

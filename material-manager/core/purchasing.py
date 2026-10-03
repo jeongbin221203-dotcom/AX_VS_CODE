@@ -238,7 +238,7 @@ def receipt_problem(conn, po_no: str, po_item: str, material_id: int, warehouse_
         return f"발주 {po_no}는 {PO_STATUS.get(po['status'], po['status'])} 상태라 입고할 수 없습니다."
     if po["warehouse_id"] != warehouse_id:
         return f"발주 {po_no}의 입고 창고와 다릅니다."
-    if not str(po_item).isdigit():
+    if not (str(po_item).isascii() and str(po_item).isdigit()) or len(str(po_item)) > 9:
         return "발주 품목 번호(10, 20 …)를 선택하세요."
     item = conn.execute("SELECT * FROM po_items WHERE po_id = ? AND line_no = ?", (po["id"], int(po_item))).fetchone()
     if item is None or item["material_id"] != material_id:

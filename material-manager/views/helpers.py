@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import io
+import math
 import secrets
 import time
 from datetime import date
@@ -101,7 +102,7 @@ def scope_all() -> bool:
 
 def page_arg() -> int:
     raw = request.args.get("page", "1")
-    return max(int(raw), 1) if raw.isdigit() else 1
+    return min(max(int(raw), 1), 1_000_000) if raw.isascii() and raw.isdigit() and len(raw) < 10 else 1
 
 
 def pager(total: int, page: int, size: int = config.PAGE_SIZE) -> dict:
@@ -221,17 +222,38 @@ def f_str(name: str, default: str = "") -> str:
     return (request.form.get(name) or default).strip()
 
 
+MAX_ID = 2 ** 63 - 1                      # DB 정수 한도 (이보다 큰 번호는 DB에 보내기 전에 거부)
+MAX_NUMBER = 1e15                         # 수량·금액 한도 (nan·무한대·터무니없이 큰 값 거부)
+
+
 def f_float(name: str, default: float = 0.0) -> float:
     raw = f_str(name).replace(",", "")
     try:
-        return float(raw) if raw else default
+        value = float(raw) if raw else default
     except ValueError as exc:
-        raise ValueError(f"숫자를 입력하세요 ({raw})") from exc
+        raise ValueError(f"숫자를 입력하세요 ({raw[:30]})") from exc
+    if not math.isfinite(value) or abs(value) > MAX_NUMBER:
+        raise ValueError(f"숫자를 다시 확인하세요 ({raw[:30]})")
+    return value
+
+
+def as_id(raw: str | None) -> int | None:
+    """'123' → 123. 숫자가 아니거나 DB 정수 한도를 넘으면 None."""
+    raw = (raw or "").strip()
+    return int(raw) if raw.isascii() and raw.isdigit() and int(raw) <= MAX_ID else None
+
+
+def f_id(name: str) -> int:
+    """폼에서 고른 항목 번호(자재·창고 등). 숫자가 아니거나 너무 크면 ValueError."""
+    raw = f_str(name)
+    if not (raw.isascii() and raw.isdigit()) or int(raw) > MAX_ID:
+        raise ValueError("선택한 항목이 올바르지 않습니다. 화면을 새로 고친 뒤 다시 선택하세요.")
+    return int(raw)
 
 
 def a_int(name: str, default: int | None = None) -> int | None:
     raw = request.args.get(name, "")
-    return int(raw) if raw.isdigit() else default
+    return int(raw) if raw.isascii() and raw.isdigit() and int(raw) <= MAX_ID else default
 
 
 def a_date(name: str, default: date) -> date:

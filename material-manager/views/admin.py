@@ -7,7 +7,7 @@ from flask import Blueprint, abort, flash, redirect, request, url_for
 
 import config
 from core import audit, auth, doctor, jobs, org, repository as repo, sso, version
-from views.helpers import (Table, a_date, actor, f_str, form_response, log_export, page_arg, pager, render_page,
+from views.helpers import (Table, a_date, actor, as_id, f_str, form_response, log_export, page_arg, pager, render_page,
                            role_required, xlsx_response)
 
 bp = Blueprint("admin", __name__, url_prefix="/admin")
@@ -127,7 +127,7 @@ def plant_update(plant_id: int):
 @role_required("ADMIN")
 def warehouse_create():
     raw = f_str("plant_id")
-    result = org.create_warehouse(int(raw) if raw.isdigit() else 0, f_str("code"), f_str("name"),
+    result = org.create_warehouse(as_id(raw) or 0, f_str("code"), f_str("name"),
                                   f_str("sap_sloc"), actor())
     flash(result.message, "success" if result.ok else "error")
     return redirect(url_for("admin.org_page"))
@@ -274,8 +274,8 @@ def form_edit(key: str):
 
 
 def _int(name: str, default: int) -> int:
-    raw = f_str(name)
-    return int(raw) if raw.isdigit() else default
+    value = as_id(f_str(name))
+    return default if value is None else value
 
 
 @bp.post("/forms/<key>/template")
