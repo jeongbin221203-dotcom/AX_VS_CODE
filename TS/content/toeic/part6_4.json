@@ -128,11 +128,11 @@
      "join",
      "will be joined",
      "are joining",
-     "joined"
+     "joining"
     ],
     "answer": 2,
     "type": "동사 시제·태",
-    "explanation": "첫 출근이 다음 주 월요일이므로 가까운 미래에 확정된 일을 나타내는 현재진행형 are joining이 정답이다. joined는 이미 끝난 과거를, will be joined는 수동태라 주어 you가 합류하는 능동의 뜻과 맞지 않고, join은 현재의 습관처럼 들려 어색하다."
+    "explanation": "첫 출근이 다음 주 월요일이므로 가까운 미래에 확정된 일을 나타내는 현재진행형 are joining이 정답이다. joining은 that절의 동사가 될 수 없고, will be joined는 수동태라 주어 you가 합류하는 능동의 뜻과 맞지 않고, join은 현재의 습관처럼 들려 어색하다."
    },
    {
     "q": "",
@@ -589,14 +589,14 @@
    {
     "q": "",
     "choices": [
-     "operation",
+     "operates",
      "operating",
      "operate",
      "operated"
     ],
     "answer": 1,
     "type": "준동사(to부정사·동명사·분사)",
-    "explanation": "begin은 동명사나 to부정사를 목적어로 취하므로 보기 중에서는 operating이 정답이다. operate는 to 없이 begin 뒤에 올 수 없고, operation은 명사라 '운행을 시작했다'는 뜻이 어색하며, operated는 과거형이다."
+    "explanation": "begin은 동명사나 to부정사를 목적어로 취하므로 보기 중에서는 operating이 정답이다. operate와 operates는 to 없이 begin 뒤에 올 수 없고, operated는 과거형이다."
    },
    {
     "q": "",
@@ -628,11 +628,11 @@
      "have been asking",
      "will ask",
      "ask",
-     "asked"
+     "asking"
     ],
     "answer": 0,
     "type": "동사 시제·태",
-    "explanation": "for years(수년 동안)와 함께 과거부터 지금까지 계속된 요청을 나타내므로 현재완료진행 have been asking이 정답이다. ask는 현재의 습관, will ask는 미래라 for years와 맞지 않고, asked도 '수년 동안 요청해 왔다'는 계속의 뜻을 살리지 못한다."
+    "explanation": "for years(수년 동안)와 함께 과거부터 지금까지 계속된 요청을 나타내므로 현재완료진행 have been asking이 정답이다. ask는 현재의 습관, will ask는 미래라 for years와 맞지 않고, asking은 조동사 없이 문장의 동사가 될 수 없다."
    }
   ],
   "translation": "새 셔틀, 도심과 공항 연결\n\n웨스트포트(2월 18일) — 웨스트포트의 여행객들은 이제 빠르고 저렴하게 공항에 갈 수 있다. 새 셔틀버스 서비스 에어링크가 월요일 운행을 시작했다.\n\n버스는 오전 5시부터 오후 11시까지 20분마다 도심 기차역에서 출발한다. 이동 시간은 약 25분으로, 일반 시내버스의 절반이다. 편도 요금은 6달러이다.\n\n버스는 여행객을 고려해 설계되기도 했다. 버스마다 큰 여행 가방을 둘 공간과 무료 와이파이, 좌석마다 충전 포트가 있다.\n\n교통국장 카를라 멘데스는 \"많은 분이 수년 동안 공항 직행버스를 요청해 오셨습니다. 마침내 제공하게 되어 기쁩니다\"라고 말했다."
@@ -1531,12 +1531,12 @@
     "choices": [
      "be",
      "being",
-     "to be",
+     "been",
      "is"
     ],
     "answer": 0,
     "type": "동사 시제·태",
-    "explanation": "is scheduled to begin and (to) be completed 구조로, and 뒤에 begin과 나란히 to에 연결되는 동사원형 be가 와야 한다. is는 시제 동사라 병렬이 깨지고, being은 형태가 맞지 않으며, to be는 to가 겹쳐 어색하다."
+    "explanation": "is scheduled to begin and (to) be completed 구조로, and 뒤에 begin과 나란히 to에 연결되는 동사원형 be가 와야 한다. is는 시제 동사라 병렬이 깨지고, being은 형태가 맞지 않으며, been은 to 뒤에 올 수 없다."
    },
    {
     "q": "",
@@ -1669,14 +1669,14 @@
    {
     "q": "",
     "choices": [
-     "have been planning",
+     "planning",
      "had planned",
      "plan",
      "are planned"
     ],
     "answer": 2,
     "type": "동사 시제·태",
-    "explanation": "that절은 현재 시점에서의 의향을 가정하는 내용이므로 '이사할 계획이다'라는 현재형 plan이 정답이다. are planned는 수동이라 주어 you와 맞지 않고, had planned는 과거완료라 시점이 맞지 않으며, have been planning은 이미 계획해 왔다는 뜻이라 '그렇다고 간주하겠다'는 맥락에 어색하다."
+    "explanation": "that절은 현재 시점에서의 의향을 가정하는 내용이므로 '이사할 계획이다'라는 현재형 plan이 정답이다. are planned는 수동이라 주어 you와 맞지 않고, had planned는 과거완료라 시점이 맞지 않으며, planning은 that절의 동사가 될 수 없다."
    }
   ],
   "translation": "애시퍼드 커머셜 프로퍼티스\n마켓 스트리트 2100번지 500호, 오하이오주 콜럼버스 43215\n\n2월 12일\n\n욜란다 피어스 씨\n피어스 플로럴 디자인 대표\n하이 스트리트 418번지, 오하이오주 콜럼버스 43215\n\n피어스 씨께,\n\n아시다시피 하이 스트리트 418번지 상가에 대한 임대 계약이 5월 31일에 만료됩니다. 저희는 피어스 플로럴 디자인을 임차인으로 모셔 온 것을 매우 소중하게 여기며, 계약을 3년 더 갱신하게 되면 기쁘겠습니다.\n\n새 계약에서는 월 임대료가 3,200달러에서 3,400달러로 오릅니다. 이 조정은 이 지역의 재산세와 유지 관리비 상승을 반영한 것입니다. 그렇더라도 하이 스트리트의 비슷한 공간 평균 임대료보다는 여전히 낮습니다.\n\n또한 올여름 건물 냉난방 시스템을 교체할 계획입니다. 매장 운영에 방해가 되지 않도록 작업은 영업시간 외에 진행됩니다.\n\n갱신 의사가 있으신지 3월 31일까지 알려 주십시오. 그때까지 연락이 없으면 현 계약이 끝날 때 이사하실 계획인 것으로 간주하겠습니다.\n\n레이먼드 조 드림\n임대 관리자"

@@ -1042,7 +1042,7 @@
  {
   "id": "dp-067",
   "setting": "볼링장",
-  "scene_ko": "볼링장. 회사 동료로 보이는 다섯 명이 한 레인에 모여 있다. 한 여자가 공을 굴리는 자세를 취하고, 나머지는 의자에 앉아 손뼉을 치고 있다.",
+  "scene_ko": "볼링장. 회사 동료로 보이는 여섯 명이 한 레인에 모여 있다. 한 여자가 공을 굴리는 자세를 취하고, 네 명은 의자에 앉아 손뼉을 치고 있다.",
   "elements": [
    {
     "where": "가운데",
@@ -1082,7 +1082,7 @@
  {
   "id": "dp-068",
   "setting": "테니스장",
-  "scene_ko": "야외 테니스장. 두 사람이 복식 경기를 하고 있고, 앞쪽 선수가 높이 뛰어 공을 치고 있다. 철망 밖 벤치에서 사람들이 구경하고 있다.",
+  "scene_ko": "야외 테니스장. 네 사람이 복식 경기를 하고 있고, 앞쪽 선수가 높이 뛰어 공을 치고 있다. 철망 밖 벤치에서 사람들이 구경하고 있다.",
   "elements": [
    {
     "where": "가운데",
@@ -1762,7 +1762,7 @@
  {
   "id": "dp-085",
   "setting": "과수원",
-  "scene_ko": "가을 사과 과수원. 남녀가 사다리에 올라 사과를 따고 있고, 아래에서 아이가 바구니에 사과를 담고 있다. 나무에 빨간 사과가 주렁주렁 달려 있다.",
+  "scene_ko": "가을 사과 과수원. 남자는 사다리에 올라, 여자는 낮은 가지에서 사과를 따고 있고, 아래에서 아이가 바구니에 사과를 담고 있다. 나무에 빨간 사과가 주렁주렁 달려 있다.",
   "elements": [
    {
     "where": "가운데",
@@ -2233,7 +2233,7 @@
   "sample": "This picture was taken in a woodworking shop. In the middle, a man is cutting a piece of wood with a saw. He is wearing safety glasses. On the right, another man is sanding a chair. There is sawdust all over the floor. In the background, many tools are hanging on the wall. They seem to be making furniture.",
   "sample_ko": "이 사진은 목공방에서 찍은 것입니다. 가운데에서 남자가 톱으로 나무를 자르고 있습니다. 그는 보안경을 쓰고 있습니다. 오른쪽에서는 다른 남자가 의자에 사포질을 하고 있습니다. 바닥 곳곳에 톱밥이 있습니다. 배경에는 많은 공구가 벽에 걸려 있습니다. 가구를 만드는 것 같습니다.",
   "sample_adv": "This photo was taken inside a woodworking workshop. In the middle, a man with safety glasses and a dusty apron is cutting a long board with a hand saw, and he's holding it steady with his other hand. On the right, his partner is sanding the legs of a wooden chair that looks almost finished. Sawdust is piled up all over the floor, and some boards are leaning against the left wall. Dozens of tools are hanging neatly on the back wall. I guess they're making a whole dining set for a customer.",
-  "sample_adv_ko": "이 사진은 목공 작업장 안에서 찍은 것입니다. 가운데에서 보안경을 쓰고 먼지 묻은 앞치마를 두른 남자가 손톱으로 긴 나무판을 자르고 있고, 다른 손으로 나무판을 단단히 잡고 있습니다. 오른쪽에서는 그의 동료가 거의 완성된 듯한 나무 의자의 다리에 사포질을 하고 있습니다. 바닥 곳곳에 톱밥이 쌓여 있고, 왼쪽 벽에는 나무판 몇 개가 기대어 있습니다. 뒷벽에는 수십 개의 공구가 가지런히 걸려 있습니다. 손님을 위해 식탁 세트 전체를 만드는 것 같습니다.",
+  "sample_adv_ko": "이 사진은 목공 작업장 안에서 찍은 것입니다. 가운데에서 보안경을 쓰고 먼지 묻은 앞치마를 두른 남자가 수동 톱으로 긴 나무판을 자르고 있고, 다른 손으로 나무판을 단단히 잡고 있습니다. 오른쪽에서는 그의 동료가 거의 완성된 듯한 나무 의자의 다리에 사포질을 하고 있습니다. 바닥 곳곳에 톱밥이 쌓여 있고, 왼쪽 벽에는 나무판 몇 개가 기대어 있습니다. 뒷벽에는 수십 개의 공구가 가지런히 걸려 있습니다. 손님을 위해 식탁 세트 전체를 만드는 것 같습니다.",
   "tips": [
    "목공 동작: cut a board with a saw, sand a chair",
    "기대어 있다: be leaning against the wall"

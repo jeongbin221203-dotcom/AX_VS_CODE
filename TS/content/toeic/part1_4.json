@@ -311,7 +311,7 @@
   "id": "p1-143",
   "level": 2,
   "type": "상태(수동태 진행/완료)",
-  "scene": "부엌 싱크대 옆 건조대에 접시들이 세워져 꽂혀 있다.",
+  "scene": "부엌 싱크대 옆 건조대에 접시들이 겹겹이 쌓여 있다.",
   "statements": [
    "Some plates are being washed.",
    "Some dishes are stacked in a rack.",

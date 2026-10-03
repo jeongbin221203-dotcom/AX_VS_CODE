@@ -1103,11 +1103,11 @@
    "The fair was not fair to everyone.",
    "I ended the call quickly.",
    "I did, and I've already got two interviews lined up.",
-   "No, I'm going next year."
+   "No, it's a fair price."
   ],
   "answer": 2,
-  "explanation": "정답은 (C)입니다. 갔는지 묻는 질문에 갔고 성과까지 말한 답이 정답입니다. fair를 '공평한'으로, end를 다른 뜻으로 쓴 선택지는 함정입니다.",
-  "translation": "질문: 결국 취업 박람회 갔어? / (A) 그 박람회는 모두에게 공평하지 않았어. / (B) 통화를 빨리 끝냈어. / (C) 갔지, 벌써 면접 두 개 잡혔어. / (D) 아니, 나는 내년에 갈 거야."
+  "explanation": "정답은 (C)입니다. 갔는지 묻는 질문에 갔고 성과까지 말한 답이 정답입니다. fair를 '공평한·적정한'으로, end를 다른 뜻으로 쓴 선택지는 함정입니다.",
+  "translation": "질문: 결국 취업 박람회 갔어? / (A) 그 박람회는 모두에게 공평하지 않았어. / (B) 통화를 빨리 끝냈어. / (C) 갔지, 벌써 면접 두 개 잡혔어. / (D) 아니, 적정한 가격이야."
  },
  {
   "id": "lr-175",

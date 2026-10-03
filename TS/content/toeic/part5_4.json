@@ -80,13 +80,13 @@
   "type": "어휘",
   "question": "Please sign your name at the ------- of the form.",
   "choices": [
-   "end",
+   "below",
    "bottom",
    "finish",
    "last"
   ],
   "answer": 1,
-  "explanation": "서식의 '맨 아래'에 서명하라는 뜻이므로 at the bottom of가 알맞다. finish와 last는 이 구조에서 명사로 쓰지 않고, end는 시간·과정의 끝에 주로 쓰여 서식의 위치를 나타낼 때는 bottom이 자연스럽다.",
+  "explanation": "서식의 '맨 아래'에 서명하라는 뜻이므로 at the bottom of가 알맞다. finish와 last는 이 구조에서 명사로 쓰지 않고, below는 전치사·부사라 the와 of 사이 명사 자리에 올 수 없다.",
   "translation": "서식 맨 아래에 이름을 서명해 주세요."
  },
  {
@@ -200,13 +200,13 @@
   "type": "품사",
   "question": "Please drive ------- in the parking lot.",
   "choices": [
-   "slow",
+   "slowed",
    "slowly",
    "slows",
    "slowness"
   ],
   "answer": 1,
-  "explanation": "완전한 명령문 Please drive 뒤에서 동사 drive를 꾸미는 부사 자리이므로 slowly가 정답이다. slow는 구어에서 부사처럼 쓰이기도 하지만 시험에서는 동사를 꾸미는 표준 부사형 slowly를 고른다. slowness는 명사, slows는 동사다.",
+  "explanation": "완전한 명령문 Please drive 뒤에서 동사 drive를 꾸미는 부사 자리이므로 slowly가 정답이다. slowed와 slows는 동사, slowness는 명사라 동사를 꾸미지 못한다.",
   "translation": "주차장에서는 천천히 운전해 주세요."
  },
  {
@@ -635,13 +635,13 @@
   "type": "어휘",
   "question": "Mr. Abbott is in charge of ------- new employees during their first week.",
   "choices": [
-   "teaching",
+   "practicing",
    "learning",
    "training",
    "studying"
   ],
   "answer": 2,
-  "explanation": "신입 사원들을 '교육하다'는 train이므로 training이 정답이다. learning과 studying은 스스로 배우는 것이라 사람을 목적어로 받지 않고, teaching은 주로 과목·학생에 쓰여 회사 신입 교육 문맥에서는 training이 표준 표현이다.",
+  "explanation": "신입 사원들을 '교육하다'는 train이므로 training이 정답이다. learning과 studying은 스스로 배우는 것이라 사람을 목적어로 받지 않고, practicing은 (기술을) 연습하다라는 뜻이라 사람을 목적어로 받지 않는다.",
   "translation": "애벗 씨는 신입 사원들의 첫 주 교육을 맡고 있다."
  },
  {
@@ -861,12 +861,12 @@
   "question": "Online orders are usually delivered ------- three business days.",
   "choices": [
    "among",
-   "inside",
+   "onto",
    "into",
    "within"
   ],
   "answer": 3,
-  "explanation": "'영업일 3일 이내에'라는 기간의 한도는 within이 나타낸다. inside는 주로 공간의 안, into는 안으로의 이동, among은 셋 이상 사이를 나타내 기간 표현과 맞지 않는다.",
+  "explanation": "'영업일 3일 이내에'라는 기간의 한도는 within이 나타낸다. onto는 표면 위로의 이동, into는 안으로의 이동, among은 셋 이상 사이를 나타내 기간 표현과 맞지 않는다.",
   "translation": "온라인 주문은 보통 영업일 기준 3일 이내에 배송된다."
  },
  {
@@ -1283,10 +1283,10 @@
    "late",
    "lateness",
    "lately",
-   "later"
+   "latest"
   ],
   "answer": 0,
-  "explanation": "'몇 분 늦게' 도착한다는 뜻의 부사 late가 정답이다. lately는 '최근에'라는 전혀 다른 뜻이고, later는 '나중에'라 a few minutes later는 '몇 분 후에'라는 시점 표현이 되어 지연을 나타내지 못하며, lateness는 명사다.",
+  "explanation": "'몇 분 늦게' 도착한다는 뜻의 부사 late가 정답이다. lately는 '최근에'라는 전혀 다른 뜻이고, latest는 최상급 형용사라 a few minutes 뒤에 올 수 없으며, lateness는 명사다.",
   "translation": "교통 체증 때문에 셔틀버스가 몇 분 늦게 도착할 수 있다."
  },
  {
@@ -1340,13 +1340,13 @@
   "type": "어휘",
   "question": "Ms. Kapoor's application was ------- because it arrived after the deadline.",
   "choices": [
-   "declined",
-   "refused",
+   "reflected",
+   "retreated",
    "rejected",
-   "denied"
+   "resisted"
   ],
   "answer": 2,
-  "explanation": "마감 후 도착한 지원서가 '불합격 처리되었다(받아들여지지 않았다)'는 rejected가 가장 자연스럽다. refused와 declined는 주로 사람이 제안·초대를 거절하는 행위에, denied는 요청·허가를 거부하는 데 쓰여 서류 자체를 주어로 한 수동태로는 어색하다.",
+  "explanation": "마감 후 도착한 지원서가 '불합격 처리되었다(받아들여지지 않았다)'는 rejected가 알맞다. reflected는 반영되다·반사되다, resisted는 저항을 받다라는 뜻이라 지원서 처리와 맞지 않고, retreated는 '물러나다'라는 자동사라 수동태로 쓸 수 없다.",
   "translation": "카푸르 씨의 지원서는 마감 이후에 도착해서 반려되었다."
  },
  {
@@ -1625,13 +1625,13 @@
   "type": "전치사",
   "question": "The parking garage will be closed ------- the renovation of the main entrance.",
   "choices": [
-   "for",
+   "between",
    "during",
    "while",
    "since"
   ],
   "answer": 1,
-  "explanation": "뒤에 명사구 the renovation이 오고 '보수 공사 기간 동안'이라는 뜻이므로 전치사 during이 정답이다. while은 접속사라 뒤에 절이 와야 하고, for는 '기간의 길이'(for two weeks)를 나타내며, since는 '~이래로'라 미래의 closed와 맞지 않는다.",
+  "explanation": "뒤에 명사구 the renovation이 오고 '보수 공사 기간 동안'이라는 뜻이므로 전치사 during이 정답이다. while은 접속사라 뒤에 절이 와야 하고, between은 두 대상 '사이'를 나타내 명사 하나와 쓰지 않으며, since는 '~이래로'라 미래의 closed와 맞지 않는다.",
   "translation": "정문 보수 공사 기간 동안 주차 건물은 폐쇄될 것이다."
  },
  {
@@ -1911,12 +1911,12 @@
   "question": "To ------- the needs of a growing client base, Dunmore Bank is hiring 40 new tellers.",
   "choices": [
    "meet",
-   "fill",
+   "pass",
    "achieve",
    "reach"
   ],
   "answer": 0,
-  "explanation": "'요구를 충족하다'는 meet the needs가 고정 연어다. reach와 achieve는 목표·합의에, fill은 빈자리(position)나 주문에 주로 쓰여 needs와 결합하지 않는다.",
+  "explanation": "'요구를 충족하다'는 meet the needs가 고정 연어다. reach와 achieve는 목표·합의에 주로 쓰이고, pass는 지나가다·통과하다라는 뜻이라 needs와 결합하지 않는다.",
   "translation": "늘어나는 고객층의 요구를 충족하기 위해 던모어 은행은 창구 직원 40명을 새로 채용하고 있다."
  },
  {
@@ -2347,11 +2347,11 @@
   "choices": [
    "to enroll",
    "enroll",
-   "enrolling",
+   "enrolls",
    "enrolled"
   ],
   "answer": 3,
-  "explanation": "멤버십 프로그램에 '등록된' 고객이라는 상태를 나타내는 과거분사 enrolled가 정답이다(be enrolled in). enrolling은 '등록하는 중인'이라는 진행 의미여서 이미 혜택을 받는 회원을 가리키기에 어색하고, enroll은 동사 원형이라 주어 뒤 수식어가 될 수 없으며, to enroll은 '등록할'이라는 미래 의미다.",
+  "explanation": "멤버십 프로그램에 '등록된' 고객이라는 상태를 나타내는 과거분사 enrolled가 정답이다(be enrolled in). enroll과 enrolls는 동사라 주어 뒤 수식어가 될 수 없고 문장에 동사 receive가 이미 있으며, to enroll은 '등록할'이라는 미래 의미다.",
   "translation": "멤버십 프로그램에 등록된 고객은 구매할 때마다 5퍼센트 할인을 받는다."
  },
  {
@@ -2403,16 +2403,16 @@
   "id": "p5-761",
   "level": 5,
   "type": "어휘",
-  "question": "The audit revealed that several invoices had been paid twice, prompting a review of the firm's ------- procedures.",
+  "question": "The audit revealed that several expense claims had been paid twice, prompting a review of the firm's ------- procedures.",
   "choices": [
    "endorsement",
    "enlargement",
    "reimbursement",
-   "settlement"
+   "entitlement"
   ],
   "answer": 2,
-  "explanation": "같은 송장을 두 번 지급한 문제 때문에 검토할 대상은 비용 '지급(상환) 절차'이므로 reimbursement가 가장 알맞다. settlement는 분쟁 '합의'나 거래 '결제 완료'를 뜻해 절차 전반을 가리키기 어렵고, enlargement는 확대, endorsement는 보증·지지라 맞지 않는다.",
-  "translation": "감사 결과 송장 여러 건이 이중으로 지급된 것이 드러나 회사의 비용 지급 절차를 검토하게 되었다."
+  "explanation": "같은 비용 청구를 두 번 지급한 문제 때문에 검토할 대상은 비용 '상환 절차'이므로 reimbursement가 정답이다. entitlement는 자격·권리, enlargement는 확대, endorsement는 보증·지지라 절차의 대상으로 맞지 않는다.",
+  "translation": "감사 결과 비용 청구 여러 건이 이중으로 지급된 것이 드러나 회사의 비용 상환 절차를 검토하게 되었다."
  },
  {
   "id": "p5-762",
@@ -2511,12 +2511,12 @@
   "question": "Because the figures in the draft report were -------, the analyst was asked to verify each source.",
   "choices": [
    "questioning",
-   "questioned",
+   "questionably",
    "questionnaire",
    "questionable"
   ],
   "answer": 3,
-  "explanation": "수치가 '의심스러워서' 출처를 확인하라고 했다는 문맥이므로 형용사 questionable이 정답이다. questioning은 '의문을 제기하는'으로 사람의 태도에 쓰이고, questioned는 '질문을 받은'이라 수치에 어색하며, questionnaire는 설문지라는 명사다.",
+  "explanation": "수치가 '의심스러워서' 출처를 확인하라고 했다는 문맥이므로 형용사 questionable이 정답이다. questioning은 '의문을 제기하는'으로 사람의 태도에 쓰이고, questionably는 부사라 be동사의 보어가 될 수 없으며, questionnaire는 설문지라는 명사다.",
   "translation": "보고서 초안의 수치가 의심스러워서 분석가는 출처를 하나하나 확인하라는 요청을 받았다."
  },
  {
@@ -2542,11 +2542,11 @@
   "choices": [
    "supply",
    "suppress",
-   "supplement",
-   "supersede"
+   "surpass",
+   "replace"
   ],
   "answer": 3,
-  "explanation": "오래된 예약 시스템을 '대체하다'는 supersede가 알맞다(supersede A with B). supplement는 '보충하다'라 기존 시스템을 유지하며 덧붙이는 뜻이 되어 outdated와 어울리지 않고, supply는 공급하다, suppress는 억누르다이다.",
+  "explanation": "오래된 예약 시스템을 모바일 플랫폼으로 '대체하다'는 replace A with B이므로 replace가 정답이다. surpass는 능가하다라 with B와 함께 쓰지 않고, supply는 공급하다, suppress는 억누르다라 문맥에 맞지 않는다.",
   "translation": "그 호텔 체인은 낡은 예약 시스템을 모바일 플랫폼으로 대체할 계획이다."
  },
  {

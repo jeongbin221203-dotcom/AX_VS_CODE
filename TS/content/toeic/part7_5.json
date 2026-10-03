@@ -2390,7 +2390,7 @@
    {
     "doc_type": "계약서",
     "title": "Catering Agreement — Excerpt / Saffron Table Catering and Norwick Biotech",
-    "text": "CATERING AGREEMENT — EXCERPT\nBetween Saffron Table Catering (“the Caterer”) and Norwick Biotech (“the Client”)\nEvent: Norwick Biotech Annual Partners' Dinner, Friday, November 14, Glasshouse Pavilion\n\n3. Guest Count. The Client shall confirm the final number of guests no later than ten days before the event. The Caterer will prepare food for the confirmed number. Increases of up to 10 percent may be requested up to three days before the event and will be charged at the standard per-person rate. Requests to reduce the guest count made fewer than ten days before the event will not reduce the amount owed.\n\n4. Price. The per-person rate is $85 for the standard menu and $98 for the premium menu, which adds a seafood course.\n\n5. Dietary Requests. Vegetarian and gluten-free meals are available at no additional cost if requested with the final guest count."
+    "text": "CATERING AGREEMENT — EXCERPT\nBetween Saffron Table Catering (“the Caterer”) and Norwick Biotech (“the Client”)\nEvent: Norwick Biotech Annual Partners' Dinner, Friday, November 14, Glasshouse Pavilion\n\n3. Guest Count. The Client shall confirm the final number of guests no later than ten days before the event. The Caterer will prepare food for the confirmed number. Increases of up to 10 percent may be requested up to three days before the event and will be charged at the per-person rate for the menu selected. Requests to reduce the guest count made fewer than ten days before the event will not reduce the amount owed.\n\n4. Price. The per-person rate is $85 for the standard menu and $98 for the premium menu, which adds a seafood course.\n\n5. Dietary Requests. Vegetarian and gluten-free meals are available at no additional cost if requested with the final guest count."
    },
    {
     "doc_type": "이메일",
@@ -2433,7 +2433,7 @@
     ],
     "answer": 2,
     "type": "연계 문제",
-    "explanation": "조 씨 측은 프리미엄 메뉴를 선택했고, 추가 인원은 기본 1인 요금으로 청구된다. 계약서 4항에서 프리미엄 메뉴는 1인당 98달러이다. 11명은 120명의 10%(12명) 이내이고 행사 3일 전보다 일찍 요청했으므로 추가가 가능하다."
+    "explanation": "조 씨 측은 프리미엄 메뉴를 선택했고, 추가 인원은 선택한 메뉴의 1인 요금으로 청구된다. 계약서 4항에서 프리미엄 메뉴는 1인당 98달러이다. 11명은 120명의 10%(12명) 이내이고 행사 3일 전보다 일찍 요청했으므로 추가가 가능하다."
    },
    {
     "q": "What is true about the gluten-free meal request?",
@@ -2460,7 +2460,7 @@
     "explanation": "계약서상 행사 10일 전 이후의 인원 감소 요청은 금액을 줄이지 않는다. 11월 10일은 행사(11월 14일) 4일 전이므로 총액은 줄지 않는다. 조 씨의 짐작은 틀렸다."
    }
   ],
-  "translation": "[계약서]\n출장 요리 계약서 — 발췌\n사프런 테이블 케이터링(이하 '케이터링 업체')과 노윅 바이오테크(이하 '고객') 간\n행사: 노윅 바이오테크 연례 파트너 만찬, 11월 14일 금요일, 글라스하우스 파빌리온\n\n3. 참석 인원. 고객은 행사 10일 전까지 최종 참석 인원을 확정해야 한다. 케이터링 업체는 확정된 인원에 맞춰 음식을 준비한다. 행사 3일 전까지 최대 10%의 인원 증가를 요청할 수 있으며, 표준 1인 요금으로 청구된다. 행사 10일 전 이후에 요청한 인원 감소는 지불액을 줄이지 않는다.\n\n4. 가격. 1인 요금은 표준 메뉴 85달러, 해산물 코스가 추가되는 프리미엄 메뉴 98달러이다.\n\n5. 식이 요청. 채식 및 글루텐 프리 식사는 최종 인원 확정 시 함께 요청하면 추가 비용 없이 제공된다.\n\n[이메일]\n보낸 사람: 조성민, 노윅 바이오테크 / 받는 사람: 다리아 볼코바, 사프런 테이블 케이터링 / 날짜: 11월 10일 / 제목: 파트너 만찬\n\n볼코바 님께,\n\n11월 3일에 확정한 대로 프리미엄 메뉴로 120명이 참석할 예정입니다. 그 후 싱가포르 지사의 파트너 몇 분이 참석하기로 해서 11명을 추가하고 싶습니다.\n\n또한 기존 참석자 중 두 명이 글루텐 프리 식사가 필요하다는 것을 방금 알았습니다. 늦게 알려 드리는 것은 알지만 맞춰 주시면 감사하겠습니다.\n\n끝으로 참석자 한 명이 취소했습니다. 이에 따라 총액이 조금 줄어들 것으로 생각합니다.\n\n감사합니다.\n조성민\n행사 담당자"
+  "translation": "[계약서]\n출장 요리 계약서 — 발췌\n사프런 테이블 케이터링(이하 '케이터링 업체')과 노윅 바이오테크(이하 '고객') 간\n행사: 노윅 바이오테크 연례 파트너 만찬, 11월 14일 금요일, 글라스하우스 파빌리온\n\n3. 참석 인원. 고객은 행사 10일 전까지 최종 참석 인원을 확정해야 한다. 케이터링 업체는 확정된 인원에 맞춰 음식을 준비한다. 행사 3일 전까지 최대 10%의 인원 증가를 요청할 수 있으며, 선택한 메뉴의 1인 요금으로 청구된다. 행사 10일 전 이후에 요청한 인원 감소는 지불액을 줄이지 않는다.\n\n4. 가격. 1인 요금은 표준 메뉴 85달러, 해산물 코스가 추가되는 프리미엄 메뉴 98달러이다.\n\n5. 식이 요청. 채식 및 글루텐 프리 식사는 최종 인원 확정 시 함께 요청하면 추가 비용 없이 제공된다.\n\n[이메일]\n보낸 사람: 조성민, 노윅 바이오테크 / 받는 사람: 다리아 볼코바, 사프런 테이블 케이터링 / 날짜: 11월 10일 / 제목: 파트너 만찬\n\n볼코바 님께,\n\n11월 3일에 확정한 대로 프리미엄 메뉴로 120명이 참석할 예정입니다. 그 후 싱가포르 지사의 파트너 몇 분이 참석하기로 해서 11명을 추가하고 싶습니다.\n\n또한 기존 참석자 중 두 명이 글루텐 프리 식사가 필요하다는 것을 방금 알았습니다. 늦게 알려 드리는 것은 알지만 맞춰 주시면 감사하겠습니다.\n\n끝으로 참석자 한 명이 취소했습니다. 이에 따라 총액이 조금 줄어들 것으로 생각합니다.\n\n감사합니다.\n조성민\n행사 담당자"
  },
  {
   "id": "p7-159",

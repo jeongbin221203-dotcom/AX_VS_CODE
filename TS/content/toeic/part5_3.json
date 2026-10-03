@@ -2705,13 +2705,13 @@
   "type": "접속사",
   "question": "Ms. Omar will approve the training budget ------- it includes funding for online courses.",
   "choices": [
-   "even if",
+   "whereas",
    "as if",
    "what if",
    "only if"
   ],
   "answer": 3,
-  "explanation": "온라인 강좌 비용이 포함된 '경우에만' 승인한다는 제한 조건이므로 only if가 정답이다. even if(~라 하더라도)는 조건과 상관없이 승인한다는 뜻이 되어 어색하고, as if(마치 ~처럼)와 what if(~라면 어떨까)는 의미가 통하지 않는다.",
+  "explanation": "온라인 강좌 비용이 포함된 '경우에만' 승인한다는 제한 조건이므로 only if가 정답이다. whereas(~인 반면)는 대조를 나타내 의미가 통하지 않고, as if(마치 ~처럼)와 what if(~라면 어떨까)도 의미가 통하지 않는다.",
   "translation": "오마르 씨는 온라인 강좌 비용이 포함된 경우에만 교육 예산을 승인할 것이다."
  },
  {

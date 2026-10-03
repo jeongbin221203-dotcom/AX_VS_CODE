@@ -1091,7 +1091,7 @@
    "discussed"
   ],
   "answer": 3,
-  "explanation": "discuss는 타동사라 수동태 be discussed(논의되다)가 가능하므로 정답이다. talk는 about이 필요하고, speak도 결과를 목적어로 받아 수동태로 쓰기 어려우며, agree는 on/to가 필요하고 의미도 맞지 않는다.",
+  "explanation": "discuss는 타동사라 수동태 be discussed(논의되다)가 가능하므로 정답이다. talk는 about이 필요하고, speak도 results(결과)를 목적어로 받지 않아 수동태로 쓰기 어려우며, agree는 on/to가 필요하고 의미도 맞지 않는다.",
   "translation": "설문 조사 결과는 다음 주 월요일 직원회의에서 논의될 것이다."
  },
  {
@@ -1762,11 +1762,11 @@
   "choices": [
    "either",
    "neither",
-   "none",
+   "each",
    "nobody"
   ],
   "answer": 1,
-  "explanation": "두 개(both proposals) 중 '어느 것도 ~아니다'라는 부정은 neither of를 쓴다. none of는 보통 셋 이상일 때 쓰고, either는 긍정문에서 '둘 중 어느 하나'라서 '장점이 있었지만'이라는 양보와 맞지 않으며, nobody는 of them과 쓰지 않는다.",
+  "explanation": "두 개(both proposals) 중 '어느 것도 ~아니다'라는 부정은 neither of를 쓴다. each는 '각각 모두 설득력 있다'는 긍정이 되어 Although(양보)의 흐름과 맞지 않고, either는 긍정문에서 '둘 중 어느 하나'라서 '장점이 있었지만'이라는 양보와 맞지 않으며, nobody는 of them과 쓰지 않는다.",
   "translation": "두 제안 모두 장점이 있었지만, 위원회는 어느 쪽도 완전히 설득력 있다고 보지 않았다."
  },
  {

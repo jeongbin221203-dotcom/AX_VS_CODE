@@ -42,7 +42,7 @@
  {
   "id": "dp-002",
   "setting": "회의실",
-  "scene_ko": "회의실에서 다섯 명이 긴 탁자에 둘러앉아 있다. 한 여자가 서서 스크린의 그래프를 가리키며 발표하고 있다. 탁자에는 노트북과 물병이 놓여 있다.",
+  "scene_ko": "회의실에서 네 명이 긴 탁자에 둘러앉아 있다. 한 여자가 서서 스크린의 그래프를 가리키며 발표하고 있다. 탁자에는 노트북과 물병이 놓여 있다.",
   "elements": [
    {
     "where": "가운데",
@@ -153,7 +153,7 @@
   "sample": "This is a picture of a coffee shop. In the middle, a barista is making coffee behind the counter. A man is standing in front of the counter and waiting for his drink. On the right, a student is studying with a laptop by the window. There are cakes in the display case. The cafe looks cozy and quiet.",
   "sample_ko": "커피숍 사진입니다. 가운데에 바리스타가 카운터 뒤에서 커피를 만들고 있습니다. 한 남자가 카운터 앞에 서서 음료를 기다리고 있습니다. 오른쪽에는 학생이 창가에서 노트북으로 공부하고 있습니다. 진열장에 케이크가 있습니다. 카페가 아늑하고 조용해 보입니다.",
   "sample_adv": "This picture was taken inside a cozy little cafe. The main focus is a barista with a ponytail who is making coffee with a large espresso machine. A man in a gray jacket is standing at the counter, and it looks like he is waiting for his order. On the right side, a young student wearing headphones is working on a laptop by the window. There is a glass case full of muffins and cakes on the left, and several round lights are hanging from the ceiling. It seems like a perfect place to relax or study.",
-  "sample_adv_ko": "이 사진은 아늑하고 작은 카페 안에서 찍었습니다. 중심에는 머리를 묶은 바리스타가 큰 에스프레소 기계로 커피를 만들고 있습니다. 회색 재킷을 입은 남자가 카운터에 서 있는데, 주문한 것을 기다리는 것 같습니다. 오른쪽에는 헤드폰을 낀 젊은 학생이 창가에서 노트북으로 작업하고 있습니다. 왼쪽에는 머핀과 케이크가 가득한 유리 진열장이 있고, 천장에는 둥근 조명 여러 개가 매달려 있습니다. 쉬거나 공부하기에 딱 좋은 곳 같습니다.",
+  "sample_adv_ko": "이 사진은 아늑하고 작은 카페 안에서 찍었습니다. 중심에는 머리를 묶은 바리스타가 큰 에스프레소 기계로 커피를 만들고 있습니다. 회색 재킷을 입은 남자가 카운터에 서 있는데, 주문한 것을 기다리는 것 같습니다. 오른쪽에는 헤드폰을 쓴 젊은 학생이 창가에서 노트북으로 작업하고 있습니다. 왼쪽에는 머핀과 케이크가 가득한 유리 진열장이 있고, 천장에는 둥근 조명 여러 개가 매달려 있습니다. 쉬거나 공부하기에 딱 좋은 곳 같습니다.",
   "tips": [
    "it looks like + 문장 으로 행동의 이유를 추측",
    "카페 표현: be waiting for an order, glass display case, be hanging from the ceiling"
@@ -661,7 +661,7 @@
    },
    {
     "where": "앞쪽",
-    "ko": "대리석 바닥에 큰 꽃병이 놓여 있다",
+    "ko": "탁자 위에 큰 꽃병이 놓여 있다",
     "en": "There is a large vase of flowers on a table in the foreground."
    },
    {
@@ -793,7 +793,7 @@
   "sample": "This picture was taken on a farm. In the middle, a farmer in a straw hat is picking strawberries. There is a basket full of strawberries on the ground. On the right, a child is watering plants. In the background, I can see a red barn and a tractor. It looks like a peaceful day.",
   "sample_ko": "이 사진은 농장에서 찍었습니다. 가운데에 밀짚모자를 쓴 농부가 딸기를 따고 있습니다. 땅에 딸기가 가득 든 바구니가 있습니다. 오른쪽에는 아이가 식물에 물을 주고 있습니다. 뒤쪽에는 빨간 헛간과 트랙터가 보입니다. 평화로운 날 같습니다.",
   "sample_adv": "This photo shows a large farm in the countryside. In the center, a farmer wearing a straw hat and gloves is kneeling down and picking strawberries. Next to him, a basket filled with ripe red strawberries is sitting on the ground. On the right, a little girl is watering some plants with a small watering can, so she might be the farmer's daughter. Long rows of plants stretch across the field, and there is a red barn and a tractor in the background. It must be harvest season.",
-  "sample_adv_ko": "이 사진은 시골의 넓은 농장을 보여 줍니다. 가운데에 밀짚모자와 장갑을 낀 농부가 무릎을 꿇고 딸기를 따고 있습니다. 그 옆 땅에는 잘 익은 빨간 딸기가 가득 든 바구니가 놓여 있습니다. 오른쪽에는 어린 여자아이가 작은 물뿌리개로 식물에 물을 주고 있는데, 농부의 딸인 것 같습니다. 긴 밭고랑이 들판을 가로질러 이어지고, 뒤쪽에는 빨간 헛간과 트랙터가 있습니다. 수확철인 게 분명합니다.",
+  "sample_adv_ko": "이 사진은 시골의 넓은 농장을 보여 줍니다. 가운데에 밀짚모자를 쓰고 장갑을 낀 농부가 무릎을 꿇고 딸기를 따고 있습니다. 그 옆 땅에는 잘 익은 빨간 딸기가 가득 든 바구니가 놓여 있습니다. 오른쪽에는 어린 여자아이가 작은 물뿌리개로 식물에 물을 주고 있는데, 농부의 딸인 것 같습니다. 긴 밭고랑이 들판을 가로질러 이어지고, 뒤쪽에는 빨간 헛간과 트랙터가 있습니다. 수확철인 게 분명합니다.",
   "tips": [
    "자세 동사: kneel down, bend over, crouch",
    "농장 단어: barn, tractor, field, harvest season"
@@ -941,7 +941,7 @@
    },
    {
     "where": "앞쪽",
-    "ko": "바닥에 아령이 줄지어 놓여 있다",
+    "ko": "거치대에 아령이 줄지어 놓여 있다",
     "en": "In the front, dumbbells are lined up on a rack."
    },
    {

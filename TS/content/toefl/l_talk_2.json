@@ -228,7 +228,7 @@
   "kind": "academic",
   "topic": "기상학",
   "voice": "male",
-  "script": "Let's start today with a simple question. Why do we see rainbows? To understand this, we first need to know something about sunlight. Sunlight looks white, but it is really a mix of many colors: red, orange, yellow, green, blue, and violet. Usually we can't see these colors separately. Now, imagine it has just rained, and there are millions of tiny water drops in the air. When sunlight goes into a water drop, the light bends. Each color bends a little differently. Red bends the least, and violet bends the most. So the colors separate. The light then bounces off the back of the drop and comes out again toward your eyes. That is why you see a band of colors in the sky. Here is a useful tip. You can only see a rainbow when the sun is behind you and the rain is in front of you. That's why rainbows are most common in the early morning or late afternoon, when the sun is low. If the sun is high in the sky at noon, the rainbow would be below the horizon, so you can't see it. Sometimes you can even see a second, lighter rainbow above the first one.",
+  "script": "Let's start today with a simple question. Why do we see rainbows? To understand this, we first need to know something about sunlight. Sunlight looks white, but it is really a mix of many colors: red, orange, yellow, green, blue, and violet. Usually we can't see these colors separately. Now, imagine it has just rained, and there are millions of tiny water drops in the air. When sunlight goes into a water drop, the light bends. Each color bends a little differently. Red bends the least, and violet bends the most. So the colors separate. The light then bounces off the back of the drop and comes out again toward your eyes. That is why you see a band of colors in the sky. Here is a useful tip. You can only see a rainbow when the sun is behind you and the rain is in front of you. That's why rainbows are most common in the early morning or late afternoon, when the sun is low. If the sun is high in the sky at noon, the rainbow is below the horizon, so you can't see it. Sometimes you can even see a second, lighter rainbow above the first one.",
   "questions": [
    {
     "q": "What does the lecture mainly explain?",
@@ -546,7 +546,7 @@
     ],
     "answer": 3,
     "type": "세부 사항",
-    "explanation": "보름달이나 초승달 무렵 태양과 달이 일직선이 되면 두 힘이 더해져 큰 조수인 사리(spring tide)가 생긴다고 합니다."
+    "explanation": "보름달이나 그믐달(삭) 무렵 태양과 달이 일직선이 되면 두 힘이 더해져 큰 조수인 사리(spring tide)가 생긴다고 합니다."
    },
    {
     "q": "Why does the professor say the name has nothing to do with the season?",
@@ -561,7 +561,7 @@
     "explanation": "spring tide라는 이름 때문에 학생들이 봄철과 관련 있다고 오해할 수 있으므로 미리 바로잡아 주는 말입니다."
    }
   ],
-  "translation": "해변에서 하루를 보내 본 적이 있다면 물이 모래 위로 올라왔다가 다시 빠져나가는 것을 보았을 겁니다. 이것이 조수이고, 오늘은 무엇이 조수를 일으키는지 알아보겠습니다. 주된 원인은 달입니다. 달의 중력은 지구의 모든 것을 당기지만, 물은 쉽게 움직이기 때문에 바다가 가장 크게 반응합니다. 달을 향한 지구 쪽은 달 쪽으로 조금 당겨지고, 그래서 물이 불룩해지는 만조가 생깁니다. 이제 많은 학생이 놀라는 부분입니다. 지구의 반대편, 즉 달을 등진 쪽에도 만조가 생깁니다. 달이 먼 쪽의 물보다 단단한 지구를 더 세게 당기기 때문에, 그쪽 물이 말하자면 뒤에 남겨지는 것입니다. 지구가 자전하면서 대부분의 해안은 매일 두 개의 불룩한 부분을 모두 지나갑니다. 그래서 많은 곳에서 약 24시간마다 만조 두 번, 간조 두 번이 있습니다. 태양도 영향을 줍니다. 보름달이나 초승달 때처럼 태양과 달이 일직선이 되면 두 힘이 합쳐져 특히 큰 조수가 생기는데, 이를 사리(spring tide)라고 합니다. 참고로 이 이름은 계절 봄과는 아무 관련이 없습니다."
+  "translation": "해변에서 하루를 보내 본 적이 있다면 물이 모래 위로 올라왔다가 다시 빠져나가는 것을 보았을 겁니다. 이것이 조수이고, 오늘은 무엇이 조수를 일으키는지 알아보겠습니다. 주된 원인은 달입니다. 달의 중력은 지구의 모든 것을 당기지만, 물은 쉽게 움직이기 때문에 바다가 가장 크게 반응합니다. 달을 향한 지구 쪽은 달 쪽으로 조금 당겨지고, 그래서 물이 불룩해지는 만조가 생깁니다. 이제 많은 학생이 놀라는 부분입니다. 지구의 반대편, 즉 달을 등진 쪽에도 만조가 생깁니다. 달이 먼 쪽의 물보다 단단한 지구를 더 세게 당기기 때문에, 그쪽 물이 말하자면 뒤에 남겨지는 것입니다. 지구가 자전하면서 대부분의 해안은 매일 두 개의 불룩한 부분을 모두 지나갑니다. 그래서 많은 곳에서 약 24시간마다 만조 두 번, 간조 두 번이 있습니다. 태양도 영향을 줍니다. 보름달이나 그믐달(삭) 때처럼 태양과 달이 일직선이 되면 두 힘이 합쳐져 특히 큰 조수가 생기는데, 이를 사리(spring tide)라고 합니다. 참고로 이 이름은 계절 봄과는 아무 관련이 없습니다."
  },
  {
   "id": "lt-053",
@@ -1914,7 +1914,7 @@
     "explanation": "교수는 이야기를 부정하려는 것이 아니라고 하면서, 늑대가 기여했지만 연쇄는 더 약하고 고르지 않으며 원인이 여럿이었다는 것이 오늘날 생태학자 대부분의 견해라고 정리합니다."
    }
   ],
-  "translation": "1995년과 1996년, 약 70년 만에 옐로스톤 국립공원에 늑대가 다시 들여왔습니다. 그 뒤에 일어난 일은 먹이 그물 꼭대기의 영향이 여러 단계로 아래까지 파급되는 '영양 단계 연쇄'의 가장 널리 인용되는 사례가 되었습니다. 대중적인 버전은 이렇습니다. 늑대가 엘크 수를 줄였고, 그만큼 중요하게 엘크의 행동도 바꾸었습니다. 엘크는 공격받기 쉬운 탁 트인 강 계곡을 피하기 시작했습니다. 심하게 뜯어먹히던 데서 벗어나 개울가의 버드나무와 사시나무가 회복되었습니다. 비버가 돌아와 물 흐름을 바꾸는 댐을 지었고, 회복된 식생이 강둑을 안정시켰습니다. 늑대가 말 그대로 강의 흐름을 바꾸었다는 유행 영상을 본 적이 있을 겁니다. 이제 저는 이 이야기를 복잡하게 만들고 싶습니다. 무시하려는 것이 아니라 이 논쟁에서 배울 점이 있기 때문입니다. 첫째, 흔히 '공포의 생태학'이라 불리는 행동 메커니즘은 확인하기 어려웠습니다. GPS 목걸이로 엘크를 추적한 연구들은 엘크가 이론이 예측한 방식으로 늑대 위험이 높은 지역을 일관되게 피하지는 않았음을 발견했습니다. 둘째, 같은 기간에 다른 요인도 바뀌었습니다. 공원 밖에서 사람의 엘크 사냥이 늘었고, 회색곰과 퓨마가 회복되었으며, 오랜 가뭄이 식물 생장에 영향을 주었습니다. 셋째, 일부 지역에서는 버드나무가 전혀 회복되지 않았는데, 아마도 수십 년간 비버가 없어 지하수면이 낮아지면서 생태계가 다른 상태에 갇혔기 때문일 것입니다. 그래서 오늘날 대부분의 생태학자는 늑대가 변화에 기여했지만, 연쇄는 깔끔한 이야기가 말하는 것보다 더 약하고, 고르지 않으며, 원인이 여럿이었다고 말할 것입니다."
+  "translation": "1995년과 1996년, 약 70년 만에 옐로스톤 국립공원에 늑대를 다시 들여왔습니다. 그 뒤에 일어난 일은 먹이 그물 꼭대기의 영향이 여러 단계로 아래까지 파급되는 '영양 단계 연쇄'의 가장 널리 인용되는 사례가 되었습니다. 대중적인 버전은 이렇습니다. 늑대가 엘크 수를 줄였고, 그만큼 중요하게 엘크의 행동도 바꾸었습니다. 엘크는 공격받기 쉬운 탁 트인 강 계곡을 피하기 시작했습니다. 심하게 뜯어먹히던 데서 벗어나 개울가의 버드나무와 사시나무가 회복되었습니다. 비버가 돌아와 물 흐름을 바꾸는 댐을 지었고, 회복된 식생이 강둑을 안정시켰습니다. 늑대가 말 그대로 강의 흐름을 바꾸었다는 유행 영상을 본 적이 있을 겁니다. 이제 저는 이 이야기를 복잡하게 만들고 싶습니다. 무시하려는 것이 아니라 이 논쟁에서 배울 점이 있기 때문입니다. 첫째, 흔히 '공포의 생태학'이라 불리는 행동 메커니즘은 확인하기 어려웠습니다. GPS 목걸이로 엘크를 추적한 연구들은 엘크가 이론이 예측한 방식으로 늑대 위험이 높은 지역을 일관되게 피하지는 않았음을 발견했습니다. 둘째, 같은 기간에 다른 요인도 바뀌었습니다. 공원 밖에서 사람의 엘크 사냥이 늘었고, 회색곰과 퓨마가 회복되었으며, 오랜 가뭄이 식물 생장에 영향을 주었습니다. 셋째, 일부 지역에서는 버드나무가 전혀 회복되지 않았는데, 아마도 수십 년간 비버가 없어 지하수면이 낮아지면서 생태계가 다른 상태에 갇혔기 때문일 것입니다. 그래서 오늘날 대부분의 생태학자는 늑대가 변화에 기여했지만, 연쇄는 깔끔한 이야기가 말하는 것보다 더 약하고, 고르지 않으며, 원인이 여럿이었다고 말할 것입니다."
  },
  {
   "id": "lt-080",
