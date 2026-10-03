@@ -18,7 +18,7 @@ def test_demo_autologin_and_role_switch(app, isolated_db, monkeypatch):
     page = c.get("/")
     body = page.get_data(as_text=True)
     assert page.status_code == 200 and "시스템관리자" in body and "포트폴리오 시연 서버" in body
-    assert "다른 역할로 보기" in body and "로그아웃" not in body
+    assert "다른 역할로 보기" in body and "로그아웃" in body and "비밀번호 변경" not in body
     assert c.get("/admin/data").status_code == 200
 
     res = c.get("/demo/as/2003", follow_redirects=True)
@@ -50,3 +50,23 @@ def test_demo_locks_admin_settings_but_allows_business_data(app, isolated_db, mo
     res = post(c, "/customers/save", {"name": "(주)방문자상사", "industry": "제조", "grade": "B"}, follow_redirects=True)
     assert "관리자 설정을 바꿀 수 없습니다" not in res.get_data(as_text=True)
     assert db._scalar("SELECT COUNT(*) FROM customers WHERE name='(주)방문자상사'") == 1   # 업무 데이터는 저장
+
+
+def test_demo_logout_shows_login_with_demo_button(app, isolated_db, monkeypatch):
+    """자재관리와 같은 흐름: 로그아웃 → 로그인 화면(시연 버튼 + 사번 로그인) → 버튼 누르면 다시 시연 관리자."""
+    import re
+    db.set_context("system", None)
+    ent.seed_org_demo()
+    monkeypatch.setattr(config, "DEMO_AUTOLOGIN", "9999")
+    c = app.test_client()
+    tok = re.search(r'name="_csrf" value="([0-9a-f]+)"', c.get("/customers").get_data(as_text=True)).group(1)
+    res = c.post("/logout", data={"_csrf": tok}, follow_redirects=True)
+    body = res.get_data(as_text=True)
+    assert "시연 관리자로 들어가기" in body
+    assert 'name="user_id"' in body or 'name="emp_no"' in body           # 일반 로그인도 그대로
+    assert "<strong>시스템관리자</strong>" not in body                      # 로그인 화면에서는 자동 로그인 안 함
+    # 방문자가 시연 계정을 중지해도 다음 자동 로그인 때 되돌린다
+    with __import__("core.database", fromlist=["x"]).get_conn() as conn:
+        conn.execute("UPDATE users SET active=0, role='REP' WHERE emp_no='9999'")
+    body = c.get("/").get_data(as_text=True)
+    assert "<strong>시스템관리자</strong>" in body and c.get("/admin/data").status_code == 200

@@ -84,6 +84,17 @@ def _logout(message: str, kind: str = "warning"):
     return redirect(url_for("auth.login"))
 
 
+def demo_user() -> dict | None:
+    """시연 관리자 계정 — 방문자가 중지·강등했더라도 시스템관리자·사용 중으로 되돌린다."""
+    user = ent.get_user(emp_no=config.DEMO_AUTOLOGIN)
+    if user and (not user.get("active") or user.get("role") != "ADMIN" or user.get("locked_until")):
+        with db.get_conn() as conn:
+            conn.execute("UPDATE users SET active=1, role='ADMIN', failed_logins=0, locked_until=NULL WHERE id=?",
+                         (user["id"],))
+        user = ent.get_user(emp_no=config.DEMO_AUTOLOGIN)
+    return user
+
+
 def demo_login(user: dict) -> None:
     """시연 서버 자동 로그인 — 방문자마다 새 세션. (감사로그는 남기지 않는다: 봇 방문마다 쌓이므로)"""
     session.clear()
@@ -120,9 +131,11 @@ def load_context():
                 return _logout("SSO 사용자가 바뀌어 다시 로그인합니다.", "info")
         g.user = user
 
-    if not g.user and config.DEMO_AUTOLOGIN and request.endpoint not in ("auth.demo_as",):
-        user = ent.get_user(emp_no=config.DEMO_AUTOLOGIN)
-        if user and user.get("active"):
+    # 시연 서버: 로그인 화면(공개 화면)이 아닌 곳에 들어오면 시연 관리자로 자동 로그인 (자재관리와 같은 방식).
+    # 로그아웃하면 로그인 화면이 나오고, 거기서 '시연 관리자로 들어가기' 또는 사번 로그인을 고를 수 있다.
+    if not g.user and config.DEMO_AUTOLOGIN and request.endpoint not in PUBLIC_ENDPOINTS:
+        user = demo_user()
+        if user:
             demo_login(user)
             g.user = user
 

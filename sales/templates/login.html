@@ -2,6 +2,13 @@
 {% from "_macros.html" import csrf %}
 {% block public %}
 <h1 class="brand-title"><img src="{{ url_for('static', filename='img/logo.svg') }}" alt="" width="40" height="40" class="brand-logo">{{ APP_TITLE }}</h1>
+{% if DEMO %}
+<section class="card">
+  <h3>🧪 포트폴리오 시연</h3>
+  <p>로그인 없이 시스템관리자로 모든 화면을 볼 수 있습니다. 들어간 뒤 사이드바에서 임원·팀장·영업사원으로 바꿔 볼 수 있습니다.</p>
+  <a class="btn btn-primary" href="{{ url_for('reports.dashboard') }}">시연 관리자로 들어가기</a>
+</section>
+{% endif %}
 {% if mode == 'oidc' %}
   {% if sso_error %}<div class="alert alert-error">{{ sso_error }}</div>{% endif %}
   <p class="muted">회사 계정(사내 통합인증)으로 로그인합니다. 이 시스템에 등록된 사용자만 들어올 수 있습니다.</p>

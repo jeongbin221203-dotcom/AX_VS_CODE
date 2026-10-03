@@ -20,16 +20,15 @@
     <div class="me">
       <strong>{{ g.user.name }}</strong> · {{ ROLE_LABEL.get(g.user.role, g.user.role) }}
       <div class="muted small">{{ '전사 데이터 조회' if g.scope is none else '조회 범위 ' ~ g.scope|length ~ '명' }}</div>
+      <form method="post" action="{{ url_for('auth.logout') }}" class="me-actions" data-logout>
+        <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+        <button class="btn btn-sm">로그아웃</button>
+        {% if AUTH_MODE == 'password' and not DEMO %}<a class="btn btn-sm" href="{{ url_for('auth.password') }}">비밀번호 변경</a>{% endif %}
+      </form>
       {% if DEMO %}
       <div class="demo-roles small">다른 역할로 보기:
         {% for emp, label in DEMO_ROLES %}<a href="{{ url_for('auth.demo_as', emp_no=emp) }}" class="{{ 'active' if g.user.emp_no|string == emp }}">{{ label }}</a>{% if not loop.last %} · {% endif %}{% endfor %}
       </div>
-      {% else %}
-      <form method="post" action="{{ url_for('auth.logout') }}" class="me-actions" data-logout>
-        <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
-        <button class="btn btn-sm">로그아웃</button>
-        {% if AUTH_MODE == 'password' %}<a class="btn btn-sm" href="{{ url_for('auth.password') }}">비밀번호 변경</a>{% endif %}
-      </form>
       {% endif %}
     </div>
     <a class="bell {{ 'has-unread' if g.unread }}" href="{{ url_for('auth.notifications') }}">🔔 알림{% if g.unread %} <b>{{ g.unread }}</b>{% endif %}</a>
