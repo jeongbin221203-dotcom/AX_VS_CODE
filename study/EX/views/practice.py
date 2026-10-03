@@ -33,9 +33,16 @@ def _owner():
     return session['lib_owner']
 
 
+def _is_owner():
+    return not current_app.config.get('PUBLIC') or bool(session.get('owner'))
+
+
 def _items():
     public = current_app.config.get('PUBLIC')
-    return library.visible(library.load_index(_library_dir()), _owner() if public else None, public)
+    items = library.load_index(_library_dir())
+    if public and session.get('owner'):          # 개인 링크로 연결한 기기: 내 자료 + 이 브라우저에서 올린 것
+        return [x for x in items if x.get('owner') in (None, _owner())]
+    return library.visible(items, _owner() if public else None, public)
 
 
 @bp.route('/')
@@ -81,6 +88,8 @@ def library_import():
 def _resolve(kind, iid, need_answer=True):
     """→ (항목 정보, 폴더, 실습 파일 이름, 정답 파일 이름, 결과 키)"""
     if kind == 'official':
+        if not _is_owner():
+            abort(404)
         s = official.get(_official_dir(), iid)
         if not s or not s['ready'] or (need_answer and not s['gradable']):
             abort(404)

@@ -172,3 +172,43 @@ def test_add_pair_public_is_private_to_browser(tmp_path, pair):
     assert other.get(url).status_code == 404
     assert '비공개 확인' not in other.get('/practice/').get_data(as_text=True)
     assert other.get(url + '/file/p.xlsx').status_code == 404
+
+
+def test_vault_roundtrip_and_wrong_key(tmp_path):
+    from core import vault
+    src = tmp_path / 'src'
+    (src / 'library' / 'a1').mkdir(parents=True)
+    (src / 'library' / 'a1' / 'x.xlsx').write_bytes(b'hello')
+    (src / 'official' / 'c2-A').mkdir(parents=True)
+    (src / 'official' / 'c2-A' / 'manifest.json').write_text('{}')
+    (src / 'ex.db').write_bytes(b'not packed')
+    key = vault.new_key()
+    blob = vault.pack(src, key)
+    assert b'hello' not in blob
+    out = tmp_path / 'out'
+    vault.unpack(blob, key, out)
+    assert (out / 'library' / 'a1' / 'x.xlsx').read_bytes() == b'hello' and not (out / 'ex.db').exists()
+    with pytest.raises(ValueError):
+        vault.unpack(blob, vault.new_key(), out)
+    vp = tmp_path / 'vault.bin'
+    vp.write_bytes(blob)
+    assert vault.restore_on_start(vp, key, tmp_path / 'r') > 0
+    assert vault.restore_on_start(vp, key, tmp_path / 'r') == 0          # 같은 보관 파일이면 다시 풀지 않음
+
+
+def test_owner_link_reveals_private_library_on_public_server(tmp_path, pair):
+    from app import create_app
+    src, ans = pair
+    _make_folder(tmp_path / 'in', src, ans)
+    library.import_folder(tmp_path / 'in', tmp_path / 'data' / 'library')
+    app = create_app({'DATA_DIR': str(tmp_path / 'data'), 'DATABASE': str(tmp_path / 'ex.db'), 'SECRET_KEY': 't',
+                      'PUBLIC': True, 'OWNER_TOKEN': 'a' * 40})
+    iid = library.load_index(tmp_path / 'data' / 'library')[0]['id']
+    c = app.test_client()
+    assert c.get(f'/practice/lib/{iid}').status_code == 404
+    assert c.get('/me/' + 'b' * 40).status_code == 404
+    r = c.get('/me/' + 'a' * 40)
+    assert r.status_code == 302
+    assert c.get(f'/practice/lib/{iid}').status_code == 200
+    assert '제01회 모의' in c.get('/practice/').get_data(as_text=True)
+    assert app.test_client().get(f'/practice/lib/{iid}').status_code == 404       # 다른 기기는 여전히 못 봄

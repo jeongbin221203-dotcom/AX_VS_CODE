@@ -3,7 +3,7 @@ import os
 import secrets
 from pathlib import Path
 
-from flask import Flask, abort, request, session, url_for
+from flask import Flask, abort, redirect, request, session, url_for
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from core import db
@@ -49,6 +49,14 @@ def create_app(config=None):
         app.config['SESSION_COOKIE_SECURE'] = True
     db.init(app.config['DATABASE'])
     app.teardown_appcontext(db.close)
+    app.permanent_session_lifetime = __import__('datetime').timedelta(days=400)
+    if os.environ.get('EX_VAULT_KEY') and not app.config.get('TESTING'):
+        from core import vault
+        try:
+            vault.restore_on_start(ROOT / 'content' / 'private' / 'vault.bin', os.environ['EX_VAULT_KEY'],
+                                   app.config['DATA_DIR'])
+        except ValueError as e:
+            app.logger.error('개인 자료 복원 실패: %s', e)
 
     @app.before_request
     def csrf_protect():
@@ -89,13 +97,24 @@ def create_app(config=None):
     def inject():
         from core import content
         return {'csrf_token': session.get('csrf', ''), 'track': current_track(), 'TRACKS': content.TRACKS,
-                'CAT_NAMES': content.CAT_NAMES, 'asset': asset_url, 'public': app.config['PUBLIC']}
+                'CAT_NAMES': content.CAT_NAMES, 'asset': asset_url, 'public': app.config['PUBLIC'],
+                'owner': bool(session.get('owner')) or not app.config['PUBLIC']}
 
     def asset_url(filename):
         """정적 파일 주소 + 수정 시각(바꾸면 브라우저가 새 파일을 받는다)."""
         path = Path(app.static_folder) / filename
         v = int(path.stat().st_mtime) if path.exists() else 0
         return url_for('static', filename=filename, v=v)
+
+    @app.route('/me/<token>')
+    def owner_login(token):
+        """개인 링크: 이 기기에서 내 교재·공식 예제 자료를 보이게 한다(비밀번호 대신 긴 무작위 주소)."""
+        want = os.environ.get('EX_OWNER_TOKEN') or app.config.get('OWNER_TOKEN')
+        if not want or not secrets.compare_digest(token, want):
+            abort(404)
+        session['owner'] = True
+        session.permanent = True
+        return redirect(url_for('practice.index', msg='이 기기에서 내 자료가 보입니다.'))
 
     @app.route('/healthz')
     def healthz():

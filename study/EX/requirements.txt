@@ -1,4 +1,5 @@
 Flask>=3.1,<4
 openpyxl>=3.1,<4
 olefile>=0.46
+cryptography>=42
 gunicorn>=23,<24; platform_system != "Windows"
