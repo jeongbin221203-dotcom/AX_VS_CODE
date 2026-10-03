@@ -141,3 +141,14 @@ def test_employment_type_cleanup():
     from core.exclude import _contract_only
     assert _contract_only({"employment_type": f("계약직 근무기간 1년 정규직 전환 가능"), "title": ""})
     assert not _contract_only({"employment_type": "정규직, 계약직", "title": ""})
+
+
+def test_region_from_title_when_location_missing():
+    from core import postings
+    p = postings.build("jobkorea", "1", title="[서울 역삼역] ㈜삼구아이앤씨 오피스 건물 시설 기사 모집", company="삼구")
+    assert p["sido"] == "서울"
+    assert postings.build("jobkorea", "2", title="시루정보 Java 개발 (대전근무)", company="시루")["sido"] == "대전"
+    assert postings.build("jobkorea", "3", title="[신입/경력] 업무총괄", company="x")["sido"] is None
+    assert postings.build("jobkorea", "4", title="(주)광주에너지 채용", company="x")["sido"] is None   # 괄호 밖 회사 이름은 지역 아님
+    # 근무지가 있으면 제목보다 근무지
+    assert postings.build("jobkorea", "5", title="[서울] 채용", company="x", location="부산 해운대구")["sido"] == "부산"

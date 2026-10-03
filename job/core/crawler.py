@@ -107,6 +107,7 @@ SITEMAP_SITES = {
 UNLIMITED = 10 ** 9        # '0 = 모두'일 때 상한
 RUN_SHARE = 0.85           # 한 번 실행이 쓸 수 있는 시간 = 실행 간격의 85% (다음 실행과 겹치지 않게)
 DETAIL_SITES = ("saramin", "jobkorea", "linkareer", "remember")     # 상세(본문·기업정보)까지 읽는 사이트
+BACKFILL_FIRST = 200      # 그중 새 공고보다 먼저 읽을 수 (회마다)
 BACKFILL_PER_RUN = 5000    # 예전에 요약만 읽어 둔 공고를 한 번에 몇 건까지 다시 읽어 상세를 채울지 (새 공고 뒤에)
 
 DEFAULT = {
@@ -397,8 +398,10 @@ def _run(s: dict, f: Fetcher) -> dict:
             st["errors"].append(str(e))
             summary["errors"].append(f"{site}: {e}")
         pending = queue_load(site, skip, s["max_new"] or UNLIMITED)
-        queues[site] = [(i, LIST_SITES[site]["detail"].format(id=i), h) for i, h in pending]
-        queues[site] += [(i, LIST_SITES[site]["detail"].format(id=i), None) for i in _needs_backfill(site)]
+        fresh = [(i, LIST_SITES[site]["detail"].format(id=i), h) for i, h in pending]
+        again = [(i, LIST_SITES[site]["detail"].format(id=i), None) for i in _needs_backfill(site)]
+        # 다시 읽기로 표시한 공고(상세가 비었거나 잘못 읽은 것)는 회마다 조금씩 먼저 — 새 공고가 많아도 계속 밀리지 않게
+        queues[site] = again[:BACKFILL_FIRST] + fresh + again[BACKFILL_FIRST:]
 
     for site in s["sitemap_sites"]:
         try:
@@ -627,7 +630,8 @@ def overview() -> dict:
         prog["running"] = False
         prog["phase"] = "중단됨 (앱이 다시 켜짐)"
     if prog and prog.get("started_at"):
-        end = prog.get("finished_at") if not prog.get("running") else _now_iso()
+        # 끊긴 실행에는 끝난 시각이 없다 — 마지막으로 기록한 시각까지
+        end = _now_iso() if prog.get("running") else (prog.get("finished_at") or prog.get("updated_at") or prog["started_at"])
         prog["elapsed_min"] = round((datetime.fromisoformat(end) - datetime.fromisoformat(prog["started_at"]))
                                     .total_seconds() / 60)
     bl = backlog_status()

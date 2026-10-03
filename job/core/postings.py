@@ -7,7 +7,7 @@ from datetime import date, timedelta
 
 from . import db, fit, jobgroups, salary
 from .normalize import (CAREER_TYPES, SIDO_ORDER, clean, parse_career, parse_education, parse_employment,
-                        parse_region, to_date)
+                        parse_region, region_from_title, to_date)
 
 FIELDS = ("url", "title", "company", "sido", "sigungu", "location_raw", "career_type", "career_min",
           "career_max", "career_raw", "education", "employment_type", "salary_raw", "salary_min",
@@ -21,6 +21,8 @@ def build(source: str, source_id, *, title, company, url=None, location=None, ca
           keywords=None, description=None, posted_at=None, deadline=None, company_info=None) -> dict:
     """출처 어댑터가 넘긴 값을 공통 공고 dict 로 만든다. 연봉 숫자를 직접 주면 문구 해석보다 우선."""
     sido, sigungu = parse_region(location)
+    if not sido and not clean(location):
+        sido, sigungu = region_from_title(title)      # 근무지가 비었으면 제목의 '[서울 역삼역]'·'(대전근무)'
     kind, cmin, cmax = parse_career(career, career_min, career_max)
     lo, hi, nego = salary.parse(salary_text, pay_type)
     if salary_min or salary_max:

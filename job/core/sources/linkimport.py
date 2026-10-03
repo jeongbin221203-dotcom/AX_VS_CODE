@@ -255,7 +255,7 @@ def _saramin(page: str, url: str) -> dict:
     return build(
         "saramin", posting_id(url, "saramin") or hashlib.sha1(url.encode("utf-8")).hexdigest()[:16],
         title=title, company=company or "(회사명 확인 필요)", url=url,
-        location=s.get("근무지역") or summary.get("location"),
+        location=s.get("근무지역") or summary.get("location") or _saramin_map_address(page),
         career=s.get("경력") or summary.get("career"),
         education=s.get("학력") or summary.get("education"),
         employment_type=s.get("근무형태") or summary.get("employment"),
@@ -266,6 +266,14 @@ def _saramin(page: str, url: str) -> dict:
         deadline=when.get("마감일") or summary.get("deadline"),
         company_info={k: v for k, v in comp.items() if k != "대표자명"},
     )
+
+
+def _saramin_map_address(page: str) -> str | None:
+    """핵심 정보에 근무지역이 없을 때 '근무지위치' 지도의 주소 (data-address="(57030) 전남 영광군 …")."""
+    m = re.search(r'class="[^"]*jv_location[^"]*"[^>]*data-address="([^"]+)"', page) or         re.search(r'data-address="([^"]+)"', page)
+    if not m:
+        return None
+    return re.sub(r"^\(\d{5}\)\s*", "", html.unescape(m.group(1))).strip() or None
 
 
 def _has_amount(text: str | None) -> bool:

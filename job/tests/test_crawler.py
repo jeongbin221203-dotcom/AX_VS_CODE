@@ -552,3 +552,12 @@ def test_sites_read_in_parallel_with_per_site_delay(app):
         assert all(b - a >= 0.19 for a, b in zip(times, times[1:]))  # 같은 사이트는 간격 지킴
     # 둘 다 차례로 읽었다면 상세 8건 × 0.2초 이상 — 동시에 읽으면 그보다 확실히 짧다
     assert time.monotonic() - started < 0.2 * (len(f.calls) - 1)
+
+
+def test_status_page_after_interrupted_run(app, client):
+    """앱이 실행 도중 꺼졌다 켜지면 진행 기록에 끝난 시각이 없다 — 수집 현황 화면이 오류 없이 열려야 한다."""
+    db.set_setting("crawl_progress", json.dumps({"running": True, "started_at": "2026-10-03T22:49:15",
+                                                 "phase": "상세 읽기", "updated_at": "2026-10-03T22:57:56"}))
+    o = crawler.overview()
+    assert o["progress"]["running"] is False and o["progress"]["elapsed_min"] == 9
+    assert client.get("/collect/status").status_code == 200

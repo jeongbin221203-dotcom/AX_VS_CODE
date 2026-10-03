@@ -66,6 +66,17 @@ def parse_region(text) -> tuple[str | None, str | None]:
     return None, None
 
 
+def region_from_title(title) -> tuple[str | None, str | None]:
+    """근무지가 없는 공고의 제목 괄호에서: '[서울 역삼역] …', '(대전근무)', '[부산근무]' → ('서울', None)."""
+    t = clean(title)
+    for seg in re.findall(r"[\[(【<]([^\])】>]{1,30})[\])】>]", t):
+        seg = re.sub(r"(근무지?|지역)\s*[:：]?", " ", seg).strip()
+        sido, sigungu = parse_region(seg)
+        if sido and sido not in ("재택",):
+            return sido, sigungu
+    return None, None
+
+
 def parse_career(text, lo=None, hi=None) -> tuple[str, int | None, int | None]:
     """'신입', '경력 3년↑', '경력(2~5년)', '신입/경력', '경력무관', '관계없음' → (구분, 최소, 최대)."""
     t = clean(text).replace(" ", "")

@@ -150,6 +150,22 @@ GROUPS: list[tuple[str, tuple[str, ...], list[tuple[str, tuple[str, ...]]]]] = [
     ("기타", ("기타",), []),
 ]
 
+# 세부 직무 단어가 없을 때 직무만 정할 넓은 단어 ('이커머스 마케팅 담당자', '주류 영업사원' 같은 제목)
+GROUP_WORDS: dict[str, tuple[str, ...]] = {
+    "마케팅·광고·홍보": ("마케팅", "마케터", "Marketing", "인플루언서", "광고"),
+    "영업·판매·무역": ("영업", "세일즈", "Sales", "어카운트 매니저", "Account Executive", "Account Manager", "통관",
+                   "보세사", "포워딩"),
+    "디자인": ("디자인", "디자이너", "Designer"),
+    "IT·개발·데이터": ("개발자", "프로그래머", "Developer", "Engineer", "소프트웨어"),
+    "기획·전략·경영": ("기획", "Product Manager", "경영지원"),
+    "고객상담·서비스": ("코디네이터", "서비스운영", "홀 매니저", "홀서빙", "서비스직"),
+    "의료·바이오": ("병원", "의원", "치과", "한의원", "약국"),
+    "교육": ("강의", "학습매니저", "학습관리"),
+    "미디어·문화·스포츠": ("애니메이션", "웹툰", "출판"),
+    "생산·제조": ("생산", "제조", "공장"),
+    "회계·세무·재무": ("재경",),
+}
+
 _SITE_TO_GROUP = {site: g for g, sites, _ in GROUPS for site in sites}
 _SUBS = {g: subs for g, _, subs in GROUPS}
 NAMES = [g for g, _, _ in GROUPS]
@@ -168,7 +184,8 @@ def groups_of(p: dict) -> set[str]:
     if found:
         return found
     title = str(p.get("title") or "") + " " + str(p.get("keywords") or "")
-    return {g for g, _, subs in GROUPS if any(_has(title, w) for _, words in subs for w in words)}
+    found = {g for g, _, subs in GROUPS if any(_has(title, w) for _, words in subs for w in words)}
+    return found or {g for g, words in GROUP_WORDS.items() if any(_has(title, w) for w in words)}
 
 
 UNSORTED = "기타·미분류"

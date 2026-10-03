@@ -264,3 +264,14 @@ def test_jobkorea_salary_not_merged_with_address():
     p = linkimport.parse(page, "https://www.jobkorea.co.kr/Recruit/GI_Read/2", "jobkorea")
     assert p["salary_raw"] == "회사 내규에 따름" and p["salary_min"] is None and p["salary_negotiable"] == 1
     assert "근무지주소: 대한민국 서울특별시 서초구" in p["description"]
+
+
+def test_saramin_location_from_map_when_summary_has_none():
+    """핵심 정보에 근무지역이 없으면 '근무지위치' 지도 주소(data-address)로 — 기업주소(본사)는 쓰지 않는다."""
+    page = ('<html><head><meta property="og:title" content="(주)에코솔라파워 채용 - 태양광발전소 운영 담당자 | 사람인">'
+            '</head><body><div class="jv_cont jv_summary"><dt>경력</dt><dd>경력무관</dd></div>'
+            '<div class="jv_cont jv_location" data-company-name="(주)에코솔라파워" '
+            'data-address="(57030) 전남 영광군 백수읍 백수로1길 20">근무지위치</div>'
+            '<div class="jv_cont jv_company">기업주소 광주 북구 어딘가</div></body></html>')
+    p = linkimport.parse(page, "https://www.saramin.co.kr/zf_user/jobs/view?rec_idx=55190071", "saramin")
+    assert (p["sido"], p["sigungu"]) == ("전남", "영광군")

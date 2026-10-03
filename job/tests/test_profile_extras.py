@@ -134,3 +134,14 @@ def test_exclude_gym_and_academy_not_healthcare_or_grad_school():
     aca = lambda t, c="가상": exclude.matches({"title": t, "company": c}, ["학원"]) == ["학원"]
     assert aca("영어 선생님 채용", "(주)DYB최선어학원") and aca("영어 보조교사", "고래영어교습소") and aca("수학학원 상담실장")
     assert not aca("대학원 석사 연구원 채용") and not aca("경영지원 사무", "가상산업")
+
+
+def test_broad_group_words_when_no_sub_word():
+    """세부 직무 단어가 없는 '이커머스 마케팅 담당자', '포워딩 영업 경력' 도 직무로 묶는다 (일반 공고는 그대로 미분류)."""
+    from core import jobgroups
+    assert jobgroups.groups_of({"title": "[노블러스] 이커머스 관리 및 마케팅 담당자"}) == {"마케팅·광고·홍보"}
+    assert jobgroups.groups_of({"title": "포워딩 해상 신규 영업 경력 채용"}) == {"영업·판매·무역"}
+    assert jobgroups.groups_of({"title": "각 부문별 신입/경력 채용"}) == set()
+    assert jobgroups.groups_of({"title": "[교육3일 바로입사] 정규직 채용"}) == set()
+    # 세부 직무 단어가 있으면 넓은 단어는 보지 않는다
+    assert jobgroups.groups_of({"title": "해외영업 담당자"}) == {"영업·판매·무역"}
