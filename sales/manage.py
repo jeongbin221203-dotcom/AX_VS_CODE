@@ -8,6 +8,8 @@
   python manage.py backup                DB 백업 (SQLite 온라인 백업 / PostgreSQL pg_dump)
   python manage.py restore <파일>        백업에서 복구 (PostgreSQL: pg_restore --clean, SQLite: 파일 교체)
   python manage.py check                 DB·저장소·스키마 상태 점검 (배포 후 확인용)
+  python manage.py demo-init             빈 DB 에 시연용 조직·계정·샘플 데이터 (Render 같은 시연 서버 빌드용,
+                                         SALES_DEMO=1 · SALES_DEMO_PASSWORD 필요)
 """
 from __future__ import annotations
 
@@ -139,6 +141,34 @@ def cmd_seed_sample(args) -> int:
     return 0
 
 
+def cmd_demo_init(args) -> int:
+    """시연 서버용: 빈 DB 에만 조직·계정(같은 비밀번호)·업종별 샘플 데이터를 넣는다.
+
+    실수로 실제 DB 에 넣지 않도록 SALES_DEMO=1 이 있어야 하고, 거래처가 하나라도 있으면 아무것도 하지 않는다.
+    """
+    if os.environ.get("SALES_DEMO") != "1":
+        print("SALES_DEMO=1 일 때만 실행합니다 (시연 서버 전용).")
+        return 2
+    password = os.environ.get("SALES_DEMO_PASSWORD", "")
+    from app import create_app
+    create_app()
+    from core import auth, sample_industry
+    from core import enterprise as ent
+    from core import sales_db as db
+    if int(db._scalar("SELECT COUNT(*) FROM customers") or 0):
+        print("이미 데이터가 있어 건너뜁니다.")
+        return 0
+    db.set_context("system", None)
+    ent.seed_org_demo()
+    if password:
+        for uid in db._df("SELECT id FROM users WHERE active=1")["id"].tolist():
+            auth.set_password(int(uid), password)
+    print("기본 샘플:", db.seed_demo_data())
+    for key, out in sample_industry.seed_many(customers=args.customers).items():
+        print(key, out)
+    return 0
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description="영업관리 운영 명령")
     sub = parser.add_subparsers(dest="cmd", required=True)
@@ -169,6 +199,9 @@ def main(argv=None) -> int:
     p.add_argument("--customers", type=int, default=8, help="업종마다 거래처 수")
     p.add_argument("--months", type=int, default=12)
     p.set_defaults(func=cmd_seed_sample)
+    p = sub.add_parser("demo-init", help="시연 서버 빌드용 — 빈 DB 에 조직·계정·샘플 데이터")
+    p.add_argument("--customers", type=int, default=5, help="업종마다 거래처 수")
+    p.set_defaults(func=cmd_demo_init)
     args = parser.parse_args(argv)
     return args.func(args)
 

@@ -304,9 +304,13 @@ def sqlalchemy_url(db_path: str | None = None) -> str:
 
 
 def alembic_config(db_path: str | None = None):
+    import sys
     from alembic.config import Config
+    here = os.path.join(BASE_DIR, "migrations")
+    if here not in sys.path:           # 버전 파일이 쓰는 ddl·schema_v2_* 도우미 — env.py 를 거치지 않고 버전만 읽을 때도 필요
+        sys.path.insert(0, here)       # (운영은 자동 마이그레이션이 꺼져 있어 head_revision 이 먼저 불린다)
     cfg = Config()                     # ini 파일 없이 설정 (명령행 alembic 은 alembic.ini 사용)
-    cfg.set_main_option("script_location", os.path.join(BASE_DIR, "migrations").replace("\\", "/"))
+    cfg.set_main_option("script_location", here.replace("\\", "/"))
     cfg.set_main_option("sqlalchemy.url", sqlalchemy_url(db_path).replace("%", "%%"))
     return cfg
 
