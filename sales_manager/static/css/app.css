@@ -55,6 +55,20 @@ code { font-size: .85em; word-break: break-all; }
 .menu a { padding: .45rem .6rem; border-radius: 6px; }
 .menu a:hover { background: rgba(255,255,255,.07); }
 .menu a.active { background: var(--accent); color: #fff; }
+/* 메뉴 편집: 즐겨찾기 · 순서 (static/js/app.js, core/prefs.py) */
+.menu-group { display: flex; flex-direction: column; gap: 2px; min-height: 4px; }
+.menu-label { font-size: .75rem; color: #9aa5b5; margin: .55rem .6rem .15rem; letter-spacing: .02em; }
+.menu-tools { display: flex; gap: .4rem; margin: .5rem .6rem 0; }
+.menu-edit { background: none; border: 1px solid rgba(255,255,255,.25); color: #c9d2de; border-radius: 6px; padding: .15rem .5rem; font-size: .78rem; cursor: pointer; }
+.menu-edit:hover { background: rgba(255,255,255,.08); }
+.menu-help { color: #9aa5b5; margin: .3rem .6rem 0; line-height: 1.4; }
+.menu.editing .menu-group { outline: 1px dashed rgba(255,255,255,.2); border-radius: 6px; padding: 2px; }
+.menu.editing .menu-group a { display: flex; align-items: center; gap: .3rem; cursor: grab; }
+.menu.editing .menu-group a.dragging { opacity: .4; }
+.menu-item-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.menu-ctl { background: none; border: 0; color: #c9d2de; cursor: pointer; padding: 0 .2rem; font-size: .9rem; line-height: 1; }
+.menu-ctl:hover { color: #fff; }
+.menu-ctl.star.on { color: #f5c542; }
 .filters { display: flex; flex-direction: column; gap: .5rem; }
 .filters select { width: 100%; }
 .foot { margin-top: auto; }

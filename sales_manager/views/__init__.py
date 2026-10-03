@@ -8,6 +8,7 @@
   io       데이터 일괄 등록 · 추출
   api      외부 연동 REST API (/api/v1, Bearer 키)
   admin    조직·사용자 · 감사로그 · 데이터 관리
+  prefs    내 화면 설정 (사이드바 메뉴 순서·즐겨찾기)
 """
 from flask import Flask
 
@@ -15,8 +16,8 @@ from .helpers import load_context
 
 
 def register_blueprints(app: Flask) -> None:
-    from . import admin, api, auth, catalog, crm, dataio, finance, reports
+    from . import admin, api, auth, catalog, crm, dataio, finance, prefs, reports
 
-    for module in (auth, reports, crm, catalog, finance, dataio, admin, api):
+    for module in (auth, reports, crm, catalog, finance, dataio, admin, api, prefs):
         app.register_blueprint(module.bp)
     app.before_request(load_context)

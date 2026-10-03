@@ -22,21 +22,22 @@ from core import notify
 from core import sales_db as db
 
 # ----------------------------------------------------------------------------
-# 메뉴 (키, 표시명, 엔드포인트, 최소 권한)
+# 메뉴 (키, 표시명, 엔드포인트, 최소 권한) — 기본 순서는 영업 현장에서 자주 쓰는 순. 대시보드는 항상 맨 위.
+# 사용자는 사이드바 '메뉴 편집'으로 순서·즐겨찾기를 바꿀 수 있다(core/prefs.py).
 # ----------------------------------------------------------------------------
 MENUS = [
     ("dashboard", "📊 대시보드", "reports.dashboard", "REP"),
-    ("forecast", "🔮 매출예측", "reports.forecast", "REP"),
-    ("analytics", "📈 파이프라인 분석", "reports.analytics", "REP"),
-    ("customers", "🏢 거래처", "crm.customers", "REP"),
     ("deals", "💼 영업기회", "crm.deals", "REP"),
     ("activities", "📞 영업활동", "crm.activities", "REP"),
-    ("sales", "💰 매출·채권", "finance.sales", "REP"),
-    ("targets", "🎯 목표", "finance.targets", "REP"),
+    ("customers", "🏢 거래처", "crm.customers", "REP"),
     ("quotes", "📝 견적", "catalog.quotes", "REP"),
     ("orders", "📑 수주", "catalog.orders", "REP"),
-    ("products", "📦 품목·단가", "catalog.products", "REP"),
+    ("sales", "💰 매출·채권", "finance.sales", "REP"),
     ("approvals", "✅ 결재함", "finance.approvals", "REP"),
+    ("products", "📦 품목·단가", "catalog.products", "REP"),
+    ("forecast", "🔮 매출예측", "reports.forecast", "REP"),
+    ("analytics", "📈 파이프라인 분석", "reports.analytics", "REP"),
+    ("targets", "🎯 목표", "finance.targets", "REP"),
     ("dataio", "📥 데이터 등록·추출", "io.index", "REP"),
     ("org", "👥 조직·사용자", "admin.org", "ADMIN"),
     ("erp", "🔗 ERP 연동", "admin.erp", "ADMIN"),
@@ -47,6 +48,7 @@ MENUS = [
     ("privacy", "🛡️ 개인정보 요청", "admin.privacy", "ADMIN"),
     ("admin", "⚙️ 데이터 관리", "admin.data", "ADMIN"),
 ]
+PINNED_MENU = "dashboard"
 
 # 로그인 없이 열 수 있는 엔드포인트
 PUBLIC_ENDPOINTS = {"auth.login", "auth.setup", "auth.oidc_start", "auth.oidc_callback", "auth.breakglass",
@@ -61,6 +63,21 @@ PASSWORD_ENDPOINTS = {"auth.password", "auth.logout", "static", "healthz"}
 
 def menus_for(user: dict) -> list[tuple]:
     return [m for m in MENUS if ent.has_role(user, m[3])]
+
+
+def menu_layout() -> dict:
+    """사이드바 메뉴: 대시보드(맨 위 고정) · 즐겨찾기 · 나머지 — 사용자가 정한 순서대로."""
+    from core import prefs
+    items = menus_for(g.user)
+    pinned = [m for m in items if m[0] == PINNED_MENU]
+    rest = [m for m in items if m[0] != PINNED_MENU]
+    p = prefs.menu(g.user["id"])
+    rank = {k: i for i, k in enumerate(p["order"])}
+    keys = [x[0] for x in MENUS]
+    rest.sort(key=lambda m: rank.get(m[0], len(rank) + keys.index(m[0])))
+    fav = set(p["fav"])
+    return {"pinned": pinned, "fav": [m for m in rest if m[0] in fav], "others": [m for m in rest if m[0] not in fav],
+            "customized": bool(p["order"] or p["fav"])}
 
 
 def menu_label(key: str) -> str:
@@ -419,7 +436,7 @@ def register_template_helpers(app: Flask) -> None:
                 "DISC_M": values["discount_manager_max"], "DISC_E": values["discount_exec_max"]}
 
     app.jinja_env.globals.update(
-        csrf_token=csrf_token, menus_for=menus_for, export_url=export_url, tab_url=tab_url,
+        csrf_token=csrf_token, menus_for=menus_for, menu_layout=menu_layout, export_url=export_url, tab_url=tab_url,
         page_url=page_url, page_path=page_path,
         STAGES=db.STAGES, STAGE_PROB=db.STAGE_PROB, GRADES=db.GRADES, INDUSTRIES=db.INDUSTRIES,
         ACT_TYPES=db.ACT_TYPES, SALE_STATUS=db.SALE_STATUS, LEAD_SOURCES=db.LEAD_SOURCES,

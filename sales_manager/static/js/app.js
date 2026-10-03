@@ -453,3 +453,141 @@
   });
   history.replaceState({ swapped: true }, "", location.href);
 })();
+
+/* 사이드바 메뉴 편집: 즐겨찾기(☆ → 위쪽 묶음) · 순서(▲▼ 또는 끌어 놓기). 대시보드는 맨 위 고정.
+   문서에 한 번만 이벤트를 건다(자재관리와 같은 코드). 저장은 /prefs/menu (core/prefs.py). */
+(function () {
+  "use strict";
+  function nav() { return document.querySelector(".menu[data-menu-save]"); }
+  function items(n) { return Array.prototype.slice.call(n.querySelectorAll(".menu-group a[data-key]")); }
+
+  function refreshLabels(n) {
+    const hasFav = !!n.querySelector('[data-group="fav"] a');
+    n.querySelectorAll("[data-group-label]").forEach(function (l) {
+      l.hidden = !hasFav && !n.classList.contains("editing");
+    });
+  }
+
+  function save(n, reset) {
+    const body = new URLSearchParams();
+    body.append("_csrf", n.dataset.csrf);
+    if (reset) body.append("reset", "1");
+    else {
+      body.append("order", items(n).map(function (a) { return a.dataset.key; }).join(","));
+      body.append("fav", Array.prototype.map.call(n.querySelectorAll('[data-group="fav"] a[data-key]'),
+                                                  function (a) { return a.dataset.key; }).join(","));
+    }
+    return fetch(n.dataset.menuSave, { method: "POST", body: body, credentials: "same-origin" })
+      .then(function (r) { if (!r.ok) throw new Error(); })
+      .catch(function () { alert("메뉴 설정을 저장하지 못했습니다. 화면을 새로고침한 뒤 다시 시도하세요."); });
+  }
+
+  function ctl(cls, text, title) {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "menu-ctl " + cls;
+    b.textContent = text;
+    b.title = title;
+    b.setAttribute("aria-label", title);
+    return b;
+  }
+
+  function decorate(a) {
+    const label = a.dataset.label || a.textContent.trim();
+    a.dataset.label = label;
+    a.textContent = "";
+    const fav = a.dataset.fav === "1";
+    const star = ctl("star" + (fav ? " on" : ""), fav ? "★" : "☆", fav ? "즐겨찾기 빼기" : "즐겨찾기");
+    const span = document.createElement("span");
+    span.className = "menu-item-label";
+    span.textContent = label;
+    a.appendChild(star);
+    a.appendChild(span);
+    a.appendChild(ctl("up", "▲", "위로"));
+    a.appendChild(ctl("down", "▼", "아래로"));
+    a.draggable = true;
+  }
+  function undecorate(a) {
+    a.textContent = a.dataset.label || a.textContent;
+    a.draggable = false;
+  }
+
+  function setEditing(n, on) {
+    n.classList.toggle("editing", on);
+    items(n).forEach(on ? decorate : undecorate);
+    n.querySelector("[data-menu-edit]").textContent = on ? "완료" : "메뉴 편집";
+    n.querySelector("[data-menu-reset]").hidden = !on;
+    n.querySelector(".menu-help").hidden = !on;
+    refreshLabels(n);
+  }
+
+  document.addEventListener("click", function (e) {
+    const n = nav();
+    if (!n || !n.contains(e.target)) return;
+    if (e.target.closest("[data-menu-edit]")) {
+      const on = !n.classList.contains("editing");
+      setEditing(n, on);
+      if (!on) save(n);
+      return;
+    }
+    if (e.target.closest("[data-menu-reset]")) {
+      save(n, true).then(function () { location.reload(); });
+      return;
+    }
+    if (!n.classList.contains("editing")) return;
+    const a = e.target.closest(".menu-group a[data-key]");
+    if (!a) return;
+    e.preventDefault();                                   // 편집 중에는 메뉴로 이동하지 않는다 (화면 전환보다 먼저 막음)
+    const b = e.target.closest(".menu-ctl");
+    if (!b) return;
+    if (b.classList.contains("star")) {
+      const toFav = a.dataset.fav !== "1";
+      const group = n.querySelector('[data-group="' + (toFav ? "fav" : "others") + '"]');
+      if (toFav) { a.dataset.fav = "1"; group.appendChild(a); }
+      else { delete a.dataset.fav; group.insertBefore(a, group.firstChild); }
+      decorate(a);
+    } else if (b.classList.contains("up") && a.previousElementSibling) {
+      a.parentNode.insertBefore(a, a.previousElementSibling);
+    } else if (b.classList.contains("down") && a.nextElementSibling) {
+      a.parentNode.insertBefore(a.nextElementSibling, a);
+    } else {
+      return;
+    }
+    refreshLabels(n);
+    save(n);
+  });
+
+  // 끌어 놓기 (편집 중에만)
+  let dragged = null;
+  document.addEventListener("dragstart", function (e) {
+    const n = nav();
+    const a = e.target.closest && e.target.closest(".menu.editing .menu-group a[data-key]");
+    if (!n || !a) return;
+    dragged = a;
+    a.classList.add("dragging");
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/plain", a.dataset.key);
+  });
+  document.addEventListener("dragover", function (e) {
+    if (!dragged) return;
+    const group = e.target.closest && e.target.closest(".menu.editing .menu-group");
+    if (!group) return;
+    e.preventDefault();
+    const after = Array.prototype.find.call(group.querySelectorAll("a[data-key]:not(.dragging)"), function (x) {
+      const r = x.getBoundingClientRect();
+      return e.clientY < r.top + r.height / 2;
+    });
+    group.insertBefore(dragged, after || null);
+  });
+  document.addEventListener("dragend", function () {
+    if (!dragged) return;
+    const n = nav(), a = dragged;
+    dragged = null;
+    a.classList.remove("dragging");
+    if (!n) return;
+    if (a.closest('[data-group="fav"]')) a.dataset.fav = "1"; else delete a.dataset.fav;
+    decorate(a);
+    refreshLabels(n);
+    save(n);
+  });
+})();
