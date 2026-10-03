@@ -156,7 +156,7 @@ def test_saramin_full_page():
     import json
     p = linkimport.parse(SARAMIN_VIEW, "https://www.saramin.co.kr/zf_user/jobs/view?rec_idx=77", "saramin")
     assert (p["source_id"], p["company"], p["title"]) == ("77", "가상물산(주)", "각 부문별 직원 채용")
-    assert (p["sido"], p["sigungu"], p["employment_type"]) == ("경기", "화성시", "정규직 수습기간 3개월")
+    assert (p["sido"], p["sigungu"], p["employment_type"]) == ("경기", "화성시", "정규직 (수습 3개월)")
     assert (p["posted_at"], p["deadline"]) == ("2026-09-30", "2026-10-05")
     assert (p["salary_min"], p["salary_max"]) == (2800, 3000)                  # 요약은 '면접 후 결정' → 본문 금액
     assert "ㆍ전화 CS 클레임 처리" in p["description"].split("\n")

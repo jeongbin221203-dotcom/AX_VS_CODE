@@ -17,11 +17,13 @@ MAX_CONVERT_HOURLY = 30_000      # 이보다 높은 시급은 연봉으로 환�
 MAX_CONVERTED = 30_000           # 월·시급·일급을 연봉으로 바꾼 값이 이 만원(3억)을 넘으면 버림
 _ALLOWANCE = re.compile(r"(식대|수당|교통비|상여|보너스|인센티브|복지|장려금|축하금|지원금|성과급|면접비|숙소비|중식|"
                         r"요금|통신비|휴대폰|건당|가능시|가능 시)")
+ABSURD_TOP = 10_000              # 범위의 위쪽이 1억 이상이면서 아래쪽의 5배를 넘으면 위쪽은 믿지 않음
 MONTHLY_AS_ANNUAL = 1500 * 10**4  # '월급 3,300만원'처럼 월 1,500만원 이상이면 연봉을 월급으로 잘못 적은 것으로 봄
 _PERIOD_KEYS = [(re.compile(r"시급|시간당"), "hour"), (re.compile(r"일급|일당"), "day"),
                 (re.compile(r"월급|월평균|매월|/월|월(?=\d)|월(?=약\d)"), "month"),
                 (re.compile(r"연봉|평균연봉|연평균|년봉|연(?=\d)|연(?=약\d)"), "year")]
 
+_NOT_MONEY = re.compile(r"(%|퍼센트|프로|개월|개|명|세|살|년|시간|시|분|층|호|회|차|주|일|건|평|km|kg)")
 _TOKEN = re.compile(r"(\d+(?:\.\d+)?)(억|천만|천|백만|백|만원|만|원)?")
 _UNIT = {"억": 10**8, "천만": 10**7, "백만": 10**6, "만원": 10**4, "만": 10**4, "원": 1}
 
@@ -66,6 +68,8 @@ def parse(text, pay_type: str | None = None) -> tuple[int | None, int | None, bo
         return values[0], None, False                  # 범위의 위쪽을 버렸으면 '이상'으로
     if len(values) >= 2 and values[0] != values[1]:
         lo, hi = sorted(values[:2])                    # 첫 범위만 (뒤의 '10~20만원 추가' 같은 금액은 무시)
+        if hi >= ABSURD_TOP and hi > lo * 5:
+            return lo, None, False                     # '3,000~50,000만원' 처럼 위쪽이 터무니없으면 '이상'으로
     elif len(values) >= 2:
         lo = hi = values[0]
         if re.search(r"(이상|↑|부터|최소)", compact):
@@ -124,7 +128,18 @@ def _period_at(keys: list[tuple[int, str]], pos: int, window: int = 20) -> str |
 
 
 def _is_allowance(t: str, pos: int) -> bool:
-    return bool(_ALLOWANCE.search(t[max(0, pos - 8):pos]))
+    """금액 바로 앞(8글자)에 식대·수당 같은 말이 있으면 추가 금액. 단 '수당 포함 월평균 300만원' 처럼
+    그 뒤에 '포함'이나 '월·연봉' 단어가 다시 나오면 본급이다."""
+    window = t[max(0, pos - 8):pos]
+    last = None
+    for m in _ALLOWANCE.finditer(window):
+        last = m
+    if not last:
+        return False
+    rest = window[last.end():]
+    if "포함" in rest or any(rx.search(rest) for rx, _ in _PERIOD_KEYS):
+        return False
+    return True
 
 
 def _amount_groups(text: str) -> list[float]:
@@ -143,6 +158,9 @@ def _amounts(text: str) -> tuple[list[tuple[float, int]], str]:
     for m in _TOKEN.finditer(t):
         if m.group(1) in ("", "."):
             continue
+        if not m.group(2) and _NOT_MONEY.match(t, m.end()):
+            prev_end = -1
+            continue                                    # '100%'·'3개월'·'2명'·'9시' 는 금액이 아님
         tok = (float(m.group(1)), m.group(2))
         if groups and m.start() == prev_end and groups[-1][-1][1] not in (None, "원", "만원", "만"):
             groups[-1].append(tok)

@@ -56,7 +56,7 @@ def matches(p: dict, words: list[str]) -> list[str]:
 def _contract_only(p: dict) -> bool:
     """계약직(기간제)으로만 뽑는 공고. '정규직, 계약직'처럼 정규직 자리도 있으면 제외하지 않는다.
     '계약직 (정규직 전환 가능)'은 계약직으로 시작하므로 제외한다."""
-    emp = str(p.get("employment_type") or "")
+    emp = re.sub(r"\([^)]*\)", "", str(p.get("employment_type") or ""))     # 괄호 안 '(정규직 전환 가능)' 은 선택지가 아님
     options = [o.strip() for o in emp.replace("·", ",").replace("/", ",").split(",") if o.strip()]
     has_regular = any(o.startswith("정규직") for o in options)
     contract = any(o.startswith(("계약직", "기간제")) for o in options)

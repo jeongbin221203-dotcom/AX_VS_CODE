@@ -6,7 +6,7 @@ import statistics
 from datetime import date, timedelta
 
 from . import db, fit, jobgroups, salary
-from .normalize import (CAREER_TYPES, SIDO_ORDER, clean, parse_career, parse_education,
+from .normalize import (CAREER_TYPES, SIDO_ORDER, clean, parse_career, parse_education, parse_employment,
                         parse_region, to_date)
 
 FIELDS = ("url", "title", "company", "sido", "sigungu", "location_raw", "career_type", "career_min",
@@ -41,7 +41,7 @@ def build(source: str, source_id, *, title, company, url=None, location=None, ca
         "career_max": cmax,
         "career_raw": clean(career)[:100] or None,
         "education": parse_education(education),
-        "employment_type": clean(employment_type)[:100] or None,
+        "employment_type": parse_employment(employment_type),
         "salary_raw": clean(salary_text)[:200] or None,
         "salary_min": lo,
         "salary_max": hi,

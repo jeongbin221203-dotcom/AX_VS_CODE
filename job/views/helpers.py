@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import re
 import secrets
 
 from flask import Flask, session
@@ -52,6 +53,9 @@ def register_template_helpers(app: Flask) -> None:
 
     @app.template_filter("salary_range")
     def _salary_range(p) -> str:
-        if p.get("salary_min") is None and p.get("salary_max") is None and not p.get("salary_negotiable")                 and p.get("salary_raw"):
-            return p["salary_raw"][:40]               # 연봉으로 못 바꾼 금액(시간제 시급 등)은 원문 그대로
+        if p.get("salary_min") is None and p.get("salary_max") is None and not p.get("salary_negotiable") \
+                and p.get("salary_raw"):
+            raw = p["salary_raw"]
+            if re.search(r"\d[\d,]*\s*(원|만원|만)", raw):
+                return raw[:40]                       # 연봉으로 못 바꾼 금액(시간제 시급·건당 등)은 원문 그대로
         return salary.format_range(p.get("salary_min"), p.get("salary_max"), bool(p.get("salary_negotiable")))

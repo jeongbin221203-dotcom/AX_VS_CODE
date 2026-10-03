@@ -538,7 +538,7 @@ def _summary_fields(desc: str | None) -> dict:
     out: dict = {}
     if not desc:
         return out
-    for part in re.split(r"\s*,(?!\d{3}\b)\s*", desc):          # '4,200 만원' 의 쉼표는 나누지 않는다
+    for part in re.split(r"\s*,(?!\d{3}(?!\d))\s*", desc):     # '4,200 만원'·'3,200만원' 의 쉼표는 나누지 않는다
         if ":" in part:
             key, _, val = part.partition(":")
             key, val = key.strip(), val.strip()

@@ -107,3 +107,37 @@ def test_commission_jobs():
     assert salary.is_commission(p) and not salary.is_commission({"title": "사무", "employment_type": "정규직"})
     r = fit.evaluate(p, {"min_salary": 4500, "career_type": "모두"})
     assert r.parts["연봉"][0] == 12 and any("실적" in w for w in r.warnings)
+
+
+def test_percent_and_counts_are_not_money():
+    """'수습기간 급여 100% 지급'의 100 은 100만원이 아니다 (예전엔 연 1,200만원으로 읽음)."""
+    assert salary.parse("입사일 ~ 3개월 간 수습기간(급여 100% 지급) 진행합니다.")[:2] == (None, None)
+    assert salary.parse("*수습기간 주5일 급여100%")[:2] == (None, None)
+    assert salary.parse("월급 110 만원 (주 20시간)")[:2] == (1320, 1320)
+
+
+def test_allowance_included_is_base_pay():
+    assert salary.parse("OT 수당 포함 월 평균 300만원 이상")[:2] == (3600, None)
+    assert salary.parse("월 250만원 + 식대 10만원")[:2] == (3000, 3000)
+
+
+def test_absurd_upper_bound_dropped():
+    assert salary.parse("연봉 3,000~50,000만원")[:2] == (3000, None)
+    assert salary.parse("연봉 2,800만원~3,000만원")[:2] == (2800, 3000)
+
+
+def test_summary_keeps_thousands_comma():
+    from core.sources.linkimport import _summary_fields
+    assert _summary_fields("경력 : 경력, 학력 : 초대졸이상, 급여 : 3,200만원 이상, 마감일 : 2026.11.09")["salary"] == "3,200만원 이상"
+
+
+def test_employment_type_cleanup():
+    from core.normalize import parse_employment as f
+    assert f("정규직 수습기간 3개월 자격요건 자격요건") == "정규직 (수습 3개월)"
+    assert f("정규직 (수습 3개월) 직급/직책") == "정규직 (수습 3개월)"
+    assert f("정규직, 계약직, 계약직") == "정규직, 계약직"
+    assert f("계약직 근무기간 1년 정규직 전환 가능") == "계약직 (근무기간 1년 · 정규직 전환 가능)"
+    assert f("무기계약직") == "무기계약직" and f("협의") == "협의"
+    from core.exclude import _contract_only
+    assert _contract_only({"employment_type": f("계약직 근무기간 1년 정규직 전환 가능"), "title": ""})
+    assert not _contract_only({"employment_type": "정규직, 계약직", "title": ""})

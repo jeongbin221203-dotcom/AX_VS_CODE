@@ -124,6 +124,42 @@ def _before_range(t: str) -> str:
     return t
 
 
+_EMP_TYPES = [("무기계약직", "무기계약직"), ("정규직", "정규직"), ("계약직", "계약직"), ("기간제", "기간제"),
+              ("전환형 인턴", "전환형 인턴"), ("인턴", "인턴"), ("파견", "파견직"), ("프리랜서", "프리랜서"),
+              ("위촉", "위촉직"), ("개인사업자", "개인사업자"), ("도급", "도급"), ("용역", "용역"), ("아르바이트", "아르바이트"),
+              ("파트타임", "파트타임"), ("교육생", "교육생"), ("연수생", "연수생"), ("병역특례", "병역특례"), ("전임", "전임")]
+
+
+def parse_employment(text) -> str | None:
+    """'정규직 수습기간 3개월 자격요건 자격요건', '정규직, 계약직, 계약직' → '정규직 (수습 3개월)', '정규직, 계약직'.
+    사이트 화면의 이름표(자격요건·직급/직책·1건)가 붙어 들어온 것을 떼고 고용형태와 수습·근무기간만 남긴다."""
+    t = clean(text)
+    if not t:
+        return None
+    rest = t
+    found: list[tuple[int, str]] = []
+    rest = re.sub(r"정규직\s*(?=전환)", lambda m: " " * len(m.group(0)), rest)   # '정규직 전환 가능' 은 고용형태가 아님
+    for word, name in _EMP_TYPES:
+        for m in re.finditer(re.escape(word), rest):
+            found.append((m.start(), name))
+        rest = rest.replace(word, " " * len(word))              # '무기계약직' 안의 '계약직' 을 다시 세지 않게
+    types = list(dict.fromkeys(n for _, n in sorted(found)))
+    if "전환형 인턴" in types and "인턴" in types:
+        types.remove("인턴")
+    notes = []
+    m = re.search(r"수습(?:기간)?\s*[:：]?\s*(\d+\s*개월)", t) or re.search(r"(\d+\s*개월)\s*수습", t)
+    if m:
+        notes.append("수습 " + m.group(1).replace(" ", ""))
+    m = re.search(r"(?:근무|계약)기간\s*[:：]?\s*((?:\d+\s*년)?\s*(?:\d+\s*개월)?)", t)
+    if m and m.group(1).strip():
+        notes.append("근무기간 " + m.group(1).replace(" ", ""))
+    if re.search(r"정규직\s*전환", t):
+        notes.append("정규직 전환 가능")
+    if not types:
+        return t[:100]                                           # 모르는 표기는 그대로
+    return ", ".join(types) + (f" ({' · '.join(notes)})" if notes else "")
+
+
 def to_date(value) -> str | None:
     """unix 초, 'YYYY-MM-DD', 'YYYYMMDD', 'YY-MM-DD', '2026.10.31' 등을 'YYYY-MM-DD' 로. 상시·채용시는 None."""
     if value in (None, ""):
