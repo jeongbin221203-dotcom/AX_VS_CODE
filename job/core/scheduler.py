@@ -35,7 +35,7 @@ def _loop() -> None:
         try:
             # 자동 수집을 꺼 두어도 마감된 미저장 공고는 한 시간마다 지운다
             if time.monotonic() - last_purge >= PURGE_SECONDS:
-                n = postings.purge_closed()
+                n = postings.purge_closed() + postings.purge_stale()
                 last_purge = time.monotonic()
                 if n:
                     log.info("마감된 미저장 공고 %d건 삭제", n)

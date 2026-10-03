@@ -70,6 +70,26 @@ CREATE TABLE IF NOT EXISTS application_events (
     created_at  TEXT NOT NULL
 );
 
+-- 아직 상세를 읽지 않은 공고 번호 (목록에서 찾음). 실행이 끝나도 남아 다음 실행이 이어 읽는다.
+-- seq 가 작을수록 먼저 — 새로 찾은 묶음이 앞에 온다 (새 공고 먼저, 밀린 공고는 뒤에)
+CREATE TABLE IF NOT EXISTS crawl_queue (
+    site      TEXT NOT NULL,
+    post_id   TEXT NOT NULL,
+    seq       INTEGER NOT NULL,
+    hint      TEXT,                          -- 목록에서 읽은 근무지·경력·직무 (JSON)
+    added_at  TEXT NOT NULL,
+    PRIMARY KEY (site, post_id)
+);
+CREATE INDEX IF NOT EXISTS idx_queue_seq ON crawl_queue(site, seq);
+
+-- 목록에서 처음 본 시각 — '하루 새 공고 수(실측)'를 센다
+CREATE TABLE IF NOT EXISTS list_seen (
+    site        TEXT NOT NULL,
+    post_id     TEXT NOT NULL,
+    first_seen  TEXT NOT NULL,
+    PRIMARY KEY (site, post_id)
+);
+
 -- 사이트맵으로 전체를 따라가는 사이트(리멤버)의 공고 번호 목록. 새로 생긴 번호만 상세를 읽는다
 CREATE TABLE IF NOT EXISTS sitemap_ids (
     site        TEXT NOT NULL,
@@ -121,6 +141,15 @@ def _migrate(con: sqlite3.Connection) -> None:
         con.execute("ALTER TABLE postings ADD COLUMN saved INTEGER NOT NULL DEFAULT 0")
     if "company_info" not in cols:
         con.execute("ALTER TABLE postings ADD COLUMN company_info TEXT")
+    for col, typ in (("fit_score", "INTEGER NOT NULL DEFAULT 0"), ("fit_ok", "INTEGER NOT NULL DEFAULT 1"),
+                     ("fit_excl", "INTEGER NOT NULL DEFAULT 0"), ("grp", "TEXT"), ("subgrp", "TEXT")):
+        if col not in cols:
+            con.execute(f"ALTER TABLE postings ADD COLUMN {col} {typ}")
+    con.executescript("""
+        CREATE INDEX IF NOT EXISTS idx_postings_list ON postings(hidden, fit_excl, deadline, fit_score);
+        CREATE INDEX IF NOT EXISTS idx_postings_fetched ON postings(fetched_at);
+        CREATE INDEX IF NOT EXISTS idx_postings_src ON postings(source, source_id);
+    """)
 
 
 @contextmanager

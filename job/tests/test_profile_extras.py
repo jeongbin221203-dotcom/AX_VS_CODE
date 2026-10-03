@@ -106,3 +106,14 @@ def test_exclude_preset_name_in_text_box(client):
     """글칸에 '파견·도급'을 적어도 '파견'·'도급' 으로 쪼개지 않고 항목으로 저장한다."""
     client.post("/profile", data={"career_type": "모두", "education": "무관", "exclude": "파견·도급, 강사, 컴퓨터 수리"})
     assert profile.load()["exclude"] == ["파견·도급", "강사", "컴퓨터 수리"]
+
+
+def test_exclude_contract_only():
+    from core import exclude
+    def ex(emp, title="사무 담당"):
+        return exclude.matches({"title": title, "employment_type": emp}, ["계약직"]) == ["계약직"]
+    assert ex("계약직") and ex("계약직, 계약직") and ex("인턴, 계약직") and ex("계약직 (정규직 전환 가능)")
+    assert ex("정규직·기간제") is False and ex("정규직, 계약직") is False and ex("계약직, 정규직") is False
+    assert ex("정규직") is False and ex("정규직 수습기간 3개월") is False
+    assert ex(None, "경리 계약직(육아휴직 대체근무자)") and not ex(None, "[정규직/계약직] 사무원")
+    assert ex("정규직", "시장조사 (1년 계약직)") is False                    # 고용형태에 정규직이 있으면 그쪽을 믿음

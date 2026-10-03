@@ -23,6 +23,8 @@ def create_app(test_config: dict | None = None) -> Flask:
         app.config.update(test_config)
 
     db.configure(app.config["DB_PATH"])
+    from core import postings
+    postings.recompute_missing()          # 미리 계산하는 점수·직무 열을 새로 더한 뒤 처음 켤 때
     register_blueprints(app)
     register_template_helpers(app)
 

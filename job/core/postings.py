@@ -87,6 +87,15 @@ def keep_existing(item: dict) -> dict:
 
 
 def upsert_many(items: list[dict]) -> tuple[int, int]:
+    """저장하고, 저장한 공고의 점수·직무를 바로 계산해 둔다."""
+    ins, upd = _upsert(items)
+    ids = [i for i in (find_id(it["source"], it["source_id"]) for it in items) if i]
+    if ids:
+        recompute(ids)
+    return ins, upd
+
+
+def _upsert(items: list[dict]) -> tuple[int, int]:
     """(새로 넣은 수, 갱신한 수). 회사 평균연봉을 직접 입력해 둔 값은 비어 있는 값으로 덮지 않는다."""
     inserted = updated = 0
     now = db.now()
@@ -136,6 +145,19 @@ def purge_closed(today: date | None = None) -> int:
             "AND id NOT IN (SELECT posting_id FROM applications)", (today_s,)).rowcount
 
 
+STALE_DAYS = 60
+
+
+def purge_stale(days: int = STALE_DAYS) -> int:
+    """마감일 없는(상시) 공고 중 처음 받은 지 오래된 것 — 저장·지원 기록이 없으면 지운다 (데이터가 끝없이 늘지 않게)."""
+    from datetime import datetime
+    cutoff = (datetime.now() - timedelta(days=days)).strftime("%Y-%m-%d %H:%M:%S")
+    with db.connect() as con:
+        return con.execute(
+            "DELETE FROM postings WHERE deadline IS NULL AND saved = 0 AND fetched_at < ? "
+            "AND id NOT IN (SELECT posting_id FROM applications)", (cutoff,)).rowcount
+
+
 def mark_closed(pid: int) -> None:
     """원문이 사라진 공고: 마감일을 어제로 둔다 (지원 기록은 남김)."""
     yesterday = (date.today() - timedelta(days=1)).isoformat()
@@ -179,80 +201,173 @@ def all_rows(include_hidden: bool = False) -> list[dict]:
         return [dict(r) for r in con.execute(sql + " ORDER BY p.id DESC")]
 
 
-def search(prof: dict, f: dict, today: date | None = None, facets: dict | None = None) -> list[dict]:
-    """필터·정렬한 공고 목록. 각 행에 'fit'(FitResult), 'dday' 를 붙인다.
-    facets 를 넘기면 다른 조건을 통과한 공고로 직무·세부 직무별 건수를 채운다 (선택칸 옆 숫자)."""
+def fit_fields(p: dict, prof: dict) -> tuple[int, int, int, str, str]:
+    """공고마다 미리 계산해 두는 값: (점수, 지원 가능, 제외 항목 걸림, 직무들, 세부 직무들).
+    '지원 가능'에서 마감 여부는 빼고 저장한다 — 마감은 날짜가 지나며 바뀌므로 조회할 때 deadline 으로 따로 거른다."""
+    r = fit.evaluate(p, prof, date(2000, 1, 1))                 # 마감 판단이 끼지 않는 날짜
+    ok = 0 if r.blockers else 1
+    groups = sorted(jobgroups.groups_of(p))
+    subs = sorted(f"{g}/{s}" for g in groups for s in jobgroups.subs_of(p, g))
+    return r.score, ok, 1 if r.excluded else 0, "|" + "|".join(groups) + "|", "|" + "|".join(subs) + "|"
+
+
+def recompute(ids: list[int] | None = None, prof: dict | None = None) -> int:
+    """미리 계산한 점수·직무를 다시 계산한다. ids 가 없으면 전부 (내 조건을 바꿨을 때, 수집이 끝났을 때)."""
+    from . import profile as profile_mod
+    prof = prof or profile_mod.load()
+    sql = _SELECT + (" WHERE p.id IN (%s)" % ",".join("?" * len(ids)) if ids else "")
+    with db.connect() as con:
+        rows = [dict(r) for r in con.execute(sql, ids or [])]
+        con.executemany("UPDATE postings SET fit_score = ?, fit_ok = ?, fit_excl = ?, grp = ?, subgrp = ? WHERE id = ?",
+                        [(*fit_fields(r, prof), r["id"]) for r in rows])
+    return len(rows)
+
+
+def recompute_missing() -> int:
+    """아직 점수·직무를 계산하지 않은 공고 (열을 새로 더한 뒤 처음 켤 때)."""
+    with db.connect() as con:
+        ids = [r[0] for r in con.execute("SELECT id FROM postings WHERE grp IS NULL")]
+    return recompute(ids) if ids else 0
+
+
+_SORTS = {
+    "fit": "p.fit_score DESC, p.deadline IS NULL, p.deadline",
+    "salary": "COALESCE((p.salary_min + p.salary_max) / 2, p.salary_min, p.salary_max) IS NULL, "
+              "COALESCE((p.salary_min + p.salary_max) / 2, p.salary_min, p.salary_max) DESC",
+    "deadline": "p.deadline IS NULL, p.deadline",
+    "new": "p.posted_at IS NULL, p.posted_at DESC, p.id DESC",
+}
+_CAREER_IN = {"신입": ("신입", "신입·경력", "무관"), "경력": ("경력", "신입·경력", "무관"), "무관": ("무관",)}
+
+
+def _where(f: dict, today: date, *, group: bool = True, excluded: bool = True) -> tuple[list[str], list]:
+    """목록 조건 → SQL. group/excluded=False 는 선택칸 옆 건수(직무별·제외 건수)를 셀 때 그 조건만 빼려고."""
+    w, a = [], []
+    w.append("p.hidden = 1" if f.get("hidden") == "1" else "p.hidden = 0")
+    if f.get("saved") == "1":
+        w.append("p.saved = 1")
+    elif f.get("show_closed") != "1":
+        w.append("(p.deadline IS NULL OR p.deadline >= ?)")
+        a.append(today.isoformat())
+    if f.get("new") == "1":
+        w.append("p.fetched_at > ?")
+        a.append(f.get("_seen") or seen_at())
+    q = (f.get("q") or "").strip()
+    if q:
+        w.append("LOWER(p.title || ' ' || p.company || ' ' || COALESCE(p.keywords, '') || ' ' || "
+                 "COALESCE(p.job_category, '')) LIKE ?")
+        a.append(f"%{q.lower()}%")
+    if f.get("sido"):
+        if f["sido"] == "미상":                                     # 근무지를 못 읽은 공고
+            w.append("p.sido IS NULL")
+        else:
+            w.append("p.sido = ?")
+            a.append(f["sido"])
+    if f.get("career") in _CAREER_IN:
+        kinds = _CAREER_IN[f["career"]]
+        w.append(f"COALESCE(p.career_type, '무관') IN ({','.join('?' * len(kinds))})")
+        a += list(kinds)
+    if f.get("source"):
+        w.append("p.source = ?")
+        a.append(f["source"])
+    min_sal = _int(f.get("min_salary"))
+    if min_sal:
+        w.append("COALESCE(p.salary_max, p.salary_min, 0) >= ?")
+        a.append(min_sal)
+    if f.get("salary_known") == "1":
+        w.append("(p.salary_min IS NOT NULL OR p.salary_max IS NOT NULL)")
+    if f.get("eligible") == "1":
+        w.append("p.fit_ok = 1")
+    min_fit = _int(f.get("min_fit"))
+    if min_fit:
+        w.append("p.fit_score >= ?")
+        a.append(min_fit)
+    if excluded and f.get("show_excluded") != "1":
+        w.append("p.fit_excl = 0")
+    if group and f.get("category"):
+        w.append("p.grp LIKE ?")
+        a.append(f"%|{f['category']}|%")
+        subs = _subs(f)
+        if subs:
+            w.append("(" + " OR ".join("p.subgrp LIKE ?" for _ in subs) + ")")
+            a += [f"%|{f['category']}/{s}|%" for s in subs]
+    return w, a
+
+
+def _subs(f: dict) -> list[str]:
+    raw = f.get("sub") or []
+    return [x for x in ([raw] if isinstance(raw, str) else raw) if x]
+
+
+def _count(where: list[str], args: list) -> int:
+    with db.connect() as con:
+        return con.execute("SELECT COUNT(*) FROM postings p WHERE " + " AND ".join(where), args).fetchone()[0]
+
+
+def query(prof: dict, f: dict, today: date | None = None, page: int = 1, per: int | None = 30,
+          facets: dict | None = None) -> tuple[list[dict], int]:
+    """조건에 맞는 공고 (한 쪽 분량)와 전체 건수. 화면에 보일 행만 적합성 이유를 자세히 계산한다."""
     today = today or date.today()
-    rows = all_rows(include_hidden=f.get("hidden") == "1")
-    q = (f.get("q") or "").strip().lower()
-    group = f.get("category") or ""
-    raw_subs = f.get("sub") or []
-    subs = [x for x in ([raw_subs] if isinstance(raw_subs, str) else raw_subs) if x]
-    saved_only = f.get("saved") == "1"
-    if facets is not None:
-        facets.update({"groups": {}, "subs": {}})
-    out = []
+    where, args = _where(f, today)
+    total = _count(where, args)
+    order = _SORTS.get(f.get("sort") or "fit", _SORTS["fit"])
+    sql = _SELECT + " WHERE " + " AND ".join(where) + f" ORDER BY {order}, p.id DESC"
+    if per:
+        sql += f" LIMIT {int(per)} OFFSET {max(0, (page - 1) * int(per))}"
+    with db.connect() as con:
+        rows = [dict(r) for r in con.execute(sql, args)]
     for p in rows:
-        if f.get("hidden") == "1" and not p["hidden"]:
-            continue
-        if saved_only and not p["saved"]:
-            continue
-        if f.get("new") == "1" and not is_new(p, f.get("_seen") or seen_at()):
-            continue
-        if q and q not in " ".join(str(p.get(k) or "") for k in
-                                   ("title", "company", "keywords", "job_category")).lower():
-            continue
-        if f.get("sido") and (p["sido"] or "미상") != f["sido"]:      # 미상 = 근무지를 못 읽은 공고
-            continue
-        if f.get("career") and not _career_match(p["career_type"], f["career"]):
-            continue
-        if f.get("source") and p["source"] != f["source"]:
-            continue
-        min_sal = _int(f.get("min_salary"))
-        if min_sal and (p["salary_max"] or p["salary_min"] or 0) < min_sal:
-            continue
-        if f.get("salary_known") == "1" and not (p["salary_min"] or p["salary_max"]):
-            continue
-        if not saved_only and f.get("show_closed") != "1" and p["deadline"] and p["deadline"] < today.isoformat():
-            continue
-        p_groups = jobgroups.groups_of(p)
-        if facets is not None:
-            for g in p_groups:
-                facets["groups"][g] = facets["groups"].get(g, 0) + 1
-        if group:
-            if group not in p_groups:
-                continue
-            p_subs = jobgroups.subs_of(p, group)
-            if facets is not None:
-                for sname in p_subs:
-                    facets["subs"][sname] = facets["subs"].get(sname, 0) + 1
-            if subs and not p_subs.intersection(subs):
-                continue
-        r = fit.evaluate(p, prof, today)
-        if r.excluded and f.get("show_excluded") != "1":
-            if facets is not None:
-                facets["excluded"] = facets.get("excluded", 0) + 1
-            continue
-        if f.get("eligible") == "1" and not r.eligible:
-            continue
-        min_fit = _int(f.get("min_fit"))
-        if min_fit and r.score < min_fit:
-            continue
-        p["fit"] = r
+        p["fit"] = fit.evaluate(p, prof, today)
         p["dday"] = (date.fromisoformat(p["deadline"]) - today).days if p["deadline"] else None
         p["salary_mid"] = salary.midpoint(p["salary_min"], p["salary_max"])
-        out.append(p)
 
-    sort = f.get("sort") or "fit"
-    if sort == "salary":
-        out.sort(key=lambda p: (p["salary_mid"] is None, -(p["salary_mid"] or 0)))
-    elif sort == "deadline":
-        out.sort(key=lambda p: (p["dday"] is None, p["dday"] if p["dday"] is not None else 0))
-    elif sort == "new":
-        out.sort(key=lambda p: (p["posted_at"] or "", p["id"]), reverse=True)
-    else:
-        out.sort(key=lambda p: (-p["fit"].score, p["dday"] if p["dday"] is not None else 9999))
+    if facets is not None:
+        # 직무·세부 직무 건수는 한 번 읽어 세어 본다 (직무마다 따로 세면 수만 건에서 느림)
+        base, base_args = _where(f, today, group=False)
+        groups: dict[str, int] = {}
+        subs: dict[str, int] = {}
+        g_sel = f.get("category") or ""
+        with db.connect() as con:
+            for grp, subgrp in con.execute("SELECT p.grp, p.subgrp FROM postings p WHERE " + " AND ".join(base),
+                                           base_args):
+                gs = (grp or "").strip("|").split("|")
+                for g in gs:
+                    if g:
+                        groups[g] = groups.get(g, 0) + 1
+                if g_sel and g_sel in gs:
+                    for gs_ in (subgrp or "").strip("|").split("|"):
+                        if gs_.startswith(g_sel + "/"):
+                            name = gs_.split("/", 1)[1]
+                            subs[name] = subs.get(name, 0) + 1
+        facets["groups"] = groups
+        facets["subs"] = subs
+        if f.get("show_excluded") != "1":
+            ex, ex_args = _where(f, today, excluded=False)
+            facets["excluded"] = _count(ex + ["p.fit_excl = 1"], ex_args)
+    return rows, total
+
+
+def open_counts(today: date | None = None) -> dict:
+    """공고 목록 기본 화면과 같은 기준(마감·제외·숨김 뺌)의 지역·출처·신입/경력별 공고 수."""
+    where, args = _where({}, today or date.today())
+    out = {"sido": {}, "source": {}, "career": {}}
+    with db.connect() as con:
+        for sido, source, career, n in con.execute(
+                "SELECT COALESCE(p.sido, '미상'), p.source, COALESCE(p.career_type, '무관'), COUNT(*) FROM postings p "
+                "WHERE " + " AND ".join(where) + " GROUP BY 1, 2, 3", args):
+            out["sido"][sido] = out["sido"].get(sido, 0) + n
+            out["source"][source] = out["source"].get(source, 0) + n
+            for want, kinds in _CAREER_IN.items():
+                if career in kinds:
+                    out["career"][want] = out["career"].get(want, 0) + n
+            if career not in _CAREER_IN:                    # 신입·경력 칸 이름 그대로도 셈
+                out["career"][career] = out["career"].get(career, 0) + n
     return out
+
+
+def search(prof: dict, f: dict, today: date | None = None, facets: dict | None = None) -> list[dict]:
+    """조건에 맞는 공고 전부 (내보내기·테스트용). 화면 목록은 query 로 한 쪽씩."""
+    return query(prof, f, today, per=None, facets=facets)[0]
 
 
 def career_match(kind: str | None, want: str) -> bool:
@@ -280,7 +395,11 @@ def _summary(values: list[int]) -> dict:
 
 def salary_stats(rows: list[dict] | None = None) -> dict:
     """공고에 적힌 연봉(범위의 가운데 값)으로 지역·경력·출처별 평균을 낸다. 미공개 공고는 평균에서 뺀다."""
-    rows = rows if rows is not None else all_rows()
+    if rows is None:                              # 필요한 열만 (본문까지 읽으면 수만 건에서 느림)
+        with db.connect() as con:
+            rows = [dict(r) for r in con.execute(
+                "SELECT sido, career_type, source, salary_min, salary_max, company_avg_salary "
+                "FROM postings WHERE hidden = 0")]
     by_region: dict[str, list[int]] = {}
     by_career: dict[str, list[int]] = {}
     by_source: dict[str, list[int]] = {}

@@ -112,6 +112,7 @@ DEFAULT = {
     "interval_hours": 4,
     "keywords": [],
     "sites": ["saramin", "jobkorea", "linkareer"],
+    "list_every_hours": 4,      # 목록 페이지 전체를 다시 읽는 주기. 그 사이 실행은 저장해 둔 대기열에서 이어 읽음
     "pages": 1,                 # 검색어·직무마다 읽을 목록 페이지 수
     "by_category": True,        # 검색어가 없을 때 사이트의 직무 분류를 하나씩 모두 돈다 (끄면 최근 등록순 목록만)
     "max_new": 30,              # 사이트마다 한 번에 새로 읽을 상세 페이지 수 (0 = 모두, 시간 예산까지)
@@ -140,6 +141,7 @@ def save_settings(data: dict) -> dict:
     merged.update({k: v for k, v in data.items() if k in DEFAULT})
     merged["interval_hours"] = min(24, max(1, int(merged["interval_hours"] or 4)))
     merged["pages"] = min(10, max(1, int(merged["pages"] or 1)))
+    merged["list_every_hours"] = min(24, max(1, int(merged["list_every_hours"] or 4)))
     merged["max_new"] = min(5000, max(0, int(merged["max_new"] or 0)))
     merged["max_refresh"] = min(200, max(0, int(merged["max_refresh"] or 0)))
     merged["sites"] = [s for s in merged["sites"] if s in LIST_SITES]
@@ -322,8 +324,9 @@ def _run(s: dict, f: Fetcher) -> dict:
     summary = {"new": 0, "updated": 0, "closed": 0, "errors": [], "sites": {}}
     keywords = s["keywords"] or [""]
     run_deadline = time.monotonic() + s["interval_hours"] * 3600 * RUN_SHARE
-    # 저장 공고 갱신·API 몫은 남겨 둔다
-    detail_deadline = run_deadline - s["max_refresh"] * max(f.delay, 0.5) * 1.5 - 120
+    # 저장 공고 갱신·API 몫은 남겨 둔다 — 이번에 실제로 다시 읽을 공고 수만큼만
+    refresh_n = len(refresh_candidates(s["max_refresh"]))
+    detail_deadline = run_deadline - refresh_n * max(f.delay, 0.5) * 1.3 - 60
 
     summary["flagged"] = collect_flags(f, s["sites"], summary["errors"])
     from . import profile as profile_mod
@@ -337,21 +340,27 @@ def _run(s: dict, f: Fetcher) -> dict:
         label = ", ".join(k for k in keywords if k) or \
             ("모든 직무(직무별)" if s["by_category"] and LIST_SITES[site].get("categories") else "모든 직무(최신순)")
         st = stats[site] = {"label": label, "listed": 0, "new": 0, "updated": 0, "errors": []}
+        skip = set().union(*(postings.flagged(site, fl) for fl in excluded_flags)) if excluded_flags else set()
         try:
-            groups, errors = collect_lists(f, site, s, keywords)
-            st["errors"] += errors
-            summary["errors"] += errors
-            ids = {i: h for g in groups.values() for i, h in g.items()}
-            st["listed"] = len(ids)
-            _fill_missing_from_list(site, ids)
-            skip = set().union(*(postings.flagged(site, fl) for fl in excluded_flags)) if excluded_flags else set()
-            new_ids = pick_round_robin(groups, lambda i: i not in skip and not postings.find_id(site, i),
-                                       s["max_new"] or UNLIMITED)
-            queues[site] = [(i, LIST_SITES[site]["detail"].format(id=i), ids[i]) for i in new_ids]
-            queues[site] += [(i, LIST_SITES[site]["detail"].format(id=i), None) for i in _needs_backfill(site)]
+            if list_due(site, s):
+                groups, errors = collect_lists(f, site, s, keywords)
+                st["errors"] += errors
+                summary["errors"] += errors
+                ids = {i: h for g in groups.values() for i, h in g.items()}
+                st["listed"] = len(ids)
+                _fill_missing_from_list(site, ids)
+                _mark_seen(site, ids)
+                order = pick_round_robin(groups, lambda i: i not in skip and not postings.find_id(site, i), UNLIMITED)
+                st["queued"] = queue_add(site, [(i, ids[i]) for i in order])
+                db.set_setting(f"list_at:{site}", _now_iso())
+            else:
+                st["label"] += " · 대기열에서 이어 읽기"
         except (SourceError, requests.RequestException) as e:
             st["errors"].append(str(e))
             summary["errors"].append(f"{site}: {e}")
+        pending = queue_load(site, skip, s["max_new"] or UNLIMITED)
+        queues[site] = [(i, LIST_SITES[site]["detail"].format(id=i), h) for i, h in pending]
+        queues[site] += [(i, LIST_SITES[site]["detail"].format(id=i), None) for i in _needs_backfill(site)]
 
     for site in s["sitemap_sites"]:
         try:
@@ -387,6 +396,8 @@ def _run(s: dict, f: Fetcher) -> dict:
                 a, b = postings.upsert_many([postings.keep_existing(item)])
                 stats[site]["new"] += a
                 stats[site]["updated"] += b
+            if site in LIST_SITES:
+                queue_done(site, post_id)
             if site in SITEMAP_SITES:
                 with db.connect() as con:
                     con.execute("UPDATE sitemap_ids SET fetched_at = ?, fetch_error = ? WHERE site = ? AND post_id = ?",
@@ -425,8 +436,9 @@ def _run(s: dict, f: Fetcher) -> dict:
                 else:
                     summary["errors"].append(f"{r['name']} API: {r['error']}")
 
-    # 마감된 공고 중 저장·지원 기록이 없는 것은 지운다
-    summary["purged"] = postings.purge_closed()
+    # 마감된 공고·60일 지난 상시 공고 중 저장·지원 기록이 없는 것은 지운다
+    summary["purged"] = postings.purge_closed() + postings.purge_stale()
+    postings.recompute()                      # 헤드헌팅 표시 등 바뀐 것을 점수·제외 여부에 반영
     summary["requests"] = f.requests
     db.set_setting("crawl_last_run", started)
     db.set_setting("crawl_last_summary", json.dumps(summary, ensure_ascii=False))
@@ -504,6 +516,44 @@ def _sitemap_remaining(site: str) -> int:
                            (site,)).fetchone()[0]
 
 
+def backlog_status() -> dict:
+    """사이트별 밀린 공고·지난 실행 처리 수·하루 새 공고 수(실측)·예상 완료 시각."""
+    s = load_settings()
+    last = json.loads(db.get_setting("crawl_last_summary") or "{}")
+    since = (datetime.now() - timedelta(hours=24)).strftime("%Y-%m-%d %H:%M:%S")
+    rows, total_left, total_rate = [], 0, 0
+    with db.connect() as con:
+        for site in list(s["sites"]) + list(s["sitemap_sites"]):
+            if site in SITEMAP_SITES:
+                left = con.execute("SELECT COUNT(*) FROM sitemap_ids WHERE site = ? AND gone = 0 AND fetched_at IS NULL",
+                                   (site,)).fetchone()[0]
+                first = con.execute("SELECT MIN(first_seen) FROM sitemap_ids WHERE site = ?", (site,)).fetchone()[0]
+                base = (datetime.fromisoformat(first) + timedelta(hours=1)).isoformat() if first else since
+                new_day = con.execute("SELECT COUNT(*) FROM sitemap_ids WHERE site = ? AND first_seen > ? AND first_seen > ?",
+                                      (site, since.replace(" ", "T"), base)).fetchone()[0]
+                backfill = 0
+            else:
+                left = con.execute("SELECT COUNT(*) FROM crawl_queue WHERE site = ?", (site,)).fetchone()[0]
+                first = db.get_setting(f"list_first:{site}")
+                base = (datetime.strptime(first, "%Y-%m-%d %H:%M:%S") + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S")                     if first else "9999"
+                new_day = con.execute("SELECT COUNT(*) FROM list_seen WHERE site = ? AND first_seen > ? AND first_seen > ?",
+                                      (site, since, base)).fetchone()[0]
+                backfill = con.execute(
+                    "SELECT COUNT(*) FROM postings WHERE source = ? AND company_info IS NULL AND hidden = 0 "
+                    "AND (deadline IS NULL OR deadline >= ?)", (site, date.today().isoformat())).fetchone()[0]                     if site in ("saramin", "jobkorea") else 0
+            done = (last.get("sites", {}).get(site) or {}).get("fetched", 0)
+            rows.append({"site": site, "name": linkimport.SITES[site][0], "left": left, "backfill": backfill,
+                         "last_fetched": done, "new_day": new_day,
+                         "list_at": (db.get_setting(f"list_at:{site}") or "")[:16].replace("T", " ") or None})
+            total_left += left + backfill
+            total_rate += done
+    eta = None
+    if total_left and total_rate:
+        eta = (datetime.now() + timedelta(hours=s["interval_hours"] * total_left / total_rate)).strftime("%m-%d %H:%M")
+    return {"sites": rows, "left": total_left, "per_run": total_rate, "eta": eta,
+            "per_hour": round(total_rate / max(s["interval_hours"], 1))}
+
+
 def sitemap_progress() -> list[dict]:
     s = load_settings()
     out = []
@@ -522,6 +572,62 @@ def sitemap_progress() -> list[dict]:
                         "total": total, "fetched": fetched, "errors": row["errors"] or 0, "remaining": remaining,
                         "eta_hours": runs * s["interval_hours"] if runs else 0})
     return out
+
+
+# ── 대기열 (아직 상세를 읽지 않은 공고 번호) ──────────────────
+
+def list_due(site: str, s: dict) -> bool:
+    """목록 전체를 다시 읽을 때인가: 처음이거나, 주기가 지났거나, 대기열이 비었을 때."""
+    last = db.get_setting(f"list_at:{site}")
+    if not last:
+        return True
+    if datetime.now() >= datetime.fromisoformat(last) + timedelta(hours=s.get("list_every_hours", 4)):
+        return True
+    with db.connect() as con:
+        return con.execute("SELECT COUNT(*) FROM crawl_queue WHERE site = ?", (site,)).fetchone()[0] == 0
+
+
+def queue_add(site: str, items: list[tuple[str, dict]]) -> int:
+    """새로 찾은 공고를 대기열 맨 앞에 (주어진 순서 그대로). 이미 있거나 저장된 공고는 뺀다. 넣은 수."""
+    with db.connect() as con:
+        have = {r[0] for r in con.execute("SELECT post_id FROM crawl_queue WHERE site = ?", (site,))}
+        fresh = [(i, h) for i, h in items if i not in have]
+        if not fresh:
+            return 0
+        low = con.execute("SELECT COALESCE(MIN(seq), 0) FROM crawl_queue WHERE site = ?", (site,)).fetchone()[0]
+        start = low - len(fresh)
+        now = db.now()
+        con.executemany("INSERT INTO crawl_queue(site, post_id, seq, hint, added_at) VALUES(?, ?, ?, ?, ?)",
+                        [(site, i, start + n, json.dumps(h or {}, ensure_ascii=False), now)
+                         for n, (i, h) in enumerate(fresh)])
+    return len(fresh)
+
+
+def queue_load(site: str, skip: set[str], limit: int) -> list[tuple[str, dict]]:
+    """대기열에서 읽을 순서대로. 그사이 저장된 공고는 대기열에서 지운다."""
+    with db.connect() as con:
+        rows = con.execute("SELECT post_id, hint FROM crawl_queue WHERE site = ? ORDER BY seq", (site,)).fetchall()
+        saved = {r[0] for r in con.execute("SELECT source_id FROM postings WHERE source = ?", (site,))}
+        stale = [(site, r[0]) for r in rows if r[0] in saved]
+        if stale:
+            con.executemany("DELETE FROM crawl_queue WHERE site = ? AND post_id = ?", stale)
+    out = [(r[0], json.loads(r[1] or "{}")) for r in rows if r[0] not in saved and r[0] not in skip]
+    return out[:limit]
+
+
+def queue_done(site: str, post_id: str) -> None:
+    with db.connect() as con:
+        con.execute("DELETE FROM crawl_queue WHERE site = ? AND post_id = ?", (site, post_id))
+
+
+def _mark_seen(site: str, ids) -> None:
+    """목록에서 처음 본 시각을 남긴다 — 하루 새 공고 수(실측)."""
+    now = db.now()
+    with db.connect() as con:
+        con.executemany("INSERT OR IGNORE INTO list_seen(site, post_id, first_seen) VALUES(?, ?, ?)",
+                        [(site, i, now) for i in ids])
+    if not db.get_setting(f"list_first:{site}"):
+        db.set_setting(f"list_first:{site}", now)
 
 
 def collect_flags(f: Fetcher, sites: list[str], errors: list[str]) -> dict:
@@ -667,18 +773,28 @@ def _apply_hint(item: dict, hint: dict) -> dict:
     return item
 
 
-def refresh(f: Fetcher, limit: int) -> tuple[int, int, list[str]]:
-    """저장한 공고 중 마감 전인 것을 오래된 순으로 다시 읽는다. (갱신 수, 마감 처리 수, 오류)."""
+def refresh_candidates(limit: int) -> list[dict]:
+    """다시 읽을 공고: 저장·지원한 공고는 하루에 한 번, 마감일 없는(상시) 공고는 일주일에 한 번.
+    나머지는 마감일로 저절로 정리되므로 다시 읽지 않는다 (수만 건을 매일 읽을 수 없음)."""
     if limit <= 0:
-        return 0, 0, []
+        return []
     today = date.today().isoformat()
-    cutoff = (datetime.now() - timedelta(hours=20)).strftime("%Y-%m-%d %H:%M:%S")
+    day = (datetime.now() - timedelta(hours=20)).strftime("%Y-%m-%d %H:%M:%S")
+    week = (datetime.now() - timedelta(days=7)).strftime("%Y-%m-%d %H:%M:%S")
     marks = ",".join("?" * len(REFRESH_SITES))
     with db.connect() as con:
-        rows = [dict(r) for r in con.execute(
+        return [dict(r) for r in con.execute(
             f"SELECT * FROM postings WHERE source IN ({marks}) AND url IS NOT NULL AND hidden = 0 "
-            "AND (deadline IS NULL OR deadline >= ?) AND updated_at < ? ORDER BY updated_at LIMIT ?",
-            (*REFRESH_SITES, today, cutoff, limit))]
+            "AND (deadline IS NULL OR deadline >= ?) AND ("
+            "  ((saved = 1 OR id IN (SELECT posting_id FROM applications)) AND updated_at < ?)"
+            "  OR (deadline IS NULL AND updated_at < ?)"
+            ") ORDER BY saved DESC, updated_at LIMIT ?",
+            (*REFRESH_SITES, today, day, week, limit))]
+
+
+def refresh(f: Fetcher, limit: int) -> tuple[int, int, list[str]]:
+    """refresh_candidates 를 다시 읽어 갱신하고, 사라진 공고(404·410)는 마감 처리. (갱신 수, 마감 처리 수, 오류)."""
+    rows = refresh_candidates(limit)
     updated = closed = 0
     errors: list[str] = []
     for row in rows:

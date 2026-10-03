@@ -41,6 +41,8 @@ def save(data: dict) -> dict:
     merged = dict(DEFAULT)
     merged.update({k: v for k, v in data.items() if k in DEFAULT})
     db.set_setting("profile", json.dumps(merged, ensure_ascii=False))
+    from . import postings                  # 점수·제외 여부를 새 조건으로 다시 계산
+    postings.recompute(prof=merged)
     return merged
 
 

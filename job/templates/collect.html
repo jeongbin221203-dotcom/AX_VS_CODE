@@ -44,6 +44,23 @@
     <br>시간 예산에서 멈춤 — 남은 새 공고 <b>{{ '{:,}'.format(left) }}</b>건은 다음 실행에서 이어 읽습니다.{% endif %}
     {% if sm.errors %}<br><span class="err-text">{{ sm.errors[:3] | join(' / ') }}</span>{% endif %}</p>
   {% endif %}
+  <div class="scroll-x">
+  <table class="tbl compact">
+    <tr><th>사이트</th><th class="r">밀린 공고</th><th class="r">상세 보충 대기</th><th class="r">지난 실행 처리</th>
+        <th class="r">하루 새 공고(실측)</th><th>목록 읽은 시각</th></tr>
+    {% for b in backlog.sites %}
+    <tr><td>{{ b.name }}</td><td class="r">{{ '{:,}'.format(b.left) }}</td><td class="r">{{ '{:,}'.format(b.backfill) if b.backfill else '-' }}</td>
+        <td class="r">{{ b.last_fetched }}</td><td class="r">{{ '{:,}'.format(b.new_day) if b.new_day else '-' }}</td>
+        <td class="small">{{ b.list_at or '-' }}</td></tr>
+    {% endfor %}
+  </table>
+  </div>
+  <p class="small">
+    {% if backlog.left %}밀린 공고 합계 <b>{{ '{:,}'.format(backlog.left) }}</b>건 · 실행당 약 {{ backlog.per_run }}건(시간당 약 {{ backlog.per_hour }}건)
+      {% if backlog.eta %}· 지금 속도면 <b>{{ backlog.eta }}</b>쯤 모두 읽음{% endif %}
+    {% else %}밀린 공고 없음 — 새로 올라오는 공고만 따라 읽습니다.{% endif %}
+    <br><span class="muted">하루 새 공고(실측)는 처음 목록을 다 읽은 뒤부터 새로 나타난 공고 수입니다. 처음 하루는 비어 있을 수 있습니다.</span>
+  </p>
   <form method="post" action="{{ url_for('collect.crawl_settings') }}" class="stack">
     <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
     <div class="row">
@@ -75,6 +92,7 @@
     </div>
     {% endfor %}
     <div class="row">
+      <label class="inl">목록 다시 읽기 <input type="number" name="list_every_hours" min="1" max="24" value="{{ crawl.list_every_hours }}"> 시간마다</label>
       <label class="inl">목록 <input type="number" name="pages" min="1" max="10" value="{{ crawl.pages }}"> 페이지</label>
       <label class="inl">사이트당 새 공고 최대 <input type="number" name="max_new" min="0" max="5000" value="{{ crawl.max_new }}"> <small class="muted">(0 = 모두)</small></label>
       <label class="inl">저장 공고 갱신 최대 <input type="number" name="max_refresh" min="0" max="200" value="{{ crawl.max_refresh }}"></label>

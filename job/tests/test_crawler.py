@@ -166,7 +166,7 @@ def test_due_lock_and_settings(app):
 
 
 def test_refresh_updates_and_closes(app):
-    old = (datetime.now() - timedelta(days=2)).strftime("%Y-%m-%d %H:%M:%S")
+    old = (datetime.now() - timedelta(days=8)).strftime("%Y-%m-%d %H:%M:%S")     # 상시 공고는 일주일마다
     url_ok = "https://career.rememberapp.co.kr/job/posting/7"
     url_gone = "https://career.rememberapp.co.kr/job/posting/8"
     postings.upsert_many([
@@ -409,3 +409,57 @@ def test_backfill_saramin_without_details(app):
     assert d.format(id=500) in f.seen and d.format(id=501) not in f.seen
     row = postings.get(postings.find_id("saramin", "500"))
     assert row["company_info"] and row["title"] == "각 부문별 직원 채용" and row["job_category"] == "생산"
+
+
+
+def test_refresh_targets_saved_daily_and_open_weekly(app):
+    """다시 읽기: 저장한 공고는 하루마다, 상시 공고는 일주일마다, 마감일 있는 미저장 공고는 안 읽음."""
+    two_days = (datetime.now() - timedelta(days=2)).strftime("%Y-%m-%d %H:%M:%S")
+    u = "https://career.rememberapp.co.kr/job/posting/{}"
+    postings.upsert_many([
+        postings.build("remember", "1", title="저장", company="c", url=u.format(1), deadline="2099-12-31"),
+        postings.build("remember", "2", title="마감일 있음", company="c", url=u.format(2), deadline="2099-12-31"),
+        postings.build("remember", "3", title="상시 이틀 전", company="c", url=u.format(3))])
+    postings.set_saved(postings.find_id("remember", "1"), True)
+    with db.connect() as con:
+        con.execute("UPDATE postings SET updated_at = ?", (two_days,))
+    assert [r["source_id"] for r in crawler.refresh_candidates(10)] == ["1"]
+
+
+def test_queue_persists_between_runs(app, monkeypatch):
+    """목록은 주기마다만 읽고, 못 다 읽은 공고는 대기열에 남아 다음 실행이 이어 읽는다."""
+    _settings(keywords=["자재관리"], sites=["saramin", "jobkorea"], max_new=0)
+    pages, sd, jd = _two_site_pages()
+    monkeypatch.setattr(crawler, "RUN_SHARE", 0)                     # 1회차: 목록만 읽고 시간 끝
+    crawler.run_once(force=True, fetcher=FakeFetcher(pages))
+    with db.connect() as con:
+        assert con.execute("SELECT COUNT(*) FROM crawl_queue").fetchone()[0] == 5
+    monkeypatch.setattr(crawler, "RUN_SHARE", 0.85)                  # 2회차: 목록은 안 읽고 대기열에서
+    f = FakeFetcher(pages)
+    result = crawler.run_once(force=True, fetcher=f)
+    assert result["new"] == 5
+    assert not any("search" in u.lower() or "Search" in u for u in f.seen)
+    with db.connect() as con:
+        assert con.execute("SELECT COUNT(*) FROM crawl_queue").fetchone()[0] == 0
+    st = crawler.backlog_status()
+    assert sum(b["left"] for b in st["sites"]) == 0 and {b["site"] for b in st["sites"]} == {"saramin", "jobkorea"}
+    assert st["left"] == 5                     # 시험용 페이지엔 기업정보가 없어 5건이 '상세 보충 대기'로 남음
+
+
+def test_new_list_items_go_to_front(app):
+    crawler.queue_add("saramin", [("1", {}), ("2", {})])
+    crawler.queue_add("saramin", [("9", {"location": "서울"}), ("2", {})])       # 2 는 이미 있음
+    assert [i for i, _ in crawler.queue_load("saramin", set(), 10)] == ["9", "1", "2"]
+    assert crawler.queue_load("saramin", {"1"}, 10)[0] == ("9", {"location": "서울"})
+
+
+def test_purge_stale_open_postings(app):
+    old = (datetime.now() - timedelta(days=70)).strftime("%Y-%m-%d %H:%M:%S")
+    postings.upsert_many([postings.build("saramin", "a", title="오래된 상시", company="c"),
+                          postings.build("saramin", "b", title="오래된 상시 저장", company="c"),
+                          postings.build("saramin", "c", title="새 상시", company="c")])
+    postings.set_saved(postings.find_id("saramin", "b"), True)
+    with db.connect() as con:
+        con.execute("UPDATE postings SET fetched_at = ? WHERE source_id IN ('a', 'b')", (old,))
+    assert postings.purge_stale() == 1
+    assert {r["source_id"] for r in postings.all_rows()} == {"b", "c"}

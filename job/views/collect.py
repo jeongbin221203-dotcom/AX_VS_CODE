@@ -24,7 +24,7 @@ def _page(results):
                            methods=SITE_METHODS, link_sites=[n for n, _ in linkimport.SITES.values()],
                            crawl=crawler.load_settings(), crawl_status=crawler.status(),
                            crawl_sites=[(k, linkimport.SITES[k][0]) for k in crawler.LIST_SITES],
-                           sitemap_progress=crawler.sitemap_progress())
+                           sitemap_progress=crawler.sitemap_progress(), backlog=crawler.backlog_status())
 
 
 @bp.post("/crawl")
@@ -37,6 +37,7 @@ def crawl_settings():
         "keywords": keywords,
         "sites": form.getlist("sites"),
         "pages": form.get("pages", 1, type=int),
+        "list_every_hours": form.get("list_every_hours", 4, type=int),
         "by_category": form.get("by_category") == "1",
         "max_new": form.get("max_new", 30, type=int),
         "max_refresh": form.get("max_refresh", 30, type=int),
