@@ -9,7 +9,7 @@ import logging
 import threading
 import time
 
-from . import crawler, postings
+from . import crawler, postings, power
 
 log = logging.getLogger("job.scheduler")
 _started = False
@@ -36,6 +36,15 @@ def _sync() -> None:
         log.info("Render 동기화 %s", r)
 
 
+def _should_stay_awake() -> bool:
+    s = crawler.load_settings()
+    if not s["enabled"]:
+        return False
+    if crawler.due():
+        return True                                   # 이번 확인에서 바로 실행됨
+    return crawler.backlog_status()["left"] > 0       # 밀린 공고가 있으면 다음 실행까지 깨어 있게
+
+
 def _loop() -> None:
     stop = threading.Event()
     last_purge = 0.0
@@ -48,6 +57,11 @@ def _loop() -> None:
                 last_purge = time.monotonic()
                 if n:
                     log.info("마감된 미저장 공고 %d건 삭제", n)
+            # 수집 중이거나(곧 실행될 때 포함) 밀린 공고가 남아 있으면 PC 가 잠들지 않게, 아니면 원래 절전 설정대로
+            awake = _should_stay_awake()
+            if power.keep_awake(awake):
+                from . import db
+                db.set_setting("keep_awake", "1" if awake else "0")       # 수집 현황 화면에 보여 줌
             if crawler.run_once() is not None or time.monotonic() - last_sync >= SYNC_SECONDS:
                 _sync()
                 last_sync = time.monotonic()
@@ -67,6 +81,13 @@ def run_now() -> bool:
 
 def _safe_run() -> None:
     try:
+        if power.keep_awake(True):                     # '지금 실행'도 끝날 때까지 잠들지 않게
+            from . import db
+            db.set_setting("keep_awake", "1")
         crawler.run_once(force=True)
     except Exception:
         log.exception("수동 크롤링 실패")
+    finally:
+        power.keep_awake(False)
+        from . import db
+        db.set_setting("keep_awake", "0")

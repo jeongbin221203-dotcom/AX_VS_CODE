@@ -15,7 +15,8 @@
       {% if p and p.running %}<span class="chip hot">실행 중</span>
       {% elif s.enabled %}<span class="chip ok">대기</span>{% else %}<span class="chip closed">꺼짐</span>{% endif %}
     </h2>
-    <span class="small muted">{{ s.interval_hours }}시간마다 · 목록은 {{ s.list_every_hours }}시간마다 · 요청 간격 {{ config.CRAWL_DELAY | int }}초</span>
+    <span class="small muted">{{ s.interval_hours }}시간마다 · 목록은 {{ s.list_every_hours }}시간마다 · 요청 간격 {{ config.CRAWL_DELAY | int }}초 ·
+      {% if o.keep_awake %}<span class="chip ok" title="수집 중이거나 밀린 공고가 남아 있어 Windows 가 잠들지 않게 하는 중">PC 잠들기 막는 중</span>{% else %}<span class="chip closed" title="원래 Windows 절전 설정대로">원래 절전 설정</span>{% endif %}</span>
   </div>
   {% if p and p.running %}
     {% set phases = ['헤드헌팅 목록', '목록 읽기', '상세 읽기', '저장 공고 다시 읽기'] %}

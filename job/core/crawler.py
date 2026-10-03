@@ -608,6 +608,7 @@ def overview() -> dict:
                                     .total_seconds() / 60)
     bl = backlog_status()
     return {"settings": s, "status": st, "progress": prog, "sites": rows, "runs": runs, "errors": errors,
+            "keep_awake": db.get_setting("keep_awake") == "1",
             "backlog": {k: bl[k] for k in ("left", "per_run", "per_hour", "eta")},
             "total": sum(r.get("n", 0) for r in rows)}
 

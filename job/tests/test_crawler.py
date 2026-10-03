@@ -481,3 +481,27 @@ def test_status_page_and_run_history(app, client):
     assert "자동수집 현황" in html and "사람인" in html and "실행 기록" in html and 'http-equiv="refresh"' in html
     data = client.get("/collect/status.json").get_json()
     assert data["sites"][0]["site"] == "saramin" and data["runs"][0]["new"] == run["new"]
+
+
+def test_stay_awake_rule(app, monkeypatch):
+    """PC 잠들기 막기: 수집이 꺼져 있으면 안 막고, 실행할 때거나 밀린 공고가 있으면 막는다."""
+    from core import scheduler
+    _settings(keywords=["자재관리"], sites=["saramin"], enabled=False)
+    assert scheduler._should_stay_awake() is False
+    _settings(keywords=["자재관리"], sites=["saramin"], enabled=True)
+    assert scheduler._should_stay_awake() is True                     # 한 번도 안 돌아 바로 실행할 때
+    db.set_setting("crawl_last_run", datetime.now().isoformat())       # 방금 돌았고
+    assert scheduler._should_stay_awake() is False                    # 밀린 공고가 없으면 원래 절전대로
+    crawler.queue_add("saramin", [("1", {})])
+    assert scheduler._should_stay_awake() is True                     # 밀린 공고가 있으면 깨어 있음
+
+
+def test_keep_awake_toggles_once():
+    import sys
+    from core import power
+    if sys.platform != "win32":
+        assert power.keep_awake(True) is False
+        return
+    assert power.keep_awake(True) is True and power.is_awake_held()
+    assert power.keep_awake(True) is False                            # 이미 막았으면 다시 부르지 않음
+    assert power.keep_awake(False) is True and not power.is_awake_held()
