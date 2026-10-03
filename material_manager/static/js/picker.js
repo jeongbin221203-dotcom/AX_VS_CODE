@@ -1,0 +1,410 @@
+/* 자재 찾기 · 바코드 스캔 · 여러 줄 입출고.
+
+   자재 찾기 (data-picker)
+   - 자재코드·이름·규격·바코드·SAP 번호의 일부를 치면 바로 목록이 뜬다(띄어 쓴 낱말은 모두 들어 있어야 함).
+     ↑↓로 고르고 Enter. 자재가 수천 개여도 서버에 매번 묻지 않는다 — 처음 한 번 받은 목록(/materials/lookup.json)에서 찾는다.
+   - USB·블루투스 바코드 스캐너는 키보드처럼 코드를 치고 Enter를 누르므로, 코드·바코드·SAP 번호가 정확히 같으면 바로 고른다.
+   - 📷: 휴대폰·태블릿 카메라로 바코드를 찍는다(브라우저가 BarcodeDetector를 지원할 때만 보인다 — 안드로이드 크롬 등, HTTPS).
+   - data-mode="select": 숨은 칸(name)에 자재 id를 넣는다. data-autosubmit-pick 이면 고르자마자 조회(입출고 화면의 자재 선택).
+     data-mode="add": 고른 자재를 'mm:pick' 이벤트로 알린다(여러 줄 입출고 — 같은 자재면 수량 +1). 카메라는 계속 찍는다.
+   - 목록은 이 브라우저에 사용자별로 보관해 두어 서버 연결이 끊겨도 찾을 수 있다.
+
+   여러 줄 입출고 (form[data-batch]) — 찍을 때마다 줄이 생기고, 같은 자재는 수량이 1씩 는다.
+   CSP 때문에 인라인 스크립트 없이 이 파일이 문서 전체에서 이벤트를 받는다(화면을 바꿔 끼워도 그대로 동작). */
+(function () {
+  "use strict";
+  const USER = document.body.dataset.user || "";
+  if (!USER) return;
+  const DEFAULT_SRC = "/materials/lookup.json";
+  const lists = {}, pending = {};
+  let items = [];                                        // 지금 쓰는 picker 의 목록 (load 가 채움)
+
+  function key(src) { return "mm-mat-lookup:" + USER + ":" + src; }
+  function cacheGet(src) { try { return JSON.parse(localStorage.getItem(key(src)) || "null"); } catch (e) { return null; } }
+  function cachePut(src, v) { try { localStorage.setItem(key(src), JSON.stringify(v)); } catch (e) { /* 저장소가 막혀도 동작 */ } }
+
+  function prepare(rows) {
+    return rows.map(function (r) {
+      const it = { id: r[0], code: r[1], name: r[2], spec: r[3] || "", unit: r[4] || "", barcode: r[5] || "",
+                   sap: r[6] || "", lot: !!r[7], price: r[8] || 0, expiry: !!r[9] };
+      it.hay = (it.code + " " + it.name + " " + it.spec + " " + it.barcode + " " + it.sap).toLowerCase();
+      it.label = "[" + it.code + "] " + it.name + (it.spec ? " (" + it.spec + ")" : "");
+      return it;
+    });
+  }
+  function srcOf(p) { return (p && p.dataset.src) || DEFAULT_SRC; }
+  // 목록은 화면(주소)마다 한 번 받는다. 서버에 닿지 않으면 이 브라우저에 보관한 목록으로 찾는다.
+  function load(p) {
+    const src = srcOf(p);
+    if (lists[src]) { items = lists[src]; return Promise.resolve(items); }
+    if (pending[src]) return pending[src];
+    pending[src] = fetch(src, { credentials: "same-origin", headers: { "X-Requested-With": "fetch" } })
+      .then(function (r) { if (!r.ok || r.redirected) throw new Error("lookup"); return r.json(); })
+      .then(function (data) { cachePut(src, data); return prepare(data.items); })
+      .catch(function () { const c = cacheGet(src); return c ? prepare(c.items) : []; })
+      .then(function (list) { lists[src] = list; items = list; delete pending[src]; return list; });
+    return pending[src];
+  }
+
+  function exact(q) {
+    const u = q.trim().toUpperCase();
+    if (!u) return null;
+    return items.find(function (it) { return it.code.toUpperCase() === u || (it.barcode && it.barcode === u) ||
+                                              (it.sap && it.sap.toUpperCase() === u); }) || null;
+  }
+  function search(q) {
+    const words = q.toLowerCase().split(/\s+/).filter(Boolean);
+    if (!words.length) return items.slice(0, 30);
+    const hit = items.filter(function (it) { return words.every(function (w) { return it.hay.indexOf(w) >= 0; }); });
+    const u = q.trim().toLowerCase();
+    hit.sort(function (a, b) {
+      const ra = a.code.toLowerCase().indexOf(u) === 0 ? 0 : 1, rb = b.code.toLowerCase().indexOf(u) === 0 ? 0 : 1;
+      return ra - rb || (a.code < b.code ? -1 : 1);
+    });
+    return hit.slice(0, 30);
+  }
+
+  function parts(p) {
+    return { q: p.querySelector(".picker-q"), list: p.querySelector(".picker-list"),
+             hidden: p.querySelector("input[type=hidden]"), mode: p.dataset.mode || "select" };
+  }
+  function show(p, found, note) {
+    const x = parts(p);
+    x.list.innerHTML = "";
+    if (note) {
+      const li = document.createElement("li");
+      li.className = "picker-note";
+      li.textContent = note;
+      x.list.appendChild(li);
+    }
+    found.forEach(function (it, i) {
+      const li = document.createElement("li");
+      li.setAttribute("role", "option");
+      li.dataset.id = it.id;
+      li.className = i === 0 ? "active" : "";
+      const code = document.createElement("strong");
+      code.textContent = it.code;
+      const rest = document.createElement("span");
+      rest.textContent = " " + it.name + (it.spec ? " · " + it.spec : "") + (it.barcode ? " · " + it.barcode : "");
+      li.appendChild(code);
+      li.appendChild(rest);
+      x.list.appendChild(li);
+    });
+    x.list.hidden = !found.length && !note;
+  }
+  function hide(p) { const l = p.querySelector(".picker-list"); if (l) l.hidden = true; }
+  function byId(id) { return items.find(function (it) { return String(it.id) === String(id); }); }
+
+  function pick(p, it) {
+    const x = parts(p);
+    hide(p);
+    if (x.mode === "add") {
+      x.q.value = "";
+      p.dispatchEvent(new CustomEvent("mm:pick", { bubbles: true, detail: it }));
+      x.q.focus();
+      return;
+    }
+    x.q.value = it.label;
+    if (x.hidden) {
+      x.hidden.value = it.id;
+      x.hidden.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+    if (p.hasAttribute("data-autosubmit-pick")) {
+      const form = p.closest("form");
+      if (window.mmNet && window.mmNet.down && form.hasAttribute("data-offline-select")) {
+        // 끊긴 동안: 화면을 다시 받지 않고 입력 폼의 자재만 바꾼다 (app.js 오프라인 입력)
+        window.mmNet.switchSelect({ name: x.hidden.name, value: String(it.id), selectedIndex: 0, options: [{ text: it.label }] });
+        return;
+      }
+      form.submit();
+    }
+  }
+  function notFound(p, q) {
+    show(p, [], "찾지 못했습니다: " + q + " — 자재 마스터의 코드·바코드를 확인하세요.");
+    p.classList.add("picker-miss");
+    setTimeout(function () { p.classList.remove("picker-miss"); }, 900);
+  }
+  function enter(p) {
+    const x = parts(p);
+    const q = x.q.value;
+    load(p).then(function () {
+      const active = x.list.hidden ? null : x.list.querySelector("li.active[data-id]");
+      const ex = exact(q);
+      if (ex) return pick(p, ex);                       // 스캐너·코드 직접 입력
+      if (active) return pick(p, byId(active.dataset.id));
+      const found = search(q);
+      if (found.length === 1) return pick(p, found[0]);
+      if (!found.length) return notFound(p, q.trim());
+      show(p, found);
+    });
+  }
+
+  document.addEventListener("input", function (e) {
+    const p = e.target.closest && e.target.closest("[data-picker]");
+    if (!p || !e.target.classList.contains("picker-q")) return;
+    const x = parts(p);
+    if (x.hidden && x.mode === "select") x.hidden.value = "";      // 글자를 바꾸면 고른 자재를 비운다
+    load(p).then(function () { show(p, search(x.q.value)); });
+  });
+  let justFocused = null;
+  document.addEventListener("mouseup", function (e) {
+    if (justFocused && e.target === justFocused) e.preventDefault();
+    justFocused = null;
+  });
+  document.addEventListener("focusin", function (e) {
+    const p = e.target.closest && e.target.closest("[data-picker]");
+    if (p && e.target.classList.contains("picker-q")) {
+      // 이미 고른 자재 이름이 들어 있으면 전체 선택 → 스캔·입력이 그 이름을 바꿔 쓴다(뒤에 붙지 않게).
+      // 마우스로 눌러 들어온 경우 뒤따르는 mouseup 이 선택을 풀지 않게 한 번 막는다.
+      if (e.target.value) {
+        justFocused = e.target;
+        setTimeout(function () { if (document.activeElement === e.target) e.target.select(); }, 0);
+      }
+      load(p).then(function () { if (document.activeElement === e.target && e.target.value === "") show(p, search("")); });
+    }
+  });
+  document.addEventListener("keydown", function (e) {
+    const p = e.target.closest && e.target.closest("[data-picker]");
+    if (!p || !e.target.classList.contains("picker-q")) return;
+    const x = parts(p);
+    if (e.key === "Enter") { e.preventDefault(); enter(p); return; }            // 폼 제출 대신 자재 고르기
+    if (e.key === "Escape") { hide(p); return; }
+    if (e.key !== "ArrowDown" && e.key !== "ArrowUp") return;
+    e.preventDefault();
+    const opts = Array.prototype.slice.call(x.list.querySelectorAll("li[data-id]"));
+    if (!opts.length) return;
+    let i = opts.findIndex(function (li) { return li.classList.contains("active"); });
+    i = e.key === "ArrowDown" ? Math.min(i + 1, opts.length - 1) : Math.max(i - 1, 0);
+    opts.forEach(function (li, j) { li.classList.toggle("active", i === j); });
+    opts[i].scrollIntoView({ block: "nearest" });
+  });
+  document.addEventListener("mousedown", function (e) {           // blur 보다 먼저 고른다
+    const li = e.target.closest && e.target.closest(".picker-list li[data-id]");
+    if (!li) return;
+    e.preventDefault();
+    const p = li.closest("[data-picker]");
+    load(p).then(function () { pick(p, byId(li.dataset.id)); });
+  });
+  document.addEventListener("focusout", function (e) {
+    const p = e.target.closest && e.target.closest("[data-picker]");
+    if (p) setTimeout(function () { if (!p.contains(document.activeElement)) hide(p); }, 150);
+  });
+  // 고르지 않고 글자만 남긴 채 제출하면 막는다 (window 단계에서 — app.js의 두 번 제출 표시보다 먼저)
+  window.addEventListener("submit", function (e) {
+    const bad = Array.prototype.find.call(e.target.querySelectorAll("[data-picker][data-mode=select]"), function (p) {
+      const x = parts(p);
+      return x.hidden && !x.hidden.value && (x.q.value.trim() || x.q.required);
+    });
+    if (bad) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      parts(bad).q.focus();
+      notFound(bad, parts(bad).q.value.trim() || "(비어 있음)");
+    }
+  }, true);
+
+  // ── 카메라 바코드 ──
+  const canScan = "BarcodeDetector" in window && navigator.mediaDevices && navigator.mediaDevices.getUserMedia;
+  if (canScan) document.documentElement.classList.add("can-scan");
+  let scanning = null;
+  function stopScan() {
+    if (!scanning) return;
+    scanning.stop = true;
+    if (scanning.stream) scanning.stream.getTracks().forEach(function (t) { t.stop(); });
+    scanning.box.remove();
+    scanning = null;
+  }
+  function startScan(p) {
+    stopScan();
+    const box = document.createElement("div");
+    box.className = "scan-overlay";
+    box.innerHTML = "<div class='scan-frame'><video playsinline muted></video><p class='scan-msg'>바코드를 화면 가운데에 비춰 주세요</p>" +
+                    "<button type='button' class='btn' data-scan-close>닫기</button></div>";
+    document.body.appendChild(box);
+    const video = box.querySelector("video"), msg = box.querySelector(".scan-msg");
+    const st = scanning = { box: box, stop: false, last: "", lastAt: 0 };
+    Promise.all([navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio: false }),
+                 window.BarcodeDetector.getSupportedFormats ? window.BarcodeDetector.getSupportedFormats() : []])
+      .then(function (r) {
+        if (st.stop) { r[0].getTracks().forEach(function (t) { t.stop(); }); return; }
+        st.stream = r[0];
+        video.srcObject = r[0];
+        video.play();
+        const detector = r[1].length ? new window.BarcodeDetector({ formats: r[1] }) : new window.BarcodeDetector();
+        const tick = function () {
+          if (st.stop) return;
+          detector.detect(video).then(function (codes) {
+            const raw = codes.length ? String(codes[0].rawValue || "").trim() : "";
+            const now = Date.now();
+            if (raw && !(raw === st.last && now - st.lastAt < 1500)) {       // 같은 상자를 계속 비추면 1.5초에 한 번
+              st.last = raw; st.lastAt = now;
+              load(p).then(function () {
+                const it = exact(raw);
+                if (!it) { msg.textContent = "등록되지 않은 바코드: " + raw; return; }
+                if (navigator.vibrate) navigator.vibrate(60);
+                if (parts(p).mode === "add") { pick(p, it); msg.textContent = "추가: " + it.label; }
+                else { stopScan(); pick(p, it); }
+              });
+            }
+          }).catch(function () { /* 프레임 하나 실패는 무시 */ }).finally(function () { setTimeout(tick, 200); });
+        };
+        tick();
+      })
+      .catch(function (err) {
+        msg.textContent = "카메라를 쓸 수 없습니다 (" + (err && err.name || "오류") + "). 브라우저의 카메라 권한을 확인하세요.";
+      });
+  }
+  document.addEventListener("click", function (e) {
+    const b = e.target.closest && e.target.closest("[data-scan]");
+    if (b) { e.preventDefault(); startScan(b.closest("[data-picker]")); return; }
+    if (e.target.closest && e.target.closest("[data-scan-close]")) stopScan();
+  });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") stopScan(); });
+
+  // ── 여러 줄 입출고 ──
+  // 찍던 줄은 이 브라우저에 사용자별로 보관한다(연결 끊김·실수로 닫음) → 다시 열면 '되살리기'. 등록에 성공하면 지운다.
+  const BKEY = "mm-batch:" + USER;
+  function money(v) { return "₩" + Math.round(v).toLocaleString("ko-KR"); }
+  function batchOf(el) { return el.closest && el.closest("form[data-batch]"); }
+  function rowsOf(form) { return Array.prototype.slice.call(form.querySelectorAll("tbody[data-lines] tr")); }
+  function val(tr, n) { return tr.querySelector("[name=" + n + "]").value; }
+  function saveBatch(form) {
+    const lines = rowsOf(form).map(function (tr) {
+      return { id: val(tr, "line_mid"), label: tr.querySelector("[data-label]").textContent,
+               unit: tr.querySelector("[data-unit]").textContent, lot_managed: tr.classList.contains("lot-line"),
+               qty: val(tr, "line_qty"), lot: val(tr, "line_lot"), exp: val(tr, "line_exp"),
+               price: val(tr, "line_price"), note: val(tr, "line_note") };
+    });
+    try {
+      if (lines.length) localStorage.setItem(BKEY, JSON.stringify({ at: Date.now(), kind: form.querySelector("[name=kind]").value,
+                                                                     lines: lines }));
+      else localStorage.removeItem(BKEY);
+    } catch (e) { /* 저장소가 막혀도 동작 */ }
+  }
+  function refresh(form) {
+    const rows = rowsOf(form);
+    let total = 0;
+    rows.forEach(function (tr, i) {
+      tr.querySelector("[data-no]").textContent = i + 1;
+      total += (parseFloat(val(tr, "line_qty")) || 0) * (parseFloat(val(tr, "line_price")) || 0);
+    });
+    const empty = form.querySelector("[data-empty]");
+    if (empty) empty.hidden = rows.length > 0;
+    const sum = form.querySelector("[data-summary]");
+    if (sum) sum.textContent = rows.length + "줄 · 합계 " + money(total);
+  }
+  function lotHint(form, tr) {
+    const lot = tr.querySelector("[name=line_lot]");
+    const isIn = form.querySelector("[name=kind]").value === "IN";
+    lot.required = tr.classList.contains("lot-line") && isIn;
+    lot.placeholder = tr.classList.contains("lot-line") ? (isIn ? "로트 (필수)" : "비우면 기한 빠른 로트부터") : "";
+  }
+  function addLine(form, d) {
+    const tpl = form.querySelector("template[data-line-tpl]");
+    const tr = tpl.content.firstElementChild.cloneNode(true);
+    tr.querySelector("[name=line_mid]").value = d.id;
+    tr.querySelector("[data-label]").textContent = d.label;
+    tr.querySelector("[data-unit]").textContent = d.unit || "";
+    ["qty", "lot", "exp", "price", "note"].forEach(function (k) {
+      if (d[k] !== undefined && d[k] !== null) tr.querySelector("[name=line_" + k + "]").value = d[k];
+    });
+    tr.classList.toggle("lot-line", !!d.lot_managed);
+    lotHint(form, tr);
+    form.querySelector("tbody[data-lines]").appendChild(tr);
+    return tr;
+  }
+  function flash(tr) { tr.classList.remove("flash"); void tr.offsetWidth; tr.classList.add("flash"); }
+  document.addEventListener("mm:pick", function (e) {
+    const form = batchOf(e.target);
+    if (!form) return;
+    const it = e.detail;
+    // 같은 자재(로트를 따로 적지 않은 줄)는 수량 +1
+    const same = rowsOf(form).find(function (tr) { return val(tr, "line_mid") === String(it.id) && !val(tr, "line_lot"); });
+    if (same) {
+      const q = same.querySelector("[name=line_qty]");
+      q.value = (parseFloat(q.value) || 0) + 1;
+      flash(same);
+    } else {
+      flash(addLine(form, { id: it.id, label: it.label, unit: it.unit, lot_managed: it.lot, qty: 1, price: it.price }));
+    }
+    refresh(form);
+    saveBatch(form);
+  });
+  document.addEventListener("input", function (e) {
+    const f = batchOf(e.target);
+    if (f && !e.target.classList.contains("picker-q")) { refresh(f); saveBatch(f); }
+  });
+  // 줄의 칸에서 Enter(스캐너가 잘못된 칸에 찍은 경우 포함)는 제출하지 않고 스캔 칸으로 돌아간다
+  document.addEventListener("keydown", function (e) {
+    const f = batchOf(e.target);
+    if (!f || e.key !== "Enter" || e.target.tagName !== "INPUT" || e.target.classList.contains("picker-q")) return;
+    e.preventDefault();
+    const q = f.querySelector("[data-picker] .picker-q");
+    if (q) q.focus();
+  });
+  document.addEventListener("click", function (e) {
+    const b = e.target.closest && e.target.closest("[data-line-remove]");
+    if (b) {
+      const form = batchOf(b);
+      b.closest("tr").remove();
+      refresh(form);
+      saveBatch(form);
+      return;
+    }
+    const r = e.target.closest && e.target.closest("[data-batch-restore]");
+    if (r) {
+      const form = r.closest("form[data-batch]");
+      let saved = null;
+      try { saved = JSON.parse(localStorage.getItem(BKEY) || "null"); } catch (err) { saved = null; }
+      if (saved) {
+        form.querySelector("[name=kind]").value = saved.kind || "IN";
+        form.dataset.kind = form.querySelector("[name=kind]").value;
+        saved.lines.forEach(function (d) { addLine(form, d); });
+        refresh(form);
+      }
+      r.closest(".batch-restore").remove();
+    }
+  });
+  document.addEventListener("change", function (e) {
+    if (e.target.name !== "kind" || !batchOf(e.target)) return;
+    const form = batchOf(e.target);
+    form.dataset.kind = e.target.value;
+    rowsOf(form).forEach(function (tr) { lotHint(form, tr); });
+    saveBatch(form);
+  });
+  function offerRestore(form) {
+    if (document.querySelector(".alert-success")) {           // 방금 등록에 성공한 화면 → 보관한 줄은 등록된 것
+      try { localStorage.removeItem(BKEY); } catch (e) { /* 무시 */ }
+      return;
+    }
+    if (rowsOf(form).length) { saveBatch(form); return; }      // 서버가 되돌려 준 줄(오류)이 있으면 그걸 보관
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem(BKEY) || "null"); } catch (e) { saved = null; }
+    if (!saved || !saved.lines || !saved.lines.length) return;
+    const box = document.createElement("div");
+    box.className = "alert alert-info batch-restore";
+    box.textContent = "등록하지 않은 줄 " + saved.lines.length + "개가 이 브라우저에 남아 있습니다 (" +
+                      new Date(saved.at).toLocaleString("ko-KR") + "). ";
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "btn btn-sm";
+    btn.setAttribute("data-batch-restore", "");
+    btn.textContent = "되살리기";
+    box.appendChild(btn);
+    form.insertBefore(box, form.firstChild);
+  }
+
+  function init(root) {
+    root.querySelectorAll("form[data-batch]").forEach(function (f) {
+      const k = f.querySelector("[name=kind]");
+      if (k) f.dataset.kind = k.value;
+      rowsOf(f).forEach(function (tr) { lotHint(f, tr); });
+      refresh(f);
+      offerRestore(f);
+    });
+    root.querySelectorAll("[data-picker]").forEach(function (p) { load(p); });
+  }
+  init(document);
+  // 본문만 바꿔 끼운 화면 전환(app.js)에서도 다시
+  window.mmPicker = { refresh: init };
+})();

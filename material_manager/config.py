@@ -122,6 +122,7 @@ MATERIAL_COLS = {
     "location": "보관위치",
     "supplier": "공급처",
     "sap_matnr": "SAP자재번호",        # SAP 플랜트·저장위치는 창고(조직 화면)에 둔다
+    "barcode": "바코드",               # 공급처 상자의 바코드(EAN 등). 스캔하면 이 자재
 }
 
 # ── SAP 연동 ──────────────────────────────────────────────────
@@ -213,6 +214,22 @@ NEW_USER_ALL_WAREHOUSES = os.getenv("MM_NEW_USER_ALL_WAREHOUSES", "0") == "1"
 # ── 직무 분리 · 결재 ──────────────────────────────────────────
 SOD_ENFORCE = os.getenv("MM_SOD_ENFORCE", "1") == "1"          # 본인 등록 거래 취소 금지 등
 ADJ_APPROVAL_AMOUNT = int(os.getenv("MM_ADJ_APPROVAL_AMOUNT", "500000"))  # 실사 조정 금액이 이 이상이면 결재
+
+# ── 거래처 마스터 (core/partners.py) ─────────────────────────
+# 1이면 거래처 마스터에 없는 이름으로는 입고·납품 출고·거래명세서·발주를 등록할 수 없다 (기본: 등록하고 경고만)
+PARTNER_REQUIRED = os.getenv("MM_PARTNER_REQUIRED", "0") == "1"
+
+# ── 결재 알림 메일 (core/notify.py) ──────────────────────────
+# off: 알림을 만들지 않음 | log: 보낼 목록에만 남김(메일 서버 없이 확인용) | smtp: 메일 서버로 보냄
+NOTIFY_MODE = os.getenv("MM_NOTIFY_MODE", "log")
+SMTP_HOST = os.getenv("MM_SMTP_HOST", "")
+SMTP_PORT = int(os.getenv("MM_SMTP_PORT", "587"))
+SMTP_USER = os.getenv("MM_SMTP_USER", "")
+SMTP_PASSWORD = os.getenv("MM_SMTP_PASSWORD", "")
+SMTP_FROM = os.getenv("MM_SMTP_FROM", "") or SMTP_USER
+SMTP_SECURITY = os.getenv("MM_SMTP_SECURITY", "starttls")     # starttls | ssl | none
+NOTIFY_MAX_TRIES = 5
+BASE_URL = os.getenv("MM_BASE_URL", "").rstrip("/")            # 메일 속 링크 앞부분 (예: https://mm.example.co.kr)
 
 # ── 목록 · 배치 ───────────────────────────────────────────────
 PAGE_SIZE = 100

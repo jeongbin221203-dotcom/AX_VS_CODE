@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf, table, partner_fields %}
+
+{% block content %}
+<p><a href="{{ url_for('partners.index') }}">← 거래처 목록</a></p>
+<h2>[{{ p.code }}] {{ p.name }} {% if not p.active %}<span class="badge">사용중지</span>{% endif %}</h2>
+<p class="muted small">{{ PARTNER_KINDS[p.kind] }}{% if biz %} · 사업자 {{ biz }}{% endif %} · 등록 {{ p.created_at[:10] }} · 수정 {{ p.updated_at[:16] }}</p>
+
+{% if can('MANAGER') %}
+<form class="card form" method="post" action="{{ url_for('partners.update', pid=p.id) }}">
+  {{ csrf() }}<input type="hidden" name="updated_at" value="{{ p.updated_at }}">
+  {{ partner_fields(form) }}
+  <p class="muted small">이름을 바꾸면 예전 이름은 '다른 이름'으로 남아, 예전 이름으로 적은 거래도 계속 이 거래처로 집계됩니다.</p>
+  <div class="row-actions">
+    <button class="btn btn-primary">저장</button>
+  </div>
+</form>
+<form class="row-actions" method="post" action="{{ url_for('partners.set_active', pid=p.id) }}">
+  {{ csrf() }}<input type="hidden" name="active" value="{{ 0 if p.active else 1 }}">
+  <button class="btn btn-sm {{ 'btn-danger' if p.active }}">{{ '사용중지' if p.active else '다시 사용' }}</button>
+  <span class="hint">사용중지한 거래처 이름으로는 새 거래가 정식 이름으로 연결되지 않습니다. 지난 거래는 그대로입니다.</span>
+</form>
+{% endif %}
+
+<h3>다른 이름</h3>
+{% if aliases %}
+  <ul class="alias-list">
+    {% for a in aliases %}
+      <li>{{ a.alias }} <span class="muted small">({{ a.created_by }} · {{ a.created_at[:10] }})</span>
+        {% if can('MANAGER') %}
+        <form class="inline" method="post" action="{{ url_for('partners.unlink', alias_id=a.id) }}">{{ csrf() }}<button class="btn btn-sm">연결 해제</button></form>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p class="muted small">없음</p>
+{% endif %}
+{% if can('MANAGER') %}
+<form class="toolbar" method="post" action="{{ url_for('partners.add_alias', pid=p.id) }}">
+  {{ csrf() }}<label class="grow">다른 이름 추가<input name="alias" placeholder="예: 대한팔레트 창원지점" required></label>
+  <button class="btn btn-sm">연결</button>
+</form>
+{% endif %}
+
+<h3>최근 거래 (50건)</h3>
+{{ table(grid, '이 거래처의 거래가 없습니다.') }}
+{% endblock %}

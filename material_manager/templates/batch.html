@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf, material_picker, partner_datalist %}
+
+{# 줄 한 개 — 서버가 다시 그리는 줄과 화면에서 새로 만드는 줄(template)이 같은 모양 #}
+{% macro line_row(l) %}
+  <tr class="{{ 'lot-line' if l.lot_managed }}">
+    <td class="num" data-no></td>
+    <td><input type="hidden" name="line_mid" value="{{ l.mid or '' }}"><span data-label>{{ l.label }}</span></td>
+    <td class="qty-cell"><input name="line_qty" type="number" min="0" step="any" value="{{ l.qty }}" required aria-label="수량">
+      <span class="muted small" data-unit>{{ l.unit }}</span></td>
+    <td class="lot-cell"><input name="line_lot" value="{{ l.lot }}" autocomplete="off" aria-label="로트"
+        placeholder="{{ '로트' if l.lot_managed else '' }}"{{ ' required' if l.lot_managed and f.kind == 'IN' }}>
+      <input name="line_exp" type="date" value="{{ l.exp }}" aria-label="유효기한" title="유효기한 (새 로트 입고 때)"></td>
+    <td><input name="line_price" type="number" min="0" step="any" value="{{ l.price }}" aria-label="단가"></td>
+    <td><input name="line_note" value="{{ l.note }}" aria-label="비고"></td>
+    <td><button type="button" class="btn btn-sm" data-line-remove aria-label="줄 삭제">✕</button></td>
+  </tr>
+{% endmacro %}
+
+{% block content %}
+{{ partner_datalist() }}
+{% if not wh_opts %}
+  <div class="alert alert-warning">등록할 수 있는 창고가 없습니다. 시스템관리자에게 데이터 범위(플랜트·창고) 부여를 요청하세요.</div>
+{% else %}
+<p class="muted">바코드 스캐너로 상자를 찍거나 자재를 찾아 Enter — 찍을 때마다 줄이 생기고 같은 자재는 수량이 1씩 늘어납니다.
+  휴대폰·태블릿은 📷로 카메라 스캔. 모든 줄을 한 번에 등록하며, 한 줄이라도 안 되면(재고 부족 등) 아무것도 등록하지 않습니다.</p>
+
+<form class="card form batch-form" method="post" action="{{ url_for('transactions.batch_post') }}" data-batch data-nodraft data-kind="{{ f.kind or 'IN' }}">
+  {{ csrf() }}
+  <div class="form-grid g4">
+    <label>구분
+      <select name="kind">
+        <option value="IN" {{ 'selected' if f.kind != 'OUT' }}>입고</option>
+        <option value="OUT" {{ 'selected' if f.kind == 'OUT' }}>출고</option>
+      </select>
+    </label>
+    <label>창고
+      <select name="warehouse_id">
+        {% for k, v in wh_opts.items() %}<option value="{{ k }}" {{ 'selected' if k|string == f.warehouse_id|string }}>{{ v }}</option>{% endfor %}
+      </select>
+    </label>
+    <label>일자<input name="tx_date" type="date" value="{{ f.tx_date or today().isoformat() }}" max="{{ today().isoformat() }}"
+                    {% if min_date %}min="{{ min_date }}"{% endif %}></label>
+    <label>문서번호 <span class="hint">비우면 묶음 번호</span><input name="ref_no" value="{{ f.ref_no or '' }}"></label>
+    <label class="span2">거래처 <span class="hint">입고: 공급처 · 출고: 납품처 (사내 사용이면 원가센터)</span>
+      <input name="partner" value="{{ f.partner or '' }}" list="partner-names" autocomplete="off"></label>
+    <label class="out-only">원가센터 (사내 사용 출고){{ ' *' if g.sap_on }}<input name="cost_center" value="{{ f.cost_center or '' }}"></label>
+    <label>비고 (모든 줄)<input name="note" value="{{ f.note or '' }}"></label>
+  </div>
+
+  <div class="scanbox">
+    <span class="scanbox-label">스캔·찾기</span>
+    {{ material_picker(mode='add', placeholder='바코드를 찍거나 자재코드·이름을 치고 Enter') }}
+  </div>
+
+  <div class="table-wrap">
+    <table class="data batch-lines">
+      <thead><tr><th class="num">#</th><th>자재</th><th>수량</th><th class="lot-cell">로트 · 유효기한</th><th>단가(원)</th><th>비고</th><th></th></tr></thead>
+      <tbody data-lines>
+        {% for l in lines if l.mid %}{{ line_row(l) }}{% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <template data-line-tpl>{{ line_row({'mid': '', 'label': '', 'unit': '', 'qty': '1', 'lot': '', 'exp': '', 'price': '', 'note': '', 'lot_managed': false}) }}</template>
+  <p class="muted small" data-empty>아직 줄이 없습니다. 위 칸에서 스캔하거나 자재를 찾으세요. (한 번에 {{ max_lines }}줄까지)</p>
+  <div class="batch-foot">
+    <strong data-summary></strong>
+    <button class="btn btn-primary">모두 등록</button>
+  </div>
+  <p class="muted small">로트 관리 자재: 입고는 로트를 적어야 하고(새 로트면 유효기한도), 출고는 비우면 유효기한 빠른 로트부터 나갑니다.
+    단가를 비우면 자재 기준단가로 기록합니다.</p>
+</form>
+
+<h3>최근 묶음</h3>
+{% if not recent %}
+  <p class="muted small">아직 여러 줄로 등록한 묶음이 없습니다.</p>
+{% else %}
+  <div class="table-wrap">
+    <table class="data">
+      <thead><tr><th>묶음</th><th>일자</th><th>구분</th><th>창고</th><th class="num">줄</th><th class="num">금액</th><th>거래처</th><th>등록</th><th></th></tr></thead>
+      <tbody>
+      {% for r in recent %}
+        <tr class="{{ 'tone-muted' if r.reversed == r.lines }}">
+          <td><a href="{{ url_for('history.index', q=r.batch_no) }}">{{ r.batch_no }}</a></td>
+          <td>{{ r.tx_date }}</td><td>{{ TX_LABEL[r.tx_type] }}</td><td>{{ r.wh_code }}</td>
+          <td class="num">{{ r.lines }}</td><td class="num">₩{{ '{:,.0f}'.format(r.amount or 0) }}</td>
+          <td>{{ r.partner }}</td><td>{{ r.created_by }} · {{ r.created_at[:16] }}</td>
+          <td>
+            {% if r.reversed == r.lines %}<span class="muted small">취소됨</span>
+            {% elif can_cancel %}
+              <details class="inline-cancel"><summary>전체 취소</summary>
+                <form method="post" action="{{ url_for('transactions.batch_cancel', batch_no=r.batch_no) }}" data-nodraft>
+                  {{ csrf() }}<input name="reason" placeholder="취소 사유" required>
+                  <button class="btn btn-sm btn-danger">취소 거래 만들기</button>
+                </form>
+              </details>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endif %}
+{% endif %}
+{% endblock %}

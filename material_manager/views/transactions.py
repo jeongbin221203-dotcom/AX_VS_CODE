@@ -8,7 +8,7 @@ import config
 from core import audit, db, documents, org, periods, purchasing, repository as repo, services
 from core.utils import month_end
 from views.documents import meta_from_form, uploaded_file
-from views.helpers import a_int, actor, f_float, f_id, f_str, render_page, role_required
+from views.helpers import Table, a_int, actor, can, f_float, f_id, f_str, render_page, role_required
 
 bp = Blueprint("transactions", __name__, url_prefix="/transactions")
 
@@ -179,3 +179,95 @@ def queue():
                   {"captured_at": captured_at, "kind": kind or f_str("tx_type"), "pending": result.pending})
     return jsonify(ok=result.ok, message=result.message, tx_id=result.tx_id, pending=result.pending,
                    warning=result.warning)
+
+
+# ── 여러 줄·스캔 입출고 ───────────────────────────────────────
+def _batch_lines_from_form() -> tuple[list[services.LineIn], list[dict], str]:
+    """줄 칸들(line_mid·line_qty·…) → (등록할 줄, 다시 그릴 줄, 문제)."""
+    f = request.form
+    cols = {c: f.getlist(f"line_{c}") for c in ("mid", "qty", "lot", "exp", "price", "note")}
+    n = len(cols["mid"])
+    if any(len(v) != n for v in cols.values()):
+        return [], [], "줄 입력이 맞지 않습니다. 화면을 새로고침해 다시 입력하세요."
+    lines, shown, problem = [], [], ""
+    labels = services.material_options(active_only=False)
+    with db.get_conn() as conn:
+        for i in range(n):
+            mid_s, qty_s, price_s = cols["mid"][i].strip(), cols["qty"][i].strip(), cols["price"][i].strip()
+            mid = int(mid_s) if mid_s.isascii() and mid_s.isdigit() else 0
+            mat = repo.get_material(mid, conn) if mid else None
+            shown.append({"mid": mid, "label": labels.get(mid, ""), "unit": mat["unit"] if mat else "",
+                          "lot_managed": bool(mat and mat["lot_managed"]), "qty": qty_s, "lot": cols["lot"][i],
+                          "exp": cols["exp"][i], "price": price_s, "note": cols["note"][i]})
+            if not mid:
+                continue
+            try:
+                qty = float(qty_s.replace(",", ""))
+                price = float(price_s.replace(",", "")) if price_s else None
+            except ValueError:
+                problem = problem or f"{i + 1}번 줄: 수량·단가는 숫자로 입력하세요."
+                continue
+            lines.append(services.LineIn(mid, qty, cols["lot"][i].strip(), cols["exp"][i].strip(), price,
+                                         cols["note"][i].strip()))
+    return lines, shown, problem
+
+
+def _batch_page(form: dict | None = None, shown: list[dict] | None = None, status: int = 200):
+    form = form or {"kind": request.args.get("kind", "IN"), "tx_date": date.today().isoformat()}
+    wh_opts = org.warehouse_options(g.wh_ids)
+    ym = periods.closed_through()
+    min_date = (date.fromisoformat(month_end(ym)) + timedelta(days=1)).isoformat() if ym else ""
+    frag, wp = db.in_clause(g.wh_ids)
+    recent = db.query_df(f"""
+        SELECT t.batch_no, MIN(t.tx_date) AS tx_date, MIN(t.tx_type) AS tx_type, MIN(w.code) AS wh_code,
+               COUNT(*) AS lines, SUM(t.qty * t.unit_price) AS amount, MIN(t.partner) AS partner,
+               MIN(t.created_by) AS created_by, MIN(t.created_at) AS created_at,
+               SUM(CASE WHEN EXISTS (SELECT 1 FROM transactions r WHERE r.reversal_of = t.id) THEN 1 ELSE 0 END) AS reversed
+        FROM transactions t JOIN warehouses w ON w.id = t.warehouse_id
+        WHERE t.batch_no <> '' AND t.reversal_of IS NULL{' AND t.warehouse_id' + frag if frag else ''}
+        GROUP BY t.batch_no ORDER BY MIN(t.id) DESC LIMIT 15""", wp)
+    return render_page("batch.html", "batch", f=form, lines=shown or [], wh_opts=wh_opts, min_date=min_date,
+                       recent=recent.to_dict("records"), max_lines=services.MAX_BATCH_LINES,
+                       can_cancel=can("MANAGER")), status
+
+
+@bp.get("/batch")
+@role_required("CLERK")
+def batch():
+    return _batch_page()
+
+
+@bp.post("/batch")
+@role_required("CLERK")
+def batch_post():
+    form = {k: f_str(k) for k in ("kind", "warehouse_id", "tx_date", "ref_no", "partner", "cost_center", "note")}
+    lines, shown, problem = _batch_lines_from_form()
+    wh = int(form["warehouse_id"]) if form["warehouse_id"].isdigit() else 0
+    if not problem and wh not in org.warehouse_options(g.wh_ids):
+        problem = "창고를 고르세요 (권한이 있는 창고만)."
+    try:
+        tx_date = date.fromisoformat(form["tx_date"] or date.today().isoformat()).isoformat()
+    except ValueError:
+        problem = problem or "일자 형식이 올바르지 않습니다."
+    if problem:
+        flash(problem, "error")
+        return _batch_page(form, shown)
+    result = services.register_lines(form["kind"], wh, tx_date, lines, actor=actor(), wh_ids=g.wh_ids,
+                                     ref_no=form["ref_no"], partner=form["partner"], cost_center=form["cost_center"],
+                                     note=form["note"])
+    if not result.ok:
+        flash(result.message, "error")
+        return _batch_page(form, shown)
+    flash(result.message, "success")
+    if result.warning:
+        flash(result.warning, "warning")
+    return redirect(url_for("transactions.batch", kind=form["kind"]))
+
+
+@bp.post("/batch/<batch_no>/cancel")
+@role_required("MANAGER")
+def batch_cancel(batch_no: str):
+    result = services.cancel_group("batch_no", batch_no, f_str("reason"), actor=actor(), wh_ids=g.wh_ids,
+                                   label=f"묶음 {batch_no}")
+    flash(result.message, "success" if result.ok else "error")
+    return redirect(url_for("transactions.batch"))

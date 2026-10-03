@@ -21,7 +21,7 @@ from datetime import date
 import pandas as pd
 
 import config
-from core import audit, db, documents, repository as repo, services
+from core import audit, db, documents, partners, repository as repo, services
 from core.utils import clean_str_series, code_series, now_str
 
 # 엑셀 열: 항목 → 표준 머리글 (별칭은 excel_forms.IMPORT_FORMS['statement_lines'])
@@ -234,6 +234,10 @@ def register(header: dict, lines: list[Line], *, actor: dict | None, wh_ids=None
     if bad:
         return Registered(False, f"{bad[0].no}번 줄: {bad[0].errors[0]}", failed_line=bad[0].no)
     st_no = (header.get("statement_no") or "").strip()
+    with db.get_conn() as conn:
+        partner, partner_id, problem = partners.apply(conn, partner)
+    if problem:
+        return Registered(False, problem)
     dup = duplicate_of(kind, partner, st_no)
     if dup:
         return Registered(False, f"이미 등록한 거래명세서입니다 (명세서 #{dup}, {partner} · {st_no}).")
@@ -245,10 +249,11 @@ def register(header: dict, lines: list[Line], *, actor: dict | None, wh_ids=None
     try:
         with db.transaction() as conn:
             st_id = conn.execute(
-                "INSERT INTO statements (kind, statement_no, partner, partner_biz_no, warehouse_id, tx_date, supply_amount, "
-                "tax_amount, line_count, note, created_by_id, created_by, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                (kind, st_no, partner, (header.get("partner_biz_no") or "").strip(), wh_id, header["tx_date"], supply, tax,
-                 len(lines), (header.get("note") or "").strip(), who.get("id"), who["name"], now_str())).lastrowid
+                "INSERT INTO statements (kind, statement_no, partner, partner_id, partner_biz_no, warehouse_id, tx_date, "
+                "supply_amount, tax_amount, line_count, note, created_by_id, created_by, created_at) "
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                (kind, st_no, partner, partner_id, (header.get("partner_biz_no") or "").strip(), wh_id, header["tx_date"],
+                 supply, tax, len(lines), (header.get("note") or "").strip(), who.get("id"), who["name"], now_str())).lastrowid
             for ln in lines:
                 out = services._register(
                     conn, who, ln.material_id, kind, float(ln.qty), header["tx_date"], float(ln.unit_price),
@@ -267,6 +272,8 @@ def register(header: dict, lines: list[Line], *, actor: dict | None, wh_ids=None
         return Registered(False, f"이미 등록한 거래명세서입니다 ({partner} · {st_no}).")
 
     msg = f"거래명세서 #{st_id} 등록 — {config.TX_LABEL[kind]} {len(lines)}줄, 공급가액 ₩{supply:,.0f}"
+    if partner_id is None:
+        msg += " · " + partners.unknown_warning(partner, None)
     if evidence is not None:
         saved = documents.save(evidence, tx_id=first_tx, actor=actor)
         if saved.ok:

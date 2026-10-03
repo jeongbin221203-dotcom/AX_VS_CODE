@@ -37,7 +37,9 @@ def _decorate(df: pd.DataFrame) -> pd.DataFrame:
 
 @bp.get("/")
 def index():
-    start = a_date("start", date.today() - timedelta(days=30))
+    keyword = request.args.get("q", "").strip()[:60]
+    # 묶음·생산 번호 링크(q만 있음)는 기간을 넓게
+    start = a_date("start", date(2000, 1, 1) if keyword and "start" not in request.args else date.today() - timedelta(days=30))
     end = a_date("end", date.today())
     # 조회 버튼을 누르기 전(첫 진입)에는 전체 구분을 선택한 상태로 본다
     types = ([t for t in request.args.getlist("type") if t in config.TX_LABEL]
@@ -48,7 +50,8 @@ def index():
     wh_sel = [w for w in repo.ids_in(request.args.getlist("wh")) if w in wh_opts]
     scope = set(wh_sel) if wh_sel else g.wh_ids
 
-    ctx = dict(start=start, end=end, types=types, opts=opts, mats=mats, wh_opts=wh_opts, wh_sel=wh_sel, df=None)
+    ctx = dict(start=start, end=end, types=types, opts=opts, mats=mats, wh_opts=wh_opts, wh_sel=wh_sel, df=None,
+               keyword=keyword)
     if start > end:
         flash("시작일이 종료일보다 늦습니다.", "error")
         return render_page("history.html", "history", **ctx)
@@ -58,13 +61,13 @@ def index():
 
     if request.args.get("export") == "xlsx":
         full = _decorate(repo.history_df(start.isoformat(), end.isoformat(), types, mats, scope,
-                                         limit=config.EXPORT_MAX_ROWS))
+                                         limit=config.EXPORT_MAX_ROWS, keyword=keyword))
         log_export("history", len(full), start=start.isoformat(), end=end.isoformat())
         return form_response("history", full[COLUMNS].rename(columns=RENAME),
                              f"거래이력_{start:%Y%m%d}_{end:%Y%m%d}.xlsx", period=f"{start} ~ {end}")
 
     df, total, sums = repo.history_page(start.isoformat(), end.isoformat(), types, mats, scope,
-                                        page=page_arg(), size=config.PAGE_SIZE)
+                                        page=page_arg(), size=config.PAGE_SIZE, keyword=keyword)
     df = _decorate(df)
     view = df[COLUMNS].rename(columns=RENAME)
     reversible = df[df["reversal_of"].isna() & df["reversed_by"].isna()]

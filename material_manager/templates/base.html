@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
   <script src="{{ url_for('static', filename='vendor/chart.umd.min.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/picker.js') }}" defer></script>
 </head>
 <body data-user="{{ g.user.id if g.user else '' }}">
 {% if g.user %}

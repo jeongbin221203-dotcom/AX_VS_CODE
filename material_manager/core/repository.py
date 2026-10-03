@@ -13,11 +13,12 @@ from core.db import Conn
 from core.utils import month_end, now_str
 
 MATERIAL_FIELDS = ("code", "name", "spec", "unit", "category", "safety_stock", "unit_price",
-                   "location", "supplier", "sap_matnr", "lot_managed", "expiry_managed")
+                   "location", "supplier", "sap_matnr", "lot_managed", "expiry_managed", "barcode")
 _EDITABLE = MATERIAL_FIELDS[1:]          # 자재코드는 바꾸지 않는다
-UPLOAD_FIELDS = MATERIAL_FIELDS[:10]      # 엑셀 일괄 업로드로 바꿀 수 있는 항목 (로트 설정 제외)
+UPLOAD_FIELDS = MATERIAL_FIELDS[:10] + ("barcode",)   # 엑셀 일괄 업로드로 바꿀 수 있는 항목 (로트 설정 제외)
 MATERIAL_DEFAULTS = {"spec": "", "unit": "EA", "category": "미분류", "safety_stock": 0, "unit_price": 0,
-                     "location": "", "supplier": "", "sap_matnr": "", "lot_managed": 0, "expiry_managed": 0}
+                     "location": "", "supplier": "", "sap_matnr": "", "lot_managed": 0, "expiry_managed": 0,
+                     "barcode": ""}
 
 # 거래 한 행이 재고에 주는 증감
 EFFECT = "CASE WHEN {t}.tx_type = 'IN' THEN {t}.qty WHEN {t}.tx_type = 'OUT' THEN -{t}.qty ELSE {t}.qty END"
@@ -49,7 +50,7 @@ def insert_material(data: dict, conn: Conn | None = None) -> int:
 
 
 def update_material(material_id: int, data: dict, conn: Conn | None = None) -> None:
-    data = {"lot_managed": 0, "expiry_managed": 0, **data}
+    data = {"lot_managed": 0, "expiry_managed": 0, "barcode": "", **data}
     _run(conn, f"""
         UPDATE materials SET {", ".join(f"{f} = ?" for f in _EDITABLE)}, updated_at = ?
         WHERE id = ?
@@ -335,13 +336,14 @@ def ledger_df(start: str, end: str, wh_ids=None) -> pd.DataFrame:
 # ── 거래 ────────────────────────────────────────────────────
 TX_FIELDS = ("material_id", "tx_type", "qty", "unit_price", "tx_date", "ref_no", "partner", "note",
              "created_by", "reversal_of", "po_no", "po_item", "cost_center", "movement_type",
-             "warehouse_id", "transfer_no", "created_by_id", "approved_by", "lot_no", "statement_id")
+             "warehouse_id", "transfer_no", "created_by_id", "approved_by", "lot_no", "statement_id",
+             "partner_id", "production_id", "batch_no")
 
 
 def insert_transaction(conn: Conn, payload: dict) -> int:
     defaults = {"reversal_of": None, "po_no": "", "po_item": "", "cost_center": "", "movement_type": "",
                 "warehouse_id": None, "transfer_no": "", "created_by_id": None, "approved_by": "", "lot_no": "",
-                "statement_id": None}
+                "statement_id": None, "partner_id": None, "production_id": None, "batch_no": ""}
     data = {**defaults, **payload}
     if data["warehouse_id"] is None:
         data["warehouse_id"] = default_warehouse_id(conn)
@@ -389,9 +391,14 @@ HISTORY_SELECT = """
 """
 
 
-def _history_where(start, end, tx_types, material_ids, wh_ids) -> tuple[str, list]:
+def _history_where(start, end, tx_types, material_ids, wh_ids, keyword: str = "") -> tuple[str, list]:
     sql = f" WHERE t.tx_date BETWEEN ? AND ? AND t.tx_type IN ({','.join('?' * len(tx_types))})"
     params = [start, end, *tx_types]
+    if keyword.strip():
+        # 문서번호·거래처·묶음·이동번호·로트·비고 (여러 줄 입출고 묶음 번호로 찾을 때 등)
+        sql += (" AND (LOWER(t.ref_no) LIKE ? OR LOWER(t.partner) LIKE ? OR LOWER(t.batch_no) LIKE ?"
+                " OR LOWER(t.transfer_no) LIKE ? OR LOWER(t.lot_no) LIKE ? OR LOWER(t.note) LIKE ?)")
+        params += [f"%{keyword.strip().lower()}%"] * 6
     if material_ids:
         sql += f" AND t.material_id IN ({','.join('?' * len(material_ids))})"
         params += list(material_ids)
@@ -400,9 +407,9 @@ def _history_where(start, end, tx_types, material_ids, wh_ids) -> tuple[str, lis
 
 
 def history_page(start: str, end: str, tx_types: Sequence[str], material_ids: Sequence[int] = (),
-                 wh_ids=None, page: int = 1, size: int = 100) -> tuple[pd.DataFrame, int, dict]:
+                 wh_ids=None, page: int = 1, size: int = 100, keyword: str = "") -> tuple[pd.DataFrame, int, dict]:
     """(해당 페이지, 전체 건수, 합계{in_qty, out_qty})."""
-    where, params = _history_where(start, end, tx_types, material_ids, wh_ids)
+    where, params = _history_where(start, end, tx_types, material_ids, wh_ids, keyword)
     df, total = paged(HISTORY_SELECT + where + " ORDER BY t.tx_date DESC, t.id DESC", params, page, size)
     with db.get_conn() as conn:
         row = conn.execute(f"""
@@ -413,9 +420,9 @@ def history_page(start: str, end: str, tx_types: Sequence[str], material_ids: Se
 
 
 def history_df(start: str, end: str, tx_types: Sequence[str], material_ids: Sequence[int] = (),
-               wh_ids=None, limit: int = 100_000) -> pd.DataFrame:
+               wh_ids=None, limit: int = 100_000, keyword: str = "") -> pd.DataFrame:
     """엑셀 내보내기용 전체 조회."""
-    where, params = _history_where(start, end, tx_types, material_ids, wh_ids)
+    where, params = _history_where(start, end, tx_types, material_ids, wh_ids, keyword)
     return db.query_df(HISTORY_SELECT + where + " ORDER BY t.tx_date DESC, t.id DESC LIMIT ?", [*params, limit])
 
 

@@ -22,12 +22,15 @@ from core import approvals, audit, auth, org, periods, repository as repo, sap
 MENUS = [
     ("dashboard", "📊 대시보드", "dashboard.index", "VIEWER"),
     ("transactions", "🔄 입출고 등록", "transactions.index", "CLERK"),
+    ("batch", "📷 여러 줄·스캔 입출고", "transactions.batch", "CLERK"),
     ("stock", "📦 재고 현황", "stock.index", "VIEWER"),
     ("history", "🧾 거래 이력", "history.index", "VIEWER"),
     ("purchase", "🛒 구매 (요청·발주)", "purchase.index", "CLERK"),
     ("approvals", "✅ 결재함", "approvals.index", "CLERK"),
     ("materials", "🗂️ 자재 마스터", "materials.index", "VIEWER"),
     ("statements", "🧾 거래명세서 입출고", "statements.index", "CLERK"),
+    ("production", "🏭 생산 투입 (BOM)", "production.index", "CLERK"),
+    ("partners", "🤝 거래처", "partners.index", "VIEWER"),
     ("documents", "📎 증빙 (세금계산서)", "documents.index", "VIEWER"),
     ("ledger", "📒 수불부", "reports.ledger", "VIEWER"),
     ("valuation", "💴 재고 평가", "reports.valuation_view", "MANAGER"),
@@ -369,8 +372,10 @@ def register_template_helpers(app: Flask) -> None:
         DOC_TYPES=config.DOC_TYPES, DOC_NEED_BIZ_NO=config.DOC_NEED_BIZ_NO,
         DB_NAME=config.DB_PATH.name, today=date.today,
     )
-    from core import demo
+    from core import demo, partners
     app.jinja_env.globals["DEMO_ROLE_VIEWS"] = demo.ROLE_VIEWS
+    app.jinja_env.globals["partner_names"] = partners.names
+    app.jinja_env.globals["PARTNER_KINDS"] = partners.KINDS
 
     def error_page(code: int, title: str, message: str):
         return render_template("error.html", code=code, title=title, message=message,

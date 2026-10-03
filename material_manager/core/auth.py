@@ -116,7 +116,7 @@ def count_users() -> int:
 
 def users_df() -> pd.DataFrame:
     return db.query_df(
-        "SELECT id, username, name, role, active, auth_source, all_warehouses, must_change_pw, "
+        "SELECT id, username, name, role, active, email, auth_source, all_warehouses, must_change_pw, "
         "failed_count, locked_until, "
         "last_login_at, created_at FROM users ORDER BY active DESC, role DESC, username"
     )
@@ -226,6 +226,22 @@ def update_user(user_id: int, name: str, role: str, active: bool, actor: dict | 
                      (after["name"], role, after["active"], "" if active else "admin", now_str(), user_id))
         audit.record(conn, actor, "USER_UPDATE", "user", user_id, diff)
     return AuthResult(True, "사용자 정보를 저장했습니다.")
+
+
+def set_email(user_id: int, email: str, actor: dict | None) -> AuthResult:
+    """결재 알림을 받을 메일 주소 (비우면 알림을 받지 않음)."""
+    email = email.strip()
+    if email and (len(email) > 200 or not re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", email)):
+        return AuthResult(False, "메일 주소 형식을 확인하세요.")
+    with db.transaction() as conn:
+        before = _row(conn, "SELECT email FROM users WHERE id = ?", (user_id,))
+        if before is None:
+            return AuthResult(False, "사용자가 없습니다.")
+        if (before["email"] or "") == email:
+            return AuthResult(True, "변경된 내용이 없습니다.")
+        conn.execute("UPDATE users SET email = ?, updated_at = ? WHERE id = ?", (email, now_str(), user_id))
+        audit.record(conn, actor, "USER_EMAIL", "user", user_id, {"email": [before["email"] or "", email]})
+    return AuthResult(True, "알림 메일 주소를 저장했습니다." if email else "알림 메일 주소를 지웠습니다.")
 
 
 def reset_password(user_id: int, new_password: str, actor: dict | None) -> AuthResult:

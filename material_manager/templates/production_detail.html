@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf, table %}
+
+{% block content %}
+<p><a href="{{ url_for('production.index', tab='history') }}">← 생산 이력</a></p>
+<h2>{{ p.prod_no }} · [{{ p.code }}] {{ p.name }} {{ '{:,.2f}'.format(p.qty) }} {{ p.unit }}
+  {% if p.cancelled_at %}<span class="badge">취소됨</span>{% endif %}</h2>
+<p class="muted small">일자 {{ p.tx_date }} · 부품 창고 {{ p.issue_wh }}{{ ' · 입고 창고 ' ~ p.receipt_wh if p.receipt_wh else ' · 완제품 입고 안 함' }}
+  · 재료비 ₩{{ '{:,.0f}'.format(p.material_cost) }}{{ ' · 작업지시 ' ~ p.work_order if p.work_order }}{{ ' · 원가센터 ' ~ p.cost_center if p.cost_center }}
+  · 등록 {{ p.created_by }} {{ p.created_at[:16] }}</p>
+{% if p.cancelled_at %}
+  <div class="alert alert-info">{{ p.cancelled_at[:16] }} {{ p.cancelled_by }} 취소 — {{ p.cancel_reason }}</div>
+{% endif %}
+
+{{ table(grid, '거래가 없습니다.') }}
+
+{% if can_cancel and not p.cancelled_at %}
+<details class="card">
+  <summary>생산 전체 취소</summary>
+  <form class="form" method="post" action="{{ url_for('production.cancel', prod_id=p.id) }}" data-nodraft>
+    {{ csrf() }}
+    <p class="muted small">완제품 입고와 부품 출고를 모두 취소 거래로 되돌립니다(오늘 일자). 완제품을 이미 다른 데 썼으면(재고가 음수가 되면) 취소되지 않습니다.
+      본인이 등록한 생산은 다른 관리자가 취소해야 합니다.</p>
+    <label>취소 사유 *<input name="reason" required></label>
+    <div><button class="btn btn-danger">전체 취소</button></div>
+  </form>
+</details>
+{% endif %}
+{% endblock %}

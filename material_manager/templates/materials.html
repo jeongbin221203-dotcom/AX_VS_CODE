@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import csrf, table, tabs as tab_bar, pager as pager_nav %}
+{% from "_macros.html" import csrf, table, tabs as tab_bar, pager as pager_nav, material_picker, partner_datalist %}
 
 {% macro fields(f, lock_code=false, sap_lock=false) %}
   {% set ro = 'readonly' if sap_lock else '' %}
@@ -17,10 +17,13 @@
 
     <label>안전재고<input name="safety_stock" type="number" min="0" step="any" value="{{ '%g' % (f.safety_stock or 0)|float }}"></label>
     <label>기준단가(원)<input name="unit_price" type="number" min="0" step="any" value="{{ '%g' % (f.unit_price or 0)|float }}" {{ ro }}></label>
-    <label>공급처<input name="supplier" value="{{ f.supplier or '' }}"></label>
+    <label>공급처<input name="supplier" value="{{ f.supplier or '' }}" list="partner-names" autocomplete="off">
+      <span class="hint">거래처 마스터의 이름으로 저장됩니다</span></label>
 
     <label>SAP 자재번호<input name="sap_matnr" value="{{ f.sap_matnr or '' }}" {{ ro }}>
       <span class="hint">SAP 플랜트·저장위치는 창고에 둡니다 (플랜트·창고 메뉴)</span></label>
+    <label>바코드 (공급처 상자의 EAN 등)<input name="barcode" value="{{ f.barcode or '' }}" autocomplete="off" inputmode="text">
+      <span class="hint">스캐너로 찍어 넣을 수 있습니다. 자재코드·SAP 번호로도 스캔됩니다</span></label>
     <fieldset>
       <legend>로트 · 유효기한 (거래가 생기면 바꿀 수 없음)</legend>
       <label class="check"><input type="checkbox" name="lot_managed" value="1" {{ 'checked' if (f.lot_managed or 0)|int }}> 로트(배치) 관리</label>
@@ -31,6 +34,7 @@
 
 {% block content %}
 {{ tab_bar(tabs, tab) }}
+{{ partner_datalist('SUPPLIER') }}
 
 {% if tab == "list" %}
   <form class="toolbar" method="get">
@@ -55,10 +59,8 @@
   {% else %}
     <form class="toolbar" method="get">
       <input type="hidden" name="tab" value="edit">
-      <label class="grow">수정할 자재
-        <select name="id" data-autosubmit>
-          {% for k, v in opts.items() %}<option value="{{ k }}" {{ 'selected' if k == mid }}>{{ v }}</option>{% endfor %}
-        </select>
+      <label class="grow">수정할 자재 (찾기·스캔)
+        {{ material_picker('id', mid, opts[mid], autosubmit=true, src=url_for('materials.lookup', all=1)) }}
       </label>
       <noscript><button class="btn">선택</button></noscript>
     </form>

@@ -20,7 +20,7 @@ def menu_keys(html: str) -> dict:
 def test_default_order_most_used_with_dashboard_first(client):          # noqa: F811
     keys = menu_keys(client.get("/stock/").get_data(as_text=True))
     assert keys["first"] == "/" and keys["fav"] == []
-    assert keys["others"][:5] == ["transactions", "stock", "history", "purchase", "approvals"]
+    assert keys["others"][:6] == ["transactions", "batch", "stock", "history", "purchase", "approvals"]
     assert "dashboard" not in keys["others"]
 
 

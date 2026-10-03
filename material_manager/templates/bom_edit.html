@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf, material_picker %}
+
+{% block content %}
+<p><a href="{{ url_for('production.index', tab='bom') }}">← BOM 목록</a></p>
+<form class="toolbar" method="get">
+  <label class="grow">제품 (완제품·반제품)
+    {{ material_picker('product', pid, product_label, autosubmit=true) }}
+  </label>
+  <noscript><button class="btn">선택</button></noscript>
+</form>
+
+{% if not mat %}
+  <div class="alert alert-info">BOM을 만들거나 고칠 제품을 찾아 고르세요. 제품도 자재 마스터에 먼저 등록돼 있어야 합니다(분류 예: 완제품·반제품).</div>
+{% else %}
+  {% if bom and not bom.active %}<div class="alert alert-warning">사용을 멈춘 BOM입니다. 저장하면 다시 사용합니다.</div>{% endif %}
+  {% if req %}
+    <p class="muted small">1개 재료비(기준단가) ₩{{ '{:,.0f}'.format(req.unit_cost) }} · 부품 {{ req.lines|length }}종
+      {% if bom %}· 수정 {{ bom.updated_by }} {{ bom.updated_at[:16] }}{% endif %}</p>
+  {% endif %}
+  <form class="card form" method="post" action="{{ url_for('production.bom_save') }}">
+    {{ csrf() }}
+    <input type="hidden" name="product" value="{{ pid }}">
+    <input type="hidden" name="updated_at" value="{{ bom.updated_at if bom else '' }}">
+    <div class="form-grid g3">
+      <label>기준 수량 ({{ mat.unit }}) *<input name="base_qty" type="number" min="0" step="any" value="{{ '%g' % (bom.base_qty if bom else 1) }}" required
+        {{ 'disabled' if not editable }}><span class="hint">이만큼 만드는 데 드는 수량을 아래에 적습니다 (보통 1)</span></label>
+      <label class="span2">메모<input name="note" value="{{ bom.note if bom else '' }}" {{ 'disabled' if not editable }}></label>
+    </div>
+    <div class="table-wrap">
+      <table class="data bom-lines">
+        <thead><tr><th>부품 (찾기·스캔)</th><th>수량</th><th>손실률 %</th><th>꺼내는 창고</th><th>메모</th></tr></thead>
+        <tbody>
+        {% for r in rows %}
+          <tr>
+            <td>{{ material_picker('comp', r.cid, r.label, placeholder='부품 코드·이름') }}</td>
+            <td><input name="qty" type="number" min="0" step="any" value="{{ r.qty }}" aria-label="수량"></td>
+            <td><input name="scrap" type="number" min="0" max="99" step="any" value="{{ r.scrap }}" aria-label="손실률"></td>
+            <td><select name="wh" aria-label="꺼내는 창고">
+                  <option value="">생산 화면에서 고른 창고</option>
+                  {% for k, v in wh_opts.items() %}<option value="{{ k }}" {{ 'selected' if k == r.wh }}>{{ v }}</option>{% endfor %}
+                </select></td>
+            <td><input name="line_note" value="{{ r.note }}" aria-label="메모"></td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <p class="muted small">줄이 모자라면 저장한 뒤 다시 열면 빈 줄이 {{ 6 }}개 더 생깁니다. 부품을 비운 줄은 지웁니다.
+      소요량 = 생산 수량 ÷ 기준 수량 × 수량 × (1 + 손실률). 제품을 자기 부품으로 넣거나 순환(A→B→A)이 되면 저장되지 않습니다.</p>
+    {% if editable %}<div><button class="btn btn-primary">BOM 저장</button></div>{% endif %}
+  </form>
+  {% if bom and editable %}
+    <form class="row-actions" method="post" action="{{ url_for('production.bom_active', product_id=pid) }}">
+      {{ csrf() }}<input type="hidden" name="active" value="{{ 0 if bom.active else 1 }}">
+      <button class="btn btn-sm">{{ 'BOM 사용 멈추기' if bom.active else 'BOM 다시 사용' }}</button>
+    </form>
+  {% endif %}
+{% endif %}
+{% endblock %}

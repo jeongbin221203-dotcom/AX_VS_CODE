@@ -204,3 +204,75 @@ form.is-submitting button[type=submit], form.is-submitting button:not([type]) { 
 .queue-panel .queue-list li { margin: .2rem 0; }
 .queue-panel .queue-list li.rejected { color: var(--error-fg); }
 .queue-panel .btn { margin-left: .4rem; }
+
+/* 자재 찾기 · 바코드 스캔 (static/js/picker.js) */
+.picker { position: relative; display: flex; gap: .35rem; align-items: center; }
+.picker .picker-q { flex: 1; min-width: 12rem; }
+.picker-cam { display: none; padding: .3rem .55rem; }
+.can-scan .picker-cam { display: inline-block; }
+.picker-list { position: absolute; z-index: 40; top: 100%; left: 0; right: 0; max-height: 18rem; overflow-y: auto;
+  margin: .2rem 0 0; padding: .2rem 0; list-style: none; background: var(--panel); border: 1px solid var(--line);
+  border-radius: var(--radius); box-shadow: 0 6px 18px rgba(0, 0, 0, .15); }
+.picker-list li { padding: .35rem .7rem; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.picker-list li.active, .picker-list li:hover { background: var(--accent-soft); }
+.picker-list li.picker-note { color: var(--error-fg); cursor: default; white-space: normal; }
+.picker-list li strong { font-variant-numeric: tabular-nums; }
+.picker.picker-miss .picker-q { outline: 2px solid var(--down); }
+.scan-overlay { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center;
+  background: rgba(0, 0, 0, .75); padding: 1rem; }
+.scan-frame { background: var(--panel); border-radius: var(--radius); padding: .75rem; width: min(560px, 100%); text-align: center; }
+.scan-frame video { width: 100%; max-height: 60vh; background: #000; border-radius: 6px; }
+.scan-msg { margin: .5rem 0; }
+
+/* 여러 줄·스캔 입출고 */
+.scanbox { display: flex; gap: .75rem; align-items: center; margin: 1rem 0 .5rem; padding: .75rem;
+  border: 2px dashed var(--accent); border-radius: var(--radius); background: var(--accent-soft); }
+.scanbox-label { font-weight: 700; white-space: nowrap; }
+.scanbox .picker { flex: 1; }
+.scanbox .picker-q { font-size: 1.05rem; padding: .55rem .7rem; }
+table.batch-lines input { width: 100%; min-width: 4.5rem; }
+table.batch-lines td.qty-cell { min-width: 7rem; }
+table.batch-lines td.lot-cell input { min-width: 7rem; }
+table.batch-lines tr:not(.lot-line) td.lot-cell input { visibility: hidden; }
+table.batch-lines tr.flash td { animation: line-flash 1s ease-out; }
+@keyframes line-flash { from { background: var(--success-bg); } to { background: transparent; } }
+.batch-foot { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-top: .75rem; }
+form[data-kind="IN"] .out-only { opacity: .45; }
+.span2 { grid-column: span 2; }
+details.inline-cancel summary { cursor: pointer; color: var(--down); }
+details.inline-cancel form { display: flex; gap: .4rem; margin-top: .3rem; }
+form.inline { display: inline-flex; gap: .4rem; align-items: center; margin-left: .5rem; }
+label.inline { display: inline-flex; gap: .3rem; align-items: center; }
+.metric-value.down { color: var(--down); }
+.alias-list { margin: 0 0 .5rem; padding-left: 1.2rem; }
+.alias-list li { margin: .25rem 0; }
+table.bom-lines td { vertical-align: middle; }
+table.bom-lines .picker-q { min-width: 16rem; }
+table.bom-lines input[type=number] { width: 6.5rem; }
+
+/* 시연 첫 안내 */
+.demo-welcome { border-left: 4px solid var(--accent); }
+.demo-welcome ol { margin: .4rem 0; padding-left: 1.3rem; }
+.demo-welcome li { margin: .2rem 0; }
+
+/* 휴대폰: 메뉴는 가로로 넘기는 한 줄, 본문이 바로 보이게 */
+@media (max-width: 760px) {
+  .sidebar { padding: .5rem .75rem; }
+  .sidebar .menu { display: flex; flex-wrap: nowrap; overflow-x: auto; gap: .3rem; padding-bottom: .3rem; }
+  .sidebar .menu .menu-group { display: contents; }
+  .sidebar .menu a { white-space: nowrap; flex: none; }
+  .sidebar .menu-label, .sidebar .menu-tools, .sidebar .menu-help, .sidebar .foot { display: none; }
+  .scanbox { flex-direction: column; align-items: stretch; }
+  .span2 { grid-column: auto; }
+  .batch-foot { flex-direction: column; align-items: stretch; }
+  .picker .picker-q { min-width: 0; }
+}
+/* 칸이 내용(긴 창고 이름 등) 때문에 넓어져 화면 밖으로 밀리지 않게 */
+.form-grid > *, .toolbar > label { min-width: 0; }
+.form-grid select, .form-grid input, .toolbar select { max-width: 100%; }
+@media (max-width: 760px) {
+  .m3, .m4, .g3, .g4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 420px) {
+  .g3, .g4 { grid-template-columns: minmax(0, 1fr); }
+}

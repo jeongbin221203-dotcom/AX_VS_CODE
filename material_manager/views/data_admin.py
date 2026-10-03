@@ -43,7 +43,7 @@ def index():
 @role_required("ADMIN")
 def template():
     df = pd.DataFrame(
-        [["PKG-100", "샘플 자재", "규격", "EA", "포장재", 10, 1000, "A-10", "공급처명", "PKG100"]],
+        [["PKG-100", "샘플 자재", "규격", "EA", "포장재", 10, 1000, "A-10", "공급처명", "PKG100", "8801234567893"]],
         columns=list(config.MATERIAL_COLS.values()),
     )
     return form_response("material_template", df, "자재마스터_업로드양식.xlsx")
@@ -181,8 +181,10 @@ def make_seed_mfg():
     if seed_mfg.exists():
         flash("제조 샘플은 이미 추가되어 있습니다.", "info")
         return redirect(url_for("data_admin.index"))
+    from core import production
     counts = seed_mfg.seed_manufacturing()
+    counts["bom"] = production.seed_sample()
     audit.log(actor(), "SEED", "material", "manufacturing", counts)
-    flash(f"제조 샘플을 추가했습니다 — 창원 제조공장 창고 3곳, 자재 {counts['materials']}종, 거래 {counts['transactions']:,}건, "
-          f"거래명세서 {counts['statements']}장.", "success")
+    flash(f"제조 샘플을 추가했습니다 — 창원 제조공장 창고 4곳, 자재 {counts['materials'] + 2}종, 거래 {counts['transactions']:,}건, "
+          f"거래명세서 {counts['statements']}장, BOM 2개·생산 투입 기록.", "success")
     return redirect(url_for("data_admin.index"))

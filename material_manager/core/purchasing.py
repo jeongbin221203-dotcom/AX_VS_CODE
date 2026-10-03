@@ -13,7 +13,7 @@ from datetime import date
 import pandas as pd
 
 import config
-from core import audit, auth, db, org, version
+from core import audit, auth, db, notify, org, partners, version
 from core.utils import now_str
 
 PR_STATUS = {"PENDING": "결재 중", "APPROVED": "승인", "REJECTED": "반려", "ORDERED": "발주 완료", "CANCELLED": "취소"}
@@ -79,6 +79,11 @@ def create_pr(warehouse_id: int, items: list[tuple[int, float, float]], need_dat
                          [(pr_id, (i + 1) * 10, m, q, p) for i, (m, q, p) in enumerate(items)])
         audit.record(conn, actor, "PR_CREATE", "purchase_request", pr_id,
                      {"pr_no": pr_no, "amount": amount, "steps": steps, "items": len(items)})
+        notify.queue(conn, notify.recipients(conn, step_role(1), warehouse_id, [actor.get("id")]),
+                     f"구매요청 {pr_no} 결재 요청 (1/{steps}단계)",
+                     [f"{actor['name']}님이 구매요청을 올렸습니다.", f"창고: {wh['code']} {wh['name']}",
+                      f"금액: ₩{amount:,.0f} · 품목 {len(items)}개 · 결재 {steps}단계", f"사유: {reason.strip()}"],
+                     f"/purchase/pr/{pr_id}", f"pr:{pr_id}")
     return PResult(True, f"구매요청 {pr_no} 등록 — 금액 ₩{amount:,.0f}, 결재 {steps}단계", pr_id)
 
 
@@ -109,6 +114,20 @@ def decide_pr(pr_id: int, approve: bool, comment: str, actor: dict, wh_ids=None)
         conn.execute("UPDATE purchase_requests SET status = ?, updated_at = ? WHERE id = ?", (status, now_str(), pr_id))
         audit.record(conn, actor, "PR_DECIDE", "purchase_request", pr_id,
                      {"step": step, "approve": approve, "comment": comment, "status": status})
+        path = f"/purchase/pr/{pr_id}"
+        if status == "PENDING":                       # 다음 단계 결재자에게
+            done_ids = [d["approver_id"] for d in done] + [actor.get("id"), pr["requested_by_id"]]
+            notify.queue(conn, notify.recipients(conn, step_role(step + 1), pr["warehouse_id"], done_ids),
+                         f"구매요청 {pr['pr_no']} 결재 요청 ({step + 1}/{pr['required_steps']}단계)",
+                         [f"{actor['name']}님이 {step}단계를 승인했습니다. 다음 단계 결재를 부탁드립니다.",
+                          f"금액: ₩{float(pr['total_amount']):,.0f} · 요청자 {pr['requested_by']}"], path, f"pr:{pr_id}")
+        else:                                         # 결과를 요청자에게
+            result_line = ("최종 승인됐습니다. 구매 담당자가 발주를 만들 수 있습니다." if approve
+                           else f"반려 사유: {comment}")
+            notify.queue(conn, notify.user(conn, pr["requested_by_id"]),
+                         f"구매요청 {pr['pr_no']} {'최종 승인' if approve else '반려'}",
+                         [f"{actor['name']}님이 {step}단계에서 {'승인' if approve else '반려'}했습니다.", result_line],
+                         path, f"pr:{pr_id}")
     if not approve:
         return PResult(True, f"{pr['pr_no']} 반려", pr_id)
     return PResult(True, f"{pr['pr_no']} {step}단계 승인" + (" — 최종 승인, 발주할 수 있습니다." if status == "APPROVED"
@@ -137,6 +156,9 @@ def create_po(pr_id: int, supplier: str, prices: dict[int, float], sap_po_no: st
     if not supplier:
         return PResult(False, "공급처를 입력하세요.")
     with db.transaction() as conn:
+        supplier, supplier_id, problem = partners.apply(conn, supplier)
+        if problem:
+            return PResult(False, problem)
         db.lock(conn, f"pr:{pr_id}")
         pr = conn.execute("SELECT * FROM purchase_requests WHERE id = ?", (pr_id,)).fetchone()
         if pr is None or pr["status"] != "APPROVED":
@@ -156,9 +178,9 @@ def create_po(pr_id: int, supplier: str, prices: dict[int, float], sap_po_no: st
         needs_approval = total > float(pr["total_amount"]) * (1 + config.PO_OVER_PR_TOLERANCE) + 1e-6
         po_no = _next_no(conn, "PO", "purchase_orders", "po_no")
         po_id = conn.execute(
-            "INSERT INTO purchase_orders (po_no, pr_id, supplier, warehouse_id, status, sap_po_no, total_amount, note, "
-            "created_by_id, created_by, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            (po_no, pr_id, supplier, pr["warehouse_id"], "PENDING_APPROVAL" if needs_approval else "OPEN",
+            "INSERT INTO purchase_orders (po_no, pr_id, supplier, supplier_id, warehouse_id, status, sap_po_no, total_amount, "
+            "note, created_by_id, created_by, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            (po_no, pr_id, supplier, supplier_id, pr["warehouse_id"], "PENDING_APPROVAL" if needs_approval else "OPEN",
              sap_po_no.strip(), total, note.strip(), actor.get("id"), actor["name"], now_str())).lastrowid
         conn.executemany("INSERT INTO po_items (po_id, line_no, material_id, qty, price) VALUES (?, ?, ?, ?, ?)",
                          [(po_id, *line) for line in lines])
@@ -166,9 +188,17 @@ def create_po(pr_id: int, supplier: str, prices: dict[int, float], sap_po_no: st
         audit.record(conn, actor, "PO_CREATE", "purchase_order", po_id,
                      {"po_no": po_no, "pr_no": pr["pr_no"], "supplier": supplier, "total": total,
                       "needs_approval": needs_approval})
+        if needs_approval:
+            notify.queue(conn, notify.recipients(conn, "MANAGER", pr["warehouse_id"], [actor.get("id"), pr["requested_by_id"]]),
+                         f"발주 {po_no} 결재 요청",
+                         [f"{actor['name']}님이 만든 발주가 요청 승인액보다 {config.PO_OVER_PR_TOLERANCE:.0%} 넘게 커서 결재가 필요합니다.",
+                          f"공급처: {supplier} · 발주 ₩{total:,.0f} (요청 승인액 ₩{float(pr['total_amount']):,.0f})"],
+                         f"/purchase/po/{po_id}", f"po:{po_id}")
     msg = f"발주 {po_no} 생성 — ₩{total:,.0f}"
     if needs_approval:
         msg += f" (요청 승인액 ₩{pr['total_amount']:,.0f}보다 {config.PO_OVER_PR_TOLERANCE:.0%} 넘게 커서 발주 결재 필요)"
+    if not supplier_id:
+        msg += " · " + partners.unknown_warning(supplier, None)
     return PResult(True, msg, po_id)
 
 
@@ -185,6 +215,8 @@ def approve_po(po_id: int, actor: dict, wh_ids=None) -> PResult:
         conn.execute("UPDATE purchase_orders SET status = 'OPEN', approved_by = ?, approved_at = ? WHERE id = ?",
                      (actor["name"], now_str(), po_id))
         audit.record(conn, actor, "PO_APPROVE", "purchase_order", po_id, {"po_no": po["po_no"]})
+        notify.queue(conn, notify.user(conn, po["created_by_id"]), f"발주 {po['po_no']} 승인",
+                     [f"{actor['name']}님이 발주를 승인했습니다. 입고할 수 있습니다."], f"/purchase/po/{po_id}", f"po:{po_id}")
     return PResult(True, f"발주 {po['po_no']} 승인 — 입고할 수 있습니다.", po_id)
 
 

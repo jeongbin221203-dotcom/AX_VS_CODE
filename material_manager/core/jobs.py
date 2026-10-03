@@ -69,6 +69,16 @@ def _master_sync() -> str:
     return ", ".join(f"{k} {v}" for k, v in counts.items())
 
 
+def _notify() -> str:
+    from core import notify
+    return notify.send_pending()
+
+
+def _notify_enabled() -> bool:
+    from core import notify
+    return notify.enabled()
+
+
 def _master_enabled() -> bool:
     from core import master_sync
     return master_sync.enabled()
@@ -79,6 +89,7 @@ JOBS = {
     "sap_master_sync": Job("sap_master_sync", "ERP·SAP 마스터 동기화", 3600, _master_sync, enabled=_master_enabled),
     "cleanup_uploads": Job("cleanup_uploads", "업로드 임시파일 정리", 3600, _cleanup_uploads),
     "db_backup": Job("db_backup", "DB 자동 백업", max(config.BACKUP_HOURS, 1) * 3600, _backup, enabled=backup.enabled),
+    "notify_send": Job("notify_send", "결재 알림 메일 보내기", 60, _notify, enabled=_notify_enabled),
     "storage_flush": Job("storage_flush", "S3 임시 보관 파일 올리기", 300, _storage_flush,
                          enabled=lambda: config.STORAGE == "s3"),
 }

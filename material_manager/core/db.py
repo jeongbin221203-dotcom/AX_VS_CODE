@@ -378,6 +378,93 @@ CREATE TABLE IF NOT EXISTS user_prefs (
     PRIMARY KEY (user_id, key)
 );
 
+-- 거래처 마스터 (core/partners.py): 공급처·납품처. 거래·명세서·발주의 거래처 이름은 여기 이름으로 맞추고 partner_id를 남긴다.
+CREATE TABLE IF NOT EXISTS partners (
+    id          {ID},
+    code        TEXT    NOT NULL UNIQUE,
+    name        TEXT    NOT NULL,
+    name_key    TEXT    NOT NULL UNIQUE,     -- 비교용 이름: (주)·주식회사·띄어쓰기·기호를 뺀 소문자
+    biz_no      TEXT    DEFAULT '',          -- 사업자등록번호 숫자 10자리
+    kind        TEXT    NOT NULL DEFAULT 'BOTH' CHECK (kind IN ('SUPPLIER', 'CUSTOMER', 'BOTH')),
+    contact     TEXT    DEFAULT '',
+    phone       TEXT    DEFAULT '',
+    email       TEXT    DEFAULT '',
+    note        TEXT    DEFAULT '',
+    active      INTEGER DEFAULT 1,
+    created_at  TEXT    NOT NULL,
+    updated_at  TEXT    NOT NULL
+);
+
+-- 거래처 다른 이름: '대한상사', '(주)대한상사', '대한 상사㈜' 처럼 같은 회사를 다르게 적은 이름 → 한 거래처
+CREATE TABLE IF NOT EXISTS partner_aliases (
+    id          {ID},
+    partner_id  INTEGER NOT NULL REFERENCES partners(id),
+    alias       TEXT    NOT NULL,
+    alias_key   TEXT    NOT NULL UNIQUE,
+    created_by  TEXT    DEFAULT '',
+    created_at  TEXT    NOT NULL
+);
+
+-- 자재 명세서(BOM): 제품 1개(base_qty)를 만드는 데 드는 부품·원자재 (core/production.py). 제품마다 하나.
+CREATE TABLE IF NOT EXISTS boms (
+    id           {ID},
+    product_id   INTEGER NOT NULL UNIQUE REFERENCES materials(id),
+    base_qty     {REAL}  NOT NULL DEFAULT 1,
+    note         TEXT    DEFAULT '',
+    active       INTEGER DEFAULT 1,
+    updated_by   TEXT    DEFAULT '',
+    created_at   TEXT    NOT NULL,
+    updated_at   TEXT    NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS bom_items (
+    id            {ID},
+    bom_id        INTEGER NOT NULL REFERENCES boms(id),
+    line_no       INTEGER NOT NULL,
+    component_id  INTEGER NOT NULL REFERENCES materials(id),
+    qty           {REAL}  NOT NULL,           -- base_qty 만큼 만드는 데 드는 수량
+    scrap_pct     {REAL}  DEFAULT 0,          -- 손실률(%): 소요량 = qty × (1 + scrap_pct/100)
+    issue_wh_id   INTEGER REFERENCES warehouses(id),   -- 이 부품을 꺼내는 창고 (비우면 생산 화면에서 고른 창고)
+    note          TEXT    DEFAULT ''
+);
+
+-- 생산 투입: BOM대로 부품을 한 번에 출고(+ 완제품 입고). 거래는 transactions.production_id로 묶인다.
+CREATE TABLE IF NOT EXISTS productions (
+    id              {ID},
+    prod_no         TEXT    NOT NULL UNIQUE,
+    product_id      INTEGER NOT NULL REFERENCES materials(id),
+    qty             {REAL}  NOT NULL,
+    issue_wh_id     INTEGER NOT NULL REFERENCES warehouses(id),
+    receipt_wh_id   INTEGER REFERENCES warehouses(id),
+    tx_date         TEXT    NOT NULL,
+    work_order      TEXT    DEFAULT '',
+    cost_center     TEXT    DEFAULT '',
+    material_cost   {REAL}  DEFAULT 0,        -- 투입 부품 금액 합 (기준단가)
+    bom_snapshot    TEXT    DEFAULT '',       -- 등록 당시 BOM (JSON) — 나중에 BOM을 바꿔도 이 생산의 근거가 남는다
+    note            TEXT    DEFAULT '',
+    created_by_id   INTEGER,
+    created_by      TEXT    NOT NULL,
+    created_at      TEXT    NOT NULL,
+    cancelled_at    TEXT    DEFAULT '',
+    cancelled_by    TEXT    DEFAULT '',
+    cancel_reason   TEXT    DEFAULT ''
+);
+
+-- 메일 알림 보낼 목록 (core/notify.py): 결재 요청·결과. 업무와 같은 트랜잭션에서 쌓고 배치가 보낸다.
+CREATE TABLE IF NOT EXISTS notifications (
+    id          {ID},
+    ref         TEXT    DEFAULT '',          -- 무엇에 대한 알림 (예: pr:12)
+    to_user_id  INTEGER,
+    to_addr     TEXT    NOT NULL,
+    subject     TEXT    NOT NULL,
+    body        TEXT    NOT NULL,
+    status      TEXT    NOT NULL,            -- PENDING | SENT | LOGGED | FAILED
+    tries       INTEGER DEFAULT 0,
+    last_error  TEXT    DEFAULT '',
+    created_at  TEXT    NOT NULL,
+    sent_at     TEXT    DEFAULT ''
+);
+
 CREATE TABLE IF NOT EXISTS job_runs (
     id           {ID},
     name         TEXT NOT NULL,
@@ -420,6 +507,13 @@ MIGRATIONS = [
     ("statements", "cancelled_at", "TEXT DEFAULT ''"),
     ("statements", "cancelled_by", "TEXT DEFAULT ''"),
     ("statements", "cancel_reason", "TEXT DEFAULT ''"),
+    ("transactions", "partner_id", "INTEGER"),          # 거래처 마스터 (이름이 마스터와 맞을 때)
+    ("transactions", "production_id", "INTEGER"),       # 생산 투입으로 한꺼번에 등록한 거래
+    ("transactions", "batch_no", "TEXT DEFAULT ''"),    # 여러 줄 입출고로 한꺼번에 등록한 거래
+    ("statements", "partner_id", "INTEGER"),
+    ("purchase_orders", "supplier_id", "INTEGER"),
+    ("materials", "barcode", "TEXT DEFAULT ''"),        # 공급처 상자의 바코드(EAN 등) — 스캔하면 이 자재
+    ("users", "email", "TEXT DEFAULT ''"),              # 결재 알림 메일
 ]
 
 INDEXES = """
@@ -441,6 +535,13 @@ CREATE INDEX IF NOT EXISTS idx_pr_status   ON purchase_requests(status);
 CREATE INDEX IF NOT EXISTS idx_po_status   ON purchase_orders(status);
 CREATE INDEX IF NOT EXISTS idx_once_at     ON form_once(created_at);
 CREATE INDEX IF NOT EXISTS idx_tx_statement ON transactions(statement_id);
+CREATE INDEX IF NOT EXISTS idx_tx_partner ON transactions(partner_id);
+CREATE INDEX IF NOT EXISTS idx_tx_production ON transactions(production_id);
+CREATE INDEX IF NOT EXISTS idx_tx_batch ON transactions(batch_no);
+CREATE INDEX IF NOT EXISTS idx_bom_items ON bom_items(bom_id);
+CREATE INDEX IF NOT EXISTS idx_bom_comp  ON bom_items(component_id);
+CREATE INDEX IF NOT EXISTS idx_notify_st ON notifications(status);
+CREATE UNIQUE INDEX IF NOT EXISTS uq_mat_barcode ON materials(barcode) WHERE barcode <> '';
 CREATE UNIQUE INDEX IF NOT EXISTS uq_statement_no ON statements(kind, partner, statement_no) WHERE statement_no <> '';
 CREATE UNIQUE INDEX IF NOT EXISTS uq_user_sso ON users(sso_subject) WHERE sso_subject <> '';
 CREATE UNIQUE INDEX IF NOT EXISTS uq_doc_approval ON documents(approval_no) WHERE approval_no <> '';

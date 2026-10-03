@@ -156,7 +156,8 @@ def seed_large() -> dict:
                     "tx_date": d.isoformat(), "ref_no": "", "partner": "", "note": "", "created_by": who["name"],
                     "reversal_of": None, "po_no": "", "po_item": "", "cost_center": "", "movement_type": "",
                     "warehouse_id": whs[wh_code], "transfer_no": "", "created_by_id": who["id"], "approved_by": "",
-                    "lot_no": "", "statement_id": None, **extra}
+                    "lot_no": "", "statement_id": None, "partner_id": None, "production_id": None, "batch_no": "",
+                    **extra}
             rows.append((*[data[f] for f in repo.TX_FIELDS], stamp(d)))
             counts["transactions"] += 1
 

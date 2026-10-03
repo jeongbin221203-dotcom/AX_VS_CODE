@@ -13,7 +13,7 @@ from datetime import date
 import pandas as pd
 
 import config
-from core import approvals, audit, db, master_sync, org, periods, purchasing, repository as repo, sap
+from core import approvals, audit, db, master_sync, org, partners, periods, purchasing, repository as repo, sap
 from core.utils import clean_str_series, code_series, now_str
 
 
@@ -42,7 +42,8 @@ class UploadResult:
 
 
 # 업로드에서 비어 있으면 기존 자재의 값을 그대로 두는 항목 (자재코드·자재명은 필수)
-UPLOAD_OPTIONAL = ("spec", "unit", "category", "safety_stock", "unit_price", "location", "supplier", "sap_matnr")
+UPLOAD_OPTIONAL = ("spec", "unit", "category", "safety_stock", "unit_price", "location", "supplier", "sap_matnr",
+                   "barcode")
 
 
 def _actor(actor: dict | None, created_by: str) -> dict:
@@ -100,16 +101,20 @@ def register_transaction(material_id: int, tx_type: str, qty_input: float, tx_da
     result = _done(mat, tx_type, qty, stock_after, tx_ids[0], wh, sap_status)
     if lot_managed:
         result.message += " · 로트 " + ", ".join(f"{lot} {q:,.2f}" for lot, q in allocations)
+    result.warning = " ".join(filter(None, [result.warning, out["partner_warning"]]))
     return result
 
 
 def _register(conn, who: dict, material_id: int, tx_type: str, qty_input: float, tx_date: str, unit_price: float,
               ref_no: str, partner: str, note: str, po_no: str, po_item: str, cost_center: str,
-              warehouse_id: int | None, wh_ids, lot_no: str, expiry_date: str, statement_id: int | None = None):
-    """register_transaction의 본문 — 호출하는 쪽의 트랜잭션 안에서 돈다(거래명세서는 여러 줄을 한 트랜잭션에).
-    실패·결재 대기는 Result, 성공은 결과 dict."""
+              warehouse_id: int | None, wh_ids, lot_no: str, expiry_date: str, statement_id: int | None = None,
+              production_id: int | None = None, batch_no: str = ""):
+    """register_transaction의 본문 — 호출하는 쪽의 트랜잭션 안에서 돈다(거래명세서·여러 줄 입출고·생산 투입은
+    여러 줄을 한 트랜잭션에). 실패·결재 대기는 Result, 성공은 결과 dict.
+    거래처 이름은 거래처 마스터에 있으면 정식 이름과 partner_id로 남긴다(입고와 원가센터 없는 출고만)."""
     if not _finite(qty_input, unit_price):
         return Result(False, "수량·단가를 숫자로 다시 입력하세요.")
+    lot_no, expiry_date = (lot_no or "").strip().upper(), (expiry_date or "").strip()
     wh_id = warehouse_id or repo.default_warehouse_id(conn)
     wh = org.get_warehouse(wh_id, conn)
     problem = _warehouse_problem(wh, wh_ids) or periods.date_problem(conn, tx_date)
@@ -121,6 +126,12 @@ def _register(conn, who: dict, material_id: int, tx_type: str, qty_input: float,
     lot_managed = bool(mat["lot_managed"])
     if not lot_managed:
         lot_no = expiry_date = ""
+    partner_id, partner_warning = None, ""
+    if partners.is_partner_tx(tx_type, cost_center):
+        partner, partner_id, problem = partners.apply(conn, partner)
+        if problem:
+            return Result(False, problem)
+        partner_warning = partners.unknown_warning(partner, partner_id)
     problem = (master_sync.cost_center_problem(conn, cost_center) if tx_type == "OUT" else "")
     if not problem and sap.enabled():
         problem = sap.mapping_problem(mat, tx_type, cost_center, po_no, po_item, warehouse=wh)
@@ -192,6 +203,7 @@ def _register(conn, who: dict, material_id: int, tx_type: str, qty_input: float,
             "ref_no": ref_no.strip(), "partner": partner.strip(), "note": note.strip(),
             "po_no": po_no, "po_item": po_item, "cost_center": cost_center,
             "movement_type": sap.movement_type(tx_type, q, po_no), "statement_id": statement_id,
+            "partner_id": partner_id, "production_id": production_id, "batch_no": batch_no,
         }, mat["code"]))
     if po_no:
         purchasing.refresh_po_status(conn, po_no)
@@ -199,7 +211,107 @@ def _register(conn, who: dict, material_id: int, tx_type: str, qty_input: float,
     stock_after = repo.current_stock(conn, material_id, wh_id)
     sap_status = conn.execute("SELECT status FROM sap_outbox WHERE tx_id = ?", (tx_ids[0],)).fetchone()
     return {"mat": mat, "qty": qty, "stock_after": stock_after, "tx_ids": tx_ids, "wh": wh,
-            "sap_status": sap_status, "allocations": allocations, "lot_managed": lot_managed}
+            "sap_status": sap_status, "allocations": allocations, "lot_managed": lot_managed,
+            "partner": partner, "partner_id": partner_id, "partner_warning": partner_warning,
+            "unit_price": max(float(unit_price), 0.0)}
+
+# ── 여러 줄 입출고 (스캔·한 화면에서 여러 품목) ─────────────────
+MAX_BATCH_LINES = 200
+
+
+@dataclass
+class LineIn:
+    material_id: int
+    qty: float
+    lot_no: str = ""
+    expiry_date: str = ""
+    unit_price: float | None = None     # 비우면 자재 기준단가
+    note: str = ""
+
+
+class _Rejected(Exception):
+    def __init__(self, no: int, message: str):
+        super().__init__(message)
+        self.no, self.message = no, message
+
+
+def register_lines(kind: str, warehouse_id: int, tx_date: str, lines: list[LineIn], *, actor: dict | None,
+                   wh_ids=None, ref_no: str = "", partner: str = "", cost_center: str = "", note: str = "") -> Result:
+    """입고·출고 여러 줄을 한 트랜잭션으로 등록한다 (바코드로 찍은 품목 등).
+    한 줄이라도 거부되면(재고 부족·마감·권한·로트 등) 아무것도 등록하지 않는다 — 판정은 한 건 등록과 같은 _register.
+    같은 묶음 번호(batch_no)가 붙어 이력에서 함께 보고, 묶음 전체를 한 번에 취소할 수 있다."""
+    if kind not in ("IN", "OUT"):
+        return Result(False, "입고 또는 출고를 고르세요.")
+    lines = [ln for ln in lines if ln.material_id]
+    if not lines:
+        return Result(False, "등록할 품목을 한 줄 이상 넣으세요 (자재를 찾거나 바코드를 스캔).")
+    if len(lines) > MAX_BATCH_LINES:
+        return Result(False, f"한 번에 {MAX_BATCH_LINES}줄까지 등록할 수 있습니다. 나눠서 등록하세요.")
+    for i, ln in enumerate(lines, 1):
+        if not _finite(ln.qty, ln.unit_price) or ln.qty <= 0:
+            return Result(False, f"{i}번 줄: 수량은 0보다 큰 숫자여야 합니다.")
+    who = _actor(actor, "")
+    batch_no = f"B-{tx_date.replace('-', '')}-{secrets.token_hex(3).upper()}"
+    warnings, first_tx, amount, shown_partner = [], 0, 0.0, partner
+    try:
+        with db.transaction() as conn:
+            for i, ln in enumerate(lines, 1):
+                mat = repo.get_material(ln.material_id, conn)
+                price = ln.unit_price if ln.unit_price is not None else float(mat["unit_price"] or 0) if mat else 0.0
+                out = _register(conn, who, ln.material_id, kind, float(ln.qty), tx_date, price, ref_no or batch_no,
+                                partner, (ln.note or note).strip(), "", "", cost_center if kind == "OUT" else "",
+                                warehouse_id, wh_ids, ln.lot_no, ln.expiry_date, batch_no=batch_no)
+                if isinstance(out, Result):
+                    raise _Rejected(i, out.message)
+                first_tx = first_tx or out["tx_ids"][0]
+                amount += float(out["qty"]) * out["unit_price"]
+                shown_partner = out["partner"] or shown_partner
+                if out["partner_warning"] and out["partner_warning"] not in warnings:
+                    warnings.append(out["partner_warning"])
+                safety = float(out["mat"]["safety_stock"] or 0)
+                if kind == "OUT" and out["stock_after"] < safety:
+                    warnings.append(f"{out['mat']['code']} 안전재고({safety:,.2f}) 미달 — 현재 {out['stock_after']:,.2f}")
+            audit.record(conn, who, "TX_BATCH", "transaction", first_tx,
+                         {"batch_no": batch_no, "kind": kind, "lines": len(lines), "warehouse_id": warehouse_id,
+                          "partner": shown_partner, "amount": amount})
+    except _Rejected as exc:
+        return Result(False, f"{exc.no}번 줄이 거부되어 아무것도 등록하지 않았습니다: {exc.message}")
+    return Result(True, f"{config.TX_LABEL[kind]} {len(lines)}줄 등록 (묶음 {batch_no}, 금액 ₩{amount:,.0f})",
+                  qty=len(lines), warning=" · ".join(warnings[:6]), tx_id=first_tx)
+
+
+def cancel_group(column: str, value, reason: str, *, actor: dict | None, wh_ids=None, label: str = "") -> Result:
+    """묶음(batch_no)·생산(production_id)으로 함께 등록한 거래를 한 번에 취소한다. 한 줄이라도 못 하면 아무것도 안 한다.
+    이미 따로 취소한 줄은 건너뛴다."""
+    if column not in ("batch_no", "production_id"):
+        raise ValueError(column)
+    reason = (reason or "").strip()
+    if not reason:
+        return Result(False, "취소 사유를 입력하세요.")
+    who = _actor(actor, "")
+    label = label or str(value)
+    try:
+        with db.transaction() as conn:
+            db.lock(conn, f"group:{column}:{value}")
+            ids = [int(r["id"]) for r in conn.execute(
+                f"SELECT t.id FROM transactions t WHERE t.{column} = ? AND t.reversal_of IS NULL "
+                "AND NOT EXISTS (SELECT 1 FROM transactions r WHERE r.reversal_of = t.id) ORDER BY t.id DESC",
+                (value,)).fetchall()]
+            if not ids:
+                return Result(False, f"{label}: 취소할 거래가 없습니다 (이미 취소됨).")
+            for tx_id in ids:                           # 나중 거래부터 (완제품 입고 → 부품 출고)
+                out = _reverse(conn, who, tx_id, f"{label} 취소: {reason}", date.today().isoformat(), wh_ids)
+                if isinstance(out, Result):
+                    raise _Rejected(tx_id, out.message)
+            if column == "production_id":
+                conn.execute("UPDATE productions SET cancelled_at = ?, cancelled_by = ?, cancel_reason = ? WHERE id = ?",
+                             (now_str(), who["name"], reason, value))
+            audit.record(conn, who, "TX_GROUP_CANCEL", "transaction", ids[-1],
+                         {column: value, "reason": reason, "reversed": ids})
+    except _Rejected as exc:
+        return Result(False, f"거래 #{exc.no}를 취소할 수 없어 아무것도 취소하지 않았습니다: {exc.message}")
+    return Result(True, f"{label}를 취소했습니다 (취소 거래 {len(ids)}건).", qty=len(ids))
+
 
 def _lot_problem(conn, mat: dict, lot_no: str, expiry_date: str, tx_date: str, receiving: bool) -> str:
     """로트 입력 검사. 입고면 로트 마스터를 만들거나 유효기한이 같은지 확인한다."""
@@ -437,6 +549,8 @@ def _reverse(conn, who: dict, tx_id: int, reason: str, reverse_date: str, wh_ids
             "po_item": leg["po_item"], "cost_center": leg["cost_center"], "warehouse_id": leg["warehouse_id"],
             "transfer_no": leg["transfer_no"], "lot_no": leg["lot_no"],
             "movement_type": sap.reversal_movement_type(leg["movement_type"] or ""),
+            "partner_id": leg["partner_id"], "production_id": leg["production_id"],
+            "batch_no": leg["batch_no"] or "",
         })
         rev_ids.append(rev_id)
     # SAP: 이동은 출고 쪽만 전기했으므로 출고 쪽 취소만 전송 (로트가 여럿이면 로트마다)
@@ -452,11 +566,36 @@ def _reverse(conn, who: dict, tx_id: int, reason: str, reverse_date: str, wh_ids
     return {"tx": tx, "rev_ids": rev_ids, "sap_status": sap_status, "after": after}
 
 # ── 자재 마스터 (감사로그 포함) ─────────────────────────────────
+BARCODE_RE = re.compile(r"[A-Z0-9._/+-]{4,64}")
+
+
+def barcode_problem(conn, barcode: str, material_id: int | None = None) -> str:
+    """바코드는 다른 자재의 바코드·자재코드·SAP 자재번호와 겹치면 안 된다(스캔하면 어느 자재인지 하나여야 한다)."""
+    if not barcode:
+        return ""
+    if not BARCODE_RE.fullmatch(barcode):
+        return "바코드는 영문·숫자(·._/+-) 4~64자로 입력하세요."
+    row = conn.execute("SELECT code FROM materials WHERE id <> ? AND (barcode = ? OR UPPER(code) = ? OR UPPER(sap_matnr) = ?)",
+                       (material_id or 0, barcode, barcode, barcode)).fetchone()
+    return f"바코드 {barcode}가 자재 {row['code']}의 바코드·자재코드·SAP 번호와 겹칩니다." if row else ""
+
+
+def _canonical_supplier(conn, name: str) -> str:
+    """자재의 공급처 이름: 거래처 마스터에 있으면 정식 이름으로 (없으면 적은 그대로 — 자재 저장은 막지 않는다)."""
+    p = partners.resolve(conn, name or "")
+    return p["name"] if p else partners.norm_name(name or "")
+
+
 def create_material(data: dict, actor: dict | None = None) -> Result:
     if not data.get("code") or not data.get("name"):
         return Result(False, "자재코드와 자재명은 필수입니다.")
+    data = {**data, "barcode": (data.get("barcode") or "").strip().upper()}
     try:
         with db.transaction() as conn:
+            problem = barcode_problem(conn, data["barcode"])
+            if problem:
+                return Result(False, problem)
+            data["supplier"] = _canonical_supplier(conn, data.get("supplier", ""))
             mid = repo.insert_material(data, conn)
             audit.record(conn, actor, "MATERIAL_CREATE", "material", mid,
                          {f: data.get(f) for f in repo.MATERIAL_FIELDS})
@@ -478,7 +617,13 @@ def update_material(material_id: int, data: dict, actor: dict | None = None,
             return Result(False, "화면을 연 뒤 다른 사용자(또는 SAP 동기화)가 이 자재를 먼저 바꿨습니다"
                                  f"({before['updated_at']}). 최신 내용을 확인한 뒤 다시 저장하세요.")
         data = {"lot_managed": int(before["lot_managed"] or 0), "expiry_managed": int(before["expiry_managed"] or 0),
-                **data}
+                "barcode": before["barcode"] or "", **data}
+        data["barcode"] = (data["barcode"] or "").strip().upper()
+        problem = barcode_problem(conn, data["barcode"], material_id)
+        if problem:
+            return Result(False, problem)
+        if "supplier" in data:
+            data["supplier"] = _canonical_supplier(conn, data["supplier"])
         diff = audit.changes(before, data, repo.MATERIAL_FIELDS[1:])
         if not diff:
             return Result(True, "변경된 내용이 없습니다.")
@@ -515,28 +660,36 @@ def import_materials(df: pd.DataFrame, actor: dict | None = None) -> Result:
     rows = df.to_dict("records")
     new, updated, sap_kept = [], [], []
     ts = now_str()
-    with db.transaction() as conn:
-        for r in rows:
-            blank = set(filter(None, str(r.get("_blank") or "").split(",")))
-            data = {f: r[f] for f in repo.UPLOAD_FIELDS}
-            cur = conn.execute("SELECT id, sap_synced_at FROM materials WHERE code = ?", (data["code"],)).fetchone()
-            if cur is None:
-                repo.insert_material(data, conn)
-                new.append(data["code"])
-                continue
-            changes = {f: data[f] for f in repo.UPLOAD_FIELDS[1:] if f not in blank}
-            if cur["sap_synced_at"] and config.SAP_MASTER_READONLY:
-                locked = [f for f in SAP_OWNED_FIELDS if f in changes]
-                for f in locked:
-                    changes.pop(f)
-                if locked:
-                    sap_kept.append(data["code"])
-            if changes:
-                conn.execute(f"UPDATE materials SET {', '.join(f'{f} = ?' for f in changes)}, updated_at = ? "
-                             "WHERE id = ?", (*changes.values(), ts, cur["id"]))
-            updated.append(data["code"])
-        audit.record(conn, actor, "MATERIAL_IMPORT", "material", "",
-                     {"new": new[:200], "updated": updated[:200], "count": len(rows), "sap_kept": sap_kept[:200]})
+    try:
+        with db.transaction() as conn:
+            for r in rows:
+                blank = set(filter(None, str(r.get("_blank") or "").split(",")))
+                data = {f: r.get(f, "") for f in repo.UPLOAD_FIELDS}
+                data["barcode"] = data["barcode"] or ""
+                cur = conn.execute("SELECT id, sap_synced_at FROM materials WHERE code = ?", (data["code"],)).fetchone()
+                if "barcode" not in blank:          # 바코드는 다른 자재와 겹치면 파일 전체를 반영하지 않는다
+                    problem = barcode_problem(conn, data["barcode"], int(cur["id"]) if cur else None)
+                    if problem:
+                        raise _Rejected(0, f"{data['code']}: {problem}")
+                if cur is None:
+                    repo.insert_material(data, conn)
+                    new.append(data["code"])
+                    continue
+                changes = {f: data[f] for f in repo.UPLOAD_FIELDS[1:] if f not in blank}
+                if cur["sap_synced_at"] and config.SAP_MASTER_READONLY:
+                    locked = [f for f in SAP_OWNED_FIELDS if f in changes]
+                    for f in locked:
+                        changes.pop(f)
+                    if locked:
+                        sap_kept.append(data["code"])
+                if changes:
+                    conn.execute(f"UPDATE materials SET {', '.join(f'{f} = ?' for f in changes)}, updated_at = ? "
+                                 "WHERE id = ?", (*changes.values(), ts, cur["id"]))
+                updated.append(data["code"])
+            audit.record(conn, actor, "MATERIAL_IMPORT", "material", "",
+                         {"new": new[:200], "updated": updated[:200], "count": len(rows), "sap_kept": sap_kept[:200]})
+    except _Rejected as exc:
+        return Result(False, f"반영하지 않았습니다 — {exc.message}")
     msg = f"{len(rows)}건 반영 완료 (신규 {len(new)} · 갱신 {len(updated)})"
     if sap_kept:
         msg += f" · SAP 동기화 자재 {len(sap_kept)}건은 SAP 항목(이름·단위·분류·단가·SAP번호)을 바꾸지 않았습니다"
@@ -579,6 +732,7 @@ def normalize_upload(raw: pd.DataFrame) -> UploadResult:
     for col in ("spec", "location", "supplier"):
         df[col] = clean_str_series(df[col])
     df["sap_matnr"] = code_series(df["sap_matnr"]).str.upper()
+    df["barcode"] = code_series(df["barcode"]).str.upper().str.replace(r"\s+", "", regex=True)
     df["unit"] = clean_str_series(df["unit"], default=config.DEFAULT_UNIT)
     df["category"] = clean_str_series(df["category"], default=config.DEFAULT_CATEGORY)
     df["_blank"] = [",".join(c for c in UPLOAD_OPTIONAL if blank[c].iloc[i]) for i in range(len(df))]

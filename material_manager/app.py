@@ -30,7 +30,7 @@ SECURITY_HEADERS = {
     "X-Content-Type-Options": "nosniff",
     "X-Frame-Options": "SAMEORIGIN",              # 다른 사이트가 이 화면을 iframe에 넣어 클릭을 유도하지 못하게
     "Referrer-Policy": "same-origin",
-    "Permissions-Policy": "camera=(), microphone=(), geolocation=(), payment=()",
+    "Permissions-Policy": "camera=(self), microphone=(), geolocation=(), payment=()",   # 카메라: 바코드 스캔(이 사이트만)
     "Cross-Origin-Opener-Policy": "same-origin",
 }
 SAFE_METHODS = {"GET", "HEAD", "OPTIONS"}

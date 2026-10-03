@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import csrf, metric, doc_fields %}
+{% from "_macros.html" import csrf, metric, doc_fields, material_picker, partner_datalist %}
 
 {# 로트 선택: 출고·이동은 기본이 자동(유효기한 빠른 순) #}
 {% macro lot_select(lots, form) %}
@@ -18,6 +18,8 @@
 {% elif not wh_opts %}
   <div class="alert alert-warning">등록할 수 있는 창고가 없습니다. 시스템관리자에게 데이터 범위(플랜트·창고) 부여를 요청하세요.</div>
 {% else %}
+  {{ partner_datalist() }}
+  <p class="muted small">품목이 여러 개면 <a href="{{ url_for('transactions.batch') }}">📷 여러 줄·스캔 입출고</a>에서 한 번에 등록하세요.</p>
   <div class="tabs">
     {% for code, label in types.items() %}
       <a href="{{ url_for('transactions.index', type=code, material=mid, wh=wh) }}" class="{{ 'active' if code == tx_type }}">{{ label }}</a>
@@ -31,10 +33,8 @@
         {% for k, v in wh_opts.items() %}<option value="{{ k }}" {{ 'selected' if k == wh }}>{{ v }}</option>{% endfor %}
       </select>
     </label>
-    <label class="grow">자재
-      <select name="material" data-autosubmit>
-        {% for k, v in opts.items() %}<option value="{{ k }}" {{ 'selected' if k == mid }}>{{ v }}</option>{% endfor %}
-      </select>
+    <label class="grow">자재 (코드·이름·바코드로 찾기, 스캐너는 찍으면 바로)
+      {{ material_picker('material', mid, opts[mid], autosubmit=true) }}
     </label>
     <noscript><button class="btn">선택</button></noscript>
   </form>
@@ -118,7 +118,7 @@
       <label>단가(원)<input name="unit_price" type="number" min="0" step="any" value="{{ form.unit_price or ('%g' % mat.unit_price) }}"></label>
 
       <label>문서번호 (PO/출고요청/B/L 등)<input name="ref_no" value="{{ form.ref_no or '' }}"></label>
-      <label>거래처 / 사용부서<input name="partner" value="{{ form.partner or '' }}"></label>
+      <label>거래처 / 사용부서<input name="partner" value="{{ form.partner or '' }}" list="partner-names" autocomplete="off"></label>
       <label>담당자<input value="{{ g.user.name }} (로그인 사용자로 기록)" disabled></label>
       {% if tx_type == "IN" and po_lines %}
         <label>발주 품목 (이 시스템 발주)

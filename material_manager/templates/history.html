@@ -22,6 +22,7 @@
       {% for k, v in opts.items() %}<option value="{{ k }}" {{ 'selected' if k in mats }}>{{ v }}</option>{% endfor %}
     </select>
   </label>
+  <label>검색 <input type="search" name="q" value="{{ keyword }}" placeholder="문서번호·거래처·묶음·로트·비고"></label>
   <button class="btn btn-primary">조회</button>
 </form>
 

@@ -51,6 +51,11 @@
     </label>
     <button class="btn">저장</button>
   </form>
+  <form class="row-actions" method="post" action="{{ url_for('admin.user_email', user_id=u.id) }}">
+    {{ csrf() }}
+    <label class="grow">결재 알림 메일<input name="email" type="email" value="{{ u.email or '' }}" placeholder="비우면 알림을 받지 않음"></label>
+    <button class="btn">저장</button>
+  </form>
   {% if u.role != 'ADMIN' %}
   <form class="form" method="post" action="{{ url_for('admin.user_scope', user_id=u.id) }}">
     {{ csrf() }}<input type="hidden" name="_ver" value="{{ u.scope_ver }}">

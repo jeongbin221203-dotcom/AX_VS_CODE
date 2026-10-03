@@ -39,6 +39,11 @@ ACTIONS = {
     "MATERIAL_SYNC": "SAP 마스터 동기화", "MFA_ENABLE": "2단계 인증 등록", "MFA_DISABLE": "2단계 인증 해제",
     "MFA_FAIL": "2단계 인증 실패", "MFA_RECOVERY": "복구 코드 사용", "SSO_LOGIN": "SSO 로그인", "ERP_TEST": "ERP 연결 확인", "SSO_OUTAGE": "SSO 장애 모드", "DOCTOR": "운영 점검", "STATEMENT_CREATE": "거래명세서 입출고", "STATEMENT_CANCEL": "거래명세서 취소", "OFFLINE_SYNC": "오프라인 입력 반영", "SSO_FAIL": "SSO 로그인 실패",
     "FORM_UPDATE": "엑셀 양식 변경", "DEMO_RESET": "시연 데이터 초기화",
+    "TX_BATCH": "여러 줄 입출고", "TX_GROUP_CANCEL": "묶음·생산 전체 취소",
+    "PARTNER_CREATE": "거래처 등록", "PARTNER_UPDATE": "거래처 수정", "PARTNER_ACTIVE": "거래처 사용/중지",
+    "PARTNER_ALIAS": "거래처 다른 이름 연결", "PARTNER_UNALIAS": "거래처 다른 이름 해제",
+    "BOM_SAVE": "BOM 저장", "BOM_ACTIVE": "BOM 사용/중지", "PRODUCTION_CREATE": "생산 투입",
+    "USER_EMAIL": "사용자 메일 변경",
 }
 
 

@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf, table, tabs as tab_bar, download, partner_fields %}
+
+
+{% block content %}
+<p class="muted">입고·출고·거래명세서·발주에 적은 거래처 이름을 이 목록의 정식 이름으로 맞춥니다.
+  '(주)대한상사'·'대한 상사㈜'처럼 표기만 다른 이름은 같은 거래처로 보고, 다르게 적은 이름은 '다른 이름'으로 연결해 한 거래처로 집계합니다.</p>
+{{ tab_bar(tabs, tab) }}
+
+{% if tab == "list" %}
+  {% if unknown_cnt %}
+    <div class="alert alert-warning">거래처 마스터에 없는 이름이 {{ unknown_cnt }}개 있습니다 —
+      <a href="{{ url_with(tab='unknown', q=None) }}">미등록 이름 정리</a>에서 등록하거나 기존 거래처에 연결하세요.</div>
+  {% endif %}
+  <form class="toolbar" method="get">
+    <input type="hidden" name="tab" value="list">
+    <label class="grow">검색<input type="search" name="q" value="{{ q }}" placeholder="이름·코드·사업자번호·다른 이름"></label>
+    <label class="check"><input type="checkbox" name="inactive" value="1" {{ 'checked' if inactive }} data-autosubmit> 사용중지 포함</label>
+    <button class="btn">조회</button>
+    {{ download(url_with(export='xlsx')) }}
+  </form>
+  {{ table(grid, '거래처가 없습니다. 거래처 등록 탭에서 추가하세요.') }}
+  <p class="muted small">입고·출고 금액은 다른 이름으로 적은 지난 거래까지 합친 값입니다(취소 거래는 상쇄). 사내 사용 출고(원가센터)는 빼고 셉니다.</p>
+
+{% elif tab == "unknown" %}
+  {% if not unknown %}
+    <div class="alert alert-success">모든 거래처 이름이 거래처 마스터와 맞습니다.</div>
+  {% else %}
+    <p class="muted small">거래·발주·자재 마스터에 적혀 있지만 거래처 마스터에 없는 이름입니다. 같은 회사면 기존 거래처에 연결하고, 새 회사면 등록하세요.
+      연결하면 그 이름으로 적은 지난 거래도 그 거래처로 집계되고, 앞으로 그 이름으로 입력하면 정식 이름으로 바뀝니다.</p>
+    <div class="table-wrap">
+      <table class="data">
+        <thead><tr><th>적힌 이름</th><th>다른 표기</th><th class="num">쓰인 곳</th><th>마지막</th><th>처리</th></tr></thead>
+        <tbody>
+        {% for u in unknown %}
+          {% set guess_id = u.guess.split('|')[0] if u.guess else '' %}
+          <tr>
+            <td><strong>{{ u.name }}</strong></td>
+            <td class="small">{{ u.variants }}</td>
+            <td class="num small">거래 {{ u.tx }} · 발주 {{ u.po }} · 자재 {{ u.mat }}</td>
+            <td class="small">{{ (u.last or '')[:10] }}</td>
+            <td>
+              {% if can('MANAGER') %}
+              <form class="row-actions" method="post" action="{{ url_for('partners.link') }}">
+                {{ csrf() }}<input type="hidden" name="name" value="{{ u.name }}">
+                <select name="partner_id" aria-label="연결할 거래처">
+                  <option value="new">새 거래처로 등록</option>
+                  {% for o in options %}<option value="{{ o.id }}" {{ 'selected' if o.id|string == guess_id }}>→ {{ o.name }} ({{ o.code }})</option>{% endfor %}
+                </select>
+                <select name="kind" aria-label="구분">
+                  <option value="SUPPLIER">공급처</option><option value="CUSTOMER">납품처</option><option value="BOTH">공급·납품</option>
+                </select>
+                <button class="btn btn-sm">처리</button>
+                {% if u.guess %}<span class="hint">비슷한 거래처: {{ u.guess.split('|')[1] }}</span>{% endif %}
+              </form>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
+
+{% elif tab == "new" %}
+  <form class="card form" method="post" action="{{ url_for('partners.create') }}">
+    {{ csrf() }}
+    <label>거래처 코드 <span class="hint">비우면 P00001처럼 자동</span><input name="code" value="{{ form.code or '' }}" autocomplete="off"></label>
+    {{ partner_fields(form) }}
+    <div><button class="btn btn-primary">등록</button></div>
+  </form>
+{% endif %}
+{% endblock %}

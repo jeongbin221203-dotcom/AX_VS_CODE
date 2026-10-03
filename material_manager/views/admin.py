@@ -38,6 +38,7 @@ def users():
     view["auth_source"] = view["auth_source"].map({"sso": "SSO", "local": "비밀번호"}).fillna("비밀번호")
     view = view.drop(columns=["failed_count"]).rename(columns={"auth_source": "로그인",
         "id": "ID", "username": "아이디", "name": "이름", "role": "역할", "active": "상태", "all_warehouses": "데이터 범위",
+        "email": "알림 메일",
         "must_change_pw": "비밀번호", "locked_until": "잠김 해제", "last_login_at": "최근 로그인",
         "created_at": "등록일시"})
     return render_page("admin_users.html", "users", grid=Table(view, {"ID": "{}"},
@@ -76,6 +77,14 @@ def create_user():
 def update_user(user_id: int):
     result = auth.update_user(user_id, f_str("name"), f_str("role"), request.form.get("active") == "1", actor(),
                               expected=f_str("_ver") or None)
+    flash(result.message, "success" if result.ok else "error")
+    return redirect(url_for("admin.users"))
+
+
+@bp.post("/users/<int:user_id>/email")
+@role_required("ADMIN")
+def user_email(user_id: int):
+    result = auth.set_email(user_id, f_str("email"), actor())
     flash(result.message, "success" if result.ok else "error")
     return redirect(url_for("admin.users"))
 
@@ -149,9 +158,17 @@ def jobs_page(checks=None):
     status = jobs.status_df()
     runs = jobs.runs_df().rename(columns={"id": "ID", "name": "작업", "holder": "실행 서버", "started_at": "시작",
                                           "finished_at": "종료", "status": "결과", "message": "메시지"})
+    from core import notify
+    notes = notify.recent_df()
+    notes_view = notes.assign(status=notes["status"].map(notify.STATUS)).rename(columns={
+        "id": "ID", "created_at": "만든 시각", "to_addr": "받는 사람", "subject": "제목", "status": "상태", "tries": "시도",
+        "last_error": "오류", "sent_at": "보낸 시각"})
     return render_page("admin_jobs.html", "jobs", status=status.to_dict("records"), worker=jobs.worker_id(),
                        lease=config.JOB_LEASE_SECONDS, checks=checks, check_label=doctor.LABEL,
-                       runs=Table(runs, {"ID": "{}"}, tones=["danger" if s == "ERROR" else None for s in runs["결과"]]))
+                       runs=Table(runs, {"ID": "{}"}, tones=["danger" if s == "ERROR" else None for s in runs["결과"]]),
+                       notify_mode=config.NOTIFY_MODE, smtp_host=config.SMTP_HOST,
+                       notes=Table(notes_view, {"ID": "{}", "시도": "{}"},
+                                   tones=["danger" if s == "FAILED" else None for s in notes["status"]]))
 
 
 @bp.post("/doctor")

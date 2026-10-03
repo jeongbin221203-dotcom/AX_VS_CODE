@@ -95,3 +95,40 @@
     {% for k, v in options.items() %}<option value="{{ k }}" {{ 'selected' if k|string == value|string }}>{{ v }}</option>{% endfor %}
   </select>
 {% endmacro %}
+
+{# 자재 찾기 (static/js/picker.js): 코드·이름·규격·바코드 일부로 찾고, 바코드 스캐너는 찍고 Enter.
+   mode='select' → 숨은 칸 name 에 자재 id. autosubmit=true 면 고르자마자 조회.
+   mode='add'    → 고를 때마다 'mm:pick' 이벤트 (여러 줄 입출고). #}
+{% macro material_picker(name='', value=none, label='', mode='select', autosubmit=false, required=false,
+                         placeholder='자재코드·이름·규격·바코드 — 스캐너는 찍으면 바로 선택', src='') %}
+  <div class="picker" data-picker data-mode="{{ mode }}"{{ ' data-autosubmit-pick' if autosubmit }}{% if src %} data-src="{{ src }}"{% endif %}>
+    <input type="search" class="picker-q" value="{{ label }}" placeholder="{{ placeholder }}" autocomplete="off"
+           aria-label="자재 찾기"{{ ' required' if required }}{{ ' autofocus' if mode == 'add' }}>
+    {% if mode == 'select' %}<input type="hidden" name="{{ name }}" value="{{ value if value is not none else '' }}">{% endif %}
+    <button type="button" class="btn picker-cam" data-scan title="카메라로 바코드 찍기" aria-label="카메라로 바코드 찍기">📷</button>
+    <ul class="picker-list" role="listbox" hidden></ul>
+  </div>
+{% endmacro %}
+
+{# 거래처 자동완성 (거래처 마스터의 정식 이름). 입력 칸에 list="partner-names" #}
+{% macro partner_datalist(kind='') %}
+  <datalist id="partner-names">{% for n in partner_names(kind) %}<option value="{{ n }}">{% endfor %}</datalist>
+{% endmacro %}
+
+{# 거래처 입력 칸 (등록·수정) #}
+{% macro partner_fields(f) %}
+  <div class="form-grid g3">
+    <label>거래처명 *<input name="name" value="{{ f.name or '' }}" required autocomplete="off"
+      placeholder="(주)·주식회사는 붙여도 같은 거래처로 봅니다"></label>
+    <label>구분
+      <select name="kind">
+        {% for k, v in PARTNER_KINDS.items() %}<option value="{{ k }}" {{ 'selected' if (f.kind or 'SUPPLIER') == k }}>{{ v }}</option>{% endfor %}
+      </select>
+    </label>
+    <label>사업자등록번호<input name="biz_no" value="{{ f.biz_no or '' }}" inputmode="numeric" placeholder="000-00-00000"></label>
+    <label>담당자<input name="contact" value="{{ f.contact or '' }}"></label>
+    <label>전화<input name="phone" value="{{ f.phone or '' }}" inputmode="tel"></label>
+    <label>메일<input name="email" value="{{ f.email or '' }}" type="email"></label>
+  </div>
+  <label>메모<input name="note" value="{{ f.note or '' }}"></label>
+{% endmacro %}

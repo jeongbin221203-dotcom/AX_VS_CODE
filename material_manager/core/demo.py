@@ -14,7 +14,7 @@ from __future__ import annotations
 import secrets
 import threading
 import time
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 
 import config
 from core import audit, auth, db, repository as repo
@@ -133,4 +133,32 @@ def prepare() -> None:
             seed.seed(history=True)              # 부산 포장·고박 자재
             seed_mfg.seed_manufacturing()        # 창원 제조공장
             seed_demo.seed_large()               # 인천·평택 + 담당자 · 1년 치 거래 · 구매 · 월 마감
+            _extras()                            # 거래처 마스터 · BOM·생산 투입 · 바코드 · 알림 메일 주소
         _mark_today()
+
+
+# 샘플 자재 바코드 (스캔 시연용 — 카메라나 스캐너로 찍으면 그 자재)
+DEMO_BARCODES = {"PKG-001": "8801234500017", "PKG-002": "8801234500024", "PKG-003": "8801234500031",
+                 "PT-BLT-001": "8809876500016", "PT-NUT-001": "8809876500023", "PT-MTR-001": "8809876500030",
+                 "PT-PCB-001": "8809876500047", "PK-BOX-001": "8809876500054"}
+
+
+def _extras() -> None:
+    """시연에서 보여 줄 새 기능의 샘플: 거래처 마스터(+표기만 다른 이름 1개는 미등록으로 남김), BOM·생산 투입,
+    자재 바코드, 결재 알림을 받을 메일 주소(시연은 '기록만' — 실제로 보내지 않음)."""
+    from core import partners, production, services
+    production.seed_sample()
+    partners.seed_from_data(audit.SYSTEM)
+    for code, bc in DEMO_BARCODES.items():
+        db.execute("UPDATE materials SET barcode = ? WHERE code = ? AND barcode = ''", (bc, code))
+    db.execute("UPDATE users SET email = username || '@example.com' WHERE email = '' AND role IN ('MANAGER', 'ADMIN', 'CLERK')")
+    # 같은 회사를 다르게 적은 입고 1건 → '미등록 이름 정리'에서 기존 거래처에 연결해 볼 수 있다
+    mid = db.scalar("SELECT id FROM materials WHERE code = 'PKG-001'")
+    wh = db.scalar("SELECT id FROM warehouses ORDER BY id LIMIT 1")
+    if mid and wh:
+        services.register_transaction(int(mid), "IN", 10, date_today(), 18000, ref_no="DEMO-ALIAS",
+                                      partner="대한팔레트 부산지점", actor=audit.SYSTEM, warehouse_id=int(wh))
+
+
+def date_today() -> str:
+    return date.today().isoformat()

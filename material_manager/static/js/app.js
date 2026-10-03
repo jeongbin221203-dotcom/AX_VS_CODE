@@ -650,6 +650,7 @@
         if (push) history.pushState({ mm: true }, "", href);
         if (window.mmUI) window.mmUI.refresh(main);
         if (window.mmNet && window.mmNet.refresh) window.mmNet.refresh(main);
+        if (window.mmPicker) window.mmPicker.refresh(main);
         const pin = function () {
           const nb = idx >= 0 ? main.querySelectorAll(".tabs")[idx] : null;
           if (nb && barTop !== null) window.scrollBy(0, nb.getBoundingClientRect().top - barTop);

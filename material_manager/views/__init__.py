@@ -15,6 +15,8 @@
   reports       수불부 · 재고 평가(이동평균·선입선출) · 재고 대사
   admin         사용자·데이터 범위 · 플랜트·창고 · 배치 · 감사로그
   prefs         내 화면 설정 (사이드바 메뉴 순서·즐겨찾기)
+  partners      거래처 마스터 · 미등록 이름 정리(등록·연결)
+  production    BOM · 생산 투입(소요량 확인 → 부품 출고 + 완제품 입고) · 부족분 구매요청
 """
 from flask import Flask
 
@@ -22,10 +24,10 @@ from .helpers import load_context
 
 
 def register_blueprints(app: Flask) -> None:
-    from . import (admin, approvals, auth, dashboard, data_admin, documents, history, materials, periods, prefs,
-                   purchase, reports, sap, statements, stock, transactions)
+    from . import (admin, approvals, auth, dashboard, data_admin, documents, history, materials, partners, periods,
+                   prefs, production, purchase, reports, sap, statements, stock, transactions)
 
     for module in (auth, dashboard, materials, transactions, statements, stock, history, documents, purchase, approvals,
-                   reports, periods, sap, data_admin, admin, prefs):
+                   reports, periods, sap, data_admin, admin, prefs, partners, production):
         app.register_blueprint(module.bp)
     app.before_request(load_context)
