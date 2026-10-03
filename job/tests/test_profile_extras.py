@@ -124,3 +124,13 @@ def test_exclude_driving_not_plant_operation():
     hit = lambda t: exclude.matches({"title": t}, ["운전"]) == ["운전"]
     assert hit("[더셀피부과] 운전기사 모집") and hit("승용차 운전 기사 채용") and hit("임원 수행기사")
     assert not hit("[시운전 · O&M(운영) · 경상정비] 발전소 플랜트") and not hit("현장설비운전 채용")
+
+
+def test_exclude_gym_and_academy_not_healthcare_or_grad_school():
+    from core import exclude
+    gym = lambda t, c="가상": exclude.matches({"title": t, "company": c}, ["헬스·피트니스"]) == ["헬스·피트니스"]
+    assert gym("멋진 트레이너 모집", "헬스보이짐") and gym("동래PT샵1등 트레이너 구인") and gym("필라테스 강사")
+    assert not gym("제약영업 채용", "(주)퍼슨헬스케어") and not gym("[AI 헬스케어] 마케터") and not gym("ePT Project Manager")
+    aca = lambda t, c="가상": exclude.matches({"title": t, "company": c}, ["학원"]) == ["학원"]
+    assert aca("영어 선생님 채용", "(주)DYB최선어학원") and aca("영어 보조교사", "고래영어교습소") and aca("수학학원 상담실장")
+    assert not aca("대학원 석사 연구원 채용") and not aca("경영지원 사무", "가상산업")
