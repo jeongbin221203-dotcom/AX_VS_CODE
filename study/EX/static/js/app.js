@@ -125,6 +125,39 @@
     setInterval(tick, 1000);
   });
 
+  /* 공개 서버: 기록을 이 브라우저에 자동 보관 → 서버가 다시 시작돼 기록이 비면 복원 제안 */
+  if (document.querySelector('meta[name="ex-autobackup"]')) {
+    fetch('/api/backup', { credentials: 'same-origin' }).then(function (r) { return r.json(); }).then(function (b) {
+      var total = 0;
+      Object.keys(b.counts).forEach(function (k) { total += b.counts[k]; });
+      var saved = null;
+      try { saved = JSON.parse(localStorage.getItem('ex-backup') || 'null'); } catch (e) { saved = null; }
+      if (total > 0) {
+        try { localStorage.setItem('ex-backup', JSON.stringify(b.data)); } catch (e) { /* 저장 공간 부족 */ }
+        return;
+      }
+      if (!saved) return;
+      var n = (saved.attempts || []).length + (saved.exam_results || []).length + (saved.build_results || []).length;
+      if (!n) return;
+      var bar = document.createElement('div');
+      bar.className = 'alert ok-alert restore-bar';
+      bar.innerHTML = '서버가 다시 시작되어 기록이 비었습니다. 이 브라우저에 남은 기록(풀이 ' + (saved.attempts || []).length +
+        '개, 시험·실습 ' + ((saved.exam_results || []).length + (saved.build_results || []).length) + '개)을 복원할까요? ';
+      var btn = document.createElement('button');
+      btn.className = 'btn sm primary';
+      btn.type = 'button';
+      btn.textContent = '복원';
+      btn.addEventListener('click', function () {
+        btn.disabled = true;
+        post('/api/restore', saved).then(function () { location.reload(); })
+          .catch(function (e) { bar.textContent = '복원하지 못했습니다: ' + e.message; });
+      });
+      bar.appendChild(btn);
+      var main = document.querySelector('main');
+      main.insertBefore(bar, main.firstChild);
+    }).catch(function () { /* 오프라인 등 */ });
+  }
+
   /* 별표 */
   document.querySelectorAll('[data-star]').forEach(function (b) {
     b.addEventListener('click', function () {

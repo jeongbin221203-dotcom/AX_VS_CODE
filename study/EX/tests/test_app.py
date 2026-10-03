@@ -152,3 +152,23 @@ def test_owner_devices_share_records(tmp_path):
     phone.post('/api/check', json={'pid': 'basic-004', 'answer': 1})
     assert '참조 전환 키' not in pc.get('/review').get_data(as_text=True)          # 맞혀서 오답 노트에 없음
     assert '1<small> / ' in pc.get('/').get_data(as_text=True)                    # 푼 문제 1
+
+
+def test_backup_and_restore(client, app):
+    post_json(client, '/api/check', {'pid': 'basic-001', 'answer': '=SUM(G2:G16)'})
+    post_json(client, '/api/star', {'pid': 'basic-003'})
+    data = client.get('/api/backup').json
+    assert data['counts']['attempts'] == 1 and data['counts']['stars'] == 1
+    import sqlite3
+    with sqlite3.connect(app.config['DATABASE']) as c:
+        c.execute('DELETE FROM attempts')
+        c.execute('DELETE FROM stars')
+    assert client.get('/api/backup').json['counts']['attempts'] == 0
+    r = client.post('/api/restore', json=data['data'], headers={'X-CSRF-Token': client.csrf})
+    assert r.json['restored']['attempts'] == 1
+    assert client.get('/api/backup').json['counts'] == data['counts']
+    assert client.post('/api/restore', json={'x': 1}, headers={'X-CSRF-Token': client.csrf}).status_code == 400
+    f = client.get('/backup.json')
+    assert f.status_code == 200 and b'"version": 1' in f.data
+    r = client.post('/restore', data={'_csrf': client.csrf, 'file': (io.BytesIO(f.data), 'b.json')})
+    assert '%EB%B3%B5%EC%9B%90' in r.headers['Location'] or '복원' in r.headers['Location']

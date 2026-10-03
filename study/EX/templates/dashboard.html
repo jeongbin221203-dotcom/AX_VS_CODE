@@ -12,6 +12,7 @@
   </div>
 </div>
 
+{% if msg %}<div class="alert ok-alert" role="status">{{ msg }}</div>{% endif %}
 <section class="grid g4" aria-label="요약 지표">
   <div class="kpi"><div class="label">푼 문제</div><div class="value">{{ d.solved }}<small> / {{ d.total }}</small></div>
     <div class="sub">{{ (100 * d.solved / d.total)|round|int if d.total else 0 }}% 완료</div></div>
@@ -105,6 +106,18 @@
   </table></div>
 </section>
 {% endif %}
+<section class="card" style="margin-top:14px">
+  <h2>기록 백업</h2>
+  <p class="small muted" style="margin-top:0">{% if public %}무료 서버라 다시 시작하면 기록이 지워집니다. 이 브라우저에 자동으로 사본을 남겨 두었다가, 기록이 비면 복원하겠느냐고 묻습니다. 파일로도 보관할 수 있습니다.{% else %}풀이 기록·모의고사·실습 점수를 파일로 보관하거나 다른 곳(예: 배포 사이트)으로 옮길 수 있습니다.{% endif %}</p>
+  <div class="btns">
+    <a class="btn" href="{{ url_for('main.backup_download') }}">기록 파일 내려받기</a>
+    <form method="post" action="{{ url_for('main.restore_upload') }}" enctype="multipart/form-data" class="btns" data-confirm="지금 기록을 파일의 기록으로 바꿀까요?">
+      <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+      <input type="file" name="file" accept=".json" aria-label="기록 파일" required>
+      <button class="btn" type="submit">파일에서 복원</button>
+    </form>
+  </div>
+</section>
 {% endblock %}
 {% block data %}<script type="application/json" id="chart-data">{"daily": {{ chart_json|safe }}}</script>{% endblock %}
 {% block scripts %}<script src="{{ asset('js/charts.js') }}"></script>{% endblock %}
