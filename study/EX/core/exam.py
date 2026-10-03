@@ -955,7 +955,8 @@ def check_page(ctx, sheet, chk):
                       ('header_right', ws.oddHeader.right), ('footer_right', ws.oddFooter.right)):
         if key in chk and _norm_text(part.text) != _norm_text(chk[key]):
             bad.append(f"{'머리글' if 'header' in key else '바닥글'} → {chk[key]}")
-    if 'fit_width' in chk and (ws.page_setup.fitToWidth or 1) != chk['fit_width']:
+    fit = bool(ws.sheet_properties.pageSetUpPr and ws.sheet_properties.pageSetUpPr.fitToPage)
+    if 'fit_width' in chk and (not fit or (ws.page_setup.fitToWidth or 1) != chk['fit_width']):
         bad.append(f"한 페이지에 맞춤(너비 {chk['fit_width']})")
     return not bad, bad[:4]
 
