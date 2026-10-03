@@ -37,8 +37,14 @@ def index():
                            msg=request.args.get('msg'), error=request.args.get('error'))
 
 
+def _local_only():
+    if current_app.config.get('PUBLIC'):
+        abort(403, '공개 서버에서는 저작물 파일을 받거나 가져올 수 없습니다. PC 에서 실행해 주세요.')
+
+
 @bp.route('/official/fetch', methods=['POST'])
 def official_fetch():
+    _local_only()
     try:
         got = official.download(_official_dir())
     except OSError as e:
@@ -48,6 +54,7 @@ def official_fetch():
 
 @bp.route('/library/import', methods=['POST'])
 def library_import():
+    _local_only()
     folder = (request.form.get('folder') or '').strip().strip('"')
     if not folder or not Path(folder).is_dir():
         return redirect(url_for('.index', error='폴더를 찾을 수 없습니다: ' + folder))

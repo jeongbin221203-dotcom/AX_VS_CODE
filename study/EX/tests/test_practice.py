@@ -124,3 +124,15 @@ def test_korean_particles():
     assert j('지점', '이/가') == '지점이' and j('부서', '이/가') == '부서가'
     assert j("'꺾은선형'", '으로/로') == "'꺾은선형'으로" and j("'수량'", '으로/로') == "'수량'으로"
     assert j("'아래쪽'", '으로/로') == "'아래쪽'으로" and j("'파일'", '으로/로') == "'파일'로"
+
+
+def test_public_server_blocks_copyrighted_imports(tmp_path):
+    from app import create_app
+    app = create_app({'DATA_DIR': str(tmp_path), 'DATABASE': str(tmp_path / 'ex.db'), 'SECRET_KEY': 't',
+                      'PUBLIC': True, 'TESTING_NO_CSRF': True})
+    c = app.test_client()
+    assert c.post('/practice/official/fetch').status_code == 403
+    assert c.post('/practice/library/import', data={'folder': str(tmp_path)}).status_code == 403
+    page = c.get('/practice/').get_data(as_text=True)
+    assert '공개 서버에서는' in page and '공개 시연 서버' in page
+    assert c.get('/healthz').json == {'ok': True}

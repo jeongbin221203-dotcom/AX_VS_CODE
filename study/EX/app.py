@@ -34,6 +34,8 @@ def create_app(config=None):
         SESSION_COOKIE_SAMESITE='Lax',
         SESSION_COOKIE_NAME='ex_session',
         PROXY=os.environ.get('EX_PROXY') == '1',
+        # 공개 서버: 저작물(공식 예제·교재 파일)을 받거나 가져오는 기능을 끈다
+        PUBLIC=os.environ.get('EX_PUBLIC') == '1',
     )
     if config:
         app.config.update(config)
@@ -87,13 +89,17 @@ def create_app(config=None):
     def inject():
         from core import content
         return {'csrf_token': session.get('csrf', ''), 'track': current_track(), 'TRACKS': content.TRACKS,
-                'CAT_NAMES': content.CAT_NAMES, 'asset': asset_url}
+                'CAT_NAMES': content.CAT_NAMES, 'asset': asset_url, 'public': app.config['PUBLIC']}
 
     def asset_url(filename):
         """정적 파일 주소 + 수정 시각(바꾸면 브라우저가 새 파일을 받는다)."""
         path = Path(app.static_folder) / filename
         v = int(path.stat().st_mtime) if path.exists() else 0
         return url_for('static', filename=filename, v=v)
+
+    @app.route('/healthz')
+    def healthz():
+        return {'ok': True}
 
     @app.errorhandler(413)
     def too_big(_e):

@@ -12,7 +12,10 @@
   <h2>대한상공회의소 공식 예제 문제</h2>
   <p class="small muted" style="margin-top:0">실제 시험 기출은 공개되지 않습니다. 대신 대한상공회의소가 공개한 <b>2024~2026 출제 기준 예제(1·2급 엑셀 A·B형)</b>와 2015 연습 예제를 공식 사이트에서 받아 이 PC 에만 저장합니다(저작권: 대한상공회의소 — 저장소에는 올리지 않음).</p>
   {% set ready = sets|selectattr('ready')|list %}
-  {% if not ready %}
+  {% if public %}
+  <div class="empty">공개 서버에서는 대한상공회의소 파일을 보관·제공하지 않습니다. PC 에서 앱을 실행하면 버튼 하나로 공식 사이트에서 받을 수 있습니다.
+    (<a href="https://license.korcham.net/co/examguide02Sub.do?cd=0103&mm=21&num=2941771" target="_blank" rel="noopener">공식 예제 페이지</a>)</div>
+  {% elif not ready %}
   <form method="post" action="{{ url_for('practice.official_fetch') }}" data-once>
     <input type="hidden" name="_csrf" value="{{ csrf_token }}">
     <button class="btn primary" type="submit">공식 사이트에서 예제 받기 (약 5MB)</button>
@@ -42,12 +45,14 @@
 
 <section class="card">
   <h2>내 교재 실습 파일 <span class="small muted" style="font-weight:400">{{ n_items }}개</span></h2>
+  {% if public %}<div class="empty">교재 파일 가져오기는 PC 에서 실행할 때만 쓸 수 있습니다(출판사 저작물).</div>{% else %}
   <form class="controls" method="post" action="{{ url_for('practice.library_import') }}" data-once>
     <input type="hidden" name="_csrf" value="{{ csrf_token }}">
     <label class="field" style="flex:1;min-width:260px">가져올 폴더 (하위 폴더의 '실습'·'정답' 또는 '실습파일'·'완성파일' 짝을 찾습니다)
       <input type="text" name="folder" value="{{ default_dir }}"></label>
     <button class="btn" type="submit">가져오기</button>
   </form>
+  {% endif %}
   <p class="small muted">교재 파일은 출판사 저작물이라 이 PC 의 data/library 에만 복사하고 저장소에는 올리지 않습니다. 문제 지문은 교재를 보세요 — 여기서는 정답 파일에서 뽑은 '해야 할 일'과 힌트를 보여 줍니다.</p>
   {% for g, items in groups.items() %}
   <h3 style="margin-top:16px">{{ g }}</h3>
