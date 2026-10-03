@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from flask import Blueprint, flash, redirect, render_template, url_for
 
-from core import applications, db, postings, profile
+from core import applications, db, postings, profile, sync
 from core.normalize import SIDO_ORDER
 
 bp = Blueprint("main", __name__)
@@ -35,6 +35,7 @@ def dashboard():
 def mark_seen():
     """'새로 들어온 맞는 공고'를 모두 확인함 — 이 시각 뒤에 들어온 공고만 새 공고로 본다."""
     postings.mark_seen()
+    sync.note("seen", value=db.get_setting("seen_at"))
     flash("확인했습니다. 다음 수집부터 들어온 공고만 새 공고로 표시합니다.", "ok")
     return redirect(url_for(".dashboard"))
 

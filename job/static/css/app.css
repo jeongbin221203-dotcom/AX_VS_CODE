@@ -195,3 +195,4 @@ ul.good, ul.warn { padding-left: 1.2rem; margin: .2rem 0; }
 .linkish { background: none; border: 0; color: var(--muted); font: inherit; font-weight: 600; cursor: pointer; padding: .35rem .7rem; }
 .linkish:hover { color: var(--accent); }
 .tbl td:first-child, .tbl th:first-child { white-space: nowrap; }
+.mirror-bar { background: var(--accent-soft); color: var(--accent); font-size: .85rem; text-align: center; padding: .35rem 16px; }

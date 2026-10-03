@@ -127,6 +127,14 @@ CREATE TABLE IF NOT EXISTS crawl_runs (
     sites       TEXT                            -- JSON {사이트: {new, fetched, left}}
 );
 
+-- Render 사본에서 사용자가 바꾼 것 (내 PC 원본이 받아 가 반영). id = 기록 시각(µs)
+CREATE TABLE IF NOT EXISTS mirror_changes (
+    id       INTEGER PRIMARY KEY,
+    at       TEXT NOT NULL,
+    kind     TEXT NOT NULL,
+    payload  TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS fetch_runs (
     id           INTEGER PRIMARY KEY AUTOINCREMENT,
     source       TEXT NOT NULL,
@@ -180,6 +188,12 @@ def connect() -> Iterator[sqlite3.Connection]:
         con.commit()
     finally:
         con.close()
+
+
+def path() -> Path:
+    if _db_path is None:
+        raise RuntimeError("db.configure() 를 먼저 호출하세요")
+    return _db_path
 
 
 def now() -> str:

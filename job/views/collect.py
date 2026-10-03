@@ -30,7 +30,18 @@ def _page(results):
 @bp.get("/status")
 def status_page():
     """자동수집 현황: 지금 실행 단계, 사이트별 대기열·상세 비율·데이터 품질, 실행 기록, 오류."""
-    return render_template("collect_status.html", o=crawler.overview())
+    from core import sync
+    return render_template("collect_status.html", o=crawler.overview(), sync_cfg=sync.settings(),
+                           sync_last=sync.last_result())
+
+
+@bp.post("/sync")
+def sync_now():
+    from core import sync
+    r = sync.push()
+    flash(f"Render 로 올렸습니다: 공고 {r.get('postings', 0):,}건, 받은 변경 {r.get('pulled', 0)}건" if r.get("ok")
+          else f"동기화 실패: {r.get('error')}", "ok" if r.get("ok") else "err")
+    return redirect(url_for(".status_page"))
 
 
 @bp.get("/status.json")

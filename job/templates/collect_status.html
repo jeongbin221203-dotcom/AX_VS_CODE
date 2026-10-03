@@ -44,6 +44,17 @@
   </div>
 </section>
 
+{% if sync_cfg %}
+<section class="card">
+  <div class="sec-head"><h2>Render 사본 <a class="small" href="{{ sync_cfg.url }}" target="_blank" rel="noopener">{{ sync_cfg.url }} ↗</a></h2>
+    <form method="post" action="{{ url_for('collect.sync_now') }}"><input type="hidden" name="_csrf" value="{{ csrf_token() }}"><button class="btn sm ghost">지금 올리기</button></form></div>
+  {% if sync_last %}
+    {% if sync_last.ok %}<p class="small">마지막 동기화 <b>{{ sync_last.at[5:16] }}</b> · 공고 {{ '{:,}'.format(sync_last.postings or 0) }}건 올림({{ sync_last.uploaded_mb }}MB) · 사본에서 받은 변경 {{ sync_last.pulled }}건</p>
+    {% else %}<p class="small err-text">마지막 동기화 실패 ({{ sync_last.at[5:16] }}): {{ sync_last.error }}</p>{% endif %}
+  {% else %}<p class="muted small">아직 올린 적 없음 — 켜고 2분 뒤, 그다음 한 시간마다(수집이 끝날 때도) 올립니다.</p>{% endif %}
+</section>
+{% endif %}
+
 <section class="card">
   <h2>사이트별</h2>
   <div class="scroll-x">

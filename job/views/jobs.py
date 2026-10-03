@@ -8,7 +8,7 @@ from datetime import date
 
 from flask import Blueprint, Response, abort, flash, redirect, render_template, request, url_for
 
-from core import applications, fit, jobgroups, postings, profile
+from core import applications, fit, jobgroups, postings, profile, sync
 from core.normalize import CAREER_TYPES, EDUCATION_LEVELS, SIDO_ORDER
 
 bp = Blueprint("jobs", __name__, url_prefix="/jobs")
@@ -60,8 +60,11 @@ def apply(pid: int):
     if not postings.get(pid):
         abort(404)
     status = request.form.get("status", "")
+    p = postings.get(pid)
+    key = {"source": p["source"], "source_id": p["source_id"]}
     if request.form.get("remove") == "1":
         applications.remove(pid)
+        sync.note("app_remove", **key)
         flash("지원 기록을 지웠습니다.", "ok")
     else:
         try:
@@ -69,6 +72,9 @@ def apply(pid: int):
                                 applied_at=request.form.get("applied_at") or None,
                                 next_at=request.form.get("next_at") or None,
                                 note=request.form.get("note", "").strip()[:200])
+            sync.note("app_upsert", **key, status=status, memo=request.form.get("memo"),
+                      applied_at=request.form.get("applied_at") or None, next_at=request.form.get("next_at") or None,
+                      note=request.form.get("note", "").strip()[:200])
         except ValueError as e:
             abort(400, str(e))
         flash(f"'{status}'(으)로 기록했습니다.", "ok")
@@ -80,6 +86,9 @@ def company_avg(pid: int):
     raw = request.form.get("company_avg_salary", "").replace(",", "").strip()
     value = int(raw) if raw.isdigit() and int(raw) > 0 else None
     postings.set_company_avg(pid, value)
+    p = postings.get(pid)
+    if p:
+        sync.note("company_avg", source=p["source"], source_id=p["source_id"], value=value)
     flash("회사 평균연봉을 저장했습니다." if value else "회사 평균연봉을 지웠습니다.", "ok")
     return redirect(url_for(".detail", pid=pid))
 
@@ -90,6 +99,8 @@ def save(pid: int):
         abort(404)
     saved = request.form.get("saved") == "1"
     postings.set_saved(pid, saved)
+    p = postings.get(pid)
+    sync.note("save", source=p["source"], source_id=p["source_id"], value=saved)
     flash("저장했습니다. 마감돼도 '저장한 공고'에서 다시 볼 수 있습니다." if saved
           else "저장을 풀었습니다. 마감되면 자동으로 지워집니다.", "ok")
     return redirect(_back(url_for(".detail", pid=pid)))
@@ -99,6 +110,9 @@ def save(pid: int):
 def hide(pid: int):
     hidden = request.form.get("hidden") == "1"
     postings.set_hidden(pid, hidden)
+    p = postings.get(pid)
+    if p:
+        sync.note("hide", source=p["source"], source_id=p["source_id"], value=hidden)
     flash("목록에서 숨겼습니다." if hidden else "다시 목록에 보입니다.", "ok")
     return redirect(_back(url_for(".index")))
 

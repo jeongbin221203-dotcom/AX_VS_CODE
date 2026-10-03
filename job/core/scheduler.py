@@ -26,11 +26,20 @@ def start() -> None:
 
 
 PURGE_SECONDS = 3600
+SYNC_SECONDS = 3600            # Render 사본으로 올리는 주기 (수집이 끝날 때도 올림)
+
+
+def _sync() -> None:
+    from . import sync
+    if sync.settings():
+        r = sync.push()
+        log.info("Render 동기화 %s", r)
 
 
 def _loop() -> None:
     stop = threading.Event()
     last_purge = 0.0
+    last_sync = time.monotonic() - SYNC_SECONDS + 120     # 켜고 2분 뒤 첫 동기화
     while not stop.wait(CHECK_SECONDS):
         try:
             # 자동 수집을 꺼 두어도 마감된 미저장 공고는 한 시간마다 지운다
@@ -39,7 +48,9 @@ def _loop() -> None:
                 last_purge = time.monotonic()
                 if n:
                     log.info("마감된 미저장 공고 %d건 삭제", n)
-            crawler.run_once()
+            if crawler.run_once() is not None or time.monotonic() - last_sync >= SYNC_SECONDS:
+                _sync()
+                last_sync = time.monotonic()
         except Exception:  # 한 번 실패해도 다음 주기에 다시 시도
             log.exception("예약 작업 실패")
 

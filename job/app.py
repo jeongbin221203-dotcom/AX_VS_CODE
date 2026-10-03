@@ -31,8 +31,8 @@ def create_app(test_config: dict | None = None) -> Flask:
 
     @app.before_request
     def csrf_protect() -> None:
-        """POST 는 세션에 발급한 토큰과 일치해야 한다 (폼 필드 _csrf)."""
-        if request.method != "POST" or app.config.get("TESTING_NO_CSRF"):
+        """POST 는 세션에 발급한 토큰과 일치해야 한다 (폼 필드 _csrf). 동기화 API 는 열쇠(Bearer)로 확인."""
+        if request.method != "POST" or app.config.get("TESTING_NO_CSRF") or request.path.startswith("/api/sync/"):
             return
         token = session.get("_csrf")
         sent = request.headers.get("X-CSRF-Token") or request.form.get("_csrf", "")
@@ -44,7 +44,8 @@ def create_app(test_config: dict | None = None) -> Flask:
         """JOB_PASSWORD 가 있으면 로그인한 사람만 (배포용). 로고·CSS·상태 확인 주소는 예외."""
         if not app.config.get("PASSWORD"):
             return None
-        if request.endpoint in ("static", "login", "healthz", "favicon") or session.get("auth"):
+        if request.endpoint in ("static", "login", "healthz", "favicon", "sync_changes", "sync_upload") \
+                or session.get("auth"):
             return None
         return redirect(url_for("login", next=request.full_path if request.method == "GET" else "/"))
 
@@ -67,6 +68,44 @@ def create_app(test_config: dict | None = None) -> Flask:
         session.clear()
         return redirect(url_for("login"))
 
+    # ── Render 사본: 원본(내 PC)과 주고받기 ──
+    def _sync_auth() -> None:
+        token = app.config.get("SYNC_TOKEN") or ""
+        sent = request.headers.get("Authorization", "").removeprefix("Bearer ").strip()
+        if not app.config.get("MIRROR") or not token or not secrets.compare_digest(token, sent):
+            abort(403)
+
+    @app.get("/api/sync/changes")
+    def sync_changes():
+        _sync_auth()
+        from core import sync
+        return {"changes": sync.changes_after(request.args.get("after", 0, type=int))}
+
+    @app.post("/api/sync/upload")
+    def sync_upload():
+        _sync_auth()
+        from core import sync
+        try:
+            return sync.receive(request.get_data(), request.headers.get("X-Last-Change", 0, type=int))
+        except (ValueError, OSError) as e:
+            abort(400, str(e))
+
+    @app.before_request
+    def mirror_read_only():
+        """사본에서는 수집·등록을 하지 않는다 (내 PC에서만). 저장·지원 기록·내 조건은 사본에서도 바꿀 수 있음."""
+        if not app.config.get("MIRROR") or request.method != "POST":
+            return None
+        if request.endpoint and (request.endpoint.startswith("collect.") or request.endpoint == "jobs.new"):
+            abort(403, "Render 사본에서는 수집·공고 등록을 하지 않습니다. 내 PC 앱에서 해 주세요.")
+        return None
+
+    @app.context_processor
+    def mirror_info():
+        if not app.config.get("MIRROR"):
+            return {"mirror": None}
+        from core import db as _db
+        return {"mirror": {"synced_at": _db.get_setting("mirror_synced_at")}}
+
     @app.get("/healthz")
     def healthz():
         return {"ok": True}
@@ -88,7 +127,8 @@ def create_app(test_config: dict | None = None) -> Flask:
 
     # 정기 크롤링 예약 스레드 (테스트·디버그 재시작 감시 프로세스에서는 띄우지 않음)
     reloader_parent = app.debug and os.environ.get("WERKZEUG_RUN_MAIN") != "true"
-    if app.config.get("START_SCHEDULER") and not app.config.get("TESTING") and not reloader_parent:
+    if app.config.get("START_SCHEDULER") and not app.config.get("TESTING") and not reloader_parent \
+            and not app.config.get("MIRROR"):
         from core import scheduler
         scheduler.start()
 
