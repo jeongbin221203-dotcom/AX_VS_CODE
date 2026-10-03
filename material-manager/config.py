@@ -76,6 +76,8 @@ PORT = int(os.getenv("MM_PORT", "5002"))   # 대한사료(5000) · 영업관리(
 # 디버그 모드는 브라우저에서 파이썬 코드를 실행할 수 있는 디버거를 연다 → 기본은 끈다.
 DEBUG = os.getenv("MM_DEBUG", "0") == "1"
 TRUST_PROXY = os.getenv("MM_TRUST_PROXY", "0") == "1"
+# 프록시가 접속자 IP를 따로 넣어 주는 헤더 (예: Render·Cloudflare의 True-Client-IP). TRUST_PROXY일 때만 쓴다.
+CLIENT_IP_HEADER = os.getenv("MM_CLIENT_IP_HEADER", "").strip()
 SESSION_COOKIE_NAME = "mm_session"
 SESSION_COOKIE_HTTPONLY = True               # 스크립트에서 쿠키를 읽지 못하게
 SESSION_COOKIE_SAMESITE = "Lax"              # 다른 사이트에서 보낸 POST에는 쿠키를 싣지 않게

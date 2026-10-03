@@ -69,7 +69,8 @@ def close_month(ym: str, actor: dict | None) -> PeriodResult:
             if unsent:
                 return PeriodResult(False, f"{ym}월까지의 거래 중 SAP 전기가 끝나지 않은 건이 {unsent}건 있습니다. "
                                            "SAP 연동 화면에서 먼저 처리하세요.")
-        stock = repo.stock_as_of(conn, end)          # (자재, 창고, 로트) → 월말 재고
+        # (자재, 창고, 로트) → 월말 재고. 소수 수량을 더하며 생기는 부동소수 오차(-1e-14 등)는 반올림해 없앤다
+        stock = {k: (round(q, 6) or 0.0) for k, q in repo.stock_as_of(conn, end).items()}
         conn.executemany(
             "INSERT INTO inventory_snapshots (ym, material_id, warehouse_id, lot_no, qty) VALUES (?, ?, ?, ?, ?) "
             "ON CONFLICT (ym, material_id, warehouse_id, lot_no) DO UPDATE SET qty = excluded.qty",

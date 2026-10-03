@@ -121,3 +121,21 @@ def test_demo_daily_reset_once_per_day(monkeypatch):
 def TODAY_STR():
     from datetime import date
     return date.today().isoformat()
+
+
+def test_month_close_ignores_float_noise(monkeypatch):
+    """소수 수량 입출고(0.1 + 0.2 - 0.3 같은)의 부동소수 오차를 음수 재고로 보고하지 않는다."""
+    _demo_app(monkeypatch)
+    rows = db.query_df("SELECT entity_id, detail FROM audit_log WHERE action = 'PERIOD_CLOSE'")
+    assert not rows.empty and not rows["detail"].str.contains("negative_stock\": \[", regex=False).any()
+    assert db.scalar("SELECT COUNT(*) FROM inventory_snapshots WHERE qty < 0") == 0
+
+
+def test_client_ip_header(monkeypatch):
+    from app import _ClientIpHeader
+    seen = {}
+    mw = _ClientIpHeader(lambda env, sr: seen.update(ip=env["REMOTE_ADDR"]), "True-Client-IP")
+    mw({"REMOTE_ADDR": "127.0.0.1", "HTTP_TRUE_CLIENT_IP": "203.0.113.7"}, None)
+    assert seen["ip"] == "203.0.113.7"
+    mw({"REMOTE_ADDR": "127.0.0.1", "HTTP_TRUE_CLIENT_IP": "not-an-ip"}, None)
+    assert seen["ip"] == "127.0.0.1"

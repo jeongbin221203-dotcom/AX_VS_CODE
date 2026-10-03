@@ -46,6 +46,8 @@ def create_app(test_config: dict | None = None) -> Flask:
         # 리버스 프록시(nginx 등) 뒤에서만 켠다. 켜지 않으면 X-Forwarded-For를 위조해 IP 제한을 피할 수 있다.
         from werkzeug.middleware.proxy_fix import ProxyFix
         app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1)
+        if app.config.get("CLIENT_IP_HEADER"):
+            app.wsgi_app = _ClientIpHeader(app.wsgi_app, app.config["CLIENT_IP_HEADER"])
 
     if app.config.get("FORWARD_URL"):
         from core import forward
@@ -177,6 +179,23 @@ def create_app(test_config: dict | None = None) -> Flask:
         return response
 
     return app
+
+
+class _ClientIpHeader:
+    """프록시가 넣어 준 접속자 IP 헤더를 REMOTE_ADDR로 (호스팅의 내부 프록시 때문에 X-Forwarded-For 끝이 내부 주소일 때)."""
+
+    def __init__(self, wsgi_app, header: str):
+        self.wsgi_app = wsgi_app
+        self.key = "HTTP_" + header.upper().replace("-", "_")
+
+    def __call__(self, environ, start_response):
+        import ipaddress
+        value = (environ.get(self.key) or "").split(",")[0].strip()
+        try:
+            environ["REMOTE_ADDR"] = str(ipaddress.ip_address(value))
+        except ValueError:
+            pass
+        return self.wsgi_app(environ, start_response)
 
 
 def _same_site_referrer() -> str:
