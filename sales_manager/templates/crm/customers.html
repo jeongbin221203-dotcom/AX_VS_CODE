@@ -42,12 +42,12 @@
 </form>
 
 <div class="card-head">
-  <p class="muted">총 {{ tbl.total }}개 거래처 · 행을 누르면 수정 화면으로 이동합니다. 목록의 고객 연락처·이메일은 가려서 표시합니다.</p>
+  <p class="muted">총 {{ tbl.total }}개 거래처 · 행을 누르면 바로 아래 수정 칸이 열립니다. 목록의 고객 연락처·이메일은 가려서 표시합니다.</p>
   {{ download(export_url('customers')) }}
 </div>
 {{ table(tbl, 460) }}
 
-<section class="card">
+<section class="card" data-edit-anchor>
   {{ tabs([('new', '➕ 신규 등록'), ('edit', '✏️ 수정 / 삭제')] + ([('merge', '🔀 중복 · 병합')] if is_admin else []), tab) }}
   {% if tab == 'merge' %}
     <p class="muted">사업자번호가 같거나 이름이 거의 같은 거래처입니다('(주)대한산업' = '대한산업 주식회사'). 병합하면 없앨 거래처의

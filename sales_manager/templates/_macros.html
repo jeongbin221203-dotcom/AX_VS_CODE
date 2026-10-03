@@ -22,7 +22,7 @@
         </tr></thead>
         <tbody>
         {% for r in t.rows %}
-          <tr class="{{ 'link' if r.href }} {{ 'tone-' ~ r.tone if r.tone }}" {% if r.href %}data-href="{{ r.href }}"{% endif %}>
+          <tr class="{{ 'link' if r.href }} {{ 'tone-' ~ r.tone if r.tone }}" {% if r.href %}data-href="{{ r.href }}" tabindex="0" title="눌러서 이 건 수정"{% endif %}>
             {% if t.select_name %}<td class="sel"><input type="checkbox" name="{{ t.select_name }}" value="{{ r.value }}" aria-label="이 행 선택"></td>{% endif %}
             {% for cell in r.cells %}<td class="{{ 'num' if t.columns[loop.index0] in t.numeric }}">{{ cell }}</td>{% endfor %}
           </tr>

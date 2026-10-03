@@ -71,10 +71,59 @@
   {{ metric('가중 예상금액', m_weighted|krw) }}
   {{ metric('평균 검증점수', m_score ~ '점', '30일 이상 정체 ' ~ m_stuck ~ '건', 'down' if m_stuck else none) }}
 </div>
-<div class="card-head"><p class="muted">행을 누르면 수정 화면으로 이동합니다.</p>{{ download(export_url('deals')) }}</div>
+<div class="card-head">
+  <nav class="view-switch" aria-label="보기">
+    <a href="{{ url_for('crm.deals', q=q, stage=stage, fcat=fcat, open='1' if only_open else '0') }}" class="{{ 'active' if view == 'list' }}">☰ 목록</a>
+    <a href="{{ url_for('crm.deals', q=q, stage=stage, fcat=fcat, open='1' if only_open else '0', view='board') }}" class="{{ 'active' if view == 'board' }}">▦ 보드</a>
+  </nav>
+  <p class="muted">{{ '카드를 다른 단계로 끌어 놓거나 카드의 단계 칸에서 바꿉니다. 카드를 누르면 수정 칸이 열립니다.' if view == 'board' else '행을 누르면 바로 아래 수정 칸이 열립니다.' }}</p>
+  {{ download(export_url('deals')) }}
+</div>
+{% if view == 'board' %}
+<div class="board" data-board data-stage-url="{{ url_for('crm.deal_stage') }}" data-csrf="{{ csrf_token() }}">
+  {% for col in board %}
+  <section class="board-col {{ 'closed' if col.closed }}" data-stage="{{ col.stage }}" aria-label="{{ col.stage }} 단계">
+    <header>
+      <b>{{ col.stage }}</b> <span class="muted small">{{ col.prob }}%</span>
+      <span class="board-sum small"><span data-count>{{ col.count }}</span>건 · <span data-sum>{{ col.sum|krw }}</span></span>
+      {% if col.closed %}<span class="muted small board-note">최근 30일</span>{% endif %}
+    </header>
+    <div class="board-cards" data-drop>
+      {% for c in col.cards %}
+      <article class="deal-card" draggable="true" data-id="{{ c.id }}" data-amount="{{ c.amount }}" data-stage="{{ col.stage }}"
+               data-href="{{ url_for('crm.deals', id=c.id, tab='edit', view='board', q=q or none, stage=stage or none, fcat=fcat or none) }}">
+        <div class="deal-card-title">{{ c.title }}</div>
+        <div class="muted small">{{ c.customer }} · {{ c.owner or '담당 없음' }}</div>
+        <div class="deal-card-amt">{{ c.amount|krw }}</div>
+        <div class="deal-card-meta small">
+          {% if c.close %}<span title="예상마감일">⏱ {{ c.close }}</span>{% endif %}
+          {% if not col.closed %}<span class="{{ 'warn' if c.days > 30 }}" title="이 단계에 머문 날">{{ c.days }}일째</span>
+          <span title="검증점수">✓ {{ c.score }}</span>{% elif c.lost %}<span>{{ c.lost }}</span>{% endif %}
+        </div>
+        <label class="deal-card-move small">단계
+          <select data-board-move aria-label="{{ c.title }} 단계 바꾸기" data-no-search>
+            {% for s in STAGES %}<option value="{{ s }}" {{ 'selected' if s == col.stage }}>{{ s }}</option>{% endfor %}
+          </select>
+        </label>
+      </article>
+      {% endfor %}
+    </div>
+  </section>
+  {% endfor %}
+</div>
+<dialog class="lost-dialog" data-lost-dialog>
+  <form method="dialog">
+    <h3>실주 사유</h3>
+    <p class="muted small">실주로 옮기려면 사유가 필요합니다.</p>
+    <label>사유 {{ select('lost_reason', LOST_REASONS, '', blank='선택하세요') }}</label>
+    <div class="row-actions"><button class="btn btn-primary" value="ok">실주 처리</button><button class="btn" value="cancel">취소</button></div>
+  </form>
+</dialog>
+{% else %}
 {{ table(tbl, 460) }}
+{% endif %}
 
-<section class="card">
+<section class="card" data-edit-anchor>
   {{ tabs([('new', '➕ 기회 등록'), ('edit', '✏️ 수정 / 삭제'), ('move', '🔀 단계 변경'), ('approval', '💳 할인 결재 요청')], tab) }}
 
   {% if tab == 'edit' %}

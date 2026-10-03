@@ -12,7 +12,7 @@
   {% if tab == 'users' %}
     <p class="muted small">행을 누르면 해당 사용자를 수정합니다. 이름이 같은 사용자가 있어도 데이터는 사번(사용자)별로 따로 관리됩니다.</p>
     {{ table(users, 360) }}
-    <h3>{{ '사용자 수정 — ' ~ target.name ~ ' (' ~ target.emp_no ~ ')' if target.id else '사용자 신규 등록' }}</h3>
+    <h3 data-edit-anchor>{{ '사용자 수정 — ' ~ target.name ~ ' (' ~ target.emp_no ~ ')' if target.id else '사용자 신규 등록' }}</h3>
     {% if target.id %}<a class="btn btn-sm" href="{{ url_for('admin.org', tab='users') }}">+ 신규 등록으로 전환</a>{% endif %}
     <form method="post" action="{{ url_for('admin.user_save') }}" class="form">
       {{ csrf() }}

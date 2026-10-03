@@ -473,10 +473,22 @@ def realign_targets(rnd_seed: Optional[int] = None) -> int:
 
 
 def backdate_customers(rnd_seed: Optional[int] = None) -> int:
-    """샘플 거래처 등록일을 첫 거래 10~60일 전으로 옮긴다 — 모두 '이번 달 신규 거래처'로 잡히지 않게. 바꾼 수."""
+    """샘플 거래처 등록일을 첫 거래 10~60일 전으로 옮긴다 — 모두 '이번 달 신규 거래처'로 잡히지 않게. 바꾼 수.
+
+    먼저 영업기회 생성일도 종료일·단계 진입일보다 앞으로 옮긴다 (오늘 만든 샘플이 지난 날짜에 끝난 것으로 나오면
+    영업 주기가 음수가 되고 데이터 점검에 '종료일이 생성일보다 빠름'으로 잡힌다)."""
     rng = random.Random(rnd_seed)
-    rows = db._df("SELECT c.id, MIN(s.sale_date) AS first FROM customers c JOIN sales s ON s.customer_id=c.id "
-                  "GROUP BY c.id HAVING MIN(s.sale_date) < substr(c.created_at, 1, 10)")
+    c, s = "COALESCE(closed_at, '9999')", "COALESCE(substr(stage_since, 1, 10), '9999')"
+    first = f"CASE WHEN {c} < {s} THEN {c} ELSE {s} END"         # 둘 중 이른 날 (SQLite·PostgreSQL 공통)
+    deals = db._df(f"SELECT id, {first} AS first FROM deals WHERE {first} < substr(created_at, 1, 10)")
+    with db.get_conn() as conn:
+        for did, first in deals.itertuples(index=False):
+            made = date.fromisoformat(str(first)[:10]) - timedelta(days=rng.randint(20, 90))
+            conn.execute("UPDATE deals SET created_at=? WHERE id=?", (f"{made.isoformat()} 09:00:00", int(did)))
+    rows = db._df("SELECT c.id, MIN(x.d) AS first FROM customers c JOIN ("
+                  "  SELECT customer_id, sale_date AS d FROM sales"
+                  "  UNION ALL SELECT customer_id, substr(created_at, 1, 10) FROM deals) x ON x.customer_id=c.id "
+                  "GROUP BY c.id HAVING MIN(x.d) < substr(c.created_at, 1, 10)")
     with db.get_conn() as conn:
         for cid, first in rows.itertuples(index=False):
             reg = date.fromisoformat(str(first)[:10]) - timedelta(days=rng.randint(10, 60))

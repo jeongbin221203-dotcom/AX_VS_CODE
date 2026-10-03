@@ -86,10 +86,7 @@
   }
 
   // ── 표: 행 클릭 이동, 전체 선택 ────────────────────────────────────────
-  document.addEventListener("click", function (e) {
-    const row = e.target.closest("tr[data-href]");
-    if (row && !e.target.closest("input, a, button")) window.location = row.dataset.href;
-  });
+  // 행 클릭은 아래 '화면 이동 없이 본문만 바꾸기'(swapMain)에서 처리한다 — 수정 칸으로 바로 내려간다.
   document.addEventListener("change", function (e) {
     if (e.target.matches("[data-check-all]")) {
       e.target.closest("table").querySelectorAll("tbody input[type=checkbox]")
@@ -97,7 +94,110 @@
     }
   });
 
+  // ── 긴 선택 목록(거래처·영업기회 등): 입력해서 찾기 ───────────────────────
+  //  선택지가 많은 <select> 옆에 검색 입력칸을 붙인다. 실제 값은 원래 <select> 에 넣고 change 를 알리므로
+  //  다른 스크립트(거래처별 영업기회 거르기·자동 조회 등)와 폼 전송·필수 검사는 그대로 동작한다.
+  const COMBO_MIN = 10;
+  function enhanceSelect(sel) {
+    if (sel.dataset.combo || sel.multiple || sel.hasAttribute("data-no-search") || sel.closest(".sidebar, .combo")) return;
+    if (sel.options.length < COMBO_MIN) return;
+    sel.dataset.combo = "1";
+    const box = document.createElement("span");
+    box.className = "combo";
+    const input = document.createElement("input");
+    input.type = "text";
+    input.className = "combo-input";
+    input.autocomplete = "off";
+    input.placeholder = "입력해서 찾기 (" + (sel.options.length - (sel.options[0] && sel.options[0].value === "" ? 1 : 0)) + "개)";
+    input.setAttribute("role", "combobox");
+    input.setAttribute("aria-autocomplete", "list");
+    input.setAttribute("aria-expanded", "false");
+    const list = document.createElement("ul");
+    list.className = "combo-list";
+    list.setAttribute("role", "listbox");
+    list.hidden = true;
+    sel.parentNode.insertBefore(box, sel);
+    box.appendChild(sel);
+    box.appendChild(input);
+    box.appendChild(list);
+    sel.classList.add("combo-native");
+    sel.tabIndex = -1;
+    sel.setAttribute("aria-hidden", "true");
+    input.disabled = sel.disabled;
+    let shown = [], active = -1;
+
+    function label() {
+      const o = sel.options[sel.selectedIndex];
+      return o && o.value !== "" ? o.text : "";
+    }
+    function close() {
+      list.hidden = true;
+      input.setAttribute("aria-expanded", "false");
+    }
+    function highlight(i) {
+      const items = list.querySelectorAll("li[data-i]");
+      if (!items.length) return;
+      active = Math.max(0, Math.min(i, items.length - 1));
+      items.forEach(function (li, k) { li.classList.toggle("active", k === active); });
+      items[active].scrollIntoView({ block: "nearest" });
+    }
+    function render(q) {
+      const words = (q || "").trim().toLowerCase().split(/\s+/).filter(Boolean);
+      list.textContent = "";
+      shown = [];
+      Array.prototype.forEach.call(sel.options, function (o) {
+        if (o.hidden || (o.value === "" && words.length)) return;
+        const text = o.text.toLowerCase();
+        if (words.every(function (w) { return text.indexOf(w) >= 0; }) && shown.length < 300) shown.push(o);
+      });
+      shown.forEach(function (o, i) {
+        const li = document.createElement("li");
+        li.textContent = o.value === "" ? (o.text || "(선택 안 함)") : o.text;
+        li.dataset.i = i;
+        li.setAttribute("role", "option");
+        if (o.selected && o.value !== "") li.classList.add("current");
+        list.appendChild(li);
+      });
+      if (!shown.length) {
+        const li = document.createElement("li");
+        li.className = "empty";
+        li.textContent = "찾는 항목이 없습니다";
+        list.appendChild(li);
+      }
+      list.hidden = false;
+      input.setAttribute("aria-expanded", "true");
+      active = -1;
+      if (words.length && shown.length) highlight(0);
+    }
+    function choose(o) {
+      if (sel.value !== o.value) {
+        sel.value = o.value;
+        sel.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+      input.value = label();
+      close();
+    }
+    input.value = label();
+    input.addEventListener("focus", function () { input.select(); render(""); });
+    input.addEventListener("input", function () { render(input.value); });
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowDown") { e.preventDefault(); if (list.hidden) render(""); highlight(active + 1); }
+      else if (e.key === "ArrowUp") { e.preventDefault(); highlight(active - 1); }
+      else if (e.key === "Enter" && !list.hidden && active >= 0 && shown[active]) { e.preventDefault(); choose(shown[active]); }
+      else if (e.key === "Escape") { input.value = label(); close(); }
+    });
+    list.addEventListener("mousedown", function (e) {
+      const li = e.target.closest("li[data-i]");
+      e.preventDefault();                                 // 입력칸 초점을 잃지 않게
+      if (li) choose(shown[Number(li.dataset.i)]);
+    });
+    input.addEventListener("blur", function () { input.value = label(); close(); });
+    sel.addEventListener("change", function () { input.value = label(); });
+    sel.addEventListener("invalid", function () { input.focus(); });
+  }
+
   function initWidgets(root) {
+  root.querySelectorAll("main select, .content select").forEach(enhanceSelect);
   // ── 거래처 선택 시 해당 거래처의 영업기회만 보이기 ──────────────────────
   root.querySelectorAll("form[data-deal-filter]").forEach(function (form) {
     const cust = form.querySelector("[name=customer_id]");
@@ -401,9 +501,11 @@
   function tabsIndex(main, bar) {
     return bar ? Array.prototype.indexOf.call(main.querySelectorAll(ANCHORS), bar) : -1;
   }
-  function swapMain(href, push, bar) {
+  function swapMain(href, push, bar, focusEdit) {
     const main = document.querySelector("main.content");
     if (!main || !window.fetch || !window.DOMParser) { window.location = href; return; }
+    const wrapIdx = focusEdit ? Array.prototype.indexOf.call(main.querySelectorAll(".table-wrap"), focusEdit.closest(".table-wrap")) : -1;
+    const wrapTop = wrapIdx >= 0 ? focusEdit.closest(".table-wrap").scrollTop : 0;
     const idx = tabsIndex(main, bar);
     const barTop = bar ? bar.getBoundingClientRect().top : null;
     const y = window.scrollY;
@@ -430,6 +532,20 @@
           if (nb && barTop !== null) window.scrollBy(0, nb.getBoundingClientRect().top - barTop);
           else window.scrollTo(0, y);
         };
+        if (focusEdit) {                  // 행을 눌렀으면: 고른 행 표시 + 수정 칸으로 이동
+          const wrap = wrapIdx >= 0 ? main.querySelectorAll(".table-wrap")[wrapIdx] : null;
+          if (wrap) wrap.scrollTop = wrapTop;
+          markSelected(main);
+          const target = main.querySelector("[data-edit-anchor]");
+          if (target) {
+            target.scrollIntoView({ block: "start" });
+            const first = target.querySelector("input:not([type=hidden]), select, textarea");
+            if (first) first.focus({ preventScroll: true });
+          } else {
+            window.scrollTo(0, y);
+          }
+          return;
+        }
         pin();
         const active = main.querySelector(".tabs a.active");
         if (active) active.focus({ preventScroll: true });
@@ -447,6 +563,38 @@
     const bar = a.closest(ANCHORS);
     if (bar.classList.contains("tabs")) bar.querySelectorAll("a").forEach(function (x) { x.classList.toggle("active", x === a); });
     swapMain(a.href, true, bar);
+  });
+  // 목록 행을 누르면 그 건의 수정 칸을 같은 화면에서 연다 (새로고침·맨 위로 튀는 것 없이)
+  function markSelected(root) {
+    const here = location.pathname + location.search;
+    root.querySelectorAll("tr[data-href], .deal-card[data-href]").forEach(function (el) {
+      el.classList.toggle("selected", el.getAttribute("data-href") === here);
+    });
+  }
+  document.addEventListener("click", function (e) {      // 보드 카드를 누르면 그 기회의 수정 칸
+    const card = e.target.closest(".deal-card[data-href]");
+    if (!card || e.target.closest("select, label, a, button") || e.button !== 0) return;
+    swapMain(card.dataset.href, true, null, card);
+  });
+  markSelected(document);
+  if (location.hash === "#edit") {                         // 다른 화면(데이터 점검 등)에서 '이 건 고치기'로 왔을 때
+    const anchor = document.querySelector("[data-edit-anchor]");
+    if (anchor) requestAnimationFrame(function () { anchor.scrollIntoView({ block: "start" }); });
+  }
+  function openRow(row) {                                  // 다른 화면으로 가는 행은 보통 이동 (사이드바 선택 표시까지 맞게)
+    const url = new URL(row.dataset.href, location.href);
+    if (url.pathname !== location.pathname) { window.location = url.href; return; }
+    swapMain(row.dataset.href, true, null, row);
+  }
+  document.addEventListener("click", function (e) {
+    const row = e.target.closest("tr[data-href]");
+    if (!row || e.target.closest("input, a, button, label") || e.button !== 0) return;
+    if (e.metaKey || e.ctrlKey || e.shiftKey) { window.open(row.dataset.href, "_blank"); return; }
+    openRow(row);
+  });
+  document.addEventListener("keydown", function (e) {   // 키보드: 행에 초점을 두고 Enter
+    const row = e.target.closest && e.target.closest("tr[data-href]");
+    if (row && e.key === "Enter") openRow(row);
   });
   window.addEventListener("popstate", function (e) {
     if (e.state && e.state.swapped) swapMain(location.href, false);
@@ -591,3 +739,131 @@
     save(n);
   });
 })();
+
+/* 영업기회 보드: 카드를 다른 단계 열로 끌어 놓거나, 카드의 '단계' 칸에서 바꾼다.
+   저장은 /deals/stage — '단계 변경' 탭과 같은 규칙(필수 조건·이력·감사로그). 막히면 카드는 제자리, 사유를 보여 준다. */
+(function () {
+  "use strict";
+  function won(n) { return "₩ " + Number(n || 0).toLocaleString("ko-KR"); }
+  function recount(col) {
+    const cards = col.querySelectorAll(".deal-card");
+    let sum = 0;
+    cards.forEach(function (c) { sum += Number(c.dataset.amount || 0); });
+    col.querySelector("[data-count]").textContent = cards.length;
+    col.querySelector("[data-sum]").textContent = won(sum);
+  }
+  function message(board, text, ok) {
+    let box = board.parentNode.querySelector("[data-board-msg]");
+    if (!box) {
+      box = document.createElement("div");
+      box.setAttribute("data-board-msg", "");
+      box.setAttribute("role", "status");
+      board.parentNode.insertBefore(box, board);
+    }
+    box.className = "alert " + (ok ? "alert-success" : "alert-error");
+    box.textContent = text;
+    clearTimeout(box._t);
+    box._t = setTimeout(function () { box.remove(); }, ok ? 2500 : 8000);
+  }
+  function askLostReason() {
+    const dlg = document.querySelector("[data-lost-dialog]");
+    if (!dlg || !dlg.showModal) {
+      return Promise.resolve(window.prompt("실주 사유를 입력하세요") || "");
+    }
+    const sel = dlg.querySelector("select");
+    sel.value = "";
+    return new Promise(function (resolve) {
+      dlg.addEventListener("close", function onClose() {
+        dlg.removeEventListener("close", onClose);
+        resolve(dlg.returnValue === "ok" ? sel.value : "");
+      });
+      dlg.returnValue = "";
+      dlg.showModal();
+    });
+  }
+  function move(card, stage) {
+    const board = card.closest("[data-board]");
+    const from = card.dataset.stage;
+    const picker = card.querySelector("[data-board-move]");
+    if (!board || stage === from) return;
+    const reasonP = stage === "실주" ? askLostReason() : Promise.resolve("");
+    reasonP.then(function (reason) {
+      if (stage === "실주" && !reason) { if (picker) picker.value = from; return; }
+      const body = new URLSearchParams();
+      body.append("_csrf", board.dataset.csrf);
+      body.append("id", card.dataset.id);
+      body.append("stage", stage);
+      if (reason) body.append("lost_reason", reason);
+      card.classList.add("saving");
+      return fetch(board.dataset.stageUrl, { method: "POST", body: body, credentials: "same-origin" })
+        .then(function (r) {
+          return r.json().catch(function () { return { ok: false, error: "저장하지 못했습니다 (" + r.status + ")" }; });
+        })
+        .then(function (res) {
+          card.classList.remove("saving");
+          if (!res.ok) {
+            if (picker) picker.value = from;
+            const title = card.querySelector(".deal-card-title");
+            message(board, (title ? title.textContent.trim() : "") + " — " + res.error, false);
+            return;
+          }
+          const fromCol = card.closest(".board-col");
+          const toCol = board.querySelector(".board-col[data-stage=\"" + stage + "\"]");
+          toCol.querySelector("[data-drop]").insertBefore(card, toCol.querySelector(".deal-card"));
+          card.dataset.stage = stage;
+          if (picker) picker.value = stage;
+          recount(fromCol);
+          recount(toCol);
+          message(board, "‘" + stage + "’ 단계로 옮겼습니다.", true);
+        });
+    }).catch(function () {
+      card.classList.remove("saving");
+      if (picker) picker.value = from;
+      message(board, "연결이 끊겨 저장하지 못했습니다. 다시 시도하세요.", false);
+    });
+  }
+
+  document.addEventListener("change", function (e) {
+    const sel = e.target.closest && e.target.closest("[data-board-move]");
+    if (sel) move(sel.closest(".deal-card"), sel.value);
+  });
+  let dragged = null;
+  document.addEventListener("dragstart", function (e) {
+    const card = e.target.closest && e.target.closest("[data-board] .deal-card");
+    if (!card) return;
+    dragged = card;
+    card.classList.add("dragging");
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/plain", card.dataset.id);
+  });
+  document.addEventListener("dragover", function (e) {
+    if (!dragged) return;
+    const col = e.target.closest && e.target.closest("[data-board] .board-col");
+    document.querySelectorAll(".board-col.drop-target").forEach(function (c) { if (c !== col) c.classList.remove("drop-target"); });
+    if (!col) return;
+    e.preventDefault();
+    col.classList.add("drop-target");
+  });
+  document.addEventListener("drop", function (e) {
+    if (!dragged) return;
+    const col = e.target.closest && e.target.closest("[data-board] .board-col");
+    if (!col) return;
+    e.preventDefault();
+    col.classList.remove("drop-target");
+    move(dragged, col.dataset.stage);
+  });
+  document.addEventListener("dragend", function () {
+    if (dragged) dragged.classList.remove("dragging");
+    dragged = null;
+    document.querySelectorAll(".board-col.drop-target").forEach(function (c) { c.classList.remove("drop-target"); });
+  });
+})();
+
+/* 확인이 필요한 폼(data-confirm): 보내기 전에 한 번 묻는다. 다른 제출 처리(중복 방지 등)보다 먼저 — capture 단계. */
+document.addEventListener("submit", function (e) {
+  const form = e.target;
+  if (form.dataset && form.dataset.confirm && !window.confirm(form.dataset.confirm)) {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+  }
+}, true);

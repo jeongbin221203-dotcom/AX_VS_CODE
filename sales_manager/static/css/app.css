@@ -104,6 +104,10 @@ table.data th { position: sticky; top: 0; background: var(--accent-soft); font-w
 table.data td.num, table.data th.num { text-align: right; font-variant-numeric: tabular-nums; }
 table.data tr.link { cursor: pointer; }
 table.data tr.link:hover td { background: var(--accent-soft); }
+table.data tr.link.selected td { background: var(--accent-soft); box-shadow: inset 0 1px 0 var(--accent), inset 0 -1px 0 var(--accent); }
+table.data tr.link.selected td:first-child { box-shadow: inset 3px 0 0 var(--accent), inset 0 1px 0 var(--accent), inset 0 -1px 0 var(--accent); }
+table.data tr.link:focus-visible td { outline: 2px solid var(--accent); outline-offset: -2px; }
+[data-edit-anchor] { scroll-margin-top: 12px; }
 table.data tr.tone-danger td { color: var(--down); font-weight: 600; }
 table.data .sel { width: 2rem; }
 input.plain { border: 0; background: transparent; padding: 0; }
@@ -270,3 +274,48 @@ label > select, label > input:not([type=checkbox]):not([type=radio]), label > te
 .demo-roles { margin-top: .4rem; color: var(--sidebar-muted, #9fb0c8); line-height: 1.7; }
 .demo-roles a { color: inherit; text-decoration: underline; white-space: nowrap; }
 .demo-roles a.active { color: #fff; font-weight: 600; text-decoration: none; }
+
+/* 긴 선택 목록: 입력해서 찾기 (static/js/app.js enhanceSelect) */
+.combo { position: relative; display: block; }
+.combo-native { position: absolute; left: 0; bottom: 0; width: 100%; height: 1px; opacity: 0; pointer-events: none; }
+.combo-input { width: 100%; }
+.combo-list { position: absolute; z-index: 40; left: 0; right: 0; top: 100%; margin: 2px 0 0; padding: 4px 0; list-style: none;
+  max-height: 280px; overflow-y: auto; background: var(--panel, #fff); color: inherit; border: 1px solid var(--line, #d0d7e2);
+  border-radius: 8px; box-shadow: 0 8px 24px rgba(15, 23, 42, .18); }
+.combo-list li { padding: .38rem .7rem; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.combo-list li.active, .combo-list li:hover { background: var(--accent-soft, #e8eefc); }
+.combo-list li.current { font-weight: 600; }
+.combo-list li.empty { color: #8a94a6; cursor: default; }
+
+/* 영업기회: 목록 / 보드 전환, 단계별 보드 */
+.view-switch { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; margin-right: .75rem; }
+.view-switch a { padding: .3rem .8rem; text-decoration: none; color: inherit; }
+.view-switch a.active { background: var(--accent); color: #fff; }
+.board { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(220px, 1fr); gap: .6rem; overflow-x: auto; padding-bottom: .5rem; }
+.board-col { background: var(--bg); border: 1px solid var(--line); border-radius: 10px; display: flex; flex-direction: column; min-height: 240px; }
+.board-col header { text-align: left; padding: .55rem .7rem; border-bottom: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: .25rem .4rem; align-items: baseline; }
+.board-sum { margin-left: auto; font-variant-numeric: tabular-nums; }
+.board-note { width: 100%; }
+.board-cards { padding: .45rem; display: flex; flex-direction: column; gap: .45rem; flex: 1; max-height: 640px; overflow-y: auto; }
+.board-col.drop-target { outline: 2px dashed var(--accent); outline-offset: -2px; }
+.deal-card { text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: .5rem .6rem; cursor: pointer; }
+.deal-card:hover { border-color: var(--accent); }
+.deal-card.selected { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
+.deal-card.dragging { opacity: .45; }
+.deal-card.saving { opacity: .6; pointer-events: none; }
+.deal-card-title { font-weight: 600; line-height: 1.35; }
+.deal-card-amt { font-variant-numeric: tabular-nums; margin-top: .2rem; }
+.deal-card-meta { display: flex; flex-wrap: wrap; gap: .5rem; color: #8a94a6; margin-top: .2rem; }
+.deal-card-meta .warn { color: var(--down); }
+.board .deal-card-move { display: flex; flex-direction: row; align-items: center; justify-content: flex-start; text-align: left; gap: .35rem; margin: .35rem 0 0; color: #8a94a6; font-weight: normal; }
+.board .deal-card-move select { padding: .1rem .3rem; font-size: .8rem; width: auto; min-width: 0; margin: 0; }
+.lost-dialog { border: 1px solid var(--line); border-radius: 10px; background: var(--panel); color: var(--text); min-width: 300px; }
+.lost-dialog::backdrop { background: rgba(15, 23, 42, .45); }
+
+/* 데이터 점검 (admin/quality.html) */
+.qc-item h3 { display: flex; align-items: center; gap: .45rem; margin: 0; }
+.qc-item.qc-ok { padding-top: .6rem; padding-bottom: .6rem; }
+.badge.qc-high { background: var(--error-bg); color: var(--error-fg); }
+.badge.qc-mid { background: var(--warning-bg); color: var(--warning-fg); }
+.badge.qc-low { background: var(--info-bg); color: var(--info-fg); }
+.badge.qc-pass { background: var(--success-bg); color: var(--success-fg); }

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% from "_macros.html" import metric, table, csrf %}
+{% block content %}
+<p class="muted">쌓여 있는 데이터의 결함을 찾아 고칠 곳으로 안내합니다. 새로 입력하는 데이터는 화면·업로드 검증이 막지만,
+  이관하거나 예전 버전에서 들어온 데이터에는 남아 있을 수 있습니다. 행을 누르면 그 건의 수정 칸이 열립니다.</p>
+
+<div class="metrics m4">
+  {{ metric('점검 항목', results|length ~ '개') }}
+  {{ metric('문제 있는 항목', summary['items'] ~ '개', none, 'down' if summary['items'] else none) }}
+  {{ metric('중요도 높음', summary['high'] ~ '개', none, 'down' if summary['high'] else none) }}
+  {{ metric('찾은 건수', '{:,}건'.format(summary['total'])) }}
+</div>
+
+{% for r in results %}
+<section class="card qc-item {{ 'qc-ok' if not r.count }}" id="qc-{{ r.key }}">
+  <div class="card-head">
+    <h3>{% if r.count %}<span class="badge qc-{{ r.severity }}">{{ r.severity_label }}</span>{% else %}<span class="badge qc-pass">정상</span>{% endif %}
+      {{ r.title }} <span class="muted">{{ '{:,}'.format(r.count) }}건</span></h3>
+    {% if r.count and r.go %}<a class="btn btn-sm" href="{{ r.go }}">고치러 가기 →</a>{% endif %}
+  </div>
+  {% if r.count %}
+    <p class="muted small">{{ r.why }}</p>
+    {% if r.fix %}
+    <form method="post" action="{{ url_for('admin.quality_fix') }}" class="inline-form" data-confirm="{{ r.fix_label }} — {{ r.count }}건을 자동으로 고칩니다. 감사로그에 남습니다.">
+      {{ csrf() }}<input type="hidden" name="action" value="{{ r.fix }}">
+      <button class="btn btn-sm btn-primary">자동 수정: {{ r.fix_label }}</button>
+    </form>
+    {% endif %}
+    {{ table(r.table, 300) }}
+    {% if r.count > r.table.total %}<p class="muted small">처음 {{ r.table.total }}건만 보여 줍니다.</p>{% endif %}
+  {% endif %}
+</section>
+{% endfor %}
+{% endblock %}

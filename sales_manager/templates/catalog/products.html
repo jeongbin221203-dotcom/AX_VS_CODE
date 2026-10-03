@@ -38,7 +38,7 @@
     </form>
     {{ table(plist, 360, '등록된 품목이 없습니다.') }}
     {% if can_edit_product %}
-    <form method="post" action="{{ url_for('catalog.product_save') }}" class="form">
+    <form method="post" action="{{ url_for('catalog.product_save') }}" class="form" data-edit-anchor>
       {{ csrf() }}
       <h3>{{ '✏️ 품목 수정 — ' ~ edit.code if edit.id else '➕ 품목 등록' }}</h3>
       {% if edit.id %}<input type="hidden" name="id" value="{{ edit.id }}">{% endif %}

@@ -223,10 +223,14 @@ def bulk_load():
     """많은 행을 한 번에 넣을 때(시연 샘플 생성): SQLite 디스크 동기화를 끈다 — 잃어도 다시 만들 수 있는 데이터에만."""
     global SQLITE_FAST
     SQLITE_FAST = True
+    # 연결을 하나 열어 두면, 짧은 연결 수천 개가 닫힐 때마다 WAL 체크포인트(파일 정리)를 하지 않는다 → 시연 준비 시간이 크게 준다
+    keep = None if is_pg() else sqlite3.connect(DB_PATH, timeout=15, check_same_thread=False)
     try:
         yield
     finally:
         SQLITE_FAST = False
+        if keep is not None:
+            keep.close()
 
 
 @contextmanager
@@ -248,7 +252,8 @@ def get_conn(db_path: str | None = None):
     raw = sqlite3.connect(db_path or DB_PATH, timeout=15, check_same_thread=False)
     raw.row_factory = sqlite3.Row
     try:
-        raw.execute("PRAGMA journal_mode=WAL")
+        if not SQLITE_FAST:                   # WAL 은 파일에 남는 설정 — 대량 적재 중에는 (시작할 때 이미 켜져 있어) 생략
+            raw.execute("PRAGMA journal_mode=WAL")
         raw.execute("PRAGMA foreign_keys=ON")
         if SQLITE_FAST:                       # 시연 샘플을 한 번에 만들 때만 (전원이 꺼지면 잃어도 되는 데이터)
             raw.execute("PRAGMA synchronous=OFF")

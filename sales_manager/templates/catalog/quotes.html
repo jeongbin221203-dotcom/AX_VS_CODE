@@ -35,7 +35,7 @@
 {{ table(tbl, 360, '견적이 없습니다.') }}
 
 {% if editing %}
-<section class="card">
+<section class="card" data-edit-anchor>
   <h3>{{ '✏️ ' ~ form.quote_no ~ ' Rev.' ~ form.revision ~ ' 수정' if form.id else '➕ 새 견적' }}</h3>
   <form method="post" action="{{ url_for('catalog.quote_save') }}" class="form" data-quote data-deal-filter data-price-url="{{ url_for('catalog.price_lookup') }}">
     {{ csrf() }}

@@ -46,6 +46,7 @@ MENUS = [
     ("audit", "🗂️ 감사로그", "admin.audit", "ADMIN"),
     ("settings", "🏢 회사 설정", "admin.settings", "ADMIN"),
     ("privacy", "🛡️ 개인정보 요청", "admin.privacy", "ADMIN"),
+    ("quality", "🩺 데이터 점검", "admin.quality", "ADMIN"),
     ("admin", "⚙️ 데이터 관리", "admin.data", "ADMIN"),
 ]
 PINNED_MENU = "dashboard"
@@ -251,7 +252,7 @@ def _cell(value: Any, money: bool) -> str:
 class Table:
     """DataFrame → 템플릿용 표.
 
-    link=(엔드포인트, 원본 컬럼, 인자명)  행 클릭 시 이동할 주소
+    link=(엔드포인트, 원본 컬럼, 인자명[, {추가 인자}])  행 클릭 시 이동할 주소 (같은 화면이면 조회 조건 유지)
     select=(폼 필드명, 원본 컬럼)        행마다 체크박스 (다건 처리용)
     page_size=N                          N행씩 나눠 보여 준다 (?page=)
     """
@@ -280,8 +281,13 @@ class Table:
             row = {"cells": [_cell(v, c in money) for c, v in zip(self.columns, vals)],
                    "href": None, "value": None, "tone": None}
             if link:
-                endpoint, key, arg = link
-                row["href"] = url_for(endpoint, **{arg: rec[key]})
+                endpoint, key, arg, *more = link
+                extra = dict(more[0]) if more else {}
+                if endpoint == request.endpoint:        # 같은 화면: 검색어·쪽 등 조회 조건을 유지한 채 그 건만 고른다
+                    keep = {k: v for k, v in request.args.items() if k not in ("export", "new", arg, *extra)}
+                    row["href"] = url_for(endpoint, **keep, **extra, **{arg: rec[key]})
+                else:
+                    row["href"] = url_for(endpoint, **extra, **{arg: rec[key]})
             if select:
                 row["value"] = rec[select[1]]
             if highlight:

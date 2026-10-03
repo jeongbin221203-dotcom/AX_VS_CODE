@@ -163,7 +163,7 @@
 
   {% if edit_row %}
   {% set raw = edit_row['raw'] %}
-  <section class="card" id="sale-edit">
+  <section class="card" id="sale-edit" data-edit-anchor>
     <h3>✏️ 매출 #{{ raw.id }} · {{ raw.sale_date }} · {{ edit_row['거래처'] }} · {{ raw.item }} · {{ raw.amount|won }} + 부가세 {{ (raw.vat_amount or 0)|won }} = {{ (raw.total_amount or raw.amount)|won }}</h3>
     <p class="muted small">결제기일 {{ raw.due_date or '-' }} · 입금 {{ (raw.paid_amount or 0)|won }} ·
       ERP {{ raw.erp_status or '미전송' }}{% if raw.erp_doc_no %} ({{ raw.erp_doc_no }}){% endif %}

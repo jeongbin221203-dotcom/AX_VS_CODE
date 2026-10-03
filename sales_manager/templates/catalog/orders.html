@@ -50,7 +50,7 @@
 
 {% if order %}
 {% set o = order %}
-<section class="card">
+<section class="card" data-edit-anchor>
   <h3>📑 {{ o.order_no }} · {{ o.customer_name }} <span class="badge">{{ o.status }}</span></h3>
   <p class="muted small">수주일 {{ o.order_date }}{% if o.delivery_date %} · 납기 {{ o.delivery_date }}{% endif %}
     {% if o.customer_po %} · 고객 발주번호 {{ o.customer_po }}{% endif %} · 담당 {{ o.owner }}

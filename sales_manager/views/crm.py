@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from datetime import date, timedelta
 
-from flask import Blueprint, abort, flash, g, redirect, request, url_for
+from flask import Blueprint, abort, flash, g, jsonify, redirect, request, url_for
 
 from core import attachments as att
 from core import company
@@ -79,7 +79,7 @@ def _customers_page(form: dict | None = None, status: int = 200):
     ctx = dict(
         q=keyword, grade=grade, cstatus=cstatus, tbl=Table(
             df, money=["누적매출", "여신한도"], drop=["id", "owner_id"],
-            link=("crm.customers", "id", "id"), page_size=PAGE_SIZE),
+            link=("crm.customers", "id", "id", {"tab": "edit"}), page_size=PAGE_SIZE),
         options=options, edit_id=edit_id, tab=tab, f=base, statuses=CUST_STATUS,
     )
     if edit_id:
@@ -256,15 +256,17 @@ def _deals_page(form: dict | None = None, status: int = 200):
             "to_stage AS 변경단계, days_in_stage AS 이전단계체류일, actor AS 변경자 "
             "FROM deal_stage_history WHERE deal_id=? ORDER BY id", [edit_id]))
 
+    view = "board" if a_str("view") == "board" else "list"
     ctx = dict(
-        q=keyword, stage=stage, fcat=fcat, only_open=only_open,
+        q=keyword, stage=stage, fcat=fcat, only_open=only_open, view=view,
+        board=_deal_board(keyword, stage, fcat) if view == "board" else None,
         m_count=len(df),
         m_total=int(df["예상금액"].sum()) if not df.empty else 0,
         m_weighted=int(df["가중금액"].sum()) if not df.empty else 0,
         m_score=int(df["검증점수"].mean()) if not df.empty else 0,
         m_stuck=int((df["단계체류일"] > 30).sum()) if not df.empty else 0,
         tbl=Table(df, money=["예상금액", "가중금액"], drop=["customer_id", "owner_id"],
-                  link=("crm.deals", "id", "id"), page_size=PAGE_SIZE),
+                  link=("crm.deals", "id", "id", {"tab": "edit"}), page_size=PAGE_SIZE),
         options=options, edit_id=edit_id, tab=tab, row=row, f=base,
         customers=db.customer_options(), history=history,
         deal_files=att.list_for("deal", [edit_id]) if edit_id else [], attach_kinds=att.KINDS,
@@ -320,6 +322,58 @@ def deal_delete(did: int):
         return redirect(url_for("crm.deals", id=did, tab="edit"))
     flash("삭제했습니다.", "warning")
     return redirect(url_for("crm.deals"))
+
+
+BOARD_CLOSED_DAYS = 30          # 보드의 수주·실주 열에는 최근 30일에 끝난 기회만
+
+
+def _txt(v) -> str:
+    return "" if v is None or (isinstance(v, float) and v != v) else str(v)
+
+
+def _num(v) -> int:
+    return 0 if v is None or (isinstance(v, float) and v != v) else int(v)
+
+
+def _deal_board(keyword: str, stage: str, fcat: str) -> list[dict]:
+    """영업기회 보드: 단계별 열. 진행 중 기회 전부 + 최근 끝난(수주·실주) 기회."""
+    df = db.list_deals(keyword=keyword, owner_id=g.owner_filter, stage=stage, only_open=False)
+    if fcat and not df.empty:
+        df = df[df["예측구분"] == fcat]
+    since = (date.today() - timedelta(days=BOARD_CLOSED_DAYS)).isoformat()
+    cols = []
+    for s in db.STAGES:
+        part = df[df["단계"] == s] if not df.empty else df
+        closed = s in (db.STAGE_WON, db.STAGE_LOST)
+        if closed and not part.empty:
+            part = part[part["종료일"].fillna("").astype(str) >= since]
+        if not part.empty:
+            part = part.sort_values(["예상마감일", "예상금액"], ascending=[True, False], na_position="last")
+        cards = [{"id": int(r["id"]), "customer": _txt(r["거래처"]), "title": _txt(r["기회명"]), "amount": _num(r["예상금액"]),
+                  "owner": _txt(r["담당자"]), "close": _txt(r["예상마감일"])[:10], "days": _num(r["단계체류일"]),
+                  "score": _num(r["검증점수"]), "lost": _txt(r.get("실주사유"))}
+                 for r in part.to_dict("records")] if not part.empty else []
+        cols.append({"stage": s, "prob": db.STAGE_PROB[s], "closed": closed, "cards": cards,
+                     "count": len(cards), "sum": sum(c["amount"] for c in cards)})
+    return cols
+
+
+@bp.route("/deals/stage", methods=["POST"])
+def deal_stage():
+    """보드에서 카드를 옮길 때 (한 건). 규칙은 '단계 변경' 탭과 같다(db.change_stage). 결과는 JSON."""
+    deal_id = f_ids("id")[:1]
+    new_stage = f_str("stage")
+    if not deal_id or new_stage not in db.STAGES:
+        return jsonify(ok=False, error="단계 값이 올바르지 않습니다."), 400
+    deal_id = deal_id[0]
+    if deal_id not in db.deal_options():
+        return jsonify(ok=False, error="볼 수 없는 영업기회입니다."), 404
+    try:
+        db.change_stage(deal_id, new_stage, lost_reason=f_str("lost_reason") or None)
+    except (ValueError, PermissionError) as exc:
+        return jsonify(ok=False, error=str(exc)), 409
+    deal = db.get_deal(deal_id)
+    return jsonify(ok=True, id=deal_id, stage=deal["stage"], probability=deal["probability"])
 
 
 @bp.route("/deals/move", methods=["POST"])

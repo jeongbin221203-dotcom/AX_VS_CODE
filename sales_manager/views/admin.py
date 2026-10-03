@@ -536,6 +536,32 @@ def audit_archive_now():
 
 
 # ============================================================================
+# 데이터 점검 (core/quality.py)
+# ============================================================================
+@bp.route("/quality")
+def quality():
+    from core import quality as qc
+    results = qc.run_all()
+    for r in results:
+        endpoint, extra, arg = r["link"] or (None, {}, None)
+        r["table"] = Table(r["rows"], money=[c for c in ("예상금액", "합계", "입금액", "입금내역합계") if c in r["rows"].columns],
+                           drop=["id"], link=(endpoint, "id", arg, {**extra, "_anchor": "edit"}) if arg else None)
+        r["go"] = url_for(endpoint, **extra) if endpoint and not arg else None
+    return render_page("admin/quality.html", "quality", results=results, summary=qc.summary(results))
+
+
+@bp.route("/quality/fix", methods=["POST"])
+def quality_fix():
+    from core import quality as qc
+    try:
+        changed = qc.fix(f_str("action"))
+        flash(f"{changed:,}건을 고쳤습니다." if changed else "고칠 건이 없었습니다.", "success" if changed else "info")
+    except ValueError as exc:
+        flash(str(exc), "error")
+    return redirect(url_for("admin.quality"))
+
+
+# ============================================================================
 # 데이터 관리
 # ============================================================================
 @bp.route("/data")
