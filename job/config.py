@@ -53,9 +53,6 @@ SECRET_KEY = _secret_key()
 # Render 사본 모드: 수집은 하지 않고, 내 PC 원본이 올려 주는 DB 를 보여 준다 (core/sync.py)
 MIRROR = os.environ.get("JOB_MIRROR", "0") == "1"
 SYNC_TOKEN = os.environ.get("JOB_SYNC_TOKEN", "")        # 원본이 올릴 때 쓰는 열쇠 (사본 쪽)
-# 배포할 때 비밀번호를 정하면 모든 화면이 로그인을 요구한다 (비우면 로그인 없음 — 내 PC 전용)
-PASSWORD = os.environ.get("JOB_PASSWORD", "")
-PERMANENT_SESSION_LIFETIME = 60 * 60 * 24 * 14          # 로그인 유지 14일
 SESSION_COOKIE_SECURE = os.environ.get("JOB_COOKIE_SECURE", "0") == "1"   # https 배포에서 1
 SESSION_COOKIE_NAME = "job_session"
 SESSION_COOKIE_SAMESITE = "Lax"

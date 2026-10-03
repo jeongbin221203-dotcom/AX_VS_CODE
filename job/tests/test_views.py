@@ -180,19 +180,3 @@ def test_stats_region_links_open_matching_jobs(app, client):
     rows = postings.search({}, {"sido": "미상", "show_closed": "1", "show_excluded": "1"})
     assert [p["id"] for p in rows] == [pid]
 
-
-def test_password_login(tmp_path):
-    from app import create_app
-    app = create_app({"TESTING": True, "TESTING_NO_CSRF": True, "DB_PATH": tmp_path / "p.db", "PASSWORD": "pw-123"})
-    c = app.test_client()
-    assert c.get("/healthz").status_code == 200
-    res = c.get("/jobs")
-    assert res.status_code == 302 and "/login" in res.headers["Location"]
-    assert "비밀번호가 맞지 않습니다" in c.post("/login", data={"password": "nope"}).get_data(as_text=True)
-    res = c.post("/login?next=/jobs", data={"password": "pw-123"})
-    assert res.status_code == 302 and res.headers["Location"].endswith("/jobs")
-    assert c.get("/jobs").status_code == 200
-    res = c.post("/login?next=//evil.example", data={"password": "pw-123"})
-    assert res.headers["Location"] == "/"
-    c.post("/logout")
-    assert c.get("/jobs").status_code == 302

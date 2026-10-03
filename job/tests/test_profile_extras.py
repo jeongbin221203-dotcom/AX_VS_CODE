@@ -117,3 +117,10 @@ def test_exclude_contract_only():
     assert ex("정규직") is False and ex("정규직 수습기간 3개월") is False
     assert ex(None, "경리 계약직(육아휴직 대체근무자)") and not ex(None, "[정규직/계약직] 사무원")
     assert ex("정규직", "시장조사 (1년 계약직)") is False                    # 고용형태에 정규직이 있으면 그쪽을 믿음
+
+
+def test_exclude_driving_not_plant_operation():
+    from core import exclude
+    hit = lambda t: exclude.matches({"title": t}, ["운전"]) == ["운전"]
+    assert hit("[더셀피부과] 운전기사 모집") and hit("승용차 운전 기사 채용") and hit("임원 수행기사")
+    assert not hit("[시운전 · O&M(운영) · 경상정비] 발전소 플랜트") and not hit("현장설비운전 채용")

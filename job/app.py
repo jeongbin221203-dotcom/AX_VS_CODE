@@ -7,9 +7,8 @@ from __future__ import annotations
 
 import os
 import secrets
-import time
 
-from flask import Flask, abort, redirect, render_template, request, session, url_for
+from flask import Flask, abort, request, session
 
 import config
 from core import db
@@ -38,35 +37,6 @@ def create_app(test_config: dict | None = None) -> Flask:
         sent = request.headers.get("X-CSRF-Token") or request.form.get("_csrf", "")
         if not token or not secrets.compare_digest(token, sent):
             abort(400, "요청이 만료되었습니다. 화면을 새로고침한 뒤 다시 시도하세요.")
-
-    @app.before_request
-    def require_login():
-        """JOB_PASSWORD 가 있으면 로그인한 사람만 (배포용). 로고·CSS·상태 확인 주소는 예외."""
-        if not app.config.get("PASSWORD"):
-            return None
-        if request.endpoint in ("static", "login", "healthz", "favicon", "sync_changes", "sync_upload") \
-                or session.get("auth"):
-            return None
-        return redirect(url_for("login", next=request.full_path if request.method == "GET" else "/"))
-
-    @app.route("/login", methods=["GET", "POST"])
-    def login():
-        error = None
-        if request.method == "POST":
-            if secrets.compare_digest(request.form.get("password", ""), app.config.get("PASSWORD", "")):
-                session.clear()
-                session.permanent = True
-                session["auth"] = True
-                nxt = request.args.get("next") or "/"
-                return redirect(nxt if nxt.startswith("/") and not nxt.startswith("//") else "/")
-            time.sleep(1)                                   # 비밀번호 마구 넣기를 늦춤
-            error = "비밀번호가 맞지 않습니다."
-        return render_template("login.html", error=error)
-
-    @app.post("/logout")
-    def logout():
-        session.clear()
-        return redirect(url_for("login"))
 
     # ── Render 사본: 원본(내 PC)과 주고받기 ──
     def _sync_auth() -> None:

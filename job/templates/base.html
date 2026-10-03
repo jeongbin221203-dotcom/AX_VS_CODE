@@ -22,9 +22,6 @@
       <a href="{{ url_for('collect.index') }}" class="{{ 'on' if ep.startswith('collect.') and ep != 'collect.status_page' }}">공고 수집</a>
       <a href="{{ url_for('collect.status_page') }}" class="{{ 'on' if ep == 'collect.status_page' }}">수집 현황</a>
       <a href="{{ url_for('profile.edit') }}" class="{{ 'on' if ep.startswith('profile.') }}">내 조건</a>
-      {% if config.PASSWORD and session.get('auth') %}
-      <form method="post" action="{{ url_for('logout') }}" class="inline-form"><input type="hidden" name="_csrf" value="{{ csrf_token() }}"><button class="linkish">로그아웃</button></form>
-      {% endif %}
     </nav>
   </div>
 </header>
