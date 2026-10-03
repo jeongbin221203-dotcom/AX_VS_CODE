@@ -26,7 +26,7 @@
     {{ metric("총 재고금액 (기준단가)", "₩ {:,.0f}".format(stock_value),
               ("재고평가(" ~ val_label ~ ") ₩ {:,.0f}".format(valued)) if valued is not none else "기준단가 × 현재고") }}
     {{ metric("안전재고 미달", "{:,} 종".format(shortage_cnt),
-              "-" ~ shortage_cnt if shortage_cnt else none, "down") }}
+              "발주·보충 필요" if shortage_cnt else "모두 안전재고 이상", "down" if shortage_cnt else none) }}
     {{ metric(cover_days ~ "일 안에 소진 예상", "{:,} 종".format(cover_cnt),
               "최근 30일 출고 기준" if cover_cnt else none, "down" if cover_cnt else none) }}
   </div>

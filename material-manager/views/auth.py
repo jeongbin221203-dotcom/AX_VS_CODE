@@ -32,6 +32,8 @@ def _login_page():
 def login():
     if auth.count_users() == 0:
         return redirect(url_for("auth.setup"))
+    if g.user and request.method == "GET":          # 이미 로그인한 사람에게 빈 로그인 화면을 보여 주지 않는다
+        return redirect(safe_next(request.args.get("next"), url_for("dashboard.index")))
     if request.method == "POST":
         result = auth.authenticate(f_str("username"), request.form.get("password", ""),
                                    request.remote_addr or "")

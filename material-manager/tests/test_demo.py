@@ -180,3 +180,10 @@ def test_demo_role_switch_uses_sample_users(monkeypatch):
 
 def test_demo_as_off_by_default(client):                            # noqa: F811
     assert client.get("/demo/as/ADMIN").status_code in (302, 404)
+
+
+def test_login_page_redirects_when_signed_in(client):     # noqa: F811
+    res = client.get("/login")
+    assert res.status_code == 302 and res.headers["Location"].endswith("/")
+    res = client.get("/login?next=/stock/")
+    assert res.status_code == 302 and res.headers["Location"].endswith("/stock/")
