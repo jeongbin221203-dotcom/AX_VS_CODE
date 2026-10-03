@@ -157,3 +157,40 @@ def test_behind_https_proxy(tmp_path, monkeypatch):
                headers={**fwd, 'X-CSRF-Token': token, 'Origin': 'https://trade.onrender.com'})
     assert r.status_code == 201
     assert c.get('/api/dashboard', base_url='http://evil.example', headers=fwd).status_code == 400
+
+
+def test_restore_backup(app, client, tmp_path):
+    aid = start(client)
+    client.patch(f'/api/attempts/{aid}/answer', json={'qid': 59000, 'choice': 2})
+    client.post(f'/api/attempts/{aid}/submit')
+    client.put('/api/questions/59000/note', json={'body': '복원 메모', 'mastered': False})
+    backup = client.get('/api/backup').data
+
+    # a fresh server (records wiped, as after a Render restart)
+    other = create_app({'TESTING': True, 'DATABASE': str(tmp_path / 'fresh.sqlite3')})
+    c = other.test_client()
+    c.environ_base['HTTP_X_CSRF_TOKEN'] = c.get('/api/bootstrap').json['csrf']
+    c.post('/api/attempts', json={'round': 60, 'subject': 1})          # replaced by the restore
+    r = c.post('/api/restore', data=backup, content_type='application/octet-stream')
+    assert r.status_code == 200 and r.json['attempts'] == 1 and r.json['notes'] == 1
+    assert c.get('/api/questions/59000').json['note']['body'] == '복원 메모'
+    d = c.get('/api/dashboard').json
+    assert d['completed'] == 1 and [h['id'] for h in d['history']] == [aid]
+    assert c.get(f'/api/attempts/{aid}').json['questions'][0]['choice'] == 2
+
+
+def test_restore_rejects_bad_files(client):
+    post = lambda data: client.post('/api/restore', data=data, content_type='application/octet-stream')
+    assert post(b'not a database').status_code == 400
+    other = sqlite3.connect(':memory:')
+    other.execute('CREATE TABLE notes(qid, body)')
+    assert post(other.serialize()).status_code == 400
+    good = sqlite3.connect(':memory:')
+    good.deserialize(client.get('/api/backup').data)
+    good.execute("INSERT INTO notes VALUES(1, 'x', 0, 0)")                 # qid not in the catalog
+    good.commit()
+    assert post(good.serialize()).status_code == 400
+    assert client.post('/api/restore', data=b'SQLite format 3\x00', content_type='application/octet-stream',
+                       headers={'X-CSRF-Token': 'bad'}).status_code == 403
+    big = b'SQLite format 3\x00' + b'0' * (51 * 1024 * 1024)
+    assert post(big).status_code == 413

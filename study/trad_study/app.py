@@ -457,6 +457,55 @@ def create_app(config=None):
             content = path.read_bytes()
         return send_file(io.BytesIO(content), as_attachment=True, download_name='study-backup.sqlite3', mimetype='application/octet-stream')
 
+    # Columns copied on restore. A backup from this app always has them; anything else is rejected.
+    restore_tables = {
+        'attempts': ['id', 'title', 'round', 'subject', 'mode', 'started_at', 'deadline', 'submitted_at', 'score', 'last_index'],
+        'responses': ['attempt_id', 'qid', 'position', 'choice', 'flagged'],
+        'notes': ['qid', 'body', 'mastered', 'updated_at'],
+        'explanations': ['qid', 'body', 'model', 'created_at', 'status'],
+    }
+
+    @app.post('/api/restore')
+    def restore():
+        """Replace all study records with an uploaded study-backup.sqlite3 (raw request body)."""
+        request.max_content_length = 50 * 1024 * 1024
+        data = request.get_data(cache=False)
+        if not data.startswith(b'SQLite format 3\x00'):
+            abort(400, '학습 기록 백업 파일(study-backup.sqlite3)을 선택해 주세요.')
+        with tempfile.TemporaryDirectory(dir=Path(app.config['DATABASE']).parent) as temp:
+            path = Path(temp) / 'upload.sqlite3'
+            path.write_bytes(data)
+            conn = db()
+            conn.execute('ATTACH DATABASE ? AS up', (path.resolve().as_uri() + '?mode=ro',))
+            try:
+                try:
+                    ok = conn.execute('PRAGMA up.integrity_check').fetchone()[0] == 'ok'
+                    for table, cols in restore_tables.items():
+                        have = {r[1] for r in conn.execute(f'PRAGMA up.table_info({table})')}
+                        ok = ok and set(cols) <= have
+                except sqlite3.DatabaseError:
+                    ok = False
+                if not ok:
+                    abort(400, '손상되었거나 이 앱의 백업이 아닌 파일입니다.')
+                bad = conn.execute("""SELECT
+                    (SELECT COUNT(*) FROM up.responses WHERE qid NOT IN (SELECT id FROM catalog.questions)
+                       OR attempt_id NOT IN (SELECT id FROM up.attempts) OR (choice IS NOT NULL AND choice NOT BETWEEN 1 AND 4))
+                  + (SELECT COUNT(*) FROM up.notes WHERE qid NOT IN (SELECT id FROM catalog.questions))
+                  + (SELECT COUNT(*) FROM up.explanations WHERE qid NOT IN (SELECT id FROM catalog.questions))""").fetchone()[0]
+                if bad:
+                    abort(400, '백업 파일에 이 앱의 문제와 맞지 않는 기록이 있습니다.')
+                with conn:
+                    conn.execute('BEGIN IMMEDIATE')
+                    for table in ['responses', 'attempts', 'notes', 'explanations']:
+                        conn.execute(f'DELETE FROM main.{table}')
+                    for table in ['attempts', 'responses', 'notes', 'explanations']:
+                        cols = ','.join(restore_tables[table])
+                        conn.execute(f'INSERT INTO main.{table}({cols}) SELECT {cols} FROM up.{table}')
+                counts = {t: conn.execute(f'SELECT COUNT(*) FROM main.{t}').fetchone()[0] for t in ['attempts', 'notes', 'explanations']}
+            finally:
+                conn.execute('DETACH DATABASE up')
+        return jsonify(ok=True, **counts)
+
     return app
 
 
