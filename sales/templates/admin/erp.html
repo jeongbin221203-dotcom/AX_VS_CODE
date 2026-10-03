@@ -44,7 +44,7 @@
     <p class="muted">ERP·EAI 가 CRM 으로 보내는 실시간 연동입니다. 관리자 &gt; 🔑 API 연동에서 <code>erp:write</code> 권한 키를 발급해
       ERP 쪽에 등록하세요(대리 사용자는 전사 범위인 임원·관리자, 품목 수신은 관리자). 본문은 <code>{"items": [...]}</code>, 한 번에 1,000건,
       항목별 결과를 돌려주며 모든 반영은 감사로그에 남습니다. 명세: <a href="{{ url_for('api.openapi') }}" target="_blank" rel="noopener">OpenAPI</a></p>
-    <table class="data">
+    <div class="table-wrap"><table class="data">
       <thead><tr><th>주소 (POST)</th><th>보내는 것</th><th>처리</th></tr></thead>
       <tbody>
         <tr><td><code>/api/v1/erp/payments</code></td><td>매출별 누적 입금액 <code>{ref: "CRM-123", paid_total}</code></td><td>차액만 입금 반영 — 같은 값을 다시 보내도 이중 입금 없음. 과입금·취소 건은 '확인필요'</td></tr>
@@ -52,7 +52,7 @@
         <tr><td><code>/api/v1/erp/credit</code></td><td>여신한도 <code>{erp_code, credit_limit}</code></td><td>재무(ERP) 한도로 거래처 여신 갱신 → 한도 초과 경고에 바로 반영</td></tr>
         <tr><td><code>/api/v1/erp/products</code></td><td>자재 마스터 <code>{code, name, unit, list_price, tax_type}</code></td><td>품목코드 기준 등록·수정 (견적·매출 단가에 사용)</td></tr>
       </tbody>
-    </table>
+    </table></div>
     <pre class="secret">curl -X POST {{ url_for('api.erp_payments', _external=True) }}   -H "Authorization: Bearer sk_xxxxxxxx_..." -H "Content-Type: application/json"   -d '{"items": [{"ref": "CRM-123", "erp_doc_no": "90001234", "paid_total": 5500000}]}'</pre>
 
   {% elif tab == 'settings' %}
@@ -60,7 +60,7 @@
       {{ csrf() }}<button class="btn btn-primary">🔌 연결 테스트</button>
       <span class="muted small">전표를 만들지 않고 연결·인증만 확인합니다 (파일: 폴더 쓰기, SAP: CSRF 토큰 발급, REST: 상태 확인 주소 GET).</span>
     </form>
-    <table class="data">
+    <div class="table-wrap"><table class="data">
       <tbody>
         <tr><th>어댑터 (SALES_ERP_ADAPTER)</th><td>{{ cfg.adapter }} — file · sap_odata · rest · none</td></tr>
         <tr><th>파일 출력 폴더</th><td><code>{{ cfg.outbound_dir }}</code></td></tr>
@@ -75,7 +75,7 @@
         <tr><th>REST 전표번호 위치 · 필드 이름 바꾸기</th><td><code>{{ cfg.rest_docno_path }}</code> · <code>{{ cfg.rest_field_map or '(표준 이름 그대로)' }}</code></td></tr>
         <tr><th>인증서 검증</th><td>{{ '사용' if cfg.sap_verify_tls else '끔 (개발 전용 — 운영에서는 기동 거부)' }}</td></tr>
       </tbody>
-    </table>
+    </table></div>
     <p class="muted small">설정은 서버 환경변수로 바꿉니다(README 참고). SAP 연동은 CSRF 토큰 발급 → 판매오더(A_SalesOrder) 생성 → 고객 PO 번호에 CRM 매출번호를 넣어 역방향 대사 키로 씁니다.</p>
 
   {% else %}

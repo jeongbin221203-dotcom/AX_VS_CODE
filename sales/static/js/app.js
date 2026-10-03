@@ -397,8 +397,9 @@
   //  화면 고정: 누른 탭 줄이 화면에서 있던 자리(위에서 몇 px)에 그대로 남도록 맞춘다.
   //  바뀌는 동안 본문 높이를 잠시 유지해, 새 내용이 짧아도 화면이 위로 끌려 올라가지 않게 한다.
   if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+  const ANCHORS = ".tabs, .pager";        // 화면에서 위치를 고정할 기준 (탭 줄, 쪽 넘김)
   function tabsIndex(main, bar) {
-    return bar ? Array.prototype.indexOf.call(main.querySelectorAll(".tabs"), bar) : -1;
+    return bar ? Array.prototype.indexOf.call(main.querySelectorAll(ANCHORS), bar) : -1;
   }
   function swapMain(href, push, bar) {
     const main = document.querySelector("main.content");
@@ -425,7 +426,7 @@
         initForms(main);
         drawCharts(main);
         const pin = function () {
-          const nb = idx >= 0 ? main.querySelectorAll(".tabs")[idx] : null;
+          const nb = idx >= 0 ? main.querySelectorAll(ANCHORS)[idx] : null;
           if (nb && barTop !== null) window.scrollBy(0, nb.getBoundingClientRect().top - barTop);
           else window.scrollTo(0, y);
         };
@@ -438,13 +439,13 @@
       .catch(function () { window.location = href; });
   }
   document.addEventListener("click", function (e) {
-    const a = e.target.closest(".tabs a[href]");
+    const a = e.target.closest(".tabs a[href], .pager a[href]");
     if (!a || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     if (a.origin !== window.location.origin || a.target) return;
     e.preventDefault();
     if (a.classList.contains("active")) return;
-    const bar = a.closest(".tabs");
-    bar.querySelectorAll("a").forEach(function (x) { x.classList.toggle("active", x === a); });
+    const bar = a.closest(ANCHORS);
+    if (bar.classList.contains("tabs")) bar.querySelectorAll("a").forEach(function (x) { x.classList.toggle("active", x === a); });
     swapMain(a.href, true, bar);
   });
   window.addEventListener("popstate", function (e) {

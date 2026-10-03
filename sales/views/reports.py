@@ -16,6 +16,9 @@ bp = Blueprint("reports", __name__)
 # ----------------------------------------------------------------------------
 # 대시보드
 # ----------------------------------------------------------------------------
+
+DASH_PAGE = 30      # 대시보드 '즉시 확인' 표는 30행씩 (전체 건수는 탭 이름에)
+
 @bp.route("/")
 def dashboard():
     ym, owner = g.ym, g.owner_filter
@@ -50,16 +53,17 @@ def dashboard():
         perf_chart=chart(perf, "담당자", ["매출", "목표"]),
         perf=Table(perf, money=["매출", "목표", "파이프라인"], drop=["owner_id"]),
         top_chart=chart(top, "거래처", "매출"), top=Table(top, money=["매출"]), top_all=top_all,
-        soon=Table(soon, money=["예상금액"]), stale=Table(stale), upcoming=Table(upcoming),
+        soon=Table(soon, money=["예상금액"], page_size=DASH_PAGE), stale=Table(stale, page_size=DASH_PAGE),
+        upcoming=Table(upcoming, page_size=DASH_PAGE),
         daily_chart=chart(daily, "일자", "매출"), daily=Table(daily, money=["매출"]),
         cat_chart=chart(by_cat, "품목군", "매출"), cat=Table(by_cat, money=["매출"]),
         overdue=Table(overdue, money=["청구액(VAT포함)", "입금액", "미수금"],
-                      highlight={"연체구간": {"90일 초과": "danger", "61~90일": "warn"}}),
+                      highlight={"연체구간": {"90일 초과": "danger", "61~90일": "warn"}}, page_size=DASH_PAGE),
         overdue_amount=int(overdue["미수금"].sum()) if not overdue.empty else 0,
-        expiring=Table(expiring, money=["합계"]),
+        expiring=Table(expiring, money=["합계"], page_size=DASH_PAGE),
         pending=Table(pending, money=[c for c in ("금액", "예상금액") if c in pending.columns],
-                      drop=[c for c in pending.columns if c == "id" or c.endswith("_id")]),
-        erp_failed=Table(erp_failed, money=["금액"], drop=["id"]), manager=manager, empty=empty,
+                      drop=[c for c in pending.columns if c == "id" or c.endswith("_id")], page_size=DASH_PAGE),
+        erp_failed=Table(erp_failed, money=["금액"], drop=["id"], page_size=DASH_PAGE), manager=manager, empty=empty,
     )
 
 

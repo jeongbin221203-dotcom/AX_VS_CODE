@@ -233,3 +233,21 @@ button[data-busy] { opacity: .6; cursor: progress; }
 .brand-logo { flex: none; border-radius: 6px; }
 .brand-title { display: flex; align-items: center; gap: .6rem; }
 .stack { display: flex; flex-direction: column; gap: 1rem; }
+
+/* 좁은 화면: 칸이 입력칸 최소 폭에 밀려 화면 밖으로 넘치지 않게 */
+.g2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.g4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.g5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.form-grid > *, .toolbar > *, .row-actions > * { min-width: 0; max-width: 100%; }
+label > select, label > input:not([type=checkbox]):not([type=radio]), label > textarea { max-width: 100%; }
+@media (max-width: 1100px) { .g4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 760px) {
+  .g2, .g3, .g4, .g5 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .toolbar .grow { min-width: 0; flex-basis: 100%; }
+}
+@media (max-width: 520px) {
+  .g2, .g3, .g4, .g5, .m3, .m5 { grid-template-columns: minmax(0, 1fr); }
+  .toolbar > label, .row-actions > label { flex: 1 1 100%; }
+  .span2 { grid-column: auto; }
+}

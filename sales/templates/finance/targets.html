@@ -13,7 +13,7 @@
         <tbody>
           {% for owner_id, label, amount in rows %}
             <tr><td><input type="hidden" name="owner_id" value="{{ owner_id }}">{{ label }}</td>
-                <td class="num"><input name="amount" type="number" min="0" step="1000000" value="{{ amount }}"></td></tr>
+                <td class="num"><input name="amount" type="number" min="0" step="1000000" value="{{ amount }}" aria-label="{{ label }} 목표금액(원)"></td></tr>
           {% else %}
             <tr><td colspan="2" class="muted">목표를 입력할 수 있는 담당자가 없습니다.</td></tr>
           {% endfor %}

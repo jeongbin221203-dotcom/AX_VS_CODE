@@ -17,13 +17,13 @@
     <div class="table-wrap" {% if height %}style="max-height: {{ height }}px"{% endif %}>
       <table class="data">
         <thead><tr>
-          {% if t.select_name %}<th class="sel"><input type="checkbox" data-check-all></th>{% endif %}
+          {% if t.select_name %}<th class="sel"><input type="checkbox" data-check-all aria-label="모두 선택"></th>{% endif %}
           {% for c in t.columns %}<th class="{{ 'num' if c in t.numeric }}">{{ c }}</th>{% endfor %}
         </tr></thead>
         <tbody>
         {% for r in t.rows %}
           <tr class="{{ 'link' if r.href }} {{ 'tone-' ~ r.tone if r.tone }}" {% if r.href %}data-href="{{ r.href }}"{% endif %}>
-            {% if t.select_name %}<td class="sel"><input type="checkbox" name="{{ t.select_name }}" value="{{ r.value }}"></td>{% endif %}
+            {% if t.select_name %}<td class="sel"><input type="checkbox" name="{{ t.select_name }}" value="{{ r.value }}" aria-label="이 행 선택"></td>{% endif %}
             {% for cell in r.cells %}<td class="{{ 'num' if t.columns[loop.index0] in t.numeric }}">{{ cell }}</td>{% endfor %}
           </tr>
         {% endfor %}

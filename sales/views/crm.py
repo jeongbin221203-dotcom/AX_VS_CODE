@@ -271,7 +271,7 @@ def _deals_page(form: dict | None = None, status: int = 200):
         qual_score=db.qual_score(base),
         move_tbl=Table(open_df[["id", "거래처", "기회명", "단계", "예상금액", "검증점수",
                                   "예상마감일", "담당자"]] if not open_df.empty else open_df,
-                         money=["예상금액"], drop=["id"], select=("ids", "id")),
+                         money=["예상금액"], drop=["id"], select=("ids", "id"), page_size=PAGE_SIZE),
         need=[(int(r.id), f"{r.거래처} · {r.기회명} · 할인 {r.할인율}% · {int(r.예상금액):,}원")
               for r in need.itertuples()] if not need.empty else [],
         is_admin=ent.has_role(g.user, "ADMIN"),
