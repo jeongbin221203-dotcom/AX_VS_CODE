@@ -17,17 +17,18 @@ from flask import Flask, abort, flash, g, redirect, render_template, request, se
 import config
 from core import approvals, audit, auth, org, periods, repository as repo, sap
 
-# 메뉴 (키, 표시명, 엔드포인트, 최소 역할)
+# 메뉴 (키, 표시명, 엔드포인트, 최소 역할) — 기본 순서는 현장에서 자주 쓰는 순. 대시보드는 항상 맨 위.
+# 사용자는 사이드바 '메뉴 편집'으로 순서·즐겨찾기를 바꿀 수 있다(core/prefs.py).
 MENUS = [
     ("dashboard", "📊 대시보드", "dashboard.index", "VIEWER"),
-    ("materials", "🗂️ 자재 마스터", "materials.index", "VIEWER"),
     ("transactions", "🔄 입출고 등록", "transactions.index", "CLERK"),
-    ("statements", "🧾 거래명세서 입출고", "statements.index", "CLERK"),
     ("stock", "📦 재고 현황", "stock.index", "VIEWER"),
     ("history", "🧾 거래 이력", "history.index", "VIEWER"),
-    ("documents", "📎 증빙 (세금계산서)", "documents.index", "VIEWER"),
     ("purchase", "🛒 구매 (요청·발주)", "purchase.index", "CLERK"),
     ("approvals", "✅ 결재함", "approvals.index", "CLERK"),
+    ("materials", "🗂️ 자재 마스터", "materials.index", "VIEWER"),
+    ("statements", "🧾 거래명세서 입출고", "statements.index", "CLERK"),
+    ("documents", "📎 증빙 (세금계산서)", "documents.index", "VIEWER"),
     ("ledger", "📒 수불부", "reports.ledger", "VIEWER"),
     ("valuation", "💴 재고 평가", "reports.valuation_view", "MANAGER"),
     ("reconcile", "⚖️ 재고 대사", "reports.reconcile_view", "MANAGER"),
@@ -40,6 +41,7 @@ MENUS = [
     ("forms", "📑 엑셀 양식", "admin.forms_list", "ADMIN"),
     ("audit", "🗂️ 감사로그", "admin.audit_log", "ADMIN"),
 ]
+PINNED_MENU = "dashboard"
 # 로그인 없이 열 수 있는 화면
 PUBLIC_ENDPOINTS = {"auth.login", "auth.setup", "static", "health"}
 # 비밀번호를 바꿔야 하는 사용자가 열 수 있는 화면
@@ -196,6 +198,20 @@ def menus_for_user() -> list[tuple]:
     return [m for m in MENUS if can(m[3])]
 
 
+def menu_layout() -> dict:
+    """사이드바 메뉴: 대시보드(맨 위 고정) · 즐겨찾기 · 나머지 — 사용자가 정한 순서대로."""
+    from core import prefs
+    items = menus_for_user()
+    pinned = [m for m in items if m[0] == PINNED_MENU]
+    rest = [m for m in items if m[0] != PINNED_MENU]
+    p = prefs.menu(g.user["id"])
+    rank = {k: i for i, k in enumerate(p["order"])}
+    rest.sort(key=lambda m: rank.get(m[0], len(rank) + [x[0] for x in MENUS].index(m[0])))
+    fav = set(p["fav"])
+    return {"pinned": pinned, "fav": [m for m in rest if m[0] in fav], "others": [m for m in rest if m[0] not in fav],
+            "customized": bool(p["order"] or p["fav"])}
+
+
 def render_page(template: str, active: str, **ctx):
     title = next((m[1] for m in MENUS if m[0] == active), "")
     return render_template(template, active=active, title=title, **ctx)
@@ -346,7 +362,7 @@ def csrf_token() -> str:
 def register_template_helpers(app: Flask) -> None:
     from core import once, version
     app.jinja_env.globals.update(
-        csrf_token=csrf_token, once_token=once.new_token, ver=version.of_row, url_with=url_with, menus_for_user=menus_for_user, can=can, scope_all=scope_all,
+        csrf_token=csrf_token, once_token=once.new_token, ver=version.of_row, url_with=url_with, menus_for_user=menus_for_user, menu_layout=menu_layout, can=can, scope_all=scope_all,
         role_label=auth.role_label, ROLES=config.ROLES, SAP_STATUS=config.SAP_STATUS,
         LOGIN_MAX_FAILS=config.LOGIN_MAX_FAILS, LOGIN_LOCK_MINUTES=config.LOGIN_LOCK_MINUTES,
         APP_TITLE=config.APP_TITLE, APP_ICON=config.APP_ICON, TX_LABEL=config.TX_LABEL,

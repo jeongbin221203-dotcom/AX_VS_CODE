@@ -24,10 +24,28 @@
         </form>
       </div>
     </div>
-    <nav class="menu">
-      {% for key, label, endpoint, _ in menus_for_user() %}
-        <a href="{{ url_for(endpoint) }}" class="{{ 'active' if key == active }}">{{ label }}</a>
+    {% set ml = menu_layout() %}
+    <nav class="menu" data-menu-save="{{ url_for('prefs.menu') }}" data-csrf="{{ csrf_token() }}" aria-label="메뉴">
+      {% for key, label, endpoint, _ in ml.pinned %}
+        <a href="{{ url_for(endpoint) }}" class="{{ 'active' if key == active }}" data-pinned>{{ label }}</a>
       {% endfor %}
+      <div class="menu-label" data-group-label="fav"{{ ' hidden' if not ml.fav }}>★ 즐겨찾기</div>
+      <div class="menu-group" data-group="fav">
+        {% for key, label, endpoint, _ in ml.fav %}
+          <a href="{{ url_for(endpoint) }}" class="{{ 'active' if key == active }}" data-key="{{ key }}" data-fav="1">{{ label }}</a>
+        {% endfor %}
+      </div>
+      <div class="menu-label" data-group-label="others"{{ ' hidden' if not ml.fav }}>전체 메뉴</div>
+      <div class="menu-group" data-group="others">
+        {% for key, label, endpoint, _ in ml.others %}
+          <a href="{{ url_for(endpoint) }}" class="{{ 'active' if key == active }}" data-key="{{ key }}">{{ label }}</a>
+        {% endfor %}
+      </div>
+      <div class="menu-tools">
+        <button type="button" class="menu-edit" data-menu-edit>메뉴 편집</button>
+        <button type="button" class="menu-edit" data-menu-reset hidden>기본 순서로</button>
+      </div>
+      <p class="menu-help small" hidden>☆를 누르면 즐겨찾기(위쪽)로, ▲▼ 또는 끌어서 순서를 바꿉니다. 대시보드는 맨 위에 고정입니다.</p>
     </nav>
     {% if g.shortage_cnt %}
       <a class="shortage" href="{{ url_for('stock.index', shortage=1) }}">안전재고 미달 {{ g.shortage_cnt }}종</a>

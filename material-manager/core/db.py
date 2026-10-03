@@ -370,6 +370,14 @@ CREATE TABLE IF NOT EXISTS form_once (
     created_at  TEXT NOT NULL
 );
 
+-- 사용자별 화면 설정 (메뉴 순서·즐겨찾기 등, core/prefs.py)
+CREATE TABLE IF NOT EXISTS user_prefs (
+    user_id  INTEGER NOT NULL,
+    key      TEXT    NOT NULL,
+    value    TEXT    NOT NULL,
+    PRIMARY KEY (user_id, key)
+);
+
 CREATE TABLE IF NOT EXISTS job_runs (
     id           {ID},
     name         TEXT NOT NULL,
@@ -382,7 +390,7 @@ CREATE TABLE IF NOT EXISTS job_runs (
 """
 
 NO_ID_TABLES = {"inventory_snapshots", "valuation_snapshots", "app_settings", "job_locks", "cost_centers", "excel_forms",
-                "form_once"}
+                "form_once", "user_prefs"}
 
 # 예전 DB에 없던 컬럼 (CREATE TABLE IF NOT EXISTS는 기존 테이블에 컬럼을 더하지 않는다)
 MIGRATIONS = [
