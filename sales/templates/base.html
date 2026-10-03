@@ -26,7 +26,7 @@
         {% if AUTH_MODE == 'password' and not DEMO %}<a class="btn btn-sm" href="{{ url_for('auth.password') }}">비밀번호 변경</a>{% endif %}
       </form>
       {% if DEMO %}
-      <div class="demo-roles small">다른 역할로 보기:
+      <div class="demo-roles small">다른 역할로 보기<br>
         {% for emp, label in DEMO_ROLES %}<a href="{{ url_for('auth.demo_as', emp_no=emp) }}" class="{{ 'active' if g.user.emp_no|string == emp }}">{{ label }}</a>{% if not loop.last %} · {% endif %}{% endfor %}
       </div>
       {% endif %}

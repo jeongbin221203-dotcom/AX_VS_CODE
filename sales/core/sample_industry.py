@@ -304,7 +304,7 @@ def seed(industry: str = "제조", customers: int = 20, months: int = 12, rnd_se
     if industry not in db.INDUSTRIES:
         from . import company
         company.save({"industries": [*db.INDUSTRIES, industry]}, "샘플")
-    pids, units = {}, {}
+    pids, units, prices = {}, {}, {}
     for code, name, spec, cat, unit, price, tax in P["products"]:
         row = db._one("SELECT id FROM products WHERE code=?", [code])
         if not row:
@@ -312,9 +312,22 @@ def seed(industry: str = "제조", customers: int = 20, months: int = 12, rnd_se
                                     "list_price": price, "tax_type": tax, "erp_material": code})
             out["products"] += 1
             row = db._one("SELECT id FROM products WHERE code=?", [code])
-        pids[code], units[code] = int(row["id"]), unit
+        pids[code], units[code], prices[code] = int(row["id"]), unit, price
 
     pay_rate, full_rate, (late_lo, late_hi) = P["pay"]
+
+    def pay(sid: int, day: str) -> None:
+        """결제기일이 지난 매출은 업종 습관대로 입금 (전액·부분·미입금)."""
+        sale = db.get_sale(sid)
+        total, due = int(sale["total_amount"]), sale["due_date"]
+        pay_day = min(date.fromisoformat(due) + timedelta(days=rng.randint(late_lo, late_hi)), today).isoformat()
+        old = (today - date.fromisoformat(due)).days > 60          # 기일이 두 달 넘게 지난 건은 대부분 회수됨
+        rate, full = (max(pay_rate, 0.95), max(full_rate, 0.95)) if old else (pay_rate, full_rate)
+        if due < today.isoformat() and rng.random() < rate and not periods_blocked(pay_day):
+            amount = total if rng.random() < full else int(round(total * rng.uniform(0.3, 0.8), -3))
+            ent.record_payment(sid, amount, pay_date=max(pay_day, day),
+                               method=rng.choice(["계좌이체", "계좌이체", "어음" if industry in ("제조", "건설") else "계좌이체"]))
+            out["payments"] += 1
     names = P["names"]
     start_no = int(db._scalar("SELECT COUNT(*) FROM customers WHERE memo=?", [P["memo"]]))
     for n in range(customers):
@@ -343,11 +356,12 @@ def seed(industry: str = "제조", customers: int = 20, months: int = 12, rnd_se
 
         # 매달 반복 구매
         regular = rng.sample(P["regular"], min(3, len(P["regular"])))
-        for m in range(months, 0, -1):
+        for m in range(months, -1, -1):                       # m=0: 이번 달(오늘까지)도 정기 구매가 있다
             if rng.random() < 0.25:
                 continue
             first = (today.replace(day=1) - timedelta(days=30 * m)).replace(day=1)
-            day = _safe_day(first + timedelta(days=rng.randint(0, 25)))
+            span = 25 if m else max(0, min(25, today.day - 1))
+            day = _safe_day(first + timedelta(days=rng.randint(0, span)))
             if not day:
                 out["skipped_closed"] += 1
                 continue
@@ -366,34 +380,26 @@ def seed(industry: str = "제조", customers: int = 20, months: int = 12, rnd_se
                                   "product_id": pids[code], "qty": qty, "unit_price": unit_price,
                                   "tax_type": price["tax_type"], "owner_id": rep["id"], "memo": "정기 구매"})
             out["sales"] += 1
-            sale = db.get_sale(sid)
-            total = int(sale["total_amount"])
-            due = sale["due_date"]
-            pay_day = min(date.fromisoformat(due) + timedelta(days=rng.randint(late_lo, late_hi)), today).isoformat()
-            if due < today.isoformat() and rng.random() < pay_rate and not periods_blocked(pay_day):
-                amount = total if rng.random() < full_rate else int(round(total * rng.uniform(0.3, 0.8), -3))
-                ent.record_payment(sid, amount, pay_date=max(pay_day, day),
-                                   method=rng.choice(["계좌이체", "계좌이체", "어음" if industry in ("제조", "건설") else "계좌이체"]))
-                out["payments"] += 1
+            pay(sid, day)
             if P["returns"] and rng.random() < P["returns"] and qty > 2 and _safe_day(today):
                 returns.create(sid, "반품", P["return_reason"], qty=rng.randint(1, max(1, qty // 4)))
                 out["returns"] += 1
 
-        # 영업기회 · 견적 · 수주 · 분할 납품
+        # 영업기회 · 견적 · 수주 · 분할 납품 (수주·실주는 지난 날짜로 마감)
         title, codes = rng.choice(P["deals"])
-        stage = rng.choice(["제안", "견적", "협상", "수주"])
-        close = (today + timedelta(days=rng.randint(-20, 90))).isoformat()
-        did = db.upsert_deal({"customer_id": cid, "title": f"{title} ({base})", "stage": "협상" if stage == "수주" else stage,
+        stage = rng.choices(["제안", "견적", "협상", "수주", "실주"], [3, 3, 2, 3, 1])[0]
+        close = (today + timedelta(days=rng.randint(3, 90))).isoformat()
+        did = db.upsert_deal({"customer_id": cid, "title": f"{title} ({base})", "stage": "협상" if stage in ("수주", "실주") else stage,
                               "owner_id": rep["id"], "list_amount": 0, "amount": 0, "expected_close": close,
                               "source": rng.choice(db.LEAD_SOURCES), "competitor": rng.choice(["", *P["competitors"]]),
                               **{f: 1 for f in db.MEDDIC_FIELDS}}, force=True, force_reason=f"{P['label']} 샘플")
         out["deals"] += 1
-        q_day = _safe_day(today - timedelta(days=rng.randint(5, 40)))
+        q_day = _safe_day(today - timedelta(days=rng.randint(10, 80) if stage in ("수주", "실주") else rng.randint(3, 30)))
         if q_day:
             items = []
             for c in codes:
                 if units[c] in P["lot_units"]:
-                    q = rng.randint(1, 3)
+                    q = 1 if prices[c] >= 50_000_000 else rng.randint(1, 3)    # 대형 설비는 1대
                 elif units[c] == "명":
                     q = rng.choice([50, 100, 300])
                 else:
@@ -402,15 +408,38 @@ def seed(industry: str = "제조", customers: int = 20, months: int = 12, rnd_se
             qid = qt.save_quote({"customer_id": cid, "deal_id": did, "title": title, "issue_date": q_day}, items)
             out["quotes"] += 1
             if stage == "수주":
+                order_day = date.fromisoformat(q_day) + timedelta(days=rng.randint(3, 10))
                 with db.get_conn() as conn:          # 시연 데이터: 결재·발송 과정 없이 수락 상태로
-                    conn.execute("UPDATE quotes SET status='수락', decided_at=? WHERE id=?", (db._now(), qid))
-                oid = orders.from_quote(qid, {"delivery_date": (today + timedelta(days=30)).isoformat(),
+                    conn.execute("UPDATE quotes SET status='수락', decided_at=? WHERE id=?",
+                                 (f"{order_day.isoformat()} 10:00:00", qid))
+                oid = orders.from_quote(qid, {"delivery_date": (order_day + timedelta(days=45)).isoformat(),
                                               "customer_po": f"PO-{rng.randint(10000, 99999)}"})
+                with db.get_conn() as conn:          # 수주일 = 견적 수락일 (오늘이 아니라)
+                    conn.execute("UPDATE sales_orders SET order_date=? WHERE id=?", (order_day.isoformat(), oid))
+                    conn.execute("UPDATE deals SET stage='수주', probability=100, closed_at=?, stage_since=?, "
+                                 "amount=(SELECT COALESCE(SUM(qty*unit_price),0) FROM sales_order_items WHERE order_id=?) "
+                                 "WHERE id=?", (f"{order_day.isoformat()} 10:00:00", order_day.isoformat(), oid, did))
                 out["orders"] += 1
                 o = orders.get(oid)
                 first_lot = {int(it["id"]): max(1, int(it["qty"]) // 2) for it in o["items"]}
-                if _safe_day(today):
-                    out["sales"] += len(orders.deliver(oid, first_lot, today.isoformat()))
+                deliver_day = _safe_day(min(order_day + timedelta(days=rng.randint(7, 30)), today))   # 1차 납품은 지난 날짜
+                if deliver_day:
+                    for sid in orders.deliver(oid, first_lot, deliver_day):
+                        out["sales"] += 1
+                        pay(sid, deliver_day)
+                    second = date.fromisoformat(deliver_day) + timedelta(days=rng.randint(20, 45))
+                    rest = {int(it["id"]): int(it["remain"]) for it in orders.get(oid)["items"] if int(it["remain"]) > 0}
+                    if rest and second < today and _safe_day(second) and rng.random() < 0.6:   # 2차 납품(잔량)
+                        for sid in orders.deliver(oid, rest, second.isoformat()):
+                            out["sales"] += 1
+                            pay(sid, second.isoformat())
+            elif stage == "실주":
+                lost_day = date.fromisoformat(q_day) + timedelta(days=rng.randint(5, 20))
+                with db.get_conn() as conn:
+                    conn.execute("UPDATE quotes SET status='거절', decided_at=? WHERE id=?", (f"{lost_day.isoformat()} 10:00:00", qid))
+                    conn.execute("UPDATE deals SET stage='실주', probability=0, closed_at=?, stage_since=?, lost_reason=? "
+                                 "WHERE id=?", (f"{lost_day.isoformat()} 10:00:00", lost_day.isoformat(),
+                                                rng.choice(db.LOST_REASONS), did))
         for _ in range(rng.randint(2, 5)):
             a_day = _safe_day(today - timedelta(days=rng.randint(0, 120)))
             if not a_day:
@@ -420,9 +449,39 @@ def seed(industry: str = "제조", customers: int = 20, months: int = 12, rnd_se
                              "next_action": rng.choice([*P["next"], ""]) or None,
                              "next_date": (today + timedelta(days=rng.randint(1, 14))).isoformat()})
             out["activities"] += 1
+    backdate_customers(rnd_seed)
     db.set_context("system", None)
     db.audit("샘플데이터", "시스템", None, {"종류": P["label"], **out})
     return out
+
+
+def realign_targets(rnd_seed: Optional[int] = None) -> int:
+    """시연용: 담당자별 월 목표를 그 담당자의 최근 평균 매출에 맞춘다(±15%). 업종 샘플의 대형 수주까지 포함해
+    달성률이 수백 %로 튀지 않게. 바꾼 행 수."""
+    rng = random.Random(rnd_seed)
+    this = date.today().replace(day=1)
+    avg = db._df("SELECT owner_id, SUM(amount) / 12.0 AS avg FROM sales WHERE status <> '취소' AND owner_id IS NOT NULL "
+                 "AND sale_date >= ? AND sale_date < ? GROUP BY owner_id",
+                 [(this - timedelta(days=365)).isoformat(), this.isoformat()])
+    months = sorted({r for (r,) in db._df("SELECT DISTINCT yyyymm FROM targets").itertuples(index=False)})
+    n = 0
+    for owner_id, base in avg.itertuples(index=False):
+        for ym in months:
+            db.upsert_target(ym, int(owner_id), int(round(float(base) * rng.uniform(0.85, 1.15), -6)))
+            n += 1
+    return n
+
+
+def backdate_customers(rnd_seed: Optional[int] = None) -> int:
+    """샘플 거래처 등록일을 첫 거래 10~60일 전으로 옮긴다 — 모두 '이번 달 신규 거래처'로 잡히지 않게. 바꾼 수."""
+    rng = random.Random(rnd_seed)
+    rows = db._df("SELECT c.id, MIN(s.sale_date) AS first FROM customers c JOIN sales s ON s.customer_id=c.id "
+                  "GROUP BY c.id HAVING MIN(s.sale_date) < substr(c.created_at, 1, 10)")
+    with db.get_conn() as conn:
+        for cid, first in rows.itertuples(index=False):
+            reg = date.fromisoformat(str(first)[:10]) - timedelta(days=rng.randint(10, 60))
+            conn.execute("UPDATE customers SET created_at=? WHERE id=?", (f"{reg.isoformat()} 09:00:00", int(cid)))
+    return len(rows)
 
 
 def seed_many(industries: list[str] | None = None, customers: int = 8, months: int = 12,

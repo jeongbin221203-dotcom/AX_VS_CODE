@@ -1402,6 +1402,25 @@ def kpi_summary(yyyymm: str, owner_id: int | None = None, db_path: str | None = 
     act_cnt = _scalar(
         f"SELECT COUNT(*) FROM activities WHERE substr(act_date, 1, 7)=?{oc}",
         [yyyymm, *op], db_path)
+    # 금액 카드용 (자재관리 대시보드와 같은 형식: 금액 · 건수 · 전월 같은 기간 대비)
+    sales_cnt = _scalar(
+        f"SELECT COUNT(*) FROM sales WHERE {ACTIVE_SALE} AND COALESCE(sale_kind,'매출')='매출' "
+        f"AND substr(sale_date, 1, 7)=?{oc}", [yyyymm, *op], db_path)
+    adj = _one(
+        f"SELECT COUNT(*) AS n, COALESCE(SUM(amount),0) AS amt FROM sales WHERE {ACTIVE_SALE} "
+        f"AND sale_kind IN ('반품','정정') AND substr(sale_date, 1, 7)=?{oc}", [yyyymm, *op], db_path) or {}
+    # 입금: 고객이 실제로 낸 돈만 (반품상계·선수금 배분·대손 같은 내부 정리는 빼고, 반제(음수)는 포함)
+    def pay_where(cut: bool) -> str:
+        return (f"COALESCE(source,'') NOT IN ('반품상계','선수금','대손') AND substr(pay_date, 1, 7)=?"
+                f"{' AND pay_date <= ?' if cut else ''} AND sale_id IN (SELECT id FROM sales WHERE 1=1{oc})")
+    pay = _one(f"SELECT COUNT(*) AS n, COALESCE(SUM(amount),0) AS amt FROM payments WHERE {pay_where(False)}",
+               [yyyymm, *op], db_path) or {}
+    prev_pay = _scalar(f"SELECT COALESCE(SUM(amount),0) FROM payments WHERE {pay_where(partial)}",
+                       [prev, *([prev_cut] if partial else []), *op], db_path)
+    late = _one(
+        f"SELECT COUNT(*) AS n, COALESCE(SUM(COALESCE(total_amount, amount) - COALESCE(paid_amount,0)),0) AS amt "
+        f"FROM sales WHERE status IN ('입금대기','부분입금') AND due_date IS NOT NULL AND due_date < ?{oc}",
+        [today, *op], db_path) or {}
 
     return {
         "month_sales": int(month_sales),
@@ -1420,6 +1439,11 @@ def kpi_summary(yyyymm: str, owner_id: int | None = None, db_path: str | None = 
         "overdue_deals": int(overdue),
         "unpaid": int(unpaid),
         "activity_cnt": int(act_cnt),
+        "sales_cnt": int(sales_cnt or 0),
+        "adj_cnt": int(adj.get("n") or 0), "adj_amount": int(adj.get("amt") or 0),
+        "receipts": int(pay.get("amt") or 0), "receipts_cnt": int(pay.get("n") or 0),
+        "receipts_mom": ((pay.get("amt") or 0) - prev_pay) / prev_pay * 100 if prev_pay else None,
+        "late_cnt": int(late.get("n") or 0), "late_amount": int(late.get("amt") or 0),
     }
 
 

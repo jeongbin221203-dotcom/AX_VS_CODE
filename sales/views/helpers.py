@@ -202,6 +202,14 @@ def won(value) -> str:
         return "-"
 
 
+def krw(value) -> str:
+    """정수 금액 → '₩ 12,345,678' (대시보드 금액 카드 — 자재관리와 같은 표기)"""
+    try:
+        return f"₩ {int(value):,}"
+    except (TypeError, ValueError):
+        return "-"
+
+
 def mil(value) -> str:
     """정수 금액 → '123.4백만'"""
     try:
@@ -401,7 +409,7 @@ def csrf_token() -> str:
 
 
 def register_template_helpers(app: Flask) -> None:
-    app.jinja_env.filters.update(won=won, mil=mil)
+    app.jinja_env.filters.update(won=won, mil=mil, krw=krw)
 
     @app.context_processor
     def _company():

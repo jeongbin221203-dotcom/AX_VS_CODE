@@ -254,5 +254,5 @@ label > select, label > input:not([type=checkbox]):not([type=radio]), label > te
 
 /* 시연 서버: 역할 바꿔 보기 */
 .demo-roles { margin-top: .4rem; color: var(--sidebar-muted, #9fb0c8); line-height: 1.7; }
-.demo-roles a { color: inherit; text-decoration: underline; }
+.demo-roles a { color: inherit; text-decoration: underline; white-space: nowrap; }
 .demo-roles a.active { color: #fff; font-weight: 600; text-decoration: none; }
