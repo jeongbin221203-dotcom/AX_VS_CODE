@@ -1686,6 +1686,21 @@ KO_DAYS = ['월', '화', '수', '목', '금', '토', '일']
 EN_DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
 
+def _clean_codes(fmt):
+    """따옴표 밖의 _x(공백 자리) · *x(채우기) · [색]/[조건] 제거, [$₩-412] → ₩."""
+    out = []
+    for part in re.split(r'("[^"]*")', fmt):
+        if part.startswith('"'):
+            out.append(part)
+            continue
+        part = re.sub(r'\[\$([^\]-]*)(?:-[0-9A-Fa-f]+)?\]', lambda m: '"' + m.group(1) + '"' if m.group(1) else '', part)
+        part = re.sub(r'\[[^\]]*\]', '', part)
+        part = re.sub(r'_.', '', part)
+        part = re.sub(r'\*.', '', part)
+        out.append(part)
+    return ''.join(out)
+
+
 def format_value(v, fmt):
     """TEXT 함수 서식: 날짜(yyyy mm dd aaa…)와 숫자(0 # , . %) 기본 형식."""
     if isinstance(v, XLErr):
@@ -1694,6 +1709,7 @@ def format_value(v, fmt):
         return to_str(v)
     # 엑셀이 저장할 때 붙이는 \ 이스케이프(\ 공백, \. \( 등)는 따옴표 글자와 같다
     fmt = re.sub(r'\\(.)', lambda m: '"' + m.group(1) + '"', fmt)
+    fmt = _clean_codes(fmt)
     if isinstance(v, str):
         try:
             v = to_num(v)

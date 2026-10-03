@@ -5,7 +5,7 @@ from pathlib import Path
 
 from flask import Blueprint, abort, current_app, redirect, render_template, request, send_file, url_for
 
-from core import compare, db, library, official, xlsx
+from core import compare, db, describe, library, official, xlsx
 
 bp = Blueprint('practice', __name__, url_prefix='/practice')
 
@@ -88,6 +88,22 @@ def _tasks(folder, practice, answer):
     return sheets
 
 
+def _problem(folder, practice, answer):
+    """정답 파일에서 만든 문제 지문(처음 한 번 만들어 저장)."""
+    cache = folder / 'problem.json'
+    if cache.exists() and cache.stat().st_mtime >= (folder / answer).stat().st_mtime:
+        return json.loads(cache.read_text(encoding='utf-8'))
+    try:
+        data = describe.describe((folder / practice).read_bytes(), (folder / answer).read_bytes())
+    except Exception:  # noqa: BLE001 — 지문 만들기에 실패해도 채점 화면은 연다
+        data = []
+    for sh in data:
+        for t in sh['tasks']:
+            t.pop('_key', None)
+    cache.write_text(json.dumps(data, ensure_ascii=False), encoding='utf-8')
+    return data
+
+
 @bp.route('/<kind>/<iid>')
 def item(kind, iid):
     info, folder, practice, answer, key = _resolve(kind, iid)
@@ -95,6 +111,7 @@ def item(kind, iid):
                                'ORDER BY id DESC LIMIT 10', (key,)).fetchall()
     return render_template('practice_item.html', kind=kind, info=info, practice=practice, answer=answer,
                            tasks=_tasks(folder, practice, answer), history=history,
+                           problem=_problem(folder, practice, answer) if kind == 'lib' else [],
                            error=request.args.get('error'))
 
 

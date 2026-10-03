@@ -94,7 +94,7 @@ def test_practice_pages(client, app, tmp_path, pair):
     assert '1%EC%8C%8D' in r.headers['Location'] or '1쌍' in r.headers['Location']
     it = library.load_index(Path(app.config['DATA_DIR']) / 'library')[0]
     page = client.get(f"/practice/lib/{it['id']}").get_data(as_text=True)
-    assert '해야 할 일' in page and '조건부 서식' in page and '피벗 테이블' in page
+    assert '채점 항목' in page and '조건부 서식' in page and '피벗 테이블 보고서를 작성하시오' in page
     r = client.post(f"/practice/lib/{it['id']}/submit",
                     data={'_csrf': client.csrf, 'file': (io.BytesIO(ans), '내답안.xlsx')})
     page = client.get(r.headers['Location']).get_data(as_text=True)
@@ -104,3 +104,23 @@ def test_practice_pages(client, app, tmp_path, pair):
     r = client.post('/practice/library/import', data={'_csrf': client.csrf, 'folder': str(tmp_path / 'none')},
                     follow_redirects=True)
     assert '찾을 수 없습니다' in r.get_data(as_text=True)
+
+
+def test_describe_generates_exam_style_text(pair):
+    from core import describe
+    src, ans = pair
+    res = describe.describe(src, ans)
+    text = '\n'.join(t['text'] + ' ' + ' '.join(t.get('items', [])) for s in res for t in s['tasks'])
+    assert "행에 '지점', 열에 '제품분류', 값에 '금액'의 합계를 배치하시오" in text
+    assert "'지점'이 '서울' 이고 '판매량'이 300 이상인 행 전체" in text
+    assert "'부서'를 기준으로" in text and '부분합' in text
+    assert "'평균' 계열의 차트 종류를 '꺾은선형'으로 변경하시오" in text
+    assert '▶ IF, AVERAGE 함수 사용' in text or '▶ AVERAGE, IF 함수 사용' in text
+    assert "이름을 '저자'로 정의하시오" in text
+
+
+def test_korean_particles():
+    from core.describe import j
+    assert j('지점', '이/가') == '지점이' and j('부서', '이/가') == '부서가'
+    assert j("'꺾은선형'", '으로/로') == "'꺾은선형'으로" and j("'수량'", '으로/로') == "'수량'으로"
+    assert j("'아래쪽'", '으로/로') == "'아래쪽'으로" and j("'파일'", '으로/로') == "'파일'로"

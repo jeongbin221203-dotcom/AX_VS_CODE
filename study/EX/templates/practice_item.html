@@ -27,8 +27,28 @@
 </section>
 {% if info.extras %}<p class="small">함께 쓰는 파일: {% for e in info.extras %}<a href="{{ url_for('practice.file', kind=kind, iid=info.id, name=e) }}">{{ e }}</a>{{ ', ' if not loop.last }}{% endfor %}</p>{% endif %}
 
+{% if problem %}
+<section class="card exam-section">
+  <h2>문제 <span class="small muted" style="font-weight:400">정답 파일에서 자동으로 만든 지문 — 교재 지문과 표현이 다를 수 있습니다</span></h2>
+  {% for s in problem %}
+  <div class="exam-task">
+    <h3>{{ s.sheet }}</h3>
+    <ol class="exam-items">
+      {% for t in s.tasks %}
+      <li><span class="num">{{ loop.index }}.</span><div>{{ t.text }}
+        {% if t.table %}<div class="table-wrap" style="max-width:780px;margin:6px 0"><table class="t sheet-like"><tbody>
+          {% for row in t.table %}<tr>{% for v in row %}<td>{{ v }}</td>{% endfor %}</tr>{% endfor %}</tbody></table></div>{% endif %}
+        {% if t.get('items') %}<ul class="small" style="margin:4px 0 0;padding-left:1.1em">{% for i in t.get('items') %}<li>{{ i }}</li>{% endfor %}</ul>{% endif %}
+      </div></li>
+      {% endfor %}
+    </ol>
+  </div>
+  {% endfor %}
+</section>
+{% endif %}
+
 <section class="card">
-  <h2>해야 할 일 <span class="small muted" style="font-weight:400">정답 파일과 실습 파일의 차이에서 뽑음 · 힌트는 눌러서 보기</span></h2>
+  <h2>{{ '채점 항목' if problem else '해야 할 일' }} <span class="small muted" style="font-weight:400">정답 파일과 실습 파일의 차이에서 뽑음 · 힌트는 눌러서 보기</span></h2>
   {% for s in tasks %}
   <h3 style="margin-top:14px">{{ s.name }}{% if s.points %} <span class="small muted" style="font-weight:400">{{ s.points|num(1) if s.points != s.points|int else s.points|int }}점</span>{% endif %}</h3>
   <ul class="list">
