@@ -20,11 +20,17 @@
     <div class="me">
       <strong>{{ g.user.name }}</strong> · {{ ROLE_LABEL.get(g.user.role, g.user.role) }}
       <div class="muted small">{{ '전사 데이터 조회' if g.scope is none else '조회 범위 ' ~ g.scope|length ~ '명' }}</div>
+      {% if DEMO %}
+      <div class="demo-roles small">다른 역할로 보기:
+        {% for emp, label in DEMO_ROLES %}<a href="{{ url_for('auth.demo_as', emp_no=emp) }}" class="{{ 'active' if g.user.emp_no|string == emp }}">{{ label }}</a>{% if not loop.last %} · {% endif %}{% endfor %}
+      </div>
+      {% else %}
       <form method="post" action="{{ url_for('auth.logout') }}" class="me-actions" data-logout>
         <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
         <button class="btn btn-sm">로그아웃</button>
         {% if AUTH_MODE == 'password' %}<a class="btn btn-sm" href="{{ url_for('auth.password') }}">비밀번호 변경</a>{% endif %}
       </form>
+      {% endif %}
     </div>
     <a class="bell {{ 'has-unread' if g.unread }}" href="{{ url_for('auth.notifications') }}">🔔 알림{% if g.unread %} <b>{{ g.unread }}</b>{% endif %}</a>
     {% if g.pending_cnt %}
@@ -58,6 +64,8 @@
       {% if ENV != 'production' %}<br><span class="env-badge">개발 환경</span>{% endif %}</div>
   </aside>
   <main class="content">
+    {% if DEMO %}<div class="alert alert-info demo-banner">🧪 포트폴리오 시연 서버입니다 — 로그인 없이 <b>{{ g.user.name }}</b>(으)로 들어왔습니다.
+      모두 샘플 데이터이며, 서버가 다시 시작되면 처음 상태로 돌아갑니다.</div>{% endif %}
     {% if READ_ONLY() %}<div class="alert alert-warning">🛠️ 시스템 점검 중입니다 — 조회만 할 수 있고 저장·변경은 막혀 있습니다.</div>{% endif %}
     <h1>{{ title }}</h1>
     {% include "_flashes.html" %}

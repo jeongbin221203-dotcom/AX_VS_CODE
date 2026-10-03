@@ -10,7 +10,7 @@ from core import auth as core_auth
 from core import enterprise as ent
 from core import sales_db as db
 
-from .helpers import f_str, sso_identity
+from .helpers import demo_login, f_str, sso_identity
 
 bp = Blueprint("auth", __name__)
 
@@ -169,6 +169,18 @@ def setup():
         except ValueError as exc:
             flash(str(exc), "error")
     return render_template("setup.html")
+
+
+@bp.route("/demo/as/<emp_no>")
+def demo_as(emp_no: str):
+    """시연 서버: 다른 역할로 바꿔 보기 (SALES_DEMO_AUTOLOGIN 이 켜진 서버에서만)."""
+    if not config.DEMO_AUTOLOGIN or emp_no not in {e for e, _ in config.DEMO_ROLES}:
+        abort(404)
+    user = ent.get_user(emp_no=emp_no)
+    if not user or not user.get("active"):
+        abort(404)
+    demo_login(user)
+    return redirect(url_for("reports.dashboard"))
 
 
 @bp.route("/logout", methods=["POST"])

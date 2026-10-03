@@ -50,6 +50,7 @@ MENUS = [
 
 # 로그인 없이 열 수 있는 엔드포인트
 PUBLIC_ENDPOINTS = {"auth.login", "auth.setup", "auth.oidc_start", "auth.oidc_callback", "auth.breakglass",
+                    "auth.demo_as",
                     "static",
                     "healthz", "readyz", "metrics"}
 # 비밀번호 변경이 필요한 사용자도 열 수 있는 엔드포인트
@@ -81,6 +82,16 @@ def _logout(message: str, kind: str = "warning"):
     return redirect(url_for("auth.login"))
 
 
+def demo_login(user: dict) -> None:
+    """시연 서버 자동 로그인 — 방문자마다 새 세션. (감사로그는 남기지 않는다: 봇 방문마다 쌓이므로)"""
+    session.clear()
+    session.permanent = True
+    session["user_id"] = user["id"]
+    session["login_at"] = datetime.now().isoformat(timespec="seconds")
+    session["auth_mode"] = core_auth.AUTH_MODE
+    session["login_method"] = "시연 자동"
+
+
 def load_context():
     """매 요청마다 사용자와 접근범위를 다시 읽는다 → 권한 변경·비활성화가 즉시 반영된다."""
     g.user = None
@@ -106,6 +117,12 @@ def load_context():
             if identity and identity != str(user.get(key) or ""):
                 return _logout("SSO 사용자가 바뀌어 다시 로그인합니다.", "info")
         g.user = user
+
+    if not g.user and config.DEMO_AUTOLOGIN and request.endpoint not in ("auth.demo_as",):
+        user = ent.get_user(emp_no=config.DEMO_AUTOLOGIN)
+        if user and user.get("active"):
+            demo_login(user)
+            g.user = user
 
     if not g.user:
         db.set_context("anonymous", [])          # 로그인 전에는 어떤 영업 데이터도 보이지 않는다
@@ -368,6 +385,7 @@ def register_template_helpers(app: Flask) -> None:
     def _company():
         values = company.all_values()
         return {"APP_TITLE": values["app_title"], "COMPANY": values,
+                "DEMO": bool(config.DEMO_AUTOLOGIN), "DEMO_ROLES": config.DEMO_ROLES if config.DEMO_AUTOLOGIN else [],
                 "DISC_M": values["discount_manager_max"], "DISC_E": values["discount_exec_max"]}
 
     app.jinja_env.globals.update(

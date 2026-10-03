@@ -46,6 +46,10 @@ PORT = int(os.environ.get("SALES_PORT", "5001"))   # 대한사료 사이트(5000
 DEBUG = os.environ.get("SALES_DEBUG", "0" if PRODUCTION else "1") == "1"
 # 개발은 켤 때 자동으로 스키마를 올리고, 운영은 배포 단계(manage.py db upgrade)에서만 올린다
 AUTO_MIGRATE = os.environ.get("SALES_AUTO_MIGRATE", "0" if PRODUCTION else "1") == "1"
+# 시연 서버(포트폴리오용 공개 서버): SALES_DEMO=1 일 때만 SALES_DEMO_AUTOLOGIN(사번)으로 로그인 없이 들어온다
+DEMO = os.environ.get("SALES_DEMO") == "1"
+DEMO_AUTOLOGIN = os.environ.get("SALES_DEMO_AUTOLOGIN", "").strip() if DEMO else ""
+DEMO_ROLES = [("9999", "시스템관리자"), ("2001", "임원"), ("2002", "팀장"), ("2003", "영업사원")]   # 역할 바꿔 보기
 
 
 def production_problems(auth_mode: str) -> list[str]:
