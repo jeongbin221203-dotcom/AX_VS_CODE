@@ -319,7 +319,7 @@ flask --app app batch --loop                            # 배치 (서비스로 �
 ## 폴더 구조
 
 ```
-material-manager/
+material_manager/
 ├── app.py              앱 생성 · CSRF · 보안 헤더 · /health
 ├── cli.py              운영 명령: flask --app app init-db · batch · erp (status/test/send/master-sync) · backup · storage-flush · sso-outage
 ├── config.py           DB·저장소·역할·ERP·결재 기준 등 설정 (환경변수로 override)
