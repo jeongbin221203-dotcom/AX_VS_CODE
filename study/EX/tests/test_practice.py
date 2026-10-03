@@ -136,3 +136,39 @@ def test_public_server_blocks_copyrighted_imports(tmp_path):
     page = c.get('/practice/').get_data(as_text=True)
     assert '공개 서버에서는' in page and '공개 시연 서버' in page
     assert c.get('/healthz').json == {'ok': True}
+
+
+def _csrf(c):
+    c.get('/practice/')
+    with c.session_transaction() as s:
+        return s['csrf']
+
+
+def test_add_pair_local(client, app, pair):
+    src, ans = pair
+    r = client.post('/practice/library/add', data={
+        '_csrf': client.csrf, 'title': '내 모의 1회', 'group': '2급 실기',
+        'practice': (io.BytesIO(src), '모의1회.xlsx'), 'answer': (io.BytesIO(ans), '모의1회(정답).xlsx'),
+        'extras': (io.BytesIO(b'a,b'), '자료.txt')})
+    assert r.status_code == 302 and '/practice/lib/' in r.headers['Location']
+    page = client.get(r.headers['Location']).get_data(as_text=True)
+    assert '내 모의 1회' in page and '자료.txt' in page and '피벗 테이블 보고서를 작성하시오' in page
+    bad = client.post('/practice/library/add', data={'_csrf': client.csrf, 'practice': (io.BytesIO(b'x'), 'a.txt'),
+                                                     'answer': (io.BytesIO(ans), 'b.xlsx')}, follow_redirects=True)
+    assert '엑셀 파일' in bad.get_data(as_text=True)
+
+
+def test_add_pair_public_is_private_to_browser(tmp_path, pair):
+    from app import create_app
+    src, ans = pair
+    app = create_app({'DATA_DIR': str(tmp_path), 'DATABASE': str(tmp_path / 'ex.db'), 'SECRET_KEY': 't', 'PUBLIC': True})
+    me, other = app.test_client(), app.test_client()
+    tok = _csrf(me)
+    r = me.post('/practice/library/add', data={'_csrf': tok, 'title': '비공개 확인',
+                                               'practice': (io.BytesIO(src), 'p.xlsx'), 'answer': (io.BytesIO(ans), 'a.xlsx')})
+    url = r.headers['Location']
+    assert me.get(url).status_code == 200 and '비공개 확인' in me.get('/practice/').get_data(as_text=True)
+    _csrf(other)
+    assert other.get(url).status_code == 404
+    assert '비공개 확인' not in other.get('/practice/').get_data(as_text=True)
+    assert other.get(url + '/file/p.xlsx').status_code == 404

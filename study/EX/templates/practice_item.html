@@ -65,6 +65,11 @@
     <a href="{{ url_for('practice.file', kind=kind, iid=info.id, name=answer) }}" data-confirm-link>정답 파일 받기</a></p>
 </section>
 
+{% if kind == 'lib' %}
+<form method="post" action="{{ url_for('practice.library_delete', iid=info.id) }}" data-confirm="이 실습 파일 쌍을 지울까요?" style="margin-bottom:10px">
+  <input type="hidden" name="_csrf" value="{{ csrf_token }}"><button class="btn sm ghost danger" type="submit">이 항목 지우기</button>
+</form>
+{% endif %}
 <section class="card">
   <h2>제출 기록</h2>
   {% if history %}

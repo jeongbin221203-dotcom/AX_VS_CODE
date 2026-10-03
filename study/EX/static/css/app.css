@@ -313,3 +313,6 @@ table.sheet-like th { text-align: center; color: var(--ink-3); font-weight: 500;
 /* 실기 실습 */
 .alert.ok-alert { background: var(--ok-soft); border-color: var(--ok); }
 .code-hint { background: var(--surface-2); border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; overflow-x: auto; max-height: 260px; white-space: pre; }
+
+.add-pair { background: var(--surface-2); margin-bottom: 12px; }
+.add-pair input[type=text] { min-width: 180px; }

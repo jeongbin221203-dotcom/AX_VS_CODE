@@ -136,3 +136,56 @@ def remove(dest, iid):
     items = [x for x in load_index(dest) if x['id'] != iid]
     shutil.rmtree(Path(dest) / iid, ignore_errors=True)
     (Path(dest) / 'index.json').write_text(json.dumps(items, ensure_ascii=False, indent=1), encoding='utf-8')
+
+
+SAFE = re.compile(r'[^\w가-힣 .()\[\]_-]+')
+
+
+def _safe_name(name, default):
+    base = Path(name or '').name
+    base = SAFE.sub('_', base).strip(' .') or default
+    return base[:120]
+
+
+def add_pair(dest, title, group, practice, answer, extras=(), owner=None, limit=None):
+    """실습 파일·정답 파일을 직접 등록. practice/answer/extras = (파일 이름, 내용) — 내용 검사 후 저장. → id"""
+    from . import xlsx
+    for name, data in (practice, answer):
+        if not name.lower().endswith(EXCEL):
+            raise xlsx.BadFile(f'{name}: 엑셀 파일(.xlsx·.xlsm)만 등록할 수 있습니다.')
+        xlsx.load(data, data_only=True)                 # 압축 폭탄·손상 파일 검사
+    dest = Path(dest)
+    dest.mkdir(parents=True, exist_ok=True)
+    items = load_index(dest)
+    if owner is not None and limit:
+        mine = [x for x in items if x.get('owner') == owner]
+        for old in mine[:max(0, len(mine) - limit + 1)]:           # 오래된 것부터 정리
+            shutil.rmtree(dest / old['id'], ignore_errors=True)
+            items = [x for x in items if x['id'] != old['id']]
+    iid = hashlib.sha1(f'{owner}|{title}|{dt.datetime.now().isoformat()}'.encode()).hexdigest()[:12]
+    d = dest / iid
+    d.mkdir()
+    p_name = _safe_name(practice[0], '실습.xlsx')
+    a_name = '정답_' + _safe_name(answer[0], '정답.xlsx')
+    (d / p_name).write_bytes(practice[1])
+    (d / a_name).write_bytes(answer[1])
+    ex_names = []
+    for name, data in extras:
+        n = _safe_name(name, 'file')
+        if Path(n).suffix.lower() in EXTRA and n not in (p_name, a_name):
+            (d / n).write_bytes(data)
+            ex_names.append(n)
+    title = (title or Path(p_name).stem).strip()[:100]
+    items.append({'id': iid, 'rel': f'직접 등록/{title}', 'title': title, 'group': (group or '직접 등록').strip()[:100],
+                  'level': _level(title + ' ' + (group or '')), 'category': category(title + ' ' + (group or '')),
+                  'practice': p_name, 'answer': a_name, 'extras': ex_names, 'owner': owner,
+                  'imported': dt.datetime.now().isoformat(timespec='seconds')})
+    (dest / 'index.json').write_text(json.dumps(items, ensure_ascii=False, indent=1), encoding='utf-8')
+    return iid
+
+
+def visible(items, owner, public):
+    """공개 서버에서는 자기가 올린 것만, PC 에서는 모두."""
+    if not public:
+        return items
+    return [x for x in items if x.get('owner') == owner and owner]

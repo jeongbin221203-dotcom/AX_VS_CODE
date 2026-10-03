@@ -45,7 +45,20 @@
 
 <section class="card">
   <h2>내 교재 실습 파일 <span class="small muted" style="font-weight:400">{{ n_items }}개</span></h2>
-  {% if public %}<div class="empty">교재 파일 가져오기는 PC 에서 실행할 때만 쓸 수 있습니다(출판사 저작물).</div>{% else %}
+  <form class="card add-pair" method="post" action="{{ url_for('practice.library_add') }}" enctype="multipart/form-data" data-once>
+    <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+    <h3 style="margin:0 0 8px">실습·정답 파일 한 쌍 등록</h3>
+    <div class="controls">
+      <label class="field">제목 <input type="text" name="title" placeholder="예: 제10회 기출변형문제"></label>
+      <label class="field">묶음 <input type="text" name="group" placeholder="예: 2급 실기 기출변형"></label>
+      <label class="field">실습(문제) 파일 <input type="file" name="practice" accept=".xlsx,.xlsm,.xltm" required></label>
+      <label class="field">정답(완성) 파일 <input type="file" name="answer" accept=".xlsx,.xlsm,.xltm" required></label>
+      <label class="field">함께 쓰는 파일(선택) <input type="file" name="extras" multiple accept=".txt,.csv,.accdb,.xml,.prn"></label>
+      <button class="btn primary" type="submit">등록</button>
+    </div>
+    {% if public %}<p class="small muted" style="margin:8px 0 0">올린 파일은 <b>이 브라우저에서만</b> 보이고 다른 사람에게는 보이지 않습니다. 무료 서버라 다시 시작하면 지워집니다(최대 30쌍).</p>{% endif %}
+  </form>
+  {% if public %}<div class="small muted">폴더째 가져오기는 PC 에서 실행할 때만 쓸 수 있습니다.</div>{% else %}
   <form class="controls" method="post" action="{{ url_for('practice.library_import') }}" data-once>
     <input type="hidden" name="_csrf" value="{{ csrf_token }}">
     <label class="field" style="flex:1;min-width:260px">가져올 폴더 (하위 폴더의 '실습'·'정답' 또는 '실습파일'·'완성파일' 짝을 찾습니다)

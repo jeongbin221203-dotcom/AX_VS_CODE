@@ -1,9 +1,10 @@
 """컴활 실기 실습: 공식 예제(대한상공회의소)·내 교재 실습 파일 — 정답 파일과 비교해 채점."""
 import json
 import os
+import secrets
 from pathlib import Path
 
-from flask import Blueprint, abort, current_app, redirect, render_template, request, send_file, url_for
+from flask import Blueprint, abort, current_app, redirect, render_template, request, send_file, session, url_for
 
 from core import compare, db, describe, library, official, xlsx
 
@@ -24,10 +25,23 @@ def _best(prefix):
     return {r['exam'][len(prefix):]: r for r in rows}
 
 
+def _owner():
+    """공개 서버: 브라우저마다 다른 보관함(올린 파일은 그 브라우저에서만 보인다)."""
+    if 'lib_owner' not in session:
+        session['lib_owner'] = secrets.token_hex(12)
+        session.permanent = True
+    return session['lib_owner']
+
+
+def _items():
+    public = current_app.config.get('PUBLIC')
+    return library.visible(library.load_index(_library_dir()), _owner() if public else None, public)
+
+
 @bp.route('/')
 def index():
     sets = official.sets(_official_dir())
-    items = library.load_index(_library_dir())
+    items = _items()
     groups = {}
     for it in items:
         groups.setdefault(it['group'], []).append(it)
@@ -75,7 +89,7 @@ def _resolve(kind, iid, need_answer=True):
                  'pdf': f.get('pdf'), 'extras': f.get('extra', []), 'source_page': s['meta']['source_page']},
                 _official_dir() / iid, f['source'], f.get('answer'), f'official:{iid}')
     if kind == 'lib':
-        it = library.get(_library_dir(), iid)
+        it = next((x for x in _items() if x['id'] == iid), None)
         if not it:
             abort(404)
         return (dict(it), _library_dir() / iid, it['practice'], it['answer'], f'lib:{iid}')
@@ -162,7 +176,25 @@ def result(rid):
     return render_template('practice_result.html', kind=kind, info=info, row=row, res=json.loads(row['detail']))
 
 
+@bp.route('/library/add', methods=['POST'])
+def library_add():
+    p, a = request.files.get('practice'), request.files.get('answer')
+    if not p or not p.filename or not a or not a.filename:
+        return redirect(url_for('.index', error='실습 파일과 정답 파일을 모두 고르세요.'))
+    extras = [(f.filename, f.read()) for f in request.files.getlist('extras') if f and f.filename]
+    public = current_app.config.get('PUBLIC')
+    try:
+        iid = library.add_pair(_library_dir(), request.form.get('title'), request.form.get('group'),
+                               (p.filename, p.read()), (a.filename, a.read()), extras,
+                               owner=_owner() if public else None, limit=30 if public else None)
+    except xlsx.BadFile as e:
+        return redirect(url_for('.index', error=str(e)))
+    return redirect(url_for('.item', kind='lib', iid=iid))
+
+
 @bp.route('/lib/<iid>/delete', methods=['POST'])
 def library_delete(iid):
+    if not any(x['id'] == iid for x in _items()):
+        abort(404)
     library.remove(_library_dir(), iid)
     return redirect(url_for('.index', msg='지웠습니다.'))
