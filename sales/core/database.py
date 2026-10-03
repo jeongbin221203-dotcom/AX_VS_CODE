@@ -215,6 +215,20 @@ def close_pool() -> None:
             _pool = None
 
 
+SQLITE_FAST = False      # bulk_load() 안에서만 True
+
+
+@contextmanager
+def bulk_load():
+    """많은 행을 한 번에 넣을 때(시연 샘플 생성): SQLite 디스크 동기화를 끈다 — 잃어도 다시 만들 수 있는 데이터에만."""
+    global SQLITE_FAST
+    SQLITE_FAST = True
+    try:
+        yield
+    finally:
+        SQLITE_FAST = False
+
+
 @contextmanager
 def get_conn(db_path: str | None = None):
     """커밋/롤백/반납을 보장하는 커넥션 컨텍스트 매니저.
@@ -236,6 +250,8 @@ def get_conn(db_path: str | None = None):
     try:
         raw.execute("PRAGMA journal_mode=WAL")
         raw.execute("PRAGMA foreign_keys=ON")
+        if SQLITE_FAST:                       # 시연 샘플을 한 번에 만들 때만 (전원이 꺼지면 잃어도 되는 데이터)
+            raw.execute("PRAGMA synchronous=OFF")
         conn = Connection(raw, False)
         yield conn
         raw.commit()

@@ -8,8 +8,8 @@
   python manage.py backup                DB 백업 (SQLite 온라인 백업 / PostgreSQL pg_dump)
   python manage.py restore <파일>        백업에서 복구 (PostgreSQL: pg_restore --clean, SQLite: 파일 교체)
   python manage.py check                 DB·저장소·스키마 상태 점검 (배포 후 확인용)
-  python manage.py demo-init             빈 DB 에 시연용 조직·계정·샘플 데이터 (Render 같은 시연 서버 빌드용,
-                                         SALES_DEMO=1 · SALES_DEMO_PASSWORD 필요)
+  python manage.py demo-init             빈 DB 에 시연용 조직·계정·샘플 데이터 (Render 같은 시연 서버, SALES_DEMO=1 필요)
+                                         시작 명령에서 serve.py 앞에 실행 → 서버가 켜질 때마다 오늘 날짜 기준 샘플
 """
 from __future__ import annotations
 
@@ -158,14 +158,18 @@ def cmd_demo_init(args) -> int:
     if int(db._scalar("SELECT COUNT(*) FROM customers") or 0):
         print("이미 데이터가 있어 건너뜁니다.")
         return 0
-    db.set_context("system", None)
-    ent.seed_org_demo()
-    if password:
-        for uid in db._df("SELECT id FROM users WHERE active=1")["id"].tolist():
-            auth.set_password(int(uid), password)
-    print("기본 샘플:", db.seed_demo_data())
-    for key, out in sample_industry.seed_many(customers=args.customers).items():
-        print(key, out)
+    import time
+    started = time.time()
+    with database.bulk_load():
+        db.set_context("system", None)
+        ent.seed_org_demo()
+        if password:
+            for uid in db._df("SELECT id FROM users WHERE active=1")["id"].tolist():
+                auth.set_password(int(uid), password)
+        print("기본 샘플:", db.seed_demo_data())
+        for key, out in sample_industry.seed_many(customers=args.customers).items():
+            print(key, out)
+    print(f"시연 데이터 준비 {time.time() - started:.1f}초 (기준일 {__import__('datetime').date.today()})")
     return 0
 
 
