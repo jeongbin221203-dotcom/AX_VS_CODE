@@ -26,7 +26,8 @@
       <label>납기 *<input name="due_date" type="date" value="{{ default_due }}" required></label>
     </div>
     <label>메모 (고객·주문 번호 등)<input name="note"></label>
-    <div><button class="btn btn-primary">수요 등록</button></div>
+    <div class="row-actions"><button class="btn btn-primary">수요 등록</button>
+      <a class="btn" href="{{ url_for('mrp.demand_import', plant=plant) }}">⬆️ 엑셀로 일괄 등록 (판매·출하 계획)</a></div>
   </form>
   {% if not demands %}
     <p class="muted">등록된 수요가 없습니다. 수요가 없어도 진행 중 작업지시·안전재고는 MRP에 들어갑니다.</p>
@@ -51,11 +52,13 @@
     <label>계획 기간 (일)<input name="horizon" type="number" min="7" max="365" value="90"></label>
     <button class="btn btn-primary">MRP 실행</button>
     <span class="muted small">실행할 때마다 새 계획을 만듭니다. 이미 바꾼 계획은 다음 실행에서 '들어올 구매요청·작업지시'로 잡힙니다.</span>
+    {% if MRP_NIGHTLY_HOUR >= 0 %}<span class="muted small">· 밤 자동 실행: 매일 {{ MRP_NIGHTLY_HOUR }}시 이후 한 번 (배치, 실행자 'MRP 자동 실행')</span>{% endif %}
   </form>
   {% endif %}
   {% if not run %}
     <div class="alert alert-info">아직 실행한 적이 없습니다.{{ ' 관리자가 MRP 실행을 누르면 계획이 나옵니다.' if not can_run }}</div>
   {% else %}
+    <div class="toolbar"><a class="btn btn-sm" href="{{ url_for('mrp.index', plant=plant, export='xlsx') }}">⬇️ 엑셀 다운로드</a></div>
     <p class="muted small">실행 {{ run.run_at[:16] }} · {{ run.run_by }} · 기간 ~{{ run.horizon }} —
       계획 {{ run.summary.plans }}건 (구매 {{ run.summary.buy }} · 생산 {{ run.summary.make }}){% if run.summary.late %} · <strong class="down">이미 늦은 계획 {{ run.summary.late }}건</strong>{% endif %}</p>
     {% if not plans %}

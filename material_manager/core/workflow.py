@@ -16,7 +16,7 @@ import config
 from core import approvals, auth, db, delegation, notify, org, purchasing, services
 from core.utils import now_str
 
-KIND = {"ADJ": "실사 조정", "PR": "구매요청", "PO": "발주"}
+KIND = {"ADJ": "실사 조정", "CANCEL": "거래 취소", "PR": "구매요청", "PO": "발주"}
 
 
 def authorities(user: dict) -> list[dict]:
@@ -53,11 +53,17 @@ def queue(user: dict) -> list[dict]:
                 return a
         return None
 
+    import json
     for r in approvals.requests_df("PENDING").to_dict("records"):
         a = pick({r["requested_by_id"]}, r["warehouse_id"], "MANAGER")
         if a:
-            items.append({"kind": "ADJ", "id": int(r["id"]), "no": f"#{r['id']}", "warehouse_id": int(r["warehouse_id"]),
-                          "title": f"[{r['code']}] {r['name']} {float(r['qty']):+,.2f} {r['unit']} · {r['wh_code']}",
+            extra = json.loads(r["payload"] or "{}")
+            title = (f"거래 #{extra.get('tx_id')} ({extra.get('tx_date')} {extra.get('tx_type')}) [{r['code']}] {r['name']} "
+                     f"{float(r['qty']):,.2f} {r['unit']} · {r['wh_code']} — 사유: {extra.get('reason', '')}"
+                     if r["kind"] == "CANCEL" else
+                     f"[{r['code']}] {r['name']} {float(r['qty']):+,.2f} {r['unit']} · {r['wh_code']}")
+            items.append({"kind": r["kind"] if r["kind"] in KIND else "ADJ", "id": int(r["id"]), "no": f"#{r['id']}",
+                          "warehouse_id": int(r["warehouse_id"]), "title": title,
                           "amount": float(r["amount"]), "requested_by": r["requested_by"], "requested_at": r["requested_at"],
                           "step": "", "link": "/approvals/?tab=adj", "via": a["via"]})
     prs = db.query_df("""
@@ -103,7 +109,7 @@ def decide(user: dict, kind: str, item_id: int, approve: bool, comment: str, ip:
     a = auths[item["via"]]
     who = {"id": user["id"], "role": a["role"] if auth.level(a["role"]) > auth.level(user["role"]) else user["role"],
            "name": user["name"] + (f" (대결: {item['via']})" if item["via"] else ""), "ip": ip}
-    if kind == "ADJ":
+    if kind in ("ADJ", "CANCEL"):
         return approvals.decide(item_id, approve, comment, who, wh_ids=a["wh_ids"])
     if kind == "PR":
         r = purchasing.decide_pr(item_id, approve, comment, who, wh_ids=a["wh_ids"])
@@ -116,10 +122,26 @@ def decide(user: dict, kind: str, item_id: int, approve: bool, comment: str, ip:
     return services.Result(False, "알 수 없는 결재입니다.")
 
 
+def decide_many(user: dict, keys: list[str], ip: str = "") -> tuple[int, list[str]]:
+    """여러 건 한꺼번에 승인 (keys: 'PR:12'). (승인한 건수, 실패 사유들). 반려는 사유가 필요해 한 건씩."""
+    done, problems = 0, []
+    for k in keys:
+        kind, _, rid = k.partition(":")
+        if kind not in KIND or not rid.isdigit():
+            problems.append(f"{k}: 알 수 없는 결재")
+            continue
+        r = decide(user, kind, int(rid), True, "일괄 승인", ip)
+        if r.ok:
+            done += 1
+        else:
+            problems.append(f"{KIND[kind]} {rid}: {r.message}")
+    return done, problems
+
+
 def my_requests(user_id: int) -> pd.DataFrame:
     """내가 올린 결재가 어디까지 왔는지 (최근 200건)."""
     adj = db.query_df("""
-        SELECT 'ADJ' AS kind, a.id, '#' || a.id AS no, a.requested_at, a.status, a.amount, m.code || ' ' || m.name AS title,
+        SELECT a.kind AS kind, a.id, '#' || a.id AS no, a.requested_at, a.status, a.amount, m.code || ' ' || m.name AS title,
                a.decided_by, a.comment, '' AS step
         FROM approval_requests a JOIN materials m ON m.id = a.material_id WHERE a.requested_by_id = ?""", (user_id,))
     pr = db.query_df("""
@@ -132,7 +154,7 @@ def my_requests(user_id: int) -> pd.DataFrame:
     if df.empty:
         return df
     label = {**approvals.STATUS, **purchasing.PR_STATUS}
-    df["status"] = [("결재 대기" if k == "ADJ" else purchasing.PR_STATUS.get(s, s)) if s == "PENDING" else label.get(s, s)
+    df["status"] = [("결재 대기" if k in ("ADJ", "CANCEL") else purchasing.PR_STATUS.get(s, s)) if s == "PENDING" else label.get(s, s)
                     for k, s in zip(df["kind"], df["status"])]
     df["kind"] = df["kind"].map(KIND)
     return df.sort_values("requested_at", ascending=False).head(200).reset_index(drop=True)
@@ -141,7 +163,7 @@ def my_requests(user_id: int) -> pd.DataFrame:
 def history(user: dict) -> pd.DataFrame:
     """내가 처리한 결재 (대결 포함, 최근 200건)."""
     adj = db.query_df("""
-        SELECT 'ADJ' AS kind, a.id, '#' || a.id AS no, a.decided_at AS at, a.status AS decision, a.amount,
+        SELECT a.kind AS kind, a.id, '#' || a.id AS no, a.decided_at AS at, a.status AS decision, a.amount,
                m.code || ' ' || m.name AS title, a.requested_by, a.decided_by AS approver, a.comment
         FROM approval_requests a JOIN materials m ON m.id = a.material_id WHERE a.decided_by_id = ?""", (user["id"],))
     pr = db.query_df("""
@@ -170,9 +192,9 @@ def remind_overdue() -> str:
     sent = 0
     with db.transaction() as conn:
         pending = []
-        for r in conn.execute("SELECT id, warehouse_id, requested_by_id, requested_at, amount FROM approval_requests "
+        for r in conn.execute("SELECT id, kind, warehouse_id, requested_by_id, requested_at, amount FROM approval_requests "
                               "WHERE status = 'PENDING'"):
-            pending.append(("ADJ", int(r["id"]), f"#{r['id']}", int(r["warehouse_id"]), "MANAGER", {r["requested_by_id"]},
+            pending.append((r["kind"] if r["kind"] in KIND else "ADJ", int(r["id"]), f"#{r['id']}", int(r["warehouse_id"]), "MANAGER", {r["requested_by_id"]},
                             r["requested_at"], float(r["amount"]), "/approvals/"))
         for r in conn.execute("SELECT * FROM purchase_requests WHERE status = 'PENDING'"):
             done = {x[0] for x in conn.execute("SELECT approver_id FROM pr_approvals WHERE pr_id = ? AND decision = 'APPROVE'",

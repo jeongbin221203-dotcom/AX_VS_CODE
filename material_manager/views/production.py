@@ -51,10 +51,17 @@ def index():
             ["prod_no", "code", "name", "qty", "unit", "issue_wh", "start_date", "due_date", "ops", "wip_cost", "planned_cost"]]
         view.columns = ["작업지시", "제품코드", "제품명", "수량", "단위", "창고", "착수", "완료 예정", "공정", "재공 금액(투입)",
                         "표준 재료비"]
+        if request.args.get("export") == "xlsx":
+            log_export("wip", len(view))
+            return form_response("wip", view, "재공품.xlsx")
         return render_page("production.html", "production", tabs=TABS, tab="wip", wip_total=float(df["wip_cost"].sum()),
                            grid=Table(view, {"수량": "{:,.4g}", "재공 금액(투입)": "₩{:,.0f}", "표준 재료비": "₩{:,.0f}"},
                                       links=[url_for("production.detail", prod_id=int(i)) for i in df["id"]],
                                       tones=["danger" if d and d < date.today().isoformat() else None for d in df["due_date"]]))
+    if tab == "bom" and request.args.get("export") == "xlsx":       # BOM 전체 — 고쳐서 일괄 등록으로 다시 올린다
+        view = bulk.boms_export()
+        log_export("boms", len(view))
+        return form_response("boms", view, "BOM_전체.xlsx")
     if tab == "bom":
         df = production.boms_df()
         view = df.assign(active=df["active"].map({1: "사용", 0: "중지"}))[
@@ -249,6 +256,9 @@ def _wo_page(form: dict | None = None):
          "work_order", "created_by"]]
     view.columns = ["작업지시", "상태", "출처", "제품코드", "제품명", "수량", "단위", "완료 예정", "부품 창고", "입고 창고",
                     "투입 금액", "작업지시 번호", "등록자"]
+    if request.args.get("export") == "xlsx":
+        log_export("work_orders", len(view), show=show)
+        return form_response("work_orders", view, "작업지시.xlsx")
     return render_page("production.html", "production", tabs=TABS, tab="wo", show=show,
                        products=production.products_with_bom(), wh_opts=org.warehouse_options(g.wh_ids), f=form or {},
                        receipt_default=_receipt_default(org.warehouse_options(g.wh_ids)),

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import csrf, table, tabs as tab_bar, pager as pager_nav, material_picker, partner_datalist %}
+{% from "_macros.html" import csrf, table, tabs as tab_bar, pager as pager_nav, material_picker, partner_datalist, change_history %}
 
 {% macro fields(f, lock_code=false, sap_lock=false) %}
   {% set ro = 'readonly' if sap_lock else '' %}
@@ -38,7 +38,11 @@
 {% endmacro %}
 
 {% block content %}
-<p class="toolbar-right"><a class="btn btn-sm" href="{{ url_for('materials.labels') }}">🏷️ 바코드 라벨 인쇄</a></p>
+<p class="toolbar-right">
+  <a class="btn btn-sm" href="{{ url_with(export='xlsx', page=None, tab=None) }}" title="올리기 양식과 같은 열 — 고쳐서 데이터 관리 → 일괄 업로드로 다시 올립니다">⬇️ 자재 마스터 내려받기</a>
+  <a class="btn btn-sm" href="{{ url_for('materials.units_export') }}">⬇️ 단위 환산 내려받기</a>
+  {% if can('MANAGER') %}<a class="btn btn-sm" href="{{ url_for('materials.units_import') }}">⬆️ 단위 환산 일괄 등록</a>{% endif %}
+  <a class="btn btn-sm" href="{{ url_for('materials.labels') }}">🏷️ 바코드 라벨 인쇄</a></p>
 {{ tab_bar(tabs, tab) }}
 {{ partner_datalist('SUPPLIER') }}
 
@@ -117,6 +121,7 @@
         {% endif %}
       </form>
     </div>
+    {{ change_history(history) }}
   {% endif %}
 {% endif %}
 {% endblock %}

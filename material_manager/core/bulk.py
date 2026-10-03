@@ -123,6 +123,7 @@ def apply_partners(rows: list[dict], actor: dict | None) -> services.Result:
                 data = {f: r.get(f) or "" for f in partners.FIELDS}
                 if r["action"] == "갱신":
                     cur = dict(conn.execute("SELECT * FROM partners WHERE id = ?", (r["id"],)).fetchone())
+                    before = dict(cur)
                     merged = {f: (data[f] if data[f] else cur[f]) for f in partners.FIELDS}
                     merged["kind"] = data["kind"] or cur["kind"]
                     if partners.key(merged["name"]) == cur["name_key"]:
@@ -136,6 +137,9 @@ def apply_partners(rows: list[dict], actor: dict | None) -> services.Result:
                                  (d["name"], partners.key(d["name"]), d["biz_no"], d["kind"], d["contact"], d["phone"],
                                   d["email"], d["note"], now_str(), r["id"]))
                     pid = r["id"]
+                    diff = audit.changes(before, d, partners.FIELDS)
+                    if diff:
+                        audit.record(conn, who, "PARTNER_UPDATE", "partner", pid, {"code": cur["code"], **diff, "via": "엑셀"})
                     if partners.key(d["name"]) != cur["name_key"]:     # 코드로 찾아 이름을 바꿨으면 예전 이름은 다른 이름으로
                         partners._add_alias(conn, pid, cur["name"], who)
                 else:
@@ -152,6 +156,9 @@ def apply_partners(rows: list[dict], actor: dict | None) -> services.Result:
                         "created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?)",
                         (code, d["name"], partners.key(d["name"]), d["biz_no"], d["kind"], d["contact"], d["phone"],
                          d["email"], d["note"], ts, ts)).lastrowid
+                    if pid is None:                                    # PostgreSQL 래퍼가 id 를 못 돌려줄 때
+                        pid = conn.execute("SELECT id FROM partners WHERE code = ?", (code,)).fetchone()[0]
+                    audit.record(conn, who, "PARTNER_CREATE", "partner", pid, {"code": code, **d, "via": "엑셀"})
                 for a in r.get("aliases") or []:
                     partners._add_alias(conn, pid, a, who)
             audit.record(conn, who, "PARTNER_IMPORT", "partner", "",
@@ -236,3 +243,177 @@ def apply_boms(rows: list[dict], actor: dict | None) -> services.Result:
     except services._Rejected as exc:
         return services.Result(False, f"{exc.no}번 줄부터 문제가 있어 아무것도 반영하지 않았습니다: {exc.message}")
     return services.Result(True, f"BOM {len(groups)}개 반영 (부품 줄 {len(rows)}개)")
+
+
+# ── 단위 환산 ────────────────────────────────────────────────
+UNIT_COLS = {"code": "자재코드", "unit": "단위", "factor": "배수", "barcode": "단위바코드"}
+
+
+def preview_units(raw: pd.DataFrame) -> Preview:
+    """한 줄 = 자재 하나의 단위 하나. 있으면 배수·바코드를 바꾸고, 없으면 추가, 배수 0 이면 그 단위를 지운다."""
+    from core import uom
+    df = _frame(raw, UNIT_COLS)
+    codes = code_series(df["code"]).str.upper()
+    units = clean_str_series(df["unit"]).str.upper()
+    bars = code_series(df["barcode"]).str.upper().str.replace(r"\s+", "", regex=True)
+    mats = {r.code.upper(): r for r in db.query_df("SELECT id, code, unit, barcode, sap_matnr FROM materials").itertuples()}
+    have = {(int(r.material_id), r.unit.upper()) for r in db.query_df("SELECT material_id, unit FROM material_units").itertuples()}
+    out, seen, seen_bc = Preview(), {}, {}
+    for i in range(len(df)):
+        line, code, unit, bc = i + 2, codes.iloc[i], units.iloc[i], bars.iloc[i]
+        if not code and not unit:
+            continue
+        f = _num(df["factor"].iloc[i])
+        problems = []
+        m = mats.get(code)
+        if m is None:
+            problems.append(f"자재코드 '{code}'가 없습니다.")
+        if not uom.UNIT_RE.fullmatch(unit or ""):
+            problems.append("단위는 영문·한글·숫자 12자 이내 (예: BOX).")
+        elif m is not None and unit == (m.unit or "").upper():
+            problems.append(f"{unit}은 기본 단위입니다.")
+        if f is None or f != f or f < 0:
+            problems.append("배수는 0 이상 숫자 (0 = 이 단위 지우기).")
+        key_ = (code, unit)
+        if key_ in seen:
+            problems.append(f"{seen[key_]}번 줄과 같은 자재·단위입니다.")
+        seen[key_] = line
+        if bc and f:
+            if bc in seen_bc:
+                problems.append(f"{seen_bc[bc]}번 줄과 바코드가 같습니다.")
+            seen_bc[bc] = line
+        exists = m is not None and (int(m.id), unit) in have
+        action = "지우기" if f == 0 else ("바꾸기" if exists else "추가")
+        if f == 0 and not exists:
+            problems.append("지울 단위가 없습니다.")
+        row = {"line": line, "code": code, "unit": unit, "factor": f, "barcode": bc, "action": action,
+               "material_id": int(m.id) if m is not None else None, "problem": " ".join(problems)}
+        out.rows.append(row)
+    # 바코드가 이미 다른 자재·단위에 있으면 미리보기에서 알린다 (같은 파일이 그 단위의 바코드를 바꾸거나 지우면 괜찮음)
+    moved = {(r["code"], r["unit"]) for r in out.rows if r["action"] == "지우기"} |             {(r["code"], r["unit"]) for r in out.rows if r["action"] == "바꾸기"}
+    with db.get_conn() as conn:
+        for r in out.rows:
+            if not r["barcode"] or not r["factor"] or r["material_id"] is None:
+                continue
+            hit = conn.execute("SELECT code FROM materials WHERE id <> ? AND (barcode = ? OR UPPER(code) = ? OR UPPER(sap_matnr) = ?)",
+                               (r["material_id"], r["barcode"], r["barcode"], r["barcode"])).fetchone()
+            if hit:
+                r["problem"] = (r["problem"] + f" 바코드가 자재 {hit['code']}의 바코드·코드와 겹칩니다.").strip()
+                continue
+            for o in conn.execute("SELECT m.code, u.unit FROM material_units u JOIN materials m ON m.id = u.material_id "
+                                  "WHERE u.barcode = ?", (r["barcode"],)):
+                owner = (str(o["code"]).upper(), str(o["unit"]).upper())
+                if owner != (r["code"], r["unit"]) and owner not in moved:
+                    r["problem"] = (r["problem"] + f" 바코드가 {o['code']} {o['unit']} 단위에 있습니다.").strip()
+    out.errors = [f"{r['line']}번 줄: {r['problem']}" for r in out.rows if r["problem"]]
+    out.summary = (f"{len(out.rows)}줄 — 추가 {sum(r['action'] == '추가' for r in out.rows)} · "
+                   f"바꾸기 {sum(r['action'] == '바꾸기' for r in out.rows)} · 지우기 {sum(r['action'] == '지우기' for r in out.rows)}")
+    return out
+
+
+def apply_units(rows: list[dict], actor: dict | None) -> services.Result:
+    who = actor or audit.SYSTEM
+    try:
+        with db.transaction() as conn:
+            for r in rows:                                    # 먼저 지우기·바코드 비우기 → 바코드를 옮겨도 겹치지 않게
+                if r["action"] == "지우기":
+                    conn.execute("DELETE FROM material_units WHERE material_id = ? AND UPPER(unit) = ?", (r["material_id"], r["unit"]))
+                elif r["action"] == "바꾸기":
+                    conn.execute("UPDATE material_units SET barcode = '' WHERE material_id = ? AND UPPER(unit) = ?",
+                                 (r["material_id"], r["unit"]))
+            for r in rows:
+                if r["action"] == "지우기":
+                    audit.record(conn, who, "UNIT_REMOVE", "material", r["material_id"], {"unit": r["unit"], "via": "엑셀"})
+                    continue
+                if r["barcode"]:
+                    problem = services.barcode_problem(conn, r["barcode"], r["material_id"])
+                    row = conn.execute("SELECT m.code, u.unit FROM material_units u JOIN materials m ON m.id = u.material_id "
+                                       "WHERE u.barcode = ?", (r["barcode"],)).fetchone()
+                    if not problem and row:
+                        problem = f"바코드 {r['barcode']}가 {row['code']} {row['unit']}에 있습니다."
+                    if problem:
+                        raise services._Rejected(r["line"], problem)
+                if r["action"] == "바꾸기":
+                    conn.execute("UPDATE material_units SET factor = ?, barcode = ? WHERE material_id = ? AND UPPER(unit) = ?",
+                                 (r["factor"], r["barcode"], r["material_id"], r["unit"]))
+                else:
+                    conn.execute("INSERT INTO material_units (material_id, unit, factor, barcode, created_at) VALUES (?, ?, ?, ?, ?)",
+                                 (r["material_id"], r["unit"], r["factor"], r["barcode"], now_str()))
+                audit.record(conn, who, "UNIT_ADD", "material", r["material_id"],
+                             {"code": r["code"], "unit": r["unit"], "factor": r["factor"], "barcode": r["barcode"],
+                              "action": r["action"], "via": "엑셀"})
+    except services._Rejected as exc:
+        return services.Result(False, f"{exc.no}번 줄 때문에 아무것도 반영하지 않았습니다: {exc.message}")
+    return services.Result(True, f"단위 환산 {len(rows)}줄 반영")
+
+
+def units_export() -> pd.DataFrame:
+    df = db.query_df("SELECT m.code, m.name, m.unit AS base, u.unit, u.factor, u.barcode FROM material_units u "
+                     "JOIN materials m ON m.id = u.material_id ORDER BY m.code, u.factor")
+    df.columns = ["자재코드", "자재명", "기본단위", "단위", "배수", "단위바코드"]
+    return df
+
+
+def boms_export() -> pd.DataFrame:
+    df = db.query_df("""
+        SELECT p.code AS product, b.base_qty, c.code AS component, i.qty, i.scrap_pct, w.code AS wh, i.note
+        FROM boms b JOIN bom_items i ON i.bom_id = b.id JOIN materials p ON p.id = b.product_id
+        JOIN materials c ON c.id = i.component_id LEFT JOIN warehouses w ON w.id = i.issue_wh_id
+        WHERE b.active = 1 ORDER BY p.code, i.line_no""")
+    df["wh"] = df["wh"].fillna("")
+    df.columns = ["제품코드", "기준수량", "부품코드", "수량", "손실률", "출고창고", "메모"]
+    return df
+
+
+# ── MRP 수요 ─────────────────────────────────────────────────
+DEMAND_COLS = {"code": "제품코드", "qty": "수량", "due": "납기", "note": "메모"}
+
+
+def preview_demands(raw: pd.DataFrame, plant_id: int, replace: bool) -> Preview:
+    from datetime import date as _date
+    df = _frame(raw, DEMAND_COLS)
+    codes = code_series(df["code"]).str.upper()
+    notes = clean_str_series(df["note"])
+    mats = {r.code.upper(): r for r in db.query_df("SELECT id, code, name, active FROM materials").itertuples()}
+    out = Preview()
+    for i in range(len(df)):
+        line, code = i + 2, codes.iloc[i]
+        if not code:
+            continue
+        problems = []
+        m = mats.get(code)
+        if m is None or not m.active:
+            problems.append(f"제품코드 '{code}'가 사용 중인 자재가 아닙니다.")
+        q = _num(df["qty"].iloc[i])
+        if q is None or q != q or q <= 0:
+            problems.append("수량은 0보다 큰 숫자.")
+        due = pd.to_datetime(df["due"].iloc[i], errors="coerce")
+        if pd.isna(due):
+            problems.append("납기 날짜를 확인하세요 (예: 2026-11-20).")
+            due_s = ""
+        else:
+            due_s = due.date().isoformat()
+        row = {"line": line, "code": code, "name": m.name if m is not None else "", "qty": q, "due": due_s,
+               "note": notes.iloc[i], "material_id": int(m.id) if m is not None else None, "plant_id": plant_id,
+               "replace": replace, "late": bool(due_s and due_s < _date.today().isoformat()), "problem": " ".join(problems)}
+        out.rows.append(row)
+        if problems:
+            out.errors.append(f"{line}번 줄: {row['problem']}")
+    out.summary = f"수요 {len(out.rows)}줄" + (" — 이 플랜트의 지금 수요는 모두 닫고 이 내용으로 바꿉니다" if replace
+                                                else " — 지금 수요에 더합니다")
+    return out
+
+
+def apply_demands(rows: list[dict], actor: dict | None) -> services.Result:
+    who = actor or audit.SYSTEM
+    if not rows:
+        return services.Result(False, "수요가 없습니다.")
+    plant = rows[0]["plant_id"]
+    with db.transaction() as conn:
+        closed = conn.execute("UPDATE mrp_demands SET active = 0 WHERE plant_id = ? AND active = 1", (plant,)).rowcount \
+            if rows[0]["replace"] else 0
+        conn.executemany("INSERT INTO mrp_demands (plant_id, material_id, qty, due_date, note, active, created_by, created_at) "
+                         "VALUES (?, ?, ?, ?, ?, 1, ?, ?)",
+                         [(plant, r["material_id"], r["qty"], r["due"], r["note"], who["name"], now_str()) for r in rows])
+        audit.record(conn, who, "MRP_DEMAND", "mrp", plant, {"import": len(rows), "closed": closed})
+    return services.Result(True, f"MRP 수요 {len(rows)}줄 등록" + (f" (기존 {closed}줄 닫음)" if closed else ""))

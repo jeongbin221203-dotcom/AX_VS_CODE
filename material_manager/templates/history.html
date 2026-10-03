@@ -41,6 +41,24 @@
     <p class="muted small">증빙이 첨부된 거래는 ID에 링크가 있습니다. 누르면 그 거래의 세금계산서 등 증빙을 봅니다.</p>
     {{ download(url_with(export='xlsx', page=none), '⬇️ 거래이력 엑셀 다운로드 (조건 전체)') }}
 
+    {% if can('CLERK') and reversible %}
+    <details class="card" {{ 'open' if not can('MANAGER') and request.args.get('cancel') }}>
+      <summary>거래 취소 요청 (잘못 넣은 거래 — 관리자가 승인하면 취소)</summary>
+      <p class="muted small">수량·자재를 잘못 넣었으면 사유와 함께 취소를 요청하세요. 관리자의 '내 결재 대기'로 가고, 승인되면 반대 거래가 오늘 일자로 생깁니다.
+        바르게 다시 넣는 것은 취소 뒤에 새로 등록합니다.</p>
+      <form class="row-actions" method="post" action="{{ url_for('history.cancel_request') }}">
+        {{ csrf() }}<input type="hidden" name="next" value="{{ request.full_path }}">
+        <label>거래
+          <select name="tx_id" required>
+            <option value="">— 거래를 고르세요 —</option>
+            {% for r in reversible %}<option value="{{ r.id }}">#{{ r.id }} · {{ r.tx_date }} {{ r.tx_type }} {{ r.wh_code }} [{{ r.code }}] {{ r.name }} {{ "{:,.2f}".format(r.qty) }}{{ ' (내가 등록)' if r.created_by == g.user.name }}</option>{% endfor %}
+          </select>
+        </label>
+        <label class="grow">취소 사유 *<input name="reason" required placeholder="예: 수량 오입력(100→10)"></label>
+        <button class="btn">📨 취소 요청</button>
+      </form>
+    </details>
+    {% endif %}
     {% if can('MANAGER') and reversible %}
     <details class="card">
       <summary>거래 취소 (잘못 등록한 건 바로잡기)</summary>

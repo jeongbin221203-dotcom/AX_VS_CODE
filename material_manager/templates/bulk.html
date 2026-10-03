@@ -8,6 +8,15 @@
   <p class="muted">거래처코드가 있으면 그 코드로, 없으면 이름으로(표기 무시) 찾아 <strong>있으면 갱신</strong>(빈 칸은 그대로), <strong>없으면 등록</strong>합니다.
     '다른 이름' 칸에 쉼표로 여러 개를 적으면 다른 이름으로 연결합니다. 구분: 공급처·납품처·공급·납품 (비우면 공급처).</p>
   {% set tpl = url_for('partners.import_template') %}{% set up = url_for('partners.import_upload') %}{% set go = url_for('partners.import_apply') %}
+{% elif kind == "units" %}
+  <p><a href="{{ url_for('materials.index') }}">← 자재 마스터</a> · <a href="{{ url_for('materials.units_export') }}">⬇️ 지금 단위 환산 내려받기</a></p>
+  <p class="muted">한 줄 = 자재 하나의 단위 하나 (자재코드 · 단위 · 배수 · 단위바코드). 있으면 배수·바코드를 바꾸고, 없으면 추가하고, <strong>배수 0이면 그 단위를 지웁니다</strong>.
+    지금 단위 환산을 내려받아 고친 뒤 그대로 올리면 됩니다. 바코드는 다른 자재·단위와 겹칠 수 없습니다.</p>
+  {% set tpl = url_for('materials.units_export') %}{% set up = url_for('materials.units_import_upload') %}{% set go = url_for('materials.units_import_apply') %}
+{% elif kind == "mrp_demand" %}
+  <p><a href="{{ url_for('mrp.index', tab='demand', plant=plant) }}">← MRP 수요</a></p>
+  <p class="muted">판매·출하 계획을 한 번에 넣습니다 (제품코드 · 수량 · 납기 · 메모). 다음 MRP 실행(밤 자동 실행 포함)부터 반영됩니다.</p>
+  {% set tpl = url_for('mrp.demand_template') %}{% set up = url_for('mrp.demand_import_upload', plant=plant) %}{% set go = url_for('mrp.demand_import_apply', plant=plant) %}
 {% else %}
   <p><a href="{{ url_for('production.index', tab='bom') }}">← BOM</a></p>
   <p class="muted">한 줄 = 제품의 부품 한 개. 제품코드별로 묶어 <strong>그 제품의 BOM 전체를 파일 내용으로 바꿉니다</strong>(부품을 지우려면 파일에서 빼면 됩니다).
@@ -19,6 +28,10 @@
   {{ csrf() }}
   <div class="toolbar">
     <a class="btn btn-sm" href="{{ tpl }}">⬇️ 빈 양식 내려받기</a>
+    {% if kind == "mrp_demand" %}
+      <label>플랜트<select name="plant">{% for k, v in plants.items() %}<option value="{{ k }}" {{ 'selected' if k == plant }}>{{ v }}</option>{% endfor %}</select></label>
+      <label class="check"><input type="checkbox" name="replace" value="1"> 지금 수요를 모두 닫고 이 파일로 바꾸기</label>
+    {% endif %}
     <label class="grow">파일 (.xlsx · .csv)<input type="file" name="file" accept=".xlsx,.csv" required></label>
     <button class="btn btn-primary">미리보기</button>
   </div>
@@ -38,6 +51,16 @@
         <tr class="{{ 'tone-danger' if r.problem }}"><td class="num">{{ r.line }}</td><td>{{ r.action }}</td><td>{{ r.code }}</td><td>{{ r.name }}</td>
           <td>{{ PARTNER_KINDS.get(r.kind, '?') }}</td><td>{{ r.biz_no }}</td><td>{{ r.contact }} {{ r.phone }} {{ r.email }}</td>
           <td>{{ r.aliases|join(', ') }}</td><td>{{ r.problem }}</td></tr>{% endfor %}</tbody>
+    {% elif kind == "units" %}
+      <thead><tr><th class="num">줄</th><th>처리</th><th>자재코드</th><th>단위</th><th class="num">배수</th><th>단위바코드</th><th>문제</th></tr></thead>
+      <tbody>{% for r in preview.rows[:500] %}
+        <tr class="{{ 'tone-danger' if r.problem }}"><td class="num">{{ r.line }}</td><td>{{ r.action }}</td><td>{{ r.code }}</td><td>{{ r.unit }}</td>
+          <td class="num">{{ r.factor }}</td><td>{{ r.barcode }}</td><td>{{ r.problem }}</td></tr>{% endfor %}</tbody>
+    {% elif kind == "mrp_demand" %}
+      <thead><tr><th class="num">줄</th><th>제품</th><th class="num">수량</th><th>납기</th><th>메모</th><th>문제</th></tr></thead>
+      <tbody>{% for r in preview.rows[:500] %}
+        <tr class="{{ 'tone-danger' if r.problem else ('tone-warn' if r.late) }}"><td class="num">{{ r.line }}</td><td>[{{ r.code }}] {{ r.name }}</td>
+          <td class="num">{{ r.qty }}</td><td>{{ r.due }}{{ ' (지남)' if r.late }}</td><td>{{ r.note }}</td><td>{{ r.problem }}</td></tr>{% endfor %}</tbody>
     {% else %}
       <thead><tr><th class="num">줄</th><th>제품</th><th>부품</th><th class="num">수량</th><th class="num">손실률</th><th>출고창고</th><th>메모</th><th>문제</th></tr></thead>
       <tbody>{% for r in preview.rows[:500] %}

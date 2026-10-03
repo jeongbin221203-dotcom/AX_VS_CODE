@@ -23,11 +23,11 @@ def template(form_key: str, sample: list[list], filename: str):
     return form_response(form_key, pd.DataFrame(sample, columns=cols), filename)
 
 
-def page(kind: str, active: str, title: str, preview: bulk.Preview | None = None, token: str = ""):
-    return render_page("bulk.html", active, kind=kind, heading=title, preview=preview, token=token)
+def page(kind: str, active: str, title: str, preview: bulk.Preview | None = None, token: str = "", extra: dict | None = None):
+    return render_page("bulk.html", active, kind=kind, heading=title, preview=preview, token=token, **(extra or {}))
 
 
-def upload(kind: str, import_key: str, preview_fn, back: str, active: str, title: str):
+def upload(kind: str, import_key: str, preview_fn, back: str, active: str, title: str, extra: dict | None = None):
     file = request.files.get("file")
     if not file or not file.filename:
         flash("엑셀(.xlsx) 또는 CSV 파일을 고르세요.", "error")
@@ -55,7 +55,7 @@ def upload(kind: str, import_key: str, preview_fn, back: str, active: str, title
                                                                  default=str).encode("utf-8"))
     elif not pv.rows:
         pv.errors.append("올린 파일에 줄이 없습니다 (머리글 줄 위치는 엑셀 양식 설정에서 바꿀 수 있습니다).")
-    return page(kind, active, title, pv, token)
+    return page(kind, active, title, pv, token, extra)
 
 
 def apply(kind: str, apply_fn, back: str):

@@ -364,6 +364,21 @@ def po_detail(po_id: int) -> tuple[dict | None, pd.DataFrame, dict]:
     return header, items, match
 
 
+def open_po_lines_in(warehouse_id: int) -> list[dict]:
+    """여러 줄 입고의 '발주 불러오기': 그 창고의 입고할 수 있는 발주 품목 (잔량 있는 것, 발주별)."""
+    df = db.query_df("""
+        SELECT o.po_no, o.supplier, i.line_no, i.material_id, m.code, m.name, m.spec, m.unit, m.lot_managed, i.qty, i.price,
+               COALESCE((SELECT SUM(t.qty) FROM transactions t WHERE t.tx_type = 'IN' AND t.po_no = o.po_no
+                         AND t.po_item = CAST(i.line_no AS TEXT) AND t.transfer_no = ''), 0) AS received
+        FROM purchase_orders o JOIN po_items i ON i.po_id = o.id JOIN materials m ON m.id = i.material_id
+        WHERE o.status IN ('OPEN', 'PARTIAL') AND o.warehouse_id = ?
+        ORDER BY o.po_no, i.line_no""", (warehouse_id,))
+    if df.empty:
+        return []
+    df["remaining"] = df["qty"] - df["received"]
+    return df[df["remaining"] > 1e-9].to_dict("records")
+
+
 def open_po_lines(warehouse_id: int, material_id: int) -> list[dict]:
     """입고 화면에서 고를 수 있는 발주 품목 (그 창고·자재, 잔량 있는 것)."""
     df = db.query_df("""

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import csrf, table, partner_fields %}
+{% from "_macros.html" import csrf, table, partner_fields, change_history %}
 
 {% block content %}
 <p><a href="{{ url_for('partners.index') }}">← 거래처 목록</a></p>
@@ -45,4 +45,6 @@
 
 <h3>최근 거래 (50건)</h3>
 {{ table(grid, '이 거래처의 거래가 없습니다.') }}
+
+{{ change_history(history) }}
 {% endblock %}

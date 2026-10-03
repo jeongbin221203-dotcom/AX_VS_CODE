@@ -5,7 +5,9 @@
 {% macro line_row(l) %}
   <tr class="{{ 'lot-line' if l.lot_managed }}">
     <td class="num" data-no></td>
-    <td><input type="hidden" name="line_mid" value="{{ l.mid or '' }}"><span data-label>{{ l.label }}</span></td>
+    <td><input type="hidden" name="line_mid" value="{{ l.mid or '' }}"><input type="hidden" name="line_po" value="{{ l.po or '' }}">
+      <span data-label>{{ l.label }}</span><span class="po-tag small" data-po-tag>{{ ('발주 ' ~ l.po.replace('|', ' / ')) if l.po }}</span></td>
+    <td class="num stock-cell" data-stock></td>
     <td class="qty-cell"><input name="line_qty" type="number" min="0" step="any" value="{{ l.qty }}" required aria-label="수량">
       <select name="line_unit" data-unit-select aria-label="단위">
         <option value="">{{ l.unit }}</option>
@@ -28,7 +30,8 @@
 <p class="muted">바코드 스캐너로 상자를 찍거나 자재를 찾아 Enter — 찍을 때마다 줄이 생기고 같은 자재는 수량이 1씩 늘어납니다.
   휴대폰·태블릿은 📷로 카메라 스캔. 모든 줄을 한 번에 등록하며, 한 줄이라도 안 되면(재고 부족 등) 아무것도 등록하지 않습니다.</p>
 
-<form class="card form batch-form" method="post" action="{{ url_for('transactions.batch_post') }}" data-batch data-nodraft data-offline="BATCH" data-label="여러 줄 입출고" data-kind="{{ f.kind or 'IN' }}">
+<form class="card form batch-form" method="post" action="{{ url_for('transactions.batch_post') }}" data-batch data-nodraft data-offline="BATCH" data-label="여러 줄 입출고" data-kind="{{ f.kind or 'IN' }}"
+      data-stock-url="{{ url_for('transactions.stock_json') }}" data-po-url="{{ url_for('transactions.po_lines_json') }}">
   {{ csrf() }}
   <div class="form-grid g4">
     <label>구분
@@ -51,6 +54,11 @@
     <label>비고 (모든 줄)<input name="note" value="{{ f.note or '' }}"></label>
   </div>
 
+  <div class="po-load in-only">
+    <label>📦 발주 불러오기 (입고)
+      <select data-po-load data-no-search><option value="">— 이 창고의 입고할 발주 —</option></select></label>
+    <span class="muted small">고르면 그 발주의 남은 수량이 줄로 들어옵니다 (수량은 고칠 수 있음, 발주보다 많이 받으면 거부).</span>
+  </div>
   <div class="scanbox">
     <label class="scan-qty">찍을 때마다 <input type="number" min="0" step="any" value="1" data-scan-qty aria-label="스캔 한 번에 더할 수량"></label>
     <span class="scanbox-label">스캔·찾기</span>
@@ -61,13 +69,13 @@
 
   <div class="table-wrap">
     <table class="data batch-lines">
-      <thead><tr><th class="num">#</th><th>자재</th><th>수량</th><th class="lot-cell">로트 · 유효기한</th><th>단가(원)</th><th>비고</th><th></th></tr></thead>
+      <thead><tr><th class="num">#</th><th>자재</th><th class="num">창고 현재고</th><th>수량</th><th class="lot-cell">로트 · 유효기한</th><th>단가(원)</th><th>비고</th><th></th></tr></thead>
       <tbody data-lines>
         {% for l in lines if l.mid %}{{ line_row(l) }}{% endfor %}
       </tbody>
     </table>
   </div>
-  <template data-line-tpl>{{ line_row({'mid': '', 'label': '', 'unit': '', 'qty': '1', 'lot': '', 'exp': '', 'price': '', 'note': '', 'lot_managed': false, 'units': [], 'entry_unit': ''}) }}</template>
+  <template data-line-tpl>{{ line_row({'mid': '', 'label': '', 'unit': '', 'qty': '1', 'lot': '', 'exp': '', 'price': '', 'note': '', 'lot_managed': false, 'units': [], 'entry_unit': '', 'po': ''}) }}</template>
   <p class="muted small" data-empty>아직 줄이 없습니다. 위 칸에서 스캔하거나 자재를 찾으세요. (한 번에 {{ max_lines }}줄까지)</p>
   <div class="batch-foot">
     <strong data-summary></strong>

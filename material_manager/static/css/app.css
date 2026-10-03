@@ -238,6 +238,12 @@ table.batch-lines tr.flash td { animation: line-flash 1s ease-out; }
 @keyframes line-flash { from { background: var(--success-bg); } to { background: transparent; } }
 .batch-foot { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-top: .75rem; }
 form[data-kind="IN"] .out-only { opacity: .45; }
+form[data-kind="OUT"] .in-only { display: none; }
+.po-load { display: flex; flex-wrap: wrap; gap: .5rem 1rem; align-items: end; margin: .5rem 0; }
+.po-tag { display: block; color: var(--muted, #667); }
+.po-tag:empty { display: none; }
+.stock-cell { white-space: nowrap; color: var(--muted, #667); }
+.stock-cell.short { color: #c0392b; font-weight: 600; }
 .span2 { grid-column: span 2; }
 details.inline-cancel summary { cursor: pointer; color: var(--down); }
 details.inline-cancel form { display: flex; gap: .4rem; margin-top: .3rem; }
@@ -323,3 +329,6 @@ pre.secret { font-family: ui-monospace, Consolas, monospace; font-size: 1rem; pa
 .board-card:hover { border-color: var(--accent); }
 .board-card.late { border-left: 4px solid var(--down); }
 @media (max-width: 760px) { .board { grid-template-columns: minmax(0, 1fr); } }
+
+.history-card summary { cursor: pointer; }
+.history-card table td { vertical-align: top; }

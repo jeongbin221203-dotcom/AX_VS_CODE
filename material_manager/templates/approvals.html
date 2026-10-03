@@ -1,18 +1,27 @@
 {% extends "base.html" %}
-{% from "_macros.html" import csrf, table, tabs as tab_bar %}
+{% from "_macros.html" import csrf, table, tabs as tab_bar, download %}
 {% block content %}
 {{ tab_bar(tabs, tab) }}
 
 {% if tab == "mine" %}
   <p class="muted small">지금 내 차례인 결재만 보입니다 — 실사 조정(금액이 결재 기준 이상), 구매요청(금액별 1~3단계), 발주(요청 승인액을 넘은 발주).
     본인이 올린 결재는 처리할 수 없고(직무 분리), 대결을 맡았으면 맡긴 사람 몫도 함께 보입니다. 기한({{ sla or '-' }}시간)을 넘기면 빨간 줄.</p>
+  {% if items %}<div class="toolbar">{{ download(url_with(export='xlsx')) }}</div>{% endif %}
   {% if not items %}
     <div class="alert alert-success">지금 처리할 결재가 없습니다.</div>
   {% else %}
+  <form id="bulk-approve" class="toolbar" method="post" action="{{ url_for('approvals.decide_many') }}"
+        data-confirm="고른 결재를 모두 승인합니다. 계속할까요?">
+    {{ csrf() }}
+    <label class="check"><input type="checkbox" data-check-all="item" form="bulk-approve"> 모두 선택</label>
+    <button class="btn btn-primary">✅ 고른 결재 한꺼번에 승인</button>
+    <span class="muted small">반려는 사유가 필요해 한 건씩 합니다.</span>
+  </form>
   <div class="approval-list">
     {% for it in items %}
       <section class="card approval-item {{ 'late' if it.late }}">
         <div class="approval-head">
+          <input type="checkbox" name="item" value="{{ it.kind }}:{{ it.id }}" form="bulk-approve" aria-label="고르기">
           <span class="badge">{{ kinds[it.kind] }}</span> <a href="{{ it.link }}"><strong>{{ it.no }}</strong></a>
           {% if it.step %}<span class="badge">{{ it.step }}</span>{% endif %}
           {% if it.via %}<span class="badge warn">대결: {{ it.via }} 대신</span>{% endif %}
@@ -33,6 +42,7 @@
 
 {% elif tab in ("requests", "history") %}
   <p class="muted small">{{ '내가 올린 실사 조정·구매요청 (최근 200건)' if tab == 'requests' else '내가 처리한 결재 (대결로 처리한 것 포함, 최근 200건)' }}</p>
+  <div class="toolbar">{{ download(url_with(export='xlsx')) }}</div>
   {{ table(grid, "해당하는 결재가 없습니다.") }}
 
 {% elif tab == "delegate" %}

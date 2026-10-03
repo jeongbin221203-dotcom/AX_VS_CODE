@@ -151,3 +151,60 @@ def audit_df(start: str, end: str, user: str = "", action: str = "", keyword: st
 
 def user_names() -> list[str]:
     return db.query_df("SELECT DISTINCT user_name FROM audit_log ORDER BY user_name")["user_name"].tolist()
+
+
+# 변경 이력 탭 (자재 수정 화면 · 거래처 상세) — 항목 이름
+FIELD_LABELS = {
+    "material": {**config.MATERIAL_COLS, "lot_managed": "로트 관리", "expiry_managed": "유효기한 관리", "active": "사용"},
+    "partner": {"name": "거래처명", "biz_no": "사업자등록번호", "kind": "구분", "contact": "담당자", "phone": "전화",
+                "email": "메일", "note": "메모", "active": "사용"},
+}
+_HISTORY_ACTIONS = {
+    "material": ("MATERIAL_CREATE", "MATERIAL_UPDATE", "MATERIAL_ACTIVE", "UNIT_ADD", "UNIT_REMOVE", "ROUTING_SAVE"),
+    "partner": ("PARTNER_CREATE", "PARTNER_UPDATE", "PARTNER_ACTIVE", "PARTNER_ALIAS", "PARTNER_UNALIAS", "PARTNER_MERGE"),
+}
+
+
+def _show(v) -> str:
+    if v is True:
+        return "예"
+    if v is False:
+        return "아니오"
+    if v is None or v == "":
+        return "(빈 값)"
+    if isinstance(v, (int, float)):
+        return f"{v:,.0f}" if float(v).is_integer() else f"{v:,.4g}"
+    return str(v)
+
+
+def entity_history(entity: str, entity_id, limit: int = 100) -> list[dict]:
+    """한 자재·거래처의 변경 이력. 수정은 바뀐 항목마다 [항목, 이전, 이후], 그 밖의 기록은 요약 한 줄."""
+    labels = FIELD_LABELS.get(entity, {})
+    frag, params = db.in_clause(list(_HISTORY_ACTIONS[entity]))
+    df = db.query_df(f"SELECT at, user_name, action, detail, ip FROM audit_log WHERE entity = ? AND entity_id = ? "
+                     f"AND action{frag} ORDER BY id DESC LIMIT ?", (entity, str(entity_id), *params, int(limit)))
+    out = []
+    for r in df.itertuples(index=False):
+        try:
+            d = json.loads(r.detail) if r.detail else {}
+        except ValueError:
+            d = {}
+        via = d.pop("via", "")
+        changes, summary = [], ""
+        if r.action in ("MATERIAL_UPDATE", "PARTNER_UPDATE", "MATERIAL_ACTIVE", "PARTNER_ACTIVE"):
+            for k, v in d.items():
+                if isinstance(v, list) and len(v) == 2:
+                    changes.append({"field": labels.get(k, k), "before": _show(v[0]), "after": _show(v[1])})
+        elif r.action in ("MATERIAL_CREATE", "PARTNER_CREATE"):
+            summary = " · ".join(f"{labels.get(k, k)} {_show(v)}" for k, v in d.items()
+                                 if k in labels and v not in ("", None, 0, 0.0))[:300]
+        elif r.action in ("UNIT_ADD", "UNIT_REMOVE"):
+            summary = f"{d.get('unit', '')}" + (f" = ×{_show(d.get('factor'))}" if d.get("factor") is not None else "") + \
+                      (f" · 바코드 {d['barcode']}" if d.get("barcode") else "")
+        elif r.action in ("PARTNER_ALIAS", "PARTNER_UNALIAS"):
+            summary = d.get("alias", "")
+        else:
+            summary = ", ".join(f"{k} {_show(v)}" for k, v in d.items() if not isinstance(v, (list, dict)))[:300]
+        out.append({"at": r.at, "user": r.user_name, "action": ACTIONS.get(r.action, r.action), "via": via,
+                    "changes": changes, "summary": summary, "ip": r.ip})
+    return out

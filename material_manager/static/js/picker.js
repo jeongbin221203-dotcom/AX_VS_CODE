@@ -347,6 +347,7 @@
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") stopScan(); });
 
   // ── 여러 줄 입출고 ──
+  // 줄마다 그 창고 현재고(출고면 모자란 줄 빨강) · '발주 불러오기'(입고, 잔량을 줄로, 발주 번호는 line_po = "PO|품목")
   // 찍던 줄은 이 브라우저에 사용자별로 보관한다(연결 끊김·실수로 닫음) → 다시 열면 '되살리기'. 등록에 성공하면 지운다.
   const BKEY = "mm-batch:" + USER;
   function money(v) { return "₩" + Math.round(v).toLocaleString("ko-KR"); }
@@ -354,6 +355,10 @@
   function rowsOf(form) { return Array.prototype.slice.call(form.querySelectorAll("tbody[data-lines] tr")); }
   function val(tr, n) { return tr.querySelector("[name=" + n + "]").value; }
   function saveBatch(form) {
+    // 줄을 새로 찍기 시작하면 보관본이 지금 줄로 바뀐다 → 예전 '되살리기'는 치운다 (누르면 지금 줄이 두 번 들어감)
+    const old = form.querySelector(".batch-restore");
+    if (old && !rowsOf(form).length) return;            // 빈 화면에서 구분·창고만 바꿨으면 보관본(되살리기)을 지우지 않는다
+    if (old) old.remove();
     const lines = rowsOf(form).map(function (tr) {
       const sel = tr.querySelector("[name=line_unit]");
       return { id: val(tr, "line_mid"), label: tr.querySelector("[data-label]").textContent,
@@ -362,13 +367,75 @@
                  return { unit: o.value, factor: parseFloat(o.dataset.factor) || 1 }; }),
                lot_managed: tr.classList.contains("lot-line"),
                qty: val(tr, "line_qty"), lot: val(tr, "line_lot"), exp: val(tr, "line_exp"),
-               price: val(tr, "line_price"), note: val(tr, "line_note") };
+               price: val(tr, "line_price"), note: val(tr, "line_note"), po: val(tr, "line_po") };
     });
     try {
       if (lines.length) localStorage.setItem(BKEY, JSON.stringify({ at: Date.now(), kind: form.querySelector("[name=kind]").value,
                                                                      lines: lines }));
       else localStorage.removeItem(BKEY);
     } catch (e) { /* 저장소가 막혀도 동작 */ }
+  }
+  function factorOf(tr) {
+    const sel = tr.querySelector("[name=line_unit]");
+    return sel.selectedIndex > 0 ? parseFloat(sel.options[sel.selectedIndex].dataset.factor) || 1 : 1;
+  }
+  function paintStock(form) {
+    const stock = form._stock || {};
+    const out = form.querySelector("[name=kind]").value === "OUT";
+    const need = {};                                   // 같은 자재 여러 줄이면 합쳐서 비교
+    rowsOf(form).forEach(function (tr) {
+      const id = val(tr, "line_mid");
+      need[id] = (need[id] || 0) + (parseFloat(val(tr, "line_qty")) || 0) * factorOf(tr);
+    });
+    rowsOf(form).forEach(function (tr) {
+      const cell = tr.querySelector("[data-stock]");
+      if (!cell) return;
+      const id = val(tr, "line_mid");
+      if (!(id in stock)) { cell.textContent = "…"; cell.classList.remove("short"); return; }
+      const st = stock[id];
+      const unit = tr.querySelector("[name=line_unit]").options[0].textContent;
+      const short = out && need[id] > st + 1e-9;
+      cell.textContent = (Math.round(st * 10000) / 10000).toLocaleString("ko-KR") + " " + unit + (short ? " ⚠ 부족" : "");
+      cell.title = short ? "출고 합계 " + need[id] + " " + unit + " > 현재고" : "이 창고 현재고 (기본 단위)";
+      cell.classList.toggle("short", short);
+    });
+  }
+  function loadStock(form, all) {
+    const url = form.dataset.stockUrl;
+    const wh = form.querySelector("[name=warehouse_id]");
+    if (!url || !wh) return;
+    if (all || form._stockWh !== wh.value) { form._stock = {}; form._stockWh = wh.value; }
+    const ids = rowsOf(form).map(function (tr) { return val(tr, "line_mid"); })
+      .filter(function (id, i, a) { return id && a.indexOf(id) === i && !(id in form._stock); });
+    if (!ids.length) { paintStock(form); return; }
+    fetch(url + "?wh=" + encodeURIComponent(wh.value) + "&ids=" + ids.join(","), { credentials: "same-origin" })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) {
+        if (j && j.ok && form._stockWh === wh.value) Object.assign(form._stock, j.stock);
+        paintStock(form);
+      })
+      .catch(function () { paintStock(form); });        // 끊김: '…' 그대로, 등록 때 서버가 판정
+  }
+  // 발주 불러오기 — 창고를 바꾸면 그 창고의 열린 발주 목록을 다시 받는다
+  function loadOrders(form) {
+    const sel = form.querySelector("[data-po-load]");
+    const wh = form.querySelector("[name=warehouse_id]");
+    if (!sel || !wh || !form.dataset.poUrl) return;
+    fetch(form.dataset.poUrl + "?wh=" + encodeURIComponent(wh.value), { credentials: "same-origin" })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) {
+        form._orders = {};
+        sel.length = 1;
+        ((j && j.orders) || []).forEach(function (o) {
+          form._orders[o.po_no] = o;
+          const op = document.createElement("option");
+          op.value = o.po_no;
+          op.textContent = o.po_no + " · " + (o.supplier || "") + " · " + o.lines.length + "품목";
+          sel.appendChild(op);
+        });
+        sel.options[0].textContent = sel.length > 1 ? "— 이 창고의 입고할 발주 (" + (sel.length - 1) + ") —" : "— 입고할 발주 없음 —";
+      })
+      .catch(function () { /* 끊김: 목록 없이 */ });
   }
   function refresh(form) {
     const rows = rowsOf(form);
@@ -383,6 +450,7 @@
     if (empty) empty.hidden = rows.length > 0;
     const sum = form.querySelector("[data-summary]");
     if (sum) sum.textContent = rows.length + "줄 · 합계 " + money(total);
+    loadStock(form, false);
   }
   function lotHint(form, tr) {
     const lot = tr.querySelector("[name=line_lot]");
@@ -409,9 +477,11 @@
       sel.appendChild(o);
     });
     sel.value = d.entry_unit || "";
-    ["qty", "lot", "exp", "price", "note"].forEach(function (k) {
+    ["qty", "lot", "exp", "price", "note", "po"].forEach(function (k) {
       if (d[k] !== undefined && d[k] !== null) tr.querySelector("[name=line_" + k + "]").value = d[k];
     });
+    const tag = tr.querySelector("[data-po-tag]");
+    if (tag) tag.textContent = d.po ? "발주 " + d.po.replace("|", " / ") : "";
     tr.classList.toggle("lot-line", !!d.lot_managed);
     lotHint(form, tr);
     form.querySelector("tbody[data-lines]").appendChild(tr);
@@ -476,10 +546,35 @@
     }
   });
   document.addEventListener("change", function (e) {
-    if (e.target.name !== "kind" || !batchOf(e.target)) return;
     const form = batchOf(e.target);
+    if (!form) return;
+    if (e.target.matches("[data-po-load]")) {
+      const o = (form._orders || {})[e.target.value];
+      e.target.value = "";
+      if (!o) return;
+      const have = rowsOf(form).map(function (tr) { return val(tr, "line_po"); });
+      let added = 0;
+      o.lines.forEach(function (l) {
+        if (have.indexOf(l.po) >= 0) return;            // 이미 불러온 발주 품목은 다시 넣지 않음
+        flash(addLine(form, { id: l.id, label: l.label, unit: l.unit, units: l.units, lot_managed: l.lot_managed,
+                              qty: l.qty, price: l.price, po: l.po }));
+        added++;
+      });
+      const partner = form.querySelector("[name=partner]");
+      if (partner && !partner.value && o.supplier) partner.value = o.supplier;
+      const ref = form.querySelector("[name=ref_no]");
+      if (ref && !ref.value) ref.value = o.po_no;
+      if (!added) window.alert("이 발주의 품목은 이미 줄에 있습니다.");
+      refresh(form);
+      saveBatch(form);
+      return;
+    }
+    if (e.target.name === "warehouse_id") { loadStock(form, true); loadOrders(form); return; }
+    if (e.target.name === "line_unit") { paintStock(form); return; }
+    if (e.target.name !== "kind") return;
     form.dataset.kind = e.target.value;
     rowsOf(form).forEach(function (tr) { lotHint(form, tr); });
+    paintStock(form);
     saveBatch(form);
   });
   // 끊긴 동안 등록 → 오프라인 대기열에 담았으면(app.js) 줄을 비운다 (같은 줄을 두 번 보내지 않게)
@@ -518,6 +613,7 @@
       if (k) f.dataset.kind = k.value;
       rowsOf(f).forEach(function (tr) { lotHint(f, tr); });
       refresh(f);
+      loadOrders(f);
       offerRestore(f);
     });
     root.querySelectorAll("[data-picker]").forEach(function (p) { load(p); });

@@ -32,6 +32,7 @@
     {{ metric("세액 합계", "₩ {:,.0f}".format(tax_sum)) }}
     {{ metric("거래 미연결", "{:,} 건".format(unlinked_cnt), "입고 거래와 연결해 주세요" if unlinked_cnt else none, "down") }}
   </div>
+  <div class="toolbar"><a class="btn btn-sm" href="{{ url_with(export='xlsx', page=None) }}">⬇️ 엑셀 다운로드 (조건 전체)</a></div>
   {{ table(grid, "조건에 맞는 증빙이 없습니다.") }}
   {{ pager_nav(pager) }}
   <p class="muted small">증빙 이미지를 열거나 내려받으면 감사로그에 기록됩니다.{% if g.wh_ids is not none %} 권한이 있는 창고의 거래에 연결된 증빙과 본인이 올린 미연결 증빙만 보입니다.{% endif %}</p>

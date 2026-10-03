@@ -84,6 +84,11 @@ def _remind() -> str:
     return workflow.remind_overdue()
 
 
+def _mrp_nightly() -> str:
+    from core import mrp
+    return mrp.nightly()
+
+
 def _master_enabled() -> bool:
     from core import master_sync
     return master_sync.enabled()
@@ -95,6 +100,8 @@ JOBS = {
     "cleanup_uploads": Job("cleanup_uploads", "업로드 임시파일 정리", 3600, _cleanup_uploads),
     "db_backup": Job("db_backup", "DB 자동 백업", max(config.BACKUP_HOURS, 1) * 3600, _backup, enabled=backup.enabled),
     "approval_remind": Job("approval_remind", "결재 독촉 (기한 넘긴 결재 다시 알림)", 3600, _remind),
+    "mrp_nightly": Job("mrp_nightly", "MRP 밤 자동 실행 (하루 한 번, 플랜트마다)", 3600, _mrp_nightly,
+                       enabled=lambda: config.MRP_NIGHTLY_HOUR >= 0),
     "notify_send": Job("notify_send", "결재 알림 보내기 (메일·잔디·네이버웍스)", 60, _notify, enabled=_notify_enabled),
     "storage_flush": Job("storage_flush", "S3 임시 보관 파일 올리기", 300, _storage_flush,
                          enabled=lambda: config.STORAGE == "s3"),

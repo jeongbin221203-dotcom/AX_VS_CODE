@@ -132,3 +132,30 @@
   </div>
   <label>메모<input name="note" value="{{ f.note or '' }}"></label>
 {% endmacro %}
+
+
+{# 변경 이력 — audit.entity_history 의 결과. 누가 언제 무엇을 이전→이후로 바꿨는지 #}
+{% macro change_history(rows) %}
+<details class="card history-card" {{ 'open' if rows and rows|length <= 5 }}>
+  <summary><strong>변경 이력</strong> <span class="muted small">{{ rows|length }}건{{ ' (최근 100건)' if rows|length >= 100 }} · 수정·엑셀 반영·사용중지 · 감사로그 기준</span></summary>
+  {% if rows %}
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th>일시</th><th>처리자</th><th>내용</th><th>항목</th><th>이전</th><th>이후</th></tr></thead>
+    <tbody>
+    {% for r in rows %}
+      {% if r.changes %}
+        {% for c in r.changes %}
+        <tr>{% if loop.first %}<td rowspan="{{ r.changes|length }}">{{ r.at[:16] }}</td><td rowspan="{{ r.changes|length }}">{{ r.user }}</td>
+            <td rowspan="{{ r.changes|length }}">{{ r.action }}{% if r.via %} <span class="badge">{{ r.via }}</span>{% endif %}</td>{% endif %}
+          <td>{{ c.field }}</td><td class="muted">{{ c.before }}</td><td><strong>{{ c.after }}</strong></td></tr>
+        {% endfor %}
+      {% else %}
+        <tr><td>{{ r.at[:16] }}</td><td>{{ r.user }}</td><td>{{ r.action }}{% if r.via %} <span class="badge">{{ r.via }}</span>{% endif %}</td>
+          <td colspan="3" class="muted">{{ r.summary }}</td></tr>
+      {% endif %}
+    {% endfor %}
+    </tbody>
+  </table></div>
+  {% else %}<p class="muted small">기록이 없습니다.</p>{% endif %}
+</details>
+{% endmacro %}

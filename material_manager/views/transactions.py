@@ -187,10 +187,11 @@ def queue():
 def _batch_lines_from_form() -> tuple[list[services.LineIn], list[dict], str]:
     """줄 칸들(line_mid·line_qty·…) → (등록할 줄, 다시 그릴 줄, 문제)."""
     f = request.form
-    cols = {c: f.getlist(f"line_{c}") for c in ("mid", "qty", "lot", "exp", "price", "note", "unit")}
+    cols = {c: f.getlist(f"line_{c}") for c in ("mid", "qty", "lot", "exp", "price", "note", "unit", "po")}
     n = len(cols["mid"])
-    if not cols["unit"]:
-        cols["unit"] = [""] * n
+    for c in ("unit", "po"):
+        if not cols[c]:
+            cols[c] = [""] * n
     if any(len(v) != n for v in cols.values()):
         return [], [], "줄 입력이 맞지 않습니다. 화면을 새로고침해 다시 입력하세요."
     lines, shown, problem = [], [], ""
@@ -203,7 +204,7 @@ def _batch_lines_from_form() -> tuple[list[services.LineIn], list[dict], str]:
             shown.append({"mid": mid, "label": labels.get(mid, ""), "unit": mat["unit"] if mat else "",
                           "lot_managed": bool(mat and mat["lot_managed"]), "qty": qty_s, "lot": cols["lot"][i],
                           "exp": cols["exp"][i], "price": price_s, "note": cols["note"][i],
-                          "units": uom.units(mid, conn) if mid else [], "entry_unit": cols["unit"][i]})
+                          "units": uom.units(mid, conn) if mid else [], "entry_unit": cols["unit"][i], "po": cols["po"][i]})
             if not mid:
                 continue
             try:
@@ -212,8 +213,9 @@ def _batch_lines_from_form() -> tuple[list[services.LineIn], list[dict], str]:
             except ValueError:
                 problem = problem or f"{i + 1}번 줄: 수량·단가는 숫자로 입력하세요."
                 continue
+            po_no, _, po_item = cols["po"][i].partition("|")
             lines.append(services.LineIn(mid, qty, cols["lot"][i].strip(), cols["exp"][i].strip(), price,
-                                         cols["note"][i].strip(), cols["unit"][i].strip()))
+                                         cols["note"][i].strip(), cols["unit"][i].strip(), po_no, po_item))
     return lines, shown, problem
 
 
@@ -300,3 +302,40 @@ def _queue_batch(captured_at: str):
         audit.log(actor(), "OFFLINE_SYNC", "transaction", result.tx_id or "",
                   {"captured_at": captured_at, "kind": "BATCH", "lines": len(lines)})
     return jsonify(ok=result.ok, message=result.message, tx_id=result.tx_id, warning=result.warning)
+
+
+@bp.get("/stock.json")
+@role_required("CLERK")
+def stock_json():
+    """여러 줄 화면: 줄마다 그 창고 현재고 (기본 단위). ids=1,2,3"""
+    wh = a_int("wh")
+    if wh is None or wh not in org.warehouse_options(g.wh_ids):
+        return jsonify(ok=False, stock={})
+    ids = [int(x) for x in request.args.get("ids", "").split(",") if x.isdigit()][:300]
+    if not ids:
+        return jsonify(ok=True, stock={})
+    frag, params = db.in_clause(ids)
+    df = db.query_df(f"SELECT t.material_id, {db.STOCK_EXPR} AS stock FROM transactions t "
+                     f"WHERE t.warehouse_id = ? AND t.material_id{frag} GROUP BY t.material_id", (wh, *params))
+    stock = {str(i): 0.0 for i in ids}
+    stock.update({str(int(r.material_id)): round(float(r.stock), 6) for r in df.itertuples()})
+    return jsonify(ok=True, stock=stock)
+
+
+@bp.get("/po-lines.json")
+@role_required("CLERK")
+def po_lines_json():
+    """여러 줄 화면 '발주 불러오기': 그 창고의 잔량 있는 발주 품목."""
+    wh = a_int("wh")
+    if wh is None or wh not in org.warehouse_options(g.wh_ids):
+        return jsonify(ok=False, orders=[])
+    lines = purchasing.open_po_lines_in(wh)
+    units = uom.all_units()
+    orders: dict = {}
+    for r in lines:
+        o = orders.setdefault(r["po_no"], {"po_no": r["po_no"], "supplier": r["supplier"], "lines": []})
+        o["lines"].append({"id": int(r["material_id"]), "label": f"[{r['code']}] {r['name']}" + (f" ({r['spec']})" if r["spec"] else ""),
+                           "unit": r["unit"], "units": [{"unit": u, "factor": f} for u, f, _ in units.get(int(r["material_id"]), [])],
+                           "lot_managed": bool(r["lot_managed"]), "qty": round(float(r["remaining"]), 6),
+                           "price": float(r["price"]), "po": f"{r['po_no']}|{int(r['line_no'])}"})
+    return jsonify(ok=True, orders=list(orders.values()))

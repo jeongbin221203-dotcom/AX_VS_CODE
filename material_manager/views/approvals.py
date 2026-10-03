@@ -11,7 +11,7 @@ from flask import Blueprint, flash, g, redirect, request, url_for
 
 import config
 from core import approvals, auth, db, delegation, workflow
-from views.helpers import Table, actor, can, f_str, render_page, role_required
+from views.helpers import Table, actor, can, f_str, form_response, log_export, render_page, role_required
 
 bp = Blueprint("approvals", __name__, url_prefix="/approvals")
 
@@ -36,6 +36,9 @@ def index():
         view = df.rename(columns={"kind": "종류", "no": "번호", "requested_at": "요청일시", "status": "상태", "step": "결재 단계",
                                   "amount": "금액", "title": "내용", "decided_by": "마지막 처리", "comment": "반려 사유"})
         cols = ["종류", "번호", "요청일시", "상태", "결재 단계", "금액", "내용", "마지막 처리", "반려 사유"]
+        if request.args.get("export") == "xlsx":
+            log_export("my_requests", len(view))
+            return form_response("my_requests", view.reindex(columns=cols), "내_요청_현황.xlsx")
         return render_page("approvals.html", "approvals", **ctx,
                            grid=Table(view[cols] if len(view) else view.reindex(columns=cols), {"금액": "₩{:,.0f}"}))
     if tab == "history":
@@ -43,6 +46,9 @@ def index():
         view = df.rename(columns={"kind": "종류", "no": "번호", "at": "처리일시", "decision": "결정", "amount": "금액",
                                   "title": "내용", "requested_by": "요청자", "approver": "처리자(대결 표시)", "comment": "의견"})
         cols = ["처리일시", "종류", "번호", "결정", "금액", "내용", "요청자", "처리자(대결 표시)", "의견"]
+        if request.args.get("export") == "xlsx":
+            log_export("approval_history", len(view))
+            return form_response("approval_history", view.reindex(columns=cols), "결재_이력.xlsx")
         return render_page("approvals.html", "approvals", **ctx,
                            grid=Table(view[cols] if len(view) else view.reindex(columns=cols), {"금액": "₩{:,.0f}"}))
     if tab == "delegate":
@@ -59,6 +65,14 @@ def index():
         return render_page("approvals.html", "approvals", **ctx, status=status, statuses=approvals.STATUS,
                            grid=Table(view[list(COLS)].rename(columns=COLS), FMT))
     items = workflow.queue(g.user)
+    if request.args.get("export") == "xlsx":
+        import pandas as pd
+        view = pd.DataFrame([{"종류": workflow.KIND[x["kind"]], "번호": x["no"], "단계": x["step"], "내용": x["title"],
+                              "금액": x["amount"], "요청자": x["requested_by"], "요청일시": x["requested_at"],
+                              "대결": x["via"] or "", "기한 넘김": "예" if x["late"] else ""} for x in items],
+                            columns=["종류", "번호", "단계", "내용", "금액", "요청자", "요청일시", "대결", "기한 넘김"])
+        log_export("approvals", len(view))
+        return form_response("approvals", view, "내_결재_대기.xlsx")
     return render_page("approvals.html", "approvals", **{**ctx, "tab": "mine"}, items=items)
 
 
@@ -73,6 +87,19 @@ def decide_any():
     r = workflow.decide(g.user, kind, int(item_id), request.form.get("decision") == "approve", f_str("comment"),
                         ip=actor().get("ip", ""))
     flash(r.message, "success" if r.ok else "error")
+    return redirect(url_for("approvals.index"))
+
+
+@bp.post("/decide-many")
+@role_required("CLERK")
+def decide_many():
+    keys = request.form.getlist("item")
+    if not keys:
+        flash("승인할 결재를 고르세요.", "error")
+        return redirect(url_for("approvals.index"))
+    done, problems = workflow.decide_many(g.user, keys, ip=actor().get("ip", ""))
+    flash(f"{done}건을 승인했습니다." + (f" 승인하지 못한 {len(problems)}건: " + " / ".join(problems[:5]) if problems else ""),
+          "success" if not problems else "warning")
     return redirect(url_for("approvals.index"))
 
 

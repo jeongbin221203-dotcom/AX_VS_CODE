@@ -7,9 +7,10 @@ from flask import Blueprint, abort, flash, g, jsonify, redirect, render_template
 import config
 from markupsafe import Markup
 
-from core import barcode, db, repository as repo, services, uom
-from views.helpers import (Table, a_int, actor, can, f_float, f_str, page_arg, pager, render_page,
-                           role_required)
+from core import audit, barcode, db, repository as repo, services, uom
+from views import bulk_ui
+from views.helpers import (Table, a_int, actor, can, f_float, f_str, form_response, log_export, page_arg, pager,
+                           render_page, role_required)
 
 bp = Blueprint("materials", __name__, url_prefix="/materials")
 
@@ -63,7 +64,17 @@ def index():
     return _list_page(request.args.get("inactive") == "1")
 
 
+def _master_export(show_inactive: bool):
+    """자재 마스터 — 올리기 양식과 같은 열 (내려받아 고친 뒤 데이터 관리 → 일괄 업로드로 다시 올린다)."""
+    df = repo.list_materials(active_only=not show_inactive)
+    view = df[list(config.MATERIAL_COLS)].rename(columns=config.MATERIAL_COLS)
+    log_export("materials_master", len(view), inactive=show_inactive)
+    return form_response("materials_master", view, "자재마스터.xlsx")
+
+
 def _list_page(show_inactive: bool):
+    if request.args.get("export") == "xlsx":
+        return _master_export(show_inactive)
     df = repo.stock_df(include_inactive=show_inactive, wh_ids=g.wh_ids)
     df["flags"] = [" · ".join(x for x, on in (("로트", lm), ("기한", em), ("SAP", bool(sy))) if on)
                    for lm, em, sy in zip(df["lot_managed"], df["expiry_managed"], df["sap_synced_at"].fillna(""))]
@@ -95,7 +106,8 @@ def _edit_page(mid: int | None, form: dict | None = None):
                        opts=opts, mid=mid, row=row, form=form or row or {},
                        units=uom.units(mid) if row else [],
                        sap_lock=bool(row and row.get("sap_synced_at") and config.SAP_MASTER_READONLY),
-                       stock_now=stock_now, is_active=bool(row and int(row["active"]) == 1))
+                       stock_now=stock_now, is_active=bool(row and int(row["active"]) == 1),
+                       history=audit.entity_history("material", mid) if row else [])
 
 
 @bp.get("/lookup.json")
@@ -273,3 +285,35 @@ def labels_print():
     labels_out = labels_out[:MAX_LABELS]
     return render_template("labels_print.html", labels=labels_out, layout=layout, skipped=skipped,
                            layout_label=LABEL_LAYOUTS[layout])
+
+
+# ── 단위 환산 엑셀 (내려받기 · 일괄 등록) ──────────────────────
+UNIT_TITLE = "단위 환산 엑셀 일괄 등록"
+
+
+@bp.get("/units/export.xlsx")
+def units_export():
+    from core import bulk
+    view = bulk.units_export()
+    log_export("units", len(view))
+    return form_response("units", view, "단위환산.xlsx")
+
+
+@bp.get("/units/import")
+@role_required("MANAGER")
+def units_import():
+    return bulk_ui.page("units", "materials", UNIT_TITLE)
+
+
+@bp.post("/units/import")
+@role_required("MANAGER")
+def units_import_upload():
+    from core import bulk
+    return bulk_ui.upload("units", "unit_upload", bulk.preview_units, url_for("materials.units_import"), "materials", UNIT_TITLE)
+
+
+@bp.post("/units/import/apply")
+@role_required("MANAGER")
+def units_import_apply():
+    from core import bulk
+    return bulk_ui.apply("units", bulk.apply_units, url_for("materials.units_import"))

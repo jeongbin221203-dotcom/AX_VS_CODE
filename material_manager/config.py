@@ -18,6 +18,7 @@
                      예전 이름 MM_SAP_MODE도 읽는다). 방식별 설정(MM_SAP_* · MM_ERP_*)은 .env.example
   MM_BACKUP_DIR      자동 백업 폴더 (기본: DB 옆 backups — 운영은 다른 디스크·NAS 권장)
   MM_BACKUP_HOURS / MM_BACKUP_KEEP   자동 백업 주기(시간, 0이면 끔) · 보관 개수
+  MM_MRP_HOUR        MRP 밤 자동 실행 시각(0~23시, 기본 2 — 하루 한 번, 플랜트마다). -1이면 끔
   MM_PG_DUMP / MM_PG_RESTORE   PostgreSQL 백업에 쓸 pg_dump · pg_restore 경로 (비우면 PATH)
   MM_STORAGE_SPOOL_DIR   s3 저장소에 연결할 수 없을 때 파일을 임시로 두는 이 서버의 폴더
 """
@@ -60,6 +61,9 @@ STORAGE_SPOOL_DIR = Path(os.getenv("MM_STORAGE_SPOOL_DIR", DB_PATH.parent / "spo
 BACKUP_DIR = Path(os.getenv("MM_BACKUP_DIR", DB_PATH.parent / "backups"))
 BACKUP_HOURS = _int_env("MM_BACKUP_HOURS", 24)
 BACKUP_KEEP = max(_int_env("MM_BACKUP_KEEP", 14), 1)
+# ── MRP 밤 자동 실행 ─────────────────────────────────────────
+# 배치(mrp_nightly)가 한 시간마다 보고, 이 시각이 지났고 오늘 자동 실행이 없으면 수요·BOM이 있는 플랜트마다 실행한다.
+MRP_NIGHTLY_HOUR = _int_env("MM_MRP_HOUR", 2)
 # PostgreSQL 백업: pg_dump · pg_restore 경로 (비우면 PATH에서 찾는다, 없으면 PostgreSQL 백업은 건너뜀)
 PG_DUMP = os.getenv("MM_PG_DUMP") or shutil.which("pg_dump") or ""
 PG_RESTORE = os.getenv("MM_PG_RESTORE") or shutil.which("pg_restore") or ""

@@ -129,6 +129,7 @@
     <a class="btn btn-sm {{ 'btn-primary' if not board and show == 'open' }}" href="{{ url_with(show='open', view=None) }}">☰ 진행 중</a>
     <a class="btn btn-sm {{ 'btn-primary' if not board and show != 'open' }}" href="{{ url_with(show='all', view=None) }}">☰ 전체</a>
     <a class="btn btn-sm {{ 'btn-primary' if board }}" href="{{ url_with(view='board') }}">▦ 보드</a>
+    {% if not board %}{{ download(url_with(export='xlsx')) }}{% endif %}
     <span class="muted small">빨간색: 완료 예정일이 지난 진행 중 작업지시</span>
   </div>
   {% if board %}
@@ -156,6 +157,7 @@
   <div class="metrics m3">
     <div class="metric"><div class="metric-label">재공품 금액 (투입했지만 완료 전)</div><div class="metric-value">₩{{ '{:,.0f}'.format(wip_total) }}</div></div>
   </div>
+  <div class="toolbar">{{ download(url_with(export='xlsx')) }}</div>
   {{ table(grid, '재공품이 없습니다 (진행 중인 작업지시 없음).') }}
   <p class="muted small">재공 금액은 작업지시에 투입한 부품 금액입니다. 완료하면 완제품 재고로 넘어갑니다.</p>
 
@@ -165,7 +167,8 @@
 
 {% elif tab == "bom" %}
   {% if can('MANAGER') %}<p><a class="btn" href="{{ url_for('production.bom_edit') }}">+ 새 BOM</a>
-    <a class="btn" href="{{ url_for('production.bom_import') }}">엑셀로 일괄 등록</a></p>{% endif %}
+    <a class="btn" href="{{ url_for('production.bom_import') }}">⬆️ 엑셀로 일괄 등록</a>
+    <a class="btn" href="{{ url_with(export='xlsx') }}">⬇️ BOM 전체 내려받기 (고쳐서 다시 올리기)</a></p>{% endif %}
   {{ table(grid, 'BOM이 없습니다.') }}
   <p class="muted small">1개 재료비는 부품 기준단가 × 수량 × (1 + 손실률)의 합 ÷ 기준 수량입니다. 반제품을 부품으로 쓰면 그 반제품을 먼저 생산해 입고해야 합니다
     (MRP가 반제품 생산 계획까지 함께 잡습니다). 제품을 눌러 BOM과 공정(라우팅)을 고칩니다.</p>

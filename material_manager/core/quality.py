@@ -14,11 +14,17 @@ from core import db, partners
 SEVERITY = {"high": "높음", "mid": "보통", "low": "낮음"}
 
 
+LIMIT = {"n": 30}
+
+
 def _check(key, title, severity, rows, fix_hint="") -> dict:
-    return {"key": key, "title": title, "severity": severity, "count": len(rows), "rows": rows[:30], "hint": fix_hint}
+    shown = rows if LIMIT["n"] is None else rows[:LIMIT["n"]]
+    return {"key": key, "title": title, "severity": severity, "count": len(rows), "rows": shown, "hint": fix_hint}
 
 
-def run(wh_ids=None) -> list[dict]:
+def run(wh_ids=None, limit: int | None = 30) -> list[dict]:
+    """limit: 항목마다 보여 줄 줄 수 (None = 전부, 엑셀 내려받기)."""
+    LIMIT["n"] = limit
     frag, wp = db.in_clause(wh_ids)
     wh_and = (lambda col: f" AND {col}{frag}") if frag else (lambda col: "")
     out = []

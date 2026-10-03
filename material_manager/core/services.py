@@ -234,6 +234,8 @@ class LineIn:
     unit_price: float | None = None     # 비우면 자재 기준단가 (기본 단위당)
     note: str = ""
     unit: str = ""                      # 입력 단위 (BOX 등, 비우면 기본 단위)
+    po_no: str = ""                     # 발주 입고 (발주 불러오기) — 입고일 때만
+    po_item: str = ""
 
 
 class _Rejected(Exception):
@@ -265,8 +267,9 @@ def register_lines(kind: str, warehouse_id: int, tx_date: str, lines: list[LineI
             for i, ln in enumerate(lines, 1):
                 mat = repo.get_material(ln.material_id, conn)
                 price = ln.unit_price if ln.unit_price is not None else float(mat["unit_price"] or 0) if mat else 0.0
-                out = _register(conn, who, ln.material_id, kind, float(ln.qty), tx_date, price, ref_no or batch_no,
-                                partner, (ln.note or note).strip(), "", "", cost_center if kind == "OUT" else "",
+                po_no, po_item = (ln.po_no.strip(), ln.po_item.strip()) if kind == "IN" else ("", "")
+                out = _register(conn, who, ln.material_id, kind, float(ln.qty), tx_date, price, ref_no or po_no or batch_no,
+                                partner, (ln.note or note).strip(), po_no, po_item, cost_center if kind == "OUT" else "",
                                 warehouse_id, wh_ids, ln.lot_no, ln.expiry_date, batch_no=batch_no, unit=ln.unit)
                 if isinstance(out, Result):
                     raise _Rejected(i, out.message)
@@ -676,7 +679,7 @@ def import_materials(df: pd.DataFrame, actor: dict | None = None) -> Result:
                 blank = set(filter(None, str(r.get("_blank") or "").split(",")))
                 data = {f: r.get(f, "") for f in repo.UPLOAD_FIELDS}
                 data["barcode"] = data["barcode"] or ""
-                cur = conn.execute("SELECT id, sap_synced_at FROM materials WHERE code = ?", (data["code"],)).fetchone()
+                cur = conn.execute("SELECT * FROM materials WHERE code = ?", (data["code"],)).fetchone()
                 if "barcode" not in blank:          # 바코드는 다른 자재와 겹치면 파일 전체를 반영하지 않는다
                     problem = barcode_problem(conn, data["barcode"], int(cur["id"]) if cur else None)
                     if problem:
@@ -684,6 +687,8 @@ def import_materials(df: pd.DataFrame, actor: dict | None = None) -> Result:
                 if cur is None:
                     repo.insert_material(data, conn)
                     new.append(data["code"])
+                    mid = conn.execute("SELECT id FROM materials WHERE code = ?", (data["code"],)).fetchone()[0]
+                    audit.record(conn, actor, "MATERIAL_CREATE", "material", mid, {**data, "via": "엑셀"})
                     continue
                 changes = {f: data[f] for f in repo.UPLOAD_FIELDS[1:] if f not in blank}
                 if cur["sap_synced_at"] and config.SAP_MASTER_READONLY:
@@ -692,9 +697,12 @@ def import_materials(df: pd.DataFrame, actor: dict | None = None) -> Result:
                         changes.pop(f)
                     if locked:
                         sap_kept.append(data["code"])
-                if changes:
+                diff = audit.changes(dict(cur), changes, list(changes))
+                if diff:
                     conn.execute(f"UPDATE materials SET {', '.join(f'{f} = ?' for f in changes)}, updated_at = ? "
                                  "WHERE id = ?", (*changes.values(), ts, cur["id"]))
+                    audit.record(conn, actor, "MATERIAL_UPDATE", "material", cur["id"],
+                                 {"code": data["code"], **diff, "via": "엑셀"})
                 updated.append(data["code"])
             audit.record(conn, actor, "MATERIAL_IMPORT", "material", "",
                          {"new": new[:200], "updated": updated[:200], "count": len(rows), "sap_kept": sap_kept[:200]})

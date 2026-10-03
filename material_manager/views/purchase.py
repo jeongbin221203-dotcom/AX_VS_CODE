@@ -6,7 +6,7 @@ from flask import Blueprint, abort, flash, g, redirect, request, url_for
 
 import config
 from core import org, purchasing, services
-from views.helpers import Table, actor, as_id, can, f_str, render_page, role_required
+from views.helpers import log_export, form_response, Table, actor, as_id, can, f_str, render_page, role_required
 
 bp = Blueprint("purchase", __name__, url_prefix="/purchase")
 
@@ -37,6 +37,9 @@ def index():
             "po_no": "발주번호", "status": "상태", "supplier": "공급처", "wh_code": "창고", "total_amount": "금액",
             "sap_po_no": "SAP PO", "pr_no": "구매요청", "created_by": "발주자", "created_at": "발주일시",
             "approved_by": "발주 결재"})
+        if request.args.get("export") == "xlsx":
+            log_export("purchase_orders", len(view))
+            return form_response("purchase_orders", view, "발주.xlsx")
         grid = Table(view, {"금액": MONEY}, links=[url_for("purchase.po_detail", po_id=int(i)) for i in df["id"]])
         return render_page("purchase.html", "purchase", tabs=TABS, tab="po", grid=grid, status=status,
                            statuses=purchasing.PO_STATUS)
@@ -50,6 +53,9 @@ def index():
                  "reason"]].rename(columns={
         "pr_no": "요청번호", "status": "상태", "steps": "결재", "wh_code": "창고", "total_amount": "금액",
         "need_date": "필요일", "requested_by": "요청자", "requested_at": "요청일시", "reason": "사유"})
+    if request.args.get("export") == "xlsx":
+        log_export("purchase_requests", len(view))
+        return form_response("purchase_requests", view, "구매요청.xlsx")
     grid = Table(view, {"금액": MONEY}, links=[url_for("purchase.pr_detail", pr_id=int(i)) for i in df["id"]])
     return render_page("purchase.html", "purchase", tabs=TABS, tab="pr", grid=grid, status=status,
                        statuses=purchasing.PR_STATUS)

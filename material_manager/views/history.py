@@ -81,6 +81,21 @@ def index():
     )
 
 
+@bp.post("/cancel-request")
+@role_required("CLERK")
+def cancel_request():
+    """담당자의 거래 취소 요청 → 관리자 결재 (승인되면 취소 거래)."""
+    from core import approvals
+    back = safe_next(f_str("next"), url_for("history.index"), prefix="/history")
+    tx_id = as_id(f_str("tx_id"))
+    if tx_id is None:
+        flash("취소를 요청할 거래를 고르세요.", "error")
+        return redirect(back)
+    r = approvals.request_cancel(tx_id, f_str("reason"), actor(), wh_ids=g.wh_ids)
+    flash(r.message, "success" if r.ok else "error")
+    return redirect(back)
+
+
 @bp.post("/reverse")
 @role_required("MANAGER")
 def reverse():

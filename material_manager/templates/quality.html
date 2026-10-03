@@ -2,6 +2,7 @@
 {% block content %}
 <p class="muted">업무 데이터에서 고쳐야 할 곳을 찾습니다 (서버·연결 점검은 배치 작업 화면의 '운영 점검'). 항목을 누르면 고칠 화면으로 갑니다.
   권한이 있는 창고만 봅니다.</p>
+<div class="toolbar"><a class="btn btn-sm" href="{{ url_for('quality.index', export='xlsx') }}">⬇️ 엑셀 다운로드 (전부)</a></div>
 <div class="metrics m3">
   <div class="metric"><div class="metric-label">고칠 곳 (높음·보통)</div><div class="metric-value {{ 'down' if problems }}">{{ problems }}</div></div>
   <div class="metric"><div class="metric-label">점검 항목</div><div class="metric-value">{{ checks|length }}</div></div>

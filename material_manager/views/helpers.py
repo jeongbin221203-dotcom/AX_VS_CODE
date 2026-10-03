@@ -381,7 +381,7 @@ def register_template_helpers(app: Flask) -> None:
         LOGIN_MAX_FAILS=config.LOGIN_MAX_FAILS, LOGIN_LOCK_MINUTES=config.LOGIN_LOCK_MINUTES,
         APP_TITLE=config.APP_TITLE, APP_ICON=config.APP_ICON, TX_LABEL=config.TX_LABEL,
         DOC_TYPES=config.DOC_TYPES, DOC_NEED_BIZ_NO=config.DOC_NEED_BIZ_NO,
-        DB_NAME=config.DB_PATH.name, today=date.today,
+        DB_NAME=config.DB_PATH.name, today=date.today, MRP_NIGHTLY_HOUR=config.MRP_NIGHTLY_HOUR,
     )
     from core import demo, partners
     app.jinja_env.globals["DEMO_ROLE_VIEWS"] = demo.ROLE_VIEWS

@@ -6,7 +6,7 @@ from datetime import date, timedelta
 from flask import Blueprint, flash, g, redirect, request, url_for
 
 from core import db, mrp, services
-from views.helpers import Table, a_int, actor, can, f_float, f_str, render_page, role_required
+from views.helpers import Table, a_int, actor, can, f_float, f_str, form_response, log_export, render_page, role_required
 
 bp = Blueprint("mrp", __name__, url_prefix="/mrp")
 
@@ -39,6 +39,15 @@ def index():
         return render_page("mrp.html", "mrp", **ctx, demands=df.to_dict("records"),
                            default_due=(date.today() + timedelta(days=30)).isoformat())
     run = mrp.latest_run(plant)
+    if request.args.get("export") == "xlsx" and run:
+        df = mrp.plans_df(run["id"])
+        view = df.assign(kind=df["kind"].map(mrp.KIND), status=df["status"].map({"OPEN": "계획", "CONVERTED": "바꿈"}))[
+            ["kind", "level", "code", "name", "qty", "unit", "order_date", "need_date", "lead_time_days", "wh_code", "pegging",
+             "status", "ref"]]
+        view.columns = ["구분", "단계", "자재코드", "자재명", "수량", "단위", "발주·착수일", "필요일", "리드타임", "창고", "근거", "상태",
+                        "바꾼 번호"]
+        log_export("mrp_plans", len(view), run=int(run["id"]))
+        return form_response("mrp_plans", view, f"MRP_계획_{run['run_at'][:10]}.xlsx")
     plans = mrp.plans_df(run["id"]).to_dict("records") if run else []
     t0 = date.today().isoformat()
     for p in plans:
@@ -90,3 +99,41 @@ def convert():
     r = mrp.convert(int(f_str("run_id") or 0), ids, actor=actor(), wh_ids=g.wh_ids)
     flash(r.message, "success" if r.ok else "error")
     return redirect(url_for("mrp.index", plant=plant))
+
+
+# ── 수요 엑셀 일괄 등록 ──────────────────────────────────────
+DEMAND_TITLE = "MRP 수요 엑셀 일괄 등록"
+
+
+@bp.get("/demand/import")
+@role_required("CLERK")
+def demand_import():
+    from views import bulk_ui
+    return bulk_ui.page("mrp_demand", "mrp", DEMAND_TITLE, extra={"plants": _plants(), "plant": _plant()})
+
+
+@bp.get("/demand/import/template.xlsx")
+@role_required("CLERK")
+def demand_template():
+    from views import bulk_ui
+    return bulk_ui.template("mrp_demand_template", [["FG-FAN-001", 120, (date.today() + timedelta(days=21)).isoformat(),
+                                                     "대리점 11월 출하"]], "MRP_수요_양식.xlsx")
+
+
+@bp.post("/demand/import")
+@role_required("CLERK")
+def demand_import_upload():
+    from core import bulk
+    from views import bulk_ui
+    plant, replace = _plant(), request.form.get("replace") == "1"
+    return bulk_ui.upload("mrp_demand", "mrp_demand_upload", lambda raw: bulk.preview_demands(raw, plant, replace),
+                          url_for("mrp.demand_import", plant=plant), "mrp", DEMAND_TITLE,
+                          extra={"plants": _plants(), "plant": plant})
+
+
+@bp.post("/demand/import/apply")
+@role_required("CLERK")
+def demand_import_apply():
+    from core import bulk
+    from views import bulk_ui
+    return bulk_ui.apply("mrp_demand", bulk.apply_demands, url_for("mrp.index", plant=_plant(), tab="demand"))

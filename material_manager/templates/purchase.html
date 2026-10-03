@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import csrf, table, tabs as tab_bar, material_picker %}
+{% from "_macros.html" import csrf, table, tabs as tab_bar, material_picker, download %}
 {% block content %}
 {{ tab_bar(tabs, tab) }}
 {% if tab == "new" %}
@@ -36,6 +36,7 @@
       </select>
     </label>
   </form>
+  <div class="toolbar">{{ download(url_with(export='xlsx')) }}</div>
   {{ table(grid, "해당하는 " ~ ('발주가' if tab == 'po' else '구매요청이') ~ " 없습니다.") }}
   {% if tab == 'pr' and not can('MANAGER') %}<p class="muted small">본인 요청만 보입니다.</p>{% endif %}
 {% endif %}

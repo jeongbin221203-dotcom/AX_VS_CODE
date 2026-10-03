@@ -9,7 +9,7 @@ from flask import Blueprint, abort, flash, g, redirect, request, send_file, url_
 
 import config
 from core import db, documents, repository as repo
-from views.helpers import Table, a_date, a_int, actor, as_id, can, f_str, page_arg, pager, render_page, role_required
+from views.helpers import log_export, form_response, Table, a_date, a_int, actor, as_id, can, f_str, page_arg, pager, render_page, role_required
 
 bp = Blueprint("documents", __name__, url_prefix="/documents")
 
@@ -50,15 +50,19 @@ def index():
     tx_id = a_int("tx")
     unlinked = request.args.get("unlinked") == "1"
 
+    exporting = request.args.get("export") == "xlsx"
     df, total, sums = repo.documents_page(start.isoformat(), end.isoformat(), types, keyword, tx_id, unlinked,
-                                          wh_ids=g.wh_ids, user_id=g.user["id"], page=page_arg(),
-                                          size=config.PAGE_SIZE)
+                                          wh_ids=g.wh_ids, user_id=g.user["id"], page=1 if exporting else page_arg(),
+                                          size=config.EXPORT_MAX_ROWS if exporting else config.PAGE_SIZE)
     view = df.copy()
     view["doc_type"] = view["doc_type"].map(config.DOC_TYPES)
     view["supplier_biz_no"] = view["supplier_biz_no"].map(documents.format_biz_no)
     view["tx_label"] = [f"#{int(t)} [{c}] {n}" if pd.notna(t) else "미연결"
                         for t, c, n in zip(df["tx_id"], df["code"], df["name"])]
     view = view[list(LIST_COLS)].rename(columns=LIST_COLS)
+    if exporting:
+        log_export("documents", len(view), start=start.isoformat(), end=end.isoformat())
+        return form_response("documents", view, f"증빙_{start:%Y%m%d}_{end:%Y%m%d}.xlsx", period=f"{start} ~ {end}")
     return render_page(
         "documents.html", "documents", tabs=TABS if can("CLERK") else TABS[:1], tab="list",
         start=start, end=end, types=types, keyword=keyword, tx_id=tx_id, unlinked=unlinked,

@@ -4,7 +4,7 @@
 import pandas as pd
 from flask import Blueprint, abort, flash, redirect, request, url_for
 
-from core import bulk, partners
+from core import audit, bulk, partners
 from views import bulk_ui
 from views.helpers import Table, actor, can, f_str, form_response, log_export, render_page, role_required
 
@@ -77,7 +77,7 @@ def detail(pid: int):
         view = view[["ID", "일자", "구분", "창고", "자재코드", "자재명", "수량", "단위", "단가", "금액", "적힌 이름", "문서번호"]]
     return render_page("partner_detail.html", "partners", p=p, form=p, aliases=partners.aliases_df(pid).to_dict("records"),
                        grid=Table(view, {"ID": "{}", "수량": "{:,.2f}", "단가": "₩{:,.0f}", "금액": "₩{:,.0f}"}),
-                       biz=partners.biz_fmt(p["biz_no"]))
+                       biz=partners.biz_fmt(p["biz_no"]), history=audit.entity_history("partner", pid))
 
 
 @bp.post("/new")

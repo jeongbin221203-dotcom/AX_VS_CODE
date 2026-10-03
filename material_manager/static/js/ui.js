@@ -86,8 +86,10 @@
   document.addEventListener("change", function (e) {
     const name = e.target.dataset && e.target.dataset.checkAll;
     if (!name) return;
-    const scope = e.target.closest("form") || document;
-    scope.querySelectorAll("input[type=checkbox][name='" + name + "']").forEach(function (c) { c.checked = e.target.checked; });
+    const form = e.target.form || e.target.closest("form");
+    const boxes = form ? Array.prototype.filter.call(form.elements, function (c) { return c.type === "checkbox" && c.name === name; })
+                       : document.querySelectorAll("input[type=checkbox][name='" + name + "']");
+    Array.prototype.forEach.call(boxes, function (c) { c.checked = e.target.checked; });   // form="…" 로 밖에 있는 칸도
   });
 
   // ── 구매요청 결재 단계 미리 보기 ──

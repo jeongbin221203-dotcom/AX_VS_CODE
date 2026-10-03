@@ -17,10 +17,11 @@ from __future__ import annotations
 import json
 import math
 from collections import defaultdict
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 
 import pandas as pd
 
+import config
 from core import audit, db, production, purchasing, services
 from core.utils import now_str
 
@@ -199,6 +200,41 @@ def run(plant_id: int, actor: dict | None, horizon_days: int = 90) -> services.R
     if late:
         msg += f" · 이미 늦은 계획 {late}건(발주·착수일이 오늘 이전)"
     return services.Result(True, msg, tx_id=rid, qty=len(plans))
+
+
+NIGHTLY = {"id": None, "name": "MRP 자동 실행", "role": "ADMIN", "ip": ""}
+
+
+def nightly_plants() -> list[int]:
+    """밤 자동 실행 대상: 사용 중인 창고가 있고, 열린 수요가 있거나 그 플랜트 창고에서 쓰는 BOM 이 있는 플랜트."""
+    return [int(r[0]) for r in db.query_df("""
+        SELECT p.id FROM plants p
+        WHERE p.active = 1 AND EXISTS (SELECT 1 FROM warehouses w WHERE w.plant_id = p.id AND w.active = 1)
+          AND (EXISTS (SELECT 1 FROM mrp_demands d WHERE d.plant_id = p.id AND d.active = 1)
+               OR EXISTS (SELECT 1 FROM mrp_runs r WHERE r.plant_id = p.id))
+        ORDER BY p.id""").itertuples(index=False)]
+
+
+def nightly(now: datetime | None = None) -> str:
+    """배치 mrp_nightly: 정한 시각(MM_MRP_HOUR)이 지났고 오늘 자동 실행이 없으면 플랜트마다 한 번 실행한다.
+    결과는 MRP 화면의 '최근 실행'으로 보이고, 담당자는 아침에 계획을 골라 구매요청·작업지시로 바꾼다."""
+    hour = config.MRP_NIGHTLY_HOUR
+    if hour < 0:
+        return "꺼짐 (MM_MRP_HOUR=-1)"
+    now = now or datetime.now()
+    if now.hour < hour:
+        return f"{hour}시 이후에 실행"
+    today = now.date().isoformat()
+    done, msgs = 0, []
+    for pid in nightly_plants():
+        ran = db.scalar("SELECT COUNT(*) FROM mrp_runs WHERE plant_id = ? AND run_by = ? AND run_at >= ?",
+                        (pid, NIGHTLY["name"], today))
+        if ran:
+            continue
+        r = run(pid, NIGHTLY)
+        done += 1
+        msgs.append(f"플랜트 {pid}: {r.message}")
+    return " · ".join(msgs) if done else "오늘 실행함 (또는 대상 플랜트 없음)"
 
 
 def latest_run(plant_id: int) -> dict | None:
