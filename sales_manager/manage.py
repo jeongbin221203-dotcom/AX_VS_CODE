@@ -10,7 +10,8 @@
   python manage.py check                 DB·저장소·스키마 상태 점검 (배포 후 확인용)
   python manage.py demo-init             빈 DB 에 시연용 조직·계정·샘플 데이터 (Render 같은 시연 서버, SALES_DEMO=1 필요)
   python manage.py demo-build            시연 샘플 DB 를 data/demo_template.db 로 미리 만든다 (배포의 빌드 단계, SALES_DEMO=1)
-                                         serve.py 가 켜질 때 이 파일로 바로 열고, 오늘 기준 샘플은 뒤에서 만든다 (core/demo_data.py)
+                                         serve.py 가 켜질 때 이 파일로 바로 열고(스키마 갱신도 serve.py 안에서), 오늘 기준 샘플은 뒤에서 만든다 (core/demo_data.py)
+                                         Render: 빌드 = pip install … && python manage.py demo-build, 시작 = python serve.py
 """
 from __future__ import annotations
 

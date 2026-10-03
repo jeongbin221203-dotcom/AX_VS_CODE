@@ -18,8 +18,9 @@ from app import create_app
 
 if __name__ == "__main__":
     if config.DEMO:                     # 시연 서버: 미리 만든 샘플로 바로 열고, 오늘 기준 샘플은 뒤에서 만들어 바꿔 끼운다
-        from core import demo_data
+        from core import database, demo_data
         demo_data.prepare()
+        database.migrate()              # 같은 프로세스에서 (manage.py db upgrade 를 따로 띄우면 라이브러리를 두 번 읽어 느림)
         demo_data.start_background()
     serve(create_app(), host=config.HOST, port=config.PORT,
           threads=int(os.environ.get("SALES_THREADS", "8")),
