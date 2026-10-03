@@ -26,6 +26,23 @@ def test_demo_auto_login_and_seed(monkeypatch):
     assert c.get("/admin/users").status_code == 200      # 시스템관리자 화면도 열린다
 
 
+def test_demo_sample_is_large_and_consistent(monkeypatch):
+    application = _demo_app(monkeypatch)
+    assert repo.count_materials() >= 70
+    assert db.scalar("SELECT COUNT(*) FROM transactions") > 5000
+    assert db.scalar("SELECT COUNT(*) FROM warehouses") >= 9
+    # 재고는 (자재, 창고, 로트) 어디서도 음수가 아니다
+    assert db.scalar("""SELECT COUNT(*) FROM (SELECT SUM(CASE WHEN tx_type = 'OUT' THEN -qty ELSE qty END) s
+                        FROM transactions GROUP BY material_id, warehouse_id, lot_no) x WHERE s < -0.001""") == 0
+    statuses = set(db.query_df("SELECT DISTINCT status FROM purchase_requests")["status"])
+    assert {"PENDING", "APPROVED", "REJECTED", "ORDERED", "CANCELLED"} <= statuses
+    assert db.scalar("SELECT COUNT(*) FROM period_closes") >= 6
+    c = application.test_client()
+    for url in ("/", "/stock/", "/history/", "/history/?page=20", "/purchase/", "/purchase/?tab=po", "/approvals/",
+                "/periods/", "/reports/ledger", "/reports/valuation", "/reports/reconcile", "/admin/users", "/admin/audit", "/materials/", "/statements/"):
+        assert c.get(url).status_code in (200, 302), url
+
+
 def test_demo_logout_shows_button_and_user_is_repaired(monkeypatch):
     application = _demo_app(monkeypatch)
     c = application.test_client()

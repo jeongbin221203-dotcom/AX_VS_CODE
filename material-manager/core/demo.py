@@ -1,6 +1,6 @@
 """포트폴리오 시연 모드 (MM_DEMO=1 일 때만).
 
-- 서버가 뜰 때 시연용 시스템관리자(demo)와 샘플 데이터(지난 11개월 거래)를 만든다. 빈 DB일 때만 샘플을 넣는다.
+- 서버가 뜰 때 시연용 시스템관리자(demo)와 샘플 데이터(4개 플랜트·1년 치 거래, core/seed_demo.py)를 만든다. 빈 DB일 때만 넣는다.
 - 로그인하지 않은 방문자는 이 계정으로 자동 로그인된다 → 어느 컴퓨터에서 열어도 바로 모든 화면을 볼 수 있다.
 - 방문자가 시연 계정을 중지·강등해도 다음 자동 로그인 때 되돌린다.
 운영 서버에서는 켜지 말 것 (누구나 시스템관리자가 된다).
@@ -27,7 +27,7 @@ def ensure_user() -> dict:
         row = conn.execute("SELECT id FROM users WHERE username = ?", (USERNAME,)).fetchone()
     if row is None:
         # 비밀번호는 아무도 모르는 임의 값 — 이 계정은 자동 로그인으로만 쓴다
-        result = auth.create_user(USERNAME, NAME, ROLE, "Demo!" + secrets.token_urlsafe(18), audit.SYSTEM,
+        result = auth.create_user(USERNAME, NAME, ROLE, "Demo1!" + secrets.token_urlsafe(18), audit.SYSTEM,
                                   must_change_pw=False)
         uid = result.user["id"] if result.ok else None
         if uid is None:                                  # 서버 여러 대가 동시에 만든 경우
@@ -48,5 +48,7 @@ def prepare() -> None:
     """서버 시작 때: 시연 계정 + (빈 DB면) 샘플 데이터."""
     ensure_user()
     if not repo.count_materials():
-        from core import seed
-        seed.seed(history=True)
+        from core import seed, seed_demo, seed_mfg
+        seed.seed(history=True)                  # 부산 포장·고박 자재
+        seed_mfg.seed_manufacturing()            # 창원 제조공장
+        seed_demo.seed_large()                   # 인천·평택 + 담당자 · 1년 치 거래 · 구매 · 월 마감
