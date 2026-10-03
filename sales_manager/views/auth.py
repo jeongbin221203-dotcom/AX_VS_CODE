@@ -8,6 +8,7 @@ from flask import Blueprint, abort, current_app, flash, g, redirect, render_temp
 
 import config
 from core import auth as core_auth
+from core.observability import client_ip
 from core import enterprise as ent
 from core import sales_db as db
 
@@ -31,9 +32,10 @@ def _login(user: dict, method: str, nxt: str | None = None, keep: dict | None = 
     session["login_at"] = datetime.now().isoformat(timespec="seconds")
     session["auth_mode"] = core_auth.AUTH_MODE    # 인증 방식이 바뀌면 옛 세션을 끊기 위해 기록
     session["login_method"] = method
+    session["sv"] = core_auth.session_version(user)  # 비밀번호 변경·로그아웃 때 판이 바뀌면 이 세션도 끊김
     session.update(keep or {})
     ent.apply_context(user)
-    db.audit("로그인", "사용자", user["id"], {"역할": user["role"], "방식": method, "IP": request.remote_addr})
+    db.audit("로그인", "사용자", user["id"], {"역할": user["role"], "방식": method, "IP": client_ip()})
     if core_auth.password_expired(user):
         flash("비밀번호를 변경해야 계속 사용할 수 있습니다.", "warning")
         return redirect(url_for("auth.password"))
@@ -65,7 +67,10 @@ def login():
                                sso_error="SSO 로 확인된 사용자가 이 시스템에 등록되어 있지 않습니다."
                                if identity else "SSO 인증 정보가 없습니다. 사내 포털을 통해 접속하세요.")
 
-    if request.method == "POST":
+    if request.method == "POST" and core_auth.ip_blocked(client_ip()):
+        db.audit("로그인차단", "사용자", None, {"IP": client_ip(), "사유": "IP 실패 누적"})
+        flash(f"이 위치(IP)에서 로그인 실패가 많아 {core_auth.IP_WINDOW_MINUTES}분 동안 막았습니다. 잠시 뒤 다시 시도하세요.", "error")
+    elif request.method == "POST":
         if mode == "password":
             user, message = core_auth.authenticate_password(f_str("emp_no"), request.form.get("password", ""))
         else:
@@ -74,6 +79,7 @@ def login():
             message = "로그인에 실패했습니다."
         if user:
             return _login(user, mode)
+        core_auth.record_ip_failure(client_ip())
         flash(message, "error")
 
     options = []
@@ -89,13 +95,17 @@ def breakglass():
     """사내 인증 장애 시 비상 계정 로그인 (SALES_BREAKGLASS_USERS)."""
     if not core_auth.breakglass_enabled():
         abort(404)
+    if core_auth.ip_blocked(client_ip()):
+        flash(f"이 위치(IP)에서 로그인 실패가 많아 {core_auth.IP_WINDOW_MINUTES}분 동안 막았습니다.", "error")
+        return redirect(url_for("auth.login"))
     user, message = core_auth.authenticate_breakglass(f_str("emp_no"), request.form.get("password", ""))
     if not user:
+        core_auth.record_ip_failure(client_ip())
         flash(message, "error")
         return redirect(url_for("auth.login"))
-    db.audit("비상로그인", "사용자", user["id"], {"IP": request.remote_addr, "방식": core_auth.AUTH_MODE})
+    db.audit("비상로그인", "사용자", user["id"], {"IP": client_ip(), "방식": core_auth.AUTH_MODE})
     from core import notify
-    notify.notify_role("ADMIN", "보안", "비상 계정 로그인", f"{user['name']}({user['emp_no']}) · IP {request.remote_addr}",
+    notify.notify_role("ADMIN", "보안", "비상 계정 로그인", f"{user['name']}({user['emp_no']}) · IP {client_ip()}",
                        "/admin/audit")
     return _login(user, "비상로그인")
 
@@ -127,12 +137,12 @@ def oidc_callback():
 
     from core import oidc
     if request.args.get("error"):
-        db.audit("로그인실패", "사용자", None, {"OIDC": request.args.get("error"), "IP": request.remote_addr})
+        db.audit("로그인실패", "사용자", None, {"OIDC": request.args.get("error"), "IP": client_ip()})
         return _oidc_error(f"사내 인증이 취소되었거나 실패했습니다 ({request.args.get('error')}).")
     try:
         token = oidc.client().authorize_access_token()
     except (OAuthError, ValueError, KeyError) as exc:          # state·nonce·서명·만료 불일치 등
-        db.audit("로그인실패", "사용자", None, {"OIDC": type(exc).__name__, "IP": request.remote_addr})
+        db.audit("로그인실패", "사용자", None, {"OIDC": type(exc).__name__, "IP": client_ip()})
         return _oidc_error("인증 응답을 확인하지 못했습니다. 처음부터 다시 로그인하세요.")
     identity = oidc.identity(token)
     user = core_auth.authenticate_sso(identity) if identity else None
@@ -203,6 +213,8 @@ def logout():
     uid = session.get("user_id")
     if uid:
         db.audit("로그아웃", "사용자", uid)
+        if not config.DEMO_AUTOLOGIN:              # 이 사용자의 다른 세션(다른 PC·복사된 쿠키)도 끊는다 — 시연 계정은 방문자가 함께 써서 제외
+            core_auth.end_all_sessions(int(uid))
     id_token = session.get("oidc_id_token")
     session.clear()
     if core_auth.AUTH_MODE == "oidc":
@@ -267,7 +279,8 @@ def password():
             try:
                 core_auth.set_password(int(g.user["id"]), new, must_change=False,
                                        current=request.form.get("current_password", ""))
-                flash("비밀번호를 변경했습니다.", "success")
+                session["sv"] = core_auth.session_version(ent.get_user(user_id=int(g.user["id"])))   # 이 세션만 이어서
+                flash("비밀번호를 변경했습니다. 다른 기기에서 로그인한 세션은 모두 끊었습니다.", "success")
                 return redirect(url_for("reports.dashboard"))
             except ValueError as exc:
                 flash(str(exc), "error")

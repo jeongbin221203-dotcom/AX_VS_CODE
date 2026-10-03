@@ -16,7 +16,7 @@
   {% if tab == 'finance' %}
     <p class="muted small">대손 처리는 금액에 따라 팀장 또는 임원, 거래정지 해제는 팀장 이상이 결재합니다. 요청한 사람은 결재할 수 없습니다.</p>
     {% for r in fin_pending_rows %}
-      <form method="post" action="{{ url_for('finance.finance_request_decide', rid=r.id) }}" class="toolbar" data-no-draft>
+      <form method="post" action="{{ url_for('finance.finance_request_decide', rid=r.id) }}" class="toolbar" data-no-draft data-confirm="'반려' — 되돌리기 어렵습니다. 계속할까요?">
         {{ csrf() }}
         <span class="grow small"><strong>{{ r['구분'] }}</strong> · {{ r['거래처'] }}{% if r['매출번호'] %} · 매출 #{{ r['매출번호']|int }}{% endif %}
           · {{ r['금액']|won }} · {{ r['사유'] }} · 요청 {{ r['요청자'] }} ({{ r['요청일시'] }})</span>
@@ -44,7 +44,7 @@
       <button class="btn btn-primary">대결 지정</button>
     </form>
     {% for did, label in revocable %}
-    <form method="post" action="{{ url_for('finance.delegation_revoke', did=did) }}" class="toolbar">
+    <form method="post" action="{{ url_for('finance.delegation_revoke', did=did) }}" class="toolbar" data-confirm="'대결 취소' — 되돌리기 어렵습니다. 계속할까요?">
       {{ csrf() }}<span class="grow">{{ label }}</span>
       <button class="btn btn-sm btn-danger">대결 취소</button>
     </form>
@@ -73,7 +73,7 @@
       {% if picked %}
         <div class="alert alert-info">요청자 <strong>{{ picked['요청자'] }}</strong> · 요청사유: {{ picked['사유'] or '(미기재)' }}<br>
           결재선: {{ picked['결재선'] }} · 내 차례: {{ picked['내 차례'] }}</div>
-        <form method="post" action="{{ url_for('finance.approval_decide', aid=pick) }}" class="form">
+        <form method="post" action="{{ url_for('finance.approval_decide', aid=pick) }}" class="form" data-confirm="'반려' — 되돌리기 어렵습니다. 계속할까요?">
           {{ csrf() }}
           <label>결재 의견 <textarea name="comment" rows="3" placeholder="반려 시 필수"></textarea></label>
           <div class="row-actions">

@@ -259,6 +259,8 @@ SCHEDULES: list[Schedule] = [
     Schedule("backup.db", daily="02:00", description="DB 백업"),
     Schedule("hr.sync", daily="03:00", enabled=_env_on("SALES_HR_SOURCE"), description="인사 시스템 동기화"),
     Schedule("jobs.cleanup", daily="04:00", description="오래된 완료 작업 정리"),
+    Schedule("storage.flush", every_minutes=5, enabled=lambda: os.environ.get("SALES_STORAGE") == "s3",
+             description="저장소(S3) 장애 때 임시 보관한 파일 다시 올리기"),
     Schedule("audit.archive", daily="01:45", enabled=lambda: _setting_on("audit_retention_years"),
              description="보관기간 지난 감사로그를 파일로 이관 (회사 설정)"),
     Schedule("credit.autoblock", daily="06:00", enabled=lambda: _setting_on("auto_block_overdue_days") or
@@ -363,6 +365,13 @@ def _snapshot(payload: dict):
 def _backup(payload: dict):
     folder = os.environ.get("SALES_BACKUP_DIR", os.path.join(database.BASE_DIR, "data", "backups"))
     return {"file": os.path.basename(db.backup_database(folder))}
+
+
+@handler("storage.flush")
+def _storage_flush(payload: dict) -> dict:
+    from .storage import get_storage
+    st = get_storage()
+    return st.flush() if hasattr(st, "flush") else {"uploaded": 0, "left": 0}
 
 
 @handler("jobs.cleanup")

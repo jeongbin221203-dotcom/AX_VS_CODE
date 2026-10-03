@@ -1,4 +1,4 @@
-# 영업관리(sales_manager/) — SQLite 와 PostgreSQL 두 가지로 같은 테스트를 돌린다
+# 영업관리(sales_manager/) — SQLite 와 PostgreSQL 두 가지로 같은 테스트, 그리고 보안 검사(bandit · pip-audit)
 name: sales-ci
 
 on:
@@ -51,6 +51,23 @@ jobs:
           SALES_TEST_PG_URL: ${{ matrix.db == 'postgres' && 'postgresql://postgres:postgres@127.0.0.1:5432/postgres' || '' }}
           SALES_PG_DUMP: pg_dump
         run: python -m pytest tests -q -p no:cacheprovider
+
+  security:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: sales_manager
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: 도구
+        run: pip install bandit pip-audit
+      - name: 정적 분석 (심각도 High 가 있으면 실패 — Medium 검토 결과는 docs/SECURITY.md)
+        run: bandit -r core views app.py manage.py config.py serve.py --severity-level high -q
+      - name: 의존성 취약점
+        run: pip-audit -r requirements.txt --progress-spinner off
 
   image:
     runs-on: ubuntu-latest

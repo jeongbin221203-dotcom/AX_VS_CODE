@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% from "_macros.html" import metric, csrf %}
+{% block content %}
+<p class="muted">설치한 뒤와 설정을 바꿀 때마다 실제 DB·저장소·백업·ERP·사내 로그인·메일·메신저·배치가 붙는지 한 번에 확인합니다.
+  업무 데이터는 보내지 않습니다(ERP·메일은 연결만, 저장소는 시험 파일을 쓰고 지웁니다). 명령: <code>python manage.py doctor</code></p>
+
+<div class="metrics m4">
+  {{ metric('정상', summary.ok ~ '개', none, 'up' if summary.ok else none) }}
+  {{ metric('주의', summary.warn ~ '개', none, 'down' if summary.warn else none) }}
+  {{ metric('실패', summary.fail ~ '개', none, 'down' if summary.fail else none) }}
+  {{ metric('사용 안 함', summary.off ~ '개') }}
+</div>
+
+<section class="card">
+  <div class="card-head"><h3>🩺 운영 점검</h3><a class="btn btn-sm" href="{{ url_for('admin.doctor') }}">다시 점검</a></div>
+  <div class="table-wrap">
+    <table class="data">
+      <thead><tr><th>영역</th><th>항목</th><th>결과</th><th>내용</th></tr></thead>
+      <tbody>
+      {% for c in checks %}
+        <tr class="{{ 'tone-danger' if c.status == 'fail' else 'tone-warn' if c.status == 'warn' else '' }}">
+          <td>{{ c.area }}</td><td>{{ c.name }}</td>
+          <td><span class="badge doc-{{ c.status }}">{{ c.label }}</span></td><td>{{ c.message }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="card" id="maintenance">
+  <h3>🛠️ 점검(읽기 전용) 모드</h3>
+  <p class="muted small">DB 옮기기·백업 복구·대량 정리처럼 데이터를 멈춰야 할 때 조회만 열어 둡니다. 모든 화면 위에 '점검 중' 띠가 나오고 저장·변경·API 쓰기는 막힙니다(이 화면은 열림).
+    서버 여러 대가 15초 안에 함께 바뀌고, 켜고 끈 기록은 감사로그에 남습니다. 명령: <code>python manage.py read-only on|off</code></p>
+  {% if env_read_only %}<div class="alert alert-warning">환경변수 SALES_READ_ONLY=1 로 켜져 있어 이 화면에서는 끌 수 없습니다(서버 설정에서 지우고 재시작).</div>{% endif %}
+  <form method="post" action="{{ url_for('admin.maintenance') }}" class="toolbar"
+        data-confirm="{{ '점검 모드를 끕니다 — 저장·변경이 다시 열립니다.' if maintenance.on else '점검 모드를 켭니다 — 모든 사용자가 조회만 할 수 있습니다.' }}">
+    {{ csrf() }}
+    {% if maintenance.on %}
+      <span class="warn-text">켜짐 — {{ maintenance.by or '' }} · {{ maintenance.at or '' }}{% if maintenance.reason %} · {{ maintenance.reason }}{% endif %}</span>
+      <input type="hidden" name="state" value="off"><button class="btn btn-primary">점검 모드 끄기</button>
+    {% else %}
+      <label class="grow">사유 <input name="reason" placeholder="예) DB 서버 교체 (22:00~23:00)"></label>
+      <input type="hidden" name="state" value="on"><button class="btn btn-danger">점검 모드 켜기</button>
+    {% endif %}
+  </form>
+</section>
+
+{% if auth_mode in ('sso', 'oidc') %}
+<section class="card" id="sso-outage">
+  <h3>🔑 SSO 장애 모드</h3>
+  <p class="muted small">사내 로그인(SSO·IdP)이 멈췄을 때, 정한 시간(최대 24시간) 동안 비밀번호가 설정된 사용자는 로그인 화면의 '비상 로그인'으로 들어올 수 있습니다.
+    시간이 지나면 저절로 꺼지고, 켜고 끈 기록·로그인은 감사로그와 관리자 알림에 남습니다. SSO 만 쓰던 직원은 비밀번호가 없으므로 미리 만들어 두세요.
+    명령: <code>python manage.py sso-outage --hours 4</code></p>
+  <form method="post" action="{{ url_for('admin.sso_outage') }}" class="toolbar"
+        data-confirm="{{ 'SSO 장애 모드를 끕니다.' if sso_until else '정한 시간 동안 비밀번호 로그인을 허용합니다.' }}">
+    {{ csrf() }}
+    {% if sso_until %}
+      <span class="warn-text">켜짐 — {{ sso_until.strftime('%Y-%m-%d %H:%M') }}까지</span>
+      <input type="hidden" name="state" value="off"><button class="btn btn-primary">끄기</button>
+    {% else %}
+      <label>시간 <input type="number" name="hours" min="1" max="24" value="4"></label>
+      <label class="grow">사유 <input name="reason" placeholder="예) IdP 장애 (사내 공지 #123)"></label>
+      <input type="hidden" name="state" value="on"><button class="btn btn-danger">켜기</button>
+    {% endif %}
+  </form>
+</section>
+{% endif %}
+{% endblock %}

@@ -3,6 +3,8 @@
 {% block content %}
 <p class="subtitle">ERP 전송·알림 발송·백업·스냅샷은 워커(<code>python manage.py worker</code>)가 처리합니다. 워커는 여러 대 띄워도 같은 작업을 두 번 처리하지 않고,
   예약 작업은 여러 서버 중 한 곳만 올립니다. 실패한 작업은 1·2·4·8…분 간격으로 다시 시도하고 끝내 실패하면 관리자에게 알립니다.</p>
+<p><a class="btn btn-primary" href="{{ url_for('admin.doctor') }}">🩺 운영 점검</a>
+  <span class="muted small">DB·저장소·백업·ERP·로그인·메일·메신저·워커를 한 번에 확인 · 점검(읽기 전용) 모드 · SSO 장애 모드</span></p>
 
 <div class="metrics m4">
   {{ metric('대기', '{:,}건'.format(summary.get('대기', 0))) }}

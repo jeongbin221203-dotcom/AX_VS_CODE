@@ -7,7 +7,7 @@
       {% if a.voided_at %}<s>{{ a.file_name }}</s> <span class="muted small">무효: {{ a.void_reason }} ({{ a.voided_by }})</span>
       {% else %}<a href="{{ url_for('crm.attachment_file', aid=a.id) }}" target="_blank" rel="noopener">{{ a.file_name }}</a>
         <span class="muted small">{{ (a.size / 1024)|round(0)|int }}KB · {{ a.uploaded_by }} · {{ a.uploaded_at }}{% if a.memo %} · {{ a.memo }}{% endif %}</span>
-        <form method="post" action="{{ url_for('crm.attachment_void', aid=a.id) }}" class="inline-form" data-no-draft>
+        <form method="post" action="{{ url_for('crm.attachment_void', aid=a.id) }}" class="inline-form" data-no-draft data-confirm="'무효' — 되돌리기 어렵습니다. 계속할까요?">
           {{ csrf() }}<input name="reason" placeholder="무효 사유" required><button class="btn btn-sm btn-danger">무효</button>
         </form>
       {% endif %}
@@ -52,7 +52,7 @@
     {% if not del_options %}
       <div class="alert alert-info">삭제할 활동이 없습니다.</div>
     {% else %}
-      <form method="post" action="{{ url_for('crm.activity_delete') }}" class="toolbar">
+      <form method="post" action="{{ url_for('crm.activity_delete') }}" class="toolbar" data-confirm="'삭제' — 되돌리기 어렵습니다. 계속할까요?">
         {{ csrf() }}
         <label class="grow">삭제할 활동 {{ select('activity_id', del_options, '') }}</label>
         <button class="btn btn-danger">🗑️ 삭제</button>

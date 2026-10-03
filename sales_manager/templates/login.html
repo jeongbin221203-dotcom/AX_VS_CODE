@@ -17,9 +17,14 @@
   <div class="alert alert-error">{{ sso_error }}</div>
 {% endif %}
 {% if breakglass %}
-  <details class="card">
-    <summary>사내 인증이 안 될 때 — 비상 계정 로그인</summary>
+  {% set outage = SSO_OUTAGE_UNTIL() %}
+  <details class="card" {{ 'open' if outage }}>
+    <summary>사내 인증이 안 될 때 — {{ '비밀번호 로그인 (SSO 장애 모드)' if outage else '비상 계정 로그인' }}</summary>
+    {% if outage %}
+    <p class="muted small">사내 로그인 장애로 {{ outage.strftime('%m-%d %H:%M') }}까지 비밀번호가 설정된 사용자는 사번·비밀번호로 들어올 수 있습니다. 사용 기록은 감사로그와 관리자 알림으로 남습니다.</p>
+    {% else %}
     <p class="muted small">인터넷이나 사내 인증 서버가 멈췄을 때 지정된 관리자만 사용합니다. 사용 기록은 감사로그와 관리자 알림으로 남습니다.</p>
+    {% endif %}
     <form method="post" action="{{ url_for('auth.breakglass') }}" class="form" autocomplete="off">
       {{ csrf() }}
       <label>사번 <input name="emp_no" required></label>

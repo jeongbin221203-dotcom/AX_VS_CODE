@@ -115,7 +115,7 @@ def deliver(ids: list[int]) -> dict:
         return {"email": 0}
     marks = ",".join("?" * len(ids))
     rows = db._df(f"SELECT n.id, n.kind, n.title, n.body, n.link, n.email_status, u.email, "
-                  f"COALESCE(u.notify_email, 1) AS notify_email, COALESCE(u.notify_messenger, 1) AS notify_messenger, u.name "
+                  f"COALESCE(u.notify_email, 1) AS notify_email, COALESCE(u.notify_messenger, 1) AS notify_messenger, u.messenger_id, u.name "
                   f"FROM notifications n JOIN users u ON u.id = n.user_id WHERE n.id IN ({marks})", ids)
     sent = skipped = 0
     for r in rows.to_dict("records"):

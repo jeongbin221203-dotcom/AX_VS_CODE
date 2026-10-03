@@ -112,7 +112,7 @@
     {% endif %}
     {% if q.effective_status == '발송' %}
       <form method="post" action="{{ url_for('catalog.quote_action', qid=q.id, action='accept') }}" class="inline-form">{{ csrf() }}<button class="btn btn-primary">✅ 수락</button></form>
-      <form method="post" action="{{ url_for('catalog.quote_action', qid=q.id, action='reject') }}" class="inline-form">{{ csrf() }}
+      <form method="post" action="{{ url_for('catalog.quote_action', qid=q.id, action='reject') }}" class="inline-form" data-confirm="'거절' — 되돌리기 어렵습니다. 계속할까요?">{{ csrf() }}
         <input name="reason" placeholder="거절 사유" required><button class="btn btn-danger">거절</button></form>
     {% endif %}
     {% if q.status in ('발송', '거절') %}

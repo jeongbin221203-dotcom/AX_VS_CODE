@@ -154,6 +154,8 @@ def user_save():
                                   "role": f_str("role"), "org_id": f_int("org_id") or None,
                                   "email": f_str("email"), "active": f_bool("active")})
         uid = new_id
+        with database.get_conn() as conn:                   # 메신저 ID 는 화면에서만 (인사 연동이 지우지 않게 따로)
+            conn.execute("UPDATE users SET messenger_id=? WHERE id=?", (f_str("messenger_id") or None, new_id))
         temp = request.form.get("temp_password", "")
         if temp:
             core_auth.set_password(new_id, temp, must_change=core_auth.AUTH_MODE == "password")
@@ -162,6 +164,15 @@ def user_save():
     except ValueError as exc:
         flash(str(exc), "error")
     return redirect(url_for("admin.org", tab="users", **({"uid": uid} if uid else {})))
+
+
+@bp.route("/users/<int:uid>/sessions/end", methods=["POST"])
+def user_sessions_end(uid: int):
+    core_auth.end_all_sessions(uid, f"관리자 {g.user['name']} 강제 종료")
+    if uid == g.user["id"]:
+        session["sv"] = core_auth.session_version(ent.get_user(user_id=uid))     # 누른 관리자 본인 화면은 유지
+    flash("그 사용자의 모든 세션을 끊었습니다 — 다음 화면부터 다시 로그인해야 합니다.", "success")
+    return redirect(url_for("admin.org", tab="users", uid=uid))
 
 
 @bp.route("/users/<int:uid>/unlock", methods=["POST"])
@@ -596,6 +607,49 @@ def channel_delete(cid: int):
     messenger.delete_channel(cid)
     flash("알림 채널을 지웠습니다.", "warning")
     return redirect(url_for("admin.channels"))
+
+
+# ============================================================================
+# 운영 점검 · 점검 모드 · SSO 장애 모드 (core/doctor.py, 자재관리와 같은 항목)
+# ============================================================================
+@bp.route("/doctor")
+def doctor():
+    from core import doctor as dr
+    checks = dr.run()
+    db.audit("운영점검", "시스템", None, dr.summary(checks))
+    return render_page("admin/doctor.html", "jobs", checks=checks, summary=dr.summary(checks),
+                       maintenance=company.get("maintenance") or {}, sso_until=core_auth.sso_outage_until(),
+                       auth_mode=core_auth.AUTH_MODE, env_read_only=os.environ.get("SALES_READ_ONLY") == "1")
+
+
+@bp.route("/maintenance", methods=["POST"])
+def maintenance():
+    on = f_str("state") == "on"
+    company.set_state("maintenance", {"on": True, "reason": f_str("reason"), "by": g.user["name"], "at": db._now()}
+                      if on else {"on": False}, g.user["name"])
+    if on:
+        from core import notify
+        notify.notify_role("ADMIN", "보안", "점검(읽기 전용) 모드를 켰습니다", f"{g.user['name']} · {f_str('reason') or '-'}",
+                           "/admin/doctor")
+    flash("점검 모드를 켰습니다 — 모든 사용자가 조회만 할 수 있습니다." if on else "점검 모드를 껐습니다.",
+          "warning" if on else "success")
+    return redirect(url_for("admin.doctor"))
+
+
+@bp.route("/sso-outage", methods=["POST"])
+def sso_outage():
+    try:
+        hours = 0 if f_str("state") == "off" else float(f_str("hours") or 4)
+        until = core_auth.set_sso_outage(hours, g.user["name"], f_str("reason"))
+        if until:
+            from core import notify
+            notify.notify_role("ADMIN", "보안", "SSO 장애 모드를 켰습니다",
+                               f"{until:%m-%d %H:%M}까지 비밀번호 로그인 허용 · {g.user['name']}", "/admin/doctor")
+        flash(f"SSO 장애 모드를 켰습니다 — {until:%m-%d %H:%M}까지 비밀번호가 있는 사용자는 비밀번호로 로그인합니다."
+              if until else "SSO 장애 모드를 껐습니다.", "warning" if until else "success")
+    except ValueError as exc:
+        flash(str(exc), "error")
+    return redirect(url_for("admin.doctor"))
 
 
 # ============================================================================

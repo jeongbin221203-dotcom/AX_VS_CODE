@@ -27,11 +27,31 @@ from flask import Flask, Response, abort, g, jsonify, request
 _REQUEST_ID: ContextVar[str] = ContextVar("request_id", default="-")
 _RID_OK = re.compile(r"^[A-Za-z0-9._\-]{8,64}$")
 WRITE_METHODS = {"POST", "PUT", "PATCH", "DELETE"}
-READ_ONLY_ALLOWED = {"auth.login", "auth.logout", "auth.oidc_start", "auth.oidc_callback", "auth.notifications_read"}
+READ_ONLY_ALLOWED = {"auth.login", "auth.logout", "auth.oidc_start", "auth.oidc_callback", "auth.notifications_read",
+                     "auth.breakglass", "admin.maintenance"}      # 점검 모드를 끄는 화면은 열어 둔다
 
 
 def read_only() -> bool:
-    return os.environ.get("SALES_READ_ONLY", "0") == "1"
+    """점검(읽기 전용) 모드: 환경변수 SALES_READ_ONLY=1 또는 화면·명령으로 켠 회사 설정 maintenance (서버 여러 대 15초 안에 같이)."""
+    if os.environ.get("SALES_READ_ONLY", "0") == "1":
+        return True
+    try:
+        from . import company
+        return bool((company.get("maintenance") or {}).get("on"))
+    except Exception:                                   # noqa: BLE001 - 설정을 못 읽으면 막지 않는다
+        return False
+
+
+def client_ip() -> str:
+    """접속한 사람의 IP. 앞단(Cloudflare·Render·사내 L7)이 넣어 주는 헤더를 SALES_CLIENT_IP_HEADER 로 지정하면 그 값을 쓴다
+    (예: True-Client-IP, X-Real-IP). 지정하지 않으면 직접 연결된 주소(SALES_PROXY_FIX=1 이면 X-Forwarded-For 로 복원된 값).
+    헤더는 앞단이 덮어쓰는 경우에만 지정한다 — 아니면 사용자가 IP 를 꾸밀 수 있다."""
+    header = os.environ.get("SALES_CLIENT_IP_HEADER", "").strip()
+    if header and request:
+        value = (request.headers.get(header) or "").split(",")[0].strip()
+        if value:
+            return value[:64]
+    return request.remote_addr or ""
 
 
 def request_id() -> str:
@@ -223,7 +243,7 @@ def init_app(app: Flask) -> None:
             ACCESS.info("%s %s %s %.0fms", request.method, request.path, response.status_code, elapsed * 1000,
                         extra={"http": {"method": request.method, "path": request.path,
                                         "status": response.status_code, "ms": round(elapsed * 1000, 1),
-                                        "ip": request.remote_addr, "endpoint": endpoint},
+                                        "ip": client_ip(), "endpoint": endpoint},
                                "user_id": user.get("id") if isinstance(user, dict) else None})
         return response
 

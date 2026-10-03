@@ -8,13 +8,14 @@ from flask import Blueprint, abort, flash, g, jsonify, redirect, request, url_fo
 from core import attachments as att
 from core import company
 from core import contacts as ct
+from core import customer_names as cn
 from core import credit
 from core import dataio
 from core import enterprise as ent
 from core import sales_db as db
 
 from .helpers import (BIG_SELECT, Table, a_int, a_str, cached, chart, csv_response, f_bool, f_float, f_ids,
-                      f_int, f_owner, f_str, render_page)
+                      f_int, f_owner, f_str, render_page, role_required)
 
 bp = Blueprint("crm", __name__)
 
@@ -123,7 +124,8 @@ def _customers_page(form: dict | None = None, status: int = 200):
     # 신규 탭은 항상 빈 양식 (수정 중이던 거래처 값이 새 등록으로 새지 않도록)
     base = dict(row) if row and tab == "edit" else {
         "grade": "B", "status": "활성", "industry": db.INDUSTRIES[0],
-        "payment_terms": company.get("default_payment_terms"), "credit_limit": 0, "owner_id": g.user["id"]}
+        "payment_terms": company.get("default_payment_terms"), "credit_limit": 0, "owner_id": g.user["id"],
+        **({"name": a_str("name")} if tab == "new" and a_str("name") else {})}     # 이름 정리에서 '새 거래처로 등록'
     if form:
         base.update(form)
 
@@ -138,6 +140,7 @@ def _customers_page(form: dict | None = None, status: int = 200):
                                   money=["예상금액", "가중금액"],
                                   drop=["id", "customer_id", "종료일", "owner_id"])
         ctx["contacts"] = ct.list_for(edit_id)
+        ctx["aliases"] = cn.aliases_of(edit_id)
         ctx["contact_roles"] = ct.ROLES
         ctx["edit_contact"] = next((c for c in ctx["contacts"] if c["id"] == a_int("contact")), {})
         ctx["cust_acts"] = Table(db.list_activities(days=365, customer_id=edit_id).head(10),
@@ -150,6 +153,8 @@ def _customers_page(form: dict | None = None, status: int = 200):
         ctx["all_customers"] = [(int(k), v) for k, v in db.customer_options(include_closed=False).items()]
     ctx["is_admin"] = ent.has_role(g.user, "ADMIN")
     ctx["can_merge"] = ent.has_role(g.user, "SUPPORT")
+    ctx["unknown_cnt"] = int(db._scalar("SELECT COUNT(*) FROM unknown_names WHERE resolved_at IS NULL") or 0)         if ctx["can_merge"] else 0
+    ctx["unknown"] = cn.list_unknown() if tab == "names" and ctx["can_merge"] else []
     return render_page("crm/customers.html", "customers", **ctx), status
 
 
@@ -178,6 +183,50 @@ def customer_unblock_request(cid: int):
     except (ValueError, PermissionError) as exc:
         flash(str(exc), "error")
     return redirect(url_for("crm.customers", tab="edit", id=cid))
+
+
+@bp.route("/customers/aliases/add", methods=["POST"])
+@role_required("SUPPORT")
+def alias_add():
+    cid = f_int("customer_id")
+    try:
+        added = cn.add_alias(cid, f_str("alias"), g.user["name"])
+        flash("다른 이름을 추가했습니다." if added else "정식 이름과 같은 표기라 따로 넣지 않았습니다.", "success" if added else "info")
+    except ValueError as exc:
+        flash(str(exc), "error")
+    return redirect(url_for("crm.customers", tab="edit", id=cid, _anchor="edit"))
+
+
+@bp.route("/customers/aliases/<int:aid>/delete", methods=["POST"])
+@role_required("SUPPORT")
+def alias_delete(aid: int):
+    row = db._one("SELECT customer_id FROM customer_aliases WHERE id=?", [aid])
+    cn.remove_alias(aid)
+    flash("다른 이름에서 뺐습니다.", "success")
+    return redirect(url_for("crm.customers", tab="edit", id=(row or {}).get("customer_id"), _anchor="edit"))
+
+
+@bp.route("/customers/names/link", methods=["POST"])
+@role_required("SUPPORT")
+def unknown_link():
+    cid = f_int("other_id") or f_int("customer_id")
+    if not cid:
+        flash("연결할 거래처를 고르세요.", "error")
+        return redirect(url_for("crm.customers", tab="names"))
+    try:
+        cn.link_unknown(f_int("unknown_id"), cid, g.user["name"])
+        flash("기존 거래처의 다른 이름으로 연결했습니다 — 다음 업로드부터 자동으로 맞춰집니다.", "success")
+    except ValueError as exc:
+        flash(str(exc), "error")
+    return redirect(url_for("crm.customers", tab="names"))
+
+
+@bp.route("/customers/names/dismiss", methods=["POST"])
+@role_required("SUPPORT")
+def unknown_dismiss():
+    cn.dismiss_unknown(f_int("unknown_id"))
+    flash("정리 목록에서 뺐습니다.", "info")
+    return redirect(url_for("crm.customers", tab="names"))
 
 
 @bp.route("/customers/merge", methods=["POST"])

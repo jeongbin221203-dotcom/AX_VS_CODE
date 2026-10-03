@@ -38,6 +38,23 @@ def is_pg() -> bool:
     return dialect() == "postgresql"
 
 
+def same_disk(folder: str | os.PathLike) -> bool:
+    """백업 폴더가 DB 파일과 같은 디스크인지 (SQLite). 같으면 디스크 고장 때 원본과 백업을 함께 잃는다."""
+    if is_pg():
+        return False
+    try:
+        os.makedirs(folder, exist_ok=True)
+        return os.stat(os.path.abspath(DB_PATH)).st_dev == os.stat(folder).st_dev
+    except OSError:
+        return False
+
+
+def on_network_share(path: str | None = None) -> bool:
+    """SQLite 파일이 네트워크 폴더(\서버\공유, 매핑 드라이브 등)에 있는지 — 파일 잠금이 보장되지 않아 DB 가 깨질 수 있다."""
+    p = os.path.abspath(path or DB_PATH)
+    return p.startswith("\\\\") or p.startswith("//")
+
+
 def describe() -> str:
     """화면 표시용 DB 위치 (비밀번호는 가린다)."""
     if is_pg():
@@ -257,6 +274,8 @@ def get_conn(db_path: str | None = None):
         raw.execute("PRAGMA foreign_keys=ON")
         if SQLITE_FAST:                       # 시연 샘플을 한 번에 만들 때만 (전원이 꺼지면 잃어도 되는 데이터)
             raw.execute("PRAGMA synchronous=OFF")
+        else:                                 # 커밋이 디스크에 기록된 뒤 끝난다 → 정전·서버 다운에도 저장한 것은 남는다
+            raw.execute("PRAGMA synchronous=FULL")
         conn = Connection(raw, False)
         yield conn
         raw.commit()

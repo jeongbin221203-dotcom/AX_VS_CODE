@@ -161,7 +161,7 @@
     <button class="btn btn-primary">💾 양식 저장</button>
   </form>
   {% if fm.id %}
-  <form method="post" action="{{ url_for('io.forms_delete', fid=fm.id) }}" class="danger-zone">
+  <form method="post" action="{{ url_for('io.forms_delete', fid=fm.id) }}" class="danger-zone" data-confirm="'사용 중지' — 되돌리기 어렵습니다. 계속할까요?">
     {{ csrf() }}<button class="btn btn-danger">사용 중지</button>
     <a class="btn" href="{{ url_for('io.form_template', fid=fm.id) }}">⬇️ 양식 파일 받기</a>
   </form>

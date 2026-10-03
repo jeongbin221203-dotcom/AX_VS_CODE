@@ -25,6 +25,7 @@
         </label>
         <label>소속 {{ select('org_id', org_options, target.org_id or '', blank='(미배정)') }}</label>
         <label>이메일 <input name="email" type="email" value="{{ target.email or '' }}"></label>
+        <label>메신저 ID <input name="messenger_id" value="{{ target.messenger_id or '' }}" placeholder="비우면 이메일 (네이버웍스 ID 등이 다를 때)"></label>
         <label class="check"><input type="checkbox" name="active" value="1" {{ 'checked' if target.active }}> 사용</label>
         {% if password_mode %}
           <label>임시 비밀번호 {{ '(바꿀 때만 입력)' if target.id else '*' }}
@@ -33,6 +34,14 @@
       </div>
       <button class="btn btn-primary">저장</button>
     </form>
+    {% if target.id %}
+      <form method="post" action="{{ url_for('admin.user_sessions_end', uid=target.id) }}" class="toolbar"
+            data-confirm="{{ target.name }} 님이 로그인한 모든 기기에서 로그아웃시킵니다.">
+        {{ csrf() }}
+        <span class="muted small">분실한 노트북·공용 PC 에 로그인이 남아 있을 때</span>
+        <button class="btn btn-sm btn-danger">모든 세션 끊기</button>
+      </form>
+    {% endif %}
     {% if target.id and locked %}
       <form method="post" action="{{ url_for('admin.user_unlock', uid=target.id) }}" class="toolbar">
         {{ csrf() }}
@@ -105,7 +114,7 @@
     </form>
     {% if org_options %}
     <h3>조직 삭제</h3>
-    <form method="post" action="{{ url_for('admin.org_delete') }}" class="toolbar">
+    <form method="post" action="{{ url_for('admin.org_delete') }}" class="toolbar" data-confirm="'조직 삭제' — 되돌리기 어렵습니다. 계속할까요?">
       {{ csrf() }}
       <label class="grow">삭제할 조직 {{ select('org_id', org_options, '') }}</label>
       <button class="btn btn-danger">🗑️ 조직 삭제</button>

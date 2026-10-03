@@ -200,14 +200,23 @@ def read_upload(file_obj, filename: str = "") -> pd.DataFrame:
 # ============================================================================
 # 행 → 레코드 변환기 (엔터티별)
 # ============================================================================
-def _customer_id_by_name(name: str, cache: dict[str, int], db_path: str | None) -> int:
+def _customer_id_by_name(name: str, cache: dict, db_path: str | None) -> int:
+    """거래처명 → id. 정식 이름 · 다른 이름 · '(주)'·띄어쓰기를 뺀 이름 순으로 찾는다 (core/customer_names.py)."""
+    from . import customer_names as cn
     key = name.strip()
     if key in cache:
         return cache[key]
-    row = db._one("SELECT id FROM customers WHERE name = ?", [key], db_path)
-    if not row:
-        raise ValueError(f"거래처명: 등록되지 않은 거래처입니다 ('{key}') → 거래처를 먼저 등록하세요")
-    cache[key] = int(row["id"])
+    if "_name_index" not in cache:
+        cache["_name_index"] = cn.Index(db_path)
+    idx = cache["_name_index"]
+    cid, _how = idx.resolve(key)
+    if cid is None:
+        cn.record_unknown(key, "엑셀 업로드", db_path)
+        hint = idx.suggest(key)
+        raise ValueError(f"거래처명: 등록되지 않은 거래처입니다 ('{key}')"
+                         + (f" — 비슷한 거래처: {', '.join(n for _i, n in hint)}" if hint else "")
+                         + " → 거래처 > 🏷️ 이름 정리에서 기존 거래처에 연결하거나 먼저 등록하세요")
+    cache[key] = cid
     return cache[key]
 
 

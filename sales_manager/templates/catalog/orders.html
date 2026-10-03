@@ -75,7 +75,7 @@
     {% endif %}
   </form>
   {% if o.status == '진행' %}
-  <form method="post" action="{{ url_for('catalog.order_cancel_remaining', oid=o.id) }}" class="danger-zone" data-no-draft>
+  <form method="post" action="{{ url_for('catalog.order_cancel_remaining', oid=o.id) }}" class="danger-zone" data-no-draft data-confirm="'잔량 취소' — 되돌리기 어렵습니다. 계속할까요?">
     {{ csrf() }}<label class="grow">남은 수량 취소 사유 <input name="reason" required placeholder="예) 고객 발주 축소"></label>
     <button class="btn btn-danger">잔량 취소</button>
   </form>

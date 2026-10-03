@@ -16,6 +16,8 @@
     연결 전까지는 임원·관리자만 볼 수 있습니다.</div>
 {% endif %}
 
+<p><a class="btn" href="{{ url_for('admin.doctor') }}">🩺 운영 점검 · 점검 모드</a></p>
+
 <section class="card">
   <h3>💾 백업</h3>
   <form method="post" action="{{ url_for('admin.data_action') }}" class="row-actions">
@@ -62,7 +64,7 @@
       <button class="btn" name="action" value="seed_industry">🧪 업종별 샘플 추가</button>
     </form>
     </div>
-    <form method="post" action="{{ url_for('admin.data_action') }}" class="danger-zone">
+    <form method="post" action="{{ url_for('admin.data_action') }}" class="danger-zone" data-confirm="'전체 데이터 초기화' — 되돌리기 어렵습니다. 계속할까요?">
       {{ csrf() }}
       <label class="check"><input type="checkbox" name="confirm" value="1"> 전체 삭제에 동의합니다 (직전에 DB 백업을 만들고, 감사로그는 남깁니다)</label>
       <button class="btn btn-danger" name="action" value="reset">⚠️ 전체 데이터 초기화</button>

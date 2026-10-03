@@ -320,8 +320,10 @@ def deliver(rows: list[dict], base_url: str) -> dict:
                                                 "url": url, "to": to}))
         if "user" in cfg.get("targets", []):
             for r in rows:
-                if r.get("email") and int(r.get("notify_messenger") or 0):
-                    jobs.append((int(r["id"]), r["email"], {"kind": r["kind"], "title": r["title"], "body": r.get("body"),
+                target = (r.get("messenger_id") or "").strip() if ch["kind"] == "naverworks" else ""
+                target = target or r.get("email")              # 네이버웍스는 메신저 ID 우선, 카카오워크는 이메일
+                if target and int(r.get("notify_messenger") or 0):
+                    jobs.append((int(r["id"]), target, {"kind": r["kind"], "title": r["title"], "body": r.get("body"),
                                                             "url": f"{base_url}{r.get('link') or ''}", "to": ""}))
         for nid, target, msg in jobs:
             with db.get_conn() as conn:

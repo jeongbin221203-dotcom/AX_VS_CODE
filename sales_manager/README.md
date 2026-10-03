@@ -10,7 +10,7 @@
 pip install -r requirements-dev.txt
 python app.py                   # 개발: http://127.0.0.1:5001 (SQLite, 간편 로그인, 스키마 자동 최신화)
 python manage.py worker         # 배치 워커 (알림·ERP 전송·결재 독촉·인사 연동·백업)
-python -m pytest tests -q       # 테스트 137개 (임시 DB·폴더 사용, data/ 는 건드리지 않음)
+python -m pytest tests -q       # 테스트 149개 (임시 DB·폴더 사용, data/ 는 건드리지 않음)
 # PostgreSQL 로 같은 테스트: SALES_TEST_PG_URL=postgresql://postgres@127.0.0.1:5433/postgres python -m pytest tests -q
 ```
 
@@ -192,6 +192,12 @@ sales/
 | 메신저 알림 | 관리자 > 🔔 알림 채널: 잔디(웹훅)·네이버웍스(봇 — 채널방/개인)·카카오워크(개인)·Slack·Teams·웹훅. 비밀값 암호화, 알림 종류 선택, 테스트 보내기, 발송 기록, 재시도 때 중복 없음(notify_log). 사용자는 🔔 알림에서 메일·메신저 받기를 끔. 실제 각 서비스 서버로는 미검증(가짜 서버 테스트) |
 | 휴대폰 | 760px 이하: 사이드바는 ☰ 메뉴로 접고, 오른쪽 아래 '＋ 활동 기록' 버튼 |
 | 대량 데이터 | 거래처 1만·매출 10만 건 측정: 선택지 300개 넘으면 서버 검색(/options/<kind>), 보드는 열마다 60장, 매출 화면은 탭별 계산, 대시보드·영업기회 집계는 60초 캐시(저장하면 즉시 새로), sales(customer_id·deal_id) 인덱스(0015) |
+| 보안·운영 (자재관리와 맞춤) | 비밀번호 변경·로그아웃 때 다른 세션 모두 끊김(users.session_version)·관리자 '모든 세션 끊기', IP 단위 로그인 차단(15분 20회), 실제 접속 IP(SALES_CLIENT_IP_HEADER), 없는 계정도 같은 응답 시간 |
+| 운영 점검 | `manage.py doctor`·관리자 > 배치 작업 > 🩺 운영 점검: DB·구조·SQLite 안전 설정·저장소·디스크·백업·ERP·로그인·메일·메신저·워커·보안 (core/doctor.py) |
+| 점검·장애 모드 | 점검(읽기 전용) 모드를 화면·`manage.py read-only on|off` 로(재기동 없음), SSO 장애 모드(최대 24시간 비밀번호 로그인, `manage.py sso-outage`) |
+| 백업·저장 안전 | 백업마다 검증(quick_check · pg_restore --list), 같은 디스크 경고, SQLite synchronous=FULL, S3 장애 때 임시 보관 + storage.flush |
+| 거래처 이름 맞추기 | 업로드에서 '(주)'·띄어쓰기 무시·다른 이름(customer_aliases)·사업자번호로 찾기, 못 찾은 이름은 거래처 > 🏷️ 이름 정리, 이름 변경·병합 때 예전 이름 자동 보존 (core/customer_names.py) |
+| 기타 | 위험한 버튼 확인 창, 사용자별 메신저 ID, 시연 감사로그 표준출력(SALES_AUDIT_STDOUT), docs/SECURITY.md · CI bandit·pip-audit (마이그레이션 0016) |
 
 ## 8. 세금계산서 · 전자세금계산서 증빙
 - 이미지·PDF·**전자세금계산서 XML**(자동 인식) 첨부, 매직 바이트 판별, 사업자번호·승인번호·세액·**공급가액/세액/합계 각각 매출과 대조**,

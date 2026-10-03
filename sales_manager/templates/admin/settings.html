@@ -45,7 +45,7 @@
     <button class="btn btn-primary">💾 저장</button>
   </form>
   {% if v.pii_retention_years %}
-  <form method="post" action="{{ url_for('admin.settings_purge') }}" class="danger-zone">
+  <form method="post" action="{{ url_for('admin.settings_purge') }}" class="danger-zone" data-confirm="'파기 실행' — 되돌리기 어렵습니다. 계속할까요?">
     {{ csrf() }}
     <span class="grow">종료한 지 {{ v.pii_retention_years }}년이 지난 거래처의 고객 담당자·연락처·이메일:
       <strong>{{ pii_preview.purged }}건</strong> 파기 대상 (매일 01:30 자동 파기 · 거래처명과 거래 기록은 남음)</span>

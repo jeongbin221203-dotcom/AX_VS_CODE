@@ -23,6 +23,7 @@ from core import dataio
 from core import demo_data
 from core import enterprise as ent
 from core import notify
+from core.observability import client_ip
 from core import sales_db as db
 
 # ----------------------------------------------------------------------------
@@ -127,12 +128,13 @@ def demo_login(user: dict) -> None:
     session["login_at"] = datetime.now().isoformat(timespec="seconds")
     session["auth_mode"] = core_auth.AUTH_MODE
     session["login_method"] = "시연 자동"
+    session["sv"] = core_auth.session_version(user)
 
 
 def load_context():
     """매 요청마다 사용자와 접근범위를 다시 읽는다 → 권한 변경·비활성화가 즉시 반영된다."""
     g.user = None
-    db.set_ip(request.remote_addr)
+    db.set_ip(client_ip())
     company.refresh()                                 # 회사 설정 (서버마다 15초 간격으로 다시 읽음)
     if request.endpoint == "static" or request.blueprint == "api":     # API 는 Bearer 키로 따로 인증
         return None
@@ -144,6 +146,8 @@ def load_context():
             return _logout("계정이 비활성화되었습니다. 관리자에게 문의하세요.")
         if session.get("auth_mode") != core_auth.AUTH_MODE:
             return _logout("인증 방식이 바뀌어 다시 로그인해야 합니다.", "info")
+        if int(session.get("sv", 0)) != core_auth.session_version(user):
+            return _logout("비밀번호가 바뀌었거나 다른 곳에서 로그아웃해 다시 로그인해야 합니다.", "info")
         login_at = session.get("login_at")
         if not login_at or datetime.fromisoformat(login_at) < datetime.now() - timedelta(
                 hours=config.SESSION_ABSOLUTE_HOURS):
@@ -511,7 +515,7 @@ def register_template_helpers(app: Flask) -> None:
         ACT_TYPES=db.ACT_TYPES, SALE_STATUS=db.SALE_STATUS, LEAD_SOURCES=db.LEAD_SOURCES,
         FORECAST_CATS=db.FORECAST_CATS, FORECAST_DESC=db.FORECAST_DESC,
         LOST_REASONS=db.LOST_REASONS, MEDDIC_FIELDS=db.MEDDIC_FIELDS,
-        ROLE_LABEL=db.ROLE_LABEL, AUTH_MODE=core_auth.AUTH_MODE,
+        ROLE_LABEL=db.ROLE_LABEL, AUTH_MODE=core_auth.AUTH_MODE, SSO_OUTAGE_UNTIL=core_auth.sso_outage_until,
         ENV=config.ENV, today=lambda: date.today(), now=lambda: datetime.now(),
     )
 

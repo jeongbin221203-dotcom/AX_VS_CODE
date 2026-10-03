@@ -31,18 +31,44 @@ def breakglass_users() -> set[str]:
     return {e.strip() for e in os.environ.get("SALES_BREAKGLASS_USERS", "").split(",") if e.strip()}
 
 
+def sso_outage_until() -> Optional[datetime]:
+    """SSO 장애 모드가 켜져 있으면 끝나는 시각. (관리자가 화면·명령으로 최대 24시간 켬)"""
+    from . import company
+    raw = str(company.get("sso_outage_until") or "")
+    try:
+        until = datetime.strptime(raw[:19], "%Y-%m-%d %H:%M:%S") if raw else None
+    except ValueError:
+        return None
+    return until if until and until > datetime.now() else None
+
+
+def set_sso_outage(hours: float, actor: str, reason: str = "") -> Optional[datetime]:
+    """hours > 0 이면 그 시간 동안 비밀번호가 있는 사용자 누구나 비밀번호로 로그인(사내 로그인 장애 대비). 0 이면 끔."""
+    from . import company
+    if hours and not 0 < float(hours) <= SSO_OUTAGE_MAX_HOURS:
+        raise ValueError(f"SSO 장애 모드는 최대 {SSO_OUTAGE_MAX_HOURS}시간까지 켤 수 있습니다.")
+    until = datetime.now() + timedelta(hours=float(hours)) if hours else None
+    company.set_state("sso_outage_until", until.strftime("%Y-%m-%d %H:%M:%S") if until else "", actor,
+                      {"사유": reason or None, "시간": hours or 0})
+    return until
+
+
 def breakglass_enabled() -> bool:
-    return AUTH_MODE in ("sso", "oidc") and bool(breakglass_users())
+    return AUTH_MODE in ("sso", "oidc") and (bool(breakglass_users()) or sso_outage_until() is not None)
 
 
 def authenticate_breakglass(emp_no: str, password: str) -> tuple[Optional[dict], str]:
-    if not breakglass_enabled() or (emp_no or "").strip() not in breakglass_users():
+    allowed = (emp_no or "").strip() in breakglass_users() or sso_outage_until() is not None
+    if not breakglass_enabled() or not allowed:
         db.audit("로그인실패", "사용자", None, {"비상로그인": emp_no, "사유": "비상 계정 아님"})
         return None, "사번 또는 비밀번호가 올바르지 않습니다."
     return authenticate_password(emp_no, password)
 
 MAX_FAILED_LOGINS = 5
 LOCK_MINUTES = 15
+IP_MAX_FAILURES = int(os.environ.get("SALES_IP_MAX_FAILURES", "20"))    # 한 IP 가 15분 동안 이만큼 실패하면 그 IP 차단
+IP_WINDOW_MINUTES = 15
+SSO_OUTAGE_MAX_HOURS = 24
 PASSWORD_MAX_AGE_DAYS = 90
 PASSWORD_MIN_LENGTH = 10
 PBKDF2_ROUNDS = 310_000
@@ -55,6 +81,15 @@ def hash_password(raw: str, salt: str | None = None, rounds: int = PBKDF2_ROUNDS
     salt = salt or os.urandom(16).hex()
     digest = hashlib.pbkdf2_hmac("sha256", raw.encode(), bytes.fromhex(salt), rounds).hex()
     return f"pbkdf2${rounds}${salt}${digest}"
+
+
+_DUMMY: list[str] = []
+
+
+def _dummy_hash() -> str:
+    if not _DUMMY:
+        _DUMMY.append(hash_password("dummy-password-for-timing", "00" * 16))
+    return _DUMMY[0]
 
 
 def verify_password(raw: str, stored: str | None) -> bool:
@@ -92,7 +127,7 @@ def set_password(user_id: int, raw: str, must_change: bool = False, current: str
         raise ValueError("이전과 다른 비밀번호를 사용하세요.")
     with db.get_conn() as conn:
         conn.execute("UPDATE users SET pw_hash=?, pw_changed_at=?, must_change_pw=?, failed_logins=0, "
-                     "locked_until=NULL WHERE id=?",
+                     "locked_until=NULL, session_version=COALESCE(session_version, 0) + 1 WHERE id=?",   # 다른 세션 모두 끊김
                      (hash_password(raw), db._now(), int(must_change), user_id))
     db.audit("비밀번호설정" if must_change else "비밀번호변경", "사용자", user_id,
              {"임시비밀번호": bool(must_change)})
@@ -124,6 +159,7 @@ def authenticate_password(emp_no: str, password: str) -> tuple[Optional[dict], s
     generic = "사번 또는 비밀번호가 맞지 않습니다."
     user = ent.get_user(emp_no=str(emp_no).strip()) if emp_no else None
     if not user or not user.get("active"):
+        verify_password(password or "", _dummy_hash())          # 없는 계정도 같은 시간이 걸리게 (계정 존재 추측 방지)
         db.audit("로그인실패", "사용자", None, {"사번": emp_no, "사유": "없는 계정/비활성"})
         return None, generic
     now = datetime.now()
@@ -166,3 +202,36 @@ def authenticate_simple(user_id: int) -> Optional[dict]:
     """개발·시연용 간편 선택 로그인."""
     user = ent.get_user(user_id=user_id)
     return user if user and user.get("active") else None
+
+
+# ---------------------------------------------------------------------------
+# 세션 판 — 비밀번호 변경·로그아웃·관리자 강제 종료 때 올려 다른 기기의 세션(복사된 쿠키 포함)을 끊는다
+# ---------------------------------------------------------------------------
+def session_version(user: dict) -> int:
+    return int((user or {}).get("session_version") or 0)
+
+
+def end_all_sessions(user_id: int, actor_reason: str = "") -> None:
+    with db.get_conn() as conn:
+        conn.execute("UPDATE users SET session_version = COALESCE(session_version, 0) + 1 WHERE id=?", (int(user_id),))
+    if actor_reason:
+        db.audit("세션종료", "사용자", int(user_id), {"사유": actor_reason})
+
+
+# ---------------------------------------------------------------------------
+# IP 단위 로그인 차단 — 여러 계정을 돌아가며 시도하는 공격(계정 잠금만으로는 못 막음)
+# ---------------------------------------------------------------------------
+def ip_blocked(ip: str) -> bool:
+    if not ip:
+        return False
+    since = (datetime.now() - timedelta(minutes=IP_WINDOW_MINUTES)).strftime("%Y-%m-%d %H:%M:%S")
+    return int(db._scalar("SELECT COUNT(*) FROM login_ip_failures WHERE ip=? AND at>=?", [ip, since]) or 0) >= IP_MAX_FAILURES
+
+
+def record_ip_failure(ip: str) -> None:
+    if not ip:
+        return
+    now = datetime.now()
+    with db.get_conn() as conn:
+        conn.execute("INSERT INTO login_ip_failures (ip, at) VALUES (?, ?)", (ip, now.strftime("%Y-%m-%d %H:%M:%S")))
+        conn.execute("DELETE FROM login_ip_failures WHERE at < ?", ((now - timedelta(days=1)).strftime("%Y-%m-%d %H:%M:%S"),))

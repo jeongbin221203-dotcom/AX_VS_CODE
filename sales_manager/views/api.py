@@ -14,6 +14,7 @@ from typing import Any
 from flask import Blueprint, current_app, g, jsonify, request
 
 from core import api_keys, database
+from core.observability import client_ip
 from core import enterprise as ent
 from core import quotes as qt
 from core import sales_db as db
@@ -60,16 +61,16 @@ def _server_error(err):
 @bp.before_request
 def _authenticate():
     g.api_started = time.perf_counter()
-    db.set_ip(request.remote_addr)
+    db.set_ip(client_ip())
     if request.endpoint in ("api.openapi",):
         return None
     header = request.headers.get("Authorization", "")
     if not header.startswith("Bearer "):
         raise ApiError(401, "unauthorized", "Authorization: Bearer <API 키> 헤더가 필요합니다.",
                        {"WWW-Authenticate": 'Bearer realm="sales-api"'})
-    client, message = api_keys.authenticate(header[7:].strip(), request.remote_addr)
+    client, message = api_keys.authenticate(header[7:].strip(), client_ip())
     if not client:
-        db.audit("API인증실패", "시스템", None, {"IP": request.remote_addr, "사유": message})
+        db.audit("API인증실패", "시스템", None, {"IP": client_ip(), "사유": message})
         raise ApiError(401, "unauthorized", message, {"WWW-Authenticate": 'Bearer error="invalid_token"'})
     allowed, remaining, reset = api_keys.hit(client)
     g.rate = (int(client["rate_limit"]), remaining, reset)

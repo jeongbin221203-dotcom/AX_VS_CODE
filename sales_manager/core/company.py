@@ -48,6 +48,9 @@ DEFAULTS: dict[str, Any] = {
     "auto_block_overdue_days": 0,          # 결제기일이 N일 넘게 지난 미수가 있으면 자동 거래정지 (0 = 끔)
     "auto_block_over_credit": False,       # 미수가 여신한도를 넘으면 자동 거래정지
     "auto_block_exempt_days": 30,          # 해제 결재 뒤 다시 자동 정지하지 않는 기간
+    # 운영 상태 (화면·명령으로 켜고 끔 — set_state, 서버 여러 대가 15초 안에 함께)
+    "maintenance": {"on": False},          # 점검(읽기 전용) 모드 {on, reason, by, at}
+    "sso_outage_until": "",                # SSO 장애 모드 끝나는 시각 (그때까지 비밀번호 계정 로그인 허용)
 }
 
 # 코드 목록 → (sales_db 의 리스트, 쓰이는 테이블·컬럼)
@@ -62,6 +65,7 @@ LABELS = {
     "app_title": "시스템 이름", "discount_manager_max": "팀장 결재 한도(%)", "discount_exec_max": "임원 결재 한도(%)",
     "approval_sla_hours": "결재 단계 기한(시간)", "quote_valid_days": "견적 유효기간(일)",
     "default_payment_terms": "기본 결제조건(일)", "stage_prob": "단계별 확률(%)", "stage_names": "진행 단계 이름",
+    "maintenance": "점검(읽기 전용) 모드", "sso_outage_until": "SSO 장애 모드",
     "pii_retention_years": "개인정보 보관기간(년)",
     "audit_retention_years": "감사로그 보관(년)", "backup_keep_daily": "일 백업 보관(개)",
     "backup_keep_monthly": "월말 백업 보관(개월)", "backup_keep_yearly": "연말 백업 보관(년)",
@@ -248,6 +252,20 @@ def save(changes: dict, actor: str | None = None) -> dict:
     db.audit("설정변경", "시스템", None, {LABELS.get(k, k): v for k, v in diff.items()})
     refresh(force=True)
     return diff
+
+
+def set_state(key: str, value: Any, actor: str, detail: dict | None = None) -> None:
+    """운영 상태 값(maintenance · sso_outage_until) 저장 — 화면 검증 없이, 감사로그를 남긴다."""
+    if key not in ("maintenance", "sso_outage_until"):
+        raise ValueError(f"상태 값이 아닙니다: {key}")
+    text, now = json.dumps(value, ensure_ascii=False), db._now()
+    with db.get_conn() as conn:
+        if conn.execute("UPDATE company_settings SET value=?, updated_by=?, updated_at=? WHERE key=?",
+                        (text, actor, now, key)).rowcount == 0:
+            conn.execute("INSERT INTO company_settings (key, value, updated_by, updated_at) VALUES (?,?,?,?)",
+                         (key, text, actor, now))
+    db.audit("운영상태변경", "시스템", None, {"항목": LABELS.get(key, key), "값": value, **(detail or {})})
+    refresh(force=True)
 
 
 # ---------------------------------------------------------------------------

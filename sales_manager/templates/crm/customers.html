@@ -48,12 +48,12 @@
 {{ table(tbl, 460) }}
 
 <section class="card" data-edit-anchor>
-  {{ tabs([('new', '➕ 신규 등록'), ('edit', '✏️ 수정 / 삭제')] + ([('merge', '🔀 중복 · 병합')] if can_merge else []), tab) }}
+  {{ tabs([('new', '➕ 신규 등록'), ('edit', '✏️ 수정 / 삭제')] + ([('merge', '🔀 중복 · 병합'), ('names', '🏷️ 이름 정리' ~ (' ' ~ unknown_cnt if unknown_cnt else ''))] if can_merge else []), tab) }}
   {% if tab == 'merge' %}
     <p class="muted">사업자번호가 같거나 이름이 거의 같은 거래처입니다('(주)대한산업' = '대한산업 주식회사'). 병합하면 없앨 거래처의
       영업기회·활동·매출·견적·특가가 남길 거래처로 옮겨지고, 없앨 거래처는 '종료(병합됨)'로 남습니다. 되돌릴 수 없으니 사유를 남기세요.</p>
     {% for grp in dup_groups %}
-      <form method="post" action="{{ url_for('crm.customer_merge') }}" class="toolbar">
+      <form method="post" action="{{ url_for('crm.customer_merge') }}" class="toolbar" data-confirm="'병합' — 되돌리기 어렵습니다. 계속할까요?">
         {{ csrf() }}
         <span class="grow small"><strong>{{ grp['기준'] }}</strong> {{ grp['값'] }} —
           {% for c in grp['거래처'] %}#{{ c.id }} {{ c.name }} ({{ c.owner }}{{ ', ' ~ c.biz_no if c.biz_no }}){{ ' · ' if not loop.last }}{% endfor %}</span>
@@ -66,7 +66,7 @@
       <div class="alert alert-success">중복으로 보이는 거래처가 없습니다.</div>
     {% endfor %}
     <h3>직접 고르기</h3>
-    <form method="post" action="{{ url_for('crm.customer_merge') }}" class="toolbar">
+    <form method="post" action="{{ url_for('crm.customer_merge') }}" class="toolbar" data-confirm="'병합' — 되돌리기 어렵습니다. 계속할까요?">
       {{ csrf() }}
       <label class="grow">없앨 거래처 {{ select('source_id', all_customers, '', blank='선택') }}</label>
       <label class="grow">남길 거래처 {{ select('target_id', all_customers, '', blank='선택') }}</label>
@@ -89,7 +89,7 @@
           {{ customer_form(f, statuses, true) }}
           <button class="btn btn-primary">💾 저장</button>
         </form>
-        <form method="post" action="{{ url_for('crm.customer_delete', cid=edit_id) }}" class="danger-zone">
+        <form method="post" action="{{ url_for('crm.customer_delete', cid=edit_id) }}" class="danger-zone" data-confirm="'삭제' — 되돌리기 어렵습니다. 계속할까요?">
           {{ csrf() }}
           <label class="check"><input type="checkbox" name="confirm" value="1"> 삭제 확인 (영업기회·활동·매출 이력이 있으면 삭제되지 않습니다 → 상태를 '종료'로)</label>
           <button class="btn btn-danger">🗑️ 삭제</button>
@@ -137,8 +137,46 @@
           <div><p class="muted small">진행 중 영업기회</p>{{ table(cust_deals) }}</div>
           <div><p class="muted small">최근 영업활동</p>{{ table(cust_acts) }}</div>
         </div>
+        <h4>🏷️ 다른 이름 <span class="muted small">엑셀 업로드에서 이 이름들도 이 거래처로 맞춥니다. 이름을 바꾸거나 병합하면 예전 이름이 자동으로 들어갑니다.</span></h4>
+        <div class="alias-list">
+          {% for a in aliases %}
+            <span class="badge">{{ a.alias }}
+              {% if can_merge %}<form method="post" action="{{ url_for('crm.alias_delete', aid=a.id) }}" class="inline-form" data-confirm="'{{ a.alias }}' 를 다른 이름에서 뺍니다.">{{ csrf() }}<button class="link-btn" title="빼기">✕</button></form>{% endif %}
+            </span>
+          {% else %}<span class="muted small">없음</span>{% endfor %}
+        </div>
+        {% if can_merge %}
+        <form method="post" action="{{ url_for('crm.alias_add') }}" class="toolbar">
+          {{ csrf() }}<input type="hidden" name="customer_id" value="{{ edit_id }}">
+          <label class="grow">다른 이름 추가 <input name="alias" placeholder="예) 대한상사 부산지점, (주)대한상사"></label>
+          <button class="btn btn-sm">추가</button>
+        </form>
+        {% endif %}
       {% endif %}
     {% endif %}
+  {% elif tab == 'names' %}
+    <p class="muted">엑셀 업로드에서 거래처 마스터에 없어 맞추지 못한 이름입니다. 같은 회사면 <b>기존 거래처의 다른 이름으로 연결</b>하고(다음 업로드부터 자동으로 맞춰짐),
+      새 회사면 등록하세요. '(주)'·띄어쓰기·기호 차이는 이미 같은 이름으로 봅니다.</p>
+    {% if not unknown %}<div class="alert alert-info">정리할 이름이 없습니다.</div>{% endif %}
+    {% for u in unknown %}
+      <div class="unknown-row">
+        <div class="grow"><strong>{{ u.name }}</strong> <span class="muted small">{{ u.source }} · {{ u.seen }}번 · 최근 {{ u.last_seen[:16] }}</span></div>
+        <form method="post" action="{{ url_for('crm.unknown_link') }}" class="toolbar">
+          {{ csrf() }}<input type="hidden" name="unknown_id" value="{{ u.id }}">
+          <label>연결할 거래처
+            <select name="customer_id" data-no-search>
+              {% for cid, name in u.suggest %}<option value="{{ cid }}">{{ name }}</option>{% endfor %}
+              <option value="">— 다른 거래처 (아래에서 찾기) —</option>
+            </select></label>
+          <label>또는 {{ pick('other_id', options, '', blank='거래처 찾기', kind='customers') }}</label>
+          <button class="btn btn-sm btn-primary">다른 이름으로 연결</button>
+        </form>
+        <a class="btn btn-sm" href="{{ url_for('crm.customers', tab='new', name=u.name) }}">새 거래처로 등록</a>
+        <form method="post" action="{{ url_for('crm.unknown_dismiss') }}" class="inline-form" data-confirm="'{{ u.name }}' 를 정리 목록에서 뺍니다(잘못 적은 이름 등).">
+          {{ csrf() }}<input type="hidden" name="unknown_id" value="{{ u.id }}"><button class="btn btn-sm">목록에서 빼기</button>
+        </form>
+      </div>
+    {% endfor %}
   {% else %}
     <form method="post" action="{{ url_for('crm.customer_save') }}" class="form">
       {{ csrf() }}

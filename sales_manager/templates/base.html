@@ -69,7 +69,7 @@
       매출·견적·결재 같은 업무는 직접 해 볼 수 있고, 관리자 설정(사용자·회사 설정·ERP·API·엑셀 양식)은 잠겨 있습니다.
       <details class="demo-reset">
         <summary>샘플로 되돌리기</summary>
-        <form method="post" action="{{ url_for('auth.demo_reset') }}" data-no-draft>
+        <form method="post" action="{{ url_for('auth.demo_reset') }}" data-no-draft data-confirm="'되돌리기' — 되돌리기 어렵습니다. 계속할까요?">
           <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
           <p>지금까지 바뀐 내용을 모두 지우고 처음 샘플로 돌아갑니다(모든 방문자에게 적용).</p>
           <button class="btn btn-sm btn-danger">되돌리기</button>
@@ -109,7 +109,8 @@
   <main class="content">
     {% if DEMO %}<div class="demo-banner">🧪 포트폴리오 시연 서버 — 로그인 없이 <b>{{ ROLE_LABEL.get(g.user.role, g.user.role) }}</b>(으)로 들어왔습니다 · 매일 새벽 {{ DEMO_RESET_HOUR }}시 샘플로 초기화 · 관리자 설정 잠김
       {% if active == 'dashboard' %}· <a href="#demo-guide" data-open-guide>사용 안내</a>{% else %}· <a href="{{ url_for('reports.dashboard') }}#demo-guide">사용 안내</a>{% endif %}</div>{% endif %}
-    {% if READ_ONLY() %}<div class="alert alert-warning">🛠️ 시스템 점검 중입니다 — 조회만 할 수 있고 저장·변경은 막혀 있습니다.</div>{% endif %}
+    {% if READ_ONLY() %}<div class="alert alert-warning">🛠️ 시스템 점검 중입니다 — 조회만 할 수 있고 저장·변경은 막혀 있습니다.{% if COMPANY.maintenance and COMPANY.maintenance.reason %} ({{ COMPANY.maintenance.reason }}){% endif %}
+      {% if g.user and g.user.role == 'ADMIN' %}<a href="{{ url_for('admin.doctor') }}#maintenance">점검 모드 끄기</a>{% endif %}</div>{% endif %}
     <h1>{{ title }}</h1>
     {% include "_flashes.html" %}
     {% block content %}{% endblock %}

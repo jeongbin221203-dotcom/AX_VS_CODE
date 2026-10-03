@@ -382,3 +382,16 @@ label > select, label > input:not([type=checkbox]):not([type=radio]), label > te
   .metric-delta, .metric-label { overflow-wrap: anywhere; }
   .layout, .content { max-width: 100vw; overflow-x: hidden; }
 }
+
+/* 운영 점검 (admin/doctor.html) */
+.badge.doc-ok { background: var(--success-bg); color: var(--success-fg); }
+.badge.doc-warn { background: var(--warning-bg); color: var(--warning-fg); }
+.badge.doc-fail { background: var(--error-bg); color: var(--error-fg); }
+.badge.doc-off { background: var(--bg); color: var(--muted); }
+
+/* 거래처 다른 이름 · 이름 정리 */
+.alias-list { display: flex; flex-wrap: wrap; gap: .35rem; margin: .3rem 0 .5rem; }
+.alias-list .inline-form { display: inline; }
+.link-btn { background: none; border: 0; color: inherit; cursor: pointer; padding: 0 0 0 .2rem; }
+.unknown-row { display: flex; flex-wrap: wrap; align-items: end; gap: .5rem 1rem; padding: .6rem 0; border-bottom: 1px solid var(--line); }
+.unknown-row .grow { flex: 1 1 220px; }

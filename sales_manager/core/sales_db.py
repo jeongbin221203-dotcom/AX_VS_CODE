@@ -301,6 +301,10 @@ def audit(action: str, entity: str, entity_id: int | None = None,
                 (*record.values(), prev, digest))
     except Exception as exc:   # noqa: BLE001 - 감사 기록 실패가 업무를 막지 않되 파일에 남긴다
         _audit_fallback(record, exc)
+        return
+    if os.environ.get("SALES_AUDIT_STDOUT") == "1":
+        # 시연 서버처럼 DB 가 재시작마다 초기화되는 곳: 서버 로그(Render 로그)에도 한 줄 JSON 으로 남겨 방문자 행동을 확인
+        print("AUDIT " + json.dumps(record, ensure_ascii=False, default=str), flush=True)
 
 
 def verify_audit_chain(db_path: str | None = None) -> dict:
@@ -581,6 +585,9 @@ def upsert_customer(data: dict, db_path: str | None = None, confirm_similar: boo
                 raise ConflictError("다른 사용자가 먼저 이 거래처를 수정했습니다. "
                                     "화면을 새로고침해 최신 내용을 확인한 뒤 다시 저장하세요.")
         _set_biz_norm(cid, record.get("biz_no"), db_path)
+        if str(prev.get("name") or "").strip() != record["name"]:       # 예전 이름은 다른 이름으로 남겨 예전 엑셀도 맞춰지게
+            from . import customer_names
+            customer_names.add_alias(cid, prev["name"], db_path=db_path, quiet=True)
         if db_path is None and (prev.get("manager"), prev.get("phone"), prev.get("email")) != \
                 (record.get("manager"), record.get("phone"), record.get("email")):
             from . import contacts
@@ -661,6 +668,10 @@ def merge_customers(source_id: int, target_id: int, reason: str, db_path: str | 
                      "memo=COALESCE(memo,'') || ?, row_version=COALESCE(row_version,0)+1 WHERE id=?",
                      (int(target_id), _now(), f"\n[병합 → {dst['name']} #{target_id}] {reason.strip()}",
                       int(source_id)))
+    from . import customer_names                    # 합쳐진 쪽 이름·다른 이름 → 남는 쪽 다른 이름
+    with get_conn(db_path) as conn:
+        conn.execute("UPDATE customer_aliases SET customer_id=? WHERE customer_id=?", (int(target_id), int(source_id)))
+    customer_names.add_alias(int(target_id), src["name"], db_path=db_path, quiet=True)
     result = {"이동": moved, "보완": list(fill), "경고": warnings}
     audit("거래처병합", "거래처", int(target_id),
           {"원거래처": f"{src['name']} #{source_id}", "대상": f"{dst['name']} #{target_id}", "사유": reason.strip(),
@@ -1613,6 +1624,13 @@ def backup_database(folder: str | os.PathLike, keep: int | None = None, db_path:
                                 capture_output=True, text=True, timeout=3600)
         if result.returncode != 0:
             raise RuntimeError(f"pg_dump 실패: {result.stderr.strip()[:500]}")
+        # 검증: pg_restore --list 로 읽히는 파일인지 (깨진 백업은 남기지 않는다)
+        restore = os.environ.get("SALES_PG_RESTORE") or shutil.which("pg_restore")
+        if restore:
+            check = subprocess.run([restore, "--list", target], capture_output=True, text=True, timeout=600)
+            if check.returncode != 0:
+                os.remove(target)
+                raise RuntimeError(f"백업 검증 실패(pg_restore --list): {check.stderr.strip()[:300]}")
         pattern = (".dump",)
     else:
         target = os.path.join(folder, f"sales_{stamp}.db")
@@ -1620,9 +1638,14 @@ def backup_database(folder: str | os.PathLike, keep: int | None = None, db_path:
         dst = sqlite3.connect(target)
         try:
             src.backup(dst)
+            # 검증: 복사본을 열어 무결성 검사 — 통과하지 못한 백업은 지운다 (복원해 보기 전엔 백업이 아니다)
+            ok = dst.execute("PRAGMA quick_check").fetchone()[0]
         finally:
             dst.close()
             src.close()
+        if ok != "ok":
+            os.remove(target)
+            raise RuntimeError(f"백업 검증 실패(quick_check): {ok}")
         pattern = (".db",)
     if keep is not None:
         olds = sorted(f for f in os.listdir(folder) if f.startswith("sales_") and f.endswith(pattern))
@@ -1631,7 +1654,9 @@ def backup_database(folder: str | os.PathLike, keep: int | None = None, db_path:
     else:
         from .retention import prune_backups
         prune_backups(folder, pattern)
-    audit("DB백업", "시스템", None, {"파일": os.path.basename(target)}, db_path)
+    same = database.same_disk(folder)
+    audit("DB백업", "시스템", None, {"파일": os.path.basename(target), "검증": "통과",
+                                    **({"경고": "DB 와 같은 디스크 — 디스크가 고장 나면 함께 잃습니다"} if same else {})}, db_path)
     return target
 
 

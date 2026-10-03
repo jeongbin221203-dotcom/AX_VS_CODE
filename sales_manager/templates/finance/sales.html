@@ -34,7 +34,7 @@
         <button class="btn btn-primary">🔒 {{ next_closable }} 마감</button>
       </form>
       {% if closed_through %}
-      <form method="post" action="{{ url_for('finance.sales_close') }}" class="danger-zone" data-no-draft>
+      <form method="post" action="{{ url_for('finance.sales_close') }}" class="danger-zone" data-no-draft data-confirm="'마감 해제' — 되돌리기 어렵습니다. 계속할까요?">
         {{ csrf() }}<input type="hidden" name="action" value="reopen">
         <label class="grow">{{ closed_through }} 마감 해제 사유 <input name="reason" required placeholder="예) 세금계산서 수정 발행 반영"></label>
         <button class="btn btn-danger">마감 해제</button>
@@ -89,7 +89,7 @@
     {{ table(advances, 200, '선수금이 있는 거래처가 없습니다.') }}
     {% if adv_options %}
     <form method="post" class="toolbar" data-no-draft
-          onsubmit="this.action='{{ url_for('finance.customer_refund', cid=0) }}'.replace('/0/', '/' + this.customer_id.value + '/')">
+          onsubmit="this.action='{{ url_for('finance.customer_refund', cid=0) }}'.replace('/0/', '/' + this.customer_id.value + '/')" data-confirm="'선수금 환불' — 되돌리기 어렵습니다. 계속할까요?">
       {{ csrf() }}
       <label class="grow">환불할 거래처 {{ select('customer_id', adv_options, '') }}</label>
       <label>환불액 <input type="number" name="amount" min="1" required></label>
@@ -179,7 +179,7 @@
       <label>품목코드 <input name="item_code" value="{{ raw.item_code or '' }}"></label>
       <button class="btn btn-primary">💾 저장</button>
     </form>
-    <form method="post" action="{{ url_for('finance.sale_cancel', sid=raw.id) }}" class="danger-zone">
+    <form method="post" action="{{ url_for('finance.sale_cancel', sid=raw.id) }}" class="danger-zone" data-confirm="'매출 취소' — 되돌리기 어렵습니다. 계속할까요?">
       {{ csrf() }}
       <label class="grow">취소 사유 <input name="reason" required placeholder="예) 계약 해지, 중복 입력"></label>
       <button class="btn btn-danger">매출 취소</button>
@@ -216,7 +216,7 @@
           <button class="btn">선수금 배분</button>
         </form>
         {% endif %}
-        <form method="post" action="{{ url_for('finance.sale_writeoff', sid=raw.id) }}" class="toolbar" data-no-draft>
+        <form method="post" action="{{ url_for('finance.sale_writeoff', sid=raw.id) }}" class="toolbar" data-no-draft data-confirm="'대손 결재 요청' — 되돌리기 어렵습니다. 계속할까요?">
           {{ csrf() }}<label class="grow">대손 처리 사유 <input name="reason" required placeholder="예) 거래처 파산, 회수 불능 확인"></label>
           <button class="btn btn-danger">대손 결재 요청 ({{ remain_amt|won }})</button>
         </form>
@@ -230,7 +230,7 @@
         <span>{{ p.pay_date }} · <strong>{{ p.amount|won }}</strong>{% if p.ref_no %} · {{ p.ref_no }}{% endif %}</span>
         <span class="muted small">{{ p.source }} · {{ p.created_by }}{% if p.memo %} · {{ p.memo }}{% endif %}{% if p.reversed_by %} · 반제됨{% endif %}</span>
         {% if p.amount > 0 and not p.reversed_by and not p.reversal_of and raw.status != '취소' %}
-          <form method="post" action="{{ url_for('finance.payment_reverse', pid=p.id) }}" class="inline-form" data-no-draft>
+          <form method="post" action="{{ url_for('finance.payment_reverse', pid=p.id) }}" class="inline-form" data-no-draft data-confirm="'반제' — 되돌리기 어렵습니다. 계속할까요?">
             {{ csrf() }}<input name="reason" placeholder="반제 사유" required><button class="btn btn-sm btn-danger">반제</button>
           </form>
         {% endif %}
@@ -284,7 +284,7 @@
               {% if d.voided_at %}<div class="small muted">무효 사유: {{ d.void_reason }} ({{ d.voided_by }})</div>
               {% else %}
                 <a class="btn btn-sm" href="{{ url_for('finance.document_file', doc_id=d.id, download=1) }}">원본 받기</a>
-                <form method="post" action="{{ url_for('finance.document_void', doc_id=d.id) }}" class="inline-form">
+                <form method="post" action="{{ url_for('finance.document_void', doc_id=d.id) }}" class="inline-form" data-confirm="'무효' — 되돌리기 어렵습니다. 계속할까요?">
                   {{ csrf() }}<input name="reason" placeholder="무효 사유" required>
                   <button class="btn btn-sm btn-danger">무효</button>
                 </form>

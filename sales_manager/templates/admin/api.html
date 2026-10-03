@@ -17,7 +17,7 @@
   <h3>발급된 키</h3>
   {{ table(clients, 300, '발급된 키가 없습니다.') }}
   {% for cid, label in revocable %}
-  <form method="post" action="{{ url_for('admin.api_revoke', cid=cid) }}" class="toolbar">
+  <form method="post" action="{{ url_for('admin.api_revoke', cid=cid) }}" class="toolbar" data-confirm="'폐기' — 되돌리기 어렵습니다. 계속할까요?">
     {{ csrf() }}<span class="grow">{{ label }}</span><button class="btn btn-sm btn-danger">폐기</button>
   </form>
   {% endfor %}

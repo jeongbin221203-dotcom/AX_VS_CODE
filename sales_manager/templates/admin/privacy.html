@@ -14,7 +14,7 @@
 
 {% if found %}
 <section class="card">
-  <form method="post" action="{{ url_for('admin.privacy') }}" class="form" data-no-draft>
+  <form method="post" action="{{ url_for('admin.privacy') }}" class="form" data-no-draft data-confirm="'삭제 요청 — 파기' — 되돌리기 어렵습니다. 계속할까요?">
     {{ csrf() }}<input type="hidden" name="term" value="{{ found.term }}">
     <h3>거래처의 고객 담당자 정보 ({{ found.customers|length }}건)</h3>
     <div class="table-wrap"><table class="data">

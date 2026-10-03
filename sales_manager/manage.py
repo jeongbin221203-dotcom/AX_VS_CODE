@@ -9,6 +9,9 @@
   python manage.py restore <파일>        백업에서 복구 (PostgreSQL: pg_restore --clean, SQLite: 파일 교체)
   python manage.py check                 DB·저장소·스키마 상태 점검 (배포 후 확인용)
   python manage.py demo-init             빈 DB 에 시연용 조직·계정·샘플 데이터 (Render 같은 시연 서버, SALES_DEMO=1 필요)
+  python manage.py doctor                운영 점검 (DB·저장소·백업·ERP·로그인·메일·메신저·워커) — 실패면 종료 코드 1
+  python manage.py read-only on|off      점검(읽기 전용) 모드 (--reason)
+  python manage.py sso-outage --hours 4  SSO 장애 모드: 그 시간 동안 비밀번호 로그인 허용 (--off 로 끔, 최대 24시간)
   python manage.py demo-build            시연 샘플 DB 를 data/demo_template.db 로 미리 만든다 (배포의 빌드 단계, SALES_DEMO=1)
                                          serve.py 가 켜질 때 이 파일로 바로 열고(스키마 갱신도 serve.py 안에서), 오늘 기준 샘플은 뒤에서 만든다 (core/demo_data.py)
                                          Render: 빌드 = pip install … && python manage.py demo-build, 시작 = python serve.py
@@ -143,6 +146,52 @@ def cmd_seed_sample(args) -> int:
     return 0
 
 
+def cmd_storage_flush(args) -> int:
+    from core.storage import get_storage
+    st = get_storage()
+    print(st.flush() if hasattr(st, "flush") else "임시 보관을 쓰지 않는 저장소입니다 (SALES_STORAGE=local).")
+    return 0
+
+
+def cmd_doctor(args) -> int:
+    """운영 점검: DB·구조·저장소·백업·ERP·로그인·메일·메신저·워커·보안. 실패가 있으면 종료 코드 1."""
+    from app import create_app
+    create_app()
+    from core import doctor
+    checks = doctor.run()
+    for c in checks:
+        print(f"[{c.label:<4}] {c.area:<4} {c.name:<12} {c.message}")
+    s = doctor.summary(checks)
+    print(f"정상 {s['ok']} · 주의 {s['warn']} · 실패 {s['fail']} · 사용 안 함 {s['off']}")
+    return 1 if s["fail"] else 0
+
+
+def cmd_read_only(args) -> int:
+    """점검(읽기 전용) 모드 켜기/끄기 — 서버 여러 대가 15초 안에 함께. (환경변수 SALES_READ_ONLY=1 은 따로 항상 켬)"""
+    from app import create_app
+    create_app()
+    from core import company
+    from core import sales_db as db
+    db.set_context("명령줄", None)
+    on = args.state == "on"
+    company.set_state("maintenance", {"on": on, "reason": args.reason or "", "by": "명령줄",
+                                      "at": db._now()} if on else {"on": False}, "명령줄")
+    print("점검 모드 켬 — 조회만 됩니다." if on else "점검 모드 끔.")
+    return 0
+
+
+def cmd_sso_outage(args) -> int:
+    """SSO 장애 모드: 정해진 시간(최대 24시간) 동안 비밀번호가 있는 사용자는 비밀번호로 로그인."""
+    from app import create_app
+    create_app()
+    from core import auth
+    from core import sales_db as db
+    db.set_context("명령줄", None)
+    until = auth.set_sso_outage(0 if args.off else args.hours, "명령줄", args.reason or "")
+    print(f"SSO 장애 모드 켬 — {until:%Y-%m-%d %H:%M}까지" if until else "SSO 장애 모드 끔.")
+    return 0
+
+
 DEMO_SEED = int(os.environ.get("SALES_DEMO_SEED", "2026"))
 
 
@@ -227,6 +276,19 @@ def main(argv=None) -> int:
     p = sub.add_parser("demo-init", help="시연 서버 빌드용 — 빈 DB 에 조직·계정·샘플 데이터")
     p.add_argument("--customers", type=int, default=5, help="업종마다 거래처 수")
     p.set_defaults(func=cmd_demo_init)
+    p = sub.add_parser("storage-flush", help="S3 장애 때 임시 보관한 파일 다시 올리기")
+    p.set_defaults(func=cmd_storage_flush)
+    p = sub.add_parser("doctor", help="운영 점검 (실패가 있으면 종료 코드 1)")
+    p.set_defaults(func=cmd_doctor)
+    p = sub.add_parser("read-only", help="점검(읽기 전용) 모드 켜기/끄기")
+    p.add_argument("state", choices=["on", "off"])
+    p.add_argument("--reason", default="")
+    p.set_defaults(func=cmd_read_only)
+    p = sub.add_parser("sso-outage", help="SSO 장애 모드 (비밀번호 로그인 임시 허용)")
+    p.add_argument("--hours", type=float, default=4)
+    p.add_argument("--off", action="store_true")
+    p.add_argument("--reason", default="")
+    p.set_defaults(func=cmd_sso_outage)
     p = sub.add_parser("demo-build", help="시연 서버 빌드용 — 샘플 DB 를 미리 만들어 둔다 (data/demo_template.db)")
     p.add_argument("--out")
     p.set_defaults(func=cmd_demo_build)
