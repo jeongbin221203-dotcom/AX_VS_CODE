@@ -603,6 +603,34 @@ def recent(exam: str, limit: int = 15) -> list[dict]:
             "FROM speaking_attempts WHERE exam = ? ORDER BY id DESC LIMIT ?", (exam, limit))]
 
 
+def question_of(bank: "SpeakingBank", task: str, item_id: str, qidx: int) -> str:
+    """기록 화면에 보여 줄 질문 (없으면 빈 문자열)."""
+    t = task.removeprefix("tsp:")
+    it = bank.by_id.get((t, item_id))
+    if not it:
+        return ""
+    if t == "read_aloud":
+        return it.get("text", "")
+    if t == "describe_picture":
+        return "사진 묘사 · " + it.get("scene_ko", "")
+    if t in ("respond_questions", "respond_info"):
+        qs = it.get("questions") or []
+        return qs[qidx] if qidx < len(qs) else ""
+    if t == "opic_rp":
+        st = it.get("steps") or []
+        return st[qidx]["question"] if qidx < len(st) else ""
+    return it.get("question", "")
+
+
+def history(exam: str, limit: int = 40, offset: int = 0) -> tuple[list[dict], int]:
+    """답변 기록 (최근 순) 과 전체 개수."""
+    with db.connect() as con:
+        total = con.execute("SELECT COUNT(*) FROM speaking_attempts WHERE exam = ?", (exam,)).fetchone()[0]
+        rows = [dict(r) for r in con.execute(
+            "SELECT * FROM speaking_attempts WHERE exam = ? ORDER BY id DESC LIMIT ? OFFSET ?", (exam, limit, offset))]
+    return rows, total
+
+
 def trend(exam: str, task: str | None = None, days: int = 60) -> list[dict]:
     """날짜별 평균 (점수 비율·단어 수) — 시간이 지나며 늘었는지 본다."""
     q = ("SELECT substr(created_at, 1, 10) d, COUNT(*) n, AVG(points / max_points) r, AVG(words) w "

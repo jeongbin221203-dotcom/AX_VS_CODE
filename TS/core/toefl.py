@@ -179,6 +179,48 @@ def recent(limit: int = 12) -> list[dict]:
     return [dict(r) for r in rows]
 
 
+WRONG_CUT_AUTO = 0.8      # 자동 채점: 80% 미만이면 틀린 것 (객관식은 0/1)
+WRONG_CUT_SELF = 0.6      # 자기 평가(쓰기·인터뷰): 5점 중 3점 미만
+
+
+def wrong_items(task: str) -> dict[str, dict]:
+    """마지막으로 푼 회차 기준 틀린 문항이 있는 문제 → {item_id: {at, wrong, n}}. 다시 풀어 맞히면 빠진다."""
+    cut = WRONG_CUT_AUTO if TASKS[task]["auto"] else WRONG_CUT_SELF
+    with db.connect() as con:
+        rows = con.execute(
+            "SELECT a.item_id, a.score, a.created_at FROM toefl_attempts a JOIN "
+            "(SELECT item_id, MAX(created_at) at FROM toefl_attempts WHERE task = ? GROUP BY item_id) m "
+            "ON a.item_id = m.item_id AND a.created_at = m.at WHERE a.task = ?", (task, task)).fetchall()
+    out: dict[str, dict] = {}
+    for r in rows:
+        d = out.setdefault(r["item_id"], {"at": r["created_at"], "wrong": 0, "n": 0})
+        d["n"] += 1
+        d["wrong"] += r["score"] < cut
+    return {k: v for k, v in out.items() if v["wrong"]}
+
+
+def item_label(task: str, it: dict) -> str:
+    """오답노트·기록에 보여 줄 문제 한 줄 요약."""
+    for k in ("title", "prompt", "context", "situation", "professor", "intro"):
+        if it.get(k):
+            text = str(it[k])
+            break
+    else:
+        text = (it.get("sentences") or [it.get("text", "")])[0] if task == "s_repeat" else str(it.get("text", ""))
+    text = text.replace("[[", "").replace("]]", "").replace("|", "")
+    topic = it.get("topic") or it.get("course") or it.get("doc_type") or ""
+    return (f"[{topic}] " if topic else "") + (text[:90] + ("…" if len(text) > 90 else ""))
+
+
+def history(days: int = 90) -> list[dict]:
+    """날짜 × 과제별 푼 문항 수와 평균."""
+    with db.connect() as con:
+        return [dict(r) for r in con.execute(
+            "SELECT substr(created_at, 1, 10) d, task, COUNT(*) n, COUNT(DISTINCT item_id) items, AVG(score) a "
+            "FROM toefl_attempts WHERE created_at >= date('now', ?) GROUP BY d, task ORDER BY d DESC, task",
+            (f"-{days} days",))]
+
+
 # ---- 밴드 추정 ---------------------------------------------------------------------
 
 def _level_acc(tasks: list[str], last_n: int = 150) -> dict[int, tuple[int, float]]:

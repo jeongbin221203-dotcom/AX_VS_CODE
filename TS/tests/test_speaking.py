@@ -277,3 +277,21 @@ def test_weak_items_practice(client):
     p = _payload(client, "/speaking/opic/practice?weak=1")
     assert [u["item_id"] for u in p["units"]] == [q["item_id"]]
     assert "약한 문항 1개 다시" in client.get("/speaking/opic").data.decode()
+
+
+def test_speaking_history_pages(client):
+    h = _csrf(client)
+    assert "아직 채점한 답변이 없습니다" in client.get("/speaking/toeic/history").data.decode()
+    st = _payload(client, "/speaking/toeic/practice/respond_questions")["units"][0]["steps"]
+    client.post("/speaking/api/attempt", headers=h, json={"exam": "tsp", "rows": [
+        {**s["ref"], "points": 2, "words": 30, "seconds": 14, "response": "I usually go on weekends"} for s in st]})
+    html = client.get("/speaking/toeic/history").data.decode()
+    assert "Q5~7 질문에 답하기" in html and "I usually go on weekends" in html and "When did you go there?" in html
+    sub = html.split('id="sub-nav"')[1].split("</nav>")[0]
+    assert 'class="on" aria-current=page>기록</a>' in sub
+    rp = _payload(client, "/speaking/opic/practice?kind=roleplay")["units"][0]["steps"]
+    client.post("/speaking/api/attempt", headers=h, json={"exam": "opic", "rows": [{**s["ref"], "points": 3} for s in rp]})
+    opic = client.get("/speaking/opic/history").data.decode()
+    assert "호텔 · 롤플레이: 질문하기" in opic and "롤플레이: 관련 경험" in opic
+    assert ">오픽</a>" in opic and 'class="on" aria-current=page>오픽</a>' in opic
+    assert client.get("/speaking/nope/history").status_code == 404

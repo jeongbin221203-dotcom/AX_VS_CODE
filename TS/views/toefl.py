@@ -67,14 +67,49 @@ def practice(task: str):
         n = max(1, min(int(request.args.get("n", default_n)), 30))
     except ValueError:
         n = default_n
-    items = b.pick(task, level, n)
+    review = request.args.get("review") == "1"
+    if review:                                   # 오답노트: 마지막에 틀린 문제만, 오래전에 틀린 것부터
+        wrong = toefl.wrong_items(task)
+        items = [b.by_id[(task, i)] for i in sorted(wrong, key=lambda i: wrong[i]["at"]) if (task, i) in b.by_id][:n]
+    else:
+        items = b.pick(task, level, n)
     st = db.get_settings()
     payload = {"task": task, "kind": info["kind"], "items": items,
                "tts": {"rate": float(st["tts_rate"]), "accent": st["tts_accent"]},
                "rubric": RUBRIC, "band": LEVEL_BAND}
     return render_template("toefl/practice.html", task=task, info=info, sec=SECTIONS[info["section"]],
-                           level=level, n=n, payload=payload, LEVEL_BAND=LEVEL_BAND, CEFR=CEFR,
+                           level=level, n=n, payload=payload, LEVEL_BAND=LEVEL_BAND, CEFR=CEFR, review=review,
                            counts={lv: b.count(task, lv) for lv in range(1, 6)})
+
+
+@bp.route("/review")
+def review():
+    """오답노트: 과제별로 마지막에 틀린 문제와 '틀린 문제만 다시 풀기'."""
+    b = tbank()
+    sections = []
+    for key, sec in SECTIONS.items():
+        tasks = []
+        for t, v in TASKS.items():
+            if v["section"] != key:
+                continue
+            wrong = toefl.wrong_items(t)
+            rows = sorted(({"id": i, **w, "label": toefl.item_label(t, b.by_id[(t, i)]), "level": b.by_id[(t, i)]["level"]}
+                           for i, w in wrong.items() if (t, i) in b.by_id), key=lambda r: r["at"], reverse=True)
+            tasks.append({"key": t, **v, "rows": rows})
+        sections.append({"key": key, **sec, "tasks": tasks, "n": sum(len(x["rows"]) for x in tasks)})
+    return render_template("toefl/review.html", sections=sections, LEVEL_BAND=LEVEL_BAND,
+                           cut_auto=int(toefl.WRONG_CUT_AUTO * 100), cut_self=int(toefl.WRONG_CUT_SELF * 5))
+
+
+@bp.route("/history")
+def history():
+    """기록: 날짜별·과제별 푼 문항과 평균, 모의고사."""
+    rows = toefl.history()
+    days: dict[str, list] = {}
+    for r in rows:
+        days.setdefault(r["d"], []).append(r)
+    return render_template("toefl/history.html", days=days, TASKS=TASKS, SECTIONS=SECTIONS, mocks=toefl.list_mocks(50),
+                           stats=toefl.task_stats(), bands=toefl.section_bands(), CEFR=CEFR)
 
 
 @bp.route("/api/attempt", methods=["POST"])

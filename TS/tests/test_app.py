@@ -575,6 +575,29 @@ def test_sub_nav_lists_current_exam_items(client):
     stats = client.get("/stats").data.decode().split('id="sub-nav"')[1].split("</nav>")[0]
     assert 'class="on" aria-current=page>통계</a>' in stats
     opic = client.get("/speaking/opic/survey").data.decode().split('id="sub-nav"')[1].split("</nav>")[0]
-    assert 'class="on" aria-current=page>설문·난이도</a>' in opic and ">실전 모의고사</a>" in opic
+    assert 'class="on" aria-current=page>설문·난이도</a>' in opic and ">모의고사</a>" in opic and ">기록</a>" in opic
     assert 'id="sub-nav"' not in client.get("/").data.decode()
     assert 'class="side-main' in client.get("/toeic").data.decode()
+
+
+def test_toefl_review_and_history(tclient):
+    """토플 오답노트: 마지막에 틀린 문제만, 다시 풀어 맞히면 빠짐. 기록: 날짜별·과제별."""
+    from core import toefl as T
+    h = _csrf(tclient)
+    post = lambda score: tclient.post("/toefl/api/attempt", headers=h, json={
+        "task": "r_daily", "item_id": "rd-001", "results": [{"qidx": 0, "score": score}, {"qidx": 1, "score": 1}]})
+    assert "틀린 문제가 없습니다" in tclient.get("/toefl/review").data.decode()
+    assert post(0).status_code == 200
+    assert T.wrong_items("r_daily") == {"rd-001": {"at": T.wrong_items("r_daily")["rd-001"]["at"], "wrong": 1, "n": 2}}
+    page = tclient.get("/toefl/review").data.decode()
+    assert "틀린 문제 다시 풀기 (1)" in page and "review=1" in page
+    html = tclient.get("/toefl/practice/r_daily?review=1&n=1").data.decode()
+    assert '"rd-001"' in html and "오답 다시 풀기" in html
+    import time; time.sleep(1.1)                   # 기록 시각(초 단위)이 달라지게
+    post(1)
+    assert T.wrong_items("r_daily") == {}
+    assert "다시 풀 틀린 문제가 없습니다" in tclient.get("/toefl/practice/r_daily?review=1").data.decode()
+    hist = tclient.get("/toefl/history").data.decode()
+    assert "일상 글 읽기" in hist and "4문항" in hist
+    sub = hist.split('id="sub-nav"')[1].split("</nav>")[0]
+    assert 'class="on" aria-current=page>기록</a>' in sub and ">읽기</a>" in sub and ">오답노트</a>" in sub

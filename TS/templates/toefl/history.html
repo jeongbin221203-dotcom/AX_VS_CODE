@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}기록 · 토플{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <div class="muted small">최근 90일 · 날짜마다 과제별로 푼 문항 수와 평균 (쓰기·인터뷰는 자기 평가 5점 만점)</div>
+    <h1>토플 기록</h1>
+  </div>
+  <a class="btn" href="{{ url_for('toefl.review') }}">오답노트</a>
+</div>
+
+<div class="grid four">
+  {% for k, s in SECTIONS.items() %}
+  <div class="card kpi"><div class="label">{{ s.ko }} <span class="muted">{{ s.name }}</span></div>
+    <div class="value">{{ bands[k] if bands[k] is not none else '–' }}</div><div class="sub">추정 밴드</div></div>
+  {% endfor %}
+</div>
+
+{% if mocks %}
+<div class="card" style="margin-top:14px">
+  <h2>모의고사</h2>
+  <table class="small"><thead><tr><th>날짜</th><th class="r">읽기</th><th class="r">듣기</th><th class="r">말하기</th><th class="r">쓰기</th><th class="r">종합</th><th></th></tr></thead><tbody>
+  {% for m in mocks %}
+    <tr><td>{{ m.created_at[:16].replace('T', ' ') }}</td>
+      {% for x in [m.r, m.l, m.s, m.w, m.total] %}<td class="r num">{{ x if x is not none else '–' }}</td>{% endfor %}
+      <td class="r"><a href="{{ url_for('toefl.mock_result', mid=m.id) }}">결과</a></td></tr>
+  {% endfor %}
+  </tbody></table>
+</div>
+{% endif %}
+
+<div class="card" style="margin-top:14px">
+  <h2>날짜별</h2>
+  {% if not days %}<p class="muted">아직 기록이 없습니다.</p>{% endif %}
+  {% for d, rows in days.items() %}
+  <details class="reveal-d" {{ 'open' if loop.index <= 3 }}>
+    <summary>{{ d }} <span class="muted small">· {{ rows | sum(attribute='n') }}문항</span></summary>
+    <table class="small"><tbody>
+      {% for r in rows %}
+      {% set t = TASKS[r.task] %}
+      <tr><td>{{ SECTIONS[t.section].ko }}</td><td>{{ t.name }}</td><td class="r num">{{ r['items'] }}문제 · {{ r.n }}문항</td>
+        <td class="r num"><b>{{ ((r.a * 100) | round | int) ~ '%' if t.auto else ((r.a * 5) | round(1)) ~ '/5' }}</b></td></tr>
+      {% endfor %}
+    </tbody></table>
+  </details>
+  {% endfor %}
+</div>
+{% endblock %}

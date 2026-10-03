@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}기록 · {{ name }}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <div class="muted small">채점한 답변 {{ total }}개 · 연습과 모의고사 모두 · 녹음 파일은 저장하지 않고 음성 인식으로 받아 적은 글만 남습니다</div>
+    <h1>{{ name }} 기록</h1>
+  </div>
+  <a class="btn" href="{{ home }}">{{ name }} 홈</a>
+</div>
+
+{% if trend %}
+<div class="card">
+  <h2>날짜별 변화 <span class="small muted">최근 60일</span></h2>
+  <table class="small"><thead><tr><th>날짜</th><th class="r">답변</th><th class="r">자기 채점 평균</th><th class="r">평균 단어</th></tr></thead><tbody>
+  {% for d in trend | reverse %}
+    <tr><td>{{ d.d }}</td><td class="r num">{{ d.n }}</td>
+      <td class="r num">{{ ((d.r * 100) | round | int) ~ '%' if key == 'tsp' else ((d.r * 5) | round(1)) ~ '/5' }}</td>
+      <td class="r num">{{ d.w | round | int if d.w is not none else '–' }}</td></tr>
+  {% endfor %}
+  </tbody></table>
+</div>
+{% endif %}
+
+{% if not days %}
+<div class="card empty">아직 채점한 답변이 없습니다. <a href="{{ home }}">연습하러 가기</a></div>
+{% endif %}
+{% for d, rows in days.items() %}
+<div class="card" style="margin-top:14px">
+  <h2>{{ d }} <span class="small muted">{{ rows | length }}개</span></h2>
+  {% for r in rows %}
+  <details class="reveal-d">
+    <summary>{{ r.created_at[11:16] }} · {{ r.kind }} — <b>{{ r.points | round(1) }}/{{ r.max_points | int }}</b>
+      <span class="small muted">{% if r.words is not none %}{{ r.words }}단어{% endif %}{% if r.seconds %} · {{ r.seconds | round | int }}초{% endif %}{% if r.accuracy is not none %} · 일치 {{ (r.accuracy * 100) | round | int }}%{% endif %}{% if r.mock_id %} · 모의고사{% endif %}</span></summary>
+    {% if r.question %}<div class="sentence spk-q" style="margin:8px 0">{{ r.question }}</div>{% endif %}
+    {% if r.response %}<div class="explain"><b>내가 한 말</b><div>{{ r.response }}</div></div>{% else %}<div class="small muted">받아 적은 글 없음 (음성 인식을 쓰지 못한 답변)</div>{% endif %}
+    {% if r.mock_id %}<p class="small"><a href="{{ url_for('speaking.mock_result', mid=r.mock_id) }}">이 모의고사 결과 보기</a></p>{% endif %}
+  </details>
+  {% endfor %}
+</div>
+{% endfor %}
+
+{% if pages > 1 %}
+<div class="row" style="justify-content:center;margin-top:14px">
+  {% if page > 1 %}<a class="btn small" href="?page={{ page - 1 }}">← 최근</a>{% endif %}
+  <span class="small muted">{{ page }} / {{ pages }}</span>
+  {% if page < pages %}<a class="btn small" href="?page={{ page + 1 }}">이전 기록 →</a>{% endif %}
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}오답노트 · 토플{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <div class="muted small">마지막으로 풀었을 때 틀린 문제만 모읍니다 (자동 채점 {{ cut_auto }}% 미만 · 쓰기·인터뷰 자기 평가 {{ cut_self }}점 미만). 다시 풀어 맞히면 빠집니다.</div>
+    <h1>토플 오답노트</h1>
+  </div>
+  <a class="btn" href="{{ url_for('toefl.history') }}">기록 보기</a>
+</div>
+{% set total = sections | sum(attribute='n') %}
+{% if not total %}
+<div class="card empty">틀린 문제가 없습니다. 연습을 하면 틀린 문제가 여기에 모입니다. <a href="{{ url_for('toefl.home') }}">토플 홈으로</a></div>
+{% endif %}
+{% for s in sections if s.n %}
+<div class="card" style="margin-top:14px" id="rv-{{ s.key }}">
+  <h2>{{ s.ko }} <span class="muted small">{{ s.name }} · {{ s.n }}문제</span></h2>
+  {% for t in s.tasks if t.rows %}
+  <div class="spread" style="margin-top:10px">
+    <b>{{ t.name }} <span class="muted small">{{ t.en }} · {{ t.rows | length }}문제</span></b>
+    <a class="btn small primary" href="{{ url_for('toefl.practice', task=t.key, review=1, n=[t.rows | length, 10] | min) }}">틀린 문제 다시 풀기 ({{ [t.rows | length, 10] | min }})</a>
+  </div>
+  <table class="small" style="margin-top:6px"><tbody>
+    {% for r in t.rows[:30] %}
+    <tr><td style="width:7em">{{ r.at[:10] }}</td><td>{{ r.label }}</td>
+      <td class="r num muted" style="white-space:nowrap">밴드 {{ LEVEL_BAND[r.level] }} · {{ r.wrong }}/{{ r.n }} 틀림</td></tr>
+    {% endfor %}
+  </tbody></table>
+  {% if t.rows | length > 30 %}<p class="small muted">외 {{ t.rows | length - 30 }}문제</p>{% endif %}
+  {% endfor %}
+</div>
+{% endfor %}
+{% endblock %}

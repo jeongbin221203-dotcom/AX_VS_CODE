@@ -233,6 +233,35 @@ def opic_guide():
                            GRADE_NAME=S.OPIC_GRADE_NAME, st=_opic_settings())
 
 
+# ---- 답변 기록 -------------------------------------------------------------------------
+
+@bp.route("/<exam>/history")
+def history(exam: str):
+    """채점한 답변을 날짜별로: 질문·점수·단어 수·말한 시간·음성 인식으로 받아 적은 내 답변."""
+    if exam not in ("toeic", "opic"):
+        abort(404)
+    key = "tsp" if exam == "toeic" else "opic"
+    b = sbank()
+    page = max(1, request.args.get("page", 1, type=int))
+    per = 40
+    rows, total = S.history(key, per, (page - 1) * per)
+    days: dict[str, list] = {}
+    for r in rows:
+        t = r["task"].removeprefix("tsp:")
+        it = b.by_id.get((t, r["item_id"])) or {}
+        if key == "tsp":
+            r["kind"] = f"{S.TSP_TASKS[t]['q']} {S.TSP_TASKS[t]['name']}" if t in S.TSP_TASKS else t
+        else:
+            kind = it.get("kind") or ((it.get("steps") or [{}] * 3)[r["qidx"]].get("kind") if it.get("steps") else "")
+            r["kind"] = f"{S.OPIC_TOPICS.get(it.get('topic'), ('',))[0]} · {S.OPIC_KINDS.get(kind, kind)}"
+        r["question"] = S.question_of(b, r["task"], r["item_id"], r["qidx"])
+        days.setdefault(r["created_at"][:10], []).append(r)
+    home = url_for("speaking.tsp_home" if key == "tsp" else "speaking.opic_home")
+    return render_template("speaking/history.html", exam=exam, key=key, days=days, total=total, page=page,
+                           pages=max(1, -(-total // per)), home=home, trend=S.trend(key),
+                           name=EXAMS["toeic-speaking" if key == "tsp" else "opic"]["name"])
+
+
 # ---- 모의고사 공통 ---------------------------------------------------------------------
 
 @bp.route("/mock/<int:mid>")

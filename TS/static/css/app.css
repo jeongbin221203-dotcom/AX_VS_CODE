@@ -82,6 +82,8 @@ p { margin: 0 0 .8em; }
 .side-items a.on { background: var(--accent-soft); color: var(--accent); font-weight: 700; }
 .side-settings { display: block; margin-top: 10px; padding: 11px 12px; border-top: 1px solid var(--line); color: var(--ink-2); }
 .side-settings.on { color: var(--accent); font-weight: 700; }
+/* 구역으로 이동할 때 위쪽 고정 바에 가리지 않게 */
+[id] { scroll-margin-top: calc(var(--topbar-h, 0px) + 12px); }
 .sub-nav { padding: 6px 0 8px; margin: 0 -4px; border-top: 1px solid var(--line); }
 .side-main { display: block; padding: 11px 12px; margin-bottom: 6px; border-bottom: 1px solid var(--line); font-weight: 700; color: var(--ink); }
 .side-main.on { color: var(--accent); }

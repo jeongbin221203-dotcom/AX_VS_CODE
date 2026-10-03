@@ -61,6 +61,30 @@
     if (e.target.matches?.(".side-group") && e.target.open)
       document.querySelectorAll(".side-group").forEach(g => { if (g !== e.target) g.open = false; });
   }, true);
+  // 세부 메뉴 줄: '읽기·듣기…'처럼 같은 화면의 구역으로 가는 항목이면, 지금 보고 있는 구역을 강조한다
+  const subLinks = [...document.querySelectorAll("#sub-nav a")];
+  const here = subLinks.filter(a => new URL(a.href, location.href).pathname === location.pathname);
+  const spots = here.map(a => [a, document.getElementById(new URL(a.href, location.href).hash.slice(1))]).filter(x => x[1]);
+  if (spots.length) {
+    const base = here.find(a => !new URL(a.href, location.href).hash) || null;
+    const mark = a => subLinks.forEach(x => {
+      x.classList.toggle("on", x === a);
+      if (x === a) x.setAttribute("aria-current", "page"); else x.removeAttribute("aria-current");
+    });
+    let pinned = 0;                       // 방금 누른 항목은 바로 이어지는 자동 스크롤 동안 그대로 둔다
+    spots.forEach(([a]) => a.addEventListener("click", () => { mark(a); pinned = Date.now() + 900; }));
+    const spy = () => {
+      if (Date.now() < pinned) return;
+      const line = (document.querySelector(".topbar")?.offsetHeight || 0) + 24;
+      let cur = base;
+      for (const [a, el] of spots) if (el.getBoundingClientRect().top <= line) cur = a;
+      if (innerHeight + scrollY >= document.documentElement.scrollHeight - 4 && scrollY > 0) cur = spots[spots.length - 1][0];
+      if (cur) mark(cur);
+    };
+    addEventListener("scroll", spy, { passive: true });
+    addEventListener("hashchange", spy);
+    spy();
+  }
   // 세부 메뉴 줄: 휴대폰처럼 좁으면 지금 항목이 보이게 가로로 밀어 둔다
   const subOn = document.querySelector("#sub-nav a.on");
   if (subOn) { const n = subOn.parentElement; n.scrollLeft = subOn.offsetLeft - (n.clientWidth - subOn.offsetWidth) / 2; }

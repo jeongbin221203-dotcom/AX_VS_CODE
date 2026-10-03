@@ -5,7 +5,7 @@
 <div class="page-head">
   <div>
     <div class="muted small">{{ sec.name }} · {{ info.en }}</div>
-    <h1>{{ info.name }} {% if level %}<span class="tag">밴드 {{ LEVEL_BAND[level] }} · {{ CEFR[LEVEL_BAND[level]] }}</span>{% endif %}</h1>
+    <h1>{{ info.name }}{% if review %} <span class="tag bad">오답 다시 풀기</span>{% endif %} {% if level %}<span class="tag">밴드 {{ LEVEL_BAND[level] }} · {{ CEFR[LEVEL_BAND[level]] }}</span>{% endif %}</h1>
     <div class="muted small">{{ info.desc }}</div>
   </div>
   <form class="row" method="get">
@@ -40,7 +40,7 @@
 </div>
 <script type="application/json" id="payload">{{ payload|tojson }}</script>
 {% else %}
-<div class="card empty">이 조건의 문제가 아직 없습니다. 다른 난이도를 골라 보세요.</div>
+<div class="card empty">{% if review %}이 과제에는 다시 풀 틀린 문제가 없습니다. <a href="{{ url_for('toefl.review') }}">오답노트로</a>{% else %}이 조건의 문제가 아직 없습니다. 다른 난이도를 골라 보세요.{% endif %}</div>
 {% endif %}
 {% endblock %}
 {% block scripts %}
