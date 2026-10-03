@@ -39,28 +39,6 @@
   setTopbar();
   window.addEventListener("resize", setTopbar);
 
-  // 사이드바: ☰ 로 열고, 바깥·✕·Esc·메뉴 이동 시 닫는다
-  const side = document.getElementById("sidebar"), dim = document.getElementById("side-dim");
-  const openBtn = document.getElementById("menu-open");
-  const setSide = open => {
-    if (!side) return;
-    side.classList.toggle("open", open);
-    side.setAttribute("aria-hidden", open ? "false" : "true");
-    dim.hidden = !open;
-    openBtn?.setAttribute("aria-expanded", open ? "true" : "false");
-    if (open) side.querySelector(".side-items a.on, summary")?.focus();
-  };
-  openBtn?.addEventListener("click", () => setSide(true));
-  document.getElementById("menu-close")?.addEventListener("click", () => setSide(false));
-  dim?.addEventListener("click", () => setSide(false));
-  side?.addEventListener("click", e => { if (e.target.closest("a")) setSide(false); });
-  document.addEventListener("keydown", e => { if (e.key === "Escape" && side?.classList.contains("open")) setSide(false); });
-
-  // 사이드바 시험 묶음: 한 번에 하나만 펼친다
-  document.addEventListener("toggle", e => {
-    if (e.target.matches?.(".side-group") && e.target.open)
-      document.querySelectorAll(".side-group").forEach(g => { if (g !== e.target) g.open = false; });
-  }, true);
   // 세부 메뉴 줄: '읽기·듣기…'처럼 같은 화면의 구역으로 가는 항목이면, 지금 보고 있는 구역을 강조한다
   const subLinks = [...document.querySelectorAll("#sub-nav a")];
   const here = subLinks.filter(a => new URL(a.href, location.href).pathname === location.pathname);

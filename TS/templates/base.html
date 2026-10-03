@@ -19,7 +19,6 @@
 {% set cur = (menus | selectattr('on') | first) or none %}
 <header class="topbar">
   <div class="topbar-row">
-    <button type="button" class="menu-btn" id="menu-open" aria-label="메뉴 열기" aria-controls="sidebar" aria-expanded="false">☰</button>
     <a class="brand" href="{{ url_for('main.home') }}" aria-label="메인 화면"><span class="brand-mark">TS</span></a>
     <nav class="exam-tabs" aria-label="시험 바로가기">
       {% for m in menus %}<a href="{{ m.home }}" class="{{ 'on' if m.on }}" {{ 'aria-current=page' if m.on }}>{{ m.name }}</a>{% endfor %}
@@ -33,25 +32,6 @@
   </nav>
   {% endif %}
 </header>
-<div class="side-dim" id="side-dim" hidden></div>
-<aside class="sidebar" id="sidebar" aria-label="메뉴" aria-hidden="true">
-  <div class="side-head">
-    <span class="brand"><span class="brand-mark">TS</span> 메뉴</span>
-    <button type="button" class="menu-btn" id="menu-close" aria-label="메뉴 닫기">✕</button>
-  </div>
-  <nav class="side-nav">
-    <a class="side-main{{ ' on' if ep == 'main.home' }}" href="{{ url_for('main.home') }}">메인 화면</a>
-    {% for m in menus %}
-      <details class="side-group{{ ' on' if m.on }}" {{ 'open' if m.on }}>
-        <summary><a class="cat-link" href="{{ m.home }}">{{ m.name }}{% if not m.ready %}<small>준비 중</small>{% endif %}</a><span class="caret" title="탭 펼치기">▾</span></summary>
-        <div class="side-items">
-          {% for it in m['items'] %}<a href="{{ it.href }}" class="{{ 'on' if it.on }}">{{ it.label }}</a>{% endfor %}
-        </div>
-      </details>
-    {% endfor %}
-    <a class="side-settings{{ ' on' if ep == 'main.settings' }}" href="{{ url_for('main.settings') }}">⚙ 설정</a>
-  </nav>
-</aside>
 <main class="wrap">
   {% with msgs = get_flashed_messages(with_categories=true) %}
     {% for cat, m in msgs %}<div class="flash {{ cat }}">{{ m }}</div>{% endfor %}

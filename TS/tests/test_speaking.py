@@ -137,8 +137,11 @@ def test_bad_routes(client):
 
 
 def test_nav_shows_speaking_menus(client):
-    html = client.get("/speaking/opic/survey").data.decode()
-    assert "설문·난이도" in html and "답변 틀·채점 기준" in html and "준비 중" not in html
+    def sub(url):
+        return client.get(url).data.decode().split('id="sub-nav"')[1].split("</nav>")[0]
+    opic, tsp = sub("/speaking/opic/survey"), sub("/speaking/toeic")
+    assert "설문·난이도" in opic and "답변 틀·등급 기준" in opic and "준비 중" not in opic
+    assert "유형별 연습" in tsp and "답변 틀·채점 기준" in tsp and "설문·난이도" not in tsp
 
 
 # ---- 점수 -------------------------------------------------------------------------

@@ -577,7 +577,8 @@ def test_sub_nav_lists_current_exam_items(client):
     opic = client.get("/speaking/opic/survey").data.decode().split('id="sub-nav"')[1].split("</nav>")[0]
     assert 'class="on" aria-current=page>설문·난이도</a>' in opic and ">모의고사</a>" in opic and ">기록</a>" in opic
     assert 'id="sub-nav"' not in client.get("/").data.decode()
-    assert 'class="side-main' in client.get("/toeic").data.decode()
+    toeic = client.get("/toeic").data.decode()
+    assert 'id="sidebar"' not in toeic and 'href="/" aria-label="메인 화면"' in toeic and 'class="settings-link' in toeic
 
 
 def test_toefl_review_and_history(tclient):
