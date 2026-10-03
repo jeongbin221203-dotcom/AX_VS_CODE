@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block title %}수집 현황{% endblock %}
+{% block head %}{% set running = o.progress and o.progress.running %}
+  <meta http-equiv="refresh" content="{{ 20 if running else 60 }}">{% endblock %}
+{% block content %}
+{% set p = o.progress %}{% set s = o.settings %}
+<div class="sec-head">
+  <h1>자동수집 현황</h1>
+  <span class="muted small">{{ '20초' if p and p.running else '1분' }}마다 자동 새로고침 · <a href="{{ url_for('collect.index') }}#crawl">설정</a></span>
+</div>
+
+<section class="card">
+  <div class="sec-head">
+    <h2>지금
+      {% if p and p.running %}<span class="chip hot">실행 중</span>
+      {% elif s.enabled %}<span class="chip ok">대기</span>{% else %}<span class="chip closed">꺼짐</span>{% endif %}
+    </h2>
+    <span class="small muted">{{ s.interval_hours }}시간마다 · 목록은 {{ s.list_every_hours }}시간마다 · 요청 간격 {{ config.CRAWL_DELAY | int }}초</span>
+  </div>
+  {% if p and p.running %}
+    {% set phases = ['헤드헌팅 목록', '목록 읽기', '상세 읽기', '저장 공고 다시 읽기'] %}
+    <ol class="steps">
+      {% for ph in phases %}<li class="{{ 'on' if p.phase == ph }} {{ 'done' if phases.index(ph) < (phases.index(p.phase) if p.phase in phases else 0) }}">{{ ph }}</li>{% endfor %}
+    </ol>
+    <div class="kpis">
+      <div class="kpi"><b>{{ p.phase }}</b><span>{{ (p.site | source_name) if p.site else '' }} {{ p.step or '' }}</span></div>
+      <div class="kpi"><b>{{ p.elapsed_min }}분</b><span>{{ p.started_at[11:16] }} 시작 · 최대 {{ (s.interval_hours * 60 * 0.85) | int }}분</span></div>
+      <div class="kpi accent"><b>{{ '{:,}'.format(p.new or 0) }}</b><span>이번 실행 새 공고</span></div>
+      <div class="kpi"><b>{{ '{:,}'.format(p.filled or 0) }}</b><span>상세 채움·갱신</span></div>
+      <div class="kpi"><b>{{ '{:,}'.format(p.requests or 0) }}</b><span>요청 수</span></div>
+    </div>
+  {% else %}
+    <div class="kpis">
+      <div class="kpi"><b>{{ o.status.next or '-' }}</b><span>다음 실행</span></div>
+      <div class="kpi"><b>{{ o.status.last or '-' }}</b><span>마지막 실행 시작</span></div>
+      {% if p %}<div class="kpi"><b>{{ p.phase }}</b><span>마지막 단계{% if p.elapsed_min is defined %} · {{ p.elapsed_min }}분 걸림{% endif %}</span></div>{% endif %}
+    </div>
+  {% endif %}
+  <div class="kpis">
+    <div class="kpi"><b>{{ '{:,}'.format(o.total) }}</b><span>저장된 공고 (숨김 제외)</span></div>
+    <div class="kpi"><b>{{ '{:,}'.format(o.backlog.left) }}</b><span>밀린 공고 (대기열+상세 보충)</span></div>
+    <div class="kpi"><b>{{ o.backlog.per_hour }}</b><span>시간당 처리 (지난 실행 기준)</span></div>
+    <div class="kpi accent"><b>{{ o.backlog.eta or ('완료' if not o.backlog.left else '-') }}</b><span>밀린 공고 다 읽는 예상 시각</span></div>
+  </div>
+</section>
+
+<section class="card">
+  <h2>사이트별</h2>
+  <div class="scroll-x">
+  <table class="tbl compact">
+    <tr><th>사이트</th><th class="r">저장 공고</th><th class="bar-cell">상세 읽음</th><th class="r">대기열</th><th class="r">상세 보충 대기</th>
+        <th class="r">지난 실행 처리</th><th class="r">24시간 새로 저장</th><th class="r">하루 새 공고(실측)</th><th>목록 읽은 시각</th>
+        <th class="r">헤드헌팅 표시</th><th class="r">제외로 숨김</th><th class="r">오늘 마감</th></tr>
+    {% for r in o.sites %}
+    <tr><td><b>{{ r.name }}</b></td><td class="r">{{ '{:,}'.format(r.n) }}</td>
+        <td class="bar-cell"><span class="bar-wrap"><span class="bar" style="width: {{ r.detail or 0 }}%"></span></span> {{ r.detail or 0 }}%</td>
+        <td class="r">{{ '{:,}'.format(r.queue) }}</td><td class="r">{{ '{:,}'.format(r.backfill) }}</td>
+        <td class="r">{{ r.last_fetched }}</td><td class="r">{{ '{:,}'.format(r.saved_24h or 0) }}</td>
+        <td class="r">{{ '{:,}'.format(r.new_day) if r.new_day else '-' }}</td><td class="small">{{ r.list_at or '-' }}</td>
+        <td class="r">{{ '{:,}'.format(r.flags) if r.flags else '-' }}</td><td class="r">{{ '{:,}'.format(r.excluded or 0) }}</td>
+        <td class="r">{{ r.closing_today or 0 }}</td></tr>
+    {% endfor %}
+  </table>
+  </div>
+  <p class="muted small">상세 읽음 = 공고 페이지(본문·기업정보·표)까지 읽은 비율. 대기열 = 목록에서 찾았지만 아직 안 읽은 새 공고.
+     상세 보충 대기 = 예전에 요약만 읽어 다시 읽을 공고. 하루 새 공고(실측)는 목록을 처음 다 읽은 뒤부터 새로 나타난 공고 수.</p>
+</section>
+
+<section class="card">
+  <h2>데이터 품질 <span class="muted small">항목이 채워진 공고 비율</span></h2>
+  <div class="scroll-x">
+  <table class="tbl compact">
+    <tr><th>사이트</th><th class="bar-cell">근무지</th><th class="bar-cell">연봉 금액</th><th class="bar-cell">마감일</th><th class="bar-cell">본문 300자 이상</th></tr>
+    {% for r in o.sites if r.n %}
+    <tr><td>{{ r.name }}</td>
+      {% for v in (r.loc, r.salary, r.deadline, r.body) %}
+      <td class="bar-cell"><span class="bar-wrap"><span class="bar" style="width: {{ v }}%"></span></span> {{ v }}%</td>
+      {% endfor %}</tr>
+    {% endfor %}
+  </table>
+  </div>
+  <p class="muted small">연봉 금액은 '회사내규·면접 후 결정' 공고가 많아 낮게 나오는 것이 정상입니다. 잡코리아 본문은 이미지인 경우가 많습니다.</p>
+</section>
+
+<section class="card">
+  <h2>실행 기록 <span class="muted small">최근 {{ o.runs | length }}번</span></h2>
+  {% if o.runs %}
+  {% set peak = (o.runs | map(attribute='new') | max) or 1 %}
+  <div class="scroll-x">
+  <table class="tbl compact">
+    <tr><th>시작</th><th class="r">걸린 시간</th><th class="bar-cell">새 공고</th><th class="r">상세·갱신</th><th class="r">마감 처리</th>
+        <th class="r">삭제</th><th class="r">요청</th><th>사이트별 (새 공고 / 읽음 / 남음)</th><th>비고</th></tr>
+    {% for r in o.runs %}
+    <tr><td class="small">{{ r.started_at[5:16] | replace('T', ' ') }}</td><td class="r">{{ (r.seconds // 60) }}분</td>
+        <td class="bar-cell"><span class="bar-wrap"><span class="bar" style="width: {{ (r.new / peak * 100) | round | int }}%"></span></span> {{ r.new }}</td>
+        <td class="r">{{ r.updated }}</td><td class="r">{{ r.closed }}</td><td class="r">{{ r.purged }}</td><td class="r">{{ r.requests }}</td>
+        <td class="small">{% for k, v in r.sites.items() %}{{ k | source_name }} {{ v.new or v.inserted or 0 }}/{{ v.fetched or 0 }}/{{ v.left if v.left is not none else '-' }}{{ ' · ' if not loop.last }}{% endfor %}</td>
+        <td class="small">{% if r.stopped %}<span class="chip">시간 예산</span>{% endif %}{% if r.errors %} <span class="chip hot">오류 {{ r.errors | length }}</span>{% endif %}</td></tr>
+    {% endfor %}
+  </table>
+  </div>
+  {% else %}<p class="muted">아직 기록이 없습니다. 첫 실행이 끝나면 여기에 쌓입니다.</p>{% endif %}
+</section>
+
+<section class="card">
+  <h2>최근 오류 <span class="muted small">이틀 안</span></h2>
+  {% for e in o.errors %}
+    <div class="mini"><span class="small muted">{{ e.started_at[5:16] }}</span> <b>{{ e.source | source_name }}</b> <span class="err-text small">{{ e.error[:200] }}</span></div>
+  {% else %}<p class="muted">오류 없음</p>{% endfor %}
+</section>
+{% endblock %}

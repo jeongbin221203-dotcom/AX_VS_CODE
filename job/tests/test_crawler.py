@@ -463,3 +463,21 @@ def test_purge_stale_open_postings(app):
         con.execute("UPDATE postings SET fetched_at = ? WHERE source_id IN ('a', 'b')", (old,))
     assert postings.purge_stale() == 1
     assert {r["source_id"] for r in postings.all_rows()} == {"b", "c"}
+
+
+def test_status_page_and_run_history(app, client):
+    """수집 현황: 실행이 끝나면 실행 기록·진행 상황이 남고, 화면과 JSON 에 사이트별 현황이 나온다."""
+    _settings(keywords=["자재관리"], sites=["saramin"], max_new=0)
+    search = crawler.LIST_SITES["saramin"]["search"].format(kw="%EC%9E%90%EC%9E%AC%EA%B4%80%EB%A6%AC", page=1)
+    d = crawler.LIST_SITES["saramin"]["detail"]
+    crawler.run_once(force=True, fetcher=FakeFetcher({search: (200, SARAMIN_LIST), d.format(id=101): (200, SARAMIN_OG),
+                                                      d.format(id=102): (200, SARAMIN_OG)}))
+    with db.connect() as con:
+        run = dict(con.execute("SELECT * FROM crawl_runs").fetchone())
+    assert run["new"] >= 1 and run["requests"] > 0
+    prog = crawler.current_progress()
+    assert prog["running"] is False and prog["phase"] == "끝"
+    html = client.get("/collect/status").get_data(as_text=True)
+    assert "자동수집 현황" in html and "사람인" in html and "실행 기록" in html and 'http-equiv="refresh"' in html
+    data = client.get("/collect/status.json").get_json()
+    assert data["sites"][0]["site"] == "saramin" and data["runs"][0]["new"] == run["new"]

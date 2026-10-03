@@ -317,6 +317,25 @@ def run_once(force: bool = False, fetcher: Fetcher | None = None) -> dict | None
         release_lock()
 
 
+_PROGRESS: dict = {}
+
+
+def progress(**kw) -> None:
+    """지금 실행 중인 단계를 settings.crawl_progress 에 남긴다 (수집 현황 화면이 읽음). 너무 자주 쓰지 않게 단계가
+    바뀔 때와 몇 건마다만."""
+    _PROGRESS.update(kw)
+    _PROGRESS["updated_at"] = _now_iso()
+    db.set_setting("crawl_progress", json.dumps(_PROGRESS, ensure_ascii=False))
+
+
+def current_progress() -> dict | None:
+    raw = db.get_setting("crawl_progress")
+    try:
+        return json.loads(raw) if raw else None
+    except json.JSONDecodeError:
+        return None
+
+
 def _run(s: dict, f: Fetcher) -> dict:
     """한 번 실행: ① 표시 목록(헤드헌팅) ② 모든 목록·사이트맵에서 새 공고 번호 모으기
     ③ 사이트를 돌아가며 하나씩 상세 읽기 — 시간 예산(간격의 85%)이 다할 때까지, 남은 것은 다음 실행에
@@ -329,6 +348,9 @@ def _run(s: dict, f: Fetcher) -> dict:
     refresh_n = len(refresh_candidates(s["max_refresh"]))
     detail_deadline = run_deadline - refresh_n * max(f.delay, 0.5) * 1.3 - 60
 
+    _PROGRESS.clear()
+    progress(running=True, started_at=started, phase="헤드헌팅 목록", site=None, step=None,
+             new=0, filled=0, requests=0, interval_hours=s["interval_hours"])
     summary["flagged"] = collect_flags(f, s["sites"], summary["errors"])
     from . import profile as profile_mod
     excluded_flags = set(profile_mod.load().get("exclude") or []) & set(FLAG_LISTS)
@@ -344,6 +366,7 @@ def _run(s: dict, f: Fetcher) -> dict:
         skip = set().union(*(postings.flagged(site, fl) for fl in excluded_flags)) if excluded_flags else set()
         try:
             if list_due(site, s):
+                progress(phase="목록 읽기", site=site, step=None, requests=f.requests)
                 groups, errors = collect_lists(f, site, s, keywords)
                 st["errors"] += errors
                 summary["errors"] += errors
@@ -377,6 +400,8 @@ def _run(s: dict, f: Fetcher) -> dict:
         queues[site] += [(i, SITEMAP_SITES[site]["detail"].format(id=i), None) for i in _needs_backfill(site)]
 
     # ③ 상세: 사이트를 돌아가며 하나씩 (한 사이트가 시간을 다 쓰지 않게)
+    queued_total = sum(len(v) for v in queues.values())
+    progress(phase="상세 읽기", site=None, step=f"0/{queued_total:,}", requests=f.requests)
     fetched = {k: 0 for k in queues}
     active = [k for k in queues if queues[k]]
     stopped_by_time = False
@@ -405,6 +430,11 @@ def _run(s: dict, f: Fetcher) -> dict:
                     con.execute("UPDATE sitemap_ids SET fetched_at = ?, fetch_error = ? WHERE site = ? AND post_id = ?",
                                 (db.now(), error, site, post_id))
             fetched[site] += 1
+            done = sum(fetched.values())
+            if done % 10 == 0:
+                progress(site=site, step=f"{done:,}/{queued_total:,}", requests=f.requests,
+                         new=sum(v["new"] for v in stats.values()),
+                         filled=sum(v["updated"] for v in stats.values()))
             if not queues[site]:
                 active.remove(site)
 
@@ -421,6 +451,8 @@ def _run(s: dict, f: Fetcher) -> dict:
     summary["stopped_by_time"] = stopped_by_time
 
     # ④ 저장 공고 갱신·API·정리
+    progress(phase="저장 공고 다시 읽기", site=None, step=None, requests=f.requests,
+             new=summary["new"], filled=summary["updated"])
     r_upd, r_closed, r_err = refresh(f, s["max_refresh"])
     summary["updated"] += r_upd
     summary["closed"] += r_closed
@@ -444,6 +476,18 @@ def _run(s: dict, f: Fetcher) -> dict:
     summary["requests"] = f.requests
     db.set_setting("crawl_last_run", started)
     db.set_setting("crawl_last_summary", json.dumps(summary, ensure_ascii=False))
+    finished = _now_iso()
+    with db.connect() as con:
+        con.execute("INSERT INTO crawl_runs(started_at, finished_at, seconds, new, updated, closed, purged, requests, "
+                    "stopped, errors, sites) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    (started, finished, int((datetime.fromisoformat(finished) - datetime.fromisoformat(started))
+                                            .total_seconds()),
+                     summary["new"], summary["updated"], summary["closed"], summary.get("purged", 0),
+                     summary["requests"], 1 if summary.get("stopped_by_time") else 0,
+                     json.dumps(summary["errors"][:50], ensure_ascii=False),
+                     json.dumps(summary["sites"], ensure_ascii=False)))
+    progress(running=False, phase="끝", finished_at=finished, requests=summary["requests"],
+             new=summary["new"], filled=summary["updated"])
     log.info("crawl done %s", summary)
     return summary
 
@@ -516,6 +560,56 @@ def _sitemap_remaining(site: str) -> int:
     with db.connect() as con:
         return con.execute("SELECT COUNT(*) FROM sitemap_ids WHERE site = ? AND gone = 0 AND fetched_at IS NULL",
                            (site,)).fetchone()[0]
+
+
+def overview() -> dict:
+    """수집 현황 화면: 지금 실행·사이트별 데이터·실행 기록·오류를 한데."""
+    s = load_settings()
+    today = date.today().isoformat()
+    sites = {b["site"]: b for b in backlog_status()["sites"]}
+    quality = {}
+    with db.connect() as con:
+        for row in con.execute(
+                "SELECT source, COUNT(*), SUM(company_info IS NOT NULL), SUM(sido IS NOT NULL), "
+                "SUM(salary_min IS NOT NULL OR salary_max IS NOT NULL), SUM(deadline IS NOT NULL), "
+                "SUM(LENGTH(COALESCE(description, '')) >= 300), SUM(fit_excl = 1), SUM(deadline = ?), "
+                "SUM(fetched_at > ?) FROM postings WHERE hidden = 0 GROUP BY source",
+                (today, (datetime.now() - timedelta(hours=24)).strftime("%Y-%m-%d %H:%M:%S"))):
+            src, n, det, loc, sal, dl, body, excl, today_dl, day_new = row
+            pct = (lambda x: round((x or 0) * 100 / n)) if n else (lambda x: 0)
+            quality[src] = {"n": n, "detail": pct(det), "detail_n": det or 0, "loc": pct(loc), "salary": pct(sal),
+                            "deadline": pct(dl), "body": pct(body), "excluded": excl or 0,
+                            "closing_today": today_dl or 0, "saved_24h": day_new or 0}
+        flags = dict(con.execute("SELECT source, COUNT(*) FROM post_flags GROUP BY source").fetchall())
+        runs = [dict(r) for r in con.execute("SELECT * FROM crawl_runs ORDER BY id DESC LIMIT 24")]
+        errors = [dict(r) for r in con.execute(
+            "SELECT started_at, source, query, error FROM fetch_runs WHERE error IS NOT NULL AND started_at > ? "
+            "ORDER BY id DESC LIMIT 30", ((datetime.now() - timedelta(days=2)).strftime("%Y-%m-%d %H:%M:%S"),))]
+    for r in runs:
+        r["errors"] = json.loads(r["errors"] or "[]")
+        r["sites"] = json.loads(r["sites"] or "{}")
+    order = list(s["sites"]) + [x for x in s["sitemap_sites"] if x not in s["sites"]]
+    order += [x for x in quality if x not in order]
+    rows = []
+    for key in order:
+        b = sites.get(key, {})
+        rows.append({"site": key, "name": linkimport.SITES.get(key, (key,))[0], **quality.get(key, {"n": 0}),
+                     "queue": b.get("left", 0), "backfill": b.get("backfill", 0), "new_day": b.get("new_day", 0),
+                     "last_fetched": b.get("last_fetched", 0), "list_at": b.get("list_at"),
+                     "flags": flags.get(key, 0)})
+    prog = current_progress()
+    st = status()
+    if prog and prog.get("running") and not st["running"]:          # 실행이 끊긴 채 남은 기록
+        prog["running"] = False
+        prog["phase"] = "중단됨 (앱이 다시 켜짐)"
+    if prog and prog.get("started_at"):
+        end = prog.get("finished_at") if not prog.get("running") else _now_iso()
+        prog["elapsed_min"] = round((datetime.fromisoformat(end) - datetime.fromisoformat(prog["started_at"]))
+                                    .total_seconds() / 60)
+    bl = backlog_status()
+    return {"settings": s, "status": st, "progress": prog, "sites": rows, "runs": runs, "errors": errors,
+            "backlog": {k: bl[k] for k in ("left", "per_run", "per_hour", "eta")},
+            "total": sum(r.get("n", 0) for r in rows)}
 
 
 def backlog_status() -> dict:
@@ -677,7 +771,9 @@ def collect_lists(f: Fetcher, site: str, s: dict, keywords: list[str]) -> tuple[
 
     groups: dict[str, dict] = {}
     errors: list[str] = []
-    for name, tpl, pages, category in jobs:
+    for n_job, (name, tpl, pages, category) in enumerate(jobs, start=1):
+        if len(jobs) > 1:
+            progress(step=f"{name} ({n_job}/{len(jobs)})", requests=f.requests)
         group = groups.setdefault(name, {})
         for page_no in range(1, pages + 1):
             res = f.get(tpl.replace("{page}", str(page_no)))

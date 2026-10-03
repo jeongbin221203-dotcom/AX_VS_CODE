@@ -27,6 +27,17 @@ def _page(results):
                            sitemap_progress=crawler.sitemap_progress(), backlog=crawler.backlog_status())
 
 
+@bp.get("/status")
+def status_page():
+    """자동수집 현황: 지금 실행 단계, 사이트별 대기열·상세 비율·데이터 품질, 실행 기록, 오류."""
+    return render_template("collect_status.html", o=crawler.overview())
+
+
+@bp.get("/status.json")
+def status_json():
+    return crawler.overview()
+
+
 @bp.post("/crawl")
 def crawl_settings():
     form = request.form

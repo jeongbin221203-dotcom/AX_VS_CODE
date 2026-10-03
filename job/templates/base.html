@@ -6,6 +6,7 @@
   <title>{% block title %}채용공고 적합성{% endblock %} · 잡핏</title>
   <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+  {% block head %}{% endblock %}
 </head>
 <body>
 {% set ep = request.endpoint or '' %}
@@ -18,8 +19,12 @@
       <a href="{{ url_for('jobs.index', saved='1') }}" class="{{ 'on' if ep == 'jobs.index' and request.args.get('saved') == '1' }}">★ 저장</a>
       <a href="{{ url_for('main.stats') }}" class="{{ 'on' if ep == 'main.stats' }}">평균 연봉</a>
       <a href="{{ url_for('apps.board') }}" class="{{ 'on' if ep.startswith('apps.') }}">지원 현황</a>
-      <a href="{{ url_for('collect.index') }}" class="{{ 'on' if ep.startswith('collect.') }}">공고 수집</a>
+      <a href="{{ url_for('collect.index') }}" class="{{ 'on' if ep.startswith('collect.') and ep != 'collect.status_page' }}">공고 수집</a>
+      <a href="{{ url_for('collect.status_page') }}" class="{{ 'on' if ep == 'collect.status_page' }}">수집 현황</a>
       <a href="{{ url_for('profile.edit') }}" class="{{ 'on' if ep.startswith('profile.') }}">내 조건</a>
+      {% if config.PASSWORD and session.get('auth') %}
+      <form method="post" action="{{ url_for('logout') }}" class="inline-form"><input type="hidden" name="_csrf" value="{{ csrf_token() }}"><button class="linkish">로그아웃</button></form>
+      {% endif %}
     </nav>
   </div>
 </header>

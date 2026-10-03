@@ -111,6 +111,22 @@ CREATE TABLE IF NOT EXISTS post_flags (
     PRIMARY KEY (source, source_id, flag)
 );
 
+-- 정기 크롤링 한 번의 결과 (수집 현황 화면의 실행 기록)
+CREATE TABLE IF NOT EXISTS crawl_runs (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    started_at  TEXT NOT NULL,
+    finished_at TEXT NOT NULL,
+    seconds     INTEGER NOT NULL,
+    new         INTEGER NOT NULL DEFAULT 0,
+    updated     INTEGER NOT NULL DEFAULT 0,
+    closed      INTEGER NOT NULL DEFAULT 0,
+    purged      INTEGER NOT NULL DEFAULT 0,
+    requests    INTEGER NOT NULL DEFAULT 0,
+    stopped     INTEGER NOT NULL DEFAULT 0,     -- 시간 예산에서 멈춤
+    errors      TEXT,                           -- JSON 목록
+    sites       TEXT                            -- JSON {사이트: {new, fetched, left}}
+);
+
 CREATE TABLE IF NOT EXISTS fetch_runs (
     id           INTEGER PRIMARY KEY AUTOINCREMENT,
     source       TEXT NOT NULL,

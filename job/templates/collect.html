@@ -31,7 +31,7 @@
 </section>
 
 <section class="card" id="crawl">
-  <div class="sec-head"><h2>자동 수집 (크롤링)</h2>
+  <div class="sec-head"><h2>자동 수집 (크롤링) <a class="small" href="{{ url_for('collect.status_page') }}">현황 자세히 →</a></h2>
     <span class="chip {{ 'ok' if crawl.enabled }}">{{ ('켜짐 · ' ~ crawl.interval_hours ~ '시간마다') if crawl.enabled else '꺼짐' }}</span></div>
   <p class="small">
     마지막 실행 <b>{{ crawl_status.last or '없음' }}</b>

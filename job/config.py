@@ -50,6 +50,10 @@ def _secret_key() -> str:
 
 
 SECRET_KEY = _secret_key()
+# 배포할 때 비밀번호를 정하면 모든 화면이 로그인을 요구한다 (비우면 로그인 없음 — 내 PC 전용)
+PASSWORD = os.environ.get("JOB_PASSWORD", "")
+PERMANENT_SESSION_LIFETIME = 60 * 60 * 24 * 14          # 로그인 유지 14일
+SESSION_COOKIE_SECURE = os.environ.get("JOB_COOKIE_SECURE", "0") == "1"   # https 배포에서 1
 SESSION_COOKIE_NAME = "job_session"
 SESSION_COOKIE_SAMESITE = "Lax"
 MAX_CONTENT_LENGTH = 5 * 1024 * 1024                   # CSV/엑셀 업로드 5MB
