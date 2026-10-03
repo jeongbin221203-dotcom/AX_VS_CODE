@@ -3,6 +3,8 @@
 - 서버가 뜰 때 시연용 시스템관리자(demo)와 샘플 데이터(4개 플랜트·1년 치 거래, core/seed_demo.py)를 만든다. 빈 DB일 때만 넣는다.
 - 로그인하지 않은 방문자는 이 계정으로 자동 로그인된다 → 어느 컴퓨터에서 열어도 바로 모든 화면을 볼 수 있다.
 - 방문자가 시연 계정을 중지·강등해도 다음 자동 로그인 때 되돌린다.
+- 사이드바 '다른 역할로 보기': 샘플 사용자(core/seed_demo.py)로 바꿔 역할·창고 범위 차이를 볼 수 있다.
+- 관리자 설정(사용자·플랜트·창고·배치·엑셀 양식·비밀번호·샘플 추가)은 저장을 막는다 — 업무 데이터는 저장된다.
 - '샘플로 되돌리기'(reset) 또는 매일 새벽(MM_DEMO_RESET_HOUR, 한국 시간) 첫 요청 때 DB를 비우고 샘플을 다시 만든다.
   방문자가 바꾼 내용은 감사로그 표준출력(MM_AUDIT_STDOUT)으로 서버 로그에 남아 초기화 뒤에도 확인할 수 있다.
 운영 서버에서는 켜지 말 것 (누구나 시스템관리자가 된다).
@@ -46,6 +48,36 @@ def ensure_user() -> dict:
         db.execute("UPDATE users SET role = ?, active = 1, all_warehouses = 1, must_change_pw = 0, "
                    "failed_count = 0, locked_until = '' WHERE id = ?", (ROLE, uid))
         user = auth.get_user(uid)
+    return user
+
+
+# 다른 역할로 보기: (역할, 아이디, 표시) — 아이디는 core/seed_demo.py 의 샘플 사용자
+ROLE_VIEWS = [("ADMIN", USERNAME, "시스템관리자"), ("MANAGER", "park.jh", "관리자"),
+              ("CLERK", "kim.mj", "담당자(인천 창고)"), ("VIEWER", "kang.dy", "조회")]
+# 시연에서 저장을 막는 관리자 설정: admin 블루프린트 전체 + 아래 (시연 초기화 /demo/reset 은 막지 않는다)
+LOCKED_ENDPOINTS = {"auth.password", "data_admin.make_seed", "data_admin.make_seed_mfg"}
+
+
+def locked(blueprint: str | None, endpoint: str | None) -> bool:
+    return blueprint == "admin" or endpoint in LOCKED_ENDPOINTS
+
+
+def role_user(role: str) -> dict | None:
+    """역할 바꿔 보기 계정. 시스템관리자는 시연 계정, 나머지는 샘플 사용자를 사용 중 상태로 되돌려 쓴다."""
+    view = next((v for v in ROLE_VIEWS if v[0] == role), None)
+    if not view:
+        return None
+    if view[1] == USERNAME:
+        return ensure_user()
+    with db.get_conn() as conn:
+        row = conn.execute("SELECT id FROM users WHERE username = ?", (view[1],)).fetchone()
+    if row is None:
+        return None
+    user = auth.get_user(row[0])
+    if user["role"] != role or not user["active"] or user["must_change_pw"] or user.get("locked_until"):
+        db.execute("UPDATE users SET role = ?, active = 1, must_change_pw = 0, failed_count = 0, locked_until = '' "
+                   "WHERE id = ?", (role, row[0]))
+        user = auth.get_user(row[0])
     return user
 
 

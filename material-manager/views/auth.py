@@ -81,6 +81,21 @@ def sso_callback():
     return redirect(nxt or url_for("dashboard.index"))
 
 
+@bp.get("/demo/as/<role>")
+def demo_as(role: str):
+    """시연 모드: 다른 역할로 바꿔 보기 (core/demo.ROLE_VIEWS 의 계정만)."""
+    if not config.DEMO:
+        abort(404)
+    from core import demo
+    from views.helpers import _demo_sign_in
+    user = demo.role_user(role)
+    if not user:
+        abort(404)
+    _demo_sign_in(user)
+    flash(f"{user['name']}({config.ROLES[user['role']][1]}) 권한으로 보고 있습니다.", "info")
+    return redirect(url_for("dashboard.index"))
+
+
 @bp.post("/logout")
 def logout():
     if g.user:

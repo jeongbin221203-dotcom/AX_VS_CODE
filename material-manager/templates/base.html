@@ -41,7 +41,8 @@
     {% if config.DEMO and config.FORWARD_URL %}
     <div class="demo-note small">포트폴리오 시연 — 실제 서버(개인 PC)가 꺼져 있어 임시 서버로 보여 드립니다. 여기서 바꾼 내용은 저장되지 않습니다.</div>
     {% elif config.DEMO %}
-    <div class="demo-note small">포트폴리오 시연 — 시스템관리자로 자동 로그인했습니다. 누구나 같은 데이터를 함께 쓰며 매일 새벽 {{ config.DEMO_RESET_HOUR }}시에 처음 샘플로 돌아갑니다.
+    <div class="demo-note small">포트폴리오 시연 — 로그인 없이 들어왔습니다. 누구나 같은 데이터를 함께 쓰며 매일 새벽 {{ config.DEMO_RESET_HOUR }}시에 처음 샘플로 돌아갑니다.
+      입출고·구매 같은 업무는 직접 해 볼 수 있고, 관리자 설정(사용자·플랜트·창고·배치·엑셀 양식)은 잠겨 있습니다.
       <details class="demo-reset">
         <summary>샘플로 되돌리기</summary>
         <form method="post" action="{{ url_for('demo_reset') }}" data-nodraft>
@@ -50,6 +51,11 @@
           <button class="btn btn-sm btn-danger">되돌리기</button>
         </form>
       </details>
+    </div>
+    {% endif %}
+    {% if config.DEMO and g.user %}
+    <div class="demo-roles small">다른 역할로 보기:
+      {% for role, uname, label in DEMO_ROLE_VIEWS %}<a href="{{ url_for('auth.demo_as', role=role) }}" class="{{ 'active' if g.user.username == uname }}">{{ label }}</a>{% if not loop.last %} · {% endif %}{% endfor %}
     </div>
     {% endif %}
     <div class="muted small foot">

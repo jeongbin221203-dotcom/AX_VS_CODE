@@ -77,6 +77,13 @@ def load_context():
             g.user = None
     if g.user is None and config.DEMO and request.endpoint not in PUBLIC_ENDPOINTS | {"auth.logout"}:
         g.user = _demo_sign_in()
+    if g.user is not None and config.DEMO and request.method == "POST":
+        from core import demo
+        if demo.locked(request.blueprint, request.endpoint):
+            # 누구나 시스템관리자로 들어오므로 관리자 설정은 저장을 막는다 (화면은 볼 수 있고 업무 데이터는 저장됨)
+            flash("시연 서버에서는 관리자 설정을 바꿀 수 없습니다 — 화면만 둘러볼 수 있습니다.", "warning")
+            back = request.referrer or ""
+            return redirect(back if back.startswith(request.host_url) else url_for("dashboard.index"))
     if g.user is None:
         if request.endpoint in PUBLIC_ENDPOINTS:
             return None
@@ -112,10 +119,10 @@ def _end_session(message: str, category: str) -> None:
     flash(message, category)
 
 
-def _demo_sign_in() -> dict:
-    """시연 모드: 로그인하지 않은 방문자를 시연용 시스템관리자로 로그인시킨다 (core/demo.py)."""
+def _demo_sign_in(user: dict | None = None) -> dict:
+    """시연 모드: 로그인하지 않은 방문자를 시연용 시스템관리자로(또는 '다른 역할로 보기'에서 고른 계정으로) 로그인시킨다."""
     from core import demo
-    user = demo.ensure_user()
+    user = user or demo.ensure_user()
     token, flashes = session.get("_csrf"), session.get("_flashes")
     session.clear()
     if token:                                      # 이미 열어 둔 화면의 폼이 그대로 제출되게
@@ -346,6 +353,8 @@ def register_template_helpers(app: Flask) -> None:
         DOC_TYPES=config.DOC_TYPES, DOC_NEED_BIZ_NO=config.DOC_NEED_BIZ_NO,
         DB_NAME=config.DB_PATH.name, today=date.today,
     )
+    from core import demo
+    app.jinja_env.globals["DEMO_ROLE_VIEWS"] = demo.ROLE_VIEWS
 
     def error_page(code: int, title: str, message: str):
         return render_template("error.html", code=code, title=title, message=message,

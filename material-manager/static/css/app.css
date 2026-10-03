@@ -58,6 +58,9 @@ h3 { font-size: 1rem; margin: 0 0 .75rem; }
 .demo-reset { margin-top: .4rem; }
 .demo-reset summary { cursor: pointer; text-decoration: underline; }
 .demo-reset p { margin: .3rem 0; }
+.demo-roles { margin-top: .5rem; color: #c9d2de; line-height: 1.7; }
+.demo-roles a { color: inherit; text-decoration: underline; }
+.demo-roles a.active { color: #fff; font-weight: 600; text-decoration: none; }
 .shortage { background: var(--down); color: #fff !important; border-radius: 6px; padding: .4rem .6rem; font-size: .85rem; font-weight: 600; }
 .content { flex: 1; min-width: 0; padding: 1.75rem 2rem 3rem; }
 
