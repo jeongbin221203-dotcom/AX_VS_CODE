@@ -135,7 +135,14 @@ def _write_index(dest, items):
 
 
 def _dir_size(path):
-    return sum(f.stat().st_size for f in Path(path).rglob('*') if f.is_file())
+    total = 0
+    for root, _, files in os.walk(path):             # 사이에 지워진 폴더는 os.walk 가 건너뛴다
+        for name in files:
+            try:
+                total += os.stat(os.path.join(root, name)).st_size
+            except OSError:                 # 다른 요청이 그 사이에 바꾼 임시 파일
+                pass
+    return total
 
 
 def get(dest, iid):

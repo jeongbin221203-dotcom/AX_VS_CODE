@@ -4,6 +4,8 @@
 import datetime as dt
 import re
 
+from openpyxl.worksheet.worksheet import Worksheet
+
 from . import formula as fx
 from . import pivots, vba, xlsx
 from .exam import _cell_mask, _color, _fmt_sample, _norm_text, describe_charts
@@ -70,19 +72,47 @@ def _raw(ws, r, c):
     return ws.cell(r, c).value if ws is not None else None
 
 
+SHORT_DATE = {'mm-dd-yy': 'yyyy-mm-dd'}     # 기본 형식 14('간단한 날짜')는 한국어 엑셀에서 yyyy-mm-dd 로 보인다
+
+
+class Fmt:
+    """표시 형식 비교: 양수 예시가 같으면서 0·음수 표시도 같아야 같은 형식.
+    회계·쉼표 스타일(_-, _(, '* ')은 0·음수 표시 방식이 여러 가지라 양수 예시만 본다."""
+
+    def __init__(self, fmt):
+        fmt = SHORT_DATE.get(fmt, fmt)
+        s = [x.strip() for x in _fmt_sample(fmt)]
+        self.pos = (s[0], s[3], s[4])
+        self.all = tuple(s)
+        self.acct = any(t in fmt for t in ('* ', '_(', '_-'))
+
+    def __eq__(self, other):
+        if not isinstance(other, Fmt):
+            return NotImplemented
+        return self.pos == other.pos and (self.acct or other.acct or self.all == other.all)
+
+    def __hash__(self):
+        return hash(self.pos)
+
+
+def _font_color(c):
+    v = _color(c)
+    return None if v in ('T1', '000000') else v       # 자동·검정·'텍스트 1'은 같은 검정
+
+
 def _style_key(cell):
     f, a, b = cell.font, cell.alignment, cell.border
     fill = _color(cell.fill.fgColor) if cell.fill is not None and cell.fill.patternType == 'solid' else None
     return {'글꼴': f.name, '크기': float(f.sz or 11), '굵게': bool(f.b), '기울임꼴': bool(f.i), '밑줄': f.u or None,
-            '글꼴 색': _color(f.color), '채우기': fill, '가로 맞춤': a.horizontal or 'general',
+            '글꼴 색': _font_color(f.color), '채우기': fill, '가로 맞춤': a.horizontal or 'general',
             '세로 맞춤': a.vertical or 'bottom', '줄 바꿈': bool(a.wrap_text),
-            '표시 형식': tuple(_fmt_sample(cell.number_format)),
+            '표시 형식': Fmt(cell.number_format),
             '테두리': tuple(bool(getattr(b, s).style) for s in ('left', 'right', 'top', 'bottom'))}
 
 
 def _show_style(k, v):
     if k == '표시 형식':
-        return '' if not v else f'(예: {v[0]})'
+        return f'(예: {v.all[0]})' if isinstance(v, Fmt) else ''
     if k == '테두리':
         return '있음' if any(v) else '없음'
     if isinstance(v, bool):
@@ -111,10 +141,17 @@ class Wb:
         self._vba = None
 
     def ws(self, name):
-        return self.f[name] if name in self.f.sheetnames else None
+        ws = self.f[name] if name in self.f.sheetnames else None
+        return ws if isinstance(ws, Worksheet) else None        # 차트 시트는 None
 
     def wv(self, name):
-        return self.v[name] if name in self.v.sheetnames else None
+        ws = self.v[name] if name in self.v.sheetnames else None
+        return ws if isinstance(ws, Worksheet) else None
+
+    @property
+    def sheets(self):
+        """셀이 있는 시트 이름들(차트 시트 제외)."""
+        return [w.title for w in self.f.worksheets]
 
     def value(self, sheet, r, c):
         try:
@@ -165,7 +202,8 @@ def _cells_items(sheet, src, ans, user):
                 break
             u_raw = ws_u.cell(r, c).value
             got = user.value(ws_u.title, r, c)
-            if got is None and u_raw is not None and xlsx.formula_text(u_raw) is None:
+            if got is None and u_raw is not None and xlsx.formula_text(u_raw) is None \
+                    and type(u_raw).__name__ != 'DataTableFormula':
                 got = xlsx.plain(u_raw)
             if dt_table and type(u_raw).__name__ != 'DataTableFormula':
                 bad.append(f'{fx.addr(r, c)}: 데이터 표가 아닙니다')
@@ -200,10 +238,11 @@ def _style_items(sheet, src, ans, user):
     items = []
     by_attr = {}
     for pos, diff in changes.items():
+        ka = _style_key(ws_a.cell(*pos))
         for k in diff:
-            by_attr.setdefault(k, set()).add(pos)
-    for attr in sorted(by_attr, key=lambda k: min(by_attr[k])):
-        for comp in _groups(by_attr[attr]):
+            by_attr.setdefault((k, ka[k]), set()).add(pos)
+    for attr, val in sorted(by_attr, key=lambda k: (min(by_attr[k]), k[0])):
+        for comp in _groups(by_attr[(attr, val)]):
             bad = []
             for r, c in comp:
                 if ws_u is None:
@@ -240,16 +279,80 @@ def _rules(ws):
 
 
 def _rule_key(sq, rule):
-    return sq, rule.type, tuple(rule.formula or ())
+    return sq, rule.type, tuple(_norm_f(f) for f in (rule.formula or ()))
+
+
+def _norm_f(f):
+    return (f or '').replace('$', '').replace(' ', '').upper()
+
+
+def broken_rule(rule):
+    """정답 파일에 남은 깨진 규칙: 행 번호가 엑셀 끝(1048576 근처)이거나 수식에 둥근 따옴표."""
+    text = ' '.join(rule.formula or [])
+    return bool(re.search(r'\$?[A-Z]+\$?10[0-9]{5}', text) or re.search('[“”‘’]', text))
+
+
+RULE_ATTRS = (('operator', None), ('rank', None), ('percent', False), ('bottom', False), ('aboveAverage', True),
+              ('equalAverage', False), ('stdDev', None), ('text', None), ('timePeriod', None))
+
+
+def _dxf(d):
+    font = (_font_color(d.font.color) if d and d.font else None, bool(d and d.font and d.font.b),
+            bool(d and d.font and d.font.i))
+    fill = (_color(d.fill.bgColor) or _color(d.fill.fgColor)) if d and d.fill else None
+    return font, fill
+
+
+def _scale(rule):
+    """색조·데이터 막대·아이콘 집합의 설정."""
+    if rule.colorScale is not None:
+        return ('colorScale', tuple(c.type for c in rule.colorScale.cfvo),
+                tuple(_color(c) for c in rule.colorScale.color))
+    if rule.dataBar is not None:
+        return ('dataBar', tuple(c.type for c in rule.dataBar.cfvo), _color(rule.dataBar.color))
+    if rule.iconSet is not None:
+        return ('iconSet', rule.iconSet.iconSet, bool(rule.iconSet.reverse), tuple(c.type for c in rule.iconSet.cfvo))
+    return None
+
+
+def _rule_same(rule, r, ans, user, sheet, sq):
+    """정답 규칙과 수험자 규칙이 같은 일을 하는지 → (같음, 다르면 이유)."""
+    if r.type != rule.type:
+        return False, '규칙 종류가 다릅니다'
+    if rule.type == 'expression' and rule.formula:
+        uf = (r.formula or ['FALSE'])[0]
+        if _norm_f(uf) != _norm_f(rule.formula[0]):
+            try:
+                want = _cell_mask(_Ctx(ans), sheet, sq.split()[0], '=' + rule.formula[0], ans.book)
+                got = _cell_mask(_Ctx(user), sheet, sq.split()[0], '=' + uf, user.book)
+            except fx.FormulaError:
+                return False, f'규칙 수식 ={uf} 을(를) 계산할 수 없습니다'
+            if want != got:
+                return False, f'규칙 수식 ={uf} 의 결과가 다릅니다'
+    else:
+        for attr, default in RULE_ATTRS:
+            a = getattr(rule, attr, None)
+            u = getattr(r, attr, None)
+            if (default if a is None else a) != (default if u is None else u):
+                return False, f'규칙 조건({attr})이 다릅니다: {u} → {a}'
+        if rule.text is None and [_norm_f(f) for f in rule.formula or []] != [_norm_f(f) for f in r.formula or []]:
+            return False, f"조건 값 {', '.join(r.formula or []) or '-'} → {', '.join(rule.formula or [])}"
+        if _scale(rule) != _scale(r):
+            return False, '색조·데이터 막대·아이콘 설정이 다릅니다'
+    if _scale(rule) is None and _dxf(rule.dxf) != _dxf(r.dxf):
+        return False, '서식(글꼴 색·스타일·채우기)이 다릅니다'
+    return True, ''
 
 
 def _cf_items(sheet, src, ans, user):
     ws_s, ws_a, ws_u = src.ws(sheet), ans.ws(sheet), user.ws(sheet)
     old = {_rule_key(*x) for x in _rules(ws_s)} if ws_s is not None else set()
-    items = []
+    items, seen = [], set()
     for sq, rule in _rules(ws_a):
-        if _rule_key(sq, rule) in old:
+        k = _rule_key(sq, rule)
+        if k in old or k in seen or broken_rule(rule):
             continue
+        seen.add(k)
         label = f'조건부 서식 {sq}'
         hint = f'규칙: ={rule.formula[0]}' if rule.formula else f'규칙 종류: {rule.type}'
         cands = [r for s, r in (_rules(ws_u) if ws_u is not None else []) if s == sq]
@@ -258,30 +361,10 @@ def _cf_items(sheet, src, ans, user):
             continue
         ok, msg = False, '규칙 내용이 다릅니다'
         for r in cands:
-            if r.type != rule.type:
-                msg = '규칙 종류가 다릅니다'
-                continue
-            if rule.type == 'expression' and rule.formula:
-                try:
-                    want = _cell_mask(_Ctx(ans), sheet, sq.split()[0], '=' + rule.formula[0], ans.book)
-                    got = _cell_mask(_Ctx(user), sheet, sq.split()[0], '=' + (r.formula or ['FALSE'])[0], user.book)
-                except fx.FormulaError:
-                    continue
-                if want != got:
-                    msg = f'규칙 수식 ={(r.formula or [""])[0]} 의 결과가 다릅니다'
-                    continue
-                da, du = rule.dxf, r.dxf
-                fa = (_color(da.font.color) if da and da.font else None, bool(da and da.font and da.font.b),
-                      bool(da and da.font and da.font.i))
-                fu = (_color(du.font.color) if du and du.font else None, bool(du and du.font and du.font.b),
-                      bool(du and du.font and du.font.i))
-                fill_a = (_color(da.fill.bgColor) or _color(da.fill.fgColor)) if da and da.fill else None
-                fill_u = (_color(du.fill.bgColor) or _color(du.fill.fgColor)) if du and du.fill else None
-                if fa != fu or fill_a != fill_u:
-                    msg = '서식(글꼴 색·스타일·채우기)이 다릅니다'
-                    continue
-            ok = True
-            break
+            ok, why = _rule_same(rule, r, ans, user, sheet, sq)
+            if ok:
+                break
+            msg = why
         items.append({'label': label, 'ok': ok, 'msgs': [] if ok else [msg], 'hint': hint})
     return items
 
@@ -293,7 +376,8 @@ class _Ctx:
 
 def _dv_items(sheet, src, ans, user):
     ws_s, ws_a, ws_u = src.ws(sheet), ans.ws(sheet), user.ws(sheet)
-    key = lambda d: (str(d.sqref).upper(), d.type, (d.formula1 or '').replace('$', ''), d.operator)  # noqa: E731
+    key = lambda d: (str(d.sqref).upper(), d.type, (d.formula1 or '').replace('$', ''),  # noqa: E731
+                     (d.formula2 or '').replace('$', ''), d.operator or 'between')
     old = {key(d) for d in ws_s.data_validations.dataValidation} if ws_s is not None else set()
     have = {key(d): d for d in ws_u.data_validations.dataValidation} if ws_u is not None else {}
     items = []
@@ -406,12 +490,13 @@ def _misc_items(sheet, src, ans, user):
     def page(ws):
         if ws is None:
             return {}
-        return {'용지 방향': ws.page_setup.orientation, '가로 가운데': bool(ws.print_options.horizontalCentered),
+        return {'용지 방향': 'landscape' if ws.page_setup.orientation == 'landscape' else 'portrait',
+                '가로 가운데': bool(ws.print_options.horizontalCentered),
                 '세로 가운데': bool(ws.print_options.verticalCentered),
                 '인쇄 영역': (ws.print_area or '').split('!')[-1].replace('$', ''),
                 '반복할 행': (ws.print_title_rows or '').replace('$', ''),
-                '머리글': _norm_text(ws.oddHeader.center.text) + '|' + _norm_text(ws.oddHeader.right.text),
-                '바닥글': _norm_text(ws.oddFooter.center.text) + '|' + _norm_text(ws.oddFooter.right.text),
+                '머리글': '|'.join(_norm_text(getattr(ws.oddHeader, p).text) for p in ('left', 'center', 'right')),
+                '바닥글': '|'.join(_norm_text(getattr(ws.oddFooter, p).text) for p in ('left', 'center', 'right')),
                 '시트 보호': bool(ws.protection.sheet),
                 '보기': ws.sheet_view.view or 'normal'}
     ps, pa, pu = page(ws_s), page(ws_a), page(ws_u)
@@ -454,16 +539,35 @@ def _misc_items(sheet, src, ans, user):
                 items.append({'label': f'메모 {cell.coordinate}', 'ok': ok, 'hint': f"메모 내용: {want}",
                               'msgs': [] if ok else [f"'{want}' 메모 필요"]})
     # 시나리오
-    sc_a = {s.name for s in (ws_a.scenarios.scenario if ws_a.scenarios else [])}
-    sc_s = {s.name for s in (ws_s.scenarios.scenario if ws_s.scenarios else [])}
-    if sc_a - sc_s:
-        sc_u = {s.name for s in (ws_u.scenarios.scenario if ws_u is not None and ws_u.scenarios else [])}
-        miss = sorted((sc_a - sc_s) - sc_u)
-        items.append({'label': '시나리오 ' + ', '.join(sorted(sc_a - sc_s)), 'ok': not miss,
-                      'hint': '; '.join(f"{s.name}: " + ', '.join(f'{ic.r}={ic.val}' for ic in s.inputCells)
-                                        for s in ws_a.scenarios.scenario if s.name in sc_a - sc_s),
-                      'msgs': [f"없음: {', '.join(miss)}"] if miss else []})
+    scen = lambda ws: {s.name: s for s in (ws.scenarios.scenario if ws is not None and ws.scenarios else [])}  # noqa: E731
+    sc_a, sc_s, sc_u = scen(ws_a), scen(ws_s), scen(ws_u)
+    new = sorted(set(sc_a) - set(sc_s))
+    if new:
+        msgs = []
+        for name in new:
+            if name not in sc_u:
+                msgs.append(f"'{name}' 시나리오가 없습니다")
+                continue
+            want = {ic.r.replace('$', '').upper(): ic.val for ic in sc_a[name].inputCells}
+            got = {ic.r.replace('$', '').upper(): ic.val for ic in sc_u[name].inputCells}
+            if set(want) != set(got):
+                msgs.append(f"'{name}' 변경 셀 {', '.join(sorted(got))} → {', '.join(sorted(want))}")
+                continue
+            for cell, v in want.items():
+                if not _same_val(_num(got[cell]), _num(v)):
+                    msgs.append(f"'{name}' {cell} 값 {got[cell]} → {v}")
+                    break
+        items.append({'label': '시나리오 ' + ', '.join(new), 'ok': not msgs, 'msgs': msgs[:3],
+                      'hint': '; '.join(f"{n}: " + ', '.join(f'{ic.r}={ic.val}' for ic in sc_a[n].inputCells)
+                                        for n in new)})
     return items
+
+
+def _num(v):
+    try:
+        return float(v)
+    except (TypeError, ValueError):
+        return v
 
 
 def _book_items(src, ans, user):
@@ -477,9 +581,10 @@ def _book_items(src, ans, user):
             continue
         got = names_u.get(n.lower())
         ok = got is not None and got.replace('$', '').replace("'", '').upper() == ref.replace('$', '').replace("'", '').upper()
-        items.append(('기본작업', {'label': f'이름 정의 {n}', 'ok': ok, 'hint': f'{n} = {ref}',
+        where = ref.lstrip('=').split('!')[0].strip("'") if '!' in ref else None
+        items.append(('기본작업', {'label': f'이름 정의 {n}', 'ok': ok, 'hint': f'{n} = {ref}', 'sheet': where,
                                    'msgs': [] if ok else [f'{got or "없음"} → {ref}']}))
-    for s in ans.f.sheetnames:
+    for s in ans.sheets:
         if s not in src.f.sheetnames:
             ok = s in user.f.sheetnames
             if ok:
@@ -501,9 +606,15 @@ def _book_items(src, ans, user):
             items.append((sec, {'label': f'VBA {name}', 'ok': False, 'msgs': ['프로시저가 없습니다(.xlsm 으로 저장)']}))
             continue
         score = _similar(u, body)
-        ok = score >= 0.6
-        items.append((sec, {'label': f'VBA {name}', 'ok': ok, 'code': '\n'.join(_code_lines(body)),
-                            'msgs': [] if ok else [f'정답 코드와 {round(score * 100)}% 일치(같은 문장 기준)']}))
+        miss = _literals(body) - _literals(u)
+        ok = score >= 0.95 or (score >= 0.3 and not miss)
+        msgs = []
+        if not ok:
+            msgs.append(f'정답 코드와 {round(score * 100)}% 일치(같은 문장 기준)')
+            if miss:
+                msgs.append('빠졌거나 다른 값: ' + ', '.join(sorted(miss)[:4]))
+        items.append((sec, {'label': f'VBA {name}', 'ok': ok, 'code': '\n'.join(_code_lines(body)), 'msgs': msgs,
+                            'macro': name}))
     b_a = set(vba.buttons(ans.data)) - set(vba.buttons(src.data))
     b_u = {(_norm_text(t), m.lower()) for t, m in vba.buttons(user.data)}
     for text, macro in sorted(b_a):
@@ -517,6 +628,31 @@ def _similar(got, want):
     """정답 코드의 문장 중 몇 %가 들어 있는지(공백·대소문자·주석 무시)."""
     w = set(_code_lines(want))
     return len(w & set(_code_lines(got))) / max(1, len(w))
+
+
+RANGE_RE = re.compile(r'\$?([a-z]{1,3})\$?(\d+)(?::\$?([a-z]{1,3})\$?(\d+))?$')
+
+
+def _literals(body):
+    """코드의 핵심 값: 다룬 셀들(범위 글자를 모두 합친 칸 목록), 그 밖의 문자열(수식·메시지), 색·서식 줄의 값."""
+    out, cells = set(), set()
+    for line in _code_lines(body):
+        for s in re.findall(r'"([^"]*)"', line):
+            s = s.replace(' ', '')
+            m = RANGE_RE.match(s)
+            if m:
+                r1, c1 = int(m.group(2)), fx.col_num(m.group(1).upper())
+                r2, c2 = (int(m.group(4)), fx.col_num(m.group(3).upper())) if m.group(3) else (r1, c1)
+                if (r2 - r1 + 1) * (c2 - c1 + 1) <= 10000:
+                    cells |= {fx.addr(r, c) for r in range(r1, r2 + 1) for c in range(c1, c2 + 1)}
+            elif s:
+                out.add(s)
+        if re.search(r'\.(color|colorindex|themecolor|numberformat\w*|bold|italic|size|name)\s*=', line) \
+                and not re.search(r'tintandshade|patterncolor', line):
+            out.add(re.sub(r'\s+', '', line.split('=', 1)[0].split('.')[-1] + '=' + line.split('=', 1)[1]))
+    if cells:
+        out.add('셀 ' + ','.join(sorted(cells, key=fx.parse_addr)))
+    return out
 
 
 def _code_lines(body):
@@ -534,40 +670,54 @@ def grade(src_bytes, ans_bytes, user_bytes, level=None):
     src = Wb(src_bytes)
     ans = Wb(ans_bytes)
     user = Wb(user_bytes)
-    level = level or exam_level(ans.f.sheetnames)
+    level = level or exam_level(ans.sheets)
     points = SHEET_POINTS[level] if level else None
     sheets, book_items = [], _book_items(src, ans, user)
-    for sheet in ans.f.sheetnames:
-        if sheet not in src.f.sheetnames:
+    for sheet in ans.sheets:
+        if src.ws(sheet) is None:
             continue
+        section = section_of(sheet)
+        fns = (_cells_items, _style_items, _cf_items, _dv_items, _pivot_items, _chart_items, _misc_items)
+        if level and section == '계산작업':       # 시험의 계산작업은 수식만(정답 파일의 강조 서식 등은 채점 안 함)
+            fns = (_cells_items,)
         items = []
-        for fn in (_cells_items, _style_items, _cf_items, _dv_items, _pivot_items, _chart_items, _misc_items):
+        for fn in fns:
             items += fn(sheet, src, ans, user)
         pts = {_key(k): v for k, v in points.items()}.get(_key(sheet), 0) if points else 0
-        sheets.append({'name': sheet, 'section': section_of(sheet), 'points': pts, 'items': items})
-    # 통합 문서 단위 항목은 해당 영역의 첫 시트(매크로는 매크로 시트, VBA 프로시저는 기타작업-3 등)에 붙인다
+        sheets.append({'name': sheet, 'section': section, 'points': pts, 'items': items})
+    if not sheets:
+        raise xlsx.BadFile('문제 파일과 정답 파일에 같은 이름의 시트가 없습니다.')
+    by_name = {s['name']: s for s in sheets}
+    macro_sheet = next((s for s in sheets if _key(s['name']) in ('매크로작업', '기타작업2')), None)
+    if level == 'c2':
+        macro_sheet = by_name.get('매크로작업', macro_sheet)
+    button_macros = {m.split('!')[-1].split('.')[-1].lower() for _, m in vba.buttons(ans.data)}
+    # 통합 문서 단위 항목: 이름 정의는 이름이 가리키는 시트, 매크로(단추로 실행)는 매크로 시트, VBA 프로그래밍은 마지막 기타작업
     for sec, it in book_items:
-        target = None
-        if it['label'].startswith('VBA') and sec == '기타작업':
-            target = next((s for s in reversed(sheets) if s['section'] == '기타작업'), None)
-            if '단추' in it['label'] or any(k in it['label'] for k in ('서식', '그래프', '총점', '채우기', '평균')):
-                target = next((s for s in sheets if s['name'] in ('매크로작업', '기타작업-2')), target)
+        target = by_name.get(it.pop('sheet', None) or '')
+        macro = it.pop('macro', None)
         if it['label'].startswith('단추'):
-            target = next((s for s in sheets if s['name'] in ('매크로작업', '기타작업-2')), None)
+            target = macro_sheet
+        elif macro and sec == '기타작업':
+            if level == 'c2' or macro.lower() in button_macros:
+                target = macro_sheet
+            target = target or next((s for s in reversed(sheets) if s['section'] == '기타작업'), None)
         if target is None:
             target = next((s for s in sheets if s['section'] == sec), sheets[0])
         target['items'].append(it)
-    if not points:      # 시험 구성이 아닌 실습 파일: 할 일이 있는 시트끼리 100점을 나눈다
-        active = [s for s in sheets if s['items']]
+    active = [s for s in sheets if s['items']]
+    if not active:
+        raise xlsx.BadFile('문제 파일과 정답 파일이 같아서 채점할 항목이 없습니다.')
+    if not points:      # 시험 구성이 아닌 실습 파일: 할 일이 있는 시트끼리 100점을 나눈다(반올림 나머지는 마지막 시트)
+        share = round(100 / len(active), 1)
         for s in sheets:
-            s['points'] = 100 / len(active) if s in active else 0
-    score = 0.0
+            s['points'] = share if s in active else 0
+        active[-1]['points'] = round(100 - share * (len(active) - 1), 1)
     for s in sheets:
         n = len(s['items'])
-        got = s['points'] * sum(1 for i in s['items'] if i['ok']) / n if n else 0
-        score += got
-        s['got'] = round(got, 1)
-        s['points'] = round(s['points'], 1)
+        good = sum(1 for i in s['items'] if i['ok'])
+        s['got'] = s['points'] if n and good == n else round(s['points'] * good / n, 1) if n else 0
+    score = round(sum(s['got'] for s in sheets), 1)
     total = sum(s['points'] for s in sheets)
     sections = []
     for sec in ('기본작업', '계산작업', '분석작업', '기타작업'):

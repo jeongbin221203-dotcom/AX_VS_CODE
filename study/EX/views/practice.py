@@ -102,12 +102,19 @@ def _resolve(kind, iid, need_answer=True):
     abort(404)
 
 
+CACHE_VER = 2          # 채점·지문 규칙을 바꾸면 올린다(예전에 저장한 할 일·지문을 다시 만든다)
+
+
 def _tasks(folder, practice, answer):
     """실습 파일을 정답과 비교한 결과 = 해야 할 일 목록(처음 한 번 계산해 저장)."""
-    cache = folder / 'tasks.json'
+    cache = folder / f'tasks.v{CACHE_VER}.json'
     if cache.exists() and cache.stat().st_mtime >= (folder / answer).stat().st_mtime:
         return json.loads(cache.read_text(encoding='utf-8'))
-    res = compare.grade((folder / practice).read_bytes(), (folder / answer).read_bytes(), (folder / practice).read_bytes())
+    try:
+        res = compare.grade((folder / practice).read_bytes(), (folder / answer).read_bytes(),
+                            (folder / practice).read_bytes())
+    except xlsx.BadFile:
+        return []                                  # 채점할 수 없는 짝: 화면은 열고 제출 때 이유를 보여 준다
     sheets = [{'name': s['name'], 'points': s['points'], 'items': [
         {'label': i['label'], 'hint': i.get('hint'), 'code': i.get('code')} for i in s['items']]}
         for s in res['sheets'] if s['items']]
@@ -117,7 +124,7 @@ def _tasks(folder, practice, answer):
 
 def _problem(folder, practice, answer):
     """정답 파일에서 만든 문제 지문(처음 한 번 만들어 저장)."""
-    cache = folder / 'problem.json'
+    cache = folder / f'problem.v{CACHE_VER}.json'
     if cache.exists() and cache.stat().st_mtime >= (folder / answer).stat().st_mtime:
         return json.loads(cache.read_text(encoding='utf-8'))
     try:
@@ -194,9 +201,12 @@ def library_add():
         return redirect(url_for('.index', error='실습 파일과 정답 파일을 모두 고르세요.'))
     extras = [(f.filename, f.read()) for f in request.files.getlist('extras') if f and f.filename]
     public = current_app.config.get('PUBLIC')
+    p_bytes, a_bytes = p.read(), a.read()
     try:
+        if all(f.filename.lower().endswith(('.xlsx', '.xlsm')) for f in (p, a)):
+            compare.grade(p_bytes, a_bytes, p_bytes)     # 채점할 수 있는 짝인지(같은 시트·차이) 먼저 확인
         iid = library.add_pair(_library_dir(), request.form.get('title'), request.form.get('group'),
-                               (p.filename, p.read()), (a.filename, a.read()), extras,
+                               (p.filename, p_bytes), (a.filename, a_bytes), extras,
                                owner=_owner() if public else None, limit=30 if public else None)
     except xlsx.BadFile as e:
         return redirect(url_for('.index', error=str(e)))

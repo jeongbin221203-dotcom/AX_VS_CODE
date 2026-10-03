@@ -24,7 +24,7 @@ def main():
     out = ROOT / 'content' / 'private' / 'vault.bin'
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_bytes(blob)
-    print(f'{out} ({len(blob) / 1024 / 1024:.1f}MB) — 암호화됨')
+    print(f'{out} ({len(blob) / 1024 / 1024:.1f}MB), 암호화됨')
 
 
 if __name__ == '__main__':

@@ -6,7 +6,7 @@ import re
 
 from . import formula as fx
 from . import pivots, xlsx
-from .compare import Wb, _charts_of, _groups, _span, _style_key
+from .compare import Wb, _charts_of, _groups, _span, _style_key, broken_rule, exam_level
 from .exam import _color, _norm_text
 
 COLOR_NAMES = {'FF0000': '빨강', 'C00000': '진한 빨강', 'FFC000': '주황', 'FFFF00': '노랑', '92D050': '연한 녹색',
@@ -47,9 +47,21 @@ def q(v):
     return f"'{v}'"
 
 
+THEME_NAMES = ['흰색, 배경 1', '검정, 텍스트 1', '배경 2', '텍스트 2', '강조 1', '강조 2', '강조 3', '강조 4', '강조 5',
+               '강조 6', '하이퍼링크', '열어 본 하이퍼링크']
+
+
 def color_name(rgb):
     if not rgb:
-        return '테마 색'
+        return '자동(검정)'
+    m = re.match(r'T(\d+)([+-][\d.]+)?$', rgb)
+    if m:
+        i = int(m.group(1))
+        name = THEME_NAMES[i] if i < len(THEME_NAMES) else f'테마 색 {i}'
+        if m.group(2):
+            tint = float(m.group(2))
+            name += f", {abs(tint) * 100:.0f}% {'더 밝게' if tint > 0 else '더 어둡게'}"
+        return name
     return COLOR_NAMES.get(rgb.upper(), '#' + rgb.upper())
 
 
@@ -539,7 +551,8 @@ STYLE_PHRASE = {
     '밑줄': lambda v: {'single': "밑줄 '실선'", 'double': "밑줄 '이중 실선'"}.get(v, "밑줄 해제"),
     '글꼴 색': lambda v: f"글꼴 색 {q(color_name(v))}", '채우기': lambda v: f"채우기 색 {q(color_name(v))}" if v else '채우기 없음',
     '가로 맞춤': lambda v: {'center': "가로 '가운데 맞춤'", 'centerContinuous': "'선택 영역의 가운데로'", 'left': "가로 '왼쪽'",
-                         'right': "가로 '오른쪽'", 'distributed': "가로 '균등 분할'"}.get(v, f'가로 {v}'),
+                         'right': "가로 '오른쪽'", 'distributed': "가로 '균등 분할'",
+                         'general': "가로 '일반'"}.get(v, f'가로 {v}'),
     '세로 맞춤': lambda v: {'center': "세로 '가운데'", 'top': "세로 '위쪽'", 'bottom': "세로 '아래쪽'"}.get(v, f'세로 {v}'),
     '줄 바꿈': lambda v: "'자동 줄 바꿈'" if v else '', '테두리': lambda v: "'모든 테두리'(⊞)" if all(v) else "테두리",
 }
@@ -555,11 +568,18 @@ def _style_tasks(sheet, ws_s, ws_a, wv_a):
         for cell in row:
             ka, ks = _style_key(cell), _style_key(ws_s.cell(cell.row, cell.column))
             for k in ka:
-                if ka[k] != ks[k]:
-                    changes.setdefault(k, set()).add((cell.row, cell.column))
-    for k, cells in changes.items():
+                if ka[k] != ks[k]:                 # (속성, 정답 값) 별로 묶어야 '가운데'·'아래쪽'이 섞이지 않는다
+                    changes.setdefault((k, ka[k]), set()).add((cell.row, cell.column))
+    for (k, want), cells in sorted(changes.items(), key=lambda x: min(x[1])):
+        boxes = []                                   # 이미 지문에 쓴 영역(그 안이 모두 같은 값일 때만)
         for comp in _groups(cells):
+            if any(b[0] <= r <= b[2] and b[1] <= c <= b[3] for b in boxes for r, c in comp[:1]) and                     all(any(b[0] <= r <= b[2] and b[1] <= c <= b[3] for b in boxes) for r, c in comp):
+                continue
             span = _span(comp)
+            r1, c1, r2, c2 = fx.parse_range(span) if ':' in span else (*fx.parse_addr(span), *fx.parse_addr(span))
+            if (r2 - r1 + 1) * (c2 - c1 + 1) <= 5000 and all(
+                    _style_key(ws_a.cell(rr, cc))[k] == want for rr in range(r1, r2 + 1) for cc in range(c1, c2 + 1)):
+                boxes.append((r1, c1, r2, c2))
             r, c = comp[0]
             v = _style_key(ws_a.cell(r, c))[k]
             if k == '표시 형식':
@@ -630,7 +650,7 @@ def _cf_tasks(sheet, ws_s, ws_a):
     for cf in ws_a.conditional_formatting:
         sq = str(cf.sqref)
         for rule in cf.rules:
-            if (sq, tuple(rule.formula or ())) in old:
+            if (sq, tuple(rule.formula or ())) in old or broken_rule(rule):
                 continue
             first = sq.split()[0]
             r1, c1, r2, c2 = fx.parse_range(first)
@@ -878,8 +898,9 @@ def describe(src_bytes, ans_bytes):
     out = []
     names_a = dict(xlsx._defined_names(ans.f))
     names_s = dict(xlsx._defined_names(src.f))
-    for sheet in ans.f.sheetnames:
-        if sheet not in src.f.sheetnames:
+    calc_only = bool(exam_level(ans.sheets))       # 시험 구성이면 계산작업은 수식만
+    for sheet in ans.sheets:
+        if src.ws(sheet) is None:
             continue
         ws_s, ws_a, wv_a = src.ws(sheet), ans.ws(sheet), ans.wv(sheet)
         tasks = []
@@ -940,13 +961,16 @@ def describe(src_bytes, ans_bytes):
         af = _autofilter_task(sheet, ws_s, ws_a)
         if af:
             tasks.append(af)
-        if not subtotal_done:                       # 부분합이 만든 굵게·윤곽 서식은 빼고
+        if calc_only and sheet.replace(' ', '') == '계산작업':
+            pass
+        elif not subtotal_done:                     # 부분합이 만든 굵게·윤곽 서식은 빼고
             tasks += [t for t in _style_tasks(sheet, ws_s, ws_a, wv_a) if not _inside(t['refs'], skip)]
         tasks += _cf_tasks(sheet, ws_s, ws_a)
         tasks += _dv_tasks(sheet, ws_s, ws_a)
         tasks += _pivot_tasks(sheet, ans)
         tasks += _chart_tasks(sheet, src, ans)
-        tasks += _misc_tasks(sheet, ws_s, ws_a)
+        if not (calc_only and sheet.replace(' ', '') == '계산작업'):
+            tasks += _misc_tasks(sheet, ws_s, ws_a)
         seen, uniq = set(), []                       # 한 표가 여러 덩어리로 나뉘어 같은 지문이 나오면 하나만
         for t in tasks:
             if t['text'] not in seen:

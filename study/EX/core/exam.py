@@ -14,6 +14,7 @@ from pathlib import Path
 from openpyxl import Workbook
 from openpyxl.chart import BarChart, LineChart, PieChart, Reference
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
+from openpyxl.styles.colors import COLOR_INDEX
 from openpyxl.worksheet.formula import ArrayFormula
 
 from . import formula as fx
@@ -200,8 +201,17 @@ def _same(got, exp, tol=1e-6):
 
 
 def _color(c):
-    """openpyxl 색 → 'RRGGBB' (테마 색이면 None)."""
+    """openpyxl 색 → 'RRGGBB'. 테마 색은 'T4'·'T4+0.40'(테마 번호·밝기), 자동 색은 None."""
     if c is None:
+        return None
+    kind = getattr(c, 'type', None)
+    if kind == 'theme':
+        tint = round(float(getattr(c, 'tint', 0) or 0), 2)
+        return f'T{c.theme}' + (f'{tint:+.2f}' if tint else '')
+    if kind == 'indexed':
+        i = c.indexed
+        return COLOR_INDEX[i][-6:].upper() if isinstance(i, int) and 0 <= i < 64 else None
+    if kind == 'auto':
         return None
     try:
         rgb = c.rgb
@@ -629,7 +639,42 @@ def check_subtotal(ctx, sheet, chk):
                 if len(keys) > 1 and b - a + 1 < (r2 - r1):
                     bad.append(f'{fx.addr(row, col)}: 여러 그룹이 섞였습니다 — 먼저 {chk["group"]} 기준으로 정렬하세요')
                     break
+            else:
+                # 그룹마다 원래 자료로 계산한 값이 부분합 칸 중 하나와 같아야 한다
+                got = [ctx.user_value(ws.title, row, col) for row, _, _ in cells]
+                for g in groups:
+                    vals = [s0.get(r, col) for r in range(r1 + 1, r2 + 1) if s0.get(r, gcol) == g]
+                    exp = _subtotal_value(no, vals)
+                    hit = next((i for i, v in enumerate(got) if exp is not None and _same(v, exp)), None)
+                    if hit is None:
+                        bad.append(f"{field} {SUBTOTAL_NAME[no]}: '{g}' 그룹 값 {fx.display(exp)} 이 없습니다")
+                        break
+                    got.pop(hit)
     return not bad, bad[:3]
+
+
+def _subtotal_value(no, vals):
+    nums = [v for v in vals if fx.is_num(v)]
+    if no == 3:
+        return sum(1 for v in vals if v not in (None, ''))
+    if no == 2:
+        return len(nums)
+    if no == 9:
+        return sum(nums)
+    if not nums:
+        return None
+    if no == 1:
+        return sum(nums) / len(nums)
+    if no == 4:
+        return max(nums)
+    if no == 5:
+        return min(nums)
+    if no == 6:
+        out = 1
+        for v in nums:
+            out *= v
+        return out
+    return None
 
 
 def check_pivot(ctx, sheet, chk):
@@ -655,7 +700,8 @@ def check_scenario(ctx, sheet, chk):
     sc = getattr(ws, 'scenarios', None)
     have = {s.name: s for s in (sc.scenario if sc else [])}
     bad = []
-    want_cells = sorted(a.replace('$', '').upper() for a in _expand(chk['changing']))
+    order = [a.replace('$', '').upper() for a in _expand(chk['changing'])]
+    want_cells = sorted(order)
     for name, vals in chk['scenarios']:
         s = have.get(name)
         if s is None:
@@ -666,7 +712,7 @@ def check_scenario(ctx, sheet, chk):
             bad.append(f"'{name}' 의 변경 셀 {', '.join(a for a, _ in cells)} → {chk['changing']}")
             continue
         got = dict(cells)
-        for a, v in zip(want_cells if len(vals) == len(want_cells) else [], vals):
+        for a, v in zip(order if len(vals) == len(order) else [], vals):
             try:
                 g = float(got[a])
             except (TypeError, ValueError):
@@ -751,9 +797,27 @@ CHART_TYPES = {'barChart': 'col', 'bar3DChart': 'col', 'lineChart': 'line', 'lin
                'radarChart': 'radar'}
 
 
-def _rich_text(t):
+def _ref_text(ref, book):
+    """셀에 연결된 제목·계열 이름(strRef) → 그 셀의 글자."""
+    if book is not None and ref.f:
+        try:
+            v = fx.evaluate(fx.parse('=' + ref.f), book, book.sheets and next(iter(book.sheets)), 1, 1)
+            if not isinstance(v, fx.XLErr):
+                return _norm_text(fx.display(v))
+        except (fx.FormulaError, fx.XLErr):
+            pass
+    cache = ref.strCache
+    if cache is not None and cache.pt:
+        return _norm_text(cache.pt[0].v)
+    return _norm_text(ref.f)
+
+
+def _rich_text(t, book=None):
     if t is None:
         return None
+    tx = getattr(t, 'tx', None)
+    if tx is not None and getattr(tx, 'strRef', None) is not None:
+        return _ref_text(tx.strRef, book)       # 셀과 연결한 제목(예: =차트작업!$A$1)
     try:
         return ''.join(r.t for p in t.tx.rich.p for r in (p.r or []))
     except AttributeError:
@@ -764,21 +828,13 @@ def _series_name(s, book):
     if s.tx is None:
         return ''
     if s.tx.strRef is not None:
-        ref = s.tx.strRef.f
-        try:
-            v = fx.evaluate(fx.parse('=' + ref), book, book.sheets and next(iter(book.sheets)), 1, 1)
-            return _norm_text(fx.display(v))
-        except (fx.FormulaError, fx.XLErr):
-            pass
-        cache = s.tx.strRef.strCache
-        if cache is not None and cache.pt:
-            return _norm_text(cache.pt[0].v)
+        return _ref_text(s.tx.strRef, book)
     return _norm_text(getattr(s.tx, 'v', '') or '')
 
 
-def _axis_title(part, which):
+def _axis_title(part, which, book=None):
     axis = getattr(part, which, None)
-    return _rich_text(axis.title) if axis is not None and axis.title else None
+    return _rich_text(axis.title, book) if axis is not None and axis.title else None
 
 
 def describe_charts(ctx, sheet, charts=None):
@@ -801,9 +857,9 @@ def describe_charts(ctx, sheet, charts=None):
                 series.append({'name': name, 'kind': kind, 'secondary': ax(part) != first_ax,
                                'labels': bool(s.dLbls and (s.dLbls.showVal or s.dLbls.showPercent or s.dLbls.showCatName)),
                                'trend': bool(s.trendline), 'val': s.val.numRef.f if s.val and s.val.numRef else ''})
-        out.append({'kinds': kinds, 'title': _rich_text(ch.title), 'series': series,
-                    'y_title': _axis_title(parts[0], 'y_axis'),
-                    'x_title': _axis_title(parts[0], 'x_axis'),
+        out.append({'kinds': kinds, 'title': _rich_text(ch.title, ctx.book), 'series': series,
+                    'y_title': _axis_title(parts[0], 'y_axis', ctx.book),
+                    'x_title': _axis_title(parts[0], 'x_axis', ctx.book),
                     'legend': ch.legend.position if ch.legend is not None else None,
                     'grouping': getattr(parts[0], 'grouping', None)})
     return out
