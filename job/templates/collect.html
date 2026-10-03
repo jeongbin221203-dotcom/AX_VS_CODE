@@ -92,10 +92,6 @@
     </div>
     {% endfor %}
     <div class="row">
-      <span class="small muted">상세 읽는 비중</span>
-      {% for key, name in crawl_sites %}<label class="inl">{{ name }} <input type="number" name="weight_{{ key }}" min="1" max="10" value="{{ crawl.site_weights.get(key, 1) }}" style="width:4rem"></label>{% endfor %}
-    </div>
-    <div class="row">
       <label class="inl">목록 다시 읽기 <input type="number" name="list_every_hours" min="1" max="24" value="{{ crawl.list_every_hours }}"> 시간마다</label>
       <label class="inl">목록 <input type="number" name="pages" min="1" max="10" value="{{ crawl.pages }}"> 페이지</label>
       <label class="inl">사이트당 새 공고 최대 <input type="number" name="max_new" min="0" max="5000" value="{{ crawl.max_new }}"> <small class="muted">(0 = 모두)</small></label>

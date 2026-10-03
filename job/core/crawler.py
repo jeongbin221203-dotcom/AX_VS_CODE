@@ -6,7 +6,7 @@
   3) 이미 저장한 공고 중 아직 마감 전인 것을 다시 읽어 내용·마감을 갱신하고, 사라진 공고(404·410)는 마감 처리한다.
   4) API 키가 있으면 사람인·고용24 Open API 도 같은 검색어로 받는다.
 
-예의 규칙: robots.txt 를 따르고, 요청 사이에 config.CRAWL_DELAY 초를 쉬며, 사이트마다 한 번에 읽는 상세 페이지 수를 제한한다.
+예의 규칙: robots.txt 를 따르고, 같은 사이트 요청 사이에 config.CRAWL_DELAY 초를 쉬며(사이트끼리는 동시에 읽음), 사이트마다 한 번에 읽는 상세 페이지 수를 제한한다.
 여러 프로세스가 동시에 돌지 않도록 DB 잠금(settings.crawl_lock)을 쓴다.
 """
 from __future__ import annotations
@@ -15,6 +15,7 @@ import html
 import json
 import logging
 import re
+import threading
 import time
 import urllib.robotparser
 from datetime import date, datetime, timedelta
@@ -113,7 +114,6 @@ DEFAULT = {
     "interval_hours": 4,
     "keywords": [],
     "sites": ["saramin", "jobkorea", "linkareer"],
-    "site_weights": {},         # 상세를 읽는 비중 {"saramin": 3, "jobkorea": 1} — 비우면 1:1
     "list_every_hours": 4,      # 목록 페이지 전체를 다시 읽는 주기. 그 사이 실행은 저장해 둔 대기열에서 이어 읽음
     "pages": 1,                 # 검색어·직무마다 읽을 목록 페이지 수
     "by_category": True,        # 검색어가 없을 때 사이트의 직무 분류를 하나씩 모두 돈다 (끄면 최근 등록순 목록만)
@@ -144,8 +144,6 @@ def save_settings(data: dict) -> dict:
     merged["interval_hours"] = min(24, max(1, int(merged["interval_hours"] or 4)))
     merged["pages"] = min(10, max(1, int(merged["pages"] or 1)))
     merged["list_every_hours"] = min(24, max(1, int(merged["list_every_hours"] or 4)))
-    merged["site_weights"] = {k: min(10, max(1, int(v))) for k, v in (merged.get("site_weights") or {}).items()
-                              if k in LIST_SITES or k in SITEMAP_SITES}
     merged["max_new"] = min(5000, max(0, int(merged["max_new"] or 0)))
     merged["max_refresh"] = min(200, max(0, int(merged["max_refresh"] or 0)))
     merged["sites"] = [s for s in merged["sites"] if s in LIST_SITES]
@@ -208,12 +206,24 @@ class Fetcher:
         self.session.headers.update({"User-Agent": linkimport.BROWSER_UA, "Accept-Language": "ko-KR,ko;q=0.9",
                                      "Accept": "text/html,application/xhtml+xml"})
         self._robots: dict[str, urllib.robotparser.RobotFileParser | None] = {}
-        self._last = 0.0
+        self._last: dict[str, float] = {}            # 사이트(호스트)마다 마지막 요청 시각 — 간격은 사이트마다 따로
+        self._host_locks: dict[str, threading.Lock] = {}
+        self._lock = threading.Lock()
         self.requests = 0
         self._fails: dict[str, int] = {}
 
+    def _host_lock(self, host: str) -> threading.Lock:
+        with self._lock:
+            return self._host_locks.setdefault(host, threading.Lock())
+
     def allowed(self, url: str) -> bool:
         host = "{0.scheme}://{0.netloc}".format(urlparse(url))
+        with self._host_lock("robots:" + host):
+            self._load_robots(host)
+        rp = self._robots[host]
+        return bool(rp and rp.can_fetch("*", url))
+
+    def _load_robots(self, host: str) -> None:
         if host not in self._robots:
             rp = urllib.robotparser.RobotFileParser()
             try:
@@ -225,8 +235,6 @@ class Fetcher:
                     self._robots[host] = rp
             except requests.RequestException:
                 self._robots[host] = None
-        rp = self._robots[host]
-        return bool(rp and rp.can_fetch("*", url))
 
     RETRY_WAITS = (10, 30)          # 연결이 끊기면 10초, 30초 쉬고 다시
     MAX_FAILS = 3                   # 한 사이트에서 연달아 이만큼 실패하면 이번 실행에서는 그 사이트를 그만 읽는다
@@ -252,14 +260,17 @@ class Fetcher:
         raise BlockedError(f"{host} 연결 실패")
 
     def _get(self, url: str) -> requests.Response:
-        wait = self.delay - (time.monotonic() - self._last)
-        if wait > 0:
-            time.sleep(wait)
-        try:
-            return self.session.get(url, timeout=config.HTTP_TIMEOUT)
-        finally:
-            self._last = time.monotonic()
-            self.requests += 1
+        host = urlparse(url).netloc
+        with self._host_lock(host):                  # 같은 사이트는 한 번에 하나씩, 간격을 두고
+            wait = self.delay - (time.monotonic() - self._last.get(host, 0.0))
+            if wait > 0:
+                time.sleep(wait)
+            try:
+                return self.session.get(url, timeout=config.HTTP_TIMEOUT)
+            finally:
+                self._last[host] = time.monotonic()
+                with self._lock:
+                    self.requests += 1
 
 
 # ── 목록 해석 ─────────────────────────────────────────────
@@ -402,48 +413,54 @@ def _run(s: dict, f: Fetcher) -> dict:
         queues[site] = [(i, SITEMAP_SITES[site]["detail"].format(id=i), None) for i in pending]
         queues[site] += [(i, SITEMAP_SITES[site]["detail"].format(id=i), None) for i in _needs_backfill(site)]
 
-    # ③ 상세: 사이트를 돌아가며 하나씩 (한 사이트가 시간을 다 쓰지 않게)
+    # ③ 상세: 사이트마다 따로 동시에 읽는다 (같은 사이트 안에서는 간격을 지킴 — Fetcher 가 사이트마다 따로 쉼)
     queued_total = sum(len(v) for v in queues.values())
     progress(phase="상세 읽기", site=None, step=f"0/{queued_total:,}", requests=f.requests)
     fetched = {k: 0 for k in queues}
-    active = [k for k in queues if queues[k]]
-    stopped_by_time = False
-    weights = s.get("site_weights") or {}
-    while active:
-        # 한 바퀴에 사이트마다 비중만큼 (사람인 3 : 잡코리아 1 이면 사람인 3건 → 잡코리아 1건)
-        for site in [x for x in list(active) for _ in range(max(1, int(weights.get(x, 1))))]:
-            if site not in active:
-                continue
+    timed_out: set[str] = set()
+    write_lock = threading.Lock()                    # DB 쓰기는 한 번에 하나씩
+
+    def read_site(site: str) -> None:
+        while queues[site]:
             if time.monotonic() > detail_deadline:
-                stopped_by_time = True
-                active = []
-                break
+                timed_out.add(site)
+                return
             post_id, url, hint = queues[site].pop(0)
             try:
                 item, error = _fetch_item(f, site, url, hint)
             except BlockedError as e:
-                stats[site]["errors"].append(str(e))
-                summary["errors"].append(f"{site}: {e}")
-                active.remove(site)
-                continue
-            if item:
-                a, b = postings.upsert_many([postings.keep_existing(item)])
-                stats[site]["new"] += a
-                stats[site]["updated"] += b
-            if site in LIST_SITES:
-                queue_done(site, post_id)
-            if site in SITEMAP_SITES:
-                with db.connect() as con:
-                    con.execute("UPDATE sitemap_ids SET fetched_at = ?, fetch_error = ? WHERE site = ? AND post_id = ?",
-                                (db.now(), error, site, post_id))
-            fetched[site] += 1
-            done = sum(fetched.values())
-            if done % 10 == 0:
-                progress(site=site, step=f"{done:,}/{queued_total:,}", requests=f.requests,
-                         new=sum(v["new"] for v in stats.values()),
-                         filled=sum(v["updated"] for v in stats.values()))
-            if not queues[site]:
-                active.remove(site)
+                with write_lock:
+                    stats[site]["errors"].append(str(e))
+                    summary["errors"].append(f"{site}: {e}")
+                return
+            except Exception as e:                   # 한 사이트 오류가 다른 사이트를 멈추지 않게
+                log.exception("상세 읽기 오류 %s", url)
+                item, error = None, f"{e.__class__.__name__}: {e}"[:200]
+            with write_lock:
+                if item:
+                    a, b = postings.upsert_many([postings.keep_existing(item)])
+                    stats[site]["new"] += a
+                    stats[site]["updated"] += b
+                if site in LIST_SITES:
+                    queue_done(site, post_id)
+                if site in SITEMAP_SITES:
+                    with db.connect() as con:
+                        con.execute("UPDATE sitemap_ids SET fetched_at = ?, fetch_error = ? WHERE site = ? AND post_id = ?",
+                                    (db.now(), error, site, post_id))
+                fetched[site] += 1
+                done = sum(fetched.values())
+                if done % 10 == 0:
+                    progress(site=site, step=f"{done:,}/{queued_total:,}", requests=f.requests,
+                             new=sum(v["new"] for v in stats.values()),
+                             filled=sum(v["updated"] for v in stats.values()))
+
+    workers = [threading.Thread(target=read_site, args=(k,), name=f"crawl-{k}", daemon=True)
+               for k in queues if queues[k]]
+    for t in workers:
+        t.start()
+    for t in workers:
+        t.join()
+    stopped_by_time = bool(timed_out)
 
     for site, st in stats.items():
         collect.record(f"crawl:{site}", st["label"], st["listed"], st["new"], st["updated"],

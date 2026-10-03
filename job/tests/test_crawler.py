@@ -1,5 +1,6 @@
 """정기 크롤링: 목록 해석·새 공고만 읽기·사이트맵 전체 동기화·잠금·robots.txt (가짜 사이트로, 네트워크 없이)."""
 import json
+import time
 from datetime import datetime, timedelta
 
 import pytest
@@ -507,20 +508,47 @@ def test_keep_awake_toggles_once():
     assert power.keep_awake(False) is True and not power.is_awake_held()
 
 
-def test_site_weights(app):
-    """비중 사람인 3 : 잡코리아 1 이면 한 바퀴에 사람인 3건 → 잡코리아 1건."""
-    _settings(keywords=["자재관리"], sites=["saramin", "jobkorea"], max_new=0, site_weights={"saramin": 3, "jobkorea": 1})
-    assert crawler.load_settings()["site_weights"] == {"saramin": 3, "jobkorea": 1}
+def test_sites_read_in_parallel_with_per_site_delay(app):
+    """사람인·잡코리아 상세는 동시에 읽고, 같은 사이트 안에서는 간격을 지킨다."""
+    import threading
+    _settings(keywords=["자재관리"], sites=["saramin", "jobkorea"], max_new=0)
     sd, jd = crawler.LIST_SITES["saramin"]["detail"], crawler.LIST_SITES["jobkorea"]["detail"]
-    sar = "".join(f'<a href="/zf_user/jobs/relay/view?rec_idx={i}">x</a>' for i in range(201, 207))
-    jk = "".join(f'<a href="/Recruit/GI_Read/{i}">x</a>' for i in range(301, 304))
+    sar = "".join(f'<a href="/zf_user/jobs/relay/view?rec_idx={i}">x</a>' for i in range(201, 205))
+    jk = "".join(f'<a href="/Recruit/GI_Read/{i}">x</a>' for i in range(301, 305))
     pages = {crawler.LIST_SITES["saramin"]["search"].format(kw="%EC%9E%90%EC%9E%AC%EA%B4%80%EB%A6%AC", page=1): (200, sar),
              crawler.LIST_SITES["jobkorea"]["search"].format(kw="%EC%9E%90%EC%9E%AC%EA%B4%80%EB%A6%AC", page=1): (200, jk)}
-    for i in range(201, 207):
+    for i in range(201, 205):
         pages[sd.format(id=i)] = (200, SARAMIN_OG.replace("자재관리 담당", f"공고{i}"))
-    for i in range(301, 304):
+    for i in range(301, 305):
         pages[jd.format(id=i)] = (200, detail_page(f"잡코리아 {i}", f"회사{i}"))
-    f = FakeFetcher(pages)
-    crawler.run_once(force=True, fetcher=f)
-    order = ["S" if "rec_idx" in u else "J" for u in f.seen if "jobs/view" in u or "GI_Read" in u]
-    assert "".join(order[:8]) == "SSSJSSSJ"
+
+    class Timed(crawler.Fetcher):
+        """실제 Fetcher 의 간격 규칙(사이트마다 0.2초)을 그대로 쓰고, 응답만 가짜."""
+        def __init__(self):
+            super().__init__(delay=0.2)
+            self.calls: list[tuple[str, float, str]] = []
+
+        def _get(self, url):
+            host = crawler.urlparse(url).netloc
+            with self._host_lock(host):
+                wait = self.delay - (time.monotonic() - self._last.get(host, 0.0))
+                if wait > 0:
+                    time.sleep(wait)
+                self._last[host] = time.monotonic()
+                self.calls.append((host, time.monotonic(), threading.current_thread().name))
+            if url.endswith("/robots.txt"):
+                return Res(200, "User-agent: *\nAllow: /\n")
+            status, text = pages.get(url, (404, ""))
+            return Res(status, text)
+
+    f = Timed()
+    started = time.monotonic()
+    r = crawler.run_once(force=True, fetcher=f)
+    assert r["sites"]["saramin"]["new"] == 4 and r["sites"]["jobkorea"]["new"] == 4
+    names = {n for _, _, n in f.calls}
+    assert {"crawl-saramin", "crawl-jobkorea"} <= names              # 사이트마다 따로 읽음
+    for host in {h for h, _, _ in f.calls}:
+        times = sorted(t for h, t, _ in f.calls if h == host)
+        assert all(b - a >= 0.19 for a, b in zip(times, times[1:]))  # 같은 사이트는 간격 지킴
+    # 둘 다 차례로 읽었다면 상세 8건 × 0.2초 이상 — 동시에 읽으면 그보다 확실히 짧다
+    assert time.monotonic() - started < 0.2 * (len(f.calls) - 1)
