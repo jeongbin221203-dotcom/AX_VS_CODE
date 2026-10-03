@@ -128,4 +128,4 @@
 </section>
 {% endblock %}
 {% block data %}<script type="application/json" id="chart-data">{{ charts_json|safe }}</script>{% endblock %}
-{% block scripts %}<script src="{{ url_for('static', filename='js/charts.js') }}"></script>{% endblock %}
+{% block scripts %}<script src="{{ asset('js/charts.js') }}"></script>{% endblock %}

@@ -6,7 +6,7 @@
 <meta name="csrf-token" content="{{ csrf_token }}">
 <title>{% block title %}엑셀 연습장{% endblock %}</title>
 <link rel="icon" href="{{ url_for('static', filename='img/logo.svg') }}" type="image/svg+xml">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+<link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
 <body>
 {% set ep = request.endpoint or '' %}
@@ -38,7 +38,7 @@
 </main>
 <footer>개인 학습용 · 문제와 데이터는 모두 새로 만든 연습용입니다. 컴활 범위 표시는 출제 경향을 참고한 분류이며 공식 자료가 아닙니다.</footer>
 {% block data %}{% endblock %}
-<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+<script src="{{ asset('js/app.js') }}"></script>
 {% block scripts %}{% endblock %}
 </body>
 </html>

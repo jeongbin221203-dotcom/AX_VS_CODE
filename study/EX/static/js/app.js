@@ -183,18 +183,29 @@
   function clearPicked() {
     sheet.querySelectorAll('td.picked').forEach(function (x) { x.classList.remove('picked'); });
   }
-  function formulaMode() { return /^[=+]|^\{=/.test(input.value); }
+  /* 이 입력창은 늘 수식 칸이다(채점할 때 = 를 붙여 줌) — = 없이 av 를 쳐도 자동 완성 */
+  function formulaMode() { return !/^['"]/.test(input.value); }
+  function ensureEq() {
+    if (input.value && !/^[=+]|^\{=/.test(input.value)) {
+      var a = input.selectionStart, b = input.selectionEnd;
+      input.value = '=' + input.value;
+      input.setSelectionRange(a + 1, b + 1);
+      if (lastIns) { lastIns.start++; lastIns.end++; }
+      if (typeof acStart === 'number') acStart++;
+    }
+  }
   /* 엑셀처럼: 연산자·( · , · = 뒤이거나, 방금 넣은 주소 바로 뒤면 주소를 넣는다 */
   function canPoint() {
     if (!formulaMode()) return false;
     var pos = input.selectionStart;
     if (lastIns && pos === lastIns.end && input.selectionEnd === pos) return true;
     var before = input.value.slice(0, pos).replace(/\s+$/, '');
-    return /[=(,+\-*/^&<>:;{]$/.test(before);
+    return before === '' || /[=(,+\-*/^&<>:;{]$/.test(before);
   }
 
   var anchor = null, lastIns = null, dragging = false, pointing = false;
   function putRef(text) {
+    if (!input.value) { input.value = '='; input.setSelectionRange(1, 1); }
     if (lastIns && input.selectionStart === lastIns.end) {
       input.setRangeText(text, lastIns.start, lastIns.end, 'end');
     } else {
@@ -291,6 +302,7 @@
   function pickAc(i) {
     var f = acItems[i];
     if (!f) return;
+    ensureEq();
     var pos = input.selectionStart;
     var hasParen = input.value.charAt(pos) === '(';
     input.setRangeText(f[0] + (hasParen ? '' : '('), acStart, pos, 'end');

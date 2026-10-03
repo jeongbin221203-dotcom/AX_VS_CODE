@@ -118,3 +118,42 @@ def test_overflow_is_num_error(book):
 
 def test_text_format_huge_number(book):
     assert 'E+' in fx.evaluate_text('=TEXT(10^20,"#,##0")', book, 'S')
+
+
+@pytest.fixture
+def book2():
+    cells = {(1, 1): '지역', (1, 2): '금액', (2, 1): '서울', (2, 2): 100, (3, 1): '부산', (3, 2): 250,
+             (4, 1): '서울', (4, 2): 50, (5, 1): '대구', (5, 2): 300,
+             (1, 5): '조건', (2, 5): fx.Formula('=B2>AVERAGE($B$2:$B$5)'),
+             (1, 7): None, (2, 7): fx.Formula('=LEFT(A2,1)="서"'), (1, 9): 'B3',
+             (6, 2): fx.Formula('=SUBTOTAL(9,B2:B5)'), (7, 2): fx.Formula('=SUBTOTAL(9,B2:B6)')}
+    return fx.Book([fx.Sheet('S', cells), fx.Sheet('표 2', {(1, 1): 7})],
+                   names={'금액열': 'S!$B$2:$B$5', '세율': '=0.1'})
+
+
+@pytest.mark.parametrize('text,want', [
+    ('=DSUM(A1:B5,"금액",E1:E2)', 550),            # 계산 조건: 평균보다 큰 금액
+    ('=DCOUNT(A1:B5,2,G1:G2)', 2),                 # 머리글 빈 계산 조건
+    ('=OFFSET(A1,2,1)', 250),
+    ('=SUM(OFFSET(B2,0,0,3,1))', 400),
+    ('=SUM(OFFSET(A1,1,1,COUNTA(A2:A5)))', 700),
+    ('=INDIRECT("B"&3)', 250),
+    ('=SUM(INDIRECT("B2:B5"))', 700),
+    ('=INDIRECT(I1)', 250),
+    ('=INDIRECT("\'표 2\'!A1")', 7),
+    ('=INDIRECT("R3C2",FALSE)', 250),
+    ('=SUM(금액열)*세율', 70),
+    ('=ROW(OFFSET(A1,3,0))', 4),
+    ('=INDEX(금액열,2)', 250),
+    ('=없는이름+1', fx.NAME),
+    ('=OFFSET(A1,-5,0)', fx.REF),
+    ('=B7', 700),                                  # SUBTOTAL 은 다른 SUBTOTAL 결과를 빼고 더한다
+    ('=SUBTOTAL(1,B2:B5)', 175),
+])
+def test_references_names_dfunc(book2, text, want):
+    got = fx.evaluate_text(text, book2, 'S', 9, 9)
+    assert fx.same_value(got, want), f'{text}: {got!r}'
+
+
+def test_korean_function_name_parses():
+    assert 'FN비고' in fx.functions_used(fx.parse('=fn비고(D4,E4)'))

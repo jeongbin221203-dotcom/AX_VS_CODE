@@ -117,6 +117,8 @@ class Sheet:
 
     def get(self, r, c):
         v = self.cells.get((r, c))
+        if isinstance(v, Formula) and v.cached is not None:
+            return v.cached
         if isinstance(v, Formula):
             key = (r, c)
             if key in self._busy:
@@ -128,7 +130,7 @@ class Sheet:
                 self._busy.discard(key)
             if isinstance(res, Arr):  # 넘치는 결과는 왼쪽 위 값만 셀에 둔다
                 res = res.rows[0][0] if res.h and res.w else None
-            self.cells[key] = res
+            v.cached = res          # 수식은 남겨 둔다(D함수 계산 조건 등이 수식을 다시 읽음)
             return res
         return v
 
@@ -137,11 +139,18 @@ class Sheet:
 
 
 class Book:
-    def __init__(self, sheets=(), today=None):
+    def __init__(self, sheets=(), today=None, names=None):
         self.sheets = {}
         self.today = today or dt.date.today()
+        self.names = {}             # 이름 정의: 대문자 이름 → AST (예: 단가표 → 'Sheet1'!$K$2:$L$6)
         for s in sheets:
             self.add(s)
+        for k, v in (names or {}).items():
+            self.define(k, v)
+
+    def define(self, name, text):
+        """이름 정의 추가. text 는 '=$K$2:$L$6' · 'Sheet1!$A$1' · '=0.1' 같은 수식."""
+        self.names[name.upper()] = parse(text if text.startswith('=') else '=' + text)
 
     def add(self, sheet):
         sheet.book = self
@@ -156,9 +165,12 @@ class Book:
 
 
 class Formula:
-    def __init__(self, text):
+    """수식 셀. cached 가 있으면(엑셀이 저장한 결과) 다시 계산하지 않고 그 값을 쓴다."""
+
+    def __init__(self, text, cached=None):
         self.text = text
         self.ast = parse(text)
+        self.cached = cached
 
     def evaluate(self, book, sheet, r, c):
         return evaluate(self.ast, book, sheet, r, c)
@@ -206,7 +218,7 @@ TOKEN_RE = re.compile(r'''
     (?P<ws>\s+)
   | (?P<str>"(?:[^"]|"")*")
   | (?P<err>\#(?:N/A|VALUE!|REF!|DIV/0!|NUM!|NAME\?|NULL!))
-  | (?P<func>(?:_xlfn\.|_xlws\.)*[A-Za-z][A-Za-z0-9._]*)\(
+  | (?P<func>(?:_xlfn\.|_xlws\.)*[A-Za-z_가-힣][A-Za-z0-9._가-힣]*)\(
   | (?P<ref>''' + _SHEET + r'''(?P<a>''' + _CELL + r''')(?::(?P<b>''' + _CELL + r'''))?)(?![A-Za-z0-9_(])
   | (?P<cols>''' + _SHEET.replace('sheet', 'csheet') + r'''(?P<ca>\$?[A-Za-z]{1,3}):(?P<cb>\$?[A-Za-z]{1,3}))(?![A-Za-z0-9_(])
   | (?P<num>(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?)
@@ -434,7 +446,7 @@ def functions_used(node, acc=None):
 def has_reference(node):
     if not isinstance(node, tuple):
         return False
-    if node[0] in ('ref', 'range'):
+    if node[0] in ('ref', 'range', 'name'):
         return True
     if node[0] == 'call':
         return any(has_reference(a) for a in node[2])
@@ -491,7 +503,7 @@ def evaluate(node, book, sheet, r=1, c=1):
         return XLErr('#CALC!')
     if v is None:
         return 0
-    if isinstance(v, Arr) and v.h == 1 and v.w == 1 and v.origin is None:
+    if isinstance(v, Arr) and v.h == 1 and v.w == 1:
         return v.rows[0][0] if v.rows[0][0] is not None else 0
     if isinstance(v, Arr):
         v = Arr([[0 if x is None else x for x in row] for row in v.rows])
@@ -530,7 +542,10 @@ def ev(node, ctx):
     if kind == 'arr':
         return Arr([list(r) for r in node[1]])
     if kind == 'name':
-        return NAME
+        ast = ctx.book.names.get(node[1].upper())
+        if ast is None:
+            return NAME
+        return ev(ast, ctx)
     if kind == 'neg':
         return elementwise(lambda x: -to_num(x), ev(node[1], ctx))
     if kind == 'pct':
@@ -2146,10 +2161,70 @@ def f_index(arr, r, c=None):
 def _ref_node_info(node, ctx):
     if node[0] == 'ref':
         return node[2], node[3], 1, 1
-    if node[0] == 'range':
-        a = range_arr(node, ctx)
-        return a.origin[1], a.origin[2], a.h, a.w
+    a = ref_value(node, ctx)
+    return a.origin[1], a.origin[2], a.h, a.w
+
+
+def ref_value(node, ctx):
+    """참조로 쓰이는 인수 → origin 이 있는 Arr (셀·범위·이름·OFFSET·INDIRECT)."""
+    if node[0] == 'ref':
+        s = ctx.sheet_obj(node[1])
+        return Arr([[s.get(node[2], node[3])]], origin=(s.name, node[2], node[3]))
+    v = ev(node, ctx)
+    if isinstance(v, Arr) and v.origin is not None:
+        return v
     raise VALUE
+
+
+def area(sheet_name, r1, c1, r2, c2, ctx):
+    if min(r1, c1) < 1 or r2 < r1 or c2 < c1 or r2 > 1_048_576 or c2 > 16_384:
+        raise REF
+    s = ctx.sheet_obj(sheet_name)
+    if (r2 - r1 + 1) * (c2 - c1 + 1) > 2_000_000:
+        raise XLErr('#CALC!')
+    return Arr([[s.get(r, c) for c in range(c1, c2 + 1)] for r in range(r1, r2 + 1)], origin=(s.name, r1, c1))
+
+
+@fn('OFFSET', lazy=True)
+def f_offset(args, ctx):
+    if not 3 <= len(args) <= 5:
+        raise VALUE
+    base = ref_value(args[0], ctx)
+    sh, r0, c0 = base.origin
+    dr = to_int(scalar(ev(args[1], ctx), ctx)) if args[1] != ('empty',) else 0
+    dc = to_int(scalar(ev(args[2], ctx), ctx)) if args[2] != ('empty',) else 0
+    h = to_int(scalar(ev(args[3], ctx), ctx)) if len(args) > 3 and args[3] != ('empty',) else base.h
+    w = to_int(scalar(ev(args[4], ctx), ctx)) if len(args) > 4 and args[4] != ('empty',) else base.w
+    if h < 1 or w < 1:
+        raise REF
+    return area(sh, r0 + dr, c0 + dc, r0 + dr + h - 1, c0 + dc + w - 1, ctx)
+
+
+@fn('INDIRECT', lazy=True)
+def f_indirect(args, ctx):
+    text = to_str(scalar(ev(args[0], ctx), ctx)).strip()
+    a1 = True if len(args) < 2 or args[1] == ('empty',) else to_bool(scalar(ev(args[1], ctx), ctx))
+    if text.upper() in ctx.book.names:
+        return ref_value(('name', text), ctx)
+    sheet = None
+    m = re.match(r"^(?:'((?:[^']|'')+)'|([^!]+))!(.+)$", text)
+    if m:
+        sheet = (m.group(1) or '').replace("''", "'") or m.group(2)
+        text = m.group(3)
+    try:
+        if a1:
+            parts = text.replace('$', '').split(':')
+            r1, c1 = parse_addr(parts[0])
+            r2, c2 = parse_addr(parts[-1])
+        else:
+            cells = [re.fullmatch(r'R(\d+)C(\d+)', p.strip(), re.I) for p in text.split(':')]
+            if not all(cells):
+                raise ValueError(text)
+            r1, c1 = int(cells[0].group(1)), int(cells[0].group(2))
+            r2, c2 = int(cells[-1].group(1)), int(cells[-1].group(2))
+    except ValueError:
+        raise REF
+    return area(sheet or ctx.sheet, min(r1, r2), min(c1, c2), max(r1, r2), max(c1, c2), ctx)
 
 
 @fn('ROW', lazy=True)
@@ -2243,8 +2318,17 @@ def f_sortby(arr, by, order=None):
 
 
 # 데이터베이스 함수
-def _db_rows(database, field, criteria):
-    db, cr = as_arr(database), as_arr(criteria)
+def _db_rows(args, ctx):
+    """D함수 공통: (데이터베이스, 필드, 조건 범위) → 조건에 맞는 행의 필드 값(필드가 없으면 행 전체).
+
+    조건 범위의 머리글이 필드 이름이면 일반 조건(문자는 '…로 시작'), 머리글이 비었거나 필드 이름이 아닌 칸에
+    수식이 있으면 '계산 조건' — 수식이 데이터베이스 첫 레코드를 가리킨다고 보고 레코드마다 행을 옮겨 계산한다.
+    """
+    if len(args) != 3:
+        raise VALUE
+    db = as_arr(ev(args[0], ctx))
+    field = None if args[1] == ('empty',) else scalar(ev(args[1], ctx), ctx)
+    cr = ref_value(args[2], ctx) if args[2][0] != 'arr' else as_arr(ev(args[2], ctx))
     heads = [to_str(h).strip().lower() for h in db.rows[0]]
     if field is None:
         col = None
@@ -2258,74 +2342,123 @@ def _db_rows(database, field, criteria):
             raise VALUE
         col = heads.index(name)
     cheads = [to_str(h).strip().lower() for h in cr.rows[0]]
+    csheet = ctx.sheet_obj(cr.origin[0]) if cr.origin else None
+    data_top = db.origin[1] + 1 if db.origin else None
     conds = []
-    for row in cr.rows[1:]:
+    for i, row in enumerate(cr.rows[1:], 1):
         tests = []
-        for h, v in zip(cheads, row):
-            if v is None or v == '':
+        for j, (h, v) in enumerate(zip(cheads, row)):
+            raw = csheet.raw(cr.origin[1] + i, cr.origin[2] + j) if csheet else None
+            if h in heads and not (h == '' and isinstance(raw, Formula)):
+                if v is None or v == '':
+                    continue
+                tests.append(('field', heads.index(h), make_crit(v, prefix=True)))
+            elif isinstance(raw, Formula):
+                if data_top is None:
+                    raise VALUE
+                tests.append(('calc', raw, (cr.origin[0], cr.origin[1] + i, cr.origin[2] + j)))
+            elif v is None or v == '':
                 continue
-            if h not in heads:
+            else:
                 raise VALUE
-            tests.append((heads.index(h), make_crit(v, prefix=True)))
         conds.append(tests)
     if not conds:
         conds = [[]]
+
+    def passes(k, row, test):
+        if test[0] == 'field':
+            return test[2](row[test[1]])
+        raw, (sh, r, c) = test[1], test[2]
+        node = shift(raw.ast, k, 0)
+        v = evaluate(node, ctx.book, sh, r, c)
+        try:
+            return to_bool(v)
+        except XLErr:
+            return False
+
     out = []
-    for row in db.rows[1:]:
-        if any(all(t(row[i]) for i, t in tests) for tests in conds):
+    for k, row in enumerate(db.rows[1:]):
+        if any(all(passes(k, row, t) for t in tests) for tests in conds):
             out.append(row[col] if col is not None else row)
     return out
 
 
-@fn('DSUM')
-def f_dsum(db, field, crit):
-    return fix(math.fsum(v for v in _db_rows(db, field, crit) if is_num(v)))
+def _dfn(name, reduce):
+    FUNCS[name] = (lambda args, ctx: reduce(_db_rows(args, ctx), args), True)
 
 
-@fn('DAVERAGE')
-def f_daverage(db, field, crit):
-    xs = [v for v in _db_rows(db, field, crit) if is_num(v)]
+def _dnums(rows):
+    return [v for v in rows if is_num(v)]
+
+
+def _davg(rows, _a):
+    xs = _dnums(rows)
     if not xs:
         raise DIV0
     return fix(math.fsum(xs) / len(xs))
 
 
-@fn('DCOUNT')
-def f_dcount(db, field, crit):
-    rows = _db_rows(db, field, crit)
-    if field is None:
+def _dcount(rows, args):
+    if args[1] == ('empty',):
         return sum(1 for r in rows if any(is_num(v) for v in r))
-    return sum(1 for v in rows if is_num(v))
+    return len(_dnums(rows))
 
 
-@fn('DCOUNTA')
-def f_dcounta(db, field, crit):
-    rows = _db_rows(db, field, crit)
-    if field is None:
+def _dcounta(rows, args):
+    if args[1] == ('empty',):
         return len(rows)
     return sum(1 for v in rows if v is not None and v != '')
 
 
-@fn('DMAX')
-def f_dmax(db, field, crit):
-    xs = [v for v in _db_rows(db, field, crit) if is_num(v)]
-    return max(xs) if xs else 0
-
-
-@fn('DMIN')
-def f_dmin(db, field, crit):
-    xs = [v for v in _db_rows(db, field, crit) if is_num(v)]
-    return min(xs) if xs else 0
-
-
-@fn('DGET')
-def f_dget(db, field, crit):
-    rows = _db_rows(db, field, crit)
+def _dget(rows, _a):
     if not rows:
         raise VALUE
     if len(rows) > 1:
         raise NUM
     return rows[0]
+
+
+_dfn('DSUM', lambda rows, a: fix(math.fsum(_dnums(rows))))
+_dfn('DAVERAGE', _davg)
+_dfn('DCOUNT', _dcount)
+_dfn('DCOUNTA', _dcounta)
+_dfn('DMAX', lambda rows, a: max(_dnums(rows)) if _dnums(rows) else 0)
+_dfn('DMIN', lambda rows, a: min(_dnums(rows)) if _dnums(rows) else 0)
+_dfn('DPRODUCT', lambda rows, a: fix(math.prod(_dnums(rows))) if _dnums(rows) else 0)
+_dfn('DSTDEV', lambda rows, a: fix(math.sqrt(_var(_dnums(rows), False))))
+_dfn('DVAR', lambda rows, a: fix(_var(_dnums(rows), False)))
+_dfn('DGET', _dget)
+
+
+SUBTOTAL_FUNCS = {1: 'AVERAGE', 2: 'COUNT', 3: 'COUNTA', 4: 'MAX', 5: 'MIN', 6: 'PRODUCT', 7: 'STDEV',
+                  8: 'STDEV.P', 9: 'SUM', 10: 'VAR', 11: 'VAR.P'}
+
+
+@fn('SUBTOTAL', lazy=True)
+def f_subtotal(args, ctx):
+    if len(args) < 2:
+        raise VALUE
+    k = to_int(scalar(ev(args[0], ctx), ctx))
+    name = SUBTOTAL_FUNCS.get(k % 100)
+    if not name:
+        raise VALUE
+    vals = []
+    for node in args[1:]:
+        a = ref_value(node, ctx)
+        sh = ctx.sheet_obj(a.origin[0])
+        r0, c0 = a.origin[1], a.origin[2]
+        rows = []
+        for i, row in enumerate(a.rows):
+            new = []
+            for j, v in enumerate(row):
+                raw = sh.raw(r0 + i, c0 + j)
+                if isinstance(raw, Formula) and re.search(r'\b(SUBTOTAL|AGGREGATE)\s*\(', raw.text, re.I):
+                    new.append(None)
+                else:
+                    new.append(v)
+            rows.append(new)
+        vals.append(Arr(rows))
+    return FUNCS[name][0](*vals)
 
 
 def supported_functions():

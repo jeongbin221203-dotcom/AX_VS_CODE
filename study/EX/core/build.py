@@ -11,7 +11,7 @@ from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.datavalidation import DataValidation
 
 from . import formula as fx
-from . import xlsx
+from . import pivots, xlsx
 
 DATA = '데이터'
 DASH = '대시보드'
@@ -129,6 +129,7 @@ def _mission_sales():
             {'id': 'cf', 'kind': 'cf', 'label': '조건부 서식 1개 이상',
              'hint': 'B9:B13 을 선택하고 [홈] > [조건부 서식] > [데이터 막대].'},
             {'id': 'pivot', 'kind': 'pivot', 'label': '(선택) 피벗 테이블', 'optional': True,
+             'pivot': {'rows': ['지역'], 'cols': ['분류'], 'values': [['금액', 'sum']]},
              'hint': '데이터 시트에서 [삽입] > [피벗 테이블] — 행: 지역, 열: 분류, 값: 금액 합계.'},
         ],
         'answer_charts': [('bar', 'A8:B13', 'H3', '지역별 매출'), ('line', 'E8:F14', 'H20', '월별 매출')],
@@ -382,7 +383,8 @@ def grade(m, data):
         if chk['kind'] in ('cell', 'range'):
             for r, c in _cells_of(chk['at']):
                 ref_dash.cells.pop((r, c), None)
-    uncached = sum(1 for s in user.sheets.values() for v in s.cells.values() if isinstance(v, fx.Formula))
+    uncached = sum(1 for s in user.sheets.values() for v in s.cells.values()
+                   if isinstance(v, fx.Formula) and v.cached is None)
     if uncached:
         notes.append('저장된 계산 결과가 없는 수식은 이 사이트의 계산기로 직접 계산했습니다.')
 
@@ -429,9 +431,8 @@ def grade(m, data):
             item['ok'] = bool(found)
             item['msgs'] = ['목록 유효성 검사 있음' if found else f'{chk["at"]} 에 목록 유효성 검사가 없습니다']
         elif kind == 'pivot':
-            n = sum(len(getattr(ws, '_pivots', [])) for ws in wb_f.worksheets)
-            item['ok'] = n >= 1
-            item['msgs'] = [f'피벗 테이블 {n}개 찾음']
+            res = pivots.check(chk.get('pivot', {}), wb_f, wb_v, user)
+            item['ok'], item['msgs'] = res['ok'], res['msgs']
         items.append(item)
 
     counted = [i for i in items if not i['optional']]

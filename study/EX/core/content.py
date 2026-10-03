@@ -152,7 +152,10 @@ def sheet_spec(problem):
 def build_book(problem):
     cells, _ = sheet_spec(problem)
     sheet = fx.Sheet(SHEET, {k: _cell_value(v) for k, v in cells.items()})
-    return fx.Book([sheet], today=FIXED_TODAY)
+    names = {k: (v if '!' in v or not fx.re.fullmatch(r'=?\$?[A-Za-z]{1,3}\$?\d+(:\$?[A-Za-z]{1,3}\$?\d+)?', v)
+                 else '=' + SHEET + '!' + v.lstrip('='))
+             for k, v in ((problem.get('sheet') or {}).get('names') or {}).items()}
+    return fx.Book([sheet], today=FIXED_TODAY, names=names)
 
 
 def fill_cells(problem):

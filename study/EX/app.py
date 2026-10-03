@@ -3,7 +3,7 @@ import os
 import secrets
 from pathlib import Path
 
-from flask import Flask, abort, request, session
+from flask import Flask, abort, request, session, url_for
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from core import db
@@ -87,7 +87,13 @@ def create_app(config=None):
     def inject():
         from core import content
         return {'csrf_token': session.get('csrf', ''), 'track': current_track(), 'TRACKS': content.TRACKS,
-                'CAT_NAMES': content.CAT_NAMES}
+                'CAT_NAMES': content.CAT_NAMES, 'asset': asset_url}
+
+    def asset_url(filename):
+        """정적 파일 주소 + 수정 시각(바꾸면 브라우저가 새 파일을 받는다)."""
+        path = Path(app.static_folder) / filename
+        v = int(path.stat().st_mtime) if path.exists() else 0
+        return url_for('static', filename=filename, v=v)
 
     @app.errorhandler(413)
     def too_big(_e):

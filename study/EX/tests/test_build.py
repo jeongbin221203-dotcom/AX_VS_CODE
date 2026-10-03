@@ -73,3 +73,26 @@ def test_changed_dropdown_value_still_graded_correctly():
     m = build.mission('inventory')
     res = _edit(m, lambda ws: ws.__setitem__('B15', '전자'))
     assert item(res, 'pick')['ok']
+
+
+FIXTURES = __import__('pathlib').Path(__file__).parent / 'fixtures'
+
+
+def test_pivot_contents_graded_from_real_excel_file():
+    """엑셀(COM)로 만든 피벗: 행 지역 · 열 분류 · 값 금액 합계."""
+    m = build.mission('sales')
+    res = build.grade(m, (FIXTURES / 'sales_pivot_excel.xlsx').read_bytes())
+    p = item(res, 'pivot')
+    assert p['ok'], p['msgs']
+    assert res['score'] == res['total']
+
+
+def test_pivot_wrong_fields_reported():
+    from core import pivots
+    wb_f = openpyxl.load_workbook(FIXTURES / 'sales_pivot_excel.xlsx')
+    pv = pivots.describe(wb_f)[0]
+    assert pv['rows'] == ['지역'] and pv['cols'] == ['분류'] and pv['values'] == [('금액', 'sum')]
+    ok, why = pivots.match({'rows': ['분류'], 'values': [['금액', 'average']]}, pv)
+    assert not ok and any('행 영역' in w for w in why) and any('평균' in w for w in why)
+    ok, why = pivots.match({'sheet': 'PV', 'at': 'A3'}, pv)
+    assert ok, why

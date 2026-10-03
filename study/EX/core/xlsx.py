@@ -71,14 +71,31 @@ def to_book(wb_f, wb_v, today=None):
                 f = formula_text(v)
                 if f:
                     cached = wv.cell(cell.row, cell.column).value if wv is not None else None
-                    if cached is not None:
-                        cells[(cell.row, cell.column)] = plain(cached)
-                    else:
-                        try:
-                            cells[(cell.row, cell.column)] = fx.Formula(f)
-                        except fx.FormulaError:
-                            cells[(cell.row, cell.column)] = fx.NAME
+                    cached = plain(cached) if cached is not None else None
+                    try:
+                        cells[(cell.row, cell.column)] = fx.Formula(f, cached)
+                    except fx.FormulaError:
+                        cells[(cell.row, cell.column)] = cached if cached is not None else fx.NAME
                 else:
                     cells[(cell.row, cell.column)] = plain(v)
         book.add(fx.Sheet(ws.title, cells))
+    for name, dn in _defined_names(wb_f):
+        try:
+            book.define(name, dn)
+        except fx.FormulaError:
+            pass
     return book
+
+
+def _defined_names(wb):
+    """통합문서·시트 범위 이름 정의 → [(이름, '=참조')]. 엑셀 내부 이름(_xlnm.)은 뺀다."""
+    out = []
+    items = list(wb.defined_names.items()) if hasattr(wb.defined_names, 'items') else [(d.name, d) for d in wb.defined_names.definedName]
+    for ws in wb.worksheets:
+        items += list(getattr(ws, 'defined_names', {}).items())
+    for name, d in items:
+        text = getattr(d, 'attr_text', None) or getattr(d, 'value', None)
+        if not text or name.startswith('_xlnm') or '#REF!' in text:
+            continue
+        out.append((name, '=' + text))
+    return out
