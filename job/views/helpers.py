@@ -39,7 +39,8 @@ def _source_name(key: str) -> str:
 
 
 def register_template_helpers(app: Flask) -> None:
-    app.jinja_env.globals.update(csrf_token=csrf_token, STATUSES=STATUSES, SOURCE_NAMES=SOURCE_NAMES)
+    app.jinja_env.globals.update(csrf_token=csrf_token, STATUSES=STATUSES, SOURCE_NAMES=SOURCE_NAMES,
+                                 is_commission=salary.is_commission)
     app.jinja_env.filters.update(
         won=salary.format_manwon,
         dday=dday_label,
@@ -51,4 +52,6 @@ def register_template_helpers(app: Flask) -> None:
 
     @app.template_filter("salary_range")
     def _salary_range(p) -> str:
+        if p.get("salary_min") is None and p.get("salary_max") is None and not p.get("salary_negotiable")                 and p.get("salary_raw"):
+            return p["salary_raw"][:40]               # 연봉으로 못 바꾼 금액(시간제 시급 등)은 원문 그대로
         return salary.format_range(p.get("salary_min"), p.get("salary_max"), bool(p.get("salary_negotiable")))

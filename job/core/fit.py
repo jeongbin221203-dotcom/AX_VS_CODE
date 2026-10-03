@@ -91,8 +91,12 @@ def evaluate(p: dict, prof: dict, today: date | None = None) -> FitResult:
     want = int(prof.get("min_salary") or 0)
     lo, hi = p.get("salary_min"), p.get("salary_max")
     top = hi or lo
+    from .salary import is_commission
     if not want:
         r.parts["연봉"] = (W, "연봉 조건 없음")
+    elif is_commission(p):
+        r.parts["연봉"] = (round(W * 0.5), "성과급 직군 — 연봉 확인 필요")
+        r.warnings.append("위촉·프리랜서 등 실적에 따른 수입 — 공고의 금액은 예시라 확인 필요")
     elif top is None:
         r.parts["연봉"] = (round(W * 0.5), "연봉 미공개·협의")
         r.warnings.append("연봉 미공개 — 면접 때 확인")

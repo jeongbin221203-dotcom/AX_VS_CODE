@@ -83,3 +83,27 @@ def test_region_with_country_prefix():
 
 def test_negotiable_with_unitless_big_amount_keeps_amount():
     assert salary.parse("회사 내규에 따름(연봉 : 25,882,560)")[:2] == (2588, 2588)
+
+
+@pytest.mark.parametrize("text, expected", [
+    ("현장직(소각장) - 시급 11,200원, 평균연봉 4,250만원(상여 포함, 잔업제외 금액)", (2809, 4250, False)),   # 금액마다 단위
+    ("· 시급 10,320원 / 식대 별도 지급 (월 220,000원)", (2588, 2588, False)),                       # 식대는 연봉 아님
+    ("조건 : 월356만원 (연봉 환산 시 약 4,280만원 수준)", (4272, 4280, False)),
+    ("시급 60,000 원", (None, None, False)),                                                     # 높은 시급은 환산 안 함
+    ("월급 3,300~4,800만원", (3300, 4800, False)),                                              # 월 1,500만원↑ = 연봉을 월급으로 잘못 적음
+    ("기본급 292만원 ~ 312만원 (지게차 가능시 10~20만원 추가", (3504, 3744, False)),                 # 첫 범위만
+    ("급여 2,054,200원+휴대폰요금(67,500원 지원)", (2465, 2465, False)),                           # 통신비는 연봉 아님
+    ("회사 내규에 따름 (※건당 1000만원 이상)", (None, None, True)),                                # 건당 = 성과급
+    ("정규직 수습 3개월, 월 280만원", (3360, 3360, False)),                                         # '3개월'의 3 은 금액 아님
+    ("3~4천만원", (3000, 4000, False)),
+])
+def test_salary_per_amount_units(text, expected):
+    assert salary.parse(text) == expected
+
+
+def test_commission_jobs():
+    from core import fit
+    p = {"title": "TMR 모집", "employment_type": "위촉직/개인사업자", "salary_min": 3000, "salary_max": 12000}
+    assert salary.is_commission(p) and not salary.is_commission({"title": "사무", "employment_type": "정규직"})
+    r = fit.evaluate(p, {"min_salary": 4500, "career_type": "모두"})
+    assert r.parts["연봉"][0] == 12 and any("실적" in w for w in r.warnings)

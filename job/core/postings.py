@@ -402,7 +402,7 @@ def salary_stats(rows: list[dict] | None = None) -> dict:
     if rows is None:                              # 필요한 열만 (본문까지 읽으면 수만 건에서 느림)
         with db.connect() as con:
             rows = [dict(r) for r in con.execute(
-                "SELECT sido, career_type, source, salary_min, salary_max, company_avg_salary "
+                "SELECT sido, career_type, source, salary_min, salary_max, company_avg_salary, employment_type, title "
                 "FROM postings WHERE hidden = 0")]
     by_region: dict[str, list[int]] = {}
     by_career: dict[str, list[int]] = {}
@@ -416,8 +416,8 @@ def salary_stats(rows: list[dict] | None = None) -> dict:
         total_count[region] = total_count.get(region, 0) + 1
         if p.get("company_avg_salary"):
             company_avg.append(p["company_avg_salary"])
-        mid = salary.midpoint(p.get("salary_min"), p.get("salary_max"))
-        if not mid:
+        mid = None if salary.is_commission(p) else salary.midpoint(p.get("salary_min"), p.get("salary_max"))
+        if not mid:                                 # 미공개·성과급 직군은 평균에서 뺌
             continue
         mids.append(mid)
         career = p.get("career_type") or "무관"

@@ -23,7 +23,8 @@
     <dl class="kv">
       <dt>지역</dt><dd>{{ p.sido or '미상' }} {{ p.sigungu or '' }}{% if p.location_raw %} <span class="muted small">({{ p.location_raw }})</span>{% endif %}</dd>
       <dt>신입/경력</dt><dd>{{ p.career_type }}{% if p.career_min %} · {{ p.career_min }}년{% if p.career_max %}~{{ p.career_max }}년{% else %} 이상{% endif %}{% endif %}{% if p.career_raw %} <span class="muted small">({{ p.career_raw }})</span>{% endif %}</dd>
-      <dt>연봉</dt><dd><b>{{ p | salary_range }}</b>{% if p.salary_raw %} <span class="muted small">원문: {{ p.salary_raw }}</span>{% endif %}</dd>
+      <dt>연봉</dt><dd><b>{{ p | salary_range }}</b>{% if p.salary_raw %} <span class="muted small">원문: {{ p.salary_raw }}</span>{% endif %}
+        {% if is_commission(p) %}<br><span class="chip">성과급 직군</span> <span class="muted small">위촉·프리랜서 등 실적에 따른 수입 — 금액은 예시라 평균 연봉·점수 비교에서 뺍니다</span>{% endif %}</dd>
       <dt>학력</dt><dd>{{ p.education or '무관' }}</dd>
       <dt>고용형태</dt><dd>{{ p.employment_type or '-' }}</dd>
       <dt>직무</dt><dd>{{ p.job_category or '-' }}</dd>

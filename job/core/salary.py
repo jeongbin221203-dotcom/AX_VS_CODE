@@ -13,6 +13,15 @@ HOURS_PER_MONTH = 209          # 주 40시간 + 주휴 기준 월 소정근로�
 WORKDAYS_PER_MONTH = 22
 NEGOTIABLE_WORDS = ("내규", "협의", "면접", "추후", "결정", "경력에 따라", "능력에 따라")
 
+MAX_CONVERT_HOURLY = 30_000      # 이보다 높은 시급은 연봉으로 환산하지 않음 (시간제·전문직)
+MAX_CONVERTED = 30_000           # 월·시급·일급을 연봉으로 바꾼 값이 이 만원(3억)을 넘으면 버림
+_ALLOWANCE = re.compile(r"(식대|수당|교통비|상여|보너스|인센티브|복지|장려금|축하금|지원금|성과급|면접비|숙소비|중식|"
+                        r"요금|통신비|휴대폰|건당|가능시|가능 시)")
+MONTHLY_AS_ANNUAL = 1500 * 10**4  # '월급 3,300만원'처럼 월 1,500만원 이상이면 연봉을 월급으로 잘못 적은 것으로 봄
+_PERIOD_KEYS = [(re.compile(r"시급|시간당"), "hour"), (re.compile(r"일급|일당"), "day"),
+                (re.compile(r"월급|월평균|매월|/월|월(?=\d)|월(?=약\d)"), "month"),
+                (re.compile(r"연봉|평균연봉|연평균|년봉|연(?=\d)|연(?=약\d)"), "year")]
+
 _TOKEN = re.compile(r"(\d+(?:\.\d+)?)(억|천만|천|백만|백|만원|만|원)?")
 _UNIT = {"억": 10**8, "천만": 10**7, "백만": 10**6, "만원": 10**4, "만": 10**4, "원": 1}
 
@@ -29,17 +38,38 @@ def parse(text, pay_type: str | None = None) -> tuple[int | None, int | None, bo
     has_money = re.search(r"\d[\d,.]*\s*(억|천만|만\s*원|만|원)", raw) or re.search(r"\d{1,3}(,\d{3}){2,}|\d{7,}", raw)
     if any(w in raw for w in NEGOTIABLE_WORDS) and not has_money:
         return None, None, True
-    groups = _amount_groups(raw)
-    if not groups:
+    items, t = _amounts(raw)
+    items = [(won, pos) for won, pos in items if not _is_allowance(t, pos)]   # 식대·수당 등은 연봉이 아님
+    if not items:
         return None, None, any(w in raw for w in NEGOTIABLE_WORDS)
 
-    period = _period(hint + " " + raw, groups)
-    factor = {"hour": HOURS_PER_MONTH * 12, "day": WORKDAYS_PER_MONTH * 12, "month": 12, "year": 1}[period]
-    values = [round(g * factor / 10**4) for g in groups]
+    keys = _period_keys(t)
+    values = []
+    dropped = False
+    for won, pos in items:
+        period = _period_at(keys, pos) or _period(hint + " " + raw, [w for w, _ in items])
+        if period == "month" and won >= MONTHLY_AS_ANNUAL:
+            period = "year"
+        if period == "hour" and won > MAX_CONVERT_HOURLY:
+            continue                                    # 시간제·전문직 높은 시급은 풀타임 연봉으로 바꾸지 않음
+        factor = {"hour": HOURS_PER_MONTH * 12, "day": WORKDAYS_PER_MONTH * 12, "month": 12, "year": 1}[period]
+        v = round(won * factor / 10**4)
+        if period != "year" and v > MAX_CONVERTED:
+            dropped = True
+            continue                                    # 월·시급을 바꾼 값이 3억을 넘으면 성과급 문구 등 — 버림
+        values.append(v)
+    if not values:
+        return None, None, any(w in raw for w in NEGOTIABLE_WORDS)
 
     compact = raw.replace(" ", "")
-    if len(values) >= 2:
-        lo, hi = min(values[:2]), max(values[:2])
+    if dropped and len(values) == 1:
+        return values[0], None, False                  # 범위의 위쪽을 버렸으면 '이상'으로
+    if len(values) >= 2 and values[0] != values[1]:
+        lo, hi = sorted(values[:2])                    # 첫 범위만 (뒤의 '10~20만원 추가' 같은 금액은 무시)
+    elif len(values) >= 2:
+        lo = hi = values[0]
+        if re.search(r"(이상|↑|부터|최소)", compact):
+            hi = None
     elif re.search(r"(이상|↑|부터|최소)", compact):
         lo, hi = values[0], None
     elif re.search(r"(이하|까지|최대|↓)", compact) or compact.lstrip("연봉월급시급:").startswith("~"):
@@ -47,6 +77,15 @@ def parse(text, pay_type: str | None = None) -> tuple[int | None, int | None, bo
     else:
         lo = hi = values[0]
     return lo, hi, False
+
+
+_COMMISSION = re.compile(r"위촉|프리랜서|개인사업자|도급계약|FC(?![A-Za-z])|설계사")
+
+
+def is_commission(p: dict) -> bool:
+    """실적에 따라 받는 직군(위촉직·프리랜서·개인사업자) — 공고의 연봉 범위는 성과급 예시라 비교에 쓰지 않는다."""
+    return bool(_COMMISSION.search(str(p.get("employment_type") or "")) or
+                re.search(r"위촉|설계사", str(p.get("title") or "")))
 
 
 def midpoint(lo: int | None, hi: int | None) -> int | None:
@@ -74,12 +113,32 @@ def format_range(lo: int | None, hi: int | None, negotiable: bool = False) -> st
     return f"{format_manwon(lo)} ~ {format_manwon(hi)}"
 
 
+def _period_keys(t: str) -> list[tuple[int, str]]:
+    return sorted((m.end(), period) for rx, period in _PERIOD_KEYS for m in rx.finditer(t))
+
+
+def _period_at(keys: list[tuple[int, str]], pos: int, window: int = 20) -> str | None:
+    """금액 바로 앞(window 글자 안)에서 가장 가까운 '시급·월·연봉' 단어."""
+    before = [(k, p) for k, p in keys if k <= pos and pos - k <= window]
+    return before[-1][1] if before else None
+
+
+def _is_allowance(t: str, pos: int) -> bool:
+    return bool(_ALLOWANCE.search(t[max(0, pos - 8):pos]))
+
+
 def _amount_groups(text: str) -> list[float]:
-    """붙어 있는 숫자·단위 조각을 하나의 금액(원)으로 묶는다. 단위 없는 숫자는 뒤 금액의 단위를 따른다."""
+    return [w for w, _ in _amounts(text)[0]]
+
+
+def _amounts(text: str) -> tuple[list[tuple[float, int]], str]:
+    """붙어 있는 숫자·단위 조각을 하나의 금액(원)으로 묶어 (금액, 위치) 목록과 정리한 글을 돌려준다.
+    단위 없는 숫자는 뒤 금액의 단위를 따른다."""
     t = text.replace(",", "").replace(" ", "")
     t = re.sub(r"\d{4}[-./]\d{1,2}[-./]\d{1,2}", "", t)          # 날짜 제거
     t = re.sub(r"(주|하루|일)\d+(시간|일)", "", t)                # 근무시간 표기 제거
     groups: list[list[tuple[float, str | None]]] = []
+    starts: list[int] = []
     prev_end = -1
     for m in _TOKEN.finditer(t):
         if m.group(1) in ("", "."):
@@ -89,6 +148,7 @@ def _amount_groups(text: str) -> list[float]:
             groups[-1].append(tok)
         else:
             groups.append([tok])
+            starts.append(m.start())
         prev_end = m.end()
 
     amounts: list[float | None] = []
@@ -115,18 +175,23 @@ def _amount_groups(text: str) -> list[float]:
     result = []
     for i, a in enumerate(amounts):
         if a is not None:
-            result.append(a)
+            result.append((a, starts[i]))
             continue
         n = groups[i][0][0]
         nxt = next((units[j] for j in range(i + 1, len(units)) if units[j]), None)
+        if n < 100 and nxt not in (10**8, 10**7):
+            continue                                    # '수습 3개월'의 3, '1~2년'의 1 같은 작은 맨숫자는 금액이 아님
+        if n < 100:
+            result.append((n * nxt, starts[i]))         # '3~4천만원' 의 3 → 3천만원
+            continue
         if nxt in (10**4, 10**8, 10**7, 10**6):
-            result.append(n * 10**4 if nxt != 10**8 else n * 10**8)
+            result.append((n * 10**4 if nxt != 10**8 else n * 10**8, starts[i]))
         elif nxt == 1 or n >= 100000:
-            result.append(n)
+            result.append((n, starts[i]))
         elif n >= 100:
-            result.append(n * 10**4)                                 # '3000' → 3000만원
+            result.append((n * 10**4, starts[i]))                    # '3000' → 3000만원
         # 100 미만의 맨숫자(년수·시간 등)는 금액으로 보지 않는다
-    return [r for r in result if r and r > 0]
+    return [(w, pos) for w, pos in result if w and w > 0], t
 
 
 def _period(text: str, groups: list[float]) -> str:
