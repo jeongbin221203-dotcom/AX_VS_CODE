@@ -376,6 +376,11 @@ def register_template_helpers(app: Flask) -> None:
     app.jinja_env.globals["DEMO_ROLE_VIEWS"] = demo.ROLE_VIEWS
     app.jinja_env.globals["partner_names"] = partners.names
     app.jinja_env.globals["PARTNER_KINDS"] = partners.KINDS
+    # 화면 파일(css·js) 판 — 배포로 파일이 바뀌면 주소가 바뀌어 브라우저가 예전 파일을 쓰지 않는다
+    from pathlib import Path
+    static = Path(app.static_folder)
+    app.jinja_env.globals["ASSET_V"] = str(int(max((f.stat().st_mtime for f in (static / "css").glob("*.css")),
+                                                   default=0) + sum(f.stat().st_size for f in (static / "js").glob("*.js"))))
 
     def error_page(code: int, title: str, message: str):
         return render_template("error.html", code=code, title=title, message=message,

@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% if title %}{{ title }} · {% endif %}{{ APP_TITLE }}</title>
   <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='logo.svg') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css', v=ASSET_V) }}">
   <script src="{{ url_for('static', filename='vendor/chart.umd.min.js') }}" defer></script>
-  <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
-  <script src="{{ url_for('static', filename='js/picker.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/app.js', v=ASSET_V) }}" defer></script>
+  <script src="{{ url_for('static', filename='js/picker.js', v=ASSET_V) }}" defer></script>
 </head>
 <body data-user="{{ g.user.id if g.user else '' }}">
 {% if g.user %}
@@ -84,7 +84,7 @@
   </aside>
   <main class="content">
     {% if config.DEMO %}
-    <div class="demo-banner">🧪 포트폴리오 시연 서버입니다 — 로그인 없이 <strong>{{ role_label(g.user.role) }}</strong>(으)로 들어왔습니다.<br>
+    <div class="alert alert-info demo-banner">🧪 포트폴리오 시연 서버입니다 — 로그인 없이 <strong>{{ role_label(g.user.role) }}</strong>(으)로 들어왔습니다.<br>
       입출고·스캔·생산 투입·구매 결재 등은 직접 입력해 볼 수 있고(매일 새벽 {{ config.DEMO_RESET_HOUR }}시에 처음 샘플로 돌아갑니다), 관리자 설정은 잠겨 있습니다.
       다른 역할은 왼쪽 아래 '다른 역할로 보기'에서 바꿉니다.</div>
     {% endif %}

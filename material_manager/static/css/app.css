@@ -278,6 +278,5 @@ table.bom-lines input[type=number] { width: 6.5rem; }
 }
 
 /* 시연 서버 안내 (모든 화면 위) */
-.demo-banner { margin: 0 0 1rem; padding: .7rem 1rem; border: 1px solid #c9d6f2; border-radius: var(--radius);
-  background: var(--info-bg); color: var(--info-fg); font-size: .92rem; line-height: 1.6; }
-@media (prefers-color-scheme: dark) { .demo-banner { border-color: #2c3d5c; } }
+.alert.demo-banner { margin: 0 0 1rem; padding: .75rem 1rem; background: var(--info-bg); color: var(--info-fg);
+  font-size: .92rem; line-height: 1.65; white-space: normal; }
