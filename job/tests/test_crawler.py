@@ -505,3 +505,22 @@ def test_keep_awake_toggles_once():
     assert power.keep_awake(True) is True and power.is_awake_held()
     assert power.keep_awake(True) is False                            # 이미 막았으면 다시 부르지 않음
     assert power.keep_awake(False) is True and not power.is_awake_held()
+
+
+def test_site_weights(app):
+    """비중 사람인 3 : 잡코리아 1 이면 한 바퀴에 사람인 3건 → 잡코리아 1건."""
+    _settings(keywords=["자재관리"], sites=["saramin", "jobkorea"], max_new=0, site_weights={"saramin": 3, "jobkorea": 1})
+    assert crawler.load_settings()["site_weights"] == {"saramin": 3, "jobkorea": 1}
+    sd, jd = crawler.LIST_SITES["saramin"]["detail"], crawler.LIST_SITES["jobkorea"]["detail"]
+    sar = "".join(f'<a href="/zf_user/jobs/relay/view?rec_idx={i}">x</a>' for i in range(201, 207))
+    jk = "".join(f'<a href="/Recruit/GI_Read/{i}">x</a>' for i in range(301, 304))
+    pages = {crawler.LIST_SITES["saramin"]["search"].format(kw="%EC%9E%90%EC%9E%AC%EA%B4%80%EB%A6%AC", page=1): (200, sar),
+             crawler.LIST_SITES["jobkorea"]["search"].format(kw="%EC%9E%90%EC%9E%AC%EA%B4%80%EB%A6%AC", page=1): (200, jk)}
+    for i in range(201, 207):
+        pages[sd.format(id=i)] = (200, SARAMIN_OG.replace("자재관리 담당", f"공고{i}"))
+    for i in range(301, 304):
+        pages[jd.format(id=i)] = (200, detail_page(f"잡코리아 {i}", f"회사{i}"))
+    f = FakeFetcher(pages)
+    crawler.run_once(force=True, fetcher=f)
+    order = ["S" if "rec_idx" in u else "J" for u in f.seen if "jobs/view" in u or "GI_Read" in u]
+    assert "".join(order[:8]) == "SSSJSSSJ"

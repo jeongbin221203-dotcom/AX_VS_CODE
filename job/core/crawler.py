@@ -113,6 +113,7 @@ DEFAULT = {
     "interval_hours": 4,
     "keywords": [],
     "sites": ["saramin", "jobkorea", "linkareer"],
+    "site_weights": {},         # 상세를 읽는 비중 {"saramin": 3, "jobkorea": 1} — 비우면 1:1
     "list_every_hours": 4,      # 목록 페이지 전체를 다시 읽는 주기. 그 사이 실행은 저장해 둔 대기열에서 이어 읽음
     "pages": 1,                 # 검색어·직무마다 읽을 목록 페이지 수
     "by_category": True,        # 검색어가 없을 때 사이트의 직무 분류를 하나씩 모두 돈다 (끄면 최근 등록순 목록만)
@@ -143,6 +144,8 @@ def save_settings(data: dict) -> dict:
     merged["interval_hours"] = min(24, max(1, int(merged["interval_hours"] or 4)))
     merged["pages"] = min(10, max(1, int(merged["pages"] or 1)))
     merged["list_every_hours"] = min(24, max(1, int(merged["list_every_hours"] or 4)))
+    merged["site_weights"] = {k: min(10, max(1, int(v))) for k, v in (merged.get("site_weights") or {}).items()
+                              if k in LIST_SITES or k in SITEMAP_SITES}
     merged["max_new"] = min(5000, max(0, int(merged["max_new"] or 0)))
     merged["max_refresh"] = min(200, max(0, int(merged["max_refresh"] or 0)))
     merged["sites"] = [s for s in merged["sites"] if s in LIST_SITES]
@@ -405,8 +408,12 @@ def _run(s: dict, f: Fetcher) -> dict:
     fetched = {k: 0 for k in queues}
     active = [k for k in queues if queues[k]]
     stopped_by_time = False
+    weights = s.get("site_weights") or {}
     while active:
-        for site in list(active):
+        # 한 바퀴에 사이트마다 비중만큼 (사람인 3 : 잡코리아 1 이면 사람인 3건 → 잡코리아 1건)
+        for site in [x for x in list(active) for _ in range(max(1, int(weights.get(x, 1))))]:
+            if site not in active:
+                continue
             if time.monotonic() > detail_deadline:
                 stopped_by_time = True
                 active = []
