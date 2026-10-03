@@ -25,16 +25,8 @@
         <button class="btn btn-sm">로그아웃</button>
         {% if AUTH_MODE == 'password' and not DEMO %}<a class="btn btn-sm" href="{{ url_for('auth.password') }}">비밀번호 변경</a>{% endif %}
       </form>
-      {% if DEMO %}
-      <div class="demo-roles small">다른 역할로 보기<br>
-        {% for emp, label in DEMO_ROLES %}<a href="{{ url_for('auth.demo_as', emp_no=emp) }}" class="{{ 'active' if g.user.emp_no|string == emp }}">{{ label }}</a>{% if not loop.last %} · {% endif %}{% endfor %}
-      </div>
-      {% endif %}
     </div>
     <a class="bell {{ 'has-unread' if g.unread }}" href="{{ url_for('auth.notifications') }}">🔔 알림{% if g.unread %} <b>{{ g.unread }}</b>{% endif %}</a>
-    {% if g.pending_cnt %}
-      <a class="pending" href="{{ url_for('finance.approvals') }}">결재 대기 {{ g.pending_cnt }}건</a>
-    {% endif %}
     {% set ml = menu_layout() %}
     <nav class="menu" data-menu-save="{{ url_for('prefs.menu') }}" data-csrf="{{ csrf_token() }}" aria-label="메뉴">
       {% for key, label, endpoint, _ in ml.pinned %}
@@ -58,6 +50,31 @@
       </div>
       <p class="menu-help small" hidden>☆를 누르면 즐겨찾기(위쪽)로, ▲▼ 또는 끌어서 순서를 바꿉니다. 대시보드는 맨 위에 고정입니다.</p>
     </nav>
+    {% if g.overdue_cnt %}
+      <a class="side-alert" href="{{ url_for('finance.sales', tab='ar') }}">연체 미수 {{ g.overdue_cnt }}건</a>
+    {% endif %}
+    {% if g.pending_cnt %}
+      <a class="side-alert pending" href="{{ url_for('finance.approvals') }}">결재 대기 {{ g.pending_cnt }}건</a>
+    {% endif %}
+    {% if g.erp_failed %}
+      <a class="side-alert" href="{{ url_for('admin.erp', status='실패') if g.user.role == 'ADMIN' else url_for('reports.dashboard') }}">ERP 전송 실패 {{ g.erp_failed }}건</a>
+    {% endif %}
+    {% if DEMO %}
+    <div class="demo-note small">포트폴리오 시연 — 로그인 없이 들어왔습니다. 누구나 같은 데이터를 함께 쓰며 매일 새벽 {{ DEMO_RESET_HOUR }}시에 처음 샘플로 돌아갑니다.
+      매출·견적·결재 같은 업무는 직접 해 볼 수 있고, 관리자 설정(사용자·회사 설정·ERP·API·엑셀 양식)은 잠겨 있습니다.
+      <details class="demo-reset">
+        <summary>샘플로 되돌리기</summary>
+        <form method="post" action="{{ url_for('auth.demo_reset') }}" data-no-draft>
+          <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+          <p>지금까지 바뀐 내용을 모두 지우고 처음 샘플로 돌아갑니다(모든 방문자에게 적용).</p>
+          <button class="btn btn-sm btn-danger">되돌리기</button>
+        </form>
+      </details>
+    </div>
+    <div class="demo-roles small">다른 역할로 보기:
+      {% for emp, label in DEMO_ROLES %}<a href="{{ url_for('auth.demo_as', emp_no=emp) }}" class="{{ 'active' if g.user.emp_no|string == emp }}">{{ label }}</a>{% if not loop.last %} · {% endif %}{% endfor %}
+    </div>
+    {% endif %}
     <form class="filters" method="get" action="{{ page_path() }}">
       <label>기준월
         <select name="ym" onchange="this.form.submit()">
@@ -77,12 +94,17 @@
       {% endfor %}
       <noscript><button class="btn btn-sm">적용</button></noscript>
     </form>
-    <div class="muted small foot">오늘: {{ today().isoformat() }}
+    <div class="muted small foot">
+      마감: {{ g.closed_through ~ '월까지' if g.closed_through else '없음' }}<br>
+      ERP 연동: {{ 'OFF' if ERP_ADAPTER in ('', 'none', 'off') else ERP_ADAPTER|upper }} · 범위: {{ '전사' if g.scope is none else g.scope|length ~ '명' }}<br>
+      DB: {{ DB_NAME }} · 오늘 {{ today().isoformat() }}
       {% if ENV != 'production' %}<br><span class="env-badge">개발 환경</span>{% endif %}</div>
   </aside>
   <main class="content">
     {% if DEMO %}<div class="alert alert-info demo-banner">🧪 포트폴리오 시연 서버입니다 — 로그인 없이 <b>{{ g.user.name }}</b>(으)로 들어왔습니다.
-      매출·견적·결재 등은 직접 입력해 볼 수 있고(서버가 다시 시작되면 처음 샘플로 돌아갑니다), 관리자 설정은 잠겨 있습니다.</div>{% endif %}
+
+매출·견적·결재 등은 직접 입력해 볼 수 있고(매일 새벽 {{ DEMO_RESET_HOUR }}시에 처음 샘플로 돌아갑니다), 관리자 설정은 잠겨 있습니다.
+다른 역할은 왼쪽 아래 '다른 역할로 보기'에서 바꿉니다.</div>{% endif %}
     {% if READ_ONLY() %}<div class="alert alert-warning">🛠️ 시스템 점검 중입니다 — 조회만 할 수 있고 저장·변경은 막혀 있습니다.</div>{% endif %}
     <h1>{{ title }}</h1>
     {% include "_flashes.html" %}

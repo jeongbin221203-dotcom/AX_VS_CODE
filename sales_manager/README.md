@@ -10,7 +10,7 @@
 pip install -r requirements-dev.txt
 python app.py                   # 개발: http://127.0.0.1:5001 (SQLite, 간편 로그인, 스키마 자동 최신화)
 python manage.py worker         # 배치 워커 (알림·ERP 전송·결재 독촉·인사 연동·백업)
-python -m pytest tests -q       # 테스트 128개 (임시 DB·폴더 사용, data/ 는 건드리지 않음)
+python -m pytest tests -q       # 테스트 130개 (임시 DB·폴더 사용, data/ 는 건드리지 않음)
 # PostgreSQL 로 같은 테스트: SALES_TEST_PG_URL=postgresql://postgres@127.0.0.1:5433/postgres python -m pytest tests -q
 ```
 
@@ -186,6 +186,7 @@ sales/
 | 영업기회 보드 | 영업기회 화면 '▦ 보드' — 단계별 열(수주·실주는 최근 30일), 카드를 끌어 놓거나 카드의 단계 칸에서 변경 → `/deals/stage`(단계 변경 탭과 같은 규칙·이력·감사로그). 막히면 제자리+사유, 실주는 사유 대화상자 |
 | 데이터 점검 | 관리자 > 🩺 데이터 점검(`core/quality.py`) — 중복 거래처·사업자번호 검증번호·입금액≠입금내역·수주인데 매출 없음·초과 입금·담당자 미연결·날짜 역전·단계/종료일 불일치·실주 사유 없음·마감 지난 기회. 행을 누르면 그 건 수정 칸으로. 자동 수정은 담당자 연결·종료일 맞추기 두 가지만(감사로그) |
 | 시연 서버 빠른 시작 | 빌드 때 `manage.py demo-build` 로 샘플 DB 를 미리 만들고, `serve.py` 가 빈 DB 에 바로 넣어 몇 초 안에 열림. 샘플 기준일이 오늘이 아니면 별도 프로세스가 새로 만들어 DB 경로를 바꿔 끼움(`core/demo_data.py`) |
+| 시연 서버 사이드바·안내 | 자재관리와 같은 모양: 메뉴 아래 알림 상자(연체 미수·결재 대기·ERP 전송 실패), 시연 안내 + '샘플로 되돌리기'(POST /demo/reset, 처음 샘플을 지금 DB 에 다시 넣음), '다른 역할로 보기', 마감·ERP·범위·DB 상태. 대시보드 맨 위 '포트폴리오 시연 안내'(해 볼 순서). 매일 새벽 4시(SALES_DEMO_RESET_HOUR, Render TZ=Asia/Seoul)에 오늘 기준 샘플로 |
 
 ## 8. 세금계산서 · 전자세금계산서 증빙
 - 이미지·PDF·**전자세금계산서 XML**(자동 인식) 첨부, 매직 바이트 판별, 사업자번호·승인번호·세액·**공급가액/세액/합계 각각 매출과 대조**,

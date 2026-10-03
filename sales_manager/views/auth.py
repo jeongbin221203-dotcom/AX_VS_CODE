@@ -10,7 +10,7 @@ from core import auth as core_auth
 from core import enterprise as ent
 from core import sales_db as db
 
-from .helpers import demo_login, f_str, sso_identity
+from .helpers import demo_login, demo_user, f_str, sso_identity
 
 bp = Blueprint("auth", __name__)
 
@@ -180,6 +180,20 @@ def demo_as(emp_no: str):
     if not user or not user.get("active"):
         abort(404)
     demo_login(user)
+    return redirect(url_for("reports.dashboard"))
+
+
+@bp.route("/demo/reset", methods=["POST"])
+def demo_reset():
+    """시연 서버: 샘플로 되돌리기 — 방문자들이 바꾼 내용을 지우고 처음 샘플로 (모든 방문자에게 적용)."""
+    if not config.DEMO_AUTOLOGIN:
+        abort(404)
+    from core import demo_data
+    day = demo_data.reset()
+    user = demo_user()
+    if user:
+        demo_login(user)                                # 되돌린 DB 의 시연 관리자로 다시 들어온다
+    flash(f"처음 샘플로 되돌렸습니다 (기준일 {day or '-'}).", "success")
     return redirect(url_for("reports.dashboard"))
 
 

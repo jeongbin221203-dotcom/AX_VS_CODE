@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import io
 import math
+import os
 import secrets
 from datetime import date, datetime, timedelta
 from functools import wraps
@@ -16,7 +17,9 @@ from flask import (Flask, abort, current_app, flash, g, redirect, render_templat
 import config
 from core import auth as core_auth
 from core import company
+from core import database
 from core import dataio
+from core import demo_data
 from core import enterprise as ent
 from core import notify
 from core import sales_db as db
@@ -195,6 +198,16 @@ def load_context():
     g.pending_cnt = len(ent.pending_for(g.user)) + (len(credit.pending_for(g.user))
                                                      if ent.has_role(g.user, "MANAGER") else 0)
     g.unread = notify.unread_count(int(g.user["id"]))
+    # 사이드바 알림 상자 (자재관리의 '안전재고 미달'·'결재 대기'와 같은 자리)
+    scope_sql, scope_params = db._scope_clause("s")
+    g.overdue_cnt = int(db._scalar(
+        f"SELECT COUNT(*) FROM sales s WHERE s.status NOT IN ('입금완료', '취소') AND s.due_date IS NOT NULL "
+        f"AND s.due_date < ? AND COALESCE(s.total_amount, s.amount) > COALESCE(s.paid_amount, 0){scope_sql}",
+        [date.today().isoformat(), *scope_params]) or 0)
+    g.erp_failed = int(db._scalar("SELECT COUNT(*) FROM erp_outbox WHERE status = '실패'") or 0) \
+        if ent.has_role(g.user, "MANAGER") else 0
+    from core import periods
+    g.closed_through = periods.closed_through()
     return None
 
 
@@ -439,7 +452,9 @@ def register_template_helpers(app: Flask) -> None:
         values = company.all_values()
         return {"APP_TITLE": values["app_title"], "COMPANY": values,
                 "DEMO": bool(config.DEMO_AUTOLOGIN), "DEMO_ROLES": config.DEMO_ROLES if config.DEMO_AUTOLOGIN else [],
-                "DISC_M": values["discount_manager_max"], "DISC_E": values["discount_exec_max"]}
+                "DISC_M": values["discount_manager_max"], "DISC_E": values["discount_exec_max"],
+                "DEMO_RESET_HOUR": demo_data.RESET_HOUR, "ERP_ADAPTER": os.environ.get("SALES_ERP_ADAPTER", "file"),
+                "DB_NAME": "PostgreSQL" if database.is_pg() else os.path.basename(database.DB_PATH)}
 
     app.jinja_env.globals.update(
         csrf_token=csrf_token, menus_for=menus_for, menu_layout=menu_layout, export_url=export_url, tab_url=tab_url,

@@ -101,3 +101,44 @@ def test_demo_template_is_copied_into_empty_db(tmp_path, monkeypatch):
         assert conn.execute("SELECT name FROM customers").fetchone()[0] == "샘플"
     conn.close()
     assert demo_data.prepare() == "2026-01-01"                       # 이미 데이터가 있으면 그대로
+
+
+def test_demo_daily_reset_hour():
+    from datetime import datetime
+    from core import demo_data
+    assert demo_data.due_day(datetime(2026, 10, 3, 3, 59)) == "2026-10-02"     # 새벽 4시 전에는 어제 샘플로 충분
+    assert demo_data.due_day(datetime(2026, 10, 3, 4, 0)) == "2026-10-03"
+
+
+def test_demo_reset_restores_sample_and_sidebar(app, isolated_db, monkeypatch, tmp_path):
+    import config
+    from core import demo_data
+    from core import enterprise as ent
+    db.set_context("system", None)
+    ent.seed_org_demo()
+    db.seed_demo_data()
+    pristine = tmp_path / "pristine.db"
+    src, dst = sqlite3.connect(database.DB_PATH), sqlite3.connect(pristine)
+    src.backup(dst)
+    src.close()
+    dst.close()
+    (tmp_path / "pristine.db.date").write_text("2026-10-03", encoding="utf-8")
+    monkeypatch.setattr(demo_data, "PRISTINE", str(pristine))
+    monkeypatch.setattr(config, "DEMO_AUTOLOGIN", "9999")
+    c = app.test_client()
+    html = c.get("/").get_data(as_text=True)
+    assert "포트폴리오 시연 안내" in html and "샘플로 되돌리기" in html and "다른 역할로 보기:" in html
+    assert "연체 미수" in html and "마감:" in html and "ERP 연동:" in html
+    name = db._df("SELECT name FROM customers WHERE id = 1")["name"][0]
+    with db.get_conn() as conn:
+        conn.execute("UPDATE customers SET name = '방문자가 바꿈' WHERE id = 1")
+    tok = re.search(r'name="_csrf" value="([0-9a-f]+)"', html).group(1)
+    res = c.post("/demo/reset", data={"_csrf": tok})
+    assert res.status_code == 302
+    assert db._df("SELECT name FROM customers WHERE id = 1")["name"][0] == name
+    assert c.get("/").status_code == 200                              # 되돌린 뒤에도 시연 관리자로 이어서
+    monkeypatch.setattr(config, "DEMO_AUTOLOGIN", "")
+    with db.get_conn() as conn:
+        conn.execute("UPDATE customers SET name = '방문자가 바꿈' WHERE id = 1")
+    assert app.test_client().post("/demo/reset", data={}).status_code in (302, 400, 404)   # 시연 서버가 아니면 로그인으로
+    assert db._df("SELECT name FROM customers WHERE id = 1")["name"][0] == "방문자가 바꿈"
