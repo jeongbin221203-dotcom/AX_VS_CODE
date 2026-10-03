@@ -53,6 +53,8 @@ PUBLIC_ENDPOINTS = {"auth.login", "auth.setup", "auth.oidc_start", "auth.oidc_ca
                     "auth.demo_as",
                     "static",
                     "healthz", "readyz", "metrics"}
+# 시연 서버에서 저장을 막는 관리자 설정 (admin 블루프린트 전체 + 아래)
+DEMO_LOCKED = {"auth.password", "io.forms_inspect", "io.forms_save", "io.forms_delete"}
 # 비밀번호 변경이 필요한 사용자도 열 수 있는 엔드포인트
 PASSWORD_ENDPOINTS = {"auth.password", "auth.logout", "static", "healthz"}
 
@@ -132,6 +134,13 @@ def load_context():
         return None
 
     ent.apply_context(g.user)
+    if config.DEMO_AUTOLOGIN and request.method == "POST" and (
+            request.blueprint == "admin" or request.endpoint in DEMO_LOCKED):
+        # 시연 서버: 누구나 관리자로 들어오므로 관리자 설정(회사 설정·사용자·ERP·API 키·초기화 등)은 저장을 막는다.
+        # 화면은 그대로 볼 수 있고, 업무 데이터(매출·견적·결재 등)는 저장된다.
+        flash("시연 서버에서는 관리자 설정을 바꿀 수 없습니다 — 화면만 둘러볼 수 있습니다.", "warning")
+        back = request.referrer or ""
+        return redirect(back if back.startswith(request.host_url) else url_for("reports.dashboard"))
     if core_auth.password_expired(g.user) and request.endpoint not in PASSWORD_ENDPOINTS:
         flash("비밀번호를 변경해야 계속 사용할 수 있습니다.", "warning")
         return redirect(url_for("auth.password"))

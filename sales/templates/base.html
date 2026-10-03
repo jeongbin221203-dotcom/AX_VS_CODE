@@ -65,7 +65,7 @@
   </aside>
   <main class="content">
     {% if DEMO %}<div class="alert alert-info demo-banner">🧪 포트폴리오 시연 서버입니다 — 로그인 없이 <b>{{ g.user.name }}</b>(으)로 들어왔습니다.
-      모두 샘플 데이터이며, 서버가 다시 시작되면 처음 상태로 돌아갑니다.</div>{% endif %}
+      매출·견적·결재 등은 직접 입력해 볼 수 있고(서버가 다시 시작되면 처음 샘플로 돌아갑니다), 관리자 설정은 잠겨 있습니다.</div>{% endif %}
     {% if READ_ONLY() %}<div class="alert alert-warning">🛠️ 시스템 점검 중입니다 — 조회만 할 수 있고 저장·변경은 막혀 있습니다.</div>{% endif %}
     <h1>{{ title }}</h1>
     {% include "_flashes.html" %}
