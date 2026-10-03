@@ -1,15 +1,15 @@
-# 영업관리(sales/) — SQLite 와 PostgreSQL 두 가지로 같은 테스트를 돌린다
+# 영업관리(sales_manager/) — SQLite 와 PostgreSQL 두 가지로 같은 테스트를 돌린다
 name: sales-ci
 
 on:
   push:
-    paths: ["sales/**", ".github/workflows/sales-ci.yml"]
+    paths: ["sales_manager/**", ".github/workflows/sales-ci.yml"]
   pull_request:
-    paths: ["sales/**", ".github/workflows/sales-ci.yml"]
+    paths: ["sales_manager/**", ".github/workflows/sales-ci.yml"]
 
 defaults:
   run:
-    working-directory: sales
+    working-directory: sales_manager
 
 jobs:
   test:
@@ -32,7 +32,7 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
-          cache-dependency-path: sales/requirements*.txt
+          cache-dependency-path: sales_manager/requirements*.txt
       - name: 의존성
         run: |
           sudo apt-get update && sudo apt-get install -y postgresql-client
