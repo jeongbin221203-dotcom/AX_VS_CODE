@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}{{ m.title }} · 대시보드 실습{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><div class="crumb"><a href="{{ url_for('build.index') }}">대시보드 실습</a> ›</div>
+    <h1>{{ m.title }}</h1><p>{{ m.desc }}</p></div>
+  <div class="btns">
+    <a class="btn primary" href="{{ url_for('build.download', key=m.key) }}">연습 파일 내려받기</a>
+    <a class="btn" href="{{ url_for('build.answer', key=m.key) }}" title="수식·차트가 들어간 완성본">완성 예시</a>
+  </div>
+</div>
+{% if error %}<div class="alert" role="alert">{{ error }}</div>{% endif %}
+<div class="grid g3">
+  <section class="card span2">
+    <h2>할 일 <span class="small muted" style="font-weight:400">'대시보드' 시트</span></h2>
+    <ol class="steps">
+      {% for c in m.checks %}
+      <li><b>{{ c.label }}</b>{% if c.at %} <code>{{ c.at }}</code>{% endif %}{% if c.optional %} <span class="badge">채점 제외</span>{% endif %}
+        <div class="small muted">{{ c.hint }}</div></li>
+      {% endfor %}
+    </ol>
+  </section>
+  <div class="stack">
+    <section class="card">
+      <h2>완성한 파일 올리기</h2>
+      <form method="post" action="{{ url_for('build.submit', key=m.key) }}" enctype="multipart/form-data" data-once>
+        <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+        <div class="drop" data-drop>
+          <input type="file" name="file" accept=".xlsx,.xlsm" aria-label="완성한 실습 파일">
+          <p class="small muted" data-file-name style="margin:8px 0 0">Excel 에서 저장한 .xlsx</p>
+        </div>
+        <div class="btns" style="margin-top:10px"><button class="btn primary" type="submit">채점하기</button></div>
+      </form>
+    </section>
+    <section class="card">
+      <h2>제출 기록</h2>
+      {% if history %}
+      <ul class="list">{% for h in history %}<li><div class="grow"><a href="{{ url_for('build.result', rid=h.id) }}"><b>{{ h.score }}/{{ h.total }}</b></a>
+        <div class="small muted">{{ h.file_name }}</div></div><span class="small muted nowrap">{{ h.created_at[5:16] }}</span></li>{% endfor %}</ul>
+      {% else %}<div class="empty">아직 없습니다.</div>{% endif %}
+    </section>
+  </div>
+</div>
+{% endblock %}

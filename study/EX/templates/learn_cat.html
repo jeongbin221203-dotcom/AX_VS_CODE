@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% from '_macros.html' import problem_row with context %}
+{% block title %}{{ CAT_NAMES[cat] }} · 엑셀 연습장{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><div class="crumb"><a href="{{ url_for('learn.index') }}">문제 풀기</a> ›</div><h1>{{ CAT_NAMES[cat] }}</h1></div>
+  <div class="btns">
+    {% for lv, name in [(None, '전체'), (1, '기초'), (2, '응용'), (3, '심화')] %}
+    <a class="btn sm {{ 'primary' if level == lv }}" href="{{ url_for('learn.category', cat=cat, level=lv) }}">{{ name }}</a>
+    {% endfor %}
+    <a class="btn sm" href="{{ url_for('learn.next_problem', cat=cat) }}">이 분류 이어서 →</a>
+  </div>
+</div>
+<section class="card">
+  {% if items %}<ul class="list">{% for p in items %}{{ problem_row(p, st, stars) }}{% endfor %}</ul>
+  {% else %}<div class="empty">조건에 맞는 문제가 없습니다. 위쪽 학습 범위를 '전체 범위'로 바꿔 보세요.</div>{% endif %}
+</section>
+{% endblock %}

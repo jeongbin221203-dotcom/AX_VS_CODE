@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% from '_macros.html' import problem_row with context %}
+{% block title %}오답 노트 · 엑셀 연습장{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>오답 노트</h1><p>마지막에 틀린 문제, 두 번 이상 틀린 문제, 별표한 문제를 모았습니다.</p></div></div>
+<div class="grid g3">
+  {% for title, items, empty in [('마지막에 틀린 문제', wrong, '없습니다. 잘하고 있어요.'), ('자주 틀린 문제 (2번 이상)', often, '아직 없습니다.'), ('별표한 문제', starred, '문제 제목 옆 ☆ 를 누르면 여기에 모입니다.')] %}
+  <section class="card">
+    <h2>{{ title }} <span class="small muted">{{ items|length }}</span></h2>
+    {% if items %}<ul class="list">{% for p in items %}{{ problem_row(p, st) }}{% endfor %}</ul>
+    {% else %}<div class="empty">{{ empty }}</div>{% endif %}
+  </section>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% from '_macros.html' import tracks, level, status with context %}
+{% block title %}{{ p.title }} · 엑셀 연습장{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <div class="crumb"><a href="{{ url_for('learn.index') }}">문제 풀기</a> › <a href="{{ url_for('learn.category', cat=p.category) }}">{{ CAT_NAMES[p.category] }}</a> › {{ p.id }}</div>
+    <h1>{{ status(st) }} {{ p.title }}
+      <button class="star-btn {{ 'on' if starred }}" type="button" data-star="{{ p.id }}" aria-pressed="{{ 'true' if starred else 'false' }}" title="별표(나중에 다시 보기)">{{ '★' if starred else '☆' }}</button></h1>
+    <div>{{ tracks(p) }} {{ level(p.level) }}{% if st %} <span class="small muted">· {{ st.tries }}번 풀이</span>{% endif %}</div>
+  </div>
+</div>
+
+<div class="problem-layout">
+  <section class="card">
+    <div class="prompt">{{ p.prompt }}</div>
+    {% if p.type == 'formula' %}
+    <p class="small muted" style="margin:8px 0 0">입력할 셀: <b class="mono">{{ p.target }}</b>{% if p.fill %} → <b class="mono">{{ p.fill }}</b> 까지 채우기(첫 셀 수식을 복사해 모든 칸을 채점){% endif %}</p>
+    {% endif %}
+    {% if p.hint %}<details style="margin-top:10px"><summary>힌트</summary><p>{{ p.hint }}</p></details>{% endif %}
+    {% if docs %}<div class="small" style="margin-top:8px">관련 함수:
+      {% for f in docs %}<a href="{{ url_for('functions.detail', name=f.name) }}" class="mono">{{ f.name }}</a>{{ ', ' if not loop.last }}{% endfor %}</div>{% endif %}
+
+    {% if p.type == 'formula' %}
+    <div class="fbar" style="margin-top:14px">
+      <div class="namebox" id="namebox">{{ p.target }}</div>
+      <div class="fx">fx</div>
+      <input id="formula" type="text" autocomplete="off" spellcheck="false" placeholder="= 로 시작하는 수식 입력" aria-label="{{ p.target }} 셀 수식">
+    </div>
+    <div class="btns" style="margin-top:10px">
+      <button class="btn primary" id="btn-check" type="button">채점 (Enter)</button>
+      <button class="btn" id="btn-try" type="button">계산해 보기 (Ctrl+Enter)</button>
+      <button class="btn ghost" id="btn-reset" type="button">시트 원래대로</button>
+    </div>
+    <div class="tip">엑셀처럼 <code>=av</code> 를 치면 AV 로 시작하는 함수가 뜹니다(↑↓ 고르고 Tab). 수식 입력 중 시트를 누르거나 끌면(드래그) 셀 주소·범위가 들어가고, F4 로 $ 고정을 바꿉니다. 배열 수식은 <code>{=…}</code> 처럼 입력해도 됩니다.</div>
+    {% else %}
+    <form id="choice-form" class="choices">
+      {% for o in p.options %}
+      <label class="choice"><input type="radio" name="opt" value="{{ loop.index0 }}"><span><b>{{ loop.index }}.</b> {{ o }}</span></label>
+      {% endfor %}
+      <div class="btns"><button class="btn primary" type="submit">채점</button></div>
+    </form>
+    {% endif %}
+    <div id="result" class="result" role="status" aria-live="polite"></div>
+    {% if p.type == 'formula' %}
+    <details id="after" class="hidden" style="margin-top:12px">
+      <summary>정답 수식·해설 보기</summary>
+      <div class="answers" id="answer-list" style="margin:8px 0"></div>
+      <div class="explain" id="explain"></div>
+    </details>
+    {% endif %}
+  </section>
+
+  {% if grid %}
+  <section class="card">
+    <div class="sheet-wrap">
+      <table class="sheet" id="sheet">
+        <thead><tr><th></th>{% for c in grid.cols %}<th>{{ c }}</th>{% endfor %}</tr></thead>
+        <tbody>
+        {% for row in grid.rows %}
+        <tr><th>{{ loop.index }}</th>{% for c in row %}<td data-a="{{ c.addr }}" class="{{ 'num' if c.num }} {{ 'head' if c.head }} {{ 'target' if c.target }}">{{ c.text }}</td>{% endfor %}</tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% if p.type == 'formula' %}
+    <div class="legend"><span><i class="sw-target"></i>수식을 넣을 칸</span><span><i class="sw-ok"></i>맞은 칸</span><span><i class="sw-bad"></i>다른 칸</span></div>
+    {% endif %}
+  </section>
+  {% endif %}
+</div>
+
+<div class="pager">
+  {% if prev_id %}<a class="btn" href="{{ url_for('learn.problem', pid=prev_id) }}">← 이전 문제</a>{% else %}<span></span>{% endif %}
+  {% if next_id %}<a class="btn primary" id="next-link" href="{{ url_for('learn.problem', pid=next_id) }}">다음 문제 →</a>
+  {% else %}<a class="btn primary" id="next-link" href="{{ url_for('learn.category', cat=p.category) }}">분류 목록으로</a>{% endif %}
+</div>
+{% endblock %}
+{% block data %}<script type="application/json" id="problem-data">{{ data_json|safe }}</script>{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}채점 결과 · {{ m.title }}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><div class="crumb"><a href="{{ url_for('build.index') }}">대시보드 실습</a> › <a href="{{ url_for('build.task', key=m.key) }}">{{ m.title }}</a> ›</div>
+    <h1>채점 결과</h1><p>{{ row.file_name }} · {{ row.created_at }}</p></div>
+  <div class="btns"><a class="btn primary" href="{{ url_for('build.task', key=m.key) }}">고쳐서 다시 올리기</a></div>
+</div>
+<div class="grid g4">
+  <div class="kpi"><div class="label">점수</div><div class="value">{{ res.score }}<small> / {{ res.total }}</small></div>
+    <div class="sub">{{ (100 * res.score / res.total)|round|int }}%</div></div>
+  <div class="kpi span2" style="grid-column: span 3"><div class="label">안내</div>
+    <div class="small" style="margin-top:6px">{% if res.score == res.total %}모든 항목을 통과했습니다. 다른 과제도 도전해 보세요.
+      {% else %}틀린 항목을 펼쳐 내 수식·값과 기대 값을 비교해 보세요. 고친 뒤 같은 파일을 다시 올리면 됩니다.{% endif %}
+      {% for n in res.notes %}<br>{{ n }}{% endfor %}</div></div>
+</div>
+<section class="card" style="margin-top:14px">
+  {% for it in res['items'] %}
+  <div class="check-item">
+    <div class="head">
+      {% if it.ok %}<span class="st ok">✓</span>{% elif it.optional %}<span class="st new">·</span>{% else %}<span class="st bad">✕</span>{% endif %}
+      <b>{{ it.label }}</b>{% if it.at %} <code>{{ it.at }}</code>{% endif %}{% if it.optional %} <span class="badge">채점 제외</span>{% endif %}
+      <span class="small muted">{{ (it.msgs or [])|join(' · ') }}</span>
+    </div>
+    {% if it.cells %}
+    <details {{ 'open' if not it.ok }} style="margin-top:6px"><summary>칸별 결과</summary>
+      <div class="table-wrap" style="margin-top:6px"><table class="t">
+        <thead><tr><th>셀</th><th>내 수식</th><th class="r">내 값</th><th class="r">기대 값</th><th></th></tr></thead>
+        <tbody>{% for c in it.cells %}<tr><td class="mono">{{ c.addr }}</td><td class="mono small">{{ c.formula or '(비어 있음)' }}</td>
+          <td class="r">{{ c.got }}</td><td class="r">{{ c.expected }}</td><td>{{ '✓' if c.ok else '✕' }}</td></tr>{% endfor %}</tbody>
+      </table></div>
+      {% if not it.ok %}<p class="small"><b>힌트</b> {{ it.hint }}<br><b>예시 수식</b> <code>{{ it.answer }}</code></p>{% endif %}
+    </details>
+    {% elif not it.ok and not it.optional %}<p class="small" style="margin:6px 0 0 32px"><b>힌트</b> {{ it.hint }}</p>{% endif %}
+  </div>
+  {% endfor %}
+</section>
+{% endblock %}

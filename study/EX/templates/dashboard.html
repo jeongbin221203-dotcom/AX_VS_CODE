@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% from '_macros.html' import problem_row with context %}
+{% block title %}대시보드 · 엑셀 연습장{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>학습 대시보드</h1>
+    <p>{{ TRACKS[track] if track else '전체 범위' }} 기준 · 함수 문제는 실제로 계산해서 채점합니다.</p>
+  </div>
+  <div class="btns">
+    <a class="btn primary" href="{{ url_for('learn.next_problem') }}">{{ '이어서 풀기' if d.tried else '첫 문제 풀기' }} →</a>
+  </div>
+</div>
+
+<section class="grid g4" aria-label="요약 지표">
+  <div class="kpi"><div class="label">푼 문제</div><div class="value">{{ d.solved }}<small> / {{ d.total }}</small></div>
+    <div class="sub">{{ (100 * d.solved / d.total)|round|int if d.total else 0 }}% 완료</div></div>
+  <div class="kpi"><div class="label">첫 시도 정답률</div><div class="value">{{ d.acc if d.acc is not none else '–' }}{% if d.acc is not none %}<small>%</small>{% endif %}</div>
+    <div class="sub">처음 풀 때 맞힌 비율</div></div>
+  <div class="kpi"><div class="label">오늘 푼 횟수</div><div class="value">{{ d.today }}</div>
+    <div class="sub">다시 볼 문제 {{ d.wrong_count }}개</div></div>
+  <div class="kpi"><div class="label">연속 학습</div><div class="value">{{ d.streak }}<small>일</small></div>
+    <div class="sub">하루 한 문제라도 이어 가기</div></div>
+</section>
+
+<div class="grid g3" style="margin-top:14px">
+  <section class="card span2">
+    <h2>최근 14일 풀이</h2>
+    <div class="chart" data-chart="daily" data-classes="ok,bad"></div>
+  </section>
+  <section class="card">
+    <h2>범위별 진도</h2>
+    {% for t in d.tracks %}
+    <div style="margin:10px 0">
+      <div class="small" style="display:flex;justify-content:space-between"><span>{{ t.name }}</span><span class="muted">{{ t.solved }} / {{ t.total }}</span></div>
+      <div class="meter" role="meter" aria-valuenow="{{ t.pct }}" aria-valuemin="0" aria-valuemax="100" aria-label="{{ t.name }} 진도"><span style="width:{{ t.pct }}%"></span></div>
+    </div>
+    {% endfor %}
+    {% if d.weak %}
+    <h3 style="margin-top:16px">보강하면 좋은 분류</h3>
+    <ul class="list">
+      {% for c in d.weak %}<li><div class="grow"><a href="{{ url_for('learn.category', cat=c.key) }}">{{ c.name }}</a></div><span class="small muted">정답률 {{ c.acc }}%</span></li>{% endfor %}
+    </ul>
+    {% endif %}
+  </section>
+</div>
+
+<div class="grid g2" style="margin-top:14px">
+  <section class="card">
+    <h2>분류별 진도 <span class="small muted" style="font-weight:400">맞힌 문제 / 전체 · 첫 시도 정답률</span></h2>
+    {% for c in d.cats %}
+    <div class="prog-row">
+      <a href="{{ url_for('learn.category', cat=c.key) }}">{{ c.name }}</a>
+      <div class="meter" aria-hidden="true"><span style="width:{{ c.pct }}%"></span></div>
+      <span class="n">{{ c.solved }}/{{ c.total }}</span>
+      <span class="n acc">{{ (c.acc|string + '%') if c.acc is not none else '–' }}</span>
+    </div>
+    {% else %}<div class="empty">문제가 없습니다.</div>{% endfor %}
+  </section>
+  <div class="stack">
+    <section class="card">
+      <h2>다시 볼 문제</h2>
+      {% if d.wrong_now %}
+      <ul class="list">{% for p in d.wrong_now %}{{ problem_row(p, {p.id: {'last_ok': False}}) }}{% endfor %}</ul>
+      {% if d.wrong_count > d.wrong_now|length %}<p class="small"><a href="{{ url_for('learn.review') }}">오답 노트에서 {{ d.wrong_count }}개 모두 보기 →</a></p>{% endif %}
+      {% else %}<div class="empty">마지막에 틀린 문제가 없습니다.</div>{% endif %}
+    </section>
+    <section class="card">
+      <h2>대시보드 만들기 실습</h2>
+      <ul class="list">
+        {% for x in missions %}
+        <li><div class="grow"><a class="title" href="{{ url_for('build.task', key=x.m.key) }}">{{ x.m.title }}</a>
+          <div class="small muted">{{ x.m.desc }}</div></div>
+          <span class="nowrap small">{% if x.best %}최고 <b>{{ x.best.score }}/{{ x.best.total }}</b>{% else %}<span class="muted">미제출</span>{% endif %}</span></li>
+        {% endfor %}
+      </ul>
+    </section>
+    <section class="card">
+      <h2>최근 분석한 파일</h2>
+      {% if uploads %}
+      <ul class="list">{% for u in uploads %}<li><div class="grow"><a href="{{ url_for('analyze.view', uid=u.id) }}">{{ u.name }}</a>
+        <div class="small muted">{{ u.sheet }} · {{ u.rows|num }}행 × {{ u.cols }}열</div></div><span class="small muted nowrap">{{ u.created_at[5:16] }}</span></li>{% endfor %}</ul>
+      {% else %}<div class="empty">엑셀 파일을 올리면 표·차트·피벗 요약을 만들어 줍니다. <a href="{{ url_for('analyze.index') }}">파일 분석 →</a></div>{% endif %}
+    </section>
+  </div>
+</div>
+
+{% if d.recent %}
+<section class="card" style="margin-top:14px">
+  <h2>최근 풀이</h2>
+  <div class="table-wrap"><table class="t">
+    <thead><tr><th>시각</th><th>문제</th><th>분류</th><th>결과</th></tr></thead>
+    <tbody>{% for r in d.recent %}<tr><td class="nowrap muted">{{ r.at }}</td><td><a href="{{ url_for('learn.problem', pid=r.pid) }}">{{ r.p.title }}</a></td>
+      <td>{{ CAT_NAMES[r.p.category] }}</td><td>{% if r.ok %}<span class="st ok">✓</span> 정답{% else %}<span class="st bad">✕</span> 오답{% endif %}</td></tr>{% endfor %}</tbody>
+  </table></div>
+</section>
+{% endif %}
+{% endblock %}
+{% block data %}<script type="application/json" id="chart-data">{"daily": {{ chart_json|safe }}}</script>{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/charts.js') }}"></script>{% endblock %}

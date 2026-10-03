@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% block title %}{{ doc.name }} · 파일 분석{% endblock %}
+{% block content %}
+{% set vname = cols[d.v].name if d.v is not none and d.a != 'count' else '건수' %}
+{% set gname = cols[d.g].name if d.g is not none else '' %}
+<div class="page-head">
+  <div><div class="crumb"><a href="{{ url_for('analyze.index') }}">파일 분석</a> ›</div>
+    <h1>{{ doc.name }}</h1>
+    <p>{{ table.sheet }} 시트 · {{ table.rows|length|num }}행 × {{ cols|length }}열 · 머리글 {{ table.head_row }}행{% if table.truncated %} · 앞 2만 행만 읽음{% endif %}</p></div>
+  <a class="btn" href="{{ url_for('analyze.export', uid=uid, **request.args.to_dict()) }}">요약을 엑셀로 내려받기</a>
+</div>
+
+{% if doc.tables|length > 1 %}
+<nav class="sheet-tabs" aria-label="시트">
+  {% for name in doc.tables %}<a href="{{ url_for('analyze.view', uid=uid, s=name) }}" class="{{ 'on' if name == table.sheet }}">{{ name }}</a>{% endfor %}
+</nav>
+{% endif %}
+
+<form class="card controls" method="get" action="{{ url_for('analyze.view', uid=uid) }}">
+  <input type="hidden" name="s" value="{{ table.sheet }}">
+  <label class="field">기준(행) 열
+    <select name="g" data-autosubmit>{% for k in d.text_idx %}<option value="{{ k }}" {{ 'selected' if k == d.g }}>{{ cols[k].name }}</option>{% endfor %}</select></label>
+  <label class="field">값 열
+    <select name="v" data-autosubmit>{% for k in d.num_idx %}<option value="{{ k }}" {{ 'selected' if k == d.v }}>{{ cols[k].name }}</option>{% else %}<option value="">(숫자 열 없음)</option>{% endfor %}</select></label>
+  <label class="field">집계
+    <select name="a" data-autosubmit>{% for k, n in aggs.items() %}<option value="{{ k }}" {{ 'selected' if k == d.a }}>{{ n }}</option>{% endfor %}</select></label>
+  <label class="field">피벗 열
+    <select name="c" data-autosubmit><option value="">(없음)</option>{% for k in d.text_idx if k != d.g %}<option value="{{ k }}" {{ 'selected' if k == d.c }}>{{ cols[k].name }}</option>{% endfor %}</select></label>
+  <label class="field">필터 열
+    <select name="f" data-autosubmit><option value="">(없음)</option>{% for k in d.text_idx %}<option value="{{ k }}" {{ 'selected' if k == d.f }}>{{ cols[k].name }}</option>{% endfor %}</select></label>
+  {% if d.f is not none %}
+  <label class="field">필터 값
+    <select name="fv" data-autosubmit><option value="">(모두)</option>{% for x in d.filter_values %}<option {{ 'selected' if x == d.fv }}>{{ x }}</option>{% endfor %}</select></label>
+  {% endif %}
+  <noscript><button class="btn" type="submit">적용</button></noscript>
+</form>
+
+<section class="grid g4" style="margin-top:14px" aria-label="핵심 지표">
+  {% for k in d.kpis %}
+  <div class="kpi"><div class="label">{{ k.label }}{% if d.fv %} <span class="muted">({{ d.fv }})</span>{% endif %}</div>
+    <div class="value">{{ k.value|num }}</div>{% if k.sub %}<div class="sub">{{ k.sub }}</div>{% endif %}</div>
+  {% endfor %}
+</section>
+
+<div class="grid g2" style="margin-top:14px">
+  {% if d.group %}
+  <section class="card">
+    <h2>{{ gname }}별 {{ vname }} {{ aggs[d.a] if d.a != 'count' else '' }}</h2>
+    <div class="chart" data-chart="group" data-type="hbar"></div>
+    {% if d.group_formula %}
+    <div class="formula-box" style="margin-top:12px">
+      <div class="small muted">엑셀 수식으로 첫 줄({{ d.group[0][0] }}) 값을 구하면</div>
+      <code>{{ d.group_formula }}</code>
+      <div class="small muted" style="margin-top:4px">조건 칸을 셀 참조로 바꾸고 범위에 $ 를 붙이면 아래로 채울 수 있습니다. 피벗 테이블로는 행: {{ gname }}, 값: {{ vname }} {{ aggs[d.a] }}.</div>
+    </div>
+    {% endif %}
+  </section>
+  {% endif %}
+  {% if d.trend %}
+  <section class="card">
+    <h2>월별 {{ vname }} {{ aggs[d.a] if d.a != 'count' else '' }} <span class="small muted" style="font-weight:400">기준: {{ d.date_name }}</span></h2>
+    <div class="chart" data-chart="trend" data-type="line"></div>
+    <details style="margin-top:8px"><summary>수치 보기</summary>
+      <div class="table-wrap" style="margin-top:6px"><table class="t"><thead><tr><th>월</th><th class="r">{{ aggs[d.a] }}</th><th class="r">건수</th></tr></thead>
+      <tbody>{% for k, v, n in d.trend %}<tr><td>{{ k }}</td><td class="r">{{ v|num }}</td><td class="r">{{ n }}</td></tr>{% endfor %}</tbody></table></div>
+    </details>
+  </section>
+  {% endif %}
+</div>
+
+{% if d.group %}
+<section class="card" style="margin-top:14px">
+  <h2>{{ gname }}별 집계표</h2>
+  <div class="table-wrap"><table class="t">
+    <thead><tr><th>{{ gname }}</th><th class="r">{{ vname }} {{ aggs[d.a] if d.a != 'count' else '' }}</th><th class="r">건수</th><th class="r">비중</th></tr></thead>
+    {% set tot = d.group|sum(attribute=1) if d.a in ('sum', 'count') else none %}
+    <tbody>{% for k, v, n in d.group %}<tr><td>{{ k }}</td><td class="r">{{ v|num }}</td><td class="r">{{ n|num }}</td>
+      <td class="r">{{ ('%.1f%%'|format(100 * v / tot)) if tot and v is not none else '–' }}</td></tr>{% endfor %}
+    {% if tot %}<tr class="total"><td>합계</td><td class="r">{{ tot|num }}</td><td class="r">{{ d.rows_n|num }}</td><td class="r">100%</td></tr>{% endif %}
+    </tbody>
+  </table></div>
+</section>
+{% endif %}
+
+{% if d.pivot %}
+<section class="card">
+  <h2>피벗 표 <span class="small muted" style="font-weight:400">행: {{ gname }} · 열: {{ cols[d.c].name }} · 값: {{ vname }} {{ aggs[d.a] }}</span></h2>
+  <div class="table-wrap"><table class="t">
+    <thead><tr><th>{{ gname }} ↓ · {{ cols[d.c].name }} →</th>{% for c in d.pivot.cols %}<th class="r">{{ c }}</th>{% endfor %}<th class="r">합계</th></tr></thead>
+    <tbody>
+      {% for row in d.pivot.rows %}<tr><td>{{ row.key }}</td>{% for v in row.vals %}<td class="r">{{ v|num }}</td>{% endfor %}<td class="r"><b>{{ row.total|num }}</b></td></tr>{% endfor %}
+      <tr class="total"><td>합계</td>{% for v in d.pivot.totals %}<td class="r">{{ v|num }}</td>{% endfor %}<td class="r">{{ d.pivot.grand|num }}</td></tr>
+    </tbody>
+  </table></div>
+  {% if d.pivot.more_cols or d.pivot.more_rows %}<p class="small muted">항목이 많아 많이 나온 것만 표시했습니다.</p>{% endif %}
+  <p class="small muted" style="margin-bottom:0">엑셀에서는 [삽입] › [피벗 테이블] → 행에 {{ gname }}, 열에 {{ cols[d.c].name }}, 값에 {{ vname }} 을 끌어 놓고 값 요약 기준을 '{{ aggs[d.a] }}'로 바꾸면 같은 표가 됩니다.</p>
+</section>
+{% endif %}
+
+{% if d.cat_counts %}
+<div class="grid g3" style="margin-top:14px">
+  {% for cc in d.cat_counts %}
+  <section class="card"><h2>{{ cc.name }}별 건수</h2><div class="chart" data-chart="cat{{ loop.index0 }}" data-type="hbar"></div></section>
+  {% endfor %}
+</div>
+{% endif %}
+
+<section class="card" style="margin-top:14px">
+  <h2>열 정보</h2>
+  <div class="table-wrap"><table class="t">
+    <thead><tr><th>열</th><th>이름</th><th>종류</th><th class="r">값</th><th class="r">빈칸</th><th class="r">고유값</th><th>요약</th></tr></thead>
+    <tbody>{% for p in d.profile %}
+      <tr><td class="mono">{{ p.letter }}</td><td>{{ p.name }}</td><td>{{ {'number': '숫자', 'date': '날짜', 'text': '문자'}[p.type] }}</td>
+        <td class="r">{{ p.filled|num }}</td><td class="r">{{ p.blank|num }}</td><td class="r">{{ p.unique|num }}</td>
+        <td class="small">{% if p.type == 'number' and p.filled %}합계 {{ p.sum|num }} · 평균 {{ p.avg|num(2) }} · {{ p.min|num }} ~ {{ p.max|num }}
+          {% elif p.type == 'date' and p.filled %}{{ p.min }} ~ {{ p.max }}
+          {% elif p.top %}{% for v, n in p.top %}{{ v }}({{ n }}){{ ', ' if not loop.last }}{% endfor %}{% endif %}</td></tr>
+    {% endfor %}</tbody>
+  </table></div>
+</section>
+
+<section class="card">
+  <h2>데이터 미리 보기 <span class="small muted" style="font-weight:400">앞 15행</span></h2>
+  <div class="table-wrap"><table class="t">
+    <thead><tr>{% for c in cols %}<th class="{{ 'r' if c.type == 'number' }}">{{ c.name }}</th>{% endfor %}</tr></thead>
+    <tbody>{% for r in d.preview %}<tr>{% for v in r %}<td class="{{ 'r' if cols[loop.index0].type == 'number' }} nowrap">{{ v|num if cols[loop.index0].type == 'number' else (v if v is not none else '') }}</td>{% endfor %}</tr>{% endfor %}</tbody>
+  </table></div>
+</section>
+{% endblock %}
+{% block data %}<script type="application/json" id="chart-data">{{ charts_json|safe }}</script>{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/charts.js') }}"></script>{% endblock %}

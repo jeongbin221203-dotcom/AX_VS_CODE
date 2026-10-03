@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% from '_macros.html' import problem_row with context %}
+{% block title %}{{ f.name }} · 함수 사전{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><div class="crumb"><a href="{{ url_for('functions.index') }}">함수 사전</a> › {{ CAT_NAMES.get(f.category, '') }}</div>
+    <h1 class="mono">{{ f.name }}{% if f.aliases %} <span class="small muted">({{ f.aliases|join(', ') }})</span>{% endif %}</h1>
+    <div>{% for t in f.get('tracks', []) %}<span class="badge {{ t }}">{{ TRACKS[t] }}</span> {% endfor %}</div></div>
+</div>
+<div class="grid g2">
+  <section class="card">
+    <p style="margin-top:0">{{ f.desc }}</p>
+    <div class="syntax">{{ f.syntax }}</div>
+    {% if f.args %}
+    <div class="table-wrap" style="margin-top:12px"><table class="t">
+      <thead><tr><th>인수</th><th>설명</th></tr></thead>
+      <tbody>{% for a in f.args %}<tr><td class="nowrap"><b>{{ a[0] }}</b></td><td>{{ a[1] }}</td></tr>{% endfor %}</tbody>
+    </table></div>
+    {% endif %}
+  </section>
+  <section class="card">
+    <h2>예제</h2>
+    <div class="formula-box"><code>{{ f.example }}</code></div>
+    {% if f.example_desc %}<p>{{ f.example_desc }}</p>{% endif %}
+    {% if f.tips %}<h3>알아 둘 점</h3><ul>{% for t in f.tips %}<li>{{ t }}</li>{% endfor %}</ul>{% endif %}
+  </section>
+</div>
+<section class="card">
+  <h2>이 함수를 쓰는 문제 <span class="small muted">{{ related|length }}</span></h2>
+  {% if related %}<ul class="list">{% for p in related %}{{ problem_row(p, {}) }}{% endfor %}</ul>
+  {% else %}<div class="empty">아직 연결된 문제가 없습니다.</div>{% endif %}
+</section>
+{% endblock %}

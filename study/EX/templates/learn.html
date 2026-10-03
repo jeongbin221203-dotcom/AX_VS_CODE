@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}문제 풀기 · 엑셀 연습장{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><h1>문제 풀기</h1>
+    <p>함수 문제는 시트에 직접 수식을 넣어 계산 결과로 채점하고, 기능 문제(피벗·서식·데이터 도구 등)는 보기를 고릅니다.</p></div>
+  <a class="btn primary" href="{{ url_for('learn.next_problem') }}">안 푼 문제부터 →</a>
+</div>
+{% for kind, title in [('formula', '함수'), ('feature', '기능')] %}
+<h2 style="margin-top:18px">{{ title }}</h2>
+<div class="grid g3">
+  {% for c in cats if c.kind == kind %}
+  <a class="card cat-card" href="{{ url_for('learn.category', cat=c.key) }}">
+    <div class="top-line"><h3 style="margin:0">{{ c.name }}</h3><span class="small muted">{{ c.solved }}/{{ c.total }}</span></div>
+    <p>{{ c.desc }}</p>
+    <div class="meter" aria-hidden="true"><span style="width:{{ c.pct }}%"></span></div>
+    <div class="small muted" style="margin-top:6px">기초 {{ c.levels[0] }} · 응용 {{ c.levels[1] }} · 심화 {{ c.levels[2] }}</div>
+  </a>
+  {% else %}<div class="empty">이 범위에는 문제가 없습니다.</div>{% endfor %}
+</div>
+{% endfor %}
+{% endblock %}

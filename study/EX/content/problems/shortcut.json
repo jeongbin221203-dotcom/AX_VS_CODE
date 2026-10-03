@@ -1,0 +1,268 @@
+{
+ "category": "shortcut",
+ "problems": [
+  {
+   "id": "shortcut-001",
+   "type": "choice",
+   "tracks": [
+    "work",
+    "c2"
+   ],
+   "level": 1,
+   "title": "오늘 날짜 입력",
+   "prompt": "셀에 오늘 날짜를 \"값\"으로(내일 열어도 바뀌지 않게) 입력하는 단축키는?",
+   "options": [
+    "Alt+;",
+    "Ctrl+Shift+;",
+    "Ctrl+;",
+    "Ctrl+D"
+   ],
+   "answer": 2,
+   "explain": "Ctrl+; 는 오늘 날짜, Ctrl+Shift+; (Ctrl+:) 은 현재 시각을 고정된 값으로 입력합니다. =TODAY() 는 파일을 열 때마다 바뀌는 수식이라 작성일 기록에는 단축키가 알맞습니다."
+  },
+  {
+   "id": "shortcut-002",
+   "type": "choice",
+   "tracks": [
+    "work",
+    "c2"
+   ],
+   "level": 1,
+   "title": "현재 시각 입력",
+   "prompt": "셀에 현재 시각(예: 14:32)을 값으로 입력하는 단축키는?",
+   "options": [
+    "Ctrl+T",
+    "Ctrl+Shift+;",
+    "Ctrl+Shift+L",
+    "Ctrl+;"
+   ],
+   "answer": 1,
+   "explain": "Ctrl+Shift+; 는 현재 시각을 입력합니다. 날짜와 시각을 한 셀에 넣으려면 Ctrl+; → 공백 → Ctrl+Shift+; 순서로 누릅니다. =NOW() 는 다시 계산할 때마다 바뀝니다."
+  },
+  {
+   "id": "shortcut-003",
+   "type": "choice",
+   "tracks": [
+    "work",
+    "c2"
+   ],
+   "level": 1,
+   "title": "셀 안에서 줄 바꾸기",
+   "prompt": "셀 하나에 \"서울시 강남구\" 다음 줄에 \"테헤란로 1\"을 입력하려 합니다. 줄을 바꾸는 키는?",
+   "options": [
+    "Shift+Enter",
+    "Enter",
+    "Ctrl+Enter",
+    "Alt+Enter"
+   ],
+   "answer": 3,
+   "explain": "Alt+Enter 는 셀 안에서 줄을 바꾸고 [자동 줄 바꿈]이 자동으로 켜집니다. Enter 는 입력을 끝내고 아래 셀로, Shift+Enter 는 위 셀로 이동합니다. Ctrl+Enter 는 선택한 여러 셀에 같은 내용을 한꺼번에 입력합니다."
+  },
+  {
+   "id": "shortcut-004",
+   "type": "choice",
+   "tracks": [
+    "work",
+    "c2"
+   ],
+   "level": 1,
+   "title": "여러 셀에 한 번에 입력",
+   "prompt": "B2:B20 을 선택하고 \"미정\"을 입력한 뒤 선택한 모든 셀에 한 번에 넣는 키는?",
+   "options": [
+    "Alt+Enter",
+    "Enter",
+    "Ctrl+D",
+    "Ctrl+Enter"
+   ],
+   "answer": 3,
+   "explain": "Ctrl+Enter 는 선택된 모든 셀에 같은 값·수식을 넣습니다. 수식이면 상대 참조가 셀마다 맞게 바뀝니다. [이동 옵션] > [빈 셀]로 빈칸만 선택한 뒤 =B2(위 셀) 를 입력하고 Ctrl+Enter 하면 빈칸을 위 값으로 채우는 실무 요령도 자주 씁니다."
+  },
+  {
+   "id": "shortcut-005",
+   "type": "choice",
+   "tracks": [
+    "work",
+    "c2"
+   ],
+   "level": 1,
+   "title": "위 셀 내용 복사",
+   "prompt": "A2 의 수식을 A2:A100 에 채우려고 A2:A100 을 선택했습니다. 맨 위 셀 내용을 아래 셀 전체에 복사하는 단축키는?",
+   "options": [
+    "Ctrl+D",
+    "Ctrl+E",
+    "Ctrl+R",
+    "Ctrl+C"
+   ],
+   "answer": 0,
+   "explain": "Ctrl+D(Down)는 선택 범위 맨 위 셀을 아래로, Ctrl+R(Right)은 맨 왼쪽 셀을 오른쪽으로 채웁니다. 수식의 상대 참조는 채우는 셀에 맞게 바뀝니다. 바로 옆 열에 데이터가 있으면 채우기 핸들을 더블클릭해도 끝까지 채워집니다."
+  },
+  {
+   "id": "shortcut-006",
+   "type": "choice",
+   "tracks": [
+    "work"
+   ],
+   "level": 1,
+   "title": "데이터 끝으로 이동",
+   "prompt": "수천 행인 표의 A1 에서 A열 데이터의 마지막 셀로 바로 이동하는 키는?",
+   "options": [
+    "Ctrl+End",
+    "Page Down",
+    "Ctrl+↓",
+    "End"
+   ],
+   "answer": 2,
+   "explain": "Ctrl+방향키는 데이터가 이어진 영역의 끝(빈 셀 직전)으로 이동합니다. 중간에 빈 셀이 있으면 그 앞에서 멈춥니다. Ctrl+End 는 시트에서 사용된 마지막 셀(마지막 행·마지막 열의 교차점), Ctrl+Home 은 A1 로 이동합니다."
+  },
+  {
+   "id": "shortcut-007",
+   "type": "choice",
+   "tracks": [
+    "work"
+   ],
+   "level": 1,
+   "title": "끝까지 선택",
+   "prompt": "B2 에서 B열 데이터의 끝(B5000)까지 한 번에 선택하는 키는?",
+   "options": [
+    "Shift+↓",
+    "Ctrl+Shift+↓",
+    "Ctrl+↓",
+    "Ctrl+A"
+   ],
+   "answer": 1,
+   "explain": "Shift 를 함께 누르면 이동한 곳까지 선택됩니다. Ctrl+Shift+↓ 는 데이터 끝까지 선택, 이어서 Ctrl+Shift+→ 를 누르면 표 전체 너비로 넓어집니다. Ctrl+A 는 현재 데이터 영역 전체(한 번 더 누르면 시트 전체)를 선택합니다."
+  },
+  {
+   "id": "shortcut-008",
+   "type": "choice",
+   "tracks": [
+    "work",
+    "c2"
+   ],
+   "level": 1,
+   "title": "셀 서식 창",
+   "prompt": "[셀 서식] 대화 상자(표시 형식·맞춤·글꼴·테두리)를 여는 단축키는?",
+   "options": [
+    "F2",
+    "Ctrl+Shift+F",
+    "Ctrl+1",
+    "Ctrl+F"
+   ],
+   "answer": 2,
+   "explain": "Ctrl+1 은 [셀 서식] 대화 상자를 엽니다(숫자 키패드 1 이 아니라 위쪽 숫자 1). 사용자 지정 표시 형식을 넣을 때 가장 자주 씁니다. F2 는 셀 편집, Ctrl+F 는 찾기입니다."
+  },
+  {
+   "id": "shortcut-009",
+   "type": "choice",
+   "tracks": [
+    "work",
+    "c2",
+    "c1"
+   ],
+   "level": 2,
+   "title": "F4 의 두 가지 역할",
+   "prompt": "F4 키의 동작으로 맞는 것을 모두 고른 것은?\n① 수식 편집 중 셀 주소 참조 방식 바꾸기(A1→$A$1→A$1→$A1)\n② 수식 편집이 아닐 때 마지막 작업 반복(예: 채우기 색 다시 적용)\n③ 시트 전체 다시 계산",
+   "options": [
+    "①만",
+    "①, ②",
+    "②, ③",
+    "①, ②, ③"
+   ],
+   "answer": 1,
+   "explain": "F4 는 수식 입력 중이면 커서가 있는 주소의 참조 방식을 바꾸고, 그렇지 않으면 바로 전 작업(행 삽입, 서식 적용 등)을 반복합니다(Ctrl+Y 와 같음). 다시 계산은 F9 입니다."
+  },
+  {
+   "id": "shortcut-010",
+   "type": "choice",
+   "tracks": [
+    "work",
+    "c2"
+   ],
+   "level": 1,
+   "title": "자동 합계",
+   "prompt": "숫자들 바로 아래 셀에서 =SUM(위쪽 범위) 를 자동으로 넣는 단축키는?",
+   "options": [
+    "Alt+S",
+    "Alt+=",
+    "Ctrl+=",
+    "Ctrl+Shift+S"
+   ],
+   "answer": 1,
+   "explain": "Alt+= 는 [자동 합계]로 위쪽(또는 왼쪽)의 연속된 숫자 범위를 잡아 SUM 수식을 넣습니다. 표 범위 전체와 오른쪽·아래 빈 줄을 함께 선택하고 누르면 행·열 합계가 한꺼번에 들어갑니다. 중간에 빈 셀이 있으면 범위가 짧게 잡히니 확인하세요."
+  },
+  {
+   "id": "shortcut-011",
+   "type": "choice",
+   "tracks": [
+    "work",
+    "c2"
+   ],
+   "level": 1,
+   "title": "필터 켜고 끄기",
+   "prompt": "표의 머리글에 자동 필터 단추를 켜거나 끄는 단축키는?",
+   "options": [
+    "Alt+F",
+    "Ctrl+Shift+L",
+    "Ctrl+L",
+    "Ctrl+T"
+   ],
+   "answer": 1,
+   "explain": "Ctrl+Shift+L 은 [데이터] > [필터]를 켜고 끕니다. Ctrl+T(또는 Ctrl+L)는 범위를 표로 만들며, 표에는 필터 단추가 기본으로 붙습니다."
+  },
+  {
+   "id": "shortcut-012",
+   "type": "choice",
+   "tracks": [
+    "work"
+   ],
+   "level": 1,
+   "title": "표 만들기",
+   "prompt": "데이터 범위를 \"표\"로 바꿔 서식·필터·구조적 참조·범위 자동 확장을 쓰려 합니다. 단축키는?",
+   "options": [
+    "Ctrl+Shift+L",
+    "Ctrl+Shift+T",
+    "Alt+T",
+    "Ctrl+T"
+   ],
+   "answer": 3,
+   "explain": "Ctrl+T 는 [표 만들기] 대화 상자를 엽니다(\"머리글 포함\" 확인). 표는 행을 추가하면 서식·수식·범위가 자동으로 늘어나고, 피벗 테이블·차트의 원본으로 쓰기 좋습니다. 일반 범위로 되돌리려면 [테이블 디자인] > [범위로 변환]."
+  },
+  {
+   "id": "shortcut-013",
+   "type": "choice",
+   "tracks": [
+    "work",
+    "c1"
+   ],
+   "level": 2,
+   "title": "수식 보기",
+   "prompt": "시트의 모든 셀에 결과 대신 수식이 보이게 했다가 다시 되돌리는 단축키는?",
+   "options": [
+    "Ctrl+`(숫자 1 왼쪽 키)",
+    "F9",
+    "F2",
+    "Ctrl+Shift+Enter"
+   ],
+   "answer": 0,
+   "explain": "Ctrl+` 는 [수식] > [수식 표시]와 같아 시트 전체를 수식 보기로 바꿉니다. 수식을 검토하거나 인쇄할 때 유용합니다. F9 는 다시 계산, F2 는 셀 편집입니다."
+  },
+  {
+   "id": "shortcut-014",
+   "type": "choice",
+   "tracks": [
+    "c1"
+   ],
+   "level": 2,
+   "title": "배열 수식 입력",
+   "prompt": "컴활 1급 배열 수식 문제에서 =SUM((C2:C20=\"서울\")*(G2:G20)) 을 입력해 {=SUM(…)} 처럼 중괄호가 붙게 하려면 무엇을 누르나요?",
+   "options": [
+    "Ctrl+Enter",
+    "Enter",
+    "Alt+Enter",
+    "Ctrl+Shift+Enter"
+   ],
+   "answer": 3,
+   "explain": "Ctrl+Shift+Enter 로 입력하면 이전 방식의 배열 수식이 되어 수식 입력줄에 중괄호 { } 가 자동으로 붙습니다(중괄호를 직접 타이핑하면 텍스트가 됨). Microsoft 365 에서는 Enter 만 눌러도 배열 계산(동적 배열)이 되지만, 컴활 시험에서는 Ctrl+Shift+Enter 를 요구합니다."
+  }
+ ]
+}

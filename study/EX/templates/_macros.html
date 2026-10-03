@@ -1,0 +1,25 @@
+{% macro tracks(p) -%}
+{% for t in p.get('tracks', []) %}<span class="badge {{ t }}">{{ TRACKS[t] }}</span> {% endfor %}
+{%- endmacro %}
+
+{% macro level(n) -%}
+<span class="lv" title="난이도">{{ '●' * n }}{{ '○' * (3 - n) }}</span>
+{%- endmacro %}
+
+{% macro status(s) -%}
+{% if not s %}<span class="st new" title="안 푼 문제">·</span>
+{% elif s.last_ok %}<span class="st ok" title="맞힘">✓</span>
+{% else %}<span class="st bad" title="틀림">✕</span>{% endif %}
+{%- endmacro %}
+
+{% macro problem_row(p, st, stars=None) -%}
+<li>
+  {{ status(st.get(p.id)) }}
+  <div class="grow">
+    <a class="title" href="{{ url_for('learn.problem', pid=p.id) }}">{{ p.title }}</a>
+    {% if stars and p.id in stars %}<span title="별표">★</span>{% endif %}
+    <div class="small muted">{{ CAT_NAMES[p.category] }} · {{ '수식' if p.type == 'formula' else '보기 고르기' }} {{ level(p.level) }}</div>
+  </div>
+  <div class="nowrap">{{ tracks(p) }}</div>
+</li>
+{%- endmacro %}
