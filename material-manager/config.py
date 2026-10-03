@@ -87,6 +87,9 @@ DEMO = os.getenv("MM_DEMO", "0") == "1"
 # 앞단 전달: 이 주소의 서버(예: 개인 PC + Cloudflare Tunnel)가 살아 있으면 방문자를 그쪽으로 보낸다(core/forward.py).
 # 꺼져 있으면 이 서버가 그대로 보여 준다. 고정 주소(Render)는 그대로 두고 실제 데이터는 PC에 저장할 때 쓴다.
 FORWARD_URL = os.getenv("MM_FORWARD_URL", "").strip().rstrip("/")
+# 감사로그를 서버 로그(표준출력)에도 한 줄 JSON으로 (시연 모드는 기본으로 켬)
+AUDIT_STDOUT = os.getenv("MM_AUDIT_STDOUT", "1" if DEMO else "0") == "1"
+DEMO_RESET_HOUR = int(os.getenv("MM_DEMO_RESET_HOUR", "4"))    # 시연 데이터 매일 자동 초기화 시각 (한국 시간)
 
 # ── 사용자 · 권한 ─────────────────────────────────────────────
 # 코드: (등급, 화면 표기). 등급이 높을수록 아래 등급의 권한을 모두 가진다.

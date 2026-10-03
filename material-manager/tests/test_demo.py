@@ -76,3 +76,48 @@ def test_forward_to_live_server_else_serve_here(monkeypatch):
     monkeypatch.setattr(forward, "target_up", lambda: False)
     html = c.get("/").get_data(as_text=True)                       # 꺼져 있으면 여기서 시연
     assert "임시 서버" in html
+
+
+def test_demo_reset_button_restores_sample_and_logs(monkeypatch, capsys):
+    from core import demo
+    application = _demo_app(monkeypatch)
+    monkeypatch.setattr(config, "AUDIT_STDOUT", True)
+    monkeypatch.setattr(demo, "MIN_GAP", 0)
+    c = application.test_client()
+    c.get("/")
+    before = db.scalar("SELECT COUNT(*) FROM transactions")
+    mid = db.scalar("SELECT id FROM materials WHERE code = 'PK-TAPE-001'")
+    wh = db.scalar("SELECT id FROM warehouses WHERE code = 'IC-A'")
+    token = csrf(c)
+    res = c.post("/transactions/", data={"_csrf": token, "material_id": mid, "warehouse_id": wh, "tx_type": "OUT",
+                                          "qty": "1", "tx_date": TODAY_STR(), "partner": "방문자"})
+    assert res.status_code in (200, 302)
+    assert db.scalar("SELECT COUNT(*) FROM transactions") == before + 1
+    out = capsys.readouterr().out
+    assert "AUDIT " in out and "TX_CREATE" in out                  # 방문자 변경이 서버 로그에 남는다
+    res = c.post("/demo/reset", data={"_csrf": token})
+    assert res.status_code == 302
+    assert db.scalar("SELECT COUNT(*) FROM transactions") == before   # 처음 샘플로 돌아감
+    assert "DEMO_RESET" in capsys.readouterr().out
+    res = c.get("/")                                                # 초기화 뒤에도 바로 자동 로그인 + 안내 유지
+    assert res.status_code == 200 and "처음 샘플로 되돌렸습니다" in res.get_data(as_text=True)
+
+
+def test_demo_daily_reset_once_per_day(monkeypatch):
+    from core import demo
+    application = _demo_app(monkeypatch)
+    monkeypatch.setattr(config, "DEMO_RESET_HOUR", 0)
+    monkeypatch.setattr(demo, "MIN_GAP", 0)
+    calls = []
+    monkeypatch.setattr(demo, "reset", lambda actor, reason: calls.append(reason))
+    c = application.test_client()
+    c.get("/")
+    assert calls == []                                              # 오늘 이미 만든 샘플
+    db.execute("UPDATE app_settings SET value = '2000-01-01' WHERE key = ?", (demo.RESET_KEY,))
+    c.get("/")
+    assert len(calls) == 1 and "자동 초기화" in calls[0]
+
+
+def TODAY_STR():
+    from datetime import date
+    return date.today().isoformat()

@@ -801,12 +801,20 @@ def reset_database() -> None:
     if is_pg():
         if "test" not in config.DATABASE_URL.rsplit("/", 1)[-1]:
             raise RuntimeError("테스트 DB(이름에 test 포함)만 초기화할 수 있습니다.")
-        with transaction() as conn:
-            conn.executescript("DROP SCHEMA public CASCADE; CREATE SCHEMA public;")
     else:
         from pathlib import Path
         if Path(config.DB_PATH).resolve() == (config.DATA_DIR / "materials.db").resolve():
             raise RuntimeError("운영 DB 파일은 초기화할 수 없습니다.")
+    wipe_database()
+
+
+def wipe_database() -> None:
+    """DB를 통째로 비우고 빈 구조를 다시 만든다. 테스트(reset_database)와 시연 초기화(core/demo.py)만 쓴다."""
+    if is_pg():
+        with transaction() as conn:
+            conn.executescript("DROP SCHEMA public CASCADE; CREATE SCHEMA public;")
+    else:
+        from pathlib import Path
         for suffix in ("", "-wal", "-shm"):
             Path(f"{config.DB_PATH}{suffix}").unlink(missing_ok=True)
     init_db()

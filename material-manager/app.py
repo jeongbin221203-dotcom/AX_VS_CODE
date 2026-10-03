@@ -80,6 +80,17 @@ def create_app(test_config: dict | None = None) -> Flask:
     if not config.SECRET_KEY_FROM_ENV and not (app.debug or app.testing):
         app.logger.warning("MM_SECRET_KEY가 없어 임시 키를 씁니다. 재시작하면 모두 로그아웃됩니다.")
 
+    if app.config.get("DEMO"):
+        @app.post("/demo/reset")
+        def demo_reset():
+            from core import demo
+            from views.helpers import actor
+            if demo.reset(actor(), "방문자가 '샘플로 되돌리기'를 누름"):
+                flash("시연 데이터를 처음 샘플로 되돌렸습니다.", "success")
+            else:
+                flash("방금 초기화했거나 초기화하는 중입니다. 잠시 뒤 다시 시도하세요.", "info")
+            return redirect("/")
+
     @app.get("/health")
     def health():
         """로드밸런서·모니터링용. 로그인 없이 열리므로 버전·경로 같은 내부 정보는 내보내지 않는다."""

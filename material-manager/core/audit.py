@@ -7,10 +7,12 @@ actor(행위자)는 {"id": 사용자ID|None, "name": 이름, "role": 역할, "ip
 """
 
 import json
+import sys
 from typing import Any
 
 import pandas as pd
 
+import config
 from core import db
 from core.utils import now_str
 
@@ -35,7 +37,7 @@ ACTIONS = {
     "PO_CREATE": "발주", "PO_APPROVE": "발주 결재", "PO_UPDATE": "발주 변경", "PO_CANCEL": "발주 취소",
     "MATERIAL_SYNC": "SAP 마스터 동기화", "MFA_ENABLE": "2단계 인증 등록", "MFA_DISABLE": "2단계 인증 해제",
     "MFA_FAIL": "2단계 인증 실패", "MFA_RECOVERY": "복구 코드 사용", "SSO_LOGIN": "SSO 로그인", "ERP_TEST": "ERP 연결 확인", "SSO_OUTAGE": "SSO 장애 모드", "DOCTOR": "운영 점검", "STATEMENT_CREATE": "거래명세서 입출고", "STATEMENT_CANCEL": "거래명세서 취소", "OFFLINE_SYNC": "오프라인 입력 반영", "SSO_FAIL": "SSO 로그인 실패",
-    "FORM_UPDATE": "엑셀 양식 변경",
+    "FORM_UPDATE": "엑셀 양식 변경", "DEMO_RESET": "시연 데이터 초기화",
 }
 
 
@@ -51,6 +53,21 @@ def record(conn, actor: dict | None, action: str, entity: str = "",
          "" if entity_id is None else str(entity_id),
          json.dumps(detail, ensure_ascii=False, default=str) if detail else "", actor.get("ip", "")),
     )
+    if config.AUDIT_STDOUT:
+        _emit(actor, action, entity, entity_id, detail)
+
+
+def _emit(actor: dict, action: str, entity: str, entity_id: Any, detail: dict | None) -> None:
+    """서버 로그(표준출력)에도 한 줄 JSON으로 남긴다 → DB가 초기화돼도 호스팅 로그(Render 등)에서 확인할 수 있다.
+    같은 트랜잭션이 나중에 실패하면 DB에는 없고 로그에만 남을 수 있다(로그는 참고용)."""
+    try:
+        line = json.dumps({"at": now_str(), "user": actor.get("name", ""), "ip": actor.get("ip", ""), "action": action,
+                           "label": ACTIONS.get(action, action), "entity": entity,
+                           "id": "" if entity_id is None else str(entity_id), "detail": detail or {}},
+                          ensure_ascii=False, default=str)
+        print("AUDIT " + line, file=sys.stdout, flush=True)
+    except Exception:       # 로그 출력 실패가 업무를 막지 않게
+        pass
 
 
 def log(actor: dict | None, action: str, entity: str = "", entity_id: Any = "",

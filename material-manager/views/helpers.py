@@ -60,18 +60,21 @@ def load_context():
         now = int(time.time())
         idle = now - int(session.get("seen", now))
         if not user or not user["active"]:
-            session.clear()
-            flash("계정이 중지되었습니다. 관리자에게 문의하세요.", "warning")
+            _end_session("계정이 중지되었습니다. 관리자에게 문의하세요.", "warning")
         elif not secrets.compare_digest(session.get("stamp", ""), auth.session_stamp(user)):
-            session.clear()                   # 비밀번호가 바뀐 뒤의 옛 세션(탈취된 쿠키 포함)
-            flash("비밀번호가 변경되어 다시 로그인해야 합니다.", "warning")
+            # 비밀번호가 바뀐 뒤의 옛 세션(탈취된 쿠키 포함)
+            _end_session("비밀번호가 변경되어 다시 로그인해야 합니다.", "warning")
         elif idle > config.IDLE_MINUTES * 60:
-            session.clear()
-            flash(f"{config.IDLE_MINUTES}분 동안 사용하지 않아 로그아웃했습니다.", "info")
+            _end_session(f"{config.IDLE_MINUTES}분 동안 사용하지 않아 로그아웃했습니다.", "info")
         else:
             g.user = user
             if now - int(session.get("seen", 0)) > 60:      # 쿠키를 매 요청 새로 쓰지 않게 1분 단위로 갱신
                 session["seen"] = now
+    if config.DEMO:
+        from core import demo
+        demo.maybe_daily_reset()
+        if g.user is not None and auth.get_user(g.user["id"]) is None:    # 초기화로 계정 번호가 바뀜
+            g.user = None
     if g.user is None and config.DEMO and request.endpoint not in PUBLIC_ENDPOINTS | {"auth.logout"}:
         g.user = _demo_sign_in()
     if g.user is None:
@@ -97,14 +100,28 @@ def load_context():
     return None
 
 
+def _end_session(message: str, category: str) -> None:
+    """세션을 끝낸다. 시연 모드는 곧바로 자동 로그인하므로 안내 없이, 남은 알림은 그대로 둔다."""
+    if config.DEMO:
+        flashes = session.get("_flashes")
+        session.clear()
+        if flashes:
+            session["_flashes"] = flashes
+        return
+    session.clear()
+    flash(message, category)
+
+
 def _demo_sign_in() -> dict:
     """시연 모드: 로그인하지 않은 방문자를 시연용 시스템관리자로 로그인시킨다 (core/demo.py)."""
     from core import demo
     user = demo.ensure_user()
-    token = session.get("_csrf")
+    token, flashes = session.get("_csrf"), session.get("_flashes")
     session.clear()
     if token:                                      # 이미 열어 둔 화면의 폼이 그대로 제출되게
         session["_csrf"] = token
+    if flashes:                                    # 초기화 직후 안내 문구가 사라지지 않게
+        session["_flashes"] = flashes
     session["user_id"] = user["id"]
     session["stamp"] = auth.session_stamp(user)
     session["seen"] = int(time.time())
