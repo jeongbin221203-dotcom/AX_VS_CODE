@@ -7,6 +7,7 @@
   SALES_SMTP_HOST / SALES_SMTP_PORT(587) / SALES_SMTP_USER / SALES_SMTP_PASSWORD
   SALES_SMTP_FROM / SALES_SMTP_STARTTLS(1)          메일 (사용자별로 끌 수 있다: users.notify_email)
   SALES_NOTIFY_WEBHOOK_URL                           Teams·Slack·사내 메신저 수신 웹훅 (JSON {"text": …})
+  관리자 > 🔔 알림 채널                              잔디·네이버웍스·카카오워크·Slack·Teams 채널 등록 (core/messenger.py)
   SALES_BASE_URL                                     메일·메신저에 넣을 링크 주소 (https://sales.example.com)
 """
 from __future__ import annotations
@@ -113,8 +114,8 @@ def deliver(ids: list[int]) -> dict:
     if not ids:
         return {"email": 0}
     marks = ",".join("?" * len(ids))
-    rows = db._df(f"SELECT n.id, n.title, n.body, n.link, n.email_status, u.email, "
-                  f"COALESCE(u.notify_email, 1) AS notify_email, u.name "
+    rows = db._df(f"SELECT n.id, n.kind, n.title, n.body, n.link, n.email_status, u.email, "
+                  f"COALESCE(u.notify_email, 1) AS notify_email, COALESCE(u.notify_messenger, 1) AS notify_messenger, u.name "
                   f"FROM notifications n JOIN users u ON u.id = n.user_id WHERE n.id IN ({marks})", ids)
     sent = skipped = 0
     for r in rows.to_dict("records"):
@@ -134,7 +135,9 @@ def deliver(ids: list[int]) -> dict:
         extra = f" 외 {len(rows) - 1}명" if len(rows) > 1 else ""
         post_webhook(f"[영업관리] {first['title']} → {first['name']}{extra}\n{first['body'] or ''}\n"
                      f"{_base_url()}{first['link'] or ''}")
-    return {"email": sent, "skipped": skipped}
+    from . import messenger                         # 잔디·네이버웍스·카카오워크·Slack·Teams (관리자 > 알림 채널)
+    chat = messenger.deliver(rows.to_dict("records"), _base_url()) if not rows.empty else {"sent": 0}
+    return {"email": sent, "skipped": skipped, "messenger": chat.get("sent", 0)}
 
 
 # ---------------------------------------------------------------------------

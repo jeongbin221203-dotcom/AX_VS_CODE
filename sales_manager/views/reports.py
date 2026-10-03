@@ -8,7 +8,7 @@ from core import enterprise as ent
 from core import erp, insights
 from core import sales_db as db
 
-from .helpers import Table, a_int, chart, csv_response, f_ids, f_str, render_page
+from .helpers import Table, a_int, cached, chart, csv_response, f_ids, f_str, render_page
 
 bp = Blueprint("reports", __name__)
 
@@ -22,30 +22,34 @@ DASH_PAGE = 30      # 대시보드 '즉시 확인' 표는 30행씩 (전체 건�
 @bp.route("/")
 def dashboard():
     ym, owner = g.ym, g.owner_filter
-    trend = db.monthly_trend(12, owner)
-    funnel = db.stage_funnel(owner)
-    perf = db.owner_performance(ym)
-    top = db.top_customers(ym, 10)
-    top_all = top.empty
-    if top_all:
-        top = db.top_customers("", 10)
-    soon = db.deals_closing_soon(14, owner)
-    stale = db.stale_customers(30, owner)
-    upcoming = db.upcoming_actions(7, owner)
-    # 자재관리 대시보드와 맞춘 항목: 최근 30일 일별 흐름 · 분류(품목군)별 구성 · 기한 임박 · 결재 대기 · 연계 실패
-    daily = insights.daily_sales(30, owner)
-    by_cat = insights.category_sales(ym, owner)
-    aging = ent.ar_aging()
-    overdue = aging[aging["연체구간"] != "정상"].drop(columns=["id"]) if not aging.empty else aging
-    expiring = insights.quotes_expiring(7, owner)
+
+    def compute() -> dict:
+        top = db.top_customers(ym, 10)
+        aging = ent.ar_aging()
+        return {
+            "trend": db.monthly_trend(12, owner), "funnel": db.stage_funnel(owner), "perf": db.owner_performance(ym),
+            "top_all": top.empty, "top": db.top_customers("", 10) if top.empty else top,
+            "soon": db.deals_closing_soon(14, owner), "stale": db.stale_customers(30, owner),
+            "upcoming": db.upcoming_actions(7, owner),
+            # 자재관리 대시보드와 맞춘 항목: 최근 30일 일별 흐름 · 분류(품목군)별 구성 · 기한 임박
+            "daily": insights.daily_sales(30, owner), "by_cat": insights.category_sales(ym, owner),
+            "overdue": aging[aging["연체구간"] != "정상"].drop(columns=["id"]) if not aging.empty else aging,
+            "expiring": insights.quotes_expiring(7, owner),
+            "k": db.kpi_summary(ym, owner), "fc": ent.forecast_summary(ym, owner),
+            "empty": not db._scalar("SELECT COUNT(*) FROM customers") and not db._scalar("SELECT COUNT(*) FROM sales"),
+        }
+    # 같은 사용자·범위·기준월이면 잠깐 기억 (저장이 있으면 바로 새로) — 결재 대기·ERP 실패는 매번
+    d = cached("dashboard", (g.user["id"], g.user.get("role"), str(g.scope), ym, owner), compute)
+    trend, funnel, perf, top, top_all = d["trend"], d["funnel"], d["perf"], d["top"], d["top_all"]
+    soon, stale, upcoming, daily, by_cat = d["soon"], d["stale"], d["upcoming"], d["daily"], d["by_cat"]
+    overdue, expiring, empty = d["overdue"], d["expiring"], d["empty"]
     pending = ent.pending_for(g.user)
     manager = ent.has_role(g.user, "MANAGER")
     erp_failed = erp.list_outbox("실패", 50) if manager else pd.DataFrame()
-    empty = not db._scalar("SELECT COUNT(*) FROM customers") and not db._scalar("SELECT COUNT(*) FROM sales")
 
     return render_page(
         "reports/dashboard.html", "dashboard",
-        k=db.kpi_summary(ym, owner), fc=ent.forecast_summary(ym, owner),
+        k=d["k"], fc=d["fc"],
         trend_chart=chart(trend, "월", ["매출", "목표"]),
         trend=Table(trend, money=["매출", "목표"]),
         funnel_chart=chart(funnel, "단계", ["금액", "가중금액"]),

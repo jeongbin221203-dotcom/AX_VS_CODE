@@ -34,6 +34,7 @@ DEFAULTS: dict[str, Any] = {
     "approval_sla_hours": int(os.environ.get("SALES_APPROVAL_SLA_HOURS", "48")),
     "quote_valid_days": 30,
     "default_payment_terms": 30,
+    "stage_names": list(db.DEFAULT_OPEN_STAGES),     # 진행 단계 이름 (수주·실주는 고정)
     "stage_prob": {"리드": 10, "접촉": 25, "제안": 45, "견적": 60, "협상": 80},
     "industries": list(db.INDUSTRIES),
     "lead_sources": list(db.LEAD_SOURCES),
@@ -60,7 +61,7 @@ LABELS = {
     "company_name": "회사명", "company_biz_no": "사업자번호", "company_ceo": "대표자", "company_address": "주소",
     "app_title": "시스템 이름", "discount_manager_max": "팀장 결재 한도(%)", "discount_exec_max": "임원 결재 한도(%)",
     "approval_sla_hours": "결재 단계 기한(시간)", "quote_valid_days": "견적 유효기간(일)",
-    "default_payment_terms": "기본 결제조건(일)", "stage_prob": "단계별 확률(%)",
+    "default_payment_terms": "기본 결제조건(일)", "stage_prob": "단계별 확률(%)", "stage_names": "진행 단계 이름",
     "pii_retention_years": "개인정보 보관기간(년)",
     "audit_retention_years": "감사로그 보관(년)", "backup_keep_daily": "일 백업 보관(개)",
     "backup_keep_monthly": "월말 백업 보관(개월)", "backup_keep_yearly": "연말 백업 보관(년)",
@@ -94,7 +95,13 @@ def _apply(values: dict) -> None:
         target = getattr(db, attr)
         if target != values[key]:
             target[:] = list(values[key])
-    for stage, prob in values["stage_prob"].items():
+    names = values.get("stage_names") or db.DEFAULT_OPEN_STAGES
+    if len(names) == len(db.OPEN_STAGES) and list(names) != db.OPEN_STAGES:
+        db.apply_stage_names(list(names))
+    probs = values["stage_prob"]
+    if not any(s in probs for s in db.OPEN_STAGES):          # 예전 이름으로 저장된 확률 → 위치대로
+        probs = dict(zip(db.OPEN_STAGES, list(probs.values())))
+    for stage, prob in probs.items():
         if stage in db.STAGE_PROB:
             db.STAGE_PROB[stage] = int(prob)
     db.DISCOUNT_POLICY[:] = [(0.0, None), (float(values["discount_manager_max"]), "MANAGER"),
@@ -180,12 +187,25 @@ def validate(changes: dict) -> dict:
             out[key] = _number(changes[key], LABELS[key], lo, hi)
     if "auto_block_over_credit" in changes:
         out["auto_block_over_credit"] = changes["auto_block_over_credit"] in (True, 1, "1", "on", "true")
-    if "stage_prob" in changes:
-        probs = {s: _number(changes["stage_prob"].get(s, cur["stage_prob"][s]), f"{s} 확률", 0, 99)
-                 for s in db.OPEN_STAGES}
-        seq = [probs[s] for s in db.OPEN_STAGES]
+    names = list(cur["stage_names"])
+    if "stage_names" in changes:
+        names = [str(n or "").strip() for n in changes["stage_names"]]
+        if len(names) != len(db.OPEN_STAGES) or not all(names):
+            raise ValueError(f"진행 단계 이름 {len(db.OPEN_STAGES)}개를 모두 입력하세요.")
+        if len(set(names)) != len(names):
+            raise ValueError("진행 단계 이름이 겹칩니다.")
+        for n in names:
+            if n in (db.STAGE_WON, db.STAGE_LOST) or len(n) > 20 or any(c in n for c in ",'\"<>"):
+                raise ValueError(f"단계 이름 '{n}' 은(는) 쓸 수 없습니다 (수주·실주는 고정, 20자 이내, 쉼표·따옴표 불가).")
+        out["stage_names"] = names
+    if "stage_prob" in changes or "stage_names" in changes:
+        old_names = list(cur["stage_names"])
+        cur_probs = {n: cur["stage_prob"].get(o, db.STAGE_PROB.get(o, 0)) for o, n in zip(old_names, names)}
+        given = changes.get("stage_prob") or {}
+        probs = {n: _number(given.get(n, cur_probs[n]), f"{n} 확률", 0, 99) for n in names}
+        seq = [probs[n] for n in names]
         if seq != sorted(seq):
-            raise ValueError("단계별 확률은 리드 → 협상 순서로 같거나 커져야 합니다.")
+            raise ValueError(f"단계별 확률은 {names[0]} → {names[-1]} 순서로 같거나 커져야 합니다.")
         out["stage_prob"] = probs
     for key, (_attr, table, column, label) in CODE_LISTS.items():
         if key in changes:
@@ -209,6 +229,16 @@ def save(changes: dict, actor: str | None = None) -> dict:
         return {}
     now = db._now()
     with db.get_conn() as conn:
+        if "stage_names" in diff:                       # 데이터에 쓰인 단계 이름도 같은 트랜잭션에서 바꾼다
+            renames = [(o, n) for o, n in zip(diff["stage_names"][0], diff["stage_names"][1]) if o != n]
+            for i, (o, _n) in enumerate(renames):        # 이름을 서로 바꾸는 경우를 위해 임시 이름을 거친다
+                for table, col in (("deals", "stage"), ("deal_stage_history", "from_stage"),
+                                   ("deal_stage_history", "to_stage")):
+                    conn.execute(f"UPDATE {table} SET {col} = ? WHERE {col} = ?", (f"__stage_{i}", o))
+            for i, (_o, n) in enumerate(renames):
+                for table, col in (("deals", "stage"), ("deal_stage_history", "from_stage"),
+                                   ("deal_stage_history", "to_stage")):
+                    conn.execute(f"UPDATE {table} SET {col} = ? WHERE {col} = ?", (n, f"__stage_{i}"))
         for key, (_old, new) in diff.items():
             text = json.dumps(new, ensure_ascii=False)
             if conn.execute("UPDATE company_settings SET value=?, updated_by=?, updated_at=? WHERE key=?",

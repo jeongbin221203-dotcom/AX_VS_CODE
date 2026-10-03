@@ -92,6 +92,28 @@
   </form>
 </section>
 
+<section class="card" id="stages">
+  <h3>영업 단계</h3>
+  <p class="muted small">진행 단계 {{ open_stages|length }}개의 이름과 확률을 회사에 맞게 바꿉니다. 이름을 바꾸면 이미 있는 영업기회·단계 이력도 함께 바뀝니다(감사로그 기록).
+    단계마다 필요한 조건은 순서를 따라갑니다(3번째 단계부터 금액·마감일·핵심 문제 등). '수주'·'실주'는 매출·채권과 연결돼 있어 바꿀 수 없습니다.</p>
+  <form method="post" action="{{ url_for('admin.settings_save') }}" class="form">
+    {{ csrf() }}<input type="hidden" name="section" value="stages">
+    <div class="stage-edit">
+      {% for s in open_stages %}
+      <div class="stage-row">
+        <span class="muted small">{{ loop.index }}</span>
+        <label>이름 <input name="stage_name_{{ loop.index0 }}" value="{{ s }}" maxlength="20" required></label>
+        <label>확률 (%) <input type="number" min="0" max="99" name="stage_prob_{{ loop.index0 }}" value="{{ v.stage_prob.get(s, STAGE_PROB.get(s, 0)) }}"></label>
+        <span class="muted small">영업기회 {{ stage_usage.get(s, 0) }}건</span>
+      </div>
+      {% endfor %}
+      <div class="stage-row fixed"><span class="muted small">고정</span><span>수주 100% · 실주 0%</span>
+        <span class="muted small">영업기회 {{ stage_usage.get('수주', 0) }} · {{ stage_usage.get('실주', 0) }}건</span></div>
+    </div>
+    <button class="btn btn-primary">💾 저장</button>
+  </form>
+</section>
+
 <section class="card" id="codes">
   <h3>코드 목록</h3>
   <form method="post" action="{{ url_for('admin.settings_save') }}" class="form">

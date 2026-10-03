@@ -387,9 +387,9 @@ def seed(industry: str = "제조", customers: int = 20, months: int = 12, rnd_se
 
         # 영업기회 · 견적 · 수주 · 분할 납품 (수주·실주는 지난 날짜로 마감)
         title, codes = rng.choice(P["deals"])
-        stage = rng.choices(["제안", "견적", "협상", "수주", "실주"], [3, 3, 2, 3, 1])[0]
+        stage = rng.choices([*db.OPEN_STAGES[2:5], db.STAGE_WON, db.STAGE_LOST], [3, 3, 2, 3, 1])[0]
         close = (today + timedelta(days=rng.randint(3, 90))).isoformat()
-        did = db.upsert_deal({"customer_id": cid, "title": f"{title} ({base})", "stage": "협상" if stage in ("수주", "실주") else stage,
+        did = db.upsert_deal({"customer_id": cid, "title": f"{title} ({base})", "stage": db.OPEN_STAGES[4] if stage in (db.STAGE_WON, db.STAGE_LOST) else stage,
                               "owner_id": rep["id"], "list_amount": 0, "amount": 0, "expected_close": close,
                               "source": rng.choice(db.LEAD_SOURCES), "competitor": rng.choice(["", *P["competitors"]]),
                               **{f: 1 for f in db.MEDDIC_FIELDS}}, force=True, force_reason=f"{P['label']} 샘플")

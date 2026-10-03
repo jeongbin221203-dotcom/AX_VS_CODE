@@ -42,7 +42,7 @@ def products():
         plist=Table(plist, money=["정가"], link=("catalog.products", "id", "pid"), page_size=PAGE_SIZE),
         prices=Table(prices, money=["정가", "특가"], drop=["id"], page_size=PAGE_SIZE),
         edit=edit or {"unit": "EA", "tax_type": "과세", "active": 1},
-        can_edit_product=ent.has_role(g.user, "ADMIN"),
+        can_edit_product=ent.has_role(g.user, "SUPPORT"),
         can_set_price=ent.has_role(g.user, "MANAGER"),
         customers=db.customer_options(include_closed=False), cust_id=cust_id,
         product_opts=[(p["id"], f"{p['code']} · {p['name']} (정가 {int(p['list_price']):,}원)")
@@ -52,7 +52,7 @@ def products():
 
 
 @bp.route("/products/save", methods=["POST"])
-@role_required("ADMIN")
+@role_required("SUPPORT")
 def product_save():
     try:
         pid = catalog.upsert_product({
@@ -136,7 +136,7 @@ def quotes():
         m_count=len(df), m_open=int(active[active["상태"] == "발송"]["합계"].sum()) if not active.empty else 0,
         m_won=int(df[df["상태"] == "수락"]["합계"].sum()) if not df.empty else 0,
         quote=None if editing and not quote else quote, editing=editing, form=form,
-        customers=db.customer_options(include_closed=False), deals=deal_choices(),
+        customers=db.customer_options(include_closed=False), deals=deal_choices((form or {}).get("customer_id")),
         products=catalog.product_options(), tax_types=db.TAX_TYPES,
         entity_opts=ent_mod.options(), currencies=ent_mod.CURRENCIES,
     )

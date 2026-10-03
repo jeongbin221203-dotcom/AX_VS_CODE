@@ -144,7 +144,7 @@ IMPORT_SPECS: dict[str, dict] = {
         "optional": ["단계", "정가", "할인율", "예상금액", "예상마감일", "예측구분",
                      "유입경로", "경쟁사", "메모"],
         "sample": {"거래처명": "예시상사", "기회명": "ERP 라이선스 갱신", "담당자": "김영업",
-                   "단계": "제안", "정가": 50000000, "할인율": 5, "예상금액": "",
+                   "단계": db.OPEN_STAGES[2], "정가": 50000000, "할인율": 5, "예상금액": "",
                    "예상마감일": "2026-03-31", "예측구분": "Best Case", "유입경로": "기존고객",
                    "경쟁사": "A社", "메모": ""},
         "key": "기회명",
@@ -255,7 +255,7 @@ def _row_deal(row: pd.Series, ctx: dict) -> tuple[str, dict]:
     title = _clean(row.get("기회명"))
     if not title:
         raise ValueError("기회명: 필수 항목입니다")
-    stage = parse_choice(row.get("단계"), "단계", db.STAGES, "리드")
+    stage = parse_choice(row.get("단계"), "단계", db.STAGES, db.OPEN_STAGES[0])
     list_amount = parse_int(row.get("정가"), "정가", 0, 0)
     discount = parse_float(row.get("할인율"), "할인율", 0.0)
     amount = parse_int(row.get("예상금액"), "예상금액", 0, 0)
@@ -369,7 +369,7 @@ def import_rows(entity: str, df: pd.DataFrame, user: dict, dry_run: bool = True,
         try:
             _owner_name, data = parser(row, ctx)
             if entity == "영업기회" and not migrate:
-                gate = db.validate_stage(data, data["stage"], db_path) if data["stage"] != "리드" else []
+                gate = db.validate_stage(data, data["stage"], db_path) if data["stage"] != db.OPEN_STAGES[0] else []
                 if gate:
                     raise ValueError(f"단계: '{data['stage']}' 조건 미충족 → {', '.join(gate)}")
             records.append((excel_row, data))

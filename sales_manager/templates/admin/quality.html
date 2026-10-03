@@ -21,7 +21,7 @@
   {% if r.count %}
     <p class="muted small">{{ r.why }}</p>
     {% if r.fix %}
-    <form method="post" action="{{ url_for('admin.quality_fix') }}" class="inline-form" data-confirm="{{ r.fix_label }} — {{ r.count }}건을 자동으로 고칩니다. 감사로그에 남습니다.">
+    <form method="post" action="{{ url_for('quality.fix') }}" class="inline-form" data-confirm="{{ r.fix_label }} — {{ r.count }}건을 자동으로 고칩니다. 감사로그에 남습니다.">
       {{ csrf() }}<input type="hidden" name="action" value="{{ r.fix }}">
       <button class="btn btn-sm btn-primary">자동 수정: {{ r.fix_label }}</button>
     </form>

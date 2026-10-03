@@ -9,6 +9,7 @@
   api      외부 연동 REST API (/api/v1, Bearer 키)
   admin    조직·사용자 · 감사로그 · 데이터 관리
   prefs    내 화면 설정 (사이드바 메뉴 순서·즐겨찾기)
+  quality  데이터 점검 (영업지원·시스템관리자)
 """
 from flask import Flask
 
@@ -16,8 +17,8 @@ from .helpers import load_context
 
 
 def register_blueprints(app: Flask) -> None:
-    from . import admin, api, auth, catalog, crm, dataio, finance, prefs, reports
+    from . import admin, api, auth, catalog, crm, dataio, finance, prefs, quality, reports
 
-    for module in (auth, reports, crm, catalog, finance, dataio, admin, api, prefs):
+    for module in (auth, reports, crm, catalog, finance, dataio, admin, api, prefs, quality):
         app.register_blueprint(module.bp)
     app.before_request(load_context)

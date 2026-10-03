@@ -54,6 +54,17 @@
   </div>
 {% endmacro %}
 
+{# 거래처·영업기회처럼 많아질 수 있는 선택: BIG_SELECT 개를 넘으면 고른 값만 싣고, 입력하면 서버에서 찾는다 (app.js enhanceSelect) #}
+{% macro pick(name, options, value='', blank=none, kind='customers', open_only=false) %}
+  {% if options|length > BIG_SELECT %}
+    {% set cur = value|string %}
+    <select name="{{ name }}" data-remote="{{ url_for('crm.options', kind=kind, open='1' if open_only else none) }}" data-total="{{ options|length }}">
+      {% if blank is not none %}<option value="">{{ blank }}</option>{% endif %}
+      {% for k, v in options.items() if k|string == cur %}<option value="{{ k }}" selected>{{ v }}</option>{% endfor %}
+    </select>
+  {% else %}{{ select(name, options.items()|list, value, blank) }}{% endif %}
+{% endmacro %}
+
 {% macro select(name, options, value='', blank=none, cls='') %}
   <select name="{{ name }}" class="{{ cls }}">
     {% if blank is not none %}<option value="">{{ blank }}</option>{% endif %}

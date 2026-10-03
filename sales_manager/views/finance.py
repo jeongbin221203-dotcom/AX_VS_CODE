@@ -18,7 +18,7 @@ from core import enterprise as ent
 from core import sales_db as db
 
 from .crm import deal_choices, visible_customer, visible_deal
-from .helpers import (xlsx_response, Table, a_int, a_str, chart, csv_response, f_int, f_owner, f_str,
+from .helpers import (BIG_SELECT, xlsx_response, Table, a_int, a_str, chart, csv_response, f_int, f_owner, f_str,
                       render_page, won)
 
 bp = Blueprint("finance", __name__)
@@ -37,16 +37,26 @@ def _sale_filters() -> tuple[str, str, str]:
     return ym_from, ym_to, a_str("status")
 
 
+def _advances(tab: str) -> dict:
+    if tab != "ar":
+        return {"advances": None, "adv_options": []}
+    bal = adv.balances()
+    return {"advances": Table(bal, money=["선수금잔액"], drop=["id"]),
+            "adv_options": [(int(r.id), f"{r.거래처} · 선수금 {int(r.선수금잔액):,}원") for r in bal.itertuples()]}
+
+
 def _sales_page(form: dict | None = None, status: int = 200):
     tab = request.args.get("tab", "records")
     ym_from, ym_to, sale_status = _sale_filters()
-    df = db.list_sales(ym_from=ym_from, ym_to=ym_to, owner_id=g.owner_filter, status=sale_status)
-    aging = ent.ar_aging()
-    bucket = a_str("bucket")
-    aging_view = aging if not bucket or aging.empty else aging[aging["연체구간"] == bucket]
-    credit = ent.credit_exposure()
-
     export = request.args.get("export")
+    # 탭마다 필요한 것만 계산한다 (매출 10만 건이면 채권·여신을 매번 다 계산하는 것만으로 수 초)
+    need_sales = tab not in ("ar", "credit", "ledger", "close") or export == "sales"
+    df = db.list_sales(ym_from=ym_from, ym_to=ym_to, owner_id=g.owner_filter, status=sale_status)         if need_sales else pd.DataFrame(columns=["id", "매출일", "공급가액", "합계", "입금액", "수금상태"])
+    bucket = a_str("bucket")
+    aging = ent.ar_aging() if tab == "ar" or export == "ar" else pd.DataFrame()
+    aging_view = aging if not bucket or aging.empty else aging[aging["연체구간"] == bucket]
+    credit = ent.credit_exposure() if tab == "credit" or export == "credit" else pd.DataFrame()
+
     if export == "sales":
         return csv_response(df.drop(columns=["customer_id", "owner_id"], errors="ignore"), "매출목록.csv")
     if export == "ar":
@@ -84,14 +94,16 @@ def _sales_page(form: dict | None = None, status: int = 200):
     edit_id = a_int("sid")
     edit_row, documents, customer_biz_no = None, [], None
     if edit_id:
-        visible = db.list_sales()
+        raw_sale = db.get_sale(edit_id)
+        # 볼 수 있는 매출인지는 그 거래처 매출 목록(권한 범위 적용)에서 확인 — 전체 매출을 읽지 않는다
+        visible = db.list_sales(customer_id=int(raw_sale["customer_id"])) if raw_sale else pd.DataFrame()
         if not visible.empty and edit_id in set(visible["id"]):
             edit_row = visible[visible["id"] == edit_id].iloc[0].to_dict()
             edit_row["raw"] = db.get_sale(edit_id)
             documents = docs.list_documents(edit_id)
             customer_biz_no = (db.get_customer(int(edit_row["raw"]["customer_id"])) or {}).get("biz_no")
 
-    summary = ent.ar_summary()
+    summary = ent.ar_summary(aging=aging) if tab == "ar" else pd.DataFrame(columns=["연체구간", "미수금", "건수"])
     ar_total = int(summary["미수금"].sum()) if not summary.empty else 0
     overdue = summary[summary["연체구간"] != "정상"]
     ar_overdue = int(overdue["미수금"].sum()) if not summary.empty else 0
@@ -108,13 +120,13 @@ def _sales_page(form: dict | None = None, status: int = 200):
         m_total=int(active["공급가액"].sum()) if not active.empty else 0,
         m_unpaid=int((active["합계"] - active["입금액"]).clip(lower=0).sum()) if not active.empty else 0,
         m_count=len(active),
-        m_missing_docs=docs.missing_documents(ym_from, ym_to),
+        m_missing_docs=docs.missing_documents(ym_from, ym_to) if need_sales else 0,
         monthly_chart=chart(monthly, "월", "공급가액"),
         tbl=Table(df, money=["단가", "공급가액", "부가세", "합계", "입금액"], drop=["customer_id", "owner_id"],
                   link=("finance.sales", "id", "sid"), page_size=PAGE_SIZE,
                   highlight={"수금상태": {db.SALE_CANCELLED: "muted"}}),
         edit_row=edit_row, documents=documents, doc_types=docs.DOC_TYPES, customer_biz_no=customer_biz_no,
-        f=base, customers=db.customer_options(include_closed=False), deals=deal_choices(),
+        f=base, customers=db.customer_options(include_closed=False), deals=deal_choices(base.get("customer_id")),
         products=catalog.product_options(), tax_types=db.TAX_TYPES,
         entity_opts=ent_mod.options(), currencies=ent_mod.CURRENCIES,
         etax_rows=etax.list_for_sale(edit_id) if edit_id else [], etax_on=etax.enabled(),
@@ -122,8 +134,7 @@ def _sales_page(form: dict | None = None, status: int = 200):
         linked=Table(rtn.linked(edit_id), money=["단가", "공급가액", "부가세", "합계"], drop=["id"]) if edit_row else None,
         returnable=rtn.returnable_qty(edit_row["raw"]) if edit_row else 0,
         advance_balance=adv.balance(int(edit_row["raw"]["customer_id"])) if edit_row else 0,
-        advances=Table(adv.balances(), money=["선수금잔액"], drop=["id"]),
-        adv_options=[(int(r.id), f"{r.거래처} · 선수금 {int(r.선수금잔액):,}원") for r in adv.balances().itertuples()],
+        **_advances(tab),
         # 채권
         ar_total=ar_total, ar_overdue=ar_overdue,
         ar_overdue_cnt=int(overdue["건수"].sum()) if not summary.empty else 0,
@@ -135,7 +146,8 @@ def _sales_page(form: dict | None = None, status: int = 200):
         pay_options=[(int(r.id), int(r.미수금),
                       f"{r.거래처} · {r.품목} · 미수 {int(r.미수금):,}원 "
                       f"(기일 {r.결제기일}, {int(r.경과일)}일 경과)")
-                     for r in aging.itertuples()] if not aging.empty else [],
+                     for r in aging.head(BIG_SELECT).itertuples()] if not aging.empty else [],   # 오래된 순 상위만
+        pay_more=max(len(aging) - BIG_SELECT, 0),
         # 여신
         credit_empty=credit.empty,
         credit_limit=int(credit["여신한도"].sum()) if not credit.empty else 0,

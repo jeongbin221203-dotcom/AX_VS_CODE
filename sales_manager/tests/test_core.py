@@ -282,7 +282,7 @@ def test_backup_and_reset_keep_audit(app, isolated_db, monkeypatch, tmp_path):
     assert db._scalar("SELECT COUNT(*) FROM audit_log") > before_audit  # 감사로그는 보존
     client = app.test_client()
     res = post(client, "/setup", {"action": "seed"})
-    assert res.status_code == 302 and len(ent.list_users()) == 8
+    assert res.status_code == 302 and len(ent.list_users()) == 9          # 영업지원 포함
 
 
 def test_migration_roundtrip_and_restore(app, isolated_db, monkeypatch, tmp_path):

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import metric, table, tabs, csrf, select, owner_input, download %}
+{% from "_macros.html" import metric, table, tabs, csrf, select, owner_input, download, pick %}
 {% macro file_list(files) %}
   {% for a in files %}
     <div class="file-row {{ 'voided' if a.voided_at }}">
@@ -19,7 +19,7 @@
 
 {% macro deal_form(f, customers, edit, is_admin) %}
   <div class="form-grid g2">
-    <label>거래처 * {{ select('customer_id', customers.items()|list, f.customer_id or '', blank='선택하세요') }}</label>
+    <label>거래처 * {{ pick('customer_id', customers, f.customer_id or '', blank='선택하세요', open_only=false) }}</label>
     <label>기회명 * <input name="title" value="{{ f.title or '' }}" placeholder="예) ERP 라이선스 갱신" required></label>
   </div>
   <div class="form-grid g3" data-deal-calc data-disc-m="{{ DISC_M }}" data-disc-e="{{ DISC_E }}">
@@ -85,7 +85,7 @@
   <section class="board-col {{ 'closed' if col.closed }}" data-stage="{{ col.stage }}" aria-label="{{ col.stage }} 단계">
     <header>
       <b>{{ col.stage }}</b> <span class="muted small">{{ col.prob }}%</span>
-      <span class="board-sum small"><span data-count>{{ col.count }}</span>건 · <span data-sum>{{ col.sum|krw }}</span></span>
+      <span class="board-sum small" data-total-count="{{ col.count }}" data-total-sum="{{ col.sum }}"><span data-count>{{ '{:,}'.format(col.count) }}</span>건 · <span data-sum>{{ col.sum|krw }}</span></span>
       {% if col.closed %}<span class="muted small board-note">최근 30일</span>{% endif %}
     </header>
     <div class="board-cards" data-drop>
@@ -108,6 +108,7 @@
       </article>
       {% endfor %}
     </div>
+    {% if col.more > 0 %}<a class="board-more small" href="{{ url_for('crm.deals', stage=col.stage, q=q or none, fcat=fcat or none, open='0' if col.closed else '1') }}">+{{ '{:,}'.format(col.more) }}건 더 — 목록에서 보기</a>{% endif %}
   </section>
   {% endfor %}
 </div>
@@ -132,7 +133,7 @@
     {% else %}
       <form method="get" class="toolbar" action="{{ page_path() }}">
         <input type="hidden" name="tab" value="edit">
-        <label class="grow">수정할 기회 {{ select('id', options.items()|list, edit_id or '', blank='선택하세요') }}</label>
+        <label class="grow">수정할 기회 {{ pick('id', options, edit_id or '', blank='선택하세요', kind='deals') }}</label>
         <button class="btn">불러오기</button>
       </form>
       {% if edit_id and row %}

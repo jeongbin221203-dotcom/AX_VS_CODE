@@ -72,7 +72,8 @@ def build(out: str) -> float:
     started = time.time()
     tmp = out + ".building"
     _remove_db(tmp)
-    env = {**os.environ, "SALES_DB_PATH": tmp, "SALES_DEMO": "1", "PYTHONIOENCODING": "utf-8"}
+    env = {**os.environ, "SALES_DB_PATH": tmp, "SALES_DEMO": "1", "PYTHONIOENCODING": "utf-8",
+           "PYTHONHASHSEED": "0"}                       # 집합 순서까지 같게 → 매번 같은 샘플
     manage = os.path.join(HERE, "manage.py")
     for step in (["db", "upgrade"], ["demo-init"]):
         subprocess.run([sys.executable, manage, *step], env=env, cwd=HERE, check=True)

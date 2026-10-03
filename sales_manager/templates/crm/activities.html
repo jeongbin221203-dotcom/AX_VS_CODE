@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import metric, table, chart, tabs, csrf, select, owner_input, download %}
+{% from "_macros.html" import metric, table, chart, tabs, csrf, select, owner_input, download, pick %}
 {% macro file_list(files) %}
   {% for a in files %}
     <div class="file-row {{ 'voided' if a.voided_at }}">
@@ -22,7 +22,7 @@
     <select name="days">{% for d in periods %}<option value="{{ d }}" {{ 'selected' if d == days }}>최근 {{ d }}일</option>{% endfor %}</select>
   </label>
   <label>활동 유형 {{ select('type', ACT_TYPES, act_type, blank='전체') }}</label>
-  <label class="grow">거래처 {{ select('customer_id', customers.items()|list, cid_filter or '', blank='(전체)') }}</label>
+  <label class="grow">거래처 {{ pick('customer_id', customers, cid_filter or '', blank='(전체)', open_only=false) }}</label>
   <button class="btn">조회</button>
 </form>
 
@@ -38,7 +38,7 @@
 <div class="card-head"><span></span>{{ download(export_url('activities')) }}</div>
 {{ table(tbl, 380) }}
 
-<section class="card">
+<section class="card" data-edit-anchor id="activity-form">
   {% set tab = request.args.get('tab', 'new') %}
   {{ tabs([('new', '➕ 활동 등록'), ('files', '📎 첨부 파일'), ('delete', '🗑️ 삭제')], tab) }}
   {% if tab == 'files' %}
@@ -65,9 +65,9 @@
     <form method="post" action="{{ url_for('crm.activity_add') }}" class="form" data-deal-filter enctype="multipart/form-data">
       {{ csrf() }}
       <div class="form-grid g3">
-        <label>거래처 * {{ select('customer_id', customers.items()|list, f.customer_id or '', blank='선택하세요') }}</label>
+        <label>거래처 * {{ pick('customer_id', customers, f.customer_id or '', blank='선택하세요', open_only=false) }}</label>
         <label>관련 영업기회 (선택)
-          <select name="deal_id">
+          <select name="deal_id"{% if deals.remote %} data-deals-url="{{ url_for('crm.options', kind='deals') }}"{% endif %}>
             <option value="">(없음)</option>
             {% for d in deals %}<option value="{{ d.id }}" data-customer="{{ d.customer_id }}" {{ 'selected' if d.id|string == (f.deal_id or '')|string }}>{{ d.label }}</option>{% endfor %}
           </select>

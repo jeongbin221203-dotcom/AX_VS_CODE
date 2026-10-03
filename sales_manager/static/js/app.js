@@ -100,7 +100,8 @@
   const COMBO_MIN = 10;
   function enhanceSelect(sel) {
     if (sel.dataset.combo || sel.multiple || sel.hasAttribute("data-no-search") || sel.closest(".sidebar, .combo")) return;
-    if (sel.options.length < COMBO_MIN) return;
+    const remote = sel.dataset.remote || "";               // 선택지가 아주 많으면 서버에서 찾는다 (_macros.pick)
+    if (!remote && sel.options.length < COMBO_MIN) return;
     sel.dataset.combo = "1";
     const box = document.createElement("span");
     box.className = "combo";
@@ -108,7 +109,8 @@
     input.type = "text";
     input.className = "combo-input";
     input.autocomplete = "off";
-    input.placeholder = "입력해서 찾기 (" + (sel.options.length - (sel.options[0] && sel.options[0].value === "" ? 1 : 0)) + "개)";
+    const total = remote ? Number(sel.dataset.total || 0) : sel.options.length - (sel.options[0] && sel.options[0].value === "" ? 1 : 0);
+    input.placeholder = "입력해서 찾기 (" + total.toLocaleString("ko-KR") + "개)";
     input.setAttribute("role", "combobox");
     input.setAttribute("aria-autocomplete", "list");
     input.setAttribute("aria-expanded", "false");
@@ -141,15 +143,33 @@
       items.forEach(function (li, k) { li.classList.toggle("active", k === active); });
       items[active].scrollIntoView({ block: "nearest" });
     }
-    function render(q) {
+    let timer = null, seq = 0;
+    function render(q, found) {
       const words = (q || "").trim().toLowerCase().split(/\s+/).filter(Boolean);
+      if (remote && words.length && !found) {                // 서버 검색 (입력이 멈추면 한 번)
+        clearTimeout(timer);
+        const my = ++seq;
+        timer = setTimeout(function () {
+          fetch(remote + (remote.indexOf("?") < 0 ? "?" : "&") + "q=" + encodeURIComponent(q.trim()), { credentials: "same-origin" })
+            .then(function (r) { return r.ok ? r.json() : []; })
+            .then(function (rows) {
+              if (my !== seq) return;
+              render(q, rows.map(function (r) { return { value: String(r[0]), text: r[1], selected: String(r[0]) === sel.value }; }));
+            }).catch(function () {});
+        }, 200);
+        return;
+      }
       list.textContent = "";
       shown = [];
-      Array.prototype.forEach.call(sel.options, function (o) {
-        if (o.hidden || (o.value === "" && words.length)) return;
-        const text = o.text.toLowerCase();
-        if (words.every(function (w) { return text.indexOf(w) >= 0; }) && shown.length < 300) shown.push(o);
-      });
+      if (found) {
+        shown = found;
+      } else {
+        Array.prototype.forEach.call(sel.options, function (o) {
+          if (o.hidden || (o.value === "" && words.length)) return;
+          const text = o.text.toLowerCase();
+          if (words.every(function (w) { return text.indexOf(w) >= 0; }) && shown.length < 300) shown.push(o);
+        });
+      }
       shown.forEach(function (o, i) {
         const li = document.createElement("li");
         li.textContent = o.value === "" ? (o.text || "(선택 안 함)") : o.text;
@@ -158,10 +178,10 @@
         if (o.selected && o.value !== "") li.classList.add("current");
         list.appendChild(li);
       });
-      if (!shown.length) {
+      if (!shown.length || (remote && !words.length)) {
         const li = document.createElement("li");
         li.className = "empty";
-        li.textContent = "찾는 항목이 없습니다";
+        li.textContent = shown.length ? "이름이나 사업자번호를 입력하면 찾아 줍니다" : "찾는 항목이 없습니다";
         list.appendChild(li);
       }
       list.hidden = false;
@@ -170,6 +190,9 @@
       if (words.length && shown.length) highlight(0);
     }
     function choose(o) {
+      if (remote && o.value !== "" && !Array.prototype.some.call(sel.options, function (x) { return x.value === o.value; })) {
+        sel.appendChild(new Option(o.text, o.value));       // 서버에서 찾은 값은 선택지로 넣고 고른다
+      }
       if (sel.value !== o.value) {
         sel.value = o.value;
         sel.dispatchEvent(new Event("change", { bubbles: true }));
@@ -203,6 +226,24 @@
     const cust = form.querySelector("[name=customer_id]");
     const deal = form.querySelector("[name=deal_id]");
     if (!cust || !deal) return;
+    if (deal.dataset.dealsUrl) {
+      cust.addEventListener("change", function () {
+        const keep = deal.value;
+        Array.prototype.slice.call(deal.options).forEach(function (o) { if (o.value) o.remove(); });
+        if (!cust.value) return;
+        fetch(deal.dataset.dealsUrl + "?customer_id=" + encodeURIComponent(cust.value), { credentials: "same-origin" })
+          .then(function (r) { return r.ok ? r.json() : []; })
+          .then(function (rows) {
+            rows.forEach(function (r) {
+              const o = new Option(r[1], String(r[0]));
+              o.dataset.customer = String(r[2]);
+              deal.appendChild(o);
+            });
+            if (keep && Array.prototype.some.call(deal.options, function (o) { return o.value === keep; })) deal.value = keep;
+          }).catch(function () {});
+      });
+      return;
+    }
     function apply() {
       deal.querySelectorAll("option[data-customer]").forEach(function (o) {
         const show = o.dataset.customer === cust.value;
@@ -745,12 +786,13 @@
 (function () {
   "use strict";
   function won(n) { return "₩ " + Number(n || 0).toLocaleString("ko-KR"); }
-  function recount(col) {
-    const cards = col.querySelectorAll(".deal-card");
-    let sum = 0;
-    cards.forEach(function (c) { sum += Number(c.dataset.amount || 0); });
-    col.querySelector("[data-count]").textContent = cards.length;
-    col.querySelector("[data-sum]").textContent = won(sum);
+  function recount(col, dCount, dSum) {            // 열 머리 건수·합계는 전체 기준(보드에는 일부 카드만) → 더하고 뺀다
+    const box = col.querySelector("[data-total-count]");
+    const n = Number(box.dataset.totalCount || 0) + dCount, s = Number(box.dataset.totalSum || 0) + dSum;
+    box.dataset.totalCount = n;
+    box.dataset.totalSum = s;
+    col.querySelector("[data-count]").textContent = n.toLocaleString("ko-KR");
+    col.querySelector("[data-sum]").textContent = won(s);
   }
   function message(board, text, ok) {
     let box = board.parentNode.querySelector("[data-board-msg]");
@@ -812,8 +854,9 @@
           toCol.querySelector("[data-drop]").insertBefore(card, toCol.querySelector(".deal-card"));
           card.dataset.stage = stage;
           if (picker) picker.value = stage;
-          recount(fromCol);
-          recount(toCol);
+          const amt = Number(card.dataset.amount || 0);
+          recount(fromCol, -1, -amt);
+          recount(toCol, 1, amt);
           message(board, "‘" + stage + "’ 단계로 옮겼습니다.", true);
         });
     }).catch(function () {
@@ -867,3 +910,37 @@ document.addEventListener("submit", function (e) {
     e.stopImmediatePropagation();
   }
 }, true);
+
+/* 시연 안내: 배너의 '사용 안내'를 누르거나 #demo-guide 로 오면 접힌 안내를 펼친다 */
+(function () {
+  function openGuide() {
+    const d = document.getElementById("demo-guide");
+    if (d) { d.open = true; d.scrollIntoView({ block: "start" }); }
+  }
+  if (location.hash === "#demo-guide") openGuide();
+  document.addEventListener("click", function (e) {
+    if (e.target.closest && e.target.closest("[data-open-guide]")) { e.preventDefault(); openGuide(); }
+  });
+})();
+
+/* 휴대폰 ☰ 메뉴: 사이드바 펼치기/접기 (메뉴를 누르면 접힘) */
+(function () {
+  function close(btn) {
+    document.body.classList.remove("side-open");
+    if (btn) { btn.setAttribute("aria-expanded", "false"); btn.textContent = "☰ 메뉴"; }
+  }
+  document.addEventListener("click", function (e) {
+    const btn = e.target.closest && e.target.closest("[data-side-toggle]");
+    if (btn) {
+      const open = document.body.classList.toggle("side-open");
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+      btn.textContent = open ? "✕ 닫기" : "☰ 메뉴";
+      if (open) window.scrollTo(0, 0);
+      return;
+    }
+    if (document.body.classList.contains("side-open") && e.target.closest && e.target.closest(".sidebar .menu a[href]")
+        && !e.target.closest(".menu.editing")) {
+      close(document.querySelector("[data-side-toggle]"));
+    }
+  });
+})();

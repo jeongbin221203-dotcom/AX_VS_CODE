@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% from "_macros.html" import table, csrf %}
+{% block content %}
+<p class="muted">결재 요청·결과, 연체·거래정지, 매일 아침 요약, 배치 실패 같은 알림을 사내 메신저로도 보냅니다.
+  화면 알림함(🔔)에는 항상 쌓이고, 메일과 메신저는 워커가 뒤에서 보냅니다. 사용자는 🔔 알림 화면에서 메일·메신저 받기를 끌 수 있습니다.</p>
+
+<div class="metrics m4">
+  <div class="metric"><div class="metric-label">메신저 채널</div><div class="metric-value">{{ channels|selectattr('active')|list|length }} / {{ channels|length }}개 사용</div></div>
+  <div class="metric"><div class="metric-label">메일 (SMTP)</div><div class="metric-value">{{ '설정됨' if smtp else '미설정' }}</div>
+    <div class="metric-delta muted small">SALES_SMTP_HOST 등 환경변수</div></div>
+  <div class="metric"><div class="metric-label">기본 웹훅</div><div class="metric-value">{{ '설정됨' if generic_webhook else '없음' }}</div>
+    <div class="metric-delta muted small">SALES_NOTIFY_WEBHOOK_URL</div></div>
+  <div class="metric"><div class="metric-label">지원 메신저</div><div class="metric-value">{{ kinds|length }}종</div>
+    <div class="metric-delta muted small">잔디·네이버웍스·카카오워크·Slack·Teams·웹훅</div></div>
+</div>
+
+<section class="card">
+  <h3>등록된 채널</h3>
+  {% if not channels %}<div class="alert alert-info">등록된 채널이 없습니다. 아래에서 메신저를 골라 등록하세요.</div>{% endif %}
+  {% for c in channels %}
+  <div class="channel-row {{ 'off' if not c.active }}">
+    <div class="grow">
+      <strong>{{ c.name }}</strong> <span class="badge">{{ c.kind_label }}</span>
+      {% if not c.active %}<span class="badge">사용 안 함</span>{% endif %}
+      <div class="muted small">받는 사람: {{ '그룹방' if 'room' in c.config.targets }}{{ ' · ' if 'room' in c.config.targets and 'user' in c.config.targets }}{{ '개인 메시지(사용자 이메일)' if 'user' in c.config.targets }}
+        · 알림: {{ c.kinds|join(', ') if c.kinds else '전체' }}</div>
+    </div>
+    <a class="btn btn-sm" href="{{ url_for('admin.channels', cid=c.id) }}">수정</a>
+    <form method="post" action="{{ url_for('admin.channel_test', cid=c.id) }}" class="inline-form">{{ csrf() }}<button class="btn btn-sm btn-primary">테스트 보내기</button></form>
+    <form method="post" action="{{ url_for('admin.channel_delete', cid=c.id) }}" class="inline-form" data-confirm="'{{ c.name }}' 채널을 지웁니다.">{{ csrf() }}<button class="btn btn-sm btn-danger">삭제</button></form>
+  </div>
+  {% endfor %}
+</section>
+
+<section class="card" id="channel-form" data-edit-anchor>
+  <h3>{{ '✏️ 채널 수정 — ' ~ edit.name if edit else '➕ 채널 등록' }}</h3>
+  {% if not edit %}
+  <nav class="tabs">
+    {% for k, spec in kinds.items() %}<a href="{{ url_for('admin.channels', kind=k) }}#channel-form" class="{{ 'active' if k == kind }}">{{ spec[0] }}</a>{% endfor %}
+  </nav>
+  {% endif %}
+  <form method="post" action="{{ url_for('admin.channel_save') }}" class="form">
+    {{ csrf() }}<input type="hidden" name="kind" value="{{ kind }}">
+    {% if edit %}<input type="hidden" name="id" value="{{ edit.id }}">{% endif %}
+    <div class="form-grid g2">
+      <label>채널 이름 <input name="name" value="{{ edit.name if edit else kinds[kind][0] }}" maxlength="60"></label>
+      {% for key, label, secret, required in kinds[kind][1] %}
+        <label class="{{ 'span2' if key == 'private_key' }}">{{ label }}{{ ' *' if required }}
+          {% if key == 'private_key' %}
+            <textarea name="{{ key }}" rows="4" placeholder="{{ '저장됨 — 바꿀 때만 입력 (' ~ edit_shown[key] ~ ')' if edit and edit_shown.get(key) else '-----BEGIN PRIVATE KEY-----' }}"></textarea>
+          {% elif secret %}
+            <input name="{{ key }}" type="password" autocomplete="off" placeholder="{{ '저장됨 — 바꿀 때만 입력 (' ~ edit_shown[key] ~ ')' if edit and edit_shown.get(key) else '' }}">
+          {% else %}
+            <input name="{{ key }}" value="{{ edit.config.get(key, '') if edit else '' }}">
+          {% endif %}
+        </label>
+      {% endfor %}
+    </div>
+    <fieldset class="channel-opts">
+      <legend>받는 사람</legend>
+      {% for t in kinds[kind][2] %}
+        <label class="check"><input type="checkbox" name="targets" value="{{ t }}" {{ 'checked' if (edit and t in edit.config.targets) or (not edit and loop.first) }}>
+          {{ '그룹방 (알림마다 한 번)' if t == 'room' else '개인 메시지 (알림 받는 사람의 이메일 = 메신저 ID)' }}</label>
+      {% endfor %}
+    </fieldset>
+    <fieldset class="channel-opts">
+      <legend>보낼 알림 (비우면 전체)</legend>
+      {% for e in events %}<label class="check"><input type="checkbox" name="kinds" value="{{ e }}" {{ 'checked' if edit and e in edit.kinds }}> {{ e }}</label>{% endfor %}
+    </fieldset>
+    <label class="check"><input type="checkbox" name="active" value="1" {{ 'checked' if not edit or edit.active }}> 사용</label>
+    <div class="row-actions">
+      <button class="btn btn-primary">💾 저장</button>
+      {% if edit %}<a class="btn" href="{{ url_for('admin.channels') }}">새 채널 등록으로</a>{% endif %}
+    </div>
+  </form>
+  <details class="muted small channel-help">
+    <summary>메신저별 준비 방법</summary>
+    <ul>
+      <li><b>잔디</b>: 토픽 → 연동하기 → Webhook 수신(Incoming Webhook) 추가 → 만들어진 URL 을 붙여 넣습니다.</li>
+      <li><b>네이버웍스</b>: Developer Console 에서 앱(Client ID·Secret)과 Service Account·Private Key 를 만들고, 봇을 등록해 Bot ID 를 받습니다(권한 bot).
+        채널방에 보내려면 봇을 방에 초대한 뒤 채널 ID 를, 개인 메시지는 사용자 이메일(웍스 ID)을 씁니다.</li>
+      <li><b>카카오워크</b>: 관리자 → 봇 → 봇 만들기 → App Key. 알림 받는 사람의 카카오워크 이메일로 보냅니다.</li>
+      <li><b>Slack</b>: Incoming Webhooks 앱 URL. <b>Teams</b>: 채널 → 워크플로 → '웹후크 요청이 수신되면 채널에 게시' URL.</li>
+      <li>토큰·키는 암호화해서 저장하고 화면에는 끝 4자리만 보입니다. 실제 각 서비스 서버로의 발송은 공개 API 형식대로 만들었고 가짜 서버로 검증했습니다.</li>
+    </ul>
+  </details>
+</section>
+
+<section class="card">
+  <h3>최근 발송 기록</h3>
+  {{ table(log, 320, '아직 보낸 메시지가 없습니다.') }}
+</section>
+{% endblock %}

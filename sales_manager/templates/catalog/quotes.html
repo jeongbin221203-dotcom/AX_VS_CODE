@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import metric, table, csrf, select, download %}
+{% from "_macros.html" import metric, table, csrf, select, download, pick %}
 
 {% macro line_row(it, products, tax_types) %}
   <tr>
@@ -41,9 +41,9 @@
     {{ csrf() }}
     {% if form.id %}<input type="hidden" name="id" value="{{ form.id }}"><input type="hidden" name="row_version" value="{{ form.row_version or 0 }}">{% endif %}
     <div class="form-grid g3">
-      <label>거래처 * {{ select('customer_id', customers.items()|list, form.customer_id or '', blank='선택하세요') }}</label>
+      <label>거래처 * {{ pick('customer_id', customers, form.customer_id or '', blank='선택하세요', open_only=true) }}</label>
       <label>영업기회 (선택)
-        <select name="deal_id">
+        <select name="deal_id"{% if deals.remote %} data-deals-url="{{ url_for('crm.options', kind='deals') }}"{% endif %}>
           <option value="">(없음)</option>
           {% for d in deals %}<option value="{{ d.id }}" data-customer="{{ d.customer_id }}" {{ 'selected' if d.id|string == (form.deal_id or '')|string }}>{{ d.label }}</option>{% endfor %}
         </select>

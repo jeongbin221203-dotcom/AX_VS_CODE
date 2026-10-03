@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import table, tabs, csrf, select, owner_input, download %}
+{% from "_macros.html" import table, tabs, csrf, select, owner_input, download, pick %}
 
 {% macro customer_form(f, statuses, edit) %}
   <div class="form-grid g3">
@@ -48,7 +48,7 @@
 {{ table(tbl, 460) }}
 
 <section class="card" data-edit-anchor>
-  {{ tabs([('new', '➕ 신규 등록'), ('edit', '✏️ 수정 / 삭제')] + ([('merge', '🔀 중복 · 병합')] if is_admin else []), tab) }}
+  {{ tabs([('new', '➕ 신규 등록'), ('edit', '✏️ 수정 / 삭제')] + ([('merge', '🔀 중복 · 병합')] if can_merge else []), tab) }}
   {% if tab == 'merge' %}
     <p class="muted">사업자번호가 같거나 이름이 거의 같은 거래처입니다('(주)대한산업' = '대한산업 주식회사'). 병합하면 없앨 거래처의
       영업기회·활동·매출·견적·특가가 남길 거래처로 옮겨지고, 없앨 거래처는 '종료(병합됨)'로 남습니다. 되돌릴 수 없으니 사유를 남기세요.</p>
@@ -79,7 +79,7 @@
     {% else %}
       <form method="get" class="toolbar" action="{{ page_path() }}">
         <input type="hidden" name="tab" value="edit">
-        <label class="grow">수정할 거래처 {{ select('id', options.items()|list, edit_id or '', blank='선택하세요') }}</label>
+        <label class="grow">수정할 거래처 {{ pick('id', options, edit_id or '', blank='선택하세요', kind='customers') }}</label>
         <button class="btn">불러오기</button>
       </form>
       {% if edit_id %}

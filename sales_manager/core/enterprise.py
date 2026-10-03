@@ -160,12 +160,13 @@ def visible_owners(user: dict, db_path: str | None = None) -> Optional[list[int]
       REP     : 본인 데이터만
       MANAGER : 본인 조직 + 하위 조직 소속원 전체 (퇴사자 포함 — 남은 실적을 볼 수 있어야 한다)
       EXEC    : 전사 (읽기 중심)
+      SUPPORT : 전사 (영업지원 — 데이터 점검·정리)
       ADMIN   : 전사 + 관리 기능
     """
     if not user:
         return []
     role = user.get("role", "REP")
-    if role in ("EXEC", "ADMIN"):
+    if role in ("EXEC", "SUPPORT", "ADMIN"):
         return None
     if role == "MANAGER":
         org_ids = descendant_org_ids(user.get("org_id"), db_path)
@@ -188,7 +189,10 @@ def apply_context(user: dict, db_path: str | None = None) -> None:
 
 
 def has_role(user: dict, minimum: str) -> bool:
-    return db.ROLES.get((user or {}).get("role", "REP"), 0) >= db.ROLES.get(minimum, 99)
+    role = (user or {}).get("role", "REP")
+    if minimum == "SUPPORT":                       # 데이터 관리 업무: 영업지원 · 시스템관리자
+        return role in db.DATA_ROLES
+    return db.ROLES.get(role, 0) >= db.ROLES.get(minimum, 99)
 
 
 def seed_org_demo(db_path: str | None = None) -> dict:
@@ -211,6 +215,7 @@ def seed_org_demo(db_path: str | None = None) -> dict:
         ("2005", "서팀장", "MANAGER", team2),
         ("2006", "박고객", "REP", team2),
         ("2007", "최성과", "REP", team2),
+        ("2008", "윤지원", "SUPPORT", hq),
         ("9999", "시스템관리자", "ADMIN", hq),
     ]
     created = 0
@@ -896,8 +901,9 @@ def ar_aging(db_path: str | None = None) -> pd.DataFrame:
     return df
 
 
-def ar_summary(db_path: str | None = None) -> pd.DataFrame:
-    df = ar_aging(db_path)
+def ar_summary(db_path: str | None = None, aging: pd.DataFrame | None = None) -> pd.DataFrame:
+    """연체구간별 건수·미수금. 이미 계산한 ar_aging 결과가 있으면 넘겨 다시 읽지 않는다."""
+    df = aging if aging is not None else ar_aging(db_path)
     if df.empty:
         return pd.DataFrame({"연체구간": db.AR_BUCKETS, "건수": 0, "미수금": 0})
     out = df.groupby("연체구간").agg(건수=("id", "count"), 미수금=("미수금", "sum")).reset_index()

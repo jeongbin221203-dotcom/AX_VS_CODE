@@ -51,8 +51,11 @@ TODAY = date.today
 
 # ── 엔터프라이즈 공통 상수 ────────────────────────────────────────────────
 # 역할: 숫자가 클수록 상위 권한. 데이터 접근 범위와 결재 권한을 함께 결정한다.
-ROLES = {"REP": 1, "MANAGER": 2, "EXEC": 3, "ADMIN": 4}
-ROLE_LABEL = {"REP": "영업사원", "MANAGER": "팀장", "EXEC": "임원", "ADMIN": "시스템관리자"}
+ROLES = {"REP": 1, "SUPPORT": 1, "MANAGER": 2, "EXEC": 3, "ADMIN": 4}
+ROLE_LABEL = {"REP": "영업사원", "SUPPORT": "영업지원", "MANAGER": "팀장", "EXEC": "임원", "ADMIN": "시스템관리자"}
+# 영업지원(SUPPORT): 결재 서열은 영업사원과 같고(결재 못 함), 전사 데이터를 보며 데이터 관리 업무(데이터 점검·
+# 거래처 병합·품목 등록)만 시스템관리자와 함께 한다. 사용자·ERP·API·회사 설정은 시스템관리자만 (enterprise.has_role)
+DATA_ROLES = ("SUPPORT", "ADMIN")
 
 # 매출 예측 카테고리 (대기업 Forecast 운영의 표준 구분)
 FORECAST_CATS = ["Commit", "Best Case", "Pipeline", "Omitted"]
@@ -83,6 +86,29 @@ STAGE_REQUIREMENTS = {
              "m_process", "m_champion", "m_metrics", "discount_approved"],
     "실주": ["lost_reason"],
 }
+
+DEFAULT_OPEN_STAGES = list(OPEN_STAGES)
+
+
+def apply_stage_names(names: list[str]) -> None:
+    """진행 단계 이름 바꾸기 (회사 설정 stage_names) — 같은 리스트·딕셔너리 객체를 제자리에서 바꾼다.
+
+    단계 조건(STAGE_REQUIREMENTS)·확률은 '몇 번째 단계인가'를 따라간다. 수주·실주는 매출·채권 로직이 쓰므로 고정.
+    DB 의 deals.stage 등은 company.save 가 같은 트랜잭션에서 바꾼다."""
+    names = list(names)
+    if names == OPEN_STAGES or len(names) != len(OPEN_STAGES):
+        return
+    old = list(OPEN_STAGES)
+    probs = {new: STAGE_PROB.get(o, 0) for o, new in zip(old, names)}
+    reqs = {new: STAGE_REQUIREMENTS[o] for o, new in zip(old, names) if o in STAGE_REQUIREMENTS}
+    OPEN_STAGES[:] = names
+    STAGES[:] = [*names, STAGE_WON, STAGE_LOST]
+    STAGE_PROB.clear()
+    STAGE_PROB.update({**probs, STAGE_WON: 100, STAGE_LOST: 0})
+    fixed = {k: v for k, v in STAGE_REQUIREMENTS.items() if k in (STAGE_WON, STAGE_LOST)}
+    STAGE_REQUIREMENTS.clear()
+    STAGE_REQUIREMENTS.update({**reqs, **fixed})
+
 
 # 할인율 구간별 필요 결재 권한 (Deal Desk 정책)
 DISCOUNT_POLICY = [(0.0, None), (10.0, "MANAGER"), (20.0, "EXEC"), (100.0, "ADMIN")]
@@ -385,22 +411,27 @@ def list_customers(keyword: str = "", owner_id: int | None = None, grade: str = 
         SELECT c.id, c.name AS 거래처명, c.grade AS 등급, c.industry AS 업종,
                c.owner AS 담당자, c.manager AS 고객담당자, c.phone AS 연락처,
                c.email AS 이메일, c.status AS 상태,
-               COALESCE(d.open_cnt, 0)  AS 진행딜,
-               COALESCE(s.total, 0)     AS 누적매출,
-               a.last_date              AS 최근접촉일,
+               {{open_cnt}} AS 진행딜,
+               {{sales_total}} AS 누적매출,
+               {{last_act}} AS 최근접촉일,
                c.credit_limit AS 여신한도, c.payment_terms AS 결제조건일,
                c.erp_code AS "ERP코드",
                c.address AS 주소, c.memo AS 메모, c.biz_no AS 사업자번호, c.owner_id
-          FROM customers c
+          FROM customers c {{joins}}
+         WHERE 1=1
+    """
+    # 집계 방식: 검색으로 좁혀지면 거래처마다 인덱스로(빠름), 전체 목록이면 표를 한 번씩 읽어 묶는다(흩어진 조회보다 빠름).
+    # 거래처 1만 · 매출 10만 건 측정 — 전체: 묶기 0.5초 vs 거래처마다 1.0초 / 검색: 거래처마다 수 ms
+    if keyword:
+        sql = sql.replace("{open_cnt}", "(SELECT COUNT(*) FROM deals d WHERE d.customer_id = c.id AND d.stage NOT IN ('수주','실주'))")                  .replace("{sales_total}", f"COALESCE((SELECT SUM(s.amount) FROM sales s WHERE s.customer_id = c.id AND s.{ACTIVE_SALE}), 0)")                  .replace("{last_act}", "(SELECT MAX(a.act_date) FROM activities a WHERE a.customer_id = c.id)")                  .replace("{joins}", "")
+    else:
+        sql = sql.replace("{open_cnt}", "COALESCE(d.open_cnt, 0)").replace("{sales_total}", "COALESCE(s.total, 0)")                  .replace("{last_act}", "a.last_date").replace("{joins}", f"""
           LEFT JOIN (SELECT customer_id, COUNT(*) open_cnt FROM deals
-                      WHERE stage NOT IN ('수주','실주') GROUP BY customer_id) d
-                 ON d.customer_id = c.id
+                      WHERE stage NOT IN ('수주','실주') GROUP BY customer_id) d ON d.customer_id = c.id
           LEFT JOIN (SELECT customer_id, SUM(amount) total FROM sales
                       WHERE {ACTIVE_SALE} GROUP BY customer_id) s ON s.customer_id = c.id
           LEFT JOIN (SELECT customer_id, MAX(act_date) last_date FROM activities
-                      GROUP BY customer_id) a ON a.customer_id = c.id
-         WHERE 1=1
-    """
+                      GROUP BY customer_id) a ON a.customer_id = c.id""")
     params: list[Any] = []
     if keyword:
         sql += " AND (c.name LIKE ? OR c.manager LIKE ? OR c.memo LIKE ?)"
@@ -655,9 +686,10 @@ def delete_customer(customer_id: int, db_path: str | None = None) -> None:
 def customer_options(db_path: str | None = None, include_closed: bool = True) -> dict[int, str]:
     scope_sql, scope_params = _scope_clause()
     closed = "" if include_closed else " AND status <> '종료'"
-    df = _df(f"SELECT id, name FROM customers WHERE 1=1{closed}{scope_sql} ORDER BY name",
-             scope_params, db_path)
-    return {int(r.id): r.name for r in df.itertuples()}
+    with get_conn(db_path) as conn:                 # 거래처가 많아도 가볍게 (DataFrame 을 거치지 않음)
+        rows = conn.execute(f"SELECT id, name FROM customers WHERE 1=1{closed}{scope_sql} ORDER BY name",
+                            scope_params).fetchall()
+    return {int(r[0]): r[1] for r in rows}
 
 
 # ----------------------------------------------------------------------------
@@ -779,7 +811,7 @@ def upsert_deal(data: dict, db_path: str | None = None, force: bool = False,
         raise ValueError("거래처를 선택하세요.")
     if not str(data.get("title", "")).strip():
         raise ValueError("기회명은 필수입니다.")
-    stage = data.get("stage") or "리드"
+    stage = data.get("stage") or OPEN_STAGES[0]
     if stage not in STAGES:
         raise ValueError(f"단계 값이 올바르지 않습니다: {stage}")
     cust = get_customer(int(data["customer_id"]), db_path)
@@ -941,8 +973,9 @@ def deal_options(customer_id: int | None = None, db_path: str | None = None) -> 
     sql += scope_sql
     params += scope_params
     sql += " ORDER BY d.id DESC"
-    df = _df(sql, params, db_path)
-    return {int(r.id): r.label for r in df.itertuples()}
+    with get_conn(db_path) as conn:
+        rows = conn.execute(sql, params).fetchall()
+    return {int(r[0]): r[1] for r in rows}
 
 
 # ----------------------------------------------------------------------------

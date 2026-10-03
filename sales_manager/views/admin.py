@@ -349,6 +349,8 @@ def settings():
                        rates=Table(ent_mod.latest_rates()), edit_entity=ent_mod.get(a_int("eid")) or {"active": 1},
                        external=int((deps["위치"] == "외부 인터넷").sum()) if not deps.empty else 0,
                        code_lists=company.CODE_LISTS, usage=usage, open_stages=db.OPEN_STAGES,
+                       stage_usage={r["v"]: int(r["n"]) for r in db._df(
+                           "SELECT stage AS v, COUNT(*) AS n FROM deals GROUP BY stage").to_dict("records")},
                        history=Table(history), pii_preview=pii_preview)
 
 
@@ -372,6 +374,11 @@ def settings_save():
             changes["stage_prob"] = probs
     elif section == "codes":
         changes = {k: form[k] for k in company.CODE_LISTS if k in form}
+    elif section == "stages":
+        n = len(db.OPEN_STAGES)
+        names = [form.get(f"stage_name_{i}", "") for i in range(n)]
+        changes = {"stage_names": names,
+                   "stage_prob": {names[i].strip(): form.get(f"stage_prob_{i}", "") for i in range(n)}}
     else:
         abort(400)
     try:
@@ -536,29 +543,59 @@ def audit_archive_now():
 
 
 # ============================================================================
-# 데이터 점검 (core/quality.py)
+# 알림 채널 — 잔디 · 네이버웍스 · 카카오워크 · Slack · Teams (core/messenger.py)
 # ============================================================================
-@bp.route("/quality")
-def quality():
-    from core import quality as qc
-    results = qc.run_all()
-    for r in results:
-        endpoint, extra, arg = r["link"] or (None, {}, None)
-        r["table"] = Table(r["rows"], money=[c for c in ("예상금액", "합계", "입금액", "입금내역합계") if c in r["rows"].columns],
-                           drop=["id"], link=(endpoint, "id", arg, {**extra, "_anchor": "edit"}) if arg else None)
-        r["go"] = url_for(endpoint, **extra) if endpoint and not arg else None
-    return render_page("admin/quality.html", "quality", results=results, summary=qc.summary(results))
+@bp.route("/channels")
+def channels():
+    from core import messenger
+    rows = messenger.list_channels()
+    for r in rows:
+        r["shown"] = messenger.masked(r["kind"], r["config"])
+    edit = messenger.get_channel(a_int("cid")) if a_int("cid") else None
+    kind = (edit or {}).get("kind") or a_str("kind") or "jandi"
+    if kind not in messenger.KINDS:
+        kind = "jandi"
+    return render_page("admin/channels.html", "channels", channels=rows, kinds=messenger.KINDS, kind=kind,
+                       edit=edit, edit_shown=messenger.masked(kind, edit["config"]) if edit else {},
+                       events=messenger.EVENT_KINDS, log=Table(messenger.recent_log(), page_size=50),
+                       smtp=bool(os.environ.get("SALES_SMTP_HOST")),
+                       generic_webhook=bool(os.environ.get("SALES_NOTIFY_WEBHOOK_URL")))
 
 
-@bp.route("/quality/fix", methods=["POST"])
-def quality_fix():
-    from core import quality as qc
+@bp.route("/channels/save", methods=["POST"])
+def channel_save():
+    from core import messenger
+    data = {k: request.form.get(k, "") for k in request.form}
+    data["kinds"] = request.form.getlist("kinds")
+    data["targets"] = request.form.getlist("targets")
+    data["active"] = bool(request.form.get("active"))
     try:
-        changed = qc.fix(f_str("action"))
-        flash(f"{changed:,}건을 고쳤습니다." if changed else "고칠 건이 없었습니다.", "success" if changed else "info")
+        cid = messenger.save_channel(data, g.user["name"])
+        flash("알림 채널을 저장했습니다. '테스트 보내기'로 연결을 확인하세요.", "success")
+        return redirect(url_for("admin.channels", cid=cid))
     except ValueError as exc:
         flash(str(exc), "error")
-    return redirect(url_for("admin.quality"))
+        return redirect(url_for("admin.channels", kind=data.get("kind"), cid=data.get("id") or None))
+
+
+@bp.route("/channels/<int:cid>/test", methods=["POST"])
+def channel_test(cid: int):
+    from core import messenger
+    from core.notify import _base_url
+    try:
+        where = messenger.send_test(cid, _base_url(), (g.user.get("email") or ""))
+        flash(f"테스트 메시지를 보냈습니다 ({where}). 메신저에서 확인하세요.", "success")
+    except (ValueError, RuntimeError) as exc:
+        flash(f"테스트 실패: {exc}", "error")
+    return redirect(url_for("admin.channels", cid=cid))
+
+
+@bp.route("/channels/<int:cid>/delete", methods=["POST"])
+def channel_delete(cid: int):
+    from core import messenger
+    messenger.delete_channel(cid)
+    flash("알림 채널을 지웠습니다.", "warning")
+    return redirect(url_for("admin.channels"))
 
 
 # ============================================================================

@@ -143,6 +143,9 @@ def cmd_seed_sample(args) -> int:
     return 0
 
 
+DEMO_SEED = int(os.environ.get("SALES_DEMO_SEED", "2026"))
+
+
 def cmd_demo_init(args) -> int:
     """시연 서버용: 빈 DB 에만 조직·계정(같은 비밀번호)·업종별 샘플 데이터를 넣는다.
 
@@ -169,10 +172,12 @@ def cmd_demo_init(args) -> int:
             for uid in db._df("SELECT id FROM users WHERE active=1")["id"].tolist():
                 auth.set_password(int(uid), password)
         print("기본 샘플:", db.seed_demo_data())
-        for key, out in sample_industry.seed_many(customers=args.customers).items():
+        # 고정 시드: 배포·재시작·매일 초기화 때마다 같은 거래처 이름·금액 (날짜만 오늘 기준으로 움직인다)
+        #  → 포트폴리오 문서·캡처의 이름·숫자와 화면이 맞는다. SALES_DEMO_SEED 로 바꿀 수 있다.
+        for key, out in sample_industry.seed_many(customers=args.customers, rnd_seed=DEMO_SEED).items():
             print(key, out)
-        sample_industry.backdate_customers()            # 기본 샘플 거래처도 첫 거래보다 먼저 등록된 것으로
-        sample_industry.realign_targets()               # 목표를 담당자별 평균 매출에 맞춤 (달성률이 수백 %로 튀지 않게)
+        sample_industry.backdate_customers(rnd_seed=DEMO_SEED)   # 기본 샘플 거래처도 첫 거래보다 먼저 등록된 것으로
+        sample_industry.realign_targets(rnd_seed=DEMO_SEED)      # 목표를 담당자별 평균 매출에 맞춤 (달성률이 수백 %로 튀지 않게)
     print(f"시연 데이터 준비 {time.time() - started:.1f}초 (기준일 {__import__('datetime').date.today()})")
     return 0
 

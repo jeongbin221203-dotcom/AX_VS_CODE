@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import table, tabs, csrf, select, download %}
+{% from "_macros.html" import table, tabs, csrf, select, download, pick %}
 {% block content %}
 <p class="subtitle">매출·견적의 단가는 <strong>거래처 특가(해당 일자에 유효) → 품목 정가</strong> 순으로 정해집니다.
   품목은 시스템관리자가, 거래처 특가는 팀장 이상이 담당 범위의 거래처에 대해 등록합니다. 모든 변경은 감사로그에 남습니다.</p>
@@ -9,7 +9,7 @@
   {% if tab == 'prices' %}
     <form method="get" class="toolbar" action="{{ page_path() }}">
       <input type="hidden" name="tab" value="prices">
-      <label class="grow">거래처 {{ select('customer_id', customers.items()|list, cust_id or '', blank='전체') }}</label>
+      <label class="grow">거래처 {{ pick('customer_id', customers, cust_id or '', blank='전체', open_only=true) }}</label>
       <button class="btn">조회</button>
       {{ download(export_url('prices')) }}
     </form>
@@ -19,7 +19,7 @@
       {{ csrf() }}
       <h3>특가 등록</h3>
       <div class="form-grid g3">
-        <label>거래처 * {{ select('customer_id', customers.items()|list, cust_id or '', blank='선택하세요') }}</label>
+        <label>거래처 * {{ pick('customer_id', customers, cust_id or '', blank='선택하세요', open_only=true) }}</label>
         <label>품목 * {{ select('product_id', product_opts, '', blank='선택하세요') }}</label>
         <label>특가(원) * <input type="number" name="unit_price" min="1" step="1000" required></label>
         <label>시작일 <input type="date" name="valid_from" value="{{ today_str }}"></label>

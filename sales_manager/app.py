@@ -97,6 +97,14 @@ def create_app(test_config: dict | None = None) -> Flask:
         return redirect(back if back.startswith(request.host_url) or back.startswith("/") else "/")
 
     @app.after_request
+    def _bump_data_version(response):
+        """저장(POST 성공)이 있으면 화면 집계 캐시(views.helpers.cached)를 새로 계산하게 한다."""
+        if request.method == "POST" and response.status_code < 400:
+            from views.helpers import bump_data_version
+            bump_data_version()
+        return response
+
+    @app.after_request
     def _release_submit(response):
         """처리에 실패한 요청(4xx·5xx)은 같은 화면에서 고쳐서 다시 보낼 수 있게 기록을 지운다."""
         sid = g.pop("submit_id", None)

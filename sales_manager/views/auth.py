@@ -1,6 +1,7 @@
 """로그인 · 로그아웃 · 최초 설정 · 비밀번호 변경."""
 from __future__ import annotations
 
+import os
 from datetime import datetime
 
 from flask import Blueprint, abort, current_app, flash, g, redirect, render_template, request, session, url_for
@@ -224,7 +225,23 @@ def logout():
 def notifications():
     from core import notify
     rows = notify.list_for(int(g.user["id"]))
-    return render_template("notifications.html", title="알림", active=None, rows=rows.to_dict("records"))
+    me = db._one("SELECT email, COALESCE(notify_email, 1) AS notify_email, COALESCE(notify_messenger, 1) AS notify_messenger "
+                 "FROM users WHERE id=?", [int(g.user["id"])]) or {}
+    from core import messenger
+    return render_template("notifications.html", title="알림", active=None, rows=rows.to_dict("records"), me=me,
+                           channels=[c["name"] for c in messenger.list_channels(active_only=True)],
+                           smtp=bool(os.environ.get("SALES_SMTP_HOST")))
+
+
+@bp.route("/notifications/prefs", methods=["POST"])
+def notifications_prefs():
+    """내 알림 받기 — 메일 · 메신저 개인 메시지 (화면 알림함은 항상)."""
+    with db.get_conn() as conn:
+        conn.execute("UPDATE users SET notify_email=?, notify_messenger=? WHERE id=?",
+                     (1 if request.form.get("notify_email") else 0, 1 if request.form.get("notify_messenger") else 0,
+                      int(g.user["id"])))
+    flash("알림 받기 설정을 저장했습니다.", "success")
+    return redirect(url_for("auth.notifications"))
 
 
 @bp.route("/notifications/read", methods=["POST"])

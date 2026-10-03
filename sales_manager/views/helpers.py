@@ -5,6 +5,7 @@ import io
 import math
 import os
 import secrets
+import time
 from datetime import date, datetime, timedelta
 from functools import wraps
 from typing import Any, Iterable
@@ -45,14 +46,16 @@ MENUS = [
     ("org", "👥 조직·사용자", "admin.org", "ADMIN"),
     ("erp", "🔗 ERP 연동", "admin.erp", "ADMIN"),
     ("jobs", "⏱️ 배치 작업", "admin.jobs", "ADMIN"),
+    ("channels", "🔔 알림 채널", "admin.channels", "ADMIN"),
     ("api", "🔑 API 연동", "admin.api_clients", "ADMIN"),
     ("audit", "🗂️ 감사로그", "admin.audit", "ADMIN"),
     ("settings", "🏢 회사 설정", "admin.settings", "ADMIN"),
     ("privacy", "🛡️ 개인정보 요청", "admin.privacy", "ADMIN"),
-    ("quality", "🩺 데이터 점검", "admin.quality", "ADMIN"),
+    ("quality", "🩺 데이터 점검", "quality.index", "SUPPORT"),
     ("admin", "⚙️ 데이터 관리", "admin.data", "ADMIN"),
 ]
 PINNED_MENU = "dashboard"
+BIG_SELECT = 300        # 선택지가 이보다 많으면 목록을 다 싣지 않고 입력해서 서버에서 찾는다 (거래처 1만 곳 등)
 
 # 로그인 없이 열 수 있는 엔드포인트
 PUBLIC_ENDPOINTS = {"auth.login", "auth.setup", "auth.oidc_start", "auth.oidc_callback", "auth.breakglass",
@@ -198,17 +201,61 @@ def load_context():
     g.pending_cnt = len(ent.pending_for(g.user)) + (len(credit.pending_for(g.user))
                                                      if ent.has_role(g.user, "MANAGER") else 0)
     g.unread = notify.unread_count(int(g.user["id"]))
-    # 사이드바 알림 상자 (자재관리의 '안전재고 미달'·'결재 대기'와 같은 자리)
-    scope_sql, scope_params = db._scope_clause("s")
-    g.overdue_cnt = int(db._scalar(
-        f"SELECT COUNT(*) FROM sales s WHERE s.status NOT IN ('입금완료', '취소') AND s.due_date IS NOT NULL "
-        f"AND s.due_date < ? AND COALESCE(s.total_amount, s.amount) > COALESCE(s.paid_amount, 0){scope_sql}",
-        [date.today().isoformat(), *scope_params]) or 0)
-    g.erp_failed = int(db._scalar("SELECT COUNT(*) FROM erp_outbox WHERE status = '실패'") or 0) \
-        if ent.has_role(g.user, "MANAGER") else 0
+    # 사이드바 알림 상자 (자재관리의 '안전재고 미달'·'결재 대기'와 같은 자리) — 느리게 바뀌므로 사용자별 60초 캐시
+    g.overdue_cnt, g.erp_failed = _side_counts()
     from core import periods
     g.closed_through = periods.closed_through()
     return None
+
+
+# ----------------------------------------------------------------------------
+# 화면 집계 캐시 — 대시보드처럼 무거운 집계를 잠깐 기억한다. 이 서버에서 저장(POST)이 있으면 바로 새로 계산하고,
+# 다른 서버·배치가 바꾼 것은 CACHE_SECONDS 안에 반영된다. (매출 10만 건 측정에서 대시보드 집계가 수 초)
+# ----------------------------------------------------------------------------
+CACHE_SECONDS = 60
+_DATA_VERSION = [0]
+_CACHE: dict[tuple, tuple[float, Any]] = {}
+
+
+def bump_data_version() -> None:
+    _DATA_VERSION[0] += 1
+
+
+def cached(name: str, parts: tuple, compute):
+    if current_app.config.get("TESTING"):
+        return compute()
+    key = (name, database.DB_PATH, _DATA_VERSION[0], date.today().isoformat(), *parts)
+    hit = _CACHE.get(key)
+    if hit and time.monotonic() - hit[0] < CACHE_SECONDS:
+        return hit[1]
+    value = compute()
+    if len(_CACHE) > 500:
+        _CACHE.clear()
+    _CACHE[key] = (time.monotonic(), value)
+    return value
+
+
+_SIDE_CACHE: dict[tuple, tuple[float, tuple[int, int]]] = {}
+SIDE_CACHE_SECONDS = 60
+
+
+def _side_counts() -> tuple[int, int]:
+    """(연체 미수 건수, ERP 전송 실패 건수). 매출 10만 건이면 매 화면 집계만으로 수십~수백 ms 라 잠시 기억해 둔다."""
+    key = (database.DB_PATH, int(g.user["id"]), g.user.get("role"), date.today().isoformat())
+    hit = _SIDE_CACHE.get(key)
+    if hit and time.monotonic() - hit[0] < SIDE_CACHE_SECONDS and not current_app.config.get("TESTING"):
+        return hit[1]
+    scope_sql, scope_params = db._scope_clause("s")
+    overdue = int(db._scalar(
+        f"SELECT COUNT(*) FROM sales s WHERE s.status NOT IN ('입금완료', '취소') AND s.due_date IS NOT NULL "
+        f"AND s.due_date < ? AND COALESCE(s.total_amount, s.amount) > COALESCE(s.paid_amount, 0){scope_sql}",
+        [date.today().isoformat(), *scope_params]) or 0)
+    failed = int(db._scalar("SELECT COUNT(*) FROM erp_outbox WHERE status = '실패'") or 0) \
+        if ent.has_role(g.user, "MANAGER") else 0
+    if len(_SIDE_CACHE) > 5000:
+        _SIDE_CACHE.clear()
+    _SIDE_CACHE[key] = (time.monotonic(), (overdue, failed))
+    return overdue, failed
 
 
 def role_required(minimum: str):
@@ -216,7 +263,8 @@ def role_required(minimum: str):
         @wraps(view)
         def wrapped(*args, **kwargs):
             if not ent.has_role(g.user, minimum):
-                abort(403, f"이 메뉴는 {db.ROLE_LABEL.get(minimum, minimum)} 이상만 사용할 수 있습니다.")
+                who = "영업지원·시스템관리자만" if minimum == "SUPPORT" else f"{db.ROLE_LABEL.get(minimum, minimum)} 이상만"
+                abort(403, f"이 메뉴는 {who} 사용할 수 있습니다.")
             return view(*args, **kwargs)
         return wrapped
     return decorator
@@ -457,7 +505,7 @@ def register_template_helpers(app: Flask) -> None:
                 "DB_NAME": "PostgreSQL" if database.is_pg() else os.path.basename(database.DB_PATH)}
 
     app.jinja_env.globals.update(
-        csrf_token=csrf_token, menus_for=menus_for, menu_layout=menu_layout, export_url=export_url, tab_url=tab_url,
+        csrf_token=csrf_token, menus_for=menus_for, menu_layout=menu_layout, BIG_SELECT=BIG_SELECT, export_url=export_url, tab_url=tab_url,
         page_url=page_url, page_path=page_path,
         STAGES=db.STAGES, STAGE_PROB=db.STAGE_PROB, GRADES=db.GRADES, INDUSTRIES=db.INDUSTRIES,
         ACT_TYPES=db.ACT_TYPES, SALE_STATUS=db.SALE_STATUS, LEAD_SOURCES=db.LEAD_SOURCES,

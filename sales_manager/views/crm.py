@@ -13,7 +13,7 @@ from core import dataio
 from core import enterprise as ent
 from core import sales_db as db
 
-from .helpers import (Table, a_int, a_str, chart, csv_response, f_bool, f_float, f_ids,
+from .helpers import (BIG_SELECT, Table, a_int, a_str, cached, chart, csv_response, f_bool, f_float, f_ids,
                       f_int, f_owner, f_str, render_page)
 
 bp = Blueprint("crm", __name__)
@@ -34,11 +34,62 @@ def visible_deal(did: int | None) -> int:
     return int(did)
 
 
-def deal_choices() -> list[dict]:
-    """영업기회 선택 목록 (거래처별로 걸러 쓰도록 customer_id 포함)."""
-    df = db.list_deals()
-    return [{"id": int(r.id), "customer_id": int(r.customer_id), "label": f"{r.거래처} - {r.기회명}"}
-            for r in df.itertuples()]
+class DealChoices(list):
+    """영업기회 선택 목록. remote=True 면 전체가 아니라 고른 거래처 것만 담겨 있고, 화면이 거래처를 바꿀 때 서버에서 받아 온다."""
+    remote = False
+
+
+def deal_choices(customer_id: int | None = None) -> DealChoices:
+    """영업기회 선택 목록 (거래처별로 걸러 쓰도록 customer_id 포함). BIG_SELECT 건을 넘으면 그 거래처 것만."""
+    scope_sql, scope_params = db._scope_clause("d")
+    sql = ("SELECT d.id, d.customer_id, c.name || ' - ' || d.title FROM deals d "
+           "JOIN customers c ON c.id = d.customer_id WHERE 1=1" + scope_sql)
+    with db.get_conn() as conn:
+        total = conn.execute(f"SELECT COUNT(*) FROM deals d WHERE 1=1{scope_sql}", scope_params).fetchone()[0]
+        out = DealChoices()
+        if total > BIG_SELECT:
+            out.remote = True
+            if not customer_id:
+                return out
+            rows = conn.execute(sql + " AND d.customer_id = ? ORDER BY d.id DESC", [*scope_params, int(customer_id)]).fetchall()
+        else:
+            rows = conn.execute(sql + " ORDER BY d.id DESC", scope_params).fetchall()
+    out.extend({"id": int(r[0]), "customer_id": int(r[1]), "label": r[2]} for r in rows)
+    return out
+
+
+@bp.route("/options/<kind>")
+def options(kind: str):
+    """긴 선택 목록 검색 (거래처·영업기회) — 화면의 '입력해서 찾기'가 부른다. 본인 조회 범위 안에서만."""
+    q = a_str("q").strip()
+    limit = 30
+    if kind == "customers":
+        scope_sql, scope_params = db._scope_clause()
+        sql, params = f"SELECT id, name, biz_no FROM customers WHERE merged_into IS NULL{scope_sql}", list(scope_params)
+        if a_str("open") == "1":
+            sql += " AND status <> '종료'"
+        for word in q.split()[:5]:
+            sql += " AND (name LIKE ? OR biz_no_norm LIKE ?)"
+            params += [f"%{word}%", f"%{''.join(ch for ch in word if ch.isdigit()) or word}%"]
+        with db.get_conn() as conn:
+            rows = conn.execute(sql + " ORDER BY name LIMIT ?", [*params, limit]).fetchall()
+        return jsonify([[int(r[0]), r[1] + (f" ({r[2]})" if r[2] else "")] for r in rows])
+    if kind == "deals":
+        scope_sql, scope_params = db._scope_clause("d")
+        sql = ("SELECT d.id, c.name || ' - ' || d.title, d.customer_id FROM deals d JOIN customers c ON c.id = d.customer_id "
+               "WHERE 1=1" + scope_sql)
+        params = list(scope_params)
+        if a_int("customer_id"):
+            sql += " AND d.customer_id = ?"
+            params.append(a_int("customer_id"))
+            limit = 300
+        for word in q.split()[:5]:
+            sql += " AND (d.title LIKE ? OR c.name LIKE ?)"
+            params += [f"%{word}%", f"%{word}%"]
+        with db.get_conn() as conn:
+            rows = conn.execute(sql + " ORDER BY d.id DESC LIMIT ?", [*params, limit]).fetchall()
+        return jsonify([[int(r[0]), r[1], int(r[2])] for r in rows])
+    abort(404)
 
 
 def _form_id(form: dict | None) -> int | None:
@@ -91,13 +142,14 @@ def _customers_page(form: dict | None = None, status: int = 200):
         ctx["edit_contact"] = next((c for c in ctx["contacts"] if c["id"] == a_int("contact")), {})
         ctx["cust_acts"] = Table(db.list_activities(days=365, customer_id=edit_id).head(10),
                                  drop=["id", "customer_id", "owner_id"])
-    if tab == "merge" and ent.has_role(g.user, "ADMIN"):
+    if tab == "merge" and ent.has_role(g.user, "SUPPORT"):
         groups = db.duplicate_groups()
         for grp in groups:
             grp["options"] = [(int(c["id"]), f"#{c['id']} {c['name']}") for c in grp["거래처"]]
         ctx["dup_groups"] = groups
         ctx["all_customers"] = [(int(k), v) for k, v in db.customer_options(include_closed=False).items()]
     ctx["is_admin"] = ent.has_role(g.user, "ADMIN")
+    ctx["can_merge"] = ent.has_role(g.user, "SUPPORT")
     return render_page("crm/customers.html", "customers", **ctx), status
 
 
@@ -130,7 +182,7 @@ def customer_unblock_request(cid: int):
 
 @bp.route("/customers/merge", methods=["POST"])
 def customer_merge():
-    if not ent.has_role(g.user, "ADMIN"):
+    if not ent.has_role(g.user, "SUPPORT"):
         abort(403, "거래처 병합은 시스템관리자만 할 수 있습니다.")
     try:
         result = db.merge_customers(f_int("source_id"), f_int("target_id"), f_str("reason"))
@@ -199,7 +251,7 @@ def customer_delete(cid: int):
 # ============================================================================
 def _deal_form_data(user: dict) -> dict:
     """폼 → upsert_deal 입력. 제안금액은 정가 × (1 - 할인율) 로 계산한다."""
-    stage = f_str("stage") or "리드"
+    stage = f_str("stage") or db.OPEN_STAGES[0]
     if stage not in db.STAGES:
         raise ValueError(f"단계 값이 올바르지 않습니다: {stage}")
     list_amount = f_int("list_amount")
@@ -224,7 +276,8 @@ def _deal_form_data(user: dict) -> dict:
 def _deals_page(form: dict | None = None, status: int = 200):
     keyword, stage, fcat = a_str("q"), a_str("stage"), a_str("fcat")
     only_open = request.args.get("open", "1") == "1"
-    df = db.list_deals(keyword=keyword, owner_id=g.owner_filter, stage=stage, only_open=only_open)
+    df = cached("deals", (g.user["id"], str(g.scope), keyword, g.owner_filter, stage, only_open),
+                lambda: db.list_deals(keyword=keyword, owner_id=g.owner_filter, stage=stage, only_open=only_open))
     if fcat and not df.empty:
         df = df[df["예측구분"] == fcat]
     if request.args.get("export") == "deals":
@@ -237,7 +290,7 @@ def _deals_page(form: dict | None = None, status: int = 200):
     row = db.get_deal(edit_id) if edit_id else None
 
     base = dict(row) if row and tab == "edit" else {
-        "stage": "리드", "list_amount": 10_000_000, "discount_rate": 0.0,
+        "stage": db.OPEN_STAGES[0], "list_amount": 10_000_000, "discount_rate": 0.0,
         "expected_close": (date.today() + timedelta(days=30)).isoformat(),
         "owner_id": g.user["id"], "forecast_category": "Pipeline", "source": db.LEAD_SOURCES[0]}
     if form:
@@ -259,7 +312,8 @@ def _deals_page(form: dict | None = None, status: int = 200):
     view = "board" if a_str("view") == "board" else "list"
     ctx = dict(
         q=keyword, stage=stage, fcat=fcat, only_open=only_open, view=view,
-        board=_deal_board(keyword, stage, fcat) if view == "board" else None,
+        board=cached("deal_board", (g.user["id"], str(g.scope), g.owner_filter, keyword, stage, fcat),
+                     lambda: _deal_board(keyword, stage, fcat)) if view == "board" else None,
         m_count=len(df),
         m_total=int(df["예상금액"].sum()) if not df.empty else 0,
         m_weighted=int(df["가중금액"].sum()) if not df.empty else 0,
@@ -325,6 +379,7 @@ def deal_delete(did: int):
 
 
 BOARD_CLOSED_DAYS = 30          # 보드의 수주·실주 열에는 최근 30일에 끝난 기회만
+BOARD_LIMIT = 60                # 열마다 카드는 마감이 가까운 순으로 이만큼만 (건수·합계는 전체, 나머지는 목록에서)
 
 
 def _txt(v) -> str:
@@ -349,12 +404,14 @@ def _deal_board(keyword: str, stage: str, fcat: str) -> list[dict]:
             part = part[part["종료일"].fillna("").astype(str) >= since]
         if not part.empty:
             part = part.sort_values(["예상마감일", "예상금액"], ascending=[True, False], na_position="last")
+        total, total_sum = len(part), int(part["예상금액"].fillna(0).sum()) if not part.empty else 0
+        part = part.head(BOARD_LIMIT) if not part.empty else part
         cards = [{"id": int(r["id"]), "customer": _txt(r["거래처"]), "title": _txt(r["기회명"]), "amount": _num(r["예상금액"]),
                   "owner": _txt(r["담당자"]), "close": _txt(r["예상마감일"])[:10], "days": _num(r["단계체류일"]),
                   "score": _num(r["검증점수"]), "lost": _txt(r.get("실주사유"))}
                  for r in part.to_dict("records")] if not part.empty else []
         cols.append({"stage": s, "prob": db.STAGE_PROB[s], "closed": closed, "cards": cards,
-                     "count": len(cards), "sum": sum(c["amount"] for c in cards)})
+                     "count": total, "sum": total_sum, "more": total - len(cards)})
     return cols
 
 
@@ -449,8 +506,8 @@ def _activities_page(form: dict | None = None, status: int = 200):
         tbl=Table(df, drop=["customer_id", "owner_id"], page_size=PAGE_SIZE),
         act_files=_activity_files(df), attach_kinds=att.KINDS,
         del_options=[(int(r.id), f"{r.활동일} · {r.거래처} · {r.유형} · {str(r.활동내용)[:20]}")
-                     for r in df.itertuples()] if not df.empty else [],
-        customers=db.customer_options(), deals=deal_choices(), f=base,
+                     for r in df.head(BIG_SELECT).itertuples()] if not df.empty else [],
+        customers=db.customer_options(), deals=deal_choices(base.get("customer_id")), f=base,
     ), status
 
 

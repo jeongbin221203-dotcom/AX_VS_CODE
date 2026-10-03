@@ -6,6 +6,15 @@
   <form method="post" action="{{ url_for('auth.notifications_read') }}">{{ csrf() }}
     <button class="btn btn-sm">모두 읽음으로</button></form>
 </div>
+<form method="post" action="{{ url_for('auth.notifications_prefs') }}" class="card notif-prefs">
+  {{ csrf() }}
+  <strong>내 알림 받기</strong>
+  <label class="check"><input type="checkbox" name="notify_email" value="1" {{ 'checked' if me.notify_email }}> 메일
+    <span class="muted small">{{ me.email or '사용자 정보에 이메일 없음' }}{{ '' if smtp else ' · 메일 서버 미설정' }}</span></label>
+  <label class="check"><input type="checkbox" name="notify_messenger" value="1" {{ 'checked' if me.notify_messenger }}> 메신저 개인 메시지
+    <span class="muted small">{{ channels|join(', ') if channels else '등록된 메신저 채널 없음' }}</span></label>
+  <button class="btn btn-sm">저장</button>
+</form>
 {% if not rows %}
   <div class="alert alert-info">받은 알림이 없습니다.</div>
 {% else %}

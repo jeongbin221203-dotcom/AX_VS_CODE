@@ -2,7 +2,7 @@
 {% from "_macros.html" import metric, table, chart, tabs %}
 {% block content %}
 {% if DEMO %}
-<details class="card demo-welcome" open>
+<details class="card demo-welcome" id="demo-guide">
   <summary><strong>포트폴리오 시연 안내</strong> — 처음이면 읽어 주세요</summary>
   <p class="small">무료 서버라 한동안 접속이 없으면 잠듭니다. 처음 열 때 30초쯤 걸렸다면 그 때문이고, 이후에는 바로 열립니다.
     로그인 없이 {{ ROLE_LABEL.get(g.user.role, g.user.role) }}(으)로 들어왔고, 바꾼 내용은 매일 새벽 {{ DEMO_RESET_HOUR }}시에 샘플로 돌아갑니다.</p>
@@ -15,7 +15,7 @@
       미수금·연체 구간이 바로 바뀝니다. 거래처 일괄 입금은 결제기일 순으로 나눠 넣고 남으면 선수금.</li>
     <li>💳 할인 결재와 왼쪽 아래 '다른 역할로 보기' — 영업기회 할인율을 {{ DISC_M|int }}% 넘게 바꿔 결재를 요청한 뒤 팀장·임원으로 바꿔
       <a href="{{ url_for('finance.approvals') }}">결재함</a>에서 승인. 요청한 본인은 결재할 수 없고, 역할마다 보이는 데이터가 다릅니다.</li>
-    {% if g.user.role == 'ADMIN' %}<li><a href="{{ url_for('admin.quality') }}">🩺 데이터 점검</a> — 쌓인 데이터의 결함(중복 거래처·사업자번호·입금 불일치 등)을 찾아 그 건의 수정 칸으로 바로 갑니다.</li>{% endif %}
+    {% if g.user.role in ('ADMIN', 'SUPPORT') %}<li><a href="{{ url_for('quality.index') }}">🩺 데이터 점검</a> — 쌓인 데이터의 결함(중복 거래처·사업자번호·입금 불일치 등)을 찾아 그 건의 수정 칸으로 바로 갑니다.</li>{% endif %}
   </ol>
   <p class="muted small">ERP·SAP 연동은 모의 서버로만 검증했습니다(실제 SAP에 연결하지 않음). 시연 서버의 ERP 전송은 파일 방식 대기열에만 쌓이고({% if g.user.role == 'ADMIN' %}<a href="{{ url_for('admin.erp') }}">ERP 연동</a> 화면{% else %}ERP 연동 화면{% endif %}),
     결재·연체 알림 메일은 보내지 않고 🔔 알림에만 남깁니다.</p>

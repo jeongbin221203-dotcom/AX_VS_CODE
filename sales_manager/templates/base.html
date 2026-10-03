@@ -14,8 +14,13 @@
 <body data-user="{{ g.user.id if g.user else '' }}">
 <div class="net-banner" data-net-banner hidden>⚠️ 서버와 연결이 끊겼습니다. 입력한 내용은 이 브라우저에 보관되며, 연결이 돌아오면 저장 버튼을 다시 누르세요.</div>
 {% if g.user %}
+<header class="mobile-bar">
+  <button type="button" class="mobile-menu" data-side-toggle aria-controls="sidebar" aria-expanded="false">☰ 메뉴</button>
+  <a class="mobile-title" href="{{ url_for('reports.dashboard') }}">{{ title or APP_TITLE }}</a>
+  {% if g.pending_cnt %}<a class="mobile-badge" href="{{ url_for('finance.approvals') }}" title="결재 대기">결재 {{ g.pending_cnt }}</a>{% endif %}
+</header>
 <div class="layout">
-  <aside class="sidebar">
+  <aside class="sidebar" id="sidebar">
     <a class="brand" href="{{ url_for('reports.dashboard') }}"><img src="{{ url_for('static', filename='img/logo.svg') }}" alt="" width="26" height="26" class="brand-logo">{{ APP_TITLE }}</a>
     <div class="me">
       <strong>{{ g.user.name }}</strong> · {{ ROLE_LABEL.get(g.user.role, g.user.role) }}
@@ -100,11 +105,10 @@
       DB: {{ DB_NAME }} · 오늘 {{ today().isoformat() }}
       {% if ENV != 'production' %}<br><span class="env-badge">개발 환경</span>{% endif %}</div>
   </aside>
+  <a class="quick-act" href="{{ url_for('crm.activities', tab='new') }}#edit" title="영업활동 바로 기록">＋ 활동 기록</a>
   <main class="content">
-    {% if DEMO %}<div class="alert alert-info demo-banner">🧪 포트폴리오 시연 서버입니다 — 로그인 없이 <b>{{ g.user.name }}</b>(으)로 들어왔습니다.
-
-매출·견적·결재 등은 직접 입력해 볼 수 있고(매일 새벽 {{ DEMO_RESET_HOUR }}시에 처음 샘플로 돌아갑니다), 관리자 설정은 잠겨 있습니다.
-다른 역할은 왼쪽 아래 '다른 역할로 보기'에서 바꿉니다.</div>{% endif %}
+    {% if DEMO %}<div class="demo-banner">🧪 포트폴리오 시연 서버 — 로그인 없이 <b>{{ ROLE_LABEL.get(g.user.role, g.user.role) }}</b>(으)로 들어왔습니다 · 매일 새벽 {{ DEMO_RESET_HOUR }}시 샘플로 초기화 · 관리자 설정 잠김
+      {% if active == 'dashboard' %}· <a href="#demo-guide" data-open-guide>사용 안내</a>{% else %}· <a href="{{ url_for('reports.dashboard') }}#demo-guide">사용 안내</a>{% endif %}</div>{% endif %}
     {% if READ_ONLY() %}<div class="alert alert-warning">🛠️ 시스템 점검 중입니다 — 조회만 할 수 있고 저장·변경은 막혀 있습니다.</div>{% endif %}
     <h1>{{ title }}</h1>
     {% include "_flashes.html" %}

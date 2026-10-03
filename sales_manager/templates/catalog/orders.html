@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import metric, table, csrf, select, download %}
+{% from "_macros.html" import metric, table, csrf, select, download, pick %}
 {% block content %}
 <p class="subtitle">수주는 견적과 매출 사이의 주문입니다. 한 번 수주한 뒤 납품할 때마다 품목별 수량을 골라 매출을 등록하고, 남은 수량(수주 잔량)을 관리합니다.
   매출을 취소하면 그 수량은 다시 잔량으로 돌아옵니다. 자재관리와 합치면 납품이 창고 출고와 연결됩니다.</p>
@@ -24,7 +24,7 @@
   <form method="post" action="{{ url_for('catalog.order_save') }}" class="form" data-quote data-price-url="{{ url_for('catalog.price_lookup') }}">
     {{ csrf() }}
     <div class="form-grid g4">
-      <label>거래처 * {{ select('customer_id', customers.items()|list, '', blank='선택하세요') }}</label>
+      <label>거래처 * {{ pick('customer_id', customers, '', blank='선택하세요', open_only=true) }}</label>
       <label>수주일 <input type="date" name="order_date" value="{{ today().isoformat() }}"></label>
       <label>납기 <input type="date" name="delivery_date"></label>
       <label>고객 발주번호 <input name="customer_po"></label>
