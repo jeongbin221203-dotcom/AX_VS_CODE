@@ -13,7 +13,7 @@ from views.helpers import Table, a_date, a_int, actor, as_id, can, f_str, page_a
 
 bp = Blueprint("documents", __name__, url_prefix="/documents")
 
-TABS = [("list", "목록"), ("new", "증빙 등록")]
+TABS = [("list", "📋 목록"), ("new", "➕ 증빙 등록")]
 LIST_COLS = {"id": "증빙ID", "issue_date": "작성일자", "doc_type": "종류", "supplier_name": "공급자",
              "supplier_biz_no": "사업자번호", "supply_amount": "공급가액", "tax_amount": "세액",
              "total_amount": "합계", "approval_no": "승인번호", "tx_label": "연결 거래", "file_name": "파일명"}

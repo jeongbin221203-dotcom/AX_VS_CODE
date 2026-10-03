@@ -304,18 +304,18 @@ def test_notifications_follow_the_approval(fresh, monkeypatch):
     clerk = {**u["req.c"], "ip": ""}
     r = purchasing.create_pr(wh(), [(mid("PKG-001"), 100, 18000)], TODAY, "보충", clerk)       # 180만원 → 2단계
     assert r.ok
-    to = set(db.query_df("SELECT to_addr FROM notifications")["to_addr"])
+    to = set(db.query_df("SELECT to_addr FROM notifications WHERE channel <> 'inbox'")["to_addr"])
     assert to == {"mgr.a@example.com", "adm@example.com"}            # 요청자 제외, 메일 없는 관리자 제외
-    db.execute("DELETE FROM notifications")
+    db.execute("DELETE FROM notifications WHERE channel <> 'inbox'")
     assert purchasing.decide_pr(r.id, True, "", {**u["mgr.a"], "ip": ""}).ok                  # 1단계 → 2단계 결재자
-    assert set(db.query_df("SELECT to_addr FROM notifications")["to_addr"]) == {"adm@example.com"}
-    db.execute("DELETE FROM notifications")
+    assert set(db.query_df("SELECT to_addr FROM notifications WHERE channel <> 'inbox'")["to_addr"]) == {"adm@example.com"}
+    db.execute("DELETE FROM notifications WHERE channel <> 'inbox'")
     assert purchasing.decide_pr(r.id, True, "", {**u["adm.c"], "ip": ""}).ok                  # 최종 → 요청자
-    rows = db.query_df("SELECT * FROM notifications")
+    rows = db.query_df("SELECT * FROM notifications WHERE channel <> 'inbox'")
     assert list(rows["to_addr"]) == ["req@example.com"] and "최종 승인" in rows.iloc[0]["subject"]
     assert "/purchase/pr/" in rows.iloc[0]["body"]
     assert "기록만" in notify.send_pending()
-    assert db.scalar("SELECT status FROM notifications") == "LOGGED"
+    assert db.scalar("SELECT status FROM notifications WHERE channel <> 'inbox'") == "LOGGED"
 
 
 def test_notifications_respect_scope_and_rollback(fresh, monkeypatch):
@@ -325,14 +325,14 @@ def test_notifications_respect_scope_and_rollback(fresh, monkeypatch):
     other = _second_warehouse()
     assert org.set_user_scope(u["mgr.a"]["id"], False, [], [other], audit.SYSTEM).ok        # 다른 창고만
     r = purchasing.create_pr(wh(), [(mid("PKG-001"), 1, 1000)], TODAY, "보충", {**u["req.c"], "ip": ""})
-    assert r.ok and set(db.query_df("SELECT to_addr FROM notifications")["to_addr"]) == {"adm@example.com"}
+    assert r.ok and set(db.query_df("SELECT to_addr FROM notifications WHERE channel <> 'inbox'")["to_addr"]) == {"adm@example.com"}
     # 업무가 거부되면 알림도 없다 (같은 트랜잭션)
-    db.execute("DELETE FROM notifications")
+    db.execute("DELETE FROM notifications WHERE channel <> 'inbox'")
     assert not purchasing.create_pr(wh(), [(mid("PKG-001"), 1, 1000)], TODAY, "", {**u["req.c"], "ip": ""}).ok
-    assert not db.scalar("SELECT COUNT(*) FROM notifications")
+    assert not db.scalar("SELECT COUNT(*) FROM notifications WHERE channel <> 'inbox'")
     monkeypatch.setattr(config, "NOTIFY_MODE", "off")
     purchasing.create_pr(wh(), [(mid("PKG-001"), 1, 1000)], TODAY, "보충", {**u["req.c"], "ip": ""})
-    assert not db.scalar("SELECT COUNT(*) FROM notifications")
+    assert not db.scalar("SELECT COUNT(*) FROM notifications WHERE channel <> 'inbox'")
 
 
 def test_large_adjustment_notifies_and_smtp_send(fresh, monkeypatch):
@@ -343,7 +343,7 @@ def test_large_adjustment_notifies_and_smtp_send(fresh, monkeypatch):
     u = _users_with_mail()
     res = services.register_transaction(mid("PKG-001"), "ADJ", 0, TODAY, 18000, actor={**u["req.c"], "ip": ""})
     assert res.pending
-    assert set(db.query_df("SELECT to_addr FROM notifications")["to_addr"]) == {"mgr.a@example.com", "adm@example.com"}
+    assert set(db.query_df("SELECT to_addr FROM notifications WHERE channel <> 'inbox'")["to_addr"]) == {"mgr.a@example.com", "adm@example.com"}
     sent, failed = [], []
 
     class FakeSMTP:
@@ -362,7 +362,7 @@ def test_large_adjustment_notifies_and_smtp_send(fresh, monkeypatch):
     monkeypatch.setattr(notify.smtplib, "SMTP", FakeSMTP)
     assert "보냄 1 · 실패 1" in notify.send_pending()
     assert notify.send_pending() == "보냄 1 · 실패 0"                 # 실패한 것은 다음 주기에 다시
-    assert set(db.query_df("SELECT status FROM notifications")["status"]) == {"SENT"}
+    assert set(db.query_df("SELECT status FROM notifications WHERE channel <> 'inbox'")["status"]) == {"SENT"}
 
 
 def test_user_email_admin_and_jobs_page(client):

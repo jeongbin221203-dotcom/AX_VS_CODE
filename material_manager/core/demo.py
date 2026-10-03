@@ -159,6 +159,13 @@ def _extras() -> None:
         services.register_transaction(int(mid), "IN", 10, date_today(), 18000, ref_no="DEMO-ALIAS",
                                       partner="대한팔레트 부산지점", actor=audit.SYSTEM, warehouse_id=int(wh))
     _manufacturing_extras()
+    from core import notify
+    user = db.query_df("SELECT id, name, email, messenger_id FROM users WHERE username = ?", (USERNAME,))
+    if not user.empty:
+        with db.transaction() as conn:
+            notify.queue(conn, [user.iloc[0].to_dict()], "시연: 처리할 결재가 기다리고 있습니다",
+                         ["결재함의 '📥 내 결재 대기'에서 구매요청·실사 조정을 바로 승인·반려해 보세요.",
+                          "'🔁 대결 지정'으로 휴가 동안 결재를 맡길 수도 있습니다."], "/approvals/", "demo:welcome")
 
 
 # 리드타임(일) · 최소 발주량 · 발주 배수 (창원 제조공장 샘플)

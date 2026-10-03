@@ -10,7 +10,7 @@ from views.helpers import Table, actor, as_id, can, f_str, render_page, role_req
 
 bp = Blueprint("purchase", __name__, url_prefix="/purchase")
 
-TABS = [("pr", "구매요청"), ("new", "새 구매요청"), ("po", "발주")]
+TABS = [("pr", "📋 구매요청"), ("new", "➕ 새 구매요청"), ("po", "📦 발주")]
 MONEY = "₩{:,.0f}"
 QTY = "{:,.2f}"
 
@@ -26,7 +26,8 @@ def index():
     status = request.args.get("status") or None
     if tab == "new":
         return render_page("purchase.html", "purchase", tabs=TABS, tab="new",
-                           wh_opts=org.warehouse_options(g.wh_ids), mats=services.material_options(), rows=range(6))
+                           wh_opts=org.warehouse_options(g.wh_ids), mats=services.material_options(), rows=range(6),
+                           tiers=[int(config.PR_APPROVAL_TIERS[0][0]), int(config.PR_APPROVAL_TIERS[1][0])])
     if tab == "po":
         df = purchasing.pos_df(status if status in purchasing.PO_STATUS else None, g.wh_ids)
         view = df.copy()

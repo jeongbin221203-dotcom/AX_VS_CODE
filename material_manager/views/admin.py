@@ -373,3 +373,60 @@ def form_template_download(key: str):
         abort(404)
     log_export("form_template", 0, form=key)
     return xlsx_response(data, f"회사양식_{key}.xlsx")
+
+
+# ── 회사 설정 · 점검 모드 ────────────────────────────────────
+@bp.get("/settings")
+@role_required("ADMIN")
+def settings():
+    from core import company, maintenance
+    hist = company.history()
+    return render_page("admin_settings.html", "settings", fields=company.FIELDS, values=company.values(),
+                       defaults=company.defaults(), stored=company.stored(), ro=maintenance.state(cache_seconds=0),
+                       history=hist.to_dict("records"))
+
+
+@bp.post("/settings")
+@role_required("ADMIN")
+def settings_save():
+    from core import company
+    ok, msg = company.save(request.form.to_dict(), actor())
+    flash(msg, "success" if ok else "error")
+    return redirect(url_for("admin.settings"))
+
+
+@bp.post("/read-only")
+@role_required("ADMIN")
+def read_only():
+    from core import maintenance
+    flash(maintenance.set_mode(request.form.get("on") == "1", f_str("reason"), actor()), "warning")
+    return redirect(url_for("admin.settings"))
+
+
+# ── API 키 ───────────────────────────────────────────────────
+@bp.get("/api-keys")
+@role_required("ADMIN")
+def api_keys():
+    from core import api_keys as keys
+    return render_page("admin_api.html", "api", rows=keys.list_df().to_dict("records"), scopes=keys.SCOPES,
+                       wh_opts=org.warehouse_options(None), new_key=None)
+
+
+@bp.post("/api-keys")
+@role_required("ADMIN")
+def api_key_create():
+    from core import api_keys as keys
+    r, raw = keys.create(f_str("name"), request.form.getlist("scope"), f_str("allowed_ips"),
+                         [int(w) for w in request.form.getlist("warehouse") if w.isdigit()], actor())
+    flash(r.message, "success" if r.ok else "error")
+    return render_page("admin_api.html", "api", rows=keys.list_df().to_dict("records"), scopes=keys.SCOPES,
+                       wh_opts=org.warehouse_options(None), new_key=raw or None)
+
+
+@bp.post("/api-keys/<int:kid>/revoke")
+@role_required("ADMIN")
+def api_key_revoke(kid: int):
+    from core import api_keys as keys
+    r = keys.revoke(kid, actor())
+    flash(r.message, "success" if r.ok else "error")
+    return redirect(url_for("admin.api_keys"))

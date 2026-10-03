@@ -5,6 +5,7 @@
 - 알림은 업무와 같은 트랜잭션에서 notifications 표에 쌓는다 → 업무가 취소되면 알림도 없다(유령 알림 없음).
   실제 발송은 배치(notify_send)가 한다 → 메일·메신저 서버가 느리거나 멈춰도 화면은 기다리지 않고, 실패하면 다시 보낸다.
 - 받는 사람: 사용 중이고 역할이 충분하고 그 창고 권한이 있는 사용자(요청자 본인 제외).
+- 알림함(channel 'inbox'): 받는 사람마다 화면 알림 한 줄 — 메일·메신저 설정과 상관없이 늘 남고, 사이드바 🔔 에 안 읽은 수.
 - 보낼 길(channel)
     email       사용자 메일 주소가 있으면 (MM_SMTP_*)
     jandi       잔디 토픽의 '들어오는 웹훅'(MM_JANDI_WEBHOOK_URL) — 사람마다가 아니라 토픽에 한 번
@@ -58,11 +59,10 @@ def _link(path: str) -> str:
 
 
 def recipients(conn, min_role: str, warehouse_id: int | None, exclude_ids=()) -> list[dict]:
-    """역할이 min_role 이상이고 그 창고 권한이 있는, 연락처(메일·메신저 아이디)가 있는 사용 중인 사용자."""
+    """역할이 min_role 이상이고 그 창고 권한이 있는 사용 중인 사용자 (+ 그 사람의 대결자). 연락처가 없으면 알림함에만."""
     exclude = {int(i) for i in exclude_ids if i is not None}
     out = []
-    for r in conn.execute("SELECT id, name, email, messenger_id, role, all_warehouses FROM users "
-                          "WHERE active = 1 AND (email <> '' OR messenger_id <> '')"):
+    for r in conn.execute("SELECT id, name, email, messenger_id, role, all_warehouses FROM users WHERE active = 1"):
         r = dict(r)
         if r["id"] in exclude or not auth.has_role(r, min_role):
             continue
@@ -72,19 +72,34 @@ def recipients(conn, min_role: str, warehouse_id: int | None, exclude_ids=()) ->
             if not hit:
                 continue
         out.append(r)
+    # 대결: 오늘 위임받은 사람에게도 (위임한 사람 대신 결재할 수 있으므로)
+    from core import delegation
+    ids = {r["id"] for r in out}
+    for d in delegation.active_for_froms(conn, list(ids)):
+        if d["to_user_id"] not in ids | exclude:
+            row = conn.execute("SELECT id, name, email, messenger_id FROM users WHERE id = ? AND active = 1",
+                               (d["to_user_id"],)).fetchone()
+            if row:
+                out.append({**dict(row), "delegate_for": d["from_name"]})
+                ids.add(row["id"])
     return out
 
 
 def user(conn, user_id) -> list[dict]:
     if user_id is None:
         return []
-    row = conn.execute("SELECT id, name, email, messenger_id FROM users WHERE id = ? AND active = 1 "
-                       "AND (email <> '' OR messenger_id <> '')", (user_id,)).fetchone()
+    row = conn.execute("SELECT id, name, email, messenger_id FROM users WHERE id = ? AND active = 1", (user_id,)).fetchone()
     return [dict(row)] if row else []
 
 
 def queue(conn, to: list[dict], subject: str, lines: list[str], path: str, ref: str) -> int:
-    """알림을 쌓는다 (호출하는 쪽 트랜잭션 안에서). 쌓은 건수."""
+    """알림을 쌓는다 (호출하는 쪽 트랜잭션 안에서). 알림함은 늘, 메일·메신저는 켜져 있을 때. 쌓은 건수."""
+    for r in to:                                         # 화면 알림함 (사람마다 한 줄)
+        if r.get("id") is not None:
+            extra = f" (대결: {r['delegate_for']} 대신)" if r.get("delegate_for") else ""
+            conn.execute("INSERT INTO notifications (ref, to_user_id, to_addr, subject, body, status, created_at, channel, link, "
+                         "read_at) VALUES (?, ?, '', ?, ?, 'INBOX', ?, 'inbox', ?, '')",
+                         (ref, r["id"], subject + extra, "\n".join(lines), now_str(), path))
     if not enabled():
         return 0
     link = _link(path)
@@ -185,8 +200,8 @@ def _send_naverworks(row) -> None:
 
 def send_pending(limit: int = 100) -> str:
     """보낼 알림을 보낸다. log 방식이면 '기록만'으로 표시한다. 실패하면 횟수를 올려 다음 주기에 다시."""
-    rows = db.query_df("SELECT * FROM notifications WHERE status = 'PENDING' OR (status = 'FAILED' AND tries < ?) "
-                       "ORDER BY id LIMIT ?", (config.NOTIFY_MAX_TRIES, limit))
+    rows = db.query_df("SELECT * FROM notifications WHERE channel <> 'inbox' AND (status = 'PENDING' "
+                       "OR (status = 'FAILED' AND tries < ?)) ORDER BY id LIMIT ?", (config.NOTIFY_MAX_TRIES, limit))
     if rows.empty:
         return "보낼 알림 없음"
     rows["channel"] = rows["channel"].fillna("email").replace("", "email")
@@ -269,4 +284,30 @@ def test_message(actor: dict) -> int:
 
 def recent_df(limit: int = 50) -> pd.DataFrame:
     return db.query_df("SELECT id, created_at, channel, to_addr, subject, status, tries, last_error, sent_at FROM notifications "
-                       "ORDER BY id DESC LIMIT ?", (limit,))
+                       "WHERE channel <> 'inbox' ORDER BY id DESC LIMIT ?", (limit,))
+
+
+# ── 알림함 ───────────────────────────────────────────────────
+def unread(user_id) -> int:
+    if not user_id:
+        return 0
+    return int(db.scalar("SELECT COUNT(*) FROM notifications WHERE channel = 'inbox' AND to_user_id = ? AND read_at = ''",
+                         (user_id,)) or 0)
+
+
+def inbox_df(user_id, only_unread: bool = False, limit: int = 200) -> pd.DataFrame:
+    return db.query_df("SELECT id, created_at, subject, body, link, read_at FROM notifications WHERE channel = 'inbox' "
+                       "AND to_user_id = ?" + (" AND read_at = ''" if only_unread else "") + " ORDER BY id DESC LIMIT ?",
+                       (user_id, limit))
+
+
+def mark_read(user_id, ids: list[int] | None = None) -> int:
+    """읽음 표시 (ids 가 None 이면 모두). 바꾼 건수."""
+    sql = "UPDATE notifications SET read_at = ? WHERE channel = 'inbox' AND to_user_id = ? AND read_at = ''"
+    params: list = [now_str(), user_id]
+    if ids is not None:
+        frag, p2 = db.in_clause([int(i) for i in ids])
+        sql += f" AND id{frag}"
+        params += p2
+    with db.transaction() as conn:
+        return conn.execute(sql, params).rowcount

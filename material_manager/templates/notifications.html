@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf %}
+
+{% block content %}
+<div class="tabs">
+  <a href="{{ url_for('notifications.index') }}" class="{{ 'active' if only_unread }}">안 읽은 알림</a>
+  <a href="{{ url_for('notifications.index', all=1) }}" class="{{ 'active' if not only_unread }}">전체 (최근 200)</a>
+</div>
+<p class="muted small">결재 요청·결과·독촉이 여기에 쌓입니다. 메일·잔디·네이버웍스를 쓰지 않아도 늘 남습니다. 열면 읽음으로 바뀌고 그 화면으로 갑니다.</p>
+{% if rows %}
+  {% if only_unread %}
+  <form method="post" action="{{ url_for('notifications.read') }}">{{ csrf() }}<button class="btn btn-sm">✔ 모두 읽음으로</button></form>
+  {% endif %}
+  <ul class="notif-list">
+    {% for n in rows %}
+      <li class="{{ 'unread' if not n.read_at }}">
+        <div class="notif-head"><strong>{{ n.subject }}</strong> <span class="muted small">{{ n.created_at[:16] }}{{ ' · 읽음 ' ~ n.read_at[5:16] if n.read_at }}</span></div>
+        <div class="notif-body small">{{ n.body }}</div>
+        <div class="row-actions inline">
+          {% if n.link %}<a class="btn btn-sm btn-primary" href="{{ url_for('notifications.open_', nid=n.id) }}">열기</a>{% endif %}
+          {% if not n.read_at %}<form class="inline" method="post" action="{{ url_for('notifications.read') }}">{{ csrf() }}
+            <input type="hidden" name="id" value="{{ n.id }}"><button class="btn btn-sm">읽음</button></form>{% endif %}
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <div class="alert alert-info">{{ '안 읽은 알림이 없습니다.' if only_unread else '알림이 없습니다.' }}</div>
+{% endif %}
+{% endblock %}

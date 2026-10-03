@@ -1,6 +1,7 @@
 """거래처 마스터 화면: 목록(실적) · 등록 · 미등록 이름 정리(새로 등록하거나 기존 거래처에 연결) · 상세(수정·다른 이름·최근 거래).
 규칙은 core/partners.py. 보기는 모두, 바꾸기는 관리자 이상."""
 
+import pandas as pd
 from flask import Blueprint, abort, flash, redirect, request, url_for
 
 from core import bulk, partners
@@ -9,7 +10,7 @@ from views.helpers import Table, actor, can, f_str, form_response, log_export, r
 
 bp = Blueprint("partners", __name__, url_prefix="/partners")
 
-TABS = [("list", "거래처 목록"), ("unknown", "미등록 이름 정리"), ("new", "거래처 등록")]
+TABS = [("list", "📋 거래처 목록"), ("unknown", "🧹 미등록 이름 정리"), ("merge", "🔀 중복 · 병합"), ("new", "➕ 거래처 등록")]
 
 
 def _form() -> dict:
@@ -20,11 +21,15 @@ def _tabs():
     return TABS if can("MANAGER") else TABS[:2]
 
 
+
 @bp.get("/")
 def index():
     tab = request.args.get("tab", "list")
-    if tab == "new" and not can("MANAGER"):
+    if tab in ("new", "merge") and not can("MANAGER"):
         tab = "list"
+    if tab == "merge":
+        return render_page("partners.html", "partners", tabs=_tabs(), tab="merge", candidates=partners.merge_candidates(),
+                           options=partners.list_df()[["id", "name", "code"]].to_dict("records"))
     if tab == "new":
         return render_page("partners.html", "partners", tabs=_tabs(), tab="new", form={"kind": "SUPPLIER"})
     if tab == "unknown":
@@ -49,8 +54,10 @@ def _view(df):
     if df.empty:
         return df.reindex(columns=["거래처코드", "거래처명", "구분", "사업자등록번호", "담당자", "전화", "메일", "다른 이름",
                                    "입고금액", "출고금액", "거래 수", "마지막 거래", "상태"])
+    merged = df["merged_into"] if "merged_into" in df.columns else pd.Series([None] * len(df))
     out = df.assign(kind=df["kind"].map(partners.KINDS), biz_no=df["biz_no"].map(partners.biz_fmt),
-                    active=df["active"].map({1: "사용", 0: "중지"}))
+                    active=["병합됨" if m == m and m is not None else ("사용" if a else "중지")
+                            for a, m in zip(df["active"], merged)])
     out = out[["code", "name", "kind", "biz_no", "contact", "phone", "email", "aliases", "in_amt", "out_amt", "tx_cnt",
                "last_tx", "active"]]
     out.columns = ["거래처코드", "거래처명", "구분", "사업자등록번호", "담당자", "전화", "메일", "다른 이름", "입고금액", "출고금액",
@@ -159,3 +166,15 @@ def import_upload():
 @role_required("MANAGER")
 def import_apply():
     return bulk_ui.apply("partners", bulk.apply_partners, url_for("partners.import_page"))
+
+
+@bp.post("/merge")
+@role_required("MANAGER")
+def merge():
+    src, dst = f_str("src"), f_str("dst")
+    if not (src.isdigit() and dst.isdigit()):
+        flash("합칠 거래처와 남길 거래처를 고르세요.", "error")
+        return redirect(url_for("partners.index", tab="merge"))
+    r = partners.merge(int(src), int(dst), actor())
+    flash(r.message, "success" if r.ok else "error")
+    return redirect(url_for("partners.detail", pid=r.id) if r.ok else url_for("partners.index", tab="merge"))

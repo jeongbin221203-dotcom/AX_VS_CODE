@@ -12,10 +12,10 @@
   {{ partner_fields(form) }}
   <p class="muted small">이름을 바꾸면 예전 이름은 '다른 이름'으로 남아, 예전 이름으로 적은 거래도 계속 이 거래처로 집계됩니다.</p>
   <div class="row-actions">
-    <button class="btn btn-primary">저장</button>
+    <button class="btn btn-primary">💾 저장</button>
   </div>
 </form>
-<form class="row-actions" method="post" action="{{ url_for('partners.set_active', pid=p.id) }}">
+<form class="row-actions" method="post" action="{{ url_for('partners.set_active', pid=p.id) }}" data-confirm="거래처 사용 상태를 바꿉니다. 계속할까요?">
   {{ csrf() }}<input type="hidden" name="active" value="{{ 0 if p.active else 1 }}">
   <button class="btn btn-sm {{ 'btn-danger' if p.active }}">{{ '사용중지' if p.active else '다시 사용' }}</button>
   <span class="hint">사용중지한 거래처 이름으로는 새 거래가 정식 이름으로 연결되지 않습니다. 지난 거래는 그대로입니다.</span>

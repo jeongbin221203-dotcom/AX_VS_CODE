@@ -22,7 +22,7 @@
         </tr></thead>
         <tbody>
         {% for r in t.rows %}
-          <tr class="{{ 'tone-' ~ r.tone if r.tone }}">
+          <tr class="{{ 'tone-' ~ r.tone if r.tone }}{{ ' link' if r.href }}"{% if r.href %} data-href="{{ r.href }}" tabindex="0" title="눌러서 열기"{% endif %}>
             {% for cell in r.cells %}<td class="{{ 'num' if t.columns[loop.index0] in t.numeric }}">{% if loop.first and r.href %}<a href="{{ r.href }}">{{ cell }}</a>{% else %}{{ cell }}{% endif %}</td>{% endfor %}
           </tr>
         {% endfor %}

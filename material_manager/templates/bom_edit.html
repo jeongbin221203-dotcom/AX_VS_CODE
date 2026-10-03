@@ -71,7 +71,7 @@
     {% if editable %}<div><button class="btn btn-primary">공정 저장</button></div>{% endif %}
   </form>
   {% if bom and editable %}
-    <form class="row-actions" method="post" action="{{ url_for('production.bom_active', product_id=pid) }}">
+    <form class="row-actions" method="post" action="{{ url_for('production.bom_active', product_id=pid) }}" data-confirm="BOM 사용 상태를 바꿉니다. 계속할까요?">
       {{ csrf() }}<input type="hidden" name="active" value="{{ 0 if bom.active else 1 }}">
       <button class="btn btn-sm">{{ 'BOM 사용 멈추기' if bom.active else 'BOM 다시 사용' }}</button>
     </form>

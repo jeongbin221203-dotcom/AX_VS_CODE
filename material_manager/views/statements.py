@@ -17,7 +17,7 @@ from views.helpers import Table, actor, f_str, form_response, render_page, role_
 
 bp = Blueprint("statements", __name__, url_prefix="/statements")
 
-TABS = [("new", "명세서 등록"), ("list", "등록한 명세서")]
+TABS = [("new", "➕ 명세서 등록"), ("list", "📋 등록한 명세서")]
 MANUAL_ROWS = 12
 TOKEN_RE = re.compile(r"^[0-9a-f]{32}$")
 SESSION_KEY = "statement_tokens"          # 미리보기 표 (탭 여러 개를 동시에 열 수 있게 최근 10개)

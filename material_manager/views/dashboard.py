@@ -72,7 +72,8 @@ def index():
     lots = lots[lots["days_left"].notna()]
     expired = lots[lots["days_left"] < 0]
     expiring = lots[(lots["days_left"] >= 0) & (lots["days_left"] <= 30)]
-    pending = approvals.requests_df("PENDING", g.wh_ids) if can("MANAGER") else pd.DataFrame()
+    from core import workflow
+    pending = pd.DataFrame(workflow.queue(g.user)) if can("CLERK") else pd.DataFrame()
     incoming = insights.incoming_po(g.wh_ids, INCOMING_DAYS)
     erp_fail, erp_fail_cnt = (sap.outbox_page(["FAILED", "ERROR"], g.wh_ids, page=1, size=50)
                               if g.sap_on and can("MANAGER") else (pd.DataFrame(), 0))
@@ -82,8 +83,8 @@ def index():
               ("cover", f"📉 소진 임박 {len(cover)}"),
               ("dead", f"💤 장기 미사용 {len(dead)}"),
               ("incoming", f"🚚 입고 예정·지연 {len(incoming)}")]
-    if can("MANAGER"):
-        checks.insert(4, ("approvals", f"✅ 결재 대기 {len(pending)}"))
+    if can("CLERK"):
+        checks.insert(4, ("approvals", f"✅ 내 결재 대기 {len(pending)}"))
     if g.sap_on and can("MANAGER"):
         checks.append(("erp", f"🔗 ERP 전송 실패 {erp_fail_cnt}"))
     if tab not in {k for k, _ in checks}:
@@ -102,12 +103,16 @@ def index():
         "incoming": Table(incoming, {"잔량": "{:,.2f}", "품목": "{}"},
                           tones=["danger" if s == "지연" else None for s in incoming["상태"]]),
     }
-    if can("MANAGER"):
+    if can("CLERK"):
+        kinds = {"ADJ": "실사 조정", "PR": "구매요청", "PO": "발주"}
         tables["approvals"] = Table(
-            pending[["id", "tx_date", "code", "name", "wh_code", "qty", "amount", "requested_by", "requested_at"]]
-            .rename(columns={"id": "번호", "tx_date": "실사일", "code": "자재코드", "name": "자재명", "wh_code": "창고",
-                             "qty": "조정 수량", "amount": "금액", "requested_by": "요청자", "requested_at": "요청일시"})
-            if not pending.empty else pd.DataFrame(), {"번호": "{}", "조정 수량": "{:+,.2f}", "금액": MONEY})
+            pending.assign(kind=pending["kind"].map(kinds), via=pending["via"].fillna(""))[
+                ["kind", "no", "step", "title", "amount", "requested_by", "requested_at", "via"]]
+            .rename(columns={"kind": "종류", "no": "번호", "step": "단계", "title": "내용", "amount": "금액",
+                             "requested_by": "요청자", "requested_at": "요청일시", "via": "대결"})
+            if not pending.empty else pd.DataFrame(), {"금액": MONEY},
+            links=list(pending["link"]) if not pending.empty else None,
+            tones=["danger" if x else None for x in pending["late"]] if not pending.empty else None)
     if "erp" in {k for k, _ in checks}:
         tables["erp"] = Table(
             erp_fail[["tx_id", "tx_date", "code", "name", "wh_code", "status", "attempts", "last_error"]]

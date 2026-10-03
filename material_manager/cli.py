@@ -195,6 +195,14 @@ def register_cli(app: Flask) -> None:
         until = sso.set_outage(hours, None)
         click.echo(f"SSO 장애 모드: {until}까지" if until else "SSO 장애 모드 해제")
 
+    @app.cli.command("read-only")
+    @click.argument("state", type=click.Choice(["on", "off"]))
+    @click.option("--reason", default="", help="점검 사유 (화면 띠에 보임)")
+    def read_only_cmd(state: str, reason: str):
+        """점검(읽기 전용) 모드 켜기·끄기 — 저장·변경을 막고 조회만 연다."""
+        from core import maintenance
+        click.echo(maintenance.set_mode(state == "on", reason, None))
+
     @app.cli.command("doctor")
     def doctor_cmd():
         """운영 점검 (거래는 보내지 않음). 실패가 있으면 종료 코드 1."""

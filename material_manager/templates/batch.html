@@ -95,7 +95,7 @@
             {% if r.reversed == r.lines %}<span class="muted small">취소됨</span>
             {% elif can_cancel %}
               <details class="inline-cancel"><summary>전체 취소</summary>
-                <form method="post" action="{{ url_for('transactions.batch_cancel', batch_no=r.batch_no) }}" data-nodraft>
+                <form method="post" action="{{ url_for('transactions.batch_cancel', batch_no=r.batch_no) }}" data-nodraft data-confirm="이 묶음의 모든 줄을 취소 거래로 되돌립니다. 계속할까요?">
                   {{ csrf() }}<input name="reason" placeholder="취소 사유" required>
                   <button class="btn btn-sm btn-danger">취소 거래 만들기</button>
                 </form>

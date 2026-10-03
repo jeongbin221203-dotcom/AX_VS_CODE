@@ -109,7 +109,7 @@
 {% if can_cancel and p.status != 'CANCELLED' %}
 <details class="card">
   <summary>작업지시 취소</summary>
-  <form class="form" method="post" action="{{ url_for('production.cancel', prod_id=p.id) }}" data-nodraft>
+  <form class="form" method="post" action="{{ url_for('production.cancel', prod_id=p.id) }}" data-nodraft data-confirm="투입·반납·완제품 입고를 모두 취소 거래로 되돌립니다. 계속할까요?">
     {{ csrf() }}
     <p class="muted small">투입·반납·완제품 입고를 모두 취소 거래로 되돌립니다(오늘 일자). 완제품을 이미 다른 데 썼으면(재고가 음수가 되면) 취소되지 않습니다.
       본인이 등록한 거래는 다른 관리자가 취소해야 합니다.</p>

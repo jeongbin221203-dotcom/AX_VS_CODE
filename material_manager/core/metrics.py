@@ -55,7 +55,7 @@ def _business() -> list[str]:
             out += [_line("mm_sap_outbox", n, status=s) for s, n in q("SELECT status, COUNT(*) FROM sap_outbox GROUP BY status")]
             out.append("# HELP mm_notifications 결재 알림 건수 (보낼 길·상태별)\n# TYPE mm_notifications gauge")
             out += [_line("mm_notifications", n, channel=c or "email", status=s) for c, s, n in
-                    q("SELECT channel, status, COUNT(*) FROM notifications GROUP BY channel, status")]
+                    q("SELECT channel, status, COUNT(*) FROM notifications WHERE channel <> 'inbox' GROUP BY channel, status")]
             pend = q("SELECT (SELECT COUNT(*) FROM approval_requests WHERE status = 'PENDING'), "
                      "(SELECT COUNT(*) FROM purchase_requests WHERE status = 'PENDING'), "
                      "(SELECT COUNT(*) FROM purchase_orders WHERE status = 'PENDING_APPROVAL')")[0]

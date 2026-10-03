@@ -104,7 +104,7 @@
   {% endif %}
 
 {% elif tab == "wo" %}
-  <details class="card" {{ 'open' if not grid.rows }}>
+  <details class="card" {{ 'open' if grid and not grid.rows }}>
     <summary><strong>새 작업지시</strong> — 계획만 세우고, 자재 투입·실적·완료는 작업지시 화면에서</summary>
     {% if not products %}<p class="muted">BOM이 있는 제품이 없습니다.</p>{% else %}
     <form class="form" method="post" action="{{ url_for('production.wo_create') }}">
@@ -125,12 +125,32 @@
     </form>
     {% endif %}
   </details>
-  <div class="toolbar">
-    <a class="btn btn-sm {{ 'btn-primary' if show == 'open' }}" href="{{ url_with(show='open') }}">진행 중</a>
-    <a class="btn btn-sm {{ 'btn-primary' if show != 'open' }}" href="{{ url_with(show='all') }}">전체</a>
-    <span class="muted small">빨간 줄: 완료 예정일이 지난 진행 중 작업지시</span>
+  <div class="toolbar view-switch">
+    <a class="btn btn-sm {{ 'btn-primary' if not board and show == 'open' }}" href="{{ url_with(show='open', view=None) }}">☰ 진행 중</a>
+    <a class="btn btn-sm {{ 'btn-primary' if not board and show != 'open' }}" href="{{ url_with(show='all', view=None) }}">☰ 전체</a>
+    <a class="btn btn-sm {{ 'btn-primary' if board }}" href="{{ url_with(view='board') }}">▦ 보드</a>
+    <span class="muted small">빨간색: 완료 예정일이 지난 진행 중 작업지시</span>
   </div>
+  {% if board %}
+    <div class="board">
+      {% for st, cards in board.items() %}
+        <section class="board-col">
+          <h4>{{ status_label[st] }} <span class="muted">{{ cards|length }}건 · {{ (cards|sum(attribute='material_cost'))|krw }}</span></h4>
+          {% for c in cards %}
+            <a class="board-card {{ 'late' if c.late }}" href="{{ url_for('production.detail', prod_id=c.id) }}">
+              <strong>{{ c.prod_no }}</strong> <span class="muted small">{{ c.work_order }}</span>
+              <div>[{{ c.code }}] {{ c.name }}</div>
+              <div class="small">{{ '{:,.4g}'.format(c.qty) }} {{ c.unit }} · {{ c.issue_wh }}{{ ' → ' ~ c.receipt_wh if c.receipt_wh }}</div>
+              <div class="small muted">{{ '완료 ' ~ c.tx_date if st == 'DONE' else '완료 예정 ' ~ (c.due_date or '-') }}{{ ' · 투입 ' ~ (c.material_cost|krw) if c.material_cost }}</div>
+            </a>
+          {% else %}<p class="muted small">없음</p>{% endfor %}
+        </section>
+      {% endfor %}
+    </div>
+    <p class="muted small">완료는 최근 30일. 카드를 누르면 작업지시 화면(자재 투입·공정 실적·완료).</p>
+  {% else %}
   {{ table(grid, '작업지시가 없습니다.') }}
+  {% endif %}
 
 {% elif tab == "wip" %}
   <div class="metrics m3">

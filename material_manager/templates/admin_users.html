@@ -49,13 +49,13 @@
     <label>상태
       <select name="active"><option value="1" {{ 'selected' if u.active }}>사용</option><option value="0" {{ 'selected' if not u.active }}>중지</option></select>
     </label>
-    <button class="btn">저장</button>
+    <button class="btn">💾 저장</button>
   </form>
   <form class="row-actions" method="post" action="{{ url_for('admin.user_email', user_id=u.id) }}">
     {{ csrf() }}
     <label class="grow">결재 알림 메일<input name="email" type="email" value="{{ u.email or '' }}" placeholder="비우면 메일로는 안 받음"></label>
     <label>메신저 아이디 (네이버웍스)<input name="messenger_id" value="{{ u.messenger_id or '' }}" placeholder="비우면 메일 주소로"></label>
-    <button class="btn">저장</button>
+    <button class="btn">💾 저장</button>
   </form>
   {% if u.role != 'ADMIN' %}
   <form class="form" method="post" action="{{ url_for('admin.user_scope', user_id=u.id) }}">

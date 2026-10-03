@@ -54,6 +54,8 @@ def create_app(test_config: dict | None = None) -> Flask:
         from core import forward
         app.before_request(forward.redirect_if_up)  # 맨 먼저: 실제 서버(PC)가 켜져 있으면 그리로 보낸다
     db.init_db()
+    if config.LOG_JSON:
+        _json_logs(app)
     register_blueprints(app)
     register_cli(app)                             # flask --app app batch / erp / init-db
     register_template_helpers(app)
@@ -111,6 +113,18 @@ def create_app(test_config: dict | None = None) -> Flask:
         ok = all(v in ("ok", "degraded") for v in checks.values())
         return jsonify(status="ok" if ok else "error", **checks), (200 if ok else 503)
 
+    @app.get("/readyz")
+    def readyz():
+        """배포·로드밸런서용 '받을 준비 됨': DB 연결 + DB 구조가 이 프로그램의 최신 리비전. 점검 모드도 알려 준다."""
+        from core import maintenance, migrate
+        try:
+            with db.get_conn() as conn:
+                cur, head = migrate.current(conn), migrate.head()
+        except Exception:
+            return jsonify(ready=False, db="error"), 503
+        ok = cur == head
+        return jsonify(ready=ok, schema=cur, expected=head, read_only=bool(maintenance.state())), (200 if ok else 503)
+
     @app.get("/metrics")
     def metrics():
         """Prometheus 감시 지표 (core/metrics.py). 토큰(MM_METRICS_TOKEN) 또는 이 서버 자신만."""
@@ -150,9 +164,31 @@ def create_app(test_config: dict | None = None) -> Flask:
         return res
 
     @app.before_request
-    def csrf_protect() -> None:
-        """상태를 바꾸는 모든 요청은 세션에 발급한 토큰과 일치해야 한다."""
+    def _request_id() -> None:
+        """요청마다 번호 (로그·오류 화면·응답 헤더 X-Request-ID) — 문의할 때 이 번호로 서버 로그를 찾는다."""
+        rid = (request.headers.get("X-Request-ID") or "")[:64]
+        g.request_id = rid if rid.replace("-", "").isalnum() else secrets.token_hex(8)
+        from core import company
+        company.refresh()
+
+    @app.before_request
+    def read_only_guard():
+        """점검(읽기 전용) 모드: 저장·변경을 막는다 (core/maintenance.py)."""
         if request.method in SAFE_METHODS:
+            return None
+        from core import maintenance
+        if not maintenance.state() or request.endpoint in maintenance.ALLOWED:
+            return None
+        if request.blueprint == "api" or request.headers.get("X-MM-Queue") == "1":
+            return jsonify(ok=False, retry=True, error="시스템 점검 중 — 조회만 됩니다. 점검이 끝나면 다시 보내세요.",
+                           message="시스템 점검 중 — 점검이 끝나면 자동으로 다시 보냅니다."), 503
+        flash("🛠️ 시스템 점검 중입니다 — 조회만 할 수 있고 저장·변경은 막혀 있습니다. 입력한 내용은 이 브라우저에 보관됩니다.", "warning")
+        return redirect(_same_site_referrer() or "/")
+
+    @app.before_request
+    def csrf_protect() -> None:
+        """상태를 바꾸는 모든 요청은 세션에 발급한 토큰과 일치해야 한다 (API 는 세션 대신 API 키)."""
+        if request.method in SAFE_METHODS or request.blueprint == "api":
             return
         token = session.get("_csrf")
         if not token or not secrets.compare_digest(token, request.form.get("_csrf", "")):
@@ -193,6 +229,12 @@ def create_app(test_config: dict | None = None) -> Flask:
         return response
 
     @app.after_request
+    def _request_id_header(response):
+        if g.get("request_id"):
+            response.headers["X-Request-ID"] = g.request_id
+        return response
+
+    @app.after_request
     def security_headers(response):
         for key, value in SECURITY_HEADERS.items():
             response.headers.setdefault(key, value)       # 증빙 파일처럼 더 엄격하게 정한 응답은 그대로 둔다
@@ -204,6 +246,30 @@ def create_app(test_config: dict | None = None) -> Flask:
         return response
 
     return app
+
+
+def _json_logs(app: Flask) -> None:
+    """서버 로그를 한 줄 JSON 으로 (MM_LOG_JSON=1) — 로그 수집기(Loki·CloudWatch 등)에서 요청 번호로 찾는다."""
+    import json
+    import logging
+
+    class JsonFormatter(logging.Formatter):
+        def format(self, record):
+            from flask import has_request_context
+            data = {"at": self.formatTime(record, "%Y-%m-%dT%H:%M:%S"), "level": record.levelname, "logger": record.name,
+                    "msg": record.getMessage()}
+            if has_request_context():
+                data.update(request_id=g.get("request_id", ""), path=request.path, method=request.method,
+                            user=(g.get("user") or {}).get("username", ""))
+            if record.exc_info:
+                data["error"] = self.formatException(record.exc_info)[-2000:]
+            return json.dumps(data, ensure_ascii=False)
+
+    handler = logging.StreamHandler()
+    handler.setFormatter(JsonFormatter())
+    root = logging.getLogger()
+    root.handlers[:] = [handler]
+    app.logger.handlers[:] = [handler]
 
 
 class _ClientIpHeader:

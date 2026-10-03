@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf %}
+{% block content %}
+<p class="muted">회사마다 다른 업무 기준을 여기서 바꿉니다 (코드·환경변수를 고치지 않아도 됨). 저장하면 서버 여러 대가 15초 안에 함께 바뀌고,
+  바뀐 항목은 감사로그에 남습니다. 지난 결재·거래에는 소급하지 않습니다.</p>
+
+<form class="card form" method="post" action="{{ url_for('admin.settings_save') }}">
+  {{ csrf() }}
+  <div class="form-grid g3">
+    {% for k, (label, kind, help, minimum) in fields.items() %}
+      {% if kind == 'bool' %}
+        <label class="check"><input type="checkbox" name="{{ k }}" value="1" {{ 'checked' if values[k] }}> {{ label }}
+          <span class="hint">{{ help }}{{ ' · 기본: ' ~ ('켬' if defaults[k] else '끔') if k in stored }}</span></label>
+      {% else %}
+        <label>{{ label }}{{ ' ✎' if k in stored }}
+          <input name="{{ k }}" value="{{ values[k] if kind == 'text' else ('%g' % values[k]) }}" {{ 'inputmode=numeric' if kind != 'text' }}>
+          <span class="hint">{{ help }}{{ ' · 기본: ' ~ defaults[k] if k in stored }}</span></label>
+      {% endif %}
+    {% endfor %}
+  </div>
+  <p class="muted small">✎ = 기본값에서 바꾼 항목. 기본값으로 되돌리려면 기본값을 그대로 넣고 저장합니다.</p>
+  <div><button class="btn btn-primary">💾 저장</button></div>
+</form>
+
+<h3>🛠️ 점검(읽기 전용) 모드</h3>
+<form class="card form" method="post" action="{{ url_for('admin.read_only') }}" data-confirm="{{ '점검 모드를 끕니다.' if ro else '모든 사용자의 저장·변경을 막습니다. 계속할까요?' }}">
+  {{ csrf() }}
+  {% if ro %}
+    <div class="alert alert-warning">지금 점검 중 — {{ ro.by }} · {{ ro.at }}{{ ' · ' ~ ro.reason if ro.reason }}</div>
+    <input type="hidden" name="on" value="0"><div><button class="btn btn-primary">점검 끝 (저장 다시 허용)</button></div>
+  {% else %}
+    <p class="muted small">DB 옮기기·백업 복구·대량 정리 동안 조회만 열어 둡니다. 화면 위에 점검 띠가 나오고, 현장의 끊김 대비 입력은 브라우저에 보관됩니다.
+      명령: <code>flask --app app read-only on --reason "..."</code></p>
+    <label>사유 (띠에 보임)<input name="reason" placeholder="예: 18:00~18:30 서버 이전"></label>
+    <input type="hidden" name="on" value="1"><div><button class="btn btn-danger">점검 시작</button></div>
+  {% endif %}
+</form>
+
+<h3>바뀐 기록</h3>
+{% if history %}
+  <div class="table-wrap"><table class="data"><thead><tr><th>일시</th><th>바꾼 사람</th><th>내용</th></tr></thead><tbody>
+  {% for h in history %}<tr><td>{{ h.at[:16] }}</td><td>{{ h.user_name }}</td><td class="small mono">{{ h.detail[:300] }}</td></tr>{% endfor %}
+  </tbody></table></div>
+{% else %}<p class="muted small">아직 바꾼 적이 없습니다 (모두 기본값).</p>{% endif %}
+{% endblock %}

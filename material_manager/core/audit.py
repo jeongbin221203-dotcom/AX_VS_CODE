@@ -47,6 +47,9 @@ ACTIONS = {
     "WO_CREATE": "작업지시", "WO_ISSUE": "작업지시 자재 투입", "WO_OPERATION": "공정 실적", "WO_COMPLETE": "작업지시 완료",
     "ROUTING_SAVE": "공정(라우팅) 저장", "MRP_RUN": "MRP 실행", "MRP_CONVERT": "MRP 계획 → 요청·지시",
     "MRP_DEMAND": "MRP 수요 등록", "PARTNER_IMPORT": "거래처 일괄 등록", "BOM_IMPORT": "BOM 일괄 등록",
+    "DELEGATION": "대결 지정", "COMPANY_SETTINGS": "회사 설정 변경", "PARTNER_MERGE": "거래처 병합",
+    "API_KEY": "API 키", "API_CALL": "API 호출", "READ_ONLY": "점검(읽기 전용) 모드", "DOWNLOAD": "파일 내려받기",
+    "QUALITY_FIX": "데이터 점검 고침",
 }
 
 

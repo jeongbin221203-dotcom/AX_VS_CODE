@@ -26,7 +26,7 @@ from core import audit, auth, db, org, partners, production, seed  # noqa: E402
 from test_app import PW, app, client, csrf, login, post  # noqa: E402,F401
 
 PUBLIC = {"auth.login", "auth.setup", "static", "health", "metrics", "auth.sso_login", "auth.sso_callback", "favicon",
-          "service_worker", "auth.logout"}
+          "service_worker", "auth.logout", "readyz", "api.openapi"}
 TODAY = date.today().isoformat()
 
 
@@ -53,6 +53,9 @@ def test_every_post_needs_csrf(client):
         if "POST" not in rule.methods:
             continue
         res = client.post(_url(rule), data={"x": "1"})
+        if rule.endpoint.startswith("api."):               # API 는 세션·CSRF 대신 API 키 → 키 없으면 401
+            assert res.status_code == 401, (rule.rule, res.status_code)
+            continue
         assert res.status_code == 400, (rule.rule, res.status_code)
 
 
@@ -60,12 +63,12 @@ def test_viewer_cannot_write(app):
     seed.seed()
     v = login(app.test_client(), "viewer")
     token = csrf(v)
-    allowed = {"auth.logout", "auth.password", "prefs.menu", "auth.demo_as"}        # 자기 계정·화면 설정만
+    allowed = {"auth.logout", "auth.password", "prefs.menu", "auth.demo_as", "notifications.read"}   # 자기 계정·화면 설정·내 알림만
     for rule in app.url_map.iter_rules():
         if "POST" not in rule.methods or rule.endpoint in allowed or rule.endpoint in PUBLIC:
             continue
         res = v.post(_url(rule), data={"_csrf": token})
-        assert res.status_code in (400, 403, 404), (rule.rule, res.status_code)
+        assert res.status_code in (400, 401, 403, 404), (rule.rule, res.status_code)
 
 
 def _scoped_clerk():

@@ -664,6 +664,7 @@
         if (window.mmUI) window.mmUI.refresh(main);
         if (window.mmNet && window.mmNet.refresh) window.mmNet.refresh(main);
         if (window.mmPicker) window.mmPicker.refresh(main);
+        if (window.mmUI2) window.mmUI2.refresh(main);
         const pin = function () {
           const nb = idx >= 0 ? main.querySelectorAll(".tabs")[idx] : null;
           if (nb && barTop !== null) window.scrollBy(0, nb.getBoundingClientRect().top - barTop);
@@ -679,7 +680,8 @@
   }
 
   document.addEventListener("click", function (e) {
-    const a = e.target.closest(".tabs a[href], .sidebar .menu a[href], .sidebar a.brand, .sidebar a.shortage");
+    const a = e.target.closest(".tabs a[href], .sidebar .menu a[href], .sidebar a.brand, .sidebar a.shortage, .sidebar a.bell, " +
+                               "main .pager a[href]");
     if (!a || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     if (a.origin !== window.location.origin || a.target || a.hasAttribute("download")) return;
     e.preventDefault();
@@ -692,6 +694,7 @@
     }
     swap(a.href, true, bar || null);
   });
+  window.mmSwap = function (href) { swap(href, true, null); };             // 목록 행 누르기(ui.js)
   window.addEventListener("popstate", function (e) {
     if (e.state && e.state.mm) swap(location.href, false, undefined);
   });

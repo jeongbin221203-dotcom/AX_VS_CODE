@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf %}
+{% block content %}
+<p class="muted">MES·WMS·사내 포털 같은 다른 시스템이 재고를 조회하고 입출고를 등록할 때 쓰는 키입니다.
+  화면 등록과 같은 규칙(재고·마감·창고·로트)으로 판정하고, 기록에는 'API:키 이름'으로 남습니다.
+  명세: <a href="{{ url_for('api.openapi') }}">/api/v1/openapi.json</a></p>
+
+{% if new_key %}
+  <div class="alert alert-warning">새 키 — <strong>지금 한 번만 보입니다.</strong> 복사해 연동 시스템의 설정에 넣으세요(다시 볼 수 없음, 잃어버리면 폐기하고 새로 만듦).
+    <pre class="secret">{{ new_key }}</pre>
+    <code class="small">curl -H "Authorization: Bearer {{ new_key[:12] }}…" {{ request.host_url }}api/v1/stock?warehouse=CW-PT</code></div>
+{% endif %}
+
+<form class="card form" method="post" action="{{ url_for('admin.api_key_create') }}">
+  {{ csrf() }}
+  <div class="form-grid g3">
+    <label>이름 *<input name="name" required placeholder="예: 1공장 MES"></label>
+    <fieldset><legend>범위 *</legend>
+      {% for k, v in scopes.items() %}<label class="check"><input type="checkbox" name="scope" value="{{ k }}" {{ 'checked' if k != 'transactions:write' }}> {{ v }} <code class="small">{{ k }}</code></label>{% endfor %}
+    </fieldset>
+    <label>허용 IP (쉼표, 비우면 어디서나)<input name="allowed_ips" placeholder="10.1.0.0/16, 203.0.113.7"></label>
+  </div>
+  <label>창고 (고르지 않으면 모든 창고)
+    <select name="warehouse" multiple size="4">{% for k, v in wh_opts.items() %}<option value="{{ k }}">{{ v }}</option>{% endfor %}</select></label>
+  <div><button class="btn btn-primary">🔑 키 만들기</button></div>
+</form>
+
+<h3>키 목록</h3>
+<div class="table-wrap"><table class="data">
+  <thead><tr><th>이름</th><th>앞자리</th><th>범위</th><th>허용 IP</th><th>창고</th><th>마지막 사용</th><th>만든 사람</th><th>상태</th><th></th></tr></thead>
+  <tbody>
+  {% for r in rows %}
+    <tr class="{{ 'tone-muted' if not r.active }}"><td>{{ r.name }}</td><td class="mono">{{ r.prefix }}…</td>
+      <td class="small">{{ r.scopes.split(',')|map('replace', 'materials:read', '자재 조회')|map('replace', 'stock:read', '재고 조회')|map('replace', 'transactions:write', '입출고 등록')|join(', ') }}</td>
+      <td class="small">{{ r.allowed_ips or '어디서나' }}</td><td class="small">{{ r.warehouse_ids or '모두' }}</td>
+      <td class="small">{{ r.last_used_at[:16] or '-' }}</td><td class="small">{{ r.created_by }} · {{ r.created_at[:10] }}</td>
+      <td>{{ '사용' if r.active else '폐기 ' ~ r.revoked_at[:10] }}</td>
+      <td>{% if r.active %}<form class="inline" method="post" action="{{ url_for('admin.api_key_revoke', kid=r.id) }}" data-confirm="이 키를 폐기합니다. 연동 시스템이 바로 막힙니다. 계속할까요?">{{ csrf() }}
+        <button class="btn btn-sm btn-danger">폐기</button></form>{% endif %}</td></tr>
+  {% else %}<tr><td colspan="9" class="muted">만든 키가 없습니다.</td></tr>{% endfor %}
+  </tbody>
+</table></div>
+{% endblock %}

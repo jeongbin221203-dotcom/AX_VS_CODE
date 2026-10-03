@@ -38,16 +38,19 @@ MENUS = [
     ("reconcile", "⚖️ 재고 대사", "reports.reconcile_view", "MANAGER"),
     ("periods", "🔒 월 마감", "periods.index", "MANAGER"),
     ("sap", "🔗 ERP·SAP 연동", "sap.index", "MANAGER"),
+    ("quality", "🩺 데이터 점검", "quality.index", "MANAGER"),
     ("data", "🛠️ 데이터 관리", "data_admin.index", "ADMIN"),
+    ("settings", "🏢 회사 설정", "admin.settings", "ADMIN"),
+    ("api", "🔑 API 연동", "admin.api_keys", "ADMIN"),
     ("org", "🏭 플랜트·창고", "admin.org_page", "ADMIN"),
     ("users", "👥 사용자", "admin.users", "ADMIN"),
-    ("jobs", "⏱️ 배치", "admin.jobs_page", "ADMIN"),
+    ("jobs", "⏱️ 배치 작업", "admin.jobs_page", "ADMIN"),
     ("forms", "📑 엑셀 양식", "admin.forms_list", "ADMIN"),
     ("audit", "🗂️ 감사로그", "admin.audit_log", "ADMIN"),
 ]
 PINNED_MENU = "dashboard"
 # 로그인 없이 열 수 있는 화면
-PUBLIC_ENDPOINTS = {"auth.login", "auth.setup", "static", "health", "metrics"}
+PUBLIC_ENDPOINTS = {"auth.login", "auth.setup", "static", "health", "metrics", "readyz", "api.openapi"}
 # 비밀번호를 바꿔야 하는 사용자가 열 수 있는 화면
 PASSWORD_ENDPOINTS = {"auth.password", "auth.logout", "static"}
 PUBLIC_ENDPOINTS |= {"auth.sso_login", "auth.sso_callback"}
@@ -58,7 +61,7 @@ XLSX = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 def load_context():
     """매 요청마다 사용자를 다시 읽는다 → 역할 변경·계정 중지가 즉시 반영된다."""
     g.user = None
-    if request.endpoint in ("static", "health", "service_worker", "favicon", "metrics"):
+    if request.endpoint in ("static", "health", "service_worker", "favicon", "metrics", "readyz") or request.blueprint == "api":
         return None
     uid = session.get("user_id")
     if uid:
@@ -104,12 +107,14 @@ def load_context():
     g.wh_ids = org.allowed_warehouses(g.user)      # None = 모든 창고
     g.closed_through = periods.closed_through()
     g.sap_on = sap.enabled()
-    g.shortage_cnt = g.sap_failed = g.pending_approvals = 0
+    g.shortage_cnt = g.sap_failed = g.pending_approvals = g.unread = 0
     if request.method == "GET":                   # 사이드바 알림은 화면을 그릴 때만 계산
+        from core import notify, workflow
         stock = repo.stock_df(wh_ids=g.wh_ids)
         g.shortage_cnt = int(stock["shortage"].sum()) if not stock.empty else 0
         g.sap_failed = sap.summary(g.wh_ids).get("FAILED", 0) if g.sap_on and can("MANAGER") else 0
-        g.pending_approvals = approvals.pending_count(g.wh_ids) if can("MANAGER") else 0
+        g.pending_approvals = workflow.count(g.user) if can("CLERK") else 0          # 내 차례인 결재 (대결 포함)
+        g.unread = notify.unread(g.user["id"])
     return None
 
 
@@ -161,6 +166,7 @@ def pager(total: int, page: int, size: int = config.PAGE_SIZE) -> dict:
 def log_export(what: str, rows: int, **detail) -> None:
     """엑셀 내보내기를 감사로그에 남긴다 (대량 반출 추적)."""
     audit.log(actor(), "EXPORT", what, "", {"rows": rows, **detail})
+    g.export_logged = True
 
 
 def safe_next(target: str | None, fallback: str, prefix: str = "/") -> str:
@@ -217,7 +223,7 @@ def menu_layout() -> dict:
 
 
 def render_page(template: str, active: str, **ctx):
-    title = next((m[1] for m in MENUS if m[0] == active), "")
+    title = ctx.pop("title_override", None) or next((m[1] for m in MENUS if m[0] == active), "")
     return render_template(template, active=active, title=title, **ctx)
 
 
@@ -328,6 +334,10 @@ def a_date(name: str, default: date) -> date:
 # 응답
 # ----------------------------------------------------------------------------
 def file_response(data: bytes, filename: str, mimetype: str):
+    """파일 내려받기. 모든 내려받기는 감사로그에 남는다(파일 이름·크기·화면) — 대량 반출 추적."""
+    if g.get("user") and not g.pop("export_logged", False):
+        audit.log(actor(), "DOWNLOAD", request.endpoint or "", "",
+                  {"file": filename, "bytes": len(data), "path": request.full_path[:300]})
     return send_file(io.BytesIO(data), mimetype=mimetype, as_attachment=True,
                      download_name=filename)
 
@@ -377,6 +387,11 @@ def register_template_helpers(app: Flask) -> None:
     app.jinja_env.globals["DEMO_ROLE_VIEWS"] = demo.ROLE_VIEWS
     app.jinja_env.globals["partner_names"] = partners.names
     app.jinja_env.globals["PARTNER_KINDS"] = partners.KINDS
+    from core import maintenance
+    app.jinja_env.globals["READ_ONLY"] = maintenance.state
+    app.jinja_env.globals["COMPANY"] = lambda: config.COMPANY_NAME
+    app.jinja_env.filters["krw"] = lambda v: f"₩ {float(v or 0):,.0f}"          # 금액 카드: ₩ 1,234,567
+    app.jinja_env.filters["won"] = lambda v: f"{float(v or 0):,.0f}원"          # 문장 속 금액: 1,234,567원
     # 화면 파일(css·js) 판 — 배포로 파일이 바뀌면 주소가 바뀌어 브라우저가 예전 파일을 쓰지 않는다
     from pathlib import Path
     static = Path(app.static_folder)
@@ -388,9 +403,10 @@ def register_template_helpers(app: Flask) -> None:
                                active=None), code
 
     app.register_error_handler(400, lambda e: error_page(400, "잘못된 요청", e.description))
-    app.register_error_handler(403, lambda e: error_page(403, "권한 없음", e.description))
+    app.register_error_handler(403, lambda e: error_page(403, "접근 권한 없음", e.description))
     # 예상하지 못한 오류: 내부 내용(경로·SQL 등)은 서버 로그에만 남기고 화면에는 일반 문구만
-    app.register_error_handler(500, lambda e: error_page(500, "오류", "처리 중 오류가 발생했습니다. 관리자에게 문의하세요."))
+    app.register_error_handler(500, lambda e: error_page(
+        500, "오류", f"처리 중 오류가 발생했습니다. 관리자에게 문의할 때 문의 번호 {g.get('request_id', '')}를 알려 주세요."))
     app.register_error_handler(404, lambda e: error_page(404, "없는 화면", "요청한 화면이 없습니다."))
     app.register_error_handler(413, lambda e: error_page(
         413, "파일이 너무 큽니다", f"업로드는 {config.MAX_CONTENT_LENGTH // 1024 // 1024}MB까지 가능합니다."))

@@ -18,6 +18,9 @@
   partners      거래처 마스터 · 미등록 이름 정리(등록·연결)
   production    간편 생산 투입 · 작업지시(투입·공정 실적·완료) · 재공품 · BOM·공정 · 부족분 구매요청
   mrp           MRP: 수요 → 다단계 전개·리드타임 역산 → 구매·생산 계획 → 구매요청·작업지시
+  notifications 🔔 알림함 (결재 요청·결과·독촉)
+  quality       🩺 데이터 점검 (음수 재고·초과 입고·거래처 중복·BOM 문제 등)
+  api           외부 연동 REST API (/api/v1, API 키)
 """
 from flask import Flask
 
@@ -25,10 +28,10 @@ from .helpers import load_context
 
 
 def register_blueprints(app: Flask) -> None:
-    from . import (admin, approvals, auth, dashboard, data_admin, documents, history, materials, mrp, partners, periods,
-                   prefs, production, purchase, reports, sap, statements, stock, transactions)
+    from . import (admin, api, approvals, auth, dashboard, data_admin, documents, history, materials, mrp, notifications,
+                   partners, periods, prefs, production, purchase, quality, reports, sap, statements, stock, transactions)
 
     for module in (auth, dashboard, materials, transactions, statements, stock, history, documents, purchase, approvals,
-                   reports, periods, sap, data_admin, admin, prefs, partners, production, mrp):
+                   reports, periods, sap, data_admin, admin, prefs, partners, production, mrp, notifications, quality, api):
         app.register_blueprint(module.bp)
     app.before_request(load_context)

@@ -323,7 +323,7 @@ def test_jandi_and_naverworks(fresh, monkeypatch):
     clerk = auth.create_user("clerk.x", "담당X", "CLERK", "Passw0rd!", audit.SYSTEM, must_change_pw=False).user
     from core import purchasing
     assert purchasing.create_pr(wh(), [(mid("PKG-001"), 1, 1000)], TODAY, "보충", {**clerk, "ip": ""}).ok
-    rows = db.query_df("SELECT channel, to_addr FROM notifications ORDER BY id")
+    rows = db.query_df("SELECT channel, to_addr FROM notifications WHERE channel <> 'inbox' ORDER BY id")
     assert set(zip(rows["channel"], rows["to_addr"])) >= {("naverworks", "mgr.x@works"), ("naverworks", "channel:ch-9")}
     assert "jandi" in set(rows["channel"])
     calls = []
@@ -345,7 +345,7 @@ def test_jandi_and_naverworks(fresh, monkeypatch):
     token_form = next(c for c in calls if c[0] == notify.NW_TOKEN_URL)[1].decode()
     assert "grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer" in token_form and "scope=bot" in token_form
     # 실패하면 다시
-    db.execute("UPDATE notifications SET status = 'PENDING'")
+    db.execute("UPDATE notifications SET status = 'PENDING' WHERE channel <> 'inbox'")
     monkeypatch.setattr(notify, "_post", lambda *a, **k: (500, b""))
     assert "실패 3" in notify.send_pending()
 

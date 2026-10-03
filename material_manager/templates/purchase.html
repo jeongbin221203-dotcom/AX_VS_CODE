@@ -1,9 +1,9 @@
 {% extends "base.html" %}
-{% from "_macros.html" import csrf, table, tabs as tab_bar %}
+{% from "_macros.html" import csrf, table, tabs as tab_bar, material_picker %}
 {% block content %}
 {{ tab_bar(tabs, tab) }}
 {% if tab == "new" %}
-  <form class="card form" method="post" action="{{ url_for('purchase.pr_create') }}">
+  <form class="card form" method="post" action="{{ url_for('purchase.pr_create') }}" data-pr-tiers="{{ tiers[0] }},{{ tiers[1] }}">
     {{ csrf() }}
     <div class="form-grid g3">
       <label>입고 창고 *
@@ -16,15 +16,16 @@
       <tr><th>자재</th><th class="num">수량</th><th class="num">예상단가(원)</th></tr>
       {% for i in rows %}
       <tr>
-        <td><select name="material_id"><option value="">—</option>{% for k, v in mats.items() %}<option value="{{ k }}">{{ v }}</option>{% endfor %}</select></td>
+        <td>{{ material_picker('material_id', none, '', placeholder='자재 코드·이름·바코드') }}</td>
         <td><input name="qty" type="number" min="0" step="any"></td>
         <td><input name="price" type="number" min="0" step="any"></td>
       </tr>
       {% endfor %}
     </table>
-    <p class="muted small">금액에 따라 결재 단계가 정해집니다: 100만 원 이하 1단계(관리자), 1천만 원 이하 2단계(관리자 2명), 그 이상 3단계(+시스템관리자).
-      요청자는 자기 요청을 결재하거나 발주할 수 없습니다.</p>
-    <div><button class="btn btn-primary">구매요청 등록</button></div>
+    <p class="pr-preview" data-pr-preview aria-live="polite"></p>
+    <p class="muted small">금액에 따라 결재 단계가 정해집니다: {{ tiers[0]|won }} 이하 1단계(관리자), {{ tiers[1]|won }} 이하 2단계(관리자 2명),
+      그 이상 3단계(+시스템관리자) — 한도는 회사 설정에서 바꿉니다. 요청자는 자기 요청을 결재하거나 발주할 수 없습니다.</p>
+    <div><button class="btn btn-primary">📝 구매요청 등록</button></div>
   </form>
 {% else %}
   <form class="toolbar" method="get">

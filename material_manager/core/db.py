@@ -477,7 +477,7 @@ CREATE TABLE IF NOT EXISTS job_runs (
 """
 
 NO_ID_TABLES = {"inventory_snapshots", "valuation_snapshots", "app_settings", "job_locks", "cost_centers", "excel_forms",
-                "form_once", "user_prefs", "schema_version"}
+                "form_once", "user_prefs", "schema_version", "approval_reminders"}
 
 # 예전 DB에 없던 컬럼 (CREATE TABLE IF NOT EXISTS는 기존 테이블에 컬럼을 더하지 않는다)
 MIGRATIONS = [

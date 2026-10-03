@@ -61,10 +61,10 @@
     {% if not plans %}
       <div class="alert alert-success">사거나 만들 것이 없습니다 — 재고와 들어올 물량으로 수요·안전재고를 채웁니다.</div>
     {% else %}
-    <form method="post" action="{{ url_for('mrp.convert') }}">
+    <form method="post" action="{{ url_for('mrp.convert') }}" data-confirm="고른 계획으로 구매요청·작업지시를 만듭니다. 계속할까요?">
       {{ csrf() }}<input type="hidden" name="plant" value="{{ plant }}"><input type="hidden" name="run_id" value="{{ run.id }}">
       <div class="table-wrap"><table class="data">
-        <thead><tr><th></th><th>구분</th><th>단계</th><th>자재</th><th class="num">수량</th><th>발주·착수일</th><th>필요일</th><th class="num">리드타임</th><th>창고</th><th>근거</th><th>상태</th></tr></thead>
+        <thead><tr><th>{% if can_run %}<input type="checkbox" data-check-all="plan" checked aria-label="모두 선택">{% endif %}</th><th>구분</th><th>단계</th><th>자재</th><th class="num">수량</th><th>발주·착수일</th><th>필요일</th><th class="num">리드타임</th><th>창고</th><th>근거</th><th>상태</th></tr></thead>
         <tbody>
         {% for x in plans %}
           <tr class="{{ 'tone-danger' if x.late else ('tone-muted' if x.status != 'OPEN') }}">

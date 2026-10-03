@@ -222,6 +222,10 @@ NEW_USER_ALL_WAREHOUSES = os.getenv("MM_NEW_USER_ALL_WAREHOUSES", "0") == "1"
 # ── 직무 분리 · 결재 ──────────────────────────────────────────
 SOD_ENFORCE = os.getenv("MM_SOD_ENFORCE", "1") == "1"          # 본인 등록 거래 취소 금지 등
 ADJ_APPROVAL_AMOUNT = int(os.getenv("MM_ADJ_APPROVAL_AMOUNT", "500000"))  # 실사 조정 금액이 이 이상이면 결재
+APPROVAL_SLA_HOURS = int(os.getenv("MM_APPROVAL_SLA_HOURS", "24"))        # 결재 기한 — 넘으면 하루 한 번 독촉 (0 = 안 함)
+COMPANY_NAME = os.getenv("MM_COMPANY_NAME", "")                          # 회사 이름 (화면 위·알림에)
+LOG_JSON = os.getenv("MM_LOG_JSON", "0") == "1"                          # 서버 로그를 한 줄 JSON 으로 (로그 수집기용)
+# 회사 설정 화면(관리자 → 🏢 회사 설정)에서 바꾼 값이 위 값들을 덮어쓴다 (core/company.py)
 
 # ── 거래처 마스터 (core/partners.py) ─────────────────────────
 # 1이면 거래처 마스터에 없는 이름으로는 입고·납품 출고·거래명세서·발주를 등록할 수 없다 (기본: 등록하고 경고만)

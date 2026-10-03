@@ -13,7 +13,7 @@ from views.helpers import (Table, a_int, actor, can, f_float, f_str, page_arg, p
 
 bp = Blueprint("materials", __name__, url_prefix="/materials")
 
-TABS = [("list", "목록"), ("new", "신규 등록"), ("edit", "수정 / 사용중지")]
+TABS = [("list", "📋 목록"), ("new", "➕ 신규 등록"), ("edit", "✏️ 수정 / 사용중지")]
 
 
 def _master_editor() -> bool:
@@ -75,7 +75,9 @@ def _list_page(show_inactive: bool):
     p = pager(len(view), page_arg())
     rows = slice(p["first"] - 1 if p["total"] else 0, p["last"])
     table = Table(view.iloc[rows], {"안전재고": "{:,.2f}", "현재고": "{:,.2f}", "단가": "₩{:,.0f}"},
-                  tones=["muted" if a == 0 else None for a in df["active"].iloc[rows]])
+                  tones=["muted" if a == 0 else None for a in df["active"].iloc[rows]],
+                  links=[url_for("materials.index", tab="edit", id=int(i)) for i in df["id"].iloc[rows]]
+                  if _master_editor() else None)                 # 행을 누르면 그 자재 수정
     return render_page("materials.html", "materials", tabs=_tabs(), tab="list",
                        show_inactive=show_inactive, grid=table, pager=p)
 

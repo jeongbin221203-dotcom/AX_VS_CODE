@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<p class="muted">업무 데이터에서 고쳐야 할 곳을 찾습니다 (서버·연결 점검은 배치 작업 화면의 '운영 점검'). 항목을 누르면 고칠 화면으로 갑니다.
+  권한이 있는 창고만 봅니다.</p>
+<div class="metrics m3">
+  <div class="metric"><div class="metric-label">고칠 곳 (높음·보통)</div><div class="metric-value {{ 'down' if problems }}">{{ problems }}</div></div>
+  <div class="metric"><div class="metric-label">점검 항목</div><div class="metric-value">{{ checks|length }}</div></div>
+  <div class="metric"><div class="metric-label">문제 없는 항목</div><div class="metric-value">{{ checks|selectattr('count', 'equalto', 0)|list|length }}</div></div>
+</div>
+{% for c in checks %}
+  <details class="card quality-item sev-{{ c.severity }}" {{ 'open' if c.count and c.severity != 'low' }}>
+    <summary>
+      {% if c.count %}<span class="badge sev-{{ c.severity }}">{{ severity[c.severity] }}</span>{% else %}<span class="badge ok">✔</span>{% endif %}
+      <strong>{{ c.title }}</strong> <span class="muted">{{ c.count }}건</span>
+    </summary>
+    {% if c.count %}
+      {% if c.hint %}<p class="muted small">{{ c.hint }}</p>{% endif %}
+      <ul class="quality-rows">
+        {% for label, link in c.rows %}<li><a href="{{ link }}">{{ label }}</a> <span class="muted small">고치러 가기 →</span></li>{% endfor %}
+      </ul>
+      {% if c.count > c.rows|length %}<p class="muted small">앞 {{ c.rows|length }}건만 보여 줍니다.</p>{% endif %}
+    {% else %}<p class="muted small">문제 없음</p>{% endif %}
+  </details>
+{% endfor %}
+{% endblock %}

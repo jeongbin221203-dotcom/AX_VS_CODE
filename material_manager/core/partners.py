@@ -389,9 +389,86 @@ def activity() -> pd.DataFrame:
     if not frames:
         return pd.DataFrame(columns=cols)
     both = pd.concat(frames, ignore_index=True)
-    both["pid"] = both["pid"].astype(int)
+    both["pid"] = both["pid"].astype(int).map(_final_map())
     return both.groupby("pid").agg(in_amt=("in_amt", "sum"), out_amt=("out_amt", "sum"), tx_cnt=("tx_cnt", "sum"),
                                    last_tx=("last_tx", "max"))
+
+
+def _final_map() -> "callable":
+    """병합 사슬을 따라간 최종 거래처 id (A→B→C 면 A·B·C 모두 C)."""
+    into = {int(r.id): int(r.merged_into) for r in db.query_df(
+        "SELECT id, merged_into FROM partners WHERE merged_into IS NOT NULL").itertuples()}
+
+    def final(pid: int) -> int:
+        seen = set()
+        while pid in into and pid not in seen:
+            seen.add(pid)
+            pid = into[pid]
+        return pid
+    return final
+
+
+def merged_ids(partner_id: int) -> list[int]:
+    """이 거래처로 병합된(사슬 포함) 거래처 id."""
+    final = _final_map()
+    ids = db.query_df("SELECT id FROM partners WHERE merged_into IS NOT NULL")["id"].astype(int).tolist()
+    return [i for i in ids if final(i) == partner_id]
+
+
+# ── 병합 ─────────────────────────────────────────────────────
+def merge(src_id: int, dst_id: int, actor: dict | None) -> PResult:
+    """중복 거래처 src 를 dst 로 합친다. src 의 이름·다른 이름은 dst 의 다른 이름이 되고, src 는 사용중지(병합됨).
+    발주·거래명세서·자재 공급처는 dst 로 바꾸고, 고칠 수 없는 지난 거래는 병합 기록으로 dst 실적에 합쳐진다."""
+    if src_id == dst_id:
+        return PResult(False, "같은 거래처끼리는 병합할 수 없습니다.")
+    who = actor or audit.SYSTEM
+    with db.transaction() as conn:
+        src = conn.execute("SELECT * FROM partners WHERE id = ?", (src_id,)).fetchone()
+        dst = conn.execute("SELECT * FROM partners WHERE id = ?", (dst_id,)).fetchone()
+        if src is None or dst is None:
+            return PResult(False, "거래처가 없습니다.")
+        if src["merged_into"] is not None:
+            return PResult(False, f"{src['name']}는 이미 다른 거래처로 병합됐습니다.")
+        if not dst["active"] or dst["merged_into"] is not None:
+            return PResult(False, "남길 거래처는 사용 중이어야 합니다.")
+        src, dst = dict(src), dict(dst)
+        ts = now_str()
+        conn.execute("UPDATE partners SET name_key = ?, active = 0, merged_into = ?, biz_no = '', updated_at = ? WHERE id = ?",
+                     (f"merged:{src_id}:{src['name_key']}", dst_id, ts, src_id))
+        conn.execute("UPDATE partner_aliases SET partner_id = ? WHERE partner_id = ?", (dst_id, src_id))
+        _add_alias(conn, dst_id, src["name"], who)
+        if not dst["biz_no"] and src["biz_no"]:
+            conn.execute("UPDATE partners SET biz_no = ? WHERE id = ?", (src["biz_no"], dst_id))
+        for col, val in (("contact", src["contact"]), ("phone", src["phone"]), ("email", src["email"])):
+            if not dst[col] and val:
+                conn.execute(f"UPDATE partners SET {col} = ? WHERE id = ?", (val, dst_id))
+        po = conn.execute("UPDATE purchase_orders SET supplier_id = ?, supplier = ? WHERE supplier_id = ?",
+                          (dst_id, dst["name"], src_id)).rowcount
+        st = conn.execute("UPDATE statements SET partner_id = ? WHERE partner_id = ?", (dst_id, src_id)).rowcount
+        mats = conn.execute("UPDATE materials SET supplier = ?, updated_at = ? WHERE supplier = ?",
+                            (dst["name"], ts, src["name"])).rowcount
+        conn.execute("UPDATE partners SET updated_at = ? WHERE id = ?", (ts, dst_id))
+        audit.record(conn, who, "PARTNER_MERGE", "partner", dst_id,
+                     {"from": f"[{src['code']}] {src['name']}", "into": f"[{dst['code']}] {dst['name']}", "po": po,
+                      "statements": st, "materials": mats})
+    return PResult(True, f"{src['name']} → {dst['name']} 병합 (발주 {po} · 명세서 {st} · 자재 공급처 {mats}건 바꿈, "
+                         "지난 거래는 실적에 합쳐짐)", dst_id)
+
+
+def merge_candidates() -> list[dict]:
+    """병합 후보: 사업자번호가 같거나, 이름(표기 무시) 한쪽이 다른 쪽을 포함하는 사용 중인 거래처 쌍."""
+    df = db.query_df("SELECT id, code, name, name_key, biz_no FROM partners WHERE active = 1 ORDER BY id").to_dict("records")
+    out = []
+    for i, a in enumerate(df):
+        for b in df[i + 1:]:
+            why = ""
+            if a["biz_no"] and a["biz_no"] == b["biz_no"]:
+                why = "사업자번호 같음"
+            elif min(len(a["name_key"]), len(b["name_key"])) >= 2 and (a["name_key"] in b["name_key"] or b["name_key"] in a["name_key"]):
+                why = "이름 비슷함"
+            if why:
+                out.append({"a": a, "b": b, "why": why})
+    return out[:100]
 
 
 def get(partner_id: int) -> dict | None:
@@ -413,12 +490,13 @@ def recent_tx(partner_id: int, limit: int = 50) -> pd.DataFrame:
     names = [n for n in db.query_df("SELECT DISTINCT partner FROM transactions WHERE partner_id IS NULL AND partner <> ''")
              ["partner"] if key(n) in keys]
     frag, params = db.in_clause(names)
+    pfrag, pparams = db.in_clause([partner_id, *merged_ids(partner_id)])
     return db.query_df(f"""
         SELECT t.id, t.tx_date, t.tx_type, m.code, m.name, t.qty, m.unit, t.unit_price, t.qty * t.unit_price AS amount,
                t.partner, t.partner_id, t.ref_no, w.code AS wh_code
         FROM transactions t JOIN materials m ON m.id = t.material_id LEFT JOIN warehouses w ON w.id = t.warehouse_id
-        WHERE (t.partner_id = ? OR (t.partner_id IS NULL AND t.partner{frag})) AND {PARTNER_TX_SQL.format(t="t")}
-        ORDER BY t.tx_date DESC, t.id DESC LIMIT ?""", (partner_id, *params, limit))
+        WHERE (t.partner_id{pfrag} OR (t.partner_id IS NULL AND t.partner{frag})) AND {PARTNER_TX_SQL.format(t="t")}
+        ORDER BY t.tx_date DESC, t.id DESC LIMIT ?""", (*pparams, *params, limit))
 
 
 def seed_from_data(actor: dict | None = None) -> int:

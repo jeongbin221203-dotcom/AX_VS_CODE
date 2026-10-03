@@ -63,6 +63,37 @@
     </div>
   {% endif %}
 
+{% elif tab == "merge" %}
+  <p class="muted small">같은 회사가 두 번 등록됐으면 하나로 합칩니다. 합쳐지는 거래처의 이름·다른 이름은 남는 거래처의 '다른 이름'이 되고,
+    발주·거래명세서·자재 공급처는 남는 거래처로 바뀝니다. 고칠 수 없는 지난 거래는 병합 기록으로 남는 거래처 실적에 합쳐집니다. 되돌릴 수 없습니다.</p>
+  {% if candidates %}
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th>이유</th><th>거래처 A</th><th>거래처 B</th><th>병합</th></tr></thead>
+    <tbody>
+    {% for c in candidates %}
+      <tr><td>{{ c.why }}</td>
+        <td><a href="{{ url_for('partners.detail', pid=c.a.id) }}">[{{ c.a.code }}] {{ c.a.name }}</a></td>
+        <td><a href="{{ url_for('partners.detail', pid=c.b.id) }}">[{{ c.b.code }}] {{ c.b.name }}</a></td>
+        <td>
+          <form class="inline" method="post" action="{{ url_for('partners.merge') }}" data-confirm="{{ c.b.name }}을(를) {{ c.a.name }}(으)로 합칩니다. 되돌릴 수 없습니다. 계속할까요?">
+            {{ csrf() }}<input type="hidden" name="src" value="{{ c.b.id }}"><input type="hidden" name="dst" value="{{ c.a.id }}">
+            <button class="btn btn-sm">B → A로 합치기</button></form>
+          <form class="inline" method="post" action="{{ url_for('partners.merge') }}" data-confirm="{{ c.a.name }}을(를) {{ c.b.name }}(으)로 합칩니다. 되돌릴 수 없습니다. 계속할까요?">
+            {{ csrf() }}<input type="hidden" name="src" value="{{ c.a.id }}"><input type="hidden" name="dst" value="{{ c.b.id }}">
+            <button class="btn btn-sm">A → B로 합치기</button></form>
+        </td></tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+  {% else %}<div class="alert alert-success">사업자번호가 같거나 이름이 비슷한 거래처가 없습니다.</div>{% endif %}
+  <h3>직접 고르기</h3>
+  <form class="toolbar" method="post" action="{{ url_for('partners.merge') }}" data-confirm="고른 거래처를 합칩니다. 되돌릴 수 없습니다. 계속할까요?">
+    {{ csrf() }}
+    <label>합쳐질 거래처 (없어짐)<select name="src" required><option value="">고르세요</option>{% for o in options %}<option value="{{ o.id }}">{{ o.name }} ({{ o.code }})</option>{% endfor %}</select></label>
+    <label>남길 거래처<select name="dst" required><option value="">고르세요</option>{% for o in options %}<option value="{{ o.id }}">{{ o.name }} ({{ o.code }})</option>{% endfor %}</select></label>
+    <button class="btn btn-danger">🔀 병합</button>
+  </form>
+
 {% elif tab == "new" %}
   <form class="card form" method="post" action="{{ url_for('partners.create') }}">
     {{ csrf() }}

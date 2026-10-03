@@ -16,7 +16,7 @@ from views.helpers import (Table, a_int, actor, can, f_float, f_str, form_respon
 
 bp = Blueprint("production", __name__, url_prefix="/production")
 
-TABS = [("run", "간편 생산 투입"), ("wo", "작업지시"), ("wip", "재공품"), ("history", "생산 이력"), ("bom", "BOM·공정")]
+TABS = [("run", "⚡ 간편 생산 투입"), ("wo", "🗂️ 작업지시"), ("wip", "🧩 재공품"), ("history", "📜 생산 이력"), ("bom", "🧬 BOM·공정")]
 BOM_EMPTY_ROWS = 6
 
 
@@ -230,6 +230,17 @@ def bom_active(product_id: int):
 def _wo_page(form: dict | None = None):
     show = request.args.get("show", "open")
     df = production.list_df(g.wh_ids)
+    if request.args.get("view") == "board":                 # ▦ 보드: 계획 · 진행(재공) · 완료(최근 30일)
+        since = (date.today() - timedelta(days=30)).isoformat()
+        today_s = date.today().isoformat()
+        cols = {"PLANNED": [], "RELEASED": [], "DONE": []}
+        for r in df.to_dict("records"):
+            if r["status"] in cols and not (r["status"] == "DONE" and str(r["tx_date"]) < since):
+                r["late"] = r["status"] != "DONE" and r["due_date"] and r["due_date"] < today_s
+                cols[r["status"]].append(r)
+        return render_page("production.html", "production", tabs=TABS, tab="wo", board=cols, status_label=production.STATUS,
+                           show=show, products=production.products_with_bom(), wh_opts=org.warehouse_options(g.wh_ids),
+                           f=form or {}, receipt_default=_receipt_default(org.warehouse_options(g.wh_ids)), grid=None)
     if show == "open":
         df = df[df["status"].isin(["PLANNED", "RELEASED"])]
     view = df.assign(status=df["status"].map(production.STATUS), source=df["source"].map(

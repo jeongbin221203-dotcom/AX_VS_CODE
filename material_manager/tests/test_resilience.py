@@ -405,7 +405,7 @@ def test_dashboard_sections_and_check_tabs(client):
     with db.transaction() as conn:                                  # 오래 출고가 없는 자재 하나
         conn.execute("UPDATE materials SET safety_stock = 0 WHERE id = ?", (m,))
     html = client.get("/").get_data(as_text=True)
-    for text in ("기준월", "월별 입고·출고 금액", "창고별 재고금액", "출고 금액 상위 자재", "즉시 확인할 항목",
+    for text in ("기준월", "월별 입고·출고 금액", "창고별 재고금액", "출고 금액 상위 자재", "즉시 확인이 필요한 항목",
                  "소진 예상", "미사용 재고", "수치 보기"):
         assert text in html, text
     for tab in ("shortage", "expiry", "cover", "dead", "approvals", "incoming"):

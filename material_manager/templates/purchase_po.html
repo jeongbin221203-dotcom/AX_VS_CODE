@@ -30,7 +30,7 @@
   </form>
   {% endif %}
   <form class="card row-actions" method="post" action="{{ url_for('purchase.po_sap', po_id=po.id) }}">
-    {{ csrf() }}<input type="hidden" name="_ver" value="{{ ver('purchase_orders', po) }}"><label class="grow">SAP 구매오더 번호<input name="sap_po_no" value="{{ po.sap_po_no }}"></label><button class="btn">저장</button>
+    {{ csrf() }}<input type="hidden" name="_ver" value="{{ ver('purchase_orders', po) }}"><label class="grow">SAP 구매오더 번호<input name="sap_po_no" value="{{ po.sap_po_no }}"></label><button class="btn">💾 저장</button>
   </form>
   {% if po.status in ('PENDING_APPROVAL', 'OPEN') %}
   <form class="card row-actions" method="post" action="{{ url_for('purchase.po_cancel', po_id=po.id) }}">
