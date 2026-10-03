@@ -976,7 +976,7 @@
    "Yes, I prefer it."
   ],
   "answer": 0,
-  "explanation": "선택 의문문에 '둘 다 괜찮다'는 (A)도 정답이 될 수 있다. (B)는 copy와 비슷한 copier를 이용했고, (C)는 선택 의문문에 Yes로 답하며 prefer를 반복한 함정이다.",
+  "explanation": "선택 의문문에 '둘 다 괜찮다'고 답한 (A)가 자연스럽다. (B)는 copy와 비슷한 copier를 이용했고, (C)는 선택 의문문에 Yes로 답하며 prefer를 반복한 함정이다.",
   "translation": "Q: 계약서를 종이로 드릴까요, 전자 파일로 드릴까요? / (A) 둘 다 괜찮아요. / (B) 복사기는 왼쪽에 있어요. / (C) 네, 그게 좋아요."
  },
  {

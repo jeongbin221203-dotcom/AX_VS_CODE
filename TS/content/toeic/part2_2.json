@@ -1518,12 +1518,12 @@
   "question": "Is the company paying for the hotel, or are we?",
   "choices": [
    "The hotel has a rooftop pool.",
-   "We paid it last month.",
+   "The company picnic is next Friday.",
    "It's covered under the travel policy."
   ],
   "answer": 2,
-  "explanation": "'출장 규정에 포함된다'며 회사가 낸다고 알린 (C)가 정답이다. (A)는 hotel을 반복했고, (B)는 pay의 과거형과 we를 반복했지만 앞으로의 숙박비와 시제가 맞지 않는다.",
-  "translation": "Q: 호텔비는 회사가 내요, 우리가 내요? / (A) 그 호텔엔 옥상 수영장이 있어요. / (B) 지난달에 우리가 냈어요. / (C) 출장 규정상 회사가 부담해요."
+  "explanation": "'출장 규정에 포함된다'며 회사가 낸다고 알린 (C)가 정답이다. (A)는 hotel을 반복했고, (B)는 company를 반복했지만 회사 야유회 이야기라 질문과 관계없다.",
+  "translation": "Q: 호텔비는 회사가 내요, 우리가 내요? / (A) 그 호텔엔 옥상 수영장이 있어요. / (B) 회사 야유회는 다음 주 금요일이에요. / (C) 출장 규정상 회사가 부담해요."
  },
  {
   "id": "p2-210",

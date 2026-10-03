@@ -5781,7 +5781,7 @@
     "pos": "adj.",
     "meaning": "(목적에) 알맞은, 편의적인",
     "example": "It would be expedient to hire a consultant.",
-    "example_ko": "컨설턴트를 고용하는 것이 효율적일 것입니다.",
+    "example_ko": "컨설턴트를 고용하는 것이 (목적에) 알맞을 것입니다.",
     "tip": "expedite(신속히 처리하다)와 구분",
     "tier": "stretch"
   },
@@ -6210,7 +6210,7 @@
     "pos": "v.",
     "meaning": "복제하다, 재현하다",
     "example": "Other branches will replicate the program.",
-    "example_ko": "다른 지점들도 그 프로그램을 도입할 것입니다.",
+    "example_ko": "다른 지점들도 그 프로그램을 그대로 따라 할(재현할) 것입니다.",
     "tip": "replication n.",
     "tier": "core"
   },

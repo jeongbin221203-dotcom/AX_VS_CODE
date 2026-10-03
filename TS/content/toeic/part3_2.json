@@ -219,7 +219,7 @@
     "explanation": "여자가 \"This is Brian, one of our trainers.\"라고 소개했으므로 브라이언은 트레이너다. 안내 데스크 직원(receptionist)은 여자다."
    },
    {
-    "q": "What will the man see first?",
+    "q": "What will Brian show the man first?",
     "choices": [
      "A café",
      "A locker room",
@@ -1674,7 +1674,7 @@
     "explanation": "여자가 \"I'll e-mail you the link so you can share it with your readers.\"라고 했으므로 방송분 링크를 보낸다."
    }
   ],
-  "translation": "W: 와 주셔서 감사해요, 애덤스 씨. 5분쯤 뒤에 녹음을 시작할 거예요. 물 좀 드릴까요?\nM: 네, 주세요. 그런데 이번 회차는 얼마나 긴가요?\nW: 최종본은 30분 정도지만, 보통 한 시간 녹음해서 편집으로 줄여요.\nM: 그렇군요. 제 새 책에 관한 메모를 가져왔는데, 이야기하면서 봐도 될까요?\nW: 물론이죠. 다만 마이크 근처에서 종이를 바스락거리지 않도록 해 주세요. 모든 소리가 다 들어가거든요.\nM: 알아 두면 좋겠네요. 그럼 언제 공개되나요?\nW: 다음 주 월요일에 온라인에 올라가요. 독자들과 공유하실 수 있게 링크를 이메일로 보내 드릴게요."
+  "translation": "W: 와 주셔서 감사해요, 애덤스 씨. 5분쯤 뒤에 녹음을 시작할 거예요. 물 좀 드릴까요?\nM: 네, 주세요. 그런데 이번 회차는 얼마나 긴가요?\nW: 최종본은 30분 정도지만, 보통 한 시간 녹음해서 편집으로 줄여요.\nM: 그렇군요. 제 새 책에 관한 메모를 가져왔는데, 이야기하면서 봐도 될까요?\nW: 물론이죠. 다만 마이크 근처에서 종이를 바스락거리지 않도록 해 주세요. 모든 소리가 다 들어가거든요.\nM: 알아 두면 좋겠네요. 그럼 언제 공개되나요?\nW: 돌아오는 월요일에서 일주일 뒤에 온라인에 올라가요. 독자들과 공유하실 수 있게 링크를 이메일로 보내 드릴게요."
  },
  {
   "id": "p3-046",
@@ -2633,7 +2633,7 @@
   "graphic": null,
   "questions": [
    {
-    "q": "Who most likely is the man?",
+    "q": "Who most likely is the first man?",
     "choices": [
      "A restaurant customer",
      "A refrigerator technician",
@@ -2642,7 +2642,7 @@
     ],
     "answer": 2,
     "type": "화자 정보(직업·장소)",
-    "explanation": "남자가 매장을 둘러본 뒤 필수 점검 항목이 빠져 \"full pass\"를 줄 수 없고 보고서를 수정하겠다고 하므로 본사에서 나온 점검 담당자다. 냉장고는 점검 대상일 뿐 남자가 수리 기사인 것은 아니다."
+    "explanation": "첫 번째 남자가 매장을 둘러본 뒤 필수 점검 항목이 빠져 \"full pass\"를 줄 수 없고 보고서를 수정하겠다고 하므로 본사에서 나온 점검 담당자다. 냉장고는 점검 대상일 뿐 남자가 수리 기사인 것은 아니다."
    },
    {
     "q": "Why were some records not completed?",

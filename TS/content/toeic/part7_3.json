@@ -1494,7 +1494,7 @@
     "explanation": "'fine papers and fountain pens'에서 fine은 '고급의, 질 좋은'이라는 뜻이므로 'high-quality'가 가장 가깝다. fine은 '얇은', '괜찮은', '벌금'이라는 뜻도 있지만 이 문맥에는 맞지 않는다."
    },
    {
-    "q": "In which of the positions marked [1], [2], [3], and [4] does the following sentence best belong? “We apologize for any inconvenience this ten-day closure may cause.”",
+    "q": "In which of the positions marked [1], [2], [3], and [4] does the following sentence best belong? “We apologize for any inconvenience this temporary closure may cause.”",
     "choices": [
      "[1]",
      "[2]",
@@ -1503,10 +1503,10 @@
     ],
     "answer": 2,
     "type": "문장 삽입",
-    "explanation": "'this ten-day closure(이 10일간의 휴업)'는 9월 20일에 현재 매장을 닫고 10월 1일에 새로 여는 기간을 가리킨다. 따라서 9월 20일 폐점을 알린 문장 바로 뒤 [3]이 알맞다. [1]에서는 아직 휴업 기간이 나오지 않았다."
+    "explanation": "'this temporary closure(이 일시 휴업)'는 9월 20일에 현재 매장을 닫고 10월 1일에 새로 여는 기간을 가리킨다. 따라서 9월 20일 폐점을 알린 문장 바로 뒤 [3]이 알맞다. [1]에서는 아직 휴업 기간이 나오지 않았다."
    }
   ],
-  "translation": "[편지]\n페이지 앤 퀼 문구점 / 애시버리 램버트가 58번지\n\n8월 25일\n\n소중한 고객님께,\n\n램버트가 58번지에서 14년을 보낸 페이지 앤 퀼 문구점이 이전합니다. 10월 1일, 새로 리모델링한 카버 마켓 건물 안 카버 애비뉴 210번지에서 다시 문을 엽니다.\n\n새 매장은 현재 매장의 거의 두 배 크기입니다. 넓어진 공간 덕분에 고급 종이와 만년필 제품군을 늘리고, 서예와 제본 수업을 열 작업 공간도 마련할 수 있게 되었습니다. 수업 일정은 9월 중 웹사이트에 게시하겠습니다.\n\n원활한 이전을 위해 현재 매장은 9월 20일에 문을 닫습니다. (이 10일간의 휴업으로 불편을 드리게 된 점 사과드립니다.) 이 기간에도 온라인 주문은 계속 받지만, 배송은 10월 1일 이후에 이루어집니다.\n\n적립 프로그램도 바뀝니다. 10월 1일부터 회원은 1달러를 쓸 때마다 1점이 아닌 2점을 적립하게 됩니다. 이전 전에 적립한 포인트는 소멸되지 않습니다.\n\n새 보금자리에서 여러분을 맞이하기를 기대합니다.\n\n마사 킨, 대표 드림"
+  "translation": "[편지]\n페이지 앤 퀼 문구점 / 애시버리 램버트가 58번지\n\n8월 25일\n\n소중한 고객님께,\n\n램버트가 58번지에서 14년을 보낸 페이지 앤 퀼 문구점이 이전합니다. 10월 1일, 새로 리모델링한 카버 마켓 건물 안 카버 애비뉴 210번지에서 다시 문을 엽니다.\n\n새 매장은 현재 매장의 거의 두 배 크기입니다. 넓어진 공간 덕분에 고급 종이와 만년필 제품군을 늘리고, 서예와 제본 수업을 열 작업 공간도 마련할 수 있게 되었습니다. 수업 일정은 9월 중 웹사이트에 게시하겠습니다.\n\n원활한 이전을 위해 현재 매장은 9월 20일에 문을 닫습니다. (이 일시 휴업으로 불편을 드리게 된 점 사과드립니다.) 이 기간에도 온라인 주문은 계속 받지만, 배송은 10월 1일 이후에 이루어집니다.\n\n적립 프로그램도 바뀝니다. 10월 1일부터 회원은 1달러를 쓸 때마다 1점이 아닌 2점을 적립하게 됩니다. 이전 전에 적립한 포인트는 소멸되지 않습니다.\n\n새 보금자리에서 여러분을 맞이하기를 기대합니다.\n\n마사 킨, 대표 드림"
  },
  {
   "id": "p7-092",
@@ -2081,7 +2081,7 @@
     "explanation": "이메일에서 5월에 사무실이 2층으로 확장되면 제도대를 다시 가져가고 도면 상자만 남으므로 중형 창고로 충분하다고 했다. 현재 창고에 문제가 있다는 말은 없다(everything has been fine)."
    },
    {
-    "q": "What is the standard monthly rate for the type of unit Ms. Fenwick wants to move to, before any extra services?",
+    "q": "What is the monthly rate for the type of unit Ms. Fenwick wants to move to, before any extra services?",
     "choices": [
      "$95",
      "$140",

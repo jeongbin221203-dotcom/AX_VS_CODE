@@ -560,7 +560,7 @@
    },
    {
     "s": "W",
-    "t": "Yes, they'll be delivered to the storage room on Monday."
+    "t": "Yes, Tom. They'll be delivered to the storage room on Monday."
    },
    {
     "s": "M",
@@ -611,10 +611,10 @@
     ],
     "answer": 2,
     "type": "다음 할 일",
-    "explanation": "여자가 \"Jason, Tom\"이라고 부른 뒤 상자에 대해 묻고 마지막에 \"I'll let the rest of my team know this afternoon.\"이라고 말한 사람이 톰이다. 팀원들에게 알리겠다는 것을 inform his coworkers로 바꿔 표현했다. 컴퓨터는 싸지 말라고 했다."
+    "explanation": "상자에 대해 물은 두 번째 남자에게 여자가 \"Yes, Tom\"이라고 답했으므로 그가 톰이다. 톰이 마지막에 \"I'll let the rest of my team know this afternoon.\"이라고 했다. 팀원들에게 알리겠다는 것을 inform his coworkers로 바꿔 표현했다. 컴퓨터는 싸지 말라고 했다."
    }
   ],
-  "translation": "W: 제이슨, 톰, 와 줘서 고마워요. 알다시피 우리는 다음 달에 새 사무실로 이사해요.\nM: 네. 정확히 언제인지 정해졌나요?\nW: 이삿짐 업체가 15일에 와요. 그래서 모두 14일까지 책상 짐을 싸야 해요.\nM2: 회사에서 상자를 주나요?\nW: 네, 월요일에 창고로 배달될 거예요.\nM: 컴퓨터는요? 그것도 싸야 하나요?\nW: 아니요, 컴퓨터는 모두 IT팀이 처리할 거예요. 서류와 개인 물품만 싸면 돼요.\nM2: 알겠어요. 오늘 오후에 제 팀원들에게 알릴게요."
+  "translation": "W: 제이슨, 톰, 와 줘서 고마워요. 알다시피 우리는 다음 달에 새 사무실로 이사해요.\nM: 네. 정확히 언제인지 정해졌나요?\nW: 이삿짐 업체가 15일에 와요. 그래서 모두 14일까지 책상 짐을 싸야 해요.\nM2: 회사에서 상자를 주나요?\nW: 네, 톰. 월요일에 창고로 배달될 거예요.\nM: 컴퓨터는요? 그것도 싸야 하나요?\nW: 아니요, 컴퓨터는 모두 IT팀이 처리할 거예요. 서류와 개인 물품만 싸면 돼요.\nM2: 알겠어요. 오늘 오후에 제 팀원들에게 알릴게요."
  },
  {
   "id": "p3-009",
@@ -1886,7 +1886,7 @@
     "explanation": "두 번째 남자가 \"there are thousands of duplicate entries\"라고 했으므로 같은 고객이 여러 번 기록된 것이 문제다. 경영진은 분기 말 기한을 제시했을 뿐 바꾼 것이 아니다."
    },
    {
-    "q": "What does the woman ask the man to do?",
+    "q": "What does the woman ask one of the men to do?",
     "choices": [
      "Hire an outside firm immediately",
      "Remove duplicates by Friday",

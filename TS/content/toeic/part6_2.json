@@ -764,13 +764,13 @@
     "q": "",
     "choices": [
      "was shipped",
-     "will ship",
-     "has shipped",
-     "is shipping"
+     "to ship",
+     "is shipped",
+     "shipping"
     ],
     "answer": 0,
     "type": "동사 시제·태",
-    "explanation": "신발은 '보내지는' 대상이므로 수동태가 필요하고, this morning(오늘 아침)이라는 지난 시점이 있으므로 과거 수동태 was shipped가 정답이다. has shipped, is shipping, will ship은 능동이며, will ship은 이미 지난 오늘 아침과도 맞지 않는다."
+    "explanation": "신발은 '보내지는' 대상이므로 수동태가 필요하고, this morning(오늘 아침)이라는 지난 시점이 있으므로 과거 수동태 was shipped가 정답이다. is shipped는 현재 시제라 이미 지난 오늘 아침과 맞지 않고, to ship과 shipping은 동사 자리에 혼자 올 수 없다."
    },
    {
     "q": "",
