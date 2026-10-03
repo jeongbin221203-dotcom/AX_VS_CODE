@@ -1,17 +1,25 @@
-"""결재 알림 메일.
+"""결재 알림: 메일 · 잔디(JANDI) · 네이버웍스(NAVER WORKS).
 
 - 결재가 필요한 일이 생기면(구매요청·다음 결재 단계·발주 결재·큰 실사 조정) 결재할 수 있는 사람에게,
   결재가 끝나면(승인·반려) 요청한 사람에게 알린다.
-- 알림은 업무와 같은 트랜잭션에서 notifications 표에 쌓는다 → 업무가 취소되면 알림도 없다(유령 메일 없음).
-  실제 발송은 배치(notify_send)가 한다 → 메일 서버가 느리거나 멈춰도 화면은 기다리지 않고, 실패하면 다시 보낸다.
-- 받는 사람: 사용 중이고 메일 주소가 있으며, 역할이 충분하고, 그 창고 권한이 있는 사용자. 요청자 본인은 빼고.
-- 방식(config.NOTIFY_MODE): off(만들지 않음) | log(보낼 목록에만 남김 — 메일 서버 없이 확인) | smtp(메일 발송).
+- 알림은 업무와 같은 트랜잭션에서 notifications 표에 쌓는다 → 업무가 취소되면 알림도 없다(유령 알림 없음).
+  실제 발송은 배치(notify_send)가 한다 → 메일·메신저 서버가 느리거나 멈춰도 화면은 기다리지 않고, 실패하면 다시 보낸다.
+- 받는 사람: 사용 중이고 역할이 충분하고 그 창고 권한이 있는 사용자(요청자 본인 제외).
+- 보낼 길(channel)
+    email       사용자 메일 주소가 있으면 (MM_SMTP_*)
+    jandi       잔디 토픽의 '들어오는 웹훅'(MM_JANDI_WEBHOOK_URL) — 사람마다가 아니라 토픽에 한 번
+    naverworks  네이버웍스 봇(MM_NAVERWORKS_*) — 사용자의 메신저 아이디(없으면 메일)로 1:1, 채널 번호가 있으면 채널에도
+- 방식(config.NOTIFY_MODE): off(만들지 않음) | log(보낼 목록에만 남김 — 서버 없이 확인) | send(실제로 보냄, 예전 이름 smtp).
 """
 from __future__ import annotations
 
+import json
 import logging
 import smtplib
 import ssl
+import time
+import urllib.parse
+import urllib.request
 from email.message import EmailMessage
 from email.utils import formataddr
 
@@ -22,11 +30,27 @@ from core import auth, db
 from core.utils import now_str
 
 log = logging.getLogger(__name__)
-STATUS = {"PENDING": "보낼 예정", "SENT": "보냄", "LOGGED": "기록만(메일 서버 없음)", "FAILED": "실패"}
+STATUS = {"PENDING": "보낼 예정", "SENT": "보냄", "LOGGED": "기록만(보내지 않음)", "FAILED": "실패"}
+CHANNELS = {"email": "메일", "jandi": "잔디", "naverworks": "네이버웍스"}
+NW_TOKEN_URL = "https://auth.worksmobile.com/oauth2/v2.0/token"
+NW_API = "https://www.worksapis.com/v1.0"
 
 
 def enabled() -> bool:
-    return config.NOTIFY_MODE in ("log", "smtp")
+    return config.NOTIFY_MODE in ("log", "send", "smtp")
+
+
+def sending() -> bool:
+    return config.NOTIFY_MODE in ("send", "smtp")
+
+
+def jandi_on() -> bool:
+    return bool(config.JANDI_WEBHOOK_URL)
+
+
+def naverworks_on() -> bool:
+    return all((config.NW_BOT_ID, config.NW_CLIENT_ID, config.NW_CLIENT_SECRET, config.NW_SERVICE_ACCOUNT,
+                config.NW_PRIVATE_KEY))
 
 
 def _link(path: str) -> str:
@@ -34,10 +58,11 @@ def _link(path: str) -> str:
 
 
 def recipients(conn, min_role: str, warehouse_id: int | None, exclude_ids=()) -> list[dict]:
-    """역할이 min_role 이상이고 그 창고 권한이 있는, 메일 주소가 있는 사용 중인 사용자."""
+    """역할이 min_role 이상이고 그 창고 권한이 있는, 연락처(메일·메신저 아이디)가 있는 사용 중인 사용자."""
     exclude = {int(i) for i in exclude_ids if i is not None}
     out = []
-    for r in conn.execute("SELECT id, name, email, role, all_warehouses FROM users WHERE active = 1 AND email <> ''"):
+    for r in conn.execute("SELECT id, name, email, messenger_id, role, all_warehouses FROM users "
+                          "WHERE active = 1 AND (email <> '' OR messenger_id <> '')"):
         r = dict(r)
         if r["id"] in exclude or not auth.has_role(r, min_role):
             continue
@@ -53,28 +78,49 @@ def recipients(conn, min_role: str, warehouse_id: int | None, exclude_ids=()) ->
 def user(conn, user_id) -> list[dict]:
     if user_id is None:
         return []
-    row = conn.execute("SELECT id, name, email FROM users WHERE id = ? AND active = 1 AND email <> ''", (user_id,)).fetchone()
+    row = conn.execute("SELECT id, name, email, messenger_id FROM users WHERE id = ? AND active = 1 "
+                       "AND (email <> '' OR messenger_id <> '')", (user_id,)).fetchone()
     return [dict(row)] if row else []
 
 
 def queue(conn, to: list[dict], subject: str, lines: list[str], path: str, ref: str) -> int:
     """알림을 쌓는다 (호출하는 쪽 트랜잭션 안에서). 쌓은 건수."""
-    if not enabled() or not to:
+    if not enabled():
         return 0
-    body = "\n".join([*lines, "", f"바로 가기: {_link(path)}", "", f"— {config.APP_TITLE} (이 메일은 자동 발송입니다)"])
+    link = _link(path)
+    body = "\n".join([*lines, "", f"바로 가기: {link}", "", f"— {config.APP_TITLE} (자동 알림)"])
+    subject = f"[{config.APP_TITLE}] {subject}"
+    rows: list[tuple] = []
     seen = set()
     for r in to:
         addr = (r.get("email") or "").strip()
-        if not addr or addr.lower() in seen:
-            continue
-        seen.add(addr.lower())
-        conn.execute("INSERT INTO notifications (ref, to_user_id, to_addr, subject, body, status, created_at) "
-                     "VALUES (?, ?, ?, ?, ?, 'PENDING', ?)",
-                     (ref, r.get("id"), addr, f"[{config.APP_TITLE}] {subject}", body, now_str()))
-    return len(seen)
+        if addr and ("email", addr.lower()) not in seen:
+            seen.add(("email", addr.lower()))
+            rows.append(("email", r.get("id"), addr))
+        if naverworks_on() and config.NW_TO_USERS:
+            nid = (r.get("messenger_id") or "").strip() or addr
+            if nid and ("naverworks", nid.lower()) not in seen:
+                seen.add(("naverworks", nid.lower()))
+                rows.append(("naverworks", r.get("id"), nid))
+    if to and jandi_on():
+        names = ", ".join(r["name"] for r in to[:5]) + (" 외" if len(to) > 5 else "")
+        rows.append(("jandi", None, f"토픽 (받을 사람: {names})"))
+    if to and naverworks_on() and config.NW_CHANNEL_ID:
+        rows.append(("naverworks", None, f"channel:{config.NW_CHANNEL_ID}"))
+    for channel, uid, addr in rows:
+        conn.execute("INSERT INTO notifications (ref, to_user_id, to_addr, subject, body, status, created_at, channel) "
+                     "VALUES (?, ?, ?, ?, ?, 'PENDING', ?, ?)", (ref, uid, addr, subject, body, now_str(), channel))
+    return len(rows)
 
 
 # ── 보내기 (배치) ─────────────────────────────────────────────
+def _post(url: str, data: bytes, headers: dict, timeout: int = 15) -> tuple[int, bytes]:
+    """HTTP POST (테스트에서 바꿔 끼운다)."""
+    req = urllib.request.Request(url, data=data, headers=headers, method="POST")
+    with urllib.request.urlopen(req, timeout=timeout) as res:          # noqa: S310 — 설정한 주소(https)만
+        return res.status, res.read()
+
+
 def _smtp():
     if config.SMTP_SECURITY == "ssl":
         s = smtplib.SMTP_SSL(config.SMTP_HOST, config.SMTP_PORT, timeout=20, context=ssl.create_default_context())
@@ -87,46 +133,124 @@ def _smtp():
     return s
 
 
+def _send_jandi(row) -> None:
+    title, _, rest = row.body.partition("\n")
+    payload = {"body": row.subject, "connectColor": "#2747A3",
+               "connectInfo": [{"title": title, "description": rest.strip()[:1500]}]}
+    status, _ = _post(config.JANDI_WEBHOOK_URL, json.dumps(payload, ensure_ascii=False).encode("utf-8"),
+                      {"Accept": "application/vnd.tosslab.jandi-v2+json", "Content-Type": "application/json"})
+    if status >= 300:
+        raise RuntimeError(f"잔디 응답 {status}")
+
+
+_nw_token = {"value": "", "until": 0.0}
+
+
+def _nw_access_token() -> str:
+    """네이버웍스 서비스 계정(JWT) 인증으로 봇 접근 토큰을 받는다 (만료 전까지 재사용)."""
+    if _nw_token["value"] and time.time() < _nw_token["until"] - 60:
+        return _nw_token["value"]
+    from joserfc import jwt
+    from joserfc.jwk import RSAKey
+    pem = config.NW_PRIVATE_KEY
+    if "BEGIN" not in pem:                                    # 파일 경로로 준 경우
+        with open(pem, encoding="utf-8") as f:
+            pem = f.read()
+    now = int(time.time())
+    assertion = jwt.encode({"alg": "RS256", "typ": "JWT"},
+                           {"iss": config.NW_CLIENT_ID, "sub": config.NW_SERVICE_ACCOUNT, "iat": now, "exp": now + 3600},
+                           RSAKey.import_key(pem))
+    form = urllib.parse.urlencode({"assertion": assertion, "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+                                   "client_id": config.NW_CLIENT_ID, "client_secret": config.NW_CLIENT_SECRET,
+                                   "scope": "bot"}).encode()
+    status, body = _post(NW_TOKEN_URL, form, {"Content-Type": "application/x-www-form-urlencoded"})
+    data = json.loads(body or b"{}")
+    if status >= 300 or not data.get("access_token"):
+        raise RuntimeError(f"네이버웍스 토큰 발급 실패 ({status})")
+    _nw_token.update(value=data["access_token"], until=time.time() + int(data.get("expires_in", 3600)))
+    return _nw_token["value"]
+
+
+def _send_naverworks(row) -> None:
+    token = _nw_access_token()
+    target = (f"channels/{urllib.parse.quote(row.to_addr[8:])}" if row.to_addr.startswith("channel:")
+              else f"users/{urllib.parse.quote(row.to_addr)}")
+    payload = {"content": {"type": "text", "text": f"{row.subject}\n{row.body}"[:2000]}}
+    status, _ = _post(f"{NW_API}/bots/{config.NW_BOT_ID}/{target}/messages",
+                      json.dumps(payload, ensure_ascii=False).encode("utf-8"),
+                      {"Authorization": f"Bearer {token}", "Content-Type": "application/json"})
+    if status >= 300:
+        raise RuntimeError(f"네이버웍스 응답 {status}")
+
+
 def send_pending(limit: int = 100) -> str:
     """보낼 알림을 보낸다. log 방식이면 '기록만'으로 표시한다. 실패하면 횟수를 올려 다음 주기에 다시."""
     rows = db.query_df("SELECT * FROM notifications WHERE status = 'PENDING' OR (status = 'FAILED' AND tries < ?) "
                        "ORDER BY id LIMIT ?", (config.NOTIFY_MAX_TRIES, limit))
     if rows.empty:
         return "보낼 알림 없음"
-    if config.NOTIFY_MODE != "smtp" or not config.SMTP_HOST:
-        ids = [int(i) for i in rows["id"]]
-        frag, params = db.in_clause(ids)
-        db.execute(f"UPDATE notifications SET status = 'LOGGED', sent_at = ? WHERE id{frag}", (now_str(), *params))
+    rows["channel"] = rows["channel"].fillna("email").replace("", "email")
+    if not sending():
+        _mark(rows["id"].tolist(), "LOGGED")
         for r in rows.itertuples():
-            log.info("알림(기록만) → %s: %s", r.to_addr, r.subject)
-        return f"기록만 {len(ids)}건 (메일 서버 설정 없음: MM_NOTIFY_MODE=smtp, MM_SMTP_HOST)"
-    sent = failed = 0
-    try:
-        server = _smtp()
-    except Exception as exc:                                    # 메일 서버 연결 실패 → 모두 다음에 다시
-        _fail(rows["id"].tolist(), f"메일 서버 연결 실패: {exc}")
-        return f"메일 서버 연결 실패 ({len(rows)}건은 다음에 다시): {exc}"
-    try:
-        for r in rows.itertuples():
-            msg = EmailMessage()
-            msg["Subject"] = r.subject
-            msg["From"] = formataddr((config.APP_TITLE, config.SMTP_FROM))
-            msg["To"] = r.to_addr
-            msg.set_content(r.body)
+            log.info("알림(기록만) %s → %s: %s", r.channel, r.to_addr, r.subject)
+        return f"기록만 {len(rows)}건 (실제로 보내려면 MM_NOTIFY_MODE=send)"
+    counts = {"sent": 0, "failed": 0}
+    mail = rows[rows["channel"] == "email"]
+    if len(mail):
+        if not config.SMTP_HOST:
+            _fail(mail["id"].tolist(), "메일 서버 설정 없음 (MM_SMTP_HOST)")
+            counts["failed"] += len(mail)
+        else:
             try:
-                server.send_message(msg)
-                db.execute("UPDATE notifications SET status = 'SENT', tries = tries + 1, sent_at = ?, last_error = '' "
-                           "WHERE id = ?", (now_str(), int(r.id)))
-                sent += 1
-            except Exception as exc:
-                _fail([r.id], str(exc))
-                failed += 1
-    finally:
-        try:
-            server.quit()
-        except Exception:
-            pass
-    return f"보냄 {sent} · 실패 {failed}"
+                server = _smtp()
+            except Exception as exc:                            # 메일 서버 연결 실패 → 모두 다음에 다시
+                _fail(mail["id"].tolist(), f"메일 서버 연결 실패: {exc}")
+                counts["failed"] += len(mail)
+                server = None
+            if server is not None:
+                try:
+                    for r in mail.itertuples():
+                        msg = EmailMessage()
+                        msg["Subject"] = r.subject
+                        msg["From"] = formataddr((config.APP_TITLE, config.SMTP_FROM))
+                        msg["To"] = r.to_addr
+                        msg.set_content(r.body)
+                        _try(r, lambda r=r, m=msg: server.send_message(m), counts)
+                finally:
+                    try:
+                        server.quit()
+                    except Exception:
+                        pass
+    for r in rows[rows["channel"] == "jandi"].itertuples():
+        if not jandi_on():
+            _fail([r.id], "잔디 웹훅 설정 없음 (MM_JANDI_WEBHOOK_URL)")
+            counts["failed"] += 1
+            continue
+        _try(r, lambda r=r: _send_jandi(r), counts)
+    for r in rows[rows["channel"] == "naverworks"].itertuples():
+        if not naverworks_on():
+            _fail([r.id], "네이버웍스 봇 설정 없음 (MM_NAVERWORKS_*)")
+            counts["failed"] += 1
+            continue
+        _try(r, lambda r=r: _send_naverworks(r), counts)
+    return f"보냄 {counts['sent']} · 실패 {counts['failed']}"
+
+
+def _try(row, fn, counts: dict) -> None:
+    try:
+        fn()
+        db.execute("UPDATE notifications SET status = 'SENT', tries = tries + 1, sent_at = ?, last_error = '' WHERE id = ?",
+                   (now_str(), int(row.id)))
+        counts["sent"] += 1
+    except Exception as exc:
+        _fail([row.id], str(exc))
+        counts["failed"] += 1
+
+
+def _mark(ids, status: str) -> None:
+    frag, params = db.in_clause([int(i) for i in ids])
+    db.execute(f"UPDATE notifications SET status = ?, sent_at = ? WHERE id{frag}", (status, now_str(), *params))
 
 
 def _fail(ids, error: str) -> None:
@@ -135,6 +259,14 @@ def _fail(ids, error: str) -> None:
                    (error[:500], int(i)))
 
 
+def test_message(actor: dict) -> int:
+    """설정 확인용 알림 한 건 (보내는 사람 자신에게 + 잔디·네이버웍스 채널)."""
+    with db.transaction() as conn:
+        me = conn.execute("SELECT id, name, email, messenger_id FROM users WHERE id = ?", (actor.get("id"),)).fetchone()
+        return queue(conn, [dict(me)] if me else [], "알림 시험", [f"{actor['name']}님이 보낸 알림 시험입니다."],
+                     "/admin/jobs", "test")
+
+
 def recent_df(limit: int = 50) -> pd.DataFrame:
-    return db.query_df("SELECT id, created_at, to_addr, subject, status, tries, last_error, sent_at FROM notifications "
+    return db.query_df("SELECT id, created_at, channel, to_addr, subject, status, tries, last_error, sent_at FROM notifications "
                        "ORDER BY id DESC LIMIT ?", (limit,))

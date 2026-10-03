@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf, material_picker %}
+
+{% block content %}
+<p class="muted">수요(판매·출하 계획)와 재고·들어올 발주·진행 중 작업지시를 맞춰, BOM을 끝까지 펼쳐 무엇을 언제 사거나 만들어야 하는지 계산합니다.
+  발주·착수일 = 필요일 - 리드타임. 최소 발주량·발주 배수를 맞추고, 안전재고는 늘 남깁니다.</p>
+{% if not plants %}
+  <div class="alert alert-warning">권한이 있는 플랜트가 없습니다.</div>
+{% else %}
+<form class="toolbar" method="get">
+  <input type="hidden" name="tab" value="{{ tab }}">
+  <label>플랜트<select name="plant" data-autosubmit>{% for k, v in plants.items() %}<option value="{{ k }}" {{ 'selected' if k == plant }}>{{ v }}</option>{% endfor %}</select></label>
+  <noscript><button class="btn">선택</button></noscript>
+</form>
+<div class="tabs">
+  <a href="{{ url_for('mrp.index', plant=plant) }}" class="{{ 'active' if tab != 'demand' }}">계획 (실행 결과)</a>
+  <a href="{{ url_for('mrp.index', plant=plant, tab='demand') }}" class="{{ 'active' if tab == 'demand' }}">수요</a>
+</div>
+
+{% if tab == "demand" %}
+  <form class="card form" method="post" action="{{ url_for('mrp.demand_add') }}">
+    {{ csrf() }}<input type="hidden" name="plant" value="{{ plant }}">
+    <div class="form-grid g4">
+      <label class="span2">제품·자재 *{{ material_picker('material', none, '', required=true, placeholder='제품 코드·이름') }}</label>
+      <label>수량 *<input name="qty" type="number" min="0" step="any" required></label>
+      <label>납기 *<input name="due_date" type="date" value="{{ default_due }}" required></label>
+    </div>
+    <label>메모 (고객·주문 번호 등)<input name="note"></label>
+    <div><button class="btn btn-primary">수요 등록</button></div>
+  </form>
+  {% if not demands %}
+    <p class="muted">등록된 수요가 없습니다. 수요가 없어도 진행 중 작업지시·안전재고는 MRP에 들어갑니다.</p>
+  {% else %}
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th>납기</th><th>제품·자재</th><th class="num">수량</th><th>메모</th><th>등록</th><th></th></tr></thead>
+    <tbody>
+    {% for d in demands %}
+      <tr class="{{ 'tone-danger' if d.due_date < today().isoformat() }}"><td>{{ d.due_date }}</td><td>[{{ d.code }}] {{ d.name }}</td>
+        <td class="num">{{ '{:,.4g}'.format(d.qty) }} {{ d.unit }}</td><td>{{ d.note }}</td><td class="small">{{ d.created_by }} · {{ d.created_at[:10] }}</td>
+        <td><form class="inline" method="post" action="{{ url_for('mrp.demand_close', did=d.id) }}">{{ csrf() }}<input type="hidden" name="plant" value="{{ plant }}">
+          <button class="btn btn-sm">닫기</button></form></td></tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+  {% endif %}
+
+{% else %}
+  {% if can_run %}
+  <form class="toolbar" method="post" action="{{ url_for('mrp.run') }}">
+    {{ csrf() }}<input type="hidden" name="plant" value="{{ plant }}">
+    <label>계획 기간 (일)<input name="horizon" type="number" min="7" max="365" value="90"></label>
+    <button class="btn btn-primary">MRP 실행</button>
+    <span class="muted small">실행할 때마다 새 계획을 만듭니다. 이미 바꾼 계획은 다음 실행에서 '들어올 구매요청·작업지시'로 잡힙니다.</span>
+  </form>
+  {% endif %}
+  {% if not run %}
+    <div class="alert alert-info">아직 실행한 적이 없습니다.{{ ' 관리자가 MRP 실행을 누르면 계획이 나옵니다.' if not can_run }}</div>
+  {% else %}
+    <p class="muted small">실행 {{ run.run_at[:16] }} · {{ run.run_by }} · 기간 ~{{ run.horizon }} —
+      계획 {{ run.summary.plans }}건 (구매 {{ run.summary.buy }} · 생산 {{ run.summary.make }}){% if run.summary.late %} · <strong class="down">이미 늦은 계획 {{ run.summary.late }}건</strong>{% endif %}</p>
+    {% if not plans %}
+      <div class="alert alert-success">사거나 만들 것이 없습니다 — 재고와 들어올 물량으로 수요·안전재고를 채웁니다.</div>
+    {% else %}
+    <form method="post" action="{{ url_for('mrp.convert') }}">
+      {{ csrf() }}<input type="hidden" name="plant" value="{{ plant }}"><input type="hidden" name="run_id" value="{{ run.id }}">
+      <div class="table-wrap"><table class="data">
+        <thead><tr><th></th><th>구분</th><th>단계</th><th>자재</th><th class="num">수량</th><th>발주·착수일</th><th>필요일</th><th class="num">리드타임</th><th>창고</th><th>근거</th><th>상태</th></tr></thead>
+        <tbody>
+        {% for x in plans %}
+          <tr class="{{ 'tone-danger' if x.late else ('tone-muted' if x.status != 'OPEN') }}">
+            <td>{% if x.status == 'OPEN' and can_run %}<input type="checkbox" name="plan" value="{{ x.id }}" checked aria-label="선택">{% endif %}</td>
+            <td>{{ kind[x.kind] }}</td><td>{{ x.level }}</td><td>[{{ x.code }}] {{ x.name }}</td>
+            <td class="num">{{ '{:,.4g}'.format(x.qty) }} {{ x.unit }}</td>
+            <td>{{ x.order_date }}{{ ' (지연)' if x.late }}</td><td>{{ x.need_date }}</td><td class="num">{{ x.lead_time_days }}일</td>
+            <td>{{ x.wh_code }}</td><td class="small">{{ x.pegging }}</td>
+            <td>{{ '→ ' ~ x.ref if x.status != 'OPEN' else '' }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table></div>
+      {% if can_run %}<div class="row-actions"><button class="btn btn-primary">고른 계획 → 구매요청·작업지시 만들기</button>
+        <span class="muted small">구매 계획은 창고별로 구매요청 하나(결재로 넘어감), 생산 계획은 작업지시 하나씩.</span></div>{% endif %}
+    </form>
+    {% endif %}
+  {% endif %}
+{% endif %}
+{% endif %}
+{% endblock %}

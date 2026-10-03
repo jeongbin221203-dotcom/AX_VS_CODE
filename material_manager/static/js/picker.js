@@ -26,8 +26,10 @@
   function prepare(rows) {
     return rows.map(function (r) {
       const it = { id: r[0], code: r[1], name: r[2], spec: r[3] || "", unit: r[4] || "", barcode: r[5] || "",
-                   sap: r[6] || "", lot: !!r[7], price: r[8] || 0, expiry: !!r[9] };
-      it.hay = (it.code + " " + it.name + " " + it.spec + " " + it.barcode + " " + it.sap).toLowerCase();
+                   sap: r[6] || "", lot: !!r[7], price: r[8] || 0, expiry: !!r[9],
+                   units: (r[10] || []).map(function (u) { return { unit: u[0], factor: u[1], barcode: u[2] || "" }; }) };
+      it.hay = (it.code + " " + it.name + " " + it.spec + " " + it.barcode + " " + it.sap + " " +
+                it.units.map(function (u) { return u.barcode; }).join(" ")).toLowerCase();
       it.label = "[" + it.code + "] " + it.name + (it.spec ? " (" + it.spec + ")" : "");
       return it;
     });
@@ -40,17 +42,55 @@
     if (pending[src]) return pending[src];
     pending[src] = fetch(src, { credentials: "same-origin", headers: { "X-Requested-With": "fetch" } })
       .then(function (r) { if (!r.ok || r.redirected) throw new Error("lookup"); return r.json(); })
-      .then(function (data) { cachePut(src, data); return prepare(data.items); })
+      .then(function (data) {
+        if (data.remote) { const r = []; r.remote = src.replace("lookup.json", "search.json"); return r; }  // 서버에서 찾기
+        cachePut(src, data);
+        return prepare(data.items);
+      })
       .catch(function () { const c = cacheGet(src); return c ? prepare(c.items) : []; })
       .then(function (list) { lists[src] = list; items = list; delete pending[src]; return list; });
     return pending[src];
   }
 
+  // 정확히 같은 코드·바코드·SAP 번호 → {it, unit}. 상자(단위) 바코드면 그 단위.
   function exact(q) {
     const u = q.trim().toUpperCase();
     if (!u) return null;
-    return items.find(function (it) { return it.code.toUpperCase() === u || (it.barcode && it.barcode === u) ||
-                                              (it.sap && it.sap.toUpperCase() === u); }) || null;
+    const it = items.find(function (x) { return x.code.toUpperCase() === u || (x.barcode && x.barcode === u) ||
+                                                (x.sap && x.sap.toUpperCase() === u); });
+    if (it) return { it: it, unit: "" };
+    for (let i = 0; i < items.length; i++) {
+      const un = items[i].units.find(function (x) { return x.barcode && x.barcode === u; });
+      if (un) return { it: items[i], unit: un.unit };
+    }
+    return null;
+  }
+  // 자재가 아주 많으면(서버 설정 MM_LOOKUP_MAX) 목록을 받지 않고 서버에 묻는다
+  const known = {};
+  function remember(list) { list.forEach(function (it) { known[it.id] = it; }); return list; }
+  function remoteGet(params) {
+    const sep = items.remote.indexOf("?") >= 0 ? "&" : "?";
+    return fetch(items.remote + sep + params, { credentials: "same-origin", headers: { "X-Requested-With": "fetch" } })
+      .then(function (r) { return r.json(); });
+  }
+  function searchAsync(q) {
+    if (!items.remote) return Promise.resolve(search(q));
+    if (!q.trim()) return Promise.resolve([]);
+    return remoteGet("q=" + encodeURIComponent(q)).then(function (d) { return remember(prepare(d.items)); })
+      .catch(function () { return []; });
+  }
+  function exactAsync(q) {
+    if (!items.remote) return Promise.resolve(exact(q));
+    if (!q.trim()) return Promise.resolve(null);
+    return remoteGet("exact=" + encodeURIComponent(q.trim())).then(function (d) {
+      const list = remember(prepare(d.items));
+      return list.length ? { it: list[0], unit: d.unit || "" } : null;
+    }).catch(function () { return null; });
+  }
+  // '24*코드'·'24 x 코드' → 이번 한 번만 수량 24
+  function splitQty(q) {
+    const m = q.match(/^\s*(\d+(?:\.\d+)?)\s*[*xX×]\s*(\S.*)$/);
+    return m ? { qty: parseFloat(m[1]), q: m[2] } : { qty: null, q: q };
   }
   function search(q) {
     const words = q.toLowerCase().split(/\s+/).filter(Boolean);
@@ -93,14 +133,15 @@
     x.list.hidden = !found.length && !note;
   }
   function hide(p) { const l = p.querySelector(".picker-list"); if (l) l.hidden = true; }
-  function byId(id) { return items.find(function (it) { return String(it.id) === String(id); }); }
+  function byId(id) { return known[id] || items.find(function (it) { return String(it.id) === String(id); }); }
 
-  function pick(p, it) {
+  function pick(p, it, extra) {
     const x = parts(p);
     hide(p);
     if (x.mode === "add") {
       x.q.value = "";
-      p.dispatchEvent(new CustomEvent("mm:pick", { bubbles: true, detail: it }));
+      const d = Object.assign({}, it, { scanUnit: (extra && extra.unit) || "", scanQty: extra ? extra.qty : null });
+      p.dispatchEvent(new CustomEvent("mm:pick", { bubbles: true, detail: d }));
       x.q.focus();
       return;
     }
@@ -126,17 +167,19 @@
   }
   function enter(p) {
     const x = parts(p);
-    const q = x.q.value;
-    load(p).then(function () {
+    const sq = x.mode === "add" ? splitQty(x.q.value) : { qty: null, q: x.q.value };
+    const q = sq.q;
+    load(p).then(function () { return exactAsync(q); }).then(function (ex) {
       const active = x.list.hidden ? null : x.list.querySelector("li.active[data-id]");
-      const ex = exact(q);
-      if (ex) return pick(p, ex);                       // 스캐너·코드 직접 입력
-      if (active) return pick(p, byId(active.dataset.id));
-      const found = search(q);
-      if (found.length === 1) return pick(p, found[0]);
+      if (ex) return pick(p, ex.it, { unit: ex.unit, qty: sq.qty });      // 스캐너·코드 직접 입력
+      if (active) return pick(p, byId(active.dataset.id), { unit: "", qty: sq.qty });
+      return searchAsync(q).then(function (found) { return finish(found); });
+    });
+    function finish(found) {
+      if (found.length === 1) return pick(p, found[0], { unit: "", qty: sq.qty });
       if (!found.length) return notFound(p, q.trim());
       show(p, found);
-    });
+    }
   }
 
   document.addEventListener("input", function (e) {
@@ -144,7 +187,13 @@
     if (!p || !e.target.classList.contains("picker-q")) return;
     const x = parts(p);
     if (x.hidden && x.mode === "select") x.hidden.value = "";      // 글자를 바꾸면 고른 자재를 비운다
-    load(p).then(function () { show(p, search(x.q.value)); });
+    clearTimeout(p._t);
+    p._t = setTimeout(function () {                                  // 서버에서 찾을 때 글자마다 묻지 않게
+      const q = x.q.value;
+      load(p).then(function () { return searchAsync(q); }).then(function (found) {
+        if (x.q.value === q) show(p, found);
+      });
+    }, items.remote ? 250 : 0);
   });
   let justFocused = null;
   document.addEventListener("mouseup", function (e) {
@@ -204,15 +253,49 @@
   }, true);
 
   // ── 카메라 바코드 ──
-  const canScan = "BarcodeDetector" in window && navigator.mediaDevices && navigator.mediaDevices.getUserMedia;
+  // 브라우저에 바코드 인식(BarcodeDetector: 안드로이드 크롬 등)이 있으면 그것을, 없으면(아이폰 Safari·PC 크롬 등)
+  // 같은 서버의 ZXing(static/vendor, 처음 📷를 누를 때만 받음)으로 읽는다. 카메라는 HTTPS(또는 localhost)에서만 열린다.
+  const ZXING = "/static/vendor/zxing-library-0.21.3.min.js";
+  const canScan = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) && window.isSecureContext !== false;
   if (canScan) document.documentElement.classList.add("can-scan");
-  let scanning = null;
+  let scanning = null, zxingLoading = null;
+  function loadZxing() {
+    if (window.ZXing) return Promise.resolve(window.ZXing);
+    if (zxingLoading) return zxingLoading;
+    zxingLoading = new Promise(function (ok, fail) {
+      const sc = document.createElement("script");
+      sc.src = ZXING;
+      sc.onload = function () { window.ZXing ? ok(window.ZXing) : fail(new Error("ZXing")); };
+      sc.onerror = function () { zxingLoading = null; fail(new Error("ZXing")); };
+      document.head.appendChild(sc);
+    });
+    return zxingLoading;
+  }
   function stopScan() {
     if (!scanning) return;
     scanning.stop = true;
+    if (scanning.reader) { try { scanning.reader.reset(); } catch (e) { /* 무시 */ } }
     if (scanning.stream) scanning.stream.getTracks().forEach(function (t) { t.stop(); });
     scanning.box.remove();
     scanning = null;
+  }
+  function onCode(p, st, msg, raw) {
+    raw = String(raw || "").trim();
+    const now = Date.now();
+    if (!raw || (raw === st.last && now - st.lastAt < 1500)) return;     // 같은 상자를 계속 비추면 1.5초에 한 번
+    st.last = raw; st.lastAt = now;
+    load(p).then(function () { return exactAsync(raw); }).then(function (ex) {
+      if (!ex) { msg.textContent = "등록되지 않은 바코드: " + raw; return; }
+      if (navigator.vibrate) navigator.vibrate(60);
+      if (parts(p).mode === "add") {
+        pick(p, ex.it, { unit: ex.unit, qty: null });
+        msg.textContent = "추가: " + ex.it.label + (ex.unit ? " · " + ex.unit : "");
+      } else { stopScan(); pick(p, ex.it); }
+    });
+  }
+  function camError(msg, err) {
+    msg.textContent = "카메라를 쓸 수 없습니다 (" + (err && err.name || "오류") + "). 브라우저의 카메라 권한을 확인하세요" +
+                      (location.protocol === "https:" ? "." : " (카메라는 https 주소에서만 열립니다).");
   }
   function startScan(p) {
     stopScan();
@@ -223,36 +306,38 @@
     document.body.appendChild(box);
     const video = box.querySelector("video"), msg = box.querySelector(".scan-msg");
     const st = scanning = { box: box, stop: false, last: "", lastAt: 0 };
-    Promise.all([navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio: false }),
-                 window.BarcodeDetector.getSupportedFormats ? window.BarcodeDetector.getSupportedFormats() : []])
-      .then(function (r) {
-        if (st.stop) { r[0].getTracks().forEach(function (t) { t.stop(); }); return; }
-        st.stream = r[0];
-        video.srcObject = r[0];
-        video.play();
-        const detector = r[1].length ? new window.BarcodeDetector({ formats: r[1] }) : new window.BarcodeDetector();
-        const tick = function () {
-          if (st.stop) return;
-          detector.detect(video).then(function (codes) {
-            const raw = codes.length ? String(codes[0].rawValue || "").trim() : "";
-            const now = Date.now();
-            if (raw && !(raw === st.last && now - st.lastAt < 1500)) {       // 같은 상자를 계속 비추면 1.5초에 한 번
-              st.last = raw; st.lastAt = now;
-              load(p).then(function () {
-                const it = exact(raw);
-                if (!it) { msg.textContent = "등록되지 않은 바코드: " + raw; return; }
-                if (navigator.vibrate) navigator.vibrate(60);
-                if (parts(p).mode === "add") { pick(p, it); msg.textContent = "추가: " + it.label; }
-                else { stopScan(); pick(p, it); }
-              });
-            }
-          }).catch(function () { /* 프레임 하나 실패는 무시 */ }).finally(function () { setTimeout(tick, 200); });
-        };
-        tick();
-      })
-      .catch(function (err) {
-        msg.textContent = "카메라를 쓸 수 없습니다 (" + (err && err.name || "오류") + "). 브라우저의 카메라 권한을 확인하세요.";
+    const constraints = { video: { facingMode: "environment" }, audio: false };
+    if ("BarcodeDetector" in window) {
+      Promise.all([navigator.mediaDevices.getUserMedia(constraints),
+                   window.BarcodeDetector.getSupportedFormats ? window.BarcodeDetector.getSupportedFormats() : []])
+        .then(function (r) {
+          if (st.stop) { r[0].getTracks().forEach(function (t) { t.stop(); }); return; }
+          st.stream = r[0];
+          video.srcObject = r[0];
+          video.play();
+          const detector = r[1].length ? new window.BarcodeDetector({ formats: r[1] }) : new window.BarcodeDetector();
+          const tick = function () {
+            if (st.stop) return;
+            detector.detect(video).then(function (codes) { if (codes.length) onCode(p, st, msg, codes[0].rawValue); })
+              .catch(function () { /* 프레임 하나 실패는 무시 */ }).finally(function () { setTimeout(tick, 200); });
+          };
+          tick();
+        })
+        .catch(function (err) { camError(msg, err); });
+      return;
+    }
+    msg.textContent = "바코드 인식기를 준비하는 중…";
+    loadZxing().then(function (Z) {
+      if (st.stop) return;
+      const reader = st.reader = new Z.BrowserMultiFormatReader();
+      msg.textContent = "바코드를 화면 가운데에 비춰 주세요";
+      return reader.decodeFromConstraints(constraints, video, function (result) {
+        if (result && !st.stop) onCode(p, st, msg, result.getText());
       });
+    }).catch(function (err) {
+      if (err && err.message === "ZXing") msg.textContent = "바코드 인식기를 받지 못했습니다. 연결을 확인하거나 바코드를 직접 입력하세요.";
+      else camError(msg, err);
+    });
   }
   document.addEventListener("click", function (e) {
     const b = e.target.closest && e.target.closest("[data-scan]");
@@ -270,8 +355,12 @@
   function val(tr, n) { return tr.querySelector("[name=" + n + "]").value; }
   function saveBatch(form) {
     const lines = rowsOf(form).map(function (tr) {
+      const sel = tr.querySelector("[name=line_unit]");
       return { id: val(tr, "line_mid"), label: tr.querySelector("[data-label]").textContent,
-               unit: tr.querySelector("[data-unit]").textContent, lot_managed: tr.classList.contains("lot-line"),
+               unit: sel.options[0].textContent, entry_unit: sel.value,
+               units: Array.prototype.slice.call(sel.options, 1).map(function (o) {
+                 return { unit: o.value, factor: parseFloat(o.dataset.factor) || 1 }; }),
+               lot_managed: tr.classList.contains("lot-line"),
                qty: val(tr, "line_qty"), lot: val(tr, "line_lot"), exp: val(tr, "line_exp"),
                price: val(tr, "line_price"), note: val(tr, "line_note") };
     });
@@ -286,7 +375,9 @@
     let total = 0;
     rows.forEach(function (tr, i) {
       tr.querySelector("[data-no]").textContent = i + 1;
-      total += (parseFloat(val(tr, "line_qty")) || 0) * (parseFloat(val(tr, "line_price")) || 0);
+      const sel = tr.querySelector("[name=line_unit]");
+      const f = sel.selectedIndex > 0 ? parseFloat(sel.options[sel.selectedIndex].dataset.factor) || 1 : 1;
+      total += (parseFloat(val(tr, "line_qty")) || 0) * f * (parseFloat(val(tr, "line_price")) || 0);
     });
     const empty = form.querySelector("[data-empty]");
     if (empty) empty.hidden = rows.length > 0;
@@ -304,7 +395,20 @@
     const tr = tpl.content.firstElementChild.cloneNode(true);
     tr.querySelector("[name=line_mid]").value = d.id;
     tr.querySelector("[data-label]").textContent = d.label;
-    tr.querySelector("[data-unit]").textContent = d.unit || "";
+    const sel = tr.querySelector("[name=line_unit]");
+    sel.innerHTML = "";
+    const base = document.createElement("option");
+    base.value = "";
+    base.textContent = d.unit || "";
+    sel.appendChild(base);
+    (d.units || []).forEach(function (u) {
+      const o = document.createElement("option");
+      o.value = u.unit;
+      o.dataset.factor = u.factor;
+      o.textContent = u.unit + "(×" + u.factor + ")";
+      sel.appendChild(o);
+    });
+    sel.value = d.entry_unit || "";
     ["qty", "lot", "exp", "price", "note"].forEach(function (k) {
       if (d[k] !== undefined && d[k] !== null) tr.querySelector("[name=line_" + k + "]").value = d[k];
     });
@@ -318,14 +422,20 @@
     const form = batchOf(e.target);
     if (!form) return;
     const it = e.detail;
-    // 같은 자재(로트를 따로 적지 않은 줄)는 수량 +1
-    const same = rowsOf(form).find(function (tr) { return val(tr, "line_mid") === String(it.id) && !val(tr, "line_lot"); });
+    // 더할 수량: '24*코드'로 넣은 수량 > 스캔 수량 칸(바꿀 때까지 유지) > 1
+    const box = form.querySelector("[data-scan-qty]");
+    const add = it.scanQty != null ? it.scanQty : (parseFloat(box && box.value) > 0 ? parseFloat(box.value) : 1);
+    // 같은 자재·같은 단위(로트를 따로 적지 않은 줄)는 수량을 더한다
+    const same = rowsOf(form).find(function (tr) {
+      return val(tr, "line_mid") === String(it.id) && val(tr, "line_unit") === (it.scanUnit || "") && !val(tr, "line_lot");
+    });
     if (same) {
       const q = same.querySelector("[name=line_qty]");
-      q.value = (parseFloat(q.value) || 0) + 1;
+      q.value = Math.round(((parseFloat(q.value) || 0) + add) * 10000) / 10000;
       flash(same);
     } else {
-      flash(addLine(form, { id: it.id, label: it.label, unit: it.unit, lot_managed: it.lot, qty: 1, price: it.price }));
+      flash(addLine(form, { id: it.id, label: it.label, unit: it.unit, units: it.units, entry_unit: it.scanUnit,
+                            lot_managed: it.lot, qty: add, price: it.price }));
     }
     refresh(form);
     saveBatch(form);
@@ -371,6 +481,14 @@
     form.dataset.kind = e.target.value;
     rowsOf(form).forEach(function (tr) { lotHint(form, tr); });
     saveBatch(form);
+  });
+  // 끊긴 동안 등록 → 오프라인 대기열에 담았으면(app.js) 줄을 비운다 (같은 줄을 두 번 보내지 않게)
+  document.addEventListener("mm:queued", function (e) {
+    const form = e.target.closest && e.target.closest("form[data-batch]");
+    if (!form) return;
+    rowsOf(form).forEach(function (tr) { tr.remove(); });
+    try { localStorage.removeItem(BKEY); } catch (err) { /* 무시 */ }
+    refresh(form);
   });
   function offerRestore(form) {
     if (document.querySelector(".alert-success")) {           // 방금 등록에 성공한 화면 → 보관한 줄은 등록된 것

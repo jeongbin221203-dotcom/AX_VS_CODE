@@ -1,8 +1,13 @@
-flask>=3.0
+flask>=3.1.3                # 3.1.3 미만은 알려진 취약점 (pip-audit)
 pandas>=2.1
 openpyxl>=3.1
 defusedxml>=0.7            # openpyxl이 엑셀 XML을 읽을 때 XXE·XML 폭탄을 막는다
-joserfc>=1.0               # 사내 SSO(OIDC) ID 토큰 서명 검증
+joserfc>=1.0               # 사내 SSO(OIDC) ID 토큰 서명 검증 · 네이버웍스 봇 JWT
+
+# 거래명세서 PDF·스캔 읽기 (core/statement_reader.py). OCR은 서버에 Tesseract 프로그램(+한국어 데이터)이 있을 때만
+pdfplumber>=0.11
+pymupdf>=1.24
+pytesseract>=0.3
 
 # 여러 서버 운영 (MM_DATABASE_URL=postgresql://...)
 psycopg[binary]>=3.1

@@ -261,7 +261,7 @@ flask --app app erp test                                   # 연결 확인 (화�
 - 찍던 줄은 브라우저에 사용자별로 보관 → 끊기거나 닫아도 다시 열면 '되살리기'. 등록에 성공하면 지운다.
 - 자재 선택 칸은 모든 화면에서 검색형(`static/js/picker.js`, `/materials/lookup.json` — 한 번 받아 브라우저에서 찾음, 바뀌지 않으면 304).
 
-## 생산 투입 · BOM (메뉴 '🏭 생산 투입 (BOM)', `core/production.py`)
+## 생산 투입 · BOM (메뉴 '🏭 생산', `core/production.py`)
 
 - BOM: 제품(완제품·반제품) 기준 수량당 부품·수량·손실률(%)·꺼내는 창고. 제품을 자기 부품으로 넣기·순환(A→B→A)·같은 부품 두 줄은 저장 안 됨.
   부품이 반제품이면(다단계) 반제품을 먼저 생산 투입해 입고한 뒤 쓴다.
@@ -280,18 +280,86 @@ flask --app app erp test                                   # 연결 확인 (화�
 - 원가센터가 있는 출고(사내 사용)의 '거래처' 칸은 사용 부서라 확인하지 않는다.
 - `MM_PARTNER_REQUIRED=1`이면 마스터에 없는 이름으로는 등록할 수 없다(기본은 등록하고 경고).
 
-## 결재 알림 메일 (`core/notify.py`)
+## 결재 알림: 메일 · 잔디 · 네이버웍스 (`core/notify.py`)
 
-- 구매요청·다음 결재 단계·발주 결재·큰 실사 조정 → 결재할 수 있는 사람(역할·창고 권한·메일 주소가 있는 사용자, 요청자 제외)에게,
-  승인·반려 → 요청자에게. 메일 주소는 사용자 화면에서 넣는다.
-- 업무와 같은 트랜잭션에서 `notifications`에 쌓고 배치 `notify_send`(1분)가 보낸다 → 업무가 거부되면 메일도 없고, 메일 서버가 멈춰도
-  화면은 기다리지 않으며 실패하면 5번까지 다시 보낸다. 배치 화면에 최근 50건.
+- 구매요청·다음 결재 단계·발주 결재·큰 실사 조정 → 결재할 수 있는 사람(역할·창고 권한·메일이나 메신저 아이디가 있는 사용자,
+  요청자 제외)에게, 승인·반려 → 요청자에게. 메일 주소·메신저 아이디는 사용자 화면에서 넣는다.
+- 잔디: 토픽의 '들어오는 웹훅'으로 한 번. 네이버웍스: 봇이 사람마다 1:1(메신저 아이디, 없으면 메일) + 채널(선택).
+  네이버웍스 인증은 서비스 계정 JWT(RS256) → 접근 토큰(만료 전까지 재사용).
+- 업무와 같은 트랜잭션에서 `notifications`에 쌓고 배치 `notify_send`(1분)가 보낸다 → 업무가 거부되면 알림도 없고,
+  메일·메신저 서버가 멈춰도 화면은 기다리지 않으며 실패하면 5번까지 다시 보낸다. 배치 화면에 최근 50건과 '나에게 시험 알림'.
+- 실제 메일·잔디·네이버웍스 서버와는 연결 시험을 하지 않았다(가짜 서버로 요청 형식만 확인).
 
 ```bash
-export MM_NOTIFY_MODE=smtp            # off | log(기본: 목록에만 남김) | smtp
-export MM_SMTP_HOST=smtp.사내 MM_SMTP_PORT=587 MM_SMTP_SECURITY=starttls MM_SMTP_USER=... MM_SMTP_PASSWORD=...
-export MM_SMTP_FROM=mm-noreply@회사 MM_BASE_URL=https://mm.사내     # 메일 속 링크 앞부분
+export MM_NOTIFY_MODE=send            # off | log(기본: 목록에만 남김) | send
+export MM_SMTP_HOST=smtp.사내 MM_SMTP_PORT=587 MM_SMTP_SECURITY=starttls MM_SMTP_USER=... MM_SMTP_PASSWORD=... MM_SMTP_FROM=mm@회사
+export MM_JANDI_WEBHOOK_URL=https://wh.jandi.com/connect-api/webhook/...
+export MM_NAVERWORKS_BOT_ID=... MM_NAVERWORKS_CLIENT_ID=... MM_NAVERWORKS_CLIENT_SECRET=... MM_NAVERWORKS_SERVICE_ACCOUNT=...
+export MM_NAVERWORKS_PRIVATE_KEY=/etc/mm/naverworks.key MM_NAVERWORKS_CHANNEL_ID=(선택)
+export MM_BASE_URL=https://mm.사내     # 알림 속 링크 앞부분
 ```
+
+## 작업지시 · 공정 · 재공품 (메뉴 '🏭 생산', `core/production.py`)
+
+- **작업지시**: 계획(PLANNED, 착수일 = 완료 예정 - 제품 리드타임) → **자재 투입**(부품 출고, 계획보다 더·덜, BOM에 없는 추가 투입,
+  남은 자재 **반납**은 음수) = 재공품(RELEASED) → **공정 실적**(공정마다 양품·불량·작업 시간·작업자) → **완료**(아직 안 넣은 계획 수량은
+  선택해 자동 투입 = 백플러시, 양품 입고). 취소하면 투입·반납·입고를 모두 취소 거래로.
+- **실제 원가**: 투입 단가 = 그 부품의 최근 180일 입고 가중평균(없으면 기준단가). 완제품 입고 단가 = 실제 투입 금액 ÷ 양품
+  (불량분 재료비도 양품 원가에). 화면에 표준(BOM × 기준단가)과 실제의 차이.
+- **간편 생산 투입**: 작업지시를 만들고 투입·완료까지 한 번에(실제 투입량·불량을 고쳐 넣을 수 있음).
+- **공정(라우팅)**: BOM 화면에서 제품마다 공정·작업장·표준 시간. 작업지시를 만들면 복사된다.
+- **재공품** 탭: 투입했지만 완료하지 않은 작업지시와 금액(완료 예정이 지난 것은 빨간 줄).
+
+## MRP (메뉴 '📅 MRP', `core/mrp.py`)
+
+- 플랜트 단위. 수요(판매·출하 계획: 제품·수량·납기) + 진행 중 작업지시의 아직 투입 안 한 부품 + 안전재고(그 플랜트에서 다룬 자재만)
+  ↔ 현재고 + 들어올 발주 잔량·승인 대기 구매요청·진행 중 작업지시 완제품.
+- BOM을 끝까지 펼친다(단계 = low-level code). 품목마다 날짜 순으로 가용 재고를 깎아 모자라는 날 = 필요일,
+  **발주·착수일 = 필요일 - 리드타임**(오늘 이전이면 '지연'), 수량은 **최소 발주량 이상·발주 배수로 올림**(낱개 단위는 정수).
+  생산 계획이면 착수일에 부품 수요를 만들어 아래 단계로. 근거(어느 수요 때문인지)를 남긴다.
+- 고른 계획 → 구매 계획은 창고별 구매요청(기존 결재 흐름), 생산 계획은 작업지시. 다시 돌리면 그것들이 공급으로 잡힌다.
+- 자재 마스터: 리드타임(일)·최소 발주량·발주 배수 (엑셀 업로드 열도 있음).
+- 하지 않는 것: 작업장 능력(부하) 계획, 여러 플랜트 사이 이동 계획, 수요 예측.
+
+## 단위 환산 · 바코드 라벨
+
+- 자재 마스터 → 수정 → **단위 환산**: 1 BOX = 100 EA 처럼. 재고는 기본 단위로, 입출고·여러 줄 화면에서 단위를 골라 넣고
+  거래에 입력 단위·수량을 함께 남긴다. 단위마다 **상자 바코드**를 둘 수 있다 → 상자를 찍으면 그 단위로 들어온다.
+- 여러 줄 화면: '찍을 때마다' 수량(바꿀 때까지 유지), `24*바코드`(이번만 24). 끊긴 동안 등록하면 브라우저 대기열에 담았다가
+  연결되면 같은 규칙으로 반영(두 번 반영 안 함).
+- **바코드 라벨 인쇄**(자재 마스터 → 🏷️): Code 128(`core/barcode.py`, 외부 라이브러리 없음), A4 24칸·10칸·라벨 프린터.
+- 카메라 스캔: 브라우저에 BarcodeDetector가 있으면 그것을, 없으면(아이폰 Safari 등) ZXing(`static/vendor`, Apache-2.0)을 처음
+  📷를 누를 때 받는다. HTTPS에서만 카메라가 열린다. 인쇄한 라벨을 가짜 카메라로 읽혀 확인했다(실제 휴대폰으로는 시험하지 않음).
+- 자재가 아주 많으면(`MM_LOOKUP_MAX`, 기본 2만) 자재 찾기가 목록 전체를 받지 않고 서버에서 찾는다(`/materials/search.json`).
+
+## 거래처·BOM 엑셀 일괄 등록
+
+- 거래처 → ⬆️ 엑셀 일괄 등록: 코드가 있으면 코드로, 없으면 이름(표기 무시)으로 찾아 갱신(빈 칸은 그대로), 없으면 등록. '다른 이름' 칸.
+- BOM → 엑셀로 일괄 등록: 한 줄 = 부품 하나, 제품마다 BOM 전체를 파일 내용으로 바꾼다. 순환·자기 자신·같은 부품은 거부.
+- 둘 다: 회사 엑셀의 열 이름을 별칭으로 맞추고(엑셀 양식), 미리보기에서 문제 줄을 보여 주며, 한 줄이라도 문제면 아무것도 반영하지 않는다.
+
+## DB 구조 버전 관리 (`core/migrate.py`, `migrations/versions/`)
+
+Alembic과 같은 방식(리비전 파일 · 앞 리비전 · upgrade/downgrade · DB에 지금 리비전과 기록)을 추가 라이브러리 없이 SQLite·PostgreSQL 공통으로.
+앱이 뜰 때 최신까지 자동으로 올린다(서버 여러 대여도 PostgreSQL 잠금으로 한 대만).
+
+```bash
+flask --app app db current                 # DB 리비전 · 프로그램 최신
+flask --app app db history                 # 리비전 목록과 올리고 내린 기록
+flask --app app db revision -m "설명"       # 새 리비전 파일 (migrations/versions/NNNN_설명.py)
+flask --app app db upgrade [리비전]
+flask --app app db downgrade 0001 --yes    # 되돌리기 (그 뒤 리비전의 표·칸이 지워진다 — 먼저 백업)
+```
+
+`0001` = 기준선(이 도구 전 구조), `0002` = 단위 환산·작업지시·MRP·메신저 알림. CI가 upgrade → downgrade → upgrade 왕복을 매번 확인한다.
+
+## 감시 · 운영 · 보안
+
+- `GET /metrics`(Prometheus): 요청 수·응답 시간, DB, ERP 전송 대기·실패, 결재 대기, 알림 실패, 재공품, 안전재고 미달, 배치 마지막 성공.
+  `MM_METRICS_TOKEN`(Bearer) 또는 서버 자신만. 설정·알림 규칙: `deploy/prometheus/`.
+- 운영 안내(역할·서비스 수준 목표·장애 등급·대응 절차·백업 복구 시험·정기 점검·배포): **`docs/OPERATIONS.md`**.
+- 보안 점검(자동 보안 테스트·bandit·pip-audit 결과, 적용 통제, 한계, 외부 점검 권고 범위): **`docs/SECURITY.md`**. 모의해킹은 하지 않았다.
+- CI: 저장소 루트 `.github/workflows/material-ci.yml` — SQLite·PostgreSQL 테스트, 리비전 왕복, bandit(High면 실패), pip-audit.
 
 ## 장애·실수 대비 (인터넷 끊김 · 두 번 제출 · 데이터 보존)
 
@@ -407,8 +475,8 @@ material_manager/
 
 ```bash
 pip install -r requirements-dev.txt
-python -m pytest tests -q                                                    # SQLite 134 + 1 건너뜀(PostgreSQL pg_dump 전용)
-MM_DATABASE_URL=postgresql://user@host:5432/mm_test python -m pytest tests -q  # PostgreSQL (DB 이름에 test 필수)
+python -m pytest tests -q                                                    # SQLite 192 통과 + 1 건너뜀(PostgreSQL pg_dump 전용)
+MM_DATABASE_URL=postgresql://user@host:5432/mm_test python -m pytest tests -q  # PostgreSQL 191 통과 + 2 건너뜀 (DB 이름에 test 필수)
 ```
 테스트는 임시 DB만 쓴다(운영 SQLite 파일과 이름에 test가 없는 PostgreSQL DB는 초기화를 거부).
 S3는 moto로, 사내 SSO는 테스트 안의 가짜 IdP(RSA 서명 토큰)로, SAP·ERP는 가짜 OData·REST 서버와 가짜 pyrfc로 흉내 낸다.

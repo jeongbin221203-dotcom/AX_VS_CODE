@@ -1,0 +1,44 @@
+# 자재관리 알림 규칙 — 장애 등급은 docs/OPERATIONS.md 와 같다 (P1 즉시 · P2 업무시간 1시간 · P3 다음 업무일).
+groups:
+  - name: material-manager
+    rules:
+      - alert: MMAppDown                      # P1: 앱이 응답하지 않음
+        expr: up{job="material-manager"} == 0
+        for: 2m
+        labels: {severity: P1}
+        annotations: {summary: "자재관리 앱 {{ $labels.instance }} 응답 없음", runbook: "OPERATIONS.md#앱이-응답하지-않음"}
+      - alert: MMDatabaseDown                 # P1: DB 연결 실패
+        expr: mm_db_up == 0
+        for: 1m
+        labels: {severity: P1}
+        annotations: {summary: "DB 연결 실패", runbook: "OPERATIONS.md#db-연결-실패"}
+      - alert: MMHighErrorRate                # P2: 5분 동안 응답의 5% 넘게 서버 오류
+        expr: sum(rate(mm_http_requests_total{status=~"5.."}[5m])) / sum(rate(mm_http_requests_total[5m])) > 0.05
+        for: 5m
+        labels: {severity: P2}
+        annotations: {summary: "서버 오류 비율 5% 초과"}
+      - alert: MMSlowResponses                # P3: 95% 응답이 2.5초를 넘음
+        expr: histogram_quantile(0.95, sum by (le) (rate(mm_http_request_seconds_bucket[10m]))) > 2.5
+        for: 15m
+        labels: {severity: P3}
+        annotations: {summary: "응답이 느림 (95번째 백분위 2.5초 초과)"}
+      - alert: MMSapOutboxFailed              # P2: ERP 전송 실패가 쌓임 (재고는 앱에 반영됐지만 ERP와 어긋남)
+        expr: mm_sap_outbox{status="FAILED"} > 0
+        for: 15m
+        labels: {severity: P2}
+        annotations: {summary: "ERP·SAP 전송 실패 {{ $value }}건", runbook: "OPERATIONS.md#erp-전송-실패"}
+      - alert: MMSapOutboxBacklog             # P3: 전송 대기가 줄지 않음
+        expr: mm_sap_outbox{status="PENDING"} > 200
+        for: 30m
+        labels: {severity: P3}
+        annotations: {summary: "ERP 전송 대기 {{ $value }}건"}
+      - alert: MMBatchStale                   # P2: 배치(전송·백업·알림)가 멈춤
+        expr: mm_job_last_success_age_seconds{job=~"sap_sync|notify_send"} > 1800 or mm_job_last_success_age_seconds{job="db_backup"} > 172800
+        for: 10m
+        labels: {severity: P2}
+        annotations: {summary: "배치 {{ $labels.job }} 이(가) 오래 성공하지 않음", runbook: "OPERATIONS.md#배치가-멈춤"}
+      - alert: MMNotificationsFailing         # P3: 알림이 계속 실패 (메일·메신저 설정·장애)
+        expr: mm_notifications{status="FAILED"} > 10
+        for: 30m
+        labels: {severity: P3}
+        annotations: {summary: "알림 실패 {{ $value }}건 ({{ $labels.channel }})"}

@@ -65,11 +65,13 @@ def seed_manufacturing() -> dict:
                                      "VALUES (?, ?, ?, '', ?)", (pid, code, name, ts)).lastrowid
         mats = {}
         for (code, name, spec, unit, cat, safety, price, loc, supplier, _wh, _q, _u, lot) in MATERIALS:
-            mats[code] = conn.execute(
+            conn.execute(
                 "INSERT INTO materials (code, name, spec, unit, category, safety_stock, unit_price, location, supplier, "
                 "lot_managed, expiry_managed, active, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?) "
                 "ON CONFLICT (code) DO NOTHING",
-                (code, name, spec, unit, cat, safety, price, loc, supplier, lot, lot, ts, ts)).lastrowid
+                (code, name, spec, unit, cat, safety, price, loc, supplier, lot, lot, ts, ts))
+            # ON CONFLICT 문은 PostgreSQL 에서 새 번호를 돌려주지 않는다 → 코드로 다시 찾는다
+            mats[code] = int(conn.execute("SELECT id FROM materials WHERE code = ?", (code,)).fetchone()[0])
             counts["materials"] += 1
 
         def tx(code, tx_type, qty, price, when, wh_code, **extra):

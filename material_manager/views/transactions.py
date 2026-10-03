@@ -5,7 +5,7 @@ from datetime import date, timedelta
 from flask import Blueprint, abort, flash, g, jsonify, redirect, request, url_for
 
 import config
-from core import audit, db, documents, org, periods, purchasing, repository as repo, services
+from core import audit, db, documents, org, periods, purchasing, repository as repo, services, uom
 from core.utils import month_end
 from views.documents import meta_from_form, uploaded_file
 from views.helpers import Table, a_int, actor, can, f_float, f_id, f_str, render_page, role_required
@@ -42,7 +42,7 @@ def _page(tx_type: str, mid: int | None, wh: int | None, form: dict | None = Non
                        mid=mid, mat=mat, wh=wh, warehouse=warehouse, wh_opts=wh_opts,
                        all_wh_opts=org.warehouse_options(None), stock_now=stock_now, form=form or {},
                        accept=documents.ACCEPT, min_date=min_date, movement=config.SAP_MOVEMENT_TYPES,
-                       approval_limit=config.ADJ_APPROVAL_AMOUNT)
+                       approval_limit=config.ADJ_APPROVAL_AMOUNT, units=uom.units(mid))
 
 
 @bp.get("/")
@@ -93,7 +93,7 @@ def create():
         tx_date=tx_date.isoformat(), unit_price=price,
         ref_no=f_str("ref_no"), partner=f_str("partner"), note=f_str("note"),
         actor=actor(), po_no=po_no, po_item=po_item, cost_center=f_str("cost_center"),
-        warehouse_id=wh, wh_ids=g.wh_ids, lot_no=f_str("lot_no"), expiry_date=f_str("expiry_date"),
+        warehouse_id=wh, wh_ids=g.wh_ids, lot_no=f_str("lot_no"), expiry_date=f_str("expiry_date"), unit=f_str("unit"),
     )
     if not result.ok:
         flash(result.message, "error")
@@ -144,6 +144,8 @@ def queue():
     """
     kind = f_str("kind")
     captured_at = f_str("captured_at")[:30]
+    if "BATCH" in request.form.getlist("kind"):         # 여러 줄 입출고 (화면의 구분 칸 kind=IN|OUT 도 함께 온다)
+        return _queue_batch(captured_at)
     mid, wh = _ids()
     try:
         qty = f_float("qty")
@@ -172,7 +174,7 @@ def queue():
             material_id=mid, tx_type=tx_type, qty_input=qty, tx_date=tx_date, unit_price=price,
             ref_no=f_str("ref_no"), partner=f_str("partner"), note=f_str("note"), actor=actor(),
             po_no=po_no, po_item=po_item, cost_center=f_str("cost_center"), warehouse_id=wh, wh_ids=g.wh_ids,
-            lot_no=f_str("lot_no"), expiry_date=f_str("expiry_date"))
+            lot_no=f_str("lot_no"), expiry_date=f_str("expiry_date"), unit=f_str("unit"))
     if result.ok:
         g.once_done = True                              # JSON 응답이어도 '처리 완료'로 남긴다 (재전송 시 두 번 반영 금지)
         audit.log(actor(), "OFFLINE_SYNC", "transaction", result.tx_id or "",
@@ -185,8 +187,10 @@ def queue():
 def _batch_lines_from_form() -> tuple[list[services.LineIn], list[dict], str]:
     """줄 칸들(line_mid·line_qty·…) → (등록할 줄, 다시 그릴 줄, 문제)."""
     f = request.form
-    cols = {c: f.getlist(f"line_{c}") for c in ("mid", "qty", "lot", "exp", "price", "note")}
+    cols = {c: f.getlist(f"line_{c}") for c in ("mid", "qty", "lot", "exp", "price", "note", "unit")}
     n = len(cols["mid"])
+    if not cols["unit"]:
+        cols["unit"] = [""] * n
     if any(len(v) != n for v in cols.values()):
         return [], [], "줄 입력이 맞지 않습니다. 화면을 새로고침해 다시 입력하세요."
     lines, shown, problem = [], [], ""
@@ -198,7 +202,8 @@ def _batch_lines_from_form() -> tuple[list[services.LineIn], list[dict], str]:
             mat = repo.get_material(mid, conn) if mid else None
             shown.append({"mid": mid, "label": labels.get(mid, ""), "unit": mat["unit"] if mat else "",
                           "lot_managed": bool(mat and mat["lot_managed"]), "qty": qty_s, "lot": cols["lot"][i],
-                          "exp": cols["exp"][i], "price": price_s, "note": cols["note"][i]})
+                          "exp": cols["exp"][i], "price": price_s, "note": cols["note"][i],
+                          "units": uom.units(mid, conn) if mid else [], "entry_unit": cols["unit"][i]})
             if not mid:
                 continue
             try:
@@ -208,7 +213,7 @@ def _batch_lines_from_form() -> tuple[list[services.LineIn], list[dict], str]:
                 problem = problem or f"{i + 1}번 줄: 수량·단가는 숫자로 입력하세요."
                 continue
             lines.append(services.LineIn(mid, qty, cols["lot"][i].strip(), cols["exp"][i].strip(), price,
-                                         cols["note"][i].strip()))
+                                         cols["note"][i].strip(), cols["unit"][i].strip()))
     return lines, shown, problem
 
 
@@ -271,3 +276,27 @@ def batch_cancel(batch_no: str):
                                    label=f"묶음 {batch_no}")
     flash(result.message, "success" if result.ok else "error")
     return redirect(url_for("transactions.batch"))
+
+
+def _queue_batch(captured_at: str):
+    """오프라인 대기열의 여러 줄 입출고 — 화면 등록과 같은 규칙(register_lines)으로 판정한다."""
+    lines, _shown, problem = _batch_lines_from_form()
+    wh = f_str("warehouse_id")
+    if not problem and (not wh.isdigit() or int(wh) not in org.warehouse_options(g.wh_ids)):
+        problem = "창고 권한이 없습니다."
+    try:
+        tx_date = date.fromisoformat(f_str("tx_date") or date.today().isoformat()).isoformat()
+    except ValueError:
+        problem = problem or "일자 형식이 올바르지 않습니다."
+    if problem:
+        return jsonify(ok=False, message=problem)
+    # f_str("kind") 는 대기열 종류(BATCH)라, 입고·출고 구분은 화면의 구분 칸(kind)이 여러 값으로 온다
+    kinds = [k for k in request.form.getlist("kind") if k in ("IN", "OUT")]
+    result = services.register_lines(kinds[0] if kinds else "", int(wh), tx_date, lines, actor=actor(), wh_ids=g.wh_ids,
+                                     ref_no=f_str("ref_no"), partner=f_str("partner"), cost_center=f_str("cost_center"),
+                                     note=f_str("note"))
+    if result.ok:
+        g.once_done = True
+        audit.log(actor(), "OFFLINE_SYNC", "transaction", result.tx_id or "",
+                  {"captured_at": captured_at, "kind": "BATCH", "lines": len(lines)})
+    return jsonify(ok=result.ok, message=result.message, tx_id=result.tx_id, warning=result.warning)

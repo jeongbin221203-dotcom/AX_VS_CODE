@@ -50,6 +50,26 @@
       소요량 = 생산 수량 ÷ 기준 수량 × 수량 × (1 + 손실률). 제품을 자기 부품으로 넣거나 순환(A→B→A)이 되면 저장되지 않습니다.</p>
     {% if editable %}<div><button class="btn btn-primary">BOM 저장</button></div>{% endif %}
   </form>
+  <h3>공정 (라우팅)</h3>
+  <form class="card form" method="post" action="{{ url_for('production.routing_save') }}">
+    {{ csrf() }}<input type="hidden" name="product" value="{{ pid }}">
+    <div class="table-wrap">
+      <table class="data">
+        <thead><tr><th>순서</th><th>공정</th><th>작업장</th><th>표준 시간 (분/개)</th><th>메모</th></tr></thead>
+        <tbody>
+        {% for o in ops %}
+          <tr><td>{{ loop.index * 10 }}</td>
+            <td><input name="op_name" value="{{ o.op_name }}" placeholder="예: 프레스" aria-label="공정"></td>
+            <td><input name="workcenter" value="{{ o.workcenter }}" placeholder="예: 1라인" aria-label="작업장"></td>
+            <td><input name="std_minutes" type="number" min="0" step="any" value="{{ o.std_minutes }}" aria-label="표준 시간"></td>
+            <td><input name="op_note" value="{{ o.note }}" aria-label="메모"></td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <p class="muted small">작업지시를 만들면 이 공정들이 복사되어 공정마다 양품·불량·작업 시간을 입력합니다. 이름을 비운 줄은 지웁니다.</p>
+    {% if editable %}<div><button class="btn btn-primary">공정 저장</button></div>{% endif %}
+  </form>
   {% if bom and editable %}
     <form class="row-actions" method="post" action="{{ url_for('production.bom_active', product_id=pid) }}">
       {{ csrf() }}<input type="hidden" name="active" value="{{ 0 if bom.active else 1 }}">

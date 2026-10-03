@@ -15,11 +15,12 @@
   <p class="small">무료 서버라 한동안 접속이 없으면 잠듭니다. 처음 열 때 30초쯤 걸렸다면 그 때문이고, 이후에는 바로 열립니다.
     로그인 없이 시스템관리자로 들어왔고, 바꾼 내용은 매일 새벽 {{ config.DEMO_RESET_HOUR }}시에 샘플로 돌아갑니다.</p>
   <ol class="small">
-    <li><a href="{{ url_for('transactions.batch') }}">📷 여러 줄·스캔 입출고</a> — 스캔 칸에 바코드 <code>8801234500017</code>이나 자재코드 <code>PT-BLT-001</code>을 넣고 Enter.
-      다시 찍으면 수량이 늘어납니다(휴대폰은 📷 카메라).</li>
-    <li><a href="{{ url_for('production.index') }}">🏭 생산 투입</a> — 'BLDC 송풍기 모듈' 25개로 소요량 확인 → 모자란 부품과 '부족분 구매요청'.</li>
-    <li><a href="{{ url_for('partners.index', tab='unknown') }}">🤝 거래처 → 미등록 이름 정리</a> — '대한팔레트 부산지점'을 기존 거래처에 연결.</li>
-    <li><a href="{{ url_for('purchase.index') }}">🛒 구매</a> 결재와 왼쪽 아래 '다른 역할로 보기' — 역할·창고 권한에 따라 보이는 것과 할 수 있는 일이 달라집니다.</li>
+    <li><a href="{{ url_for('transactions.batch') }}">📷 여러 줄·스캔 입출고</a> — 스캔 칸에 <code>8801234500017</code>(팔레트)이나 상자 바코드 <code>8809876500993</code>(볼트 1 BOX = 500 EA)을 넣고 Enter.
+      '찍을 때마다' 수량을 바꾸면 그만큼씩, <code>24*PKG-001</code>처럼 한 번만 다른 수량도 됩니다(휴대폰은 📷 카메라, 아이폰 포함).</li>
+    <li><a href="{{ url_for('mrp.index') }}">📅 MRP</a> — 송풍기 출하 계획 180대로 계산한 구매·생산 계획(리드타임 역산, 늦은 발주는 빨간 줄) → 구매요청·작업지시로 바꾸기.</li>
+    <li><a href="{{ url_for('production.index', tab='wo') }}">🏭 작업지시</a> — 진행 중인 브래킷 작업지시에서 자재 투입·반납, 공정 실적, 완료(실제 원가) · <a href="{{ url_for('production.index', tab='wip') }}">재공품</a>.</li>
+    <li><a href="{{ url_for('partners.index', tab='unknown') }}">🤝 거래처 → 미등록 이름 정리</a> — '대한팔레트 부산지점'을 기존 거래처에 연결 · 엑셀 일괄 등록.</li>
+    <li><a href="{{ url_for('materials.labels') }}">🏷️ 바코드 라벨 인쇄</a>, <a href="{{ url_for('purchase.index') }}">🛒 구매</a> 결재와 왼쪽 아래 '다른 역할로 보기'.</li>
   </ol>
   <p class="muted small">ERP·SAP 연동은 모의 서버로만 검증했습니다(실제 SAP에 연결하지 않음). 결재 알림 메일도 시연에서는 보내지 않고
     <a href="{{ url_for('admin.jobs_page') }}">배치</a> 화면에 보낼 목록으로만 남깁니다.</p>

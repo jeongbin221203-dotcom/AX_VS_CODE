@@ -65,6 +65,11 @@ PG_DUMP = os.getenv("MM_PG_DUMP") or shutil.which("pg_dump") or ""
 PG_RESTORE = os.getenv("MM_PG_RESTORE") or shutil.which("pg_restore") or ""
 
 APP_TITLE = "자재관리 시스템"
+APP_VERSION = "2026.10.03"
+# 자재 찾기: 사용 중인 자재가 이보다 많으면 목록 전체를 브라우저로 보내지 않고 서버에서 찾는다(/materials/search.json)
+LOOKUP_MAX = int(os.getenv("MM_LOOKUP_MAX", "20000"))
+# 감시 지표 /metrics: 토큰이 있으면 'Authorization: Bearer <토큰>' 필요, 없으면 이 서버(127.0.0.1)에서만
+METRICS_TOKEN = os.getenv("MM_METRICS_TOKEN", "")
 APP_ICON = "📦"
 
 # Flask
@@ -123,6 +128,9 @@ MATERIAL_COLS = {
     "supplier": "공급처",
     "sap_matnr": "SAP자재번호",        # SAP 플랜트·저장위치는 창고(조직 화면)에 둔다
     "barcode": "바코드",               # 공급처 상자의 바코드(EAN 등). 스캔하면 이 자재
+    "lead_time_days": "리드타임(일)",   # 구매: 발주→입고, 제품: 착수→완료 (MRP 역산)
+    "min_order_qty": "최소발주량",
+    "order_multiple": "발주배수",
 }
 
 # ── SAP 연동 ──────────────────────────────────────────────────
@@ -219,9 +227,19 @@ ADJ_APPROVAL_AMOUNT = int(os.getenv("MM_ADJ_APPROVAL_AMOUNT", "500000"))  # 실�
 # 1이면 거래처 마스터에 없는 이름으로는 입고·납품 출고·거래명세서·발주를 등록할 수 없다 (기본: 등록하고 경고만)
 PARTNER_REQUIRED = os.getenv("MM_PARTNER_REQUIRED", "0") == "1"
 
-# ── 결재 알림 메일 (core/notify.py) ──────────────────────────
-# off: 알림을 만들지 않음 | log: 보낼 목록에만 남김(메일 서버 없이 확인용) | smtp: 메일 서버로 보냄
+# ── 결재 알림 (core/notify.py): 메일 · 잔디 · 네이버웍스 ─────
+# off: 알림을 만들지 않음 | log: 보낼 목록에만 남김(서버 없이 확인용) | send: 실제로 보냄 (예전 이름 smtp)
 NOTIFY_MODE = os.getenv("MM_NOTIFY_MODE", "log")
+# 잔디: 토픽 → 연동 → '들어오는 웹훅(Incoming Webhook)' 주소
+JANDI_WEBHOOK_URL = os.getenv("MM_JANDI_WEBHOOK_URL", "")
+# 네이버웍스: Developer Console 의 앱(Client ID·Secret·Service Account·Private Key) + 봇(Bot ID, 봇에 bot 범위)
+NW_BOT_ID = os.getenv("MM_NAVERWORKS_BOT_ID", "")
+NW_CLIENT_ID = os.getenv("MM_NAVERWORKS_CLIENT_ID", "")
+NW_CLIENT_SECRET = os.getenv("MM_NAVERWORKS_CLIENT_SECRET", "")
+NW_SERVICE_ACCOUNT = os.getenv("MM_NAVERWORKS_SERVICE_ACCOUNT", "")
+NW_PRIVATE_KEY = os.getenv("MM_NAVERWORKS_PRIVATE_KEY", "")        # PEM 내용 또는 파일 경로
+NW_CHANNEL_ID = os.getenv("MM_NAVERWORKS_CHANNEL_ID", "")          # 비우면 채널에는 안 보냄
+NW_TO_USERS = os.getenv("MM_NAVERWORKS_TO_USERS", "1") == "1"      # 사람마다 1:1 (메신저 아이디, 없으면 메일)
 SMTP_HOST = os.getenv("MM_SMTP_HOST", "")
 SMTP_PORT = int(os.getenv("MM_SMTP_PORT", "587"))
 SMTP_USER = os.getenv("MM_SMTP_USER", "")

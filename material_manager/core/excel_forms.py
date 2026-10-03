@@ -46,6 +46,9 @@ EXPORT_FORMS: dict[str, tuple[str, list[str]]] = {
     "material_template": ("자재 업로드 양식 (빈 양식)", list(config.MATERIAL_COLS.values())),
     "statement_template": ("거래명세서 품목 양식 (빈 양식)", ["자재코드", "품명", "규격", "수량", "단가", "공급가액", "세액",
                                                          "로트", "유효기한", "발주번호", "발주품목", "비고"]),
+    "partner_template": ("거래처 일괄 등록 양식 (빈 양식)", ["거래처코드", "거래처명", "구분", "사업자등록번호", "담당자", "전화",
+                                                         "메일", "메모", "다른 이름"]),
+    "bom_template": ("BOM 일괄 등록 양식 (빈 양식)", ["제품코드", "기준수량", "부품코드", "수량", "손실률", "출고창고", "메모"]),
     "partners": ("거래처", ["거래처코드", "거래처명", "구분", "사업자등록번호", "담당자", "전화", "메일", "다른 이름", "입고금액",
                           "출고금액", "거래 수", "마지막 거래", "상태"]),
     "productions": ("생산 투입 이력", ["생산번호", "일자", "제품코드", "제품명", "수량", "단위", "부품 창고", "입고 창고",
@@ -78,6 +81,26 @@ SYNONYMS: dict[str, list[str]] = {
 
 # 올리기: 항목 → (표준 머리글, 기본 별칭)
 IMPORT_FORMS: dict[str, tuple[str, dict[str, tuple[str, list[str]]]]] = {
+    "partner_upload": ("거래처 일괄 등록", {
+        "code": ("거래처코드", ["코드", "거래처 코드", "Vendor", "Customer", "LIFNR", "KUNNR"]),
+        "name": ("거래처명", ["상호", "업체명", "거래처", "회사명", "Name"]),
+        "kind": ("구분", ["거래처구분", "유형", "Type"]),
+        "biz_no": ("사업자등록번호", ["사업자번호", "등록번호", "Business No"]),
+        "contact": ("담당자", ["담당", "Contact"]),
+        "phone": ("전화", ["전화번호", "연락처", "Tel", "Phone"]),
+        "email": ("메일", ["이메일", "E-mail", "Email"]),
+        "note": ("메모", ["비고", "Note"]),
+        "aliases": ("다른 이름", ["별칭", "다른이름", "약칭"]),
+    }),
+    "bom_upload": ("BOM 일괄 등록", {
+        "product": ("제품코드", ["모품목", "상위품목", "완제품코드", "제품", "Parent", "Material"]),
+        "base_qty": ("기준수량", ["기준 수량", "Base Qty"]),
+        "component": ("부품코드", ["자품목", "하위품목", "구성품", "부품", "Component"]),
+        "qty": ("수량", ["소요량", "단위수량", "Qty", "Quantity"]),
+        "scrap_pct": ("손실률", ["로스율", "불량률", "Scrap", "Scrap %"]),
+        "wh": ("출고창고", ["창고", "저장위치", "Storage Location"]),
+        "note": ("메모", ["비고", "Note"]),
+    }),
     "material_upload": ("자재 일괄 업로드", {k: (v, SYNONYMS.get(v, [])) for k, v in config.MATERIAL_COLS.items()}),
     "sap_stock": ("SAP 재고 (재고 대사)", {
         "sap_matnr": ("SAP자재번호", ["자재", "자재번호", "Material", "MATNR"]),

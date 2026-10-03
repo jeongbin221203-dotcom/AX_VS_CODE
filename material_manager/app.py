@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import os
 import secrets
+import time
 
 from urllib.parse import urlsplit
 
@@ -109,6 +110,30 @@ def create_app(test_config: dict | None = None) -> Flask:
             checks["storage"] = "error"
         ok = all(v in ("ok", "degraded") for v in checks.values())
         return jsonify(status="ok" if ok else "error", **checks), (200 if ok else 503)
+
+    @app.get("/metrics")
+    def metrics():
+        """Prometheus 감시 지표 (core/metrics.py). 토큰(MM_METRICS_TOKEN) 또는 이 서버 자신만."""
+        from core import metrics as m
+        if config.METRICS_TOKEN:
+            sent = request.headers.get("Authorization", "").removeprefix("Bearer ").strip()
+            if not secrets.compare_digest(sent, config.METRICS_TOKEN):
+                abort(401)
+        elif not _loopback(request.remote_addr or ""):
+            abort(403, "감시 지표는 MM_METRICS_TOKEN 을 정해야 밖에서 볼 수 있습니다.")
+        return app.response_class(m.render(), mimetype="text/plain; version=0.0.4")
+
+    @app.before_request
+    def _timer() -> None:
+        g._t0 = time.perf_counter()
+
+    @app.after_request
+    def _observe(response):
+        t0 = g.pop("_t0", None)
+        if t0 is not None and request.endpoint not in ("static", "metrics"):
+            from core import metrics as m
+            m.observe(request.endpoint or "404", request.method, response.status_code, time.perf_counter() - t0)
+        return response
 
     @app.get("/favicon.ico")
     def favicon():

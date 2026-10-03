@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf %}
+
+{% block content %}
+<h2>{{ heading }}</h2>
+{% if kind == "partners" %}
+  <p><a href="{{ url_for('partners.index') }}">← 거래처</a></p>
+  <p class="muted">거래처코드가 있으면 그 코드로, 없으면 이름으로(표기 무시) 찾아 <strong>있으면 갱신</strong>(빈 칸은 그대로), <strong>없으면 등록</strong>합니다.
+    '다른 이름' 칸에 쉼표로 여러 개를 적으면 다른 이름으로 연결합니다. 구분: 공급처·납품처·공급·납품 (비우면 공급처).</p>
+  {% set tpl = url_for('partners.import_template') %}{% set up = url_for('partners.import_upload') %}{% set go = url_for('partners.import_apply') %}
+{% else %}
+  <p><a href="{{ url_for('production.index', tab='bom') }}">← BOM</a></p>
+  <p class="muted">한 줄 = 제품의 부품 한 개. 제품코드별로 묶어 <strong>그 제품의 BOM 전체를 파일 내용으로 바꿉니다</strong>(부품을 지우려면 파일에서 빼면 됩니다).
+    기준수량은 제품의 첫 줄에만 적어도 됩니다(비우면 1). 손실률은 %, 출고창고는 창고 코드(비우면 생산 화면에서 고른 창고).</p>
+  {% set tpl = url_for('production.bom_import_template') %}{% set up = url_for('production.bom_import_upload') %}{% set go = url_for('production.bom_import_apply') %}
+{% endif %}
+
+<form class="card form" method="post" action="{{ up }}" enctype="multipart/form-data">
+  {{ csrf() }}
+  <div class="toolbar">
+    <a class="btn btn-sm" href="{{ tpl }}">⬇️ 빈 양식 내려받기</a>
+    <label class="grow">파일 (.xlsx · .csv)<input type="file" name="file" accept=".xlsx,.csv" required></label>
+    <button class="btn btn-primary">미리보기</button>
+  </div>
+  <p class="muted small">회사 엑셀의 열 이름이 달라도 됩니다 — 흔한 이름(상호·업체명, 모품목·자품목 등)은 알아서 맞추고, 더 맞출 이름은 관리자 → 엑셀 양식에서 넣습니다.
+    한 줄이라도 문제가 있으면 아무것도 반영하지 않습니다.</p>
+</form>
+
+{% if preview %}
+  <h3>미리보기 — {{ preview.summary }}</h3>
+  {% if preview.errors %}
+    <div class="alert alert-error">고칠 곳 {{ preview.errors|length }}개 — 파일을 고쳐 다시 올리세요.<br>{{ preview.errors[:20]|join('\n') }}</div>
+  {% endif %}
+  <div class="table-wrap"><table class="data">
+    {% if kind == "partners" %}
+      <thead><tr><th class="num">줄</th><th>처리</th><th>코드</th><th>거래처명</th><th>구분</th><th>사업자번호</th><th>담당자·연락처</th><th>다른 이름</th><th>문제</th></tr></thead>
+      <tbody>{% for r in preview.rows[:500] %}
+        <tr class="{{ 'tone-danger' if r.problem }}"><td class="num">{{ r.line }}</td><td>{{ r.action }}</td><td>{{ r.code }}</td><td>{{ r.name }}</td>
+          <td>{{ PARTNER_KINDS.get(r.kind, '?') }}</td><td>{{ r.biz_no }}</td><td>{{ r.contact }} {{ r.phone }} {{ r.email }}</td>
+          <td>{{ r.aliases|join(', ') }}</td><td>{{ r.problem }}</td></tr>{% endfor %}</tbody>
+    {% else %}
+      <thead><tr><th class="num">줄</th><th>제품</th><th>부품</th><th class="num">수량</th><th class="num">손실률</th><th>출고창고</th><th>메모</th><th>문제</th></tr></thead>
+      <tbody>{% for r in preview.rows[:500] %}
+        <tr class="{{ 'tone-danger' if r.problem }}"><td class="num">{{ r.line }}</td><td>{{ r.product }}</td><td>{{ r.component }}</td>
+          <td class="num">{{ r.qty }}</td><td class="num">{{ r.scrap }}</td><td>{{ r.wh }}</td><td>{{ r.note }}</td><td>{{ r.problem }}</td></tr>{% endfor %}</tbody>
+    {% endif %}
+  </table></div>
+  {% if preview.rows|length > 500 %}<p class="muted small">앞 500줄만 보여 줍니다.</p>{% endif %}
+  {% if token %}
+    <form method="post" action="{{ go }}">{{ csrf() }}<input type="hidden" name="token" value="{{ token }}">
+      <button class="btn btn-primary">이대로 반영</button></form>
+  {% endif %}
+{% endif %}
+{% endblock %}

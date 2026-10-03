@@ -477,7 +477,7 @@ CREATE TABLE IF NOT EXISTS job_runs (
 """
 
 NO_ID_TABLES = {"inventory_snapshots", "valuation_snapshots", "app_settings", "job_locks", "cost_centers", "excel_forms",
-                "form_once", "user_prefs"}
+                "form_once", "user_prefs", "schema_version"}
 
 # 예전 DB에 없던 컬럼 (CREATE TABLE IF NOT EXISTS는 기존 테이블에 컬럼을 더하지 않는다)
 MIGRATIONS = [
@@ -899,6 +899,9 @@ def _init(conn: Conn) -> None:
     _migrate_snapshots(conn, wh)
     conn.executescript(INDEXES)
     conn.executescript(PG_TRIGGERS if conn.pg else SQLITE_TRIGGERS)
+    # 이후의 구조 변경은 리비전 파일로 (core/migrate.py, migrations/versions/)
+    from core import migrate
+    migrate.upgrade(conn)
     # 2단계 인증 기능은 2026-10-02 삭제했다. 예전 DB에 남은 비밀키·복구 코드는 지운다(칸은 그대로 둔다).
     if "totp_secret" in _columns(conn, "users"):
         conn.execute("UPDATE users SET totp_secret = '', totp_enabled = 0, totp_last_step = 0, recovery_codes = '' "

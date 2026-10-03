@@ -1,0 +1,32 @@
+/* 바코드 라벨 인쇄 (templates/labels_print.html). 화면에서는 미리보기, 인쇄하면 라벨 용지 칸에 맞춘다. */
+:root { --ink: #111; --line: #d0d4da; }
+* { box-sizing: border-box; }
+body { margin: 0; background: #eef0f3; color: var(--ink); font: 12px/1.3 "Pretendard", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif; }
+.label-bar { position: sticky; top: 0; padding: 10px 16px; background: #fff; border-bottom: 1px solid var(--line); }
+.label-bar button { margin: 0 8px; padding: 4px 14px; font: inherit; cursor: pointer; }
+.label-bar .warn { color: #a1281d; margin: 6px 0 0; }
+.sheet { display: grid; gap: 0; margin: 16px auto; background: #fff; }
+.label { overflow: hidden; padding: 2mm 3mm; border: 1px dashed var(--line); display: flex; flex-direction: column; }
+.l-name { font-weight: 700; font-size: 10pt; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.l-spec { font-size: 7.5pt; color: #444; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-height: 1em; }
+.l-bars { flex: 1; min-height: 8mm; margin: 1mm 0 .5mm; }
+.l-bars svg { width: 100%; height: 100%; display: block; }
+.l-foot { display: flex; justify-content: space-between; font-size: 8pt; font-family: ui-monospace, Consolas, monospace; }
+.l-code { font-size: 7pt; color: #555; }
+
+/* 용지 */
+.a4-24 .sheet { width: 210mm; grid-template-columns: repeat(3, 70mm); grid-auto-rows: 37mm; padding: 0; }
+.a4-10 .sheet { width: 210mm; grid-template-columns: repeat(2, 105mm); grid-auto-rows: 57mm; }
+.a4-10 .l-name { font-size: 13pt; } .a4-10 .l-foot { font-size: 10pt; }
+.roll .sheet { width: 100mm; grid-template-columns: 100mm; grid-auto-rows: 50mm; }
+.roll .l-name { font-size: 12pt; }
+
+@media print {
+  body { background: #fff; }
+  .no-print { display: none; }
+  .sheet { margin: 0; }
+  .label { border: 0; break-inside: avoid; }
+  .a4-24 .label:nth-child(24n), .a4-10 .label:nth-child(10n) { break-after: page; }
+  .roll .label { break-after: page; }
+}
+@page { margin: 0; }

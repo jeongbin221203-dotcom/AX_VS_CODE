@@ -2,7 +2,8 @@
 {% from "_macros.html" import csrf, table, tabs as tab_bar, download %}
 
 {% block content %}
-<p class="muted">BOM(자재 명세서)대로 부품을 한 번에 출고하고, 만든 제품을 입고합니다. 부품이 하나라도 모자라면 아무것도 등록하지 않습니다.</p>
+<p class="muted">BOM(자재 명세서)대로 부품을 출고하고 만든 제품을 입고합니다. 간편 생산 투입은 한 번에, 작업지시는 계획 → 자재 투입(재공) → 공정 실적 → 완료 순서로.
+  부품이 하나라도 모자라면 아무것도 등록하지 않습니다.</p>
 {{ tab_bar(tabs, tab) }}
 
 {% if tab == "run" %}
@@ -32,12 +33,17 @@
     <div class="metrics m3">
       <div class="metric"><div class="metric-label">지금 재고로 만들 수 있는 수량</div><div class="metric-value">{{ '{:,}'.format(req.makeable) }} {{ mat.unit }}</div></div>
       <div class="metric"><div class="metric-label">부족한 부품</div><div class="metric-value {{ 'down' if req.short_cnt }}">{{ req.short_cnt }}종</div></div>
-      <div class="metric"><div class="metric-label">재료비 (기준단가)</div><div class="metric-value">₩{{ '{:,.0f}'.format(req.cost) }}</div>
-        <div class="metric-delta">1개 ₩{{ '{:,.0f}'.format(req.unit_cost) }}</div></div>
+      <div class="metric"><div class="metric-label">표준 재료비 (기준단가)</div><div class="metric-value">₩{{ '{:,.0f}'.format(req.cost) }}</div>
+        <div class="metric-delta">1개 ₩{{ '{:,.0f}'.format(req.unit_cost) }} · 실제 원가는 투입 단가로 계산</div></div>
     </div>
+
+    {% set can_post = not req.short_cnt and not bad %}
+    {% if can_post %}<form class="card form" method="post" action="{{ url_for('production.run') }}">{{ csrf() }}
+      <input type="hidden" name="product" value="{{ pid }}"><input type="hidden" name="wh" value="{{ wh }}">{% endif %}
     <div class="table-wrap">
       <table class="data">
-        <thead><tr><th>부품</th><th>창고</th><th class="num">1개당</th><th class="num">필요</th><th class="num">가용 재고</th><th class="num">부족</th><th class="num">금액</th></tr></thead>
+        <thead><tr><th>부품</th><th>창고</th><th class="num">1개당</th><th class="num">BOM 소요량</th><th class="num">가용 재고</th><th class="num">부족</th>
+          {% if can_post %}<th>실제 투입량</th>{% endif %}<th class="num">금액(표준)</th></tr></thead>
         <tbody>
         {% for x in req.lines %}
           <tr class="{{ 'tone-danger' if x.short > 0.000001 or not x.allowed }}">
@@ -47,13 +53,16 @@
             <td class="num">{{ '{:,.2f}'.format(x.need) }}</td>
             <td class="num">{{ '{:,.2f}'.format(x.stock) }}</td>
             <td class="num">{{ '{:,.2f}'.format(x.short) if x.short > 0.000001 else '' }}</td>
+            {% if can_post %}<td><input class="qty-input" name="actual_{{ x.component_id }}" type="number" min="0" step="any"
+                  value="{{ f.get('actual_' ~ x.component_id) or ('%g' % x.need) }}" aria-label="실제 투입량"></td>{% endif %}
             <td class="num">₩{{ '{:,.0f}'.format(x.amount) }}</td>
           </tr>
         {% endfor %}
         </tbody>
       </table>
     </div>
-    <p class="muted small">가용 재고는 유효기한이 지난 로트를 뺀 수량입니다. 로트 관리 부품은 유효기한 빠른 로트부터 자동으로 나갑니다.</p>
+    <p class="muted small">가용 재고는 유효기한이 지난 로트를 뺀 수량입니다. 로트 관리 부품은 유효기한 빠른 로트부터 자동으로 나갑니다.
+      실제로 더 쓰거나 덜 쓴 부품은 '실제 투입량'을 고치면 그만큼 출고하고, 완제품 원가도 실제 투입으로 계산합니다.</p>
 
     {% if req.short_cnt %}
       <div class="alert alert-warning">부족한 부품이 있어 지금은 등록할 수 없습니다 (최대 {{ '{:,}'.format(req.makeable) }}개까지 가능).
@@ -67,11 +76,10 @@
     {% elif bad %}
       <div class="alert alert-warning">권한이 없는 창고의 부품이 있습니다. 그 창고 권한이 있는 사람이 등록해야 합니다.</div>
     {% else %}
-    <form class="card form" method="post" action="{{ url_for('production.run') }}">
-      {{ csrf() }}
-      <input type="hidden" name="product" value="{{ pid }}"><input type="hidden" name="wh" value="{{ wh }}">
       <div class="form-grid g3">
         <label>생산 수량 *<input name="qty" type="number" min="0" step="any" value="{{ '%g' % qty }}" required></label>
+        <label>그중 불량<input name="scrap_qty" type="number" min="0" step="any" value="{{ f.scrap_qty or 0 }}">
+          <span class="hint">양품만 입고, 불량분 재료비는 양품 원가에 들어갑니다</span></label>
         <label>일자<input name="tx_date" type="date" value="{{ f.tx_date or today().isoformat() }}" max="{{ today().isoformat() }}"
                         {% if min_date %}min="{{ min_date }}"{% endif %}></label>
         <label>완제품 입고 창고
@@ -88,20 +96,58 @@
         {% endif %}
       </div>
       <label>비고<input name="note" value="{{ f.note or '' }}"></label>
-      <p class="muted small">완제품 입고 단가 = 투입 부품 금액 ÷ 생산 수량. SAP 연동 중이면 부품은 원가센터 출고(201), 완제품은 무PO 입고(501)로 전송됩니다.</p>
+      <p class="muted small">완제품 입고 단가 = 실제 투입 금액(부품별 최근 입고 평균단가) ÷ 양품 수량. SAP 연동 중이면 부품은 원가센터 출고(201), 완제품은 무PO 입고(501)로 전송됩니다.</p>
       <div><button class="btn btn-primary">생산 투입 등록</button></div>
     </form>
     {% endif %}
   {% endif %}
   {% endif %}
 
+{% elif tab == "wo" %}
+  <details class="card" {{ 'open' if not grid.rows }}>
+    <summary><strong>새 작업지시</strong> — 계획만 세우고, 자재 투입·실적·완료는 작업지시 화면에서</summary>
+    {% if not products %}<p class="muted">BOM이 있는 제품이 없습니다.</p>{% else %}
+    <form class="form" method="post" action="{{ url_for('production.wo_create') }}">
+      {{ csrf() }}
+      <div class="form-grid g3">
+        <label class="span2">제품<select name="product">{% for k, v in products.items() %}<option value="{{ k }}">{{ v }}</option>{% endfor %}</select></label>
+        <label>수량 *<input name="qty" type="number" min="0" step="any" required></label>
+        <label>완료 예정일 *<input name="due_date" type="date" value="{{ today().isoformat() }}" required>
+          <span class="hint">착수일 = 완료 예정 - 제품 리드타임</span></label>
+        <label>부품 창고 (기본)<select name="wh">{% for k, v in wh_opts.items() %}<option value="{{ k }}">{{ v }}</option>{% endfor %}</select></label>
+        <label>완제품 입고 창고<select name="receipt_wh"><option value="">입고하지 않음</option>
+          {% for k, v in wh_opts.items() %}<option value="{{ k }}" {{ 'selected' if k == receipt_default }}>{{ v }}</option>{% endfor %}</select></label>
+        <label>작업지시 번호<input name="work_order" placeholder="비우면 생산번호"></label>
+        <label>원가센터<input name="cost_center"></label>
+        <label>비고<input name="note"></label>
+      </div>
+      <div><button class="btn btn-primary">작업지시 만들기</button></div>
+    </form>
+    {% endif %}
+  </details>
+  <div class="toolbar">
+    <a class="btn btn-sm {{ 'btn-primary' if show == 'open' }}" href="{{ url_with(show='open') }}">진행 중</a>
+    <a class="btn btn-sm {{ 'btn-primary' if show != 'open' }}" href="{{ url_with(show='all') }}">전체</a>
+    <span class="muted small">빨간 줄: 완료 예정일이 지난 진행 중 작업지시</span>
+  </div>
+  {{ table(grid, '작업지시가 없습니다.') }}
+
+{% elif tab == "wip" %}
+  <div class="metrics m3">
+    <div class="metric"><div class="metric-label">재공품 금액 (투입했지만 완료 전)</div><div class="metric-value">₩{{ '{:,.0f}'.format(wip_total) }}</div></div>
+  </div>
+  {{ table(grid, '재공품이 없습니다 (진행 중인 작업지시 없음).') }}
+  <p class="muted small">재공 금액은 작업지시에 투입한 부품 금액입니다. 완료하면 완제품 재고로 넘어갑니다.</p>
+
 {% elif tab == "history" %}
   <div class="toolbar">{{ download(url_with(export='xlsx')) }}</div>
   {{ table(grid, '생산 투입 기록이 없습니다.') }}
 
 {% elif tab == "bom" %}
-  {% if can('MANAGER') %}<p><a class="btn" href="{{ url_for('production.bom_edit') }}">+ 새 BOM</a></p>{% endif %}
+  {% if can('MANAGER') %}<p><a class="btn" href="{{ url_for('production.bom_edit') }}">+ 새 BOM</a>
+    <a class="btn" href="{{ url_for('production.bom_import') }}">엑셀로 일괄 등록</a></p>{% endif %}
   {{ table(grid, 'BOM이 없습니다.') }}
-  <p class="muted small">1개 재료비는 부품 기준단가 × 수량 × (1 + 손실률)의 합 ÷ 기준 수량입니다. 반제품을 부품으로 쓰면 그 반제품을 먼저 생산 투입해 입고해야 합니다.</p>
+  <p class="muted small">1개 재료비는 부품 기준단가 × 수량 × (1 + 손실률)의 합 ÷ 기준 수량입니다. 반제품을 부품으로 쓰면 그 반제품을 먼저 생산해 입고해야 합니다
+    (MRP가 반제품 생산 계획까지 함께 잡습니다). 제품을 눌러 BOM과 공정(라우팅)을 고칩니다.</p>
 {% endif %}
 {% endblock %}

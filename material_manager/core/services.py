@@ -13,7 +13,7 @@ from datetime import date
 import pandas as pd
 
 import config
-from core import approvals, audit, db, master_sync, org, partners, periods, purchasing, repository as repo, sap
+from core import approvals, audit, db, master_sync, org, partners, periods, purchasing, repository as repo, sap, uom
 from core.utils import clean_str_series, code_series, now_str
 
 
@@ -43,7 +43,7 @@ class UploadResult:
 
 # 업로드에서 비어 있으면 기존 자재의 값을 그대로 두는 항목 (자재코드·자재명은 필수)
 UPLOAD_OPTIONAL = ("spec", "unit", "category", "safety_stock", "unit_price", "location", "supplier", "sap_matnr",
-                   "barcode")
+                   "barcode", "lead_time_days", "min_order_qty", "order_multiple")
 
 
 def _actor(actor: dict | None, created_by: str) -> dict:
@@ -66,8 +66,8 @@ def register_transaction(material_id: int, tx_type: str, qty_input: float, tx_da
                          note: str = "", created_by: str = "", *, actor: dict | None = None,
                          po_no: str = "", po_item: str = "", cost_center: str = "",
                          warehouse_id: int | None = None, wh_ids=None,
-                         lot_no: str = "", expiry_date: str = "") -> Result:
-    """입고 / 출고 / 실사조정 등록 (창고 단위).
+                         lot_no: str = "", expiry_date: str = "", unit: str = "") -> Result:
+    """입고 / 출고 / 실사조정 등록 (창고 단위). unit: 입력 단위(비우면 기본 단위, 예: BOX → 배수만큼 기본 단위로).
 
     - 같은 자재를 바꾸는 작업은 잠금으로 줄 세운 뒤 재고를 다시 읽어 판정한다(동시 등록 방어).
     - 조정(ADJ)은 '실사수량'을 받아 현재고와의 차이만 기록한다. 차이 금액이 결재 기준 이상이면
@@ -92,7 +92,7 @@ def register_transaction(material_id: int, tx_type: str, qty_input: float, tx_da
 
     with db.transaction() as conn:
         out = _register(conn, who, material_id, tx_type, qty_input, tx_date, unit_price, ref_no, partner, note,
-                        po_no, po_item, cost_center, warehouse_id, wh_ids, lot_no, expiry_date)
+                        po_no, po_item, cost_center, warehouse_id, wh_ids, lot_no, expiry_date, unit=unit)
     if isinstance(out, Result):
         return out
     mat, qty, stock_after, tx_ids = out["mat"], out["qty"], out["stock_after"], out["tx_ids"]
@@ -108,7 +108,7 @@ def register_transaction(material_id: int, tx_type: str, qty_input: float, tx_da
 def _register(conn, who: dict, material_id: int, tx_type: str, qty_input: float, tx_date: str, unit_price: float,
               ref_no: str, partner: str, note: str, po_no: str, po_item: str, cost_center: str,
               warehouse_id: int | None, wh_ids, lot_no: str, expiry_date: str, statement_id: int | None = None,
-              production_id: int | None = None, batch_no: str = ""):
+              production_id: int | None = None, batch_no: str = "", unit: str = ""):
     """register_transaction의 본문 — 호출하는 쪽의 트랜잭션 안에서 돈다(거래명세서·여러 줄 입출고·생산 투입은
     여러 줄을 한 트랜잭션에). 실패·결재 대기는 Result, 성공은 결과 dict.
     거래처 이름은 거래처 마스터에 있으면 정식 이름과 partner_id로 남긴다(입고와 원가센터 없는 출고만)."""
@@ -126,6 +126,11 @@ def _register(conn, who: dict, material_id: int, tx_type: str, qty_input: float,
     lot_managed = bool(mat["lot_managed"])
     if not lot_managed:
         lot_no = expiry_date = ""
+    f, problem = uom.factor(conn, material_id, unit, mat["unit"])
+    if problem:
+        return Result(False, problem)
+    entry_unit, entry_qty = (unit.strip().upper(), float(qty_input)) if f != 1 else ("", None)
+    qty_input = float(qty_input) * f                    # 재고는 늘 기본 단위
     partner_id, partner_warning = None, ""
     if partners.is_partner_tx(tx_type, cost_center):
         partner, partner_id, problem = partners.apply(conn, partner)
@@ -204,6 +209,7 @@ def _register(conn, who: dict, material_id: int, tx_type: str, qty_input: float,
             "po_no": po_no, "po_item": po_item, "cost_center": cost_center,
             "movement_type": sap.movement_type(tx_type, q, po_no), "statement_id": statement_id,
             "partner_id": partner_id, "production_id": production_id, "batch_no": batch_no,
+            "entry_unit": entry_unit if len(allocations) == 1 else "", "entry_qty": entry_qty if len(allocations) == 1 else None,
         }, mat["code"]))
     if po_no:
         purchasing.refresh_po_status(conn, po_no)
@@ -225,8 +231,9 @@ class LineIn:
     qty: float
     lot_no: str = ""
     expiry_date: str = ""
-    unit_price: float | None = None     # 비우면 자재 기준단가
+    unit_price: float | None = None     # 비우면 자재 기준단가 (기본 단위당)
     note: str = ""
+    unit: str = ""                      # 입력 단위 (BOX 등, 비우면 기본 단위)
 
 
 class _Rejected(Exception):
@@ -260,7 +267,7 @@ def register_lines(kind: str, warehouse_id: int, tx_date: str, lines: list[LineI
                 price = ln.unit_price if ln.unit_price is not None else float(mat["unit_price"] or 0) if mat else 0.0
                 out = _register(conn, who, ln.material_id, kind, float(ln.qty), tx_date, price, ref_no or batch_no,
                                 partner, (ln.note or note).strip(), "", "", cost_center if kind == "OUT" else "",
-                                warehouse_id, wh_ids, ln.lot_no, ln.expiry_date, batch_no=batch_no)
+                                warehouse_id, wh_ids, ln.lot_no, ln.expiry_date, batch_no=batch_no, unit=ln.unit)
                 if isinstance(out, Result):
                     raise _Rejected(i, out.message)
                 first_tx = first_tx or out["tx_ids"][0]
@@ -304,8 +311,8 @@ def cancel_group(column: str, value, reason: str, *, actor: dict | None, wh_ids=
                 if isinstance(out, Result):
                     raise _Rejected(tx_id, out.message)
             if column == "production_id":
-                conn.execute("UPDATE productions SET cancelled_at = ?, cancelled_by = ?, cancel_reason = ? WHERE id = ?",
-                             (now_str(), who["name"], reason, value))
+                conn.execute("UPDATE productions SET cancelled_at = ?, cancelled_by = ?, cancel_reason = ?, status = 'CANCELLED' "
+                             "WHERE id = ?", (now_str(), who["name"], reason, value))
             audit.record(conn, who, "TX_GROUP_CANCEL", "transaction", ids[-1],
                          {column: value, "reason": reason, "reversed": ids})
     except _Rejected as exc:
@@ -577,7 +584,10 @@ def barcode_problem(conn, barcode: str, material_id: int | None = None) -> str:
         return "바코드는 영문·숫자(·._/+-) 4~64자로 입력하세요."
     row = conn.execute("SELECT code FROM materials WHERE id <> ? AND (barcode = ? OR UPPER(code) = ? OR UPPER(sap_matnr) = ?)",
                        (material_id or 0, barcode, barcode, barcode)).fetchone()
-    return f"바코드 {barcode}가 자재 {row['code']}의 바코드·자재코드·SAP 번호와 겹칩니다." if row else ""
+    if row:
+        return f"바코드 {barcode}가 자재 {row['code']}의 바코드·자재코드·SAP 번호와 겹칩니다."
+    owner = uom.barcode_owner(conn, barcode)
+    return f"바코드 {barcode}가 {owner} 단위 바코드와 겹칩니다." if owner else ""
 
 
 def _canonical_supplier(conn, name: str) -> str:
@@ -723,7 +733,7 @@ def normalize_upload(raw: pd.DataFrame) -> UploadResult:
     # 빈 칸(또는 숫자가 아닌 숫자 칸)은 기존 자재의 값을 유지한다 → 행마다 빈 항목을 적어 둔다
     blank = {c: clean_str_series(df[c]) == "" for c in UPLOAD_OPTIONAL}
     bad_numbers = 0
-    for col in ("safety_stock", "unit_price"):
+    for col in ("safety_stock", "unit_price", "lead_time_days", "min_order_qty", "order_multiple"):
         num = pd.to_numeric(df[col], errors="coerce")
         bad = num.isna() & ~blank[col]
         bad_numbers += int(bad.sum())

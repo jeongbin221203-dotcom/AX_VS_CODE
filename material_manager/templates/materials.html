@@ -24,6 +24,11 @@
       <span class="hint">SAP 플랜트·저장위치는 창고에 둡니다 (플랜트·창고 메뉴)</span></label>
     <label>바코드 (공급처 상자의 EAN 등)<input name="barcode" value="{{ f.barcode or '' }}" autocomplete="off" inputmode="text">
       <span class="hint">스캐너로 찍어 넣을 수 있습니다. 자재코드·SAP 번호로도 스캔됩니다</span></label>
+    <label>리드타임 (일)<input name="lead_time_days" type="number" min="0" step="1" value="{{ (f.lead_time_days or 0)|int }}">
+      <span class="hint">구매 자재: 발주→입고 · 제품: 착수→완료. MRP가 이만큼 앞당겨 발주·착수일을 잡습니다</span></label>
+    <label>최소 발주량<input name="min_order_qty" type="number" min="0" step="any" value="{{ '%g' % (f.min_order_qty or 0)|float }}"></label>
+    <label>발주 배수<input name="order_multiple" type="number" min="0" step="any" value="{{ '%g' % (f.order_multiple or 0)|float }}">
+      <span class="hint">예: 50이면 50·100·150… 단위로 발주 (0 = 제한 없음)</span></label>
     <fieldset>
       <legend>로트 · 유효기한 (거래가 생기면 바꿀 수 없음)</legend>
       <label class="check"><input type="checkbox" name="lot_managed" value="1" {{ 'checked' if (f.lot_managed or 0)|int }}> 로트(배치) 관리</label>
@@ -33,6 +38,7 @@
 {% endmacro %}
 
 {% block content %}
+<p class="toolbar-right"><a class="btn btn-sm" href="{{ url_for('materials.labels') }}">🏷️ 바코드 라벨 인쇄</a></p>
 {{ tab_bar(tabs, tab) }}
 {{ partner_datalist('SUPPLIER') }}
 
@@ -70,6 +76,29 @@
       {{ fields(form, lock_code=true, sap_lock=sap_lock) }}
       <div><button class="btn btn-primary">저장</button></div>
     </form>
+
+    <div class="card">
+      <h3>단위 환산 <span class="muted small">— 재고는 기본 단위({{ row.unit }})로, 입력은 다른 단위로도</span></h3>
+      {% if units %}
+      <table class="data">
+        <thead><tr><th>단위</th><th class="num">1 단위 =</th><th>단위 바코드 (상자 등)</th><th></th></tr></thead>
+        <tbody>
+        {% for u in units %}
+          <tr><td>{{ u.unit }}</td><td class="num">{{ '%g' % u.factor }} {{ row.unit }}</td><td>{{ u.barcode }}</td>
+            <td><form class="inline" method="post" action="{{ url_for('materials.unit_delete', uid=u.id) }}">{{ csrf() }}
+              <button class="btn btn-sm">삭제</button></form></td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      {% else %}<p class="muted small">다른 단위가 없습니다. 예: 상자로 사서 낱개로 쓰면 BOX = 100 {{ row.unit }}.</p>{% endif %}
+      <form class="toolbar" method="post" action="{{ url_for('materials.unit_add', mid=mid) }}">
+        {{ csrf() }}
+        <label>단위<input name="unit" placeholder="BOX" required autocomplete="off"></label>
+        <label>1 단위 = ? {{ row.unit }}<input name="factor" type="number" min="0" step="any" required></label>
+        <label class="grow">단위 바코드 (선택)<input name="barcode" autocomplete="off" placeholder="상자 바코드를 찍으면 이 단위 1개로 입력"></label>
+        <button class="btn btn-sm">추가</button>
+      </form>
+    </div>
 
     <div class="card">
       <p>상태: <strong>{{ '사용' if is_active else '사용중지' }}</strong> ·

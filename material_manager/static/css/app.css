@@ -280,3 +280,6 @@ table.bom-lines input[type=number] { width: 6.5rem; }
 /* 시연 서버 안내 (모든 화면 위) */
 .alert.demo-banner { margin: 0 0 1rem; padding: .75rem 1rem; background: var(--info-bg); color: var(--info-fg);
   font-size: .92rem; line-height: 1.65; white-space: normal; }
+
+.toolbar-right { margin: 0 0 .5rem; text-align: right; }
+.qty-input { width: 6.5rem; }

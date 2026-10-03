@@ -1,0 +1,67 @@
+# 자재관리(material_manager/) — 테스트를 SQLite 와 PostgreSQL 두 가지로, 그리고 보안 검사(bandit · pip-audit)
+name: material-ci
+
+on:
+  push:
+    paths: ["material_manager/**", ".github/workflows/material-ci.yml"]
+  pull_request:
+    paths: ["material_manager/**", ".github/workflows/material-ci.yml"]
+
+defaults:
+  run:
+    working-directory: material_manager
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        db: [sqlite, postgres]
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: mm_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 5s --health-retries 20
+    env:
+      MM_DATABASE_URL: ${{ matrix.db == 'postgres' && 'postgresql://postgres:postgres@127.0.0.1:5432/mm_test' || '' }}
+      MM_PG_DUMP: pg_dump
+      MM_PG_RESTORE: pg_restore
+      MM_SECRET_KEY: ci-only-not-secret
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: material_manager/requirements*.txt
+      - name: 의존성
+        run: |
+          sudo apt-get update && sudo apt-get install -y postgresql-client
+          pip install -r requirements-dev.txt
+      - name: DB 구조 리비전 왕복 (upgrade → downgrade 0001 → upgrade)
+        run: |
+          python -m flask --app app db upgrade
+          python -m flask --app app db downgrade 0001 --yes
+          python -m flask --app app db upgrade
+          python -m flask --app app db current
+      - name: 테스트
+        run: python -m pytest tests -q -p no:cacheprovider
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: 도구
+        run: pip install bandit pip-audit
+      - name: 정적 분석 (심각도 High 가 있으면 실패 — Medium 검토 결과는 docs/SECURITY.md)
+        run: bandit -r core views app.py cli.py config.py --severity-level high -q
+      - name: 의존성 취약점 (requirements.lock)
+        run: pip-audit -r requirements.lock --progress-spinner off

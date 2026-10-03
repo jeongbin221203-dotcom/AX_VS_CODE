@@ -3,7 +3,8 @@
 
 from flask import Blueprint, abort, flash, redirect, request, url_for
 
-from core import partners
+from core import bulk, partners
+from views import bulk_ui
 from views.helpers import Table, actor, can, f_str, form_response, log_export, render_page, role_required
 
 bp = Blueprint("partners", __name__, url_prefix="/partners")
@@ -129,3 +130,32 @@ def add_alias(pid: int):
     r = partners.link(f_str("alias"), pid, actor())
     flash(r.message, "success" if r.ok else "error")
     return redirect(url_for("partners.detail", pid=pid))
+
+
+# ── 엑셀 일괄 등록 ───────────────────────────────────────────
+TITLE = "거래처 엑셀 일괄 등록"
+
+
+@bp.get("/import")
+@role_required("MANAGER")
+def import_page():
+    return bulk_ui.page("partners", "partners", TITLE)
+
+
+@bp.get("/import/template.xlsx")
+@role_required("MANAGER")
+def import_template():
+    return bulk_ui.template("partner_template", [["", "(주)대한팔레트", "공급처", "124-81-00998", "김구매", "051-000-0000",
+                                                  "buy@example.com", "", "대한팔레트 부산지점, 대한PLT"]], "거래처_일괄등록_양식.xlsx")
+
+
+@bp.post("/import")
+@role_required("MANAGER")
+def import_upload():
+    return bulk_ui.upload("partners", "partner_upload", bulk.preview_partners, url_for("partners.import_page"), "partners", TITLE)
+
+
+@bp.post("/import/apply")
+@role_required("MANAGER")
+def import_apply():
+    return bulk_ui.apply("partners", bulk.apply_partners, url_for("partners.import_page"))

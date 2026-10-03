@@ -158,6 +158,51 @@ def _extras() -> None:
     if mid and wh:
         services.register_transaction(int(mid), "IN", 10, date_today(), 18000, ref_no="DEMO-ALIAS",
                                       partner="대한팔레트 부산지점", actor=audit.SYSTEM, warehouse_id=int(wh))
+    _manufacturing_extras()
+
+
+# 리드타임(일) · 최소 발주량 · 발주 배수 (창원 제조공장 샘플)
+DEMO_PLANNING = {"PT-MTR-001": (14, 50, 10), "PT-PCB-001": (21, 50, 10), "PT-BRG-001": (7, 100, 50),
+                 "PT-HRN-001": (10, 100, 50), "PT-BLT-001": (5, 1000, 500), "PT-NUT-001": (5, 1000, 500),
+                 "PT-SEL-001": (7, 500, 100), "PK-BOX-001": (5, 200, 100), "RM-STL-002": (10, 500, 100),
+                 "CH-PNT-001": (14, 50, 25), "SA-BRK-001": (2, 0, 0), "FG-FAN-001": (3, 0, 0)}
+DEMO_UNITS = [("PT-BLT-001", "BOX", 500, "8809876500993"), ("PT-NUT-001", "BOX", 500, "8809876500986"),
+              ("PK-BOX-001", "BUNDLE", 20, "8809876500979"), ("PKG-003", "BUNDLE", 10, "8801234500048")]
+DEMO_ROUTING = {"SA-BRK-001": [("프레스", "프레스 1호", 1.5), ("분체 도장", "도장 라인", 3.0)],
+                "FG-FAN-001": [("모터·기판 조립", "조립 1라인", 6.0), ("성능 검사", "QC", 2.0), ("포장", "포장", 1.0)]}
+
+
+def _manufacturing_extras() -> None:
+    """작업지시·MRP 시연: 리드타임·단위·공정, 판매 계획(수요) → MRP 실행 결과, 진행 중 작업지시(재공품)."""
+    from datetime import timedelta
+    from core import mrp, production, uom
+    ids = {r.code: int(r.id) for r in db.query_df("SELECT id, code FROM materials").itertuples()}
+    if "FG-FAN-001" not in ids:
+        return
+    for code, (lead, moq, mult) in DEMO_PLANNING.items():
+        db.execute("UPDATE materials SET lead_time_days = ?, min_order_qty = ?, order_multiple = ? WHERE code = ?",
+                   (lead, moq, mult, code))
+    for code, unit, f, bc in DEMO_UNITS:
+        if code in ids:
+            uom.add(ids[code], unit, f, bc, audit.SYSTEM)
+    for code, ops in DEMO_ROUTING.items():
+        production.save_routing(ids[code], [production.Op(n, w, m) for n, w, m in ops], audit.SYSTEM)
+    whs = {r.code: int(r.id) for r in db.query_df("SELECT id, code FROM warehouses").itertuples()}
+    plant = int(db.scalar("SELECT id FROM plants WHERE code = 'P-CW'"))
+    today = date.today()
+    mrp.add_demand(plant, ids["FG-FAN-001"], 120, (today + timedelta(days=21)).isoformat(), "대리점 11월 출하 계획", audit.SYSTEM)
+    mrp.add_demand(plant, ids["FG-FAN-001"], 60, (today + timedelta(days=45)).isoformat(), "설비 교체 수주 #A-1027", audit.SYSTEM)
+    # 진행 중 작업지시: 브래킷 40개 — 강판·볼트 투입, 프레스 실적까지 (재공품)
+    wo = production.create_wo(ids["SA-BRK-001"], 40, whs["CW-RM"], due_date=(today + timedelta(days=2)).isoformat(),
+                              actor=audit.SYSTEM, receipt_wh_id=whs["CW-FG"], work_order="WO-DEMO-01", note="시연 샘플")
+    if wo.ok:
+        lines = production.wo_lines(wo.tx_id)
+        qty = {int(r.id): float(r.planned_qty) for r in lines.itertuples() if r.code in ("RM-STL-002", "PT-BLT-001")}
+        production.issue(wo.tx_id, qty, today.isoformat(), actor=audit.SYSTEM)
+        op = production.wo_ops(wo.tx_id)
+        if len(op):
+            production.report_operation(wo.tx_id, int(op.iloc[0]["id"]), 40, 1, 65, "김작업", "", audit.SYSTEM)
+    mrp.run(plant, audit.SYSTEM)
 
 
 def date_today() -> str:

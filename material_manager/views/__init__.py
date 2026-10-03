@@ -16,7 +16,8 @@
   admin         사용자·데이터 범위 · 플랜트·창고 · 배치 · 감사로그
   prefs         내 화면 설정 (사이드바 메뉴 순서·즐겨찾기)
   partners      거래처 마스터 · 미등록 이름 정리(등록·연결)
-  production    BOM · 생산 투입(소요량 확인 → 부품 출고 + 완제품 입고) · 부족분 구매요청
+  production    간편 생산 투입 · 작업지시(투입·공정 실적·완료) · 재공품 · BOM·공정 · 부족분 구매요청
+  mrp           MRP: 수요 → 다단계 전개·리드타임 역산 → 구매·생산 계획 → 구매요청·작업지시
 """
 from flask import Flask
 
@@ -24,10 +25,10 @@ from .helpers import load_context
 
 
 def register_blueprints(app: Flask) -> None:
-    from . import (admin, approvals, auth, dashboard, data_admin, documents, history, materials, partners, periods,
+    from . import (admin, approvals, auth, dashboard, data_admin, documents, history, materials, mrp, partners, periods,
                    prefs, production, purchase, reports, sap, statements, stock, transactions)
 
     for module in (auth, dashboard, materials, transactions, statements, stock, history, documents, purchase, approvals,
-                   reports, periods, sap, data_admin, admin, prefs, partners, production):
+                   reports, periods, sap, data_admin, admin, prefs, partners, production, mrp):
         app.register_blueprint(module.bp)
     app.before_request(load_context)

@@ -43,3 +43,9 @@ WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEM
 COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ```
+
+### ZXing for JS (@zxing/library) 0.21.3 — Apache License 2.0
+https://github.com/zxing-js/library · `static/vendor/zxing-library-0.21.3.min.js` (수정 없이 그대로)
+
+브라우저에 바코드 인식 기능(BarcodeDetector)이 없을 때(아이폰 Safari 등) 카메라 바코드 스캔에 쓴다.
+Apache License 2.0 전문: https://www.apache.org/licenses/LICENSE-2.0

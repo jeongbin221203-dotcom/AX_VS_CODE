@@ -44,9 +44,11 @@
 <h3>최근 실행 기록</h3>
 {{ table(runs, "아직 실행 기록이 없습니다.") }}
 
-<h3>결재 알림 메일 (최근 50건)</h3>
-<p class="muted small">방식: {{ {'off': '끔', 'log': '기록만 (메일 서버 없이 목록에만 남김)', 'smtp': '메일 발송 (' ~ (smtp_host or '메일 서버 미설정') ~ ')'}.get(notify_mode, notify_mode) }}
-  — 결재 요청은 결재할 수 있는 사람(역할·창고 권한·메일 주소가 있는 사용자)에게, 결과는 요청자에게 갑니다.
-  메일 주소는 사용자 화면에서 넣습니다. 발송은 '결재 알림 메일 보내기' 배치가 1분마다 하며, 실패하면 {{ 5 }}번까지 다시 보냅니다.</p>
+<h3>결재 알림 (최근 50건)</h3>
+<p class="muted small">방식: {{ {'off': '끔', 'log': '기록만 (보내지 않고 목록에만 남김)', 'send': '실제로 보냄', 'smtp': '실제로 보냄'}.get(notify_mode, notify_mode) }}
+  · 연결: {% for k, v in channels_on.items() %}{{ k }} {{ '✔' if v else '— (설정 없음)' }}{{ ' · ' if not loop.last }}{% endfor %}
+  — 결재 요청은 결재할 수 있는 사람(역할·창고 권한·메일·메신저 아이디가 있는 사용자)에게, 결과는 요청자에게 갑니다. 잔디는 토픽에 한 번.
+  메일·메신저 아이디는 사용자 화면에서 넣습니다. 발송은 '결재 알림 보내기' 배치가 1분마다 하며, 실패하면 5번까지 다시 보냅니다.</p>
+<form method="post" action="{{ url_for('admin.notify_test') }}">{{ csrf() }}<button class="btn btn-sm">나에게 시험 알림</button></form>
 {{ table(notes, "아직 알림이 없습니다.") }}
 {% endblock %}

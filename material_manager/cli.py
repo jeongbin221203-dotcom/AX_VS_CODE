@@ -1,6 +1,10 @@
 """운영 명령 (Flask CLI). 앱과 같은 설정·DB로 돈다.
 
     flask --app app init-db                  # 테이블 만들기·마이그레이션 (앱 시작 때도 자동)
+    flask --app app db current|history       # DB 구조 리비전 (core/migrate.py)
+    flask --app app db upgrade [리비전]       # 올리기 (앱 시작 때도 최신까지 자동)
+    flask --app app db downgrade 0001 --yes  # 되돌리기 (먼저 백업)
+    flask --app app db revision -m "설명"     # 새 리비전 파일
     flask --app app batch --loop             # 배치: 15초마다 주기가 된 작업 실행 (운영: 서비스로 등록, 여러 서버 가능)
     flask --app app batch                    # 주기가 된 작업을 한 번만
     flask --app app batch run sap_sync       # 특정 작업을 지금 실행
@@ -22,7 +26,7 @@ import click
 from flask import Flask
 
 import config
-from core import audit, backup, db, doctor, erp, jobs, master_sync, sap, sso, storage
+from core import audit, backup, db, doctor, erp, jobs, master_sync, migrate, sap, sso, storage
 
 
 def register_cli(app: Flask) -> None:
@@ -31,6 +35,74 @@ def register_cli(app: Flask) -> None:
         """테이블 만들기·마이그레이션."""
         db.init_db()
         click.echo("DB 준비 완료")
+
+    @app.cli.group("db")
+    def db_group():
+        """DB 구조 버전 관리 (core/migrate.py, migrations/versions/)."""
+
+    def _raw():
+        """리비전을 돌릴 연결 (PostgreSQL은 한 트랜잭션, SQLite는 리비전마다 확정)."""
+        if db.is_pg():
+            return db.transaction()
+        from contextlib import contextmanager
+
+        @contextmanager
+        def sqlite():
+            raw = db.connect_sqlite()
+            try:
+                yield db.Conn(raw, False)
+                raw.commit()
+            finally:
+                raw.close()
+        return sqlite()
+
+    @db_group.command("current")
+    def db_current():
+        with _raw() as conn:
+            click.echo(f"DB 리비전: {migrate.current(conn) or '(없음)'} · 프로그램 최신: {migrate.head()}")
+
+    @db_group.command("history")
+    def db_history():
+        for m in migrate.chain():
+            click.echo(f"{m.revision}  {getattr(m, 'message', '')}")
+        with _raw() as conn:
+            click.echo("--- 적용 기록 ---")
+            for h in migrate.history(conn):
+                click.echo(f"{h['applied_at']}  {h['direction']:<9} {h['version']}  {h['message']}")
+
+    @db_group.command("upgrade")
+    @click.argument("target", default="head")
+    def db_upgrade(target: str):
+        """리비전을 올린다 (기본: 최신)."""
+        db.init_db() if target == "head" else None
+        with _raw() as conn:
+            done = migrate.upgrade(conn, target)
+            click.echo(f"올림: {', '.join(done) or '없음 (이미 최신)'} · 지금 {migrate.current(conn)}")
+
+    @db_group.command("downgrade")
+    @click.argument("target")
+    @click.option("--yes", is_flag=True, help="확인 없이")
+    def db_downgrade(target: str, yes: bool):
+        """target 리비전으로 되돌린다 (그 뒤 리비전의 표·칸이 지워진다 — 먼저 백업)."""
+        if not yes:
+            click.confirm(f"{target} 이후 리비전을 되돌립니다. 그 표·칸의 데이터가 지워집니다. 백업했습니까?", abort=True)
+        with _raw() as conn:
+            done = migrate.downgrade(conn, target)
+            click.echo(f"되돌림: {', '.join(done) or '없음'} · 지금 {migrate.current(conn)}")
+
+    @db_group.command("revision")
+    @click.option("-m", "message", required=True, help="변경 설명")
+    def db_revision(message: str):
+        """새 리비전 파일을 만든다."""
+        click.echo(f"만듦: {migrate.create(message)}")
+
+    @db_group.command("stamp")
+    @click.argument("rev")
+    def db_stamp(rev: str):
+        """구조는 그대로, 리비전 기록만 맞춘다."""
+        with _raw() as conn:
+            migrate.stamp(conn, rev)
+        click.echo(f"기록: {rev}")
 
     @app.cli.group("batch", invoke_without_command=True)
     @click.option("--loop", is_flag=True, help="계속 실행")

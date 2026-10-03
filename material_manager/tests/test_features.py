@@ -371,7 +371,7 @@ def test_user_email_admin_and_jobs_page(client):
     assert not db.scalar("SELECT email FROM users WHERE id = ?", (uid,))
     post(client, f"/admin/users/{uid}/email", {"email": "m@example.com"})
     assert db.scalar("SELECT email FROM users WHERE id = ?", (uid,)) == "m@example.com"
-    assert "결재 알림 메일" in client.get("/admin/jobs").get_data(as_text=True)
+    assert "결재 알림 (최근 50건)" in client.get("/admin/jobs").get_data(as_text=True)
 
 
 # ── 새 화면 권한 ─────────────────────────────────────────────

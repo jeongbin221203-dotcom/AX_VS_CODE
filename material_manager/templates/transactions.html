@@ -102,6 +102,14 @@
       {% else %}
         <label>수량 *<input name="qty" type="number" min="0" step="any" required value="{{ form.qty or '' }}"></label>
       {% endif %}
+      {% if units %}
+        <label>단위
+          <select name="unit">
+            <option value="">{{ mat.unit }} (기본)</option>
+            {% for u in units %}<option value="{{ u.unit }}" {{ 'selected' if form.unit == u.unit }}>{{ u.unit }} (= {{ '%g' % u.factor }} {{ mat.unit }})</option>{% endfor %}
+          </select>
+        </label>
+      {% endif %}
       {% if mat.lot_managed %}
         {% if tx_type == "OUT" %}
           {{ lot_select(lots, form) }}
@@ -115,7 +123,7 @@
                       max="{{ today().isoformat() }}" {% if min_date %}min="{{ min_date }}"{% endif %}>
         {% if g.closed_through %}<span class="hint">{{ g.closed_through }}월까지 마감 — 그 이후 일자만 가능</span>{% endif %}
       </label>
-      <label>단가(원)<input name="unit_price" type="number" min="0" step="any" value="{{ form.unit_price or ('%g' % mat.unit_price) }}"></label>
+      <label>단가(원/{{ mat.unit }})<input name="unit_price" type="number" min="0" step="any" value="{{ form.unit_price or ('%g' % mat.unit_price) }}"></label>
 
       <label>문서번호 (PO/출고요청/B/L 등)<input name="ref_no" value="{{ form.ref_no or '' }}"></label>
       <label>거래처 / 사용부서<input name="partner" value="{{ form.partner or '' }}" list="partner-names" autocomplete="off"></label>

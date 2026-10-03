@@ -1,18 +1,22 @@
-"""생산 투입(BOM) 화면: 제품·수량 → 소요량 확인(부품별 필요·가용·부족, 만들 수 있는 최대 수량) → 부품 출고 + 완제품 입고를
-한 번에 등록. 부족분 구매요청, 생산 이력·전체 취소, BOM 관리. 규칙은 core/production.py."""
+"""생산 화면 (규칙은 core/production.py)
+  간편 생산 투입  제품·수량 → 소요량 확인 → (실제 투입량·불량 고쳐서) 부품 출고 + 완제품 입고를 한 번에
+  작업지시       계획 → 자재 투입·반납(재공) → 공정 실적 → 완료 입고(실제 원가), 취소
+  재공품         투입했지만 아직 완료하지 않은 작업지시와 금액
+  BOM·공정       자재 명세서와 공정(라우팅)"""
 
 from datetime import date, timedelta
 
 from flask import Blueprint, abort, flash, g, redirect, request, url_for
 
-from core import org, periods, production, repository as repo, services
+from core import bulk, org, periods, production, repository as repo, services
+from views import bulk_ui
 from core.utils import month_end
 from views.helpers import (Table, a_int, actor, can, f_float, f_str, form_response, log_export, render_page,
                            role_required)
 
 bp = Blueprint("production", __name__, url_prefix="/production")
 
-TABS = [("run", "생산 투입"), ("history", "생산 이력"), ("bom", "BOM (자재 명세서)")]
+TABS = [("run", "간편 생산 투입"), ("wo", "작업지시"), ("wip", "재공품"), ("history", "생산 이력"), ("bom", "BOM·공정")]
 BOM_EMPTY_ROWS = 6
 
 
@@ -27,7 +31,7 @@ def index():
     tab = request.args.get("tab", "run")
     if tab == "history":
         df = production.list_df(g.wh_ids)
-        view = df.assign(cancelled_at=df["cancelled_at"].map(lambda v: "취소됨" if v else ""))
+        view = df.assign(cancelled_at=df["status"].map(production.STATUS))
         view = view[["prod_no", "tx_date", "code", "name", "qty", "unit", "issue_wh", "receipt_wh", "material_cost",
                      "work_order", "created_by", "cancelled_at"]]
         view.columns = ["생산번호", "일자", "제품코드", "제품명", "수량", "단위", "부품 창고", "입고 창고", "재료비", "작업지시",
@@ -39,6 +43,18 @@ def index():
                            grid=Table(view, {"수량": "{:,.2f}", "재료비": "₩{:,.0f}"},
                                       links=[url_for("production.detail", prod_id=int(i)) for i in df["id"]],
                                       tones=["muted" if c else None for c in df["cancelled_at"]]))
+    if tab == "wo":
+        return _wo_page()
+    if tab == "wip":
+        df = production.wip_df(g.wh_ids)
+        view = df.assign(ops=[f"{d}/{t}" if t else "-" for d, t in zip(df["ops_done"], df["ops_total"])])[
+            ["prod_no", "code", "name", "qty", "unit", "issue_wh", "start_date", "due_date", "ops", "wip_cost", "planned_cost"]]
+        view.columns = ["작업지시", "제품코드", "제품명", "수량", "단위", "창고", "착수", "완료 예정", "공정", "재공 금액(투입)",
+                        "표준 재료비"]
+        return render_page("production.html", "production", tabs=TABS, tab="wip", wip_total=float(df["wip_cost"].sum()),
+                           grid=Table(view, {"수량": "{:,.4g}", "재공 금액(투입)": "₩{:,.0f}", "표준 재료비": "₩{:,.0f}"},
+                                      links=[url_for("production.detail", prod_id=int(i)) for i in df["id"]],
+                                      tones=["danger" if d and d < date.today().isoformat() else None for d in df["due_date"]]))
     if tab == "bom":
         df = production.boms_df()
         view = df.assign(active=df["active"].map({1: "사용", 0: "중지"}))[
@@ -89,10 +105,18 @@ def run():
         flash("제품·창고·수량·일자를 확인하세요.", "error")
         return _run_page(request.form)
     receipt = f_str("receipt_wh")
+    try:
+        actual = {int(k[7:]): float(v.replace(",", "")) for k, v in request.form.items()
+                  if k.startswith("actual_") and k[7:].isdigit() and v.strip()}
+        scrap = f_float("scrap_qty")
+    except ValueError:
+        flash("실제 투입량·불량은 숫자로 입력하세요.", "error")
+        return _run_page(request.form)
     result = production.post(pid, qty, wh, tx_date, actor=actor(), wh_ids=g.wh_ids,
                              receipt_wh_id=int(receipt) if receipt.isdigit() else None,
                              work_order=f_str("work_order"), cost_center=f_str("cost_center"), note=f_str("note"),
-                             lot_no=f_str("lot_no"), expiry_date=f_str("expiry_date"))
+                             lot_no=f_str("lot_no"), expiry_date=f_str("expiry_date"), actual=actual or None,
+                             scrap_qty=scrap)
     flash(result.message, "success" if result.ok else "error")
     if not result.ok:
         return _run_page(request.form)
@@ -121,14 +145,23 @@ def detail(prod_id: int):
     if g.wh_ids is not None and int(p["issue_wh_id"]) not in g.wh_ids:
         abort(403, "이 창고의 생산 기록을 볼 권한이 없습니다.")
     lines = production.lines_df(prod_id)
-    view = lines.assign(tx_type=lines["tx_type"].map({"OUT": "부품 출고", "IN": "완제품 입고"}),
+    view = lines.assign(tx_type=[{"OUT": "부품 출고", "IN": "반납" if n.startswith("생산 반납") else "완제품 입고"}.get(t, t)
+                                 for t, n in zip(lines["tx_type"], lines["note"])],
                         reversed_by=lines["reversed_by"].map(lambda v: f"취소(#{int(v)})" if v == v and v is not None else ""))
     view = view[["id", "tx_type", "code", "name", "wh_code", "lot_no", "qty", "unit", "unit_price", "amount", "reversed_by"]]
     view.columns = ["거래 ID", "구분", "자재코드", "자재명", "창고", "로트", "수량", "단위", "단가", "금액", "상태"]
-    return render_page("production_detail.html", "production", p=p,
+    wl = production.wo_lines(prod_id).to_dict("records")
+    for r in wl:
+        r["rest"] = round(float(r["planned_qty"]) - float(r["issued_qty"]), 4)
+        r["std_cost"] = float(r["planned_qty"]) * float(r["std_price"] or 0)
+    std_unit = (float(p["planned_cost"] or 0) / float(p["qty"])) if p["qty"] else 0
+    actual_unit = (float(p["material_cost"] or 0) / float(p["good_qty"])) if p["good_qty"] else 0
+    return render_page("production_detail.html", "production", p=p, wl=wl, ops=production.wo_ops(prod_id).to_dict("records"),
+                       status_label=production.STATUS.get(p["status"], p["status"]), std_unit=std_unit, actual_unit=actual_unit,
                        grid=Table(view, {"거래 ID": "{}", "수량": "{:,.4g}", "단가": "₩{:,.0f}", "금액": "₩{:,.0f}"},
                                   tones=["muted" if s else None for s in view["상태"]]),
-                       can_cancel=can("MANAGER"))
+                       wh_opts=org.warehouse_options(g.wh_ids), can_cancel=can("MANAGER"), min_date=_min_date(),
+                       open_wo=p["status"] in ("PLANNED", "RELEASED"))
 
 
 @bp.post("/<int:prod_id>/cancel")
@@ -153,7 +186,9 @@ def bom_edit():
              "note": i["note"] or ""} for i in items]
     rows += [{"cid": "", "label": "", "qty": "", "scrap": "", "wh": "", "note": ""} for _ in range(BOM_EMPTY_ROWS)]
     req = production.requirements(pid, 1, next(iter(org.warehouse_options(None)), 0)) if bom else None
-    return render_page("bom_edit.html", "production", mat=mat, bom=bom, rows=rows, pid=pid,
+    ops = production.routing(pid) if mat else []
+    ops += [{"op_name": "", "workcenter": "", "std_minutes": "", "note": ""} for _ in range(4)]
+    return render_page("bom_edit.html", "production", mat=mat, bom=bom, rows=rows, pid=pid, ops=ops,
                        product_label=labels.get(pid, "") if pid else "", wh_opts=org.warehouse_options(None),
                        editable=can("MANAGER"), req=req)
 
@@ -189,3 +224,138 @@ def bom_active(product_id: int):
     r = production.set_bom_active(product_id, f_str("active") == "1", actor())
     flash(r.message, "success" if r.ok else "error")
     return redirect(url_for("production.bom_edit", product=product_id))
+
+
+# ── 작업지시 ─────────────────────────────────────────────────
+def _wo_page(form: dict | None = None):
+    show = request.args.get("show", "open")
+    df = production.list_df(g.wh_ids)
+    if show == "open":
+        df = df[df["status"].isin(["PLANNED", "RELEASED"])]
+    view = df.assign(status=df["status"].map(production.STATUS), source=df["source"].map(
+        {"QUICK": "간편", "MANUAL": "직접", "MRP": "MRP"}))[
+        ["prod_no", "status", "source", "code", "name", "qty", "unit", "due_date", "issue_wh", "receipt_wh", "material_cost",
+         "work_order", "created_by"]]
+    view.columns = ["작업지시", "상태", "출처", "제품코드", "제품명", "수량", "단위", "완료 예정", "부품 창고", "입고 창고",
+                    "투입 금액", "작업지시 번호", "등록자"]
+    return render_page("production.html", "production", tabs=TABS, tab="wo", show=show,
+                       products=production.products_with_bom(), wh_opts=org.warehouse_options(g.wh_ids), f=form or {},
+                       receipt_default=_receipt_default(org.warehouse_options(g.wh_ids)),
+                       grid=Table(view, {"수량": "{:,.4g}", "투입 금액": "₩{:,.0f}"},
+                                  links=[url_for("production.detail", prod_id=int(i)) for i in df["id"]],
+                                  tones=["danger" if s == "RELEASED" and d and d < date.today().isoformat() else None
+                                         for s, d in zip(df["status"], df["due_date"])]))
+
+
+@bp.post("/wo")
+@role_required("CLERK")
+def wo_create():
+    try:
+        pid, wh, qty = int(f_str("product")), int(f_str("wh")), f_float("qty")
+        due = date.fromisoformat(f_str("due_date") or date.today().isoformat()).isoformat()
+    except ValueError:
+        flash("제품·창고·수량·완료 예정일을 확인하세요.", "error")
+        return redirect(url_for("production.index", tab="wo"))
+    receipt = f_str("receipt_wh")
+    r = production.create_wo(pid, qty, wh, due_date=due, actor=actor(), wh_ids=g.wh_ids,
+                             receipt_wh_id=int(receipt) if receipt.isdigit() else None, work_order=f_str("work_order"),
+                             cost_center=f_str("cost_center"), note=f_str("note"))
+    flash(r.message, "success" if r.ok else "error")
+    return redirect(url_for("production.detail", prod_id=r.tx_id) if r.ok else url_for("production.index", tab="wo"))
+
+
+def _date_arg() -> str:
+    try:
+        return date.fromisoformat(f_str("tx_date") or date.today().isoformat()).isoformat()
+    except ValueError:
+        return date.today().isoformat()
+
+
+@bp.post("/<int:prod_id>/issue")
+@role_required("CLERK")
+def wo_issue(prod_id: int):
+    try:
+        qty = {int(k[5:]): float(v.replace(",", "")) for k, v in request.form.items()
+               if k.startswith("line_") and k[5:].isdigit() and v.strip()}
+        extra = []
+        if f_str("extra_mid").isdigit() and f_str("extra_qty"):
+            extra = [(int(f_str("extra_mid")), f_float("extra_qty"), int(f_str("extra_wh")))]
+    except ValueError:
+        flash("수량은 숫자로 입력하세요.", "error")
+        return redirect(url_for("production.detail", prod_id=prod_id))
+    r = production.issue(prod_id, qty, _date_arg(), actor=actor(), wh_ids=g.wh_ids, extra=extra)
+    flash(r.message, "success" if r.ok else "error")
+    return redirect(url_for("production.detail", prod_id=prod_id))
+
+
+@bp.post("/<int:prod_id>/op/<int:op_id>")
+@role_required("CLERK")
+def wo_operation(prod_id: int, op_id: int):
+    try:
+        good, scrap, minutes = f_float("good_qty"), f_float("scrap_qty"), f_float("minutes")
+    except ValueError:
+        flash("수량·시간은 숫자로 입력하세요.", "error")
+        return redirect(url_for("production.detail", prod_id=prod_id))
+    r = production.report_operation(prod_id, op_id, good, scrap, minutes, f_str("worker"), f_str("note"), actor())
+    flash(r.message, "success" if r.ok else "error")
+    return redirect(url_for("production.detail", prod_id=prod_id))
+
+
+@bp.post("/<int:prod_id>/complete")
+@role_required("CLERK")
+def wo_complete(prod_id: int):
+    try:
+        good, scrap = f_float("good_qty"), f_float("scrap_qty")
+    except ValueError:
+        flash("양품·불량 수량은 숫자로 입력하세요.", "error")
+        return redirect(url_for("production.detail", prod_id=prod_id))
+    r = production.complete(prod_id, good, scrap, _date_arg(), actor=actor(), wh_ids=g.wh_ids,
+                            backflush=request.form.get("backflush") == "1", lot_no=f_str("lot_no"),
+                            expiry_date=f_str("expiry_date"))
+    flash(r.message, "success" if r.ok else "error")
+    return redirect(url_for("production.detail", prod_id=prod_id))
+
+
+@bp.post("/routing")
+@role_required("MANAGER")
+def routing_save():
+    try:
+        pid = int(f_str("product"))
+        f = request.form
+        ops = [production.Op(n, w, float(m or 0), note) for n, w, m, note in
+               zip(f.getlist("op_name"), f.getlist("workcenter"), f.getlist("std_minutes"), f.getlist("op_note"))]
+    except ValueError:
+        flash("표준 시간은 숫자로 입력하세요.", "error")
+        return redirect(url_for("production.bom_edit", product=f_str("product")))
+    r = production.save_routing(pid, ops, actor())
+    flash(r.message, "success" if r.ok else "error")
+    return redirect(url_for("production.bom_edit", product=pid))
+
+
+# ── BOM 엑셀 일괄 등록 ───────────────────────────────────────
+BOM_TITLE = "BOM 엑셀 일괄 등록"
+
+
+@bp.get("/bom/import")
+@role_required("MANAGER")
+def bom_import():
+    return bulk_ui.page("bom", "production", BOM_TITLE)
+
+
+@bp.get("/bom/import/template.xlsx")
+@role_required("MANAGER")
+def bom_import_template():
+    return bulk_ui.template("bom_template", [["FG-001", 1, "PT-BLT-001", 8, 2, "CW-PT", ""],
+                                             ["FG-001", "", "PT-NUT-001", 8, 2, "CW-PT", ""]], "BOM_일괄등록_양식.xlsx")
+
+
+@bp.post("/bom/import")
+@role_required("MANAGER")
+def bom_import_upload():
+    return bulk_ui.upload("bom", "bom_upload", bulk.preview_boms, url_for("production.bom_import"), "production", BOM_TITLE)
+
+
+@bp.post("/bom/import/apply")
+@role_required("MANAGER")
+def bom_import_apply():
+    return bulk_ui.apply("bom", bulk.apply_boms, url_for("production.bom_import"))

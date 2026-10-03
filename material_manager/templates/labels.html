@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<p><a href="{{ url_for('materials.index') }}">← 자재 마스터</a></p>
+<h2>바코드 라벨 인쇄</h2>
+<p class="muted">바코드가 없는 자재에 붙일 라벨을 만듭니다. 바코드 값은 자재 바코드, 없으면 자재코드(Code 128 — 일반 스캐너·휴대폰 카메라 모두 읽음).
+  상자(단위) 바코드가 있으면 그 라벨도 따로 고릅니다. 브라우저 인쇄로 라벨 용지에 찍습니다(배율 100%, 여백 없음).</p>
+<form class="toolbar" method="get">
+  <label class="grow">찾기<input type="search" name="q" value="{{ q }}" placeholder="코드·이름·규격·분류"></label>
+  <button class="btn">조회</button>
+</form>
+<form method="get" action="{{ url_for('materials.labels_print') }}" target="_blank">
+  <div class="toolbar">
+    <label>용지<select name="layout">{% for k, v in layouts.items() %}<option value="{{ k }}">{{ v }}</option>{% endfor %}</select></label>
+    <button class="btn btn-primary">라벨 만들기 (새 창)</button>
+    <span class="muted small">{{ total }}종{{ ' 중 앞 500종' if total > 500 }} · 장수를 0으로 두면 빼고 만듭니다</span>
+  </div>
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th></th><th>자재</th><th>바코드 값</th><th class="num">장수</th><th>상자(단위) 라벨</th></tr></thead>
+    <tbody>
+    {% for r in rows %}
+      <tr><td><input type="checkbox" name="id" value="{{ r.id }}" aria-label="선택"></td>
+        <td>[{{ r.code }}] {{ r.name }} <span class="muted small">{{ r.spec }}</span></td>
+        <td class="mono">{{ r.barcode or r.code }}</td>
+        <td><input class="qty-input" name="n_{{ r.id }}" type="number" min="0" max="200" value="1" aria-label="장수"></td>
+        <td>{% for u, f, bc in r.units if bc %}<label class="inline small">{{ u }}(×{{ '%g' % f }})
+          <input class="qty-input" name="u_{{ r.id }}_{{ u }}" type="number" min="0" max="200" value="0" aria-label="{{ u }} 라벨 장수"></label>{% endfor %}</td></tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+</form>
+{% endblock %}

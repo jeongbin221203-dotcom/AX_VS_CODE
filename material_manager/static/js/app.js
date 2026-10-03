@@ -76,6 +76,11 @@
     e.target.form.submit();
   });
 
+  // 인쇄 버튼 (라벨 인쇄 화면)
+  document.addEventListener("click", function (e) {
+    if (e.target.closest && e.target.closest("[data-print]")) { e.preventDefault(); window.print(); }
+  });
+
   // 차트 높이 (인라인 style 대신 data-height)
   function sizeCharts(root) {
     root.querySelectorAll(".chart[data-height]").forEach(function (el) {
@@ -141,6 +146,12 @@
       if (el.multiple) {
         out[el.name] = Array.prototype.filter.call(el.options, function (o) { return o.selected; })
           .map(function (o) { return o.value; });
+        return;
+      }
+      // 대기열에 담을 때(withHidden): 같은 이름 칸이 여럿이면(여러 줄 입출고의 줄들) 모두 담는다
+      if (withHidden && el.name in out) {
+        if (!Array.isArray(out[el.name])) out[el.name] = [out[el.name]];
+        out[el.name].push(el.value);
         return;
       }
       out[el.name] = el.value;
@@ -210,9 +221,10 @@
 
   function enqueue(form) {
     const fields = collect(form, true);
+    const lines = Array.isArray(fields.line_mid) ? fields.line_mid.length : (fields.line_mid ? 1 : 0);
     const entry = { id: token(), user: USER, kind: form.dataset.offline, fields: fields,
-                    label: form.dataset.label || "", qty: fields.qty || "", at: new Date().toISOString(),
-                    status: "waiting", error: "" };
+                    label: form.dataset.label || "", qty: fields.qty || (lines ? lines + "줄" : ""),
+                    at: new Date().toISOString(), status: "waiting", error: "" };
     const q = loadQueue();
     q.push(entry);
     if (!saveQueue(q)) { alert("브라우저 저장 공간이 부족해 오프라인 입력을 저장하지 못했습니다."); return false; }
@@ -223,6 +235,7 @@
     });
     drop("localStorage", draftKey(form));
     form._mmBase = collect(form);
+    form.dispatchEvent(new CustomEvent("mm:queued", { bubbles: true }));      // 여러 줄 화면은 줄을 비운다
     renderQueue();
     return true;
   }

@@ -43,7 +43,10 @@ ACTIONS = {
     "PARTNER_CREATE": "거래처 등록", "PARTNER_UPDATE": "거래처 수정", "PARTNER_ACTIVE": "거래처 사용/중지",
     "PARTNER_ALIAS": "거래처 다른 이름 연결", "PARTNER_UNALIAS": "거래처 다른 이름 해제",
     "BOM_SAVE": "BOM 저장", "BOM_ACTIVE": "BOM 사용/중지", "PRODUCTION_CREATE": "생산 투입",
-    "USER_EMAIL": "사용자 메일 변경",
+    "USER_EMAIL": "사용자 메일 변경", "UNIT_ADD": "단위 환산 추가", "UNIT_REMOVE": "단위 환산 삭제",
+    "WO_CREATE": "작업지시", "WO_ISSUE": "작업지시 자재 투입", "WO_OPERATION": "공정 실적", "WO_COMPLETE": "작업지시 완료",
+    "ROUTING_SAVE": "공정(라우팅) 저장", "MRP_RUN": "MRP 실행", "MRP_CONVERT": "MRP 계획 → 요청·지시",
+    "MRP_DEMAND": "MRP 수요 등록", "PARTNER_IMPORT": "거래처 일괄 등록", "BOM_IMPORT": "BOM 일괄 등록",
 }
 
 

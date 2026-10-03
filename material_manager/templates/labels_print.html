@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>바코드 라벨 · {{ APP_TITLE }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/labels.css', v=ASSET_V) }}">
+  <script src="{{ url_for('static', filename='js/app.js', v=ASSET_V) }}" defer></script>
+</head>
+<body class="labels {{ layout }}">
+  <div class="label-bar no-print">
+    <strong>바코드 라벨 {{ labels|length }}장</strong> · {{ layout_label }}
+    <button type="button" data-print>인쇄</button>
+    <span>인쇄 창에서 배율 100%, 여백 '없음', 머리글·바닥글 끄기.</span>
+    {% if skipped %}<p class="warn">바코드로 만들 수 없는 글자(한글 등)가 있어 뺀 자재: {{ skipped|join(', ') }} — 자재 마스터에 영문·숫자 바코드를 넣으세요.</p>{% endif %}
+    {% if not labels %}<p class="warn">고른 자재가 없습니다. 앞 화면에서 체크하고 장수를 넣으세요.</p>{% endif %}
+  </div>
+  <main class="sheet">
+    {% for l in labels %}
+      <section class="label">
+        <div class="l-name">{{ l.name }}</div>
+        <div class="l-spec">{{ l.spec }}</div>
+        <div class="l-bars">{{ l.svg }}</div>
+        <div class="l-foot"><span class="l-value">{{ l.value }}</span><span class="l-unit">{{ l.unit }}</span></div>
+        <div class="l-code">{{ l.code }}</div>
+      </section>
+    {% endfor %}
+  </main>
+</body>
+</html>

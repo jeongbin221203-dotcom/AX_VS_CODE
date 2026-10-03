@@ -1,28 +1,120 @@
 {% extends "base.html" %}
-{% from "_macros.html" import csrf, table %}
+{% from "_macros.html" import csrf, table, material_picker %}
 
 {% block content %}
-<p><a href="{{ url_for('production.index', tab='history') }}">← 생산 이력</a></p>
-<h2>{{ p.prod_no }} · [{{ p.code }}] {{ p.name }} {{ '{:,.2f}'.format(p.qty) }} {{ p.unit }}
-  {% if p.cancelled_at %}<span class="badge">취소됨</span>{% endif %}</h2>
-<p class="muted small">일자 {{ p.tx_date }} · 부품 창고 {{ p.issue_wh }}{{ ' · 입고 창고 ' ~ p.receipt_wh if p.receipt_wh else ' · 완제품 입고 안 함' }}
-  · 재료비 ₩{{ '{:,.0f}'.format(p.material_cost) }}{{ ' · 작업지시 ' ~ p.work_order if p.work_order }}{{ ' · 원가센터 ' ~ p.cost_center if p.cost_center }}
-  · 등록 {{ p.created_by }} {{ p.created_at[:16] }}</p>
+<p><a href="{{ url_for('production.index', tab='wo') }}">← 작업지시</a> · <a href="{{ url_for('production.index', tab='history') }}">생산 이력</a></p>
+<h2>{{ p.prod_no }} · [{{ p.code }}] {{ p.name }} {{ '{:,.4g}'.format(p.qty) }} {{ p.unit }}
+  <span class="badge">{{ status_label }}</span></h2>
+<p class="muted small">착수 {{ p.start_date or '-' }} · 완료 예정 {{ p.due_date or '-' }} · 부품 창고 {{ p.issue_wh }}{{ ' · 입고 창고 ' ~ p.receipt_wh if p.receipt_wh else ' · 완제품 입고 안 함' }}
+  {{ ' · 작업지시 ' ~ p.work_order if p.work_order }}{{ ' · 원가센터 ' ~ p.cost_center if p.cost_center }} · 등록 {{ p.created_by }} {{ p.created_at[:16] }}</p>
 {% if p.cancelled_at %}
   <div class="alert alert-info">{{ p.cancelled_at[:16] }} {{ p.cancelled_by }} 취소 — {{ p.cancel_reason }}</div>
 {% endif %}
 
-{{ table(grid, '거래가 없습니다.') }}
+<div class="metrics m4">
+  <div class="metric"><div class="metric-label">표준 재료비 (BOM × 기준단가)</div><div class="metric-value">₩{{ '{:,.0f}'.format(p.planned_cost or 0) }}</div>
+    <div class="metric-delta">1개 ₩{{ '{:,.0f}'.format(std_unit) }}</div></div>
+  <div class="metric"><div class="metric-label">{{ '실제 재료비' if p.status == 'DONE' else '지금까지 투입 (재공)' }}</div>
+    <div class="metric-value">₩{{ '{:,.0f}'.format(p.material_cost or 0) }}</div>
+    {% if p.status == 'DONE' and p.good_qty %}<div class="metric-delta">양품 1개 ₩{{ '{:,.0f}'.format(actual_unit) }}</div>{% endif %}</div>
+  <div class="metric"><div class="metric-label">차이 (실제 - 표준)</div>
+    {% if p.status == 'DONE' %}
+      {% set diff = (p.material_cost or 0) - (p.planned_cost or 0) %}
+      <div class="metric-value {{ 'down' if diff > 0.5 }}">{{ '+' if diff > 0 }}₩{{ '{:,.0f}'.format(diff) }}</div>
+    {% else %}<div class="metric-value muted">완료 후</div><div class="metric-delta">투입이 끝나야 비교합니다</div>{% endif %}</div>
+  <div class="metric"><div class="metric-label">양품 · 불량</div><div class="metric-value">{{ '{:,.4g}'.format(p.good_qty or 0) }} · {{ '{:,.4g}'.format(p.scrap_qty or 0) }}</div></div>
+</div>
 
-{% if can_cancel and not p.cancelled_at %}
+<h3>자재 (계획 대비 투입)</h3>
+{% if open_wo %}<form class="card form" method="post" action="{{ url_for('production.wo_issue', prod_id=p.id) }}">{{ csrf() }}{% endif %}
+<div class="table-wrap">
+  <table class="data">
+    <thead><tr><th>부품</th><th>창고</th><th class="num">계획</th><th class="num">투입</th><th class="num">남음</th><th class="num">투입 금액</th><th class="num">표준 금액</th>
+      {% if open_wo %}<th>이번에 투입 (반납은 -)</th>{% endif %}</tr></thead>
+    <tbody>
+    {% for l in wl %}
+      <tr class="{{ 'tone-warn' if l.issued_qty > l.planned_qty + 0.0001 }}">
+        <td>[{{ l.code }}] {{ l.name }}{{ ' · ' ~ l.note if l.note }}</td><td>{{ l.wh_code }}</td>
+        <td class="num">{{ '{:,.4g}'.format(l.planned_qty) }} {{ l.unit }}</td>
+        <td class="num">{{ '{:,.4g}'.format(l.issued_qty) }}</td>
+        <td class="num">{{ '{:,.4g}'.format(l.rest) if l.rest > 0 else '' }}</td>
+        <td class="num">₩{{ '{:,.0f}'.format(l.issued_cost) }}</td>
+        <td class="num">₩{{ '{:,.0f}'.format(l.std_cost) }}</td>
+        {% if open_wo %}<td><input class="qty-input" name="line_{{ l.id }}" type="number" step="any" value="{{ '%g' % l.rest if l.rest > 0 else '' }}" aria-label="이번 투입"></td>{% endif %}
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% if open_wo %}
+  <div class="form-grid g4">
+    <label class="span2">BOM에 없는 추가 투입 (선택)
+      {{ material_picker('extra_mid', none, '', placeholder='추가로 쓴 자재') }}</label>
+    <label>수량<input name="extra_qty" type="number" step="any"></label>
+    <label>창고<select name="extra_wh">{% for k, v in wh_opts.items() %}<option value="{{ k }}" {{ 'selected' if k == p.issue_wh_id }}>{{ v }}</option>{% endfor %}</select></label>
+    <label>일자<input name="tx_date" type="date" value="{{ today().isoformat() }}" max="{{ today().isoformat() }}" {% if min_date %}min="{{ min_date }}"{% endif %}></label>
+  </div>
+  <p class="muted small">투입하면 그 부품이 출고되고(단가 = 최근 입고 평균단가) 재공품이 됩니다. 남은 자재를 창고로 돌릴 때는 음수(-)로 넣습니다.</p>
+  <div><button class="btn btn-primary">자재 투입·반납</button></div>
+</form>
+{% endif %}
+
+{% if ops %}
+<h3>공정</h3>
+<div class="table-wrap">
+  <table class="data">
+    <thead><tr><th>순서</th><th>공정</th><th>작업장</th><th class="num">표준(분/개)</th><th>상태</th><th class="num">양품</th><th class="num">불량</th><th class="num">작업 시간(분)</th><th>작업자</th>
+      {% if open_wo %}<th>실적 입력</th>{% endif %}</tr></thead>
+    <tbody>
+    {% for o in ops %}
+      <tr class="{{ 'tone-muted' if o.status == 'DONE' }}">
+        <td>{{ o.seq }}</td><td>{{ o.op_name }}</td><td>{{ o.workcenter }}</td><td class="num">{{ '%g' % o.std_minutes }}</td>
+        <td>{{ '완료' if o.status == 'DONE' else '대기' }}</td>
+        <td class="num">{{ '%g' % o.good_qty }}</td><td class="num">{{ '%g' % o.scrap_qty }}</td><td class="num">{{ '%g' % o.minutes }}</td><td>{{ o.worker }}</td>
+        {% if open_wo %}<td>
+          <form class="inline" method="post" action="{{ url_for('production.wo_operation', prod_id=p.id, op_id=o.id) }}">{{ csrf() }}
+            <input class="qty-input" name="good_qty" type="number" min="0" step="any" value="{{ '%g' % (o.good_qty or p.qty) }}" aria-label="양품" title="양품">
+            <input class="qty-input" name="scrap_qty" type="number" min="0" step="any" value="{{ '%g' % o.scrap_qty }}" aria-label="불량" title="불량">
+            <input class="qty-input" name="minutes" type="number" min="0" step="any" value="{{ '%g' % (o.minutes or (o.std_minutes * p.qty)) }}" aria-label="작업 시간" title="작업 시간(분)">
+            <input name="worker" value="{{ o.worker }}" placeholder="작업자" aria-label="작업자">
+            <button class="btn btn-sm">{{ '고치기' if o.status == 'DONE' else '완료' }}</button>
+          </form></td>{% endif %}
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+
+{% if open_wo %}
+<h3>완료 (완제품 입고)</h3>
+<form class="card form" method="post" action="{{ url_for('production.wo_complete', prod_id=p.id) }}">
+  {{ csrf() }}
+  <div class="form-grid g4">
+    <label>양품 *<input name="good_qty" type="number" min="0" step="any" value="{{ '%g' % p.qty }}" required></label>
+    <label>불량<input name="scrap_qty" type="number" min="0" step="any" value="0"></label>
+    <label>일자<input name="tx_date" type="date" value="{{ today().isoformat() }}" max="{{ today().isoformat() }}" {% if min_date %}min="{{ min_date }}"{% endif %}></label>
+    <label class="check"><input type="checkbox" name="backflush" value="1" checked> 아직 투입 안 한 계획 수량은 지금 자동 투입 (백플러시)</label>
+    <label>완제품 로트<input name="lot_no" placeholder="로트 관리 제품만, 비우면 생산번호"></label>
+    <label>유효기한<input name="expiry_date" type="date"></label>
+  </div>
+  <p class="muted small">완제품 입고 단가 = 실제 투입 금액 ÷ 양품. 불량분의 재료비도 양품 원가에 들어갑니다.</p>
+  <div><button class="btn btn-primary">완료하고 입고</button></div>
+</form>
+{% endif %}
+
+<h3>거래</h3>
+{{ table(grid, '아직 거래가 없습니다 (계획 상태).') }}
+
+{% if can_cancel and p.status != 'CANCELLED' %}
 <details class="card">
-  <summary>생산 전체 취소</summary>
+  <summary>작업지시 취소</summary>
   <form class="form" method="post" action="{{ url_for('production.cancel', prod_id=p.id) }}" data-nodraft>
     {{ csrf() }}
-    <p class="muted small">완제품 입고와 부품 출고를 모두 취소 거래로 되돌립니다(오늘 일자). 완제품을 이미 다른 데 썼으면(재고가 음수가 되면) 취소되지 않습니다.
-      본인이 등록한 생산은 다른 관리자가 취소해야 합니다.</p>
+    <p class="muted small">투입·반납·완제품 입고를 모두 취소 거래로 되돌립니다(오늘 일자). 완제품을 이미 다른 데 썼으면(재고가 음수가 되면) 취소되지 않습니다.
+      본인이 등록한 거래는 다른 관리자가 취소해야 합니다.</p>
     <label>취소 사유 *<input name="reason" required></label>
-    <div><button class="btn btn-danger">전체 취소</button></div>
+    <div><button class="btn btn-danger">취소</button></div>
   </form>
 </details>
 {% endif %}

@@ -13,12 +13,14 @@ from core.db import Conn
 from core.utils import month_end, now_str
 
 MATERIAL_FIELDS = ("code", "name", "spec", "unit", "category", "safety_stock", "unit_price",
-                   "location", "supplier", "sap_matnr", "lot_managed", "expiry_managed", "barcode")
+                   "location", "supplier", "sap_matnr", "lot_managed", "expiry_managed", "barcode",
+                   "lead_time_days", "min_order_qty", "order_multiple")
 _EDITABLE = MATERIAL_FIELDS[1:]          # 자재코드는 바꾸지 않는다
-UPLOAD_FIELDS = MATERIAL_FIELDS[:10] + ("barcode",)   # 엑셀 일괄 업로드로 바꿀 수 있는 항목 (로트 설정 제외)
+# 엑셀 일괄 업로드로 바꿀 수 있는 항목 (로트 설정 제외)
+UPLOAD_FIELDS = MATERIAL_FIELDS[:10] + ("barcode", "lead_time_days", "min_order_qty", "order_multiple")
 MATERIAL_DEFAULTS = {"spec": "", "unit": "EA", "category": "미분류", "safety_stock": 0, "unit_price": 0,
                      "location": "", "supplier": "", "sap_matnr": "", "lot_managed": 0, "expiry_managed": 0,
-                     "barcode": ""}
+                     "barcode": "", "lead_time_days": 0, "min_order_qty": 0, "order_multiple": 0}
 
 # 거래 한 행이 재고에 주는 증감
 EFFECT = "CASE WHEN {t}.tx_type = 'IN' THEN {t}.qty WHEN {t}.tx_type = 'OUT' THEN -{t}.qty ELSE {t}.qty END"
@@ -50,7 +52,8 @@ def insert_material(data: dict, conn: Conn | None = None) -> int:
 
 
 def update_material(material_id: int, data: dict, conn: Conn | None = None) -> None:
-    data = {"lot_managed": 0, "expiry_managed": 0, "barcode": "", **data}
+    data = {"lot_managed": 0, "expiry_managed": 0, "barcode": "", "lead_time_days": 0, "min_order_qty": 0,
+            "order_multiple": 0, **data}
     _run(conn, f"""
         UPDATE materials SET {", ".join(f"{f} = ?" for f in _EDITABLE)}, updated_at = ?
         WHERE id = ?
@@ -337,13 +340,14 @@ def ledger_df(start: str, end: str, wh_ids=None) -> pd.DataFrame:
 TX_FIELDS = ("material_id", "tx_type", "qty", "unit_price", "tx_date", "ref_no", "partner", "note",
              "created_by", "reversal_of", "po_no", "po_item", "cost_center", "movement_type",
              "warehouse_id", "transfer_no", "created_by_id", "approved_by", "lot_no", "statement_id",
-             "partner_id", "production_id", "batch_no")
+             "partner_id", "production_id", "batch_no", "entry_unit", "entry_qty")
 
 
 def insert_transaction(conn: Conn, payload: dict) -> int:
     defaults = {"reversal_of": None, "po_no": "", "po_item": "", "cost_center": "", "movement_type": "",
                 "warehouse_id": None, "transfer_no": "", "created_by_id": None, "approved_by": "", "lot_no": "",
-                "statement_id": None, "partner_id": None, "production_id": None, "batch_no": ""}
+                "statement_id": None, "partner_id": None, "production_id": None, "batch_no": "", "entry_unit": "",
+                "entry_qty": None}
     data = {**defaults, **payload}
     if data["warehouse_id"] is None:
         data["warehouse_id"] = default_warehouse_id(conn)

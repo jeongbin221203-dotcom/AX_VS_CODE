@@ -43,7 +43,7 @@ def index():
 @role_required("ADMIN")
 def template():
     df = pd.DataFrame(
-        [["PKG-100", "샘플 자재", "규격", "EA", "포장재", 10, 1000, "A-10", "공급처명", "PKG100", "8801234567893"]],
+        [["PKG-100", "샘플 자재", "규격", "EA", "포장재", 10, 1000, "A-10", "공급처명", "PKG100", "8801234567893", 7, 100, 50]],
         columns=list(config.MATERIAL_COLS.values()),
     )
     return form_response("material_template", df, "자재마스터_업로드양식.xlsx")

@@ -1,0 +1,18 @@
+# 자재관리 감시 (Prometheus). 앱 서버마다 /metrics 를 15초마다 읽는다.
+# 앱에는 MM_METRICS_TOKEN 을, 여기에는 같은 값을 credentials_file 로 준다 (토큰 파일은 저장소에 넣지 말 것).
+global:
+  scrape_interval: 15s
+  evaluation_interval: 30s
+
+rule_files:
+  - alerts.yml
+
+scrape_configs:
+  - job_name: material-manager
+    metrics_path: /metrics
+    scheme: https
+    authorization:
+      type: Bearer
+      credentials_file: /etc/prometheus/mm_metrics_token
+    static_configs:
+      - targets: ["mm-app-01.사내:443", "mm-app-02.사내:443"]

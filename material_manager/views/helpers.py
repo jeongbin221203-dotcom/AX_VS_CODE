@@ -29,7 +29,8 @@ MENUS = [
     ("approvals", "✅ 결재함", "approvals.index", "CLERK"),
     ("materials", "🗂️ 자재 마스터", "materials.index", "VIEWER"),
     ("statements", "🧾 거래명세서 입출고", "statements.index", "CLERK"),
-    ("production", "🏭 생산 투입 (BOM)", "production.index", "CLERK"),
+    ("production", "🏭 생산 (작업지시·BOM)", "production.index", "CLERK"),
+    ("mrp", "📅 MRP (자재 소요 계획)", "mrp.index", "CLERK"),
     ("partners", "🤝 거래처", "partners.index", "VIEWER"),
     ("documents", "📎 증빙 (세금계산서)", "documents.index", "VIEWER"),
     ("ledger", "📒 수불부", "reports.ledger", "VIEWER"),
@@ -46,7 +47,7 @@ MENUS = [
 ]
 PINNED_MENU = "dashboard"
 # 로그인 없이 열 수 있는 화면
-PUBLIC_ENDPOINTS = {"auth.login", "auth.setup", "static", "health"}
+PUBLIC_ENDPOINTS = {"auth.login", "auth.setup", "static", "health", "metrics"}
 # 비밀번호를 바꿔야 하는 사용자가 열 수 있는 화면
 PASSWORD_ENDPOINTS = {"auth.password", "auth.logout", "static"}
 PUBLIC_ENDPOINTS |= {"auth.sso_login", "auth.sso_callback"}
@@ -57,7 +58,7 @@ XLSX = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 def load_context():
     """매 요청마다 사용자를 다시 읽는다 → 역할 변경·계정 중지가 즉시 반영된다."""
     g.user = None
-    if request.endpoint in ("static", "health", "service_worker", "favicon"):
+    if request.endpoint in ("static", "health", "service_worker", "favicon", "metrics"):
         return None
     uid = session.get("user_id")
     if uid:

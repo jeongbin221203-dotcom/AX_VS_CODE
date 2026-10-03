@@ -300,26 +300,32 @@ def _key_map() -> dict[str, int]:
     return out
 
 
+def _name_counts() -> pd.DataFrame:
+    """partner_id 없이 적힌 거래처 이름별 (쓰인 곳, 건수, 마지막) — DB에서 묶어서 가져온다(거래 수와 무관하게 이름 수만큼)."""
+    return db.query_df(f"""
+        SELECT name, src, kind, COUNT(*) AS n, MAX(at) AS last, SUM(amount) AS amount
+        FROM ({_name_sources()}) s WHERE s.partner_id IS NULL GROUP BY name, src, kind""")
+
+
 def unknown_names(limit: int = 300) -> pd.DataFrame:
     """마스터에 없는(연결도 안 된) 거래처 이름과 쓰인 횟수 — 데이터 정리 목록."""
-    df = db.query_df(f"SELECT * FROM ({_name_sources()}) s WHERE s.partner_id IS NULL")
+    cols = ["name", "uses", "tx", "po", "mat", "last", "variants", "guess"]
+    df = _name_counts()
     if df.empty:
-        return pd.DataFrame(columns=["name", "uses", "tx", "po", "mat", "last", "guess"])
+        return pd.DataFrame(columns=cols)
     known = _key_map()
     df["k"] = df["name"].map(key)
     df = df[(df["k"] != "") & ~df["k"].isin(known)]
     if df.empty:
-        return pd.DataFrame(columns=["name", "uses", "tx", "po", "mat", "last", "guess"])
-    g = df.groupby("k")
-    out = pd.DataFrame({
-        "name": g["name"].agg(lambda s: s.value_counts().index[0]),    # 가장 많이 쓴 표기
-        "uses": g.size(),
-        "tx": g["src"].agg(lambda s: int((s == "TX").sum())),
-        "po": g["src"].agg(lambda s: int((s == "PO").sum())),
-        "mat": g["src"].agg(lambda s: int((s == "MAT").sum())),
-        "last": g["at"].max(),
-        "variants": g["name"].agg(lambda s: " / ".join(sorted(set(s))[:4])),
-    }).reset_index(drop=True)
+        return pd.DataFrame(columns=cols)
+    rows = []
+    for k, grp in df.groupby("k"):
+        by_name = grp.groupby("name")["n"].sum()
+        rows.append({"name": by_name.idxmax(), "uses": int(grp["n"].sum()),
+                     "tx": int(grp.loc[grp["src"] == "TX", "n"].sum()), "po": int(grp.loc[grp["src"] == "PO", "n"].sum()),
+                     "mat": int(grp.loc[grp["src"] == "MAT", "n"].sum()), "last": grp["last"].max(),
+                     "variants": " / ".join(sorted(by_name.index)[:4])})
+    out = pd.DataFrame(rows, columns=cols[:-1])
     out["guess"] = out["name"].map(_guess)
     return out.sort_values(["uses", "name"], ascending=[False, True]).head(limit).reset_index(drop=True)
 
@@ -357,25 +363,35 @@ def list_df(q: str = "", include_inactive: bool = False) -> pd.DataFrame:
 
 
 def activity() -> pd.DataFrame:
-    """거래처별 입고 금액·출고 금액·거래 수·마지막 거래일 (취소 거래는 원거래와 상쇄)."""
-    tx = db.query_df("""
-        SELECT t.partner AS name, t.partner_id, t.tx_type, t.qty * t.unit_price AS amount, t.tx_date,
-               COALESCE(o.partner_id, t.partner_id) AS pid
+    """거래처별 입고 금액·출고 금액·거래 수·마지막 거래일. DB에서 묶어 계산한다:
+    partner_id 가 있는 거래는 그 거래처로, 없는(마스터 전에 적은) 거래는 이름 → 이름·다른 이름으로 맞춘다.
+    취소 거래는 원거래와 상쇄된다(금액은 부호가 반대, 건수는 원거래만)."""
+    cols = ["in_amt", "out_amt", "tx_cnt", "last_tx"]
+    agg = """SUM(CASE WHEN t.tx_type = 'IN' THEN t.qty * t.unit_price ELSE 0 END) AS in_amt,
+             SUM(CASE WHEN t.tx_type = 'OUT' THEN t.qty * t.unit_price ELSE 0 END) AS out_amt,
+             SUM(CASE WHEN t.reversal_of IS NULL THEN 1 ELSE 0 END) AS tx_cnt, MAX(t.tx_date) AS last_tx"""
+    cond = PARTNER_TX_SQL.format(t="t")
+    by_id = db.query_df(f"""
+        SELECT COALESCE(t.partner_id, o.partner_id) AS pid, {agg}
         FROM transactions t LEFT JOIN transactions o ON o.id = t.reversal_of
-        WHERE (t.partner <> '' OR t.partner_id IS NOT NULL) AND """ + PARTNER_TX_SQL.format(t="t"))
-    if tx.empty:
-        return pd.DataFrame(columns=["in_amt", "out_amt", "tx_cnt", "last_tx"])
-    known = _key_map()
-    tx["pid"] = [int(p) if pd.notna(p) else known.get(key(n)) for p, n in zip(tx["pid"], tx["name"])]
-    tx = tx[tx["pid"].notna()]
-    tx["pid"] = tx["pid"].astype(int)
-    g = tx.groupby("pid")
-    return pd.DataFrame({
-        "in_amt": g.apply(lambda d: float(d.loc[d["tx_type"] == "IN", "amount"].sum()), include_groups=False),
-        "out_amt": g.apply(lambda d: float(d.loc[d["tx_type"] == "OUT", "amount"].sum()), include_groups=False),
-        "tx_cnt": g.size(),
-        "last_tx": g["tx_date"].max(),
-    })
+        WHERE COALESCE(t.partner_id, o.partner_id) IS NOT NULL AND {cond}
+        GROUP BY COALESCE(t.partner_id, o.partner_id)""")
+    by_name = db.query_df(f"""
+        SELECT t.partner AS name, {agg}
+        FROM transactions t LEFT JOIN transactions o ON o.id = t.reversal_of
+        WHERE t.partner <> '' AND t.partner_id IS NULL AND o.partner_id IS NULL AND {cond}
+        GROUP BY t.partner""")
+    if not by_name.empty:
+        known = _key_map()
+        by_name["pid"] = by_name["name"].map(lambda n: known.get(key(n)))
+        by_name = by_name.dropna(subset=["pid"]).drop(columns="name")
+    frames = [f for f in (by_id, by_name) if not f.empty]
+    if not frames:
+        return pd.DataFrame(columns=cols)
+    both = pd.concat(frames, ignore_index=True)
+    both["pid"] = both["pid"].astype(int)
+    return both.groupby("pid").agg(in_amt=("in_amt", "sum"), out_amt=("out_amt", "sum"), tx_cnt=("tx_cnt", "sum"),
+                                   last_tx=("last_tx", "max"))
 
 
 def get(partner_id: int) -> dict | None:
@@ -389,16 +405,20 @@ def aliases_df(partner_id: int) -> pd.DataFrame:
 
 
 def recent_tx(partner_id: int, limit: int = 50) -> pd.DataFrame:
-    keys = {get(partner_id)["name_key"], *aliases_df(partner_id)["alias"].map(key)} if get(partner_id) else set()
-    df = db.query_df("""
+    """이 거래처의 최근 거래 (partner_id 로 남은 것 + 마스터 전에 이 이름·다른 이름으로 적은 것)."""
+    p = get(partner_id)
+    if p is None:
+        return pd.DataFrame()
+    keys = {p["name_key"], *aliases_df(partner_id)["alias"].map(key)}
+    names = [n for n in db.query_df("SELECT DISTINCT partner FROM transactions WHERE partner_id IS NULL AND partner <> ''")
+             ["partner"] if key(n) in keys]
+    frag, params = db.in_clause(names)
+    return db.query_df(f"""
         SELECT t.id, t.tx_date, t.tx_type, m.code, m.name, t.qty, m.unit, t.unit_price, t.qty * t.unit_price AS amount,
                t.partner, t.partner_id, t.ref_no, w.code AS wh_code
         FROM transactions t JOIN materials m ON m.id = t.material_id LEFT JOIN warehouses w ON w.id = t.warehouse_id
-        WHERE t.partner <> '' AND """ + PARTNER_TX_SQL.format(t="t") + " ORDER BY t.tx_date DESC, t.id DESC")
-    if df.empty:
-        return df
-    hit = (df["partner_id"] == partner_id) | (df["partner_id"].isna() & df["partner"].map(key).isin(keys))
-    return df[hit].head(limit).reset_index(drop=True)
+        WHERE (t.partner_id = ? OR (t.partner_id IS NULL AND t.partner{frag})) AND {PARTNER_TX_SQL.format(t="t")}
+        ORDER BY t.tx_date DESC, t.id DESC LIMIT ?""", (partner_id, *params, limit))
 
 
 def seed_from_data(actor: dict | None = None) -> int:
