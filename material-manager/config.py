@@ -11,6 +11,7 @@
   MM_COOKIE_SECURE   1이면 세션 쿠키를 HTTPS에서만 보낸다 (운영에서 HTTPS 뒤에 둘 때 반드시 1)
   MM_TRUST_PROXY     1이면 리버스 프록시가 넘긴 X-Forwarded-For/Proto를 믿는다 (프록시 뒤에 둘 때만)
   MM_IDLE_MINUTES    이 시간 동안 아무 요청이 없으면 자동 로그아웃 (기본 30분)
+  MM_FORWARD_URL     이 주소의 서버가 살아 있으면 방문자를 그쪽으로 보낸다 (꺼져 있으면 이 서버가 응답)
   MM_DEMO            1이면 포트폴리오 시연 모드 — 방문자를 시연용 시스템관리자로 자동 로그인 (운영에서는 끌 것)
   MM_PW_ITERATIONS   비밀번호 해시 반복 횟수 (테스트에서만 낮춘다)
   MM_ERP_MODE        off | mock | http | sap_odata | sap_rfc | rest | file   ERP·SAP 연결 방식 (core/erp.py,
@@ -83,6 +84,9 @@ PERMANENT_SESSION_LIFETIME = 8 * 60 * 60     # 로그인 후 최대 8시간
 IDLE_MINUTES = int(os.getenv("MM_IDLE_MINUTES", "30"))
 # 포트폴리오 시연 모드: 방문자를 시연용 시스템관리자로 자동 로그인 + 빈 DB에 샘플 데이터 (core/demo.py). 운영에서는 끌 것
 DEMO = os.getenv("MM_DEMO", "0") == "1"
+# 앞단 전달: 이 주소의 서버(예: 개인 PC + Cloudflare Tunnel)가 살아 있으면 방문자를 그쪽으로 보낸다(core/forward.py).
+# 꺼져 있으면 이 서버가 그대로 보여 준다. 고정 주소(Render)는 그대로 두고 실제 데이터는 PC에 저장할 때 쓴다.
+FORWARD_URL = os.getenv("MM_FORWARD_URL", "").strip().rstrip("/")
 
 # ── 사용자 · 권한 ─────────────────────────────────────────────
 # 코드: (등급, 화면 표기). 등급이 높을수록 아래 등급의 권한을 모두 가진다.

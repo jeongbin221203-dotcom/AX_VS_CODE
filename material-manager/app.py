@@ -47,6 +47,9 @@ def create_app(test_config: dict | None = None) -> Flask:
         from werkzeug.middleware.proxy_fix import ProxyFix
         app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1)
 
+    if app.config.get("FORWARD_URL"):
+        from core import forward
+        app.before_request(forward.redirect_if_up)  # 맨 먼저: 실제 서버(PC)가 켜져 있으면 그리로 보낸다
     db.init_db()
     register_blueprints(app)
     register_cli(app)                             # flask --app app batch / erp / init-db

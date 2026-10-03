@@ -38,8 +38,10 @@
     {% if g.sap_failed %}
       <a class="shortage" href="{{ url_for('sap.index', status='FAILED') }}">SAP 전송 실패 {{ g.sap_failed }}건</a>
     {% endif %}
-    {% if config.DEMO %}
-    <div class="demo-note small">포트폴리오 시연 — 시스템관리자로 자동 로그인했습니다. 샘플 데이터이며 서버가 다시 시작되면 처음 상태로 돌아갑니다.</div>
+    {% if config.DEMO and config.FORWARD_URL %}
+    <div class="demo-note small">포트폴리오 시연 — 실제 서버(개인 PC)가 꺼져 있어 임시 서버로 보여 드립니다. 여기서 바꾼 내용은 저장되지 않습니다.</div>
+    {% elif config.DEMO %}
+    <div class="demo-note small">포트폴리오 시연 — 시스템관리자로 자동 로그인했습니다. 누구나 같은 데이터를 함께 씁니다.</div>
     {% endif %}
     <div class="muted small foot">
       마감: {{ g.closed_through ~ '월까지' if g.closed_through else '없음' }}<br>

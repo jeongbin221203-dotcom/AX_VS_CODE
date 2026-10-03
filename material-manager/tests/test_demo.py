@@ -61,3 +61,18 @@ def test_demo_logout_shows_button_and_user_is_repaired(monkeypatch):
 def test_demo_off_by_default(client):                   # noqa: F811
     assert config.DEMO is False
     assert client.application.test_client().get("/").status_code == 302
+
+
+def test_forward_to_live_server_else_serve_here(monkeypatch):
+    from core import forward
+    monkeypatch.setattr(config, "FORWARD_URL", "https://pc.example")
+    application = _demo_app(monkeypatch)
+    monkeypatch.setattr(config, "FORWARD_URL", "https://pc.example")
+    c = application.test_client()
+    monkeypatch.setattr(forward, "target_up", lambda: True)
+    res = c.get("/stock/?q=1")
+    assert res.status_code == 302 and res.headers["Location"] == "https://pc.example/stock/?q=1"
+    assert c.get("/health").status_code == 200                   # 상태 확인은 전달하지 않는다
+    monkeypatch.setattr(forward, "target_up", lambda: False)
+    html = c.get("/").get_data(as_text=True)                       # 꺼져 있으면 여기서 시연
+    assert "임시 서버" in html
