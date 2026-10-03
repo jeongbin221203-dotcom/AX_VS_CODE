@@ -115,6 +115,15 @@ def parse(page: str, url: str, site: str) -> dict:
         title = raw.split(" | ")[0].strip()          # '제목 | 공모전 대외활동' 꼴의 분류 꼬리 제거
     if not title:
         raise SourceError("페이지에서 공고 제목을 찾지 못했습니다 (로그인이 필요한 공고일 수 있음)")
+    headhunt = None
+    if site == "jobkorea" and "잡코리아 헤드헌팅" in (_title_tag(page) or ""):
+        # 헤드헌팅 공고: 회사 이름 대신 '중견기업 : 제목' — 회사는 비공개로, 헤드헌팅 표시 (제외 항목에 걸리게)
+        m = re.match(r"\s*([^:：]{2,20}?)\s*[:：]\s*(.+)", title)
+        if m:
+            headhunt, title = m.group(1).strip(), m.group(2).strip()
+        else:
+            headhunt = "헤드헌팅"
+        company = company or f"비공개 ({headhunt})"
     if not company:
         company = _company_from_title(title, site)
     title = _clean_title(_strip_site(title), company)
@@ -161,10 +170,13 @@ def parse(page: str, url: str, site: str) -> dict:
     if company_info is None:
         company_info = {}                    # 공고 페이지를 읽었다는 표시 (기업정보가 없는 사이트도 다시 채우기에서 빠지게)
     sid = posting_id(url, site) or hashlib.sha1(url.split("#")[0].encode("utf-8")).hexdigest()[:16]
-    return build(site, sid, title=title, company=company or "(회사명 확인 필요)", url=url, location=location,
+    item = build(site, sid, title=title, company=company or "(회사명 확인 필요)", url=url, location=location,
                  career=career, education=education, employment_type=emp, salary_text=salary_text,
                  keywords=keywords, description=desc, deadline=deadline, posted_at=posted,
                  job_category=_text(jp.get("industry")) if jp else None, company_info=company_info)
+    if headhunt:
+        item["_flags"] = ["헤드헌팅"]
+    return item
 
 
 _JK_LABELS = ("모집분야", "모집인원", "고용형태", "급여", "근무지주소", "근무지역", "근무시간", "근무요일", "경력", "학력",
@@ -200,7 +212,8 @@ def _jobkorea_table(page: str) -> dict:
 
 # ── 페이지 해석 ─────────────────────────────────────────────
 
-_SAR_SUMMARY = ("경력", "학력", "근무형태", "급여", "근무지역", "근무일시", "직급/직책", "필수사항", "우대사항")
+_SAR_SUMMARY = ("경력", "학력", "근무형태", "급여", "근무지역", "근무일시", "근무일수", "출퇴근 시간", "근무시간",
+                "직급/직책", "필수사항", "우대사항")
 _SAR_SUMMARY_STOP = ("지도보기", "최저임금계산에 대한 알림", "조회수", "상세보기")
 _SAR_COMPANY = ("대표자명", "기업형태", "업종", "사원수", "설립일", "매출액", "기업주소", "홈페이지")
 _SAR_COMPANY_STOP = ("채용정보", "기업정보 전체보기", "관심기업")

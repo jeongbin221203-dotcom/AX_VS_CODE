@@ -193,6 +193,8 @@ def to_date(value) -> str | None:
         if not m:
             return None
         y, mo, d = 2000 + int(m.group(1)), int(m.group(2)), int(m.group(3))
+    if y >= 2100:
+        return None                                   # '9999-01-01' 은 상시 채용 표시
     try:
         return date(y, mo, d).isoformat()
     except ValueError:

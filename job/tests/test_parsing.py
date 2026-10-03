@@ -152,3 +152,7 @@ def test_region_from_title_when_location_missing():
     assert postings.build("jobkorea", "4", title="(주)광주에너지 채용", company="x")["sido"] is None   # 괄호 밖 회사 이름은 지역 아님
     # 근무지가 있으면 제목보다 근무지
     assert postings.build("jobkorea", "5", title="[서울] 채용", company="x", location="부산 해운대구")["sido"] == "부산"
+
+
+def test_far_future_deadline_is_open_ended():
+    assert to_date("9999-01-01") is None and to_date("2099-12-31") == "2099-12-31"

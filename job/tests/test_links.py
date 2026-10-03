@@ -275,3 +275,10 @@ def test_saramin_location_from_map_when_summary_has_none():
             '<div class="jv_cont jv_company">기업주소 광주 북구 어딘가</div></body></html>')
     p = linkimport.parse(page, "https://www.saramin.co.kr/zf_user/jobs/view?rec_idx=55190071", "saramin")
     assert (p["sido"], p["sigungu"]) == ("전남", "영광군")
+
+
+def test_jobkorea_headhunting_page_is_flagged():
+    """잡코리아 헤드헌팅 공고는 회사 이름 대신 '벤처기업 : 제목' — 회사 비공개 + 헤드헌팅 표시(제외 항목에 걸리게)."""
+    page = "<html><head><title>벤처기업 : 가맹사업 총괄 임원 | 잡코리아 헤드헌팅</title></head><body></body></html>"
+    p = linkimport.parse(page, "https://www.jobkorea.co.kr/Recruit/GI_Read/49725148", "jobkorea")
+    assert (p["title"], p["company"], p["_flags"]) == ("가맹사업 총괄 임원", "비공개 (벤처기업)", ["헤드헌팅"])
