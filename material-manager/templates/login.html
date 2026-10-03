@@ -13,6 +13,13 @@
   <p class="muted small">회사 계정으로 로그인합니다. 권한은 사내 그룹에 따라 자동으로 정해집니다.</p>
 </section>
 {% endif %}
+{% if config.DEMO %}
+<section class="card">
+  <h3>포트폴리오 시연</h3>
+  <p>로그인 없이 시스템관리자로 모든 화면을 볼 수 있습니다.</p>
+  <a class="btn btn-primary" href="{{ url_for('dashboard.index') }}">시연 관리자로 들어가기</a>
+</section>
+{% endif %}
 <form class="card form" method="post" action="{{ url_for('auth.login') }}">
   <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
   <input type="hidden" name="next" value="{{ next }}">

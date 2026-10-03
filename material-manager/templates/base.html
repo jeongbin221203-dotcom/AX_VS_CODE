@@ -38,6 +38,9 @@
     {% if g.sap_failed %}
       <a class="shortage" href="{{ url_for('sap.index', status='FAILED') }}">SAP 전송 실패 {{ g.sap_failed }}건</a>
     {% endif %}
+    {% if config.DEMO %}
+    <div class="demo-note small">포트폴리오 시연 — 시스템관리자로 자동 로그인했습니다. 샘플 데이터이며 서버가 다시 시작되면 처음 상태로 돌아갑니다.</div>
+    {% endif %}
     <div class="muted small foot">
       마감: {{ g.closed_through ~ '월까지' if g.closed_through else '없음' }}<br>
       SAP 연동: {{ 'ON' if g.sap_on else 'OFF' }} · 범위: {{ '전체 창고' if g.wh_ids is none else (g.wh_ids|length) ~ '개 창고' }}<br>

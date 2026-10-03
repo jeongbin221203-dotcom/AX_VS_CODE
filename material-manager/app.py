@@ -51,6 +51,10 @@ def create_app(test_config: dict | None = None) -> Flask:
     register_blueprints(app)
     register_cli(app)                             # flask --app app batch / erp / init-db
     register_template_helpers(app)
+    if app.config.get("DEMO"):
+        from core import demo
+        demo.prepare()                            # 시연 계정 + 빈 DB면 샘플 데이터 → 최초 설정 없이 바로 열린다
+        app.logger.warning("시연 모드(MM_DEMO=1): 방문자를 시스템관리자로 자동 로그인합니다. 운영에서는 끄세요.")
 
     # 최초 설정(첫 시스템관리자 등록)은 서버 콘솔에 찍힌 코드를 아는 사람만 할 수 있다
     # → 설치 직후 먼저 접속한 아무나 관리자를 차지하는 것을 막는다.

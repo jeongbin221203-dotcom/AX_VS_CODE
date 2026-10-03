@@ -380,6 +380,8 @@ S3는 moto로, 사내 SSO는 테스트 안의 가짜 IdP(RSA 서명 토큰)로, 
   `MM_ADJ_APPROVAL_AMOUNT`, `MM_SOD_ENFORCE`, `MM_SETUP_CODE`, `MM_HOST` / `MM_PORT` / `MM_DEBUG`,
   `MM_SSO_*`, `MM_VALUATION`, `MM_SAP_MASTER_SYNC`, `MM_SAP_MASTER_READONLY`,
   `MM_BACKUP_DIR` / `MM_BACKUP_HOURS` / `MM_BACKUP_KEEP`, `MM_STORAGE_SPOOL_DIR`.
+- **포트폴리오 시연 모드** `MM_DEMO=1`: 서버 시작 때 시연용 시스템관리자(demo)와 빈 DB면 샘플 데이터를 만들고,
+  로그인하지 않은 방문자를 그 계정으로 자동 로그인시킨다(계정이 중지·강등돼도 되돌림). Render 시연 서버용 — 운영에서는 켜지 말 것.
 - **포트 중복 주의(Windows)**: 개발 서버는 같은 포트에 여러 개가 동시에 떠도 오류가 나지 않는다. 확인용 서버는 다른 포트를 쓴다.
 - **아직 없는 것**: 실제 SAP·ERP·IdP·오브젝트 스토리지와의 연결 검증(모두 모의·가짜 서버로만 검증), SAML 직접 연동(IdP의 OIDC 사용),
   SCIM 사용자 자동 등록(로그인 시 생성·동기화는 됨), 모바일 바코드 입력 화면, 표준원가 평가.

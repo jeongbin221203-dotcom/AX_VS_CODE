@@ -72,6 +72,8 @@ def load_context():
             g.user = user
             if now - int(session.get("seen", 0)) > 60:      # 쿠키를 매 요청 새로 쓰지 않게 1분 단위로 갱신
                 session["seen"] = now
+    if g.user is None and config.DEMO and request.endpoint not in PUBLIC_ENDPOINTS | {"auth.logout"}:
+        g.user = _demo_sign_in()
     if g.user is None:
         if request.endpoint in PUBLIC_ENDPOINTS:
             return None
@@ -93,6 +95,21 @@ def load_context():
         g.sap_failed = sap.summary(g.wh_ids).get("FAILED", 0) if g.sap_on and can("MANAGER") else 0
         g.pending_approvals = approvals.pending_count(g.wh_ids) if can("MANAGER") else 0
     return None
+
+
+def _demo_sign_in() -> dict:
+    """시연 모드: 로그인하지 않은 방문자를 시연용 시스템관리자로 로그인시킨다 (core/demo.py)."""
+    from core import demo
+    user = demo.ensure_user()
+    token = session.get("_csrf")
+    session.clear()
+    if token:                                      # 이미 열어 둔 화면의 폼이 그대로 제출되게
+        session["_csrf"] = token
+    session["user_id"] = user["id"]
+    session["stamp"] = auth.session_stamp(user)
+    session["seen"] = int(time.time())
+    session.permanent = True
+    return user
 
 
 def scope_all() -> bool:
