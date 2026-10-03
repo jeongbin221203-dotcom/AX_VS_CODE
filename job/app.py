@@ -54,6 +54,7 @@ def create_app(test_config: dict | None = None) -> Flask:
     @app.post("/api/sync/upload")
     def sync_upload():
         _sync_auth()
+        request.max_content_length = 300 * 1024 * 1024    # 원본 DB(gzip)는 CSV 업로드 한도(5MB)보다 큼
         from core import sync
         try:
             return sync.receive(request.get_data(), request.headers.get("X-Last-Change", 0, type=int))

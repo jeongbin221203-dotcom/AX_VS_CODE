@@ -65,3 +65,13 @@ def test_bad_upload_rejected(two_dbs):
 
 def test_push_without_settings_does_nothing(app):
     assert sync.push()["ok"] is False
+
+
+def test_big_upload_not_blocked_by_csv_limit(two_dbs):
+    """원본 DB(gzip)는 CSV 업로드 한도(5MB)보다 커도 받아야 한다 — 크기 때문에 413 이 나면 안 됨."""
+    _, mirror, _, _ = two_dbs
+    c = mirror.test_client()
+    big = gzip.compress(b"x" * 10) + b"\0" * (6 * 1024 * 1024)
+    r = c.post("/api/sync/upload", data=big, headers={"Authorization": "Bearer tok"})
+    assert r.status_code == 400                     # 내용이 틀려 거부될 뿐, 크기로 막히지 않음
+    assert c.post("/api/sync/upload", data=big).status_code == 403   # 열쇠 없이 큰 요청은 여전히 거부
