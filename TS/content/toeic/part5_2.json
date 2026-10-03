@@ -590,13 +590,13 @@
   "type": "비교",
   "question": "Summer is the ------- season for our beach resort.",
   "choices": [
-   "busy",
+   "busyness",
    "busily",
    "busier",
    "busiest"
   ],
   "answer": 3,
-  "explanation": "the와 함께 '가장 바쁜'을 나타내는 최상급 busiest가 알맞다. busy는 원급, busier는 than과 쓰는 비교급이며, busily는 부사라 명사 season을 꾸밀 수 없다.",
+  "explanation": "the와 명사 season 사이에서 '가장 바쁜'을 나타내는 최상급 형용사 busiest가 알맞다. busyness는 명사라 season을 꾸밀 수 없고, busier는 than과 쓰는 비교급이며, busily는 부사라 명사 season을 꾸밀 수 없다.",
   "translation": "여름은 우리 해변 리조트의 가장 바쁜 시즌이다."
  },
  {

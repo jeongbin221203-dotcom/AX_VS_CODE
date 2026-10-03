@@ -720,12 +720,12 @@
   "question": "Are you staying at the hotel or with friends?",
   "choices": [
    "My friend has a spare room.",
-   "The hotel was full.",
+   "The hotel lobby is on the first floor.",
    "Yes, for three days."
   ],
   "answer": 0,
-  "explanation": "숙소를 고르라는 질문에 '친구 집에 남는 방이 있다'고 간접적으로 고른 (A)가 정답이다. (C)는 선택 의문문에 Yes로 답했고, (B)는 hotel을 반복하며 과거 시제로 말한 함정이다.",
-  "translation": "Q: 호텔에 묵어요, 아니면 친구 집에요? / (A) 친구 집에 남는 방이 있어요. / (B) 호텔이 꽉 찼었어요. / (C) 네, 3일 동안이요."
+  "explanation": "숙소를 고르라는 질문에 '친구 집에 남는 방이 있다'고 간접적으로 고른 (A)가 정답이다. (C)는 선택 의문문에 Yes로 답했고, (B)는 hotel을 반복했지만 로비 위치를 말해 질문과 관계없는 함정이다.",
+  "translation": "Q: 호텔에 묵어요, 아니면 친구 집에요? / (A) 친구 집에 남는 방이 있어요. / (B) 호텔 로비는 1층에 있어요. / (C) 네, 3일 동안이요."
  },
  {
   "id": "p2-453",

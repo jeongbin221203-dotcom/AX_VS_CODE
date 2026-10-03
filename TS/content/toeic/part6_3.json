@@ -486,13 +486,13 @@
     "q": "",
     "choices": [
      "However",
-     "As a result",
+     "Otherwise",
      "Likewise",
      "For example"
     ],
     "answer": 0,
     "type": "접속사",
-    "explanation": "앞 문장은 '좌석과 기내식은 그대로'라는 좋은 소식이고, 뒤 문장은 '도착이 늦어진다'는 달라진 점이다. 대조를 나타내는 However가 알맞다. Likewise(마찬가지로), As a result(그 결과), For example(예를 들어)은 두 문장의 대조 관계를 나타내지 못한다."
+    "explanation": "앞 문장은 '좌석과 기내식은 그대로'라는 좋은 소식이고, 뒤 문장은 '도착이 늦어진다'는 달라진 점이다. 대조를 나타내는 However가 알맞다. Likewise(마찬가지로), Otherwise(그렇지 않으면), For example(예를 들어)은 두 문장의 대조 관계를 나타내지 못한다."
    },
    {
     "q": "",

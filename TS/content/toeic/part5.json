@@ -2151,12 +2151,12 @@
   "question": "The board will appoint a committee, the members of ------- will be chosen from each department.",
   "choices": [
    "them",
-   "whom",
+   "what",
    "which",
    "that"
   ],
   "answer": 2,
-  "explanation": "콤마 뒤에서 앞 절과 뒤 절을 연결해야 하므로 관계사가 필요하고, 선행사 a committee는 사물(조직)이므로 'the members of which'가 정답이다. whom은 사람 선행사에 쓰고, them은 접속 기능이 없어 문장이 두 개가 되며, that은 전치사 뒤에 올 수 없다.",
+  "explanation": "콤마 뒤에서 앞 절과 뒤 절을 연결해야 하므로 관계사가 필요하고, 선행사 a committee는 사물(조직)이므로 'the members of which'가 정답이다. what은 선행사를 포함한 관계대명사라 선행사 뒤에 쓸 수 없고, them은 접속 기능이 없어 문장이 두 개가 되며, that은 전치사 뒤에 올 수 없다.",
   "translation": "이사회는 위원회를 구성할 것이며, 그 위원들은 각 부서에서 선발될 것이다."
  },
  {

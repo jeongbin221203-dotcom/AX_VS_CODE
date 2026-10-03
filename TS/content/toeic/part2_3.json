@@ -1896,12 +1896,12 @@
   "question": "Wasn't the loading dock supposed to be cleared by noon?",
   "choices": [
    "It's clearly marked.",
-   "At noon tomorrow.",
+   "Let's have lunch at noon.",
    "The truck driver ran into heavy traffic."
   ],
   "answer": 2,
-  "explanation": "하역장을 정오까지 비우기로 하지 않았냐는 질문에 '트럭 기사가 교통 체증에 걸렸다'고 지연 이유를 댄 (C)가 정답이다. (A)는 cleared와 같은 어근의 clearly를, (B)는 noon을 반복한 함정이다.",
-  "translation": "Q: 하역장은 정오까지 비우기로 되어 있지 않았어요? / (A) 표시가 분명히 되어 있어요. / (B) 내일 정오에요. / (C) 트럭 기사가 심한 교통 체증에 걸렸어요."
+  "explanation": "하역장을 정오까지 비우기로 하지 않았냐는 질문에 '트럭 기사가 교통 체증에 걸렸다'고 지연 이유를 댄 (C)가 정답이다. (A)는 cleared와 같은 어근의 clearly를, (B)는 noon을 반복했지만 점심 약속 이야기라 질문과 관계없는 함정이다.",
+  "translation": "Q: 하역장은 정오까지 비우기로 되어 있지 않았어요? / (A) 표시가 분명히 되어 있어요. / (B) 정오에 점심 먹어요. / (C) 트럭 기사가 심한 교통 체증에 걸렸어요."
  },
  {
   "id": "p2-387",
