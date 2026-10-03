@@ -11,10 +11,10 @@
 
 <div class="metrics m5">
   {{ metric('진행 기회', '{:,}건'.format(v.open_deals)) }}
-  {{ metric('평균 수주금액', v.avg_deal|mil) }}
+  {{ metric('평균 수주금액', v.avg_deal|krw) }}
   {{ metric('승률', v.win_rate ~ '%', '수주 ' ~ v.won_cnt ~ ' / 실주 ' ~ v.lost_cnt) }}
   {{ metric('평균 영업주기', '%.0f일'|format(v.avg_cycle_days)) }}
-  {{ metric('월 환산 영업속도', v.velocity_per_month|mil) }}
+  {{ metric('월 환산 영업속도', v.velocity_per_month|krw) }}
 </div>
 <p class="muted small">영업속도 = (진행 기회수 × 평균 수주금액 × 승률) ÷ 평균 영업주기.
   네 변수 중 무엇을 개선해야 매출이 가장 크게 움직이는지 판단하는 지표입니다.</p>

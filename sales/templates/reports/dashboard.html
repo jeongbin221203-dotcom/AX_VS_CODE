@@ -58,9 +58,9 @@
 <section class="card">
   <h3>🔮 이번 달 예측 요약</h3>
   <div class="metrics m4">
-    {{ metric('확정 매출', fc.closed|mil, '목표 대비 %.0f%%'|format(fc.attainment)) }}
-    {{ metric('Commit 포함 전망', fc.commit_total|mil, '%.0f%%'|format(fc.commit_attainment)) }}
-    {{ metric('목표 갭', fc.gap|mil, '초과 달성 전망' if fc.gap <= 0 else '추가 확보 필요', 'up' if fc.gap <= 0 else 'down') }}
+    {{ metric('확정 매출', fc.closed|krw, '목표 대비 %.0f%%'|format(fc.attainment)) }}
+    {{ metric('Commit 포함 전망', fc.commit_total|krw, '%.0f%%'|format(fc.commit_attainment)) }}
+    {{ metric('목표 갭', fc.gap|krw, '초과 달성 전망' if fc.gap <= 0 else '추가 확보 필요', 'up' if fc.gap <= 0 else 'down') }}
     {{ metric('파이프라인 커버리지', '%.1f배'|format(fc.coverage), '건전(3배 이상)' if fc.coverage >= 3 else '부족', 'up' if fc.coverage >= 3 else 'down') }}
   </div>
 </section>
@@ -74,7 +74,7 @@
   {% if manager %}{% set items = items + [('erp', '🔗 ERP 전송 실패 ' ~ erp_failed.total)] %}{% endif %}
   {{ tabs(items, tab) }}
   {% if tab == 'overdue' %}
-    {% if not overdue.empty %}<div class="alert alert-warning">결제기일이 지난 미수금 {{ overdue_amount|mil }} ({{ overdue.total }}건, 부가세 포함 청구액 기준).
+    {% if not overdue.empty %}<div class="alert alert-warning">결제기일이 지난 미수금 {{ overdue_amount|krw }} ({{ overdue.total }}건, 부가세 포함 청구액 기준).
       <a href="{{ url_for('finance.sales', tab='ar') }}">채권 화면</a></div>{% endif %}
     {{ table(overdue, 400) }}
   {% elif tab == 'quotes' %}

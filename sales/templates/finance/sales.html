@@ -49,8 +49,8 @@
 {% elif tab == 'ar' %}
 
   <div class="metrics m3">
-    {{ metric('총 미수금', ar_total|mil) }}
-    {{ metric('연체 채권', ar_overdue|mil, ('연체비중 %.0f%%'|format(ar_overdue / ar_total * 100)) if ar_total else '-', 'down') }}
+    {{ metric('총 미수금', ar_total|krw) }}
+    {{ metric('연체 채권', ar_overdue|krw, ('연체비중 %.0f%%'|format(ar_overdue / ar_total * 100)) if ar_total else '-', 'down') }}
     {{ metric('연체 건수', '{:,}건'.format(ar_overdue_cnt)) }}
   </div>
   <section class="card">
@@ -124,8 +124,8 @@
     <div class="alert alert-info">거래처 데이터가 없습니다.</div>
   {% else %}
     <div class="metrics m3">
-      {{ metric('여신한도 합계', credit_limit|mil) }}
-      {{ metric('미수 잔액 합계', credit_unpaid|mil) }}
+      {{ metric('여신한도 합계', credit_limit|krw) }}
+      {{ metric('미수 잔액 합계', credit_unpaid|krw) }}
       {{ metric('한도 초과 거래처', over_cnt ~ '개', none, 'down' if over_cnt else none) }}
     </div>
     {% if over_cnt %}
@@ -148,8 +148,8 @@
     <button class="btn">조회</button>
   </form>
   <div class="metrics m4">
-    {{ metric('기간 매출', m_total|mil, '취소 제외') }}
-    {{ metric('미수금', m_unpaid|mil) }}
+    {{ metric('기간 매출', m_total|krw, '취소 제외') }}
+    {{ metric('미수금', m_unpaid|krw) }}
     {{ metric('건수', '{:,}건'.format(m_count)) }}
     {{ metric('세금계산서 미등록', '{:,}건'.format(m_missing_docs), '부가세 신고 전 확인' if m_missing_docs else '모두 등록됨',
               'down' if m_missing_docs else 'up') }}

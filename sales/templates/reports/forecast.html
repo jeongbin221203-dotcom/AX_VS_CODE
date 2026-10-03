@@ -5,16 +5,16 @@
   주간 단위로 예측하고, 실제 실적과 비교해 예측 신뢰도를 관리합니다.</p>
 
 <div class="metrics m5">
-  {{ metric('목표', fc.target|mil) }}
-  {{ metric('확정 매출', fc.closed|mil, '%.0f%%'|format(fc.attainment)) }}
-  {{ metric('Commit 전망', fc.commit_total|mil, '%.0f%%'|format(fc.commit_attainment)) }}
-  {{ metric('Best Case 전망', fc.best_total|mil) }}
+  {{ metric('목표', fc.target|krw) }}
+  {{ metric('확정 매출', fc.closed|krw, '%.0f%%'|format(fc.attainment)) }}
+  {{ metric('Commit 전망', fc.commit_total|krw, '%.0f%%'|format(fc.commit_attainment)) }}
+  {{ metric('Best Case 전망', fc.best_total|krw) }}
   {{ metric('커버리지', '%.1f배'|format(fc.coverage), '건전' if fc.coverage >= 3 else '부족', 'up' if fc.coverage >= 3 else 'down') }}
 </div>
 
 {% if fc.gap > 0 %}
   <div class="alert alert-warning">Commit 기준으로 목표까지 {{ fc.gap|won }} 부족합니다.
-    Best Case {{ fc.best_case|mil }} 중 일부를 Commit 으로 전환하거나 신규 파이프라인 확보가 필요합니다.</div>
+    Best Case {{ fc.best_case|krw }} 중 일부를 Commit 으로 전환하거나 신규 파이프라인 확보가 필요합니다.</div>
 {% else %}
   <div class="alert alert-success">Commit 기준으로 목표를 {{ (-fc.gap)|won }} 초과 달성할 전망입니다.</div>
 {% endif %}

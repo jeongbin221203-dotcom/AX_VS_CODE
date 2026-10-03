@@ -67,8 +67,8 @@
 
 <div class="metrics m4">
   {{ metric('건수', '{:,}건'.format(m_count)) }}
-  {{ metric('예상금액 합계', m_total|mil) }}
-  {{ metric('가중 예상금액', m_weighted|mil) }}
+  {{ metric('예상금액 합계', m_total|krw) }}
+  {{ metric('가중 예상금액', m_weighted|krw) }}
   {{ metric('평균 검증점수', m_score ~ '점', '30일 이상 정체 ' ~ m_stuck ~ '건', 'down' if m_stuck else none) }}
 </div>
 <div class="card-head"><p class="muted">행을 누르면 수정 화면으로 이동합니다.</p>{{ download(export_url('deals')) }}</div>

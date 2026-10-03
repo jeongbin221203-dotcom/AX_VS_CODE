@@ -6,7 +6,7 @@
 
 <div class="metrics m3">
   {{ metric('진행 중 수주', m_count ~ '건') }}
-  {{ metric('수주 잔량 금액 (공급가액)', m_open|mil) }}
+  {{ metric('수주 잔량 금액 (공급가액)', m_open|krw) }}
   {{ metric('상태', status or '전체') }}
 </div>
 
