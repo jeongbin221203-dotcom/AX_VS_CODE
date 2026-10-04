@@ -393,7 +393,8 @@ ROW_PARSERS: dict[str, Callable] = {
 # 일괄 등록
 # ============================================================================
 def import_rows(entity: str, df: pd.DataFrame, user: dict, dry_run: bool = True,
-                on_duplicate: str = "건너뛰기", db_path: str | None = None, row_offset: int = 2) -> dict:
+                on_duplicate: str = "건너뛰기", db_path: str | None = None, row_offset: int = 2,
+                progress=None, batch: int = 200) -> dict:
     """업로드 데이터를 검증하고(dry_run=True) 또는 실제로 등록한다.
 
     영업기회는 관리자만 이관 데이터로 보아 Stage Gate 를 우회할 수 있다(감사로그에 사유 기록).
@@ -439,38 +440,44 @@ def import_rows(entity: str, df: pd.DataFrame, user: dict, dry_run: bool = True,
                 "errors": errors, "preview": preview}
 
     inserted = 0
-    for excel_row, data in records:
-        try:
-            if entity == "거래처":
-                blank = data.pop("_blank", [])
-                exists = _existing_customer(data, ctx, db_path)
-                if exists:
-                    if on_duplicate == "건너뛰기" or not db.in_scope(exists["owner_id"]):
-                        skipped += 1
-                        continue
-                    # 덮어쓰기: 파일에서 비어 있거나 없는 열은 기존 값 그대로 (두 열만 올려도 나머지가 지워지지 않게)
-                    for field in blank:
-                        data[field] = exists.get(field)
-                    data["name"] = exists["name"]           # 다른 이름으로 맞춘 경우 정식 이름 유지
-                    data["id"] = int(exists["id"])
-                db.upsert_customer(data, db_path)
-            elif entity == "영업기회":
-                db.upsert_deal(data, db_path, force=migrate,
-                               force_reason="일괄 등록(이관 데이터)" if migrate else "")
-            elif entity == "영업활동":
-                db.add_activity(data, db_path)
-            elif entity == "매출":
-                if _sale_exists(data, db_path):
-                    skipped += 1                        # 같은 파일을 두 번 올려도 매출이 두 번 생기지 않게
-                    errors.append((excel_row, "건너뜀: 같은 거래처·일자·품목·수량·금액의 매출이 이미 있습니다"))
-                    continue
-                db.upsert_sale(data, db_path)
-            else:
-                db.upsert_target(data["yyyymm"], data["owner_id"], data["amount"], db_path)
-            inserted += 1
-        except (ValueError, PermissionError) as exc:   # 한 행 실패가 전체를 막지 않도록
-            errors.append((excel_row, f"등록 실패: {exc}"))
+    # 행마다 커밋하지 않고 batch 행씩 한 트랜잭션 (2,000행 252초 → 수십 초). 한 행 오류는 그 행만 되돌린다(저장점)
+    size = max(1, int(batch))
+    for start_at in range(0, len(records), size):
+        with db.transaction(db_path):
+            for excel_row, data in records[start_at:start_at + size]:
+                try:
+                    if entity == "거래처":
+                        blank = data.pop("_blank", [])
+                        exists = _existing_customer(data, ctx, db_path)
+                        if exists:
+                            if on_duplicate == "건너뛰기" or not db.in_scope(exists["owner_id"]):
+                                skipped += 1
+                                continue
+                            # 덮어쓰기: 파일에서 비어 있거나 없는 열은 기존 값 그대로 (두 열만 올려도 나머지가 지워지지 않게)
+                            for field in blank:
+                                data[field] = exists.get(field)
+                            data["name"] = exists["name"]           # 다른 이름으로 맞춘 경우 정식 이름 유지
+                            data["id"] = int(exists["id"])
+                        db.upsert_customer(data, db_path)
+                    elif entity == "영업기회":
+                        db.upsert_deal(data, db_path, force=migrate,
+                                       force_reason="일괄 등록(이관 데이터)" if migrate else "")
+                    elif entity == "영업활동":
+                        db.add_activity(data, db_path)
+                    elif entity == "매출":
+                        if _sale_exists(data, db_path):
+                            skipped += 1                        # 같은 파일을 두 번 올려도 매출이 두 번 생기지 않게
+                            errors.append((excel_row, "건너뜀: 같은 거래처·일자·품목·수량·금액의 매출이 이미 있습니다"))
+                            continue
+                        db.upsert_sale(data, db_path)
+                    else:
+                        db.upsert_target(data["yyyymm"], data["owner_id"], data["amount"], db_path)
+                    inserted += 1
+                except (ValueError, PermissionError) as exc:   # 한 행 실패가 전체를 막지 않도록
+                    errors.append((excel_row, f"등록 실패: {exc}"))
 
+        if progress:
+            progress(min(start_at + size, len(records)), len(records))
     db.audit("일괄등록", entity, None,
              {"요청": len(df), "등록": inserted, "건너뜀": skipped, "오류": len(errors),
               "단계검증우회": migrate}, db_path)
@@ -483,6 +490,9 @@ def _existing_customer(data: dict, ctx: dict, db_path: str | None) -> Optional[d
     if "_name_index" not in ctx:
         ctx["_name_index"] = cn.Index(db_path)
     cid, _how = ctx["_name_index"].resolve(data["name"])
+    if cid is None:                    # 같은 파일 앞쪽 행에서 방금 만든 거래처 (색인은 업로드 시작 때 만든 것)
+        row = db._one("SELECT id FROM customers WHERE name=? AND merged_into IS NULL", [data["name"]], db_path)
+        cid = row["id"] if row else None
     if cid is None and db.biz_digits(data.get("biz_no")):
         row = db._one("SELECT id FROM customers WHERE biz_no_norm=? AND merged_into IS NULL",
                       [db.biz_digits(data.get("biz_no"))], db_path)

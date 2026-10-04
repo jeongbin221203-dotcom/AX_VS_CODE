@@ -10,6 +10,7 @@ from flask import Blueprint, abort, flash, g, redirect, request, send_file, url_
 from core import advances as adv
 from core import catalog
 from core import credit
+from core.credit import WRITEOFF_REASONS
 from core import returns as rtn
 from core import entities as ent_mod
 from core import etax
@@ -41,8 +42,9 @@ def _advances(tab: str) -> dict:
     if tab != "ar":
         return {"advances": None, "adv_options": []}
     bal = adv.balances()
-    return {"advances": Table(bal, money=["선수금잔액"], drop=["id"]),
-            "adv_options": [(int(r.id), f"{r.거래처} · 선수금 {int(r.선수금잔액):,}원") for r in bal.itertuples()]}
+    return {"advances": Table(bal, money=["선수금잔액", "돌려줄돈(반품초과)", "잔액합계"], drop=["id"]),
+            "adv_options": [(int(r.id), f"{r.거래처} · 잔액 {int(r.잔액합계):,}원"
+                             + (f" (돌려줄 돈 {int(r[4]):,}원)" if int(r[4]) else "")) for r in bal.itertuples()]}
 
 
 def _sales_page(form: dict | None = None, status: int = 200):
@@ -135,6 +137,10 @@ def _sales_page(form: dict | None = None, status: int = 200):
         products=catalog.product_options(), tax_types=db.TAX_TYPES,
         entity_opts=ent_mod.options(), currencies=ent_mod.CURRENCIES,
         etax_rows=etax.list_for_sale(edit_id) if edit_id else [], etax_on=etax.enabled(),
+        etax_reasons=etax.MODIFY_REASONS, etax_rules=etax.MODIFY_RULES,
+        wo_reasons=WRITEOFF_REASONS, can_recover=ent.has_role(g.user, "MANAGER"),
+        writeoffs=db._df("SELECT * FROM fin_requests WHERE sale_id=? AND kind='대손' AND status='승인' ORDER BY id",
+                         [edit_id]).to_dict("records") if edit_id else [],
         payments=ent.list_payments(edit_id) if edit_id and edit_row else [], **extra,
         linked=Table(rtn.linked(edit_id), money=["단가", "공급가액", "부가세", "합계"], drop=["id"]) if edit_row else None,
         returnable=rtn.returnable_qty(edit_row["raw"]) if edit_row else 0,
@@ -236,6 +242,21 @@ def sale_etax(sid: int):
     return redirect(url_for("finance.sales", sid=sid))
 
 
+@bp.route("/sales/<int:sid>/etax/<int:eid>/modify", methods=["POST"])
+def sale_etax_modify(sid: int, eid: int):
+    """수정세금계산서 (01 착오 · 04 계약 해제 · 05 내국신용장 · 06 이중발급) — 당초분을 음수로 지운다."""
+    try:
+        row = db._one("SELECT sale_id FROM etax_invoices WHERE id=?", [eid])
+        if not row or int(row["sale_id"]) != sid:
+            abort(404)
+        new_id = etax.request_modify(eid, f_str("code"), f_str("reason"), g.user, f_str("day") or None)
+        flash(f"수정세금계산서 발행을 요청했습니다(요청 #{new_id}). 승인되면 당초 증빙은 무효로 바뀌고 매출 잠금이 풀립니다.",
+              "success")
+    except (ValueError, PermissionError) as exc:
+        flash(str(exc), "error")
+    return redirect(url_for("finance.sales", sid=sid))
+
+
 @bp.route("/sales/<int:sid>/cancel", methods=["POST"])
 def sale_cancel(sid: int):
     try:
@@ -282,11 +303,39 @@ def sale_return(sid: int):
 @bp.route("/sales/<int:sid>/writeoff", methods=["POST"])
 def sale_writeoff(sid: int):
     try:
-        rid = credit.request_writeoff(sid, f_str("reason"), g.user)
+        rid = credit.request_writeoff(sid, f_str("reason"), g.user, f_str("code"), f_str("event_date") or None)
         flash(f"대손 처리 결재를 요청했습니다(요청 #{rid}). 승인되면 채권에서 빠집니다.", "success")
     except (ValueError, PermissionError) as exc:
         flash(str(exc), "error")
     return redirect(url_for("finance.sales", sid=sid))
+
+
+@bp.route("/sales/<int:sid>/writeoff/<int:rid>/recover", methods=["POST"])
+@role_required("MANAGER")
+def sale_writeoff_recover(sid: int, rid: int):
+    try:
+        req = db._one("SELECT sale_id FROM fin_requests WHERE id=?", [rid])
+        if not req or int(req["sale_id"] or 0) != sid:
+            abort(404)
+        r = credit.recover(rid, f_int("amount"), f_str("pay_date") or None, g.user, ref_no=f_str("ref_no"))
+        flash(f"대손 회수 {won(r['회수액'])}을 입금으로 등록했습니다. 대손세액 {won(r['대손세액가산'])}은 "
+              f"이번 과세기간 매출세액에 더해 신고하세요.", "success")
+    except (ValueError, PermissionError) as exc:
+        flash(str(exc), "error")
+    return redirect(url_for("finance.sales", sid=sid))
+
+
+@bp.route("/approvals/bad-debt-report.xlsx")
+@role_required("MANAGER")
+def bad_debt_report():
+    """부가가치세 신고용 대손세액 공제·가산 자료 (반기 = 확정신고 단위)."""
+    from core import dataio
+    year = a_int("year") or date.today().year
+    half = 1 if a_int("half") == 1 else 2 if a_int("half") == 2 else (1 if date.today().month <= 6 else 2)
+    rep = credit.tax_report(year, half)
+    data = dataio.to_excel({"대손세액 공제": rep["공제"], "대손세액 가산(회수)": rep["가산"]},
+                           {"자료": "대손세액 공제·가산", "과세기간": f"{year}년 {half}기"})
+    return xlsx_response(data, f"대손세액_{year}_{half}기.xlsx", rows=len(rep["공제"]) + len(rep["가산"]))
 
 
 @bp.route("/sales/<int:sid>/apply-advance", methods=["POST"])

@@ -94,7 +94,8 @@ def build_document(outbox: dict, cfg: dict) -> dict:
             raise ValueError("대손 결재 기록이 없습니다.")
         base = build_document({**outbox, "doc_type": "매출", "ref_id": req["sale_id"]}, cfg)
         return {**base, "doc_type": "대손", "crm_ref": f"CRM-WO-{req['id']}", "writeoff_amount": int(req["amount"]),
-                "writeoff_reason": req["reason"], "approved_by": req.get("decided_by"),
+                "writeoff_reason": req["reason"], "writeoff_reason_code": req.get("wo_reason_code"),
+                "bad_debt_vat": req.get("bad_debt_vat"), "approved_by": req.get("decided_by"),
                 "erp_doc_no": (db.get_sale(int(req["sale_id"])) or {}).get("erp_doc_no")}
     sale = db.get_sale(int(outbox["ref_id"]))
     if not sale:

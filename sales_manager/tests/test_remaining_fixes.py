@@ -168,7 +168,7 @@ def test_split_delivery_is_all_or_nothing(app, monkeypatch):
 def test_writeoff_approval_rolls_back_when_nothing_left(app):
     cid = _cust("대손원자상사")
     sid = _sale(cid, unit=100_000)
-    rid = credit.request_writeoff(sid, "회수 불가", user("김영업"))
+    rid = credit.request_writeoff(sid, "회수 불가", user("김영업"), "BANKRUPT", TODAY)
     ent.record_payment(sid, 110_000)                   # 결재 전에 전액 입금
     with pytest.raises(ValueError, match="미수금이 없습니다"):
         credit.decide(rid, True, "", user("시스템관리자"))

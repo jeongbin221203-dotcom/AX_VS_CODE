@@ -179,3 +179,226 @@ def test_restore_refuses_non_database(app, tmp_path):
     assert manage.main(["restore", str(bad), "--yes"]) == 2
     assert manage.main(["db", "downgrade"]) == 2          # 확인 없이 되돌리지 않음
     assert os.path.exists(bad)
+
+
+# ── 수정세금계산서 · 세금계산서 잠금 ────────────────────────────────────────
+def _issued_sale(monkeypatch, name: str, prefix9: str) -> tuple[int, dict]:
+    from conftest import biz
+    from core import jobs
+    monkeypatch.setenv("SALES_ETAX_ADAPTER", "mock")
+    company.save({"company_name": "(주)수정발행", "company_biz_no": biz("123456789")}, "test")
+    company.refresh(force=True)
+    cid = _cust(name, biz_no=biz(prefix9))
+    sid = _sale(cid, 1, 1_000_000)
+    from core import etax
+    etax.request_issue(sid, None, {"name": "t"})
+    jobs.run_pending()
+    row = db._one("SELECT * FROM etax_invoices WHERE sale_id=? AND modify_code IS NULL", [sid])
+    assert row["status"] == "발행완료"
+    return sid, row
+
+
+def test_issued_sale_is_locked_until_contract_cancel_invoice(app, monkeypatch):
+    from core import etax, jobs
+    sid, row = _issued_sale(monkeypatch, "계약해제상사", "214365871")
+    s = db.get_sale(sid)
+    with pytest.raises(ValueError, match="세금계산서"):
+        db.upsert_sale({**s, "amount": 900_000, "unit_price": 900_000})
+    with pytest.raises((ValueError, PermissionError)):
+        db.cancel_sale(sid, "취소", actor=user("시스템관리자"))
+    with pytest.raises(ValueError, match="해제일"):
+        etax.request_modify(row["id"], "04", "고객 계약 해지", {"name": "t"},
+                            day=(date.today() + timedelta(days=1)).isoformat())
+    mid = etax.request_modify(row["id"], "04", "고객 계약 해지", {"name": "t"}, day=TODAY)
+    with pytest.raises(ValueError, match="이미"):
+        etax.request_modify(row["id"], "04", "또", {"name": "t"}, day=TODAY)
+    jobs.run_pending()
+    mod = db._one("SELECT * FROM etax_invoices WHERE id=?", [mid])
+    assert mod["status"] == "발행완료" and int(mod["supply_amount"]) == -1_000_000
+    assert db._one("SELECT status FROM etax_invoices WHERE id=?", [row["id"]])["status"] == "수정발행됨"
+    assert db._one("SELECT voided_at FROM sale_documents WHERE id=?", [row["document_id"]])["voided_at"]
+    mod_doc = db._one("SELECT * FROM sale_documents WHERE id=?", [mod["document_id"]])
+    assert mod_doc["doc_type"] == "수정세금계산서"
+    db.set_context("system", None)
+    db.cancel_sale(sid, "계약 해제", actor=user("시스템관리자"))      # 이제 취소 가능
+    assert db.get_sale(sid)["status"] == "취소"
+    company.save({"company_name": "", "company_biz_no": ""}, "test")
+
+
+def test_error_correction_invoice_allows_reissue(app, monkeypatch):
+    from core import etax, jobs
+    sid, row = _issued_sale(monkeypatch, "착오정정상사", "214365872")
+    etax.request_modify(row["id"], "01", "품목명 오기재", {"name": "t"})
+    jobs.run_pending()
+    mod = db._one("SELECT * FROM etax_invoices WHERE original_etax_id=?", [row["id"]])
+    assert mod["issue_date"] == row["issue_date"]                       # 01 은 당초 작성일
+    etax.request_issue(sid, None, {"name": "t"})                         # 바로잡아 다시 발행 가능
+    jobs.run_pending()
+    assert db._scalar("SELECT COUNT(*) FROM etax_invoices WHERE sale_id=? AND modify_code IS NULL "
+                      "AND status='발행완료'", [sid]) == 1
+    with pytest.raises(ValueError, match="사유"):
+        etax.request_modify(row["id"], "03", "반품", {"name": "t"})
+    company.save({"company_name": "", "company_biz_no": ""}, "test")
+
+
+def test_paper_tax_invoice_locks_sale(app):
+    sid = _sale(_cust("종이세금계산서상사"), 1, 500_000)
+    with db.get_conn() as conn:
+        conn.execute("INSERT INTO sale_documents (sale_id, doc_type, file_name, file_path, mime, file_size, sha256, "
+                     "uploaded_by, uploaded_at) VALUES (?, '세금계산서', 'paper.jpg', 'x/paper.jpg', 'image/jpeg', 1, "
+                     "'0', 't', ?)", (sid, db._now()))
+    s = db.get_sale(sid)
+    with pytest.raises(ValueError, match="세금계산서"):
+        db.upsert_sale({**s, "tax_type": "영세"})
+    db.upsert_sale({**s, "memo": "메모는 고칠 수 있음"})
+
+
+def test_special_price_is_approval_base(app):
+    from core import catalog
+    cid = _cust("특가기준상사")
+    db.set_context("system", None)
+    pid = catalog.upsert_product({"code": "SP-TEST-01", "name": "특가시험품", "list_price": 1_000_000, "unit": "EA",
+                                  "tax_type": "과세"})
+    catalog.set_customer_price(cid, pid, 900_000, TODAY)
+    qid = qt.save_quote({"customer_id": cid, "owner_id": user("김영업")["id"]}, [{"product_id": pid, "qty": 1}])
+    q = qt.get_quote(qid)
+    assert float(q["discount_rate"]) == 10.0 and qt.approval_rate(q) == 0.0
+    qt.send(qid)                                                          # 특가 그대로면 결재 없이 발송
+    assert qt.get_quote(qid)["status"] == "발송"
+
+
+def test_order_from_quote_wins_deal(app):
+    from core import orders as so
+    cid = _cust("자동수주상사")
+    db.set_context("system", None)
+    did = db.upsert_deal({"customer_id": cid, "title": "자동수주 기회", "owner_id": user("김영업")["id"],
+                          "stage": db.OPEN_STAGES[0], "list_amount": 100_000, "amount": 100_000,
+                          "discount_rate": 0, "expected_close": TODAY})
+    qid = qt.save_quote({"customer_id": cid, "deal_id": did, "owner_id": user("김영업")["id"]},
+                        [{"item_name": "자동", "qty": 1, "unit_price": 100_000}])
+    qt.send(qid)
+    qt.decide(qid, True)
+    so.from_quote(qid)
+    assert db.get_deal(did)["stage"] == db.STAGE_WON
+
+
+def test_refund_due_shown_apart_from_advances(app):
+    from core import advances as adv
+    cid = _cust("돌려줄돈상사")
+    sid = _sale(cid, 2, 100_000)
+    ent.record_payment(sid, 220_000)
+    rtn.create(sid, "반품", "1개 반품", qty=1)                          # 다 받은 매출의 반품 → 돌려줄 돈 110,000
+    assert adv.refund_due(cid) == 110_000
+    row = adv.balances().set_index("id").loc[cid]
+    assert int(row["돌려줄돈(반품초과)"]) == 110_000 and int(row["선수금잔액"]) == 0
+
+
+# ── 대손 법정 사유 · 대손세액 · 회수 ─────────────────────────────────────────
+def test_writeoff_needs_legal_reason_and_elapsed_time(app):
+    from core import credit
+    sid = _sale(_cust("대손요건상사"), 1, 1_000_000)
+    with pytest.raises(ValueError, match="사유를 고르세요"):
+        credit.request_writeoff(sid, "회수 불능", user("김영업"))
+    with pytest.raises(ValueError, match="요건이 아직"):                 # 부도 후 6개월이 안 됨
+        credit.request_writeoff(sid, "부도", user("김영업"), "DISHONOR", TODAY)
+    with pytest.raises(ValueError, match="30만원"):
+        credit.request_writeoff(sid, "소액", user("김영업"), "SMALL")
+    s = db.get_sale(sid)
+    assert credit.check_writeoff(s, 330_000, "DISHONOR", "2026-01-05", today=date(2026, 7, 5)) == date(2026, 7, 5) \
+        if s["sale_date"] <= "2026-01-05" else True
+
+
+def test_writeoff_vat_and_recovery(app):
+    from core import credit
+    sid = _sale(_cust("대손회수상사"), 1, 1_000_000)                     # 합계 1,100,000
+    rid = credit.request_writeoff(sid, "파산 선고", user("김영업"), "BANKRUPT", TODAY)
+    credit.decide(rid, True, "", user("정임원"))
+    req = db._one("SELECT * FROM fin_requests WHERE id=?", [rid])
+    assert int(req["bad_debt_vat"]) == 100_000                         # 1,100,000 × 10/110
+    r = credit.recover(rid, 550_000, TODAY, user("한팀장"))
+    assert r["대손세액가산"] == 50_000
+    s = db.get_sale(sid)
+    assert int(s["paid_amount"]) == 1_100_000 and _paid_sum(sid) == 1_100_000
+    with pytest.raises(ValueError, match="회수 금액"):
+        credit.recover(rid, 600_000, TODAY, user("한팀장"))
+    half = 1 if date.today().month <= 6 else 2
+    rep = credit.tax_report(date.today().year, half)
+    assert rid in set(rep["공제"]["요청번호"]) and 550_000 in set(rep["가산"]["회수액"])
+
+
+def _paid_sum(sid: int) -> int:
+    return int(db._scalar("SELECT COALESCE(SUM(amount),0) FROM payments WHERE sale_id=?", [sid]))
+
+
+# ── 외화 ─────────────────────────────────────────────────────────────────
+def test_foreign_amount_rounded_once(app):
+    cid = _cust("외화반올림상사")
+    db.set_context("system", None)
+    sid = db.upsert_sale({"customer_id": cid, "item": "외화품", "qty": 1000, "currency": "USD", "fx_rate": "1385.55",
+                          "foreign_unit_price": "10.555", "owner_id": user("김영업")["id"], "sale_date": TODAY})
+    s = db.get_sale(sid)
+    assert int(s["amount"]) == 14_624_480                 # 10,555 USD × 1,385.55 (단가를 먼저 반올림하면 14,624,000)
+
+
+def test_split_delivery_uses_delivery_date_rate(app):
+    from core import entities as ent_mod
+    from core import orders as so
+    cid = _cust("납품환율상사")
+    db.set_context("system", None)
+    with db.get_conn() as conn:
+        conn.execute("DELETE FROM fx_rates WHERE currency='EUR'")
+    ent_mod.set_rate("EUR", (date.today() - timedelta(days=60)).isoformat(), 1500, "test")
+    oid = so.create({"customer_id": cid, "owner_id": user("김영업")["id"], "currency": "EUR", "fx_rate": 1500,
+                     "delivery_date": TODAY}, [{"item_name": "유로품", "qty": 2, "unit_price": 150_000, "tax_type": "영세"}])
+    ent_mod.set_rate("EUR", TODAY, 1600, "test")
+    item = so.get(oid)["items"][0]
+    [sid] = so.deliver(oid, {item["id"]: 1}, TODAY)
+    s = db.get_sale(sid)
+    assert float(s["fx_rate"]) == 1600 and int(s["amount"]) == 160_000   # EUR 100 × 납품일 환율 1,600
+    assert ent_mod.rate_on("EUR", TODAY) == 1600
+
+
+# ── 감사로그 검색 · 백그라운드 업로드·추출 ─────────────────────────────────
+def test_audit_search_by_date_target_and_detail(app):
+    cid = _cust("감사검색상사")
+    rows = db.list_audit(50, entity="거래처", entity_id=cid, date_from=TODAY, date_to=TODAY, keyword="감사검색상사")
+    assert not rows.empty and set(rows["대상ID"].astype(int)) == {cid}
+    assert db.list_audit(50, entity_id=cid, date_to="2000-01-01").empty
+
+
+def test_background_import_and_backup(app, monkeypatch):
+    from core import bulk
+    monkeypatch.setattr(bulk, "SYNC", True)
+    monkeypatch.setattr(bulk, "INLINE_ROWS", 1)              # 2행이어도 백그라운드 경로로
+    _cust("대량업로드상사")
+    df = pd.DataFrame([{"거래처명": "대량업로드상사", "매출일": TODAY, "품목": f"대량{i}", "수량": 1, "단가": 1_000,
+                        "담당자": "김영업"} for i in range(2)] +
+                      [{"거래처명": "없는거래처", "매출일": TODAY, "품목": "x", "수량": 1, "단가": 1, "담당자": "김영업"}])
+    admin_user = user("시스템관리자")
+    tid = bulk.start("업로드", "시험", lambda p: {**(r := dataio.import_rows("매출", df, admin_user, dry_run=False,
+                                                                        progress=p)),
+                                                   "errors": [list(e) for e in r["errors"]]}, admin_user, total=3)
+    task = bulk.get(tid, admin_user)
+    assert task["status"] == "완료" and task["ok"] == 2 and task["error_count"] == 1
+    admin = login(app, "시스템관리자")
+    assert "없는거래처" in admin.get(f"/data/tasks/{tid}/errors.csv").get_data(as_text=True)
+    with pytest.raises(PermissionError):
+        bulk.get(tid, user("김영업"))                          # 남의 작업은 못 봄
+    res = admin.get("/admin/data/backup.xlsx")
+    assert res.status_code == 302
+    last = db._one("SELECT * FROM bulk_tasks WHERE title LIKE '엑셀 백업%' ORDER BY id DESC LIMIT 1")
+    assert last["status"] == "완료" and last["file_key"]
+    before = db._scalar("SELECT COUNT(*) FROM audit_log WHERE action='다운로드'")
+    got = admin.get(f"/data/tasks/{last['id']}/file")
+    assert got.status_code == 200 and "spreadsheetml" in got.mimetype
+    assert db._scalar("SELECT COUNT(*) FROM audit_log WHERE action='다운로드'") == before + 1
+
+
+def test_stale_bulk_task_marked_stopped(app):
+    from core import bulk
+    with db.get_conn() as conn:
+        conn.execute("INSERT INTO bulk_tasks (kind, title, status, created_by_id, created_at, updated_at) "
+                     "VALUES ('업로드', '멈춘 작업', '진행중', ?, '2000-01-01 00:00:00', '2000-01-01 00:00:00')",
+                     (user("김영업")["id"],))
+    assert bulk.mark_stale() >= 1
+    assert db._one("SELECT status FROM bulk_tasks WHERE title='멈춘 작업'")["status"] == "중단"

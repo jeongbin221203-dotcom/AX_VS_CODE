@@ -84,7 +84,8 @@
       <button class="btn btn-primary">입금 배분</button>
     </form>
     <p class="muted small">결제기일이 빠른 미수 매출부터 채우고, 남는 금액(계약금·과입금)은 거래처 선수금으로 둡니다. 선수금은 매출 화면에서 배분합니다.</p>
-    <h4>선수금 잔액</h4>
+    <h4>선수금 잔액 · 돌려줄 돈</h4>
+    <p class="muted small">선수금 = 계약금·과입금처럼 미리 받은 돈(매출에 배분). 돌려줄 돈 = 이미 다 받은 매출을 반품·정정해 거래처에 환불해야 할 금액(환불 예정).</p>
     {{ table(advances, 200, '선수금이 있는 거래처가 없습니다.') }}
     {% if adv_options %}
     <form method="post" class="toolbar" data-no-draft
@@ -217,11 +218,32 @@
         </form>
         {% endif %}
         <form method="post" action="{{ url_for('finance.sale_writeoff', sid=raw.id) }}" class="toolbar" data-no-draft data-confirm="'대손 결재 요청' — 되돌리기 어렵습니다. 계속할까요?">
-          {{ csrf() }}<label class="grow">대손 처리 사유 <input name="reason" required placeholder="예) 거래처 파산, 회수 불능 확인"></label>
+          {{ csrf() }}
+          <label>대손 사유 * <select name="code" required><option value="">고르세요</option>
+            {% for code, r in wo_reasons.items() %}<option value="{{ code }}">{{ r[0] }}</option>{% endfor %}</select></label>
+          <label>사유 발생일 (선고·부도·시효 완성일) <input type="date" name="event_date"></label>
+          <label class="grow">설명 * <input name="reason" required placeholder="예) 2026-09-01 파산 선고 (서울회생법원 2026하단123)"></label>
           <button class="btn btn-danger">대손 결재 요청 ({{ remain_amt|won }})</button>
         </form>
+        <p class="muted small">대손은 법정 사유가 있어야 부가가치세 대손세액공제(대손금액 × 10/110)를 받습니다. 부도 6개월·중소기업 2년·30만원 이하 6개월은
+          기간이 지나야 요청할 수 있고, 공급일로부터 10년이 지나면 공제를 받을 수 없습니다.</p>
       {% endif %}
     {% endif %}
+
+    {% for w in writeoffs %}
+      <div class="alert alert-info small">대손 처리됨 (결재 #{{ w.id }} · {{ w.decided_at }}) — 대손 {{ w.amount|won }} · 대손세액 {{ (w.bad_debt_vat or 0)|won }} · 회수 {{ (w.recovered_amount or 0)|won }}</div>
+      {% if (w.recovered_amount or 0) < w.amount and can_recover %}
+        <form method="post" action="{{ url_for('finance.sale_writeoff_recover', sid=raw.id, rid=w.id) }}" class="toolbar" data-no-draft
+              data-confirm="대손 회수 — 대손 일부를 되돌리고 입금으로 등록합니다. 계속할까요?">
+          {{ csrf() }}
+          <label>회수액 <input type="number" name="amount" min="1" max="{{ w.amount - (w.recovered_amount or 0) }}" required></label>
+          <label>입금일 <input type="date" name="pay_date" value="{{ today().isoformat() }}"></label>
+          <label>참조번호 <input name="ref_no"></label>
+          <button class="btn">대손 회수 등록</button>
+          <span class="muted small">회수한 금액의 대손세액은 회수한 과세기간의 매출세액에 더해 신고합니다.</span>
+        </form>
+      {% endif %}
+    {% endfor %}
 
     <h3 class="doc-title">💵 입금 내역</h3>
     {% for p in payments %}
@@ -251,10 +273,26 @@
 
     <h3 class="doc-title">🧾 전자세금계산서 발행</h3>
     {% for e in etax_rows %}
-      <div class="small">요청 #{{ e.id }} · {{ e.status }} · 작성일 {{ e.issue_date }}{% if e.approval_no %} · 승인번호 {{ e.approval_no }}{% endif %}
+      <div class="small">요청 #{{ e.id }}{% if e.modify_label %} · <strong>{{ e.modify_label }}</strong>{% endif %} · {{ e.status }} · 작성일 {{ e.issue_date }}{% if e.approval_no %} · 승인번호 {{ e.approval_no }}{% endif %}
         {% if e.error %}<span class="warn-text"> · {{ e.error }}</span>{% endif %}</div>
+      {% if etax_on and e.can_modify and (raw.sale_kind or '매출') == '매출' %}
+        <details class="small"><summary>수정세금계산서로 지우기 (요청 #{{ e.id }})</summary>
+          <form method="post" action="{{ url_for('finance.sale_etax_modify', sid=raw.id, eid=e.id) }}" class="toolbar" data-no-draft
+                data-confirm="수정세금계산서는 국세청에 음수 세금계산서로 나갑니다. 계속할까요?">
+            {{ csrf() }}
+            <label>사유 <select name="code" required>
+              {% for code, name in etax_reasons.items() %}<option value="{{ code }}" {{ 'selected' if (e.status == '실패' and code == '06') }}>{{ code }} {{ name }}</option>{% endfor %}
+            </select></label>
+            <label>날짜 (04 해제일 · 05 내국신용장 개설일) <input type="date" name="day"></label>
+            <label class="grow">설명 * <input name="reason" required placeholder="예) 공급받는자 사업자번호 오기재"></label>
+            <button class="btn btn-danger">수정세금계산서 요청</button>
+          </form>
+          <ul class="muted">{% for code, rule in etax_rules.items() %}<li>{{ code }} {{ etax_reasons[code] }} — {{ rule }}</li>{% endfor %}
+            <li>반품은 03(환입), 단가 변동은 02 — 위 '반품·정정'으로 처리합니다.</li></ul>
+        </details>
+      {% endif %}
     {% endfor %}
-    {% if etax_on and raw.status != '취소' and not (etax_rows and etax_rows[0].status in ('발행요청', '전송중', '발행완료')) %}
+    {% if etax_on and raw.status != '취소' and not (etax_rows and etax_rows|selectattr('modify_code', 'none')|selectattr('status', 'in', ['발행요청', '전송중', '발행완료'])|list) %}
       <form method="post" action="{{ url_for('finance.sale_etax', sid=raw.id) }}" class="toolbar" data-no-draft>
         {{ csrf() }}
         <label>작성일자 <input type="date" name="issue_date" value="{{ raw.sale_date }}"></label>

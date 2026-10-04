@@ -8,6 +8,23 @@
 </div>
 
 {% if tab == 'import' %}
+{% if bulk_tasks %}
+<section class="card">
+  <h3>⏳ 내 작업 (업로드·추출){% if bulk_running %} — 진행 중{% endif %}</h3>
+  {% if bulk_running %}<meta http-equiv="refresh" content="5">{% endif %}
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th>#</th><th>작업</th><th>상태</th><th class="num">진행</th><th class="num">등록</th><th class="num">건너뜀</th><th class="num">오류·안내</th><th>시작</th><th></th></tr></thead>
+    <tbody>
+    {% for t in bulk_tasks %}
+      <tr><td>{{ t.id }}</td><td>{{ t.title }}{% if t.message %}<div class="small muted">{{ t.message }}</div>{% endif %}</td>
+        <td>{{ t.status }}</td><td class="num">{{ t.percent }}%</td><td class="num">{{ t.ok or 0 }}</td>
+        <td class="num">{{ t.skipped or 0 }}</td><td class="num">{{ t.error_count or 0 }}</td><td class="small">{{ t.created_at }}</td>
+        <td>{% if t.error_count %}<a href="{{ url_for('io.task_errors', tid=t.id) }}">오류 목록</a>{% endif %}
+            {% if t.file_key %}<a href="{{ url_for('io.task_file', tid=t.id) }}">⬇️ 파일 받기</a>{% endif %}</td></tr>
+    {% endfor %}
+    </tbody></table></div>
+</section>
+{% endif %}
 <p class="muted">엑셀/CSV 파일로 대량 등록합니다. 업로드하면 <strong>먼저 검증 결과</strong>를 보여 주고,
   확인 후에 실제 등록이 진행됩니다. 본인 권한 범위 밖의 담당자로는 등록할 수 없습니다.</p>
 
@@ -223,6 +240,7 @@
     <div class="row-actions">
       <button class="btn">조회</button>
       <button class="btn btn-primary" name="download" value="xlsx">⬇️ 엑셀로 추출 (다중 시트)</button>
+      <button class="btn" name="download" value="bg" title="데이터가 많아 오래 걸리면 — 다 만들어지면 작업 목록에서 받습니다">⏳ 백그라운드로 추출</button>
     </div>
     {% if export_forms %}
     <fieldset>

@@ -107,8 +107,27 @@ def history(customer_id: int) -> pd.DataFrame:
                   [int(customer_id)])
 
 
+def refund_due(customer_id: int) -> int:
+    """잔액 중 '돌려줄 돈'(반품초과) — 받은 선수금(계약금·과입금)과 성격이 달라 따로 보여 준다.
+    반품초과로 쌓인 금액에서 환불한 금액을 뺀 것 (잔액을 넘지 않게)."""
+    row = db._one("SELECT COALESCE(SUM(CASE WHEN kind='반품초과' THEN amount ELSE 0 END), 0) AS due, "
+                  "COALESCE(SUM(CASE WHEN kind='환불' THEN -amount ELSE 0 END), 0) AS refunded, "
+                  "COALESCE(SUM(amount), 0) AS bal FROM advances WHERE customer_id=?", [int(customer_id)]) or {}
+    return max(0, min(int(row.get("bal") or 0), int(row.get("due") or 0) - int(row.get("refunded") or 0)))
+
+
 def balances() -> pd.DataFrame:
+    """거래처별 잔액 = 받은 선수금 + 돌려줄 돈(반품초과). 돌려줄 돈은 환불 예정이라 따로 열로."""
     sc, sp = db._scope_clause("c")
-    return db._df("SELECT c.id, c.name AS 거래처, SUM(a.amount) AS 선수금잔액 FROM advances a JOIN customers c "
-                  f"ON c.id = a.customer_id WHERE 1=1{sc} GROUP BY c.id, c.name HAVING SUM(a.amount) <> 0 "
-                  "ORDER BY SUM(a.amount) DESC", sp)
+    df = db._df("SELECT c.id, c.name AS 거래처, "
+                "SUM(CASE WHEN a.kind='반품초과' THEN a.amount ELSE 0 END) AS due, "
+                "SUM(CASE WHEN a.kind='환불' THEN -a.amount ELSE 0 END) AS refunded, "
+                "SUM(a.amount) AS 잔액합계 FROM advances a JOIN customers c "
+                f"ON c.id = a.customer_id WHERE 1=1{sc} GROUP BY c.id, c.name HAVING SUM(a.amount) <> 0 "
+                "ORDER BY SUM(a.amount) DESC", sp)
+    if df.empty:
+        return pd.DataFrame(columns=["id", "거래처", "선수금잔액", "돌려줄돈(반품초과)", "잔액합계"])
+    due = (df["due"] - df["refunded"]).clip(lower=0)
+    df["돌려줄돈(반품초과)"] = due.where(due < df["잔액합계"], df["잔액합계"]).astype(int)
+    df["선수금잔액"] = (df["잔액합계"] - df["돌려줄돈(반품초과)"]).astype(int)
+    return df[["id", "거래처", "선수금잔액", "돌려줄돈(반품초과)", "잔액합계"]]

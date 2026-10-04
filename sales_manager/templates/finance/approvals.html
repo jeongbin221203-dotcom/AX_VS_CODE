@@ -18,7 +18,7 @@
     {% for r in fin_pending_rows %}
       <form method="post" action="{{ url_for('finance.finance_request_decide', rid=r.id) }}" class="toolbar" data-no-draft>
         {{ csrf() }}
-        <span class="grow small"><strong>{{ r['구분'] }}</strong> · <a href="{{ url_for('crm.customers', id=r['customer_id']) }}">{{ r['거래처'] }}</a>{% if r['매출번호'] %} · <a href="{{ url_for('finance.sales', sid=r['매출번호']|int) }}">매출 #{{ r['매출번호']|int }}</a>{% endif %}
+        <span class="grow small"><strong>{{ r['구분'] }}</strong>{% if r['대손사유'] %} · {{ r['대손사유'] }} · 대손세액 {{ (r['대손세액'] or 0)|won }}{% endif %} · <a href="{{ url_for('crm.customers', id=r['customer_id']) }}">{{ r['거래처'] }}</a>{% if r['매출번호'] %} · <a href="{{ url_for('finance.sales', sid=r['매출번호']|int) }}">매출 #{{ r['매출번호']|int }}</a>{% endif %}
           · {{ r['금액']|won }} · {{ r['사유'] }} · 요청 {{ r['요청자'] }} ({{ r['요청일시'] }})</span>
         <input name="comment" placeholder="의견 (반려 시 필수)">
         <button class="btn btn-sm btn-primary" name="decision" value="approve">승인</button>
@@ -29,6 +29,14 @@
     {% endfor %}
     <h3>처리 이력</h3>
     {{ table(fin_history, 280, '요청 이력이 없습니다.') }}
+    {% if g.user.role in ('MANAGER', 'EXEC', 'ADMIN') %}
+    <form method="get" action="{{ url_for('finance.bad_debt_report') }}" class="toolbar">
+      <label>연도 <input type="number" name="year" value="{{ today().year }}" min="2000" max="2100"></label>
+      <label>과세기간 <select name="half"><option value="1">1기 (1~6월)</option><option value="2">2기 (7~12월)</option></select></label>
+      <button class="btn">⬇️ 대손세액 신고 자료 (엑셀)</button>
+      <span class="muted small">공제 = 그 기간에 확정(승인)한 대손, 가산 = 그 기간에 회수한 대손.</span>
+    </form>
+    {% endif %}
   {% elif tab == 'delegation' %}
     <p class="muted small">출장·휴가 등으로 자리를 비울 때, 기간 동안 다른 사람이 내 결재를 대신합니다(대결). 결재 기록에는 "OOO 대결" 로 남습니다.</p>
     {{ table(delegations) }}

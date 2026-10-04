@@ -516,7 +516,9 @@ def audit():
     actor, entity = a_str("actor"), a_str("entity")
     limit = a_int("limit", 300)
     limit = limit if limit in AUDIT_LIMITS else 300
-    df = db.list_audit(limit, actor, entity if entity in AUDIT_ENTITIES else "")
+    df = db.list_audit(limit, actor, entity if entity in AUDIT_ENTITIES else "", date_from=a_str("from"),
+                       date_to=a_str("to"), entity_id=a_int("entity_id") or None, action=a_str("action"),
+                       keyword=a_str("q"))
     if request.args.get("export") == "audit":
         return csv_response(df, "감사로그.csv")
     return render_page(
@@ -673,11 +675,19 @@ def data():
 
 @bp.route("/data/backup.xlsx")
 def backup():
-    """엑셀 백업. 고객 개인정보는 가린다(원본 보관은 DB 백업으로)."""
-    sheets = {"거래처": dataio.mask_pii(db.list_customers()), "영업기회": db.list_deals(),
-              "영업활동": db.list_activities(days=3650), "매출": db.list_sales(), "목표": db.list_targets()}
-    return xlsx_response(dataio.to_excel(sheets), f"영업관리_백업_{date.today():%Y%m%d}.xlsx",
-                         rows=sum(len(f) for f in sheets.values()))
+    """엑셀 백업. 고객 개인정보는 가린다(원본 보관은 DB 백업으로).
+    데이터가 많으면 몇 분 걸리므로 백그라운드에서 만들고, 데이터 관리 > 일괄 등록 화면의 작업 목록에서 받는다."""
+    from core import bulk
+
+    def work(progress) -> dict:
+        sheets = {"거래처": dataio.mask_pii(db.list_customers()), "영업기회": db.list_deals(),
+                  "영업활동": db.list_activities(days=3650), "매출": db.list_sales(), "목표": db.list_targets()}
+        return {"file": (f"영업관리_백업_{date.today():%Y%m%d}.xlsx", dataio.to_excel(sheets)),
+                "ok": sum(len(f) for f in sheets.values())}
+
+    bulk.start("내려받기", "엑셀 백업 (전체 데이터)", work, dict(g.user))
+    flash("엑셀 백업을 만들고 있습니다. 다 되면 '데이터 일괄 등록' 화면의 작업 목록에서 받을 수 있습니다.", "info")
+    return redirect(url_for("io.index"))
 
 
 def _sample_industries():

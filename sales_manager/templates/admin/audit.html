@@ -6,6 +6,10 @@
 <form method="get" class="toolbar" action="{{ page_path() }}">
   <label>사용자 {{ select('actor', actors, actor, blank='전체') }}</label>
   <label>대상 {{ select('entity', entities, entity, blank='전체') }}</label>
+  <label>대상 번호 <input type="number" name="entity_id" min="1" value="{{ request.args.get('entity_id', '') }}" style="width:7em"></label>
+  <label>작업 <input name="action" value="{{ request.args.get('action', '') }}" placeholder="예) 수정, 다운로드" style="width:9em"></label>
+  <label>기간 <input type="date" name="from" value="{{ request.args.get('from', '') }}"> ~ <input type="date" name="to" value="{{ request.args.get('to', '') }}"></label>
+  <label class="grow">상세 검색 <input name="q" value="{{ request.args.get('q', '') }}" placeholder="접속 IP · 문의 번호(요청 ID) · 거래처명 등"></label>
   <label>표시 건수 <select name="limit">{% for l in limits %}<option {{ 'selected' if l == limit }}>{{ l }}</option>{% endfor %}</select></label>
   <button class="btn">조회</button>
   <button class="btn" name="verify" value="1">🔐 무결성 검증</button>

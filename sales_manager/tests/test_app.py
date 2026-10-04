@@ -285,7 +285,6 @@ def test_downloads_are_audited(app):
     for url, mime in [("/data/template/매출.csv", "text/csv"),
                       ("/data/template/매출.xlsx", "spreadsheetml"),
                       ("/data/export?preset=내부통제 점검&download=xlsx", "spreadsheetml"),
-                      ("/admin/data/backup.xlsx", "spreadsheetml"),
                       ("/sales?export=ar", "text/csv"),
                       ("/admin/audit?export=audit", "text/csv")]:
         before = db._scalar("SELECT COUNT(*) FROM audit_log WHERE action='다운로드'")

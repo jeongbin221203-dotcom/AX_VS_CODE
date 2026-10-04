@@ -107,7 +107,7 @@ def test_writeoff_needs_approval_and_clears_ar(app):
     sid = _sale(cid, qty=1, unit=20_000_000)            # 2,200만 > 1,000만 → 임원 결재
     ent.record_payment(sid, 2_000_000)
     rep = login(app, "김영업")
-    post(rep, f"/sales/{sid}/writeoff", {"reason": "거래처 파산"})
+    post(rep, f"/sales/{sid}/writeoff", {"reason": "거래처 파산", "code": "BANKRUPT", "event_date": TODAY})
     req = db._one("SELECT * FROM fin_requests WHERE sale_id=? AND kind='대손'", [sid])
     assert req["required_role"] == "EXEC" and int(req["amount"]) == 20_000_000
     mgr = login(app, "한팀장")
@@ -125,7 +125,7 @@ def test_writeoff_needs_approval_and_clears_ar(app):
     assert doc["doc_type"] == "대손" and doc["writeoff_amount"] == 20_000_000
     # 본인 요청 결재 금지
     sid2 = _sale(cid, qty=1, unit=100_000)
-    rid = credit.request_writeoff(sid2, "소액", user("한팀장"))
+    rid = credit.request_writeoff(sid2, "소액", user("한팀장"), "BANKRUPT", TODAY)
     with pytest.raises(PermissionError):
         credit.decide(rid, True, "", user("한팀장"))
 

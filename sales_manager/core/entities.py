@@ -148,4 +148,6 @@ def to_krw(currency: str, foreign_amount: Any, rate: Any = None, on: Optional[st
     value = float(rate) if rate not in (None, "") else rate_on(currency, on)
     if not value or value <= 0:
         raise ValueError(f"{currency} 환율이 없습니다. 회사 설정 > 환율에 넣거나 환율을 직접 입력하세요.")
-    return int(round(float(foreign_amount or 0) * value)), value
+    from decimal import ROUND_HALF_UP, Decimal
+    krw = (Decimal(str(foreign_amount or 0)) * Decimal(str(value))).quantize(Decimal("1"), rounding=ROUND_HALF_UP)
+    return int(krw), value                       # 십진수로 계산해 0.5원 경계의 이진 소수 오차를 없앤다

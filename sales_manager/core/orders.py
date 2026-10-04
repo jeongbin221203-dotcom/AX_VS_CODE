@@ -89,9 +89,11 @@ def from_quote(quote_id: int, data: Optional[dict] = None) -> int:
     items = [{"product_id": it["product_id"], "item_name": it["item_name"], "item_code": it["item_code"],
               "unit": it["unit"], "qty": it["qty"], "unit_price": it["unit_price"], "tax_type": it["tax_type"]}
              for it in q["items"]]
-    return create({"customer_id": q["customer_id"], "deal_id": q["deal_id"], "quote_id": q["id"],
-                   "entity_id": q.get("entity_id"), "currency": q.get("currency"), "fx_rate": q.get("fx_rate"),
-                   "owner_id": q["owner_id"], "memo": f"견적 {q['quote_no']} Rev.{q['revision']}", **(data or {})}, items)
+    oid = create({"customer_id": q["customer_id"], "deal_id": q["deal_id"], "quote_id": q["id"],
+                  "entity_id": q.get("entity_id"), "currency": q.get("currency"), "fx_rate": q.get("fx_rate"),
+                  "owner_id": q["owner_id"], "memo": f"견적 {q['quote_no']} Rev.{q['revision']}", **(data or {})}, items)
+    qt.win_deal(q, "견적으로 수주 등록")
+    return oid
 
 
 def get(order_id: int) -> dict:
@@ -144,12 +146,22 @@ def deliver(order_id: int, quantities: dict[int, int], sale_date: Optional[str] 
             if not ok:
                 raise db.ConflictError("그 사이 다른 납품이 등록되어 잔량이 바뀌었습니다. 새로고침 후 다시 입력하세요.")
             it = items[iid]
-            sid = db.upsert_sale({
+            sale = {
                 "customer_id": o["customer_id"], "deal_id": o["deal_id"], "sale_date": sale_date, "item": it["item_name"],
                 "item_code": it["item_code"], "product_id": it["product_id"], "qty": qty, "unit_price": it["unit_price"],
                 "amount": qty * int(it["unit_price"]), "tax_type": it["tax_type"], "owner_id": o["owner_id"],
                 "quote_id": o["quote_id"], "entity_id": o["entity_id"], "currency": o.get("currency") or "KRW",
-                "fx_rate": o.get("fx_rate") or 1, "memo": f"수주 {o['order_no']}"})
+                "fx_rate": o.get("fx_rate") or 1, "memo": f"수주 {o['order_no']}"}
+            if sale["currency"] != "KRW":
+                # 외화 매출은 공급시기(납품일)의 환율로 원화 환산한다 (부가가치세법 시행령 제59조) — 수주일 환율이 아니라
+                from . import entities as ent_mod
+                rate = ent_mod.rate_on(sale["currency"], sale_date)
+                if not rate:
+                    raise ValueError(f"납품일({sale_date or '오늘'})의 {sale['currency']} 환율이 없습니다. "
+                                     f"회사 설정 > 환율에 넣은 뒤 다시 납품하세요.")
+                sale.update(foreign_unit_price=round(int(it["unit_price"]) / float(o.get("fx_rate") or 1), 2),
+                            fx_rate=rate, amount=None)
+            sid = db.upsert_sale(sale)
             with db.get_conn() as conn:
                 conn.execute("UPDATE sales SET order_id=?, order_item_id=? WHERE id=?", (int(order_id), iid, sid))
             sale_ids.append(sid)

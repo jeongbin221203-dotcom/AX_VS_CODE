@@ -172,7 +172,7 @@ def save_quote(data: dict, items: list[dict]) -> int:
     _x, fx_rate = ent_mod.to_krw(currency, 1, data.get("fx_rate"), issue)
     header = {"customer_id": int(cust["id"]), "deal_id": deal_id, "owner": owner_name, "owner_id": owner_id,
               "entity_id": ent_mod.resolve(data.get("entity_id")), "currency": currency, "fx_rate": fx_rate,
-              "foreign_amount": round(totals["total_amount"] / fx_rate, 2) if currency != "KRW" else None,
+              "foreign_amount": round(totals["supply_amount"] / fx_rate, 2) if currency != "KRW" else None,   # 매출과 같은 공급가액 기준
               "title": (data.get("title") or "").strip() or None, "issue_date": issue, "valid_until": valid,
               "terms": data.get("terms") or f"결제조건: 세금계산서 발행 후 {cust.get('payment_terms') or 30}일",
               "memo": data.get("memo"), **totals}
@@ -232,10 +232,30 @@ def revise(quote_id: int) -> int:
 # ---------------------------------------------------------------------------
 # 발송 · 결정 · 매출 전환
 # ---------------------------------------------------------------------------
+def approval_base(q: dict) -> int:
+    """할인 결재 기준가 합계: 품목 마스터 줄은 거래처 특가(팀장 이상이 등록·승인한 가격)가 있으면 특가, 없으면 정가.
+    특가까지는 이미 승인된 가격이라 견적마다 다시 결재받지 않고, 특가보다 더 깎은 만큼만 결재 대상."""
+    total = 0
+    for line in q.get("items") or []:
+        price = int(line["list_price"])
+        if line.get("product_id"):
+            try:
+                price = int(catalog.price_for(int(q["customer_id"]), int(line["product_id"]), q.get("issue_date"))["unit_price"])
+            except ValueError:
+                pass
+        total += int(line["qty"]) * price
+    return total
+
+
+def approval_rate(q: dict, base: Optional[int] = None) -> float:
+    base = approval_base(q) if base is None else base
+    return round((1 - int(q["supply_amount"]) / base) * 100, 2) if base else 0.0
+
+
 def _sync_deal(q: dict) -> dict:
-    """견적 조건(정가 합계·공급가액·할인율)을 영업기회에 반영한다. 바뀌면 기존 할인 승인은 무효가 된다."""
+    """견적 조건(결재 기준가 합계·공급가액·할인율)을 영업기회에 반영한다. 바뀌면 기존 할인 승인은 무효가 된다."""
     deal = db.get_deal(int(q["deal_id"]))
-    list_total = int(q["list_total"])
+    list_total = approval_base(q)
     if any(not line.get("product_id") for line in q.get("items") or []):
         # 직접 입력 품목은 정가를 사용자가 정한다 → 영업기회에 잡힌 정가보다 낮춰 할인율을 0% 로 만들 수 없게
         list_total = max(list_total, int(deal.get("list_amount") or 0))
@@ -262,9 +282,10 @@ def send(quote_id: int) -> None:
                              f"견적 조건을 영업기회에 반영했으니, 영업기회에서 할인 결재를 받은 뒤 발송하세요.")
     else:
         # 할인 결재는 영업기회 단위로 받는다 → 결재가 필요한 할인인데 영업기회가 없으면 결재 없이 나가지 않게 막는다
-        role = db.required_approval_role(q.get("discount_rate"))
+        rate = approval_rate(q)                     # 특가 대비 할인율
+        role = db.required_approval_role(rate)
         if role:
-            raise ValueError(f"할인 {float(q['discount_rate']):.1f}% 는 {db.ROLE_LABEL[role]} 결재가 필요합니다. "
+            raise ValueError(f"할인 {rate:.1f}% (특가·정가 기준) 는 {db.ROLE_LABEL[role]} 결재가 필요합니다. "
                              f"견적에 영업기회를 연결하고 그 영업기회에서 할인 결재를 받은 뒤 발송하세요.")
     with db.get_conn() as conn:
         if conn.execute("UPDATE quotes SET status='발송', sent_at=?, updated_at=?, row_version=COALESCE(row_version,0)+1 "
@@ -297,6 +318,19 @@ def claim(q: dict) -> None:
             raise db.ConflictError("다른 사용자가 방금 이 견적을 처리했습니다. 새로고침해서 확인하세요.")
 
 
+def win_deal(q: dict, how: str) -> bool:
+    """수락된 견적이 수주·매출로 넘어가면 연결된 영업기회를 '수주' 로 옮긴다 (진행 단계에 남아 예측에 두 번 잡히지 않게).
+    단계 조건(MEDDIC 등)은 이미 고객이 견적을 받아들여 계약한 사실로 대신한다 — 감사로그에 이유를 남긴다."""
+    if not q.get("deal_id"):
+        return False
+    deal = db.get_deal(int(q["deal_id"])) or {}
+    if deal.get("stage") in (db.STAGE_WON, db.STAGE_LOST):
+        return False
+    db.change_stage(int(q["deal_id"]), db.STAGE_WON, force=True)
+    db.audit("자동수주", "영업기회", int(q["deal_id"]), {"견적번호": q["quote_no"], "사유": how})
+    return True
+
+
 def convert_to_sales(quote_id: int, sale_date: Optional[str] = None) -> list[int]:
     """수락된 견적을 품목별 매출로 등록한다 (한 견적은 한 번만)."""
     q = get_quote(quote_id)
@@ -317,6 +351,7 @@ def convert_to_sales(quote_id: int, sale_date: Optional[str] = None) -> list[int
             "entity_id": q.get("entity_id"), "currency": q.get("currency") or "KRW", "fx_rate": q.get("fx_rate") or 1,
             "memo": f"견적 {q['quote_no']} Rev.{q['revision']}"}))
     db.audit("매출전환", "견적", quote_id, {"견적번호": q["quote_no"], "매출": ids})
+    win_deal(q, "견적을 매출로 전환")
     return ids
 
 
@@ -388,7 +423,7 @@ def pdf(quote_id: int) -> bytes:
     story = [Paragraph("견 적 서", title), head, Spacer(1, 6 * mm), table, Spacer(1, 6 * mm),
              Paragraph(f"거래조건: {q.get('terms') or '-'}", body)]
     if (q.get("currency") or "KRW") != "KRW":
-        story.append(Paragraph(f"외화 합계: {q['currency']} {float(q.get('foreign_amount') or 0):,.2f} "
+        story.append(Paragraph(f"외화 공급가액(부가세 제외): {q['currency']} {float(q.get('foreign_amount') or 0):,.2f} "
                                f"(환율 {float(q.get('fx_rate') or 1):,.4f}원 적용, 원화 금액이 기준)", body))
     if q.get("memo"):
         story.append(Paragraph(f"비고: {q['memo']}".replace("\n", "<br/>"), body))

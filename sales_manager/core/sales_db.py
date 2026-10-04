@@ -16,6 +16,7 @@ from __future__ import annotations
 import calendar
 import hashlib
 import json
+from decimal import Decimal
 import os
 import random
 import re
@@ -279,8 +280,14 @@ def audit(action: str, entity: str, entity_id: int | None = None,
     text = (json.dumps(detail, ensure_ascii=False, default=str)
             if not isinstance(detail, (str, type(None))) else detail)
     ip = _IP.get()
-    if ip and isinstance(detail, (dict, type(None))):
-        text = json.dumps({**(detail or {}), "접속IP": ip}, ensure_ascii=False, default=str)
+    try:                                       # 요청 ID — 사용자 문의(오류 화면의 문의 번호)와 감사로그를 잇는다
+        from .observability import request_id
+        rid = request_id()
+    except Exception:   # noqa: BLE001
+        rid = "-"
+    if (ip or rid not in ("-", "", None)) and isinstance(detail, (dict, type(None))):
+        extra = {k: v for k, v in (("접속IP", ip), ("요청ID", rid if rid not in ("-", "") else None)) if v}
+        text = json.dumps({**(detail or {}), **extra}, ensure_ascii=False, default=str)
     record = {"ts": _now(), "actor": _ACTOR.get(), "actor_id": _ACTOR_ID.get(), "action": action,
               "entity": entity, "entity_id": entity_id, "detail": text}
     try:
@@ -366,16 +373,33 @@ def diff(prev: Optional[dict], new: dict, fields: Iterable[str]) -> dict:
 
 
 def list_audit(limit: int = 300, actor: str = "", entity: str = "",
-               db_path: str | None = None) -> pd.DataFrame:
+               db_path: str | None = None, date_from: str = "", date_to: str = "", entity_id: int | None = None,
+               action: str = "", keyword: str = "") -> pd.DataFrame:
+    """감사로그 검색 — 사용자·대상·기간·대상 번호·작업·상세 글자(접속 IP·요청 ID·거래처명 등)."""
     sql = ("SELECT id AS 번호, ts AS 시각, actor AS 사용자, action AS 작업, entity AS 대상, "
            'entity_id AS "대상ID", detail AS 상세 FROM audit_log WHERE 1=1')
     params: list[Any] = []
     if actor:
-        sql += " AND actor = ?"
-        params.append(actor)
+        sql += " AND actor LIKE ?"
+        params.append(f"%{actor}%")
     if entity:
         sql += " AND entity = ?"
         params.append(entity)
+    if _d(date_from):
+        sql += " AND ts >= ?"
+        params.append(_d(date_from))
+    if _d(date_to):
+        sql += " AND ts <= ?"
+        params.append(_d(date_to) + " 23:59:59")
+    if entity_id:
+        sql += " AND entity_id = ?"
+        params.append(int(entity_id))
+    if action:
+        sql += " AND action LIKE ?"
+        params.append(f"%{action}%")
+    if keyword:
+        sql += " AND detail LIKE ?"
+        params.append(f"%{keyword}%")
     sql += " ORDER BY id DESC LIMIT ?"
     params.append(int(limit))
     return _df(sql, params, db_path)
@@ -1143,9 +1167,15 @@ def status_for(paid: int, total: int) -> str:
 
 
 def _etax_active(sale_id: int, db_path: str | None = None) -> bool:
+    """세금계산서가 나간 매출인지 — 금액·과세구분·일자 수정과 취소를 막는다.
+    전자 발행(진행 중·완료), 진행 중인 수정세금계산서, 손으로 등록한 종이·전자 세금계산서 증빙(무효 처리 안 된 것)."""
     try:
-        return bool(_scalar("SELECT COUNT(*) FROM etax_invoices WHERE sale_id=? AND status IN ('발행요청','전송중','발행완료')",
-                            [int(sale_id)], db_path))
+        if _scalar("SELECT COUNT(*) FROM etax_invoices WHERE sale_id=? AND ("
+                   "(modify_code IS NULL AND status IN ('발행요청','전송중','발행완료')) OR "
+                   "(modify_code IS NOT NULL AND status IN ('발행요청','전송중')))", [int(sale_id)], db_path):
+            return True
+        return bool(_scalar("SELECT COUNT(*) FROM sale_documents WHERE sale_id=? AND voided_at IS NULL "
+                            "AND doc_type IN ('전자세금계산서','세금계산서')", [int(sale_id)], db_path))
     except Exception:                                # noqa: BLE001 - 마이그레이션 전
         return False
 
@@ -1162,10 +1192,12 @@ def upsert_sale(data: dict, db_path: str | None = None) -> int:
     fx_rate, foreign_amount = 1.0, None
     if currency != "KRW":                 # 외화: 외화 단가 × 환율 = 원화 단가 (집계·채권·부가세는 원화)
         if data.get("foreign_unit_price") not in (None, ""):
-            foreign_unit = float(str(data["foreign_unit_price"]).replace(",", ""))
-            unit_krw, fx_rate = ent_mod.to_krw(currency, foreign_unit, data.get("fx_rate"), data.get("sale_date"))
-            data = {**data, "unit_price": unit_krw, "amount": None}
-            foreign_amount = round(foreign_unit * qty, 2)
+            foreign_unit = Decimal(str(data["foreign_unit_price"]).replace(",", ""))
+            foreign_total = foreign_unit * qty
+            # 외화 합계 × 환율을 한 번만 반올림한다 (원화 단가를 먼저 반올림해 수량을 곱하면 수량만큼 오차가 커짐)
+            amount_krw, fx_rate = ent_mod.to_krw(currency, foreign_total, data.get("fx_rate"), data.get("sale_date"))
+            data = {**data, "unit_price": round(amount_krw / qty) if qty else amount_krw, "amount": amount_krw}
+            foreign_amount = float(round(foreign_total, 2))
         else:
             _x, fx_rate = ent_mod.to_krw(currency, 1, data.get("fx_rate"), data.get("sale_date"))
     unit_price = int(data.get("unit_price") or 0)
@@ -1235,7 +1267,7 @@ def upsert_sale(data: dict, db_path: str | None = None) -> int:
         values = [record[f] for f in SALE_FIELDS]
         money_changed = diff(prev, record, ["customer_id", "qty", "unit_price", "amount", "sale_date", "tax_type"])
         if money_changed and _etax_active(sid, db_path):
-            raise ValueError("전자세금계산서를 발행(요청)한 매출은 금액·과세구분·일자를 바꿀 수 없습니다 — 반품·정정(수정세금계산서)을 쓰세요.")
+            raise ValueError("세금계산서가 발행(등록)된 매출은 금액·과세구분·일자를 바꿀 수 없습니다 — 반품·정정, 또는 매출 화면의 '수정세금계산서'(01 착오·04 계약 해제·05 내국신용장·06 이중발급)를 쓰세요. 손으로 올린 증빙이 잘못이면 증빙을 무효 처리하세요.")
         if money_changed and prev.get("erp_status") == "전송완료":
             raise ValueError("ERP로 전송된 매출은 금액·거래처·일자를 바꿀 수 없습니다. "
                              "매출을 취소한 뒤 다시 등록하세요(ERP에는 취소 전표가 전송됩니다).")
@@ -1302,7 +1334,8 @@ def cancel_sale(sale_id: int, reason: str, db_path: str | None = None, actor: di
     if int(prev.get("paid_amount") or 0) > 0:
         raise ValueError("입금 내역이 있는 매출은 취소할 수 없습니다. 입금 반제를 먼저 처리하세요.")
     if _etax_active(sale_id, db_path):
-        raise ValueError("전자세금계산서를 발행(요청)한 매출은 취소할 수 없습니다 — 반품(수정세금계산서)으로 처리하세요.")
+        raise ValueError("세금계산서가 발행(등록)된 매출은 바로 취소할 수 없습니다 — 매출 화면에서 수정세금계산서 04(계약 해제)를 "
+                         "발행한 뒤 취소하거나, 반품으로 처리하세요.")
     if (prev.get("sale_kind") or "매출") != "매출":
         raise ValueError("반품·정정 행은 취소하지 않습니다. 반대 방향 정정으로 바로잡으세요.")
     if _one("SELECT id FROM sales WHERE original_sale_id=? AND status <> ?", [sale_id, SALE_CANCELLED], db_path):

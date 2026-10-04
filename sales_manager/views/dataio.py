@@ -9,6 +9,7 @@ from pathlib import Path
 import pandas as pd
 from flask import Blueprint, abort, flash, g, redirect, request, session, url_for
 
+from core import bulk
 from core import dataio
 from core import excel_forms as xf
 from core import enterprise as ent
@@ -65,7 +66,8 @@ def index():
 
 def _import_ctx(entity: str, form_id: int | None = None) -> dict:
     forms = xf.list_forms("import", entity)
-    return {"import_forms": forms, "form_id": form_id if form_id is not None else a_int("form_id")}
+    return {"import_forms": forms, "form_id": form_id if form_id is not None else a_int("form_id"),
+            "bulk_tasks": bulk.recent(g.user), "bulk_running": bulk.running(g.user)}
 
 
 @bp.route("/template/form/<int:fid>.xlsx")
@@ -154,16 +156,51 @@ def import_run():
         return redirect(url_for("io.index", entity=entity))
     on_dup = f_str("on_duplicate") if f_str("on_duplicate") in ("건너뛰기", "덮어쓰기") else "건너뛰기"
     raw, offset = _read_pending(info, key)
-    result = dataio.import_rows(entity, raw, g.user, dry_run=False, on_duplicate=on_dup, row_offset=offset)
     _discard_upload()
+    user = dict(g.user)
 
-    message = f"{entity} {result['ok']}건 등록 완료"
-    if result["skipped"]:
-        message += f" · 중복 {result['skipped']}건 건너뜀"
-    if result["errors"]:
-        message += f" · 오류 {len(result['errors'])}건"
-    flash(message, "success" if result["ok"] else "warning")
+    def work(progress) -> dict:
+        r = dataio.import_rows(entity, raw, user, dry_run=False, on_duplicate=on_dup, row_offset=offset,
+                               progress=progress)
+        return {"ok": r["ok"], "skipped": r["skipped"], "errors": [list(e) for e in r["errors"]]}
+
+    inline = len(raw) <= bulk.INLINE_ROWS             # 작은 파일은 바로, 큰 파일은 백그라운드 (요청 시간 초과·중복 재시도 방지)
+    tid = bulk.start("업로드", f"{entity} 일괄 등록 ({len(raw):,}행, {info.get('filename') or '파일'})", work, user,
+                     total=len(raw), inline=inline)
+    task = bulk.get(tid, user)
+    if inline:
+        message = f"{entity} {task['ok']}건 등록 완료"
+        if task["skipped"]:
+            message += f" · 중복 {task['skipped']}건 건너뜀"
+        if task["error_count"]:
+            message += f" · 오류·안내 {task['error_count']}건 (아래 작업 목록에서 목록 받기)"
+        flash(message if task["status"] == "완료" else f"등록 실패: {task['message']}",
+              "success" if task["status"] == "완료" and task["ok"] else "warning")
+    else:
+        flash(f"{len(raw):,}행을 백그라운드에서 등록하고 있습니다. 아래 '작업' 목록에서 진행률을 볼 수 있고, "
+              f"다른 화면으로 가도 계속됩니다.", "info")
     return redirect(url_for("io.index", entity=entity))
+
+
+@bp.route("/tasks/<int:tid>/errors.csv")
+def task_errors(tid: int):
+    try:
+        task = bulk.get(tid, g.user)
+    except PermissionError as exc:
+        abort(403, str(exc))
+    return csv_response(bulk.errors_frame(task), f"작업{tid}_오류목록.csv")
+
+
+@bp.route("/tasks/<int:tid>/file")
+def task_file(tid: int):
+    try:
+        task = bulk.get(tid, g.user)
+        data = bulk.file_bytes(task)
+    except PermissionError as exc:
+        abort(403, str(exc))
+    except ValueError:
+        abort(404)
+    return xlsx_response(data, task["file_name"], rows=None, pii=bool(task.get("pii")))
 
 
 # ----------------------------------------------------------------------------
@@ -230,6 +267,24 @@ def export():
         frame = _collect({**p, "sources": [form["entity"]]}).get(form["entity"], pd.DataFrame())
         data = xf.render_export(form, frame, xf.export_meta(g.user, f"{p['date_from']} ~ {p['date_to']}"))
         return xlsx_response(data, f"{form['name']}_{date.today():%Y%m%d}.xlsx", rows=len(frame), pii=with_pii)
+
+    if request.args.get("download") == "bg" and p["sources"]:
+        # 큰 추출은 백그라운드에서 파일을 만들고 링크로 받는다 (요청이 끊겨도 계속)
+        scope = db.current_scope()
+        meta = {"추출일시": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "추출자": f"{g.user['name']} ({db.ROLE_LABEL.get(g.user['role'], g.user['role'])})",
+                "조회범위": "전사" if scope is None else f"{len(scope)}명",
+                "기간": f"{p['date_from']} ~ {p['date_to']}", "담당자": p["owner_label"],
+                "개인정보": f"포함 (사유: {p['pii_reason']})" if with_pii else "마스킹"}
+
+        def work(progress) -> dict:
+            frames = _collect(p)
+            return {"file": (f"영업데이터_{date.today():%Y%m%d}.xlsx", dataio.to_excel(frames, meta)), "pii": with_pii,
+                    "ok": sum(len(f) for f in frames.values())}
+
+        bulk.start("내려받기", f"데이터 추출 ({', '.join(p['sources'])})", work, dict(g.user))
+        flash("추출 파일을 만들고 있습니다. '일괄 등록' 탭 아래 작업 목록에서 다 되면 받을 수 있습니다.", "info")
+        return redirect(url_for("io.index"))
 
     if request.args.get("download") == "xlsx":
         scope = db.current_scope()

@@ -40,14 +40,22 @@ def enabled() -> bool:
     return adapter_name() in ("file", "rest", "mock")
 
 
-MODIFY_CODES = {"반품": "03", "정정": "02"}      # 수정사유: 03 환입(반품), 02 공급가액 변동
+MODIFY_CODES = {"반품": "03", "정정": "02"}      # 수정사유: 03 환입(반품), 02 공급가액 변동 (반품·정정 매출 행으로)
+# 당초분을 통째로 음수로 지우는 수정세금계산서 (부가가치세법 시행령 제70조) — 매출 화면의 발행 기록에서 요청
+MODIFY_REASONS = {"01": "기재사항 착오·정정", "04": "계약의 해제", "05": "내국신용장 사후개설", "06": "착오에 의한 이중발급"}
+MODIFY_RULES = {
+    "01": "작성일자 = 당초 작성일. 당초분 음수 발행 뒤 바로잡은 내용으로 다시 발행하세요.",
+    "04": "작성일자 = 계약 해제일. 발행된 뒤 매출을 취소할 수 있습니다.",
+    "05": "작성일자 = 당초 작성일. 내국신용장은 공급한 과세기간 끝난 뒤 25일 안에 개설된 것이어야 하고, 음수 발행 뒤 영세율로 다시 발행합니다.",
+    "06": "작성일자 = 당초 작성일. 이중으로 발급된 한 장을 음수로 지웁니다.",
+}
 
 
 def build_xml(sale: dict, customer: dict, supplier: dict, issue_date: str, approval_no: str = "",
               original_approval: str = "") -> bytes:
     """국세청 전자세금계산서 표준(KEC) 구조의 XML. 금액은 원화. 반품·정정 행이면 수정세금계산서(수정사유·당초 승인번호)."""
     kind = sale.get("sale_kind") or "매출"
-    modify = MODIFY_CODES.get(kind)
+    modify = sale.get("_modify_code") or MODIFY_CODES.get(kind)
     type_code = ("0201" if modify else "0101") if (sale.get("tax_type") or "과세") == "과세" else         ("0202" if modify else "0102")                                  # 일반/영세율 · 수정이면 02xx
     d = issue_date.replace("-", "")
     item = escape(str(sale["item"]))[:100]
@@ -130,8 +138,8 @@ def request_issue(sale_id: int, issue_date: Optional[str], actor: dict) -> int:
         raise ValueError(f"발급 기한({deadline:%Y-%m-%d})이 지났습니다. 지연발급은 세무 담당과 확인한 뒤 ASP 에서 직접 처리하세요.")
     from . import jobs
     with db.get_conn() as conn:
-        active = conn.execute("SELECT COUNT(*) FROM etax_invoices WHERE sale_id=? AND status IN ('발행요청','전송중','발행완료')",
-                              (sale["id"],)).fetchone()[0]
+        active = conn.execute("SELECT COUNT(*) FROM etax_invoices WHERE sale_id=? AND modify_code IS NULL "
+                              "AND status IN ('발행요청','전송중','발행완료')", (sale["id"],)).fetchone()[0]
         if active:
             raise ValueError("이미 발행했거나 발행 중인 매출입니다.")
         try:
@@ -145,6 +153,75 @@ def request_issue(sale_id: int, issue_date: Optional[str], actor: dict) -> int:
         jobs.enqueue("etax.issue", {"id": eid}, dedupe_key=f"etax-{eid}", conn=conn)
     db.audit("세금계산서발행요청", "매출", int(sale["id"]), {"요청번호": eid, "작성일자": day})
     return eid
+
+
+def _quarter_end(day: date) -> date:
+    month = ((day.month - 1) // 3 + 1) * 3
+    return (date(day.year, month, 28) + timedelta(days=4)).replace(day=1) - timedelta(days=1)
+
+
+def modifiable(row: dict) -> bool:
+    """이 발행 기록을 수정세금계산서(01·04·05·06)로 지울 수 있는지."""
+    return bool(row.get("approval_no")) and not row.get("modify_code") and row.get("status") in ("발행완료", "실패")
+
+
+def request_modify(eid: int, code: str, reason: str, actor: dict, day: Optional[str] = None) -> int:
+    """당초 발행분을 음수로 지우는 수정세금계산서 요청. 금액은 당초 매출 그대로(부호만 반대)."""
+    if not enabled():
+        raise ValueError("전자세금계산서 발행 연결이 설정되지 않았습니다 (SALES_ETAX_ADAPTER).")
+    if code not in MODIFY_REASONS:
+        raise ValueError("수정 사유를 고르세요 (01·04·05·06). 반품은 03, 단가 변동은 02 — 매출의 반품·정정으로 하세요.")
+    if not str(reason or "").strip():
+        raise ValueError("수정 사유 설명을 입력하세요.")
+    orig = db._one("SELECT * FROM etax_invoices WHERE id=?", [int(eid)])
+    if not orig or not modifiable(orig):
+        raise ValueError("승인번호가 있는 당초 발행만 수정세금계산서로 지울 수 있습니다.")
+    if code != "06" and orig["status"] != "발행완료":
+        raise ValueError("발행 완료된 세금계산서만 이 사유로 고칠 수 있습니다 (이중 발급분은 06).")
+    sale, customer, supplier = _context(int(orig["sale_id"]))
+    if (sale.get("sale_kind") or "매출") != "매출":
+        raise ValueError("반품·정정 행의 수정세금계산서는 원매출에서 반대 방향 정정으로 처리하세요.")
+    if db._one("SELECT id FROM etax_invoices WHERE original_etax_id=? AND status IN ('발행요청','전송중','발행완료')",
+               [int(eid)]):
+        raise ValueError("이 세금계산서는 이미 수정세금계산서를 발행(요청)했습니다.")
+    original_day = datetime.strptime(str(orig["issue_date"])[:10], "%Y-%m-%d").date()
+    if code == "04":
+        written = datetime.strptime(db._d(day) or date.today().isoformat(), "%Y-%m-%d").date()
+        if written < original_day or written > date.today():
+            raise ValueError(f"계약 해제일은 당초 작성일({original_day})부터 오늘 사이여야 합니다.")
+    else:
+        written = original_day
+    if code == "05":
+        if (sale.get("tax_type") or "과세") != "과세":
+            raise ValueError("내국신용장 사후개설은 과세로 발행한 매출을 영세율로 바꿀 때만 씁니다.")
+        opened = datetime.strptime(db._d(day) or "", "%Y-%m-%d").date() if db._d(day) else None
+        limit = _quarter_end(original_day) + timedelta(days=25)
+        if not opened or not original_day <= opened <= limit:
+            raise ValueError(f"내국신용장 개설일을 입력하세요 — 공급한 과세기간 끝난 뒤 25일({limit}) 안이어야 합니다.")
+    from . import jobs
+    with db.get_conn() as conn:
+        cur = conn.execute(
+            "INSERT INTO etax_invoices (sale_id, status, issue_date, requested_by, requested_at, modify_code, "
+            "original_etax_id, supply_amount, vat_amount, note) VALUES (?, '발행요청', ?, ?, ?, ?, ?, ?, ?, ?)",
+            (int(orig["sale_id"]), written.isoformat(), actor.get("name"), db._now(), code, int(eid),
+             -int(sale["amount"]), -int(sale.get("vat_amount") or 0), reason.strip()[:500]))
+        new_id = int(cur.lastrowid)
+        jobs.enqueue("etax.issue", {"id": new_id}, dedupe_key=f"etax-{new_id}", conn=conn)
+    db.audit("수정세금계산서요청", "매출", int(orig["sale_id"]),
+             {"요청번호": new_id, "당초": int(eid), "당초승인번호": orig["approval_no"], "사유코드": code,
+              "사유": MODIFY_REASONS[code], "설명": reason.strip(), "작성일자": written.isoformat()})
+    return new_id
+
+
+def _xml_for(row: dict, sale: dict, customer: dict, supplier: dict, number: str = "") -> bytes:
+    """발행 기록 하나의 XML — 수정분(01·04·05·06)이면 당초 금액의 음수와 당초 승인번호."""
+    if row.get("modify_code"):
+        orig = db._one("SELECT approval_no FROM etax_invoices WHERE id=?", [int(row["original_etax_id"])]) or {}
+        supply, vat = int(row["supply_amount"] or 0), int(row["vat_amount"] or 0)
+        neg = {**sale, "_modify_code": row["modify_code"], "amount": supply, "vat_amount": vat,
+               "total_amount": supply + vat, "qty": -abs(int(sale["qty"]))}
+        return build_xml(neg, customer, supplier, row["issue_date"], number, orig.get("approval_no") or "")
+    return build_xml(sale, customer, supplier, row["issue_date"], number, _original(sale))
 
 
 def _send(eid: int, xml: bytes, row: dict) -> Optional[str]:
@@ -200,11 +277,11 @@ def process(eid: int) -> dict:
     try:
         db.set_context("system", None)
         sale, customer, supplier = _context(row["sale_id"])
-        if sale.get("status") == db.SALE_CANCELLED:          # 요청 뒤에 취소된 매출은 보내지 않는다
+        if sale.get("status") == db.SALE_CANCELLED and not row.get("modify_code"):   # 요청 뒤 취소된 매출은 보내지 않는다
             with db.get_conn() as conn:
                 conn.execute("UPDATE etax_invoices SET status='실패', error=? WHERE id=?", ("매출이 취소되어 발행하지 않음", eid))
             return {"skipped": True, "reason": "cancelled"}
-        xml = build_xml(sale, customer, supplier, row["issue_date"], original_approval=_original(sale))
+        xml = _xml_for(row, sale, customer, supplier)
         number = _send(int(eid), xml, row)
     except Exception as exc:
         # 어디서 실패하든 '전송중' 으로 남기지 않는다 → 큐가 다시 시도 (REST 는 Idempotency-Key 로 두 번 발행되지 않음)
@@ -279,8 +356,9 @@ def complete(eid: int, approval_no: str, ok: bool = True, message: str = "") -> 
             return {"id": eid, "status": "발행완료", "approval_no": number}
     db.set_context("system", None)
     sale, customer, supplier = _context(row["sale_id"])
-    xml = build_xml(sale, customer, supplier, row["issue_date"], number, _original(sale))
-    doc_type = "수정세금계산서" if (sale.get("sale_kind") or "매출") != "매출" else "전자세금계산서"
+    xml = _xml_for(row, sale, customer, supplier, number)
+    doc_type = ("수정세금계산서" if row.get("modify_code") or (sale.get("sale_kind") or "매출") != "매출"
+                else "전자세금계산서")
     try:
         doc_id, warnings = docs.add_document(int(row["sale_id"]), {"doc_type": doc_type}, xml,
                                              f"전자세금계산서_{number}.xml", {"name": "전자세금계산서 발행", "id": None})
@@ -293,9 +371,25 @@ def complete(eid: int, approval_no: str, ok: bool = True, message: str = "") -> 
     with db.get_conn() as conn:
         conn.execute("UPDATE etax_invoices SET document_id=?, xml_key=?, error=NULL WHERE id=?", (doc_id, key, eid))
     db.audit("세금계산서발행", "매출", int(row["sale_id"]), {"요청번호": eid, "승인번호": number, "증빙": doc_id})
-    if sale.get("status") == db.SALE_CANCELLED:
+    if row.get("modify_code"):
+        _close_original(row, number)
+    elif sale.get("status") == db.SALE_CANCELLED:
         _alert(row, number, "취소된 매출에 전자세금계산서가 발행됨(늦은 승인) — 수정세금계산서(계약의 해제)를 발행하세요.")
     return {"id": eid, "status": "발행완료", "approval_no": number, "document_id": doc_id, "warnings": warnings}
+
+
+def _close_original(row: dict, number: str) -> None:
+    """수정분(음수)이 승인되면 당초 발행은 지워진 것 → 당초 증빙을 무효로 하고 상태를 '수정발행됨' 으로.
+    그러면 매출 잠금이 풀려 사유에 맞게 이어서 처리한다 (01·05 다시 발행, 04 매출 취소)."""
+    orig = db._one("SELECT * FROM etax_invoices WHERE id=?", [int(row["original_etax_id"])]) or {}
+    with db.get_conn() as conn:
+        conn.execute("UPDATE etax_invoices SET status='수정발행됨', error=? WHERE id=?",
+                     (f"수정세금계산서 {row['modify_code']} {MODIFY_REASONS.get(row['modify_code'], '')} 승인 {number}",
+                      int(row["original_etax_id"])))
+        if orig.get("document_id"):
+            conn.execute("UPDATE sale_documents SET voided_at=?, void_reason=?, voided_by=? WHERE id=? AND voided_at IS NULL",
+                         (db._now(), f"수정세금계산서({row['modify_code']}) 승인번호 {number} 로 취소", "전자세금계산서 발행",
+                          int(orig["document_id"])))
 
 
 def _alert(row: dict, number: str, message: str) -> None:
@@ -316,4 +410,10 @@ def _original(sale: dict) -> str:
 
 
 def list_for_sale(sale_id: int) -> list[dict]:
-    return db._df("SELECT * FROM etax_invoices WHERE sale_id=? ORDER BY id DESC", [int(sale_id)]).to_dict("records")
+    rows = db._df("SELECT * FROM etax_invoices WHERE sale_id=? ORDER BY id DESC", [int(sale_id)]).to_dict("records")
+    for r in rows:
+        code = r.get("modify_code") if isinstance(r.get("modify_code"), str) else None
+        r["modify_code"] = code
+        r["modify_label"] = f"수정 {code} {MODIFY_REASONS.get(code, '')}" if code else ""
+        r["can_modify"] = modifiable(r)
+    return rows
