@@ -621,3 +621,16 @@ def test_save_error_does_not_stop_site(app, monkeypatch):
     monkeypatch.setattr(postings, "upsert_many", flaky)
     r = crawler.run_once(force=True, fetcher=FakeFetcher(pages))
     assert r["sites"]["saramin"]["new"] == 3
+
+
+def test_reread_old_postings_without_erasing(app):
+    """읽기 규칙을 고친 시각(reread_before) 전에 읽은 공고는 다시 읽을 대상 — 값은 지우지 않고 표시만."""
+    postings.upsert_many([postings.build("saramin", "71", title="옛 공고", company="가", deadline="2099-12-31",
+                                         salary_text="연봉 3,000만원", company_info={"업종": "제조"})])
+    assert "71" not in crawler._needs_backfill("saramin")
+    with db.connect() as con:
+        con.execute("UPDATE postings SET updated_at = '2026-10-01 00:00:00' WHERE source_id = '71'")
+    db.set_setting("reread_before", "2026-10-05 09:00:00")
+    assert "71" in crawler._needs_backfill("saramin")
+    p = postings.get(postings.find_id("saramin", "71"))
+    assert p["salary_min"] == 3000 and p["company_info"]                    # 값은 그대로

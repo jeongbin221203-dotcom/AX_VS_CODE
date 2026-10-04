@@ -429,7 +429,10 @@ def _linkareer(page: str, url: str) -> dict | None:
         unit = "원" if max(int(lo or 0), int(hi or 0)) >= 100000 else "만원"
         pre = {"YEARLY": "연봉 ", "MONTHLY": "월 ", "HOURLY": "시급 "}.get(a.get("salaryType") or "", "")
         salary_text = (pre + (f"{lo}{unit}~{hi}{unit}" if lo and hi else f"{lo or hi}{unit}")) if (lo or hi) else None
-    emp = ", ".join(dict.fromkeys(_JOB_TYPES.get(t, t) for t in a.get("jobTypes") or [])) or None
+    kinds = a.get("jobTypes") or []
+    # jobTypes 에는 고용형태(FULL_TIME…)와 신입/경력(NEW·EXPERIENCED)이 섞여 온다
+    career = "·".join(n for k, n in (("NEW", "신입"), ("EXPERIENCED", "경력")) if k in kinds) or None
+    emp = ", ".join(dict.fromkeys(_JOB_TYPES.get(t, t) for t in kinds if t not in ("NEW", "EXPERIENCED"))) or None
     edu = [_EDU_CODES.get(str(e).lower(), str(e)) for e in a.get("educationTypes") or []]
     cats = [c.get("name") for c in (a.get("rootCategories") or []) + (a.get("categories") or []) if c.get("name")]
     text = _html_text(body)
@@ -441,7 +444,7 @@ def _linkareer(page: str, url: str) -> dict | None:
     return build(
         "linkareer", posting_id(url, "linkareer") or str(a.get("id")),
         title=_clean_title(a.get("title") or "", a.get("organizationName")), company=a.get("organizationName"),
-        url=url, location=location, education=min(edu, key=len) if edu else None,
+        url=url, location=location, education=min(edu, key=len) if edu else None, career=career,
         employment_type=emp, salary_text=salary_text, job_category=", ".join(dict.fromkeys(cats)) or None,
         keywords=", ".join(s.get("name") for s in a.get("skills") or [] if isinstance(s, dict) and s.get("name")) or None,
         description=desc or None, posted_at=_ms_date(a.get("recruitStartAt")),

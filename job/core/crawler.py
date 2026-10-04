@@ -526,15 +526,24 @@ def _run(s: dict, f: Fetcher) -> dict:
     return summary
 
 
+def _reread_sql() -> tuple[str, list]:
+    """다시 읽을 공고 조건: 상세를 아직 안 읽었거나(company_info 가 NULL), 읽기 규칙을 고친 시각(reread_before)
+    전에 읽은 마감 전 공고. 다시 읽어도 새 페이지에 없는 값은 지우지 않는다(keep_existing)."""
+    before = db.get_setting("reread_before") or ""
+    return ("source = ? AND hidden = 0 AND (deadline IS NULL OR deadline >= ?) "
+            "AND (company_info IS NULL OR updated_at < ?)", [date.today().isoformat(), before])
+
+
 def _needs_backfill(site: str) -> list[str]:
-    """상세를 아직 안 읽은(company_info 가 NULL 인) 마감 전 공고 — 상세 읽기를 갖춘 사이트."""
+    """다시 읽을 공고 — 상세를 안 읽은 것 먼저, 그다음 오래전에 읽은 것부터. 상세 읽기를 갖춘 사이트만."""
     if site not in DETAIL_SITES:
         return []
+    where, args = _reread_sql()
     with db.connect() as con:
         return [r[0] for r in con.execute(
-            "SELECT source_id FROM postings WHERE source = ? AND company_info IS NULL AND hidden = 0 "
-            "AND (deadline IS NULL OR deadline >= ?) ORDER BY id DESC LIMIT ?",
-            (site, date.today().isoformat(), BACKFILL_PER_RUN))]
+            f"SELECT source_id FROM postings WHERE {where} "
+            "ORDER BY company_info IS NOT NULL, updated_at, id DESC LIMIT ?",
+            (site, *args, BACKFILL_PER_RUN))]
 
 
 def _fetch_item(f: Fetcher, site: str, url: str, hint: dict | None) -> tuple[dict | None, str | None]:
@@ -670,9 +679,8 @@ def backlog_status() -> dict:
                 base = (datetime.strptime(first, "%Y-%m-%d %H:%M:%S") + timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S")                     if first else "9999"
                 new_day = con.execute("SELECT COUNT(*) FROM list_seen WHERE site = ? AND first_seen > ? AND first_seen > ?",
                                       (site, since, base)).fetchone()[0]
-                backfill = con.execute(
-                    "SELECT COUNT(*) FROM postings WHERE source = ? AND company_info IS NULL AND hidden = 0 "
-                    "AND (deadline IS NULL OR deadline >= ?)", (site, date.today().isoformat())).fetchone()[0]                     if site in DETAIL_SITES else 0
+                where, args = _reread_sql()
+                backfill = con.execute(f"SELECT COUNT(*) FROM postings WHERE {where}", (site, *args)).fetchone()[0]                     if site in DETAIL_SITES else 0
             done = (last.get("sites", {}).get(site) or {}).get("fetched", 0)
             rows.append({"site": site, "name": linkimport.SITES[site][0], "left": left, "backfill": backfill,
                          "last_fetched": done, "new_day": new_day,
