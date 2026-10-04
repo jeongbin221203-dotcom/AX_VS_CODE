@@ -15,3 +15,8 @@ data/attachments/
 
 # 비밀값이 든 설정 파일
 .env
+
+# 점검 스크립트가 만든 임시 파일 (화면 덤프 등)
+prev_*.html
+stmt_prev.html
+poid.txt
