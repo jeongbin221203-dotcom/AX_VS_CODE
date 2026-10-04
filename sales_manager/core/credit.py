@@ -166,6 +166,27 @@ def pending_for(user: dict) -> pd.DataFrame:
                           "요청일시": r["requested_at"], "필요권한": db.ROLE_LABEL.get(r["required_role"])} for r in mine])
 
 
+def withdraw(request_id: int, actor: dict, reason: str = "") -> None:
+    """요청자가 결재 대기 중인 대손·거래정지 해제 요청을 회수한다."""
+    req = db._one("SELECT * FROM fin_requests WHERE id=?", [int(request_id)])
+    if not req:
+        raise ValueError("요청을 찾을 수 없습니다.")
+    if int(req.get("requested_by_id") or 0) != int(actor["id"]):
+        raise PermissionError("본인이 요청한 건만 회수할 수 있습니다.")
+    with db.get_conn() as conn:
+        if conn.execute("UPDATE fin_requests SET status='회수', decided_at=?, comment=? WHERE id=? AND status='대기'",
+                        (db._now(), f"[요청자 회수] {reason or ''}".strip(), int(request_id))).rowcount == 0:
+            raise ValueError(f"이미 처리된 요청이라 회수할 수 없습니다(현재 상태: {req['status']}).")
+    db.audit(f"{req['kind']}회수", "거래처", int(req["customer_id"]), {"요청번호": int(request_id), "사유": reason or None})
+
+
+def mine_pending(user: dict) -> pd.DataFrame:
+    """내가 요청해서 아직 결재 대기 중인 대손·거래정지 해제."""
+    return db._df("SELECT r.id, r.kind AS 구분, c.name AS 거래처, r.sale_id AS 매출번호, r.amount AS 금액, "
+                  "r.requested_at AS 요청일시 FROM fin_requests r JOIN customers c ON c.id = r.customer_id "
+                  "WHERE r.status='대기' AND r.requested_by_id=? ORDER BY r.id DESC", [int(user["id"])])
+
+
 def recover(request_id: int, amount: int, pay_date: Optional[str], actor: dict, method: str = "계좌이체",
             ref_no: str = "") -> dict:
     """대손 처리한 채권을 나중에 받았을 때: 대손 일부를 되돌리고(음수 '대손' 행) 실제 입금으로 바꾼다.
@@ -296,12 +317,13 @@ def block_candidates(today: Optional[str] = None) -> pd.DataFrame:
                         "GROUP BY customer_id", [db.SALE_CANCELLED, limit]).itertuples():
             rows.append({"customer_id": int(r.customer_id), "reason": f"결제기일 {days}일 초과 연체 {int(r.n)}건 (가장 오래된 기일 {r.oldest})"})
     if over_credit:
-        for r in db._df("SELECT c.id, c.credit_limit, SUM(COALESCE(s.total_amount, s.amount) - COALESCE(s.paid_amount, 0)) AS ar "
+        for r in db._df("SELECT c.id, c.credit_limit, SUM(COALESCE(s.total_amount, s.amount) - COALESCE(s.paid_amount, 0)) "
+                        "- COALESCE((SELECT SUM(a.amount) FROM advances a WHERE a.customer_id = c.id), 0) AS ar "
                         "FROM customers c JOIN sales s ON s.customer_id = c.id AND s.status NOT IN ('입금완료', ?) "
                         "WHERE COALESCE(c.credit_limit, 0) > 0 GROUP BY c.id, c.credit_limit",
                         [db.SALE_CANCELLED]).itertuples():
             if int(r.ar or 0) > int(r.credit_limit):
-                rows.append({"customer_id": int(r.id), "reason": f"미수 {int(r.ar):,}원이 여신한도 {int(r.credit_limit):,}원 초과"})
+                rows.append({"customer_id": int(r.id), "reason": f"순채권(미수−선수금) {int(r.ar):,}원이 여신한도 {int(r.credit_limit):,}원 초과"})
     out = pd.DataFrame(rows)
     return out.groupby("customer_id")["reason"].apply(" · ".join).reset_index() if not out.empty else out
 

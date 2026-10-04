@@ -48,10 +48,11 @@
 
 {% elif tab == 'ar' %}
 
-  <div class="metrics m3">
+  <div class="metrics m4">
     {{ metric('총 미수금', ar_total|krw) }}
     {{ metric('연체 채권', ar_overdue|krw, ('연체비중 %.0f%%'|format(ar_overdue / ar_total * 100)) if ar_total else '-', 'down') }}
     {{ metric('연체 건수', '{:,}건'.format(ar_overdue_cnt)) }}
+    {{ metric('순채권 (미수 − 선수금)', (ar_total - adv_total)|krw, '선수금·돌려줄 돈 ' ~ adv_total|krw) }}
   </div>
   <section class="card">
     <h3>📊 연체구간별 미수금</h3>
@@ -271,7 +272,7 @@
       </form>
     {% endif %}
 
-    <h3 class="doc-title">🧾 전자세금계산서 발행</h3>
+    <h3 class="doc-title">🧾 {{ '전자계산서 (면세)' if raw.tax_type == '면세' else '전자세금계산서' }} 발행</h3>
     {% for e in etax_rows %}
       <div class="small">요청 #{{ e.id }}{% if e.modify_label %} · <strong>{{ e.modify_label }}</strong>{% endif %} · {{ e.status }} · 작성일 {{ e.issue_date }}{% if e.approval_no %} · 승인번호 {{ e.approval_no }}{% endif %}
         {% if e.error %}<span class="warn-text"> · {{ e.error }}</span>{% endif %}</div>
@@ -296,7 +297,7 @@
       <form method="post" action="{{ url_for('finance.sale_etax', sid=raw.id) }}" class="toolbar" data-no-draft>
         {{ csrf() }}
         <label>작성일자 <input type="date" name="issue_date" value="{{ raw.sale_date }}"></label>
-        <button class="btn btn-primary">전자세금계산서 발행 요청</button>
+        <button class="btn btn-primary">{{ '전자계산서' if raw.tax_type == '면세' else '전자세금계산서' }} 발행 요청</button>
         <span class="muted small">발행 대행(ASP)으로 보내고, 승인번호가 오면 아래 증빙에 자동 등록됩니다. 발급 기한·사업자번호를 먼저 확인합니다.</span>
       </form>
     {% elif not etax_on %}

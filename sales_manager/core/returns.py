@@ -145,6 +145,7 @@ def create(sale_id: int, kind: str, reason: str, qty: Optional[int] = None, new_
 
 def original_approval_no(sale_id: int) -> Optional[str]:
     row = db._one("SELECT approval_no FROM sale_documents WHERE sale_id=? AND voided_at IS NULL "
-                  "AND approval_no IS NOT NULL AND doc_type IN ('전자세금계산서','세금계산서') ORDER BY id DESC LIMIT 1",
+                  "AND approval_no IS NOT NULL AND doc_type IN ('전자세금계산서','세금계산서','전자계산서','계산서') "
+                  "ORDER BY id DESC LIMIT 1",
                   [int(sale_id)])
     return (row or {}).get("approval_no")

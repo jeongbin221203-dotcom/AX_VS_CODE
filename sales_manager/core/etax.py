@@ -56,7 +56,13 @@ def build_xml(sale: dict, customer: dict, supplier: dict, issue_date: str, appro
     """국세청 전자세금계산서 표준(KEC) 구조의 XML. 금액은 원화. 반품·정정 행이면 수정세금계산서(수정사유·당초 승인번호)."""
     kind = sale.get("sale_kind") or "매출"
     modify = sale.get("_modify_code") or MODIFY_CODES.get(kind)
-    type_code = ("0201" if modify else "0101") if (sale.get("tax_type") or "과세") == "과세" else         ("0202" if modify else "0102")                                  # 일반/영세율 · 수정이면 02xx
+    tax_type = sale.get("tax_type") or "과세"
+    # 종류 코드: 세금계산서 01xx(수정 02xx) 일반 x1 · 영세율 x2 / 계산서(면세) 0301(수정 0401)
+    if tax_type == "면세":
+        type_code = "0401" if modify else "0301"
+        sale = {**sale, "vat_amount": 0, "total_amount": int(sale.get("amount") or 0)}
+    else:
+        type_code = ("0201" if modify else "0101") if tax_type == "과세" else ("0202" if modify else "0102")
     d = issue_date.replace("-", "")
     item = escape(str(sale["item"]))[:100]
 
@@ -103,8 +109,6 @@ def check(sale: dict, customer: dict, supplier: dict) -> list[str]:
     problems = []
     if sale["status"] == db.SALE_CANCELLED:
         problems.append("취소된 매출입니다.")
-    if (sale.get("tax_type") or "과세") == "면세":
-        problems.append("면세 매출은 세금계산서가 아니라 계산서 발행 대상입니다.")
     if not docs.valid_biz_no(supplier.get("biz_no")):
         problems.append("공급자(우리 회사·법인) 사업자번호가 없거나 올바르지 않습니다 — 회사 설정·법인에서 입력하세요.")
     if not docs.valid_biz_no(customer.get("biz_no")):
@@ -357,8 +361,11 @@ def complete(eid: int, approval_no: str, ok: bool = True, message: str = "") -> 
     db.set_context("system", None)
     sale, customer, supplier = _context(row["sale_id"])
     xml = _xml_for(row, sale, customer, supplier, number)
-    doc_type = ("수정세금계산서" if row.get("modify_code") or (sale.get("sale_kind") or "매출") != "매출"
-                else "전자세금계산서")
+    modified = bool(row.get("modify_code")) or (sale.get("sale_kind") or "매출") != "매출"
+    if (sale.get("tax_type") or "과세") == "면세":              # 면세 매출은 (전자)계산서
+        doc_type = "수정계산서" if modified else "전자계산서"
+    else:
+        doc_type = "수정세금계산서" if modified else "전자세금계산서"
     try:
         doc_id, warnings = docs.add_document(int(row["sale_id"]), {"doc_type": doc_type}, xml,
                                              f"전자세금계산서_{number}.xml", {"name": "전자세금계산서 발행", "id": None})

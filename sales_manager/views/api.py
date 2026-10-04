@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import time
 import re
-from datetime import date
+from datetime import date, datetime, timedelta
 from typing import Any
 
 from flask import Blueprint, current_app, g, jsonify, request
@@ -65,13 +65,26 @@ def _authenticate():
     db.set_ip(client_ip())
     if request.endpoint in ("api.openapi",):
         return None
+    from core import auth as core_auth
+    fail_key = f"api:{client_ip()}"           # 웹 로그인 실패와 따로 센다 (연동 설정 실수가 사무실 로그인을 막지 않게)
+    if core_auth.ip_blocked(fail_key):
+        raise ApiError(429, "too_many_failures",
+                       f"인증 실패가 많아 {core_auth.IP_WINDOW_MINUTES}분 동안 이 IP 의 API 호출을 막았습니다. 키를 확인하세요.",
+                       {"Retry-After": str(core_auth.IP_WINDOW_MINUTES * 60)})
     header = request.headers.get("Authorization", "")
     if not header.startswith("Bearer "):
         raise ApiError(401, "unauthorized", "Authorization: Bearer <API 키> 헤더가 필요합니다.",
                        {"WWW-Authenticate": 'Bearer realm="sales-api"'})
     client, message = api_keys.authenticate(header[7:].strip(), client_ip())
     if not client:
-        db.audit("API인증실패", "시스템", None, {"IP": client_ip(), "사유": message})
+        since = (datetime.now() - timedelta(minutes=core_auth.IP_WINDOW_MINUTES)).strftime("%Y-%m-%d %H:%M:%S")
+        before = int(db._scalar("SELECT COUNT(*) FROM login_ip_failures WHERE ip=? AND at>=?", [fail_key, since]))
+        core_auth.record_ip_failure(fail_key)
+        # 감사로그(해시 체인)는 처음 실패와 차단되는 순간만 — 잘못된 키로 계속 불러도 로그가 불어나지 않게
+        if before == 0 or before + 1 == core_auth.IP_MAX_FAILURES:
+            db.audit("API인증실패", "시스템", None, {"IP": client_ip(), "사유": message,
+                                                   "연속실패": before + 1,
+                                                   "차단": before + 1 >= core_auth.IP_MAX_FAILURES})
         raise ApiError(401, "unauthorized", message, {"WWW-Authenticate": 'Bearer error="invalid_token"'})
     allowed, remaining, reset = api_keys.hit(client)
     g.rate = (int(client["rate_limit"]), remaining, reset)

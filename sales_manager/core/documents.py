@@ -24,8 +24,10 @@ from .storage import get_storage
 
 COMPANY_BIZ_NO = re.sub(r"\D", "", os.environ.get("SALES_COMPANY_BIZ_NO", ""))   # 우리 회사(공급자)
 
-DOC_TYPES = ["전자세금계산서", "세금계산서", "수정세금계산서", "거래명세서", "기타"]
-TAX_INVOICE_TYPES = {"전자세금계산서", "세금계산서", "수정세금계산서"}
+DOC_TYPES = ["전자세금계산서", "세금계산서", "수정세금계산서", "전자계산서", "계산서", "수정계산서", "거래명세서", "기타"]
+EXEMPT_INVOICE_TYPES = {"전자계산서", "계산서", "수정계산서"}          # 면세 매출 (부가세 없음 — 소득세법·법인세법상 계산서)
+TAX_INVOICE_TYPES = {"전자세금계산서", "세금계산서", "수정세금계산서"} | EXEMPT_INVOICE_TYPES
+ISSUED_INVOICE_TYPES = ("전자세금계산서", "세금계산서", "전자계산서", "계산서")        # 당초 발행분 (수정분 제외)
 MAX_BYTES = 10 * 1024 * 1024
 
 # 매직 바이트 → (MIME, 저장 확장자). SVG·HTML 처럼 스크립트를 품을 수 있는 형식은 받지 않는다
@@ -194,9 +196,9 @@ def validate(meta: dict, sale: dict, customer: dict) -> tuple[list[str], list[st
         errors.append("문서 종류를 선택하세요.")
     is_tax = doc_type in TAX_INVOICE_TYPES
 
-    if doc_type == "전자세금계산서":
+    if doc_type in ("전자세금계산서", "전자계산서"):
         if len(meta.get("approval_no") or "") != 24:
-            errors.append("전자세금계산서 승인번호는 24자리 숫자입니다.")
+            errors.append(f"{doc_type} 승인번호는 24자리 숫자입니다.")
     elif meta.get("approval_no") and len(meta["approval_no"]) != 24:
         errors.append("승인번호는 24자리 숫자여야 합니다.")
     if is_tax and not meta.get("issue_date"):
@@ -210,6 +212,15 @@ def validate(meta: dict, sale: dict, customer: dict) -> tuple[list[str], list[st
             errors.append(f"{label} 사업자등록번호를 입력하세요.")
 
     supply, tax, total = meta.get("supply_amount"), meta.get("tax_amount"), meta.get("total_amount")
+    exempt = doc_type in EXEMPT_INVOICE_TYPES
+    if exempt:
+        if tax:
+            errors.append("계산서(면세)에는 세액이 없습니다 — 세액을 0 으로 하거나 세금계산서로 등록하세요.")
+        tax = meta["tax_amount"] = 0
+        if (sale.get("tax_type") or "과세") != "면세":
+            warnings.append("과세·영세 매출에 계산서를 붙였습니다 — 세금계산서가 맞는지 확인하세요.")
+    elif is_tax and (sale.get("tax_type") or "과세") == "면세":
+        warnings.append("면세 매출에는 세금계산서가 아니라 계산서를 발급합니다.")
     if is_tax:
         if supply is None or tax is None:
             errors.append("공급가액과 세액을 입력하세요.")
@@ -218,7 +229,7 @@ def validate(meta: dict, sale: dict, customer: dict) -> tuple[list[str], list[st
             meta["total_amount"] = total
             if supply + tax != total:
                 errors.append(f"공급가액 + 세액({supply + tax:,})이 합계({total:,})와 다릅니다.")
-            if tax and abs(tax - db.vat_for(supply, "과세")) > 10:      # 매출 부가세와 같은 절사 기준
+            if tax and not exempt and abs(tax - db.vat_for(supply, "과세")) > 10:      # 매출 부가세와 같은 절사 기준
                 warnings.append(f"세액이 공급가액의 10%({db.vat_for(supply, '과세'):,})와 다릅니다 — 영세율·면세·단수 처리를 확인하세요.")
     sale_supply = int(sale.get("amount") or 0)
     sale_total = int(sale.get("total_amount") or sale_supply)
@@ -371,7 +382,7 @@ def missing_documents(ym_from: str = "", ym_to: str = "") -> int:
     scope_sql, scope_params = db._scope_clause("s")
     sql = ("SELECT COUNT(*) FROM sales s WHERE s.status <> '취소' AND NOT EXISTS ("
            "SELECT 1 FROM sale_documents d WHERE d.sale_id = s.id AND d.voided_at IS NULL "
-           "AND d.doc_type IN ('전자세금계산서','세금계산서','수정세금계산서'))")
+           "AND d.doc_type IN ('전자세금계산서','세금계산서','수정세금계산서','전자계산서','계산서','수정계산서'))")
     params: list[Any] = []
     if ym_from:
         sql += " AND substr(s.sale_date, 1, 7) >= ?"

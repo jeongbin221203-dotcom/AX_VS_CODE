@@ -402,3 +402,73 @@ def test_stale_bulk_task_marked_stopped(app):
                      (user("김영업")["id"],))
     assert bulk.mark_stale() >= 1
     assert db._one("SELECT status FROM bulk_tasks WHERE title='멈춘 작업'")["status"] == "중단"
+
+
+# ── 순채권 · ERP 대사 · 견적 입력 유지 · 결재 회수 · API 인증 실패 ─────────────
+def test_net_receivable_subtracts_advances(app):
+    from core import advances as adv
+    from core import periods
+    cid = _cust("순채권상사", credit_limit=1_000_000)
+    _sale(cid, 1, 1_000_000)                                    # 미수 1,100,000 (한도 초과)
+    adv.add(cid, 300_000, "입금", TODAY, memo="계약금")
+    row = ent.credit_exposure().set_index("거래처").loc["순채권상사"]
+    assert int(row["선수금"]) == 300_000 and int(row["순채권"]) == 800_000 and row["한도초과"] == ""
+    bal = periods.ar_balances(TODAY).set_index("customer_id").loc[cid]
+    assert int(bal["advance"]) == 300_000 and int(bal["net"]) == int(bal["balance"]) - 300_000
+
+
+def test_erp_reconcile_ignores_internal_settlements(app):
+    from core import erp
+    cid = _cust("대사내부상사")
+    sid = _sale(cid, 2, 100_000)                                # 220,000
+    rtn.create(sid, "반품", "1개", qty=1)                       # 원매출에 반품상계 110,000
+    frame = pd.DataFrame([{"참조번호": f"CRM-{sid}", "누적입금액": 0}])
+    out = erp.reconcile_payments(frame).iloc[0]
+    assert out["결과"] == "일치" and int(out["CRM내부정리"]) == 110_000
+    frame = pd.DataFrame([{"참조번호": f"CRM-{sid}", "누적입금액": 110_000}])
+    assert erp.reconcile_payments(frame).iloc[0]["결과"] == "반영예정"
+
+
+def test_failed_quote_save_keeps_all_lines(app):
+    rep = login(app, "김영업")
+    cid = _cust("견적유지상사")
+    res = post(rep, "/quotes/save", {"customer_id": str(cid), "title": "남아야 할 건명",
+                                     "item_name": ["첫줄", "둘째줄"], "product_id": ["", ""], "qty": ["1", "0"],
+                                     "unit_price": ["1000", "2000"], "tax_type": ["과세", "과세"]})
+    text = res.get_data(as_text=True)
+    assert res.status_code == 400 and "남아야 할 건명" in text and "둘째줄" in text
+
+
+def test_requester_can_withdraw_pending_requests(app):
+    from core import credit
+    cid = _cust("회수상사")
+    sid = _sale(cid, 1, 100_000)
+    rid = credit.request_writeoff(sid, "파산", user("김영업"), "BANKRUPT", TODAY)
+    with pytest.raises(PermissionError):
+        credit.withdraw(rid, user("한팀장"))
+    credit.withdraw(rid, user("김영업"), "착오")
+    assert db._one("SELECT status FROM fin_requests WHERE id=?", [rid])["status"] == "회수"
+    with pytest.raises(ValueError):
+        credit.decide(rid, True, "", user("정임원"))
+    credit.request_writeoff(sid, "파산", user("김영업"), "BANKRUPT", TODAY)      # 다시 요청 가능
+    db.set_context("system", None)
+    did = db.upsert_deal({"customer_id": cid, "title": "회수 기회", "owner_id": user("김영업")["id"],
+                          "stage": db.OPEN_STAGES[0], "list_amount": 1_000_000, "amount": 900_000,
+                          "discount_rate": 10, "expected_close": TODAY})
+    aid = ent.request_approval(did, user("김영업"), "할인")
+    ent.withdraw_approval(aid, user("김영업"))
+    assert db.get_deal(did)["approval_status"] == "미요청"
+    assert db._one("SELECT status FROM approvals WHERE id=?", [aid])["status"] == "취소"
+
+
+def test_bad_api_keys_do_not_flood_audit_log(app, monkeypatch):
+    from core import auth as core_auth
+    monkeypatch.setattr(core_auth, "IP_MAX_FAILURES", 5)
+    c = app.test_client()
+    before = db._scalar("SELECT COUNT(*) FROM audit_log WHERE action='API인증실패'")
+    codes = [c.get("/api/v1/sales", headers={"Authorization": "Bearer sk_nope_bad"},
+                   environ_base={"REMOTE_ADDR": "203.0.113.200"}).status_code for _ in range(8)]
+    assert codes[:5] == [401] * 5 and codes[5:] == [429] * 3          # 5번 실패 뒤 그 IP 는 15분 차단
+    assert db._scalar("SELECT COUNT(*) FROM audit_log WHERE action='API인증실패'") - before == 2   # 첫 실패 + 차단
+    with db.get_conn() as conn:
+        conn.execute("DELETE FROM login_ip_failures WHERE ip LIKE 'api:%'")

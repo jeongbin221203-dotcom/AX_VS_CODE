@@ -85,9 +85,10 @@ def close_month(ym: str, actor: dict) -> dict:
     with db.get_conn() as conn:
         conn.execute("DELETE FROM ar_snapshots WHERE ym=?", (ym,))
         for r in snap.itertuples():
-            conn.execute("INSERT INTO ar_snapshots (ym, customer_id, sales_total, paid_total, balance, overdue, created_at) "
-                         "VALUES (?,?,?,?,?,?,?)", (ym, int(r.customer_id), int(r.sales_total), int(r.paid_total),
-                                                    int(r.balance), int(r.overdue), db._now()))
+            conn.execute("INSERT INTO ar_snapshots (ym, customer_id, sales_total, paid_total, balance, overdue, advance, "
+                         "created_at) VALUES (?,?,?,?,?,?,?,?)",
+                         (ym, int(r.customer_id), int(r.sales_total), int(r.paid_total), int(r.balance),
+                          int(r.overdue), int(r.advance), db._now()))
         conn.execute("INSERT INTO sales_period_closes (closed_through, action, actor, at) VALUES (?, 'CLOSE', ?, ?)",
                      (ym, actor.get("name"), db._now()))
     result = {"ym": ym, "customers": len(snap), "balance": int(snap["balance"].sum()) if not snap.empty else 0}
@@ -123,8 +124,16 @@ def ar_balances(as_of: str) -> pd.DataFrame:
     sales = db._df("SELECT s.id, s.customer_id, COALESCE(s.total_amount, s.amount) AS total, s.due_date "
                    "FROM sales s WHERE s.status <> ? AND s.sale_date <= ? AND COALESCE(s.total_amount, s.amount) >= 0",
                    [db.SALE_CANCELLED, as_of])
+    # 선수금(미리 받은 돈 + 반품으로 돌려줄 돈) — 순채권 = 미수 잔액 − 선수금
+    adv = db._df("SELECT customer_id, SUM(amount) AS advance FROM advances WHERE entry_date <= ? GROUP BY customer_id",
+                 [as_of])
     if sales.empty:
-        return pd.DataFrame(columns=["customer_id", "sales_total", "paid_total", "balance", "overdue"])
+        out = adv.assign(sales_total=0, paid_total=0, balance=0, overdue=0) if not adv.empty else \
+            pd.DataFrame(columns=["customer_id", "sales_total", "paid_total", "balance", "overdue", "advance"])
+        out = out[out["advance"] != 0] if not out.empty else out
+        if not out.empty:
+            out["net"] = out["balance"] - out["advance"]
+        return out
     pays = db._df("SELECT p.sale_id, SUM(p.amount) AS paid FROM payments p JOIN sales s ON s.id = p.sale_id "
                   "WHERE s.status <> ? AND p.pay_date <= ? GROUP BY p.sale_id", [db.SALE_CANCELLED, as_of])
     sales = sales.merge(pays, how="left", left_on="id", right_on="sale_id")
@@ -133,13 +142,18 @@ def ar_balances(as_of: str) -> pd.DataFrame:
     sales["late"] = sales["remain"].where(sales["due_date"].fillna("9999-12-31") < as_of, 0)
     out = sales.groupby("customer_id").agg(sales_total=("total", "sum"), paid_total=("paid", "sum"),
                                            balance=("remain", "sum"), overdue=("late", "sum")).reset_index()
-    return out[(out["balance"] != 0) | (out["sales_total"] != 0)]
+    out = out.merge(adv, how="outer", on="customer_id")
+    out[["sales_total", "paid_total", "balance", "overdue", "advance"]] = \
+        out[["sales_total", "paid_total", "balance", "overdue", "advance"]].fillna(0).astype(int)
+    out["net"] = out["balance"] - out["advance"]
+    return out[(out["balance"] != 0) | (out["sales_total"] != 0) | (out["advance"] != 0)]
 
 
 def snapshot_table(ym: str) -> pd.DataFrame:
     sc, sp = db._scope_clause("c")
     return db._df("SELECT c.name AS 거래처, a.sales_total AS 매출누계, a.paid_total AS 입금누계, a.balance AS 월말잔액, "
-                  "a.overdue AS 연체잔액 FROM ar_snapshots a JOIN customers c ON c.id = a.customer_id "
+                  "a.overdue AS 연체잔액, COALESCE(a.advance, 0) AS 선수금, a.balance - COALESCE(a.advance, 0) AS 순채권 "
+                  "FROM ar_snapshots a JOIN customers c ON c.id = a.customer_id "
                   f"WHERE a.ym = ?{sc} ORDER BY a.balance DESC", [ym, *sp])
 
 

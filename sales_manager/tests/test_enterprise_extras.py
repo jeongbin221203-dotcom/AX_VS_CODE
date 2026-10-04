@@ -220,11 +220,15 @@ def test_etax_issue_mock_and_file_ack(app, monkeypatch, tmp_path):
     assert int(doc["supply_amount"]) == 1_000_000 and int(doc["tax_amount"]) == 100_000
     res = post(rep, f"/sales/{sid}/etax", {}, follow_redirects=True)
     assert "이미 발행" in res.get_data(as_text=True)
-    # 면세는 세금계산서 대상이 아님
+    # 면세 매출은 세금계산서가 아니라 전자계산서(종류 0301, 세액 없음)
     sid2 = db.upsert_sale({"customer_id": cid, "item": "면세품목", "qty": 1, "unit_price": 50_000, "owner_id": owner,
                            "tax_type": "면세", "sale_date": datetime.now().strftime("%Y-%m-%d")})
-    with pytest.raises(ValueError, match="면세"):
-        etax.request_issue(sid2, None, {"name": "t"})
+    etax.request_issue(sid2, None, {"name": "t"})
+    jobs.run_pending()
+    row2 = db._one("SELECT * FROM etax_invoices WHERE sale_id=?", [sid2])
+    doc2 = db._one("SELECT * FROM sale_documents WHERE id=?", [row2["document_id"]])
+    assert row2["status"] == "발행완료" and doc2["doc_type"] == "전자계산서" and int(doc2["tax_amount"] or 0) == 0
+    assert b"<TypeCode>0301</TypeCode>" in etax.build_xml(db.get_sale(sid2), {}, {}, "2026-10-05")
     # 파일 방식: XML 을 내려놓고, ASP 가 API 로 승인번호를 회신
     monkeypatch.setenv("SALES_ETAX_ADAPTER", "file")
     monkeypatch.setenv("SALES_ETAX_OUT_DIR", str(tmp_path / "etax"))

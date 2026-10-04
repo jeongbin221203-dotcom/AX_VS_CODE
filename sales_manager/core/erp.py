@@ -503,6 +503,8 @@ def reconcile_payments(df: pd.DataFrame, apply: bool = False) -> pd.DataFrame:
     """ERP 누적 입금액과 CRM 입금액을 매출별로 대사한다.
 
     apply=True 이면 ERP 가 더 많은 만큼만 CRM 에 입금 등록한다(멱등). 결과표를 돌려준다.
+    CRM 쪽은 실제로 돈이 들어온 입금만 비교한다 — 반품상계·선수금 배분·대손은 CRM 안의 정리(ERP 에는 반품·대손 전표로
+    따로 가거나 선수금 입금으로 이미 잡힘)라 빼고 본다. 그렇지 않으면 반품·대손이 있는 매출이 모두 '확인필요' 가 된다.
     """
     missing = [c for c in PAYMENT_COLUMNS["required"] if c not in df.columns]
     if missing:
@@ -523,7 +525,11 @@ def reconcile_payments(df: pd.DataFrame, apply: bool = False) -> pd.DataFrame:
             out.append({**line, "결과": "미일치", "내용": "CRM 매출을 찾지 못함"})
             continue
         crm_paid = int(sale.get("paid_amount") or 0)
-        line.update({"매출번호": int(sale["id"]), "CRM입금": crm_paid, "ERP입금": erp_paid})
+        internal = int(db._scalar("SELECT COALESCE(SUM(amount), 0) FROM payments WHERE sale_id=? AND source IN (?, ?, ?)",
+                                  [int(sale["id"]), *ent.NON_REVERSIBLE_SOURCES]))
+        crm_cash = crm_paid - internal
+        line.update({"매출번호": int(sale["id"]), "CRM입금": crm_cash, "ERP입금": erp_paid,
+                     "CRM내부정리": internal})
         notes = []
         if "매출액" in df.columns and pd.notna(row.get("매출액")):
             try:
@@ -535,14 +541,17 @@ def reconcile_payments(df: pd.DataFrame, apply: bool = False) -> pd.DataFrame:
         if sale["status"] == db.SALE_CANCELLED:
             out.append({**line, "결과": "확인필요", "내용": "CRM 에서 취소된 매출에 ERP 입금이 있음"})
             continue
-        gap = erp_paid - crm_paid
+        gap = erp_paid - crm_cash
+        if internal:
+            notes.append(f"반품상계·선수금·대손 {internal:,}원은 비교에서 뺌")
         if gap == 0:
             out.append({**line, "결과": "일치", "내용": " / ".join(notes)})
         elif gap < 0:
             out.append({**line, "결과": "확인필요",
                         "내용": " / ".join([f"CRM 입금이 {-gap:,}원 더 많음(수기 입금 확인)", *notes])})
-        elif erp_paid > int(sale.get("total_amount") or sale["amount"]):
-            out.append({**line, "결과": "확인필요", "내용": "ERP 입금이 매출액을 넘음(과입금)"})
+        elif gap > int(sale.get("total_amount") or sale["amount"]) - crm_paid:
+            out.append({**line, "결과": "확인필요",
+                        "내용": "ERP 입금이 남은 미수금을 넘음(과입금 · 또는 반품·대손이 ERP 에 아직 반영 안 됨)"})
         else:
             if apply:
                 try:

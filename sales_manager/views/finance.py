@@ -149,6 +149,8 @@ def _sales_page(form: dict | None = None, status: int = 200):
         **_advances(tab),
         # 채권
         ar_total=ar_total, ar_overdue=ar_overdue,
+        adv_total=int(db._scalar("SELECT COALESCE(SUM(a.amount), 0) FROM advances a JOIN customers c ON c.id = a.customer_id "
+                                 f"WHERE 1=1{db._scope_clause('c')[0]}", db._scope_clause("c")[1])) if tab == "ar" else 0,
         ar_overdue_cnt=int(overdue["건수"].sum()) if not summary.empty else 0,
         ar_chart=chart(summary, "연체구간", "미수금")
         if not summary.empty and summary["미수금"].sum() > 0 else None,
@@ -552,6 +554,9 @@ def approvals():
     return render_page(
         "finance/approvals.html", "approvals", fin_pending=Table(fin_rows, money=["금액"], drop=["customer_id"]), fin_pending_rows=fin_rows.to_dict("records"), fin_history=Table(credit.history(), money=["금액"], drop=["id"]), tab=request.args.get("tab", default_tab),
         fin_cnt=len(fin_rows), mine_cnt=len(mine), requested_cnt=len(requested),
+        my_pending=[(int(r.id), f"{r.거래처} · {r.기회명} · 할인 {r.할인율}%")
+                    for r in requested.itertuples() if r.상태 == "대기"] if not requested.empty else [],
+        my_fin_pending=credit.mine_pending(user).to_dict("records"),
         mine_total=int(mine["제안가"].sum()) if not mine.empty else 0,
         mine=Table(mine, money=["정가", "제안가"], drop=hidden,
                    link=("finance.approvals", "id", "aid")),
@@ -571,6 +576,26 @@ def approvals():
                    for u in users.itertuples()] if not users.empty else [],
         today_str=date.today().isoformat(),
     )
+
+
+@bp.route("/approvals/<int:aid>/withdraw", methods=["POST"])
+def approval_withdraw(aid: int):
+    try:
+        ent.withdraw_approval(aid, g.user, f_str("reason"))
+        flash("할인 결재 요청을 회수했습니다. 조건을 고친 뒤 다시 요청할 수 있습니다.", "success")
+    except (ValueError, PermissionError) as exc:
+        flash(str(exc), "error")
+    return redirect(url_for("finance.approvals", tab="requested"))
+
+
+@bp.route("/approvals/finance/<int:rid>/withdraw", methods=["POST"])
+def finance_request_withdraw(rid: int):
+    try:
+        credit.withdraw(rid, g.user, f_str("reason"))
+        flash("요청을 회수했습니다.", "success")
+    except (ValueError, PermissionError) as exc:
+        flash(str(exc), "error")
+    return redirect(url_for("finance.approvals", tab="requested"))
 
 
 @bp.route("/approvals/finance/<int:rid>/decide", methods=["POST"])

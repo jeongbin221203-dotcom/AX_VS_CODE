@@ -396,6 +396,23 @@ def request_approval(deal_id: int, requester: dict, reason: str = "",
     return new_id
 
 
+def withdraw_approval(approval_id: int, requester: dict, reason: str = "", db_path: str | None = None) -> None:
+    """요청자가 아직 끝나지 않은 할인 결재를 회수한다 (조건을 바꿔 다시 요청하거나 할인을 접을 때)."""
+    row = db._one("SELECT * FROM approvals WHERE id=?", [int(approval_id)], db_path)
+    if not row:
+        raise ValueError("존재하지 않는 결재 건입니다.")
+    if int(row.get("requested_by_id") or 0) != int(requester["id"]):
+        raise PermissionError("본인이 요청한 결재만 회수할 수 있습니다.")
+    with db.get_conn(db_path) as conn:
+        if conn.execute("UPDATE approvals SET status='취소', comment=?, decided_at=? WHERE id=? AND status='대기'",
+                        (f"[요청자 회수] {reason or ''}".strip(), db._now(), int(approval_id))).rowcount == 0:
+            raise ValueError(f"이미 처리된 결재라 회수할 수 없습니다(현재 상태: {row['status']}).")
+        conn.execute("UPDATE approval_steps SET status='취소' WHERE approval_id=? AND status IN ('대기','예정')",
+                     (int(approval_id),))
+        conn.execute("UPDATE deals SET approval_status='미요청' WHERE id=?", (row["deal_id"],))
+    db.audit("결재회수", "승인", int(approval_id), {"기회ID": row["deal_id"], "사유": reason or None}, db_path)
+
+
 def decide_approval(approval_id: int, approver: dict, approve: bool, comment: str = "",
                     db_path: str | None = None) -> None:
     """현재 단계를 결재한다. 대결 지정을 받은 사람은 원결재자를 대신해 결재한다(기록에 남는다)."""
@@ -920,20 +937,22 @@ def ar_summary(db_path: str | None = None, aging: pd.DataFrame | None = None) ->
 
 
 def credit_exposure(db_path: str | None = None) -> pd.DataFrame:
-    """거래처별 여신한도 대비 미수 잔액 (한도 초과 거래처 조기 발견)."""
+    """거래처별 여신한도 대비 채권. 순채권 = 미수 잔액 − 선수금(미리 받은 돈·돌려줄 돈) — 한도 비교는 순채권으로."""
     scope_sql, scope_params = db._scope_clause("c")
     df = db._df(
         f"SELECT c.name AS 거래처, c.grade AS 등급, c.owner AS 담당자, "
         f"COALESCE(c.credit_limit,0) AS 여신한도, "
         f"COALESCE(SUM(CASE WHEN s.status NOT IN ('입금완료','취소') "
-        f"     THEN COALESCE(s.total_amount, s.amount) - COALESCE(s.paid_amount,0) ELSE 0 END), 0) AS 미수잔액 "
+        f"     THEN COALESCE(s.total_amount, s.amount) - COALESCE(s.paid_amount,0) ELSE 0 END), 0) AS 미수잔액, "
+        f"COALESCE((SELECT SUM(a.amount) FROM advances a WHERE a.customer_id = c.id), 0) AS 선수금 "
         f"FROM customers c LEFT JOIN sales s ON s.customer_id = c.id "
         f"WHERE 1=1{scope_sql} GROUP BY c.id ORDER BY 미수잔액 DESC", scope_params, db_path)
     if df.empty:
         return df
-    df["소진율"] = (df["미수잔액"] / df["여신한도"].replace(0, pd.NA) * 100).fillna(0).round(1)
+    df["순채권"] = df["미수잔액"] - df["선수금"]
+    df["소진율"] = (df["순채권"].clip(lower=0) / df["여신한도"].replace(0, pd.NA) * 100).fillna(0).round(1)
     df["한도초과"] = df.apply(
-        lambda r: "초과" if r["여신한도"] and r["미수잔액"] > r["여신한도"] else "", axis=1)
+        lambda r: "초과" if r["여신한도"] and r["순채권"] > r["여신한도"] else "", axis=1)
     return df
 
 

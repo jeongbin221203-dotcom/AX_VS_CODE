@@ -1175,7 +1175,7 @@ def _etax_active(sale_id: int, db_path: str | None = None) -> bool:
                    "(modify_code IS NOT NULL AND status IN ('발행요청','전송중')))", [int(sale_id)], db_path):
             return True
         return bool(_scalar("SELECT COUNT(*) FROM sale_documents WHERE sale_id=? AND voided_at IS NULL "
-                            "AND doc_type IN ('전자세금계산서','세금계산서')", [int(sale_id)], db_path))
+                            "AND doc_type IN ('전자세금계산서','세금계산서','전자계산서','계산서')", [int(sale_id)], db_path))
     except Exception:                                # noqa: BLE001 - 마이그레이션 전
         return False
 

@@ -116,6 +116,11 @@ def _visible_quote(qid: int) -> dict:
 
 @bp.route("/quotes")
 def quotes():
+    return _quotes_page()
+
+
+def _quotes_page(submitted: dict | None = None, http_status: int = 200):
+    """견적 화면. submitted 가 있으면 저장에 실패한 입력(머리·품목 줄 전부)을 그대로 다시 그린다."""
     status = a_str("status")
     ready = a_str("ready") == "1"                    # 수주 전: 수락했지만 아직 수주·매출로 넘어가지 않은 견적
     df = qt.list_quotes("수락" if ready else status, customer_id=a_int("customer_id") or None, owner_id=g.owner_filter,
@@ -127,14 +132,16 @@ def quotes():
         df = df[~df["id"].isin(done)]
     if request.args.get("export") == "quotes":
         return csv_response(df.drop(columns=["id", "owner_id", "customer_id"], errors="ignore"), "견적목록.csv")
-    qid = a_int("qid")
+    qid = a_int("qid") or (int(submitted["id"]) if submitted and submitted.get("id") else None)
     quote = _visible_quote(qid) if qid else None
-    editing = request.args.get("edit") == "1" or request.args.get("new") == "1"
+    editing = request.args.get("edit") == "1" or request.args.get("new") == "1" or submitted is not None
     if editing and quote and quote["status"] != "작성중":
         editing = False
     form = quote if (editing and quote) else {
         "customer_id": a_int("customer_id") or "", "deal_id": a_int("deal_id") or "",
         "issue_date": date.today().isoformat(), "items": [{}]}
+    if submitted is not None:
+        form = {**(quote or {}), **submitted, "items": submitted.get("items") or [{}]}
     active = df[~df["상태"].isin(["거절", "만료"])] if not df.empty else df
     return render_page(
         "catalog/quotes.html", "quotes", status=status, statuses=qt.QUOTE_STATUS[:-1],
@@ -147,7 +154,7 @@ def quotes():
         customers=db.customer_options(include_closed=False), deals=deal_choices((form or {}).get("customer_id")),
         products=catalog.product_options(), tax_types=db.TAX_TYPES,
         entity_opts=ent_mod.options(), currencies=ent_mod.CURRENCIES,
-    )
+    ), http_status
 
 
 @bp.route("/quotes/save", methods=["POST"])
@@ -161,15 +168,15 @@ def quote_save():
             "memo": f_str("memo"), "row_version": f_str("row_version"),
             "entity_id": f_str("entity_id") or None, "currency": f_str("currency") or "KRW",
             "fx_rate": f_str("fx_rate") or None}
+    items = _items_from_form()
     try:
-        qid = qt.save_quote(data, _items_from_form())
+        qid = qt.save_quote(data, items)
         flash("견적을 저장했습니다.", "success")
         return redirect(url_for("catalog.quotes", qid=qid))
     except ValueError as exc:     # ConflictError 도 ValueError
         flash(str(exc), "error")
-        if data["id"]:
-            return redirect(url_for("catalog.quotes", qid=data["id"], edit=1))
-        return redirect(url_for("catalog.quotes", new=1, customer_id=cid))
+        # 다른 화면으로 보내지 않고 입력한 그대로 다시 그린다 (영업기회·건명·유효기한·품목 줄이 사라지지 않게)
+        return _quotes_page({**data, "items": items or [{}]}, 400)
 
 
 @bp.route("/quotes/<int:qid>/<action>", methods=["POST"])

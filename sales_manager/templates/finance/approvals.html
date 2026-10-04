@@ -58,6 +58,22 @@
     </form>
     {% endfor %}
   {% elif tab == 'requested' %}
+    {% if my_pending or my_fin_pending %}
+      <h3>결재 대기 중인 내 요청 — 회수</h3>
+      <p class="muted small">조건을 고쳐 다시 올리거나 진행을 접을 때 요청을 회수합니다. 결재가 끝난 건은 회수할 수 없습니다.</p>
+      {% for aid, label in my_pending %}
+        <form method="post" action="{{ url_for('finance.approval_withdraw', aid=aid) }}" class="toolbar" data-no-draft
+              data-confirm="할인 결재 요청을 회수할까요?">
+          {{ csrf() }}<span class="grow small">할인 결재 #{{ aid }} · {{ label }}</span>
+          <input name="reason" placeholder="회수 사유 (선택)"><button class="btn btn-sm">회수</button></form>
+      {% endfor %}
+      {% for r in my_fin_pending %}
+        <form method="post" action="{{ url_for('finance.finance_request_withdraw', rid=r.id) }}" class="toolbar" data-no-draft
+              data-confirm="{{ r['구분'] }} 요청을 회수할까요?">
+          {{ csrf() }}<span class="grow small">{{ r['구분'] }} #{{ r.id }} · {{ r['거래처'] }} · {{ r['금액']|won }}</span>
+          <input name="reason" placeholder="회수 사유 (선택)"><button class="btn btn-sm">회수</button></form>
+      {% endfor %}
+    {% endif %}
     {{ table(requested) }}
   {% elif tab == 'history' %}
     <form method="get" class="card-head" action="{{ page_path() }}">
