@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}컴활 필기 · 엑셀 연습장{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><h1>컴활 필기</h1>
+    <p>{{ L[level].name }} — {% for s in stats.values() %}{{ s.name }}{{ ' · ' if not loop.last }}{% endfor %}.
+      실제 시험처럼 과목마다 20문항, {{ L[level].minutes }}분 · 과목별 {{ cut[0] }}점 이상이면서 평균 {{ cut[1] }}점 이상이면 합격.</p></div>
+  <div class="btns">
+    <a class="btn {{ 'primary' if level == 'c2' else '' }}" href="{{ url_for('written.index', level='c2') }}">2급</a>
+    <a class="btn {{ 'primary' if level == 'c1' else '' }}" href="{{ url_for('written.index', level='c1') }}">1급</a>
+  </div>
+</div>
+
+<section class="card">
+  <div class="top-line"><h2 style="margin:0">모의고사</h2>
+    <a class="btn primary" href="{{ url_for('written.mock', level=level) }}">{{ L[level].name }} 모의고사 시작 ({{ L[level].subjects|length * 20 }}문항 · {{ L[level].minutes }}분)</a></div>
+  <p class="small muted">최근에 푼 문제는 되도록 빼고, 과목마다 주제가 고르게 섞이도록 20문항씩 뽑습니다. 답안을 내면 과목별 점수·과락·해설을 보여 줍니다.</p>
+  {% if history %}
+  <div class="table-wrap"><table class="t">
+    <thead><tr><th>날짜</th><th>급</th><th class="r">평균</th><th>결과</th><th class="r">시간</th><th></th></tr></thead>
+    <tbody>{% for r in history %}<tr>
+      <td>{{ r.created_at }}</td><td>{{ L[r.level].name }}</td><td class="r">{{ r.average }}</td>
+      <td>{{ '합격' if r.passed else '불합격' }}</td><td class="r">{{ (r.seconds // 60) ~ '분' if r.seconds else '–' }}</td>
+      <td><a href="{{ url_for('written.result', rid=r.id) }}">결과</a></td></tr>{% endfor %}</tbody>
+  </table></div>
+  {% endif %}
+</section>
+
+<div class="grid g3" style="margin-top:14px">
+  {% for key, s in stats.items() %}
+  <section class="card">
+    <div class="top-line"><h2 style="margin:0">{{ s.name }}</h2><span class="small muted">{{ s.done }}/{{ s.total }}</span></div>
+    <div class="meter" aria-hidden="true"><span style="width:{{ (100 * s.done / s.total)|round|int if s.total else 0 }}%"></span></div>
+    <p class="small muted" style="margin:6px 0">맞힘 {{ s.ok }} · 틀림 {{ s.wrong }}</p>
+    <div class="btns">
+      <a class="btn sm primary" href="{{ url_for('written.practice', level=level, subject=key) }}">20문항 풀기</a>
+      {% if s.wrong %}<a class="btn sm" href="{{ url_for('written.practice', level=level, subject=key, mode='wrong') }}">틀린 문제 {{ s.wrong }}</a>{% endif %}
+    </div>
+    <table class="t" style="margin-top:10px">
+      <thead><tr><th>주제</th><th class="r">푼 문제</th><th class="r">정답률</th></tr></thead>
+      <tbody>{% for t in s.topics %}<tr>
+        <td><a href="{{ url_for('written.practice', level=level, subject=key, topic=t.name) }}">{{ t.name }}</a></td>
+        <td class="r">{{ t.done }}/{{ t.total }}</td>
+        <td class="r">{{ ((100 * t.ok / t.done)|round|int ~ '%') if t.done else '–' }}</td></tr>{% endfor %}</tbody>
+    </table>
+  </section>
+  {% else %}<div class="card empty">필기 문제가 아직 없습니다.</div>{% endfor %}
+</div>
+{% endblock %}

@@ -338,3 +338,21 @@ table.sheet-like td, table.sheet-like th { white-space: nowrap; }
   .problem-layout.has-grid > section:first-child { position: sticky; top: 72px; }
   .problem-layout.has-grid .sheet-wrap { max-height: calc(100vh - 140px); }
 }
+
+/* 컴활 필기 */
+.wq { border: 0; padding: 0; margin: 0 0 16px; min-width: 0; }
+.card.wq { padding: 14px 16px; }
+.wq-q { font-weight: 500; margin: 6px 0 8px; line-height: 1.6; white-space: pre-line; }
+button.choice { width: 100%; text-align: left; font: inherit; color: inherit; }
+button.choice:disabled { cursor: default; opacity: 1; }
+.wq-opts { margin: 4px 0 6px 1.4em; padding: 0; }
+.wq-opts li { padding: 2px 4px; border-radius: 4px; }
+.wq-opts li.right { background: var(--ok-soft); font-weight: 600; }
+.wq-opts li.wrong { background: var(--bad-soft); }
+.wq-opts li.wrong .o { text-decoration: line-through; }
+[hidden] { display: none !important; }
+.wq.is-bad { border-left: 3px solid var(--bad); padding-left: 10px; }
+.wq.is-ok { border-left: 3px solid var(--ok); padding-left: 10px; }
+.ok-text { color: var(--ok); }
+.bad-text { color: var(--bad); }
+.wq-list .result { margin-top: 8px; }

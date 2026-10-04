@@ -4,7 +4,7 @@ import sqlite3
 
 from flask import current_app, g, has_request_context, session
 
-USER_TABLES = ('attempts', 'stars', 'uploads', 'build_results', 'exam_results')
+USER_TABLES = ('attempts', 'stars', 'uploads', 'build_results', 'exam_results', 'written_attempts', 'written_results')
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS attempts (
@@ -52,6 +52,28 @@ CREATE TABLE IF NOT EXISTS exam_results (
     detail TEXT,
     file_name TEXT,
     created_at TEXT NOT NULL DEFAULT (datetime('now', 'localtime'))
+);
+
+CREATE TABLE IF NOT EXISTS written_attempts (
+    id INTEGER PRIMARY KEY,
+    qid TEXT NOT NULL,
+    subject TEXT NOT NULL,
+    ok INTEGER NOT NULL,
+    picked INTEGER,
+    created_at TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),
+    user TEXT NOT NULL DEFAULT ''
+);
+CREATE INDEX IF NOT EXISTS ix_written_attempts ON written_attempts(user, qid);
+
+CREATE TABLE IF NOT EXISTS written_results (
+    id INTEGER PRIMARY KEY,
+    level TEXT NOT NULL,
+    average REAL NOT NULL,
+    passed INTEGER NOT NULL,
+    seconds INTEGER,
+    detail TEXT,
+    created_at TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),
+    user TEXT NOT NULL DEFAULT ''
 );
 
 CREATE TABLE IF NOT EXISTS settings (

@@ -78,7 +78,8 @@ def test_restore_rejects_bad_rows_and_results_stay_readable(client):
            'build_results': [{'task': 'sales', 'score': 1, 'total': 11, 'detail': '[]'}]}
     r = client.post('/api/restore', json=bad, headers=h)
     assert r.status_code == 200 and r.json['restored'] == {'attempts': 0, 'stars': 0, 'build_results': 0,
-                                                           'exam_results': 0}
+                                                           'exam_results': 0, 'written_attempts': 0,
+                                                           'written_results': 0}
 
 
 def test_csv_long_field_and_control_chars(client):

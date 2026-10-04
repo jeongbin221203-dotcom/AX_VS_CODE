@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }} · 컴활 필기{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><div class="crumb"><a href="{{ url_for('written.index', level=level) }}">컴활 필기 {{ L[level].name }}</a> ›</div>
+    <h1>{{ title }}</h1>
+    <p>{{ qs|length }}문항 · 보기를 누르면 바로 채점하고 해설을 보여 줍니다.</p></div>
+  <a class="btn" href="{{ request.full_path }}">다른 문제로</a>
+</div>
+{% if not qs %}<div class="card empty">{{ '틀린 문제가 없습니다.' if mode == 'wrong' else '문제가 없습니다.' }}</div>{% endif %}
+<div class="wq-list" data-written-practice>
+  {% for q in qs %}
+  <section class="card wq" data-wq="{{ q.id }}">
+    <div class="small muted">{{ loop.index }}. {{ S[q.subject].name }} · {{ q.topic }}{% if q.levels == ['c1'] %} · <span class="badge c1">1급</span>{% endif %}</div>
+    <p class="wq-q">{{ q.q }}</p>
+    <div class="choices">
+      {% for o in q.options %}
+      <button type="button" class="choice" data-pick="{{ loop.index0 }}"><b>{{ '①②③④'[loop.index0] }}</b> <span>{{ o }}</span></button>
+      {% endfor %}
+    </div>
+    <div class="result" role="status" aria-live="polite"></div>
+  </section>
+  {% endfor %}
+</div>
+{% if qs %}<div class="card wq-score hidden" id="wq-score"></div>{% endif %}
+{% endblock %}

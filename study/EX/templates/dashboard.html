@@ -77,6 +77,17 @@
       </ul>
     </section>
     <section class="card">
+      <h2>컴활 필기</h2>
+      <ul class="list">
+        {% for lv in ('c2', 'c1') %}{% set w = written_best.get(lv) %}
+        <li><div class="grow"><a class="title" href="{{ url_for('written.index', level=lv) }}">필기 {{ '2급' if lv == 'c2' else '1급' }}</a>
+          <div class="small muted">{{ '2과목 40문항 40분' if lv == 'c2' else '3과목 60문항 60분' }} · 과목 40점·평균 60점</div></div>
+          <span class="nowrap small">{% if w %}최고 평균 <b>{{ w.average }}점</b>{% if w.passed %} <span class="st ok">✓</span>{% endif %}{% else %}<span class="muted">미응시</span>{% endif %}</span></li>
+        {% endfor %}
+      </ul>
+      <p class="small muted" style="margin:6px 0 0">과목별 연습 {{ written_done }}문항 풀이</p>
+    </section>
+    <section class="card">
       <h2>대시보드 만들기 실습</h2>
       <ul class="list">
         {% for x in missions %}

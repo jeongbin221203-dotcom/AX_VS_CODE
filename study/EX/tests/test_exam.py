@@ -120,3 +120,36 @@ def test_c1_01_excel_answer_with_vba_scores_full():
     """Excel 이 VBA(사용자 정의 함수·매크로·단추·프로시저)까지 넣어 만든 정답 파일(tools/exam_answer.py)."""
     res = ex.grade(ex.get('c1-01'), (FIX / 'c1-01_answer_excel.xlsm').read_bytes(), '정답.xlsm')
     assert res['score'] == res['total'], [k for k, v in _items(res).items() if not v['ok']]
+
+
+def test_c1_02_excel_answer_with_form_and_external_pivot_scores_full():
+    """Excel 로 만든 정답: 사용자 정의 폼 코드 + 외부 데이터(csv) 데이터 모델 피벗."""
+    res = ex.grade(ex.get('c1-02'), (FIX / 'c1-02_answer_excel.xlsm').read_bytes(), '정답.xlsm')
+    assert res['score'] == res['total'], [k for k, v in _items(res).items() if not v['ok']]
+
+
+def test_form_problem_files_match_definitions():
+    """1급 문제 파일(.xlsm)에 폼이 있고, 시트 내용이 시험 정의와 같은지(정의를 바꾸고 다시 안 만들면 실패)."""
+    import openpyxl
+    from core import vba
+    for eid in ('c1-01', 'c1-02'):
+        e = ex.get(eid)
+        data, ext = ex.problem_file(e)
+        assert ext == 'xlsm'
+        srcs = vba.sources(data)
+        names = ' '.join(srcs) if isinstance(srcs, dict) else str(srcs)
+        assert all(f['name'] in names for f in e['forms'])
+        got = openpyxl.load_workbook(io.BytesIO(data))
+        want = openpyxl.load_workbook(io.BytesIO(ex.problem_workbook(e)))
+        for ws in want.worksheets:
+            for row in ws.iter_rows():
+                for c in row:
+                    assert got[ws.title][c.coordinate].value == c.value, (eid, ws.title, c.coordinate)
+    csv = ex.data_file(ex.get('c1-02'), '렌터카대여.csv').decode('utf-8-sig').splitlines()
+    assert csv[0].startswith('대여번호,지점,차종') and len(csv) == 31
+
+
+def test_in_sheet_pivot_fails_external_check():
+    from core import pivots
+    assert not pivots.match({'external': True}, {'external': False, 'filters': [], 'rows': [], 'cols': [], 'values': []})[0]
+    assert pivots.clean_name('[쿼리].[지점].[지점]') == '지점' and pivots.clean_name('[Measures].[평균: 대여료]') == '대여료'

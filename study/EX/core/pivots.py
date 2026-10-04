@@ -1,5 +1,6 @@
 """엑셀 파일 속 피벗 테이블 읽기·채점 (필드 배치·값 요약 방식·위치·총합계)."""
 import math
+import re
 
 from . import formula as fx
 
@@ -9,8 +10,22 @@ ALIASES = {'avg': 'average', 'mean': 'average', '합계': 'sum', '개수': 'coun
            '최소': 'min'}
 
 
+SUMMARY_PREFIX = re.compile(r'^(합계|평균|개수|최대|최소|최댓값|최솟값|곱|Sum|Average|Count|Max|Min)\s*(of)?\s*:?\s*', re.I)
+
+
+def clean_name(name):
+    """데이터 모델(외부 데이터) 피벗의 이름 '[쿼리].[지점].[지점]'·'[Measures].[평균: 대여료]' → '지점'·'대여료'."""
+    parts = re.findall(r'\[([^\]]*)\]', str(name))
+    if not parts:
+        return name
+    last = parts[-1]
+    if parts[0].lower() == 'measures':
+        last = SUMMARY_PREFIX.sub('', last).strip() or last
+    return last
+
+
 def _names(pt):
-    return [f.name for f in pt.cache.cacheFields]
+    return [clean_name(f.name) for f in pt.cache.cacheFields]
 
 
 def _field_names(fields, names):
@@ -70,6 +85,7 @@ def describe(wb):
                 'layout': 'compact' if pt.compact is not False and pt.outline is not False else
                           ('outline' if pt.outline else 'tabular'),
                 'value_formats': value_formats, 'cell_formats': _cell_formats(ws, pt.location.ref),
+                'external': getattr(pt.cache.cacheSource, 'type', None) == 'external',
             })
     return out
 
@@ -116,6 +132,8 @@ def match(spec, pv):
     if spec.get('layout') and spec['layout'] != pv['layout']:
         names = {'compact': '압축', 'outline': '개요', 'tabular': '테이블'}
         why.append(f"보고서 레이아웃: {names[spec['layout']]} 형식이어야 합니다")
+    if spec.get('external') and not pv.get('external'):
+        why.append('원본이 시트 범위입니다 — 외부 데이터 가져오기(csv)로 만든 피벗이어야 합니다')
     if spec.get('value_numfmt'):
         from .exam import _same_fmt
         have = (pv.get('value_formats') or []) + (pv.get('cell_formats') or [])

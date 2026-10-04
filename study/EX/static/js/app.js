@@ -123,12 +123,16 @@
       try { localStorage.setItem(key, String(Date.now())); } catch (e) { /* 저장 불가면 이 화면에서만 */ }
       tick();
     });
+    if (box.hasAttribute('data-timer-auto')) {          // 필기 모의고사: 문제를 연 순간 시작(새 문제지마다 새로)
+      try { localStorage.setItem(key, String(Date.now())); } catch (e) { /* 무시 */ }
+    }
     box.querySelector('[data-timer-reset]').addEventListener('click', function () {
       if (getStart() && !window.confirm('시간을 처음으로 되돌릴까요?')) return;
       try { localStorage.removeItem(key); } catch (e) { /* 무시 */ }
       tick();
     });
-    box.querySelector('form').addEventListener('submit', function () { tick(); });
+    var tform = box.querySelector('form') || box.closest('form');
+    if (tform) tform.addEventListener('submit', function () { tick(); });
     tick();
     setInterval(tick, 1000);
   });
@@ -179,6 +183,57 @@
       main.insertBefore(bar, main.firstChild);
     }).catch(function () { /* 오프라인 등 */ });
   }
+
+  /* 필기 연습: 보기를 누르면 바로 채점·해설, 다 풀면 점수 */
+  var wlist = document.querySelector('[data-written-practice]');
+  if (wlist) {
+    var wdone = 0, wok = 0, wtotal = wlist.querySelectorAll('[data-wq]').length;
+    wlist.addEventListener('click', function (ev) {
+      var b = ev.target.closest('[data-pick]');
+      if (!b) return;
+      var box = b.closest('[data-wq]');
+      if (box.classList.contains('answered')) return;
+      box.classList.add('answered');
+      var picked = parseInt(b.getAttribute('data-pick'), 10);
+      box.querySelectorAll('[data-pick]').forEach(function (x) { x.disabled = true; });
+      post('/written/api/answer', { id: box.getAttribute('data-wq'), picked: picked }).then(function (r) {
+        box.querySelectorAll('[data-pick]').forEach(function (x, i) {
+          if (i === r.answer) x.classList.add('right');
+          else if (i === picked) x.classList.add('wrong');
+        });
+        var res = box.querySelector('.result');
+        res.className = 'result show ' + (r.ok ? 'ok' : 'bad');
+        res.innerHTML = '<b>' + (r.ok ? '정답' : '오답 — 정답은 ' + '①②③④'.charAt(r.answer)) + '</b> <span class="explain">' + esc(r.explain) + '</span>';
+        wdone++; if (r.ok) wok++;
+        if (wdone === wtotal) {
+          var sc = document.getElementById('wq-score');
+          sc.classList.remove('hidden');
+          sc.innerHTML = '<b>' + wtotal + '문항 중 ' + wok + '문항 정답 (' + Math.round(100 * wok / wtotal) + '점)</b> — 틀린 문제는 [필기] 화면의 "틀린 문제"에서 다시 풀 수 있습니다.';
+        }
+      }).catch(function (e) { box.classList.remove('answered'); box.querySelectorAll('[data-pick]').forEach(function (x) { x.disabled = false; }); window.alert(e.message); });
+    });
+  }
+  /* 필기 모의고사: 답한 문항 수, 안 푼 문항이 있으면 제출 전에 묻기 */
+  document.querySelectorAll('form[data-confirm-unanswered]').forEach(function (f) {
+    var names = {};
+    f.querySelectorAll('input[type=radio]').forEach(function (r) { names[r.name] = true; });
+    var total = Object.keys(names).length, counter = f.querySelector('[data-answered]');
+    function answered() { return Object.keys(names).filter(function (n) { return f.querySelector('input[name="' + n + '"]:checked'); }).length; }
+    f.addEventListener('change', function () { if (counter) counter.textContent = answered() + '/' + total + '문항 답함'; });
+    f.addEventListener('submit', function (ev) {
+      var left = total - answered();
+      if (left > 0 && !window.confirm('아직 ' + left + '문항을 풀지 않았습니다. 그래도 제출할까요?')) {
+        ev.preventDefault();
+        ev.stopImmediatePropagation();
+      }
+    }, true);
+  });
+  /* 필기 결과: 틀린 문제만 보기 */
+  document.querySelectorAll('[data-wrong-only]').forEach(function (cb) {
+    cb.addEventListener('change', function () {
+      document.querySelectorAll('.wq[data-ok="1"]').forEach(function (x) { x.classList.toggle('hidden', cb.checked); });
+    });
+  });
 
   /* 별표 */
   document.querySelectorAll('[data-star]').forEach(function (b) {

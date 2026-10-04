@@ -850,6 +850,30 @@ def check_datatable(ctx, sheet, chk):
     return True, []
 
 
+FILES = Path(__file__).resolve().parent.parent / 'content' / 'exams' / 'files'
+
+
+def problem_file(exam):
+    """내려받을 문제 파일 → (바이트, 확장자). 폼·ActiveX 단추가 있는 1급은 Excel 로 만든 .xlsm(tools/exam_problem_files.py)."""
+    p = FILES / f"{exam['id']}.xlsm"
+    if (exam.get('forms') or exam.get('commands')) and p.exists():
+        return p.read_bytes(), 'xlsm'
+    return problem_workbook(exam), 'xlsx'
+
+
+def data_file(exam, name):
+    """외부 데이터 자료(csv) → UTF-8(BOM) 바이트. 없으면 None."""
+    spec = (exam.get('data_files') or {}).get(name)
+    if not spec:
+        return None
+    import csv as _csv
+    bio = io.StringIO()
+    w = _csv.writer(bio, lineterminator='\r\n')
+    for row in spec['rows']:
+        w.writerow(['' if v is None else (v[1:] if isinstance(v, str) and v.startswith('@') else v) for v in row])
+    return bio.getvalue().encode('utf-8-sig')
+
+
 def _key_name(n):
     return re.sub(r'[\s-]', '', n)
 

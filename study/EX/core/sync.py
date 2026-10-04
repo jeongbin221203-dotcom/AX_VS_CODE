@@ -20,7 +20,9 @@ log = logging.getLogger(__name__)
 
 KEYS = {'attempts': ('pid', 'created_at', 'ok', 'answer'),
         'build_results': ('task', 'created_at', 'score', 'file_name'),
-        'exam_results': ('exam', 'created_at', 'score', 'file_name')}
+        'exam_results': ('exam', 'created_at', 'score', 'file_name'),
+        'written_attempts': ('qid', 'created_at', 'ok', 'picked'),
+        'written_results': ('level', 'created_at', 'average')}
 MAX_BODY = 40 * 1024 * 1024            # 압축을 푼 크기
 
 

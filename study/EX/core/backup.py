@@ -7,16 +7,21 @@ from . import db
 # 열마다 허용하는 형식 — 맞지 않는 행은 건너뛴다
 TYPES = {'pid': str, 'category': str, 'answer': str, 'task': str, 'exam': str, 'file_name': str, 'created_at': str,
          'detail': str, 'ok': (int, bool), 'score': (int, float), 'total': (int, float), 'passed': (int, bool),
-         'seconds': (int, float, type(None))}
-REQUIRED = {'pid', 'category', 'ok', 'task', 'exam', 'score', 'total', 'passed'}
-DETAIL_KEYS = {'build_results': ('items', 'score', 'total'), 'exam_results': ('score', 'total')}
+         'seconds': (int, float, type(None)), 'qid': str, 'subject': str, 'picked': (int, type(None)), 'level': str,
+         'average': (int, float)}
+REQUIRED = {'pid', 'category', 'ok', 'task', 'exam', 'score', 'total', 'passed', 'qid', 'subject', 'level', 'average'}
+DETAIL_KEYS = {'build_results': ('items', 'score', 'total'), 'exam_results': ('score', 'total'),
+               'written_results': ('subjects', 'average')}
 
 VERSION = 1
-LIMITS = {'attempts': 20000, 'stars': 2000, 'build_results': 300, 'exam_results': 300}
+LIMITS = {'attempts': 20000, 'stars': 2000, 'build_results': 300, 'exam_results': 300, 'written_attempts': 30000,
+          'written_results': 300}
 COLS = {'attempts': ('pid', 'category', 'ok', 'answer', 'created_at'),
         'stars': ('pid', 'created_at'),
         'build_results': ('task', 'score', 'total', 'detail', 'file_name', 'created_at'),
-        'exam_results': ('exam', 'score', 'total', 'passed', 'seconds', 'detail', 'file_name', 'created_at')}
+        'exam_results': ('exam', 'score', 'total', 'passed', 'seconds', 'detail', 'file_name', 'created_at'),
+        'written_attempts': ('qid', 'subject', 'ok', 'picked', 'created_at'),
+        'written_results': ('level', 'average', 'passed', 'seconds', 'detail', 'created_at')}
 
 
 def export(conn=None, user=None):

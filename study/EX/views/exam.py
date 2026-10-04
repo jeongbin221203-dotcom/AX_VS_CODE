@@ -63,8 +63,19 @@ def _file_name(e, ext='xlsx'):
 @bp.route('/<eid>/file')
 def download(eid):
     e = _exam(eid)
-    return send_file(io.BytesIO(ex.problem_workbook(e)), download_name=_file_name(e), as_attachment=True,
-                     mimetype=XLSX)
+    data, ext = ex.problem_file(e)
+    return send_file(io.BytesIO(data), download_name=_file_name(e, ext), as_attachment=True,
+                     mimetype=XLSX if ext == 'xlsx' else 'application/vnd.ms-excel.sheet.macroEnabled.12')
+
+
+@bp.route('/<eid>/data/<name>')
+def data_file(eid, name):
+    """외부 데이터 가져오기 문제의 자료 파일(csv)."""
+    e = _exam(eid)
+    data = ex.data_file(e, name)
+    if data is None:
+        abort(404)
+    return send_file(io.BytesIO(data), download_name=name, as_attachment=True, mimetype='text/csv')
 
 
 @bp.route('/<eid>/submit', methods=['POST'])

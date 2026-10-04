@@ -1517,24 +1517,28 @@ FUNCS['ISERR'] = (_err_test(lambda v: isinstance(v, XLErr) and v.code != '#N/A')
 FUNCS['ISNA'] = (_err_test(lambda v: isinstance(v, XLErr) and v.code == '#N/A'), True)
 
 
-@fn('ISBLANK')
-def f_isblank(v):
-    return elementwise(lambda x: x is None, v)
+def _type_test(name, test, per_item=True):
+    """ISNUMBER·ISTEXT 등: 인수가 오류여도 오류를 넘기지 않고 FALSE (=ISNUMBER(FIND("x",A1)) 이 FALSE)."""
+    def safe(x):
+        return False if isinstance(x, XLErr) else test(x)
+
+    def f(args, ctx):
+        if len(args) != 1:
+            raise ArgError(name)
+        try:
+            v = ev(args[0], ctx)
+        except XLErr:
+            return False
+        if isinstance(v, Arr) and not (v.h == 1 and v.w == 1):
+            return v.map(safe) if per_item else safe(scalar(v))
+        return safe(scalar(v))
+    return f
 
 
-@fn('ISNUMBER')
-def f_isnumber(v):
-    return elementwise(lambda x: is_num(x), v) if isinstance(v, Arr) else is_num(v)
-
-
-@fn('ISTEXT')
-def f_istext(v):
-    return elementwise(lambda x: isinstance(x, str), v) if isinstance(v, Arr) else isinstance(v, str)
-
-
-@fn('ISLOGICAL')
-def f_islogical(v):
-    return isinstance(scalar(v), bool)
+FUNCS['ISBLANK'] = (_type_test('ISBLANK', lambda x: x is None), True)
+FUNCS['ISNUMBER'] = (_type_test('ISNUMBER', is_num), True)
+FUNCS['ISTEXT'] = (_type_test('ISTEXT', lambda x: isinstance(x, str)), True)
+FUNCS['ISLOGICAL'] = (_type_test('ISLOGICAL', lambda x: isinstance(x, bool), per_item=False), True)
 
 
 @fn('ISEVEN')

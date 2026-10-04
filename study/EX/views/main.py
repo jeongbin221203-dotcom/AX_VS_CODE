@@ -25,11 +25,17 @@ def home():
         'SELECT exam, MAX(score) score, total, COUNT(*) n, MAX(passed) passed FROM exam_results WHERE user=? '
         'GROUP BY exam', (db.user_id(),))}
     exams = [{'e': e, 'best': ebest.get(e['id'])} for e in exam.exams()]
+    written_best = {r['level']: r for r in conn.execute(
+        'SELECT level, MAX(average) average, MAX(passed) passed FROM written_results WHERE user=? GROUP BY level',
+        (db.user_id(),))}
+    written_done = conn.execute('SELECT COUNT(DISTINCT qid) FROM written_attempts WHERE user=?',
+                                (db.user_id(),)).fetchone()[0]
     chart = {'labels': [d['label'] for d in dash['daily']],
              'series': [{'name': '정답', 'values': [d['ok'] for d in dash['daily']]},
                         {'name': '오답', 'values': [d['bad'] for d in dash['daily']]}]}
     return render_template('dashboard.html', d=dash, missions=missions, uploads=uploads, exams=exams,
                            msg=request.args.get('msg'), sync_last=db.setting('sync_last'),
+                           written_best=written_best, written_done=written_done,
                            chart_json=json.dumps(chart, ensure_ascii=False).replace('</', '<\\/'))
 
 

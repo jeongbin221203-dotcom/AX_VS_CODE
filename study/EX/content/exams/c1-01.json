@@ -1670,24 +1670,12 @@
     ]
    ],
    "cells": {
-    "A1": "교육 과정 수강 신청 관리",
-    "G3": "<입력>",
-    "G4": "성명",
-    "G5": "과정",
-    "G6": "수강료",
-    "H4": "송민준",
-    "H5": "파이썬 기초",
-    "H6": 240000,
-    "G8": "<집계>",
-    "G9": "신청 인원",
-    "G10": "납부액 합계"
+    "A1": "교육 과정 수강 신청 관리"
    },
    "formats": {
     "C4:C20": "#,##0",
     "D4:D20": "0%",
-    "E4:E20": "#,##0",
-    "H6": "#,##0",
-    "H10": "#,##0"
+    "E4:E20": "#,##0"
    },
    "widths": {
     "A": 9,
@@ -1699,14 +1687,10 @@
     "H": 13
    },
    "bold": [
-    "A3:E3",
-    "G3",
-    "G8"
+    "A3:E3"
    ],
    "borders": [
-    "A3:E9",
-    "G4:H6",
-    "G9:H10"
+    "A3:E9"
    ]
   }
  ],
@@ -2380,30 +2364,52 @@
    "section": "기타작업",
    "title": "VBA 프로그래밍",
    "sheet": "기타작업-3",
-   "text": "'기타작업-3' 시트에 대하여 다음의 지시사항을 처리하시오. ※ 실제 시험의 <수강신청> 폼 대신 이 시트의 [H4:H6] 입력 칸과 단추로 실행하는 표준 모듈 프로시저를 사용합니다.",
+   "text": "'기타작업-3' 시트에 대하여 다음의 지시사항을 처리하시오.",
    "items": [
-    "① '등록' 프로시저를 작성하시오. (7점)\n  - [H4:H6] 에 입력된 성명·과정·수강료를 [표]의 마지막 행 다음 행에 차례로 입력하시오.\n  - 할인율은 수강료가 200,000 이상이면 10%, 그 외는 5%로 [D] 열에, 납부액(수강료 × (1 - 할인율))은 [E] 열에 값으로 입력하시오.\n  - 마지막 행은 [A3] 셀의 CurrentRegion 또는 End(xlUp)을 이용하여 구하고, If ~ Else 문을 사용하시오.\n  - 시트에 양식 컨트롤 '단추'(텍스트 '등록')를 만들어 '등록' 프로시저를 연결하고, 문제 파일에 입력된 자료 1건을 등록한 상태로 저장하시오.",
-    "② '집계' 프로시저를 작성하시오. (4점)\n  - [H9] 셀에 신청 인원(성명 개수)을, [H10] 셀에 납부액 합계를 값으로 표시하시오.\n  - WorksheetFunction 개체의 CountA, Sum 메서드를 사용하고, ① 실행 후 '집계'를 실행한 결과가 남아 있도록 하시오.",
-    "③ '종료' 프로시저를 작성하시오. (4점)\n  - [H4:H6] 영역의 내용을 지우고, 메시지 상자에 '2026-10-03 작업을 마칩니다.'처럼 오늘 날짜(Format, Date 사용)와 함께 '작업을 마칩니다.'를 표시하시오.",
+    "<수강신청> 폼: 성명(txt성명), 과정(cmb과정), 수강료(txt수강료) 입력 칸과 '등록'(cmd등록)·'종료'(cmd종료) 단추가 문제 파일에 만들어져 있습니다.",
+    "① '수강 신청'(cmd신청) 단추를 클릭하면 <수강신청> 폼이 나타나고, 폼이 초기화(Initialize)되면 과정(cmb과정) 목록에 '엑셀 실무', '파워BI 입문', 'VBA 자동화', '데이터 시각화', '파이썬 기초'가 표시되도록 프로시저를 작성하시오. (5점)",
+    "② 폼의 '등록'(cmd등록) 단추를 클릭하면 폼에 입력한 성명·과정·수강료를 [표]의 마지막 행 다음 행에 입력하고, 할인율은 수강료가 200,000 이상이면 10%, 그 외는 5%로 [D] 열에, 납부액(수강료 × (1 - 할인율))은 [E] 열에 입력하는 프로시저를 작성하시오. (If ~ Else 문, CurrentRegion 또는 End(xlUp) 사용) (6점)",
+    "  - 작성 후 폼에 성명 '송민준', 과정 '파이썬 기초', 수강료 240000 을 입력하고 [등록] 단추를 눌러 등록한 상태로 저장하시오. 수강료는 숫자로 입력되어야 합니다.",
+    "③ 폼의 '종료'(cmd종료) 단추를 클릭하면 '2026-10-03 작업을 마칩니다.'처럼 오늘 날짜(Format, Date 사용)와 함께 메시지를 표시하고 폼을 닫는 프로시저를 작성하시오. (Unload 사용) (4점)",
     "파일은 Excel 매크로 사용 통합 문서(*.xlsm)로 저장하시오."
    ],
    "checks": [
     {
      "kind": "vba",
-     "label": "① '등록' 프로시저",
-     "points": 5,
-     "proc": "등록",
+     "label": "① '수강 신청' 단추로 폼 열기",
+     "points": 2,
+     "proc": "cmd신청_Click",
+     "needs_vba": true,
+     "patterns": [
+      "frm수강신청\\.Show"
+     ]
+    },
+    {
+     "kind": "vba",
+     "label": "① 폼 초기화(과정 목록)",
+     "points": 3,
+     "proc": "UserForm_Initialize",
+     "needs_vba": true,
+     "patterns": [
+      "AddItem|RowSource|\\.List ?="
+     ]
+    },
+    {
+     "kind": "vba",
+     "label": "② '등록' 단추 프로시저",
+     "points": 4,
+     "proc": "cmd등록_Click",
      "needs_vba": true,
      "patterns": [
       "CurrentRegion|End\\(xlUp\\)",
-      "H4|Cells\\(4, ?(8|\"H\")\\)",
+      "txt성명",
       "If .*200000",
       "Else"
      ]
     },
     {
      "kind": "values",
-     "label": "① 등록 결과 A10:E10",
+     "label": "② 등록 결과 A10:E10",
      "points": 2,
      "range": "A10:E10",
      "expect": [
@@ -2418,69 +2424,120 @@
     },
     {
      "kind": "vba",
-     "label": "② '집계' 프로시저",
-     "points": 3,
-     "proc": "집계",
-     "needs_vba": true,
-     "patterns": [
-      "WorksheetFunction\\.CountA",
-      "WorksheetFunction\\.Sum"
-     ]
-    },
-    {
-     "kind": "values",
-     "label": "② 집계 결과 H9:H10",
-     "points": 1,
-     "range": "H9:H10",
-     "expect": [
-      [
-       7
-      ],
-      [
-       1456500
-      ]
-     ]
-    },
-    {
-     "kind": "vba",
-     "label": "③ '종료' 프로시저",
+     "label": "③ '종료' 단추 프로시저",
      "points": 4,
-     "proc": "종료",
+     "proc": "cmd종료_Click",
      "needs_vba": true,
      "patterns": [
-      "Clear|\\.Value ?= ?\"\"",
       "MsgBox",
-      "Format\\(Date"
+      "Format\\(Date",
+      "Unload"
      ]
     }
    ],
    "answer": [
     {
      "op": "vba",
-     "code": "Sub 등록()\n    Dim r As Long, 할인율 As Double\n    r = Cells(Rows.Count, 1).End(xlUp).Row + 1\n    Cells(r, 1).Value = Range(\"H4\").Value\n    Cells(r, 2).Value = Range(\"H5\").Value\n    Cells(r, 3).Value = Range(\"H6\").Value\n    If Range(\"H6\").Value >= 200000 Then\n        할인율 = 0.1\n    Else\n        할인율 = 0.05\n    End If\n    Cells(r, 4).Value = 할인율\n    Cells(r, 5).Value = Range(\"H6\").Value * (1 - 할인율)\nEnd Sub\n\nSub 집계()\n    Dim last As Long\n    last = Cells(Rows.Count, 1).End(xlUp).Row\n    Range(\"H9\").Value = WorksheetFunction.CountA(Range(\"A4:A\" & last))\n    Range(\"H10\").Value = WorksheetFunction.Sum(Range(\"E4:E\" & last))\nEnd Sub\n\nSub 종료()\n    Range(\"H4:H6\").ClearContents\n    MsgBox Format(Date, \"yyyy-mm-dd\") & \" 작업을 마칩니다.\"\nEnd Sub",
-     "buttons": [
-      {
-       "text": "등록",
-       "macro": "등록",
-       "range": "J3:K4"
-      },
-      {
-       "text": "집계",
-       "macro": "집계",
-       "range": "J6:K7"
-      },
-      {
-       "text": "종료",
-       "macro": "종료",
-       "range": "J9:K10"
-      }
-     ],
-     "run": [
-      "등록",
-      "집계"
-     ]
+     "module": "form:frm수강신청",
+     "code": "Private Sub UserForm_Initialize()\n    cmb과정.AddItem \"엑셀 실무\"\n    cmb과정.AddItem \"파워BI 입문\"\n    cmb과정.AddItem \"VBA 자동화\"\n    cmb과정.AddItem \"데이터 시각화\"\n    cmb과정.AddItem \"파이썬 기초\"\nEnd Sub\n\nSub cmd등록_Click()\n    Dim r As Long, 수강료 As Double, 할인율 As Double\n    r = Range(\"A3\").CurrentRegion.Rows.Count + 3\n    수강료 = Val(txt수강료.Value)\n    If 수강료 >= 200000 Then\n        할인율 = 0.1\n    Else\n        할인율 = 0.05\n    End If\n    Cells(r, 1).Value = txt성명.Value\n    Cells(r, 2).Value = cmb과정.Value\n    Cells(r, 3).Value = 수강료\n    Cells(r, 4).Value = 할인율\n    Cells(r, 5).Value = 수강료 * (1 - 할인율)\nEnd Sub\n\nPrivate Sub cmd종료_Click()\n    MsgBox Format(Date, \"yyyy-mm-dd\") & \" 작업을 마칩니다.\"\n    Unload Me\nEnd Sub"
+    },
+    {
+     "op": "vba",
+     "module": "sheet",
+     "code": "Private Sub cmd신청_Click()\n    frm수강신청.Show\nEnd Sub"
+    },
+    {
+     "op": "vba",
+     "test": "Load frm수강신청\n    frm수강신청.txt성명.Value = \"송민준\"\n    frm수강신청.cmb과정.Value = \"파이썬 기초\"\n    frm수강신청.txt수강료.Value = \"240000\"\n    frm수강신청.cmd등록_Click\n    Unload frm수강신청"
     }
    ]
+  }
+ ],
+ "forms": [
+  {
+   "name": "frm수강신청",
+   "caption": "수강 신청",
+   "width": 260,
+   "height": 166,
+   "controls": [
+    {
+     "type": "Label",
+     "name": "lbl성명",
+     "left": 12,
+     "top": 15,
+     "width": 60,
+     "height": 18,
+     "caption": "성명"
+    },
+    {
+     "type": "TextBox",
+     "name": "txt성명",
+     "left": 80,
+     "top": 12,
+     "width": 150,
+     "height": 20
+    },
+    {
+     "type": "Label",
+     "name": "lbl과정",
+     "left": 12,
+     "top": 43,
+     "width": 60,
+     "height": 18,
+     "caption": "과정"
+    },
+    {
+     "type": "ComboBox",
+     "name": "cmb과정",
+     "left": 80,
+     "top": 40,
+     "width": 150,
+     "height": 20
+    },
+    {
+     "type": "Label",
+     "name": "lbl수강료",
+     "left": 12,
+     "top": 71,
+     "width": 60,
+     "height": 18,
+     "caption": "수강료"
+    },
+    {
+     "type": "TextBox",
+     "name": "txt수강료",
+     "left": 80,
+     "top": 68,
+     "width": 150,
+     "height": 20
+    },
+    {
+     "type": "CommandButton",
+     "name": "cmd등록",
+     "left": 40,
+     "top": 104,
+     "width": 70,
+     "height": 26,
+     "caption": "등록"
+    },
+    {
+     "type": "CommandButton",
+     "name": "cmd종료",
+     "left": 140,
+     "top": 104,
+     "width": 70,
+     "height": 26,
+     "caption": "종료"
+    }
+   ]
+  }
+ ],
+ "commands": [
+  {
+   "sheet": "기타작업-3",
+   "name": "cmd신청",
+   "caption": "수강 신청",
+   "range": "G3:H4"
   }
  ]
 }

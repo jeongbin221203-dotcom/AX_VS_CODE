@@ -58,6 +58,13 @@
 사용자 정의 함수(1급): formula 항목에 `require: ["FN비고"]` + `needs_vba: true`, `answer` 는 같은 결과를 내는 일반 수식.
 매크로 결과(합계 칸·서식)는 macro 와 별도의 formula/style 항목으로 채점한다(매크로 실행 결과는 자동 검증됨).
 
+## 1급 폼·외부 데이터
+- 시험 최상위 `forms: [{name, caption, width, height, controls: [{type: Label|TextBox|ComboBox|ListBox|CommandButton|OptionButton|CheckBox, name, left, top, width, height, caption}]}]`,
+  `commands: [{sheet, name, caption, range}]`(시트의 ActiveX 명령 단추) → `python tools/exam_problem_files.py` 가 Excel 로 `content/exams/files/<id>.xlsm` 을 만든다
+  (폼에는 코드 없이 컨트롤만). 정의를 바꾸면 다시 실행(테스트가 시트 내용이 같은지 확인).
+- `data_files: {"이름.csv": {"rows": [[머리글…], …]}}` → 문제지의 [자료 파일] 단추로 받는 외부 데이터. 피벗 검사 `external: true` 는 원본이 시트 범위가 아닌지 본다.
+  데이터 모델 피벗의 필드 이름('[쿼리].[지점].[지점]', '[Measures].[평균: 대여료]')은 채점 때 '지점'·'대여료'로 읽는다.
+
 ## 정답 단계(answer op) — `tools/exam_answer.py` 가 Excel 에서 실행
 `values{range,values}` · `formula{range,formula,array}` · `style{…check 와 같은 필드}` · `comment{cell,text}` · `name{name,ref}` ·
 `cf{range,formula,font_color,bold,italic,fill}` · `dv{range,type,operator,formula1,formula2,error_title,error,prompt_title,prompt,style}` ·
@@ -67,7 +74,9 @@
 `consolidate{target,sources:["'시트'!$A$3:$C$9"],func,top,left}` · `chart{source,type,at,title,line_series,secondary,labels,trend,y_title,x_title,legend}` ·
 `page{…}` · `protect{unlocked,hidden,password}` · `textsplit{range,delimiter}` ·
 `vba{code, module('sheet'=그 시트 모듈, 기본=새 표준 모듈), buttons:[{text,macro,range}](양식 단추), commands:[{name,caption,range}](ActiveX 명령 단추), run:[실행할 프로시저], activate(시트를 다시 활성화해 Worksheet_Activate 실행)}`
-— 매크로·사용자 정의 함수·VBA 프로그래밍 문제의 모범 답안. 실행하려면 Excel '보안 센터 > VBA 프로젝트 개체 모델에 안전하게 액세스'(AccessVBOM)가 켜져 있어야 한다.
+— 매크로·사용자 정의 함수·VBA 프로그래밍 문제의 모범 답안. `module: "form:<폼 이름>"` 은 그 폼의 코드,
+  `test: "<VBA 문장>"` 은 임시 모듈에서 실행(폼에 값을 넣고 단추 프로시저를 부르는 식 — 폼 단추 프로시저는 Public 이어야 부를 수 있음).
+`pivot{external_csv: "<data_files 이름>"}` 은 csv → Power Query → 데이터 모델 피벗(시험의 [외부 데이터 원본 사용]과 같은 형태). 실행하려면 Excel '보안 센터 > VBA 프로젝트 개체 모델에 안전하게 액세스'(AccessVBOM)가 켜져 있어야 한다.
 op 에 `sheet` 를 주면 그 시트에서 실행(기본은 task 의 sheet).
 
 ## 검증
