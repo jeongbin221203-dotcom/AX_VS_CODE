@@ -73,7 +73,10 @@ def pack(data):
 
 
 def unpack(blob):
-    raw = gzip.GzipFile(fileobj=__import__('io').BytesIO(blob)).read(MAX_BODY + 1)
+    if blob[:2] != b'\x1f\x8b':                      # 중간 프록시(Render)가 압축을 풀어 보낸 경우
+        raw = blob[:MAX_BODY + 1]
+    else:
+        raw = gzip.GzipFile(fileobj=__import__('io').BytesIO(blob)).read(MAX_BODY + 1)
     if len(raw) > MAX_BODY:
         raise ValueError('기록이 너무 큽니다.')
     return json.loads(raw.decode('utf-8'))
@@ -100,7 +103,8 @@ def sync_once(db_path, url, token, timeout=120):
     try:
         mine = backup.export(conn, '')
         req = urllib.request.Request(url + '/api/sync', data=pack(mine), method='POST', headers={
-            'Authorization': f'Bearer {token}', 'Content-Type': 'application/json', 'Content-Encoding': 'gzip'})
+            'Authorization': f'Bearer {token}', 'Content-Type': 'application/json', 'Content-Encoding': 'gzip',
+            'Accept-Encoding': 'gzip'})
         with urllib.request.urlopen(req, timeout=timeout) as resp:
             body = resp.read(MAX_BODY + 1)
         theirs = unpack(body)
