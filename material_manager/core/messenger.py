@@ -322,6 +322,15 @@ def send_test(cid: int, actor: dict) -> tuple[bool, str]:
         send_row(row)
     except Exception as exc:
         db.execute("UPDATE notifications SET status = 'FAILED', tries = tries + 1, last_error = ? WHERE id = ?", (str(exc)[:500], nid))
-        return False, f"시험 보내기 실패: {exc}"
+        text = str(exc)
+        if "timed out" in text or "timeout" in text.lower():
+            text = "응답이 없습니다(시간 초과) — 주소가 맞는지, 이 서버에서 인터넷(사내 방화벽)으로 나갈 수 있는지 확인하세요."
+        elif "Name or service not known" in text or "getaddrinfo" in text or "nodename" in text:
+            text = "주소(도메인)를 찾지 못했습니다 — 웹훅 URL 을 확인하세요."
+        elif "HTTP Error 401" in text or "HTTP Error 403" in text:
+            text = "인증이 거부됐습니다 — 키·토큰을 확인하세요."
+        elif "HTTP Error 404" in text:
+            text = "주소가 없습니다(404) — 웹훅 URL 을 확인하세요."
+        return False, f"시험 보내기 실패: {text}"
     db.execute("UPDATE notifications SET status = 'SENT', tries = tries + 1, sent_at = ? WHERE id = ?", (now_str(), nid))
     return True, f"시험 메시지를 보냈습니다 ({'그룹방' if 'room' in targets else mine})."

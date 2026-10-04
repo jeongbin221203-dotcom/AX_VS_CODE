@@ -44,6 +44,8 @@ def movement_type(tx_type: str, qty: float, po_no: str = "", issue_return: bool 
     if tx_type == "IN":
         if issue_return:                              # 생산에 투입했던 자재를 되돌림 = 원가센터 출고 취소(202), 매입(501) 아님
             return t.get("IN_RETURN", "202")
+        if production == "receipt":                   # 원가센터 방식 완제품 입고 = 생산 무계획 입고(521)
+            return t.get("PROD_RECEIPT", "521")
         return t["IN_PO"] if po_no else t["IN_NO_PO"]
     if tx_type == "OUT":
         return t["OUT"]

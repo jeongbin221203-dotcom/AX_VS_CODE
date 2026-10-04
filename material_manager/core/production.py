@@ -200,16 +200,17 @@ def requirements(product_id: int, qty: float, issue_wh_id: int, wh_ids=None) -> 
 COST_DAYS = 180
 
 
-def current_cost(conn, material_id: int, warehouse_id: int | None = None, as_of: str | None = None) -> float:
+def current_cost(conn, material_id: int, warehouse_id: int | None = None, as_of: str | None = None,
+                 qty: float = 1.0) -> float:
     """생산 투입 단가: 그 창고 플랜트의 재고 평가 단가(이동평균·선입선출 — 재고 평가에서 빠지는 금액과 같게).
     평가할 재고가 없으면 최근 {COST_DAYS}일 입고(이동·취소 제외)의 가중평균, 그것도 없으면 기준단가."""
     if warehouse_id is not None:
         from core import valuation
         plant = conn.execute("SELECT plant_id FROM warehouses WHERE id = ?", (warehouse_id,)).fetchone()
         if plant is not None:
-            cost = valuation.unit_cost(conn, material_id, int(plant[0]), as_of or date.today().isoformat())
-            if cost is not None and cost > 0:
-                return round(cost, 4)
+            total = valuation.issue_cost(conn, material_id, int(plant[0]), as_of or date.today().isoformat(), max(qty, 1e-9))
+            if total is not None and total > 0:
+                return round(total / max(qty, 1e-9), 6)          # 선입선출이면 여러 층을 꺼낸 평균 단가
     since = (date.today() - timedelta(days=COST_DAYS)).isoformat()
     row = conn.execute("""
         SELECT SUM(t.qty * t.unit_price), SUM(t.qty) FROM transactions t
@@ -257,6 +258,7 @@ def save_routing(product_id: int, ops: list[Op], actor: dict | None) -> services
 # ── 작업지시 ─────────────────────────────────────────────────
 # 상태: PLANNED(계획) → RELEASED(자재 투입 시작 = 재공) → DONE(완료 입고) / CANCELLED
 STATUS = {"PLANNED": "계획", "RELEASED": "진행(재공)", "DONE": "완료", "CANCELLED": "취소"}
+COMPLETE_TOLERANCE = 0.10              # 완료 수량(양품+불량)은 작업지시 수량의 110% 까지
 
 
 def _who(actor):
@@ -272,7 +274,9 @@ def _create(conn, who: dict, product_id: int, qty: float, issue_wh_id: int, rece
     bom = get_bom(product_id, conn)
     if prod is None or not prod["active"] or bom is None or not bom["active"]:
         return services.Result(False, "BOM이 있는 사용 중인 제품을 고르세요.")
-    for w in {issue_wh_id, receipt_wh_id} - {None}:
+    line_whs = {int(r[0]) for r in conn.execute("SELECT DISTINCT issue_wh_id FROM bom_items WHERE bom_id = ? AND issue_wh_id IS NOT NULL",
+                                                 (bom["id"],))} if bom is not None else set()
+    for w in ({issue_wh_id, receipt_wh_id} | line_whs) - {None}:
         problem = services._warehouse_problem(org.get_warehouse(w, conn), wh_ids)
         if problem:
             return services.Result(False, problem)
@@ -341,7 +345,7 @@ def _issue(conn, who: dict, pid: int, quantities: dict[int, float], tx_date: str
         if ln is None:
             return services.Result(False, "작업지시에 없는 줄입니다.")
         if q > 0:
-            price = current_cost(conn, int(ln["component_id"]), int(ln["wh_id"]), tx_date)
+            price = current_cost(conn, int(ln["component_id"]), int(ln["wh_id"]), tx_date, qty=q)
             out = services._register(conn, who, int(ln["component_id"]), "OUT", q, tx_date, price, ref, "",
                                      f"생산 투입 {p['prod_no']} → {p['product_code']}", "", "", p["cost_center"] or "",
                                      int(ln["wh_id"]), wh_ids, "", "", production_id=pid)
@@ -411,9 +415,18 @@ def _complete(conn, who: dict, pid: int, good_qty: float, scrap_qty: float, tx_d
         return services.Result(False, _scope_problem(p, wh_ids))
     if not services._finite(good_qty, scrap_qty) or good_qty < 0 or scrap_qty < 0 or good_qty + scrap_qty <= 0:
         return services.Result(False, "양품·불량 수량을 확인하세요 (합이 0보다 커야 함).")
+    p_qty = float(p["qty"] or 0)
+    over = max(p_qty * (1 + COMPLETE_TOLERANCE), p_qty + 1e-9)
+    if good_qty + scrap_qty > over + 1e-9:             # 작업지시 수량보다 훨씬 많이 완료하면 원가·재고가 틀어진다
+        return services.Result(False, f"양품+불량 {fmt_qty(good_qty + scrap_qty)}이 작업지시 수량 {fmt_qty(p_qty)}의 "
+                                      f"{COMPLETE_TOLERANCE:.0%} 허용을 넘습니다. 수량을 확인하거나 작업지시를 새로 만드세요.")
     if backflush:
+        returned = {int(r[0]) for r in conn.execute(      # 반납한 적 있는 부품 = 일부러 덜 쓴 것 → 다시 채우지 않음
+            "SELECT DISTINCT t.material_id FROM transactions t WHERE t.production_id = ? AND t.tx_type = 'IN' "
+            "AND t.material_id <> ? AND t.reversal_of IS NULL", (pid, p["product_id"]))}
         rest = {int(r["id"]): round(float(r["planned_qty"]) - float(r["issued_qty"]), 4)
-                for r in conn.execute("SELECT id, planned_qty, issued_qty FROM production_lines WHERE production_id = ?", (pid,))}
+                for r in conn.execute("SELECT id, planned_qty, issued_qty, component_id FROM production_lines WHERE production_id = ?",
+                                      (pid,)) if int(r["component_id"]) not in returned}
         rest = {k: v for k, v in rest.items() if v > 1e-9}
         if rest:
             out = _issue(conn, who, pid, rest, tx_date, wh_ids)
@@ -443,7 +456,8 @@ def _complete(conn, who: dict, pid: int, good_qty: float, scrap_qty: float, tx_d
     audit.record(conn, who, "WO_COMPLETE", "production", pid,
                  {"prod_no": p["prod_no"], "good": good_qty, "scrap": scrap_qty, "cost": cost, "labor": labor,
                   "overhead": overhead, "minutes": minutes, "scrap_loss": cost + labor + overhead if good_qty <= 0 else 0})
-    conv = f" · 노무비 ₩{labor:,.0f} · 경비 ₩{overhead:,.0f} ({fmt_qty(minutes)}분)" if labor or overhead else ""
+    conv = (f" · 노무비 ₩{labor:,.0f} · 경비 ₩{overhead:,.0f} ({fmt_qty(minutes)}분)" if labor or overhead else
+            f" · 작업 {fmt_qty(minutes)}분이 있지만 노무 임률·경비 배부율이 0이라 재료비만 원가에 넣었습니다(회사 설정)" if minutes else "")
     loss = (f" · 양품 없음 — 재료비 ₩{cost + labor + overhead:,.0f}은 불량 손실(재공에서 비용으로)"
             if good_qty <= 0 and (cost + labor + overhead) > 0 else "")
     return f"완료 — 양품 {fmt_qty(good_qty)} · 불량 {fmt_qty(scrap_qty)} · 실제 재료비 ₩{cost:,.0f}{conv}{receipt}{loss}"

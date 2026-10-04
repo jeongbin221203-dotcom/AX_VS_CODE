@@ -154,7 +154,8 @@ def test_s4_odata_post_cancel_and_idempotent_retry(fresh, s4):
     assert body["GoodsMovementCode"] == "05" and body["MaterialDocumentHeaderText"] == f"MM-TX-{tx.tx_id}"
     assert body["PostingDate"].startswith("/Date(") and body["ReferenceDocument"] == "GR-1"
     assert item == {"Material": "PKG001", "Plant": "1000", "StorageLocation": "0001", "GoodsMovementType": "501",
-                    "EntryUnit": "EA", "QuantityInEntryUnit": "5.000"}
+                    "EntryUnit": "EA", "QuantityInEntryUnit": "5.000",
+                    "TotalGoodsMvtAmtInCCCrcy": "90000.00"}                     # 무PO 입고 금액
     assert state["token"] == "T2", "만료된 CSRF 토큰은 다시 받아 재요청"
 
     # 응답을 못 받아 다시 보내는 경우: 헤더 텍스트(멱등키)로 찾아 같은 번호를 쓰고 새로 전기하지 않는다

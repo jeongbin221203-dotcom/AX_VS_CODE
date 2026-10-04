@@ -457,7 +457,7 @@ def cost_rollup():
     from core import costing
     if not scope_all():
         abort(403, "표준원가는 회사 전체에 적용되므로 모든 창고 권한이 있는 관리자만 산정할 수 있습니다.")
-    ok, msg = costing.rollup(actor())
+    ok, msg = costing.rollup(actor(), update_price=request.form.get("update_price") == "1")
     flash(msg, "success" if ok else "error")
     return redirect(url_for("production.index", tab="cost", view="standard"))
 

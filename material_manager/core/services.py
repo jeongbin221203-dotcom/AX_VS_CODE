@@ -82,7 +82,7 @@ def register_transaction(material_id: int, tx_type: str, qty_input: float, tx_da
     if tx_type not in config.TX_LABEL:
         return Result(False, f"알 수 없는 거래 유형: {tx_type}")
     who = _actor(actor, created_by)
-    po_no, po_item, cost_center = po_no.strip(), po_item.strip(), cost_center.strip()
+    po_no, po_item, cost_center = po_no.strip(), po_item.strip(), cost_center.strip().upper()   # 원가센터는 대문자로 통일
     lot_no, expiry_date = lot_no.strip().upper(), expiry_date.strip()
     if tx_type != "IN":
         po_no = po_item = ""
@@ -169,6 +169,9 @@ def _register(conn, who: dict, material_id: int, tx_type: str, qty_input: float,
             problem = purchasing.receipt_problem(conn, po_no, po_item, material_id, wh_id, qty)
             if problem:
                 return Result(False, problem)
+            if config.SOD_PO_RECEIPT and who.get("id") is not None and conn.execute(
+                    "SELECT 1 FROM purchase_orders WHERE po_no = ? AND created_by_id = ?", (po_no, who.get("id"))).fetchone():
+                return Result(False, "발주를 만든 사람은 그 발주의 입고를 등록할 수 없습니다(직무 분리 — 회사 설정).")
             po_price = purchasing.po_line_price(conn, po_no, po_item)
             if po_price is not None:                      # 발주 입고는 발주 단가로 (SAP 101 과 같게, 단가 차이는 계산서 대사에서)
                 if unit_price and abs(float(unit_price) - po_price) > 0.005:
@@ -507,7 +510,8 @@ def transfer(material_id: int, from_wh: int, to_wh: int, qty: float, tx_date: st
         else:
             _, avail = repo.balance_window(conn, material_id, from_wh, None, tx_date)
             if qty > avail + 1e-9:
-                return Result(False, f"재고 부족: {src['code']} {tx_date} 이후 이동 가능 {avail:,.2f}, 이동 요청 {qty:,.2f}")
+                return Result(False, f"재고 부족: {src['code']} {tx_date} 이후 이동 가능 {fmt_qty(avail)} {mat['unit']}, "
+                                     f"이동 요청 {fmt_qty(qty)} {mat['unit']}")
             allocations = [("", qty)]
         transfer_no = f"TRF-{tx_date.replace('-', '')}-{secrets.token_hex(4).upper()}"
         mvt = sap.transfer_movement_type(src["plant_id"] == dst["plant_id"])

@@ -19,7 +19,7 @@
   {{ metric("발주 금액", "₩ {:,.0f}".format(match.ordered)) }}
   {{ metric("입고 금액 (발주 단가)", "₩ {:,.0f}".format(match.received)) }}
   {{ metric("세금계산서 공급가액", "₩ {:,.0f}".format(match.invoiced), "{}건".format(match.invoice_count)) }}
-  {{ metric("차이 (계산서 − 입고)", "₩ {:+,.0f}".format(match.gap), "일치" if match.gap|abs < 1 else "대조 필요", "up" if match.gap|abs < 1 else "down") }}
+  {{ metric("차이 (계산서 − 입고)", "₩ {:+,.0f}".format(match.gap), payment, "down" if payment == '지급 보류' else "up") }}
 </div>
 <p class="muted small">세금계산서는 이 발주로 입고한 거래에 연결된 증빙(세금계산서·전자세금계산서·계산서)만 셉니다.</p>
 <p>지급: <strong>{{ payment }}</strong>{% if payment_note %} <span class="muted small">— {{ payment_note.split('] ', 1)[-1] }}</span>{% endif %}</p>

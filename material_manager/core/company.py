@@ -31,6 +31,7 @@ FIELDS = {
     "MATCH_PRICE_TOL_PCT": ("3자 대조 금액 허용오차 (%)", "float", "세금계산서 공급가액과 입고 금액(발주 단가)의 차이가 넘으면 지급 보류", 0),
     "MATCH_QTY_TOL_PCT": ("3자 대조 수량 허용오차 (%)", "float", "입고 수량이 발주 수량과 이만큼 넘게 다르면 지급 보류", 0),
     "WEEKEND_OFF": ("토·일은 쉬는 날", "bool", "MRP 리드타임을 근무일로 계산 (회사 휴일은 아래 작업 달력)", None),
+    "SOD_PO_RECEIPT": ("발주자는 그 발주의 입고 금지", "bool", "켜면 발주를 만든 사람은 입고를 등록할 수 없음 (구매·입고 직무 분리)", None),
 }
 _cache = {"at": 0.0, "values": {}}
 _defaults: dict = {}
@@ -45,7 +46,7 @@ def _current_from_config() -> dict:
             "PARTNER_REQUIRED": bool(config.PARTNER_REQUIRED), "COST_DAYS": int(production.COST_DAYS),
             "LABOR_RATE": float(config.LABOR_RATE), "OVERHEAD_RATE": float(config.OVERHEAD_RATE),
             "MATCH_PRICE_TOL_PCT": float(config.MATCH_PRICE_TOL_PCT), "MATCH_QTY_TOL_PCT": float(config.MATCH_QTY_TOL_PCT),
-            "WEEKEND_OFF": bool(config.WEEKEND_OFF)}
+            "WEEKEND_OFF": bool(config.WEEKEND_OFF), "SOD_PO_RECEIPT": bool(config.SOD_PO_RECEIPT)}
 
 
 def defaults() -> dict:
@@ -84,6 +85,7 @@ def _apply(v: dict, keys) -> None:
         "MATCH_PRICE_TOL_PCT": lambda x: setattr(config, "MATCH_PRICE_TOL_PCT", float(x)),
         "MATCH_QTY_TOL_PCT": lambda x: setattr(config, "MATCH_QTY_TOL_PCT", float(x)),
         "WEEKEND_OFF": lambda x: setattr(config, "WEEKEND_OFF", bool(x)),
+        "SOD_PO_RECEIPT": lambda x: setattr(config, "SOD_PO_RECEIPT", bool(x)),
     }
     for k in keys:
         if k in setters:

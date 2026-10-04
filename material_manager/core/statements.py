@@ -248,6 +248,7 @@ def register(header: dict, lines: list[Line], *, actor: dict | None, wh_ids=None
     supply = sum(float(ln.supply or 0) for ln in lines)
     tax = sum(float(ln.tax or 0) for ln in lines if ln.tax is not None and not math.isnan(ln.tax))
     first_tx = 0
+    price_notes: list[str] = []
     try:
         with db.transaction() as conn:
             st_id = conn.execute(
@@ -265,6 +266,8 @@ def register(header: dict, lines: list[Line], *, actor: dict | None, wh_ids=None
                 if isinstance(out, services.Result):            # 거부 → 전체 되돌림
                     raise _LineRejected(ln.no, out.message)
                 first_tx = first_tx or out["tx_ids"][0]
+                if out.get("partner_warning") and "발주 단가" in out["partner_warning"]:
+                    price_notes.append(f"{ln.no}번 줄 {out['partner_warning'].split(' — ')[0]}")
             audit.record(conn, who, "STATEMENT_CREATE", "statement", st_id,
                          {"kind": kind, "partner": partner, "statement_no": st_no, "lines": len(lines),
                           "supply": supply, "tax": tax, "warehouse_id": wh_id})
@@ -274,6 +277,8 @@ def register(header: dict, lines: list[Line], *, actor: dict | None, wh_ids=None
         return Registered(False, f"이미 등록한 거래명세서입니다 ({partner} · {st_no}).")
 
     msg = f"거래명세서 #{st_id} 등록 — {config.TX_LABEL[kind]} {len(lines)}줄, 공급가액 ₩{supply:,.0f}"
+    if price_notes:
+        msg += " · ⚠ " + " / ".join(price_notes[:5]) + " (명세서 단가와 다르면 공급처·계산서를 확인)"
     if partner_id is None:
         msg += " · " + partners.unknown_warning(partner, None)
     if evidence is not None:

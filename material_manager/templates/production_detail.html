@@ -66,7 +66,8 @@
         <td class="num">{{ (l.rest)|qty if l.rest > 0 else '' }}</td>
         <td class="num">₩{{ '{:,.0f}'.format(l.issued_cost) }}</td>
         <td class="num">₩{{ '{:,.0f}'.format(l.std_cost) }}</td>
-        {% if open_wo %}<td><input class="qty-input" name="line_{{ l.id }}" type="number" step="any" value="{{ (l.rest)|plain if l.rest > 0 else '' }}" aria-label="이번 투입"></td>{% endif %}
+        {% if open_wo %}<td><input class="qty-input" name="line_{{ l.id }}" type="number" step="any" value="" data-rest="{{ (l.rest)|plain if l.rest > 0 else '' }}"
+             placeholder="{{ (l.rest)|plain if l.rest > 0 else '' }}" aria-label="이번 투입 (반납은 음수)"></td>{% endif %}
       </tr>
     {% endfor %}
     </tbody>
@@ -81,7 +82,9 @@
     <label>일자<input name="tx_date" type="date" value="{{ today().isoformat() }}" max="{{ today().isoformat() }}" {% if min_date %}min="{{ min_date }}"{% endif %}></label>
   </div>
   <p class="muted small">투입하면 그 부품이 출고되고(단가 = 최근 입고 평균단가) 재공품이 됩니다. 남은 자재를 창고로 돌릴 때는 음수(-)로 넣습니다.</p>
-  <div><button class="btn btn-primary">자재 투입·반납</button></div>
+  <div class="toolbar"><button type="button" class="btn btn-sm" data-fill-rest>남은 계획 수량 모두 채우기</button>
+    <button class="btn btn-primary">자재 투입·반납</button>
+    <span class="hint">적은 줄만 처리합니다 (빈 칸은 그대로, 반납은 음수).</span></div>
 </form>
 {% endif %}
 
@@ -117,7 +120,10 @@
 <form class="card form" method="post" action="{{ url_for('production.wo_complete', prod_id=p.id) }}" data-confirm="작업지시를 완료하고 양품을 입고합니다(백플러시를 켰으면 남은 부품도 자동 투입). 되돌리려면 작업지시 전체를 취소해야 합니다. 계속할까요?">
   {{ csrf() }}
   <div class="form-grid g4">
-    <label>양품 *<input name="good_qty" type="number" min="0" step="any" value="{{ (p.qty)|plain }}" required></label>
+    {% set done_ops = ops|selectattr('status', 'equalto', 'DONE')|list %}
+    <label>양품 *<input name="good_qty" type="number" min="0" step="any" required
+        value="{{ (done_ops[-1].good_qty if done_ops and done_ops[-1].good_qty else p.qty)|plain }}">
+      {% if done_ops and done_ops[-1].good_qty %}<span class="hint">마지막 공정 실적의 양품</span>{% endif %}</label>
     <label>불량<input name="scrap_qty" type="number" min="0" step="any" value="0"></label>
     <label>일자<input name="tx_date" type="date" value="{{ today().isoformat() }}" max="{{ today().isoformat() }}" {% if min_date %}min="{{ min_date }}"{% endif %}></label>
     <label class="check"><input type="checkbox" name="backflush" value="1" checked> 아직 투입 안 한 계획 수량은 지금 자동 투입 (백플러시)</label>

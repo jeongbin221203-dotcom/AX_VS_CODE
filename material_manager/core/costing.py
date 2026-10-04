@@ -101,8 +101,9 @@ def standard(material_id: int, conn=None) -> dict | None:
     return dict(row) if row is not None else None
 
 
-def rollup(actor: dict) -> tuple[bool, str]:
-    """모든 자재의 표준원가를 다시 계산한다 (구매품 = 기준단가, 제품 = BOM·공정 롤업)."""
+def rollup(actor: dict, update_price: bool = False) -> tuple[bool, str]:
+    """모든 자재의 표준원가를 다시 계산한다 (구매품 = 기준단가, 제품 = BOM·공정 롤업).
+    update_price: 만드는 제품의 기준단가(재고 현황·수불부 금액)도 표준원가로 맞춘다 (SAP 에서 받는 자재는 제외)."""
     from core import mrp
     labor, overhead = float(config.LABOR_RATE or 0), float(config.OVERHEAD_RATE or 0)
     with db.transaction() as conn:
@@ -126,15 +127,41 @@ def rollup(actor: dict) -> tuple[bool, str]:
                              "basis": {"purchase": "기준단가"}}
             cost[mid]["total"] = cost[mid]["material"] + cost[mid]["labor"] + cost[mid]["overhead"]
         ts = now_str()
+        before = {int(r["material_id"]): dict(r) for r in conn.execute("SELECT * FROM standard_costs")}
+        try:
+            conn.execute("INSERT INTO standard_cost_history (material_id, material, labor, overhead, total, minutes, basis, "
+                         "set_by, set_at, replaced_by, replaced_at) SELECT material_id, material, labor, overhead, total, minutes, "
+                         "basis, set_by, set_at, ?, ? FROM standard_costs", (actor["name"], ts))
+        except db.DBError:                              # 리비전 0009 전
+            pass
+        changed = {mats[m]["code"]: [round(float(before[m]["total"]), 4), round(c["total"], 4)]
+                   for m, c in cost.items() if m in before and abs(float(before[m]["total"]) - c["total"]) > 0.005}
         conn.execute("DELETE FROM standard_costs")
         conn.executemany("INSERT INTO standard_costs (material_id, material, labor, overhead, total, minutes, basis, set_by, set_at) "
                          "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
                          [(mid, round(c["material"], 4), round(c["labor"], 4), round(c["overhead"], 4), round(c["total"], 4),
                            c["minutes"], json.dumps(c["basis"], ensure_ascii=False), actor["name"], ts) for mid, c in cost.items()])
         made = sum(1 for m in cost if m in boms)
+        repriced = {}
+        if update_price:
+            for m in cost:
+                if m not in boms:
+                    continue
+                row = conn.execute("SELECT code, unit_price, COALESCE(sap_synced_at, '') AS synced FROM materials WHERE id = ?",
+                                   (m,)).fetchone()
+                new = round(cost[m]["total"], 2)
+                if row is None or row["synced"] or abs(float(row["unit_price"] or 0) - new) < 0.005:
+                    continue
+                conn.execute("UPDATE materials SET unit_price = ?, updated_at = ? WHERE id = ?", (new, ts, m))
+                repriced[row["code"]] = [float(row["unit_price"] or 0), new]
         audit.record(conn, actor, "STD_COST", "material", "", {"materials": len(cost), "products": made,
-                                                              "labor_rate": labor, "overhead_rate": overhead})
-    return True, f"표준원가를 다시 산정했습니다 — 자재 {len(cost)}종 (제품 {made}종은 BOM·공정 롤업, 임률 {labor:g}·배부율 {overhead:g} 원/분)."
+                                                              "labor_rate": labor, "overhead_rate": overhead,
+                                                              "changed": dict(list(changed.items())[:200]),
+                                                              "changed_count": len(changed),
+                                                              "repriced": dict(list(repriced.items())[:200])})
+    extra = f" · 제품 기준단가 {len(repriced)}종을 표준원가로 맞춤" if update_price else ""
+    return True, (f"표준원가를 다시 산정했습니다 — 자재 {len(cost)}종 (제품 {made}종은 BOM·공정 롤업, "
+                  f"임률 {labor:g}·배부율 {overhead:g} 원/분){extra}.")
 
 
 def standards_df() -> pd.DataFrame:
@@ -153,6 +180,18 @@ def _stale(conn, product_id: int, set_at: str) -> str:
     routing = conn.execute("SELECT MAX(at) FROM audit_log WHERE action = 'ROUTING_SAVE' AND entity_id = ?", (str(product_id),)).fetchone()
     if routing and routing[0] and str(routing[0]) > str(set_at or ""):
         return "공정이 표준원가 산정 뒤에 바뀜"
+    std = conn.execute("SELECT basis FROM standard_costs WHERE material_id = ?", (product_id,)).fetchone()
+    basis = json.loads(std["basis"] or "{}") if std else {}
+    if basis.get("minutes"):
+        if abs(float(basis.get("labor_rate") or 0) - float(config.LABOR_RATE or 0)) > 1e-9 or \
+           abs(float(basis.get("overhead_rate") or 0) - float(config.OVERHEAD_RATE or 0)) > 1e-9:
+            return "임률·배부율이 표준원가 산정 뒤에 바뀜"
+    for comp in basis.get("bom", []):                  # 구매품 부품의 기준단가가 바뀌었는지
+        row = conn.execute("SELECT m.unit_price, s.basis FROM materials m LEFT JOIN standard_costs s ON s.material_id = m.id "
+                           "WHERE m.code = ?", (comp.get("code"),)).fetchone()
+        if row is not None and row["basis"] and '"purchase"' in row["basis"] and \
+                abs(float(row["unit_price"] or 0) - float(comp.get("std") or 0)) > 0.005:
+            return f"부품 {comp.get('code')} 기준단가가 표준원가 산정 뒤에 바뀜"
     return ""
 
 
@@ -214,6 +253,8 @@ def variance(pid: int) -> dict | None:
         actual = float(p["material_cost"] or 0) + actual_labor + actual_oh
         std_total = float(std["total"]) * good
         std_labor, std_oh = float(std["labor"] or 0) * good, float(std["overhead"] or 0) * good   # 산정 때 임률·배부율
+        if not stale and actual_labor + actual_oh == 0 and std_labor + std_oh > 0:
+            stale = "완료 때 임률·공정이 없어 노무비·경비를 넣지 않은 작업지시 — 지금 표준과 비교할 수 없음"
         return {"prod_no": p["prod_no"], "code": p["code"], "name": p["name"], "unit": p["unit"], "good": good, "scrap": scrap,
                 "std_unit": float(std["total"]), "std_total": std_total, "actual_total": actual,
                 "actual_material": float(p["material_cost"] or 0), "actual_labor": actual_labor, "actual_overhead": actual_oh,

@@ -41,7 +41,7 @@
   {% endif %}
 
 {% elif tab in ("requests", "history") %}
-  <p class="muted small">{{ '내가 올린 실사 조정·구매요청 (최근 200건)' if tab == 'requests' else '내가 처리한 결재 (대결로 처리한 것 포함, 최근 200건)' }}</p>
+  <p class="muted small">{{ '내가 올린 실사 조정·거래 취소·구매요청 (최근 200건)' if tab == 'requests' else '내가 처리한 결재 (대결로 처리한 것 포함, 최근 200건)' }}</p>
   <div class="toolbar">{{ download(url_with(export='xlsx')) }}</div>
   {{ table(grid, "해당하는 결재가 없습니다.") }}
 

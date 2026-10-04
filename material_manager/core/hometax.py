@@ -94,24 +94,28 @@ def read(data: bytes, filename: str) -> tuple[pd.DataFrame, str]:
     out["write_date"] = out["write_date"].map(lambda v: (lambda d: d.date().isoformat() if pd.notna(d) else str(v)[:10])(
         _excel_date(str(v).replace(".", "-") if re.fullmatch(r"\d{4}\.\d{2}\.\d{2}", str(v)) else v)))
     out["supplier_biz_no"] = out["supplier_biz_no"].map(_digits)
-    # 품목마다 여러 줄 → 승인번호로 한 건 (금액은 첫 줄의 합계 값이 들어 있으면 그대로, 아니면 더함)
+    # 품목마다 여러 줄 → 승인번호로 한 건. 줄마다 같은 금액(문서 합계를 되풀이)이면 한 번만, 다르면(품목 금액) 더한다
+    def _amount(s):
+        s = s[s != 0]
+        return float(s.iloc[0]) if s.nunique() == 1 else float(s.sum())
     agg = out.groupby("approval_no", as_index=False).agg(
         write_date=("write_date", "first"), supplier_biz_no=("supplier_biz_no", "first"), supplier_name=("supplier_name", "first"),
-        supply=("supply", "max"), tax=("tax", "max"), total=("total", "max"), item=("item", "first"), kind=("kind", "first"))
+        supply=("supply", _amount), tax=("tax", _amount), total=("total", _amount), item=("item", "first"), kind=("kind", "first"))
     agg.attrs["period"] = period
     return agg, ""
 
 
-def reconcile(inv: pd.DataFrame, wh_ids=None) -> dict:
+def reconcile(inv: pd.DataFrame, wh_ids=None, user_id: int | None = None) -> dict:
     """대사 결과 {rows: [...], counts: {...}, start, end}."""
     period = inv.attrs.get("period")
     start, end = period if period else (str(inv["write_date"].min())[:10], str(inv["write_date"].max())[:10])
     docs = db.query_df("""
         SELECT d.id, d.doc_type, d.issue_date, d.approval_no, d.supplier_biz_no, d.supplier_name, d.supply_amount, d.tax_amount,
-               d.tx_id, t.warehouse_id
+               d.tx_id, t.warehouse_id, d.created_by_id
         FROM documents d LEFT JOIN transactions t ON t.id = d.tx_id""")
-    if wh_ids is not None and len(docs):
-        docs = docs[docs["warehouse_id"].isna() | docs["warehouse_id"].isin(list(wh_ids))]
+    if wh_ids is not None and len(docs):                 # 증빙 목록과 같은 규칙: 미연결 증빙은 본인이 올린 것만
+        from core import repository as repo
+        docs = docs[[repo.doc_visible(r, wh_ids, user_id) for r in docs.to_dict("records")]]
     docs["key"] = docs["approval_no"].map(_digits) if len(docs) else []
     by_no = {k: r for k, r in zip(docs["key"], docs.to_dict("records")) if k} if len(docs) else {}
     rows, used = [], set()

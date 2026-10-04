@@ -384,6 +384,8 @@ class SapODataConnector:
               "IssuingOrReceivingPlant": p.get("receivingPlant", ""),
               "IssuingOrReceivingStorageLoc": p.get("receivingStorageLocation", ""),
               "ManufacturingOrder": p.get("productionOrder", "")}
+        if p["movementType"] in ("501", "521", "561") and p.get("amount"):
+            it["TotalGoodsMvtAmtInCCCrcy"] = f"{float(p['amount']):.2f}"   # 무PO 입고 외부 금액 (실제 SAP 미검증)
         if p.get("purchaseOrder"):
             it["GoodsMovementRefDocType"] = "B"        # 구매오더 참조 입고
         elif p.get("productionOrder") and p["movementType"] == config.SAP_MOVEMENT_TYPES.get("WO_RECEIPT", "101"):
@@ -534,7 +536,7 @@ class SapRfcConnector:
             it["MVT_IND"] = "B"
         elif p.get("productionOrder") and p["movementType"] == config.SAP_MOVEMENT_TYPES.get("WO_RECEIPT", "101"):
             it["MVT_IND"] = "F"                       # 생산오더 입고
-        if p["movementType"] in ("501", "561") and p.get("amount"):
+        if p["movementType"] in ("501", "521", "561") and p.get("amount"):
             it["AMOUNT_LC"] = p["amount"]             # 무PO 입고는 외부 금액으로 평가 (SAP 단가와 어긋나지 않게)
         return {k: v for k, v in it.items() if v not in ("", None)}
 

@@ -57,6 +57,8 @@
 
 {% if snapshot %}
 <h3>{{ closed }}월 말 재고 (마감 스냅샷)</h3>
+{% if closed_value %}<p>마감 때 저장한 재고 평가: {% for k, v in closed_value.items() %}<strong>{{ {'MAVG': '이동평균', 'FIFO': '선입선출'}.get(k, k) }} ₩{{ '{:,.0f}'.format(v) }}</strong>{{ ' · ' if not loop.last }}{% endfor %}
+  <span class="muted small">— 재무 보고용 (아래 표의 금액은 지금 기준단가로 다시 곱한 참고값이라 기준단가를 바꾸면 달라집니다)</span></p>{% endif %}
 {{ table(snapshot) }}
 {% endif %}
 {% endblock %}

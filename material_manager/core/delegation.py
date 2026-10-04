@@ -36,8 +36,8 @@ def create(from_user_id: int, to_user_id: int, start: str, end: str, reason: str
                                                          (from_user_id, to_user_id))}
         if len(users) != 2 or not users[to_user_id]["active"]:
             return services.Result(False, "사용 중인 사용자를 고르세요.")
-        if not auth.has_role(users[to_user_id], "CLERK"):
-            return services.Result(False, "조회 역할에게는 결재를 맡길 수 없습니다.")
+        if users[to_user_id]["role"] == "DATA" or not auth.has_role(users[to_user_id], "CLERK"):
+            return services.Result(False, "조회·데이터 관리 역할에게는 결재를 맡길 수 없습니다 (담당자 이상).")
         clash = conn.execute("SELECT 1 FROM approval_delegations WHERE from_user_id = ? AND active = 1 "
                              "AND NOT (end_date < ? OR start_date > ?)", (from_user_id, start, end)).fetchone()
         if clash:

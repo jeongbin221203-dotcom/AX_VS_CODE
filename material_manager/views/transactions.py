@@ -359,7 +359,8 @@ def po_lines_json():
     units = uom.all_units()
     orders: dict = {}
     for r in lines:
-        o = orders.setdefault(r["po_no"], {"po_no": r["po_no"], "supplier": r["supplier"], "lines": []})
+        o = orders.setdefault(r["po_no"], {"po_no": r["po_no"], "supplier": r["supplier"],
+                                           "delivery": str(r.get("delivery_date") or ""), "lines": []})
         o["lines"].append({"id": int(r["material_id"]), "label": f"[{r['code']}] {r['name']}" + (f" ({r['spec']})" if r["spec"] else ""),
                            "unit": r["unit"], "units": [{"unit": u, "factor": f} for u, f, _ in units.get(int(r["material_id"]), [])],
                            "lot_managed": bool(r["lot_managed"]), "qty": round(float(r["remaining"]), 6),

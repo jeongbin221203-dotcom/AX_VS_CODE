@@ -180,6 +180,8 @@
   {% if view == "standard" %}
     {% if can('MANAGER') and scope_all() %}<form class="toolbar" method="post" action="{{ url_for('production.cost_rollup') }}" data-confirm="모든 자재의 표준원가를 지금 기준(기준단가·BOM·공정·임률)으로 다시 계산합니다. 계속할까요?">
       {{ csrf() }}<button class="btn btn-primary">📐 표준원가 다시 산정</button>
+      <label class="check"><input type="checkbox" name="update_price" value="1"> 만드는 제품의 기준단가도 표준원가로 맞추기
+        <span class="hint">재고 현황·수불부·대시보드 금액이 표준원가와 같아짐 (SAP 에서 받는 자재 제외)</span></label>
       <span class="muted small">구매품 = 기준단가, 제품 = 부품 표준원가 × 소요량(손실 포함) + 공정 표준시간 × 임률·배부율 (다단계). {{ '마지막 산정 ' ~ set_at if set_at }}</span>
       {{ download(url_with(export='xlsx')) }}</form>{% endif %}
     {{ table(grid, '표준원가가 없습니다. 위의 버튼으로 산정하세요.') }}
@@ -188,6 +190,8 @@
       <label>시작<input type="date" name="start" value="{{ start.isoformat() }}"></label><label>종료<input type="date" name="end" value="{{ end.isoformat() }}"></label>
       <button class="btn">조회</button>{{ download(url_with(export='xlsx')) }}</form>
     <p>가격차이 합계 <strong>₩{{ '{:+,.0f}'.format(ppv_total) }}</strong> <span class="muted small">(+ = 표준보다 비싸게 삼 · 입고 단가 − 표준 단가, 구매품 표준 = 기준단가)</span></p>
+    <p class="muted small">참고용입니다: 재고는 실제 원가(이동평균·선입선출)로 평가하므로, 이 가격차이는 그 부품을 쓴 작업지시의 '재료 가격차이'에 다시 나타납니다.
+      손익에는 둘 중 하나(작업지시 차이)만 반영하세요.</p>
     {{ table(grid, '이 기간에 표준과 다른 단가로 들어온 입고가 없습니다.') }}
   {% else %}
     {% if not has_std %}<div class="alert alert-warning">표준원가가 없습니다 — {{ "'표준원가' 탭에서 먼저 산정해야" if can('MANAGER') and scope_all() else '모든 창고 권한이 있는 관리자에게 표준원가 산정을 요청해야' }} 차이를 계산합니다.</div>{% endif %}

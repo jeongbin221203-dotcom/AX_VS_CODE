@@ -441,6 +441,8 @@ def preview_demands(raw: pd.DataFrame, plant_id: int, replace: bool) -> Preview:
             due_s = ""
         else:
             due_s = due.date().isoformat()
+        if q is None or q != q:
+            q = None                                    # 숫자가 아니면 미리보기에 nan 대신 빈칸
         row = {"line": line, "code": code, "name": m.name if m is not None else "", "qty": q, "due": due_s,
                "note": notes.iloc[i], "material_id": int(m.id) if m is not None else None, "plant_id": plant_id,
                "replace": replace, "late": bool(due_s and due_s < _date.today().isoformat()), "problem": " ".join(problems)}

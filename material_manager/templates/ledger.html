@@ -15,11 +15,12 @@
   {% if closed %}<strong>마감된 달</strong>이라 숫자가 바뀌지 않습니다.{% else %}아직 마감 전이라 숫자가 바뀔 수 있습니다.{% endif %}</p>
 
 <div class="metrics m4">
-  {{ metric("기초", "{:,.2f}".format(totals.opening)) }}
-  {{ metric("입고 / 출고", "{:,.2f} / {:,.2f}".format(totals.in_qty, totals.out_qty)) }}
-  {{ metric("조정 · 이동(입−출)", "{:+,.2f} · {:+,.2f}".format(totals.adj_qty, totals.trf_in - totals.trf_out)) }}
-  {{ metric("기말 (금액)", "{:,.2f}".format(totals.closing), "₩ {:,.0f}".format(totals.closing_value)) }}
+  {{ metric("자재 수", "{:,}종".format(count)) }}
+  {{ metric("입고가 있는 자재", "{:,}종".format(moved.in_n), "출고 {:,}종".format(moved.out_n)) }}
+  {{ metric("조정·이동이 있는 자재", "{:,}종".format(moved.adj_n)) }}
+  {{ metric("기말 금액", "₩ {:,.0f}".format(totals.closing_value), "현재 단가 기준") }}
 </div>
+<p class="muted small">자재마다 단위(EA·KG·ROLL…)가 달라 수량은 합치지 않습니다 — 자재별 수량은 아래 표에서 보세요.</p>
 {{ table(grid, "이 달에 재고나 움직임이 있는 자재가 없습니다.") }}
 {% if pg and pg.pages > 1 %}{{ pager_nav(pg) }}<p class="muted small">합계·엑셀 다운로드는 전체 자재 기준입니다.</p>{% endif %}
 {{ download(url_with(export='xlsx'), '⬇️ 수불부 엑셀 다운로드') }}

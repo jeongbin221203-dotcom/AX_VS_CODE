@@ -43,10 +43,12 @@ def ledger():
         return form_response("ledger", view, f"수불부_{ym}.xlsx", period=f"{start} ~ {end}")
     totals = {k: float(df[k].sum()) for k in ("opening", "in_qty", "out_qty", "adj_qty", "trf_in", "trf_out",
                                               "closing", "closing_value")}
+    moved = {"in_n": int((df["in_qty"] != 0).sum()), "out_n": int((df["out_qty"] != 0).sum()),
+             "adj_n": int(((df["adj_qty"] != 0) | (df["trf_in"] != 0) | (df["trf_out"] != 0)).sum())}
     pg = pager(len(view), page_arg())                 # 화면은 100건씩 (합계·엑셀은 전부)
     view = view.iloc[pg["first"] - 1:pg["last"]] if len(view) else view
     return render_page("ledger.html", "ledger", ym=ym, start=start, end=end, wh_opts=wh_opts, wh_sel=wh_sel,
-                       grid=Table(view, LEDGER_FMT), totals=totals, count=len(df), pg=pg,
+                       grid=Table(view, LEDGER_FMT), totals=totals, count=len(df), pg=pg, moved=moved,
                        closed=g.closed_through and ym <= g.closed_through)
 
 
@@ -121,6 +123,9 @@ def valuation_view():
         plant_ids = {int(p) for p in whs["plant_id"].unique()
                      if set(whs.loc[whs["plant_id"] == p, "id"].astype(int)) <= g.wh_ids}
     df, warnings = valuation.report(start, end, method, plant_ids)
+    if plant_ids is not None and not plant_ids:
+        warnings = ["재고 평가는 플랜트 단위입니다 — 한 플랜트의 모든 창고 권한이 있어야 금액이 보입니다 "
+                    "(관리자에게 데이터 범위를 요청하세요)."] + list(warnings)
     view = df[list(VAL_COLS)].rename(columns=VAL_COLS) if not df.empty else pd.DataFrame(columns=list(VAL_COLS.values()))
     if request.args.get("export") == "xlsx":
         log_export("valuation", len(view), ym=ym, method=method)

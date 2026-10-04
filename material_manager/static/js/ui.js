@@ -107,6 +107,15 @@
     if (f.elements.partner && !f.elements.partner.value) f.elements.partner.value = o.dataset.supplier || "";
   });
 
+  // ── 작업지시: '남은 계획 수량 모두 채우기' (기본은 빈 칸 — 한 줄만 반납해도 나머지가 투입되지 않게) ──
+  document.addEventListener("click", function (e) {
+    const b = e.target.closest && e.target.closest("[data-fill-rest]");
+    if (!b) return;
+    const form = b.form || b.closest("form");
+    if (!form) return;
+    form.querySelectorAll("input[data-rest]").forEach(function (i) { if (i.dataset.rest && !i.value) i.value = i.dataset.rest; });
+  });
+
   // ── 구매요청 결재 단계 미리 보기 ──
   function prPreview(form) {
     const tiers = (form.dataset.prTiers || "").split(",").map(Number);

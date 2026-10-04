@@ -329,10 +329,11 @@ def _fill_placeholders(ws, ctx: dict) -> None:
 
 def export(form_key: str, df: pd.DataFrame, ctx: dict | None = None) -> bytes:
     """df(기본 머리글)를 설정한 양식으로 엑셀 파일 내용으로 만든다. ctx: title·user·period."""
+    from core import names
     cfg = load(form_key)
     ctx = {**(ctx or {}), "title": cfg.get("title") or label(form_key), "rows": len(df)}
     cols = [c for c in cfg.get("columns") or [] if c["source"] in df.columns] or \
-           [{"source": c, "header": c, "format": ""} for c in df.columns]
+           [{"source": c, "header": names.relabel(str(c)), "format": ""} for c in df.columns]   # 회사가 바꾼 거래 이름
     template = template_bytes(form_key)
     if template is not None:
         wb = openpyxl.load_workbook(io.BytesIO(template))

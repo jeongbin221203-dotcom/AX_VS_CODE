@@ -23,7 +23,7 @@ FMT = {"결재ID": "{}", "수량 (조정: 차이 · 취소: 원거래)": "{:+,.2
 
 def _tabs():
     t = [("mine", "📥 내 결재 대기"), ("requests", "📤 내 요청 현황"), ("history", "🗃️ 결재 이력"), ("delegate", "🔁 대결 지정")]
-    return t + ([("adj", "📋 실사 조정 전체")] if can("MANAGER") else [])
+    return t + ([("adj", "📋 실사 조정·취소 요청 전체")] if can("MANAGER") else [])
 
 
 @bp.get("/")
@@ -52,7 +52,9 @@ def index():
         return render_page("approvals.html", "approvals", **ctx,
                            grid=Table(view[cols] if len(view) else view.reindex(columns=cols), {"금액": "₩{:,.0f}"}))
     if tab == "delegate":
-        users = db.query_df("SELECT id, name, username, role FROM users WHERE active = 1 AND role <> 'VIEWER' ORDER BY name")
+        users = db.query_df("SELECT id, name, username, role FROM users WHERE active = 1 ORDER BY name")
+        if len(users):                                  # 결재를 맡을 수 있는 사람 = 담당자 이상 (조회·데이터 관리 역할 제외)
+            users = users[[r != "DATA" and auth.has_role({"role": r}, "CLERK") for r in users["role"]]]
         mine = delegation.list_df(None if can("ADMIN") else g.user["id"])
         return render_page("approvals.html", "approvals", **ctx, users=users.to_dict("records"),
                            delegations=mine.to_dict("records"), role_label=auth.role_label)

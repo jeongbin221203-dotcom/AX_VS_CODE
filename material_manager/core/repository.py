@@ -298,7 +298,11 @@ def stock_df(include_inactive: bool = False, wh_ids=None) -> pd.DataFrame:
     df["stock"] = df["stock"].astype(float)
     df["stock_value"] = df["stock"] * df["unit_price"]
     df["shortage"] = df["stock"] < df["safety_stock"]
-    df["shortage_qty"] = (df["safety_stock"] - df["stock"]).clip(lower=0)
+    if wh_ids is not None and len(df):            # 일부 창고 권한: 그 창고에서 다룬 적 있는 자재만 미달로 센다 (다른 공장 자재 제외)
+        twsql2, twp2 = _wh("warehouse_id", wh_ids)
+        used = db.query_df(f"SELECT DISTINCT material_id FROM transactions WHERE 1 = 1{twsql2}", tuple(twp2))["material_id"]
+        df["shortage"] = df["shortage"] & df["id"].isin(used.astype(int).tolist())
+    df["shortage_qty"] = (df["safety_stock"] - df["stock"]).clip(lower=0).where(df["shortage"], 0)
     return df
 
 

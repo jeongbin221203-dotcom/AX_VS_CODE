@@ -19,12 +19,13 @@ def index():
     snap = periods.snapshot_df(ym, g.wh_ids) if ym else None
     snap_view = None
     if snap is not None:
-        snap_view = snap.rename(columns={"code": "자재코드", "name": "자재명", "wh_code": "창고", "unit": "단위", "qty": "월말재고",
+        snap_view = snap.rename(columns={"code": "자재코드", "name": "자재명", "wh_code": "창고", "lot_no": "로트", "unit": "단위", "qty": "월말재고",
                                          "unit_price": "현재 단가", "value": "금액(현재 단가 기준)"})
+    closed_value = periods.closed_valuation(ym) if ym else {}
     nxt = periods.next_closable()
     checks = periods.close_checks(nxt) if nxt else None
     return render_page(
-        "periods.html", "periods", closed=ym, next_ym=nxt, checks=checks,
+        "periods.html", "periods", closed=ym, next_ym=nxt, checks=checks, closed_value=closed_value,
         history=Table(hist, {"ID": "{}"}),
         snapshot=Table(snap_view, {"월말재고": "{:,.2f}", "현재 단가": "₩{:,.0f}", "금액(현재 단가 기준)": "₩{:,.0f}"})
         if snap_view is not None else None,

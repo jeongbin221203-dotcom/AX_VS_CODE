@@ -122,9 +122,12 @@ class Engine:
 
         old_value = a.value
         if orig is not None and int(orig) not in self.tx_value:
-            # 원거래가 마감 스냅샷 이전이라 평가 금액을 모른다 → 입고 취소는 원거래 단가, 출고 취소는 현재 평균으로
+            # 원거래가 마감 스냅샷 이전이라 평가 금액을 모른다 → 원거래 단가(취소 거래에 복사돼 있음)로.
+            # 생산 투입은 투입 때의 평가 단가가 거래에 남아 있다 (오늘 평균으로 되돌리면 금액이 생기거나 사라짐)
             if q > 0:
-                price = a.avg(fallback)
+                price = float(t["unit_price"] or 0)
+                if price <= 0:
+                    price = a.avg(fallback)
                 v = q * price
                 if fifo:
                     a.layers.appendleft([q, price])
@@ -170,8 +173,8 @@ class Engine:
                     conv = float(t["labor_cost"] or 0) + float(t["overhead_cost"] or 0)   # + 노무비·경비 배부
                     if spent is not None and spent + conv > 0:
                         price = (spent + conv) / q
-                else:                                 # 부품 반납 = 출고를 되돌림 (매입 아님): 지금 평균 단가로
-                    price = a.avg(fallback)
+                else:                                 # 부품 반납 = 출고를 되돌림 (매입 아님): 투입했던 단가로
+                    price = price if price > 0 else a.avg(fallback)
                     self.wo_cost[int(pid)] -= q * price
                     kind = "issue"
             if price <= 0:
@@ -270,6 +273,27 @@ def run(conn, method: str, start: str, end: str) -> tuple[Engine, Engine, Stats]
     for t, same in _events(conn, opening_day, end):
         eng.apply(t, same, stats[(int(t["material_id"]), int(t["plant_id"]))])
     return opening, eng, stats
+
+
+def issue_cost(conn, material_id: int, plant_id: int, as_of: str, qty: float, method: str | None = None) -> float | None:
+    """그 자재·플랜트에서 as_of 에 qty 를 꺼낼 때의 평가 금액 (이동평균 = qty × 평균, 선입선출 = 앞 층부터 실제로 꺼낸 금액).
+    재고가 없으면 None. 생산 투입 단가 = 이 금액 ÷ qty → 재고 평가에서 빠지는 금액과 같다."""
+    method = method if method in config.VALUATION_METHODS else config.VALUATION_DEFAULT
+    base = _base(conn, method, as_of)
+    eng = Engine(method)
+    if base:
+        eng.load(conn.execute("SELECT * FROM valuation_snapshots WHERE ym = ? AND method = ? AND material_id = ?",
+                              (base, method, material_id)))
+    for t, same in _events(conn, month_end(base), as_of, material_id):
+        eng.apply(t, same, None)
+    a = eng.areas.get((int(material_id), int(plant_id)))
+    if a is None or a.qty <= EPS:
+        return None
+    if method == "FIFO" and a.layers:
+        sim = Area(qty=a.qty, value=a.value, layers=deque(list(x) for x in a.layers), last_price=a.last_price)
+        cost, _ = _consume(sim, float(qty), a.avg(0))
+        return cost
+    return float(qty) * a.value / a.qty
 
 
 def unit_cost(conn, material_id: int, plant_id: int, as_of: str, method: str | None = None) -> float | None:

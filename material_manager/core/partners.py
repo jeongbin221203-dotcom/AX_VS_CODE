@@ -445,6 +445,9 @@ def merge(src_id: int, dst_id: int, actor: dict | None) -> PResult:
         if not dst["active"] or dst["merged_into"] is not None:
             return PResult(False, "남길 거래처는 사용 중이어야 합니다.")
         src, dst = dict(src), dict(dst)
+        if src["biz_no"] and dst["biz_no"] and src["biz_no"] != dst["biz_no"]:
+            return PResult(False, f"사업자번호가 다릅니다 ({src['biz_no']} ≠ {dst['biz_no']}) — 다른 법인은 병합할 수 없습니다. "
+                                  "같은 회사면 한쪽 사업자번호를 먼저 고치세요.")
         ts = now_str()
         conn.execute("UPDATE partners SET name_key = ?, active = 0, merged_into = ?, biz_no = '', updated_at = ? WHERE id = ?",
                      (f"merged:{src_id}:{src['name_key']}", dst_id, ts, src_id))

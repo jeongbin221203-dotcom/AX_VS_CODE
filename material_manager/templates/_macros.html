@@ -5,7 +5,7 @@
 
 {% macro metric(label, value, delta=none, tone=none) %}
   <div class="metric">
-    <div class="metric-label">{{ label }}</div>
+    <div class="metric-label">{{ label|relabel }}</div>
     <div class="metric-value">{{ value }}</div>
     {% if delta %}<div class="metric-delta {{ tone or '' }}">{{ delta }}</div>{% endif %}
   </div>

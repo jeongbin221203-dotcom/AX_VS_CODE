@@ -53,6 +53,12 @@ def next_closable(conn=None) -> str:
     return str(first)[:7] if first else prev_month(date.today().strftime("%Y-%m"))
 
 
+def closed_valuation(ym: str) -> dict:
+    """마감 때 저장한 재고 평가 합계 {방법: 금액} — 나중에 기준단가가 바뀌어도 그대로."""
+    df = db.query_df("SELECT method, SUM(value) AS v FROM valuation_snapshots WHERE ym = ? GROUP BY method", (ym,))
+    return {r.method: float(r.v or 0) for r in df.itertuples(index=False)}
+
+
 def close_checks(ym: str, conn=None) -> dict:
     """마감 전 점검 (막지는 않고 마감 기록에 남긴다):
     재공품 — 투입했지만 완료하지 않은 작업지시 (월말 재공으로 남음) / GR/IR — 월말까지 입고했는데 세금계산서가 없는 발주 입고,

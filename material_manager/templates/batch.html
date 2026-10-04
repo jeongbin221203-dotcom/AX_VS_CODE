@@ -3,7 +3,7 @@
 
 {# 줄 한 개 — 서버가 다시 그리는 줄과 화면에서 새로 만드는 줄(template)이 같은 모양 #}
 {% macro line_row(l) %}
-  <tr class="{{ 'lot-line' if l.lot_managed }}">
+  <tr class="{{ 'lot-line' if l.lot_managed }}" data-factor="{% for u in l.units or [] %}{% if l.entry_unit == u.unit %}{{ u.factor }}{% endif %}{% endfor %}">
     <td class="num" data-no></td>
     <td><input type="hidden" name="line_mid" value="{{ l.mid or '' }}"><input type="hidden" name="line_po" value="{{ l.po or '' }}">
       <span data-label>{{ l.label }}</span><span class="po-tag small" data-po-tag>{{ ('발주 ' ~ l.po.replace('|', ' / ')) if l.po }}</span></td>
@@ -57,7 +57,8 @@
   <div class="po-load in-only">
     <label>📦 발주 불러오기 (입고)
       <select data-po-load data-no-search><option value="">— 이 창고의 입고할 발주 —</option></select></label>
-    <span class="muted small">고르면 그 발주의 남은 수량이 줄로 들어옵니다 (수량은 고칠 수 있음, 발주보다 많이 받으면 거부).</span>
+    <span class="muted small">고르면 그 발주의 남은 수량이 줄로 들어옵니다 (수량은 고칠 수 있음, 발주보다 많이 받으면 거부).
+      불러온 뒤 그 자재를 스캔하면 첫 스캔이 예정 수량을 대신하고 이후 스캔은 더합니다 — 실제로 센 수량만 입고됩니다.</span>
   </div>
   <div class="scanbox">
     <label class="scan-qty">찍을 때마다 <input type="number" min="0" step="any" value="1" data-scan-qty aria-label="스캔 한 번에 더할 수량"></label>

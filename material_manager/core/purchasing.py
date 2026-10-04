@@ -168,6 +168,15 @@ def create_po(pr_id: int, supplier: str, prices: dict[int, float], sap_po_no: st
         if wh_ids is not None and pr["warehouse_id"] not in wh_ids:
             return PResult(False, "이 창고의 발주 권한이 없습니다.")
         items = conn.execute("SELECT * FROM pr_items WHERE pr_id = ? ORDER BY line_no", (pr_id,)).fetchall()
+        from core import sap
+        if sap.enabled():
+            ids = [int(it["material_id"]) for it in items]
+            frag, prm = db.in_clause(ids)
+            nomap = [r[0] for r in conn.execute(f"SELECT code FROM materials WHERE id{frag} AND COALESCE(TRIM(sap_matnr), '') = ''",
+                                                tuple(prm))] if ids else []
+            if nomap:
+                return PResult(False, f"SAP 자재번호가 없는 자재는 입고할 수 없어 발주할 수 없습니다: {', '.join(nomap[:10])} "
+                                      "— 자재 마스터에 먼저 입력하세요.")
         lines = []
         for it in items:
             price = float(prices.get(int(it["id"]), it["est_price"]))
@@ -304,7 +313,9 @@ def receipt_problem(conn, po_no: str, po_item: str, material_id: int, warehouse_
         return f"발주 {po_no} 품목 {po_item}의 자재가 아닙니다."
     remaining = float(item["qty"]) - _received(conn, po_no, int(po_item))
     if qty > remaining * (1 + config.GR_OVER_TOLERANCE) + 1e-9:
-        return f"발주 잔량({remaining:,.2f})보다 많이 입고할 수 없습니다."
+        mat = conn.execute("SELECT code, unit FROM materials WHERE id = ?", (material_id,)).fetchone()
+        return (f"{mat['code']} 발주 {po_no}/{po_item} 잔량은 {fmt_qty(remaining)} {mat['unit']}인데 "
+                f"{fmt_qty(qty)} {mat['unit']}(기본 단위로 환산)을 입고하려 합니다. 수량·단위를 확인하세요.")
     return ""
 
 
@@ -402,7 +413,7 @@ def po_detail(po_id: int) -> tuple[dict | None, pd.DataFrame, dict]:
 def open_po_lines_in(warehouse_id: int) -> list[dict]:
     """여러 줄 입고의 '발주 불러오기': 그 창고의 입고할 수 있는 발주 품목 (잔량 있는 것, 발주별)."""
     df = db.query_df("""
-        SELECT o.po_no, o.supplier, i.line_no, i.material_id, m.code, m.name, m.spec, m.unit, m.lot_managed, i.qty, i.price,
+        SELECT o.po_no, o.supplier, o.delivery_date, i.line_no, i.material_id, m.code, m.name, m.spec, m.unit, m.lot_managed, i.qty, i.price,
                COALESCE((SELECT SUM(t.qty) FROM transactions t WHERE t.tx_type = 'IN' AND t.po_no = o.po_no
                          AND t.po_item = CAST(i.line_no AS TEXT) AND t.transfer_no = ''), 0) AS received
         FROM purchase_orders o JOIN po_items i ON i.po_id = o.id JOIN materials m ON m.id = i.material_id
@@ -552,6 +563,12 @@ def release_payment(po_id: int, reason: str, actor: dict, wh_ids=None) -> PResul
             return PResult(False, "지급 보류 상태인 발주가 아닙니다.")
         if po["created_by_id"] is not None and po["created_by_id"] == actor.get("id"):
             return PResult(False, "발주를 만든 사람은 지급 보류를 해제할 수 없습니다(직무 분리).")
+        involved = conn.execute("""
+            SELECT 1 FROM transactions t WHERE t.po_no = ? AND t.created_by_id = ?
+            UNION SELECT 1 FROM documents d JOIN transactions t ON t.id = d.tx_id WHERE t.po_no = ? AND d.created_by_id = ?""",
+            (po["po_no"], actor.get("id"), po["po_no"], actor.get("id"))).fetchone() if actor.get("id") is not None else None
+        if involved:
+            return PResult(False, "이 발주를 입고했거나 계산서를 올린 사람은 지급 보류를 해제할 수 없습니다(직무 분리).")
         stamp = (po["payment_note"] or "").split("]", 1)[0] + "]" if (po["payment_note"] or "").startswith("[") else "[]"
         conn.execute("UPDATE purchase_orders SET payment_status = 'RELEASED', payment_note = ?, payment_checked_at = ? "
                      "WHERE id = ?", (f"{stamp} 해제: {reason} ({actor['name']})", now_str(), po_id))

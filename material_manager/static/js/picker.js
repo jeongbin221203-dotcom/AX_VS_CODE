@@ -437,7 +437,7 @@
           form._orders[o.po_no] = o;
           const op = document.createElement("option");
           op.value = o.po_no;
-          op.textContent = o.po_no + " · " + (o.supplier || "") + " · " + o.lines.length + "품목";
+          op.textContent = o.po_no + " · " + (o.supplier || "") + (o.delivery ? " · 납기 " + o.delivery : "") + " · " + o.lines.length + "품목";
           sel.appendChild(op);
         });
         sel.options[0].textContent = sel.length > 1 ? "— 이 창고의 입고할 발주 (" + (sel.length - 1) + ") —" : "— 입고할 발주 없음 —";
@@ -484,6 +484,7 @@
       sel.appendChild(o);
     });
     sel.value = d.entry_unit || "";
+    tr.dataset.factor = sel.selectedIndex > 0 ? parseFloat(sel.options[sel.selectedIndex].dataset.factor) || 1 : 1;
     ["qty", "lot", "exp", "price", "note", "po"].forEach(function (k) {
       if (d[k] !== undefined && d[k] !== null) tr.querySelector("[name=line_" + k + "]").value = d[k];
     });
@@ -502,13 +503,22 @@
     // 더할 수량: '24*코드'로 넣은 수량 > 스캔 수량 칸(바꿀 때까지 유지) > 1
     const box = form.querySelector("[data-scan-qty]");
     const add = it.scanQty != null ? it.scanQty : (parseFloat(box && box.value) > 0 ? parseFloat(box.value) : 1);
-    // 같은 자재·같은 단위(로트를 따로 적지 않은 줄)는 수량을 더한다
-    const same = rowsOf(form).find(function (tr) {
+    const su = (it.units || []).find(function (u) { return u.unit === (it.scanUnit || ""); });
+    const scanF = su ? parseFloat(su.factor) || 1 : 1;
+    // 발주에서 불러온 같은 자재 줄이 있으면 그 줄에 센다 (단위는 그 줄 단위로 환산).
+    // 불러온 잔량은 '예정'이므로 첫 스캔이 그 수량을 대신하고, 이후 스캔은 더한다 → 실제로 센 수량만 입고
+    const poRow = rowsOf(form).find(function (tr) {
+      return val(tr, "line_mid") === String(it.id) && val(tr, "line_po") && !val(tr, "line_lot");
+    });
+    const same = poRow || rowsOf(form).find(function (tr) {
       return val(tr, "line_mid") === String(it.id) && val(tr, "line_unit") === (it.scanUnit || "") && !val(tr, "line_lot");
     });
     if (same) {
       const q = same.querySelector("[name=line_qty]");
-      q.value = Math.round(((parseFloat(q.value) || 0) + add) * 10000) / 10000;
+      const conv = add * scanF / factorOf(same);
+      const start = (same === poRow && !same.dataset.scanned) ? 0 : (parseFloat(q.value) || 0);
+      same.dataset.scanned = "1";
+      q.value = Math.round((start + conv) * 10000) / 10000;
       flash(same);
     } else {
       flash(addLine(form, { id: it.id, label: it.label, unit: it.unit, units: it.units, entry_unit: it.scanUnit,
@@ -577,7 +587,17 @@
       return;
     }
     if (e.target.name === "warehouse_id") { loadStock(form, true); loadOrders(form); return; }
-    if (e.target.name === "line_unit") { paintStock(form); return; }
+    if (e.target.name === "line_unit") {                  // 단위를 바꾸면 같은 양이 되게 수량을 환산 (상자 2 → 개 24)
+      const tr = e.target.closest("tr");
+      const q = tr.querySelector("[name=line_qty]");
+      const oldF = parseFloat(tr.dataset.factor) || 1, newF = factorOf(tr);
+      if (q.value !== "" && oldF !== newF) q.value = Math.round((parseFloat(q.value) || 0) * oldF / newF * 10000) / 10000;
+      tr.dataset.factor = newF;
+      refresh(form);
+      paintStock(form);
+      saveBatch(form);
+      return;
+    }
     if (e.target.name !== "kind") return;
     form.dataset.kind = e.target.value;
     rowsOf(form).forEach(function (tr) { lotHint(form, tr); });

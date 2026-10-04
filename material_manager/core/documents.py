@@ -154,6 +154,15 @@ def prepare(data: bytes, filename: str, meta: dict) -> Prepared:
                 errors.append(f"이미 등록된 증빙입니다 (증빙 ID {dup}). 같은 파일이거나 같은 승인번호입니다.")
             if tx_id is not None and repo.get_transaction(conn, tx_id) is None:
                 errors.append(f"거래 ID {tx_id}가 없습니다.")
+            elif tx_id is not None and biz_no:
+                try:
+                    p = conn.execute("SELECT p.name, p.biz_no FROM transactions t JOIN partners p ON p.id = t.partner_id "
+                                     "WHERE t.id = ?", (tx_id,)).fetchone()
+                except db.DBError:
+                    p = None
+                if p is not None and p["biz_no"] and digits(p["biz_no"]) != biz_no:
+                    warnings.append(f"계산서 공급자({format_biz_no(biz_no)})가 이 거래의 거래처 {p['name']}"
+                                    f"({format_biz_no(digits(p['biz_no']))})와 다릅니다. 맞는 거래에 연결했는지 확인하세요.")
 
     if errors:
         return Prepared(False, errors, warnings)

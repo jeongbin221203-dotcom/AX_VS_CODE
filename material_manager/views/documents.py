@@ -204,7 +204,7 @@ def hometax_check():
     if problem or inv.empty:
         flash(problem or "목록에 계산서가 없습니다.", "error")
         return redirect(url_for("documents.index", tab="hometax"))
-    result = hometax.reconcile(inv, g.wh_ids)
+    result = hometax.reconcile(inv, g.wh_ids, g.user["id"])
     audit.log(actor(), "HOMETAX_CHECK", "document", "", {"invoices": len(inv), **result["counts"],
                                                          "period": f"{result['start']}~{result['end']}"})
     if request.form.get("export") == "1":
