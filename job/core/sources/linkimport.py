@@ -159,9 +159,10 @@ def parse(page: str, url: str, site: str) -> dict:
         if not parse_region(location)[0] and (x.get("근무지주소") or x.get("근무지역")):
             location = x.get("근무지주소") or x.get("근무지역")
         posted, deadline = x.get("시작일") or posted, x.get("마감일") or deadline
-        lines = [f"{k}: {x[k]}" for k in ("모집분야", "모집인원", "고용형태", "급여", "근무지주소", "근무시간", "근무요일",
-                                          "경력", "학력", "우대사항")
-                 if x.get(k)]
+        lines = [f"{k}: {x[k]}" for k in ("모집분야", "모집인원", "고용형태", "직급/직책", "급여", "근무지주소", "근무시간",
+                                          "근무요일", "경력", "학력", "스킬", "핵심역량", "우대조건", "기본우대", "외국어",
+                                          "자격증", "우대전공", "우대사항")
+                 if x.get(k) and x[k].strip(" []")]
         if lines:
             desc = "\n".join(["[모집요강]", *lines, "", desc or "", "(상세 본문은 원문에서 확인하세요 — 이미지로 된 경우가 많습니다)"])
         company_info = {k2: x[k] for k, k2 in (("기업구분", "기업형태"), ("산업(업종)", "업종"), ("사원수", "사원수"),
@@ -179,11 +180,12 @@ def parse(page: str, url: str, site: str) -> dict:
     return item
 
 
-_JK_LABELS = ("모집분야", "모집인원", "고용형태", "급여", "근무지주소", "근무지역", "근무시간", "근무요일", "경력", "학력",
-              "우대사항", "시작일", "마감일",
+_JK_LABELS = ("모집분야", "모집인원", "고용형태", "직급/직책", "급여", "근무지주소", "근무지역", "근무시간", "근무요일",
+              "경력", "학력", "스킬", "핵심역량", "우대조건", "기본우대", "외국어", "자격증", "우대전공", "우대사항",
+              "시작일", "마감일",
               "사원수", "기업구분", "산업(업종)", "설립", "매출액", "위치")
 _JK_STOP = ("지원자격", "로그인", "TOP", "궁금해요", "접수기간 · 방법", "기업 정보", "기업정보 더보기", "지도보기",
-            "모집요강", "💌")
+            "모집요강", "💌", "이 기업과 나의 적합도 체크", "핵심 역량")
 
 
 def _jobkorea_table(page: str) -> dict:
@@ -207,6 +209,7 @@ def _jobkorea_table(page: str) -> dict:
             break
     if out.get("모집인원"):
         out["모집인원"] = out["모집인원"].replace(" 명", "명")
+    out = {k: re.sub(r"\[\]\s*", "", v).strip() for k, v in out.items()}     # '외국어 [] 730점' — 원문의 빈 칸
     return {k: v for k, v in out.items() if v}
 
 
