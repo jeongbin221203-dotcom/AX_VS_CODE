@@ -192,8 +192,9 @@ def to_date(value) -> str | None:
     if isinstance(value, (datetime, date)):
         return value.strftime("%Y-%m-%d")
     t = clean(value)
-    if any(w in t for w in ("상시", "채용시", "채용 시", "수시")):
-        return None
+    has_date = re.search(r"\d{4}[-./년 ]\s*\d{1,2}[-./월 ]\s*\d{1,2}|\d{8}", t)
+    if not has_date and any(w in t for w in ("상시", "채용시", "채용 시", "수시")):
+        return None                                   # '2026.10.31(토) 채용 시 마감' 처럼 날짜가 있으면 날짜
     m = re.search(r"(\d{4})[-./년 ]\s*(\d{1,2})[-./월 ]\s*(\d{1,2})", t) or re.search(r"(\d{4})(\d{2})(\d{2})", t)
     if m:
         y, mo, d = (int(x) for x in m.groups())

@@ -561,3 +561,42 @@ def test_status_page_after_interrupted_run(app, client):
     o = crawler.overview()
     assert o["progress"]["running"] is False and o["progress"]["elapsed_min"] == 9
     assert client.get("/collect/status").status_code == 200
+
+
+def test_jobkorea_newest_scan_goes_past_category_lists(app):
+    """잡코리아 직무 목록은 1쪽뿐이라, 전체 최신순을 이미 본 공고가 나올 때까지 + 지난번 위치부터 더 깊이 읽는다."""
+    _settings(keywords=[], sites=["jobkorea"], max_new=0, by_category=True, pages=1)
+    cfg = crawler.LIST_SITES["jobkorea"]
+    pages = {cfg["category"].replace("{code}", code): (200, "") for code, _ in cfg["categories"]}
+    def page(ids):
+        return (200, "".join(f'<a href="/Recruit/GI_Read/{i}">x</a>' for i in ids))
+    newest = cfg["newest"]
+    pages[newest.replace("{page}", "1")] = page(range(900, 920))
+    pages[newest.replace("{page}", "2")] = page(range(880, 900))
+    pages[newest.replace("{page}", "3")] = page(range(860, 880))
+    pages[newest.replace("{page}", "4")] = (200, "<html>결과 없음</html>")
+    f = FakeFetcher(pages)
+    groups, _ = crawler.collect_lists(f, "jobkorea", crawler.load_settings(), [])
+    assert len(groups["최신순"]) == 60                       # 빈 4쪽에서 멈춤
+    assert db.get_setting("deep_page:jobkorea") == "1"      # 끝까지 갔으니 다음엔 처음부터
+
+
+def test_jobkorea_newest_scan_stops_at_known_and_goes_deeper(app):
+    _settings(keywords=[], sites=["jobkorea"], max_new=0, by_category=True, pages=1)
+    cfg = crawler.LIST_SITES["jobkorea"]
+    pages = {cfg["category"].replace("{code}", code): (200, "") for code, _ in cfg["categories"]}
+    newest = cfg["newest"]
+    for n in range(1, 400):
+        pages[newest.replace("{page}", str(n))] = (200, "".join(f'<a href="/Recruit/GI_Read/{n * 100 + i}">x</a>' for i in range(20)))
+    with db.connect() as con:                                   # 2쪽은 이미 본 공고
+        con.executemany("INSERT INTO list_seen(site, post_id, first_seen) VALUES('jobkorea', ?, '2026-10-01')",
+                        [(str(200 + i),) for i in range(20)])
+    f = FakeFetcher(pages)
+    crawler.collect_lists(f, "jobkorea", crawler.load_settings(), [])
+    read = [int(u.split("Page_No=")[1].split("&")[0]) for u in f.seen if "Page_No=" in u]
+    assert read[:2] == [1, 2] and read[2] == 3 and len(read) == 2 + crawler.DEEP_PAGES
+    assert db.get_setting("deep_page:jobkorea") == str(3 + crawler.DEEP_PAGES)
+    f2 = FakeFetcher(pages)                                     # 다음 번에는 지난번 위치부터 더 깊이
+    crawler.collect_lists(f2, "jobkorea", crawler.load_settings(), [])
+    read2 = [int(u.split("Page_No=")[1].split("&")[0]) for u in f2.seen if "Page_No=" in u]
+    assert read2[-1] == 2 + 2 * crawler.DEEP_PAGES

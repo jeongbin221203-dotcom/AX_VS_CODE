@@ -188,3 +188,8 @@ def test_abroad_title_overrides_head_office_address():
                        location="대한민국 경기도 성남시 분당구 정자일로 45")
     assert p["sido"] == "해외"
     assert postings.build("jobkorea", "8", title="[중국어 통역] 채용", company="x", location="서울 강남구")["sido"] == "서울"
+
+
+def test_deadline_with_date_and_early_close_note():
+    assert to_date("2026.10.31(토) 채용 시 마감") == "2026-10-31"
+    assert to_date("채용시 마감") is None and to_date("상시채용") is None

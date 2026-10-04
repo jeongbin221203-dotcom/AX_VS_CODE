@@ -58,6 +58,8 @@ LIST_SITES = {
         # 직무 목록은 페이지 번호를 바꿔도 결과가 거의 같아 직무마다 1페이지(약 170건)만 읽는다
         "category": "https://www.jobkorea.co.kr/recruit/joblist?menucode=duty&dutyCtgr={code}",
         "category_pages": 1,
+        # 그래서 전체 최신순 검색(페이지당 20건, 페이지가 넘어감)으로 나머지를 모은다 — newest_scan
+        "newest": "https://www.jobkorea.co.kr/Search/?stext=&tabType=recruit&Page_No={page}&Ord=RegDtDesc",
         "categories": [
             ("10026", "기획·전략"), ("10027", "법무·사무·총무"), ("10028", "인사·HR"), ("10029", "회계·세무"),
             ("10030", "마케팅·광고·MD"), ("10031", "AI·개발·데이터"), ("10032", "디자인"), ("10033", "물류·무역"),
@@ -820,7 +822,55 @@ def collect_lists(f: Fetcher, site: str, s: dict, keywords: list[str]) -> tuple[
             if not fresh:
                 break                                 # 다음 페이지가 같은 내용이면 그만 읽는다
     _drop_promoted_category(site, groups)
+    if not any(keywords) and cfg.get("newest"):
+        newest_scan(f, site, cfg["newest"], groups, errors)
     return groups, errors
+
+
+NEWEST_MAX_PAGES = 300     # 최신순 앞쪽: 이미 본 공고만 나오는 페이지까지, 최대 이만큼
+DEEP_PAGES = 100           # 최신순 뒤쪽: 목록을 읽을 때마다 지난번에 멈춘 곳부터 이만큼 더 (예전 공고 모으기)
+
+
+def newest_scan(f: Fetcher, site: str, tpl: str, groups: dict[str, dict], errors: list[str]) -> None:
+    """전체 최신순 목록. 앞쪽은 이미 본 공고만 나올 때까지(새 공고 모두), 뒤쪽은 페이지 위치를 기억해 조금씩 더 깊이."""
+    with db.connect() as con:
+        known = {r[0] for r in con.execute("SELECT post_id FROM list_seen WHERE site = ?", (site,))}
+        known |= {r[0] for r in con.execute("SELECT source_id FROM postings WHERE source = ?", (site,))}
+    group = groups.setdefault("최신순", {})
+
+    def read(page_no: int) -> list[dict] | None:
+        res = f.get(tpl.replace("{page}", str(page_no)))
+        if res.status_code in (403, 429):
+            raise BlockedError(f"목록 요청이 막혔습니다 (HTTP {res.status_code})")
+        if res.status_code != 200:
+            errors.append(f"{site} 최신순 {page_no}쪽: HTTP {res.status_code}")
+            return None
+        found = list_items(site, res.text)
+        for it in found:
+            group.setdefault(it["id"], it["hint"])
+        return found
+
+    page_no = 0
+    for page_no in range(1, NEWEST_MAX_PAGES + 1):
+        if page_no % 10 == 1:
+            progress(step=f"최신순 {page_no}쪽", requests=f.requests)
+        found = read(page_no)
+        if found == []:                               # 목록 끝까지 다 읽음 — 더 깊이 갈 곳이 없다
+            db.set_setting(f"deep_page:{site}", "1")
+            return
+        if not found or all(it["id"] in known for it in found):
+            break
+    start = max(page_no + 1, int(db.get_setting(f"deep_page:{site}") or 1))
+    for deep in range(start, start + DEEP_PAGES):
+        if deep % 10 == 0:
+            progress(step=f"최신순 깊이 {deep}쪽", requests=f.requests)
+        found = read(deep)
+        if found is None:
+            break
+        if not found:                                 # 끝까지 갔으면 다음에는 처음부터
+            deep = 0
+            break
+    db.set_setting(f"deep_page:{site}", str(deep + 1))
 
 
 PROMOTED_MIN_GROUPS = 3
