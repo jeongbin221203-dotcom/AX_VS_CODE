@@ -198,3 +198,20 @@ def test_summary_keeps_comma_in_parentheses():
     from core.sources.linkimport import _summary_fields
     f = _summary_fields("(주)가나, 생산관리, 경력:경력무관, 학력:대학졸업(2,3년)이상, 연봉 3,200만원, 마감일:2026-11-30")
     assert f["education"] == "대학졸업(2,3년)이상" and f["salary"] == "연봉 3,200만원"
+
+
+def test_body_salary_line_and_allowance_ranges():
+    """'40만원 ~ 1억' 범위의 원인: 본문의 복리후생·인상·수당 문장을 연봉으로 읽던 것."""
+    from core.sources.linkimport import _salary_from_body as pick
+    assert pick(["반기별 스타상: 최대 상금 100만원과 연봉 600만원 인상의 기회", "급여 외 매월 최대 6만6천원 지원",
+                 "• 급여 : 연봉 3,200만원 이상"]) == "연봉 3,200만원 이상"
+    assert pick(["입사 후 교육 기간 동안 매일 10만원의 급여를 지급해요."]) is None
+    assert salary.parse("급여 실수령액 270만원 + 식대20만원 + 인센티브(평균 15~20만원)")[:2] == (3240, 3240)
+    assert salary.parse("건별 300,000원 (면접 후 결정)")[:2] == (None, None)
+    assert salary.parse("급여 : 편당 40만 원")[:2] == (None, None)
+    assert salary.parse("• 급여 : 3천 중후반선 (이후 안내)")[:2] == (3000, 3000)
+
+
+def test_foreign_location_is_abroad():
+    assert parse_region("미국전체") == ("해외", None) and parse_region("유럽 폴란드") == ("해외", None)
+    assert parse_region("인천 남동구") == ("인천", "남동구")

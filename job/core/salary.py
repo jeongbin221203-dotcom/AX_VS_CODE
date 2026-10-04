@@ -16,7 +16,7 @@ NEGOTIABLE_WORDS = ("내규", "협의", "면접", "추후", "결정", "경력에
 MAX_CONVERT_HOURLY = 30_000      # 이보다 높은 시급은 연봉으로 환산하지 않음 (시간제·전문직)
 MAX_CONVERTED = 30_000           # 월·시급·일급을 연봉으로 바꾼 값이 이 만원(3억)을 넘으면 버림
 _ALLOWANCE = re.compile(r"(식대|수당|교통비|상여|보너스|인센티브|복지|장려금|축하금|지원금|성과급|면접비|숙소비|중식|"
-                        r"요금|통신비|휴대폰|건당|가능시|가능 시)")
+                        r"요금|통신비|휴대폰|건당|건별|편당|회당|가능시|가능 시|인상|상금|포인트|식권)")
 PLACEHOLDER_TOP = 10_000         # 범위 위쪽이 딱 1억이고 아래쪽이 5천 이하면 위쪽은 의미 없는 끝값
 MIN_WAGE_YEARS = (2_516, 2_588)  # 최저임금 연봉(만원): 2025년 25,155,240원 · 2026년 25,882,560원
 ABSURD_TOP = 10_000              # 범위의 위쪽이 1억 이상이면서 아래쪽의 5배를 넘으면 위쪽은 믿지 않음
@@ -43,7 +43,15 @@ def parse(text, pay_type: str | None = None) -> tuple[int | None, int | None, bo
     if any(w in raw for w in NEGOTIABLE_WORDS) and not has_money:
         return None, None, True
     items, t = _amounts(raw)
-    items = [(won, pos) for won, pos in items if not _is_allowance(t, pos)]   # 식대·수당 등은 연봉이 아님
+    kept, prev_skip = [], None
+    for won, pos in items:                              # 식대·수당 등은 연봉이 아님
+        if _is_allowance(t, pos) or (prev_skip is not None and pos - prev_skip <= 12
+                                     and re.fullmatch(r"[\d.]*(만원|만|원)?~", t[prev_skip:pos])):
+            prev_skip = pos                             # '인센티브(평균 15~20만원)' 의 20 도 수당
+            continue
+        prev_skip = None
+        kept.append((won, pos))
+    items = kept
     if not items:
         return None, None, any(w in raw for w in NEGOTIABLE_WORDS)
 
@@ -138,6 +146,9 @@ def _period_at(keys: list[tuple[int, str]], pos: int, window: int = 20) -> str |
 def _is_allowance(t: str, pos: int) -> bool:
     """금액 바로 앞(8글자)에 식대·수당 같은 말이 있으면 추가 금액. 단 '수당 포함 월평균 300만원' 처럼
     그 뒤에 '포함'이나 '월·연봉' 단어가 다시 나오면 본급이다."""
+    m = re.search(r"[\d.]+(만원|만|원)?~$", t[:pos])        # '인센티브(평균 15~20만원)': 범위 앞부분부터 본다
+    if m:
+        pos = m.start()
     window = t[max(0, pos - 8):pos]
     last = None
     for m in _ALLOWANCE.finditer(window):
@@ -162,6 +173,7 @@ def _amounts(text: str) -> tuple[list[tuple[float, int]], str]:
     t = re.sub(r"(주|하루|일)\d+(시간|일)", "", t)                # 근무시간 표기 제거
     groups: list[list[tuple[float, str | None]]] = []
     starts: list[int] = []
+    ends: list[int] = []
     prev_end = -1
     for m in _TOKEN.finditer(t):
         if m.group(1) in ("", "."):
@@ -172,19 +184,22 @@ def _amounts(text: str) -> tuple[list[tuple[float, int]], str]:
         tok = (float(m.group(1)), m.group(2))
         if groups and m.start() == prev_end and groups[-1][-1][1] not in (None, "원", "만원", "만"):
             groups[-1].append(tok)
+            ends[-1] = m.end()
         else:
             groups.append([tok])
             starts.append(m.start())
+            ends.append(m.end())
         prev_end = m.end()
 
     amounts: list[float | None] = []
     units: list[int | None] = []
-    for g in groups:
+    for gi, g in enumerate(groups):
         has_man = any(u in ("만", "만원", "억", "천만", "백만") for _, u in g)
         total, unit_seen = 0.0, None
         for n, u in g:
             if u == "천":
-                mul = 10**7 if has_man or len(g) > 1 else 10**3
+                # '3천 중후반'·'4천 이상' 처럼 천만 단위를 줄여 쓴 것 (뒤에 '원' 이 붙은 '3천원' 은 그대로)
+                mul = 10**7 if has_man or len(g) > 1 or (n < 10 and not t[ends[gi]:].startswith("원")) else 10**3
             elif u == "백":
                 mul = 10**6 if has_man or len(g) > 1 else 10**2
             else:

@@ -295,11 +295,20 @@ def _has_amount(text: str | None) -> bool:
     return bool(lo or hi)
 
 
+_BODY_LABEL = re.compile(r"^[\sㆍ·•\-*○◦▶▷■□◆◇※o0-9.)]*(급여\s*조건|급여|연봉|임금|보수|월급|시급|처우)\s*[:：]")
+_BODY_NOT_PAY = re.compile(r"(외\s|별도|추가|인상|지원|상금|수당|식대|식권|포인트|복지|인센티브|성과급|축하금|장려금|교육\s*기간|"
+                           r"수습|건별|건당|편당|회당|최대\s*\d)")
+
+
 def _salary_from_body(lines: list[str]) -> str | None:
-    """본문의 '급여조건 : 연봉2800만원~3000만원' 같은 줄에서 금액을 찾는다."""
-    for line in lines:
-        if re.search(r"(급여|연봉|월급|시급|임금)", line) and re.search(r"\d", line) and _has_amount(line):
-            return re.sub(r"^[ㆍ·\-\s]*(급여조건|급여|임금)\s*[:：]?\s*", "", line)[:100]
+    """본문의 '급여조건 : 연봉2800만원~3000만원' 같은 줄에서 금액을 찾는다.
+    '급여 : …' 처럼 이름표로 시작하는 줄을 먼저 보고, 그 밖의 줄은 복리후생·수당·인상 문장이 아닐 때만."""
+    labeled = [ln for ln in lines if _BODY_LABEL.match(ln)]
+    others = [ln for ln in lines if not _BODY_LABEL.match(ln) and re.search(r"(급여|연봉|월급|시급|임금)", ln)
+              and not _BODY_NOT_PAY.search(ln)]
+    for line in labeled + others:
+        if re.search(r"\d", line) and _has_amount(line):
+            return re.sub(r"^[\sㆍ·•\-*○◦▶▷■□◆◇※o0-9.)]*(급여\s*조건|급여|임금|보수|처우)\s*[:：]?\s*", "", line)[:100]
     return None
 
 

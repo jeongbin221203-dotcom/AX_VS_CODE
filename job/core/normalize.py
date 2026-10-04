@@ -63,11 +63,16 @@ def parse_region(text) -> tuple[str | None, str | None]:
             return short, sigungu
     if "재택" in text or "원격" in text:
         return "재택", None
+    if _FOREIGN.match(first):                         # '미국전체', '일본 도쿄', '유럽 폴란드', '베트남 하노이'
+        return "해외", None
     return None, None
 
 
-_ABROAD = re.compile(r"[\[(【]\s*(해외|일본|중국|미국|베트남|인도네시아|태국|필리핀|싱가포르|유럽|독일|폴란드|캐나다|호주|멕시코|인도|대만|홍콩|UAE|사우디)"
-                     r"\s*(근무|법인|파견|현지|지사)?\s*[\])】]")
+_COUNTRIES = ("해외|일본|중국|미국|베트남|인도네시아|태국|필리핀|싱가포르|말레이시아|유럽|독일|폴란드|헝가리|체코|영국|프랑스|"
+              "캐나다|호주|뉴질랜드|멕시코|브라질|인도|대만|홍콩|몽골|UAE|두바이|사우디|카타르|우즈베키스탄|카자흐스탄|"
+              "북미|남미|중동|동남아|아시아|아프리카")
+_FOREIGN = re.compile(rf"^\s*({_COUNTRIES})")
+_ABROAD = re.compile(rf"[\[(【]\s*({_COUNTRIES})\s*(근무|법인|파견|현지|지사|취업)?\s*[\])】]")
 
 
 def abroad_in_title(title) -> bool:
