@@ -180,7 +180,7 @@ def _migrate(con: sqlite3.Connection) -> None:
 def connect() -> Iterator[sqlite3.Connection]:
     if _db_path is None:
         raise RuntimeError("db.configure() 를 먼저 호출하세요")
-    con = sqlite3.connect(_db_path)
+    con = sqlite3.connect(_db_path, timeout=30)        # 수집 스레드·화면·동기화 복사가 겹치면 잠깐 기다림 (기본 5초는 짧음)
     con.row_factory = sqlite3.Row
     con.execute("PRAGMA foreign_keys = ON")
     try:

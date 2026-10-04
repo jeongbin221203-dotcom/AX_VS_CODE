@@ -442,10 +442,15 @@ def _run(s: dict, f: Fetcher) -> dict:
                 log.exception("상세 읽기 오류 %s", url)
                 item, error = None, f"{e.__class__.__name__}: {e}"[:200]
             with write_lock:
-                if item:
-                    a, b = postings.upsert_many([postings.keep_existing(item)])
-                    stats[site]["new"] += a
-                    stats[site]["updated"] += b
+                try:
+                    if item:
+                        a, b = postings.upsert_many([postings.keep_existing(item)])
+                        stats[site]["new"] += a
+                        stats[site]["updated"] += b
+                except Exception as e:                   # DB 잠김 등 — 이 공고만 건너뛰고 사이트 읽기는 계속
+                    log.exception("저장 실패 %s", url)
+                    stats[site]["errors"].append(f"저장 실패 {post_id}: {e.__class__.__name__}")
+                    continue
                 if site in LIST_SITES:
                     queue_done(site, post_id)
                 if site in SITEMAP_SITES:

@@ -600,3 +600,24 @@ def test_jobkorea_newest_scan_stops_at_known_and_goes_deeper(app):
     crawler.collect_lists(f2, "jobkorea", crawler.load_settings(), [])
     read2 = [int(u.split("Page_No=")[1].split("&")[0]) for u in f2.seen if "Page_No=" in u]
     assert read2[-1] == 2 + 2 * crawler.DEEP_PAGES
+
+
+def test_save_error_does_not_stop_site(app, monkeypatch):
+    """저장 중 오류(DB 잠김 등)가 나도 그 공고만 건너뛰고 같은 사이트의 나머지 공고는 계속 읽는다."""
+    import sqlite3
+    _settings(keywords=["자재관리"], sites=["saramin"], max_new=0)
+    sd = crawler.LIST_SITES["saramin"]["detail"]
+    lst = "".join(f'<a href="/zf_user/jobs/relay/view?rec_idx={i}">x</a>' for i in range(501, 505))
+    pages = {crawler.LIST_SITES["saramin"]["search"].format(kw="%EC%9E%90%EC%9E%AC%EA%B4%80%EB%A6%AC", page=1): (200, lst)}
+    for i in range(501, 505):
+        pages[sd.format(id=i)] = (200, SARAMIN_OG.replace("자재관리 담당", f"공고{i}"))
+    real = postings.upsert_many
+    calls = {"n": 0}
+    def flaky(items):
+        calls["n"] += 1
+        if calls["n"] == 1:
+            raise sqlite3.OperationalError("database is locked")
+        return real(items)
+    monkeypatch.setattr(postings, "upsert_many", flaky)
+    r = crawler.run_once(force=True, fetcher=FakeFetcher(pages))
+    assert r["sites"]["saramin"]["new"] == 3
