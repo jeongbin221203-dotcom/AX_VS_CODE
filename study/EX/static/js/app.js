@@ -9,7 +9,11 @@
       headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrf },
       body: JSON.stringify(body)
     }).then(function (r) {
-      if (!r.ok) throw new Error('서버 응답 ' + r.status);
+      if (!r.ok) {
+        return r.json().catch(function () { return {}; }).then(function (b) {
+          throw new Error((b && b.error) || (r.status === 400 ? '요청이 거부되었습니다 — 페이지를 새로 고친 뒤 다시 해 보세요.' : '서버 응답 ' + r.status));
+        });
+      }
       return r.json();
     });
   }
@@ -18,6 +22,67 @@
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
     });
   }
+
+  /* 위쪽 머리글 높이(시험 시간 막대가 그 아래에 고정되게), 휴대폰 메뉴에서 지금 메뉴가 보이게 */
+  var topbar = document.querySelector('header.top');
+  function setTopH() { if (topbar) document.documentElement.style.setProperty('--top-h', topbar.offsetHeight + 'px'); }
+  setTopH();
+  window.addEventListener('resize', setTopH);
+  var onNav = document.querySelector('.nav a.on');
+  if (onNav && onNav.scrollIntoView) { try { onNav.scrollIntoView({ block: 'nearest', inline: 'center' }); window.scrollTo(0, 0); } catch (e) { /* 무시 */ } }
+  /* 뒤로 가기로 돌아온 화면: '처리 중…' 단추 되살리기 */
+  window.addEventListener('pageshow', function (ev) {
+    if (!ev.persisted) return;
+    document.querySelectorAll('form[data-once] button[type=submit]').forEach(function (b) {
+      b.disabled = false;
+      if (b.getAttribute('data-label')) b.textContent = b.getAttribute('data-label');
+    });
+  });
+
+  /* 필기 모의고사: 문제지·고른 답을 브라우저에 저장 → 새로 고쳐도 같은 문제지·답·시간으로 이어 풀기 */
+  (function () {
+    var f = document.querySelector('form[data-written-mock]');
+    var clear = document.querySelector('[data-mock-clear]');
+    function key(lv) { return 'ex-written-mock:' + lv; }
+    if (clear) { try { localStorage.removeItem(key(clear.getAttribute('data-mock-clear'))); } catch (e) { /* 무시 */ } }
+    if (!f) return;
+    var lv = f.getAttribute('data-written-mock'), qids = f.getAttribute('data-qids');
+    var tkey = 'ex-exam-start:written-' + lv, saved = null;
+    try { saved = JSON.parse(localStorage.getItem(key(lv)) || 'null'); } catch (e) { saved = null; }
+    var params = new URLSearchParams(location.search);
+    if (params.get('new')) {                            // [새 문제지]: 저장한 것 버리고 새로
+      saved = null;
+      try { localStorage.removeItem(key(lv)); localStorage.removeItem(tkey); } catch (e) { /* 무시 */ }
+    } else if (saved && saved.qids && saved.qids !== qids) {
+      location.replace(location.pathname + '?q=' + encodeURIComponent(saved.qids));
+      return;
+    }
+    if (!saved || saved.qids !== qids) {
+      saved = { qids: qids, answers: {} };
+      try { localStorage.setItem(tkey, String(Date.now())); } catch (e) { /* 무시 */ }
+    }
+    Object.keys(saved.answers || {}).forEach(function (n) {
+      var r = f.querySelector('input[name="' + n + '"][value="' + saved.answers[n] + '"]');
+      if (r) r.checked = true;
+    });
+    function store() { try { localStorage.setItem(key(lv), JSON.stringify(saved)); } catch (e) { /* 저장 공간 */ } }
+    store();
+    f.addEventListener('change', function (ev) {
+      if (ev.target.type === 'radio') { saved.answers[ev.target.name] = ev.target.value; store(); }
+    });
+    var leaving = false;
+    f.addEventListener('submit', function () { leaving = true; });
+    document.querySelectorAll('[data-new-paper]').forEach(function (a) {
+      a.addEventListener('click', function (ev) {
+        if (Object.keys(saved.answers).length && !window.confirm('지금 문제지의 답을 버리고 새 문제지를 받을까요?')) { ev.preventDefault(); return; }
+        leaving = true;
+      });
+    });
+    window.addEventListener('beforeunload', function (ev) {
+      if (!leaving && Object.keys(saved.answers).length) { ev.preventDefault(); ev.returnValue = ''; }
+    });
+    setTimeout(function () { f.dispatchEvent(new Event('change')); }, 0);   // 답한 문항 수 표시
+  })();
 
   /* 테마 */
   var root = document.documentElement;
@@ -94,7 +159,7 @@
   document.querySelectorAll('form[data-once]').forEach(function (f) {
     f.addEventListener('submit', function () {
       var b = f.querySelector('button[type=submit]');
-      if (b) { b.disabled = true; b.textContent = '처리 중…'; }
+      if (b) { if (!b.getAttribute('data-label')) b.setAttribute('data-label', b.textContent); b.disabled = true; b.textContent = '처리 중…'; }
     });
   });
 
@@ -115,6 +180,11 @@
       var used = Math.floor((Date.now() - start) / 1000);
       var left = minutes * 60 - used;
       wrap.classList.toggle('over', left < 0);
+      if (left <= 0 && box.hasAttribute('data-timer-autosubmit') && !box.getAttribute('data-sent')) {
+        box.setAttribute('data-sent', '1');                 // 시간이 다 되면 그대로 제출(실제 CBT 처럼)
+        var af = box.closest('form') || box.querySelector('form');
+        if (af) { af.setAttribute('data-auto', '1'); if (secondsInput) secondsInput.value = minutes * 60; af.requestSubmit(); }
+      }
       var a = Math.abs(left);
       text.textContent = (left < 0 ? '시간 초과 +' : '') + Math.floor(a / 60) + ':' + pad(a % 60);
       if (secondsInput) secondsInput.value = used;
@@ -123,7 +193,7 @@
       try { localStorage.setItem(key, String(Date.now())); } catch (e) { /* 저장 불가면 이 화면에서만 */ }
       tick();
     });
-    if (box.hasAttribute('data-timer-auto')) {          // 필기 모의고사: 문제를 연 순간 시작(새 문제지마다 새로)
+    if (box.hasAttribute('data-timer-autosubmit') && !getStart()) {   // 필기 모의고사: 문제를 연 순간 시작
       try { localStorage.setItem(key, String(Date.now())); } catch (e) { /* 무시 */ }
     }
     box.querySelector('[data-timer-reset]').addEventListener('click', function () {
@@ -188,6 +258,15 @@
   var wlist = document.querySelector('[data-written-practice]');
   if (wlist) {
     var wdone = 0, wok = 0, wtotal = wlist.querySelectorAll('[data-wq]').length;
+    document.addEventListener('keydown', function (ev) {
+      if (!/^[1-4]$/.test(ev.key) || ev.ctrlKey || ev.altKey || ev.metaKey || /input|textarea|select/i.test(ev.target.tagName)) return;
+      var box = ev.target.closest && ev.target.closest('[data-wq]:not(.answered)');
+      if (!box) box = wlist.querySelector('[data-wq]:not(.answered)');
+      if (!box) return;
+      ev.preventDefault();
+      var b = box.querySelectorAll('[data-pick]')[parseInt(ev.key, 10) - 1];
+      if (b) b.click();
+    });
     wlist.addEventListener('click', function (ev) {
       var b = ev.target.closest('[data-pick]');
       if (!b) return;
@@ -203,6 +282,7 @@
         });
         var res = box.querySelector('.result');
         res.className = 'result show ' + (r.ok ? 'ok' : 'bad');
+        setTimeout(function () { try { res.focus({ preventScroll: true }); } catch (e) { /* 무시 */ } }, 0);
         res.innerHTML = '<b>' + (r.ok ? '정답' : '오답 — 정답은 ' + '①②③④'.charAt(r.answer)) + '</b> <span class="explain">' + esc(r.explain) + '</span>';
         wdone++; if (r.ok) wok++;
         if (wdone === wtotal) {
@@ -221,6 +301,7 @@
     function answered() { return Object.keys(names).filter(function (n) { return f.querySelector('input[name="' + n + '"]:checked'); }).length; }
     f.addEventListener('change', function () { if (counter) counter.textContent = answered() + '/' + total + '문항 답함'; });
     f.addEventListener('submit', function (ev) {
+      if (f.getAttribute('data-auto')) return;              // 시간 종료 자동 제출은 묻지 않음
       var left = total - answered();
       if (left > 0 && !window.confirm('아직 ' + left + '문항을 풀지 않았습니다. 그래도 제출할까요?')) {
         ev.preventDefault();

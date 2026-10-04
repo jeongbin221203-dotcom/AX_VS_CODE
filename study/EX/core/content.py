@@ -181,6 +181,18 @@ def _run(problem, ast, budget=None):
     r0, c0 = cells[0]
     out = []
     start = time.monotonic()
+    if len(cells) > 1:                       # 범위 전체에 한 번에 넣는 배열 수식(FREQUENCY 등): 결과 배열이 채우기 범위 모양이면 그대로 펼침
+        first = fx.evaluate(ast, book, SHEET, r0, c0)
+        rows = sorted({r for r, _ in cells})
+        cols = sorted({c for _, c in cells})
+        if isinstance(first, fx.Arr) and len(rows) * len(cols) == len(cells) and \
+                first.h >= len(rows) and first.w >= len(cols) and (first.h > 1 or first.w > 1):
+            text = '=' + fx.unparse(ast)
+            for r, c in cells:
+                v = first.rows[r - rows[0]][c - cols[0]]
+                sheet.set(r, c, v)
+                out.append((r, c, v, text))
+            return out, book
     for r, c in cells:
         if budget and time.monotonic() - start > budget:
             raise TooSlow()
@@ -309,7 +321,7 @@ def check(problem, text, reveal=True):
             break
     ok = all(per) and not missing and fx.has_reference(ast)
     wrong = [fx.addr(r, c) for (r, c, _, _), good in zip(res, per) if not good]
-    if wrong and len(res) > 1 and per[0]:
+    if wrong and len(res) > 1 and per[0] and fx.unparse(ast).count('$') < str(problem.get('answer', '')).count('$'):
         notes.append(f'첫 셀은 맞지만 {", ".join(wrong[:4])} 에서 결과가 다릅니다 — 채우기로 복사할 때 '
                      '고정해야 할 범위에 $ 를 붙였는지 확인하세요.')
     out.update(ok=ok, per=per, notes=notes,
@@ -372,6 +384,8 @@ def _refers_to(node, r, c):
         rows_ok = r1 is None or min(r1, r2) <= r <= max(r1, r2)
         return rows_ok and min(c1, c2) <= c <= max(c1, c2)
     if kind == 'call':
+        if node[1] in ('ROW', 'ROWS', 'COLUMN', 'COLUMNS'):     # 위치만 쓰므로 순환 참조가 아님(=ROWS($H$2:H2))
+            return False
         return any(_refers_to(a, r, c) for a in node[2])
     if kind == 'arr':
         return False

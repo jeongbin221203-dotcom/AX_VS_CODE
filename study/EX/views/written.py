@@ -3,11 +3,57 @@ import json
 import random
 
 from flask import Blueprint, abort, jsonify, redirect, render_template, request, url_for
+from markupsafe import Markup, escape
+from markupsafe import Markup, escape
 
 from core import db, written
 
 bp = Blueprint('written', __name__, url_prefix='/written')
 
+
+@bp.app_template_filter('wtext')
+def wtext(text):
+    """문제 글: ' | ' 로 나눈 줄이 이어지면 표로, 나머지는 줄 바꿈 그대로."""
+    out, rows = [], []
+
+    def flush():
+        if rows:
+            head, *body = rows
+            out.append('<div class="table-wrap"><table class="t wq-table"><thead><tr>' +
+                       ''.join(f'<th>{escape(c)}</th>' for c in head) + '</tr></thead><tbody>' +
+                       ''.join('<tr>' + ''.join(f'<td>{escape(c)}</td>' for c in r) + '</tr>' for r in body) +
+                       '</tbody></table></div>')
+            rows.clear()
+    for line in str(text).split('\n'):
+        if ' | ' in line:
+            rows.append([c.strip() for c in line.split('|')])
+        else:
+            flush()
+            out.append(f'<span class="wq-line">{escape(line)}</span>')
+    flush()
+    return Markup(''.join(out))
+
+@bp.app_template_filter('wtext')
+def wtext(text):
+    """문제 글: ' | ' 로 나눈 줄이 이어지면 표로, 나머지는 줄 바꿈 그대로."""
+    out, rows = [], []
+
+    def flush():
+        if rows:
+            head, *body = rows
+            out.append('<div class="table-wrap"><table class="t wq-table"><thead><tr>' +
+                       ''.join(f'<th>{escape(c)}</th>' for c in head) + '</tr></thead><tbody>' +
+                       ''.join('<tr>' + ''.join(f'<td>{escape(c)}</td>' for c in r) + '</tr>' for r in body) +
+                       '</tbody></table></div>')
+            rows.clear()
+    for line in str(text).split('\n'):
+        if ' | ' in line:
+            rows.append([c.strip() for c in line.split('|')])
+        else:
+            flush()
+            out.append(f'<span class="wq-line">{escape(line)}</span>')
+    flush()
+    return Markup(''.join(out))
 
 def _level():
     """학습 범위(2급·1급) — 위쪽 선택이 2급이면 2급, 그 밖은 1급(필기는 실무 범위가 없음)."""
@@ -59,10 +105,12 @@ def practice():
     level = _level()
     subj = request.args.get('subject')
     if subj and subj not in written.LEVELS[level]['subjects']:
+        if subj in written.SUBJECTS:                  # 2급에서 데이터베이스(1급 과목)를 열면 1급으로
+            return redirect(url_for('.practice', **{**request.args.to_dict(), 'level': 'c1'}))
         abort(404)
     topic = request.args.get('topic') or None
     mode = request.args.get('mode', 'new')
-    n = max(5, min(50, request.args.get('n', 20, type=int)))
+    n = max(5, min(50, request.args.get('n', 20, type=int) or 20))
     _, last = _stats(level)
     pool = written.questions(subj, level, topic) if subj else \
         [q for s in written.LEVELS[level]['subjects'] for q in written.questions(s, level)]
@@ -84,13 +132,13 @@ def api_answer():
     """연습 문제 하나 채점·기록 → 정답 번호·해설."""
     body = request.get_json(silent=True)
     if not isinstance(body, dict):
-        abort(400)
+        return jsonify({'error': '요청 형식이 잘못되었습니다.'}), 400
     q = written.get(str(body.get('id', '')))
     if q is None:
-        abort(404)
+        return jsonify({'error': '없는 문제입니다.'}), 404
     picked = body.get('picked')
-    if not isinstance(picked, int) or not 0 <= picked <= 3:
-        abort(400)
+    if type(picked) is not int or not 0 <= picked <= 3:
+        return jsonify({'error': '보기 번호가 잘못되었습니다.'}), 400
     ok = picked == q['answer']
     conn = db.get()
     conn.execute('INSERT INTO written_attempts(qid, subject, ok, picked, user) VALUES(?, ?, ?, ?, ?)',
@@ -103,9 +151,13 @@ def api_answer():
 def mock(level):
     if level not in written.LEVELS:
         abort(404)
-    recent = [r['qid'] for r in db.get().execute(
-        'SELECT qid FROM written_attempts WHERE user=? ORDER BY id DESC LIMIT 400', (db.user_id(),))]
-    qids = written.build_mock(level, avoid=recent)
+    asked = [x for x in request.args.get('q', '').split(',') if x]
+    if asked and written.valid_paper(level, asked):    # 풀던 문제지 이어 풀기(브라우저가 기억한 문항)
+        qids = asked
+    else:
+        recent = [r['qid'] for r in db.get().execute(
+            'SELECT qid FROM written_attempts WHERE user=? ORDER BY id DESC LIMIT 400', (db.user_id(),))]
+        qids = written.build_mock(level, avoid=recent)
     qs = [written.get(i) for i in qids]
     groups = []
     for subj in written.LEVELS[level]['subjects']:
@@ -117,9 +169,17 @@ def mock(level):
 def mock_submit(level):
     if level not in written.LEVELS:
         abort(404)
-    qids = [x for x in request.form.get('qids', '').split(',') if written.get(x)][:120]
+    qids = []
+    for x in request.form.get('qids', '').split(','):
+        q = written.get(x)
+        if q and level in q['levels'] and x not in qids:    # 겹친 번호·다른 급 문제는 빼고
+            qids.append(x)
+    qids = qids[:written.PER_SUBJECT * len(written.LEVELS[level]['subjects'])]
     if not qids:
         return redirect(url_for('.index', level=level))
+    seconds = request.form.get('seconds', type=int)
+    if seconds is not None:
+        seconds = max(0, min(seconds, written.LEVELS[level]['minutes'] * 60 * 3))
     answers = {}
     for qid in qids:
         v = request.form.get('a_' + qid, type=int)
@@ -128,13 +188,12 @@ def mock_submit(level):
     res = written.grade(qids, answers)
     conn = db.get()
     u = db.user_id()
-    for row in res['rows']:
-        if row['picked'] is not None:                    # 고르지 않은 문제는 풀이 기록에 넣지 않음(결과에는 오답)
-            conn.execute('INSERT INTO written_attempts(qid, subject, ok, picked, user) VALUES(?, ?, ?, ?, ?)',
-                         (row['id'], row['subject'], int(row['ok']), row['picked'], u))
+    for row in res['rows']:                              # 안 푼 문제도 오답으로 남겨 '틀린 문제'에서 다시 보게
+        conn.execute('INSERT INTO written_attempts(qid, subject, ok, picked, user) VALUES(?, ?, ?, ?, ?)',
+                     (row['id'], row['subject'], int(row['ok']), row['picked'], u))
     detail = {'subjects': res['subjects'], 'average': res['average'], 'rows': res['rows']}
     cur = conn.execute('INSERT INTO written_results(level, average, passed, seconds, detail, user) VALUES(?, ?, ?, ?, ?, ?)',
-                       (level, res['average'], int(res['passed']), request.form.get('seconds', type=int),
+                       (level, res['average'], int(res['passed']), seconds,
                         json.dumps(detail, ensure_ascii=False), u))
     conn.commit()
     return redirect(url_for('.result', rid=cur.lastrowid, done=1))

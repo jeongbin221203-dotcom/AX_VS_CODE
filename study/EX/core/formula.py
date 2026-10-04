@@ -409,6 +409,8 @@ class Parser:
             return ('err', tok[1])
         if kind == 'ref':
             node = ('ref', tok[1], *tok[2])
+            if self.peek() == ('op', ':') and self.t[self.i + 1][0] == 'func':
+                raise FormulaError(f"범위 끝에 함수를 쓰는 형태(A1:{self.t[self.i + 1][1]}(…))는 이 연습장에서 아직 계산하지 못합니다 — OFFSET 등 다른 방법으로 써 보세요")
             if self.peek() == ('op', ':') and self.t[self.i + 1][0] == 'ref':
                 self.take()
                 b = self.take()
@@ -508,6 +510,8 @@ def has_reference(node):
     if node[0] in ('ref', 'range', 'name'):
         return True
     if node[0] == 'call':
+        if node[1] in ('ROW', 'COLUMN') and not [a for a in node[2] if a != ('empty',)]:
+            return True                        # =ROW()-1 은 자기 위치를 쓰는 수식
         return any(has_reference(a) for a in node[2])
     return any(has_reference(x) for x in node[1:] if isinstance(x, tuple))
 
@@ -1266,7 +1270,7 @@ def f_sumifs(sum_rng, *pairs):
 
 @fn('COUNTIF')
 def f_countif(rng, crit):
-    if isinstance(crit, Arr) and crit.origin is None and (crit.h > 1 or crit.w > 1):
+    if isinstance(crit, Arr) and (crit.h > 1 or crit.w > 1):    # 배열 수식: 조건이 범위면 칸마다(1/COUNTIF(A:A,A:A))
         return crit.map(lambda c: f_countif(rng, c))
     cr = make_crit(crit)
     return sum(1 for v in as_arr(rng).flat() if cr(v))
@@ -1558,8 +1562,12 @@ def f_na():
 
 @fn('N')
 def f_n(v):
+    if isinstance(v, Arr) and (v.h > 1 or v.w > 1):
+        return v.map(lambda x: f_n(x))
     v = scalar(v)
-    return v if is_num(v) else (int(v) if isinstance(v, bool) else 0)
+    if isinstance(v, XLErr):
+        raise v
+    return int(v) if isinstance(v, bool) else (v if is_num(v) else 0)
 
 
 # 수학
@@ -1643,7 +1651,9 @@ def f_pi():
 
 @fn('SIGN')
 def f_sign(x):
-    v = to_num(x)
+    if isinstance(x, Arr) and (x.h > 1 or x.w > 1):
+        return x.map(lambda v: f_sign(v))
+    v = to_num(scalar(x))
     return (v > 0) - (v < 0)
 
 
@@ -1949,8 +1959,17 @@ def format_value(v, fmt):
     return _format_number(x, fmt)
 
 
+class _Day0:
+    """시각만 있는 값(0.x)의 날짜 부분 = 엑셀의 1900-01-00(월 1, 일 0)."""
+    year, month, day = 1900, 1, 0
+
+    @staticmethod
+    def weekday():
+        return 5                               # 1900-01-00 은 엑셀에서 토요일
+
+
 def _format_date(x, fmt):
-    d = serial_date(x)
+    d = serial_date(x) if math.floor(x) != 0 else _Day0
     frac = x - math.floor(x)
     secs = int(round(frac * 86400))
     total_secs = int(round(x * 86400))
@@ -2025,8 +2044,8 @@ def _format_date(x, fmt):
             out.append(f'{ss:02d}' if lo == 'ss' else str(ss))
         else:
             out.append(t)
-        if lo not in (':',):
-            prev_h = prev_h and lo == ':'
+        if lo in ('yyyy', 'yy', 'mmmm', 'mmm', 'mm', 'm', 'dddd', 'ddd', 'dd', 'd', 'aaaa', 'aaa', 'ss', 's'):
+            prev_h = False                     # 시 뒤의 m 은 사이에 글자("시간 ")가 있어도 분 — 날짜·초 코드가 오면 끝
     return ''.join(out)
 
 
@@ -2486,9 +2505,14 @@ def f_offset(args, ctx):
     dc = to_int(scalar(ev(args[2], ctx), ctx)) if args[2] != ('empty',) else 0
     h = to_int(scalar(ev(args[3], ctx), ctx)) if len(args) > 3 and args[3] != ('empty',) else base.h
     w = to_int(scalar(ev(args[4], ctx), ctx)) if len(args) > 4 and args[4] != ('empty',) else base.w
-    if h < 1 or w < 1:
+    if h == 0 or w == 0:
         raise REF
-    return area(sh, r0 + dr, c0 + dc, r0 + dr + h - 1, c0 + dc + w - 1, ctx)
+    top, left = r0 + dr, c0 + dc
+    r1, r2 = (top, top + h - 1) if h > 0 else (top + h + 1, top)      # 음수 높이·너비: 기준에서 위·왼쪽으로
+    c1, c2 = (left, left + w - 1) if w > 0 else (left + w + 1, left)
+    if r1 < 1 or c1 < 1:
+        raise REF
+    return area(sh, r1, c1, r2, c2, ctx)
 
 
 @fn('INDIRECT', lazy=True)

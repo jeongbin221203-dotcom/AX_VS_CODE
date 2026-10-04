@@ -335,8 +335,11 @@ def check_values(ctx, sheet, chk):
         for j, e in enumerate(row):
             r, c = r0 + i, c0 + j
             got = ctx.user_value(ws.title, r, c)
-            if not _same(got, _val(e)):
-                bad.append(f'{fx.addr(r, c)}: {fx.display(got) if got is not None else "(빈칸)"} → {fx.display(_val(e))}')
+            want = _val(e)
+            if fx.is_num(want) and isinstance(got, str) and got.strip():
+                bad.append(f'{fx.addr(r, c)}: "{got}" 가 텍스트로 입력되었습니다 — 숫자로(Val·CLng 등) 넣어야 합니다')
+            elif not _same(got, want):
+                bad.append(f'{fx.addr(r, c)}: {fx.display(got) if got is not None else "(빈칸)"} → {fx.display(want)}')
     return not bad, bad[:4]
 
 

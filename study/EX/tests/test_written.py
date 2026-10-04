@@ -63,5 +63,5 @@ def test_pages_and_records(client):
     res = client.get(r.headers['Location']).get_data(as_text=True)
     assert '불합격' in res and '답을 고르지 않았습니다' in res
     data = client.get('/api/backup').json['data']
-    assert len(data['written_results']) == 1 and len(data['written_attempts']) == 31
+    assert len(data['written_results']) == 1 and len(data['written_attempts']) == 61   # 안 푼 30문항도 오답 기록
     assert client.get('/written/practice?level=c1&subject=computer&mode=wrong').status_code == 200

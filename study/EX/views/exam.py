@@ -43,8 +43,28 @@ def paper(eid):
         if tasks:
             sections.append({'name': s, 'points': sum(ex.task_points(t) for t in tasks), 'tasks': tasks})
     tables = {t['no']: [[_show(v) for v in row] for row in t['table']['rows']] for t in e['tasks'] if t.get('table')}
+    items = {t['no']: _items(t.get('items') or []) for t in e['tasks']}
     return render_template('exam_paper.html', e=e, sections=sections, history=history, ex=ex, circled=CIRCLED,
-                           tables=tables, error=request.args.get('error'))
+                           tables=tables, items=items, error=request.args.get('error'))
+
+
+def _items(raw):
+    """지시사항 줄 → [{kind: item|sub|code, num, text}]. 글에 ①② 가 이미 있으면 번호를 또 붙이지 않는다."""
+    own = any(x.lstrip()[:1] in CIRCLED for x in raw)
+    out, k = [], 0
+    for x in raw:
+        if '\n' in x or x.startswith(('Public Function', 'Function ', 'Sub ')):
+            out.append({'kind': 'code', 'num': '', 'text': x})
+        elif x.startswith(('  -', '- ', '  ')):
+            out.append({'kind': 'sub', 'num': '', 'text': x.strip().lstrip('-').strip()})
+        elif x.startswith('▶') or len(raw) == 1:
+            out.append({'kind': 'item', 'num': '▶', 'text': x.lstrip('▶ ')})
+        elif own:
+            out.append({'kind': 'item', 'num': '', 'text': x})
+        else:
+            out.append({'kind': 'item', 'num': CIRCLED[k], 'text': x})
+            k += 1
+    return out
 
 
 def _show(v):

@@ -4,10 +4,12 @@
 <div class="page-head">
   <div><div class="crumb"><a href="{{ url_for('written.index', level=level) }}">컴활 필기</a> ›</div>
     <h1>필기 모의고사 {{ L[level].name }}</h1>
-    <p>{{ groups|length }}과목 {{ groups|map(attribute='qs')|map('length')|sum }}문항 · {{ L[level].minutes }}분 · 과목별 40점 이상, 평균 60점 이상 합격</p></div>
+    <p>{{ groups|length }}과목 {{ groups|map(attribute='qs')|map('length')|sum }}문항 · {{ L[level].minutes }}분 · 과목별 40점 이상, 평균 60점 이상 합격 ·
+      고른 답과 시간은 이 브라우저에 저장되어 새로 고쳐도 이어지며, 시간이 다 되면 자동으로 제출합니다.</p></div>
 </div>
-<form method="post" action="{{ url_for('written.mock_submit', level=level) }}" data-once data-confirm-unanswered>
-<section class="card exam-bar" data-exam-timer="{{ L[level].minutes }}" data-exam-id="written-{{ level }}" data-timer-auto>
+<form method="post" action="{{ url_for('written.mock_submit', level=level) }}" data-once data-confirm-unanswered
+      data-written-mock="{{ level }}" data-qids="{{ qids }}">
+<section class="card exam-bar" data-exam-timer="{{ L[level].minutes }}" data-exam-id="written-{{ level }}" data-timer-autosubmit>
   <div class="timer"><span class="small muted">남은 시간</span> <b data-timer-text>{{ L[level].minutes }}:00</b></div>
   <div class="small muted" data-answered>0문항 답함</div>
   <input type="hidden" name="_csrf" value="{{ csrf_token }}">
@@ -15,6 +17,8 @@
   <input type="hidden" name="seconds" value="" data-timer-seconds>
   <button class="btn ghost" type="button" data-timer-reset hidden>시간 초기화</button>
   <button class="btn" type="button" data-timer-start hidden>시작</button>
+  <a class="btn ghost" href="{{ url_for('written.mock', level=level, new=1) }}" data-new-paper>새 문제지</a>
+  <a class="btn ghost" href="{{ url_for('written.mock', level=level, new=1) }}" data-new-paper>새 문제지</a>
   <button class="btn primary exam-upload" type="submit">답안 제출·채점</button>
 </section>
 {% set n = namespace(i=0) %}
@@ -23,7 +27,7 @@
   <h2>{{ loop.index }}과목 {{ g.name }}</h2>
   {% for q in g.qs %}{% set n.i = n.i + 1 %}
   <fieldset class="wq">
-    <legend class="wq-q"><b>{{ n.i }}.</b> {{ q.q }}</legend>
+    <legend class="wq-q"><b>{{ n.i }}.</b> {{ q.q|wtext }}</legend>
     <div class="choices">
       {% for o in q.options %}
       <label class="choice"><input type="radio" name="a_{{ q.id }}" value="{{ loop.index0 }}"><span><b>{{ '①②③④'[loop.index0] }}</b> {{ o }}</span></label>

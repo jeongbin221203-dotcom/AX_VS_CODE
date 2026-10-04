@@ -4,13 +4,13 @@
 <div class="page-head">
   <div><div class="crumb"><a href="{{ url_for('written.index', level=row.level) }}">컴활 필기</a> ›</div>
     <h1>필기 {{ L[row.level].name }} 결과 — {{ '합격' if row.passed else '불합격' }}</h1>
-    <p>{{ row.created_at }}{% if row.seconds %} · {{ row.seconds // 60 }}분 {{ row.seconds % 60 }}초{% endif %} · 평균 {{ row.average }}점</p></div>
+    <p>{{ row.created_at }}{% if row.seconds %} · {{ (row.seconds // 60 ~ '분 ') if row.seconds >= 60 }}{{ row.seconds % 60 }}초{% endif %} · 평균 {{ row.average }}점</p></div>
   <div class="btns">
     <a class="btn primary" href="{{ url_for('written.mock', level=row.level) }}">새 모의고사</a>
     <a class="btn" href="{{ url_for('written.practice', level=row.level, mode='wrong') }}">틀린 문제 다시</a>
   </div>
 </div>
-{% if request.args.get('done') %}<span hidden data-timer-clear="written-{{ row.level }}"></span>{% endif %}
+{% if request.args.get('done') %}<span hidden data-timer-clear="written-{{ row.level }}" data-mock-clear="{{ row.level }}"></span>{% endif %}
 <div class="grid g3">
   {% for s in subjects %}
   <section class="card">
@@ -25,10 +25,10 @@
     <label class="small"><input type="checkbox" data-wrong-only> 틀린 문제만</label></div>
   {% for it in items %}
   <div class="wq {{ 'is-ok' if it.ok else 'is-bad' }}" data-ok="{{ 1 if it.ok else 0 }}">
-    <p class="wq-q"><b>{{ loop.index }}.</b> {{ '○' if it.ok else '✕' }} <span class="small muted">{{ S[it.q.subject].name }} · {{ it.q.topic }}</span><br>{{ it.q.q }}</p>
-    <ol class="wq-opts">
+    <p class="wq-q"><b>{{ loop.index }}.</b> {{ '○' if it.ok else '✕' }} <span class="small muted">{{ S[it.q.subject].name }} · {{ it.q.topic }}</span><br>{{ it.q.q|wtext }}</p>
+    <ol class="wq-opts circled">
       {% for o in it.q.options %}
-      <li class="{{ 'right' if loop.index0 == it.q.answer }} {{ 'wrong' if loop.index0 == it.picked and not it.ok }}"><span class="o">{{ o }}</span>{% if loop.index0 == it.picked %} <span class="small muted">← 고른 답</span>{% endif %}</li>
+      <li class="{{ 'right' if loop.index0 == it.q.answer }} {{ 'wrong' if loop.index0 == it.picked and not it.ok }}"><b class="num">{{ '①②③④'[loop.index0] }}</b> <span class="o">{{ o }}</span>{% if loop.index0 == it.picked %} <span class="small muted">← 고른 답</span>{% endif %}</li>
       {% endfor %}
     </ol>
     {% if it.picked is none %}<p class="small bad-text">답을 고르지 않았습니다.</p>{% endif %}

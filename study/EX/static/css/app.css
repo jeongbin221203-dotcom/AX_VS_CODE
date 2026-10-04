@@ -296,7 +296,7 @@ table.sheet td.picked { box-shadow: inset 0 0 0 1px var(--accent-line); }
 @media (max-width: 760px) { .ac, .argtip { left: 0; max-width: 100%; min-width: 0; width: 100%; } }
 
 /* 모의고사 */
-.exam-bar { display: flex; flex-wrap: wrap; gap: 12px 18px; align-items: center; position: sticky; top: 64px; z-index: 10; }
+.exam-bar { display: flex; flex-wrap: wrap; gap: 12px 18px; align-items: center; position: sticky; top: var(--top-h, 64px); z-index: 10; }
 .exam-bar .timer b { font-size: 1.5rem; font-variant-numeric: tabular-nums; font-family: var(--mono); }
 .exam-bar .timer.over b { color: var(--bad); }
 .exam-upload { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-left: auto; }
@@ -308,7 +308,7 @@ table.sheet td.picked { box-shadow: inset 0 0 0 1px var(--accent-line); }
 .exam-items li { display: flex; gap: 8px; padding: 3px 0; }
 .exam-items .num { flex: none; width: 1.3em; color: var(--ink-2); }
 table.sheet-like th { text-align: center; color: var(--ink-3); font-weight: 500; }
-@media (max-width: 760px) { .exam-bar { top: 0; padding: 8px 12px; gap: 8px 12px; } .exam-upload { margin-left: 0; } }
+@media (max-width: 760px) { .exam-bar { padding: 8px 12px; gap: 8px 12px; } .exam-upload { margin-left: 0; } }
 
 /* 실기 실습 */
 .alert.ok-alert { background: var(--ok-soft); border-color: var(--ok); }
@@ -356,3 +356,14 @@ button.choice:disabled { cursor: default; opacity: 1; }
 .ok-text { color: var(--ok); }
 .bad-text { color: var(--bad); }
 .wq-list .result { margin-top: 8px; }
+
+.wq-line { display: block; }
+.wq-table { margin: 6px 0; width: auto; font-weight: 400; }
+.wq-opts.circled { list-style: none; margin-left: 0; }
+.wq-opts .num { font-weight: 600; margin-right: 2px; }
+:root[data-theme="dark"] { color-scheme: dark; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { color-scheme: dark; } }
+
+.exam-items li.sub { list-style: none; padding-left: 1.6em; color: var(--ink-2); }
+.exam-items li.code { list-style: none; }
+.exam-items li.code pre { margin: 4px 0; padding: 8px 10px; background: var(--surface-2); border-radius: 6px; white-space: pre-wrap; }

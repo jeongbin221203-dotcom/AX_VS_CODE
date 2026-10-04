@@ -129,15 +129,27 @@ def build_mock(level, seed=None, avoid=()):
             by_topic.setdefault(q.get('topic'), []).append(q)
         for qs in by_topic.values():
             rnd.shuffle(qs)
-        chosen = []
-        topics = list(by_topic)
-        rnd.shuffle(topics)
-        while len(chosen) < min(PER_SUBJECT, len(pool)):
-            for t in topics:
-                if by_topic[t] and len(chosen) < PER_SUBJECT:
-                    chosen.append(by_topic[t].pop())
+        # 주제마다 문제 은행 크기에 비례해(최대 나머지 방식), 문제가 많은 운영체제·함수 쪽이 더 나오게
+        n = min(PER_SUBJECT, len(pool))
+        want = {t: n * len(qs) / len(pool) for t, qs in by_topic.items()}
+        take = {t: int(w) for t, w in want.items()}
+        for t in sorted(want, key=lambda t: (want[t] - take[t], rnd.random()), reverse=True)[:n - sum(take.values())]:
+            take[t] += 1
+        chosen = [q for t, qs in by_topic.items() for q in qs[:take[t]]]
+        rnd.shuffle(chosen)
         picked += [q['id'] for q in chosen]
     return picked
+
+
+def valid_paper(level, qids):
+    """주소(?q=)로 받은 문제지가 이 급의 실제 구성인지(과목마다 20문항, 겹침 없음)."""
+    if len(set(qids)) != len(qids):
+        return False
+    for subj in LEVELS[level]['subjects']:
+        qs = [get(i) for i in qids if get(i) and get(i)['subject'] == subj]
+        if len(qs) != PER_SUBJECT or any(level not in q['levels'] for q in qs):
+            return False
+    return len(qids) == PER_SUBJECT * len(LEVELS[level]['subjects'])
 
 
 def grade(qids, answers):

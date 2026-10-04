@@ -14,13 +14,13 @@
 <section class="card">
   <div class="top-line"><h2 style="margin:0">모의고사</h2>
     <a class="btn primary" href="{{ url_for('written.mock', level=level) }}">{{ L[level].name }} 모의고사 시작 ({{ L[level].subjects|length * 20 }}문항 · {{ L[level].minutes }}분)</a></div>
-  <p class="small muted">최근에 푼 문제는 되도록 빼고, 과목마다 주제가 고르게 섞이도록 20문항씩 뽑습니다. 답안을 내면 과목별 점수·과락·해설을 보여 줍니다.</p>
+  <p class="small muted">최근에 푼 문제는 되도록 빼고, 과목마다 문제 은행의 주제 비율대로 20문항씩 섞어 뽑습니다. 풀던 문제지는 새로 고쳐도 이어지고, 시간이 다 되면 자동 제출됩니다. 답안을 내면 과목별 점수·과락·해설을 보여 줍니다.</p>
   {% if history %}
   <div class="table-wrap"><table class="t">
     <thead><tr><th>날짜</th><th>급</th><th class="r">평균</th><th>결과</th><th class="r">시간</th><th></th></tr></thead>
     <tbody>{% for r in history %}<tr>
       <td>{{ r.created_at }}</td><td>{{ L[r.level].name }}</td><td class="r">{{ r.average }}</td>
-      <td>{{ '합격' if r.passed else '불합격' }}</td><td class="r">{{ (r.seconds // 60) ~ '분' if r.seconds else '–' }}</td>
+      <td>{{ '합격' if r.passed else '불합격' }}</td><td class="r">{{ ((r.seconds // 60) ~ '분' if r.seconds >= 60 else r.seconds ~ '초') if r.seconds else '–' }}</td>
       <td><a href="{{ url_for('written.result', rid=r.id) }}">결과</a></td></tr>{% endfor %}</tbody>
   </table></div>
   {% endif %}
