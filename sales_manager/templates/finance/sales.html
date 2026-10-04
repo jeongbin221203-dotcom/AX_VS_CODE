@@ -74,10 +74,9 @@
 
   <section class="card">
     <h3>🏦 거래처 일괄 입금 (여러 매출 한 번에 · 선수금)</h3>
-    <form method="post" class="toolbar" data-no-draft
-          onsubmit="this.action='{{ url_for('finance.customer_receipt', cid=0) }}'.replace('/0/', '/' + this.customer_id.value + '/')">
+    <form method="post" class="toolbar" data-no-draft action="{{ url_for('finance.customer_receipt') }}">
       {{ csrf() }}
-      <label class="grow">거래처 {{ pick('customer_id', customers, '', blank='선택하세요', open_only=true) }}</label>
+      <label class="grow">거래처 * {{ pick('customer_id', customers, '', blank='선택하세요', open_only=true, required=true) }}</label>
       <label>입금액 <input type="number" name="amount" min="1" required></label>
       <label>입금일 <input type="date" name="pay_date" value="{{ today().isoformat() }}"></label>
       <label>방법 {{ select('method', pay_methods, '계좌이체') }}</label>
@@ -143,6 +142,7 @@
 
 {% else %}
   <form method="get" class="toolbar" action="{{ page_path() }}">
+    <label class="grow">검색 <input name="q" value="{{ request.args.get('q', '') }}" placeholder="거래처 · 품목 · 메모 · #매출번호"></label>
     <label>시작월 {{ select('from', g.months, ym_from) }}</label>
     <label>종료월 {{ select('to', g.months, ym_to) }}</label>
     <label>상태 {{ select('status', SALE_STATUS + ['취소'], sale_status, blank='전체') }}</label>
@@ -172,7 +172,7 @@
     {% if raw.status != '취소' %}
     <form method="post" action="{{ url_for('finance.sale_update', sid=raw.id) }}" class="toolbar">
       {{ csrf() }}<input type="hidden" name="row_version" value="{{ raw.row_version or 0 }}">
-      <label>수금상태 {{ select('status', SALE_STATUS, raw.status) }}</label>
+      <span class="small" title="수금상태는 입금 내역으로 정해집니다 — 아래 '입금 등록'을 쓰세요">수금상태 <strong>{{ raw.status }}</strong></span>
       <label>공급가액(원) <input type="number" name="amount" min="1" step="1" value="{{ raw.amount|int }}"
              {% if raw.erp_status == '전송완료' %}readonly title="ERP로 전송된 매출은 금액을 바꿀 수 없습니다"{% endif %}></label>
       <label>과세구분 {{ select('tax_type', tax_types, raw.tax_type or '과세') }}</label>
@@ -200,7 +200,7 @@
         {{ csrf() }}
         <label>구분 <select name="kind"><option>반품</option><option>정정</option></select></label>
         <label>반품 수량 (남은 {{ returnable }}) <input type="number" name="qty" min="1" max="{{ returnable }}"></label>
-        <label>정정 단가 (지금 {{ raw.unit_price|won }}) <input type="number" name="new_unit_price" min="0"></label>
+        <label>정정 단가 (지금 {{ unit_now|won }}) <input type="number" name="new_unit_price" min="0"></label>
         <label>일자 <input type="date" name="return_date" value="{{ today().isoformat() }}"></label>
         <label class="grow">사유 * <input name="reason" required placeholder="예) 2개 불량 반품, 계약 단가 인하"></label>
         <button class="btn">등록</button>
@@ -345,9 +345,9 @@
         <label>품목 * <input name="item" value="{{ f.item or '' }}" required></label>
         <label>품목코드 (ERP 자재번호) <input name="item_code" value="{{ f.item_code or '' }}" placeholder="예) SW-ERP-01"></label>
         {{ owner_input('owner_id', f.owner_id) }}
-        <label>수금상태 {{ select('status', SALE_STATUS, f.status) }}</label>
+        <p class="small muted">수금상태는 입금으로 정해집니다 — 등록한 뒤 '입금 등록'에서 받은 돈을 넣으세요.</p>
         <label>수량 <input type="number" name="qty" min="1" step="1" value="{{ f.qty }}"></label>
-        <label>단가(원) <input type="number" name="unit_price" min="0" step="1" value="{{ f.unit_price }}"></label>
+        <label>단가(원) * <input type="number" name="unit_price" min="1" step="1" value="{{ f.unit_price }}" required placeholder="예) 1000000"></label>
         <label>과세구분 {{ select('tax_type', tax_types, f.tax_type or '과세') }}</label>
         {% if entity_opts %}<label>법인 {{ select('entity_id', entity_opts, f.entity_id or '') }}</label>{% endif %}
         <label>통화 {{ select('currency', currencies, f.currency or 'KRW') }}</label>

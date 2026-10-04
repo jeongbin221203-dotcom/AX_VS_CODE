@@ -12,13 +12,13 @@
 </div>
 
 <section class="card">
-  {{ tabs([('mine', '📥 내 결재 대기'), ('requested', '📤 내 요청 현황'), ('history', '🗃️ 결재 이력'), ('finance', '💳 대손 · 거래정지 해제'), ('delegation', '🔁 대결 지정')], tab) }}
+  {{ tabs([('mine', '📥 내 결재 대기 (' ~ mine_cnt ~ ')'), ('requested', '📤 내 요청 현황'), ('history', '🗃️ 결재 이력'), ('finance', '💳 대손 · 거래정지 해제 (' ~ fin_cnt ~ ')'), ('delegation', '🔁 대결 지정')], tab) }}
   {% if tab == 'finance' %}
     <p class="muted small">대손 처리는 금액에 따라 팀장 또는 임원, 거래정지 해제는 팀장 이상이 결재합니다. 요청한 사람은 결재할 수 없습니다.</p>
     {% for r in fin_pending_rows %}
       <form method="post" action="{{ url_for('finance.finance_request_decide', rid=r.id) }}" class="toolbar" data-no-draft>
         {{ csrf() }}
-        <span class="grow small"><strong>{{ r['구분'] }}</strong> · {{ r['거래처'] }}{% if r['매출번호'] %} · 매출 #{{ r['매출번호']|int }}{% endif %}
+        <span class="grow small"><strong>{{ r['구분'] }}</strong> · <a href="{{ url_for('crm.customers', id=r['customer_id']) }}">{{ r['거래처'] }}</a>{% if r['매출번호'] %} · <a href="{{ url_for('finance.sales', sid=r['매출번호']|int) }}">매출 #{{ r['매출번호']|int }}</a>{% endif %}
           · {{ r['금액']|won }} · {{ r['사유'] }} · 요청 {{ r['요청자'] }} ({{ r['요청일시'] }})</span>
         <input name="comment" placeholder="의견 (반려 시 필수)">
         <button class="btn btn-sm btn-primary" name="decision" value="approve">승인</button>
@@ -72,7 +72,8 @@
       </form>
       {% if picked %}
         <div class="alert alert-info">요청자 <strong>{{ picked['요청자'] }}</strong> · 요청사유: {{ picked['사유'] or '(미기재)' }}<br>
-          결재선: {{ picked['결재선'] }} · 내 차례: {{ picked['내 차례'] }}</div>
+          결재선: {{ picked['결재선'] }} · 내 차례: {{ picked['내 차례'] }}
+          {% if picked['deal_id'] %}<br><a href="{{ url_for('crm.deals', id=picked['deal_id']|int, tab='edit') }}">영업기회 열기</a> · <a href="{{ url_for('catalog.quotes', deal_id=picked['deal_id']|int) }}">이 기회의 견적</a>{% endif %}</div>
         <form method="post" action="{{ url_for('finance.approval_decide', aid=pick) }}" class="form">
           {{ csrf() }}
           <label>결재 의견 <textarea name="comment" rows="3" placeholder="반려 시 필수"></textarea></label>

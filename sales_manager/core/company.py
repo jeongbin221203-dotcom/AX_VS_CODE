@@ -17,6 +17,7 @@ import os
 import re
 import threading
 import time
+from datetime import datetime
 from typing import Any
 
 from . import sales_db as db
@@ -48,6 +49,7 @@ DEFAULTS: dict[str, Any] = {
     "auto_block_overdue_days": 0,          # 결제기일이 N일 넘게 지난 미수가 있으면 자동 거래정지 (0 = 끔)
     "auto_block_over_credit": False,       # 미수가 여신한도를 넘으면 자동 거래정지
     "auto_block_exempt_days": 30,          # 해제 결재 뒤 다시 자동 정지하지 않는 기간
+    "holidays": [],                        # 공휴일·대체공휴일 (YYYY-MM-DD) — 세금계산서 발급 기한이 이 날이면 다음 영업일로
     # 운영 상태 (화면·명령으로 켜고 끔 — set_state, 서버 여러 대가 15초 안에 함께)
     "maintenance": {"on": False},          # 점검(읽기 전용) 모드 {on, reason, by, at}
     "sso_outage_until": "",                # SSO 장애 모드 끝나는 시각 (그때까지 비밀번호 계정 로그인 허용)
@@ -71,7 +73,7 @@ LABELS = {
     "backup_keep_monthly": "월말 백업 보관(개월)", "backup_keep_yearly": "연말 백업 보관(년)",
     "fiscal_start_month": "회계연도 시작 월", "writeoff_exec_threshold": "대손 임원결재 기준(원)",
     "auto_block_overdue_days": "자동 거래정지 연체일", "auto_block_over_credit": "여신 초과 자동 거래정지",
-    "auto_block_exempt_days": "해제 후 재정지 유예(일)", **{k: v[3] for k, v in CODE_LISTS.items()},
+    "auto_block_exempt_days": "해제 후 재정지 유예(일)", "holidays": "공휴일", **{k: v[3] for k, v in CODE_LISTS.items()},
 }
 
 _lock = threading.Lock()
@@ -189,6 +191,16 @@ def validate(changes: dict) -> dict:
                         ("auto_block_overdue_days", 0, 3650), ("auto_block_exempt_days", 0, 365)):
         if key in changes:
             out[key] = _number(changes[key], LABELS[key], lo, hi)
+    if "holidays" in changes:
+        days = set()
+        for part in re.split(r"[\s,]+", str(changes["holidays"] or "")):
+            if not part:
+                continue
+            try:
+                days.add(datetime.strptime(part.replace(".", "-").replace("/", "-"), "%Y-%m-%d").date().isoformat())
+            except ValueError:
+                raise ValueError(f"공휴일 '{part}' 은(는) 날짜(YYYY-MM-DD)가 아닙니다.") from None
+        out["holidays"] = sorted(days)
     if "auto_block_over_credit" in changes:
         out["auto_block_over_credit"] = changes["auto_block_over_credit"] in (True, 1, "1", "on", "true")
     names = list(cur["stage_names"])

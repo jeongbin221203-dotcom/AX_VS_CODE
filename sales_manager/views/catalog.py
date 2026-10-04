@@ -118,11 +118,12 @@ def _visible_quote(qid: int) -> dict:
 def quotes():
     status = a_str("status")
     ready = a_str("ready") == "1"                    # 수주 전: 수락했지만 아직 수주·매출로 넘어가지 않은 견적
-    df = qt.list_quotes("수락" if ready else status, owner_id=g.owner_filter)
+    df = qt.list_quotes("수락" if ready else status, customer_id=a_int("customer_id") or None, owner_id=g.owner_filter,
+                        deal_id=a_int("deal_id") or None, keyword=a_str("q"))
     if ready and not df.empty:
-        done = {int(r["quote_id"]) for r in database.rows(
-            "SELECT quote_id FROM sales_orders WHERE quote_id IS NOT NULL "
-            "UNION SELECT quote_id FROM sales WHERE quote_id IS NOT NULL")}
+        done = {int(r["quote_id"]) for r in database.rows(          # 취소한 수주·매출은 '넘어간 것'으로 보지 않는다
+            "SELECT quote_id FROM sales_orders WHERE quote_id IS NOT NULL AND status <> '취소' "
+            "UNION SELECT quote_id FROM sales WHERE quote_id IS NOT NULL AND status <> '취소'")}
         df = df[~df["id"].isin(done)]
     if request.args.get("export") == "quotes":
         return csv_response(df.drop(columns=["id", "owner_id", "customer_id"], errors="ignore"), "견적목록.csv")

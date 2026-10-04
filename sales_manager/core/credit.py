@@ -101,7 +101,8 @@ def pending_for(user: dict) -> pd.DataFrame:
     rows = db._df("SELECT r.*, c.name AS customer_name FROM fin_requests r JOIN customers c ON c.id = r.customer_id "
                   "WHERE r.status='대기' ORDER BY r.id").to_dict("records")
     mine = [r for r in rows if any(int(u["id"]) == int(user["id"]) for u in _approvers(r))]
-    return pd.DataFrame([{"id": r["id"], "구분": r["kind"], "거래처": r["customer_name"], "매출번호": r["sale_id"],
+    return pd.DataFrame([{"id": r["id"], "구분": r["kind"], "거래처": r["customer_name"], "customer_id": r["customer_id"],
+                          "매출번호": r["sale_id"],
                           "금액": int(r["amount"]), "사유": r["reason"], "요청자": r["requested_by"],
                           "요청일시": r["requested_at"], "필요권한": db.ROLE_LABEL.get(r["required_role"])} for r in mine])
 

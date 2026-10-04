@@ -1280,19 +1280,6 @@ def _sync_payment_rows(sale_id: int, before: int, after: int, source: str, db_pa
                       "수금상태 변경으로 맞춘 입금액", current_actor(), current_actor_id(), _now()))
 
 
-def update_sale_status(sale_id: int, status: str, db_path: str | None = None) -> None:
-    if status not in SALE_STATUS:
-        raise ValueError(f"수금상태 값이 올바르지 않습니다: {status}")
-    prev = get_sale(sale_id, db_path)
-    check_record_scope(prev, "매출")
-    if prev["status"] == SALE_CANCELLED:
-        raise ValueError("취소된 매출입니다.")
-    with get_conn(db_path) as conn:
-        conn.execute("UPDATE sales SET status=?, row_version=COALESCE(row_version,0)+1 WHERE id=?",
-                     (status, sale_id))
-    audit("수금상태변경", "매출", sale_id, {"변경": {"status": [prev["status"], status]}}, db_path)
-
-
 def cancel_sale(sale_id: int, reason: str, db_path: str | None = None, actor: dict | None = None) -> None:
     """매출 취소. 기록은 지우지 않고 '취소' 상태로 남긴다(회계·감사 추적).
 

@@ -136,7 +136,7 @@ def load_context():
     g.user = None
     db.set_ip(client_ip())
     company.refresh()                                 # 회사 설정 (서버마다 15초 간격으로 다시 읽음)
-    if request.endpoint == "static" or request.blueprint == "api":     # API 는 Bearer 키로 따로 인증
+    if request.endpoint == "static" or request.blueprint == "api" or request.path.startswith("/api/"):   # API 는 Bearer 키로 따로 인증 (없는 API 주소도 로그인 화면이 아니라 JSON 404)
         return None
 
     uid = session.get("user_id")
@@ -531,6 +531,12 @@ def register_template_helpers(app: Flask) -> None:
     )
 
     def error_page(code: int, title: str, message: str):
+        if request.path.startswith("/api/"):         # API 는 HTML 이 아니라 JSON 오류
+            from flask import jsonify
+            names = {400: "bad_request", 403: "forbidden", 404: "not_found", 405: "method_not_allowed",
+                     413: "too_large", 500: "server_error"}
+            return jsonify({"error": {"code": names.get(code, str(code)), "message": message,
+                                      "request_id": getattr(g, "request_id", None)}}), code
         return render_template("error.html", code=code, message=message, active=None,
                                title=title), code
 
@@ -572,6 +578,10 @@ def register_template_helpers(app: Flask) -> None:
     def not_found(err):
         return error_page(404, "없는 화면", "요청한 화면이 없습니다.")
 
+    @app.errorhandler(405)
+    def not_allowed(err):
+        return error_page(405, "허용되지 않는 요청", "이 주소는 그 방식(GET/POST 등)으로 부를 수 없습니다.")
+
     @app.errorhandler(413)
     def too_large(err):
         return error_page(413, "파일이 너무 큼", "업로드 파일이 허용 크기(20MB)를 넘습니다.")
@@ -579,4 +589,5 @@ def register_template_helpers(app: Flask) -> None:
     @app.errorhandler(500)
     def server_error(err):
         # 예외 내용은 로그(data/logs/app.log)에만 남기고 화면에는 드러내지 않는다
-        return error_page(500, "처리 중 오류", "처리 중 오류가 발생했습니다. 같은 문제가 반복되면 관리자에게 알려 주세요.")
+        return error_page(500, "처리 중 오류", "처리 중 오류가 발생했습니다. 같은 문제가 반복되면 관리자에게 아래 문의 번호와 시각을 "
+                          f"알려 주세요. (문의 번호 {getattr(g, 'request_id', '-')} · {datetime.now():%Y-%m-%d %H:%M:%S})")

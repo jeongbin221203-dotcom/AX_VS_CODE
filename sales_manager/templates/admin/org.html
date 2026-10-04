@@ -88,9 +88,9 @@
       {% endif %}
     {% endif %}
   {% elif tab == 'transfer' %}
-    <p class="muted">퇴사·팀 이동 시 거래처와 진행 중 영업기회를 다른 담당자에게 넘깁니다.
+    <p class="muted">퇴사·팀 이동 시 거래처 · 진행 중 영업기회 · 진행 중 견적·수주를 다른 담당자에게 넘깁니다.
       매출·활동·목표는 실적 귀속을 지키기 위해 원래 담당자에게 남깁니다. 이관 내역은 감사로그에 기록됩니다.</p>
-    <form method="post" action="{{ url_for('admin.user_transfer') }}" class="form">
+    <form method="post" action="{{ url_for('admin.user_transfer') }}" class="form" data-confirm="담당자 이관 — 넘긴 뒤 되돌리려면 반대로 다시 이관해야 합니다. 계속할까요?">
       {{ csrf() }}
       <div class="form-grid g2">
         <label>넘겨주는 담당자 {{ select('from_id', all_users, '') }}</label>

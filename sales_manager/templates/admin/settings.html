@@ -42,6 +42,8 @@
       <input type="hidden" name="auto_block_present" value="1">
       <label class="check"><input type="checkbox" name="auto_block_over_credit" value="1" {{ 'checked' if v.auto_block_over_credit }}> 미수가 여신한도를 넘으면 자동 거래정지</label>
     </div>
+    <label>공휴일·대체공휴일 (세금계산서 발급 기한 10일이 토·일·공휴일이면 다음 영업일까지 — 한 줄에 하나, 예: 2026-10-12)
+      <textarea name="holidays" rows="3">{{ (v.holidays or []) | join('\n') }}</textarea></label>
     <button class="btn btn-primary">💾 저장</button>
   </form>
   {% if v.pii_retention_years %}

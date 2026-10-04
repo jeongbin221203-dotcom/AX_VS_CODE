@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import io
 import re
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from typing import Any, Callable, Optional
 
 import pandas as pd
@@ -42,11 +42,19 @@ def parse_date(value: Any, field: str, required: bool = False) -> Optional[str]:
         return value.strftime("%Y-%m-%d")
     if isinstance(value, date):
         return value.strftime("%Y-%m-%d")
-    text = raw.replace(".", "-").replace("/", "-").split(" ")[0]
+    text = raw.replace(".", "-").replace("/", "-").split(" ")[0].strip("-")
+    if re.fullmatch(r"\d{5}(\.0)?", raw):                      # 엑셀 날짜 일련번호 (46299 = 2026-10-04)
+        return (date(1899, 12, 30) + timedelta(days=int(float(raw)))).strftime("%Y-%m-%d")
     if re.fullmatch(r"\d{8}", text):
         text = f"{text[:4]}-{text[4:6]}-{text[6:]}"
     try:
         parts = [int(p) for p in text.split("-")[:3]]
+        if len(parts) < 3:
+            raise ValueError
+        if parts[0] < 100:                                       # '26.10.04' → 2026-10-04
+            parts[0] += 2000
+        if not 2000 <= parts[0] <= 2100:
+            raise ValueError
         return date(parts[0], parts[1], parts[2]).strftime("%Y-%m-%d")
     except (ValueError, IndexError) as exc:
         raise ValueError(f"{field}: 날짜 형식이 아닙니다 ('{raw}') → 예: 2026-01-05") from exc
@@ -264,10 +272,16 @@ def _owner(row: pd.Series, ctx: dict) -> dict:
     return {"owner_id": found[0], "owner": found[1]}
 
 
+CUSTOMER_COLUMNS = {"grade": "등급", "industry": "업종", "biz_no": "사업자번호", "manager": "고객담당자",
+                    "phone": "연락처", "email": "이메일", "address": "주소", "credit_limit": "여신한도",
+                    "payment_terms": "결제조건일", "erp_code": "ERP코드", "memo": "메모"}
+
+
 def _row_customer(row: pd.Series, ctx: dict) -> tuple[str, dict]:
     name = _clean(row.get("거래처명"))
     if not name:
         raise ValueError("거래처명: 필수 항목입니다")
+    blank = [f for f, col in CUSTOMER_COLUMNS.items() if not _clean(row.get(col))]
     data = {
         "name": name,
         "grade": parse_choice(row.get("등급"), "등급", db.GRADES, "B"),
@@ -283,6 +297,7 @@ def _row_customer(row: pd.Series, ctx: dict) -> tuple[str, dict]:
         "memo": _clean(row.get("메모")) or None,
         "status": "활성",
         **_owner(row, ctx),
+        "_blank": blank,
     }
     return data["owner"], data
 
@@ -427,11 +442,16 @@ def import_rows(entity: str, df: pd.DataFrame, user: dict, dry_run: bool = True,
     for excel_row, data in records:
         try:
             if entity == "거래처":
-                exists = db._one("SELECT id, owner_id FROM customers WHERE name=?", [data["name"]], db_path)
+                blank = data.pop("_blank", [])
+                exists = _existing_customer(data, ctx, db_path)
                 if exists:
                     if on_duplicate == "건너뛰기" or not db.in_scope(exists["owner_id"]):
                         skipped += 1
                         continue
+                    # 덮어쓰기: 파일에서 비어 있거나 없는 열은 기존 값 그대로 (두 열만 올려도 나머지가 지워지지 않게)
+                    for field in blank:
+                        data[field] = exists.get(field)
+                    data["name"] = exists["name"]           # 다른 이름으로 맞춘 경우 정식 이름 유지
                     data["id"] = int(exists["id"])
                 db.upsert_customer(data, db_path)
             elif entity == "영업기회":
@@ -440,6 +460,10 @@ def import_rows(entity: str, df: pd.DataFrame, user: dict, dry_run: bool = True,
             elif entity == "영업활동":
                 db.add_activity(data, db_path)
             elif entity == "매출":
+                if _sale_exists(data, db_path):
+                    skipped += 1                        # 같은 파일을 두 번 올려도 매출이 두 번 생기지 않게
+                    errors.append((excel_row, "건너뜀: 같은 거래처·일자·품목·수량·금액의 매출이 이미 있습니다"))
+                    continue
                 db.upsert_sale(data, db_path)
             else:
                 db.upsert_target(data["yyyymm"], data["owner_id"], data["amount"], db_path)
@@ -452,6 +476,27 @@ def import_rows(entity: str, df: pd.DataFrame, user: dict, dry_run: bool = True,
               "단계검증우회": migrate}, db_path)
     return {"total": len(df), "ok": inserted, "skipped": skipped,
             "errors": errors, "preview": preview}
+
+
+def _existing_customer(data: dict, ctx: dict, db_path: str | None) -> Optional[dict]:
+    from . import customer_names as cn
+    if "_name_index" not in ctx:
+        ctx["_name_index"] = cn.Index(db_path)
+    cid, _how = ctx["_name_index"].resolve(data["name"])
+    if cid is None and db.biz_digits(data.get("biz_no")):
+        row = db._one("SELECT id FROM customers WHERE biz_no_norm=? AND merged_into IS NULL",
+                      [db.biz_digits(data.get("biz_no"))], db_path)
+        cid = row["id"] if row else None
+    return db.get_customer(int(cid), db_path) if cid else None
+
+
+def _sale_exists(data: dict, db_path: str | None) -> bool:
+    qty = int(data.get("qty") or 0)
+    amount = int(data.get("amount") or qty * int(data.get("unit_price") or 0))
+    return bool(db._one("SELECT id FROM sales WHERE customer_id=? AND sale_date=? AND item=? AND qty=? AND amount=? "
+                        "AND status <> ? LIMIT 1",
+                        [int(data["customer_id"]), data.get("sale_date"), str(data.get("item") or "").strip(), qty,
+                         amount, db.SALE_CANCELLED], db_path))
 
 
 def errors_to_df(errors: list[tuple[int, str]]) -> pd.DataFrame:

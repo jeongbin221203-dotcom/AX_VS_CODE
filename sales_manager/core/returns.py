@@ -32,16 +32,33 @@ def returnable_qty(sale: dict) -> int:
     return int(sale["qty"]) + int(done)          # 반품 행 수량은 음수
 
 
-def _insert(orig: dict, kind: str, qty: int, unit_price: int, reason: str, day: str) -> int:
-    """원매출의 거래처·담당자·품목·과세·법인·통화를 물려받은 반품/정정 행."""
-    amount = qty * unit_price
-    vat = int(amount * db.VAT_RATE[orig.get("tax_type") or "과세"]) if amount >= 0 else \
-        -int(-amount * db.VAT_RATE[orig.get("tax_type") or "과세"])
+def _due_from_terms(orig: dict, day: str) -> str:
+    from datetime import timedelta
+    terms = int((db.get_customer(int(orig["customer_id"])) or {}).get("payment_terms") or 30)
+    return (date.fromisoformat(day) + timedelta(days=terms)).isoformat()
+
+
+def net_totals(orig: dict) -> tuple[int, int]:
+    """원매출 + 취소되지 않은 반품·정정 행의 순 공급가액·부가세."""
+    row = db._one("SELECT COALESCE(SUM(amount), 0) AS a, COALESCE(SUM(vat_amount), 0) AS v FROM sales "
+                  "WHERE original_sale_id=? AND status <> ?", [int(orig["id"]), db.SALE_CANCELLED]) or {}
+    return int(orig["amount"]) + int(row.get("a") or 0), int(orig.get("vat_amount") or 0) + int(row.get("v") or 0)
+
+
+def _insert(orig: dict, kind: str, qty: int, unit_price: int, reason: str, day: str,
+            amount: Optional[int] = None) -> int:
+    """원매출의 거래처·담당자·품목·과세·법인·통화를 물려받은 반품/정정 행.
+    부가세는 '바뀐 뒤 순 공급가액의 부가세 − 지금까지 부가세' → 나눠서 반품해도 순 부가세 = 순 공급가액 × 10% (절사)."""
+    amount = qty * unit_price if amount is None else int(amount)
+    net_amount, net_vat = net_totals(orig)
+    vat = db.vat_for(net_amount + amount, orig.get("tax_type") or "과세") - net_vat
     total = amount + vat
     fx = float(orig.get("fx_rate") or 1)
     record = {f: orig.get(f) for f in db.SALE_FIELDS}
     record.update(sale_date=day, qty=qty, unit_price=unit_price, amount=amount, vat_amount=vat, total_amount=total,
-                  memo=f"[{kind}] {reason}", due_date=day,
+                  memo=f"[{kind}] {reason}",
+                  # 단가를 올린 정정(청구 추가)은 원매출 결제기일, 지났으면 거래처 결제조건만큼 뒤 (등록일 당일 연체 방지)
+                  due_date=day if amount < 0 else max(str(orig.get("due_date") or day), _due_from_terms(orig, day)),
                   status="입금완료" if total < 0 else "입금대기", paid_amount=0,
                   foreign_amount=round(amount / fx, 2) if (orig.get("currency") or "KRW") != "KRW" else None)
     cols = [*db.SALE_FIELDS, "sale_kind", "original_sale_id", "erp_status", "created_by_id", "created_at"]
@@ -104,7 +121,10 @@ def create(sale_id: int, kind: str, reason: str, qty: Optional[int] = None, new_
             can = returnable_qty(orig)
             if not 1 <= qty <= can:
                 raise ValueError(f"반품 수량은 1 ~ {can} 사이여야 합니다 (원수량 {orig['qty']}, 이미 반품 {int(orig['qty']) - can}).")
-            sid = _insert(orig, "반품", -qty, unit_now, reason.strip(), day)
+            # 남은 수량을 모두 반품하면 남은 공급가액 전액 (단가 반올림·정정으로 생긴 끝전이 채권에 남지 않게)
+            rest = net_totals(orig)[0] if qty == can else None
+            sid = _insert(orig, "반품", -qty, unit_now, reason.strip(), day,
+                          amount=-rest if rest is not None else None)
         else:
             if new_unit_price is None or int(new_unit_price) < 0:
                 raise ValueError("정정할 단가를 입력하세요.")

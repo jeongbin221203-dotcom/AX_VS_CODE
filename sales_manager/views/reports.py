@@ -25,7 +25,7 @@ def dashboard():
 
     def compute() -> dict:
         top = db.top_customers(ym, 10)
-        aging = ent.ar_aging()
+        aging = ent.ar_aging(owner_id=owner)
         return {
             "trend": db.monthly_trend(12, owner), "funnel": db.stage_funnel(owner), "perf": db.owner_performance(ym),
             "top_all": top.empty, "top": db.top_customers("", 10) if top.empty else top,
@@ -47,8 +47,14 @@ def dashboard():
     manager = ent.has_role(g.user, "MANAGER")
     erp_failed = erp.list_outbox("실패", 50) if manager else pd.DataFrame()
 
+    if owner:
+        scope_label = next((o["label"] for o in g.assignable if int(o["id"]) == int(owner)), "담당자")
+    elif g.user.get("role") == "REP":
+        scope_label = "내 담당"
+    else:
+        scope_label = "전사" if g.user.get("role") in ("EXEC", "ADMIN", "SUPPORT") else "우리 팀"
     return render_page(
-        "reports/dashboard.html", "dashboard",
+        "reports/dashboard.html", "dashboard", scope_label=scope_label,
         k=d["k"], fc=d["fc"],
         trend_chart=chart(trend, "월", ["매출", "목표"]),
         trend=Table(trend, money=["매출", "목표"]),

@@ -8,6 +8,7 @@
 from __future__ import annotations
 
 import time
+import re
 from datetime import date
 from typing import Any
 
@@ -177,6 +178,10 @@ def sales():
                       ("customer_id", "customer_id = ?")):
         if request.args.get(arg):
             value = request.args[arg]
+            if arg in ("from", "to") and not re.fullmatch(r"\d{4}-\d{2}(-\d{2})?", value):
+                raise ApiError(400, "bad_request", f"{arg} 는 YYYY-MM-DD 또는 YYYY-MM 형식이어야 합니다.")
+            if arg == "customer_id" and not value.isdigit():
+                raise ApiError(400, "bad_request", "customer_id 는 정수여야 합니다.")
             if arg == "to" and len(value) == 7:
                 value += "-31"
             sql += f" AND {cond}"

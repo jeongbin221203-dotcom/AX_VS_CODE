@@ -21,7 +21,7 @@
     결재·연체 알림 메일은 보내지 않고 🔔 알림에만 남깁니다.</p>
 </details>
 {% endif %}
-<p class="subtitle">{{ g.ym }} · {{ g.owner_filter or '전사' }}</p>
+<p class="subtitle">{{ g.ym }} · {{ scope_label }}</p>
 {% if empty %}
 <div class="alert alert-info">아직 거래처·매출이 없습니다. 거래처와 영업기회를 등록하거나{% if g.user.role == 'ADMIN' %}
   <a href="{{ url_for('admin.data') }}">데이터 관리</a>에서 샘플 데이터를 만들어 보세요{% endif %}.</div>

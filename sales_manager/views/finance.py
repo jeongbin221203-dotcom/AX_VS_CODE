@@ -19,7 +19,7 @@ from core import sales_db as db
 
 from .crm import deal_choices, visible_customer, visible_deal
 from .helpers import (BIG_SELECT, xlsx_response, Table, a_int, a_str, chart, csv_response, f_int, f_owner, f_str,
-                      render_page, won)
+                      render_page, role_required, won)
 
 bp = Blueprint("finance", __name__)
 
@@ -52,6 +52,11 @@ def _sales_page(form: dict | None = None, status: int = 200):
     # 탭마다 필요한 것만 계산한다 (매출 10만 건이면 채권·여신을 매번 다 계산하는 것만으로 수 초)
     need_sales = tab not in ("ar", "credit", "ledger", "close") or export == "sales"
     df = db.list_sales(ym_from=ym_from, ym_to=ym_to, owner_id=g.owner_filter, status=sale_status)         if need_sales else pd.DataFrame(columns=["id", "매출일", "공급가액", "합계", "입금액", "수금상태"])
+    keyword = a_str("q").strip()
+    if keyword and not df.empty:                  # 거래처 · 품목 · 메모 · 매출번호로 찾기
+        text = (df["거래처"].astype(str) + " " + df["품목"].astype(str) + " " + df["메모"].fillna("").astype(str)
+                + " #" + df["id"].astype(str))
+        df = df[text.str.contains(keyword, case=False, regex=False)]
     bucket = a_str("bucket")
     aging = ent.ar_aging() if tab == "ar" or export == "ar" else pd.DataFrame()
     aging_view = aging if not bucket or aging.empty else aging[aging["연체구간"] == bucket]
@@ -108,7 +113,7 @@ def _sales_page(form: dict | None = None, status: int = 200):
     overdue = summary[summary["연체구간"] != "정상"]
     ar_overdue = int(overdue["미수금"].sum()) if not summary.empty else 0
 
-    base = {"sale_date": date.today().isoformat(), "qty": 1, "unit_price": 1_000_000,
+    base = {"sale_date": date.today().isoformat(), "qty": 1, "unit_price": "",
             "owner_id": g.user["id"], "status": db.SALE_STATUS[0]}
     if form:
         base.update(form)
@@ -133,6 +138,7 @@ def _sales_page(form: dict | None = None, status: int = 200):
         payments=ent.list_payments(edit_id) if edit_id and edit_row else [], **extra,
         linked=Table(rtn.linked(edit_id), money=["단가", "공급가액", "부가세", "합계"], drop=["id"]) if edit_row else None,
         returnable=rtn.returnable_qty(edit_row["raw"]) if edit_row else 0,
+        unit_now=rtn.current_unit_price(edit_row["raw"]) if edit_row else 0,
         advance_balance=adv.balance(int(edit_row["raw"]["customer_id"])) if edit_row else 0,
         **_advances(tab),
         # 채권
@@ -178,22 +184,23 @@ def sale_add():
             raise ValueError("수량은 1 이상, 단가는 0 이상이어야 합니다.")
         if (f_str("currency") or "KRW") != "KRW" and not f_str("foreign_unit_price"):
             raise ValueError("외화 매출은 외화 단가를 입력하세요.")
-        db.upsert_sale({"customer_id": cid, "deal_id": deal_id,
+        new_id = db.upsert_sale({"customer_id": cid, "deal_id": deal_id,
                         "sale_date": f_str("sale_date") or None, "item": f_str("item"),
                         "item_code": f_str("item_code"), "product_id": f_int("product_id") or None,
                         "tax_type": f_str("tax_type") or "과세",
                         "entity_id": f_str("entity_id") or None, "currency": f_str("currency") or "KRW",
                         "fx_rate": f_str("fx_rate") or None, "foreign_unit_price": f_str("foreign_unit_price") or None,
                         "qty": qty, "unit_price": unit_price, "amount": qty * unit_price,
-                        "owner_id": f_owner(), "status": f_str("status") or db.SALE_STATUS[0],
+                        "owner_id": f_owner(), "status": db.SALE_STATUS[0],   # 수금상태는 입금으로만 (선택으로 입금이 생기지 않게)
                         "memo": f_str("memo")})
     except ValueError as exc:
         flash(str(exc), "error")
         return _sales_page(form=dict(request.form), status=400)
     supply = qty * unit_price
     total = supply + db.vat_for(supply, f_str("tax_type") or "과세")
-    flash(f"매출 {won(supply)}(부가세 포함 {won(total)})을 등록했습니다. ERP 전송 대기열에 올라갔습니다.", "success")
-    return redirect(url_for("finance.sales"))
+    flash(f"매출 {won(supply)}(부가세 포함 {won(total)})을 등록했습니다. ERP 전송 대기열에 올라갔습니다. "
+          f"이어서 증빙·입금을 등록하세요.", "success")
+    return redirect(url_for("finance.sales", sid=new_id) + "#sale-edit")      # 방금 만든 매출을 바로 연다
 
 
 @bp.route("/sales/<int:sid>/update", methods=["POST"])
@@ -212,7 +219,7 @@ def sale_update(sid: int):
                         "row_version": f_str("row_version") or None,
                         "product_id": row.get("product_id"), "quote_id": row.get("quote_id"),
                         "tax_type": f_str("tax_type") or row.get("tax_type") or "과세",
-                        "status": f_str("status"), "memo": row["memo"], "due_date": row["due_date"]})
+                        "status": row["status"], "memo": row["memo"], "due_date": row["due_date"]})
         flash("저장했습니다.", "success")
     except ValueError as exc:
         flash(str(exc), "error")
@@ -292,9 +299,14 @@ def sale_apply_advance(sid: int):
     return redirect(url_for("finance.sales", sid=sid))
 
 
+@bp.route("/customers/receipt", methods=["POST"])
 @bp.route("/customers/<int:cid>/receipt", methods=["POST"])
-def customer_receipt(cid: int):
+def customer_receipt(cid: int = 0):
     """거래처 일괄 입금 — 미수 매출에 결제기일 순으로 나눠 넣고 남으면 선수금."""
+    cid = cid or f_int("customer_id")
+    if not cid:
+        flash("거래처를 고르세요.", "error")
+        return redirect(url_for("finance.sales", tab="ar"))
     visible_customer(cid)
     try:
         r = adv.receive(cid, f_int("amount"), f_str("pay_date") or None, f_str("method") or "계좌이체",
@@ -413,7 +425,7 @@ def targets():
     fy_summary = fiscal.summary(fy)
     money_cols = [c for c in fy_summary.columns if c not in ("담당자", "달성률(%)")]
     return render_page(
-        "finance/targets.html", "targets",
+        "finance/targets.html", "targets", can_edit=ent.has_role(g.user, "MANAGER"),
         fy=fy, fy_label=fiscal.label(fy), fy_options=[(y, fiscal.label(y)) for y in range(fy - 3, fy + 2)],
         fy_table=Table(fy_summary, money=money_cols), fy_months=fiscal.months(fy),
         rows=[(o["id"], o["label"], target_map.get(o["id"], 0)) for o in g.assignable],
@@ -427,6 +439,7 @@ def targets():
 
 
 @bp.route("/targets/distribute", methods=["POST"])
+@role_required("MANAGER")          # 목표는 팀장 이상이 정한다 (영업사원이 자기 달성률을 바꾸지 못하게)
 def targets_distribute():
     from core import fiscal
     fy, period = f_int("fy"), f_str("period")
@@ -440,6 +453,7 @@ def targets_distribute():
 
 
 @bp.route("/targets/save", methods=["POST"])
+@role_required("MANAGER")          # 목표는 팀장 이상이 정한다 (영업사원이 자기 달성률을 바꾸지 못하게)
 def targets_save():
     ids = request.form.getlist("owner_id")
     amounts = request.form.getlist("amount")
@@ -470,6 +484,8 @@ def approvals():
     requested = ent.list_approvals(requested_by_id=user["id"])
     hist_status = a_str("status")
     hist = ent.list_approvals(hist_status) if ent.has_role(user, "MANAGER") else requested
+    if hist_status and not ent.has_role(user, "MANAGER") and not hist.empty and "상태" in hist.columns:
+        hist = hist[hist["상태"] == hist_status]          # 영업사원도 상태로 거르기
     hidden = ["id", "deal_id", "requested_by_id"]
     if request.args.get("export") == "history":
         return csv_response(hist.drop(columns=hidden, errors="ignore"), "결재이력.csv")
@@ -479,11 +495,14 @@ def approvals():
     pick = pick if pick in ids else (ids[0] if ids else None)
     picked = mine[mine["id"] == pick].iloc[0].to_dict() if pick else None
     is_admin = ent.has_role(user, "ADMIN")
+    fin_rows = credit.pending_for(user)
+    # 첫 탭: 할인 결재가 없고 대손·거래정지 해제만 있으면 그 탭을 연다 (사이드바 '결재 대기' 숫자와 같은 화면)
+    default_tab = "finance" if mine.empty and not fin_rows.empty else "mine"
     delegations = ent.list_delegations(None if is_admin else int(user["id"]))
     users = ent.list_users(active_only=True)
     return render_page(
-        "finance/approvals.html", "approvals", fin_pending=Table(credit.pending_for(user), money=["금액"]), fin_pending_rows=credit.pending_for(user).to_dict("records"), fin_history=Table(credit.history(), money=["금액"], drop=["id"]), tab=request.args.get("tab", "mine"),
-        mine_cnt=len(mine), requested_cnt=len(requested),
+        "finance/approvals.html", "approvals", fin_pending=Table(fin_rows, money=["금액"], drop=["customer_id"]), fin_pending_rows=fin_rows.to_dict("records"), fin_history=Table(credit.history(), money=["금액"], drop=["id"]), tab=request.args.get("tab", default_tab),
+        fin_cnt=len(fin_rows), mine_cnt=len(mine), requested_cnt=len(requested),
         mine_total=int(mine["제안가"].sum()) if not mine.empty else 0,
         mine=Table(mine, money=["정가", "제안가"], drop=hidden,
                    link=("finance.approvals", "id", "aid")),

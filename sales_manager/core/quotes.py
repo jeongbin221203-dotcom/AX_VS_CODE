@@ -87,7 +87,7 @@ def effective_status(q: dict) -> str:
 
 
 def list_quotes(status: str = "", customer_id: Optional[int] = None, owner_id: Optional[int] = None,
-                include_superseded: bool = False) -> pd.DataFrame:
+                include_superseded: bool = False, deal_id: Optional[int] = None, keyword: str = "") -> pd.DataFrame:
     sql = ("SELECT q.id, q.quote_no AS 견적번호, q.revision AS 판, c.name AS 거래처, q.title AS 건명, "
            "q.issue_date AS 작성일, q.valid_until AS 유효기한, q.status AS 상태, q.supply_amount AS 공급가액, "
            "q.vat_amount AS 부가세, q.total_amount AS 합계, q.discount_rate AS 할인율, q.owner AS 담당자, "
@@ -105,6 +105,13 @@ def list_quotes(status: str = "", customer_id: Optional[int] = None, owner_id: O
     if owner_id:
         sql += " AND q.owner_id = ?"
         params.append(int(owner_id))
+    if deal_id:
+        sql += " AND q.deal_id = ?"
+        params.append(int(deal_id))
+    if keyword.strip():                       # 견적번호 · 거래처 · 건명 · 영업기회
+        like = f"%{keyword.strip()}%"
+        sql += " AND (q.quote_no LIKE ? OR c.name LIKE ? OR q.title LIKE ? OR d.title LIKE ?)"
+        params += [like] * 4
     sc, sp = db._scope_clause("q")
     df = db._df(sql + sc + " ORDER BY q.id DESC", params + sp)
     if not df.empty:
@@ -127,6 +134,8 @@ def get_quote(quote_id: int) -> dict:
                             [q["quote_no"]]).to_dict("records")
     q["sales"] = db._df("SELECT id, sale_date, item, amount, total_amount, status FROM sales WHERE quote_id=?",
                         [quote_id]).to_dict("records")
+    q["orders"] = db._df("SELECT id, order_no, status FROM sales_orders WHERE quote_id=? AND status <> '취소' ORDER BY id",
+                         [quote_id]).to_dict("records")
     return q
 
 
@@ -226,8 +235,13 @@ def revise(quote_id: int) -> int:
 def _sync_deal(q: dict) -> dict:
     """견적 조건(정가 합계·공급가액·할인율)을 영업기회에 반영한다. 바뀌면 기존 할인 승인은 무효가 된다."""
     deal = db.get_deal(int(q["deal_id"]))
-    new = {"list_amount": int(q["list_total"]), "amount": int(q["supply_amount"]),
-           "discount_rate": float(q["discount_rate"])}
+    list_total = int(q["list_total"])
+    if any(not line.get("product_id") for line in q.get("items") or []):
+        # 직접 입력 품목은 정가를 사용자가 정한다 → 영업기회에 잡힌 정가보다 낮춰 할인율을 0% 로 만들 수 없게
+        list_total = max(list_total, int(deal.get("list_amount") or 0))
+    supply = int(q["supply_amount"])
+    new = {"list_amount": list_total, "amount": supply,
+           "discount_rate": round((1 - supply / list_total) * 100, 2) if list_total else 0.0}
     if db.diff(deal, new, db.COMMERCIAL_FIELDS):
         data = {**deal, **new, "row_version": deal.get("row_version")}
         db.upsert_deal(data)

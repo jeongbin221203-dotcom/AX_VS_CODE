@@ -97,7 +97,9 @@
 
         {% if f.trade_blocked %}
           <div class="alert alert-error">⛔ 거래정지 ({{ f.block_source or '수기' }}) — {{ f.block_reason or '사유 없음' }}{% if f.blocked_at %} · {{ f.blocked_at }}{% endif %}</div>
-          {% if f.block_source != 'ERP' %}
+          {% if f.block_source == 'ERP' or (f.erp_synced_at and f.block_source != '자동') %}
+          <p class="small muted">ERP 가 관리하는 거래처라 거래정지 해제는 ERP 에서 합니다.</p>
+          {% else %}
           <form method="post" action="{{ url_for('crm.customer_unblock_request', cid=edit_id) }}" class="toolbar" data-no-draft>
             {{ csrf() }}<label class="grow">해제 요청 사유 <input name="reason" required placeholder="예) 연체금 회수 약정 체결"></label>
             <button class="btn">거래정지 해제 결재 요청</button>

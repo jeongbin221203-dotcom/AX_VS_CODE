@@ -339,7 +339,7 @@ def _deals_page(form: dict | None = None, status: int = 200):
     row = db.get_deal(edit_id) if edit_id else None
 
     base = dict(row) if row and tab == "edit" else {
-        "stage": db.OPEN_STAGES[0], "list_amount": 10_000_000, "discount_rate": 0.0,
+        "stage": db.OPEN_STAGES[0], "list_amount": "", "discount_rate": 0.0,
         "expected_close": (date.today() + timedelta(days=30)).isoformat(),
         "owner_id": g.user["id"], "forecast_category": "Pipeline", "source": db.LEAD_SOURCES[0]}
     if form:
@@ -409,7 +409,9 @@ def deal_save():
         flash(str(exc), "error")
         return _deals_page(form=dict(request.form), status=400)
     flash("저장했습니다." if did else f"'{data['title']}' 기회를 등록했습니다.", "success")
-    return redirect(url_for("crm.deals", id=new_id, tab="edit"))
+    back = {k: request.form.get(f"_back_{k}") for k in ("view", "q", "stage", "fcat", "open")
+            if request.form.get(f"_back_{k}")}                       # 보드·검색 조건을 유지한 채 돌아간다
+    return redirect(url_for("crm.deals", id=new_id, tab="edit", **back))
 
 
 @bp.route("/deals/<int:did>/delete", methods=["POST"])

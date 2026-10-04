@@ -230,7 +230,10 @@ def test_payment_keeps_paid_amount_on_edit(app):
 def test_targets_by_user_id(app):
     rep = login(app, "김영업")
     ym = date.today().strftime("%Y-%m")
-    post(rep, "/targets/save", {"owner_id": [user("김영업")["id"], user("박고객")["id"]],
+    res = post(rep, "/targets/save", {"owner_id": [user("김영업")["id"]], "amount": ["999999999"]})
+    assert res.status_code == 403                                   # 영업사원은 자기 목표를 못 바꿈
+    mgr = login(app, "한팀장")
+    post(mgr, "/targets/save", {"owner_id": [user("김영업")["id"], user("박고객")["id"]],
                                 "amount": ["70000000", "1"]})
     rows = {r.owner: r.target_amount for r in db._df(
         "SELECT owner, target_amount FROM targets WHERE yyyymm=?", [ym]).itertuples()}

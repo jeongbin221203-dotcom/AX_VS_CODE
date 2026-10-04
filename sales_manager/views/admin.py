@@ -379,7 +379,7 @@ def settings_save():
                                          "quote_valid_days", "default_payment_terms", "pii_retention_years",
                                          "audit_retention_years", "backup_keep_daily", "backup_keep_monthly",
                                          "backup_keep_yearly", "fiscal_start_month", "writeoff_exec_threshold",
-                                         "auto_block_overdue_days", "auto_block_exempt_days") if k in form}
+                                         "auto_block_overdue_days", "auto_block_exempt_days", "holidays") if k in form}
         if "auto_block_present" in form:
             changes["auto_block_over_credit"] = bool(form.get("auto_block_over_credit"))
         probs = {s: form[f"prob_{s}"] for s in db.OPEN_STAGES if f"prob_{s}" in form}
@@ -664,8 +664,9 @@ def data():
                      key=lambda f: f.name, reverse=True)[:10] if folder.exists() else []
     return render_page(
         "admin/data.html", "admin",
-        cust_cnt=len(db.list_customers()), deal_cnt=len(db.list_deals()),
-        sale_cnt=len(db.list_sales()), db_path=database.describe(), unlinked=ent.unlinked_counts(),
+        # 건수만 필요하므로 표 전체를 읽지 않는다 (매출 10만 건이면 화면이 8초 넘게 걸렸음)
+        cust_cnt=int(db._scalar("SELECT COUNT(*) FROM customers")), deal_cnt=int(db._scalar("SELECT COUNT(*) FROM deals")),
+        sale_cnt=int(db._scalar("SELECT COUNT(*) FROM sales")), db_path=database.describe(), unlinked=ent.unlinked_counts(),
         backups=[(b.name, f"{b.stat().st_size / 1024 / 1024:,.1f}MB") for b in backups],
         production=config.PRODUCTION, backup_dir=folder, sample_industries=_sample_industries())
 

@@ -215,6 +215,12 @@ def run_worker(poll_seconds: float = 2.0, tick_seconds: float = 30.0, stop: Opti
     from .observability import read_only
     while not (stop and stop()):
         if read_only():                       # 점검(읽기 전용) 중에는 쓰기 작업을 하지 않는다
+            if time.monotonic() - last_tick >= tick_seconds:
+                try:
+                    heartbeat(me)             # 살아 있다는 신호는 남긴다 (점검 중 '워커 응답 없음' 오경보 방지)
+                except Exception:   # noqa: BLE001
+                    LOG.exception("heartbeat failed")
+                last_tick = time.monotonic()
             time.sleep(poll_seconds)
             continue
         if time.monotonic() - last_tick >= tick_seconds:

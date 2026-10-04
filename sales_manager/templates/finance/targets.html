@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% from "_macros.html" import table, chart, csrf %}
 {% block content %}
-<p class="subtitle">담당자별 월 목표를 입력하면 대시보드 달성률에 즉시 반영됩니다. (단위: 원)</p>
+<p class="subtitle">담당자별 월 목표를 입력하면 대시보드 달성률에 즉시 반영됩니다. (단위: 원){% if not can_edit %} · 목표는 팀장 이상이 정합니다 (조회만 가능).{% endif %}</p>
 
 <section class="card">
   <h3>💾 {{ g.ym }} 목표 입력</h3>
@@ -13,17 +13,17 @@
         <tbody>
           {% for owner_id, label, amount in rows %}
             <tr><td><input type="hidden" name="owner_id" value="{{ owner_id }}">{{ label }}</td>
-                <td class="num"><input name="amount" type="number" min="0" step="1" value="{{ amount }}" aria-label="{{ label }} 목표금액(원)"></td></tr>
+                <td class="num">{% if can_edit %}<input name="amount" type="number" min="0" step="1" value="{{ amount }}" aria-label="{{ label }} 목표금액(원)">{% else %}{{ amount|krw }}{% endif %}</td></tr>
           {% else %}
             <tr><td colspan="2" class="muted">목표를 입력할 수 있는 담당자가 없습니다.</td></tr>
           {% endfor %}
         </tbody>
       </table>
     </div>
-    <div class="row-actions">
+    {% if can_edit %}<div class="row-actions">
       <button class="btn btn-primary">💾 {{ g.ym }} 목표 저장</button>
       <span class="muted small">담당자 목록은 조직·사용자 메뉴에 등록된 활성 사용자(내 권한 범위)입니다.</span>
-    </div>
+    </div>{% endif %}
   </form>
 </section>
 
@@ -36,14 +36,14 @@
     <span class="muted small">1분기 = {{ fy_months[0] }} ~ {{ fy_months[2] }} · 시작 월은 회사 설정에서 바꿉니다.</span>
   </form>
   {{ table(fy_table, none, '이 회계연도에 목표나 매출이 없습니다.') }}
-  <form method="post" action="{{ url_for('finance.targets_distribute') }}" class="toolbar">
+  {% if can_edit %}<form method="post" action="{{ url_for('finance.targets_distribute') }}" class="toolbar">
     {{ csrf() }}<input type="hidden" name="fy" value="{{ fy }}">
     <label>담당자 <select name="owner_id">{% for owner_id, label, _a in rows %}<option value="{{ owner_id }}">{{ label }}</option>{% endfor %}</select></label>
     <label>기간 <select name="period"><option value="Y">연간</option><option>Q1</option><option>Q2</option><option>Q3</option><option>Q4</option></select></label>
     <label>목표금액(원) <input type="number" name="amount" min="0" step="1" required></label>
     <button class="btn">월별로 나눠 저장</button>
     <span class="muted small">분기는 3개월, 연간은 12개월에 똑같이 나눕니다(나머지는 마지막 달). 그 기간의 월 목표는 덮어씁니다.</span>
-  </form>
+  </form>{% endif %}
 </section>
 
 <section class="card">

@@ -27,6 +27,9 @@
 </div>
 
 <form method="get" class="toolbar" action="{{ page_path() }}">
+  <label class="grow">검색 <input name="q" value="{{ request.args.get('q', '') }}" placeholder="견적번호 · 거래처 · 건명 · 영업기회"></label>
+  {% if request.args.get('deal_id') %}<input type="hidden" name="deal_id" value="{{ request.args.get('deal_id') }}">
+    <span class="small">영업기회 #{{ request.args.get('deal_id') }} 의 견적 · <a href="{{ url_for('catalog.quotes') }}">전체 보기</a></span>{% endif %}
   <label>상태 {{ select('status', statuses, status, blank='전체') }}</label>
   <label class="check"><input type="checkbox" name="ready" value="1" {{ 'checked' if request.args.get('ready') == '1' }}> 수주 전 (수락했지만 아직 수주·매출 없음)</label>
   <button class="btn">조회</button>
@@ -119,7 +122,7 @@
     {% if q.status in ('발송', '거절') %}
       <form method="post" action="{{ url_for('catalog.quote_action', qid=q.id, action='revise') }}" class="inline-form">{{ csrf() }}<button class="btn">🔁 개정 (새 판)</button></form>
     {% endif %}
-    {% if q.status == '수락' and not q.sales %}
+    {% if q.status == '수락' and not q.sales and not q.orders %}
       <form method="post" action="{{ url_for('catalog.quote_action', qid=q.id, action='order') }}" class="inline-form">{{ csrf() }}
         <input type="date" name="delivery_date" title="납기"><input name="customer_po" placeholder="고객 발주번호">
         <button class="btn btn-primary">📑 수주 등록 (나눠 납품)</button></form>
@@ -127,6 +130,12 @@
         <input type="date" name="sale_date" value="{{ today() }}"><button class="btn btn-primary">💰 매출로 전환</button></form>
     {% endif %}
   </div>
+  {% if q.deal_id %}<p class="small">영업기회: <a href="{{ url_for('crm.deals', id=q.deal_id, tab='edit') }}">#{{ q.deal_id }} 열기</a></p>{% endif %}
+  {% if q.orders %}
+    <p class="small">수주:
+      {% for o in q.orders %}<a href="{{ url_for('catalog.orders', oid=o.id) }}">{{ o.order_no }} ({{ o.status }})</a>{{ ', ' if not loop.last }}{% endfor %}
+      — 납품은 수주 화면에서 합니다.</p>
+  {% endif %}
   {% if q.sales %}
     <p class="small">전환된 매출:
       {% for s in q.sales %}<a href="{{ url_for('finance.sales', sid=s.id) }}">#{{ s.id }} {{ s.item }} {{ (s.total_amount or s.amount)|won }}</a>{{ ', ' if not loop.last }}{% endfor %}</p>

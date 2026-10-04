@@ -42,6 +42,13 @@ def cmd_db(args) -> int:
     elif args.action == "history":
         command.history(cfg)
     elif args.action == "downgrade":
+        # 되돌리면 그 리비전이 만든 표·칸의 데이터가 지워진다 → 확인을 받고 먼저 백업
+        if not getattr(args, "yes", False):
+            print("downgrade 는 새 버전이 만든 표·칸의 데이터를 지웁니다. 확인했으면 --yes 를 붙이세요 (실행 전에 자동 백업).")
+            return 2
+        from core import sales_db as db
+        db.set_context("batch", None)
+        print("되돌리기 전 백업:", db.backup_database(config.BACKUP_DIR))
         command.downgrade(cfg, args.revision or "-1")
     return 0
 
@@ -72,6 +79,20 @@ def cmd_restore(args) -> int:
         print("복구하면 현재 데이터가 백업 시점으로 바뀝니다. 확인했으면 --yes 를 붙이세요.")
         return 2
     from core import sales_db as db
+    if not os.path.isfile(args.file):
+        print("백업 파일이 없습니다:", args.file)
+        return 2
+    if database.is_pg():
+        exe = os.environ.get("SALES_PG_RESTORE") or shutil.which("pg_restore") or "pg_restore"
+        listing = subprocess.run([exe, "--list", args.file], capture_output=True, text=True)
+        if listing.returncode != 0 or "TABLE DATA public sales " not in listing.stdout:
+            print("복구하지 않았습니다 — 영업관리 pg_dump 백업 파일이 아닙니다.", listing.stderr.strip()[:300])
+            return 2
+    else:
+        problem = _sqlite_backup_problem(args.file)
+        if problem:
+            print("복구하지 않았습니다 —", problem)
+            return 2
     db.set_context("batch", None)
     safety = db.backup_database(config.BACKUP_DIR)
     print("복구 전 안전 백업:", safety)
@@ -84,9 +105,39 @@ def cmd_restore(args) -> int:
             print(result.stderr)
             return result.returncode
     else:
-        shutil.copyfile(args.file, database.DB_PATH)
+        # 파일 복사만 하면 남아 있던 -wal 이 다시 적용되어 복구가 무효가 될 수 있다 → SQLite 백업 API 로 덮어쓰기
+        import sqlite3
+        src = sqlite3.connect(f"file:{args.file}?mode=ro", uri=True)
+        dst = sqlite3.connect(database.DB_PATH, timeout=30)
+        try:
+            src.backup(dst)
+            dst.execute("PRAGMA wal_checkpoint(TRUNCATE)")
+        finally:
+            src.close()
+            dst.close()
+        print("앱 서버·워커가 켜져 있었다면 다시 시작하세요 (열린 연결이 예전 화면 캐시를 들고 있을 수 있음).")
     print("복구 완료:", args.file)
     return 0
+
+
+def _sqlite_backup_problem(path: str) -> str:
+    """복구할 파일이 이 앱의 SQLite DB 가 맞는지 (아니면 이유)."""
+    import sqlite3
+    try:
+        con = sqlite3.connect(f"file:{path}?mode=ro", uri=True)
+        try:
+            if con.execute("PRAGMA quick_check").fetchone()[0] != "ok":
+                return "파일이 손상되었습니다 (quick_check 실패)."
+            tables = {r[0] for r in con.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+            if not {"sales", "customers", "alembic_version"} <= tables:
+                return "영업관리 DB 백업이 아닙니다 (sales·customers·alembic_version 표가 없음)."
+            rev = con.execute("SELECT version_num FROM alembic_version").fetchone()
+            print("백업 파일의 스키마 리비전:", rev[0] if rev else "(없음)", "/ 최신:", database.head_revision())
+        finally:
+            con.close()
+    except sqlite3.DatabaseError as exc:
+        return f"SQLite 파일이 아닙니다 ({exc})."
+    return ""
 
 
 def cmd_check(args) -> int:
@@ -245,11 +296,17 @@ def cmd_demo_build(args) -> int:
 
 
 def main(argv=None) -> int:
+    for stream in (sys.stdout, sys.stderr):        # Windows cp949 콘솔·파일로 돌린 출력에서 한글 때문에 죽지 않게
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
     parser = argparse.ArgumentParser(description="영업관리 운영 명령")
     sub = parser.add_subparsers(dest="cmd", required=True)
     p = sub.add_parser("db")
     p.add_argument("action", choices=["upgrade", "current", "history", "downgrade"])
     p.add_argument("revision", nargs="?")
+    p.add_argument("--yes", action="store_true", help="downgrade 확인 (데이터가 지워질 수 있음)")
     p.set_defaults(func=cmd_db)
     p = sub.add_parser("worker")
     p.add_argument("--once", action="store_true")

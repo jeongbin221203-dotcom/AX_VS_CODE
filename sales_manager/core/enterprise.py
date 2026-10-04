@@ -230,7 +230,7 @@ def seed_org_demo(db_path: str | None = None) -> dict:
 
 def transfer_owner(from_id: int, to_id: int, include_closed: bool = False,
                    db_path: str | None = None) -> dict:
-    """담당자 이관 (퇴사·팀 이동). 거래처와 진행 중 영업기회를 넘긴다.
+    """담당자 이관 (퇴사·팀 이동). 거래처 · 진행 중 영업기회 · 진행 중 견적(작성중·발송) · 진행 중 수주를 넘긴다.
 
     매출·활동·목표·마감된 기회는 실적 귀속을 지키기 위해 원래 담당자에 남긴다.
     """
@@ -248,7 +248,13 @@ def transfer_owner(from_id: int, to_id: int, include_closed: bool = False,
         deals = conn.execute(f"UPDATE deals SET owner=?, owner_id=?, updated_at=?, "
                              f"row_version=COALESCE(row_version,0)+1 WHERE owner_id=?{stage_cond}",
                              (to_name, to_id, db._now(), from_id)).rowcount
-    result = {"거래처": cust, "영업기회": deals}
+        # 진행 중인 견적·수주도 넘긴다 (안 넘기면 새 담당자가 볼 수 없고 수락·납품이 멈춘다)
+        quotes = conn.execute("UPDATE quotes SET owner=?, owner_id=?, updated_at=?, "
+                              "row_version=COALESCE(row_version,0)+1 WHERE owner_id=? AND status IN ('작성중','발송','수락')",
+                              (to_name, to_id, db._now(), from_id)).rowcount
+        orders = conn.execute("UPDATE sales_orders SET owner=?, owner_id=?, updated_at=? WHERE owner_id=? AND status='진행'",
+                              (to_name, to_id, db._now(), from_id)).rowcount
+    result = {"거래처": cust, "영업기회": deals, "견적": quotes, "수주": orders}
     db.audit("담당자이관", "사용자", int(from_id),
              {"보낸이": src["name"], "받는이": to_name, **result}, db_path)
     return result
@@ -870,9 +876,11 @@ def win_loss_analysis(days: int = 365, db_path: str | None = None) -> dict:
 # ============================================================================
 # 5. 채권 관리 (AR Aging / 여신)
 # ============================================================================
-def ar_aging(db_path: str | None = None) -> pd.DataFrame:
-    """미수 채권을 결제기일 경과일 기준으로 분류한다."""
+def ar_aging(db_path: str | None = None, owner_id: int | None = None) -> pd.DataFrame:
+    """미수 채권을 결제기일 경과일 기준으로 분류한다. owner_id 를 주면 그 담당자 것만 (대시보드 담당자 필터)."""
     scope_sql, scope_params = db._scope_clause("s")
+    if owner_id:
+        scope_sql, scope_params = scope_sql + " AND s.owner_id = ?", [*scope_params, int(owner_id)]
     df = db._df(
         f"SELECT s.id, s.sale_date AS 매출일, s.due_date AS 결제기일, c.name AS 거래처, "
         f"s.item AS 품목, COALESCE(s.total_amount, s.amount) AS \"청구액(VAT포함)\", COALESCE(s.paid_amount,0) AS 입금액, "
@@ -962,6 +970,11 @@ def _record_payment_once(sale_id: int, amount: int, db_path: str | None, source:
     db.check_record_scope(row, "매출")
     if row["status"] == db.SALE_CANCELLED:
         raise ValueError("취소된 매출에는 입금을 등록할 수 없습니다.")
+    if pay_date > date.today().isoformat():
+        raise ValueError(f"입금일({pay_date})이 오늘 이후입니다. 실제로 돈이 들어온 날짜를 입력하세요.")
+    if pay_date < str(row["sale_date"])[:10]:
+        raise ValueError(f"입금일({pay_date})이 매출일({row['sale_date']})보다 빠릅니다. "
+                         f"매출 전에 받은 돈은 거래처 선수금으로 등록한 뒤 매출에 배분하세요.")
     before = int(row.get("paid_amount") or 0)
     if expected_before is not None and before != int(expected_before):
         raise db.ConflictError("대사 중 다른 입금이 들어와 이 건은 반영하지 않았습니다. 다시 대사하세요.")
@@ -971,7 +984,7 @@ def _record_payment_once(sale_id: int, amount: int, db_path: str | None, source:
     total = int(row.get("total_amount") or row["amount"])      # 채권은 부가세 포함 합계 기준
     if paid > total:
         raise ValueError(f"입금액이 미수금({total - before:,}원, 부가세 포함)을 넘습니다. "
-                         f"과입금은 별도 반제 처리가 필요합니다.")
+                         f"남는 금액은 '거래처 일괄 입금'으로 넣으면 선수금으로 남습니다.")
     status = "입금완료" if paid >= total else ("부분입금" if paid > 0 else "입금대기")
     with db.get_conn(db_path) as conn:
         changed = conn.execute("UPDATE sales SET paid_amount=?, status=?, row_version=COALESCE(row_version,0)+1 "

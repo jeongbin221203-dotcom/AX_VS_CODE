@@ -20,7 +20,7 @@ import os
 import secrets
 import urllib.error
 import urllib.request
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Optional
 from xml.sax.saxutils import escape
@@ -117,9 +117,16 @@ def request_issue(sale_id: int, issue_date: Optional[str], actor: dict) -> int:
     problems = check(sale, customer, supplier)
     if problems:
         raise ValueError(" / ".join(problems))
-    day = db._d(issue_date) or date.today().isoformat()
+    # 작성일자 = 공급시기(매출일, 반품·정정 행은 환입·변동일). 월합계 특례로 그 달 말일까지만 늦출 수 있다 (부가법 제34조)
+    supply = datetime.strptime(sale["sale_date"][:10], "%Y-%m-%d").date()
+    day = db._d(issue_date) or supply.isoformat()
+    written = datetime.strptime(day, "%Y-%m-%d").date()
+    month_end = (supply.replace(day=28) + timedelta(days=4)).replace(day=1) - timedelta(days=1)
+    if not supply <= written <= month_end:
+        raise ValueError(f"작성일자는 공급일({supply:%Y-%m-%d})부터 그 달 말일({month_end:%Y-%m-%d}) 사이여야 합니다 "
+                         f"(공급시기 — 발급하는 날이 아닙니다).")
     deadline = docs.issue_deadline(sale["sale_date"])
-    if datetime.strptime(day, "%Y-%m-%d").date() > deadline:
+    if date.today() > deadline:                 # 기한은 전송(발급)하는 날 기준
         raise ValueError(f"발급 기한({deadline:%Y-%m-%d})이 지났습니다. 지연발급은 세무 담당과 확인한 뒤 ASP 에서 직접 처리하세요.")
     from . import jobs
     with db.get_conn() as conn:

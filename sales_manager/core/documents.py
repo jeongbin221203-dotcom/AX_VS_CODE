@@ -171,10 +171,18 @@ def parse_etax_xml(data: bytes) -> dict:
 # 검증
 # ---------------------------------------------------------------------------
 def issue_deadline(supply_date: str) -> date:
-    """세금계산서 발급 기한: 공급일이 속한 달의 다음 달 10일 (월합계 발급 특례 기준)."""
+    """세금계산서 발급 기한: 공급일이 속한 달의 다음 달 10일 (월합계 발급 특례 기준).
+    그날이 토·일요일이나 공휴일(회사 설정)이면 다음 영업일 (국세기본법 제5조 제1항)."""
+    from datetime import timedelta
+
+    from . import company
     d = datetime.strptime(supply_date[:10], "%Y-%m-%d").date()
     y, m = (d.year + 1, 1) if d.month == 12 else (d.year, d.month + 1)
-    return date(y, m, 10)
+    due = date(y, m, 10)
+    holidays = set(company.get("holidays") or [])
+    while due.weekday() >= 5 or due.isoformat() in holidays:
+        due += timedelta(days=1)
+    return due
 
 
 def validate(meta: dict, sale: dict, customer: dict) -> tuple[list[str], list[str]]:
@@ -210,8 +218,8 @@ def validate(meta: dict, sale: dict, customer: dict) -> tuple[list[str], list[st
             meta["total_amount"] = total
             if supply + tax != total:
                 errors.append(f"공급가액 + 세액({supply + tax:,})이 합계({total:,})와 다릅니다.")
-            if tax and abs(tax - round(supply * 0.1)) > 10:
-                warnings.append(f"세액이 공급가액의 10%({round(supply * 0.1):,})와 다릅니다 — 영세율·면세·단수 처리를 확인하세요.")
+            if tax and abs(tax - db.vat_for(supply, "과세")) > 10:      # 매출 부가세와 같은 절사 기준
+                warnings.append(f"세액이 공급가액의 10%({db.vat_for(supply, '과세'):,})와 다릅니다 — 영세율·면세·단수 처리를 확인하세요.")
     sale_supply = int(sale.get("amount") or 0)
     sale_total = int(sale.get("total_amount") or sale_supply)
     if supply is not None and supply != sale_supply:
