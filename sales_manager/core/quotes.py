@@ -49,8 +49,9 @@ def compute(items: list[dict], customer_id: Optional[int], on: Optional[str] = N
             list_price = int(raw.get("list_price") or unit_price)
             name, code = str(raw["item_name"]).strip(), (raw.get("item_code") or None)
             unit, tax = raw.get("unit") or "EA", raw.get("tax_type") or "과세"
-        if unit_price < 0 or list_price < 0:
-            raise ValueError("단가는 0 이상이어야 합니다.")
+        if unit_price <= 0 or list_price < 0:
+            # 0원 줄(무상 제공)은 매출로 넘길 수 없어 견적이 반쯤 전환된 채 멈춘다 → 받지 않는다 (무상분은 다른 줄 단가에 반영하거나 메모)
+            raise ValueError("단가는 1원 이상이어야 합니다 (무상 품목은 메모에 적어 주세요).")
         supply = qty * unit_price
         lines.append({
             "product_id": pid, "item_code": code, "item_name": name, "unit": unit, "qty": qty,
@@ -204,6 +205,10 @@ def revise(quote_id: int) -> int:
             "foreign_amount"]
     today = date.today().isoformat()
     with db.get_conn() as conn:
+        # 먼저 옛 판을 '대체됨'으로 (그 사이 수락·전환됐으면 개정하지 않는다 — 같은 트랜잭션이라 실패하면 새 판도 안 생김)
+        if conn.execute("UPDATE quotes SET status='대체됨', updated_at=?, row_version=COALESCE(row_version,0)+1 "
+                        "WHERE id=? AND status IN ('발송', '거절', '만료')", (db._now(), q["id"])).rowcount == 0:
+            raise db.ConflictError("그 사이 이 견적의 상태가 바뀌었습니다. 새로고침해서 확인하세요.")
         cur = conn.execute(
             f"INSERT INTO quotes ({', '.join(cols)}, revision, parent_id, status, issue_date, valid_until, "
             f"created_at, updated_at) VALUES ({', '.join('?' * len(cols))}, ?, ?, '작성중', ?, ?, ?, ?)",
@@ -211,7 +216,6 @@ def revise(quote_id: int) -> int:
              (date.today() + timedelta(days=valid_days())).isoformat(), db._now(), db._now()))
         new_id = int(cur.lastrowid)
         _write_items(conn, new_id, q["items"])
-        conn.execute("UPDATE quotes SET status='대체됨', updated_at=? WHERE id=?", (db._now(), q["id"]))
     db.audit("개정", "견적", new_id, {"견적번호": q["quote_no"], "판": int(q["revision"]) + 1})
     return new_id
 
@@ -243,8 +247,9 @@ def send(quote_id: int) -> None:
             raise ValueError(f"할인 {float(deal['discount_rate']):.1f}% 는 {db.ROLE_LABEL[role]} 결재가 필요합니다. "
                              f"견적 조건을 영업기회에 반영했으니, 영업기회에서 할인 결재를 받은 뒤 발송하세요.")
     with db.get_conn() as conn:
-        conn.execute("UPDATE quotes SET status='발송', sent_at=?, updated_at=? WHERE id=?",
-                     (db._now(), db._now(), quote_id))
+        if conn.execute("UPDATE quotes SET status='발송', sent_at=?, updated_at=?, row_version=COALESCE(row_version,0)+1 "
+                        "WHERE id=? AND status='작성중'", (db._now(), db._now(), quote_id)).rowcount == 0:
+            raise db.ConflictError("그 사이 이 견적의 상태가 바뀌었습니다. 새로고침해서 확인하세요.")
     db.audit("발송", "견적", quote_id, {"견적번호": q["quote_no"], "판": q["revision"], "합계": q["total_amount"]})
 
 
@@ -256,9 +261,20 @@ def decide(quote_id: int, accepted: bool, reason: str = "") -> None:
         raise ValueError("거절 사유를 입력하세요.")
     status = "수락" if accepted else "거절"
     with db.get_conn() as conn:
-        conn.execute("UPDATE quotes SET status=?, decided_at=?, memo=COALESCE(memo,'') || ?, updated_at=? WHERE id=?",
-                     (status, db._now(), f"\n[{status}] {reason}".rstrip() if reason else "", db._now(), quote_id))
+        if conn.execute("UPDATE quotes SET status=?, decided_at=?, memo=COALESCE(memo,'') || ?, updated_at=?, "
+                        "row_version=COALESCE(row_version,0)+1 WHERE id=? AND status='발송'",
+                        (status, db._now(), f"\n[{status}] {reason}".rstrip() if reason else "", db._now(),
+                         quote_id)).rowcount == 0:
+            raise db.ConflictError("그 사이 이 견적의 상태가 바뀌었습니다. 새로고침해서 확인하세요.")
     db.audit(status, "견적", quote_id, {"견적번호": q["quote_no"], "사유": reason or None})
+
+
+def claim(q: dict) -> None:
+    """전환 직전 선점: 두 사람이 같은 견적을 동시에 매출·수주로 넘겨 매출이 두 번 생기지 않게 (판 번호를 올리며 확인)."""
+    with db.get_conn() as conn:
+        if conn.execute("UPDATE quotes SET row_version = COALESCE(row_version, 0) + 1 WHERE id = ? AND status = '수락' "
+                        "AND COALESCE(row_version, 0) = ?", (int(q["id"]), int(q.get("row_version") or 0))).rowcount == 0:
+            raise db.ConflictError("다른 사용자가 방금 이 견적을 처리했습니다. 새로고침해서 확인하세요.")
 
 
 def convert_to_sales(quote_id: int, sale_date: Optional[str] = None) -> list[int]:
@@ -270,6 +286,7 @@ def convert_to_sales(quote_id: int, sale_date: Optional[str] = None) -> list[int
         raise ValueError("이미 매출로 전환한 견적입니다.")
     if db._one("SELECT id FROM sales_orders WHERE quote_id=? AND status <> '취소'", [quote_id]):
         raise ValueError("이 견적은 수주로 등록되어 있습니다. 수주 화면에서 납품하며 매출을 등록하세요.")
+    claim(q)
     ids = []
     for line in q["items"]:
         ids.append(db.upsert_sale({

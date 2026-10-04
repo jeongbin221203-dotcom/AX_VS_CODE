@@ -991,6 +991,9 @@ def _record_payment_once(sale_id: int, amount: int, db_path: str | None, source:
     return int(amount)
 
 
+NON_REVERSIBLE_SOURCES = ("반품상계", "선수금", "대손")
+
+
 def reverse_payment(payment_id: int, reason: str, db_path: str | None = None) -> int:
     """반제: 잘못 넣은 입금을 지우지 않고 같은 금액의 음수 입금으로 되돌린다(오늘 날짜)."""
     if not str(reason or "").strip():
@@ -998,6 +1001,10 @@ def reverse_payment(payment_id: int, reason: str, db_path: str | None = None) ->
     pay = db._one("SELECT * FROM payments WHERE id=?", [int(payment_id)], db_path)
     if not pay or int(pay["amount"]) <= 0 or pay.get("reversal_of"):
         raise ValueError("반제할 수 있는 입금이 아닙니다.")
+    if (pay.get("source") or "") in NON_REVERSIBLE_SOURCES:
+        # 반품상계·선수금 배분·대손은 돈이 들어온 입금이 아니라 내부 정리라, 반제하면 반품한 물건 값을 다시 청구하거나
+        # 선수금이 사라진다 → 각자의 화면(반품 취소·선수금·대손 결재)에서 되돌린다
+        raise ValueError(f"'{pay['source']}' 입금은 반제할 수 없습니다 — 해당 화면에서 정리하세요.")
     if db._one("SELECT id FROM payments WHERE reversal_of=?", [int(payment_id)], db_path):
         raise ValueError("이미 반제한 입금입니다.")
     for attempt in range(3):
@@ -1008,6 +1015,10 @@ def reverse_payment(payment_id: int, reason: str, db_path: str | None = None) ->
         except db.ConflictError:
             if attempt == 2:
                 raise
+        except Exception as exc:                     # noqa: BLE001 - 동시에 반제한 경우 (ux_payments_reversal)
+            if "unique" in str(exc).lower() or "ux_payments_reversal" in str(exc):
+                raise ValueError("이미 반제한 입금입니다.") from exc
+            raise
     raise AssertionError("unreachable")
 
 

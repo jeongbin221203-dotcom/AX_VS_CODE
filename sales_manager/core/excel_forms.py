@@ -252,6 +252,7 @@ def inspect_file(data: bytes, filename: str, sheet: str | None = None, header_ro
         raw = pd.concat([pd.DataFrame([list(frame.columns)]), pd.DataFrame(frame.values)], ignore_index=True)
         sheets, sheet = ["(CSV)"], None
     else:
+        dataio.check_excel_safe(data)
         book = pd.ExcelFile(io.BytesIO(data))
         sheets = book.sheet_names
         sheet = sheet if sheet in sheets else sheets[0]
@@ -312,7 +313,9 @@ def to_standard(form: dict, data: bytes, filename: str) -> tuple[pd.DataFrame, i
         sheet = form["sheet_name"] if form.get("sheet_name") in book.sheet_names else book.sheet_names[0]
         if form.get("sheet_name") and form["sheet_name"] not in book.sheet_names:
             raise ValueError(f"'{form['sheet_name']}' 시트가 없습니다 (파일의 시트: {', '.join(book.sheet_names)}).")
-        frame = pd.read_excel(book, sheet_name=sheet, header=header - 1, dtype=object)
+        frame = pd.read_excel(book, sheet_name=sheet, header=header - 1, dtype=object, nrows=dataio.MAX_UPLOAD_ROWS + 1)
+        if len(frame) > dataio.MAX_UPLOAD_ROWS:
+            raise ValueError(f"한 번에 {dataio.MAX_UPLOAD_ROWS:,}행까지 올릴 수 있습니다. 나눠 올려 주세요.")
     frame.columns = [str(c).strip() for c in frame.columns]
     by_norm = {_norm(c): c for c in frame.columns}
     mapping = {}
@@ -431,7 +434,9 @@ def render_export(form: dict, frame: pd.DataFrame, meta: dict) -> bytes:
                         cell.value = values[whole.group(1)]
                         cell.number_format = "#,##0"
                     else:
-                        cell.value = _PLACEHOLDER.sub(lambda mt: str(values.get(mt.group(1), mt.group(0))), cell.value)
+                        text = _PLACEHOLDER.sub(lambda mt: str(values.get(mt.group(1), mt.group(0))), cell.value)
+                        # 바꾼 결과가 = + - @ 로 시작하면 엑셀이 수식으로 실행한다 → 글자로 (사용자 이름 '=HYPERLINK(...)' 등)
+                        cell.value = "'" + text if text.startswith(dataio.FORMULA_PREFIX) else text
     buf = io.BytesIO()
     wb.save(buf)
     return buf.getvalue()

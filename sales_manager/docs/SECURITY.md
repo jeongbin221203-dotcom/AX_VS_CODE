@@ -14,9 +14,9 @@
 | 위조 요청(CSRF) | 모든 POST 에 세션 토큰, 같은 제출 두 번 처리 안 함(`_submit_id`) | `app.py` |
 | XSS | Jinja 자동 이스케이프, CSP(`default-src 'self'`, 외부 CDN 없음 — Chart.js 는 static/vendor) | `app.py` |
 | 클릭재킹 | `X-Frame-Options: DENY`, CSP `frame-ancestors 'none'` | `app.py` |
-| 열린 리다이렉트 | 로그인 후 이동은 사이트 내부 경로만 | `views/auth._next_url` |
-| 엑셀 수식 주입 | 내려받는 엑셀·CSV 에서 `= + - @` 로 시작하면 앞에 `'` | `core/dataio.py` |
-| 악성 업로드 | 증빙은 파일 앞부분으로 형식 판정, XML 은 defusedxml, 업로드 크기·행 수 제한 | `core/documents.py`, `core/dataio.py` |
+| 열린 리다이렉트 | 로그인 후 이동은 사이트 내부 경로만 (`//`·역슬래시·제어문자·공백 거부 — 브라우저가 지워 외부 주소가 되는 탭 문자가 낀 `/(탭)/evil.com` 등) | `views/auth._next_url` |
+| 엑셀 수식 주입 | 내려받는 엑셀·CSV 에서 `= + - @` 로 시작하면 앞에 `'` (회사 양식의 자리표시 `{{제목}}` 에 들어가는 값도) | `core/dataio.py` |
+| 악성 업로드 | 증빙은 파일 앞부분으로 형식 판정, XML 은 defusedxml, 업로드 크기·행 수(2만) 제한, xlsx 압축 폭탄(풀린 크기 200MB·압축비) 거부 | `core/documents.py`, `core/dataio.py` |
 | 정보 노출 | 운영(production)에서는 위험한 설정으로 기동 거부, 500 은 일반 문구 + 문의 번호(X-Request-ID), 로그인 화면 외 `Cache-Control: no-store`, 개인정보 마스킹·다운로드 감사 | `config.py`, `core/observability.py` |
 | SQL 주입 | 값은 모두 파라미터 바인딩. 문자열로 붙이는 부분은 코드에 고정된 표·열 이름뿐(사용자 입력 아님) | 전역 |
 | 비밀값 | 메신저 토큰·키는 DB 에 Fernet 암호화(키: `SALES_NOTIFY_KEY` → `SALES_SECRET_KEY`), 화면에는 끝 4자리 | `core/messenger.py` |
@@ -48,6 +48,25 @@ pip install bandit pip-audit
 bandit -r core views app.py manage.py config.py serve.py --severity-level high -q
 PYTHONUTF8=1 pip-audit -r requirements.txt     # Windows 는 PYTHONUTF8=1 (requirements 의 한글 주석)
 ```
+
+## 2-1. 코드 검토·입력 퍼징 (2026-10-04)
+
+검토 에이전트 3개(데이터 정합성·동시성·보안)가 찾은 결함과 고친 것. 회귀 테스트 `tests/test_review_fixes.py`.
+
+| 결함 | 고친 것 |
+|---|---|
+| 아주 큰 숫자·NaN 입력이 500 | 숫자는 ±10^15 까지, 넘으면 안내 문구. 처리되지 않은 ValueError 는 전역에서 이전 화면 + 안내(400) |
+| 같은 입금을 두 사람이 동시에 반제 | DB 고유 인덱스 `ux_payments_reversal`(마이그레이션 0017). 반품상계·선수금·대손 입금은 반제 금지 |
+| 정정 뒤 반품이 처음 단가로 계산 | 반품·정정은 지금 단가(원단가 + 정정 차액) 기준 |
+| 매출 수정이 입금액을 바꿈 | 수정은 입금액을 바꾸지 않음(입금액 = 입금 내역 합계), 받은 금액보다 작게 못 줄임, 전자세금계산서 발행(요청)한 매출은 금액·취소 잠금 |
+| 견적 발송·수락·개정·전환이 동시에 두 번 | 상태 조건부 UPDATE + 판 번호(row_version), 0줄이면 '그 사이 바뀜' |
+| 견적 0원 줄 → 반쯤 전환된 채 멈춤 | 단가 1원 이상만 |
+| API 매출 등록에 이상 값 | 수량·단가 범위, 상태는 입금대기만, 품목·영업기회가 실제 있고 그 거래처 것인지 확인 |
+| ERP 대사가 대손 결재번호(`CRM-WO-`)를 매출로 읽음 | 매출 참조는 `CRM-<번호>` 만, 행마다 권한·값 오류를 따로 기록 |
+| 멈춘 멱등 요청이 영구히 '처리 중' | 5분 지나면 다음 요청이 이어받음 |
+| 개인정보 검색에 `%`·`_` | 글자 그대로 검색(`ESCAPE '!'`) — `%%` 로 전체가 파기 대상이 되지 않음 |
+
+퍼징(POST 82개 경로 × 빈 값·글자·큰 수·없는 번호·날짜 오류·긴 특수문자): 서버 오류 0. 역할별 링크 순회 1,437 화면: 500·404·3초 이상 0.
 
 ## 3. 운영에서 꼭 설정할 것
 

@@ -52,8 +52,8 @@ def create(data: dict, items: list[dict]) -> int:
             unit_price = int(raw.get("unit_price") or 0)
             name, code, unit, tax = str(raw["item_name"]).strip(), raw.get("item_code"), raw.get("unit") or "EA", \
                 raw.get("tax_type") or "과세"
-        if unit_price < 0:
-            raise ValueError("단가는 0 이상이어야 합니다.")
+        if unit_price <= 0:
+            raise ValueError("단가는 1원 이상이어야 합니다 (0원 줄은 납품해도 매출이 되지 않습니다).")
         lines.append((pid, code, name, unit, qty, unit_price, tax))
     if not lines:
         raise ValueError("수주 품목을 한 줄 이상 입력하세요.")
@@ -85,6 +85,7 @@ def from_quote(quote_id: int, data: Optional[dict] = None) -> int:
         raise ValueError("수락된 견적만 수주로 등록할 수 있습니다.")
     if q["sales"] or db._one("SELECT id FROM sales_orders WHERE quote_id=? AND status<>'취소'", [int(quote_id)]):
         raise ValueError("이미 매출이나 수주로 넘어간 견적입니다.")
+    qt.claim(q)
     items = [{"product_id": it["product_id"], "item_name": it["item_name"], "item_code": it["item_code"],
               "unit": it["unit"], "qty": it["qty"], "unit_price": it["unit_price"], "tax_type": it["tax_type"]}
              for it in q["items"]]

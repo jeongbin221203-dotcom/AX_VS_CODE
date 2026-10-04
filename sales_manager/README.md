@@ -10,7 +10,7 @@
 pip install -r requirements-dev.txt
 python app.py                   # 개발: http://127.0.0.1:5001 (SQLite, 간편 로그인, 스키마 자동 최신화)
 python manage.py worker         # 배치 워커 (알림·ERP 전송·결재 독촉·인사 연동·백업)
-python -m pytest tests -q       # 테스트 151개 (임시 DB·폴더 사용, data/ 는 건드리지 않음)
+python -m pytest tests -q       # 테스트 165개 (임시 DB·폴더 사용, data/ 는 건드리지 않음)
 # PostgreSQL 로 같은 테스트: SALES_TEST_PG_URL=postgresql://postgres@127.0.0.1:5433/postgres python -m pytest tests -q
 ```
 

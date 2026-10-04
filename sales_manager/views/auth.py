@@ -20,7 +20,9 @@ bp = Blueprint("auth", __name__)
 def _next_url(nxt: str | None = None) -> str:
     """로그인 후 돌아갈 주소. 같은 사이트의 경로만 허용한다(외부 주소로의 리다이렉트 차단)."""
     nxt = nxt if nxt is not None else (request.args.get("next") or "")
-    if nxt.startswith("/") and not nxt.startswith("//") and "\\" not in nxt:
+    # 사이트 안의 경로만: '//'·역슬래시·제어문자·공백(브라우저가 지워 '//evil.com' 이 되는 '/	/evil.com' 등) 거부
+    if (nxt.startswith("/") and not nxt.startswith("//") and "\\" not in nxt
+            and not any(ord(ch) < 33 or ord(ch) == 127 for ch in nxt)):
         return nxt
     return url_for("reports.dashboard")
 

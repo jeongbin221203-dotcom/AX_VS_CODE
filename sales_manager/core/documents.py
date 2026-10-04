@@ -277,8 +277,13 @@ def add_document(sale_id: int, form: dict, data: bytes, filename: str,
     meta = normalize_meta(form)
     if mime == "application/xml":
         parsed = parse_etax_xml(data)
+        mismatch = [key for key, value in parsed.items()
+                    if value not in (None, "") and meta.get(key) not in (None, "") and str(meta[key]) != str(value)]
+        if mismatch:                                 # 파일이 원본 — 다른 매출의 XML 에 손으로 맞춘 값을 적어 넣지 못하게
+            raise ValueError("입력한 값이 전자세금계산서 파일과 다릅니다: " + ", ".join(mismatch)
+                             + " — 칸을 비우면 파일 값으로 채웁니다.")
         for key, value in parsed.items():
-            if not meta.get(key):
+            if value not in (None, ""):
                 meta[key] = value
         meta["doc_type"] = meta["doc_type"] or "전자세금계산서"
     errors, warnings = validate(meta, sale, customer)

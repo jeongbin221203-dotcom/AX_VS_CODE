@@ -32,22 +32,24 @@ def search(term: str) -> dict:
     if len(term) < 2:
         raise ValueError("이름·전화번호·이메일을 두 글자 이상 입력하세요.")
     digits = _digits(term)
-    like = f"%{term}%"
+    # LIKE 의 % · _ 는 글자 그대로 (그렇지 않으면 '%%' 한 줄로 모든 고객 개인정보가 열람·파기 대상이 된다)
+    esc = term.replace("!", "!!").replace("%", "!%").replace("_", "!_")      # ESCAPE '!' (역슬래시는 DB 마다 다르게 읽음)
+    like = f"%{esc}%"
     cust_sql = ("SELECT id, name AS 거래처, manager AS 고객담당자, phone AS 연락처, email AS 이메일, owner AS 영업담당 "
-                "FROM customers WHERE manager LIKE ? OR email = ?")
+                "FROM customers WHERE manager LIKE ? ESCAPE '!' OR email = ?")
     params: list[Any] = [like, term]
     if len(digits) >= 7:
-        cust_sql += (" OR REPLACE(REPLACE(REPLACE(COALESCE(phone,''), '-', ''), ' ', ''), '.', '') LIKE ?")
+        cust_sql += (" OR REPLACE(REPLACE(REPLACE(COALESCE(phone,''), '-', ''), ' ', ''), '.', '') LIKE ? ESCAPE '!'")
         params.append(f"%{digits}%")
     customers = db._df(cust_sql + " ORDER BY id", params)
     acts = db._df("SELECT a.id, a.act_date AS 활동일, c.name AS 거래처, a.summary AS 활동내용, a.next_action AS 다음액션, "
                   "a.owner AS 영업담당 FROM activities a JOIN customers c ON c.id = a.customer_id "
-                  "WHERE a.summary LIKE ? OR a.next_action LIKE ? ORDER BY a.id", [like, like])
+                  "WHERE a.summary LIKE ? ESCAPE '!' OR a.next_action LIKE ? ESCAPE '!' ORDER BY a.id", [like, like])
     ct_sql = ("SELECT t.id, c.name AS 거래처, t.name AS 담당자, t.dept AS 부서, t.phone AS 연락처, t.email AS 이메일 "
-              "FROM customer_contacts t JOIN customers c ON c.id = t.customer_id WHERE t.name LIKE ? OR t.email = ?")
+              "FROM customer_contacts t JOIN customers c ON c.id = t.customer_id WHERE t.name LIKE ? ESCAPE '!' OR t.email = ?")
     ct_params: list[Any] = [like, term]
     if len(digits) >= 7:
-        ct_sql += " OR REPLACE(REPLACE(REPLACE(COALESCE(t.phone,''), '-', ''), ' ', ''), '.', '') LIKE ?"
+        ct_sql += " OR REPLACE(REPLACE(REPLACE(COALESCE(t.phone,''), '-', ''), ' ', ''), '.', '') LIKE ? ESCAPE '!'"
         ct_params.append(f"%{digits}%")
     contacts = db._df(ct_sql + " ORDER BY t.id", ct_params)
     return {"term": term, "customers": customers, "activities": acts, "contacts": contacts}

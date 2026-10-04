@@ -1137,6 +1137,19 @@ def vat_for(supply: int, tax_type: str) -> int:
     return int(int(supply) * VAT_RATE[tax_type])
 
 
+def status_for(paid: int, total: int) -> str:
+    """수금상태는 입금액과 합계로 정한다 (손으로 고른 상태가 입금액과 어긋나지 않게)."""
+    return "입금완료" if total > 0 and paid >= total else ("부분입금" if paid > 0 else "입금대기")
+
+
+def _etax_active(sale_id: int, db_path: str | None = None) -> bool:
+    try:
+        return bool(_scalar("SELECT COUNT(*) FROM etax_invoices WHERE sale_id=? AND status IN ('발행요청','전송중','발행완료')",
+                            [int(sale_id)], db_path))
+    except Exception:                                # noqa: BLE001 - 마이그레이션 전
+        return False
+
+
 def upsert_sale(data: dict, db_path: str | None = None) -> int:
     """매출 등록/수정. 신규 매출은 ERP 전송 대기열에 자동으로 올라간다."""
     if not data.get("customer_id"):
@@ -1189,10 +1202,12 @@ def upsert_sale(data: dict, db_path: str | None = None) -> int:
               "qty": qty, "unit_price": unit_price, "amount": amount,
               "owner": owner_name, "owner_id": owner_id, "status": status,
               "memo": data.get("memo"), "due_date": due_date,
-              "paid_amount": int(data.get("paid_amount") or (total if status == "입금완료" else 0)),
+              "paid_amount": min(int(data.get("paid_amount") or (total if status == "입금완료" else 0)), total),
               "product_id": data.get("product_id"), "quote_id": data.get("quote_id"),
               "tax_type": tax_type, "vat_amount": vat, "total_amount": total,
               "entity_id": entity_id, "currency": currency, "fx_rate": fx_rate, "foreign_amount": foreign_amount}
+    if not data.get("id"):
+        record["status"] = status_for(record["paid_amount"], total)   # '부분입금'인데 입금 0 같은 어긋남 방지
     values = [record[f] for f in SALE_FIELDS]
 
     if data.get("id"):
@@ -1201,6 +1216,8 @@ def upsert_sale(data: dict, db_path: str | None = None) -> int:
         check_record_scope(prev, "매출")
         if prev["status"] == SALE_CANCELLED:
             raise ValueError("취소된 매출은 수정할 수 없습니다.")
+        if (prev.get("sale_kind") or "매출") != "매출":
+            raise ValueError("반품·정정 매출은 고칠 수 없습니다. 원매출에서 반대 방향 정정으로 바로잡으세요.")
         periods.check(prev["sale_date"])
         if "entity_id" not in data:              # 수정 화면이 다루지 않는 값은 기존 값 유지
             record["entity_id"] = prev.get("entity_id")
@@ -1208,11 +1225,17 @@ def upsert_sale(data: dict, db_path: str | None = None) -> int:
             record.update(currency=prev.get("currency") or "KRW", fx_rate=float(prev.get("fx_rate") or 1))
             record["foreign_amount"] = (round(amount / record["fx_rate"], 2) if record["currency"] != "KRW" else None)
         values = [record[f] for f in SALE_FIELDS]
-        if data.get("paid_amount") is None:      # 수정 화면은 입금액을 다루지 않는다 → 기존 입금액 유지
-            record["paid_amount"] = (total if status == "입금완료"
-                                     else min(int(prev.get("paid_amount") or 0), total))
-            values = [record[f] for f in SALE_FIELDS]
+        paid_before = int(prev.get("paid_amount") or 0)
+        # 수정으로는 입금액을 바꾸지 않는다 (입금액 = 입금 내역 합계 — 넘어온 paid_amount 는 무시, 입금·반제 화면에서만)
+        if paid_before > total:
+            raise ValueError(f"이미 받은 금액({paid_before:,}원)보다 합계를 줄일 수 없습니다 — 반품·정정을 쓰세요.")
+        mark_paid = status == "입금완료" and prev["status"] != "입금완료"   # 일부러 '입금완료'로 바꾼 경우만 남은 금액 입금
+        record["paid_amount"] = total if mark_paid else paid_before
+        record["status"] = status_for(int(record["paid_amount"]), total)
+        values = [record[f] for f in SALE_FIELDS]
         money_changed = diff(prev, record, ["customer_id", "qty", "unit_price", "amount", "sale_date", "tax_type"])
+        if money_changed and _etax_active(sid, db_path):
+            raise ValueError("전자세금계산서를 발행(요청)한 매출은 금액·과세구분·일자를 바꿀 수 없습니다 — 반품·정정(수정세금계산서)을 쓰세요.")
         if money_changed and prev.get("erp_status") == "전송완료":
             raise ValueError("ERP로 전송된 매출은 금액·거래처·일자를 바꿀 수 없습니다. "
                              "매출을 취소한 뒤 다시 등록하세요(ERP에는 취소 전표가 전송됩니다).")
@@ -1291,6 +1314,8 @@ def cancel_sale(sale_id: int, reason: str, db_path: str | None = None, actor: di
             raise PermissionError("본인이 등록한 매출은 본인이 취소할 수 없습니다(직무 분리). 다른 팀장에게 요청하세요.")
     if int(prev.get("paid_amount") or 0) > 0:
         raise ValueError("입금 내역이 있는 매출은 취소할 수 없습니다. 입금 반제를 먼저 처리하세요.")
+    if _etax_active(sale_id, db_path):
+        raise ValueError("전자세금계산서를 발행(요청)한 매출은 취소할 수 없습니다 — 반품(수정세금계산서)으로 처리하세요.")
     if (prev.get("sale_kind") or "매출") != "매출":
         raise ValueError("반품·정정 행은 취소하지 않습니다. 반대 방향 정정으로 바로잡으세요.")
     if _one("SELECT id FROM sales WHERE original_sale_id=? AND status <> ?", [sale_id, SALE_CANCELLED], db_path):

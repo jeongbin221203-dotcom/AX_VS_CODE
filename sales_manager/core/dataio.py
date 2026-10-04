@@ -78,10 +78,14 @@ def parse_int(value: Any, field: str, default: int = 0, minimum: int | None = No
         return default
     try:
         number = int(round(float(raw)))
+    except OverflowError:
+        raise ValueError(f"{field}: 숫자가 너무 큽니다 ('{raw[:30]}')") from None
     except ValueError:
         number = _korean_number(raw)
         if number is None:
-            raise ValueError(f"{field}: 숫자가 아닙니다 ('{raw}')")
+            raise ValueError(f"{field}: 숫자가 아닙니다 ('{raw[:30]}')")
+    if abs(number) > 10 ** 15:
+        raise ValueError(f"{field}: 숫자가 너무 큽니다 ('{raw[:30]}')")
     if minimum is not None and number < minimum:
         raise ValueError(f"{field}: {minimum} 이상이어야 합니다 (입력값 {number})")
     return number
@@ -92,9 +96,12 @@ def parse_float(value: Any, field: str, default: float = 0.0) -> float:
     if not raw:
         return default
     try:
-        return float(raw)
+        number = float(raw)
     except ValueError as exc:
-        raise ValueError(f"{field}: 숫자가 아닙니다 ('{raw}')") from exc
+        raise ValueError(f"{field}: 숫자가 아닙니다 ('{raw[:30]}')") from exc
+    if number != number or abs(number) > 10 ** 15:
+        raise ValueError(f"{field}: 숫자가 올바르지 않습니다 ('{raw[:30]}')")
+    return number
 
 
 def parse_choice(value: Any, field: str, choices: list[str], default: str | None = None,
@@ -182,11 +189,32 @@ def template_df(entity: str) -> pd.DataFrame:
     return pd.DataFrame([{c: spec["sample"].get(c, "") for c in columns}], columns=columns)
 
 
+MAX_UPLOAD_ROWS = 20_000              # 한 번에 올리는 행 수 상한 (넘으면 나눠 올리게)
+MAX_XLSX_UNPACKED = 200 * 1024 * 1024  # 엑셀(zip) 풀었을 때 크기 상한 — 작은 파일이 수 GB 로 풀리는 압축 폭탄 차단
+
+
+def check_excel_safe(data: bytes) -> None:
+    """xlsx 는 zip 이다: 풀린 크기·압축률을 먼저 본다 (pandas 가 통째로 풀기 전에)."""
+    import zipfile
+    try:
+        with zipfile.ZipFile(io.BytesIO(data)) as zf:
+            unpacked = sum(i.file_size for i in zf.infolist())
+    except zipfile.BadZipFile:
+        return                                         # .xls(옛 형식) 등은 그대로 — pandas 가 판단
+    if unpacked > MAX_XLSX_UNPACKED or (len(data) and unpacked / len(data) > 200):
+        raise ValueError("엑셀 파일이 너무 큽니다(풀면 200MB 초과). 행을 나눠 올려 주세요.")
+
+
 def read_upload(file_obj, filename: str = "") -> pd.DataFrame:
     """CSV / Excel 업로드 파일을 DataFrame 으로 읽는다(한글 인코딩 자동 처리)."""
     name = (filename or getattr(file_obj, "name", "")).lower()
     if name.endswith((".xlsx", ".xlsm", ".xls")):
-        return pd.read_excel(file_obj, dtype=object)
+        data = file_obj.read() if hasattr(file_obj, "read") else open(file_obj, "rb").read()
+        check_excel_safe(data)
+        df = pd.read_excel(io.BytesIO(data), dtype=object, nrows=MAX_UPLOAD_ROWS + 1)
+        if len(df) > MAX_UPLOAD_ROWS:
+            raise ValueError(f"한 번에 {MAX_UPLOAD_ROWS:,}행까지 올릴 수 있습니다. 나눠 올려 주세요.")
+        return df
     for encoding in ("utf-8-sig", "cp949", "euc-kr", "utf-8"):
         try:
             if hasattr(file_obj, "seek"):
@@ -357,6 +385,8 @@ def import_rows(entity: str, df: pd.DataFrame, user: dict, dry_run: bool = True,
     그 외 사용자의 영업기회 업로드는 화면 입력과 똑같이 단계 조건을 검사한다.
     반환: {"total", "ok", "skipped", "errors"[(엑셀행번호, 사유)], "preview" DataFrame}
     """
+    if len(df) > MAX_UPLOAD_ROWS:
+        raise ValueError(f"한 번에 {MAX_UPLOAD_ROWS:,}행까지 올릴 수 있습니다 ({len(df):,}행). 나눠 올려 주세요.")
     if entity not in IMPORT_SPECS:
         raise ValueError(f"지원하지 않는 항목입니다: {entity}")
     spec = IMPORT_SPECS[entity]

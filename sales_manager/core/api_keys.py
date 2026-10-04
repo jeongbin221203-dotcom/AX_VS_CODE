@@ -12,7 +12,7 @@ import hmac
 import ipaddress
 import json
 import secrets
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Optional
 
 import pandas as pd
@@ -142,6 +142,14 @@ def idem_begin(client_id: int, key: str, body: bytes) -> tuple[str, Optional[tup
     if row["request_hash"] != digest:
         return "conflict", None
     if int(row["status"]) == 0:
+        # 처리 중 서버가 죽으면 '처리 중'으로 남아 7일 동안 409 → 5분 넘었으면 이 요청이 이어받는다
+        started = datetime.strptime(str(row["created_at"])[:19], "%Y-%m-%d %H:%M:%S")
+        if datetime.now() - started > timedelta(minutes=5):
+            with db.get_conn() as conn:
+                taken = conn.execute("UPDATE api_idempotency SET created_at=? WHERE client_id=? AND idem_key=? "
+                                     "AND status=0 AND created_at=?", (db._now(), client_id, key, row["created_at"])).rowcount
+            if taken:
+                return "new", None
         return "busy", None
     return "replay", (int(row["status"]), json.loads(row["response"]))
 

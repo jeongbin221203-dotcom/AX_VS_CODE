@@ -132,6 +132,8 @@ def decide(request_id: int, approve: bool, comment: str, actor: dict) -> dict:
         remain = int(sale.get("total_amount") or sale["amount"]) - int(sale.get("paid_amount") or 0)
         if remain <= 0:
             raise ValueError("그 사이 입금되어 남은 미수금이 없습니다. 반려하세요.")
+        # 결재 한도는 요청 금액으로 정했다 → 그 사이 미수금이 늘었어도 요청 금액까지만 대손 (더 크면 다시 요청)
+        remain = min(remain, int(req.get("amount") or remain))
         ent.record_payment(int(req["sale_id"]), remain, source="대손", method="기타", memo=f"대손 처리 (결재 #{req['id']})")
         with db.get_conn() as conn:
             conn.execute("INSERT INTO erp_outbox (doc_type, ref_id, status, created_at) VALUES ('대손', ?, '대기', ?)",

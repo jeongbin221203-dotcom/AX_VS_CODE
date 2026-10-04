@@ -181,6 +181,10 @@ def process(eid: int) -> dict:
             return {"skipped": True}
     db.set_context("system", None)
     sale, customer, supplier = _context(row["sale_id"])
+    if sale.get("status") == db.SALE_CANCELLED:          # 요청 뒤에 취소된 매출은 보내지 않는다
+        with db.get_conn() as conn:
+            conn.execute("UPDATE etax_invoices SET status='실패', error=? WHERE id=?", ("매출이 취소되어 발행하지 않음", eid))
+        return {"skipped": True, "reason": "cancelled"}
     xml = build_xml(sale, customer, supplier, row["issue_date"], original_approval=_original(sale))
     try:
         number = _send(int(eid), xml, row)

@@ -229,7 +229,7 @@
         <span class="badge">{{ '반제' if p.amount < 0 else p.method }}</span>
         <span>{{ p.pay_date }} · <strong>{{ p.amount|won }}</strong>{% if p.ref_no %} · {{ p.ref_no }}{% endif %}</span>
         <span class="muted small">{{ p.source }} · {{ p.created_by }}{% if p.memo %} · {{ p.memo }}{% endif %}{% if p.reversed_by %} · 반제됨{% endif %}</span>
-        {% if p.amount > 0 and not p.reversed_by and not p.reversal_of and raw.status != '취소' %}
+        {% if p.amount > 0 and not p.reversed_by and not p.reversal_of and raw.status != '취소' and p.source not in ('반품상계', '선수금', '대손') %}
           <form method="post" action="{{ url_for('finance.payment_reverse', pid=p.id) }}" class="inline-form" data-no-draft data-confirm="'반제' — 되돌리기 어렵습니다. 계속할까요?">
             {{ csrf() }}<input name="reason" placeholder="반제 사유" required><button class="btn btn-sm btn-danger">반제</button>
           </form>

@@ -475,13 +475,13 @@ def payment_template() -> pd.DataFrame:
 
 
 def _find_sale(ref: str, erp_no: str) -> Optional[dict]:
-    m = re.search(r"(\d+)$", ref or "")
-    if ref and ref.upper().startswith("CRM") and m:
+    m = re.fullmatch(r"\s*CRM[-_ ]?(\d+)\s*", ref or "", re.I)    # 매출 참조만 (대손 'CRM-WO-<결재번호>' 등은 매출 번호가 아님)
+    if m:
         return db.get_sale(int(m.group(1)))
     if erp_no:
         return db._one("SELECT * FROM sales WHERE erp_doc_no=?", [erp_no])
-    if m:
-        return db._one("SELECT * FROM sales WHERE erp_doc_no=?", [ref])
+    if (ref or "").strip():                                         # 참조에 ERP 전표번호를 바로 적어 보낸 경우
+        return db._one("SELECT * FROM sales WHERE erp_doc_no=?", [ref.strip()])
     return None
 
 
@@ -539,6 +539,12 @@ def reconcile_payments(df: pd.DataFrame, apply: bool = False) -> pd.DataFrame:
                 except db.ConflictError as exc:
                     out.append({**line, "결과": "확인필요", "내용": str(exc)})
                     continue
+                except PermissionError as exc:          # 키·사용자 권한 밖 매출: 이 줄만 건너뛰고 나머지는 계속
+                    out.append({**line, "결과": "권한없음", "내용": str(exc)})
+                    continue
+                except ValueError as exc:               # 마감된 월·과입금 등
+                    out.append({**line, "결과": "오류", "내용": str(exc)})
+                    continue
                 applied_total += gap
             out.append({**line, "결과": "반영" if apply else "반영예정",
                         "내용": " / ".join([f"{gap:,}원 입금 반영", *notes])})
@@ -582,7 +588,7 @@ def receive_payments(items: list[dict]) -> list[dict]:
              "누적입금액": i.get("paid_total"), "입금일": i.get("pay_date"),
              **({"매출액": i["sale_total"]} if i.get("sale_total") is not None else {})}
             for i in items]
-    frame = pd.DataFrame(rows, columns=["참조번호", "ERP전표번호", "누적입금액", "매출액"])
+    frame = pd.DataFrame(rows, columns=["참조번호", "ERP전표번호", "누적입금액", "매출액", "입금일"])
     result = reconcile_payments(frame, apply=True)
     return [{"ref": r["참조번호"], "erp_doc_no": r["ERP전표번호"] or None, "result": r["결과"],
              "sale_id": int(r["매출번호"]) if pd.notna(r.get("매출번호")) else None, "message": r.get("내용") or ""}
@@ -608,7 +614,7 @@ def receive_ack(ref: str, erp_doc_no: str, ok: bool = True, message: str = "") -
             conn.execute("UPDATE sales SET erp_status='실패', row_version=COALESCE(row_version,0)+1 WHERE id=?",
                      (sale["id"],))
             conn.execute("UPDATE erp_outbox SET status='실패', last_error=? WHERE id = (SELECT MAX(id) FROM erp_outbox "
-                         "WHERE ref_id=?)", (f"ERP 회신: {message}"[:500], sale["id"]))
+                         "WHERE ref_id=? AND doc_type IN ('매출','매출취소','반품'))", (f"ERP 회신: {message}"[:500], sale["id"]))
     db.audit("ERP회신", "매출", int(sale["id"]), {"ERP번호": erp_doc_no or None, "성공": ok, "내용": message or None})
     return {"sale_id": int(sale["id"]), "erp_doc_no": erp_doc_no or None, "status": "전송완료" if ok else "실패"}
 

@@ -99,7 +99,7 @@ def plan(feed: dict) -> dict:
             if changes:
                 out["orgs_update"].append({"id": cur["id"], "code": o["code"], "name": o["name"], "changes": changes})
     for o in orgs:
-        if o.get("code") and o["code"] not in feed_codes and int(o.get("active") or 1):
+        if o.get("code") and o["code"] not in feed_codes and int(o["active"] if o.get("active") is not None else 1):
             out["orgs_close"].append({"id": o["id"], "code": o["code"], "name": o["name"]})
 
     users = {u["emp_no"]: u for u in db._df("SELECT * FROM users", ()).to_dict("records")}

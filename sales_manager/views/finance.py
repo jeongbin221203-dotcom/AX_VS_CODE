@@ -204,7 +204,10 @@ def sale_update(sid: int):
         db.upsert_sale({"id": sid, "customer_id": int(row["customer_id"]), "deal_id": row["deal_id"],
                         "sale_date": row["sale_date"], "item": row["item"],
                         "item_code": f_str("item_code") or row.get("item_code"),
-                        "qty": int(row["qty"]), "unit_price": int(row["unit_price"]),
+                        "qty": int(row["qty"]),
+                        # 공급가액을 고치면 단가도 맞춘다 (반품·정정이 단가 × 수량으로 계산하므로 어긋나면 돌려줄 금액이 틀린다)
+                        "unit_price": (round(f_int("amount") / int(row["qty"])) if int(row["qty"] or 0) and f_int("amount")
+                                       and f_int("amount") != int(row["amount"]) else int(row["unit_price"])),
                         "amount": f_int("amount"), "owner_id": row["owner_id"], "owner": row["owner"],
                         "row_version": f_str("row_version") or None,
                         "product_id": row.get("product_id"), "quote_id": row.get("quote_id"),

@@ -392,20 +392,29 @@ def f_str(name: str, default: str = "") -> str:
     return (request.form.get(name) or default).strip()
 
 
+MAX_NUMBER = 10 ** 15          # 금액·수량 입력 상한 (DB 정수 범위 안 — 넘으면 저장 단계에서 서버 오류가 난다)
+
+
 def f_int(name: str, default: int = 0) -> int:
     raw = f_str(name).replace(",", "")
     try:
-        return int(float(raw)) if raw else default
-    except ValueError as exc:
-        raise ValueError(f"숫자를 입력하세요 ({raw})") from exc
+        number = int(float(raw)) if raw else default
+    except (ValueError, OverflowError) as exc:
+        raise ValueError(f"숫자를 입력하세요 ({raw[:30]})") from exc
+    if abs(number) > MAX_NUMBER:
+        raise ValueError(f"숫자가 너무 큽니다 ({raw[:30]})")
+    return number
 
 
 def f_float(name: str, default: float = 0.0) -> float:
     raw = f_str(name).replace(",", "").replace("%", "")
     try:
-        return float(raw) if raw else default
+        number = float(raw) if raw else default
     except ValueError as exc:
-        raise ValueError(f"숫자를 입력하세요 ({raw})") from exc
+        raise ValueError(f"숫자를 입력하세요 ({raw[:30]})") from exc
+    if number != number or abs(number) > MAX_NUMBER:              # NaN · inf · 너무 큰 수
+        raise ValueError(f"숫자가 올바르지 않습니다 ({raw[:30]})")
+    return number
 
 
 def f_bool(name: str) -> int:
@@ -430,7 +439,7 @@ def a_str(name: str, default: str = "") -> str:
 
 def a_int(name: str, default: int | None = None) -> int | None:
     raw = request.args.get(name, "")
-    return int(raw) if raw.isdigit() else default
+    return int(raw) if raw.isdigit() and len(raw) <= 15 else default
 
 
 # ----------------------------------------------------------------------------
@@ -540,6 +549,20 @@ def register_template_helpers(app: Flask) -> None:
     @app.errorhandler(409)
     def conflict_http(err):
         return error_page(409, "처리할 수 없음", err.description)
+
+    @app.errorhandler(ValueError)
+    def value_error(err):
+        """화면에서 처리하지 못한 입력 검증 오류(ValueError — 이 앱은 사용자에게 보일 문구로 쓴다)는 500 대신 안내."""
+        message = str(err)[:300] or "입력값이 올바르지 않습니다."
+        back = request.referrer or ""
+        if request.method == "POST" and back.startswith(request.host_url) and request.blueprint != "api":
+            flash(message, "error")
+            return redirect(back)
+        return error_page(400, "잘못된 입력", message)
+
+    @app.errorhandler(OverflowError)
+    def overflow_error(err):
+        return value_error(ValueError("숫자가 너무 큽니다."))
 
     @app.errorhandler(400)
     def bad_request(err):

@@ -248,8 +248,17 @@ def _create_sale(body: dict) -> tuple[int, dict]:
         qty, unit_price = int(body["qty"]), int(body["unit_price"])
     except (TypeError, ValueError) as exc:
         raise ApiError(422, "validation_error", "qty·unit_price 는 정수여야 합니다.") from exc
-    if qty < 1 or unit_price < 0:
-        raise ApiError(422, "validation_error", "수량은 1 이상, 단가는 0 이상이어야 합니다.")
+    if not 1 <= qty <= 10 ** 9 or not 1 <= unit_price <= 10 ** 13:
+        raise ApiError(422, "validation_error", "수량은 1~10억, 단가는 1원 이상이어야 합니다.")
+    if body.get("status") not in (None, "", db.SALE_STATUS[0]):
+        raise ApiError(422, "validation_error", "API 로 등록하는 매출은 '입금대기'로만 — 입금은 /erp/payments 로 보내세요.")
+    if body.get("product_id") not in (None, "") and not database.rows("SELECT id FROM products WHERE id=?",
+                                                                     [int(body["product_id"])]):
+        raise ApiError(422, "validation_error", f"없는 품목입니다: {body['product_id']}")
+    if body.get("deal_id") not in (None, ""):
+        deal = database.rows("SELECT customer_id FROM deals WHERE id=?", [int(body["deal_id"])])
+        if not deal or int(deal[0]["customer_id"]) != int(body["customer_id"]):
+            raise ApiError(422, "validation_error", "deal_id 가 이 거래처의 영업기회가 아닙니다.")
     if body.get("tax_type") and body["tax_type"] not in db.TAX_TYPES:
         raise ApiError(422, "validation_error", f"tax_type 은 {', '.join(db.TAX_TYPES)} 중 하나입니다.")
     try:
@@ -262,7 +271,7 @@ def _create_sale(body: dict) -> tuple[int, dict]:
             "item_code": body.get("item_code"), "product_id": body.get("product_id"),
             "qty": qty, "unit_price": unit_price, "amount": qty * unit_price,
             "tax_type": body.get("tax_type") or "과세", "owner_id": body.get("owner_id") or g.user["id"],
-            "status": body.get("status") or db.SALE_STATUS[0], "memo": body.get("memo")})
+            "status": db.SALE_STATUS[0], "memo": (str(body["memo"])[:1000] if body.get("memo") is not None else None)})
     except (ValueError, TypeError) as exc:
         raise ApiError(422, "validation_error", str(exc)) from exc
     return 201, database.rows(f"SELECT {SALE_COLS} FROM sales WHERE id=?", [sid])[0]
@@ -349,7 +358,12 @@ def erp_acks():
     results = []
     for i in _items():
         try:
-            r = erp.receive_ack(str(i.get("ref") or ""), str(i.get("erp_doc_no") or ""), bool(i.get("ok", True)),
+            ok = i.get("ok", True)
+            if isinstance(ok, str):                 # "false" 를 성공으로 읽지 않게 (bool("false") 는 True)
+                if ok.strip().lower() not in ("true", "false", "1", "0"):
+                    raise ValueError(f"ok 값이 올바르지 않습니다: {ok}")
+                ok = ok.strip().lower() in ("true", "1")
+            r = erp.receive_ack(str(i.get("ref") or ""), str(i.get("erp_doc_no") or ""), bool(ok),
                                 str(i.get("message") or ""))
             results.append({"ref": i.get("ref"), "result": "반영", **r})
         except (ValueError, PermissionError) as exc:
