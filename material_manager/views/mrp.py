@@ -6,7 +6,8 @@ from datetime import date, timedelta
 from flask import Blueprint, flash, g, redirect, request, url_for
 
 from core import db, mrp, services
-from views.helpers import Table, a_int, actor, can, f_float, f_str, form_response, log_export, render_page, role_required
+from views.helpers import (MAX_ID, Table, a_int, actor, as_id, can, f_float, f_str, form_response, log_export, render_page,
+                           role_required)
 
 bp = Blueprint("mrp", __name__, url_prefix="/mrp")
 
@@ -96,7 +97,12 @@ def run():
 def convert():
     plant = _plant()
     ids = [int(v) for v in request.form.getlist("plan") if v.isdigit()]
-    r = mrp.convert(int(f_str("run_id") or 0), ids, actor=actor(), wh_ids=g.wh_ids)
+    run_id = as_id(f_str("run_id"))
+    if run_id is None:
+        flash("MRP 실행을 다시 고르세요 (화면을 새로 고친 뒤).", "error")
+        return redirect(url_for("mrp.index", plant=plant))
+    ids = [i for i in ids if i <= MAX_ID]
+    r = mrp.convert(run_id, ids, actor=actor(), wh_ids=g.wh_ids)
     flash(r.message, "success" if r.ok else "error")
     return redirect(url_for("mrp.index", plant=plant))
 

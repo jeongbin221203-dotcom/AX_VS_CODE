@@ -16,6 +16,7 @@ import pandas as pd  # noqa: E402
 
 from core import approvals, audit, bulk, db, mrp, partners, production, services  # noqa: E402
 from test_advanced import M1, M2, fresh, mid, stock, wh  # noqa: E402,F401
+from test_app import app  # noqa: E402,F401
 
 TODAY = date.today().isoformat()
 CLERK = {"id": 11, "name": "담당1", "role": "CLERK", "ip": ""}
@@ -151,3 +152,140 @@ def test_mrp_ignores_wo_without_receipt_wh(fresh):
     assert r.ok
     plans = mrp.plans_df(r.tx_id)
     assert (plans["code"] == "ZP9").any()                                     # 입고되지 않을 작업지시는 공급으로 보지 않음
+
+
+# ── 다시 점검 (2차) ──────────────────────────────────────────
+def test_cancel_request_closed_when_already_reversed(fresh):
+    from core import workflow
+    tx = services.register_transaction(mid("PKG-001"), "IN", 4, TODAY, 1000, warehouse_id=wh(), actor=CLERK)
+    req = approvals.request_cancel(tx.tx_id, "착오", CLERK)
+    assert req.ok
+    assert services.reverse_transaction(tx.tx_id, "관리자가 먼저 취소", actor=M1).ok
+    r = approvals.decide(req.tx_id, True, "", M2)
+    assert not r.ok and "닫았습니다" in r.message
+    assert db.scalar("SELECT status FROM approval_requests WHERE id = ?", (req.tx_id,)) == "REJECTED"
+    assert all(x["id"] != req.tx_id for x in workflow.queue(M2) if x["kind"] == "CANCEL")
+
+
+def test_cancel_request_transfer_both_legs(fresh):
+    other = int(db.scalar("SELECT id FROM warehouses WHERE id <> ? ORDER BY id LIMIT 1", (wh(),)) or 0)
+    if not other:
+        return
+    r = services.transfer(mid("PKG-001"), wh(), other, 2, TODAY, actor=CLERK)
+    assert r.ok, r.message
+    legs = [int(x) for x in db.query_df("SELECT id FROM transactions WHERE transfer_no <> '' ORDER BY id")["id"]]
+    assert approvals.request_cancel(legs[0], "착오", CLERK).ok
+    assert not approvals.request_cancel(legs[1], "또", CLERK).ok              # 같은 이동의 다른 줄도 중복
+
+
+def test_bom_bulk_blank_base_keeps(fresh):
+    a, b = _mat("ZBA"), _mat("ZBB")
+    assert production.save_bom(a, 10, [production.BomLine(b, 5)], "원본 메모", M1).ok
+    cols = ["제품코드", "기준수량", "부품코드", "수량", "손실률", "출고창고", "메모"]
+    pv = bulk.preview_boms(pd.DataFrame([["ZBA", "", "ZBB", 6, "", "", ""]], columns=cols))
+    assert pv.ok and "그대로" in pv.summary
+    assert bulk.apply_boms(pv.rows, M1).ok
+    bom = production.get_bom(a)
+    assert bom["base_qty"] == 10 and bom["note"] == "원본 메모"
+
+
+def test_mrp_convert_only_latest_run(fresh):
+    plant = int(db.scalar("SELECT plant_id FROM warehouses WHERE id = ?", (wh(),)))
+    assert mrp.add_demand(plant, mid("PKG-001"), 500, TODAY, "", M1).ok
+    old = mrp.run(plant, M1).tx_id
+    new = mrp.run(plant, M1).tx_id
+    ids = [int(i) for i in mrp.plans_df(old)["id"]]
+    r = mrp.convert(old, ids, actor=M1)
+    assert not r.ok and "더 새로운" in r.message
+    assert not mrp.convert(new, [int(i) for i in mrp.plans_df(new)["id"]], actor=M1, wh_ids=[999999]).ok
+
+
+def test_adjustment_pending_blocks_second(fresh):
+    r = services.register_transaction(mid("PKG-001"), "ADJ", 5, TODAY, 18000, actor=CLERK)      # 35 → 5, 54만원 → 결재
+    assert r.ok and r.pending
+    again = services.register_transaction(mid("PKG-001"), "ADJ", 5, TODAY, 18000, actor=CLERK)
+    assert not again.ok and "결재 대기" in again.message
+    assert services.register_transaction(mid("PKG-001"), "IN", 100, TODAY, 18000, actor=CLERK).ok
+    req = int(db.scalar("SELECT id FROM approval_requests WHERE kind = 'ADJ'"))
+    assert approvals.decide(req, True, "", M1).ok
+    assert stock("PKG-001") == 105
+
+
+def test_close_month_blocked_by_pending_adjustment(fresh):
+    from core import periods
+    last = date.today().replace(day=1) - timedelta(days=1)
+    r = services.register_transaction(mid("PKG-001"), "ADJ", 500, last.isoformat(), 18000, actor=CLERK)
+    if not (r.ok and r.pending):
+        raise AssertionError(r.message)
+    ym = last.strftime("%Y-%m")
+    while periods.next_closable() < ym:                                           # 앞 달들은 순서대로 마감
+        assert periods.close_month(periods.next_closable(), M1).ok
+    out = periods.close_month(ym, M1)
+    assert not out.ok and "결재 대기" in out.message
+
+
+def test_sap_reversal_after_attempt_waits(fresh):
+    import config
+    from core import sap
+    config.SAP_MODE = "mock"
+    try:
+        with db.transaction() as conn:
+            conn.execute("UPDATE materials SET sap_matnr = REPLACE(code, '-', '')")
+            conn.execute("UPDATE plants SET sap_plant = '1000'")
+            conn.execute("UPDATE warehouses SET sap_sloc = '0001'")
+        tx = services.register_transaction(mid("PKG-001"), "IN", 5, TODAY, 1, actor=CLERK)
+        db.execute("UPDATE sap_outbox SET status = 'ERROR', attempts = 1 WHERE tx_id = ?", (tx.tx_id,))  # 시간 초과 등
+        rev = services.reverse_transaction(tx.tx_id, "취소", actor=M1)
+        assert rev.ok
+        st = dict(db.query_df("SELECT tx_id, status FROM sap_outbox").itertuples(index=False))
+        assert st[tx.tx_id] == "ERROR" and st[rev.tx_id] == "PENDING"            # 원거래는 다시 보내고 취소는 기다림
+    finally:
+        config.SAP_MODE = "off"
+
+
+def test_reconcile_shared_sap_key(fresh):
+    import config
+    from core import reconcile
+    config.SAP_MODE = "mock"
+    try:
+        with db.transaction() as conn:
+            conn.execute("UPDATE materials SET sap_matnr = '100200' WHERE code IN ('PKG-001', 'PKG-002')")
+            conn.execute("UPDATE plants SET sap_plant = '1000'")
+            conn.execute("UPDATE warehouses SET sap_sloc = '0001'")
+        total = stock("PKG-001", "WH1") + stock("PKG-002", "WH1")
+        sap_stock = pd.DataFrame({"sap_matnr": ["100200"], "plant": ["1000"], "sloc": ["0001"], "sap_qty": [total]})
+        res = reconcile.compare(sap_stock).set_index("code")
+        assert res.loc["PKG-001", "verdict"].startswith("일치") and res.loc["PKG-002", "verdict"].startswith("일치")
+    finally:
+        config.SAP_MODE = "off"
+
+
+# ── 다시 점검 (3차: 실행·업로드) ─────────────────────────────
+def test_quality_late_approvals_scoped(fresh):
+    from core import purchasing, quality
+    pr = purchasing.create_pr(wh(), [(mid("PKG-001"), 1, 1000)], TODAY, "보충", CLERK)
+    db.execute("UPDATE purchase_requests SET requested_at = '2020-01-01 09:00:00' WHERE id = ?", (pr.id,))
+    late = lambda ws: next(c for c in quality.run(ws) if c["key"] == "approval_late")["rows"]   # noqa: E731
+    assert late(None) and not late([999999])
+
+
+def test_csv_cp949_and_thousands(fresh):
+    from core import excel_forms
+    raw = "자재코드,자재명,단위,단가\nZK-1,한글자재,EA,\"1,000\"\n".encode("cp949")
+    df, problem = excel_forms.read_import("material_upload", raw, "m.csv", 100)
+    assert not problem and df.iloc[0]["자재명"] == "한글자재"
+    up = services.normalize_upload(df)
+    assert services.import_materials(up.df, actor=M1).ok
+    assert db.scalar("SELECT unit_price FROM materials WHERE code = 'ZK-1'") == 1000
+
+
+def test_bad_ids_do_not_500(app):
+    from test_app import client as _c, login, post  # noqa: F401
+    from core import seed
+    seed.seed()
+    c = login(app.test_client(), "admin")
+    huge = "9" * 23
+    for url, data in (("/mrp/convert", {"run_id": "abc"}), ("/mrp/convert", {"run_id": huge}),
+                      ("/notifications/read", {"id": huge}), ("/partners/link", {"name": "x", "partner_id": huge}),
+                      ("/production/routing", {"product": huge}), ("/production/run", {"product": huge})):
+        assert post(c, url, data).status_code < 500, url

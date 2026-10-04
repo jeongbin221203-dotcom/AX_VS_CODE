@@ -82,10 +82,12 @@ def enqueue(conn, tx_id: int, reversal_of: int | None = None) -> str:
     ts = now_str()
     status = "PENDING"
     if reversal_of is not None:
-        orig = conn.execute("SELECT id, status FROM sap_outbox WHERE tx_id = ?", (reversal_of,)).fetchone()
+        orig = conn.execute("SELECT id, status, attempts FROM sap_outbox WHERE tx_id = ?", (reversal_of,)).fetchone()
         if orig is None:                              # 원거래가 SAP 연동 전 거래 → SAP에도 없으니 보낼 것 없음
             return "NONE"
-        if orig["status"] in ("PENDING", "ERROR", "FAILED"):
+        # 아직 한 번도 보내지 않은 원거래만 '둘 다 안 보냄'. 보낸 적이 있으면(시간 초과·5xx 등) SAP에 전기됐을 수 있으므로
+        # 원거래는 그대로 다시 보내고(같은 멱등키), 취소는 원거래가 전기된 뒤 보낸다(build_payload 의 WAIT).
+        if orig["status"] in ("PENDING", "ERROR", "FAILED") and int(orig["attempts"] or 0) == 0:
             conn.execute("UPDATE sap_outbox SET status = 'CANCELLED', last_error = ?, updated_at = ? WHERE id = ?",
                          ("전송 전에 취소됨", ts, orig["id"]))
             status = "CANCELLED"

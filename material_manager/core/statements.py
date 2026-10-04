@@ -93,7 +93,9 @@ def lines_from_frame(df: pd.DataFrame) -> tuple[list[Line], list[str]]:
             continue                                            # 합계·소계 줄
         exp = texts["expiry_date"].iloc[i]
         if exp:
-            exp = str(pd.to_datetime(exp, errors="coerce").date()) if pd.notna(pd.to_datetime(exp, errors="coerce")) else exp
+            from core.bulk import _excel_date              # 날짜 숫자(46300 = 2026-10-05)도 날짜로
+            d = _excel_date(exp)
+            exp = str(d.date()) if pd.notna(d) else exp
         out.append(Line(no=len(out) + 1, code=code, name=name, spec=texts["spec"].iloc[i],
                         qty=qty if qty is not None else float("nan"),
                         unit_price=_num(df["unit_price"].iloc[i]) if _num(df["unit_price"].iloc[i]) is not None else float("nan"),

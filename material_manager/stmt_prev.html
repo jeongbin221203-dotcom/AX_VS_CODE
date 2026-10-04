@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>🧾 거래명세서 입출고 · 자재관리 시스템</title>
+  <link rel="icon" type="image/svg+xml" href="/static/logo.svg">
+  <link rel="stylesheet" href="/static/css/app.css?v=1791113721">
+  <script src="/static/vendor/chart.umd.min.js" defer></script>
+  <script src="/static/js/app.js?v=1791113721" defer></script>
+  <script src="/static/js/picker.js?v=1791113721" defer></script>
+  <script src="/static/js/ui.js?v=1791113721" defer></script>
+</head>
+<body data-user="1">
+
+<div class="layout">
+  <aside class="sidebar">
+    <a class="brand" href="/"><img class="brand-logo" src="/static/logo.svg" alt=""> 자재관리</a>
+    
+    <div class="me">
+      <strong>테스트</strong> · 시스템관리자
+      <div class="me-actions">
+        <a href="/password">비밀번호 변경</a>
+        <form method="post" action="/logout" data-logout>
+          <input type="hidden" name="_csrf" value="tttttttttttttttttttttttttttttttt">
+          <button class="btn btn-sm">로그아웃</button>
+        </form>
+      </div>
+    </div>
+    <a class="bell " href="/notifications/">🔔 알림</a>
+    
+    <nav class="menu" data-menu-save="/prefs/menu" data-csrf="tttttttttttttttttttttttttttttttt" aria-label="메뉴">
+      
+        <a href="/" class="" data-pinned>📊 대시보드</a>
+      
+      <div class="menu-label" data-group-label="fav" hidden>★ 즐겨찾기</div>
+      <div class="menu-group" data-group="fav">
+        
+      </div>
+      <div class="menu-label" data-group-label="others" hidden>전체 메뉴</div>
+      <div class="menu-group" data-group="others">
+        
+          <a href="/transactions/" class="" data-key="transactions">🔄 입출고 등록</a>
+        
+          <a href="/transactions/batch" class="" data-key="batch">📷 여러 줄·스캔 입출고</a>
+        
+          <a href="/stock/" class="" data-key="stock">📦 재고 현황</a>
+        
+          <a href="/history/" class="" data-key="history">🧾 거래 이력</a>
+        
+          <a href="/purchase/" class="" data-key="purchase">🛒 구매 (요청·발주)</a>
+        
+          <a href="/approvals/" class="" data-key="approvals">✅ 결재함</a>
+        
+          <a href="/materials/" class="" data-key="materials">🗂️ 자재 마스터</a>
+        
+          <a href="/statements/" class="active" data-key="statements">🧾 거래명세서 입출고</a>
+        
+          <a href="/production/" class="" data-key="production">🏭 생산 (작업지시·BOM)</a>
+        
+          <a href="/mrp/" class="" data-key="mrp">📅 MRP (자재 소요 계획)</a>
+        
+          <a href="/partners/" class="" data-key="partners">🤝 거래처</a>
+        
+          <a href="/documents/" class="" data-key="documents">📎 증빙 (세금계산서)</a>
+        
+          <a href="/reports/ledger" class="" data-key="ledger">📒 수불부</a>
+        
+          <a href="/reports/valuation" class="" data-key="valuation">💴 재고 평가</a>
+        
+          <a href="/reports/reconcile" class="" data-key="reconcile">⚖️ 재고 대사</a>
+        
+          <a href="/periods/" class="" data-key="periods">🔒 월 마감</a>
+        
+          <a href="/sap/" class="" data-key="sap">🔗 ERP·SAP 연동</a>
+        
+          <a href="/quality/" class="" data-key="quality">🩺 데이터 점검</a>
+        
+          <a href="/data/" class="" data-key="data">🛠️ 데이터 관리</a>
+        
+          <a href="/admin/settings" class="" data-key="settings">🏢 회사 설정</a>
+        
+          <a href="/admin/api-keys" class="" data-key="api">🔑 API 연동</a>
+        
+          <a href="/admin/org" class="" data-key="org">🏭 플랜트·창고</a>
+        
+          <a href="/admin/users" class="" data-key="users">👥 사용자</a>
+        
+          <a href="/admin/jobs" class="" data-key="jobs">⏱️ 배치 작업</a>
+        
+          <a href="/admin/forms" class="" data-key="forms">📑 엑셀 양식</a>
+        
+          <a href="/admin/audit" class="" data-key="audit">🗂️ 감사로그</a>
+        
+      </div>
+      <div class="menu-tools">
+        <button type="button" class="menu-edit" data-menu-edit>메뉴 편집</button>
+        <button type="button" class="menu-edit" data-menu-reset hidden>기본 순서로</button>
+      </div>
+      <p class="menu-help small" hidden>☆를 누르면 즐겨찾기(위쪽)로, ▲▼ 또는 끌어서 순서를 바꿉니다. 대시보드는 맨 위에 고정입니다.</p>
+    </nav>
+    
+    
+    
+    
+    
+    <div class="muted small foot">
+      마감: 없음<br>
+      SAP 연동: OFF · 범위: 전체 창고<br>
+      DB: m.db · 오늘 2026-10-04
+    </div>
+  </aside>
+  <main class="content">
+    
+    
+    
+    <h1>🧾 거래명세서 입출고</h1>
+    
+    
+
+
+
+  <div class="metrics m4">
+    
+  <div class="metric">
+    <div class="metric-label">구분 · 창고</div>
+    <div class="metric-value">입고 · WH1</div>
+    
+  </div>
+
+    
+  <div class="metric">
+    <div class="metric-label">거래처</div>
+    <div class="metric-value">테스트상사</div>
+    <div class="metric-delta ">명세서 S-1</div>
+  </div>
+
+    
+  <div class="metric">
+    <div class="metric-label">품목</div>
+    <div class="metric-value">2 줄</div>
+    <div class="metric-delta up">모두 확인됨</div>
+  </div>
+
+    
+  <div class="metric">
+    <div class="metric-label">공급가액 · 세액</div>
+    <div class="metric-value">₩ 460,000</div>
+    <div class="metric-delta ">세액 ₩ 36,000</div>
+  </div>
+
+  </div>
+  
+  
+  
+  
+
+  <form class="card form" method="post" action="/statements/apply">
+    <input type="hidden" name="_csrf" value="tttttttttttttttttttttttttttttttt"><input type="hidden" name="_once" value="6ea61605a1240e9026bf331a5e4f79be"><input type="hidden" name="token" value="a95a759a355ba40212eefc3485d8f838">
+    <datalist id="material-codes"><option value="CHM-901">방청제(VCI 스프레이) (420ml)</option><option value="LBL-001">취급주의 라벨 (100x150)</option><option value="LSH-001">라싱 벨트 (50mm 5T 9m)</option><option value="LSH-002">에어백(던니지백) (900x1800)</option><option value="LSH-009">와이어 로프 슬링 (12mm 3m)</option><option value="PKG-001">수출용 목재 팔레트 (1100x1100 훈증)</option><option value="PKG-002">스트레치 필름 (500mm x 300m)</option><option value="PKG-003">5겹 골판지 박스 (600x400x400)</option><option value="PKG-009">방습제(실리카겔) 1kg (1kg 파우치)</option><option value="SFT-001">안전장갑 (코팅 L)</option></datalist>
+    <div class="table-wrap">
+      <table class="data">
+        <thead><tr><th>#</th><th>명세서 품목</th><th>자재 (이 시스템)</th><th class="num">수량</th><th class="num">단가</th><th class="num">공급가액</th><th class="num">세액</th><th>로트 · 발주</th><th>확인</th></tr></thead>
+        <tbody>
+        
+          <tr class="">
+            <td class="num">1</td>
+            <td>CHM-901 </td>
+            <td>
+              <input name="material_1" list="material-codes" value="CHM-901"
+                     placeholder="자재코드 입력" aria-label="1번 자재코드" autocomplete="off">
+              <div class="muted small">[CHM-901] 방청제(VCI 스프레이)</div>
+            </td>
+            <td class="num">20.00</td>
+            <td class="num">₩18,000</td>
+            <td class="num">₩360,000</td>
+            <td class="num">₩36,000</td>
+            <td>L1 ~46300</td>
+            <td>확인</td>
+          </tr>
+        
+          <tr class="">
+            <td class="num">2</td>
+            <td>CHM-901 </td>
+            <td>
+              <input name="material_2" list="material-codes" value="CHM-901"
+                     placeholder="자재코드 입력" aria-label="2번 자재코드" autocomplete="off">
+              <div class="muted small">[CHM-901] 방청제(VCI 스프레이)</div>
+            </td>
+            <td class="num">1,000.00</td>
+            <td class="num">₩100</td>
+            <td class="num">₩100,000</td>
+            <td class="num"></td>
+            <td>L2 ~2026-12-31</td>
+            <td>확인</td>
+          </tr>
+        
+        </tbody>
+      </table>
+    </div>
+    <p class="muted small">재고·마감·권한·발주 잔량은 등록할 때 다시 확인합니다. 한 줄이라도 거부되면 아무것도 등록하지 않습니다.
+      자재를 바꿨으면 '등록'을 누를 때 다시 확인합니다.</p>
+    <div class="row-actions">
+      <button class="btn btn-primary" >2줄 입고 등록</button>
+      <a class="btn" href="/statements/">처음부터</a>
+    </div>
+  </form>
+
+
+
+  </main>
+</div>
+
+</body>
+</html>

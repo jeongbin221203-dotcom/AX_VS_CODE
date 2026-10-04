@@ -3,7 +3,7 @@
 from flask import Blueprint, abort, flash, g, redirect, request, url_for
 
 from core import db, notify
-from views.helpers import render_page
+from views.helpers import as_id, render_page
 
 bp = Blueprint("notifications", __name__, url_prefix="/notifications")
 
@@ -28,7 +28,7 @@ def open_(nid: int):
 
 @bp.post("/read")
 def read():
-    ids = [int(v) for v in request.form.getlist("id") if v.isdigit()]
+    ids = [i for i in (as_id(v) for v in request.form.getlist("id")) if i is not None]
     n = notify.mark_read(g.user["id"], ids or None)
     flash(f"{n}건을 읽음으로 바꿨습니다.", "success")
     return redirect(url_for("notifications.index"))

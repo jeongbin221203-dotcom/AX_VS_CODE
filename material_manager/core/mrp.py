@@ -264,6 +264,17 @@ def plans_df(run_id: int) -> pd.DataFrame:
 
 def convert(run_id: int, plan_ids: list[int], *, actor: dict, wh_ids=None) -> services.Result:
     """고른 계획 → 구매 계획은 창고별 구매요청 하나씩, 생산 계획은 작업지시 하나씩."""
+    plant = db.scalar("SELECT plant_id FROM mrp_runs WHERE id = ?", (run_id,))
+    if plant is None:
+        return services.Result(False, "MRP 실행을 찾을 수 없습니다.")
+    if wh_ids is not None:
+        frag, wp = db.in_clause(list(wh_ids) or [-1])
+        if not db.scalar(f"SELECT COUNT(*) FROM warehouses WHERE plant_id = ? AND id{frag}", (plant, *wp)):
+            return services.Result(False, "이 플랜트의 권한이 없습니다.")
+    latest = latest_run(int(plant))
+    if latest and int(latest["id"]) != int(run_id):         # 밤 자동 실행 등으로 새 계획이 생겼다 → 옛 화면에서 바꾸면 이중 발주
+        return services.Result(False, f"더 새로운 MRP 실행(#{latest['id']}, {latest['run_at'][:16]})이 있습니다. "
+                                      "화면을 새로 고쳐 최신 계획에서 바꾸세요.")
     df = plans_df(run_id)
     df = df[df["id"].isin(plan_ids) & (df["status"] == "OPEN")]
     if df.empty:

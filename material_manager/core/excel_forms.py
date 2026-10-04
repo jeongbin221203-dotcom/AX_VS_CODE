@@ -401,13 +401,21 @@ def read_import(form_key: str, data: bytes, filename: str, max_rows: int) -> tup
     name = filename.lower()
     try:
         if name.endswith(".csv"):
-            raw = pd.read_csv(io.BytesIO(data), header=header, nrows=max_rows + 1)
+            raw = None
+            for enc in ("utf-8-sig", "cp949"):           # 한글 엑셀 'CSV (쉼표로 분리)' 저장은 cp949
+                try:
+                    raw = pd.read_csv(io.BytesIO(data), header=header, nrows=max_rows + 1, encoding=enc)
+                    break
+                except UnicodeDecodeError:
+                    continue
+            if raw is None:
+                raise ValueError("encoding")
         else:
             xl = pd.ExcelFile(io.BytesIO(data))
             sheet = cfg.get("sheet") if cfg.get("sheet") in xl.sheet_names else xl.sheet_names[0]
             raw = xl.parse(sheet, header=header, nrows=max_rows + 1)
     except Exception:
-        return pd.DataFrame(), "파일을 읽을 수 없습니다. 엑셀(.xlsx) 또는 UTF-8 CSV로 저장해 주세요."
+        return pd.DataFrame(), "파일을 읽을 수 없습니다. 엑셀(.xlsx) 또는 CSV(UTF-8·한글 엑셀 기본)로 저장해 주세요."
     lookup: dict[str, str] = {}
     for field, (std, defaults) in fields.items():
         for n in [std, *defaults, *cfg.get("aliases", {}).get(field, [])]:

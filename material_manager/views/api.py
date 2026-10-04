@@ -109,6 +109,8 @@ def transactions():
     if err:
         return err
     body = request.get_json(silent=True) or {}
+    if not isinstance(body, dict):                     # 배열 등 → 멱등키를 잡기 전에 거절 (500 이면 키가 '처리 중'으로 남음)
+        return _err(400, "본문은 JSON 객체여야 합니다.")
     idem = (request.headers.get("Idempotency-Key") or "").strip()[:100]
     token = hashlib.sha256(f"api:{key['id']}:{idem}".encode()).hexdigest()[:32] if idem else ""
     if token:

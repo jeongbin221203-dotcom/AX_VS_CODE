@@ -548,8 +548,8 @@ material_manager/
 
 ```bash
 pip install -r requirements-dev.txt
-python -m pytest tests -q                                                    # SQLite 231 통과 + 1 건너뜀(PostgreSQL pg_dump 전용)
-MM_DATABASE_URL=postgresql://user@host:5432/mm_test python -m pytest tests -q  # PostgreSQL 230 통과 + 2 건너뜀 (DB 이름에 test 필수)
+python -m pytest tests -q                                                    # SQLite 243 통과 + 1 건너뜀(PostgreSQL pg_dump 전용)
+MM_DATABASE_URL=postgresql://user@host:5432/mm_test python -m pytest tests -q  # PostgreSQL 242 통과 + 2 건너뜀 (DB 이름에 test 필수)
 ```
 테스트는 임시 DB만 쓴다(운영 SQLite 파일과 이름에 test가 없는 PostgreSQL DB는 초기화를 거부).
 S3는 moto로, 사내 SSO는 테스트 안의 가짜 IdP(RSA 서명 토큰)로, SAP·ERP는 가짜 OData·REST 서버와 가짜 pyrfc로 흉내 낸다.

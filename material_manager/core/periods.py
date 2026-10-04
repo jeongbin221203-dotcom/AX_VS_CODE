@@ -64,6 +64,11 @@ def close_month(ym: str, actor: dict | None) -> PeriodResult:
         expected = next_closable(conn)               # 잠금 안에서 확인 (두 서버가 같은 달을 동시에 마감하지 않게)
         if ym != expected:
             return PeriodResult(False, f"마감은 한 달씩 순서대로 합니다. 다음 마감 대상은 {expected}입니다.")
+        adj = conn.execute("SELECT COUNT(*) FROM approval_requests WHERE kind = 'ADJ' AND status = 'PENDING' AND tx_date <= ?",
+                           (end,)).fetchone()[0]
+        if adj:
+            return PeriodResult(False, f"{ym}월까지 실사일인 실사 조정 {adj}건이 결재 대기 중입니다. 마감하면 승인할 수 없으니 "
+                                       "결재함에서 먼저 승인·반려하세요.")
         if sap.enabled():
             unsent = sap.unsent_until(conn, end)
             if unsent:

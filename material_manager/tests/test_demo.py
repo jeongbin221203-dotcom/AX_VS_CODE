@@ -187,3 +187,14 @@ def test_login_page_redirects_when_signed_in(client):     # noqa: F811
     assert res.status_code == 302 and res.headers["Location"].endswith("/")
     res = client.get("/login?next=/stock/")
     assert res.status_code == 302 and res.headers["Location"].endswith("/stock/")
+
+
+def test_demo_guide_links_follow_role(monkeypatch):
+    """시연 안내의 바로 가기는 지금 역할이 열 수 있는 화면만 링크 (조회 역할이면 글자만)."""
+    application = _demo_app(monkeypatch)
+    c = application.test_client()
+    admin_page = c.get("/").get_data(as_text=True)
+    assert 'href="/transactions/batch"' in admin_page
+    c.get("/demo/as/VIEWER")
+    page = c.get("/").get_data(as_text=True)
+    assert "조회만 됩니다" in page and 'href="/transactions/batch"' not in page and 'href="/admin/jobs"' not in page

@@ -6,6 +6,7 @@
 
 import math
 import re
+import json
 import secrets
 from dataclasses import dataclass, field
 from datetime import date
@@ -176,6 +177,13 @@ def _register(conn, who: dict, material_id: int, tx_type: str, qty_input: float,
     else:                                               # ADJ
         if qty_input < 0:
             return Result(False, "실사수량은 0 이상이어야 합니다.")
+        pending = conn.execute(
+            "SELECT id FROM approval_requests WHERE kind = 'ADJ' AND status = 'PENDING' AND material_id = ? "
+            "AND warehouse_id = ? AND payload LIKE ?",
+            (material_id, wh_id, f'%"lot_no": {json.dumps(lot_no or "", ensure_ascii=False)}%')).fetchone()
+        if pending:                                     # 결재 대기 조정은 그때의 차이를 그대로 반영하므로 겹치면 두 번 빠진다
+            return Result(False, f"이 자재·창고{'·로트' if lot_no else ''}에 결재 대기 중인 실사 조정 #{pending[0]}이 있습니다. "
+                                 "결재함에서 먼저 승인·반려한 뒤 다시 입력하세요.")
         if lot_managed:
             if not lot_no:
                 return Result(False, "로트 관리 자재는 로트별로 실사수량을 입력하세요.")
@@ -753,7 +761,8 @@ def normalize_upload(raw: pd.DataFrame) -> UploadResult:
     blank = {c: clean_str_series(df[c]) == "" for c in UPLOAD_OPTIONAL}
     bad_numbers = 0
     for col in ("safety_stock", "unit_price", "lead_time_days", "min_order_qty", "order_multiple"):
-        num = pd.to_numeric(df[col], errors="coerce")
+        num = pd.to_numeric(df[col].map(lambda v: str(v).replace(",", "").replace("₩", "").strip() if isinstance(v, str) else v),
+                            errors="coerce")                       # 천 단위 쉼표·₩ 표시가 있는 글자 숫자도
         bad = num.isna() & ~blank[col]
         bad_numbers += int(bad.sum())
         blank[col] = blank[col] | bad

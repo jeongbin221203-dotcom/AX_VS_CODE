@@ -58,17 +58,32 @@ def request_cancel(tx_id: int, reason: str, requester: dict, wh_ids=None):
             return services.Result(False, "취소 거래는 다시 취소할 수 없습니다.")
         if services.single_cancel_problem(tx):
             return services.Result(False, services.single_cancel_problem(tx))
-        if conn.execute("SELECT 1 FROM transactions WHERE reversal_of = ?", (tx_id,)).fetchone():
+        legs = _legs(conn, tx)
+        if _already_reversed(conn, legs):
             return services.Result(False, "이미 취소된 거래입니다.")
-        dup = conn.execute("SELECT id FROM approval_requests WHERE kind = 'CANCEL' AND status = 'PENDING' AND payload LIKE ?",
-                           (f'%"tx_id": {tx_id},%',)).fetchone()
-        if dup:
-            return services.Result(False, f"이 거래는 이미 취소 요청 #{dup[0]}가 처리 중입니다.")
+        for leg in legs:                                     # 창고 이동은 출고·입고 두 줄 어느 쪽으로 요청해도 같은 건
+            dup = conn.execute("SELECT id FROM approval_requests WHERE kind = 'CANCEL' AND status = 'PENDING' AND payload LIKE ?",
+                               (f'%"tx_id": {leg},%',)).fetchone()
+            if dup:
+                return services.Result(False, f"이 거래는 이미 취소 요청 #{dup[0]}가 처리 중입니다.")
         amount = abs(float(tx["qty"]) * float(tx["unit_price"] or 0))
         req_id = create(conn, "CANCEL", int(tx["material_id"]), int(tx["warehouse_id"]), date.today().isoformat(),
                         float(tx["qty"]), amount, requester, {"tx_id": int(tx_id), "reason": reason, "tx_type": tx["tx_type"],
                                                               "tx_date": tx["tx_date"]})
     return services.Result(True, f"거래 #{tx_id} 취소 요청 #{req_id}를 올렸습니다. 관리자가 승인하면 취소 거래가 생깁니다.", tx_id=req_id)
+
+
+def _legs(conn, tx) -> list[int]:
+    """취소 단위: 창고 이동이면 같은 이동 번호의 원거래 두 줄, 아니면 그 거래 하나."""
+    if tx["transfer_no"]:
+        return [int(r[0]) for r in conn.execute("SELECT id FROM transactions WHERE transfer_no = ? AND reversal_of IS NULL",
+                                                (tx["transfer_no"],))]
+    return [int(tx["id"])]
+
+
+def _already_reversed(conn, legs: list[int]) -> bool:
+    frag, params = db.in_clause(legs)
+    return bool(conn.execute(f"SELECT 1 FROM transactions WHERE reversal_of{frag}", params).fetchone())
 
 
 def decide(req_id: int, approve: bool, comment: str, actor: dict, wh_ids=None):
@@ -90,6 +105,16 @@ def decide(req_id: int, approve: bool, comment: str, actor: dict, wh_ids=None):
         result, tx_id = services.Result(True, f"결재 #{req_id}를 반려했습니다."), None
         if approve and req["kind"] == "CANCEL":                 # 거래 취소 요청 → 취소 거래 (직무 분리: 등록자 본인은 승인 불가)
             extra = json.loads(req["payload"] or "{}")
+            tx = conn.execute("SELECT * FROM transactions WHERE id = ?", (int(extra["tx_id"]),)).fetchone()
+            closed = ("거래가 없습니다" if tx is None else
+                      "이미 취소된 거래입니다" if _already_reversed(conn, _legs(conn, tx)) else
+                      services.single_cancel_problem(tx))
+            if closed:                                          # 더 처리할 수 없는 요청은 닫는다 (결재함에 계속 남지 않게)
+                note = f"자동 종료 — {closed}"
+                conn.execute("UPDATE approval_requests SET status = 'REJECTED', decided_by_id = ?, decided_by = ?, decided_at = ?, "
+                             "comment = ? WHERE id = ?", (actor.get("id"), actor["name"], now_str(), note[:300], req_id))
+                audit.record(conn, actor, "APPROVAL_DECIDE", "approval", req_id, {"approve": False, "comment": note})
+                return services.Result(False, f"취소 요청 #{req_id}를 닫았습니다: {closed}")
             from datetime import date
             out = services._reverse(conn, actor, int(extra["tx_id"]), f"취소 요청 #{req_id} ({req['requested_by']}): {extra.get('reason', '')}",
                                      date.today().isoformat(), wh_ids)

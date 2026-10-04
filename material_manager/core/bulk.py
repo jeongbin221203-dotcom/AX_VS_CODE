@@ -243,7 +243,10 @@ def preview_boms(raw: pd.DataFrame) -> Preview:
                 if c not in seen_ and len(path) < 25:
                     seen_.add(c)
                     stack.append((c, path + [names.get(c, str(c))]))
-    out.summary = f"제품 {len(groups)}개 · 부품 줄 {len(out.rows)}개 (제품마다 BOM 전체를 이 내용으로 바꿉니다)"
+    out.summary = f"제품 {len(groups)}개 · 부품 줄 {len(out.rows)}개 (제품마다 BOM 전체를 이 내용으로 바꿉니다"
+    keep = [p for p, g in groups.items() if g["base"] is None and p in mats and
+            db.scalar("SELECT 1 FROM boms WHERE product_id = ? AND active = 1", (int(mats[p].id),))]
+    out.summary += f" · 기준수량 빈 칸 {len(keep)}개 제품은 지금 기준수량 그대로)" if keep else ")"
     return out
 
 
@@ -258,10 +261,11 @@ def apply_boms(rows: list[dict], actor: dict | None) -> services.Result:
         with db.transaction() as conn:
             for p, rs in groups.items():
                 lines = [production.BomLine(mats[r["component"]], r["qty"], r["scrap"], whs.get(r["wh"]), r["note"]) for r in rs]
-                base = next((r.get("base") for r in rs if r.get("base")), None) or 1
+                cur = conn.execute("SELECT base_qty, note FROM boms WHERE product_id = ? AND active = 1", (mats[p],)).fetchone()
+                base = next((r.get("base") for r in rs if r.get("base")), None) or (float(cur["base_qty"]) if cur else 1)
                 lines, problem = production.check_bom(mats[p], base, lines)
-                res = services.Result(False, problem) if problem else production._save_bom(conn, mats[p], base, lines,
-                                                                                              "엑셀 일괄 등록", who)
+                res = services.Result(False, problem) if problem else production._save_bom(
+                    conn, mats[p], base, lines, (cur["note"] if cur and cur["note"] else "엑셀 일괄 등록"), who)
                 if not res.ok:
                     raise services._Rejected(rs[0]["line"], f"{p}: {res.message}")
             audit.record(conn, who, "BOM_IMPORT", "bom", "", {"products": list(groups)[:200], "lines": len(rows)})

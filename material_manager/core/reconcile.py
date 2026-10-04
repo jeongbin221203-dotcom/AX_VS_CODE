@@ -90,21 +90,26 @@ def compare(sap_stock: pd.DataFrame, wh_ids=None) -> pd.DataFrame:
     merged["sap_qty"] = merged["sap_qty"].fillna(0.0)
     for col in ("stock", "unsent", "expected"):
         merged[col] = merged[col].fillna(0.0)
-    merged["diff"] = merged["sap_qty"] - merged["expected"]
+    keys = ["sap_matnr", "plant", "sloc"]
+    merged[keys] = merged[keys].fillna("")
+    grp = merged.groupby(keys)["expected"]
+    merged["shared"] = grp.transform("size").where(merged["sap_matnr"] != "", 1)   # 같은 SAP 키를 쓰는 앱 줄 수
+    merged["diff"] = merged["sap_qty"] - grp.transform("sum")                         # 여럿이면 합계와 비교
 
     def verdict(r) -> str:
         if not r["sap_matnr"]:
             return "SAP 자재번호 없음"
         if r["_merge"] == "right_only":
             return "SAP에만 있음"
+        both = f" (같은 SAP 번호·저장위치 {int(r['shared'])}줄 합계)" if r["shared"] > 1 else ""
         if abs(r["diff"]) < 1e-9:
-            return "일치 (전송 대기 반영)" if r["unsent"] else "일치"
-        return "차이 — 조사 필요"
+            return ("일치 (전송 대기 반영)" if r["unsent"] else "일치") + both
+        return "차이 — 조사 필요" + both
 
     merged["verdict"] = merged.apply(verdict, axis=1)
     merged = merged.drop(columns=["_merge"])
-    order = {"차이 — 조사 필요": 0, "SAP에만 있음": 1, "SAP 자재번호 없음": 2}
-    merged["_o"] = merged["verdict"].map(order).fillna(3)
+    order = {"차이": 0, "SAP에만": 1, "SAP 자재번호": 2}
+    merged["_o"] = [next((v for k, v in order.items() if s.startswith(k)), 3) for s in merged["verdict"]]
     return merged.sort_values(["_o", "code", "wh_code"]).drop(columns=["_o"]).reset_index(drop=True)
 
 

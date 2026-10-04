@@ -102,13 +102,14 @@ def run(wh_ids=None, limit: int | None = 30) -> list[dict]:
 
     # 7) 오래 기다린 결재 · 완료 예정 지난 작업지시
     sla = config.APPROVAL_SLA_HOURS or 24
-    old = db.query_df("SELECT 'PR' AS k, id, pr_no AS no, requested_at AS at FROM purchase_requests WHERE status = 'PENDING' "
-                      "UNION ALL SELECT 'ADJ', id, '#' || id, requested_at FROM approval_requests WHERE status = 'PENDING'")
+    old = db.query_df(f"SELECT 'PR' AS k, id, pr_no AS no, requested_at AS at FROM purchase_requests WHERE status = 'PENDING'"
+                      f"{wh_and('warehouse_id')} UNION ALL SELECT kind, id, '#' || id, requested_at FROM approval_requests "
+                      f"WHERE status = 'PENDING'{wh_and('warehouse_id')}", (*wp, *wp))
     from datetime import datetime
     late = [r for r in old.itertuples()
             if (datetime.now() - datetime.fromisoformat(str(r.at)[:19])).total_seconds() > sla * 3600]
     out.append(_check("approval_late", f"결재 기한({sla}시간)을 넘긴 결재", "mid",
-                      [(f"{'구매요청' if r.k == 'PR' else '실사 조정'} {r.no} · {str(r.at)[:16]}",
+                      [(f"{ {'PR': '구매요청', 'CANCEL': '거래 취소 요청'}.get(r.k, '실사 조정')} {r.no} · {str(r.at)[:16]}",
                         f"/purchase/pr/{r.id}" if r.k == "PR" else "/approvals/") for r in late]))
     rows = db.query_df(f"SELECT p.id, p.prod_no, m.code, p.due_date FROM productions p JOIN materials m ON m.id = p.product_id "
                        f"WHERE p.status IN ('PLANNED', 'RELEASED') AND p.due_date <> '' AND p.due_date < ?{wh_and('p.issue_wh_id')}",

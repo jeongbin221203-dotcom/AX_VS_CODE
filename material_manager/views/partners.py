@@ -6,7 +6,7 @@ from flask import Blueprint, abort, flash, g, redirect, request, url_for
 
 from core import audit, bulk, partners
 from views import bulk_ui
-from views.helpers import Table, actor, can, f_str, form_response, log_export, render_page, role_required
+from views.helpers import Table, actor, as_id, can, f_str, form_response, log_export, render_page, role_required
 
 bp = Blueprint("partners", __name__, url_prefix="/partners")
 
@@ -114,8 +114,8 @@ def link():
     target = f_str("partner_id")
     if target == "new":
         r = partners.create({"name": name, "kind": f_str("kind") or "SUPPLIER"}, actor())
-    elif target.isdigit():
-        r = partners.link(name, int(target), actor())
+    elif as_id(target) is not None:
+        r = partners.link(name, as_id(target), actor())
     else:
         flash("연결할 거래처를 고르세요.", "error")
         return redirect(url_for("partners.index", tab="unknown"))

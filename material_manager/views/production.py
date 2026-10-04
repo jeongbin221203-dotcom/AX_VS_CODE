@@ -11,7 +11,7 @@ from flask import Blueprint, abort, flash, g, redirect, request, url_for
 from core import bulk, org, periods, production, repository as repo, services
 from views import bulk_ui
 from core.utils import month_end
-from views.helpers import (Table, a_int, actor, can, f_float, f_str, form_response, log_export, render_page,
+from views.helpers import (Table, a_int, actor, as_id, can, f_float, f_id, f_str, form_response, log_export, render_page,
                            role_required)
 
 bp = Blueprint("production", __name__, url_prefix="/production")
@@ -78,7 +78,7 @@ def _run_page(form: dict | None = None):
     products = production.products_with_bom()
     wh_opts = org.warehouse_options(g.wh_ids)
     form = form or request.args
-    pid = a_int("product") if form is request.args else (int(form.get("product")) if str(form.get("product", "")).isdigit() else None)
+    pid = a_int("product") if form is request.args else as_id(str(form.get("product", "")))
     if products and pid not in products:
         pid = next(iter(products))
     wh = form.get("wh")
@@ -342,7 +342,7 @@ def wo_complete(prod_id: int):
 @role_required("MANAGER")
 def routing_save():
     try:
-        pid = int(f_str("product"))
+        pid = f_id("product")
         f = request.form
         ops = [production.Op(n, w, float(m or 0), note) for n, w, m, note in
                zip(f.getlist("op_name"), f.getlist("workcenter"), f.getlist("std_minutes"), f.getlist("op_note"))]

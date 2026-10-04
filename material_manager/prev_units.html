@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>🗂️ 자재 마스터 · 자재관리 시스템</title>
+  <link rel="icon" type="image/svg+xml" href="/static/logo.svg">
+  <link rel="stylesheet" href="/static/css/app.css?v=1791113721">
+  <script src="/static/vendor/chart.umd.min.js" defer></script>
+  <script src="/static/js/app.js?v=1791113721" defer></script>
+  <script src="/static/js/picker.js?v=1791113721" defer></script>
+  <script src="/static/js/ui.js?v=1791113721" defer></script>
+</head>
+<body data-user="1">
+
+<div class="layout">
+  <aside class="sidebar">
+    <a class="brand" href="/"><img class="brand-logo" src="/static/logo.svg" alt=""> 자재관리</a>
+    
+    <div class="me">
+      <strong>테스트</strong> · 시스템관리자
+      <div class="me-actions">
+        <a href="/password">비밀번호 변경</a>
+        <form method="post" action="/logout" data-logout>
+          <input type="hidden" name="_csrf" value="tttttttttttttttttttttttttttttttt">
+          <button class="btn btn-sm">로그아웃</button>
+        </form>
+      </div>
+    </div>
+    <a class="bell " href="/notifications/">🔔 알림</a>
+    
+    <nav class="menu" data-menu-save="/prefs/menu" data-csrf="tttttttttttttttttttttttttttttttt" aria-label="메뉴">
+      
+        <a href="/" class="" data-pinned>📊 대시보드</a>
+      
+      <div class="menu-label" data-group-label="fav" hidden>★ 즐겨찾기</div>
+      <div class="menu-group" data-group="fav">
+        
+      </div>
+      <div class="menu-label" data-group-label="others" hidden>전체 메뉴</div>
+      <div class="menu-group" data-group="others">
+        
+          <a href="/transactions/" class="" data-key="transactions">🔄 입출고 등록</a>
+        
+          <a href="/transactions/batch" class="" data-key="batch">📷 여러 줄·스캔 입출고</a>
+        
+          <a href="/stock/" class="" data-key="stock">📦 재고 현황</a>
+        
+          <a href="/history/" class="" data-key="history">🧾 거래 이력</a>
+        
+          <a href="/purchase/" class="" data-key="purchase">🛒 구매 (요청·발주)</a>
+        
+          <a href="/approvals/" class="" data-key="approvals">✅ 결재함</a>
+        
+          <a href="/materials/" class="active" data-key="materials">🗂️ 자재 마스터</a>
+        
+          <a href="/statements/" class="" data-key="statements">🧾 거래명세서 입출고</a>
+        
+          <a href="/production/" class="" data-key="production">🏭 생산 (작업지시·BOM)</a>
+        
+          <a href="/mrp/" class="" data-key="mrp">📅 MRP (자재 소요 계획)</a>
+        
+          <a href="/partners/" class="" data-key="partners">🤝 거래처</a>
+        
+          <a href="/documents/" class="" data-key="documents">📎 증빙 (세금계산서)</a>
+        
+          <a href="/reports/ledger" class="" data-key="ledger">📒 수불부</a>
+        
+          <a href="/reports/valuation" class="" data-key="valuation">💴 재고 평가</a>
+        
+          <a href="/reports/reconcile" class="" data-key="reconcile">⚖️ 재고 대사</a>
+        
+          <a href="/periods/" class="" data-key="periods">🔒 월 마감</a>
+        
+          <a href="/sap/" class="" data-key="sap">🔗 ERP·SAP 연동</a>
+        
+          <a href="/quality/" class="" data-key="quality">🩺 데이터 점검</a>
+        
+          <a href="/data/" class="" data-key="data">🛠️ 데이터 관리</a>
+        
+          <a href="/admin/settings" class="" data-key="settings">🏢 회사 설정</a>
+        
+          <a href="/admin/api-keys" class="" data-key="api">🔑 API 연동</a>
+        
+          <a href="/admin/org" class="" data-key="org">🏭 플랜트·창고</a>
+        
+          <a href="/admin/users" class="" data-key="users">👥 사용자</a>
+        
+          <a href="/admin/jobs" class="" data-key="jobs">⏱️ 배치 작업</a>
+        
+          <a href="/admin/forms" class="" data-key="forms">📑 엑셀 양식</a>
+        
+          <a href="/admin/audit" class="" data-key="audit">🗂️ 감사로그</a>
+        
+      </div>
+      <div class="menu-tools">
+        <button type="button" class="menu-edit" data-menu-edit>메뉴 편집</button>
+        <button type="button" class="menu-edit" data-menu-reset hidden>기본 순서로</button>
+      </div>
+      <p class="menu-help small" hidden>☆를 누르면 즐겨찾기(위쪽)로, ▲▼ 또는 끌어서 순서를 바꿉니다. 대시보드는 맨 위에 고정입니다.</p>
+    </nav>
+    
+    
+    
+    
+    
+    <div class="muted small foot">
+      마감: 없음<br>
+      SAP 연동: OFF · 범위: 전체 창고<br>
+      DB: m.db · 오늘 2026-10-04
+    </div>
+  </aside>
+  <main class="content">
+    
+    
+    
+    <h1>🗂️ 자재 마스터</h1>
+    
+    
+<h2>단위 환산 엑셀 일괄 등록</h2>
+
+  <p><a href="/materials/">← 자재 마스터</a> · <a href="/materials/units/export.xlsx">⬇️ 지금 단위 환산 내려받기</a></p>
+  <p class="muted">한 줄 = 자재 하나의 단위 하나 (자재코드 · 단위 · 배수 · 단위바코드). 있으면 배수·바코드를 바꾸고, 없으면 추가하고, <strong>배수 0이면 그 단위를 지웁니다</strong>.
+    지금 단위 환산을 내려받아 고친 뒤 그대로 올리면 됩니다. 바코드는 다른 자재·단위와 겹칠 수 없습니다.</p>
+  
+
+
+<form class="card form" method="post" action="/materials/units/import" enctype="multipart/form-data">
+  <input type="hidden" name="_csrf" value="tttttttttttttttttttttttttttttttt"><input type="hidden" name="_once" value="74af9d74a7c0c8de3ebd77835adb62f4">
+  <div class="toolbar">
+    <a class="btn btn-sm" href="/materials/units/export.xlsx">⬇️ 빈 양식 내려받기</a>
+    
+    <label class="grow">파일 (.xlsx · .csv)<input type="file" name="file" accept=".xlsx,.csv" required></label>
+    <button class="btn btn-primary">미리보기</button>
+  </div>
+  <p class="muted small">회사 엑셀의 열 이름이 달라도 됩니다 — 흔한 이름(상호·업체명, 모품목·자품목 등)은 알아서 맞추고, 더 맞출 이름은 관리자 → 엑셀 양식에서 넣습니다.
+    한 줄이라도 문제가 있으면 아무것도 반영하지 않습니다.</p>
+</form>
+
+
+  <h3>미리보기 — 2줄 — 추가 2 · 바꾸기 0 · 지우기 0</h3>
+  
+  <div class="table-wrap"><table class="data">
+    
+      <thead><tr><th class="num">줄</th><th>처리</th><th>자재코드</th><th>단위</th><th class="num">배수</th><th>단위바코드</th><th>문제</th></tr></thead>
+      <tbody>
+        <tr class=""><td class="num">2</td><td>추가</td><td>CHM-901</td><td>BOX</td>
+          <td class="num">24.0</td><td></td><td></td></tr>
+        <tr class=""><td class="num">3</td><td>추가</td><td>CHM-901</td><td>PLT</td>
+          <td class="num">1200.0</td><td></td><td></td></tr></tbody>
+    
+  </table></div>
+  
+  
+    <form method="post" action="/materials/units/import/apply"><input type="hidden" name="_csrf" value="tttttttttttttttttttttttttttttttt"><input type="hidden" name="_once" value="18cce66eafbde4289d2fbb43997c944f"><input type="hidden" name="token" value="e228593b1bad565e15c1cc3373b461d6">
+      <button class="btn btn-primary">이대로 반영</button></form>
+  
+
+
+  </main>
+</div>
+
+</body>
+</html>
