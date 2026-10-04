@@ -21,7 +21,6 @@
 
   /* 테마 */
   var root = document.documentElement;
-  try { var saved = localStorage.getItem('ex-theme'); if (saved) root.setAttribute('data-theme', saved); } catch (e) { /* 저장소 없음 */ }
   document.addEventListener('click', function (ev) {
     var b = ev.target.closest('[data-theme-toggle]');
     if (!b) return;
@@ -31,6 +30,15 @@
     root.setAttribute('data-theme', next);
     try { localStorage.setItem('ex-theme', next); } catch (e) { /* 무시 */ }
   });
+
+  /* 한 번 보여 준 안내(?msg=·?error=)는 주소에서 지운다 — 새로 고쳐도 다시 뜨지 않게 */
+  try {
+    var u = new URL(location.href);
+    if (u.searchParams.has('msg') || u.searchParams.has('error') || u.searchParams.has('done')) {
+      ['msg', 'error', 'done'].forEach(function (k) { u.searchParams.delete(k); });
+      history.replaceState(null, '', u.pathname + (u.search || '') + u.hash);
+    }
+  } catch (e) { /* 오래된 브라우저 */ }
 
   /* 선택하면 바로 제출 */
   document.addEventListener('change', function (ev) {
@@ -59,6 +67,8 @@
       document.querySelectorAll('[data-fn-group]').forEach(function (g) {
         g.classList.toggle('hidden', !g.querySelector('[data-fn]:not(.hidden)'));
       });
+      var none = document.getElementById('fn-none');
+      if (none) none.classList.toggle('hidden', !q || !!document.querySelector('[data-fn]:not(.hidden)'));
     });
   }
 
@@ -114,15 +124,18 @@
       tick();
     });
     box.querySelector('[data-timer-reset]').addEventListener('click', function () {
+      if (getStart() && !window.confirm('시간을 처음으로 되돌릴까요?')) return;
       try { localStorage.removeItem(key); } catch (e) { /* 무시 */ }
       tick();
     });
-    box.querySelector('form').addEventListener('submit', function () {
-      tick();
-      try { localStorage.removeItem(key); } catch (e) { /* 무시 */ }
-    });
+    box.querySelector('form').addEventListener('submit', function () { tick(); });
     tick();
     setInterval(tick, 1000);
+  });
+
+  /* 방금 제출한 시험의 채점 결과 화면: 그 시험 시간 기록을 지운다 */
+  document.querySelectorAll('[data-timer-clear]').forEach(function (el) {
+    try { localStorage.removeItem('ex-exam-start:' + el.getAttribute('data-timer-clear')); } catch (e) { /* 무시 */ }
   });
 
   /* 공개 서버: 기록을 이 브라우저에 자동 보관 → 서버가 다시 시작돼 기록이 비면 복원 제안 */
@@ -191,6 +204,9 @@
 
   if (P.type === 'choice') {
     var form = document.getElementById('choice-form');
+    form.addEventListener('keydown', function (ev) {      // 보기에서 Enter = 채점
+      if (ev.key === 'Enter' && ev.target.matches('input[name=opt]')) { ev.preventDefault(); form.requestSubmit(); }
+    });
     form.addEventListener('submit', function (ev) {
       ev.preventDefault();
       var picked = form.querySelector('input[name=opt]:checked');
@@ -212,6 +228,7 @@
 
   var input = document.getElementById('formula');
   var namebox = document.getElementById('namebox');
+  if (window.matchMedia && window.matchMedia('(hover: hover)').matches) input.focus({ preventScroll: true });
   var sheet = document.getElementById('sheet');
   var cells = {};
   sheet.querySelectorAll('td[data-a]').forEach(function (td) {
@@ -444,6 +461,7 @@
   });
 
   input.addEventListener('keydown', function (ev) {
+    if (ev.isComposing || ev.keyCode === 229) return;   // 한글 입력 조합 중
     var open = acItems.length > 0;
     if (open && (ev.key === 'ArrowDown' || ev.key === 'ArrowUp')) {
       ev.preventDefault();
@@ -451,19 +469,20 @@
       renderAc();
       return;
     }
-    if (open && ev.key === 'Tab') { ev.preventDefault(); pickAc(acIndex); return; }
+    if (open && (ev.key === 'Tab' || (ev.key === 'Enter' && !ev.ctrlKey))) { ev.preventDefault(); pickAc(acIndex); return; }
     if (open && ev.key === 'Escape') { ev.preventDefault(); hideAc(); argtip.classList.add('hidden'); return; }
     if (ev.key === 'F4') {
       /* F4: 커서가 있는 셀 주소의 $ 를 A1 → $A$1 → A$1 → $A1 순서로 */
       ev.preventDefault();
       var v = input.value, pos = input.selectionStart;
-      var re = /(\$?)([A-Za-z]{1,3})(\$?)(\d+)/g, m;
+      var re = /(\$?)([A-Za-z]{1,3})(\$?)(\d+)(?::(\$?)([A-Za-z]{1,3})(\$?)(\d+))?/g, m;
       while ((m = re.exec(v))) {
         var s = m.index, e = s + m[0].length;
         if (pos >= s && pos <= e) {
           var state = (m[1] ? 2 : 0) + (m[3] ? 1 : 0); // 0:A1 3:$A$1 1:A$1 2:$A1
           var next = { 0: 3, 3: 1, 1: 2, 2: 0 }[state];
-          var rep = (next & 2 ? '$' : '') + m[2] + (next & 1 ? '$' : '') + m[4];
+          var one = function (col, row) { return (next & 2 ? '$' : '') + col + (next & 1 ? '$' : '') + row; };
+          var rep = one(m[2], m[4]) + (m[6] ? ':' + one(m[6], m[8]) : '');   // 범위는 양 끝을 함께(엑셀과 같음)
           input.value = v.slice(0, s) + rep + v.slice(e);
           input.setSelectionRange(s + rep.length, s + rep.length);
           break;

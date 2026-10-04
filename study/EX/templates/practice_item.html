@@ -13,7 +13,7 @@
 {% if error %}<div class="alert" role="alert">{{ error }}</div>{% endif %}
 
 <section class="card exam-bar" data-exam-timer="{{ 40 if info.level == 'c2' else 45 }}" data-exam-id="{{ kind }}-{{ info.id }}">
-  <div class="timer" aria-live="polite"><span class="small muted">시간</span> <b data-timer-text>{{ 40 if info.level == 'c2' else 45 }}:00</b></div>
+  <div class="timer"><span class="small muted">시간</span> <b data-timer-text>{{ 40 if info.level == 'c2' else 45 }}:00</b></div>
   <div class="btns">
     <button class="btn" type="button" data-timer-start>시작</button>
     <button class="btn ghost" type="button" data-timer-reset>초기화</button>

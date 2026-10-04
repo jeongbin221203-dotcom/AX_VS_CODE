@@ -262,7 +262,7 @@
     "Ctrl+Shift+Enter"
    ],
    "answer": 3,
-   "explain": "Ctrl+Shift+Enter 로 입력하면 이전 방식의 배열 수식이 되어 수식 입력줄에 중괄호 { } 가 자동으로 붙습니다(중괄호를 직접 타이핑하면 텍스트가 됨). Microsoft 365 에서는 Enter 만 눌러도 배열 계산(동적 배열)이 되지만, 컴활 시험에서는 Ctrl+Shift+Enter 를 요구합니다."
+   "explain": "Ctrl+Shift+Enter 로 입력하면 이전 방식의 배열 수식이 되어 수식 입력줄에 중괄호 { } 가 자동으로 붙습니다(중괄호를 직접 타이핑하면 텍스트가 됨). Excel 2021·Microsoft 365 는 Enter 만 눌러도 배열 계산(동적 배열)이 되지만, 컴활 채점은 중괄호가 붙은 배열 수식을 기준으로 하므로 Ctrl+Shift+Enter 로 입력합니다."
   }
  ]
 }

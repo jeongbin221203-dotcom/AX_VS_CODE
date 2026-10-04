@@ -2055,7 +2055,7 @@
     {
      "kind": "pivot",
      "label": "필터·행·열·값 필드",
-     "points": 4,
+     "points": 3,
      "filters": [
       "지점"
      ],
@@ -2094,6 +2094,13 @@
      "label": "테이블 형식",
      "points": 2,
      "layout": "tabular",
+     "check_total": false
+    },
+    {
+     "kind": "pivot",
+     "label": "값 영역 1000 단위 구분 기호",
+     "points": 1,
+     "value_numfmt": "#,##0",
      "check_total": false
     }
    ],
@@ -2389,7 +2396,7 @@
      "needs_vba": true,
      "patterns": [
       "CurrentRegion|End\\(xlUp\\)",
-      "Range\\(\"H4\"\\)|\\[H4\\]|Cells\\(4, ?8\\)",
+      "H4|Cells\\(4, ?(8|\"H\")\\)",
       "If .*200000",
       "Else"
      ]
@@ -2441,7 +2448,7 @@
      "proc": "종료",
      "needs_vba": true,
      "patterns": [
-      "ClearContents|ClearContents|\\.Value ?= ?\"\"|Clear",
+      "Clear|\\.Value ?= ?\"\"",
       "MsgBox",
       "Format\\(Date"
      ]

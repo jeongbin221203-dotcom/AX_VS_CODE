@@ -23,7 +23,8 @@
     return v.toLocaleString('ko-KR', { maximumFractionDigits: 2 });
   }
 
-  function niceMax(m) {
+  function niceMax(m, ints) {
+    if (ints) return Math.max(4, Math.ceil(niceMax(m) / 4) * 4);   // 건수 차트: 눈금이 정수(0·1·2·3·4 …)
     if (m <= 0) return 1;
     var p = Math.pow(10, Math.floor(Math.log10(m)));
     var steps = [1, 2, 2.5, 5, 10];
@@ -67,7 +68,7 @@
     var totals = spec.labels.map(function (_, i) {
       return spec.series.reduce(function (a, s) { return a + Math.max(0, s.values[i] || 0); }, 0);
     });
-    var max = niceMax(Math.max.apply(null, totals.concat([0])));
+    var max = niceMax(Math.max.apply(null, totals.concat([0])), totals.every(function (v) { return v === Math.round(v); }));
     var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': spec.title || '막대 차트' }, box);
     var ph = H - pad.t - pad.b, pw = W - pad.l - pad.r;
     var ax = el('g', { 'class': 'axis' }, svg);
@@ -137,7 +138,7 @@
     var W = Math.max(box.clientWidth, 280), H = spec.height || 220;
     var pad = { l: 44, r: 14, t: 14, b: 26 };
     var vals = spec.series[0].values, n = vals.length;
-    var max = niceMax(Math.max.apply(null, vals.concat([0])));
+    var max = niceMax(Math.max.apply(null, vals.concat([0])), vals.every(function (v) { return v === Math.round(v); }));
     var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': spec.title || '선 차트' }, box);
     var ph = H - pad.t - pad.b, pw = W - pad.l - pad.r;
     var ax = el('g', { 'class': 'axis' }, svg);

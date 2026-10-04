@@ -102,7 +102,7 @@ def _resolve(kind, iid, need_answer=True):
     abort(404)
 
 
-CACHE_VER = 2          # 채점·지문 규칙을 바꾸면 올린다(예전에 저장한 할 일·지문을 다시 만든다)
+CACHE_VER = 3          # 채점·지문 규칙을 바꾸면 올린다(예전에 저장한 할 일·지문을 다시 만든다)
 
 
 def _tasks(folder, practice, answer):
@@ -176,7 +176,7 @@ def submit(kind, iid):
                        (key, res['score'], res['total'], int(res['passed']), request.form.get('seconds', type=int),
                         json.dumps(res, ensure_ascii=False), f.filename[:200], db.user_id()))
     conn.commit()
-    return redirect(url_for('.result', rid=cur.lastrowid))
+    return redirect(url_for('.result', rid=cur.lastrowid, done=1))
 
 
 @bp.route('/result/<int:rid>')

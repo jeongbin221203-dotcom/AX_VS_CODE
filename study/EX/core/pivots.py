@@ -24,12 +24,39 @@ def _field_names(fields, names):
     return out
 
 
+def _fmt_code(wb, num_id):
+    """표시 형식 번호 → 형식 글자(기본 형식 또는 이 통합문서의 사용자 지정 형식)."""
+    from openpyxl.styles.numbers import BUILTIN_FORMATS
+    if num_id is None:
+        return None
+    if num_id in BUILTIN_FORMATS:
+        return BUILTIN_FORMATS[num_id]
+    custom = list(getattr(wb, '_number_formats', []) or [])
+    i = num_id - 164
+    return custom[i] if 0 <= i < len(custom) else None
+
+
+def _cell_formats(ws, ref):
+    """피벗 범위 안 숫자 칸들의 표시 형식(값 필드 대신 셀 서식으로 지정한 경우)."""
+    try:
+        r1, c1, r2, c2 = fx.parse_range(ref)
+    except ValueError:
+        return []
+    out = set()
+    for row in ws.iter_rows(min_row=r1, max_row=min(r2, r1 + 200), min_col=c1, max_col=c2):
+        for cell in row:
+            if isinstance(cell.value, (int, float)) and not isinstance(cell.value, bool):
+                out.add(cell.number_format)
+    return sorted(out)
+
+
 def describe(wb):
     """통합문서의 모든 피벗 → [{sheet, ref, rows, cols, filters, values[(필드, 함수)], source, grouped}]"""
     out = []
     for ws in wb.worksheets:
         for pt in getattr(ws, '_pivots', []):
             names = _names(pt)
+            value_formats = [c for c in (_fmt_code(wb, getattr(d, 'numFmtId', None)) for d in pt.dataFields) if c]
             src = pt.cache.cacheSource.worksheetSource if pt.cache.cacheSource else None
             grouped = [cf.name for cf in pt.cache.cacheFields if getattr(cf, 'fieldGroup', None) is not None]
             out.append({
@@ -42,6 +69,7 @@ def describe(wb):
                 'grand_rows': pt.rowGrandTotals is not False, 'grand_cols': pt.colGrandTotals is not False,
                 'layout': 'compact' if pt.compact is not False and pt.outline is not False else
                           ('outline' if pt.outline else 'tabular'),
+                'value_formats': value_formats, 'cell_formats': _cell_formats(ws, pt.location.ref),
             })
     return out
 
@@ -88,6 +116,11 @@ def match(spec, pv):
     if spec.get('layout') and spec['layout'] != pv['layout']:
         names = {'compact': '압축', 'outline': '개요', 'tabular': '테이블'}
         why.append(f"보고서 레이아웃: {names[spec['layout']]} 형식이어야 합니다")
+    if spec.get('value_numfmt'):
+        from .exam import _same_fmt
+        have = (pv.get('value_formats') or []) + (pv.get('cell_formats') or [])
+        if not any(_same_fmt(f, spec['value_numfmt'], [1234567, 1234.5]) for f in have):
+            why.append(f"값 영역 표시 형식: {spec['value_numfmt']}(예: 1,234,567) 이어야 합니다 — [값 필드 설정] > [표시 형식]")
     return not why, why
 
 

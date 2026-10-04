@@ -86,7 +86,7 @@ def submit(eid):
                        (eid, res['score'], res['total'], int(res['passed']), seconds,
                         json.dumps(res, ensure_ascii=False), f.filename[:200], db.user_id()))
     conn.commit()
-    return redirect(url_for('.result', rid=cur.lastrowid))
+    return redirect(url_for('.result', rid=cur.lastrowid, done=1))
 
 
 @bp.route('/result/<int:rid>')

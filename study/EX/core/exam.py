@@ -222,6 +222,50 @@ def _color(c):
     return None
 
 
+THEME_SLOTS = ('lt1', 'dk1', 'lt2', 'dk2', 'accent1', 'accent2', 'accent3', 'accent4', 'accent5', 'accent6',
+               'hlink', 'folHlink')                 # 셀 색의 theme 번호 순서(0=배경1 흰색, 1=텍스트1 검정 …)
+HALIGN_KO = {'general': '일반', 'left': '왼쪽', 'center': '가운데', 'right': '오른쪽', 'fill': '채우기',
+             'centerContinuous': '선택 영역의 가운데로', 'distributed': '균등 분할', 'justify': '양쪽 맞춤'}
+VALIGN_KO = {'top': '위쪽', 'center': '가운데', 'bottom': '아래쪽', 'justify': '양쪽 맞춤', 'distributed': '균등 분할'}
+
+
+def theme_colors(wb):
+    """통합 문서 테마의 색 → {'T0': 'FFFFFF', 'T1': '000000', 'T4': '4F81BD', ...}"""
+    xml = getattr(wb, 'loaded_theme', None)
+    if not xml:
+        return {}
+    text = xml.decode('utf-8', 'replace') if isinstance(xml, bytes) else str(xml)
+    out = {}
+    for i, slot in enumerate(THEME_SLOTS):
+        m = re.search(rf'<a:{slot}>(.*?)</a:{slot}>', text, re.S)
+        if not m:
+            continue
+        c = re.search(r'(?:lastClr|val)="([0-9A-Fa-f]{6})"', m.group(1))
+        if c:
+            out[f'T{i}'] = c.group(1).upper()
+    return out
+
+
+def same_color(got, want, theme=None):
+    """got: _color() 값(RRGGBB 또는 T4 같은 테마 색), want: 'RRGGBB'. 같은 색이면 테마 색으로 골라도 맞음."""
+    want = want.upper() if want else want
+    if got == want:
+        return True
+    return bool(got and theme and theme.get(got) == want)
+
+
+def _same_fmt(user_fmt, want_fmt, values=()):
+    """표시 형식: 실제 칸 값(있으면)과 양수 예시가 같게 보이면 같은 형식(예: #,###"원" = #,##0"원" — 0 이 없을 때)."""
+    if user_fmt == want_fmt:
+        return True
+    nums = [v for v in values if fx.is_num(v)][:50]
+    samples = nums + [1234.5] if nums else (1234.5, 0, -56.78, 0.256, 46000)
+    try:
+        return all(fx.format_value(v, user_fmt).strip() == fx.format_value(v, want_fmt).strip() for v in samples)
+    except Exception:  # noqa: BLE001 — 계산기가 모르는 서식
+        return _fmt_sample(user_fmt) == _fmt_sample(want_fmt)
+
+
 def _ws(wb, name):
     for ws in wb.worksheets:
         if ws.title.strip() == name.strip():
@@ -261,6 +305,12 @@ class Ctx:
             return self.book.sheet(sheet).get(r, c)
         except fx.XLErr:
             return None
+
+    @property
+    def theme(self):
+        if not hasattr(self, '_theme'):
+            self._theme = theme_colors(self.wb_f)
+        return self._theme
 
     @property
     def vba(self):
@@ -372,19 +422,22 @@ def check_style(ctx, sheet, chk):
             bad.append(f'{a}: 기울임꼴')
         if 'underline' in f and (cell.font.u or None) != (f['underline'] or None):
             bad.append(f"{a}: 밑줄({f['underline']})")
-        if 'color' in f and _color(cell.font.color) != f['color'].upper():
+        if 'color' in f and not same_color(_color(cell.font.color) or ('000000' if f['color'].upper() == '000000' else None),
+                                           f['color'], ctx.theme):
             bad.append(f"{a}: 글꼴 색")
         if 'fill' in chk:
             got = _color(cell.fill.fgColor) if cell.fill.patternType == 'solid' else None
-            if got != chk['fill'].upper():
+            if not same_color(got, chk['fill'], ctx.theme):
                 bad.append(f'{a}: 채우기 색')
         if 'halign' in chk and (cell.alignment.horizontal or 'general') != chk['halign']:
-            bad.append(f"{a}: 가로 맞춤 {cell.alignment.horizontal or '일반'} → {chk['halign']}")
+            have = HALIGN_KO.get(cell.alignment.horizontal or 'general', cell.alignment.horizontal)
+            bad.append(f"{a}: 가로 맞춤 '{have}' → '{HALIGN_KO.get(chk['halign'], chk['halign'])}'")
         if 'valign' in chk and (cell.alignment.vertical or 'bottom') != chk['valign']:
-            bad.append(f'{a}: 세로 맞춤')
+            bad.append(f"{a}: 세로 맞춤 → '{VALIGN_KO.get(chk['valign'], chk['valign'])}'")
         if 'wrap' in chk and bool(cell.alignment.wrap_text) != chk['wrap']:
             bad.append(f'{a}: 자동 줄 바꿈')
-        if 'numfmt' in chk and _fmt_sample(cell.number_format) != _fmt_sample(chk['numfmt']):
+        if 'numfmt' in chk and not _same_fmt(cell.number_format, chk['numfmt'],
+                                             [ctx.user_value(ws.title, rr, cc) for rr, cc in cells]):
             bad.append(f"{a}: 표시 형식 {cell.number_format} → {chk['numfmt']}")
         if chk.get('border') == 'all':
             b = cell.border
@@ -483,7 +536,8 @@ def check_cf(ctx, sheet, chk):
             continue
         dxf = rule.dxf
         fmt_bad = []
-        if 'font_color' in chk and _color(dxf.font.color if dxf and dxf.font else None) != chk['font_color'].upper():
+        if 'font_color' in chk and not same_color(_color(dxf.font.color if dxf and dxf.font else None),
+                                                  chk['font_color'], ctx.theme):
             fmt_bad.append('글꼴 색')
         if 'bold' in chk and bool(dxf and dxf.font and dxf.font.b) != chk['bold']:
             fmt_bad.append('굵게')
@@ -492,7 +546,7 @@ def check_cf(ctx, sheet, chk):
         if 'fill' in chk:
             fill = dxf.fill if dxf else None
             got = _color(fill.bgColor) or _color(fill.fgColor) if fill else None
-            if got != chk['fill'].upper():
+            if not same_color(got, chk['fill'], ctx.theme):
                 fmt_bad.append('채우기 색')
         if fmt_bad:
             msgs.append('서식이 다릅니다: ' + ', '.join(fmt_bad))
@@ -792,6 +846,10 @@ def check_datatable(ctx, sheet, chk):
     return True, []
 
 
+def _key_name(n):
+    return re.sub(r'[\s-]', '', n)
+
+
 CHART_TYPES = {'barChart': 'col', 'bar3DChart': 'col', 'lineChart': 'line', 'line3DChart': 'line', 'pieChart': 'pie',
                'pie3DChart': 'pie', 'doughnutChart': 'doughnut', 'areaChart': 'area', 'scatterChart': 'scatter',
                'radarChart': 'radar'}
@@ -990,6 +1048,11 @@ CHECKS = {'values': check_values, 'formula': check_formula, 'style': check_style
 # ------------------------------------------------------------ 채점 ----------
 def grade(exam, data, filename='답안.xlsx'):
     ctx = Ctx(exam, data, filename)
+    want = [s['name'] for s in exam['sheets']]
+    have = {_key_name(n) for n in ctx.wb_f.sheetnames}
+    if sum(1 for n in want if _key_name(n) in have) * 2 < len(want):
+        raise xlsx.BadFile(f"이 모의고사({exam['title']})의 답안 파일이 아닌 것 같습니다 — 시트 "
+                           f"{', '.join(want[:4])}… 가 없습니다. 이 문제지에서 받은 파일에 답을 넣어 올려 주세요.")
     tasks, score = [], 0
     for t in exam['tasks']:
         items, got = [], 0

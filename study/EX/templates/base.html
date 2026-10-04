@@ -8,6 +8,7 @@
 <title>{% block title %}엑셀 연습장{% endblock %}</title>
 <link rel="icon" href="{{ url_for('static', filename='img/logo.svg') }}" type="image/svg+xml">
 <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+<script src="{{ asset('js/theme.js') }}"></script>
 </head>
 <body>
 {% set ep = request.endpoint or '' %}

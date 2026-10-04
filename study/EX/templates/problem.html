@@ -11,7 +11,7 @@
   </div>
 </div>
 
-<div class="problem-layout">
+<div class="problem-layout{{ ' has-grid' if grid }}">
   <section class="card">
     <div class="prompt">{{ p.prompt }}</div>
     {% if p.type == 'formula' %}
@@ -25,14 +25,15 @@
     <div class="fbar" style="margin-top:14px">
       <div class="namebox" id="namebox">{{ p.target }}</div>
       <div class="fx">fx</div>
-      <input id="formula" type="text" autocomplete="off" spellcheck="false" placeholder="= 로 시작하는 수식 입력" aria-label="{{ p.target }} 셀 수식">
+      <input id="formula" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="= 로 시작하는 수식 입력" aria-label="{{ p.target }} 셀 수식">
     </div>
     <div class="btns" style="margin-top:10px">
-      <button class="btn primary" id="btn-check" type="button">채점 (Enter)</button>
-      <button class="btn" id="btn-try" type="button">계산해 보기 (Ctrl+Enter)</button>
+      <button class="btn primary" id="btn-check" type="button">채점<span class="kbd-hint"> (Enter)</span></button>
+      <button class="btn" id="btn-try" type="button">계산해 보기<span class="kbd-hint"> (Ctrl+Enter)</span></button>
       <button class="btn ghost" id="btn-reset" type="button">시트 원래대로</button>
     </div>
-    <div class="tip">엑셀처럼 <code>=av</code> 를 치면 AV 로 시작하는 함수가 뜹니다(↑↓ 고르고 Tab). 수식 입력 중 시트를 누르거나 끌면(드래그) 셀 주소·범위가 들어가고, F4 로 $ 고정을 바꿉니다. 배열 수식은 <code>{=…}</code> 처럼 입력해도 됩니다.</div>
+    <div class="tip touch-only">셀을 누르면 수식에 그 주소가 들어갑니다. 범위는 <code>B2:B5</code> 처럼 직접 입력하세요.</div>
+    <div class="tip kbd-hint">엑셀처럼 <code>=av</code> 를 치면 AV 로 시작하는 함수가 뜹니다(↑↓ 고르고 Tab). 수식 입력 중 시트를 누르거나 끌면(드래그) 셀 주소·범위가 들어가고, F4 로 $ 고정을 바꿉니다. 배열 수식은 <code>{=…}</code> 처럼 입력해도 됩니다.</div>
     {% else %}
     <form id="choice-form" class="choices">
       {% for o in p.options %}

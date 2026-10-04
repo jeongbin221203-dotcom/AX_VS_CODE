@@ -79,6 +79,11 @@ def _csv_value(s):
     if s == '':
         return None
     n = s.replace(',', '')
+    n = re.sub(r'^([-+]?)[₩$￦]\s*', r'\1', n)          # ₩120,000 · 120,000원 같은 금액
+    if re.fullmatch(r'-?[\d.]+\s*원', n):
+        n = re.sub(r'\s*원$', '', n)
+    if re.fullmatch(r'-?\d+(?:\.\d+)?%', n):
+        return float(n[:-1]) / 100
     if re.fullmatch(r'-?\d+', n):
         return int(n)
     if re.fullmatch(r'-?\d*\.\d+(?:[eE][-+]?\d+)?|-?\d+[eE][-+]?\d+', n):
@@ -235,7 +240,7 @@ def _agg(vals, how, count):
     if how == 'count':
         return count
     if not vals:
-        return None
+        return 0 if how == 'sum' else None      # 금액이 빈 항목: 합계 0(엑셀 SUM 과 같음), 평균·최대·최소는 없음
     if how == 'sum':
         return fx.fix(math.fsum(vals))
     if how == 'avg':

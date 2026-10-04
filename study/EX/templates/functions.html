@@ -3,14 +3,15 @@
 {% block content %}
 <div class="page-head">
   <div><h1>함수 사전</h1><p>함수 {{ total }}개 · 형식, 인수, 예제, 컴활 범위.</p></div>
-  <input id="fn-search" type="search" placeholder="함수 이름 검색 (예: VLOOKUP)" aria-label="함수 검색">
+  <input id="fn-search" type="search" placeholder="함수 이름·뜻 검색 (예: VLOOKUP, 합계)" aria-label="함수 검색">
 </div>
+<div id="fn-none" class="card empty hidden">찾는 함수가 없습니다. 함수 이름의 일부나 '합계'·'개수'·'날짜' 같은 말로 찾아 보세요.</div>
 {% for g in groups %}
 <section class="card" data-fn-group>
   <h2>{{ g.name }}</h2>
   <div class="fn-list">
     {% for f in g.funcs %}
-    <a class="fn-card" href="{{ url_for('functions.detail', name=f.name) }}" data-fn="{{ f.name }} {{ f.get('aliases', [])|join(' ') }} {{ f.desc }}">
+    <a class="fn-card" href="{{ url_for('functions.detail', name=f.name) }}" data-fn="{{ f.name }} {{ f.get('aliases', [])|join(' ') }} {{ f.desc }} {{ g.name }} {{ f.get('keywords', '') }}">
       <b>{{ f.name }}</b>{% for t in f.get('tracks', []) %} <span class="badge {{ t }}">{{ TRACKS[t] }}</span>{% endfor %}
       <span>{{ f.desc|truncate(60) }}</span>
     </a>

@@ -81,6 +81,7 @@ class Fmt:
 
     def __init__(self, fmt):
         fmt = SHORT_DATE.get(fmt, fmt)
+        self.fmt = fmt
         s = [x.strip() for x in _fmt_sample(fmt)]
         self.pos = (s[0], s[3], s[4])
         self.all = tuple(s)
@@ -110,9 +111,30 @@ def _style_key(cell):
             '테두리': tuple(bool(getattr(b, s).style) for s in ('left', 'right', 'top', 'bottom'))}
 
 
+UNDERLINE_KO = {'single': '실선', 'double': '이중 실선', 'singleAccounting': '회계용 실선',
+                'doubleAccounting': '회계용 이중 실선'}
+
+
 def _show_style(k, v):
+    """채점 항목·힌트에 보일 말(내부 값 → 엑셀 화면의 이름)."""
+    from .describe import color_name                 # describe 가 이 모듈을 불러오므로 여기서
+    from .exam import HALIGN_KO, VALIGN_KO
     if k == '표시 형식':
-        return f'(예: {v.all[0]})' if isinstance(v, Fmt) else ''
+        if not isinstance(v, Fmt):
+            return ''
+        if v.fmt == '@':
+            return "'텍스트'"
+        plain = re.sub(r'"[^"]*"|\[[^\]]*\]', '', v.fmt.lower())
+        sample = v.all[3] if '%' in plain else v.all[4] if re.search(r'[ymd]', plain) else v.all[0]
+        return f'{v.fmt} (예: {sample})'
+    if k in ('글꼴 색', '채우기'):
+        return '없음' if v is None and k == '채우기' else color_name(v)
+    if k == '가로 맞춤':
+        return HALIGN_KO.get(v, v)
+    if k == '세로 맞춤':
+        return VALIGN_KO.get(v, v)
+    if k == '밑줄':
+        return UNDERLINE_KO.get(v, '없음') if v else '없음'
     if k == '테두리':
         return '있음' if any(v) else '없음'
     if isinstance(v, bool):

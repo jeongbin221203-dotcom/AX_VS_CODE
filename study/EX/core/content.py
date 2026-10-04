@@ -1,6 +1,7 @@
 """문제 은행·함수 사전 읽기와 수식 문제 채점."""
 import datetime as dt
 import json
+import re
 import threading
 from pathlib import Path
 
@@ -221,9 +222,15 @@ def check(problem, text, reveal=True):
     try:
         ast = fx.parse(text)
     except fx.FormulaError as e:
-        return {'ok': False, 'error': f'수식을 읽을 수 없습니다: {e}'}
+        msg = f'수식을 읽을 수 없습니다: {e}'
+        if re.search(r'[ㄱ-ㅎㅏ-ㅣ가-힣]', re.sub(r'"[^"]*"', '', text)):
+            msg += ' — 따옴표 밖에 한글이 있습니다. 한/영 키로 영문 입력인지 확인하세요.'
+        return {'ok': False, 'error': msg}
     used = fx.functions_used(ast)
     unknown = sorted(n for n in used if n not in fx.FUNCS)
+    if unknown and reveal:                              # 철자가 틀린 함수(=su 등)는 오답으로 기록하지 않음
+        return {'ok': False, 'error': '이 연습장이 모르는 함수: ' + ', '.join(unknown) +
+                ' — 철자를 확인하세요(함수 이름을 입력하는 중이면 목록에서 Tab·Enter 로 고르세요).'}
     res, _ = _run(problem, ast)
     formats = sheet_spec(problem)[1]
     cells = []
@@ -233,6 +240,9 @@ def check(problem, text, reveal=True):
     out = {'cells': cells, 'unknown': unknown}
     if not reveal:
         return out
+    if res and all(isinstance(v, fx.XLErr) and fx.display(v) == '#NAME?' for _, _, v, _ in res):
+        return {'ok': False, 'cells': cells, 'error': '#NAME? — 이 연습장이 모르는 이름이 들어 있습니다. 함수 이름 철자와 '
+                '따옴표를 확인하세요(함수를 고르는 중이면 목록에서 Tab·Enter).'}
     exp = expected(problem)
     per = [fx.same_value(v, e[2]) for (_, _, v, _), e in zip(res, exp)]
     notes = []
@@ -242,8 +252,32 @@ def check(problem, text, reveal=True):
     missing = [n for n in need if n not in used and not (n == 'RANK.EQ' and 'RANK' in used)]
     if missing:
         notes.append('이 문제는 ' + ', '.join(missing) + ' 함수를 써서 풀어야 합니다.')
+    groups = problem.get('require_any') or []          # 예: [["MINIFS"], ["MIN", "IF"]] — 어느 한 묶음을 모두 쓰면 됨
+    if groups and not any(all(n.upper() in used for n in g) for g in groups):
+        missing.append('|'.join('+'.join(g) for g in groups))
+        notes.append('이 문제는 ' + ' 또는 '.join('+'.join(g) for g in groups) + ' 로 풀어야 합니다.')
+    banned = sorted(n for n in (x.upper() for x in problem.get('forbid', [])) if n in used)
+    if banned:
+        missing.append(','.join(banned))
+        notes.append(', '.join(banned) + ' 함수는 쓰지 않고 풀어야 합니다(문제의 지시 방법대로).')
     if not fx.has_reference(ast):
         notes.append('값을 직접 입력하지 말고 셀을 참조하는 수식으로 만드세요.')
+    exact = _exact_lookup_missing(problem.get('answer', ''), text)
+    if exact:
+        missing.append('exact')
+        notes.append(f'{exact} 의 마지막 인수(찾는 방법)에 0 또는 FALSE 를 넣어 정확히 일치하는 값을 찾으세요 — '
+                     '생략하면 비슷하게 일치(정렬된 표 전용)라 자료에 따라 엉뚱한 값이 나옵니다.')
+    for (r, c, v, _), e, good in zip(res, exp, per):
+        if good:
+            continue
+        if fx.display(v) == fx.display(e[2]) and isinstance(v, str) != isinstance(e[2], str):
+            notes.append(f'{fx.addr(r, c)} 처럼 값은 같아 보여도 ' + ('문자' if isinstance(v, str) else '숫자') +
+                         ' 입니다 — 기대한 것은 ' + ('문자' if isinstance(e[2], str) else '숫자') +
+                         ' (예: LEFT·MID·RIGHT 결과는 문자, 숫자로 바꾸려면 VALUE 나 *1).')
+            break
+        if isinstance(v, str) and isinstance(e[2], str) and v.lower() == e[2].lower():
+            notes.append(f'{fx.addr(r, c)}: 대소문자가 다릅니다("{v}" → "{e[2]}") — 따옴표 안 글자를 문제와 똑같이 쓰세요.')
+            break
     ok = all(per) and not missing and fx.has_reference(ast)
     wrong = [fx.addr(r, c) for (r, c, _, _), good in zip(res, per) if not good]
     if wrong and len(res) > 1 and per[0]:
@@ -252,6 +286,44 @@ def check(problem, text, reveal=True):
     out.update(ok=ok, per=per, notes=notes,
                expected=[{'addr': fx.addr(r, c), 'value': display_cell(v, _fmt_of(formats, r, c))} for r, c, v, _ in exp])
     return out
+
+
+def _lookup_calls(text):
+    """수식 글자에서 VLOOKUP·HLOOKUP 호출마다 (함수 이름, 인수 글자 목록)."""
+    out = []
+    for m in re.finditer(r'\b([VH]LOOKUP)\s*\(', text, re.I):
+        depth, args, cur, in_str = 0, [], '', False
+        for ch in text[m.end():]:
+            if ch == '"':
+                in_str = not in_str
+            if not in_str:
+                if ch in '({':
+                    depth += 1
+                elif ch in ')}':
+                    if depth == 0:
+                        break
+                    depth -= 1
+                elif ch == ',' and depth == 0:
+                    args.append(cur.strip())
+                    cur = ''
+                    continue
+            cur += ch
+        args.append(cur.strip())
+        out.append((m.group(1).upper(), args))
+    return out
+
+
+def _exact_lookup_missing(answer, text):
+    """정답이 정확히 일치(0·FALSE)로 찾는데 수험자 수식은 그 인수를 빠뜨렸거나 TRUE 면 그 함수 이름."""
+    def exact(args):
+        return len(args) >= 4 and args[3].upper() in ('0', 'FALSE', '')
+    want = [n for n, a in _lookup_calls(answer) if exact(a)]
+    if not want:
+        return None
+    for n, a in _lookup_calls(text):
+        if not exact(a):
+            return n
+    return None
 
 
 def check_choice(problem, picked):
@@ -274,6 +346,9 @@ def grid(problem, max_rows=40, max_cols=16):
         rows_n = max(rows_n, fx.parse_addr(problem['target'])[0] + int(problem['spill_rows']) - 1)
     rows_n, cols_n = min(rows_n + 1, max_rows), min(cols_n + 1, max_cols)
     out = []
+    head_cols = 0                                   # 1행에서 A 열부터 이어진 글자 = 표 머리글(그 오른쪽 입력 칸은 아님)
+    while head_cols < cols_n and isinstance(sheet.get(1, head_cols + 1), str):
+        head_cols += 1
     for r in range(1, rows_n + 1):
         row = []
         for c in range(1, cols_n + 1):
@@ -287,7 +362,7 @@ def grid(problem, max_rows=40, max_cols=16):
                 else:
                     text = fx.display(v)
             row.append({'addr': a, 'text': text, 'num': fx.is_num(v), 'target': (r, c) in fill,
-                        'head': r == 1 and v is not None and not fx.is_num(v)})
+                        'head': r == 1 and c <= head_cols})
         out.append(row)
     return {'cols': [fx.col_name(c) for c in range(1, cols_n + 1)], 'rows': out}
 

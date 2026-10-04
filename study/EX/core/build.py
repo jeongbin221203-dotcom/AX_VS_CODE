@@ -410,6 +410,12 @@ def grade(m, data):
                     msgs.append(f'{fx.addr(r, c)}: 값은 맞지만 수식이 아니라 직접 입력한 값입니다.')
                 elif not ok and raw is None:
                     msgs.append(f'{fx.addr(r, c)}: 비어 있음')
+                elif not ok and not ftext:
+                    msgs.append(f'{fx.addr(r, c)}: 수식이 아니라 값({fx.display(got)})을 직접 입력했습니다 — '
+                                f'기대한 결과 {fx.display(exp)}')
+                elif not ok:
+                    msgs.append(f'{fx.addr(r, c)}: 결과 {fx.display(got) if got is not None else "(없음)"} → '
+                                f'기대한 결과 {fx.display(exp)}')
                 all_ok &= ok
                 item['cells'].append({'addr': fx.addr(r, c), 'formula': ftext or ('' if raw is None else str(raw)),
                                       'got': fx.display(got) if got is not None else '', 'expected': fx.display(exp),

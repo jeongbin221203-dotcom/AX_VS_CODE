@@ -6,6 +6,7 @@
     <h1>채점 결과</h1><p>{{ row.file_name }} · {{ row.created_at }}{% if row.seconds %} · {{ row.seconds // 60 }}분 {{ row.seconds % 60 }}초{% endif %}</p></div>
   <a class="btn primary" href="{{ url_for('exam.paper', eid=e.id) }}">문제지로</a>
 </div>
+{% if request.args.get('done') %}<span hidden data-timer-clear="{{ e.id }}"></span>{% endif %}
 <div class="grid g4">
   <div class="kpi"><div class="label">점수</div><div class="value">{{ res.score|num }}<small> / {{ res.total|num }}</small></div>
     <div class="sub">{% if res.passed %}<span class="st ok">✓</span> 합격선({{ e.pass }}점) 이상{% else %}<span class="st bad">✕</span> 합격선 {{ e.pass }}점 미달{% endif %}</div></div>

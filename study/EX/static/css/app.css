@@ -308,7 +308,7 @@ table.sheet td.picked { box-shadow: inset 0 0 0 1px var(--accent-line); }
 .exam-items li { display: flex; gap: 8px; padding: 3px 0; }
 .exam-items .num { flex: none; width: 1.3em; color: var(--ink-2); }
 table.sheet-like th { text-align: center; color: var(--ink-3); font-weight: 500; }
-@media (max-width: 760px) { .exam-bar { position: static; } .exam-upload { margin-left: 0; } }
+@media (max-width: 760px) { .exam-bar { top: 0; padding: 8px 12px; gap: 8px 12px; } .exam-upload { margin-left: 0; } }
 
 /* 실기 실습 */
 .alert.ok-alert { background: var(--ok-soft); border-color: var(--ok); }
@@ -324,4 +324,17 @@ table.sheet-like td, table.sheet-like th { white-space: nowrap; }
 @media (max-width: 760px) {
   .card h2 > span.small { flex-basis: 100%; }
   .exam-items li > div { min-width: 0; }
+}
+
+/* 휴대폰·태블릿(마우스 없음): 키보드 안내는 숨기고 터치 안내 */
+.touch-only { display: none; }
+@media (hover: none) and (pointer: coarse) { .kbd-hint { display: none; } .touch-only { display: block; } }
+/* 긴 설명이 카드 밖으로 넘치지 않게 */
+.card, .cat-card, .fn-card { overflow-wrap: anywhere; }
+
+/* 넓은 화면: 문제·수식 입력줄은 왼쪽에 고정, 시트는 오른쪽 — 드래그할 때 시트와 수식이 함께 보이게 */
+@media (min-width: 1100px) {
+  .problem-layout.has-grid { grid-template-columns: minmax(340px, 430px) minmax(0, 1fr); align-items: start; }
+  .problem-layout.has-grid > section:first-child { position: sticky; top: 72px; }
+  .problem-layout.has-grid .sheet-wrap { max-height: calc(100vh - 140px); }
 }

@@ -1,5 +1,7 @@
 """대시보드(첫 화면)·학습 범위 선택."""
+import datetime as dt
 import json
+from urllib.parse import quote
 
 from flask import Blueprint, Response, jsonify, redirect, render_template, request, url_for
 
@@ -51,19 +53,26 @@ def api_restore():
 @bp.route('/backup.json')
 def backup_download():
     body = json.dumps(backup.export(), ensure_ascii=False)
+    name = quote(f"엑셀연습장_기록_{dt.date.today():%Y%m%d}.json")
     return Response(body, mimetype='application/json',
-                    headers={'Content-Disposition': "attachment; filename*=UTF-8''%EC%97%91%EC%85%80%EC%97%B0%EC%8A%B5%EC%9E%A5_%EA%B8%B0%EB%A1%9D.json"})
+                    headers={'Content-Disposition': f"attachment; filename*=UTF-8''{name}"})
 
 
 @bp.route('/restore', methods=['POST'])
 def restore_upload():
     f = request.files.get('file')
+    if not f or not f.filename:
+        return redirect(url_for('main.home', msg='복원할 기록 파일(.json)을 고르세요.'))
     try:
-        data = json.loads((f.read() if f else b'').decode('utf-8'))
+        data = json.loads(f.read().decode('utf-8-sig'))
+    except (ValueError, UnicodeDecodeError):
+        return redirect(url_for('main.home', msg='복원하지 못했습니다: 엑셀 연습장에서 내려받은 기록 파일(.json)이 아닙니다.'))
+    try:
         done = backup.restore(data)
-    except (ValueError, UnicodeDecodeError) as e:
+    except ValueError as e:
         return redirect(url_for('main.home', msg=f'복원하지 못했습니다: {e}'))
-    return redirect(url_for('main.home', msg=f"기록을 복원했습니다(풀이 {done['attempts']}개, 모의고사·실습 {done['exam_results']}개)."))
+    return redirect(url_for('main.home', msg=f"기록을 복원했습니다(풀이 {done['attempts']}개, 모의고사 {done['exam_results']}개, "
+                                             f"대시보드 실습 {done['build_results']}개, 별표 {done['stars']}개)."))
 
 
 @bp.route('/track', methods=['POST'])
