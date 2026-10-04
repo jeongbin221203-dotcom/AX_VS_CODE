@@ -493,20 +493,49 @@ def refresh_payment(po_id: int) -> str:
 
 
 def payment_df(wh_ids=None, status: str | None = None) -> pd.DataFrame:
-    """입고나 계산서가 있는 발주의 3자 대조 (다시 대조해 저장)."""
+    """입고가 있는 발주의 3자 대조 — 한 번의 집계로 계산하고, 바뀐 지급 상태만 저장한다 (발주 수백 건도 빠르게)."""
     frag, wp = db.in_clause(wh_ids)
-    ids = db.query_df(f"""SELECT o.id FROM purchase_orders o WHERE o.status IN ('OPEN', 'PARTIAL', 'CLOSED', 'SHORT_CLOSED')
-                          AND EXISTS (SELECT 1 FROM transactions t WHERE t.po_no = o.po_no AND t.tx_type = 'IN')
-                          {'AND o.warehouse_id' + frag if frag else ''} ORDER BY o.id DESC LIMIT 500""", wp)["id"]
-    rows = []
-    for pid in ids:
-        st = refresh_payment(int(pid))
-        po, _, m = po_detail(int(pid))
+    df = db.query_df(f"""
+        WITH lines AS (
+            SELECT i.po_id, i.qty, i.price,
+                   COALESCE((SELECT SUM(t.qty) FROM transactions t WHERE t.tx_type = 'IN' AND t.po_no = o.po_no
+                             AND t.po_item = CAST(i.line_no AS TEXT) AND t.transfer_no = ''), 0) AS received
+            FROM po_items i JOIN purchase_orders o ON o.id = i.po_id
+            WHERE o.status IN ('OPEN', 'PARTIAL', 'CLOSED', 'SHORT_CLOSED'){' AND o.warehouse_id' + frag if frag else ''})
+        SELECT o.id, o.po_no, o.supplier, o.status, o.payment_status, o.payment_note, o.created_by_id,
+               SUM(l.qty * l.price) AS ordered, SUM(l.qty) AS ordered_qty, SUM(l.received * l.price) AS received,
+               SUM(l.received) AS received_qty,
+               COALESCE((SELECT SUM(d.supply_amount) FROM documents d JOIN transactions t ON t.id = d.tx_id
+                         WHERE t.po_no = o.po_no AND d.doc_type IN ('E_TAX_INVOICE', 'TAX_INVOICE', 'INVOICE')), 0) AS invoiced,
+               COALESCE((SELECT COUNT(*) FROM documents d JOIN transactions t ON t.id = d.tx_id
+                         WHERE t.po_no = o.po_no AND d.doc_type IN ('E_TAX_INVOICE', 'TAX_INVOICE', 'INVOICE')), 0) AS invoice_count
+        FROM purchase_orders o JOIN lines l ON l.po_id = o.id
+        GROUP BY o.id, o.po_no, o.supplier, o.status, o.payment_status, o.payment_note, o.created_by_id
+        HAVING SUM(l.received) > 0
+        ORDER BY o.id DESC LIMIT 500""", wp)
+    rows, changes = [], []
+    for r in df.to_dict("records"):
+        m = {"ordered": float(r["ordered"] or 0), "received": float(r["received"] or 0), "invoiced": float(r["invoiced"] or 0),
+             "invoice_count": int(r["invoice_count"] or 0)}
+        m["gap"] = m["invoiced"] - m["received"]
+        items = pd.DataFrame({"qty": [float(r["ordered_qty"] or 0)], "received": [float(r["received_qty"] or 0)]})
+        st, reason = match(r, items, m)
+        stamp = f"{m['invoiced']:.0f}/{m['received']:.0f}"
+        note = r["payment_note"] or ""
+        if r["payment_status"] == "RELEASED" and note.startswith(f"[{stamp}]"):
+            st, new_note = "RELEASED", note
+        else:
+            new_note = f"[{stamp}] {reason}".strip() if reason else ""
+        if (r["payment_status"] or "") != st or note != new_note:
+            changes.append((st, new_note, now_str(), int(r["id"])))
         if status and st != status:
             continue
-        rows.append({"id": int(pid), "po_no": po["po_no"], "supplier": po["supplier"], "status": po["status"],
-                     "ordered": m["ordered"], "received": m["received"], "invoiced": m["invoiced"], "gap": m["gap"],
-                     "payment": st, "reason": (po.get("payment_note") or "").split("] ", 1)[-1], "created_by_id": po.get("created_by_id")})
+        rows.append({"id": int(r["id"]), "po_no": r["po_no"], "supplier": r["supplier"], "status": r["status"], **m,
+                     "payment": st, "reason": new_note.split("] ", 1)[-1], "created_by_id": r["created_by_id"]})
+    if changes:
+        with db.transaction() as conn:
+            conn.executemany("UPDATE purchase_orders SET payment_status = ?, payment_note = ?, payment_checked_at = ? WHERE id = ?",
+                             changes)
     return pd.DataFrame(rows)
 
 
