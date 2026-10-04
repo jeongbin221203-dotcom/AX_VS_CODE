@@ -25,7 +25,12 @@ FIELDS = {
     "ADJ_APPROVAL_AMOUNT": ("실사 조정 결재 기준 (원)", "int", "조정 금액(기준단가)이 이 이상이면 관리자 결재 후 반영", 0),
     "APPROVAL_SLA_HOURS": ("결재 기한 (시간)", "int", "넘으면 결재자에게 하루 한 번 독촉 (0 = 독촉 안 함)", 0),
     "PARTNER_REQUIRED": ("거래처 마스터에 있는 이름만 허용", "bool", "켜면 마스터에 없는 거래처 이름으로는 등록할 수 없음", None),
-    "COST_DAYS": ("실제 원가 기준 기간 (일)", "int", "생산 투입 단가 = 이 기간 입고의 가중평균", 7),
+    "COST_DAYS": ("실제 원가 기준 기간 (일)", "int", "생산 투입 단가는 재고 평가 단가 — 평가할 재고가 없을 때만 이 기간 입고의 가중평균", 7),
+    "LABOR_RATE": ("노무 임률 (원/분)", "float", "작업지시 실제 작업시간 × 이 값 = 노무비 → 완제품 원가 (0 = 재료비만)", 0),
+    "OVERHEAD_RATE": ("제조경비 배부율 (원/분)", "float", "작업시간 × 이 값 = 경비 배부액 → 완제품 원가", 0),
+    "MATCH_PRICE_TOL_PCT": ("3자 대조 금액 허용오차 (%)", "float", "세금계산서 공급가액과 입고 금액(발주 단가)의 차이가 넘으면 지급 보류", 0),
+    "MATCH_QTY_TOL_PCT": ("3자 대조 수량 허용오차 (%)", "float", "입고 수량이 발주 수량과 이만큼 넘게 다르면 지급 보류", 0),
+    "WEEKEND_OFF": ("토·일은 쉬는 날", "bool", "MRP 리드타임을 근무일로 계산 (회사 휴일은 아래 작업 달력)", None),
 }
 _cache = {"at": 0.0, "values": {}}
 _defaults: dict = {}
@@ -37,7 +42,10 @@ def _current_from_config() -> dict:
     return {"COMPANY_NAME": config.COMPANY_NAME, "PR_TIER1": int(t1), "PR_TIER2": int(t2),
             "PO_OVER_PR_TOLERANCE_PCT": round(config.PO_OVER_PR_TOLERANCE * 100, 4),
             "ADJ_APPROVAL_AMOUNT": int(config.ADJ_APPROVAL_AMOUNT), "APPROVAL_SLA_HOURS": int(config.APPROVAL_SLA_HOURS),
-            "PARTNER_REQUIRED": bool(config.PARTNER_REQUIRED), "COST_DAYS": int(production.COST_DAYS)}
+            "PARTNER_REQUIRED": bool(config.PARTNER_REQUIRED), "COST_DAYS": int(production.COST_DAYS),
+            "LABOR_RATE": float(config.LABOR_RATE), "OVERHEAD_RATE": float(config.OVERHEAD_RATE),
+            "MATCH_PRICE_TOL_PCT": float(config.MATCH_PRICE_TOL_PCT), "MATCH_QTY_TOL_PCT": float(config.MATCH_QTY_TOL_PCT),
+            "WEEKEND_OFF": bool(config.WEEKEND_OFF)}
 
 
 def defaults() -> dict:
@@ -71,6 +79,11 @@ def _apply(v: dict, keys) -> None:
         "APPROVAL_SLA_HOURS": lambda x: setattr(config, "APPROVAL_SLA_HOURS", int(x)),
         "PARTNER_REQUIRED": lambda x: setattr(config, "PARTNER_REQUIRED", bool(x)),
         "COST_DAYS": lambda x: setattr(production, "COST_DAYS", int(x)),
+        "LABOR_RATE": lambda x: setattr(config, "LABOR_RATE", float(x)),
+        "OVERHEAD_RATE": lambda x: setattr(config, "OVERHEAD_RATE", float(x)),
+        "MATCH_PRICE_TOL_PCT": lambda x: setattr(config, "MATCH_PRICE_TOL_PCT", float(x)),
+        "MATCH_QTY_TOL_PCT": lambda x: setattr(config, "MATCH_QTY_TOL_PCT", float(x)),
+        "WEEKEND_OFF": lambda x: setattr(config, "WEEKEND_OFF", bool(x)),
     }
     for k in keys:
         if k in setters:

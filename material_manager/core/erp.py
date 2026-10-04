@@ -153,8 +153,10 @@ def erp_unit(unit: str) -> str:
     return config.ERP_UNIT_MAP.get(unit, unit)
 
 
-def gm_code(movement_type: str) -> str:
-    """SAP 이동유형 → 거래 코드(GM_CODE / GoodsMovementCode). 01 구매입고 · 03 출고 · 04 이전 · 05 기타입고."""
+def gm_code(movement_type: str, payload: dict | None = None) -> str:
+    """SAP 이동유형 → 거래 코드(GM_CODE / GoodsMovementCode). 01 구매입고 · 02 생산오더 입고 · 03 출고 · 04 이전 · 05 기타입고."""
+    if payload and payload.get("productionOrder") and movement_type == config.SAP_MOVEMENT_TYPES.get("WO_RECEIPT", "101"):
+        return "02"
     return config.SAP_GM_CODES.get(movement_type, "05")
 
 
@@ -380,9 +382,12 @@ class SapODataConnector:
               "CostCenter": p.get("costCenter", ""), "PurchaseOrder": p.get("purchaseOrder", ""),
               "PurchaseOrderItem": p.get("purchaseOrderItem", ""),
               "IssuingOrReceivingPlant": p.get("receivingPlant", ""),
-              "IssuingOrReceivingStorageLoc": p.get("receivingStorageLocation", "")}
+              "IssuingOrReceivingStorageLoc": p.get("receivingStorageLocation", ""),
+              "ManufacturingOrder": p.get("productionOrder", "")}
         if p.get("purchaseOrder"):
             it["GoodsMovementRefDocType"] = "B"        # 구매오더 참조 입고
+        elif p.get("productionOrder") and p["movementType"] == config.SAP_MOVEMENT_TYPES.get("WO_RECEIPT", "101"):
+            it["GoodsMovementRefDocType"] = "F"        # 생산오더 참조 입고
         return {k: v for k, v in it.items() if v not in ("", None)}
 
     def _find_reversal(self, doc: str, year: str) -> Posted | None:
@@ -409,7 +414,7 @@ class SapODataConnector:
             found = self._find(key)
             if found:
                 return found
-        body = {"GoodsMovementCode": gm_code(payload["movementType"]),
+        body = {"GoodsMovementCode": gm_code(payload["movementType"], payload),
                 "PostingDate": _odata_date(payload["postingDate"]),
                 "DocumentDate": _odata_date(payload.get("documentDate") or payload["postingDate"]),
                 "MaterialDocumentHeaderText": key[:25],
@@ -523,9 +528,14 @@ class SapRfcConnector:
               "ENTRY_UOM": erp_unit(p["unit"]), "BATCH": p.get("batch", ""),
               "COSTCENTER": _alpha(p.get("costCenter", ""), 10),
               "PO_NUMBER": p.get("purchaseOrder", ""), "PO_ITEM": _alpha(p.get("purchaseOrderItem", ""), 5),
-              "MOVE_PLANT": p.get("receivingPlant", ""), "MOVE_STLOC": p.get("receivingStorageLocation", "")}
+              "MOVE_PLANT": p.get("receivingPlant", ""), "MOVE_STLOC": p.get("receivingStorageLocation", ""),
+              "ORDERID": _alpha(p.get("productionOrder", ""), 12)}
         if p.get("purchaseOrder"):
             it["MVT_IND"] = "B"
+        elif p.get("productionOrder") and p["movementType"] == config.SAP_MOVEMENT_TYPES.get("WO_RECEIPT", "101"):
+            it["MVT_IND"] = "F"                       # 생산오더 입고
+        if p["movementType"] in ("501", "561") and p.get("amount"):
+            it["AMOUNT_LC"] = p["amount"]             # 무PO 입고는 외부 금액으로 평가 (SAP 단가와 어긋나지 않게)
         return {k: v for k, v in it.items() if v not in ("", None)}
 
     def send(self, payload: dict, attempt: int = 1) -> Posted:
@@ -554,7 +564,7 @@ class SapRfcConnector:
                              GOODSMVT_HEADER={"PSTNG_DATE": _yyyymmdd(payload["postingDate"]),
                                               "DOC_DATE": _yyyymmdd(payload.get("documentDate") or payload["postingDate"]),
                                               "HEADER_TXT": key[:25], "REF_DOC_NO": (payload.get("reference") or "")[:16]},
-                             GOODSMVT_CODE={"GM_CODE": gm_code(payload["movementType"])},
+                             GOODSMVT_CODE={"GM_CODE": gm_code(payload["movementType"], payload)},
                              GOODSMVT_ITEM=[self.item(payload)])
             self._check(conn, res.get("RETURN"))
             doc = str(res.get("MATERIALDOCUMENT") or "")

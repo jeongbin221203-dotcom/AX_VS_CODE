@@ -3,7 +3,7 @@
 - 금액은 거래 단가 × 수량(취소 거래는 수량 부호가 반대라 그대로 상쇄). 창고 간 이동은 입출고 실적에서 뺀다.
 - 소진 예상: 최근 30일 출고(이동 제외)의 하루 평균으로 지금 재고가 며칠 버티는지.
 - 장기 미사용: 재고는 있는데 90일 동안 출고(이동 제외)가 없는 자재.
-- 입고 예정 발주: 잔량이 남은 발주 품목의 필요일(구매요청의 필요일). 지나면 '지연'.
+- 입고 예정 발주: 잔량이 남은 발주 품목의 납기일(발주 납기일, 없으면 구매요청 필요일). 지나면 '지연'.
 """
 
 from datetime import date, timedelta
@@ -178,27 +178,27 @@ def dead_stock(stock: pd.DataFrame, wh_ids=None, days: int = 90) -> pd.DataFrame
 
 
 def incoming_po(wh_ids=None, days: int = 14) -> pd.DataFrame:
-    """잔량이 남은 발주 품목 중 필요일이 days일 안이거나 지난 것."""
+    """잔량이 남은 발주 품목 중 납기일이 days일 안이거나 지난 것."""
     wsql, wp = _wh("o.warehouse_id", wh_ids)
     limit = (date.today() + timedelta(days=days)).isoformat()
     df = db.query_df(f"""
-        SELECT r.need_date, o.po_no, i.line_no, m.code, m.name, w.code AS wh_code, o.supplier, i.qty,
+        SELECT COALESCE(NULLIF(o.delivery_date, ''), r.need_date) AS need_date, o.po_no, i.line_no, m.code, m.name, w.code AS wh_code, o.supplier, i.qty,
                COALESCE((SELECT SUM(t.qty) FROM transactions t WHERE t.tx_type = 'IN' AND t.po_no = o.po_no
                          AND t.po_item = CAST(i.line_no AS TEXT) AND t.transfer_no = ''), 0) AS received
         FROM purchase_orders o JOIN po_items i ON i.po_id = o.id
         JOIN purchase_requests r ON r.id = o.pr_id
         JOIN materials m ON m.id = i.material_id JOIN warehouses w ON w.id = o.warehouse_id
-        WHERE o.status IN ('PENDING_APPROVAL', 'OPEN', 'PARTIAL') AND r.need_date <> '' AND r.need_date <= ?{wsql}
-        ORDER BY r.need_date, o.po_no, i.line_no
+        WHERE o.status IN ('PENDING_APPROVAL', 'OPEN', 'PARTIAL') AND COALESCE(NULLIF(o.delivery_date, ''), r.need_date) <> '' AND COALESCE(NULLIF(o.delivery_date, ''), r.need_date) <= ?{wsql}
+        ORDER BY 1, o.po_no, i.line_no
         """, (limit, *wp))
     if df.empty:
-        return pd.DataFrame(columns=["필요일", "상태", "발주번호", "품목", "자재코드", "자재명", "창고", "공급처", "잔량"])
+        return pd.DataFrame(columns=["납기일", "상태", "발주번호", "품목", "자재코드", "자재명", "창고", "공급처", "잔량"])
     df["remaining"] = df["qty"] - df["received"]
     df = df[df["remaining"] > 1e-9]
     today = date.today().isoformat()
     df["state"] = ["지연" if d < today else "예정" for d in df["need_date"]]
     return (df[["need_date", "state", "po_no", "line_no", "code", "name", "wh_code", "supplier", "remaining"]]
-            .rename(columns={"need_date": "필요일", "state": "상태", "po_no": "발주번호", "line_no": "품목",
+            .rename(columns={"need_date": "납기일", "state": "상태", "po_no": "발주번호", "line_no": "품목",
                              "code": "자재코드", "name": "자재명", "wh_code": "창고", "supplier": "공급처",
                              "remaining": "잔량"})
             .reset_index(drop=True))

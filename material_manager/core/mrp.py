@@ -128,7 +128,7 @@ def run(plant_id: int, actor: dict | None, horizon_days: int = 90) -> services.R
         for r in conn.execute(f"""
                 SELECT i.material_id, i.qty - COALESCE((SELECT SUM(t.qty) FROM transactions t WHERE t.po_no = o.po_no
                        AND t.po_item = CAST(i.line_no AS TEXT) AND t.tx_type = 'IN'), 0) AS remain,
-                       COALESCE(NULLIF(r.need_date, ''), ?) AS due, o.po_no
+                       COALESCE(NULLIF(o.delivery_date, ''), NULLIF(r.need_date, ''), ?) AS due, o.po_no
                 FROM po_items i JOIN purchase_orders o ON o.id = i.po_id LEFT JOIN purchase_requests r ON r.id = o.pr_id
                 WHERE o.status IN ('OPEN', 'PARTIAL', 'PENDING_APPROVAL') AND o.warehouse_id{frag}""", (t0, *wp)):
             if float(r["remain"]) > 1e-9:
@@ -178,7 +178,8 @@ def run(plant_id: int, actor: dict | None, horizon_days: int = 90) -> services.R
             if avail < -1e-9:
                 short = -avail
                 qty = _lot(short, float(m["min_order_qty"] or 0), float(m["order_multiple"] or 0), m["unit"])
-                order = (date.fromisoformat(when) - timedelta(days=int(m["lead_time_days"] or 0))).isoformat()
+                from core import costing                 # 리드타임은 근무일로 역산 (주말·회사 휴일 제외)
+                order = costing.sub_workdays(when, int(m["lead_time_days"] or 0))
                 kind = "MAKE" if mid in boms else "BUY"
                 wh = pending_wh.get(mid) or default_wh.get(mid) or whs[0]
                 plans.append({"kind": kind, "material_id": mid, "qty": qty, "need_date": when, "order_date": order,

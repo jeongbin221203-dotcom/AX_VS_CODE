@@ -167,8 +167,9 @@ class Engine:
             if pid is not None and t["tx_type"] == "IN":
                 if t["product_id"] is not None and int(t["product_id"]) == int(t["material_id"]):
                     spent = self.wo_cost.pop(int(pid), None)     # 완제품 입고 = 그 작업지시가 쓴 부품 원가
-                    if spent is not None and spent > 0:
-                        price = spent / q
+                    conv = float(t["labor_cost"] or 0) + float(t["overhead_cost"] or 0)   # + 노무비·경비 배부
+                    if spent is not None and spent + conv > 0:
+                        price = (spent + conv) / q
                 else:                                 # 부품 반납 = 출고를 되돌림 (매입 아님): 지금 평균 단가로
                     price = a.avg(fallback)
                     self.wo_cost[int(pid)] -= q * price
@@ -234,15 +235,17 @@ def _base(conn, method: str, as_of: str) -> str:
     return ""
 
 
-def _events(conn, after: str, until: str):
-    rows = conn.execute("""
+def _events(conn, after: str, until: str, material_id: int | None = None):
+    only = " AND t.material_id = ?" if material_id is not None else ""
+    rows = conn.execute(f"""
         SELECT t.id, t.tx_date, t.tx_type, t.qty, t.unit_price, t.material_id, t.reversal_of, t.transfer_no,
-               t.lot_no, w.plant_id, m.unit_price AS master_price, t.production_id, p.product_id
+               t.lot_no, w.plant_id, m.unit_price AS master_price, t.production_id, p.product_id,
+               p.labor_cost, p.overhead_cost
         FROM transactions t JOIN warehouses w ON w.id = t.warehouse_id JOIN materials m ON m.id = t.material_id
         LEFT JOIN productions p ON p.id = t.production_id
-        WHERE t.tx_date > ? AND t.tx_date <= ?
+        WHERE t.tx_date > ? AND t.tx_date <= ?{only}
         ORDER BY t.tx_date, t.id
-        """, (after, until)).fetchall()
+        """, (after, until, *([material_id] if material_id is not None else []))).fetchall()
     # 같은 플랜트 안의 이동은 평가 대상이 아니다 → (이동번호, 로트, 원/취소) 묶음의 플랜트가 모두 같으면 건너뜀
     plants = defaultdict(set)
     for r in rows:
@@ -267,6 +270,25 @@ def run(conn, method: str, start: str, end: str) -> tuple[Engine, Engine, Stats]
     for t, same in _events(conn, opening_day, end):
         eng.apply(t, same, stats[(int(t["material_id"]), int(t["plant_id"]))])
     return opening, eng, stats
+
+
+def unit_cost(conn, material_id: int, plant_id: int, as_of: str, method: str | None = None) -> float | None:
+    """그 자재·플랜트의 as_of 시점 평가 단가 (재고가 없으면 None). 생산 투입 단가 — 재고 평가에서 빠지는 금액과 같게.
+    그 자재의 거래만 마지막 마감 스냅샷부터 다시 계산한다(호출하는 쪽 트랜잭션 안에서, 방금 넣은 거래 포함)."""
+    method = method if method in config.VALUATION_METHODS else config.VALUATION_DEFAULT
+    base = _base(conn, method, as_of)
+    eng = Engine(method)
+    if base:
+        eng.load(conn.execute("SELECT * FROM valuation_snapshots WHERE ym = ? AND method = ? AND material_id = ?",
+                              (base, method, material_id)))
+    for t, same in _events(conn, month_end(base), as_of, material_id):
+        eng.apply(t, same, None)
+    a = eng.areas.get((int(material_id), int(plant_id)))
+    if a is None or a.qty <= EPS:
+        return None
+    if method == "FIFO" and a.layers:                 # 선입선출: 지금 꺼낼 층의 단가(맨 앞 층)
+        return float(a.layers[0][1])
+    return a.value / a.qty
 
 
 def report(start: str, end: str, method: str | None = None, plant_ids=None) -> tuple[pd.DataFrame, list[str]]:

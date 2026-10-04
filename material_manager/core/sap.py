@@ -35,8 +35,12 @@ def transfer_movement_type(same_plant: bool) -> str:
     return config.SAP_MOVEMENT_TYPES["TRF_SLOC" if same_plant else "TRF_PLANT"]
 
 
-def movement_type(tx_type: str, qty: float, po_no: str = "", issue_return: bool = False) -> str:
+def movement_type(tx_type: str, qty: float, po_no: str = "", issue_return: bool = False, production: str = "") -> str:
+    """production: '' | issue(부품 투입) | return(부품 반납) | receipt(완제품 입고) — 생산 거래일 때."""
     t = config.SAP_MOVEMENT_TYPES
+    if production and config.SAP_PRODUCTION_MODE == "order":   # 생산오더 방식
+        return {"issue": t.get("WO_ISSUE", "261"), "return": t.get("WO_RETURN", "262"),
+                "receipt": t.get("WO_RECEIPT", "101")}[production]
     if tx_type == "IN":
         if issue_return:                              # 생산에 투입했던 자재를 되돌림 = 원가센터 출고 취소(202), 매입(501) 아님
             return t.get("IN_RETURN", "202")
@@ -59,7 +63,7 @@ def warehouse_problem(warehouse: dict) -> str:
 
 
 def mapping_problem(material: dict, tx_type: str, cost_center: str, po_no: str, po_item: str,
-                    warehouse: dict | None = None) -> str:
+                    warehouse: dict | None = None, production: str = "", order_no: str = "") -> str:
     """SAP로 보낼 수 없는 입력이면 사유. 연동이 켜져 있을 때만 검사한다.
     SAP 자재번호는 자재에, 플랜트·저장위치는 창고에 있다."""
     if not str(material.get("sap_matnr") or "").strip():
@@ -68,6 +72,10 @@ def mapping_problem(material: dict, tx_type: str, cost_center: str, po_no: str, 
         problem = warehouse_problem(warehouse)
         if problem:
             return problem
+    if production and config.SAP_PRODUCTION_MODE == "order":
+        if not order_no:
+            return "SAP 생산오더 방식입니다 — 작업지시에 SAP 생산오더 번호를 먼저 넣으세요."
+        return ""                                     # 생산오더 출고(261)는 원가센터가 아니라 오더로 간다
     if tx_type == "OUT" and not cost_center:
         return "SAP 연동 중에는 출고에 원가센터가 필요합니다."
     if po_no and not po_item:
@@ -134,7 +142,16 @@ def build_payload(conn, tx_id: int) -> tuple[dict | None, str]:
                "quantity": abs(float(t["qty"])), "unit": t["unit"],
                "purchaseOrder": t["po_no"], "purchaseOrderItem": t["po_item"], "costCenter": t["cost_center"],
                "reference": t["ref_no"], "headerText": f"{t['code']} {t['partner']}".strip()[:25],
-               "enteredBy": t["created_by"], "batch": t["lot_no"] or ""}
+               "enteredBy": t["created_by"], "batch": t["lot_no"] or "",
+               # 금액: 앱이 기록한 단가 × 수량 (구매오더 입고는 SAP 가 PO 단가로 평가 — 대사용, 무PO 입고는 외부 금액으로 전기)
+               "unitPrice": round(float(t["unit_price"] or 0), 4),
+               "amount": round(abs(float(t["qty"])) * float(t["unit_price"] or 0), 2), "currency": config.SAP_CURRENCY}
+    if t["production_id"] is not None and config.SAP_PRODUCTION_MODE == "order":
+        order = conn.execute("SELECT sap_order_no FROM productions WHERE id = ?", (t["production_id"],)).fetchone()
+        if not order or not order["sap_order_no"]:
+            return None, "작업지시에 SAP 생산오더 번호가 없습니다. 작업지시 화면에서 넣은 뒤 재전송하세요."
+        payload["productionOrder"] = order["sap_order_no"]
+        payload["costCenter"] = ""
     if t["po_no"]:                               # 이 시스템 발주면 SAP 구매오더 번호로 바꿔 보낸다
         po = conn.execute("SELECT sap_po_no FROM purchase_orders WHERE po_no = ?", (t["po_no"],)).fetchone()
         if po is not None:

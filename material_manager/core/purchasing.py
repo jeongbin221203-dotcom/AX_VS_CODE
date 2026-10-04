@@ -14,7 +14,7 @@ import pandas as pd
 
 import config
 from core import audit, auth, db, notify, org, partners, version
-from core.utils import now_str
+from core.utils import fmt_qty, now_str
 
 PR_STATUS = {"PENDING": "결재 중", "APPROVED": "승인", "REJECTED": "반려", "ORDERED": "발주 완료", "CANCELLED": "취소"}
 PO_STATUS = {"PENDING_APPROVAL": "발주 결재 중", "OPEN": "발주", "PARTIAL": "부분 입고", "CLOSED": "입고 완료",
@@ -150,7 +150,7 @@ def cancel_pr(pr_id: int, actor: dict, wh_ids=None) -> PResult:
 
 # ── 발주 ─────────────────────────────────────────────────────
 def create_po(pr_id: int, supplier: str, prices: dict[int, float], sap_po_no: str, note: str,
-              actor: dict, wh_ids=None) -> PResult:
+              actor: dict, wh_ids=None, delivery_date: str = "") -> PResult:
     """승인된 구매요청으로 발주를 만든다. prices: {pr_item_id: 발주단가} (없으면 예상단가)."""
     supplier = supplier.strip()
     if not supplier:
@@ -175,13 +175,19 @@ def create_po(pr_id: int, supplier: str, prices: dict[int, float], sap_po_no: st
                 return PResult(False, "발주 단가는 0 이상이어야 합니다.")
             lines.append((it["line_no"], it["material_id"], float(it["qty"]), price))
         total = sum(q * p for _, _, q, p in lines)
+        delivery = (delivery_date or "").strip() or (pr["need_date"] or "")
+        if delivery:
+            try:
+                delivery = date.fromisoformat(delivery).isoformat()
+            except ValueError:
+                return PResult(False, "납기일 형식이 올바르지 않습니다 (예: 2026-11-20).")
         needs_approval = total > float(pr["total_amount"]) * (1 + config.PO_OVER_PR_TOLERANCE) + 1e-6
         po_no = _next_no(conn, "PO", "purchase_orders", "po_no")
         po_id = conn.execute(
             "INSERT INTO purchase_orders (po_no, pr_id, supplier, supplier_id, warehouse_id, status, sap_po_no, total_amount, "
-            "note, created_by_id, created_by, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            "note, created_by_id, created_by, created_at, delivery_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             (po_no, pr_id, supplier, supplier_id, pr["warehouse_id"], "PENDING_APPROVAL" if needs_approval else "OPEN",
-             sap_po_no.strip(), total, note.strip(), actor.get("id"), actor["name"], now_str())).lastrowid
+             sap_po_no.strip(), total, note.strip(), actor.get("id"), actor["name"], now_str(), delivery)).lastrowid
         conn.executemany("INSERT INTO po_items (po_id, line_no, material_id, qty, price) VALUES (?, ?, ?, ?, ?)",
                          [(po_id, *line) for line in lines])
         conn.execute("UPDATE purchase_requests SET status = 'ORDERED', updated_at = ? WHERE id = ?", (now_str(), pr_id))
@@ -368,7 +374,8 @@ def pos_df(status: str | None = None, wh_ids=None) -> pd.DataFrame:
 
 def po_detail(po_id: int) -> tuple[dict | None, pd.DataFrame, dict]:
     """(발주, 품목별 입고 현황, 3자 대조 합계)."""
-    po = db.query_df("SELECT o.*, w.code AS wh_code, r.pr_no, r.total_amount AS pr_amount FROM purchase_orders o "
+    po = db.query_df("SELECT o.*, w.code AS wh_code, r.pr_no, r.total_amount AS pr_amount, r.need_date AS pr_need_date "
+                     "FROM purchase_orders o "
                      "JOIN warehouses w ON w.id = o.warehouse_id LEFT JOIN purchase_requests r ON r.id = o.pr_id "
                      "WHERE o.id = ?", (po_id,))
     if po.empty:
@@ -419,3 +426,106 @@ def open_po_lines(warehouse_id: int, material_id: int) -> list[dict]:
         """, (warehouse_id, material_id))
     df["remaining"] = df["qty"] - df["received"]
     return df[df["remaining"] > 1e-9].to_dict("records")
+
+
+
+# ── 발주 납기일 · 3자 대조 지급 보류 ─────────────────────────
+PAYMENT_STATUS = {"": "대조 전", "WAIT": "계산서 대기", "MATCHED": "일치 — 지급 가능", "BLOCKED": "지급 보류",
+                  "RELEASED": "보류 해제 — 지급 가능"}
+
+
+def set_delivery_date(po_id: int, delivery: str, actor: dict, wh_ids=None) -> PResult:
+    try:
+        delivery = date.fromisoformat((delivery or "").strip()).isoformat()
+    except ValueError:
+        return PResult(False, "납기일을 고르세요.")
+    if delivery < date.today().isoformat():
+        return PResult(False, "납기일은 오늘 이후로만 바꿀 수 있습니다 (이미 늦은 발주는 그대로 두면 '지연'으로 보입니다).")
+    with db.transaction() as conn:
+        po = conn.execute("SELECT * FROM purchase_orders WHERE id = ?", (po_id,)).fetchone()
+        if po is None or (wh_ids is not None and po["warehouse_id"] not in wh_ids):
+            return PResult(False, "발주가 없거나 권한 밖입니다.")
+        if po["status"] not in ("PENDING_APPROVAL", "OPEN", "PARTIAL"):
+            return PResult(False, "입고가 끝났거나 취소된 발주입니다.")
+        conn.execute("UPDATE purchase_orders SET delivery_date = ? WHERE id = ?", (delivery, po_id))
+        audit.record(conn, actor, "PO_DELIVERY", "purchase_order", po_id,
+                     {"po_no": po["po_no"], "delivery_date": [po["delivery_date"], delivery]})
+    return PResult(True, f"발주 {po['po_no']} 납기일을 {delivery}(으)로 바꿨습니다 (다음 MRP 부터 반영).", po_id)
+
+
+def match(po: dict, items: pd.DataFrame, m: dict) -> tuple[str, str]:
+    """3자 대조 판정 (발주 · 입고 · 세금계산서). (상태, 사유)."""
+    if not m["invoice_count"]:
+        return ("WAIT", "입고에 연결된 세금계산서가 아직 없습니다.") if m["received"] > 0 else ("", "")
+    reasons = []
+    base = max(m["received"], 1.0)
+    gap_pct = abs(m["invoiced"] - m["received"]) / base * 100
+    if gap_pct > float(config.MATCH_PRICE_TOL_PCT) + 1e-9:
+        reasons.append(f"계산서 공급가액 ₩{m['invoiced']:,.0f} ≠ 입고 금액(발주 단가) ₩{m['received']:,.0f} "
+                       f"({gap_pct:.1f}% > 허용 {float(config.MATCH_PRICE_TOL_PCT):g}%)")
+    if po["status"] == "CLOSED":                       # 다 받았다고 끝난 발주: 수량 차이 (잔량 종결은 제외)
+        ordered = float(items["qty"].sum()) if len(items) else 0.0
+        received = float(items["received"].sum()) if len(items) else 0.0
+        qty_pct = abs(received - ordered) / max(ordered, 1e-9) * 100
+        if qty_pct > float(config.MATCH_QTY_TOL_PCT) + 1e-9:
+            reasons.append(f"입고 수량 {fmt_qty(received)} ≠ 발주 수량 {fmt_qty(ordered)} ({qty_pct:.1f}% > 허용 "
+                           f"{float(config.MATCH_QTY_TOL_PCT):g}%)")
+    return ("BLOCKED", " · ".join(reasons)) if reasons else ("MATCHED", "")
+
+
+def refresh_payment(po_id: int) -> str:
+    """대조해 지급 상태를 저장한다. 관리자가 해제한(RELEASED) 발주는 금액이 그대로면 유지."""
+    po, items, m = po_detail(po_id)
+    if po is None:
+        return ""
+    status, reason = match(po, items, m)
+    stamp = f"{m['invoiced']:.0f}/{m['received']:.0f}"
+    note = po.get("payment_note") or ""
+    if po.get("payment_status") == "RELEASED" and note.startswith(f"[{stamp}]"):
+        return "RELEASED"                              # 해제 뒤 금액 변화 없음
+    new_note = f"[{stamp}] {reason}".strip() if reason else ""
+    if po.get("payment_status") == status and (po.get("payment_note") or "") == new_note:
+        return status                                  # 바뀐 것 없음 → 화면을 열 때마다 쓰지 않는다
+    with db.transaction() as conn:
+        conn.execute("UPDATE purchase_orders SET payment_status = ?, payment_note = ?, payment_checked_at = ? WHERE id = ?",
+                     (status, new_note, now_str(), po_id))
+    return status
+
+
+def payment_df(wh_ids=None, status: str | None = None) -> pd.DataFrame:
+    """입고나 계산서가 있는 발주의 3자 대조 (다시 대조해 저장)."""
+    frag, wp = db.in_clause(wh_ids)
+    ids = db.query_df(f"""SELECT o.id FROM purchase_orders o WHERE o.status IN ('OPEN', 'PARTIAL', 'CLOSED', 'SHORT_CLOSED')
+                          AND EXISTS (SELECT 1 FROM transactions t WHERE t.po_no = o.po_no AND t.tx_type = 'IN')
+                          {'AND o.warehouse_id' + frag if frag else ''} ORDER BY o.id DESC LIMIT 500""", wp)["id"]
+    rows = []
+    for pid in ids:
+        st = refresh_payment(int(pid))
+        po, _, m = po_detail(int(pid))
+        if status and st != status:
+            continue
+        rows.append({"id": int(pid), "po_no": po["po_no"], "supplier": po["supplier"], "status": po["status"],
+                     "ordered": m["ordered"], "received": m["received"], "invoiced": m["invoiced"], "gap": m["gap"],
+                     "payment": st, "reason": (po.get("payment_note") or "").split("] ", 1)[-1], "created_by_id": po.get("created_by_id")})
+    return pd.DataFrame(rows)
+
+
+def release_payment(po_id: int, reason: str, actor: dict, wh_ids=None) -> PResult:
+    """지급 보류 해제: 발주를 만든 사람이 아닌 관리자가 사유와 함께 (직무 분리)."""
+    reason = (reason or "").strip()
+    if not reason:
+        return PResult(False, "해제 사유를 입력하세요 (예: 운송비 포함 계산서 — 차액 승인).")
+    with db.transaction() as conn:
+        po = conn.execute("SELECT * FROM purchase_orders WHERE id = ?", (po_id,)).fetchone()
+        if po is None or (wh_ids is not None and po["warehouse_id"] not in wh_ids):
+            return PResult(False, "발주가 없거나 권한 밖입니다.")
+        if po["payment_status"] != "BLOCKED":
+            return PResult(False, "지급 보류 상태인 발주가 아닙니다.")
+        if po["created_by_id"] is not None and po["created_by_id"] == actor.get("id"):
+            return PResult(False, "발주를 만든 사람은 지급 보류를 해제할 수 없습니다(직무 분리).")
+        stamp = (po["payment_note"] or "").split("]", 1)[0] + "]" if (po["payment_note"] or "").startswith("[") else "[]"
+        conn.execute("UPDATE purchase_orders SET payment_status = 'RELEASED', payment_note = ?, payment_checked_at = ? "
+                     "WHERE id = ?", (f"{stamp} 해제: {reason} ({actor['name']})", now_str(), po_id))
+        audit.record(conn, actor, "PAYMENT_RELEASE", "purchase_order", po_id,
+                     {"po_no": po["po_no"], "reason": reason, "was": po["payment_note"]})
+    return PResult(True, f"발주 {po['po_no']} 지급 보류를 해제했습니다.", po_id)

@@ -200,8 +200,16 @@ def requirements(product_id: int, qty: float, issue_wh_id: int, wh_ids=None) -> 
 COST_DAYS = 180
 
 
-def current_cost(conn, material_id: int) -> float:
-    """실제 원가에 쓰는 자재 단가: 최근 {COST_DAYS}일 입고(이동·취소 제외)의 가중평균. 입고가 없으면 기준단가."""
+def current_cost(conn, material_id: int, warehouse_id: int | None = None, as_of: str | None = None) -> float:
+    """생산 투입 단가: 그 창고 플랜트의 재고 평가 단가(이동평균·선입선출 — 재고 평가에서 빠지는 금액과 같게).
+    평가할 재고가 없으면 최근 {COST_DAYS}일 입고(이동·취소 제외)의 가중평균, 그것도 없으면 기준단가."""
+    if warehouse_id is not None:
+        from core import valuation
+        plant = conn.execute("SELECT plant_id FROM warehouses WHERE id = ?", (warehouse_id,)).fetchone()
+        if plant is not None:
+            cost = valuation.unit_cost(conn, material_id, int(plant[0]), as_of or date.today().isoformat())
+            if cost is not None and cost > 0:
+                return round(cost, 4)
     since = (date.today() - timedelta(days=COST_DAYS)).isoformat()
     row = conn.execute("""
         SELECT SUM(t.qty * t.unit_price), SUM(t.qty) FROM transactions t
@@ -272,7 +280,8 @@ def _create(conn, who: dict, product_id: int, qty: float, issue_wh_id: int, rece
     items = conn.execute("SELECT i.*, m.unit_price FROM bom_items i JOIN materials m ON m.id = i.component_id "
                          "WHERE i.bom_id = ? ORDER BY i.line_no", (bom["id"],)).fetchall()
     due = due_date or date.today().isoformat()
-    start = (date.fromisoformat(due) - timedelta(days=int(prod["lead_time_days"] or 0))).isoformat()
+    from core import costing                              # 착수일 = 완료 예정에서 리드타임만큼 근무일을 거슬러 (MRP 와 같게)
+    start = costing.sub_workdays(date.fromisoformat(due).isoformat(), int(prod["lead_time_days"] or 0))
     prod_no = purchasing._next_no(conn, "MO", "productions", "prod_no")
     planned_cost = 0.0
     lines = []
@@ -332,7 +341,7 @@ def _issue(conn, who: dict, pid: int, quantities: dict[int, float], tx_date: str
         if ln is None:
             return services.Result(False, "작업지시에 없는 줄입니다.")
         if q > 0:
-            price = current_cost(conn, int(ln["component_id"]))
+            price = current_cost(conn, int(ln["component_id"]), int(ln["wh_id"]), tx_date)
             out = services._register(conn, who, int(ln["component_id"]), "OUT", q, tx_date, price, ref, "",
                                      f"생산 투입 {p['prod_no']} → {p['product_code']}", "", "", p["cost_center"] or "",
                                      int(ln["wh_id"]), wh_ids, "", "", production_id=pid)
@@ -412,10 +421,12 @@ def _complete(conn, who: dict, pid: int, good_qty: float, scrap_qty: float, tx_d
                 return out
     cost = float(conn.execute("SELECT COALESCE(SUM(issued_cost), 0) FROM production_lines WHERE production_id = ?",
                               (pid,)).fetchone()[0])
+    from core import costing                            # 노무비·경비 = 실제 작업시간 × 임률·배부율 (회사 설정)
+    minutes, labor, overhead = costing.conversion(conn, pid, good_qty, scrap_qty)
     receipt = ""
     if p["receipt_wh_id"] is not None and good_qty > 0:
         prod = repo.get_material(int(p["product_id"]), conn)
-        unit_cost = round(cost / good_qty, 4)
+        unit_cost = round((cost + labor + overhead) / good_qty, 4)
         out = services._register(conn, who, int(p["product_id"]), "IN", good_qty, tx_date, unit_cost,
                                  p["work_order"] or p["prod_no"], "", f"생산 입고 {p['prod_no']}", "", "", "",
                                  int(p["receipt_wh_id"]), wh_ids, (lot_no.strip() or p["prod_no"]).upper(), expiry_date.strip(),
@@ -424,13 +435,18 @@ def _complete(conn, who: dict, pid: int, good_qty: float, scrap_qty: float, tx_d
             return services.Result(False, f"완제품 입고 — {out.message}")
         receipt = f" · {prod['code']} {fmt_qty(good_qty)} {prod['unit']} 입고({out['wh']['code']}, 실제 단가 ₩{unit_cost:,.0f})"
     conn.execute("UPDATE productions SET status = 'DONE', good_qty = ?, scrap_qty = ?, material_cost = ?, completed_at = ?, "
-                 "tx_date = ? WHERE id = ?", (good_qty, scrap_qty, cost, now_str(), tx_date, pid))
+                 "tx_date = ?, labor_cost = ?, overhead_cost = ? WHERE id = ?",
+                 (good_qty, scrap_qty, cost, now_str(), tx_date, labor, overhead, pid))
     conn.execute("UPDATE wo_operations SET status = 'DONE', good_qty = CASE WHEN good_qty = 0 THEN ? ELSE good_qty END, "
                  "done_at = CASE WHEN done_at = '' THEN ? ELSE done_at END WHERE production_id = ? AND status = 'WAIT'",
                  (good_qty, now_str(), pid))
     audit.record(conn, who, "WO_COMPLETE", "production", pid,
-                 {"prod_no": p["prod_no"], "good": good_qty, "scrap": scrap_qty, "cost": cost})
-    return f"완료 — 양품 {fmt_qty(good_qty)} · 불량 {fmt_qty(scrap_qty)} · 실제 재료비 ₩{cost:,.0f}{receipt}"
+                 {"prod_no": p["prod_no"], "good": good_qty, "scrap": scrap_qty, "cost": cost, "labor": labor,
+                  "overhead": overhead, "minutes": minutes, "scrap_loss": cost + labor + overhead if good_qty <= 0 else 0})
+    conv = f" · 노무비 ₩{labor:,.0f} · 경비 ₩{overhead:,.0f} ({fmt_qty(minutes)}분)" if labor or overhead else ""
+    loss = (f" · 양품 없음 — 재료비 ₩{cost + labor + overhead:,.0f}은 불량 손실(재공에서 비용으로)"
+            if good_qty <= 0 and (cost + labor + overhead) > 0 else "")
+    return f"완료 — 양품 {fmt_qty(good_qty)} · 불량 {fmt_qty(scrap_qty)} · 실제 재료비 ₩{cost:,.0f}{conv}{receipt}{loss}"
 
 
 def _run(fn, *args, **kw) -> services.Result:
@@ -471,6 +487,23 @@ def issue(pid: int, quantities: dict[int, float], tx_date: str, *, actor: dict |
           extra: list[tuple[int, float, int]] = ()) -> services.Result:
     who = _who(actor)
     return _run(lambda conn: _issue(conn, who, pid, quantities, tx_date, wh_ids, extra))
+
+
+def set_sap_order(pid: int, order_no: str, actor: dict | None, wh_ids=None) -> services.Result:
+    """SAP 생산오더 번호 (MM_SAP_PRODUCTION_MODE=order 일 때 투입 261·완제품 101 이 이 오더로 전기된다)."""
+    order_no = (order_no or "").strip().upper()[:20]
+    who = _who(actor)
+    with db.transaction() as conn:
+        p = conn.execute("SELECT * FROM productions WHERE id = ?", (pid,)).fetchone()
+        if p is None:
+            return services.Result(False, "작업지시가 없습니다.")
+        if _scope_problem(p, wh_ids):
+            return services.Result(False, _scope_problem(p, wh_ids))
+        if p["status"] in ("DONE", "CANCELLED") and p["sap_order_no"]:
+            return services.Result(False, "완료·취소된 작업지시의 SAP 오더 번호는 바꿀 수 없습니다.")
+        conn.execute("UPDATE productions SET sap_order_no = ? WHERE id = ?", (order_no, pid))
+        audit.record(conn, who, "WO_SAP_ORDER", "production", pid, {"prod_no": p["prod_no"], "sap_order_no": order_no})
+    return services.Result(True, f"SAP 생산오더 번호를 {order_no or '(비움)'}(으)로 저장했습니다.")
 
 
 def report_operation(pid: int, op_id: int, good: float, scrap: float, minutes: float, worker: str, note: str,
@@ -549,6 +582,9 @@ def cancel(prod_id: int, reason: str, *, actor: dict | None, wh_ids=None) -> ser
         return services.Result(False, "취소 사유를 입력하세요.")
     if _scope_problem(p, wh_ids):
         return services.Result(False, _scope_problem(p, wh_ids))
+    if p.get("settled_at"):
+        return services.Result(False, f"정산한 작업지시입니다({p['settled_at'][:16]}) — 원가 차이가 확정돼 취소할 수 없습니다. "
+                                      "잘못 만든 생산이면 반대 작업(반납·별도 출고)으로 바로잡으세요.")
     has_tx = db.scalar("SELECT COUNT(*) FROM transactions WHERE production_id = ? AND reversal_of IS NULL", (prod_id,))
     if not has_tx:
         who = _who(actor)

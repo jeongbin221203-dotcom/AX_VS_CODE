@@ -37,7 +37,18 @@
     </label>
   </form>
   <div class="toolbar">{{ download(url_with(export='xlsx')) }}</div>
-  {{ table(grid, "해당하는 " ~ ('발주가' if tab == 'po' else '구매요청이') ~ " 없습니다.") }}
+  {{ table(grid, "해당하는 " ~ ('발주가' if tab in ('po', 'payment') else '구매요청이') ~ " 없습니다.") }}
   {% if tab == 'pr' and not can('MANAGER') %}<p class="muted small">본인 요청만 보입니다.</p>{% endif %}
+  {% if tab == 'payment' %}
+    <p class="muted small">발주마다 발주 · 입고(발주 단가) · 입고에 연결된 세금계산서를 맞춥니다. 계산서 금액 차이가 {{ tol[0]|plain }}%,
+      다 받은 발주의 수량 차이가 {{ tol[1]|plain }}%를 넘으면 <strong>지급 보류</strong> — 발주를 만든 사람이 아닌 관리자가 사유와 함께 해제합니다.
+      허용오차는 회사 설정.</p>
+    {% for b in blocked if b.created_by_id != g.user.id %}
+    <form class="row-actions" method="post" action="{{ url_for('purchase.po_release', po_id=b.id) }}" data-confirm="{{ b.po_no }} 지급 보류를 해제합니다. 계속할까요?">
+      {{ csrf() }}<span><strong>{{ b.po_no }}</strong> {{ b.supplier }} — {{ b.reason }}</span>
+      <label class="grow">해제 사유<input name="reason" required></label><button class="btn btn-sm">보류 해제</button>
+    </form>
+    {% endfor %}
+  {% endif %}
 {% endif %}
 {% endblock %}

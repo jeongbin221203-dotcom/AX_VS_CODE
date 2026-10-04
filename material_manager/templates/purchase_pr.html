@@ -30,6 +30,7 @@
   <div class="form-grid g3">
     <label>공급처 *<input name="supplier" required></label>
     <label>SAP 구매오더 번호 (SAP 연동 시 입고 전기에 필요)<input name="sap_po_no"></label>
+    <label>납기일 <span class="hint">비우면 구매요청 필요일 — MRP 가 이 날을 입고 예정일로 씀</span><input type="date" name="delivery_date" value="{{ pr.need_date or '' }}"></label>
     <label>메모<input name="note"></label>
   </div>
   <table class="data">

@@ -47,7 +47,7 @@ ACTIONS = {
     "WO_CREATE": "작업지시", "WO_ISSUE": "작업지시 자재 투입", "WO_OPERATION": "공정 실적", "WO_COMPLETE": "작업지시 완료",
     "ROUTING_SAVE": "공정(라우팅) 저장", "MRP_RUN": "MRP 실행", "MRP_CONVERT": "MRP 계획 → 요청·지시",
     "MRP_DEMAND": "MRP 수요 등록", "PARTNER_IMPORT": "거래처 일괄 등록", "BOM_IMPORT": "BOM 일괄 등록",
-    "DELEGATION": "대결 지정", "CHANNEL_SAVE": "알림 채널 저장", "NAMES_SAVE": "이름 설정 변경", "HOMETAX_CHECK": "홈택스 매입 대사", "PO_SHORT_CLOSE": "발주 잔량 종결", "CATEGORY_RENAME": "자재 분류 이름 변경", "CHANNEL_DELETE": "알림 채널 삭제", "COMPANY_SETTINGS": "회사 설정 변경", "PARTNER_MERGE": "거래처 병합",
+    "DELEGATION": "대결 지정", "CHANNEL_SAVE": "알림 채널 저장", "NAMES_SAVE": "이름 설정 변경", "HOMETAX_CHECK": "홈택스 매입 대사", "PO_SHORT_CLOSE": "발주 잔량 종결", "STD_COST": "표준원가 산정", "WO_SETTLE": "오더 정산", "WO_SAP_ORDER": "SAP 생산오더 번호", "CALENDAR": "작업 달력", "PO_DELIVERY": "발주 납기일 변경", "PAYMENT_RELEASE": "지급 보류 해제", "CATEGORY_RENAME": "자재 분류 이름 변경", "CHANNEL_DELETE": "알림 채널 삭제", "COMPANY_SETTINGS": "회사 설정 변경", "PARTNER_MERGE": "거래처 병합",
     "API_KEY": "API 키", "API_CALL": "API 호출", "READ_ONLY": "점검(읽기 전용) 모드", "DOWNLOAD": "파일 내려받기",
     "QUALITY_FIX": "데이터 점검 고침",
 }

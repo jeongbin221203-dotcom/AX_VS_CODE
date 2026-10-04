@@ -17,13 +17,39 @@
   <div class="metric"><div class="metric-label">{{ '실제 재료비' if p.status == 'DONE' else '지금까지 투입 (재공)' }}</div>
     <div class="metric-value">₩{{ '{:,.0f}'.format(p.material_cost or 0) }}</div>
     {% if p.status == 'DONE' and p.good_qty %}<div class="metric-delta">양품 1개 ₩{{ '{:,.0f}'.format(actual_unit) }}</div>{% endif %}</div>
-  <div class="metric"><div class="metric-label">차이 (실제 - 표준)</div>
+  <div class="metric"><div class="metric-label">재료비 차이 (실제 − BOM × 기준단가)</div>
     {% if p.status == 'DONE' %}
       {% set diff = (p.material_cost or 0) - (p.planned_cost or 0) %}
       <div class="metric-value {{ 'down' if diff > 0.5 }}">{{ '+' if diff > 0 }}₩{{ '{:,.0f}'.format(diff) }}</div>
     {% else %}<div class="metric-value muted">완료 후</div><div class="metric-delta">투입이 끝나야 비교합니다</div>{% endif %}</div>
   <div class="metric"><div class="metric-label">양품 · 불량</div><div class="metric-value">{{ (p.good_qty or 0)|qty }} · {{ (p.scrap_qty or 0)|qty }}</div></div>
 </div>
+
+{% if p.status == 'DONE' and ((p.labor_cost or 0) + (p.overhead_cost or 0)) > 0 %}
+  <p>노무비 ₩{{ '{:,.0f}'.format(p.labor_cost or 0) }} · 제조경비 ₩{{ '{:,.0f}'.format(p.overhead_cost or 0) }}
+    → 완제품 원가 = 재료 + 노무 + 경비 ₩{{ '{:,.0f}'.format((p.material_cost or 0) + (p.labor_cost or 0) + (p.overhead_cost or 0)) }}</p>
+{% endif %}
+{% if variance and not variance.missing %}
+<details class="card" {{ 'open' if variance.settled }}>
+  <summary><strong>원가 차이 (표준원가 대비)</strong> {{ '· 정산됨 ' ~ p.settled_at[:16] ~ ' ' ~ p.settled_by if p.settled_at }}
+    — 합계 ₩{{ '{:+,.0f}'.format(variance.total_var) }}</summary>
+  <p class="small">표준 ₩{{ '{:,.0f}'.format(variance.std_total) }} (양품 {{ variance.good|qty }} × ₩{{ '{:,.0f}'.format(variance.std_unit) }})
+    · 실제 ₩{{ '{:,.0f}'.format(variance.actual_total) }} — 재료 가격차이 ₩{{ '{:+,.0f}'.format(variance.price_var) }}
+    · 재료 수량차이 ₩{{ '{:+,.0f}'.format(variance.qty_var) }} · 노무 ₩{{ '{:+,.0f}'.format(variance.labor_var) }}
+    · 경비 ₩{{ '{:+,.0f}'.format(variance.overhead_var) }}{% if (variance.other_var or 0)|abs > 0.5 %} · 기타 ₩{{ '{:+,.0f}'.format(variance.other_var) }}{% endif %}
+    (작업 {{ variance.minutes|qty }}분 / 표준 {{ variance.std_minutes|qty }}분)</p>
+  {% if variance.stale and not variance.settled %}<p class="alert alert-warning small">{{ variance.stale }} — 표준원가를 다시 산정해야 정산할 수 있습니다.</p>{% endif %}
+  {% if not variance.settled and not variance.stale and can('MANAGER') %}
+  <form method="post" action="{{ url_for('production.settle', prod_id=p.id) }}" data-confirm="이 작업지시의 원가 차이를 확정합니다(오더 정산). 계속할까요?">{{ csrf() }}
+    <button class="btn btn-sm">📐 오더 정산</button></form>{% endif %}
+</details>
+{% elif p.status == 'DONE' %}<p class="muted small">표준원가가 없어 차이를 계산하지 않았습니다 — 생산 → 📐 원가 → 표준원가에서 산정하세요.</p>{% endif %}
+{% if sap_order_mode and can('CLERK') %}
+<form class="toolbar" method="post" action="{{ url_for('production.sap_order', prod_id=p.id) }}">{{ csrf() }}
+  <label>SAP 생산오더 번호<input name="sap_order_no" value="{{ p.sap_order_no or '' }}" placeholder="1000123" {{ 'disabled' if p.status in ('DONE', 'CANCELLED') and p.sap_order_no }}></label>
+  <button class="btn btn-sm">저장</button><span class="hint">생산오더 방식: 투입 261 · 반납 262 · 완제품 101 이 이 오더로 전기됩니다.</span>
+</form>
+{% endif %}
 
 <h3>자재 (계획 대비 투입)</h3>
 {% if open_wo %}<form class="card form" method="post" action="{{ url_for('production.wo_issue', prod_id=p.id) }}" data-confirm="적힌 수량만큼 자재를 투입(음수는 반납)합니다. 계속할까요?">{{ csrf() }}{% endif %}

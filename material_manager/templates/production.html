@@ -172,5 +172,42 @@
   {{ table(grid, 'BOM이 없습니다.') }}
   <p class="muted small">1개 재료비는 부품 기준단가 × 수량 × (1 + 손실률)의 합 ÷ 기준 수량입니다. 반제품을 부품으로 쓰면 그 반제품을 먼저 생산해 입고해야 합니다
     (MRP가 반제품 생산 계획까지 함께 잡습니다). 제품을 눌러 BOM과 공정(라우팅)을 고칩니다.</p>
+
+{% elif tab == "cost" %}
+  <div class="tabs sub">{% for k, v in views.items() %}<a href="{{ url_with(view=k, page=none) }}" class="{{ 'active' if k == view }}">{{ v }}</a>{% endfor %}</div>
+  <p class="muted small">노무 임률 ₩{{ rates[0]|qty }}/분 · 제조경비 배부율 ₩{{ rates[1]|qty }}/분 (회사 설정). 실제 원가 = 투입 재료비 + 실제 작업시간(공정 실적) × 임률·배부율.
+    {% if sap_order %}SAP 생산오더 방식 — 투입 261 · 반납 262 · 완제품 101(오더), SAP 에서 KO88 정산.{% else %}SAP 로는 원가센터 방식(투입 201 · 반납 202 · 완제품 501).{% endif %}</p>
+  {% if view == "standard" %}
+    {% if can('MANAGER') and scope_all() %}<form class="toolbar" method="post" action="{{ url_for('production.cost_rollup') }}" data-confirm="모든 자재의 표준원가를 지금 기준(기준단가·BOM·공정·임률)으로 다시 계산합니다. 계속할까요?">
+      {{ csrf() }}<button class="btn btn-primary">📐 표준원가 다시 산정</button>
+      <span class="muted small">구매품 = 기준단가, 제품 = 부품 표준원가 × 소요량(손실 포함) + 공정 표준시간 × 임률·배부율 (다단계). {{ '마지막 산정 ' ~ set_at if set_at }}</span>
+      {{ download(url_with(export='xlsx')) }}</form>{% endif %}
+    {{ table(grid, '표준원가가 없습니다. 위의 버튼으로 산정하세요.') }}
+  {% elif view == "ppv" %}
+    <form class="toolbar" method="get"><input type="hidden" name="tab" value="cost"><input type="hidden" name="view" value="ppv">
+      <label>시작<input type="date" name="start" value="{{ start.isoformat() }}"></label><label>종료<input type="date" name="end" value="{{ end.isoformat() }}"></label>
+      <button class="btn">조회</button>{{ download(url_with(export='xlsx')) }}</form>
+    <p>가격차이 합계 <strong>₩{{ '{:+,.0f}'.format(ppv_total) }}</strong> <span class="muted small">(+ = 표준보다 비싸게 삼 · 입고 단가 − 표준 단가, 구매품 표준 = 기준단가)</span></p>
+    {{ table(grid, '이 기간에 표준과 다른 단가로 들어온 입고가 없습니다.') }}
+  {% else %}
+    {% if not has_std %}<div class="alert alert-warning">표준원가가 없습니다 — {{ "'표준원가' 탭에서 먼저 산정해야" if can('MANAGER') and scope_all() else '모든 창고 권한이 있는 관리자에게 표준원가 산정을 요청해야' }} 차이를 계산합니다.</div>{% endif %}
+    <div class="metrics m4">
+      <div class="metric"><div class="metric-label">재료 가격차이</div><div class="metric-value">₩{{ '{:+,.0f}'.format(totals.price_var) }}</div></div>
+      <div class="metric"><div class="metric-label">재료 수량차이 (불량·초과 투입)</div><div class="metric-value">₩{{ '{:+,.0f}'.format(totals.qty_var) }}</div></div>
+      <div class="metric"><div class="metric-label">노무·경비 차이</div><div class="metric-value">₩{{ '{:+,.0f}'.format(totals.labor_var + totals.overhead_var) }}</div></div>
+      <div class="metric"><div class="metric-label">차이 합계</div><div class="metric-value">₩{{ '{:+,.0f}'.format(totals.total_var) }}</div></div>
+    </div>
+    <div class="toolbar">{{ download(url_with(export='xlsx')) }}</div>
+    {{ table(grid, '완료된 작업지시가 없습니다.') }}
+    <p class="muted small">'비고'에 표준원가 없음·BOM/공정 변경이 있으면 그 줄은 정산할 수 없습니다(표준원가를 다시 산정한 뒤).
+      + 는 불리(표준보다 많이 씀), − 는 유리. 재료 가격차이 = (투입 단가 − 부품 표준원가) × 투입량, 수량차이 = (투입량 − 양품 × 표준 소요량) × 표준원가,
+      노무·경비 차이 = 실제 노무·경비(완료 때 임률) − 양품 × 표준(산정 때 임률), 기타 = BOM·표준을 바꿔 생긴 나머지. 정산하면 그 작업지시의 차이가 확정됩니다(이후 표준을 바꿔도 그대로).</p>
+    {% if can('MANAGER') and open_settle %}
+    <h4>오더 정산 (완료된 작업지시의 차이 확정)</h4>
+    <div class="row-actions">{% for o in open_settle[:30] %}
+      <form class="inline" method="post" action="{{ url_for('production.settle', prod_id=o.id) }}" data-confirm="{{ o.prod_no }} 의 원가 차이(₩{{ '{:+,.0f}'.format(o.total_var) }})를 확정합니다. 계속할까요?">
+        {{ csrf() }}<button class="btn btn-sm">{{ o.prod_no }} 정산 (₩{{ '{:+,.0f}'.format(o.total_var) }})</button></form>{% endfor %}</div>
+    {% endif %}
+  {% endif %}
 {% endif %}
 {% endblock %}

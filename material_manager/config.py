@@ -181,15 +181,22 @@ SAP_MOVEMENT_TYPES = {
     "IN_NO_PO": "501",   # 구매오더 없는 입고
     "OUT": "201",        # 원가센터 출고
     "IN_RETURN": "202",  # 원가센터 출고 되돌림 (생산 투입 자재 반납)
+    "WO_ISSUE": "261",   # 생산오더 출고 (MM_SAP_PRODUCTION_MODE=order)
+    "WO_RETURN": "262",  # 생산오더 출고 취소(반납)
+    "WO_RECEIPT": "101", # 생산오더 입고 (완제품)
     "ADJ_PLUS": "701",   # 재고실사 차이(증가)
     "ADJ_MINUS": "702",  # 재고실사 차이(감소)
     "TRF_SLOC": "311",   # 같은 플랜트 안 저장위치 이전
     "TRF_PLANT": "301",  # 플랜트 간 이전
 }
 # 이동유형 → SAP 거래 코드(GM_CODE): 01 구매오더 입고 · 03 출고 · 04 이전 · 05 기타 입고 · 06 취소
-SAP_GM_CODES = {"101": "01", "501": "05", "201": "03", "202": "03", "701": "05", "702": "03", "311": "04", "301": "04",
+# 생산을 SAP 로 보내는 방식: costcenter = 원가센터 출고 201·반납 202·완제품 무PO 입고 501 (생산오더 없음)
+#                            order      = 생산오더(SAP 오더 번호) 출고 261·반납 262·완제품 입고 101 → SAP 에서 오더 정산(KO88)
+SAP_PRODUCTION_MODE = os.getenv("MM_SAP_PRODUCTION_MODE", "costcenter")
+SAP_CURRENCY = os.getenv("MM_SAP_CURRENCY", "KRW")       # 전송 금액의 통화
+SAP_GM_CODES = {"101": "01", "501": "05", "201": "03", "202": "03", "261": "03", "262": "03", "701": "05", "702": "03", "311": "04", "301": "04",
                 "561": "05", "551": "03"}
-SAP_REVERSAL_TYPES = {"101": "102", "501": "502", "201": "202", "202": "201", "701": "702", "702": "701",
+SAP_REVERSAL_TYPES = {"101": "102", "501": "502", "201": "202", "202": "201", "261": "262", "262": "261", "701": "702", "702": "701",
                       "311": "312", "301": "302"}
 SAP_STATUS = {
     "PENDING": "전송 대기", "SENDING": "전송 중", "SENT": "전기 완료", "ERROR": "오류(자동 재시도)",
@@ -209,6 +216,14 @@ VALUATION_DEFAULT = os.getenv("MM_VALUATION", "MAVG")
 PR_APPROVAL_TIERS = [(1_000_000, 1), (10_000_000, 2), (float("inf"), 3)]
 PO_OVER_PR_TOLERANCE = 0.10          # 발주 금액이 요청 승인 금액보다 10% 넘게 크면 발주도 결재
 GR_OVER_TOLERANCE = 0.0              # 발주 수량 초과 입고 허용 비율
+# 3자 대조(발주·입고·세금계산서) 허용오차 — 넘으면 그 발주는 '지급 보류'(관리자가 사유와 함께 해제)
+MATCH_PRICE_TOL_PCT = float(os.getenv("MM_MATCH_PRICE_TOL_PCT", "2"))    # 계산서 공급가액 vs 입고 금액(발주 단가) 차이 %
+MATCH_QTY_TOL_PCT = float(os.getenv("MM_MATCH_QTY_TOL_PCT", "0"))        # 입고 수량 vs 발주 수량 차이 % (잔량 종결 제외)
+# 원가: 작업지시의 실제 작업시간(공정 실적) × 임률·배부율 = 노무비·경비 → 완제품 원가에 넣는다 (0이면 재료비만)
+LABOR_RATE = float(os.getenv("MM_LABOR_RATE", "0"))         # 노무 임률 (원/분)
+OVERHEAD_RATE = float(os.getenv("MM_OVERHEAD_RATE", "0"))   # 제조경비 배부율 (원/분)
+# 작업 달력: 토·일을 쉬는 날로 볼지 (회사 휴일은 관리자 → 회사 설정 → 작업 달력)
+WEEKEND_OFF = os.getenv("MM_WEEKEND_OFF", "1") == "1"
 
 # ── 사내 SSO (OIDC) ───────────────────────────────────────────
 SSO_ENABLED = os.getenv("MM_SSO_ENABLED", "0") == "1"

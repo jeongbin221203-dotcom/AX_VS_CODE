@@ -388,7 +388,20 @@ def settings():
     from core import names
     return render_page("admin_settings.html", "settings", fields=company.FIELDS, values=company.values(),
                        defaults=company.defaults(), stored=company.stored(), ro=maintenance.state(cache_seconds=0),
-                       history=hist.to_dict("records"), name_groups=names.rows(), categories=names.categories())
+                       history=hist.to_dict("records"), name_groups=names.rows(), categories=names.categories(),
+                       holidays=__import__("core.costing", fromlist=["x"]).calendar_df().to_dict("records"))
+
+
+@bp.post("/settings/calendar")
+@role_required("ADMIN")
+def calendar_save():
+    from core import costing
+    if f_str("remove"):
+        ok, msg = costing.remove_holiday(f_str("remove"), actor())
+    else:
+        ok, msg = costing.add_holiday(f_str("day"), f_str("name"), actor())
+    flash(msg, "success" if ok else "error")
+    return redirect(url_for("admin.settings") + "#calendar")
 
 
 @bp.post("/settings/names")

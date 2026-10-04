@@ -52,6 +52,19 @@
   <div><button class="btn">분류 이름 바꾸기</button></div>
 </form>
 
+<h3 id="calendar">📆 작업 달력 (회사 휴일)</h3>
+<form class="card form" method="post" action="{{ url_for('admin.calendar_save') }}">
+  {{ csrf() }}
+  <p class="muted small">MRP 가 리드타임을 근무일로 역산합니다(발주·착수일이 쉬는 날이면 그 앞 근무일). 토·일은 위의 '토·일은 쉬는 날' 설정.</p>
+  <div class="toolbar"><label>날짜<input type="date" name="day" required></label><label class="grow">이름<input name="name" placeholder="예: 창립기념일" maxlength="40"></label>
+    <button class="btn">휴일 넣기</button></div>
+</form>
+{% if holidays %}
+<div class="row-actions">{% for h in holidays %}
+  <form class="inline" method="post" action="{{ url_for('admin.calendar_save') }}">{{ csrf() }}<input type="hidden" name="remove" value="{{ h.day }}">
+    <button class="btn btn-sm" title="근무일로 되돌리기">{{ h.day }} {{ h.name }} ✕</button></form>{% endfor %}</div>
+{% else %}<p class="muted small">등록한 회사 휴일이 없습니다.</p>{% endif %}
+
 <h3>🛠️ 점검(읽기 전용) 모드</h3>
 <form class="card form" method="post" action="{{ url_for('admin.read_only') }}" data-confirm="{{ '점검 모드를 끕니다.' if ro else '모든 사용자의 저장·변경을 막습니다. 계속할까요?' }}">
   {{ csrf() }}

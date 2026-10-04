@@ -2,6 +2,7 @@
 
 import math
 
+import pandas as pd
 from flask import Blueprint, abort, flash, g, redirect, request, url_for
 
 import config
@@ -10,8 +11,12 @@ from views.helpers import log_export, form_response, Table, actor, as_id, can, f
 
 bp = Blueprint("purchase", __name__, url_prefix="/purchase")
 
-TABS = [("pr", "📋 구매요청"), ("new", "➕ 새 구매요청"), ("po", "📦 발주")]
+TABS = [("pr", "📋 구매요청"), ("new", "➕ 새 구매요청"), ("po", "📦 발주"), ("payment", "💳 지급 대조")]
 MONEY = "₩{:,.0f}"
+
+
+def _tabs():
+    return [t for t in TABS if t[0] != "payment" or can("MANAGER")]
 QTY = "{:,.2f}"
 
 
@@ -25,9 +30,28 @@ def index():
     tab = request.args.get("tab", "pr")
     status = request.args.get("status") or None
     if tab == "new":
-        return render_page("purchase.html", "purchase", tabs=TABS, tab="new",
+        return render_page("purchase.html", "purchase", tabs=_tabs(), tab="new",
                            wh_opts=org.warehouse_options(g.wh_ids), mats=services.material_options(), rows=range(6),
                            tiers=[int(config.PR_APPROVAL_TIERS[0][0]), int(config.PR_APPROVAL_TIERS[1][0])])
+    if tab == "payment":                               # 3자 대조 · 지급 보류
+        if not can("MANAGER"):
+            abort(403)
+        st = status if status in purchasing.PAYMENT_STATUS else None
+        df = purchasing.payment_df(g.wh_ids, st)
+        view = (df.assign(status=df["status"].map(purchasing.PO_STATUS), payment=df["payment"].map(purchasing.PAYMENT_STATUS))
+                [["po_no", "supplier", "status", "ordered", "received", "invoiced", "gap", "payment", "reason"]]
+                .rename(columns={"po_no": "발주번호", "supplier": "공급처", "status": "발주 상태", "ordered": "발주 금액",
+                                 "received": "입고 금액(발주 단가)", "invoiced": "계산서 공급가액", "gap": "차이",
+                                 "payment": "지급", "reason": "사유"})) if len(df) else pd.DataFrame()
+        if request.args.get("export") == "xlsx":
+            log_export("payment_match", len(view))
+            return form_response("payment_match", view, "지급_대조.xlsx")
+        return render_page("purchase.html", "purchase", tabs=_tabs(), tab="payment", status=st,
+                           statuses={k: v for k, v in purchasing.PAYMENT_STATUS.items() if k}, blocked=df[df["payment"] == "BLOCKED"].to_dict("records") if len(df) else [],
+                           grid=Table(view, {"발주 금액": MONEY, "입고 금액(발주 단가)": MONEY, "계산서 공급가액": MONEY, "차이": "₩{:+,.0f}"},
+                                      links=[url_for("purchase.po_detail", po_id=int(i)) for i in df["id"]] if len(df) else None,
+                                      tones=["danger" if p == "BLOCKED" else None for p in df["payment"]] if len(df) else None),
+                           tol=(config.MATCH_PRICE_TOL_PCT, config.MATCH_QTY_TOL_PCT))
     if tab == "po":
         df = purchasing.pos_df(status if status in purchasing.PO_STATUS else None, g.wh_ids)
         view = df.copy()
@@ -41,7 +65,7 @@ def index():
             log_export("purchase_orders", len(view))
             return form_response("purchase_orders", view, "발주.xlsx")
         grid = Table(view, {"금액": MONEY}, links=[url_for("purchase.po_detail", po_id=int(i)) for i in df["id"]])
-        return render_page("purchase.html", "purchase", tabs=TABS, tab="po", grid=grid, status=status,
+        return render_page("purchase.html", "purchase", tabs=_tabs(), tab="po", grid=grid, status=status,
                            statuses=purchasing.PO_STATUS)
     df = purchasing.prs_df(status if status in purchasing.PR_STATUS else None, g.wh_ids)
     if not can("MANAGER"):
@@ -57,7 +81,7 @@ def index():
         log_export("purchase_requests", len(view))
         return form_response("purchase_requests", view, "구매요청.xlsx")
     grid = Table(view, {"금액": MONEY}, links=[url_for("purchase.pr_detail", pr_id=int(i)) for i in df["id"]])
-    return render_page("purchase.html", "purchase", tabs=TABS, tab="pr", grid=grid, status=status,
+    return render_page("purchase.html", "purchase", tabs=_tabs(), tab="pr", grid=grid, status=status,
                        statuses=purchasing.PR_STATUS)
 
 
@@ -144,7 +168,8 @@ def po_create(pr_id: int):
             except ValueError:
                 flash("발주 단가는 숫자로 입력하세요.", "error")
                 return redirect(url_for("purchase.pr_detail", pr_id=pr_id))
-    result = purchasing.create_po(pr_id, f_str("supplier"), prices, f_str("sap_po_no"), f_str("note"), actor(), g.wh_ids)
+    result = purchasing.create_po(pr_id, f_str("supplier"), prices, f_str("sap_po_no"), f_str("note"), actor(), g.wh_ids,
+                                  delivery_date=f_str("delivery_date"))
     flash(result.message, "success" if result.ok else "error")
     return redirect(url_for("purchase.po_detail", po_id=result.id) if result.ok
                     else url_for("purchase.pr_detail", pr_id=pr_id))
@@ -165,7 +190,9 @@ def po_detail(po_id: int):
     return render_page("purchase_po.html", "purchase", po=po, status=purchasing.PO_STATUS.get(po["status"]),
                        grid=Table(view, {"발주수량": QTY, "단가": MONEY, "발주금액": MONEY, "입고": QTY, "잔량": QTY},
                                   links=receive_links),
-                       match=match, sap_on=config.SAP_MODE != "off")
+                       match=match, sap_on=config.SAP_MODE != "off",
+                       payment=purchasing.PAYMENT_STATUS.get(purchasing.refresh_payment(po_id), ""),
+                       payment_note=(purchasing.po_detail(po_id)[0] or {}).get("payment_note", ""))
 
 
 @bp.post("/po/<int:po_id>/approve")
@@ -182,6 +209,23 @@ def po_sap(po_id: int):
     result = purchasing.set_sap_po_no(po_id, f_str("sap_po_no"), actor(), g.wh_ids, expected=f_str("_ver") or None)
     flash(result.message, "success" if result.ok else "error")
     return redirect(url_for("purchase.po_detail", po_id=po_id))
+
+
+@bp.post("/po/<int:po_id>/delivery")
+@role_required("CLERK")
+def po_delivery(po_id: int):
+    result = purchasing.set_delivery_date(po_id, f_str("delivery_date"), actor(), g.wh_ids)
+    flash(result.message, "success" if result.ok else "error")
+    return redirect(url_for("purchase.po_detail", po_id=po_id))
+
+
+@bp.post("/po/<int:po_id>/release")
+@role_required("MANAGER")
+def po_release(po_id: int):
+    result = purchasing.release_payment(po_id, f_str("reason"), actor(), g.wh_ids)
+    flash(result.message, "success" if result.ok else "error")
+    return redirect(request.referrer if (request.referrer or "").startswith(request.host_url) else
+                    url_for("purchase.po_detail", po_id=po_id))
 
 
 @bp.post("/po/<int:po_id>/short-close")

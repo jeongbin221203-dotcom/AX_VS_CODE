@@ -140,9 +140,17 @@ def _register(conn, who: dict, material_id: int, tx_type: str, qty_input: float,
             return Result(False, problem)
         if not po_no:                                     # 발주 입고면 발주의 공급처 이름 — 현장에서 고칠 일이 아니다
             partner_warning = partners.unknown_warning(partner, partner_id)
-    problem = (master_sync.cost_center_problem(conn, cost_center) if tx_type == "OUT" else "")
+    production_role, order_no = "", ""
+    if production_id is not None:                     # 생산 거래: 부품 투입 · 부품 반납 · 완제품 입고
+        prow = conn.execute("SELECT product_id, sap_order_no FROM productions WHERE id = ?", (production_id,)).fetchone()
+        production_role = ("issue" if tx_type == "OUT" else
+                           "receipt" if int(prow["product_id"]) == int(material_id) else "return")
+        order_no = prow["sap_order_no"] or ""
+    order_mode = bool(production_role) and config.SAP_PRODUCTION_MODE == "order"
+    problem = (master_sync.cost_center_problem(conn, cost_center) if tx_type == "OUT" and not order_mode else "")
     if not problem and sap.enabled():
-        problem = sap.mapping_problem(mat, tx_type, cost_center, po_no, po_item, warehouse=wh)
+        problem = sap.mapping_problem(mat, tx_type, cost_center, po_no, po_item, warehouse=wh,
+                                      production=production_role, order_no=order_no)
     if problem:
         return Result(False, problem)
 
@@ -218,8 +226,7 @@ def _register(conn, who: dict, material_id: int, tx_type: str, qty_input: float,
                           qty=qty, stock_after=stock_now, pending=True)
         allocations = [(lot_no, qty)]
 
-    issue_return = bool(tx_type == "IN" and production_id is not None and conn.execute(
-        "SELECT product_id FROM productions WHERE id = ?", (production_id,)).fetchone()[0] != material_id)
+    issue_return = production_role == "return"
     tx_ids = []
     for lot, q in allocations:
         tx_ids.append(_insert(conn, who, {
@@ -227,7 +234,8 @@ def _register(conn, who: dict, material_id: int, tx_type: str, qty_input: float,
             "unit_price": max(float(unit_price), 0.0), "tx_date": tx_date, "lot_no": lot,
             "ref_no": ref_no.strip(), "partner": partner.strip(), "note": note.strip(),
             "po_no": po_no, "po_item": po_item, "cost_center": cost_center,
-            "movement_type": sap.movement_type(tx_type, q, po_no, issue_return=issue_return), "statement_id": statement_id,
+            "movement_type": sap.movement_type(tx_type, q, po_no, issue_return=issue_return, production=production_role),
+            "statement_id": statement_id,
             "partner_id": partner_id, "production_id": production_id, "batch_no": batch_no,
             "entry_unit": entry_unit if len(allocations) == 1 else "", "entry_qty": entry_qty if len(allocations) == 1 else None,
         }, mat["code"]))

@@ -15,6 +15,20 @@
   {% if not scope_all() %}
   <div class="alert alert-info">월 마감은 회사 전체에 적용되어 모든 창고 권한이 있는 관리자만 할 수 있습니다.</div>
   {% elif next_ym < today().strftime('%Y-%m') %}
+  {% if checks %}
+  <h4>{{ next_ym }}월 마감 전 점검 <span class="muted small">(막지는 않고 마감 기록에 남습니다)</span></h4>
+  <ul class="small">
+    <li class="{{ 'tone-warn' if checks.wip_count }}">재공품: 투입했지만 완료하지 않은 작업지시 {{ checks.wip_count }}건 · ₩{{ '{:,.0f}'.format(checks.wip_value) }}
+      {% if checks.wip_count %}— <a href="{{ url_for('production.index', tab='wip') }}">재공품</a>에서 완료·반납할 것이 있는지{% endif %}</li>
+    <li class="{{ 'tone-warn' if checks.gr_no_invoice_count }}">GR/IR: 월말까지 입고 금액보다 계산서가 적은 발주 {{ checks.gr_no_invoice_count }}건 · 차액 ₩{{ '{:,.0f}'.format(checks.gr_no_invoice_value) }}
+      (미착 계산서 — 미지급금 추정)</li>
+    <li class="{{ 'tone-warn' if checks.invoice_no_receipt_count }}">거래에 연결 안 된 세금계산서 {{ checks.invoice_no_receipt_count }}건 · ₩{{ '{:,.0f}'.format(checks.invoice_no_receipt_value) }}
+      {% if checks.invoice_no_receipt_count %}— <a href="{{ url_for('documents.index', unlinked=1) }}">증빙(미연결)</a>{% endif %}</li>
+    <li class="{{ 'tone-danger' if checks.negative_count }}">월말 음수 재고 {{ checks.negative_count }}건{% if checks.negative %}: {{ checks.negative[:10]|join(', ') }}{% endif %}</li>
+    <li class="{{ 'tone-warn' if checks.payment_blocked }}">지급 보류 발주 {{ checks.payment_blocked }}건
+      {% if checks.payment_blocked %}— <a href="{{ url_for('purchase.index', tab='payment', status='BLOCKED') }}">지급 대조</a>{% endif %}</li>
+  </ul>
+  {% endif %}
   <form class="row-actions" method="post" action="{{ url_for('periods.close') }}">
     {{ csrf() }}
     <input type="hidden" name="ym" value="{{ next_ym }}">

@@ -21,8 +21,10 @@ def index():
     if snap is not None:
         snap_view = snap.rename(columns={"code": "자재코드", "name": "자재명", "wh_code": "창고", "unit": "단위", "qty": "월말재고",
                                          "unit_price": "현재 단가", "value": "금액(현재 단가 기준)"})
+    nxt = periods.next_closable()
+    checks = periods.close_checks(nxt) if nxt else None
     return render_page(
-        "periods.html", "periods", closed=ym, next_ym=periods.next_closable(),
+        "periods.html", "periods", closed=ym, next_ym=nxt, checks=checks,
         history=Table(hist, {"ID": "{}"}),
         snapshot=Table(snap_view, {"월말재고": "{:,.2f}", "현재 단가": "₩{:,.0f}", "금액(현재 단가 기준)": "₩{:,.0f}"})
         if snap_view is not None else None,

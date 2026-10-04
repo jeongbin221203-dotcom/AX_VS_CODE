@@ -124,7 +124,8 @@ def _product(code="FG-1", lead=0):
     return mid(code)
 
 
-def test_work_order_lifecycle_actual_cost(fresh):
+def test_work_order_lifecycle_actual_cost(fresh, monkeypatch):
+    monkeypatch.setattr(config, "WEEKEND_OFF", False)              # 착수일을 달력일로 (근무일 계산은 test_round6)
     fg = _product(lead=3)
     L = production.BomLine
     production.save_bom(fg, 1, [L(mid("LSH-001"), 2), L(mid("LBL-001"), 4)], "", M1)
@@ -179,7 +180,8 @@ def test_quick_post_actual_and_scrap(fresh):
 
 
 # ── MRP ──────────────────────────────────────────────────────
-def test_mrp_multilevel_lead_time_lot_sizing_and_convert(fresh):
+def test_mrp_multilevel_lead_time_lot_sizing_and_convert(fresh, monkeypatch):
+    monkeypatch.setattr(config, "WEEKEND_OFF", False)              # 날짜 계산을 달력일로 (근무일 계산은 test_round5)
     fg, sa = _product("FG-1", lead=2), _product("SA-1", lead=3)
     buy = mid("LSH-001")
     db.execute("UPDATE materials SET lead_time_days = 5, min_order_qty = 100, order_multiple = 50, safety_stock = 0 "

@@ -6,17 +6,20 @@
 
 from datetime import date, timedelta
 
+import pandas as pd
 from flask import Blueprint, abort, flash, g, redirect, request, url_for
 
-from core import bulk, org, periods, production, repository as repo, services
+import config
+from core import bulk, costing, org, periods, production, repository as repo, services
 from views import bulk_ui
 from core.utils import month_end
-from views.helpers import (Table, a_int, actor, as_id, can, f_float, f_id, f_str, form_response, log_export, render_page,
-                           role_required)
+from views.helpers import (Table, a_date, a_int, actor, as_id, can, f_float, f_id, f_str, form_response, log_export,
+                           render_page, role_required, scope_all)
 
 bp = Blueprint("production", __name__, url_prefix="/production")
 
-TABS = [("run", "⚡ 간편 생산 투입"), ("wo", "🗂️ 작업지시"), ("wip", "🧩 재공품"), ("history", "📜 생산 이력"), ("bom", "🧬 BOM·공정")]
+TABS = [("run", "⚡ 간편 생산 투입"), ("wo", "🗂️ 작업지시"), ("wip", "🧩 재공품"), ("history", "📜 생산 이력"), ("bom", "🧬 BOM·공정"),
+        ("cost", "📐 원가")]
 BOM_EMPTY_ROWS = 6
 
 
@@ -29,6 +32,8 @@ def _min_date() -> str:
 @role_required("CLERK")
 def index():
     tab = request.args.get("tab", "run")
+    if tab == "cost":
+        return _cost_page()
     if tab == "history":
         df = production.list_df(g.wh_ids)
         view = df.assign(cancelled_at=df["status"].map(production.STATUS))
@@ -168,7 +173,9 @@ def detail(prod_id: int):
                        grid=Table(view, {"거래 ID": "{}", "수량": "qty", "단가": "₩{:,.0f}", "금액": "₩{:,.0f}"},
                                   tones=["muted" if s else None for s in view["상태"]]),
                        wh_opts=org.warehouse_options(g.wh_ids), can_cancel=can("MANAGER"), min_date=_min_date(),
-                       open_wo=p["status"] in ("PLANNED", "RELEASED"))
+                       open_wo=p["status"] in ("PLANNED", "RELEASED"),
+                       variance=costing.variance(prod_id) if p["status"] == "DONE" else None,
+                       sap_order_mode=config.SAP_PRODUCTION_MODE == "order")
 
 
 @bp.post("/<int:prod_id>/cancel")
@@ -381,3 +388,93 @@ def bom_import_upload():
 @role_required("MANAGER")
 def bom_import_apply():
     return bulk_ui.apply("bom", bulk.apply_boms, url_for("production.bom_import"))
+
+
+
+# ── 📐 원가: 표준원가 · 작업지시 원가 차이 · 오더 정산 · 구매 가격차이 ──
+COST_VIEWS = {"variance": "작업지시 차이", "standard": "표준원가", "ppv": "구매 가격차이"}
+
+
+def _cost_page():
+    from core import costing
+    view = request.args.get("view", "variance")
+    view = view if view in COST_VIEWS else "variance"
+    ctx = dict(tabs=TABS, tab="cost", view=view, views=COST_VIEWS, rates=(config.LABOR_RATE, config.OVERHEAD_RATE),
+               sap_order=config.SAP_PRODUCTION_MODE == "order")
+    if view == "standard":
+        df = costing.standards_df()
+        out = (df.assign(made=df["made"].map({1: "제품", 0: "구매품"}))[
+            ["code", "name", "unit", "made", "material", "labor", "overhead", "total", "minutes", "set_at", "set_by"]]
+               .rename(columns={"code": "자재코드", "name": "자재명", "unit": "단위", "made": "구분", "material": "재료",
+                                "labor": "노무", "overhead": "경비", "total": "표준원가", "minutes": "표준시간(분)",
+                                "set_at": "산정일시", "set_by": "산정자"})) if len(df) else pd.DataFrame()
+        if request.args.get("export") == "xlsx":
+            log_export("standard_costs", len(out))
+            return form_response("standard_costs", out.drop(columns=["구분"], errors="ignore").round(2), "표준원가.xlsx")
+        return render_page("production.html", "production", **ctx, set_at=df["set_at"].max() if len(df) else "",
+                           grid=Table(out, {"재료": "₩{:,.2f}", "노무": "₩{:,.2f}", "경비": "₩{:,.2f}", "표준원가": "₩{:,.2f}",
+                                            "표준시간(분)": "qty"}))
+    if view == "ppv":
+        start = a_date("start", date.today() - timedelta(days=90))
+        end = a_date("end", date.today())
+        df = costing.purchase_price_variance(start.isoformat(), end.isoformat(), g.wh_ids)
+        out = (df[["tx_date", "code", "name", "qty", "unit", "unit_price", "std_price", "variance", "po_no", "partner"]]
+               .rename(columns={"tx_date": "일자", "code": "자재코드", "name": "자재명", "qty": "수량", "unit": "단위",
+                                "unit_price": "입고 단가", "std_price": "표준 단가", "variance": "가격차이", "po_no": "발주번호",
+                                "partner": "거래처"})) if len(df) else pd.DataFrame()
+        if request.args.get("export") == "xlsx":
+            log_export("ppv", len(out))
+            return form_response("ppv", out, "구매_가격차이.xlsx")
+        return render_page("production.html", "production", **ctx, start=start, end=end,
+                           ppv_total=float(df["variance"].sum()) if len(df) else 0.0,
+                           grid=Table(out, {"수량": "qty", "입고 단가": "₩{:,.0f}", "표준 단가": "₩{:,.0f}", "가격차이": "₩{:+,.0f}"},
+                                      tones=["danger" if v > 0 else None for v in df["variance"]] if len(df) else None))
+    df = costing.variances_df(g.wh_ids)
+    out = (df.assign(settled=df["settled"].map({True: "정산됨", False: ""}))[
+        ["prod_no", "code", "name", "good", "std_total", "actual_total", "price_var", "qty_var", "labor_var", "overhead_var",
+         "other_var", "total_var", "settled", "note"]]
+           .rename(columns={"prod_no": "작업지시", "code": "제품코드", "name": "제품명", "good": "양품", "std_total": "표준 원가",
+                            "actual_total": "실제 원가", "price_var": "재료 가격차이", "qty_var": "재료 수량차이",
+                            "labor_var": "노무 차이", "overhead_var": "경비 차이", "other_var": "기타 차이",
+                            "total_var": "차이 합계", "note": "비고",
+                            "settled": "정산"})) if len(df) else pd.DataFrame()
+    if request.args.get("export") == "xlsx":
+        log_export("variances", len(out))
+        return form_response("variances", out.round(0) if len(out) else out, "작업지시_원가차이.xlsx")
+    money = {k: "₩{:+,.0f}" for k in ("재료 가격차이", "재료 수량차이", "노무 차이", "경비 차이", "기타 차이", "차이 합계")}
+    return render_page("production.html", "production", **ctx, has_std=bool(len(costing.standards_df())),
+                       open_settle=df[df["can_settle"]].to_dict("records") if len(df) else [],
+                       totals={k: float(df[k].sum()) if len(df) else 0.0 for k in ("price_var", "qty_var", "labor_var",
+                                                                                   "overhead_var", "total_var")},
+                       grid=Table(out, {"양품": "qty", "표준 원가": "₩{:,.0f}", "실제 원가": "₩{:,.0f}", **money},
+                                  links=[url_for("production.detail", prod_id=int(i)) for i in df["id"]] if len(df) else None,
+                                  tones=["danger" if v > 0.5 else None for v in df["total_var"]] if len(df) else None))
+
+
+@bp.post("/cost/rollup")
+@role_required("MANAGER")
+def cost_rollup():
+    from core import costing
+    if not scope_all():
+        abort(403, "표준원가는 회사 전체에 적용되므로 모든 창고 권한이 있는 관리자만 산정할 수 있습니다.")
+    ok, msg = costing.rollup(actor())
+    flash(msg, "success" if ok else "error")
+    return redirect(url_for("production.index", tab="cost", view="standard"))
+
+
+@bp.post("/<int:prod_id>/settle")
+@role_required("MANAGER")
+def settle(prod_id: int):
+    from core import costing
+    ok, msg = costing.settle(prod_id, actor(), g.wh_ids)
+    flash(msg, "success" if ok else "error")
+    return redirect(request.referrer if (request.referrer or "").startswith(request.host_url) else
+                    url_for("production.index", tab="cost"))
+
+
+@bp.post("/<int:prod_id>/sap-order")
+@role_required("CLERK")
+def sap_order(prod_id: int):
+    r = production.set_sap_order(prod_id, f_str("sap_order_no"), actor(), g.wh_ids)
+    flash(r.message, "success" if r.ok else "error")
+    return redirect(url_for("production.detail", prod_id=prod_id))
