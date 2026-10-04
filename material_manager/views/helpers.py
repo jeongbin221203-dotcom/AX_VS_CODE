@@ -15,7 +15,8 @@ import pandas as pd
 from flask import Flask, abort, flash, g, redirect, render_template, request, send_file, session, url_for
 
 import config
-from core import approvals, audit, auth, org, periods, repository as repo, sap
+from core import audit, auth, org, periods, repository as repo, sap
+from core.utils import fmt_qty
 
 # 메뉴 (키, 표시명, 엔드포인트, 최소 역할) — 기본 순서는 현장에서 자주 쓰는 순. 대시보드는 항상 맨 위.
 # 사용자는 사이드바 '메뉴 편집'으로 순서·즐겨찾기를 바꿀 수 있다(core/prefs.py).
@@ -45,6 +46,7 @@ MENUS = [
     ("org", "🏭 플랜트·창고", "admin.org_page", "ADMIN"),
     ("users", "👥 사용자", "admin.users", "ADMIN"),
     ("jobs", "⏱️ 배치 작업", "admin.jobs_page", "ADMIN"),
+    ("channels", "🔔 알림 채널", "admin.channels", "ADMIN"),
     ("forms", "📑 엑셀 양식", "admin.forms_list", "ADMIN"),
     ("audit", "🗂️ 감사로그", "admin.audit_log", "ADMIN"),
 ]
@@ -110,8 +112,8 @@ def load_context():
     g.shortage_cnt = g.sap_failed = g.pending_approvals = g.unread = 0
     if request.method == "GET":                   # 사이드바 알림은 화면을 그릴 때만 계산
         from core import notify, workflow
-        stock = repo.stock_df(wh_ids=g.wh_ids)
-        g.shortage_cnt = int(stock["shortage"].sum()) if not stock.empty else 0
+        from core import cache
+        g.shortage_cnt = cache.memo(("shortage_cnt", cache.wh_key(g.wh_ids)), 30, lambda: repo.shortage_count(g.wh_ids))
         g.sap_failed = sap.summary(g.wh_ids).get("FAILED", 0) if g.sap_on and can("MANAGER") else 0
         g.pending_approvals = workflow.count(g.user) if can("CLERK") else 0          # 내 차례인 결재 (대결 포함)
         g.unread = notify.unread(g.user["id"])
@@ -187,6 +189,36 @@ def can(minimum: str) -> bool:
     return auth.has_role(g.get("user"), minimum)
 
 
+def can_master() -> bool:
+    """기준정보(자재 마스터·단위·거래처)를 바꿀 수 있나: 모든 창고 권한이 있는 관리자 이상, 또는 '데이터 관리' 역할."""
+    user = g.get("user")
+    return bool(user) and (user.get("role") == "DATA" or (can("MANAGER") and g.get("wh_ids") is None))
+
+
+def master_required(view):
+    @wraps(view)
+    def wrapped(*args, **kwargs):
+        if not can_master():
+            abort(403, "기준정보는 모든 창고 권한이 있는 관리자 또는 '데이터 관리' 역할만 바꿀 수 있습니다.")
+        return view(*args, **kwargs)
+    return wrapped
+
+
+def role_or_data(minimum: str):
+    """그 역할 이상 또는 '데이터 관리' 역할 (데이터 점검 등)."""
+    def decorator(view):
+        @wraps(view)
+        def wrapped(*args, **kwargs):
+            if not (can(minimum) or (g.get("user") or {}).get("role") == "DATA"):
+                abort(403, f"이 기능은 {auth.role_label(minimum)} 이상 또는 데이터 관리 역할만 사용할 수 있습니다.")
+            return view(*args, **kwargs)
+        return wrapped
+    return decorator
+
+
+DATA_MENUS = {"quality"}                     # '데이터 관리' 역할에 더 보이는 메뉴 (자재 마스터·거래처는 조회 메뉴라 이미 보임)
+
+
 def role_required(minimum: str):
     def decorator(view):
         @wraps(view)
@@ -205,7 +237,8 @@ def actor() -> dict:
 
 
 def menus_for_user() -> list[tuple]:
-    return [m for m in MENUS if can(m[3])]
+    data = (g.get("user") or {}).get("role") == "DATA"
+    return [m for m in MENUS if can(m[3]) or (data and m[0] in DATA_MENUS)]
 
 
 def menu_layout() -> dict:
@@ -233,6 +266,8 @@ def render_page(template: str, active: str, **ctx):
 def _cell(value: Any, fmt: str | None) -> str:
     if value is None or (not isinstance(value, str) and pd.isna(value)):
         return ""
+    if fmt == "qty":                               # 수량: 지수 표기·반올림 없이 (fmt_qty)
+        return fmt_qty(value)
     if fmt:
         try:
             return fmt.format(value)
@@ -377,7 +412,7 @@ def register_template_helpers(app: Flask) -> None:
     from core import once, version
     app.jinja_env.globals.update(
         csrf_token=csrf_token, once_token=once.new_token, ver=version.of_row, url_with=url_with, menus_for_user=menus_for_user, menu_layout=menu_layout, can=can, scope_all=scope_all,
-        role_label=auth.role_label, ROLES=config.ROLES, SAP_STATUS=config.SAP_STATUS,
+        role_label=auth.role_label, ROLES=config.ROLES, can_master=can_master, SAP_STATUS=config.SAP_STATUS,
         LOGIN_MAX_FAILS=config.LOGIN_MAX_FAILS, LOGIN_LOCK_MINUTES=config.LOGIN_LOCK_MINUTES,
         APP_TITLE=config.APP_TITLE, APP_ICON=config.APP_ICON, TX_LABEL=config.TX_LABEL,
         DOC_TYPES=config.DOC_TYPES, DOC_NEED_BIZ_NO=config.DOC_NEED_BIZ_NO,
@@ -390,6 +425,10 @@ def register_template_helpers(app: Flask) -> None:
     from core import maintenance
     app.jinja_env.globals["READ_ONLY"] = maintenance.state
     app.jinja_env.globals["COMPANY"] = lambda: config.COMPANY_NAME
+    from core import names
+    app.jinja_env.filters["relabel"] = lambda s: names.relabel(str(s))     # 표 머리글: 회사가 바꾼 거래 구분 이름
+    app.jinja_env.filters["qty"] = fmt_qty                               # 수량 표시: 1,234.5 (지수 표기 없이)
+    app.jinja_env.filters["plain"] = lambda v: fmt_qty(v, sep=False)     # 입력 칸 값: 1234.5
     app.jinja_env.filters["krw"] = lambda v: f"₩ {float(v or 0):,.0f}"          # 금액 카드: ₩ 1,234,567
     app.jinja_env.filters["won"] = lambda v: f"{float(v or 0):,.0f}원"          # 문장 속 금액: 1,234,567원
     # 화면 파일(css·js) 판 — 배포로 파일이 바뀌면 주소가 바뀌어 브라우저가 예전 파일을 쓰지 않는다

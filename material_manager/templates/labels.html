@@ -23,7 +23,7 @@
         <td>[{{ r.code }}] {{ r.name }} <span class="muted small">{{ r.spec }}</span></td>
         <td class="mono">{{ r.barcode or r.code }}</td>
         <td><input class="qty-input" name="n_{{ r.id }}" type="number" min="0" max="200" value="1" aria-label="장수"></td>
-        <td>{% for u, f, bc in r.units if bc %}<label class="inline small">{{ u }}(×{{ '%g' % f }})
+        <td>{% for u, f, bc in r.units if bc %}<label class="inline small">{{ u }}(×{{ (f)|plain }})
           <input class="qty-input" name="u_{{ r.id }}_{{ u }}" type="number" min="0" max="200" value="0" aria-label="{{ u }} 라벨 장수"></label>{% endfor %}</td></tr>
     {% endfor %}
     </tbody>

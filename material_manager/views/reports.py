@@ -8,7 +8,7 @@ from flask import Blueprint, current_app, flash, g, request
 import config
 from core import audit, excel_forms, org, reconcile, repository as repo
 from core.utils import month_end, prev_month, xlsx_problem
-from views.helpers import Table, actor, form_response, log_export, render_page, role_required
+from views.helpers import Table, actor, form_response, log_export, page_arg, pager, render_page, role_required
 
 bp = Blueprint("reports", __name__, url_prefix="/reports")
 
@@ -43,8 +43,10 @@ def ledger():
         return form_response("ledger", view, f"수불부_{ym}.xlsx", period=f"{start} ~ {end}")
     totals = {k: float(df[k].sum()) for k in ("opening", "in_qty", "out_qty", "adj_qty", "trf_in", "trf_out",
                                               "closing", "closing_value")}
+    pg = pager(len(view), page_arg())                 # 화면은 100건씩 (합계·엑셀은 전부)
+    view = view.iloc[pg["first"] - 1:pg["last"]] if len(view) else view
     return render_page("ledger.html", "ledger", ym=ym, start=start, end=end, wh_opts=wh_opts, wh_sel=wh_sel,
-                       grid=Table(view, LEDGER_FMT), totals=totals, count=len(df),
+                       grid=Table(view, LEDGER_FMT), totals=totals, count=len(df), pg=pg,
                        closed=g.closed_through and ym <= g.closed_through)
 
 
@@ -126,6 +128,9 @@ def valuation_view():
                              period=f"{start} ~ {end} · {config.VALUATION_METHODS.get(method, method)}")
     totals = {k: float(df[k].sum()) if not df.empty else 0.0
               for k in ("open_value", "receipts", "issues", "adjustments", "close_value")}
+    pg = pager(len(view), page_arg())                 # 자재가 많으면 화면은 100건씩 (합계·엑셀은 전부)
+    if not df.empty:
+        view = view.iloc[pg["first"] - 1:pg["last"]]
     return render_page("valuation.html", "valuation", ym=ym, start=start, end=end, method=method,
                        methods=config.VALUATION_METHODS, grid=Table(view, VAL_FMT), totals=totals,
-                       warnings=warnings[:20], warn_count=len(warnings))
+                       warnings=warnings[:20], warn_count=len(warnings), pg=pg)

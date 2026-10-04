@@ -4,13 +4,13 @@
 그리고 '즉시 확인할 항목'(안전재고 미달 · 유효기한 · 소진 임박 · 장기 미사용 · 결재 대기 · 입고 예정 발주 · ERP 전송 실패).
 """
 
-from datetime import date, timedelta
+from datetime import date
 
 import pandas as pd
 from flask import Blueprint, g, request
 
 import config
-from core import approvals, insights, repository as repo, sap, services, valuation
+from core import insights, repository as repo, sap, services, valuation
 from views.helpers import Table, can, chart, render_page
 from views.stock import STOCK_FMT
 
@@ -26,9 +26,22 @@ def _pct(now: float, before: float) -> float | None:
     return (now - before) / before * 100 if before else None
 
 
+CACHE_SECONDS = 60                     # 집계 보관 (이 서버에서 저장하면 바로 비움, core/cache.py)
+VALUED_SECONDS = 300                   # 재고평가 합계 (이동평균·선입선출 재계산이 무거워 5분)
+TABLE_ROWS = 200                       # '즉시 확인' 표는 앞 200줄 (전체는 재고 현황·엑셀)
+
+
+def _memo(name: str, fn, *args):
+    from core import cache
+    out = cache.memo(("dashboard", name, cache.wh_key(g.wh_ids), *args), CACHE_SECONDS, fn)
+    return out.copy() if hasattr(out, "copy") else out
+
+
 @bp.get("/")
 def index():
-    stock = repo.stock_df(wh_ids=g.wh_ids)
+    if g.wh_ids is not None and not g.wh_ids:          # 데이터 범위(플랜트·창고)를 아직 받지 못한 사용자
+        return render_page("dashboard.html", "dashboard", empty=True, no_scope=True)
+    stock = _memo("stock", lambda: repo.stock_df(wh_ids=g.wh_ids))
     if stock.empty:
         return render_page("dashboard.html", "dashboard", empty=True)
 
@@ -39,42 +52,45 @@ def index():
     tab = request.args.get("tab", "shortage")
 
     # ── 핵심 지표 ──
-    amounts = insights.monthly_amounts(12, g.wh_ids, end_ym=ym)
-    cur, prev, same_period = insights.month_to_date(ym, g.wh_ids)
+    amounts = _memo("amounts", lambda: insights.monthly_amounts(12, g.wh_ids, end_ym=ym), ym)
+    cur, prev, same_period = _memo("mtd", lambda: insights.month_to_date(ym, g.wh_ids), ym)
     shortage = stock[stock["shortage"]].sort_values("shortage_qty", ascending=False)
-    cover = insights.stock_cover(stock, g.wh_ids, horizon=COVER_DAYS)
-    dead = insights.dead_stock(stock, g.wh_ids, days=DEAD_DAYS)
+    cover = _memo("cover", lambda: insights.stock_cover(stock, g.wh_ids, horizon=COVER_DAYS))
+    dead = _memo("dead", lambda: insights.dead_stock(stock, g.wh_ids, days=DEAD_DAYS))
 
     # 재고평가(이동평균·선입선출) 기말 금액. 평가는 플랜트 단위라 창고 범위가 정해진 사용자에게는 보이지 않는다.
     valued = None
     if g.wh_ids is None:
         try:
-            vdf, _warn = valuation.report("2000-01-01", date.today().isoformat())
-            valued = float(vdf["close_value"].sum()) if not vdf.empty else 0.0
+            def _valued():
+                vdf, _warn = valuation.report("2000-01-01", date.today().isoformat())
+                return float(vdf["close_value"].sum()) if not vdf.empty else 0.0
+            from core import cache                           # 거래 전체를 다시 평가 → 5분 보관(저장해도 유지)
+            valued = cache.memo(("slow", "dashboard_valued", cache.wh_key(g.wh_ids)), VALUED_SECONDS, _valued)
         except Exception:                                           # 평가 실패가 대시보드를 막지 않게
             from flask import current_app
             current_app.logger.exception("대시보드 재고평가 계산 실패")
 
     # ── 추이 · 구성 ──
-    daily = insights.daily_amounts(30, g.wh_ids)
+    daily = _memo("daily", lambda: insights.daily_amounts(30, g.wh_ids))
     has_daily = bool(daily[["입고금액", "출고금액", "조정금액"]].abs().to_numpy().sum())
     series = {k: daily[k] for k in ("입고금액", "출고금액", "조정금액") if k != "조정금액" or daily[k].abs().sum()}
     trend_chart = chart(daily["일자"].str[5:], series, money=True) if has_daily else None
     by_cat = stock.groupby("category")["stock_value"].sum().sort_values(ascending=False)
-    whs = insights.warehouse_values(g.wh_ids)
-    top = insights.top_issues(ym, g.wh_ids)
+    whs = _memo("whs", lambda: insights.warehouse_values(g.wh_ids))
+    top = _memo("top", lambda: insights.top_issues(ym, g.wh_ids), ym)
     top_all = top.empty
     if top_all:
-        top = insights.top_issues("", g.wh_ids)
+        top = _memo("top_all", lambda: insights.top_issues("", g.wh_ids))
 
     # ── 즉시 확인 ──
-    lots = repo.stock_by_lot(wh_ids=g.wh_ids)
+    lots = _memo("lots", lambda: repo.stock_by_lot(wh_ids=g.wh_ids))
     lots = lots[lots["days_left"].notna()]
     expired = lots[lots["days_left"] < 0]
     expiring = lots[(lots["days_left"] >= 0) & (lots["days_left"] <= 30)]
     from core import workflow
     pending = pd.DataFrame(workflow.queue(g.user)) if can("CLERK") else pd.DataFrame()
-    incoming = insights.incoming_po(g.wh_ids, INCOMING_DAYS)
+    incoming = _memo("incoming", lambda: insights.incoming_po(g.wh_ids, INCOMING_DAYS))
     erp_fail, erp_fail_cnt = (sap.outbox_page(["FAILED", "ERROR"], g.wh_ids, page=1, size=50)
                               if g.sap_on and can("MANAGER") else (pd.DataFrame(), 0))
 
@@ -91,20 +107,20 @@ def index():
         tab = "shortage"
 
     tables = {
-        "shortage": Table(services.stock_display(shortage), STOCK_FMT),
+        "shortage": Table(services.stock_display(shortage.head(TABLE_ROWS)), STOCK_FMT),
         "expiry": Table(pd.concat([expired, expiring])[["code", "name", "wh_code", "lot_no", "expiry_date", "days_left", "stock"]]
                         .rename(columns={"code": "자재코드", "name": "자재명", "wh_code": "창고", "lot_no": "로트",
                                          "expiry_date": "유효기한", "days_left": "남은 일수", "stock": "현재고"}),
                         {"현재고": "{:,.2f}", "남은 일수": "{:,.0f}"},
                         tones=["danger"] * len(expired) + ["warn"] * len(expiring)),
-        "cover": Table(cover, {"현재고": "{:,.2f}", "하루 평균 출고": "{:,.2f}", "남은 일수": "{:,.1f}"},
-                       tones=["danger" if d <= 3 else "warn" for d in cover["남은 일수"]]),
-        "dead": Table(dead, {"현재고": "{:,.2f}", "재고금액": MONEY}),
+        "cover": Table(cover.head(TABLE_ROWS), {"현재고": "{:,.2f}", "하루 평균 출고": "{:,.2f}", "남은 일수": "{:,.1f}"},
+                       tones=["danger" if d <= 3 else "warn" for d in cover["남은 일수"].head(TABLE_ROWS)]),
+        "dead": Table(dead.head(TABLE_ROWS), {"현재고": "{:,.2f}", "재고금액": MONEY}),
         "incoming": Table(incoming, {"잔량": "{:,.2f}", "품목": "{}"},
                           tones=["danger" if s == "지연" else None for s in incoming["상태"]]),
     }
     if can("CLERK"):
-        kinds = {"ADJ": "실사 조정", "PR": "구매요청", "PO": "발주"}
+        kinds = workflow.KIND
         tables["approvals"] = Table(
             pending.assign(kind=pending["kind"].map(kinds), via=pending["via"].fillna(""))[
                 ["kind", "no", "step", "title", "amount", "requested_by", "requested_at", "via"]]
@@ -127,7 +143,8 @@ def index():
         valued=valued, val_label=config.VALUATION_METHODS.get(config.VALUATION_DEFAULT, ""),
         cur=cur, same_period=same_period,
         in_mom=_pct(cur["입고금액"], prev["입고금액"]), out_mom=_pct(cur["출고금액"], prev["출고금액"]),
-        cover_cnt=len(cover), dead_value=dead["재고금액"].sum() if not dead.empty else 0,
+        cover_cnt=len(cover), dead_value=dead["재고금액"].sum() if not dead.empty else 0, table_rows=TABLE_ROWS,
+        tab_total={"shortage": len(shortage), "cover": len(cover), "dead": len(dead)}.get(tab, 0),
         dead_cnt=len(dead), cover_days=COVER_DAYS, dead_days=DEAD_DAYS, incoming_days=INCOMING_DAYS,
         trend_chart=trend_chart,
         trend=Table(daily[daily[["입고금액", "출고금액", "조정금액"]].abs().sum(axis=1) > 0],

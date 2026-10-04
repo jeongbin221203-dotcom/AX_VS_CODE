@@ -9,6 +9,7 @@ from __future__ import annotations
 from datetime import date
 
 import config
+from core.utils import fmt_qty
 from core import db, partners
 
 SEVERITY = {"high": "높음", "mid": "보통", "low": "낮음"}
@@ -49,7 +50,7 @@ def run(wh_ids=None, limit: int | None = 30) -> list[dict]:
         WHERE o.status <> 'CANCELLED'{wh_and('o.warehouse_id')}""", wp)
     rows = rows[rows["received"] > rows["qty"] + 1e-6] if len(rows) else rows
     out.append(_check("over_receipt", "발주보다 많이 받은 입고", "high",
-                      [(f"{r.po_no} / {r.line_no} · {r.code} 발주 {r.qty:,.4g} · 입고 {r.received:,.4g}", f"/purchase/po/{r.id}")
+                      [(f"{r.po_no} / {r.line_no} · {r.code} 발주 {fmt_qty(r.qty)} · 입고 {fmt_qty(r.received)}", f"/purchase/po/{r.id}")
                        for r in rows.itertuples()], "초과분 입고를 취소하거나 발주를 고칩니다."))
 
     # 3) 거래처: 같은 사업자번호 · 검증번호 오류
@@ -87,7 +88,7 @@ def run(wh_ids=None, limit: int | None = 30) -> list[dict]:
         WHERE m.active = 1 AND COALESCE(m.unit_price, 0) = 0{wh_and('t.warehouse_id')}
         GROUP BY m.id, m.code, m.name HAVING {db.STOCK_EXPR} > 0.000001""", wp)
     out.append(_check("no_price", "재고는 있는데 기준단가 0", "mid",
-                      [(f"[{r.code}] {r.name} · 재고 {r.stock:,.4g}", f"/materials/?tab=edit&id={r.id}") for r in rows.itertuples()]))
+                      [(f"[{r.code}] {r.name} · 재고 {fmt_qty(r.stock)}", f"/materials/?tab=edit&id={r.id}") for r in rows.itertuples()]))
 
     # 6) 유효기한 지난 재고
     rows = db.query_df(f"""
@@ -97,7 +98,7 @@ def run(wh_ids=None, limit: int | None = 30) -> list[dict]:
         WHERE l.expiry_date <> '' AND l.expiry_date < ?{wh_and('t.warehouse_id')}
         GROUP BY m.code, m.name, w.code, l.lot_no, l.expiry_date HAVING {db.STOCK_EXPR} > 0.000001""", (today, *wp))
     out.append(_check("expired", "유효기한 지난 재고", "mid",
-                      [(f"[{r.code}] {r.name} · {r.wh} · 로트 {r.lot_no} ({r.expiry_date}) · {r.stock:,.4g}", "/stock/?view=lot")
+                      [(f"[{r.code}] {r.name} · {r.wh} · 로트 {r.lot_no} ({r.expiry_date}) · {fmt_qty(r.stock)}", "/stock/?view=lot")
                        for r in rows.itertuples()], "폐기는 실사조정으로 0을 넣습니다."))
 
     # 7) 오래 기다린 결재 · 완료 예정 지난 작업지시

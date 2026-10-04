@@ -19,7 +19,7 @@
         {% for k, v in products.items() %}<option value="{{ k }}" {{ 'selected' if k == pid }}>{{ v }}</option>{% endfor %}
       </select>
     </label>
-    <label>생산 수량<input name="qty" type="number" min="0" step="any" value="{{ '%g' % qty if qty else '' }}" required></label>
+    <label>생산 수량<input name="qty" type="number" min="0" step="any" value="{{ (qty)|plain if qty else '' }}" required></label>
     <label>부품 창고 (기본)
       <select name="wh">
         {% for k, v in wh_opts.items() %}<option value="{{ k }}" {{ 'selected' if k == wh }}>{{ v }}</option>{% endfor %}
@@ -49,12 +49,12 @@
           <tr class="{{ 'tone-danger' if x.short > 0.000001 or not x.allowed }}">
             <td>[{{ x.code }}] {{ x.name }}{{ ' · 로트' if x.lot_managed }}</td>
             <td>{{ x.wh_code }}{{ ' (권한 없음)' if not x.allowed }}</td>
-            <td class="num">{{ '{:,.4g}'.format(x.per_unit) }} {{ x.unit }}</td>
+            <td class="num">{{ (x.per_unit)|qty }} {{ x.unit }}</td>
             <td class="num">{{ '{:,.2f}'.format(x.need) }}</td>
             <td class="num">{{ '{:,.2f}'.format(x.stock) }}</td>
             <td class="num">{{ '{:,.2f}'.format(x.short) if x.short > 0.000001 else '' }}</td>
             {% if can_post %}<td><input class="qty-input" name="actual_{{ x.component_id }}" type="number" min="0" step="any"
-                  value="{{ f.get('actual_' ~ x.component_id) or ('%g' % x.need) }}" aria-label="실제 투입량"></td>{% endif %}
+                  value="{{ f.get('actual_' ~ x.component_id) or ((x.need)|plain) }}" aria-label="실제 투입량"></td>{% endif %}
             <td class="num">₩{{ '{:,.0f}'.format(x.amount) }}</td>
           </tr>
         {% endfor %}
@@ -68,7 +68,7 @@
       <div class="alert alert-warning">부족한 부품이 있어 지금은 등록할 수 없습니다 (최대 {{ '{:,}'.format(req.makeable) }}개까지 가능).
         <form class="inline" method="post" action="{{ url_for('production.shortage') }}">
           {{ csrf() }}<input type="hidden" name="product" value="{{ pid }}"><input type="hidden" name="wh" value="{{ wh }}">
-          <input type="hidden" name="qty" value="{{ '%g' % qty }}">
+          <input type="hidden" name="qty" value="{{ (qty)|plain }}">
           <label class="inline">필요일 <input type="date" name="need_date" title="비우면 7일 뒤"></label>
           <button class="btn btn-sm">부족분 구매요청 만들기</button>
         </form>
@@ -77,7 +77,7 @@
       <div class="alert alert-warning">권한이 없는 창고의 부품이 있습니다. 그 창고 권한이 있는 사람이 등록해야 합니다.</div>
     {% else %}
       <div class="form-grid g3">
-        <label>생산 수량 *<input name="qty" type="number" min="0" step="any" value="{{ '%g' % qty }}" required></label>
+        <label>생산 수량 *<input name="qty" type="number" min="0" step="any" value="{{ (qty)|plain }}" required></label>
         <label>그중 불량<input name="scrap_qty" type="number" min="0" step="any" value="{{ f.scrap_qty or 0 }}">
           <span class="hint">양품만 입고, 불량분 재료비는 양품 원가에 들어갑니다</span></label>
         <label>일자<input name="tx_date" type="date" value="{{ f.tx_date or today().isoformat() }}" max="{{ today().isoformat() }}"
@@ -141,7 +141,7 @@
             <a class="board-card {{ 'late' if c.late }}" href="{{ url_for('production.detail', prod_id=c.id) }}">
               <strong>{{ c.prod_no }}</strong> <span class="muted small">{{ c.work_order }}</span>
               <div>[{{ c.code }}] {{ c.name }}</div>
-              <div class="small">{{ '{:,.4g}'.format(c.qty) }} {{ c.unit }} · {{ c.issue_wh }}{{ ' → ' ~ c.receipt_wh if c.receipt_wh }}</div>
+              <div class="small">{{ (c.qty)|qty }} {{ c.unit }} · {{ c.issue_wh }}{{ ' → ' ~ c.receipt_wh if c.receipt_wh }}</div>
               <div class="small muted">{{ '완료 ' ~ c.tx_date if st == 'DONE' else '완료 예정 ' ~ (c.due_date or '-') }}{{ ' · 투입 ' ~ (c.material_cost|krw) if c.material_cost }}</div>
             </a>
           {% else %}<p class="muted small">없음</p>{% endfor %}

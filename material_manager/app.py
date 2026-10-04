@@ -42,6 +42,8 @@ def create_app(test_config: dict | None = None) -> Flask:
     app.config.from_object(config)
     if test_config:
         app.config.update(test_config)
+    from core import cache
+    cache.ENABLED["on"] = not app.testing          # 테스트는 매번 DB를 새로 만들어 보관한 집계가 맞지 않는다
 
     if app.config.get("TRUST_PROXY"):
         # 리버스 프록시(nginx 등) 뒤에서만 켠다. 켜지 않으면 X-Forwarded-For를 위조해 IP 제한을 피할 수 있다.
@@ -168,8 +170,9 @@ def create_app(test_config: dict | None = None) -> Flask:
         """요청마다 번호 (로그·오류 화면·응답 헤더 X-Request-ID) — 문의할 때 이 번호로 서버 로그를 찾는다."""
         rid = (request.headers.get("X-Request-ID") or "")[:64]
         g.request_id = rid if rid.replace("-", "").isalnum() else secrets.token_hex(8)
-        from core import company
+        from core import company, names
         company.refresh()
+        names.refresh()                                      # 회사가 바꾼 이름(거래 구분·상태)
 
     @app.before_request
     def read_only_guard():
@@ -217,13 +220,24 @@ def create_app(test_config: dict | None = None) -> Flask:
         return redirect(_same_site_referrer() or "/")
 
     @app.after_request
+    def cache_bump(response):
+        """저장이 성공하면 화면 집계 보관(core/cache.py)을 비운다 → 바꾼 내용이 바로 보인다."""
+        if request.method not in SAFE_METHODS and response.status_code < 400:
+            from core import cache
+            cache.bump()
+        return response
+
+    @app.after_request
     def once_finish(response):
         token = g.pop("once", None)
         if token:
             # 이동(3xx) = 처리 끝 → 결과 주소를 남긴다. 화면 다시 그림(입력 오류)·오류 = 처리 안 됨 → 표를 지운다
             done = 300 <= response.status_code < 400 or bool(g.pop("once_done", False))
+            location = response.headers.get("Location", "") if done else ""
+            if done and request.headers.get("X-MM-Queue") == "1":
+                location = once.OFFLINE                       # 오프라인 대기열 표는 오래 보관 (며칠 뒤 재전송 대비)
             try:
-                once.finish(token, done, response.headers.get("Location", "") if done else "")
+                once.finish(token, done, location)
             except db.DBError:
                 app.logger.exception("중복 제출 표 정리 실패")
         return response

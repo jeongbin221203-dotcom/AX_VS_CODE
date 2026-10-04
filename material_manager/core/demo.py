@@ -53,7 +53,7 @@ def ensure_user() -> dict:
 
 # 다른 역할로 보기: (역할, 아이디, 표시) — 아이디는 core/seed_demo.py 의 샘플 사용자
 ROLE_VIEWS = [("ADMIN", USERNAME, "시스템관리자"), ("MANAGER", "park.jh", "관리자"),
-              ("CLERK", "kim.mj", "담당자(인천 창고)"), ("VIEWER", "kang.dy", "조회")]
+              ("CLERK", "kim.mj", "담당자(인천 창고)"), ("DATA", "yoon.jw", "데이터 관리"), ("VIEWER", "kang.dy", "조회")]
 # 시연에서 저장을 막는 관리자 설정: admin 블루프린트 전체 + 아래 (시연 초기화 /demo/reset 은 막지 않는다)
 LOCKED_ENDPOINTS = {"auth.password", "data_admin.make_seed", "data_admin.make_seed_mfg"}
 

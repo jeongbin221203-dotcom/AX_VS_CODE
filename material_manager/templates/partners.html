@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import csrf, table, tabs as tab_bar, download, partner_fields %}
+{% from "_macros.html" import csrf, table, tabs as tab_bar, download, partner_fields, pager as pager_nav %}
 
 
 {% block content %}
@@ -18,9 +18,10 @@
     <label class="check"><input type="checkbox" name="inactive" value="1" {{ 'checked' if inactive }} data-autosubmit> 사용중지 포함</label>
     <button class="btn">조회</button>
     {{ download(url_with(export='xlsx')) }}
-    {% if can('MANAGER') %}<a class="btn btn-sm" href="{{ url_for('partners.import_page') }}">⬆️ 엑셀 일괄 등록</a>{% endif %}
+    {% if can_master() %}<a class="btn btn-sm" href="{{ url_for('partners.import_page') }}">⬆️ 엑셀 일괄 등록</a>{% endif %}
   </form>
   {{ table(grid, '거래처가 없습니다. 거래처 등록 탭에서 추가하세요.') }}
+  {% if pg and pg.pages > 1 %}{{ pager_nav(pg) }}{% endif %}
   <p class="muted small">입고·출고 금액은 다른 이름으로 적은 지난 거래까지 합친 값입니다(취소 거래는 상쇄). 사내 사용 출고(원가센터)는 빼고 셉니다.</p>
 
 {% elif tab == "unknown" %}
@@ -41,13 +42,19 @@
             <td class="num small">거래 {{ u.tx }} · 발주 {{ u.po }} · 자재 {{ u.mat }}</td>
             <td class="small">{{ (u.last or '')[:10] }}</td>
             <td>
-              {% if can('MANAGER') %}
+              {% if can_master() %}
               <form class="row-actions" method="post" action="{{ url_for('partners.link') }}">
                 {{ csrf() }}<input type="hidden" name="name" value="{{ u.name }}">
+                {% if big_options %}
+                  <input name="partner_id_ref" list="partner-pick" aria-label="연결할 거래처" autocomplete="off"
+                         placeholder="연결할 거래처 이름·코드 (비우면 새로 등록)"
+                         value="{% for o in options if o.id|string == guess_id %}[{{ o.code }}] {{ o.name }}{% endfor %}">
+                {% else %}
                 <select name="partner_id" aria-label="연결할 거래처">
                   <option value="new">새 거래처로 등록</option>
                   {% for o in options %}<option value="{{ o.id }}" {{ 'selected' if o.id|string == guess_id }}>→ {{ o.name }} ({{ o.code }})</option>{% endfor %}
                 </select>
+                {% endif %}
                 <select name="kind" aria-label="구분">
                   <option value="SUPPLIER">공급처</option><option value="CUSTOMER">납품처</option><option value="BOTH">공급·납품</option>
                 </select>
@@ -89,8 +96,13 @@
   <h3>직접 고르기</h3>
   <form class="toolbar" method="post" action="{{ url_for('partners.merge') }}" data-confirm="고른 거래처를 합칩니다. 되돌릴 수 없습니다. 계속할까요?">
     {{ csrf() }}
+    {% if big_options %}
+    <label>합쳐질 거래처 (없어짐)<input name="src_ref" list="partner-pick" required autocomplete="off" placeholder="이름·코드 입력"></label>
+    <label>남길 거래처<input name="dst_ref" list="partner-pick" required autocomplete="off" placeholder="이름·코드 입력"></label>
+    {% else %}
     <label>합쳐질 거래처 (없어짐)<select name="src" required><option value="">고르세요</option>{% for o in options %}<option value="{{ o.id }}">{{ o.name }} ({{ o.code }})</option>{% endfor %}</select></label>
     <label>남길 거래처<select name="dst" required><option value="">고르세요</option>{% for o in options %}<option value="{{ o.id }}">{{ o.name }} ({{ o.code }})</option>{% endfor %}</select></label>
+    {% endif %}
     <button class="btn btn-danger">🔀 병합</button>
   </form>
 
@@ -102,4 +114,5 @@
     <div><button class="btn btn-primary">등록</button></div>
   </form>
 {% endif %}
+{% if big_options %}<datalist id="partner-pick">{% for o in options %}<option value="[{{ o.code }}] {{ o.name }}">{% endfor %}</datalist>{% endif %}
 {% endblock %}

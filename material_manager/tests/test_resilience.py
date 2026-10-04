@@ -25,6 +25,7 @@ from test_advanced import M1, fresh, mid, wh  # noqa: E402,F401
 from test_app import PW, app, client, login, post  # noqa: E402,F401
 
 TODAY = date.today().isoformat()
+NOW_ISO = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 def tokens(html: str) -> dict:
@@ -292,7 +293,7 @@ def test_offline_queue_applies_once_and_rechecks_stock(client):
     m, w = mid("PKG-001"), wh("WH1")
     before = tx_count()
     entry = {"kind": "TX", "tx_type": "IN", "material_id": m, "warehouse_id": w, "qty": "4", "unit_price": "10",
-             "tx_date": TODAY, "captured_at": "2026-10-02T01:00:00Z"}
+             "tx_date": TODAY, "captured_at": NOW_ISO}
     tok = once.new_token()
     r = queue_post(client, entry, tok).get_json()
     assert r["ok"] and r["tx_id"]

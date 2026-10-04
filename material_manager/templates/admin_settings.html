@@ -13,13 +13,43 @@
           <span class="hint">{{ help }}{{ ' · 기본: ' ~ ('켬' if defaults[k] else '끔') if k in stored }}</span></label>
       {% else %}
         <label>{{ label }}{{ ' ✎' if k in stored }}
-          <input name="{{ k }}" value="{{ values[k] if kind == 'text' else ('%g' % values[k]) }}" {{ 'inputmode=numeric' if kind != 'text' }}>
+          <input name="{{ k }}" value="{{ values[k] if kind == 'text' else (values[k]|plain) }}" {{ 'inputmode=numeric' if kind != 'text' }}>
           <span class="hint">{{ help }}{{ ' · 기본: ' ~ defaults[k] if k in stored }}</span></label>
       {% endif %}
     {% endfor %}
   </div>
   <p class="muted small">✎ = 기본값에서 바꾼 항목. 기본값으로 되돌리려면 기본값을 그대로 넣고 저장합니다.</p>
   <div><button class="btn btn-primary">💾 저장</button></div>
+</form>
+
+<h3 id="names">🏷️ 이름 설정 — 회사에서 부르는 말로</h3>
+<form class="card form" method="post" action="{{ url_for('admin.names_save') }}">
+  {{ csrf() }}
+  <p class="muted small">화면·엑셀·알림에 보이는 이름만 바뀝니다(데이터에는 코드로 저장돼 지난 기록도 새 이름으로 보임). 빈 칸 = 기본 이름.</p>
+  <div class="form-grid g3">
+  {% for grp in name_groups %}
+    <fieldset><legend>{{ grp.title }}</legend>
+      {% for it in grp['items'] %}
+        <label>{{ it.default }} <span class="hint">{{ it.code }}</span>
+          <input name="{{ grp.group }}.{{ it.code }}" value="{{ it.value }}" maxlength="20" placeholder="{{ it.default }}"></label>
+      {% endfor %}
+    </fieldset>
+  {% endfor %}
+  </div>
+  <div><button class="btn btn-primary">💾 이름 저장</button></div>
+</form>
+
+<form class="card form" method="post" action="{{ url_for('admin.category_rename') }}" data-confirm="이 분류의 자재를 모두 새 이름으로 바꿉니다. 계속할까요?">
+  {{ csrf() }}
+  <h4>자재 분류 이름 바꾸기 · 합치기</h4>
+  <p class="muted small">그 분류의 자재를 모두 한 번에 바꿉니다. 이미 있는 분류 이름을 넣으면 두 분류가 합쳐집니다(감사로그에 남음).</p>
+  <div class="form-grid g3">
+    <label>바꿀 분류
+      <select name="old" required>{% for c in categories %}<option value="{{ c.category }}">{{ c.category }} ({{ c.n }}종)</option>{% endfor %}</select></label>
+    <label>새 이름<input name="new" required maxlength="40" list="category-names"></label>
+    <datalist id="category-names">{% for c in categories %}<option value="{{ c.category }}">{% endfor %}</datalist>
+  </div>
+  <div><button class="btn">분류 이름 바꾸기</button></div>
 </form>
 
 <h3>🛠️ 점검(읽기 전용) 모드</h3>

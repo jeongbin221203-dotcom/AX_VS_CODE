@@ -11,7 +11,7 @@
     <td class="qty-cell"><input name="line_qty" type="number" min="0" step="any" value="{{ l.qty }}" required aria-label="수량">
       <select name="line_unit" data-unit-select aria-label="단위">
         <option value="">{{ l.unit }}</option>
-        {% for u in l.units or [] %}<option value="{{ u.unit }}" data-factor="{{ u.factor }}" {{ 'selected' if l.entry_unit == u.unit }}>{{ u.unit }}(×{{ '%g' % u.factor }})</option>{% endfor %}
+        {% for u in l.units or [] %}<option value="{{ u.unit }}" data-factor="{{ u.factor }}" {{ 'selected' if l.entry_unit == u.unit }}>{{ u.unit }}(×{{ (u.factor)|plain }})</option>{% endfor %}
       </select></td>
     <td class="lot-cell"><input name="line_lot" value="{{ l.lot }}" autocomplete="off" aria-label="로트"
         placeholder="{{ '로트' if l.lot_managed else '' }}"{{ ' required' if l.lot_managed and f.kind == 'IN' }}>

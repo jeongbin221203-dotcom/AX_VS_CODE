@@ -7,7 +7,7 @@ import re
 import secrets
 
 import pandas as pd
-from flask import flash, redirect, request, session, url_for
+from flask import flash, redirect, request, session
 
 import config
 from core import bulk, excel_forms, storage

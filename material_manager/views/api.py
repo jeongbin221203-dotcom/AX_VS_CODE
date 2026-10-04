@@ -16,7 +16,7 @@ from datetime import date
 from flask import Blueprint, jsonify, request
 
 import config
-from core import api_keys, db, once, repository as repo, services, uom
+from core import api_keys, db, once, services, uom
 
 bp = Blueprint("api", __name__, url_prefix="/api/v1")
 

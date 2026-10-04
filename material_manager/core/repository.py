@@ -302,6 +302,19 @@ def stock_df(include_inactive: bool = False, wh_ids=None) -> pd.DataFrame:
     return df
 
 
+def material_stock(material_id: int, wh_ids=None) -> float:
+    """자재 하나의 현재고 (wh_ids 창고 합계)."""
+    twsql, twp = _wh("t.warehouse_id", wh_ids)
+    return float(db.scalar(f"SELECT COALESCE(SUM({EFFECT.format(t='t')}), 0) FROM transactions t "
+                           f"WHERE t.material_id = ?{twsql}", (material_id, *twp)) or 0)
+
+
+def shortage_count(wh_ids=None) -> int:
+    """안전재고 미달 자재 수 (사이드바). stock_df 와 같은 기준이지만 숫자 하나만 센다."""
+    df = stock_df(wh_ids=wh_ids)
+    return int(df["shortage"].sum()) if not df.empty else 0
+
+
 # ── 수불부 ──────────────────────────────────────────────────
 def ledger_df(start: str, end: str, wh_ids=None) -> pd.DataFrame:
     """기간 수불부: 기초 + 입고 − 출고 ± 조정 + 이동입고 − 이동출고 = 기말 (자재별, 창고 합계).
@@ -458,19 +471,34 @@ def trend_df(since: str, wh_ids=None) -> pd.DataFrame:
     )
 
 
+# 전체 백업에서 빼는 표 (실행 중 상태·임시 기록) 와 열 (비밀값)
+BACKUP_SKIP_TABLES = {"form_once", "job_locks", "sqlite_sequence", "schema_version", "app_settings"}
+BACKUP_SKIP_COLUMNS = {"password_hash", "key_hash", "totp_secret", "recovery_codes"}
+BACKUP_FIRST = ["materials", "plants", "warehouses", "partners", "transactions", "lots", "documents", "statements",
+                "purchase_requests", "pr_items", "purchase_orders", "po_items", "boms", "bom_items", "productions",
+                "production_lines", "approval_requests", "period_closes", "inventory_snapshots", "audit_log"]
+
+
+def backup_tables() -> list[str]:
+    with db.get_conn() as conn:
+        if conn.pg:
+            names = [r[0] for r in conn.execute("SELECT table_name FROM information_schema.tables "
+                                                "WHERE table_schema = current_schema() AND table_type = 'BASE TABLE'")]
+        else:
+            names = [r[0] for r in conn.execute("SELECT name FROM sqlite_master WHERE type = 'table'")]
+    names = [n for n in names if n not in BACKUP_SKIP_TABLES]
+    return [n for n in BACKUP_FIRST if n in names] + sorted(n for n in names if n not in BACKUP_FIRST)
+
+
 def dump_all() -> dict[str, pd.DataFrame]:
-    """전체 엑셀 백업 (사용자 비밀번호 해시는 넣지 않는다)."""
-    return {
-        "materials": db.query_df("SELECT * FROM materials ORDER BY code"),
-        "plants": db.query_df("SELECT * FROM plants ORDER BY code"),
-        "warehouses": db.query_df("SELECT * FROM warehouses ORDER BY code"),
-        "transactions": db.query_df("SELECT * FROM transactions ORDER BY tx_date, id"),
-        "documents": db.query_df("SELECT * FROM documents ORDER BY issue_date, id"),
-        "sap_outbox": db.query_df("SELECT * FROM sap_outbox ORDER BY id"),
-        "approval_requests": db.query_df("SELECT * FROM approval_requests ORDER BY id"),
-        "period_closes": db.query_df("SELECT * FROM period_closes ORDER BY id"),
-        "audit_log": db.query_df("SELECT * FROM audit_log ORDER BY id"),
-    }
+    """전체 엑셀 백업: 업무 표 전부 (비밀번호·API 키 해시 등 비밀값 열은 넣지 않는다)."""
+    out = {}
+    for table in backup_tables():
+        with db.get_conn() as conn:
+            cols = [c for c in db._columns(conn, table) if c not in BACKUP_SKIP_COLUMNS]
+        order = " ORDER BY id" if "id" in cols else ""
+        out[table] = db.query_df(f"SELECT {', '.join(sorted(cols))} FROM {table}{order}")   # 표 이름은 DB 목록에서만
+    return out
 
 
 # ── 증빙 ────────────────────────────────────────────────────

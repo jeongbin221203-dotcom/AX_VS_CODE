@@ -157,6 +157,13 @@
         window.mmNet.switchSelect({ name: x.hidden.name, value: String(it.id), selectedIndex: 0, options: [{ text: it.label }] });
         return;
       }
+      // 상자 바코드(단위)·'24*코드'(수량)는 화면을 다시 받을 때 함께 넘겨 그 단위·수량으로 채운다
+      [["unit", extra && extra.unit], ["qty", extra && extra.qty != null ? String(extra.qty) : ""]].forEach(function (kv) {
+        let el = form.querySelector("input[type=hidden][name=" + kv[0] + "]");
+        if (!kv[1]) { if (el) el.remove(); return; }
+        if (!el) { el = document.createElement("input"); el.type = "hidden"; el.name = kv[0]; form.appendChild(el); }
+        el.value = kv[1];
+      });
       form.submit();
     }
   }
@@ -167,7 +174,7 @@
   }
   function enter(p) {
     const x = parts(p);
-    const sq = x.mode === "add" ? splitQty(x.q.value) : { qty: null, q: x.q.value };
+    const sq = x.mode === "add" || p.hasAttribute("data-autosubmit-pick") ? splitQty(x.q.value) : { qty: null, q: x.q.value };
     const q = sq.q;
     load(p).then(function () { return exactAsync(q); }).then(function (ex) {
       const active = x.list.hidden ? null : x.list.querySelector("li.active[data-id]");

@@ -97,6 +97,16 @@
     Array.prototype.forEach.call(boxes, function (c) { c.checked = e.target.checked; });   // form="…" 로 밖에 있는 칸도
   });
 
+  // ── 입고: 발주 품목을 고르면 단가 = 발주 단가, 수량이 비었으면 잔량, 거래처가 비었으면 공급처 ──
+  document.addEventListener("change", function (e) {
+    if (!e.target.matches || !e.target.matches("select[data-po-line]")) return;
+    const o = e.target.options[e.target.selectedIndex], f = e.target.form;
+    if (!o || !o.value || !f) return;
+    if (f.elements.unit_price) f.elements.unit_price.value = o.dataset.price;
+    if (f.elements.qty && !f.elements.qty.value) f.elements.qty.value = o.dataset.remaining;
+    if (f.elements.partner && !f.elements.partner.value) f.elements.partner.value = o.dataset.supplier || "";
+  });
+
   // ── 구매요청 결재 단계 미리 보기 ──
   function prPreview(form) {
     const tiers = (form.dataset.prTiers || "").split(",").map(Number);

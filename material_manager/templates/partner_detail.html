@@ -6,7 +6,7 @@
 <h2>[{{ p.code }}] {{ p.name }} {% if not p.active %}<span class="badge">사용중지</span>{% endif %}</h2>
 <p class="muted small">{{ PARTNER_KINDS[p.kind] }}{% if biz %} · 사업자 {{ biz }}{% endif %} · 등록 {{ p.created_at[:10] }} · 수정 {{ p.updated_at[:16] }}</p>
 
-{% if can('MANAGER') %}
+{% if can_master() %}
 <form class="card form" method="post" action="{{ url_for('partners.update', pid=p.id) }}">
   {{ csrf() }}<input type="hidden" name="updated_at" value="{{ p.updated_at }}">
   {{ partner_fields(form) }}
@@ -27,7 +27,7 @@
   <ul class="alias-list">
     {% for a in aliases %}
       <li>{{ a.alias }} <span class="muted small">({{ a.created_by }} · {{ a.created_at[:10] }})</span>
-        {% if can('MANAGER') %}
+        {% if can_master() %}
         <form class="inline" method="post" action="{{ url_for('partners.unlink', alias_id=a.id) }}">{{ csrf() }}<button class="btn btn-sm">연결 해제</button></form>
         {% endif %}
       </li>
@@ -36,7 +36,7 @@
 {% else %}
   <p class="muted small">없음</p>
 {% endif %}
-{% if can('MANAGER') %}
+{% if can_master() %}
 <form class="toolbar" method="post" action="{{ url_for('partners.add_alias', pid=p.id) }}">
   {{ csrf() }}<label class="grow">다른 이름 추가<input name="alias" placeholder="예: 대한팔레트 창원지점" required></label>
   <button class="btn btn-sm">연결</button>

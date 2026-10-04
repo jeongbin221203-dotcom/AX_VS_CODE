@@ -97,6 +97,9 @@ class Engine:
         self.tx_value: dict[int, float] = {}         # 거래별 평가 금액 (부호 = 재고금액 증감)
         self.tx_layers: dict[int, list] = {}         # FIFO: 출고 때 꺼낸 층
         self.transit: dict[tuple, tuple] = {}        # 플랜트 간 이동: 출고 쪽 금액·층
+        # 생산: 작업지시별로 실제로 빠져나간 부품 원가(투입 − 반납). 완제품 입고는 이 금액으로 평가한다
+        # → 생산으로 재고금액이 생기거나 없어지지 않는다 (투입 단가를 화면 계산 단가가 아니라 평가 원가로)
+        self.wo_cost: dict[int, float] = defaultdict(float)
         self.warnings: list[str] = []
 
     def load(self, rows) -> None:
@@ -158,14 +161,24 @@ class Engine:
                 a.layers.extend([list(x) for x in layers])
             kind = "transfer"
         elif q > 0:                                   # 입고 · 조정(+)
+            pid = t["production_id"] if "production_id" in t.keys() else None
             price = float(t["unit_price"] or 0) if t["tx_type"] == "IN" else 0.0
+            kind = "receipt" if t["tx_type"] == "IN" else "adjust"
+            if pid is not None and t["tx_type"] == "IN":
+                if t["product_id"] is not None and int(t["product_id"]) == int(t["material_id"]):
+                    spent = self.wo_cost.pop(int(pid), None)     # 완제품 입고 = 그 작업지시가 쓴 부품 원가
+                    if spent is not None and spent > 0:
+                        price = spent / q
+                else:                                 # 부품 반납 = 출고를 되돌림 (매입 아님): 지금 평균 단가로
+                    price = a.avg(fallback)
+                    self.wo_cost[int(pid)] -= q * price
+                    kind = "issue"
             if price <= 0:
                 price = a.avg(fallback)
             v = q * price
             if fifo:
                 a.layers.append([q, price])
             a.last_price = price
-            kind = "receipt" if t["tx_type"] == "IN" else "adjust"
         else:                                         # 출고 · 조정(−) · 이동 출고
             need = -q
             if a.qty < need - EPS:
@@ -179,6 +192,8 @@ class Engine:
             v = -cost
             if tkey:
                 self.transit[tkey] = (cost, taken)
+            if "production_id" in t.keys() and t["production_id"] is not None:
+                self.wo_cost[int(t["production_id"])] += cost
             kind = "transfer" if tkey else ("adjust" if t["tx_type"] == "ADJ" else "issue")
 
         a.qty += q
@@ -222,8 +237,9 @@ def _base(conn, method: str, as_of: str) -> str:
 def _events(conn, after: str, until: str):
     rows = conn.execute("""
         SELECT t.id, t.tx_date, t.tx_type, t.qty, t.unit_price, t.material_id, t.reversal_of, t.transfer_no,
-               t.lot_no, w.plant_id, m.unit_price AS master_price
+               t.lot_no, w.plant_id, m.unit_price AS master_price, t.production_id, p.product_id
         FROM transactions t JOIN warehouses w ON w.id = t.warehouse_id JOIN materials m ON m.id = t.material_id
+        LEFT JOIN productions p ON p.id = t.production_id
         WHERE t.tx_date > ? AND t.tx_date <= ?
         ORDER BY t.tx_date, t.id
         """, (after, until)).fetchall()

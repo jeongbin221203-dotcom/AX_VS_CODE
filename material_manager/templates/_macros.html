@@ -18,7 +18,7 @@
     <div class="table-wrap">
       <table class="data">
         <thead><tr>
-          {% for c in t.columns %}<th class="{{ 'num' if c in t.numeric }}">{{ c }}</th>{% endfor %}
+          {% for c in t.columns %}<th class="{{ 'num' if c in t.numeric }}">{{ c|relabel }}</th>{% endfor %}
         </tr></thead>
         <tbody>
         {% for r in t.rows %}

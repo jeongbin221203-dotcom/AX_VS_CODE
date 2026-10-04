@@ -57,7 +57,7 @@ def allowed_warehouses(user: dict | None) -> set[int] | None:
     """None = 모든 창고. 집합 = 그 창고만."""
     if not user:
         return set()
-    if user.get("role") == "ADMIN" or int(user.get("all_warehouses", 1) or 0) == 1:
+    if user.get("role") in ("ADMIN", "DATA") or int(user.get("all_warehouses", 1) or 0) == 1:   # 데이터 관리는 전사 조회
         return None
     rows = db.query_df("""
         SELECT DISTINCT w.id FROM user_scopes s

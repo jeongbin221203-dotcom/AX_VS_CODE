@@ -35,9 +35,11 @@ def transfer_movement_type(same_plant: bool) -> str:
     return config.SAP_MOVEMENT_TYPES["TRF_SLOC" if same_plant else "TRF_PLANT"]
 
 
-def movement_type(tx_type: str, qty: float, po_no: str = "") -> str:
+def movement_type(tx_type: str, qty: float, po_no: str = "", issue_return: bool = False) -> str:
     t = config.SAP_MOVEMENT_TYPES
     if tx_type == "IN":
+        if issue_return:                              # 생산에 투입했던 자재를 되돌림 = 원가센터 출고 취소(202), 매입(501) 아님
+            return t.get("IN_RETURN", "202")
         return t["IN_PO"] if po_no else t["IN_NO_PO"]
     if tx_type == "OUT":
         return t["OUT"]

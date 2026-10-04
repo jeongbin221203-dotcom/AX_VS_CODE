@@ -23,7 +23,7 @@ import pandas as pd
 
 import config
 from core import audit, db, production, purchasing, services
-from core.utils import now_str
+from core.utils import fmt_qty, now_str
 
 KIND = {"BUY": "구매", "MAKE": "생산"}
 
@@ -46,7 +46,7 @@ def add_demand(plant_id: int, material_id: int, qty: float, due_date: str, note:
                            "VALUES (?, ?, ?, ?, ?, 1, ?, ?)",
                            (plant_id, material_id, qty, due_date, note.strip(), (actor or audit.SYSTEM)["name"], now_str())).lastrowid
         audit.record(conn, actor, "MRP_DEMAND", "mrp", did, {"material": m["code"], "qty": qty, "due": due_date})
-    return services.Result(True, f"수요 등록: {m['code']} {qty:,.4g} · 납기 {due_date}", tx_id=did)
+    return services.Result(True, f"수요 등록: {m['code']} {fmt_qty(qty)} · 납기 {due_date}", tx_id=did)
 
 
 def close_demand(demand_id: int, actor: dict | None, wh_ids=None) -> services.Result:
@@ -168,7 +168,7 @@ def run(plant_id: int, actor: dict | None, horizon_days: int = 90) -> services.R
         avail = stock.get(mid, 0.0) - safety                              # 안전재고는 늘 남겨 둔다
         evs = list(events.get(mid, []))
         if avail < -1e-9:                                                 # 지금 안전재고 미달 → 오늘 필요 (오늘 들어올 것 먼저)
-            evs.append((t0, 0.0, f"안전재고 {safety:,.4g} 미달"))
+            evs.append((t0, 0.0, f"안전재고 {fmt_qty(safety)} 미달"))
         evs.sort(key=lambda e: (e[0], -e[1]))                             # 날짜 순, 같은 날은 공급 먼저
         reasons = []
         for when, q, why in evs:
@@ -187,7 +187,7 @@ def run(plant_id: int, actor: dict | None, horizon_days: int = 90) -> services.R
                 avail += qty
                 if kind == "MAKE":                                        # 착수일에 부품 수요 → 다음 단계
                     for comp, per, comp_wh in boms[mid]["items"]:
-                        events[comp].append((max(order, t0), -round(per * qty, 4), f"{KIND[kind]} {m['code']} {qty:,.4g}"))
+                        events[comp].append((max(order, t0), -round(per * qty, 4), f"{KIND[kind]} {m['code']} {fmt_qty(qty)}"))
                         if comp_wh:
                             pending_wh.setdefault(comp, comp_wh)
                         if comp not in seen:
@@ -281,7 +281,9 @@ def convert(run_id: int, plan_ids: list[int], *, actor: dict, wh_ids=None) -> se
         return services.Result(False, "바꿀 계획을 고르세요 (이미 바꾼 계획은 빠짐).")
     msgs, made = [], 0
     for wh, grp in df[df["kind"] == "BUY"].groupby("warehouse_id"):
-        r = purchasing.create_pr(int(wh), [(int(x.material_id), float(x.qty), float(x.unit_price or 0)) for x in grp.itertuples()],
+        merged = grp.groupby("material_id", as_index=False).agg(qty=("qty", "sum"), unit_price=("unit_price", "first"))
+        r = purchasing.create_pr(int(wh), [(int(x.material_id), float(x.qty), float(x.unit_price or 0))      # 같은 자재는 한 줄
+                                           for x in merged.itertuples()],
                                  str(grp["need_date"].min()), f"MRP 실행 #{run_id} 구매 계획 {len(grp)}건", actor, wh_ids)
         if not r.ok:
             return services.Result(False, f"구매요청을 만들지 못했습니다: {r.message}" + (f" (먼저 바꾼 것: {'; '.join(msgs)})" if msgs else ""))

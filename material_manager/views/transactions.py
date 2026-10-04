@@ -8,7 +8,7 @@ import config
 from core import audit, db, documents, org, periods, purchasing, repository as repo, services, uom
 from core.utils import month_end
 from views.documents import meta_from_form, uploaded_file
-from views.helpers import Table, a_int, actor, can, f_float, f_id, f_str, render_page, role_required
+from views.helpers import a_int, actor, can, f_float, f_id, f_str, render_page, role_required
 
 bp = Blueprint("transactions", __name__, url_prefix="/transactions")
 
@@ -51,7 +51,13 @@ def index():
     tx_type = request.args.get("type", "IN")
     if tx_type not in TYPES:
         tx_type = "IN"
-    return _page(tx_type, a_int("material"), a_int("wh"))
+    form = {}
+    unit, qty = request.args.get("unit", "")[:12], request.args.get("qty", "")[:12]
+    if unit:                                            # 스캔한 상자 바코드의 단위 (picker.js)
+        form["unit"] = unit.upper()
+    if qty.replace(".", "", 1).isdigit():                # '24*코드' 로 찍은 수량
+        form["qty"] = qty
+    return _page(tx_type, a_int("material"), a_int("wh"), form or None)
 
 
 def _ids() -> tuple[int, int]:
@@ -144,6 +150,9 @@ def queue():
     """
     kind = f_str("kind")
     captured_at = f_str("captured_at")[:30]
+    stale = _stale_offline(captured_at)
+    if stale:
+        return jsonify(ok=False, message=stale)
     if "BATCH" in request.form.getlist("kind"):         # 여러 줄 입출고 (화면의 구분 칸 kind=IN|OUT 도 함께 온다)
         return _queue_batch(captured_at)
     mid, wh = _ids()
@@ -278,6 +287,23 @@ def batch_cancel(batch_no: str):
                                    label=f"묶음 {batch_no}")
     flash(result.message, "success" if result.ok else "error")
     return redirect(url_for("transactions.batch"))
+
+
+def _stale_offline(captured_at: str) -> str:
+    """중복 방지 기록 보관 기간(OFFLINE_KEEP_DAYS)보다 오래된 오프라인 입력은 자동으로 반영하지 않는다
+    (그 사이 한 번 반영됐는데 응답만 못 받은 것이면 두 번 들어간다)."""
+    from datetime import datetime, timezone
+    try:
+        at = datetime.fromisoformat(captured_at.replace("Z", "+00:00"))
+    except ValueError:
+        return ""
+    if at.tzinfo is None:
+        at = at.replace(tzinfo=timezone.utc)
+    days = (datetime.now(timezone.utc) - at).total_seconds() / 86400
+    if days > config.OFFLINE_KEEP_DAYS - 1:
+        return (f"{int(days)}일 전에 입력한 오프라인 입력이라 자동으로 반영하지 않습니다(이미 반영됐는지 확인할 수 없음). "
+                "거래 이력에서 확인한 뒤 필요하면 직접 다시 입력하세요.")
+    return ""
 
 
 def _queue_batch(captured_at: str):

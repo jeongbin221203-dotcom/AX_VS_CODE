@@ -4,15 +4,19 @@ import pandas as pd
 from flask import Blueprint, g, request
 
 from core import quality
-from views.helpers import form_response, log_export, render_page, role_required
+from views.helpers import form_response, log_export, render_page, role_or_data
 
 bp = Blueprint("quality", __name__, url_prefix="/quality")
 
 
 @bp.get("/")
-@role_required("MANAGER")
+@role_or_data("MANAGER")
 def index():
-    checks = quality.run(g.wh_ids, limit=None if request.args.get("export") == "xlsx" else 30)
+    from core import cache
+    if request.args.get("export") == "xlsx":
+        checks = quality.run(g.wh_ids, limit=None)
+    else:                                                        # 거래 전체를 훑으므로 60초 보관 (저장하면 비움)
+        checks = cache.memo(("quality", cache.wh_key(g.wh_ids)), 60, lambda: quality.run(g.wh_ids, limit=30))
     if request.args.get("export") == "xlsx":                    # 전부 (화면은 항목마다 30건)
         view = pd.DataFrame([{"항목": c["title"], "심각도": quality.SEVERITY[c["severity"]], "내용": label, "고칠 곳": link}
                              for c in checks for label, link in c["rows"]], columns=["항목", "심각도", "내용", "고칠 곳"])

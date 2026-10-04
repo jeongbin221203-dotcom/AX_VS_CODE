@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf, table %}
+{% block content %}
+<p class="muted">결재 요청·결과·독촉 알림을 사내 메신저로 보냅니다. 채널마다 보낼 알림 종류와 받는 곳(그룹방·개인)을 고르고,
+  '시험 보내기'로 바로 확인하세요. 비밀값(웹훅 주소·키)은 암호화해 저장하고 화면에는 끝 4자리만 보입니다.
+  {% if notify_mode == 'off' %}<strong>지금 알림이 꺼져 있습니다(MM_NOTIFY_MODE=off).</strong>
+  {% elif notify_mode == 'log' %}지금은 <strong>기록만</strong> 하는 방식이라 실제로는 보내지 않습니다(MM_NOTIFY_MODE=send 로 켬). '시험 보내기'는 바로 보냅니다.{% endif %}</p>
+
+<div class="toolbar">
+  <span class="muted small">채널 추가:</span>
+  {% for k, v in kinds.items() %}<a class="btn btn-sm" href="{{ url_for('admin.channels', new=k) }}">＋ {{ v[0] }}</a>{% endfor %}
+</div>
+
+{% set form_kind = edit.kind if edit else new_kind %}
+{% if form_kind %}
+<form class="card form" method="post" action="{{ url_for('admin.channel_save') }}">
+  {{ csrf() }}
+  <input type="hidden" name="kind" value="{{ form_kind }}"><input type="hidden" name="id" value="{{ edit.id if edit else '' }}">
+  <h3>{{ kinds[form_kind][0] }} — {{ '채널 수정' if edit else '새 채널' }}</h3>
+  {% if edit and edit.lost %}<div class="alert alert-warning">암호 키(MM_NOTIFY_KEY · MM_SECRET_KEY)가 바뀌어 저장된 비밀값을 읽을 수 없습니다. 다시 입력하세요.</div>{% endif %}
+  <div class="form-grid g3">
+    <label>이름<input name="name" value="{{ edit.name if edit else '' }}" placeholder="예: 구매팀 잔디 토픽" maxlength="60"></label>
+    {% for key, label, secret, required in kinds[form_kind][1] %}
+      {% if key == 'private_key' %}
+        <label class="span2">{{ label }}{{ ' *' if required and not edit }}
+          <textarea name="private_key" rows="3" placeholder="{{ '바꾸지 않으려면 비워 두세요 (' ~ edit.shown.get(key, '') ~ ')' if edit and edit.config.get(key) else '-----BEGIN PRIVATE KEY-----' }}"></textarea></label>
+      {% else %}
+        <label>{{ label }}{{ ' *' if required and not (edit and secret) }}
+          <input name="{{ key }}" {{ 'type=password autocomplete=new-password' if secret }}
+                 value="{{ '' if secret else (edit.config.get(key, '') if edit else '') }}"
+                 placeholder="{{ ('바꾸지 않으려면 비워 두세요 (' ~ edit.shown.get(key, '') ~ ')') if secret and edit and edit.config.get(key) else ('https://…' if key == 'webhook_url' else '') }}"></label>
+      {% endif %}
+    {% endfor %}
+  </div>
+  <div class="form-grid g3">
+    <fieldset><legend>받는 곳</legend>
+      {% set cur_targets = (edit.config.get('targets') if edit else None) or [kinds[form_kind][2][0]] %}
+      {% for t in kinds[form_kind][2] %}<label class="check"><input type="checkbox" name="targets" value="{{ t }}" {{ 'checked' if t in cur_targets }}> {{ targets[t] }}</label>{% endfor %}
+      {% if form_kind in ('naverworks', 'kakaowork') %}<p class="muted small">개인 메시지는 사용자의 {{ '메신저 아이디(없으면 메일)' if form_kind == 'naverworks' else '메일' }}로 보냅니다 — 사용자 화면에서 입력.</p>{% endif %}
+    </fieldset>
+    <fieldset><legend>보낼 알림 (고르지 않으면 모두)</legend>
+      {% for k, v in events.items() %}<label class="check"><input type="checkbox" name="events" value="{{ k }}" {{ 'checked' if edit and k in edit.events }}> {{ v }}</label>{% endfor %}
+    </fieldset>
+    <label class="check"><input type="checkbox" name="active" value="1" {{ 'checked' if not edit or edit.active }}> 사용</label>
+  </div>
+  <div class="toolbar"><button class="btn btn-primary">💾 저장</button> <a class="btn btn-sm" href="{{ url_for('admin.channels') }}">닫기</a></div>
+</form>
+{% endif %}
+
+<h3>채널 목록</h3>
+{% if rows %}
+<div class="table-wrap"><table class="data">
+  <thead><tr><th>이름</th><th>종류</th><th>받는 곳</th><th>보낼 알림</th><th>설정</th><th>상태</th><th></th></tr></thead>
+  <tbody>
+  {% for r in rows %}
+    <tr class="{{ 'muted' if not r.active }}">
+      <td><a href="{{ url_for('admin.channels', edit=r.id) }}">{{ r.name }}</a></td><td>{{ r.kind_label }}</td>
+      <td>{% for t in r.config.get('targets') or [] %}{{ targets.get(t, t) }}{{ ', ' if not loop.last }}{% endfor %}</td>
+      <td>{% for e in r.events %}{{ events.get(e, e) }}{{ ', ' if not loop.last }}{% else %}모두{% endfor %}</td>
+      <td class="small">{% for k, v in r.shown.items() if k != 'targets' and v %}{{ k }} {{ v }}{{ ' · ' if not loop.last }}{% endfor %}
+        {% if r.lost %}<span class="badge warn">비밀값 다시 입력 필요</span>{% endif %}</td>
+      <td>{{ '사용' if r.active else '꺼짐' }}</td>
+      <td class="row-actions">
+        <form class="inline" method="post" action="{{ url_for('admin.channel_test', cid=r.id) }}">{{ csrf() }}<button class="btn btn-sm">📨 시험 보내기</button></form>
+        <form class="inline" method="post" action="{{ url_for('admin.channel_delete', cid=r.id) }}" data-confirm="'{{ r.name }}' 채널을 지울까요? 아직 못 보낸 알림은 보내지 않습니다.">{{ csrf() }}<button class="btn btn-sm btn-danger">지우기</button></form>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+{% else %}<p class="muted small">등록한 채널이 없습니다. 위에서 메신저를 골라 추가하세요. (환경변수 MM_JANDI_* · MM_NAVERWORKS_* 로 설정한 예전 방식도 계속 동작합니다.)</p>{% endif %}
+
+<h3>발송 기록 (최근 50건)</h3>
+{{ table(log, '아직 보낸 알림이 없습니다.') }}
+{% endblock %}

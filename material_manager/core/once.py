@@ -50,7 +50,14 @@ def finish(token: str, done: bool, location: str = "") -> None:
             conn.execute("DELETE FROM form_once WHERE token = ?", (token,))
 
 
+OFFLINE = "offline-queue"                 # 오프라인 대기열로 반영한 표의 location (오래 보관)
+
+
 def cleanup() -> int:
-    cutoff = (datetime.now() - timedelta(hours=config.FORM_ONCE_KEEP_HOURS)).strftime("%Y-%m-%d %H:%M:%S")
+    """화면 제출 표는 FORM_ONCE_KEEP_HOURS, 오프라인 대기열 표는 OFFLINE_KEEP_DAYS 뒤에 지운다."""
+    now = datetime.now()
+    cutoff = (now - timedelta(hours=config.FORM_ONCE_KEEP_HOURS)).strftime("%Y-%m-%d %H:%M:%S")
+    offline_cutoff = (now - timedelta(days=config.OFFLINE_KEEP_DAYS)).strftime("%Y-%m-%d %H:%M:%S")
     with db.transaction() as conn:
-        return conn.execute("DELETE FROM form_once WHERE created_at < ?", (cutoff,)).rowcount
+        n = conn.execute("DELETE FROM form_once WHERE created_at < ? AND location <> ?", (cutoff, OFFLINE)).rowcount
+        return n + conn.execute("DELETE FROM form_once WHERE created_at < ? AND location = ?", (offline_cutoff, OFFLINE)).rowcount

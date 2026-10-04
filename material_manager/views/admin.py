@@ -67,8 +67,12 @@ def sso_outage():
 def create_user():
     result = auth.create_user(f_str("username"), f_str("name"), f_str("role"),
                               request.form.get("password", ""), actor())
-    flash(result.message + (" 첫 로그인 때 비밀번호를 바꾸게 됩니다." if result.ok else ""),
-          "success" if result.ok else "error")
+    note = ""
+    if result.ok:
+        note = ". 첫 로그인 때 비밀번호를 바꾸게 됩니다."
+        if result.user and result.user["role"] not in ("ADMIN", "DATA") and not int(result.user.get("all_warehouses") or 0):
+            note += " ⚠ 아직 데이터 범위(플랜트·창고)가 없어 아무것도 보이지 않습니다 — 아래 사용자 목록에서 범위를 주세요."
+    flash(result.message + note, "success" if result.ok else "error")
     return redirect(url_for("admin.users"))
 
 
@@ -381,9 +385,28 @@ def form_template_download(key: str):
 def settings():
     from core import company, maintenance
     hist = company.history()
+    from core import names
     return render_page("admin_settings.html", "settings", fields=company.FIELDS, values=company.values(),
                        defaults=company.defaults(), stored=company.stored(), ro=maintenance.state(cache_seconds=0),
-                       history=hist.to_dict("records"))
+                       history=hist.to_dict("records"), name_groups=names.rows(), categories=names.categories())
+
+
+@bp.post("/settings/names")
+@role_required("ADMIN")
+def names_save():
+    from core import names
+    ok, msg = names.save(request.form.to_dict(), actor())
+    flash(msg, "success" if ok else "error")
+    return redirect(url_for("admin.settings") + "#names")
+
+
+@bp.post("/settings/category")
+@role_required("ADMIN")
+def category_rename():
+    from core import names
+    ok, msg = names.rename_category(f_str("old"), f_str("new"), actor())
+    flash(msg, "success" if ok else "error")
+    return redirect(url_for("admin.settings") + "#names")
 
 
 @bp.post("/settings")
@@ -430,3 +453,57 @@ def api_key_revoke(kid: int):
     r = keys.revoke(kid, actor())
     flash(r.message, "success" if r.ok else "error")
     return redirect(url_for("admin.api_keys"))
+
+
+# ── 알림 채널 (사내 메신저) ──────────────────────────────────
+@bp.get("/channels")
+@role_required("ADMIN")
+def channels():
+    from core import messenger, notify
+    edit = messenger.get(as_id(request.args.get("edit")) or 0) if request.args.get("edit") else None
+    new_kind = request.args.get("new") if request.args.get("new") in messenger.KINDS else None
+    log = messenger.log_df()
+    log_view = log.assign(status=log["status"].map(notify.STATUS), event=log["event"].map(
+        {**messenger.EVENTS, "TEST": "시험"}).fillna(log["event"])).rename(columns={
+        "id": "ID", "created_at": "만든 시각", "channel": "채널", "event": "알림", "to_addr": "받는 곳", "subject": "제목",
+        "status": "결과", "tries": "시도", "last_error": "오류", "sent_at": "보낸 시각"})
+    return render_page("admin_channels.html", "channels", rows=messenger.list_channels(), kinds=messenger.KINDS,
+                       events=messenger.EVENTS, targets=messenger.TARGETS, edit=edit, new_kind=new_kind,
+                       notify_mode=config.NOTIFY_MODE,
+                       log=Table(log_view, {"ID": "{}", "시도": "{}"},
+                                 tones=["danger" if s == "FAILED" else None for s in log["status"]]))
+
+
+@bp.post("/channels")
+@role_required("ADMIN")
+def channel_save():
+    from core import messenger
+    data = {k: f_str(k) for k in ("id", "kind", "name", "active", "webhook_url", "client_id", "client_secret",
+                                  "service_account", "private_key", "bot_id", "channel_id", "app_key")}
+    data["private_key"] = request.form.get("private_key", "").strip()        # PEM 은 여러 줄
+    data["targets"] = request.form.getlist("targets")
+    data["events"] = request.form.getlist("events")
+    data["active"] = "1" if request.form.get("active") else "0"
+    ok, msg, cid = messenger.save(data, actor())
+    flash(msg, "success" if ok else "error")
+    if not ok:
+        return redirect(url_for("admin.channels", edit=data["id"]) if data["id"] else url_for("admin.channels", new=data["kind"]))
+    return redirect(url_for("admin.channels"))
+
+
+@bp.post("/channels/<int:cid>/delete")
+@role_required("ADMIN")
+def channel_delete(cid: int):
+    from core import messenger
+    ok, msg = messenger.delete(cid, actor())
+    flash(msg, "success" if ok else "error")
+    return redirect(url_for("admin.channels"))
+
+
+@bp.post("/channels/<int:cid>/test")
+@role_required("ADMIN")
+def channel_test(cid: int):
+    from core import messenger
+    ok, msg = messenger.send_test(cid, actor())
+    flash(msg, "success" if ok else "error")
+    return redirect(url_for("admin.channels"))

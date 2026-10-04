@@ -8,12 +8,17 @@ import pandas as pd
 from flask import Blueprint, abort, flash, g, redirect, request, send_file, url_for
 
 import config
-from core import db, documents, repository as repo
+from core import audit, db, documents, hometax, repository as repo
+from core.utils import xlsx_problem
 from views.helpers import log_export, form_response, Table, a_date, a_int, actor, as_id, can, f_str, page_arg, pager, render_page, role_required
 
 bp = Blueprint("documents", __name__, url_prefix="/documents")
 
-TABS = [("list", "📋 목록"), ("new", "➕ 증빙 등록")]
+TABS = [("list", "📋 목록"), ("new", "➕ 증빙 등록"), ("hometax", "🧾 홈택스 매입 대사")]
+
+
+def _tabs():
+    return TABS if can("MANAGER") else (TABS[:2] if can("CLERK") else TABS[:1])
 LIST_COLS = {"id": "증빙ID", "issue_date": "작성일자", "doc_type": "종류", "supplier_name": "공급자",
              "supplier_biz_no": "사업자번호", "supply_amount": "공급가액", "tax_amount": "세액",
              "total_amount": "합계", "approval_no": "승인번호", "tx_label": "연결 거래", "file_name": "파일명"}
@@ -40,8 +45,13 @@ def uploaded_file() -> tuple[bytes, str]:
 @bp.get("/")
 def index():
     tab = request.args.get("tab", "list")
+    if tab == "hometax" and can("MANAGER"):
+        return render_page("documents_hometax.html", "documents", tabs=_tabs(), tab="hometax", result=None,
+                           results=hometax.RESULT)
     if tab == "new" and can("CLERK"):
-        return _new_page(form={"tx_id": request.args.get("tx", "")})
+        keys = ("approval_no", "supplier_biz_no", "supplier_name", "supply_amount", "tax_amount", "doc_issue_date", "doc_type")
+        form = {"tx_id": request.args.get("tx", ""), **{k: request.args.get(k, "")[:60] for k in keys if request.args.get(k)}}
+        return _new_page(form=form)
 
     start = a_date("start", date.today() - timedelta(days=90))
     end = a_date("end", date.today())
@@ -64,7 +74,7 @@ def index():
         log_export("documents", len(view), start=start.isoformat(), end=end.isoformat())
         return form_response("documents", view, f"증빙_{start:%Y%m%d}_{end:%Y%m%d}.xlsx", period=f"{start} ~ {end}")
     return render_page(
-        "documents.html", "documents", tabs=TABS if can("CLERK") else TABS[:1], tab="list",
+        "documents.html", "documents", tabs=_tabs(), tab="list",
         start=start, end=end, types=types, keyword=keyword, tx_id=tx_id, unlinked=unlinked,
         count=total, supply_sum=sums["supply"], tax_sum=sums["tax"], unlinked_cnt=sums["unlinked"],
         pager=pager(total, page_arg()),
@@ -74,7 +84,7 @@ def index():
 
 
 def _new_page(form):
-    return render_page("documents.html", "documents", tabs=TABS, tab="new", form=form,
+    return render_page("documents.html", "documents", tabs=_tabs(), tab="new", form=form,
                        tx_opts=repo.recent_tx_options(wh_ids=g.wh_ids), accept=documents.ACCEPT)
 
 
@@ -174,3 +184,33 @@ def delete(doc_id: int):
     saved = documents.delete(doc_id, actor())
     flash(saved.message, "success" if saved.ok else "error")
     return redirect(url_for("documents.index"))
+
+
+@bp.post("/hometax")
+@role_required("MANAGER")
+def hometax_check():
+    """홈택스 매입 전자세금계산서 목록 ↔ 증빙·입고 대사. 파일은 저장하지 않는다."""
+    file = request.files.get("file")
+    if not file or not file.filename:
+        flash("홈택스에서 받은 매입 전자세금계산서 목록 파일을 고르세요.", "error")
+        return redirect(url_for("documents.index", tab="hometax"))
+    data = file.read()                                  # 요청 크기는 MAX_CONTENT_LENGTH(20MB)로 이미 제한
+    if file.filename.lower().endswith(".xlsx"):
+        problem = xlsx_problem(data, config.XLSX_MAX_UNCOMPRESSED, config.XLSX_MAX_RATIO)
+        if problem:
+            flash(problem, "error")
+            return redirect(url_for("documents.index", tab="hometax"))
+    inv, problem = hometax.read(data, file.filename)
+    if problem or inv.empty:
+        flash(problem or "목록에 계산서가 없습니다.", "error")
+        return redirect(url_for("documents.index", tab="hometax"))
+    result = hometax.reconcile(inv, g.wh_ids)
+    audit.log(actor(), "HOMETAX_CHECK", "document", "", {"invoices": len(inv), **result["counts"],
+                                                         "period": f"{result['start']}~{result['end']}"})
+    if request.form.get("export") == "1":
+        view = hometax.export_df(result)
+        log_export("hometax", len(view))
+        return form_response("hometax", view, f"홈택스_매입대사_{result['start']}_{result['end']}.xlsx",
+                             period=f"{result['start']} ~ {result['end']}")
+    return render_page("documents_hometax.html", "documents", tabs=_tabs(), tab="hometax", result=result,
+                       results=hometax.RESULT)

@@ -96,7 +96,7 @@
       {% if tx_type == "ADJ" %}
         <label>실사수량 *
           <input name="qty" type="number" min="0" step="any" required
-                 value="{{ form.qty or ('%g' % (stock_now if stock_now > 0 else 0)) }}">
+                 value="{{ form.qty or (((stock_now if stock_now > 0 else 0))|plain) }}">
           <span class="hint">창고에서 직접 센 수량. 차이 금액이 ₩{{ '{:,}'.format(approval_limit) }} 이상이면 관리자 결재 후 반영됩니다.</span>
         </label>
       {% else %}
@@ -106,7 +106,7 @@
         <label>단위
           <select name="unit">
             <option value="">{{ mat.unit }} (기본)</option>
-            {% for u in units %}<option value="{{ u.unit }}" {{ 'selected' if form.unit == u.unit }}>{{ u.unit }} (= {{ '%g' % u.factor }} {{ mat.unit }})</option>{% endfor %}
+            {% for u in units %}<option value="{{ u.unit }}" {{ 'selected' if form.unit == u.unit }}>{{ u.unit }} (= {{ (u.factor)|plain }} {{ mat.unit }})</option>{% endfor %}
           </select>
         </label>
       {% endif %}
@@ -123,17 +123,18 @@
                       max="{{ today().isoformat() }}" {% if min_date %}min="{{ min_date }}"{% endif %}>
         {% if g.closed_through %}<span class="hint">{{ g.closed_through }}월까지 마감 — 그 이후 일자만 가능</span>{% endif %}
       </label>
-      <label>단가(원/{{ mat.unit }})<input name="unit_price" type="number" min="0" step="any" value="{{ form.unit_price or ('%g' % mat.unit_price) }}"></label>
+      <label>단가 (원 / 기본 단위 {{ mat.unit }}){% if units %}<span class="hint">다른 단위로 입력해도 단가는 {{ mat.unit }} 1개 기준</span>{% endif %}<input name="unit_price" type="number" min="0" step="any" value="{{ form.unit_price or ((mat.unit_price)|plain) }}"></label>
 
       <label>문서번호 (PO/출고요청/B/L 등)<input name="ref_no" value="{{ form.ref_no or '' }}"></label>
       <label>거래처 / 사용부서<input name="partner" value="{{ form.partner or '' }}" list="partner-names" autocomplete="off"></label>
       <label>담당자<input value="{{ g.user.name }} (로그인 사용자로 기록)" disabled></label>
       {% if tx_type == "IN" and po_lines %}
         <label>발주 품목 (이 시스템 발주)
-          <select name="po_line">
+          <select name="po_line" data-po-line>
             <option value="">발주 없이 / 아래에 직접 입력</option>
-            {% for p in po_lines %}<option value="{{ p.po_no }}|{{ p.line_no }}">{{ p.po_no }} / {{ p.line_no }} · 잔량 {{ "{:,.2f}".format(p.remaining) }} · ₩{{ "{:,.0f}".format(p.price) }} · {{ p.supplier }}</option>{% endfor %}
+            {% for p in po_lines %}{% set key = p.po_no ~ '|' ~ p.line_no %}<option value="{{ key }}" data-price="{{ (p.price)|plain }}" data-remaining="{{ (p.remaining)|plain }}" data-supplier="{{ p.supplier }}" {{ 'selected' if form.po_line == key }}>{{ p.po_no }} / {{ p.line_no }} · 잔량 {{ "{:,.2f}".format(p.remaining) }} · ₩{{ "{:,.0f}".format(p.price) }} · {{ p.supplier }}</option>{% endfor %}
           </select>
+          <span class="hint">고르면 단가는 발주 단가로, 수량 칸이 비었으면 잔량으로 채웁니다(입고는 발주 단가로 기록).</span>
         </label>
       {% endif %}
       {% if tx_type == "IN" %}

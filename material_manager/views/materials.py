@@ -9,8 +9,8 @@ from markupsafe import Markup
 
 from core import audit, barcode, db, repository as repo, services, uom
 from views import bulk_ui
-from views.helpers import (Table, a_int, actor, can, f_float, f_str, form_response, log_export, page_arg, pager,
-                           render_page, role_required)
+from views.helpers import (Table, a_int, actor, can_master, f_float, f_str, form_response, log_export, master_required,
+                           page_arg, pager, render_page)
 
 bp = Blueprint("materials", __name__, url_prefix="/materials")
 
@@ -19,7 +19,7 @@ TABS = [("list", "📋 목록"), ("new", "➕ 신규 등록"), ("edit", "✏️ 
 
 def _master_editor() -> bool:
     """자재 마스터는 회사 전체 데이터 → 모든 창고 권한이 있는 관리자만 바꾼다."""
-    return can("MANAGER") and g.wh_ids is None
+    return can_master()                               # 모든 창고 관리자 또는 '데이터 관리' 역할
 
 
 def _tabs():
@@ -100,8 +100,7 @@ def _edit_page(mid: int | None, form: dict | None = None):
     row = repo.get_material(mid) if opts else None
     stock_now = 0.0
     if row:
-        mine = repo.stock_df(include_inactive=True, wh_ids=g.wh_ids)
-        stock_now = float(mine.loc[mine["id"] == mid, "stock"].sum())
+        stock_now = repo.material_stock(mid, g.wh_ids)          # 이 자재만 (전체 재고표를 만들지 않는다)
     return render_page("materials.html", "materials", tabs=_tabs(), tab="edit",
                        opts=opts, mid=mid, row=row, form=form or row or {},
                        units=uom.units(mid) if row else [],
@@ -136,7 +135,7 @@ def lookup():
 
 
 @bp.post("/new")
-@role_required("MANAGER")
+@master_required
 def create():
     try:
         data = _form_data()
@@ -151,7 +150,7 @@ def create():
 
 
 @bp.post("/<int:mid>/edit")
-@role_required("MANAGER")
+@master_required
 def update(mid: int):
     row = repo.get_material(mid) or abort(404)
     try:
@@ -167,7 +166,7 @@ def update(mid: int):
 
 
 @bp.post("/<int:mid>/active")
-@role_required("MANAGER")
+@master_required
 def set_active(mid: int):
     repo.get_material(mid) or abort(404)
     result = services.set_material_active(mid, request.form.get("active") == "1", actor())
@@ -211,7 +210,7 @@ def search():
 
 
 @bp.post("/<int:mid>/units")
-@role_required("MANAGER")
+@master_required
 def unit_add(mid: int):
     try:
         factor = f_float("factor")
@@ -224,7 +223,7 @@ def unit_add(mid: int):
 
 
 @bp.post("/units/<int:uid>/delete")
-@role_required("MANAGER")
+@master_required
 def unit_delete(uid: int):
     ok, msg, mid = uom.remove(uid, actor())
     flash(msg, "success" if ok else "error")
@@ -300,20 +299,20 @@ def units_export():
 
 
 @bp.get("/units/import")
-@role_required("MANAGER")
+@master_required
 def units_import():
     return bulk_ui.page("units", "materials", UNIT_TITLE)
 
 
 @bp.post("/units/import")
-@role_required("MANAGER")
+@master_required
 def units_import_upload():
     from core import bulk
     return bulk_ui.upload("units", "unit_upload", bulk.preview_units, url_for("materials.units_import"), "materials", UNIT_TITLE)
 
 
 @bp.post("/units/import/apply")
-@role_required("MANAGER")
+@master_required
 def units_import_apply():
     from core import bulk
     return bulk_ui.apply("units", bulk.apply_units, url_for("materials.units_import"))

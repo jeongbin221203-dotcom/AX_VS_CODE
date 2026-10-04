@@ -16,7 +16,7 @@ from flask import Blueprint, abort, flash, redirect, request, session, url_for
 
 import config
 from core import audit, db, excel_forms, jobs, repository as repo, seed, services, storage
-from core.utils import to_excel_bytes, xlsx_problem
+from core.utils import to_csv_zip_bytes, to_excel_bytes, xlsx_problem
 from views.helpers import Table, actor, file_response, form_response, render_page, role_required, xlsx_response
 
 bp = Blueprint("data_admin", __name__, url_prefix="/data")
@@ -143,6 +143,15 @@ def backup_xlsx():
     audit.log(actor(), "BACKUP", "xlsx", "전체 데이터")
     return xlsx_response(to_excel_bytes(repo.dump_all()),
                          f"자재관리_전체백업_{datetime.now():%Y%m%d_%H%M}.xlsx")
+
+
+@bp.get("/backup-csv.zip")
+@role_required("ADMIN")
+def backup_csv():
+    """전체 데이터 CSV 묶음 — 엑셀 백업보다 빠르고 행 수 제한(시트당 약 100만 행)이 없다. 데이터가 많을 때."""
+    audit.log(actor(), "BACKUP", "csv", "전체 데이터")
+    return file_response(to_csv_zip_bytes(repo.dump_all()), f"자재관리_전체백업_{datetime.now():%Y%m%d_%H%M}_csv.zip",
+                         "application/zip")
 
 
 @bp.get("/backup-attachments.zip")

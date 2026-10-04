@@ -15,7 +15,7 @@ import pandas as pd
 
 import config
 from core import approvals, audit, db, master_sync, org, partners, periods, purchasing, repository as repo, sap, uom
-from core.utils import clean_str_series, code_series, now_str
+from core.utils import fmt_qty, clean_str_series, code_series, now_str
 
 
 @dataclass
@@ -115,6 +115,7 @@ def _register(conn, who: dict, material_id: int, tx_type: str, qty_input: float,
     거래처 이름은 거래처 마스터에 있으면 정식 이름과 partner_id로 남긴다(입고와 원가센터 없는 출고만)."""
     if not _finite(qty_input, unit_price):
         return Result(False, "수량·단가를 숫자로 다시 입력하세요.")
+    price_note = ""
     lot_no, expiry_date = (lot_no or "").strip().upper(), (expiry_date or "").strip()
     wh_id = warehouse_id or repo.default_warehouse_id(conn)
     wh = org.get_warehouse(wh_id, conn)
@@ -137,7 +138,8 @@ def _register(conn, who: dict, material_id: int, tx_type: str, qty_input: float,
         partner, partner_id, problem = partners.apply(conn, partner)
         if problem:
             return Result(False, problem)
-        partner_warning = partners.unknown_warning(partner, partner_id)
+        if not po_no:                                     # 발주 입고면 발주의 공급처 이름 — 현장에서 고칠 일이 아니다
+            partner_warning = partners.unknown_warning(partner, partner_id)
     problem = (master_sync.cost_center_problem(conn, cost_center) if tx_type == "OUT" else "")
     if not problem and sap.enabled():
         problem = sap.mapping_problem(mat, tx_type, cost_center, po_no, po_item, warehouse=wh)
@@ -159,6 +161,12 @@ def _register(conn, who: dict, material_id: int, tx_type: str, qty_input: float,
             problem = purchasing.receipt_problem(conn, po_no, po_item, material_id, wh_id, qty)
             if problem:
                 return Result(False, problem)
+            po_price = purchasing.po_line_price(conn, po_no, po_item)
+            if po_price is not None:                      # 발주 입고는 발주 단가로 (SAP 101 과 같게, 단가 차이는 계산서 대사에서)
+                if unit_price and abs(float(unit_price) - po_price) > 0.005:
+                    price_note = (f"발주 단가 ₩{po_price:,.0f}로 입고했습니다(입력한 ₩{float(unit_price):,.0f}는 쓰지 않음) — "
+                                  "단가가 바뀌었으면 발주를 고치거나 세금계산서 대사에서 차이를 확인하세요.")
+                unit_price = po_price
         allocations = [(lot_no, qty)]
     elif tx_type == "OUT":
         qty = qty_input
@@ -171,8 +179,10 @@ def _register(conn, who: dict, material_id: int, tx_type: str, qty_input: float,
         else:
             _, avail = repo.balance_window(conn, material_id, wh_id, None, tx_date)
             if qty > avail + 1e-9:
-                return Result(False, f"재고 부족: {wh['code']} {tx_date} 이후 출고 가능 {avail:,.2f}, "
-                                     f"출고 요청 {qty:,.2f}")
+                unit = mat.get("unit") or ""
+                when = "" if tx_date >= date.today().isoformat() else f" ({tx_date} 이후 어느 날도 재고가 음수가 되면 안 되므로)"
+                return Result(False, f"재고 부족: {wh['code']}에서 나갈 수 있는 수량 {fmt_qty(avail)} {unit}, "
+                                     f"요청 {fmt_qty(qty)} {unit}{when}. 수량을 줄이거나 먼저 입고·이동을 등록하세요.")
             allocations = [("", qty)]
     else:                                               # ADJ
         if qty_input < 0:
@@ -208,6 +218,8 @@ def _register(conn, who: dict, material_id: int, tx_type: str, qty_input: float,
                           qty=qty, stock_after=stock_now, pending=True)
         allocations = [(lot_no, qty)]
 
+    issue_return = bool(tx_type == "IN" and production_id is not None and conn.execute(
+        "SELECT product_id FROM productions WHERE id = ?", (production_id,)).fetchone()[0] != material_id)
     tx_ids = []
     for lot, q in allocations:
         tx_ids.append(_insert(conn, who, {
@@ -215,7 +227,7 @@ def _register(conn, who: dict, material_id: int, tx_type: str, qty_input: float,
             "unit_price": max(float(unit_price), 0.0), "tx_date": tx_date, "lot_no": lot,
             "ref_no": ref_no.strip(), "partner": partner.strip(), "note": note.strip(),
             "po_no": po_no, "po_item": po_item, "cost_center": cost_center,
-            "movement_type": sap.movement_type(tx_type, q, po_no), "statement_id": statement_id,
+            "movement_type": sap.movement_type(tx_type, q, po_no, issue_return=issue_return), "statement_id": statement_id,
             "partner_id": partner_id, "production_id": production_id, "batch_no": batch_no,
             "entry_unit": entry_unit if len(allocations) == 1 else "", "entry_qty": entry_qty if len(allocations) == 1 else None,
         }, mat["code"]))
@@ -226,7 +238,8 @@ def _register(conn, who: dict, material_id: int, tx_type: str, qty_input: float,
     sap_status = conn.execute("SELECT status FROM sap_outbox WHERE tx_id = ?", (tx_ids[0],)).fetchone()
     return {"mat": mat, "qty": qty, "stock_after": stock_after, "tx_ids": tx_ids, "wh": wh,
             "sap_status": sap_status, "allocations": allocations, "lot_managed": lot_managed,
-            "partner": partner, "partner_id": partner_id, "partner_warning": partner_warning,
+            "partner": partner, "partner_id": partner_id,
+            "partner_warning": " ".join(filter(None, [partner_warning, price_note])),
             "unit_price": max(float(unit_price), 0.0)}
 
 # ── 여러 줄 입출고 (스캔·한 화면에서 여러 품목) ─────────────────
@@ -363,15 +376,22 @@ def _allocate(conn, mat: dict, wh_id: int, qty: float, lot_no: str | None, tx_da
     if lot_no:
         if mat["expiry_managed"] and lot_no in expired:
             return [], f"로트 {lot_no}는 유효기한이 지났습니다. 출고할 수 없습니다(폐기는 실사조정으로)."
-        have = next((b["qty"] for b in balances if b["lot_no"] == lot_no), 0.0)
+        have = next((b["qty"] for b in balances if b["lot_no"] == lot_no), None)
+        unit = mat.get("unit") or ""
+        others = ", ".join(f"{b['lot_no']} {fmt_qty(b['qty'])}" for b in balances
+                           if b["lot_no"] != lot_no and not (mat["expiry_managed"] and b["lot_no"] in expired))[:200]
+        if have is None:
+            return [], (f"재고 부족: 로트 {lot_no}는 이 창고에 재고가 없습니다." +
+                        (f" 이 창고의 로트: {others} {unit} — 로트 칸을 비우면 유효기한 빠른 로트부터 나갑니다." if others else ""))
         if qty > have + 1e-9:
-            return [], f"재고 부족: 로트 {lot_no} 현재고 {have:,.2f}, 요청 {qty:,.2f}"
+            return [], (f"재고 부족: 로트 {lot_no}에는 {fmt_qty(have)} {unit}만 있습니다(요청 {fmt_qty(qty)})." +
+                        (f" 다른 로트: {others} — 로트 칸을 비우면 여러 로트에서 나눠 나갑니다." if others else ""))
         return [(lot_no, qty)], ""
     usable = [b for b in balances if not (mat["expiry_managed"] and b["lot_no"] in expired)]
     total = sum(b["qty"] for b in usable)
     if qty > total + 1e-9:
         extra = f" (유효기한 지난 로트 {len(expired)}개 제외)" if expired and mat["expiry_managed"] else ""
-        return [], f"재고 부족: 출고 가능 {total:,.2f}{extra}, 요청 {qty:,.2f}"
+        return [], f"재고 부족: 이 창고에서 나갈 수 있는 수량 {fmt_qty(total)} {mat.get('unit') or ''}{extra}, 요청 {fmt_qty(qty)}"
     out, left = [], qty
     for b in usable:                                   # lot_balances는 유효기한 빠른 순
         if left <= 1e-9:

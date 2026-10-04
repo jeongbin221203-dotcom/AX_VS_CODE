@@ -31,8 +31,11 @@
   <div class="row-actions">
     {% if db_file %}{{ download(url_for('data_admin.backup_db'), '⬇️ DB 파일 백업 (.db)') }}{% endif %}
     {{ download(url_for('data_admin.backup_xlsx'), '⬇️ 전체 데이터 엑셀 백업') }}
+    {{ download(url_for('data_admin.backup_csv'), '⬇️ 전체 데이터 CSV 묶음 (.zip, 빠름)') }}
     {{ download(url_for('data_admin.backup_attachments'), '⬇️ 증빙 파일 백업 (.zip, ' ~ attach_cnt ~ '건)') }}
   </div>
+  <p class="muted small">엑셀·CSV 백업에는 모든 업무 표가 표마다 한 장(파일)씩 들어갑니다(비밀번호·API 키 해시는 빼고).
+    데이터가 많으면 CSV 묶음이 몇 배 빠르고 행 수 제한이 없습니다(엑셀은 시트당 약 100만 행 — 넘으면 시트를 나눔).</p>
   <p class="muted small">DB: {{ 'PostgreSQL — DB 서버에서 pg_dump·스냅샷으로 정기 백업하세요' if is_pg else 'SQLite 파일' }} ·
     파일 저장소: {{ storage_name }}. DB 백업에는 증빙 이미지가 들어 있지 않으니 증빙 파일(.zip)도 함께 받아 두세요
     ({{ 'S3는 버킷 버전 관리·복제로 보호하는 것을 권장' if storage_name == 's3' else '복원 시 zip을 저장소의 attachments/ 폴더에 풀면 됩니다' }}).</p>

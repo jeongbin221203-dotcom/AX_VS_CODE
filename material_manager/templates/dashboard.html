@@ -28,7 +28,10 @@
     {{ go('ADMIN', url_for('admin.jobs_page'), '배치') }} 화면에 보낼 목록으로만 남깁니다.</p>
 </details>
 {% endif %}
-{% if empty %}
+{% if no_scope %}
+  <div class="alert alert-warning">아직 볼 수 있는 플랜트·창고가 없습니다(데이터 범위 없음). 시스템관리자에게 담당 플랜트·창고를 요청하세요 —
+    받기 전에는 재고·거래·결재가 보이지 않습니다.</div>
+{% elif empty %}
   <div class="alert alert-info">등록된 자재가 없습니다. <a href="{{ url_for('data_admin.index') }}">데이터 관리</a>에서 샘플 데이터를 생성하거나 <a href="{{ url_for('materials.index', tab='new') }}">자재를 등록</a>하세요.</div>
 {% else %}
   <form class="toolbar" method="get">
@@ -98,6 +101,8 @@
     {% elif tab == 'expiry' %}<p class="muted small"><a href="{{ url_for('stock.index', view='lot', expiring=1) }}">로트·유효기한 재고 전체 보기</a></p>
     {% endif %}
     {{ table(check_table, "해당 항목이 없습니다.") }}
+    {% if tab_total > table_rows %}<p class="muted small">앞 {{ table_rows }}건만 보입니다 (전체 {{ '{:,}'.format(tab_total) }}건) —
+      전체는 {% if tab == 'shortage' %}<a href="{{ url_for('stock.index') }}">재고 현황</a>{% else %}재고 현황{% endif %}·엑셀 다운로드에서.</p>{% endif %}
   </section>
 {% endif %}
 {% endblock %}

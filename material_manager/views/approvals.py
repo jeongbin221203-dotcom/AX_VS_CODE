@@ -15,10 +15,10 @@ from views.helpers import Table, actor, can, f_str, form_response, log_export, r
 
 bp = Blueprint("approvals", __name__, url_prefix="/approvals")
 
-COLS = {"id": "결재ID", "status": "상태", "tx_date": "일자", "wh_code": "창고", "code": "자재코드", "name": "자재명",
-        "qty": "조정 수량", "amount": "금액", "requested_by": "요청자", "requested_at": "요청일시",
+COLS = {"id": "결재ID", "kind": "종류", "status": "상태", "tx_date": "일자", "wh_code": "창고", "code": "자재코드", "name": "자재명",
+        "qty": "수량 (조정: 차이 · 취소: 원거래)", "amount": "금액", "requested_by": "요청자", "requested_at": "요청일시",
         "decided_by": "처리자", "decided_at": "처리일시", "comment": "의견", "result_tx_id": "거래ID"}
-FMT = {"결재ID": "{}", "조정 수량": "{:+,.2f}", "금액": "₩{:,.0f}", "거래ID": "{}"}
+FMT = {"결재ID": "{}", "수량 (조정: 차이 · 취소: 원거래)": "{:+,.2f}", "금액": "₩{:,.0f}", "거래ID": "{}"}
 
 
 def _tabs():
@@ -62,6 +62,7 @@ def index():
         df = approvals.requests_df(status, g.wh_ids)
         view = df.copy()
         view["status"] = view["status"].map(approvals.STATUS)
+        view["kind"] = view["kind"].map(approvals.KINDS).fillna(view["kind"])
         return render_page("approvals.html", "approvals", **ctx, status=status, statuses=approvals.STATUS,
                            grid=Table(view[list(COLS)].rename(columns=COLS), FMT))
     items = workflow.queue(g.user)

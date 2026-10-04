@@ -10,6 +10,8 @@
     email       사용자 메일 주소가 있으면 (MM_SMTP_*)
     jandi       잔디 토픽의 '들어오는 웹훅'(MM_JANDI_WEBHOOK_URL) — 사람마다가 아니라 토픽에 한 번
     naverworks  네이버웍스 봇(MM_NAVERWORKS_*) — 사용자의 메신저 아이디(없으면 메일)로 1:1, 채널 번호가 있으면 채널에도
+- 알림 채널(관리자 → 🔔 알림 채널, core/messenger.py): 잔디·네이버웍스·카카오워크·Slack·Teams·웹훅을 화면에서 등록 —
+  채널마다 보낼 알림 종류(결재 요청·결과·독촉)와 받는 곳(그룹방·개인)을 고른다. 위의 환경변수 방식도 그대로 동작한다.
 - 방식(config.NOTIFY_MODE): off(만들지 않음) | log(보낼 목록에만 남김 — 서버 없이 확인) | send(실제로 보냄, 예전 이름 smtp).
 """
 from __future__ import annotations
@@ -32,7 +34,8 @@ from core.utils import now_str
 
 log = logging.getLogger(__name__)
 STATUS = {"PENDING": "보낼 예정", "SENT": "보냄", "LOGGED": "기록만(보내지 않음)", "FAILED": "실패"}
-CHANNELS = {"email": "메일", "jandi": "잔디", "naverworks": "네이버웍스"}
+CHANNELS = {"email": "메일", "jandi": "잔디", "naverworks": "네이버웍스", "kakaowork": "카카오워크", "slack": "Slack",
+            "teams": "Teams", "webhook": "웹훅"}
 NW_TOKEN_URL = "https://auth.worksmobile.com/oauth2/v2.0/token"
 NW_API = "https://www.worksapis.com/v1.0"
 
@@ -92,8 +95,18 @@ def user(conn, user_id) -> list[dict]:
     return [dict(row)] if row else []
 
 
-def queue(conn, to: list[dict], subject: str, lines: list[str], path: str, ref: str) -> int:
+def event_of(subject: str) -> str:
+    """알림 종류(채널별로 고를 수 있음): 결재 독촉 · 결재 결과(승인·반려) · 결재 요청."""
+    if "독촉" in subject:
+        return "REMIND"
+    if subject.rstrip().endswith(("승인", "반려")) or " 승인" in subject or " 반려" in subject:
+        return "RESULT"
+    return "REQUEST"
+
+
+def queue(conn, to: list[dict], subject: str, lines: list[str], path: str, ref: str, event: str = "") -> int:
     """알림을 쌓는다 (호출하는 쪽 트랜잭션 안에서). 알림함은 늘, 메일·메신저는 켜져 있을 때. 쌓은 건수."""
+    event = event or event_of(subject)
     for r in to:                                         # 화면 알림함 (사람마다 한 줄)
         if r.get("id") is not None:
             extra = f" (대결: {r['delegate_for']} 대신)" if r.get("delegate_for") else ""
@@ -125,7 +138,13 @@ def queue(conn, to: list[dict], subject: str, lines: list[str], path: str, ref: 
     for channel, uid, addr in rows:
         conn.execute("INSERT INTO notifications (ref, to_user_id, to_addr, subject, body, status, created_at, channel) "
                      "VALUES (?, ?, ?, ?, ?, 'PENDING', ?, ?)", (ref, uid, addr, subject, body, now_str(), channel))
-    return len(rows)
+    from core import messenger                           # 화면에서 등록한 알림 채널 (채널마다 알림 종류·받는 곳)
+    ch_rows = messenger.rows_for(conn, to, event)
+    for kind, cid, addr in ch_rows:
+        conn.execute("INSERT INTO notifications (ref, to_user_id, to_addr, subject, body, status, created_at, channel, "
+                     "channel_id, event, link) VALUES (?, NULL, ?, ?, ?, 'PENDING', ?, ?, ?, ?, ?)",
+                     (ref, addr, subject, "\n".join(lines), now_str(), kind, cid, event, path))
+    return len(rows) + len(ch_rows)
 
 
 # ── 보내기 (배치) ─────────────────────────────────────────────
@@ -211,6 +230,12 @@ def send_pending(limit: int = 100) -> str:
             log.info("알림(기록만) %s → %s: %s", r.channel, r.to_addr, r.subject)
         return f"기록만 {len(rows)}건 (실제로 보내려면 MM_NOTIFY_MODE=send)"
     counts = {"sent": 0, "failed": 0}
+    by_channel = rows["channel_id"].notna() if "channel_id" in rows.columns else pd.Series(False, index=rows.index)
+    if by_channel.any():
+        from core import messenger
+        for r in rows[by_channel].itertuples():           # 화면에서 등록한 알림 채널
+            _try(r, lambda r=r: messenger.send_row(r), counts)
+    rows = rows[~by_channel]
     mail = rows[rows["channel"] == "email"]
     if len(mail):
         if not config.SMTP_HOST:

@@ -7,7 +7,7 @@ import json
 import os
 import sys
 import tempfile
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 os.environ.setdefault("MM_DB_PATH", str(Path(tempfile.mkdtemp(prefix="mm_r2_")) / "test.db"))
@@ -24,6 +24,7 @@ from test_advanced import M1, M2, fresh, mid, stock, wh  # noqa: E402,F401
 from test_app import app, client, csrf, login, post  # noqa: E402,F401
 
 TODAY = date.today().isoformat()
+NOW_ISO = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 def ahead(days: int) -> str:
@@ -110,7 +111,7 @@ def test_offline_batch_queue(client):
     data = {"kind": ["IN", "BATCH"], "warehouse_id": str(wh()), "tx_date": TODAY, "ref_no": "", "partner": "",
             "cost_center": "", "note": "", "line_mid": [str(m), str(m)], "line_qty": ["1", "2"], "line_unit": ["", ""],
             "line_lot": ["", ""], "line_exp": ["", ""], "line_price": ["", ""], "line_note": ["", ""],
-            "captured_at": "2026-10-03T01:00:00Z", "_once": "a" * 32}
+            "captured_at": NOW_ISO, "_once": "a" * 32}
     res = client.post("/transactions/queue", data={**data, "_csrf": csrf(client)}, headers={"X-MM-Queue": "1"})
     assert res.get_json()["ok"] and stock("PKG-001") == before + 3
     res = client.post("/transactions/queue", data={**data, "_csrf": csrf(client)}, headers={"X-MM-Queue": "1"})

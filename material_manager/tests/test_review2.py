@@ -289,3 +289,34 @@ def test_bad_ids_do_not_500(app):
                       ("/notifications/read", {"id": huge}), ("/partners/link", {"name": "x", "partner_id": huge}),
                       ("/production/routing", {"product": huge}), ("/production/run", {"product": huge})):
         assert post(c, url, data).status_code < 500, url
+
+
+# ── 전문가 점검: 생산 원가가 재고 평가와 맞아야 한다 ─────────
+def test_production_does_not_create_inventory_value(fresh):
+    from datetime import date as _d, timedelta as _td
+    from core import valuation
+    p, c = _mat("ZFG"), _mat("ZCP", price=100)
+    assert production.save_bom(p, 1, [production.BomLine(c, 1)], "", M1).ok
+    old = (_d.today() - _td(days=200)).isoformat()
+    recent = (_d.today() - _td(days=10)).isoformat()
+    assert services.register_transaction(c, "IN", 10, old, 100, warehouse_id=wh(), actor=M2).ok
+    assert services.register_transaction(c, "IN", 10, recent, 300, warehouse_id=wh(), actor=M2).ok
+    r = production.post(p, 10, wh(), TODAY, actor=CLERK, receipt_wh_id=wh())
+    assert r.ok, r.message
+    df, _ = valuation.report("2000-01-01", TODAY, "MAVG")
+    total = float(df["close_value"].sum() - 0)
+    zc = df.set_index("code")
+    assert abs(float(zc.loc["ZCP", "close_value"]) + float(zc.loc["ZFG", "close_value"]) - 4000) < 1   # 산 금액 그대로
+    assert abs(float(zc.loc["ZFG", "close_value"]) - 2000) < 1                                         # 평균 200 × 10
+    del total
+
+
+def test_production_return_is_not_a_purchase(fresh):
+    from core import valuation
+    p, c, pid, line = _wo("ZP7", "ZC7")
+    assert production.issue(pid, {line: 20}, TODAY, actor=CLERK).ok
+    assert production.issue(pid, {line: -5}, TODAY, actor=CLERK).ok
+    df, _ = valuation.report(TODAY, TODAY, "MAVG")
+    row = df.set_index("code").loc["ZC7"]
+    assert abs(float(row["receipts"]) - 100000) < 1                # 매입은 처음 100개 × 1,000 만
+    assert abs(float(row["issues"]) - 15000) < 1                   # 출고 20 − 반납 5 = 15개

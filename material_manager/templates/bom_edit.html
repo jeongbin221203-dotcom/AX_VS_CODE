@@ -23,7 +23,7 @@
     <input type="hidden" name="product" value="{{ pid }}">
     <input type="hidden" name="updated_at" value="{{ bom.updated_at if bom else '' }}">
     <div class="form-grid g3">
-      <label>기준 수량 ({{ mat.unit }}) *<input name="base_qty" type="number" min="0" step="any" value="{{ '%g' % (bom.base_qty if bom else 1) }}" required
+      <label>기준 수량 ({{ mat.unit }}) *<input name="base_qty" type="number" min="0" step="any" value="{{ ((bom.base_qty if bom else 1))|plain }}" required
         {{ 'disabled' if not editable }}><span class="hint">이만큼 만드는 데 드는 수량을 아래에 적습니다 (보통 1)</span></label>
       <label class="span2">메모<input name="note" value="{{ bom.note if bom else '' }}" {{ 'disabled' if not editable }}></label>
     </div>

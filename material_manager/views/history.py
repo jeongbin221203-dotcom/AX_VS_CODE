@@ -6,7 +6,7 @@ import pandas as pd
 from flask import Blueprint, flash, g, redirect, request, url_for
 
 import config
-from core import org, repository as repo, services
+from core import db, org, repository as repo, services
 from views.helpers import (Table, a_date, actor, as_id, f_str, form_response, log_export, page_arg, pager, render_page,
                            role_required, safe_next)
 
@@ -33,6 +33,18 @@ def _decorate(df: pd.DataFrame) -> pd.DataFrame:
     df["sap_status"] = df["sap_status"].map(config.SAP_STATUS).fillna("")
     df["sap_doc_no"] = df["sap_doc_no"].fillna("")
     return df
+
+
+def _pending_cancels() -> dict[int, int]:
+    """처리 중인 취소 요청: {거래 번호: 요청 번호}."""
+    import json
+    out = {}
+    for rid, payload in db.query_df("SELECT id, payload FROM approval_requests WHERE kind = 'CANCEL' AND status = 'PENDING'")            .itertuples(index=False):
+        try:
+            out[int(json.loads(payload or "{}")["tx_id"])] = int(rid)
+        except (ValueError, KeyError, TypeError):
+            continue
+    return out
 
 
 @bp.get("/")
@@ -69,12 +81,15 @@ def index():
     df, total, sums = repo.history_page(start.isoformat(), end.isoformat(), types, mats, scope,
                                         page=page_arg(), size=config.PAGE_SIZE, keyword=keyword)
     df = _decorate(df)
+    pending = _pending_cancels()                       # 처리 중인 취소 요청 → 상태에 표시하고 다시 요청 목록에서 뺀다
+    df["state"] = [s or (f"취소 요청 중(#{pending[int(i)]})" if int(i) in pending else "") for s, i in zip(df["state"], df["id"])]
     view = df[COLUMNS].rename(columns=RENAME)
     reversible = df[df["reversal_of"].isna() & df["reversed_by"].isna()]
+    requestable = reversible[~reversible["id"].astype(int).isin(pending)]
     return render_page(
         "history.html", "history", **{**ctx, "df": df},
         total=total, pager=pager(total, page_arg()), in_qty=sums["in_qty"], out_qty=sums["out_qty"],
-        reversible=reversible.to_dict("records"),
+        reversible=reversible.to_dict("records"), requestable=requestable.to_dict("records"),
         grid=Table(view, FMT, links=[url_for("documents.index", tx=int(i), start="2000-01-01")
                                      if c else None for i, c in zip(df["id"], df["doc_cnt"])],
                    tones=["muted" if s else None for s in df["state"]]),

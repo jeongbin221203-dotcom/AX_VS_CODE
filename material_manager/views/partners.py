@@ -4,13 +4,36 @@
 import pandas as pd
 from flask import Blueprint, abort, flash, g, redirect, request, url_for
 
-from core import audit, bulk, partners
+from core import audit, bulk, db, partners
 from views import bulk_ui
-from views.helpers import Table, actor, as_id, can, f_str, form_response, log_export, render_page, role_required
+from views.helpers import (Table, actor, as_id, can_master, f_str, form_response, log_export, master_required,
+                           page_arg, pager, render_page)
 
 bp = Blueprint("partners", __name__, url_prefix="/partners")
 
 TABS = [("list", "📋 거래처 목록"), ("unknown", "🧹 미등록 이름 정리"), ("merge", "🔀 중복 · 병합"), ("new", "➕ 거래처 등록")]
+
+
+BIG_OPTIONS = 300                       # 거래처가 이보다 많으면 고르기 대신 입력해서 찾기
+
+
+def _options() -> dict:
+    """연결·병합에서 고를 거래처. 많으면 datalist 하나('[코드] 이름')를 함께 쓰고 서버가 코드로 찾는다."""
+    opts = db.query_df("SELECT id, name, code FROM partners WHERE active = 1 ORDER BY name").to_dict("records")
+    return {"options": opts, "big_options": len(opts) > BIG_OPTIONS}
+
+
+def _pick(field: str):
+    """폼에서 고른 거래처: 번호(select) 또는 '[코드] 이름'(입력해서 찾기). 없으면 None."""
+    pid = as_id(f_str(field))
+    if pid is not None:
+        return pid
+    ref = f_str(field + "_ref")
+    code = ref[1:ref.index("]")] if ref.startswith("[") and "]" in ref else ref.strip()
+    if not code:
+        return None
+    row = db.query_df("SELECT id FROM partners WHERE UPPER(code) = ? OR name = ?", (code.upper(), ref.strip()))
+    return int(row.iloc[0]["id"]) if len(row) == 1 else None
 
 
 def _form() -> dict:
@@ -18,33 +41,36 @@ def _form() -> dict:
 
 
 def _tabs():
-    return TABS if can("MANAGER") else TABS[:2]
+    return TABS if can_master() else TABS[:2]
 
 
 
 @bp.get("/")
 def index():
     tab = request.args.get("tab", "list")
-    if tab in ("new", "merge") and not can("MANAGER"):
+    if tab in ("new", "merge") and not can_master():
         tab = "list"
     if tab == "merge":
         return render_page("partners.html", "partners", tabs=_tabs(), tab="merge", candidates=partners.merge_candidates(),
-                           options=partners.list_df()[["id", "name", "code"]].to_dict("records"))
+                           **_options())
     if tab == "new":
         return render_page("partners.html", "partners", tabs=_tabs(), tab="new", form={"kind": "SUPPLIER"})
     if tab == "unknown":
         df = partners.unknown_names()
         return render_page("partners.html", "partners", tabs=_tabs(), tab="unknown", unknown=df.to_dict("records"),
-                           options=partners.list_df()[["id", "name", "code"]].to_dict("records"))
+                           **_options())
     q = request.args.get("q", "").strip()[:60]
     inactive = request.args.get("inactive") == "1"
     df = partners.list_df(q, include_inactive=inactive, wh_ids=g.wh_ids)
-    view = _view(df)
     if request.args.get("export") == "xlsx":
+        view = _view(df)
         log_export("partners", len(view))
         return form_response("partners", view, "거래처.xlsx")
+    pg = pager(len(df), page_arg())                     # 화면은 100건씩 (내려받기는 전부)
+    df = df.iloc[pg["first"] - 1:pg["last"]] if len(df) else df
+    view = _view(df)
     return render_page("partners.html", "partners", tabs=_tabs(), tab="list", q=q, inactive=inactive,
-                       unknown_cnt=len(partners.unknown_names()),
+                       unknown_cnt=partners.unknown_count(), pg=pg,
                        grid=Table(view, {"입고금액": "₩{:,.0f}", "출고금액": "₩{:,.0f}", "거래 수": "{:,.0f}"},
                                   links=[url_for("partners.detail", pid=int(i)) for i in df["id"]] if len(df) else [],
                                   tones=["muted" if not a else None for a in df["active"]] if len(df) else []))
@@ -81,7 +107,7 @@ def detail(pid: int):
 
 
 @bp.post("/new")
-@role_required("MANAGER")
+@master_required
 def create():
     r = partners.create(_form(), actor(), code=f_str("code"))
     flash(r.message, "success" if r.ok else "error")
@@ -91,7 +117,7 @@ def create():
 
 
 @bp.post("/<int:pid>")
-@role_required("MANAGER")
+@master_required
 def update(pid: int):
     r = partners.update(pid, _form(), actor(), expected=f_str("updated_at") or None)
     flash(r.message, "success" if r.ok else "error")
@@ -99,7 +125,7 @@ def update(pid: int):
 
 
 @bp.post("/<int:pid>/active")
-@role_required("MANAGER")
+@master_required
 def set_active(pid: int):
     r = partners.set_active(pid, f_str("active") == "1", actor())
     flash(r.message, "success" if r.ok else "error")
@@ -107,15 +133,15 @@ def set_active(pid: int):
 
 
 @bp.post("/link")
-@role_required("MANAGER")
+@master_required
 def link():
     """미등록 이름 → 기존 거래처에 연결, 또는 그 이름으로 새 거래처 등록."""
     name = f_str("name")
     target = f_str("partner_id")
-    if target == "new":
+    if target == "new" or (not target and not f_str("partner_id_ref")):
         r = partners.create({"name": name, "kind": f_str("kind") or "SUPPLIER"}, actor())
-    elif as_id(target) is not None:
-        r = partners.link(name, as_id(target), actor())
+    elif _pick("partner_id") is not None:
+        r = partners.link(name, _pick("partner_id"), actor())
     else:
         flash("연결할 거래처를 고르세요.", "error")
         return redirect(url_for("partners.index", tab="unknown"))
@@ -124,7 +150,7 @@ def link():
 
 
 @bp.post("/alias/<int:alias_id>/delete")
-@role_required("MANAGER")
+@master_required
 def unlink(alias_id: int):
     r = partners.unlink(alias_id, actor())
     flash(r.message, "success" if r.ok else "error")
@@ -132,7 +158,7 @@ def unlink(alias_id: int):
 
 
 @bp.post("/<int:pid>/alias")
-@role_required("MANAGER")
+@master_required
 def add_alias(pid: int):
     r = partners.link(f_str("alias"), pid, actor())
     flash(r.message, "success" if r.ok else "error")
@@ -144,37 +170,37 @@ TITLE = "거래처 엑셀 일괄 등록"
 
 
 @bp.get("/import")
-@role_required("MANAGER")
+@master_required
 def import_page():
     return bulk_ui.page("partners", "partners", TITLE)
 
 
 @bp.get("/import/template.xlsx")
-@role_required("MANAGER")
+@master_required
 def import_template():
     return bulk_ui.template("partner_template", [["", "(주)대한팔레트", "공급처", "124-81-00998", "김구매", "051-000-0000",
                                                   "buy@example.com", "", "대한팔레트 부산지점, 대한PLT"]], "거래처_일괄등록_양식.xlsx")
 
 
 @bp.post("/import")
-@role_required("MANAGER")
+@master_required
 def import_upload():
     return bulk_ui.upload("partners", "partner_upload", bulk.preview_partners, url_for("partners.import_page"), "partners", TITLE)
 
 
 @bp.post("/import/apply")
-@role_required("MANAGER")
+@master_required
 def import_apply():
     return bulk_ui.apply("partners", bulk.apply_partners, url_for("partners.import_page"))
 
 
 @bp.post("/merge")
-@role_required("MANAGER")
+@master_required
 def merge():
-    src, dst = f_str("src"), f_str("dst")
-    if not (src.isdigit() and dst.isdigit()):
+    src, dst = _pick("src"), _pick("dst")
+    if src is None or dst is None:
         flash("합칠 거래처와 남길 거래처를 고르세요.", "error")
         return redirect(url_for("partners.index", tab="merge"))
-    r = partners.merge(int(src), int(dst), actor())
+    r = partners.merge(src, dst, actor())
     flash(r.message, "success" if r.ok else "error")
     return redirect(url_for("partners.detail", pid=r.id) if r.ok else url_for("partners.index", tab="merge"))

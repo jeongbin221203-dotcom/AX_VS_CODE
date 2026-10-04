@@ -184,6 +184,14 @@ def po_sap(po_id: int):
     return redirect(url_for("purchase.po_detail", po_id=po_id))
 
 
+@bp.post("/po/<int:po_id>/short-close")
+@role_required("MANAGER")
+def po_short_close(po_id: int):
+    result = purchasing.short_close_po(po_id, f_str("reason"), actor(), g.wh_ids)
+    flash(result.message, "success" if result.ok else "error")
+    return redirect(url_for("purchase.po_detail", po_id=po_id))
+
+
 @bp.post("/po/<int:po_id>/cancel")
 @role_required("MANAGER")
 def po_cancel(po_id: int):

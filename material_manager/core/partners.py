@@ -307,6 +307,12 @@ def _name_counts() -> pd.DataFrame:
         FROM ({_name_sources()}) s WHERE s.partner_id IS NULL GROUP BY name, src, kind""")
 
 
+def unknown_count() -> int:
+    """미등록 이름 수 (목록 화면 안내·데이터 점검) — 거래 전체를 훑으므로 60초 보관 (core/cache.py)."""
+    from core import cache
+    return cache.memo(("partners_unknown_cnt",), 60, lambda: len(unknown_names(limit=100000)))
+
+
 def unknown_names(limit: int = 300) -> pd.DataFrame:
     """마스터에 없는(연결도 안 된) 거래처 이름과 쓰인 횟수 — 데이터 정리 목록."""
     cols = ["name", "uses", "tx", "po", "mat", "last", "variants", "guess"]
@@ -326,16 +332,20 @@ def unknown_names(limit: int = 300) -> pd.DataFrame:
                      "mat": int(grp.loc[grp["src"] == "MAT", "n"].sum()), "last": grp["last"].max(),
                      "variants": " / ".join(sorted(by_name.index)[:4])})
     out = pd.DataFrame(rows, columns=cols[:-1])
-    out["guess"] = out["name"].map(_guess)
+    out = out.sort_values(["uses", "name"], ascending=[False, True]).head(limit)
+    active = list(db.query_df("SELECT id, name, name_key FROM partners WHERE active = 1").itertuples(index=False))
+    out["guess"] = out["name"].map(lambda n: _guess(n, active))
     return out.sort_values(["uses", "name"], ascending=[False, True]).head(limit).reset_index(drop=True)
 
 
-def _guess(name: str) -> str:
+def _guess(name: str, active=None) -> str:
     """비슷한 정식 거래처 (한쪽 이름이 다른 쪽을 포함) — 연결 후보로 보여 준다."""
     k = key(name)
     if len(k) < 2:
         return ""
-    for pid, pname, pk in db.query_df("SELECT id, name, name_key FROM partners WHERE active = 1").itertuples(index=False):
+    if active is None:
+        active = db.query_df("SELECT id, name, name_key FROM partners WHERE active = 1").itertuples(index=False)
+    for pid, pname, pk in active:
         if len(pk) >= 2 and (k in pk or pk in k):
             return f"{pid}|{pname}"
     return ""
@@ -461,16 +471,30 @@ def merge(src_id: int, dst_id: int, actor: dict | None) -> PResult:
 def merge_candidates() -> list[dict]:
     """병합 후보: 사업자번호가 같거나, 이름(표기 무시) 한쪽이 다른 쪽을 포함하는 사용 중인 거래처 쌍."""
     df = db.query_df("SELECT id, code, name, name_key, biz_no FROM partners WHERE active = 1 ORDER BY id").to_dict("records")
-    out = []
-    for i, a in enumerate(df):
-        for b in df[i + 1:]:
-            why = ""
-            if a["biz_no"] and a["biz_no"] == b["biz_no"]:
-                why = "사업자번호 같음"
-            elif min(len(a["name_key"]), len(b["name_key"])) >= 2 and (a["name_key"] in b["name_key"] or b["name_key"] in a["name_key"]):
-                why = "이름 비슷함"
-            if why:
-                out.append({"a": a, "b": b, "why": why})
+    # 모든 쌍을 비교하지 않는다(거래처 3천이면 450만 쌍): 사업자번호는 묶음으로, 이름은 '한 이름의 부분 글자 = 다른 이름'을 사전에서 찾는다
+    by_key: dict[str, list[dict]] = {}
+    by_biz: dict[str, list[dict]] = {}
+    for p in df:
+        if len(p["name_key"] or "") >= 2:
+            by_key.setdefault(p["name_key"], []).append(p)
+        if p["biz_no"]:
+            by_biz.setdefault(p["biz_no"], []).append(p)
+    pairs: dict[tuple[int, int], str] = {}
+    for grp in by_biz.values():
+        for i, a in enumerate(grp):
+            for b in grp[i + 1:]:
+                pairs[(a["id"], b["id"])] = "사업자번호 같음"
+    for b in df:
+        k = b["name_key"] or ""
+        if len(k) < 2:
+            continue
+        for n in range(2, len(k) + 1):                  # k 의 부분 글자 중 다른 거래처 이름과 같은 것
+            for i in range(len(k) - n + 1):
+                for a in by_key.get(k[i:i + n], ()):
+                    if a["id"] != b["id"]:
+                        pairs.setdefault((min(a["id"], b["id"]), max(a["id"], b["id"])), "이름 비슷함")
+    rows = {p["id"]: p for p in df}
+    out = [{"a": rows[x], "b": rows[y], "why": why} for (x, y), why in sorted(pairs.items())]
     return out[:100]
 
 

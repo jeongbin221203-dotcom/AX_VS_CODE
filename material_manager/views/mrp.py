@@ -5,8 +5,8 @@ from datetime import date, timedelta
 
 from flask import Blueprint, flash, g, redirect, request, url_for
 
-from core import db, mrp, services
-from views.helpers import (MAX_ID, Table, a_int, actor, as_id, can, f_float, f_str, form_response, log_export, render_page,
+from core import db, mrp
+from views.helpers import (MAX_ID, a_int, actor, as_id, can, f_float, f_str, form_response, log_export, render_page,
                            role_required)
 
 bp = Blueprint("mrp", __name__, url_prefix="/mrp")

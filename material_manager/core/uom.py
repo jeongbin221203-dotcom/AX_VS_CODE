@@ -13,7 +13,7 @@ import re
 import pandas as pd
 
 from core import audit, db
-from core.utils import now_str
+from core.utils import fmt_qty, now_str
 
 UNIT_RE = re.compile(r"[A-Za-z가-힣0-9._-]{1,12}")
 
@@ -93,7 +93,7 @@ def barcode_owner(conn, barcode: str) -> str:
 
 
 def describe(qty: float, unit: str, f: float, base_unit: str) -> str:
-    return f"{qty:,.4g} {unit}(={qty * f:,.4g} {base_unit})" if unit and f != 1 else ""
+    return f"{fmt_qty(qty)} {unit}(={fmt_qty(qty * f)} {base_unit})" if unit and f != 1 else ""
 
 
 def units_df(material_id: int) -> pd.DataFrame:

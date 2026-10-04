@@ -385,6 +385,11 @@
     const text = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].text : "";
     document.querySelectorAll("form[data-offline]").forEach(function (f) {
       if (f.elements[target]) f.elements[target].value = sel.value;
+      if (target === "material_id") {                    // 앞 자재의 단가·단위·로트가 남지 않게 (서버가 기준단가로 채움)
+        ["unit_price", "lot_no", "expiry_date", "po_line"].forEach(function (n) { if (f.elements[n]) f.elements[n].value = ""; });
+        const u = f.elements.unit;
+        if (u && u.tagName === "SELECT") { u.value = ""; u.disabled = true; u.title = "끊긴 동안 다른 자재는 기본 단위로만"; }
+      }
       const parts = (f.dataset.label || "").split(" · ");
       if (sel.name === "material" && parts.length >= 3) parts[1] = text;
       if (sel.name === "wh" && parts.length >= 3) parts[2] = text.split(" ")[0];

@@ -37,7 +37,7 @@
     <tbody>
     {% for d in demands %}
       <tr class="{{ 'tone-danger' if d.due_date < today().isoformat() }}"><td>{{ d.due_date }}</td><td>[{{ d.code }}] {{ d.name }}</td>
-        <td class="num">{{ '{:,.4g}'.format(d.qty) }} {{ d.unit }}</td><td>{{ d.note }}</td><td class="small">{{ d.created_by }} · {{ d.created_at[:10] }}</td>
+        <td class="num">{{ (d.qty)|qty }} {{ d.unit }}</td><td>{{ d.note }}</td><td class="small">{{ d.created_by }} · {{ d.created_at[:10] }}</td>
         <td><form class="inline" method="post" action="{{ url_for('mrp.demand_close', did=d.id) }}">{{ csrf() }}<input type="hidden" name="plant" value="{{ plant }}">
           <button class="btn btn-sm">닫기</button></form></td></tr>
     {% endfor %}
@@ -73,7 +73,7 @@
           <tr class="{{ 'tone-danger' if x.late else ('tone-muted' if x.status != 'OPEN') }}">
             <td>{% if x.status == 'OPEN' and can_run %}<input type="checkbox" name="plan" value="{{ x.id }}" checked aria-label="선택">{% endif %}</td>
             <td>{{ kind[x.kind] }}</td><td>{{ x.level }}</td><td>[{{ x.code }}] {{ x.name }}</td>
-            <td class="num">{{ '{:,.4g}'.format(x.qty) }} {{ x.unit }}</td>
+            <td class="num">{{ (x.qty)|qty }} {{ x.unit }}</td>
             <td>{{ x.order_date }}{{ ' (지연)' if x.late }}</td><td>{{ x.need_date }}</td><td class="num">{{ x.lead_time_days }}일</td>
             <td>{{ x.wh_code }}</td><td class="small">{{ x.pegging }}</td>
             <td>{{ '→ ' ~ x.ref if x.status != 'OPEN' else '' }}</td>

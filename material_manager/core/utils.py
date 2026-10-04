@@ -49,21 +49,65 @@ def clean_str_series(s: pd.Series, default: str = "") -> pd.Series:
 _FORMULA_START = ("=", "+", "-", "@", "\t", "\r")
 
 
+def fmt_qty(value, sep: bool = True, places: int = 4) -> str:
+    """수량 표시: 1,234.5 · 25,000 · 0.125 (지수 표기 1e+04 없이, 소수 places 자리까지, 끝의 0 은 뺀다).
+    sep=False 는 입력 칸 값 (쉼표 없이, 소수 6자리까지)."""
+    try:
+        v = float(value)
+    except (TypeError, ValueError):
+        return "" if value is None else str(value)
+    if v != v or v in (float("inf"), float("-inf")):
+        return ""
+    s = f"{v:,.{places}f}" if sep else f"{v:.6f}"
+    s = s.rstrip("0").rstrip(".") if "." in s else s
+    return "0" if s in ("-0", "") else s
+
+
 def neutralize_formula(value):
     if isinstance(value, str) and value.startswith(_FORMULA_START):
         return "'" + value
     return value
 
 
-def to_excel_bytes(sheets: Mapping[str, pd.DataFrame]) -> bytes:
+EXCEL_MAX_ROWS = 1_048_575                   # 시트 한 장에 넣을 수 있는 데이터 행 (머리글 제외)
+
+
+def to_csv_zip_bytes(sheets: Mapping[str, pd.DataFrame]) -> bytes:
+    """여러 표 → 표마다 CSV(UTF-8 BOM, 엑셀에서 바로 열림) 하나씩 담은 zip. 엑셀보다 몇 배 빠르고 행 수 제한이 없다.
+    엑셀로 열 때 수식이 실행되지 않게 글자 칸의 수식 시작 문자는 무력화한다."""
+    import zipfile
     buf = BytesIO()
-    with pd.ExcelWriter(buf, engine="openpyxl") as writer:
-        for sheet_name, df in sheets.items():
+    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as zf:
+        for name, df in sheets.items():
             safe = df.copy()
             for col in safe.columns:
                 if safe[col].dtype == object or pd.api.types.is_string_dtype(safe[col]):
                     safe[col] = safe[col].map(neutralize_formula)
-            safe.to_excel(writer, sheet_name=str(sheet_name)[:31], index=False)
+            zf.writestr(f"{name}.csv", safe.to_csv(index=False).encode("utf-8-sig"))
+    return buf.getvalue()
+
+
+def to_excel_bytes(sheets: Mapping[str, pd.DataFrame]) -> bytes:
+    """여러 표 → .xlsx. 서식 없이 값만 쓰는 빠른 방식(openpyxl write-only — pandas.to_excel 보다 몇 배 빠름).
+    글자 칸의 수식 시작 문자는 무력화하고, 한 시트에 다 안 들어가면 '이름 (2)' 시트로 나눈다."""
+    from openpyxl import Workbook
+    wb = Workbook(write_only=True)
+    for sheet_name, df in sheets.items():
+        safe = df.copy()
+        for col in safe.columns:
+            if safe[col].dtype == object or pd.api.types.is_string_dtype(safe[col]):
+                safe[col] = safe[col].map(neutralize_formula)
+        header = [str(c) for c in safe.columns]
+        rows = safe.astype(object).where(safe.notna(), None).values.tolist()
+        parts = [rows[i:i + EXCEL_MAX_ROWS] for i in range(0, len(rows), EXCEL_MAX_ROWS)] or [[]]
+        for n, part in enumerate(parts, 1):
+            name = str(sheet_name)[:31] if n == 1 else f"{str(sheet_name)[:25]} ({n})"
+            ws = wb.create_sheet(name)
+            ws.append(header)
+            for r in part:
+                ws.append(r)
+    buf = BytesIO()
+    wb.save(buf)
     return buf.getvalue()
 
 

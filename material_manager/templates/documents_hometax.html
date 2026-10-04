@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf, metric, tabs as tab_bar %}
+{% block content %}
+{{ tab_bar(tabs, tab) }}
+
+<p class="muted">국세청(홈택스)에 올라온 <strong>매입 전자세금계산서 목록</strong>과 이 시스템의 증빙·입고를 맞춰 봅니다.
+  빠진 증빙, 금액이 다른 증빙, 홈택스에 없는(취소됐거나 승인번호를 잘못 적은) 증빙을 찾습니다.
+  국세청에 직접 접속하지 않고, 올린 파일은 저장하지 않습니다(감사로그에 건수만).</p>
+
+<form class="card form" method="post" action="{{ url_for('documents.hometax_check') }}" enctype="multipart/form-data">
+  {{ csrf() }}
+  <ol class="small muted">
+    <li>홈택스 → 조회/발급 → 전자세금계산서 → <strong>목록조회</strong> → 매입 · 기간 선택 → 엑셀 내려받기</li>
+    <li>받은 파일을 엑셀에서 <strong>.xlsx</strong> 로 다시 저장(또는 CSV)해 아래에 올립니다. 머리글 줄 위치는 알아서 찾습니다.</li>
+  </ol>
+  <div class="toolbar">
+    <label class="grow">파일 (.xlsx · .csv)<input type="file" name="file" accept=".xlsx,.csv" required></label>
+    <label class="check"><input type="checkbox" name="export" value="1"> 결과를 엑셀로 받기</label>
+    <button class="btn btn-primary">🧾 대사</button>
+  </div>
+</form>
+
+{% if result %}
+  <h3>결과 — 작성일자 {{ result.start }} ~ {{ result.end }}</h3>
+  <div class="metrics m4">
+    {{ metric("일치", "{:,} 건".format(result.counts.MATCH)) }}
+    {{ metric("금액 다름", "{:,} 건".format(result.counts.AMOUNT), "수정세금계산서·입력 실수 확인", "down" if result.counts.AMOUNT else None) }}
+    {{ metric("증빙 없음", "{:,} 건".format(result.counts.MISSING), "증빙 등록 필요", "down" if result.counts.MISSING else None) }}
+    {{ metric("홈택스에 없음", "{:,} 건".format(result.counts.EXTRA), "취소·승인번호 오류 확인", "down" if result.counts.EXTRA else None) }}
+  </div>
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th>결과</th><th>작성일자</th><th>공급자</th><th>승인번호</th><th class="num">공급가액(홈택스)</th><th class="num">세액</th>
+      <th class="num">공급가액(증빙)</th><th class="num">세액</th><th>증빙 · 후보 입고</th></tr></thead>
+    <tbody>
+    {% for r in result.rows %}
+      <tr class="{{ {'AMOUNT': 'tone-danger', 'MISSING': 'tone-warn', 'EXTRA': 'tone-danger'}.get(r.result, '') }}">
+        <td>{{ results[r.result] }}</td><td>{{ r.write_date }}</td>
+        <td>{{ r.supplier }}{% if r.biz_no %} <span class="muted small">{{ r.biz_no }}</span>{% endif %}</td>
+        <td class="small mono">{{ r.approval_no }}</td>
+        <td class="num">{{ r.supply|krw if r.supply is not none }}</td><td class="num">{{ r.tax|krw if r.tax is not none }}</td>
+        <td class="num">{{ r.doc_supply|krw if r.doc_supply is not none }}</td><td class="num">{{ r.doc_tax|krw if r.doc_tax is not none }}</td>
+        <td class="small">
+          {% if r.doc_id %}<a href="{{ url_for('documents.detail', doc_id=r.doc_id) }}">증빙 #{{ r.doc_id }}</a>{% endif %}
+          {% if r.result == 'MISSING' %}
+            {% if r.candidate %}후보: {{ r.candidate }} · {% endif %}<a href="{{ url_for('documents.index', tab='new', doc_type='E_TAX_INVOICE',
+               approval_no=r.approval_no, supplier_biz_no=r.biz_no, supplier_name=r.supplier, supply_amount=r.supply|plain,
+               tax_amount=r.tax|plain, doc_issue_date=r.write_date) }}">증빙 등록 (내용 채워짐)</a>
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+{% endif %}
+{% endblock %}

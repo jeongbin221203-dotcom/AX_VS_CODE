@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import metric, table, download %}
+{% from "_macros.html" import metric, table, download, pager as pager_nav %}
 {% block content %}
 <form class="toolbar" method="get">
   <label>기준월<input type="month" name="ym" value="{{ ym }}"></label>
@@ -22,5 +22,6 @@
     <details><summary>보기</summary>{% for w in warnings %}<div class="small">{{ w }}</div>{% endfor %}</details></div>
 {% endif %}
 {{ table(grid, "이 기간에 평가할 재고가 없습니다.") }}
+{% if pg and pg.pages > 1 %}{{ pager_nav(pg) }}<p class="muted small">합계·엑셀 다운로드는 전체 자재 기준입니다.</p>{% endif %}
 {{ download(url_with(export='xlsx'), '⬇️ 재고평가 엑셀 다운로드') }}
 {% endblock %}

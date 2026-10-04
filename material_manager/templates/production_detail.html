@@ -3,7 +3,7 @@
 
 {% block content %}
 <p><a href="{{ url_for('production.index', tab='wo') }}">← 작업지시</a> · <a href="{{ url_for('production.index', tab='history') }}">생산 이력</a></p>
-<h2>{{ p.prod_no }} · [{{ p.code }}] {{ p.name }} {{ '{:,.4g}'.format(p.qty) }} {{ p.unit }}
+<h2>{{ p.prod_no }} · [{{ p.code }}] {{ p.name }} {{ (p.qty)|qty }} {{ p.unit }}
   <span class="badge">{{ status_label }}</span></h2>
 <p class="muted small">착수 {{ p.start_date or '-' }} · 완료 예정 {{ p.due_date or '-' }} · 부품 창고 {{ p.issue_wh }}{{ ' · 입고 창고 ' ~ p.receipt_wh if p.receipt_wh else ' · 완제품 입고 안 함' }}
   {{ ' · 작업지시 ' ~ p.work_order if p.work_order }}{{ ' · 원가센터 ' ~ p.cost_center if p.cost_center }} · 등록 {{ p.created_by }} {{ p.created_at[:16] }}</p>
@@ -22,11 +22,11 @@
       {% set diff = (p.material_cost or 0) - (p.planned_cost or 0) %}
       <div class="metric-value {{ 'down' if diff > 0.5 }}">{{ '+' if diff > 0 }}₩{{ '{:,.0f}'.format(diff) }}</div>
     {% else %}<div class="metric-value muted">완료 후</div><div class="metric-delta">투입이 끝나야 비교합니다</div>{% endif %}</div>
-  <div class="metric"><div class="metric-label">양품 · 불량</div><div class="metric-value">{{ '{:,.4g}'.format(p.good_qty or 0) }} · {{ '{:,.4g}'.format(p.scrap_qty or 0) }}</div></div>
+  <div class="metric"><div class="metric-label">양품 · 불량</div><div class="metric-value">{{ (p.good_qty or 0)|qty }} · {{ (p.scrap_qty or 0)|qty }}</div></div>
 </div>
 
 <h3>자재 (계획 대비 투입)</h3>
-{% if open_wo %}<form class="card form" method="post" action="{{ url_for('production.wo_issue', prod_id=p.id) }}">{{ csrf() }}{% endif %}
+{% if open_wo %}<form class="card form" method="post" action="{{ url_for('production.wo_issue', prod_id=p.id) }}" data-confirm="적힌 수량만큼 자재를 투입(음수는 반납)합니다. 계속할까요?">{{ csrf() }}{% endif %}
 <div class="table-wrap">
   <table class="data">
     <thead><tr><th>부품</th><th>창고</th><th class="num">계획</th><th class="num">투입</th><th class="num">남음</th><th class="num">투입 금액</th><th class="num">표준 금액</th>
@@ -35,12 +35,12 @@
     {% for l in wl %}
       <tr class="{{ 'tone-warn' if l.issued_qty > l.planned_qty + 0.0001 }}">
         <td>[{{ l.code }}] {{ l.name }}{{ ' · ' ~ l.note if l.note }}</td><td>{{ l.wh_code }}</td>
-        <td class="num">{{ '{:,.4g}'.format(l.planned_qty) }} {{ l.unit }}</td>
-        <td class="num">{{ '{:,.4g}'.format(l.issued_qty) }}</td>
-        <td class="num">{{ '{:,.4g}'.format(l.rest) if l.rest > 0 else '' }}</td>
+        <td class="num">{{ (l.planned_qty)|qty }} {{ l.unit }}</td>
+        <td class="num">{{ (l.issued_qty)|qty }}</td>
+        <td class="num">{{ (l.rest)|qty if l.rest > 0 else '' }}</td>
         <td class="num">₩{{ '{:,.0f}'.format(l.issued_cost) }}</td>
         <td class="num">₩{{ '{:,.0f}'.format(l.std_cost) }}</td>
-        {% if open_wo %}<td><input class="qty-input" name="line_{{ l.id }}" type="number" step="any" value="{{ '%g' % l.rest if l.rest > 0 else '' }}" aria-label="이번 투입"></td>{% endif %}
+        {% if open_wo %}<td><input class="qty-input" name="line_{{ l.id }}" type="number" step="any" value="{{ (l.rest)|plain if l.rest > 0 else '' }}" aria-label="이번 투입"></td>{% endif %}
       </tr>
     {% endfor %}
     </tbody>
@@ -68,14 +68,14 @@
     <tbody>
     {% for o in ops %}
       <tr class="{{ 'tone-muted' if o.status == 'DONE' }}">
-        <td>{{ o.seq }}</td><td>{{ o.op_name }}</td><td>{{ o.workcenter }}</td><td class="num">{{ '%g' % o.std_minutes }}</td>
+        <td>{{ o.seq }}</td><td>{{ o.op_name }}</td><td>{{ o.workcenter }}</td><td class="num">{{ (o.std_minutes)|plain }}</td>
         <td>{{ '완료' if o.status == 'DONE' else '대기' }}</td>
-        <td class="num">{{ '%g' % o.good_qty }}</td><td class="num">{{ '%g' % o.scrap_qty }}</td><td class="num">{{ '%g' % o.minutes }}</td><td>{{ o.worker }}</td>
+        <td class="num">{{ (o.good_qty)|plain }}</td><td class="num">{{ (o.scrap_qty)|plain }}</td><td class="num">{{ (o.minutes)|plain }}</td><td>{{ o.worker }}</td>
         {% if open_wo %}<td>
           <form class="inline" method="post" action="{{ url_for('production.wo_operation', prod_id=p.id, op_id=o.id) }}">{{ csrf() }}
-            <input class="qty-input" name="good_qty" type="number" min="0" step="any" value="{{ '%g' % (o.good_qty or p.qty) }}" aria-label="양품" title="양품">
-            <input class="qty-input" name="scrap_qty" type="number" min="0" step="any" value="{{ '%g' % o.scrap_qty }}" aria-label="불량" title="불량">
-            <input class="qty-input" name="minutes" type="number" min="0" step="any" value="{{ '%g' % (o.minutes or (o.std_minutes * p.qty)) }}" aria-label="작업 시간" title="작업 시간(분)">
+            <input class="qty-input" name="good_qty" type="number" min="0" step="any" value="{{ ((o.good_qty or p.qty))|plain }}" aria-label="양품" title="양품">
+            <input class="qty-input" name="scrap_qty" type="number" min="0" step="any" value="{{ (o.scrap_qty)|plain }}" aria-label="불량" title="불량">
+            <input class="qty-input" name="minutes" type="number" min="0" step="any" value="{{ ((o.minutes or (o.std_minutes * p.qty)))|plain }}" aria-label="작업 시간" title="작업 시간(분)">
             <input name="worker" value="{{ o.worker }}" placeholder="작업자" aria-label="작업자">
             <button class="btn btn-sm">{{ '고치기' if o.status == 'DONE' else '완료' }}</button>
           </form></td>{% endif %}
@@ -88,10 +88,10 @@
 
 {% if open_wo %}
 <h3>완료 (완제품 입고)</h3>
-<form class="card form" method="post" action="{{ url_for('production.wo_complete', prod_id=p.id) }}">
+<form class="card form" method="post" action="{{ url_for('production.wo_complete', prod_id=p.id) }}" data-confirm="작업지시를 완료하고 양품을 입고합니다(백플러시를 켰으면 남은 부품도 자동 투입). 되돌리려면 작업지시 전체를 취소해야 합니다. 계속할까요?">
   {{ csrf() }}
   <div class="form-grid g4">
-    <label>양품 *<input name="good_qty" type="number" min="0" step="any" value="{{ '%g' % p.qty }}" required></label>
+    <label>양품 *<input name="good_qty" type="number" min="0" step="any" value="{{ (p.qty)|plain }}" required></label>
     <label>불량<input name="scrap_qty" type="number" min="0" step="any" value="0"></label>
     <label>일자<input name="tx_date" type="date" value="{{ today().isoformat() }}" max="{{ today().isoformat() }}" {% if min_date %}min="{{ min_date }}"{% endif %}></label>
     <label class="check"><input type="checkbox" name="backflush" value="1" checked> 아직 투입 안 한 계획 수량은 지금 자동 투입 (백플러시)</label>

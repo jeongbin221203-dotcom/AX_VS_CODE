@@ -17,7 +17,7 @@
     {% if c.count %}
       {% if c.hint %}<p class="muted small">{{ c.hint }}</p>{% endif %}
       <ul class="quality-rows">
-        {% for label, link in c.rows %}<li><a href="{{ link }}">{{ label }}</a> <span class="muted small">고치러 가기 →</span></li>{% endfor %}
+        {% for label, link in c.rows %}<li>{% if link.startswith('/admin') and not can('ADMIN') %}{{ label }} <span class="muted small">(시스템관리자에게 요청)</span>{% else %}<a href="{{ link }}">{{ label }}</a> <span class="muted small">고치러 가기 →</span>{% endif %}</li>{% endfor %}
       </ul>
       {% if c.count > c.rows|length %}<p class="muted small">앞 {{ c.rows|length }}건만 보여 줍니다.</p>{% endif %}
     {% else %}<p class="muted small">문제 없음</p>{% endif %}

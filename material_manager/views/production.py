@@ -55,7 +55,7 @@ def index():
             log_export("wip", len(view))
             return form_response("wip", view, "재공품.xlsx")
         return render_page("production.html", "production", tabs=TABS, tab="wip", wip_total=float(df["wip_cost"].sum()),
-                           grid=Table(view, {"수량": "{:,.4g}", "재공 금액(투입)": "₩{:,.0f}", "표준 재료비": "₩{:,.0f}"},
+                           grid=Table(view, {"수량": "qty", "재공 금액(투입)": "₩{:,.0f}", "표준 재료비": "₩{:,.0f}"},
                                       links=[url_for("production.detail", prod_id=int(i)) for i in df["id"]],
                                       tones=["danger" if d and d < date.today().isoformat() else None for d in df["due_date"]]))
     if tab == "bom" and request.args.get("export") == "xlsx":       # BOM 전체 — 고쳐서 일괄 등록으로 다시 올린다
@@ -165,7 +165,7 @@ def detail(prod_id: int):
     actual_unit = (float(p["material_cost"] or 0) / float(p["good_qty"])) if p["good_qty"] else 0
     return render_page("production_detail.html", "production", p=p, wl=wl, ops=production.wo_ops(prod_id).to_dict("records"),
                        status_label=production.STATUS.get(p["status"], p["status"]), std_unit=std_unit, actual_unit=actual_unit,
-                       grid=Table(view, {"거래 ID": "{}", "수량": "{:,.4g}", "단가": "₩{:,.0f}", "금액": "₩{:,.0f}"},
+                       grid=Table(view, {"거래 ID": "{}", "수량": "qty", "단가": "₩{:,.0f}", "금액": "₩{:,.0f}"},
                                   tones=["muted" if s else None for s in view["상태"]]),
                        wh_opts=org.warehouse_options(g.wh_ids), can_cancel=can("MANAGER"), min_date=_min_date(),
                        open_wo=p["status"] in ("PLANNED", "RELEASED"))
@@ -262,7 +262,7 @@ def _wo_page(form: dict | None = None):
     return render_page("production.html", "production", tabs=TABS, tab="wo", show=show,
                        products=production.products_with_bom(), wh_opts=org.warehouse_options(g.wh_ids), f=form or {},
                        receipt_default=_receipt_default(org.warehouse_options(g.wh_ids)),
-                       grid=Table(view, {"수량": "{:,.4g}", "투입 금액": "₩{:,.0f}"},
+                       grid=Table(view, {"수량": "qty", "투입 금액": "₩{:,.0f}"},
                                   links=[url_for("production.detail", prod_id=int(i)) for i in df["id"]],
                                   tones=["danger" if s == "RELEASED" and d and d < date.today().isoformat() else None
                                          for s, d in zip(df["status"], df["due_date"])]))

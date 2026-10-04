@@ -1,6 +1,6 @@
 """내 화면 설정: 사이드바 메뉴 순서·즐겨찾기 저장 (사이드바 '메뉴 편집'이 부른다)."""
 
-from flask import Blueprint, g, jsonify, request
+from flask import Blueprint, g, jsonify
 
 from core import prefs
 from views.helpers import PINNED_MENU, f_str, menus_for_user

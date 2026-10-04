@@ -18,7 +18,7 @@ from core.utils import now_str
 
 PR_STATUS = {"PENDING": "결재 중", "APPROVED": "승인", "REJECTED": "반려", "ORDERED": "발주 완료", "CANCELLED": "취소"}
 PO_STATUS = {"PENDING_APPROVAL": "발주 결재 중", "OPEN": "발주", "PARTIAL": "부분 입고", "CLOSED": "입고 완료",
-             "CANCELLED": "취소"}
+             "SHORT_CLOSED": "잔량 종결", "CANCELLED": "취소"}
 
 
 @dataclass
@@ -241,7 +241,7 @@ def cancel_po(po_id: int, actor: dict, wh_ids=None) -> PResult:
         if po is None or (wh_ids is not None and po["warehouse_id"] not in wh_ids):
             return PResult(False, "발주가 없거나 권한 밖입니다.")
         if po["status"] not in ("PENDING_APPROVAL", "OPEN"):
-            return PResult(False, "입고가 시작된 발주는 취소할 수 없습니다(입고를 먼저 취소하세요).")
+            return PResult(False, "입고가 시작된 발주는 취소 대신 '잔량 종결'로 남은 수량을 더 받지 않게 끝냅니다.")
         if _received(conn, po["po_no"]):
             return PResult(False, "입고 기록이 있는 발주는 취소할 수 없습니다.")
         conn.execute("UPDATE purchase_orders SET status = 'CANCELLED' WHERE id = ?", (po_id,))
@@ -249,6 +249,27 @@ def cancel_po(po_id: int, actor: dict, wh_ids=None) -> PResult:
                      (now_str(), po["pr_id"]))
         audit.record(conn, actor, "PO_CANCEL", "purchase_order", po_id, {"po_no": po["po_no"]})
     return PResult(True, f"발주 {po['po_no']} 취소 — 구매요청은 다시 발주할 수 있는 상태가 됐습니다.", po_id)
+
+
+def short_close_po(po_id: int, reason: str, actor: dict, wh_ids=None) -> PResult:
+    """부분 입고된 발주를 끝낸다(남은 수량은 더 받지 않음 — 공급처 품절·발주 변경 등). 받은 입고는 그대로."""
+    reason = (reason or "").strip()
+    if not reason:
+        return PResult(False, "잔량 종결 사유를 입력하세요 (예: 공급처 단종으로 나머지 납품 불가).")
+    with db.transaction() as conn:
+        db.lock(conn, f"po:{po_id}")
+        po = conn.execute("SELECT * FROM purchase_orders WHERE id = ?", (po_id,)).fetchone()
+        if po is None or (wh_ids is not None and po["warehouse_id"] not in wh_ids):
+            return PResult(False, "발주가 없거나 권한 밖입니다.")
+        if po["status"] != "PARTIAL":
+            return PResult(False, "부분 입고 상태인 발주만 잔량 종결할 수 있습니다 (입고 전이면 발주 취소).")
+        items = conn.execute("SELECT line_no, qty FROM po_items WHERE po_id = ?", (po_id,)).fetchall()
+        rest = {int(it["line_no"]): round(float(it["qty"]) - _received(conn, po["po_no"], it["line_no"]), 6) for it in items}
+        conn.execute("UPDATE purchase_orders SET status = 'SHORT_CLOSED', note = ? WHERE id = ?",
+                     (((po["note"] or "") + f" [잔량 종결: {reason}]").strip()[:500], po_id))
+        audit.record(conn, actor, "PO_SHORT_CLOSE", "purchase_order", po_id,
+                     {"po_no": po["po_no"], "reason": reason, "rest": {k: v for k, v in rest.items() if v > 1e-9}})
+    return PResult(True, f"발주 {po['po_no']} 잔량 종결 — 남은 수량은 더 받지 않습니다 (입고 예정·MRP 에서 빠짐).", po_id)
 
 
 # ── 입고 연계 ───────────────────────────────────────────────
@@ -279,6 +300,13 @@ def receipt_problem(conn, po_no: str, po_item: str, material_id: int, warehouse_
     if qty > remaining * (1 + config.GR_OVER_TOLERANCE) + 1e-9:
         return f"발주 잔량({remaining:,.2f})보다 많이 입고할 수 없습니다."
     return ""
+
+
+def po_line_price(conn, po_no: str, po_item: str) -> float | None:
+    """이 시스템 발주 품목의 단가 (외부 구매오더면 None)."""
+    row = conn.execute("SELECT i.price FROM po_items i JOIN purchase_orders o ON o.id = i.po_id "
+                       "WHERE o.po_no = ? AND i.line_no = ?", (po_no, int(po_item) if str(po_item).isdigit() else -1)).fetchone()
+    return float(row["price"]) if row is not None else None
 
 
 def refresh_po_status(conn, po_no: str) -> None:

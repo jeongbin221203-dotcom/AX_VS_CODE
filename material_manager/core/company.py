@@ -103,7 +103,10 @@ def _parse(form: dict) -> tuple[dict, str]:
             out[k] = str(raw).strip()[:60]
             continue
         try:
-            val = int(str(raw).replace(",", "")) if kind == "int" else float(str(raw).replace(",", ""))
+            num = float(str(raw).replace(",", "").strip())          # '1,000,000' · '1e+06' 모두
+            if num != num or num in (float("inf"), float("-inf")):
+                raise ValueError
+            val = int(round(num)) if kind == "int" else num
         except ValueError:
             return {}, f"{label}: 숫자를 입력하세요."
         if minimum is not None and val < minimum:

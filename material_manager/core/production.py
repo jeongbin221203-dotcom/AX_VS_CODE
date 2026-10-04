@@ -21,7 +21,7 @@ from datetime import date, timedelta
 import pandas as pd
 
 from core import audit, db, org, purchasing, repository as repo, services
-from core.utils import now_str
+from core.utils import fmt_qty, now_str
 
 
 @dataclass
@@ -342,12 +342,12 @@ def _issue(conn, who: dict, pid: int, quantities: dict[int, float], tx_date: str
         else:                                                   # 반납: 남은 자재를 창고로 되돌린다
             back = -q
             if back > float(ln["issued_qty"]) + 1e-9:
-                return services.Result(False, f"{ln['code']} — 투입한 {float(ln['issued_qty']):,.4g}보다 많이 반납할 수 없습니다.")
+                return services.Result(False, f"{ln['code']} — 투입한 {fmt_qty(float(ln['issued_qty']))}보다 많이 반납할 수 없습니다.")
             price = float(ln["issued_cost"]) / float(ln["issued_qty"]) if float(ln["issued_qty"]) else 0.0
             for lot, part in _return_lots(conn, pid, int(ln["component_id"]), int(ln["wh_id"]), back):
                 out = services._register(conn, who, int(ln["component_id"]), "IN", part, tx_date, price, ref, "",
-                                         f"생산 반납 {p['prod_no']}", "", "", "", int(ln["wh_id"]), wh_ids, lot, "",
-                                         production_id=pid)
+                                         f"생산 반납 {p['prod_no']}", "", "", p["cost_center"] or "", int(ln["wh_id"]), wh_ids,
+                                         lot, "", production_id=pid)
                 if isinstance(out, services.Result):
                     return services.Result(False, f"{ln['code']} 반납 — {out.message}")
             cost = -back * price
@@ -422,7 +422,7 @@ def _complete(conn, who: dict, pid: int, good_qty: float, scrap_qty: float, tx_d
                                  production_id=pid)
         if isinstance(out, services.Result):
             return services.Result(False, f"완제품 입고 — {out.message}")
-        receipt = f" · {prod['code']} {good_qty:,.4g} {prod['unit']} 입고({out['wh']['code']}, 실제 단가 ₩{unit_cost:,.0f})"
+        receipt = f" · {prod['code']} {fmt_qty(good_qty)} {prod['unit']} 입고({out['wh']['code']}, 실제 단가 ₩{unit_cost:,.0f})"
     conn.execute("UPDATE productions SET status = 'DONE', good_qty = ?, scrap_qty = ?, material_cost = ?, completed_at = ?, "
                  "tx_date = ? WHERE id = ?", (good_qty, scrap_qty, cost, now_str(), tx_date, pid))
     conn.execute("UPDATE wo_operations SET status = 'DONE', good_qty = CASE WHEN good_qty = 0 THEN ? ELSE good_qty END, "
@@ -430,7 +430,7 @@ def _complete(conn, who: dict, pid: int, good_qty: float, scrap_qty: float, tx_d
                  (good_qty, now_str(), pid))
     audit.record(conn, who, "WO_COMPLETE", "production", pid,
                  {"prod_no": p["prod_no"], "good": good_qty, "scrap": scrap_qty, "cost": cost})
-    return f"완료 — 양품 {good_qty:,.4g} · 불량 {scrap_qty:,.4g} · 실제 재료비 ₩{cost:,.0f}{receipt}"
+    return f"완료 — 양품 {fmt_qty(good_qty)} · 불량 {fmt_qty(scrap_qty)} · 실제 재료비 ₩{cost:,.0f}{receipt}"
 
 
 def _run(fn, *args, **kw) -> services.Result:
@@ -489,7 +489,7 @@ def report_operation(pid: int, op_id: int, good: float, scrap: float, minutes: f
                      "done_at = ? WHERE id = ?", (good, scrap, minutes, worker.strip() or who["name"], note.strip(), now_str(), op_id))
         audit.record(conn, who, "WO_OPERATION", "production", pid,
                      {"prod_no": p["prod_no"], "op": op["op_name"], "good": good, "scrap": scrap, "minutes": minutes})
-    return services.Result(True, f"{op['op_name']} 실적 — 양품 {good:,.4g} · 불량 {scrap:,.4g}")
+    return services.Result(True, f"{op['op_name']} 실적 — 양품 {fmt_qty(good)} · 불량 {fmt_qty(scrap)}")
 
 
 def complete(pid: int, good_qty: float, scrap_qty: float, tx_date: str, *, actor: dict | None, wh_ids=None,
