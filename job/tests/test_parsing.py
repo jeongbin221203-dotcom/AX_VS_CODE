@@ -215,3 +215,19 @@ def test_body_salary_line_and_allowance_ranges():
 def test_foreign_location_is_abroad():
     assert parse_region("미국전체") == ("해외", None) and parse_region("유럽 폴란드") == ("해외", None)
     assert parse_region("인천 남동구") == ("인천", "남동구")
+
+
+def test_more_salary_wording():
+    assert salary.parse("화.목 5시부터 8시30분 시급 25.000원")[:2] == (6270, 6270)     # 25.000 = 25,000, '5시부터' 는 이상 아님
+    assert salary.parse("정규직 380부터")[:2] == (4560, None)
+    assert salary.parse("o 연봉 : 경력에 따른 협의 ( 정규 근무시 실 수령액 280 만원 이상 ~)")[:2] == (3360, None)   # 실수령은 월
+    assert salary.parse("- 연봉 : 기본 3,064만원 이상 + 인센티브 1년간 평균 250만원 지급")[:2] == (3064, None)
+    from core.normalize import parse_employment
+    assert parse_employment("파트 자격요건 1건 자격요건") == "파트타임"
+
+
+def test_big_amount_not_hourly_and_tiny_dropped():
+    assert salary.parse("기본급 2,156,880원 + 만근수당 170,000원 / 특근시급 15,480원")[:2] == (2588, 2588)
+    assert salary.parse("시급 60,000 원")[:2] == (None, None)                  # 진짜 높은 시급은 그대로 원문 표시
+    assert salary.parse("- 최저 NET 280 + 충격파인센 5%, 메뉴얼 7분당 1,000원")[:2] == (None, None)
+    assert salary.parse("월급 50 만원 (주 7시간)")[:2] == (600, 600)
