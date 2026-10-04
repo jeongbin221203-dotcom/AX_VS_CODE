@@ -28,7 +28,7 @@ from typing import Any, Iterable, Optional
 import pandas as pd
 
 from . import database
-from .database import days_between, days_since, get_conn, lock  # noqa: F401 - 다른 모듈이 db.get_conn 으로 쓴다
+from .database import days_between, days_since, get_conn, lock, transaction  # noqa: F401 - 다른 모듈이 db.get_conn 으로 쓴다
 
 # ----------------------------------------------------------------------------
 # 설정 / 공통 상수

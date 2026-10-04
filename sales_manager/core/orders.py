@@ -135,29 +135,26 @@ def deliver(order_id: int, quantities: dict[int, int], sale_date: Optional[str] 
         if qty > int(items[iid]["remain"]):
             raise ValueError(f"'{items[iid]['item_name']}' 납품 수량({qty})이 잔량({items[iid]['remain']})을 넘습니다.")
     sale_ids = []
-    for iid, qty in todo.items():
-        with db.get_conn() as conn:          # 잔량 선점 — 동시에 두 번 납품해도 넘치지 않게
-            ok = conn.execute("UPDATE sales_order_items SET delivered_qty = delivered_qty + ? WHERE id=? "
-                              "AND qty - delivered_qty - cancelled_qty >= ?", (qty, iid, qty)).rowcount
-        if not ok:
-            raise db.ConflictError("그 사이 다른 납품이 등록되어 잔량이 바뀌었습니다. 새로고침 후 다시 입력하세요.")
-        it = items[iid]
-        try:
+    # 여러 품목 납품(잔량 차감 + 품목별 매출)을 한 트랜잭션으로 — 두 번째 품목에서 실패하면 첫 품목 매출도 되돌린다
+    with db.transaction():
+        for iid, qty in todo.items():
+            with db.get_conn() as conn:          # 잔량 선점 — 동시에 두 번 납품해도 넘치지 않게
+                ok = conn.execute("UPDATE sales_order_items SET delivered_qty = delivered_qty + ? WHERE id=? "
+                                  "AND qty - delivered_qty - cancelled_qty >= ?", (qty, iid, qty)).rowcount
+            if not ok:
+                raise db.ConflictError("그 사이 다른 납품이 등록되어 잔량이 바뀌었습니다. 새로고침 후 다시 입력하세요.")
+            it = items[iid]
             sid = db.upsert_sale({
                 "customer_id": o["customer_id"], "deal_id": o["deal_id"], "sale_date": sale_date, "item": it["item_name"],
                 "item_code": it["item_code"], "product_id": it["product_id"], "qty": qty, "unit_price": it["unit_price"],
                 "amount": qty * int(it["unit_price"]), "tax_type": it["tax_type"], "owner_id": o["owner_id"],
                 "quote_id": o["quote_id"], "entity_id": o["entity_id"], "currency": o.get("currency") or "KRW",
                 "fx_rate": o.get("fx_rate") or 1, "memo": f"수주 {o['order_no']}"})
-        except Exception:
             with db.get_conn() as conn:
-                conn.execute("UPDATE sales_order_items SET delivered_qty = delivered_qty - ? WHERE id=?", (qty, iid))
-            raise
-        with db.get_conn() as conn:
-            conn.execute("UPDATE sales SET order_id=?, order_item_id=? WHERE id=?", (int(order_id), iid, sid))
-        sale_ids.append(sid)
-    _refresh_status(int(order_id))
-    db.audit("납품", "매출", None, {"수주번호": o["order_no"], "매출": sale_ids, "수량": todo})
+                conn.execute("UPDATE sales SET order_id=?, order_item_id=? WHERE id=?", (int(order_id), iid, sid))
+            sale_ids.append(sid)
+        _refresh_status(int(order_id))
+        db.audit("납품", "매출", None, {"수주번호": o["order_no"], "매출": sale_ids, "수량": todo})
     return sale_ids
 
 

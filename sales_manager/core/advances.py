@@ -60,12 +60,9 @@ def apply_to_sale(sale_id: int, amount: Optional[int] = None, day: Optional[str]
     use = min(int(amount) if amount else remain, remain, balance(int(sale["customer_id"])))
     if use <= 0:
         raise ValueError("배분할 선수금이나 미수금이 없습니다.")
-    add(int(sale["customer_id"]), use, "배분", day, sale_id=int(sale_id), memo=f"매출 #{sale_id} 에 배분")
-    try:
+    with db.transaction():                    # 선수금 차감과 매출 입금을 함께 (한쪽만 남지 않게)
+        add(int(sale["customer_id"]), use, "배분", day, sale_id=int(sale_id), memo=f"매출 #{sale_id} 에 배분")
         ent.record_payment(int(sale_id), use, source="선수금", pay_date=day, method="상계", memo="선수금 배분")
-    except Exception:
-        add(int(sale["customer_id"]), use, "입금", day, memo=f"매출 #{sale_id} 배분 실패 되돌림")
-        raise
     return use
 
 
@@ -79,26 +76,28 @@ def receive(customer_id: int, amount: int, day: Optional[str] = None, method: st
     if left <= 0:
         raise ValueError("입금액은 0보다 커야 합니다.")
     day = db._d(day) or date.today().isoformat()
-    sql = ("SELECT id, COALESCE(total_amount, amount) - COALESCE(paid_amount, 0) AS remain FROM sales "
-           "WHERE customer_id=? AND status NOT IN ('입금완료', ?) AND COALESCE(total_amount, amount) > 0")
-    params: list = [int(customer_id), db.SALE_CANCELLED]
-    if sale_ids:
-        sql += f" AND id IN ({','.join('?' * len(sale_ids))})"
-        params += [int(i) for i in sale_ids]
-    open_sales = db._df(sql + " ORDER BY COALESCE(due_date, sale_date), id", params).to_dict("records")
-    applied = []
-    for s in open_sales:
-        if left <= 0:
-            break
-        use = min(left, int(s["remain"]))
-        if use <= 0:
-            continue
-        ent.record_payment(int(s["id"]), use, pay_date=day, method=method, ref_no=ref_no, memo=memo or "일괄 입금")
-        applied.append({"매출": int(s["id"]), "금액": use})
-        left -= use
-    if left:
-        add(int(customer_id), left, "입금", day, method=method, ref_no=ref_no, memo=memo or "매출에 배분하지 않은 입금")
-    db.audit("일괄입금", "거래처", int(customer_id), {"입금액": int(amount), "배분": applied, "선수금": left})
+    # 여러 매출 입금 + 남은 선수금을 한 트랜잭션으로 — 중간에 실패하면 일부만 입금된 채 남지 않는다
+    with db.transaction():
+        sql = ("SELECT id, COALESCE(total_amount, amount) - COALESCE(paid_amount, 0) AS remain FROM sales "
+               "WHERE customer_id=? AND status NOT IN ('입금완료', ?) AND COALESCE(total_amount, amount) > 0")
+        params: list = [int(customer_id), db.SALE_CANCELLED]
+        if sale_ids:
+            sql += f" AND id IN ({','.join('?' * len(sale_ids))})"
+            params += [int(i) for i in sale_ids]
+        open_sales = db._df(sql + " ORDER BY COALESCE(due_date, sale_date), id", params).to_dict("records")
+        applied = []
+        for s in open_sales:
+            if left <= 0:
+                break
+            use = min(left, int(s["remain"]))
+            if use <= 0:
+                continue
+            ent.record_payment(int(s["id"]), use, pay_date=day, method=method, ref_no=ref_no, memo=memo or "일괄 입금")
+            applied.append({"매출": int(s["id"]), "금액": use})
+            left -= use
+        if left:
+            add(int(customer_id), left, "입금", day, method=method, ref_no=ref_no, memo=memo or "매출에 배분하지 않은 입금")
+        db.audit("일괄입금", "거래처", int(customer_id), {"입금액": int(amount), "배분": applied, "선수금": left})
     return {"applied": applied, "advance": left}
 
 

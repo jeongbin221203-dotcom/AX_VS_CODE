@@ -164,6 +164,8 @@ def test_erp_file_adapter_and_failures(app, monkeypatch):
 
 class _FakeSap(BaseHTTPRequestHandler):
     calls: list = []
+    orders: dict = {}          # PurchaseOrderByCustomer → SalesOrder (이미 만든 오더 찾기용)
+    slow_once: bool = False    # True 면 오더를 만든 뒤 응답을 늦게 보내 클라이언트가 시간 초과로 끊게 한다
 
     def log_message(self, *args):   # noqa: D401 - 테스트 출력 억제
         pass
@@ -182,6 +184,11 @@ class _FakeSap(BaseHTTPRequestHandler):
         if self.headers.get("x-csrf-token") == "Fetch":
             return self._reply(200, {"d": {"results": []}},
                                {"x-csrf-token": "TOKEN123", "Set-Cookie": "SAP_SESSIONID=abc; Path=/"})
+        if "$filter=" in self.path:
+            from urllib.parse import unquote
+            ref = unquote(self.path).split("PurchaseOrderByCustomer eq '")[1].split("'")[0]
+            hit = _FakeSap.orders.get(ref)
+            return self._reply(200, {"d": {"results": [{"SalesOrder": hit}] if hit else []}})
         return self._reply(400)
 
     def _body(self):
@@ -194,7 +201,13 @@ class _FakeSap(BaseHTTPRequestHandler):
             return self._reply(403, {"error": {"message": {"value": "CSRF token validation failed"}}})
         if not body.get("SoldToParty"):
             return self._reply(400, {"error": {"message": {"value": "Sold-to party missing"}}})
-        return self._reply(201, {"d": {"SalesOrder": "5000001"}})
+        number = str(5000001 + len(_FakeSap.orders))
+        _FakeSap.orders[body.get("PurchaseOrderByCustomer")] = number
+        if _FakeSap.slow_once:
+            _FakeSap.slow_once = False
+            import time
+            time.sleep(2)                       # SAP 는 만들었지만 응답이 늦음
+        return self._reply(201, {"d": {"SalesOrder": number}})
 
     def do_PATCH(self):
         _FakeSap.calls.append(("PATCH", self.path, dict(self.headers), self._body()))
@@ -212,6 +225,7 @@ def test_sap_odata_adapter_against_mock(app, monkeypatch):
         monkeypatch.setenv("SALES_SAP_CLIENT", "100")
         with db.get_conn() as conn:
             conn.execute("UPDATE erp_outbox SET status='취소' WHERE status IN ('대기','실패')")
+        _FakeSap.orders.clear()
         _, sid = _new_sale(item_code="MAT-9", erp_code="C777")
         assert erp.process_outbox()["sent"] == 1
         assert db.get_sale(sid)["erp_doc_no"] == "5000001"
@@ -228,6 +242,20 @@ def test_sap_odata_adapter_against_mock(app, monkeypatch):
         erp.process_outbox()
         patch_call = next(c for c in _FakeSap.calls if c[0] == "PATCH")
         assert "SalesOrder='5000001'" in patch_call[1] and patch_call[3]["SalesDocumentRjcnReason"] == "Z1"
+
+        # 응답 시간 초과: SAP 에는 오더가 생겼는데 CRM 은 '실패' → 다시 보낼 때 새로 만들지 않고 찾은 번호를 쓴다
+        monkeypatch.setenv("SALES_ERP_TIMEOUT", "1")
+        _, sid2 = _new_sale(item_code="MAT-9", erp_code="C777")
+        _FakeSap.slow_once = True
+        assert erp.process_outbox()["failed"] == 1
+        import time
+        time.sleep(2.5)                         # 가짜 서버(한 줄씩 처리)가 늦은 응답을 끝낼 때까지
+        with db.get_conn() as conn:             # 실패 건은 다음 순번에 다시 보낸다 (테스트에서는 바로)
+            conn.execute("UPDATE erp_outbox SET status='실패' WHERE status='전송중'")
+        posts_before = sum(1 for c in _FakeSap.calls if c[0] == "POST")
+        assert erp.process_outbox()["sent"] == 1
+        assert sum(1 for c in _FakeSap.calls if c[0] == "POST") == posts_before          # 두 번째 오더 없음
+        assert db.get_sale(sid2)["erp_doc_no"] == _FakeSap.orders[f"CRM-{sid2}"]
     finally:
         server.shutdown()
 

@@ -95,28 +95,31 @@ def create(sale_id: int, kind: str, reason: str, qty: Optional[int] = None, new_
     periods.check(day, "반품·정정")
     if day < orig["sale_date"]:
         raise ValueError("반품·정정 일자는 원매출 일자보다 빠를 수 없습니다.")
-    unit_now = current_unit_price(orig)                 # 원단가 + 지금까지 정정한 차액 (정정·반품은 이 단가 기준)
-    if kind == "반품":
-        qty = int(qty or 0)
-        can = returnable_qty(orig)
-        if not 1 <= qty <= can:
-            raise ValueError(f"반품 수량은 1 ~ {can} 사이여야 합니다 (원수량 {orig['qty']}, 이미 반품 {int(orig['qty']) - can}).")
-        sid = _insert(orig, "반품", -qty, unit_now, reason.strip(), day)
-    else:
-        if new_unit_price is None or int(new_unit_price) < 0:
-            raise ValueError("정정할 단가를 입력하세요.")
-        delta = int(new_unit_price) - unit_now
-        if delta == 0:
-            raise ValueError("단가가 같습니다.")
-        qty_now = returnable_qty(orig)                       # 반품되지 않은 수량에만 정정 적용
-        if qty_now <= 0:
-            raise ValueError("남은 수량이 없습니다.")
-        sid = _insert(orig, "정정", qty_now, delta, f"단가 {unit_now:,} → {int(new_unit_price):,} · {reason.strip()}",
-                      day)
-    row = db.get_sale(sid)
-    settle = _settle_credit(orig, -int(row["total_amount"]), day, sid) if int(row["total_amount"]) < 0 else {}
-    db.audit(kind, "매출", int(orig["id"]), {"반품·정정매출": sid, "수량": row["qty"], "합계": row["total_amount"],
-                                             "사유": reason.strip(), **settle})
+    # 반품 행 · 원매출 상계 입금 · 선수금(반품초과)을 한 트랜잭션으로 — 중간에 실패하면 모두 되돌린다
+    with db.transaction() as conn:
+        db.lock(conn, f"sale-adjust-{int(orig['id'])}")      # 같은 매출에 동시에 반품해 수량이 넘치지 않게
+        unit_now = current_unit_price(orig)                 # 원단가 + 지금까지 정정한 차액 (정정·반품은 이 단가 기준)
+        if kind == "반품":
+            qty = int(qty or 0)
+            can = returnable_qty(orig)
+            if not 1 <= qty <= can:
+                raise ValueError(f"반품 수량은 1 ~ {can} 사이여야 합니다 (원수량 {orig['qty']}, 이미 반품 {int(orig['qty']) - can}).")
+            sid = _insert(orig, "반품", -qty, unit_now, reason.strip(), day)
+        else:
+            if new_unit_price is None or int(new_unit_price) < 0:
+                raise ValueError("정정할 단가를 입력하세요.")
+            delta = int(new_unit_price) - unit_now
+            if delta == 0:
+                raise ValueError("단가가 같습니다.")
+            qty_now = returnable_qty(orig)                       # 반품되지 않은 수량에만 정정 적용
+            if qty_now <= 0:
+                raise ValueError("남은 수량이 없습니다.")
+            sid = _insert(orig, "정정", qty_now, delta, f"단가 {unit_now:,} → {int(new_unit_price):,} · {reason.strip()}",
+                          day)
+        row = db.get_sale(sid)
+        settle = _settle_credit(orig, -int(row["total_amount"]), day, sid) if int(row["total_amount"]) < 0 else {}
+        db.audit(kind, "매출", int(orig["id"]), {"반품·정정매출": sid, "수량": row["qty"], "합계": row["total_amount"],
+                                                 "사유": reason.strip(), **settle})
     return {"sale_id": sid, "total": int(row["total_amount"]), **settle}
 
 

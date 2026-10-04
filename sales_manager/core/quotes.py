@@ -246,6 +246,12 @@ def send(quote_id: int) -> None:
         if role and not (deal.get("approval_status") == "승인" and db.approval_covers(deal)):
             raise ValueError(f"할인 {float(deal['discount_rate']):.1f}% 는 {db.ROLE_LABEL[role]} 결재가 필요합니다. "
                              f"견적 조건을 영업기회에 반영했으니, 영업기회에서 할인 결재를 받은 뒤 발송하세요.")
+    else:
+        # 할인 결재는 영업기회 단위로 받는다 → 결재가 필요한 할인인데 영업기회가 없으면 결재 없이 나가지 않게 막는다
+        role = db.required_approval_role(q.get("discount_rate"))
+        if role:
+            raise ValueError(f"할인 {float(q['discount_rate']):.1f}% 는 {db.ROLE_LABEL[role]} 결재가 필요합니다. "
+                             f"견적에 영업기회를 연결하고 그 영업기회에서 할인 결재를 받은 뒤 발송하세요.")
     with db.get_conn() as conn:
         if conn.execute("UPDATE quotes SET status='발송', sent_at=?, updated_at=?, row_version=COALESCE(row_version,0)+1 "
                         "WHERE id=? AND status='작성중'", (db._now(), db._now(), quote_id)).rowcount == 0:

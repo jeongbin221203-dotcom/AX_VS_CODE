@@ -14,6 +14,8 @@ PostgreSQL 일 때 이 계층이 다음을 바꿔 준다.
 from __future__ import annotations
 
 import atexit
+import contextvars
+import itertools
 import os
 import re
 import sqlite3
@@ -250,12 +252,48 @@ def bulk_load():
             keep.close()
 
 
+_OUTER: contextvars.ContextVar[Optional[tuple]] = contextvars.ContextVar("sales_outer_tx", default=None)
+_SAVEPOINTS = itertools.count(1)
+
+
+@contextmanager
+def transaction(db_path: str | None = None):
+    """여러 단계를 한 트랜잭션으로 — 안에서 부르는 get_conn() 은 같은 커넥션을 쓰고(저장점), 끝까지 성공해야 한 번에 커밋.
+    중간에 예외가 나면 앞 단계까지 모두 되돌린다 (분할 납품·반품·선수금 입금·대손 결재가 일부만 저장되지 않게)."""
+    outer = _OUTER.get()
+    if outer and outer[0] == (db_path or None):
+        with get_conn(db_path) as conn:          # 이미 바깥 트랜잭션 안 → 저장점으로
+            yield conn
+        return
+    with get_conn(db_path) as conn:
+        if not conn.pg:
+            conn.execute("BEGIN IMMEDIATE")      # 처음부터 쓰기 잠금 (나중에 읽기→쓰기로 올리다 막히지 않게)
+        token = _OUTER.set((db_path or None, conn))
+        try:
+            yield conn
+        finally:
+            _OUTER.reset(token)
+
+
 @contextmanager
 def get_conn(db_path: str | None = None):
     """커밋/롤백/반납을 보장하는 커넥션 컨텍스트 매니저.
 
     db_path 는 SQLite 전용 (테스트·배치에서 다른 파일을 가리킬 때). PostgreSQL 이면 풀에서 빌린다.
+    transaction() 안이면 새 커넥션 대신 바깥 커넥션의 저장점(SAVEPOINT)을 쓴다 — 커밋은 바깥이 한다.
     """
+    outer = _OUTER.get()
+    if outer and outer[0] == (db_path or None):
+        conn, name = outer[1], f"sp_{next(_SAVEPOINTS)}"
+        conn.execute(f"SAVEPOINT {name}")
+        try:
+            yield conn
+        except BaseException:
+            conn.execute(f"ROLLBACK TO SAVEPOINT {name}")   # 이 단계만 되돌림 (잡아서 넘기는 오류 뒤에도 계속 쓸 수 있게)
+            conn.execute(f"RELEASE SAVEPOINT {name}")
+            raise
+        conn.execute(f"RELEASE SAVEPOINT {name}")
+        return
     if is_pg() and not db_path:
         with _get_pool().connection() as raw:
             conn = Connection(raw, True)
@@ -290,7 +328,7 @@ def lock(conn: Connection, name: str) -> None:
     """트랜잭션 범위의 배타 잠금 (감사로그 해시 체인·스케줄러 리더 선출 등)."""
     if conn.pg:
         conn.execute("SELECT pg_advisory_xact_lock(hashtext(?))", (name,))
-    else:
+    elif not conn.raw.in_transaction:       # transaction() 안이면 이미 BEGIN IMMEDIATE 로 쓰기 잠금을 가짐
         conn.execute("BEGIN IMMEDIATE")
 
 

@@ -7,7 +7,8 @@
                                     (PostgreSQL advisory lock)
 
 실패한 작업은 1·2·4·8…분 간격으로 max_attempts 까지 다시 시도하고, 끝내 실패하면 관리자에게 알린다.
-워커가 죽어 '실행중' 으로 남은 작업은 STALE_MINUTES 뒤 다시 대기로 돌린다.
+실행 중인 작업은 LEASE_SECONDS 마다 잠금 시각을 갱신한다 → 오래 걸리는 작업(백업 등)을 다른 서버가 '죽은 작업'으로 보고
+두 번 실행하지 않는다. 워커가 죽어 갱신이 멈춘 작업만 STALE_MINUTES 뒤 다시 대기로 돌린다.
 """
 from __future__ import annotations
 
@@ -15,6 +16,7 @@ import json
 import logging
 import os
 import socket
+import threading
 import time
 import traceback
 from dataclasses import dataclass
@@ -25,7 +27,8 @@ from . import database
 from . import sales_db as db
 
 LOG = logging.getLogger("sales.jobs")
-STALE_MINUTES = 30
+STALE_MINUTES = 10                  # 잠금 갱신이 이만큼 멈추면 워커가 죽은 것으로 본다
+LEASE_SECONDS = 60                  # 실행 중 잠금 갱신 간격
 HANDLERS: dict[str, Callable[[dict], Any]] = {}
 FMT = "%Y-%m-%d %H:%M:%S"
 
@@ -117,13 +120,43 @@ def claim(worker: str) -> Optional[dict]:
 
 
 def _finish(job: dict, status: str, result: Any = None, error: str | None = None,
-            run_after: Optional[datetime] = None) -> None:
+            run_after: Optional[datetime] = None) -> bool:
+    """잠금을 가진 워커만 결과를 쓴다 (잠금을 잃었는데 덮어쓰면 다른 워커의 실행 상태가 지워진다)."""
     with db.get_conn() as conn:
-        conn.execute("UPDATE jobs SET status=?, result=?, last_error=?, finished_at=?, run_after=?, "
-                     "locked_by=NULL, locked_at=NULL WHERE id=?",
-                     (status, json.dumps(result, ensure_ascii=False, default=str) if result is not None else None,
-                      error, _ts(_now()) if status in ("완료", "실패") else None,
-                      _ts(run_after or _now()), job["id"]))
+        done = conn.execute("UPDATE jobs SET status=?, result=?, last_error=?, finished_at=?, run_after=?, "
+                            "locked_by=NULL, locked_at=NULL WHERE id=? AND status='실행중' AND locked_by=?",
+                            (status, json.dumps(result, ensure_ascii=False, default=str) if result is not None else None,
+                             error, _ts(_now()) if status in ("완료", "실패") else None,
+                             _ts(run_after or _now()), job["id"], job["locked_by"])).rowcount
+    if not done:
+        LOG.warning("job %s %s: 잠금을 잃어 결과를 기록하지 않음", job["id"], job["kind"])
+    return bool(done)
+
+
+class _Lease:
+    """실행하는 동안 LEASE_SECONDS 마다 locked_at 을 갱신한다."""
+
+    def __init__(self, job: dict):
+        self.job, self.stop = job, threading.Event()
+        self.thread = threading.Thread(target=self._run, name=f"job-lease-{job['id']}", daemon=True)
+
+    def _run(self) -> None:
+        while not self.stop.wait(LEASE_SECONDS):
+            try:
+                with db.get_conn() as conn:
+                    kept = conn.execute("UPDATE jobs SET locked_at=? WHERE id=? AND status='실행중' AND locked_by=?",
+                                        (_ts(_now()), self.job["id"], self.job["locked_by"])).rowcount
+                if not kept:
+                    return
+            except Exception:   # noqa: BLE001 - 갱신 실패는 다음 간격에 다시
+                LOG.exception("job lease renew failed")
+
+    def __enter__(self):
+        self.thread.start()
+        return self
+
+    def __exit__(self, *exc) -> None:
+        self.stop.set()
 
 
 def run_one(worker: Optional[str] = None) -> bool:
@@ -139,7 +172,8 @@ def run_one(worker: Optional[str] = None) -> bool:
     try:
         if fn is None:
             raise LookupError(f"등록되지 않은 작업 종류입니다: {job['kind']}")
-        result = fn(json.loads(job["payload"] or "{}"))
+        with _Lease(job):
+            result = fn(json.loads(job["payload"] or "{}"))
         _finish(job, "완료", result)
         LOG.info("job %s %s done", job["id"], job["kind"])
     except Exception as exc:   # noqa: BLE001 - 어떤 실패든 기록하고 다음 작업으로 넘어간다
@@ -149,7 +183,8 @@ def run_one(worker: Optional[str] = None) -> bool:
             delay = min(2 ** (int(job["attempts"]) - 1), 60)
             _finish(job, "대기", error=error, run_after=_now() + timedelta(minutes=delay))
         else:
-            _finish(job, "실패", error=error)
+            if not _finish(job, "실패", error=error):
+                return True
             from . import notify
             notify.notify_role("ADMIN", "작업실패", f"배치 작업 실패: {job['kind']}",
                                f"{job['attempts']}번 시도했지만 실패했습니다. {error}", "/admin/jobs?status=실패")
@@ -352,7 +387,9 @@ def _privacy_purge(payload: dict):
 def _erp_send(payload: dict):
     from . import erp
     stuck = erp.recover_stuck()
-    return {**erp.process_outbox(), "stuck": stuck}
+    from . import etax                          # 같은 5분 주기에 멈춘 전자세금계산서 전송도 되살린다
+    etax_stuck = etax.recover_stuck() if etax.enabled() else 0
+    return {**erp.process_outbox(), "stuck": stuck, "etax_stuck": etax_stuck}
 
 
 @handler("forecast.snapshot")

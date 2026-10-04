@@ -30,6 +30,7 @@ import re
 import ssl
 import sys
 import urllib.error
+import urllib.parse
 import urllib.request
 from datetime import datetime
 from http.cookiejar import CookieJar
@@ -237,9 +238,21 @@ class SapODataAdapter:
         if not self.token:
             raise RuntimeError("SAP CSRF 토큰을 받지 못했습니다.")
 
+    def existing_order(self, crm_ref: str) -> Optional[str]:
+        """같은 CRM 번호(PurchaseOrderByCustomer)로 이미 만든 판매오더 번호.
+        응답 시간 초과로 '실패' 처리됐어도 SAP 에는 오더가 생겼을 수 있다 → 다시 보내기 전에 찾아서 두 번 만들지 않는다."""
+        flt = urllib.parse.quote(f"PurchaseOrderByCustomer eq '{crm_ref}'")
+        _, result = self._call("GET", f"/A_SalesOrder?$filter={flt}&$select=SalesOrder&$top=1&$format=json")
+        rows = (result.get("d") or {}).get("results") or []
+        return str(rows[0]["SalesOrder"]) if rows and rows[0].get("SalesOrder") else None
+
     def send(self, outbox_id: int, doc: dict) -> str:
         if not self.token:
             self._fetch_token()
+        if doc["doc_type"] in ("매출", "반품"):
+            found = self.existing_order(doc["crm_ref"])      # 확인을 못 하면 예외 → 만들지 않고 다음에 다시 시도
+            if found:
+                return found
         if doc["doc_type"] == "대손":
             raise ValueError("SAP 판매오더 API 로는 대손(FI) 전표를 보낼 수 없습니다. 재무팀이 FI 에서 처리한 뒤 '재시도' 대신 "
                              "ERP 수신 API 로 결과를 회신하거나, 대손은 파일·REST 연동으로 보내세요.")

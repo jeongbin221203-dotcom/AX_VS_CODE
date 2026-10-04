@@ -126,31 +126,35 @@ def decide(request_id: int, approve: bool, comment: str, actor: dict) -> dict:
         raise PermissionError(f"이 요청은 {db.ROLE_LABEL.get(req['required_role'])} 이상이 결재합니다.")
     if not approve and not str(comment or "").strip():
         raise ValueError("반려 사유를 입력하세요.")
-    result: dict = {}
-    if approve and req["kind"] == "대손":
-        sale = db.get_sale(int(req["sale_id"]))
-        remain = int(sale.get("total_amount") or sale["amount"]) - int(sale.get("paid_amount") or 0)
-        if remain <= 0:
-            raise ValueError("그 사이 입금되어 남은 미수금이 없습니다. 반려하세요.")
-        # 결재 한도는 요청 금액으로 정했다 → 그 사이 미수금이 늘었어도 요청 금액까지만 대손 (더 크면 다시 요청)
-        remain = min(remain, int(req.get("amount") or remain))
-        ent.record_payment(int(req["sale_id"]), remain, source="대손", method="기타", memo=f"대손 처리 (결재 #{req['id']})")
-        with db.get_conn() as conn:
-            conn.execute("INSERT INTO erp_outbox (doc_type, ref_id, status, created_at) VALUES ('대손', ?, '대기', ?)",
-                         (int(req["id"]), db._now()))
-        result["대손금액"] = remain
-    if approve and req["kind"] == "거래정지해제":
-        exempt = (date.today() + timedelta(days=int(_setting("auto_block_exempt_days")))).isoformat()
-        with db.get_conn() as conn:
-            conn.execute("UPDATE customers SET trade_blocked=0, block_source=NULL, block_reason=NULL, blocked_at=NULL, "
-                         "block_exempt_until=? WHERE id=?", (exempt, int(req["customer_id"])))
-        result["재정지유예"] = exempt
-    with db.get_conn() as conn:
-        conn.execute("UPDATE fin_requests SET status=?, decided_by=?, decided_by_id=?, decided_at=?, comment=? WHERE id=?",
-                     ("승인" if approve else "반려", actor.get("name"), int(actor["id"]), db._now(), comment or None,
-                      int(req["id"])))
-    db.audit(f"{req['kind']}{'승인' if approve else '반려'}", "거래처", int(req["customer_id"]),
-             {"요청번호": req["id"], "의견": comment or None, **result})
+    # 결재 상태 · 대손 입금 · ERP 전송 대기 · 거래정지 해제를 한 트랜잭션으로 (중간에 실패하면 모두 되돌림)
+    with db.transaction():
+        result: dict = {}
+        with db.get_conn() as conn:         # 먼저 결재를 차지한다 — 두 사람이 동시에 승인해 대손이 두 번 잡히지 않게
+            if conn.execute("UPDATE fin_requests SET status=?, decided_by=?, decided_by_id=?, decided_at=?, comment=? "
+                            "WHERE id=? AND status='대기'",
+                            ("승인" if approve else "반려", actor.get("name"), int(actor["id"]), db._now(), comment or None,
+                             int(req["id"]))).rowcount == 0:
+                raise db.ConflictError("그 사이 다른 사람이 이 요청을 처리했습니다. 새로고침해서 확인하세요.")
+        if approve and req["kind"] == "대손":
+            sale = db.get_sale(int(req["sale_id"]))
+            remain = int(sale.get("total_amount") or sale["amount"]) - int(sale.get("paid_amount") or 0)
+            if remain <= 0:
+                raise ValueError("그 사이 입금되어 남은 미수금이 없습니다. 반려하세요.")
+            # 결재 한도는 요청 금액으로 정했다 → 그 사이 미수금이 늘었어도 요청 금액까지만 대손 (더 크면 다시 요청)
+            remain = min(remain, int(req.get("amount") or remain))
+            ent.record_payment(int(req["sale_id"]), remain, source="대손", method="기타", memo=f"대손 처리 (결재 #{req['id']})")
+            with db.get_conn() as conn:
+                conn.execute("INSERT INTO erp_outbox (doc_type, ref_id, status, created_at) VALUES ('대손', ?, '대기', ?)",
+                             (int(req["id"]), db._now()))
+            result["대손금액"] = remain
+        if approve and req["kind"] == "거래정지해제":
+            exempt = (date.today() + timedelta(days=int(_setting("auto_block_exempt_days")))).isoformat()
+            with db.get_conn() as conn:
+                conn.execute("UPDATE customers SET trade_blocked=0, block_source=NULL, block_reason=NULL, blocked_at=NULL, "
+                             "block_exempt_until=? WHERE id=?", (exempt, int(req["customer_id"])))
+            result["재정지유예"] = exempt
+        db.audit(f"{req['kind']}{'승인' if approve else '반려'}", "거래처", int(req["customer_id"]),
+                 {"요청번호": req["id"], "의견": comment or None, **result})
     if req.get("requested_by_id"):
         notify.notify([int(req["requested_by_id"])], "결재결과", f"{req['kind']} {'승인' if approve else '반려'}",
                       comment or "", "/approvals?tab=finance")

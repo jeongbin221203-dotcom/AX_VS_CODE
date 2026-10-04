@@ -127,8 +127,13 @@ def request_issue(sale_id: int, issue_date: Optional[str], actor: dict) -> int:
                               (sale["id"],)).fetchone()[0]
         if active:
             raise ValueError("이미 발행했거나 발행 중인 매출입니다.")
-        cur = conn.execute("INSERT INTO etax_invoices (sale_id, status, issue_date, requested_by, requested_at) "
-                           "VALUES (?, '발행요청', ?, ?, ?)", (sale["id"], day, actor.get("name"), db._now()))
+        try:
+            cur = conn.execute("INSERT INTO etax_invoices (sale_id, status, issue_date, requested_by, requested_at) "
+                               "VALUES (?, '발행요청', ?, ?, ?)", (sale["id"], day, actor.get("name"), db._now()))
+        except Exception as exc:                  # noqa: BLE001 - 동시에 두 번 요청 (ux_etax_active)
+            if _unique_error(exc):
+                raise ValueError("이미 발행했거나 발행 중인 매출입니다.") from exc
+            raise
         eid = int(cur.lastrowid)
         jobs.enqueue("etax.issue", {"id": eid}, dedupe_key=f"etax-{eid}", conn=conn)
     db.audit("세금계산서발행요청", "매출", int(sale["id"]), {"요청번호": eid, "작성일자": day})
@@ -171,32 +176,62 @@ def _send(eid: int, xml: bytes, row: dict) -> Optional[str]:
     raise RuntimeError("전자세금계산서 발행 연결이 설정되지 않았습니다.")
 
 
+def _unique_error(exc: Exception) -> bool:
+    text = str(exc).lower()
+    return "unique" in text or "ux_etax_active" in text
+
+
 def process(eid: int) -> dict:
     """작업 큐에서 호출. 실패하면 예외 → 큐가 간격을 두고 다시 시도한다."""
     row = db._one("SELECT * FROM etax_invoices WHERE id=?", [int(eid)])
     if not row or row["status"] != "발행요청":
         return {"skipped": True}
     with db.get_conn() as conn:          # 선점: 같은 요청을 두 워커가 동시에 보내지 않게
-        if conn.execute("UPDATE etax_invoices SET status='전송중' WHERE id=? AND status='발행요청'", (eid,)).rowcount == 0:
+        if conn.execute("UPDATE etax_invoices SET status='전송중', claimed_at=?, sent_at=NULL "
+                        "WHERE id=? AND status='발행요청'", (db._now(), eid)).rowcount == 0:
             return {"skipped": True}
-    db.set_context("system", None)
-    sale, customer, supplier = _context(row["sale_id"])
-    if sale.get("status") == db.SALE_CANCELLED:          # 요청 뒤에 취소된 매출은 보내지 않는다
-        with db.get_conn() as conn:
-            conn.execute("UPDATE etax_invoices SET status='실패', error=? WHERE id=?", ("매출이 취소되어 발행하지 않음", eid))
-        return {"skipped": True, "reason": "cancelled"}
-    xml = build_xml(sale, customer, supplier, row["issue_date"], original_approval=_original(sale))
     try:
+        db.set_context("system", None)
+        sale, customer, supplier = _context(row["sale_id"])
+        if sale.get("status") == db.SALE_CANCELLED:          # 요청 뒤에 취소된 매출은 보내지 않는다
+            with db.get_conn() as conn:
+                conn.execute("UPDATE etax_invoices SET status='실패', error=? WHERE id=?", ("매출이 취소되어 발행하지 않음", eid))
+            return {"skipped": True, "reason": "cancelled"}
+        xml = build_xml(sale, customer, supplier, row["issue_date"], original_approval=_original(sale))
         number = _send(int(eid), xml, row)
     except Exception as exc:
+        # 어디서 실패하든 '전송중' 으로 남기지 않는다 → 큐가 다시 시도 (REST 는 Idempotency-Key 로 두 번 발행되지 않음)
         with db.get_conn() as conn:
-            conn.execute("UPDATE etax_invoices SET status='발행요청', error=? WHERE id=?", (str(exc)[:500], eid))
+            conn.execute("UPDATE etax_invoices SET status='발행요청', claimed_at=NULL, error=? "
+                         "WHERE id=? AND status='전송중'", (str(exc)[:500], eid))
         raise
     if number is None:                   # 파일 방식: 승인번호 회신을 기다린다
         with db.get_conn() as conn:
-            conn.execute("UPDATE etax_invoices SET error=NULL WHERE id=?", (eid,))
+            conn.execute("UPDATE etax_invoices SET error=NULL, sent_at=? WHERE id=?", (db._now(), eid))
         return {"sent": True, "waiting_ack": True}
     return complete(int(eid), number)
+
+
+def recover_stuck(minutes: int = 15) -> int:
+    """전송을 시작했다가 서버가 꺼져 '전송중' 으로 멈춘 요청을 다시 발행요청으로 돌려 큐에 올린다.
+    파일 방식에서 ASP 로 넘긴 뒤(sent_at) 회신을 기다리는 건은 정상이라 건드리지 않는다."""
+    from datetime import timedelta
+
+    from . import jobs
+    limit = (datetime.now() - timedelta(minutes=minutes)).strftime("%Y-%m-%d %H:%M:%S")
+    rows = db._df("SELECT id FROM etax_invoices WHERE status='전송중' AND sent_at IS NULL "
+                  "AND (claimed_at IS NULL OR claimed_at < ?)", [limit])
+    n = 0
+    for eid in ([int(i) for i in rows["id"]] if not rows.empty else []):
+        with db.get_conn() as conn:
+            if conn.execute("UPDATE etax_invoices SET status='발행요청', claimed_at=NULL, "
+                            "error='전송 도중 중단되어 다시 보냄' WHERE id=? AND status='전송중' AND sent_at IS NULL",
+                            (eid,)).rowcount:
+                jobs.enqueue("etax.issue", {"id": eid}, dedupe_key=f"etax-{eid}-r{secrets.token_hex(4)}", conn=conn)
+                n += 1
+    if n:
+        db.audit("세금계산서전송복구", "매출", None, {"건수": n})
+    return n
 
 
 def complete(eid: int, approval_no: str, ok: bool = True, message: str = "") -> dict:
@@ -204,28 +239,66 @@ def complete(eid: int, approval_no: str, ok: bool = True, message: str = "") -> 
     row = db._one("SELECT * FROM etax_invoices WHERE id=?", [int(eid)])
     if not row:
         raise ValueError("발행 요청을 찾을 수 없습니다.")
-    if row["status"] == "발행완료":
+    if row["status"] == "발행완료" and row.get("document_id"):
         return {"id": eid, "status": "발행완료", "approval_no": row["approval_no"]}
     if not ok:
         with db.get_conn() as conn:
-            conn.execute("UPDATE etax_invoices SET status='실패', error=? WHERE id=?", (message[:500] or "ASP 거부", eid))
+            conn.execute("UPDATE etax_invoices SET status='실패', claimed_at=NULL, error=? WHERE id=? AND status <> '발행완료'",
+                         (message[:500] or "ASP 거부", eid))
         db.audit("세금계산서발행실패", "매출", int(row["sale_id"]), {"요청번호": eid, "사유": message})
         return {"id": eid, "status": "실패"}
     number = docs.digits(approval_no)
     if len(number) != 24:
         raise ValueError("승인번호는 24자리 숫자여야 합니다.")
+    if row["status"] == "발행완료" and row.get("approval_no") and row["approval_no"] != number:
+        raise ValueError(f"이미 승인번호 {row['approval_no']} 로 발행된 요청입니다.")
+    if row["status"] != "발행완료":
+        # 먼저 '발행완료' 를 차지한다 — 회신이 두 번 와도 증빙이 두 번 생기지 않게
+        try:
+            with db.get_conn() as conn:
+                claimed = conn.execute("UPDATE etax_invoices SET status='발행완료', approval_no=?, issued_at=?, error=NULL "
+                                       "WHERE id=? AND status <> '발행완료'", (number, db._now(), eid)).rowcount
+        except Exception as exc:                  # noqa: BLE001
+            if not _unique_error(exc):
+                raise
+            # 실패로 정리한 뒤 다시 요청해 새 발행이 진행 중인데 옛 요청의 승인이 늦게 왔다 → 국세청에는 두 건이 발행됨
+            _alert(row, number, "같은 매출에 다른 발행 요청이 있는데 이 요청도 승인됨 — 이중 발행. "
+                                "하나를 수정세금계산서(착오 발급)로 취소하세요.")
+            with db.get_conn() as conn:
+                conn.execute("UPDATE etax_invoices SET approval_no=?, error=? WHERE id=?",
+                             (number, "이중 발행 — 수정세금계산서로 취소 필요", eid))
+            return {"id": eid, "status": row["status"], "approval_no": number, "duplicate": True}
+        if not claimed:                           # 그 사이 다른 회신이 먼저 차지해 증빙을 등록하는 중
+            return {"id": eid, "status": "발행완료", "approval_no": number}
     db.set_context("system", None)
     sale, customer, supplier = _context(row["sale_id"])
     xml = build_xml(sale, customer, supplier, row["issue_date"], number, _original(sale))
     doc_type = "수정세금계산서" if (sale.get("sale_kind") or "매출") != "매출" else "전자세금계산서"
-    doc_id, warnings = docs.add_document(int(row["sale_id"]), {"doc_type": doc_type}, xml,
-                                         f"전자세금계산서_{number}.xml", {"name": "전자세금계산서 발행", "id": None})
+    try:
+        doc_id, warnings = docs.add_document(int(row["sale_id"]), {"doc_type": doc_type}, xml,
+                                             f"전자세금계산서_{number}.xml", {"name": "전자세금계산서 발행", "id": None})
+    except Exception as exc:
+        # 국세청에는 발행됐으므로 '발행완료' 는 유지하고, 증빙 등록만 다음 회신·재시도 때 다시 한다
+        with db.get_conn() as conn:
+            conn.execute("UPDATE etax_invoices SET error=? WHERE id=?", (f"증빙 등록 실패: {exc}"[:500], eid))
+        raise
     key = docs.get_document(doc_id)["file_path"]
     with db.get_conn() as conn:
-        conn.execute("UPDATE etax_invoices SET status='발행완료', approval_no=?, document_id=?, xml_key=?, error=NULL, "
-                     "issued_at=? WHERE id=?", (number, doc_id, key, db._now(), eid))
+        conn.execute("UPDATE etax_invoices SET document_id=?, xml_key=?, error=NULL WHERE id=?", (doc_id, key, eid))
     db.audit("세금계산서발행", "매출", int(row["sale_id"]), {"요청번호": eid, "승인번호": number, "증빙": doc_id})
+    if sale.get("status") == db.SALE_CANCELLED:
+        _alert(row, number, "취소된 매출에 전자세금계산서가 발행됨(늦은 승인) — 수정세금계산서(계약의 해제)를 발행하세요.")
     return {"id": eid, "status": "발행완료", "approval_no": number, "document_id": doc_id, "warnings": warnings}
+
+
+def _alert(row: dict, number: str, message: str) -> None:
+    db.audit("세금계산서확인필요", "매출", int(row["sale_id"]), {"요청번호": row["id"], "승인번호": number, "내용": message})
+    try:
+        from . import notify
+        notify.notify_role("ADMIN", "세금계산서", f"전자세금계산서 확인 필요 (매출 #{row['sale_id']})", message,
+                           f"/sales?sid={row['sale_id']}")
+    except Exception:   # noqa: BLE001 - 알림 실패가 회신 처리를 막지 않게
+        pass
 
 
 def _original(sale: dict) -> str:
