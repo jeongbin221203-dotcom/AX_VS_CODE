@@ -66,6 +66,15 @@ def parse_region(text) -> tuple[str | None, str | None]:
     return None, None
 
 
+_ABROAD = re.compile(r"[\[(【]\s*(해외|일본|중국|미국|베트남|인도네시아|태국|필리핀|싱가포르|유럽|독일|폴란드|캐나다|호주|멕시코|인도|대만|홍콩|UAE|사우디)"
+                     r"\s*(근무|법인|파견|현지|지사)?\s*[\])】]")
+
+
+def abroad_in_title(title) -> bool:
+    """제목에 '[일본근무]'·'(해외근무)'·'[베트남 법인]' — 근무지 칸이 본사 주소여도 해외 근무."""
+    return bool(_ABROAD.search(clean(title)))
+
+
 def region_from_title(title) -> tuple[str | None, str | None]:
     """근무지가 없는 공고의 제목 괄호에서: '[서울 역삼역] …', '(대전근무)', '[부산근무]' → ('서울', None)."""
     t = clean(title)

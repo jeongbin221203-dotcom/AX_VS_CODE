@@ -7,7 +7,7 @@ from datetime import date, timedelta
 
 from . import db, fit, jobgroups, salary
 from .normalize import (CAREER_TYPES, SIDO_ORDER, clean, parse_career, parse_education, parse_employment,
-                        parse_region, region_from_title, to_date)
+                        parse_region, region_from_title, to_date, abroad_in_title)
 
 FIELDS = ("url", "title", "company", "sido", "sigungu", "location_raw", "career_type", "career_min",
           "career_max", "career_raw", "education", "employment_type", "salary_raw", "salary_min",
@@ -23,6 +23,8 @@ def build(source: str, source_id, *, title, company, url=None, location=None, ca
     sido, sigungu = parse_region(location)
     if not sido and not clean(location):
         sido, sigungu = region_from_title(title)      # 근무지가 비었으면 제목의 '[서울 역삼역]'·'(대전근무)'
+    if abroad_in_title(title):
+        sido, sigungu = "해외", None                   # '[일본근무]' 는 근무지 칸(본사 주소)보다 우선
     kind, cmin, cmax = parse_career(career, career_min, career_max)
     lo, hi, nego = salary.parse(salary_text, pay_type)
     if salary_min or salary_max:

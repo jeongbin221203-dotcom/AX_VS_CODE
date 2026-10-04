@@ -162,3 +162,29 @@ def test_saramin_highschool_wording():
     assert parse_education("고교졸업 이상") == "고졸"
     assert parse_education("대학교졸업(4년) 이상") == "대졸"
     assert parse_education("대학졸업(2,3년) 이상") == "초대졸"
+
+
+def test_wide_gap_and_unit_mistakes():
+    """화면에서 본 갭이 큰 연봉: 1억 끝값, 최저임금을 만원으로 잘못 적음, 원을 만원으로 적음."""
+    assert salary.parse("연봉 25900000원~100000000원")[:2] == (2590, None)       # 잡코리아 입력 칸 끝값 1억
+    assert salary.parse("연봉 5,000~10,000만원")[:2] == (5000, None)
+    assert salary.parse("연봉 6,000~10,000만원")[:2] == (6000, 10000)            # 아래쪽이 5천 넘으면 그대로
+    assert salary.parse("연봉 25,882만원 이상 (면접 후 결정)")[:2] == (2588, None)  # 최저임금 25,882,560원
+    assert salary.parse("연봉 2억 5천만원")[:2] == (25000, 25000)                 # 진짜 2억 5천은 그대로
+    assert salary.parse("월급 2,236,300만원")[:2] == (2684, 2684)                 # 2,236,300원
+
+
+def test_wide_range_scored_by_midpoint():
+    from core import fit
+    prof = {"min_salary": 8000}
+    pts, label = fit.evaluate({"salary_min": 3500, "salary_max": 8000, "title": "x"}, prof).parts["연봉"]
+    assert "중간값 5,750만원" in label and pts < 5
+    assert fit.evaluate({"salary_min": 6000, "salary_max": 9000, "title": "x"}, prof).parts["연봉"][0] == 20
+
+
+def test_abroad_title_overrides_head_office_address():
+    from core import postings
+    p = postings.build("jobkorea", "9", title="[일본근무] 티맥스소프트 일본법인엔지니어", company="티맥스",
+                       location="대한민국 경기도 성남시 분당구 정자일로 45")
+    assert p["sido"] == "해외"
+    assert postings.build("jobkorea", "8", title="[중국어 통역] 채용", company="x", location="서울 강남구")["sido"] == "서울"

@@ -17,6 +17,8 @@ MAX_CONVERT_HOURLY = 30_000      # 이보다 높은 시급은 연봉으로 환�
 MAX_CONVERTED = 30_000           # 월·시급·일급을 연봉으로 바꾼 값이 이 만원(3억)을 넘으면 버림
 _ALLOWANCE = re.compile(r"(식대|수당|교통비|상여|보너스|인센티브|복지|장려금|축하금|지원금|성과급|면접비|숙소비|중식|"
                         r"요금|통신비|휴대폰|건당|가능시|가능 시)")
+PLACEHOLDER_TOP = 10_000         # 범위 위쪽이 딱 1억이고 아래쪽이 5천 이하면 위쪽은 의미 없는 끝값
+MIN_WAGE_YEARS = (2_516, 2_588)  # 최저임금 연봉(만원): 2025년 25,155,240원 · 2026년 25,882,560원
 ABSURD_TOP = 10_000              # 범위의 위쪽이 1억 이상이면서 아래쪽의 5배를 넘으면 위쪽은 믿지 않음
 MONTHLY_AS_ANNUAL = 1500 * 10**4  # '월급 3,300만원'처럼 월 1,500만원 이상이면 연봉을 월급으로 잘못 적은 것으로 봄
 _PERIOD_KEYS = [(re.compile(r"시급|시간당"), "hour"), (re.compile(r"일급|일당"), "day"),
@@ -49,6 +51,8 @@ def parse(text, pay_type: str | None = None) -> tuple[int | None, int | None, bo
     values = []
     dropped = False
     for won, pos in items:
+        if won >= 10**10:
+            won /= 10**4                                # '월급 2,236,300만원' — 원을 만원으로 잘못 적음 (100억 이상은 없음)
         period = _period_at(keys, pos) or _period(hint + " " + raw, [w for w, _ in items])
         if period == "month" and won >= MONTHLY_AS_ANNUAL:
             period = "year"
@@ -56,6 +60,8 @@ def parse(text, pay_type: str | None = None) -> tuple[int | None, int | None, bo
             continue                                    # 시간제·전문직 높은 시급은 풀타임 연봉으로 바꾸지 않음
         factor = {"hour": HOURS_PER_MONTH * 12, "day": WORKDAYS_PER_MONTH * 12, "month": 12, "year": 1}[period]
         v = round(won * factor / 10**4)
+        if period == "year" and any(abs(v - m * 10) <= 15 for m in MIN_WAGE_YEARS):
+            v = round(v / 10)                           # '25,882만원' = 최저임금 연봉 25,882,560원을 만원 단위로 잘못 적음
         if period != "year" and v > MAX_CONVERTED:
             dropped = True
             continue                                    # 월·시급을 바꾼 값이 3억을 넘으면 성과급 문구 등 — 버림
@@ -70,6 +76,8 @@ def parse(text, pay_type: str | None = None) -> tuple[int | None, int | None, bo
         lo, hi = sorted(values[:2])                    # 첫 범위만 (뒤의 '10~20만원 추가' 같은 금액은 무시)
         if hi >= ABSURD_TOP and hi > lo * 5:
             return lo, None, False                     # '3,000~50,000만원' 처럼 위쪽이 터무니없으면 '이상'으로
+        if hi == PLACEHOLDER_TOP and lo <= PLACEHOLDER_TOP // 2:
+            return lo, None, False                     # 잡코리아 '25,900,000원~100,000,000원': 1억은 입력 칸의 끝값 — '이상'으로
     elif len(values) >= 2:
         lo = hi = values[0]
         if re.search(r"(이상|↑|부터|최소)", compact):
