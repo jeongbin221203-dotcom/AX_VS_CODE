@@ -108,7 +108,7 @@
 {% endif %}
 <section class="card" style="margin-top:14px">
   <h2>기록 백업</h2>
-  <p class="small muted" style="margin-top:0">{% if public %}무료 서버라 다시 시작하면 기록이 지워집니다. 이 브라우저에 자동으로 사본을 남겨 두었다가, 기록이 비면 복원하겠느냐고 묻습니다. 파일로도 보관할 수 있습니다.{% else %}풀이 기록·모의고사·실습 점수를 파일로 보관하거나 다른 곳(예: 배포 사이트)으로 옮길 수 있습니다.{% endif %}</p>
+  <p class="small muted" style="margin-top:0">{% if public %}무료 서버라 다시 시작하면 기록이 지워집니다. 이 브라우저에 자동으로 사본을 남겨 두었다가, 기록이 비면 복원하겠느냐고 묻습니다. 파일로도 보관할 수 있습니다.{% else %}풀이 기록·모의고사·실습 점수를 파일로 보관하거나 다른 곳(예: 배포 사이트)으로 옮길 수 있습니다.{% if sync_last %} 배포 사이트(개인 링크 기기)와 30분마다 자동으로 맞춥니다 — 마지막: {{ sync_last }}.{% endif %}{% endif %}</p>
   <div class="btns">
     <a class="btn" href="{{ url_for('main.backup_download') }}">기록 파일 내려받기</a>
     <form method="post" action="{{ url_for('main.restore_upload') }}" enctype="multipart/form-data" class="btns" data-confirm="지금 기록을 파일의 기록으로 바꿀까요?">

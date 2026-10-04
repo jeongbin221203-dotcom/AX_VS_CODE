@@ -37,6 +37,7 @@ def toggle_star(pid):
         conn.execute('INSERT INTO stars(pid, user) VALUES(?, ?)', (pid, u))
         on = True
     conn.commit()
+    db.set_setting('stars_at', dt.datetime.now().isoformat(timespec='seconds'))
     return on
 
 

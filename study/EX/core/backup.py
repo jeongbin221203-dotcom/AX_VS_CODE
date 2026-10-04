@@ -19,16 +19,57 @@ COLS = {'attempts': ('pid', 'category', 'ok', 'answer', 'created_at'),
         'exam_results': ('exam', 'score', 'total', 'passed', 'seconds', 'detail', 'file_name', 'created_at')}
 
 
-def export():
-    conn = db.get()
-    u = db.user_id()
+def export(conn=None, user=None):
+    conn = conn or db.get()
+    u = db.user_id() if user is None else user
     out = {'version': VERSION}
     for table, cols in COLS.items():
         rows = conn.execute(f"SELECT {', '.join(cols)} FROM {table} WHERE user=? ORDER BY rowid DESC LIMIT ?",
                             (u, LIMITS[table])).fetchall()
         out[table] = [dict(r) for r in reversed(rows)]
-    out['track'] = db.setting('track', '')
+    out['track'] = raw_setting(conn, u, 'track', '')
+    out['stars_at'] = raw_setting(conn, u, 'stars_at', '')
     return out
+
+
+def raw_setting(conn, user, key, default=None):
+    row = conn.execute('SELECT value FROM settings WHERE key=?', (f'{user}:{key}' if user else key,)).fetchone()
+    return row['value'] if row else default
+
+
+def set_raw_setting(conn, user, key, value):
+    conn.execute('INSERT INTO settings(key, value) VALUES(?, ?) ON CONFLICT(key) DO UPDATE SET value=excluded.value',
+                 (f'{user}:{key}' if user else key, value))
+
+
+def clean_row(t, row):
+    """올라온 한 행 → 넣을 값 목록(형식이 틀리면 None)."""
+    cols = COLS[t]
+    if not isinstance(row, dict):
+        return None
+    vals = []
+    for c in cols:
+        v = row.get(c)
+        if c == 'created_at' and not v:
+            v = __import__('datetime').datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        if c == 'detail' and v is not None and not isinstance(v, str):
+            v = json.dumps(v, ensure_ascii=False)
+        if isinstance(v, str):
+            v = v[:200000]
+        vals.append(v)
+    for c, v in zip(cols, vals):
+        if v is None and c in REQUIRED:
+            return None
+        if v is not None and not isinstance(v, TYPES.get(c, object)):
+            return None
+    if t in DETAIL_KEYS:
+        try:
+            d = json.loads(vals[cols.index('detail')] or '')
+        except (ValueError, TypeError):
+            return None
+        if not (isinstance(d, dict) and all(k in d for k in DETAIL_KEYS[t])):
+            return None
+    return vals
 
 
 def counts(data=None):
@@ -64,31 +105,8 @@ def restore(data, replace=True):
             raise ValueError('기록 파일 형식이 잘못되었습니다.')
         n = 0
         for row in rows[-LIMITS[t]:]:
-            if not isinstance(row, dict):
-                continue
-            vals = []
-            for c in cols:
-                v = row.get(c)
-                if c == 'created_at' and not v:
-                    v = __import__('datetime').datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                if c == 'detail' and v is not None and not isinstance(v, str):
-                    v = json.dumps(v, ensure_ascii=False)
-                if isinstance(v, str):
-                    v = v[:200000]
-                vals.append(v)
-            row_ok = True
-            for c, v in zip(cols, vals):
-                if v is None and c in REQUIRED:
-                    row_ok = False
-                elif v is not None and not isinstance(v, TYPES.get(c, object)):
-                    row_ok = False
-            if row_ok and t in DETAIL_KEYS:
-                try:
-                    d = json.loads(vals[cols.index('detail')] or '')
-                    row_ok = isinstance(d, dict) and all(k in d for k in DETAIL_KEYS[t])
-                except (ValueError, TypeError):
-                    row_ok = False
-            if not row_ok:
+            vals = clean_row(t, row)
+            if vals is None:
                 continue
             placeholders = ', '.join('?' for _ in cols)
             try:

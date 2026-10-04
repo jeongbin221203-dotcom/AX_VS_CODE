@@ -61,6 +61,8 @@ def create_app(config=None):
     @app.before_request
     def csrf_protect():
         session.setdefault('csrf', secrets.token_urlsafe(24))
+        if request.path == '/api/sync':              # 쿠키가 아니라 개인 링크 토큰(Bearer)으로 확인
+            return None
         if request.method in ('POST', 'PUT', 'DELETE') and not app.config.get('TESTING_NO_CSRF'):
             token = request.headers.get('X-CSRF-Token') or request.form.get('_csrf', '')
             if not secrets.compare_digest(token.encode('utf-8'), session['csrf'].encode('utf-8')):
@@ -116,6 +118,26 @@ def create_app(config=None):
         session.permanent = True
         return redirect(url_for('practice.index', msg='이 기기에서 내 자료가 보입니다.'))
 
+    @app.route('/api/sync', methods=['POST'])
+    def api_sync():
+        """PC 앱이 보낸 기록을 개인 링크 기기('owner') 기록에 합치고, 합친 결과를 돌려준다(gzip JSON)."""
+        from core import backup, sync
+        want = os.environ.get('EX_OWNER_TOKEN') or app.config.get('OWNER_TOKEN')
+        got = request.headers.get('Authorization', '')
+        if not want or not app.config['PUBLIC'] or not secrets.compare_digest(
+                got.encode('utf-8'), f'Bearer {want}'.encode('utf-8')):
+            abort(404)
+        request.max_content_length = 12 * 1024 * 1024
+        try:
+            data = sync.unpack(request.get_data()) if request.headers.get('Content-Encoding') == 'gzip' \
+                else request.get_json(force=True)
+            conn = db.get()
+            added = sync.merge(conn, 'owner', data)
+        except (ValueError, OSError, EOFError) as e:
+            abort(400, str(e))
+        body = sync.pack({'added': added, 'data': backup.export(conn, 'owner')})
+        return body, 200, {'Content-Type': 'application/json', 'Content-Encoding': 'gzip'}
+
     @app.route('/healthz')
     def healthz():
         return {'ok': True}
@@ -135,4 +157,7 @@ def current_track():
 
 if __name__ == '__main__':
     port = int(os.environ.get('EX_PORT', DEFAULT_PORT))
-    create_app().run(host='127.0.0.1', port=port, debug=os.environ.get('EX_DEBUG') == '1')
+    application = create_app()
+    from core import sync
+    sync.start(application)                    # data/sync.json 이 있으면 배포 서버와 학습 기록 맞추기
+    application.run(host='127.0.0.1', port=port, debug=os.environ.get('EX_DEBUG') == '1')

@@ -27,7 +27,7 @@ def home():
              'series': [{'name': '정답', 'values': [d['ok'] for d in dash['daily']]},
                         {'name': '오답', 'values': [d['bad'] for d in dash['daily']]}]}
     return render_template('dashboard.html', d=dash, missions=missions, uploads=uploads, exams=exams,
-                           msg=request.args.get('msg'),
+                           msg=request.args.get('msg'), sync_last=db.setting('sync_last'),
                            chart_json=json.dumps(chart, ensure_ascii=False).replace('</', '<\\/'))
 
 
