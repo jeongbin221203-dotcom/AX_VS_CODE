@@ -156,3 +156,9 @@ def test_region_from_title_when_location_missing():
 
 def test_far_future_deadline_is_open_ended():
     assert to_date("9999-01-01") is None and to_date("2099-12-31") == "2099-12-31"
+
+
+def test_saramin_highschool_wording():
+    assert parse_education("고교졸업 이상") == "고졸"
+    assert parse_education("대학교졸업(4년) 이상") == "대졸"
+    assert parse_education("대학졸업(2,3년) 이상") == "초대졸"

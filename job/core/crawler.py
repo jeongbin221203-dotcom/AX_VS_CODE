@@ -867,8 +867,8 @@ def pick_round_robin(groups: dict[str, dict], keep, limit: int) -> list[str]:
 
 
 def _fill_missing_from_list(site: str, hints: dict[str, dict]) -> None:
-    """이미 저장했지만 근무지·직무가 비어 있는 공고는 목록 값으로 채운다 (상세를 다시 읽지 않음)."""
-    from .normalize import parse_region
+    """이미 저장했지만 근무지·직무·학력이 비어 있는 공고는 목록 값으로 채운다 (상세를 다시 읽지 않음)."""
+    from .normalize import parse_education, parse_region
     with db.connect() as con:
         for post_id, hint in hints.items():
             if hint.get("location"):
@@ -880,6 +880,10 @@ def _fill_missing_from_list(site: str, hints: dict[str, dict]) -> None:
             if hint.get("category"):
                 con.execute("UPDATE postings SET job_category = ? WHERE source = ? AND source_id = ? "
                             "AND (job_category IS NULL OR job_category = '')", (hint["category"], site, post_id))
+            edu = parse_education(hint.get("education"))
+            if edu != "무관":                           # 상세에서 학력을 못 읽은 공고('무관')는 목록의 학력으로
+                con.execute("UPDATE postings SET education = ? WHERE source = ? AND source_id = ? AND education = '무관'",
+                            (edu, site, post_id))
 
 
 def _apply_hint(item: dict, hint: dict) -> dict:
