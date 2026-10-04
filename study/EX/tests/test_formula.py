@@ -88,9 +88,11 @@ def test_shift_respects_dollars():
 
 
 def test_parse_errors():
-    for bad in ['=SUM(B2:B5', '=1+', '=', '="abc']:
+    for bad in ['=1+', '=', '="abc', '=SUM(B2:B5 B3']:
         with pytest.raises(fx.FormulaError):
             fx.parse(bad)
+    assert fx.unparse(fx.parse('=SUM(B2:B5')) == 'SUM(B2:B5)'          # 엑셀처럼 끝 괄호를 채움
+    assert fx.unparse(fx.parse('=IF(A1>1,"a",IF(A1>0,"b","c"')) == 'IF(A1>1,"a",IF(A1>0,"b","c"))'
 
 
 def test_fullwidth_and_lowercase(book):

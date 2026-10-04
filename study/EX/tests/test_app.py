@@ -42,8 +42,10 @@ def test_try_mode_not_recorded(client):
 
 
 def test_parse_error_message(client):
-    r = post_json(client, '/api/check', {'pid': 'basic-001', 'answer': '=SUM(G2:G16'})
+    r = post_json(client, '/api/check', {'pid': 'basic-001', 'answer': '=SUM(G2:G16)+'})
     assert '읽을 수 없습니다' in r.json['error']
+    r = post_json(client, '/api/check', {'pid': 'basic-001', 'answer': '=SUM(G2:G16'})   # 엑셀처럼 ) 를 채워 줌
+    assert r.json['ok']
 
 
 def test_csrf_required(client):

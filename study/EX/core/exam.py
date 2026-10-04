@@ -375,8 +375,12 @@ def check_formula(ctx, sheet, chk):
         try:
             used = fx.functions_used(fx.parse(text))
         except fx.FormulaError:
-            used = set()
-        miss = [n for n in need if n not in used and not (n == 'RANK.EQ' and 'RANK' in used)]
+            used = None
+        if used is None:                     # 이 채점기가 못 읽는 수식(표 이름 참조 등) — 함수 검사 대신 값만
+            used = {n.upper() for n in re.findall(r'([A-Za-z][A-Za-z0-9.]*)\s*\(', text)}
+        same_as = {'RANK.EQ': 'RANK', 'QUARTILE.INC': 'QUARTILE', 'PERCENTILE.INC': 'PERCENTILE',
+                   'STDEV.S': 'STDEV', 'VAR.S': 'VAR', 'MODE.SNGL': 'MODE'}   # 예전 이름도 같은 함수
+        miss = [n for n in need if n not in used and same_as.get(n) not in used]
         if miss:
             bad.append(f'{a}: {", ".join(miss)} 함수를 써야 합니다')
             continue

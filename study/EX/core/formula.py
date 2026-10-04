@@ -8,6 +8,7 @@ import calendar
 import datetime as dt
 import math
 import re
+import unicodedata
 from decimal import ROUND_DOWN, ROUND_HALF_UP, ROUND_UP, Decimal
 
 EPOCH = dt.date(1899, 12, 30)
@@ -42,6 +43,14 @@ class _Empty:
 
 
 EMPTY = _Empty()
+
+
+class ArgError(XLErr):
+    """함수 인수 개수·형식이 맞지 않음(엑셀은 입력을 거부, 여기서는 #VALUE! 와 안내)."""
+
+    def __init__(self, func):
+        super().__init__('#VALUE!')
+        self.func = func
 
 
 class FormulaError(ValueError):
@@ -273,8 +282,9 @@ NORMALIZE = str.maketrans({'＝': '=', '，': ',', '（': '(', '）': ')', '“'
 
 
 def clean_input(text):
-    """사용자 입력 정리: 전각 기호, 배열 수식 중괄호 {=...}, 앞의 = / +."""
+    """사용자 입력 정리: 전각 기호·전각 영문, 배열 수식 중괄호 {=...}, 앞의 = / +."""
     t = (text or '').translate(NORMALIZE).strip()
+    t = ''.join(x if x.startswith('"') else unicodedata.normalize('NFKC', x) for x in re.split(r'("[^"]*")', t))
     if t.startswith('{=') and t.endswith('}'):
         t = t[1:-1].strip()
     if t.startswith('='):
@@ -419,11 +429,15 @@ class Parser:
                 sep = self.take()
                 if sep == ('op', ')'):
                     return ('call', tok[1], args)
+                if sep[0] == 'end':                    # 수식 끝에서 괄호가 안 닫힘 → 엑셀처럼 닫아 준다
+                    self.i -= 1
+                    return ('call', tok[1], args)
                 if sep != ('op', ','):
-                    raise FormulaError('함수 인수 사이에는 쉼표(,)가 필요합니다')
+                    raise FormulaError(f"{tok[1]} 함수의 인수 사이에는 쉼표(,)가 필요합니다 — '{sep[1]}' 근처를 확인하세요")
         if tok == ('op', '('):
             node = self.expr()
-            self.expect(')')
+            if self.peek()[0] != 'end':                # 끝에서 안 닫힌 괄호는 닫아 준다
+                self.expect(')')
             return node
         if tok == ('op', '{'):
             rows, row = [], []
@@ -549,10 +563,22 @@ def evaluate(node, book, sheet, r=1, c=1):
     if v is None:
         return 0
     if isinstance(v, Arr) and v.h == 1 and v.w == 1:
-        return v.rows[0][0] if v.rows[0][0] is not None else 0
+        v = v.rows[0][0] if v.rows[0][0] is not None else 0
     if isinstance(v, Arr):
-        v = Arr([[0 if x is None else x for x in row] for row in v.rows])
-    return v
+        return Arr([[0 if x is None else _final(x) for x in row] for row in v.rows])
+    return _final(v)
+
+
+def _final(x):
+    """셀에 들어갈 최종 값: 숫자는 엑셀처럼 15자리, 글자는 32,767자까지."""
+    if isinstance(x, str) and len(x) > 32767:
+        return VALUE
+    if is_num(x) and not isinstance(x, bool):
+        try:
+            return fix(x)
+        except XLErr as e:
+            return e
+    return x
 
 
 def evaluate_text(text, book, sheet, r=1, c=1):
@@ -596,8 +622,14 @@ def ev(node, ctx):
     if kind == 'pct':
         return elementwise(lambda x: to_num(x) / 100, ev(node[1], ctx))
     if kind == 'bin':
-        a = ev(node[2], ctx)
-        b = ev(node[3], ctx)
+        try:
+            a = ev(node[2], ctx)
+        except XLErr as e:                      # 왼쪽 오류가 먼저(=NA()+1/0 → #N/A)
+            a = e
+        try:
+            b = ev(node[3], ctx)
+        except XLErr as e:
+            b = e
         return binop(node[1], a, b, ctx)
     if kind == 'call':
         name = node[1]
@@ -605,9 +637,18 @@ def ev(node, ctx):
         if spec is None:
             return NAME
         fn, lazy = spec
-        if lazy:
-            return fn(node[2], ctx)
-        return fn(*eval_args(node[2], ctx))
+        try:
+            if lazy:
+                return fn(node[2], ctx)
+            return fn(*eval_args(node[2], ctx))
+        except (XLErr, FormulaError, RecursionError):
+            raise
+        except (TypeError, IndexError):
+            raise ArgError(name)
+        except ZeroDivisionError:
+            raise DIV0
+        except (ValueError, OverflowError, ArithmeticError, MemoryError):
+            raise NUM
     raise FormulaError(f'알 수 없는 노드 {kind}')
 
 
@@ -675,24 +716,36 @@ def scalar_bin(op, a, b):
         return {'=': c == 0, '<>': c != 0, '<': c < 0, '>': c > 0, '<=': c <= 0, '>=': c >= 0}[op]
     x, y = to_num(a), to_num(b)
     if op == '+':
-        return fix(x + y)
+        return _exact(x + y)
     if op == '-':
-        return fix(x - y)
+        return _exact(x - y)
     if op == '*':
-        return fix(x * y)
+        return _exact(x * y)
     if op == '/':
         if y == 0:
             raise DIV0
-        return fix(x / y)
+        return _exact(x / y)
     if op == '^':
         try:
-            r = float(x) ** y
+            if x < 0 and y != int(y) and abs(1 / y - round(1 / y)) < 1e-9 and round(1 / y) % 2:
+                r = -((-float(x)) ** y)          # (-8)^(1/3) = -2 (홀수 제곱근)
+            else:
+                r = float(x) ** y
         except (OverflowError, ZeroDivisionError):
             raise NUM
         if isinstance(r, complex):
             raise NUM
-        return fix(r)
+        return _exact(r)
     raise FormulaError(op)
+
+
+def _exact(x):
+    """계산 중간 값: 15자리로 자르지 않고 그대로(무한·NaN 만 #NUM!, 큰 정수는 실수로)."""
+    if type(x) is int:
+        return x if abs(x) < 10 ** 15 else fix(x)
+    if math.isnan(x) or math.isinf(x):
+        raise NUM
+    return int(x) if x == int(x) and abs(x) < 1e15 else x
 
 
 def fix(x):
@@ -723,6 +776,8 @@ def compare(a, b):
         return -1 if ra < rb else 1
     if ra == 1:
         a, b = a.lower(), b.lower()
+    elif ra == 0:                                # 숫자 비교는 15자리로(엑셀: =0.1+0.2=0.3 은 TRUE)
+        a, b = fix(a), fix(b)
     return (a > b) - (a < b)
 
 
@@ -1091,7 +1146,7 @@ def f_small(arr, k):
 def _kth(xs, k):
     if isinstance(k, Arr):
         return k.map(lambda kk: _kth(xs, kk))
-    i = to_int(k)
+    i = math.ceil(to_num(k))
     if i < 1 or i > len(xs):
         raise NUM
     return xs[i - 1]
@@ -1111,6 +1166,9 @@ def f_rank(n, ref, order=None):
 
 @fn('RANK.AVG')
 def f_rank_avg(n, ref, order=None):
+    if isinstance(n, Arr) and not (n.h == 1 and n.w == 1):
+        return n.map(lambda v: f_rank_avg(v, ref, order))
+    n = scalar(n)
     x = to_num(n)
     xs = nums_from([as_arr(ref)])
     if x not in xs:
@@ -1422,7 +1480,20 @@ def f_ifna(args, ctx):
 
 @fn('CHOOSE', lazy=True)
 def f_choose(args, ctx):
-    i = to_int(scalar(ev(args[0], ctx), ctx))
+    idx = ev(args[0], ctx)
+    if isinstance(idx, Arr) and not (idx.h == 1 and idx.w == 1) and idx.origin is None:
+        picks = [[to_int(x) for x in row] for row in idx.rows]       # CHOOSE({1,2},B:B,A:A) — 왼쪽 찾기에 쓰는 형태
+        if any(i < 1 or i >= len(args) for row in picks for i in row):
+            raise VALUE
+        vals = {i: ev(args[i], ctx) for row in picks for i in row}
+        if idx.h == 1:
+            cols = [vals[i] for i in picks[0]]
+            hh = max(v.h if isinstance(v, Arr) else 1 for v in cols)
+            return Arr([[(c.rows[r][0] if c.h > r else NA) if isinstance(c, Arr) else c for c in cols] for r in range(hh)])
+        rows = [vals[row[0]] for row in picks]
+        ww = max(v.w if isinstance(v, Arr) else 1 for v in rows)
+        return Arr([[(v.rows[0][k] if v.w > k else NA) if isinstance(v, Arr) else v for k in range(ww)] for v in rows])
+    i = to_int(scalar(idx, ctx))
     if i < 1 or i >= len(args):
         raise VALUE
     return ev(args[i], ctx)
@@ -1489,8 +1560,8 @@ def f_n(v):
 
 # 수학
 def _round(x, digits, mode):
-    x = to_num(x)
-    d = to_int(digits) if digits is not None else 0
+    x = fix(to_num(x))                 # 엑셀처럼 15자리 값을 기준으로(3104999.9999999995 → 3105000)
+    d = int(to_num(digits)) if digits is not None else 0     # 2.5 → 2, -2.5 → -2 (0 쪽으로)
     q = Decimal(1).scaleb(-d)
     r = Decimal(repr(float(x)) if isinstance(x, float) else x).quantize(q, rounding=mode) if d >= 0 else \
         (Decimal(repr(float(x)) if isinstance(x, float) else x) / Decimal(10) ** (-d)).quantize(Decimal(1), rounding=mode) * Decimal(10) ** (-d)
@@ -1684,7 +1755,22 @@ FUNCS['VALUE'] = (_txt(_value), False)
 
 @fn('CONCATENATE')
 def f_concatenate(*args):
-    return ''.join(to_str(a) for a in args)
+    if any(isinstance(a, Arr) and not (a.h == 1 and a.w == 1) for a in args):
+        h = max(a.h if isinstance(a, Arr) else 1 for a in args)
+        w = max(a.w if isinstance(a, Arr) else 1 for a in args)
+
+        def at(a, i, j):
+            if not isinstance(a, Arr):
+                return a
+            return a.rows[0 if a.h == 1 else i][0 if a.w == 1 else j] if (a.h == 1 or i < a.h) and (a.w == 1 or j < a.w) else NA
+        return Arr([[_safe(lambda i=i, j=j: ''.join(to_str(at(a, i, j)) for a in args)) for j in range(w)] for i in range(h)])
+    return _limit(''.join(to_str(a) for a in args))
+
+
+def _limit(text):
+    if len(text) > 32767:                        # 엑셀 셀 글자 수 한도
+        raise VALUE
+    return text
 
 
 @fn('CONCAT')
@@ -1712,9 +1798,10 @@ def f_textjoin(delim, ignore_empty, *args):
 @fn('REPT')
 def f_rept(t, n):
     k = to_int(n)
-    if k < 0:
+    text = to_str(t)
+    if k < 0 or len(text) * k > 32767:
         raise VALUE
-    return to_str(t) * k
+    return text * k
 
 
 @fn('EXACT')
@@ -1786,19 +1873,32 @@ def f_code(t):
 def f_text(v, fmt):
     if isinstance(v, Arr) and not (v.h == 1 and v.w == 1):
         return v.map(lambda x: f_text(x, fmt))
-    return format_value(scalar(v), to_str(fmt))
+    x = scalar(v)
+    if isinstance(x, bool):                      # TEXT(TRUE,"0") = TRUE
+        return 'TRUE' if x else 'FALSE'
+    return format_value(x, to_str(fmt))
 
 
 @fn('FIXED')
 def f_fixed(v, digits=None, no_commas=None):
-    d = to_int(digits) if digits is not None else 2
+    d = int(to_num(digits)) if digits is not None else 2
     fmt = ('0' if no_commas is not None and to_bool(no_commas) else '#,##0') + ('.' + '0' * d if d > 0 else '')
-    return format_value(to_num(v), fmt)
+    x = to_num(v)
+    if d < 0:
+        x = _round(x, d, ROUND_HALF_UP)
+    return format_value(x, fmt)
 
 
 @fn('NUMBERVALUE')
-def f_numbervalue(t):
-    return to_num(to_str(t))
+def f_numbervalue(t, dec=None, grp=None):
+    text = to_str(t)
+    d = to_str(dec) if dec is not None and dec is not EMPTY else '.'
+    g = to_str(grp) if grp is not None and grp is not EMPTY else ','
+    if g:
+        text = text.replace(g[0], '')
+    if d and d[0] != '.':
+        text = text.replace(d[0], '.')
+    return to_num(text.replace(' ', ''))
 
 
 KO_DAYS = ['월', '화', '수', '목', '금', '토', '일']
@@ -2130,7 +2230,7 @@ def f_time(h, m, s):
 
 def _secs(v):
     n = to_num(v)
-    return int(round((n - math.floor(n)) * 86400))
+    return int(round((n - math.floor(n)) * 86400)) % 86400
 
 
 FUNCS['HOUR'] = (_txt(lambda v: _secs(v) // 3600), False)
@@ -3062,3 +3162,130 @@ def f_percentrank(arr, x, sig=None):
         r = (below - 1 + (v - lo) / (hi - lo)) / (n - 1)
     q = Decimal(repr(r)).quantize(Decimal(1).scaleb(-digits), rounding=ROUND_DOWN)
     return fix(float(q))
+
+
+# ------------------------------------------------- 2026-10-04 점검에서 추가 -----
+@fn('CLEAN')
+def f_clean(t):
+    return elementwise(lambda v: re.sub(r'[\x00-\x1f]', '', to_str(v)), t)
+
+
+@fn('T')
+def f_t(v):
+    v = scalar(v)
+    return v if isinstance(v, str) else ''
+
+
+def _nums_a(args):
+    """MAXA·MINA: 범위의 논리값 TRUE=1·FALSE=0, 글자=0 도 센다."""
+    out = []
+    for a in args:
+        for v in (a.flat() if isinstance(a, Arr) else [a]):
+            if isinstance(v, XLErr):
+                raise v
+            if isinstance(v, bool):
+                out.append(int(v))
+            elif is_num(v):
+                out.append(v)
+            elif isinstance(v, str):
+                out.append(0)
+    return out
+
+
+@fn('MAXA')
+def f_maxa(*args):
+    xs = _nums_a(args)
+    return max(xs) if xs else 0
+
+
+@fn('MINA')
+def f_mina(*args):
+    xs = _nums_a(args)
+    return min(xs) if xs else 0
+
+
+@fn('GCD')
+def f_gcd(*args):
+    xs = [int(to_num(v)) for v in nums_from(args)]
+    if any(x < 0 for x in xs):
+        raise NUM
+    out = 0
+    for x in xs:
+        out = math.gcd(out, x)
+    return out
+
+
+@fn('LCM')
+def f_lcm(*args):
+    xs = [int(to_num(v)) for v in nums_from(args)]
+    if any(x < 0 for x in xs):
+        raise NUM
+    out = 1
+    for x in xs:
+        out = out * x // math.gcd(out, x) if x and out else 0
+    return out
+
+
+@fn('COMBIN')
+def f_combin(n, k):
+    n, k = int(to_num(n)), int(to_num(k))
+    if n < 0 or k < 0 or k > n:
+        raise NUM
+    return fix(math.comb(n, k))
+
+
+@fn('PERMUT')
+def f_permut(n, k):
+    n, k = int(to_num(n)), int(to_num(k))
+    if n < 0 or k < 0 or k > n:
+        raise NUM
+    return fix(math.perm(n, k))
+
+
+FUNCS['RADIANS'] = (_txt(lambda v: fix(math.radians(to_num(v)))), False)
+FUNCS['DEGREES'] = (_txt(lambda v: fix(math.degrees(to_num(v)))), False)
+
+
+@fn('PERCENTILE.EXC')
+def f_percentile_exc(arr, k):
+    xs = sorted(nums_from([as_arr(arr)]))
+    p = to_num(k)
+    n = len(xs)
+    pos = p * (n + 1)
+    if not xs or pos < 1 or pos > n:
+        raise NUM
+    lo = int(math.floor(pos))
+    hi = min(lo + 1, n)
+    return fix(xs[lo - 1] + (xs[hi - 1] - xs[lo - 1]) * (pos - lo))
+
+
+@fn('QUARTILE.EXC')
+def f_quartile_exc(arr, q):
+    qi = to_int(q)
+    if qi < 1 or qi > 3:
+        raise NUM
+    return f_percentile_exc(arr, qi / 4)
+
+
+AGG_FUNCS = {1: 'AVERAGE', 2: 'COUNT', 3: 'COUNTA', 4: 'MAX', 5: 'MIN', 6: 'PRODUCT', 7: 'STDEV.S', 8: 'STDEV.P',
+             9: 'SUM', 10: 'VAR.S', 11: 'VAR.P', 12: 'MEDIAN', 13: 'MODE.SNGL', 14: 'LARGE', 15: 'SMALL',
+             16: 'PERCENTILE.INC', 17: 'QUARTILE.INC', 18: 'PERCENTILE.EXC', 19: 'QUARTILE.EXC'}
+
+
+@fn('AGGREGATE')
+def f_aggregate(func, options, ref, k=None):
+    """AGGREGATE(함수 번호, 옵션, 범위[, k]) — 옵션 2·3·6·7 은 오류 값을 건너뜀(숨긴 행은 이 연습장에 없음)."""
+    f = to_int(func)
+    opt = to_int(options) if options is not None and options is not EMPTY else 0
+    name = AGG_FUNCS.get(f)
+    if name is None or name not in FUNCS:
+        raise VALUE
+    vals = as_arr(ref)
+    if opt in (2, 3, 6, 7):
+        vals = Arr([[None if isinstance(v, XLErr) else v for v in row] for row in vals.rows])
+    fn_, _ = FUNCS[name]
+    if f >= 14:
+        if k is None:
+            raise VALUE
+        return fn_(vals, k)
+    return fn_(vals)

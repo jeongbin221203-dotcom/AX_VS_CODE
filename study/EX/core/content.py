@@ -3,6 +3,7 @@ import datetime as dt
 import json
 import re
 import threading
+import time
 from pathlib import Path
 
 from . import formula as fx
@@ -165,14 +166,24 @@ def fill_cells(problem):
     return [(r, c) for r in range(r1, r2 + 1) for c in range(c1, c2 + 1)]
 
 
-def _run(problem, ast):
+TIME_BUDGET = 6.0          # 한 번 채점에 쓰는 계산 시간(초) — 넘으면 멈추고 안내
+
+
+class TooSlow(Exception):
+    pass
+
+
+def _run(problem, ast, budget=None):
     """ast 를 채우기 범위 각 셀에 복사해 계산. → [(r, c, 값, 그 셀의 수식)]"""
     book = build_book(problem)
     sheet = book.sheets[SHEET]
     cells = fill_cells(problem)
     r0, c0 = cells[0]
     out = []
+    start = time.monotonic()
     for r, c in cells:
+        if budget and time.monotonic() - start > budget:
+            raise TooSlow()
         node = fx.shift(ast, r - r0, c - c0)
         v = fx.evaluate(node, book, SHEET, r, c)
         sheet.set(r, c, v)
@@ -194,13 +205,16 @@ def _cell_out(r, c, v, f, formats):
     return {'addr': fx.addr(r, c), 'value': display_cell(v, _fmt_of(formats, r, c)), 'formula': f}
 
 
+SPILL_MAX = 400            # 화면에 펼쳐 보일 배열 결과 칸 수
+
+
 def _spill(r, c, v, formats):
-    """동적 배열 결과를 아래·오른쪽 셀로 펼친다."""
+    """동적 배열 결과를 아래·오른쪽 셀로 펼친다(너무 크면 앞부분만)."""
     if not isinstance(v, fx.Arr):
         return []
     out = []
-    for i, row in enumerate(v.rows):
-        for j, x in enumerate(row):
+    for i, row in enumerate(v.rows[:40]):
+        for j, x in enumerate(row[:SPILL_MAX // 40]):
             out.append({'addr': fx.addr(r + i, c + j), 'value': display_cell(x, _fmt_of(formats, r + i, c + j)),
                         'spill': True})
     return out
@@ -228,10 +242,21 @@ def check(problem, text, reveal=True):
         return {'ok': False, 'error': msg}
     used = fx.functions_used(ast)
     unknown = sorted(n for n in used if n not in fx.FUNCS)
+    circ = _self_reference(problem, ast)
+    if circ:
+        return {'ok': False, 'error': f'순환 참조: {circ} 셀의 수식이 자기 자신({circ})이 들어 있는 범위를 참조합니다 — '
+                                      '엑셀에서는 0 과 순환 참조 경고가 나옵니다. 범위에서 결과 칸을 빼세요.'}
     if unknown and reveal:                              # 철자가 틀린 함수(=su 등)는 오답으로 기록하지 않음
         return {'ok': False, 'error': '이 연습장이 모르는 함수: ' + ', '.join(unknown) +
                 ' — 철자를 확인하세요(함수 이름을 입력하는 중이면 목록에서 Tab·Enter 로 고르세요).'}
-    res, _ = _run(problem, ast)
+    try:
+        res, _ = _run(problem, ast, budget=TIME_BUDGET)
+    except TooSlow:
+        return {'ok': False, 'error': '계산이 너무 오래 걸립니다 — 전체 열·아주 큰 범위 대신 표 범위(예: G2:G16)를 쓰세요.'}
+    bad_args = next((v for _, _, v, _ in res if isinstance(v, fx.ArgError)), None)
+    if bad_args is not None and reveal:
+        return {'ok': False, 'error': f'{bad_args.func} 함수의 인수 개수(또는 형식)가 맞지 않습니다 — '
+                                      f'함수 사전에서 {bad_args.func} 의 형식을 확인하세요.'}
     formats = sheet_spec(problem)[1]
     cells = []
     for r, c, v, f in res:
@@ -262,6 +287,10 @@ def check(problem, text, reveal=True):
         notes.append(', '.join(banned) + ' 함수는 쓰지 않고 풀어야 합니다(문제의 지시 방법대로).')
     if not fx.has_reference(ast):
         notes.append('값을 직접 입력하지 말고 셀을 참조하는 수식으로 만드세요.')
+    if _wants_cse(problem) and not text.strip().startswith('{') and _needs_array(ast):
+        missing.append('cse')
+        notes.append('배열 수식으로 입력해야 합니다 — 엑셀에서는 Ctrl+Shift+Enter 로 확정해 {=…} 처럼 중괄호가 붙게 하세요'
+                     '(여기서는 {=…} 로 입력). 중괄호 없이 Enter 만 누르면 Excel 2019 이하에서는 결과가 달라집니다.')
     exact = _exact_lookup_missing(problem.get('answer', ''), text)
     if exact:
         missing.append('exact')
@@ -286,6 +315,67 @@ def check(problem, text, reveal=True):
     out.update(ok=ok, per=per, notes=notes,
                expected=[{'addr': fx.addr(r, c), 'value': display_cell(v, _fmt_of(formats, r, c))} for r, c, v, _ in exp])
     return out
+
+
+def _wants_cse(problem):
+    """'배열 수식으로' 구하라는 문제(정답이 {=…})."""
+    return str(problem.get('answer', '')).startswith('{') and '배열 수식' in problem.get('prompt', '')
+
+
+ARRAY_NATIVE = {'SUMPRODUCT', 'MMULT', 'SUMIF', 'SUMIFS', 'COUNTIF', 'COUNTIFS', 'AVERAGEIF', 'AVERAGEIFS', 'MAXIFS',
+                'MINIFS', 'LOOKUP', 'AGGREGATE', 'XLOOKUP', 'XMATCH', 'FILTER', 'SORT', 'SORTBY', 'UNIQUE'}
+
+
+def _needs_array(node, inside_native=False):
+    """범위끼리 계산(B2:B16=I2, E2:E13*G2:G13)이 SUMPRODUCT 같은 함수 밖에 있으면 배열 수식이 필요."""
+    if not isinstance(node, tuple):
+        return False
+    kind = node[0]
+    if kind == 'call':
+        native = inside_native or node[1] in ARRAY_NATIVE
+        return any(_needs_array(a, native) for a in node[2])
+    if kind in ('bin', 'neg', 'pct') and not inside_native:
+        def has_range(n):
+            if not isinstance(n, tuple):
+                return False
+            if n[0] == 'range':
+                return True
+            if n[0] == 'call':
+                return False
+            return any(has_range(x) for x in n[1:] if isinstance(x, tuple))
+        if has_range(node):
+            return True
+    return any(_needs_array(x, inside_native) for x in node[1:] if isinstance(x, tuple))
+
+
+def _self_reference(problem, ast):
+    """채우기 범위의 칸이 자기 자신을 포함한 범위를 참조하면 그 칸 주소(엑셀 순환 참조)."""
+    cells = fill_cells(problem)
+    r0, c0 = cells[0]
+    for r, c in cells[:400]:
+        node = fx.shift(ast, r - r0, c - c0)
+        if _refers_to(node, r, c):
+            return fx.addr(r, c)
+    return None
+
+
+def _refers_to(node, r, c):
+    if not isinstance(node, tuple):
+        return False
+    kind = node[0]
+    if kind == 'ref':
+        return node[1] in (None, SHEET) and node[2] == r and node[3] == c
+    if kind == 'range':
+        _, sh, r1, c1, _, _, r2, c2, _, _ = node
+        if sh not in (None, SHEET):
+            return False
+        rows_ok = r1 is None or min(r1, r2) <= r <= max(r1, r2)
+        return rows_ok and min(c1, c2) <= c <= max(c1, c2)
+    if kind == 'call':
+        return any(_refers_to(a, r, c) for a in node[2])
+    if kind == 'arr':
+        return False
+    return any(_refers_to(x, r, c) for x in node[1:] if isinstance(x, tuple))
 
 
 def _lookup_calls(text):
