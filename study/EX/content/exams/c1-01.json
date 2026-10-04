@@ -456,6 +456,7 @@
   {
    "name": "계산작업",
    "rows": [
+    [],
     [
      "[표1] 사원 평가 현황"
     ],
@@ -1896,9 +1897,13 @@
    ],
    "answer": [
     {
+     "op": "vba",
+     "code": "Public Function fn비고(직급, 성과점수)\n    If 성과점수 >= 85 And 직급 <> \"과장\" Then\n        fn비고 = \"승진후보\"\n    ElseIf 성과점수 < 60 Then\n        fn비고 = \"면담\"\n    Else\n        fn비고 = \"\"\n    End If\nEnd Function"
+    },
+    {
      "op": "formula",
      "range": "G4:G15",
-     "formula": "=IF(AND(F4>=85,D4<>\"과장\"),\"승진후보\",IF(F4<60,\"면담\",\"\"))"
+     "formula": "=fn비고(D4,F4)"
     }
    ]
   },
@@ -2342,17 +2347,24 @@
    ],
    "answer": [
     {
-     "op": "formula",
-     "range": "F4:F10",
-     "formula": "=AVERAGE(B4:E4)"
-    },
-    {
-     "op": "style",
-     "range": "A3:F3",
-     "fill": "FFC000",
-     "font": {
-      "color": "FFFFFF"
-     }
+     "op": "vba",
+     "code": "Sub 평균계산()\n    Range(\"F4:F10\").Formula = \"=AVERAGE(B4:E4)\"\nEnd Sub\n\nSub 서식적용()\n    With Range(\"A3:F3\")\n        .Interior.Color = RGB(255, 192, 0)\n        .Font.Color = RGB(255, 255, 255)\n    End With\nEnd Sub",
+     "buttons": [
+      {
+       "text": "평균계산",
+       "macro": "평균계산",
+       "range": "H3:I4"
+      },
+      {
+       "text": "서식적용",
+       "macro": "서식적용",
+       "range": "H7:I8"
+      }
+     ],
+     "run": [
+      "평균계산",
+      "서식적용"
+     ]
     }
    ]
   },
@@ -2437,28 +2449,28 @@
    ],
    "answer": [
     {
-     "op": "values",
-     "range": "A10:E10",
-     "values": [
-      [
-       "송민준",
-       "파이썬 기초",
-       240000,
-       0.1,
-       216000
-      ]
-     ]
-    },
-    {
-     "op": "values",
-     "range": "H9:H10",
-     "values": [
-      [
-       7
-      ],
-      [
-       1456500
-      ]
+     "op": "vba",
+     "code": "Sub 등록()\n    Dim r As Long, 할인율 As Double\n    r = Cells(Rows.Count, 1).End(xlUp).Row + 1\n    Cells(r, 1).Value = Range(\"H4\").Value\n    Cells(r, 2).Value = Range(\"H5\").Value\n    Cells(r, 3).Value = Range(\"H6\").Value\n    If Range(\"H6\").Value >= 200000 Then\n        할인율 = 0.1\n    Else\n        할인율 = 0.05\n    End If\n    Cells(r, 4).Value = 할인율\n    Cells(r, 5).Value = Range(\"H6\").Value * (1 - 할인율)\nEnd Sub\n\nSub 집계()\n    Dim last As Long\n    last = Cells(Rows.Count, 1).End(xlUp).Row\n    Range(\"H9\").Value = WorksheetFunction.CountA(Range(\"A4:A\" & last))\n    Range(\"H10\").Value = WorksheetFunction.Sum(Range(\"E4:E\" & last))\nEnd Sub\n\nSub 종료()\n    Range(\"H4:H6\").ClearContents\n    MsgBox Format(Date, \"yyyy-mm-dd\") & \" 작업을 마칩니다.\"\nEnd Sub",
+     "buttons": [
+      {
+       "text": "등록",
+       "macro": "등록",
+       "range": "J3:K4"
+      },
+      {
+       "text": "집계",
+       "macro": "집계",
+       "range": "J6:K7"
+      },
+      {
+       "text": "종료",
+       "macro": "종료",
+       "range": "J9:K10"
+      }
+     ],
+     "run": [
+      "등록",
+      "집계"
      ]
     }
    ]

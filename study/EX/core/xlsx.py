@@ -90,7 +90,10 @@ def to_book(wb_f, wb_v, today=None):
                     continue
                 f = formula_text(v)
                 if f:
-                    cached = wv.cell(cell.row, cell.column).value if wv is not None else None
+                    vc = wv.cell(cell.row, cell.column) if wv is not None else None
+                    cached = vc.value if vc is not None else None
+                    if cached is None and vc is not None and vc.data_type == 'str':
+                        cached = ''                 # 엑셀이 저장한 빈 문자열 결과(예: 사용자 정의 함수가 "" 반환)
                     cached = plain(cached) if cached is not None else None
                     try:
                         cells[(cell.row, cell.column)] = fx.Formula(f, cached)

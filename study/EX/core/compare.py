@@ -606,7 +606,8 @@ def _book_items(src, ans, user):
             items.append((sec, {'label': f'VBA {name}', 'ok': False, 'msgs': ['프로시저가 없습니다(.xlsm 으로 저장)']}))
             continue
         score = _similar(u, body)
-        miss = _literals(body) - _literals(u)
+        lit_u = _literals(u)
+        miss = _same_result_formulas(_literals(body) - lit_u, lit_u, _literals(body), ans.book)
         ok = score >= 0.95 or (score >= 0.3 and not miss)
         msgs = []
         if not ok:
@@ -637,8 +638,8 @@ def _literals(body):
     """코드의 핵심 값: 다룬 셀들(범위 글자를 모두 합친 칸 목록), 그 밖의 문자열(수식·메시지), 색·서식 줄의 값."""
     out, cells = set(), set()
     for line in _code_lines(body):
-        for s in re.findall(r'"([^"]*)"', line):
-            s = s.replace(' ', '')
+        for s in re.findall(r'"((?:[^"]|"")*)"', line):
+            s = s.replace('""', '"').replace(' ', '')
             m = RANGE_RE.match(s)
             if m:
                 r1, c1 = int(m.group(2)), fx.col_num(m.group(1).upper())
@@ -653,6 +654,73 @@ def _literals(body):
     if cells:
         out.add('셀 ' + ','.join(sorted(cells, key=fx.parse_addr)))
     return out
+
+
+R1C1_RE = re.compile(r'(?<![a-z0-9_.])r(\[-?\d+\]|\d+)?c(\[-?\d+\]|\d+)?(?![a-z0-9_(])', re.I)
+
+
+def r1c1_to_a1(formula, row, col):
+    """R1C1 수식(=rc[-2]+rc[-1]) → (row, col) 칸 기준 A1 수식. 따옴표 안 글자는 그대로."""
+    def one(m):
+        def part(g, base):
+            if g is None:
+                return base, False
+            if g.startswith('['):
+                return base + int(g[1:-1]), False
+            return int(g), True
+        r, r_abs = part(m.group(1), row)
+        c, c_abs = part(m.group(2), col)
+        if r < 1 or c < 1:
+            raise fx.FormulaError('범위를 벗어난 R1C1 참조')
+        return ('$' if c_abs else '') + fx.addr(1, c)[:-1] + ('$' if r_abs else '') + str(r)
+    pieces = re.split(r'("[^"]*")', formula)
+    return ''.join(x if x.startswith('"') else R1C1_RE.sub(one, x) for x in pieces)
+
+
+def _at(formula, r, c, first):
+    """범위에 넣은 수식이 (r, c) 칸에서 갖는 모양: R1C1 은 그 칸 기준, A1 은 첫 칸에서 채운 것처럼 이동."""
+    if any(R1C1_RE.search(x) for x in re.split(r'"[^"]*"', formula)):
+        return r1c1_to_a1(formula, r, c)
+    return '=' + fx.unparse(fx.shift(fx.parse(formula), r - first[0], c - first[1]))
+
+
+def _formula_cells(lits):
+    for x in lits:
+        if x.startswith('셀 '):
+            return [fx.parse_addr(a) for a in x[2:].split(',')]
+    return []
+
+
+def _same_result_formulas(miss, user_lits, ans_lits, book):
+    """빠진 수식 값 중, 수험자 코드의 다른 수식이 매크로가 다루는 칸들에서 같은 결과를 내면 맞은 것으로 뺀다."""
+    cells = _formula_cells(ans_lits)
+    if not cells or not any(x.startswith('=') for x in miss):
+        return miss
+    spare = [x for x in user_lits if x.startswith('=') and x not in ans_lits]
+    left = set(miss)
+    for want in [x for x in miss if x.startswith('=')]:
+        hit = next((u for u in spare if _same_results(want, u, cells, book)), None)
+        if hit is not None:
+            left.discard(want)
+            spare.remove(hit)
+    return left
+
+
+def _same_results(f1, f2, cells, book):
+    for sheet in book.sheets:
+        vals = []
+        try:
+            for r, c in cells[:200]:
+                a = fx.evaluate_text(_at(f1, r, c, cells[0]), book, sheet, r, c)
+                b = fx.evaluate_text(_at(f2, r, c, cells[0]), book, sheet, r, c)
+                if isinstance(a, (fx.XLErr, fx.Arr)) or isinstance(b, (fx.XLErr, fx.Arr)):
+                    raise fx.FormulaError('계산 불가')
+                vals.append((a, b))
+        except (fx.FormulaError, fx.XLErr, ValueError, ZeroDivisionError):
+            continue
+        if vals and any(a not in (None, '', 0) for a, _ in vals) and all(_same_val(b, a) for a, b in vals):
+            return True
+    return False
 
 
 def _code_lines(body):

@@ -2071,17 +2071,24 @@
    ],
    "answer": [
     {
-     "op": "formula",
-     "range": "E4:E10",
-     "formula": "=SUM(B4:D4)"
-    },
-    {
-     "op": "style",
-     "range": "A3:F3",
-     "fill": "FFFF00",
-     "font": {
-      "bold": true
-     }
+     "op": "vba",
+     "code": "Sub 합계()\n    Range(\"E4:E10\").Formula = \"=SUM(B4:D4)\"\nEnd Sub\n\nSub 서식()\n    With Range(\"A3:F3\")\n        .Interior.Color = RGB(255, 255, 0)\n        .Font.Bold = True\n    End With\nEnd Sub",
+     "buttons": [
+      {
+       "text": "합계",
+       "macro": "합계",
+       "range": "H5:I6"
+      },
+      {
+       "text": "서식",
+       "macro": "서식",
+       "range": "H8:I9"
+      }
+     ],
+     "run": [
+      "합계",
+      "서식"
+     ]
     }
    ]
   },

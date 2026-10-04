@@ -2245,7 +2245,17 @@
      "needs_vba": true
     }
    ],
-   "answer": []
+   "answer": [
+    {
+     "op": "vba",
+     "code": "Public Function fn보험료(차종, 운전경력)\n    Select Case 차종\n        Case \"SUV\", \"전기차\"\n            If 운전경력 < 3 Then\n                fn보험료 = 25000\n            ElseIf 운전경력 < 10 Then\n                fn보험료 = 18000\n            Else\n                fn보험료 = 10000\n            End If\n        Case Else\n            If 운전경력 < 3 Then\n                fn보험료 = 18000\n            ElseIf 운전경력 < 10 Then\n                fn보험료 = 12000\n            Else\n                fn보험료 = 10000\n            End If\n    End Select\nEnd Function"
+    },
+    {
+     "op": "formula",
+     "range": "E20:E29",
+     "formula": "=fn보험료(B20,C20)"
+    }
+   ]
   },
   {
    "no": "2-3",
@@ -2583,19 +2593,24 @@
    ],
    "answer": [
     {
-     "op": "formula",
-     "range": "F4:F11",
-     "formula": "=SUM(C4:E4)/B4"
-    },
-    {
-     "op": "style",
-     "range": "F4:F11",
-     "numfmt": "0.0%"
-    },
-    {
-     "op": "style",
-     "range": "A3:F3",
-     "fill": "FFC000"
+     "op": "vba",
+     "code": "Sub 달성률계산()\n    Range(\"F4:F11\").Formula = \"=SUM(C4:E4)/B4\"\nEnd Sub\n\nSub 서식적용()\n    Range(\"F4:F11\").NumberFormat = \"0.0%\"\n    Range(\"A3:F3\").Interior.Color = RGB(255, 192, 0)\nEnd Sub",
+     "buttons": [
+      {
+       "text": "달성률",
+       "macro": "달성률계산",
+       "range": "H3:I4"
+      },
+      {
+       "text": "서식",
+       "macro": "서식적용",
+       "range": "H6:I7"
+      }
+     ],
+     "run": [
+      "달성률계산",
+      "서식적용"
+     ]
     }
    ]
   },
@@ -2608,7 +2623,7 @@
    "items": [
     "'등록'(이름: cmd등록) 단추를 클릭하면 입력 칸의 고객명[I4], 차종[I5], 대여일수[I6], 일요금[I7]을 표의 마지막 행 다음 행에 추가하는 프로시저를 작성하시오. 대여번호는 바로 윗행의 대여번호 + 1, 대여료는 일요금 × 대여일수의 값으로 입력하고, 추가한 뒤 입력 칸[I4:I7]의 내용을 지우시오. (CurrentRegion 또는 End 속성 사용) 작성 후 문제 파일에 입력되어 있는 자료로 '등록' 단추를 한 번 클릭하시오.",
     "'조회'(이름: cmd조회) 단추를 클릭하면 InputBox로 고객명을 입력받아 표에서 찾고, 찾으면 MsgBox로 '대여료 : 296,000원'과 같이 표시(Format 함수 사용), 없으면 '등록되지 않은 고객입니다'를 표시하는 프로시저를 작성하시오.",
-    "'기타작업-3' 시트가 활성화(Activate)되면 [A1] 셀의 글꼴 크기를 16, 글꼴 스타일을 '굵게'로 지정하고 [F3] 셀에 오늘 날짜(Date)를 표시하는 프로시저를 작성하시오."
+    "'기타작업-3' 시트가 활성화(Activate)되면 [A1] 셀의 글꼴 크기를 16, 글꼴 스타일을 '굵게'로 지정하고 [I1] 셀에 오늘 날짜(Date)를 표시하는 프로시저를 작성하시오."
    ],
    "checks": [
     {
@@ -2668,36 +2683,25 @@
    ],
    "answer": [
     {
-     "op": "values",
-     "range": "A9:F9",
-     "values": [
-      [
-       1006,
-       "윤서아",
-       "전기차",
-       6,
-       74000,
-       444000
-      ]
-     ]
-    },
-    {
-     "op": "values",
-     "range": "I4:I7",
-     "values": [
-      [
-       null
-      ],
-      [
-       null
-      ],
-      [
-       null
-      ],
-      [
-       null
-      ]
-     ]
+     "op": "vba",
+     "module": "sheet",
+     "code": "Private Sub cmd등록_Click()\n    Dim r As Long\n    r = Cells(Rows.Count, 1).End(xlUp).Row + 1\n    Cells(r, 1).Value = Cells(r - 1, 1).Value + 1\n    Cells(r, 2).Value = Range(\"I4\").Value\n    Cells(r, 3).Value = Range(\"I5\").Value\n    Cells(r, 4).Value = Range(\"I6\").Value\n    Cells(r, 5).Value = Range(\"I7\").Value\n    Cells(r, 6).Value = Range(\"I7\").Value * Range(\"I6\").Value\n    Range(\"I4:I7\").ClearContents\nEnd Sub\n\nPrivate Sub cmd조회_Click()\n    Dim 고객 As String, c As Range\n    고객 = InputBox(\"고객명을 입력하세요\")\n    For Each c In Range(\"B4\", Cells(Rows.Count, 2).End(xlUp))\n        If c.Value = 고객 Then\n            MsgBox \"대여료 : \" & Format(c.Offset(0, 4).Value, \"#,##0\") & \"원\"\n            Exit Sub\n        End If\n    Next c\n    MsgBox \"등록되지 않은 고객입니다\"\nEnd Sub\n\nPrivate Sub Worksheet_Activate()\n    Range(\"A1\").Font.Size = 16\n    Range(\"A1\").Font.Bold = True\n    Range(\"I1\").Value = Date\nEnd Sub",
+     "commands": [
+      {
+       "name": "cmd등록",
+       "caption": "등록",
+       "range": "K4:L5"
+      },
+      {
+       "name": "cmd조회",
+       "caption": "조회",
+       "range": "K7:L8"
+      }
+     ],
+     "run": [
+      "cmd등록_Click"
+     ],
+     "activate": true
     }
    ]
   }

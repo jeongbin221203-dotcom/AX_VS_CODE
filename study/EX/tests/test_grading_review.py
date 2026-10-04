@@ -177,3 +177,27 @@ def test_exam_subtotal_needs_group_values():
         ws.cell(r, 6).value = f'=SUBTOTAL(1,F{4 + i}:F{4 + i})'
     ctx = ex.Ctx(e, _save(wb), 'x.xlsx')
     assert not any(ex.check_subtotal(ctx, '분석작업-2', chk)[0] for chk in t['checks'])
+
+
+def test_vba_formula_with_same_result_is_accepted():
+    def book(edit=None):
+        wb = openpyxl.Workbook()
+        ws = wb.active
+        ws.title = '매크로작업'
+        for r in range(4, 9):
+            ws.cell(r, 3, r * 10)
+            ws.cell(r, 4, r)
+        return compare.Wb(_save(wb))
+    want = 'Sub 총점()\n    Range("E4").Select\n    ActiveCell.FormulaR1C1 = "=RC[-2]+RC[-1]"\n' \
+           '    Selection.AutoFill Destination:=Range("E4:E8")\nEnd Sub'
+    b = book().book
+
+    def ok(got):
+        s = compare._similar(got, want)
+        la, lu = compare._literals(want), compare._literals(got)
+        miss = compare._same_result_formulas(la - lu, lu, la, b)
+        return s >= 0.95 or (s >= 0.3 and not miss)
+    assert ok('Sub 총점()\n    Range("E4:E8").FormulaR1C1 = "=SUM(RC[-2]:RC[-1])"\nEnd Sub')
+    assert ok('Sub 총점()\n    Range("E4:E8").Formula = "=C4+D4"\nEnd Sub')
+    assert not ok(want.replace('RC[-2]+RC[-1]', 'RC[-2]*RC[-1]'))
+    assert compare.r1c1_to_a1('=IF(RC[-1]>=80,"RC","")', 4, 5) == '=IF(D4>=80,"RC","")'

@@ -2151,15 +2151,24 @@
    ],
    "answer": [
     {
-     "op": "formula",
-     "range": "F4:F10",
-     "formula": "=AVERAGE(B4:E4)"
-    },
-    {
-     "op": "style",
-     "range": "A3:F3",
-     "fill": "FFC000",
-     "halign": "center"
+     "op": "vba",
+     "code": "Sub 평균()\n    Range(\"F4:F10\").Formula = \"=AVERAGE(B4:E4)\"\nEnd Sub\n\nSub 서식()\n    With Range(\"A3:F3\")\n        .Interior.Color = RGB(255, 192, 0)\n        .HorizontalAlignment = xlCenter\n    End With\nEnd Sub",
+     "buttons": [
+      {
+       "text": "평균",
+       "macro": "평균",
+       "range": "H4:I5"
+      },
+      {
+       "text": "서식",
+       "macro": "서식",
+       "range": "H7:I8"
+      }
+     ],
+     "run": [
+      "평균",
+      "서식"
+     ]
     }
    ]
   },

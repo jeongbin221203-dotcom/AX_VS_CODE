@@ -114,3 +114,9 @@ def test_every_exam_page_and_file(client):
         assert client.get(f"/exam/{e['id']}").status_code == 200, e['id']
         assert ex.grade(e, ex.problem_workbook(e))['score'] == 0, e['id']
     assert {e['level'] for e in ex.exams()} == {'c2', 'c1'}
+
+
+def test_c1_01_excel_answer_with_vba_scores_full():
+    """Excel 이 VBA(사용자 정의 함수·매크로·단추·프로시저)까지 넣어 만든 정답 파일(tools/exam_answer.py)."""
+    res = ex.grade(ex.get('c1-01'), (FIX / 'c1-01_answer_excel.xlsm').read_bytes(), '정답.xlsm')
+    assert res['score'] == res['total'], [k for k, v in _items(res).items() if not v['ok']]

@@ -65,8 +65,10 @@
 `pivot{source_sheet,source,at,dest_sheet,rows,cols,filters,values:[[필드,함수,표시 이름]],layout,no_grand_rows,no_grand_cols}` ·
 `scenario{changing,scenarios,result}` · `goalseek{cell,value,changing}` · `datatable{range(머리 포함 전체),row_input,col_input,corner,corner_at}` ·
 `consolidate{target,sources:["'시트'!$A$3:$C$9"],func,top,left}` · `chart{source,type,at,title,line_series,secondary,labels,trend,y_title,x_title,legend}` ·
-`page{…}` · `protect{unlocked,hidden,password}` · `textsplit{range,delimiter}`
+`page{…}` · `protect{unlocked,hidden,password}` · `textsplit{range,delimiter}` ·
+`vba{code, module('sheet'=그 시트 모듈, 기본=새 표준 모듈), buttons:[{text,macro,range}](양식 단추), commands:[{name,caption,range}](ActiveX 명령 단추), run:[실행할 프로시저], activate(시트를 다시 활성화해 Worksheet_Activate 실행)}`
+— 매크로·사용자 정의 함수·VBA 프로그래밍 문제의 모범 답안. 실행하려면 Excel '보안 센터 > VBA 프로젝트 개체 모델에 안전하게 액세스'(AccessVBOM)가 켜져 있어야 한다.
 op 에 `sheet` 를 주면 그 시트에서 실행(기본은 task 의 sheet).
 
 ## 검증
-`python tools/exam_answer.py <id>` → `<id>: 점수/100 (매크로·VBA n점 제외)` 와 실패 항목. needs_vba 를 뺀 모든 항목이 통과해야 한다.
+`python tools/exam_answer.py <id>` → `<id>: 점수/100 (매크로·VBA 포함)` 와 실패 항목. 모든 항목이 통과해야 한다(VBA 접근이 꺼져 있거나 `--no-vba` 면 needs_vba 항목은 빼고 보고).
