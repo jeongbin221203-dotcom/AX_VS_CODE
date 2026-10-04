@@ -554,12 +554,29 @@ _SUMMARY_KEYS = {
 }
 
 
+def _split_summary(desc: str) -> list[str]:
+    """쉼표로 나누되 '4,200 만원'·'3,200만원' 의 천 단위 쉼표와 괄호 안 '대학졸업(2,3년)' 의 쉼표는 나누지 않는다."""
+    parts, cur, depth = [], "", 0
+    for i, ch in enumerate(desc):
+        if ch in "([":
+            depth += 1
+        elif ch in ")]":
+            depth = max(0, depth - 1)
+        if ch == "," and depth == 0 and not re.match(r"\d{3}(?!\d)", desc[i + 1:]):
+            parts.append(cur.strip())
+            cur = ""
+            continue
+        cur += ch
+    parts.append(cur.strip())
+    return [p for p in parts if p]
+
+
 def _summary_fields(desc: str | None) -> dict:
     """'현대오토에버(주), …, 경력:신입, 학력:대학교졸업(4년)이상, 면접 후 결정, 마감일:2026-10-12' 같은 요약문을 나눈다."""
     out: dict = {}
     if not desc:
         return out
-    for part in re.split(r"\s*,(?!\d{3}(?!\d))\s*", desc):     # '4,200 만원'·'3,200만원' 의 쉼표는 나누지 않는다
+    for part in _split_summary(desc):
         if ":" in part:
             key, _, val = part.partition(":")
             key, val = key.strip(), val.strip()

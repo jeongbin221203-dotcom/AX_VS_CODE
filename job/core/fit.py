@@ -103,12 +103,6 @@ def evaluate(p: dict, prof: dict, today: date | None = None) -> FitResult:
     elif (lo or top) >= want:
         r.parts["연봉"] = (W, "희망 연봉 이상")
         r.reasons.append(f"연봉이 희망({want:,}만원) 이상")
-    elif top >= want and lo and top >= lo * 2 and (lo + top) / 2 < want:
-        # '3,500~8,000만원' 처럼 범위가 넓으면 상한보다 중간값으로 본다 (상한은 경력 많은 사람 기준인 경우가 많음)
-        mid = round((lo + top) / 2)
-        pts = round(W * 0.8 * max(0.0, (mid / want - 0.7) / 0.3))
-        r.parts["연봉"] = (pts, f"범위가 넓음 — 중간값 {mid:,}만원 기준")
-        r.warnings.append(f"연봉 범위가 넓음({lo:,}~{top:,}만원) — 중간값 {mid:,}만원으로 봄, 면접 때 확인")
     elif top >= want:
         r.parts["연봉"] = (round(W * 0.8), "상한은 희망 연봉 이상")
         r.reasons.append("연봉 상한이 희망 연봉에 닿음")

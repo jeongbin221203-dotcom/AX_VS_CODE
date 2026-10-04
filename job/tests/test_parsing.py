@@ -174,12 +174,11 @@ def test_wide_gap_and_unit_mistakes():
     assert salary.parse("월급 2,236,300만원")[:2] == (2684, 2684)                 # 2,236,300원
 
 
-def test_wide_range_scored_by_midpoint():
+def test_wide_range_keeps_upper_bound_scoring():
+    """원문 그대로의 넓은 범위('3,500~8,000')는 중간값으로 바꾸지 않는다 — 상한이 희망 연봉에 닿으면 20점."""
     from core import fit
     prof = {"min_salary": 8000}
-    pts, label = fit.evaluate({"salary_min": 3500, "salary_max": 8000, "title": "x"}, prof).parts["연봉"]
-    assert "중간값 5,750만원" in label and pts < 5
-    assert fit.evaluate({"salary_min": 6000, "salary_max": 9000, "title": "x"}, prof).parts["연봉"][0] == 20
+    assert fit.evaluate({"salary_min": 3500, "salary_max": 8000, "title": "x"}, prof).parts["연봉"] == (20, "상한은 희망 연봉 이상")
 
 
 def test_abroad_title_overrides_head_office_address():
@@ -193,3 +192,9 @@ def test_abroad_title_overrides_head_office_address():
 def test_deadline_with_date_and_early_close_note():
     assert to_date("2026.10.31(토) 채용 시 마감") == "2026-10-31"
     assert to_date("채용시 마감") is None and to_date("상시채용") is None
+
+
+def test_summary_keeps_comma_in_parentheses():
+    from core.sources.linkimport import _summary_fields
+    f = _summary_fields("(주)가나, 생산관리, 경력:경력무관, 학력:대학졸업(2,3년)이상, 연봉 3,200만원, 마감일:2026-11-30")
+    assert f["education"] == "대학졸업(2,3년)이상" and f["salary"] == "연봉 3,200만원"
