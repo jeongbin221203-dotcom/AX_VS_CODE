@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import re
 import statistics
 from datetime import date, timedelta
 
@@ -406,6 +407,12 @@ STATS_RANGE = (1_000, 20_000)   # 평균에 넣는 연봉(만원): 1천만원 �
 CAREER_LABELS = {"신입": "신입 지원 가능", "경력": "경력 지원 가능", "신입·경력": "신입·경력", "무관": "경력 무관"}
 
 
+def _part_time_only(p: dict) -> bool:
+    """파트타임·아르바이트로만 뽑는 공고 — 시급을 주 40시간 연봉으로 바꾼 값이라 평균에서 뺀다 ('토일 파트 시급 25,000원')."""
+    kinds = [k.strip() for k in re.sub(r"\([^)]*\)", "", str(p.get("employment_type") or "")).split(",") if k.strip()]
+    return bool(kinds) and all(k in ("파트타임", "아르바이트") for k in kinds)
+
+
 def salary_stats(rows: list[dict] | None = None) -> dict:
     """공고에 적힌 연봉(범위의 가운데 값)으로 지역·경력·출처별 평균을 낸다. 미공개 공고는 평균에서 뺀다."""
     if rows is None:                              # 필요한 열만 (본문까지 읽으면 수만 건에서 느림)
@@ -426,7 +433,7 @@ def salary_stats(rows: list[dict] | None = None) -> dict:
         total_count[region] = total_count.get(region, 0) + 1
         if p.get("company_avg_salary"):
             company_avg.append(p["company_avg_salary"])
-        mid = None if salary.is_commission(p) else salary.midpoint(p.get("salary_min"), p.get("salary_max"))
+        mid = None if salary.is_commission(p) or _part_time_only(p) else             salary.midpoint(p.get("salary_min"), p.get("salary_max"))
         if not mid or not STATS_RANGE[0] <= mid < STATS_RANGE[1]:
             continue                                # 미공개·성과급 직군·주 몇 시간 파트·단위 오기 의심 금액은 평균에서 뺌
         mids.append(mid)

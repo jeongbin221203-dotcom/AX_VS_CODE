@@ -161,3 +161,13 @@ def test_huge_salary_flagged_not_full_score():
     from core import fit
     r = fit.evaluate({"salary_min": 31500, "salary_max": 41200, "title": "직원 채용"}, {"min_salary": 8000})
     assert r.parts["연봉"] == (12, "금액 확인 필요") and any("확인 필요" in w for w in r.warnings)
+
+
+def test_stats_skip_part_time_only():
+    from core import postings
+    rows = [{"sido": "울산", "career_type": "무관", "source": "saramin", "salary_min": 6270, "salary_max": 6270,
+             "employment_type": "파트타임", "title": "토일 파트"},
+            {"sido": "울산", "career_type": "무관", "source": "saramin", "salary_min": 3000, "salary_max": 3000,
+             "employment_type": "정규직, 아르바이트", "title": "직원"}]
+    st = postings.salary_stats(rows)
+    assert st["overall"]["n"] == 1 and st["overall"]["max"] == 3000
