@@ -91,6 +91,8 @@ def parse(text, pay_type: str | None = None) -> tuple[int | None, int | None, bo
         return values[0], None, False                  # 범위의 위쪽을 버렸으면 '이상'으로
     if len(values) >= 2 and values[0] != values[1]:
         lo, hi = sorted(values[:2])                    # 첫 범위만 (뒤의 '10~20만원 추가' 같은 금액은 무시)
+        if hi == PLACEHOLDER_TOP and lo <= 1_000:
+            return None, None, False                   # 리멤버 '1000~10000만원': 입력 칸 처음값~끝값 그대로 = 미공개
         if hi >= ABSURD_TOP and hi > lo * 5:
             return lo, None, False                     # '3,000~50,000만원' 처럼 위쪽이 터무니없으면 '이상'으로
         if hi == PLACEHOLDER_TOP and lo <= PLACEHOLDER_TOP // 2:

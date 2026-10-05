@@ -99,7 +99,7 @@ textarea { width: 100%; }
 .tbl { width: 100%; border-collapse: collapse; font-size: .9rem; }
 .tbl th, .tbl td { padding: .45rem .5rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: middle; }
 .tbl th { color: var(--muted); font-weight: 600; font-size: .82rem; }
-.tbl th.r, .tbl td.r { text-align: right; }
+.tbl th.r, .tbl td.r { text-align: right; white-space: nowrap; }
 .tbl.compact td, .tbl.compact th { padding: .3rem .4rem; }
 .tbl td.up { color: var(--ok); } .tbl td.down { color: var(--bad); }
 .bar-cell { width: 34%; }

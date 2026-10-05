@@ -231,3 +231,10 @@ def test_big_amount_not_hourly_and_tiny_dropped():
     assert salary.parse("시급 60,000 원")[:2] == (None, None)                  # 진짜 높은 시급은 그대로 원문 표시
     assert salary.parse("- 최저 NET 280 + 충격파인센 5%, 메뉴얼 7분당 1,000원")[:2] == (None, None)
     assert salary.parse("월급 50 만원 (주 7시간)")[:2] == (600, 600)
+
+
+def test_slider_default_range_is_undisclosed():
+    assert salary.parse("1000~10000만원")[:2] == (None, None)
+    assert salary.parse("연봉 25900000원~100000000원")[:2] == (2590, None)
+
+    assert salary.parse("시급 10500원~10500원")[:2] == (2633, 2633)

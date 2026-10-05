@@ -429,7 +429,8 @@ def _linkareer(page: str, url: str) -> dict | None:
         salary_text = "면접 후 결정"
     else:
         lo, hi = a.get("minSalary"), a.get("maxSalary")
-        unit = "원" if max(int(lo or 0), int(hi or 0)) >= 100000 else "만원"
+        # 시급은 원 단위로 온다 (10500 = 10,500원). 월급·연봉은 10만 이상이면 원, 아니면 만원
+        unit = "원" if a.get("salaryType") == "HOURLY" or max(int(lo or 0), int(hi or 0)) >= 100000 else "만원"
         pre = {"YEARLY": "연봉 ", "MONTHLY": "월 ", "HOURLY": "시급 "}.get(a.get("salaryType") or "", "")
         salary_text = (pre + (f"{lo}{unit}~{hi}{unit}" if lo and hi else f"{lo or hi}{unit}")) if (lo or hi) else None
     kinds = a.get("jobTypes") or []
