@@ -30,6 +30,8 @@ class FitResult:
         return not self.blockers
 
 
+SUSPICIOUS_ANNUAL = 20_000   # 연 2억 이상(만원)은 단위 오기일 수 있어 점수에서 미공개처럼
+
 def grade_of(score: int) -> str:
     if score >= 80:
         return "적합"
@@ -100,6 +102,10 @@ def evaluate(p: dict, prof: dict, today: date | None = None) -> FitResult:
     elif top is None:
         r.parts["연봉"] = (round(W * 0.5), "연봉 미공개·협의")
         r.warnings.append("연봉 미공개 — 면접 때 확인")
+    elif top >= SUSPICIOUS_ANNUAL:
+        # 원문 그대로지만 '연봉 31,500~41,200만원' 처럼 단위를 잘못 넣은 경우가 많다 — 값은 두고 점수는 미공개와 같게
+        r.parts["연봉"] = (round(W * 0.5), "금액 확인 필요")
+        r.warnings.append(f"원문 연봉이 {top:,}만원 — 단위를 잘못 적었을 수 있어 확인 필요")
     elif (lo or top) >= want:
         r.parts["연봉"] = (W, "희망 연봉 이상")
         r.reasons.append(f"연봉이 희망({want:,}만원) 이상")

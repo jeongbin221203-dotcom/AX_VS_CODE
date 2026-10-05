@@ -245,7 +245,8 @@ _SORTS = {
     "deadline": "p.deadline IS NULL, p.deadline",
     "new": "p.posted_at IS NULL, p.posted_at DESC, p.id DESC",
 }
-_CAREER_IN = {"신입": ("신입", "신입·경력", "무관"), "경력": ("경력", "신입·경력", "무관"), "무관": ("무관",)}
+_CAREER_IN = {"신입": ("신입", "신입·경력", "무관"), "경력": ("경력", "신입·경력", "무관"),
+              "신입·경력": ("신입·경력",), "무관": ("무관",)}
 
 
 def _where(f: dict, today: date, *, group: bool = True, excluded: bool = True) -> tuple[list[str], list]:

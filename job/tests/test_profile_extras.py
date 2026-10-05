@@ -145,3 +145,19 @@ def test_broad_group_words_when_no_sub_word():
     assert jobgroups.groups_of({"title": "[교육3일 바로입사] 정규직 채용"}) == set()
     # 세부 직무 단어가 있으면 넓은 단어는 보지 않는다
     assert jobgroups.groups_of({"title": "해외영업 담당자"}) == {"영업·판매·무역"}
+
+
+def test_career_filter_only_both(app):
+    """'신입·경력만' 은 신입·경력 공고만 (예전엔 조건이 빠져 전체가 나옴)."""
+    from core import postings
+    postings.upsert_many([postings.build("saramin", str(i), title=f"공고{i}", company="가", career=c, deadline="2099-12-31")
+                          for i, c in enumerate(["신입", "경력", "신입·경력", "경력무관"])])
+    rows, total = postings.query({}, {"career": "신입·경력"}, page=1, per=30)
+    assert total == 1 and rows[0]["career_type"] == "신입·경력"
+    assert postings.query({}, {"career": "무관"}, page=1, per=30)[1] == 1
+
+
+def test_huge_salary_flagged_not_full_score():
+    from core import fit
+    r = fit.evaluate({"salary_min": 31500, "salary_max": 41200, "title": "직원 채용"}, {"min_salary": 8000})
+    assert r.parts["연봉"] == (12, "금액 확인 필요") and any("확인 필요" in w for w in r.warnings)
