@@ -171,3 +171,11 @@ def test_stats_skip_part_time_only():
              "employment_type": "정규직, 아르바이트", "title": "직원"}]
     st = postings.salary_stats(rows)
     assert st["overall"]["n"] == 1 and st["overall"]["max"] == 3000
+
+
+def test_part_time_only_counts_as_arbeit():
+    from core.exclude import matches
+    assert matches({"title": "경희둘레한의원 파트타임 간호조무사", "employment_type": "파트타임"}, ["아르바이트"])
+    assert matches({"title": "작은도서관 돌봄교사 파트타이머", "employment_type": None}, ["아르바이트"])
+    assert matches({"title": "물류 사무", "employment_type": "정규직, 아르바이트"}, ["아르바이트"])     # 예전처럼
+    assert not matches({"title": "방사선사(풀타임, 정규직)", "employment_type": "정규직, 파트타임"}, ["아르바이트"])

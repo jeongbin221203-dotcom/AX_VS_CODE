@@ -47,10 +47,31 @@ def matches(p: dict, words: list[str]) -> list[str]:
             if _contract_only(p):
                 hits.append(w)
             continue
+        if w == "아르바이트" and _part_time_only(p):
+            hits.append(w)                           # '파트타임' 으로만 뽑는 공고도 (아르바이트·알바가 적힌 공고는 아래에서)
+            continue
         terms = PRESETS.get(w, (w,))
         if any(_hit(text, t) for t in terms):
             hits.append(w)
     return hits
+
+
+_FULL = ("정규직", "무기계약직", "계약직", "기간제", "인턴", "전환형 인턴", "위촉직", "프리랜서", "개인사업자", "파견직", "도급")
+_PART = ("아르바이트", "파트타임")
+
+
+def _part_time_only(p: dict) -> bool:
+    """파트타임으로만 뽑는 공고 (아르바이트 제외 항목에 함께 걸림). '정규직, 파트타임'처럼 다른 자리도 있으면 아님.
+    고용형태가 없으면 제목('아르바이트'·'알바'·'파트타이머'·'파트타임')으로 판단."""
+    emp = re.sub(r"\([^)]*\)", "", str(p.get("employment_type") or ""))
+    options = [o.strip() for o in emp.replace("·", ",").replace("/", ",").split(",") if o.strip()]
+    title = _norm(p.get("title") or "")
+    part_title = any(w in title for w in ("아르바이트", "알바", "파트타이머", "파트타임"))
+    if not options:
+        return part_title
+    has_part = any(o in _PART for o in options)
+    has_other = any(o in _FULL for o in options)
+    return (has_part or part_title) and not has_other
 
 
 def _contract_only(p: dict) -> bool:
