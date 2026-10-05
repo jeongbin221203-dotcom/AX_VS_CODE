@@ -47,4 +47,5 @@ def stats():
     regions = [r["name"] for r in st["regions"]]
     open_n = postings.open_counts()                 # 공고 목록 기본 화면과 같은 기준 (마감·제외 숨김), DB 에서 셈
     return render_template("stats.html", st=st, peak=peak, regions=regions, open_n=open_n,
-                           careers=[c["name"] for c in st["careers"]], sido_order=SIDO_ORDER)
+                           careers=[c["name"] for c in st["careers"]], career_labels=postings.CAREER_LABELS,
+                           sido_order=SIDO_ORDER)

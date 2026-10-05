@@ -402,13 +402,18 @@ def _summary(values: list[int]) -> dict:
             "min": min(values), "max": max(values)}
 
 
+STATS_RANGE = (1_000, 20_000)   # 평균에 넣는 연봉(만원): 1천만원 미만(시간제 파트)·2억 이상(단위 오기 의심)은 뺌
+CAREER_LABELS = {"신입": "신입 지원 가능", "경력": "경력 지원 가능", "신입·경력": "신입·경력", "무관": "경력 무관"}
+
+
 def salary_stats(rows: list[dict] | None = None) -> dict:
     """공고에 적힌 연봉(범위의 가운데 값)으로 지역·경력·출처별 평균을 낸다. 미공개 공고는 평균에서 뺀다."""
     if rows is None:                              # 필요한 열만 (본문까지 읽으면 수만 건에서 느림)
+        where, args = _where({}, date.today())      # '모집 중' 과 같은 공고 (마감·제외·숨김 뺌)
         with db.connect() as con:
             rows = [dict(r) for r in con.execute(
-                "SELECT sido, career_type, source, salary_min, salary_max, company_avg_salary, employment_type, title "
-                "FROM postings WHERE hidden = 0")]
+                "SELECT p.sido, p.career_type, p.source, p.salary_min, p.salary_max, p.company_avg_salary, "
+                "p.employment_type, p.title FROM postings p WHERE " + " AND ".join(where), args)]
     by_region: dict[str, list[int]] = {}
     by_career: dict[str, list[int]] = {}
     by_source: dict[str, list[int]] = {}
@@ -422,14 +427,16 @@ def salary_stats(rows: list[dict] | None = None) -> dict:
         if p.get("company_avg_salary"):
             company_avg.append(p["company_avg_salary"])
         mid = None if salary.is_commission(p) else salary.midpoint(p.get("salary_min"), p.get("salary_max"))
-        if not mid:                                 # 미공개·성과급 직군은 평균에서 뺌
-            continue
+        if not mid or not STATS_RANGE[0] <= mid < STATS_RANGE[1]:
+            continue                                # 미공개·성과급 직군·주 몇 시간 파트·단위 오기 의심 금액은 평균에서 뺌
         mids.append(mid)
-        career = p.get("career_type") or "무관"
+        kind = p.get("career_type") or "무관"
         by_region.setdefault(region, []).append(mid)
-        by_career.setdefault(career, []).append(mid)
         by_source.setdefault(p.get("source") or "-", []).append(mid)
-        by_region_career.setdefault((region, career), []).append(mid)
+        for want, kinds in _CAREER_IN.items():      # 목록 필터와 같은 기준 (신입 지원 가능 = 신입·신입경력·무관)
+            if kind in kinds:
+                by_career.setdefault(want, []).append(mid)
+                by_region_career.setdefault((region, want), []).append(mid)
 
     # 500만원 단위 연봉 구간 (3,000만원 미만 / 3,000~3,499 … / 8,000만원 이상)
     edges = list(range(3000, 8001, 500))
@@ -447,7 +454,8 @@ def salary_stats(rows: list[dict] | None = None) -> dict:
         "disclosed": len(mids),
         "company_avg": _summary(company_avg),
         "regions": [{"name": r, "count": total_count[r], **_summary(by_region.get(r, []))} for r in regions],
-        "careers": [{"name": c, **_summary(by_career.get(c, []))} for c in CAREER_TYPES if c in by_career],
+        "careers": [{"name": c, "label": CAREER_LABELS.get(c, c), **_summary(by_career.get(c, []))}
+                    for c in CAREER_TYPES if c in by_career],
         "sources": [{"name": s, **_summary(v)} for s, v in sorted(by_source.items())],
         "matrix": {f"{r}|{c}": _summary(v)["avg"] for (r, c), v in by_region_career.items()},
         "bands": bands,
