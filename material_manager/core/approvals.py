@@ -12,7 +12,7 @@ import pandas as pd
 from core import audit, db, notify
 from core.utils import now_str
 
-STATUS = {"PENDING": "결재 대기", "APPROVED": "승인", "REJECTED": "반려"}
+STATUS = {"PENDING": "결재 대기", "APPROVED": "승인", "REJECTED": "반려", "WITHDRAWN": "회수"}
 KINDS = {"ADJ": "실사 조정", "CANCEL": "거래 취소"}
 
 
@@ -141,6 +141,30 @@ def decide(req_id: int, approve: bool, comment: str, actor: dict, wh_ids=None):
                        f"조정 수량 {float(req['qty']):+,.2f} · 금액 ₩{float(req['amount']):,.0f}")],
                      "/approvals/", f"approval:{req_id}")
     return result
+
+
+def withdraw(req_id: int, actor: dict, wh_ids=None):
+    """요청자가 아직 처리되지 않은 실사 조정·거래 취소 요청을 거둬들인다. 결재자가 처리하는 순간과 겹치면 먼저 된 쪽만 성립한다
+    (조건부 UPDATE 한 문장). 회수한 요청은 결재함에서 사라지고, 같은 거래는 다시 요청할 수 있다."""
+    from core import services
+    with db.transaction() as conn:
+        db.lock(conn, f"approval:{req_id}")
+        row = conn.execute("SELECT * FROM approval_requests WHERE id = ?", (req_id,)).fetchone()
+        if row is None or (wh_ids is not None and row["warehouse_id"] not in wh_ids):
+            return services.Result(False, "요청이 없거나 권한 밖입니다.")
+        if row["requested_by_id"] is None or row["requested_by_id"] != actor.get("id"):
+            return services.Result(False, "본인이 올린 요청만 회수할 수 있습니다 (다른 사람의 요청은 결재함에서 반려).")
+        n = conn.execute("UPDATE approval_requests SET status = 'WITHDRAWN', decided_by_id = ?, decided_by = ?, decided_at = ?, "
+                         "comment = ? WHERE id = ? AND status = 'PENDING'",
+                         (actor.get("id"), actor["name"], now_str(), "요청자가 회수", req_id)).rowcount
+        if n != 1:
+            return services.Result(False, "이미 결재자가 처리했거나 회수한 요청입니다.")
+        audit.record(conn, actor, "APPROVAL_WITHDRAW", "approval", req_id, {"kind": row["kind"], "amount": float(row["amount"] or 0)})
+        try:                                                    # 결재자 알림함의 '결재 요청' 알림은 읽음으로
+            conn.execute("UPDATE notifications SET read_at = ? WHERE ref = ? AND read_at IS NULL", (now_str(), f"approval:{req_id}"))
+        except db.DBError:
+            pass
+    return services.Result(True, f"{KINDS.get(row['kind'], '결재')} 요청 #{req_id}를 회수했습니다.")
 
 
 def requests_df(status: str | None = None, wh_ids=None, limit: int = 500) -> pd.DataFrame:

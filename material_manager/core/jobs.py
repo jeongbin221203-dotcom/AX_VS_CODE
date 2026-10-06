@@ -97,6 +97,11 @@ def _audit_seal() -> str:
     return f"감사로그 {n}건 봉인"
 
 
+def _audit_anchor() -> str:
+    from core import audit
+    return audit.announce_anchor()
+
+
 def _master_enabled() -> bool:
     from core import master_sync
     return master_sync.enabled()
@@ -111,6 +116,7 @@ JOBS = {
     "mrp_nightly": Job("mrp_nightly", "MRP 밤 자동 실행 (하루 한 번, 플랜트마다)", 3600, _mrp_nightly,
                        enabled=lambda: config.MRP_NIGHTLY_HOUR >= 0),
     "audit_seal": Job("audit_seal", "감사로그 해시 체인 봉인", 60, _audit_seal),
+    "audit_anchor": Job("audit_anchor", "감사로그 앵커를 서버 로그에 남기기 (하루 한 번)", 86400, _audit_anchor),
     "notify_send": Job("notify_send", "결재 알림 보내기 (메일·잔디·네이버웍스)", 60, _notify, enabled=_notify_enabled),
     "storage_flush": Job("storage_flush", "S3 임시 보관 파일 올리기", 300, _storage_flush,
                          enabled=lambda: config.STORAGE == "s3"),

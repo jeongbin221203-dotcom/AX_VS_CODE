@@ -298,6 +298,7 @@ DOC_MAX_BYTES = 10 * 1024 * 1024                                  # 증빙 파�
 
 # ── 업로드 방어 ──────────────────────────────────────────────
 UPLOAD_MAX_ROWS = 20000                    # 자재 일괄 업로드 최대 행 수
+SCOPE_TEMP_MAX_DAYS = int(os.getenv("MM_SCOPE_TEMP_MAX_DAYS", "365"))   # 임시 데이터 범위의 최대 기간
 BG_ROWS = int(os.getenv("MM_BG_ROWS", "500"))                  # 일괄 반영이 이 줄 수를 넘으면 백그라운드 작업으로 (core/tasks.py)
 BG_EXPORT_ROWS = int(os.getenv("MM_BG_EXPORT_ROWS", "10000"))  # 엑셀 추출이 이 행 수를 넘으면 백그라운드 작업으로
 BG_WORKERS = int(os.getenv("MM_BG_WORKERS", "2"))              # 이 서버에서 동시에 도는 백그라운드 작업 수

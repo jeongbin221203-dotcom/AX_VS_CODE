@@ -7,7 +7,7 @@ from flask import Blueprint, abort, flash, redirect, request, url_for
 
 import config
 from core import audit, auth, db, doctor, jobs, org, repository as repo, sso, version
-from views.helpers import (Table, a_date, actor, as_id, f_str, form_response, log_export, page_arg, pager, render_page,
+from views.helpers import (Table, a_date, actor, as_id, f_str, file_response, form_response, log_export, page_arg, pager, render_page,
                            role_required, xlsx_response)
 
 bp = Blueprint("admin", __name__, url_prefix="/admin")
@@ -26,6 +26,7 @@ def users():
         p, w = org.user_scope(u["id"])
         u["scope_plants"], u["scope_whs"] = p, w
         u["scope_ver"] = version.of_scope(u["all_warehouses"], p, w)
+        u["temps"] = org.temp_scopes(u["id"])
         u["scope_label"] = ("전체" if u["role"] == "ADMIN" or u["all_warehouses"] else
                             ", ".join([plant_name.get(i, "?") + "(플랜트)" for i in sorted(p)]
                                       + [wh_name.get(i, "?") for i in sorted(w)]) or "없음")
@@ -99,6 +100,23 @@ def user_scope(user_id: int):
     result = org.set_user_scope(user_id, request.form.get("all") == "1",
                                 repo.ids_in(request.form.getlist("plant")),
                                 repo.ids_in(request.form.getlist("warehouse")), actor(), expected=f_str("_ver") or None)
+    flash(result.message, "success" if result.ok else "error")
+    return redirect(url_for("admin.users"))
+
+
+@bp.post("/users/<int:user_id>/scope-temp")
+@role_required("ADMIN")
+def user_scope_temp(user_id: int):
+    result = org.add_temp_scope(user_id, repo.ids_in(request.form.getlist("plant")), repo.ids_in(request.form.getlist("warehouse")),
+                                f_str("valid_to"), f_str("reason"), actor())
+    flash(result.message, "success" if result.ok else "error")
+    return redirect(url_for("admin.users"))
+
+
+@bp.post("/scope-temp/<int:scope_id>/revoke")
+@role_required("ADMIN")
+def scope_temp_revoke(scope_id: int):
+    result = org.revoke_temp_scope(scope_id, actor())
     flash(result.message, "success" if result.ok else "error")
     return redirect(url_for("admin.users"))
 
@@ -235,7 +253,7 @@ def audit_log():
     head = audit.chain_head()
     unsealed = int(db.scalar("SELECT COUNT(*) FROM audit_log WHERE seq IS NULL") or 0)
     return render_page("admin_audit.html", "audit", start=start, end=end, user=user, action=action,
-                       keyword=keyword, users=audit.user_names(), actions=audit.ACTIONS, head=head, unsealed=unsealed,
+                       keyword=keyword, users=audit.user_names(), actions=audit.ACTIONS, head=head, unsealed=unsealed, anchor_age=audit.anchor_age_days(),
                        count=total, pager=pager(total, page_arg()), grid=Table(view, {"ID": "{}"}))
 
 
@@ -247,9 +265,35 @@ def audit_verify():
     audit.log(actor(), "AUDIT_VERIFY", "audit_log", "", {"ok": result["ok"], "sealed": result["sealed"],
                                                           "broken_seq": result["broken_seq"], "reason": result["reason"]})
     if result["ok"]:
-        flash(f"감사로그 {result['sealed']:,}건이 봉인 당시 그대로입니다 (마지막 해시 {result['head'][:16]}…).", "success")
+        flash(f"감사로그 {result['sealed']:,}건이 봉인 당시 그대로입니다 — 봉인 번호 {result['sealed']} · 해시 {result['head']}. "
+              "이 값을 서버 밖에 보관하려면 '앵커 내려받기'를 누르세요.", "success")
     else:
         flash(f"⚠ 감사로그가 바뀌었습니다 — 봉인 번호 {result['broken_seq']}: {result['reason']}. 즉시 DB 관리자·보안 담당에게 알리세요.", "error")
+    return redirect(url_for("admin.audit_log"))
+
+
+@bp.get("/audit/anchor.txt")
+@role_required("ADMIN")
+def audit_anchor():
+    """서버 밖에 보관할 감사로그 앵커(봉인 번호 + 해시) 파일."""
+    text = audit.anchor_text()
+    audit.mark_anchor_saved()
+    audit.log(actor(), "AUDIT_ANCHOR", "audit_log", "", {"download": True})
+    return file_response(text.encode("utf-8"), f"감사로그_앵커_{date.today():%Y%m%d}.txt", "text/plain; charset=utf-8")
+
+
+@bp.post("/audit/anchor-check")
+@role_required("ADMIN")
+def audit_anchor_check():
+    """이전에 서버 밖에 적어 둔 앵커를 붙여 넣어 지금 감사로그와 대조한다."""
+    parsed = audit.parse_anchor(request.form.get("anchor", ""))
+    if not parsed:
+        flash("앵커에서 봉인 번호와 해시(64자리)를 읽지 못했습니다. 내려받은 파일의 내용을 그대로 붙여 넣으세요.", "error")
+        return redirect(url_for("admin.audit_log"))
+    ok, message = audit.check_anchor(*parsed)
+    audit.mark_anchor_saved()
+    audit.log(actor(), "AUDIT_ANCHOR", "audit_log", parsed[0], {"check": True, "ok": ok})
+    flash(message, "success" if ok else "error")
     return redirect(url_for("admin.audit_log"))
 
 

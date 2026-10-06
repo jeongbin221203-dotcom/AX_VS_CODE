@@ -143,8 +143,22 @@ def _security():
     return ("warn", " · ".join(problems)) if problems else ("ok", "세션 키·쿠키 설정 정상")
 
 
+def _audit_chain():
+    from core import audit
+    head, unsealed = audit.chain_head(), int(db.scalar("SELECT COUNT(*) FROM audit_log WHERE seq IS NULL") or 0)
+    age = audit.anchor_age_days()
+    problems = []
+    if unsealed > 5000:
+        problems.append(f"봉인 대기 {unsealed:,}건 (배치 audit_seal 확인)")
+    if age is None:
+        problems.append("감사로그 앵커를 서버 밖에 보관한 기록이 없습니다 (관리자 > 감사로그 > 앵커 내려받기)")
+    elif age > audit.ANCHOR_WARN_DAYS:
+        problems.append(f"앵커를 서버 밖에 보관한 지 {age}일 지났습니다 (월 1회 권장)")
+    return ("warn", " · ".join(problems)) if problems else ("ok", f"봉인 {head['seq']:,}건 · 앵커 보관 {age}일 전")
+
+
 CHECKS = [("DB", _db), ("파일 저장소", _storage), ("ERP·SAP", _erp), ("사내 로그인(SSO)", _sso),
-          ("백업", _backup), ("배치", _batch), ("명세서 스캔(OCR)", _ocr), ("보안 설정", _security)]
+          ("백업", _backup), ("배치", _batch), ("명세서 스캔(OCR)", _ocr), ("보안 설정", _security), ("감사로그 무결성", _audit_chain)]
 
 
 def run() -> list[Check]:

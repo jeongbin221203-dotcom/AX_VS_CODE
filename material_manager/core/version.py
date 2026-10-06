@@ -42,7 +42,8 @@ def of_scope(all_warehouses, plants, warehouses) -> str:
 
 def scope_now(conn, user_id: int) -> str:
     row = conn.execute("SELECT all_warehouses FROM users WHERE id = ?", (user_id,)).fetchone()
-    rows = conn.execute("SELECT plant_id, warehouse_id FROM user_scopes WHERE user_id = ?", (user_id,)).fetchall()
+    rows = conn.execute("SELECT plant_id, warehouse_id FROM user_scopes WHERE user_id = ? AND (valid_to = '' OR valid_to IS NULL)",
+                        (user_id,)).fetchall()
     return of_scope(row["all_warehouses"] if row else 0,
                     [r["plant_id"] for r in rows if r["plant_id"] is not None],
                     [r["warehouse_id"] for r in rows if r["warehouse_id"] is not None])

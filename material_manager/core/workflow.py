@@ -160,12 +160,29 @@ def my_requests(user_id: int) -> pd.DataFrame:
     return df.sort_values("requested_at", ascending=False).head(200).reset_index(drop=True)
 
 
+def withdrawable(user_id: int) -> list[dict]:
+    """내가 올렸고 아직 처리 전인 요청 — 회수할 수 있다 (실사 조정·거래 취소는 approvals.withdraw, 구매요청은 취소)."""
+    out = []
+    adj = db.query_df("""
+        SELECT a.kind, a.id, '#' || a.id AS no, a.requested_at, a.amount, m.code || ' ' || m.name AS title
+        FROM approval_requests a JOIN materials m ON m.id = a.material_id
+        WHERE a.requested_by_id = ? AND a.status = 'PENDING' ORDER BY a.id DESC""", (user_id,))
+    pr = db.query_df("""
+        SELECT 'PR' AS kind, p.id, p.pr_no AS no, p.requested_at, p.total_amount AS amount, p.reason AS title
+        FROM purchase_requests p WHERE p.requested_by_id = ? AND p.status = 'PENDING' ORDER BY p.id DESC""", (user_id,))
+    for df in (adj, pr):
+        for r in df.to_dict("records"):
+            out.append({**r, "label": KIND.get(r["kind"], r["kind"])})
+    return sorted(out, key=lambda r: r["requested_at"], reverse=True)
+
+
 def history(user: dict) -> pd.DataFrame:
     """내가 처리한 결재 (대결 포함, 최근 200건)."""
     adj = db.query_df("""
         SELECT a.kind AS kind, a.id, '#' || a.id AS no, a.decided_at AS at, a.status AS decision, a.amount,
                m.code || ' ' || m.name AS title, a.requested_by, a.decided_by AS approver, a.comment
-        FROM approval_requests a JOIN materials m ON m.id = a.material_id WHERE a.decided_by_id = ?""", (user["id"],))
+        FROM approval_requests a JOIN materials m ON m.id = a.material_id
+        WHERE a.decided_by_id = ? AND a.status <> 'WITHDRAWN'""", (user["id"],))      # 회수는 '처리한 결재'가 아니다
     pr = db.query_df("""
         SELECT 'PR' AS kind, p.id, p.pr_no AS no, x.at, x.decision, p.total_amount AS amount, p.reason AS title,
                p.requested_by, x.approver, x.comment

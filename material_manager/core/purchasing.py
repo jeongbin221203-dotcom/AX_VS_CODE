@@ -136,6 +136,7 @@ def decide_pr(pr_id: int, approve: bool, comment: str, actor: dict, wh_ids=None)
 
 def cancel_pr(pr_id: int, actor: dict, wh_ids=None) -> PResult:
     with db.transaction() as conn:
+        db.lock(conn, f"pr:{pr_id}")                       # 결재·발주와 같은 잠금 — PostgreSQL 에서 겹쳐도 하나만 성립
         pr = conn.execute("SELECT * FROM purchase_requests WHERE id = ?", (pr_id,)).fetchone()
         if pr is None or (wh_ids is not None and pr["warehouse_id"] not in wh_ids):
             return PResult(False, "요청이 없거나 권한 밖입니다.")
@@ -143,8 +144,15 @@ def cancel_pr(pr_id: int, actor: dict, wh_ids=None) -> PResult:
             return PResult(False, "취소할 수 있는 요청이 아닙니다.")
         if pr["requested_by_id"] != actor.get("id") and not auth.has_role(actor, "MANAGER"):
             return PResult(False, "요청자나 관리자만 취소할 수 있습니다.")
-        conn.execute("UPDATE purchase_requests SET status = 'CANCELLED', updated_at = ? WHERE id = ?", (now_str(), pr_id))
+        n = conn.execute("UPDATE purchase_requests SET status = 'CANCELLED', updated_at = ? WHERE id = ? "
+                         "AND status IN ('PENDING', 'APPROVED')", (now_str(), pr_id)).rowcount
+        if n != 1:
+            return PResult(False, "취소할 수 있는 요청이 아닙니다.")
         audit.record(conn, actor, "PR_CANCEL", "purchase_request", pr_id, {"pr_no": pr["pr_no"]})
+        try:                                                # 결재자 알림함의 '결재 요청' 알림은 읽음으로
+            conn.execute("UPDATE notifications SET read_at = ? WHERE ref = ? AND read_at IS NULL", (now_str(), f"pr:{pr_id}"))
+        except db.DBError:
+            pass
     return PResult(True, f"{pr['pr_no']} 취소", pr_id)
 
 

@@ -73,6 +73,38 @@
       <div><button class="btn">범위 저장</button></div>
     </fieldset>
   </form>
+  {% if not u.all_warehouses %}
+  <form class="form" method="post" action="{{ url_for('admin.user_scope_temp', user_id=u.id) }}">
+    {{ csrf() }}
+    <fieldset>
+      <legend>임시 범위 추가 (기한·사유) <span class="muted small">— 휴가 대행·타 창고 지원. 기한이 지나면 자동으로 빠집니다</span></legend>
+      <div class="checks">
+        {% for p in plants %}<label class="check"><input type="checkbox" name="plant" value="{{ p.id }}"> {{ p.code }} {{ p.name }} (플랜트 전체)</label>{% endfor %}
+      </div>
+      <div class="checks">
+        {% for w in warehouses %}<label class="check"><input type="checkbox" name="warehouse" value="{{ w.id }}"> {{ w.plant_code }}/{{ w.code }} {{ w.name }}</label>{% endfor %}
+      </div>
+      <div class="form-grid g4">
+        <label>기한 (이날까지) *<input type="date" name="valid_to" min="{{ today().isoformat() }}" required></label>
+        <label class="span3">사유 *<input name="reason" required placeholder="예: 인천 창고 담당자 휴가 대행"></label>
+      </div>
+      <div><button class="btn">임시 범위 추가</button></div>
+    </fieldset>
+  </form>
+  {% endif %}
+  {% if u.temps %}
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th>임시 범위</th><th>기한</th><th>사유</th><th>등록</th><th>상태</th><th></th></tr></thead>
+    <tbody>
+    {% for t in u.temps %}
+      <tr class="{{ 'tone-muted' if t.expired }}"><td>{{ t.target }}</td><td>{{ t.valid_to }}</td><td>{{ t.reason }}</td>
+        <td>{{ t.created_by }} · {{ (t.created_at or '')[:10] }}</td><td>{{ '끝남' if t.expired else '적용 중' }}</td>
+        <td>{% if not t.expired %}<form class="inline" method="post" action="{{ url_for('admin.scope_temp_revoke', scope_id=t.id) }}">{{ csrf() }}
+          <button class="btn btn-sm" data-confirm="임시 범위를 지금 회수할까요?">회수</button></form>{% endif %}</td></tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+  {% endif %}
   {% endif %}
   {% if u.auth_source != 'sso' %}
   <form class="row-actions" method="post" action="{{ url_for('admin.reset_password', user_id=u.id) }}">

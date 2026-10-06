@@ -39,7 +39,7 @@ def index():
         if request.args.get("export") == "xlsx":
             log_export("my_requests", len(view))
             return form_response("my_requests", view.reindex(columns=cols), "내_요청_현황.xlsx")
-        return render_page("approvals.html", "approvals", **ctx,
+        return render_page("approvals.html", "approvals", **ctx, withdrawable=workflow.withdrawable(g.user["id"]),
                            grid=Table(view[cols] if len(view) else view.reindex(columns=cols), {"금액": "₩{:,.0f}"}))
     if tab == "history":
         df = workflow.history(g.user)
@@ -77,6 +77,24 @@ def index():
         log_export("approvals", len(view))
         return form_response("approvals", view, "내_결재_대기.xlsx")
     return render_page("approvals.html", "approvals", **{**ctx, "tab": "mine"}, items=items)
+
+
+@bp.post("/withdraw")
+@role_required("CLERK")
+def withdraw():
+    """내가 올린 요청 회수. 실사 조정·거래 취소 요청은 회수, 구매요청은 취소(요청자 본인)."""
+    from core import purchasing
+    kind, raw = f_str("kind"), f_str("id")
+    rid = int(raw) if raw.isascii() and raw.isdigit() and int(raw) <= 2 ** 63 - 1 else 0
+    if kind in ("ADJ", "CANCEL"):
+        r = approvals.withdraw(rid, actor(), g.wh_ids)
+    elif kind == "PR":
+        r = purchasing.cancel_pr(rid, actor(), g.wh_ids)
+    else:
+        flash("회수할 수 없는 종류입니다.", "error")
+        return redirect(url_for("approvals.index", tab="requests"))
+    flash(r.message, "success" if r.ok else "error")
+    return redirect(url_for("approvals.index", tab="requests"))
 
 
 @bp.post("/decide")

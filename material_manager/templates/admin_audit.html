@@ -17,8 +17,21 @@
 <form class="card row-actions" method="post" action="{{ url_for('admin.audit_verify') }}">
   {{ csrf() }}<button class="btn">🔗 무결성 검증</button>
   <span class="muted small">기록은 순서대로 해시로 이어 봉인됩니다(1분마다). 봉인 {{ '{:,}'.format(head.seq) }}건{% if head.hash %} · 마지막 해시 <code>{{ head.hash[:16] }}…</code>{% endif %}{% if unsealed %} · 봉인 대기 {{ unsealed }}건{% endif %}.
-    봉인한 기록을 고치거나 지우거나 끼워 넣으면 검증이 찾아냅니다. 마지막 해시를 서버 밖(보안 담당 문서)에 보관하면 더 안전합니다.</span>
+    봉인한 기록을 고치거나 지우거나 끼워 넣으면 검증이 찾아냅니다.</span>
 </form>
+<details class="card">
+  <summary>🔐 앵커 — 마지막 해시를 서버 밖에 보관 (월 1회 권장)</summary>
+  <p class="muted small">DB 관리자가 트리거를 끄고 체인 전체를 다시 계산하면 무결성 검증만으로는 못 찾습니다. 그래서 봉인 번호와 해시(앵커)를 서버 밖
+    (보안 담당 문서·메일·인쇄)에 보관해 두고, 나중에 대조합니다. 앵커는 배치 <code>audit_anchor</code> 가 하루에 한 번 서버 로그에도 남깁니다(<code>AUDIT_ANCHOR</code>).
+    {% if anchor_age is none %}<strong>아직 앵커를 보관한 기록이 없습니다.</strong>{% else %}마지막으로 내려받거나 대조한 때: {{ anchor_age }}일 전.{% endif %}</p>
+  <p><a class="btn" href="{{ url_for('admin.audit_anchor') }}">⬇️ 앵커 내려받기</a></p>
+  <form class="form" method="post" action="{{ url_for('admin.audit_anchor_check') }}">
+    {{ csrf() }}
+    <label>보관해 둔 앵커 붙여넣기 (파일 내용 또는 <code>ANCHOR seq=… hash=…</code> 한 줄)
+      <textarea name="anchor" rows="3" required></textarea></label>
+    <div><button class="btn">대조</button></div>
+  </form>
+</details>
 {{ table(grid, "조건에 맞는 기록이 없습니다.") }}
 {{ pager_nav(pager) }}
 {{ download(url_with(export='xlsx', page=none), '⬇️ 감사로그 엑셀 다운로드') }}

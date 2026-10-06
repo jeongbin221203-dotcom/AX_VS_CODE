@@ -103,7 +103,9 @@ def check(raw: str, ip: str, scope: str) -> tuple[dict | None, int, str]:
     """(키 정보, HTTP 상태, 문제). 문제가 없으면 상태 200."""
     if ip_blocked(ip):
         return None, 429, f"API 키 인증 실패가 너무 많아 이 주소의 요청을 {config.API_FAIL_MINUTES}분 동안 막았습니다."
-    if not raw or not raw.startswith("mmk_"):
+    if not raw:                                      # 키를 안 보낸 요청(잘못 연결한 도구·상태 확인 등)은 실패로 세지 않는다
+        return None, 401, "API 키가 필요합니다 (Authorization: Bearer mmk_...)."
+    if not raw.startswith("mmk_"):
         _fail(ip)
         return None, 401, "API 키가 필요합니다 (Authorization: Bearer mmk_...)."
     row = db.query_df("SELECT * FROM api_keys WHERE prefix = ?", (raw[:12],))

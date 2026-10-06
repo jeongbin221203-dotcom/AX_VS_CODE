@@ -6,7 +6,7 @@ import pandas as pd
 from flask import Blueprint, flash, g, redirect, request, url_for
 
 import config
-from core import db, org, repository as repo, services
+from core import audit, db, org, repository as repo, services
 from views.helpers import (Table, a_date, actor, as_id, f_str, form_response, log_export, page_arg, pager, render_page,
                            role_required, safe_next)
 

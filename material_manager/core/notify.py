@@ -21,6 +21,7 @@ import logging
 import smtplib
 import ssl
 import time
+from datetime import date
 import urllib.parse
 import urllib.request
 from email.message import EmailMessage
@@ -71,7 +72,8 @@ def recipients(conn, min_role: str, warehouse_id: int | None, exclude_ids=()) ->
             continue
         if warehouse_id is not None and r["role"] != "ADMIN" and not int(r["all_warehouses"] or 0):
             hit = conn.execute("SELECT 1 FROM user_scopes s JOIN warehouses w ON w.id = s.warehouse_id OR w.plant_id = s.plant_id "
-                               "WHERE s.user_id = ? AND w.id = ?", (r["id"], warehouse_id)).fetchone()
+                               "WHERE s.user_id = ? AND w.id = ? AND (s.valid_to = '' OR s.valid_to IS NULL OR s.valid_to >= ?)",
+                               (r["id"], warehouse_id, date.today().isoformat())).fetchone()
             if not hit:
                 continue
         out.append(r)

@@ -43,6 +43,24 @@
 {% elif tab in ("requests", "history") %}
   <p class="muted small">{{ '내가 올린 실사 조정·거래 취소·구매요청 (최근 200건)' if tab == 'requests' else '내가 처리한 결재 (대결로 처리한 것 포함, 최근 200건)' }}</p>
   <div class="toolbar">{{ download(url_with(export='xlsx')) }}</div>
+  {% if tab == 'requests' and withdrawable %}
+  <section class="card">
+    <h3>회수할 수 있는 요청 <span class="muted small">(아직 결재자가 처리하지 않은 것)</span></h3>
+    <p class="muted small">잘못 올렸거나 더 필요 없으면 회수하세요. 실사 조정·거래 취소는 '회수'로 닫히고 같은 거래를 다시 요청할 수 있으며, 구매요청은 취소됩니다.
+      결재자가 처리하는 순간과 겹치면 먼저 된 쪽만 적용됩니다.</p>
+    <div class="table-wrap"><table class="data">
+      <thead><tr><th>종류</th><th>번호</th><th>요청일시</th><th>내용</th><th>금액</th><th></th></tr></thead>
+      <tbody>
+      {% for w in withdrawable %}
+        <tr><td>{{ w.label }}</td><td>{{ w.no }}</td><td>{{ w.requested_at[:16] }}</td><td>{{ w.title }}</td><td class="num">{{ w.amount|krw }}</td>
+          <td><form class="inline" method="post" action="{{ url_for('approvals.withdraw') }}">{{ csrf() }}
+            <input type="hidden" name="kind" value="{{ w.kind }}"><input type="hidden" name="id" value="{{ w.id }}">
+            <button class="btn btn-sm" data-confirm="{{ w.no }} 요청을 회수할까요?">회수</button></form></td></tr>
+      {% endfor %}
+      </tbody>
+    </table></div>
+  </section>
+  {% endif %}
   {{ table(grid, "해당하는 결재가 없습니다.") }}
 
 {% elif tab == "delegate" %}

@@ -25,7 +25,7 @@ def _view(task: dict) -> dict:
 
 
 @bp.get("/")
-@role_required("CLERK")
+@role_required("VIEWER")
 def index():
     df = tasks.list_for(g.user)
     view = df[["id", "created_at", "title", "status", "message", "user_name"]].copy() if len(df) else df
@@ -39,21 +39,21 @@ def index():
 
 
 @bp.get("/<int:task_id>")
-@role_required("CLERK")
+@role_required("VIEWER")
 def detail(task_id: int):
     tasks.mark_stale()
     return render_page("tasks.html", "data", title_override="백그라운드 작업", task=_view(_mine(task_id)), grid=None)
 
 
 @bp.get("/<int:task_id>.json")
-@role_required("CLERK")
+@role_required("VIEWER")
 def status(task_id: int):
     tasks.mark_stale()
     return jsonify(_view(_mine(task_id)))
 
 
 @bp.get("/<int:task_id>/download")
-@role_required("CLERK")
+@role_required("VIEWER")
 def download(task_id: int):
     task = _mine(task_id)
     data = tasks.result_bytes(task) if task["status"] == "DONE" else None

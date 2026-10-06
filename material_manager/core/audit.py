@@ -51,7 +51,8 @@ ACTIONS = {
     "DELEGATION": "대결 지정", "CHANNEL_SAVE": "알림 채널 저장", "NAMES_SAVE": "이름 설정 변경", "HOMETAX_CHECK": "홈택스 매입 대사", "PO_SHORT_CLOSE": "발주 잔량 종결", "STD_COST": "표준원가 산정", "WO_SETTLE": "오더 정산", "WO_SAP_ORDER": "SAP 생산오더 번호", "CALENDAR": "작업 달력", "PO_DELIVERY": "발주 납기일 변경", "PAYMENT_RELEASE": "지급 보류 해제", "CATEGORY_RENAME": "자재 분류 이름 변경", "CHANNEL_DELETE": "알림 채널 삭제", "COMPANY_SETTINGS": "회사 설정 변경", "PARTNER_MERGE": "거래처 병합",
     "API_KEY": "API 키", "API_CALL": "API 호출", "READ_ONLY": "점검(읽기 전용) 모드", "DOWNLOAD": "파일 내려받기",
     "QUALITY_FIX": "데이터 점검 고침", "API_AUTH_FAIL": "API 인증 실패(IP 차단)", "AUDIT_VERIFY": "감사로그 무결성 검증",
-    "BULK_TASK": "대용량 작업", "AP_SNAPSHOT": "월말 미지급 스냅샷",
+    "BULK_TASK": "대용량 작업", "AP_SNAPSHOT": "월말 미지급 스냅샷", "AUDIT_ANCHOR": "감사로그 앵커 내려받기·대조",
+    "APPROVAL_WITHDRAW": "결재 요청 회수", "SCOPE_TEMP": "임시 데이터 범위",
 }
 
 
@@ -131,6 +132,71 @@ def seal_soon(min_seconds: int = 60) -> None:
 def chain_head() -> dict:
     row = db.query_df("SELECT seq, hash FROM audit_log WHERE seq IS NOT NULL ORDER BY seq DESC LIMIT 1")
     return {"seq": int(row.iloc[0]["seq"]), "hash": row.iloc[0]["hash"]} if not row.empty else {"seq": 0, "hash": ""}
+
+
+ANCHOR_KEY = "audit_anchor_saved"
+ANCHOR_WARN_DAYS = 35
+
+
+def anchor_text() -> str:
+    """서버 밖(보안 담당 문서·메일·인쇄)에 보관할 앵커. 나중에 '앵커 대조'에 이 값을 넣으면, 그 시점까지의 감사로그가
+    그대로인지 알 수 있다 — DB 관리자가 트리거를 끄고 체인 전체를 다시 계산해도 이 값과는 맞지 않는다."""
+    for _ in range(200):
+        if seal() < 5000:
+            break
+    head = chain_head()
+    return (f"자재관리 감사로그 앵커 — 서버 밖에 보관하세요\n기록 시각: {now_str()}\n"
+            f"봉인 번호: {head['seq']}\n해시: {head['hash']}\n\n"
+            f"ANCHOR seq={head['seq']} hash={head['hash']}\n")
+
+
+def parse_anchor(text: str) -> tuple[int, str] | None:
+    """붙여넣은 앵커(파일 전체 또는 'ANCHOR seq=.. hash=..' 한 줄)에서 번호와 해시를 읽는다."""
+    import re
+    seq = re.search(r"(?:seq\s*=\s*|봉인 번호:\s*)(\d+)", text or "")
+    digest = re.search(r"\b([0-9a-fA-F]{64})\b", text or "")
+    return (int(seq.group(1)), digest.group(1).lower()) if seq and digest else None
+
+
+def mark_anchor_saved() -> None:
+    """앵커를 내려받거나 대조한 시각 (운영 점검이 '월 1회 보관'을 확인한다)."""
+    db.execute("INSERT INTO app_settings (key, value) VALUES (?, ?) ON CONFLICT (key) DO UPDATE SET value = excluded.value",
+               (ANCHOR_KEY, now_str()))
+
+
+def anchor_age_days() -> int | None:
+    from datetime import datetime
+    raw = db.scalar("SELECT value FROM app_settings WHERE key = ?", (ANCHOR_KEY,))
+    if not raw:
+        return None
+    try:
+        return (datetime.now() - datetime.strptime(str(raw), "%Y-%m-%d %H:%M:%S")).days
+    except ValueError:
+        return None
+
+
+def check_anchor(seq: int, digest: str) -> tuple[bool, str]:
+    """이전에 서버 밖에 적어 둔 앵커와 지금 감사로그를 대조한다. (ok, 설명)."""
+    row = db.query_df("SELECT hash FROM audit_log WHERE seq = ?", (int(seq),))
+    if row.empty:
+        return False, f"봉인 번호 {seq}번 기록이 없습니다 — 그 뒤로 감사로그가 지워졌거나 번호를 잘못 입력했습니다."
+    if (row.iloc[0]["hash"] or "") != digest:
+        return False, (f"봉인 번호 {seq}번의 해시가 보관해 둔 값과 다릅니다 — 그 시점 이전의 감사로그가 바뀌었거나 "
+                       "체인이 다시 계산됐습니다. 즉시 DB 관리자·보안 담당에게 알리세요.")
+    result = verify()
+    if not result["ok"]:
+        return False, f"앵커는 맞지만 그 이후 체인이 깨졌습니다 — 봉인 번호 {result['broken_seq']}: {result['reason']}"
+    return True, f"봉인 번호 {seq}번까지의 감사로그가 보관해 둔 값과 같고, 지금({result['sealed']:,}건)까지 체인도 정상입니다."
+
+
+def announce_anchor() -> str:
+    """앵커를 서버 로그(표준출력)에 한 줄 남긴다 — 호스팅 로그(Render 등)가 서버 밖 보관 역할을 한다. 배치 audit_anchor 가 하루에 한 번."""
+    head = chain_head()
+    if not head["seq"]:
+        return "봉인된 기록이 아직 없습니다"
+    print("AUDIT_ANCHOR " + json.dumps({"at": now_str(), "seq": head["seq"], "hash": head["hash"]}, ensure_ascii=False),
+          file=sys.stdout, flush=True)
+    return f"앵커 봉인 {head['seq']:,}번 {head['hash'][:16]}… 를 서버 로그에 남김"
 
 
 def verify(batch: int = 5000) -> dict:

@@ -155,12 +155,18 @@ def mark_stale() -> int:
     """하트비트가 끊긴 진행·대기 작업을 중단됨으로 (서버가 죽었거나 재시작). 표시한 건수."""
     cutoff = (datetime.now() - timedelta(minutes=STALE_MINUTES)).strftime("%Y-%m-%d %H:%M:%S")
     try:
+        # 먼저 읽기로 확인한다 — 쓰기 잠금(SQLite 는 전체 잠금)을 잡으면 긴 반영 중에 상태 조회가 멈춘다
+        old = db.query_df("SELECT id FROM bg_tasks WHERE status IN ('QUEUED', 'RUNNING') "
+                          "AND COALESCE(NULLIF(heartbeat_at, ''), created_at) < ?", (cutoff,))
+        ids = [int(i) for i in old["id"] if int(i) not in _threads]      # 이 서버에서 아직 도는 작업은 하트비트를 못 써도 살아 있다
+        if not ids:
+            return 0
+        frag, params = db.in_clause(ids)
         with db.transaction() as conn:
             return conn.execute(
-                "UPDATE bg_tasks SET status = 'ERROR', finished_at = ?, message = ? WHERE status IN ('QUEUED', 'RUNNING') "
-                "AND COALESCE(NULLIF(heartbeat_at, ''), created_at) < ?",
+                f"UPDATE bg_tasks SET status = 'ERROR', finished_at = ?, message = ? WHERE id{frag} AND status IN ('QUEUED', 'RUNNING')",
                 (now_str(), "서버가 중간에 멈춰 끝내지 못했습니다. 파일을 다시 올려 주세요 (반영은 전부 또는 아무것도 되지 않으므로 일부만 들어간 데이터는 없습니다).",
-                 cutoff)).rowcount
+                 *params)).rowcount
     except db.DBError:
         return 0
 
