@@ -67,6 +67,20 @@ def _stats(level):
     return out, last
 
 
+WEAK_MIN = 3          # 약점으로 보려면 그 주제를 이만큼은 풀어 봐야 함
+WEAK_BELOW = 0.7      # 마지막에 맞힌 비율이 이보다 낮으면 약점
+
+
+def weak_topics(stats):
+    """[(과목 키, 주제, 맞힌 비율, 푼 수)] 약한 순 — 마지막 풀이 기준."""
+    out = []
+    for key, s in stats.items():
+        for t in s['topics']:
+            if t['done'] >= WEAK_MIN and t['ok'] / t['done'] < WEAK_BELOW:
+                out.append((key, t['name'], t['ok'] / t['done'], t['done']))
+    return sorted(out, key=lambda x: (x[2], -x[3]))
+
+
 @bp.route('/')
 def index():
     level = _level()
@@ -74,7 +88,7 @@ def index():
     rows = db.get().execute('SELECT id, level, average, passed, seconds, created_at FROM written_results WHERE user=? '
                             'ORDER BY id DESC LIMIT 10', (db.user_id(),)).fetchall()
     return render_template('written.html', level=level, L=written.LEVELS, stats=stats, history=rows,
-                           cut=(written.SUBJECT_CUT, written.AVERAGE_CUT))
+                           weak=weak_topics(stats)[:6], cut=(written.SUBJECT_CUT, written.AVERAGE_CUT))
 
 
 @bp.route('/practice')
@@ -89,18 +103,35 @@ def practice():
     topic = request.args.get('topic') or None
     mode = request.args.get('mode', 'new')
     n = max(5, min(50, request.args.get('n', 20, type=int) or 20))
-    _, last = _stats(level)
+    stats, last = _stats(level)
     pool = written.questions(subj, level, topic) if subj else \
         [q for s in written.LEVELS[level]['subjects'] for q in written.questions(s, level)]
     if mode == 'wrong':
         pool = [q for q in pool if q['id'] in last and not last[q['id']]]
+    if mode == 'weak':                                # 약점 주제의 문제만(틀린 것·안 푼 것 먼저), 약점이 없으면 안 푼 문제
+        wk = {(k, t) for k, t, *_ in weak_topics(stats)}
+        weak_pool = [q for q in pool if (q['subject'], q.get('topic')) in wk]
+        pool = weak_pool or pool
+        if not weak_pool:
+            mode = 'new'
+        else:
+            pool.sort(key=lambda q: (0 if q['id'] in last and not last[q['id']] else 1 if q['id'] not in last else 2))
     rnd = random.Random()
-    rnd.shuffle(pool)
+    if mode != 'weak':
+        rnd.shuffle(pool)
+    else:                                             # 약점: 우선순위(틀린 것 → 안 푼 것 → 맞힌 것)는 지키고 그 안에서 섞기
+        groups = {}
+        for q in pool:
+            groups.setdefault(0 if q['id'] in last and not last[q['id']] else 1 if q['id'] not in last else 2, []).append(q)
+        pool = []
+        for g in sorted(groups):
+            rnd.shuffle(groups[g])
+            pool += groups[g]
     if mode == 'new':
         pool.sort(key=lambda q: q['id'] in last)          # 안 푼 문제 먼저(같은 무리 안에서는 섞인 순서)
     qs = pool[:n]
     title = (written.SUBJECTS[subj]['name'] if subj else '전 과목') + (f' · {topic}' if topic else '') + \
-        {'wrong': ' · 틀린 문제 다시', 'new': '', 'all': ''}.get(mode, '')
+        {'wrong': ' · 틀린 문제 다시', 'weak': ' · 약점 주제', 'new': '', 'all': ''}.get(mode, '')
     return render_template('written_practice.html', level=level, L=written.LEVELS, qs=qs, title=title,
                            S=written.SUBJECTS, mode=mode, subject=subj, topic=topic)
 

@@ -24,9 +24,9 @@
    - 할 일·지문은 짝 폴더에 `tasks.v<N>.json`·`problem.v<N>.json` 으로 저장해 둔다. 채점·지문 규칙을 바꾸면 `views/practice.py` 의 `CACHE_VER` 를 올린다.
    - 공식·교재 파일은 저작물이므로 `data/` 에만 두고 저장소에 올리지 않는다(.gitignore).
 
-6. **컴활 필기** — 컴퓨터 일반 200 · 스프레드시트 일반 200 · 데이터베이스 일반(1급) 150문항, 모두 새로 쓴 문제(`content/written/`, 형식 SCHEMA.md, 검사 `python tools/validate_written.py`).
+6. **컴활 필기** — 컴퓨터 일반 400 · 스프레드시트 일반 400 · 데이터베이스 일반(1급) 300문항(총 1,100), 모두 새로 쓴 문제(`content/written/`, 형식 SCHEMA.md, 검사 `python tools/validate_written.py`).
    - 과목·주제별 연습(보기를 누르면 바로 채점·해설, 틀린 문제 다시), 실제 구성 모의고사(2급 2과목 40문항 40분 · 1급 3과목 60문항 60분, 과목 40점·평균 60점 합격).
-   - 기록은 `written_attempts`·`written_results`(백업·PC↔서버 맞추기에 포함).
+   - 기록은 `written_attempts`·`written_results`(백업·PC↔서버 맞추기에 포함). 첫 화면에 약점 주제(마지막에 맞힌 비율 70% 미만, 3문제 이상 푼 주제)와 [약점 주제 20문항 풀기]가 나온다.
 
 ## 실행
 

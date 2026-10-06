@@ -65,3 +65,24 @@ def test_pages_and_records(client):
     data = client.get('/api/backup').json['data']
     assert len(data['written_results']) == 1 and len(data['written_attempts']) == 61   # 안 푼 30문항도 오답 기록
     assert client.get('/written/practice?level=c1&subject=computer&mode=wrong').status_code == 200
+
+
+def test_weak_topics_and_practice(client):
+    from core import db
+    from views import written as vw
+    h = {'X-CSRF-Token': client.csrf}
+    # 컴퓨터 일반 한 주제를 4문제 모두 틀려서 약점으로 만든다
+    topic = written.SUBJECTS['computer']['topics'][0]
+    qs = [q for q in written.questions('computer', 'c2') if q['topic'] == topic][:4]
+    for q in qs:
+        client.post('/written/api/answer', json={'id': q['id'], 'picked': (q['answer'] + 1) % 4}, headers=h)
+    page = client.get('/written/?level=c2').get_data(as_text=True)
+    assert '약점 주제' in page and topic in page
+    r = client.get('/written/practice?level=c2&mode=weak')
+    html = r.get_data(as_text=True)
+    assert r.status_code == 200 and all(q['id'] in html for q in qs)          # 틀린 문제부터 나옴
+    # 약점이 없는 사용자는 안 푼 문제로
+    other = client.application.test_client()
+    other.get('/')
+    assert other.get('/written/practice?level=c2&mode=weak').status_code == 200
+    del db, vw

@@ -26,6 +26,20 @@
   {% endif %}
 </section>
 
+{% if weak %}
+<section class="card" style="margin-top:14px">
+  <div class="top-line"><h2 style="margin:0">약점 주제</h2>
+    <a class="btn primary" href="{{ url_for('written.practice', level=level, mode='weak') }}">약점 주제 20문항 풀기</a></div>
+  <p class="small muted">마지막에 푼 결과 기준으로 맞힌 비율이 70% 미만인 주제입니다(주제마다 3문제 이상 푼 경우). 틀린 문제부터 나옵니다.</p>
+  <ul class="list">
+    {% for key, name, acc, done in weak %}
+    <li><div class="grow"><a class="title" href="{{ url_for('written.practice', level=level, subject=key, topic=name, mode='weak') }}">{{ name }}</a>
+      <div class="small muted">{{ L[level].name }} · {{ stats[key].name }}</div></div>
+      <span class="nowrap small bad-text"><b>{{ (acc * 100)|round|int }}%</b> <span class="muted">({{ done }}문제)</span></span></li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
 <div class="grid g3" style="margin-top:14px">
   {% for key, s in stats.items() %}
   <section class="card">
