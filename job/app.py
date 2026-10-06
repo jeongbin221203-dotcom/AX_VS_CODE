@@ -57,7 +57,7 @@ def create_app(test_config: dict | None = None) -> Flask:
         request.max_content_length = 300 * 1024 * 1024    # 원본 DB(gzip)는 CSV 업로드 한도(5MB)보다 큼
         from core import sync
         try:
-            return sync.receive(request.get_data(), request.headers.get("X-Last-Change", 0, type=int))
+            return sync.receive_stream(request.stream, request.headers.get("X-Last-Change", 0, type=int))
         except (ValueError, OSError) as e:
             abort(400, str(e))
 

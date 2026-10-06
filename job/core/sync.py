@@ -12,6 +12,7 @@ from __future__ import annotations
 import gzip
 import json
 import os
+import shutil
 import sqlite3
 import tempfile
 import time
@@ -44,13 +45,27 @@ def changes_after(after: int) -> list[dict]:
 
 
 def receive(data: bytes, last_change: int) -> dict:
-    """원본 DB(gzip)를 받아 사본 DB 를 바꾼다. 원본이 아직 못 받아 간 변경(last_change 뒤)은 새 DB 에 다시 얹는다."""
+    """바이트로 받은 원본 DB(gzip) — 테스트·작은 파일용. 큰 파일은 receive_stream 으로(메모리 한계)."""
+    import io
+    return receive_stream(io.BytesIO(data), last_change)
+
+
+def receive_stream(stream, last_change: int) -> dict:
+    """원본 DB(gzip)를 흘려받아 사본 DB 를 바꾼다 — 받은 것도 푼 것도 메모리에 통째로 올리지 않고 파일로만 쓴다
+    (무료 서버 메모리 512MB, DB 200MB 넘으면 통째로 올리다 죽음). 원본이 아직 못 받아 간 변경(last_change 뒤)은 새 DB 에 다시 얹는다."""
     pending = changes_after(last_change)
-    raw = gzip.decompress(data)
     target = db.path()
     fd, tmp = tempfile.mkstemp(dir=target.parent, suffix=".upload")
     os.close(fd)
-    Path(tmp).write_bytes(raw)
+    size = 0
+    try:
+        with gzip.GzipFile(fileobj=stream, mode="rb") as gz, open(tmp, "wb") as out:
+            while chunk := gz.read(1 << 20):
+                out.write(chunk)
+                size += len(chunk)
+    except (OSError, EOFError, ValueError) as e:      # gzip 이 아니거나 중간에 끊김
+        os.remove(tmp)
+        raise ValueError(f"받은 파일을 풀지 못했습니다: {e}") from e
     try:
         con = sqlite3.connect(tmp)
         n = con.execute("SELECT COUNT(*) FROM postings").fetchone()[0]
@@ -67,7 +82,7 @@ def receive(data: bytes, last_change: int) -> dict:
     for c in pending:                             # 사본 화면에도 그대로 보이게
         apply(c)
     db.set_setting("mirror_synced_at", db.now())
-    return {"postings": n, "reapplied": len(pending), "bytes": len(raw)}
+    return {"postings": n, "reapplied": len(pending), "bytes": size}
 
 
 # ── 변경 적용 (원본에서, 그리고 사본에서 다시 얹을 때) ────────
@@ -108,10 +123,11 @@ def settings() -> dict | None:
     return s if s.get("url") and s.get("token") else None
 
 
-def snapshot_gz() -> bytes:
-    """쓰는 중에도 안전하게 원본 DB 를 복사해 gzip 으로."""
+def snapshot_file() -> str:
+    """쓰는 중에도 안전하게 원본 DB 를 복사해 gzip 파일로 (경로를 돌려줌, 쓴 뒤 지울 것). 메모리에 통째로 올리지 않음."""
     fd, tmp = tempfile.mkstemp(suffix=".db")
     os.close(fd)
+    out = tmp + ".gz"
     try:
         src = sqlite3.connect(db.path())
         dst = sqlite3.connect(tmp)
@@ -120,9 +136,20 @@ def snapshot_gz() -> bytes:
         dst.commit()
         dst.close()
         src.close()
-        return gzip.compress(Path(tmp).read_bytes(), 6)
+        with open(tmp, "rb") as f, gzip.open(out, "wb", compresslevel=6) as g:
+            shutil.copyfileobj(f, g, 1 << 20)
+        return out
     finally:
         os.remove(tmp)
+
+
+def snapshot_gz() -> bytes:
+    """snapshot_file 을 바이트로 (테스트용)."""
+    path = snapshot_file()
+    try:
+        return Path(path).read_bytes()
+    finally:
+        os.remove(path)
 
 
 def push() -> dict:
@@ -142,12 +169,17 @@ def push() -> dict:
         if changes:
             last = max(last, max(c["id"] for c in changes))
             db.set_setting("sync_last_change", str(last))
-        data = snapshot_gz()
-        r = requests.post(f"{base}/api/sync/upload", data=data, timeout=300,
-                          headers={**h, "Content-Type": "application/gzip", "X-Last-Change": str(last)})
+        path = snapshot_file()
+        try:
+            size = os.path.getsize(path)
+            with open(path, "rb") as f:                # 파일을 흘려 보냄
+                r = requests.post(f"{base}/api/sync/upload", data=f, timeout=600,
+                                  headers={**h, "Content-Type": "application/gzip", "X-Last-Change": str(last)})
+        finally:
+            os.remove(path)
         r.raise_for_status()
         result = {"ok": True, "at": started, "pulled": len(changes), "applied": applied, "uploaded_mb":
-                  round(len(data) / 1e6, 2), **r.json()}
+                  round(size / 1e6, 2), **r.json()}
     except (requests.RequestException, KeyError, ValueError) as e:
         result = {"ok": False, "at": started, "error": f"{e.__class__.__name__}: {str(e)[:200]}"}
     db.set_setting("sync_last", json.dumps(result, ensure_ascii=False))

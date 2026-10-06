@@ -147,7 +147,7 @@ SARAMIN_VIEW = """<html><head><meta property="og:title" content="[가상물산(�
 <dt>근무형태</dt><dd>정규직</dd><dd>수습기간 3개월</dd><dt>급여</dt><dd>면접 후 결정</dd><dt>근무지역</dt><dd>경기 화성시</dd><a>지도보기</a></dl><p>조회수</p></div>
 <div class="jv_cont jv_detail"><div class="user_content jobsViewDetail_1"><p>담당업무</p><p>ㆍ전화 CS 클레임 처리</p>
 <p>자격요건</p><p>ㆍ학력사항 : 학력무관</p><p>근무조건</p><p>ㆍ급여조건 : 연봉2800만원~3000만원(경력자 협의 가능)</p></div></div>
-<div class="jv_cont jv_howto"><dt>시작일</dt><dd>2026.09.30 00:00</dd><dt>마감일</dt><dd>2026.10.05 23:59</dd></div>
+<div class="jv_cont jv_howto"><dt>시작일</dt><dd>2026.09.30 00:00</dd><dt>마감일</dt><dd>2099.10.05 23:59</dd></div>
 <div class="jv_cont jv_company"><h2>기업정보</h2><dt>대표자명</dt><dd>홍길동</dd><dt>기업형태</dt><dd>중소기업</dd><dt>업종</dt><dd>식품 제조업</dd>
 <dt>사원수</dt><dd>8 명</dd><dd>(2026년 기준)</dd><dt>매출액</dt><dd>63억 3,331만원</dd><p>채용정보</p></div></body></html>"""
 
@@ -157,7 +157,7 @@ def test_saramin_full_page():
     p = linkimport.parse(SARAMIN_VIEW, "https://www.saramin.co.kr/zf_user/jobs/view?rec_idx=77", "saramin")
     assert (p["source_id"], p["company"], p["title"]) == ("77", "가상물산(주)", "각 부문별 직원 채용")
     assert (p["sido"], p["sigungu"], p["employment_type"]) == ("경기", "화성시", "정규직 (수습 3개월)")
-    assert (p["posted_at"], p["deadline"]) == ("2026-09-30", "2026-10-05")
+    assert (p["posted_at"], p["deadline"]) == ("2026-09-30", "2099-10-05")
     assert (p["salary_min"], p["salary_max"]) == (2800, 3000)                  # 요약은 '면접 후 결정' → 본문 금액
     assert "ㆍ전화 CS 클레임 처리" in p["description"].split("\n")
     info = json.loads(p["company_info"])
