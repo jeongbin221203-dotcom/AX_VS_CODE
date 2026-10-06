@@ -309,7 +309,13 @@ def test_backup_and_reset_keep_audit(app, isolated_db, monkeypatch, tmp_path):
     assert db._scalar("SELECT COUNT(*) FROM users") == 0
     assert db._scalar("SELECT COUNT(*) FROM audit_log") > before_audit  # 감사로그는 보존
     client = app.test_client()
-    res = post(client, "/setup", {"action": "seed"})
+    from core import auth as core_auth
+    res = post(client, "/setup", {"action": "seed"})                      # 코드 없이는 못 만든다
+    assert res.status_code == 200 and len(ent.list_users()) == 0
+    res = post(client, "/setup", {"action": "seed", "setup_code": "WRONG"})
+    assert len(ent.list_users()) == 0
+    client.get("/setup")                                                  # 코드가 콘솔에 찍힌다
+    res = post(client, "/setup", {"action": "seed", "setup_code": core_auth.setup_code()})
     assert res.status_code == 302 and len(ent.list_users()) == 9          # 영업지원 포함
 
 

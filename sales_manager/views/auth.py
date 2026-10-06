@@ -160,10 +160,17 @@ def setup():
     """사용자가 한 명도 없을 때의 초기 설정 화면."""
     if not ent.list_users(active_only=True).empty:
         return redirect(url_for("auth.login"))
+    if request.method == "GET":
+        code = core_auth.setup_code()
+        print(f"[초기 설정] 관리자를 만들려면 /setup 화면에 이 코드를 입력하세요: {code}", flush=True)   # 서버 콘솔
+        current_app.logger.warning("초기 설정 코드: %s", code)
     if request.method == "POST":
         db.set_context("system", None)
         raw_pw = request.form.get("password", "")
         try:
+            if not core_auth.check_setup_code(request.form.get("setup_code", "")):
+                db.audit("초기설정거부", "사용자", None, {"IP": client_ip(), "사유": "설정 코드 불일치"})
+                raise ValueError("설정 코드가 올바르지 않습니다. 서버 콘솔(로그)에 찍힌 코드를 입력하세요.")
             # password 모드에서는 관리자 비밀번호 없이 계정을 만들면 아무도 로그인할 수 없다
             if core_auth.AUTH_MODE == "password":
                 problems = core_auth.password_problems(raw_pw)
@@ -178,6 +185,7 @@ def setup():
                 flash("관리자 계정을 만들었습니다. 로그인하세요.", "success")
             if core_auth.AUTH_MODE == "password":
                 core_auth.set_password(admin_id, raw_pw, must_change=False)
+            core_auth.retire_setup_code()                      # 한 번 쓴 코드는 버린다
             return redirect(url_for("auth.login"))
         except ValueError as exc:
             flash(str(exc), "error")

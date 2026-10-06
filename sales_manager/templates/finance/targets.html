@@ -12,7 +12,7 @@
         <thead><tr><th>담당자</th><th class="num">목표금액(원)</th></tr></thead>
         <tbody>
           {% for owner_id, label, amount in rows %}
-            <tr><td><input type="hidden" name="owner_id" value="{{ owner_id }}">{{ label }}</td>
+            <tr><td><input type="hidden" name="owner_id" value="{{ owner_id }}"><input type="hidden" name="expected" value="{{ amount }}">{{ label }}</td>
                 <td class="num">{% if can_edit %}<input name="amount" type="number" min="0" step="1" value="{{ amount }}" aria-label="{{ label }} 목표금액(원)">{% else %}{{ amount|krw }}{% endif %}</td></tr>
           {% else %}
             <tr><td colspan="2" class="muted">목표를 입력할 수 있는 담당자가 없습니다.</td></tr>

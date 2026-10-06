@@ -68,31 +68,78 @@ def next_closable() -> str:
     return (first or {}).get("ym") or date.today().replace(day=1).isoformat()[:7]
 
 
-def close_month(ym: str, actor: dict) -> dict:
+def close_checks(ym: str) -> list[dict]:
+    """마감 전 점검 (자재관리 close_checks 와 같은 생각). level 'block' 이면 마감을 막고, 'warn' 이면 결과만 남긴다.
+    [{key, label, count, level, hint}] — 건수가 0 이면 정상."""
+    end = _month_end(ym)
+    checks: list[dict] = []
+
+    def add(key: str, label: str, count: int, level: str, hint: str) -> None:
+        checks.append({"key": key, "label": label, "count": int(count or 0), "level": level, "hint": hint})
+
     from . import erp
+    if erp.settings()["adapter"] != "none":
+        add("erp_unsent", "ERP 로 전송되지 않은 매출",
+            db._scalar("SELECT COUNT(*) FROM sales WHERE substr(sale_date, 1, 7)=? AND status <> ? "
+                       "AND COALESCE(erp_status, '') NOT IN ('전송완료', '취소완료')", [ym, db.SALE_CANCELLED]),
+            "block", "ERP 연동 화면에서 전송을 끝내세요")
+    add("pending_requests", "결재 대기 중인 매출 취소·입금 반제·대손 요청",
+        db._scalar("SELECT COUNT(*) FROM fin_requests r JOIN sales s ON s.id = r.sale_id WHERE r.status='대기' "
+                   "AND r.kind IN ('매출취소','입금반제','대손') AND s.sale_date <= ?", [end]),
+        "block", "승인·반려·회수한 뒤 마감하세요 (마감하면 그 달 매출·입금을 바꿀 수 없음)")
+    add("etax_in_flight", "전자세금계산서 발행 진행 중(요청·전송중)",
+        db._scalar("SELECT COUNT(*) FROM etax_invoices e JOIN sales s ON s.id = e.sale_id WHERE e.status IN ('발행요청','전송중') "
+                   "AND substr(s.sale_date, 1, 7) <= ?", [ym]),
+        "block", "발행이 끝난 뒤 마감하세요")
+    add("tax_docs_missing", "세금계산서·계산서 증빙이 없는 매출",
+        db._scalar("SELECT COUNT(*) FROM sales s WHERE substr(s.sale_date, 1, 7)=? AND s.status <> ? "
+                   "AND COALESCE(s.sale_kind, '매출') = '매출' AND NOT EXISTS (SELECT 1 FROM sale_documents d "
+                   "WHERE d.sale_id = s.id AND d.voided_at IS NULL AND d.doc_type IN ('전자세금계산서','세금계산서','수정세금계산서',"
+                   "'전자계산서','계산서','수정계산서'))", [ym, db.SALE_CANCELLED]),
+        "warn", "부가세 신고 전에 발행·등록 여부를 확인하세요 (데이터 점검에서 목록)")
+    add("paid_mismatch", "입금액과 입금 내역 합계가 다른 매출",
+        db._scalar("SELECT COUNT(*) FROM sales s WHERE s.sale_date <= ? AND COALESCE(s.paid_amount,0) <> "
+                   "COALESCE((SELECT SUM(p.amount) FROM payments p WHERE p.sale_id = s.id), 0)", [end]),
+        "warn", "데이터 점검 > '입금액≠입금내역' 에서 확인하세요")
+    add("overpaid", "입금이 합계를 넘은 매출",
+        db._scalar("SELECT COUNT(*) FROM sales s WHERE s.sale_date <= ? AND s.status <> ? "
+                   "AND COALESCE(s.paid_amount,0) > COALESCE(s.total_amount, s.amount)", [end, db.SALE_CANCELLED]),
+        "warn", "과입금은 선수금으로 정리하세요")
+    return checks
+
+
+def close_month(ym: str, actor: dict) -> dict:
     expected = next_closable()
     if ym != expected:
         raise ValueError(f"마감은 한 달씩 순서대로 합니다. 다음 마감할 달은 {expected} 입니다.")
     if ym >= date.today().strftime("%Y-%m"):
         raise ValueError("아직 끝나지 않은 달은 마감할 수 없습니다.")
-    if erp.settings()["adapter"] != "none":
-        unsent = int(db._scalar("SELECT COUNT(*) FROM sales WHERE substr(sale_date, 1, 7)=? AND status <> ? "
-                                "AND COALESCE(erp_status, '') NOT IN ('전송완료', '취소완료')", [ym, db.SALE_CANCELLED]))
-        if unsent:
-            raise ValueError(f"{ym} 매출 중 ERP 로 전송되지 않은 건이 {unsent}건 있습니다. 전송을 끝낸 뒤 마감하세요.")
+    import json
     end = _month_end(ym)
-    snap = ar_balances(end)
-    with db.get_conn() as conn:
-        conn.execute("DELETE FROM ar_snapshots WHERE ym=?", (ym,))
-        for r in snap.itertuples():
-            conn.execute("INSERT INTO ar_snapshots (ym, customer_id, sales_total, paid_total, balance, overdue, advance, "
-                         "created_at) VALUES (?,?,?,?,?,?,?,?)",
-                         (ym, int(r.customer_id), int(r.sales_total), int(r.paid_total), int(r.balance),
-                          int(r.overdue), int(r.advance), db._now()))
-        conn.execute("INSERT INTO sales_period_closes (closed_through, action, actor, at) VALUES (?, 'CLOSE', ?, ?)",
-                     (ym, actor.get("name"), db._now()))
-    result = {"ym": ym, "customers": len(snap), "balance": int(snap["balance"].sum()) if not snap.empty else 0}
-    db.audit("월마감", "매출", None, result)
+    with db.transaction():
+        with db.get_conn() as conn:
+            db.lock(conn, "period-close")                  # 두 서버·두 사람이 같은 달을 동시에 마감하지 못하게
+        if ym != next_closable():                          # 잠금을 얻은 사이 다른 쪽이 먼저 마감했다
+            raise db.ConflictError(f"그 사이 다른 사용자가 마감했습니다. 다음 마감할 달은 {next_closable()} 입니다.")
+        checks = close_checks(ym)
+        blockers = [c for c in checks if c["level"] == "block" and c["count"]]
+        if blockers:
+            raise ValueError(f"{ym} 마감 전에 처리할 것이 있습니다 — " +
+                             " / ".join(f"{c['label']} {c['count']}건 ({c['hint']})" for c in blockers))
+        snap = ar_balances(end)
+        with db.get_conn() as conn:
+            conn.execute("DELETE FROM ar_snapshots WHERE ym=?", (ym,))
+            for r in snap.itertuples():
+                conn.execute("INSERT INTO ar_snapshots (ym, customer_id, sales_total, paid_total, balance, overdue, advance, "
+                             "created_at) VALUES (?,?,?,?,?,?,?,?)",
+                             (ym, int(r.customer_id), int(r.sales_total), int(r.paid_total), int(r.balance),
+                              int(r.overdue), int(r.advance), db._now()))
+            conn.execute("INSERT INTO sales_period_closes (closed_through, action, actor, at, checks) VALUES (?, 'CLOSE', ?, ?, ?)",
+                         (ym, actor.get("name"), db._now(), json.dumps(checks, ensure_ascii=False)))
+        warnings = {c["key"]: c["count"] for c in checks if c["level"] == "warn" and c["count"]}
+        result = {"ym": ym, "customers": len(snap), "balance": int(snap["balance"].sum()) if not snap.empty else 0,
+                  "경고": warnings}
+        db.audit("월마감", "매출", None, result)
     return result
 
 

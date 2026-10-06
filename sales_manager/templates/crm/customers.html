@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import table, tabs, csrf, select, owner_input, download, pick %}
+{% from "_macros.html" import table, tabs, csrf, select, owner_input, download, pick, change_history %}
 
 {% macro customer_form(f, statuses, edit) %}
   <div class="form-grid g3">
@@ -89,6 +89,7 @@
           {{ customer_form(f, statuses, true) }}
           <button class="btn btn-primary">💾 저장</button>
         </form>
+        {{ change_history('거래처', edit_id) }}
         <form method="post" action="{{ url_for('crm.customer_delete', cid=edit_id) }}" class="danger-zone" data-confirm="'삭제' — 되돌리기 어렵습니다. 계속할까요?">
           {{ csrf() }}
           <label class="check"><input type="checkbox" name="confirm" value="1"> 삭제 확인 (영업기회·활동·매출 이력이 있으면 삭제되지 않습니다 → 상태를 '종료'로)</label>

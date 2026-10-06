@@ -729,6 +729,19 @@ def data():
         production=config.PRODUCTION, backup_dir=folder, sample_industries=_sample_industries())
 
 
+@bp.route("/data/files.zip")
+def backup_files_zip():
+    """증빙·첨부 파일 전체를 zip 으로 (DB 백업과 따로 보관할 때) — 오래 걸릴 수 있어 백그라운드에서 만든다."""
+    from core import backup_files, bulk
+
+    def work(progress) -> dict:
+        return {"file": (f"증빙첨부파일_{date.today():%Y%m%d}.zip", backup_files.zip_files()), "pii": True}
+
+    bulk.start("내려받기", "증빙·첨부 파일 전체 (zip)", work, dict(g.user))
+    flash("증빙·첨부 파일 zip 을 만들고 있습니다. 다 되면 '데이터 일괄 등록' 화면의 작업 목록에서 받을 수 있습니다.", "info")
+    return redirect(url_for("io.index"))
+
+
 @bp.route("/data/backup.xlsx")
 def backup():
     """엑셀 백업. 고객 개인정보는 가린다(원본 보관은 DB 백업으로).

@@ -643,11 +643,17 @@ def attachment_file(aid: int):
     inline = row["mime"] in ("application/pdf", "image/jpeg", "image/png") and not request.args.get("download")
     if not inline:
         db.audit("다운로드", "첨부", aid, {"파일": row["file_name"]})
+    else:
+        from core import documents as _docs
+        _docs.record_view(row, g.user["name"], "첨부")
     from flask import send_file
     import io as _io
     res = send_file(_io.BytesIO(row["data"]), mimetype=row["mime"], as_attachment=not inline,
                     download_name=row["file_name"])
     res.headers["X-Frame-Options"] = "SAMEORIGIN"
+    res.headers["Cache-Control"] = "private, no-store"
+    if row["mime"].startswith("image/"):
+        res.headers["Content-Security-Policy"] = "default-src 'none'; img-src 'self' data:; sandbox"
     return res
 
 
@@ -658,7 +664,7 @@ def attachment_void(aid: int):
         flash("첨부를 무효 처리했습니다(기록은 남습니다).", "warning")
         back = url_for("crm.deals", tab="edit", id=row["entity_id"]) if row["entity"] == "deal" \
             else url_for("crm.activities", tab="files")
-    except ValueError as exc:
+    except (ValueError, PermissionError) as exc:
         flash(str(exc), "error")
         back = request.referrer or url_for("crm.deals")
     return redirect(back)

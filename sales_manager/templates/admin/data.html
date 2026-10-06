@@ -24,6 +24,7 @@
     {{ csrf() }}
     <button class="btn btn-primary" name="action" value="backup_db">DB 백업 (원본 그대로)</button>
     <a class="btn" href="{{ url_for('admin.backup') }}">⬇️ 엑셀로 내보내기 (개인정보 가림)</a>
+    <a class="btn" href="{{ url_for('admin.backup_files_zip') }}" title="세금계산서 이미지·XML·첨부 파일 (DB 백업에는 파일이 들어 있지 않습니다)">⬇️ 증빙·첨부 파일 zip</a>
   </form>
   <p class="muted small">백업 폴더: <code>{{ backup_dir }}</code> · 최근 30개 보관. 운영에서는 OS 스케줄러로 매일 실행하세요:<br>
     <code>python -c "import config; from core import sales_db as db; db.init_db(); print(db.backup_database(config.BACKUP_DIR))"</code></p>

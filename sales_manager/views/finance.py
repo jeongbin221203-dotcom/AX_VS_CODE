@@ -96,7 +96,9 @@ def _sales_page(form: dict | None = None, status: int = 200, extra_ctx: dict | N
                          ledger_closing=int(rows["잔액"].iloc[-1]) if not rows.empty else opening)
     if tab == "close":
         snap_ym = a_str("snap") or extra["closed_through"]
-        extra.update(next_closable=periods.next_closable(), close_history=Table(periods.history()),
+        _next = periods.next_closable()
+        extra.update(next_closable=_next, close_history=Table(periods.history()),
+                     close_checks=periods.close_checks(_next) if _next < date.today().strftime("%Y-%m") else [],
                      snap_ym=snap_ym, snapshot=Table(periods.snapshot_table(snap_ym), money=["매출누계", "입금누계", "월말잔액", "연체잔액"])
                      if snap_ym else None, is_admin=ent.has_role(g.user, "ADMIN"))
     edit_id = a_int("sid")
@@ -491,9 +493,14 @@ def document_file(doc_id: int):
     inline = doc["mime"] in ("image/jpeg", "image/png", "application/pdf") and not request.args.get("download")
     if not inline:
         db.audit("다운로드", "증빙", doc_id, {"파일": doc["file_name"], "매출": doc["sale_id"]})
+    else:
+        docs.record_view(doc, g.user["name"], "증빙")
     response = send_file(io.BytesIO(doc["data"]), mimetype=doc["mime"], as_attachment=not inline,
                          download_name=doc["file_name"])
     response.headers["X-Frame-Options"] = "SAMEORIGIN"        # 매출 화면 안 미리보기만 허용
+    response.headers["Cache-Control"] = "private, no-store"
+    if doc["mime"].startswith("image/"):                      # 이미지에는 스크립트·외부 요청이 필요 없다 → 완전 격리
+        response.headers["Content-Security-Policy"] = "default-src 'none'; img-src 'self' data:; sandbox"
     return response
 
 
@@ -503,7 +510,7 @@ def document_void(doc_id: int):
     try:
         docs.void_document(doc_id, f_str("reason"), g.user)
         flash("증빙을 무효 처리했습니다(기록은 남습니다).", "warning")
-    except ValueError as exc:
+    except (ValueError, PermissionError) as exc:
         flash(str(exc), "error")
     return redirect(url_for("finance.sales", sid=doc["sale_id"]))
 
@@ -557,15 +564,19 @@ def targets_distribute():
 def targets_save():
     ids = request.form.getlist("owner_id")
     amounts = request.form.getlist("amount")
+    expected = request.form.getlist("expected")                # 화면을 열었을 때의 값 (동시 수정 확인)
     saved, skipped = 0, []
-    for raw_id, raw in zip(ids, amounts):
+    for n, (raw_id, raw) in enumerate(zip(ids, amounts)):
         if not raw_id.isdigit():
             continue
         try:
             amount = int(float(raw.replace(",", "") or 0))
-            db.upsert_target(g.ym, int(raw_id), amount)       # 범위 밖·비활성 담당자는 여기서 거부된다
+            was = expected[n] if n < len(expected) and str(expected[n]).lstrip("-").isdigit() else None
+            if was is not None and int(was) == amount:
+                continue                                       # 바꾸지 않은 칸은 저장하지 않는다 (남의 수정을 덮지 않게)
+            db.upsert_target(g.ym, int(raw_id), amount, expected=int(was) if was is not None else None)
             saved += 1
-        except ValueError as exc:
+        except ValueError as exc:                              # ConflictError 포함
             skipped.append(str(exc))
     flash(f"{saved}명의 {g.ym} 목표를 저장했습니다.", "success")
     if skipped:

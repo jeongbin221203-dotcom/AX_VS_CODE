@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import metric, table, csrf, select, download, pick %}
+{% from "_macros.html" import metric, table, csrf, select, download, pick, change_history %}
 
 {% macro line_row(it, products, tax_types) %}
   <tr>
@@ -130,6 +130,7 @@
         <input type="date" name="sale_date" value="{{ today() }}"><button class="btn btn-primary">💰 매출로 전환</button></form>
     {% endif %}
   </div>
+  {{ change_history('견적', q.id) }}
   {% if q.deal_id %}<p class="small">영업기회: <a href="{{ url_for('crm.deals', id=q.deal_id, tab='edit') }}">#{{ q.deal_id }} 열기</a></p>{% endif %}
   {% if q.orders %}
     <p class="small">수주:

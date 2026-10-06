@@ -85,6 +85,26 @@ def hash_password(raw: str, salt: str | None = None, rounds: int = PBKDF2_ROUNDS
 
 _DUMMY: list[str] = []
 
+# ── 초기 설정 코드 ────────────────────────────────────────────────────────
+# 사용자가 한 명도 없을 때 /setup 으로 관리자를 만드는데, 코드 없이 열려 있으면 처음 접속한 사람이 관리자가 된다.
+# 서버 콘솔(로그)에 찍힌 코드를 입력해야만 만들 수 있다 (SALES_SETUP_CODE 로 정해 둘 수도 있음 — 서버 여러 대일 때).
+_SETUP: dict = {"code": None}
+
+
+def setup_code() -> str:
+    if not _SETUP["code"]:
+        import secrets
+        _SETUP["code"] = os.environ.get("SALES_SETUP_CODE", "").strip() or secrets.token_hex(4).upper()
+    return _SETUP["code"]
+
+
+def check_setup_code(given: str) -> bool:
+    return bool(given) and hmac.compare_digest(str(given).strip().upper(), setup_code().upper())
+
+
+def retire_setup_code() -> None:
+    _SETUP["code"] = None
+
 
 def _dummy_hash() -> str:
     if not _DUMMY:

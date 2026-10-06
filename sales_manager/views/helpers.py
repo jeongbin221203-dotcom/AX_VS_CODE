@@ -513,6 +513,7 @@ def csrf_token() -> str:
 
 def register_template_helpers(app: Flask) -> None:
     app.jinja_env.filters.update(won=won, mil=mil, krw=krw, label=company.label)
+    app.jinja_env.globals["entity_history"] = db.entity_history
 
     @app.context_processor
     def _company():

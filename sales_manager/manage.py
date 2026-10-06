@@ -140,6 +140,18 @@ def _sqlite_backup_problem(path: str) -> str:
     return ""
 
 
+def cmd_restore_files(args) -> int:
+    """DB 를 복구한 뒤 증빙·첨부 파일을 백업 폴더에서 저장소로 되돌린다 (이미 있는 파일은 그대로, sha256 확인)."""
+    from core import backup_files
+    folder = args.folder or str(config.BACKUP_DIR)
+    if not os.path.isdir(os.path.join(folder, "files")):
+        print("백업 폴더에 files/ 가 없습니다:", folder)
+        return 2
+    result = backup_files.restore_files(folder)
+    print("증빙·첨부 파일 복원:", result)
+    return 1 if result["불일치"] else 0
+
+
 def cmd_check(args) -> int:
     from core import offline
     from core import sales_db as db
@@ -316,6 +328,9 @@ def main(argv=None) -> int:
     p = sub.add_parser("backup")
     p.add_argument("--dir")
     p.set_defaults(func=cmd_backup)
+    p = sub.add_parser("restore-files")
+    p.add_argument("folder", nargs="?")
+    p.set_defaults(func=cmd_restore_files)
     p = sub.add_parser("restore")
     p.add_argument("file")
     p.add_argument("--yes", action="store_true")

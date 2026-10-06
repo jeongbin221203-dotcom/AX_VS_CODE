@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import metric, table, tabs, csrf, select, owner_input, download, pick %}
+{% from "_macros.html" import metric, table, tabs, csrf, select, owner_input, download, pick, change_history %}
 {% macro file_list(files) %}
   {% for a in files %}
     <div class="file-row {{ 'voided' if a.voided_at }}">
@@ -155,6 +155,7 @@
           <button class="btn btn-danger">🗑️ 삭제</button>
         </form>
         <details><summary>📜 단계 변경 이력 ({{ history.total }}건)</summary>{{ table(history) }}</details>
+        {{ change_history('영업기회', edit_id) }}
         <h3>📎 첨부 — 제안서·견적서·계약서·회의록</h3>
         {{ file_list(deal_files) }}
         <form method="post" action="{{ url_for('crm.attachment_upload', entity='deal', eid=edit_id) }}"

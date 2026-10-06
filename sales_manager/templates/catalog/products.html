@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import table, tabs, csrf, select, download, pick %}
+{% from "_macros.html" import table, tabs, csrf, select, download, pick, change_history %}
 {% block content %}
 <p class="subtitle">매출·견적의 단가는 <strong>거래처 특가(해당 일자에 유효) → 품목 정가</strong> 순으로 정해집니다.
   품목은 시스템관리자가, 거래처 특가는 팀장 이상이 담당 범위의 거래처에 대해 등록합니다. 모든 변경은 감사로그에 남습니다.</p>
@@ -58,6 +58,7 @@
       <p class="muted small">과세 10% · 영세율 0%(수출 등) · 면세(부가세 없음). 정가를 바꿔도 이미 발송한 견적·등록한 매출 금액은 바뀌지 않습니다.</p>
       <button class="btn btn-primary">💾 저장</button>
       {% if edit.id %}<a class="btn" href="{{ url_for('catalog.products') }}">새 품목</a>{% endif %}
+      {% if edit.id %}{{ change_history('품목', edit.id) }}{% endif %}
     </form>
     {% endif %}
   {% endif %}

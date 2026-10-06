@@ -177,6 +177,14 @@ def _backup():
     if database.same_disk(folder):
         status = "warn"
         notes.append("DB 와 같은 디스크 — 다른 디스크·NAS 로 (SALES_BACKUP_DIR)")
+    try:
+        from . import backup_files
+        missing = backup_files.missing_in_backup(folder)
+        if missing:
+            status = "warn" if status == "ok" else status
+            notes.append(f"증빙·첨부 파일 {missing}개가 백업 폴더에 없음 → 다음 백업 때 복사됨 (python manage.py backup)")
+    except Exception:   # noqa: BLE001
+        pass
     return status, " · ".join(notes)
 
 

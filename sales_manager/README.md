@@ -10,7 +10,7 @@
 pip install -r requirements-dev.txt
 python app.py                   # 개발: http://127.0.0.1:5001 (SQLite, 간편 로그인, 스키마 자동 최신화)
 python manage.py worker         # 배치 워커 (알림·ERP 전송·결재 독촉·인사 연동·백업)
-python -m pytest tests -q       # 테스트 221개 (임시 DB·폴더 사용, data/ 는 건드리지 않음)
+python -m pytest tests -q       # 테스트 229개 (임시 DB·폴더 사용, data/ 는 건드리지 않음)
 # PostgreSQL 로 같은 테스트: SALES_TEST_PG_URL=postgresql://postgres@127.0.0.1:5433/postgres python -m pytest tests -q
 ```
 
@@ -21,7 +21,7 @@ python serve.py                 # waitress WSGI. HTTPS 는 앞단 프록시(ngin
 python manage.py check          # DB·스키마·저장소 점검
 ```
 컨테이너 구성(nginx + 앱 2대 + 워커 + PostgreSQL + MinIO + Prometheus)은 [deploy/docker-compose.yml](deploy/docker-compose.yml),
-장애 대응·복구 절차는 [docs/RUNBOOK.md](docs/RUNBOOK.md).
+장애 대응·복구 절차는 [docs/RUNBOOK.md](docs/RUNBOOK.md), 역할·서비스 수준·감시·정기 점검·변경 관리는 [docs/OPERATIONS.md](docs/OPERATIONS.md).
 
 첫 실행 시 사용자가 없으면 **초기 설정** 화면이 열린다(샘플 조직·계정 9개 또는 관리자 1명).
 시연용 계정: `정임원`(임원) / `한팀장`(팀장, 영업1팀) / `김영업`(사원) / `윤지원`(영업지원) / `시스템관리자`(사번 9999)
@@ -48,6 +48,7 @@ sales/
 ├─ templates/ static/  Jinja2, CSS, Chart.js·한글 글꼴(로컬 보관 — 사내망에서도 동작)
 ├─ deploy/             docker-compose · nginx · Prometheus 수집·경보 규칙 · .env 예시
 ├─ docs/RUNBOOK.md     배포·장애 대응·백업/복구(DR) 절차
+├─ docs/OPERATIONS.md  역할·서비스 수준·감시·백업 복구 시험·정기 점검·변경 관리·초기 설치
 └─ tests/              화면·권한 · 코어 · 플랫폼(큐·알림) · 영업 실무 · 연동(HR·OIDC·API) · 운영 · 엑셀 양식
 ```
 

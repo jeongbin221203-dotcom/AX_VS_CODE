@@ -405,6 +405,62 @@ def list_audit(limit: int = 300, actor: str = "", entity: str = "",
     return _df(sql, params, db_path)
 
 
+# 감사로그의 변경 전·후 값에 쓰인 DB 열 이름 → 화면에 보이는 이름
+FIELD_LABELS = {
+    "name": "거래처명", "grade": "등급", "industry": "업종", "biz_no": "사업자번호", "manager": "고객담당자", "phone": "연락처",
+    "email": "이메일", "address": "주소", "credit_limit": "여신한도", "payment_terms": "결제조건(일)", "erp_code": "ERP코드",
+    "memo": "메모", "status": "상태", "owner": "담당자", "owner_id": "담당자(ID)",
+    "sale_date": "매출일", "item": "품목", "item_code": "품목코드", "qty": "수량", "unit_price": "단가", "amount": "공급가액",
+    "vat_amount": "부가세", "total_amount": "합계", "tax_type": "과세구분", "due_date": "결제기일", "paid_amount": "입금액",
+    "customer_id": "거래처(ID)", "deal_id": "영업기회(ID)", "product_id": "품목(ID)", "currency": "통화", "fx_rate": "환율",
+    "code": "품목코드", "spec": "규격", "category": "분류", "unit": "단위", "list_price": "정가", "erp_material": "ERP자재번호",
+    "active": "사용", "title": "제목", "stage": "단계", "list_amount": "정가", "discount_rate": "할인율", "expected_close": "예상마감일",
+    "probability": "확률", "forecast_category": "예측구분", "source": "유입경로", "competitor": "경쟁사",
+}
+
+
+def entity_history(entity: str, entity_id: int, limit: int = 100) -> list[dict]:
+    """한 기록(거래처·품목·매출·영업기회·견적)의 변경 이력 — 감사로그에서 가져와 '항목: 이전 → 이후' 로 풀어 준다."""
+    import json as _json
+    try:
+        rows = _df("SELECT id, ts, actor, action, detail FROM audit_log WHERE entity=? AND entity_id=? "
+                   "ORDER BY id DESC LIMIT ?", [entity, int(entity_id), int(limit)]).to_dict("records")
+    except Exception:   # noqa: BLE001
+        return []
+    out = []
+    for r in rows:
+        try:
+            detail = _json.loads(r["detail"]) if r.get("detail") else {}
+        except (TypeError, ValueError):
+            detail = {}
+        changes, via = [], None
+        raw = detail.get("변경") if isinstance(detail, dict) else None
+        if isinstance(raw, dict):
+            for field, pair in raw.items():
+                if isinstance(pair, (list, tuple)) and len(pair) == 2:
+                    changes.append({"field": FIELD_LABELS.get(field, field), "before": _fmt_hist(pair[0]),
+                                    "after": _fmt_hist(pair[1])})
+        if isinstance(detail, dict):
+            via = "API" if str(r.get("actor") or "").startswith("API:") else ("엑셀" if "일괄" in str(r.get("action")) else None)
+        summary = ""
+        if not changes and isinstance(detail, dict):
+            skip = {"접속IP", "요청ID", "변경"}
+            summary = " · ".join(f"{k}: {_fmt_hist(v)}" for k, v in detail.items() if k not in skip and v not in (None, ""))[:200]
+        out.append({"at": str(r["ts"]), "user": r["actor"], "action": r["action"], "changes": changes, "via": via,
+                    "summary": summary})
+    return out
+
+
+def _fmt_hist(v: Any) -> str:
+    if v is None:
+        return "(비움)"
+    if isinstance(v, bool):
+        return "예" if v else "아니오"
+    if isinstance(v, (int, float)):
+        return f"{int(v):,}" if float(v) == int(v) else f"{v:,.2f}"
+    return str(v)[:80]
+
+
 def _now() -> str:
     return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
@@ -1381,8 +1437,10 @@ def list_targets(yyyymm: str = "", db_path: str | None = None) -> pd.DataFrame:
     return _df(sql, params + scope_params, db_path)
 
 
-def upsert_target(yyyymm: str, owner: Any, amount: int, db_path: str | None = None) -> None:
-    """월 목표 저장. owner 는 사용자 id(int)·사번·이름 중 하나."""
+def upsert_target(yyyymm: str, owner: Any, amount: int, db_path: str | None = None,
+                  expected: int | None = None) -> None:
+    """월 목표 저장. owner 는 사용자 id(int)·사번·이름 중 하나.
+    expected: 화면을 열었을 때 보였던 값 — 그 사이 다른 팀장이 바꿨으면 덮어쓰지 않고 ConflictError."""
     if not yyyymm:
         raise ValueError("월은 필수입니다.")
     owner_id, owner_name = resolve_owner(owner, db_path)
@@ -1391,6 +1449,9 @@ def upsert_target(yyyymm: str, owner: Any, amount: int, db_path: str | None = No
         raise ValueError("목표금액은 0 이상이어야 합니다.")
     prev = _one("SELECT target_amount FROM targets WHERE yyyymm=? AND owner_key=?",
                 [yyyymm, str(owner_id)], db_path)
+    if expected is not None and int((prev or {}).get("target_amount") or 0) != int(expected):
+        raise ConflictError(f"{owner_name} 님의 {yyyymm} 목표를 다른 사용자가 먼저 바꿨습니다"
+                            f"({int((prev or {}).get('target_amount') or 0):,}원). 새로고침한 뒤 다시 입력하세요.")
     with get_conn(db_path) as conn:
         conn.execute(
             "INSERT INTO targets (yyyymm, owner, owner_id, owner_key, target_amount) VALUES (?,?,?,?,?) "
@@ -1711,7 +1772,15 @@ def backup_database(folder: str | os.PathLike, keep: int | None = None, db_path:
         from .retention import prune_backups
         prune_backups(folder, pattern)
     same = database.same_disk(folder)
+    files = None
+    if db_path is None:                           # 증빙·첨부 파일도 같은 폴더로 (DB 만 복원하면 파일이 없어 위변조 점검이 '원본 없음')
+        try:
+            from . import backup_files
+            files = backup_files.mirror_files(folder)
+        except Exception as exc:   # noqa: BLE001 - 파일 백업 실패가 DB 백업을 막지 않되 기록한다
+            files = {"오류": str(exc)[:200]}
     audit("DB백업", "시스템", None, {"파일": os.path.basename(target), "검증": "통과",
+                                    **({"증빙파일": files} if files is not None else {}),
                                     **({"경고": "DB 와 같은 디스크 — 디스크가 고장 나면 함께 잃습니다"} if same else {})}, db_path)
     return target
 

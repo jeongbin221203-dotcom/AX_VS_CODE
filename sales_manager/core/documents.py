@@ -16,7 +16,7 @@ import json
 import os
 import re
 import secrets
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from typing import Any, Optional
 
 from . import sales_db as db
@@ -364,12 +364,31 @@ def get_document(doc_id: int, with_data: bool = False) -> dict:
     return doc
 
 
+def check_void_allowed(uploaded_by_id, actor: dict, what: str = "증빙") -> None:
+    """무효 처리는 팀장 이상, 그 파일을 올린 본인은 못 한다 (직무 분리) — 증빙 무효가 세금계산서 잠금·'증빙 없음' 점검을 푸는 열쇠라서."""
+    from . import enterprise as ent
+    if not ent.has_role(actor, "MANAGER"):
+        raise PermissionError(f"{what} 무효 처리는 팀장 이상이 합니다 — 팀장에게 요청하세요.")
+    if uploaded_by_id and int(uploaded_by_id) == int(actor.get("id") or 0):
+        raise PermissionError(f"본인이 올린 {what}는 본인이 무효 처리할 수 없습니다(직무 분리). 다른 팀장에게 요청하세요.")
+
+
+def record_view(doc: dict, actor_name: str, kind: str = "증빙") -> None:
+    """화면 안 미리보기 열람도 감사로그에 남긴다 (같은 사람이 30분 안에 같은 파일을 다시 열면 한 번만 — 목록 썸네일이 로그를 채우지 않게)."""
+    since = (datetime.now() - timedelta(minutes=30)).strftime("%Y-%m-%d %H:%M:%S")
+    if db._one("SELECT id FROM audit_log WHERE action=? AND entity=? AND entity_id=? AND actor=? AND ts>=? LIMIT 1",
+               [f"{kind}열람", kind, int(doc["id"]), actor_name, since]):
+        return
+    db.audit(f"{kind}열람", kind, int(doc["id"]), {"파일": doc.get("file_name"), "매출": doc.get("sale_id")})
+
+
 def void_document(doc_id: int, reason: str, actor: dict) -> None:
     if not (reason or "").strip():
         raise ValueError("무효 사유를 입력하세요.")
     doc = get_document(doc_id)
     if doc.get("voided_at"):
         raise ValueError("이미 무효 처리된 증빙입니다.")
+    check_void_allowed(doc.get("uploaded_by_id"), actor, "증빙")
     with db.get_conn() as conn:
         conn.execute("UPDATE sale_documents SET voided_at=?, void_reason=?, voided_by=? WHERE id=?",
                      (db._now(), reason.strip(), actor.get("name"), doc_id))

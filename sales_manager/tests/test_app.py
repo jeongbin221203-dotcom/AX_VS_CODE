@@ -373,7 +373,9 @@ def test_tax_invoice_image_and_xml(app):
     # 4) 다른 팀은 증빙을 볼 수 없다 · 무효 처리는 기록을 남긴다
     other = login(app, "박고객")
     assert other.get(f"/documents/{doc['id']}/file").status_code == 403
-    post(rep, f"/documents/{doc['id']}/void", {"reason": "재발행"})
+    post(rep, f"/documents/{doc['id']}/void", {"reason": "재발행"})                      # 영업사원·올린 본인은 무효 처리 못 함
+    assert not db._one("SELECT voided_at FROM sale_documents WHERE id=?", [doc["id"]])["voided_at"]
+    post(login(app, "한팀장"), f"/documents/{doc['id']}/void", {"reason": "재발행"})     # 다른 팀장이 처리
     assert db._one("SELECT voided_at FROM sale_documents WHERE id=?", [doc["id"]])["voided_at"]
     assert "재발행" in rep.get(f"/sales?sid={sid}").get_data(as_text=True)
 

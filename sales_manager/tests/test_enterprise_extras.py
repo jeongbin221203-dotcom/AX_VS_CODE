@@ -117,7 +117,9 @@ def test_deal_and_activity_attachments(app):
     assert rep.get(f"/attachments/{att['id']}/file").status_code == 200
     assert login(app, "박고객").get(f"/attachments/{att['id']}/file").status_code == 403
     assert "제안서.docx" in rep.get(f"/deals?tab=edit&id={deal['id']}").get_data(as_text=True)
-    post(rep, f"/attachments/{att['id']}/void", {"reason": "판 교체"})
+    post(rep, f"/attachments/{att['id']}/void", {"reason": "판 교체"})                  # 올린 영업사원 본인은 무효 처리 못 함
+    assert not db._one("SELECT voided_at FROM attachments WHERE id=?", [att["id"]])["voided_at"]
+    post(login(app, "한팀장"), f"/attachments/{att['id']}/void", {"reason": "판 교체"})   # 팀장이 처리
     assert db._one("SELECT voided_at FROM attachments WHERE id=?", [att["id"]])["voided_at"]
     cid = db._one("SELECT id FROM customers WHERE owner_id=? ORDER BY id LIMIT 1", [user("김영업")["id"]])["id"]
     post(rep, "/activities/add", {"customer_id": cid, "act_type": db.ACT_TYPES[0], "summary": "첨부 회의",

@@ -200,6 +200,9 @@ def task_file(tid: int):
         abort(403, str(exc))
     except ValueError:
         abort(404)
+    if str(task["file_name"]).lower().endswith(".zip"):
+        from .helpers import file_response
+        return file_response(data, task["file_name"], "application/zip", rows=None, pii=bool(task.get("pii")))
     return xlsx_response(data, task["file_name"], rows=None, pii=bool(task.get("pii")))
 
 

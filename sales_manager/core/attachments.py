@@ -81,10 +81,10 @@ def add(entity: str, entity_id: int, data: bytes, filename: str, kind: str = "�
     safe_name = "".join(ch for ch in (filename or "file") if ch not in '\\/:*?"<>|')[:150] or f"file{ext}"
     with db.get_conn() as conn:
         cur = conn.execute("INSERT INTO attachments (entity, entity_id, kind, file_key, file_name, mime, size, sha256, "
-                           "memo, uploaded_by, uploaded_at) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+                           "memo, uploaded_by, uploaded_at, uploaded_by_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
                            (entity, int(entity_id), kind, key, safe_name, mime, len(data),
                             hashlib.sha256(data).hexdigest(), memo or None, (actor or {}).get("name") or db.current_actor(),
-                            db._now()))
+                            db._now(), (actor or {}).get("id") or db.current_actor_id()))
         aid = int(cur.lastrowid)
     db.audit("첨부", ENTITIES[entity], int(entity_id), {"파일": safe_name, "종류": kind, "크기": len(data)})
     return aid
@@ -114,6 +114,8 @@ def void(attachment_id: int, reason: str, actor: dict) -> dict:
     if not str(reason or "").strip():
         raise ValueError("무효 사유를 입력하세요.")
     row = get(attachment_id)
+    from . import documents as _docs
+    _docs.check_void_allowed(row.get("uploaded_by_id"), actor, "첨부")
     with db.get_conn() as conn:
         conn.execute("UPDATE attachments SET voided_at=?, voided_by=?, void_reason=? WHERE id=? AND voided_at IS NULL",
                      (db._now(), actor.get("name"), reason.strip(), int(attachment_id)))

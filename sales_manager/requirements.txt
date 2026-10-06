@@ -1,5 +1,6 @@
 # 운영 의존성 (python manage.py check 로 설치 상태를 확인한다)
 flask>=3.0
+werkzeug>=3.1.9         # CVE-2026-102598 조치 (pip-audit) — flask 가 끌어오는 버전이 낮아도 이 아래로는 안 내려감
 pandas>=2.0
 openpyxl>=3.1
 waitress>=3.0            # 운영 WSGI 서버 (serve.py)
