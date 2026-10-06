@@ -6,7 +6,7 @@
 <div class="page-head">
   <div><div class="crumb"><a href="{{ url_for('analyze.index') }}">파일 분석</a> ›</div>
     <h1>{{ doc.name }}</h1>
-    <p>{{ table.sheet }} 시트 · {{ table.rows|length|num }}행 × {{ cols|length }}열 · 머리글 {{ table.head_row }}행{% if table.truncated %} · 앞 2만 행만 읽음{% endif %}</p></div>
+    <p>{{ table.sheet }} 시트 · {{ table.rows|length|num }}행 × {{ cols|length }}열 · 머리글 {{ table.head_row }}행{% if table.truncated %} · 앞 2만 행만 읽음{% endif %}{% if table.skipped %} · 합계·메모 행 {{ table.skipped }}개는 빼고 분석{% endif %}{% if table.wide %} · 60열이 넘어 앞 60열만 읽음{% endif %}</p></div>
   <a class="btn" href="{{ url_for('analyze.export', uid=uid, **request.args.to_dict()) }}">요약을 엑셀로 내려받기</a>
 </div>
 
@@ -58,10 +58,10 @@
   {% endif %}
   {% if d.trend %}
   <section class="card">
-    <h2>월별 {{ vname }} {{ aggs[d.a] if d.a != 'count' else '' }} <span class="small muted" style="font-weight:400">기준: {{ d.date_name }}</span></h2>
+    <h2>{{ '연도별' if d.trend and d.trend[0][0]|length == 4 else '월별' }} {{ vname }} {{ aggs[d.a] if d.a != 'count' else '' }} <span class="small muted" style="font-weight:400">기준: {{ d.date_name }}</span></h2>
     <div class="chart" data-chart="trend" data-type="line"></div>
     <details style="margin-top:8px"><summary>수치 보기</summary>
-      <div class="table-wrap" style="margin-top:6px"><table class="t"><thead><tr><th>월</th><th class="r">{{ aggs[d.a] }}</th><th class="r">건수</th></tr></thead>
+      <div class="table-wrap" style="margin-top:6px"><table class="t"><thead><tr><th>{{ '연도' if d.trend and d.trend[0][0]|length == 4 else '월' }}</th><th class="r">{{ aggs[d.a] }}</th><th class="r">건수</th></tr></thead>
       <tbody>{% for k, v, n in d.trend %}<tr><td>{{ k }}</td><td class="r">{{ v|num }}</td><td class="r">{{ n }}</td></tr>{% endfor %}</tbody></table></div>
     </details>
   </section>

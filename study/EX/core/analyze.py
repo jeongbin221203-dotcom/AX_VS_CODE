@@ -42,7 +42,7 @@ def read_sheets(data, filename):
         except csv.Error:
             dialect = csv.excel
         try:
-            rows = [[_csv_value(v) for v in row[:MAX_COLS]]
+            rows = [[_csv_value(v) for v in row[:MAX_COLS + 1]]
                     for _, row in zip(range(MAX_ROWS + 50), csv.reader(io.StringIO(text), dialect))]
         except csv.Error as e:
             raise xlsx.BadFile(f'CSV 를 읽을 수 없습니다: {e}')
@@ -62,7 +62,7 @@ def read_sheets(data, filename):
             for i, row in enumerate(ws.iter_rows(values_only=True)):
                 if i >= MAX_ROWS + 50:
                     break
-                rows.append(list(row[:MAX_COLS]))
+                rows.append([_csv_value(v) if isinstance(v, str) else v for v in row[:MAX_COLS + 1]])   # 글자로 저장된 숫자·날짜도
             out.append((ws.title, rows))
     except Exception as e:  # noqa: BLE001 — 깨진 시트 XML 등
         raise xlsx.BadFile(f'시트를 읽을 수 없습니다: {type(e).__name__}')
@@ -98,6 +98,9 @@ def _is_blank(v):
     return v is None or (isinstance(v, str) and not v.strip())
 
 
+TOTAL_RE = re.compile(r'(총\s*)?(합\s*계|총\s*계|소\s*계|누\s*계|총합계|계)(\s*\(.*\))?')
+
+
 def to_table(sheet_name, rows):
     """머리글 행 찾기 → 열 이름·종류·값 정리."""
     head_i = None
@@ -109,18 +112,39 @@ def to_table(sheet_name, rows):
             break
     if head_i is None:
         raise xlsx.BadFile(f"'{sheet_name}' 시트에서 머리글(열 이름) 행을 찾지 못했습니다. 첫 행에 열 이름을 넣어 주세요.")
+    wide = any(len(r) > MAX_COLS for r in rows)
+    rows = [r[:MAX_COLS] for r in rows]
     head = rows[head_i]
     used = [j for j, v in enumerate(head) if not _is_blank(v)]
     first_c, last_c = used[0], used[-1]
-    names, seen = [], Counter()
+    # 두 줄 머리글(병합한 '매출' 아래 '1분기·2분기'): 다음 행이 숫자 없는 글자뿐이고 위 머리글에 빈칸이 있으면 합친다
+    sub = rows[head_i + 1] if head_i + 1 < len(rows) else []
+    sub_vals = [sub[j] if j < len(sub) else None for j in range(first_c, max(last_c, len(sub) - 1) + 1)]
+    two_line = (sum(1 for v in sub_vals if isinstance(v, str) and v.strip()) >= 2
+                and not any(fx.is_num(v) or isinstance(v, (dt.date, dt.datetime)) for v in sub_vals if not _is_blank(v))
+                and any(_is_blank(head[j]) if j < len(head) else True for j in range(first_c, len(sub_vals) + first_c)))
+    if two_line:
+        last_c = max(last_c, first_c + max(k for k, v in enumerate(sub_vals) if not _is_blank(v)))
+    names, seen, top = [], Counter(), ''
     for j in range(first_c, last_c + 1):
-        n = str(head[j]).strip() if not _is_blank(head[j]) else f'열{j + 1}'
+        h = str(head[j]).strip() if j < len(head) and not _is_blank(head[j]) else ''
+        if two_line:
+            top = h or top
+            s_ = str(sub[j]).strip() if j < len(sub) and not _is_blank(sub[j]) else ''
+            n = (f'{top} {s_}' if top and s_ and top != s_ else (s_ or top)) or f'열{j + 1}'
+        else:
+            n = h or f'열{j + 1}'
         seen[n] += 1
         names.append(n if seen[n] == 1 else f'{n}_{seen[n]}')
-    body = []
-    for row in rows[head_i + 1:]:
+    body, skipped = [], 0
+    for row in rows[head_i + (2 if two_line else 1):]:
         vals = [row[j] if j < len(row) else None for j in range(first_c, last_c + 1)]
         if all(_is_blank(v) for v in vals):
+            continue
+        texts = [str(v).strip() for v in vals if isinstance(v, str) and v.strip()]
+        if any(TOTAL_RE.fullmatch(t) for t in texts) or (len(texts) == 1 and texts[0][:1] in '※*' and
+                                                          sum(1 for v in vals if not _is_blank(v)) == 1):
+            skipped += 1                       # 합계·소계 행과 ※ 메모 행은 자료가 아님(넣으면 합계가 두 배)
             continue
         body.append(vals)
         if len(body) >= MAX_ROWS:
@@ -156,7 +180,7 @@ def to_table(sheet_name, rows):
                     out.append(ILLEGAL.sub('', str(v)).strip())
         clean.append(out)
     return {'sheet': sheet_name, 'columns': cols, 'rows': clean, 'head_row': head_i + 1,
-            'truncated': len(body) >= MAX_ROWS}
+            'truncated': len(body) >= MAX_ROWS, 'skipped': skipped, 'wide': wide}
 
 
 # ------------------------------------------------------------ 저장 ----------
@@ -290,6 +314,12 @@ def monthly(rows, dcol, vcol, how):
     keys = sorted(counts)
     y, m = map(int, keys[0].split('-'))
     y2, m2 = map(int, keys[-1].split('-'))
+    if (y2 - y) * 12 + (m2 - m) > 36:                  # 3년 넘게 이어지면 월별 대신 연별
+        yb, yc = defaultdict(list), Counter()
+        for k in keys:
+            yc[k[:4]] += counts[k]
+            yb[k[:4]] += buckets[k]
+        return [(str(yy), _agg(yb[str(yy)], how, yc[str(yy)]) if yc[str(yy)] else 0, yc[str(yy)]) for yy in range(y, y2 + 1)]
     out = []
     while (y, m) <= (y2, m2) and len(out) < 60:
         k = f'{y:04d}-{m:02d}'
@@ -328,7 +358,10 @@ def excel_formula(table, gcol, vcol, how, key, sheet_ref=True):
         s = table['sheet']
         prefix = (s if re.fullmatch(r'[A-Za-z_가-힣][\w가-힣]*', s) else "'" + s.replace("'", "''") + "'") + '!'
     rng = lambda k: f"{prefix}${table['columns'][k]['letter']}${r1}:${table['columns'][k]['letter']}${n}"  # noqa: E731
-    lit = '"' + str(key).replace('"', '""') + '"' if not fx.is_num(key) else str(key)
+    if key == '(빈칸)':
+        lit = '""'                                       # 빈 칸 조건은 "" (글자 '(빈칸)' 이 아님)
+    else:
+        lit = '"' + str(key).replace('"', '""') + '"' if not fx.is_num(key) else str(key)
     if how == 'count':
         return f'=COUNTIFS({rng(gcol)},{lit})'
     return f'={AGG_FUNCS[how]}({rng(vcol)},{rng(gcol)},{lit})'

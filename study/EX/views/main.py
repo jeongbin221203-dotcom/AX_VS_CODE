@@ -1,6 +1,7 @@
 """대시보드(첫 화면)·학습 범위 선택."""
 import datetime as dt
 import json
+import re
 from urllib.parse import quote
 
 from flask import Blueprint, Response, jsonify, redirect, render_template, request, url_for
@@ -86,6 +87,6 @@ def set_track():
     t = request.form.get('track', '')
     db.set_setting('track', t if t in content.TRACKS else '')
     nxt = request.form.get('next') or url_for('main.home')
-    if not nxt.startswith('/') or nxt.startswith('//'):
+    if not re.fullmatch(r"/(?![/\\])[A-Za-z0-9_\-./?=&%:+,~가-힣]*", nxt):   # //·/\·제어 문자 → 첫 화면
         nxt = url_for('main.home')
     return redirect(nxt)

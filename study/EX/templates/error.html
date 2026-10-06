@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}{{ code }} · 엑셀 연습장{% endblock %}
+{% block content %}
+<section class="card empty" style="margin-top:24px">
+  <h1 style="margin-top:0">{{ '페이지를 찾을 수 없습니다' if code == 404 else ('파일이 너무 큽니다' if code == 413 else '요청을 처리하지 못했습니다') }}</h1>
+  <p>{{ msg }}</p>
+  <p><a class="btn primary" href="{{ url_for('main.home') }}">대시보드로</a></p>
+</section>
+{% endblock %}

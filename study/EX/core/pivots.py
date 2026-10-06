@@ -74,13 +74,22 @@ def describe(wb):
             value_formats = [c for c in (_fmt_code(wb, getattr(d, 'numFmtId', None)) for d in pt.dataFields) if c]
             src = pt.cache.cacheSource.worksheetSource if pt.cache.cacheSource else None
             grouped = [cf.name for cf in pt.cache.cacheFields if getattr(cf, 'fieldGroup', None) is not None]
+            group_info = {}
+            for cf in pt.cache.cacheFields:
+                fg = getattr(cf, 'fieldGroup', None)
+                rp = getattr(fg, 'rangePr', None) if fg is not None else None
+                if rp is not None:
+                    group_info.setdefault(clean_name(cf.name), []).append({
+                        'by': getattr(rp, 'groupBy', None) or 'range', 'interval': getattr(rp, 'groupInterval', None),
+                        'start': getattr(rp, 'startDate', None) or getattr(rp, 'startNum', None),
+                        'end': getattr(rp, 'endDate', None) or getattr(rp, 'endNum', None)})
             out.append({
                 'sheet': ws.title, 'ref': pt.location.ref, 'name': pt.name,
                 'rows': _field_names(pt.rowFields, names), 'cols': _field_names(pt.colFields, names),
                 'filters': _field_names(pt.pageFields, names),
                 'values': [(names[d.fld], d.subtotal or 'sum') for d in pt.dataFields if 0 <= d.fld < len(names)],
                 'source': (getattr(src, 'sheet', None), getattr(src, 'ref', None), getattr(src, 'name', None)) if src else None,
-                'grouped': grouped,
+                'grouped': grouped, 'group_info': group_info,
                 'grand_rows': pt.rowGrandTotals is not False, 'grand_cols': pt.colGrandTotals is not False,
                 'layout': 'compact' if pt.compact is not False and pt.outline is not False else
                           ('outline' if pt.outline else 'tabular'),

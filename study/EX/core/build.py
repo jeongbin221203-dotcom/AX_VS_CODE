@@ -365,7 +365,7 @@ def _find_sheet(wb, name):
     return None
 
 
-def grade(m, data):
+def _grade_unlimited(m, data):
     """올린 .xlsx 채점 → {'items': [...], 'score': n, 'total': n, 'notes': [...]}"""
     wb_f = xlsx.load(data, data_only=False)
     wb_v = xlsx.load(data, data_only=True)
@@ -453,3 +453,16 @@ def _in_sqref(at, sqref):
         if r1 <= r <= r2 and c1 <= c <= c2:
             return True
     return False
+
+
+
+GRADE_SECONDS = 25
+
+
+def grade(m, data):
+    """채점(계산 시간 제한 {GRADE_SECONDS}초 — 넘으면 BadFile 로 안내)."""
+    try:
+        with fx.time_limit(GRADE_SECONDS):
+            return _grade_unlimited(m, data)
+    except fx.TimeUp:
+        raise xlsx.BadFile('파일 속 수식 계산이 너무 오래 걸려 채점을 멈췄습니다 — 아주 큰 범위·배열 수식을 줄여 다시 올려 주세요.')

@@ -159,6 +159,11 @@ def file(kind, iid, name):
     return send_file(folder / name, as_attachment=not inline, download_name=name)
 
 
+def _seconds():
+    v = request.form.get('seconds', type=int)
+    return None if v is None else max(0, min(v, 6 * 3600))
+
+
 @bp.route('/<kind>/<iid>/submit', methods=['POST'])
 def submit(kind, iid):
     info, folder, practice, answer, key = _resolve(kind, iid)
@@ -173,7 +178,7 @@ def submit(kind, iid):
     conn = db.get()
     cur = conn.execute('INSERT INTO exam_results(exam, score, total, passed, seconds, detail, file_name, user) '
                        'VALUES(?, ?, ?, ?, ?, ?, ?, ?)',
-                       (key, res['score'], res['total'], int(res['passed']), request.form.get('seconds', type=int),
+                       (key, res['score'], res['total'], int(res['passed']), _seconds(),
                         json.dumps(res, ensure_ascii=False), f.filename[:200], db.user_id()))
     conn.commit()
     return redirect(url_for('.result', rid=cur.lastrowid, done=1))

@@ -182,6 +182,12 @@ class Wb:
             return None
 
     @property
+    def custom_heights(self):
+        if not hasattr(self, '_custom_heights'):
+            self._custom_heights = xlsx.custom_height_rows(self.data)
+        return self._custom_heights
+
+    @property
     def raw_charts(self):
         if not hasattr(self, '_raw_charts'):
             self._raw_charts = xlsx.raw_charts(self.data)
@@ -192,6 +198,13 @@ class Wb:
         if self._vba is None:
             self._vba = vba.procedures(vba.sources(self.data))
         return self._vba
+
+
+VOLATILE = ('TODAY', 'NOW', 'RAND', 'RANDBETWEEN')
+
+
+def _volatile_funcs(text):
+    return {n for n in VOLATILE if re.search(r'\b' + n + r'\s*\(', text or '', re.I)}
 
 
 def _cells_items(sheet, src, ans, user):
@@ -227,7 +240,14 @@ def _cells_items(sheet, src, ans, user):
             if got is None and u_raw is not None and xlsx.formula_text(u_raw) is None \
                     and type(u_raw).__name__ != 'DataTableFormula':
                 got = xlsx.plain(u_raw)
-            if dt_table and type(u_raw).__name__ != 'DataTableFormula':
+            volatile = _volatile_funcs(xlsx.formula_text(a_raw)) if a_formula else set()
+            if volatile:
+                uf = xlsx.formula_text(u_raw)
+                if uf is None:
+                    bad.append(f'{fx.addr(r, c)}: 수식이 아니라 값입니다')
+                elif not volatile <= _volatile_funcs(uf):
+                    bad.append(f"{fx.addr(r, c)}: {', '.join(sorted(volatile))} 함수를 써야 합니다")
+            elif dt_table and type(u_raw).__name__ != 'DataTableFormula':
                 bad.append(f'{fx.addr(r, c)}: 데이터 표가 아닙니다')
             elif a_formula and xlsx.formula_text(u_raw) is None and got not in (None, ''):
                 bad.append(f'{fx.addr(r, c)}: 수식이 아니라 값입니다')
@@ -281,10 +301,11 @@ def _style_items(sheet, src, ans, user):
     for m in sorted({str(m) for m in ws_a.merged_cells.ranges} - m_src):
         items.append({'label': f'셀 병합 {m}', 'ok': m in m_usr, 'msgs': [] if m in m_usr else [f'{m} 병합 필요'],
                       'hint': f'{m} 을 병합'})
-    # 행 높이
+    # 행 높이(엑셀이 글꼴·테두리에 맞춰 스스로 정한 높이는 빼고, 직접 지정한 행만)
+    own = ans.custom_heights.get(sheet, set())
     for r, d in ws_a.row_dimensions.items():
         hs = ws_s.row_dimensions[r].height if r in ws_s.row_dimensions else None
-        if d.height and d.customHeight and (hs is None or abs(d.height - hs) > 0.5):   # 직접 지정한 높이만
+        if d.height and r in own and (hs is None or abs(d.height - hs) > 0.5):
             hu = ws_u.row_dimensions[r].height if ws_u is not None and r in ws_u.row_dimensions else None
             ok = hu is not None and abs(hu - d.height) <= 0.5
             items.append({'label': f'{r}행 높이 {d.height:g}', 'ok': ok, 'msgs': [] if ok else [f'현재 {hu or "기본"}'],
@@ -343,7 +364,7 @@ def _rule_same(rule, r, ans, user, sheet, sq):
         return False, '규칙 종류가 다릅니다'
     if rule.type == 'expression' and rule.formula:
         uf = (r.formula or ['FALSE'])[0]
-        if _norm_f(uf) != _norm_f(rule.formula[0]):
+        if uf.replace(' ', '').upper() != rule.formula[0].replace(' ', '').upper():
             try:
                 want = _cell_mask(_Ctx(ans), sheet, sq.split()[0], '=' + rule.formula[0], ans.book)
                 got = _cell_mask(_Ctx(user), sheet, sq.split()[0], '=' + uf, user.book)
@@ -639,9 +660,9 @@ def _book_items(src, ans, user):
         items.append((sec, {'label': f'VBA {name}', 'ok': ok, 'code': '\n'.join(_code_lines(body)), 'msgs': msgs,
                             'macro': name}))
     b_a = set(vba.buttons(ans.data)) - set(vba.buttons(src.data))
-    b_u = {(_norm_text(t), m.lower()) for t, m in vba.buttons(user.data)}
+    b_u = {(_norm_text(t), m.lower().split('.')[-1]) for t, m in vba.buttons(user.data)}
     for text, macro in sorted(b_a):
-        ok = (_norm_text(text), macro.lower()) in b_u
+        ok = (_norm_text(text), macro.lower().split('.')[-1]) in b_u
         items.append(('기타작업', {'label': f"단추 '{text}' → {macro}", 'ok': ok,
                                    'msgs': [] if ok else ['단추가 없거나 매크로가 연결되지 않았습니다']}))
     return items
@@ -656,10 +677,19 @@ def _similar(got, want):
 RANGE_RE = re.compile(r'\$?([a-z]{1,3})\$?(\d+)(?::\$?([a-z]{1,3})\$?(\d+))?$')
 
 
+COLOR_INDEX_RGB = {'6': '65535', '3': '255', '4': '65280', '5': '16711680', '2': '16777215', '1': '0'}
+
+
 def _literals(body):
-    """코드의 핵심 값: 다룬 셀들(범위 글자를 모두 합친 칸 목록), 그 밖의 문자열(수식·메시지), 색·서식 줄의 값."""
+    """코드의 핵심 값: 쓰거나 서식을 바꾼 셀들(범위 글자를 모두 합친 칸 목록), 그 밖의 문자열(수식·메시지), 색·서식 줄의 값."""
     out, cells = set(), set()
-    for line in _code_lines(body):
+    lines = _code_lines(body)
+    # 기록한 매크로 끝의 Range("..").Select 는 커서를 놓은 것일 뿐 — 그 줄 뒤에 쓰기·서식이 없으면 셀 목록에서 뺀다
+    tail = [lines.pop()] if lines and re.match(r'end (sub|function)', lines[-1]) else []
+    while lines and re.fullmatch(r'(range\(".*"\)|cells\(.*\)|\[.*\])\.select', lines[-1].replace(' ', '')):
+        lines = lines[:-1]
+    lines += tail
+    for line in lines:
         for s in re.findall(r'"((?:[^"]|"")*)"', line):
             s = s.replace('""', '"').replace(' ', '')
             m = RANGE_RE.match(s)
@@ -672,7 +702,10 @@ def _literals(body):
                 out.add(s)
         if re.search(r'\.(color|colorindex|themecolor|numberformat\w*|bold|italic|size|name)\s*=', line) \
                 and not re.search(r'tintandshade|patterncolor', line):
-            out.add(re.sub(r'\s+', '', line.split('=', 1)[0].split('.')[-1] + '=' + line.split('=', 1)[1]))
+            key, val = line.split('=', 1)[0].split('.')[-1], re.sub(r'\s+', '', line.split('=', 1)[1])
+            if key.strip().lower() == 'colorindex':
+                key, val = 'color', COLOR_INDEX_RGB.get(val, val)
+            out.add(re.sub(r'\s+', '', key) + '=' + val)
     if cells:
         out.add('셀 ' + ','.join(sorted(cells, key=fx.parse_addr)))
     return out
@@ -755,7 +788,7 @@ def _code_lines(body):
     return lines
 
 
-def grade(src_bytes, ans_bytes, user_bytes, level=None):
+def _grade_unlimited(src_bytes, ans_bytes, user_bytes, level=None):
     """문제 파일·정답 파일·수험자 파일 → 시트별 항목 채점. level 이 없으면 시트 이름으로 시험 구성인지 판단."""
     src = Wb(src_bytes)
     ans = Wb(ans_bytes)
@@ -819,3 +852,16 @@ def grade(src_bytes, ans_bytes, user_bytes, level=None):
         total = 100
     return {'score': round(score, 1), 'total': round(total, 1), 'passed': score >= 70 * total / 100,
             'sheets': sheets, 'sections': sections, 'has_vba': bool(user.procs), 'level': level}
+
+
+
+GRADE_SECONDS = 25
+
+
+def grade(src_bytes, ans_bytes, user_bytes, level=None):
+    """채점(계산 시간 제한 {GRADE_SECONDS}초 — 넘으면 BadFile 로 안내)."""
+    try:
+        with fx.time_limit(GRADE_SECONDS):
+            return _grade_unlimited(src_bytes, ans_bytes, user_bytes, level)
+    except fx.TimeUp:
+        raise xlsx.BadFile('파일 속 수식 계산이 너무 오래 걸려 채점을 멈췄습니다 — 아주 큰 범위·배열 수식을 줄여 다시 올려 주세요.')

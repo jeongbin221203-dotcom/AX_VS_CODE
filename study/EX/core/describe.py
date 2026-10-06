@@ -233,7 +233,7 @@ def _subtotal_task(sheet, ws_a, comp):
         if m:
             funcs.setdefault(int(m.group(1)) % 100, set()).add(m.group(2))
     label_cells = [(r, c) for r, c in comp if isinstance(ws_a.cell(r, c).value, str)
-                   and re.search(r'(요약|평균|최대|최소|개수|합계)\s*$', ws_a.cell(r, c).value)]
+                   and re.search(r'(요약|평균|최대|최소|개수|합계)값?\s*$', ws_a.cell(r, c).value)]
     gcol = label_cells[0][1] if label_cells else None
     top = min(r for r, _ in comp)
     cmin = min(c for _, c in comp)
@@ -396,11 +396,8 @@ def _filter_tasks(sheet, ws_s, ws_a, comps):
             crit = (r1, c1, r2 - r1 + 1, c2 - c1 + 1)
         elif known >= max(1, len(heads) - 0) and r2 - r1 >= 1:
             out = (r1, c1, heads)
-    if crit is None and out is None:
-        return None
-    # 계산 조건(필드 이름이 아닌 머리글)도 조건으로 본다
-    if crit is None:
-        return None
+    if crit is None or out is None or not _rows_from_source(ws_s, ws_a, out):
+        return None                       # 조건만 있고 추출 결과가 없으면 고급 필터가 아님(D함수 조건·정렬 등)
     r, c, h, w = crit
     cond = _criteria_text(ws_a, r, c, h, w)
     text = f"{q(sheet)} 시트에서 {cond}인 데이터를 고급 필터로 추출하시오."
@@ -409,6 +406,22 @@ def _filter_tasks(sheet, ws_s, ws_a, comps):
         items.append(f"결과는 [{fx.addr(out[0], out[1])}] 셀부터 표시하시오.")
         items.append('추출할 필드: ' + ', '.join(q(x) for x in out[2]))
     return {'text': text, 'items': items, 'refs': ''}
+
+
+def _rows_from_source(ws_s, ws_a, out):
+    """추출 결과 덩어리의 첫 자료 행이 원본 표의 어느 행과 같은 값인지(고급 필터로 옮긴 행)."""
+    if ws_s is None:
+        return False
+    r0, c0, heads = out
+    vals = [ws_a.cell(r0 + 1, c0 + k).value for k in range(len(heads))]
+    if all(v in (None, '') for v in vals):
+        return False
+    want = [v for v in vals if v not in (None, '')]
+    for row in ws_s.iter_rows(max_row=min(ws_s.max_row, 2000), values_only=True):
+        cells = [v for v in row if v not in (None, '')]
+        if all(v in cells for v in want):
+            return True
+    return False
 
 
 def _autofilter_task(sheet, ws_s, ws_a):
@@ -524,11 +537,43 @@ def _formula_task(sheet, ws_a, comp):
         obj = f"{head}[{span}]{'을' if _batchim(head) else '를'}" if head else f"[{span}] 영역에 알맞은 값을"
         text = f"{j(title, '을/를') + ' 이용하여 ' if title else ''}{obj} 표시하시오."
     items = []
-    if funcs:
+    shapes = []                                      # 칸마다 다른 수식이면(문자열 함수 연습 등) 칸별로 안내
+    for r, c in comp:
+        t = xlsx.formula_text(ws_a.cell(r, c).value)
+        try:
+            shapes.append(fx.unparse(fx.shift(fx.parse(t), r0 - r, c0 - c)) if t else None)
+        except fx.FormulaError:
+            shapes.append(t)
+    if len(set(shapes)) > 1 and len(comp) <= 15:
+        for (r, c), t in zip(comp, (xlsx.formula_text(ws_a.cell(r, c).value) for r, c in comp)):
+            if t:
+                lab = label_left(ws_a, r, c)
+                fs = [f for f in _funcs([t]) if f in fx.FUNCS or re.match(r'^FN', f, re.I)]
+                items.append(f"[{fx.addr(r, c)}]{' ' + q(lab) if lab else ''}: {', '.join(fs) or '수식'}")
+    elif funcs:
         items.append(f"▶ {', '.join(funcs)} 함수 사용")
+    items += _result_shape(texts[0] if texts else '')
     if any(t.startswith('{') for t in texts) or any(type(ws_a.cell(r, c).value).__name__ == 'ArrayFormula' for r, c in comp):
         items.insert(0, '배열 수식으로 작성하시오.')
     return {'text': text, 'items': items, 'refs': span, 'kind': 'formula'}
+
+
+PLACES = {-4: '만의 자리', -3: '천의 자리', -2: '백의 자리', -1: '십의 자리', 0: '정수', 1: '소수 첫째 자리',
+          2: '소수 둘째 자리', 3: '소수 셋째 자리'}
+
+
+def _result_shape(text):
+    """정답 수식의 겉모양: 반올림·올림·내림 자릿수, 뒤에 붙인 글자 → 지시문."""
+    out = []
+    t = (text or '').upper()
+    m = re.match(r'^=?\s*(ROUNDUP|ROUNDDOWN|ROUND|TRUNC)\((.*),\s*(-?\d)\s*\)\s*(?:&\s*"([^"]*)")?\s*$', t)
+    if m:
+        how = {'ROUNDUP': '올림', 'ROUNDDOWN': '내림', 'TRUNC': '내림', 'ROUND': '반올림'}[m.group(1)]
+        out.append(f"결과는 {how}하여 {PLACES.get(int(m.group(3)), m.group(3) + '자리')}까지 표시하시오.")
+    m2 = re.search(r'&\s*"([^"]+)"\s*$', text or '')
+    if m2:
+        out.append(f"결과 뒤에 {q(m2.group(1))}{'을' if _batchim(m2.group(1)) else '를'} 붙여 표시하시오.")
+    return out
 
 
 def _input_task(sheet, wv_a, comp):
@@ -558,7 +603,16 @@ STYLE_PHRASE = {
 }
 
 
-def _style_tasks(sheet, ws_s, ws_a, wv_a):
+def _date_fmt(fmt):
+    """날짜·시각 형식인지(따옴표 글자·[Red]·[$-412] 같은 대괄호는 빼고 y·d·h·s 를 본다)."""
+    plain = re.sub(r'"[^"]*"|\[[^\]]*\]|\\.', '', fmt or '').lower()
+    return bool(re.search(r'[ydhs]', plain))
+
+
+VISIBLE_EMPTY = ('채우기', '테두리')     # 빈 칸에서도 보이는 서식(맞춤·글꼴·표시 형식은 빈 칸에선 안 보임)
+
+
+def _style_tasks(sheet, ws_s, ws_a, wv_a, own_rows=()):
     if ws_s is None:
         return []
     by_span = {}
@@ -567,7 +621,10 @@ def _style_tasks(sheet, ws_s, ws_a, wv_a):
     for row in ws_a.iter_rows():
         for cell in row:
             ka, ks = _style_key(cell), _style_key(ws_s.cell(cell.row, cell.column))
+            empty = cell.value in (None, '') and ws_s.cell(cell.row, cell.column).value in (None, '')
             for k in ka:
+                if empty and k not in VISIBLE_EMPTY:
+                    continue
                 if ka[k] != ks[k]:                 # (속성, 정답 값) 별로 묶어야 '가운데'·'아래쪽'이 섞이지 않는다
                     changes.setdefault((k, ka[k]), set()).add((cell.row, cell.column))
     for (k, want), cells in sorted(changes.items(), key=lambda x: min(x[1])):
@@ -589,7 +646,9 @@ def _style_tasks(sheet, ws_s, ws_a, wv_a):
                     sample = raw
                 elif hasattr(raw, 'year'):
                     sample = xlsx.plain(raw)
-                elif re.search(r'[yd]', re.sub(r'"[^"]*"', '', cell.number_format.lower())):
+                elif isinstance(raw, str):
+                    sample = raw
+                elif _date_fmt(cell.number_format):
                     sample = 45430
                 else:
                     sample = 1234.5
@@ -599,7 +658,7 @@ def _style_tasks(sheet, ws_s, ws_a, wv_a):
                     shown = cell.number_format
                 try:
                     shown_in = (fx.format_value(sample, 'yyyy-mm-dd')
-                                if re.search(r'[yd]', re.sub(r'"[^"]*"', '', cell.number_format.lower()))
+                                if _date_fmt(cell.number_format) and not isinstance(sample, str)
                                 else fx.display(xlsx.plain(sample)))
                 except (fx.XLErr, OverflowError, ValueError):
                     shown_in = fx.display(xlsx.plain(sample))
@@ -629,7 +688,7 @@ def _style_tasks(sheet, ws_s, ws_a, wv_a):
     rows = []
     for r, d in sorted(ws_a.row_dimensions.items()):
         hs = ws_s.row_dimensions[r].height if r in ws_s.row_dimensions else None
-        if d.height and d.customHeight and (hs is None or abs(d.height - hs) > 0.5):
+        if d.height and r in own_rows and (hs is None or abs(d.height - hs) > 0.5):
             if rows and rows[-1][1] == r - 1 and rows[-1][2] == d.height:
                 rows[-1][1] = r
             else:
@@ -754,7 +813,7 @@ def _pivot_tasks(sheet, ans):
         place.append(f"값에 {vals}")
         items.append(', '.join(place) + '를 배치하시오.')
         if p['grouped']:
-            items.append(f"{', '.join(q(g) for g in p['grouped'])} 필드는 그룹을 지정하시오(단위는 정답 참조).")
+            items.append(_group_text(p))
         if p['layout'] != 'compact':
             items.append(f"보고서 레이아웃은 {j(q({'outline': '개요 형식으로 표시', 'tabular': '테이블 형식으로 표시'}[p['layout']]), '으로/로')} 지정하시오.")
         if not p['grand_rows'] or not p['grand_cols']:
@@ -762,6 +821,26 @@ def _pivot_tasks(sheet, ans):
                          + ' 총합계를 표시하지 않도록 지정하시오.')
         out.append({'text': f"{where}을 이용하여 피벗 테이블 보고서를 작성하시오.", 'items': items, 'refs': p['ref']})
     return out
+
+
+BY_KO = {'years': '연', 'quarters': '분기', 'months': '월', 'days': '일', 'hours': '시', 'minutes': '분', 'seconds': '초'}
+
+
+def _group_text(p):
+    parts = []
+    for name, gs in (p.get('group_info') or {}).items():
+        units = [BY_KO.get(g['by'], '') for g in gs if g['by'] in BY_KO]
+        rng = next((g for g in gs if g['by'] == 'range'), None)
+        days = next((g for g in gs if g['by'] == 'days' and g.get('interval') and g['interval'] > 1), None)
+        if days:
+            st = str(days['start'])[:10] if days.get('start') else ''
+            parts.append(f"{q(name)} 필드는 {int(days['interval'])}일 단위로 그룹을 지정하시오" + (f"(시작 {st})." if st else '.'))
+        elif units:
+            parts.append(f"{q(name)} 필드는 {'·'.join(dict.fromkeys(units))} 단위로 그룹을 지정하시오.")
+        elif rng:
+            parts.append(f"{q(name)} 필드는 시작 {fx.display(rng['start'])}, 끝 {fx.display(rng['end'])}, "
+                         f"단위 {fx.display(rng['interval'])}로 그룹을 지정하시오.")
+    return ' '.join(parts) or f"{', '.join(q(g) for g in p['grouped'])} 필드는 그룹을 지정하시오."
 
 
 def _chart_tasks(sheet, src, ans):
@@ -777,7 +856,12 @@ def _chart_tasks(sheet, src, ans):
         cs = s[i] if i < len(s) else None
         items = []
         if cs is None:
-            items.append('차트를 새로 작성하시오(정답 그림 참고).')
+            refs = [x['val'].replace('$', '').split('!')[-1] for x in ca['series'] if x.get('val')]
+            kname0 = {'col': '세로 막대형', 'bar': '가로 막대형', 'line': '꺾은선형', 'pie': '원형', 'area': '영역형',
+                      'scatter': '분산형', 'doughnut': '도넛형', 'radar': '방사형'}
+            kinds0 = '·'.join(dict.fromkeys(kname0.get(x['kind'], x['kind']) for x in ca['series']))
+            items.append(f"{', '.join(q(x['name']) for x in ca['series'] if x['name'])} 계열"
+                         + (f"(값 [{'], ['.join(refs)}])" if refs else '') + f"으로 {kinds0 or ''} 차트를 작성하시오.")
         names_a = [x['name'] for x in ca['series']]
         if cs is not None and names_a != [x['name'] for x in cs['series']]:
             add = [n for n in names_a if n not in [x['name'] for x in cs['series']]]
@@ -860,7 +944,8 @@ def _misc_tasks(sheet, ws_s, ws_a):
         for cell in row:
             if cell.comment and ws_s.cell(cell.row, cell.column).comment is None:
                 body = _norm_text(cell.comment.text.split(':\n', 1)[-1])
-                out.append({'text': f"[{cell.coordinate}] 셀에 {q(body)}라는 메모를 삽입하시오.", 'refs': cell.coordinate})
+                out.append({'text': f"[{cell.coordinate}] 셀에 {q(body)}{'이라는' if _batchim(body) else '라는'} 메모를 삽입하시오.",
+                            'refs': cell.coordinate})
     sc_a = ws_a.scenarios.scenario if ws_a.scenarios else []
     sc_s = {s.name for s in (ws_s.scenarios.scenario if ws_s.scenarios else [])}
     new = [s for s in sc_a if s.name not in sc_s]
@@ -935,7 +1020,14 @@ def describe(src_bytes, ans_bytes):
                 continue
             nform = sum(1 for r, c in comp if xlsx.formula_text(ws_a.cell(r, c).value))
             if nform * 2 >= len(comp):
-                tasks.append(_formula_task(sheet, ws_a, comp))
+                consts = [(r, c) for r, c in comp if not xlsx.formula_text(ws_a.cell(r, c).value)
+                          and ws_a.cell(r, c).value not in (None, '')]
+                for r, c in consts:                 # 수식 옆의 조건 값(예: D함수 조건 '경기')은 따로 입력 지시
+                    tasks.append({'text': f"[{fx.addr(r, c)}] 셀에 {j(q(fx.display(xlsx.plain(wv_a.cell(r, c).value))), '을/를')} 입력하시오.",
+                                  'refs': fx.addr(r, c)})
+                fcells = [p for p in comp if p not in consts]
+                for part in (_groups(fcells) if consts else [comp]):
+                    tasks.append(_formula_task(sheet, ws_a, part))
                 continue
             srt = _sort_task(sheet, src.wv(sheet), ws_a, wv_a, comp)
             if srt:
@@ -964,7 +1056,7 @@ def describe(src_bytes, ans_bytes):
         if calc_only and sheet.replace(' ', '') == '계산작업':
             pass
         elif not subtotal_done:                     # 부분합이 만든 굵게·윤곽 서식은 빼고
-            tasks += [t for t in _style_tasks(sheet, ws_s, ws_a, wv_a) if not _inside(t['refs'], skip)]
+            tasks += [t for t in _style_tasks(sheet, ws_s, ws_a, wv_a, ans.custom_heights.get(sheet, set())) if not _inside(t['refs'], skip)]
         tasks += _cf_tasks(sheet, ws_s, ws_a)
         tasks += _dv_tasks(sheet, ws_s, ws_a)
         tasks += _pivot_tasks(sheet, ans)
@@ -981,7 +1073,9 @@ def describe(src_bytes, ans_bytes):
     book = []
     for n, ref in names_a.items():
         if names_s.get(n) != ref:
-            book.append({'text': f"[{ref.lstrip('=').split('!')[-1].replace('$', '')}] 영역의 이름을 {q(n)}로 정의하시오.", 'refs': ''})
+            sh = ref.lstrip('=').split('!')[0].strip("'") if '!' in ref else ''
+            book.append({'text': f"{q(sh) + ' 시트의 ' if sh else ''}[{ref.lstrip('=').split('!')[-1].replace('$', '')}] 영역의 이름을 "
+                                 f"{j(q(n), '으로/로')} 정의하시오.", 'refs': ''})
     from . import vba
     procs_a, procs_s = ans.procs, src.procs
     btn_a = set(vba.buttons(ans_bytes)) - set(vba.buttons(src_bytes))

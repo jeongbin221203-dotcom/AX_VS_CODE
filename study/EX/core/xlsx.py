@@ -149,6 +149,27 @@ def _rels(z, part):
     return out
 
 
+def custom_height_rows(data):
+    """{시트 이름: {직접 지정한 높이의 행 번호}} — 시트 XML 의 <row … customHeight="1"> (엑셀이 스스로 정한 높이는 제외)."""
+    out = {}
+    try:
+        z = zipfile.ZipFile(io.BytesIO(data))
+        wbx = z.read('xl/workbook.xml').decode('utf-8', 'replace')
+    except (zipfile.BadZipFile, KeyError):
+        return out
+    rels = _rels(z, 'xl/workbook.xml')
+    for m in re.finditer(r'<sheet\b([^>]*)/>', wbx):
+        attrs = dict(re.findall(r'([\w:]+)="([^"]*)"', m.group(1)))
+        name = attrs.get('name', '').replace('&amp;', '&')
+        part = rels.get(attrs.get('r:id'), (None,))[0]
+        if not part or part not in z.namelist():
+            continue
+        head = z.read(part)[:5_000_000].decode('utf-8', 'replace')
+        out[name] = {int(r.group(1)) for r in re.finditer(r'<row\b[^>]*\br="(\d+)"[^>]*\bcustomHeight="(?:1|true)"', head)} | \
+            {int(r.group(1)) for r in re.finditer(r'<row\b[^>]*\bcustomHeight="(?:1|true)"[^>]*\br="(\d+)"', head)}
+    return out
+
+
 def raw_charts(data):
     """openpyxl 이 놓치는 차트(그룹 안 차트 등)까지: {시트 이름: [openpyxl 차트 객체]} — 파일의 차트 XML 을 직접 읽는다."""
     from openpyxl.chart.chartspace import ChartSpace

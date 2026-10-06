@@ -108,8 +108,12 @@ def sources(xlsm_bytes):
     return out
 
 
+_SCAN_MAX = 512 * 1024
+
+
 def _scan_source(raw):
     """모듈 스트림 안에서 'Attribute VB_Name' 으로 풀리는 압축 덩어리를 찾는다(뒤에서부터 — 소스는 끝에 있다)."""
+    raw = raw[-_SCAN_MAX:]                       # 엉터리 큰 스트림은 끝부분만(시간 폭증 방지)
     for i in range(len(raw) - 3, -1, -1):
         if raw[i] != 1 or (raw[i + 2] & 0x70) != 0x30:      # 서명 1 + 덩어리 머리 0b011
             continue

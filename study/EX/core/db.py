@@ -1,4 +1,5 @@
 """SQLite 연결. 요청마다 연결하고 요청이 끝나면 닫는다."""
+import os
 import secrets
 import sqlite3
 
@@ -102,6 +103,18 @@ def init(path):
         conn.commit()
     finally:
         conn.close()
+
+
+DB_BUDGET = 300 * 1024 * 1024        # 공개 서버 DB 파일 한도(방문자 복원·기록이 끝없이 늘지 않게)
+
+
+def too_big():
+    """DB 파일이 한도를 넘었는지(공개 서버에서만 의미)."""
+    try:
+        path = current_app.config['DATABASE']
+        return current_app.config.get('PUBLIC') and os.path.getsize(path) > DB_BUDGET
+    except (OSError, RuntimeError, KeyError):
+        return False
 
 
 def user_id():

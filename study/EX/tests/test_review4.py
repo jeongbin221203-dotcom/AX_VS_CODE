@@ -57,3 +57,34 @@ def test_written_mock_paper_and_submit(client):
     data = client.get('/api/backup').json['data']
     assert len(data['written_attempts']) == 1 and data['written_results'][0]['seconds'] == 0
     assert client.get('/written/practice?subject=database&level=c2').status_code == 302
+
+
+def test_round5_fixes(tmp_path):
+    import zipfile
+    from core import analyze, compare, describe, xlsx
+    # 합계·메모 행은 자료가 아님 / 두 줄 머리글 / 글자로 저장된 숫자·날짜
+    t = analyze.to_table('S', [['지점', '매출', None], [None, '1분기', '2분기'], ['서울', 1, 2], ['합계', 1, 2], ['※ 기준', None, None]])
+    assert [c['name'] for c in t['columns']] == ['지점', '매출 1분기', '매출 2분기'] and len(t['rows']) == 1 and t['skipped'] == 2
+    assert analyze._csv_value('2026.01.05') is not None and analyze._csv_value('₩1,200원') == 1200
+    # 휘발 함수와 모듈 이름
+    assert compare._volatile_funcs('=YEAR(TODAY())-1') == {'TODAY'}
+    assert compare._literals('Sub a()\n Range("A1").Value = 1\n Range("E19").Select\nEnd Sub') == \
+        compare._literals('Sub a()\n Range("A1").Value = 1\nEnd Sub')
+    assert compare._literals('Sub a()\n Range("A1").Interior.ColorIndex = 6\nEnd Sub') == \
+        compare._literals('Sub a()\n Range("A1").Interior.Color = 65535\nEnd Sub')
+    # 직접 지정한 행 높이만
+    import openpyxl
+    wb = openpyxl.Workbook()
+    wb.active.row_dimensions[2].height = 30
+    p = tmp_path / 'h.xlsx'
+    wb.save(p)
+    assert xlsx.custom_height_rows(p.read_bytes()).get('Sheet') == {2}
+    with zipfile.ZipFile(p) as z:
+        assert b'customHeight="1"' in z.read('xl/worksheets/sheet1.xml')
+    # 시간 제한
+    import pytest
+    big = fx.parse('=SUMPRODUCT(SEQUENCE(2000)*TRANSPOSE(SEQUENCE(2000)))')
+    with pytest.raises(fx.TimeUp):
+        with fx.time_limit(0.3):
+            fx.evaluate(big, fx.Book([fx.Sheet('S', {})]), 'S')
+    del describe

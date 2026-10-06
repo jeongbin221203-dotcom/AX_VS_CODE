@@ -1008,7 +1008,7 @@ def check_macro(ctx, sheet, chk):
         btn = [(t, m) for t, m in info['buttons'] if _norm_text(t) == _norm_text(chk['button'])]
         if not btn:
             bad.append(f"'{chk['button']}' 단추가 없습니다")
-        elif not any(m.lower() == chk['name'].lower() for _, m in btn):
+        elif not any(m.lower().split('.')[-1] == chk['name'].lower() for _, m in btn):
             bad.append(f"'{chk['button']}' 단추에 '{chk['name']}' 매크로를 연결하세요")
     return not bad, bad
 
@@ -1077,7 +1077,7 @@ CHECKS = {'values': check_values, 'formula': check_formula, 'style': check_style
 
 
 # ------------------------------------------------------------ 채점 ----------
-def grade(exam, data, filename='답안.xlsx'):
+def _grade_unlimited(exam, data, filename='답안.xlsx'):
     ctx = Ctx(exam, data, filename)
     want = [s['name'] for s in exam['sheets']]
     have = {_key_name(n) for n in ctx.wb_f.sheetnames}
@@ -1144,3 +1144,16 @@ def validate(exam):
     if exam.get('level') == 'c1' and total_points(exam) != 100:
         errs.append(f'배점 합계 {total_points(exam)} (100 이어야 함)')
     return errs
+
+
+
+GRADE_SECONDS = 25
+
+
+def grade(exam, data, filename='답안.xlsx'):
+    """채점(계산 시간 제한 {GRADE_SECONDS}초 — 넘으면 BadFile 로 안내)."""
+    try:
+        with fx.time_limit(GRADE_SECONDS):
+            return _grade_unlimited(exam, data, filename)
+    except fx.TimeUp:
+        raise xlsx.BadFile('파일 속 수식 계산이 너무 오래 걸려 채점을 멈췄습니다 — 아주 큰 범위·배열 수식을 줄여 다시 올려 주세요.')

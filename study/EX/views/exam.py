@@ -111,6 +111,8 @@ def submit(eid):
     except xlsx.BadFile as err:
         return redirect(url_for('.paper', eid=eid, error=str(err)))
     seconds = request.form.get('seconds', type=int)
+    if seconds is not None:
+        seconds = max(0, min(seconds, e['minutes'] * 60 * 5))
     conn = db.get()
     cur = conn.execute('INSERT INTO exam_results(exam, score, total, passed, seconds, detail, file_name, user) '
                        'VALUES(?, ?, ?, ?, ?, ?, ?, ?)',

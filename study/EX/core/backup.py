@@ -60,7 +60,7 @@ def clean_row(t, row):
         if c == 'detail' and v is not None and not isinstance(v, str):
             v = json.dumps(v, ensure_ascii=False)
         if isinstance(v, str):
-            v = v[:200000]
+            v = v[:2000] if c == 'answer' else v[:200000]
         vals.append(v)
     for c, v in zip(cols, vals):
         if v is None and c in REQUIRED:
@@ -74,6 +74,14 @@ def clean_row(t, row):
             return None
         if not (isinstance(d, dict) and all(k in d for k in DETAIL_KEYS[t])):
             return None
+        for k in ('tasks', 'sections', 'items', 'subjects', 'rows', 'sheets', 'notes'):
+            if k in d and not isinstance(d[k], list):
+                return None
+            if k in d and not all(isinstance(x, (dict, str)) for x in d[k]):
+                return None
+        for k in ('score', 'total', 'average'):
+            if k in d and not isinstance(d[k], (int, float)):
+                return None
     return vals
 
 
@@ -101,6 +109,10 @@ def restore(data, replace=True):
     conn = db.get()
     u = db.user_id()
     done = {}
+    if db.too_big():
+        raise ValueError('서버 저장 공간이 부족해 지금은 복원할 수 없습니다.')
+    if replace and not any(isinstance(data.get(t), list) and data.get(t) for t in COLS):
+        raise ValueError('기록이 하나도 없는 파일입니다 — 지금 기록을 지우지 않았습니다.')
     if replace:
         for t in COLS:
             conn.execute(f'DELETE FROM {t} WHERE user=?', (u,))

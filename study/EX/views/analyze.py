@@ -15,7 +15,24 @@ def _folder():
     return current_app.config['UPLOADS']
 
 
+def _folder_size():
+    import os
+    total = 0
+    for root, _, files in os.walk(_folder()):
+        for n in files:
+            try:
+                total += os.stat(os.path.join(root, n)).st_size
+            except OSError:
+                pass
+    return total
+
+
+UPLOAD_BUDGET = 300 * 1024 * 1024       # 공개 서버: 방문자들이 올린 분석 파일 전체 한도
+
+
 def _store(data, name):
+    if current_app.config.get('PUBLIC') and (db.too_big() or _folder_size() > UPLOAD_BUDGET):
+        raise xlsx.BadFile('서버 저장 공간이 부족합니다. 잠시 뒤 다시 시도하거나 PC 에서 실행해 주세요.')
     uid, table = an.save_upload(_folder(), data, name)
     conn = db.get()
     conn.execute('INSERT INTO uploads(id, name, sheet, rows, cols, user) VALUES(?, ?, ?, ?, ?, ?)',
@@ -49,7 +66,10 @@ def upload():
 
 @bp.route('/sample', methods=['POST'])
 def sample():
-    uid = _store(an.sample_file(), '샘플_상반기매출.xlsx')
+    try:
+        uid = _store(an.sample_file(), '샘플_상반기매출.xlsx')
+    except xlsx.BadFile as e:
+        return redirect(url_for('.index', error=str(e)))
     return redirect(url_for('.view', uid=uid))
 
 

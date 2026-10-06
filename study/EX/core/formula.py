@@ -8,6 +8,8 @@ import calendar
 import datetime as dt
 import math
 import re
+import threading
+import time
 import unicodedata
 from decimal import ROUND_DOWN, ROUND_HALF_UP, ROUND_UP, Decimal
 
@@ -43,6 +45,44 @@ class _Empty:
 
 
 EMPTY = _Empty()
+
+
+class TimeUp(Exception):
+    """계산 시간 제한을 넘음(time_limit 안에서). 오류 값으로 바뀌지 않고 채점기까지 올라간다."""
+
+
+_limit = threading.local()
+
+
+class time_limit:
+    """with fx.time_limit(10): … — 이 스레드의 계산이 그 시간을 넘으면 TimeUp."""
+
+    def __init__(self, seconds):
+        self.seconds = seconds
+
+    def __enter__(self):
+        self.prev = getattr(_limit, 'deadline', None)
+        dl = time.monotonic() + self.seconds
+        _limit.deadline = dl if self.prev is None else min(dl, self.prev)
+        _limit.n = 0
+        return self
+
+    def __exit__(self, *exc):
+        _limit.deadline = self.prev
+        return False
+
+
+def _ticked(fn, v):
+    _tick()
+    return fn(v)
+
+
+def _tick():
+    dl = getattr(_limit, 'deadline', None)
+    if dl is not None:
+        _limit.n = getattr(_limit, 'n', 0) + 1
+        if _limit.n & 31 == 0 and time.monotonic() > dl:
+            raise TimeUp()
 
 
 class ArgError(XLErr):
@@ -82,7 +122,7 @@ class Arr:
         return self.flat()
 
     def map(self, fn):
-        return Arr([[fn(v) for v in row] for row in self.rows])
+        return Arr([[_ticked(fn, v) for v in row] for row in self.rows])
 
     def __repr__(self):
         return f'Arr({self.rows})'
@@ -602,6 +642,7 @@ def range_arr(node, ctx):
 
 
 def ev(node, ctx):
+    _tick()
     kind = node[0]
     if kind in ('num', 'str', 'bool'):
         return node[1]
@@ -676,6 +717,7 @@ def elementwise(fn, v):
 
 
 def _safe(fn, *xs):
+    _tick()
     try:
         return fn(*xs)
     except XLErr as e:

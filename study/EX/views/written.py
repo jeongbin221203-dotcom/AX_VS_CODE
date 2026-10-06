@@ -4,7 +4,6 @@ import random
 
 from flask import Blueprint, abort, jsonify, redirect, render_template, request, url_for
 from markupsafe import Markup, escape
-from markupsafe import Markup, escape
 
 from core import db, written
 
@@ -33,27 +32,6 @@ def wtext(text):
     flush()
     return Markup(''.join(out))
 
-@bp.app_template_filter('wtext')
-def wtext(text):
-    """문제 글: ' | ' 로 나눈 줄이 이어지면 표로, 나머지는 줄 바꿈 그대로."""
-    out, rows = [], []
-
-    def flush():
-        if rows:
-            head, *body = rows
-            out.append('<div class="table-wrap"><table class="t wq-table"><thead><tr>' +
-                       ''.join(f'<th>{escape(c)}</th>' for c in head) + '</tr></thead><tbody>' +
-                       ''.join('<tr>' + ''.join(f'<td>{escape(c)}</td>' for c in r) + '</tr>' for r in body) +
-                       '</tbody></table></div>')
-            rows.clear()
-    for line in str(text).split('\n'):
-        if ' | ' in line:
-            rows.append([c.strip() for c in line.split('|')])
-        else:
-            flush()
-            out.append(f'<span class="wq-line">{escape(line)}</span>')
-    flush()
-    return Markup(''.join(out))
 
 def _level():
     """학습 범위(2급·1급) — 위쪽 선택이 2급이면 2급, 그 밖은 1급(필기는 실무 범위가 없음)."""

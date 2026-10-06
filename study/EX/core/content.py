@@ -262,8 +262,9 @@ def check(problem, text, reveal=True):
         return {'ok': False, 'error': '이 연습장이 모르는 함수: ' + ', '.join(unknown) +
                 ' — 철자를 확인하세요(함수 이름을 입력하는 중이면 목록에서 Tab·Enter 로 고르세요).'}
     try:
-        res, _ = _run(problem, ast, budget=TIME_BUDGET)
-    except TooSlow:
+        with fx.time_limit(TIME_BUDGET):
+            res, _ = _run(problem, ast, budget=TIME_BUDGET)
+    except (TooSlow, fx.TimeUp):
         return {'ok': False, 'error': '계산이 너무 오래 걸립니다 — 전체 열·아주 큰 범위 대신 표 범위(예: G2:G16)를 쓰세요.'}
     bad_args = next((v for _, _, v, _ in res if isinstance(v, fx.ArgError)), None)
     if bad_args is not None and reveal:

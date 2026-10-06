@@ -1,10 +1,20 @@
 """엑셀 연습장 — 함수·기능 학습, 파일 → 대시보드 분석, 대시보드 만들기 실습 (Flask)."""
 import os
+import re
 import secrets
 from pathlib import Path
 
-from flask import Flask, abort, redirect, request, session, url_for
+from flask import Flask, abort, redirect, render_template, request, session, url_for
 from werkzeug.middleware.proxy_fix import ProxyFix
+from werkzeug.routing import IntegerConverter
+
+
+class SafeInt(IntegerConverter):
+    """<int:rid> 에 SQLite 범위를 넘는 큰 수가 오면 404(이전에는 500)."""
+
+    def __init__(self, url_map, *args, **kwargs):
+        kwargs.setdefault('max', 2 ** 63 - 1)
+        super().__init__(url_map, *args, **kwargs)
 
 from core import db
 from core import formula as fx
@@ -24,6 +34,7 @@ def _secret(data_dir):
 
 def create_app(config=None):
     app = Flask(__name__)
+    app.url_map.converters['int'] = SafeInt
     data_dir = Path(os.environ.get('EX_DATA_DIR', ROOT / 'data'))
     app.config.update(
         DATA_DIR=str(data_dir),
@@ -144,7 +155,18 @@ def create_app(config=None):
 
     @app.errorhandler(413)
     def too_big(_e):
-        return '파일이 너무 큽니다(최대 8MB).', 413
+        return render_template('error.html', code=413, msg='파일이 너무 큽니다(최대 8MB).'), 413
+
+    @app.errorhandler(404)
+    def not_found(_e):
+        return render_template('error.html', code=404, msg='찾는 페이지가 없습니다. 주소를 확인하거나 위 메뉴에서 이동하세요.'), 404
+
+    @app.errorhandler(400)
+    def bad_request(e):
+        msg = getattr(e, 'description', '') or ''
+        if not re.search('[가-힣]', msg):
+            msg = '요청을 처리할 수 없습니다. 페이지를 새로 고친 뒤 다시 해 보세요.'
+        return render_template('error.html', code=400, msg=msg), 400
 
     return app
 
