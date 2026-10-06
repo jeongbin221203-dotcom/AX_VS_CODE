@@ -52,6 +52,34 @@
 </details>
 {% endif %}
 
+{% if ap_ym %}
+<section class="card">
+  <h3>월말 미지급·GR/IR 스냅샷 <span class="muted small">(마감 때 고정 — 나중에 계산서를 올려도 그 달 잔액은 그대로)</span></h3>
+  <form class="toolbar" method="get">
+    <label>마감월<select name="ap" data-autosubmit>{% for m in ap_months %}<option {{ 'selected' if m == ap_ym }}>{{ m }}</option>{% endfor %}</select></label>
+    <button class="btn">조회</button>
+  </form>
+  <div class="metrics m4">
+    <div class="metric"><div class="metric-label">월말까지 입고 금액</div><div class="metric-value">{{ ap_total.received|krw }}</div></div>
+    <div class="metric"><div class="metric-label">월말까지 계산서 공급가액</div><div class="metric-value">{{ ap_total.invoiced|krw }}</div></div>
+    <div class="metric"><div class="metric-label">미착 계산서 (입고 − 계산서 &gt; 0)</div><div class="metric-value">{{ ap_total.open|krw }}</div>
+      <div class="metric-delta">미지급금 추정액</div></div>
+    <div class="metric"><div class="metric-label">GR/IR 순차이</div><div class="metric-value">{{ ap_total.gr_ir|krw }}</div></div>
+  </div>
+  <p class="muted small">입고는 거래 일자, 계산서는 작성일자가 월말 이내인 것만 센 값입니다. 양수 = 입고했지만 계산서가 안 온 금액, 음수 = 계산서가 먼저 온 금액.
+    지급(결제) 내역은 이 시스템에 없으므로 '지급 완료' 잔액이 아니라 대금 확정 전 잔액입니다. 지급 상태는 스냅샷을 저장한 시점의 값입니다.
+    {% if ap_total.backfilled %}이 달은 이 기능을 넣기 전에 마감해 날짜 기준으로 나중에 만들었습니다.{% endif %}</p>
+  {{ table(ap_grid, "이 달 말에 입고나 계산서가 있는 발주가 없습니다.") }}
+  <p><a class="btn btn-sm" href="{{ url_for('periods.index', ap=ap_ym, export='xlsx') }}">⬇️ 엑셀</a></p>
+</section>
+{% endif %}
+{% if ap_missing and can('MANAGER') and scope_all() %}
+<form class="card row-actions" method="post" action="{{ url_for('periods.ap_fill') }}">
+  {{ csrf() }}<button class="btn">미지급 스냅샷 보충</button>
+  <span class="muted small">이 기능을 넣기 전에 마감한 달({{ ap_missing|join(', ') }})의 월말 미지급 잔액을 입고·계산서 날짜 기준으로 만듭니다.</span>
+</form>
+{% endif %}
+
 <h3>마감 이력</h3>
 {{ table(history, "아직 마감한 달이 없습니다.") }}
 

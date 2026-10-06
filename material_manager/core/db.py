@@ -550,8 +550,6 @@ CREATE UNIQUE INDEX IF NOT EXISTS uq_tx_reversal  ON transactions(reversal_of) W
 """
 
 SQLITE_TRIGGERS = """
-CREATE TRIGGER IF NOT EXISTS audit_no_update BEFORE UPDATE ON audit_log
-BEGIN SELECT RAISE(ABORT, '감사로그는 수정할 수 없습니다'); END;
 CREATE TRIGGER IF NOT EXISTS audit_no_delete BEFORE DELETE ON audit_log
 BEGIN SELECT RAISE(ABORT, '감사로그는 삭제할 수 없습니다'); END;
 CREATE TRIGGER IF NOT EXISTS tx_no_update BEFORE UPDATE ON transactions
@@ -564,8 +562,9 @@ PG_TRIGGERS = """
 CREATE OR REPLACE FUNCTION mm_block_change() RETURNS trigger AS $$
 BEGIN RAISE EXCEPTION '%', TG_ARGV[0]; END; $$ LANGUAGE plpgsql;
 DROP TRIGGER IF EXISTS audit_no_change ON audit_log;
-CREATE TRIGGER audit_no_change BEFORE UPDATE OR DELETE ON audit_log
-    FOR EACH ROW EXECUTE FUNCTION mm_block_change('감사로그는 수정·삭제할 수 없습니다');
+DROP TRIGGER IF EXISTS audit_no_delete ON audit_log;
+CREATE TRIGGER audit_no_delete BEFORE DELETE ON audit_log
+    FOR EACH ROW EXECUTE FUNCTION mm_block_change('감사로그는 삭제할 수 없습니다');
 DROP TRIGGER IF EXISTS tx_no_change ON transactions;
 CREATE TRIGGER tx_no_change BEFORE UPDATE OR DELETE ON transactions
     FOR EACH ROW EXECUTE FUNCTION mm_block_change('거래는 수정·삭제할 수 없습니다. 취소 거래로 처리하세요');

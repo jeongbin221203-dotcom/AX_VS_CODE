@@ -249,6 +249,14 @@ def create_app(test_config: dict | None = None) -> Flask:
         return response
 
     @app.after_request
+    def _seal_audit(response):
+        """감사로그 해시 체인 봉인 — 배치 서버가 없어도(시연·작은 설치) 요청 뒤 1분에 한 번 이어 붙인다."""
+        if request.endpoint not in ("static", "service_worker", "favicon"):
+            from core import audit
+            audit.seal_soon()
+        return response
+
+    @app.after_request
     def security_headers(response):
         for key, value in SECURITY_HEADERS.items():
             response.headers.setdefault(key, value)       # 증빙 파일처럼 더 엄격하게 정한 응답은 그대로 둔다

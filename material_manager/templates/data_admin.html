@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% from "_macros.html" import csrf, table, download %}
 {% block content %}
+<p class="muted small">큰 업로드·큰 백업은 <a href="{{ url_for('tasks.index') }}">백그라운드 작업</a>에서 진행 상황을 보고 결과를 받습니다.</p>
 <section class="card">
   <h3>1. 자재 일괄 업로드</h3>
   {{ download(url_for('data_admin.template'), '⬇️ 업로드 양식 다운로드') }}

@@ -132,6 +132,27 @@
     if (form) prPreview(form);
   });
 
+  // ── 백그라운드 작업 진행 (2초마다 상태를 묻고, 끝나면 새로 고쳐 결과·내려받기를 보인다) ──
+  function pollTask(box) {
+    if (box.dataset.taskDone === "1") return;
+    const bar = box.querySelector("[data-task-bar]"), msg = box.querySelector("[data-task-message]"),
+          st = box.querySelector("[data-task-status]");
+    let misses = 0;
+    const timer = window.setInterval(function () {
+      fetch(box.dataset.taskPoll, { credentials: "same-origin", headers: { Accept: "application/json" } })
+        .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+        .then(function (j) {
+          misses = 0;
+          if (st) st.textContent = j.status_label;
+          if (bar && j.percent != null) bar.value = j.percent;
+          if (msg && j.message) msg.textContent = j.message;
+          if (j.finished) { window.clearInterval(timer); window.location.reload(); }
+        })
+        .catch(function () { if (++misses > 30) window.clearInterval(timer); });
+    }, 2000);
+  }
+  document.querySelectorAll("[data-task-poll]").forEach(pollTask);
+
   function init(root) { initCombos(root); }
   init(document);
   window.mmUI2 = { refresh: init };

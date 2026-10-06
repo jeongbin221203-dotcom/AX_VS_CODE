@@ -116,6 +116,8 @@ PW_MIN_LENGTH = 8
 LOGIN_MAX_FAILS = 5                        # 연속 실패 시 잠금
 LOGIN_LOCK_MINUTES = 15
 LOGIN_IP_MAX_FAILS = 20                    # 한 IP에서 15분 안에 이만큼 실패하면 그 IP의 로그인 시도를 막는다
+API_FAIL_MAX = int(os.getenv("MM_API_FAIL_MAX", "20"))            # API 키 인증이 한 IP에서 이만큼 실패하면 그 IP 의 API 요청을 막는다(429)
+API_FAIL_MINUTES = int(os.getenv("MM_API_FAIL_MINUTES", "15"))    # 실패를 세는 시간 · 막는 시간
 
 # ── 거래 ──────────────────────────────────────────────────────
 TX_LABEL = {"IN": "입고", "OUT": "출고", "ADJ": "조정"}
@@ -296,6 +298,10 @@ DOC_MAX_BYTES = 10 * 1024 * 1024                                  # 증빙 파�
 
 # ── 업로드 방어 ──────────────────────────────────────────────
 UPLOAD_MAX_ROWS = 20000                    # 자재 일괄 업로드 최대 행 수
+BG_ROWS = int(os.getenv("MM_BG_ROWS", "500"))                  # 일괄 반영이 이 줄 수를 넘으면 백그라운드 작업으로 (core/tasks.py)
+BG_EXPORT_ROWS = int(os.getenv("MM_BG_EXPORT_ROWS", "10000"))  # 엑셀 추출이 이 행 수를 넘으면 백그라운드 작업으로
+BG_WORKERS = int(os.getenv("MM_BG_WORKERS", "2"))              # 이 서버에서 동시에 도는 백그라운드 작업 수
+BG_INLINE = os.getenv("MM_BG_INLINE", "0") == "1"              # 테스트용: 스레드 없이 그 자리에서 돌린다
 XLSX_MAX_UNCOMPRESSED = 100 * 1024 * 1024  # 엑셀(zip) 압축 해제 후 최대 크기 — 압축 폭탄 방어
 XLSX_MAX_RATIO = 100                       # 압축률이 이보다 크면 거부
 UPLOAD_KEEP_HOURS = 24                     # 반영하지 않은 업로드 미리보기 파일 보관 시간

@@ -6,7 +6,7 @@ from datetime import date, timedelta
 from flask import Blueprint, abort, flash, redirect, request, url_for
 
 import config
-from core import audit, auth, doctor, jobs, org, repository as repo, sso, version
+from core import audit, auth, db, doctor, jobs, org, repository as repo, sso, version
 from views.helpers import (Table, a_date, actor, as_id, f_str, form_response, log_export, page_arg, pager, render_page,
                            role_required, xlsx_response)
 
@@ -223,7 +223,7 @@ def audit_log():
         log_export("audit_log", len(full), start=start.isoformat(), end=end.isoformat())
         full["action"] = full["action"].map(lambda a: audit.ACTIONS.get(a, a))
         full = full.rename(columns={"id": "ID", "at": "일시", "user_name": "사용자", "action": "행위", "entity": "대상",
-                                    "entity_id": "대상ID", "detail": "내용", "ip": "IP"})
+                                    "entity_id": "대상ID", "detail": "내용", "ip": "IP", "request_id": "요청번호"})
         return form_response("audit", full, f"감사로그_{start:%Y%m%d}_{end:%Y%m%d}.xlsx", period=f"{start} ~ {end}")
     df, total = audit.audit_page(start.isoformat(), end.isoformat(), user, action, keyword,
                                  page=page_arg(), size=config.PAGE_SIZE)
@@ -231,10 +231,26 @@ def audit_log():
     view["action"] = view["action"].map(lambda a: audit.ACTIONS.get(a, a))
     view["detail"] = view["detail"].map(_short)
     view = view.rename(columns={"id": "ID", "at": "일시", "user_name": "사용자", "action": "행위",
-                                "entity": "대상", "entity_id": "대상ID", "detail": "내용", "ip": "IP"})
+                                "entity": "대상", "entity_id": "대상ID", "detail": "내용", "ip": "IP", "request_id": "요청번호"})
+    head = audit.chain_head()
+    unsealed = int(db.scalar("SELECT COUNT(*) FROM audit_log WHERE seq IS NULL") or 0)
     return render_page("admin_audit.html", "audit", start=start, end=end, user=user, action=action,
-                       keyword=keyword, users=audit.user_names(), actions=audit.ACTIONS,
+                       keyword=keyword, users=audit.user_names(), actions=audit.ACTIONS, head=head, unsealed=unsealed,
                        count=total, pager=pager(total, page_arg()), grid=Table(view, {"ID": "{}"}))
+
+
+@bp.post("/audit/verify")
+@role_required("ADMIN")
+def audit_verify():
+    """감사로그 해시 체인을 처음부터 다시 계산해 중간 삭제·수정·끼워 넣기를 찾는다."""
+    result = audit.verify()
+    audit.log(actor(), "AUDIT_VERIFY", "audit_log", "", {"ok": result["ok"], "sealed": result["sealed"],
+                                                          "broken_seq": result["broken_seq"], "reason": result["reason"]})
+    if result["ok"]:
+        flash(f"감사로그 {result['sealed']:,}건이 봉인 당시 그대로입니다 (마지막 해시 {result['head'][:16]}…).", "success")
+    else:
+        flash(f"⚠ 감사로그가 바뀌었습니다 — 봉인 번호 {result['broken_seq']}: {result['reason']}. 즉시 DB 관리자·보안 담당에게 알리세요.", "error")
+    return redirect(url_for("admin.audit_log"))
 
 
 def _short(detail: str) -> str:

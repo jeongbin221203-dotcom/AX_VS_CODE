@@ -7,14 +7,15 @@ import re
 import secrets
 
 import pandas as pd
-from flask import flash, redirect, request, session
+from flask import flash, redirect, request, session, url_for
 
 import config
-from core import bulk, excel_forms, storage
+from core import bulk, excel_forms, storage, tasks
 from core.utils import xlsx_problem
 from views.helpers import actor, f_str, form_response, render_page
 
 TOKEN_RE = re.compile(r"^[0-9a-f]{32}$")
+BULK_LABEL = {"partners": "거래처", "bom": "BOM", "units": "단위 환산", "mrp_demand": "MRP 수요"}
 KEY = "bulk_tokens"
 
 
@@ -72,7 +73,15 @@ def apply(kind: str, apply_fn, back: str):
     if saved.get("kind") != kind:
         flash("다른 종류의 미리보기입니다.", "error")
         return redirect(back)
-    r = apply_fn(saved["rows"], actor())
+    rows, who = saved["rows"], actor()
+    if len(rows) > config.BG_ROWS:                  # 줄이 많으면 요청 안에서 기다리지 않고 백그라운드로 (반영은 전부 또는 아무것도)
+        store.delete(f"uploads/{token}.json")
+        session[KEY] = [t for t in session.get(KEY) or [] if t != token]
+        label = BULK_LABEL.get(kind, kind)
+        tid = tasks.start(f"bulk_{kind}", f"{label} 일괄 반영 ({len(rows):,}줄)", lambda progress: apply_fn(rows, who), who)
+        flash(f"{label} {len(rows):,}줄 반영을 시작했습니다. 끝나면 이 화면에 결과가 나옵니다.", "info")
+        return redirect(url_for("tasks.detail", task_id=tid))
+    r = apply_fn(rows, who)
     flash(r.message, "success" if r.ok else "error")
     if r.ok:
         store.delete(f"uploads/{token}.json")

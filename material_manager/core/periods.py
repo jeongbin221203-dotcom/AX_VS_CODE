@@ -59,6 +59,76 @@ def closed_valuation(ym: str) -> dict:
     return {r.method: float(r.v or 0) for r in df.itertuples(index=False)}
 
 
+INVOICE_TYPES = "('E_TAX_INVOICE', 'TAX_INVOICE', 'INVOICE')"
+
+
+def ap_snapshot(conn, ym: str, backfilled: bool = False) -> int:
+    """월말 미지급·GR/IR 스냅샷: 그 달 말일 기준 발주별 입고 금액 · 계산서 공급가액 · 차이(입고 − 계산서)를 저장한다.
+    입고는 거래 일자, 계산서는 작성일자가 월말 이내인 것만 센다 → 나중에 계산서를 올려도 마감 당시 잔액이 그대로 남는다.
+    차이 > 0 = 입고했지만 계산서가 안 온 금액(미착 계산서 = 미지급금 추정), < 0 = 계산서가 먼저 온 금액.
+    지급 상태는 이 스냅샷을 저장한 시점의 것이다. 저장한 행 수."""
+    end = month_end(ym)
+    rows = conn.execute(f"""
+        SELECT o.po_no, o.supplier, o.warehouse_id, o.payment_status,
+               COALESCE((SELECT SUM(i.qty * i.price) FROM po_items i WHERE i.po_id = o.id), 0) AS ordered,
+               COALESCE((SELECT SUM(t.qty * t.unit_price) FROM transactions t WHERE t.tx_type = 'IN' AND t.po_no = o.po_no
+                         AND t.transfer_no = '' AND t.tx_date <= ?), 0) AS received,
+               COALESCE((SELECT SUM(d.supply_amount) FROM documents d JOIN transactions x ON x.id = d.tx_id
+                         WHERE x.po_no = o.po_no AND d.issue_date <= ? AND d.doc_type IN {INVOICE_TYPES}), 0) AS invoiced
+        FROM purchase_orders o""", (end, end)).fetchall()
+    ts = now_str()
+    data = []
+    for r in rows:
+        received, invoiced = round(float(r["received"] or 0), 2), round(float(r["invoiced"] or 0), 2)
+        if abs(received) < 0.5 and abs(invoiced) < 0.5:
+            continue
+        data.append((ym, r["po_no"], r["supplier"] or "", r["warehouse_id"], round(float(r["ordered"] or 0), 2), received,
+                     invoiced, round(received - invoiced, 2), r["payment_status"] or "", 1 if backfilled else 0, ts))
+    conn.execute("DELETE FROM ap_snapshots WHERE ym = ?", (ym,))
+    conn.executemany("INSERT INTO ap_snapshots (ym, po_no, supplier, warehouse_id, ordered, received, invoiced, gr_ir, "
+                     "payment_status, backfilled, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", data)
+    return len(data)
+
+
+def ap_months() -> list[str]:
+    """미지급 스냅샷이 있는 달 (최근 순)."""
+    try:
+        df = db.query_df("SELECT DISTINCT ym FROM ap_snapshots ORDER BY ym DESC")
+    except db.DBError:
+        return []
+    return df["ym"].tolist()
+
+
+def ap_missing() -> list[str]:
+    """마감했지만 미지급 스냅샷이 없는 달 (이 기능을 넣기 전에 마감한 달) — 날짜 기준으로 만들어 채울 수 있다."""
+    try:
+        have = set(ap_months())
+        closed = db.query_df("SELECT DISTINCT ym FROM inventory_snapshots ORDER BY ym")["ym"].tolist()
+    except db.DBError:
+        return []
+    return [ym for ym in closed if ym not in have]
+
+
+def ap_backfill(actor: dict | None) -> PeriodResult:
+    missing = ap_missing()
+    if not missing:
+        return PeriodResult(False, "채울 달이 없습니다.")
+    total = 0
+    with db.transaction() as conn:
+        for ym in missing:
+            total += ap_snapshot(conn, ym, backfilled=True)
+        audit.record(conn, actor, "AP_SNAPSHOT", "period", ",".join(missing), {"months": missing, "rows": total, "backfilled": True})
+    return PeriodResult(True, f"{', '.join(missing)} 미지급 스냅샷 {total}건을 만들었습니다 (입고·계산서 날짜 기준, 지급 상태는 지금 값).")
+
+
+def ap_df(ym: str, wh_ids=None) -> pd.DataFrame:
+    frag, wp = db.in_clause(wh_ids)
+    return db.query_df(f"""
+        SELECT s.po_no, s.supplier, w.code AS wh_code, s.ordered, s.received, s.invoiced, s.gr_ir, s.payment_status, s.backfilled
+        FROM ap_snapshots s LEFT JOIN warehouses w ON w.id = s.warehouse_id
+        WHERE s.ym = ?{' AND s.warehouse_id' + frag if frag else ''} ORDER BY ABS(s.gr_ir) DESC, s.po_no""", (ym, *wp))
+
+
 def close_checks(ym: str, conn=None) -> dict:
     """마감 전 점검 (막지는 않고 마감 기록에 남긴다):
     재공품 — 투입했지만 완료하지 않은 작업지시 (월말 재공으로 남음) / GR/IR — 월말까지 입고했는데 세금계산서가 없는 발주 입고,
@@ -131,12 +201,13 @@ def close_month(ym: str, actor: dict | None) -> PeriodResult:
             "ON CONFLICT (ym, material_id, warehouse_id, lot_no) DO UPDATE SET qty = excluded.qty",
             [(ym, mid, wh, lot, qty) for (mid, wh, lot), qty in stock.items()])
         valuation.snapshot(conn, ym)               # 재고 평가(이동평균·선입선출)도 함께 저장
+        ap_rows = ap_snapshot(conn, ym)            # 월말 미지급·GR/IR 잔액도 함께 고정
         checks = close_checks(ym, conn)                # 재공품 · GR/IR · 음수 재고 · 지급 보류 — 마감 기록에 함께 남긴다
         conn.execute("INSERT INTO period_closes (closed_through, action, user_name, at, checks) VALUES (?, 'CLOSE', ?, ?, ?)",
                      (ym, (actor or audit.SYSTEM)["name"], now_str(), json.dumps(checks, ensure_ascii=False)))
         negatives = [f"{mid}@{wh}{'/' + lot if lot else ''}" for (mid, wh, lot), q in stock.items() if q < 0]
         audit.record(conn, actor, "PERIOD_CLOSE", "period", ym,
-                     {"rows": len(stock), "negative_stock": negatives or None})
+                     {"rows": len(stock), "negative_stock": negatives or None, "ap_rows": ap_rows})
     notes = []
     if checks["wip_count"]:
         notes.append(f"재공품 {checks['wip_count']}건 ₩{checks['wip_value']:,.0f}")
@@ -163,6 +234,7 @@ def reopen(reason: str, actor: dict | None) -> PeriodResult:
         new_through = prev["closed_through"] if prev else ""
         conn.execute("DELETE FROM inventory_snapshots WHERE ym = ?", (ym,))
         conn.execute("DELETE FROM valuation_snapshots WHERE ym = ?", (ym,))
+        conn.execute("DELETE FROM ap_snapshots WHERE ym = ?", (ym,))
         conn.execute("INSERT INTO period_closes (closed_through, action, reason, user_name, at) "
                      "VALUES (?, 'REOPEN', ?, ?, ?)", (new_through, reason, (actor or audit.SYSTEM)["name"], now_str()))
         audit.record(conn, actor, "PERIOD_REOPEN", "period", ym, {"reason": reason, "now_closed_through": new_through})

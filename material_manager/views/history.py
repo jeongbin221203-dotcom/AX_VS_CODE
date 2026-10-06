@@ -35,6 +35,26 @@ def _decorate(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def _background_export(start, end, types, mats, scope, keyword, count):
+    from core import excel_forms, tasks
+    who = actor()
+    name = f"거래이력_{start:%Y%m%d}_{end:%Y%m%d}.xlsx"
+    period = f"{start} ~ {end}"
+
+    def work(progress):
+        full = _decorate(repo.history_df(start.isoformat(), end.isoformat(), types, mats, scope,
+                                         limit=config.EXPORT_MAX_ROWS, keyword=keyword))
+        data = excel_forms.export("history", full[COLUMNS].rename(columns=RENAME), {"user": who["name"], "period": period})
+        audit.log(who, "EXPORT", "history", "", {"rows": len(full), "start": start.isoformat(), "end": end.isoformat(),
+                                                   "background": True})
+        return tasks.Output(f"거래 {len(full):,}건을 엑셀로 만들었습니다.", data, name,
+                            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+
+    tid = tasks.start("export_history", f"거래이력 엑셀 ({count:,}건)", work, who)
+    flash(f"{count:,}건이라 백그라운드에서 만드는 중입니다. 끝나면 이 화면에서 내려받으세요.", "info")
+    return redirect(url_for("tasks.detail", task_id=tid))
+
+
 def _pending_cancels() -> dict[int, int]:
     """처리 중인 취소 요청: {거래 번호: 요청 번호}."""
     import json
@@ -72,6 +92,9 @@ def index():
         return render_page("history.html", "history", **ctx)
 
     if request.args.get("export") == "xlsx":
+        _, count, _s = repo.history_page(start.isoformat(), end.isoformat(), types, mats, scope, page=1, size=1, keyword=keyword)
+        if count > config.BG_EXPORT_ROWS:           # 많으면 백그라운드로 만들어 작업 화면에서 받는다
+            return _background_export(start, end, types, mats, scope, keyword, min(count, config.EXPORT_MAX_ROWS))
         full = _decorate(repo.history_df(start.isoformat(), end.isoformat(), types, mats, scope,
                                          limit=config.EXPORT_MAX_ROWS, keyword=keyword))
         log_export("history", len(full), start=start.isoformat(), end=end.isoformat())

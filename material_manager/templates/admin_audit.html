@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import table, download, pager as pager_nav %}
+{% from "_macros.html" import table, download, csrf, pager as pager_nav %}
 {% block content %}
 <form class="toolbar" method="get">
   <label>시작일<input type="date" name="start" value="{{ start.isoformat() }}"></label>
@@ -10,10 +10,15 @@
   <label>행위
     <select name="action"><option value="">전체</option>{% for code, label in actions.items() %}<option value="{{ code }}" {{ 'selected' if code == action }}>{{ label }}</option>{% endfor %}</select>
   </label>
-  <label class="grow">내용 검색 (자재코드·거래ID 등)<input name="q" value="{{ keyword }}"></label>
+  <label class="grow">내용 검색 (자재코드·거래ID·오류 화면의 문의 번호)<input name="q" value="{{ keyword }}"></label>
   <button class="btn btn-primary">조회</button>
 </form>
 <p class="muted small">감사로그는 추가만 가능하며 수정·삭제할 수 없습니다(DB 트리거로 차단). 조회 {{ '{:,}'.format(count) }}건.</p>
+<form class="card row-actions" method="post" action="{{ url_for('admin.audit_verify') }}">
+  {{ csrf() }}<button class="btn">🔗 무결성 검증</button>
+  <span class="muted small">기록은 순서대로 해시로 이어 봉인됩니다(1분마다). 봉인 {{ '{:,}'.format(head.seq) }}건{% if head.hash %} · 마지막 해시 <code>{{ head.hash[:16] }}…</code>{% endif %}{% if unsealed %} · 봉인 대기 {{ unsealed }}건{% endif %}.
+    봉인한 기록을 고치거나 지우거나 끼워 넣으면 검증이 찾아냅니다. 마지막 해시를 서버 밖(보안 담당 문서)에 보관하면 더 안전합니다.</span>
+</form>
 {{ table(grid, "조건에 맞는 기록이 없습니다.") }}
 {{ pager_nav(pager) }}
 {{ download(url_with(export='xlsx', page=none), '⬇️ 감사로그 엑셀 다운로드') }}

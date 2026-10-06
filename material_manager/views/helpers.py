@@ -12,7 +12,7 @@ from typing import Any, Iterable, Mapping
 from urllib.parse import urlsplit
 
 import pandas as pd
-from flask import Flask, abort, flash, g, redirect, render_template, request, send_file, session, url_for
+from flask import Flask, abort, flash, g, jsonify, redirect, render_template, request, send_file, session, url_for
 
 import config
 from core import audit, auth, org, periods, repository as repo, sap
@@ -442,6 +442,21 @@ def register_template_helpers(app: Flask) -> None:
                                active=None), code
 
     app.register_error_handler(400, lambda e: error_page(400, "잘못된 요청", e.description))
+
+    def bad_input(e):
+        """처리되지 않은 입력 오류(숫자 아님·너무 큰 수·범위 밖)는 500 이 아니라 안내로. 우리가 쓴 한글 문구만 보여 주고
+        라이브러리의 영어 내부 메시지는 감춘다. API 는 JSON."""
+        text = str(e)
+        message = text if any("가" <= ch <= "힣" for ch in text) else "입력한 값을 확인하세요 (숫자·날짜·번호 형식이나 범위가 맞지 않습니다)."
+        if request.blueprint == "api":
+            return jsonify(ok=False, error=message), 400
+        if request.method == "POST" and request.referrer and urlsplit(request.referrer).netloc == request.host:
+            flash(message, "error")                           # 입력하던 화면으로 돌아가 안내 (입력은 브라우저가 보관)
+            return redirect(request.referrer)
+        return error_page(400, "입력값 확인", message)
+
+    app.register_error_handler(ValueError, bad_input)
+    app.register_error_handler(OverflowError, bad_input)
     app.register_error_handler(403, lambda e: error_page(403, "접근 권한 없음", e.description))
     # 예상하지 못한 오류: 내부 내용(경로·SQL 등)은 서버 로그에만 남기고 화면에는 일반 문구만
     app.register_error_handler(500, lambda e: error_page(

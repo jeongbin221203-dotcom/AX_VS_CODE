@@ -15,7 +15,7 @@ import pandas as pd
 from flask import Blueprint, abort, flash, redirect, request, session, url_for
 
 import config
-from core import audit, db, excel_forms, jobs, repository as repo, seed, services, storage
+from core import audit, db, excel_forms, jobs, repository as repo, seed, services, storage, tasks
 from core.utils import to_csv_zip_bytes, to_excel_bytes, xlsx_problem
 from views.helpers import Table, actor, file_response, form_response, render_page, role_required, xlsx_response
 
@@ -119,8 +119,14 @@ def apply_upload():
     if "_blank" not in df.columns:                  # 이 기능 전에 만든 미리보기
         df["_blank"] = ""
     df = df[[*config.MATERIAL_COLS, "_blank"]]
-    result = services.import_materials(df, actor())
     storage.get().delete(key)
+    who = actor()
+    if len(df) > config.BG_ROWS:                    # 자재가 많으면 백그라운드로 (요청 제한에 걸리지 않게)
+        tid = tasks.start("material_import", f"자재 마스터 일괄 반영 ({len(df):,}줄)",
+                          lambda progress: services.import_materials(df, who), who)
+        flash(f"자재 {len(df):,}줄 반영을 시작했습니다. 끝나면 이 화면에 결과가 나옵니다.", "info")
+        return redirect(url_for("tasks.detail", task_id=tid))
+    result = services.import_materials(df, who)
     flash(result.message, "success")
     return redirect(url_for("data_admin.index"))
 
@@ -137,12 +143,32 @@ def backup_db():
                          "application/octet-stream")
 
 
+XLSX_MIME = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+
+
+def _big_data() -> bool:
+    return int(db.scalar("SELECT COUNT(*) FROM transactions") or 0) > config.BG_EXPORT_ROWS
+
+
+def _background_backup(kind: str, name: str, build, config_mime: str):
+    who = actor()
+
+    def work(progress):
+        return tasks.Output(f"{name} 를 만들었습니다.", build(repo.dump_all()), name, config_mime)
+
+    tid = tasks.start(f"backup_{kind}", f"전체 백업 {kind.upper()} 만들기", work, who)
+    flash("데이터가 많아 백그라운드에서 만드는 중입니다. 끝나면 이 화면에서 내려받으세요.", "info")
+    return redirect(url_for("tasks.detail", task_id=tid))
+
+
 @bp.get("/backup.xlsx")
 @role_required("ADMIN")
 def backup_xlsx():
     audit.log(actor(), "BACKUP", "xlsx", "전체 데이터")
-    return xlsx_response(to_excel_bytes(repo.dump_all()),
-                         f"자재관리_전체백업_{datetime.now():%Y%m%d_%H%M}.xlsx")
+    name = f"자재관리_전체백업_{datetime.now():%Y%m%d_%H%M}.xlsx"
+    if _big_data():                                 # 거래가 많으면 백그라운드로 만들어 작업 화면에서 받는다
+        return _background_backup("xlsx", name, to_excel_bytes, config_mime=XLSX_MIME)
+    return xlsx_response(to_excel_bytes(repo.dump_all()), name)
 
 
 @bp.get("/backup-csv.zip")
@@ -150,8 +176,10 @@ def backup_xlsx():
 def backup_csv():
     """전체 데이터 CSV 묶음 — 엑셀 백업보다 빠르고 행 수 제한(시트당 약 100만 행)이 없다. 데이터가 많을 때."""
     audit.log(actor(), "BACKUP", "csv", "전체 데이터")
-    return file_response(to_csv_zip_bytes(repo.dump_all()), f"자재관리_전체백업_{datetime.now():%Y%m%d_%H%M}_csv.zip",
-                         "application/zip")
+    name = f"자재관리_전체백업_{datetime.now():%Y%m%d_%H%M}_csv.zip"
+    if _big_data():
+        return _background_backup("csv", name, to_csv_zip_bytes, config_mime="application/zip")
+    return file_response(to_csv_zip_bytes(repo.dump_all()), name, "application/zip")
 
 
 @bp.get("/backup-attachments.zip")

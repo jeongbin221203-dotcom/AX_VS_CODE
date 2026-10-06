@@ -21,6 +21,7 @@
   notifications 🔔 알림함 (결재 요청·결과·독촉)
   quality       🩺 데이터 점검 (음수 재고·초과 입고·거래처 중복·BOM 문제 등)
   api           외부 연동 REST API (/api/v1, API 키)
+  tasks         백그라운드 작업 (큰 업로드 반영·큰 엑셀 추출의 진행·결과)
 """
 from flask import Flask
 
@@ -29,9 +30,10 @@ from .helpers import load_context
 
 def register_blueprints(app: Flask) -> None:
     from . import (admin, api, approvals, auth, dashboard, data_admin, documents, history, materials, mrp, notifications,
-                   partners, periods, prefs, production, purchase, quality, reports, sap, statements, stock, transactions)
+                   partners, periods, prefs, production, purchase, quality, reports, sap, statements, stock, tasks,
+                   transactions)
 
     for module in (auth, dashboard, materials, transactions, statements, stock, history, documents, purchase, approvals,
-                   reports, periods, sap, data_admin, admin, prefs, partners, production, mrp, notifications, quality, api):
+                   reports, periods, sap, data_admin, admin, prefs, partners, production, mrp, notifications, quality, api, tasks):
         app.register_blueprint(module.bp)
     app.before_request(load_context)

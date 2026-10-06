@@ -13,9 +13,11 @@ import secrets
 import threading
 import time
 from collections import defaultdict, deque
+from datetime import datetime, timedelta
 
 import pandas as pd
 
+import config
 from core import audit, db, services
 from core.utils import now_str
 
@@ -61,15 +63,56 @@ def revoke(key_id: int, actor: dict) -> services.Result:
     return services.Result(bool(n), "키를 폐기했습니다. 이 키로 오는 요청은 바로 막힙니다." if n else "이미 폐기된 키입니다.")
 
 
+def _since() -> str:
+    return (datetime.now() - timedelta(minutes=config.API_FAIL_MINUTES)).strftime("%Y-%m-%d %H:%M:%S")
+
+
+def ip_blocked(ip: str) -> bool:
+    """이 IP 에서 최근 API 키 인증 실패가 너무 많으면 막는다 (키 무차별 대입 방어). 실패 수는 DB 에 있어 서버 여러 대가 함께 센다."""
+    if not ip:
+        return False
+    try:
+        row = db.query_df("SELECT fails, window_start FROM api_auth_failures WHERE ip = ?", (ip,))
+    except db.DBError:                          # 리비전 0010 전
+        return False
+    return (not row.empty and str(row.iloc[0]["window_start"]) >= _since()
+            and int(row.iloc[0]["fails"]) >= config.API_FAIL_MAX)
+
+
+def _fail(ip: str) -> None:
+    """인증 실패 한 번을 센다. 감사로그에는 시간창의 첫 실패와 막힌 순간만 남긴다 (공격 중 로그가 넘치지 않게)."""
+    if not ip:
+        return
+    since, now = _since(), now_str()
+    try:
+        with db.transaction() as conn:
+            conn.execute(
+                "INSERT INTO api_auth_failures (ip, fails, window_start) VALUES (?, 1, ?) "
+                "ON CONFLICT (ip) DO UPDATE SET fails = CASE WHEN api_auth_failures.window_start < ? THEN 1 "
+                "ELSE api_auth_failures.fails + 1 END, window_start = CASE WHEN api_auth_failures.window_start < ? "
+                "THEN ? ELSE api_auth_failures.window_start END", (ip, now, since, since, now))
+            fails = int(conn.execute("SELECT fails FROM api_auth_failures WHERE ip = ?", (ip,)).fetchone()[0])
+            if fails in (1, config.API_FAIL_MAX):
+                audit.record(conn, {"id": None, "name": "API", "role": "", "ip": ip}, "API_AUTH_FAIL", "ip", ip,
+                             {"fails": fails, "blocked": fails >= config.API_FAIL_MAX, "minutes": config.API_FAIL_MINUTES})
+    except db.DBError:
+        pass
+
+
 def check(raw: str, ip: str, scope: str) -> tuple[dict | None, int, str]:
     """(키 정보, HTTP 상태, 문제). 문제가 없으면 상태 200."""
+    if ip_blocked(ip):
+        return None, 429, f"API 키 인증 실패가 너무 많아 이 주소의 요청을 {config.API_FAIL_MINUTES}분 동안 막았습니다."
     if not raw or not raw.startswith("mmk_"):
+        _fail(ip)
         return None, 401, "API 키가 필요합니다 (Authorization: Bearer mmk_...)."
     row = db.query_df("SELECT * FROM api_keys WHERE prefix = ?", (raw[:12],))
     if row.empty or not secrets.compare_digest(row.iloc[0]["key_hash"], _hash(raw)):
+        _fail(ip)
         return None, 401, "API 키가 맞지 않습니다."
     key = row.iloc[0].to_dict()
     if not key["active"]:
+        _fail(ip)
         return None, 401, "폐기된 API 키입니다."
     if scope not in key["scopes"].split(","):
         return None, 403, f"이 키에는 '{SCOPES.get(scope, scope)}' 권한이 없습니다."

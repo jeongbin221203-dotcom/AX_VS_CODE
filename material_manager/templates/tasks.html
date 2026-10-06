@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% from "_macros.html" import table %}
+{% block content %}
+{% if task %}
+<section class="card" data-task-poll="{{ url_for('tasks.status', task_id=task.id) }}" data-task-done="{{ 1 if task.finished else 0 }}">
+  <h3>{{ task.title }}</h3>
+  <p>상태: <strong data-task-status>{{ task.status_label }}</strong> <span class="muted small">· 시작 {{ task.created_at }}{% if task.finished_at %} · 끝 {{ task.finished_at }}{% endif %}</span></p>
+  {% if not task.finished %}
+  <progress data-task-bar max="100" {% if task.percent is not none %}value="{{ task.percent }}"{% endif %} style="width:100%"></progress>
+  <p class="muted small">진행 중입니다. 이 화면을 닫아도 계속 진행되며, 2초마다 자동으로 새로 고칩니다.</p>
+  {% endif %}
+  <p data-task-message class="{{ 'tone-danger' if task.status == 'ERROR' }}">{{ task.message }}</p>
+  {% if task.status == 'DONE' and task.file %}
+  <p><a class="btn btn-primary" href="{{ url_for('tasks.download', task_id=task.id) }}">⬇️ {{ task.file }} 내려받기</a>
+    <span class="muted small">파일은 24시간 뒤 정리됩니다.</span></p>
+  {% endif %}
+  <p><a href="{{ url_for('tasks.index') }}">← 작업 목록</a></p>
+</section>
+{% else %}
+<p class="muted small">큰 업로드 반영·큰 엑셀 추출은 요청 시간 제한에 걸리지 않도록 여기서 따로 처리합니다. 행을 누르면 진행 상황과 결과 파일을 볼 수 있습니다.</p>
+{{ table(grid, "백그라운드로 처리한 작업이 없습니다.") }}
+{% endif %}
+{% endblock %}

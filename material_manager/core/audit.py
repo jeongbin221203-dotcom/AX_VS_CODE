@@ -6,6 +6,7 @@
 actor(행위자)는 {"id": 사용자ID|None, "name": 이름, "role": 역할, "ip": 접속IP} 형태의 dict다.
 """
 
+import hashlib
 import json
 import sys
 from contextlib import contextmanager
@@ -49,7 +50,8 @@ ACTIONS = {
     "MRP_DEMAND": "MRP 수요 등록", "PARTNER_IMPORT": "거래처 일괄 등록", "BOM_IMPORT": "BOM 일괄 등록",
     "DELEGATION": "대결 지정", "CHANNEL_SAVE": "알림 채널 저장", "NAMES_SAVE": "이름 설정 변경", "HOMETAX_CHECK": "홈택스 매입 대사", "PO_SHORT_CLOSE": "발주 잔량 종결", "STD_COST": "표준원가 산정", "WO_SETTLE": "오더 정산", "WO_SAP_ORDER": "SAP 생산오더 번호", "CALENDAR": "작업 달력", "PO_DELIVERY": "발주 납기일 변경", "PAYMENT_RELEASE": "지급 보류 해제", "CATEGORY_RENAME": "자재 분류 이름 변경", "CHANNEL_DELETE": "알림 채널 삭제", "COMPANY_SETTINGS": "회사 설정 변경", "PARTNER_MERGE": "거래처 병합",
     "API_KEY": "API 키", "API_CALL": "API 호출", "READ_ONLY": "점검(읽기 전용) 모드", "DOWNLOAD": "파일 내려받기",
-    "QUALITY_FIX": "데이터 점검 고침",
+    "QUALITY_FIX": "데이터 점검 고침", "API_AUTH_FAIL": "API 인증 실패(IP 차단)", "AUDIT_VERIFY": "감사로그 무결성 검증",
+    "BULK_TASK": "대용량 작업", "AP_SNAPSHOT": "월말 미지급 스냅샷",
 }
 
 
@@ -58,19 +60,108 @@ def record(conn, actor: dict | None, action: str, entity: str = "",
     actor = actor or SYSTEM
     conn.execute(
         """
-        INSERT INTO audit_log (at, user_id, user_name, action, entity, entity_id, detail, ip)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO audit_log (at, user_id, user_name, action, entity, entity_id, detail, ip, request_id)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
         (now_str(), actor.get("id"), actor.get("name", ""), action, entity,
          "" if entity_id is None else str(entity_id),
-         json.dumps(detail, ensure_ascii=False, default=str) if detail else "", actor.get("ip", "")),
+         json.dumps(detail, ensure_ascii=False, default=str) if detail else "", actor.get("ip", ""), request_id()),
     )
     if config.AUDIT_STDOUT and not _quiet["n"]:
         _emit(actor, action, entity, entity_id, detail)
 
 
+def request_id() -> str:
+    """지금 요청의 번호(오류 화면의 '문의 번호'). 요청 밖(배치·CLI)이면 ''."""
+    try:
+        from flask import g, has_request_context
+        return str(g.get("request_id", "") or "")[:64] if has_request_context() else ""
+    except Exception:       # 요청 번호를 못 얻어도 감사 기록은 계속
+        return ""
+
+
 _quiet = {"n": 0}
 
+
+# ── 해시 체인 (위변조 탐지) ───────────────────────────────────
+# 기록 순서에 맞춰 직전 기록의 해시를 이어 붙인다. 기록할 때마다 잠그면 서버 여러 대가 서로 기다리다 교착할 수 있어
+# (업무 트랜잭션 안에서 기록하므로), 기록은 그대로 두고 '봉인'(seal)이 번호(seq)·해시를 채운다 — 배치(1분)·검증·요청 중 가끔.
+# 봉인된 기록을 고치거나 지우거나 사이에 끼워 넣으면 verify() 가 찾아낸다. (DB 관리자가 트리거를 끄고 전체를 다시 계산하면
+# 막지 못하므로 chain_head() 의 마지막 해시를 서버 밖(운영 문서·표준출력 로그)에 따로 보관하면 더 안전하다.)
+CHAIN_FIELDS = ("id", "at", "user_id", "user_name", "action", "entity", "entity_id", "detail", "ip", "request_id")
+_CHAIN_SELECT = "SELECT seq, prev_hash, hash, " + ", ".join(CHAIN_FIELDS) + " FROM audit_log"
+_seal_state = {"at": 0.0}
+
+
+def _digest(prev: str, row) -> str:
+    payload = json.dumps([prev or ""] + ["" if row[f] is None else str(row[f]) for f in CHAIN_FIELDS],
+                         ensure_ascii=False, separators=(",", ":"))
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def seal(limit: int = 5000) -> int:
+    """아직 봉인 안 된 기록(번호 없음)에 순서 번호와 해시를 채운다. 봉인한 건수. 서버 여러 대가 동시에 불러도 한 대씩."""
+    with db.transaction() as conn:
+        db.lock(conn, "audit_seal")                                 # 이 안에서는 다른 잠금을 잡지 않으므로 교착 없음
+        last = conn.execute("SELECT seq, hash FROM audit_log WHERE seq IS NOT NULL ORDER BY seq DESC LIMIT 1").fetchone()
+        seq, prev = (int(last["seq"]), last["hash"] or "") if last else (0, "")
+        rows = conn.execute(_CHAIN_SELECT + " WHERE seq IS NULL ORDER BY id LIMIT ?", (int(limit),)).fetchall()
+        for r in rows:
+            seq += 1
+            digest = _digest(prev, r)
+            conn.execute("UPDATE audit_log SET seq = ?, prev_hash = ?, hash = ? WHERE id = ? AND seq IS NULL",
+                         (seq, prev, digest, r["id"]))
+            prev = digest
+    return len(rows)
+
+
+def seal_soon(min_seconds: int = 60) -> None:
+    """요청 처리 뒤 가끔(프로세스마다 min_seconds 에 한 번) 봉인 — 배치 서버가 없는 환경에서도 체인이 이어지게."""
+    import time
+    now = time.time()
+    if now - _seal_state["at"] < min_seconds:
+        return
+    _seal_state["at"] = now
+    try:
+        seal()
+    except Exception:       # 봉인 실패가 화면을 막지 않는다 (다음 기회에 다시)
+        pass
+
+
+def chain_head() -> dict:
+    row = db.query_df("SELECT seq, hash FROM audit_log WHERE seq IS NOT NULL ORDER BY seq DESC LIMIT 1")
+    return {"seq": int(row.iloc[0]["seq"]), "hash": row.iloc[0]["hash"]} if not row.empty else {"seq": 0, "hash": ""}
+
+
+def verify(batch: int = 5000) -> dict:
+    """봉인된 기록을 처음부터 다시 계산한다. {ok, sealed, unsealed, broken_seq, reason, head}."""
+    for _ in range(200):                                            # 먼저 남은 기록을 모두 봉인 (한 번에 5,000건씩)
+        if seal() < 5000:
+            break
+    result = {"ok": True, "sealed": 0, "unsealed": 0, "broken_seq": None, "reason": "", "head": ""}
+    prev, expect, after = "", 1, 0
+    with db.get_conn() as conn:
+        result["unsealed"] = int(conn.execute("SELECT COUNT(*) FROM audit_log WHERE seq IS NULL").fetchone()[0])
+        while True:
+            rows = conn.execute(_CHAIN_SELECT + " WHERE seq > ? ORDER BY seq LIMIT ?", (after, int(batch))).fetchall()
+            if not rows:
+                break
+            for r in rows:
+                seq = int(r["seq"])
+                reason = ""
+                if seq != expect:
+                    reason = f"번호 {expect}번 기록이 없습니다 (삭제됐거나 끼어 넣은 기록)"
+                elif (r["prev_hash"] or "") != prev:
+                    reason = "앞 기록과의 연결이 끊어졌습니다"
+                elif r["hash"] != _digest(prev, r):
+                    reason = "기록 내용이 봉인한 뒤 바뀌었습니다"
+                if reason:
+                    result.update(ok=False, broken_seq=seq, reason=reason, head=prev)
+                    return result
+                prev, expect, after = r["hash"], expect + 1, seq
+                result["sealed"] += 1
+    result["head"] = prev
+    return result
 
 @contextmanager
 def quiet():
@@ -127,12 +218,12 @@ def _audit_where(start, end, user, action, keyword) -> tuple[str, list]:
         sql += " AND action = ?"
         params.append(action)
     if keyword:
-        sql += " AND (detail LIKE ? OR entity_id = ?)"
-        params += [f"%{keyword}%", keyword]
+        sql += " AND (detail LIKE ? OR entity_id = ? OR request_id = ?)"      # 요청 번호(오류 화면의 문의 번호)로도 찾는다
+        params += [f"%{keyword}%", keyword, keyword]
     return sql, params
 
 
-AUDIT_SELECT = "SELECT id, at, user_name, action, entity, entity_id, detail, ip FROM audit_log"
+AUDIT_SELECT = "SELECT id, at, user_name, action, entity, entity_id, detail, ip, request_id FROM audit_log"
 
 
 def audit_page(start: str, end: str, user: str = "", action: str = "", keyword: str = "",

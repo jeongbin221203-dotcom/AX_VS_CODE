@@ -11,6 +11,7 @@
 import logging
 import os
 import socket
+import threading
 import time
 import traceback
 from dataclasses import dataclass
@@ -52,7 +53,8 @@ def _cleanup_uploads() -> str:
             logging.getLogger(__name__).warning("업로드 임시파일 정리 실패: %s", key, exc_info=True)
             continue
     removed_once = once.cleanup()
-    return f"삭제 {removed}건 · 중복 제출 기록 정리 {removed_once}건"
+    from core import tasks
+    return f"삭제 {removed}건 · 중복 제출 기록 정리 {removed_once}건 · {tasks.cleanup()}"
 
 
 def _storage_flush() -> str:
@@ -89,6 +91,12 @@ def _mrp_nightly() -> str:
     return mrp.nightly()
 
 
+def _audit_seal() -> str:
+    from core import audit
+    n = audit.seal()
+    return f"감사로그 {n}건 봉인"
+
+
 def _master_enabled() -> bool:
     from core import master_sync
     return master_sync.enabled()
@@ -102,6 +110,7 @@ JOBS = {
     "approval_remind": Job("approval_remind", "결재 독촉 (기한 넘긴 결재 다시 알림)", 3600, _remind),
     "mrp_nightly": Job("mrp_nightly", "MRP 밤 자동 실행 (하루 한 번, 플랜트마다)", 3600, _mrp_nightly,
                        enabled=lambda: config.MRP_NIGHTLY_HOUR >= 0),
+    "audit_seal": Job("audit_seal", "감사로그 해시 체인 봉인", 60, _audit_seal),
     "notify_send": Job("notify_send", "결재 알림 보내기 (메일·잔디·네이버웍스)", 60, _notify, enabled=_notify_enabled),
     "storage_flush": Job("storage_flush", "S3 임시 보관 파일 올리기", 300, _storage_flush,
                          enabled=lambda: config.STORAGE == "s3"),
@@ -140,6 +149,34 @@ def _release(name: str, holder: str, started: str, status: str, message: str) ->
                      "VALUES (?, ?, ?, ?, ?, ?)", (name, holder, started, now_str(), status, message[:2000]))
 
 
+class _Lease(threading.Thread):
+    """작업이 도는 동안 임대(lease_until)를 주기적으로 늘린다 → 임대보다 오래 걸리는 작업(MRP 전 플랜트·큰 백업)을
+    다른 서버가 '죽은 작업'으로 보고 중복 실행하지 않는다. 임대를 잃으면(다른 서버가 이어받음) lost 로 표시한다."""
+
+    def __init__(self, name: str, holder: str):
+        super().__init__(daemon=True, name=f"mm-lease-{name}")
+        self.job, self.holder = name, holder
+        self.stop_event, self.lost = threading.Event(), False
+
+    def run(self) -> None:
+        every = max(config.JOB_LEASE_SECONDS / 3, 0.2)
+        while not self.stop_event.wait(every):
+            try:
+                until = _ts(datetime.now() + timedelta(seconds=config.JOB_LEASE_SECONDS))
+                with db.transaction() as conn:
+                    n = conn.execute("UPDATE job_locks SET lease_until = ? WHERE name = ? AND holder = ?",
+                                     (until, self.job, self.holder)).rowcount
+                if n != 1:
+                    self.lost = True
+                    return
+            except Exception:           # 한 번 못 늘려도 다음 주기에 다시 (임대는 3배 여유)
+                logging.getLogger(__name__).warning("작업 임대 갱신 실패: %s", self.job, exc_info=True)
+
+    def finish(self) -> None:
+        self.stop_event.set()
+        self.join(timeout=5)
+
+
 def run(name: str, force: bool = False, holder: str | None = None) -> tuple[bool, str]:
     """(실행했는지, 메시지). force=True면 주기와 상관없이(단, 다른 서버가 돌리는 중이면 건너뜀)."""
     job = JOBS[name]
@@ -149,11 +186,17 @@ def run(name: str, force: bool = False, holder: str | None = None) -> tuple[bool
     if not _acquire(name, job.interval, holder, force):
         return False, "다른 서버가 실행 중이거나 아직 실행 주기가 아닙니다."
     started = now_str()
+    lease = _Lease(name, holder)
+    lease.start()
     try:
         message = job.func() or ""
+        lease.finish()
+        if lease.lost:
+            message += " (실행 중 임대를 잃어 다른 서버와 겹쳤을 수 있음)"
         _release(name, holder, started, "OK", message)
         return True, message
     except Exception as exc:                       # 작업 하나가 실패해도 배치 루프는 계속 돈다
+        lease.finish()
         _release(name, holder, started, "ERROR", f"{exc}\n{traceback.format_exc(limit=3)}")
         return True, f"오류: {exc}"
 
