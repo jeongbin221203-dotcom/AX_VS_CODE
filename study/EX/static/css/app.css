@@ -367,3 +367,24 @@ button.choice:disabled { cursor: default; opacity: 1; }
 .exam-items li.sub { list-style: none; padding-left: 1.6em; color: var(--ink-2); }
 .exam-items li.code { list-style: none; }
 .exam-items li.code pre { margin: 4px 0; padding: 8px 10px; background: var(--surface-2); border-radius: 6px; white-space: pre-wrap; }
+
+/* 키보드: 본문으로 건너뛰기(포커스가 올 때만 보임) */
+.skip-link { position: absolute; left: 8px; top: -48px; z-index: 100; background: var(--accent); color: #fff; padding: 8px 12px; border-radius: 6px; text-decoration: none; }
+.skip-link:focus { top: 8px; }
+main:focus { outline: none; }
+a:focus-visible, summary:focus-visible, button:focus-visible, .theme-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* 인쇄: 메뉴·단추·타이머를 빼고 내용만, 접힌 힌트는 펼침, 배경 없이도 읽히게 */
+@media print {
+  header.top, footer, .skip-link, .track-form, .theme-btn, .btns, .exam-bar, .exam-upload, .star-btn, .restore-bar,
+  form[method="post"], #btn-check, #btn-try, #btn-reset, .tip, .alert { display: none !important; }
+  body, main { background: #fff !important; color: #000 !important; }
+  main { max-width: none !important; padding: 0 !important; }
+  .card { box-shadow: none !important; border: 1px solid #999 !important; break-inside: avoid; }
+  details > :not(summary) { display: block !important; }
+  .meter { border: 1px solid #666; }
+  .meter > span { background: #666 !important; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  a { color: #000 !important; text-decoration: none !important; }
+  .choice { border: 1px solid #999 !important; }
+  .hidden { display: none !important; }
+}

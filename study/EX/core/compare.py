@@ -285,16 +285,22 @@ def _style_items(sheet, src, ans, user):
             by_attr.setdefault((k, ka[k]), set()).add(pos)
     for attr, val in sorted(by_attr, key=lambda k: (min(by_attr[k]), k[0])):
         for comp in _groups(by_attr[(attr, val)]):
-            bad = []
+            bad, first = [], None
             for r, c in comp:
                 if ws_u is None:
                     bad.append('시트 없음')
                     break
                 if _style_key(ws_u.cell(r, c))[attr] != _style_key(ws_a.cell(r, c))[attr]:
                     bad.append(fx.addr(r, c))
+                    if first is None:
+                        first = (fx.addr(r, c), _show_style(attr, _style_key(ws_u.cell(r, c))[attr]),
+                                 _show_style(attr, _style_key(ws_a.cell(r, c))[attr]))
             want = _show_style(attr, _style_key(ws_a.cell(*comp[0]))[attr])
+            msg = f"{', '.join(bad[:4])}{' 등' if len(bad) > 4 else ''} 이(가) 다릅니다"
+            if first:
+                msg += f" — {first[0]}: 현재 {first[1] or '(기본)'} → 정답 {first[2] or '(기본)'}"
             items.append({'label': f'{attr} {_span(comp)}', 'ok': not bad, 'hint': f'{attr}: {want}'.rstrip(': '),
-                          'msgs': [f"{', '.join(bad[:4])}{' 등' if len(bad) > 4 else ''} 이(가) 다릅니다"] if bad else []})
+                          'msgs': [msg] if bad else []})
     # 병합
     m_src = {str(m) for m in ws_s.merged_cells.ranges}
     m_usr = {str(m) for m in ws_u.merged_cells.ranges} if ws_u is not None else set()
@@ -387,6 +393,11 @@ def _rule_same(rule, r, ans, user, sheet, sq):
     return True, ''
 
 
+RULE_KO = {'cellIs': '셀 값 비교', 'expression': '수식', 'top10': '상위·하위 항목', 'aboveAverage': '평균 초과·미만',
+           'containsText': '특정 텍스트 포함', 'colorScale': '색조', 'dataBar': '데이터 막대', 'iconSet': '아이콘 집합',
+           'duplicateValues': '중복 값', 'uniqueValues': '고유 값', 'timePeriod': '날짜 발생'}
+
+
 def _cf_items(sheet, src, ans, user):
     ws_s, ws_a, ws_u = src.ws(sheet), ans.ws(sheet), user.ws(sheet)
     old = {_rule_key(*x) for x in _rules(ws_s)} if ws_s is not None else set()
@@ -397,7 +408,7 @@ def _cf_items(sheet, src, ans, user):
             continue
         seen.add(k)
         label = f'조건부 서식 {sq}'
-        hint = f'규칙: ={rule.formula[0]}' if rule.formula else f'규칙 종류: {rule.type}'
+        hint = f'규칙: ={rule.formula[0]}' if rule.formula else f"규칙 종류: {RULE_KO.get(rule.type, rule.type)}"
         cands = [r for s, r in (_rules(ws_u) if ws_u is not None else []) if s == sq]
         if not cands:
             items.append({'label': label, 'ok': False, 'msgs': [f'{sq} 범위의 규칙이 없습니다'], 'hint': hint})
@@ -442,6 +453,31 @@ def _dv_items(sheet, src, ans, user):
     return items
 
 
+CHART_KIND_KO = {'col': '세로 막대형', 'bar': '가로 막대형', 'line': '꺾은선형', 'pie': '원형', 'area': '영역형',
+                 'scatter': '분산형', 'doughnut': '도넛형', 'radar': '방사형'}
+LEGEND_KO = {'t': '위쪽', 'b': '아래쪽', 'l': '왼쪽', 'r': '오른쪽', 'tr': '오른쪽 위'}
+GROUP_KO = {'clustered': '묶은형', 'stacked': '누적형', 'percentStacked': '100% 누적형', 'standard': '표준'}
+
+
+def _chart_show(label, v):
+    """차트 항목 값을 학습자가 읽을 말로(내부 코드·파이썬 목록 모양 없이)."""
+    if v in (None, '', [], ()):
+        return '없음'
+    if label == '범례':
+        return LEGEND_KO.get(v, str(v))
+    if label == '누적 여부':
+        return GROUP_KO.get(v, str(v))
+    if isinstance(v, (list, tuple, set)):
+        parts = []
+        for x in v:
+            if isinstance(x, tuple) and len(x) == 2:
+                parts.append(f"{x[0]}: {CHART_KIND_KO.get(x[1], x[1])}")
+            else:
+                parts.append(str(x))
+        return ', '.join(parts) or '없음'
+    return str(v)
+
+
 def _chart_items(sheet, src, ans, user):
     try:
         a = _charts_of(ans, sheet)
@@ -461,8 +497,11 @@ def _chart_items(sheet, src, ans, user):
             if cs is not None and getter(cs) == want:
                 return
             got = getter(cu) if cu is not None else None
-            items.append({'label': f'차트: {label}', 'ok': got == want, 'hint': f'정답: {want}',
-                          'msgs': [] if got == want else [f'{got} → {want}' if got is not None else '차트가 없습니다']})
+            if cs is None and want in ('', [], None, ()) :
+                return                                   # 새 차트에서 정답에도 없는 항목은 과제가 아님
+            items.append({'label': f'차트: {label}', 'ok': got == want, 'hint': f'정답: {_chart_show(label, want)}',
+                          'msgs': [] if got == want else [f'{_chart_show(label, got)} → {_chart_show(label, want)}'
+                                                          if cu is not None else '차트가 없습니다']})
         add('데이터 계열', lambda c: [x['name'] for x in c['series']])
         add('차트 종류', lambda c: sorted({(x['name'], x['kind']) for x in c['series']}))
         add('보조 축', lambda c: sorted(x['name'] for x in c['series'] if x['secondary']))
@@ -831,6 +870,10 @@ def _grade_unlimited(src_bytes, ans_bytes, user_bytes, level=None):
     active = [s for s in sheets if s['items']]
     if not active:
         raise xlsx.BadFile('문제 파일과 정답 파일이 같아서 채점할 항목이 없습니다.')
+    mine = set(user.sheets)
+    if not any(s['name'] in mine for s in active):
+        raise xlsx.BadFile(f"올린 파일에 이 문제의 시트({', '.join(s['name'] for s in active[:3])})가 없습니다 — "
+                           "다른 문제의 파일이 아닌지 확인하세요.")
     if not points:      # 시험 구성이 아닌 실습 파일: 할 일이 있는 시트끼리 100점을 나눈다(반올림 나머지는 마지막 시트)
         share = round(100 / len(active), 1)
         for s in sheets:

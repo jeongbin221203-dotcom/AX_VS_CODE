@@ -11,6 +11,7 @@
 <script src="{{ asset('js/theme.js') }}"></script>
 </head>
 <body>
+<a class="skip-link" href="#main">본문으로 건너뛰기</a>
 {% set ep = request.endpoint or '' %}
 <header class="top">
   <div class="top-in">
@@ -38,7 +39,7 @@
     <button class="theme-btn" type="button" data-theme-toggle title="밝게/어둡게">◐</button>
   </div>
 </header>
-<main>
+<main id="main" tabindex="-1">
 {% block content %}{% endblock %}
 </main>
 <footer>{% if public %}<b>공개 시연 서버</b> — 무료 서버라 다시 시작하면 학습 기록과 올린 파일이 지워집니다. · {% endif %}개인 학습용 · 문제와 데이터는 모두 새로 만든 연습용입니다. 컴활 범위 표시는 출제 경향을 참고한 분류이며 공식 자료가 아닙니다.</footer>

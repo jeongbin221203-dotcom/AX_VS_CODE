@@ -14,7 +14,7 @@
 
 {% if msg %}<div class="alert ok-alert" role="status">{{ msg }}</div>{% endif %}
 <section class="grid g4" aria-label="요약 지표">
-  <div class="kpi"><div class="label">푼 문제</div><div class="value">{{ d.solved }}<small> / {{ d.total }}</small></div>
+  <div class="kpi"><div class="label">맞힌 문제</div><div class="value">{{ d.solved }}<small> / {{ d.total }}</small></div>
     <div class="sub">{{ (100 * d.solved / d.total)|round|int if d.total else 0 }}% 완료</div></div>
   <div class="kpi"><div class="label">첫 시도 정답률</div><div class="value">{{ d.acc if d.acc is not none else '–' }}{% if d.acc is not none %}<small>%</small>{% endif %}</div>
     <div class="sub">처음 풀 때 맞힌 비율</div></div>
@@ -74,6 +74,16 @@
           <div class="small muted">{{ x.e.minutes }}분 · 합격 {{ x.e.pass }}점</div></div>
           <span class="nowrap small">{% if x.best %}최고 <b>{{ x.best.score|num }}점</b>{% if x.best.passed %} <span class="st ok">✓</span>{% endif %}{% else %}<span class="muted">미응시</span>{% endif %}</span></li>
         {% else %}<li class="muted">준비 중</li>{% endfor %}
+      </ul>
+    </section>
+    <section class="card">
+      <h2>컴활 실기 실습</h2>
+      <ul class="list">
+        {% for x in practice_recent %}
+        <li><div class="grow"><a class="title" href="{{ url_for('practice.result', rid=x.id) }}">{{ x.title }}</a>
+          <div class="small muted">{{ x.created_at[5:16] }} · {{ x.file_name }}</div></div>
+          <span class="nowrap small"><b>{{ x.score|num }}</b> / {{ x.total|num }}{% if x.passed %} <span class="st ok">✓</span>{% endif %}</span></li>
+        {% else %}<li class="muted">아직 푼 실습이 없습니다. <a href="{{ url_for('practice.index') }}">실기 실습으로 →</a></li>{% endfor %}
       </ul>
     </section>
     <section class="card">

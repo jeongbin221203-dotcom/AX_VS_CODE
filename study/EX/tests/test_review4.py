@@ -88,3 +88,38 @@ def test_round5_fixes(tmp_path):
         with fx.time_limit(0.3):
             fx.evaluate(big, fx.Book([fx.Sheet('S', {})]), 'S')
     del describe
+
+
+def test_round6_ux(client):
+    import io
+    import openpyxl
+    from core import compare, library
+    page = client.get('/').get_data(as_text=True)
+    assert 'skip-link' in page and 'id="main"' in page and '맞힌 문제' in page and '컴활 실기 실습' in page
+    # 다른 문제의 파일은 0점으로 저장하지 않고 안내
+    def book(sheet, val):
+        wb = openpyxl.Workbook()
+        wb.active.title = sheet
+        wb.active['A1'] = val
+        bio = io.BytesIO()
+        wb.save(bio)
+        return bio.getvalue()
+    import pytest
+    from core import xlsx
+    with pytest.raises(xlsx.BadFile):
+        compare.grade(book('가', None), book('가', 1), book('다른', 1))
+    # 서식 메시지는 현재 → 정답
+    from openpyxl.styles import Font
+    def styled(bold):
+        wb = openpyxl.Workbook()
+        wb.active.title = 'S'
+        wb.active['A1'] = 1
+        wb.active['A1'].font = Font(b=bold)
+        bio = io.BytesIO()
+        wb.save(bio)
+        return bio.getvalue()
+    res = compare.grade(styled(False), styled(True), styled(False))
+    msg = [m for s in res['sheets'] for i in s['items'] for m in i['msgs']][0]
+    assert '현재' in msg and '정답' in msg
+    assert compare._chart_show('범례', 'b') == '아래쪽' and compare._chart_show('차트 종류', {('B', 'col')}) == 'B: 세로 막대형'
+    del library

@@ -11,6 +11,26 @@ from core import backup, build, content, db, exam, study
 bp = Blueprint('main', __name__)
 
 
+def _practice_recent(conn):
+    """최근 실기 실습 결과(교재 'lib:…'·공식 예제 'official:…') — 제목은 목록에서 찾고 없으면 키."""
+    rows = conn.execute("SELECT id, exam, score, total, passed, file_name, created_at FROM exam_results "
+                        "WHERE user=? AND (exam LIKE 'lib:%' OR exam LIKE 'official:%') ORDER BY id DESC LIMIT 6",
+                        (db.user_id(),)).fetchall()
+    titles = {}
+    try:
+        from views import practice
+        for it in practice._items():
+            titles['lib:' + it['id']] = it['title']
+    except Exception:  # noqa: BLE001 — 제목을 못 찾아도 대시보드는 열린다
+        pass
+    out = []
+    for r in rows:
+        d = dict(r)
+        d['title'] = titles.get(r['exam']) or r['exam'].split(':', 1)[-1]
+        out.append(d)
+    return out
+
+
 @bp.route('/')
 def home():
     from app import current_track
@@ -26,6 +46,7 @@ def home():
         'SELECT exam, MAX(score) score, total, COUNT(*) n, MAX(passed) passed FROM exam_results WHERE user=? '
         'GROUP BY exam', (db.user_id(),))}
     exams = [{'e': e, 'best': ebest.get(e['id'])} for e in exam.exams()]
+    practice_recent = _practice_recent(conn)
     written_best = {r['level']: r for r in conn.execute(
         'SELECT level, MAX(average) average, MAX(passed) passed FROM written_results WHERE user=? GROUP BY level',
         (db.user_id(),))}
@@ -36,7 +57,7 @@ def home():
                         {'name': '오답', 'values': [d['bad'] for d in dash['daily']]}]}
     return render_template('dashboard.html', d=dash, missions=missions, uploads=uploads, exams=exams,
                            msg=request.args.get('msg'), sync_last=db.setting('sync_last'),
-                           written_best=written_best, written_done=written_done,
+                           written_best=written_best, written_done=written_done, practice_recent=practice_recent,
                            chart_json=json.dumps(chart, ensure_ascii=False).replace('</', '<\\/'))
 
 

@@ -138,7 +138,7 @@ def test_public_users_are_isolated(tmp_path):
     r = a.post('/exam/c2-01/submit', data={'file': (open(FIX / 'c2-01_answer_excel.xlsx', 'rb'), 'x.xlsx')})
     result_url = r.headers['Location']
     a.post('/track', data={'track': 'c1'})
-    assert '1<small> / ' in a.get('/').get_data(as_text=True) or '푼 문제' in a.get('/').get_data(as_text=True)
+    assert '1<small> / ' in a.get('/').get_data(as_text=True) or '맞힌 문제' in a.get('/').get_data(as_text=True)
     page_b = b.get('/').get_data(as_text=True)
     assert '샘플_상반기매출' not in page_b and '최고 <b>94점</b>' not in page_b
     assert b.get(result_url).status_code == 404
