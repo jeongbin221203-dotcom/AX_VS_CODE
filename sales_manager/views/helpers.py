@@ -61,7 +61,7 @@ BIG_SELECT = 300        # 선택지가 이보다 많으면 목록을 다 싣지 
 # 로그인 없이 열 수 있는 엔드포인트
 PUBLIC_ENDPOINTS = {"auth.login", "auth.setup", "auth.oidc_start", "auth.oidc_callback", "auth.breakglass",
                     "auth.demo_as",
-                    "static",
+                    "static", "service_worker", "offline",
                     "healthz", "readyz", "metrics"}
 # 시연 서버에서 저장을 막는 관리자 설정 (admin 블루프린트 전체 + 아래)
 DEMO_LOCKED = {"auth.password", "io.forms_inspect", "io.forms_save", "io.forms_delete"}
@@ -335,6 +335,10 @@ class Table:
             df = df.iloc[(self.page - 1) * page_size: self.page * page_size]
         src = df.head(limit) if limit else df
         view = src.drop(columns=[c for c in drop if c in src.columns])
+        labels = company.get("status_labels") or {}
+        if labels:                                   # 상태 열은 회사에서 정한 이름으로 보여 준다 (값·강조 기준은 원래 이름)
+            view = view.assign(**{c: view[c].map(lambda v: labels.get(v, v) if isinstance(v, str) else v)
+                                  for c in ("상태", "수금상태") if c in view.columns})
         money = set(money)
         self.columns = list(view.columns)
         self.numeric = {c for c in self.columns
@@ -508,7 +512,7 @@ def csrf_token() -> str:
 
 
 def register_template_helpers(app: Flask) -> None:
-    app.jinja_env.filters.update(won=won, mil=mil, krw=krw)
+    app.jinja_env.filters.update(won=won, mil=mil, krw=krw, label=company.label)
 
     @app.context_processor
     def _company():

@@ -186,8 +186,35 @@ IMPORT_SPECS: dict[str, dict] = {
         "optional": [],
         "sample": {"월": "2026-03", "담당자": "김영업", "목표금액": 80000000},
         "key": "월+담당자",
+        "role": "MANAGER",
+    },
+    # 자재관리와 맞춤: 마스터도 엑셀로 (내려받기는 올리기 양식과 같은 열) — 빈 칸은 기존 값 유지
+    "품목": {
+        "required": ["품목코드", "품목명"],
+        "optional": ["규격", "분류", "단위", "정가", "과세구분", "ERP자재번호", "사용", "메모"],
+        "sample": {"품목코드": "SW-ERP-01", "품목명": "ERP 라이선스(연간)", "규격": "50 사용자", "분류": "소프트웨어",
+                   "단위": "식", "정가": 12000000, "과세구분": "과세", "ERP자재번호": "MAT-1001", "사용": "Y", "메모": ""},
+        "key": "품목코드",
+        "role": "SUPPORT",
+    },
+    "특가": {
+        "required": ["거래처명", "품목코드", "특가", "시작일"],
+        "optional": ["종료일", "메모"],
+        "sample": {"거래처명": "예시상사", "품목코드": "SW-ERP-01", "특가": 10800000, "시작일": "2026-01-01",
+                   "종료일": "", "메모": "연간 계약 단가"},
+        "key": "거래처명+품목코드+시작일",
+        "role": "MANAGER",
+    },
+    "거래처담당자": {
+        "required": ["거래처명", "이름"],
+        "optional": ["부서", "직위", "역할", "연락처", "이메일", "대표", "메모"],
+        "sample": {"거래처명": "예시상사", "이름": "홍길동", "부서": "구매팀", "직위": "과장", "역할": "구매",
+                   "연락처": "010-1234-5678", "이메일": "hong@example.co.kr", "대표": "Y", "메모": ""},
+        "key": "거래처명+이름",
     },
 }
+PRODUCT_COLUMNS = {"spec": "규격", "category": "분류", "unit": "단위", "list_price": "정가", "tax_type": "과세구분",
+                   "erp_material": "ERP자재번호", "memo": "메모"}
 
 
 def template_df(entity: str) -> pd.DataFrame:
@@ -383,9 +410,56 @@ def _row_target(row: pd.Series, ctx: dict) -> tuple[str, dict]:
     return data["owner"], data
 
 
+def _yes(value: Any) -> bool:
+    return _clean(value).upper() in ("Y", "YES", "예", "O", "1", "TRUE", "사용", "대표")
+
+
+def _row_product(row: pd.Series, ctx: dict) -> tuple[str, dict]:
+    code, name = _clean(row.get("품목코드")), _clean(row.get("품목명"))
+    if not code or not name:
+        raise ValueError("품목코드·품목명: 필수 항목입니다")
+    blank = [f for f, col in PRODUCT_COLUMNS.items() if not _clean(row.get(col))]
+    if not _clean(row.get("사용")):
+        blank.append("active")
+    data = {"code": code, "name": name, "spec": _clean(row.get("규격")) or None, "category": _clean(row.get("분류")) or None,
+            "unit": _clean(row.get("단위")) or "EA", "list_price": parse_int(row.get("정가"), "정가", 0, 0),
+            "tax_type": parse_choice(row.get("과세구분"), "과세구분", db.TAX_TYPES, "과세"),
+            "erp_material": _clean(row.get("ERP자재번호")) or None, "active": 1 if not _clean(row.get("사용")) or _yes(row.get("사용")) else 0,
+            "memo": _clean(row.get("메모")) or None, "_blank": blank}
+    return "", data
+
+
+def _product_id_by_code(code: str, db_path: str | None) -> int:
+    row = db._one("SELECT id FROM products WHERE code=?", [code], db_path)
+    if not row:
+        raise ValueError(f"품목코드: 등록되지 않은 품목입니다 ('{code}') — 품목을 먼저 올리세요")
+    return int(row["id"])
+
+
+def _row_price(row: pd.Series, ctx: dict) -> tuple[str, dict]:
+    cid = _customer_id_by_name(_clean(row.get("거래처명")), ctx["cust_cache"], ctx["db_path"])
+    pid = _product_id_by_code(_clean(row.get("품목코드")), ctx["db_path"])
+    price = parse_int(row.get("특가"), "특가", 0, 0)
+    if price <= 0:
+        raise ValueError("특가: 0보다 커야 합니다")
+    return "", {"customer_id": cid, "product_id": pid, "unit_price": price,
+                "valid_from": parse_date(row.get("시작일"), "시작일", required=True),
+                "valid_to": parse_date(row.get("종료일"), "종료일"), "memo": _clean(row.get("메모"))}
+
+
+def _row_contact(row: pd.Series, ctx: dict) -> tuple[str, dict]:
+    cid = _customer_id_by_name(_clean(row.get("거래처명")), ctx["cust_cache"], ctx["db_path"])
+    name = _clean(row.get("이름"))
+    if not name:
+        raise ValueError("이름: 필수 항목입니다")
+    return "", {"customer_id": cid, "name": name, "dept": _clean(row.get("부서")), "title": _clean(row.get("직위")),
+                "role": _clean(row.get("역할")), "phone": _clean(row.get("연락처")), "email": _clean(row.get("이메일")),
+                "memo": _clean(row.get("메모")), "is_primary": 1 if _yes(row.get("대표")) else 0}
+
+
 ROW_PARSERS: dict[str, Callable] = {
     "거래처": _row_customer, "영업기회": _row_deal, "영업활동": _row_activity,
-    "매출": _row_sale, "목표": _row_target,
+    "매출": _row_sale, "목표": _row_target, "품목": _row_product, "특가": _row_price, "거래처담당자": _row_contact,
 }
 
 
@@ -406,6 +480,9 @@ def import_rows(entity: str, df: pd.DataFrame, user: dict, dry_run: bool = True,
     if entity not in IMPORT_SPECS:
         raise ValueError(f"지원하지 않는 항목입니다: {entity}")
     spec = IMPORT_SPECS[entity]
+    if spec.get("role") and not ent.has_role(user, spec["role"]):
+        raise ValueError(f"{entity} 일괄 등록은 {db.ROLE_LABEL.get(spec['role'], spec['role'])} 이상만 할 수 있습니다 "
+                         f"(화면에서 고칠 수 있는 사람과 같은 기준).")
     df = df.dropna(how="all")
     missing = [c for c in spec["required"] if c not in df.columns]
     if missing:
@@ -464,6 +541,32 @@ def import_rows(entity: str, df: pd.DataFrame, user: dict, dry_run: bool = True,
                                        force_reason="일괄 등록(이관 데이터)" if migrate else "")
                     elif entity == "영업활동":
                         db.add_activity(data, db_path)
+                    elif entity == "품목":
+                        from . import catalog
+                        blank = data.pop("_blank", [])
+                        prev = db._one("SELECT * FROM products WHERE code=?", [data["code"]], db_path)
+                        if prev:
+                            if on_duplicate == "건너뛰기":
+                                skipped += 1
+                                continue
+                            for field in blank:                 # 빈 칸·없는 열은 기존 값 유지
+                                data[field] = prev.get(field)
+                            data["id"] = int(prev["id"])
+                        catalog.upsert_product(data)
+                    elif entity == "특가":
+                        from . import catalog
+                        catalog.set_customer_price(data["customer_id"], data["product_id"], data["unit_price"],
+                                                   data["valid_from"], data["valid_to"], data["memo"])
+                    elif entity == "거래처담당자":
+                        from . import contacts
+                        same = db._one("SELECT id FROM customer_contacts WHERE customer_id=? AND name=? AND active=1 "
+                                       "AND (COALESCE(phone,'')=? OR COALESCE(email,'')=? OR (? = '' AND ? = ''))",
+                                       [data["customer_id"], data["name"], data["phone"], data["email"],
+                                        data["phone"], data["email"]], db_path)
+                        if same and on_duplicate == "건너뛰기":
+                            skipped += 1
+                            continue
+                        contacts.save(data["customer_id"], data, int(same["id"]) if same else None)
                     elif entity == "매출":
                         if _sale_exists(data, db_path):
                             skipped += 1                        # 같은 파일을 두 번 올려도 매출이 두 번 생기지 않게
@@ -516,7 +619,7 @@ def errors_to_df(errors: list[tuple[int, str]]) -> pd.DataFrame:
 # ============================================================================
 # 데이터 추출
 # ============================================================================
-EXPORT_SOURCES = ["거래처", "영업기회", "영업활동", "매출", "목표",
+EXPORT_SOURCES = ["거래처", "영업기회", "영업활동", "매출", "목표", "품목", "특가", "거래처담당자",
                   "채권(미수)", "결재이력", "담당자별예측", "감사로그"]
 
 DROP_COLUMNS = {"id", "customer_id", "deal_id", "org_id", "parent_id", "역할코드", "owner_id",
@@ -593,6 +696,26 @@ def collect(sources: list[str], date_from: str = "", date_to: str = "", owner_id
             frame = db.list_sales(ym_from=ym_from, ym_to=ym_to, owner_id=owner_id, db_path=db_path)
         elif source == "목표":
             frame = db.list_targets(ym, db_path=db_path)
+        elif source == "품목":                 # 올리기 양식과 같은 열 — 받아서 고친 뒤 그대로 올리면 된다
+            frame = db._df("SELECT code AS 품목코드, name AS 품목명, spec AS 규격, category AS 분류, unit AS 단위, "
+                           "list_price AS 정가, tax_type AS 과세구분, erp_material AS ERP자재번호, "
+                           "CASE WHEN active=1 THEN 'Y' ELSE 'N' END AS 사용, memo AS 메모 FROM products ORDER BY code",
+                           (), db_path)
+        elif source == "특가":
+            sc, sp = db._scope_clause("c")
+            frame = db._df("SELECT c.name AS 거래처명, p.code AS 품목코드, cp.unit_price AS 특가, cp.valid_from AS 시작일, "
+                           "cp.valid_to AS 종료일, cp.memo AS 메모 FROM customer_prices cp JOIN customers c ON c.id = cp.customer_id "
+                           f"JOIN products p ON p.id = cp.product_id WHERE 1=1{sc} ORDER BY c.name, p.code, cp.valid_from",
+                           sp, db_path)
+        elif source == "거래처담당자":
+            sc, sp = db._scope_clause("c")
+            frame = db._df("SELECT c.name AS 거래처명, t.name AS 이름, t.dept AS 부서, t.title AS 직위, t.role AS 역할, "
+                           "t.phone AS 연락처, t.email AS 이메일, CASE WHEN t.is_primary=1 THEN 'Y' ELSE '' END AS 대표, "
+                           "t.memo AS 메모 FROM customer_contacts t JOIN customers c ON c.id = t.customer_id "
+                           f"WHERE t.active=1{sc} ORDER BY c.name, t.is_primary DESC, t.name", sp, db_path)
+            if not include_pii and not frame.empty:
+                frame = frame.assign(이름=frame["이름"].map(mask_name), 연락처=frame["연락처"].map(mask_phone),
+                                     이메일=frame["이메일"].map(mask_email))
         elif source == "채권(미수)":
             frame = ent.ar_aging(db_path=db_path)
         elif source == "결재이력":

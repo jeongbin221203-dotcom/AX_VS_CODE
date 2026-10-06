@@ -128,7 +128,7 @@ PAYMENT_TERMS = [0, 15, 30, 45, 60, 90]
 # ----------------------------------------------------------------------------
 # 스키마 (Alembic 마이그레이션) / 담당자 연결
 # ----------------------------------------------------------------------------
-OWNER_TABLES = ("customers", "deals", "activities", "sales", "targets", "pipeline_snapshots")
+OWNER_TABLES = ("customers", "deals", "activities", "sales", "targets", "pipeline_snapshots", "quotes", "sales_orders")
 
 
 def link_owner_ids(conn, name: str | None = None) -> None:

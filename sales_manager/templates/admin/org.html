@@ -16,7 +16,7 @@
     {% if target.id %}<a class="btn btn-sm" href="{{ url_for('admin.org', tab='users') }}">+ 신규 등록으로 전환</a>{% endif %}
     <form method="post" action="{{ url_for('admin.user_save') }}" class="form">
       {{ csrf() }}
-      {% if target.id %}<input type="hidden" name="id" value="{{ target.id }}">{% endif %}
+      {% if target.id %}<input type="hidden" name="id" value="{{ target.id }}"><input type="hidden" name="row_version" value="{{ target.row_version or 0 }}">{% endif %}
       <div class="form-grid g3">
         <label>사번 * <input name="emp_no" value="{{ target.emp_no or '' }}" required></label>
         <label>이름 * <input name="name" value="{{ target.name or '' }}" required></label>
@@ -40,6 +40,26 @@
         {{ csrf() }}
         <span class="muted small">분실한 노트북·공용 PC 에 로그인이 남아 있을 때</span>
         <button class="btn btn-sm btn-danger">모든 세션 끊기</button>
+      </form>
+    {% endif %}
+    {% if target.id and target.role in ('REP', 'MANAGER') %}
+      <h4>추가 데이터 범위 (공동 담당·다른 팀 지원)</h4>
+      <p class="muted small">역할·소속으로 정해진 범위 밖의 담당자·조직 데이터를 더 볼(고칠) 수 있게 합니다. 기한이 지나면 자동으로 빠집니다.
+        임원·영업지원·관리자는 이미 전사를 봅니다.</p>
+      {% for s in scopes %}
+        <form method="post" action="{{ url_for('admin.user_scope_delete', sid=s.id) }}" class="toolbar" data-confirm="이 범위를 해제할까요?">
+          {{ csrf() }}<span class="grow small">{{ s.kind_label }} · <strong>{{ s.target_name or s.target_id }}</strong>
+            {% if s.valid_to %} · {{ s.valid_to }}까지{% endif %}{% if s.expired %} <span class="muted">(기한 지남)</span>{% endif %} · {{ s.reason }} · {{ s.created_by }}</span>
+          <button class="btn btn-sm">해제</button></form>
+      {% endfor %}
+      <form method="post" action="{{ url_for('admin.user_scope_add', uid=target.id) }}" class="toolbar">
+        {{ csrf() }}
+        <label>구분 <select name="kind">{% for k, v in scope_kinds.items() %}<option value="{{ k }}">{{ v }}</option>{% endfor %}</select></label>
+        <label>담당자 {{ select('owner_target', all_users, '', blank='—') }}</label>
+        <label>조직 {{ select('org_target', org_options, '', blank='—') }}</label>
+        <label>기한 <input type="date" name="valid_to"></label>
+        <label class="grow">사유 * <input name="reason" required placeholder="예) 김영업 휴직 중 거래처 임시 관리"></label>
+        <button class="btn btn-sm">범위 더하기</button>
       </form>
     {% endif %}
     {% if target.id and locked %}

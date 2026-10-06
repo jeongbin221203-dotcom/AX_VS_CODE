@@ -38,7 +38,12 @@ def product_options(active_only: bool = True) -> list[dict]:
     return db._df(sql + " ORDER BY code").to_dict("records")
 
 
-def upsert_product(data: dict) -> int:
+ERP_LOCKED_PRODUCT_FIELDS = ("code", "name", "unit", "list_price", "tax_type")
+
+
+def upsert_product(data: dict, source: str = "화면") -> int:
+    """품목 등록·수정. data['row_version'] 을 주면 그 사이 다른 사람이 고쳤는지 확인한다.
+    ERP 마스터로 받은 품목(erp_synced_at)은 코드·이름·단위·정가·과세구분을 ERP 에서만 고친다."""
     code = str(data.get("code") or "").strip()
     name = str(data.get("name") or "").strip()
     if not code or not name:
@@ -59,14 +64,25 @@ def upsert_product(data: dict) -> int:
         raise ValueError(f"품목코드 {code} 는 이미 있습니다.")
     values = [record[f] for f in PRODUCT_FIELDS]
     prev = get_product(int(data["id"])) if data.get("id") else None
+    if prev and prev.get("erp_synced_at") and source != "ERP":
+        changed = [f for f in ERP_LOCKED_PRODUCT_FIELDS if str(prev.get(f) or "") != str(record.get(f) or "")]
+        if changed:
+            raise ValueError("ERP 에서 받아 온 품목이라 이 항목은 ERP 에서 고쳐야 합니다: " + ", ".join(changed))
     with db.get_conn() as conn:
         if prev:
-            conn.execute(f"UPDATE products SET {', '.join(f'{f}=?' for f in PRODUCT_FIELDS)}, updated_at=? WHERE id=?",
-                         (*values, db._now(), prev["id"]))
+            sql = (f"UPDATE products SET {', '.join(f'{f}=?' for f in PRODUCT_FIELDS)}, updated_at=?, "
+                   f"row_version=COALESCE(row_version,0)+1{', erp_synced_at=?' if source == 'ERP' else ''} WHERE id=?")
+            params = [*values, db._now(), *([db._now()] if source == "ERP" else []), prev["id"]]
+            if data.get("row_version") not in (None, "") and source != "ERP":
+                sql += " AND COALESCE(row_version,0)=?"
+                params.append(int(data["row_version"]))
+            if conn.execute(sql, params).rowcount == 0:
+                raise db.ConflictError("다른 사용자가 먼저 이 품목을 수정했습니다. 새로고침해서 확인한 뒤 다시 저장하세요.")
             pid = int(prev["id"])
         else:
-            cur = conn.execute(f"INSERT INTO products ({', '.join(PRODUCT_FIELDS)}, created_at, updated_at) "
-                               f"VALUES ({', '.join('?' * len(PRODUCT_FIELDS))}, ?, ?)", (*values, db._now(), db._now()))
+            cur = conn.execute(f"INSERT INTO products ({', '.join(PRODUCT_FIELDS)}, created_at, updated_at, erp_synced_at) "
+                               f"VALUES ({', '.join('?' * len(PRODUCT_FIELDS))}, ?, ?, ?)",
+                               (*values, db._now(), db._now(), db._now() if source == "ERP" else None))
             pid = int(cur.lastrowid)
     db.audit("수정" if prev else "등록", "품목", pid,
              {"품목코드": code, "변경": db.diff(prev, record, PRODUCT_FIELDS) if prev else None})

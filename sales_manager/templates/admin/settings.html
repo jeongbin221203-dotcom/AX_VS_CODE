@@ -116,6 +116,19 @@
   </form>
 </section>
 
+<section class="card" id="labels">
+  <h3>상태 표시 이름</h3>
+  <form method="post" action="{{ url_for('admin.settings_save') }}" class="form">
+    {{ csrf() }}<input type="hidden" name="section" value="labels">
+    <label>한 줄에 '원래 이름=표시 이름' (예: 입금대기=미수, 발송=제출, 수락=수주확정)
+      <textarea name="status_labels" rows="5">{% for k, val in (v.status_labels or {}).items() %}{{ k }}={{ val }}
+{% endfor %}</textarea></label>
+    <p class="muted small">화면 목록·상세에 보이는 이름만 바뀌고, 저장되는 값·엑셀 업로드 값·API 는 원래 이름 그대로입니다.
+      바꿀 수 있는 상태: {{ status_codes|join(', ') }}</p>
+    <button class="btn btn-primary">💾 저장</button>
+  </form>
+</section>
+
 <section class="card" id="codes">
   <h3>코드 목록</h3>
   <form method="post" action="{{ url_for('admin.settings_save') }}" class="form">

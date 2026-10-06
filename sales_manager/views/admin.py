@@ -63,6 +63,7 @@ def org():
         password_mode=core_auth.AUTH_MODE == "password" or bool(
             target and core_auth.breakglass_enabled() and target.get("emp_no") in core_auth.breakglass_users()),
         locked=bool(target and (target.get("locked_until") or target.get("failed_logins"))),
+        scopes=ent.list_user_scopes(int(target["id"])) if target else [], scope_kinds=ent.SCOPE_KINDS,
         **_hr_context(),
     )
 
@@ -143,6 +144,29 @@ def org_delete():
     return redirect(url_for("admin.org", tab="orgs"))
 
 
+@bp.route("/users/<int:uid>/scopes", methods=["POST"])
+def user_scope_add(uid: int):
+    try:
+        kind = f_str("kind")
+        target = f_int("owner_target") if kind == "owner" else f_int("org_target")
+        ent.add_user_scope(uid, kind, target, f_str("reason"), g.user, f_str("valid_to") or None)
+        flash("데이터 범위를 더했습니다. 그 사용자의 다음 화면부터 적용됩니다.", "success")
+    except ValueError as exc:
+        flash(str(exc), "error")
+    return redirect(url_for("admin.org", tab="users", uid=uid))
+
+
+@bp.route("/users/scopes/<int:sid>/delete", methods=["POST"])
+def user_scope_delete(sid: int):
+    row = database.one("SELECT user_id FROM user_scopes WHERE id=?", [sid]) or {}
+    try:
+        ent.remove_user_scope(sid, g.user)
+        flash("더한 범위를 해제했습니다.", "warning")
+    except ValueError as exc:
+        flash(str(exc), "error")
+    return redirect(url_for("admin.org", tab="users", uid=row.get("user_id")))
+
+
 @bp.route("/users/save", methods=["POST"])
 def user_save():
     uid = f_int("id") or None
@@ -152,7 +176,8 @@ def user_save():
     try:
         new_id = ent.upsert_user({"id": uid, "emp_no": f_str("emp_no"), "name": f_str("name"),
                                   "role": f_str("role"), "org_id": f_int("org_id") or None,
-                                  "email": f_str("email"), "active": f_bool("active")})
+                                  "email": f_str("email"), "active": f_bool("active"),
+                                  "row_version": f_str("row_version") or None})
         uid = new_id
         with database.get_conn() as conn:                   # 메신저 ID 는 화면에서만 (인사 연동이 지우지 않게 따로)
             conn.execute("UPDATE users SET messenger_id=? WHERE id=?", (f_str("messenger_id") or None, new_id))
@@ -234,6 +259,17 @@ def erp_send():
     return redirect(url_for("admin.erp"))
 
 
+@bp.route("/erp/master-sync", methods=["POST"])
+def erp_master_sync():
+    try:
+        r = erp.master_pull(full=f_bool("full"))
+        flash(f"ERP 마스터를 가져왔습니다 — 거래처 {r['customers']['받음']}건(오류 {r['customers']['오류']}) · "
+              f"품목 {r['products']['받음']}건(오류 {r['products']['오류']})", "success")
+    except (ValueError, RuntimeError) as exc:
+        flash(f"가져오지 못했습니다: {exc}", "error")
+    return redirect(url_for("admin.erp", tab="inbound"))
+
+
 @bp.route("/erp/test", methods=["POST"])
 def erp_test():
     ok, message = erp.test_connection()
@@ -254,6 +290,24 @@ def erp_retry():
 @bp.route("/erp/template.csv")
 def erp_payment_template():
     return csv_response(erp.payment_template(), "ERP입금대사_양식.csv")
+
+
+@bp.route("/erp/ar-reconcile", methods=["POST"])
+def erp_ar_reconcile():
+    """ERP 거래처 채권 잔액 파일과 CRM 잔액 비교 (반영 없이 보기만)."""
+    upload = request.files.get("file")
+    try:
+        if not upload or Path(upload.filename or "").suffix.lower() not in (".csv", ".xlsx", ".xls"):
+            raise ValueError("ERP 거래처 채권 잔액 파일(CSV/Excel)을 선택하세요.")
+        frame = dataio.read_upload(io.BytesIO(upload.read()), upload.filename)
+        result = erp.reconcile_ar_balances(frame, f_str("as_of") or None)
+    except ValueError as exc:
+        flash(f"대사하지 못했습니다: {exc}", "error")
+        return redirect(url_for("admin.erp", tab="payments"))
+    return _erp_render(tab="payments", ar_recon=Table(result, money=["CRM잔액", "ERP미전송", "보정CRM잔액", "ERP잔액", "차이"],
+                                                       highlight={"결과": {"차이": "danger", "미일치": "danger",
+                                                                          "ERP에 없음": "danger"}}),
+                       ar_as_of=f_str("as_of") or date.today().isoformat())
 
 
 @bp.route("/erp/reconcile", methods=["POST"])
@@ -356,7 +410,7 @@ def settings():
     from core import entities as ent_mod
     from core import offline
     deps = pd_frame(offline.dependencies())
-    return render_page("admin/settings.html", "settings", v=values, labels=company.LABELS,
+    return render_page("admin/settings.html", "settings", v=values, labels=company.LABELS, status_codes=company.STATUS_CODES,
                        deps=Table(deps, highlight={"위치": {"외부 인터넷": "danger"}}),
                        entities=ent_mod.list_entities(active_only=False), currencies=ent_mod.CURRENCIES[1:],
                        rates=Table(ent_mod.latest_rates()), edit_entity=ent_mod.get(a_int("eid")) or {"active": 1},
@@ -385,6 +439,8 @@ def settings_save():
         probs = {s: form[f"prob_{s}"] for s in db.OPEN_STAGES if f"prob_{s}" in form}
         if probs:
             changes["stage_prob"] = probs
+    elif section == "labels":
+        changes = {"status_labels": form.get("status_labels", "")}
     elif section == "codes":
         changes = {k: form[k] for k in company.CODE_LISTS if k in form}
     elif section == "stages":

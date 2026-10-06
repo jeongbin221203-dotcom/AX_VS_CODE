@@ -10,7 +10,7 @@ from flask import Blueprint, abort, flash, g, redirect, request, send_file, url_
 from core import advances as adv
 from core import catalog
 from core import credit
-from core.credit import WRITEOFF_REASONS
+from core.credit import WRITEOFF_REASONS, can_cancel_directly, can_reverse_directly
 from core import returns as rtn
 from core import entities as ent_mod
 from core import etax
@@ -47,12 +47,13 @@ def _advances(tab: str) -> dict:
                              + (f" (돌려줄 돈 {int(r[4]):,}원)" if int(r[4]) else "")) for r in bal.itertuples()]}
 
 
-def _sales_page(form: dict | None = None, status: int = 200):
-    tab = request.args.get("tab", "records")
+def _sales_page(form: dict | None = None, status: int = 200, extra_ctx: dict | None = None,
+                tab_override: str | None = None):
+    tab = tab_override or request.args.get("tab", "records")
     ym_from, ym_to, sale_status = _sale_filters()
     export = request.args.get("export")
     # 탭마다 필요한 것만 계산한다 (매출 10만 건이면 채권·여신을 매번 다 계산하는 것만으로 수 초)
-    need_sales = tab not in ("ar", "credit", "ledger", "close") or export == "sales"
+    need_sales = tab not in ("ar", "credit", "ledger", "close", "hometax") or export == "sales"
     df = db.list_sales(ym_from=ym_from, ym_to=ym_to, owner_id=g.owner_filter, status=sale_status)         if need_sales else pd.DataFrame(columns=["id", "매출일", "공급가액", "합계", "입금액", "수금상태"])
     keyword = a_str("q").strip()
     if keyword and not df.empty:                  # 거래처 · 품목 · 메모 · 매출번호로 찾기
@@ -139,9 +140,12 @@ def _sales_page(form: dict | None = None, status: int = 200):
         etax_rows=etax.list_for_sale(edit_id) if edit_id else [], etax_on=etax.enabled(),
         etax_reasons=etax.MODIFY_REASONS, etax_rules=etax.MODIFY_RULES,
         wo_reasons=WRITEOFF_REASONS, can_recover=ent.has_role(g.user, "MANAGER"),
+        can_cancel_direct=can_cancel_directly(edit_row["raw"], g.user) if edit_row else False,
+        can_reverse=lambda p: can_reverse_directly(p, g.user),
         writeoffs=db._df("SELECT * FROM fin_requests WHERE sale_id=? AND kind='대손' AND status='승인' ORDER BY id",
                          [edit_id]).to_dict("records") if edit_id else [],
         payments=ent.list_payments(edit_id) if edit_id and edit_row else [], **extra,
+        **{"hometax_result": None, "hometax_counts": {}, **(extra_ctx or {})},
         linked=Table(rtn.linked(edit_id), money=["단가", "공급가액", "부가세", "합계"], drop=["id"]) if edit_row else None,
         returnable=rtn.returnable_qty(edit_row["raw"]) if edit_row else 0,
         unit_now=rtn.current_unit_price(edit_row["raw"]) if edit_row else 0,
@@ -269,6 +273,51 @@ def sale_cancel(sid: int):
     return redirect(url_for("finance.sales", sid=sid))
 
 
+@bp.route("/sales/hometax", methods=["POST"])
+def hometax_reconcile():
+    """홈택스 매출 목록 대사 — 결과를 화면에 보여 주고, 엑셀로도 작업 목록에 남긴다."""
+    from core import bulk, dataio, hometax
+    upload = request.files.get("file")
+    try:
+        if not upload or not upload.filename:
+            raise ValueError("홈택스에서 내려받은 파일을 고르세요.")
+        frame, period = hometax.read(upload.read(), upload.filename)
+        result = hometax.reconcile(frame, period)
+    except ValueError as exc:
+        flash(str(exc), "error")
+        return redirect(url_for("finance.sales", tab="hometax"))
+    bulk.start("대사", f"홈택스 매출 대사 ({len(frame):,}건)",
+               lambda _p: {"file": (f"홈택스대사_{date.today():%Y%m%d}.xlsx", dataio.to_excel({"대사 결과": result})),
+                           "ok": len(result)}, dict(g.user), inline=True)
+    counts = result["결과"].value_counts().to_dict() if not result.empty else {}
+    return _sales_page(extra_ctx={"hometax_result": Table(result, money=["홈택스 공급가액", "홈택스 세액", "증빙 공급가액",
+                                                                          "증빙 세액"], page_size=500),
+                                  "hometax_counts": counts}, tab_override="hometax")
+
+
+@bp.route("/sales/<int:sid>/cancel-request", methods=["POST"])
+def sale_cancel_request(sid: int):
+    try:
+        rid = credit.request_cancel(sid, f_str("reason"), g.user)
+        flash(f"매출 취소 결재를 요청했습니다(요청 #{rid}). 팀장이 승인하면 취소됩니다.", "success")
+    except (ValueError, PermissionError) as exc:
+        flash(str(exc), "error")
+    return redirect(url_for("finance.sales", sid=sid))
+
+
+@bp.route("/payments/<int:pid>/reverse-request", methods=["POST"])
+def payment_reverse_request(pid: int):
+    pay = db._one("SELECT sale_id FROM payments WHERE id=?", [pid])
+    if not pay:
+        abort(404)
+    try:
+        rid = credit.request_reversal(pid, f_str("reason"), g.user)
+        flash(f"입금 반제 결재를 요청했습니다(요청 #{rid}).", "success")
+    except (ValueError, PermissionError) as exc:
+        flash(str(exc), "error")
+    return redirect(url_for("finance.sales", sid=pay["sale_id"]))
+
+
 @bp.route("/sales/payment", methods=["POST"])
 def sale_payment():
     try:
@@ -388,9 +437,9 @@ def payment_reverse(pid: int):
     if not pay:
         abort(404)
     try:
-        ent.reverse_payment(pid, f_str("reason"))
+        ent.reverse_payment(pid, f_str("reason"), actor=g.user)
         flash("입금을 반제했습니다(원래 입금은 남고, 같은 금액의 반제가 추가됩니다).", "warning")
-    except ValueError as exc:
+    except (ValueError, PermissionError) as exc:
         flash(str(exc), "error")
     return redirect(url_for("finance.sales", sid=pay["sale_id"]))
 
@@ -611,6 +660,22 @@ def finance_request_decide(rid: int):
 
 @bp.route("/approvals/<int:aid>/decide", methods=["POST"])
 def approval_decide(aid: int):
+    return _approval_decide(aid)
+
+
+@bp.route("/approvals/decide-many", methods=["POST"])
+def approval_decide_many():
+    ids = [int(i) for i in request.form.getlist("aid") if str(i).isdigit()]
+    if not ids:
+        flash("승인할 결재를 체크하세요.", "error")
+        return redirect(url_for("finance.approvals"))
+    done, problems = ent.decide_many(ids, g.user, f_str("comment"))
+    flash(f"{done}건을 승인했습니다." + (f" 처리하지 못한 {len(problems)}건: " + " / ".join(problems[:5]) if problems else ""),
+          "success" if not problems else "warning")
+    return redirect(url_for("finance.approvals"))
+
+
+def _approval_decide(aid: int):
     mine = ent.pending_for(g.user)
     if mine.empty or aid not in set(mine["id"]):
         abort(403, "결재 권한이 없거나 이미 처리된 건입니다.")

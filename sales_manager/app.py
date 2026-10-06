@@ -12,7 +12,7 @@ import time
 import sys
 from logging.handlers import RotatingFileHandler
 
-from flask import Flask, abort, flash, g, jsonify, redirect, request, session
+from flask import Flask, abort, flash, g, jsonify, redirect, request, send_from_directory, session
 
 import config
 from core import auth as core_auth
@@ -140,6 +140,24 @@ def create_app(test_config: dict | None = None) -> Flask:
         if app.config["SESSION_COOKIE_SECURE"]:
             response.headers.setdefault("Strict-Transport-Security", "max-age=31536000")
         return response
+
+    @app.route("/sw.js")
+    def service_worker():
+        """서비스 워커는 사이트 전체(/)를 맡아야 해서 루트 주소로 낸다. 바뀌면 바로 반영되게 캐시하지 않는다."""
+        res = send_from_directory(os.path.join(app.root_path, "static", "js"), "sw.js", mimetype="text/javascript")
+        res.headers["Cache-Control"] = "no-cache"
+        res.headers["Service-Worker-Allowed"] = "/"
+        return res
+
+    @app.route("/offline")
+    def offline():
+        """연결이 끊겼을 때 서비스 워커가 보여 주는 화면 (업무 데이터 없음)."""
+        return ("<!doctype html><html lang='ko'><head><meta charset='utf-8'><meta name='viewport' "
+                "content='width=device-width, initial-scale=1'><title>연결 끊김 · 영업관리</title>"
+                "<link rel='stylesheet' href='/static/css/app.css'></head><body><main style='max-width:560px;margin:15vh auto;"
+                "padding:16px'><h2>📡 서버에 연결할 수 없습니다</h2><p>인터넷이나 회사망 연결을 확인한 뒤 다시 시도하세요. "
+                "입력하던 내용은 이 브라우저에 보관되어 있어, 연결이 돌아오면 같은 화면에서 이어서 저장할 수 있습니다.</p>"
+                "<p><a href='/'>다시 시도</a></p></main></body></html>")
 
     @app.route("/healthz")
     def healthz():

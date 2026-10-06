@@ -41,7 +41,8 @@
     <form method="post" action="{{ url_for('catalog.product_save') }}" class="form" data-edit-anchor>
       {{ csrf() }}
       <h3>{{ '✏️ 품목 수정 — ' ~ edit.code if edit.id else '➕ 품목 등록' }}</h3>
-      {% if edit.id %}<input type="hidden" name="id" value="{{ edit.id }}">{% endif %}
+      {% if edit.id %}<input type="hidden" name="id" value="{{ edit.id }}"><input type="hidden" name="row_version" value="{{ edit.row_version or 0 }}">
+        {% if edit.erp_synced_at %}<p class="small muted">ERP 에서 받은 품목 ({{ edit.erp_synced_at }}) — 코드·이름·단위·정가·과세구분은 ERP 에서 고칩니다.</p>{% endif %}{% endif %}
       <div class="form-grid g4">
         <label>품목코드 * <input name="code" value="{{ edit.code or '' }}" required placeholder="SW-ERP-01"></label>
         <label class="span2">품목명 * <input name="name" value="{{ edit.name or '' }}" required></label>

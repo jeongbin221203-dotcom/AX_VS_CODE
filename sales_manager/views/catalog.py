@@ -60,7 +60,8 @@ def product_save():
             "id": f_int("id") or None, "code": f_str("code"), "name": f_str("name"), "spec": f_str("spec"),
             "category": f_str("category"), "unit": f_str("unit"), "list_price": f_int("list_price"),
             "tax_type": f_str("tax_type"), "erp_material": f_str("erp_material"),
-            "active": 1 if request.form.get("active") else 0, "memo": f_str("memo")})
+            "active": 1 if request.form.get("active") else 0, "memo": f_str("memo"),
+            "row_version": f_str("row_version") or None})
         flash("품목을 저장했습니다.", "success")
         return redirect(url_for("catalog.products", pid=pid))
     except ValueError as exc:

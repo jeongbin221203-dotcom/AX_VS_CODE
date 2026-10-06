@@ -32,7 +32,7 @@ import sys
 import urllib.error
 import urllib.parse
 import urllib.request
-from datetime import datetime
+from datetime import date, datetime, timezone
 from http.cookiejar import CookieJar
 from pathlib import Path
 from typing import Any, Optional
@@ -77,6 +77,8 @@ def settings() -> dict:
         "rest_hmac_secret": env("SALES_ERP_REST_HMAC_SECRET", ""),     # 있으면 X-Signature 로 본문 서명
         "rest_docno_path": env("SALES_ERP_REST_DOCNO_PATH", "doc_no"), # 응답 JSON 에서 전표번호 위치 (예: data.slipNo)
         "rest_field_map": env("SALES_ERP_REST_FIELD_MAP", ""),         # JSON {"customer_code": "CUST_CD", ...}
+        # ERP 마스터 가져오기(pull): {master_url}/customers·/products?changedSince=… → {"items": [...]} (받기 API 와 같은 모양)
+        "master_url": env("SALES_ERP_MASTER_URL", ""),
     }
 
 
@@ -578,6 +580,97 @@ def reconcile_payments(df: pd.DataFrame, apply: bool = False) -> pd.DataFrame:
     return result
 
 
+def master_pull(cfg: dict | None = None, full: bool = False) -> dict:
+    """ERP 거래처·품목 마스터를 바뀐 것만 가져와 반영한다 (자재관리 SAP 마스터 동기화와 같은 흐름).
+    받기 API(/api/v1/erp/customers·products)를 ERP 가 못 부를 때 쓴다. 가져온 품목·거래처는 화면에서 핵심 항목을 못 고친다."""
+    cfg = cfg or settings()
+    base = (cfg.get("master_url") or "").rstrip("/")
+    if not base:
+        raise ValueError("SALES_ERP_MASTER_URL 이 설정되지 않았습니다.")
+    client = RestAdapter({**cfg, "rest_url": base})
+    since = "" if full else (db._one("SELECT last_slot FROM scheduler_state WHERE name='erp.master_since'") or {}).get("last_slot") or ""
+    started = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    result: dict[str, Any] = {"since": since or "(처음)"}
+    for kind, receiver in (("customers", receive_customers), ("products", receive_products)):
+        url = f"{base}/{kind}" + (f"?changedSince={urllib.parse.quote(since)}" if since else "")
+        body = client.call("GET", url)
+        items = body if isinstance(body, list) else (body.get("items") or [])
+        rows = receiver(items) if items else []
+        result[kind] = {"받음": len(items), "오류": sum(1 for r in rows if r.get("result") == "오류")}
+    with db.get_conn() as conn:                   # 다음에는 이번 시작 시각 이후 바뀐 것만 (UTC)
+        if conn.execute("UPDATE scheduler_state SET last_slot=?, last_run_at=? WHERE name='erp.master_since'",
+                        (started, db._now())).rowcount == 0:
+            conn.execute("INSERT INTO scheduler_state (name, last_slot, last_run_at) VALUES ('erp.master_since', ?, ?)",
+                         (started, db._now()))
+    db.audit("ERP마스터가져오기", "ERP", None, result)
+    return result
+
+
+def reconcile_ar_balances(df: pd.DataFrame, as_of: Optional[str] = None) -> pd.DataFrame:
+    """거래처별 채권 잔액 대사 (자재관리의 SAP 재고 대사와 같은 생각 — 아직 ERP 에 안 간 것만큼 보정해 비교).
+
+    df: ERP 거래처 채권 잔액 [ERP코드 또는 사업자번호 또는 거래처명, 채권잔액]. as_of: 잔액 기준일 (기본 오늘).
+    CRM 잔액 = 그날까지 매출(부가세 포함) − 입금. ERP 로 아직 안 보낸 매출의 미수는 ERP 에 없으므로 빼고 비교한다.
+    """
+    as_of = db._d(as_of) or date.today().isoformat()
+    cols = {c.replace(" ", ""): c for c in df.columns}
+    amount_col = next((cols[c] for c in ("채권잔액", "미수잔액", "잔액", "balance") if c in cols), None)
+    if not amount_col:
+        raise ValueError("'채권잔액' 열이 없습니다 (ERP코드·사업자번호·거래처명 중 하나와 채권잔액).")
+    from . import customer_names as cn
+    from . import periods
+    crm = periods.ar_balances(as_of).set_index("customer_id")
+    unsent = db._df("SELECT customer_id, SUM(COALESCE(total_amount, amount) - COALESCE(paid_amount, 0)) AS amt FROM sales "
+                    "WHERE status <> ? AND sale_date <= ? AND COALESCE(erp_status, '') NOT IN ('전송완료', '취소대기') "
+                    "AND COALESCE(total_amount, amount) > 0 GROUP BY customer_id", [db.SALE_CANCELLED, as_of])
+    unsent_by = {int(r.customer_id): int(r.amt or 0) for r in unsent.itertuples()}
+    index = cn.Index()
+    out, seen = [], set()
+    for idx, row in df.dropna(how="all").iterrows():
+        code = str(row.get(cols.get("ERP코드", "")) or "").strip() if "ERP코드" in cols else ""
+        biz = str(row.get(cols.get("사업자번호", "")) or "").strip() if "사업자번호" in cols else ""
+        name = str(row.get(cols.get("거래처명", "")) or "").strip() if "거래처명" in cols else ""
+        line = {"행": int(idx) + 2, "ERP코드": code or None, "거래처": name or None}
+        try:
+            erp_bal = int(float(str(row.get(amount_col)).replace(",", "")))
+        except ValueError:
+            out.append({**line, "결과": "오류", "내용": "채권잔액이 숫자가 아닙니다"})
+            continue
+        cust = None
+        if code:
+            cust = db._one("SELECT id, name FROM customers WHERE erp_code=? AND merged_into IS NULL", [code])
+        if not cust and (name or biz):
+            cid, _how = index.resolve(name, biz)
+            cust = db._one("SELECT id, name FROM customers WHERE id=?", [cid]) if cid else None
+        if not cust:
+            out.append({**line, "ERP잔액": erp_bal, "결과": "미일치", "내용": "CRM 거래처를 찾지 못함 (ERP코드·이름 정리 필요)"})
+            continue
+        cid = int(cust["id"])
+        if not db.in_scope((db.get_customer(cid) or {}).get("owner_id")):
+            continue
+        seen.add(cid)
+        crm_bal = int(crm.loc[cid, "balance"]) if cid in crm.index else 0
+        adj = unsent_by.get(cid, 0)
+        gap = erp_bal - (crm_bal - adj)
+        out.append({**line, "거래처": cust["name"], "CRM잔액": crm_bal, "ERP미전송": adj, "보정CRM잔액": crm_bal - adj,
+                    "ERP잔액": erp_bal, "차이": gap, "결과": "일치" if gap == 0 else "차이",
+                    "내용": "" if gap == 0 else ("ERP 가 더 많음 — CRM 미등록 매출·ERP 입금 미반영 확인" if gap > 0
+                                                 else "CRM 이 더 많음 — CRM 수기 입금·반품·대손이 ERP 에 반영됐는지 확인")})
+    for cid, row in crm.iterrows():                     # CRM 에는 잔액이 있는데 ERP 파일에 없는 거래처
+        cid = int(cid)
+        bal = int(row["balance"]) - unsent_by.get(cid, 0)
+        if cid in seen or bal == 0 or not db.in_scope((db.get_customer(cid) or {}).get("owner_id")):
+            continue
+        out.append({"행": None, "ERP코드": (db.get_customer(cid) or {}).get("erp_code"),
+                    "거래처": (db.get_customer(cid) or {}).get("name"), "CRM잔액": int(row["balance"]),
+                    "ERP미전송": unsent_by.get(cid, 0), "보정CRM잔액": bal, "ERP잔액": None, "차이": -bal,
+                    "결과": "ERP에 없음", "내용": "CRM 에만 채권 잔액이 있음 — ERP 거래처 코드·전송 확인"})
+    result = pd.DataFrame(out)
+    db.audit("ERP채권대사", "ERP", None, {"기준일": as_of, "행수": len(result),
+                                         **(result["결과"].value_counts().to_dict() if not result.empty else {})})
+    return result
+
+
 # ---------------------------------------------------------------------------
 # 연결 테스트 (관리자 화면)
 # ---------------------------------------------------------------------------
@@ -720,7 +813,8 @@ def receive_products(items: list[dict]) -> list[dict]:
             prev = db._one("SELECT * FROM products WHERE code=?", [code])
             data = {**(prev or {}), **{k: v for k, v in i.items() if v is not None}, "id": prev["id"] if prev else None}
             data.setdefault("erp_material", code)
-            pid = catalog.upsert_product(data)
+            data.pop("row_version", None)
+            pid = catalog.upsert_product(data, source="ERP")
             out.append({"code": code, "product_id": pid, "result": "수정" if prev else "등록", "message": ""})
         except (ValueError, TypeError) as exc:
             out.append({"code": code, "result": "오류", "message": str(exc)})

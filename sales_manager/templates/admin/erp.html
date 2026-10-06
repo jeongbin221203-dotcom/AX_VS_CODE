@@ -40,7 +40,25 @@
       {% endif %}
     {% endif %}
 
+    <h3>거래처별 채권 잔액 대사</h3>
+    <p class="muted">ERP(SAP FBL5N·거래처 원장)의 <strong>거래처별 채권 잔액</strong>(열: ERP코드 또는 사업자번호·거래처명, 채권잔액)을 올리면
+      기준일의 CRM 잔액과 비교합니다. 아직 ERP 로 보내지 않은 매출의 미수는 ERP 에 없으므로 빼고 비교합니다(반영은 하지 않음).</p>
+    <form method="post" action="{{ url_for('admin.erp_ar_reconcile') }}" enctype="multipart/form-data" class="toolbar">
+      {{ csrf() }}
+      <label>기준일 <input type="date" name="as_of" value="{{ today().isoformat() }}"></label>
+      <label class="grow">ERP 채권 잔액 파일 <input type="file" name="file" accept=".csv,.xlsx,.xls" required></label>
+      <button class="btn">잔액 대사</button>
+    </form>
+    {% if ar_recon %}<h3>잔액 대사 결과 — {{ ar_as_of }} 기준</h3>{{ table(ar_recon, 420) }}{% endif %}
+
   {% elif tab == 'inbound' %}
+    <form method="post" action="{{ url_for('admin.erp_master_sync') }}" class="toolbar">
+      {{ csrf() }}
+      <span class="grow small">ERP 가 받기 API 를 부를 수 없으면, 이 시스템이 <code>SALES_ERP_MASTER_URL</code> 에서 거래처·품목 마스터를 가져옵니다
+        (매일 05:00 바뀐 것만, {{ '설정됨' if cfg.master_url else '설정 안 됨' }}). 가져온 거래처·품목은 화면에서 코드·이름·정가 등을 고칠 수 없습니다.</span>
+      <label class="check"><input type="checkbox" name="full" value="1"> 전체 다시</label>
+      <button class="btn btn-sm" {{ '' if cfg.master_url else 'disabled' }}>지금 가져오기</button>
+    </form>
     <p class="muted">ERP·EAI 가 CRM 으로 보내는 실시간 연동입니다. 관리자 &gt; 🔑 API 연동에서 <code>erp:write</code> 권한 키를 발급해
       ERP 쪽에 등록하세요(대리 사용자는 전사 범위인 임원·관리자, 품목 수신은 관리자). 본문은 <code>{"items": [...]}</code>, 한 번에 1,000건,
       항목별 결과를 돌려주며 모든 반영은 감사로그에 남습니다. 명세: <a href="{{ url_for('api.openapi') }}" target="_blank" rel="noopener">OpenAPI</a></p>

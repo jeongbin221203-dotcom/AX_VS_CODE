@@ -19,7 +19,7 @@ import pandas as pd
 
 from . import sales_db as db
 
-KINDS = ("대손", "거래정지해제")
+KINDS = ("대손", "거래정지해제", "매출취소", "입금반제")
 
 # 대손 사유 (부가가치세법 시행령 제87조 → 법인세법 시행령 제19조의2 · 소득세법 시행령 제55조)
 #   코드: (이름, 사유 발생일이 필요한지, 확인할 경과 개월, 경과를 세는 기준)
@@ -87,6 +87,49 @@ def _role_for(kind: str, amount: int) -> str:
     return "MANAGER"
 
 
+# ---------------------------------------------------------------------------
+# 매출 취소 · 입금 반제 요청 (자재관리의 '거래 취소 요청' 과 같은 흐름)
+#   직접 처리할 수 없는 사람(영업사원, 본인이 등록한 ERP 전송 매출·본인이 넣은 입금)은 요청을 올리고
+#   팀장 이상(요청자·등록자 제외)이 승인하면 그때 취소·반제한다.
+# ---------------------------------------------------------------------------
+def can_cancel_directly(sale: dict, user: dict) -> bool:
+    if sale.get("erp_status") not in ("전송완료", "취소대기"):
+        return True
+    return db.ROLES.get(user.get("role"), 0) >= db.ROLES["MANAGER"] and \
+        int(sale.get("created_by_id") or 0) != int(user.get("id") or 0)
+
+
+def can_reverse_directly(payment: dict, user: dict) -> bool:
+    """입금 반제는 팀장 이상, 그 입금을 넣은 본인은 안 된다 (직무 분리)."""
+    return db.ROLES.get(user.get("role"), 0) >= db.ROLES["MANAGER"] and \
+        int(payment.get("created_by_id") or 0) != int(user.get("id") or 0)
+
+
+def request_cancel(sale_id: int, reason: str, actor: dict) -> int:
+    sale = db.get_sale(int(sale_id))
+    db.check_record_scope(sale, "매출")
+    if sale["status"] == db.SALE_CANCELLED:
+        raise ValueError("이미 취소된 매출입니다.")
+    if (sale.get("sale_kind") or "매출") != "매출":
+        raise ValueError("반품·정정 행은 취소하지 않습니다. 반대 방향 정정으로 바로잡으세요.")
+    if int(sale.get("paid_amount") or 0) > 0:
+        raise ValueError("입금 내역이 있는 매출은 취소할 수 없습니다. 입금 반제를 먼저 처리(요청)하세요.")
+    return _request("매출취소", int(sale["customer_id"]), reason, actor, sale_id=int(sale_id),
+                    amount=int(sale.get("total_amount") or sale["amount"]))
+
+
+def request_reversal(payment_id: int, reason: str, actor: dict) -> int:
+    from . import enterprise as ent
+    pay = db._one("SELECT * FROM payments WHERE id=?", [int(payment_id)])
+    if not pay:
+        raise ValueError("입금을 찾을 수 없습니다.")
+    sale = db.get_sale(int(pay["sale_id"]))
+    db.check_record_scope(sale, "매출")
+    ent.check_reversible(pay)
+    return _request("입금반제", int(sale["customer_id"]), reason, actor, sale_id=int(sale["id"]),
+                    amount=int(pay["amount"]), payment_id=int(payment_id))
+
+
 def request_writeoff(sale_id: int, reason: str, actor: dict, code: Optional[str] = None,
                      event_date: Optional[str] = None) -> int:
     sale = db.get_sale(int(sale_id))
@@ -115,18 +158,19 @@ def request_unblock(customer_id: int, reason: str, actor: dict) -> int:
 
 
 def _request(kind: str, customer_id: int, reason: str, actor: dict, sale_id: Optional[int] = None,
-             amount: int = 0) -> int:
+             amount: int = 0, payment_id: Optional[int] = None) -> int:
     if not str(reason or "").strip():
         raise ValueError("사유를 입력하세요.")
     with db.get_conn() as conn:
         dup = conn.execute("SELECT id FROM fin_requests WHERE kind=? AND status='대기' AND customer_id=? "
-                           "AND COALESCE(sale_id, 0)=?", (kind, customer_id, int(sale_id or 0))).fetchone()
+                           "AND COALESCE(sale_id, 0)=? AND COALESCE(payment_id, 0)=?",
+                           (kind, customer_id, int(sale_id or 0), int(payment_id or 0))).fetchone()
         if dup:
             raise ValueError("이미 결재 대기 중인 요청이 있습니다.")
         cur = conn.execute("INSERT INTO fin_requests (kind, sale_id, customer_id, amount, reason, required_role, status, "
-                           "requested_by, requested_by_id, requested_at) VALUES (?,?,?,?,?,?, '대기', ?,?,?)",
+                           "requested_by, requested_by_id, requested_at, payment_id) VALUES (?,?,?,?,?,?, '대기', ?,?,?,?)",
                            (kind, sale_id, customer_id, int(amount), reason.strip(), _role_for(kind, int(amount)),
-                            actor.get("name"), actor.get("id"), db._now()))
+                            actor.get("name"), actor.get("id"), db._now(), payment_id))
         rid = int(cur.lastrowid)
     db.audit(f"{kind}요청", "거래처", customer_id, {"요청번호": rid, "매출": sale_id, "금액": amount, "사유": reason.strip()})
     _notify_approvers(rid)
@@ -138,8 +182,15 @@ def _approvers(req: dict) -> list[dict]:
     users = db._df("SELECT * FROM users WHERE active = 1").to_dict("records")
     cust = db.get_customer(int(req["customer_id"])) or {}
     out = []
+    # 직무 분리: 매출 취소는 그 매출 등록자, 입금 반제는 그 입금을 넣은 사람도 결재할 수 없다
+    excluded = {int(req.get("requested_by_id") or 0)}
+    if req["kind"] == "매출취소" and req.get("sale_id"):
+        excluded.add(int((db.get_sale(int(req["sale_id"])) or {}).get("created_by_id") or 0))
+    if req["kind"] == "입금반제" and req.get("payment_id"):
+        excluded.add(int((db._one("SELECT created_by_id FROM payments WHERE id=?", [int(req["payment_id"])]) or {})
+                         .get("created_by_id") or 0))
     for u in users:
-        if int(u["id"]) == int(req.get("requested_by_id") or 0) or not ent.has_role(u, req["required_role"]):
+        if int(u["id"]) in excluded or not ent.has_role(u, req["required_role"]):
             continue
         if u["role"] == "MANAGER" and cust.get("owner_id") not in (ent.visible_owners(u) or []):
             continue
@@ -288,6 +339,12 @@ def decide(request_id: int, approve: bool, comment: str, actor: dict) -> dict:
                 conn.execute("INSERT INTO erp_outbox (doc_type, ref_id, status, created_at) VALUES ('대손', ?, '대기', ?)",
                              (int(req["id"]), db._now()))
             result["대손금액"] = remain
+        if approve and req["kind"] == "매출취소":
+            db.cancel_sale(int(req["sale_id"]), f"{req['reason']} (결재 #{req['id']})", actor=actor)
+            result["취소매출"] = int(req["sale_id"])
+        if approve and req["kind"] == "입금반제":
+            from . import enterprise as ent_mod
+            result["반제입금"] = ent_mod.reverse_payment(int(req["payment_id"]), f"{req['reason']} (결재 #{req['id']})")
         if approve and req["kind"] == "거래정지해제":
             exempt = (date.today() + timedelta(days=int(_setting("auto_block_exempt_days")))).isoformat()
             with db.get_conn() as conn:

@@ -49,6 +49,7 @@ DEFAULTS: dict[str, Any] = {
     "auto_block_overdue_days": 0,          # 결제기일이 N일 넘게 지난 미수가 있으면 자동 거래정지 (0 = 끔)
     "auto_block_over_credit": False,       # 미수가 여신한도를 넘으면 자동 거래정지
     "auto_block_exempt_days": 30,          # 해제 결재 뒤 다시 자동 정지하지 않는 기간
+    "status_labels": {},                   # 상태 화면 이름 {원래 이름: 회사에서 부르는 이름} — DB 값은 그대로 (자재관리 names.py)
     "holidays": [],                        # 공휴일·대체공휴일 (YYYY-MM-DD) — 세금계산서 발급 기한이 이 날이면 다음 영업일로
     # 운영 상태 (화면·명령으로 켜고 끔 — set_state, 서버 여러 대가 15초 안에 함께)
     "maintenance": {"on": False},          # 점검(읽기 전용) 모드 {on, reason, by, at}
@@ -73,7 +74,7 @@ LABELS = {
     "backup_keep_monthly": "월말 백업 보관(개월)", "backup_keep_yearly": "연말 백업 보관(년)",
     "fiscal_start_month": "회계연도 시작 월", "writeoff_exec_threshold": "대손 임원결재 기준(원)",
     "auto_block_overdue_days": "자동 거래정지 연체일", "auto_block_over_credit": "여신 초과 자동 거래정지",
-    "auto_block_exempt_days": "해제 후 재정지 유예(일)", "holidays": "공휴일", **{k: v[3] for k, v in CODE_LISTS.items()},
+    "auto_block_exempt_days": "해제 후 재정지 유예(일)", "holidays": "공휴일", "status_labels": "상태 표시 이름", **{k: v[3] for k, v in CODE_LISTS.items()},
 }
 
 _lock = threading.Lock()
@@ -123,6 +124,17 @@ def refresh(force: bool = False, max_age: float | None = None) -> dict:
         _apply(values)
         _state.update(values=values, loaded_at=time.monotonic())
     return values
+
+
+# 표시 이름을 바꿀 수 있는 상태 (DB 에는 원래 이름이 그대로 남는다)
+STATUS_CODES = ["입금대기", "부분입금", "입금완료", "취소", "작성중", "발송", "수락", "거절", "만료", "대체됨",
+                "진행", "완료", "대기", "승인", "반려", "회수"]
+
+
+def label(value: Any) -> Any:
+    """화면에 보일 상태 이름."""
+    labels = get("status_labels") or {}
+    return labels.get(value, value) if isinstance(value, str) else value
 
 
 def get(key: str) -> Any:
@@ -191,6 +203,22 @@ def validate(changes: dict) -> dict:
                         ("auto_block_overdue_days", 0, 3650), ("auto_block_exempt_days", 0, 365)):
         if key in changes:
             out[key] = _number(changes[key], LABELS[key], lo, hi)
+    if "status_labels" in changes:
+        raw = changes["status_labels"]
+        pairs = raw.items() if isinstance(raw, dict) else (
+            line.split("=", 1) for line in str(raw or "").splitlines() if line.strip())
+        labels: dict[str, str] = {}
+        for item in pairs:
+            if len(item) != 2:
+                raise ValueError("상태 표시 이름은 한 줄에 '원래 이름=표시 이름' 으로 적으세요.")
+            src, dst = str(item[0]).strip(), str(item[1]).strip()
+            if src not in STATUS_CODES:
+                raise ValueError(f"'{src}' 은(는) 바꿀 수 있는 상태가 아닙니다 ({', '.join(STATUS_CODES)}).")
+            if not dst or len(dst) > 20 or any(c in dst for c in "<>\"'"):
+                raise ValueError(f"'{src}' 의 표시 이름은 20자 이내로 적으세요.")
+            if dst != src:
+                labels[src] = dst
+        out["status_labels"] = labels
     if "holidays" in changes:
         days = set()
         for part in re.split(r"[\s,]+", str(changes["holidays"] or "")):

@@ -31,6 +31,11 @@ def test_payment_history_and_reversal(app):
     pays = ent.list_payments(sid)
     assert len(pays) == 1 and pays[0]["method"] == "어음" and pays[0]["ref_no"] == "AB-123"
     post(rep, f"/payments/{pays[0]['id']}/reverse", {"reason": "다른 거래처 입금을 잘못 넣음"})
+    assert int(db.get_sale(sid)["paid_amount"]) == 600_000            # 영업사원은 바로 반제 못 함 (직무 분리)
+    post(rep, f"/payments/{pays[0]['id']}/reverse-request", {"reason": "다른 거래처 입금을 잘못 넣음"})
+    from core import credit
+    req = db._one("SELECT id FROM fin_requests WHERE kind='입금반제' AND payment_id=? AND status='대기'", [pays[0]["id"]])
+    credit.decide(int(req["id"]), True, "", user("한팀장"))           # 팀장 승인 → 반제
     sale = db.get_sale(sid)
     assert int(sale["paid_amount"]) == 0 and sale["status"] == "입금대기"
     rows = ent.list_payments(sid)

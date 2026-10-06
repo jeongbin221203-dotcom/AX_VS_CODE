@@ -950,3 +950,12 @@ document.addEventListener("submit", function (e) {
     }
   });
 })();
+
+/* 서비스 워커 — 정적 파일 보관 + 연결 끊김 안내 화면 (HTTPS·localhost 에서만). 로그인 화면에서는 보관본을 비운다. */
+(function () {
+  if (!("serviceWorker" in navigator)) return;
+  if (location.protocol !== "https:" && location.hostname !== "localhost" && location.hostname !== "127.0.0.1") return;
+  navigator.serviceWorker.register("/sw.js", { scope: "/" }).then(function (reg) {
+    if (location.pathname.indexOf("/login") === 0 && reg.active) reg.active.postMessage("clear");
+  }).catch(function () { /* 등록 실패는 무시 — 앱은 그대로 동작 */ });
+})();

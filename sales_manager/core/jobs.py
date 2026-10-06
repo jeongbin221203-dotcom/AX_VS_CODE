@@ -295,6 +295,8 @@ def _env_on(name: str) -> Callable[[], bool]:
 SCHEDULES: list[Schedule] = [
     Schedule("erp.send", every_minutes=5, description="ERP 전송 대기열 처리"),
     Schedule("notify.digest", daily="08:30", description="미수·마감 임박 요약 알림"),
+    Schedule("erp.master_sync", daily="05:00", enabled=_env_on("SALES_ERP_MASTER_URL"),
+             description="ERP 거래처·품목 마스터 가져오기 (바뀐 것만)"),
     Schedule("approval.escalate", every_minutes=60, description="결재 기한 경과 독촉·상위 보고"),
     Schedule("forecast.snapshot", daily="07:00", weekday=0, description="주간 파이프라인 스냅샷"),
     Schedule("backup.db", daily="02:00", description="DB 백업"),
@@ -387,6 +389,12 @@ def _audit_archive(payload: dict):
 def _privacy_purge(payload: dict):
     from . import company
     return company.purge_pii()
+
+
+@handler("erp.master_sync")
+def _erp_master_sync(payload: dict):
+    from . import erp
+    return erp.master_pull()
 
 
 @handler("erp.send")

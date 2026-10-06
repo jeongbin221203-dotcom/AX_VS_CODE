@@ -128,8 +128,13 @@ def upsert_user(data: dict, db_path: str | None = None) -> int:
     with db.get_conn(db_path) as conn:
         if prev:
             new_id = int(prev["id"])
-            conn.execute(f"UPDATE users SET {', '.join(f'{f}=?' for f in USER_FIELDS)} WHERE id=?",
-                         (*values, new_id))
+            sql = f"UPDATE users SET {', '.join(f'{f}=?' for f in USER_FIELDS)}, row_version=COALESCE(row_version,0)+1 WHERE id=?"
+            params = [*values, new_id]
+            if data.get("row_version") not in (None, ""):        # 두 관리자가 같은 사용자를 동시에 고친 경우
+                sql += " AND COALESCE(row_version,0)=?"
+                params.append(int(data["row_version"]))
+            if conn.execute(sql, params).rowcount == 0:
+                raise db.ConflictError("다른 관리자가 먼저 이 사용자를 수정했습니다. 새로고침해서 확인한 뒤 다시 저장하세요.")
             if prev["name"] != record["name"]:
                 for table in db.OWNER_TABLES:
                     conn.execute(f"UPDATE {table} SET owner=? WHERE owner_id=?", (record["name"], new_id))
@@ -168,17 +173,90 @@ def visible_owners(user: dict, db_path: str | None = None) -> Optional[list[int]
     role = user.get("role", "REP")
     if role in ("EXEC", "SUPPORT", "ADMIN"):
         return None
+    ids = [int(user["id"])]
     if role == "MANAGER":
         org_ids = descendant_org_ids(user.get("org_id"), db_path)
-        if not org_ids:
-            return [int(user["id"])]
-        placeholders = ",".join("?" * len(org_ids))
-        rows = db._df(f"SELECT id FROM users WHERE org_id IN ({placeholders})", org_ids, db_path)
-        ids = [int(i) for i in rows["id"].tolist()] if not rows.empty else []
-        if int(user["id"]) not in ids:
-            ids.append(int(user["id"]))
-        return ids
-    return [int(user["id"])]
+        if org_ids:
+            placeholders = ",".join("?" * len(org_ids))
+            rows = db._df(f"SELECT id FROM users WHERE org_id IN ({placeholders})", org_ids, db_path)
+            ids = sorted(set(ids) | {int(i) for i in rows["id"].tolist()})
+    return sorted(set(ids) | extra_scope_owners(int(user["id"]), db_path))
+
+
+# ---------------------------------------------------------------------------
+# 데이터 범위 예외 (자재관리의 사용자별 플랜트·창고 범위와 같은 생각 — 영업은 담당자·조직 단위)
+#   공동 담당, 다른 팀 지원, 휴직자 거래처 임시 관리처럼 역할·조직으로 정해진 범위 밖을 더 볼(고칠) 수 있게 한다.
+#   기한(valid_to)이 지나면 자동으로 빠진다. 추가·해제는 관리자만, 감사로그에 남는다.
+# ---------------------------------------------------------------------------
+SCOPE_KINDS = {"owner": "담당자", "org": "조직(하위 포함)"}
+
+
+def extra_scope_owners(user_id: int, db_path: str | None = None) -> set[int]:
+    try:
+        rows = db._df("SELECT kind, target_id FROM user_scopes WHERE user_id=? AND (valid_to IS NULL OR valid_to >= ?)",
+                      [int(user_id), date.today().isoformat()], db_path).to_dict("records")
+    except Exception:   # noqa: BLE001 - 마이그레이션 전
+        return set()
+    out: set[int] = set()
+    for r in rows:
+        if r["kind"] == "owner":
+            out.add(int(r["target_id"]))
+        elif r["kind"] == "org":
+            org_ids = descendant_org_ids(int(r["target_id"]), db_path)
+            if org_ids:
+                found = db._df(f"SELECT id FROM users WHERE org_id IN ({','.join('?' * len(org_ids))})", org_ids, db_path)
+                out |= {int(i) for i in found["id"]}
+    return out
+
+
+def list_user_scopes(user_id: int) -> list[dict]:
+    rows = db._df("SELECT s.*, CASE s.kind WHEN 'owner' THEN (SELECT name FROM users WHERE id = s.target_id) "
+                  "ELSE (SELECT name FROM orgs WHERE id = s.target_id) END AS target_name FROM user_scopes s "
+                  "WHERE s.user_id=? ORDER BY s.id", [int(user_id)]).to_dict("records")
+    today = date.today().isoformat()
+    for r in rows:
+        r["kind_label"] = SCOPE_KINDS.get(r["kind"], r["kind"])
+        r["expired"] = bool(r.get("valid_to")) and str(r["valid_to"]) < today
+    return rows
+
+
+def add_user_scope(user_id: int, kind: str, target_id: int, reason: str, actor: dict,
+                   valid_to: Optional[str] = None) -> int:
+    if kind not in SCOPE_KINDS:
+        raise ValueError("범위 구분은 담당자 또는 조직입니다.")
+    if not str(reason or "").strip():
+        raise ValueError("범위를 더하는 사유를 입력하세요 (예: 공동 담당, 휴직자 거래처 임시 관리).")
+    target = get_user(user_id=int(target_id)) if kind == "owner" else         db._one("SELECT id, name FROM orgs WHERE id=?", [int(target_id)])
+    if not target:
+        raise ValueError("대상 담당자·조직을 찾을 수 없습니다.")
+    if kind == "owner" and int(target_id) == int(user_id):
+        raise ValueError("본인 데이터는 이미 볼 수 있습니다.")
+    end = db._d(valid_to)
+    if end and end < date.today().isoformat():
+        raise ValueError("기한이 이미 지났습니다.")
+    try:
+        with db.get_conn() as conn:
+            cur = conn.execute("INSERT INTO user_scopes (user_id, kind, target_id, reason, valid_to, created_by, created_at) "
+                               "VALUES (?,?,?,?,?,?,?)", (int(user_id), kind, int(target_id), reason.strip(), end,
+                                                          actor.get("name"), db._now()))
+            sid = int(cur.lastrowid)
+    except Exception as exc:   # noqa: BLE001
+        if "unique" in str(exc).lower():
+            raise ValueError("이미 더한 범위입니다.") from exc
+        raise
+    db.audit("범위추가", "사용자", int(user_id), {"구분": SCOPE_KINDS[kind], "대상": target["name"], "기한": end,
+                                               "사유": reason.strip()})
+    return sid
+
+
+def remove_user_scope(scope_id: int, actor: dict) -> None:
+    row = db._one("SELECT * FROM user_scopes WHERE id=?", [int(scope_id)])
+    if not row:
+        raise ValueError("범위를 찾을 수 없습니다.")
+    with db.get_conn() as conn:
+        conn.execute("DELETE FROM user_scopes WHERE id=?", (int(scope_id),))
+    db.audit("범위해제", "사용자", int(row["user_id"]), {"구분": SCOPE_KINDS.get(row["kind"]), "대상ID": row["target_id"],
+                                                     "처리자": actor.get("name")})
 
 
 def apply_context(user: dict, db_path: str | None = None) -> None:
@@ -394,6 +472,21 @@ def request_approval(deal_id: int, requester: dict, reason: str = "",
     _notify_step(approval, _active_step(new_id, db_path), f"할인 결재 요청: {deal.get('title')}",
                  f"{requester['name']} · 할인 {rate:.1f}% · 제안가 {final_amount:,}원\n사유: {reason or '-'}", db_path)
     return new_id
+
+
+def decide_many(approval_ids: list[int], approver: dict, comment: str = "") -> tuple[int, list[str]]:
+    """여러 할인 결재를 한꺼번에 승인 (반려는 사유가 건마다 달라 한 건씩). 결재선 권한·자기결재 금지·조건 변경 취소는
+    decide_approval 이 건마다 그대로 확인하고, 안 되는 건은 이유와 함께 돌려준다 (나머지는 진행)."""
+    done, problems = 0, []
+    for aid in dict.fromkeys(int(i) for i in approval_ids):
+        try:
+            decide_approval(aid, approver, True, comment)
+            done += 1
+        except (ValueError, PermissionError) as exc:
+            problems.append(f"#{aid}: {exc}")
+    if done:
+        db.audit("일괄승인", "승인", None, {"건수": done, "실패": len(problems), "결재자": approver.get("name")})
+    return done, problems
 
 
 def withdraw_approval(approval_id: int, requester: dict, reason: str = "", db_path: str | None = None) -> None:
@@ -1026,19 +1119,28 @@ def _record_payment_once(sale_id: int, amount: int, db_path: str | None, source:
 NON_REVERSIBLE_SOURCES = ("반품상계", "선수금", "대손")
 
 
-def reverse_payment(payment_id: int, reason: str, db_path: str | None = None) -> int:
-    """반제: 잘못 넣은 입금을 지우지 않고 같은 금액의 음수 입금으로 되돌린다(오늘 날짜)."""
-    if not str(reason or "").strip():
-        raise ValueError("반제 사유를 입력하세요.")
-    pay = db._one("SELECT * FROM payments WHERE id=?", [int(payment_id)], db_path)
+def check_reversible(pay: dict, db_path: str | None = None) -> None:
     if not pay or int(pay["amount"]) <= 0 or pay.get("reversal_of"):
         raise ValueError("반제할 수 있는 입금이 아닙니다.")
     if (pay.get("source") or "") in NON_REVERSIBLE_SOURCES:
         # 반품상계·선수금 배분·대손은 돈이 들어온 입금이 아니라 내부 정리라, 반제하면 반품한 물건 값을 다시 청구하거나
         # 선수금이 사라진다 → 각자의 화면(반품 취소·선수금·대손 결재)에서 되돌린다
         raise ValueError(f"'{pay['source']}' 입금은 반제할 수 없습니다 — 해당 화면에서 정리하세요.")
-    if db._one("SELECT id FROM payments WHERE reversal_of=?", [int(payment_id)], db_path):
+    if db._one("SELECT id FROM payments WHERE reversal_of=?", [int(pay["id"])], db_path):
         raise ValueError("이미 반제한 입금입니다.")
+
+
+def reverse_payment(payment_id: int, reason: str, db_path: str | None = None, actor: dict | None = None) -> int:
+    """반제: 잘못 넣은 입금을 지우지 않고 같은 금액의 음수 입금으로 되돌린다(오늘 날짜).
+    actor 를 주면(화면에서 바로 반제) 팀장 이상·그 입금을 넣은 본인이 아닌지 확인한다 — 아니면 반제 요청(결재)."""
+    if not str(reason or "").strip():
+        raise ValueError("반제 사유를 입력하세요.")
+    pay = db._one("SELECT * FROM payments WHERE id=?", [int(payment_id)], db_path)
+    check_reversible(pay, db_path)
+    if actor is not None:
+        from . import credit
+        if not credit.can_reverse_directly(pay, actor):
+            raise PermissionError("입금 반제는 팀장 이상이, 그 입금을 넣지 않은 사람이 합니다 — '반제 요청' 으로 결재를 올리세요.")
     for attempt in range(3):
         try:
             return _record_payment_once(int(pay["sale_id"]), -int(pay["amount"]), db_path, "반제", None,

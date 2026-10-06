@@ -12,9 +12,9 @@
 </div>
 
 <section class="card">
-  {{ tabs([('mine', '📥 내 결재 대기 (' ~ mine_cnt ~ ')'), ('requested', '📤 내 요청 현황'), ('history', '🗃️ 결재 이력'), ('finance', '💳 대손 · 거래정지 해제 (' ~ fin_cnt ~ ')'), ('delegation', '🔁 대결 지정')], tab) }}
+  {{ tabs([('mine', '📥 내 결재 대기 (' ~ mine_cnt ~ ')'), ('requested', '📤 내 요청 현황'), ('history', '🗃️ 결재 이력'), ('finance', '💳 대손·해제·취소·반제 (' ~ fin_cnt ~ ')'), ('delegation', '🔁 대결 지정')], tab) }}
   {% if tab == 'finance' %}
-    <p class="muted small">대손 처리는 금액에 따라 팀장 또는 임원, 거래정지 해제는 팀장 이상이 결재합니다. 요청한 사람은 결재할 수 없습니다.</p>
+    <p class="muted small">대손 처리는 금액에 따라 팀장 또는 임원, 거래정지 해제·매출 취소·입금 반제는 팀장 이상이 결재합니다. 요청한 사람과 그 매출·입금을 등록한 사람은 결재할 수 없습니다.</p>
     {% for r in fin_pending_rows %}
       <form method="post" action="{{ url_for('finance.finance_request_decide', rid=r.id) }}" class="toolbar" data-no-draft>
         {{ csrf() }}
@@ -90,6 +90,17 @@
       <div class="alert alert-success">결재할 건이 없습니다.</div>
     {% else %}
       {{ table(mine) }}
+      {% if options|length > 1 %}
+      <details class="card"><summary>☑️ 여러 건 한꺼번에 승인 ({{ options|length }}건)</summary>
+        <form method="post" action="{{ url_for('finance.approval_decide_many') }}" class="form" data-confirm="체크한 결재를 모두 승인할까요?">
+          {{ csrf() }}
+          {% for oid, label in options %}<label class="check"><input type="checkbox" name="aid" value="{{ oid }}"> {{ label }}</label>{% endfor %}
+          <label>공통 결재 의견 (선택) <input name="comment"></label>
+          <button class="btn btn-primary">✅ 체크한 건 승인</button>
+          <span class="muted small">반려는 사유가 건마다 달라 한 건씩 합니다. 권한·자기결재·조건 변경은 건마다 확인합니다.</span>
+        </form>
+      </details>
+      {% endif %}
       <form method="get" class="toolbar" action="{{ page_path() }}">
         <label class="grow">결재 대상 {{ select('aid', options, pick) }}</label>
         <button class="btn">선택</button>
