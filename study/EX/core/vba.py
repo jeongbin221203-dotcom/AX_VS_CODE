@@ -140,6 +140,37 @@ def procedures(srcs):
     return out
 
 
+def button_cells(xlsm_bytes):
+    """단추 → [(단추 글자, 매크로 이름, 왼쪽 위 셀의 행, 열)] (1부터). 양식 컨트롤은 VML 의 Anchor, 도형은 drawing 의 from."""
+    out = []
+    try:
+        z = zipfile.ZipFile(io.BytesIO(xlsm_bytes))
+    except zipfile.BadZipFile:
+        return out
+    for n in z.namelist():
+        if re.search(r'drawings/vmlDrawing\d*\.vml$', n):
+            text = z.read(n).decode('utf-8', 'replace')
+            for shape in re.findall(r'<v:shape\b.*?</v:shape>', text, re.S):
+                if 'ObjectType="Button"' not in shape:
+                    continue
+                label = re.sub(r'<[^>]+>', '', ''.join(re.findall(r'<v:textbox\b.*?</v:textbox>', shape, re.S))).strip()
+                macro = re.search(r'<x:FmlaMacro>(.*?)</x:FmlaMacro>', shape, re.S)
+                macro = re.sub(r'^\[\d+\]!', '', macro.group(1).strip() if macro else '').split('!')[-1]
+                a = re.search(r'<x:Anchor>\s*(\d+)\s*,\s*-?\d+\s*,\s*(\d+)', shape)
+                if a:
+                    out.append((re.sub(r'\s+', ' ', label), macro, int(a.group(2)) + 1, int(a.group(1)) + 1))
+        elif re.search(r'drawings/drawing\d*\.xml$', n):
+            text = z.read(n).decode('utf-8', 'replace')
+            for sp in re.findall(r'<xdr:twoCellAnchor\b.*?</xdr:twoCellAnchor>', text, re.S):
+                m = re.search(r'<xdr:sp\b[^>]*\bmacro="([^"]*)"', sp)
+                f = re.search(r'<xdr:from>\s*<xdr:col>(\d+)</xdr:col>.*?<xdr:row>(\d+)</xdr:row>', sp, re.S)
+                if m and m.group(1) and f:
+                    label = ''.join(re.findall(r'<a:t>([^<]*)</a:t>', sp))
+                    macro = re.sub(r'^\[\d+\]!', '', m.group(1)).split('!')[-1]
+                    out.append((re.sub(r'\s+', ' ', label).strip(), macro, int(f.group(2)) + 1, int(f.group(1)) + 1))
+    return out
+
+
 def buttons(xlsm_bytes):
     """양식 단추 → [(단추 글자, 연결된 매크로 이름)]"""
     out = []

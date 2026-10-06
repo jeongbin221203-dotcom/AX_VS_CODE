@@ -382,6 +382,12 @@ a:focus-visible, summary:focus-visible, button:focus-visible, .theme-btn:focus-v
   main { max-width: none !important; padding: 0 !important; }
   .card { box-shadow: none !important; border: 1px solid #999 !important; break-inside: avoid; }
   details > :not(summary) { display: block !important; }
+  details::details-content { content-visibility: visible !important; display: block !important; }
+  .table-wrap, .sheet-wrap { overflow: visible !important; max-height: none !important; }
+  .sheet { font-size: 11px; }
+  .exam-section, .exam-section .card { break-inside: auto; }
+  a.btn, .fbar, .namebox, #after .btns { display: none !important; }
+  .chart { max-width: 100%; }
   .meter { border: 1px solid #666; }
   .meter > span { background: #666 !important; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
   a { color: #000 !important; text-decoration: none !important; }

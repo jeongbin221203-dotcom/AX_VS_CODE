@@ -79,6 +79,11 @@ def _csv_value(s):
     if s == '':
         return None
     n = s.replace(',', '')
+    if re.fullmatch(r'\(\s*[\d.]+\s*\)', n):                  # (3) = 회계식 음수
+        n = '-' + n.strip('() ')
+    elif re.fullmatch(r'-?\d{1,3}( \d{3})+(\.\d+)?', n):         # 2 500 = 2500
+        n = n.replace(' ', '')
+    n = re.sub(r'^(-?[\d.]+)\s*(개|명|건|회|점|대|권|장|개월|일|kg|㎏)$', r'\1', n)    # 10개
     n = re.sub(r'^([-+]?)[₩$￦]\s*', r'\1', n)          # ₩120,000 · 120,000원 같은 금액
     if re.fullmatch(r'-?[\d.]+\s*원', n):
         n = re.sub(r'\s*원$', '', n)
@@ -98,6 +103,8 @@ def _is_blank(v):
     return v is None or (isinstance(v, str) and not v.strip())
 
 
+MEMO_RE = re.compile(r'(※|\*|출처\s*[:：]|주\d*\)|주\s*[:：]|비고\s*[:：]|참고\s*[:：]|단위\s*[:：]|\(단위|자료\s*[:：]|note\s*[:：])', re.I)
+UNIT_RE = re.compile(r'\(.{1,12}\)')
 TOTAL_RE = re.compile(r'(총\s*)?(합\s*계|총\s*계|소\s*계|누\s*계|총합계|계)(\s*\(.*\))?')
 
 
@@ -111,7 +118,7 @@ def to_table(sheet_name, rows):
             head_i = i
             break
     if head_i is None:
-        raise xlsx.BadFile(f"'{sheet_name}' 시트에서 머리글(열 이름) 행을 찾지 못했습니다. 첫 행에 열 이름을 넣어 주세요.")
+        raise xlsx.BadFile(f"{'파일' if sheet_name == 'CSV' else repr(sheet_name) + ' 시트'}에서 머리글(열 이름) 행을 찾지 못했습니다. 첫 행에 열 이름을 넣어 주세요.")
     wide = any(len(r) > MAX_COLS for r in rows)
     rows = [r[:MAX_COLS] for r in rows]
     head = rows[head_i]
@@ -120,7 +127,10 @@ def to_table(sheet_name, rows):
     # 두 줄 머리글(병합한 '매출' 아래 '1분기·2분기'): 다음 행이 숫자 없는 글자뿐이고 위 머리글에 빈칸이 있으면 합친다
     sub = rows[head_i + 1] if head_i + 1 < len(rows) else []
     sub_vals = [sub[j] if j < len(sub) else None for j in range(first_c, max(last_c, len(sub) - 1) + 1)]
-    two_line = (sum(1 for v in sub_vals if isinstance(v, str) and v.strip()) >= 2
+    sub_strs = [v for v in sub_vals if isinstance(v, str) and v.strip()]
+    units_row = bool(sub_strs) and len(sub_strs) == sum(1 for v in sub_vals if not _is_blank(v)) and \
+        all(UNIT_RE.fullmatch(v.strip()) for v in sub_strs)              # (개)·(원) 같은 단위만 있는 둘째 줄
+    two_line = units_row or (sum(1 for v in sub_vals if isinstance(v, str) and v.strip()) >= 2
                 and not any(fx.is_num(v) or isinstance(v, (dt.date, dt.datetime)) for v in sub_vals if not _is_blank(v))
                 and any(_is_blank(head[j]) if j < len(head) else True for j in range(first_c, len(sub_vals) + first_c)))
     if two_line:
@@ -142,7 +152,7 @@ def to_table(sheet_name, rows):
         if all(_is_blank(v) for v in vals):
             continue
         texts = [str(v).strip() for v in vals if isinstance(v, str) and v.strip()]
-        if any(TOTAL_RE.fullmatch(t) for t in texts) or (len(texts) == 1 and texts[0][:1] in '※*' and
+        if any(TOTAL_RE.fullmatch(t) for t in texts) or (len(texts) == 1 and MEMO_RE.match(texts[0]) and
                                                           sum(1 for v in vals if not _is_blank(v)) == 1):
             skipped += 1                       # 합계·소계 행과 ※ 메모 행은 자료가 아님(넣으면 합계가 두 배)
             continue

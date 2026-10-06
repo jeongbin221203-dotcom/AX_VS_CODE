@@ -123,3 +123,35 @@ def test_round6_ux(client):
     assert '현재' in msg and '정답' in msg
     assert compare._chart_show('범례', 'b') == '아래쪽' and compare._chart_show('차트 종류', {('B', 'col')}) == 'B: 세로 막대형'
     del library
+
+
+def test_round7_fixes():
+    import io
+    import openpyxl
+    import pytest
+    from core import analyze, compare, exam as ex, xlsx
+    # 다른 시험·다른 문제의 파일은 내용(글자)으로도 거부
+    with pytest.raises(xlsx.BadFile):
+        ex.grade(ex.get('c2-01'), ex.problem_workbook(ex.get('c1-01')))
+    def book(texts):
+        wb = openpyxl.Workbook()
+        ws = wb.active
+        ws.title = '시트'
+        for i, t in enumerate(texts, 1):
+            ws.cell(i, 1, t)
+        bio = io.BytesIO()
+        wb.save(bio)
+        return bio.getvalue()
+    src = book([f'문제글자{i}' for i in range(12)])
+    ans = book([f'문제글자{i}' for i in range(12)] + ['정답'])
+    with pytest.raises(xlsx.BadFile):
+        compare.grade(src, ans, book([f'전혀다른{i}' for i in range(12)]))
+    # 파일 분석: 출처·주 행 제외, 단위만 있는 둘째 머리글 줄, 회계식 음수·단위 글자
+    t = analyze.to_table('S', [['지점', '수량', '금액'], [None, '(개)', '(원)'], ['서울', 3, 1000], ['출처: 회계팀', None, None],
+                               ['주1) 잠정', None, None]])
+    assert [c['name'] for c in t['columns']] == ['지점', '수량 (개)', '금액 (원)'] and len(t['rows']) == 1 and t['skipped'] == 2
+    assert analyze._csv_value('(3)') == -3 and analyze._csv_value('10개') == 10 and analyze._csv_value('2 500') == 2500
+    # 조건부 서식 힌트·서식 메시지의 읽을 말
+    from openpyxl.formatting.rule import Rule
+    assert compare._rule_hint(Rule(type='aboveAverage', aboveAverage=False)) == '평균 미만'
+    assert compare._show_style('크기', 11.0) == '11' and compare._show_style('테두리', (True, True, False, False)) == '왼쪽·오른쪽'

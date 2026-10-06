@@ -6,7 +6,7 @@ import re
 
 from . import formula as fx
 from . import pivots, xlsx
-from .compare import Wb, _charts_of, _groups, _span, _style_key, broken_rule, exam_level
+from .compare import Wb, _charts_of, _groups, _rule_hint, _span, _style_key, broken_rule, exam_level
 from .exam import _color, _norm_text
 
 COLOR_NAMES = {'FF0000': '빨강', 'C00000': '진한 빨강', 'FFC000': '주황', 'FFFF00': '노랑', '92D050': '연한 녹색',
@@ -757,7 +757,7 @@ def _cf_tasks(sheet, ws_s, ws_a):
                 text = f"[{sq}] 영역에서 {'하위' if rule.bottom else '상위'} {rule.rank}{'%' if rule.percent else ''} 항목에 {fmt_text}을 적용하시오."
                 items = []
             else:
-                text, items = f"[{sq}] 영역에 조건부 서식({rule.type})을 적용하시오.", []
+                text, items = f"[{sq}] 영역에서 {_rule_hint(rule)} 조건으로 {fmt_text}을 적용하시오.", []
             if re.search(r'\$?[A-Z]+\$?10[0-9]{5}', ' '.join(rule.formula or [])):
                 continue                     # 행 번호가 엑셀 끝(1048576 근처)으로 깨진 규칙
             key = (sq.replace('$', ''), tuple(rule.formula or ()), rule.type)

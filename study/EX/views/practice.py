@@ -102,7 +102,7 @@ def _resolve(kind, iid, need_answer=True):
     abort(404)
 
 
-CACHE_VER = 5          # 채점·지문 규칙을 바꾸면 올린다(예전에 저장한 할 일·지문을 다시 만든다)
+CACHE_VER = 6          # 채점·지문 규칙을 바꾸면 올린다(예전에 저장한 할 일·지문을 다시 만든다)
 
 
 def _tasks(folder, practice, answer):

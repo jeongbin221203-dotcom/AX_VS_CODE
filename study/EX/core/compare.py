@@ -133,6 +133,11 @@ def _show_style(k, v):
         return HALIGN_KO.get(v, v)
     if k == '세로 맞춤':
         return VALIGN_KO.get(v, v)
+    if k == '크기':
+        return f'{v:g}'
+    if k == '테두리' and isinstance(v, tuple):
+        names = [n for n, on in zip(('왼쪽', '오른쪽', '위', '아래'), v) if on]
+        return '모든 테두리' if len(names) == 4 else ('없음' if not names else '·'.join(names))
     if k == '밑줄':
         return UNDERLINE_KO.get(v, '없음') if v else '없음'
     if k == '테두리':
@@ -398,6 +403,25 @@ RULE_KO = {'cellIs': '셀 값 비교', 'expression': '수식', 'top10': '상위�
            'duplicateValues': '중복 값', 'uniqueValues': '고유 값', 'timePeriod': '날짜 발생'}
 
 
+OP_KO = {'greaterThan': '보다 큼', 'lessThan': '보다 작음', 'between': '사이', 'notBetween': '사이 아님', 'equal': '같음',
+         'notEqual': '같지 않음', 'greaterThanOrEqual': '크거나 같음', 'lessThanOrEqual': '작거나 같음'}
+
+
+def _rule_hint(rule):
+    t = rule.type
+    if t == 'expression' and rule.formula:
+        return f'규칙: ={rule.formula[0]}'
+    if t == 'cellIs':
+        return f"셀 값 {', '.join(rule.formula or [])} {OP_KO.get(rule.operator, rule.operator or '')}"
+    if t == 'top10':
+        return f"{'하위' if rule.bottom else '상위'} {rule.rank}{'%' if rule.percent else '개'} 항목"
+    if t == 'aboveAverage':
+        return '평균 ' + ('초과' if rule.aboveAverage is not False else '미만') + ('(같은 값 포함)' if rule.equalAverage else '')
+    if t == 'containsText':
+        return f"'{rule.text}' 포함"
+    return f"규칙 종류: {RULE_KO.get(t, t)}"
+
+
 def _cf_items(sheet, src, ans, user):
     ws_s, ws_a, ws_u = src.ws(sheet), ans.ws(sheet), user.ws(sheet)
     old = {_rule_key(*x) for x in _rules(ws_s)} if ws_s is not None else set()
@@ -408,7 +432,7 @@ def _cf_items(sheet, src, ans, user):
             continue
         seen.add(k)
         label = f'조건부 서식 {sq}'
-        hint = f'규칙: ={rule.formula[0]}' if rule.formula else f"규칙 종류: {RULE_KO.get(rule.type, rule.type)}"
+        hint = _rule_hint(rule)
         cands = [r for s, r in (_rules(ws_u) if ws_u is not None else []) if s == sq]
         if not cands:
             items.append({'label': label, 'ok': False, 'msgs': [f'{sq} 범위의 규칙이 없습니다'], 'hint': hint})
@@ -871,6 +895,9 @@ def _grade_unlimited(src_bytes, ans_bytes, user_bytes, level=None):
     if not active:
         raise xlsx.BadFile('문제 파일과 정답 파일이 같아서 채점할 항목이 없습니다.')
     mine = set(user.sheets)
+    if not _same_origin(src, user):
+        raise xlsx.BadFile('올린 파일이 이 문제의 실습 파일이 아닌 것 같습니다 — 문제 파일의 내용(글자)이 거의 남아 있지 않습니다. '
+                           '이 문제에서 받은 실습 파일에 풀이를 넣어 올려 주세요.')
     if not any(s['name'] in mine for s in active):
         raise xlsx.BadFile(f"올린 파일에 이 문제의 시트({', '.join(s['name'] for s in active[:3])})가 없습니다 — "
                            "다른 문제의 파일이 아닌지 확인하세요.")
@@ -899,6 +926,25 @@ def _grade_unlimited(src_bytes, ans_bytes, user_bytes, level=None):
 
 
 GRADE_SECONDS = 25
+
+
+def _same_origin(src, user):
+    """문제 파일의 글자 상수 중 40% 이상이 수험자 파일의 같은 시트에 남아 있는지(위치가 밀려도 되게 값 집합으로)."""
+    total = kept = 0
+    for ws in src.f.worksheets:
+        wu = user.ws(ws.title)
+        have = set()
+        if wu is not None:
+            for row in wu.iter_rows():
+                for c in row:
+                    if isinstance(c.value, str):
+                        have.add(c.value.strip())
+        for row in ws.iter_rows():
+            for c in row:
+                if isinstance(c.value, str) and len(c.value.strip()) >= 2 and not c.value.startswith('='):
+                    total += 1
+                    kept += c.value.strip() in have
+    return total < 8 or kept / total >= 0.4
 
 
 def grade(src_bytes, ans_bytes, user_bytes, level=None):

@@ -23,6 +23,14 @@
     });
   }
 
+  /* 인쇄: 접힌 힌트·해설을 펼쳤다가 인쇄 뒤 원래대로 */
+  var printOpened = [];
+  window.addEventListener('beforeprint', function () {
+    printOpened = [];
+    document.querySelectorAll('details:not([open])').forEach(function (d) { d.open = true; printOpened.push(d); });
+  });
+  window.addEventListener('afterprint', function () { printOpened.forEach(function (d) { d.open = false; }); printOpened = []; });
+
   /* 위쪽 머리글 높이(시험 시간 막대가 그 아래에 고정되게), 휴대폰 메뉴에서 지금 메뉴가 보이게 */
   var topbar = document.querySelector('header.top');
   function setTopH() { if (topbar) document.documentElement.style.setProperty('--top-h', topbar.offsetHeight + 'px'); }
@@ -50,11 +58,23 @@
     var tkey = 'ex-exam-start:written-' + lv, saved = null;
     try { saved = JSON.parse(localStorage.getItem(key(lv)) || 'null'); } catch (e) { saved = null; }
     var params = new URLSearchParams(location.search);
+    var bar = document.querySelector('[data-exam-timer]');
+    var limit = bar ? parseInt(bar.getAttribute('data-exam-timer'), 10) * 60000 : 0;
+    var startedAt = 0;
+    try { startedAt = parseInt(localStorage.getItem(tkey) || '0', 10); } catch (e) { startedAt = 0; }
+    if (!params.get('new') && saved && saved.qids && startedAt && limit && Date.now() - startedAt > limit &&
+        window.confirm('이전에 풀던 모의고사는 시간이 끝났습니다.\n[확인] 새 문제지로 시작  /  [취소] 그 문제지를 지금 제출해 채점')) {
+      try { localStorage.removeItem(tkey); localStorage.removeItem(key(lv)); } catch (e) { /* 무시 */ }   // 아래 타이머가 옛 시간으로 자동 제출하지 않게
+      window.__exRedirecting = true;
+      location.replace(location.pathname + '?new=1');
+      return;
+    }
     if (params.get('new')) {                            // [새 문제지]: 저장한 것 버리고 새로
       saved = null;
       try { localStorage.removeItem(key(lv)); localStorage.removeItem(tkey); } catch (e) { /* 무시 */ }
     } else if (saved && saved.qids && saved.qids !== qids) {
       location.replace(location.pathname + '?q=' + encodeURIComponent(saved.qids));
+      window.__exRedirecting = true;
       return;
     }
     if (!saved || saved.qids !== qids) {
@@ -125,9 +145,9 @@
   var fsearch = document.getElementById('fn-search');
   if (fsearch) {
     fsearch.addEventListener('input', function () {
-      var q = fsearch.value.trim().toUpperCase();
+      var q = fsearch.value.replace(/\s+/g, '').toUpperCase();
       document.querySelectorAll('[data-fn]').forEach(function (c) {
-        c.classList.toggle('hidden', q && c.getAttribute('data-fn').toUpperCase().indexOf(q) < 0);
+        c.classList.toggle('hidden', q && c.getAttribute('data-fn').replace(/\s+/g, '').toUpperCase().indexOf(q) < 0);
       });
       document.querySelectorAll('[data-fn-group]').forEach(function (g) {
         g.classList.toggle('hidden', !g.querySelector('[data-fn]:not(.hidden)'));
@@ -180,7 +200,7 @@
       var used = Math.floor((Date.now() - start) / 1000);
       var left = minutes * 60 - used;
       wrap.classList.toggle('over', left < 0);
-      if (left <= 0 && box.hasAttribute('data-timer-autosubmit') && !box.getAttribute('data-sent')) {
+      if (left <= 0 && box.hasAttribute('data-timer-autosubmit') && !box.getAttribute('data-sent') && !window.__exRedirecting) {
         box.setAttribute('data-sent', '1');                 // 시간이 다 되면 그대로 제출(실제 CBT 처럼)
         var af = box.closest('form') || box.querySelector('form');
         if (af) { af.setAttribute('data-auto', '1'); if (secondsInput) secondsInput.value = minutes * 60; af.requestSubmit(); }

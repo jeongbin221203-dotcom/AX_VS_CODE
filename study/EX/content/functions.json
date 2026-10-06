@@ -26,7 +26,7 @@
     "c2",
     "c1"
    ],
-   "keywords": "합계 더하기 총합"
+   "keywords": "합계 합산 더하기"
   },
   {
    "name": "AVERAGE",
@@ -183,7 +183,7 @@
     "c2",
     "c1"
    ],
-   "keywords": "최댓값 가장 큰"
+   "keywords": "최대 최댓값 가장 큰"
   },
   {
    "name": "MIN",
@@ -211,7 +211,7 @@
     "c2",
     "c1"
    ],
-   "keywords": "최솟값 가장 작은"
+   "keywords": "최소 최솟값 가장 작은"
   },
   {
    "name": "PRODUCT",
@@ -269,7 +269,7 @@
     "c2",
     "c1"
    ],
-   "keywords": "조건 합계"
+   "keywords": "조건 합계 합산"
   },
   {
    "name": "SUMIFS",
@@ -305,7 +305,7 @@
     "c2",
     "c1"
    ],
-   "keywords": "여러 조건 합계"
+   "keywords": "여러 조건 합계 합산"
   },
   {
    "name": "COUNTIF",
@@ -2190,7 +2190,7 @@
     "c2",
     "c1"
    ],
-   "keywords": "기간 나이 근속"
+   "keywords": "기간 나이 근속 날짜 차이"
   },
   {
    "name": "EOMONTH",
@@ -2940,7 +2940,8 @@
    "tracks": [
     "c2",
     "c1"
-   ]
+   ],
+   "keywords": "순위 등수 평균 순위"
   },
   {
    "name": "LARGE",
@@ -2967,7 +2968,7 @@
     "c2",
     "c1"
    ],
-   "keywords": "n번째 큰 값 순위"
+   "keywords": "최대 n번째 큰 값"
   },
   {
    "name": "SMALL",
@@ -2992,7 +2993,7 @@
     "c2",
     "c1"
    ],
-   "keywords": "n번째 작은 값"
+   "keywords": "최소 n번째 작은 값"
   },
   {
    "name": "MEDIAN",

@@ -316,7 +316,8 @@ class Ctx:
     def vba(self):
         if self._vba is None:
             srcs = vba.sources(self.data)
-            self._vba = {'sources': srcs, 'procs': vba.procedures(srcs), 'buttons': vba.buttons(self.data)}
+            self._vba = {'sources': srcs, 'procs': vba.procedures(srcs), 'buttons': vba.buttons(self.data),
+                         'cells': vba.button_cells(self.data)}
         return self._vba
 
 
@@ -684,6 +685,22 @@ def check_subtotal(ctx, sheet, chk):
                     found.setdefault((int(m.group(1)) % 100, fx.col_num(m.group(2))), []).append(
                         (cell.row, int(m.group(3)), int(m.group(4))))
     bad = []
+
+    def group_rows(no, col):                          # 그룹 하나를 묶은 부분합 칸(전체 합계 칸 제외)의 (행, 첫 데이터 행)
+        return sorted((row, a) for row, a, b in found.get((no, col), []) if b - a + 1 < (r2 - r1))
+    if chk.get('ordered') and chk['items']:           # 정렬: 그룹이 오름차순으로 이어져 있어야 한다
+        it0 = chk['items'][0]
+        keys = [ctx.user_value(ws.title, a, gcol) for _, a in group_rows(SUBTOTAL_NO[it0['func']],
+                                                                       c1 + head.index(_norm_text(it0['fields'][0])))]
+        keys = [k for k in keys if k is not None]
+        if keys and keys != sorted(keys, key=lambda k: (not fx.is_num(k), str(k) if not fx.is_num(k) else k)):
+            bad.append(f"{chk['group']} 그룹이 오름차순이 아닙니다({', '.join(str(k) for k in keys)}) — 먼저 오름차순 정렬하세요")
+    if chk.get('above'):                               # 적용 순서: 나중에 만든 부분합 줄이 앞에 만든 줄 위에 있어야 한다
+        ab = chk['above']
+        mine = group_rows(SUBTOTAL_NO[chk['items'][0]['func']], c1 + head.index(_norm_text(chk['items'][0]['fields'][0])))
+        other = group_rows(SUBTOTAL_NO[ab['func']], c1 + head.index(_norm_text(ab['field'])))
+        if mine and other and len(mine) == len(other) and any(m[0] > o[0] for m, o in zip(mine, other)):
+            bad.append('부분합을 적용한 순서가 문제와 다릅니다 — 문제에 적힌 순서대로 만들고 두 번째는 "새로운 값으로 대치"를 해제하세요')
     for item in chk['items']:
         no = SUBTOTAL_NO[item['func']]
         for field in item['fields']:
@@ -1010,6 +1027,17 @@ def check_macro(ctx, sheet, chk):
             bad.append(f"'{chk['button']}' 단추가 없습니다")
         elif not any(m.lower().split('.')[-1] == chk['name'].lower() for _, m in btn):
             bad.append(f"'{chk['button']}' 단추에 '{chk['name']}' 매크로를 연결하세요")
+        elif chk.get('near'):                        # 단추 위치: 지정한 셀(범위)에서 2칸 안
+            r1, c1, r2, c2 = fx.parse_range(chk['near']) if ':' in chk['near'] else (*fx.parse_addr(chk['near']),
+                                                                                    *fx.parse_addr(chk['near']))
+            at = [(r, c) for t, m, r, c in info.get('cells', []) if _norm_text(t) == _norm_text(chk['button'])]
+            if at and not any(r1 - 2 <= r <= r2 + 2 and c1 - 2 <= c <= c2 + 2 for r, c in at):
+                bad.append(f"'{chk['button']}' 단추가 {chk['near']} 근처가 아니라 {fx.addr(*at[0])} 에 있습니다")
+    body = info['procs'].get(chk['name'].lower())
+    for pat in chk.get('patterns', []):               # 매크로 코드에 지시한 일이 들어 있는지(결과만 손으로 넣은 경우 걸러냄)
+        if body is not None and not re.search(pat, re.sub(r"'.*", '', body), re.I):
+            bad.append(f"'{chk['name']}' 매크로 코드에 지시한 내용이 없습니다({pat.split('|')[0]} …)")
+            break
     return not bad, bad
 
 
@@ -1077,8 +1105,29 @@ CHECKS = {'values': check_values, 'formula': check_formula, 'style': check_style
 
 
 # ------------------------------------------------------------ 채점 ----------
+def _same_origin(ctx):
+    """문제 파일의 글자 상수 중 40% 이상이 수험자 파일의 같은 시트에 남아 있는지(다른 시험의 파일이면 거의 없음)."""
+    total = kept = 0
+    for name, sh in ctx.orig.sheets.items():
+        wu = _ws(ctx.wb_f, name)
+        have = set()
+        if wu is not None:
+            for row in wu.iter_rows():
+                for c in row:
+                    if isinstance(c.value, str):
+                        have.add(c.value.strip())
+        for v in sh.cells.values():
+            if isinstance(v, str) and len(v.strip()) >= 2 and not v.startswith('='):
+                total += 1
+                kept += v.strip() in have
+    return total < 8 or kept / total >= 0.4
+
+
 def _grade_unlimited(exam, data, filename='답안.xlsx'):
     ctx = Ctx(exam, data, filename)
+    if not _same_origin(ctx):
+        raise xlsx.BadFile(f"이 모의고사({exam['title']})의 문제 파일이 아닌 것 같습니다 — 문제 파일의 글자가 거의 남아 있지 않습니다. "
+                           '이 문제지에서 받은 파일에 답을 넣어 올려 주세요.')
     want = [s['name'] for s in exam['sheets']]
     have = {_key_name(n) for n in ctx.wb_f.sheetnames}
     if sum(1 for n in want if _key_name(n) in have) * 2 < len(want):

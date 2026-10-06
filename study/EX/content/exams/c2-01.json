@@ -1238,9 +1238,7 @@
    "borders": [
     "A3:F10"
    ],
-   "cells": {
-    "H3": "※ 매크로 단추를 이 근처에 만드세요"
-   }
+   "cells": {}
   },
   {
    "name": "기타작업-2",
@@ -1793,7 +1791,7 @@
    "sheet": "계산작업",
    "text": "[표3]에서 지점이 '강남'인 제품의 수량 평균을 계산하여 [E24] 셀에 표시하시오.",
    "items": [
-    "평균은 소수점 이하 첫째 자리에서 반올림하여 정수로 표시 [표시 예: 14.75 → 15]",
+    "평균은 소수점 이하 첫째 자리에서 반올림하여 정수로 표시 [표시 예: 12.4 → 12]",
     "ROUND, AVERAGEIF 함수 사용"
    ],
    "checks": [
@@ -1969,7 +1967,8 @@
         "기본급"
        ]
       }
-     ]
+     ],
+     "ordered": true
     },
     {
      "kind": "subtotal",
@@ -1984,7 +1983,12 @@
         "수당"
        ]
       }
-     ]
+     ],
+     "ordered": true,
+     "above": {
+      "func": "max",
+      "field": "기본급"
+     }
     }
    ],
    "answer": [
@@ -2038,7 +2042,11 @@
      "points": 3,
      "name": "합계",
      "button": "합계",
-     "needs_vba": true
+     "needs_vba": true,
+     "near": "H5",
+     "patterns": [
+      "SUM"
+     ]
     },
     {
      "kind": "formula",
@@ -2056,7 +2064,12 @@
      "points": 3,
      "name": "서식",
      "button": "서식",
-     "needs_vba": true
+     "needs_vba": true,
+     "near": "H8",
+     "patterns": [
+      "Interior|ColorIndex|\\.Color",
+      "Bold"
+     ]
     },
     {
      "kind": "style",

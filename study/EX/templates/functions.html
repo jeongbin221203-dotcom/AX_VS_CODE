@@ -11,7 +11,7 @@
   <h2>{{ g.name }}</h2>
   <div class="fn-list">
     {% for f in g.funcs %}
-    <a class="fn-card" href="{{ url_for('functions.detail', name=f.name) }}" data-fn="{{ f.name }} {{ f.get('aliases', [])|join(' ') }} {{ f.desc }} {{ g.name }} {{ f.get('keywords', '') }}">
+    <a class="fn-card" href="{{ url_for('functions.detail', name=f.name) }}" data-fn="{{ f.name }} {{ f.get('aliases', [])|join(' ') }} {{ f.desc }} {{ f.get('keywords', '') }}">
       <b>{{ f.name }}</b>{% for t in f.get('tracks', []) %} <span class="badge {{ t }}">{{ TRACKS[t] }}</span>{% endfor %}
       <span>{{ f.desc|truncate(60) }}</span>
     </a>
