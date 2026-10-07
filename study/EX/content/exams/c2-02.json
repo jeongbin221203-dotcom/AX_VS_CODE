@@ -1735,7 +1735,8 @@
       "수강인원",
       "만족도"
      ],
-     "criteria_at": "A21"
+     "criteria_at": "A21",
+     "criteria_range": "A21:C23"
     }
    ],
    "answer": [

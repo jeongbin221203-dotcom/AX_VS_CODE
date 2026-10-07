@@ -1890,6 +1890,7 @@
     {
      "kind": "pivot",
      "label": "행·열·값 필드",
+     "source": "A3:G27",
      "points": 6,
      "rows": [
       "지점"

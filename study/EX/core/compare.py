@@ -369,6 +369,13 @@ def _scale(rule):
     return None
 
 
+def _formula_funcs(text):
+    try:
+        return set(fx.functions_used(fx.parse('=' + text)))
+    except fx.FormulaError:
+        return set()
+
+
 def _rule_same(rule, r, ans, user, sheet, sq):
     """정답 규칙과 수험자 규칙이 같은 일을 하는지 → (같음, 다르면 이유)."""
     if r.type != rule.type:
@@ -383,6 +390,10 @@ def _rule_same(rule, r, ans, user, sheet, sq):
                 return False, f'규칙 수식 ={uf} 을(를) 계산할 수 없습니다'
             if want != got:
                 return False, f'규칙 수식 ={uf} 의 결과가 다릅니다'
+        need = _formula_funcs(rule.formula[0])         # 지문에 "AND 함수 사용" 처럼 적힌 함수
+        miss = need - _formula_funcs(uf)
+        if miss:
+            return False, f"{', '.join(sorted(miss))} 함수를 사용해 규칙을 만드세요(현재 ={uf})"
     else:
         for attr, default in RULE_ATTRS:
             a = getattr(rule, attr, None)
@@ -536,6 +547,11 @@ def _chart_items(sheet, src, ans, user):
         add('가로 축 제목', lambda c: _norm_text(c['x_title']))
         add('범례', lambda c: c['legend'])
         add('누적 여부', lambda c: c['grouping'])
+        hid_a = {x['name'] for x in ca['series'] if not x.get('visible', True)}
+        hid_u = {x['name'] for x in cu['series'] if not x.get('visible', True)} if cu is not None else set()
+        if hid_u - hid_a:
+            items.append({'label': '차트: 보이는 계열', 'ok': False, 'hint': '정답: 모든 계열이 보임',
+                          'msgs': [f"{', '.join(sorted(hid_u - hid_a))} 계열이 채우기·선 없음으로 보이지 않습니다"]})
     return items
 
 

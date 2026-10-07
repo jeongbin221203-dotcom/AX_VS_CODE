@@ -123,6 +123,12 @@ def match(spec, pv):
         if want != got:
             fmt = lambda xs: ', '.join(f'{f} {FUNC_NAMES.get(_func(fn), fn)}' for f, fn in xs) or '(없음)'  # noqa: E731
             why.append(f"값 영역: {fmt(spec['values'])} 이어야 하는데 {fmt(pv['values'])}")
+    if spec.get('source'):                            # 원본 범위 — 문제에 적힌 영역 전체를 써야 함
+        src = pv.get('source') or (None, None, None)
+        want_rng = str(spec['source']).replace('$', '').upper()
+        got_rng = str(src[1] or src[2] or '').replace('$', '').upper()
+        if got_rng != want_rng:
+            why.append(f"원본 범위: [{spec['source']}] 영역이어야 하는데 [{src[1] or src[2] or '알 수 없음'}]")
     if spec.get('sheet') and _norm(spec['sheet']) != _norm(pv['sheet']):
         why.append(f"위치: '{spec['sheet']}' 시트여야 하는데 '{pv['sheet']}'")
     if spec.get('at'):

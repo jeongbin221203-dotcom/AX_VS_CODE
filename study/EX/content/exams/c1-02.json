@@ -1756,7 +1756,9 @@
       "대여일수",
       "대여료"
      ],
-     "criteria_at": "A21"
+     "criteria_at": "A21",
+     "criteria_range": "A21:A22",
+     "criteria_head": "조건"
     }
    ],
    "answer": [

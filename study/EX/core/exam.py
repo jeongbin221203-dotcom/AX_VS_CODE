@@ -409,6 +409,18 @@ def _fmt_sample(fmt):
     return out
 
 
+def _fmt_label(code):
+    """표시 형식 코드 → 학습자가 읽을 말(코드 + 예시). 일반·텍스트는 이름으로."""
+    if code in (None, '', 'General'):
+        return '일반'
+    if code == '@':
+        return "'텍스트'"
+    plain = re.sub(r'"[^"]*"|\[[^\]]*\]', '', str(code).lower())
+    s = [x.strip() for x in _fmt_sample(code)]
+    sample = s[3] if '%' in plain else s[4] if re.search(r'[ymd]', plain) else s[0]
+    return f'{code} (예: {sample})'
+
+
 def check_style(ctx, sheet, chk):
     ws = ctx.ws(sheet)
     bad = []
@@ -446,7 +458,7 @@ def check_style(ctx, sheet, chk):
             bad.append(f'{a}: 자동 줄 바꿈')
         if 'numfmt' in chk and not _same_fmt(cell.number_format, chk['numfmt'],
                                              [ctx.user_value(ws.title, rr, cc) for rr, cc in cells]):
-            bad.append(f"{a}: 표시 형식 {cell.number_format} → {chk['numfmt']}")
+            bad.append(f"{a}: 표시 형식 {_fmt_label(cell.number_format)} → {_fmt_label(chk['numfmt'])}")
         if chk.get('border') == 'all':
             b = cell.border
             if not all(getattr(b, s).style for s in ('left', 'right', 'top', 'bottom')):
@@ -623,6 +635,14 @@ def check_filter(ctx, sheet, chk):
         cr, cc = fx.parse_addr(chk['criteria_at'])
         if ctx.user_value(sheet, cr, cc) in (None, ''):
             bad.append(f"조건을 {chk['criteria_at']} 셀부터 입력해야 합니다")
+    if chk.get('criteria_range'):                     # 문제가 정한 조건 영역 안에 조건(머리글 아래 칸)이 있어야 함
+        cr1, cc1, cr2, cc2 = fx.parse_range(chk['criteria_range'])
+        has = any(ctx.user_value(sheet, r, c) not in (None, '') for r in range(cr1 + 1, cr2 + 1)
+                  for c in range(cc1, cc2 + 1))
+        if not has:
+            bad.append(f"조건을 [{chk['criteria_range']}] 영역 안(머리글 아래 칸)에 입력해야 합니다")
+        if chk.get('criteria_head') and _norm_text(ctx.user_value(sheet, cr1, cc1)) != _norm_text(chk['criteria_head']):
+            bad.append(f"조건의 필드명은 '{chk['criteria_head']}'으로 입력해야 합니다({fx.addr(cr1, cc1)})")
     if not got:
         return False, bad + [f"{chk['out']} 에 결과가 없습니다"]
     if [_norm_text(x) for x in got[0]] != [_norm_text(x) for x in exp[0]]:
@@ -943,6 +963,19 @@ def _axis_title(part, which, book=None):
     return _rich_text(axis.title, book) if axis is not None and axis.title else None
 
 
+def _series_hidden(s, kind):
+    """채우기·선이 모두 '없음'으로 서식돼 눈에 보이지 않는 계열인지."""
+    sp = getattr(s, 'spPr', None)
+    if sp is None:
+        return False
+    ln = getattr(sp, 'ln', None)
+    line_off = ln is not None and bool(getattr(ln, 'noFill', False))
+    if kind in ('line', 'scatter', 'radar'):
+        mk = getattr(s, 'marker', None)
+        return line_off and mk is not None and getattr(mk, 'symbol', None) == 'none'
+    return bool(getattr(sp, 'noFill', False)) and line_off
+
+
 def describe_charts(ctx, sheet, charts=None):
     ws = ctx.ws(sheet)
     out = []
@@ -961,6 +994,7 @@ def describe_charts(ctx, sheet, charts=None):
                 if any(x['name'] == name for x in series):
                     continue
                 series.append({'name': name, 'kind': kind, 'secondary': ax(part) != first_ax,
+                               'visible': not _series_hidden(s, kind),
                                'labels': bool(s.dLbls and (s.dLbls.showVal or s.dLbls.showPercent or s.dLbls.showCatName)),
                                'trend': bool(s.trendline), 'val': s.val.numRef.f if s.val and s.val.numRef else ''})
         out.append({'kinds': kinds, 'title': _rich_text(ch.title, ctx.book), 'series': series,
@@ -1011,6 +1045,9 @@ def check_chart(ctx, sheet, chk):
         bad.append(f"범례 위치 {pos.get(ch['legend'], ch['legend'])} → {pos.get(chk['legend'], chk['legend'])}")
     if 'grouping' in chk and ch['grouping'] != chk['grouping']:
         bad.append(f"차트 종류(누적 여부) → {chk['grouping']}")
+    hidden = [s['name'] for s in ch['series'] if not s.get('visible', True)]
+    if hidden:
+        bad.append(f"{', '.join(hidden)} 계열이 채우기·선 없음으로 보이지 않습니다")
     return not bad, bad[:4]
 
 

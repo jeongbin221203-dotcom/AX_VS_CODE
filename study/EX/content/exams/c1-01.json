@@ -1721,7 +1721,8 @@
       "수량",
       "판매금액"
      ],
-     "criteria_at": "A26"
+     "criteria_at": "A26",
+     "criteria_range": "A25:A26"
     }
    ],
    "answer": [
@@ -2039,6 +2040,7 @@
     {
      "kind": "pivot",
      "label": "필터·행·열·값 필드",
+     "source": "A3:F39",
      "points": 3,
      "filters": [
       "지점"

@@ -42,10 +42,10 @@
 | name | `name`, `ref` (`'시트'!D4:D15`) |
 | cf | `range`, `formula`(첫 행 기준 정답 규칙 — 행마다 계산해 서식 받을 행을 비교), `font_color`, `bold`, `italic`, `fill` |
 | dv | `range`, `type`(whole/decimal/list/date/textLength/custom), `operator`, `formula1`, `formula2`, `error_title`, `error`, `prompt_title`, `prompt`, `style`(stop/warning/information) |
-| filter | 고급 필터 결과: `source`(머리글 포함), `answer`(첫 데이터 행 기준 조건 수식), `out`(결과 첫 칸), `columns`(일부 필드만 추출할 때), `criteria_at` |
+| filter | 고급 필터 결과: `source`(머리글 포함), `answer`(첫 데이터 행 기준 조건 수식), `out`(결과 첫 칸), `columns`(일부 필드만 추출할 때), `criteria_at`, `criteria_range`(조건 영역), `criteria_head`(필드명) |
 | sorted | `range`(머리글 포함), `keys`: `[["부서","asc"], ["직급", ["부장","과장","대리","사원"]]]` |
 | subtotal | `range`(원본 머리글 포함), `group`, `items`: `[{"func":"max","fields":["기본급"]}]` (sum·average·count·max·min) |
-| pivot | `rows`, `cols`, `filters`, `values`: `[["금액","sum"]]`, `sheet`, `at`, `layout`(compact/outline/tabular), `no_grand_rows`, `no_grand_cols`, `group`, `check_total` |
+| pivot | `rows`, `cols`, `filters`, `values`: `[["금액","sum"]]`, `source`(원본 범위), `sheet`, `at`, `layout`(compact/outline/tabular), `no_grand_rows`, `no_grand_cols`, `group`, `check_total` |
 | goalseek | `cell`(수식 셀), `value`(목표값), `changing` |
 | scenario | `changing`, `scenarios`: `[["이름", [값…]]]`, `summary`(요약 시트 필요), `summary_before`(요약 시트가 바로 앞에 와야 할 시트) |
 | datatable | `range`(결과 칸 — 머리 행·열 제외), `row_input`, `col_input` (모서리 칸 수식은 문제 파일에 미리 두거나 정답 단계에서 넣음) |
