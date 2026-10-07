@@ -64,7 +64,7 @@ PUBLIC_ENDPOINTS = {"auth.login", "auth.setup", "auth.oidc_start", "auth.oidc_ca
                     "static", "service_worker", "offline",
                     "healthz", "readyz", "metrics"}
 # 시연 서버에서 저장을 막는 관리자 설정 (admin 블루프린트 전체 + 아래)
-DEMO_LOCKED = {"auth.password", "io.forms_inspect", "io.forms_save", "io.forms_delete"}
+DEMO_LOCKED = {"auth.password", "io.forms_inspect", "io.forms_save", "io.forms_delete", "io.import_remember"}
 # 비밀번호 변경이 필요한 사용자도 열 수 있는 엔드포인트
 PASSWORD_ENDPOINTS = {"auth.password", "auth.logout", "static", "healthz"}
 

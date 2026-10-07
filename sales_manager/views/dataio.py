@@ -122,16 +122,72 @@ def import_check():
     try:
         check = dataio.import_rows(entity, raw, g.user, dry_run=True, row_offset=offset)
     except ValueError as exc:
+        if form is None and "필수 컬럼이 없습니다" in str(exc) and ent.has_role(g.user, "SUPPORT"):
+            # 표준 양식이 아닌 회사 파일 — 버리지 않고 '이 모양 기억하기' 를 권한다 (기억하면 그 열 연결로 바로 이어서 올린다)
+            return render_page("io/index.html", "dataio", tab="import", entity=entity, spec=dataio.IMPORT_SPECS[entity],
+                               entities=list(dataio.IMPORT_SPECS), check=None, remember_offer=str(exc),
+                               remember_name=Path(upload.filename or "").stem, can_remember=True,
+                               **_import_ctx(entity, form_id), **_export_ctx())
         _discard_upload()
         flash(str(exc), "error")
         return redirect(url_for("io.index", entity=entity, form_id=form_id))
 
+    return _check_page(entity, form, form_id, upload.filename, raw, check)
+
+
+def _check_page(entity: str, form: dict | None, form_id, filename: str, raw: pd.DataFrame, check: dict):
     return render_page("io/index.html", "dataio", tab="import", entity=entity,
                        spec=dataio.IMPORT_SPECS[entity], entities=list(dataio.IMPORT_SPECS),
-                       check=check, raw_total=len(raw), filename=upload.filename,
-                       used_form=form, **_import_ctx(entity, form_id),
+                       check=check, raw_total=len(raw), filename=filename,
+                       used_form=form, can_remember=ent.has_role(g.user, "SUPPORT"),
+                       paired=xf.paired_export(form["id"]) if form else None,
+                       remember_name=Path(filename or "").stem, **_import_ctx(entity, form_id),
                        raw_preview=Table(raw.head(10)),
                        errors=Table(dataio.errors_to_df(check["errors"])), **_export_ctx())
+
+
+@bp.route("/import/remember", methods=["POST"])
+def import_remember():
+    """올린 회사 엑셀 파일 모양을 기억한다 → 데이터 추출에서 '회사 양식으로 받기' 로 같은 모양으로 내려받는다."""
+    if not ent.has_role(g.user, "SUPPORT"):
+        abort(403, "회사 양식은 영업지원·관리자가 저장합니다.")
+    info, key = _pending_upload()
+    if not info:
+        flash("검증한 업로드 파일이 없습니다. 파일을 다시 올려 주세요.", "error")
+        return redirect(url_for("io.index"))
+    entity = info["entity"]
+    form = xf.get_form(info["form_id"]) if info.get("form_id") else None
+    try:
+        r = xf.remember_upload(entity, get_storage().get(key), info["name"], f_str("name") or Path(info["name"]).stem,
+                               import_form=form)
+    except ValueError as exc:
+        flash(str(exc), "error")
+        return redirect(url_for("io.index", entity=entity, form_id=info.get("form_id")))
+    note = "서식 파일(로고·제목·결재란·글꼴)까지 그대로" if r["template"] else "열 이름·순서만 같은 새 파일로 (.xlsx 가 아니면 서식은 못 가져옵니다)"
+    flash(f"이 회사 양식을 기억했습니다 — 다음부터 '데이터 추출'에서 '{f_str('name') or Path(info['name']).stem} (내려받기)' 로 받으면 {note} 내려줍니다."
+          + (f" 연결하지 못한 열(비워서 내려줌): {', '.join(r['unmapped'][:8])}" if r["unmapped"] else ""), "success")
+    if form is None and r.get("import_id"):
+        info["form_id"] = r["import_id"]                  # 방금 만든 업로드 양식으로 이 파일을 이어서 검증한다
+        session["upload"] = info
+        return redirect(url_for("io.import_recheck"))
+    return redirect(url_for("io.export", sources=entity))
+
+
+@bp.route("/import/recheck")
+def import_recheck():
+    info, key = _pending_upload()
+    if not info:
+        flash("검증한 업로드 파일이 없습니다. 파일을 다시 올려 주세요.", "error")
+        return redirect(url_for("io.index"))
+    entity = info["entity"]
+    form = xf.get_form(info["form_id"]) if info.get("form_id") else None
+    try:
+        raw, offset = _read_pending(info, key)
+        check = dataio.import_rows(entity, raw, g.user, dry_run=True, row_offset=offset)
+    except Exception as exc:  # noqa: BLE001
+        flash(f"파일을 읽지 못했습니다: {exc}", "error")
+        return redirect(url_for("io.index", entity=entity))
+    return _check_page(entity, form, info.get("form_id"), info["name"], raw, check)
 
 
 @bp.route("/import/errors.csv")

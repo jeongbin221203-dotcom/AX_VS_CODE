@@ -58,6 +58,19 @@
   </form>
 </section>
 
+{% if remember_offer %}
+<section class="card">
+  <div class="alert alert-warn">표준 업로드 양식이 아닙니다 — {{ remember_offer }}</div>
+  <h4>📎 회사 엑셀 파일이면 모양을 기억하세요</h4>
+  <p class="muted small">올린 파일의 머리글·열 이름을 읽어 열을 자동으로 연결하고, 업로드 양식과 <strong>내려받기 양식</strong>을 만든 뒤 이 파일을 바로 이어서 검증합니다.
+    다음부터는 데이터 추출 → 회사 양식으로 받기에서 이 모양으로 받습니다. 필수 항목({{ spec.required|join(', ') }})에 해당하는 열을 못 찾으면 만들지 않습니다.</p>
+  <form method="post" action="{{ url_for('io.import_remember') }}" class="toolbar" data-no-draft>
+    {{ csrf() }}
+    <label class="grow">양식 이름 <input name="name" value="{{ remember_name }}" required maxlength="60"></label>
+    <button class="btn btn-primary">📎 이 모양 기억하고 이어서 올리기</button>
+  </form>
+</section>
+{% endif %}
 {% if check %}
 <section class="card">
   <h3>업로드 내용 미리보기 — {{ filename }} · 총 {{ '{:,}'.format(raw_total) }}행</h3>
@@ -72,6 +85,21 @@
     {{ metric('오류', '{:,}행'.format(check.errors|length), none, 'down' if check.errors else none) }}
   </div>
 
+  {% if can_remember and not (used_form and paired) %}
+  <section class="card">
+    <h4>📎 이 회사 엑셀 모양을 기억해 나중에 같은 모양으로 받기</h4>
+    <p class="muted small">방금 올린 파일의 머리글·열 이름을 읽어 {{ '내려받기 양식을' if used_form else '업로드·내려받기 양식을' }} 만듭니다.
+      파일의 로고·제목·결재란·글꼴·테두리는 그대로 두고 데이터 행만 비운 서식 파일로 저장하며, 합계 줄의 SUM 은 내려받을 때의 합계로 채웁니다.
+      다음부터 <strong>데이터 추출 → 회사 양식으로 받기</strong>에서 이 모양으로 받습니다. (등록 여부와 상관없이 지금 저장할 수 있습니다)</p>
+    <form method="post" action="{{ url_for('io.import_remember') }}" class="toolbar" data-no-draft>
+      {{ csrf() }}
+      <label class="grow">양식 이름 <input name="name" value="{{ remember_name }}" required maxlength="60"></label>
+      <button class="btn">📎 이 모양 기억하기</button>
+    </form>
+  </section>
+  {% elif used_form and paired %}
+  <p class="small muted">📎 이 양식의 내려받기 짝 <strong>{{ paired.name }}</strong> 이 있습니다 — 데이터 추출에서 같은 모양으로 받을 수 있습니다.</p>
+  {% endif %}
   {% if check.errors %}
     <div class="alert alert-error">아래 행은 등록되지 않습니다. 엑셀에서 해당 행을 수정한 뒤 다시 올리십시오.</div>
     {{ table(errors, 240) }}

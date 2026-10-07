@@ -345,6 +345,151 @@ def to_standard(form: dict, data: bytes, filename: str) -> tuple[pd.DataFrame, i
     return out, header + 1
 
 
+# 업로드 항목 이름 → 내려받기 열 이름 (두 이름이 다른 것만)
+EXPORT_ALIASES: dict[str, dict[str, str]] = {
+    "영업기회": {"거래처명": "거래처"},
+    "영업활동": {"거래처명": "거래처"},
+    "매출": {"거래처명": "거래처", "금액": "공급가액"},
+}
+MAX_REMEMBER_BYTES = 8 * 1024 * 1024
+
+
+def clean_template(data: bytes, filename: str, sheet_name: str | None, header_row: int, start: int,
+                   stop_words: list[str] | None = None) -> bytes | None:
+    """올린 회사 파일에서 '데이터 행만' 비워 서식 파일로 만든다 (로고·제목·결재란·글꼴·테두리·열 너비는 그대로).
+
+    * 머리글 아래 데이터 행의 값을 지우고 첫 행(서식)만 남긴다. 그 아래의 합계 줄은 위로 붙인다.
+    * 합계 줄의 =SUM(...) 은 {{합계:열이름}} 자리표시자로 바꿔 내려받을 때 실제 합계가 들어가게 한다.
+    * .xlsx 가 아니거나 너무 크거나 열 수 없으면 None (그러면 열 이름·순서만 같은 새 파일로 내려준다).
+    """
+    if not filename.lower().endswith(".xlsx") or len(data) > MAX_REMEMBER_BYTES:
+        return None
+    from openpyxl import load_workbook
+    try:
+        wb = load_workbook(io.BytesIO(data))
+    except Exception:   # noqa: BLE001
+        return None
+    ws = wb[sheet_name] if sheet_name in wb.sheetnames else wb.worksheets[0]
+    stop = {_norm(w) for w in (stop_words or DEFAULT_STOP_WORDS)}
+
+    def first_text(r: int) -> str:
+        for cell in ws[r]:
+            v = cell.value
+            if isinstance(v, str) and v.strip() and not v.startswith("="):
+                return _norm(v)
+        return ""
+
+    footer = next((r for r in range(start, ws.max_row + 1) if first_text(r) in stop), None)
+    data_end = (footer - 1) if footer else ws.max_row
+    while data_end >= start and not any(c.value not in (None, "") for c in ws[data_end]):
+        data_end -= 1                                          # 데이터 아래 빈 줄은 데이터가 아님
+    heads = {c.column: str(c.value).strip() for c in ws[header_row] if c.value not in (None, "")}
+    if footer:
+        for r in range(footer, ws.max_row + 1):
+            for c in ws[r]:
+                if isinstance(c.value, str) and c.value.startswith("=") and "SUM(" in c.value.upper() and c.column in heads:
+                    c.value = "{{합계:%s}}" % heads[c.column]
+    if data_end >= start:
+        below = []                                            # openpyxl 은 행을 지워도 병합 범위를 옮기지 않는다 → 직접
+        for rng in list(ws.merged_cells.ranges):
+            if rng.min_row > data_end:
+                below.append((rng.min_col, rng.min_row, rng.max_col, rng.max_row))
+                ws.unmerge_cells(str(rng))
+            elif rng.max_row >= start:
+                ws.unmerge_cells(str(rng))
+        for r in range(start, data_end + 1):
+            for c in ws[r]:
+                c.value = None
+        removed = data_end - start
+        if removed > 0:
+            ws.delete_rows(start + 1, removed)
+        for c0, r0, c1, r1 in below:
+            ws.merge_cells(start_row=r0 - removed, start_column=c0, end_row=r1 - removed, end_column=c1)
+    buf = io.BytesIO()
+    wb.save(buf)
+    return buf.getvalue()
+
+
+def _invert_value_map(value_map: dict) -> dict:
+    """업로드 변환표 {항목: {회사 값: 시스템 값}} → 내려받기 변환표 {항목: {시스템 값: 회사 값}} (처음 나온 회사 값 사용)."""
+    out: dict = {}
+    for field, table_ in (value_map or {}).items():
+        inv: dict = {}
+        for company, system in table_.items():
+            inv.setdefault(str(system), company)
+        out[field] = inv
+    return out
+
+
+def remember_upload(entity: str, data: bytes, filename: str, name: str, import_form: dict | None = None,
+                    make_import: bool = True) -> dict:
+    """올린 회사 엑셀 파일 모양을 기억해 나중에 같은 모양으로 내려받게 한다.
+
+    import_form 이 있으면(이미 등록한 업로드 양식으로 올림) 그 열 연결로 내려받기 양식만 만든다.
+    없으면 파일의 머리글을 읽어 열을 자동으로 연결해 업로드 양식과 내려받기 양식을 함께 만든다
+    (필수 항목을 못 찾으면 거부 — 관리자 > 회사 엑셀 양식에서 직접 연결).
+    돌려주는 값: {'import_id', 'export_id', 'template': 서식 파일 사용 여부, 'unmapped': 연결 못 한 열}
+    """
+    name = str(name or "").strip()
+    if not name:
+        raise ValueError("양식 이름을 입력하세요 (예: 본사 매출집계표).")
+    if import_form is None:
+        info = inspect_file(data, filename)
+        header_row = int(info["header_row"])
+        mapping = [m for m in suggest_mapping(info["headers"], system_fields("import", entity)) if m["field"]]
+        mapped = {m["field"] for m in mapping}
+        missing = [f for f in dataio.IMPORT_SPECS[entity]["required"] if f not in mapped]
+        if missing:
+            raise ValueError(f"파일의 열에서 필수 항목을 찾지 못했습니다: {', '.join(missing)} — "
+                             f"관리자 > 회사 엑셀 양식에서 열을 직접 연결해 주세요.")
+        base = {"sheet_name": info["sheet"] if info["sheet"] != "(CSV)" else None, "header_row": header_row,
+                "data_start_row": header_row + 1, "column_map": mapping, "value_map": {}, "fill_down": [],
+                "stop_words": list(DEFAULT_STOP_WORDS)}
+        unmapped = [h for h in info["headers"] if h not in {m["column"] for m in mapping}]
+    else:
+        base = {k: import_form[k] for k in ("sheet_name", "header_row", "data_start_row", "column_map", "value_map",
+                                           "fill_down", "stop_words")}
+        unmapped = []
+    cleaned = clean_template(data, filename, base["sheet_name"], int(base["header_row"]),
+                             int(base.get("data_start_row") or int(base["header_row"]) + 1), base["stop_words"])
+    result: dict[str, Any] = {"import_id": import_form["id"] if import_form else None, "template": bool(cleaned),
+                              "unmapped": unmapped}
+    if import_form is None and make_import:
+        result["import_id"] = save_form({"name": f"{name} (업로드)", "direction": "import", "entity": entity, **base},
+                                        cleaned, f"{name}.xlsx" if cleaned else None)
+    # 내려받기 양식: 업로드 항목 → 내려받기 열 이름으로 바꿔 연결 (내려받기에 없는 항목은 비워 둔다)
+    export_cols = set(system_fields("export", entity))
+    aliases = EXPORT_ALIASES.get(entity, {})
+    export_map, skipped = [], []
+    for m in base["column_map"]:
+        field = m["field"] if m["field"] in export_cols else aliases.get(m["field"])
+        if field in export_cols:
+            export_map.append({"column": m["column"], "field": field})
+        else:
+            skipped.append(m["column"])
+    if not export_map:
+        raise ValueError("올린 파일의 열을 내려받기 항목에 연결하지 못했습니다.")
+    result["unmapped"] = unmapped + skipped
+    inverted = _invert_value_map(base["value_map"])
+    inverted = {aliases.get(k, k): v for k, v in inverted.items()}
+    result["export_id"] = save_form(
+        {"name": f"{name} (내려받기)", "direction": "export", "entity": entity, "sheet_name": base["sheet_name"],
+         "header_row": base["header_row"], "data_start_row": base.get("data_start_row"), "column_map": export_map,
+         "value_map": inverted, "fill_down": [], "stop_words": base["stop_words"],
+         "memo": f"올린 파일에서 자동 생성 — 업로드 양식 #{result['import_id']}"},
+        cleaned, f"{name}.xlsx" if cleaned else None)
+    db.audit("회사양식기억", "시스템", result["export_id"], {"이름": name, "항목": entity, "서식파일": bool(cleaned),
+                                                          "연결 못 한 열": len(result["unmapped"])})
+    return result
+
+
+def paired_export(import_form_id: int) -> dict | None:
+    """이 업로드 양식에서 만든 내려받기 양식 (있으면)."""
+    row = db._one("SELECT id FROM excel_forms WHERE direction='export' AND active=1 AND memo LIKE ? ORDER BY id DESC LIMIT 1",
+                  [f"%업로드 양식 #{int(import_form_id)}"])
+    return get_form(int(row["id"])) if row else None
+
+
 def blank_template(form: dict) -> bytes:
     """업로드용 빈 양식: 회사 서식 파일이 있으면 그대로, 없으면 머리글 행 위치에 회사 열 이름을 둔다."""
     if form.get("template_key"):
@@ -376,6 +521,10 @@ def render_export(form: dict, frame: pd.DataFrame, meta: dict) -> bytes:
     columns = [m for m in form["column_map"] if m["field"] in frame.columns]
     body = dataio.neutralize_formulas(frame[[m["field"] for m in columns]]) if columns else pd.DataFrame()
     body.columns = [m["column"] for m in columns]
+    for m in columns:                                      # 회사에서 쓰는 코드로 되돌린다 (예: '과세' → '01')
+        table_ = (form.get("value_map") or {}).get(m["field"]) if form.get("direction") == "export" else None
+        if table_ and m["column"] in body.columns:
+            body[m["column"]] = body[m["column"]].map(lambda v, t=table_: t.get(str(v), v) if pd.notna(v) else v)
     if not form.get("template_key"):
         return dataio.to_excel({form.get("sheet_name") or form["entity"]: body}, meta)
 
