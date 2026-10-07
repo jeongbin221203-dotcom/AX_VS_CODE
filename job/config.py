@@ -30,7 +30,7 @@ MAX_PAGES = int(os.environ.get("JOB_MAX_PAGES", "3"))    # 한 번 수집할 때
 USER_AGENT = "job-fit-checker/1.0 (personal use)"
 
 # ── 정기 크롤링 (켜기·검색어·간격은 화면 '공고 수집 → 자동 수집'에서) ──
-CRAWL_DELAY = float(os.environ.get("JOB_CRAWL_DELAY", "2"))      # 같은 사이트 요청 사이 최소 간격(초). 사이트끼리는 동시에 읽음
+CRAWL_DELAY = float(os.environ.get("JOB_CRAWL_DELAY", "1.2"))      # 같은 사이트 요청 사이 최소 간격(초). 사이트끼리는 동시에 읽음
 # 앱 안에서 예약 실행 스레드를 띄울지. 별도 작업(crawl.py --loop, 작업 스케줄러)으로 돌리면 0
 START_SCHEDULER = os.environ.get("JOB_SCHEDULER", "1") == "1"
 
