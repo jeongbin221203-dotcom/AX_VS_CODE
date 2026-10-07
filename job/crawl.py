@@ -14,7 +14,7 @@ import logging
 import time
 
 import config
-from core import crawler, db
+from core import crawler, db, power
 
 
 def main() -> None:
@@ -27,9 +27,17 @@ def main() -> None:
 
     if args.loop:
         while True:
-            _report(crawler.run_once())
+            power.keep_awake(True)             # 수집하는 동안 Windows 가 잠들지 않게 (앱 예약과 같은 방식)
+            try:
+                _report(crawler.run_once())
+            finally:
+                power.keep_awake(False)
             time.sleep(60)
-    result = crawler.run_once(force=args.now)
+    power.keep_awake(True)
+    try:
+        result = crawler.run_once(force=args.now)
+    finally:
+        power.keep_awake(False)
     if result is None and not args.now and not crawler.load_settings()["enabled"]:
         print("자동 수집이 꺼져 있습니다. 화면에서 켜거나 --now 로 실행하세요.")
     _report(result)
