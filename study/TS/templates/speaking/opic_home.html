@@ -124,7 +124,7 @@
   {% for r in recent %}
     {% set it = by_id.get((r.task, r.item_id)) %}
     <tr><td>{{ r.created_at[5:16].replace('T', ' ') }}</td>
-      <td>{% if it %}{{ TOPICS[it.topic][0] }} · {{ KINDS[it.kind] if it.kind else KINDS[it.steps[r.qidx].kind] }}{% else %}{{ r.item_id }}{% endif %}{{ ' · 모의고사' if r.mock_id }}</td>
+      <td>{% if it %}{{ TOPICS[it.topic][0] }} · {{ KINDS[it.kind] if it.kind else (KINDS[it.steps[r.qidx].kind] if r.qidx < it.steps|length else '롤플레이') }}{% else %}{{ r.item_id }}{% endif %}{{ ' · 모의고사' if r.mock_id }}</td>
       <td class="r num">{{ r.points | round(1) }}/5</td><td class="r num muted">{{ (r.words ~ '단어') if r.words is not none else '' }}</td></tr>
   {% endfor %}
   </tbody></table>

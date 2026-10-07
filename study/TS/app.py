@@ -4,9 +4,13 @@
 """
 from __future__ import annotations
 
+import os
 import secrets
+import sys
+import time
 
-from flask import Flask, abort, request, session
+from flask import Flask, Request, abort, request, session
+from werkzeug.routing import IntegerConverter
 
 import config
 from core import db
@@ -16,8 +20,32 @@ from views import register_blueprints
 from views.helpers import register_template_helpers
 
 
+if sys.platform != "win32":
+    # 서버(Render 등)가 UTC 여도 '오늘'·'내일 복습'·연속 학습일이 한국 시간 기준이 되게 한다 (이 PC 는 이미 KST)
+    os.environ.setdefault("TZ", "Asia/Seoul")
+    time.tzset()
+
+
+class JsonDictRequest(Request):
+    """JSON 본문이 객체가 아니면(배열·숫자 등) 없는 것으로 본다 — 뷰의 `get_json() or {}` 가 500 대신 400 안내로 이어지게."""
+
+    def get_json(self, *args, **kwargs):
+        data = super().get_json(*args, **kwargs)
+        return data if isinstance(data, dict) else None
+
+
+class SafeIntConverter(IntegerConverter):
+    """주소의 번호는 최대 10자리까지만 — 아주 큰 숫자가 DB 에서 OverflowError(500)가 되지 않게 404 로 처리."""
+
+    def __init__(self, map, **kwargs):
+        kwargs.setdefault("max", 2**31 - 1)
+        super().__init__(map, **kwargs)
+
+
 def create_app(test_config: dict | None = None) -> Flask:
     app = Flask(__name__)
+    app.request_class = JsonDictRequest
+    app.url_map.converters["int"] = SafeIntConverter
     app.config.from_object(config)
     if test_config:
         app.config.update(test_config)
@@ -45,8 +73,16 @@ def create_app(test_config: dict | None = None) -> Flask:
             return
         token = session.get("_csrf")
         sent = request.headers.get("X-CSRF-Token") or request.form.get("_csrf", "")
-        if not token or not secrets.compare_digest(token, sent):
+        try:
+            ok = bool(token) and secrets.compare_digest(token, sent)
+        except TypeError:                                  # 한글 등 ASCII 가 아닌 글자
+            ok = False
+        if not ok:
             abort(400, "요청이 만료되었습니다. 화면을 새로고침한 뒤 다시 시도하세요.")
+
+    @app.errorhandler(OverflowError)
+    def too_big(_e):
+        return ("값이 너무 큽니다.", 400)
 
     @app.after_request
     def headers(response):

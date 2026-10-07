@@ -11,9 +11,9 @@
   <div class="card kpi">
     <div class="label">종합 밴드</div>
     <div class="value">{{ r.total if r.total is not none else '–' }}</div>
-    <div class="sub">{% if r.total %}{{ cefr(r.total) }} · 예전 점수 약 {{ BAND_OLD[r.total|int] }} · 목표 {{ target }}{% endif %}</div>
+    <div class="sub">{% if r.total %}{{ cefr(r.total) }} · 예전 점수 약 {{ BAND_OLD[r.total] }} · 목표 {{ target }}{% endif %}</div>
   </div>
-  {% for k in ['R', 'L', 'S', 'W'] %}
+  {% for k in ['R', 'L', 'W', 'S'] %}
     {% set b = r.bands[k] %}
     <div class="card kpi">
       <div class="label">{{ SECTIONS[k].name }}</div>

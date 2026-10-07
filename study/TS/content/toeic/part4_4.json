@@ -635,16 +635,16 @@
     "explanation": "도심과 공항을 잇는 새 버스 노선(Route 50)이 운행을 시작한다는 소식이다. 공항 건물이나 택시 요금 이야기는 아니다."
    },
    {
-    "q": "How long will the trip take?",
+    "q": "Look at the graphic. What time does the first Route 50 bus leave City Hall on weekdays?",
     "choices": [
-     "Twenty minutes",
-     "Thirty minutes",
-     "Fifty minutes",
-     "Forty minutes"
+     "5:00 A.M.",
+     "5:30 A.M.",
+     "6:00 A.M.",
+     "11:00 P.M."
     ],
-    "answer": 3,
-    "type": "세부 사항",
-    "explanation": "'the trip will take about forty minutes'라고 했다. 20분은 배차 간격이고 50은 노선 번호다."
+    "answer": 1,
+    "type": "시각 자료 연계",
+    "explanation": "표의 First Bus 칸을 보면 평일 첫차는 5:30 A.M.이다. 11:00 P.M.은 막차 시각이고, 담화에는 첫차 시각이 나오지 않으므로 표를 확인해야 풀 수 있다."
    },
    {
     "q": "What does the speaker say about paying?",

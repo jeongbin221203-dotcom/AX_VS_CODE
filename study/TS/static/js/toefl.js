@@ -466,5 +466,5 @@
     $("#quiz-main").classList.remove("hidden");
     TTS.load().then(render);
   });
-  window.addEventListener("beforeunload", stopAll);
+  window.addEventListener("pagehide", stopAll);
 })();

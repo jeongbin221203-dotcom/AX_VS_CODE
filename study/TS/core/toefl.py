@@ -5,7 +5,9 @@
 """
 from __future__ import annotations
 
+import math
 import json
+import threading
 import random
 from pathlib import Path
 
@@ -13,8 +15,8 @@ from . import db
 from .content import content_files
 
 SECTIONS = {
-    "R": {"name": "Reading", "ko": "읽기", "time": "약 30분", "note": "적응형 · 35~48문항"},
-    "L": {"name": "Listening", "ko": "듣기", "time": "약 29분", "note": "적응형 · 35~45문항 · 이전 문제로 못 돌아감"},
+    "R": {"name": "Reading", "ko": "읽기", "time": "약 30분", "note": "적응형 · 약 50문항"},
+    "L": {"name": "Listening", "ko": "듣기", "time": "약 29분", "note": "적응형 · 약 47문항 · 이전 문제로 못 돌아감"},
     "S": {"name": "Speaking", "ko": "말하기", "time": "약 8분", "note": "11문항: 따라 말하기 7 + 인터뷰 4"},
     "W": {"name": "Writing", "ko": "쓰기", "time": "약 23분", "note": "12문항: 문장 만들기 10 + 이메일 1 + 학술 토론 1"},
 }
@@ -59,7 +61,14 @@ class VocabGrade:
 
 
 VOCAB_GRADES = [VocabGrade(lv) for lv in range(1, 6)]
-BAND_OLD = {1: "0~19", 2: "20~41", 3: "42~71", 4: "72~94", 5: "95~113", 6: "114~120"}   # 기존 0~120점 대응(참고)
+# 기존 0~120점 대응(참고) — ETS 공식 환산표(종합 점수): 6=114+, 5.5=107+, 5=95+, 4.5=86+, 4=72+, 3.5=58+, 3=44+, 2.5=34+, 2=24+, 1.5=12+, 1=0+
+BAND_OLD = {1: "0~11", 1.5: "12~23", 2: "24~33", 2.5: "34~43", 3: "44~57", 3.5: "58~71", 4: "72~85",
+            4.5: "86~94", 5: "95~106", 5.5: "107~113", 6: "114~120"}
+
+
+def half_up(x: float) -> float:
+    """0.5 단위로 가장 가까운 값(.25 는 올림). 파이썬 round() 는 짝수 쪽으로 가서 5.25 → 5.0 이 되므로 쓰지 않는다."""
+    return math.floor(x * 2 + 0.5) / 2
 LEVEL_BAND = {1: 2, 2: 3, 3: 4, 4: 5, 5: 6}
 
 # 쓰기·말하기 자기 평가 기준 (0~5) → 밴드 1~6
@@ -258,7 +267,7 @@ def self_band(tasks: list[str], last_n: int = 20) -> float | None:
                            (*tasks, last_n)).fetchall()
     if not rows:
         return None
-    return round((1 + 5 * sum(r[0] for r in rows) / len(rows)) * 2) / 2
+    return half_up(1 + 5 * sum(r[0] for r in rows) / len(rows))
 
 
 def section_bands() -> dict[str, float | None]:
@@ -275,7 +284,7 @@ def section_bands() -> dict[str, float | None]:
             b = self_band(manual[s])
             if b is not None:
                 parts.append(b)
-        out[s] = round(sum(parts) / len(parts) * 2) / 2 if parts else None
+        out[s] = half_up(sum(parts) / len(parts)) if parts else None
     return out
 
 
@@ -283,7 +292,7 @@ def overall_band(bands: dict[str, float | None]) -> float | None:
     vals = [b for b in bands.values() if b is not None]
     if len(vals) < 4:
         return None
-    return round(sum(vals) / 4 * 2) / 2                 # 실제 시험: 네 영역 평균을 0.5 단위로 반올림
+    return half_up(sum(vals) / 4)                       # 실제 시험: 네 영역 평균을 0.5 단위로 반올림
 
 
 def cefr(band: float | None) -> str:
@@ -301,7 +310,7 @@ EASY_LEVELS = [1, 2]       # 밴드 2~3
 READ_MODULE = [("r_words", 1, None), ("r_daily", 2, None), ("r_academic", 1, None)]
 LISTEN_MODULE = [("l_response", 6, None), ("l_conversation", 1, None), ("l_talk", 1, "announcement"),
                  ("l_talk", 1, "academic")]
-MOCK_ORDER = ["R", "L", "S", "W"]       # 개편 시험 순서 (자료에 따라 S·W 순서가 다르게 소개되기도 함)
+MOCK_ORDER = ["R", "L", "W", "S"]       # 개편 시험 순서 (ETS 공식: Reading → Listening → Writing → Speaking)
 
 MOCK_SCHEMA = """
 CREATE TABLE IF NOT EXISTS toefl_mocks (
@@ -390,7 +399,15 @@ def list_mocks(limit: int = 20) -> list[dict]:
             "ORDER BY id DESC LIMIT ?", (limit,))]
 
 
+_FINISH_LOCK = threading.Lock()      # 워커 1개(gunicorn.conf.py) — 같은 제출이 겹쳐도 한 번만 기록
+
+
 def finish_mock(bank: ToeflBank, mid: int, payload: dict) -> dict:
+    with _FINISH_LOCK:
+        return _finish_mock(bank, mid, payload)
+
+
+def _finish_mock(bank: ToeflBank, mid: int, payload: dict) -> dict:
     """payload = {"items": [{"task", "item_id", "results": [{qidx, score, response}]}], "routes": {"R": "hard"}}.
     풀이 기록을 저장하고(연습 밴드에도 반영) 이 시험만으로 영역별 밴드를 계산한다."""
     m = get_mock(mid)
@@ -401,15 +418,24 @@ def finish_mock(bank: ToeflBank, mid: int, payload: dict) -> dict:
     auto: dict[str, dict[int, list[float]]] = {s: {} for s in SECTIONS}
     selfs: dict[str, list[float]] = {s: [] for s in SECTIONS}
     detail = []
-    for row in payload.get("items", []) or []:
+    rows = []
+    for row in payload.get("items", []) or []:             # 먼저 모두 검사 — 중간에 실패해도 일부만 저장되지 않게
+        if not isinstance(row, dict):
+            raise ValueError("답안 형식이 올바르지 않습니다.")
         task, iid = str(row.get("task")), str(row.get("item_id"))
         it = bank.by_id.get((task, iid))
         results = row.get("results") or []
         if not it or task not in TASKS or not isinstance(results, list) or not results:
             continue
+        if not all(isinstance(r, dict) for r in results):
+            raise ValueError("답안 형식이 올바르지 않습니다.")
+        sc = [max(0.0, min(1.0, float(r.get("score", 0)))) for r in results]
+        for r in results:
+            int(r.get("qidx", 0))
+        rows.append((task, iid, it, results, sc))
+    for task, iid, it, results, sc in rows:
         record(task, iid, it["level"], results)
         sec = TASKS[task]["section"]
-        sc = [max(0.0, min(1.0, float(r.get("score", 0)))) for r in results]
         if TASKS[task]["auto"]:
             auto[sec].setdefault(it["level"], []).extend(sc)
         else:
@@ -423,8 +449,8 @@ def finish_mock(bank: ToeflBank, mid: int, payload: dict) -> dict:
             if b is not None:
                 parts.append(b)
         if selfs[s]:
-            parts.append(round((1 + 5 * sum(selfs[s]) / len(selfs[s])) * 2) / 2)
-        bands[s] = round(sum(parts) / len(parts) * 2) / 2 if parts else None
+            parts.append(half_up(1 + 5 * sum(selfs[s]) / len(selfs[s])))
+        bands[s] = half_up(sum(parts) / len(parts)) if parts else None
     total = overall_band(bands)
     result = {"bands": bands, "total": total, "routes": payload.get("routes") or {}, "detail": detail,
               "duration_sec": payload.get("duration_sec")}

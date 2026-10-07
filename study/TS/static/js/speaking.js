@@ -439,13 +439,19 @@
     }
     totalEl.hidden = true;
     const done = await review(answers, "채점 제출하고 결과 보기");
-    try {
-      const r = await TS.post(`/speaking/api/mock/${P.mock_id}/finish`, { rows: done.map(rowOf), duration: Math.round((Date.now() - startedAt) / 1000) });
-      location.href = r.redirect;
-    } catch (e) {
-      alert("제출 실패: " + e.message);
-      stage.querySelector("[data-submit]").disabled = false;
-    }
+    const duration = Math.round((Date.now() - startedAt) / 1000);
+    const send = async () => {
+      const btn = stage.querySelector("[data-submit]");
+      try {
+        const r = await TS.post(`/speaking/api/mock/${P.mock_id}/finish`, { rows: done.map(rowOf), duration });
+        location.href = r.redirect;
+      } catch (e) {
+        alert("제출 실패: " + e.message + " (채점한 내용은 그대로입니다. 버튼을 다시 누르세요.)");
+        btn.disabled = false;
+        btn.onclick = () => { btn.disabled = true; send(); };       // review() 의 버튼은 한 번만 쓰는 Promise 라서 다시 연결한다
+      }
+    };
+    send();
   }
 
   $("#start-btn").addEventListener("click", async () => {
@@ -460,8 +466,8 @@
     if (MOCK) await runMock(stream); else await runPractice(stream);
     if (stream) stream.getTracks().forEach(t => t.stop());
   });
+  window.addEventListener("pagehide", stopAll);          // beforeunload 에서 정리하면 "나가시겠습니까?" 취소 뒤에도 음성·마이크가 꺼진 채 남는다
   window.addEventListener("beforeunload", e => {
-    stopAll();
     if (MOCK && answers.length && !stage.querySelector("[data-submit]")?.disabled) { e.preventDefault(); e.returnValue = ""; }
   });
 })();

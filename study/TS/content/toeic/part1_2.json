@@ -280,20 +280,6 @@
   "explanation": "정답 (B): '승객들이 열차에 타고 있다.' (A)는 매표 줄이 없고, (C)는 역에서 연상되는 승무원이지만 사진에 없다. (D)는 열차가 아니라 버스이고 동작도 반대(내리는 중)다."
  },
  {
-  "id": "p1-051",
-  "level": 3,
-  "type": "사물·배경",
-  "scene": "항구에 요트 여러 척이 나란히 정박해 있다. 돛은 모두 접혀 있고 물은 잔잔하다.",
-  "statements": [
-   "Some boats are docked in a harbor.",
-   "Some boats are sailing on the open sea.",
-   "Some sails are being raised.",
-   "A bridge crosses over the harbor."
-  ],
-  "answer": 0,
-  "explanation": "정답 (A): '배들이 항구에 정박해 있다.' (B)는 배들이 움직이고 있지 않고, (C)는 돛을 올리는 사람이 없는데 being raised를 쓴 함정이다. (D)의 다리는 사진에 없다."
- },
- {
   "id": "p1-052",
   "level": 3,
   "type": "사물·배경",

@@ -45,7 +45,7 @@ def review(word_id: str, grade: int, today: date | None = None) -> dict:
         ef, interval, reps, lapses = (2.5, 0, 0, 0) if was_new else \
             (card["ef"], card["interval"], card["reps"], card["lapses"])
         ef, interval, reps = schedule(ef, interval, reps, grade)
-        if grade < 3 and not was_new:
+        if grade < 3:                       # 처음 보는 단어를 틀려도 '본 카드'로 세어 내일 복습에 들어가게 한다
             lapses += 1
         due = (today + timedelta(days=interval)).isoformat()
         con.execute(
@@ -121,12 +121,13 @@ def new_learned_today(today: date | None = None, ids: set | None = None) -> int:
 
 
 def queue(bank: Bank, level: int | None, daily_new: int, starred_only: bool = False,
-          today: date | None = None, tier: str | None = None) -> dict:
+          today: date | None = None, tier: str | None = None, start_level: int | None = None) -> dict:
     """오늘 볼 카드: 복습 예정(due) 먼저, 그다음 새 단어(하루 한도까지)."""
     today = today or date.today()
     cs = cards()
     words = [w for w in bank.vocab if (not level or w["level"] == level) and (not tier or w["tier"] == tier)]
-    words.sort(key=lambda w: (w["level"], w["tier"] != "core"))      # 새 단어는 낮은 등급·필수 단어부터
+    # 새 단어는 낮은 등급·필수 단어부터. start_level 을 주면 그 등급부터(낮은 등급은 그 뒤로) — 700점대가 1등급 단어부터 나오지 않게
+    words.sort(key=lambda w: (bool(start_level) and w["level"] < start_level, w["level"], w["tier"] != "core"))
     due = [w for w in words if w["id"] in cs and cs[w["id"]]["reps"] + cs[w["id"]]["lapses"] > 0
            and cs[w["id"]]["due"] <= today.isoformat() and (not starred_only or cs[w["id"]]["starred"])]
     due.sort(key=lambda w: cs[w["id"]]["due"])

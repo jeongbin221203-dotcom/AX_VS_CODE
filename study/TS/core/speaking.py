@@ -9,6 +9,7 @@
 from __future__ import annotations
 
 import json
+import threading
 import random
 from pathlib import Path
 
@@ -513,8 +514,12 @@ def record(bank: SpeakingBank, exam: str, rows: list, mock_id: int | None = None
             if not isinstance(r, dict):
                 continue
             task, iid = str(r.get("task", "")), str(r.get("item_id", ""))
-            if not _valid(bank, exam, task, iid):
+            it = _valid(bank, exam, task, iid)
+            if not it:
                 continue
+            qi = int(_num(r.get("qidx"), 0, 20) or 0)
+            if exam == "opic" and qi >= (len(it.get("steps") or []) if task == "opic_rp" else 1):
+                continue                                     # 없는 단계 번호는 저장하지 않는다
             mx = TSP_TASKS[task]["max"] if exam == "tsp" else 5
             pts = _num(r.get("points"), 0 if exam == "tsp" else 1, mx)
             if pts is None:
@@ -677,7 +682,15 @@ def list_mocks(exam: str, limit: int = 20) -> list[dict]:
     return out
 
 
+_FINISH_LOCK = threading.Lock()      # 워커 1개(gunicorn.conf.py) — 같은 제출이 겹쳐도 한 번만 기록
+
+
 def finish_mock(bank: SpeakingBank, mid: int, rows: list, duration: float | None = None) -> dict:
+    with _FINISH_LOCK:
+        return _finish_mock(bank, mid, rows, duration)
+
+
+def _finish_mock(bank: SpeakingBank, mid: int, rows: list, duration: float | None = None) -> dict:
     m = get_mock(mid)
     if not m:
         raise ValueError("모의고사가 없습니다.")
@@ -703,8 +716,12 @@ def finish_mock(bank: SpeakingBank, mid: int, rows: list, duration: float | None
                   "answered": len(saved), "total": len(planned), "duration": duration}
         label = str(score)
     else:
-        scored = [r for r in saved if not r["item_id"].startswith("oq-intro")]   # 자기소개는 채점 비중 낮음 → 제외
-        pts = [r["points"] for r in scored] or [r["points"] for r in saved]
+        got = {(r["task"], r["item_id"], r["qidx"]): r["points"] for r in saved}
+        # 자기소개는 채점 비중 낮음 → 제외. 답하지 않은 문항은 최저점(1점)으로 센다 — 3문항만 답하고 AL 이 나오지 않게
+        # (토익스피킹은 안 한 문항을 0점으로 계산하는 것과 같은 규칙)
+        pts = [got.get(k, 1.0) for k in planned if not k[1].startswith("oq-intro")]
+        if not pts:
+            pts = [r["points"] for r in saved]
         avg = sum(pts) / len(pts)
         grade = opic_grade(avg, avg_words)
         result = {"avg": avg, "grade": grade, "grade_name": OPIC_GRADE_NAME.get(grade, ""), "words": avg_words,

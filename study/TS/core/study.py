@@ -179,6 +179,8 @@ def _record(con, sid: int, q, chosen: int, elapsed_ms: int | None, ts: str) -> b
         "INSERT INTO attempts(session_id, qkey, part, item_id, qidx, level, qtype, chosen, correct, elapsed_ms, created_at) "
         "VALUES (?,?,?,?,?,?,?,?,?,?,?)",
         (sid, q.qkey, q.part, q.item_id, q.qidx, q.level, q.qtype, chosen, int(ok), elapsed_ms, ts))
+    if chosen < 0:                       # 답하지 않은 문항은 오답노트·통계에 넣지 않는다 (빈 답안 제출이 기록을 망가뜨리지 않게)
+        return False
     note = con.execute("SELECT * FROM wrong_notes WHERE qkey = ?", (q.qkey,)).fetchone()
     if not ok:
         if note:
@@ -225,7 +227,7 @@ def grade_item(bank: Bank, sid: int, ref: str, raw_answers) -> dict:
     part, iid = split_ref(ref)
     ts = db.now()
     results = []
-    with db.connect() as con:
+    with db.connect(write=True) as con:
         done = con.execute("SELECT qidx, chosen, correct FROM attempts WHERE session_id = ? AND part = ? AND item_id = ?",
                            (sid, part, iid)).fetchall()
         if done:
@@ -252,7 +254,10 @@ def submit_session(bank: Bank, sid: int, payload: dict) -> dict:
     if not isinstance(items, dict):
         raise StudyError("답안 형식이 올바르지 않습니다.")
     ts = db.now()
-    with db.connect() as con:
+    with db.connect(write=True) as con:
+        row = con.execute("SELECT finished_at FROM sessions WHERE id = ?", (sid,)).fetchone()
+        if row and row["finished_at"]:                      # 겹친 요청이 먼저 끝냈다
+            return get_session(sid)
         graded = {(r["part"], r["item_id"]) for r in
                   con.execute("SELECT DISTINCT part, item_id FROM attempts WHERE session_id = ?", (sid,))}
         if s["mode"] in ("mock", "diagnostic"):
@@ -274,13 +279,18 @@ def finish_session(bank: Bank, sid: int, duration_sec=None) -> dict:
     lc = [(r["level"], bool(r["correct"])) for r in rows if r["part"] in LC_PARTS]
     rc = [(r["level"], bool(r["correct"])) for r in rows if r["part"] not in LC_PARTS]
     est = {"lc_est": None, "rc_est": None, "total_est": None}
-    if s["mode"] == "mock" and scoring.MOCK_FORMS.get(s["variant"] or "", {}).get("real"):
+    answered = sum(1 for r in rows if r["chosen"] >= 0)
+    if rows and answered * 2 < len(rows):
+        pass                              # 절반도 안 풀고 낸 시험은 점수로 추정하지 않는다 (현재 점수·등급이 0점으로 바뀌지 않게)
+    elif s["mode"] == "mock" and scoring.MOCK_FORMS.get(s["variant"] or "", {}).get("real"):
         est = scoring.estimate_raw(sum(ok for _, ok in lc), len(lc), sum(ok for _, ok in rc), len(rc))
     elif s["mode"] in ("mock", "diagnostic"):
         est = scoring.estimate(lc, rc)
     try:
         dur = int(duration_sec) if duration_sec is not None else None
-    except (TypeError, ValueError):
+    except (TypeError, ValueError, OverflowError):
+        dur = None
+    if dur is not None and not 0 <= dur <= 24 * 3600:
         dur = None
     if dur is None:
         start = datetime.fromisoformat(s["created_at"])

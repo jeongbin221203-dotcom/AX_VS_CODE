@@ -12,7 +12,7 @@ def part_accuracy(days: int | None = None, last_n: int | None = None) -> dict[in
     out = {}
     with db.connect() as con:
         for part in PART_INFO:
-            sql = "SELECT correct, elapsed_ms FROM attempts WHERE part = ?"
+            sql = "SELECT correct, elapsed_ms FROM attempts WHERE part = ? AND chosen >= 0"
             args: list = [part]
             if days:
                 sql += " AND created_at >= ?"
@@ -35,14 +35,14 @@ def part_accuracy(days: int | None = None, last_n: int | None = None) -> dict[in
 def level_accuracy() -> dict[tuple[int, int], dict]:
     """(파트, 등급)별 정답률."""
     with db.connect() as con:
-        rows = con.execute("SELECT part, level, COUNT(*) n, SUM(correct) c FROM attempts GROUP BY part, level").fetchall()
+        rows = con.execute("SELECT part, level, COUNT(*) n, SUM(correct) c FROM attempts WHERE chosen >= 0 GROUP BY part, level").fetchall()
     return {(r["part"], r["level"]): {"n": r["n"], "rate": r["c"] / r["n"]} for r in rows}
 
 
 def type_accuracy(min_n: int = 3) -> list[dict]:
     """유형별 정답률 (낮은 순)."""
     with db.connect() as con:
-        rows = con.execute("SELECT part, qtype, COUNT(*) n, SUM(correct) c FROM attempts "
+        rows = con.execute("SELECT part, qtype, COUNT(*) n, SUM(correct) c FROM attempts WHERE chosen >= 0 "
                            "GROUP BY part, qtype HAVING COUNT(*) >= ?", (min_n,)).fetchall()
     out = [{"part": r["part"], "qtype": r["qtype"], "n": r["n"], "rate": r["c"] / r["n"]} for r in rows]
     out.sort(key=lambda x: (x["rate"], -x["n"]))
@@ -66,7 +66,7 @@ def daily_counts(days: int = 30) -> list[dict]:
     with db.connect() as con:
         q = {r["d"]: (r["n"], r["c"]) for r in con.execute(
             "SELECT substr(created_at, 1, 10) d, COUNT(*) n, SUM(correct) c FROM attempts "
-            "WHERE created_at >= ? GROUP BY d", (start.isoformat(),))}
+            "WHERE chosen >= 0 AND created_at >= ? GROUP BY d", (start.isoformat(),))}
         v = {r["d"]: r["n"] for r in con.execute(
             "SELECT substr(reviewed_at, 1, 10) d, COUNT(*) n FROM vocab_log WHERE reviewed_at >= ? GROUP BY d",
             (start.isoformat(),))}
@@ -82,10 +82,10 @@ def today_counts() -> dict:
     d = date.today().isoformat()
     with db.connect() as con:
         per_part = {r["part"]: r["n"] for r in con.execute(
-            "SELECT part, COUNT(*) n FROM attempts WHERE substr(created_at, 1, 10) = ? GROUP BY part", (d,))}
+            "SELECT part, COUNT(*) n FROM attempts WHERE chosen >= 0 AND substr(created_at, 1, 10) = ? GROUP BY part", (d,))}
         words = con.execute("SELECT COUNT(*) FROM vocab_log WHERE substr(reviewed_at, 1, 10) = ?", (d,)).fetchone()[0]
         reviewed = con.execute("SELECT COUNT(*) FROM attempts a JOIN sessions s ON s.id = a.session_id "
-                               "WHERE s.mode = 'review' AND substr(a.created_at, 1, 10) = ?", (d,)).fetchone()[0]
+                               "WHERE s.mode = 'review' AND a.chosen >= 0 AND substr(a.created_at, 1, 10) = ?", (d,)).fetchone()[0]
     return {"per_part": per_part, "questions": sum(per_part.values()), "words": words, "reviewed": reviewed}
 
 

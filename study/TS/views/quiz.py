@@ -138,7 +138,10 @@ def review_note():
     if "memo" in request.form:
         study.set_note_memo(qkey, request.form["memo"])
     if request.form.get("status"):
-        study.set_note_status(qkey, request.form["status"])
+        try:
+            study.set_note_status(qkey, request.form["status"])
+        except study.StudyError:
+            abort(400, "상태 값이 올바르지 않습니다.")
     return redirect(request.referrer or url_for("quiz.review"))
 
 

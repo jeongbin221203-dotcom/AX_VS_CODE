@@ -211,6 +211,7 @@ def duration_sec(path: Path) -> float:
 
 _jobs: dict[str, dict] = {}
 _lock = threading.Lock()
+MAX_RUNNING = 2            # 동시에 만들 수 있는 음성 파일 수 (한 파일에 edge-tts 연결을 12개까지 연다)
 
 
 def job_key(words: list[dict], repeats: int, example: bool) -> str:
@@ -223,6 +224,11 @@ def start_job(words: list[dict], out_dir: Path, *, repeats: int, example: bool, 
         job = _jobs.get(key)
         if job and job["state"] in ("running", "done") and (job["state"] == "running" or Path(job["path"]).exists()):
             return job
+        if sum(1 for j in _jobs.values() if j["state"] == "running") >= MAX_RUNNING:      # 공개 서버에서 작업이 무한히 쌓이지 않게
+            return {"key": key, "state": "error", "done": 0, "total": 0, "path": "", "name": name,
+                    "error": "다른 음성 파일을 만드는 중입니다. 끝난 뒤 다시 눌러 주세요."}
+        for k in [k for k, j in _jobs.items() if j["state"] == "error"][:-10]:           # 오래된 실패 기록 정리
+            _jobs.pop(k, None)
         job = {"key": key, "state": "running", "done": 0, "total": 0, "path": "", "error": "", "name": name}
         _jobs[key] = job
 

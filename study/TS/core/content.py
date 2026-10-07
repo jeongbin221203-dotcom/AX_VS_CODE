@@ -194,11 +194,18 @@ class Bank:
                 p.sort(key=lambda it: last_seen.get(self.ref(it), ""))
             return p
         out, count = [], 0
-        for it in pool("single"):
-            if count >= singles_q:
+        rest = pool("single")
+        while count < singles_q and rest:
+            need = singles_q - count
+            # 목표 문항 수에 정확히 맞춘다 (실제 시험 단일 지문 29문항). 남은 수가 1이 되는 세트는 피한다.
+            pick = next((it for it in rest if len(it["questions"]) <= need and need - len(it["questions"]) != 1), None)
+            if pick is None:
+                pick = rest[0] if need >= 2 else None
+            if pick is None:
                 break
-            out.append(self.ref(it))
-            count += len(it["questions"])
+            rest.remove(pick)
+            out.append(self.ref(pick))
+            count += len(pick["questions"])
         out += [self.ref(it) for it in pool("double")[:doubles]]
         out += [self.ref(it) for it in pool("triple")[:triples]]
         return out

@@ -22,10 +22,11 @@
   const played = {};           // 시험 모드: 한 번 재생한 듣기 문제
   let idx = 0, curQ = 0, started = false, rcUsed = 0, totalMs = 0, submitting = false, wrongOnly = false;
   let audioState = "idle";     // idle | playing | done
+  let timeUpHandled = false;
   let realToken = 0;           // 실전 LC 자동 진행 취소용
   const firstRC = items.findIndex(it => !P.lc_parts.includes(it.part));
   const inLC = i => i >= 0 && i < items.length && P.lc_parts.includes(items[i].part);
-  const BACKUP = `ts-exam-${P.sid}`;
+  const BACKUP = `ts-exam-${P.sid}-${P.created_at}`;     // 서버 DB 가 초기화돼 번호가 1부터 다시 시작해도 예전 백업과 섞이지 않게
 
   const $ = sel => document.querySelector(sel);
   const stage = $("#stage"), qnav = $("#qnav"), timerEl = $("#timer"), progEl = $("#progress");
@@ -454,7 +455,11 @@
       const remain = P.time_limit - rcUsed / 1000;
       timerEl.textContent = `RC 남은 시간 ${TS.fmtTime(remain)}`;
       timerEl.classList.toggle("over", remain < 300);
-      if (remain <= 0) { alert("RC 제한 시간이 끝났습니다. 지금까지의 답안을 제출합니다."); submitExam(true); }
+      if (remain <= 0 && !timeUpHandled) {                  // 한 번만 — 제출이 실패해도 0.25초마다 알림이 반복되지 않게
+        timeUpHandled = true;
+        alert("RC 제한 시간이 끝났습니다. 지금까지의 답안을 제출합니다. 실패하면 '제출하기'를 다시 누르세요.");
+        submitExam(true);
+      }
     } else if (!RESULT) {
       timerEl.textContent = `경과 ${TS.fmtTime(totalMs / 1000)}`;
     }

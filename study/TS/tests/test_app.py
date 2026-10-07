@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
 from app import create_app  # noqa: E402
-from core import db, planner, scoring, srs, study  # noqa: E402
+from core import db, planner, scoring, srs, stats, study  # noqa: E402
 from core.content import PARTS, Bank  # noqa: E402
 from tools import validate_content  # noqa: E402
 
@@ -191,11 +191,28 @@ def test_mock_submit_estimates_score(app, bank):
     assert study.submit_session(bank, sid, {"items": {}})["total"] == done["total"]
 
 
+def _all_wrong(bank, sid):
+    """모든 문항에 틀린 답을 낸 제출 본문."""
+    items = {}
+    for ref in study.get_session(sid)["items"]:
+        items[ref] = [{"qidx": q.qidx, "chosen": (q.answer + 1) % 3} for q in bank.questions(bank.item(ref))]
+    return {"items": items}
+
+
 def test_unanswered_counts_as_wrong(app, bank):
     sid = study.start_diagnostic(bank, rng=random.Random(6))
-    done = study.submit_session(bank, sid, {"items": {}})
+    done = study.submit_session(bank, sid, _all_wrong(bank, sid))
     assert done["total"] > 0 and done["correct"] == 0
     assert done["total_est"] is not None and done["total_est"] <= 20
+
+
+def test_blank_submit_does_not_pollute_records(app, bank):
+    """아무것도 안 풀고 낸 시험: 점수로 추정하지 않고, 오답노트·오늘 푼 문항에도 넣지 않는다."""
+    sid = study.start_diagnostic(bank, rng=random.Random(6))
+    done = study.submit_session(bank, sid, {"items": {}})
+    assert done["total"] > 0 and done["correct"] == 0 and done["total_est"] is None
+    assert study.wrong_notes("open") == []
+    assert stats.today_counts()["questions"] == 0
 
 
 # ---- 학습 계획 ---------------------------------------------------------------------
@@ -210,7 +227,7 @@ def test_plan_uses_latest_estimate_and_manual_score(app, bank):
     db.save_settings({"current_score": "600", "current_score_at": "2000-01-01T00:00:00", "target_score": "800",
                       "exam_date": (date.today() + timedelta(days=70)).isoformat()})
     sid = study.start_diagnostic(bank, rng=random.Random(7))
-    study.submit_session(bank, sid, {"items": {}})
+    study.submit_session(bank, sid, _all_wrong(bank, sid))
     plan = planner.build(bank, db.get_settings())
     assert plan["score_source"].startswith("추정")        # 직접 입력보다 나중의 추정치
     db.save_settings({"current_score": "650", "current_score_at": "2999-01-01T00:00:00"})
@@ -473,7 +490,7 @@ def test_toefl_mock_flow(tclient):
     mid = int(r.headers["Location"].rsplit("/", 1)[1])
     page = tclient.get(f"/toefl/mock/{mid}").data.decode()
     plan = json.loads(re.search(r'id="payload">(.*?)</script>', page, re.S).group(1))["plan"]
-    assert plan["order"] == ["R", "L", "S", "W"]
+    assert plan["order"] == ["R", "L", "W", "S"]
     assert set(plan["sections"]["R"]["modules"][1]) == {"hard", "easy"}
     # 모든 문제를 만점으로 제출
     items = []

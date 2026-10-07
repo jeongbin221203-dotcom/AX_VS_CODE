@@ -202,6 +202,8 @@ def settings():
                 errors.append("오픽 난이도를 1~6에서 고르세요.")
         try:
             rate = float(f.get("tts_rate", "1.0"))
+            if rate != rate or rate in (float("inf"), float("-inf")):
+                raise ValueError
             values["tts_rate"] = str(min(max(rate, 0.6), 1.5))
         except ValueError:
             errors.append("음성 속도 값 오류")

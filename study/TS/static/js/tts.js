@@ -139,5 +139,5 @@
     info() { return { count: voices.length, accents: availableAccents(), korean: koVoices.map(v => v.name), voices: voices.map(v => `${v.name} (${v.lang}, ${genderOf(v) || "?"})`) }; },
     hasKorean() { return koVoices.length > 0; },
   };
-  window.addEventListener("beforeunload", stop);
+  window.addEventListener("pagehide", stop);      // beforeunload 는 "나가시겠습니까?"에서 취소해도 실행돼 재생이 끊긴다
 })();

@@ -70,9 +70,9 @@ def build(bank: Bank, settings: dict, today: date | None = None) -> dict:
     measured = {p: a["rate"] for p, a in acc.items() if a["n"] >= MIN_ATTEMPTS_FOR_WEAKNESS}
     if measured:
         def shortfall(p):
-            tgt = guide["targets"].get(p, 0.7)
-            return (tgt - measured[p]) if p in measured else -1
-        weak = sorted(measured, key=shortfall, reverse=True)
+            return guide["targets"][p] - measured[p]
+        # 이 등급의 목표가 없는 파트(예: 1등급의 Part 3·7)는 약점 계산에서 뺀다 — 기초 파트를 밀어내지 않게
+        weak = sorted((p for p in measured if p in guide["targets"]), key=shortfall, reverse=True)
         weak = [p for p in weak if shortfall(p) > 0]
         focus = weak[:2] + [p for p in focus if p not in weak[:2]]
     focus = focus[:3]
@@ -80,7 +80,7 @@ def build(bank: Bank, settings: dict, today: date | None = None) -> dict:
     daily_q = _int(settings.get("daily_questions"), 40)
     daily_new = _int(settings.get("daily_new_words"), guide["daily_new_words"])
     today_done = stats.today_counts()
-    vq = queue(bank, None, daily_new)
+    vq = queue(bank, None, daily_new, start_level=lv)
     open_notes = len(study.wrong_notes("open"))
 
     tasks = []

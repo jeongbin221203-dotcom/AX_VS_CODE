@@ -7,7 +7,8 @@ from pathlib import Path
 
 from flask import Blueprint, current_app, flash, jsonify, redirect, render_template, request, send_file, url_for
 
-from core import audio, db, srs
+from core import audio, db, scoring, srs
+from core.planner import current_score
 from core.content import TIERS
 
 from .helpers import bank as toeic_bank
@@ -53,11 +54,17 @@ def _level_arg():
         return None
 
 
+def _grade_level(st: dict) -> int | None:
+    """현재 점수의 등급(1~5) — 새 단어를 이 등급부터 보여 주는 데 쓴다. 점수가 없으면 None(1등급부터)."""
+    g = scoring.grade_for(current_score(st)[0])
+    return g.level if g else None
+
+
 @bp.route("/vocab")
 def overview():
     b = bank()
     st = db.get_settings()
-    q = srs.queue(b, None, int(st["daily_new_words"] or 0))
+    q = srs.queue(b, None, int(st["daily_new_words"] or 0), start_level=_grade_level(st))
     cs = srs.cards()
     return render_template("vocab.html", progress=srs.level_progress(b), due=len(q["due"]), new=len(q["new"]),
                            new_today=srs.new_learned_today(ids=set(b.vocab_by_id)), daily_new=st["daily_new_words"],
@@ -72,7 +79,8 @@ def study():
     tier = _tier_arg()
     starred = request.args.get("starred") == "1"
     st = db.get_settings()
-    q = srs.queue(b, level, int(st["daily_new_words"] or 0), starred_only=starred, tier=tier)
+    q = srs.queue(b, level, int(st["daily_new_words"] or 0), starred_only=starred, tier=tier,
+                  start_level=None if level else _grade_level(st))
     cs = srs.cards()
     cards = [{**w, "is_new": False, "starred": bool(cs.get(w["id"], {}).get("starred"))} for w in q["due"]] + \
             [{**w, "is_new": True, "starred": bool(cs.get(w["id"], {}).get("starred"))} for w in q["new"]]

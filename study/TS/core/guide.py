@@ -14,7 +14,7 @@ GUIDE = {
         "focus_parts": [5, 2, 1],
         "daily_new_words": 20,
         "tasks": [
-            "Orange 단어 120개를 먼저 끝낸다 (하루 20개, 복습 포함 30분).",
+            "Orange 필수 단어 216개부터 끝낸다 (하루 20개, 복습 포함 30분).",
             "Part 5 '품사'·'동사 시제·태' 문제로 문장 5형식과 품사 자리를 익힌다.",
             "Part 2는 질문 첫 단어(Who/When/Where)만 정확히 듣는 연습부터 한다.",
             "Part 1 문장을 받아쓰기로 3번씩 따라 쓴다.",
@@ -107,7 +107,7 @@ GUIDE = {
             "도치 (Only / Rarely / Should + 주어), 가정법 과거완료",
             "복합관계사 (whoever, whatever), 관계사 생략",
             "준동사의 의미상 주어·시제 (having p.p.)",
-            "혼동 어휘: affect/effect, rise/raise, lie/lay, adjacent to / next to",
+            "혼동 어휘: affect/effect, rise/raise, lie/lay, beside / besides",
             "숫자·기간 표현과 전치사 (by, until, within, throughout)",
         ],
         "routine": [("단어 새로 30 + 복습", 20), ("Part 5 30문항 10분 안에", 12), ("Part 3·4 세 세트", 25),

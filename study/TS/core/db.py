@@ -118,16 +118,23 @@ def configure(path: Path | str) -> None:
         cols = {r["name"] for r in con.execute("PRAGMA table_info(sessions)")}
         if "seen_before" not in cols:                       # 예전 DB 업그레이드
             con.execute("ALTER TABLE sessions ADD COLUMN seen_before INTEGER")
+        # 예전 버전: 처음 보는 단어를 '다시'로 틀리면 reps·lapses 가 둘 다 0 이라 복습 목록에 안 들어갔다 → 틀린 기록이 있으면 1로 바로잡는다
+        con.execute("UPDATE vocab_cards SET lapses = 1 WHERE reps = 0 AND lapses = 0 "
+                    "AND word_id IN (SELECT word_id FROM vocab_log WHERE grade < 3)")
 
 
 @contextmanager
-def connect() -> Iterator[sqlite3.Connection]:
+def connect(write: bool = False) -> Iterator[sqlite3.Connection]:
+    """write=True 이면 시작하자마자 쓰기 잠금을 잡는다 — '이미 했나' 확인과 기록이 한 덩어리여야 하는 곳
+    (같은 제출이 겹쳐 두 번 저장되는 것을 막는다). 다른 쓰기가 끝날 때까지 최대 30초 기다린다."""
     if _db_path is None:
         raise RuntimeError("db.configure()를 먼저 호출하세요")
-    con = sqlite3.connect(_db_path)
+    con = sqlite3.connect(_db_path, timeout=30)
     con.row_factory = sqlite3.Row
     con.execute("PRAGMA foreign_keys = ON")
     try:
+        if write:
+            con.execute("BEGIN IMMEDIATE")
         yield con
         con.commit()
     except Exception:
