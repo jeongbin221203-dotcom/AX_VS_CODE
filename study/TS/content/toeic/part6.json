@@ -265,14 +265,14 @@
    {
     "q": "",
     "choices": [
-     "Your lamp was delivered to your home yesterday.",
-     "Our store is located next to the city library.",
+     "The lamp you ordered will be shipped to the address on file with a tracking number.",
+     "However, the discount cannot be applied to items that are currently out of stock.",
      "If you would prefer to cancel your order, please reply to this e-mail.",
-     "We are currently hiring part-time sales staff."
+     "Please note that lamps cannot be returned once their original box has been opened."
     ],
     "answer": 2,
     "type": "문장 삽입",
-    "explanation": "품절로 배송이 늦어진다는 안내 뒤에는 고객이 택할 수 있는 다른 방법(주문 취소)을 알려 주는 문장이 자연스럽다. 램프가 어제 배송되었다는 문장은 품절 내용과 모순되고, 매장 위치·채용은 관련이 없다."
+    "explanation": "추적 번호 안내 뒤, '불편을 드려 죄송하다'는 말 앞이므로 고객이 택할 수 있는 다른 방법(주문 취소)을 알려 주는 문장이 자연스럽다. 첫 번째 보기는 앞 문장에서 이미 말한 발송·추적 번호 정보를 되풀이하고, 두 번째는 However가 앞 내용과 대조되지 않는 데다 뒤에 나올 할인 이야기를 먼저 꺼내 어색하다. 네 번째는 반품 규정이라 품절 안내와 이어지지 않는다."
    },
    {
     "q": "",
@@ -428,13 +428,13 @@
     "q": "",
     "choices": [
      "This spring, for example, members will get an early look at our new photography exhibit.",
-     "Unfortunately, the gift shop will close permanently next month.",
-     "Please return your membership card by March 31.",
-     "Our museum was built in 1985 by a local architect."
+     "For example, guests who buy a single ticket will get an early look at our new photography exhibit.",
+     "Renewal fees will increase by 10 percent beginning on April 1.",
+     "Our museum was built in 1985 by a local architect and has since been expanded twice."
     ],
     "answer": 0,
     "type": "문장 삽입",
-    "explanation": "앞에서 회원 혜택(특별 저녁 행사 초대)을 나열하고 있으므로 혜택의 예(새 사진전 미리 관람)를 드는 문장이 이어져야 한다. 기념품점 폐점은 10% 할인 혜택과 모순되고, 회원증 반납은 갱신을 권하는 편지 취지와 맞지 않는다."
+    "explanation": "앞에서 회원 혜택(할인, 특별 저녁 행사 초대)을 나열하고 있으므로 혜택의 구체적인 예(회원이 새 사진전을 미리 관람)를 드는 문장이 이어져야 한다. 두 번째 보기는 주체가 회원이 아니라 일반 입장객(guests)이라 '회원 혜택'이 아니다. 세 번째는 갱신 요금 인상으로 혜택 설명과 이어지지 않고, 네 번째는 박물관 역사라 흐름과 무관하다."
    },
    {
     "q": "",
@@ -498,13 +498,13 @@
     "q": "",
     "choices": [
      "They will take place on Tuesday and Thursday at 3:00 P.M. in Room 405.",
-     "The previous system was introduced five years ago.",
-     "All original receipts must be mailed to the finance office.",
+     "The previous system was introduced five years ago by the former finance manager.",
+     "Sessions for the finance staff will take place on Tuesday and Thursday afternoon.",
      "Several sales representatives were promoted last month."
     ],
     "answer": 0,
     "type": "문장 삽입",
-    "explanation": "앞 문장의 two training sessions를 They로 받아 일시·장소를 알려 주고, 뒤 문장의 Each session으로 자연스럽게 이어진다. 영수증 원본을 우편으로 보내라는 문장은 '원본 보관이 필요 없다'는 앞 내용과 모순된다."
+    "explanation": "앞 문장의 two training sessions를 They로 받아 일시·장소를 알려 주고, 뒤 문장의 Each session으로 자연스럽게 이어진다. 두 번째 보기는 이전 시스템의 역사라 교육 안내와 관계없고, 세 번째는 교육 대상이 영업팀이 아니라 재무팀으로 되어 있어 앞 문장(the finance team will hold ...)과 맞지 않으며, 네 번째는 승진 소식이라 무관하다."
    },
    {
     "q": "",
@@ -543,14 +543,14 @@
    {
     "q": "",
     "choices": [
-     "Our kitchen is cleaned twice a day by professional staff.",
-     "All members must sign a five-year lease.",
-     "Meeting rooms are available only to employees of WorkNest.",
+     "Our kitchen is cleaned twice a day, and the coffee is refilled every morning.",
+     "Those who only need a desk occasionally should reserve a meeting room online.",
+     "Our monthly plan also gives members priority when reserving meeting rooms.",
      "Our daily pass is ideal for those who only need a desk occasionally."
     ],
     "answer": 3,
     "type": "문장 삽입",
-    "explanation": "앞에서 '예산에 맞는 유연한 요금제'를 소개하고, 뒤에서 '고정 좌석이 필요한 분은(Those who ...) 월 요금제'를 설명한다. 따라서 그 사이에는 다른 요금제(가끔 쓰는 사람을 위한 일일권)를 소개하는 문장이 와야 한다. 5년 임대 계약은 '장기 약정이 없다'는 내용과 모순된다."
+    "explanation": "'예산에 맞는 유연한 요금제'를 소개한 뒤 '고정 좌석이 필요한 분은 월 요금제'로 이어지므로, 그 사이에는 다른 요금제(가끔 쓰는 사람을 위한 일일권)를 소개하는 문장이 와야 한다. 두 번째 보기는 요금제가 아니라 회의실 예약을 말하고, 세 번째는 아직 소개되지 않은 월 요금제를 먼저 언급해 순서가 맞지 않으며, 첫 번째는 주방 청소 이야기라 연결되지 않는다."
    },
    {
     "q": "",
@@ -671,14 +671,14 @@
    {
     "q": "",
     "choices": [
-     "Breakfast will be served in your room at no extra charge.",
-     "The hotel swimming pool is closed for cleaning today.",
+     "Guests may also request a late check-in by calling the hotel in advance.",
+     "Guests who leave late are welcome to have lunch in the Seaside Restaurant until 2:00 P.M.",
      "Requests made on the morning of departure cannot always be accommodated.",
-     "Check-in begins at 7:00 A.M. every day."
+     "Check-in for new guests begins at 3:00 P.M. on the day of arrival."
     ],
     "answer": 2,
     "type": "문장 삽입",
-    "explanation": "하루 전에 미리 알리라는 요청과 '가능 여부에 따라' 늦은 체크아웃을 해 준다는 내용 뒤이므로, '출발 당일 아침 요청은 들어주지 못할 수 있다'가 논리적으로 이어진다. 객실 무료 조식은 조식권을 사야 한다는 앞 내용과 모순되고, 수영장·체크인은 체크아웃 단락과 관계없다."
+    "explanation": "하루 전에 미리 알리라는 요청과 '가능 여부에 따라' 늦은 체크아웃을 해 준다는 내용 뒤이므로, '출발 당일 아침 요청은 들어주지 못할 수 있다'가 논리적으로 이어진다. 첫 번째 보기는 체크인(late check-in)이라 체크아웃 단락과 맞지 않고, 두 번째는 앞에서 아침 식사 시간이 10시까지라고 한 것과 어긋나며, 네 번째는 체크인 시간 안내라 이어지지 않는다."
    },
    {
     "q": "",
@@ -729,14 +729,14 @@
    {
     "q": "",
     "choices": [
-     "We have therefore decided to end our contract with Calvert Packaging.",
-     "Your proposal was received after the deadline had passed.",
+     "Therefore, we kindly ask that you send us the final invoice for this year's labels.",
+     "We appreciate the high quality of your labels, and our team has been pleased with them.",
      "Nevertheless, we would like to continue our partnership and have a few suggestions.",
-     "Our sales of bottled water have declined sharply this year."
+     "Our sales of bottled water have declined this year, which has put pressure on our budget."
     ],
     "answer": 2,
     "type": "문장 삽입",
-    "explanation": "뒤 문장이 For instance로 3년 계약, 최소 주문량 확대 등 '제안'의 예를 들고 있으므로, 앞에는 '그래도 거래를 계속하고 싶고 몇 가지 제안이 있다'는 문장이 필요하다. 계약 종료는 이어지는 제안 및 마지막 단락의 논의 요청과 모순된다."
+    "explanation": "뒤 문장이 For instance로 3년 계약, 최소 주문량 확대 같은 '제안'의 예를 들고 있으므로, 앞에는 '그래도 거래를 계속하고 싶고 몇 가지 제안이 있다'는 문장이 필요하다. 첫 번째 보기는 마무리 청구서 이야기라 뒤의 For instance 예시로 이어지지 않고, 두 번째는 앞 단락에서 이미 한 칭찬의 반복이며, 네 번째는 배경 설명일 뿐 제안을 소개하지 않는다."
    },
    {
     "q": "",
@@ -776,13 +776,13 @@
     "q": "",
     "choices": [
      "More than 60 percent of respondents reported spending over an hour commuting each day.",
-     "Only a few employees completed the survey last year.",
-     "The Marketing division moved to a new building in March.",
-     "Employees must work in the office every day during the pilot."
+     "The survey was sent to all employees by e-mail during the last week of November.",
+     "The Design division was asked to complete the same survey again in the spring of this year.",
+     "Employees in other divisions will be invited to join the pilot next year."
     ],
     "answer": 0,
     "type": "문장 삽입",
-    "explanation": "뒤 문장이 'Many respondents also said(또한 많은 응답자가 ~라고 했다)'이므로 앞에는 설문 결과 중 다른 한 가지가 먼저 제시되어야 한다. 매일 통근에 1시간 이상 걸린다는 응답이 그 역할을 한다. 응답자가 적었다는 문장은 Many respondents와, 매일 출근해야 한다는 문장은 재택근무 제도와 모순된다."
+    "explanation": "뒤 문장이 'Many respondents also said(또한 많은 응답자가 ~라고 했다)'이므로 앞에는 설문 결과 중 다른 한 가지가 먼저 제시되어야 한다. 통근에 하루 1시간 넘게 걸린다는 응답이 그 역할을 한다. 두 번째와 세 번째는 설문 실시 방식·시기를 말할 뿐 결과가 아니어서 also로 이어지지 않고, 네 번째는 다른 부서 확대 이야기라 설문과 관계없다."
    },
    {
     "q": "",
@@ -833,14 +833,14 @@
    {
     "q": "",
     "choices": [
-     "That is why we have decided to close our physical store permanently.",
+     "It also shows that most of our customers still prefer to place orders by telephone.",
      "What they want from a store is an experience they can't get on the Internet.",
-     "Our online sales have fallen for the third consecutive year.",
-     "Most of our employees have worked here for over a decade."
+     "Our online sales have grown steadily, and we will continue to invest in them.",
+     "Many of our employees have worked here for more than a decade."
     ],
     "answer": 1,
     "type": "문장 삽입",
-    "explanation": "'요즘 사람들은 거의 모든 것을 온라인으로 산다'에 이어, 식품 매장·카페를 들이고 공간을 넓힌 개조 이유를 설명하는 말이 와야 한다. '매장에서 원하는 건 인터넷에서 얻을 수 없는 경험'이 그 연결 고리다. 매장 영구 폐쇄는 재개장 기사와 모순되고, 온라인 매출 감소나 직원 근속은 앞 문장과 이어지지 않는다."
+    "explanation": "'요즘 사람들은 거의 모든 것을 온라인으로 산다'에 이어, 식품 매장·카페를 들이고 공간을 넓힌 개조 이유를 설명하는 말이 와야 한다. '매장에서 원하는 건 인터넷에서 얻을 수 없는 경험'이 그 연결 고리다. 첫 번째 보기의 It은 가리키는 대상이 없고 내용도 맞지 않으며, 세 번째는 개조 이유를 설명하지 않고, 네 번째 직원 근속은 앞 문장과 이어지지 않는다."
    },
    {
     "q": "",
@@ -961,14 +961,14 @@
    {
     "q": "",
     "choices": [
-     "She added that the airline plans to open a fourth hub in Memphis next year.",
-     "As a result, fuel prices have fallen significantly in recent months.",
-     "She added that concentrating resources in two cities would allow the airline to offer more frequent connections.",
-     "Memphis-based pilots will therefore be dismissed by December."
+     "She added that pilots from Memphis will be offered jobs at the Dallas or Atlanta hubs next year.",
+     "He added that fuel costs are expected to keep rising through the end of next year.",
+     "She added that concentrating resources in two cities would allow more frequent connections.",
+     "Analysts added that the two remaining hubs would soon be among the busiest in the country."
     ],
     "answer": 2,
     "type": "문장 삽입",
-    "explanation": "CEO가 허브 세 곳 유지가 어렵다고 말한 뒤이므로, 두 도시에 자원을 집중하면 얻는 이점을 덧붙이는 문장이 자연스럽다. 멤피스 네 번째 허브 개설은 멤피스 축소 계획과, 연료비 하락은 '연료비 상승' 발언과, 조종사 해고는 '일자리를 잃는 직원이 없다'는 내용과 각각 모순된다."
+    "explanation": "CEO가 허브 세 곳 유지가 어렵다고 말한 뒤이므로, 두 도시에 자원을 집중하면 얻는 이점을 덧붙이는 문장이 자연스럽다. 첫 번째 보기는 앞 문장에서 이미 밝힌 직원 배치 내용을 되풀이하고, 두 번째는 CEO가 여성(Laura Kincaid)인데 He로 받아 지시어가 맞지 않으며, 네 번째는 말한 주체가 CEO가 아니라 분석가여서 바로 다음 문단(Industry observers ...)과 겹친다."
    },
    {
     "q": "",
@@ -1065,14 +1065,14 @@
    {
     "q": "",
     "choices": [
-     "Organizations founded this year are especially encouraged to apply.",
-     "Applicants should also indicate any other funding they have secured or requested for the project.",
-     "The Foundation will cover the full cost of every approved project.",
-     "Budgets are optional for projects under $5,000."
+     "Applications for projects in rural areas will be given special consideration this year.",
+     "Applicants should also list any other funding they have secured or requested.",
+     "Applicants who received a grant before should attach a copy of their final project report.",
+     "Please note that budget items cannot be changed once a grant has been awarded."
     ],
     "answer": 1,
     "type": "문장 삽입",
-    "explanation": "뒤 문장에서 재단 자금에만 의존하는 제안은 거의 선정되지 않는다고 하므로, 앞에는 다른 자금 조달 내역을 밝히라는 요청이 와야 흐름이 이어진다. 올해 설립된 단체는 '2년 이상 등록' 자격 요건과, 전액 지원은 뒤 문장과, 예산 선택 사항은 '예산을 반드시 포함하라'는 앞 문장과 모순된다."
+    "explanation": "뒤 문장에서 재단 자금에만 의존하는 제안은 거의 선정되지 않는다고 하므로, 앞에는 다른 자금 조달 내역을 밝히라는 요청이 와야 흐름이 이어진다. 첫 번째 보기는 지역 우대 이야기이고, 세 번째는 앞 단락에서 이미 말한 최종 보고서 내용을 되풀이하며, 네 번째는 예산 변경 금지 규정으로 '다른 재원'과 이어지지 않는다."
    },
    {
     "q": "",

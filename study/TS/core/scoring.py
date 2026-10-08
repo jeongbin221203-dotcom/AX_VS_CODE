@@ -122,11 +122,12 @@ def estimate_raw(lc_correct: int, lc_total: int, rc_correct: int, rc_total: int)
     return {"lc_est": lc, "rc_est": rc, "total_est": (lc + rc) if lc is not None and rc is not None else None}
 
 
-# 진단 테스트: 등급을 고르게 섞은 짧은 세트 (약 15분)
+# 진단 테스트: 등급을 고르게 섞은 짧은 세트 (약 20분). 듣기 28문항 — 이보다 적으면 듣기 점수 오차가 ±70점을 넘는다.
 DIAGNOSTIC_FORM = {
-    1: {1: 1, 3: 1},                          # part: {level: 문항 수}
-    2: {1: 1, 2: 1, 3: 2, 4: 1, 5: 1},
-    3: {3: 3},
+    1: {1: 1, 2: 1, 3: 1},                    # part: {level: 문항 수}
+    2: {1: 2, 2: 2, 3: 2, 4: 2, 5: 2},
+    3: {2: 3, 4: 3, 5: 3},
+    4: {3: 3, 5: 3},
     5: {1: 2, 2: 3, 3: 3, 4: 3, 5: 2},
     7: {2: 2, 4: 2},
 }

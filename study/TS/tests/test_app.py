@@ -151,8 +151,23 @@ def test_wrong_note_clears_after_two_correct_reviews(app, bank):
         assert ref in study.get_session(rid)["items"]
         study.grade_item(bank, rid, ref, [{"qidx": 0, "chosen": q.answer}])
         study.finish_session(bank, rid)
+        with db.connect() as con:                       # 졸업은 서로 다른 날에 맞혀야 센다 — 하루 전으로 돌린다
+            con.execute("UPDATE wrong_notes SET last_seen_at = '2000-01-01T00:00:00' WHERE qkey = ?", (q.qkey,))
     assert study.wrong_notes("open") == []
     assert [n["qkey"] for n in study.wrong_notes("cleared")] == [q.qkey]
+
+
+def test_wrong_note_not_cleared_by_same_day_repeats(app, bank):
+    """같은 날 두 번 맞혀도 졸업하지 않는다 (정답 위치를 외워 졸업하는 것 방지)."""
+    sid = study.start_practice(bank, 5, 1, None, 1, rng=random.Random(2))
+    ref = study.get_session(sid)["items"][0]
+    q = bank.questions(bank.item(ref))[0]
+    study.grade_item(bank, sid, ref, [{"qidx": 0, "chosen": (q.answer + 1) % 4}])
+    for _ in range(3):
+        rid = study.start_review(bank, None, 10)
+        study.grade_item(bank, rid, ref, [{"qidx": 0, "chosen": q.answer}])
+        study.finish_session(bank, rid)
+    assert [n["qkey"] for n in study.wrong_notes("open")] == [q.qkey]
 
 
 def test_grade_rejects_foreign_item(app, bank):

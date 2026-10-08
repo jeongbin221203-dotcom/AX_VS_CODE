@@ -2,6 +2,18 @@
 {% block title %}오늘{% endblock %}
 {% block content %}
 {% set g = plan.grade %}
+{% if ongoing %}
+<div class="card" style="margin-bottom:14px">
+  <h2 style="margin:0 0 6px">이어서 풀기</h2>
+  <table class="small"><tbody>
+  {% for o in ongoing %}
+    <tr><td><a href="{{ url_for('quiz.quiz', sid=o.id) }}">{{ session_title(o) }}</a>
+        <div class="muted">{{ o.created_at[5:16].replace('T', ' ') }} 시작{% if o.answered %} · {{ o.answered }}문항 풂{% endif %}</div></td>
+      <td class="r"><a class="btn" href="{{ url_for('quiz.quiz', sid=o.id) }}">이어서</a></td></tr>
+  {% endfor %}
+  </tbody></table>
+</div>
+{% endif %}
 <div class="page-head">
   <div>
     <div class="muted small">연속 학습 {{ streak }}일</div>

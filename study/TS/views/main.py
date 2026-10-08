@@ -89,7 +89,7 @@ def dashboard():
     settings = db.get_settings()
     plan = planner.build(bank(), settings)
     return render_template("dashboard.html", plan=plan, streak=stats.streak(),
-                           acc=stats.part_accuracy(last_n=60), recent=stats.recent_sessions(5),
+                           acc=stats.part_accuracy(last_n=60), recent=stats.recent_sessions(5), ongoing=stats.unfinished_sessions(),
                            history=stats.score_history(10))
 
 

@@ -144,6 +144,9 @@ def w_sentence(c, o, w):
         target = re.sub(r"[.?!]$", "", o["answer"].strip())
         if joined != target:
             c.err(w, f"chunks 합이 answer 와 다름: '{joined}' ≠ '{target}'")
+        for alt in o.get("alts") or []:                      # 다른 정답 순서 — 같은 낱말을 다른 순서로 놓은 것이어야 한다
+            if not isinstance(alt, str) or sorted(alt.split()) != sorted(joined.split()):
+                c.err(w, f"alts 가 chunks 와 같은 낱말이 아님: {alt!r}")
 
 
 def w_email(c, o, w):

@@ -111,6 +111,18 @@ def recent_sessions(limit: int = 10) -> list[dict]:
             "SELECT * FROM sessions WHERE finished_at IS NOT NULL ORDER BY finished_at DESC LIMIT ?", (limit,))]
 
 
+def unfinished_sessions(limit: int = 5, days: int = 7) -> list[dict]:
+    """끝내지 않은 세션 (이어서 풀기) — 모의고사·진단은 시작만 해도, 연습은 한 문제라도 푼 것만. 최근 며칠 것."""
+    since = (date.today() - timedelta(days=days)).isoformat()
+    with db.connect() as con:
+        rows = con.execute(
+            "SELECT s.*, (SELECT COUNT(*) FROM attempts a WHERE a.session_id = s.id) AS answered FROM sessions s "
+            "WHERE s.finished_at IS NULL AND s.created_at >= ? AND "
+            "(s.mode IN ('mock', 'diagnostic') OR EXISTS (SELECT 1 FROM attempts a WHERE a.session_id = s.id)) "
+            "ORDER BY s.id DESC LIMIT ?", (since, limit)).fetchall()
+    return [dict(r) for r in rows]
+
+
 def time_by_part() -> dict[int, float | None]:
     """RC 파트별 문항당 평균 풀이 시간(초), 최근 100문항."""
     acc = part_accuracy(last_n=100)

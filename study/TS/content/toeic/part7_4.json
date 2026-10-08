@@ -29,7 +29,7 @@
      "Many came from people who were busy earlier in the day.",
      "They were handled mainly by supervisors.",
      "They had longer hold times than morning calls.",
-     "They made up about half of all calls during the pilot."
+     "They made up about half of all the calls received during the pilot."
     ],
     "answer": 0,
     "type": "세부 사항",
@@ -77,7 +77,7 @@
    {
     "q": "According to Ms. Farouk, why is Polyform Packaging raising its prices?",
     "choices": [
-     "Its freight contract has expired.",
+     "Its freight contract with the carrier has expired and costs more now.",
      "Demand for its trays has grown.",
      "It is redesigning its product line.",
      "The material it uses has become more expensive."
@@ -116,7 +116,7 @@
      "Cancel the order with Polyform",
      "Arrange for new drop tests",
      "Request pricing from another supplier",
-     "Move funds from the marketing budget"
+     "Move money from the marketing budget into the order"
     ],
     "answer": 2,
     "type": "추론",
@@ -154,7 +154,7 @@
     "choices": [
      "It asked for more changes to the design than the quote covered.",
      "It paid a rush fee in advance.",
-     "It ordered fewer catalogs than it originally planned.",
+     "It ordered fewer catalogs than it originally planned to save on printing costs",
      "It has not used Castellan Print Works before."
     ],
     "answer": 0,
@@ -215,7 +215,7 @@
    {
     "q": "What is indicated about employees who leave the company within a year of receiving the allowance?",
     "choices": [
-     "They must repay the full $600.",
+     "They must repay the full $600 within thirty days of leaving the company",
      "They may have to give back one type of equipment.",
      "They lose access to ergonomic assessments.",
      "They must submit their receipts again."
@@ -285,7 +285,7 @@
     "choices": [
      "It was sent after proposals were due.",
      "It was sent within the period allowed for questions.",
-     "It was addressed to the selection panel.",
+     "It was addressed to the selection panel rather than to a single named contact",
      "It includes Harvest Table's final pricing."
     ],
     "answer": 1,
@@ -365,7 +365,7 @@
     "choices": [
      "It is a small company.",
      "It needs an electrical connection.",
-     "It wants a booth open on two sides.",
+     "It wants a booth open on two sides rather than a standard inline booth",
      "It is booking after the deadline for the discount."
     ],
     "answer": 3,
@@ -377,7 +377,7 @@
     "choices": [
      "To explain why his booth will need power",
      "To request a larger booth",
-     "To describe a product he plans to sell",
+     "To describe a product he plans to sell at the exhibition",
      "To ask about safety regulations"
     ],
     "answer": 0,
@@ -469,7 +469,7 @@
     "choices": [
      "A new store will open.",
      "Company results will be discussed with investors.",
-     "The Sheffield center will begin operations.",
+     "The Sheffield center will begin handling deliveries to stores",
      "Third-quarter figures will be released."
     ],
     "answer": 1,
@@ -529,7 +529,7 @@
     "q": "Why will the damaged plotter not be covered at its full value?",
     "choices": [
      "It was packed by office staff.",
-     "Its value was below $5,000.",
+     "Its value was below the $5,000 threshold for written declaration",
      "It was moved on a weekday.",
      "Its declaration was sent too close to the moving date."
     ],
@@ -601,7 +601,7 @@
    {
     "q": "Why was Mr. Wierzbicki charged for the meeting room?",
     "choices": [
-     "He booked it before paying his April fee.",
+     "He booked it before paying his April membership fee in full",
      "His new plan does not include meeting-room hours.",
      "He used it for more than ten hours.",
      "He booked it on a weekend."
@@ -625,7 +625,7 @@
    {
     "q": "What is indicated about Mr. Wierzbicki's printing in April?",
     "choices": [
-     "It was included in the Resident fee.",
+     "It was included in the monthly Resident fee, with no extra charge",
      "It was charged at a discounted rate.",
      "It was mostly for client meetings.",
      "It exceeded the monthly allowance by 150 pages."
@@ -713,7 +713,7 @@
      "She has attended the earlier sessions live.",
      "She works in the Delhi office.",
      "She is a speaker in the series.",
-     "She registered for only one session."
+     "She registered for only one session in the series"
     ],
     "answer": 0,
     "type": "연계 문제",
@@ -813,7 +813,7 @@
     "q": "What is the article mainly about?",
     "choices": [
      "Research on how a technology affects returned merchandise",
-     "A retailer's decision to stop accepting returns",
+     "A retailer's decision to stop accepting returns of worn clothing",
      "Changes in how clothing sizes are labeled",
      "The launch of a new online clothing store"
     ],
@@ -1009,7 +1009,7 @@
      "Operating profit was lower than in the previous year.",
      "Gross margin improved.",
      "Sales volume declined.",
-     "The dividend per share was reduced."
+     "The dividend per share was reduced to fund the new Kendal facility"
     ],
     "answer": 0,
     "type": "사실 확인(NOT/TRUE)",
@@ -1018,7 +1018,7 @@
    {
     "q": "According to the summary, what is one reason margins were lower?",
     "choices": [
-     "Sales of the premium range fell.",
+     "Sales of the premium range fell sharply during the year.",
      "A new facility opened in Kendal.",
      "Packaging material became more expensive.",
      "The company lowered its prices."
@@ -1167,7 +1167,7 @@
     "q": "What is the purpose of the guidelines?",
     "choices": [
      "To describe the conditions for receiving financial support",
-     "To announce the winners of a grant competition",
+     "To announce the winners of a grant competition for small exporters",
      "To invite companies to exhibit at a trade show",
      "To explain new export regulations"
     ],
@@ -1204,7 +1204,7 @@
     "choices": [
      "It has too many employees to apply.",
      "It currently sells products in Ireland.",
-     "It has already received a grant from the foundation.",
+     "It has already received an export grant from the foundation in a previous round",
      "It meets the foundation's requirement regarding past exports."
     ],
     "answer": 3,
@@ -1277,7 +1277,7 @@
     "choices": [
      "The reading rooms could not be sealed from dust.",
      "Starting on May 26 would overlap window work by more than one week.",
-     "The Saturday crew would not be available until June.",
+     "The Saturday crew would not be available until the middle of June because of other jobs",
      "The roof inspection was rescheduled."
     ],
     "answer": 1,
@@ -1288,7 +1288,7 @@
     "q": "What is indicated about the summer reading program?",
     "choices": [
      "It has been moved to the West Wing.",
-     "It was canceled because of the renovation.",
+     "It was canceled because of the renovation work on the East Wing.",
      "It will be led by Mr. Abara.",
      "It was planned to start on the East Wing's reopening date."
     ],
@@ -1373,7 +1373,7 @@
     "q": "What does Ms. Mbeki's legal counsel advise against?",
     "choices": [
      "Altering a required condition to accommodate one bidder",
-     "Awarding the contract before the summer timetable",
+     "Awarding the contract before the summer timetable has been finalized",
      "Asking vendors to lower their prices",
      "Delaying the Board's vote until February 10"
     ],
@@ -1448,7 +1448,7 @@
      "The free period was not applied.",
      "The wrong daily rate was used.",
      "It was based on volumetric rather than actual weight.",
-     "It was charged for the wrong shipment."
+     "The charge was applied to a different shipment held in the same warehouse"
     ],
     "answer": 2,
     "type": "연계 문제",

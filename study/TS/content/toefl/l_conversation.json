@@ -124,7 +124,7 @@
     "q": "What will the woman do next?",
     "choices": [
      "Go to the store for tomatoes",
-     "Order tacos by phone",
+     "Order tacos from a restaurant by phone",
      "Cook the meat",
      "Wash the dishes"
     ],
@@ -248,7 +248,7 @@
     "q": "What is the problem with the book?",
     "choices": [
      "It is sold out.",
-     "It is too long.",
+     "It is too long to finish in one week.",
      "It is very old.",
      "It costs a lot of money."
     ],
@@ -259,7 +259,7 @@
    {
     "q": "What will the speakers probably do after class?",
     "choices": [
-     "Ask the teacher for a copy",
+     "Ask the teacher for a copy of the book",
      "Borrow the book for a week",
      "Buy the book together",
      "Read the book at the library"
@@ -384,7 +384,7 @@
     "q": "What is the woman worried about?",
     "choices": [
      "She can't find Room 110.",
-     "She is too busy on Wednesdays.",
+     "She is too busy on Wednesdays to attend meetings.",
      "She doesn't have a good camera.",
      "She doesn't know any members."
     ],
@@ -395,7 +395,7 @@
    {
     "q": "What will the club do this Wednesday?",
     "choices": [
-     "Buy new cameras",
+     "Buy new cameras for all of the members",
      "Watch a movie",
      "Take pictures in the park",
      "Visit a museum"
@@ -457,7 +457,7 @@
    {
     "q": "Why did no one come to fix the heater?",
     "choices": [
-     "The repair staff were on vacation.",
+     "The repair staff were on vacation until next week.",
      "The request went to the wrong building.",
      "The woman never reported it.",
      "The form was not complete."
@@ -532,7 +532,7 @@
     "q": "Why does the man visit the professor?",
     "choices": [
      "To ask for more time on an essay",
-     "To choose a topic for his essay",
+     "To choose a topic for his history essay",
      "To drop the history class",
      "To ask about his grade"
     ],
@@ -543,7 +543,7 @@
    {
     "q": "What must the man do by Monday?",
     "choices": [
-     "Meet the professor again",
+     "Meet the professor again at her office hours",
      "Send the professor an outline",
      "Finish the whole essay",
      "Visit the health center"
@@ -606,7 +606,7 @@
     "q": "What is the woman's problem?",
     "choices": [
      "She can't pay for her classes.",
-     "She doesn't know what to major in.",
+     "She isn't sure whether to major in business or marketing.",
      "Her work schedule changed.",
      "Two classes she wants meet at the same time."
     ],
@@ -679,7 +679,7 @@
    {
     "q": "Why is the man unhappy?",
     "choices": [
-     "The woman is too loud at night.",
+     "The woman is too loud at night when he studies.",
      "He has been washing most of the dishes.",
      "The woman ate his food.",
      "The kitchen sink is broken."
@@ -694,7 +694,7 @@
      "Take out the trash every week",
      "Clean the fridge",
      "Buy a dishwasher",
-     "Wash the dishes every day"
+     "Wash the dishes every day of the week"
     ],
     "answer": 0,
     "type": "세부 사항",
@@ -768,7 +768,7 @@
      "Call Greg on the phone",
      "Visit the bakery",
      "Apply on the student jobs website",
-     "Start training at the cafe"
+     "Start training at the cafe on Monday morning"
     ],
     "answer": 2,
     "type": "다음 할 일",
@@ -833,7 +833,7 @@
     "choices": [
      "It is closed on Saturday.",
      "It costs too much to rent.",
-     "It is too far from the dorms.",
+     "It is too far from the dorms for most students.",
      "Another group is already using it."
     ],
     "answer": 3,
@@ -843,7 +843,7 @@
    {
     "q": "What will the woman do tomorrow?",
     "choices": [
-     "Make a sign for the table",
+     "Make a sign for the table and put up posters",
      "Visit the animal shelter",
      "Bake cookies for the sale",
      "Ask if the student center is available"
@@ -910,7 +910,7 @@
     "q": "What is the professor's main concern about the woman's first topic?",
     "choices": [
      "There are not enough sources.",
-     "It is not related to the course.",
+     "It is not related to the course she is taking this term.",
      "It is too broad for a short paper.",
      "It has been studied too much."
     ],
@@ -987,7 +987,7 @@
    {
     "q": "Why does the librarian suggest a scanned copy?",
     "choices": [
-     "The other library does not lend books.",
+     "The other library only lends books to its own students.",
      "The man needs only one chapter, and it arrives faster.",
      "A printed copy would cost too much.",
      "The book cannot be borrowed by students."
@@ -1160,7 +1160,7 @@
     "q": "Why does the advisor mention human factors psychology?",
     "choices": [
      "To suggest he stay in engineering",
-     "To explain why psychology is difficult",
+     "To explain why psychology is more difficult than engineering",
      "To show him a way to use both of his interests",
      "To recommend a class she teaches"
     ],
@@ -1226,7 +1226,7 @@
     "q": "What is the main topic of the conversation?",
     "choices": [
      "Hiring more dining hall workers",
-     "Moving the gym closer to the dorms",
+     "Moving the gym closer to the dorms so it can stay open late",
      "A plan to ask for longer dining hall hours",
      "Complaints about the quality of food"
     ],
@@ -1321,7 +1321,7 @@
     "choices": [
      "It will probably not be a problem for the job.",
      "It will take place in June.",
-     "She will have to cancel it.",
+     "She will have to cancel it because of the summer schedule.",
      "She will do research there."
     ],
     "answer": 0,
@@ -1389,7 +1389,7 @@
    {
     "q": "What is the professor's main criticism of the draft?",
     "choices": [
-     "The research in the middle section is weak.",
+     "The research in the middle section is weak and needs to be replaced.",
      "The thesis is not original enough.",
      "Background information is not clearly tied to the main argument.",
      "The paper is much too short."
@@ -1471,7 +1471,7 @@
    {
     "q": "What is the woman's attitude toward the rent increase?",
     "choices": [
-     "She is happy because the apartment is being improved.",
+     "She is happy because the landlord is improving the apartment.",
      "She doesn't care because she plans to move anyway.",
      "She thinks it is unfair given the landlord's lack of repairs.",
      "She thinks it is reasonable for the area."
@@ -1551,7 +1551,7 @@
     "choices": [
      "She missed a payment deadline.",
      "She failed to submit a form.",
-     "She dropped below full-time status.",
+     "She dropped below full-time status during the last term.",
      "Her grades fell below the required level."
     ],
     "answer": 3,

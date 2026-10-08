@@ -9,7 +9,7 @@
     "q": "What is the passage mainly about?",
     "choices": [
      "How a camel's body helps it live in the desert",
-     "Why people in the desert need more water",
+     "Why the people of the desert depend so much on camels for water",
      "How to take care of a camel on a farm",
      "Why sandstorms are dangerous for animals"
     ],
@@ -56,10 +56,10 @@
    {
     "q": "What can be inferred about a camel that has not eaten for many days?",
     "choices": [
-     "It will sweat more than usual.",
+     "It will sweat much more than usual during the day.",
      "It will not be able to walk.",
      "Its hump will look smaller than usual.",
-     "Its eyelashes will become shorter."
+     "Its eyelashes will become shorter and thinner."
     ],
     "answer": 2,
     "type": "추론",
@@ -101,8 +101,8 @@
    {
     "q": "The word \"trusted\" in the passage is closest in meaning to",
     "choices": [
-     "very large",
-     "far away",
+     "very large and easy to find",
+     "far away from the market",
      "believed to be honest",
      "newly built"
     ],
@@ -114,7 +114,7 @@
     "q": "Why does the author mention Marco Polo?",
     "choices": [
      "To show that paper money was new to people from Europe",
-     "To explain who invented paper money",
+     "To explain which country first invented the use of paper money",
      "To show that he was a merchant who carried coins",
      "To describe how he stole coins from shops"
     ],
@@ -125,10 +125,10 @@
    {
     "q": "What can be inferred about the paper notes from the shops?",
     "choices": [
-     "They were more valuable than gold.",
-     "People accepted them because they trusted they could get coins for them.",
+     "They were more valuable than the gold coins that shops kept.",
+     "People accepted them because they could be exchanged for coins.",
      "Only the government could use them.",
-     "Thieves liked them more than coins."
+     "Thieves liked them more than coins because they were light to carry."
     ],
     "answer": 1,
     "type": "추론",
@@ -170,9 +170,9 @@
    {
     "q": "According to the passage, which of the following is TRUE about the yellow and orange colors in leaves?",
     "choices": [
-     "They are made only in winter.",
+     "They are made only in the winter months.",
      "They are in the leaves all year.",
-     "They come from the ground.",
+     "They come from the ground through the roots.",
      "They make the leaves fall."
     ],
     "answer": 1,
@@ -215,7 +215,7 @@
    {
     "q": "What is the passage mainly about?",
     "choices": [
-     "How to make bread and beer in ancient Egypt",
+     "How to make bread and beer for workers in ancient Egypt",
      "Why the Nile River flooded every year",
      "Movies about ancient Egypt",
      "Evidence about the people who built the pyramids"
@@ -251,8 +251,8 @@
    {
     "q": "The word \"honor\" in the passage is closest in meaning to",
     "choices": [
-     "a heavy job",
-     "a hard rule",
+     "a heavy job to carry out",
+     "a hard rule to follow",
      "a special respect",
      "a long trip"
     ],
@@ -263,10 +263,10 @@
    {
     "q": "What can be inferred about the farmers who worked on the pyramids?",
     "choices": [
-     "They did not want to work on the pyramids.",
-     "They worked on the pyramids when they could not work on their farms.",
+     "They did not want to leave their farms to work on the pyramids.",
+     "They worked on the pyramids when farming was not possible.",
      "They lived in the workers' town all year.",
-     "They were the doctors for the other workers."
+     "They were the doctors who took care of the other workers."
     ],
     "answer": 1,
     "type": "추론",
@@ -284,10 +284,10 @@
    {
     "q": "What is the main idea of the passage?",
     "choices": [
-     "Plastic is the best material for making toys.",
+     "Plastic is the best material for making toys and other products.",
      "Sea turtles need more food in the ocean.",
      "Cities should build more landfills.",
-     "Recycling alone cannot solve the plastic problem, so people should use less plastic."
+     "Recycling is not enough, so people should use less plastic."
     ],
     "answer": 3,
     "type": "주제·목적",
@@ -297,7 +297,7 @@
     "q": "According to the passage, why does plastic stay in nature for a long time?",
     "choices": [
      "It is very strong and does not break down easily.",
-     "It is too light to sink.",
+     "It is too light to sink in the ocean, so it floats away.",
      "It is always too dirty.",
      "It is made in landfills."
     ],
@@ -308,7 +308,7 @@
    {
     "q": "The word \"melted\" in the passage is closest in meaning to",
     "choices": [
-     "cut into small boxes",
+     "cut into many small boxes and bags",
      "made into a liquid by heat",
      "painted a new color",
      "put into bags"
@@ -365,7 +365,7 @@
    {
     "q": "According to the passage, how did people move Karl Drais's machine?",
     "choices": [
-     "They turned pedals on the front wheel.",
+     "They turned pedals attached to the front wheel.",
      "They pushed the ground with their feet.",
      "They used a chain.",
      "Horses pulled it."
@@ -378,7 +378,7 @@
     "q": "According to the passage, why was a large front wheel useful?",
     "choices": [
      "It made the bicycle go faster.",
-     "It made the bicycle safer.",
+     "It made the bicycle much safer for riders.",
      "It made the seat lower.",
      "It made the ride softer."
     ],
@@ -390,7 +390,7 @@
     "q": "The word \"common\" in the passage is closest in meaning to",
     "choices": [
      "seen in many places",
-     "very expensive",
+     "very expensive for most families",
      "hard to use",
      "made by hand"
     ],
@@ -403,8 +403,8 @@
     "choices": [
      "It had no pedals.",
      "It was only used by men.",
-     "It had wooden wheels and iron tires.",
-     "It was less dangerous than the bicycle with the large front wheel."
+     "It had wooden wheels and iron tires, just like the first machine.",
+     "It was safer than the bicycle with the large front wheel."
     ],
     "answer": 3,
     "type": "추론",
@@ -423,7 +423,7 @@
     "q": "What is the passage mainly about?",
     "choices": [
      "The relationship between coral and algae and how heat threatens it",
-     "The different species of fish that live on reefs",
+     "The many different species of fish and other animals that live on reefs",
      "How limestone rocks form on land",
      "Why rainforests are similar to oceans"
     ],
@@ -459,7 +459,7 @@
     "q": "According to the passage, which of the following is TRUE about bleached coral?",
     "choices": [
      "It is already dead.",
-     "It has more algae than healthy coral.",
+     "It has more algae living inside it than healthy coral does.",
      "It grows faster in warm water.",
      "It can recover if the water cools quickly."
     ],
@@ -471,7 +471,7 @@
     "q": "What can be inferred about coral in deep, dark water?",
     "choices": [
      "It would turn white more quickly.",
-     "It would grow faster than coral near the surface.",
+     "It would grow faster than coral that lives near the surface.",
      "It would have difficulty getting enough food from algae.",
      "It would not need a skeleton."
     ],
@@ -491,8 +491,8 @@
    {
     "q": "What is the main purpose of the passage?",
     "choices": [
-     "To explain how teenagers should explore caves safely",
-     "To describe the Lascaux paintings, how they were made, and what happened to them",
+     "To explain how young people should explore dark caves more safely",
+     "To describe the Lascaux paintings and what has happened to them",
      "To argue that the paintings were used in religious ceremonies",
      "To compare French art with art from other countries"
     ],
@@ -505,7 +505,7 @@
     "choices": [
      "By mixing mineral powder with water or animal fat",
      "By boiling plants in water",
-     "By crushing animal bones into powder",
+     "By crushing animal bones into powder and mixing it with clay",
      "By buying it from other groups"
     ],
     "answer": 0,
@@ -515,7 +515,7 @@
    {
     "q": "The word \"applied\" in the passage is closest in meaning to",
     "choices": [
-     "asked for",
+     "asked for help from others",
      "paid for",
      "put on a surface",
      "took away"
@@ -527,10 +527,10 @@
    {
     "q": "Why does the author mention wooden platforms?",
     "choices": [
-     "To show that the cave was used as a home",
+     "To show that the cave was used as a home by the artists",
      "To describe how visitors entered the cave",
      "To explain how the paintings were damaged",
-     "To explain how the artists could paint high on the walls"
+     "To explain how the artists painted high on the walls"
     ],
     "answer": 3,
     "type": "글의 구조",
@@ -540,7 +540,7 @@
     "q": "What can be inferred about the copy of the cave that visitors see today?",
     "choices": [
      "It is older than the original cave.",
-     "It was painted by the four teenagers.",
+     "It was painted by the four teenagers who found the cave.",
      "It contains more images of humans.",
      "It was made to protect the original paintings."
     ],
@@ -561,7 +561,7 @@
     "q": "What is the main idea of the passage?",
     "choices": [
      "Students should study only in the morning.",
-     "The hippocampus is the largest part of the brain.",
+     "The hippocampus is the largest and most important part of the brain.",
      "Afternoon naps are better than night sleep.",
      "Sleep helps people store and learn new information."
     ],
@@ -572,9 +572,9 @@
    {
     "q": "Why does the author compare the hippocampus to a notebook?",
     "choices": [
-     "To explain that memories are written in words",
+     "To explain that memories are written down in words and sentences",
      "To suggest that students should take notes",
-     "To show that it holds new information but has limited space",
+     "To show that it holds new facts but has limited space",
      "To show that it keeps memories for many years"
     ],
     "answer": 2,
@@ -596,7 +596,7 @@
    {
     "q": "The word \"replay\" in the passage is closest in meaning to",
     "choices": [
-     "throw away",
+     "throw away completely",
      "go through again",
      "make larger",
      "hide from"
@@ -609,9 +609,9 @@
     "q": "What can be inferred about a student who stays up all night before an exam?",
     "choices": [
      "The student will remember more than usual.",
-     "The student's hippocampus will have more space.",
+     "The student's hippocampus will have more space for new facts.",
      "The student will not need to study again.",
-     "The student may have trouble storing information learned that night."
+     "The student may have trouble storing the new information."
     ],
     "answer": 3,
     "type": "추론",
@@ -629,10 +629,10 @@
    {
     "q": "What is the passage mainly about?",
     "choices": [
-     "How silk is made from start to finish",
+     "How silk is made from silkworms to finished cloth in China",
      "Why the city of Samarkand was built",
      "The history of Buddhism in India",
-     "How goods, ideas, and diseases moved along the Silk Road"
+     "How goods, ideas, and diseases traveled the Silk Road"
     ],
     "answer": 3,
     "type": "주제·목적",
@@ -653,7 +653,7 @@
    {
     "q": "The phrase \"changed hands\" in the passage is closest in meaning to",
     "choices": [
-     "were cleaned",
+     "were cleaned before sale",
      "were broken",
      "passed to a new owner",
      "became lighter"
@@ -678,7 +678,7 @@
     "q": "What can be inferred about silk that reached Rome?",
     "choices": [
      "It was much more expensive in Rome than in China.",
-     "It was carried by a single trader from China.",
+     "It was carried all the way by a single trader from China.",
      "It was cheaper than the silk sold in Samarkand.",
      "It was made in Rome by Chinese workers."
     ],
@@ -698,9 +698,9 @@
    {
     "q": "What is the passage mainly about?",
     "choices": [
-     "The best materials for building houses in the countryside",
+     "The best materials for building houses in the countryside and suburbs",
      "How air conditioners work",
-     "The causes and effects of urban heat islands and ways to reduce them",
+     "The causes, effects, and solutions of urban heat islands",
      "Why older people prefer to live in cities"
     ],
     "answer": 2,
@@ -746,10 +746,10 @@
    {
     "q": "What can be inferred about a city park?",
     "choices": [
-     "It absorbs more heat than asphalt.",
+     "It absorbs more heat than asphalt does in the summer.",
      "It blocks the wind like tall buildings.",
      "It increases the use of electricity.",
-     "The air in it is probably cooler than on nearby streets."
+     "Its air is probably cooler than the nearby streets."
     ],
     "answer": 3,
     "type": "추론",
@@ -767,9 +767,9 @@
    {
     "q": "What is the main purpose of the passage?",
     "choices": [
-     "To explain how Gutenberg's printing press worked and how it changed Europe",
+     "To explain how Gutenberg's press worked and how it changed Europe",
      "To describe the daily life of monks",
-     "To argue that Chinese printing was better than European printing",
+     "To argue that Chinese printing was better than European printing methods",
      "To explain how to make metal letters"
     ],
     "answer": 0,
@@ -781,7 +781,7 @@
     "choices": [
      "It did not need any ink.",
      "The letters could be reused for different pages.",
-     "It could only print one copy at a time.",
+     "It could only print one copy of each page at a time.",
      "It was invented by monks."
     ],
     "answer": 1,
@@ -791,9 +791,9 @@
    {
     "q": "Why does the author mention the Chinese and Koreans?",
     "choices": [
-     "To show that Asian books were more expensive",
+     "To show that books made in Asia were more expensive than European books",
      "To explain why Europeans could not read",
-     "To point out that Gutenberg was not the first to print with movable type",
+     "To point out that Gutenberg was not the first to use movable type",
      "To show where Gutenberg learned metalwork"
     ],
     "answer": 2,
@@ -815,8 +815,8 @@
    {
     "q": "What can be inferred about European alphabets?",
     "choices": [
-     "Their small number of letters made movable type practical.",
-     "They were harder to print than Chinese writing.",
+     "Having few letters made movable type practical.",
+     "They were harder to print with movable type than Chinese writing.",
      "They were invented by Gutenberg.",
      "They were used only by churches."
     ],
@@ -836,8 +836,8 @@
    {
     "q": "What is the passage mainly about?",
     "choices": [
-     "How Wegener's idea was first rejected and later supported by new evidence",
-     "Why fossils of reptiles are found in Africa",
+     "How Wegener's idea was rejected and later supported by new evidence",
+     "Why fossils of land reptiles are found on both sides of the Atlantic",
      "How physicists measure the strength of rocks",
      "The life and death of Alfred Wegener"
     ],
@@ -849,8 +849,8 @@
     "q": "Why does the author mention the fossils of a land reptile?",
     "choices": [
      "To show that reptiles were good swimmers",
-     "To give an example of evidence that the continents were once joined",
-     "To explain why Wegener's theory was rejected",
+     "To give an example of evidence that the continents were joined",
+     "To explain why most geologists rejected Wegener's theory at first",
      "To describe how new ocean crust forms"
     ],
     "answer": 1,
@@ -860,7 +860,7 @@
    {
     "q": "According to the passage, why did most geologists reject Wegener's theory?",
     "choices": [
-     "The coastlines of the continents did not match.",
+     "The coastlines of the continents did not fit together well.",
      "He had no fossil evidence.",
      "He believed the ocean floor was rigid.",
      "He could not explain what force moved the continents."
@@ -886,7 +886,7 @@
     "choices": [
      "He was wrong that the continents had once been joined.",
      "He was right that continents move but wrong about how they move.",
-     "He discovered the underwater mountain ranges himself.",
+     "He discovered the underwater mountain ranges before anyone else.",
      "He correctly explained the force that moves the plates."
     ],
     "answer": 1,
@@ -906,7 +906,7 @@
     "q": "What is the main idea of the passage?",
     "choices": [
      "Migrating birds use several different methods to navigate.",
-     "Arctic terns fly farther than any other bird.",
+     "Arctic terns fly farther each year than any other kind of bird.",
      "Birds are born with a map of the night sky.",
      "Pigeons navigate only by using magnetic fields."
     ],
@@ -943,8 +943,8 @@
     "choices": [
      "To explain why birds do not migrate in winter",
      "To show that magnets help birds see through clouds",
-     "To argue that the sun is not important for navigation",
-     "To show that pigeons with magnets could still navigate when they could see the sun"
+     "To argue that the sun is not important for birds that navigate by magnets",
+     "To show that pigeons with magnets navigated well when the sun was visible"
     ],
     "answer": 3,
     "type": "글의 구조",
@@ -975,9 +975,9 @@
     "q": "What is the main purpose of the passage?",
     "choices": [
      "To describe the life of Claude Monet",
-     "To argue that historical paintings are better than modern ones",
+     "To argue that paintings about history are better than modern landscapes",
      "To explain how the Salon chose its judges",
-     "To explain how the Impressionists broke away from the rules of the Academy"
+     "To explain how the Impressionists broke away from the Academy's rules"
     ],
     "answer": 3,
     "type": "주제·목적",
@@ -987,7 +987,7 @@
     "q": "According to the passage, why did the Impressionists paint quickly?",
     "choices": [
      "They wanted to capture changing light and weather outdoors.",
-     "The Salon required paintings to be finished in one day.",
+     "The Salon required all paintings to be finished within one day.",
      "They could not afford expensive paints.",
      "They painted only small sketches."
     ],
@@ -1044,9 +1044,9 @@
     "q": "What is the passage mainly about?",
     "choices": [
      "How the price of gasoline is determined",
-     "Why price ceilings can cause problems even though they have good goals",
+     "Why price ceilings can cause problems despite their good goals",
      "Why landlords prefer to build new apartments",
-     "The history of the United States economy in the 1970s"
+     "The history of the United States economy in the 1970s and 1980s"
     ],
     "answer": 1,
     "type": "주제·목적",
@@ -1068,7 +1068,7 @@
     "q": "Why does the author mention long lines at gas stations?",
     "choices": [
      "To show that gasoline became too expensive",
-     "To argue that people used their cars too much",
+     "To argue that people used their cars far too much in the 1970s",
      "To illustrate a shortage caused by a price ceiling",
      "To explain how rent control works"
     ],

@@ -8,7 +8,7 @@ UTF-8 JSON 배열. 검사: `python tools/validate_speaking.py` (TS 폴더에서)
 - 질문·지문은 브라우저 음성 합성으로 읽으므로 괄호 지시문·이모지 금지.
 - 모범 답안은 **실제로 말하는 문장**: 짧은 문장 위주, 구어 연결어(Well, Actually, So, Also, That's why …) 사용.
   - `sample` = 기본 답변 (IM2~IM3 / 토익스피킹 130~150 목표): 쉬운 단어, 정확한 문장.
-  - `sample_adv` = 고득점 답변 (IH~AL / 160 이상 목표): 더 길고, 구체적 예시·다양한 시제·연결어.
+  - `sample_adv` = 고득점 답변 (IH~AL / 160 이상 목표): 구체적 예시·다양한 시제·연결어. 토익스피킹은 **답변 시간 안에 말할 수 있는 길이**여야 한다 — 단어 수 ≤ 답변 초 × 2.3 (Q3·4 30초 ≤69, Q5·6 15초 ≤34, Q7 30초 ≤69, Q8·9 15초 ≤34, Q10 30초 ≤69, Q11 60초 ≤138).
   - `_ko` = 바로 앞 영어의 자연스러운 한국어 번역.
 - `tips`: 한국어 1~3개. 그 문제에 바로 쓸 수 있는 표현·전략 (예: "장소 묘사 순서: 전체 → 가운데 → 양옆 → 배경").
 - `id` 는 파일 종류 안에서 겹치지 않게 (접두어 + 3자리).
@@ -38,7 +38,7 @@ UTF-8 JSON 배열. 검사: `python tools/validate_speaking.py` (TS 폴더에서)
  "elements":[
    {"where":"가운데","ko":"여자가 서서 화이트보드의 그래프를 가리키고 있다","en":"A woman is standing and pointing at a graph on a whiteboard."},
    {"where":"왼쪽","ko":"...","en":"..."}],
- "sample":"(50~70단어)","sample_ko":"...","sample_adv":"(75~95단어)","sample_adv_ko":"...","tips":["..."]}
+ "sample":"(50~70단어)","sample_ko":"...","sample_adv":"(60~69단어)","sample_adv_ko":"...","tips":["..."]}
 ```
 - elements 4~6개, where: 가운데 | 왼쪽 | 오른쪽 | 앞쪽 | 뒤쪽 | 배경 | 전체 중 하나. `en` 은 현재진행형·there is·위치 표현을 쓴 완전한 문장.
 - 모범 답안 구성: 장소 한 문장 → 가장 눈에 띄는 사람 → 다른 사람·사물 → 배경 → 느낌·추측 한 문장.
@@ -55,7 +55,7 @@ UTF-8 JSON 배열. 검사: `python tools/validate_speaking.py` (TS 폴더에서)
  "questions_ko":["...","...","..."],
  "samples":["(Q5 25~35단어)","(Q6 25~35단어)","(Q7 50~70단어)"],
  "samples_ko":["...","...","..."],
- "samples_adv":["(Q5 35~45단어)","(Q6 35~45단어)","(Q7 70~90단어)"],
+ "samples_adv":["(Q5 28~34단어)","(Q6 28~34단어)","(Q7 58~69단어)"],
  "samples_adv_ko":["...","...","..."],
  "tips":["Q5·Q6 는 질문의 단어를 그대로 살려 첫 문장을 만든다", "..."]}
 ```
@@ -88,7 +88,7 @@ UTF-8 JSON 배열. 검사: `python tools/validate_speaking.py` (TS 폴더에서)
  "question":"Do you agree or disagree with the following statement? Employees should be allowed to work from home at least two days a week. Give specific reasons and examples to support your opinion.",
  "question_ko":"...",
  "outline":["의견: 찬성","이유 1: 출퇴근 시간 절약 → 업무 집중","예시: 친구 회사 사례","마무리: 그래서 찬성"],
- "sample":"(110~140단어)","sample_ko":"...","sample_adv":"(140~170단어)","sample_adv_ko":"...","tips":["..."]}
+ "sample":"(110~140단어)","sample_ko":"...","sample_adv":"(115~138단어)","sample_adv_ko":"...","tips":["..."]}
 ```
 - 질문 형식을 섞는다: 찬반(Do you agree or disagree …) | 선택(Which do you prefer, A or B?) | 장단점(What are the advantages of …?) | 중요한 것(What is the most important …?).
 - topic: 직장 | 교육 | 기술 | 생활 | 사회 | 리더십 | 소비 | 건강 | 환경 | 지역 사회 중 하나.

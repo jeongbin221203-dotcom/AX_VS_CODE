@@ -9,7 +9,7 @@
   </div>
   <div class="row">
     {% if s.mode == 'practice' and s.part %}
-      <a class="btn" href="{{ url_for('quiz.practice_start', part=s.part, level=s.level or '', type=s.variant or '', n=s.total or 10) }}">같은 조건으로 다시</a>
+      <a class="btn" href="{{ url_for('quiz.practice_start', part=s.part, level=s.level or '', type=s.variant or '', n=s.requested or s.total or 10) }}">같은 조건으로 다시</a>
     {% endif %}
     <a class="btn" href="{{ url_for('quiz.review') }}">오답노트</a>
     <a class="btn primary" href="{{ url_for('main.dashboard') }}">오늘 할 일로</a>

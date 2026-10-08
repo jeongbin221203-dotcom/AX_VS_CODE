@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <div class="muted small">{{ code }}</div>
+    <h1>{{ title }}</h1>
+    <div class="muted small">{{ message }}</div>
+  </div>
+  <a class="btn primary" href="{{ url_for('main.home') }}">처음으로</a>
+</div>
+{% endblock %}

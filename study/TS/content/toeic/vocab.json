@@ -151,7 +151,7 @@
     "example": "We are meeting a client for lunch.",
     "example_ko": "점심에 고객을 만날 예정입니다.",
     "tip": "customer(매장 손님)와 달리 전문 서비스 고객",
-    "tier": "stretch"
+    "tier": "core"
   },
   {
     "id": "v-0015",
@@ -261,7 +261,7 @@
     "example": "Please keep your receipt for returns.",
     "example_ko": "반품을 위해 영수증을 보관해 주세요.",
     "tip": "upon receipt of (~을 받는 즉시) · receive v.",
-    "tier": "stretch"
+    "tier": "core"
   },
   {
     "id": "v-0025",
@@ -1350,7 +1350,7 @@
     "example": "We take inventory at the end of every month.",
     "example_ko": "매달 말에 재고 조사를 합니다.",
     "tip": "take inventory (재고 조사를 하다)",
-    "tier": "stretch"
+    "tier": "core"
   },
   {
     "id": "v-0124",
@@ -2109,7 +2109,7 @@
     "example": "You need permission to enter the lab.",
     "example_ko": "연구실에 들어가려면 허가가 필요합니다.",
     "tip": "permit v. 허락하다; n. 허가증",
-    "tier": "stretch"
+    "tier": "core"
   },
   {
     "id": "v-0193",
@@ -2274,7 +2274,7 @@
     "example": "The company's headquarters is in London.",
     "example_ko": "그 회사의 본사는 런던에 있습니다.",
     "tip": "단수·복수 동형",
-    "tier": "stretch"
+    "tier": "core"
   },
   {
     "id": "v-0208",
@@ -2659,7 +2659,7 @@
     "example": "The company will reimburse your travel expenses.",
     "example_ko": "회사가 출장 경비를 환급해 드릴 것입니다.",
     "tip": "reimbursement n. 상환 · reimburse A for B",
-    "tier": "stretch"
+    "tier": "core"
   },
   {
     "id": "v-0243",
@@ -2670,7 +2670,7 @@
     "example": "We have a tentative date for the launch.",
     "example_ko": "출시 날짜를 잠정적으로 정했습니다.",
     "tip": "tentatively adv. 잠정적으로",
-    "tier": "stretch"
+    "tier": "core"
   },
   {
     "id": "v-0244",
@@ -2681,7 +2681,7 @@
     "example": "Subsequent meetings will be held online.",
     "example_ko": "이후 회의는 온라인으로 열립니다.",
     "tip": "subsequent to (~ 이후에) · subsequently adv.",
-    "tier": "stretch"
+    "tier": "core"
   },
   {
     "id": "v-0245",
@@ -2912,7 +2912,7 @@
     "example": "Full-time staff are eligible for health insurance.",
     "example_ko": "정규직 직원은 건강 보험 가입 자격이 있습니다.",
     "tip": "eligibility n. 자격",
-    "tier": "stretch"
+    "tier": "core"
   },
   {
     "id": "v-0266",
@@ -3616,7 +3616,7 @@
     "example": "Guests receive complimentary breakfast.",
     "example_ko": "투숙객은 무료 조식을 받습니다.",
     "tip": "complementary (보완적인)와 혼동 주의",
-    "tier": "stretch"
+    "tier": "core"
   },
   {
     "id": "v-0330",

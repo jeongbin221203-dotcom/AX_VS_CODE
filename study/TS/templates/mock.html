@@ -2,10 +2,22 @@
 {% block title %}모의고사{% endblock %}
 {% block content %}
 {% set full = forms.full %}
+{% if ongoing %}
+<div class="card" style="margin-bottom:14px">
+  <h2 style="margin:0 0 6px">이어서 풀기</h2>
+  <table class="small"><tbody>
+  {% for o in ongoing %}
+    <tr><td><a href="{{ url_for('quiz.quiz', sid=o.id) }}">{{ session_title(o) }}</a>
+        <div class="muted">{{ o.created_at[5:16].replace('T', ' ') }} 시작{% if o.answered %} · {{ o.answered }}문항 풂{% endif %}</div></td>
+      <td class="r"><a class="btn" href="{{ url_for('quiz.quiz', sid=o.id) }}">이어서</a></td></tr>
+  {% endfor %}
+  </tbody></table>
+</div>
+{% endif %}
 <div class="page-head">
   <div><h1>모의고사</h1>
     <div class="muted small">내 실제 위치를 알려면 <b>실전 모의고사</b>를 보세요. 등급을 고르지 않고 실제 시험과 같은 구성·진행으로 치릅니다.</div></div>
-  <a class="btn" href="{{ url_for('quiz.diagnostic') }}">진단 테스트 (15분)</a>
+  <a class="btn" href="{{ url_for('quiz.diagnostic') }}">진단 테스트 (20분)</a>
 </div>
 
 <form method="post" class="card">

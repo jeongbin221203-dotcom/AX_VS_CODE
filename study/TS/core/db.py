@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS sessions (
     items        TEXT NOT NULL,        -- JSON: ["5:p5-001", "3:p3-004", ...] 문제 묶음 순서
     time_limit   INTEGER,              -- RC 제한 시간(초), 없으면 NULL
     seen_before  INTEGER,              -- 모의고사: 전에 풀어 본 문제 묶음 수
+    requested    INTEGER,              -- 연습: 처음 요청한 문항 수 ("같은 조건으로 다시" 에 쓴다)
     total        INTEGER NOT NULL DEFAULT 0,
     correct      INTEGER NOT NULL DEFAULT 0,
     lc_total     INTEGER NOT NULL DEFAULT 0,
@@ -118,6 +119,8 @@ def configure(path: Path | str) -> None:
         cols = {r["name"] for r in con.execute("PRAGMA table_info(sessions)")}
         if "seen_before" not in cols:                       # 예전 DB 업그레이드
             con.execute("ALTER TABLE sessions ADD COLUMN seen_before INTEGER")
+        if "requested" not in cols:
+            con.execute("ALTER TABLE sessions ADD COLUMN requested INTEGER")
         # 예전 버전: 처음 보는 단어를 '다시'로 틀리면 reps·lapses 가 둘 다 0 이라 복습 목록에 안 들어갔다 → 틀린 기록이 있으면 1로 바로잡는다
         con.execute("UPDATE vocab_cards SET lapses = 1 WHERE reps = 0 AND lapses = 0 "
                     "AND word_id IN (SELECT word_id FROM vocab_log WHERE grade < 3)")

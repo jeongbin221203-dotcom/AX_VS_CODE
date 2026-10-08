@@ -1,691 +1,1202 @@
 [
-{"id":"rq-071","topic":"편의점",
- "intro":"Imagine that a marketing firm is doing research in your area. You have agreed to participate in a telephone interview about convenience stores.",
- "intro_ko":"한 마케팅 회사가 당신이 사는 지역에서 조사를 하고 있다고 상상해 보세요. 당신은 편의점에 관한 전화 인터뷰에 참여하기로 했습니다.",
- "questions":["How often do you go to a convenience store, and what do you usually buy there?",
-              "How far is the nearest convenience store from your home?",
-              "Do you think convenience stores should sell more fresh food like fruit and salads? Why or why not?"],
- "questions_ko":["편의점에 얼마나 자주 가고, 보통 무엇을 사나요?",
-                 "집에서 가장 가까운 편의점은 얼마나 떨어져 있나요?",
-                 "편의점이 과일이나 샐러드 같은 신선 식품을 더 많이 팔아야 한다고 생각하나요? 이유는요?"],
- "samples":["I go to a convenience store about three times a week. I usually buy drinks, snacks, and sometimes a quick lunch like a sandwich or a rice ball.",
-            "The nearest convenience store is very close to my home. It is only about two minutes away on foot, so I can go there anytime, even late at night.",
-            "Yes, I think convenience stores should sell more fresh food. First, many people buy their meals at convenience stores, so healthy options are important. Also, it is hard to find a grocery store open late at night. If convenience stores sold fruit and salads, people could eat better. That's why I think it is a good idea."],
- "samples_ko":["편의점에는 일주일에 세 번쯤 가요. 보통 음료와 과자, 가끔은 샌드위치나 주먹밥 같은 간단한 점심을 사요.",
-               "가장 가까운 편의점은 집에서 아주 가까워요. 걸어서 2분 정도라서 밤늦게라도 언제든 갈 수 있어요.",
-               "네, 편의점이 신선 식품을 더 팔아야 한다고 생각해요. 먼저 많은 사람이 편의점에서 끼니를 사기 때문에 건강한 선택지가 중요해요. 또 밤늦게 문을 연 식료품점은 찾기 어려워요. 편의점에서 과일과 샐러드를 팔면 사람들이 더 잘 먹을 수 있을 거예요. 그래서 좋은 생각이라고 봐요."],
- "samples_adv":["Well, I stop by a convenience store almost every day, usually on my way to work. I mostly grab a bottle of water and a coffee, and when I'm running late, I pick up a sandwich for breakfast.",
-                "Actually, there's a convenience store right on the first floor of my apartment building. So it takes less than a minute to get there, which is really handy when I suddenly run out of something.",
-                "Definitely, I think they should. These days, a lot of office workers and students eat at convenience stores because they're busy. But most of the food there is instant noodles or fried snacks, which aren't very healthy. For example, my younger brother eats lunch at a convenience store almost every day, and I worry about his diet. If stores offered fresh fruit and salads, people could make healthier choices without spending extra time. So I'd really welcome that change."],
- "samples_adv_ko":["음, 저는 거의 매일 편의점에 들러요. 보통 출근길에요. 주로 물 한 병과 커피를 사고, 늦을 때는 아침으로 샌드위치를 사요.",
-                   "사실 우리 아파트 건물 1층에 편의점이 있어요. 그래서 1분도 안 걸리는데, 뭔가 갑자기 떨어졌을 때 정말 편해요.",
-                   "당연히 그래야 한다고 생각해요. 요즘 많은 직장인과 학생이 바빠서 편의점에서 끼니를 해결해요. 그런데 거기 음식은 대부분 컵라면이나 튀긴 간식이라 건강에 별로 좋지 않아요. 예를 들어 제 남동생은 거의 매일 편의점에서 점심을 먹어서 식단이 걱정돼요. 가게에서 신선한 과일과 샐러드를 팔면 사람들이 시간을 더 들이지 않고도 건강한 선택을 할 수 있어요. 그래서 저는 그런 변화를 정말 환영해요."],
- "tips":["빈도 표현: about three times a week, almost every day, on my way to work","거리 표현: It's only two minutes away on foot / right on the first floor of my building"]},
-
-{"id":"rq-072","topic":"동영상 스트리밍",
- "intro":"Imagine that an entertainment company is doing research in your country. You have agreed to participate in a telephone interview about video streaming services.",
- "intro_ko":"한 엔터테인먼트 회사가 당신의 나라에서 조사를 하고 있다고 상상해 보세요. 당신은 동영상 스트리밍 서비스에 관한 전화 인터뷰에 참여하기로 했습니다.",
- "questions":["How many video streaming services do you use, and which one do you use the most?",
-              "When do you usually watch shows or movies on a streaming service?",
-              "Would you rather watch all the episodes of a series at once or one episode a week? Why?"],
- "questions_ko":["동영상 스트리밍 서비스를 몇 개 쓰고, 어느 것을 가장 많이 쓰나요?",
-                 "보통 언제 스트리밍 서비스로 드라마나 영화를 보나요?",
-                 "시리즈를 한 번에 다 보는 것과 일주일에 한 편씩 보는 것 중 어느 쪽이 좋나요? 이유는요?"],
- "samples":["I use two video streaming services right now. I use the bigger one the most, because it has a lot of movies and dramas that I like.",
-            "I usually watch shows on a streaming service at night after dinner. I also watch them on weekends when I have free time at home.",
-            "I would rather watch all the episodes at once. First, I don't like waiting a whole week for the next episode. When a story is exciting, I want to know what happens next right away. Also, I can enjoy the story better when I watch it all together. That's why I prefer watching a series all at once on the weekend."],
- "samples_ko":["지금 동영상 스트리밍 서비스를 두 개 써요. 제가 좋아하는 영화와 드라마가 많아서 더 큰 서비스를 가장 많이 써요.",
-               "보통 저녁 먹고 밤에 스트리밍 서비스로 드라마를 봐요. 집에서 시간이 있는 주말에도 봐요.",
-               "저는 한 번에 다 보는 걸 더 좋아해요. 먼저 다음 편을 일주일 내내 기다리는 게 싫어요. 이야기가 재미있으면 바로 다음이 궁금하거든요. 또 한꺼번에 보면 이야기를 더 잘 즐길 수 있어요. 그래서 주말에 시리즈를 한 번에 몰아 보는 걸 좋아해요."],
- "samples_adv":["Well, I'm subscribed to three streaming services at the moment, which is probably too many. But the one I use the most is the service with lots of Korean dramas, because my family and I watch it together.",
-                "I usually watch something on my tablet before I go to bed, maybe one or two episodes. And on long train rides, I download a movie in advance so I can watch it without using my data.",
-                "Honestly, I'd rather watch one episode a week. I know that sounds old-fashioned, but when I binge a whole series in one day, I forget the details really quickly. On the other hand, when I watch it weekly, I have time to think about the story and talk about it with my friends. For example, last year my coworkers and I followed a mystery drama every Friday, and we shared our guesses at lunch. It made the show much more fun."],
- "samples_adv_ko":["음, 지금 스트리밍 서비스를 세 개 구독하고 있는데, 아마 너무 많은 것 같아요. 그래도 가장 많이 쓰는 건 한국 드라마가 많은 서비스예요. 가족과 함께 보거든요.",
-                   "보통 자기 전에 태블릿으로 한두 편 정도 봐요. 그리고 기차를 오래 탈 때는 데이터를 쓰지 않고 볼 수 있게 영화를 미리 내려받아요.",
-                   "솔직히 저는 일주일에 한 편씩 보는 게 좋아요. 구식처럼 들리겠지만, 하루에 시리즈를 몰아 보면 내용을 금방 잊어버려요. 반면 매주 보면 이야기를 생각해 보고 친구들과 이야기할 시간이 있어요. 예를 들어 작년에 동료들과 매주 금요일 추리 드라마를 챙겨 보면서 점심때 추리를 나눴어요. 그래서 드라마가 훨씬 재미있었어요."],
- "tips":["I would rather A 형식 질문은 첫 문장에 I would rather ... 로 바로 선택을 말한다","binge-watch 몰아 보다, subscribe to 구독하다"]},
-
-{"id":"rq-073","topic":"택시",
- "intro":"Imagine that a transportation company is doing research in your city. You have agreed to participate in a telephone interview about taking taxis.",
- "intro_ko":"한 교통 회사가 당신이 사는 도시에서 조사를 하고 있다고 상상해 보세요. 당신은 택시 이용에 관한 전화 인터뷰에 참여하기로 했습니다.",
- "questions":["When was the last time you took a taxi, and where did you go?",
-              "Do you usually call a taxi with an app or catch one on the street?",
-              "What is the most important thing to you when you take a taxi: price, safety, or speed? Why?"],
- "questions_ko":["마지막으로 택시를 탄 게 언제고, 어디에 갔나요?",
-                 "보통 앱으로 택시를 부르나요, 길에서 잡나요?",
-                 "택시를 탈 때 가격, 안전, 속도 중 무엇이 가장 중요한가요? 이유는요?"],
- "samples":["The last time I took a taxi was last Saturday night. I went home from a restaurant downtown, because the subway had already stopped running.",
-            "I usually call a taxi with an app. It is easier than waiting on the street, and I can see how long it will take for the taxi to arrive.",
-            "For me, safety is the most important thing. I often take a taxi late at night, so I want to feel safe in the car. A careful driver is better than a fast driver. Also, with an app, I can share my trip with my family. Price and speed are important too, but safety comes first. That's why I choose safety."],
- "samples_ko":["마지막으로 택시를 탄 건 지난 토요일 밤이에요. 지하철이 이미 끊겨서 시내 식당에서 집으로 갔어요.",
-               "보통 앱으로 택시를 불러요. 길에서 기다리는 것보다 쉽고, 택시가 오는 데 얼마나 걸리는지 볼 수 있어요.",
-               "저에게는 안전이 가장 중요해요. 밤늦게 택시를 자주 타서 차 안에서 안전하다고 느끼고 싶어요. 빠른 기사님보다 조심스러운 기사님이 더 좋아요. 또 앱으로 가족에게 이동 경로를 공유할 수 있어요. 가격과 속도도 중요하지만 안전이 먼저예요. 그래서 안전을 골랐어요."],
- "samples_adv":["Actually, I took a taxi just two days ago. I had an early flight, and I had a heavy suitcase, so I took a taxi from my apartment to the airport bus terminal. It cost about fifteen dollars.",
-                "These days, I almost always use an app. It shows me the expected fare before I get in, and I can pay automatically with my card. Catching a taxi on the street can take forever, especially when it's raining.",
-                "Well, I'd say price is the most important thing for me. Taxis are much more expensive than buses or the subway, so I only take them when I really need to. Also, late at night, there's an extra charge, so the fare can go up quickly. For example, last month a short ride home cost me almost twenty dollars because of the night rate. So I always compare prices on the app before I choose a ride."],
- "samples_adv_ko":["사실 바로 이틀 전에 택시를 탔어요. 아침 일찍 비행기가 있었고 여행 가방이 무거워서 아파트에서 공항버스 터미널까지 택시를 탔어요. 15달러쯤 나왔어요.",
-                   "요즘은 거의 항상 앱을 써요. 타기 전에 예상 요금을 보여 주고 카드로 자동 결제할 수 있어요. 길에서 택시를 잡으면, 특히 비 올 때는 한참 걸려요.",
-                   "음, 저에게는 가격이 가장 중요해요. 택시는 버스나 지하철보다 훨씬 비싸서 정말 필요할 때만 타요. 또 밤늦게는 할증이 붙어서 요금이 금방 올라가요. 예를 들어 지난달에는 야간 요금 때문에 집까지 짧게 타고 거의 20달러를 냈어요. 그래서 고르기 전에 항상 앱에서 가격을 비교해요."],
- "tips":["세 가지 중 고르는 Q7 은 하나만 확실히 고르고 이유 2개를 말한다","fare 요금, extra charge at night 할증, expected fare 예상 요금"]},
-
-{"id":"rq-074","topic":"공항",
- "intro":"Imagine that an airport is doing research to improve its services. You have agreed to participate in a telephone interview about airports.",
- "intro_ko":"한 공항이 서비스 개선을 위해 조사를 하고 있다고 상상해 보세요. 당신은 공항에 관한 전화 인터뷰에 참여하기로 했습니다.",
- "questions":["How early do you usually arrive at the airport before your flight?",
-              "What do you usually do while you are waiting for your flight?",
-              "If our airport opened a new facility, which would you want most: a rest area, more restaurants, or a play area for kids? Why?"],
- "questions_ko":["보통 비행기 출발 얼마 전에 공항에 도착하나요?",
-                 "비행기를 기다리는 동안 보통 무엇을 하나요?",
-                 "우리 공항에 새 시설을 연다면 휴게 공간, 식당 추가, 어린이 놀이 공간 중 무엇을 가장 원하나요? 이유는요?"],
- "samples":["I usually arrive at the airport about two hours before my flight. For international flights, I sometimes go even earlier, because the lines can be very long.",
-            "While I am waiting for my flight, I usually get a coffee and read a book. Sometimes I also look around the duty-free shops near my gate.",
-            "I would want a rest area the most. Waiting at the airport can be very tiring, especially when my flight is late. In a rest area, I could sit on a comfortable chair or even take a short nap. Also, it would be nice to have a quiet place away from the noise. That's why I would choose a rest area."],
- "samples_ko":["보통 비행기 출발 두 시간 전쯤 공항에 도착해요. 국제선은 줄이 아주 길 수 있어서 가끔 더 일찍 가요.",
-               "비행기를 기다리는 동안 보통 커피를 사서 책을 읽어요. 가끔 탑승구 근처 면세점도 구경해요.",
-               "저는 휴게 공간을 가장 원해요. 공항에서 기다리는 건 특히 비행기가 늦을 때 정말 피곤해요. 휴게 공간이 있으면 편한 의자에 앉거나 잠깐 낮잠도 잘 수 있어요. 또 소음에서 떨어진 조용한 곳이 있으면 좋겠어요. 그래서 휴게 공간을 고르겠어요."],
- "samples_adv":["Well, I usually get to the airport about two and a half hours before an international flight. I've had a bad experience before, when the security line was so long that I almost missed my plane.",
-                "Most of the time, I charge my phone and check my work emails one last time. After that, I grab a light meal, because airplane food isn't really my favorite, and then I just relax at the gate.",
-                "I'd definitely want more restaurants. Right now, there are only a few places to eat, and they're always crowded. For instance, on my last trip, I waited almost thirty minutes for a simple bowl of noodles, and I had to eat it in a hurry. If there were more restaurants with different kinds of food, travelers could enjoy a proper meal before a long flight. Plus, the airport would make more money, so it's good for everyone."],
- "samples_adv_ko":["음, 국제선은 보통 출발 두 시간 반 전에 공항에 도착해요. 전에 보안 검색 줄이 너무 길어서 비행기를 놓칠 뻔한 안 좋은 경험이 있거든요.",
-                   "대부분 휴대폰을 충전하고 업무 이메일을 마지막으로 확인해요. 그다음 기내식을 별로 안 좋아해서 가볍게 식사를 하고, 탑승구에서 그냥 쉬어요.",
-                   "저는 당연히 식당이 더 많으면 좋겠어요. 지금은 먹을 곳이 몇 군데뿐이고 항상 붐벼요. 예를 들어 지난 여행 때는 국수 한 그릇에 30분 가까이 기다려서 급하게 먹어야 했어요. 다양한 음식점이 더 생기면 여행객들이 긴 비행 전에 제대로 식사를 할 수 있어요. 게다가 공항도 돈을 더 벌 수 있으니 모두에게 좋아요."],
- "tips":["How early ... 질문은 about two hours before my flight 처럼 숫자로 바로 답한다","공항 어휘: security line, boarding gate, duty free shop, delayed flight"]},
-
-{"id":"rq-075","topic":"기차 여행",
- "intro":"Imagine that you are talking on the telephone with a friend. Your friend is planning a trip and wants to know about traveling by train.",
- "intro_ko":"친구와 전화로 이야기하고 있다고 상상해 보세요. 친구가 여행을 계획 중인데 기차 여행에 대해 알고 싶어 합니다.",
- "questions":["When was the last time you traveled by train, and where did you go?",
-              "Is it better to buy train tickets online or at the station?",
-              "I'm deciding between taking a train or driving for a three-hour trip. Which would you recommend and why?"],
- "questions_ko":["마지막으로 기차로 여행한 게 언제고, 어디에 갔나요?",
-                 "기차표는 온라인으로 사는 게 나아요, 역에서 사는 게 나아요?",
-                 "세 시간 거리 여행에 기차를 탈지 운전할지 고민 중이야. 어느 쪽을 추천하고 이유는 뭐야?"],
- "samples":["The last time I traveled by train was last spring. I went to a city by the sea with my family, and the ride took about two hours.",
-            "I think it is better to buy train tickets online. You can choose your seat in advance, and you don't have to wait in line at the station.",
-            "I would recommend taking a train. First, a train is more relaxing than driving. You can sleep, read, or look out the window. Also, you don't have to worry about traffic or parking. Driving for three hours can make you very tired before your trip even starts. So I think the train is the better choice for you."],
- "samples_ko":["마지막으로 기차 여행을 한 건 작년 봄이에요. 가족과 바닷가 도시에 갔고, 두 시간쯤 걸렸어요.",
-               "기차표는 온라인으로 사는 게 낫다고 생각해. 자리를 미리 고를 수 있고 역에서 줄을 서지 않아도 돼.",
-               "나는 기차를 추천해. 먼저 기차가 운전보다 편해. 자거나 책을 읽거나 창밖을 볼 수 있어. 또 교통 체증이나 주차를 걱정할 필요가 없어. 세 시간 운전하면 여행이 시작되기도 전에 많이 피곤해질 수 있어. 그래서 기차가 더 나은 선택이라고 생각해."],
- "samples_adv":["Actually, I took a train just last month for a business trip. I went from Seoul to Busan on the high-speed train, and it only took about two and a half hours, which was much faster than I expected.",
-                "Definitely online. If you book on the railway app a few weeks early, you can sometimes get a discount. Also, on holidays the tickets sell out really fast, so waiting until you get to the station is risky.",
-                "Well, it depends on what you want to do there. If you're going to visit several places that are far from the station, driving might be more convenient. But if you're just staying in the city, I'd say take the train. You can relax, and you'll arrive on time without getting stuck in traffic. For example, when I drove to the coast last summer, a three-hour trip took almost five hours because of an accident. So, in most cases, the train is the safer bet."],
- "samples_adv_ko":["사실 바로 지난달에 출장으로 기차를 탔어. 고속 열차로 서울에서 부산까지 갔는데 두 시간 반 정도밖에 안 걸려서 생각보다 훨씬 빨랐어.",
-                   "당연히 온라인이지. 철도 앱으로 몇 주 일찍 예매하면 가끔 할인도 받을 수 있어. 또 명절에는 표가 정말 빨리 매진돼서 역에 가서 사려고 하면 위험해.",
-                   "음, 거기서 뭘 할지에 따라 달라. 역에서 먼 곳을 여러 군데 갈 거면 운전이 더 편할 수도 있어. 그런데 도시 안에만 있을 거면 기차를 타. 쉴 수 있고 차가 막히지 않아서 제시간에 도착할 거야. 예를 들어 작년 여름에 바닷가로 운전해 갔을 때 사고 때문에 세 시간 거리가 거의 다섯 시간 걸렸어. 그래서 대부분은 기차가 더 안전한 선택이야."],
- "tips":["친구와의 대화형 intro 는 I would recommend ... / I'd say ... 로 친구에게 말하듯 답한다","it depends on ... 로 시작해도 마지막에는 한쪽을 분명히 추천한다"]},
-
-{"id":"rq-076","topic":"아침 식사",
- "intro":"Imagine that a food company is doing research in your country. You have agreed to participate in a telephone interview about eating breakfast.",
- "intro_ko":"한 식품 회사가 당신의 나라에서 조사를 하고 있다고 상상해 보세요. 당신은 아침 식사에 관한 전화 인터뷰에 참여하기로 했습니다.",
- "questions":["What time do you usually eat breakfast, and what do you have?",
-              "Do you eat breakfast at home or on the way to work or school?",
-              "Some people skip breakfast to save time. Do you think breakfast is the most important meal of the day? Why or why not?"],
- "questions_ko":["보통 몇 시에 아침을 먹고, 무엇을 먹나요?",
-                 "아침은 집에서 먹나요, 출근이나 등교하는 길에 먹나요?",
-                 "시간을 아끼려고 아침을 거르는 사람들도 있어요. 아침이 하루 중 가장 중요한 식사라고 생각하나요? 이유는요?"],
- "samples":["I usually eat breakfast at around seven thirty in the morning. I have toast with eggs and a glass of milk, because it is quick and easy to make.",
-            "I usually eat breakfast at home. I wake up a little early, so I have enough time to sit down and eat with my family before I leave.",
-            "Yes, I think breakfast is the most important meal. When I eat breakfast, I have more energy in the morning. I can focus better at work or in class. But when I skip it, I get hungry and tired before lunch. Also, I tend to eat too much at lunch. That's why I always try to eat something in the morning."],
- "samples_ko":["보통 아침 7시 반쯤 아침을 먹어요. 빠르고 만들기 쉬워서 토스트에 달걀, 우유 한 잔을 먹어요.",
-               "보통 집에서 아침을 먹어요. 조금 일찍 일어나서 나가기 전에 가족과 앉아서 먹을 시간이 충분해요.",
-               "네, 아침이 가장 중요한 식사라고 생각해요. 아침을 먹으면 오전에 힘이 더 나요. 회사나 수업에서 집중도 더 잘 돼요. 하지만 거르면 점심 전에 배고프고 피곤해요. 또 점심을 너무 많이 먹게 돼요. 그래서 아침에는 항상 뭐라도 먹으려고 해요."],
- "samples_adv":["Well, on weekdays I eat breakfast around seven, right before I leave the house. I usually have a bowl of yogurt with some fruit and granola, and of course a big cup of coffee to wake me up.",
-                "Honestly, I usually eat on the way to work. I grab a banana or a sandwich from the café near the subway station and eat it at my desk. On weekends, though, I make a proper breakfast at home.",
-                "Actually, I don't think it's necessarily the most important meal. I believe it depends on the person. For example, I'm not hungry at all in the morning, so if I force myself to eat, I feel heavy and sleepy. Instead, I just have coffee and eat a good lunch, and I feel fine. On the other hand, my sister can't function without breakfast. So I think people should listen to their own bodies rather than follow one rule."],
- "samples_adv_ko":["음, 평일에는 집을 나서기 직전인 7시쯤 아침을 먹어요. 보통 요거트에 과일과 그래놀라를 넣어 먹고, 물론 잠을 깨려고 커피도 큰 잔으로 마셔요.",
-                   "솔직히 보통 출근길에 먹어요. 지하철역 근처 카페에서 바나나나 샌드위치를 사서 자리에서 먹어요. 그래도 주말에는 집에서 제대로 아침을 차려 먹어요.",
-                   "사실 저는 아침이 꼭 가장 중요한 식사라고 생각하진 않아요. 사람마다 다르다고 봐요. 예를 들어 저는 아침에 전혀 배가 안 고파서 억지로 먹으면 속이 더부룩하고 졸려요. 대신 커피만 마시고 점심을 잘 먹으면 괜찮아요. 반면 제 언니는 아침을 안 먹으면 아무것도 못 해요. 그래서 하나의 규칙을 따르기보다 자기 몸에 맞게 해야 한다고 생각해요."],
- "tips":["What time ... and what ...? 은 두 가지를 한 문장에 모두 답한다: I eat at seven, and I have ...","반대 의견도 가능: I don't think it's necessarily ... / It depends on the person"]},
-
-{"id":"rq-077","topic":"간식",
- "intro":"Imagine that a snack company is doing research in your area. You have agreed to participate in a telephone interview about snacks.",
- "intro_ko":"한 과자 회사가 당신이 사는 지역에서 조사를 하고 있다고 상상해 보세요. 당신은 간식에 관한 전화 인터뷰에 참여하기로 했습니다.",
- "questions":["What kind of snacks do you like, and when do you usually eat them?",
-              "Where do you usually buy your snacks?",
-              "If you were choosing a new snack, would you care more about the taste or about how healthy it is? Why?"],
- "questions_ko":["어떤 간식을 좋아하고, 보통 언제 먹나요?",
-                 "간식은 보통 어디에서 사나요?",
-                 "새 간식을 고른다면 맛과 건강 중 어느 쪽을 더 신경 쓰나요? 이유는요?"],
- "samples":["I like salty snacks like potato chips and crackers. I usually eat them in the afternoon at work, when I feel a little hungry before dinner.",
-            "I usually buy my snacks at the supermarket near my home. They often have discounts if you buy two bags, so it is cheaper than a convenience store.",
-            "I would care more about how healthy it is. These days, I try to eat less sugar and salt, because I want to stay healthy. Also, I eat snacks almost every day, so a healthy snack is better for me in the long run. Of course, taste is important too, but there are many healthy snacks that taste good. That's why I would choose a healthy one."],
- "samples_ko":["감자칩이나 크래커 같은 짭짤한 간식을 좋아해요. 보통 오후에 회사에서 저녁 전에 조금 배고플 때 먹어요.",
-               "간식은 보통 집 근처 슈퍼마켓에서 사요. 두 봉지를 사면 할인을 자주 해서 편의점보다 싸요.",
-               "저는 건강을 더 신경 쓰겠어요. 요즘 건강을 지키고 싶어서 설탕과 소금을 덜 먹으려고 해요. 또 간식을 거의 매일 먹어서 길게 보면 건강한 간식이 저에게 더 나아요. 물론 맛도 중요하지만 맛있는 건강 간식도 많아요. 그래서 건강한 것을 고르겠어요."],
- "samples_adv":["Well, I have a real sweet tooth, so I love chocolate and cookies. I usually eat them around three in the afternoon with a cup of tea, because that's when I start to feel sleepy at work.",
-                "Mostly online, actually. I order snacks in bulk from a shopping app once a month, and they're delivered to my door. It's cheaper that way, and I can share them with my coworkers at the office.",
-                "To be honest, I'd care more about the taste. For me, a snack is a small reward during a long day, so it has to be something I really enjoy. I've tried some healthy snacks, like protein bars and rice cakes, but most of them tasted pretty bland, and I didn't finish them. Instead, I just try to control how much I eat. For example, I buy small packs rather than big bags. That way, I can enjoy the taste without eating too much."],
- "samples_adv_ko":["음, 저는 단것을 정말 좋아해서 초콜릿과 쿠키를 아주 좋아해요. 보통 오후 3시쯤 차와 함께 먹는데, 회사에서 그때 졸리기 시작하거든요.",
-                   "사실 대부분 온라인으로 사요. 한 달에 한 번 쇼핑 앱에서 간식을 대량으로 주문하면 집 앞까지 배달돼요. 그게 더 싸고, 사무실에서 동료들과 나눠 먹을 수도 있어요.",
-                   "솔직히 저는 맛을 더 신경 쓰겠어요. 저에게 간식은 긴 하루 중 작은 보상이라 정말 즐길 수 있는 거여야 해요. 단백질 바나 쌀과자 같은 건강 간식을 먹어 봤는데 대부분 맛이 밋밋해서 다 먹지 못했어요. 대신 먹는 양을 조절하려고 해요. 예를 들어 큰 봉지 대신 작은 포장을 사요. 그러면 너무 많이 먹지 않고도 맛을 즐길 수 있어요."],
- "tips":["have a sweet tooth 단것을 좋아하다, salty 짭짤한, bland 밋밋한","in bulk 대량으로, small packs 소포장"]},
-
-{"id":"rq-078","topic":"신발",
- "intro":"Imagine that a shoe company is doing research in your country. You have agreed to participate in a telephone interview about buying shoes.",
- "intro_ko":"한 신발 회사가 당신의 나라에서 조사를 하고 있다고 상상해 보세요. 당신은 신발 구매에 관한 전화 인터뷰에 참여하기로 했습니다.",
- "questions":["How many pairs of shoes do you have, and which pair do you wear most often?",
-              "When was the last time you bought shoes, and where did you buy them?",
-              "Do you prefer to buy shoes in a store or online? Why?"],
- "questions_ko":["신발이 몇 켤레 있고, 어떤 신발을 가장 자주 신나요?",
-                 "마지막으로 신발을 산 게 언제고, 어디에서 샀나요?",
-                 "신발은 매장에서 사는 게 좋아요, 온라인에서 사는 게 좋아요? 이유는요?"],
- "samples":["I have about six pairs of shoes. I wear my white sneakers most often, because they are comfortable and they go well with most of my clothes.",
-            "The last time I bought shoes was about two months ago. I bought a pair of running shoes at a sports store in a shopping mall near my home.",
-            "I prefer to buy shoes in a store. Shoe sizes are different for each brand, so I need to try them on first. In a store, I can walk around and check if they are comfortable. When I bought shoes online before, they were too small, and returning them was a hassle. That's why I like buying shoes in a store."],
- "samples_ko":["신발이 여섯 켤레쯤 있어요. 편하고 대부분의 옷과 잘 어울려서 흰 운동화를 가장 자주 신어요.",
-               "마지막으로 신발을 산 건 두 달쯤 전이에요. 집 근처 쇼핑몰의 스포츠 매장에서 운동화 한 켤레를 샀어요.",
-               "저는 매장에서 사는 게 좋아요. 신발 사이즈는 브랜드마다 달라서 먼저 신어 봐야 해요. 매장에서는 걸어 보면서 편한지 확인할 수 있어요. 전에 온라인으로 샀을 때 너무 작아서 반품하느라 번거로웠어요. 그래서 매장에서 사는 걸 좋아해요."],
- "samples_adv":["Let me think. I probably have around ten pairs, including boots and sandals. But honestly, I wear the same black walking shoes almost every day, because I walk a lot on my way to work.",
-                "I bought a pair of dress shoes last week, actually. I have a friend's wedding coming up, so I went to a department store and found a nice pair on sale for about half price.",
-                "Well, I usually prefer buying shoes online. Once I know my size for a certain brand, I don't really need to try them on again. Online stores have a much wider selection, and the prices are often lower. For instance, the running shoes I'm wearing now were about thirty percent cheaper online than in the store. Also, many shopping sites offer free returns, so even if the size is wrong, it's not a big deal. So online shopping just makes more sense for me."],
- "samples_adv_ko":["생각해 볼게요. 부츠와 샌들을 포함해서 아마 열 켤레쯤 있어요. 그런데 솔직히 출근길에 많이 걸어서 거의 매일 같은 검은색 워킹화를 신어요.",
-                   "사실 지난주에 정장 구두를 한 켤레 샀어요. 곧 친구 결혼식이 있어서 백화점에 갔는데 거의 반값 할인하는 괜찮은 구두를 찾았어요.",
-                   "음, 저는 보통 온라인으로 사는 걸 더 좋아해요. 어떤 브랜드의 제 사이즈를 알면 다시 신어 볼 필요가 별로 없어요. 온라인 매장은 종류도 훨씬 다양하고 가격도 자주 더 낮아요. 예를 들어 지금 신고 있는 운동화는 매장보다 온라인이 30퍼센트 정도 쌌어요. 또 많은 쇼핑몰이 무료 반품을 해 줘서 사이즈가 틀려도 큰 문제가 아니에요. 그래서 저에게는 온라인 쇼핑이 더 합리적이에요."],
- "tips":["a pair of shoes 한 켤레, try on 신어 보다, go well with 잘 어울리다","Q7 은 반대쪽 단점 한 가지(returning was a hassle)를 넣으면 이유가 탄탄해진다"]},
-
-{"id":"rq-079","topic":"가방",
- "intro":"Imagine that a fashion company is doing research in your area. You have agreed to participate in a telephone interview about bags.",
- "intro_ko":"한 패션 회사가 당신이 사는 지역에서 조사를 하고 있다고 상상해 보세요. 당신은 가방에 관한 전화 인터뷰에 참여하기로 했습니다.",
- "questions":["What kind of bag do you usually carry, and what is inside it?",
-              "How long have you had the bag you use most often?",
-              "When you buy a new bag, which is more important to you, the design or the size? Why?"],
- "questions_ko":["보통 어떤 가방을 들고 다니고, 안에 무엇이 있나요?",
-                 "가장 자주 쓰는 가방은 얼마나 오래 썼나요?",
-                 "새 가방을 살 때 디자인과 크기 중 무엇이 더 중요한가요? 이유는요?"],
- "samples":["I usually carry a black backpack. Inside it, I have my laptop, a notebook, a water bottle, and a phone charger, because I need them every day.",
-            "I have had my backpack for about three years. It is a little old now, but it is still strong, so I don't need a new one yet.",
-            "The size is more important to me. I carry many things every day, like my laptop and some books. If the bag is too small, I can't put everything inside. Also, a big bag is useful when I go shopping after work. A nice design is good, but a bag should be useful first. That's why I care more about the size."],
- "samples_ko":["보통 검은색 백팩을 메고 다녀요. 안에는 매일 필요한 노트북, 공책, 물병, 휴대폰 충전기가 있어요.",
-               "그 백팩은 3년쯤 썼어요. 지금은 조금 낡았지만 아직 튼튼해서 새것이 필요하지는 않아요.",
-               "저에게는 크기가 더 중요해요. 매일 노트북이랑 책 같은 걸 많이 들고 다녀요. 가방이 너무 작으면 다 넣을 수가 없어요. 또 퇴근 후 장 볼 때도 큰 가방이 유용해요. 예쁜 디자인도 좋지만 가방은 먼저 쓸모가 있어야 해요. 그래서 크기를 더 신경 써요."],
- "samples_adv":["Well, I usually carry a medium-sized leather shoulder bag. There's always a wallet, my phone, earphones, a small umbrella, and some hand cream. I like to be ready for anything during the day.",
-                "I've been using this shoulder bag for almost five years. My parents gave it to me as a gift when I got my first job, so it has a lot of meaning to me, and I still take good care of it.",
-                "For me, the design matters more. I wear my bag every day, so it's actually a big part of my outfit. If a bag looks nice, it can make even simple clothes look stylish. Besides, these days I don't carry that much, because most things are on my phone. For example, I used to carry a big bag with lots of papers, but now I only need my wallet and phone. So I'd rather choose a bag that I really love the look of."],
- "samples_adv_ko":["음, 저는 보통 중간 크기의 가죽 숄더백을 들어요. 지갑, 휴대폰, 이어폰, 작은 우산, 핸드크림이 항상 들어 있어요. 하루 동안 무슨 일이든 대비하는 걸 좋아해요.",
-                   "이 숄더백은 거의 5년째 쓰고 있어요. 첫 직장을 얻었을 때 부모님이 선물해 주신 거라 저에게 의미가 커서 아직도 잘 관리하고 있어요.",
-                   "저에게는 디자인이 더 중요해요. 가방은 매일 드니까 사실 옷차림의 큰 부분이에요. 가방이 예쁘면 단순한 옷도 멋져 보일 수 있어요. 게다가 요즘은 대부분 휴대폰에 있어서 많이 들고 다니지 않아요. 예를 들어 예전에는 서류가 많아서 큰 가방을 들었는데, 지금은 지갑과 휴대폰만 있으면 돼요. 그래서 모양이 정말 마음에 드는 가방을 고르겠어요."],
- "tips":["How long have you had ...? 는 현재완료로 답한다: I have had it for three years","가방 종류: backpack, shoulder bag, tote bag, briefcase"]},
-
-{"id":"rq-080","topic":"시계",
- "intro":"Imagine that an electronics company is doing research in your country. You have agreed to participate in a telephone interview about watches.",
- "intro_ko":"한 전자 회사가 당신의 나라에서 조사를 하고 있다고 상상해 보세요. 당신은 시계에 관한 전화 인터뷰에 참여하기로 했습니다.",
- "questions":["Do you wear a watch, and if so, what kind is it?",
-              "How do you usually check the time during the day?",
-              "Would you rather buy a smartwatch or a traditional watch? Why?"],
- "questions_ko":["시계를 차나요? 찬다면 어떤 종류인가요?",
-                 "낮에 보통 어떻게 시간을 확인하나요?",
-                 "스마트워치와 일반 시계 중 무엇을 사고 싶나요? 이유는요?"],
- "samples":["Yes, I wear a watch every day. It is a simple silver watch with a leather band. My grandfather gave it to me when I graduated from college.",
-            "I usually check the time on my phone. I always have my phone in my hand or my pocket, so it is the easiest way for me to see the time.",
-            "I would rather buy a smartwatch. A smartwatch can do many things. It can count my steps and check my heart rate. Also, I can read text messages without taking out my phone. This is very useful when I am busy or exercising. A traditional watch only shows the time. That's why I would choose a smartwatch."],
- "samples_ko":["네, 매일 시계를 차요. 가죽 줄이 달린 단순한 은색 시계예요. 대학교를 졸업할 때 할아버지가 주셨어요.",
-               "보통 휴대폰으로 시간을 확인해요. 휴대폰을 항상 손이나 주머니에 가지고 있어서 시간을 보기 가장 쉬운 방법이에요.",
-               "저는 스마트워치를 사겠어요. 스마트워치는 많은 걸 할 수 있어요. 걸음 수를 세고 심박수도 확인해요. 또 휴대폰을 꺼내지 않고 문자를 읽을 수 있어요. 바쁘거나 운동할 때 아주 유용해요. 일반 시계는 시간만 보여 줘요. 그래서 스마트워치를 고르겠어요."],
- "samples_adv":["Actually, I don't wear a watch anymore. I used to wear one in high school, but after I got a smartphone, I found that I didn't really need it, so it's just sitting in a drawer now.",
-                "Most of the time, I just glance at the screen of my phone or my laptop. At work, there's also a big clock on the wall right in front of my desk, so it's easy to keep track of time during meetings.",
-                "Personally, I'd rather buy a traditional watch. Smartwatches are convenient, but they need to be charged almost every day, which is pretty annoying. Also, I already get too many notifications on my phone, and I don't want my wrist buzzing all day. A good traditional watch, on the other hand, can last for decades. For example, my father has worn the same watch for over twenty years, and it still looks great. So I think a classic watch is a better long-term choice."],
- "samples_adv_ko":["사실 이제는 시계를 안 차요. 고등학교 때는 찼는데 스마트폰이 생긴 뒤로 별로 필요 없다는 걸 알게 돼서 지금은 서랍에 그냥 있어요.",
-                   "대부분 휴대폰이나 노트북 화면을 슬쩍 봐요. 회사에서는 자리 바로 앞 벽에 큰 시계가 있어서 회의 중에도 시간을 챙기기 쉬워요.",
-                   "개인적으로 저는 일반 시계를 사겠어요. 스마트워치는 편하지만 거의 매일 충전해야 해서 꽤 귀찮아요. 또 이미 휴대폰으로 알림을 너무 많이 받는데, 손목까지 하루 종일 진동이 울리는 건 싫어요. 반면 좋은 일반 시계는 수십 년을 가요. 예를 들어 아버지는 같은 시계를 20년 넘게 차셨는데 아직도 멋져 보여요. 그래서 오래 보면 클래식 시계가 더 나은 선택이라고 생각해요."],
- "tips":["Do you ..., and if so ...? 질문은 Yes/No 를 먼저 말하고 이어서 설명한다","used to + 동사원형 = 예전에 ~했다 (지금은 안 함)"]},
-
-{"id":"rq-081","topic":"노트북 컴퓨터",
- "intro":"Imagine that a computer company is doing research in your country. You have agreed to participate in a telephone interview about laptop computers.",
- "intro_ko":"한 컴퓨터 회사가 당신의 나라에서 조사를 하고 있다고 상상해 보세요. 당신은 노트북 컴퓨터에 관한 전화 인터뷰에 참여하기로 했습니다.",
- "questions":["How many hours a day do you use a laptop, and what do you use it for?",
-              "When did you buy your current laptop, and are you happy with it?",
-              "If you were buying a new laptop, what would be the most important feature to you? Why?"],
- "questions_ko":["하루에 노트북을 몇 시간 쓰고, 무엇에 쓰나요?",
-                 "지금 노트북은 언제 샀고, 만족하나요?",
-                 "새 노트북을 산다면 가장 중요한 기능은 무엇인가요? 이유는요?"],
- "samples":["I use a laptop for about six hours a day. I mostly use it for work, like writing reports and sending emails, and sometimes I watch videos at night.",
-            "I bought my current laptop about two years ago. I am happy with it, because it is fast enough for my work and it has never had any problems.",
-            "The most important feature for me would be the battery life. I often work in cafés and on the train, and I can't always find a place to charge it. If the battery lasts all day, I don't have to carry the charger. Also, I don't need to worry about losing my work. That's why battery life is the most important to me."],
- "samples_ko":["하루에 노트북을 여섯 시간쯤 써요. 주로 보고서 쓰기와 이메일 보내기 같은 업무에 쓰고, 가끔 밤에 동영상을 봐요.",
-               "지금 노트북은 2년쯤 전에 샀어요. 업무에 충분히 빠르고 한 번도 문제가 없어서 만족해요.",
-               "저에게 가장 중요한 기능은 배터리 수명이에요. 카페나 기차에서 자주 일하는데 충전할 곳을 항상 찾을 수는 없어요. 배터리가 하루 종일 가면 충전기를 들고 다닐 필요가 없어요. 또 작업한 걸 날릴까 걱정하지 않아도 돼요. 그래서 배터리 수명이 가장 중요해요."],
- "samples_adv":["Well, I'm a graphic designer, so I'm on my laptop for at least nine or ten hours a day. I use it for editing images and designing websites, and after work I sometimes use it for online classes too.",
-                "I bought it about four years ago, right before I started my current job. To be honest, I'm not very happy with it these days. It's gotten pretty slow, and the fan gets really loud whenever I open large files.",
-                "If I bought a new one, I'd focus on the weight. I carry my laptop between home, the office, and client meetings almost every day, so a heavy laptop really hurts my shoulders by the end of the week. My current one weighs over two kilograms, and I can feel it. A lighter model would make my commute much easier. Of course, it still has to be powerful enough for design work, but I'd happily pay a little more for a lighter laptop."],
- "samples_adv_ko":["음, 저는 그래픽 디자이너라서 하루에 적어도 아홉, 열 시간은 노트북을 써요. 이미지 편집과 웹사이트 디자인에 쓰고, 퇴근 후에는 가끔 온라인 강의도 들어요.",
-                   "4년쯤 전, 지금 직장에 들어가기 직전에 샀어요. 솔직히 요즘은 별로 만족스럽지 않아요. 꽤 느려졌고, 큰 파일을 열 때마다 팬 소리가 정말 커요.",
-                   "새로 산다면 무게에 집중하겠어요. 거의 매일 집, 사무실, 고객 미팅 사이를 노트북을 들고 다녀서 무거우면 주말쯤엔 어깨가 정말 아파요. 지금 노트북은 2킬로그램이 넘어서 확실히 느껴져요. 더 가벼운 모델이면 출퇴근이 훨씬 편해질 거예요. 물론 디자인 작업을 할 만큼 성능은 좋아야 하지만, 가벼운 노트북이라면 기꺼이 조금 더 내겠어요."],
- "tips":["가정법 질문 If you were buying ... 은 I would ... 로 답한다","기능 어휘: battery life, weight, screen size, storage, speed"]},
-
-{"id":"rq-082","topic":"이어폰",
- "intro":"Imagine that an audio company is doing research in your area. You have agreed to participate in a telephone interview about earphones and headphones.",
- "intro_ko":"한 음향 기기 회사가 당신이 사는 지역에서 조사를 하고 있다고 상상해 보세요. 당신은 이어폰과 헤드폰에 관한 전화 인터뷰에 참여하기로 했습니다.",
- "questions":["Where do you usually use your earphones, and what do you listen to?",
-              "Do you prefer wireless earphones or ones with a cord?",
-              "Some people say that wearing earphones on the street is dangerous. What do you think? Why?"],
- "questions_ko":["이어폰을 보통 어디에서 쓰고, 무엇을 듣나요?",
-                 "무선 이어폰과 줄 있는 이어폰 중 어느 쪽이 좋나요?",
-                 "길에서 이어폰을 끼는 게 위험하다고 말하는 사람들이 있어요. 어떻게 생각하나요? 이유는요?"],
- "samples":["I usually use my earphones on the bus and the subway. I listen to music most of the time, and sometimes I listen to English lessons to study.",
-            "I prefer wireless earphones. There is no cord, so it is easy to move around. I don't have to worry about the cord getting stuck in my bag.",
-            "I agree that it can be dangerous. When people listen to loud music, they can't hear cars or bicycles around them. Also, many people look at their phones while they walk. This can cause accidents. So I think people should turn the volume down or take one earphone out on busy streets. That's my opinion."],
- "samples_ko":["보통 버스와 지하철에서 이어폰을 써요. 대부분 음악을 듣고, 가끔 공부하려고 영어 강의를 들어요.",
-               "저는 무선 이어폰이 좋아요. 줄이 없어서 움직이기 편해요. 가방 안에서 줄이 엉킬까 걱정하지 않아도 돼요.",
-               "위험할 수 있다는 데 동의해요. 음악을 크게 들으면 주변의 차나 자전거 소리를 못 들어요. 또 걸으면서 휴대폰을 보는 사람도 많아요. 이러면 사고가 날 수 있어요. 그래서 붐비는 거리에서는 소리를 줄이거나 한쪽 이어폰을 빼야 한다고 생각해요. 그게 제 의견이에요."],
- "samples_adv":["Well, I wear my earphones pretty much everywhere, on my commute, at the gym, and even at the office when I need to concentrate. I usually listen to podcasts in the morning and calm music while I'm working.",
-                "Wireless, for sure. I switched to wireless earphones about three years ago, and I'll never go back. The only problem is that I have to remember to charge them, and once I left the case in a taxi.",
-                "Honestly, I think it can be dangerous, but it depends on how you use them. If you play music really loudly with noise-canceling turned on, you might not hear a car horn or a bike bell. In fact, I once almost got hit by a delivery scooter because I didn't hear it coming. Since then, I keep the volume low and use the transparency mode when I'm walking. So I don't think we need to ban them, but people should be more careful."],
- "samples_adv_ko":["음, 저는 출퇴근길, 헬스장, 집중해야 할 때는 사무실에서까지 거의 어디서나 이어폰을 껴요. 보통 아침에는 팟캐스트를, 일할 때는 잔잔한 음악을 들어요.",
-                   "당연히 무선이죠. 3년쯤 전에 무선 이어폰으로 바꿨는데 다시는 안 돌아갈 거예요. 유일한 문제는 충전을 잊지 말아야 한다는 거고, 한 번은 케이스를 택시에 두고 내렸어요.",
-                   "솔직히 위험할 수 있지만 어떻게 쓰느냐에 달렸다고 생각해요. 노이즈 캔슬링을 켜고 음악을 아주 크게 들으면 자동차 경적이나 자전거 벨 소리를 못 들을 수 있어요. 실제로 저도 배달 오토바이가 오는 소리를 못 들어서 부딪힐 뻔한 적이 있어요. 그 뒤로 걸을 때는 소리를 작게 하고 주변음 모드를 써요. 그래서 금지할 필요는 없지만 사람들이 더 조심해야 한다고 생각해요."],
- "tips":["What do you think? 질문은 I agree that ... / I think it depends on ... 로 입장을 먼저 밝힌다","경험 한 줄(I once almost got hit ...)이 Q7 고득점의 핵심"]},
-
-{"id":"rq-083","topic":"소셜 미디어",
- "intro":"Imagine that a technology research company is doing a survey in your country. You have agreed to participate in a telephone interview about social media.",
- "intro_ko":"한 기술 조사 회사가 당신의 나라에서 설문을 하고 있다고 상상해 보세요. 당신은 소셜 미디어에 관한 전화 인터뷰에 참여하기로 했습니다.",
- "questions":["Which social media app do you use the most, and how much time do you spend on it each day?",
-              "What kind of posts do you usually share on social media?",
-              "Do you think social media helps people stay close to their friends? Why or why not?"],
- "questions_ko":["어떤 소셜 미디어 앱을 가장 많이 쓰고, 하루에 얼마나 시간을 쓰나요?",
-                 "소셜 미디어에 보통 어떤 게시물을 올리나요?",
-                 "소셜 미디어가 친구와 가깝게 지내는 데 도움이 된다고 생각하나요? 이유는요?"],
- "samples":["I use a photo-sharing app the most. I spend about one hour on it each day, usually when I am on the subway or before I go to sleep.",
-            "I usually share pictures of food and travel on social media. When I go to a nice restaurant or a beautiful place, I like to post a photo.",
-            "Yes, I think social media helps people stay close. Many of my friends live in other cities, so I can't meet them often. But on social media, I can see their photos and know what they are doing. I can also send them messages easily. Without social media, it would be hard to keep in touch. That's why I think it helps."],
- "samples_ko":["사진 공유 앱을 가장 많이 써요. 보통 지하철에서나 자기 전에, 하루에 한 시간쯤 써요.",
-               "소셜 미디어에는 보통 음식과 여행 사진을 올려요. 좋은 식당이나 아름다운 곳에 가면 사진을 올리는 걸 좋아해요.",
-               "네, 소셜 미디어가 가깝게 지내는 데 도움이 된다고 생각해요. 많은 친구가 다른 도시에 살아서 자주 못 만나요. 그런데 소셜 미디어에서는 사진을 보고 무엇을 하는지 알 수 있어요. 메시지도 쉽게 보낼 수 있어요. 소셜 미디어가 없으면 연락하기 어려울 거예요. 그래서 도움이 된다고 생각해요."],
- "samples_adv":["Well, I use a short video app the most, and honestly, I spend way too much time on it, probably about two hours a day. I keep telling myself I'll watch just one video, and then an hour is gone.",
-                "Actually, I rarely post anything myself. I mostly just watch other people's posts. But once in a while, I share photos of my dog or a short clip from a trip, mainly so my family can see them.",
-                "I think it helps in some ways, but not completely. It's great for keeping in touch with people who live far away. For instance, I have a friend who moved to Canada, and thanks to social media, I still feel like I know what's going on in her life. However, just liking someone's photo isn't the same as having a real conversation. Sometimes I feel close to people online, but we never actually meet. So I think social media is useful, but we still need face-to-face time."],
- "samples_adv_ko":["음, 저는 짧은 동영상 앱을 가장 많이 쓰는데, 솔직히 너무 많이 써요. 아마 하루 두 시간쯤이에요. 하나만 봐야지 하다가 한 시간이 사라져요.",
-                   "사실 제가 직접 올리는 건 거의 없어요. 대부분 다른 사람 게시물을 봐요. 그래도 가끔 가족이 볼 수 있게 강아지 사진이나 여행 영상을 짧게 올려요.",
-                   "어떤 면에서는 도움이 되지만 완전히 그렇지는 않다고 생각해요. 멀리 사는 사람과 연락하기에는 아주 좋아요. 예를 들어 캐나다로 이사 간 친구가 있는데, 소셜 미디어 덕분에 아직 그 친구가 어떻게 지내는지 아는 것 같아요. 하지만 사진에 좋아요를 누르는 건 진짜 대화와는 달라요. 가끔 온라인에서는 가깝게 느껴도 실제로는 한 번도 안 만나요. 그래서 소셜 미디어가 유용하지만 직접 만나는 시간도 여전히 필요하다고 생각해요."],
- "tips":["keep in touch 연락하고 지내다, post a photo 사진을 올리다, scroll through 훑어보다","부분 동의: It helps in some ways, but ... — 장점 하나, 단점 하나, 결론 한 문장"]},
-
-{"id":"rq-084","topic":"문자 메시지",
- "intro":"Imagine that a mobile phone company is doing research in your area. You have agreed to participate in a telephone interview about text messaging.",
- "intro_ko":"한 휴대폰 회사가 당신이 사는 지역에서 조사를 하고 있다고 상상해 보세요. 당신은 문자 메시지에 관한 전화 인터뷰에 참여하기로 했습니다.",
- "questions":["Who do you send text messages to most often, and what do you usually talk about?",
-              "How quickly do you usually reply to a text message?",
-              "When you need to discuss something important, do you prefer to send a message or make a phone call? Why?"],
- "questions_ko":["문자 메시지를 누구에게 가장 자주 보내고, 보통 무슨 이야기를 하나요?",
-                 "문자 메시지에 보통 얼마나 빨리 답장하나요?",
-                 "중요한 일을 의논해야 할 때 메시지를 보내는 것과 전화하는 것 중 무엇이 좋나요? 이유는요?"],
- "samples":["I send text messages to my best friend most often. We usually talk about our day, funny videos, and plans for the weekend.",
-            "I usually reply to a text message very quickly, within a few minutes. But when I am in a meeting or driving, I reply later.",
-            "When it is important, I prefer to make a phone call. On the phone, I can explain things clearly and hear the other person's answer right away. Text messages can be misunderstood, because I can't hear the person's voice. Also, a phone call is faster than sending many messages back and forth. That's why I call for important things."],
- "samples_ko":["가장 친한 친구에게 문자 메시지를 가장 자주 보내요. 보통 하루 일과, 웃긴 영상, 주말 계획에 대해 이야기해요.",
-               "보통 몇 분 안에 아주 빨리 답장해요. 하지만 회의 중이거나 운전 중일 때는 나중에 답장해요.",
-               "중요한 일이면 저는 전화하는 걸 더 좋아해요. 전화로는 분명하게 설명하고 상대의 대답을 바로 들을 수 있어요. 문자는 목소리를 들을 수 없어서 오해가 생길 수 있어요. 또 메시지를 여러 번 주고받는 것보다 전화가 더 빨라요. 그래서 중요한 일은 전화를 해요."],
- "samples_adv":["Well, I text my mother the most, believe it or not. She sends me messages every day, asking if I've eaten or reminding me to dress warmly. We also share photos of her garden and my cat.",
-                "It really depends on who it is. For family and close friends, I reply almost immediately. But for group chats, I sometimes check them only once or twice a day, because there are just too many messages.",
-                "Actually, I prefer sending a message, even for important things. When I write a message, I have time to think carefully about what I want to say. Also, there's a written record, so nobody forgets the details later. For example, when I discussed a contract with my landlord, we did everything by message, and it was really helpful when we disagreed about a date. Of course, if it's very urgent, I'll call. But in most cases, a message works better for me."],
- "samples_adv_ko":["음, 믿기 어렵겠지만 저는 엄마에게 문자를 가장 많이 보내요. 엄마가 밥은 먹었는지 묻거나 따뜻하게 입으라고 매일 메시지를 보내세요. 엄마의 정원 사진과 제 고양이 사진도 주고받아요.",
-                   "누구냐에 따라 정말 달라요. 가족과 친한 친구에게는 거의 바로 답장해요. 하지만 단체 대화방은 메시지가 너무 많아서 하루에 한두 번만 확인할 때도 있어요.",
-                   "사실 저는 중요한 일이라도 메시지를 더 좋아해요. 메시지를 쓸 때 하고 싶은 말을 신중하게 생각할 시간이 있어요. 또 기록이 남아서 나중에 아무도 세부 내용을 잊지 않아요. 예를 들어 집주인과 계약을 의논할 때 전부 메시지로 했는데, 날짜에 대해 의견이 달랐을 때 정말 도움이 됐어요. 물론 아주 급하면 전화해요. 하지만 대부분은 메시지가 저에게 더 잘 맞아요."],
- "tips":["How quickly ...? → within a few minutes, almost immediately, later in the day","Who ... and what ...? 두 의문사를 빠짐없이 답한다"]},
-
-{"id":"rq-085","topic":"놀이공원",
- "intro":"Imagine that a theme park company is doing research in your country. You have agreed to participate in a telephone interview about amusement parks.",
- "intro_ko":"한 테마파크 회사가 당신의 나라에서 조사를 하고 있다고 상상해 보세요. 당신은 놀이공원에 관한 전화 인터뷰에 참여하기로 했습니다.",
- "questions":["When was the last time you went to an amusement park, and who did you go with?",
-              "What is your favorite ride at an amusement park?",
-              "Would you rather visit an amusement park on a weekday with fewer people or on a weekend with special events? Why?"],
- "questions_ko":["마지막으로 놀이공원에 간 게 언제고, 누구와 갔나요?",
-                 "놀이공원에서 가장 좋아하는 놀이기구는 무엇인가요?",
-                 "사람이 적은 평일과 특별 행사가 있는 주말 중 언제 놀이공원에 가고 싶나요? 이유는요?"],
- "samples":["The last time I went to an amusement park was last fall. I went with my college friends, and we stayed there from morning until the night parade.",
-            "My favorite ride is the roller coaster. It is fast and a little scary, but that is why it is so exciting. I always ride it at least twice.",
-            "I would rather visit on a weekday with fewer people. On weekends, the lines are very long, and sometimes I wait more than an hour for one ride. On a weekday, I can enjoy many rides without waiting. Also, it is less noisy and more relaxing. Special events are fun, but I think riding more is better. That's why I prefer weekdays."],
- "samples_ko":["마지막으로 놀이공원에 간 건 작년 가을이에요. 대학 친구들과 갔고, 아침부터 밤 퍼레이드까지 있었어요.",
-               "제가 가장 좋아하는 놀이기구는 롤러코스터예요. 빠르고 조금 무섭지만 그래서 정말 신나요. 항상 적어도 두 번은 타요.",
-               "저는 사람이 적은 평일에 가겠어요. 주말에는 줄이 아주 길어서 놀이기구 하나에 한 시간 넘게 기다릴 때도 있어요. 평일에는 기다리지 않고 많이 탈 수 있어요. 또 덜 시끄럽고 더 여유로워요. 특별 행사도 재미있지만 더 많이 타는 게 낫다고 생각해요. 그래서 평일이 좋아요."],
- "samples_adv":["Let me see. I think it was about two months ago. I took my niece and nephew there for my niece's birthday. They were so excited that they ran from one ride to another all day, and I was exhausted by the evening.",
-                "Honestly, I'm not a big fan of scary rides, so my favorite is the Ferris wheel. It's slow and peaceful, and when you get to the top, you can see the whole park and the city. It's especially beautiful at sunset.",
-                "I'd actually choose a weekend with special events. I know it's more crowded, but for me, the special events are what make the trip memorable. For example, last Halloween, the park had a spooky night festival with costumes, live shows, and fireworks, and it was totally worth the long lines. On a quiet weekday, it might feel a bit empty. Besides, I usually work on weekdays, so taking a day off just for an amusement park isn't easy. So weekends are better for me."],
- "samples_adv_ko":["생각해 보면 두 달쯤 전이었어요. 조카딸 생일이라 조카들을 데리고 갔어요. 아이들이 너무 신나서 하루 종일 이 놀이기구 저 놀이기구로 뛰어다녀서 저녁쯤엔 저는 녹초가 됐어요.",
-                   "솔직히 저는 무서운 놀이기구를 별로 안 좋아해서 대관람차를 가장 좋아해요. 느리고 평화롭고, 꼭대기에 올라가면 공원 전체와 도시가 보여요. 해 질 녘에 특히 아름다워요.",
-                   "저는 사실 특별 행사가 있는 주말을 고르겠어요. 더 붐비는 건 알지만 저에게는 특별 행사가 나들이를 기억에 남게 해 줘요. 예를 들어 지난 핼러윈에 공원에서 의상, 라이브 공연, 불꽃놀이가 있는 으스스한 밤 축제를 했는데 긴 줄을 설 만한 가치가 충분했어요. 조용한 평일은 조금 썰렁할 수도 있어요. 게다가 저는 평일에 일해서 놀이공원 때문에 휴가를 내기도 쉽지 않아요. 그래서 저에게는 주말이 나아요."],
- "tips":["놀이기구 어휘: roller coaster, Ferris wheel, bumper cars, parade, fireworks","wait in line for an hour 한 시간 줄 서다 — 숫자를 넣으면 이유가 구체적이 된다"]},
-
-{"id":"rq-086","topic":"해변",
- "intro":"Imagine that a travel magazine is doing research for an article. You have agreed to participate in a telephone interview about going to the beach.",
- "intro_ko":"한 여행 잡지가 기사를 위해 조사를 하고 있다고 상상해 보세요. 당신은 해변에 가는 것에 관한 전화 인터뷰에 참여하기로 했습니다.",
- "questions":["How often do you go to the beach, and how do you get there?",
-              "What do you usually do when you are at the beach?",
-              "Do you prefer a busy beach with many shops and restaurants or a quiet beach with few people? Why?"],
- "questions_ko":["해변에 얼마나 자주 가고, 어떻게 가나요?",
-                 "해변에 가면 보통 무엇을 하나요?",
-                 "가게와 식당이 많은 붐비는 해변과 사람이 적은 조용한 해변 중 어느 쪽이 좋나요? 이유는요?"],
- "samples":["I go to the beach about two or three times a year, usually in summer. I live far from the sea, so I get there by train or by car.",
-            "When I am at the beach, I usually swim in the sea and walk along the sand. I also like to sit under an umbrella and read a book.",
-            "I prefer a quiet beach with few people. I go to the beach to relax, so I don't like noise and crowds. At a quiet beach, I can listen to the waves and rest well. Also, it is usually cleaner. I can bring my own food and drinks, so I don't need many shops. That's why I like quiet beaches better."],
- "samples_ko":["해변에는 1년에 두세 번쯤, 보통 여름에 가요. 바다에서 멀리 살아서 기차나 차로 가요.",
-               "해변에 가면 보통 바다에서 수영하고 모래사장을 따라 걸어요. 파라솔 아래 앉아 책 읽는 것도 좋아해요.",
-               "저는 사람이 적은 조용한 해변이 좋아요. 쉬려고 해변에 가니까 소음과 인파가 싫어요. 조용한 해변에서는 파도 소리를 들으며 푹 쉴 수 있어요. 또 보통 더 깨끗해요. 음식과 음료는 직접 가져가면 되니까 가게가 많을 필요가 없어요. 그래서 조용한 해변이 더 좋아요."],
- "samples_adv":["Actually, I'm lucky because I live about twenty minutes from the coast. So I go to the beach almost every weekend in summer, and I usually just ride my bike there along the river path.",
-                "Well, it depends on the season. In summer, I go surfing in the morning when the waves are good. In the cooler months, I just take a long walk on the beach with my dog, and then grab a coffee at a café nearby.",
-                "To be honest, I prefer a busy beach with lots of shops and restaurants. I enjoy the lively atmosphere, and it's convenient because I don't have to pack a lot. For instance, last summer I went to a popular beach where there were seafood restaurants, music, and even a night market right by the sand. We swam during the day and had fresh grilled fish at night. It felt like a small festival. A quiet beach is nice, but I think I'd get bored after a few hours."],
- "samples_adv_ko":["사실 저는 운이 좋아서 바닷가에서 20분 정도 거리에 살아요. 그래서 여름에는 거의 매주 해변에 가고, 보통 강변길을 따라 자전거를 타고 가요.",
-                   "음, 계절에 따라 달라요. 여름에는 파도가 좋은 아침에 서핑을 해요. 선선한 계절에는 강아지와 해변을 오래 걷고 근처 카페에서 커피를 마셔요.",
-                   "솔직히 저는 가게와 식당이 많은 붐비는 해변이 좋아요. 활기찬 분위기를 즐기고, 짐을 많이 안 챙겨도 돼서 편해요. 예를 들어 작년 여름에 유명한 해변에 갔는데 해산물 식당, 음악, 심지어 모래사장 바로 옆에 야시장까지 있었어요. 낮에는 수영하고 밤에는 갓 구운 생선을 먹었어요. 작은 축제 같았어요. 조용한 해변도 좋지만 몇 시간 지나면 지루해질 것 같아요."],
- "tips":["How often ... and how ...? → 빈도 + 교통수단을 한 번에: twice a year, by train","해변 어휘: waves, sand, beach umbrella, surfing, seafood restaurant"]},
-
-{"id":"rq-087","topic":"동물원",
- "intro":"Imagine that a city zoo is doing research to attract more visitors. You have agreed to participate in a telephone interview about zoos.",
- "intro_ko":"한 시립 동물원이 방문객을 더 끌기 위해 조사를 하고 있다고 상상해 보세요. 당신은 동물원에 관한 전화 인터뷰에 참여하기로 했습니다.",
- "questions":["When did you last visit a zoo, and what animals did you see?",
-              "How long do you usually stay at a zoo when you visit?",
-              "What could a zoo do to make visitors want to come back again? Give some suggestions."],
- "questions_ko":["마지막으로 동물원에 간 게 언제고, 어떤 동물을 봤나요?",
-                 "동물원에 가면 보통 얼마나 머무나요?",
-                 "방문객이 다시 오고 싶게 하려면 동물원이 무엇을 할 수 있을까요? 제안해 주세요."],
- "samples":["I last visited a zoo about a year ago with my family. We saw lions, giraffes, and elephants. The baby elephant was the cutest animal there.",
-            "When I visit a zoo, I usually stay for about three or four hours. It takes a long time to walk around and see all the animals.",
-            "I have two suggestions. First, the zoo could offer animal feeding times or talks with the zookeepers. Visitors, especially children, would learn a lot and have fun. Second, the zoo could add more places to rest, like benches and shady areas. In summer, walking around the zoo is very tiring. If the zoo did these things, I would want to come back."],
- "samples_ko":["마지막으로 동물원에 간 건 1년쯤 전에 가족과 함께였어요. 사자, 기린, 코끼리를 봤어요. 아기 코끼리가 거기서 가장 귀여운 동물이었어요.",
-               "동물원에 가면 보통 서너 시간쯤 있어요. 걸어 다니면서 동물을 다 보려면 오래 걸려요.",
-               "두 가지를 제안할게요. 먼저 동물원에서 먹이 주기 시간이나 사육사와의 이야기 시간을 운영할 수 있어요. 방문객, 특히 아이들이 많이 배우고 즐거울 거예요. 둘째, 벤치나 그늘 같은 쉴 곳을 더 만들 수 있어요. 여름에는 동물원을 돌아다니는 게 아주 힘들어요. 동물원이 이렇게 하면 다시 가고 싶을 거예요."],
- "samples_adv":["Let me think. It was this past spring, when my son's kindergarten had a family day there. We saw penguins, red pandas, and a huge gorilla. My son was so amazed by the penguins that he didn't want to leave.",
-                "Usually, we spend about half a day there, maybe four hours. With a small child, we have to take a lot of breaks, and we always stop for ice cream, so it takes longer than you'd think.",
-                "Well, I think the zoo could make each visit feel different. For example, it could hold seasonal programs, like a night zoo in summer when visitors can see animals that are active after dark. That would be really exciting. Also, a yearly membership with discounts would encourage families to visit more often. My family bought one at an aquarium last year, and we ended up going five times. Lastly, a good mobile map with feeding times would help visitors plan their day better."],
- "samples_adv_ko":["생각해 보면 올봄이었어요. 아들 유치원이 거기서 가족의 날 행사를 했어요. 펭귄, 레서판다, 커다란 고릴라를 봤어요. 아들이 펭귄에 너무 감탄해서 떠나고 싶어 하지 않았어요.",
-                   "보통 반나절, 네 시간쯤 있어요. 어린아이가 있으면 쉬는 시간을 많이 가져야 하고, 항상 아이스크림을 먹으러 멈춰서 생각보다 오래 걸려요.",
-                   "음, 동물원이 방문할 때마다 다르게 느껴지게 하면 좋겠어요. 예를 들어 여름에 밤에 활동하는 동물을 볼 수 있는 야간 동물원 같은 계절 프로그램을 열 수 있어요. 정말 신날 거예요. 또 할인이 되는 연간 회원권이 있으면 가족들이 더 자주 올 거예요. 저희 가족은 작년에 아쿠아리움 회원권을 샀는데 결국 다섯 번이나 갔어요. 마지막으로 먹이 주기 시간이 나오는 좋은 모바일 지도가 있으면 방문객이 하루 계획을 더 잘 세울 수 있어요."],
- "tips":["제안형 Q7: I have two suggestions. First, ... Second, ... 로 번호를 붙여 정리","could + 동사원형 으로 부드럽게 제안: The zoo could offer ..."]},
-
-{"id":"rq-088","topic":"보드게임",
- "intro":"Imagine that a toy and game company is doing research in your country. You have agreed to participate in a telephone interview about board games.",
- "intro_ko":"한 장난감·게임 회사가 당신의 나라에서 조사를 하고 있다고 상상해 보세요. 당신은 보드게임에 관한 전화 인터뷰에 참여하기로 했습니다.",
- "questions":["When was the last time you played a board game, and who did you play with?",
-              "What is your favorite board game, and why do you like it?",
-              "Do you think board games are a good activity for families? Why or why not?"],
- "questions_ko":["마지막으로 보드게임을 한 게 언제고, 누구와 했나요?",
-                 "가장 좋아하는 보드게임은 무엇이고, 왜 좋아하나요?",
-                 "보드게임이 가족에게 좋은 활동이라고 생각하나요? 이유는요?"],
- "samples":["The last time I played a board game was during the last holiday. I played with my cousins at my grandparents' house, and we played until midnight.",
-            "My favorite board game is a word game where you make words with letter tiles. I like it because it is fun and I can learn new words.",
-            "Yes, I think board games are a great activity for families. First, everyone can play together, from children to grandparents. Also, people put down their phones and talk to each other. In my family, we laugh a lot when we play board games. It is a good way to spend time together. That's why I think board games are good for families."],
- "samples_ko":["마지막으로 보드게임을 한 건 지난 명절이에요. 조부모님 댁에서 사촌들과 했는데 자정까지 했어요.",
-               "제가 가장 좋아하는 보드게임은 글자 타일로 단어를 만드는 단어 게임이에요. 재미있고 새 단어를 배울 수 있어서 좋아해요.",
-               "네, 보드게임은 가족에게 아주 좋은 활동이라고 생각해요. 먼저 아이부터 조부모님까지 모두 함께할 수 있어요. 또 사람들이 휴대폰을 내려놓고 서로 이야기해요. 우리 가족은 보드게임을 하면 많이 웃어요. 함께 시간을 보내기 좋은 방법이에요. 그래서 보드게임이 가족에게 좋다고 생각해요."],
- "samples_adv":["Actually, it was just last Friday. A few coworkers and I went to a board game café after work. We played a strategy game for almost three hours, and I lost badly, but it was still a lot of fun.",
-                "Well, my favorite is a trading game where you collect resources and build roads and towns. I love it because every game is different, and you have to negotiate with the other players, so there's lots of talking and laughing.",
-                "Absolutely, I think they're one of the best family activities. Unlike watching TV, board games make everyone talk and work together. Kids also learn useful skills, like taking turns, counting, and losing gracefully. For example, my nephew used to cry every time he lost a game, but after playing with us every weekend, he's become a much better sport. On top of that, board games are cheap, and you can play them again and again. So I'd recommend them to any family."],
- "samples_adv_ko":["사실 바로 지난 금요일이었어요. 퇴근 후 동료 몇 명과 보드게임 카페에 갔어요. 전략 게임을 거의 세 시간 했는데, 저는 크게 졌지만 그래도 정말 재미있었어요.",
-                   "음, 제가 가장 좋아하는 건 자원을 모아 길과 마을을 짓는 교환 게임이에요. 판마다 다르고 다른 사람들과 협상해야 해서 이야기하고 웃을 일이 많아서 좋아해요.",
-                   "물론이에요, 가장 좋은 가족 활동 중 하나라고 생각해요. TV 보기와 달리 보드게임은 모두가 이야기하고 함께하게 해요. 아이들은 순서 지키기, 숫자 세기, 깨끗하게 지는 법 같은 유용한 것도 배워요. 예를 들어 제 조카는 게임에 질 때마다 울었는데, 매주 주말 우리와 하다 보니 훨씬 의젓해졌어요. 게다가 보드게임은 싸고 계속 다시 할 수 있어요. 그래서 어느 가족에게나 추천하겠어요."],
- "tips":["What ... and why ...? 는 이름(종류) → because 이유 순서로 한 번에","Unlike watching TV, ... 처럼 다른 활동과 비교하면 이유가 선명해진다"]},
-
-{"id":"rq-089","topic":"요가",
- "intro":"Imagine that a fitness magazine is doing research in your area. You have agreed to participate in a telephone interview about yoga and stretching.",
- "intro_ko":"한 피트니스 잡지가 당신이 사는 지역에서 조사를 하고 있다고 상상해 보세요. 당신은 요가와 스트레칭에 관한 전화 인터뷰에 참여하기로 했습니다.",
- "questions":["Have you ever tried yoga, and if so, where did you do it?",
-              "How often do you stretch, and when do you usually do it?",
-              "Would you prefer to take a yoga class at a studio or follow a yoga video at home? Why?"],
- "questions_ko":["요가를 해 본 적이 있나요? 있다면 어디에서 했나요?",
-                 "스트레칭을 얼마나 자주 하고, 보통 언제 하나요?",
-                 "요가를 학원에서 수업으로 듣는 것과 집에서 영상을 따라 하는 것 중 어느 쪽이 좋나요? 이유는요?"],
- "samples":["Yes, I have tried yoga a few times. I took a beginner class at a community center near my home last year, and it was harder than I expected.",
-            "I stretch almost every day. I usually do it in the morning right after I wake up, because my body feels stiff and stretching helps me wake up.",
-            "I would prefer to take a class at a studio. As a beginner, I don't know the right positions yet. In a class, the teacher can watch me and fix my mistakes. This helps me avoid injuries. Also, when I pay for a class, I go more regularly. At home, I might skip it. That's why I prefer a studio class."],
- "samples_ko":["네, 요가를 몇 번 해 봤어요. 작년에 집 근처 주민센터에서 초급반 수업을 들었는데 생각보다 어려웠어요.",
-               "거의 매일 스트레칭을 해요. 보통 아침에 일어나자마자 해요. 몸이 뻣뻣한데 스트레칭을 하면 잠이 깨거든요.",
-               "저는 학원에서 수업을 듣는 게 좋아요. 초보자라서 아직 올바른 자세를 몰라요. 수업에서는 선생님이 보고 틀린 걸 고쳐 줄 수 있어요. 그러면 부상을 피할 수 있어요. 또 수업료를 내면 더 꾸준히 가요. 집에서는 빼먹을 수도 있어요. 그래서 학원 수업이 좋아요."],
- "samples_adv":["Yes, I've been doing yoga for about two years now. I started at a small studio near my office, because I had terrible back pain from sitting all day. These days, I go there twice a week after work.",
-                "I try to stretch at least three times a day, actually. I do a little in the morning, a few minutes at my desk in the afternoon, and then a longer session before bed. It really helps me sleep better.",
-                "Honestly, I'd rather follow a video at home now. When I was a beginner, a studio class was definitely helpful, but now I know the basic poses well. At home, I can practice whenever I want, even late at night, and I don't have to spend time traveling. Also, there are so many free videos online, from ten-minute routines to hour-long classes. For example, I've been following a thirty-day program on a video channel, and it's been great. So home practice fits my busy schedule better."],
- "samples_adv_ko":["네, 요가를 한 지 2년쯤 됐어요. 하루 종일 앉아 있어서 허리가 너무 아파서 회사 근처 작은 학원에서 시작했어요. 요즘은 퇴근 후 일주일에 두 번 가요.",
-                   "사실 하루에 적어도 세 번은 스트레칭하려고 해요. 아침에 조금, 오후에 자리에서 몇 분, 그리고 자기 전에 길게 해요. 잠을 더 잘 자는 데 정말 도움이 돼요.",
-                   "솔직히 지금은 집에서 영상을 따라 하는 게 좋아요. 초보일 때는 학원 수업이 확실히 도움이 됐지만, 지금은 기본자세를 잘 알아요. 집에서는 밤늦게라도 원할 때 연습할 수 있고 이동 시간도 안 들어요. 또 온라인에 10분짜리 루틴부터 한 시간짜리 수업까지 무료 영상이 아주 많아요. 예를 들어 저는 영상 채널의 30일 프로그램을 따라 하고 있는데 정말 좋아요. 그래서 집 연습이 바쁜 제 일정에 더 잘 맞아요."],
- "tips":["Have you ever ...? 는 Yes, I have tried ... / No, I haven't, but ... 로 현재완료 답변","stiff 뻣뻣한, pose 자세, injury 부상, beginner class 초급반"]},
-
-{"id":"rq-090","topic":"산책",
- "intro":"Imagine that a community organization is doing research in your area. You have agreed to participate in a telephone interview about walking for exercise.",
- "intro_ko":"한 지역 단체가 당신이 사는 지역에서 조사를 하고 있다고 상상해 보세요. 당신은 운동으로 걷기에 관한 전화 인터뷰에 참여하기로 했습니다.",
- "questions":["How many minutes a day do you walk, and where do you usually walk?",
-              "Do you prefer to walk alone or with someone else?",
-              "What could our town do to encourage more people to walk? Give some suggestions."],
- "questions_ko":["하루에 몇 분 걷고, 보통 어디를 걷나요?",
-                 "혼자 걷는 것과 다른 사람과 걷는 것 중 어느 쪽이 좋나요?",
-                 "더 많은 사람이 걷도록 우리 동네가 무엇을 할 수 있을까요? 제안해 주세요."],
- "samples":["I walk for about thirty minutes a day. I usually walk in the park near my apartment after dinner, because there are nice trees and a quiet path.",
-            "I prefer to walk with someone else. When I walk with my friend or my sister, we can talk, and the time goes by much faster.",
-            "I have two suggestions. First, the town could build more walking paths with lights. Many people want to walk at night, but some streets are too dark. Second, the town could hold a walking event every month, with small prizes. This would make walking more fun. If the town did these things, more people would walk."],
- "samples_ko":["하루에 30분쯤 걸어요. 보통 저녁을 먹고 아파트 근처 공원을 걸어요. 나무가 좋고 길이 조용하거든요.",
-               "저는 다른 사람과 걷는 게 좋아요. 친구나 언니와 걸으면 이야기할 수 있고 시간이 훨씬 빨리 가요.",
-               "두 가지를 제안할게요. 먼저 동네에 조명이 있는 산책로를 더 만들 수 있어요. 밤에 걷고 싶은 사람이 많은데 어떤 길은 너무 어두워요. 둘째, 매달 작은 상품이 있는 걷기 행사를 열 수 있어요. 그러면 걷기가 더 재미있어질 거예요. 동네가 이렇게 하면 더 많은 사람이 걸을 거예요."],
- "samples_adv":["Well, I try to walk at least ten thousand steps a day, which is about an hour and a half. I walk to the subway station instead of taking the bus, and I take a long walk along the river on weekends.",
-                "Honestly, I prefer walking alone. It's the only time of day when I can really think and clear my head. I usually put on a podcast or some music and just enjoy being by myself for a while.",
-                "First of all, the town should make the sidewalks safer. In my neighborhood, some sidewalks are very narrow, and scooters and bikes often go by really fast, so walking can feel a bit risky. Also, the town could plant more trees and put benches along the main streets. Shade makes a huge difference in summer. Lastly, I think a step-counting challenge through the town's app would be fun. For example, people could earn points for local shops. That would motivate a lot of people."],
- "samples_adv_ko":["음, 하루에 적어도 만 보는 걸으려고 하는데, 한 시간 반 정도예요. 버스 대신 지하철역까지 걷고, 주말에는 강을 따라 오래 걸어요.",
-                   "솔직히 저는 혼자 걷는 게 좋아요. 하루 중 유일하게 생각하고 머리를 비울 수 있는 시간이거든요. 보통 팟캐스트나 음악을 틀고 잠시 혼자인 시간을 즐겨요.",
-                   "우선 동네가 인도를 더 안전하게 만들어야 해요. 우리 동네는 인도가 아주 좁은 곳이 있고 킥보드와 자전거가 자주 빠르게 지나가서 걷는 게 조금 위험하게 느껴져요. 또 큰길을 따라 나무를 더 심고 벤치를 놓을 수 있어요. 여름에는 그늘이 큰 차이를 만들어요. 마지막으로 동네 앱으로 걸음 수 챙기기 도전을 하면 재미있을 것 같아요. 예를 들어 동네 가게에서 쓸 수 있는 포인트를 받을 수 있게요. 그러면 많은 사람이 동기 부여가 될 거예요."],
- "tips":["제안 연결어: First of all, ... Also, ... Lastly, ...","걷기 어휘: walking path, sidewalk, ten thousand steps, clear my head"]},
-
-{"id":"rq-091","topic":"라디오",
- "intro":"Imagine that a radio station is doing research in your city. You have agreed to participate in a telephone interview about listening to the radio.",
- "intro_ko":"한 라디오 방송국이 당신이 사는 도시에서 조사를 하고 있다고 상상해 보세요. 당신은 라디오 청취에 관한 전화 인터뷰에 참여하기로 했습니다.",
- "questions":["How often do you listen to the radio, and where do you usually listen to it?",
-              "What kind of radio programs do you like the most?",
-              "Do you think radio will still be popular ten years from now? Why or why not?"],
- "questions_ko":["라디오를 얼마나 자주 듣고, 보통 어디에서 듣나요?",
-                 "어떤 라디오 프로그램을 가장 좋아하나요?",
-                 "10년 뒤에도 라디오가 인기 있을 거라고 생각하나요? 이유는요?"],
- "samples":["I listen to the radio about three times a week. I usually listen to it in my car when I drive to work in the morning.",
-            "I like music programs the most. The hosts play many good songs, and they also read stories from listeners. It makes my drive more fun.",
-            "Yes, I think radio will still be popular. Many people listen to the radio while they drive, and they can't watch videos in the car. Also, radio is free and easy to use. Radio hosts feel like friends, and listeners can send messages to the programs. So I think people will keep listening to the radio in the future."],
- "samples_ko":["라디오를 일주일에 세 번쯤 들어요. 보통 아침에 운전해서 출근할 때 차에서 들어요.",
-               "저는 음악 프로그램을 가장 좋아해요. 진행자가 좋은 노래를 많이 틀어 주고 청취자 사연도 읽어 줘요. 운전이 더 즐거워져요.",
-               "네, 라디오는 계속 인기 있을 거라고 생각해요. 많은 사람이 운전하면서 라디오를 듣는데 차에서는 영상을 볼 수 없어요. 또 라디오는 무료이고 쓰기 쉬워요. 라디오 진행자는 친구처럼 느껴지고 청취자가 프로그램에 메시지를 보낼 수도 있어요. 그래서 앞으로도 사람들이 라디오를 계속 들을 거라고 생각해요."],
- "samples_adv":["Honestly, I hardly ever listen to the radio these days. The only time is when I take a taxi and the driver has it on. At home, I usually listen to music or podcasts on my phone instead.",
-                "When I do listen, I like the late-night talk shows. The host usually speaks in a calm voice and shares stories from listeners about their day. It's really relaxing, and sometimes the stories are surprisingly touching.",
-                "I think radio will still be around, but it'll look different. Young people like me mostly use streaming apps and podcasts, so traditional radio might lose some listeners. On the other hand, many radio stations now have apps and video live streams, so people can listen anywhere and even chat with the hosts in real time. For example, my mom listens to her favorite morning show on an app while she cooks. So radio won't disappear, but it'll keep changing to fit new technology."],
- "samples_adv_ko":["솔직히 요즘은 라디오를 거의 안 들어요. 택시를 탔는데 기사님이 틀어 놨을 때뿐이에요. 집에서는 대신 보통 휴대폰으로 음악이나 팟캐스트를 들어요.",
-                   "들을 때는 심야 토크 프로그램을 좋아해요. 진행자가 보통 차분한 목소리로 청취자들의 하루 사연을 들려줘요. 정말 편안하고, 가끔은 사연이 놀랄 만큼 감동적이에요.",
-                   "라디오는 계속 남아 있겠지만 모습은 달라질 거라고 생각해요. 저 같은 젊은 사람들은 대부분 스트리밍 앱과 팟캐스트를 써서 기존 라디오는 청취자를 일부 잃을 수도 있어요. 반면 요즘 많은 방송국이 앱과 영상 생방송을 해서 어디서나 듣고 진행자와 실시간으로 채팅도 할 수 있어요. 예를 들어 우리 엄마는 요리하면서 앱으로 좋아하는 아침 프로그램을 들으세요. 그래서 라디오는 사라지지 않고 새 기술에 맞게 계속 바뀔 거예요."],
- "tips":["미래 예측 질문은 will 로 답한다: Radio will still be popular / won't disappear","hardly ever 거의 ~하지 않다 — 자주 하지 않는 일도 솔직하게 답해도 된다"]},
-
-{"id":"rq-092","topic":"잡지",
- "intro":"Imagine that a magazine publisher is doing research in your country. You have agreed to participate in a telephone interview about reading magazines.",
- "intro_ko":"한 잡지 출판사가 당신의 나라에서 조사를 하고 있다고 상상해 보세요. 당신은 잡지 읽기에 관한 전화 인터뷰에 참여하기로 했습니다.",
- "questions":["When was the last time you read a magazine, and what was it about?",
-              "Where do you usually read magazines?",
-              "Would you rather read a magazine in print or on a digital device? Why?"],
- "questions_ko":["마지막으로 잡지를 읽은 게 언제고, 무엇에 관한 잡지였나요?",
-                 "잡지는 보통 어디에서 읽나요?",
-                 "잡지를 종이로 읽는 것과 디지털 기기로 읽는 것 중 어느 쪽이 좋나요? 이유는요?"],
- "samples":["The last time I read a magazine was last week. It was a travel magazine, and it had many beautiful photos of small towns in Europe.",
-            "I usually read magazines at the hair salon or at the dentist's office while I am waiting. I don't often buy magazines myself.",
-            "I would rather read a magazine in print. Magazines have big, colorful photos, and they look much better on paper. Also, my eyes get tired when I look at a screen for a long time. I already use my phone and computer all day. Reading a paper magazine feels relaxing. That's why I prefer print magazines."],
- "samples_ko":["마지막으로 잡지를 읽은 건 지난주예요. 여행 잡지였는데, 유럽 작은 마을의 아름다운 사진이 많았어요.",
-               "잡지는 보통 미용실이나 치과에서 기다리는 동안 읽어요. 직접 잡지를 사는 일은 많지 않아요.",
-               "저는 종이 잡지가 좋아요. 잡지는 크고 화려한 사진이 있어서 종이로 보면 훨씬 보기 좋아요. 또 화면을 오래 보면 눈이 피곤해요. 이미 하루 종일 휴대폰과 컴퓨터를 써요. 종이 잡지를 읽으면 편안한 느낌이 들어요. 그래서 종이 잡지가 좋아요."],
- "samples_adv":["Actually, I read one just this morning. I have a subscription to a science magazine, and this month's issue was about how cities can stay cool during heat waves. It was really interesting and easy to understand.",
-                "Mostly, I read them on my tablet during my commute. The subway ride takes about forty minutes, so I usually finish one or two articles each way. On Sundays, I also read at a café near my home.",
-                "I'd rather read on a digital device. First, it's much more convenient. I can carry dozens of magazines on one tablet, and I don't need to worry about piles of paper at home. Second, digital magazines often include videos and links, so I can learn more about a topic right away. For instance, when I read a cooking magazine on my tablet, I can watch the recipe video at the same time. Plus, it's better for the environment because it saves paper."],
- "samples_adv_ko":["사실 바로 오늘 아침에 하나 읽었어요. 과학 잡지를 구독하는데, 이번 달 호는 폭염 때 도시가 어떻게 시원함을 유지할 수 있는지에 관한 거였어요. 정말 흥미롭고 이해하기 쉬웠어요.",
-                   "대부분 출퇴근길에 태블릿으로 읽어요. 지하철로 40분쯤 걸려서 보통 갈 때 올 때 기사 한두 개씩 읽어요. 일요일에는 집 근처 카페에서도 읽어요.",
-                   "저는 디지털 기기로 읽는 게 좋아요. 먼저 훨씬 편해요. 태블릿 하나에 잡지 수십 권을 넣고 다닐 수 있고, 집에 종이가 쌓일 걱정도 없어요. 둘째, 디지털 잡지는 영상과 링크가 있어서 주제에 대해 바로 더 알아볼 수 있어요. 예를 들어 태블릿으로 요리 잡지를 읽으면 요리법 영상도 동시에 볼 수 있어요. 게다가 종이를 아끼니까 환경에도 더 좋아요."],
- "tips":["What was it about? → It was about ... / It was a travel magazine with ...","subscription 구독, issue 호, article 기사, in print 종이로"]},
-
-{"id":"rq-093","topic":"쿠폰·할인",
- "intro":"Imagine that a marketing firm is doing research in your area. You have agreed to participate in a telephone interview about using coupons and discounts.",
- "intro_ko":"한 마케팅 회사가 당신이 사는 지역에서 조사를 하고 있다고 상상해 보세요. 당신은 쿠폰과 할인 이용에 관한 전화 인터뷰에 참여하기로 했습니다.",
- "questions":["How often do you use coupons, and where do you usually get them?",
-              "When was the last time you bought something on sale, and what did you buy?",
-              "Some stores send discount offers by text message. Do you think this is helpful or annoying? Why?"],
- "questions_ko":["쿠폰을 얼마나 자주 쓰고, 보통 어디에서 받나요?",
-                 "마지막으로 할인 상품을 산 게 언제고, 무엇을 샀나요?",
-                 "어떤 가게들은 문자로 할인 소식을 보내요. 이게 도움이 된다고 생각하나요, 귀찮다고 생각하나요? 이유는요?"],
- "samples":["I use coupons about once a week. I usually get them from shopping apps on my phone, and sometimes from the receipts at the supermarket.",
-            "The last time I bought something on sale was last weekend. I bought a winter coat at a department store, and it was forty percent off.",
-            "I think it is annoying. I get too many text messages from stores every day, and most of them are not useful for me. Sometimes they come late at night or during work. Also, I worry about my personal information. If I want a discount, I can check the app myself. That's why I don't like these messages."],
- "samples_ko":["쿠폰은 일주일에 한 번쯤 써요. 보통 휴대폰 쇼핑 앱에서 받고, 가끔 슈퍼마켓 영수증에서도 받아요.",
-               "마지막으로 할인 상품을 산 건 지난 주말이에요. 백화점에서 겨울 코트를 샀는데 40퍼센트 할인이었어요.",
-               "저는 귀찮다고 생각해요. 매일 가게에서 문자가 너무 많이 오는데 대부분 저에게 쓸모가 없어요. 가끔 밤늦게나 일하는 중에 와요. 또 개인 정보도 걱정돼요. 할인을 원하면 제가 직접 앱을 확인하면 돼요. 그래서 이런 문자가 싫어요."],
- "samples_adv":["Well, I use coupons almost every day, to be honest. Most of them come from food delivery and coffee shop apps. I also collect stamps at my favorite bakery, and every tenth loaf is free.",
-                "Just yesterday, actually. My favorite sports brand had a big end-of-season sale, so I bought two pairs of running shorts and a jacket. Altogether I saved about fifty dollars, which made me really happy.",
-                "I think it can be helpful, as long as it's from a store I actually like. For example, my local supermarket texts me when fruit or meat is on sale, and I've saved quite a lot of money that way. Last month I bought a big box of strawberries for half price because of one of those messages. But when random stores I visited only once keep sending ads, it's definitely annoying. So I only sign up for messages from a few stores I use often."],
- "samples_adv_ko":["음, 솔직히 쿠폰은 거의 매일 써요. 대부분 배달 앱과 커피숍 앱에서 받아요. 좋아하는 빵집에서는 도장도 모으는데 열 번째 빵은 무료예요.",
-                   "사실 바로 어제예요. 좋아하는 스포츠 브랜드가 시즌 마감 세일을 크게 해서 운동용 반바지 두 벌과 재킷을 샀어요. 모두 합쳐 50달러쯤 아껴서 정말 기뻤어요.",
-                   "제가 정말 좋아하는 가게에서 오는 거라면 도움이 될 수 있다고 생각해요. 예를 들어 동네 슈퍼마켓은 과일이나 고기를 할인할 때 문자를 보내 주는데, 그렇게 돈을 꽤 많이 아꼈어요. 지난달에는 그런 문자 덕분에 딸기 한 상자를 반값에 샀어요. 하지만 한 번 가 본 가게들이 계속 광고를 보내면 확실히 귀찮아요. 그래서 자주 가는 몇몇 가게에서만 문자를 받도록 신청해요."],
- "tips":["할인 표현: forty percent off, half price, on sale, end-of-season sale, save money","as long as ... = ~라면 (조건부 의견)"]},
-
-{"id":"rq-094","topic":"재활용",
- "intro":"Imagine that a research company is doing a survey for your city government. You have agreed to participate in a telephone interview about recycling.",
- "intro_ko":"한 조사 회사가 시청을 위해 설문을 하고 있다고 상상해 보세요. 당신은 재활용에 관한 전화 인터뷰에 참여하기로 했습니다.",
- "questions":["How often do you take out the recycling, and what do you recycle the most?",
-              "Is it easy to recycle in your neighborhood?",
-              "What do you think is the best way to get people to recycle more? Why?"],
- "questions_ko":["재활용품을 얼마나 자주 내놓고, 무엇을 가장 많이 재활용하나요?",
-                 "당신 동네에서는 재활용하기 쉬운가요?",
-                 "사람들이 재활용을 더 많이 하게 하는 가장 좋은 방법은 무엇이라고 생각하나요? 이유는요?"],
- "samples":["I take out the recycling twice a week. I recycle plastic bottles the most, because I drink a lot of water and juice at home.",
-            "Yes, it is easy to recycle in my neighborhood. There is a recycling area in my apartment complex, and there are separate bins for paper, plastic, and cans.",
-            "I think the best way is to give people rewards. For example, people could get points or a little money when they bring bottles and cans to a machine. People like rewards, so they would recycle more. Also, it would be a fun way to teach children about recycling. That's why I think rewards are the best way."],
- "samples_ko":["재활용품은 일주일에 두 번 내놓아요. 집에서 물과 주스를 많이 마셔서 플라스틱병을 가장 많이 재활용해요.",
-               "네, 우리 동네는 재활용하기 쉬워요. 아파트 단지에 분리수거장이 있고, 종이, 플라스틱, 캔 수거함이 따로 있어요.",
-               "가장 좋은 방법은 보상을 주는 거라고 생각해요. 예를 들어 기계에 병과 캔을 가져가면 포인트나 약간의 돈을 받을 수 있어요. 사람들은 보상을 좋아해서 더 많이 재활용할 거예요. 또 아이들에게 재활용을 가르치는 재미있는 방법도 될 거예요. 그래서 보상이 가장 좋은 방법이라고 생각해요."],
- "samples_adv":["In my building, we can only put out recycling on Tuesdays and Saturdays, so I do it twice a week. I recycle cardboard boxes the most, because I order so many things online, and the boxes pile up really quickly.",
-                "Not really, to be honest. I live in a small building without a recycling area, so I have to sort everything myself and carry it to a collection point down the street. And the rules about what goes where are pretty confusing.",
-                "I think the best way is to make the rules simple and clear. Right now, a lot of people want to recycle, but they don't know how. For example, I'm never sure whether a greasy pizza box or a plastic cup with a paper label can be recycled. If the city put easy pictures on every bin and sent out a short guide, people would make fewer mistakes. Also, an app that tells you how to sort an item when you scan it would be really helpful."],
- "samples_adv_ko":["우리 건물은 화요일과 토요일에만 재활용품을 내놓을 수 있어서 일주일에 두 번 해요. 온라인으로 주문을 정말 많이 해서 상자가 금방 쌓이니까 종이 상자를 가장 많이 재활용해요.",
-                   "솔직히 별로 그렇지 않아요. 분리수거장이 없는 작은 건물에 살아서 직접 다 분리해서 길 아래 수거 장소까지 들고 가야 해요. 그리고 뭘 어디에 버리는지 규칙이 꽤 헷갈려요.",
-                   "가장 좋은 방법은 규칙을 단순하고 분명하게 만드는 거라고 생각해요. 지금 재활용하고 싶어 하는 사람은 많지만 방법을 몰라요. 예를 들어 저는 기름 묻은 피자 상자나 종이 라벨이 붙은 플라스틱 컵을 재활용할 수 있는지 늘 헷갈려요. 시에서 모든 수거함에 쉬운 그림을 붙이고 짧은 안내문을 보내면 사람들이 실수를 덜 할 거예요. 또 물건을 스캔하면 분리 방법을 알려 주는 앱이 있으면 정말 도움이 될 거예요."],
- "tips":["재활용 어휘: take out the recycling, sort, separate bins, collection point, cardboard","Is it easy ...? 는 Yes/No → 이유 한 가지로 짧게"]},
-
-{"id":"rq-095","topic":"에너지 절약",
- "intro":"Imagine that an energy company is doing research in your area. You have agreed to participate in a telephone interview about saving energy at home.",
- "intro_ko":"한 에너지 회사가 당신이 사는 지역에서 조사를 하고 있다고 상상해 보세요. 당신은 집에서 에너지 절약에 관한 전화 인터뷰에 참여하기로 했습니다.",
- "questions":["Which uses the most electricity in your home, and how often do you use it?",
-              "What do you do to save energy at home?",
-              "Would you be willing to pay more for appliances that use less energy? Why or why not?"],
- "questions_ko":["집에서 무엇이 전기를 가장 많이 쓰고, 얼마나 자주 쓰나요?",
-                 "집에서 에너지를 아끼려고 무엇을 하나요?",
-                 "에너지를 덜 쓰는 가전제품이라면 돈을 더 낼 의향이 있나요? 이유는요?"],
- "samples":["The air conditioner uses the most electricity in my home. In summer, I use it almost every day, especially at night when it is too hot to sleep.",
-            "To save energy, I always turn off the lights when I leave a room. I also unplug my phone charger and computer when I am not using them.",
-            "Yes, I would be willing to pay more. Appliances that use less energy cost more at first, but they lower my electricity bill every month. So in the long run, I can save money. Also, using less energy is good for the environment. I want to do something to help the planet. That's why I would pay more."],
- "samples_ko":["우리 집에서는 에어컨이 전기를 가장 많이 써요. 여름에는 거의 매일, 특히 너무 더워서 잠이 안 오는 밤에 써요.",
-               "에너지를 아끼려고 방을 나갈 때 항상 불을 꺼요. 또 쓰지 않을 때는 휴대폰 충전기와 컴퓨터 플러그를 뽑아요.",
-               "네, 돈을 더 낼 의향이 있어요. 에너지를 덜 쓰는 가전제품은 처음엔 더 비싸지만 매달 전기 요금을 낮춰 줘요. 그래서 길게 보면 돈을 아낄 수 있어요. 또 에너지를 덜 쓰는 건 환경에도 좋아요. 지구를 위해 뭔가 하고 싶어요. 그래서 돈을 더 내겠어요."],
- "samples_adv":["I'd say it's the clothes dryer. I live with my husband and two kids, so we do laundry almost every day, and we use the dryer for nearly every load, especially during the rainy season when nothing dries outside.",
-                "Well, I've made a few small changes. I replaced all the light bulbs with LED ones, and I set the heating a couple of degrees lower in winter and just wear a sweater. I also use a power strip with a switch, so I can turn off several devices at once.",
-                "Definitely, as long as the difference isn't too big. For example, last year I bought a new refrigerator with the highest energy rating. It was about two hundred dollars more expensive than a similar model, but my electricity bill went down noticeably, so I think I'll get the money back in a few years. Besides, energy prices keep going up, so efficient appliances make more and more sense. And of course, it's better for the environment, which matters to me as a parent."],
- "samples_adv_ko":["건조기라고 할게요. 남편과 두 아이와 살아서 거의 매일 빨래를 하는데, 특히 밖에서 아무것도 안 마르는 장마철에는 거의 매번 건조기를 써요.",
-                   "음, 작은 변화를 몇 가지 했어요. 전구를 모두 LED로 바꿨고, 겨울에는 난방을 2도쯤 낮추고 스웨터를 입어요. 또 스위치 달린 멀티탭을 써서 여러 기기를 한 번에 끌 수 있어요.",
-                   "차이가 너무 크지만 않다면 당연히 그래요. 예를 들어 작년에 에너지 효율 등급이 가장 높은 냉장고를 새로 샀어요. 비슷한 모델보다 200달러쯤 비쌌지만 전기 요금이 눈에 띄게 줄어서 몇 년 안에 본전을 뽑을 것 같아요. 게다가 에너지 가격이 계속 오르니까 효율 좋은 가전이 점점 더 합리적이에요. 그리고 물론 환경에도 더 좋은데, 부모로서 저에게 중요한 부분이에요."],
- "tips":["be willing to + 동사원형 = 기꺼이 ~하다 → Yes, I would be willing to pay more","에너지 어휘: electricity bill, unplug, energy rating, LED bulbs, in the long run"]},
-
-{"id":"rq-096","topic":"택배",
- "intro":"Imagine that a delivery company is doing research in your country. You have agreed to participate in a telephone interview about sending and receiving packages.",
- "intro_ko":"한 택배 회사가 당신의 나라에서 조사를 하고 있다고 상상해 보세요. 당신은 택배를 보내고 받는 것에 관한 전화 인터뷰에 참여하기로 했습니다.",
- "questions":["How many packages do you receive in a month, and what are they usually?",
-              "When was the last time you sent a package, and who did you send it to?",
-              "Which is more important to you when you choose a delivery service, a low price or fast delivery? Why?"],
- "questions_ko":["한 달에 택배를 몇 개 받고, 보통 무엇인가요?",
-                 "마지막으로 택배를 보낸 게 언제고, 누구에게 보냈나요?",
-                 "택배 서비스를 고를 때 낮은 가격과 빠른 배송 중 무엇이 더 중요한가요? 이유는요?"],
- "samples":["I receive about ten packages a month. They are usually things I order online, like clothes, books, and some food for my kitchen.",
-            "The last time I sent a package was last month. I sent a box of snacks and a warm sweater to my younger brother, who is in the army.",
-            "A low price is more important to me. Most of the things I send are not urgent, so I don't mind waiting a few more days. If I choose the cheaper service, I can save money every time. Fast delivery is nice, but it often costs a lot more. That's why I usually choose the cheaper option."],
- "samples_ko":["한 달에 택배를 열 개쯤 받아요. 보통 옷, 책, 주방에서 쓸 음식처럼 온라인으로 주문한 물건이에요.",
-               "마지막으로 택배를 보낸 건 지난달이에요. 군대에 있는 남동생에게 과자 한 상자와 따뜻한 스웨터를 보냈어요.",
-               "저에게는 낮은 가격이 더 중요해요. 제가 보내는 건 대부분 급하지 않아서 며칠 더 기다려도 괜찮아요. 더 싼 서비스를 고르면 매번 돈을 아낄 수 있어요. 빠른 배송도 좋지만 보통 훨씬 비싸요. 그래서 보통 더 싼 쪽을 골라요."],
- "samples_adv":["Honestly, way too many. I'd say around twenty packages a month. Since I don't have a car, I order almost everything online, from groceries and pet food to cleaning supplies, so there's a box at my door nearly every day.",
-                "Just last week, actually. I sold an old camera on a second-hand app, so I packed it carefully with lots of bubble wrap and sent it to the buyer from the convenience store near my home. It arrived the next day.",
-                "For me, fast delivery matters more. A lot of the packages I send are for work, like contracts or product samples for clients, and they often have deadlines. If something arrives late, it can cause real problems. For example, once a sample I sent with a cheap service arrived two days late, and we almost lost the client. Since then, I always choose the faster option for anything important, even though it costs a few dollars more. I think it's worth the peace of mind."],
- "samples_adv_ko":["솔직히 너무 많아요. 한 달에 스무 개쯤이라고 할게요. 차가 없어서 장보기부터 반려동물 사료, 청소용품까지 거의 다 온라인으로 주문해서 거의 매일 문 앞에 상자가 있어요.",
-                   "사실 바로 지난주예요. 중고 거래 앱에서 오래된 카메라를 팔아서 뽁뽁이로 꼼꼼히 싸서 집 근처 편의점에서 구매자에게 보냈어요. 다음 날 도착했어요.",
-                   "저에게는 빠른 배송이 더 중요해요. 제가 보내는 택배는 계약서나 고객용 제품 샘플처럼 업무용이 많고 마감이 자주 있어요. 늦게 도착하면 정말 문제가 될 수 있어요. 예를 들어 한번은 싼 서비스로 보낸 샘플이 이틀 늦게 도착해서 고객을 잃을 뻔했어요. 그 뒤로는 몇 달러 더 들더라도 중요한 건 항상 빠른 쪽을 골라요. 마음 편한 값어치가 있다고 생각해요."],
- "tips":["택배 어휘: package, deliver, ship, tracking number, bubble wrap, arrive the next day","I don't mind waiting = 기다려도 괜찮다"]},
-
-{"id":"rq-097","topic":"주차",
- "intro":"Imagine that a research company is doing a survey for your city government. You have agreed to participate in a telephone interview about parking in your city.",
- "intro_ko":"한 조사 회사가 시청을 위해 설문을 하고 있다고 상상해 보세요. 당신은 도시 주차에 관한 전화 인터뷰에 참여하기로 했습니다.",
- "questions":["How often do you drive downtown, and is it easy to find a parking space?",
-              "How much do you usually pay for parking when you go shopping?",
-              "What do you think the city should do to solve parking problems? Give some suggestions."],
- "questions_ko":["시내에 얼마나 자주 운전해서 가고, 주차 공간을 찾기 쉬운가요?",
-                 "쇼핑하러 갈 때 주차비를 보통 얼마나 내나요?",
-                 "주차 문제를 해결하려면 시에서 무엇을 해야 한다고 생각하나요? 제안해 주세요."],
- "samples":["I drive downtown about once a week. It is not easy to find a parking space, especially on weekends. Sometimes I drive around for twenty minutes.",
-            "When I go shopping, I usually pay about five dollars for parking. Some big stores give free parking if I spend a certain amount of money.",
-            "I have two suggestions. First, the city should build more public parking lots near busy areas. Then people would not park on the street. Second, the city could make an app that shows empty parking spaces. This would save time and reduce traffic. If the city did these things, parking would be much easier."],
- "samples_ko":["시내에는 일주일에 한 번쯤 운전해서 가요. 주차 공간 찾기가 쉽지 않아요, 특히 주말에요. 가끔 20분 동안 돌아다녀요.",
-               "쇼핑하러 가면 보통 주차비로 5달러쯤 내요. 큰 가게들은 일정 금액 이상 사면 무료 주차를 해 줘요.",
-               "두 가지를 제안할게요. 먼저 시에서 붐비는 곳 근처에 공영 주차장을 더 지어야 해요. 그러면 사람들이 길에 주차하지 않을 거예요. 둘째, 빈 주차 공간을 보여 주는 앱을 만들 수 있어요. 그러면 시간도 아끼고 교통 체증도 줄 거예요. 시에서 이렇게 하면 주차가 훨씬 쉬워질 거예요."],
- "samples_adv":["Actually, I almost never drive downtown anymore. Finding a parking spot there is a nightmare, and the last time I tried, I spent half an hour circling the block. So now I just take the subway whenever I go into the city.",
-                "It really depends on where I go. At the big shopping mall near my place, parking is free for three hours with a receipt. But at the department store downtown, I once paid almost fifteen dollars for just two hours.",
-                "Well, rather than building more parking lots, I think the city should encourage people to drive less. For example, it could build large park-and-ride lots at subway stations on the edge of the city, so people can leave their cars there and take the train downtown. Also, the city could run more buses on weekends, when parking is the hardest. In my opinion, adding more parking just brings more cars, so improving public transportation is a better long-term solution."],
- "samples_adv_ko":["사실 이제 시내에는 거의 운전해서 안 가요. 거기서 주차 자리 찾기가 악몽이고, 마지막으로 갔을 때는 블록을 30분 동안 빙빙 돌았어요. 그래서 이제 시내 갈 때는 그냥 지하철을 타요.",
-                   "어디 가느냐에 따라 정말 달라요. 집 근처 큰 쇼핑몰은 영수증이 있으면 세 시간 무료예요. 하지만 시내 백화점에서는 한번은 두 시간에 거의 15달러를 냈어요.",
-                   "음, 주차장을 더 짓기보다는 시에서 사람들이 운전을 덜 하게 해야 한다고 생각해요. 예를 들어 도시 외곽 지하철역에 큰 환승 주차장을 지어서 사람들이 차를 거기 두고 시내까지 전철을 타게 할 수 있어요. 또 주차가 가장 힘든 주말에 버스를 더 운행할 수 있어요. 제 생각에 주차장을 늘리면 차만 더 늘어나니까 대중교통을 개선하는 게 더 좋은 장기 해결책이에요."],
- "tips":["주차 어휘: parking space, parking lot, free parking, circle the block, park-and-ride","rather than A, I think B = A 보다는 B — 흔한 답과 다른 제안으로 고득점"]},
-
-{"id":"rq-098","topic":"친구 만나기",
- "intro":"Imagine that a marketing firm is doing research in your area. You have agreed to participate in a telephone interview about spending time with friends.",
- "intro_ko":"한 마케팅 회사가 당신이 사는 지역에서 조사를 하고 있다고 상상해 보세요. 당신은 친구들과 시간을 보내는 것에 관한 전화 인터뷰에 참여하기로 했습니다.",
- "questions":["How often do you meet your friends, and where do you usually meet them?",
-              "What did you do the last time you met your friends?",
-              "Do you prefer to meet one friend at a time or a large group of friends? Why?"],
- "questions_ko":["친구를 얼마나 자주 만나고, 보통 어디에서 만나나요?",
-                 "마지막으로 친구를 만났을 때 무엇을 했나요?",
-                 "친구를 한 명씩 만나는 것과 여럿이 함께 만나는 것 중 어느 쪽이 좋나요? 이유는요?"],
- "samples":["I meet my friends about twice a month. We usually meet at a restaurant or a café downtown, because it is easy for everyone to get there.",
-            "The last time I met my friends, we had dinner at a Korean barbecue restaurant. After that, we went to a karaoke room and sang for an hour.",
-            "I prefer to meet one friend at a time. When I meet just one friend, we can have a deep conversation. I can listen carefully and share my worries too. In a big group, it is noisy, and I can't talk to everyone. Also, it is easier to choose a time and a place with one person. That's why I prefer meeting one friend."],
- "samples_ko":["친구들은 한 달에 두 번쯤 만나요. 모두 오기 쉬워서 보통 시내 식당이나 카페에서 만나요.",
-               "마지막으로 친구들을 만났을 때 고깃집에서 저녁을 먹었어요. 그다음 노래방에 가서 한 시간 동안 노래를 불렀어요.",
-               "저는 한 명씩 만나는 게 좋아요. 한 명만 만나면 깊은 대화를 할 수 있어요. 잘 들어 주고 제 고민도 나눌 수 있어요. 여럿이 만나면 시끄럽고 모두와 이야기할 수가 없어요. 또 한 명이면 시간과 장소를 정하기도 더 쉬워요. 그래서 한 명씩 만나는 게 좋아요."],
- "samples_adv":["Honestly, not as often as I'd like. Since we all started working, it's hard to match our schedules, so we meet maybe once a month. We usually get together at a friend's apartment, cook dinner, and just hang out.",
-                "Last Saturday, a few of my friends and I went hiking on a small mountain outside the city. It took about two hours to reach the top, and afterward we had spicy noodles and pancakes at a restaurant near the trail.",
-                "I actually prefer meeting a big group of friends. There's just more energy and more laughter when everyone is together. Also, I get to catch up with lots of people at once, which saves time when everyone is busy. For example, every December, about ten of my high school friends rent a large room for a year-end party. We play games, share news, and stay up talking until late. It's my favorite night of the year. One-on-one is nice, but group gatherings feel more like a celebration."],
- "samples_adv_ko":["솔직히 바라는 만큼 자주는 못 만나요. 다들 일을 시작한 뒤로 일정 맞추기가 어려워서 한 달에 한 번 정도 만나요. 보통 친구 집에 모여서 저녁을 해 먹고 그냥 놀아요.",
-                   "지난 토요일에 친구 몇 명과 도시 밖 작은 산에 등산을 갔어요. 정상까지 두 시간쯤 걸렸고, 그다음 등산로 근처 식당에서 매운 국수와 전을 먹었어요.",
-                   "저는 사실 여럿이 만나는 게 더 좋아요. 다 같이 모이면 에너지와 웃음이 더 많아요. 또 한 번에 여러 사람의 근황을 들을 수 있어서 다들 바쁠 때 시간이 절약돼요. 예를 들어 매년 12월이면 고등학교 친구 열 명쯤이 큰 방을 빌려 송년회를 해요. 게임도 하고 소식도 나누고 늦게까지 이야기해요. 1년 중 제가 가장 좋아하는 밤이에요. 일대일도 좋지만 단체 모임은 더 축제 같아요."],
- "tips":["What did you do ...? 는 과거 시제 + 순서 연결어: First we ..., After that, ...","hang out 어울려 놀다, catch up with 근황을 나누다, get together 모이다"]},
-
-{"id":"rq-099","topic":"우산",
- "intro":"Imagine that you are talking on the telephone with a colleague. It is raining heavily today, and you are talking about rainy days.",
- "intro_ko":"동료와 전화로 이야기하고 있다고 상상해 보세요. 오늘 비가 많이 오고 있고, 비 오는 날에 대해 이야기하고 있습니다.",
- "questions":["How did you get to work today in the rain, and did you get wet?",
-              "What do you usually like to do at home on a rainy day?",
-              "I keep losing my umbrellas. Should I buy a cheap umbrella or an expensive, high-quality one? What would you recommend?"],
- "questions_ko":["오늘 비 오는데 어떻게 출근했고, 젖었어요?",
-                 "비 오는 날 집에서 보통 무엇을 하는 걸 좋아해요?",
-                 "저는 우산을 자꾸 잃어버려요. 싼 우산을 살까요, 비싸고 좋은 우산을 살까요? 무엇을 추천해요?"],
- "samples":["I took the bus to work today. I had an umbrella, but the wind was very strong, so my shoes and pants got a little wet.",
-            "On a rainy day, I like to stay home and watch movies. I also like to cook something warm, like soup or noodles, and listen to the rain.",
-            "I would recommend buying a cheap umbrella. You said you keep losing them. If you lose an expensive umbrella, you will feel very bad. But if a cheap one gets lost, it is not a big problem. Also, cheap umbrellas are easy to find in convenience stores. So I think a cheap umbrella is better for you right now."],
- "samples_ko":["오늘은 버스를 타고 출근했어요. 우산이 있었는데 바람이 아주 세서 신발이랑 바지가 조금 젖었어요.",
-               "비 오는 날에는 집에서 영화를 보는 걸 좋아해요. 국이나 국수처럼 따뜻한 음식을 만들어 먹으면서 빗소리를 듣는 것도 좋아해요.",
-               "싼 우산을 사는 걸 추천해요. 우산을 자꾸 잃어버린다고 했잖아요. 비싼 우산을 잃어버리면 정말 속상할 거예요. 하지만 싼 건 잃어버려도 큰 문제가 아니에요. 또 싼 우산은 편의점에서 쉽게 살 수 있어요. 그래서 지금은 싼 우산이 더 나을 것 같아요."],
- "samples_adv":["Well, I usually walk to the office, but this morning I took a taxi because it was pouring. Even so, I got soaked just walking from the taxi to the building entrance, so I'm still drying my socks under my desk right now.",
-                "Honestly, rainy days are my favorite days to stay in. I usually make a pot of tea, put on some jazz, and read a novel by the window. And in the evening, I often make spicy pancakes, which is a popular rainy-day food in Korea.",
-                "Actually, I'd recommend getting a good one, but a bright, unusual one. Here's my thinking. People usually lose cheap umbrellas because they don't care about them. If you pay more for an umbrella you really like, you'll be more careful with it. I used to lose umbrellas all the time too, but two years ago I bought a sturdy yellow one, and I still have it. Because of the bright color, I always notice it when I leave a café or a bus. So, give it a try."],
- "samples_adv_ko":["음, 보통은 걸어서 출근하는데 오늘 아침엔 비가 퍼부어서 택시를 탔어요. 그래도 택시에서 건물 입구까지 걷는 동안 흠뻑 젖어서 지금도 책상 밑에서 양말을 말리고 있어요.",
-                   "솔직히 비 오는 날은 집에 있기 가장 좋아하는 날이에요. 보통 차를 한 주전자 끓이고 재즈를 틀고 창가에서 소설을 읽어요. 그리고 저녁에는 한국에서 비 오는 날 인기 있는 음식인 매운 전을 자주 부쳐요.",
-                   "사실 좋은 우산을 사되, 눈에 띄는 특이한 걸로 사길 추천해요. 제 생각은 이래요. 사람들은 싼 우산은 신경을 안 써서 잃어버려요. 정말 마음에 드는 우산에 돈을 더 내면 더 조심하게 될 거예요. 저도 예전엔 우산을 늘 잃어버렸는데, 2년 전에 튼튼한 노란 우산을 사서 아직도 갖고 있어요. 밝은 색이라 카페나 버스에서 내릴 때 항상 눈에 띄어요. 그러니 한번 해 보세요."],
- "tips":["동료와의 전화 대화형: You said you ... 로 상대 말을 받아 추천하면 자연스럽다","비 표현: pouring, get soaked, heavy rain, umbrella, windy"]},
-
-{"id":"rq-100","topic":"헤어 제품",
- "intro":"Imagine that a personal care company is doing research in your country. You have agreed to participate in a telephone interview about hair care products.",
- "intro_ko":"한 생활용품 회사가 당신의 나라에서 조사를 하고 있다고 상상해 보세요. 당신은 헤어 제품에 관한 전화 인터뷰에 참여하기로 했습니다.",
- "questions":["What hair care products do you use, and how often do you buy them?",
-              "Where do you usually buy shampoo and other hair products?",
-              "When you choose a shampoo, what is most important to you: the price, the brand, or the ingredients? Why?"],
- "questions_ko":["어떤 헤어 제품을 쓰고, 얼마나 자주 사나요?",
-                 "샴푸와 다른 헤어 제품은 보통 어디에서 사나요?",
-                 "샴푸를 고를 때 가격, 브랜드, 성분 중 무엇이 가장 중요한가요? 이유는요?"],
- "samples":["I use shampoo and conditioner every day, and sometimes a little hair wax. I buy new ones about once every two months, when the bottles are almost empty.",
-            "I usually buy shampoo at the supermarket near my home. They often have special deals, like buy one, get one free, so I buy two bottles at a time.",
-            "The ingredients are the most important to me. My scalp is sensitive, so some shampoos make it itchy. That's why I always read the label before I buy. I try to choose shampoos with natural ingredients. The price and the brand are not very important if the shampoo is not good for my hair. So I check the ingredients first."],
- "samples_ko":["매일 샴푸와 컨디셔너를 쓰고, 가끔 헤어 왁스를 조금 써요. 병이 거의 비면 두 달에 한 번쯤 새로 사요.",
-               "샴푸는 보통 집 근처 슈퍼마켓에서 사요. 1+1 같은 특가를 자주 해서 한 번에 두 병씩 사요.",
-               "저에게는 성분이 가장 중요해요. 두피가 예민해서 어떤 샴푸는 가렵게 해요. 그래서 사기 전에 항상 라벨을 읽어요. 천연 성분 샴푸를 고르려고 해요. 샴푸가 제 머리에 안 맞으면 가격과 브랜드는 별로 중요하지 않아요. 그래서 성분을 먼저 확인해요."],
- "samples_adv":["Well, besides shampoo and conditioner, I use a hair oil after I shower, because my hair gets really dry in winter. I usually buy a set of products every six weeks or so, and I stock up when there's a big online sale.",
-                "Mostly online, to be honest. I subscribe to a beauty app that sends my usual shampoo every month, so I never run out. But when I want to try something new, I go to a beauty store, because I can smell the products first.",
-                "For me, the price is the most important thing. Honestly, I've tried expensive salon brands, and I couldn't really see a big difference in my hair. Shampoo just washes off in a minute anyway. Plus, my whole family shares the same bottle, so we go through it really fast. For example, we use about two big bottles a month, so a cheaper brand saves us quite a bit over a year. As long as it smells nice and cleans well, I'm happy with an affordable one."],
- "samples_adv_ko":["음, 샴푸와 컨디셔너 말고도 겨울엔 머리가 정말 건조해져서 샤워 후에 헤어 오일을 발라요. 보통 6주쯤마다 한 세트를 사고, 온라인 대규모 할인 때 쟁여 둬요.",
-                   "솔직히 대부분 온라인으로 사요. 뷰티 앱을 구독해서 늘 쓰는 샴푸가 매달 와서 떨어질 일이 없어요. 하지만 새로운 걸 써 보고 싶을 때는 향을 먼저 맡아 볼 수 있어서 화장품 가게에 가요.",
-                   "저에게는 가격이 가장 중요해요. 솔직히 비싼 미용실 브랜드를 써 봤는데 머리에 큰 차이를 못 느꼈어요. 어차피 샴푸는 1분이면 씻겨 나가요. 게다가 온 가족이 같은 병을 써서 정말 빨리 써요. 예를 들어 한 달에 큰 병 두 개쯤 쓰니까 더 싼 브랜드를 쓰면 1년이면 꽤 아껴요. 향이 좋고 잘 씻기기만 하면 저렴한 걸로 만족해요."],
- "tips":["샴푸·헤어 어휘: scalp 두피, sensitive 예민한, ingredients 성분, run out 다 떨어지다, stock up 쟁여 두다","buy one, get one free = 1+1"]}
+ {
+  "id": "rq-071",
+  "topic": "편의점",
+  "intro": "Imagine that a marketing firm is doing research in your area. You have agreed to participate in a telephone interview about convenience stores.",
+  "intro_ko": "한 마케팅 회사가 당신이 사는 지역에서 조사를 하고 있다고 상상해 보세요. 당신은 편의점에 관한 전화 인터뷰에 참여하기로 했습니다.",
+  "questions": [
+   "How often do you go to a convenience store, and what do you usually buy there?",
+   "How far is the nearest convenience store from your home?",
+   "Do you think convenience stores should sell more fresh food like fruit and salads? Why or why not?"
+  ],
+  "questions_ko": [
+   "편의점에 얼마나 자주 가고, 보통 무엇을 사나요?",
+   "집에서 가장 가까운 편의점은 얼마나 떨어져 있나요?",
+   "편의점이 과일이나 샐러드 같은 신선 식품을 더 많이 팔아야 한다고 생각하나요? 이유는요?"
+  ],
+  "samples": [
+   "I go to a convenience store about three times a week. I usually buy drinks, snacks, and sometimes a quick lunch like a sandwich or a rice ball.",
+   "The nearest convenience store is very close to my home. It is only about two minutes away on foot, so I can go there anytime, even late at night.",
+   "Yes, I think convenience stores should sell more fresh food. First, many people buy their meals at convenience stores, so healthy options are important. Also, it is hard to find a grocery store open late at night. If convenience stores sold fruit and salads, people could eat better. That's why I think it is a good idea."
+  ],
+  "samples_ko": [
+   "편의점에는 일주일에 세 번쯤 가요. 보통 음료와 과자, 가끔은 샌드위치나 주먹밥 같은 간단한 점심을 사요.",
+   "가장 가까운 편의점은 집에서 아주 가까워요. 걸어서 2분 정도라서 밤늦게라도 언제든 갈 수 있어요.",
+   "네, 편의점이 신선 식품을 더 팔아야 한다고 생각해요. 먼저 많은 사람이 편의점에서 끼니를 사기 때문에 건강한 선택지가 중요해요. 또 밤늦게 문을 연 식료품점은 찾기 어려워요. 편의점에서 과일과 샐러드를 팔면 사람들이 더 잘 먹을 수 있을 거예요. 그래서 좋은 생각이라고 봐요."
+  ],
+  "samples_adv": [
+   "I stop by a convenience store almost every day on my way to work. I mostly grab a bottle of water and a coffee, and when I'm running late, a sandwich for breakfast.",
+   "There's a convenience store on the first floor of my apartment building, so it takes less than a minute to get there, which is handy when I suddenly run out of something.",
+   "Definitely. Busy office workers and students eat at convenience stores, but most of the food is instant noodles or fried snacks, which aren't healthy. My younger brother eats lunch there almost daily, and I worry about his diet. With fresh fruit and salads, people could make healthier choices without spending extra time. I'd really welcome that change."
+  ],
+  "samples_adv_ko": [
+   "거의 매일 출근길에 편의점에 들릅니다. 주로 생수 한 병과 커피를 사고, 늦을 때는 아침으로 샌드위치를 삽니다.",
+   "제 아파트 건물 1층에 편의점이 있어서 1분도 안 걸리는데, 갑자기 뭔가 떨어졌을 때 정말 편리합니다.",
+   "물론입니다. 바쁜 직장인과 학생들이 편의점에서 먹지만 음식 대부분이 라면이나 튀긴 과자여서 건강에 좋지 않습니다. 제 남동생은 거의 매일 거기서 점심을 먹어서 식단이 걱정됩니다. 신선한 과일과 샐러드가 있다면 사람들이 시간을 더 들이지 않고도 더 건강한 선택을 할 수 있을 겁니다. 그런 변화를 정말 환영합니다."
+  ],
+  "tips": [
+   "빈도 표현: about three times a week, almost every day, on my way to work",
+   "거리 표현: It's only two minutes away on foot / right on the first floor of my building"
+  ]
+ },
+ {
+  "id": "rq-072",
+  "topic": "동영상 스트리밍",
+  "intro": "Imagine that an entertainment company is doing research in your country. You have agreed to participate in a telephone interview about video streaming services.",
+  "intro_ko": "한 엔터테인먼트 회사가 당신의 나라에서 조사를 하고 있다고 상상해 보세요. 당신은 동영상 스트리밍 서비스에 관한 전화 인터뷰에 참여하기로 했습니다.",
+  "questions": [
+   "How many video streaming services do you use, and which one do you use the most?",
+   "When do you usually watch shows or movies on a streaming service?",
+   "Would you rather watch all the episodes of a series at once or one episode a week? Why?"
+  ],
+  "questions_ko": [
+   "동영상 스트리밍 서비스를 몇 개 쓰고, 어느 것을 가장 많이 쓰나요?",
+   "보통 언제 스트리밍 서비스로 드라마나 영화를 보나요?",
+   "시리즈를 한 번에 다 보는 것과 일주일에 한 편씩 보는 것 중 어느 쪽이 좋나요? 이유는요?"
+  ],
+  "samples": [
+   "I use two video streaming services right now. I use the bigger one the most, because it has a lot of movies and dramas that I like.",
+   "I usually watch shows on a streaming service at night after dinner. I also watch them on weekends when I have free time at home.",
+   "I would rather watch all the episodes at once. First, I don't like waiting a whole week for the next episode. When a story is exciting, I want to know what happens next right away. Also, I can enjoy the story better when I watch it all together. That's why I prefer watching a series all at once on the weekend."
+  ],
+  "samples_ko": [
+   "지금 동영상 스트리밍 서비스를 두 개 써요. 제가 좋아하는 영화와 드라마가 많아서 더 큰 서비스를 가장 많이 써요.",
+   "보통 저녁 먹고 밤에 스트리밍 서비스로 드라마를 봐요. 집에서 시간이 있는 주말에도 봐요.",
+   "저는 한 번에 다 보는 걸 더 좋아해요. 먼저 다음 편을 일주일 내내 기다리는 게 싫어요. 이야기가 재미있으면 바로 다음이 궁금하거든요. 또 한꺼번에 보면 이야기를 더 잘 즐길 수 있어요. 그래서 주말에 시리즈를 한 번에 몰아 보는 걸 좋아해요."
+  ],
+  "samples_adv": [
+   "I'm subscribed to three streaming services right now, which is probably too many. But I use most the one with lots of Korean dramas, because my family and I watch it together.",
+   "I usually watch one or two episodes on my tablet before bed. On long train rides, I download a movie in advance so I can watch it without using my data.",
+   "Honestly, I'd rather watch one episode a week. It sounds old-fashioned, but when I binge a whole series in a day, I quickly forget the details. Weekly viewing gives me time to think about the story and discuss it. Last year, my coworkers and I followed a mystery drama every Friday and shared our guesses at lunch, which made it much more fun."
+  ],
+  "samples_adv_ko": [
+   "지금 스트리밍 서비스 세 개에 가입해 있는데 아마 너무 많은 것 같습니다. 하지만 한국 드라마가 많은 서비스를 가장 많이 쓰는데, 가족과 함께 보기 때문입니다.",
+   "보통 자기 전에 태블릿으로 한두 편을 봅니다. 장거리 기차를 탈 때는 데이터를 쓰지 않고 볼 수 있도록 영화를 미리 내려받습니다.",
+   "솔직히 저는 일주일에 한 편씩 보는 쪽입니다. 구식처럼 들리지만, 하루에 시리즈 전체를 몰아 보면 세부 내용을 금방 잊어버립니다. 매주 보면 이야기를 생각하고 이야기할 시간이 생깁니다. 작년에 동료들과 매주 금요일 미스터리 드라마를 챙겨 보며 점심 때 추리를 나눴는데 훨씬 더 재미있었습니다."
+  ],
+  "tips": [
+   "I would rather A 형식 질문은 첫 문장에 I would rather ... 로 바로 선택을 말한다",
+   "binge-watch 몰아 보다, subscribe to 구독하다"
+  ]
+ },
+ {
+  "id": "rq-073",
+  "topic": "택시",
+  "intro": "Imagine that a transportation company is doing research in your city. You have agreed to participate in a telephone interview about taking taxis.",
+  "intro_ko": "한 교통 회사가 당신이 사는 도시에서 조사를 하고 있다고 상상해 보세요. 당신은 택시 이용에 관한 전화 인터뷰에 참여하기로 했습니다.",
+  "questions": [
+   "When was the last time you took a taxi, and where did you go?",
+   "Do you usually call a taxi with an app or catch one on the street?",
+   "What is the most important thing to you when you take a taxi: price, safety, or speed? Why?"
+  ],
+  "questions_ko": [
+   "마지막으로 택시를 탄 게 언제고, 어디에 갔나요?",
+   "보통 앱으로 택시를 부르나요, 길에서 잡나요?",
+   "택시를 탈 때 가격, 안전, 속도 중 무엇이 가장 중요한가요? 이유는요?"
+  ],
+  "samples": [
+   "The last time I took a taxi was last Saturday night. I went home from a restaurant downtown, because the subway had already stopped running.",
+   "I usually call a taxi with an app. It is easier than waiting on the street, and I can see how long it will take for the taxi to arrive.",
+   "For me, safety is the most important thing. I often take a taxi late at night, so I want to feel safe in the car. A careful driver is better than a fast driver. Also, with an app, I can share my trip with my family. Price and speed are important too, but safety comes first. That's why I choose safety."
+  ],
+  "samples_ko": [
+   "마지막으로 택시를 탄 건 지난 토요일 밤이에요. 지하철이 이미 끊겨서 시내 식당에서 집으로 갔어요.",
+   "보통 앱으로 택시를 불러요. 길에서 기다리는 것보다 쉽고, 택시가 오는 데 얼마나 걸리는지 볼 수 있어요.",
+   "저에게는 안전이 가장 중요해요. 밤늦게 택시를 자주 타서 차 안에서 안전하다고 느끼고 싶어요. 빠른 기사님보다 조심스러운 기사님이 더 좋아요. 또 앱으로 가족에게 이동 경로를 공유할 수 있어요. 가격과 속도도 중요하지만 안전이 먼저예요. 그래서 안전을 골랐어요."
+  ],
+  "samples_adv": [
+   "I took a taxi just two days ago. I had an early flight and a heavy suitcase, so I took one from my apartment to the airport bus terminal. It cost about fifteen dollars.",
+   "These days, I almost always use an app. It shows the expected fare before I get in, and I pay automatically by card. Hailing on the street can take forever, especially in the rain.",
+   "I'd say price matters most. Taxis are much more expensive than buses or the subway, so I only take them when I truly need to. Late at night, there's also an extra charge, so fares rise quickly. Last month, a short ride home cost almost twenty dollars because of the night rate. I always compare prices on the app first."
+  ],
+  "samples_adv_ko": [
+   "바로 이틀 전에 택시를 탔습니다. 아침 일찍 비행기를 타야 했고 무거운 짐도 있어서 아파트에서 공항버스 터미널까지 택시를 탔습니다. 요금은 약 15달러였습니다.",
+   "요즘은 거의 항상 앱을 씁니다. 타기 전에 예상 요금이 보이고 카드로 자동 결제됩니다. 길에서 잡으면 끝없이 걸릴 수 있고, 특히 비 올 때는 더 그렇습니다.",
+   "저는 가격이 가장 중요하다고 봅니다. 택시는 버스나 지하철보다 훨씬 비싸서 정말 필요할 때만 탑니다. 밤늦게는 할증도 붙어서 요금이 빨리 오릅니다. 지난달에는 집까지 짧은 거리가 야간 요금 때문에 거의 20달러가 나왔습니다. 그래서 항상 앱에서 먼저 가격을 비교합니다."
+  ],
+  "tips": [
+   "세 가지 중 고르는 Q7 은 하나만 확실히 고르고 이유 2개를 말한다",
+   "fare 요금, extra charge at night 할증, expected fare 예상 요금"
+  ]
+ },
+ {
+  "id": "rq-074",
+  "topic": "공항",
+  "intro": "Imagine that an airport is doing research to improve its services. You have agreed to participate in a telephone interview about airports.",
+  "intro_ko": "한 공항이 서비스 개선을 위해 조사를 하고 있다고 상상해 보세요. 당신은 공항에 관한 전화 인터뷰에 참여하기로 했습니다.",
+  "questions": [
+   "How early do you usually arrive at the airport before your flight?",
+   "What do you usually do while you are waiting for your flight?",
+   "If our airport opened a new facility, which would you want most: a rest area, more restaurants, or a play area for kids? Why?"
+  ],
+  "questions_ko": [
+   "보통 비행기 출발 얼마 전에 공항에 도착하나요?",
+   "비행기를 기다리는 동안 보통 무엇을 하나요?",
+   "우리 공항에 새 시설을 연다면 휴게 공간, 식당 추가, 어린이 놀이 공간 중 무엇을 가장 원하나요? 이유는요?"
+  ],
+  "samples": [
+   "I usually arrive at the airport about two hours before my flight. For international flights, I sometimes go even earlier, because the lines can be very long.",
+   "While I am waiting for my flight, I usually get a coffee and read a book. Sometimes I also look around the duty-free shops near my gate.",
+   "I would want a rest area the most. Waiting at the airport can be very tiring, especially when my flight is late. In a rest area, I could sit on a comfortable chair or even take a short nap. Also, it would be nice to have a quiet place away from the noise. That's why I would choose a rest area."
+  ],
+  "samples_ko": [
+   "보통 비행기 출발 두 시간 전쯤 공항에 도착해요. 국제선은 줄이 아주 길 수 있어서 가끔 더 일찍 가요.",
+   "비행기를 기다리는 동안 보통 커피를 사서 책을 읽어요. 가끔 탑승구 근처 면세점도 구경해요.",
+   "저는 휴게 공간을 가장 원해요. 공항에서 기다리는 건 특히 비행기가 늦을 때 정말 피곤해요. 휴게 공간이 있으면 편한 의자에 앉거나 잠깐 낮잠도 잘 수 있어요. 또 소음에서 떨어진 조용한 곳이 있으면 좋겠어요. 그래서 휴게 공간을 고르겠어요."
+  ],
+  "samples_adv": [
+   "I usually arrive about two and a half hours before an international flight. Once, the security line was so long that I almost missed my plane.",
+   "Mostly, I charge my phone and check my work emails one last time. Then I grab a light meal, since I'm not a fan of airplane food, and relax at the gate.",
+   "I'd definitely want more restaurants. Right now, there are only a few places to eat, and they're always crowded. On my last trip, I waited almost thirty minutes for a simple bowl of noodles and ate it in a hurry. More restaurants with different cuisines would let travelers enjoy a proper meal before a long flight, and the airport would earn more."
+  ],
+  "samples_adv_ko": [
+   "국제선은 보통 두 시간 반 일찍 도착합니다. 한번은 보안 검색 줄이 너무 길어서 비행기를 놓칠 뻔했습니다.",
+   "대부분 휴대폰을 충전하고 업무 이메일을 마지막으로 확인합니다. 그다음 기내식을 별로 좋아하지 않아서 가볍게 식사를 하고 게이트에서 쉽니다.",
+   "저는 단연 식당이 더 많았으면 좋겠습니다. 지금은 먹을 곳이 몇 군데뿐이고 항상 붐빕니다. 지난 여행에서는 간단한 국수 한 그릇을 위해 거의 30분을 기다려서 서둘러 먹었습니다. 다양한 음식의 식당이 더 있다면 여행객들이 장거리 비행 전에 제대로 된 식사를 할 수 있고 공항도 더 많이 벌 수 있습니다."
+  ],
+  "tips": [
+   "How early ... 질문은 about two hours before my flight 처럼 숫자로 바로 답한다",
+   "공항 어휘: security line, boarding gate, duty free shop, delayed flight"
+  ]
+ },
+ {
+  "id": "rq-075",
+  "topic": "기차 여행",
+  "intro": "Imagine that you are talking on the telephone with a friend. Your friend is planning a trip and wants to know about traveling by train.",
+  "intro_ko": "친구와 전화로 이야기하고 있다고 상상해 보세요. 친구가 여행을 계획 중인데 기차 여행에 대해 알고 싶어 합니다.",
+  "questions": [
+   "When was the last time you traveled by train, and where did you go?",
+   "Is it better to buy train tickets online or at the station?",
+   "I'm deciding between taking a train or driving for a three-hour trip. Which would you recommend and why?"
+  ],
+  "questions_ko": [
+   "마지막으로 기차로 여행한 게 언제고, 어디에 갔나요?",
+   "기차표는 온라인으로 사는 게 나아요, 역에서 사는 게 나아요?",
+   "세 시간 거리 여행에 기차를 탈지 운전할지 고민 중이야. 어느 쪽을 추천하고 이유는 뭐야?"
+  ],
+  "samples": [
+   "The last time I traveled by train was last spring. I went to a city by the sea with my family, and the ride took about two hours.",
+   "I think it is better to buy train tickets online. You can choose your seat in advance, and you don't have to wait in line at the station.",
+   "I would recommend taking a train. First, a train is more relaxing than driving. You can sleep, read, or look out the window. Also, you don't have to worry about traffic or parking. Driving for three hours can make you very tired before your trip even starts. So I think the train is the better choice for you."
+  ],
+  "samples_ko": [
+   "마지막으로 기차 여행을 한 건 작년 봄이에요. 가족과 바닷가 도시에 갔고, 두 시간쯤 걸렸어요.",
+   "기차표는 온라인으로 사는 게 낫다고 생각해. 자리를 미리 고를 수 있고 역에서 줄을 서지 않아도 돼.",
+   "나는 기차를 추천해. 먼저 기차가 운전보다 편해. 자거나 책을 읽거나 창밖을 볼 수 있어. 또 교통 체증이나 주차를 걱정할 필요가 없어. 세 시간 운전하면 여행이 시작되기도 전에 많이 피곤해질 수 있어. 그래서 기차가 더 나은 선택이라고 생각해."
+  ],
+  "samples_adv": [
+   "I took a train just last month for a business trip, from Seoul to Busan on the high-speed train. It took only about two and a half hours, much faster than I expected.",
+   "Definitely online. If you book on the railway app a few weeks early, you can sometimes get a discount. Also, holiday tickets sell out fast, so waiting until you reach the station is risky.",
+   "It depends on what you plan to do. If you're visiting several places far from the station, driving may be more convenient. But if you're staying in the city, take the train: you can relax and arrive on time without traffic. When I drove to the coast last summer, a three-hour trip took almost five because of an accident."
+  ],
+  "samples_adv_ko": [
+   "바로 지난달 출장으로 서울에서 부산까지 고속열차를 탔습니다. 약 두 시간 반밖에 안 걸려서 예상보다 훨씬 빨랐습니다.",
+   "단연 온라인입니다. 철도 앱에서 몇 주 일찍 예약하면 가끔 할인도 받을 수 있습니다. 또 명절에는 표가 빨리 매진되어서 역에 갈 때까지 기다리는 것은 위험합니다.",
+   "거기서 무엇을 할지에 따라 다릅니다. 역에서 먼 여러 곳을 방문한다면 운전이 더 편할 수 있습니다. 하지만 도시에만 머문다면 기차를 타세요. 쉴 수 있고 교통 체증 없이 제시간에 도착합니다. 지난여름 해안으로 운전했을 때는 사고 때문에 세 시간 거리가 거의 다섯 시간 걸렸습니다."
+  ],
+  "tips": [
+   "친구와의 대화형 intro 는 I would recommend ... / I'd say ... 로 친구에게 말하듯 답한다",
+   "it depends on ... 로 시작해도 마지막에는 한쪽을 분명히 추천한다"
+  ]
+ },
+ {
+  "id": "rq-076",
+  "topic": "아침 식사",
+  "intro": "Imagine that a food company is doing research in your country. You have agreed to participate in a telephone interview about eating breakfast.",
+  "intro_ko": "한 식품 회사가 당신의 나라에서 조사를 하고 있다고 상상해 보세요. 당신은 아침 식사에 관한 전화 인터뷰에 참여하기로 했습니다.",
+  "questions": [
+   "What time do you usually eat breakfast, and what do you have?",
+   "Do you eat breakfast at home or on the way to work or school?",
+   "Some people skip breakfast to save time. Do you think breakfast is the most important meal of the day? Why or why not?"
+  ],
+  "questions_ko": [
+   "보통 몇 시에 아침을 먹고, 무엇을 먹나요?",
+   "아침은 집에서 먹나요, 출근이나 등교하는 길에 먹나요?",
+   "시간을 아끼려고 아침을 거르는 사람들도 있어요. 아침이 하루 중 가장 중요한 식사라고 생각하나요? 이유는요?"
+  ],
+  "samples": [
+   "I usually eat breakfast at around seven thirty in the morning. I have toast with eggs and a glass of milk, because it is quick and easy to make.",
+   "I usually eat breakfast at home. I wake up a little early, so I have enough time to sit down and eat with my family before I leave.",
+   "Yes, I think breakfast is the most important meal. When I eat breakfast, I have more energy in the morning. I can focus better at work or in class. But when I skip it, I get hungry and tired before lunch. Also, I tend to eat too much at lunch. That's why I always try to eat something in the morning."
+  ],
+  "samples_ko": [
+   "보통 아침 7시 반쯤 아침을 먹어요. 빠르고 만들기 쉬워서 토스트에 달걀, 우유 한 잔을 먹어요.",
+   "보통 집에서 아침을 먹어요. 조금 일찍 일어나서 나가기 전에 가족과 앉아서 먹을 시간이 충분해요.",
+   "네, 아침이 가장 중요한 식사라고 생각해요. 아침을 먹으면 오전에 힘이 더 나요. 회사나 수업에서 집중도 더 잘 돼요. 하지만 거르면 점심 전에 배고프고 피곤해요. 또 점심을 너무 많이 먹게 돼요. 그래서 아침에는 항상 뭐라도 먹으려고 해요."
+  ],
+  "samples_adv": [
+   "On weekdays, I eat breakfast around seven, right before I leave the house. I usually have yogurt with fruit and granola, and of course a big cup of coffee to wake me up.",
+   "Honestly, I usually eat on the way to work. I grab a banana or a sandwich near the station and eat it at my desk. On weekends, I make a proper breakfast.",
+   "Actually, I don't think it's necessarily the most important meal. It depends on the person. I'm not hungry at all in the morning, and if I force myself to eat, I feel heavy and sleepy. I just have coffee and a good lunch, and I feel fine. My sister, however, can't function without breakfast. People should listen to their own bodies."
+  ],
+  "samples_adv_ko": [
+   "평일에는 집을 나서기 직전인 7시쯤 아침을 먹습니다. 보통 과일과 그래놀라를 곁들인 요거트를 먹고, 잠을 깨우려고 당연히 큰 컵의 커피도 마십니다.",
+   "솔직히 보통 출근길에 먹습니다. 역 근처에서 바나나나 샌드위치를 사서 책상에서 먹습니다. 주말에는 제대로 된 아침을 만들어 먹습니다.",
+   "사실 아침이 반드시 가장 중요한 식사라고는 생각하지 않습니다. 사람마다 다릅니다. 저는 아침에 전혀 배고프지 않아서 억지로 먹으면 속이 더부룩하고 졸립니다. 커피만 마시고 점심을 잘 먹으면 괜찮습니다. 반면 제 여동생은 아침 없이는 일을 못 합니다. 사람들은 하나의 규칙을 따르기보다 자기 몸의 소리를 들어야 합니다."
+  ],
+  "tips": [
+   "What time ... and what ...? 은 두 가지를 한 문장에 모두 답한다: I eat at seven, and I have ...",
+   "반대 의견도 가능: I don't think it's necessarily ... / It depends on the person"
+  ]
+ },
+ {
+  "id": "rq-077",
+  "topic": "간식",
+  "intro": "Imagine that a snack company is doing research in your area. You have agreed to participate in a telephone interview about snacks.",
+  "intro_ko": "한 과자 회사가 당신이 사는 지역에서 조사를 하고 있다고 상상해 보세요. 당신은 간식에 관한 전화 인터뷰에 참여하기로 했습니다.",
+  "questions": [
+   "What kind of snacks do you like, and when do you usually eat them?",
+   "Where do you usually buy your snacks?",
+   "If you were choosing a new snack, would you care more about the taste or about how healthy it is? Why?"
+  ],
+  "questions_ko": [
+   "어떤 간식을 좋아하고, 보통 언제 먹나요?",
+   "간식은 보통 어디에서 사나요?",
+   "새 간식을 고른다면 맛과 건강 중 어느 쪽을 더 신경 쓰나요? 이유는요?"
+  ],
+  "samples": [
+   "I like salty snacks like potato chips and crackers. I usually eat them in the afternoon at work, when I feel a little hungry before dinner.",
+   "I usually buy my snacks at the supermarket near my home. They often have discounts if you buy two bags, so it is cheaper than a convenience store.",
+   "I would care more about how healthy it is. These days, I try to eat less sugar and salt, because I want to stay healthy. Also, I eat snacks almost every day, so a healthy snack is better for me in the long run. Of course, taste is important too, but there are many healthy snacks that taste good. That's why I would choose a healthy one."
+  ],
+  "samples_ko": [
+   "감자칩이나 크래커 같은 짭짤한 간식을 좋아해요. 보통 오후에 회사에서 저녁 전에 조금 배고플 때 먹어요.",
+   "간식은 보통 집 근처 슈퍼마켓에서 사요. 두 봉지를 사면 할인을 자주 해서 편의점보다 싸요.",
+   "저는 건강을 더 신경 쓰겠어요. 요즘 건강을 지키고 싶어서 설탕과 소금을 덜 먹으려고 해요. 또 간식을 거의 매일 먹어서 길게 보면 건강한 간식이 저에게 더 나아요. 물론 맛도 중요하지만 맛있는 건강 간식도 많아요. 그래서 건강한 것을 고르겠어요."
+  ],
+  "samples_adv": [
+   "I have a real sweet tooth, so I love chocolate and cookies. I usually eat them around three in the afternoon with tea, because that's when I start feeling sleepy at work.",
+   "Mostly online. I order snacks in bulk from a shopping app once a month, and they're delivered to my door. It's cheaper that way, and I can share them with coworkers.",
+   "To be honest, taste matters more. A snack is a small reward during a long day, so I have to really enjoy it. I've tried healthy snacks like protein bars and rice cakes, but most tasted bland, and I didn't finish them. Instead, I control how much I eat by buying small packs rather than big bags, so I enjoy the taste without overeating."
+  ],
+  "samples_adv_ko": [
+   "단 것을 정말 좋아해서 초콜릿과 쿠키를 즐겨 먹습니다. 보통 오후 3시쯤 차와 함께 먹는데, 그때쯤 근무 중 졸리기 시작하기 때문입니다.",
+   "주로 온라인입니다. 한 달에 한 번 쇼핑 앱에서 간식을 대량으로 주문하면 집 앞까지 배달됩니다. 그렇게 하면 더 싸고 동료들과 나눠 먹을 수도 있습니다.",
+   "솔직히 맛이 더 중요합니다. 간식은 긴 하루 중 작은 보상이라서 정말 즐길 수 있어야 합니다. 단백질 바나 떡 같은 건강 간식도 먹어 봤지만 대부분 밋밋해서 다 먹지 못했습니다. 대신 큰 봉지보다 작은 팩을 사서 먹는 양을 조절하니 과식하지 않고 맛을 즐길 수 있습니다."
+  ],
+  "tips": [
+   "have a sweet tooth 단것을 좋아하다, salty 짭짤한, bland 밋밋한",
+   "in bulk 대량으로, small packs 소포장"
+  ]
+ },
+ {
+  "id": "rq-078",
+  "topic": "신발",
+  "intro": "Imagine that a shoe company is doing research in your country. You have agreed to participate in a telephone interview about buying shoes.",
+  "intro_ko": "한 신발 회사가 당신의 나라에서 조사를 하고 있다고 상상해 보세요. 당신은 신발 구매에 관한 전화 인터뷰에 참여하기로 했습니다.",
+  "questions": [
+   "How many pairs of shoes do you have, and which pair do you wear most often?",
+   "When was the last time you bought shoes, and where did you buy them?",
+   "Do you prefer to buy shoes in a store or online? Why?"
+  ],
+  "questions_ko": [
+   "신발이 몇 켤레 있고, 어떤 신발을 가장 자주 신나요?",
+   "마지막으로 신발을 산 게 언제고, 어디에서 샀나요?",
+   "신발은 매장에서 사는 게 좋아요, 온라인에서 사는 게 좋아요? 이유는요?"
+  ],
+  "samples": [
+   "I have about six pairs of shoes. I wear my white sneakers most often, because they are comfortable and they go well with most of my clothes.",
+   "The last time I bought shoes was about two months ago. I bought a pair of running shoes at a sports store in a shopping mall near my home.",
+   "I prefer to buy shoes in a store. Shoe sizes are different for each brand, so I need to try them on first. In a store, I can walk around and check if they are comfortable. When I bought shoes online before, they were too small, and returning them was a hassle. That's why I like buying shoes in a store."
+  ],
+  "samples_ko": [
+   "신발이 여섯 켤레쯤 있어요. 편하고 대부분의 옷과 잘 어울려서 흰 운동화를 가장 자주 신어요.",
+   "마지막으로 신발을 산 건 두 달쯤 전이에요. 집 근처 쇼핑몰의 스포츠 매장에서 운동화 한 켤레를 샀어요.",
+   "저는 매장에서 사는 게 좋아요. 신발 사이즈는 브랜드마다 달라서 먼저 신어 봐야 해요. 매장에서는 걸어 보면서 편한지 확인할 수 있어요. 전에 온라인으로 샀을 때 너무 작아서 반품하느라 번거로웠어요. 그래서 매장에서 사는 걸 좋아해요."
+  ],
+  "samples_adv": [
+   "I probably have around ten pairs, including boots and sandals. But honestly, I wear the same black walking shoes almost every day, because I walk a lot on my way to work.",
+   "I bought dress shoes last week for a friend's upcoming wedding. I went to a department store and found a nice pair on sale for about half price.",
+   "I usually prefer buying shoes online. Once I know my size for a brand, I don't need to try them on again. Online stores have a much wider selection and often lower prices. My running shoes were about thirty percent cheaper online than in the store. Many sites also offer free returns, so a wrong size isn't a big deal."
+  ],
+  "samples_adv_ko": [
+   "부츠와 샌들을 포함해 열 켤레쯤 있을 겁니다. 하지만 솔직히 출근길에 많이 걷기 때문에 같은 검은색 워킹화를 거의 매일 신습니다.",
+   "지난주에 곧 있을 친구 결혼식을 위해 구두를 샀습니다. 백화점에 가서 반값 정도로 세일하는 괜찮은 구두를 찾았습니다.",
+   "저는 보통 온라인으로 신발을 사는 쪽을 선호합니다. 브랜드별 제 사이즈를 알면 다시 신어 볼 필요가 없습니다. 온라인 상점은 선택지가 훨씬 많고 가격도 대체로 더 낮습니다. 제가 지금 신은 러닝화도 매장보다 온라인이 약 30퍼센트 쌌습니다. 많은 사이트가 무료 반품을 제공해서 사이즈가 틀려도 큰 문제가 아닙니다."
+  ],
+  "tips": [
+   "a pair of shoes 한 켤레, try on 신어 보다, go well with 잘 어울리다",
+   "Q7 은 반대쪽 단점 한 가지(returning was a hassle)를 넣으면 이유가 탄탄해진다"
+  ]
+ },
+ {
+  "id": "rq-079",
+  "topic": "가방",
+  "intro": "Imagine that a fashion company is doing research in your area. You have agreed to participate in a telephone interview about bags.",
+  "intro_ko": "한 패션 회사가 당신이 사는 지역에서 조사를 하고 있다고 상상해 보세요. 당신은 가방에 관한 전화 인터뷰에 참여하기로 했습니다.",
+  "questions": [
+   "What kind of bag do you usually carry, and what is inside it?",
+   "How long have you had the bag you use most often?",
+   "When you buy a new bag, which is more important to you, the design or the size? Why?"
+  ],
+  "questions_ko": [
+   "보통 어떤 가방을 들고 다니고, 안에 무엇이 있나요?",
+   "가장 자주 쓰는 가방은 얼마나 오래 썼나요?",
+   "새 가방을 살 때 디자인과 크기 중 무엇이 더 중요한가요? 이유는요?"
+  ],
+  "samples": [
+   "I usually carry a black backpack. Inside it, I have my laptop, a notebook, a water bottle, and a phone charger, because I need them every day.",
+   "I have had my backpack for about three years. It is a little old now, but it is still strong, so I don't need a new one yet.",
+   "The size is more important to me. I carry many things every day, like my laptop and some books. If the bag is too small, I can't put everything inside. Also, a big bag is useful when I go shopping after work. A nice design is good, but a bag should be useful first. That's why I care more about the size."
+  ],
+  "samples_ko": [
+   "보통 검은색 백팩을 메고 다녀요. 안에는 매일 필요한 노트북, 공책, 물병, 휴대폰 충전기가 있어요.",
+   "그 백팩은 3년쯤 썼어요. 지금은 조금 낡았지만 아직 튼튼해서 새것이 필요하지는 않아요.",
+   "저에게는 크기가 더 중요해요. 매일 노트북이랑 책 같은 걸 많이 들고 다녀요. 가방이 너무 작으면 다 넣을 수가 없어요. 또 퇴근 후 장 볼 때도 큰 가방이 유용해요. 예쁜 디자인도 좋지만 가방은 먼저 쓸모가 있어야 해요. 그래서 크기를 더 신경 써요."
+  ],
+  "samples_adv": [
+   "I usually carry a medium-sized leather shoulder bag. There's always a wallet, my phone, earphones, a small umbrella, and some hand cream. I like being ready for anything during the day.",
+   "I've used this shoulder bag for almost five years. My parents gave it to me when I got my first job, so it means a lot, and I take good care of it.",
+   "For me, design matters more. I wear my bag every day, so it's a big part of my outfit, and a nice bag can make even simple clothes look stylish. Besides, I don't carry much now because most things are on my phone. I used to carry a big bag full of papers, but now I only need my wallet and phone."
+  ],
+  "samples_adv_ko": [
+   "보통 중간 크기의 가죽 숄더백을 들고 다닙니다. 안에는 항상 지갑, 휴대폰, 이어폰, 작은 우산, 핸드크림이 있습니다. 낮 동안 무슨 일이든 대비되어 있는 걸 좋아합니다.",
+   "이 숄더백은 거의 5년째 쓰고 있습니다. 첫 직장을 얻었을 때 부모님이 선물로 주신 것이라 의미가 커서 잘 관리합니다.",
+   "저에게는 디자인이 더 중요합니다. 가방은 매일 드니까 옷차림의 큰 부분이고, 멋진 가방은 평범한 옷도 세련돼 보이게 합니다. 게다가 요즘은 대부분이 휴대폰에 있어서 많이 들고 다니지 않습니다. 예전에는 서류가 가득한 큰 가방을 들었지만 이제는 지갑과 휴대폰이면 충분합니다."
+  ],
+  "tips": [
+   "How long have you had ...? 는 현재완료로 답한다: I have had it for three years",
+   "가방 종류: backpack, shoulder bag, tote bag, briefcase"
+  ]
+ },
+ {
+  "id": "rq-080",
+  "topic": "시계",
+  "intro": "Imagine that an electronics company is doing research in your country. You have agreed to participate in a telephone interview about watches.",
+  "intro_ko": "한 전자 회사가 당신의 나라에서 조사를 하고 있다고 상상해 보세요. 당신은 시계에 관한 전화 인터뷰에 참여하기로 했습니다.",
+  "questions": [
+   "Do you wear a watch, and if so, what kind is it?",
+   "How do you usually check the time during the day?",
+   "Would you rather buy a smartwatch or a traditional watch? Why?"
+  ],
+  "questions_ko": [
+   "시계를 차나요? 찬다면 어떤 종류인가요?",
+   "낮에 보통 어떻게 시간을 확인하나요?",
+   "스마트워치와 일반 시계 중 무엇을 사고 싶나요? 이유는요?"
+  ],
+  "samples": [
+   "Yes, I wear a watch every day. It is a simple silver watch with a leather band. My grandfather gave it to me when I graduated from college.",
+   "I usually check the time on my phone. I always have my phone in my hand or my pocket, so it is the easiest way for me to see the time.",
+   "I would rather buy a smartwatch. A smartwatch can do many things. It can count my steps and check my heart rate. Also, I can read text messages without taking out my phone. This is very useful when I am busy or exercising. A traditional watch only shows the time. That's why I would choose a smartwatch."
+  ],
+  "samples_ko": [
+   "네, 매일 시계를 차요. 가죽 줄이 달린 단순한 은색 시계예요. 대학교를 졸업할 때 할아버지가 주셨어요.",
+   "보통 휴대폰으로 시간을 확인해요. 휴대폰을 항상 손이나 주머니에 가지고 있어서 시간을 보기 가장 쉬운 방법이에요.",
+   "저는 스마트워치를 사겠어요. 스마트워치는 많은 걸 할 수 있어요. 걸음 수를 세고 심박수도 확인해요. 또 휴대폰을 꺼내지 않고 문자를 읽을 수 있어요. 바쁘거나 운동할 때 아주 유용해요. 일반 시계는 시간만 보여 줘요. 그래서 스마트워치를 고르겠어요."
+  ],
+  "samples_adv": [
+   "Actually, I don't wear a watch anymore. I wore one in high school, but after I got a smartphone, I didn't really need it, so it's just sitting in a drawer now.",
+   "Mostly, I glance at my phone or laptop screen. At work, there's also a big wall clock right in front of my desk, so it's easy to keep track of time during meetings.",
+   "Personally, I'd buy a traditional watch. Smartwatches are convenient, but they need charging almost daily, which is annoying. I also get too many phone notifications already, and I don't want my wrist buzzing all day. A good traditional watch can last for decades. My father has worn the same watch for over twenty years, and it still looks great."
+  ],
+  "samples_adv_ko": [
+   "사실 이제는 시계를 차지 않습니다. 고등학교 때는 찼지만 스마트폰이 생긴 뒤로 정말 필요하지 않아서 지금은 서랍에 있습니다.",
+   "대부분 휴대폰이나 노트북 화면을 흘끗 봅니다. 직장에서는 책상 바로 앞에 큰 벽시계도 있어서 회의 중에 시간을 확인하기 쉽습니다.",
+   "개인적으로는 전통 시계를 사겠습니다. 스마트워치는 편리하지만 거의 매일 충전해야 해서 번거롭습니다. 휴대폰 알림도 이미 너무 많아서 손목이 하루 종일 울리는 건 싫습니다. 좋은 전통 시계는 수십 년 갈 수 있습니다. 아버지는 20년이 넘게 같은 시계를 차고 계시는데 여전히 멋집니다."
+  ],
+  "tips": [
+   "Do you ..., and if so ...? 질문은 Yes/No 를 먼저 말하고 이어서 설명한다",
+   "used to + 동사원형 = 예전에 ~했다 (지금은 안 함)"
+  ]
+ },
+ {
+  "id": "rq-081",
+  "topic": "노트북 컴퓨터",
+  "intro": "Imagine that a computer company is doing research in your country. You have agreed to participate in a telephone interview about laptop computers.",
+  "intro_ko": "한 컴퓨터 회사가 당신의 나라에서 조사를 하고 있다고 상상해 보세요. 당신은 노트북 컴퓨터에 관한 전화 인터뷰에 참여하기로 했습니다.",
+  "questions": [
+   "How many hours a day do you use a laptop, and what do you use it for?",
+   "When did you buy your current laptop, and are you happy with it?",
+   "If you were buying a new laptop, what would be the most important feature to you? Why?"
+  ],
+  "questions_ko": [
+   "하루에 노트북을 몇 시간 쓰고, 무엇에 쓰나요?",
+   "지금 노트북은 언제 샀고, 만족하나요?",
+   "새 노트북을 산다면 가장 중요한 기능은 무엇인가요? 이유는요?"
+  ],
+  "samples": [
+   "I use a laptop for about six hours a day. I mostly use it for work, like writing reports and sending emails, and sometimes I watch videos at night.",
+   "I bought my current laptop about two years ago. I am happy with it, because it is fast enough for my work and it has never had any problems.",
+   "The most important feature for me would be the battery life. I often work in cafés and on the train, and I can't always find a place to charge it. If the battery lasts all day, I don't have to carry the charger. Also, I don't need to worry about losing my work. That's why battery life is the most important to me."
+  ],
+  "samples_ko": [
+   "하루에 노트북을 여섯 시간쯤 써요. 주로 보고서 쓰기와 이메일 보내기 같은 업무에 쓰고, 가끔 밤에 동영상을 봐요.",
+   "지금 노트북은 2년쯤 전에 샀어요. 업무에 충분히 빠르고 한 번도 문제가 없어서 만족해요.",
+   "저에게 가장 중요한 기능은 배터리 수명이에요. 카페나 기차에서 자주 일하는데 충전할 곳을 항상 찾을 수는 없어요. 배터리가 하루 종일 가면 충전기를 들고 다닐 필요가 없어요. 또 작업한 걸 날릴까 걱정하지 않아도 돼요. 그래서 배터리 수명이 가장 중요해요."
+  ],
+  "samples_adv": [
+   "I'm a graphic designer, so I'm on my laptop at least nine or ten hours a day. I use it for editing images and designing websites, and sometimes for online classes after work.",
+   "I bought it about four years ago, right before my current job. Honestly, I'm not very happy with it now. It's slow, and the fan gets really loud whenever I open large files.",
+   "I'd focus on weight. I carry my laptop between home, the office, and client meetings almost daily, so a heavy one really hurts my shoulders by the end of the week. My current laptop weighs over two kilograms, and I can feel it. It still has to be powerful enough for design work, but I'd happily pay a little more for a lighter one."
+  ],
+  "samples_adv_ko": [
+   "저는 그래픽 디자이너라서 하루에 최소 9~10시간 노트북을 씁니다. 이미지를 편집하고 웹사이트를 디자인하는 데 쓰고, 퇴근 후에는 온라인 수업에도 씁니다.",
+   "약 4년 전, 현재 직장을 시작하기 직전에 샀습니다. 솔직히 요즘은 별로 만족스럽지 않습니다. 느려졌고 큰 파일을 열 때마다 팬 소리가 매우 시끄럽습니다.",
+   "저는 무게에 집중하겠습니다. 거의 매일 집, 사무실, 고객 미팅을 오가며 노트북을 들고 다녀서 무거우면 주말쯤엔 어깨가 정말 아픕니다. 지금 노트북은 2킬로그램이 넘어서 확실히 느껴집니다. 디자인 작업에 충분히 강력해야 하지만 더 가벼운 모델이라면 돈을 조금 더 내겠습니다."
+  ],
+  "tips": [
+   "가정법 질문 If you were buying ... 은 I would ... 로 답한다",
+   "기능 어휘: battery life, weight, screen size, storage, speed"
+  ]
+ },
+ {
+  "id": "rq-082",
+  "topic": "이어폰",
+  "intro": "Imagine that an audio company is doing research in your area. You have agreed to participate in a telephone interview about earphones and headphones.",
+  "intro_ko": "한 음향 기기 회사가 당신이 사는 지역에서 조사를 하고 있다고 상상해 보세요. 당신은 이어폰과 헤드폰에 관한 전화 인터뷰에 참여하기로 했습니다.",
+  "questions": [
+   "Where do you usually use your earphones, and what do you listen to?",
+   "Do you prefer wireless earphones or ones with a cord?",
+   "Some people say that wearing earphones on the street is dangerous. What do you think? Why?"
+  ],
+  "questions_ko": [
+   "이어폰을 보통 어디에서 쓰고, 무엇을 듣나요?",
+   "무선 이어폰과 줄 있는 이어폰 중 어느 쪽이 좋나요?",
+   "길에서 이어폰을 끼는 게 위험하다고 말하는 사람들이 있어요. 어떻게 생각하나요? 이유는요?"
+  ],
+  "samples": [
+   "I usually use my earphones on the bus and the subway. I listen to music most of the time, and sometimes I listen to English lessons to study.",
+   "I prefer wireless earphones. There is no cord, so it is easy to move around. I don't have to worry about the cord getting stuck in my bag.",
+   "I agree that it can be dangerous. When people listen to loud music, they can't hear cars or bicycles around them. Also, many people look at their phones while they walk. This can cause accidents. So I think people should turn the volume down or take one earphone out on busy streets. That's my opinion."
+  ],
+  "samples_ko": [
+   "보통 버스와 지하철에서 이어폰을 써요. 대부분 음악을 듣고, 가끔 공부하려고 영어 강의를 들어요.",
+   "저는 무선 이어폰이 좋아요. 줄이 없어서 움직이기 편해요. 가방 안에서 줄이 엉킬까 걱정하지 않아도 돼요.",
+   "위험할 수 있다는 데 동의해요. 음악을 크게 들으면 주변의 차나 자전거 소리를 못 들어요. 또 걸으면서 휴대폰을 보는 사람도 많아요. 이러면 사고가 날 수 있어요. 그래서 붐비는 거리에서는 소리를 줄이거나 한쪽 이어폰을 빼야 한다고 생각해요. 그게 제 의견이에요."
+  ],
+  "samples_adv": [
+   "I wear earphones almost everywhere: on my commute, at the gym, and even at the office when I need to concentrate. I listen to podcasts in the morning and calm music while working.",
+   "Wireless, for sure. I switched about three years ago and will never go back. The only problem is remembering to charge them, and once I left the case in a taxi.",
+   "Honestly, I think it can be dangerous, depending on how you use them. With loud music and noise-canceling on, you might not hear a car horn or a bike bell. I once almost got hit by a delivery scooter because I didn't hear it coming. Since then, I keep the volume low and use transparency mode. People should just be more careful."
+  ],
+  "samples_adv_ko": [
+   "출퇴근길, 헬스장, 집중이 필요할 때는 사무실에서까지 거의 어디서나 이어폰을 씁니다. 아침에는 팟캐스트를, 일할 때는 차분한 음악을 듣습니다.",
+   "당연히 무선입니다. 약 3년 전에 바꿨고 절대 돌아가지 않을 겁니다. 유일한 문제는 충전을 잊지 않아야 한다는 것이고, 한번은 케이스를 택시에 두고 내렸습니다.",
+   "솔직히 쓰는 방법에 따라 위험할 수 있다고 생각합니다. 음악을 크게 틀고 노이즈 캔슬링을 켜면 자동차 경적이나 자전거 벨을 못 들을 수 있습니다. 저는 소리를 못 들어서 배달 오토바이에 칠 뻔한 적이 있습니다. 그 뒤로는 볼륨을 낮추고 외부 소리 듣기 모드를 씁니다. 사람들이 더 조심하면 됩니다."
+  ],
+  "tips": [
+   "What do you think? 질문은 I agree that ... / I think it depends on ... 로 입장을 먼저 밝힌다",
+   "경험 한 줄(I once almost got hit ...)이 Q7 고득점의 핵심"
+  ]
+ },
+ {
+  "id": "rq-083",
+  "topic": "소셜 미디어",
+  "intro": "Imagine that a technology research company is doing a survey in your country. You have agreed to participate in a telephone interview about social media.",
+  "intro_ko": "한 기술 조사 회사가 당신의 나라에서 설문을 하고 있다고 상상해 보세요. 당신은 소셜 미디어에 관한 전화 인터뷰에 참여하기로 했습니다.",
+  "questions": [
+   "Which social media app do you use the most, and how much time do you spend on it each day?",
+   "What kind of posts do you usually share on social media?",
+   "Do you think social media helps people stay close to their friends? Why or why not?"
+  ],
+  "questions_ko": [
+   "어떤 소셜 미디어 앱을 가장 많이 쓰고, 하루에 얼마나 시간을 쓰나요?",
+   "소셜 미디어에 보통 어떤 게시물을 올리나요?",
+   "소셜 미디어가 친구와 가깝게 지내는 데 도움이 된다고 생각하나요? 이유는요?"
+  ],
+  "samples": [
+   "I use a photo-sharing app the most. I spend about one hour on it each day, usually when I am on the subway or before I go to sleep.",
+   "I usually share pictures of food and travel on social media. When I go to a nice restaurant or a beautiful place, I like to post a photo.",
+   "Yes, I think social media helps people stay close. Many of my friends live in other cities, so I can't meet them often. But on social media, I can see their photos and know what they are doing. I can also send them messages easily. Without social media, it would be hard to keep in touch. That's why I think it helps."
+  ],
+  "samples_ko": [
+   "사진 공유 앱을 가장 많이 써요. 보통 지하철에서나 자기 전에, 하루에 한 시간쯤 써요.",
+   "소셜 미디어에는 보통 음식과 여행 사진을 올려요. 좋은 식당이나 아름다운 곳에 가면 사진을 올리는 걸 좋아해요.",
+   "네, 소셜 미디어가 가깝게 지내는 데 도움이 된다고 생각해요. 많은 친구가 다른 도시에 살아서 자주 못 만나요. 그런데 소셜 미디어에서는 사진을 보고 무엇을 하는지 알 수 있어요. 메시지도 쉽게 보낼 수 있어요. 소셜 미디어가 없으면 연락하기 어려울 거예요. 그래서 도움이 된다고 생각해요."
+  ],
+  "samples_adv": [
+   "I use a short video app the most, honestly about two hours a day, which is way too much. I tell myself I'll watch just one video, and an hour is gone.",
+   "I rarely post and mostly watch other people's posts. Once in a while, I share photos of my dog or a short trip clip, mainly so my family can see them.",
+   "I think it helps in some ways, but not completely. It's great for keeping in touch with people far away. A friend who moved to Canada and I still follow each other's lives thanks to social media. However, liking someone's photo isn't a real conversation. Sometimes I feel close to people online but never meet them, so we still need face-to-face time."
+  ],
+  "samples_adv_ko": [
+   "숏폼 영상 앱을 가장 많이 쓰는데, 솔직히 하루 두 시간쯤으로 너무 많습니다. 하나만 봐야지 하다가 한 시간이 지나가 버립니다.",
+   "직접 올리는 일은 거의 없고 주로 다른 사람들의 게시물을 봅니다. 가끔 강아지 사진이나 짧은 여행 영상을 올리는데, 주로 가족이 보게 하려는 겁니다.",
+   "어느 정도는 도움이 되지만 완전하지는 않다고 생각합니다. 멀리 사는 사람들과 연락하기에는 훌륭합니다. 캐나다로 이사 간 친구의 근황을 SNS 덕분에 계속 알고 있습니다. 하지만 사진에 좋아요를 누르는 건 진짜 대화가 아닙니다. 온라인에서는 가깝다고 느껴도 실제로 만나지 않는 경우가 있어서, 직접 만나는 시간도 여전히 필요합니다."
+  ],
+  "tips": [
+   "keep in touch 연락하고 지내다, post a photo 사진을 올리다, scroll through 훑어보다",
+   "부분 동의: It helps in some ways, but ... — 장점 하나, 단점 하나, 결론 한 문장"
+  ]
+ },
+ {
+  "id": "rq-084",
+  "topic": "문자 메시지",
+  "intro": "Imagine that a mobile phone company is doing research in your area. You have agreed to participate in a telephone interview about text messaging.",
+  "intro_ko": "한 휴대폰 회사가 당신이 사는 지역에서 조사를 하고 있다고 상상해 보세요. 당신은 문자 메시지에 관한 전화 인터뷰에 참여하기로 했습니다.",
+  "questions": [
+   "Who do you send text messages to most often, and what do you usually talk about?",
+   "How quickly do you usually reply to a text message?",
+   "When you need to discuss something important, do you prefer to send a message or make a phone call? Why?"
+  ],
+  "questions_ko": [
+   "문자 메시지를 누구에게 가장 자주 보내고, 보통 무슨 이야기를 하나요?",
+   "문자 메시지에 보통 얼마나 빨리 답장하나요?",
+   "중요한 일을 의논해야 할 때 메시지를 보내는 것과 전화하는 것 중 무엇이 좋나요? 이유는요?"
+  ],
+  "samples": [
+   "I send text messages to my best friend most often. We usually talk about our day, funny videos, and plans for the weekend.",
+   "I usually reply to a text message very quickly, within a few minutes. But when I am in a meeting or driving, I reply later.",
+   "When it is important, I prefer to make a phone call. On the phone, I can explain things clearly and hear the other person's answer right away. Text messages can be misunderstood, because I can't hear the person's voice. Also, a phone call is faster than sending many messages back and forth. That's why I call for important things."
+  ],
+  "samples_ko": [
+   "가장 친한 친구에게 문자 메시지를 가장 자주 보내요. 보통 하루 일과, 웃긴 영상, 주말 계획에 대해 이야기해요.",
+   "보통 몇 분 안에 아주 빨리 답장해요. 하지만 회의 중이거나 운전 중일 때는 나중에 답장해요.",
+   "중요한 일이면 저는 전화하는 걸 더 좋아해요. 전화로는 분명하게 설명하고 상대의 대답을 바로 들을 수 있어요. 문자는 목소리를 들을 수 없어서 오해가 생길 수 있어요. 또 메시지를 여러 번 주고받는 것보다 전화가 더 빨라요. 그래서 중요한 일은 전화를 해요."
+  ],
+  "samples_adv": [
+   "Believe it or not, I text my mother the most. She messages me daily, asking if I've eaten or reminding me to dress warmly. We also share photos of her garden and my cat.",
+   "It depends on who it is. For family and close friends, I reply almost immediately. For group chats, I sometimes check only once or twice a day, because there are just too many messages.",
+   "Actually, I prefer messaging, even for important matters. Writing gives me time to think carefully about what I want to say, and the written record means nobody forgets details. When I discussed a contract with my landlord entirely by message, it really helped when we disagreed about a date. If it's urgent, I'll call, but usually messages work better."
+  ],
+  "samples_adv_ko": [
+   "믿기 어렵겠지만 어머니께 가장 많이 문자를 보냅니다. 어머니는 매일 밥은 먹었는지, 따뜻하게 입으라는 메시지를 보내십니다. 어머니의 정원과 제 고양이 사진도 공유합니다.",
+   "누구냐에 따라 다릅니다. 가족과 친한 친구에게는 거의 바로 답합니다. 단체 채팅방은 메시지가 너무 많아서 하루에 한두 번만 확인할 때도 있습니다.",
+   "사실 저는 중요한 일에도 메시지를 선호합니다. 글로 쓰면 하고 싶은 말을 신중하게 생각할 시간이 있고, 기록이 남아 아무도 세부 사항을 잊지 않습니다. 집주인과 계약을 전부 메시지로 논의했을 때 날짜에 의견이 갈리자 정말 도움이 됐습니다. 급하면 전화하지만 대개는 메시지가 더 낫습니다."
+  ],
+  "tips": [
+   "How quickly ...? → within a few minutes, almost immediately, later in the day",
+   "Who ... and what ...? 두 의문사를 빠짐없이 답한다"
+  ]
+ },
+ {
+  "id": "rq-085",
+  "topic": "놀이공원",
+  "intro": "Imagine that a theme park company is doing research in your country. You have agreed to participate in a telephone interview about amusement parks.",
+  "intro_ko": "한 테마파크 회사가 당신의 나라에서 조사를 하고 있다고 상상해 보세요. 당신은 놀이공원에 관한 전화 인터뷰에 참여하기로 했습니다.",
+  "questions": [
+   "When was the last time you went to an amusement park, and who did you go with?",
+   "What is your favorite ride at an amusement park?",
+   "Would you rather visit an amusement park on a weekday with fewer people or on a weekend with special events? Why?"
+  ],
+  "questions_ko": [
+   "마지막으로 놀이공원에 간 게 언제고, 누구와 갔나요?",
+   "놀이공원에서 가장 좋아하는 놀이기구는 무엇인가요?",
+   "사람이 적은 평일과 특별 행사가 있는 주말 중 언제 놀이공원에 가고 싶나요? 이유는요?"
+  ],
+  "samples": [
+   "The last time I went to an amusement park was last fall. I went with my college friends, and we stayed there from morning until the night parade.",
+   "My favorite ride is the roller coaster. It is fast and a little scary, but that is why it is so exciting. I always ride it at least twice.",
+   "I would rather visit on a weekday with fewer people. On weekends, the lines are very long, and sometimes I wait more than an hour for one ride. On a weekday, I can enjoy many rides without waiting. Also, it is less noisy and more relaxing. Special events are fun, but I think riding more is better. That's why I prefer weekdays."
+  ],
+  "samples_ko": [
+   "마지막으로 놀이공원에 간 건 작년 가을이에요. 대학 친구들과 갔고, 아침부터 밤 퍼레이드까지 있었어요.",
+   "제가 가장 좋아하는 놀이기구는 롤러코스터예요. 빠르고 조금 무섭지만 그래서 정말 신나요. 항상 적어도 두 번은 타요.",
+   "저는 사람이 적은 평일에 가겠어요. 주말에는 줄이 아주 길어서 놀이기구 하나에 한 시간 넘게 기다릴 때도 있어요. 평일에는 기다리지 않고 많이 탈 수 있어요. 또 덜 시끄럽고 더 여유로워요. 특별 행사도 재미있지만 더 많이 타는 게 낫다고 생각해요. 그래서 평일이 좋아요."
+  ],
+  "samples_adv": [
+   "It was about two months ago. I took my niece and nephew for her birthday. They were so excited that they ran from ride to ride all day, and I was exhausted by evening.",
+   "Honestly, I'm not a fan of scary rides, so my favorite is the Ferris wheel. It's slow and peaceful, and from the top you can see the whole park and city, beautiful at sunset.",
+   "I'd choose a weekend with special events. It's more crowded, but the events make the trip memorable. Last Halloween, the park held a spooky night festival with costumes, live shows, and fireworks, which was totally worth the long lines. A quiet weekday might feel empty, and taking a day off just for a park isn't easy."
+  ],
+  "samples_adv_ko": [
+   "약 두 달 전이었습니다. 조카의 생일을 맞아 조카들을 데려갔습니다. 아이들이 너무 신나서 하루 종일 뛰어다녔고, 저는 저녁이 되자 녹초가 됐습니다.",
+   "솔직히 무서운 놀이기구를 좋아하지 않아서 가장 좋아하는 것은 대관람차입니다. 느리고 평화로우며 꼭대기에서 공원과 도시 전체를 볼 수 있고 석양 무렵이 아름답습니다.",
+   "저는 특별 행사가 있는 주말을 고르겠습니다. 더 붐비지만 행사가 여행을 기억에 남게 합니다. 지난 핼러윈에 공원은 의상, 라이브 공연, 불꽃놀이가 있는 으스스한 야간 축제를 열었는데 긴 줄을 설 만한 가치가 충분했습니다. 조용한 평일은 썰렁할 수 있고, 놀이공원만을 위해 휴가를 내기도 쉽지 않습니다."
+  ],
+  "tips": [
+   "놀이기구 어휘: roller coaster, Ferris wheel, bumper cars, parade, fireworks",
+   "wait in line for an hour 한 시간 줄 서다 — 숫자를 넣으면 이유가 구체적이 된다"
+  ]
+ },
+ {
+  "id": "rq-086",
+  "topic": "해변",
+  "intro": "Imagine that a travel magazine is doing research for an article. You have agreed to participate in a telephone interview about going to the beach.",
+  "intro_ko": "한 여행 잡지가 기사를 위해 조사를 하고 있다고 상상해 보세요. 당신은 해변에 가는 것에 관한 전화 인터뷰에 참여하기로 했습니다.",
+  "questions": [
+   "How often do you go to the beach, and how do you get there?",
+   "What do you usually do when you are at the beach?",
+   "Do you prefer a busy beach with many shops and restaurants or a quiet beach with few people? Why?"
+  ],
+  "questions_ko": [
+   "해변에 얼마나 자주 가고, 어떻게 가나요?",
+   "해변에 가면 보통 무엇을 하나요?",
+   "가게와 식당이 많은 붐비는 해변과 사람이 적은 조용한 해변 중 어느 쪽이 좋나요? 이유는요?"
+  ],
+  "samples": [
+   "I go to the beach about two or three times a year, usually in summer. I live far from the sea, so I get there by train or by car.",
+   "When I am at the beach, I usually swim in the sea and walk along the sand. I also like to sit under an umbrella and read a book.",
+   "I prefer a quiet beach with few people. I go to the beach to relax, so I don't like noise and crowds. At a quiet beach, I can listen to the waves and rest well. Also, it is usually cleaner. I can bring my own food and drinks, so I don't need many shops. That's why I like quiet beaches better."
+  ],
+  "samples_ko": [
+   "해변에는 1년에 두세 번쯤, 보통 여름에 가요. 바다에서 멀리 살아서 기차나 차로 가요.",
+   "해변에 가면 보통 바다에서 수영하고 모래사장을 따라 걸어요. 파라솔 아래 앉아 책 읽는 것도 좋아해요.",
+   "저는 사람이 적은 조용한 해변이 좋아요. 쉬려고 해변에 가니까 소음과 인파가 싫어요. 조용한 해변에서는 파도 소리를 들으며 푹 쉴 수 있어요. 또 보통 더 깨끗해요. 음식과 음료는 직접 가져가면 되니까 가게가 많을 필요가 없어요. 그래서 조용한 해변이 더 좋아요."
+  ],
+  "samples_adv": [
+   "I'm lucky to live about twenty minutes from the coast. I go to the beach almost every weekend in summer, and I usually ride my bike there along the river path.",
+   "It depends on the season. In summer, I surf in the morning when the waves are good. In cooler months, I take a long walk with my dog, then grab a coffee nearby.",
+   "To be honest, I prefer a busy beach with shops and restaurants. I enjoy the lively atmosphere, and I don't have to pack much. Last summer, I went to a popular beach with seafood restaurants, music, and even a night market by the sand. We swam by day and had fresh grilled fish at night, like a small festival. A quiet beach would bore me after a few hours."
+  ],
+  "samples_adv_ko": [
+   "운 좋게도 해안에서 약 20분 거리에 삽니다. 여름에는 거의 매주 주말에 해변에 가고, 보통 강변길을 따라 자전거로 갑니다.",
+   "계절에 따라 다릅니다. 여름에는 파도가 좋은 아침에 서핑을 합니다. 선선한 계절에는 강아지와 오래 걷고 근처에서 커피를 마십니다.",
+   "솔직히 상점과 식당이 많은 북적이는 해변을 선호합니다. 활기찬 분위기가 좋고 짐을 많이 싸지 않아도 됩니다. 지난여름에는 해산물 식당, 음악, 모래사장 바로 옆 야시장까지 있는 인기 해변에 갔습니다. 낮에는 수영하고 밤에는 신선한 생선구이를 먹었는데 작은 축제 같았습니다. 조용한 해변은 몇 시간 뒤 지루해질 것 같습니다."
+  ],
+  "tips": [
+   "How often ... and how ...? → 빈도 + 교통수단을 한 번에: twice a year, by train",
+   "해변 어휘: waves, sand, beach umbrella, surfing, seafood restaurant"
+  ]
+ },
+ {
+  "id": "rq-087",
+  "topic": "동물원",
+  "intro": "Imagine that a city zoo is doing research to attract more visitors. You have agreed to participate in a telephone interview about zoos.",
+  "intro_ko": "한 시립 동물원이 방문객을 더 끌기 위해 조사를 하고 있다고 상상해 보세요. 당신은 동물원에 관한 전화 인터뷰에 참여하기로 했습니다.",
+  "questions": [
+   "When did you last visit a zoo, and what animals did you see?",
+   "How long do you usually stay at a zoo when you visit?",
+   "What could a zoo do to make visitors want to come back again? Give some suggestions."
+  ],
+  "questions_ko": [
+   "마지막으로 동물원에 간 게 언제고, 어떤 동물을 봤나요?",
+   "동물원에 가면 보통 얼마나 머무나요?",
+   "방문객이 다시 오고 싶게 하려면 동물원이 무엇을 할 수 있을까요? 제안해 주세요."
+  ],
+  "samples": [
+   "I last visited a zoo about a year ago with my family. We saw lions, giraffes, and elephants. The baby elephant was the cutest animal there.",
+   "When I visit a zoo, I usually stay for about three or four hours. It takes a long time to walk around and see all the animals.",
+   "I have two suggestions. First, the zoo could offer animal feeding times or talks with the zookeepers. Visitors, especially children, would learn a lot and have fun. Second, the zoo could add more places to rest, like benches and shady areas. In summer, walking around the zoo is very tiring. If the zoo did these things, I would want to come back."
+  ],
+  "samples_ko": [
+   "마지막으로 동물원에 간 건 1년쯤 전에 가족과 함께였어요. 사자, 기린, 코끼리를 봤어요. 아기 코끼리가 거기서 가장 귀여운 동물이었어요.",
+   "동물원에 가면 보통 서너 시간쯤 있어요. 걸어 다니면서 동물을 다 보려면 오래 걸려요.",
+   "두 가지를 제안할게요. 먼저 동물원에서 먹이 주기 시간이나 사육사와의 이야기 시간을 운영할 수 있어요. 방문객, 특히 아이들이 많이 배우고 즐거울 거예요. 둘째, 벤치나 그늘 같은 쉴 곳을 더 만들 수 있어요. 여름에는 동물원을 돌아다니는 게 아주 힘들어요. 동물원이 이렇게 하면 다시 가고 싶을 거예요."
+  ],
+  "samples_adv": [
+   "It was this spring, at my son's kindergarten family day. We saw penguins, red pandas, and a huge gorilla. My son was so amazed by the penguins that he didn't want to leave.",
+   "We usually spend about half a day there, maybe four hours. With a small child, we take lots of breaks and always stop for ice cream, so it takes longer than you'd think.",
+   "I think the zoo could make each visit feel different. For example, seasonal programs, like a summer night zoo where visitors see animals active after dark, would be exciting. A yearly discounted membership would also encourage visits. My family bought one at an aquarium last year and went five times. A mobile map with feeding times would help planning too."
+  ],
+  "samples_adv_ko": [
+   "올봄 아들 유치원의 가족의 날이었습니다. 펭귄, 레서판다, 거대한 고릴라를 봤습니다. 아들은 펭귄에 너무 감탄해서 떠나려 하지 않았습니다.",
+   "보통 반나절, 대략 네 시간을 보냅니다. 어린아이와 함께라 자주 쉬고 항상 아이스크림을 먹으러 들르기 때문에 생각보다 오래 걸립니다.",
+   "동물원이 방문할 때마다 다르게 느끼도록 만들 수 있다고 생각합니다. 예를 들어 여름 야간 동물원처럼, 어두워진 뒤 활동하는 동물을 볼 수 있는 계절 프로그램은 흥미로울 겁니다. 할인되는 연간 회원권도 방문을 늘릴 것입니다. 저희 가족은 작년에 수족관 회원권을 사서 다섯 번 갔습니다. 먹이 주는 시간이 표시된 모바일 지도도 일정을 짜는 데 도움이 됩니다."
+  ],
+  "tips": [
+   "제안형 Q7: I have two suggestions. First, ... Second, ... 로 번호를 붙여 정리",
+   "could + 동사원형 으로 부드럽게 제안: The zoo could offer ..."
+  ]
+ },
+ {
+  "id": "rq-088",
+  "topic": "보드게임",
+  "intro": "Imagine that a toy and game company is doing research in your country. You have agreed to participate in a telephone interview about board games.",
+  "intro_ko": "한 장난감·게임 회사가 당신의 나라에서 조사를 하고 있다고 상상해 보세요. 당신은 보드게임에 관한 전화 인터뷰에 참여하기로 했습니다.",
+  "questions": [
+   "When was the last time you played a board game, and who did you play with?",
+   "What is your favorite board game, and why do you like it?",
+   "Do you think board games are a good activity for families? Why or why not?"
+  ],
+  "questions_ko": [
+   "마지막으로 보드게임을 한 게 언제고, 누구와 했나요?",
+   "가장 좋아하는 보드게임은 무엇이고, 왜 좋아하나요?",
+   "보드게임이 가족에게 좋은 활동이라고 생각하나요? 이유는요?"
+  ],
+  "samples": [
+   "The last time I played a board game was during the last holiday. I played with my cousins at my grandparents' house, and we played until midnight.",
+   "My favorite board game is a word game where you make words with letter tiles. I like it because it is fun and I can learn new words.",
+   "Yes, I think board games are a great activity for families. First, everyone can play together, from children to grandparents. Also, people put down their phones and talk to each other. In my family, we laugh a lot when we play board games. It is a good way to spend time together. That's why I think board games are good for families."
+  ],
+  "samples_ko": [
+   "마지막으로 보드게임을 한 건 지난 명절이에요. 조부모님 댁에서 사촌들과 했는데 자정까지 했어요.",
+   "제가 가장 좋아하는 보드게임은 글자 타일로 단어를 만드는 단어 게임이에요. 재미있고 새 단어를 배울 수 있어서 좋아해요.",
+   "네, 보드게임은 가족에게 아주 좋은 활동이라고 생각해요. 먼저 아이부터 조부모님까지 모두 함께할 수 있어요. 또 사람들이 휴대폰을 내려놓고 서로 이야기해요. 우리 가족은 보드게임을 하면 많이 웃어요. 함께 시간을 보내기 좋은 방법이에요. 그래서 보드게임이 가족에게 좋다고 생각해요."
+  ],
+  "samples_adv": [
+   "Last Friday, a few coworkers and I went to a board game cafe after work. We played a strategy game for three hours, and I lost badly, but it was great fun.",
+   "My favorite is a trading game where you collect resources and build roads and towns. Every game is different, and you must negotiate, so there's lots of talking and laughing.",
+   "Absolutely, they're one of the best family activities. Unlike watching TV, board games make everyone talk and cooperate. Kids also learn useful skills like taking turns, counting, and losing gracefully. My nephew used to cry every time he lost, but after playing with us every weekend, he's a much better sport. Board games are also cheap and endlessly replayable."
+  ],
+  "samples_adv_ko": [
+   "바로 지난 금요일이었습니다. 퇴근 후 동료 몇 명과 보드게임 카페에 갔습니다. 세 시간 동안 전략 게임을 했고 크게 졌지만 정말 재미있었습니다.",
+   "제가 가장 좋아하는 것은 자원을 모아 길과 마을을 짓는 거래 게임입니다. 매 판이 다르고 협상도 해야 해서 대화와 웃음이 많습니다.",
+   "물론입니다. 가장 좋은 가족 활동 중 하나라고 생각합니다. TV 시청과 달리 보드게임은 모두가 대화하고 협력하게 합니다. 아이들은 순서 지키기, 계산하기, 깔끔하게 지는 법 같은 유용한 기술도 배웁니다. 제 조카는 질 때마다 울곤 했지만 주말마다 저희와 게임하면서 훨씬 의젓해졌습니다. 보드게임은 저렴하고 계속 다시 할 수 있기도 합니다."
+  ],
+  "tips": [
+   "What ... and why ...? 는 이름(종류) → because 이유 순서로 한 번에",
+   "Unlike watching TV, ... 처럼 다른 활동과 비교하면 이유가 선명해진다"
+  ]
+ },
+ {
+  "id": "rq-089",
+  "topic": "요가",
+  "intro": "Imagine that a fitness magazine is doing research in your area. You have agreed to participate in a telephone interview about yoga and stretching.",
+  "intro_ko": "한 피트니스 잡지가 당신이 사는 지역에서 조사를 하고 있다고 상상해 보세요. 당신은 요가와 스트레칭에 관한 전화 인터뷰에 참여하기로 했습니다.",
+  "questions": [
+   "Have you ever tried yoga, and if so, where did you do it?",
+   "How often do you stretch, and when do you usually do it?",
+   "Would you prefer to take a yoga class at a studio or follow a yoga video at home? Why?"
+  ],
+  "questions_ko": [
+   "요가를 해 본 적이 있나요? 있다면 어디에서 했나요?",
+   "스트레칭을 얼마나 자주 하고, 보통 언제 하나요?",
+   "요가를 학원에서 수업으로 듣는 것과 집에서 영상을 따라 하는 것 중 어느 쪽이 좋나요? 이유는요?"
+  ],
+  "samples": [
+   "Yes, I have tried yoga a few times. I took a beginner class at a community center near my home last year, and it was harder than I expected.",
+   "I stretch almost every day. I usually do it in the morning right after I wake up, because my body feels stiff and stretching helps me wake up.",
+   "I would prefer to take a class at a studio. As a beginner, I don't know the right positions yet. In a class, the teacher can watch me and fix my mistakes. This helps me avoid injuries. Also, when I pay for a class, I go more regularly. At home, I might skip it. That's why I prefer a studio class."
+  ],
+  "samples_ko": [
+   "네, 요가를 몇 번 해 봤어요. 작년에 집 근처 주민센터에서 초급반 수업을 들었는데 생각보다 어려웠어요.",
+   "거의 매일 스트레칭을 해요. 보통 아침에 일어나자마자 해요. 몸이 뻣뻣한데 스트레칭을 하면 잠이 깨거든요.",
+   "저는 학원에서 수업을 듣는 게 좋아요. 초보자라서 아직 올바른 자세를 몰라요. 수업에서는 선생님이 보고 틀린 걸 고쳐 줄 수 있어요. 그러면 부상을 피할 수 있어요. 또 수업료를 내면 더 꾸준히 가요. 집에서는 빼먹을 수도 있어요. 그래서 학원 수업이 좋아요."
+  ],
+  "samples_adv": [
+   "Yes, I've done yoga for two years. I started at a small studio near my office because of terrible back pain from sitting all day. Now I go twice a week after work.",
+   "I try to stretch at least three times a day: briefly in the morning, a few minutes at my desk in the afternoon, and longer before bed. It helps me sleep better.",
+   "Honestly, I'd rather follow a video at home now. A studio class helped me as a beginner, but I now know the basic poses. At home, I can practice whenever I want, even late at night, without traveling. There are also plenty of free videos, from ten-minute routines to hour-long classes. I'm following a thirty-day program, and it's been great."
+  ],
+  "samples_adv_ko": [
+   "네, 2년째 요가를 하고 있습니다. 하루 종일 앉아 있어서 심한 허리 통증이 있어 사무실 근처 작은 스튜디오에서 시작했습니다. 지금은 퇴근 후 주 2회 갑니다.",
+   "하루에 최소 세 번 스트레칭하려고 합니다. 아침에 잠깐, 오후에 책상에서 몇 분, 자기 전에 더 길게 합니다. 잠을 더 잘 자는 데 도움이 됩니다.",
+   "솔직히 이제는 집에서 영상을 따라 하는 쪽입니다. 초보 때는 스튜디오 수업이 도움이 됐지만 이제 기본 자세는 잘 압니다. 집에서는 늦은 밤에도 원할 때 이동 없이 연습할 수 있습니다. 10분 루틴부터 한 시간짜리 수업까지 무료 영상도 많습니다. 저는 30일 프로그램을 따라 하고 있는데 아주 좋습니다."
+  ],
+  "tips": [
+   "Have you ever ...? 는 Yes, I have tried ... / No, I haven't, but ... 로 현재완료 답변",
+   "stiff 뻣뻣한, pose 자세, injury 부상, beginner class 초급반"
+  ]
+ },
+ {
+  "id": "rq-090",
+  "topic": "산책",
+  "intro": "Imagine that a community organization is doing research in your area. You have agreed to participate in a telephone interview about walking for exercise.",
+  "intro_ko": "한 지역 단체가 당신이 사는 지역에서 조사를 하고 있다고 상상해 보세요. 당신은 운동으로 걷기에 관한 전화 인터뷰에 참여하기로 했습니다.",
+  "questions": [
+   "How many minutes a day do you walk, and where do you usually walk?",
+   "Do you prefer to walk alone or with someone else?",
+   "What could our town do to encourage more people to walk? Give some suggestions."
+  ],
+  "questions_ko": [
+   "하루에 몇 분 걷고, 보통 어디를 걷나요?",
+   "혼자 걷는 것과 다른 사람과 걷는 것 중 어느 쪽이 좋나요?",
+   "더 많은 사람이 걷도록 우리 동네가 무엇을 할 수 있을까요? 제안해 주세요."
+  ],
+  "samples": [
+   "I walk for about thirty minutes a day. I usually walk in the park near my apartment after dinner, because there are nice trees and a quiet path.",
+   "I prefer to walk with someone else. When I walk with my friend or my sister, we can talk, and the time goes by much faster.",
+   "I have two suggestions. First, the town could build more walking paths with lights. Many people want to walk at night, but some streets are too dark. Second, the town could hold a walking event every month, with small prizes. This would make walking more fun. If the town did these things, more people would walk."
+  ],
+  "samples_ko": [
+   "하루에 30분쯤 걸어요. 보통 저녁을 먹고 아파트 근처 공원을 걸어요. 나무가 좋고 길이 조용하거든요.",
+   "저는 다른 사람과 걷는 게 좋아요. 친구나 언니와 걸으면 이야기할 수 있고 시간이 훨씬 빨리 가요.",
+   "두 가지를 제안할게요. 먼저 동네에 조명이 있는 산책로를 더 만들 수 있어요. 밤에 걷고 싶은 사람이 많은데 어떤 길은 너무 어두워요. 둘째, 매달 작은 상품이 있는 걷기 행사를 열 수 있어요. 그러면 걷기가 더 재미있어질 거예요. 동네가 이렇게 하면 더 많은 사람이 걸을 거예요."
+  ],
+  "samples_adv": [
+   "I try to walk ten thousand steps a day, about an hour and a half. I walk to the subway instead of taking the bus, and take a long riverside walk on weekends.",
+   "Honestly, I prefer walking alone. It's the only time of day I can really think and clear my head. I put on a podcast or music and enjoy being by myself.",
+   "First, the town should make sidewalks safer. In my neighborhood, some are very narrow, and scooters and bikes zip past, so walking feels risky. The town could also plant more trees and add benches along main streets, since shade matters in summer. Lastly, a step-counting challenge through the town app, with points redeemable at local shops, would motivate many people."
+  ],
+  "samples_adv_ko": [
+   "하루 최소 만 보, 약 한 시간 반을 걸으려고 합니다. 버스 대신 지하철역까지 걸어가고, 주말에는 강변을 오래 걷습니다.",
+   "솔직히 혼자 걷는 것을 선호합니다. 하루 중 정말 생각하고 머리를 비울 수 있는 유일한 시간입니다. 팟캐스트나 음악을 틀고 혼자 있는 걸 즐깁니다.",
+   "첫째, 시는 인도를 더 안전하게 만들어야 합니다. 우리 동네 일부 인도는 매우 좁고 스쿠터와 자전거가 빠르게 지나가서 걷기가 위험하게 느껴집니다. 또 여름에는 그늘이 중요하니 큰길을 따라 나무를 더 심고 벤치를 놓을 수도 있습니다. 마지막으로 시 앱을 통한 걸음 수 챌린지를 하고 지역 상점에서 쓸 수 있는 포인트를 주면 많은 사람에게 동기가 될 것입니다."
+  ],
+  "tips": [
+   "제안 연결어: First of all, ... Also, ... Lastly, ...",
+   "걷기 어휘: walking path, sidewalk, ten thousand steps, clear my head"
+  ]
+ },
+ {
+  "id": "rq-091",
+  "topic": "라디오",
+  "intro": "Imagine that a radio station is doing research in your city. You have agreed to participate in a telephone interview about listening to the radio.",
+  "intro_ko": "한 라디오 방송국이 당신이 사는 도시에서 조사를 하고 있다고 상상해 보세요. 당신은 라디오 청취에 관한 전화 인터뷰에 참여하기로 했습니다.",
+  "questions": [
+   "How often do you listen to the radio, and where do you usually listen to it?",
+   "What kind of radio programs do you like the most?",
+   "Do you think radio will still be popular ten years from now? Why or why not?"
+  ],
+  "questions_ko": [
+   "라디오를 얼마나 자주 듣고, 보통 어디에서 듣나요?",
+   "어떤 라디오 프로그램을 가장 좋아하나요?",
+   "10년 뒤에도 라디오가 인기 있을 거라고 생각하나요? 이유는요?"
+  ],
+  "samples": [
+   "I listen to the radio about three times a week. I usually listen to it in my car when I drive to work in the morning.",
+   "I like music programs the most. The hosts play many good songs, and they also read stories from listeners. It makes my drive more fun.",
+   "Yes, I think radio will still be popular. Many people listen to the radio while they drive, and they can't watch videos in the car. Also, radio is free and easy to use. Radio hosts feel like friends, and listeners can send messages to the programs. So I think people will keep listening to the radio in the future."
+  ],
+  "samples_ko": [
+   "라디오를 일주일에 세 번쯤 들어요. 보통 아침에 운전해서 출근할 때 차에서 들어요.",
+   "저는 음악 프로그램을 가장 좋아해요. 진행자가 좋은 노래를 많이 틀어 주고 청취자 사연도 읽어 줘요. 운전이 더 즐거워져요.",
+   "네, 라디오는 계속 인기 있을 거라고 생각해요. 많은 사람이 운전하면서 라디오를 듣는데 차에서는 영상을 볼 수 없어요. 또 라디오는 무료이고 쓰기 쉬워요. 라디오 진행자는 친구처럼 느껴지고 청취자가 프로그램에 메시지를 보낼 수도 있어요. 그래서 앞으로도 사람들이 라디오를 계속 들을 거라고 생각해요."
+  ],
+  "samples_adv": [
+   "Honestly, I hardly ever listen to the radio now. The only time is in a taxi when the driver has it on. At home, I listen to music or podcasts instead.",
+   "When I do listen, I like late-night talk shows. The host speaks calmly and shares listeners' stories about their day. It's really relaxing, and sometimes the stories are surprisingly touching.",
+   "I think radio will still be around, but it'll look different. Young people mostly use streaming apps and podcasts, so traditional radio may lose some listeners. However, many stations now have apps and live video streams, so people can listen anywhere and chat with hosts in real time. My mom listens to her favorite morning show on an app while she cooks. Radio will keep adapting."
+  ],
+  "samples_adv_ko": [
+   "솔직히 요즘은 라디오를 거의 듣지 않습니다. 택시 기사님이 틀어 놓았을 때뿐입니다. 집에서는 대신 음악이나 팟캐스트를 듣습니다.",
+   "들을 때는 심야 토크쇼를 좋아합니다. 진행자가 차분한 목소리로 청취자들의 하루 이야기를 전해 줍니다. 정말 편안하고 가끔 사연이 놀랄 만큼 감동적입니다.",
+   "라디오는 계속 남겠지만 모습은 달라질 것 같습니다. 저 같은 젊은 사람들은 주로 스트리밍 앱과 팟캐스트를 써서 전통 라디오는 청취자를 일부 잃을 수 있습니다. 하지만 많은 방송국이 앱과 영상 생중계를 제공해서 어디서나 듣고 진행자와 실시간으로 대화할 수도 있습니다. 어머니는 요리하면서 앱으로 좋아하는 아침 방송을 들으십니다. 라디오는 계속 적응할 겁니다."
+  ],
+  "tips": [
+   "미래 예측 질문은 will 로 답한다: Radio will still be popular / won't disappear",
+   "hardly ever 거의 ~하지 않다 — 자주 하지 않는 일도 솔직하게 답해도 된다"
+  ]
+ },
+ {
+  "id": "rq-092",
+  "topic": "잡지",
+  "intro": "Imagine that a magazine publisher is doing research in your country. You have agreed to participate in a telephone interview about reading magazines.",
+  "intro_ko": "한 잡지 출판사가 당신의 나라에서 조사를 하고 있다고 상상해 보세요. 당신은 잡지 읽기에 관한 전화 인터뷰에 참여하기로 했습니다.",
+  "questions": [
+   "When was the last time you read a magazine, and what was it about?",
+   "Where do you usually read magazines?",
+   "Would you rather read a magazine in print or on a digital device? Why?"
+  ],
+  "questions_ko": [
+   "마지막으로 잡지를 읽은 게 언제고, 무엇에 관한 잡지였나요?",
+   "잡지는 보통 어디에서 읽나요?",
+   "잡지를 종이로 읽는 것과 디지털 기기로 읽는 것 중 어느 쪽이 좋나요? 이유는요?"
+  ],
+  "samples": [
+   "The last time I read a magazine was last week. It was a travel magazine, and it had many beautiful photos of small towns in Europe.",
+   "I usually read magazines at the hair salon or at the dentist's office while I am waiting. I don't often buy magazines myself.",
+   "I would rather read a magazine in print. Magazines have big, colorful photos, and they look much better on paper. Also, my eyes get tired when I look at a screen for a long time. I already use my phone and computer all day. Reading a paper magazine feels relaxing. That's why I prefer print magazines."
+  ],
+  "samples_ko": [
+   "마지막으로 잡지를 읽은 건 지난주예요. 여행 잡지였는데, 유럽 작은 마을의 아름다운 사진이 많았어요.",
+   "잡지는 보통 미용실이나 치과에서 기다리는 동안 읽어요. 직접 잡지를 사는 일은 많지 않아요.",
+   "저는 종이 잡지가 좋아요. 잡지는 크고 화려한 사진이 있어서 종이로 보면 훨씬 보기 좋아요. 또 화면을 오래 보면 눈이 피곤해요. 이미 하루 종일 휴대폰과 컴퓨터를 써요. 종이 잡지를 읽으면 편안한 느낌이 들어요. 그래서 종이 잡지가 좋아요."
+  ],
+  "samples_adv": [
+   "I read one just this morning. I subscribe to a science magazine, and this month's issue was about how cities can stay cool during heat waves. It was interesting and easy to understand.",
+   "Mostly on my tablet during my commute. The subway ride takes about forty minutes, so I finish one or two articles each way. On Sundays, I also read at a cafe near my home.",
+   "I'd rather read digitally. First, it's convenient: one tablet holds dozens of magazines, so no piles of paper at home. Second, digital magazines include videos and links, so I can learn more right away. When I read a cooking magazine on my tablet, I can watch the recipe video at the same time. It also saves paper, which is better for the environment."
+  ],
+  "samples_adv_ko": [
+   "바로 오늘 아침에 읽었습니다. 과학 잡지를 구독하는데, 이번 달 호는 도시가 폭염 동안 어떻게 시원하게 유지될 수 있는지에 관한 내용이었습니다. 흥미롭고 이해하기 쉬웠습니다.",
+   "주로 출퇴근 중에 태블릿으로 읽습니다. 지하철로 약 40분이라 편도마다 기사 한두 편을 끝냅니다. 일요일에는 집 근처 카페에서도 읽습니다.",
+   "저는 디지털로 읽는 쪽입니다. 첫째, 편리합니다. 태블릿 하나에 잡지 수십 권이 들어가서 집에 종이 더미가 쌓일 걱정이 없습니다. 둘째, 디지털 잡지에는 영상과 링크가 있어 바로 더 알아볼 수 있습니다. 요리 잡지를 태블릿으로 읽을 때는 레시피 영상을 동시에 볼 수 있습니다. 종이를 아껴 환경에도 더 좋습니다."
+  ],
+  "tips": [
+   "What was it about? → It was about ... / It was a travel magazine with ...",
+   "subscription 구독, issue 호, article 기사, in print 종이로"
+  ]
+ },
+ {
+  "id": "rq-093",
+  "topic": "쿠폰·할인",
+  "intro": "Imagine that a marketing firm is doing research in your area. You have agreed to participate in a telephone interview about using coupons and discounts.",
+  "intro_ko": "한 마케팅 회사가 당신이 사는 지역에서 조사를 하고 있다고 상상해 보세요. 당신은 쿠폰과 할인 이용에 관한 전화 인터뷰에 참여하기로 했습니다.",
+  "questions": [
+   "How often do you use coupons, and where do you usually get them?",
+   "When was the last time you bought something on sale, and what did you buy?",
+   "Some stores send discount offers by text message. Do you think this is helpful or annoying? Why?"
+  ],
+  "questions_ko": [
+   "쿠폰을 얼마나 자주 쓰고, 보통 어디에서 받나요?",
+   "마지막으로 할인 상품을 산 게 언제고, 무엇을 샀나요?",
+   "어떤 가게들은 문자로 할인 소식을 보내요. 이게 도움이 된다고 생각하나요, 귀찮다고 생각하나요? 이유는요?"
+  ],
+  "samples": [
+   "I use coupons about once a week. I usually get them from shopping apps on my phone, and sometimes from the receipts at the supermarket.",
+   "The last time I bought something on sale was last weekend. I bought a winter coat at a department store, and it was forty percent off.",
+   "I think it is annoying. I get too many text messages from stores every day, and most of them are not useful for me. Sometimes they come late at night or during work. Also, I worry about my personal information. If I want a discount, I can check the app myself. That's why I don't like these messages."
+  ],
+  "samples_ko": [
+   "쿠폰은 일주일에 한 번쯤 써요. 보통 휴대폰 쇼핑 앱에서 받고, 가끔 슈퍼마켓 영수증에서도 받아요.",
+   "마지막으로 할인 상품을 산 건 지난 주말이에요. 백화점에서 겨울 코트를 샀는데 40퍼센트 할인이었어요.",
+   "저는 귀찮다고 생각해요. 매일 가게에서 문자가 너무 많이 오는데 대부분 저에게 쓸모가 없어요. 가끔 밤늦게나 일하는 중에 와요. 또 개인 정보도 걱정돼요. 할인을 원하면 제가 직접 앱을 확인하면 돼요. 그래서 이런 문자가 싫어요."
+  ],
+  "samples_adv": [
+   "To be honest, I use coupons almost every day. Most come from food delivery and coffee shop apps. I also collect stamps at my favorite bakery, and every tenth loaf is free.",
+   "Just yesterday, actually. My favorite sports brand had a big end-of-season sale, so I bought two pairs of running shorts and a jacket. I saved about fifty dollars, which delighted me.",
+   "It can be helpful if it's from a store I actually like. My local supermarket texts me when fruit or meat is on sale, and I've saved quite a lot that way. Last month, one message got me a big box of strawberries at half price. But random stores I visited once sending ads is annoying, so I only sign up with a few stores I use often."
+  ],
+  "samples_adv_ko": [
+   "솔직히 거의 매일 쿠폰을 씁니다. 대부분 배달 음식과 커피숍 앱에서 받습니다. 좋아하는 빵집에서는 도장도 모으는데, 열 번째 빵은 무료입니다.",
+   "사실 바로 어제였습니다. 제가 좋아하는 스포츠 브랜드가 시즌 마감 세일을 크게 해서 러닝 반바지 두 벌과 재킷을 샀습니다. 합쳐서 약 50달러를 아껴 정말 기뻤습니다.",
+   "제가 정말 좋아하는 가게라면 도움이 될 수 있습니다. 동네 슈퍼마켓은 과일이나 고기가 할인될 때 문자를 보내 줘서 그렇게 꽤 많이 절약했습니다. 지난달에는 문자 하나 덕분에 딸기 한 상자를 반값에 샀습니다. 하지만 한 번 가 본 아무 가게나 광고를 보내면 짜증스러워서, 자주 가는 몇 곳의 문자만 신청합니다."
+  ],
+  "tips": [
+   "할인 표현: forty percent off, half price, on sale, end-of-season sale, save money",
+   "as long as ... = ~라면 (조건부 의견)"
+  ]
+ },
+ {
+  "id": "rq-094",
+  "topic": "재활용",
+  "intro": "Imagine that a research company is doing a survey for your city government. You have agreed to participate in a telephone interview about recycling.",
+  "intro_ko": "한 조사 회사가 시청을 위해 설문을 하고 있다고 상상해 보세요. 당신은 재활용에 관한 전화 인터뷰에 참여하기로 했습니다.",
+  "questions": [
+   "How often do you take out the recycling, and what do you recycle the most?",
+   "Is it easy to recycle in your neighborhood?",
+   "What do you think is the best way to get people to recycle more? Why?"
+  ],
+  "questions_ko": [
+   "재활용품을 얼마나 자주 내놓고, 무엇을 가장 많이 재활용하나요?",
+   "당신 동네에서는 재활용하기 쉬운가요?",
+   "사람들이 재활용을 더 많이 하게 하는 가장 좋은 방법은 무엇이라고 생각하나요? 이유는요?"
+  ],
+  "samples": [
+   "I take out the recycling twice a week. I recycle plastic bottles the most, because I drink a lot of water and juice at home.",
+   "Yes, it is easy to recycle in my neighborhood. There is a recycling area in my apartment complex, and there are separate bins for paper, plastic, and cans.",
+   "I think the best way is to give people rewards. For example, people could get points or a little money when they bring bottles and cans to a machine. People like rewards, so they would recycle more. Also, it would be a fun way to teach children about recycling. That's why I think rewards are the best way."
+  ],
+  "samples_ko": [
+   "재활용품은 일주일에 두 번 내놓아요. 집에서 물과 주스를 많이 마셔서 플라스틱병을 가장 많이 재활용해요.",
+   "네, 우리 동네는 재활용하기 쉬워요. 아파트 단지에 분리수거장이 있고, 종이, 플라스틱, 캔 수거함이 따로 있어요.",
+   "가장 좋은 방법은 보상을 주는 거라고 생각해요. 예를 들어 기계에 병과 캔을 가져가면 포인트나 약간의 돈을 받을 수 있어요. 사람들은 보상을 좋아해서 더 많이 재활용할 거예요. 또 아이들에게 재활용을 가르치는 재미있는 방법도 될 거예요. 그래서 보상이 가장 좋은 방법이라고 생각해요."
+  ],
+  "samples_adv": [
+   "In my building, recycling goes out only on Tuesdays and Saturdays, so I do it twice a week. I recycle cardboard boxes most, because I order so much online.",
+   "Not really. My small building has no recycling area, so I sort everything myself and carry it to a collection point down the street. The rules are also confusing.",
+   "I think the best way is to make the rules simple and clear. Many people want to recycle but don't know how. I'm never sure whether a greasy pizza box or a plastic cup with a paper label is recyclable. Simple pictures on every bin and a short guide would reduce mistakes. An app that explains how to sort an item when scanned would also help."
+  ],
+  "samples_adv_ko": [
+   "우리 건물에서는 재활용품을 화요일과 토요일에만 내놓을 수 있어서 일주일에 두 번 합니다. 온라인 주문이 많아 골판지 상자를 가장 많이 재활용합니다.",
+   "그렇지 않습니다. 작은 건물이라 재활용 구역이 없어서 직접 분리해 길 아래 수거 장소까지 들고 갑니다. 규칙도 헷갈립니다.",
+   "가장 좋은 방법은 규칙을 단순하고 명확하게 만드는 것이라고 생각합니다. 많은 사람이 재활용하고 싶어 하지만 방법을 모릅니다. 기름 묻은 피자 상자나 종이 라벨이 붙은 플라스틱 컵을 재활용할 수 있는지 저도 늘 헷갈립니다. 모든 수거함에 쉬운 그림을 붙이고 짧은 안내서를 보내면 실수가 줄 겁니다. 스캔하면 분리 방법을 알려 주는 앱도 도움이 됩니다."
+  ],
+  "tips": [
+   "재활용 어휘: take out the recycling, sort, separate bins, collection point, cardboard",
+   "Is it easy ...? 는 Yes/No → 이유 한 가지로 짧게"
+  ]
+ },
+ {
+  "id": "rq-095",
+  "topic": "에너지 절약",
+  "intro": "Imagine that an energy company is doing research in your area. You have agreed to participate in a telephone interview about saving energy at home.",
+  "intro_ko": "한 에너지 회사가 당신이 사는 지역에서 조사를 하고 있다고 상상해 보세요. 당신은 집에서 에너지 절약에 관한 전화 인터뷰에 참여하기로 했습니다.",
+  "questions": [
+   "Which uses the most electricity in your home, and how often do you use it?",
+   "What do you do to save energy at home?",
+   "Would you be willing to pay more for appliances that use less energy? Why or why not?"
+  ],
+  "questions_ko": [
+   "집에서 무엇이 전기를 가장 많이 쓰고, 얼마나 자주 쓰나요?",
+   "집에서 에너지를 아끼려고 무엇을 하나요?",
+   "에너지를 덜 쓰는 가전제품이라면 돈을 더 낼 의향이 있나요? 이유는요?"
+  ],
+  "samples": [
+   "The air conditioner uses the most electricity in my home. In summer, I use it almost every day, especially at night when it is too hot to sleep.",
+   "To save energy, I always turn off the lights when I leave a room. I also unplug my phone charger and computer when I am not using them.",
+   "Yes, I would be willing to pay more. Appliances that use less energy cost more at first, but they lower my electricity bill every month. So in the long run, I can save money. Also, using less energy is good for the environment. I want to do something to help the planet. That's why I would pay more."
+  ],
+  "samples_ko": [
+   "우리 집에서는 에어컨이 전기를 가장 많이 써요. 여름에는 거의 매일, 특히 너무 더워서 잠이 안 오는 밤에 써요.",
+   "에너지를 아끼려고 방을 나갈 때 항상 불을 꺼요. 또 쓰지 않을 때는 휴대폰 충전기와 컴퓨터 플러그를 뽑아요.",
+   "네, 돈을 더 낼 의향이 있어요. 에너지를 덜 쓰는 가전제품은 처음엔 더 비싸지만 매달 전기 요금을 낮춰 줘요. 그래서 길게 보면 돈을 아낄 수 있어요. 또 에너지를 덜 쓰는 건 환경에도 좋아요. 지구를 위해 뭔가 하고 싶어요. 그래서 돈을 더 내겠어요."
+  ],
+  "samples_adv": [
+   "I'd say the clothes dryer. With my husband and two kids, we do laundry almost daily and dry nearly every load, especially in the rainy season when nothing dries outside.",
+   "I've made small changes. I replaced all the bulbs with LEDs, I set the winter heating a couple of degrees lower and wear a sweater, and I use a switched power strip.",
+   "Definitely, as long as the difference isn't too big. Last year, I bought a refrigerator with the highest energy rating. It cost about two hundred dollars more than a similar model, but my electricity bill dropped noticeably, so I'll recoup the money in a few years. Energy prices keep rising, and as a parent, I care about the environment."
+  ],
+  "samples_adv_ko": [
+   "건조기라고 생각합니다. 남편, 아이 둘과 거의 매일 빨래를 하고, 특히 바깥에서 아무것도 마르지 않는 장마철에는 거의 모든 빨래를 건조기로 말립니다.",
+   "작은 변화를 줬습니다. 전구를 모두 LED로 바꿨고, 겨울에는 난방을 몇 도 낮추고 스웨터를 입으며, 스위치 달린 멀티탭을 씁니다.",
+   "차이가 너무 크지 않다면 물론입니다. 작년에 에너지 효율 최고 등급 냉장고를 샀습니다. 비슷한 모델보다 약 200달러 비쌌지만 전기요금이 눈에 띄게 줄어서 몇 년 안에 본전을 찾을 것입니다. 에너지 가격은 계속 오르고, 부모로서 환경도 중요합니다."
+  ],
+  "tips": [
+   "be willing to + 동사원형 = 기꺼이 ~하다 → Yes, I would be willing to pay more",
+   "에너지 어휘: electricity bill, unplug, energy rating, LED bulbs, in the long run"
+  ]
+ },
+ {
+  "id": "rq-096",
+  "topic": "택배",
+  "intro": "Imagine that a delivery company is doing research in your country. You have agreed to participate in a telephone interview about sending and receiving packages.",
+  "intro_ko": "한 택배 회사가 당신의 나라에서 조사를 하고 있다고 상상해 보세요. 당신은 택배를 보내고 받는 것에 관한 전화 인터뷰에 참여하기로 했습니다.",
+  "questions": [
+   "How many packages do you receive in a month, and what are they usually?",
+   "When was the last time you sent a package, and who did you send it to?",
+   "Which is more important to you when you choose a delivery service, a low price or fast delivery? Why?"
+  ],
+  "questions_ko": [
+   "한 달에 택배를 몇 개 받고, 보통 무엇인가요?",
+   "마지막으로 택배를 보낸 게 언제고, 누구에게 보냈나요?",
+   "택배 서비스를 고를 때 낮은 가격과 빠른 배송 중 무엇이 더 중요한가요? 이유는요?"
+  ],
+  "samples": [
+   "I receive about ten packages a month. They are usually things I order online, like clothes, books, and some food for my kitchen.",
+   "The last time I sent a package was last month. I sent a box of snacks and a warm sweater to my younger brother, who is in the army.",
+   "A low price is more important to me. Most of the things I send are not urgent, so I don't mind waiting a few more days. If I choose the cheaper service, I can save money every time. Fast delivery is nice, but it often costs a lot more. That's why I usually choose the cheaper option."
+  ],
+  "samples_ko": [
+   "한 달에 택배를 열 개쯤 받아요. 보통 옷, 책, 주방에서 쓸 음식처럼 온라인으로 주문한 물건이에요.",
+   "마지막으로 택배를 보낸 건 지난달이에요. 군대에 있는 남동생에게 과자 한 상자와 따뜻한 스웨터를 보냈어요.",
+   "저에게는 낮은 가격이 더 중요해요. 제가 보내는 건 대부분 급하지 않아서 며칠 더 기다려도 괜찮아요. 더 싼 서비스를 고르면 매번 돈을 아낄 수 있어요. 빠른 배송도 좋지만 보통 훨씬 비싸요. 그래서 보통 더 싼 쪽을 골라요."
+  ],
+  "samples_adv": [
+   "Honestly, way too many, around twenty a month. I don't have a car, so I order almost everything online, from groceries to pet food, and a box sits at my door nearly daily.",
+   "Just last week, I sold an old camera on a second-hand app, packed it carefully with bubble wrap, and sent it from a nearby convenience store. It arrived the next day.",
+   "Fast delivery matters more to me. Many of my packages are for work, like contracts or client samples, and they have deadlines. Once, a sample sent with a cheap service arrived two days late, and we almost lost the client. Since then, I always choose the faster option for anything important, even if it costs a few dollars more. It's worth the peace of mind."
+  ],
+  "samples_adv_ko": [
+   "솔직히 한 달에 스무 개쯤으로 너무 많습니다. 차가 없어서 식료품부터 반려동물 사료까지 거의 모든 것을 온라인으로 주문해 거의 매일 집 앞에 상자가 있습니다.",
+   "바로 지난주에 중고 앱에서 오래된 카메라를 팔고, 뽁뽁이로 꼼꼼히 포장해 근처 편의점에서 보냈습니다. 다음 날 도착했습니다.",
+   "저는 빠른 배송이 더 중요합니다. 제가 보내는 소포 중 상당수는 계약서나 고객 샘플처럼 업무용이고 기한이 있습니다. 한번은 저렴한 서비스로 보낸 샘플이 이틀 늦게 도착해서 고객을 잃을 뻔했습니다. 그 뒤로 중요한 건 몇 달러가 더 들어도 항상 빠른 쪽을 고릅니다. 마음의 평화값은 충분히 합니다."
+  ],
+  "tips": [
+   "택배 어휘: package, deliver, ship, tracking number, bubble wrap, arrive the next day",
+   "I don't mind waiting = 기다려도 괜찮다"
+  ]
+ },
+ {
+  "id": "rq-097",
+  "topic": "주차",
+  "intro": "Imagine that a research company is doing a survey for your city government. You have agreed to participate in a telephone interview about parking in your city.",
+  "intro_ko": "한 조사 회사가 시청을 위해 설문을 하고 있다고 상상해 보세요. 당신은 도시 주차에 관한 전화 인터뷰에 참여하기로 했습니다.",
+  "questions": [
+   "How often do you drive downtown, and is it easy to find a parking space?",
+   "How much do you usually pay for parking when you go shopping?",
+   "What do you think the city should do to solve parking problems? Give some suggestions."
+  ],
+  "questions_ko": [
+   "시내에 얼마나 자주 운전해서 가고, 주차 공간을 찾기 쉬운가요?",
+   "쇼핑하러 갈 때 주차비를 보통 얼마나 내나요?",
+   "주차 문제를 해결하려면 시에서 무엇을 해야 한다고 생각하나요? 제안해 주세요."
+  ],
+  "samples": [
+   "I drive downtown about once a week. It is not easy to find a parking space, especially on weekends. Sometimes I drive around for twenty minutes.",
+   "When I go shopping, I usually pay about five dollars for parking. Some big stores give free parking if I spend a certain amount of money.",
+   "I have two suggestions. First, the city should build more public parking lots near busy areas. Then people would not park on the street. Second, the city could make an app that shows empty parking spaces. This would save time and reduce traffic. If the city did these things, parking would be much easier."
+  ],
+  "samples_ko": [
+   "시내에는 일주일에 한 번쯤 운전해서 가요. 주차 공간 찾기가 쉽지 않아요, 특히 주말에요. 가끔 20분 동안 돌아다녀요.",
+   "쇼핑하러 가면 보통 주차비로 5달러쯤 내요. 큰 가게들은 일정 금액 이상 사면 무료 주차를 해 줘요.",
+   "두 가지를 제안할게요. 먼저 시에서 붐비는 곳 근처에 공영 주차장을 더 지어야 해요. 그러면 사람들이 길에 주차하지 않을 거예요. 둘째, 빈 주차 공간을 보여 주는 앱을 만들 수 있어요. 그러면 시간도 아끼고 교통 체증도 줄 거예요. 시에서 이렇게 하면 주차가 훨씬 쉬워질 거예요."
+  ],
+  "samples_adv": [
+   "I almost never drive downtown anymore. Parking there is a nightmare, and the last time I tried, I spent half an hour circling the block. Now I just take the subway into the city.",
+   "It depends. At the big mall near my place, parking is free for three hours with a receipt. At the downtown department store, I once paid almost fifteen dollars for two hours.",
+   "Rather than building more parking lots, I think the city should encourage people to drive less. It could build large park-and-ride lots at subway stations on the city's edge, so people leave their cars and take the train downtown. It could also run more weekend buses, when parking is hardest. More parking just brings more cars, so better public transportation is the long-term solution."
+  ],
+  "samples_adv_ko": [
+   "이제는 시내까지 운전하는 일이 거의 없습니다. 주차는 악몽이고, 마지막으로 시도했을 때는 블록을 돌며 30분을 보냈습니다. 지금은 시내에 갈 때 지하철을 탑니다.",
+   "어디 가느냐에 따라 다릅니다. 집 근처 대형 쇼핑몰은 영수증이 있으면 3시간 무료입니다. 시내 백화점에서는 한번 두 시간에 거의 15달러를 낸 적이 있습니다.",
+   "주차장을 더 짓기보다 시가 운전을 덜 하도록 장려해야 한다고 생각합니다. 도시 외곽 지하철역에 대형 환승 주차장을 지어서 차를 두고 기차로 시내에 가게 할 수 있습니다. 주차가 가장 어려운 주말에는 버스도 더 운행할 수 있습니다. 주차를 늘리면 차만 늘어나므로 대중교통 개선이 장기적 해법입니다."
+  ],
+  "tips": [
+   "주차 어휘: parking space, parking lot, free parking, circle the block, park-and-ride",
+   "rather than A, I think B = A 보다는 B — 흔한 답과 다른 제안으로 고득점"
+  ]
+ },
+ {
+  "id": "rq-098",
+  "topic": "친구 만나기",
+  "intro": "Imagine that a marketing firm is doing research in your area. You have agreed to participate in a telephone interview about spending time with friends.",
+  "intro_ko": "한 마케팅 회사가 당신이 사는 지역에서 조사를 하고 있다고 상상해 보세요. 당신은 친구들과 시간을 보내는 것에 관한 전화 인터뷰에 참여하기로 했습니다.",
+  "questions": [
+   "How often do you meet your friends, and where do you usually meet them?",
+   "What did you do the last time you met your friends?",
+   "Do you prefer to meet one friend at a time or a large group of friends? Why?"
+  ],
+  "questions_ko": [
+   "친구를 얼마나 자주 만나고, 보통 어디에서 만나나요?",
+   "마지막으로 친구를 만났을 때 무엇을 했나요?",
+   "친구를 한 명씩 만나는 것과 여럿이 함께 만나는 것 중 어느 쪽이 좋나요? 이유는요?"
+  ],
+  "samples": [
+   "I meet my friends about twice a month. We usually meet at a restaurant or a café downtown, because it is easy for everyone to get there.",
+   "The last time I met my friends, we had dinner at a Korean barbecue restaurant. After that, we went to a karaoke room and sang for an hour.",
+   "I prefer to meet one friend at a time. When I meet just one friend, we can have a deep conversation. I can listen carefully and share my worries too. In a big group, it is noisy, and I can't talk to everyone. Also, it is easier to choose a time and a place with one person. That's why I prefer meeting one friend."
+  ],
+  "samples_ko": [
+   "친구들은 한 달에 두 번쯤 만나요. 모두 오기 쉬워서 보통 시내 식당이나 카페에서 만나요.",
+   "마지막으로 친구들을 만났을 때 고깃집에서 저녁을 먹었어요. 그다음 노래방에 가서 한 시간 동안 노래를 불렀어요.",
+   "저는 한 명씩 만나는 게 좋아요. 한 명만 만나면 깊은 대화를 할 수 있어요. 잘 들어 주고 제 고민도 나눌 수 있어요. 여럿이 만나면 시끄럽고 모두와 이야기할 수가 없어요. 또 한 명이면 시간과 장소를 정하기도 더 쉬워요. 그래서 한 명씩 만나는 게 좋아요."
+  ],
+  "samples_adv": [
+   "Honestly, not as often as I'd like. Since we all started working, our schedules rarely match, so we meet maybe once a month, usually at a friend's apartment to cook dinner and hang out.",
+   "Last Saturday, a few friends and I hiked a small mountain outside the city. It took two hours to reach the top, and afterward we had spicy noodles and pancakes near the trail.",
+   "I prefer a big group, because there's more energy and laughter when everyone's together. I also catch up with many people at once, which saves time when everyone is busy. Every December, about ten high school friends rent a large room for a year-end party, play games, share news, and stay up late talking. It's my favorite night of the year."
+  ],
+  "samples_adv_ko": [
+   "솔직히 원하는 만큼 자주는 못 만납니다. 다들 일을 시작한 뒤로 일정 맞추기가 어려워서 한 달에 한 번쯤 만나고, 보통 친구 집에서 저녁을 해 먹으며 시간을 보냅니다.",
+   "지난 토요일에 친구 몇 명과 도시 밖 작은 산으로 등산을 갔습니다. 정상까지 두 시간쯤 걸렸고, 이후 등산로 근처에서 매운 국수와 전을 먹었습니다.",
+   "저는 큰 모임을 선호하는데, 모두 모이면 에너지와 웃음이 더 많기 때문입니다. 또 여러 사람의 근황을 한꺼번에 들을 수 있어서 모두 바쁠 때 시간을 아낄 수 있습니다. 매년 12월에는 고등학교 친구 열 명쯤이 넓은 방을 빌려 송년 파티를 하며 게임하고 소식을 나누고 늦게까지 이야기합니다. 일 년 중 가장 좋아하는 밤입니다."
+  ],
+  "tips": [
+   "What did you do ...? 는 과거 시제 + 순서 연결어: First we ..., After that, ...",
+   "hang out 어울려 놀다, catch up with 근황을 나누다, get together 모이다"
+  ]
+ },
+ {
+  "id": "rq-099",
+  "topic": "우산",
+  "intro": "Imagine that you are talking on the telephone with a colleague. It is raining heavily today, and you are talking about rainy days.",
+  "intro_ko": "동료와 전화로 이야기하고 있다고 상상해 보세요. 오늘 비가 많이 오고 있고, 비 오는 날에 대해 이야기하고 있습니다.",
+  "questions": [
+   "How did you get to work today in the rain, and did you get wet?",
+   "What do you usually like to do at home on a rainy day?",
+   "I keep losing my umbrellas. Should I buy a cheap umbrella or an expensive, high-quality one? What would you recommend?"
+  ],
+  "questions_ko": [
+   "오늘 비 오는데 어떻게 출근했고, 젖었어요?",
+   "비 오는 날 집에서 보통 무엇을 하는 걸 좋아해요?",
+   "저는 우산을 자꾸 잃어버려요. 싼 우산을 살까요, 비싸고 좋은 우산을 살까요? 무엇을 추천해요?"
+  ],
+  "samples": [
+   "I took the bus to work today. I had an umbrella, but the wind was very strong, so my shoes and pants got a little wet.",
+   "On a rainy day, I like to stay home and watch movies. I also like to cook something warm, like soup or noodles, and listen to the rain.",
+   "I would recommend buying a cheap umbrella. You said you keep losing them. If you lose an expensive umbrella, you will feel very bad. But if a cheap one gets lost, it is not a big problem. Also, cheap umbrellas are easy to find in convenience stores. So I think a cheap umbrella is better for you right now."
+  ],
+  "samples_ko": [
+   "오늘은 버스를 타고 출근했어요. 우산이 있었는데 바람이 아주 세서 신발이랑 바지가 조금 젖었어요.",
+   "비 오는 날에는 집에서 영화를 보는 걸 좋아해요. 국이나 국수처럼 따뜻한 음식을 만들어 먹으면서 빗소리를 듣는 것도 좋아해요.",
+   "싼 우산을 사는 걸 추천해요. 우산을 자꾸 잃어버린다고 했잖아요. 비싼 우산을 잃어버리면 정말 속상할 거예요. 하지만 싼 건 잃어버려도 큰 문제가 아니에요. 또 싼 우산은 편의점에서 쉽게 살 수 있어요. 그래서 지금은 싼 우산이 더 나을 것 같아요."
+  ],
+  "samples_adv": [
+   "I usually walk to the office, but this morning I took a taxi because it was pouring. Even so, I got soaked walking to the entrance, so my socks are drying under my desk.",
+   "Honestly, rainy days are my favorite for staying in. I make a pot of tea, put on jazz, and read a novel by the window. In the evening, I often make spicy pancakes.",
+   "I'd recommend a good one, but bright and unusual. People lose cheap umbrellas because they don't care about them, while an umbrella you love makes you more careful. I used to lose umbrellas constantly, but two years ago I bought a sturdy yellow one, and I still have it. The bright color catches my eye whenever I leave a cafe or bus."
+  ],
+  "samples_adv_ko": [
+   "보통 사무실까지 걸어가지만 오늘 아침에는 비가 쏟아져서 택시를 탔습니다. 그래도 입구까지 걷는 동안 흠뻑 젖어서 양말을 책상 밑에서 말리고 있습니다.",
+   "솔직히 비 오는 날은 집에 있기 가장 좋은 날입니다. 차를 끓이고 재즈를 틀고 창가에서 소설을 읽습니다. 저녁에는 전을 자주 부칩니다.",
+   "좋은 것을 사되 밝고 독특한 색을 추천합니다. 사람들은 신경 쓰지 않아서 싼 우산을 잃어버리고, 정말 마음에 드는 우산은 더 조심하게 됩니다. 저도 우산을 계속 잃어버렸지만 2년 전에 튼튼한 노란 우산을 샀고 아직도 갖고 있습니다. 밝은 색이라 카페나 버스를 나설 때 항상 눈에 띕니다."
+  ],
+  "tips": [
+   "동료와의 전화 대화형: You said you ... 로 상대 말을 받아 추천하면 자연스럽다",
+   "비 표현: pouring, get soaked, heavy rain, umbrella, windy"
+  ]
+ },
+ {
+  "id": "rq-100",
+  "topic": "헤어 제품",
+  "intro": "Imagine that a personal care company is doing research in your country. You have agreed to participate in a telephone interview about hair care products.",
+  "intro_ko": "한 생활용품 회사가 당신의 나라에서 조사를 하고 있다고 상상해 보세요. 당신은 헤어 제품에 관한 전화 인터뷰에 참여하기로 했습니다.",
+  "questions": [
+   "What hair care products do you use, and how often do you buy them?",
+   "Where do you usually buy shampoo and other hair products?",
+   "When you choose a shampoo, what is most important to you: the price, the brand, or the ingredients? Why?"
+  ],
+  "questions_ko": [
+   "어떤 헤어 제품을 쓰고, 얼마나 자주 사나요?",
+   "샴푸와 다른 헤어 제품은 보통 어디에서 사나요?",
+   "샴푸를 고를 때 가격, 브랜드, 성분 중 무엇이 가장 중요한가요? 이유는요?"
+  ],
+  "samples": [
+   "I use shampoo and conditioner every day, and sometimes a little hair wax. I buy new ones about once every two months, when the bottles are almost empty.",
+   "I usually buy shampoo at the supermarket near my home. They often have special deals, like buy one, get one free, so I buy two bottles at a time.",
+   "The ingredients are the most important to me. My scalp is sensitive, so some shampoos make it itchy. That's why I always read the label before I buy. I try to choose shampoos with natural ingredients. The price and the brand are not very important if the shampoo is not good for my hair. So I check the ingredients first."
+  ],
+  "samples_ko": [
+   "매일 샴푸와 컨디셔너를 쓰고, 가끔 헤어 왁스를 조금 써요. 병이 거의 비면 두 달에 한 번쯤 새로 사요.",
+   "샴푸는 보통 집 근처 슈퍼마켓에서 사요. 1+1 같은 특가를 자주 해서 한 번에 두 병씩 사요.",
+   "저에게는 성분이 가장 중요해요. 두피가 예민해서 어떤 샴푸는 가렵게 해요. 그래서 사기 전에 항상 라벨을 읽어요. 천연 성분 샴푸를 고르려고 해요. 샴푸가 제 머리에 안 맞으면 가격과 브랜드는 별로 중요하지 않아요. 그래서 성분을 먼저 확인해요."
+  ],
+  "samples_adv": [
+   "Besides shampoo and conditioner, I use hair oil after showering, because my hair gets very dry in winter. I buy a set every six weeks or so and stock up during big online sales.",
+   "Mostly online. I subscribe to a beauty app that sends my usual shampoo monthly, so I never run out. To try something new, I go to a beauty store and smell the products first.",
+   "For me, price matters most. I've tried expensive salon brands and couldn't see a big difference in my hair, since shampoo washes off in a minute anyway. My whole family shares the same bottle, so we use about two big bottles a month, and a cheaper brand saves quite a bit over a year. If it smells nice and cleans well, I'm happy."
+  ],
+  "samples_adv_ko": [
+   "샴푸와 컨디셔너 외에도 겨울에는 머릿결이 매우 건조해지기 때문에 샤워 후 헤어 오일을 씁니다. 6주쯤마다 한 세트를 사고 온라인 대규모 세일 때 쟁여 둡니다.",
+   "주로 온라인입니다. 평소 쓰는 샴푸를 매달 보내 주는 뷰티 앱을 구독해서 떨어질 일이 없습니다. 새로운 걸 써 볼 때는 뷰티 매장에서 향을 먼저 맡아 봅니다.",
+   "저에게는 가격이 가장 중요합니다. 비싼 미용실 브랜드도 써 봤지만 어차피 샴푸는 1분 만에 씻겨 나가서 머릿결에 큰 차이를 못 느꼈습니다. 온 가족이 같은 병을 써서 한 달에 큰 병 두 개쯤 쓰기 때문에, 저렴한 브랜드는 1년이면 꽤 아낄 수 있습니다. 향이 좋고 잘 씻기면 만족합니다."
+  ],
+  "tips": [
+   "샴푸·헤어 어휘: scalp 두피, sensitive 예민한, ingredients 성분, run out 다 떨어지다, stock up 쟁여 두다",
+   "buy one, get one free = 1+1"
+  ]
+ }
 ]

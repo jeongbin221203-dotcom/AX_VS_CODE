@@ -25,14 +25,15 @@ def _last_seen() -> dict[str, str]:
 
 
 def _create(mode: str, refs: list[str], *, variant: str | None = None, part: int | None = None,
-            level: int | None = None, time_limit: int | None = None, seen_before: int | None = None) -> int:
+            level: int | None = None, time_limit: int | None = None, seen_before: int | None = None,
+            requested: int | None = None) -> int:
     if not refs:
         raise StudyError("조건에 맞는 문제가 없습니다. 등급이나 유형 조건을 바꿔 보세요.")
     with db.connect() as con:
         cur = con.execute(
-            "INSERT INTO sessions(created_at, mode, variant, part, level, items, time_limit, seen_before) "
-            "VALUES (?,?,?,?,?,?,?,?)",
-            (db.now(), mode, variant, part, level, json.dumps(refs), time_limit, seen_before))
+            "INSERT INTO sessions(created_at, mode, variant, part, level, items, time_limit, seen_before, requested) "
+            "VALUES (?,?,?,?,?,?,?,?,?)",
+            (db.now(), mode, variant, part, level, json.dumps(refs), time_limit, seen_before, requested))
         return int(cur.lastrowid)
 
 
@@ -42,7 +43,7 @@ def start_practice(bank: Bank, part: int, level: int | None, qtype: str | None, 
         raise StudyError("알 수 없는 파트입니다.")
     n = max(1, min(n, 100))
     refs = bank.pick(part, n, [level] if level else None, qtype or None, rng=rng, last_seen=_last_seen())
-    return _create("practice", refs, variant=qtype or None, part=part, level=level)
+    return _create("practice", refs, variant=qtype or None, part=part, level=level, requested=n)
 
 
 def _pick_mixed(bank: Bank, part: int, n: int, rng: random.Random, used: set[str],
@@ -191,7 +192,8 @@ def _record(con, sid: int, q, chosen: int, elapsed_ms: int | None, ts: str) -> b
                         "first_wrong_at, last_wrong_at, last_seen_at) VALUES (?,?,?,?,?,?,1,?,?,?)",
                         (q.qkey, q.part, q.item_id, q.qidx, q.level, q.qtype, ts, ts, ts))
     elif note:
-        streak = note["right_streak"] + 1
+        same_day = bool(note["last_seen_at"]) and note["last_seen_at"][:10] == ts[:10] and note["right_streak"] > 0
+        streak = note["right_streak"] if same_day else note["right_streak"] + 1      # 정답 위치를 외워 같은 날 졸업하지 못하게 — 다른 날에 맞혀야 센다
         status = "cleared" if streak >= WRONG_CLEAR_STREAK else note["status"]
         con.execute("UPDATE wrong_notes SET right_streak = ?, status = ?, last_seen_at = ? WHERE qkey = ?",
                     (streak, status, ts, q.qkey))

@@ -10,9 +10,9 @@ MENUS = {
     "toeic": [
         ("홈", "main.dashboard", {}, ["main.dashboard"]),
         ("등급 가이드", "main.guide", {}, ["main.guide"]),
-        ("파트 연습", "quiz.practice", {}, ["quiz.practice", "quiz.practice_start", "quiz.quiz"]),
-        ("모의고사", "quiz.mock", {}, ["quiz.mock", "quiz.diagnostic", "quiz.result"]),
-        ("오답노트", "quiz.review", {}, ["quiz.review"]),
+        ("파트 연습", "quiz.practice", {}, ["quiz.practice", "quiz.practice_start", "quiz.quiz:practice"]),
+        ("모의고사", "quiz.mock", {}, ["quiz.mock", "quiz.diagnostic", "quiz.quiz:mock", "quiz.quiz:diagnostic", "quiz.result"]),
+        ("오답노트", "quiz.review", {}, ["quiz.review", "quiz.quiz:review"]),
         ("단어", "vocab.overview", {}, ["vocab."]),
         ("받아쓰기", "quiz.dictation", {}, ["quiz.dictation"]),
         ("통계", "main.stats_page", {}, ["main.stats_page", "main.history"]),
@@ -52,7 +52,17 @@ def _mock_exam() -> str:
     return m["exam"] if m else ""
 
 
+def _session_mode() -> str:
+    from core import study
+    s = study.get_session((request.view_args or {}).get("sid", 0))
+    return s["mode"] if s else ""
+
+
 def _matches(pattern: str, ep: str) -> bool:
+    if pattern == "quiz.quiz:" + (_session_mode() if ep == "quiz.quiz" else "-"):     # 풀이 화면 → 세션 종류(연습·모의고사·복습)
+        return True
+    if pattern.startswith("quiz.quiz:"):
+        return False
     if pattern.startswith("speaking.mock_") and ":" in pattern:      # 모의고사 화면 → 어느 시험 것인지
         name, exam = pattern.split(":", 1)
         return ep == name and _mock_exam() == exam

@@ -12,7 +12,7 @@
     "q": "Why is the speaker calling?",
     "choices": [
      "To cancel a checkup",
-     "To ask for a payment",
+     "To ask for payment of an outstanding bill",
      "To introduce a new dentist",
      "To confirm a scheduled visit"
     ],
@@ -62,7 +62,7 @@
      "At a bank",
      "At a farm",
      "At a grocery store",
-     "At a restaurant"
+     "At a restaurant on Main Street"
     ],
     "answer": 2,
     "type": "화자 정보(직업·장소)",
@@ -167,7 +167,7 @@
    {
     "q": "What is offered this month?",
     "choices": [
-     "Free installation",
+     "Free installation of all furniture",
      "A gift card",
      "Longer business hours",
      "Discounts on certain items"
@@ -180,7 +180,7 @@
     "q": "How can customers get free delivery?",
     "choices": [
      "By shopping on weekdays",
-     "By ordering online",
+     "By ordering online before the end of the month",
      "By living near the library",
      "By spending a certain amount"
     ],
@@ -217,7 +217,7 @@
     "choices": [
      "Leaving before six",
      "Crossing Harbor Bridge",
-     "Taking a train",
+     "Taking a train from the downtown station",
      "Taking a different road"
     ],
     "answer": 3,
@@ -251,7 +251,7 @@
    {
     "q": "Who most likely is the speaker?",
     "choices": [
-     "An office manager",
+     "An office manager at Ms. Thompson's company",
      "An employee of a window company",
      "A real estate agent",
      "A building inspector"
@@ -275,7 +275,7 @@
    {
     "q": "What does the speaker ask the listener to do?",
     "choices": [
-     "Send some measurements",
+     "Send some measurements again by e-mail",
      "Cancel an order",
      "Visit his office",
      "Confirm a start date by phone"
@@ -382,7 +382,7 @@
     "q": "Where are the listeners?",
     "choices": [
      "At a beverage factory",
-     "On a farm",
+     "On a farm that grows fruit",
      "At a supermarket",
      "At a restaurant"
     ],
@@ -393,7 +393,7 @@
    {
     "q": "What are listeners told not to do?",
     "choices": [
-     "Touch the fruit",
+     "Touch the fruit coming from the farms",
      "Take pictures in a certain area",
      "Drink the juice",
      "Talk to the workers"
@@ -408,7 +408,7 @@
      "Wash some fruit",
      "Buy some bottles",
      "Sample some products",
-     "Meet local farmers"
+     "Meet local farmers who supply fruit"
     ],
     "answer": 2,
     "type": "다음 할 일",
@@ -432,7 +432,7 @@
      "To celebrate a design award",
      "To welcome new engineers",
      "To honor an employee who is leaving",
-     "To open a new bridge"
+     "To open the new Riverside Bridge to traffic"
     ],
     "answer": 2,
     "type": "주제·목적",
@@ -603,7 +603,7 @@
     "q": "What does Northfield Electronics produce?",
     "choices": [
      "Components for vehicles",
-     "Home appliances",
+     "Home appliances for kitchens",
      "Highway signs",
      "Solar panels"
     ],
@@ -628,7 +628,7 @@
     "choices": [
      "The plant will open.",
      "The mayor will visit the site.",
-     "A new road will be completed.",
+     "A new access road will be completed and opened.",
      "A community meeting will take place."
     ],
     "answer": 3,
@@ -662,7 +662,7 @@
    {
     "q": "Why does the speaker say, \"I know, that's a lot of recipes to lose\"?",
     "choices": [
-     "To complain about the marketing team",
+     "To complain about the marketing team's decision to limit the page count",
      "To show that she understands the listener's likely reaction",
      "To praise a new chapter",
      "To suggest adding more pages"
@@ -819,7 +819,7 @@
     "q": "What is the announcement mainly about?",
     "choices": [
      "A change to a communication system",
-     "A change in office hours",
+     "A change in office hours over the weekend",
      "A new mobile phone policy",
      "An upcoming client visit"
     ],
@@ -830,7 +830,7 @@
    {
     "q": "What are listeners advised to do?",
     "choices": [
-     "Work over the weekend",
+     "Work from home over the weekend to finish reports",
      "Tell clients to contact them by phone",
      "Change their passwords on Friday",
      "Turn off their computers"
@@ -879,7 +879,7 @@
     "q": "Why does the speaker say, \"Now, I've negotiated a lot of these deals over the years\"?",
     "choices": [
      "To show that her opinion is based on experience",
-     "To indicate that she will retire soon",
+     "To indicate that she will retire soon after the deal",
      "To explain why the talks took so long",
      "To suggest that someone else lead the talks"
     ],
@@ -893,7 +893,7 @@
      "Draft a written contract",
      "Inspect a warehouse in Brazil",
      "Informally find out how a company might respond",
-     "Present sales targets to the board"
+     "Present sales targets for Brazil to the board next week"
     ],
     "answer": 2,
     "type": "요청·제안",
@@ -914,7 +914,7 @@
    {
     "q": "What caused coffee prices to rise?",
     "choices": [
-     "Transportation costs increased.",
+     "Transportation costs increased across the region.",
      "Demand grew in new markets.",
      "Weather conditions reduced production.",
      "Large chains bought more beans."
@@ -927,7 +927,7 @@
     "q": "According to the speaker, why will independent cafés be especially affected?",
     "choices": [
      "They have less buying power than big companies.",
-     "They use more expensive beans.",
+     "They use more expensive beans than large chains.",
      "They sell more tea than coffee.",
      "They are located in growing regions."
     ],
@@ -938,7 +938,7 @@
    {
     "q": "What will listeners hear after the break?",
     "choices": [
-     "A report on tea prices",
+     "A report on tea prices in Asian markets",
      "An advertisement for a café",
      "The weather forecast",
      "A conversation with a grower"
@@ -1015,7 +1015,7 @@
    {
     "q": "What does the speaker say about the catering order?",
     "choices": [
-     "It has already been changed.",
+     "It has already been changed to a larger order.",
      "Final numbers must be provided in advance.",
      "It will cost less than before.",
      "It must be canceled."
@@ -1039,7 +1039,7 @@
    {
     "q": "What problem does the speaker mention?",
     "choices": [
-     "Employees miss too many meetings.",
+     "Employees miss too many team meetings every week.",
      "Work information is spread across many places.",
      "Computers are running slowly.",
      "Office monitors are too small."
@@ -1052,7 +1052,7 @@
     "q": "Why does the speaker say, \"Over four thousand companies made the switch last year alone\"?",
     "choices": [
      "To announce a price increase",
-     "To explain why setup takes time",
+     "To explain why setup takes about fifteen minutes",
      "To thank long-time customers",
      "To reassure listeners who may have doubts"
     ],

@@ -55,7 +55,7 @@
     "q": "What does the woman ask the man for?",
     "choices": [
      "His driver's license",
-     "His phone number",
+     "His phone number and home address",
      "His car keys",
      "His credit card"
     ],
@@ -967,7 +967,7 @@
    {
     "q": "Who most likely is Carlos?",
     "choices": [
-     "A piano teacher",
+     "A piano teacher from the neighborhood",
      "A furniture seller",
      "The head of a moving team",
      "A building manager"
@@ -992,7 +992,7 @@
     "q": "What will happen on Friday?",
     "choices": [
      "The woman will move.",
-     "A payment will be made.",
+     "A payment will be made to the moving company.",
      "A piano will be tuned.",
      "Some boxes will be delivered."
     ],
@@ -1042,7 +1042,7 @@
    {
     "q": "What is the problem with the man's bike?",
     "choices": [
-     "A tire is flat.",
+     "A tire has a hole that must be patched.",
      "The seat is too low.",
      "The chain is broken.",
      "Some parts need to be replaced."
@@ -1068,7 +1068,7 @@
     "choices": [
      "A receipt",
      "His contact information",
-     "His home address",
+     "His home address for delivery",
      "A deposit"
     ],
     "answer": 1,
@@ -1197,7 +1197,7 @@
     "q": "What problem does the woman report?",
     "choices": [
      "A heating unit is broken.",
-     "Her rent has increased.",
+     "Her rent has increased since last month.",
      "A window will not close.",
      "A pipe is leaking."
     ],
@@ -1208,7 +1208,7 @@
    {
     "q": "Why does the woman say, \"It's going to be really cold\"?",
     "choices": [
-     "She is explaining why she canceled a trip.",
+     "She is explaining why she canceled a trip this weekend.",
      "She is asking to borrow warm clothes.",
      "She wants to move to another apartment.",
      "She thinks waiting for the repair would be difficult."
@@ -1286,7 +1286,7 @@
     "choices": [
      "A special cable must be found.",
      "The booth must be moved.",
-     "An electrician is busy.",
+     "An electrician is busy with another booth.",
      "The office is closed."
     ],
     "answer": 0,
@@ -1400,7 +1400,7 @@
     "q": "Why does the man want Priya to attend the interview?",
     "choices": [
      "She will work with the new employee.",
-     "She is the head of the department.",
+     "She is the head of the design department.",
      "She designed the skills test.",
      "She knows the candidate personally."
     ],
@@ -1470,7 +1470,7 @@
    {
     "q": "Why does the woman say, \"I promised my kids I'd take them camping this weekend\"?",
     "choices": [
-     "To ask for time off",
+     "To ask for time off from her supervisor",
      "To explain why she is tired",
      "To recommend a campsite",
      "To decline the man's request"
@@ -1564,7 +1564,7 @@
      "A product launch",
      "A company celebration",
      "A cooking class",
-     "A wedding reception"
+     "A wedding reception for a coworker"
     ],
     "answer": 1,
     "type": "주제·목적",
@@ -1654,7 +1654,7 @@
     "choices": [
      "Speaking too quickly",
      "Going over the time limit",
-     "Drinking near the equipment",
+     "Drinking water near the equipment",
      "Making noise with his papers"
     ],
     "answer": 3,
@@ -1740,7 +1740,7 @@
    {
     "q": "Why does the man speak with Mr. Hughes?",
     "choices": [
-     "The woman asked to see a manager.",
+     "The woman asked to see a manager about her complaint.",
      "He is unsure whether a refund is allowed.",
      "He needs a new ticket printer.",
      "He wants to take a break."
@@ -1822,7 +1822,7 @@
      "To indicate that the delay could cause problems",
      "To invite the man to a sales event",
      "To suggest a new launch date",
-     "To explain why she ordered extra boxes"
+     "To explain why she ordered extra boxes for the gift sets"
     ],
     "answer": 0,
     "type": "의도 파악",
@@ -1831,7 +1831,7 @@
    {
     "q": "What does the man offer?",
     "choices": [
-     "A refund for the entire order",
+     "A refund for the entire order and a free replacement",
      "Boxes from a different factory",
      "A discount on the next order",
      "Free faster shipping for part of an order"
@@ -2196,7 +2196,7 @@
    {
     "q": "What is the man trying to do?",
     "choices": [
-     "Organize a fundraiser",
+     "Organize a fundraiser for the library",
      "Register a group for an event",
      "Recruit new employees",
      "Book a meeting room"
@@ -2551,7 +2551,7 @@
    {
     "q": "What change did the company recently make?",
     "choices": [
-     "It raised the prices of its products.",
+     "It raised the prices of many of its products.",
      "It opened several new stores.",
      "It replaced a points system with coupons.",
      "It hired more store managers."
@@ -2577,7 +2577,7 @@
     "choices": [
      "Train store employees",
      "Design a new coupon",
-     "Present data to the board",
+     "Present the survey data to the board on the tenth",
      "Project the effect of a proposed rule"
     ],
     "answer": 3,
@@ -2638,7 +2638,7 @@
      "A restaurant customer",
      "A refrigerator technician",
      "An inspector from a head office",
-     "A new kitchen supervisor"
+     "A new kitchen supervisor hired last week"
     ],
     "answer": 2,
     "type": "화자 정보(직업·장소)",
@@ -2730,7 +2730,7 @@
    {
     "q": "Why does the woman say, \"the terrace was what the city's planning committee liked most about the proposal\"?",
     "choices": [
-     "To take credit for the design",
+     "To take credit for the design of the rooftop terrace",
      "To suggest that removing a feature could be risky",
      "To complain about the committee's decision",
      "To propose adding more green space"
@@ -2996,7 +2996,7 @@
    {
     "q": "What does the woman want to do?",
     "choices": [
-     "Rent office space for her company",
+     "Rent office space for her production company",
      "Use a building as a filming location",
      "Hire some building contractors",
      "Renovate a lobby"
@@ -3008,7 +3008,7 @@
    {
     "q": "Why does the woman say, \"Our director is set on this location\"?",
     "choices": [
-     "To request a meeting with the property owners",
+     "To request another meeting with the property owners and the tenants",
      "To complain about the director's choice",
      "To suggest that the director visit the site",
      "To explain why she does not want to give up on the building"
@@ -3023,7 +3023,7 @@
      "Sign a location agreement",
      "Meet with the contractors",
      "Check labor rules for longer workdays",
-     "Visit the building on a Sunday"
+     "Visit the building on a Sunday to take measurements"
     ],
     "answer": 2,
     "type": "다음 할 일",

@@ -103,7 +103,7 @@ def build(bank: Bank, settings: dict, today: date | None = None) -> dict:
                       "done": today_done["reviewed"] >= min(10, open_notes), "href": "/review/start?n=10"})
     last = stats.latest_estimate()
     if not last:
-        tasks.insert(0, {"kind": "diagnostic", "title": "진단 테스트", "detail": "약 15분 · 현재 등급을 먼저 확인",
+        tasks.insert(0, {"kind": "diagnostic", "title": "진단 테스트", "detail": "약 20분 · 현재 등급을 먼저 확인",
                          "done": False, "href": "/diagnostic"})
     else:
         last_day = datetime.fromisoformat(last["finished_at"]).date()

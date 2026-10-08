@@ -29,7 +29,7 @@
      "She likes the hotel's location.",
      "She wants to join Mr. Porter.",
      "She agrees with Mr. Porter's new plan.",
-     "She enjoyed the meeting."
+     "She enjoyed the meeting with the hotel manager earlier"
     ],
     "answer": 2,
     "type": "의도 파악",
@@ -167,7 +167,7 @@
    {
     "q": "What will Mr. Cho do in the afternoon on March 9?",
     "choices": [
-     "Receive a laptop",
+     "Receive a new laptop and a security badge",
      "Meet a client",
      "Have lunch with coworkers",
      "Visit the front desk"
@@ -270,7 +270,7 @@
     "q": "What is indicated about the parking garage?",
     "choices": [
      "It closes at midnight.",
-     "It accepts only cash.",
+     "It accepts only cash payments from all visitors",
      "It offers free parking to some shoppers.",
      "It is located inside a hotel."
     ],
@@ -466,7 +466,7 @@
    {
     "q": "Where is FixIt Laptop Repair located?",
     "choices": [
-     "Inside Central Station",
+     "Inside the main hall of Central Station",
      "On Station Road",
      "Near a university",
      "Next to a train station"
@@ -551,7 +551,7 @@
    {
     "q": "What is true about all the tours?",
     "choices": [
-     "They last three hours.",
+     "They all last about three hours each",
      "They start at the same place.",
      "They visit the Art Museum.",
      "They cost $25."
@@ -578,7 +578,7 @@
      "The Morning Tour",
      "The Afternoon Tour",
      "The Night Tour",
-     "A private tour"
+     "A private tour arranged for his group"
     ],
     "answer": 1,
     "type": "연계 문제",
@@ -690,7 +690,7 @@
     "q": "What is indicated about the winning bread?",
     "choices": [
      "It was created by Ms. Hoffman's grandmother.",
-     "It is made without honey.",
+     "It is made with white flour and no honey at all",
      "It is sold only on weekends.",
      "It has won prizes before."
     ],
@@ -803,7 +803,7 @@
    {
     "q": "Why does Mr. Okoye want to sit near the front?",
     "choices": [
-     "He needs extra legroom.",
+     "He needs extra legroom for his long legs.",
      "He would like a better view.",
      "He is traveling with a colleague.",
      "He wants to leave the plane quickly."
@@ -986,7 +986,7 @@
     "q": "What does Mr. Benson offer Ms. Novak?",
     "choices": [
      "A portable heater to use for now",
-     "A discount on her rent",
+     "A discount on her rent for this month",
      "A new apartment",
      "A visit on Saturday"
     ],
@@ -1212,7 +1212,7 @@
     "q": "Why did Ms. Tanaka receive a bag?",
     "choices": [
      "She joined online before the deadline.",
-     "She bought it at the museum shop.",
+     "She bought it at the museum shop on opening day",
      "She attended an opening night.",
      "She chose the Patron level."
     ],
@@ -1274,7 +1274,7 @@
    {
     "q": "According to Mr. Carver, why did the company make the change?",
     "choices": [
-     "The showroom rent increased.",
+     "The showroom rent increased and the company needed another source of income",
      "Customers who had moved still wanted to buy its products.",
      "A competitor started selling online.",
      "Its oak supplier closed."
@@ -1327,7 +1327,7 @@
     "choices": [
      "A beach location is unavailable.",
      "A photographer can no longer do a job.",
-     "Some models canceled their contracts.",
+     "Some models canceled their contracts at the last minute",
      "A catalog was printed with errors."
     ],
     "answer": 1,
@@ -1490,7 +1490,7 @@
    {
     "q": "Why is Mr. Reed at Corbin Hardware?",
     "choices": [
-     "To buy some garden tools",
+     "To buy some garden tools for the weekend",
      "To give a sales presentation",
      "To repair a tablet",
      "To pick up some brochures"
@@ -1621,7 +1621,7 @@
    {
     "q": "Why did Ms. Molina write the e-mail?",
     "choices": [
-     "To request a student rate",
+     "To request a student rate for her team",
      "To become an association member",
      "To cancel a registration",
      "To ask which discount is cheaper"
@@ -1774,7 +1774,7 @@
    {
     "q": "Why is Ms. Ortiz most likely a strong candidate?",
     "choices": [
-     "She has worked at Lumen Payroll before.",
+     "She has worked at Lumen Payroll before as a team supervisor and trainer",
      "She has managed a team of specialists.",
      "She lives near the Denver office.",
      "She has a preferred skill as well as the required experience."
@@ -1799,7 +1799,7 @@
     "q": "What is suggested about Ms. Ortiz's interview?",
     "choices": [
      "It was arranged after her training course.",
-     "It will be conducted by Mr. Cruz.",
+     "It will be conducted by Mr. Cruz in the Denver office",
      "It will take place in Room 4A.",
      "It was canceled."
     ],
@@ -1859,7 +1859,7 @@
    {
     "q": "Why most likely did Ms. Bianchi's package arrive on December 15?",
     "choices": [
-     "It was sent to the wrong address.",
+     "It was sent to the wrong address and then redirected",
      "She placed the order after the daily cutoff time.",
      "The warehouse was closed for a holiday.",
      "She chose the standard shipping option."
@@ -1934,7 +1934,7 @@
    {
     "q": "According to the article, what was a problem with the previous format?",
     "choices": [
-     "Customers found the menus too limited.",
+     "Customers found the menus too limited for their taste",
      "Restaurants had to stay open later.",
      "One price did not suit all types of restaurants.",
      "The event was held during a busy season."
@@ -1986,7 +1986,7 @@
     "q": "What are the writers mainly discussing?",
     "choices": [
      "The schedule for moving to a new e-mail system",
-     "The results of a quarterly financial report",
+     "The results of the quarterly financial report review",
      "A complaint about slow Internet service",
      "Training for new accounting staff"
     ],
@@ -2010,7 +2010,7 @@
     "q": "At 4:09 P.M., what does Mr. Pike mean when he writes, “That would be a relief”?",
     "choices": [
      "He approves of delaying his team's migration.",
-     "He wants the test group to be expanded.",
+     "He wants the test group to be expanded to more staff",
      "He is glad the project is finished.",
      "He would like to take a week off."
     ],
@@ -2049,7 +2049,7 @@
     "q": "Who is eligible for the allowance?",
     "choices": [
      "All new employees",
-     "Employees who work from home every day",
+     "Employees who work from home every single day of the week",
      "Managers in the IT department",
      "Employees who work remotely two or more days a week"
     ],
@@ -2135,7 +2135,7 @@
    {
     "q": "What is Ms. Ingram invited to do?",
     "choices": [
-     "Switch to a digital subscription",
+     "Switch to a digital subscription at a reduced price",
      "Write a review of the online archive",
      "Attend an event for long-time subscribers",
      "Renew at the current price before the change"
@@ -2200,7 +2200,7 @@
     "choices": [
      "It cannot be connected in time.",
      "It does not display any text.",
-     "It is being used in another ballroom.",
+     "It is being used in another ballroom at the same time",
      "Charts on it would be hard to see from the back."
     ],
     "answer": 3,
@@ -2279,7 +2279,7 @@
     "q": "What is suggested about Ms. Moreau's request to meet Mr. Vidal?",
     "choices": [
      "It falls within the period when he is available for interviews.",
-     "It conflicts with his trip to Asia.",
+     "It conflicts with a business trip he plans to take to Asia in April",
      "It must take place in Lisbon.",
      "It was already rejected."
     ],
@@ -2347,7 +2347,7 @@
     "q": "Why does Mr. Lindqvist want to sign the agreement?",
     "choices": [
      "To receive faster delivery",
-     "To get a discount on mussels",
+     "To get a discount on mussels and other shellfish ordered every week",
      "To try new menu items",
      "To keep paying current prices on items whose prices are rising"
     ],
@@ -2373,7 +2373,7 @@
      "The restaurant is closed on Saturdays.",
      "Orders placed at 5 P.M. will no longer arrive the next day.",
      "Coastline does not deliver on Fridays.",
-     "The chef works only on weekends."
+     "The chef works only on weekends and cannot receive deliveries on weekdays"
     ],
     "answer": 1,
     "type": "연계 문제",
@@ -2451,7 +2451,7 @@
     "q": "What is suggested about the canceled guest?",
     "choices": [
      "The cancellation will not lower the total amount owed.",
-     "Norwick Biotech will receive a refund for that guest.",
+     "Norwick Biotech will receive a refund for that guest's meal",
      "The guest will be replaced by someone from Singapore.",
      "The guest required a vegetarian meal."
     ],
@@ -2501,7 +2501,7 @@
     "choices": [
      "He wanted to be in the section for sustainable materials.",
      "The start-up section was full.",
-     "He needed space for heavy machinery.",
+     "He needed space for heavy machinery and large equipment on display",
      "He wanted to be near the main entrance."
     ],
     "answer": 0,
@@ -2536,7 +2536,7 @@
     "q": "Where will Mr. Mensah go after picking up the badges?",
     "choices": [
      "To the food court",
-     "To the main entrance",
+     "To the main entrance of the exhibition hall to meet Ms. Ruiz",
      "To the area near the labels and printing booths",
      "To Hall A"
     ],
@@ -2647,7 +2647,7 @@
    {
     "q": "What is the article mainly about?",
     "choices": [
-     "Why companies are moving to cheaper cities",
+     "Why companies are moving to cheaper cities outside the capital",
      "How companies are changing the way they use office space",
      "A decline in demand for meeting rooms",
      "The rising cost of commercial construction"
@@ -2671,7 +2671,7 @@
    {
     "q": "According to the article, what complaint did some employees make?",
     "choices": [
-     "Video-call booths were too noisy.",
+     "Video-call booths were too noisy for private conversations",
      "Kitchens were too small.",
      "It was difficult to locate coworkers.",
      "Their commute had become longer."
@@ -2723,7 +2723,7 @@
     "q": "At 9:16 A.M., what does Mr. Haddad imply when he writes, “Last year they settled for four after we pushed back”?",
     "choices": [
      "The supplier may accept a smaller increase if challenged.",
-     "The company should accept the 9 percent increase.",
+     "The company should accept the 9 percent increase without further talks",
      "The supplier has never raised prices before.",
      "He was not involved in last year's negotiation."
     ],
@@ -2746,7 +2746,7 @@
    {
     "q": "What will Ms. Delacroix most likely do?",
     "choices": [
-     "Sign a contract with Brenner Chemical",
+     "Sign an 18-month contract with Brenner Chemical this week",
      "Arrange transfers to the Leeds warehouse",
      "Negotiate with Talvik Polymers using a competing offer",
      "Ask Glasgow to reduce its orders"
@@ -2850,7 +2850,7 @@
     "choices": [
      "It was recently sold.",
      "Its inventory was counted by another company.",
-     "It will be visited on February 3.",
+     "It will be visited on February 3 by the audit team",
      "It is leased to a retailer."
     ],
     "answer": 1,
@@ -2899,7 +2899,7 @@
    {
     "q": "What is the purpose of the Web page?",
     "choices": [
-     "To advertise job openings at Vantrell Group",
+     "To advertise job openings at Vantrell Group's Eindhoven office",
      "To explain how companies can start supplying Vantrell Group",
      "To announce changes to Vantrell's Code of Conduct",
      "To list Vantrell's approved auditors"
@@ -2967,7 +2967,7 @@
    {
     "q": "Why must Ms. Solberg get approval from Mr. Mwangi?",
     "choices": [
-     "She wants to fly business class.",
+     "She wants to fly business class instead of economy class on this trip",
      "She is booking her flight less than two weeks before departure.",
      "She is extending her trip for personal reasons.",
      "She wants to use a different travel portal."
@@ -3072,7 +3072,7 @@
     "q": "Why is Brightcap Builders most likely not selected?",
     "choices": [
      "It would require closing loading docks during the day.",
-     "It cannot finish before October.",
+     "It cannot finish before October because of the summer schedule",
      "It exceeds the approved budget.",
      "It offers no warranty."
     ],
@@ -3127,7 +3127,7 @@
    {
     "q": "What does Loopcrate provide?",
     "choices": [
-     "Recycled cardboard packaging",
+     "Recycled cardboard packaging for online retailers",
      "Software for tracking packages",
      "Delivery services for pharmacies",
      "Reusable containers for shipping goods"
@@ -3175,7 +3175,7 @@
    {
     "q": "What can be inferred about the Medira pharmacy chain?",
     "choices": [
-     "It has invested $8 million in Loopcrate.",
+     "It has invested $8 million in Loopcrate to fund its expansion into three new cities",
      "It operates in some of the cities where Loopcrate plans to expand.",
      "It is Loopcrate's largest retail customer.",
      "It sells clothing online."
@@ -3236,7 +3236,7 @@
    {
     "q": "Why is the Networking Reception package likely a good fit for Ledgerline?",
     "choices": [
-     "It includes the largest exhibition space.",
+     "It includes the largest exhibition space for displaying products to visitors and partners",
      "It offers a speaking opportunity and an informal setting for meeting partners.",
      "It is the least expensive package.",
      "It includes ten full passes."
@@ -3335,7 +3335,7 @@
     "choices": [
      "She wants to add a third unit.",
      "She will decide after the winter.",
-     "She wants one unit for each floor.",
+     "She wants one unit for each floor of the warehouse building",
      "She thinks one unit may be enough for the area."
     ],
     "answer": 3,

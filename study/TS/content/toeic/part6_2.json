@@ -91,14 +91,14 @@
    {
     "q": "",
     "choices": [
-     "Our store will be closed on weekends.",
+     "Our store also offers free delivery for orders over $50 within five kilometers of Pine Road.",
      "In fact, many of our customers say our vegetables taste better than any others in town.",
-     "We are hiring truck drivers for our new warehouse.",
-     "Please return your library books on time."
+     "All of our fruits and vegetables come from farms within 50 kilometers of the store.",
+     "Several of our cashiers have worked at the market since it first opened ten years ago."
     ],
     "answer": 1,
     "type": "문장 삽입",
-    "explanation": "앞 문장이 '품질이 높다'는 내용이므로 '실제로 고객들이 우리 채소가 가장 맛있다고 말한다'는 근거가 이어지는 것이 자연스럽다. 주말 휴무는 '매일 영업'과 모순되고, 트럭 기사 채용과 도서 반납은 광고 흐름과 관계가 없다."
+    "explanation": "앞 문장이 '가격은 낮아도 품질은 높다'는 내용이므로 '실제로 고객들이 우리 채소가 가장 맛있다고 말한다'는 근거가 이어지는 것이 자연스럽다. 첫 번째 보기는 새로운 배달 서비스 소개라 품질 이야기와 이어지지 않고, 세 번째는 첫 문단에서 이미 말한 산지 정보의 반복이며, 네 번째는 직원 근속 이야기라 품질의 근거가 되지 못한다."
    },
    {
     "q": "",
@@ -164,11 +164,11 @@
      "It",
      "He",
      "They",
-     "Its"
+     "Themselves"
     ],
     "answer": 2,
     "type": "대명사",
-    "explanation": "빈칸은 앞 문장의 our customer service agents(고객 서비스 상담원들)를 가리키는 주어 자리이다. 복수 명사를 받는 주격 대명사 They가 정답이다. It, He는 단수이고, Its는 소유격이라 주어 자리에 올 수 없다."
+    "explanation": "빈칸은 앞 문장의 our customer service agents(고객 서비스 상담원들)를 가리키는 주어 자리이다. 복수 명사를 받는 주격 대명사 They가 정답이다. It, He는 단수이고, Themselves는 재귀대명사라 주어 자리에 올 수 없다."
    }
   ],
   "translation": "김 선생님께,\n\n<홈 쿠킹 먼슬리>를 읽어 주셔서 감사합니다. 선생님의 1년 구독이 10월 31일에 끝납니다. 계속 잡지를 받으시려면 그 전에 구독을 갱신해 주십시오.\n\n지금 갱신하시면 1년 더 구독하는 데 24달러만 내시면 됩니다. 정가보다 20퍼센트 저렴합니다. 이 특별 가격은 기존 구독자에게만 제공됩니다. 또한 특별 명절 요리책도 무료로 받으시게 됩니다.\n\n갱신은 간단합니다. 아래 버튼을 누르고 결제 정보를 입력하시기만 하면 됩니다. 궁금한 점이 있으시면 555-0182번으로 고객 서비스 상담원에게 전화해 주십시오. 상담원들은 월요일부터 금요일까지 오전 9시부터 오후 5시까지 응대합니다.\n\n앞으로도 저희 요리법을 즐겨 주시기 바랍니다!\n\n캐런 브룩스\n고객 서비스 매니저"
@@ -185,24 +185,24 @@
     "choices": [
      "because",
      "because of",
-     "due",
+     "in spite of",
      "since"
     ],
     "answer": 1,
     "type": "전치사",
-    "explanation": "빈칸 뒤에 명사구 road construction만 있으므로 전치사가 필요하다. because of(~ 때문에)가 정답이다. because와 since는 접속사로 뒤에 주어와 동사가 있는 절이 와야 하고, due는 to 없이 쓸 수 없다."
+    "explanation": "빈칸 뒤에 명사구 road construction만 있으므로 전치사가 필요하다. because of(~ 때문에)가 정답이다. because와 since는 접속사로 뒤에 주어와 동사가 있는 절이 와야 하고, in spite of(~에도 불구하고)는 전치사이지만 뜻이 맞지 않는다."
    },
    {
     "q": "",
     "choices": [
-     "The hospital is looking for new nurses.",
-     "The fare will increase to $5 next month.",
-     "The Elm Street stop will remain open during the construction.",
+     "These stops were added last year to help passengers reach the hospital.",
+     "Route 12 will be extended to the airport once the construction work on Elm Street is finished.",
+     "Buses on Bay Road will stop only at these two stops between 7 A.M. and 9 A.M.",
      "These stops will make it easier for patients and students to reach their destinations."
     ],
     "answer": 3,
     "type": "문장 삽입",
-    "explanation": "앞 문장에서 병원과 고등학교에 새 정류장이 생긴다고 했으므로 '환자와 학생이 목적지에 가기 쉬워진다'는 문장이 이어진다. 요금은 '여전히 2달러'라고 했고, 엘름 스트리트에는 더 이상 서지 않는다고 했으므로 두 문장은 모순이며, 간호사 채용은 관계없다."
+    "explanation": "앞 문장에서 병원과 고등학교에 새 정류장이 '추가될 것'이라고 했으므로 '이 정류장들이 환자와 학생이 목적지에 가기 쉽게 해 줄 것'이라는 문장이 자연스럽다. 첫 번째 보기는 정류장이 작년에 이미 추가되었다고 해서 시제가 맞지 않고, 두 번째는 공항 연장 이야기라 관련이 없으며, 세 번째는 운행 시간을 제한해 바로 뒤의 '다른 정류장은 변경 없음' 및 배차 간격 설명과 어긋난다."
    },
    {
     "q": "",
@@ -312,13 +312,13 @@
     "q": "",
     "choices": [
      "In addition",
-     "However",
+     "Nevertheless",
      "Instead",
      "Otherwise"
     ],
     "answer": 0,
     "type": "접속사",
-    "explanation": "밴드 공연, 음식 판매에 이어 어린이 활동을 하나 더 덧붙이고 있으므로 In addition(게다가)이 정답이다. However(하지만)는 반대, Instead(대신에)는 대체, Otherwise(그렇지 않으면)는 조건을 나타낸다."
+    "explanation": "밴드 공연, 음식 판매에 이어 어린이 활동을 하나 더 덧붙이고 있으므로 In addition(게다가)이 정답이다. Nevertheless(그럼에도 불구하고)는 반대, Instead(대신에)는 대체, Otherwise(그렇지 않으면)는 조건을 나타낸다."
    },
    {
     "q": "",
@@ -555,14 +555,14 @@
    {
     "q": "",
     "choices": [
-     "Your rent will be reduced to $1,000 next year.",
-     "In addition, we will repaint the hallways and replace the carpets in the building this fall.",
-     "We are sorry that you have decided to move out.",
-     "The apartment is currently empty."
+     "However, tenants who wish to leave before the lease ends must give 60 days' written notice.",
+     "In addition, we will repaint the hallways and replace the carpets this fall.",
+     "Our office will be closed on June 2 and will reopen on June 9.",
+     "Apartment 5A, next door, has recently been rented to a new tenant."
     ],
     "answer": 1,
     "type": "문장 삽입",
-    "explanation": "임대료 인상이 크지 않다고 설명한 뒤 '게다가 가을에 복도 도색과 카펫 교체를 한다'며 계약 연장의 장점을 덧붙이는 것이 자연스럽다. 임대료는 오르므로 1,000달러 인하는 모순이고, 세입자가 이사를 결정한 적도 없으며, 현재 살고 있으므로 빈집이라는 말도 틀리다."
+    "explanation": "임대료 인상이 크지 않고 주변 시세보다 낮다고 설명한 뒤 '게다가 가을에 복도 도색과 카펫 교체를 한다'며 계약 연장의 장점을 덧붙이는 것이 자연스럽다. 첫 번째 보기는 However로 시작하지만 앞 내용과 대조되지 않고 중도 해지 규정이라 흐름이 끊기며, 세 번째는 사무실 휴무 안내, 네 번째는 옆집 소식이라 이 편지의 내용과 관련이 없다."
    },
    {
     "q": "",
@@ -591,24 +591,24 @@
     "choices": [
      "crowded",
      "late",
-     "expensive",
+     "disappointing",
      "impressive"
     ],
     "answer": 3,
     "type": "어휘",
-    "explanation": "앞 문장에서 음식 맛이 밝고 신선하다고 칭찬하고 있으므로 옥수수 수프가 특히 '인상적이었다'는 impressive가 정답이다. crowded(붐비는)는 음식에 쓰지 않고, expensive(비싼)는 뒤의 '가격이 합리적'이라는 내용과 어긋나며, late(늦은)는 뜻이 맞지 않는다."
+    "explanation": "앞 문장에서 음식 맛이 밝고 신선하다고 칭찬하고 있으므로 옥수수 수프가 특히 '인상적이었다'는 impressive가 정답이다. crowded(붐비는)는 음식에 쓰지 않고, disappointing(실망스러운)은 앞의 칭찬과 어긋나며, late(늦은)는 뜻이 맞지 않는다."
    },
    {
     "q": "",
     "choices": [
      "As a result",
-     "For instance",
+     "For the same reason",
      "On the other hand",
      "In addition"
     ],
     "answer": 2,
     "type": "접속사",
-    "explanation": "앞에서는 수프를 칭찬하고 뒤에서는 닭고기가 퍽퍽했다는 단점을 말하므로 대조를 나타내는 On the other hand(반면에)가 정답이다. As a result(그 결과), For instance(예를 들어), In addition(게다가)은 대조 관계를 나타내지 않는다."
+    "explanation": "앞에서는 수프를 칭찬하고 뒤에서는 닭고기가 퍽퍽했다는 단점을 말하므로 대조를 나타내는 On the other hand(반면에)가 정답이다. As a result(그 결과), For the same reason(같은 이유로), In addition(게다가)은 대조 관계를 나타내지 않는다."
    },
    {
     "q": "",
@@ -659,14 +659,14 @@
    {
     "q": "",
     "choices": [
-     "Each participant will also give a short practice presentation and receive feedback.",
-     "The workshop has been canceled due to low interest.",
-     "Dr. Blake will not be able to attend the workshop.",
-     "Registration is not necessary for this event."
+     "Dr. Blake has also written several books on leadership, communication, and teamwork.",
+     "The same workshop will be held again for new employees in the spring.",
+     "He teaches the same course at the city university every Monday evening.",
+     "Each participant will also give a short presentation and receive feedback."
     ],
-    "answer": 0,
+    "answer": 3,
     "type": "문장 삽입",
-    "explanation": "참가자들이 배울 내용을 설명하는 단락이므로 '짧은 연습 발표를 하고 피드백을 받는다'는 활동이 이어지는 것이 자연스럽다. 워크숍 취소와 강사 불참은 안내문 전체와 모순되고, 뒤에서 등록 방법을 안내하므로 등록 불필요도 틀리다."
+    "explanation": "참가자들이 배울 내용을 설명하는 단락이므로 '짧은 발표를 하고 피드백을 받는다'는 활동이 이어지는 것이 자연스럽다. 첫 번째 보기는 강사 소개로 앞 문단에서 이미 다룬 내용이고, 두 번째는 봄 재실시 이야기라 이 단락과 이어지지 않으며, 세 번째는 Dr. Nora Blake를 He로 받아 지시어가 맞지 않는다."
    },
    {
     "q": "",
@@ -717,14 +717,14 @@
    {
     "q": "",
     "choices": [
-     "The kettle has received several design awards this year.",
-     "As a result, several customers have been seriously injured.",
-     "In rare cases, this could cause the kettle to tip over while it contains hot water.",
+     "The kettle has received several design awards since it was first introduced.",
+     "As a result, the kettle's heating element must be replaced every six months of use.",
+     "In rare cases, this could cause the kettle to tip over while holding hot water.",
      "Customers who bought the kettle last year will receive a discount coupon."
     ],
     "answer": 2,
     "type": "문장 삽입",
-    "explanation": "앞 문장이 '손잡이가 헐거워질 수 있다'는 결함이므로 그 결함이 일으킬 수 있는 위험(뜨거운 물이 든 채 기울어짐)을 설명하는 문장이 이어진다. 바로 뒤에 '부상 보고는 없다'고 했으므로 '심각한 부상'은 모순이고, 디자인상과 할인 쿠폰은 리콜 흐름과 맞지 않는다."
+    "explanation": "앞 문장이 '손잡이가 헐거워질 수 있다'는 결함이므로 그 결함이 일으킬 수 있는 위험(뜨거운 물이 든 채 기울어짐)을 설명하는 문장이 이어지고, 뒤의 'Although no injuries have been reported'와도 자연스럽게 연결된다. 첫 번째 보기는 수상 경력이라 리콜 내용과 맞지 않고, 두 번째는 결함이 손잡이인데 발열체 교체라는 엉뚱한 결과를 말하며, 네 번째는 쿠폰이라 바로 다음 문단의 환불·교환 안내와 어긋난다."
    },
    {
     "q": "",
@@ -743,12 +743,12 @@
     "choices": [
      "depend",
      "respond",
-     "apologize",
+     "congratulate",
      "appreciate"
     ],
     "answer": 3,
     "type": "어휘",
-    "explanation": "사과에 이어 '양해해 주셔서 감사하다'는 뜻이 되도록 목적어 your understanding을 바로 취하는 appreciate가 정답이다. depend와 respond는 자동사라 on, to가 필요하고, apologize는 이미 앞에서 쓴 표현이며 your understanding을 목적어로 취하지 않는다."
+    "explanation": "사과에 이어 '양해해 주셔서 감사하다'는 뜻이 되도록 목적어 your understanding을 바로 취하는 appreciate가 정답이다. depend와 respond는 자동사라 on, to가 필요하고, congratulate는 '축하하다'라는 뜻이라 your understanding과 어울리지 않는다."
    }
   ],
   "translation": "브라이트홈 가전은 아쿠아퓨어 전기 주전자 AK-200 모델을 자발적으로 리콜합니다. 해당 주전자는 올해 1월에서 4월 사이에 제조되어 전국의 생활용품 매장에서 판매되었습니다.\n\n당사 품질팀은 일부 제품의 손잡이가 반복 사용 후 헐거워질 수 있다는 사실을 발견했습니다. 드문 경우 이로 인해 뜨거운 물이 담긴 상태에서 주전자가 넘어질 수 있습니다. 부상 사례는 보고되지 않았지만 고객의 안전을 위해 이 조치를 취합니다.\n\n고객께서는 즉시 주전자 사용을 중단하고 바닥에 인쇄된 모델 번호를 확인해 주십시오. 주전자가 AK-200이라면 전액 환불이나 무료 교환을 받으실 수 있습니다. 영수증 유무와 관계없이 참여 매장에 제품을 가져오시기만 하면 됩니다.\n\n참여 매장 목록은 www.brighthome.com/recall을 방문하시거나 1-800-555-0147로 전화해 확인하십시오. 이로 인해 불편을 드릴 수 있는 점 진심으로 사과드리며, 양해해 주셔서 감사합니다."
@@ -882,11 +882,11 @@
      "Instead",
      "In addition",
      "Otherwise",
-     "Even so"
+     "Nevertheless"
     ],
     "answer": 1,
     "type": "접속사",
-    "explanation": "앞에서 성장(직원 35명, 식당 60곳 납품)을 말하고, 뒤에서 지역 사회 기여(푸드뱅크 기부)를 덧붙이므로 In addition(게다가)이 정답이다. 두 내용 모두 수상 이유를 뒷받침하므로 Instead(대신에), Otherwise(그렇지 않으면), Even so(그렇기는 하지만)는 맞지 않는다."
+    "explanation": "앞에서 성장(직원 35명, 식당 60곳 납품)을 말하고, 뒤에서 지역 사회 기여(푸드뱅크 기부)를 덧붙이므로 In addition(게다가)이 정답이다. 두 내용 모두 수상 이유를 뒷받침하므로 Instead(대신에), Otherwise(그렇지 않으면), Nevertheless(그럼에도 불구하고)는 맞지 않는다."
    },
    {
     "q": "",
@@ -903,14 +903,14 @@
    {
     "q": "",
     "choices": [
-     "The bakery was forced to close last month due to falling sales.",
-     "Mr. Hanson declined to comment on the award.",
-     "The ceremony was held in Millbrook last week.",
-     "He added that he hopes to hire ten more people next year as the business continues to grow."
+     "She added that the bakery's staff will each receive a bonus from the prize money.",
+     "Mr. Hanson's wife, Anna, has worked at the bakery since it opened in 2009.",
+     "The award ceremony was held in Millbrook last week, with more than 200 guests attending.",
+     "He added that he hopes to hire ten more people next year."
     ],
     "answer": 3,
     "type": "문장 삽입",
-    "explanation": "수상 소감 인용문 뒤이므로 '그는 ~라고 덧붙였다'로 발언을 이어 가는 문장이 자연스럽다. 판매 감소로 인한 폐업은 성장 내용과 모순되고, 소감을 말했으므로 논평 거부도 틀리며, 시상식은 6월 12일 워싱턴에서 열릴 예정이다."
+    "explanation": "수상 소감 인용문 뒤이므로 '그는 ~라고 덧붙였다'로 발언을 이어 가는 문장이 자연스럽다. 첫 번째 보기는 Mr. Hanson을 She로 받아 지시어가 틀리고 상금 용도(주방 개선)와도 맞지 않으며, 두 번째는 인용문과 이어지지 않는 가족 이야기이고, 세 번째는 시상식이 6월 12일 워싱턴에서 열릴 예정이라는 마지막 문장과 시간·장소가 어긋난다."
    },
    {
     "q": "",
@@ -1032,13 +1032,13 @@
     "q": "",
     "choices": [
      "contacted",
-     "will contact",
+     "will be contacting",
      "will be contacted",
      "have contacted"
     ],
     "answer": 2,
     "type": "동사 시제·태",
-    "explanation": "면접 대상자는 회사로부터 '연락을 받는' 입장이므로 수동태가 필요하고, 지원 마감(2월 28일) 이후의 일이므로 미래 수동태 will be contacted가 정답이다. will contact, have contacted는 능동이라 목적어가 없고, contacted는 과거 시제라 앞으로의 절차와 맞지 않는다."
+    "explanation": "면접 대상자는 회사로부터 '연락을 받는' 입장이므로 수동태가 필요하고, 지원 마감(2월 28일) 이후의 일이므로 미래 수동태 will be contacted가 정답이다. will be contacting, have contacted는 능동이라 목적어가 없고, contacted는 과거 시제라 앞으로의 절차와 맞지 않는다."
    }
   ],
   "translation": "노스게이트 엔지니어링의 10주 여름 인턴십 프로그램은 대학생들에게 토목·환경 공학 분야의 실무 경험을 쌓을 기회를 제공합니다. 인턴들은 다리, 정수장, 공공건물을 포함한 진행 중인 프로젝트에서 저희 엔지니어들과 함께 일합니다.\n\n지원 자격\n지원자는 현재 공학 전공 과정에 재학 중이어야 하며 최소 2년의 학업을 마쳤어야 합니다. 이전 근무 경험은 도움이 되지만 필수는 아닙니다.\n\n프로그램 세부 사항\n프로그램은 6월 9일부터 8월 15일까지 진행됩니다. 인턴은 주 40시간 근무하며 시간당 22달러를 받습니다. 각 인턴에게는 여름 내내 지도해 줄 멘토가 배정됩니다. 프로그램이 끝날 때 인턴들은 고위 경영진 앞에서 자신의 작업을 발표합니다.\n\n지원 방법\n2월 28일까지 온라인으로 지원서를 제출하십시오. 지원서에는 이력서, 성적 증명서 사본, 추천서 한 부가 포함되어야 합니다. 매년 많은 지원서가 접수되므로 면접 대상자로 선정된 분에게만 연락을 드립니다."
@@ -1065,14 +1065,14 @@
    {
     "q": "",
     "choices": [
-     "LedgerPro has been in use in our department since last year.",
-     "Attendance at the training course is optional.",
-     "The course was held in the main conference room last Tuesday.",
-     "A link to the course, along with your login details, will be sent to you in a separate e-mail."
+     "The old system was installed by a team from the Marketing Department five years ago.",
+     "Training for managers was completed in December and will not be repeated.",
+     "The course was held in the main conference room last Tuesday and lasted about two hours.",
+     "A link to the course and your login details will be sent to you in a separate e-mail."
     ],
     "answer": 3,
     "type": "문장 삽입",
-    "explanation": "온라인 교육 이수를 요구한 직후이므로 '교육 링크와 로그인 정보를 별도 이메일로 보낸다'는 안내가 자연스럽다. LedgerPro는 이제 도입되므로 작년부터 사용했다는 말은 모순이고, 교육은 필수이며 1월 31일까지 이수할 온라인 과정이므로 선택 사항이나 지난주 회의실 교육은 맞지 않는다."
+    "explanation": "온라인 교육 이수를 요구한 직후이므로 '교육 링크와 로그인 정보를 별도 이메일로 보낸다'는 안내가 자연스럽다. 첫 번째 보기는 옛 시스템 설치 이야기, 두 번째는 관리자 교육이 이미 끝났다는 내용으로 '모든 직원이 1월 31일까지 이수'라는 앞 문장과 이어지지 않는다. 세 번째는 교육이 지난 화요일에 이미 열렸다고 해서 앞으로 이수해야 한다는 시점과 맞지 않는다."
    },
    {
     "q": "",
@@ -1123,14 +1123,14 @@
    {
     "q": "",
     "choices": [
-     "Protective gear, including helmets and safety glasses, must also be worn at all times on the production floor.",
-     "Production will therefore be suspended for the entire week.",
-     "The inspection has been postponed until further notice.",
-     "Employees are encouraged to take the day off during the inspection."
+     "These preparations were completed by supervisors during last year's inspection.",
+     "Inspectors will arrive at the main gate at 7:30 A.M. and will first meet with the plant manager.",
+     "Employees who fail to follow these rules will be reported to the inspector by their supervisors.",
+     "Helmets and safety glasses must also be worn at all times on the production floor."
     ],
-    "answer": 0,
+    "answer": 3,
     "type": "문장 삽입",
-    "explanation": "통로 정리, 비상구 확보 등 직원이 지켜야 할 안전 준비 사항을 나열한 단락이므로 '보호 장비 착용'이라는 준비 사항이 하나 더 이어지는 것이 자연스럽다. 뒤에서 점검 중에도 평소 업무를 계속하라고 했으므로 생산 중단이나 휴가 권유는 모순이고, 점검 연기도 공지 전체와 맞지 않는다."
+    "explanation": "통로 정리, 비상구 확보 등 직원이 지켜야 할 안전 준비 사항을 나열한 단락이므로 '보호 장비 착용'이라는 준비 사항이 하나 더 이어지는 것이 자연스럽다. 첫 번째 보기는 준비가 작년 점검 때 끝났다고 해서 시점이 맞지 않고, 두 번째는 점검관의 도착 일정이라 직원 준비 사항이 아니며, 세 번째는 감독자가 직원을 신고한다는 내용으로 안내문의 협조 요청 어조와 맞지 않는다."
    },
    {
     "q": "",
@@ -1181,14 +1181,14 @@
    {
     "q": "",
     "choices": [
-     "As a result, the event was canceled due to low participation.",
-     "Through the platform, each runner raised an average of $120, compared with $60 in previous years.",
-     "The hospital plans to close its children's ward next year.",
-     "Runners were not allowed to accept donations online."
+     "As a result, the Hope Run will be held in two cities instead of one next year.",
+     "Through the platform, each runner raised an average of $120, up from $60.",
+     "The platform was developed by a local software company and was first used last spring.",
+     "Donations made in person on the day of the race were collected at the finish line."
     ],
     "answer": 1,
     "type": "문장 삽입",
-    "explanation": "앞 문장이 '새 온라인 플랫폼 덕분에 모금액이 늘었다'이므로 그 플랫폼을 통한 1인당 모금액 증가를 구체적으로 보여 주는 문장이 이어진다. 행사가 성황리에 열렸으므로 취소는 모순이고, 온라인 기부 금지는 플랫폼 내용과 반대이며, 소아 병동 폐쇄는 재활 센터 건립과 맞지 않는다."
+    "explanation": "앞 문장이 '새 온라인 플랫폼 덕분에 모금액이 늘었다'이므로 그 플랫폼을 통한 1인당 모금액 증가를 구체적으로 보여 주는 문장이 이어진다. 첫 번째 보기는 As a result가 이끄는 결과가 앞 내용에서 도출되지 않고, 세 번째는 플랫폼의 개발 경위일 뿐 '늘어난 이유'를 보여 주지 못하며, 네 번째는 온라인이 아닌 현장 모금 이야기라 플랫폼과 관련이 없다."
    },
    {
     "q": "",
@@ -1196,11 +1196,11 @@
      "began",
      "has begun",
      "will begin",
-     "had begun"
+     "would have begun"
     ],
     "answer": 2,
     "type": "동사 시제·태",
-    "explanation": "앞 문장에서 모금액이 센터를 짓는 데 '쓰일 것(will be used)'이라고 했고 next spring(내년 봄)이 있으므로 미래 시제 will begin이 정답이다. began, has begun, had begun은 모두 이미 시작된 일을 나타내 next spring과 맞지 않는다."
+    "explanation": "앞 문장에서 모금액이 센터를 짓는 데 '쓰일 것(will be used)'이라고 했고 next spring(내년 봄)이 있으므로 미래 시제 will begin이 정답이다. began, has begun은 이미 시작된 일을, would have begun은 실현되지 않은 가정을 나타내 next spring과 맞지 않는다."
    },
    {
     "q": "",
@@ -1239,26 +1239,26 @@
    {
     "q": "",
     "choices": [
-     "All of our dishes are frozen and reheated before delivery.",
-     "We recently opened our first location in Chicago.",
-     "Delivery is available only on weekends.",
-     "We can also accommodate vegetarian, gluten-free, and other dietary requirements upon request."
+     "Our breakfast platters are our most popular items among clients in the Chicago area.",
+     "We will open a second kitchen in Evanston next spring to serve more clients.",
+     "Orders must be placed at least 48 hours in advance, and delivery is always free of charge.",
+     "We can also provide vegetarian, gluten-free, and other special meals on request."
     ],
     "answer": 3,
     "type": "문장 삽입",
-    "explanation": "메뉴의 범위와 준비 방식을 소개하는 단락이므로 '채식·글루텐 프리 등 식단 요구도 맞출 수 있다'는 메뉴 관련 장점이 자연스럽게 이어진다. 당일 조리한다고 했으므로 냉동 후 데우기는 모순이고, 15년 넘게 영업했으므로 최근 첫 매장 개점도 틀리며, 회사 행사가 대상인데 주말만 배달은 맞지 않는다."
+    "explanation": "메뉴의 범위와 준비 방식을 소개하는 단락이므로 '채식·글루텐 프리 등 특별식도 주문 시 제공한다'는 메뉴 관련 장점이 자연스럽게 이어진다. 첫 번째 보기는 인기 메뉴 이야기이고 두 번째는 새 주방 계획이라 메뉴 설명과 이어지지 않는다. 세 번째는 배달 조건을 먼저 말하는 데다 '항상 무료'라는 내용이 다음 문단의 '급한 주문은 소정의 요금'과 어긋난다."
    },
    {
     "q": "",
     "choices": [
      "will be charged",
      "charges",
-     "will charge",
+     "will have charged",
      "has charged"
     ],
     "answer": 0,
     "type": "동사 시제·태",
-    "explanation": "수수료(a small fee)는 '부과되는' 대상이므로 수동태가 필요하고, 앞으로 급한 주문을 할 경우의 일이므로 will be charged가 정답이다. charges, will charge, has charged는 능동이라 수수료가 무언가를 청구한다는 이상한 뜻이 된다."
+    "explanation": "수수료(a small fee)는 '부과되는' 대상이므로 수동태가 필요하고, 앞으로 급한 주문을 할 경우의 일이므로 will be charged가 정답이다. charges, will have charged, has charged는 능동이라 수수료가 무언가를 청구한다는 이상한 뜻이 된다."
    },
    {
     "q": "",
@@ -1355,14 +1355,14 @@
    {
     "q": "",
     "choices": [
-     "The summit was held in Vancouver for the first time last month.",
-     "Only professionals from the shipping industry may attend.",
-     "Purely promotional talks about a specific product or service will not be accepted.",
-     "Speakers will be selected by random drawing."
+     "Proposals on sustainable transport will be given priority over all other topics.",
+     "The summit's main hall can seat more than 1,500 people.",
+     "Purely promotional talks about specific products will not be accepted.",
+     "Speakers who presented at last year's summit will be given priority in the selection process."
     ],
     "answer": 2,
     "type": "문장 삽입",
-    "explanation": "발표가 '실용적'이어야 한다는 기준 바로 뒤이므로, 받지 않는 발표 유형(특정 제품 홍보)을 밝히는 문장이 자연스럽다. 행사는 내년에 열리므로 지난달 개최는 틀리고, 창고·공급망 기술 분야도 참여하므로 해운업만 참석 가능하다는 것도 모순이며, 전문가 패널이 심사하므로 추첨도 맞지 않는다."
+    "explanation": "발표가 '실용적'이어야 한다는 기준 바로 뒤이므로, 받지 않는 발표 유형(특정 제품 홍보)을 밝히는 문장이 자연스럽다. 첫 번째 보기는 앞 문장의 '다양한 주제 환영'과 어긋나고, 두 번째는 행사장 규모라 발표 기준과 이어지지 않으며, 네 번째는 우대 선발 이야기로 뒤 문단의 '전문가 심사 위원회가 모든 제안을 검토한다'는 내용과 맞지 않는다."
    },
    {
     "q": "",
@@ -1425,14 +1425,14 @@
    {
     "q": "",
     "choices": [
-     "The merger would therefore give Halvorsen immediate access to an extensive international distribution network.",
-     "As a result, Brightmill has decided to withdraw from all foreign markets.",
-     "Ms. Doyle will retire from the food industry once the deal is completed.",
-     "Regulators approved the deal last week, ahead of schedule."
+     "Brightmill, in turn, has struggled to build a presence in its home market in Britain.",
+     "Ms. Doyle said that she expects the combined company to open an office in London.",
+     "The merger would therefore give Halvorsen immediate access to an international distribution network.",
+     "The merger would therefore give Brightmill access to Halvorsen's large frozen-meal factories in Norway."
     ],
-    "answer": 0,
+    "answer": 2,
     "type": "문장 삽입",
-    "explanation": "앞 문장의 대조(할버슨은 해외 진출에 약하고 브라이트밀은 20여 개국에 판매)를 바탕으로 '따라서 합병으로 할버슨이 광범위한 해외 유통망을 곧바로 얻게 된다'는 결론이 이어지고, 이는 분석가들이 합병을 반긴 이유가 된다. 해외 시장 철수는 이 논리와 반대이고, 도일 씨는 이사회에 합류할 예정이며, 규제 당국의 승인은 아직 필요하다."
+    "explanation": "앞 문장의 대조(할버슨은 해외 진출에 약하고 브라이트밀은 20여 개국에 판매)를 바탕으로 '따라서 합병으로 할버슨이 해외 유통망을 곧바로 얻게 된다'는 결론이 이어진다. 첫 번째 보기는 앞 내용과 반대로 브라이트밀의 약점을 말해 흐름이 어긋나고, 두 번째는 런던 사무소 이야기라 분석가 평가와 무관하며, 네 번째는 이득을 보는 쪽이 브라이트밀로 바뀌어 앞 문장의 논리와 맞지 않는다."
    },
    {
     "q": "",
@@ -1471,14 +1471,14 @@
    {
     "q": "",
     "choices": [
-     "Pricing information should not be included at this stage.",
-     "Flexibility of this kind is essential, as patient numbers can rise sharply during seasonal outbreaks of illness.",
-     "The contract was awarded to a local supplier earlier this month.",
-     "We are therefore satisfied with our current arrangement of four vendors."
+     "Samples of the uniforms will be requested from shortlisted suppliers in October.",
+     "Flexibility of this kind is essential, as patient numbers can rise sharply during outbreaks.",
+     "Unfortunately, the present vendors have not been able to meet our delivery deadlines.",
+     "Delivery schedules should therefore be arranged separately for each of the seven hospitals in the group."
     ],
     "answer": 1,
     "type": "문장 삽입",
-    "explanation": "바로 앞에서 '갑작스러운 수요 증가에 대응하는 능력'을 적으라고 했으므로, 그런 유연성이 왜 중요한지(계절성 질병 유행 시 환자 급증) 설명하는 문장이 이어진다. 앞 문장에서 가격을 적으라고 했으므로 가격 제외는 모순이고, 계약 체결 완료와 현재 방식 만족은 제안 요청이라는 이메일 목적과 반대이다."
+    "explanation": "바로 앞에서 '갑작스러운 수요 증가에 대응하는 능력'을 적으라고 했으므로, 그런 유연성이 왜 중요한지(유행 시기에 환자 급증) 설명하는 문장이 이어진다. 첫 번째 보기는 견본 요청 일정이라 수요 대응과 이어지지 않고, 세 번째는 현재 업체 문제라 제안서 작성 요령과 맞지 않으며, 네 번째는 therefore가 앞 문장에서 도출되지 않는 결론을 이끌어 흐름이 어색하다."
    },
    {
     "q": "",
@@ -1529,14 +1529,14 @@
    {
     "q": "",
     "choices": [
-     "Construction of the new park was completed last year.",
-     "Residents are not permitted to comment on the plan.",
-     "The shipyard will therefore continue to operate at full capacity.",
-     "Printed copies can also be requested free of charge from the Planning Department."
+     "The shipyard closed in 2015 after more than a century of operation in the port.",
+     "Residents who live near the waterfront will receive the final plan by mail in the autumn.",
+     "The review period was extended because many residents asked for more time.",
+     "Printed copies are also available free of charge from the Planning Department."
     ],
     "answer": 3,
     "type": "문장 삽입",
-    "explanation": "초안을 시청과 웹사이트에서 열람할 수 있다는 문장 뒤이므로 '인쇄본도 무료로 요청할 수 있다'는 열람 방법 안내가 자연스럽게 이어진다. 아직 초안 단계이므로 공원 완공은 모순이고, 공지 자체가 주민 의견을 구하므로 의견 제출 금지도 틀리며, 조선소는 이미 '이전의(former)' 조선소이다."
+    "explanation": "초안을 시청과 웹사이트에서 열람할 수 있다는 문장 뒤이므로 '인쇄본도 무료로 받을 수 있다'는 열람 방법 안내가 자연스럽게 이어진다. 첫 번째 보기는 조선소의 역사라 열람 안내와 이어지지 않고, 두 번째는 최종안 우편 발송 이야기로 아직 의견 수렴 중인 이 공지의 시점과 맞지 않으며, 세 번째는 6월 20일까지로 정해진 의견 접수 기간과 어긋난다."
    },
    {
     "q": "",
@@ -1599,14 +1599,14 @@
    {
     "q": "",
     "choices": [
-     "Each participant is also paired with a faculty coach who provides individual feedback throughout the program.",
-     "Classes are taught entirely online through prerecorded videos.",
-     "The program is intended primarily for recent university graduates.",
-     "Participants must therefore take six weeks of leave from their jobs."
+     "Executives from the program's first class now work in more than thirty countries.",
+     "Each participant is also paired with a faculty coach who gives individual feedback.",
+     "Tuition for the program includes all books, materials, and meals served on campus during the six weeks.",
+     "Participants therefore spend most of each week working in small groups on campus."
     ],
-    "answer": 0,
+    "answer": 1,
     "type": "문장 삽입",
-    "explanation": "6주간의 학습 방식(사례 분석, 소그룹 활동)을 설명하는 단락이므로 '교수진 코치가 개별 피드백을 제공한다'는 방식이 하나 더 이어지는 것이 자연스럽다. 금요일 저녁과 토요일에 수업이 '열린다(meet)'고 했으므로 녹화 영상 수업은 모순이고, 10년 이상 경력자 대상이므로 대학 졸업생 대상도 틀리며, 일을 계속하며 수강할 수 있으므로 휴직 필요도 맞지 않는다."
+    "explanation": "6주간의 학습 방식(사례 분석, 소그룹 활동)을 설명하는 단락이므로 '교수진 코치가 개별 피드백을 제공한다'는 방식이 하나 더 이어지는 것이 자연스럽다(B). A는 졸업생의 근무 지역 이야기, C는 수강료 포함 내역이라 학습 방식과 거리가 멀고, D는 therefore의 근거가 없는 데다 수업이 금요일 저녁과 토요일뿐이라는 다음 문단과 어긋난다."
    },
    {
     "q": "",
@@ -1633,26 +1633,26 @@
    {
     "q": "",
     "choices": [
-     "at the latest",
+     "at the very latest",
      "at least",
      "at most",
      "at the earliest"
     ],
     "answer": 3,
     "type": "어휘",
-    "explanation": "허가가 아직 나지 않아 착공이 늦어지는 상황이므로 '빨라야 1월 중순'이라는 뜻의 at the earliest가 정답이다. at the latest(늦어도)는 오히려 일정이 확실하다는 뜻이 되어 허가 지연 상황과 맞지 않고, at most(많아야), at least(적어도)는 수량에 주로 쓰여 시점 표현과 어울리지 않는다."
+    "explanation": "허가가 아직 나지 않아 착공이 늦어지는 상황이므로 '빨라야 1월 중순'이라는 뜻의 at the earliest가 정답이다. at the very latest(아무리 늦어도)는 오히려 일정이 확실하다는 뜻이 되어 허가 지연 상황과 맞지 않고, at most(많아야), at least(적어도)는 수량에 주로 쓰여 시점 표현과 어울리지 않는다."
    },
    {
     "q": "",
     "choices": [
-     "The permit was issued last week, so work will begin as planned.",
-     "As a result, we have decided to cancel the project.",
-     "Because the site is next to a busy highway, planners want to confirm that truck traffic will not cause congestion.",
-     "The study was completed in October and approved by the city."
+     "The city has asked that the study be repeated every year after the center opens.",
+     "As a result, we have asked the city to reduce the size of the proposed parking lot.",
+     "Because the site is near a busy highway, the city wants to check truck traffic.",
+     "The firm has completed similar studies for the cities of Hamilton and Oakville."
     ],
     "answer": 2,
     "type": "문장 삽입",
-    "explanation": "앞 문장에서 시가 교통 조사를 추가로 요구했다고 했으므로 '부지가 혼잡한 고속도로 옆이라 트럭 통행이 정체를 일으키지 않는지 확인하려 한다'는 요구 이유가 이어지는 것이 자연스럽다. 허가는 아직 나오지 않았고, 프로젝트는 계속되며, 조사는 이제 막 업체를 고용해 12월 10일에 보고서가 나올 예정이므로 나머지는 모두 모순이다."
+    "explanation": "앞 문장에서 시가 교통 조사를 추가로 요구했다고 했으므로 '부지가 혼잡한 고속도로 근처라 트럭 통행을 확인하려 한다'는 요구 이유가 이어지는 것이 자연스럽다. 첫 번째 보기는 매년 조사를 반복하라는 근거 없는 내용이고, 두 번째는 As a result가 이끄는 결과(주차장 축소)가 앞 문장에서 나오지 않으며, 네 번째는 아직 소개되지 않은 the firm이 먼저 등장해 바로 뒤의 'We have already hired an engineering firm'과 순서가 맞지 않는다."
    },
    {
     "q": "",
@@ -1715,26 +1715,26 @@
    {
     "q": "",
     "choices": [
-     "As a result, passengers will experience more crowded trains during peak hours.",
-     "In fact, the longer trains will provide several hundred additional seats per hour during the morning rush.",
-     "Weekend services will therefore be suspended until further notice.",
-     "The Harwick Bridge reopened to trains last month after the work was completed."
+     "As a result, passengers on the Northshore Line will see fewer trains in the late evening.",
+     "In fact, the longer trains will provide several hundred more seats per hour at peak times.",
+     "Peak services between Harwick and Central Station will be shown in red on the new timetable.",
+     "The engineering work on Harwick Bridge is expected to be finished earlier than planned."
     ],
     "answer": 1,
     "type": "문장 삽입",
-    "explanation": "앞 문장의 '전체 수송력이 더 커진다'를 '실제로 긴 열차가 아침 출근 시간에 시간당 수백 석을 더 제공한다'는 구체적 수치로 뒷받침하는 것이 자연스럽다. 수송력이 늘어나므로 더 혼잡해진다는 문장은 모순이고, 주말 운행 중단은 근거가 없으며, 다리 공사는 3월까지 계속되므로 완료되었다는 문장도 틀리다."
+    "explanation": "앞 문장의 '전체 수송력이 더 커진다'를 '실제로 긴 열차가 피크 시간에 시간당 수백 석을 더 제공한다'는 구체적 수치로 뒷받침하는 것이 자연스럽다. 첫 번째 보기는 심야 운행 이야기로 다음 문단의 내용을 미리 당겨 쓴 것이고, 세 번째는 시간표의 표시 방식이라 수송력과 무관하며, 네 번째는 공사가 3월까지 계속된다는 첫 문단 내용과 어긋난다."
    },
    {
     "q": "",
     "choices": [
      "will adjust",
      "adjusting",
-     "have adjusted",
+     "will have adjusted",
      "will be adjusted"
     ],
     "answer": 3,
     "type": "동사 시제·태",
-    "explanation": "주어 some departure times(출발 시각)는 철도 회사에 의해 '조정되는' 대상이므로 수동태가 필요하고, 12월 7일부터 적용될 변경이므로 미래 수동태 will be adjusted가 정답이다. will adjust와 have adjusted는 능동이라 출발 시각이 무언가를 조정하는 뜻이 되고, adjusting은 동사 자리에 올 수 없다."
+    "explanation": "주어 some departure times(출발 시각)는 철도 회사에 의해 '조정되는' 대상이므로 수동태가 필요하고, 12월 7일부터 적용될 변경이므로 미래 수동태 will be adjusted가 정답이다. will adjust와 will have adjusted는 능동이라 출발 시각이 무언가를 조정하는 뜻이 되고, adjusting은 동사 자리에 올 수 없다."
    }
   ],
   "translation": "12월 7일 일요일부터 코스털 레일은 노스쇼어선에 개정된 시간표를 도입합니다. 이번 변경은 운행 신뢰성을 높이는 것뿐만 아니라 3월까지 계속될 예정인 하윅 다리 공사를 수용하기 위한 것입니다.\n\n주요 변경 사항\n하윅과 중앙역 사이의 평일 출퇴근 시간 열차는 10분이 아닌 12분 간격으로 운행합니다. 열차 수는 약간 줄지만 각 열차가 6량이 아닌 8량으로 운행되므로 전체 수송력은 지금보다 커집니다. 실제로 더 길어진 열차는 아침 출근 시간에 시간당 수백 석의 좌석을 추가로 제공합니다.\n\n심야 열차는 자정이 아닌 오후 11시 30분에 운행을 마치며, 오전 1시까지는 대체 버스가 운행합니다.\n\n일부 출발 시각이 최대 5분까지 조정되므로 승객 여러분은 이동 전에 소요 시간을 확인하시기 바랍니다. 개정된 시간표는 직원이 있는 모든 역과 코스털 레일 앱에서 확인하실 수 있습니다. 불편을 드려 죄송하며, 이 필수 공사가 진행되는 동안 양해해 주시는 승객 여러분께 감사드립니다."

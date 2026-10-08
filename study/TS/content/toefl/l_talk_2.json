@@ -94,7 +94,7 @@
     "choices": [
      "Sign up on the website",
      "Bring their own juice",
-     "Visit a doctor",
+     "Visit a doctor to check their health",
      "Eat a meal and drink water"
     ],
     "answer": 3,
@@ -130,7 +130,7 @@
      "It broke the glass jar.",
      "It opened the lid of a jar to get food.",
      "It changed color to match the jar.",
-     "It refused to touch the jar."
+     "It refused to touch the jar and swam away."
     ],
     "answer": 1,
     "type": "세부 사항",
@@ -174,7 +174,7 @@
    {
     "q": "What is the main topic of the lecture?",
     "choices": [
-     "Why it rarely rains in deserts",
+     "Why it rarely rains in most deserts around the world",
      "Which animals eat cactus plants",
      "How cactus plants survive with little water",
      "How to grow a cactus at home"
@@ -187,7 +187,7 @@
     "q": "According to the professor, why are many cactus roots close to the surface?",
     "choices": [
      "To catch rainwater quickly before it dries",
-     "To hold the plant strongly in the wind",
+     "To hold the plant strongly in place during strong winds",
      "To find food deep in the ground",
      "To stay away from hot rocks"
     ],
@@ -213,7 +213,7 @@
      "By listing several features that help the cactus save water",
      "By comparing deserts in different countries",
      "By telling the history of one famous cactus",
-     "By describing the life of a cactus from seed to flower"
+     "By describing the whole life of a cactus from seed to flower"
     ],
     "answer": 0,
     "type": "글의 구조",
@@ -247,7 +247,7 @@
     "choices": [
      "The light becomes brighter.",
      "The light stops moving.",
-     "The light turns completely red.",
+     "The light turns completely red and then fades away.",
      "The light bends and the colors separate."
     ],
     "answer": 3,
@@ -316,7 +316,7 @@
    {
     "q": "According to the professor, what happened in Baghdad?",
     "choices": [
-     "Papyrus was first made there.",
+     "Papyrus was first made there from plants growing by the river.",
      "Cai Lun moved there to teach.",
      "People stopped using paper.",
      "Paper mills were built and books became more common."
@@ -330,7 +330,7 @@
     "choices": [
      "To show what people wrote on before paper and why paper was better",
      "To explain how Cai Lun got his idea",
-     "To argue that papyrus was better than paper",
+     "To argue that papyrus and animal skins were better than paper for books",
      "To describe what Chinese books looked like"
     ],
     "answer": 0,
@@ -353,7 +353,7 @@
     "choices": [
      "Dreams have no real purpose.",
      "Sleep helps the brain store and use new information.",
-     "College students should study at night.",
+     "College students should study at night instead of during the day.",
      "Computers work like human brains."
     ],
     "answer": 1,
@@ -365,7 +365,7 @@
     "choices": [
      "The brain moves new information into long-term memory.",
      "The brain stops working.",
-     "We have most of our dreams.",
+     "We have most of our dreams and connect ideas in new ways.",
      "The body grows taller."
     ],
     "answer": 0,
@@ -377,7 +377,7 @@
     "choices": [
      "To show that computers are smarter than brains",
      "To make it easier to understand how memories are stored",
-     "To suggest that students use computers to study",
+     "To suggest that students use computers to study instead of books",
      "To explain why dreams are strange"
     ],
     "answer": 1,
@@ -388,7 +388,7 @@
     "q": "What does the professor imply about studying all night before an exam?",
     "choices": [
      "It is the best way to prepare.",
-     "It is only a problem for older students.",
+     "It is only a problem for older students who sleep less than seven hours.",
      "It may not help because the brain cannot save information well.",
      "It improves REM sleep the next night."
     ],
@@ -410,7 +410,7 @@
    {
     "q": "Why will the water be turned off?",
     "choices": [
-     "To clean the showers on every floor",
+     "To clean the showers and sinks on every floor of the building",
      "To fix a leak in the main lobby",
      "To replace an old pipe under the building",
      "To test a new heating system"
@@ -425,7 +425,7 @@
      "Wait until the evening",
      "Use a shower in another dormitory",
      "Shower early or go to the recreation center",
-     "Ask for bottled water in the lobby"
+     "Ask for bottled water in the lobby before they shower"
     ],
     "answer": 2,
     "type": "세부 사항",
@@ -445,7 +445,7 @@
    {
     "q": "What is new this semester?",
     "choices": [
-     "Tutoring is free for the first time.",
+     "Tutoring is free for all students for the first time.",
      "Tutoring in computer science is offered.",
      "Sessions can now be booked online.",
      "Study tables are open on weekends."
@@ -457,7 +457,7 @@
    {
     "q": "Why does the speaker mention October fifteenth?",
     "choices": [
-     "It is the first day of tutoring sessions.",
+     "It is the first day of tutoring sessions for the new semester.",
      "It is the deadline to apply to become a tutor.",
      "It is when the study tables close.",
      "It is the date of a math exam."
@@ -480,7 +480,7 @@
    {
     "q": "What is the main purpose of this announcement?",
     "choices": [
-     "To announce the winners of a film contest",
+     "To announce the winners of a film contest held at the media lab",
      "To advertise a new film studies major",
      "To invite students to submit short films to a festival",
      "To explain how to use the media lab"
@@ -530,7 +530,7 @@
      "The Sun pulls the water on that side.",
      "The Moon pulls the solid Earth more strongly than the far water.",
      "Winds push the water to that side.",
-     "The water there is warmer and expands."
+     "The water there is warmer than the water near the Moon and expands."
     ],
     "answer": 1,
     "type": "세부 사항",
@@ -552,7 +552,7 @@
     "q": "Why does the professor say the name has nothing to do with the season?",
     "choices": [
      "To introduce a new topic about seasons",
-     "To explain that tides are smaller in spring",
+     "To explain that tides are smaller in spring than in other seasons",
      "To correct a likely misunderstanding about the term",
      "To show that the term is no longer used"
     ],
@@ -577,7 +577,7 @@
      "A product sold very cheaply to attract customers",
      "A manager who loses money for a company",
      "A customer who only buys cheap items",
-     "A product placed at the front of a store"
+     "A product placed at the front of a store to attract customers"
     ],
     "answer": 0,
     "type": "세부 사항",
@@ -589,7 +589,7 @@
      "To explain how stores make customers pass other products",
      "To show that milk needs to be kept cold",
      "To complain about supermarket design",
-     "To show that milk is not a popular product"
+     "To show that milk is not a popular product among most shoppers"
     ],
     "answer": 0,
     "type": "화자 의도",
@@ -601,7 +601,7 @@
      "They buy only the cheap items, so the store loses money.",
      "They complain about high prices.",
      "They take too long at the checkout.",
-     "They return products after buying them."
+     "They return products after buying them and ask for their money back."
     ],
     "answer": 0,
     "type": "세부 사항",
@@ -610,7 +610,7 @@
    {
     "q": "What kind of product would probably make the best loss leader?",
     "choices": [
-     "An expensive item that people buy once in ten years",
+     "An expensive item that people buy only once every ten years or so",
      "A product that is difficult to find in other stores",
      "A product people buy often that leads to other purchases",
      "A product that customers rarely notice"
@@ -634,7 +634,7 @@
     "q": "Why is Pompeii especially valuable to archaeologists?",
     "choices": [
      "It was buried quickly, so it shows a single moment of daily life.",
-     "It was the largest city in the Roman Empire.",
+     "It was the largest city in the Roman Empire and the home of many generals.",
      "It was built on top of an older town.",
      "It was where Roman emperors lived."
     ],
@@ -646,7 +646,7 @@
     "q": "What does the professor say about the messages written on buildings?",
     "choices": [
      "They show how ordinary people thought and spoke.",
-     "They were written only by government officials.",
+     "They were written only by government officials and Roman soldiers.",
      "They were added by later visitors.",
      "They describe the volcanic eruption."
     ],
@@ -659,7 +659,7 @@
     "choices": [
      "He filled empty spaces in the ash with plaster.",
      "He predicted the eruption.",
-     "He removed all the paintings from the walls.",
+     "He removed all the paintings from the walls to protect them.",
      "He found bread in the ovens."
     ],
     "answer": 0,
@@ -672,7 +672,7 @@
      "Future tools may help them learn more.",
      "They have lost interest in the site.",
      "The area is too dangerous to dig.",
-     "The government does not allow it."
+     "The government does not allow anyone to dig there."
     ],
     "answer": 0,
     "type": "추론",
@@ -695,7 +695,7 @@
      "Why birds fly south in the fall",
      "The methods birds use to navigate during migration",
      "How planetariums are built",
-     "Which birds fly the longest distances"
+     "Which birds fly the longest distances across the ocean each year"
     ],
     "answer": 1,
     "type": "주제·목적",
@@ -705,7 +705,7 @@
     "q": "What happened in the planetarium experiment?",
     "choices": [
      "The birds changed direction when the star pattern was rotated.",
-     "The birds fell asleep under the stars.",
+     "The birds fell asleep under the stars and could not move in any direction at all.",
      "The birds ignored the stars completely.",
      "The birds used smell to find the exit."
     ],
@@ -717,7 +717,7 @@
     "q": "Why does the professor compare birds to a traveler with a map, a compass, and a watch?",
     "choices": [
      "To show that birds use several different tools to find their way",
-     "To suggest that people learned navigation from birds",
+     "To suggest that people learned how to navigate long distances from birds",
      "To explain how scientists track birds",
      "To argue that birds are better than people at travel"
     ],
@@ -730,7 +730,7 @@
     "choices": [
      "Birds can fly faster with more tools.",
      "It helps them find food along the way.",
-     "Young birds need more tools than adults.",
+     "Young birds need more tools than adults because they fly farther.",
      "If one tool does not work, they can rely on another."
     ],
     "answer": 3,
@@ -763,7 +763,7 @@
    {
     "q": "Why does the professor mention salt on roads?",
     "choices": [
-     "To explain why roads are slippery in winter",
+     "To explain why roads are slippery and dangerous for cars in winter",
      "To show how zinc is produced",
      "To give an example of something that speeds up rusting",
      "To describe a way to protect cars"
@@ -777,7 +777,7 @@
     "choices": [
      "Rust produces its own water.",
      "Rust turns into zinc.",
-     "Rust attracts more salt from the air.",
+     "Rust attracts more salt and moisture from the air around it.",
      "Rust flakes off and exposes fresh iron underneath."
     ],
     "answer": 3,
@@ -789,7 +789,7 @@
     "choices": [
      "Its reaction with oxygen helps protect it.",
      "It rusts faster than iron.",
-     "It does not react with oxygen at all.",
+     "It does not react with oxygen at all, so it never rusts.",
      "It must be galvanized with zinc."
     ],
     "answer": 0,
@@ -812,7 +812,7 @@
     "choices": [
      "It is moving to a new building.",
      "Demand has grown and waiting for walk-in visits was frustrating.",
-     "It has hired fewer counselors this year.",
+     "It has hired fewer counselors this year and cannot see every student.",
      "Students asked for more support groups."
     ],
     "answer": 1,
@@ -822,7 +822,7 @@
    {
     "q": "What will happen during the phone consultation?",
     "choices": [
-     "Students will receive their first full counseling session.",
+     "Students will receive their first full counseling session by phone.",
      "A counselor will help choose the most suitable type of support.",
      "Students will be asked to pay a fee.",
      "Students will schedule a walk-in visit."
@@ -845,7 +845,7 @@
    {
     "q": "Why are first-year residents losing access to parking permits?",
     "choices": [
-     "Too many first-year students had parking accidents.",
+     "Too many first-year students had parking accidents in the lots on campus.",
      "The university wants to reduce pollution.",
      "Parking fees have become too expensive.",
      "A construction project is removing hundreds of parking spaces."
@@ -880,7 +880,7 @@
    {
     "q": "According to the speaker, what is one advantage of the exchange program?",
     "choices": [
-     "Students pay the host university's lower tuition.",
+     "Students pay the host university's lower tuition and get a discount here.",
      "Students do not need to take any courses abroad.",
      "Students pay their usual tuition, which is often more affordable.",
      "Students receive free housing."
@@ -892,7 +892,7 @@
    {
     "q": "Why does the speaker suggest meeting with an academic advisor?",
     "choices": [
-     "To get a letter of recommendation",
+     "To get a letter of recommendation for the exchange application",
      "To raise their grade point average",
      "To find out which courses are still required for their major",
      "To sign up for an information session"
@@ -918,7 +918,7 @@
      "How to grow healthier grass on campus",
      "Informal paths that show where people want to walk",
      "The history of sidewalks in American cities",
-     "Why students should stay on official sidewalks"
+     "Why students should stay on official sidewalks and off the grass"
     ],
     "answer": 1,
     "type": "주제·목적",
@@ -927,7 +927,7 @@
    {
     "q": "How has the view of desire paths changed among many designers?",
     "choices": [
-     "They now consider them dangerous in all cases.",
+     "They now consider them dangerous in all cases and want to fence them.",
      "They now see them as useful information about movement.",
      "They now ignore them completely.",
      "They now require students to repair them."
@@ -940,7 +940,7 @@
     "q": "Why does the professor say the university story may be partly legend?",
     "choices": [
      "To show that the story is completely false",
-     "To suggest that students invented desire paths",
+     "To suggest that students invented desire paths as a way to protest campus rules",
      "To criticize universities for poor planning",
      "To admit uncertainty about its accuracy while still using it to make a point"
     ],
@@ -952,7 +952,7 @@
     "q": "According to the professor, why should some desire paths not be paved?",
     "choices": [
      "They are too long to pave.",
-     "Paving is too expensive for cities.",
+     "Paving is too expensive for most cities to pay for every year.",
      "Students would stop using them.",
      "They may cross sensitive areas or create safety risks."
     ],
@@ -974,7 +974,7 @@
    {
     "q": "What is the main purpose of the lecture?",
     "choices": [
-     "To tell the life story of the hero Theseus",
+     "To tell the life story of the hero Theseus and his ships in Athens",
      "To compare Greek and English philosophy",
      "To explain how ancient ships were built",
      "To introduce a philosophical puzzle about identity over time"
@@ -987,7 +987,7 @@
     "q": "What twist did Thomas Hobbes add to the puzzle?",
     "choices": [
      "The ship was destroyed in a storm.",
-     "The ship was moved to a different city.",
+     "The ship was moved to a different city in Greece for display.",
      "Theseus himself replaced the planks.",
      "The old planks were used to rebuild a second ship."
     ],
@@ -998,7 +998,7 @@
    {
     "q": "Why does the professor mention the cells in the human body?",
     "choices": [
-     "To explain a biological process in detail",
+     "To explain a biological process in detail to the students in class",
      "To introduce a lecture on medicine",
      "To argue that people do not really change",
      "To show that the puzzle also applies to personal identity"
@@ -1034,7 +1034,7 @@
     "q": "Why do researchers compare new drugs with placebos?",
     "choices": [
      "Placebos are cheaper to produce.",
-     "Placebos have no effect on patients.",
+     "Placebos have no effect on patients, so they are a clean comparison.",
      "Patients often improve even without active medicine.",
      "Doctors prefer giving placebos."
     ],
@@ -1046,7 +1046,7 @@
     "q": "Which detail is mentioned as affecting how well a placebo works?",
     "choices": [
      "The price of the pill",
-     "The time of day the pill is taken",
+     "The time of day the pill is taken by the patient",
      "The age of the doctor",
      "The number of pills and the form of treatment"
     ],
@@ -1058,7 +1058,7 @@
     "q": "What does the professor find most puzzling?",
     "choices": [
      "Placebos work better for children.",
-     "Red pills are more calming than blue ones.",
+     "Red pills are reported as more calming than blue ones in most studies.",
      "Some patients improve even when told they are taking a placebo.",
      "Brain scans show no changes."
     ],
@@ -1070,7 +1070,7 @@
     "q": "What is the professor's attitude toward placebos at the end of the lecture?",
     "choices": [
      "They should replace most medicines.",
-     "They are useless and should not be studied.",
+     "They are useless and should not be studied any further by scientists.",
      "They are effective against infections.",
      "They can affect symptoms but are not a substitute for real treatment."
     ],
@@ -1093,7 +1093,7 @@
     "q": "Why was the Sinosauropteryx fossil so well preserved?",
     "choices": [
      "It was frozen in ice.",
-     "It was found deep in the ocean.",
+     "It was found deep in the ocean, away from other animals.",
      "It was trapped in tree sap.",
      "It was buried in fine volcanic ash near a lake."
     ],
@@ -1106,7 +1106,7 @@
     "choices": [
      "By studying cave paintings",
      "By examining dinosaur eggs",
-     "By analyzing the volcanic ash",
+     "By analyzing the chemicals in the volcanic ash around the fossils",
      "By comparing melanosome shapes with those of living birds"
     ],
     "answer": 3,
@@ -1117,7 +1117,7 @@
     "q": "Why does the professor mention the down on a baby chick?",
     "choices": [
      "To describe how chicks learn to fly",
-     "To argue that dinosaurs were baby birds",
+     "To argue that all dinosaurs were really just baby birds",
      "To explain the idea that feathers kept dinosaurs warm",
      "To compare dinosaur and chicken diets"
     ],
@@ -1128,7 +1128,7 @@
    {
     "q": "What does the term exaptation refer to in the lecture?",
     "choices": [
-     "A feature that disappears over time",
+     "A feature that slowly disappears over time because it is no longer needed",
      "A dinosaur that could not fly",
      "A feature that evolves for one use and is later used for another",
      "A method for dating fossils"
@@ -1152,7 +1152,7 @@
     "q": "What is the lecture mainly about?",
     "choices": [
      "The childhood of Charles Dickens",
-     "The cost of books in the twentieth century",
+     "The cost of books and newspapers in the twentieth century",
      "Why Dickens moved to America",
      "How publishing novels in parts influenced Dickens's work"
     ],
@@ -1165,7 +1165,7 @@
     "choices": [
      "To show that Dickens wrote for television",
      "To explain how each part ended in a way that made readers want more",
-     "To argue that novels are better than television",
+     "To argue that novels are much better than modern television for readers",
      "To describe how long each installment was"
     ],
     "answer": 1,
@@ -1178,7 +1178,7 @@
      "Dickens sent the main character to America.",
      "Dickens lowered the price of each part.",
      "Dickens stopped writing the novel.",
-     "Dickens published the whole book at once."
+     "Dickens published the whole book at once to save money."
     ],
     "answer": 0,
     "type": "세부 사항",
@@ -1189,7 +1189,7 @@
     "choices": [
      "As a timeline of Dickens's life",
      "As a list of effects of serial publication",
-     "As a comparison of two different authors",
+     "As a comparison of two different authors of the period",
      "As a description of one novel's plot"
     ],
     "answer": 1,
@@ -1212,7 +1212,7 @@
     "choices": [
      "Graduate students no longer need ethics training.",
      "Ethics training will now be offered only in person.",
-     "The review board will stop approving undergraduate research.",
+     "The review board will stop approving undergraduate research unless a professor signs.",
      "Undergraduates in human-subject research must now complete ethics training."
     ],
     "answer": 3,
@@ -1222,7 +1222,7 @@
    {
     "q": "Why does the speaker mention that delays could hold up an entire lab's project?",
     "choices": [
-     "To suggest that students work in larger groups",
+     "To suggest that students work in larger groups to share the training",
      "To warn labs that they may lose funding",
      "To explain why the module is three hours long",
      "To encourage students to complete the training promptly"
@@ -1259,7 +1259,7 @@
     "choices": [
      "It will pay for all students' textbooks.",
      "It is only for graduate courses.",
-     "It will replace the First Day Access program.",
+     "It will replace the First Day Access program within a few years.",
      "It may eliminate textbook costs for some courses."
     ],
     "answer": 3,
@@ -1283,7 +1283,7 @@
      "Friends from different class years found it hard to live together.",
      "Rooms were too expensive for seniors.",
      "There were not enough rooms on campus.",
-     "Students could not choose their own roommates at all."
+     "Students could not choose their own roommates at all under the old system."
     ],
     "answer": 0,
     "type": "주제·목적",
@@ -1295,7 +1295,7 @@
      "The group loses its selection time.",
      "The group keeps its time but must fill the space or accept an assigned roommate.",
      "The group must register again.",
-     "The remaining members are moved to a different building."
+     "The remaining members are moved to a different building and given a later selection time."
     ],
     "answer": 1,
     "type": "세부 사항",
@@ -1328,7 +1328,7 @@
     "q": "According to Granovetter, why are weak ties useful?",
     "choices": [
      "They connect people to different social groups and new information.",
-     "They are more trustworthy than close friends.",
+     "They are more trustworthy and more helpful than close friends in most cases.",
      "They require less time to maintain.",
      "They provide stronger emotional support."
     ],
@@ -1339,7 +1339,7 @@
    {
     "q": "Why does the professor mention people in crisis?",
     "choices": [
-     "To argue that weak ties are always more important",
+     "To argue that weak ties are always more important than strong ties",
      "To introduce a study about job interviews",
      "To point out that strong ties also have important functions",
      "To explain why Granovetter chose his title"
@@ -1352,7 +1352,7 @@
     "q": "What did the 2022 study add to Granovetter's idea?",
     "choices": [
      "Strong ties are best for finding jobs.",
-     "The weakest ties are the most valuable.",
+     "The weakest ties are the most valuable for finding a new job.",
      "Moderately weak ties are the most useful for job mobility.",
      "Networking sites make ties unimportant."
     ],
@@ -1389,7 +1389,7 @@
      "It cools the pan underneath.",
      "It adds more water to the drop.",
      "It is a poor conductor of heat and acts as insulation.",
-     "It increases friction with the pan."
+     "It increases friction with the pan and slows the drop down."
     ],
     "answer": 2,
     "type": "세부 사항",
@@ -1400,7 +1400,7 @@
     "choices": [
      "To explain how the effect was first discovered",
      "To give an example where the effect causes a practical problem",
-     "To show that the effect only happens in laboratories",
+     "To show that the effect only happens in laboratories and never in industry",
      "To compare water with other liquids"
     ],
     "answer": 1,
@@ -1412,7 +1412,7 @@
     "choices": [
      "They make drops last even longer.",
      "They prevent water from boiling.",
-     "They are used to make cooking pans cheaper.",
+     "They are used to make cooking pans cheaper and easier to clean at home.",
      "They are designed to improve cooling by disrupting the vapor layer."
     ],
     "answer": 3,
@@ -1433,7 +1433,7 @@
    {
     "q": "According to the professor, what is one advantage of monoculture?",
     "choices": [
-     "Crops are more resistant to disease.",
+     "Crops are more resistant to disease and to changes in weather.",
      "Plants ripen together and can be managed uniformly.",
      "Farmers need fewer seed banks.",
      "It protects soil from erosion."
@@ -1458,7 +1458,7 @@
     "q": "Why does the professor mention political and economic causes of the famine?",
     "choices": [
      "To acknowledge that the famine had more than one cause",
-     "To show that biology played no role",
+     "To show that biology played no role in the famine at all",
      "To change the topic to Irish history",
      "To criticize historians"
     ],
@@ -1470,7 +1470,7 @@
     "q": "How does the banana example relate to the main point of the lecture?",
     "choices": [
      "It shows that the same risk of uniformity continues today.",
-     "It shows that monoculture problems are only historical.",
+     "It shows that monoculture problems are only historical and no longer matter.",
      "It proves that fungal diseases cannot affect bananas.",
      "It shows that seed banks have failed."
     ],
@@ -1492,7 +1492,7 @@
    {
     "q": "What was the purpose of Kuleshov's experiment?",
     "choices": [
-     "To test which actor was most popular",
+     "To test which actor was most popular among Soviet movie audiences",
      "To compare Soviet and American films",
      "To show how the shots placed next to a face change its meaning",
      "To find the best way to film food"

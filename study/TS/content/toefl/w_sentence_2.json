@@ -324,7 +324,10 @@
    "yet"
   ],
   "explanation": "현재완료 수동태 has (not) been + 과거분사입니다. yet 은 부정문 끝에 씁니다.",
-  "translation": "A: 오늘 강의실 정말 추웠어. / B: 난방이 아직 안 고쳐졌어."
+  "translation": "A: 오늘 강의실 정말 추웠어. / B: 난방이 아직 안 고쳐졌어.",
+  "alts": [
+   "The heating has not yet been fixed"
+  ]
  },
  {
   "id": "ws-123",
@@ -534,7 +537,10 @@
    "my roommate"
   ],
   "explanation": "경험을 나타내는 현재완료 have been there 입니다. 횟수 twice 는 그 뒤에 둡니다.",
-  "translation": "A: 과학 박물관 가 본 적 있어? / B: 룸메이트랑 두 번 가 봤어."
+  "translation": "A: 과학 박물관 가 본 적 있어? / B: 룸메이트랑 두 번 가 봤어.",
+  "alts": [
+   "I have been there with my roommate twice"
+  ]
  },
  {
   "id": "ws-137",
@@ -1235,7 +1241,10 @@
    "replicated"
   ],
   "explanation": "Not before ~ 는 '~하기 전에는 아니다'라는 축약 응답입니다. 시간 접속사 뒤 현재완료 수동태가 미래 완료를 나타냅니다.",
-  "translation": "A: 그 이론이 받아들여질까? / B: 결과가 독립적으로 재현되기 전에는 안 될 거야."
+  "translation": "A: 그 이론이 받아들여질까? / B: 결과가 독립적으로 재현되기 전에는 안 될 거야.",
+  "alts": [
+   "Not before the findings have been replicated independently"
+  ]
  },
  {
   "id": "ws-183",
@@ -1483,7 +1492,10 @@
    "entirely"
   ],
   "explanation": "간접화법에서 시제 일치로 would be spared(과거 기준 미래 수동태)를 씁니다.",
-  "translation": "A: 학장이 예산 삭감에 대해 뭐라고 했어? / B: 완전히 제외되는 프로그램은 없을 거라고 했어."
+  "translation": "A: 학장이 예산 삭감에 대해 뭐라고 했어? / B: 완전히 제외되는 프로그램은 없을 거라고 했어.",
+  "alts": [
+   "She said that no program would be entirely spared"
+  ]
  },
  {
   "id": "ws-199",

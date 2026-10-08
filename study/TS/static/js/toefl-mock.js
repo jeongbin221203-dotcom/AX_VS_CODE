@@ -1,4 +1,4 @@
-/* 토플 실전 모의고사: Reading → Listening → Speaking → Writing
+/* 토플 실전 모의고사: Reading → Listening → Writing → Speaking
    - 읽기·듣기: 2단계 적응형 (1모듈 정답률로 2모듈 어려움/쉬움 결정), 모듈 시간 제한
    - 듣기: 음성 한 번만, 되돌아가기 없음 · 읽기: 모듈 안에서 앞뒤 이동
    - 시험 중 정답 비공개. 끝나면 쓰기·인터뷰(·인식 안 된 따라 말하기) 자기 채점 후 제출 */
@@ -17,6 +17,25 @@
   const review = [];           // 끝나고 자기 채점할 것
   const t0 = Date.now();
   let tick = null, cleanup = [];
+  // 영역(Reading·Listening·…)을 끝낼 때마다 진행 상황을 브라우저에 저장 — 새로고침·실수로 닫아도 끝낸 영역은 다시 안 본다
+  const KEY = `ts-tmock-${P.id}`;
+  let doneSecs = [];
+  function persist() {
+    try { localStorage.setItem(KEY, JSON.stringify({ done: doneSecs, results, routes, review })); } catch (e) { /* 저장 불가 */ }
+  }
+  function loadSaved() {
+    try {
+      const s = JSON.parse(localStorage.getItem(KEY) || "null");
+      if (!s || !Array.isArray(s.done) || !s.done.length) return false;
+      if (!confirm(`이전에 끝낸 영역(${s.done.join(", ")})이 저장되어 있습니다.
+확인 = 이어서 하기 / 취소 = 처음부터 다시`)) { localStorage.removeItem(KEY); return false; }
+      doneSecs = s.done.filter(k => plan.order.includes(k));
+      Object.assign(results, s.results || {});
+      Object.assign(routes, s.routes || {});
+      (s.review || []).forEach(r => review.push(r));
+      return true;
+    } catch (e) { return false; }
+  }
 
   const sleep = ms => new Promise(r => setTimeout(r, ms));
   const accent = () => (P.tts.accent === "mix" ? "us" : P.tts.accent);
@@ -300,7 +319,7 @@
       draw();
       stage.querySelector("[data-ok]").onclick = () => {
         const mine = placed.map(ci => it.chunks[ci]).join(" ");
-        setResult("w_sentence", it, [{ qidx: 0, score: mine === it.chunks.join(" ") ? 1 : 0, response: mine }]);
+        setResult("w_sentence", it, [{ qidx: 0, score: (mine === it.chunks.join(" ") || (it.alts || []).includes(mine)) ? 1 : 0, response: mine }]);
         resolve();
       };
     });
@@ -372,7 +391,9 @@
 
   // ---------------------------------------------------------------- 진행
   async function run() {
+    loadSaved();
     for (const key of plan.order) {
+      if (doneSecs.includes(key)) continue;
       const sec = plan.sections[key];
       if (key === "R") {
         await gate("Reading", ["모듈 2개, 모듈마다 15분. 모듈 안에서는 문제 번호로 앞뒤 이동이 됩니다.", "1모듈 결과에 따라 2모듈 난이도가 달라집니다."], "Reading 시작");
@@ -391,6 +412,8 @@
         for (let i = 0; i < sents.length; i++) await runSentence(sents[i].item, i + 1, sents.length);
         for (const e of sec.items.filter(e => e.task !== "w_sentence")) await runWrite(e.task, e.item);
       }
+      doneSecs.push(key);
+      persist();
     }
     if (review.length) await selfReview();
     await submit();
@@ -401,6 +424,7 @@
     try {
       const r = await TS.post(`/toefl/api/mock/${P.id}/finish`, { items: Object.values(results), routes, duration_sec: Math.round((Date.now() - t0) / 1000) });
       window.onbeforeunload = null;
+      try { localStorage.removeItem(KEY); } catch (e) { /* 무시 */ }
       location.href = r.redirect;
     } catch (e) {
       stage.innerHTML = `<div class="flash error">제출 실패: ${esc(e.message)} <button class="btn small" id="retry">다시 제출</button></div>`;
@@ -408,7 +432,7 @@
     }
   }
 
-  window.onbeforeunload = () => "모의고사를 그만둘까요? 진행 내용은 저장되지 않습니다.";
+  window.onbeforeunload = () => "모의고사를 그만둘까요? 끝낸 영역은 저장되지만, 지금 보는 영역은 처음부터 다시 봐야 합니다.";
   $("#start-btn").addEventListener("click", () => {
     $("#intro").classList.add("hidden");
     $("#quiz-main").classList.remove("hidden");

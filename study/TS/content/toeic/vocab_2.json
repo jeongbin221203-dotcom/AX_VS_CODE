@@ -157,7 +157,7 @@
 {"id": "v-0756", "level": 1, "word": "quiet", "pos": "adj.", "meaning": "조용한", "example": "Please keep your voice down in the quiet zone.", "example_ko": "조용한 구역에서는 목소리를 낮춰 주세요.", "tip": "quite (꽤)와 구별", "tier": "core"},
 {"id": "v-0757", "level": 1, "word": "crowded", "pos": "adj.", "meaning": "붐비는, 혼잡한", "example": "The station is crowded in the morning.", "example_ko": "아침에는 역이 붐빕니다.", "tip": "", "tier": "stretch"},
 {"id": "v-0758", "level": 1, "word": "part-time", "pos": "adj.", "meaning": "시간제의, 파트타임의", "example": "We are hiring part-time workers.", "example_ko": "시간제 직원을 채용하고 있습니다.", "tip": "full-time (정규직의)", "tier": "core"},
-{"id": "v-0759", "level": 1, "word": "overtime", "pos": "n.", "meaning": "초과 근무, 야근", "example": "Staff are paid for overtime.", "example_ko": "직원들은 초과 근무 수당을 받습니다.", "tip": "work overtime (야근하다)", "tier": "stretch"},
+{"id": "v-0759", "level": 1, "word": "overtime", "pos": "n.", "meaning": "초과 근무, 야근", "example": "Staff are paid for overtime.", "example_ko": "직원들은 초과 근무 수당을 받습니다.", "tip": "work overtime (야근하다)", "tier": "core"},
 {"id": "v-0760", "level": 1, "word": "customer service", "pos": "n.", "meaning": "고객 서비스", "example": "Please call customer service for help.", "example_ko": "도움이 필요하면 고객 서비스로 전화하세요.", "tip": "", "tier": "core"},
 {"id": "v-0761", "level": 1, "word": "next to", "pos": "phr.", "meaning": "~ 옆에", "example": "The copier is next to my desk.", "example_ko": "복사기는 제 책상 옆에 있습니다.", "tip": "", "tier": "core"},
 {"id": "v-0762", "level": 1, "word": "across from", "pos": "phr.", "meaning": "~의 맞은편에", "example": "The bank is across from the post office.", "example_ko": "은행은 우체국 맞은편에 있습니다.", "tip": "", "tier": "stretch"},

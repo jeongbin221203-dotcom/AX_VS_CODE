@@ -38,7 +38,7 @@
    {
     "q": "What problem are the speakers discussing?",
     "choices": [
-     "A meeting was canceled.",
+     "A meeting was canceled by the manager.",
      "A floor is closed.",
      "A machine is out of order.",
      "A phone call was missed."
@@ -429,7 +429,7 @@
    {
     "q": "Why does the man reject the airline's offer?",
     "choices": [
-     "The ticket is too expensive.",
+     "The ticket is too expensive for their budget.",
      "The flight would arrive too late.",
      "The flight leaves too early.",
      "The seats are not together."
@@ -690,7 +690,7 @@
     "choices": [
      "He has to speak with a customer.",
      "He has to train new staff.",
-     "He will be on vacation.",
+     "He will be on vacation for the whole week.",
      "He has to write a report."
     ],
     "answer": 0,
@@ -794,7 +794,7 @@
      "Pay in cash",
      "Call back later",
      "Complete an online form",
-     "Send a list by e-mail"
+     "Send a list of names by e-mail"
     ],
     "answer": 2,
     "type": "요청·제안",
@@ -853,7 +853,7 @@
      "The design of a Web site",
      "The results of a promotional effort",
      "A new store opening",
-     "Training on social media"
+     "Training employees to use social media"
     ],
     "answer": 1,
     "type": "주제·목적",
@@ -862,7 +862,7 @@
    {
     "q": "Why does the woman say, \"But the budget for the summer campaign was approved last week\"?",
     "choices": [
-     "To announce that more money is available",
+     "To announce that more money is available for the summer campaign",
      "To complain about a late decision",
      "To indicate that a plan cannot be changed now",
      "To ask the man to review a budget"
@@ -950,7 +950,7 @@
    {
     "q": "Who most likely is Grace?",
     "choices": [
-     "A hotel guest",
+     "A hotel guest staying on the eighth floor",
      "A person in charge of building upkeep",
      "A front desk clerk",
      "A meeting organizer"
@@ -1045,7 +1045,7 @@
    {
     "q": "What does the woman want to order?",
     "choices": [
-     "Name tags for an event",
+     "Name tags for a company event next week",
      "A new company logo",
      "Printed items for new workers",
      "Office furniture"
@@ -1212,7 +1212,7 @@
     "q": "What is the conversation mainly about?",
     "choices": [
      "A shopping mall opening",
-     "A change to a bus route",
+     "A change to a bus route near the mall",
      "A new ID card system",
      "A temporary parking arrangement"
     ],
@@ -1235,7 +1235,7 @@
    {
     "q": "According to the woman, what must employees do by Friday?",
     "choices": [
-     "Sign up for a shuttle",
+     "Sign up for the shuttle bus service online",
      "Collect a document at the front desk",
      "Repaint their parking spaces",
      "Send an e-mail to reception"
@@ -1410,7 +1410,7 @@
    {
     "q": "What is the main topic of the conversation?",
     "choices": [
-     "A holiday sales event",
+     "A holiday sales event for retail partners",
      "Choosing a new supplier",
      "Hiring factory workers",
      "A delay in releasing a product"
@@ -1425,7 +1425,7 @@
      "Finding another factory",
      "Selling a small number of units first",
      "Lowering the price",
-     "Postponing the launch until spring"
+     "Postponing the launch until the spring season"
     ],
     "answer": 1,
     "type": "요청·제안",
@@ -1495,7 +1495,7 @@
     "choices": [
      "A deadline that has been moved earlier",
      "A new board member",
-     "A trip to an overseas office",
+     "A trip to the Asia office next Thursday",
      "Errors in some figures"
     ],
     "answer": 0,
@@ -1601,7 +1601,7 @@
    {
     "q": "What does the man say he will do?",
     "choices": [
-     "Prepare a menu for Tuesday",
+     "Prepare a full menu for the anniversary dinner",
      "Cook a sample dish today",
      "Arrange for scheduling information to be sent",
      "Visit the women's office"
@@ -1661,7 +1661,7 @@
     "q": "What problem are the speakers discussing?",
     "choices": [
      "The phone lines are down.",
-     "A server was stolen.",
+     "A server was stolen from the data center.",
      "Some sales staff are absent.",
      "Customers are unable to pay online."
     ],
@@ -1684,7 +1684,7 @@
    {
     "q": "What does the man ask the woman to do?",
     "choices": [
-     "Start a free trial",
+     "Start a free trial with PayStream today",
      "Call the tech team",
      "Contact the director",
      "Compare some service providers"
@@ -1776,7 +1776,7 @@
    {
     "q": "What does the woman ask the man to do?",
     "choices": [
-     "Approve a department budget",
+     "Approve a department's spending for next quarter",
      "Deliver some supplies",
      "Check a document before it is submitted",
      "Place an order for her"
@@ -1975,7 +1975,7 @@
    {
     "q": "What will the man do this afternoon?",
     "choices": [
-     "Sign a five-year lease",
+     "Sign a five-year lease for the Elm Street store",
      "Inquire about short-term space",
      "Visit Elm Street",
      "Speak with the bus company"
@@ -2162,7 +2162,7 @@
    {
     "q": "Why does the woman say, \"We're launching the summer promotion in four\"?",
     "choices": [
-     "To suggest postponing a promotion",
+     "To suggest postponing a summer promotion by a month",
      "To correct a date the man gave",
      "To show that sales will rise soon",
      "To point out that a timeline is too long"
@@ -2174,7 +2174,7 @@
    {
     "q": "What does the woman ask the man to do?",
     "choices": [
-     "Meet with competitors",
+     "Meet with competitors about their apps",
      "Design forty new workouts",
      "Cancel the summer promotion",
      "Outline a simplified feature"

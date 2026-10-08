@@ -9,7 +9,7 @@ import secrets
 import sys
 import time
 
-from flask import Flask, Request, abort, request, session
+from flask import Flask, Request, abort, render_template, request, session
 from werkzeug.routing import IntegerConverter
 
 import config
@@ -83,6 +83,13 @@ def create_app(test_config: dict | None = None) -> Flask:
     @app.errorhandler(OverflowError)
     def too_big(_e):
         return ("값이 너무 큽니다.", 400)
+
+    @app.errorhandler(404)
+    def not_found(_e):
+        if "/api/" in request.path:                          # JS 가 부르는 주소는 기본 응답 그대로
+            return ("찾을 수 없습니다.", 404)
+        return render_template("error.html", code=404, title="페이지를 찾을 수 없습니다",
+                               message="주소가 바뀌었거나 지워진 기록일 수 있습니다. 처음 화면에서 다시 찾아 주세요."), 404
 
     @app.after_request
     def headers(response):

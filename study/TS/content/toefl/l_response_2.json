@@ -608,11 +608,11 @@
    "The road curves to the left there.",
    "I got a B on the final last year.",
    "She hasn't said anything about it in class.",
-   "Yes, the midterm is next Tuesday."
+   "Yes, the midterm is next Tuesday, and it covers the first six chapters."
   ],
   "answer": 2,
   "explanation": "정답은 (C)입니다. 확답 대신 교수님이 언급한 적이 없다고 간접적으로 답한 것이 자연스럽습니다. curve를 '휘다'의 뜻으로 쓰거나 시험 날짜를 말한 선택지는 함정입니다.",
-  "translation": "질문: 교수님이 중간고사 점수를 상대평가로 조정해 주실까? / (A) 거기서 길이 왼쪽으로 휘어. / (B) 작년 기말에 B 받았어. / (C) 수업 시간에 그런 말씀은 없으셨어. / (D) 응, 중간고사는 다음 주 화요일이야."
+  "translation": "질문: 교수님이 중간고사 점수를 상대평가로 조정해 주실까? / (A) 거기서 길이 왼쪽으로 휘어. / (B) 작년 기말에 B 받았어. / (C) 수업 시간에 그런 말씀은 없으셨어. / (D) 네, 중간고사는 다음 주 화요일이고 1장부터 6장까지 나와요."
  },
  {
   "id": "lr-142",
@@ -638,11 +638,11 @@
    "I meant to, but I still need a reference letter.",
    "The house has three bedrooms.",
    "Turn right at the next light.",
-   "Yes, I applied some lotion."
+   "Yes, I applied some lotion because my hands were very dry."
   ],
   "answer": 0,
   "explanation": "정답은 (A)입니다. 부정 의문문으로 확인하는 질문에 아직 못 낸 이유를 설명한 답이 정답입니다. turn, apply를 다른 뜻으로 쓴 선택지는 소리만 비슷한 함정입니다.",
-  "translation": "질문: 기숙사 신청서 이미 내지 않았어? / (A) 그러려고 했는데 아직 추천서가 필요해. / (B) 그 집은 침실이 세 개야. / (C) 다음 신호등에서 오른쪽으로 돌아. / (D) 응, 로션 발랐어."
+  "translation": "질문: 기숙사 신청서 이미 내지 않았어? / (A) 그러려고 했는데 아직 추천서가 필요해. / (B) 그 집은 침실이 세 개야. / (C) 다음 신호등에서 오른쪽으로 돌아. / (D) 네, 손이 너무 건조해서 로션을 발랐어요."
  },
  {
   "id": "lr-144",
@@ -652,12 +652,12 @@
   "choices": [
    "I sampled the new coffee.",
    "Put on your safety goggles first.",
-   "They were collected last week.",
+   "They were collected last week by the students in the morning section.",
    "The fridge in the back is for samples only."
   ],
   "answer": 3,
   "explanation": "정답은 (D)입니다. 어디에 둘지 묻는 질문에 샘플 전용 냉장고를 알려 준 답이 정답입니다. 보안경 착용은 put on을 이용한 함정이고, 채취 시기는 장소와 관계가 없습니다.",
-  "translation": "질문: 이 실험 샘플들 어디에 둘까? / (A) 새 커피를 맛봤어. / (B) 먼저 보안경부터 써. / (C) 지난주에 채취한 거야. / (D) 뒤쪽 냉장고가 샘플 전용이야."
+  "translation": "질문: 이 실험 샘플들 어디에 둘까? / (A) 새 커피를 맛봤어. / (B) 먼저 보안경부터 써. / (C) 아침 반 학생들이 지난주에 수집했어요. / (D) 뒤쪽 냉장고가 샘플 전용이야."
  },
  {
   "id": "lr-145",
@@ -668,11 +668,11 @@
    "I'll come with you tomorrow.",
    "Switch off the light, please.",
    "I really enjoyed the field trips in the intro course.",
-   "Geology is in the science building."
+   "Geology is in the science building, on the third floor near the café."
   ],
   "answer": 2,
   "explanation": "정답은 (C)입니다. How come은 이유를 묻는 표현이므로 현장 답사가 재미있었다는 이유를 말한 답이 정답입니다. come, switch를 다른 뜻으로 쓴 선택지는 함정입니다.",
-  "translation": "질문: 왜 지질학으로 전공을 바꿨어? / (A) 내일 너랑 같이 갈게. / (B) 불 좀 꺼 줘. / (C) 입문 수업의 현장 답사가 정말 재밌었거든. / (D) 지질학과는 과학관에 있어."
+  "translation": "질문: 왜 지질학으로 전공을 바꿨어? / (A) 내일 너랑 같이 갈게. / (B) 불 좀 꺼 줘. / (C) 입문 수업의 현장 답사가 정말 재밌었거든. / (D) 지질학과는 과학관 3층 카페 근처에 있어요."
  },
  {
   "id": "lr-146",
@@ -683,11 +683,11 @@
    "Good luck on your test.",
    "Maybe a salad. We already have plenty of desserts.",
    "I brought it back yesterday.",
-   "The pot is on the stove."
+   "The pot is on the stove, and the lid is in the cabinet above it."
   ],
   "answer": 1,
   "explanation": "정답은 (B)입니다. 가져갈 것을 묻는 질문에 이미 많은 것을 피해 샐러드를 제안한 답이 자연스럽습니다. luck, pot은 potluck과 소리가 겹치는 함정입니다.",
-  "translation": "질문: 포틀럭 파티에 뭐 가져가야 해? / (A) 시험 잘 봐. / (B) 샐러드 어때? 디저트는 이미 충분해. / (C) 어제 돌려줬어. / (D) 냄비는 가스레인지 위에 있어."
+  "translation": "질문: 포틀럭 파티에 뭐 가져가야 해? / (A) 시험 잘 봐. / (B) 샐러드 어때? 디저트는 이미 충분해. / (C) 어제 돌려줬어. / (D) 냄비는 가스레인지 위에 있고 뚜껑은 그 위 찬장에 있어요."
  },
  {
   "id": "lr-147",
@@ -698,11 +698,11 @@
    "The IT help desk can reset your password.",
    "I'll email you the notes tonight.",
    "The account is overdrawn.",
-   "Students get a discount."
+   "Students get a discount at the bookstore on Mondays and Wednesdays."
   ],
   "answer": 0,
   "explanation": "정답은 (A)입니다. 로그인 문제에 해결 방법(IT 지원 센터의 비밀번호 초기화)을 알려 준 답이 정답입니다. email, account를 다른 맥락으로 쓴 선택지는 함정입니다.",
-  "translation": "질문: 학교 이메일 계정에 접속이 안 돼. / (A) IT 지원 센터에서 비밀번호를 초기화해 줄 수 있어. / (B) 오늘 밤에 노트를 이메일로 보내 줄게. / (C) 계좌가 잔액 초과야. / (D) 학생은 할인받아."
+  "translation": "질문: 학교 이메일 계정에 접속이 안 돼. / (A) IT 지원 센터에서 비밀번호를 초기화해 줄 수 있어. / (B) 오늘 밤에 노트를 이메일로 보내 줄게. / (C) 계좌가 잔액 초과야. / (D) 학생은 월요일과 수요일에 서점에서 할인을 받아요."
  },
  {
   "id": "lr-148",
@@ -726,13 +726,13 @@
   "prompt": "Do you want to split a taxi to the airport?",
   "choices": [
    "They split up last month.",
-   "The airport has free Wi-Fi.",
+   "The airport has free Wi-Fi in every terminal and in the cafés.",
    "My flight isn't until Sunday, unfortunately.",
    "I taxed my brain too much."
   ],
   "answer": 2,
   "explanation": "정답은 (C)입니다. 직접 거절하지 않고 비행 일정이 다르다고 말해 함께 갈 수 없음을 나타낸 답이 정답입니다. split을 '헤어지다'의 뜻으로 쓴 선택지는 함정입니다.",
-  "translation": "질문: 공항까지 택시 같이 타고 나눠 낼래? / (A) 그 둘은 지난달에 헤어졌어. / (B) 공항에 무료 와이파이가 있어. / (C) 아쉽지만 내 비행기는 일요일에야 있어. / (D) 머리를 너무 많이 썼어."
+  "translation": "질문: 공항까지 택시 같이 타고 나눠 낼래? / (A) 그 둘은 지난달에 헤어졌어. / (B) 공항은 모든 터미널과 카페에서 무료 와이파이를 제공해요. / (C) 아쉽지만 내 비행기는 일요일에야 있어. / (D) 머리를 너무 많이 썼어."
  },
  {
   "id": "lr-150",
@@ -743,11 +743,11 @@
    "I knew the professor in high school.",
    "Then I'd better skip lunch and finish mine.",
    "It's noon in New York.",
-   "The essays were very long."
+   "The essays were very long, and some of them had no conclusion."
   ],
   "answer": 1,
   "explanation": "정답은 (B)입니다. 마감 소식을 듣고 점심을 거르고 끝내겠다고 반응한 답이 자연스럽습니다. professor, noon, essays를 반복했지만 상황에 반응하지 않은 선택지는 함정입니다.",
-  "translation": "질문: 교수님이 에세이를 정오까지 내래. / (A) 그 교수님을 고등학교 때부터 알았어. / (B) 그럼 점심 거르고 내 것 끝내야겠다. / (C) 뉴욕은 정오야. / (D) 에세이들이 아주 길었어."
+  "translation": "질문: 교수님이 에세이를 정오까지 내래. / (A) 그 교수님을 고등학교 때부터 알았어. / (B) 그럼 점심 거르고 내 것 끝내야겠다. / (C) 뉴욕은 정오야. / (D) 에세이들이 아주 길었고 일부는 결론이 없었어요."
  },
  {
   "id": "lr-151",
@@ -756,13 +756,13 @@
   "prompt": "Why is the elevator roped off?",
   "choices": [
    "Maintenance is fixing a broken cable.",
-   "I'm afraid of heights.",
+   "I'm afraid of heights, so I always take the stairs up.",
    "The rope was too short.",
    "Take it to the fifth floor."
   ],
   "answer": 0,
   "explanation": "정답은 (A)입니다. 출입을 막은 이유를 묻는 질문에 수리 중이라는 이유를 말한 답이 정답입니다. rope를 '밧줄'의 뜻으로 반복한 선택지는 함정입니다.",
-  "translation": "질문: 엘리베이터에 왜 줄을 쳐 놨어? / (A) 정비팀이 고장 난 케이블을 고치고 있어. / (B) 나는 고소공포증이 있어. / (C) 밧줄이 너무 짧았어. / (D) 5층으로 가져가."
+  "translation": "질문: 엘리베이터에 왜 줄을 쳐 놨어? / (A) 정비팀이 고장 난 케이블을 고치고 있어. / (B) 저는 높은 곳이 무서워서 항상 계단으로 올라가요. / (C) 밧줄이 너무 짧았어. / (D) 5층으로 가져가."
  },
  {
   "id": "lr-152",
@@ -785,14 +785,14 @@
   "voice": "female",
   "prompt": "Could you tell me how much the late fee is?",
   "choices": [
-   "It's too late to apply.",
+   "It's too late to apply for the program, but you can try next year.",
    "Feel free to ask me.",
    "It's twenty-five cents per day for each item.",
    "She told me yesterday."
   ],
   "answer": 2,
   "explanation": "정답은 (C)입니다. 연체료 금액을 묻는 질문에 구체적인 금액으로 답한 것이 정답입니다. late, tell을 다른 의미로 반복한 선택지는 금액을 알려 주지 않습니다.",
-  "translation": "질문: 연체료가 얼마인지 알려 주실래요? / (A) 신청하기엔 너무 늦었어요. / (B) 편하게 물어보세요. / (C) 한 권당 하루 25센트예요. / (D) 그녀가 어제 말해 줬어요."
+  "translation": "질문: 연체료가 얼마인지 알려 주실래요? / (A) 그 프로그램은 신청하기엔 늦었지만 내년에 해 볼 수 있어요. / (B) 편하게 물어보세요. / (C) 한 권당 하루 25센트예요. / (D) 그녀가 어제 말해 줬어요."
  },
  {
   "id": "lr-154",
@@ -802,12 +802,12 @@
   "choices": [
    "I changed my shirt.",
    "Really? I hope it still stops near my apartment.",
-   "The space shuttle launched in 1981.",
+   "The space shuttle launched in 1981 and flew for thirty years.",
    "Root vegetables are healthy."
   ],
   "answer": 1,
   "explanation": "정답은 (B)입니다. 소식에 놀라며 자신과 관련된 걱정을 말한 답이 자연스럽습니다. route와 발음이 비슷한 root, shuttle을 다른 뜻으로 쓴 선택지는 함정입니다.",
-  "translation": "질문: 캠퍼스 셔틀 노선이 바뀐대. / (A) 셔츠 갈아입었어. / (B) 정말? 우리 아파트 근처엔 계속 서면 좋겠다. / (C) 우주왕복선은 1981년에 발사됐어. / (D) 뿌리채소는 건강에 좋아."
+  "translation": "질문: 캠퍼스 셔틀 노선이 바뀐대. / (A) 셔츠 갈아입었어. / (B) 정말? 우리 아파트 근처엔 계속 서면 좋겠다. / (C) 우주왕복선은 1981년에 발사되어 30년 동안 비행했어요. / (D) 뿌리채소는 건강에 좋아."
  },
  {
   "id": "lr-155",
@@ -816,13 +816,13 @@
   "prompt": "Which do you recommend, the history seminar or the art survey?",
   "choices": [
    "Depends on whether you like writing papers or taking exams.",
-   "I recommended him for the job.",
+   "I recommended him for the job, and he started working there last week.",
    "We filled out a survey yesterday.",
    "Yes, both of them."
   ],
   "answer": 0,
   "explanation": "정답은 (A)입니다. 둘 중 하나를 고르는 질문에 상황에 따라 다르다고 기준을 제시한 답이 자연스럽습니다. 선택 의문문에 Yes로 답하거나 survey를 '설문'으로 쓴 선택지는 틀립니다.",
-  "translation": "질문: 역사 세미나랑 미술 개론 중 뭘 추천해? / (A) 리포트 쓰는 걸 좋아하는지 시험 보는 걸 좋아하는지에 달렸어. / (B) 그 일자리에 그를 추천했어. / (C) 어제 설문지를 작성했어. / (D) 응, 둘 다."
+  "translation": "질문: 역사 세미나랑 미술 개론 중 뭘 추천해? / (A) 리포트 쓰는 걸 좋아하는지 시험 보는 걸 좋아하는지에 달렸어. / (B) 그를 그 일자리에 추천했고 지난주에 일을 시작했어요. / (C) 어제 설문지를 작성했어. / (D) 응, 둘 다."
  },
  {
   "id": "lr-156",
@@ -830,14 +830,14 @@
   "voice": "male",
   "prompt": "You're not wearing your glasses today.",
   "choices": [
-   "I drank two glasses of water.",
+   "I drank two glasses of water before I left the house this morning.",
    "Today is my birthday.",
    "I wear a uniform at work.",
    "I'm trying out contact lenses."
   ],
   "answer": 3,
   "explanation": "정답은 (D)입니다. 안경을 안 쓴 것을 지적하자 콘택트렌즈를 써 본다고 이유를 말한 답이 정답입니다. glasses를 '유리잔'으로 쓴 선택지는 함정입니다.",
-  "translation": "질문: 오늘 안경 안 썼네. / (A) 물 두 잔 마셨어. / (B) 오늘 내 생일이야. / (C) 직장에서는 유니폼을 입어. / (D) 콘택트렌즈를 써 보는 중이야."
+  "translation": "질문: 오늘 안경 안 썼네. / (A) 오늘 아침 집을 나서기 전에 물 두 잔을 마셨어요. / (B) 오늘 내 생일이야. / (C) 직장에서는 유니폼을 입어. / (D) 콘택트렌즈를 써 보는 중이야."
  },
  {
   "id": "lr-157",
@@ -860,14 +860,14 @@
   "voice": "male",
   "prompt": "I can't figure out how to use the new scanner.",
   "choices": [
-   "The figures are in the appendix.",
+   "The figures are in the appendix at the end of the lab manual.",
    "There's an instruction sheet taped to the side.",
    "I scanned the room for my keys.",
    "It's brand new."
   ],
   "answer": 1,
   "explanation": "정답은 (B)입니다. 사용법을 모른다는 말에 설명서 위치를 알려 준 답이 정답입니다. figure, scan을 다른 뜻으로 쓴 선택지는 소리만 비슷한 함정입니다.",
-  "translation": "질문: 새 스캐너를 어떻게 쓰는지 모르겠어. / (A) 수치는 부록에 있어. / (B) 옆면에 사용 설명서가 붙어 있어. / (C) 열쇠를 찾으려고 방을 훑어봤어. / (D) 완전 새거야."
+  "translation": "질문: 새 스캐너를 어떻게 쓰는지 모르겠어. / (A) 수치는 실험 교재 끝의 부록에 있어요. / (B) 옆면에 사용 설명서가 붙어 있어. / (C) 열쇠를 찾으려고 방을 훑어봤어. / (D) 완전 새거야."
  },
  {
   "id": "lr-159",
@@ -877,12 +877,12 @@
   "choices": [
    "As soon as the landlord finishes painting.",
    "The movie was really moving.",
-   "It has two bathrooms.",
+   "It has two bathrooms, a balcony, and a view of the river.",
    "I moved here from Texas."
   ],
   "answer": 0,
   "explanation": "정답은 (A)입니다. 날짜 대신 '페인트칠이 끝나는 대로'라는 조건으로 시점을 말한 답이 자연스럽습니다. moving을 '감동적인'의 뜻으로 쓴 선택지는 함정입니다.",
-  "translation": "질문: 새 아파트로 언제 이사해? / (A) 집주인이 페인트칠을 끝내는 대로. / (B) 그 영화 정말 감동적이었어. / (C) 화장실이 두 개야. / (D) 텍사스에서 이사 왔어."
+  "translation": "질문: 새 아파트로 언제 이사해? / (A) 집주인이 페인트칠을 끝내는 대로. / (B) 그 영화 정말 감동적이었어. / (C) 화장실이 두 개이고 발코니와 강이 보이는 전망이 있어요. / (D) 텍사스에서 이사 왔어."
  },
  {
   "id": "lr-160",
@@ -891,13 +891,13 @@
   "prompt": "Do you mind if I record today's lecture?",
   "choices": [
    "Yes, I set a new record.",
-   "Today's lecture is about volcanoes.",
+   "Today's lecture is about volcanoes and how they form on the ocean floor.",
    "I don't mind the cold.",
    "Not at all, as long as it's for your own use."
   ],
   "answer": 3,
   "explanation": "정답은 (D)입니다. Do you mind if는 '~해도 될까'의 뜻이라 허락할 때는 Not at all로 답합니다. 조건을 붙여 허락한 답이 정답이고, record를 '기록'으로 쓴 선택지는 함정입니다.",
-  "translation": "질문: 오늘 강의 녹음해도 될까요? / (A) 네, 신기록을 세웠어요. / (B) 오늘 강의는 화산에 관한 거예요. / (C) 추위는 상관없어요. / (D) 개인적으로만 쓴다면 전혀 상관없어요."
+  "translation": "질문: 오늘 강의 녹음해도 될까요? / (A) 네, 신기록을 세웠어요. / (B) 오늘 강의는 화산과 그것이 해저에서 어떻게 생기는지에 관한 거예요. / (C) 추위는 상관없어요. / (D) 개인적으로만 쓴다면 전혀 상관없어요."
  },
  {
   "id": "lr-161",
@@ -905,14 +905,14 @@
   "voice": "female",
   "prompt": "Do you want to grab dinner after the seminar?",
   "choices": [
-   "The seminar was full of great ideas.",
+   "The seminar was full of great ideas, and the speaker answered every question.",
    "Grab the door for me, would you?",
    "Dinner was served at seven.",
    "I've got a problem set due at midnight, so I'll have to pass."
   ],
   "answer": 3,
   "explanation": "정답은 (D)입니다. 마감 과제가 있다는 이유를 들어 완곡하게 거절한 답이 정답입니다. pass는 '거절하다, 빠지다'의 뜻이며, grab, dinner를 다른 맥락으로 쓴 선택지는 함정입니다.",
-  "translation": "질문: 세미나 끝나고 저녁 먹을래? / (A) 세미나는 좋은 아이디어로 가득했어. / (B) 문 좀 잡아 줄래? / (C) 저녁은 7시에 나왔어. / (D) 자정 마감인 문제 풀이가 있어서 이번엔 빠질게."
+  "translation": "질문: 세미나 끝나고 저녁 먹을래? / (A) 세미나는 훌륭한 아이디어로 가득했고 발표자가 모든 질문에 답했어요. / (B) 문 좀 잡아 줄래? / (C) 저녁은 7시에 나왔어. / (D) 자정 마감인 문제 풀이가 있어서 이번엔 빠질게."
  },
  {
   "id": "lr-162",
@@ -923,11 +923,11 @@
    "I run every morning before class.",
    "The council meets in the city hall.",
    "You'd be great at it. You're always organizing events anyway.",
-   "I think so too, but it's raining."
+   "I think so too, but it's raining, so the meeting may be cancelled today."
   ],
   "answer": 2,
   "explanation": "정답은 (C)입니다. 출마 고민에 근거를 들어 격려한 답이 자연스럽습니다. run을 '달리다'로 쓰거나 council을 시의회로 바꾼 선택지는 함정입니다.",
-  "translation": "질문: 학생회 선거에 나갈까 생각 중이야. / (A) 나는 매일 수업 전에 달려. / (B) 시의회는 시청에서 모여. / (C) 너 잘할 거야. 어차피 늘 행사를 맡아 하잖아. / (D) 나도 그렇게 생각하는데 비가 와."
+  "translation": "질문: 학생회 선거에 나갈까 생각 중이야. / (A) 나는 매일 수업 전에 달려. / (B) 시의회는 시청에서 모여. / (C) 너 잘할 거야. 어차피 늘 행사를 맡아 하잖아. / (D) 저도 그렇게 생각하지만 비가 와서 오늘 모임은 취소될지도 몰라요."
  },
  {
   "id": "lr-163",
@@ -938,11 +938,11 @@
    "I extended my visa last year.",
    "That's a relief. My dorm is way too noisy to study in.",
    "The finals were held in the gym.",
-   "It took me hours to find it."
+   "It took me hours to find it, and I still don't know where it was."
   ],
   "answer": 1,
   "explanation": "정답은 (B)입니다. 소식에 대해 안도하며 그 이유를 말한 답이 정답입니다. finals를 운동 경기의 결승으로 쓰거나 extend를 반복한 선택지는 함정입니다.",
-  "translation": "질문: 기말고사 기간에 도서관 운영 시간이 늘어난대. / (A) 작년에 비자를 연장했어. / (B) 다행이다. 우리 기숙사는 너무 시끄러워서 공부가 안 되거든. / (C) 결승전은 체육관에서 열렸어. / (D) 그거 찾는 데 몇 시간 걸렸어."
+  "translation": "질문: 기말고사 기간에 도서관 운영 시간이 늘어난대. / (A) 작년에 비자를 연장했어. / (B) 다행이다. 우리 기숙사는 너무 시끄러워서 공부가 안 되거든. / (C) 결승전은 체육관에서 열렸어. / (D) 찾는 데 몇 시간이 걸렸고 아직도 어디에 있었는지 모르겠어요."
  },
  {
   "id": "lr-164",
@@ -953,11 +953,11 @@
    "You might want to ask Maria. She just started working in that lab.",
    "She accepted the award last spring.",
    "Research shows that sleep matters.",
-   "Yes, I assisted her with the move."
+   "Yes, I assisted her with the move, and we carried boxes all weekend."
   ],
   "answer": 0,
   "explanation": "정답은 (A)입니다. 직접 아는 것이 없어 더 잘 알 만한 사람을 알려 주는 간접 응답이 정답입니다. accept, assist를 다른 의미로 반복한 선택지는 함정입니다.",
-  "translation": "질문: 린 교수님이 새 연구 조교를 뽑으시는지 알아? / (A) 마리아한테 물어봐. 그 연구실에서 막 일을 시작했거든. / (B) 그녀는 작년 봄에 상을 받았어. / (C) 연구에 따르면 잠이 중요해. / (D) 응, 이사하는 거 도와드렸어."
+  "translation": "질문: 린 교수님이 새 연구 조교를 뽑으시는지 알아? / (A) 마리아한테 물어봐. 그 연구실에서 막 일을 시작했거든. / (B) 그녀는 작년 봄에 상을 받았어. / (C) 연구에 따르면 잠이 중요해. / (D) 네, 이사하는 걸 도왔고 주말 내내 상자를 날랐어요."
  },
  {
   "id": "lr-165",
@@ -966,13 +966,13 @@
   "prompt": "Weren't you supposed to meet your tutor at two?",
   "choices": [
    "I suppose it's two dollars.",
-   "My tutor is from Canada.",
+   "My tutor is from Canada and has been teaching here for three years.",
    "We met two years ago.",
    "She texted to say she's running behind."
   ],
   "answer": 3,
   "explanation": "정답은 (D)입니다. 왜 아직 여기 있냐는 뜻의 부정 의문문에 튜터가 늦는다는 이유를 말한 답이 정답입니다. running behind는 '늦어지다'라는 뜻이며, suppose, two를 반복한 선택지는 함정입니다.",
-  "translation": "질문: 2시에 튜터 만나기로 하지 않았어? / (A) 아마 2달러일 거야. / (B) 내 튜터는 캐나다 출신이야. / (C) 우리는 2년 전에 만났어. / (D) 늦는다고 문자가 왔어."
+  "translation": "질문: 2시에 튜터 만나기로 하지 않았어? / (A) 아마 2달러일 거야. / (B) 제 과외 선생님은 캐나다 출신이고 여기서 3년째 가르치고 있어요. / (C) 우리는 2년 전에 만났어. / (D) 늦는다고 문자가 왔어."
  },
  {
   "id": "lr-166",
@@ -997,12 +997,12 @@
   "choices": [
    "You should cut it into smaller pieces.",
    "Everyone feels that way after organic chemistry. Give it time.",
-   "The medical school is across the street.",
+   "The medical school is across the street from the hospital and the library.",
    "I'm sure the clinic is open."
   ],
   "answer": 1,
   "explanation": "정답은 (B)입니다. be cut out for는 '~에 적성이 맞다'라는 뜻으로, 자신감을 잃은 사람을 위로하는 답이 정답입니다. cut을 '자르다'로 쓴 선택지는 함정입니다.",
-  "translation": "질문: 내가 의대에 맞는 사람인지 모르겠어. / (A) 더 작게 잘라야 해. / (B) 유기화학 듣고 나면 다들 그래. 시간을 좀 줘 봐. / (C) 의대는 길 건너편에 있어. / (D) 병원은 분명 열었을 거야."
+  "translation": "질문: 내가 의대에 맞는 사람인지 모르겠어. / (A) 더 작게 잘라야 해. / (B) 유기화학 듣고 나면 다들 그래. 시간을 좀 줘 봐. / (C) 의대는 병원과 도서관 맞은편에 있어요. / (D) 병원은 분명 열었을 거야."
  },
  {
   "id": "lr-168",
@@ -1011,13 +1011,13 @@
   "prompt": "Could I get an extension on the paper? My grandmother's been in the hospital.",
   "choices": [
    "I'm sorry to hear that. Let's say next Wednesday.",
-   "The hospital is on Fifth Avenue.",
+   "The hospital is on Fifth Avenue, right across from the post office.",
    "Your extension number is 4421.",
    "My grandmother visited last week."
   ],
   "answer": 0,
   "explanation": "정답은 (A)입니다. 연장 요청에 위로하며 새 마감일을 정해 준 답이 자연스럽습니다. extension을 '내선 번호'로 쓴 선택지와 hospital, grandmother를 반복한 선택지는 함정입니다.",
-  "translation": "질문: 보고서 기한 연장해 주실 수 있을까요? 할머니가 입원해 계세요. / (A) 안타깝네요. 다음 주 수요일까지로 하죠. / (B) 그 병원은 5번가에 있어요. / (C) 당신 내선 번호는 4421이에요. / (D) 우리 할머니가 지난주에 오셨어요."
+  "translation": "질문: 보고서 기한 연장해 주실 수 있을까요? 할머니가 입원해 계세요. / (A) 안타깝네요. 다음 주 수요일까지로 하죠. / (B) 병원은 우체국 바로 맞은편 5번가에 있어요. / (C) 당신 내선 번호는 4421이에요. / (D) 우리 할머니가 지난주에 오셨어요."
  },
  {
   "id": "lr-169",
@@ -1026,13 +1026,13 @@
   "prompt": "Have you had a chance to look at my draft?",
   "choices": [
    "There's a draft coming from the window.",
-   "I had a chance to travel last year.",
+   "I had a chance to travel last year, and I visited five countries.",
    "Look at the chart on page two.",
    "I'm halfway through. I'll have comments for you tonight."
   ],
   "answer": 3,
   "explanation": "정답은 (D)입니다. 검토 여부를 묻는 질문에 진행 상황과 언제 의견을 줄지 알려 준 답이 정답입니다. draft를 '외풍'으로 쓰거나 chance를 반복한 선택지는 함정입니다.",
-  "translation": "질문: 내 초안 볼 시간 있었어? / (A) 창문에서 바람이 들어와. / (B) 작년에 여행할 기회가 있었어. / (C) 2쪽 표를 봐. / (D) 반쯤 봤어. 오늘 밤에 의견 줄게."
+  "translation": "질문: 내 초안 볼 시간 있었어? / (A) 창문에서 바람이 들어와. / (B) 작년에 여행할 기회가 있어서 다섯 나라를 방문했어요. / (C) 2쪽 표를 봐. / (D) 반쯤 봤어. 오늘 밤에 의견 줄게."
  },
  {
   "id": "lr-170",
@@ -1041,13 +1041,13 @@
   "prompt": "The bookstore ran out of the textbook for Psych 101.",
   "choices": [
    "I ran three miles this morning.",
-   "Psychology is a popular major.",
+   "Psychology is a popular major, and many students take it as a minor.",
    "The library keeps a copy on reserve you could use.",
    "They'll run out of time."
   ],
   "answer": 2,
   "explanation": "정답은 (C)입니다. 책이 품절된 문제에 대안(도서관 지정 도서)을 제시한 답이 정답입니다. ran, run out을 다른 맥락으로 쓴 선택지는 함정입니다.",
-  "translation": "질문: 서점에 심리학 개론 교과서가 다 떨어졌어. / (A) 오늘 아침에 3마일 뛰었어. / (B) 심리학은 인기 전공이야. / (C) 도서관에 지정 도서로 한 부 있어서 쓸 수 있어. / (D) 그들은 시간이 모자랄 거야."
+  "translation": "질문: 서점에 심리학 개론 교과서가 다 떨어졌어. / (A) 오늘 아침에 3마일 뛰었어. / (B) 심리학은 인기 있는 전공이고 많은 학생이 부전공으로도 택해요. / (C) 도서관에 지정 도서로 한 부 있어서 쓸 수 있어. / (D) 그들은 시간이 모자랄 거야."
  },
  {
   "id": "lr-171",
@@ -1055,14 +1055,14 @@
   "voice": "female",
   "prompt": "Is it worth buying a meal plan if I live off campus?",
   "choices": [
-   "The plan was approved by the board.",
+   "The plan was approved by the board last spring after a long debate.",
    "Only if you're on campus for lunch most days.",
    "I live on the third floor.",
    "It's worth about ten dollars."
   ],
   "answer": 1,
   "explanation": "정답은 (B)입니다. 살 만한지 묻는 질문에 조건을 붙여 답한 것이 자연스럽습니다. plan, live, worth를 다른 의미로 반복한 선택지는 함정입니다.",
-  "translation": "질문: 캠퍼스 밖에 살아도 학식 요금제를 살 만해? / (A) 그 계획은 이사회 승인을 받았어. / (B) 대부분 점심때 캠퍼스에 있다면 그렇지. / (C) 나는 3층에 살아. / (D) 10달러쯤 하는 가치야."
+  "translation": "질문: 캠퍼스 밖에 살아도 학식 요금제를 살 만해? / (A) 그 계획은 지난봄 긴 토론 끝에 이사회에서 승인됐어요. / (B) 대부분 점심때 캠퍼스에 있다면 그렇지. / (C) 나는 3층에 살아. / (D) 10달러쯤 하는 가치야."
  },
  {
   "id": "lr-172",
@@ -1073,11 +1073,11 @@
    "My roommate played in high school. Want me to ask her?",
    "He's not that short.",
    "The ball is under the bench.",
-   "The team played for an hour."
+   "The team played for an hour before the rain forced everyone inside."
   ],
   "answer": 0,
   "explanation": "정답은 (A)입니다. 사람이 부족하다는 말에 대신할 사람을 제안한 답이 정답입니다. short를 '키가 작다'로 쓴 선택지는 함정입니다.",
-  "translation": "질문: 배구팀에 한 명이 모자라. / (A) 내 룸메이트가 고등학교 때 했어. 물어볼까? / (B) 그는 그렇게 키가 작진 않아. / (C) 공은 벤치 밑에 있어. / (D) 그 팀은 한 시간 동안 경기했어."
+  "translation": "질문: 배구팀에 한 명이 모자라. / (A) 내 룸메이트가 고등학교 때 했어. 물어볼까? / (B) 그는 그렇게 키가 작진 않아. / (C) 공은 벤치 밑에 있어. / (D) 팀은 한 시간 동안 경기를 하다가 비 때문에 모두 안으로 들어갔어요."
  },
  {
   "id": "lr-173",
@@ -1085,14 +1085,14 @@
   "voice": "female",
   "prompt": "I'm afraid the workshop's already full.",
   "choices": [
-   "I'm afraid of spiders.",
+   "I'm afraid of spiders, so I never go into the basement storage room.",
    "I'm full. I just ate.",
    "The workshop was excellent.",
    "Is there a waiting list I could put my name on?"
   ],
   "answer": 3,
   "explanation": "정답은 (D)입니다. 정원이 찼다는 말에 대기 명단을 묻는 답이 자연스럽습니다. I'm afraid를 '무섭다'로, full을 '배부르다'로 쓴 선택지는 함정입니다.",
-  "translation": "질문: 죄송하지만 워크숍은 이미 정원이 찼어요. / (A) 저는 거미가 무서워요. / (B) 배불러요. 방금 먹었어요. / (C) 워크숍 정말 좋았어요. / (D) 이름 올릴 수 있는 대기 명단이 있나요?"
+  "translation": "질문: 죄송하지만 워크숍은 이미 정원이 찼어요. / (A) 저는 거미가 무서워서 지하 창고에는 절대 안 가요. / (B) 배불러요. 방금 먹었어요. / (C) 워크숍 정말 좋았어요. / (D) 이름 올릴 수 있는 대기 명단이 있나요?"
  },
  {
   "id": "lr-174",
@@ -1100,14 +1100,14 @@
   "voice": "male",
   "prompt": "Did you end up going to the job fair?",
   "choices": [
-   "The fair was not fair to everyone.",
+   "The fair was not fair to everyone, and many students complained about it.",
    "I ended the call quickly.",
    "I did, and I've already got two interviews lined up.",
    "No, it's a fair price."
   ],
   "answer": 2,
   "explanation": "정답은 (C)입니다. 갔는지 묻는 질문에 갔고 성과까지 말한 답이 정답입니다. fair를 '공평한·적정한'으로, end를 다른 뜻으로 쓴 선택지는 함정입니다.",
-  "translation": "질문: 결국 취업 박람회 갔어? / (A) 그 박람회는 모두에게 공평하지 않았어. / (B) 통화를 빨리 끝냈어. / (C) 갔지, 벌써 면접 두 개 잡혔어. / (D) 아니, 적정한 가격이야."
+  "translation": "질문: 결국 취업 박람회 갔어? / (A) 박람회는 모두에게 공평하지 않았고 많은 학생이 불평했어요. / (B) 통화를 빨리 끝냈어. / (C) 갔지, 벌써 면접 두 개 잡혔어. / (D) 아니, 적정한 가격이야."
  },
  {
   "id": "lr-175",
@@ -1117,12 +1117,12 @@
   "choices": [
    "I moved to a new apartment.",
    "Sorry, I assumed you'd seen the email.",
-   "The review was very positive.",
+   "The review was very positive, and the author thanked all the readers.",
    "Tell me about it later."
   ],
   "answer": 1,
   "explanation": "정답은 (B)입니다. 알려 주지 않은 것에 대한 불만에 사과하며 이유를 말한 답이 자연스럽습니다. move, review를 다른 의미로 쓴 선택지는 함정입니다.",
-  "translation": "질문: 복습 세션 옮겨진 거 나한테 말 안 해 줬잖아. / (A) 새 아파트로 이사했어. / (B) 미안, 너도 이메일 본 줄 알았어. / (C) 그 평은 아주 호의적이었어. / (D) 나중에 얘기해 줘."
+  "translation": "질문: 복습 세션 옮겨진 거 나한테 말 안 해 줬잖아. / (A) 새 아파트로 이사했어. / (B) 미안, 너도 이메일 본 줄 알았어. / (C) 서평은 아주 긍정적이었고 저자가 모든 독자에게 감사를 전했어요. / (D) 나중에 얘기해 줘."
  },
  {
   "id": "lr-176",
@@ -1131,13 +1131,13 @@
   "prompt": "Professor Kim's office hours conflict with my lab.",
   "choices": [
    "She's usually happy to set up an appointment by email.",
-   "The conflict in the region continues.",
+   "The conflict in the region continues, and the news says it may spread.",
    "Her office is very small.",
    "The lab results came back."
   ],
   "answer": 0,
   "explanation": "정답은 (A)입니다. 일정이 겹치는 문제에 이메일로 따로 약속을 잡으라는 해결책을 준 답이 정답입니다. conflict를 '분쟁'으로 쓴 선택지는 함정입니다.",
-  "translation": "질문: 김 교수님 면담 시간이 내 실험 시간이랑 겹쳐. / (A) 이메일로 따로 약속 잡으면 보통 흔쾌히 만나 주셔. / (B) 그 지역의 분쟁은 계속되고 있어. / (C) 교수님 연구실은 아주 작아. / (D) 실험 결과가 나왔어."
+  "translation": "질문: 김 교수님 면담 시간이 내 실험 시간이랑 겹쳐. / (A) 이메일로 따로 약속 잡으면 보통 흔쾌히 만나 주셔. / (B) 그 지역의 분쟁은 계속되고 있고 뉴스에서는 확산될 수도 있다고 해요. / (C) 교수님 연구실은 아주 작아. / (D) 실험 결과가 나왔어."
  },
  {
   "id": "lr-177",
@@ -1145,14 +1145,14 @@
   "voice": "female",
   "prompt": "Is this the right form for changing my address?",
   "choices": [
-   "Yes, turn right at the address.",
+   "Yes, turn right at the address on the sign and go straight for two blocks.",
    "He gave a long address.",
    "The form was in good shape.",
    "That one's for name changes. You need the blue one."
   ],
   "answer": 3,
   "explanation": "정답은 (D)입니다. 서식을 확인하는 질문에 틀렸다고 정정하며 맞는 것을 알려 준 답이 정답입니다. right, address, form을 다른 뜻으로 쓴 선택지는 함정입니다.",
-  "translation": "질문: 이게 주소 변경하는 서식이 맞나요? / (A) 네, 그 주소에서 오른쪽으로 도세요. / (B) 그는 긴 연설을 했어요. / (C) 몸 상태가 좋았어요. / (D) 그건 이름 변경용이에요. 파란색 서식이 필요해요."
+  "translation": "질문: 이게 주소 변경하는 서식이 맞나요? / (A) 네, 표지판에 적힌 주소에서 우회전해 두 블록 직진하세요. / (B) 그는 긴 연설을 했어요. / (C) 몸 상태가 좋았어요. / (D) 그건 이름 변경용이에요. 파란색 서식이 필요해요."
  },
  {
   "id": "lr-178",
@@ -1160,14 +1160,14 @@
   "voice": "male",
   "prompt": "I've got two midterms and a presentation on the same day.",
   "choices": [
-   "The presentation was on the same topic.",
+   "The presentation was on the same topic as the one we saw last week.",
    "I've got two cats.",
    "Ouch. Have you asked if any of them can be rescheduled?",
    "Same here. I loved the day."
   ],
   "answer": 2,
   "explanation": "정답은 (C)입니다. 부담스러운 일정에 공감하며 일정 조정을 제안한 답이 정답입니다. Same here로 즐거웠다고 한 선택지는 상황과 감정이 맞지 않습니다.",
-  "translation": "질문: 같은 날 중간고사 두 개에 발표까지 있어. / (A) 발표는 같은 주제였어. / (B) 나는 고양이 두 마리가 있어. / (C) 아이고. 그중 하나라도 일정 바꿀 수 있는지 물어봤어? / (D) 나도. 그날 정말 좋았어."
+  "translation": "질문: 같은 날 중간고사 두 개에 발표까지 있어. / (A) 발표는 지난주에 본 것과 같은 주제였어요. / (B) 나는 고양이 두 마리가 있어. / (C) 아이고. 그중 하나라도 일정 바꿀 수 있는지 물어봤어? / (D) 나도. 그날 정말 좋았어."
  },
  {
   "id": "lr-179",
@@ -1193,11 +1193,11 @@
    "Good idea. I'll take chapters one through four.",
    "Because the notes were lost.",
    "I shared a room with him.",
-   "The readings were boring."
+   "The readings were boring, and I fell asleep during most of them."
   ],
   "answer": 0,
   "explanation": "정답은 (A)입니다. Why don't we는 제안이므로 찬성하며 자기가 맡을 부분을 정한 답이 정답입니다. Because로 시작한 선택지는 Why에만 반응한 함정입니다.",
-  "translation": "질문: 읽기 자료를 나눠 읽고 노트를 공유하는 게 어때? / (A) 좋은 생각이야. 내가 1장부터 4장까지 맡을게. / (B) 노트를 잃어버렸기 때문이야. / (C) 그와 방을 같이 썼어. / (D) 읽기 자료가 지루했어."
+  "translation": "질문: 읽기 자료를 나눠 읽고 노트를 공유하는 게 어때? / (A) 좋은 생각이야. 내가 1장부터 4장까지 맡을게. / (B) 노트를 잃어버렸기 때문이야. / (C) 그와 방을 같이 썼어. / (D) 읽기 자료는 지루했고 저는 대부분 읽다가 잠들었어요."
  },
  {
   "id": "lr-181",
@@ -1206,13 +1206,13 @@
   "prompt": "I'd be lying if I said I understood a word of that lecture.",
   "choices": [
    "Same here. Want to go over the slides together tonight?",
-   "I'm glad you found it so clear.",
+   "I'm glad you found it so clear, and I hope the next lecture is as good.",
    "Lying down after lunch is a good idea.",
    "He said only a few words."
   ],
   "answer": 0,
   "explanation": "정답은 (A)입니다. I'd be lying if I said ~는 '~라고 하면 거짓말'이므로 전혀 이해하지 못했다는 뜻입니다. 공감하며 같이 복습하자는 답이 정답이고, 강의가 명확했다고 받아들인 선택지는 정반대의 해석입니다.",
-  "translation": "질문: 그 강의를 한마디라도 이해했다고 하면 거짓말일 거야. / (A) 나도 그래. 오늘 밤에 같이 슬라이드 훑어볼래? / (B) 그렇게 명확하게 느꼈다니 다행이야. / (C) 점심 먹고 눕는 건 좋은 생각이야. / (D) 그는 몇 마디만 했어."
+  "translation": "질문: 그 강의를 한마디라도 이해했다고 하면 거짓말일 거야. / (A) 나도 그래. 오늘 밤에 같이 슬라이드 훑어볼래? / (B) 당신이 아주 명쾌하다고 느꼈다니 기쁘고, 다음 강의도 그렇길 바라요. / (C) 점심 먹고 눕는 건 좋은 생각이야. / (D) 그는 몇 마디만 했어."
  },
  {
   "id": "lr-182",
@@ -1220,14 +1220,14 @@
   "voice": "male",
   "prompt": "So much for getting an early start on the project.",
   "choices": [
-   "Great, I'm glad we started early.",
+   "Great, I'm glad we started early, and the project is almost finished now.",
    "It costs so much to start a business.",
    "The project begins at eight sharp.",
    "I know. Between midterms and work, we never found the time."
   ],
   "answer": 3,
   "explanation": "정답은 (D)입니다. So much for ~는 계획이 무산되었음을 아쉬워하는 표현입니다. 일찍 시작하지 못한 이유를 말하며 동조한 답이 정답이고, 일찍 시작했다고 받아들인 선택지는 반대의 해석입니다.",
-  "translation": "질문: 프로젝트 일찍 시작하겠다던 건 물 건너갔네. / (A) 좋아, 일찍 시작해서 다행이야. / (B) 사업을 시작하려면 돈이 정말 많이 들어. / (C) 프로젝트는 8시 정각에 시작해. / (D) 그러게. 중간고사랑 일 때문에 시간을 전혀 못 냈어."
+  "translation": "질문: 프로젝트 일찍 시작하겠다던 건 물 건너갔네. / (A) 잘됐네요, 일찍 시작해서 기쁘고 과제도 거의 끝났어요. / (B) 사업을 시작하려면 돈이 정말 많이 들어. / (C) 프로젝트는 8시 정각에 시작해. / (D) 그러게. 중간고사랑 일 때문에 시간을 전혀 못 냈어."
  },
  {
   "id": "lr-183",
@@ -1235,14 +1235,14 @@
   "voice": "female",
   "prompt": "You'd think the registrar's office would answer its phone at least once.",
   "choices": [
-   "Yes, they always answer right away.",
+   "Yes, they always answer right away, usually within the first two rings, no matter the time.",
    "I think the phone is in my bag.",
    "Try going in person. That's the only way I ever got anything done there.",
    "Once a week is enough."
   ],
   "answer": 2,
   "explanation": "정답은 (C)입니다. You'd think ~는 '~할 법도 한데 그렇지 않다'는 불만을 나타냅니다. 전화가 안 되니 직접 가 보라는 대안을 준 답이 정답이며, 항상 받는다는 답은 화자의 말과 모순됩니다.",
-  "translation": "질문: 학적과가 적어도 한 번쯤은 전화를 받아 줄 법도 한데. / (A) 응, 그쪽은 항상 바로 받아. / (B) 휴대폰은 내 가방에 있는 것 같아. / (C) 직접 가 봐. 나도 그 방법으로만 일을 처리했어. / (D) 일주일에 한 번이면 충분해."
+  "translation": "질문: 학적과가 적어도 한 번쯤은 전화를 받아 줄 법도 한데. / (A) 네, 시간에 상관없이 보통 벨이 두 번 울리기 전에 바로 받아요. / (B) 휴대폰은 내 가방에 있는 것 같아. / (C) 직접 가 봐. 나도 그 방법으로만 일을 처리했어. / (D) 일주일에 한 번이면 충분해."
  },
  {
   "id": "lr-184",
@@ -1250,14 +1250,14 @@
   "voice": "male",
   "prompt": "Whoever scheduled the exam the day after the holiday clearly wasn't thinking.",
   "choices": [
-   "Yes, he was thinking about the holiday.",
+   "Yes, he was thinking about the holiday and how to make the break longer.",
    "Tell me about it. I'll be studying on the train home.",
    "The exam was scheduled for the morning.",
    "I'm thinking of taking a holiday."
   ],
   "answer": 1,
   "explanation": "정답은 (B)입니다. 일정을 비판하는 말에 Tell me about it(내 말이)으로 공감하고 자신의 처지를 덧붙인 답이 정답입니다. wasn't thinking을 글자 그대로 받아들인 선택지는 함정입니다.",
-  "translation": "질문: 연휴 다음 날로 시험을 잡은 사람은 분명 생각이 없었던 거야. / (A) 응, 그는 연휴 생각을 하고 있었어. / (B) 내 말이. 나는 집에 가는 기차에서 공부해야 할 판이야. / (C) 시험은 오전으로 잡혀 있었어. / (D) 휴가를 갈까 생각 중이야."
+  "translation": "질문: 연휴 다음 날로 시험을 잡은 사람은 분명 생각이 없었던 거야. / (A) 네, 그는 휴일과 휴가를 더 길게 만들 방법을 생각하고 있었어요. / (B) 내 말이. 나는 집에 가는 기차에서 공부해야 할 판이야. / (C) 시험은 오전으로 잡혀 있었어. / (D) 휴가를 갈까 생각 중이야."
  },
  {
   "id": "lr-185",
@@ -1266,13 +1266,13 @@
   "prompt": "I wouldn't mind if the committee took its time reviewing my proposal.",
   "choices": [
    "Still need to polish the budget section, huh?",
-   "You should complain about the delay.",
+   "You should complain about the delay to the committee chair right away.",
    "The committee meets every Tuesday.",
    "I'll take my time at lunch."
   ],
   "answer": 0,
   "explanation": "정답은 (A)입니다. 검토가 늦어져도 괜찮다는 말은 아직 준비가 덜 되었음을 암시합니다. 그 함의를 읽고 확인한 답이 정답이며, 지연에 항의하라는 선택지는 화자의 의도와 반대입니다.",
-  "translation": "질문: 위원회가 내 제안서를 천천히 검토해도 나는 상관없어. / (A) 아직 예산 부분 다듬어야 하는구나? / (B) 지연에 대해 항의해야 해. / (C) 위원회는 매주 화요일에 모여. / (D) 점심은 천천히 먹을게."
+  "translation": "질문: 위원회가 내 제안서를 천천히 검토해도 나는 상관없어. / (A) 아직 예산 부분 다듬어야 하는구나? / (B) 지연된 것을 위원장에게 바로 항의하셔야 해요. / (C) 위원회는 매주 화요일에 모여. / (D) 점심은 천천히 먹을게."
  },
  {
   "id": "lr-186",
@@ -1295,14 +1295,14 @@
   "voice": "female",
   "prompt": "I've half a mind to drop this class and take it with a different instructor.",
   "choices": [
-   "Only half the class showed up.",
+   "Only half the class showed up, and the professor ended the lecture early.",
    "Mind the step on your way out.",
    "Before you do, check whether the other section still has seats.",
    "The instructor dropped his pen."
   ],
   "answer": 2,
   "explanation": "정답은 (C)입니다. have half a mind to는 '~할까 꽤 생각 중이다'라는 뜻입니다. 실행 전에 확인할 사항을 조언한 답이 정답이며, half, mind, drop을 다른 뜻으로 쓴 선택지는 함정입니다.",
-  "translation": "질문: 이 수업 철회하고 다른 강사로 다시 들을까 하는 마음이 반은 있어. / (A) 반만 출석했어. / (B) 나갈 때 계단 조심해. / (C) 그러기 전에 다른 분반에 아직 자리가 있는지 확인해 봐. / (D) 강사가 펜을 떨어뜨렸어."
+  "translation": "질문: 이 수업 철회하고 다른 강사로 다시 들을까 하는 마음이 반은 있어. / (A) 수강생의 절반만 왔고 교수님이 수업을 일찍 끝냈어요. / (B) 나갈 때 계단 조심해. / (C) 그러기 전에 다른 분반에 아직 자리가 있는지 확인해 봐. / (D) 강사가 펜을 떨어뜨렸어."
  },
  {
   "id": "lr-188",
@@ -1310,14 +1310,14 @@
   "voice": "male",
   "prompt": "Leave it to Jason to show up an hour late to his own surprise party.",
   "choices": [
-   "Leave the party at Jason's house.",
+   "Leave the party at Jason's house and bring the cake to my apartment.",
    "At least he was actually surprised when he walked in.",
    "I'm sure he'll arrive early this time.",
    "I was surprised by the late bus."
   ],
   "answer": 1,
   "explanation": "정답은 (B)입니다. Leave it to 사람 to ~는 '역시 그 사람답게 ~하다'라는 뜻으로, 이미 늦게 나타난 일을 말합니다. 그래도 좋은 점을 찾아 대꾸한 답이 정답이며, 앞으로 일찍 올 거라는 선택지는 이미 일어난 일과 맞지 않습니다.",
-  "translation": "질문: 자기 깜짝 파티에 한 시간이나 늦게 나타나는 건 역시 제이슨다워. / (A) 파티는 제이슨네 집에서 해. / (B) 그래도 들어올 때 진짜 놀라긴 했잖아. / (C) 이번엔 분명 일찍 올 거야. / (D) 버스가 늦어서 놀랐어."
+  "translation": "질문: 자기 깜짝 파티에 한 시간이나 늦게 나타나는 건 역시 제이슨다워. / (A) 파티는 제이슨의 집에 두고 케이크는 우리 집으로 가져와요. / (B) 그래도 들어올 때 진짜 놀라긴 했잖아. / (C) 이번엔 분명 일찍 올 거야. / (D) 버스가 늦어서 놀랐어."
  },
  {
   "id": "lr-189",
@@ -1328,11 +1328,11 @@
    "I can add the responses from the follow-up interviews.",
    "Thanks for holding the door.",
    "I've lost a lot of weight recently.",
-   "So you think the argument fails completely?"
+   "So you think the argument fails completely, and I should start the paper over?"
   ],
   "answer": 0,
   "explanation": "정답은 (A)입니다. 주장은 인정하되 데이터가 부족하다는 지적에 자료를 보강하겠다는 답이 정답입니다. thin을 '마른'으로 쓴 선택지와 주장이 완전히 틀렸다고 오해한 선택지는 함정입니다.",
-  "translation": "질문: 네 주장은 성립하지만 두 번째 설문 데이터가 좀 빈약해. / (A) 후속 인터뷰 응답을 추가할 수 있어. / (B) 문 잡아 줘서 고마워. / (C) 요즘 살이 많이 빠졌어. / (D) 그럼 주장이 완전히 틀렸다는 거야?"
+  "translation": "질문: 네 주장은 성립하지만 두 번째 설문 데이터가 좀 빈약해. / (A) 후속 인터뷰 응답을 추가할 수 있어. / (B) 문 잡아 줘서 고마워. / (C) 요즘 살이 많이 빠졌어. / (D) 그럼 논증이 완전히 무너졌으니 논문을 처음부터 다시 써야 한다는 건가요?"
  },
  {
   "id": "lr-190",
@@ -1340,14 +1340,14 @@
   "voice": "male",
   "prompt": "If the shuttle's late one more time, I'm buying a bike.",
   "choices": [
-   "The shuttle was on time today.",
+   "The shuttle was on time today, and it came before I even reached the stop.",
    "I bought one more ticket.",
    "Riding a bike once is enough.",
    "You'd probably get to class faster that way anyway."
   ],
   "answer": 3,
   "explanation": "정답은 (D)입니다. 셔틀의 잦은 지연에 대한 불만에 자전거가 더 낫다고 맞장구친 답이 정답입니다. 오늘은 제시간에 왔다는 선택지는 대화를 이어 가지 못하고, 나머지는 단어만 반복합니다.",
-  "translation": "질문: 셔틀이 한 번만 더 늦으면 자전거 살 거야. / (A) 셔틀은 오늘 제시간에 왔어. / (B) 표를 한 장 더 샀어. / (C) 자전거는 한 번 타 보면 충분해. / (D) 어차피 그게 수업에 더 빨리 가는 방법일 거야."
+  "translation": "질문: 셔틀이 한 번만 더 늦으면 자전거 살 거야. / (A) 오늘은 셔틀이 제시간에 왔고 제가 정류장에 닿기도 전에 왔어요. / (B) 표를 한 장 더 샀어. / (C) 자전거는 한 번 타 보면 충분해. / (D) 어차피 그게 수업에 더 빨리 가는 방법일 거야."
  },
  {
   "id": "lr-191",
@@ -1372,12 +1372,12 @@
   "choices": [
    "Since I was a child.",
    "Ever since someone walked off with a microscope last month.",
-   "Sign here and here, please.",
+   "Sign here and here, please, and then write the date next to each one.",
    "The equipment is new this year."
   ],
   "answer": 1,
   "explanation": "정답은 (B)입니다. Since when ~?은 시점보다 새 규정에 대한 놀라움이나 불만을 나타냅니다. 규정이 생긴 계기를 설명한 답이 정답이며, 글자 그대로 어릴 때부터라고 한 선택지는 함정입니다.",
-  "translation": "질문: 언제부터 실험실 장비 대여에 서명이 두 개나 필요해졌어? / (A) 내가 어릴 때부터. / (B) 지난달 누가 현미경을 들고 가 버린 뒤부터. / (C) 여기랑 여기에 서명해 주세요. / (D) 장비는 올해 새로 들였어."
+  "translation": "질문: 언제부터 실험실 장비 대여에 서명이 두 개나 필요해졌어? / (A) 내가 어릴 때부터. / (B) 지난달 누가 현미경을 들고 가 버린 뒤부터. / (C) 여기와 여기에 서명하시고, 각각 옆에 날짜를 적어 주세요. / (D) 장비는 올해 새로 들였어."
  },
  {
   "id": "lr-193",
@@ -1388,11 +1388,11 @@
    "Then double-check everything with the department office.",
    "She's sitting between you and me.",
    "It's ninety degrees outside.",
-   "I'm glad she's so experienced."
+   "I'm glad she's so experienced, and I hope she stays for many years."
   ],
   "answer": 0,
   "explanation": "정답은 (A)입니다. 지도교수를 믿기 어렵다는 걱정에 학과 사무실에서 재확인하라는 조언이 정답입니다. between you and me를 글자 그대로 받거나 degree를 '온도'로 쓴 선택지, 경험이 많다고 칭찬한 선택지는 함정입니다.",
-  "translation": "질문: 우리끼리 얘기지만, 새 지도교수님은 졸업 요건을 잘 모르시는 것 같아. / (A) 그럼 학과 사무실에 다 한 번 더 확인해. / (B) 그녀는 너와 나 사이에 앉아 있어. / (C) 밖은 화씨 90도야. / (D) 그분이 경험이 많아서 다행이야."
+  "translation": "질문: 우리끼리 얘기지만, 새 지도교수님은 졸업 요건을 잘 모르시는 것 같아. / (A) 그럼 학과 사무실에 다 한 번 더 확인해. / (B) 그녀는 너와 나 사이에 앉아 있어. / (C) 밖은 화씨 90도야. / (D) 그분이 경력이 많아서 다행이고 오래 계셨으면 좋겠어요."
  },
  {
   "id": "lr-194",
@@ -1401,13 +1401,13 @@
   "prompt": "I could do without another group project this semester.",
   "choices": [
    "Great, I'll sign you up for one more.",
-   "You can do it without a computer.",
+   "You can do it without a computer if you write everything by hand.",
    "The group met in the library.",
    "Unfortunately, it's forty percent of the final grade."
   ],
   "answer": 3,
   "explanation": "정답은 (D)입니다. I could do without ~는 '~는 없었으면 좋겠다'라는 뜻입니다. 피할 수 없는 이유(성적 비중)를 알려 준 답이 정답이며, 하나 더 신청해 주겠다는 선택지는 의미를 반대로 이해한 것입니다.",
-  "translation": "질문: 이번 학기에 그룹 프로젝트가 또 있으면 안 됐으면 좋겠어. / (A) 좋아, 하나 더 신청해 줄게. / (B) 컴퓨터 없이도 할 수 있어. / (C) 그 그룹은 도서관에서 모였어. / (D) 안타깝지만 그게 최종 성적의 40%야."
+  "translation": "질문: 이번 학기에 그룹 프로젝트가 또 있으면 안 됐으면 좋겠어. / (A) 좋아, 하나 더 신청해 줄게. / (B) 손으로 다 쓰면 컴퓨터 없이도 할 수 있어요. / (C) 그 그룹은 도서관에서 모였어. / (D) 안타깝지만 그게 최종 성적의 40%야."
  },
  {
   "id": "lr-195",
@@ -1415,14 +1415,14 @@
   "voice": "female",
   "prompt": "The new parking policy is going to go over like a lead balloon.",
   "choices": [
-   "Balloons are not allowed in the stadium.",
+   "Balloons are not allowed in the stadium during football games or concerts.",
    "Yes, everyone's going to love it.",
    "Especially with commuters who already pay for permits.",
    "The lead singer was amazing."
   ],
   "answer": 2,
   "explanation": "정답은 (C)입니다. go over like a lead balloon은 '전혀 호응을 얻지 못하다'라는 관용 표현입니다. 누가 특히 반발할지 덧붙인 답이 정답이며, 모두 좋아할 거라는 선택지는 정반대입니다.",
-  "translation": "질문: 새 주차 정책은 반응이 형편없을 거야. / (A) 경기장에 풍선은 반입 금지야. / (B) 응, 다들 아주 좋아할 거야. / (C) 특히 이미 허가증 값을 내는 통학생들한테는 더하겠지. / (D) 리드 보컬이 대단했어."
+  "translation": "질문: 새 주차 정책은 반응이 형편없을 거야. / (A) 풍선은 미식축구 경기나 콘서트 중에 경기장에 반입할 수 없어요. / (B) 응, 다들 아주 좋아할 거야. / (C) 특히 이미 허가증 값을 내는 통학생들한테는 더하겠지. / (D) 리드 보컬이 대단했어."
  },
  {
   "id": "lr-196",
@@ -1446,13 +1446,13 @@
   "prompt": "I'll believe the cafeteria is serving decent food when I taste it.",
   "choices": [
    "Fair enough, but the new chef really has changed the menu.",
-   "You already believe it, then.",
+   "You already believe it, then, so there's no need for anyone to taste it.",
    "The taste test is on Friday.",
    "I believe the cafeteria is closed."
   ],
   "answer": 0,
   "explanation": "정답은 (A)입니다. I'll believe it when I see(taste) it은 직접 확인하기 전엔 믿지 않겠다는 회의적인 표현입니다. 의심을 인정하면서 근거를 제시한 답이 정답이며, 이미 믿는다고 해석한 선택지는 틀립니다.",
-  "translation": "질문: 학식이 괜찮은 음식을 낸다는 건 내가 먹어 봐야 믿겠어. / (A) 그럴 만도 하지만, 새 요리사가 메뉴를 정말 바꿨어. / (B) 그럼 이미 믿는구나. / (C) 맛 테스트는 금요일이야. / (D) 학식은 문 닫은 것 같아."
+  "translation": "질문: 학식이 괜찮은 음식을 낸다는 건 내가 먹어 봐야 믿겠어. / (A) 그럴 만도 하지만, 새 요리사가 메뉴를 정말 바꿨어. / (B) 그럼 이미 믿고 계신 거니까 아무도 맛볼 필요가 없겠네요. / (C) 맛 테스트는 금요일이야. / (D) 학식은 문 닫은 것 같아."
  },
  {
   "id": "lr-198",
@@ -1460,14 +1460,14 @@
   "voice": "male",
   "prompt": "The way the schedule's set up, I'd have to be in two places at once.",
   "choices": [
-   "Two places are better than one.",
+   "Two places are better than one, so I'll just attend both classes.",
    "Set the table at once, please.",
    "You're always in the right place.",
    "Can't you take one of those courses online?"
   ],
   "answer": 3,
   "explanation": "정답은 (D)입니다. 동시에 두 곳에 있어야 한다는 말은 시간표가 겹친다는 뜻입니다. 해결책(한 과목을 온라인으로)을 제안한 답이 정답이며, set, at once를 다른 뜻으로 쓴 선택지는 함정입니다.",
-  "translation": "질문: 시간표가 짜인 대로라면 나는 동시에 두 곳에 있어야 해. / (A) 두 곳이 한 곳보다 나아. / (B) 당장 상 좀 차려 줘. / (C) 너는 늘 맞는 곳에 있어. / (D) 그중 한 과목을 온라인으로 들을 순 없어?"
+  "translation": "질문: 시간표가 짜인 대로라면 나는 동시에 두 곳에 있어야 해. / (A) 두 곳이 한 곳보다 나으니 그냥 두 수업 다 들어갈래요. / (B) 당장 상 좀 차려 줘. / (C) 너는 늘 맞는 곳에 있어. / (D) 그중 한 과목을 온라인으로 들을 순 없어?"
  },
  {
   "id": "lr-199",
@@ -1478,11 +1478,11 @@
    "Great, I'll ask him to drive you.",
    "It's supposed to stop raining soon.",
    "Was the drive last week really that bad?",
-   "He walks to school every day."
+   "He walks to school every day because he lives right next to campus."
   ],
   "answer": 2,
   "explanation": "정답은 (C)입니다. I'd sooner A than B는 'B 하느니 차라리 A'라는 뜻으로, 그의 차를 다시 타기 싫다는 의미입니다. 그 이유를 되묻는 답이 정답이며, 그에게 부탁하겠다는 선택지는 의도를 거스릅니다.",
-  "translation": "질문: 그에게 또 태워 달라고 하느니 차라리 빗속을 걸을래. / (A) 좋아, 그에게 태워 주라고 할게. / (B) 곧 비가 그친대. / (C) 지난주에 차 탄 게 그렇게 별로였어? / (D) 그는 매일 학교에 걸어가."
+  "translation": "질문: 그에게 또 태워 달라고 하느니 차라리 빗속을 걸을래. / (A) 좋아, 그에게 태워 주라고 할게. / (B) 곧 비가 그친대. / (C) 지난주에 차 탄 게 그렇게 별로였어? / (D) 그는 캠퍼스 바로 옆에 살아서 매일 걸어서 학교에 가요."
  },
  {
   "id": "lr-200",
@@ -1492,11 +1492,11 @@
   "choices": [
    "Then don't complain about it.",
    "You have every right to. Have you filed a formal complaint?",
-   "It was hot in here last summer.",
+   "It was hot in here last summer, and the air conditioning broke twice.",
    "Three times is a good number."
   ],
   "answer": 1,
   "explanation": "정답은 (B)입니다. I'm not one to complain, but은 불평을 조심스럽게 꺼내는 표현입니다. 불평이 정당하다고 인정하고 정식 민원을 권한 답이 정답이며, 불평하지 말라는 선택지는 문맥에 맞지 않습니다.",
-  "translation": "질문: 불평하는 성격은 아니지만, 이번 달에만 난방이 세 번째 나갔어. / (A) 그럼 불평하지 마. / (B) 불평할 만해. 정식으로 민원 넣었어? / (C) 지난여름엔 여기가 더웠어. / (D) 세 번이면 딱 좋은 횟수야."
+  "translation": "질문: 불평하는 성격은 아니지만, 이번 달에만 난방이 세 번째 나갔어. / (A) 그럼 불평하지 마. / (B) 불평할 만해. 정식으로 민원 넣었어? / (C) 작년 여름에는 여기가 더웠고 에어컨이 두 번 고장 났어요. / (D) 세 번이면 딱 좋은 횟수야."
  }
 ]

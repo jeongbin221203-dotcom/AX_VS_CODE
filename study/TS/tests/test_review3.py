@@ -165,3 +165,81 @@ def test_opic_bad_qidx_does_not_break_pages(tmp_path):
     assert r.status_code < 500
     assert c.get("/speaking/opic").status_code == 200
     assert c.get("/speaking/opic/history").status_code == 200
+
+
+# ---- 2026-10-07 2차: 이어서 풀기·메뉴·문항 수·다른 정답·404·진단 ----------------------
+
+def test_unfinished_sessions_listed_and_resumable(tmp_path):
+    app = create_app({"TESTING": True, "DB_PATH": tmp_path / "u.db"})
+    bank = app.extensions["bank"]
+    from core import stats
+    mock = study.start_mock(bank, "mini", rng=random.Random(1))
+    prac = study.start_practice(bank, 5, 1, None, 2, rng=random.Random(1))               # 한 문제도 안 풀었으면 목록에 없음
+    ids = [s["id"] for s in stats.unfinished_sessions()]
+    assert mock in ids and prac not in ids
+    c = app.test_client()
+    assert f"/quiz/{mock}" in c.get("/toeic").get_data(as_text=True)
+    assert f"/quiz/{mock}" in c.get("/mock").get_data(as_text=True)
+    study.finish_session(bank, mock)
+    assert mock not in [s["id"] for s in stats.unfinished_sessions()]
+
+
+def test_same_conditions_again_keeps_requested_count(tmp_path):
+    app = create_app({"TESTING": True, "DB_PATH": tmp_path / "r.db"})
+    bank = app.extensions["bank"]
+    sid = study.start_practice(bank, 5, 1, None, 10, rng=random.Random(1))
+    ref = study.get_session(sid)["items"][0]
+    q = bank.questions(bank.item(ref))[0]
+    study.grade_item(bank, sid, ref, [{"qidx": 0, "chosen": q.answer}])
+    study.finish_session(bank, sid)                                                       # 10문항 중 1문항만 풀고 끝냄
+    with app.test_request_context():
+        from flask import url_for
+        url = url_for("quiz.result", sid=sid)
+    html = app.test_client().get(url).get_data(as_text=True)
+    assert "n=10" in html
+
+
+def test_quiz_page_highlights_menu_by_session_mode(tmp_path):
+    app = create_app({"TESTING": True, "DB_PATH": tmp_path / "m.db"})
+    bank = app.extensions["bank"]
+    c = app.test_client()
+    mock = study.start_mock(bank, "mini", rng=random.Random(1))
+    prac = study.start_practice(bank, 5, 1, None, 2, rng=random.Random(1))
+    import re as _re
+
+    def active(sid):
+        html = c.get(f"/quiz/{sid}").get_data(as_text=True)
+        return _re.findall(r'class="on" aria-current=page>([^<]+)<', html)
+    assert "모의고사" in active(mock) and "파트 연습" not in active(mock)
+    assert "파트 연습" in active(prac) and "모의고사" not in active(prac)
+
+
+def test_sentence_alternative_orders_validated():
+    import json
+    from tools import validate_toefl
+    for f in ("w_sentence.json", "w_sentence_2.json"):
+        for it in json.load(open(Path(__file__).resolve().parent.parent / "content" / "toefl" / f, encoding="utf-8")):
+            for alt in it.get("alts", []):
+                assert sorted(alt.split()) == sorted(" ".join(it["chunks"]).split())
+    assert hasattr(validate_toefl, "w_sentence")
+
+
+def test_korean_404_page(tmp_path):
+    c, _ = _client(tmp_path)
+    r = c.get("/no-such-page")
+    assert r.status_code == 404 and "찾을 수 없습니다" in r.get_data(as_text=True)
+
+
+def test_diagnostic_has_enough_listening(tmp_path):
+    app = create_app({"TESTING": True, "DB_PATH": tmp_path / "d.db"})
+    bank = app.extensions["bank"]
+    sid = study.start_diagnostic(bank, rng=random.Random(4))
+    refs = study.get_session(sid)["items"]
+    lc = sum(len(bank.questions(bank.item(r))) for r in refs if int(r.split(":")[0]) in (1, 2, 3, 4))
+    assert lc >= 25
+
+
+def test_frequent_words_are_core_tier(app, bank):
+    tiers = {w["word"]: w["tier"] for w in bank.vocab}
+    for w in ("client", "receipt", "overtime", "inventory", "permission", "headquarters", "eligible", "reimburse"):
+        assert tiers[w] == "core", w

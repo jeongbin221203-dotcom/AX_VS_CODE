@@ -79,14 +79,14 @@
    {
     "q": "",
     "choices": [
-     "Building A will reopen next month.",
-     "Please take the elevator to the third floor.",
-     "The new lines were painted last week.",
-     "Spaces marked 'Visitor' there should be left open for our guests."
+     "The main lot has space for about 200 cars, including 10 spaces for disabled drivers.",
+     "However, the north lot is also used by the nearby supermarket on weekends.",
+     "Workers will begin painting the new lines in the north lot on Monday morning.",
+     "Spaces marked 'Visitor' there should be left open for guests."
     ],
     "answer": 3,
     "type": "문장 삽입",
-    "explanation": "앞 문장들이 북쪽 주차장 이용 방법을 설명하므로 '그곳의 방문객 전용 칸은 비워 두라'는 주의 사항이 자연스럽다. 선 칠하기는 앞으로 할 작업이라 '지난주에 칠했다'는 틀리고, A동 건물은 닫힌다는 말이 없으므로 재개장 문장도 맞지 않는다. 엘리베이터 안내는 주차와 관련이 없다."
+    "explanation": "앞 문장들이 북쪽 주차장 이용 방법을 설명하므로 '그곳의 방문객 전용 칸은 비워 두라'는 주의 사항이 자연스럽다. 첫 번째 보기는 공사 대상인 본 주차장의 규모 이야기라 이어지지 않고, 두 번째는 However가 앞 내용과 대조되지 않으며, 세 번째는 도색 작업이 북쪽 주차장이 아니라 본 주차장에서 이뤄진다는 첫 문단과 어긋난다."
    },
    {
     "q": "",
@@ -195,14 +195,14 @@
    {
     "q": "",
     "choices": [
-     "Our new café serves breakfast all day.",
-     "If you have sensitive skin, we also offer soap with no added scent.",
-     "Please wash your clothes before you give them to us.",
-     "Our drivers are available only on weekends."
+     "Our drivers wear uniforms and carry identification cards at all times.",
+     "If you have sensitive skin, we also offer unscented soap.",
+     "All clothes are washed together at the same temperature to save time and water.",
+     "Pickup bags can be purchased separately for $3 at any of our stores."
     ],
     "answer": 1,
     "type": "문장 삽입",
-    "explanation": "앞 문장이 순한 세제를 쓴다고 소개하므로 '민감한 피부를 위해 무향 세제도 있다'는 비누 관련 설명이 이어지는 것이 자연스럽다. 세탁 서비스에 맡기기 전에 직접 빨라는 말은 서비스 취지와 모순되고, 수거 시간은 매일 오전 7시~오후 10시로 고를 수 있으므로 주말에만 운행한다는 말도 틀리다. 카페는 관련이 없다."
+    "explanation": "앞 문장이 모든 옷에 안전한 순한 세제를 쓴다고 소개하므로 '민감한 피부를 위해 무향 세제도 있다'는 세제 관련 설명이 이어지는 것이 자연스럽다. 첫 번째 보기는 기사 복장 이야기라 세제와 이어지지 않고, 세 번째는 모든 옷을 같은 온도로 함께 세탁한다는 내용이라 '모든 옷에 안전하다'는 앞 문장과 맞지 않으며, 네 번째는 가방 판매 이야기이고 매장이 없는 방문 서비스와도 어울리지 않는다."
    },
    {
     "q": "",
@@ -613,14 +613,14 @@
    {
     "q": "",
     "choices": [
-     "The council meeting was canceled because of rain.",
-     "Brightwave is looking for new employees.",
-     "Early reports show that hundreds of people have already used the service.",
-     "The service will not be available until next year."
+     "The council has also asked residents to suggest names for the three parks.",
+     "She added that the network was designed by engineers from Brightwave.",
+     "Hundreds of people have already used the service, early reports show.",
+     "Mr. Ross said that only city employees will be allowed to use the network."
     ],
     "answer": 2,
     "type": "문장 삽입",
-    "explanation": "로스 의원이 믿을 만한 연결을 제공하고 싶었다고 말한 뒤 '벌써 수백 명이 서비스를 이용했다'는 초기 반응이 이어지는 것이 자연스럽다. 서비스는 이미 시작되었으므로 '내년까지 이용 불가'는 모순이고, 채용이나 회의 취소는 기사 흐름과 관계가 없다."
+    "explanation": "로스 의원이 믿을 만한 연결을 제공하고 싶었다고 말한 뒤 '벌써 수백 명이 서비스를 이용했다'는 초기 반응이 이어지는 것이 자연스럽다(C). A는 공원 이름 공모라 서비스 이야기와 관련이 없고, B는 David Ross를 She로 받아 지시어가 틀리며, D는 시 직원만 쓸 수 있다는 내용으로 '야외에서 일하거나 공부하는 많은 사람', '비밀번호가 필요 없다'는 앞뒤 내용과 어긋난다."
    },
    {
     "q": "",
@@ -717,14 +717,14 @@
    {
     "q": "",
     "choices": [
-     "Please mail your old card back to us.",
-     "Your account number will change next month.",
-     "We have opened a new branch in Riverside.",
-     "For your safety, do not choose a number that is easy to guess, such as your birthday."
+     "Your new card can also be used at any Crestwood Bank ATM without a fee.",
+     "However, the card can be activated only in person at a Crestwood Bank branch.",
+     "We have recently opened a new branch in Riverside for your convenience.",
+     "For safety, avoid numbers that are easy to guess, such as your birthday."
     ],
     "answer": 3,
     "type": "문장 삽입",
-    "explanation": "앞 문장이 네 자리 비밀번호(PIN)를 만들어야 한다는 내용이므로 '생일처럼 추측하기 쉬운 번호는 피하라'는 조언이 자연스럽다. 계좌 번호는 바뀌지 않는다고 했고, 옛 카드는 잘라서 버리라고 했으므로 두 문장은 모순이다. 새 지점 소식은 관련이 없다."
+    "explanation": "앞 문장이 네 자리 비밀번호(PIN)를 만들어야 한다는 내용이므로 '생일처럼 추측하기 쉬운 번호는 피하라'는 조언이 자연스럽다(D). A는 수수료 이야기라 비밀번호와 이어지지 않고, B는 전화로 시작하라는 앞 문장과 모순이며, C는 새 지점 소식이라 관련이 없다."
    },
    {
     "q": "",
@@ -891,14 +891,14 @@
    {
     "q": "",
     "choices": [
-     "We only move furniture within the same building.",
+     "That is why we offer storage space for customers who need to keep items for a while.",
      "That is why we assign a personal coordinator to every customer.",
-     "Our prices went up by 50 percent last month.",
-     "Please pack all of your boxes yourselves before we arrive."
+     "Our crews are trained to protect floors, doors, and walls inside your home.",
+     "Our trucks are cleaned and checked every morning before they leave the garage."
     ],
     "answer": 1,
     "type": "문장 삽입",
-    "explanation": "앞 문장이 '이사는 스트레스가 될 수 있다'이고, 뒤 문장이 Your coordinator로 시작하므로 '그래서 모든 고객에게 전담 코디네이터를 배정한다'는 문장이 들어가야 뒤의 Your coordinator가 자연스럽게 이어진다. 팀이 직접 포장한다고 했으므로 직접 짐을 싸라는 말은 모순이고, 같은 건물 안 이사만 한다는 말이나 가격 인상은 광고 내용과 맞지 않는다."
+    "explanation": "앞 문장이 '이사는 스트레스가 될 수 있다'이고 뒤 문장이 Your coordinator로 시작하므로 '그래서 모든 고객에게 전담 코디네이터를 배정한다'는 문장이 들어가야 뒤의 Your coordinator가 자연스럽게 이어진다. 첫 번째 보기는 보관 서비스를 되풀이하는 데다 That is why의 이유가 되지 못하고, 세 번째와 네 번째는 작업 품질·차량 관리 이야기라 코디네이터가 소개되지 않아 뒤 문장의 your coordinator를 받을 수 없다."
    },
    {
     "q": "",
@@ -1007,14 +1007,14 @@
    {
     "q": "",
     "choices": [
-     "The event has been canceled due to budget cuts.",
-     "Activities range from sorting food donations to reading with young students.",
-     "Employees must work a full day in the office on May 16.",
-     "Last year's event was attended by only a few employees."
+     "The Eastside Food Bank has served the community since it was founded in 1998.",
+     "Activities range from sorting donated food to reading with children.",
+     "All four groups will be announced to employees at the end of May.",
+     "Last year, the event was held on a Saturday in September at the downtown park."
     ],
     "answer": 1,
     "type": "문장 삽입",
-    "explanation": "앞 문장이 네 협력 단체(푸드뱅크, 아동 독서 프로젝트 등)를 소개하므로 '음식 기부품 분류부터 아이들과 책 읽기까지 다양한 활동이 있다'는 설명이 자연스럽다. 행사는 예정대로 열리고, 그날 오후에는 봉사를 권장하며, 작년에는 200명 넘게 참여했으므로 나머지 선택지는 모두 지문과 모순된다."
+    "explanation": "앞 문장이 네 협력 단체(푸드뱅크, 아동 독서 프로젝트 등)를 소개하므로 '음식 기부품 분류부터 아이들과 책 읽기까지 다양한 활동이 있다'는 설명이 자연스럽고, 뒤의 '각 활동 설명' 문장으로도 이어진다(B). A는 푸드뱅크의 역사라 활동 안내와 거리가 멀고, C는 이미 '올해 네 단체와 협력했다'고 한 뒤 단체를 발표한다는 모순이며(신청 마감도 5월 2일이다), D는 작년 행사 이야기로 올해 안내와 이어지지 않는다."
    },
    {
     "q": "",
@@ -1089,14 +1089,14 @@
    {
     "q": "",
     "choices": [
-     "Diesel buses are much quieter than electric ones.",
-     "The electric buses have already been removed from service.",
-     "Supporters argue that the savings on fuel and repairs will cover the difference over time.",
-     "Voltra Motors has decided to stop making buses."
+     "Electric buses can be charged at the depot in about four hours each night.",
+     "Mr. Evans said the new charging station was built with money from the state.",
+     "Supporters argue that lower fuel and repair costs will cover the difference.",
+     "As a result, the city has decided to cancel its order for the electric buses."
     ],
     "answer": 2,
     "type": "문장 삽입",
-    "explanation": "앞 문장이 전기버스가 디젤 버스보다 두 배 비싸다는 반대 의견이므로 '찬성하는 쪽은 연료·수리비 절감으로 그 차액을 메울 수 있다고 주장한다'는 반론이 이어지는 것이 자연스럽다. 버스는 월요일에 막 운행을 시작했고, 전기버스가 더 조용하다고 했으므로 두 문장은 모순이다. 제조사의 생산 중단은 근거가 없는 새 정보다."
+    "explanation": "앞 문장이 전기버스가 디젤 버스보다 두 배 비싸다는 반대 의견이므로 '찬성하는 쪽은 연료·수리비 절감으로 그 차액을 메울 수 있다고 주장한다'는 반론이 이어지는 것이 자연스럽다(C). A는 충전 방식으로 앞 단락에서 이미 설명했고, B는 충전소 재원 이야기라 비용 논쟁과 이어지지 않으며, D는 '전체를 교체할 계획'이라는 앞 내용과 정반대로 주문 취소를 말해 모순이다."
    }
   ],
   "translation": "밀브룩, 시내버스에 전기버스 도입\n\n밀브룩(4월 7일) — 밀브룩 교통공사는 월요일 첫 전기버스 15대의 운행을 시작했다. 관계자들은 이 조치로 연료비가 줄고 시내 도로의 소음이 감소할 것이라고 말한다.\n\n볼트라 모터스가 제작한 이 버스들은 한 번 충전으로 최대 250킬로미터를 달릴 수 있다. 버스는 밤사이 켈러 애비뉴의 차고지에 보관되며, 그곳에는 새 충전소가 설치되었다.\n\n폴 에번스 교통국장은 '승객들이 벌써 새 버스가 얼마나 더 조용한지 이야기합니다. 버스가 정류장에 들어와도 모르는 사람이 많았습니다'라고 말했다.\n\n시는 2032년까지 디젤 버스 90대 전체를 교체할 계획이다. 하지만 모두가 이 계획을 지지하는 것은 아니다. 일부 시의원은 디젤 모델보다 약 두 배 비싼 차량 가격에 의문을 제기했다. 지지하는 쪽은 연료비와 수리비 절감으로 시간이 지나면 그 차액을 메울 수 있다고 주장한다."
@@ -1355,14 +1355,14 @@
    {
     "q": "",
     "choices": [
+     "Harvest Table also operates cafeterias at several other companies in the region.",
      "In addition, the cafeteria will stay open one hour later, until 3:00 P.M.",
-     "The salad bar will be removed next month.",
-     "Harvest Table has operated our cafeteria for ten years.",
-     "Most items will cost twice as much as before."
+     "Employees can order made-to-order sandwiches through the company's mobile app.",
+     "However, some menu items will cost slightly more than they do now."
     ],
-    "answer": 0,
+    "answer": 1,
     "type": "문장 삽입",
-    "explanation": "앞 문장들이 새 업체의 메뉴와 가격 등 달라지는 점을 소개하므로 In addition으로 '운영 시간도 한 시간 늘어난다'는 변경 사항을 덧붙이는 것이 자연스럽다. 가격은 거의 같다고 했고, 샐러드 바는 새로 생기며, 하비스트 테이블은 새로 들어오는 업체이므로 나머지는 모두 모순이다."
+    "explanation": "앞 문장들이 새 업체의 메뉴와 가격 등 달라지는 점을 소개하므로 In addition으로 '운영 시간도 한 시간 늘어난다'는 변경 사항을 덧붙이는 것이 자연스럽다. 첫 번째 보기는 업체의 다른 고객사 소개라 변경 사항이 아니고, 세 번째는 모바일 앱 주문이라 근거가 없으며, 네 번째는 However가 앞 내용과 대조되지 않는 데다 '가격은 거의 같다'는 앞 문장과 어긋난다."
    },
    {
     "q": "",
@@ -1425,14 +1425,14 @@
    {
     "q": "",
     "choices": [
+     "Trailmix Coffee has been roasting its beans in Portland since 2008.",
+     "Summit customers would, however, need to register on our Web site to receive the voucher.",
      "This arrangement would introduce each brand to the other's customers.",
-     "Our coffee shops will be closed throughout the autumn.",
-     "Unfortunately, we have decided to cancel the promotion.",
-     "Summit Outdoor Gear has already agreed to all of these terms."
+     "Ms. Grayson's team at Summit has already printed the vouchers for the first month."
     ],
-    "answer": 0,
+    "answer": 2,
     "type": "문장 삽입",
-    "explanation": "앞 문장들이 두 회사가 서로의 고객에게 혜택을 주는 구조를 설명하므로 '이 방식으로 각 브랜드가 상대 회사 고객에게 소개될 것'이라는 효과 설명이 자연스럽다. 이메일은 제안을 하는 중이므로 취소는 모순이고, 세부 사항을 논의하자고 했으므로 이미 모든 조건에 동의했다는 말도 틀리다. 가을 휴업은 가을 판촉과 맞지 않는다."
+    "explanation": "앞 문장들이 두 회사가 서로의 고객에게 혜택을 주는 구조를 설명하므로 '이 방식으로 각 브랜드가 상대 회사 고객에게 소개될 것'이라는 효과 설명이 자연스럽다. 첫 번째 보기는 회사 연혁이라 제안 설명과 이어지지 않고, 두 번째는 However로 시작하지만 앞 내용과 대조되지 않으며, 네 번째는 이메일이 제안 단계인데 이미 바우처를 인쇄했다고 해서 흐름과 맞지 않는다."
    },
    {
     "q": "",
@@ -1529,14 +1529,14 @@
    {
     "q": "",
     "choices": [
-     "The facility has already begun supplying power to local homes.",
-     "Some residents had raised concerns about the farm's impact on local wildlife.",
-     "The permits were approved within a few days.",
-     "Crestline has decided to move the project to another state."
+     "Crestline has built three smaller solar farms in the state since 2018.",
+     "Some residents had raised concerns about the farm's effect on wildlife.",
+     "The company then spent several months searching for a suitable site near Dalton.",
+     "Crestline's chief executive described the project as the most important in the company's history."
     ],
     "answer": 1,
     "type": "문장 삽입",
-    "explanation": "뒤 문장이 In the end(결국)로 시작해 '토종 조류 서식지로 50에이커를 따로 두기로 했다'는 해결책을 말하므로, 그 앞에는 '일부 주민이 야생 동물에 미칠 영향을 우려했다'는 문제 제기가 와야 한다. 시설은 막 착공했으므로 전력 공급은 모순이고, 허가를 받는 데 2년 가까이 걸렸으므로 며칠 만에 승인되었다는 말도 틀리다. 다른 주로 옮긴다는 말도 착공 소식과 맞지 않는다."
+    "explanation": "뒤 문장이 In the end(결국)로 시작해 '토종 조류 서식지로 50에이커를 따로 두기로 했다'는 해결책을 말하므로, 그 앞에는 '일부 주민이 야생 동물에 미칠 영향을 우려했다'는 문제 제기가 와야 한다. 첫 번째 보기는 다른 태양광 발전소 이야기, 네 번째는 대표의 평가라 해결책으로 이어지는 갈등이 없고, 세 번째는 부지를 이미 정해 공사를 시작했다는 첫 문단과 시간 순서가 맞지 않는다."
    },
    {
     "q": "",
@@ -1599,14 +1599,14 @@
    {
     "q": "",
     "choices": [
-     "Your monthly fee increases every time you add a transaction.",
-     "You must pay a setup fee before starting the free trial.",
-     "The software must be installed on a single office computer.",
-     "Multiple team members can also work on the same account at the same time."
+     "Our customer support team is available by phone from 9 A.M. to 5 P.M. on weekdays.",
+     "Accountants can also request a free demonstration of the reporting tools.",
+     "However, the service cannot be used on tablets or mobile phones.",
+     "Several team members can also work on the same account at once."
     ],
     "answer": 3,
     "type": "문장 삽입",
-    "explanation": "앞 문장이 온라인에 저장되어 어느 기기에서나 접속할 수 있다는 장점이므로 '여러 팀원이 같은 계정에서 동시에 작업할 수도 있다'는 추가 장점이 자연스럽다. 클라우드 기반이라고 했으므로 한 대의 컴퓨터에만 설치해야 한다는 말은 모순이고, 월 19달러 정액이며 무료 체험에 카드도 필요 없다고 했으므로 나머지 선택지도 틀리다."
+    "explanation": "앞 문장이 온라인에 저장되어 어느 기기에서나 접속할 수 있다는 장점이므로 '여러 팀원이 같은 계정에서 동시에 작업할 수도 있다'는 추가 장점이 자연스럽다(D). A는 고객 지원 시간, B는 회계사용 시연 안내라 접속 편의성과 이어지지 않고, C는 '어느 기기에서나'라는 앞 문장과 정반대로 태블릿·휴대폰에서 쓸 수 없다고 해서 모순이다."
    },
    {
     "q": "",
@@ -1645,14 +1645,14 @@
    {
     "q": "",
     "choices": [
-     "Unfortunately, we are unable to offer you the position at this time.",
-     "Full details of these benefits are described in the enclosed employee handbook.",
-     "Your salary will be decided after your first year of employment.",
-     "Health insurance is not available to new employees."
+     "Employees who have worked here for five years may apply for a transfer to another city.",
+     "Full details of these benefits are described in the enclosed handbook.",
+     "Your supervisor, Dr. Alvarez, will meet with you on your first day to discuss your goals.",
+     "Vacation days that are not used in a given year can be carried over for up to two years."
     ],
     "answer": 1,
     "type": "문장 삽입",
-    "explanation": "앞 문장이 건강보험·퇴직연금·유급휴가 등 복리후생을 나열하므로 '이 혜택들의 자세한 내용은 동봉한 직원 안내서에 있다'는 문장이 these benefits로 자연스럽게 이어진다. 편지는 채용 제안이므로 제안할 수 없다는 말은 모순이고, 건강보험 대상이 된다고 했으며 초봉도 이미 6만 8천 달러로 정해졌으므로 나머지도 틀리다."
+    "explanation": "앞 문장이 건강보험·퇴직연금·유급휴가 등 복리후생을 나열하므로 '이 혜택들의 자세한 내용은 동봉한 안내서에 있다'는 문장이 these benefits로 자연스럽게 이어진다. 첫 번째 보기는 근속자의 전근 이야기라 입사 제안 단계와 맞지 않고, 세 번째는 첫 출근 일정으로 다음 문단(첫날은 3월 3일)에서 다룰 내용을 먼저 꺼낸 것이며, 네 번째는 휴가 이월 규정을 단정적으로 덧붙여 these benefits를 받는 문장이 되지 못한다."
    },
    {
     "q": "",
@@ -1773,14 +1773,14 @@
    {
     "q": "",
     "choices": [
-     "The company was founded by a group of professional photographers.",
-     "AgriSky plans to shut down its operations next month.",
-     "AgriSky's drones are designed mainly to deliver packages to homes.",
-     "Farmers who use the service say it has helped them reduce their use of water and chemicals."
+     "The company now employs more than 120 people, most of them in Sacramento.",
+     "Harlow Ventures has invested in more than thirty technology companies since 2015.",
+     "Farmers in Canada and Australia are expected to pay higher monthly fees than those in California.",
+     "Farmers who use the service say it has helped them use less water and fewer chemicals."
     ],
     "answer": 3,
     "type": "문장 삽입",
-    "explanation": "앞 문장이 드론 이미지로 농작물 문제를 일찍 발견할 수 있다는 서비스 설명이므로 '이용 농민들이 물과 농약 사용을 줄였다고 말한다'는 효과가 이어지는 것이 자연스럽다. 드론은 작물 감시용이고, 회사는 농업 엔지니어 출신이 세웠으며, 투자를 받아 확장한다고 했으므로 나머지 선택지는 모두 모순이다."
+    "explanation": "앞 문장이 드론 이미지로 농작물 문제를 일찍 발견할 수 있다는 서비스 설명이므로 '이용 농민들이 물과 농약 사용을 줄였다고 말한다'는 효과가 이어지는 것이 자연스럽다. 첫 번째 보기는 직원 수, 두 번째는 투자사 소개라 서비스 설명과 이어지지 않고, 세 번째는 기사에 근거가 없는 요금 이야기라 다음 문단의 매출 성장 설명과도 연결되지 않는다."
    },
    {
     "q": "",
@@ -1877,14 +1877,14 @@
    {
     "q": "",
     "choices": [
-     "Both practices make it difficult to confirm that the expenses were legitimate business costs.",
-     "As a result, the audit found no problems in any office.",
-     "These offices have been praised for their exceptional record-keeping.",
-     "Receipts are therefore no longer necessary for expense claims."
+     "As a result, all regional offices have been asked to stop reimbursing client meals.",
+     "Both practices make it hard to confirm that the costs were legitimate.",
+     "These offices will be visited by my team before the end of the month.",
+     "Missing receipts are most common in the offices that handle the largest travel budgets."
     ],
-    "answer": 0,
+    "answer": 1,
     "type": "문장 삽입",
-    "explanation": "앞 문단이 영수증 없는 청구와 참석자 기록 없는 식대 처리라는 두 가지 관행을 설명하므로 '두 관행 모두 정당한 업무 비용인지 확인하기 어렵게 만든다'는 문제점 정리가 Both practices로 자연스럽게 이어진다. 반복되는 문제가 발견되었다고 했으므로 '문제가 없었다'와 '기록 관리가 뛰어나 칭찬받았다'는 모순이고, 영수증 누락이 문제라고 했으므로 영수증이 필요 없다는 말도 틀리다."
+    "explanation": "앞 문단이 영수증 없는 청구와 참석자 기록 없는 식대 처리라는 두 가지 관행을 설명하므로 '두 관행 모두 정당한 업무 비용인지 확인하기 어렵게 만든다'는 문제점 정리가 Both practices로 자연스럽게 이어진다. 첫 번째 보기는 As a result의 근거가 없고 뒤의 시정 계획 요청 내용을 앞질러 단정하며, 세 번째는 These offices가 가리키는 대상이 없고, 네 번째는 근거 없는 추가 주장이라 두 관행을 정리하는 문장이 되지 못한다."
    },
    {
     "q": "",
@@ -1993,14 +1993,14 @@
    {
     "q": "",
     "choices": [
-     "Several of Marlowe's major clients have already announced targets of their own.",
-     "Marlowe has therefore decided to stop using recycled materials.",
-     "Consumers, however, have shown little interest in the issue.",
-     "The company expects the change to lower its production costs immediately."
+     "Marlowe has therefore decided to close two of its older mills in Yorkshire.",
+     "Several of Marlowe's major clients have already announced targets.",
+     "Furniture makers in Europe have been slower to change than those in Asia.",
+     "Marlowe's chief executive said the company will report its progress every year."
     ],
-    "answer": 0,
+    "answer": 1,
     "type": "문장 삽입",
-    "explanation": "앞 문장이 가구 업체들이 환경 영향을 줄이라는 압박을 받고 있다는 내용이므로 '말로의 주요 고객사 여러 곳이 이미 자체 목표를 발표했다'는 문장이 수요 증가를 뒷받침한다. 소비자의 압박이 있다고 했으므로 관심이 적다는 말은 모순이고, 재활용 원료 비중을 늘리는 계획이므로 사용 중단도 틀리다. 다음 문단이 '전환은 비용이 든다'이므로 즉시 비용이 준다는 말도 맞지 않는다."
+    "explanation": "앞 문장이 가구 업체들이 환경 영향을 줄이라는 압박을 받고 있다는 내용이므로 '말로의 주요 고객사 여러 곳이 이미 자체 목표를 발표했다'는 문장이 수요 증가를 뒷받침한다. 첫 번째 보기는 therefore의 근거 없이 공장 폐쇄를 말하고, 세 번째는 지역 비교라 수요 증가를 뒷받침하지 못하며, 네 번째는 진척 보고 이야기라 앞 문장과 이어지지 않는다."
    },
    {
     "q": "",
@@ -2225,14 +2225,14 @@
    {
     "q": "",
     "choices": [
-     "The deposit will be fully refunded upon request.",
-     "Clients may reserve rooms without paying a deposit.",
-     "Reservations for which full payment has not been received by this date may be canceled.",
-     "Payment in full is due on the day of the event."
+     "Clients are responsible for any damage caused to the hall's furniture during their event.",
+     "Payments may be made by bank transfer, credit card, or company check.",
+     "Reservations not paid in full by this date may be canceled.",
+     "Invoices for the remaining balance are sent to the client's e-mail address 60 days before the event."
     ],
     "answer": 2,
     "type": "문장 삽입",
-    "explanation": "앞 문장이 잔금을 행사 30일 전까지 내야 한다는 규정이므로 '이 날짜까지 전액이 입금되지 않은 예약은 취소될 수 있다'는 불이행 시 조치가 this date로 자연스럽게 이어진다. 보증금은 환불 불가이고, 잔금은 30일 전까지 내야 하며, 예약 확정에 보증금이 필요하다고 했으므로 나머지 선택지는 모두 모순이다."
+    "explanation": "앞 문장이 잔금을 행사 30일 전까지 내야 한다는 규정이므로 '이 날짜까지 전액이 입금되지 않은 예약은 취소될 수 있다'는 불이행 시 조치가 this date로 자연스럽게 이어진다. 첫 번째 보기는 시설 파손 책임이라 납부 기한과 이어지지 않고, 두 번째는 결제 수단 안내이며, 네 번째는 잔금 청구서를 60일 전에 보낸다고 해서 '30일 전까지 납부' 규정과 날짜가 맞지 않는다."
    },
    {
     "q": "",
@@ -2295,14 +2295,14 @@
    {
     "q": "",
     "choices": [
-     "Any further violations may result in financial penalties for the contractor.",
-     "Unfortunately, we are unable to take any action regarding your concern.",
-     "Work will therefore begin at 5:00 A.M. from now on.",
-     "The project was completed ahead of schedule last month."
+     "Any further violations could result in fines for the contractor.",
+     "Crews are not permitted to use the neighboring parking lot for their trucks.",
+     "Work will therefore begin at 5:00 A.M. so that the project can finish on time.",
+     "We received similar complaints about noise from other residents of Linden Avenue last month."
     ],
     "answer": 0,
     "type": "문장 삽입",
-    "explanation": "앞 문장이 시공사에 규정을 상기시키고 불시 점검을 하겠다는 조치이므로 '추가 위반 시 시공사에 벌금이 부과될 수 있다'는 후속 경고가 자연스럽다. 공사는 9월 중순에 끝날 예정이므로 지난달 완공은 모순이고, 오전 7시 이전 작업이 문제였으므로 5시 시작도 틀리다. 이미 조치를 취했다고 했으므로 아무 조치도 할 수 없다는 말도 모순이다."
+    "explanation": "앞 문장이 시공사에 규정을 상기시키고 불시 점검을 하겠다는 조치이므로 '추가 위반 시 시공사에 벌금이 부과될 수 있다'는 후속 경고가 자연스럽다. 두 번째 보기는 주차 규정이라 소음 문제와 이어지지 않고, 세 번째는 therefore의 근거가 없으며 7시 이전 작업을 막겠다는 앞 내용과 정반대이고, 네 번째는 다른 주민의 민원 이야기라 앞 문장의 조치와 이어지지 않는다."
    },
    {
     "q": "",

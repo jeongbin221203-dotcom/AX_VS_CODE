@@ -10,7 +10,7 @@
    {
     "q": "What is the main purpose of the announcement?",
     "choices": [
-     "To announce that the library will close for exam week",
+     "To announce that the library will be closed for renovation during exam week",
      "To tell students about longer library hours during exam week",
      "To explain how to get a new library card",
      "To invite students to a study skills class"
@@ -93,7 +93,7 @@
     "q": "Why does the speaker tell students to sign up early?",
     "choices": [
      "Students need time to buy a mat.",
-     "The classes start at six o'clock.",
+     "The classes start at six o'clock, so students must arrive on time.",
      "The website will close soon.",
      "Each class has a limited number of spots."
     ],
@@ -154,7 +154,7 @@
      "To introduce the idea that bees use another way to communicate",
      "To show that bees are not very smart",
      "To explain why bees live in large groups",
-     "To tell students that the topic is difficult"
+     "To tell students that the topic is too difficult to understand quickly"
     ],
     "answer": 0,
     "type": "화자 의도",
@@ -211,7 +211,7 @@
     "q": "How does the professor begin the talk?",
     "choices": [
      "By showing a picture of the Moon",
-     "By telling a story about an astronomer",
+     "By telling a story about a famous astronomer who studied the Moon",
      "By asking about something students may have noticed",
      "By reviewing the last class"
     ],
@@ -233,7 +233,7 @@
    {
     "q": "What is the talk mainly about?",
     "choices": [
-     "Where the biggest volcanoes in the world are",
+     "Where the biggest and most dangerous volcanoes in the world are",
      "How volcanoes work and why they behave differently",
      "How scientists predict volcanic eruptions",
      "Why people like to visit Hawaii"
@@ -272,7 +272,7 @@
      "To explain how trapped gas can cause an explosion",
      "To show that lava is a kind of liquid",
      "To compare the color of magma to a drink",
-     "To tell students not to bring drinks to class"
+     "To tell students not to bring soda or other drinks into the classroom"
     ],
     "answer": 0,
     "type": "화자 의도",
@@ -294,7 +294,7 @@
     "choices": [
      "The invention of the piano and the meaning of its name",
      "How to play the harpsichord",
-     "The life of a famous Italian composer",
+     "The life of a famous Italian composer who played the harpsichord",
      "Why pianos are expensive today"
     ],
     "answer": 0,
@@ -329,7 +329,7 @@
     "q": "What can be inferred about the word piano?",
     "choices": [
      "It was used for the harpsichord before.",
-     "It was the name of Cristofori's hometown.",
+     "It was the name of the Italian town where Cristofori was born.",
      "It first meant loud in Italian.",
      "It is a shorter form of a longer Italian name."
     ],
@@ -387,7 +387,7 @@
    {
     "q": "Why does the professor mention the university's program?",
     "choices": [
-     "To ask students to work at the program",
+     "To ask students to work at the program as volunteers next year",
      "To complain that the program is too small",
      "To explain why the dining halls are closing",
      "To encourage students to use the green bins on campus"
@@ -413,7 +413,7 @@
      "To explain how to apply for a summer class",
      "To announce job openings at Career Services",
      "To give information about an upcoming career fair",
-     "To introduce a new sports program in the gym"
+     "To introduce a new sports program that will be held in the gym"
     ],
     "answer": 2,
     "type": "주제·목적",
@@ -540,7 +540,7 @@
     "q": "Why does the professor talk about saving a document on a computer?",
     "choices": [
      "To show that computers work like human brains",
-     "To suggest that students take notes on a computer",
+     "To suggest that students take their notes on a computer instead of paper",
      "To explain how sleep helps keep information for a long time",
      "To warn students about losing their homework"
     ],
@@ -574,7 +574,7 @@
    {
     "q": "What is the lecture mainly about?",
     "choices": [
-     "Modern methods for copying old paintings",
+     "Modern methods for copying old paintings and protecting caves",
      "How teenagers explored caves in France",
      "Why prehistoric people hunted wild animals",
      "The discovery and creation of the Lascaux cave paintings"
@@ -610,7 +610,7 @@
    {
     "q": "What can be inferred about the copy of the cave?",
     "choices": [
-     "It will be closed to visitors soon.",
+     "It will be closed to visitors soon because it is also getting damaged.",
      "It was made by the four teenagers.",
      "It is older than the original paintings.",
      "It lets people see the art without harming the original."
@@ -659,7 +659,7 @@
     "choices": [
      "To give an example of a sunny day",
      "To explain why the shop closed",
-     "To show that demand is more important than supply",
+     "To show that demand is always more important than supply in setting prices",
      "To show that a change in supply can also change the price"
     ],
     "answer": 3,
@@ -670,7 +670,7 @@
     "q": "What is the equilibrium price?",
     "choices": [
      "The price on a sunny day",
-     "The lowest price a shop can charge",
+     "The lowest price a shop can charge without losing money on the goods it sells",
      "The price at which the amount people want equals the amount available",
      "The price set by the factory"
     ],
@@ -695,7 +695,7 @@
      "Why French people give many gifts",
      "How to choose a good birthday present",
      "How giving gifts helps build social relationships",
-     "How businesses use gifts to attract customers"
+     "How businesses use gifts to attract customers and keep them loyal"
     ],
     "answer": 2,
     "type": "주제·목적",
@@ -717,7 +717,7 @@
     "q": "Why does the professor ask about inviting a friend to dinner?",
     "choices": [
      "To show that dinner is the most common gift",
-     "To suggest that students cook for their friends",
+     "To suggest that students cook dinner for their friends more often",
      "To connect the idea to the students' own experience",
      "To explain a rule of French culture"
     ],
@@ -812,7 +812,7 @@
     "choices": [
      "To explain what residents must do when they move out",
      "To announce that a residence hall will be repaired",
-     "To tell students how to apply for winter housing",
+     "To tell students how and when to apply for winter housing on campus",
      "To remind students to pay their housing fees"
     ],
     "answer": 0,
@@ -822,7 +822,7 @@
    {
     "q": "What can be inferred about students who are approved to stay over the winter break?",
     "choices": [
-     "They must check out before December sixteenth.",
+     "They must check out with their RA before December sixteenth at noon.",
      "They will have to live in a different building for a while.",
      "They will pay a fifty-dollar fee.",
      "They can stay in their current rooms."
@@ -845,7 +845,7 @@
    {
     "q": "What is the announcement mainly about?",
     "choices": [
-     "A change in the dates of the spring term",
+     "A change in the dates of the spring term and the registration deadline",
      "Preparing for registration with a new online system",
      "New rules about library fines",
      "How seniors can graduate early"
@@ -860,7 +860,7 @@
      "To stress that students should check their accounts soon",
      "To complain that students do not read emails",
      "To explain why registration will be delayed",
-     "To show that the new system has technical problems"
+     "To show that the new system has technical problems that staff must fix"
     ],
     "answer": 0,
     "type": "화자 의도",
@@ -951,7 +951,7 @@
    {
     "q": "What does the professor imply about how children learn language?",
     "choices": [
-     "They learn only the words adults use most often.",
+     "They learn only the words and sounds that adults use most often.",
      "They create grammatical rules rather than just copying.",
      "They learn simplified languages more slowly.",
      "They prefer the language of the dominant group."
@@ -974,7 +974,7 @@
    {
     "q": "What is the lecture mainly about?",
     "choices": [
-     "How predators use light to find prey",
+     "How predators use light and shadow to find their prey in the ocean",
      "Why fish change color as they grow",
      "How a two-tone coloring pattern helps animals hide",
      "Why artists became interested in animals"
@@ -987,7 +987,7 @@
     "q": "According to the professor, why is the shadow on the bottom of an object important?",
     "choices": [
      "It hides the object from animals below it.",
-     "It makes the object look darker than its background.",
+     "It makes the object look darker than its background and easier to hide.",
      "It shows which direction the light comes from.",
      "It helps the eye recognize a three-dimensional shape."
     ],
@@ -1001,7 +1001,7 @@
      "To give an example of countershading",
      "To contrast the previous topic with a different kind of camouflage",
      "To show that frogs and fish use the same strategy",
-     "To explain why green is the most common animal color"
+     "To explain why green is the most common color among animals in nature"
     ],
     "answer": 1,
     "type": "화자 의도",
@@ -1035,7 +1035,7 @@
     "choices": [
      "How mountain ranges are created",
      "How granite and limestone are formed",
-     "Why floods were common in the eighteenth century",
+     "Why giant floods were so common in the eighteenth century",
      "What glacial erratics are and why they are useful"
     ],
     "answer": 3,
@@ -1047,7 +1047,7 @@
     "choices": [
      "By showing a map of ancient ice sheets",
      "By defining a Latin word",
-     "By reviewing the history of the last ice age",
+     "By reviewing the history of the last ice age in North America",
      "By describing an imaginary scene that presents a puzzle"
     ],
     "answer": 3,
@@ -1059,7 +1059,7 @@
     "choices": [
      "To describe how limestone is formed",
      "To explain how glaciers melted",
-     "To show that erratics are found near rivers",
+     "To show that erratics are usually found near rivers and lakes",
      "To give an earlier explanation that turned out to be wrong"
     ],
     "answer": 3,
@@ -1070,7 +1070,7 @@
     "q": "How can erratics help scientists learn about ancient ice sheets?",
     "choices": [
      "Their color shows how cold the climate was.",
-     "Their age shows how long the ice age lasted.",
+     "Their age shows how long the last ice age lasted in the region.",
      "Their size shows how thick the ice was.",
      "Their source can show which way the ice moved."
     ],
@@ -1094,7 +1094,7 @@
     "choices": [
      "A method for detecting planets around other stars",
      "The history of the solar system",
-     "Why stars change their brightness over time",
+     "Why stars change their brightness over millions of years",
      "How to photograph planets directly"
     ],
     "answer": 0,
@@ -1104,7 +1104,7 @@
    {
     "q": "Why does the professor mention a firefly next to a stadium light?",
     "choices": [
-     "To compare the sizes of planets and stars",
+     "To compare the sizes of planets and stars in our solar system",
      "To explain how stars produce light",
      "To show how hard it is to see an exoplanet directly",
      "To describe what a transit looks like"
@@ -1128,7 +1128,7 @@
    {
     "q": "What does the professor imply about the number of exoplanets?",
     "choices": [
-     "Only large planets can have stable orbits.",
+     "Only large planets can have stable orbits around their stars.",
      "Most of them have already been discovered.",
      "There are probably far more than we have detected.",
      "Most of them orbit edge-on to Earth."
@@ -1152,7 +1152,7 @@
     "q": "What is the main topic of the lecture?",
     "choices": [
      "How to prepare for an exam in one night",
-     "How Ebbinghaus became a famous psychologist",
+     "How Ebbinghaus became a famous psychologist in Germany",
      "Why nonsense syllables are hard to remember",
      "Why spreading out study sessions improves memory"
     ],
@@ -1164,7 +1164,7 @@
     "q": "What is the forgetting curve?",
     "choices": [
      "A test that measures how well students study",
-     "A method for spreading study over several days",
+     "A method for spreading study sessions over several days to learn faster",
      "A list of syllables that are easy to forget",
      "A pattern of fast forgetting at first, then slower forgetting"
     ],
@@ -1176,7 +1176,7 @@
     "q": "What does the professor mean when he says the feeling of fluency is misleading?",
     "choices": [
      "Fluent speakers often forget grammar rules.",
-     "Students who read quickly usually understand less.",
+     "Students who read quickly and fluently usually understand much less than slow readers do.",
      "Cramming is always impossible for most students.",
      "Feeling that material is easy now does not mean it will be remembered later."
     ],
@@ -1210,7 +1210,7 @@
    {
     "q": "What is the main purpose of the announcement?",
     "choices": [
-     "To explain why the library databases were shut down",
+     "To explain why the library databases were shut down for security reasons last week",
      "To announce that campus email will be replaced",
      "To inform students that an extra login step will soon be required",
      "To recruit students to work at the help desk"
@@ -1223,7 +1223,7 @@
     "q": "Why does the speaker say that ITS staff will never ask for passwords by email or phone?",
     "choices": [
      "To show that the new system does not use passwords",
-     "To explain that the help desk will be too busy to call",
+     "To explain that the help desk will be too busy to call students about passwords",
      "To warn students about scams that may take advantage of the change",
      "To tell students to contact Baker Hall in person"
     ],
@@ -1245,7 +1245,7 @@
    {
     "q": "Which of the following must be included in a proposal?",
     "choices": [
-     "A recommendation letter from the department",
+     "A recommendation letter from the department chair or a faculty member",
      "A complete set of final results",
      "The name of a faculty member who has agreed to be a mentor",
      "A ten-minute recorded presentation"
@@ -1281,7 +1281,7 @@
     "q": "What is the main purpose of the announcement?",
     "choices": [
      "To explain how library services will continue during a renovation",
-     "To ask students to vote on whether to renovate the library",
+     "To ask students to vote on whether to renovate the library at the open forum",
      "To announce that the library's collection will be reduced",
      "To introduce the architects who designed the Student Union"
     ],
@@ -1294,7 +1294,7 @@
     "choices": [
      "To warn students that some books will be lost",
      "To reassure students that they can still get stored books",
-     "To explain why the temporary library is so small",
+     "To explain why the temporary library on the second floor is so small",
      "To encourage students to return borrowed books early"
     ],
     "answer": 1,
@@ -1316,7 +1316,7 @@
     "q": "What is the lecture mainly about?",
     "choices": [
      "How governments privatize public land",
-     "The history of the Nobel Prize in economics",
+     "The history of the Nobel Prize in economics and its first winners",
      "Why overfishing is difficult to stop",
      "A challenge to a well-known theory about shared resources"
     ],
@@ -1387,7 +1387,7 @@
     "q": "According to the professor, what was the problem with storing paint in pig bladders?",
     "choices": [
      "They leaked and dried out, making long outdoor work impractical.",
-     "They were too expensive for most painters.",
+     "They were too expensive for most painters to buy in large amounts.",
      "They changed the color of the paint.",
      "They could only hold very small amounts of paint."
     ],
@@ -1398,7 +1398,7 @@
    {
     "q": "Why does the professor quote Renoir?",
     "choices": [
-     "To prove that technology was the only cause of Impressionism",
+     "To prove that technology was the only cause of the whole Impressionist movement in France",
      "To show that an Impressionist himself recognized the importance of the tube",
      "To explain how Renoir invented the paint tube",
      "To show that Renoir disliked painting outdoors"
@@ -1457,7 +1457,7 @@
    {
     "q": "Why does the professor use the word ironically when mentioning air conditioners?",
     "choices": [
-     "Most air conditioners are found in the countryside.",
+     "Most air conditioners are found in the countryside, far from large cities.",
      "Air conditioners are used less in hot cities.",
      "Air conditioners are cheaper than green roofs.",
      "Devices meant to cool people actually add heat to the city."
@@ -1470,7 +1470,7 @@
     "q": "What can be inferred about low-income neighborhoods?",
     "choices": [
      "Their residents face greater health risks during heat waves.",
-     "They are usually cooler than wealthier areas.",
+     "They are usually cooler than wealthier areas because they have more trees.",
      "They have more green roofs than other areas.",
      "They produce most of a city's waste heat."
     ],
@@ -1492,7 +1492,7 @@
    {
     "q": "What is the lecture mainly about?",
     "choices": [
-     "Why ancient Greek music used only perfect fifths",
+     "Why ancient Greek music used only perfect fifths and octaves in its scales",
      "How Pythagoras invented the guitar",
      "A mathematical problem in tuning and the compromise that solved it",
      "How to tune a piano by ear"
@@ -1516,7 +1516,7 @@
    {
     "q": "What does the professor imply about keys before equal temperament was adopted?",
     "choices": [
-     "Musicians could move freely between keys.",
+     "Musicians could move freely between keys without any problems in tuning.",
      "All keys sounded exactly the same.",
      "Only one key could be played on a keyboard.",
      "Different keys had noticeably different characters."
@@ -1553,7 +1553,7 @@
     "choices": [
      "Why Romanesque churches had small windows",
      "How Gothic builders solved a structural problem to build tall, bright churches",
-     "How stained glass was produced in the Middle Ages",
+     "How stained glass was produced and installed in Gothic cathedrals in the Middle Ages",
      "The religious meaning of Gothic architecture"
     ],
     "answer": 1,
@@ -1577,7 +1577,7 @@
     "choices": [
      "He contrasts an older solution with three newer innovations.",
      "He describes buildings in the order they were built.",
-     "He compares Gothic churches in several different countries.",
+     "He compares Gothic churches in several different countries and centuries.",
      "He lists the advantages and disadvantages of stained glass."
     ],
     "answer": 0,
@@ -1590,7 +1590,7 @@
      "They made the building structurally weaker.",
      "They were added after the cathedral was completed.",
      "They were made possible by changes in how forces were supported.",
-     "They were designed mainly to reduce lateral thrust."
+     "They were designed mainly to reduce lateral thrust on the upper walls."
     ],
     "answer": 2,
     "type": "추론",
@@ -1611,7 +1611,7 @@
     "q": "What is the main purpose of the announcement?",
     "choices": [
      "To ask instructors to write new syllabi by January",
-     "To announce that AI tools are banned in all courses",
+     "To announce that AI tools are banned in all courses starting next term",
      "To correct a misunderstanding and explain how a new policy works",
      "To promote a set of library workshops on writing"
     ],
@@ -1625,7 +1625,7 @@
      "The student should ask the instructor only if a concern is raised.",
      "The student may use the tools as long as the help is minor.",
      "The student should assume the tools are not allowed unless told otherwise in writing.",
-     "The student is free to decide, since the instructor gave no rules."
+     "The student is free to decide on their own, since the instructor gave no specific rules."
     ],
     "answer": 2,
     "type": "추론",
@@ -1647,7 +1647,7 @@
     "choices": [
      "To reveal whose contact settings would prevent them from being alerted",
      "To train faculty to lead students to safety",
-     "To measure how quickly students leave their classrooms",
+     "To measure how quickly students and faculty can leave their classrooms safely",
      "To test whether the outdoor sirens are loud enough"
     ],
     "answer": 0,
@@ -1657,7 +1657,7 @@
    {
     "q": "Why does the speaker mention that nearly one in six students did not receive last spring's alert?",
     "choices": [
-     "To criticize the company that runs the alert system",
+     "To criticize the company that runs the alert system for failing to send texts",
      "To emphasize why students should check their notification settings",
      "To explain why the test will last three minutes",
      "To show that most students ignore emergency alerts"
@@ -1682,7 +1682,7 @@
     "choices": [
      "To clarify what kind of project the fellowship is meant to support",
      "To announce a change in the fellowship's deadline",
-     "To encourage students with high grades to apply",
+     "To encourage students with high grades to apply for the fellowship this year",
      "To explain how to apply to master's programs abroad"
     ],
     "answer": 0,
@@ -1716,7 +1716,7 @@
     "q": "What is the lecture mainly about?",
     "choices": [
      "How Australian and Russian languages developed",
-     "Why Whorf's theory was proven correct by modern experiments",
+     "Why Whorf's strongest theory was proven completely correct by modern experiments in Australia",
      "How research has revived a limited form of the idea that language influences thought",
      "Why translation between languages is always imperfect"
     ],
@@ -1729,7 +1729,7 @@
     "choices": [
      "It caused researchers to dismiss even milder, testable versions of the idea for years.",
      "It led researchers to accept the strong version too quickly.",
-     "It was based on experiments that were later shown to be flawed.",
+     "It was based on early experiments on color and space that were later shown to be flawed.",
      "It ignored evidence that translation is impossible."
     ],
     "answer": 0,
@@ -1739,7 +1739,7 @@
    {
     "q": "According to the professor, why do Guugu Yimithirr speakers have an accurate sense of direction?",
     "choices": [
-     "They have special words for every type of landmark.",
+     "They have special words for every type of landmark, building, and street in their area.",
      "They grow up in open landscapes without buildings.",
      "Their language requires them to use compass directions to describe locations.",
      "They are trained to navigate from early childhood."

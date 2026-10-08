@@ -83,6 +83,7 @@ def mock():
         return redirect(url_for("quiz.quiz", sid=sid))
     past = [s for s in stats.recent_sessions(100) if s["mode"] == "mock"]
     return render_template("mock.html", forms=scoring.MOCK_FORMS, past=past, fresh=study.fresh_mock_capacity(bank()),
+                           ongoing=stats.unfinished_sessions(),
                            selected=request.args.get("form", "full"))
 
 

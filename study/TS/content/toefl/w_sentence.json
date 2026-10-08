@@ -984,7 +984,10 @@
    "cited"
   ],
   "explanation": "make sure that + 절 구조이며, 수동태 was cited 사이에 부사 properly 가 들어갑니다.",
-  "translation": "A: 어떻게 그렇게 좋은 성적을 받았어? / B: 모든 출처를 제대로 인용했는지 꼭 확인했어."
+  "translation": "A: 어떻게 그렇게 좋은 성적을 받았어? / B: 모든 출처를 제대로 인용했는지 꼭 확인했어.",
+  "alts": [
+   "I made sure that every source was cited properly"
+  ]
  },
  {
   "id": "ws-061",
@@ -1604,7 +1607,10 @@
    "explicitly"
   ],
   "explanation": "suggest 뒤 that 절은 동사원형을 씁니다(가정법 현재). 수동이므로 be stated 가 되고 is stated 가 아닙니다.",
-  "translation": "A: 보고서에서 무엇을 강조해야 할까? / B: 한계점을 더 명시적으로 밝혔으면 해."
+  "translation": "A: 보고서에서 무엇을 강조해야 할까? / B: 한계점을 더 명시적으로 밝혔으면 해.",
+  "alts": [
+   "I'd suggest that the limitations be more explicitly stated"
+  ]
  },
  {
   "id": "ws-096",

@@ -8,7 +8,7 @@
    {
     "q": "What is the passage mainly about?",
     "choices": [
-     "Why bats sleep during the day",
+     "Why bats sleep during the day and hunt at night",
      "How bats use sound to find insects",
      "How moths find food at night",
      "Why people cannot hear bats"
@@ -33,7 +33,7 @@
     "q": "Why does a bat make sounds much faster when it is near an insect?",
     "choices": [
      "To follow the insect's quick movements",
-     "To call other bats",
+     "To call other bats to come and join the hunt",
      "To scare the insect",
      "To rest its ears"
     ],
@@ -44,10 +44,10 @@
    {
     "q": "The word \"escape\" in the passage is closest in meaning to",
     "choices": [
-     "eat",
+     "eat a meal",
      "get away",
-     "sing",
-     "build"
+     "sing loudly",
+     "build a nest"
     ],
     "answer": 1,
     "type": "어휘",
@@ -57,7 +57,7 @@
     "q": "What can be inferred about the moths that drop toward the ground?",
     "choices": [
      "They are more likely to survive a bat attack.",
-     "They are bigger than bats.",
+     "They are bigger and stronger than the bats that hunt them.",
      "They make high sounds like bats.",
      "They cannot fly well."
     ],
@@ -77,7 +77,7 @@
    {
     "q": "According to the passage, why does magma rise toward the surface?",
     "choices": [
-     "It is pushed by ocean water.",
+     "It is pushed upward by the pressure of ocean water.",
      "It is pulled by the Sun.",
      "It is colder than the rock above it.",
      "It is lighter than the rock around it."
@@ -91,7 +91,7 @@
     "choices": [
      "Lava is magma that has reached the surface.",
      "Lava contains no rock.",
-     "Magma is colder than lava.",
+     "Magma is much colder than lava and never moves.",
      "Magma is only found in Hawaii."
     ],
     "answer": 0,
@@ -101,7 +101,7 @@
    {
     "q": "The word \"sticky\" in the passage is closest in meaning to",
     "choices": [
-     "light and fast",
+     "light and quick to flow away",
      "clean and bright",
      "thick and hard to move",
      "cold and wet"
@@ -114,7 +114,7 @@
     "q": "Why does the author mention Hawaii?",
     "choices": [
      "To show where the biggest explosions happen",
-     "To describe how scientists measure earthquakes",
+     "To describe how scientists measure earthquakes in the Pacific",
      "To explain where magma comes from",
      "To give an example of quiet eruptions with flowing lava"
     ],
@@ -128,7 +128,7 @@
      "They never erupt.",
      "They are more dangerous because they can explode.",
      "They produce no ash.",
-     "They are easier to predict than other volcanoes."
+     "They are easier to predict than other kinds of volcanoes."
     ],
     "answer": 1,
     "type": "추론",
@@ -158,7 +158,7 @@
    {
     "q": "Why did the first emperor of a united China connect the walls?",
     "choices": [
-     "To mark the border between small states",
+     "To mark the border between the small states of the region",
      "To protect farms and towns from northern groups",
      "To give work to farmers",
      "To build a road for traders"
@@ -195,7 +195,7 @@
     "q": "What can be inferred from the last paragraph?",
     "choices": [
      "The wall was completely useless.",
-     "Enemies could never go around the wall.",
+     "Enemies could never go around or climb over the wall at any point.",
      "The wall had value even when it did not stop all attacks.",
      "Soldiers lived only in the desert."
     ],
@@ -218,7 +218,7 @@
      "How animals sleep",
      "Why babies need oxygen",
      "Possible reasons for yawning and how it spreads",
-     "How to stop yawning in class"
+     "How to stop yawning when you are sitting in class"
     ],
     "answer": 2,
     "type": "주제·목적",
@@ -228,7 +228,7 @@
     "q": "According to the passage, why do scientists doubt the oxygen explanation?",
     "choices": [
      "People with extra oxygen did not yawn less.",
-     "Animals do not need oxygen.",
+     "Animals do not need oxygen to stay alive and healthy.",
      "Babies do not yawn.",
      "Yawning makes people tired."
     ],
@@ -239,7 +239,7 @@
    {
     "q": "Why does the author mention the cold pack study?",
     "choices": [
-     "To prove that oxygen causes yawning",
+     "To prove that oxygen is the main cause of yawning",
      "To show that yawning is contagious",
      "To explain how babies yawn",
      "To support the idea that yawning cools the brain"
@@ -254,7 +254,7 @@
      "dangerous",
      "very loud",
      "spreading from one person to another",
-     "difficult to see"
+     "difficult to see without special tools"
     ],
     "answer": 2,
     "type": "어휘",
@@ -322,7 +322,7 @@
     "choices": [
      "When the Sun, Moon, and Earth are in a line",
      "Only in the spring season",
-     "When the Sun and Moon pull at right angles",
+     "When the Sun and Moon pull at right angles to each other",
      "When there is no Moon"
     ],
     "answer": 0,
@@ -332,7 +332,7 @@
    {
     "q": "Why does the author mention people who fish and sail?",
     "choices": [
-     "To explain how tides were discovered",
+     "To explain how tides were first discovered by sailors",
      "To show that tides matter in daily life",
      "To describe the Moon's gravity",
      "To compare spring and neap tides"
@@ -365,7 +365,7 @@
    {
     "q": "Why does the author mention a tomato and a turkey?",
     "choices": [
-     "To show what the Aztecs ate with chocolate",
+     "To show what the Aztecs liked to eat with their chocolate",
      "To explain how cacao trees grow",
      "To compare Aztec and Spanish food",
      "To show that cacao beans were used as money"
@@ -390,7 +390,7 @@
     "q": "What made solid chocolate bars possible?",
     "choices": [
      "Machines that separated cocoa butter",
-     "Growing cacao in Europe",
+     "Growing cacao trees in Europe instead of Mexico",
      "Adding spices to the drink",
      "Using beans as money"
     ],
@@ -404,7 +404,7 @@
      "It was only made in Switzerland.",
      "Most ordinary people could not easily afford it.",
      "It was always sold as candy.",
-     "It was more popular in Asia than in Europe."
+     "It was more popular in Asia than it was in Europe at that time."
     ],
     "answer": 1,
     "type": "추론",
@@ -425,7 +425,7 @@
      "Why snow falls in winter",
      "The history of Norway",
      "How glaciers form, move, and change the landscape",
-     "How to measure temperatures in the Alps"
+     "How to measure temperatures in the Alps and in Norway each year"
     ],
     "answer": 2,
     "type": "주제·목적",
@@ -434,7 +434,7 @@
    {
     "q": "According to the passage, what happens to a river valley when a glacier moves through it?",
     "choices": [
-     "It becomes deeper and narrower.",
+     "It becomes much deeper and narrower than it was before.",
      "It fills with sand.",
      "It turns into a lake immediately.",
      "It changes from a V shape to a U shape."
@@ -461,7 +461,7 @@
      "To show evidence that ice once covered larger areas",
      "To explain how sandpaper is made",
      "To show that glaciers melt quickly",
-     "To describe the shape of U-shaped valleys"
+     "To describe the shape of U-shaped valleys carved by ice"
     ],
     "answer": 0,
     "type": "글의 구조",
@@ -471,9 +471,9 @@
     "q": "What can be inferred about the early scientists mentioned in paragraph 3?",
     "choices": [
      "They knew that glaciers once covered Europe.",
-     "They did not at first realize that glaciers could move rocks long distances.",
+     "They did not at first realize that glaciers could carry rocks far.",
      "They believed boulders formed from melting ice.",
-     "They had studied glaciers in Norway for centuries."
+     "They had already studied the glaciers in Norway for several centuries."
     ],
     "answer": 1,
     "type": "추론",
@@ -491,9 +491,9 @@
    {
     "q": "Why was the Rosetta Stone so useful to scholars?",
     "choices": [
-     "It was the oldest stone in Egypt.",
+     "It was the oldest stone with writing that was ever found in Egypt.",
      "It explained the history of the French army.",
-     "It contained the same message in a script they could already read.",
+     "It contained the same message in a script they could read.",
      "It showed pictures of every Egyptian king."
     ],
     "answer": 2,
@@ -504,7 +504,7 @@
     "q": "The word \"assumed\" in the passage is closest in meaning to",
     "choices": [
      "supposed",
-     "proved",
+     "proved by tests",
      "denied",
      "wrote"
     ],
@@ -527,7 +527,7 @@
    {
     "q": "What was Champollion's key discovery?",
     "choices": [
-     "Hieroglyphs were written in Greek.",
+     "Hieroglyphs were written in the Greek language.",
      "Hieroglyphs only represented ideas.",
      "Coptic was older than hieroglyphs.",
      "Many hieroglyphs represented sounds."
@@ -540,9 +540,9 @@
     "q": "What can be inferred about Champollion's knowledge of Coptic?",
     "choices": [
      "It was not related to his success.",
-     "It made the Greek text unnecessary.",
+     "It made the Greek text on the stone completely unnecessary.",
      "It was learned from the Rosetta Stone.",
-     "It gave him an advantage that other researchers may not have had."
+     "It gave him an advantage over other researchers."
     ],
     "answer": 3,
     "type": "추론",
@@ -561,7 +561,7 @@
     "q": "What is the main purpose of the waggle dance?",
     "choices": [
      "To attract a mate",
-     "To warn bees of danger",
+     "To warn the other bees of danger near the hive",
      "To clean the hive",
      "To tell other bees where food is located"
     ],
@@ -572,7 +572,7 @@
    {
     "q": "According to the passage, what does the direction of the straight run show?",
     "choices": [
-     "The size of the flower patch",
+     "The size of the flower patch that the scout found",
      "The number of bees needed",
      "The age of the scout bee",
      "The direction of food compared with the Sun"
@@ -596,7 +596,7 @@
    {
     "q": "The word \"recognize\" in the passage is closest in meaning to",
     "choices": [
-     "leave",
+     "leave behind",
      "identify",
      "build",
      "forget"
@@ -609,8 +609,8 @@
     "q": "Why does the author mention Karl von Frisch?",
     "choices": [
      "To explain how bees make honey",
-     "To argue that bees are smarter than people",
-     "To show that the bee dance was studied and recognized as an important discovery",
+     "To argue that bees are smarter than people in some ways",
+     "To show that the bee dance was an important discovery",
      "To describe the history of Austria"
     ],
     "answer": 2,
@@ -632,7 +632,7 @@
      "A very strong medicine",
      "A fake treatment that looks like real medicine",
      "A doctor who tests new drugs",
-     "A chemical produced by the brain"
+     "A chemical produced by the brain after taking a pill"
     ],
     "answer": 1,
     "type": "세부 사항",
@@ -641,7 +641,7 @@
    {
     "q": "Why does the author mention expensive pills and cheap pills?",
     "choices": [
-     "To argue that cheap medicine is dangerous",
+     "To argue that cheap medicine is less safe and more dangerous",
      "To explain why medicine costs so much",
      "To show that patients' expectations can affect results",
      "To describe how pills are made"
@@ -667,7 +667,7 @@
     "choices": [
      "Only the patients",
      "Only the doctors",
-     "Both the patients and the doctors",
+     "Both the patients and the doctors who treat them",
      "Neither the patients nor the doctors"
     ],
     "answer": 3,
@@ -711,7 +711,7 @@
     "q": "Why does wet ocean air release rain over hills and mountains?",
     "choices": [
      "It cools as it is pushed upward.",
-     "It becomes warmer as it rises.",
+     "It becomes warmer as it rises over the hills",
      "It mixes with dry winter air.",
      "It is blocked by rivers."
     ],
@@ -722,7 +722,7 @@
    {
     "q": "The word \"reverses\" in the passage is closest in meaning to",
     "choices": [
-     "stops completely",
+     "stops completely for months",
      "becomes stronger",
      "repeats exactly",
      "turns the opposite way"
@@ -734,7 +734,7 @@
    {
     "q": "Which of the following is NOT mentioned as an effect of the monsoon rains?",
     "choices": [
-     "Growing rice",
+     "Helping farmers grow rice in the fields",
      "Refilling rivers",
      "Causing floods",
      "Creating new mountains"
@@ -746,10 +746,10 @@
    {
     "q": "What can be inferred from the last paragraph?",
     "choices": [
-     "The monsoon always arrives on the same day.",
+     "The monsoon always arrives on exactly the same day each year.",
      "Floods only happen in winter.",
      "Farmers in South Asia do not need rain.",
-     "An accurate forecast of the monsoon is valuable to many people."
+     "Accurate monsoon forecasts are valuable to many people."
     ],
     "answer": 3,
     "type": "추론",
@@ -767,10 +767,10 @@
    {
     "q": "What is the passage mainly about?",
     "choices": [
-     "Why Mount Vesuvius erupted",
+     "Why Mount Vesuvius erupted and how far its ash traveled",
      "How Roman elections worked",
      "The life of Giuseppe Fiorelli",
-     "How Pompeii was buried and what it reveals about Roman life"
+     "How Pompeii was buried and what it reveals about Romans"
     ],
     "answer": 3,
     "type": "주제·목적",
@@ -803,7 +803,7 @@
    {
     "q": "How did Fiorelli create his casts?",
     "choices": [
-     "He carved them from volcanic rock.",
+     "He carved them from the hardened volcanic rock itself.",
      "He filled empty spaces in the ash with plaster.",
      "He copied paintings from the walls.",
      "He used bones found in ovens."
@@ -815,8 +815,8 @@
    {
     "q": "Why does the author compare Pompeii with most ancient cities?",
     "choices": [
-     "To argue that Pompeii was larger than other cities",
-     "To show why Pompeii is especially useful for studying daily life",
+     "To argue that Pompeii was larger and richer than other cities",
+     "To show why Pompeii is so useful for studying daily life",
      "To explain why volcanoes are dangerous",
      "To show that Pompeii was rebuilt often"
     ],
@@ -849,7 +849,7 @@
     "q": "In Ricardo's example, why should Portugal focus on wine?",
     "choices": [
      "It cannot produce cloth at all.",
-     "England refuses to buy Portuguese cloth.",
+     "England refuses to buy Portuguese cloth at any price",
      "Wine is more expensive than cloth.",
      "Its advantage over England is greatest in wine."
     ],
@@ -863,7 +863,7 @@
      "To explain how typing speed is measured",
      "To criticize the legal profession",
      "To show that the principle also applies to individuals",
-     "To argue that assistants are paid too little"
+     "To argue that assistants are paid too little for their work"
     ],
     "answer": 2,
     "type": "글의 구조",
@@ -887,7 +887,7 @@
      "It assumes workers can easily switch industries.",
      "It ignores the cost of wine.",
      "It only works for small countries.",
-     "It was proven false by Ricardo himself."
+     "It was proven false by Ricardo himself in later years"
     ],
     "answer": 0,
     "type": "사실 확인",
@@ -905,9 +905,9 @@
    {
     "q": "According to the passage, where have pidgins typically developed?",
     "choices": [
-     "In universities where many languages are studied",
+     "In universities where many different languages are studied closely",
      "In isolated mountain villages",
-     "In places of trade or forced labor with mixed language groups",
+     "In trade or forced-labor settings with mixed language groups",
      "In countries with a single official language"
     ],
     "answer": 2,
@@ -944,7 +944,7 @@
      "A creole has no grammar.",
      "A creole is spoken as a full first language by a community.",
      "A pidgin is used by more people.",
-     "A pidgin is always older than a creole by many centuries."
+     "A pidgin is always many centuries older than the creole that follows"
     ],
     "answer": 1,
     "type": "추론",
@@ -956,7 +956,7 @@
      "To give an example of a creole used by millions of people",
      "To show that creoles are rarely spoken today",
      "To compare it with Caribbean pidgins",
-     "To prove that all creoles share the same vocabulary"
+     "To prove that all creoles share exactly the same vocabulary"
     ],
     "answer": 0,
     "type": "글의 구조",
@@ -977,7 +977,7 @@
      "When a nebula first forms",
      "When hydrogen begins to fuse into helium",
      "When a red giant appears",
-     "When gravity stops pulling inward"
+     "When gravity finally stops pulling the cloud of gas inward"
     ],
     "answer": 1,
     "type": "세부 사항",
@@ -986,8 +986,8 @@
    {
     "q": "Why does a star remain stable for most of its life?",
     "choices": [
-     "Gravity and the outward push of fusion energy are balanced.",
-     "It moves away from other stars.",
+     "Gravity and the outward push of fusion are in balance.",
+     "It moves far away from other stars that could affect it.",
      "Its fuel never runs out.",
      "It stops producing energy."
     ],
@@ -999,7 +999,7 @@
     "q": "The word \"dramatically\" in the passage is closest in meaning to",
     "choices": [
      "quietly",
-     "slowly",
+     "slowly and calmly",
      "spectacularly",
      "regularly"
     ],
@@ -1010,8 +1010,8 @@
    {
     "q": "What can be inferred about massive stars?",
     "choices": [
-     "They usually live longer than the Sun.",
-     "They have shorter lives than smaller stars despite having more fuel.",
+     "They usually live much longer than the Sun and smaller stars.",
+     "They have shorter lives than smaller stars despite more fuel.",
      "They become white dwarfs.",
      "They contain no heavy elements."
     ],
@@ -1022,10 +1022,10 @@
    {
     "q": "Why does the author mention iron and gold?",
     "choices": [
-     "To show that supernovas contribute material to future stars and planets",
+     "To show that supernovas supply material for future stars and planets",
      "To explain how white dwarfs are formed",
      "To compare the value of different stars",
-     "To describe what is found inside a nebula"
+     "To describe which heavy elements are found inside a nebula cloud today"
     ],
     "answer": 0,
     "type": "글의 구조",
@@ -1092,7 +1092,7 @@
     "q": "What can be inferred about the quoll experiment?",
     "choices": [
      "It has already removed toads from Australia.",
-     "It is designed to kill as many toads as possible.",
+     "It is designed to kill as many cane toads as it possibly can.",
      "It makes quolls immune to all poisons.",
      "It is meant to teach quolls to avoid eating toads."
     ],
@@ -1125,7 +1125,7 @@
     "q": "Why does the author quote Paul Delaroche?",
     "choices": [
      "To show the fear that photography would replace painting",
-     "To prove that painting ended in 1839",
+     "To prove that the art of painting had completely ended in 1839",
      "To describe how photographs were made",
      "To praise the Impressionists"
     ],
@@ -1161,7 +1161,7 @@
     "q": "What can be inferred about the Impressionists' interest in color and light?",
     "choices": [
      "It ended the market for landscape paintings.",
-     "It was copied from black-and-white photographs.",
+     "It was copied from the black-and-white photographs of the time",
      "It was something early photographs could not compete with.",
      "It was criticized by Edgar Degas."
     ],
@@ -1182,9 +1182,9 @@
     "q": "According to the passage, what is cognitive dissonance?",
     "choices": [
      "A memory problem caused by boredom",
-     "Discomfort from conflicting ideas or from actions that do not match beliefs",
+     "Discomfort caused by conflicting beliefs or actions",
      "A method for reducing lying",
-     "The pleasure people feel after shopping"
+     "The pleasure people feel after shopping for new things"
     ],
     "answer": 1,
     "type": "세부 사항",
@@ -1251,9 +1251,9 @@
     "q": "What is the island rule, according to the passage?",
     "choices": [
      "All animals become smaller on islands.",
-     "Large animals tend to shrink and small animals tend to grow on islands.",
+     "Large animals tend to shrink and small ones tend to grow on islands.",
      "Islands always have more predators than the mainland.",
-     "Animals on islands live longer than those on the mainland."
+     "Animals living on islands tend to live longer than those on the mainland."
     ],
     "answer": 1,
     "type": "세부 사항",
@@ -1274,7 +1274,7 @@
    {
     "q": "According to paragraph 2, why might small animals become larger on islands?",
     "choices": [
-     "Islands provide more food than the mainland.",
+     "Islands provide far more food than the mainland ever does.",
      "Larger animals migrate to islands.",
      "Islands often lack predators that keep them small.",
      "The climate on islands is colder."
@@ -1368,9 +1368,9 @@
     "q": "What was the problem with Libby's original assumption?",
     "choices": [
      "Carbon-14 does not actually decay.",
-     "The half-life of carbon-14 is only 50 years.",
+     "The half-life of carbon-14 is only about 50 years, which is too short.",
      "Tree rings contain no carbon.",
-     "The amount of atmospheric carbon-14 has not always been constant."
+     "The amount of atmospheric carbon-14 was not always constant."
     ],
     "answer": 3,
     "type": "사실 확인",
@@ -1415,7 +1415,7 @@
      "Landowners competed for a smaller number of workers.",
      "Kings ordered higher wages.",
      "Peasants refused to work at all.",
-     "New farming tools made labor more valuable."
+     "New farming tools made labor more valuable than before."
     ],
     "answer": 0,
     "type": "세부 사항",
@@ -1426,8 +1426,8 @@
     "choices": [
      "It was designed mainly to protect peasants.",
      "It was passed after the Peasants' Revolt.",
-     "It successfully lowered wages for a century.",
-     "It was intended to benefit landowners by limiting wages."
+     "It successfully kept wages low for about a hundred years.",
+     "It was meant to help landowners by limiting wages."
     ],
     "answer": 3,
     "type": "추론",
@@ -1494,8 +1494,8 @@
     "q": "Why does the author mention fish, seabirds, and whales in paragraph 3?",
     "choices": [
      "To explain why whales eat plankton",
-     "To list animals that build calcium carbonate shells",
-     "To show that acidification could affect animals beyond shell builders through the food chain",
+     "To list the marine animals that depend on calcium carbonate to build shells",
+     "To show that acidification could affect many animals through the food web",
      "To argue that these animals cause acidification"
     ],
     "answer": 2,
@@ -1526,9 +1526,9 @@
    {
     "q": "Why does the author mention Neptune and Mercury?",
     "choices": [
-     "To explain how dark matter was discovered in the solar system",
+     "To explain how dark matter was first discovered in the solar system",
      "To show that planets and stars move at the same speed",
-     "To illustrate that in the solar system, distant planets orbit more slowly",
+     "To show that distant planets in the solar system orbit slowly",
      "To compare the sizes of the two planets"
     ],
     "answer": 2,
@@ -1550,7 +1550,7 @@
    {
     "q": "The word \"contradicted\" in the passage is closest in meaning to",
     "choices": [
-     "confirmed",
+     "confirmed strongly",
      "went against",
      "repeated",
      "explained"
@@ -1574,7 +1574,7 @@
    {
     "q": "What can be inferred about the physicists mentioned in the last paragraph?",
     "choices": [
-     "They have detected dark matter particles.",
+     "They have detected dark matter particles directly in labs.",
      "They agree with the majority view.",
      "They believe galaxies do not rotate.",
      "They doubt that dark matter is the correct explanation."
@@ -1631,8 +1631,8 @@
    {
     "q": "Why does the author mention Masaccio's The Holy Trinity?",
     "choices": [
-     "To show that medieval painters used perspective",
-     "To give an example of perspective applied so precisely that it seemed real",
+     "To show that medieval painters regularly used linear perspective in their church murals",
+     "To give an example of perspective applied so precisely it seemed real",
      "To criticize early viewers",
      "To describe Brunelleschi's building"
     ],
@@ -1665,8 +1665,8 @@
     "q": "Why does the author mention Latin pater and English father in paragraph 1?",
     "choices": [
      "To show that Latin borrowed words from English",
-     "To introduce the puzzle of sound correspondences that Grimm's Law addresses",
-     "To prove that the two words have different meanings",
+     "To introduce the sound-correspondence puzzle Grimm's Law addresses",
+     "To prove that the two words have different meanings in the two languages",
      "To argue that Sanskrit is older than Latin"
     ],
     "answer": 1,
@@ -1688,10 +1688,10 @@
    {
     "q": "What was the significance of Verner's contribution?",
     "choices": [
-     "It explained many exceptions and supported the idea that sound change is regular.",
+     "It explained many exceptions and supported regular sound change.",
      "It showed that Grimm's Law was entirely wrong.",
      "It proved that accent has no role in sound change.",
-     "It demonstrated that borrowing causes all sound changes."
+     "It demonstrated that language borrowing causes all sound changes."
     ],
     "answer": 0,
     "type": "세부 사항",
@@ -1734,8 +1734,8 @@
     "q": "According to paragraph 2, why are glacial deposits near the ancient equator significant?",
     "choices": [
      "They contain fossils of early animals.",
-     "They prove that the equator has always been cold.",
-     "They show that ice existed at low latitudes, implying an extremely cold planet.",
+     "They prove that the equator has been cold for most of Earth's history.",
+     "They show ice existed at low latitudes, implying a very cold Earth.",
      "They indicate that volcanoes were inactive."
     ],
     "answer": 2,
@@ -1759,7 +1759,7 @@
     "choices": [
      "The Sun suddenly became brighter.",
      "Carbon dioxide from volcanoes built up and caused warming.",
-     "Ocean currents carried warm water to the poles.",
+     "Ocean currents carried warm water from the equator to the poles.",
      "Photosynthetic organisms released heat."
     ],
     "answer": 1,

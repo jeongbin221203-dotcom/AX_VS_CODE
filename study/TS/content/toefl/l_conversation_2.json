@@ -533,7 +533,7 @@
     "choices": [
      "To ask about insurance",
      "To buy a thermometer",
-     "To cancel a lab session",
+     "To cancel a lab session that conflicts with his visit",
      "To make an appointment for a sore throat"
     ],
     "answer": 3,
@@ -771,7 +771,7 @@
     "choices": [
      "The slides are not online.",
      "The man missed two classes.",
-     "The essay instructions were lost.",
+     "The essay instructions were lost by the department.",
      "Some information was not on the slides."
     ],
     "answer": 3,
@@ -1001,7 +1001,7 @@
     "choices": [
      "The program is almost full.",
      "Popular time slots fill up quickly.",
-     "The price will go up next week.",
+     "The price of each box will go up next week.",
      "The office closes during finals."
     ],
     "answer": 1,
@@ -1068,7 +1068,7 @@
      "His data were incorrect.",
      "He mixed results with interpretation.",
      "He submitted it late.",
-     "He did not include any tables."
+     "He did not include any tables in his report."
     ],
     "answer": 1,
     "type": "세부 사항",
@@ -1148,7 +1148,7 @@
     "q": "According to the woman, what should tutors do when a student is stuck?",
     "choices": [
      "Give the student the answer",
-     "Send the student to the professor",
+     "Send the student to the professor's office hours",
      "Work through a similar problem together",
      "Skip that problem"
     ],
@@ -1227,7 +1227,7 @@
     "choices": [
      "The software is expensive.",
      "He must check the information in each entry.",
-     "Chicago style is not supported.",
+     "Chicago style is not supported by the software.",
      "The workshop is already full."
     ],
     "answer": 1,
@@ -1299,7 +1299,7 @@
    {
     "q": "What is the main problem the speakers discuss?",
     "choices": [
-     "The concert date conflicts with exams.",
+     "The concert date conflicts with exams, so many members cannot perform.",
      "Too few members can perform.",
      "Their budget is too small for the theater and other costs.",
      "The posters were not approved."
@@ -1313,7 +1313,7 @@
     "choices": [
      "Book the theater",
      "Design the posters",
-     "Request more money",
+     "Request more money from the student activities office",
      "Ask members about performing on two nights"
     ],
     "answer": 3,
@@ -1460,7 +1460,7 @@
     "q": "Why is the woman unsure about accepting the internship?",
     "choices": [
      "The pay is too low.",
-     "Her advisor disapproves of it.",
+     "Her advisor disapproves of it because it is not in her field.",
      "The firm is too far from campus.",
      "It conflicts with a course she needs to graduate on time."
     ],
@@ -1472,7 +1472,7 @@
     "q": "Why does the man mention students who lost credits?",
     "choices": [
      "To stress the importance of getting approval in advance",
-     "To discourage her from taking online courses",
+     "To discourage her from taking online courses at another university",
      "To criticize her department",
      "To suggest she delay graduation"
     ],
@@ -1538,7 +1538,7 @@
     "q": "Why does the RA job take more time in September?",
     "choices": [
      "RAs must take a training course.",
-     "RAs help with course registration.",
+     "RAs help first-year students with course registration.",
      "There are more weekend duties.",
      "New students have the most problems then."
     ],
@@ -1549,7 +1549,7 @@
    {
     "q": "What does the woman imply about the man's interest in the job?",
     "choices": [
-     "He should not apply because he is pre-med.",
+     "He should not apply because his schedule is too heavy for a pre-med student.",
      "His high school experience is not relevant.",
      "Wanting free housing alone may not be enough motivation.",
      "He is likely to be hired."
@@ -1616,7 +1616,7 @@
     "q": "What is the problem with the third course?",
     "choices": [
      "It is taught only in Spanish.",
-     "It conflicts with another course.",
+     "It conflicts with another course she plans to take in Granada.",
      "It has not been reviewed by the department before.",
      "It is not offered in the spring."
     ],
@@ -1695,7 +1695,7 @@
     "choices": [
      "Students would not use the bikes.",
      "The cost of replacing lost or damaged bikes",
-     "There is no place to park the bikes.",
+     "There is no place on campus to park or lock the bikes.",
      "The phone app is difficult to use."
     ],
     "answer": 1,
@@ -1778,7 +1778,7 @@
      "She forgot to cite the source.",
      "She kept the original structure and only changed some words.",
      "She misunderstood the article.",
-     "She quoted the article without quotation marks."
+     "She quoted the article directly without using quotation marks or a citation."
     ],
     "answer": 1,
     "type": "세부 사항",
@@ -1863,7 +1863,7 @@
     "choices": [
      "The survey sample is too small.",
      "Commuting has no effect on students.",
-     "Off-campus students answered dishonestly.",
+     "Off-campus students may have answered the survey questions dishonestly.",
      "Another factor may explain the connection he found."
     ],
     "answer": 3,
@@ -1948,7 +1948,7 @@
     "q": "Why would the woman's project require full ethics review?",
     "choices": [
      "She is interviewing professors.",
-     "The project is part of a senior thesis.",
+     "The project is part of a senior thesis that the university requires.",
      "She plans to pay the participants.",
      "The results will be shared publicly and the topic is sensitive."
     ],
@@ -2034,7 +2034,7 @@
     "q": "Why is the man having trouble writing the label?",
     "choices": [
      "The blanket was damaged.",
-     "The family wants the blanket returned.",
+     "The family wants the blanket returned to them before the exhibit opens.",
      "The records and the family's account disagree about the maker.",
      "He cannot read the old records."
     ],
@@ -2133,7 +2133,7 @@
     "choices": [
      "The equipment is too expensive.",
      "She lacks experience with fieldwork.",
-     "The green roof is closed to students.",
+     "The green roof will be closed to students for repairs throughout the spring.",
      "The weather during spring is not hot enough to show the full effect."
     ],
     "answer": 3,
@@ -2217,7 +2217,7 @@
    {
     "q": "What does the man mean when he says, \"That's more candid than I expected\"?",
     "choices": [
-     "He thinks the woman is hiding information.",
+     "He thinks the woman is hiding information about the program's real costs.",
      "He is surprised she admits the program does not fully pay for itself.",
      "He believes the critics are wrong.",
      "He finds the budget too complicated."
@@ -2294,7 +2294,7 @@
      "The TAs used different rubrics.",
      "The TAs interpreted one rubric category differently.",
      "One section wrote a different essay.",
-     "One TA graded late submissions more harshly."
+     "One TA graded late submissions more harshly than the other TA did."
     ],
     "answer": 1,
     "type": "세부 사항",
@@ -2304,7 +2304,7 @@
     "q": "What will the TAs most likely do before the next essay?",
     "choices": [
      "Grade sample essays with the professor to agree on a standard",
-     "Ask students to compare their scores",
+     "Ask students to compare their scores with those in the other section",
      "Lower the grades in the man's section",
      "Write a new rubric on their own"
     ],

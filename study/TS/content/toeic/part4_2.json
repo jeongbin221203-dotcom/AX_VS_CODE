@@ -84,7 +84,7 @@
     "q": "What does the speaker ask the listener to do before the work?",
     "choices": [
      "Buy some tiles",
-     "Clean the floor",
+     "Clean the kitchen floor thoroughly",
      "Pay a deposit",
      "Move a piece of furniture"
     ],
@@ -549,7 +549,7 @@
    {
     "q": "Who is the advertisement mainly intended for?",
     "choices": [
-     "Tour guides",
+     "Tour guides who travel overseas",
      "Language teachers",
      "Working professionals",
      "University students"
@@ -646,7 +646,7 @@
     "q": "What product is being advertised?",
     "choices": [
      "A recording device",
-     "A fitness app",
+     "A fitness app for desk workers",
      "A massage service",
      "A piece of office furniture"
     ],
@@ -670,7 +670,7 @@
     "q": "Why does the speaker say, \"You can tell I'm standing right now, can't you?\"",
     "choices": [
      "To suggest that he is using the product as he speaks",
-     "To explain why the episode is short",
+     "To explain why the episode is shorter than usual today",
      "To apologize for the sound quality",
      "To ask listeners to stand up"
     ],
@@ -707,7 +707,7 @@
     "choices": [
      "She wrote online product reviews.",
      "She opened an office in Portugal.",
-     "She designed a new ordering system.",
+     "She designed a new ordering system for customers.",
      "She led a response to a technical failure."
     ],
     "answer": 3,
@@ -766,7 +766,7 @@
     "q": "What is the main purpose of the talk?",
     "choices": [
      "To review a product launch schedule",
-     "To report sales results",
+     "To report sales results from last quarter",
      "To choose a packaging design",
      "To announce a new hire"
     ],
@@ -792,7 +792,7 @@
      "Redesign the packaging",
      "Edit the training videos",
      "Arrange visits to retailers",
-     "Write a press release"
+     "Write a press release for the launch"
     ],
     "answer": 2,
     "type": "요청·제안",
@@ -814,7 +814,7 @@
     "q": "What is the news report mainly about?",
     "choices": [
      "The renovation of a public building",
-     "A fundraising campaign",
+     "A fundraising campaign for a new library",
      "The opening of a new post office",
      "A change in library hours"
     ],
@@ -874,7 +874,7 @@
     "q": "Why was a session moved?",
     "choices": [
      "The speaker arrived late.",
-     "A room needed repairs.",
+     "A room needed repairs after a leak.",
      "It was more popular than expected.",
      "The weather was bad."
     ],
@@ -909,7 +909,7 @@
    {
     "q": "Why is the speaker calling?",
     "choices": [
-     "To introduce a new menu",
+     "To introduce a new menu for board events",
      "To respond to a client's requests",
      "To cancel an event",
      "To ask for a payment"
@@ -934,7 +934,7 @@
     "q": "What will the speaker send this afternoon?",
     "choices": [
      "An updated price estimate",
-     "A contract",
+     "A contract for the catering service",
      "A sample menu",
      "A delivery schedule"
     ],
@@ -957,7 +957,7 @@
    {
     "q": "Who most likely are the listeners?",
     "choices": [
-     "Newly hired factory workers",
+     "Newly hired factory workers in training",
      "Government safety inspectors",
      "Solar panel customers",
      "Financial backers of the company"
@@ -981,7 +981,7 @@
    {
     "q": "Why are listeners not allowed to take photos in the lab?",
     "choices": [
-     "Tests are already being filmed.",
+     "Tests are already being filmed by a television crew.",
      "The lab is too dark.",
      "The equipment is dangerous to approach.",
      "Some technology is awaiting legal protection."
@@ -1065,7 +1065,7 @@
    {
     "q": "What will Dr. Farouk's talk focus on?",
     "choices": [
-     "Funding for large construction projects",
+     "Funding for large construction projects in cities",
      "The history of bridge construction",
      "Inexpensive ways to test changes to streets",
      "Training programs for engineers"
@@ -1078,7 +1078,7 @@
     "q": "How should listeners submit questions?",
     "choices": [
      "By writing them on cards",
-     "By raising their hands",
+     "By raising their hands at the end",
      "By using a microphone",
      "By sending e-mails"
     ],
@@ -1222,7 +1222,7 @@
      "Repairs cost extra.",
      "Printers are delivered overnight.",
      "Supplies are ordered automatically.",
-     "Paper is included at no charge."
+     "Paper is included at no charge for all plans."
     ],
     "answer": 2,
     "type": "세부 사항",
@@ -1316,7 +1316,7 @@
     "q": "What does the speaker mean when he says, \"the numbers tell only part of the story\"?",
     "choices": [
      "Profit alone did not justify keeping the stores open.",
-     "Sales at the stores were lower than announced.",
+     "Sales at the stores were lower than had been announced to shareholders.",
      "The financial figures were reported incorrectly.",
      "More data will be released later."
     ],
@@ -1327,7 +1327,7 @@
    {
     "q": "What does the company plan to do this fall?",
     "choices": [
-     "Open three new downtown stores",
+     "Open three new downtown stores near the old sites",
      "Use some former store sites for order pickup",
      "Close its distribution centers",
      "Raise its delivery prices"
@@ -1351,7 +1351,7 @@
    {
     "q": "What has the speaker's company achieved?",
     "choices": [
-     "All of its factories now use recycled materials.",
+     "All of its factories now use recycled materials in their packaging.",
      "It has reduced its number of suppliers.",
      "It has invented a new recycling technology.",
      "Most of its factories no longer send waste to landfills."
@@ -1377,7 +1377,7 @@
     "choices": [
      "It will attract new employees.",
      "Recycled materials will become less expensive.",
-     "Suppliers will lower their packaging prices.",
+     "Suppliers will lower their packaging prices for her company.",
      "It will receive licensing fees."
     ],
     "answer": 1,
@@ -1526,7 +1526,7 @@
     "choices": [
      "Meetings take too long.",
      "Decisions are not based on available information.",
-     "Companies do not collect enough data.",
+     "Companies do not collect enough data about their customers.",
      "Software is too expensive."
     ],
     "answer": 1,
@@ -1536,7 +1536,7 @@
    {
     "q": "Why does the speaker say, \"You probably have plenty already\"?",
     "choices": [
-     "To praise listeners' current software",
+     "To praise the quality of listeners' current software products",
      "To apologize for a limited product range",
      "To suggest that buying more tools is not the solution",
      "To announce a discount on software"
@@ -1603,7 +1603,7 @@
     "choices": [
      "A ceremony was added.",
      "There was a power outage.",
-     "It went into extra time.",
+     "It went into extra time after a tie score.",
      "It was delayed by weather."
     ],
     "answer": 3,

@@ -60,7 +60,7 @@
     "q": "Who most likely is the speaker?",
     "choices": [
      "A building manager",
-     "A delivery driver",
+     "A delivery driver for the building",
      "A bus driver",
      "A hotel guest"
     ],
@@ -350,7 +350,7 @@
      "Use a flash when taking photos",
      "Visit the gift shop",
      "Touch the fish tank",
-     "Talk loudly"
+     "Talk loudly near the sea turtles"
     ],
     "answer": 0,
     "type": "요청·제안",
@@ -383,7 +383,7 @@
    {
     "q": "What problem does the speaker mention?",
     "choices": [
-     "A payment was declined.",
+     "A payment was declined by the bank.",
      "An order was delivered late.",
      "The wrong address was given.",
      "Some items are not available."
@@ -398,7 +398,7 @@
      "Pick up an order",
      "Choose between two options",
      "Cancel an order",
-     "Pay an extra fee"
+     "Pay an extra fee for faster delivery"
     ],
     "answer": 1,
     "type": "요청·제안",
@@ -448,7 +448,7 @@
    {
     "q": "Why is the usual gate unavailable?",
     "choices": [
-     "It is too crowded.",
+     "It is too crowded with Oak Bay passengers.",
      "A bus has broken down.",
      "The door is locked.",
      "The floor is being repaired."
@@ -496,7 +496,7 @@
    {
     "q": "What is the talk mainly about?",
     "choices": [
-     "Hiring a moving company",
+     "Hiring a moving company for next week",
      "Preparing for an office move",
      "Planning a team event",
      "Renovating a storage room"
@@ -521,7 +521,7 @@
     "q": "What does the speaker imply when he says, \"the new office has less storage space\"?",
     "choices": [
      "The move will be delayed.",
-     "Some employees will work elsewhere.",
+     "Some employees will work at another building.",
      "More boxes will be ordered.",
      "Employees should throw away some papers."
     ],
@@ -544,7 +544,7 @@
    {
     "q": "What is being advertised?",
     "choices": [
-     "A moving company",
+     "A moving company for small offices",
      "A home cleaning service",
      "A cleaning product",
      "A pet store"
@@ -605,7 +605,7 @@
     "q": "Why does the speaker say, \"Last year, parking was a big problem\"?",
     "choices": [
      "To explain why a parking area has been added",
-     "To suggest that the market should move",
+     "To suggest that the market should move to a new location",
      "To warn that visitors cannot drive",
      "To complain about the city"
     ],
@@ -666,7 +666,7 @@
     "choices": [
      "The food they make",
      "A discount coupon",
-     "A recipe book",
+     "A recipe book written by the chef",
      "An apron"
     ],
     "answer": 0,
@@ -712,7 +712,7 @@
    {
     "q": "Why has the tour order been changed?",
     "choices": [
-     "A garden is closed for repairs.",
+     "A garden is closed for repairs this week.",
      "Another group is at the first stop.",
      "The tour is shorter today.",
      "The weather is bad."
@@ -785,7 +785,7 @@
     "q": "Why is the speaker calling?",
     "choices": [
      "To confirm a delivery",
-     "To request a reference",
+     "To request a reference from a former employer",
      "To offer a promotion",
      "To arrange a job interview"
     ],
@@ -1029,7 +1029,7 @@
    {
     "q": "What are residents invited to do?",
     "choices": [
-     "Test new bicycles",
+     "Test new bicycles at the university",
      "Vote in an election",
      "Attend a council meeting",
      "Suggest station locations"
@@ -1053,7 +1053,7 @@
    {
     "q": "Where does the speaker most likely work?",
     "choices": [
-     "At a weather station",
+     "At a weather station near the creek",
      "At a delicatessen",
      "At a parks association",
      "At a recycling plant"
@@ -1238,7 +1238,7 @@
    {
     "q": "Why will a session start late?",
     "choices": [
-     "Audio equipment is being repaired.",
+     "Audio equipment is being repaired in Room C.",
      "A presenter's travel has been delayed.",
      "The room is being cleaned.",
      "Lunch is running late."
@@ -1251,7 +1251,7 @@
     "q": "What should attendees of the evening reception do?",
     "choices": [
      "Register online",
-     "Pay an additional fee",
+     "Pay an additional fee at the entrance",
      "Collect their wristbands",
      "Go to the terrace"
     ],
@@ -1394,7 +1394,7 @@
    {
     "q": "What is the report mainly about?",
     "choices": [
-     "A merger between two firms",
+     "A merger between two manufacturing firms",
      "A trial of a new work schedule",
      "A change in employee pay",
      "The opening of a new plant"
@@ -1563,7 +1563,7 @@
     "q": "What does the speaker propose?",
     "choices": [
      "Postponing the redesign",
-     "Hiring a different engineer",
+     "Hiring a different engineer to review the drawings",
      "Meeting at the site to review options",
      "Replacing the reception desk"
     ],
@@ -1611,7 +1611,7 @@
     "q": "What is the purpose of the announcement?",
     "choices": [
      "To announce new weekend shifts",
-     "To introduce a new data center manager",
+     "To introduce a new data center manager in Fairmont",
      "To give details about a server relocation",
      "To report a security problem"
     ],
@@ -1712,7 +1712,7 @@
     "q": "What is Tomasz asked to do?",
     "choices": [
      "Negotiate a faster delivery",
-     "Schedule an environmental audit",
+     "Schedule an environmental audit of the factory",
      "Request a long-term price guarantee",
      "Arrange a quality inspection"
     ],
@@ -1749,7 +1749,7 @@
     "choices": [
      "To translators with relevant industry knowledge",
      "To several teams at once",
-     "Based on the client's location",
+     "Based on the client's location and the size of its budget",
      "To automated tools first"
     ],
     "answer": 0,
@@ -1807,7 +1807,7 @@
    {
     "q": "What concern do smaller businesses have?",
     "choices": [
-     "Their panels are too small to qualify.",
+     "Their panels are too small to qualify for the new credit program.",
      "They must pay installation costs before receiving credits.",
      "The credits will expire in January.",
      "Rebates will go only to large firms."
@@ -1843,7 +1843,7 @@
    {
     "q": "What does the number eighteen refer to?",
     "choices": [
-     "The number of regions that met their targets",
+     "The number of regions that met their targets last year",
      "The number of new accounts opened last year",
      "The percentage increase in bonuses",
      "The share of revenue from recently acquired customers"
@@ -1858,7 +1858,7 @@
      "Regional managers will be reassigned.",
      "The conference will be held twice a year.",
      "Bonuses will partly depend on attracting new clients.",
-     "Sales targets will be lowered."
+     "Sales targets will be lowered for every region next year"
     ],
     "answer": 2,
     "type": "세부 사항",
@@ -1882,7 +1882,7 @@
      "An airline pilot",
      "A parts supplier",
      "An operations manager",
-     "A safety inspector"
+     "A safety inspector from the airline"
     ],
     "answer": 2,
     "type": "화자 정보(직업·장소)",

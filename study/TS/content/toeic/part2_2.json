@@ -902,12 +902,12 @@
   "question": "Where do you keep the spare keyboards?",
   "choices": [
    "Keep the change.",
-   "Two wireless ones.",
+   "Two wireless ones, and one with a number pad.",
    "In the supply closet on the fourth floor."
   ],
   "answer": 2,
   "explanation": "보관 장소를 묻는 질문에 (C)가 '4층 비품실'이라고 답했다. (A)는 keep을 반복한 함정이고, (B)는 keyboards에서 연상되는 수량과 종류를 말했다.",
-  "translation": "Q: 여분 키보드는 어디에 보관해요? / (A) 잔돈은 가지세요. / (B) 무선으로 두 개요. / (C) 4층 비품실에요."
+  "translation": "Q: 여분 키보드는 어디에 보관해요? / (A) 잔돈은 가지세요. / (B) 무선 두 개요, 숫자 키패드 있는 것도 하나 있어요. / (C) 4층 비품실에요."
  },
  {
   "id": "p2-166",
@@ -916,12 +916,12 @@
   "question": "Where will the job candidates be interviewed?",
   "choices": [
    "Five candidates applied.",
-   "Tomorrow afternoon.",
+   "Tomorrow afternoon, around two o'clock.",
    "In the small meeting room."
   ],
   "answer": 2,
   "explanation": "장소를 묻는 질문에 (C)가 '작은 회의실'이라고 답했다. (A)는 candidates를 반복했고, (B)는 시점을 말한 When 응답이다.",
-  "translation": "Q: 지원자 면접은 어디서 해요? / (A) 지원자 다섯 명이 지원했어요. / (B) 내일 오후에요. / (C) 작은 회의실에서요."
+  "translation": "Q: 지원자 면접은 어디서 해요? / (A) 지원자 다섯 명이 지원했어요. / (B) 내일 오후 2시쯤이요. / (C) 작은 회의실에서요."
  },
  {
   "id": "p2-167",
@@ -971,13 +971,13 @@
   "type": "Why 의문문",
   "question": "Why are the lights in the hallway flickering?",
   "choices": [
-   "Because the hallway is long.",
+   "Because the hallway is long and very narrow.",
    "Turn them on, please.",
    "There's a problem with the wiring."
   ],
   "answer": 2,
   "explanation": "이유를 묻는 질문에 (C)가 '배선 문제'라고 답했다. (A)는 Because로 시작하지만 이유가 논리적으로 맞지 않고 hallway를 반복한 함정이다. (B)는 lights에서 연상되는 요청이다.",
-  "translation": "Q: 복도 조명이 왜 깜빡거려요? / (A) 복도가 길어서요. / (B) 켜 주세요. / (C) 배선에 문제가 있어요."
+  "translation": "Q: 복도 조명이 왜 깜빡거려요? / (A) 복도가 길고 아주 좁기 때문이에요. / (B) 켜 주세요. / (C) 배선에 문제가 있어요."
  },
  {
   "id": "p2-171",
@@ -987,11 +987,11 @@
   "choices": [
    "The audience seemed impressed.",
    "Go straight ahead.",
-   "It'll be held in Hall C."
+   "It'll be held in Hall C on the second floor."
   ],
   "answer": 0,
   "explanation": "결과를 묻는 질문에 (A)가 '관객들이 감명받은 것 같다'고 답했다. (B)는 go를 '가다'라는 뜻으로 반복했고, (C)는 이미 끝난 시연에 미래 시제와 장소로 답한 함정이다.",
-  "translation": "Q: 제품 시연은 어떻게 됐어요? / (A) 관객들이 감명받은 것 같았어요. / (B) 직진하세요. / (C) C홀에서 열릴 거예요."
+  "translation": "Q: 제품 시연은 어떻게 됐어요? / (A) 관객들이 감명받은 것 같았어요. / (B) 직진하세요. / (C) 2층 C홀에서 열릴 거예요."
  },
  {
   "id": "p2-172",
@@ -1099,11 +1099,11 @@
   "choices": [
    "A video call is more convenient.",
    "Call me at extension 12.",
-   "Yes, let's meet."
+   "Yes, let's meet at the usual place tomorrow."
   ],
   "answer": 0,
   "explanation": "둘 중 하나를 고르는 질문에 (A)가 화상 통화를 골랐다. (B)는 call을 반복했고, (C)는 선택 의문문에 Yes로 답하며 meet을 반복한 함정이다.",
-  "translation": "Q: 직접 만날까요, 화상 통화를 할까요? / (A) 화상 통화가 더 편해요. / (B) 내선 12번으로 전화 주세요. / (C) 네, 만나요."
+  "translation": "Q: 직접 만날까요, 화상 통화를 할까요? / (A) 화상 통화가 더 편해요. / (B) 내선 12번으로 전화 주세요. / (C) 네, 내일 늘 가던 곳에서 만나요."
  },
  {
   "id": "p2-180",
@@ -1125,13 +1125,13 @@
   "type": "선택 의문문",
   "question": "Are you driving to the trade fair or taking the train?",
   "choices": [
-   "The fare is ten dollars.",
+   "The fare is ten dollars each way, I think.",
    "My colleague is giving me a ride.",
    "The training was helpful."
   ],
   "answer": 1,
   "explanation": "둘 중 어느 것도 아닌 제3의 방법(동료 차)으로 답한 (B)가 자연스럽다. (A)는 fair와 발음이 같은 fare를, (C)는 train과 비슷한 training을 이용한 함정이다.",
-  "translation": "Q: 무역 박람회에 운전해서 가요, 기차 타고 가요? / (A) 요금은 10달러예요. / (B) 동료가 태워 주기로 했어요. / (C) 교육이 도움이 됐어요."
+  "translation": "Q: 무역 박람회에 운전해서 가요, 기차 타고 가요? / (A) 요금은 편도 10달러인 것 같아요. / (B) 동료가 태워 주기로 했어요. / (C) 교육이 도움이 됐어요."
  },
  {
   "id": "p2-182",
@@ -1168,12 +1168,12 @@
   "question": "Why don't we ask for a bigger discount?",
   "choices": [
    "They've already lowered the price twice.",
-   "Because it's bigger.",
+   "Because it's bigger than the one we bought before.",
    "It's a discount store."
   ],
   "answer": 0,
   "explanation": "제안에 대해 '이미 두 번 낮춰 줬다'며 간접적으로 반대한 (A)가 정답이다. (B)는 Why에 Because로 답하게 만드는 함정이고, (C)는 discount를 반복했다.",
-  "translation": "Q: 할인을 더 해 달라고 요청하는 게 어때요? / (A) 이미 두 번이나 가격을 낮춰 줬어요. / (B) 더 크니까요. / (C) 할인 매장이에요."
+  "translation": "Q: 할인을 더 해 달라고 요청하는 게 어때요? / (A) 이미 두 번이나 가격을 낮춰 줬어요. / (B) 전에 산 것보다 크기 때문이에요. / (C) 할인 매장이에요."
  },
  {
   "id": "p2-185",
@@ -1197,11 +1197,11 @@
   "choices": [
    "The server's being upgraded.",
    "The truck is being loaded.",
-   "Please speak more slowly."
+   "Please speak more slowly, I can't follow you."
   ],
   "answer": 0,
   "explanation": "사이트가 느리다는 말에 (A)가 원인(서버 업그레이드)을 알려 주었다. (B)는 loading을 '짐을 싣다'라는 뜻으로, (C)는 slowly를 반복한 함정이다.",
-  "translation": "Q: 오늘 우리 웹사이트가 아주 느리게 열려요. / (A) 서버를 업그레이드하는 중이에요. / (B) 트럭에 짐을 싣고 있어요. / (C) 좀 더 천천히 말씀해 주세요."
+  "translation": "Q: 오늘 우리 웹사이트가 아주 느리게 열려요. / (A) 서버를 업그레이드하는 중이에요. / (B) 트럭에 짐을 싣고 있어요. / (C) 좀 더 천천히 말씀해 주세요, 따라가기 어려워요."
  },
  {
   "id": "p2-187",
@@ -1210,12 +1210,12 @@
   "question": "I'm not sure where to put these boxes.",
   "choices": [
    "Yes, I'm sure.",
-   "Put on your jacket.",
+   "Put on your jacket, it's cold outside today.",
    "Just leave them by the door."
   ],
   "answer": 2,
   "explanation": "둘 곳을 모르겠다는 말에 (C)가 '문 옆에 두라'고 알려 주었다. (A)는 sure를 반복했고, (B)는 put을 '입다(put on)'라는 뜻으로 바꾼 함정이다.",
-  "translation": "Q: 이 상자들을 어디에 둬야 할지 모르겠어요. / (A) 네, 확실해요. / (B) 재킷을 입으세요. / (C) 그냥 문 옆에 두세요."
+  "translation": "Q: 이 상자들을 어디에 둬야 할지 모르겠어요. / (A) 네, 확실해요. / (B) 재킷을 입으세요, 오늘 밖이 추워요. / (C) 그냥 문 옆에 두세요."
  },
  {
   "id": "p2-188",
@@ -1224,12 +1224,12 @@
   "question": "When is the payment for this invoice due?",
   "choices": [
    "It was due to the weather.",
-   "Please pay at the counter.",
+   "Please pay at the counter on the first floor.",
    "I'll have to ask Accounting."
   ],
   "answer": 2,
   "explanation": "기한을 모르니 '회계부에 물어봐야 한다'고 한 (C)가 간접 응답이다. (A)는 due를 due to(~ 때문에)로 바꾼 함정이고, (B)는 payment와 비슷한 pay를 이용했다.",
-  "translation": "Q: 이 청구서 대금 기한이 언제예요? / (A) 날씨 때문이었어요. / (B) 계산대에서 결제하세요. / (C) 회계부에 물어봐야 해요."
+  "translation": "Q: 이 청구서 대금 기한이 언제예요? / (A) 날씨 때문이었어요. / (B) 1층 카운터에서 결제해 주세요. / (C) 회계부에 물어봐야 해요."
  },
  {
   "id": "p2-189",
@@ -1252,12 +1252,12 @@
   "question": "Which projector should I use for the workshop?",
   "choices": [
    "The one in Room 3 was just repaired.",
-   "The project is due Monday.",
+   "The project is due Monday morning at nine.",
    "It's a three-hour workshop."
   ],
   "answer": 0,
   "explanation": "'3번 방 것이 방금 수리됐다'며 그것을 쓰라고 암시한 (A)가 정답이다. (B)는 projector와 비슷한 project를, (C)는 workshop을 반복한 함정이다.",
-  "translation": "Q: 워크숍에 어느 프로젝터를 써야 할까요? / (A) 3번 방에 있는 게 방금 수리됐어요. / (B) 그 프로젝트는 월요일 마감이에요. / (C) 3시간짜리 워크숍이에요."
+  "translation": "Q: 워크숍에 어느 프로젝터를 써야 할까요? / (A) 3번 방에 있는 게 방금 수리됐어요. / (B) 프로젝트는 월요일 오전 9시까지예요. / (C) 3시간짜리 워크숍이에요."
  },
  {
   "id": "p2-191",
@@ -1281,11 +1281,11 @@
   "choices": [
    "It's a dark blue carpet.",
    "The same company that did our offices.",
-   "Please place it in the corner."
+   "Please place it in the corner by the window."
   ],
   "answer": 1,
   "explanation": "주체를 묻는 질문에 (B)가 '사무실을 해 준 그 업체'라고 답했다. (A)는 carpet을 반복하며 색을 말했고, (C)는 replacing과 비슷한 place를 이용한 함정이다.",
-  "translation": "Q: 접수 구역 카펫은 누가 교체해요? / (A) 짙은 파란색 카펫이에요. / (B) 우리 사무실을 해 준 그 업체요. / (C) 구석에 놓아 주세요."
+  "translation": "Q: 접수 구역 카펫은 누가 교체해요? / (A) 짙은 파란색 카펫이에요. / (B) 우리 사무실을 해 준 그 업체요. / (C) 창가 쪽 모퉁이에 놓아 주세요."
  },
  {
   "id": "p2-193",
@@ -1295,11 +1295,11 @@
   "choices": [
    "Twenty questions in total.",
    "Not until the end of the quarter.",
-   "They came in first place."
+   "They came in first place at the national contest."
   ],
   "answer": 1,
   "explanation": "시점을 묻는 질문에 (B)가 'Not until(~이 되어서야)'으로 답했다. (A)는 survey에서 연상되는 문항 수이고, (C)는 come in을 '(순위로) 들어오다'라는 뜻으로 바꾼 함정이다.",
-  "translation": "Q: 설문 결과가 언제 들어올 것 같아요? / (A) 총 20문항이에요. / (B) 분기 말은 돼야 해요. / (C) 그들이 1등을 했어요."
+  "translation": "Q: 설문 결과가 언제 들어올 것 같아요? / (A) 총 20문항이에요. / (B) 분기 말은 돼야 해요. / (C) 그들은 전국 대회에서 1위를 했어요."
  },
  {
   "id": "p2-194",
@@ -1308,12 +1308,12 @@
   "question": "Where are we storing the old office furniture?",
   "choices": [
    "There's some space in the basement.",
-   "At the furniture store downtown.",
+   "At the furniture store downtown on Main Street.",
    "It's quite old."
   ],
   "answer": 0,
   "explanation": "보관 장소를 묻는 질문에 (A)가 '지하실에 공간이 있다'고 답했다. (B)는 storing과 비슷한 store(가게)를 이용한 장소 함정이고, (C)는 old를 반복했다.",
-  "translation": "Q: 오래된 사무실 가구를 어디에 보관하나요? / (A) 지하실에 공간이 좀 있어요. / (B) 시내 가구점에서요. / (C) 꽤 낡았어요."
+  "translation": "Q: 오래된 사무실 가구를 어디에 보관하나요? / (A) 지하실에 공간이 좀 있어요. / (B) 시내 메인 가의 가구점에서요. / (C) 꽤 낡았어요."
  },
  {
   "id": "p2-195",
@@ -1322,12 +1322,12 @@
   "question": "Where did Mr. Diaz say he'd meet the investors?",
   "choices": [
    "They've invested heavily.",
-   "He said three o'clock.",
+   "He said three o'clock, right after the lunch break.",
    "He sent everyone the address this morning."
   ],
   "answer": 2,
   "explanation": "장소를 직접 말하지 않고 '주소를 보냈다(메일을 확인하라)'고 한 (C)가 간접 응답이다. (A)는 investors와 비슷한 invested를 이용했고, (B)는 said를 반복했지만 시간을 답했다.",
-  "translation": "Q: 디아즈 씨가 투자자들을 어디서 만난다고 했어요? / (A) 그들은 많이 투자했어요. / (B) 3시라고 했어요. / (C) 오늘 아침에 모두에게 주소를 보냈어요."
+  "translation": "Q: 디아즈 씨가 투자자들을 어디서 만난다고 했어요? / (A) 그들은 많이 투자했어요. / (B) 점심시간 직후인 3시라고 했어요. / (C) 오늘 아침에 모두에게 주소를 보냈어요."
  },
  {
   "id": "p2-196",
@@ -1379,11 +1379,11 @@
   "choices": [
    "It's our tenth anniversary.",
    "We're still short of volunteers.",
-   "I'm going by bus."
+   "I'm going by bus, so I'll be a little late."
   ],
   "answer": 1,
   "explanation": "진행 상황을 묻는 질문에 (B)가 '자원봉사자가 부족하다'고 현황을 알렸다. (A)는 anniversary를 반복했고, (C)는 going을 '가다'라는 뜻으로 반복한 함정이다.",
-  "translation": "Q: 기념 갈라 준비는 어떻게 돼 가요? / (A) 우리 10주년이에요. / (B) 아직 자원봉사자가 부족해요. / (C) 저는 버스로 가요."
+  "translation": "Q: 기념 갈라 준비는 어떻게 돼 가요? / (A) 우리 10주년이에요. / (B) 아직 자원봉사자가 부족해요. / (C) 버스로 가서 조금 늦을 거예요."
  },
  {
   "id": "p2-200",
@@ -1447,13 +1447,13 @@
   "type": "부정·부가 의문문",
   "question": "Wasn't the rent supposed to go up this year?",
   "choices": [
-   "I rented a car for the trip.",
+   "I rented a car for the trip to Chicago last week.",
    "He went up the stairs.",
    "The landlord agreed to wait until next year."
   ],
   "answer": 2,
   "explanation": "인상 여부를 묻는 질문에 (C)가 '내년까지 미뤄졌다'고 답했다. (A)는 rent를 '빌리다'라는 동사로, (B)는 go up을 '올라가다'라는 뜻으로 바꾼 함정이다.",
-  "translation": "Q: 올해 임대료가 오르기로 되어 있지 않았어요? / (A) 여행 때문에 차를 빌렸어요. / (B) 그는 계단으로 올라갔어요. / (C) 건물주가 내년까지 기다려 주기로 했어요."
+  "translation": "Q: 올해 임대료가 오르기로 되어 있지 않았어요? / (A) 지난주 시카고 출장용으로 차를 빌렸어요. / (B) 그는 계단으로 올라갔어요. / (C) 건물주가 내년까지 기다려 주기로 했어요."
  },
  {
   "id": "p2-205",
@@ -1461,13 +1461,13 @@
   "type": "부정·부가 의문문",
   "question": "You'll be at the store opening on Saturday, won't you?",
   "choices": [
-   "The store opens at nine.",
+   "The store opens at nine on weekdays.",
    "Yes, it was on Saturday.",
    "I've got a family event that day."
   ],
   "answer": 2,
   "explanation": "'가족 행사가 있다'며 못 간다는 뜻을 전한 (C)가 정답이다. (A)는 store와 opening을 반복했고, (B)는 Yes로 답하지만 과거 시제라 맞지 않는다.",
-  "translation": "Q: 토요일 매장 개점 행사에 오시죠, 그렇죠? / (A) 매장은 9시에 열어요. / (B) 네, 토요일이었어요. / (C) 그날 가족 행사가 있어요."
+  "translation": "Q: 토요일 매장 개점 행사에 오시죠, 그렇죠? / (A) 가게는 평일 오전 9시에 열어요. / (B) 네, 토요일이었어요. / (C) 그날 가족 행사가 있어요."
  },
  {
   "id": "p2-206",
@@ -1477,11 +1477,11 @@
   "choices": [
    "About fifteen percent over budget.",
    "Print it double-sided.",
-   "I expected you earlier."
+   "I expected you earlier, but that's fine."
   ],
   "answer": 0,
   "explanation": "비용이 높았는지 확인하는 질문에 (A)가 '예산 대비 15% 초과'라고 구체적으로 답했다. (B)는 printing과 비슷한 print를, (C)는 expected를 반복한 함정이다.",
-  "translation": "Q: 인쇄 비용이 예상보다 높았죠, 그렇죠? / (A) 예산보다 15퍼센트 정도 초과했어요. / (B) 양면으로 출력하세요. / (C) 더 일찍 오실 줄 알았어요."
+  "translation": "Q: 인쇄 비용이 예상보다 높았죠, 그렇죠? / (A) 예산보다 15퍼센트 정도 초과했어요. / (B) 양면으로 출력하세요. / (C) 더 일찍 오실 줄 알았는데, 괜찮아요."
  },
  {
   "id": "p2-207",
@@ -1503,13 +1503,13 @@
   "type": "선택 의문문",
   "question": "Should I send the samples today, or wait until the client confirms?",
   "choices": [
-   "They're simple samples.",
+   "They're simple samples, nothing complicated.",
    "Yes, I confirmed the flight.",
    "Let's hold off until we hear back."
   ],
   "answer": 2,
   "explanation": "'회신을 받을 때까지 보류하자'며 기다리는 쪽을 고른 (C)가 정답이다. (A)는 samples와 발음이 비슷한 simple을 이용했고, (B)는 Yes로 답하며 confirm을 반복한 함정이다.",
-  "translation": "Q: 샘플을 오늘 보낼까요, 고객이 확정할 때까지 기다릴까요? / (A) 간단한 샘플이에요. / (B) 네, 항공편을 확정했어요. / (C) 회신을 받을 때까지 보류합시다."
+  "translation": "Q: 샘플을 오늘 보낼까요, 고객이 확정할 때까지 기다릴까요? / (A) 단순한 샘플이에요, 복잡한 건 없어요. / (B) 네, 항공편을 확정했어요. / (C) 회신을 받을 때까지 보류합시다."
  },
  {
   "id": "p2-209",
@@ -1575,11 +1575,11 @@
   "choices": [
    "Let's tell the customers about the delay.",
    "The highway was built in 1990.",
-   "I'll break it down for you."
+   "I'll break it down for you one step at a time."
   ],
   "answer": 0,
   "explanation": "고장 소식에 '고객에게 지연을 알리자'고 대응한 (A)가 정답이다. (B)는 highway를 반복했고, (C)는 break down을 '세분해 설명하다'라는 다른 뜻으로 쓴 함정이다.",
-  "translation": "Q: 배송 밴이 고속도로에서 고장 났어요. / (A) 고객들에게 지연을 알립시다. / (B) 그 고속도로는 1990년에 지어졌어요. / (C) 제가 자세히 설명해 드릴게요."
+  "translation": "Q: 배송 밴이 고속도로에서 고장 났어요. / (A) 고객들에게 지연을 알립시다. / (B) 그 고속도로는 1990년에 지어졌어요. / (C) 한 단계씩 풀어서 설명해 드릴게요."
  },
  {
   "id": "p2-214",
@@ -1603,11 +1603,11 @@
   "choices": [
    "I'll drive you home.",
    "You need to connect through the VPN first.",
-   "We shared a taxi."
+   "We shared a taxi from the airport last night."
   ],
   "answer": 1,
   "explanation": "접속 문제에 해결책(VPN 연결)을 알려 준 (B)가 정답이다. (A)는 drive를 '운전하다'라는 뜻으로, (C)는 shared를 반복한 함정이다.",
-  "translation": "Q: 집에서 공유 드라이브에 접속이 안 돼요. / (A) 집까지 태워 드릴게요. / (B) 먼저 VPN으로 연결해야 해요. / (C) 우리는 택시를 같이 탔어요."
+  "translation": "Q: 집에서 공유 드라이브에 접속이 안 돼요. / (A) 집까지 태워 드릴게요. / (B) 먼저 VPN으로 연결해야 해요. / (C) 어젯밤 공항에서 택시를 같이 탔어요."
  },
  {
   "id": "p2-216",
@@ -1617,11 +1617,11 @@
   "choices": [
    "Security is printing them this afternoon.",
    "Higher than last year.",
-   "I received your e-mail."
+   "I received your e-mail this morning, thank you."
   ],
   "answer": 0,
   "explanation": "사원증 문제에 '오늘 오후에 출력한다'고 알려 준 (A)가 정답이다. (B)는 hires와 발음이 비슷한 higher를, (C)는 received를 반복한 함정이다.",
-  "translation": "Q: 신입 사원들이 아직 사원증을 못 받았어요. / (A) 보안팀이 오늘 오후에 출력할 거예요. / (B) 작년보다 높아요. / (C) 이메일 받았어요."
+  "translation": "Q: 신입 사원들이 아직 사원증을 못 받았어요. / (A) 보안팀이 오늘 오후에 출력할 거예요. / (B) 작년보다 높아요. / (C) 오늘 아침 이메일 받았어요, 고맙습니다."
  },
  {
   "id": "p2-217",
@@ -1630,12 +1630,12 @@
   "question": "When will the photocopier be replaced?",
   "choices": [
    "Place it next to the copier.",
-   "Ten copies of each page.",
+   "Ten copies of each page, stapled in the corner.",
    "Management hasn't approved the purchase yet."
   ],
   "answer": 2,
   "explanation": "시점 대신 '아직 구매 승인이 안 났다(미정)'고 한 (C)가 간접 응답이다. (A)는 replaced와 비슷한 place를, (B)는 photocopier와 비슷한 copies를 이용한 함정이다.",
-  "translation": "Q: 복사기는 언제 교체되나요? / (A) 복사기 옆에 두세요. / (B) 페이지마다 10부씩이요. / (C) 경영진이 아직 구매를 승인하지 않았어요."
+  "translation": "Q: 복사기는 언제 교체되나요? / (A) 복사기 옆에 두세요. / (B) 한 쪽당 열 부씩, 모서리를 스테이플러로 찍어서요. / (C) 경영진이 아직 구매를 승인하지 않았어요."
  },
  {
   "id": "p2-218",
@@ -1658,12 +1658,12 @@
   "question": "How much should we budget for the new signs?",
   "choices": [
    "The sign says 'Exit.'",
-   "It's much bigger.",
+   "It's much bigger than the old one.",
    "Let's get a few quotes first."
   ],
   "answer": 2,
   "explanation": "금액 대신 '먼저 견적을 받아 보자'고 한 (C)가 간접 응답이다. (A)는 sign을 반복했고, (B)는 much를 반복한 함정이다.",
-  "translation": "Q: 새 간판 예산을 얼마로 잡아야 할까요? / (A) 표지판에 '출구'라고 쓰여 있어요. / (B) 훨씬 더 커요. / (C) 먼저 견적을 몇 군데 받아 봅시다."
+  "translation": "Q: 새 간판 예산을 얼마로 잡아야 할까요? / (A) 표지판에 '출구'라고 쓰여 있어요. / (B) 예전 것보다 훨씬 커요. / (C) 먼저 견적을 몇 군데 받아 봅시다."
  },
  {
   "id": "p2-220",
@@ -1671,13 +1671,13 @@
   "type": "간접 응답",
   "question": "Is the client arriving at the airport or the train station?",
   "choices": [
-   "It's a very busy airport.",
+   "It's a very busy airport this time of year.",
    "Yes, he's arriving tonight.",
    "His assistant is sending me the itinerary."
   ],
   "answer": 2,
   "explanation": "어느 쪽인지 아직 모르지만 '비서가 일정표를 보내 줄 것'이라고 한 (C)가 간접 응답이다. (A)는 airport를 반복했고, (B)는 선택 의문문에 Yes로 답하며 arriving을 반복한 함정이다.",
-  "translation": "Q: 고객이 공항으로 도착해요, 기차역으로 도착해요? / (A) 아주 붐비는 공항이에요. / (B) 네, 오늘 밤에 도착해요. / (C) 그의 비서가 일정표를 보내 줄 거예요."
+  "translation": "Q: 고객이 공항으로 도착해요, 기차역으로 도착해요? / (A) 연중 이맘때는 공항이 아주 붐벼요. / (B) 네, 오늘 밤에 도착해요. / (C) 그의 비서가 일정표를 보내 줄 거예요."
  },
  {
   "id": "p2-221",
@@ -1686,12 +1686,12 @@
   "question": "Who'll be handling customer inquiries while the call center is being renovated?",
   "choices": [
    "We're routing calls to the Busan office.",
-   "The renovation should take a month.",
+   "The renovation should take about a month in total.",
    "Please inquire at the front desk."
   ],
   "answer": 0,
   "explanation": "사람 대신 '부산 사무소로 전화를 돌린다'고 처리 주체를 알려 준 (A)가 정답이다. (B)는 renovated와 비슷한 renovation으로 기간을 말했고, (C)는 inquiries와 비슷한 inquire를 이용한 함정이다.",
-  "translation": "Q: 콜센터 공사 기간에 고객 문의는 누가 처리하나요? / (A) 부산 사무소로 전화를 돌리고 있어요. / (B) 공사는 한 달 걸릴 거예요. / (C) 안내 데스크에 문의하세요."
+  "translation": "Q: 콜센터 공사 기간에 고객 문의는 누가 처리하나요? / (A) 부산 사무소로 전화를 돌리고 있어요. / (B) 공사는 총 한 달 정도 걸릴 거예요. / (C) 안내 데스크에 문의하세요."
  },
  {
   "id": "p2-222",
@@ -1700,12 +1700,12 @@
   "question": "When is the new product line supposed to be announced?",
   "choices": [
    "Please wait in line.",
-   "It was announced over the speakers.",
+   "It was announced over the speakers during the fire drill.",
    "The press release is still with the legal team."
   ],
   "answer": 2,
   "explanation": "'보도 자료가 아직 법무팀 검토 중'이라며 시점이 미정임을 알린 (C)가 정답이다. (A)는 line을 '줄'이라는 뜻으로, (B)는 announce를 과거 시제로 반복한 함정이다.",
-  "translation": "Q: 신제품 라인은 언제 발표될 예정이에요? / (A) 줄을 서서 기다려 주세요. / (B) 스피커로 방송됐어요. / (C) 보도 자료가 아직 법무팀에 있어요."
+  "translation": "Q: 신제품 라인은 언제 발표될 예정이에요? / (A) 줄을 서서 기다려 주세요. / (B) 소방 훈련 중에 스피커로 방송됐어요. / (C) 보도 자료가 아직 법무팀에 있어요."
  },
  {
   "id": "p2-223",
@@ -1714,12 +1714,12 @@
   "question": "Where should the auditors set up while they're here?",
   "choices": [
    "Conference Room B is free all week.",
-   "They audited us last year.",
+   "They audited us last year and again in March.",
    "Set it up on Monday."
   ],
   "answer": 0,
   "explanation": "'B 회의실이 이번 주 내내 비어 있다'며 장소를 제안한 (A)가 정답이다. (B)는 auditors와 비슷한 audited를 과거 시제로 썼고, (C)는 set up을 반복하며 시점을 말한 함정이다.",
-  "translation": "Q: 감사관들이 여기 있는 동안 어디에 자리를 잡아야 할까요? / (A) B 회의실이 이번 주 내내 비어 있어요. / (B) 그들은 작년에 우리를 감사했어요. / (C) 월요일에 설치하세요."
+  "translation": "Q: 감사관들이 여기 있는 동안 어디에 자리를 잡아야 할까요? / (A) B 회의실이 이번 주 내내 비어 있어요. / (B) 작년에 감사했고 3월에 또 했어요. / (C) 월요일에 설치하세요."
  },
  {
   "id": "p2-224",
@@ -1728,12 +1728,12 @@
   "question": "What's holding up our building permit application?",
   "choices": [
    "The city asked for additional documents.",
-   "I applied for the job last week.",
+   "I applied for the job last week through the website.",
    "Permit me to introduce myself."
   ],
   "answer": 0,
   "explanation": "지연 원인을 묻는 질문에 (A)가 '추가 서류 요청'이라고 답했다. (B)는 application과 비슷한 applied를, (C)는 permit을 '허락하다'라는 동사로 바꾼 함정이다.",
-  "translation": "Q: 건축 허가 신청이 뭐 때문에 지연되고 있어요? / (A) 시청에서 추가 서류를 요청했어요. / (B) 지난주에 그 일자리에 지원했어요. / (C) 제 소개를 하겠습니다."
+  "translation": "Q: 건축 허가 신청이 뭐 때문에 지연되고 있어요? / (A) 시청에서 추가 서류를 요청했어요. / (B) 지난주 웹사이트로 그 일자리에 지원했어요. / (C) 제 소개를 하겠습니다."
  },
  {
   "id": "p2-225",
@@ -1742,12 +1742,12 @@
   "question": "Why are the quarterly bonuses being paid late?",
   "choices": [
    "Late in the afternoon.",
-   "A bonus of ten percent.",
+   "A bonus of ten percent for every employee.",
    "Didn't you read the memo from Payroll?"
   ],
   "answer": 2,
   "explanation": "이유를 직접 말하지 않고 '급여팀 메모에 나와 있다'는 뜻으로 되물은 (C)가 정답이다. (A)는 late를 반복했고, (B)는 bonus를 반복한 함정이다.",
-  "translation": "Q: 분기 보너스가 왜 늦게 지급되고 있어요? / (A) 오후 늦게요. / (B) 10퍼센트 보너스요. / (C) 급여팀 메모 못 읽었어요?"
+  "translation": "Q: 분기 보너스가 왜 늦게 지급되고 있어요? / (A) 오후 늦게요. / (B) 전 직원에게 10퍼센트 보너스요. / (C) 급여팀 메모 못 읽었어요?"
  },
  {
   "id": "p2-226",
@@ -1756,12 +1756,12 @@
   "question": "How did the negotiations with the new supplier turn out?",
   "choices": [
    "Turn off the lights when you leave.",
-   "They supply office furniture.",
+   "They supply office furniture and stationery to us.",
    "We're meeting again next week to finalize terms."
   ],
   "answer": 2,
   "explanation": "'다음 주에 다시 만나 조건을 확정한다(아직 진행 중)'고 한 (C)가 정답이다. (A)는 turn을 다른 뜻으로, (B)는 supplier와 비슷한 supply를 이용한 함정이다.",
-  "translation": "Q: 새 공급업체와의 협상은 어떻게 됐어요? / (A) 나갈 때 불을 꺼 주세요. / (B) 그들은 사무용 가구를 공급해요. / (C) 조건을 확정하려고 다음 주에 다시 만나요."
+  "translation": "Q: 새 공급업체와의 협상은 어떻게 됐어요? / (A) 나갈 때 불을 꺼 주세요. / (B) 그들은 우리에게 사무용 가구와 문구를 공급해요. / (C) 조건을 확정하려고 다음 주에 다시 만나요."
  },
  {
   "id": "p2-227",
@@ -1770,12 +1770,12 @@
   "question": "Is there any way we could extend the deadline for the proposal?",
   "choices": [
    "Dial extension 305.",
-   "They proposed a new design.",
+   "They proposed a new design last month.",
    "Only if the client agrees to it."
   ],
   "answer": 2,
   "explanation": "가능 여부를 묻는 질문에 (C)가 '고객이 동의해야만'이라는 조건으로 답했다. (A)는 extend와 비슷한 extension을, (B)는 proposal과 비슷한 proposed를 이용한 함정이다.",
-  "translation": "Q: 제안서 마감을 연장할 방법이 있을까요? / (A) 내선 305번으로 거세요. / (B) 그들은 새 디자인을 제안했어요. / (C) 고객이 동의해야만 가능해요."
+  "translation": "Q: 제안서 마감을 연장할 방법이 있을까요? / (A) 내선 305번으로 거세요. / (B) 그들은 지난달에 새 디자인을 제안했어요. / (C) 고객이 동의해야만 가능해요."
  },
  {
   "id": "p2-228",
@@ -1783,13 +1783,13 @@
   "type": "일반 의문문",
   "question": "Did the maintenance crew fix the leak in the storeroom?",
   "choices": [
-   "A crew of five people.",
+   "A crew of five people from the main office.",
    "Water's still dripping from the ceiling.",
    "Store it in the back room."
   ],
   "answer": 1,
   "explanation": "Yes/No 대신 '아직 물이 떨어진다(안 고쳐졌다)'고 한 (B)가 정답이다. (A)는 crew를 반복했고, (C)는 storeroom을 store와 room으로 나눠 반복한 함정이다.",
-  "translation": "Q: 관리팀이 창고 누수를 고쳤어요? / (A) 다섯 명으로 된 팀이요. / (B) 아직 천장에서 물이 떨어지고 있어요. / (C) 뒷방에 보관하세요."
+  "translation": "Q: 관리팀이 창고 누수를 고쳤어요? / (A) 본사에서 온 다섯 명의 팀이에요. / (B) 아직 천장에서 물이 떨어지고 있어요. / (C) 뒷방에 보관하세요."
  },
  {
   "id": "p2-229",
@@ -1854,12 +1854,12 @@
   "question": "The new pricing takes effect next month, doesn't it?",
   "choices": [
    "It had a strong effect on me.",
-   "About a month ago.",
+   "About a month ago, if I remember correctly.",
    "Only for international orders."
   ],
   "answer": 2,
   "explanation": "'해외 주문에만 적용된다'고 조건을 덧붙인 (C)가 정답이다. (A)는 effect를 '영향'이라는 뜻으로 반복했고, (B)는 month를 반복했지만 과거 시점이라 맞지 않는다.",
-  "translation": "Q: 새 가격 정책은 다음 달부터 적용되죠, 그렇죠? / (A) 그건 저에게 큰 영향을 줬어요. / (B) 한 달쯤 전에요. / (C) 해외 주문에만요."
+  "translation": "Q: 새 가격 정책은 다음 달부터 적용되죠, 그렇죠? / (A) 그건 저에게 큰 영향을 줬어요. / (B) 제 기억으로는 약 한 달 전이에요. / (C) 해외 주문에만요."
  },
  {
   "id": "p2-234",
@@ -1869,11 +1869,11 @@
   "choices": [
    "The policy is on page four.",
    "People tend to ignore memos.",
-   "Yes, it's changed a lot."
+   "Yes, it's changed a lot since last year."
   ],
   "answer": 1,
   "explanation": "'메모는 잘 안 본다'며 회의 발표를 간접적으로 고른 (B)가 정답이다. (A)는 policy를 반복했고, (C)는 선택 의문문에 Yes로 답하며 change를 반복한 함정이다.",
-  "translation": "Q: 정책 변경을 직원회의에서 발표할까요, 메모를 보낼까요? / (A) 그 정책은 4쪽에 있어요. / (B) 사람들이 메모는 잘 안 보더라고요. / (C) 네, 많이 바뀌었어요."
+  "translation": "Q: 정책 변경을 직원회의에서 발표할까요, 메모를 보낼까요? / (A) 그 정책은 4쪽에 있어요. / (B) 사람들이 메모는 잘 안 보더라고요. / (C) 네, 작년 이후로 많이 바뀌었어요."
  },
  {
   "id": "p2-235",
@@ -1909,13 +1909,13 @@
   "type": "선택 의문문",
   "question": "Are we taking the clients to the seafood place or the steakhouse?",
   "choices": [
-   "The steak was delicious.",
+   "The steak was delicious at the last place.",
    "Yes, we're taking them.",
    "One of them is vegetarian, remember?"
   ],
   "answer": 2,
   "explanation": "'한 명이 채식주의자'라며 둘 다 적절하지 않다는 뜻을 전한 (C)가 정답이다. (A)는 steakhouse와 비슷한 steak를 과거 시제로 썼고, (B)는 선택 의문문에 Yes로 답하며 taking을 반복한 함정이다.",
-  "translation": "Q: 고객들을 해산물 식당에 모실까요, 스테이크 하우스에 모실까요? / (A) 스테이크가 맛있었어요. / (B) 네, 우리가 모시고 가요. / (C) 그중 한 분이 채식주의자인 거 기억하죠?"
+  "translation": "Q: 고객들을 해산물 식당에 모실까요, 스테이크 하우스에 모실까요? / (A) 지난번 식당 스테이크는 맛있었어요. / (B) 네, 우리가 모시고 가요. / (C) 그중 한 분이 채식주의자인 거 기억하죠?"
  },
  {
   "id": "p2-238",
@@ -1937,13 +1937,13 @@
   "type": "요청·제안",
   "question": "Why don't we move the product launch to the spring?",
   "choices": [
-   "Because it's spring.",
+   "Because it's spring and the weather is nice.",
    "Our main competitor is launching in March.",
    "Move it a little to the left."
   ],
   "answer": 1,
   "explanation": "'경쟁사가 3월에 출시한다'며 간접적으로 반대한 (B)가 정답이다. (A)는 Why에 Because로 답하게 만드는 함정이고, (C)는 move를 '물건을 옮기다'라는 뜻으로 반복했다.",
-  "translation": "Q: 제품 출시를 봄으로 옮기는 게 어때요? / (A) 봄이니까요. / (B) 주요 경쟁사가 3월에 출시해요. / (C) 왼쪽으로 조금 옮기세요."
+  "translation": "Q: 제품 출시를 봄으로 옮기는 게 어때요? / (A) 봄이고 날씨가 좋기 때문이에요. / (B) 주요 경쟁사가 3월에 출시해요. / (C) 왼쪽으로 조금 옮기세요."
  },
  {
   "id": "p2-240",
@@ -1979,13 +1979,13 @@
   "type": "평서문",
   "question": "The shipment of monitors arrived with several cracked screens.",
   "choices": [
-   "We screen all applicants carefully.",
+   "We screen all applicants carefully before hiring.",
    "Take photos before we contact the supplier.",
    "Monitor the situation closely."
   ],
   "answer": 1,
   "explanation": "파손 소식에 '연락 전에 사진부터 찍으라'고 대응한 (B)가 정답이다. (A)는 screens를 '심사하다'라는 동사로, (C)는 monitors를 '감시하다'라는 동사로 바꾼 함정이다.",
-  "translation": "Q: 모니터 배송품이 화면 여러 개가 깨진 채로 도착했어요. / (A) 우리는 모든 지원자를 꼼꼼히 심사해요. / (B) 공급업체에 연락하기 전에 사진을 찍어 두세요. / (C) 상황을 면밀히 지켜보세요."
+  "translation": "Q: 모니터 배송품이 화면 여러 개가 깨진 채로 도착했어요. / (A) 채용 전에 모든 지원자를 꼼꼼히 심사해요. / (B) 공급업체에 연락하기 전에 사진을 찍어 두세요. / (C) 상황을 면밀히 지켜보세요."
  },
  {
   "id": "p2-243",
@@ -2009,11 +2009,11 @@
   "choices": [
    "Thursday's forecast is sunny.",
    "There's another one just a block away.",
-   "The lobby there is beautiful."
+   "The lobby there is beautiful and very spacious."
   ],
   "answer": 1,
   "explanation": "연장 불가 소식에 '근처에 다른 호텔이 있다'고 대안을 제시한 (B)가 정답이다. (A)는 Thursday를 반복했고, (C)는 hotel에서 연상되는 로비 이야기일 뿐이다.",
-  "translation": "Q: 호텔에서 목요일 이후로는 숙박 연장이 안 된대요. / (A) 목요일 예보는 맑음이에요. / (B) 한 블록 떨어진 곳에 다른 호텔이 있어요. / (C) 거기 로비가 아름다워요."
+  "translation": "Q: 호텔에서 목요일 이후로는 숙박 연장이 안 된대요. / (A) 목요일 예보는 맑음이에요. / (B) 한 블록 떨어진 곳에 다른 호텔이 있어요. / (C) 그곳 로비는 아름답고 아주 넓어요."
  },
  {
   "id": "p2-245",
@@ -2022,12 +2022,12 @@
   "question": "Sales in the northern region dropped last quarter.",
   "choices": [
    "That's when a competitor opened a store there.",
-   "I dropped it off at the post office.",
+   "I dropped it off at the post office yesterday afternoon.",
    "A quarter of an hour."
   ],
   "answer": 0,
   "explanation": "매출 하락 소식에 원인(경쟁사 매장 개점)을 짚은 (A)가 정답이다. (B)는 dropped를 '갖다 놓다(drop off)'라는 뜻으로, (C)는 quarter를 '15분'이라는 뜻으로 바꾼 함정이다.",
-  "translation": "Q: 지난 분기에 북부 지역 매출이 떨어졌어요. / (A) 그때 경쟁사가 거기에 매장을 열었죠. / (B) 우체국에 맡기고 왔어요. / (C) 15분이요."
+  "translation": "Q: 지난 분기에 북부 지역 매출이 떨어졌어요. / (A) 그때 경쟁사가 거기에 매장을 열었죠. / (B) 어제 오후에 우체국에 맡겼어요. / (C) 15분이요."
  },
  {
   "id": "p2-246",
@@ -2036,12 +2036,12 @@
   "question": "We still haven't received the signed agreement from Morrison Limited.",
   "choices": [
    "I agree with you completely.",
-   "Please sign at the bottom.",
+   "Please sign at the bottom of the last page.",
    "Their legal team is on holiday this week."
   ],
   "answer": 2,
   "explanation": "계약서가 안 왔다는 말에 이유(법무팀 휴가)를 알려 준 (C)가 정답이다. (A)는 agreement와 비슷한 agree를, (B)는 signed와 비슷한 sign을 이용한 함정이다.",
-  "translation": "Q: 모리슨 사로부터 서명된 계약서를 아직 못 받았어요. / (A) 전적으로 동의해요. / (B) 맨 아래에 서명해 주세요. / (C) 그쪽 법무팀이 이번 주 휴가예요."
+  "translation": "Q: 모리슨 사로부터 서명된 계약서를 아직 못 받았어요. / (A) 전적으로 동의해요. / (B) 마지막 장 맨 아래에 서명해 주세요. / (C) 그쪽 법무팀이 이번 주 휴가예요."
  },
  {
   "id": "p2-247",
@@ -2049,13 +2049,13 @@
   "type": "간접 응답",
   "question": "Who's going to lead the site visit on Friday?",
   "choices": [
-   "The website is down again.",
+   "The website is down again, so I can't check the details.",
    "It might be canceled because of the forecast.",
    "Friday at ten."
   ],
   "answer": 1,
   "explanation": "사람 대신 '예보 때문에 취소될 수도 있다'고 전제 자체를 흔든 (B)가 간접 응답이다. (A)는 site와 비슷한 website를, (C)는 Friday를 반복하며 시각을 말한 함정이다.",
-  "translation": "Q: 금요일 현장 방문은 누가 인솔해요? / (A) 웹사이트가 또 다운됐어요. / (B) 일기 예보 때문에 취소될지도 몰라요. / (C) 금요일 10시요."
+  "translation": "Q: 금요일 현장 방문은 누가 인솔해요? / (A) 웹사이트가 또 안 돼서 자세한 내용을 확인할 수 없어요. / (B) 일기 예보 때문에 취소될지도 몰라요. / (C) 금요일 10시요."
  },
  {
   "id": "p2-248",
@@ -2065,11 +2065,11 @@
   "choices": [
    "We had quite a few left over last year.",
    "Show me the way, please.",
-   "The printer's on the left."
+   "The printer's on the left side of the office."
   ],
   "answer": 0,
   "explanation": "숫자 대신 '작년에 많이 남았다(적게 찍자)'고 암시한 (A)가 간접 응답이다. (B)는 show를 '보여 주다'라는 동사로, (C)는 print와 비슷한 printer와 left over의 left를 이용한 함정이다.",
-  "translation": "Q: 무역 박람회용 안내 책자를 몇 부 인쇄해야 할까요? / (A) 작년에 꽤 많이 남았어요. / (B) 길 좀 안내해 주세요. / (C) 프린터는 왼쪽에 있어요."
+  "translation": "Q: 무역 박람회용 안내 책자를 몇 부 인쇄해야 할까요? / (A) 작년에 꽤 많이 남았어요. / (B) 길 좀 안내해 주세요. / (C) 프린터는 사무실 왼쪽에 있어요."
  },
  {
   "id": "p2-249",
@@ -2078,12 +2078,12 @@
   "question": "Has Ms. Yamada decided which candidate to hire?",
   "choices": [
    "She's interviewing one more person tomorrow.",
-   "She decided to take a taxi.",
+   "She decided to take a taxi to the airport instead.",
    "You can hire a car at the airport."
   ],
   "answer": 0,
   "explanation": "'내일 한 명 더 면접 본다(아직 미정)'고 한 (A)가 간접 응답이다. (B)는 decided를 반복하며 엉뚱한 결정을 말했고, (C)는 hire를 '(차를) 빌리다'라는 뜻으로 바꾼 함정이다.",
-  "translation": "Q: 야마다 씨가 어느 지원자를 채용할지 결정했어요? / (A) 내일 한 명을 더 면접 본대요. / (B) 그녀는 택시를 타기로 했어요. / (C) 공항에서 차를 빌릴 수 있어요."
+  "translation": "Q: 야마다 씨가 어느 지원자를 채용할지 결정했어요? / (A) 내일 한 명을 더 면접 본대요. / (B) 그녀는 대신 공항까지 택시를 타기로 했어요. / (C) 공항에서 차를 빌릴 수 있어요."
  },
  {
   "id": "p2-250",
@@ -2092,11 +2092,11 @@
   "question": "Why isn't the new coffee machine working?",
   "choices": [
    "Has anyone read the instruction manual?",
-   "We work in the sales department.",
+   "We work in the sales department upstairs.",
    "Two sugars, please."
   ],
   "answer": 0,
   "explanation": "원인을 단정하지 않고 '설명서를 읽어 봤냐'고 되물어 사용법 문제일 수 있음을 암시한 (A)가 간접 응답이다. (B)는 working과 같은 어근의 work를, (C)는 coffee에서 연상되는 설탕을 이용한 함정이다.",
-  "translation": "Q: 새 커피 머신이 왜 작동하지 않죠? / (A) 누구 사용 설명서 읽어 본 사람 있어요? / (B) 우리는 영업부에서 일해요. / (C) 설탕 두 개 넣어 주세요."
+  "translation": "Q: 새 커피 머신이 왜 작동하지 않죠? / (A) 누구 사용 설명서 읽어 본 사람 있어요? / (B) 저희는 위층 영업부에서 일해요. / (C) 설탕 두 개 넣어 주세요."
  }
 ]

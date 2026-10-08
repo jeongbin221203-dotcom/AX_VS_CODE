@@ -243,7 +243,7 @@
       chk.onclick = () => {
         const mine = placed.map(ci => it.chunks[ci]).join(" ");
         const target = it.chunks.join(" ");
-        const ok = mine === target;
+        const ok = mine === target || (it.alts || []).includes(mine);       // 부사 위치처럼 다른 순서도 맞는 문장
         chk.classList.add("hidden");
         bank.innerHTML = "";
         line.classList.add(ok ? "ok" : "bad");

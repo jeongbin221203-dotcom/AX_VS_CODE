@@ -68,8 +68,9 @@ class C:
         self.s(o, w, "sample_ko")
         self.s(o, w, "sample_adv", *adv, spoken=True)
         self.s(o, w, "sample_adv_ko")
-        if words(o.get("sample_adv", "")) <= words(o.get("sample", "")):
-            self.err(w, "sample_adv 가 sample 보다 길어야 함")
+        # 고득점 답안은 말할 수 있는 시간 안에 끝나야 해서(단어 수 ≤ 답변 초 × 2.3) 기본 답안과 길이가 비슷할 수 있다 — 몇 단어 짧은 것까지만 허용
+        if words(o.get("sample_adv", "")) < words(o.get("sample", "")) - 3:
+            self.err(w, "sample_adv 가 sample 보다 3단어 넘게 짧음")
 
 
 # ---- 토익스피킹 --------------------------------------------------------------------
@@ -103,7 +104,7 @@ def describe_picture(c, o, w):
                 continue
             c.s(e, f"{w} el{i}", "ko")
             c.s(e, f"{w} el{i}", "en", 4, 25)
-    c.samples(o, w, (45, 75), (70, 100))
+    c.samples(o, w, (45, 75), (55, 69))              # 사진 묘사 30초 → 69단어 이하
     c.tips(o, w)
 
 
@@ -115,7 +116,7 @@ def respond_questions(c, o, w):
     c.arr(o, w, "questions_ko", 3)
     c.arr(o, w, "samples", 3, [(18, 45), (18, 45), (40, 80)], spoken=True)
     c.arr(o, w, "samples_ko", 3)
-    c.arr(o, w, "samples_adv", 3, [(28, 55), (28, 55), (60, 100)], spoken=True)
+    c.arr(o, w, "samples_adv", 3, [(25, 34), (25, 34), (50, 69)], spoken=True)    # Q5·6 15초 → 34, Q7 30초 → 69
     c.arr(o, w, "samples_adv_ko", 3)
     c.tips(o, w)
 
@@ -154,7 +155,7 @@ def opinion(c, o, w):
     ol = o.get("outline")
     if not isinstance(ol, list) or not 3 <= len(ol) <= 6:
         c.err(w, "outline 3~6개")
-    c.samples(o, w, (95, 150), (130, 185))
+    c.samples(o, w, (95, 150), (110, 138))             # Q11 60초 → 138단어 이하
     c.tips(o, w)
 
 
