@@ -6,6 +6,7 @@
   <title>무역연습실 · 국제무역사 1급</title>
   <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/store.js" defer></script>
   <script src="/static/app.js" defer></script>
 </head>
 <body>
@@ -20,8 +21,8 @@
     <a href="#concepts" data-nav="concepts"><span data-icon="bulb"></span> 핵심 개념</a>
   </nav>
   <div class="sidebar-bottom">
-    <div class="tiny-card"><span class="dot"></span> 나만의 공부 공간<p>기록은 백업 파일로 차곡차곡.<br>오늘도 한 문제부터 시작해요.</p></div>
-    <a class="backup-link" href="/api/backup"><span data-icon="download"></span> 학습 기록 백업</a>
+    <div class="tiny-card"><span class="dot"></span> 나만의 공부 공간<p>기록은 이 브라우저에 차곡차곡.<br>가끔 백업해 두면 더 안전해요.</p></div>
+    <button type="button" class="backup-link" data-action="backup"><span data-icon="download"></span> 학습 기록 백업</button>
     <button type="button" class="backup-link" data-action="restore"><span data-icon="upload"></span> 학습 기록 복원</button>
     <small>국제무역사 1급 · 59–65회</small>
   </div>
@@ -31,7 +32,7 @@
     <button class="btn compact" data-action="settings"><span class="dot" id="ai-dot"></span><span id="ai-status">AI 연결하기</span><span data-icon="settings"></span></button>
   </header>
   <main id="main" tabindex="-1"><div class="loading">학습 공간을 준비하고 있어요…</div></main>
-  <footer class="footer">조금씩 쌓이는 실력, 무역연습실 <span>개인 학습용 · LOCAL STUDY</span></footer>
+  <footer class="footer">조금씩 쌓이는 실력, 무역연습실 <span>개인 학습용 · 기록은 이 브라우저에 저장</span></footer>
 </div>
 <dialog id="dialog" aria-labelledby="dialog-title"></dialog>
 <div id="toast" role="status" aria-live="polite"></div>
