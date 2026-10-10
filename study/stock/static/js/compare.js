@@ -17,7 +17,13 @@
   function fmtTime(t) { return typeof t === 'number' ? new Date(t * 1000).toISOString().slice(0, 16).replace('T', ' ') : t; }
   function msg(t) { var m = document.getElementById('cmsg'); m.hidden = !t; m.textContent = t || ''; }
   function fmt(n) { return Math.round(n).toLocaleString('ko-KR'); }
-  function syncOn() { return document.getElementById('sync').checked; }
+  // 동기화는 같은 종류끼리만 — 분봉의 '오늘 하루'를 일봉에 맞추면 일봉이 2개만 찌그러져 보인다
+  function compat() {
+    if (typeof panes === 'undefined' || !panes || !panes.a || !panes.b) return true;
+    var ta = panes.a.settings().tf, tb = panes.b.settings().tf;
+    return isIntra(ta) || isIntra(tb) ? ta === tb : true;   // 분봉은 같은 간격끼리만, 일·주·월봉은 서로 맞춘다
+  }
+  function syncOn() { return document.getElementById('sync').checked && compat(); }
 
   function Pane(side) {
     var self = this;
@@ -268,7 +274,7 @@
     this.root.querySelector('.cset').addEventListener('change', function () { self.drawMA(); saveUrl(); });
     this.root.querySelector('.ckind').addEventListener('change', function () { self.loadPred(); saveUrl(); });
     this.root.querySelector('.ctf').addEventListener('change', function () {
-      self.load().then(function () { self.showRange(); saveUrl(); });
+      self.load().then(function () { showBoth(); saveUrl(); });
     });
   };
 
@@ -314,7 +320,7 @@
     bars = parseInt(b.getAttribute('data-bars'), 10);
     showBoth();
   });
-  document.getElementById('sync').addEventListener('change', function () { if (this.checked) showBoth(); });
+  document.getElementById('sync').addEventListener('change', function () { showBoth(); });
 
   document.getElementById('quick').addEventListener('click', function (e) {
     var b = e.target.closest('button'); if (!b) return;
