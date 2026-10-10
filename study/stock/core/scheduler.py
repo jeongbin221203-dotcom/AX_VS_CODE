@@ -1,4 +1,5 @@
 """장 마감 후 자동 갱신: 평일 UPDATE_AT(기본 16:10) 이후 하루 한 번 전체 종목 일봉을 이어 받는다."""
+import os
 import threading
 import time
 from datetime import datetime
@@ -38,6 +39,9 @@ def run_update(limit: int = 0) -> dict:
             _state["msg"] += " · 신호 훑는 중"
             signal_scan.run(log=lambda m: _state.update(msg=f"신호: {m}"))
             _state["msg"] = f"완료: 성공 {res['ok']}, 실패 {res['fail']} · 신호 갱신"
+            if os.environ.get("STOCK_PUBLISH") == "1":          # Render 스냅샷도 같이 올린다(.env 에 STOCK_PUBLISH=1)
+                from core import publish
+                _state["msg"] += " · 스냅샷 " + publish.run()
         except Exception as e:
             _state["msg"] = f"완료: 성공 {res['ok']}, 실패 {res['fail']} · 신호 갱신 실패: {e}"
         return res

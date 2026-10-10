@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}신호{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+</head>
+<body>
+<header class="top"><span class="logo">📈 차트분석 · 오늘의 신호</span><span class="hint">읽기 전용 스냅샷{% if rep and rep.meta.generated %} · 생성 {{ rep.meta.generated }}{% endif %}</span></header>
+<main>{% block body %}{% endblock %}</main>
+<footer class="foot">{{ disclaimer }}</footer>
+</body>
+</html>

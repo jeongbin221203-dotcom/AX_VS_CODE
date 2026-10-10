@@ -6,7 +6,7 @@ from core import collector, db
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=["update", "toss-check", "yt-list", "yt-meta", "yt-captions", "yt-stats", "yt-clean", "backtest", "ai-train", "entry-train", "avoid-train", "surge-train", "combined-train", "strategy-train", "risk-train", "boom-train", "jump-train", "precursor-train", "pattern-train", "quietvol-train", "timing-train", "presignal-train", "bestday-train", "plan-train", "signals-scan"])
+    ap.add_argument("cmd", choices=["update", "toss-check", "yt-list", "yt-meta", "yt-captions", "yt-stats", "yt-clean", "backtest", "ai-train", "entry-train", "avoid-train", "surge-train", "combined-train", "strategy-train", "risk-train", "boom-train", "jump-train", "precursor-train", "pattern-train", "quietvol-train", "timing-train", "presignal-train", "bestday-train", "plan-train", "signals-scan", "publish-snapshot"])
     ap.add_argument("--top", type=int, default=0, help="시가총액 상위 N개")
     ap.add_argument("--codes", nargs="*", default=[])
     ap.add_argument("--all", action="store_true", help="전체 종목(관심종목 먼저)")
@@ -16,6 +16,10 @@ def main():
     ap.add_argument("--years", type=int, default=5)
     ap.add_argument("--fresh", action="store_true", help="strategy-train: 표본 캐시를 다시 만듦")
     a = ap.parse_args()
+    if a.cmd == "publish-snapshot":
+        from core import publish
+        print(publish.run(log=lambda m: print(m, flush=True)))
+        return
     if a.cmd == "signals-scan":
         from core import signal_scan
         rep = signal_scan.run(limit=a.limit, log=lambda m: print(m, flush=True))
