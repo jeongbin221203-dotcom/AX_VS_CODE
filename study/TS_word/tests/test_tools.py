@@ -99,6 +99,64 @@ def test_import_missing_db():
     assert imp.main(["/없는/경로/ts.db", "-o", str(Path(tempfile.gettempdir()) / "x.json")]) == 1
 
 
+def test_convert_exam_from_ts_schema():
+    """TS 앱의 실제 DB 구조(core/db.py)에서 풀이 기록을 TSStore 모양으로 바꾼다."""
+    sys.path.insert(0, str(ROOT.parent / "TS"))
+    sys.dont_write_bytecode = True
+    from core import db as ts_db                                # noqa: E402  (TS 앱은 읽기만 함)
+    with tempfile.TemporaryDirectory() as d:
+        path = Path(d) / "ts.db"
+        con = sqlite3.connect(path)
+        con.executescript(ts_db.SCHEMA)
+        con.execute("INSERT INTO sessions(created_at, finished_at, mode, variant, part, level, items, total, correct, total_est) "
+                    "VALUES ('2026-10-01T10:00:00', '2026-10-01T10:10:00', 'practice', NULL, 5, 2, '[\"5:p5-001\"]', 1, 0, NULL)")
+        con.execute("INSERT INTO attempts(session_id, qkey, part, item_id, qidx, level, qtype, chosen, correct, elapsed_ms, created_at) "
+                    "VALUES (1, '5:p5-001:0', 5, 'p5-001', 0, 2, '품사', 2, 0, 5000, '2026-10-01T10:01:00')")
+        con.execute("INSERT INTO wrong_notes(qkey, part, item_id, qidx, level, qtype, wrong_count, right_streak, status, "
+                    "first_wrong_at, last_wrong_at, last_seen_at, memo) VALUES ('5:p5-001:0', 5, 'p5-001', 0, 2, '품사', 1, 0, 'open', "
+                    "'2026-10-01T10:01:00', '2026-10-01T10:01:00', '2026-10-01T10:01:00', '메모')")
+        con.execute("INSERT INTO settings VALUES ('target_score', '900'), ('exam_date', '2026-12-20'), ('tts_rate', '1.2')")
+        con.commit()
+        con.close()
+        ts = imp.convert(path)["ts"]
+        assert ts["settings"] == {"target_score": "900", "exam_date": "2026-12-20"}            # 단어 쪽 설정은 따로 옮겨짐
+        assert ts["sessions"][0]["items"] == ["5:p5-001"] and ts["seq"] == {"session": 1}
+        assert ts["attempts"] == [{"s": 1, "k": "5:p5-001:0", "c": 2, "o": 0, "m": 5000, "t": "2026-10-01T10:01:00", "l": 2, "y": "품사"}]
+        assert ts["notes"]["5:p5-001:0"]["memo"] == "메모" and "qkey" not in ts["notes"]["5:p5-001:0"]
+
+
+def test_old_db_without_exam_tables():
+    """단어 표만 있는 예전 DB 도 변환된다 (시험 기록은 비어 있음)."""
+    with tempfile.TemporaryDirectory() as d:
+        path = Path(d) / "old.db"
+        con = sqlite3.connect(path)
+        con.executescript("CREATE TABLE settings(key TEXT PRIMARY KEY, value TEXT);")
+        con.commit()
+        con.close()
+        assert imp.convert_exam(path)["sessions"] == []
+
+
+def test_pages_are_in_sync_with_generator():
+    """HTML 화면 파일은 tools/make_pages.py 가 만든 그대로여야 한다 (손으로 고치면 다음 실행에서 사라짐)."""
+    import make_pages as mp
+    for name, (title, scripts, attrs) in mp.PAGES.items():
+        assert (ROOT / name).read_text(encoding="utf-8") == mp.render(title, scripts, attrs), f"{name} 이 make_pages.py 와 다름"
+
+
+def test_question_data_files():
+    toeic_total = 0
+    for part in range(1, 8):
+        text = (ROOT / "data" / f"toeic-p{part}.js").read_text(encoding="utf-8")
+        mark = f".p{part} = "
+        body = text[text.index(mark) + len(mark):].rstrip().rstrip(";")
+        items = json.loads(body)
+        assert items and all(it["part"] == part for it in items)
+        toeic_total += sum(len(it["questions"]) if "questions" in it else 1 for it in items)
+    assert toeic_total >= 3500
+    meta = (ROOT / "data" / "meta.js").read_text(encoding="utf-8")
+    assert json.loads(meta[meta.index("window.TS_META = ") + 17:].rstrip().rstrip(";"))["toeic"]["questions"] == toeic_total
+
+
 if __name__ == "__main__":
     fails = 0
     for name, fn in list(globals().items()):

@@ -21,9 +21,10 @@
   const levelFromScore = score => (score >= 860 ? 5 : score >= 730 ? 4 : score >= 470 ? 3 : score >= 220 ? 2 : 1);
   const DEFAULTS = { set: "toeic", daily_new: 20, tts_rate: 1, tts_accent: "mix", my_level: 0 };   // my_level 0 = 자동(1등급부터)
 
+  let clock = () => new Date();                // 테스트에서 '오늘'을 고정하려고 바꿀 수 있다 (Ward.setClock)
   const pad = n => String(n).padStart(2, "0");
-  const todayStr = (d = new Date()) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-  const nowStr = () => { const d = new Date(); return `${todayStr(d)}T${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`; };
+  const todayStr = (d = clock()) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  const nowStr = () => { const d = clock(); return `${todayStr(d)}T${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`; };
   function addDays(dateStr, n) {
     const [y, m, d] = dateStr.split("-").map(Number);
     return todayStr(new Date(y, m - 1, d + n));
@@ -243,5 +244,7 @@
     cardOf, stateOf, seen, schedule, review, quizAnswer, toggleStar, failCounts, recentlyMissed,
     newLearnedToday, queue, levelProgress, streak, todayCounts,
     exportJSON, importJSON, reset, saveFailed: () => saveError,
+    setClock: fn => { clock = fn; },
+    logEntries: () => db.log,       // 복습 기록 [{i:단어, g:평가, n:새 단어 여부, t:시각}] (읽기 전용 — 토익 통계의 연속 학습일·하루 학습량이 씀)
   };
 })();

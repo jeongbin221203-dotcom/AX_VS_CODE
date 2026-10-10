@@ -45,7 +45,7 @@ UI.boot("study", () => {
     </div>
     <div class="card empty hidden" id="vs-done">
       <h2>오늘 카드 끝!</h2><p>내일 복습할 카드가 준비됩니다.</p>
-      <a class="btn" href="index.html">단어 홈</a> <a class="btn primary" href="${UI.url("quiz.html", { level })}">뜻 고르기 시험</a>
+      <a class="btn" href="words.html">단어 홈</a> <a class="btn primary" href="${UI.url("quiz.html", { level })}">뜻 고르기 시험</a>
     </div>` : `
     <div class="card empty"><h2>지금 볼 카드가 없습니다</h2>
       <p>${starredOnly ? "별표한 단어가 없습니다. 카드·단어장에서 ★를 누르면 모입니다." : "오늘 복습은 끝났고, 새 단어 하루 한도도 채웠습니다."}</p>

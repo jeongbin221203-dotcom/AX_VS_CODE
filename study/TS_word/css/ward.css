@@ -22,3 +22,12 @@ label select, label input[type=checkbox] { margin-left: 4px; }
   .vocab-hero { grid-template-columns: 1fr; }
   .vocab-hero .cta { min-width: 0; }
 }
+
+/* ---- 시험 메뉴 (4개 시험 + 단어 화면 보조 메뉴) ---- */
+.nav .soon { padding: 6px 10px; border-radius: 8px; color: var(--ink-3); white-space: nowrap; font-size: .92rem; cursor: default; opacity: .65; }
+.nav .soon small { font-size: .68rem; margin-left: 2px; }
+.word-nav { padding: 6px 0 8px; margin: 0 -4px; border-top: 1px dashed var(--line); align-items: center; }
+.word-nav .spacer { flex: 1; }
+.word-nav a.on { background: var(--accent-soft); color: var(--accent); font-weight: 700; }
+.word-nav a[data-wordset] { font-size: .85rem; border: 1px solid var(--line); }
+.word-nav a[data-wordset].on { border-color: var(--accent); }
