@@ -5,6 +5,7 @@ import shutil
 import sqlite3
 import subprocess
 import sys
+import time
 from pathlib import Path
 from unittest.mock import patch
 
@@ -217,3 +218,75 @@ def test_browser_store_in_node(client, tmp_path):
     run = subprocess.run(['node', '--test', str(ROOT / 'tests' / 'store.test.js')], capture_output=True, text=True, encoding='utf-8',
                          env={**__import__('os').environ, 'FIXTURE_DIR': str(tmp_path)})
     assert run.returncode == 0, run.stdout[-4000:] + run.stderr[-2000:]
+
+
+# ---------- 서버 점검(2026-10-10)에서 찾은 문제의 재발 방지 ----------
+def test_convert_backup_rejects_views_and_oversized_tables(client, tmp_path):
+    """뷰를 표로 위장해 서버가 계속 행을 만들게 하는 파일(작은 크기로 서버를 붙잡음)을 즉시 거부."""
+    post = lambda blob: client.post('/api/convert-backup', data=blob, content_type='application/octet-stream')
+    evil = tmp_path / 'evil.sqlite3'
+    db = sqlite3.connect(evil)
+    db.executescript('''
+    CREATE VIEW attempts AS WITH RECURSIVE c(x) AS (SELECT 1 UNION ALL SELECT x+1 FROM c)
+      SELECT 'a'||x AS id, 't' AS title, 59 AS round, 0 AS subject, 'exam' AS mode, 1.0 AS started_at, NULL AS deadline, NULL AS submitted_at, NULL AS score, 0 AS last_index FROM c;
+    CREATE VIEW responses AS SELECT 'a1' AS attempt_id, 59000 AS qid, 0 AS position, NULL AS choice, 0 AS flagged;
+    CREATE VIEW notes AS SELECT 59000 AS qid, '' AS body, 0 AS mastered, 1.0 AS updated_at WHERE 0;
+    CREATE VIEW explanations AS SELECT 59000 AS qid, '' AS body, 'm' AS model, 1.0 AS created_at, 'x' AS status WHERE 0;''')
+    db.commit(); db.close()
+    started = time.monotonic()
+    assert post(evil.read_bytes()).status_code == 400
+    assert time.monotonic() - started < 2                                      # 끝없는 뷰를 읽지 않고 바로 거부
+    many = tmp_path / 'many.sqlite3'
+    db = sqlite3.connect(many); db.executescript(OLD_SCHEMA)
+    db.executemany('INSERT OR IGNORE INTO attempts VALUES(?,?,?,?,?,?,?,?,?,?)', [(f'a{i}', 't', 59, 0, 'exam', 1.0, None, None, None, 0) for i in range(2001)])
+    db.commit(); db.close()
+    assert post(many.read_bytes()).status_code == 400                          # 시험 기록 2,001개 > 한도 2,000
+    ok = make_old_backup(tmp_path / 'ok.sqlite3')
+    assert post(ok).status_code == 200                                         # 정상 백업은 그대로
+
+
+def test_huge_question_numbers_are_404_not_500(client):
+    for url in ['/question-image/99999999999999999999/body/0.png', '/question-image/59999/body/0.png']:
+        assert client.get(url).status_code == 404
+    assert client.post('/api/questions/99999999999999999999/explanation', json={}).status_code == 404
+
+
+def test_openai_connection_failures_and_odd_replies_are_502_json(client):
+    import http.client
+    key = 'sk-fake-testing-only-1234567890'
+    with patch('urllib.request.urlopen', side_effect=lambda *a, **k: fake_response()):
+        assert client.post('/api/ai/settings', json={'key': key, 'model': 'gpt-4.1-mini'}).status_code == 200
+    for exc in [http.client.IncompleteRead(b'x'), http.client.BadStatusLine('x'), http.client.RemoteDisconnected('closed'), ConnectionResetError('reset')]:
+        with patch('urllib.request.urlopen', side_effect=exc):
+            r = client.post('/api/ai/chat', json={'qid': 59000, 'message': '질문', 'reveal': True})
+            assert r.status_code == 502 and r.json['error'].startswith('AI 서버에 연결하지 못했습니다'), type(exc).__name__
+    for body in [b'[]', b'null', b'{"output":null}', b'{"output":[null]}', b'{"output":[{"type":"message","content":null}]}',
+                 b'{"output":[{"type":"message","content":[{"type":"output_text","text":null}]}]}', b'{"output":[]}', b'']:
+        with patch('urllib.request.urlopen', side_effect=lambda *a, b=body, **k: io.BytesIO(b)):
+            r = client.post('/api/questions/59000/explanation', json={})
+            assert r.status_code == 502 and r.is_json, body
+
+
+def test_long_conversations_fit_and_oversized_ones_get_a_korean_message(client):
+    key = 'sk-fake-testing-only-1234567890'
+    with patch('urllib.request.urlopen', side_effect=lambda *a, **k: fake_response()):
+        client.post('/api/ai/settings', json={'key': key, 'model': 'gpt-4.1-mini'})
+        # 규칙상 허용되는 가장 긴 대화: 12개 × 한글 12,000자(브라우저는 한글을 3바이트로 보냄, 약 430KB)
+        history = [{'role': 'user' if i % 2 == 0 else 'assistant', 'content': '가' * 12000} for i in range(12)]
+        body = json.dumps({'qid': 59000, 'message': '질문', 'history': history, 'reveal': True}, ensure_ascii=False).encode('utf-8')
+        assert 400_000 < len(body) < 500_000
+        assert client.post('/api/ai/chat', data=body, content_type='application/json').status_code == 200
+        huge = json.dumps({'message': 'x' * 1_100_000}).encode()
+        r = client.post('/api/ai/chat', data=huge, content_type='application/json')
+        assert r.status_code == 413 and '너무 커요' in r.json['error']
+
+
+def test_error_messages_are_korean_json_and_unexpected_errors_do_not_leak(client, app):
+    assert client.get('/api/nope').json['error'] == '찾을 수 없습니다.'
+    assert client.post('/healthz', json={}).status_code == 405 and client.post('/healthz', json={}).json['error'] == '허용되지 않는 요청 방식입니다.'
+    assert client.post('/api/answers', data='{"qids":[59000]}' + ' ' * 150_000, content_type='application/json').json['error'].startswith('보낸 내용이 너무 커요')
+    assert client.post('/api/answers', json={'qids': []}).json['error'] == '문제 번호를 확인해 주세요.'     # 직접 쓴 문구는 그대로
+    app.config['PROPAGATE_EXCEPTIONS'] = False
+    with patch('fitz.open', side_effect=RuntimeError('내부 경로 C:/secret/path 가 보이면 안 됨')):
+        r = client.get('/question-image/59000/body/0.png')
+    assert r.status_code == 500 and r.is_json and 'secret' not in r.text and '문제가 생겼어요' in r.json['error']

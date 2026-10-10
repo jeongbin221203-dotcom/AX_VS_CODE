@@ -5,6 +5,7 @@ browser (static/store.js, IndexedDB). The server holds no per-user data except t
 so a restarted or sleeping server loses nothing.
 """
 import base64
+import http.client
 import io
 import json
 import os
@@ -92,9 +93,21 @@ def create_app(config=None):
             response.headers['Cache-Control'] = 'no-store'
         return response
 
+    korean = {400: '요청을 확인해 주세요.', 403: '허용되지 않는 요청입니다.', 404: '찾을 수 없습니다.', 405: '허용되지 않는 요청 방식입니다.',
+              408: '요청 시간이 지났어요. 다시 시도해 주세요.', 413: '보낸 내용이 너무 커요. 대화를 줄이거나 새로 시작해 주세요.',
+              429: '요청이 너무 많아요. 잠시 후 다시 시도해 주세요.', 500: '서버에 문제가 생겼어요. 잠시 후 다시 시도해 주세요.',
+              502: '연결에 문제가 생겼어요. 잠시 후 다시 시도해 주세요.', 503: '서버가 바빠요. 잠시 후 다시 시도해 주세요.'}
+
     @app.errorhandler(HTTPException)
     def error(err):
-        return jsonify(error=err.description), err.code
+        # abort(코드, '직접 쓴 한글 문구')는 그대로, Werkzeug 기본 영어 문구만 한글로 바꾼다
+        message = korean.get(err.code, '요청을 처리하지 못했습니다.') if err.description == type(err).description else err.description
+        return jsonify(error=message), err.code
+
+    @app.errorhandler(Exception)
+    def unexpected(err):
+        app.logger.exception('처리하지 못한 오류: %s %s', request.method, request.path)
+        return jsonify(error=korean[500]), 500
 
     def payload():
         data = request.get_json(silent=True)
@@ -103,6 +116,8 @@ def create_app(config=None):
         return data
 
     def question(qid):
+        if not valid_qid(qid):                      # 아주 큰 번호는 SQLite 가 받지 못해 500 이 났음
+            abort(404, '문제를 찾을 수 없습니다.')
         row = catalog().execute('SELECT * FROM questions WHERE id=?', (qid,)).fetchone()
         if row is None:
             abort(404, '문제를 찾을 수 없습니다.')
@@ -151,14 +166,20 @@ def create_app(config=None):
                 404: '모델 이름이나 모델 접근 권한을 확인해 주세요.', 429: 'API 사용 한도나 잔액을 확인하고 잠시 후 다시 시도해 주세요.',
                 400: '모델이 요청 형식 또는 이미지 입력을 지원하는지 확인해 주세요.'}
             abort(502, messages_by_code.get(err.code, 'AI 서비스 응답에 실패했습니다. 잠시 후 다시 시도해 주세요.'))
-        except (urllib.error.URLError, TimeoutError, OSError):
+        except (urllib.error.URLError, TimeoutError, OSError, http.client.HTTPException):
             abort(502, 'AI 서버에 연결하지 못했습니다. 인터넷 연결을 확인해 주세요.')
         except (ValueError, TypeError):
             abort(502, 'AI 응답 형식을 읽지 못했습니다.')
+        if not isinstance(result, dict):
+            abort(502, 'AI 응답 형식을 읽지 못했습니다.')
         if result.get('status') == 'incomplete':
             abort(502, 'AI가 답변을 끝내지 못했습니다. 질문을 짧게 바꾸거나 다른 모델을 사용해 주세요.')
-        texts = [c.get('text', '') for o in result.get('output', []) if o.get('type') == 'message'
-                 for c in o.get('content', []) if c.get('type') == 'output_text']
+        texts = []
+        for o in result.get('output') if isinstance(result.get('output'), list) else []:
+            if isinstance(o, dict) and o.get('type') == 'message':
+                for c in o.get('content') if isinstance(o.get('content'), list) else []:
+                    if isinstance(c, dict) and c.get('type') == 'output_text' and isinstance(c.get('text'), str):
+                        texts.append(c['text'])
         answer = '\n'.join(texts).strip()
         if not answer:
             abort(502, 'AI 답변이 비어 있습니다. 다시 시도해 주세요.')
@@ -262,6 +283,7 @@ def create_app(config=None):
 
     @app.post('/api/ai/chat')
     def chat():
+        request.max_content_length = 1_000_000        # 기본 100KB 로는 규칙상 허용되는 긴 대화가 걸림
         s = require_key(); data = payload(); text = data.get('message', '')
         if not isinstance(text, str) or not 1 <= len(text.strip()) <= 4000:
             abort(400, '질문은 1~4,000자로 입력해 주세요.')
@@ -296,10 +318,13 @@ def create_app(config=None):
         text = ask_api(s, messages, tutor)
         return jsonify(body=text, model=s['model'], created_at=time.time(), status='AI 초안')
 
+    # 변환할 수 있는 최대 크기 — 이 앱이 만든 백업은 이보다 훨씬 작다. 올린 파일의 '뷰'가 계속 행을 만들어 내는 공격을 막는다.
+    convert_limits = {'attempts': 2000, 'responses': 120_000, 'notes': 840, 'explanations': 840}
+
     @app.post('/api/convert-backup')
     def convert_backup():
         """Turn an old server-side study-backup.sqlite3 into browser records (nothing is stored here)."""
-        request.max_content_length = 50 * 1024 * 1024
+        request.max_content_length = 20 * 1024 * 1024
         data = request.get_data(cache=False)
         if not data.startswith(b'SQLite format 3\x00'):
             abort(400, '학습 기록 백업 파일을 선택해 주세요.')
@@ -307,6 +332,7 @@ def create_app(config=None):
                 'responses': ['attempt_id', 'qid', 'position', 'choice', 'flagged'],
                 'notes': ['qid', 'body', 'mastered', 'updated_at'],
                 'explanations': ['qid', 'body', 'model', 'created_at', 'status']}
+        deadline = time.monotonic() + app.config.get('CONVERT_SECONDS', 10)
         with tempfile.TemporaryDirectory() as temp:
             path = Path(temp) / 'upload.sqlite3'
             path.write_bytes(data)
@@ -314,16 +340,22 @@ def create_app(config=None):
             try:
                 old = sqlite3.connect(path.resolve().as_uri() + '?mode=ro', uri=True)
                 old.row_factory = sqlite3.Row
+                old.set_progress_handler(lambda: 1 if time.monotonic() > deadline else 0, 20000)   # 시간이 지나면 중단
                 try:
-                    ok = old.execute('PRAGMA integrity_check').fetchone()[0] == 'ok'
+                    # 진짜 표만 받는다(뷰·가상 표는 읽을 때마다 계산이 돌아 서버를 붙잡을 수 있음)
+                    kinds = {n: (t, q) for n, t, q in old.execute('SELECT name,type,sql FROM sqlite_master WHERE name IN (?,?,?,?)', tuple(need))}
+                    ok = set(kinds) == set(need) and all(t == 'table' and (q or '').lstrip().upper().startswith('CREATE TABLE') for t, q in kinds.values())
+                    ok = ok and old.execute('PRAGMA quick_check').fetchone()[0] == 'ok'
                     for table, cols in need.items():
+                        if not ok:
+                            break
                         have = {r[1] for r in old.execute(f'PRAGMA table_info({table})')}
-                        ok = ok and set(cols) <= have
+                        ok = set(cols) <= have and old.execute(f'SELECT COUNT(*) FROM {table}').fetchone()[0] <= convert_limits[table]
                     if ok:
-                        rows = {t: [dict(r) for r in old.execute(f'SELECT * FROM {t}')] for t in need}
+                        rows = {t: [dict(r) for r in old.execute(f'SELECT * FROM {t} LIMIT {convert_limits[t]}')] for t in need}
                 finally:
                     old.close()
-            except sqlite3.DatabaseError:
+            except sqlite3.Error:
                 rows = None
         if rows is None:
             abort(400, '손상되었거나 이 앱의 백업이 아닌 파일입니다.')
