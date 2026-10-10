@@ -243,10 +243,10 @@ test("모의고사 구성: 문제가 모자라면 가까운 난이도로 채움"
 test("기록 저장: 점수 범위 보정·긴 답 자르기·시각이 같은 한 묶음, 용량 보호", () => {
   const s = loaded({ withHistory: false });
   const T = s.W.Toefl, col = s.W.TSStore.col("toefl_attempts");
-  assert.strictEqual(T.record("r_daily", "x1", 2, [{ qidx: 0, score: 5, response: "a".repeat(5000) }, { qidx: 1, score: -1 }, { qidx: 2, score: "0.5" }]), 3);
+  assert.strictEqual(T.record("r_daily", "x1", 2, [{ qidx: 0, score: 5, response: "a".repeat(6000) }, { qidx: 1, score: -1 }, { qidx: 2, score: "0.5" }]), 3);
   const rows = col.all();
   same(rows.map(r => r.score), [1, 0, 0.5]);
-  assert.strictEqual(rows[0].response.length, 3000);
+  assert.strictEqual(rows[0].response.length, 5000);
   assert.strictEqual(new Set(rows.map(r => r.created_at)).size, 1);
   assert.strictEqual(rows[0].created_at, "2026-10-10T09:00:00");
   const many = Array.from({ length: T.ATTEMPT_CAP + 300 }, (_, i) => ({ qidx: i, score: 1 }));

@@ -142,7 +142,7 @@
     store().batch(() => {
       for (const r of results) {
         const score = Math.max(0, Math.min(1, Number(r.score) || 0));
-        col.add({ created_at: ts, task, item_id: String(itemId), qidx: parseInt(r.qidx, 10) || 0, level, score, response: String(r.response ?? "").slice(0, 3000) });
+        col.add({ created_at: ts, task, item_id: String(itemId), qidx: parseInt(r.qidx, 10) || 0, level, score, response: String(r.response ?? "").slice(0, 5000) });
         n++;
       }
       const all = col.all();

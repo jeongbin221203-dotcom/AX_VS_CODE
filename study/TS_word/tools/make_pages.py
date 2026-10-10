@@ -31,7 +31,7 @@ PAGES: dict[str, tuple[str, list[str], dict[str, str]]] = {
     "study.html": ("카드 · TS 단어", BASE + ["js/study.js"], {}),
     "quiz.html": ("시험 · TS 단어", BASE + ["js/quiz.js"], {}),
     "list.html": ("단어장 · TS 단어", BASE + ["js/list.js"], {}),
-    "listen.html": ("듣기 · TS 단어", BASE + ["js/listen.js"], {}),
+    "listen.html": ("듣기 · TS 단어", BASE + ["data/audio-list.js", "js/listen.js"], {}),
     # 토익
     "toeic.html": ("오늘의 토익 · TS", BASE + EXAM + CHART + ["js/toeic.js"], {}),
     "practice.html": ("파트 연습 · TS", BASE + EXAM + ["js/practice.js"], {}),

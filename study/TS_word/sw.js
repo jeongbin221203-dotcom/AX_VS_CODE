@@ -1,12 +1,12 @@
 /* 오프라인 사용: 한 번 열어 두면 인터넷이 없어도 단어 공부가 된다 (https 또는 localhost 에서만 동작).
    화면·스크립트·단어와 문제 데이터를 보관하고, 열 때마다 뒤에서 새 것으로 갱신한다(stale-while-revalidate).
    학습 기록은 localStorage 에 있어 이 파일과 상관없이 보존된다. */
-const CACHE = "ts-word-v5";
+const CACHE = "ts-word-v6";
 const ASSETS = [
   "./", "index.html", "words.html", "study.html", "quiz.html", "list.html", "listen.html", "settings.html",
   "toeic.html", "practice.html", "diagnostic.html", "mock.html", "solve.html", "result.html", "review.html", "dictation.html",
   "stats.html", "history.html", "guide.html", "toefl.html", "toeic-speaking.html", "opic.html",
-  "css/app.css", "css/ward.css",
+  "data/audio-list.js", "css/app.css", "css/ward.css",
   "js/theme.js", "js/tsutil.js", "js/scoring.js", "js/exams.js", "js/store.js", "js/tsstore.js", "js/tts.js", "js/ui.js", "js/bank.js", "js/stats.js",
   "js/planner.js", "js/sessions.js", "js/engine.js", "js/charts.js", "js/backup.js", "js/hub.js", "js/hub-extra.js", "js/soon.js",
   "js/home.js", "js/study.js", "js/quiz.js", "js/list.js", "js/listen.js", "js/settings.js",
@@ -31,7 +31,8 @@ self.addEventListener("activate", e => {
 
 self.addEventListener("fetch", e => {
   const req = e.request;
-  if (req.method !== "GET" || new URL(req.url).origin !== location.origin) return;
+  const u = new URL(req.url);
+  if (req.method !== "GET" || u.origin !== location.origin || u.pathname.includes("/audio/") || req.headers.has("range")) return;   // 긴 MP3 는 브라우저가 직접 받는다(범위 요청)
   e.respondWith(caches.open(CACHE).then(async cache => {
     const hit = await cache.match(req, { ignoreSearch: true });          // study.html?level=2 도 study.html 로 찾는다
     const fresh = fetch(req).then(res => { if (res && res.ok) cache.put(req, res.clone()); return res; }).catch(() => null);

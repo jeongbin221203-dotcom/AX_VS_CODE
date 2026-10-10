@@ -61,6 +61,7 @@ UI.boot("listen", () => {
       <label><input type="checkbox" id="opt-spell"> 단어 철자도 읽기 (s-u-b-m-i-t)</label>
       <label><input type="checkbox" id="opt-loop" checked> 끝나면 처음부터 반복</label>
     </div></div>
+    <div class="card" id="mp3-ready"></div>
     <div class="card"><h2 style="margin-top:0">🎧 긴 MP3 파일로 만들기 <span class="small muted">(화면을 끄고 듣는 용도)</span></h2>
       <p class="small muted">브라우저만으로는 음성 파일을 만들 수 없어서 컴퓨터에서 한 줄을 실행합니다. (Python, <code>pip install edge-tts lameenc</code> 필요)
       지금 고른 조건 그대로의 명령이 아래에 만들어집니다. 만든 파일은 <code>audio/</code> 폴더에 생기고, 휴대폰에 옮겨 들으세요.</p>
@@ -176,6 +177,16 @@ UI.boot("listen", () => {
     else if (e.key === "ArrowRight") jump(1);
     else if (e.key === "ArrowLeft") jump(-1);
   });
+  // 미리 만들어 둔 MP3 (audio/ 폴더, tools/list_audio.py 가 목록 생성) — 서버 없이 바로 재생
+  (function () {
+    const box = $("mp3-ready");
+    const list = (window.WARD_AUDIO || []).filter(a => a.set === Ward.currentSet());
+    if (!box) return;
+    if (!list.length) { box.remove(); return; }
+    box.innerHTML = `<h2 style="margin-top:0">🎵 미리 만든 MP3 <span class="small muted">(필수 단어 · 영어 3번 → 뜻 · 눌러서 바로 듣기)</span></h2>` +
+      list.map(a => `<div style="margin:10px 0"><div class="small"><b>${esc(a.label)}</b> <span class="muted">${a.mb}MB</span> · <a href="audio/${encodeURIComponent(a.file)}" download>내려받기</a></div>
+        <audio controls preload="none" style="width:100%" src="audio/${encodeURIComponent(a.file)}"></audio></div>`).join("");
+  })();
   // MP3 만들기 명령: 지금 고른 등급·범위·반복·예문을 그대로 담는다
   function mp3Command() {
     const o = readOpts(true);
