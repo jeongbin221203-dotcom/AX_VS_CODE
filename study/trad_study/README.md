@@ -136,3 +136,14 @@ python scripts/verify_against_flask.py   # 데이터·이미지·PDF 를 Flask �
 로그인 없는 **한 사람의 학습**을 전제로 합니다. 기록은 각 브라우저가 따로 가지며 기기 간 자동 동기화는 없습니다(백업·복원으로 옮김). 이 폴더를 인터넷에 올리면 누구나 문제·PDF를 볼 수 있습니다.
 
 기출문제와 정답표의 출처는 사용자가 제공한 국제무역사 1급 시험 PDF이며, 그 권리는 원 저작권자에게 있습니다. Noto Sans KR 글꼴의 부분집합을 포함하며 라이선스는 `static/fonts/OFL.txt`에 있습니다.
+
+## 호스팅 설정 (보안 헤더·캐시, 2026-10-10)
+
+서버가 없어도 Flask 버전과 같은 보호를 받도록 헤더 정의를 `scripts/site.py` 한 곳에 두었습니다.
+
+- **보안 헤더**: CSP(`frame-ancestors 'none'` 포함), `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: same-origin`. `<meta>`로는 지정할 수 없는 항목이 있어 호스팅 설정이 필요합니다.
+- **캐시**: `img/*`(이름이 내용 해시)는 1년 immutable, 화면·스크립트·스타일·데이터는 `no-cache`(매번 304 확인), 시험지 PDF는 매번 확인, 글꼴·아이콘은 하루.
+- **파일 버전 주소**: `index.html`의 스크립트·스타일 주소와 정답 파일(`data/answers.js?v=`)에 내용 해시가 붙습니다. 파일을 고친 뒤 `python scripts/site.py write`로 갱신합니다(`check`로 검사, `node --test`에 포함).
+- **만들어지는 파일**: `_headers`(Netlify·Cloudflare Pages), `render.yaml`(Render 정적 사이트 Blueprint) — 직접 고치지 마세요.
+- **로컬 실행**: `start.bat`/`start.sh`는 `python scripts/site.py`를 실행합니다. 같은 헤더·ETag(304)·Range(PDF)를 내고, index.html·static·data·img 밖은 404입니다.
+- 아직 배포하지 않았습니다. `file://`로 열면 헤더가 없어 `<meta>` CSP만 적용됩니다.

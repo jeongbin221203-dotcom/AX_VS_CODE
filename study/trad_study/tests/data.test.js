@@ -85,12 +85,12 @@ test('index.html: 상대 경로·필요한 스크립트·보안 설정, 정답 �
   const refs = [...html.matchAll(/(?:src|href)="([^"#][^"]*)"/g)].map(m => m[1]);
   for (const ref of refs) {
     assert.ok(!ref.startsWith('/') && !/^https?:/.test(ref), `상대 경로여야 함: ${ref}`);
-    assert.ok(fs.existsSync(at(ref)), ref);
+    assert.ok(fs.existsSync(at(ref.replace(/\?v=[0-9a-f]+$/, ''))), ref);
   }
-  const scripts = [...html.matchAll(/<script src="([^"]+)"/g)].map(m => m[1]);
+  const scripts = [...html.matchAll(/<script src="([^"?]+)(?:\?v=[0-9a-f]+)?"/g)].map(m => m[1]);
   assert.deepEqual(scripts, ['static/theme.js', 'data/catalog.js', 'static/store.js', 'static/ai.js', 'static/app.js']);
-  assert.ok(!/<script src="static\/theme\.js"[^>]*defer/.test(html), 'theme.js 는 defer 없이 먼저 실행돼야 밝은 화면이 번쩍이지 않음');
-  for (const name of ['data/catalog.js', 'static/store.js', 'static/ai.js', 'static/app.js']) assert.ok(html.includes(`<script src="${name}" defer>`), name);
+  assert.ok(!/<script src="static\/theme\.js[^"]*"[^>]*defer/.test(html), 'theme.js 는 defer 없이 먼저 실행돼야 밝은 화면이 번쩍이지 않음');
+  for (const name of ['data/catalog.js', 'static/store.js', 'static/ai.js', 'static/app.js']) assert.match(html.split(`<script src="${name}?v=`)[1] || '', /^[0-9a-f]{10}" defer>/, name);
   assert.ok(!html.includes('answers.js'), '정답 파일은 채점할 때만 불러옴');
   assert.match(html, /Content-Security-Policy[^>]*script-src 'self'[^>]*connect-src 'self' https:\/\/api\.openai\.com/);
   for (const file of ['static/app.js', 'static/ai.js', 'static/store.js', 'static/style.css'])

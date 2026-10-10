@@ -1,0 +1,62 @@
+# 이 파일은 scripts/site.py 가 만듭니다 — 직접 고치지 말고 그 파일을 고친 뒤 `python scripts/site.py write` 를 실행하세요.
+# Render 정적 사이트(Blueprint). 서비스를 만들 때 Blueprint 파일 경로를 study/trad_study/render.yaml 로 지정합니다.
+services:
+  - type: web
+    name: trad-study-html
+    runtime: static
+    rootDir: study/trad_study
+    buildCommand: "echo 정적 파일이라 빌드할 것이 없습니다"
+    staticPublishPath: .
+    autoDeploy: true
+    headers:
+      - path: "/*"
+        name: X-Content-Type-Options
+        value: "nosniff"
+      - path: "/*"
+        name: X-Frame-Options
+        value: "DENY"
+      - path: "/*"
+        name: Referrer-Policy
+        value: "same-origin"
+      - path: "/*"
+        name: Content-Security-Policy
+        value: "default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self' https://api.openai.com; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+      - path: "/img/*"
+        name: Cache-Control
+        value: "public, max-age=31536000, immutable"
+      - path: "/data/sources/*"
+        name: Cache-Control
+        value: "public, max-age=0, must-revalidate"
+      - path: "/static/fonts/*"
+        name: Cache-Control
+        value: "public, max-age=86400"
+      - path: "/static/favicon.svg"
+        name: Cache-Control
+        value: "public, max-age=86400"
+      - path: "/static/ai.js"
+        name: Cache-Control
+        value: "no-cache"
+      - path: "/static/app.js"
+        name: Cache-Control
+        value: "no-cache"
+      - path: "/static/store.js"
+        name: Cache-Control
+        value: "no-cache"
+      - path: "/static/style.css"
+        name: Cache-Control
+        value: "no-cache"
+      - path: "/static/theme.js"
+        name: Cache-Control
+        value: "no-cache"
+      - path: "/data/answers.js"
+        name: Cache-Control
+        value: "no-cache"
+      - path: "/data/catalog.js"
+        name: Cache-Control
+        value: "no-cache"
+      - path: "/"
+        name: Cache-Control
+        value: "no-cache"
+      - path: "/index.html"
+        name: Cache-Control
+        value: "no-cache"

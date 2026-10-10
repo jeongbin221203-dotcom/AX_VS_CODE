@@ -37,7 +37,7 @@ const BOOT={subjects:['무역규범','무역결제','무역계약','무역영어
 let answersLoading=null;
 function loadAnswers(){
   if(window.TRADE_ANSWERS)return Promise.resolve();
-  if(!answersLoading)answersLoading=new Promise((resolve,reject)=>{const el=document.createElement('script');el.src='data/answers.js';el.onload=resolve;el.onerror=()=>{answersLoading=null;el.remove();reject(new Error('공식 정답 파일을 불러오지 못했어요. 새로 고침한 뒤 다시 시도해 주세요.'));};document.head.append(el);});
+  if(!answersLoading)answersLoading=new Promise((resolve,reject)=>{const el=document.createElement('script');const ver=document.querySelector('meta[name="answers-version"]');el.src='data/answers.js'+(ver&&ver.content?'?v='+encodeURIComponent(ver.content):'');el.onload=resolve;el.onerror=()=>{answersLoading=null;el.remove();reject(new Error('공식 정답 파일을 불러오지 못했어요. 새로 고침한 뒤 다시 시도해 주세요.'));};document.head.append(el);});
   return answersLoading;
 }
 const officialAnswers=async qids=>{await loadAnswers();return Object.fromEntries(qids.map(q=>[q,window.TRADE_ANSWERS[q]]));};
