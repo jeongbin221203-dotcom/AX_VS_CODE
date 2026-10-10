@@ -345,9 +345,15 @@ def form_edit(key: str):
 
     title, sources = excel_forms.EXPORT_FORMS[key]
     if request.method == "POST":
+        n_cols = len(request.form.getlist("source"))
+
+        def column_values(name: str) -> list[str]:        # col·new 가 없는 폼(옛 화면)도 열이 사라지지 않게 빈 값으로 채운다
+            values = request.form.getlist(name)
+            return (values + [""] * n_cols)[:n_cols]
+
         cols = [{"source": s, "header": h, "format": fmt, "col": c, "new": n == "1"} for s, h, fmt, c, n in
-                zip(request.form.getlist("source"), request.form.getlist("header"), request.form.getlist("format"),
-                    request.form.getlist("col"), request.form.getlist("new"))]
+                zip(request.form.getlist("source"), column_values("header"), column_values("format"),
+                    column_values("col"), column_values("new"))]
         problem = excel_forms.save_export(key, cols, f_str("sheet"), _int("header_row", 1), _int("start_row", 2),
                                           f_str("start_col") or "A", request.form.get("write_header") == "1",
                                           f_str("title"), actor())
