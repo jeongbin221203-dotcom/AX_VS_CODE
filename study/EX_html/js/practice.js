@@ -9,9 +9,8 @@
   var CACHE_VER = 7;                 // 채점·지문 규칙이 바뀌면 올린다(저장해 둔 할 일·지문을 다시 만든다)
   var OFFICIAL = [
     ['c2-A', 'c2', '2급 엑셀 A형 (2024~2026 예제)'], ['c2-B', 'c2', '2급 엑셀 B형 (2024~2026 예제)'],
-    ['c1-A', 'c1', '1급 엑셀 A형 (2024~2026 예제)'], ['c1-B', 'c1', '1급 엑셀 B형 (2024~2026 예제)'],
-    ['c2-2015', 'c2', '2급 엑셀 연습 예제 (2015)'], ['c1-2015', 'c1', '1급 엑셀 연습 예제 (2015)']
-  ];
+    ['c1-A', 'c1', '1급 엑셀 A형 (2024~2026 예제)'], ['c1-B', 'c1', '1급 엑셀 B형 (2024~2026 예제)']
+  ];   // 2015 연습 예제는 정답 파일이 없어 채점할 수 없으므로 뺐다
   var LEVEL = { c1: '컴활 1급', c2: '컴활 2급' };
 
   function prefetch() { if (EX.py.available()) EX.py.ready().catch(function () {}); }
@@ -45,12 +44,12 @@
     results().forEach(function (r) { var b = best[r.key] || (best[r.key] = { score: 0, n: 0 }); b.score = Math.max(b.score, r.score); b.n++; });
     var h = '<div class="page-head"><div><h1>컴활 실기 실습</h1><p>실습 파일을 Excel 에서 풀어 올리면 <b>정답 파일과 비교</b>해 항목별로 채점합니다. 해야 할 일 목록과 힌트도 정답 파일에서 뽑아 보여 줍니다.</p></div></div>' +
       '<div id="note">' + (msg ? '<div class="alert ok-alert" role="status">' + esc(msg) + '</div>' : '') + (err ? '<div class="alert" role="alert">' + esc(err) + '</div>' : '') + '</div>';
-    h += '<section class="card"><h2>대한상공회의소 공식 예제 문제</h2><p class="small muted" style="margin-top:0">실제 시험 기출은 공개되지 않습니다. 대신 대한상공회의소가 공개한 <b>2024~2026 출제 기준 예제(1·2급 엑셀 A·B형)</b>와 2015 연습 예제가 있습니다. ' +
+    h += '<section class="card"><h2>대한상공회의소 공식 예제 문제</h2><p class="small muted" style="margin-top:0">실제 시험 기출은 공개되지 않습니다. 대신 대한상공회의소가 공개한 <b>2024~2026 출제 기준 예제(1·2급 엑셀 A·B형)</b>가 있습니다. ' +
       '<a href="https://license.korcham.net/co/examguide02Sub.do?cd=0103&mm=21&num=2941771" target="_blank" rel="noopener">공식 예제 페이지</a>에서 zip 을 받아 아래에서 고르면 이 브라우저에만 풀어 둡니다(저작권: 대한상공회의소 — 서버·저장소로 보내지 않음).</p>' +
       '<div class="controls"><label class="field" style="flex:1;min-width:240px">받은 zip 파일(여러 개 가능)<input type="file" id="zips" accept=".zip" multiple></label><button class="btn primary" id="zip-go" type="button">가져오기</button></div>' +
       '<div class="grid g3" style="margin-top:12px">' + OFFICIAL.map(function (o) {
         var it = off[o[0]], b = it && best['official:' + o[0]];
-        if (!it) return '<div class="card cat-card" style="opacity:.6"><div class="top-line"><h3 style="margin:0">' + esc(o[2]) + '</h3><span class="badge ' + o[1] + '">' + LEVEL[o[1]] + '</span></div><p>아직 가져오지 않음</p></div>';
+        if (!it) return '<div class="card cat-card pick-zip" role="button" tabindex="0" title="눌러서 받은 zip 파일 고르기" style="cursor:pointer"><div class="top-line"><h3 style="margin:0">' + esc(o[2]) + '</h3><span class="badge ' + o[1] + '">' + LEVEL[o[1]] + '</span></div><p class="muted">아직 가져오지 않음</p><div class="small"><b>눌러서 zip 파일 고르기</b></div></div>';
         return '<div class="card cat-card"><div class="top-line"><h3 style="margin:0">' + esc(o[2]) + '</h3><span class="badge ' + o[1] + '">' + LEVEL[o[1]] + '</span></div><p>' + (it.answer ? '문제지 PDF · 소스 · 정답 파일' : '문제지 PDF · 소스 파일(정답 파일 없음 — 채점 불가)') + '</p><div class="btns">' +
           (it.pdf ? '<a class="btn sm" href="' + blobUrl(it.pdf, 'application/pdf') + '" target="_blank" rel="noopener">문제지</a>' : '') +
           (it.answer ? '<a class="btn sm primary" href="#/official/' + esc(it.id) + '">풀고 채점하기</a>' : '<button class="btn sm" data-src="' + esc(it.id) + '" type="button">소스 파일</button>') +
@@ -79,6 +78,13 @@
     window.scrollTo(0, 0);
     var note = document.getElementById('note'), prog = document.getElementById('prog');
 
+    /* 안 가져온 카드를 누르면 바로 zip 고르기 창이 열리고, 고르면 곧바로 가져온다 */
+    var zipsEl = document.getElementById('zips');
+    main.querySelectorAll('.pick-zip').forEach(function (c) {
+      c.addEventListener('click', function () { zipsEl.click(); });
+      c.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); zipsEl.click(); } });
+    });
+    zipsEl.addEventListener('change', function () { if (zipsEl.files.length) document.getElementById('zip-go').click(); });
     document.getElementById('zip-go').addEventListener('click', async function () {
       var files = Array.prototype.slice.call(document.getElementById('zips').files);
       if (!files.length) { notice(note, '받은 zip 파일을 고르세요.'); return; }
@@ -276,5 +282,26 @@
     else viewList();
   }
   window.addEventListener('hashchange', route);
-  route();
+
+  /* 내 PC 용 자료(data/private.js — tools/pack_private.py 가 만듦)가 있으면 아직 넣지 않은 항목을 브라우저에 자동으로 넣는다.
+     한 번 넣은 항목은 기록해 두어, 목록에서 지운 것이 다시 살아나지 않게 한다. */
+  function unb64(s) { var bin = atob(s), u = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return u; }
+  async function seedPrivate() {
+    var P = window.EXPRIVATE;
+    if (!P || !P.items) return;
+    var rec = await EX.idb.get('meta', 'seeded').catch(function () { return null; }), done = (rec && rec.list) || [], seen = {};   // 기록은 자료와 같은 곳(IndexedDB)에 둔다 — 백업·동기화로 다른 브라우저에 번지지 않게
+    done.forEach(function (k) { seen[k] = 1; });
+    var fresh = P.items.filter(function (it) { return !seen[it.kind + ':' + it.id]; });
+    if (!fresh.length) return;
+    main.innerHTML = '<div class="card engine-status"><span class="spin"></span><span>내 자료 ' + fresh.length + '개를 이 브라우저에 넣는 중…</span></div>';
+    var file = function (f) { return f ? { name: f.name, data: unb64(f.b64) } : null; };
+    for (var i = 0; i < fresh.length; i++) {
+      var it = fresh[i];
+      await EX.idb.put('practice', { id: it.id, kind: it.kind, title: it.title, group: it.group, level: it.level, category: it.category, order: it.order,
+        practice: file(it.practice), answer: file(it.answer), pdf: file(it.pdf), extras: (it.extras || []).map(file), at: Date.now() });
+      done.push(it.kind + ':' + it.id);
+    }
+    await EX.idb.put('meta', { id: 'seeded', list: done });
+  }
+  seedPrivate().catch(function () { /* 자료를 못 넣어도 화면은 연다 */ }).then(route);
 })();

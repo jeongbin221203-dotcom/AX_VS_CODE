@@ -60,6 +60,25 @@ def bundle():
     return out.stat().st_size
 
 
+EMBED = ['pyodide.asm.wasm', 'python_stdlib.zip', 'pyodide-lock.json', 'bundle.zip']
+
+
+def embed():
+    """file:// 로 열어도 파이썬 엔진이 뜨도록, 엔진 파일을 base64 스크립트(py/embed/*.js)로도 만든다.
+    (file:// 에서는 fetch·모듈 불러오기가 막히지만 <script> 는 읽힌다. 웹 주소로 열 때는 쓰이지 않는다.)"""
+    import base64
+    d = HERE / 'py' / 'embed'
+    d.mkdir(exist_ok=True)
+    sizes = {}
+    for name in EMBED:
+        src = (HERE / 'py' / name) if name == 'bundle.zip' else (HERE / 'py' / 'pyodide' / name)
+        b64 = base64.b64encode(src.read_bytes()).decode('ascii')
+        out = d / (name + '.js')
+        out.write_text("window.EXEMBED=window.EXEMBED||{};EXEMBED[%s]='%s';\n" % (json.dumps(name), b64), encoding='ascii', newline='\n')
+        sizes[name] = out.stat().st_size
+    return sizes
+
+
 def build():
     sizes = {}
     qs = [{k: q[k] for k in ('id', 'subject', 'levels', 'topic', 'q', 'options', 'answer', 'explain')}
@@ -72,7 +91,8 @@ def build():
     funcs = content.bank()['functions']
     sizes['functions'] = js('functions', {
         'categories': [[k, n, kind, d] for k, n, kind, d in content.CATEGORIES],
-        'tracks': content.TRACKS, 'items': funcs})
+        'tracks': content.TRACKS, 'items': funcs,
+        'engine': sorted(content.fx.FUNCS)})   # 자동 완성용: 사전에 없는 지원 함수 이름까지
 
     datasets = json.loads((SRC / 'content' / 'datasets.json').read_text(encoding='utf-8'))
     probs = []
@@ -83,6 +103,7 @@ def build():
     sc = json.loads((SRC / 'content' / 'shortcuts.json').read_text(encoding='utf-8'))
     sizes['shortcuts'] = js('shortcuts', sc)
     sizes['bundle'] = bundle()
+    sizes['embed'] = embed()
     return {'written': len(qs), 'functions': len(funcs), 'problems': len(probs),
             'shortcuts': sum(len(g['items']) for g in sc['groups']), 'bytes': sizes}
 

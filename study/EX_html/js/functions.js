@@ -15,6 +15,7 @@
   }
 
   function viewList() {
+    document.title = '함수 사전 · 엑셀 연습장';
     var h = '<div class="page-head"><div><h1>함수 사전</h1><p>함수 ' + F.items.length + '개 · 형식, 인수, 예제, 컴활 범위.</p></div>' +
       '<input id="fn-search" type="search" placeholder="함수 이름·뜻 검색 (예: VLOOKUP, 합계)" aria-label="함수 검색"></div>' +
       '<div id="fn-none" class="card empty hidden">찾는 함수가 없습니다. 함수 이름의 일부나 \'합계\'·\'개수\'·\'날짜\' 같은 말로 찾아 보세요.</div>';
@@ -48,15 +49,25 @@
     names[f.name.toUpperCase()] = 1;
     (f.aliases || []).forEach(function (a) { names[a.toUpperCase()] = 1; });
     var related = P ? P.items.filter(function (p) { return (p.functions || []).some(function (n) { return names[n.toUpperCase()]; }); }) : [];
-    var h = '<p><a href="#">← 함수 사전</a></p><div class="page-head"><div><h1 style="font-family:var(--mono)">' + esc(f.name) + '</h1><p>' + esc(f.desc) + trackBadges(f) + '</p></div></div>';
-    h += '<section class="card"><h2>형식</h2><code class="answer-code">' + esc(f.syntax) + '</code>';
-    if (f.args && f.args.length) h += '<table class="t" style="margin-top:8px"><thead><tr><th>인수</th><th>설명</th></tr></thead><tbody>' +
-      f.args.map(function (a) { return '<tr><td><code>' + esc(a[0]) + '</code></td><td>' + esc(a[1]) + '</td></tr>'; }).join('') + '</tbody></table>';
+    document.title = f.name + ' · 함수 사전 · 엑셀 연습장';
+    var catName = {};
+    F.categories.forEach(function (c) { catName[c[0]] = c[1]; });
+    var h = '<div class="page-head"><div><div class="crumb"><a href="#">함수 사전</a> › ' + esc(catName[f.category] || '') + '</div>' +
+      '<h1 class="mono">' + esc(f.name) + ((f.aliases || []).length ? ' <span class="small muted">(' + esc(f.aliases.join(', ')) + ')</span>' : '') + '</h1><div>' + trackBadges(f) + '</div></div></div>';
+    h += '<div class="grid g2"><section class="card"><p style="margin-top:0">' + esc(f.desc) + '</p><div class="syntax">' + esc(f.syntax) + '</div>';
+    if (f.args && f.args.length) h += '<div class="table-wrap" style="margin-top:12px"><table class="t"><thead><tr><th>인수</th><th>설명</th></tr></thead><tbody>' +
+      f.args.map(function (a) { return '<tr><td class="nowrap"><b>' + esc(a[0]) + '</b></td><td>' + esc(a[1]) + '</td></tr>'; }).join('') + '</tbody></table></div>';
+    h += '</section><section class="card"><h2>예제</h2><div class="formula-box"><code>' + esc(f.example || '') + '</code></div>' + (f.example_desc ? '<p>' + esc(f.example_desc) + '</p>' : '');
+    if (f.tips && f.tips.length) h += '<h3>알아 둘 점</h3><ul>' + f.tips.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ul>';
+    h += '</section></div><section class="card"><h2>이 함수를 쓰는 문제 <span class="small muted">' + related.length + '</span></h2>';
+    if (related.length) h += '<ul class="list">' + related.map(function (p) {
+      var cat = p.category || p.id.replace(/-\d+$/, '');
+      return '<li><div class="grow"><a class="title" href="learn.html#/' + encodeURIComponent(p.id) + '">' + esc(p.title) + '</a><div class="small muted">' + esc(catName[cat] || cat) + ' · ' +
+        (p.type === 'formula' ? '수식' : '보기 고르기') + ' <span class="lv" title="난이도">' + '●'.repeat(p.level || 1) + '○'.repeat(3 - (p.level || 1)) + '</span></div></div><div class="nowrap">' +
+        (p.tracks || []).map(function (t) { return '<span class="badge ' + t + '">' + esc(F.tracks[t] || t) + '</span> '; }).join('') + '</div></li>';
+    }).join('') + '</ul>';
+    else h += '<div class="empty">아직 연결된 문제가 없습니다.</div>';
     h += '</section>';
-    if (f.example) h += '<section class="card"><h2>예제</h2><code class="answer-code">' + esc(f.example) + '</code>' + (f.example_desc ? '<p>' + esc(f.example_desc) + '</p>' : '') + '</section>';
-    if (f.tips && f.tips.length) h += '<section class="card"><h2>알아 두기</h2><ul style="margin:0;padding-left:18px">' + f.tips.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ul></section>';
-    if (related.length) h += '<section class="card"><h2>이 함수를 쓰는 문제 ' + related.length + '개</h2><ul style="margin:0;padding-left:18px">' +
-      related.slice(0, 20).map(function (p) { return '<li><a href="learn.html#/' + encodeURIComponent(p.id) + '">' + esc(p.title) + '</a> <span class="muted small">' + esc(p.id) + '</span></li>'; }).join('') + '</ul></section>';
     main.innerHTML = h;
     window.scrollTo(0, 0);
   }

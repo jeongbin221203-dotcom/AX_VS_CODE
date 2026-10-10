@@ -1,5 +1,5 @@
 /* 브라우저 파이썬(Pyodide) 엔진: Flask 버전의 core/ 를 그대로 돌려 엑셀 파일 채점·분석·수식 계산을 한다.
-   처음 부를 때만 약 13MB(런타임)를 읽고 이후엔 브라우저가 보관한다. http(s) 에서만 동작 — file:// 은 막혀 있다. */
+   처음 부를 때만 약 13MB(런타임)를 읽고 이후엔 브라우저가 보관한다. file:// 에서는 py/embed/*.js(base64)로 읽는다. */
 (function () {
   'use strict';
   var EX = window.EX = window.EX || {};
@@ -17,14 +17,49 @@
     });
   }
 
+  /* file:// 에서는 fetch 가 막히므로, 엔진 파일을 base64 스크립트(py/embed/*.js)로 읽어 메모리 Blob 으로 만들고
+     엔진이 같은 이름의 파일을 fetch 할 때 그 Blob 을 돌려준다. */
+  var EMBED = ['pyodide.asm.wasm', 'python_stdlib.zip', 'pyodide-lock.json', 'bundle.zip'];
+  var MIME = { wasm: 'application/wasm', js: 'text/javascript', zip: 'application/zip', json: 'application/json' };
+  var embedded = null;
+  function b64bytes(s) {
+    var bin = atob(s), u = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i);
+    return u;
+  }
+  async function useEmbedded(say) {
+    if (embedded) return embedded;
+    embedded = (async function () {
+      var urls = {};
+      for (var i = 0; i < EMBED.length; i++) {
+        var n = EMBED[i];
+        say('엔진 파일을 읽는 중… (' + (i + 1) + '/' + EMBED.length + ')');
+        await loadScript(base + 'embed/' + n + '.js');
+        urls[n] = URL.createObjectURL(new Blob([b64bytes(window.EXEMBED[n])], { type: MIME[n.split('.').pop()] }));
+        delete window.EXEMBED[n];
+      }
+      await loadScript(base + 'pyodide/pyodide.asm.js');   // import() 는 file:// 에서 막히므로 일반 스크립트로 먼저 올려 둔다
+      var orig = window.fetch;
+      window.fetch = function (input, init) {
+        var u = typeof input === 'string' ? input : (input && input.url) || String(input);
+        var name = u.split('?')[0].split('/').pop();
+        if (urls[name] && /^file:/.test(u)) return orig.call(window, urls[name]);
+        return orig.apply(window, arguments);
+      };
+      return urls;
+    })();
+    embedded.catch(function () { embedded = null; });
+    return embedded;
+  }
+
   EX.py = {
-    available: function () { return location.protocol === 'http:' || location.protocol === 'https:'; },
+    available: function () { return true; },
     ready: function (onStatus) {
       if (state) return state;
       var say = onStatus || function () {};
       state = (async function () {
-        if (!EX.py.available()) throw new Error('이 기능은 파일을 직접 연 상태(file://)에서는 쓸 수 없습니다. start.bat 으로 열거나 인터넷 주소로 접속하세요.');
         say('엔진을 불러오는 중… (처음 한 번, 약 13MB)');
+        if (location.protocol === 'file:') await useEmbedded(say);
         await loadScript(base + 'pyodide/pyodide.js');
         var py = await window.loadPyodide({ indexURL: base + 'pyodide/' });
         say('채점 프로그램을 푸는 중…');

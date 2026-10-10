@@ -143,58 +143,62 @@
     return '#/' + path + (s ? '?' + s : '');
   }
 
+  var CIRCLED = '①②③④';
+  function durText(sec) { return sec ? (sec >= 60 ? Math.floor(sec / 60) + '분' : sec + '초') : '–'; }
+
   function viewHome() {
     var lv = level(), L = D.levels[lv], st = stats(lv), weak = weakTopics(st);
     var saved = store.get('w.mock.' + lv, null);
-    var hist = store.get('w.hist', []).slice(-8).reverse();
-    var h = '<div class="page-head"><div><h1>컴활 필기</h1><p>문제 ' + D.questions.length + '개 · 연습은 한 문제씩 바로 채점하고, 모의고사는 실제 시험 구성(과목마다 ' + D.perSubject +
-      '문항)으로 풉니다. 합격 기준: 과목마다 ' + D.subjectCut + '점 이상, 평균 ' + D.averageCut + '점 이상.</p></div></div>';
+    var hist = store.get('w.hist', []).slice(-10).reverse();
+    var h = '<div class="page-head"><div><h1>컴활 필기</h1><p>' + L.name + ' — ' + L.subjects.map(function (s) { return D.subjects[s].name; }).join(' · ') +
+      '. 실제 시험처럼 과목마다 ' + D.perSubject + '문항, ' + L.minutes + '분 · 과목별 ' + D.subjectCut + '점 이상이면서 평균 ' + D.averageCut + '점 이상이면 합격. (문제 ' + D.questions.length + '개)</p></div></div>';
     h += '<div class="tabs" role="tablist" aria-label="급 선택">' + Object.keys(D.levels).map(function (k) {
       return '<button class="tab' + (k === lv ? ' on' : '') + '" role="tab" aria-selected="' + (k === lv) + '" data-level="' + k + '">컴활 ' + D.levels[k].name + '</button>';
     }).join('') + '</div>';
 
-    h += '<section class="card"><div class="row spread"><div><h2 style="margin:0">모의고사 (' + L.name + ' · ' + L.minutes + '분)</h2><p class="muted small" style="margin:2px 0 0">' +
-      L.subjects.map(function (s) { return D.subjects[s].name; }).join(' · ') + ' 각 ' + D.perSubject + '문항, 최근 푼 문제는 되도록 피해서 뽑습니다.</p></div><div class="row">';
+    h += '<section class="card"><div class="row spread"><div><h2 style="margin:0">모의고사 (' + L.name + ' · ' + L.subjects.length * D.perSubject + '문항 · ' + L.minutes + '분)</h2></div><div class="row">';
     if (saved) h += '<a class="btn primary" href="' + link('mock/' + lv, { resume: 1 }) + '">이어서 풀기</a><a class="btn" href="' + link('mock/' + lv, { 'new': 1 }) + '">새 문제지로 시작</a>';
-    else h += '<a class="btn primary" href="' + link('mock/' + lv, {}) + '">모의고사 시작</a>';
-    h += '</div></div></section>';
+    else h += '<a class="btn primary" href="' + link('mock/' + lv, {}) + '">' + L.name + ' 모의고사 시작 (' + L.subjects.length * D.perSubject + '문항 · ' + L.minutes + '분)</a>';
+    h += '</div></div><p class="small muted">최근에 푼 문제는 되도록 빼고, 과목마다 문제 은행의 주제 비율대로 ' + D.perSubject + '문항씩 섞어 뽑습니다. 풀던 문제지는 새로 고쳐도 이어지고, 시간이 다 되면 자동 제출됩니다. 답안을 내면 과목별 점수·과락·해설을 보여 줍니다.</p>';
+    if (hist.length) {
+      h += '<div class="table-wrap"><table class="t"><thead><tr><th>날짜</th><th>급</th><th class="r">평균</th><th>결과</th><th class="r">시간</th><th></th></tr></thead><tbody>' +
+        hist.map(function (r) {
+          return '<tr><td>' + EX.fmtDate(r.at) + '</td><td>' + esc(D.levels[r.level] ? D.levels[r.level].name : r.level) + '</td><td class="r">' + r.average + '</td><td>' + (r.passed ? '합격' : '불합격') +
+            '</td><td class="r">' + durText(r.seconds) + '</td><td>' + (r.rows ? '<a href="' + link('result/' + r.at, {}) + '">결과</a>' : '') + '</td></tr>';
+        }).join('') + '</tbody></table></div>';
+    }
+    h += '</section>';
 
     if (weak.length) {
       h += '<section class="card"><div class="row spread"><h2 style="margin:0">약점 주제</h2><a class="btn primary" href="' + link('practice', { level: lv, mode: 'weak' }) + '">약점 주제 20문항 풀기</a></div>' +
-        '<p class="muted small">마지막에 푼 결과 기준으로 맞힌 비율이 ' + Math.round(WEAK_BELOW * 100) + '% 미만인 주제입니다(주제마다 ' + WEAK_MIN + '문제 이상 푼 경우). 틀린 문제부터 나옵니다.</p><ul style="margin:0;padding-left:18px">' +
+        '<p class="muted small">마지막에 푼 결과 기준으로 맞힌 비율이 ' + Math.round(WEAK_BELOW * 100) + '% 미만인 주제입니다(주제마다 ' + WEAK_MIN + '문제 이상 푼 경우). 틀린 문제부터 나옵니다.</p><ul class="list">' +
         weak.slice(0, 6).map(function (w) {
-          return '<li><a href="' + link('practice', { level: lv, subject: w.subject, topic: w.name, mode: 'weak' }) + '">' + esc(w.name) + '</a> <span class="muted small">' +
-            esc(D.subjects[w.subject].name) + ' · ' + Math.round(w.acc * 100) + '% (' + w.done + '문제)</span></li>';
+          return '<li><div class="grow"><a class="title" href="' + link('practice', { level: lv, subject: w.subject, topic: w.name, mode: 'weak' }) + '">' + esc(w.name) + '</a><div class="small muted">' + esc(L.name) + ' · ' +
+            esc(D.subjects[w.subject].name) + '</div></div><span class="nowrap small bad-text"><b>' + Math.round(w.acc * 100) + '%</b> <span class="muted">(' + w.done + '문제)</span></span></li>';
         }).join('') + '</ul></section>';
     }
 
     h += '<div class="grid g3">';
     L.subjects.forEach(function (s) {
-      var x = st[s], pct = x.total ? Math.round(100 * x.done / x.total) : 0, acc = x.done ? Math.round(100 * x.ok / x.done) : 0;
-      h += '<section class="card"><h2>' + esc(x.name) + '</h2><div class="stat">' + x.done + '<span class="muted small" style="font-weight:400"> / ' + x.total + '문제 푼 것</span></div>' +
-        '<div class="meter" aria-hidden="true"><i style="width:' + pct + '%"></i></div><p class="muted small" style="margin-top:6px">마지막 풀이 정답률 ' + (x.done ? acc + '%' : '-') + '</p>' +
-        '<div class="row" style="margin-bottom:10px"><a class="btn sm primary" href="' + link('practice', { level: lv, subject: s, mode: 'new' }) + '">새 문제 20</a>' +
-        '<a class="btn sm" href="' + link('practice', { level: lv, subject: s, mode: 'wrong' }) + '">틀린 문제 다시</a>' +
+      var x = st[s], pct = x.total ? Math.round(100 * x.done / x.total) : 0, wrong = x.done - x.ok;
+      h += '<section class="card"><div class="row spread"><h2 style="margin:0">' + esc(x.name) + '</h2><span class="small muted">' + x.done + '/' + x.total + '</span></div>' +
+        '<div class="meter" aria-hidden="true" style="margin-top:8px"><i style="width:' + pct + '%"></i></div><p class="muted small" style="margin:6px 0">맞힘 ' + x.ok + ' · 틀림 ' + wrong + '</p>' +
+        '<div class="row" style="margin-bottom:10px"><a class="btn sm primary" href="' + link('practice', { level: lv, subject: s, mode: 'new' }) + '">' + D.perSubject + '문항 풀기</a>' +
+        (wrong ? '<a class="btn sm" href="' + link('practice', { level: lv, subject: s, mode: 'wrong' }) + '">틀린 문제 ' + wrong + '</a>' : '') +
         '<a class="btn sm" href="' + link('practice', { level: lv, subject: s, mode: 'all' }) + '">전체 섞기</a></div>' +
-        '<table class="t"><tbody>' + x.topics.map(function (t) {
-          return '<tr><td><a href="' + link('practice', { level: lv, subject: s, topic: t.name, mode: 'new' }) + '">' + esc(t.name) + '</a></td><td class="muted small" style="text-align:right">' +
-            (t.done ? t.ok + '/' + t.done + ' · ' : '') + t.total + '문제</td></tr>';
+        '<table class="t"><thead><tr><th>주제</th><th class="r">푼 문제</th><th class="r">정답률</th></tr></thead><tbody>' + x.topics.map(function (t) {
+          return '<tr><td><a href="' + link('practice', { level: lv, subject: s, topic: t.name, mode: 'new' }) + '">' + esc(t.name) + '</a></td><td class="r">' + t.done + '/' + t.total +
+            '</td><td class="r">' + (t.done ? Math.round(100 * t.ok / t.done) + '%' : '–') + '</td></tr>';
         }).join('') + '</tbody></table></section>';
     });
     h += '</div>';
-
-    h += '<section class="card"><h2>최근 모의고사</h2>' + (hist.length ? '<table class="t"><thead><tr><th>날짜</th><th>급</th><th>평균</th><th>결과</th><th>걸린 시간</th></tr></thead><tbody>' +
-      hist.map(function (r) {
-        return '<tr><td>' + EX.fmtDate(r.at) + '</td><td>' + esc(D.levels[r.level] ? D.levels[r.level].name : r.level) + '</td><td>' + r.average + '점</td><td>' +
-          (r.passed ? '<span class="badge ok">합격 기준 충족</span>' : '<span class="badge bad">미달</span>') + '</td><td>' + EX.fmtTime(r.seconds || 0) + '</td></tr>';
-      }).join('') + '</tbody></table>' : '<p class="muted">아직 푼 모의고사가 없습니다.</p>') + '</section>';
     setMain(h);
     main.querySelectorAll('[data-level]').forEach(function (b) {
       b.addEventListener('click', function () { store.set('w.level', b.getAttribute('data-level')); viewHome(); });
     });
   }
 
-  function optionButtons(q, prefix) {
+  function optionButtons(q) {
     return '<div class="opts" role="group" aria-label="보기">' + q.options.map(function (o, i) {
       return '<button type="button" class="opt" data-q="' + q.id + '" data-i="' + i + '"><span class="n">' + (i + 1) + '</span><span>' + esc(o) + '</span></button>';
     }).join('') + '</div>';
@@ -218,24 +222,27 @@
     return '<div class="sheet-wrap"><table class="sheet"><thead><tr>' + rows[0].map(function (c) { return '<th>' + esc(c) + '</th>'; }).join('') + '</tr></thead><tbody>' +
       rows.slice(1).map(function (r) { return '<tr>' + r.map(function (c) { return '<td>' + esc(c) + '</td>'; }).join('') + '</tr>'; }).join('') + '</tbody></table></div>';
   }
+  function crumb(lv) { return '<div class="crumb"><a href="#/">컴활 필기 ' + esc(D.levels[lv].name) + '</a> ›</div>'; }
 
   function viewPractice(o) {
     var lv = D.levels[o.level] ? o.level : level();
+    if (o.subject && D.subjects[o.subject] && D.levels[lv].subjects.indexOf(o.subject) < 0) lv = 'c1';   // 2급에서 데이터베이스(1급 과목)를 열면 1급으로
     var mode = ['new', 'wrong', 'all', 'weak'].indexOf(o.mode) >= 0 ? o.mode : 'new';
     var sel = pickPractice(lv, o.subject, o.topic, mode, 20, Math.random);
     var qs = sel.qs;
-    var title = (o.subject ? D.subjects[o.subject].name : '전 과목') + (o.topic ? ' · ' + o.topic : '') +
+    var title = (o.subject && D.subjects[o.subject] ? D.subjects[o.subject].name : '전 과목') + (o.topic ? ' · ' + o.topic : '') +
       ({ wrong: ' · 틀린 문제 다시', weak: ' · 약점 주제' }[sel.mode] || '');
     if (!qs.length) {
-      setMain('<div class="card empty">' + (mode === 'wrong' ? '틀린 문제가 없습니다. 먼저 문제를 풀어 보세요.' : '풀 문제가 없습니다.') + '<p><a class="btn" href="#/">처음으로</a></p></div>');
+      setMain('<div class="page-head"><div>' + crumb(lv) + '<h1>' + esc(title) + '</h1></div></div><div class="card empty">' + (mode === 'wrong' ? '틀린 문제가 없습니다.' : '문제가 없습니다.') + '<p><a class="btn" href="#/">처음으로</a></p></div>');
       return;
     }
-    var h = '<div class="page-head"><div><h1>' + esc(title) + '</h1><p class="muted">컴활 ' + D.levels[lv].name + ' · 보기를 누르면 바로 채점됩니다. 키보드 1~4로도 답할 수 있습니다.</p></div>' +
-      '<div class="row"><a class="btn" href="#/">그만하기</a></div></div>' +
+    var h = '<div class="page-head"><div>' + crumb(lv) + '<h1>' + esc(title) + '</h1><p class="muted">' + qs.length + '문항 · 보기를 누르면 바로 채점하고 해설을 보여 줍니다. 키보드: 1~4 로 고르기.</p></div>' +
+      '<div class="row"><a class="btn" href="' + link('practice', { level: lv, subject: o.subject || '', topic: o.topic || '', mode: mode, t: Date.now() }) + '">다른 문제로</a><a class="btn" href="#/">그만하기</a></div></div>' +
       '<div class="stickybar row spread"><span id="p-prog">0 / ' + qs.length + '문제</span><span id="p-score" class="muted">정답 0</span></div><div id="p-list">';
     qs.forEach(function (q, i) {
-      h += '<article class="q" id="q-' + q.id + '" data-id="' + q.id + '"><div class="row spread" style="margin-bottom:6px"><div><span class="qno">' + (i + 1) + '.</span><span class="badge">' + esc(q.topic) + '</span></div><span class="muted small">' + q.id + '</span></div>' +
-        textOf(q) + optionButtons(q) + '<div class="explain hidden" aria-live="polite"></div></article>';
+      h += '<article class="q" id="q-' + q.id + '" data-id="' + q.id + '"><div class="row spread" style="margin-bottom:6px"><div><span class="qno">' + (i + 1) + '.</span><span class="badge">' + esc(D.subjects[q.subject].name) + ' · ' + esc(q.topic) + '</span>' +
+        (q.levels.length === 1 && q.levels[0] === 'c1' ? ' <span class="badge c1">1급</span>' : '') + '</div><span class="muted small">' + q.id + '</span></div>' +
+        textOf(q) + optionButtons(q) + '<div class="explain hidden" role="status" aria-live="polite" tabindex="-1"></div></article>';
     });
     h += '</div><div id="p-end" class="card hidden"></div>';
     setMain(h);
@@ -255,7 +262,7 @@
       });
       var ex = card.querySelector('.explain');
       ex.className = 'explain ' + (ok ? 'ok' : 'bad');
-      ex.innerHTML = '<b>' + (ok ? '정답입니다.' : '오답입니다. 정답은 ' + (q.answer + 1) + '번') + '</b>\n' + esc(q.explain);
+      ex.innerHTML = '<b>' + (ok ? '정답입니다.' : '오답입니다. 정답은 ' + CIRCLED.charAt(q.answer) + '번') + '</b>\n' + esc(q.explain);
       document.getElementById('p-prog').textContent = answered + ' / ' + qs.length + '문제';
       document.getElementById('p-score').textContent = '정답 ' + right;
       if (answered === qs.length) finish();
@@ -268,7 +275,8 @@
     function finish() {
       var end = document.getElementById('p-end');
       end.classList.remove('hidden');
-      end.innerHTML = '<h2>끝났습니다</h2><p class="stat">' + right + ' / ' + qs.length + '<span class="muted small" style="font-weight:400"> 정답</span></p><div class="row">' +
+      end.innerHTML = '<h2>끝났습니다</h2><p class="stat">' + right + ' / ' + qs.length + '<span class="muted small" style="font-weight:400"> 정답 (' + Math.round(100 * right / qs.length) + '점)</span></p>' +
+        '<p class="small muted">틀린 문제는 [컴활 필기] 화면의 "틀린 문제"에서 다시 풀 수 있습니다.</p><div class="row">' +
         '<a class="btn primary" href="' + link('practice', { level: lv, subject: o.subject || '', topic: o.topic || '', mode: mode, t: Date.now() }) + '">같은 조건으로 20문제 더</a>' +
         '<a class="btn" href="' + link('practice', { level: lv, subject: o.subject || '', topic: o.topic || '', mode: 'wrong' }) + '">틀린 문제 다시</a><a class="btn" href="#/">처음으로</a></div>';
       end.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -290,6 +298,9 @@
     };
   }
 
+  var leaveGuard = null;
+  function clearLeaveGuard() { if (leaveGuard) { window.removeEventListener('beforeunload', leaveGuard); leaveGuard = null; } }
+
   function viewMock(lv, opts) {
     if (!D.levels[lv]) { location.hash = '#/'; return; }
     var L = D.levels[lv], key = 'w.mock.' + lv;
@@ -299,25 +310,31 @@
       var okPaper = s.qids && s.qids.length === D.perSubject * L.subjects.length && s.qids.every(function (id) { return byId[id] && byId[id].levels.indexOf(lv) >= 0; });
       if (!okPaper) s = null;
     }
-    if (s && Date.now() - s.start > L.minutes * 60000 + 5000 && !opts.resume) s = null;
+    var gradeNow = false;
+    if (s && Date.now() - s.start > L.minutes * 60000 + 5000 && !opts.resume) {   // 시간이 지난 채 다시 연 문제지
+      if (window.confirm('이전에 풀던 모의고사는 시간이 끝났습니다.\n[확인] 새 문제지로 시작  /  [취소] 그 문제지를 지금 제출해 채점')) s = null;
+      else gradeNow = true;
+    }
     if (!s) {
       s = { qids: buildMock(lv, Math.random, store.get('w.recent', [])), answers: {}, start: Date.now() };
       store.set(key, s);
     }
     var left = function () { return L.minutes * 60 - (Date.now() - s.start) / 1000; };
-    var h = '<div class="page-head"><div><h1>컴활 ' + L.name + ' 모의고사</h1><p class="muted">' + L.subjects.length + '과목 ' + s.qids.length + '문항 · 제한 시간 ' + L.minutes +
-      '분. 답은 자동으로 저장되어 새로 고쳐도 이어서 풀 수 있습니다.</p></div></div>' +
+    var h = '<div class="page-head"><div>' + crumb(lv) + '<h1>필기 모의고사 ' + L.name + '</h1><p class="muted">' + L.subjects.length + '과목 ' + s.qids.length + '문항 · ' + L.minutes + '분 · 과목별 ' + D.subjectCut + '점 이상, 평균 ' + D.averageCut +
+      '점 이상 합격 · 고른 답과 시간은 이 브라우저에 저장되어 새로 고쳐도 이어지며, 시간이 다 되면 자동으로 제출합니다.</p></div></div>' +
       '<div class="stickybar row spread"><span>남은 시간 <span class="timer" id="m-time">--:--</span></span><span id="m-prog" class="muted"></span>' +
-      '<button class="btn primary" id="m-submit" type="button">제출하고 채점</button></div>';
+      '<span class="row"><a class="btn ghost" href="' + link('mock/' + lv, { 'new': 1 }) + '" id="m-new">새 문제지</a><button class="btn primary" id="m-submit" type="button">답안 제출·채점</button></span></div>';
     var n = 0;
-    L.subjects.forEach(function (sub) {
-      h += '<h2 style="margin-top:18px">' + esc(D.subjects[sub].name) + '</h2>';
-      s.qids.filter(function (id) { return byId[id].subject === sub; }).forEach(function (id, i) {
+    L.subjects.forEach(function (sub, si) {
+      h += '<h2 style="margin-top:18px">' + (si + 1) + '과목 ' + esc(D.subjects[sub].name) + '</h2>';
+      s.qids.filter(function (id) { return byId[id].subject === sub; }).forEach(function (id) {
         var q = byId[id]; n++;
-        h += '<article class="q" data-id="' + id + '"><div style="margin-bottom:6px"><span class="qno">' + (i + 1) + '.</span><span class="badge">' + esc(q.topic) + '</span></div>' + textOf(q) + optionButtons(q) + '</article>';
+        h += '<article class="q" data-id="' + id + '"><div style="margin-bottom:6px"><span class="qno">' + n + '.</span><span class="badge">' + esc(q.topic) + '</span></div>' + textOf(q) + optionButtons(q) + '</article>';
       });
     });
     setMain(h);
+    clearLeaveGuard();
+    if (opts['new'] || opts.resume) { try { history.replaceState(null, '', location.pathname + location.search + '#/mock/' + lv); } catch (e) { /* 무시 */ } }   // 새로 고쳐도 또 새 문제지가 되지 않게
     function paint() {
       var cnt = 0;
       main.querySelectorAll('.opt').forEach(function (b) {
@@ -325,7 +342,7 @@
         b.classList.toggle('sel', s.answers[id] === i);
       });
       Object.keys(s.answers).forEach(function (id) { if (byId[id] && s.qids.indexOf(id) >= 0) cnt++; });
-      document.getElementById('m-prog').textContent = cnt + ' / ' + s.qids.length + ' 답함';
+      document.getElementById('m-prog').textContent = cnt + ' / ' + s.qids.length + ' 문항 답함';
     }
     paint();
     main.onclick = function (ev) {
@@ -339,8 +356,9 @@
     function submit(auto) {
       if (submitted) return;
       var un = s.qids.filter(function (id) { return typeof s.answers[id] !== 'number'; }).length;
-      if (!auto && un && !window.confirm('아직 답하지 않은 문제가 ' + un + '개 있습니다. 제출할까요?')) return;
+      if (!auto && un && !window.confirm('아직 ' + un + '문항을 풀지 않았습니다. 그래도 제출할까요?')) return;
       submitted = true;
+      clearLeaveGuard();
       var res = grade(s.qids, s.answers);
       res.level = lv; res.at = Date.now(); res.seconds = Math.min(L.minutes * 60, Math.round((Date.now() - s.start) / 1000)); res.auto = !!auto;
       var a = att();                       // 안 푼 문제도 오답으로 기록(어떤 주제가 약한지 보이도록)
@@ -351,13 +369,19 @@
       store.set('w.att', a);
       store.set('w.recent', store.get('w.recent', []).concat(s.qids).slice(-RECENT_MAX));
       var hist = store.get('w.hist', []);
-      hist.push({ at: res.at, level: lv, average: res.average, passed: res.passed, seconds: res.seconds, subjects: res.subjects });
+      hist.push({ at: res.at, level: lv, average: res.average, passed: res.passed, seconds: res.seconds, auto: res.auto, subjects: res.subjects, rows: res.rows });
       store.set('w.hist', hist.slice(-30));
       store.remove(key);
       store.set('w.last', res);
-      location.hash = '#/result';
+      location.hash = '#/result/' + res.at;
     }
     document.getElementById('m-submit').addEventListener('click', function () { submit(false); });
+    document.getElementById('m-new').addEventListener('click', function (ev) {
+      if (Object.keys(s.answers).length && !window.confirm('지금 문제지의 답을 버리고 새 문제지를 받을까요?')) { ev.preventDefault(); return; }
+      clearLeaveGuard();
+    });
+    leaveGuard = function (ev) { if (!submitted && Object.keys(s.answers).length) { ev.preventDefault(); ev.returnValue = ''; } };
+    window.addEventListener('beforeunload', leaveGuard);   // 답을 고른 채 창을 닫으면 한 번 묻기
     function tick() {
       var t = left(), el = document.getElementById('m-time');
       if (!el) { stopTimer(); return; }
@@ -367,41 +391,52 @@
     }
     tick();
     timer = setInterval(tick, 1000);
+    if (gradeNow) { stopTimer(); submit(true); }
   }
 
-  function viewResult() {
-    var res = store.get('w.last', null);
-    if (!res) { location.hash = '#/'; return; }
+  function viewResult(at) {
+    var res = at ? store.get('w.hist', []).filter(function (r) { return r.at === at; })[0] : store.get('w.last', null);
+    if (!res || !res.rows) {
+      setMain('<div class="card empty">채점 결과를 찾을 수 없습니다(오래된 기록은 점수만 남습니다).<p><a class="btn" href="#/">처음으로</a></p></div>');
+      return;
+    }
     var L = D.levels[res.level] || { name: '' };
-    var h = '<div class="page-head"><div><h1>채점 결과 · 컴활 ' + esc(L.name) + '</h1><p class="muted">' + EX.fmtDate(res.at) + ' · 걸린 시간 ' + EX.fmtTime(res.seconds) +
-      (res.auto ? ' (시간이 끝나 자동 제출)' : '') + '</p></div><div class="row"><a class="btn primary" href="#/">처음으로</a><a class="btn" href="' + link('mock/' + res.level, { 'new': 1 }) + '">새 모의고사</a></div></div>';
+    var h = '<div class="page-head"><div>' + crumb(res.level) + '<h1>필기 ' + esc(L.name) + ' 결과 — ' + (res.passed ? '합격' : '불합격') + '</h1><p class="muted">' + EX.fmtDate(res.at) + ' · 걸린 시간 ' + EX.fmtTime(res.seconds || 0) +
+      (res.auto ? ' (시간이 끝나 자동 제출)' : '') + ' · 평균 ' + res.average + '점</p></div><div class="row"><a class="btn primary" href="' + link('mock/' + res.level, { 'new': 1 }) + '">새 모의고사</a>' +
+      '<a class="btn" href="' + link('practice', { level: res.level, mode: 'wrong' }) + '">틀린 문제 다시</a></div></div>';
+    h += '<div class="grid g3">' + res.subjects.map(function (x) {
+      return '<section class="card"><div class="row spread"><h2 style="margin:0">' + esc(x.name) + '</h2><b class="' + (x.cut ? 'ok-text' : 'bad-text') + '">' + x.score + '점</b></div>' +
+        '<p class="small muted">' + x.ok + '/' + x.n + ' 정답 · ' + (x.cut ? '통과' : '과락(' + D.subjectCut + '점 미만)') + '</p><div class="meter" aria-hidden="true"><i style="width:' + x.score + '%"></i></div></section>';
+    }).join('') + '</div>';
     h += '<section class="card"><div class="row spread"><div><span class="stat">' + res.average + '점</span> <span class="muted">평균</span></div>' +
       (res.passed ? '<span class="badge ok">합격 기준 충족</span>' : '<span class="badge bad">합격 기준 미달</span>') + '</div>' +
-      '<table class="t" style="margin-top:8px"><thead><tr><th>과목</th><th>맞힌 수</th><th>점수</th><th>과락(' + D.subjectCut + '점)</th></tr></thead><tbody>' +
-      res.subjects.map(function (x) {
-        return '<tr><td>' + esc(x.name) + '</td><td>' + x.ok + ' / ' + x.n + '</td><td>' + x.score + '점</td><td>' + (x.cut ? '<span class="badge ok">통과</span>' : '<span class="badge bad">과락</span>') + '</td></tr>';
-      }).join('') + '</tbody></table><p class="muted small" style="margin-top:8px">합격 기준: 과목마다 ' + D.subjectCut + '점 이상이고 평균 ' + D.averageCut + '점 이상입니다.</p></section>';
-    var wrong = res.rows.filter(function (r) { return !r.ok; });
-    h += '<h2>틀린 문제 ' + wrong.length + '개</h2>' + (wrong.length ? '' : '<div class="card empty">모두 맞혔습니다.</div>');
-    wrong.forEach(function (r, i) {
+      '<p class="muted small" style="margin:6px 0 0">합격 기준: 과목마다 ' + D.subjectCut + '점 이상이고 평균 ' + D.averageCut + '점 이상입니다.</p></section>';
+    h += '<section class="card"><div class="row spread"><h2 style="margin:0">문항별 해설</h2><label class="small"><input type="checkbox" id="wrong-only"> 틀린 문제만</label></div>';
+    res.rows.forEach(function (r, i) {
       var q = byId[r.id];
       if (!q) return;
-      h += '<article class="q"><div class="row spread" style="margin-bottom:6px"><div><span class="qno">' + (i + 1) + '.</span><span class="badge">' + esc(D.subjects[q.subject].name) + ' · ' + esc(q.topic) + '</span></div><span class="muted small">' + q.id + '</span></div>' +
+      h += '<article class="q" data-ok="' + (r.ok ? 1 : 0) + '" style="border-left:3px solid ' + (r.ok ? 'var(--ok)' : 'var(--bad)') + ';padding-left:10px"><div class="row spread" style="margin-bottom:6px"><div><span class="qno">' + (i + 1) + '.</span> ' + (r.ok ? '○' : '✕') +
+        ' <span class="badge">' + esc(D.subjects[q.subject].name) + ' · ' + esc(q.topic) + '</span></div><span class="muted small">' + q.id + '</span></div>' +
         textOf(q) + '<div class="opts">' + q.options.map(function (o, k) {
-          var cls = k === q.answer ? ' right' : (k === r.picked ? ' wrong' : '');
-          return '<div class="opt' + cls + '"><span class="n">' + (k + 1) + '</span><span>' + esc(o) + (k === r.picked ? ' <span class="muted small">(내 답)</span>' : '') + '</span></div>';
-        }).join('') + '</div>' + (r.picked === null ? '<p class="muted small">답하지 않았습니다.</p>' : '') + '<div class="explain">' + esc(q.explain) + '</div></article>';
+          var cls = k === q.answer ? ' right' : (k === r.picked && !r.ok ? ' wrong' : '');
+          return '<div class="opt' + cls + '"><span class="n">' + (k + 1) + '</span><span>' + esc(o) + (k === r.picked ? ' <span class="muted small">← 고른 답</span>' : '') + '</span></div>';
+        }).join('') + '</div>' + (r.picked === null ? '<p class="small bad-text">답을 고르지 않았습니다.</p>' : '') + '<div class="explain">' + esc(q.explain) + '</div></article>';
     });
+    h += '</section>';
     setMain(h);
+    document.getElementById('wrong-only').addEventListener('change', function (ev) {
+      main.querySelectorAll('article[data-ok="1"]').forEach(function (x) { x.classList.toggle('hidden', ev.target.checked); });
+    });
   }
 
   function route() {
     document.onkeydown = null;
     main.onclick = null;
+    clearLeaveGuard();
     var r = parseHash();
     if (r.path === 'practice') viewPractice({ level: r.q.level, subject: r.q.subject, topic: r.q.topic, mode: r.q.mode });
     else if (r.path.indexOf('mock/') === 0) viewMock(r.path.slice(5), { 'new': r.q['new'] === '1', resume: r.q.resume === '1' });
-    else if (r.path === 'result') viewResult();
+    else if (r.path === 'result' || r.path.indexOf('result/') === 0) viewResult(Number(r.path.slice(7)) || 0);
     else viewHome();
   }
   window.addEventListener('hashchange', route);

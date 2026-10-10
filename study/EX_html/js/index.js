@@ -12,7 +12,38 @@
   var pct = function (a, b) { return b ? Math.round(100 * a / b) : 0; };
 
   var h = '<div class="page-head"><div><h1>엑셀 연습장 <span class="badge">HTML 버전</span></h1><p>서버 없이 파일만으로 열리는 학습 도구입니다. 이 폴더를 그대로 열거나 정적 호스팅에 올려도 동작합니다.</p></div></div>';
-  h += '<div class="grid g3">' +
+  /* 학습 대시보드(문제 풀기 기록) */
+  var esc = EX.esc, track = (EX.store.get('l.filter', {}) || {}).track || '';
+  var D = EX.learn.dashboard(track), nxtId = EX.learn.nextProblem('', track);
+  h = h.replace('</div></div>', '</div><div class="row"><a class="btn" href="learn.html#/review">오답 노트</a><a class="btn primary" href="learn.html#/' + (nxtId ? encodeURIComponent(nxtId) : '') + '">' + (D.tried ? '이어서 풀기' : '첫 문제 풀기') + ' →</a></div></div>');
+  h += '<section class="g4" aria-label="요약 지표">' +
+    '<div class="kpi"><div class="label">맞힌 문제</div><div class="value">' + D.solved + '<small> / ' + D.total + '</small></div><div class="sub">' + pct(D.solved, D.total) + '% 완료</div></div>' +
+    '<div class="kpi"><div class="label">첫 시도 정답률</div><div class="value">' + (D.acc === null ? '–' : D.acc + '<small>%</small>') + '</div><div class="sub">처음 풀 때 맞힌 비율</div></div>' +
+    '<div class="kpi"><div class="label">오늘 푼 횟수</div><div class="value">' + D.today + '</div><div class="sub">다시 볼 문제 ' + D.wrong_count + '개</div></div>' +
+    '<div class="kpi"><div class="label">연속 학습</div><div class="value">' + D.streak + '<small>일</small></div><div class="sub">하루 한 문제라도 이어 가기</div></div></section>';
+  h += '<div class="grid g3" style="margin-top:14px"><section class="card span2"><h2>최근 14일 풀이</h2><div class="chart" data-chart="daily" data-classes="ok,bad"></div></section>' +
+    '<section class="card"><h2>범위별 진도</h2>' + D.tracks.map(function (t) {
+      return '<div style="margin:10px 0"><div class="small" style="display:flex;justify-content:space-between"><span>' + esc(t.name) + '</span><span class="muted">' + t.solved + ' / ' + t.total + '</span></div>' +
+        '<div class="meter" role="meter" aria-valuenow="' + t.pct + '" aria-valuemin="0" aria-valuemax="100" aria-label="' + esc(t.name) + ' 진도"><i style="width:' + t.pct + '%"></i></div></div>';
+    }).join('') + (D.weak.length ? '<h3 style="margin-top:16px">보강하면 좋은 분류</h3><ul class="list">' + D.weak.map(function (c) {
+      return '<li><div class="grow"><a href="learn.html#/cat/' + c.key + '">' + esc(c.name) + '</a></div><span class="small muted">정답률 ' + c.acc + '%</span></li>';
+    }).join('') + '</ul>' : '') + '</section></div>';
+  h += '<div class="grid g2" style="margin-top:14px"><section class="card"><h2>분류별 진도 <span class="small muted" style="font-weight:400">맞힌 문제 / 전체 · 첫 시도 정답률</span></h2>' +
+    (D.cats.length ? D.cats.map(function (c) {
+      return '<div class="prog-row"><a href="learn.html#/cat/' + c.key + '">' + esc(c.name) + '</a><div class="meter" aria-hidden="true"><i style="width:' + c.pct + '%"></i></div>' +
+        '<span class="n">' + c.solved + '/' + c.total + '</span><span class="n acc">' + (c.acc === null ? '–' : c.acc + '%') + '</span></div>';
+    }).join('') : '<div class="empty">문제가 없습니다.</div>') + '</section><div class="stack"><section class="card"><h2>다시 볼 문제</h2>' +
+    (D.wrong_now.length ? '<ul class="list">' + D.wrong_now.map(function (p) {
+      return '<li><span class="st bad" title="틀림">✕</span><div class="grow"><a class="title" href="learn.html#/' + encodeURIComponent(p.id) + '">' + esc(p.title) + '</a></div></li>';
+    }).join('') + '</ul>' + (D.wrong_count > D.wrong_now.length ? '<p class="small"><a href="learn.html#/review">오답 노트에서 ' + D.wrong_count + '개 모두 보기 →</a></p>' : '') : '<div class="empty">마지막에 틀린 문제가 없습니다.</div>') + '</section></div></div>';
+  if (D.recent.length) {
+    h += '<section class="card" style="margin-top:14px"><h2>최근 풀이</h2><div class="table-wrap"><table class="t"><thead><tr><th>시각</th><th>문제</th><th>분류</th><th>결과</th></tr></thead><tbody>' +
+      D.recent.map(function (r) {
+        return '<tr><td class="nowrap muted">' + r.at + '</td><td><a href="learn.html#/' + encodeURIComponent(r.pid) + '">' + esc(r.p.title) + '</a></td><td>' + esc(EX.learn.catName(r.p)) + '</td><td>' +
+          (r.ok ? '<span class="st ok">✓</span> 정답' : '<span class="st bad">✕</span> 오답') + '</td></tr>';
+      }).join('') + '</tbody></table></div></section>';
+  }
+  h += '<h2 style="margin-top:22px">시험·참고 자료</h2><div class="grid g3">' +
     '<section class="card"><h2>컴활 필기</h2><div class="stat">' + wDone + '<span class="muted small" style="font-weight:400"> / ' + W.questions.length + '문제</span></div><div class="meter" aria-hidden="true"><i style="width:' + pct(wDone, W.questions.length) + '%"></i></div>' +
     '<p class="muted small" style="margin-top:6px">마지막 풀이 정답 ' + wOk + '개' + (last ? ' · 최근 모의고사 ' + last.average + '점 (' + (last.passed ? '합격 기준 충족' : '미달') + ')' : '') + '</p><a class="btn primary" href="written.html">필기 연습·모의고사</a></section>' +
     '<section class="card"><h2>문제 풀기</h2><div class="stat">' + lDone + '<span class="muted small" style="font-weight:400"> / ' + P.items.length + '문제</span></div><div class="meter" aria-hidden="true"><i style="width:' + pct(lDone, P.items.length) + '%"></i></div>' +
@@ -34,7 +65,7 @@
 
   h += '<section class="card"><h2>이 HTML 버전에서 달라지는 점</h2><ul style="margin:0;padding-left:18px">' +
     '<li><b>서버 대신 브라우저 안의 파이썬</b> — 실기 모의고사·대시보드 실습·파일 분석·수식 값 채점은 Flask 버전의 채점·계산 코드를 그대로 브라우저(Pyodide)에서 돌립니다. 처음 쓸 때 약 13MB 를 읽고 이후엔 브라우저가 보관합니다. 올린 파일은 어디로도 전송되지 않습니다.</li>' +
-    '<li><b>웹 주소로 열어야 하는 기능</b> — 위 파이썬 기능은 보안 규칙상 파일을 직접 연 상태(file://)에서는 실행되지 않습니다. <code>start.bat</code> 이나 인터넷에 올린 주소로 여세요. 필기·단축키·함수 사전과 선택형 문제는 file:// 에서도 됩니다(수식 문제는 글자 비교로 대신 채점).</li>' +
+    '<li><b>파일을 직접 열어도 됩니다</b> — 엔진 파일(py/embed)을 함께 읽기 때문에 <code>index.html</code> 을 더블클릭해 열어도(file://) 실기 모의고사·대시보드 실습·파일 분석·수식 값 채점이 됩니다. 처음 쓸 때 엔진을 읽느라 10초쯤 걸리고, 웹 주소(start.bat·정적 호스팅)에서는 더 빨리 뜹니다.</li>' +
     '<li><b>학습 기록</b> — 이 브라우저(localStorage·IndexedDB)에만 저장됩니다. 브라우저를 바꾸거나 사이트 데이터를 지우면 사라지니 [기록 내려받기]로 백업하거나, 아래 [기기 간 동기화]로 파일에 맞춰 두세요.</li>' +
     '<li><b>교재·공식 예제</b> — 저작물이라 저장소에 들어 있지 않습니다. [컴활 실기 실습]에서 내 PC 의 폴더·zip 을 가져오면 이 브라우저에만 보관됩니다(서버로 전송 안 함).</li></ul></section>';
 
@@ -50,6 +81,7 @@
     '<label class="btn" for="b-merge" style="cursor:pointer">기록 합쳐서 불러오기</label><input type="file" id="b-merge" accept=".json,application/json" class="visually-hidden">' +
     '<button class="btn" id="b-reset" type="button">기록 모두 지우기</button><span id="b-msg" class="muted small" aria-live="polite"></span></div></section>';
   main.innerHTML = h;
+  EX.charts.draw(main, { daily: D.chart });
 
   var msg = document.getElementById('b-msg');
   document.getElementById('b-export').addEventListener('click', function () { EX.exportAll(); msg.textContent = '내려받았습니다.'; });

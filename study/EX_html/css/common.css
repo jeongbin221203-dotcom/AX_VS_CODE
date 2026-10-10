@@ -1,0 +1,30 @@
+/* 모든 화면 공통(common.js 가 불러옴): 키보드 포커스, 머리글 높이에 맞춘 고정 막대, 인쇄 */
+main:focus { outline: none; }
+a:focus-visible, summary:focus-visible, button:focus-visible, .theme-btn:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.stickybar { top: var(--top-h, 49px); }
+.exam-bar { top: var(--top-h, 52px); }
+@media (max-width: 760px) { .exam-bar { padding: 8px 12px; gap: 8px 12px; } }
+
+/* 인쇄: 메뉴·단추·타이머를 빼고 내용만, 접힌 힌트는 펼침, 배경 없이도 읽히게 */
+@media print {
+  header.top, footer, .skip-link, .theme-btn, .btns, .exam-bar, .exam-upload, .stickybar, .tabs, .tip, .alert, #btn-check, #btn-try, #btn-reset { display: none !important; }
+  body, main { background: #fff !important; color: #000 !important; }
+  main { max-width: none !important; padding: 0 !important; }
+  .card { box-shadow: none !important; border: 1px solid #999 !important; break-inside: avoid; }
+  details > :not(summary) { display: block !important; }
+  details::details-content { content-visibility: visible !important; display: block !important; }
+  .table-wrap, .sheet-wrap { overflow: visible !important; max-height: none !important; }
+  table.sheet { font-size: 11px; }
+  .exam-section, .exam-section .card { break-inside: auto; }
+  a.btn, .fbar { display: none !important; }
+  .chart { max-width: 100%; }
+  .meter { border: 1px solid #666; }
+  .meter > span, .meter > i { background: #666 !important; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  a { color: #000 !important; text-decoration: none !important; }
+  .choice, .opt { border: 1px solid #999 !important; }
+  .hidden { display: none !important; }
+}
+.ok-text { color: var(--ok); }
+.bad-text { color: var(--bad); }
+.list .title { font-weight: 600; }
+.syntax { font-family: var(--mono); font-size: 1.05rem; background: var(--surface-2); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; word-break: break-all; }

@@ -2,6 +2,16 @@
 (function () {
   'use strict';
   var EX = window.EX = window.EX || {};
+
+  /* 공통 스타일(키보드 포커스·고정 막대 위치·인쇄) */
+  try { var cl = document.createElement('link'); cl.rel = 'stylesheet'; cl.href = 'css/common.css'; document.head.appendChild(cl); } catch (e) { /* 무시 */ }
+  /* 인쇄: 접힌 힌트·해설을 펼쳤다가 인쇄 뒤 원래대로 */
+  var printOpened = [];
+  window.addEventListener('beforeprint', function () {
+    printOpened = [];
+    document.querySelectorAll('details:not([open])').forEach(function (d) { d.open = true; printOpened.push(d); });
+  });
+  window.addEventListener('afterprint', function () { printOpened.forEach(function (d) { d.open = false; }); printOpened = []; });
   var PREFIX = 'exh:';
 
   /* 학습 기록은 이 브라우저의 localStorage 에만 저장된다(서버 없음). 막혀 있으면 이번 탭 메모리에만 둔다. */
@@ -251,6 +261,12 @@
     el.innerHTML = '<div class="top-in"><a class="brand" href="index.html" aria-label="엑셀 연습장 홈" title="엑셀 연습장"><span class="brand-mark" aria-hidden="true">X</span></a>' +
       '<nav class="nav" aria-label="주 메뉴">' + nav + '</nav>' +
       '<button class="theme-btn" type="button" id="theme-btn" title="밝게/어둡게" aria-label="밝게 또는 어둡게 바꾸기">◐</button></div>';
+    /* 머리글 높이(시험 시간 막대가 그 아래에 고정되게), 휴대폰 메뉴에서 지금 메뉴가 보이게 */
+    var setTopH = function () { document.documentElement.style.setProperty('--top-h', el.offsetHeight + 'px'); };
+    setTopH();
+    window.addEventListener('resize', setTopH);
+    var onNav = el.querySelector('.nav a.on');
+    if (onNav && onNav.scrollIntoView) { try { onNav.scrollIntoView({ block: 'nearest', inline: 'center' }); window.scrollTo(0, 0); } catch (e) { /* 무시 */ } }
     document.getElementById('theme-btn').addEventListener('click', function () {
       var cur = document.documentElement.getAttribute('data-theme');
       var dark = cur ? cur === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
