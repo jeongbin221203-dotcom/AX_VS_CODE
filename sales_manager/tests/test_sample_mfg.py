@@ -44,8 +44,8 @@ def test_every_industry_sample_is_consistent(app, isolated_db):
     from core import sample_industry as si
     db.set_context("system", None)
     ent.seed_org_demo()
-    result = si.seed_many(customers=3, months=6, rnd_seed=11)
-    assert set(result) == set(si.INDUSTRY_KEYS)
+    result = si.seed_many(list(si.PRESETS), customers=3, months=6, rnd_seed=11)
+    assert set(result) == set(si.PRESETS) and set(si.EXTRA_KEYS) <= set(result)
     q = db._scalar
     for key, out in result.items():
         p = si.PRESETS[key]
@@ -83,3 +83,19 @@ def test_admin_industry_button(app, isolated_db):
                follow_redirects=True)
     body = res.get_data(as_text=True)
     assert "업종별 샘플 추가" in body and "IT·소프트웨어 거래처 2" in body
+
+
+def test_clean_default_sample(app, isolated_db):
+    """기본 샘플 — 수량은 적고(≤5) 금액은 크며(≥100만), 입금 규칙을 지키고, 두 번 눌러도 늘지 않는다."""
+    from core import sample_clean
+    db.set_context("system", None)
+    ent.seed_org_demo()
+    out = sample_clean.seed()
+    assert out["customers"] == 12 and out["sales"] > 50
+    q = db._scalar
+    assert q("SELECT MAX(qty) FROM sales") <= 5
+    assert q("SELECT MIN(total_amount) FROM sales WHERE total_amount > 0") >= 1_000_000
+    assert q("SELECT COUNT(*) FROM (SELECT s.id FROM sales s LEFT JOIN payments p ON p.sale_id=s.id "
+             "GROUP BY s.id, s.paid_amount HAVING COALESCE(s.paid_amount,0) <> COALESCE(SUM(p.amount),0)) x") == 0
+    assert "skipped" in sample_clean.seed()
+    assert db.verify_audit_chain()["broken_id"] is None

@@ -780,7 +780,8 @@ def data_action():
         elif action == "backup_db":
             flash(f"DB 백업 완료: {os.path.basename(db.backup_database(config.BACKUP_DIR))}", "success")
         elif action == "seed_demo":
-            created = db.seed_demo_data()
+            from core import sample_clean
+            created = sample_clean.seed()
             flash("샘플 데이터 생성 완료: " + ", ".join(f"{k} {v}건" for k, v in created.items()), "success")
         elif action == "seed_mfg":
             from core import sample_mfg
@@ -789,7 +790,7 @@ def data_action():
         elif action == "seed_industry":
             from core import sample_industry as si
             key = request.form.get("industry", "all")
-            keys = si.INDUSTRY_KEYS if key == "all" else [key]
+            keys = list(si.PRESETS) if key == "all" else [key]
             count = max(1, min(f_int("sample_count", 8), 100))
             result = si.seed_many(keys, customers=count)
             flash("업종별 샘플 추가 — " + " · ".join(

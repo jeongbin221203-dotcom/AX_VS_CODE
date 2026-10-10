@@ -258,7 +258,11 @@ PRESETS: dict[str, dict] = {
         "competitors": ["조달 우수 업체", "지역 업체"],
     },
 }
-INDUSTRY_KEYS = list(PRESETS)
+INDUSTRY_KEYS = list(PRESETS)          # 기본 8개 업종 (seed_many 기본값·시연 서버)
+
+from .sample_extra import EXTRA        # noqa: E402  추가 업종 — 관리자 '추가 데이터' 에서만 고른다
+PRESETS.update(EXTRA)
+EXTRA_KEYS = list(EXTRA)
 
 PERSON = ["김", "이", "박", "최", "정", "강", "조", "윤", "장", "임", "한", "오"]
 GIVEN = ["민수", "지훈", "서연", "현우", "수진", "도윤", "예린", "성호", "은지", "태영", "하늘", "준호", "다은", "승민"]
