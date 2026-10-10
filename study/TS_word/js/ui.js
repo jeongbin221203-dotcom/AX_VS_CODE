@@ -48,8 +48,16 @@
         <a class="brand" href="index.html" aria-label="메인 화면"><span class="brand-mark">TS</span></a>
         <nav class="exam-tabs" aria-label="시험 바로가기">${tabs}</nav>
         <div class="crumb">${o.page === "settings" ? "<b>설정</b>" : ""}</div>
-        <a class="settings-link${o.page === "settings" ? " on" : ""}" href="settings.html">⚙ 설정</a>
+        <button type="button" class="theme-btn" id="theme-btn" aria-label="화면 색상 바꾸기"></button>
+        <a class="settings-link${o.page === "settings" ? " on" : ""}" href="settings.html" style="margin-left:0">⚙ 설정</a>
       </div>${subNav}${wordNav}</header>`;
+    const tb = $("theme-btn");
+    if (tb && window.Theme) {
+      const LABEL = { auto: "🌗 자동", dark: "🌙 다크", light: "☀️ 라이트" };
+      const show = () => { tb.textContent = LABEL[Theme.get()]; };
+      show();
+      tb.addEventListener("click", () => { Theme.cycle(); show(); });
+    }
     $("hdr").addEventListener("click", e => {
       const ws = e.target.closest("[data-wordset]");
       if (ws) {                                                // 단어 화면에서 토익 단어 ↔ 토플 학술 어휘 바꾸기

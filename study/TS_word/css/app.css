@@ -21,7 +21,7 @@
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --bg: #15171B; --surface: #1D2026; --surface-2: #252932; --ink: #E8E9EC; --ink-2: #B0B5BF; --ink-3: #7D838E;
     --line: #2E333C; --accent: #7B9CFF; --accent-soft: #232C45; --ok: #4CC47F; --ok-soft: #173325;
     --bad: #F0776C; --bad-soft: #3A1E1C; --warn: #E0A84A;
@@ -29,6 +29,14 @@
     color-scheme: dark;
   }
 }
+:root[data-theme="dark"] {
+    --bg: #15171B; --surface: #1D2026; --surface-2: #252932; --ink: #E8E9EC; --ink-2: #B0B5BF; --ink-3: #7D838E;
+    --line: #2E333C; --accent: #7B9CFF; --accent-soft: #232C45; --ok: #4CC47F; --ok-soft: #173325;
+    --bad: #F0776C; --bad-soft: #3A1E1C; --warn: #E0A84A;
+    --g1: #F0924A; --g2: #C08A68; --g3: #4DB67E; --g4: #6A9EE3; --g5: #D8B456;
+    color-scheme: dark;
+}
+:root[data-theme="light"] { color-scheme: light; }
 
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
@@ -411,3 +419,6 @@ ul.clean li { margin: 4px 0; }
 .hub-vocab span { font-size: .85rem; color: var(--ink-2); }
 .hub-vocab:hover { background: var(--accent); }
 .hub-vocab:hover b, .hub-vocab:hover span { color: #fff; }
+
+.theme-btn { border: 0; background: none; font: inherit; cursor: pointer; padding: 6px 8px; border-radius: 8px; color: var(--ink-2); white-space: nowrap; }
+.theme-btn:hover { background: var(--surface-2); }

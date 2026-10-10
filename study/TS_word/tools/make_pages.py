@@ -81,6 +81,7 @@ TEMPLATE = """<!doctype html>
   <meta name="theme-color" content="#2F5BD3">
   <link rel="stylesheet" href="css/app.css">
   <link rel="stylesheet" href="css/ward.css">
+  <script src="js/theme.js"></script>
 </head>
 <body{attrs}>
 <div id="hdr"></div>

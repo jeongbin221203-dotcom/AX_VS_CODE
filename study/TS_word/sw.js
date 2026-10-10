@@ -1,13 +1,13 @@
 /* 오프라인 사용: 한 번 열어 두면 인터넷이 없어도 단어 공부가 된다 (https 또는 localhost 에서만 동작).
    화면·스크립트·단어와 문제 데이터를 보관하고, 열 때마다 뒤에서 새 것으로 갱신한다(stale-while-revalidate).
    학습 기록은 localStorage 에 있어 이 파일과 상관없이 보존된다. */
-const CACHE = "ts-word-v3";
+const CACHE = "ts-word-v4";
 const ASSETS = [
   "./", "index.html", "words.html", "study.html", "quiz.html", "list.html", "listen.html", "settings.html",
   "toeic.html", "practice.html", "diagnostic.html", "mock.html", "solve.html", "result.html", "review.html", "dictation.html",
   "stats.html", "history.html", "guide.html", "toefl.html", "toeic-speaking.html", "opic.html",
   "css/app.css", "css/ward.css",
-  "js/tsutil.js", "js/scoring.js", "js/exams.js", "js/store.js", "js/tsstore.js", "js/tts.js", "js/ui.js", "js/bank.js", "js/stats.js",
+  "js/theme.js", "js/tsutil.js", "js/scoring.js", "js/exams.js", "js/store.js", "js/tsstore.js", "js/tts.js", "js/ui.js", "js/bank.js", "js/stats.js",
   "js/planner.js", "js/sessions.js", "js/engine.js", "js/charts.js", "js/backup.js", "js/hub.js", "js/hub-extra.js", "js/soon.js",
   "js/home.js", "js/study.js", "js/quiz.js", "js/list.js", "js/listen.js", "js/settings.js",
   "js/toeic.js", "js/practice.js", "js/diagnostic.js", "js/mock.js", "js/solve.js", "js/result.js", "js/review.js",
