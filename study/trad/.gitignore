@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+# 예전 버전이 만들던 서버 쪽 학습 기록 (지금은 브라우저에 저장)
+instance/
+.env
