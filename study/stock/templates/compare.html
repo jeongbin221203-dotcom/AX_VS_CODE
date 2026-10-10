@@ -12,6 +12,7 @@
   <span class="grp" id="quick">
     <button class="btn" data-q="sets" title="왼쪽 종목을 양쪽에 놓고 이평선 세트만 다르게">같은 종목·세트 비교</button>
     <button class="btn" data-q="tf" title="왼쪽 종목을 양쪽에 놓고 왼쪽 일봉·오른쪽 주봉">일봉 ↔ 주봉</button>
+    <button class="btn" data-q="scalp" title="왼쪽 5분봉 · 오른쪽 15분봉, 둘 다 예측(단테 기법) — 1분마다 갱신">단타 5분·15분</button>
     <button class="btn" data-q="swap">좌우 바꾸기</button>
   </span>
 </div>
@@ -31,6 +32,11 @@
         <option value="none" {{ 'selected' if p.set == 'none' }}>이평선 없음</option>
       </select>
       <select class="ctf" aria-label="봉 단위">
+        <option value="1m" {{ 'selected' if p.tf == '1m' }}>1분봉</option>
+        <option value="5m" {{ 'selected' if p.tf == '5m' }}>5분봉</option>
+        <option value="15m" {{ 'selected' if p.tf == '15m' }}>15분봉</option>
+        <option value="30m" {{ 'selected' if p.tf == '30m' }}>30분봉</option>
+        <option value="60m" {{ 'selected' if p.tf == '60m' }}>60분봉</option>
         <option value="D" {{ 'selected' if p.tf == 'D' }}>일봉</option>
         <option value="W" {{ 'selected' if p.tf == 'W' }}>주봉</option>
         <option value="M" {{ 'selected' if p.tf == 'M' }}>월봉</option>

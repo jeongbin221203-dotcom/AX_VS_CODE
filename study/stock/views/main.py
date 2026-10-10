@@ -3,7 +3,7 @@ from datetime import datetime
 
 from flask import Blueprint, jsonify, render_template, request
 
-from core import collector, db, service, techniques
+from core import collector, db, intraday, service, techniques
 
 bp = Blueprint("main", __name__)
 _job = {"running": False, "done": 0, "total": 0, "msg": ""}
@@ -85,7 +85,7 @@ def compare():
             return "잘못된 종목코드", 400
 
     def side(code, set_, tf, default_set, kind, default_kind):
-        return {"code": code, "name": _name(code), "tf": tf if tf in ("D", "W", "M") else "D",
+        return {"code": code, "name": _name(code), "tf": tf if (tf in ("D", "W", "M") or intraday.is_intraday(tf)) else "D",
                 "set": set_ if set_ in ("a", "b", "none") else default_set,
                 "kind": kind if kind in ("none", "dante", "ai") else default_kind}   # 겹쳐 그리기: 왼쪽 '예측'(단테 기법), 오른쪽 'AI'
     pa = side(a, request.args.get("sa"), request.args.get("ta"), "a", request.args.get("ka"), "dante")
@@ -103,11 +103,16 @@ def compare():
 @bp.get("/api/chart/<code>")
 def api_chart(code):
     tf = request.args.get("tf", "D")
-    if tf not in ("D", "W", "M"):
-        return jsonify(error="tf must be D/W/M"), 400
+    if tf not in ("D", "W", "M") and not intraday.is_intraday(tf):
+        return jsonify(error="tf must be D/W/M 또는 1m/5m/15m/30m/60m"), 400
     bars = min(max(request.args.get("bars", 500, type=int), 30), 5000)
     if not _valid_code(code):
         return jsonify(error="잘못된 종목코드"), 400
+    if intraday.is_intraday(tf):
+        try:
+            return jsonify(intraday.payload(code, tf, bars))
+        except intraday.IntradayError as e:
+            return jsonify(error=str(e)), 502
     p = service.chart_payload(code, tf, bars)
     if p is None:  # 아직 없으면 한 번 받아 본다
         try:

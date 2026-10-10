@@ -12,6 +12,9 @@
   var bars = 250, syncing = false, crossing = false;
   var tip = document.getElementById('tip');
 
+  var INTRA = { '1m': 1, '5m': 1, '15m': 1, '30m': 1, '60m': 1 };
+  function isIntra(tf) { return !!INTRA[tf]; }
+  function fmtTime(t) { return typeof t === 'number' ? new Date(t * 1000).toISOString().slice(0, 16).replace('T', ' ') : t; }
   function msg(t) { var m = document.getElementById('cmsg'); m.hidden = !t; m.textContent = t || ''; }
   function fmt(n) { return Math.round(n).toLocaleString('ko-KR'); }
   function syncOn() { return document.getElementById('sync').checked; }
@@ -71,7 +74,7 @@
   function showTip(pane, p) {
     var c = p.seriesData.get(pane.candle), v = p.seriesData.get(pane.vol);
     var pr = pane.probMap[p.time];
-    tip.textContent = p.time + '\n시 ' + fmt(c.open) + '  고 ' + fmt(c.high) + '\n저 ' + fmt(c.low) + '  종 ' + fmt(c.close) +
+    tip.textContent = fmtTime(p.time) + '\n시 ' + fmt(c.open) + '  고 ' + fmt(c.high) + '\n저 ' + fmt(c.low) + '  종 ' + fmt(c.close) +
       ' (' + ((c.close / c.open - 1) * 100).toFixed(2) + '%)' + (v ? '\n거래량 ' + fmt(v.value) : '') +
       (pr !== undefined ? '\nAI 확률 ' + (pr * 100).toFixed(1) + '%' : '');
     var r = pane.el.getBoundingClientRect();
@@ -98,6 +101,7 @@
     var self = this, s = this.settings(), seq = ++this.predSeq;
     this.clearPred();
     if (s.kind === 'none' || !this.data) return Promise.resolve();
+    if (s.kind === 'ai' && isIntra(s.tf)) { this.root.querySelector('.cpred').textContent = 'AI(상승 확률)는 일봉·주봉·월봉에서만 볼 수 있습니다. 분봉에서는 예측(단테 기법)을 쓰세요.'; return Promise.resolve(); }
     return fetch('/api/predict/' + encodeURIComponent(this.code) + '?kind=' + s.kind + '&tf=' + s.tf + '&bars=5000').then(function (r) {
       return r.json().then(function (j) { if (!r.ok) throw new Error(j.error || '오류'); return j; });
     }).then(function (j) {
@@ -144,9 +148,21 @@
     var b = document.createElement('b'); b.textContent = j.name + ' · '; box.appendChild(b);
     box.appendChild(document.createTextNode(j.summary + (j.note ? '\n' + j.note : '')));
     if (j.kind === 'dante' && ms.length) {
-      var last = ms.slice(-5).reverse().map(function (m) { return m.date + ' ' + m.label + (m.good ? ' ✔' : '') + (m.stat ? ' — ' + m.stat : ''); });
+      var last = ms.slice(-5).reverse().map(function (m) { return (m.shown || m.date) + ' ' + m.label + (m.good ? ' ✔' : '') + (m.stat ? ' — ' + m.stat : ''); });
       box.appendChild(document.createTextNode('\n최근 신호: ' + last.join(' / ')));
     }
+  };
+
+  // 분봉은 1분마다 새로 받는다(탭이 보일 때만)
+  Pane.prototype.setupRefresh = function (tf) {
+    var self = this;
+    if (this.timer) { clearInterval(this.timer); this.timer = null; }
+    if (!isIntra(tf)) return;
+    this.timer = setInterval(function () {
+      if (document.hidden || self.settings().tf !== tf) return;
+      var keep = self.chart.timeScale().getVisibleLogicalRange();
+      self.load().then(function () { if (keep) { syncing = true; try { self.chart.timeScale().setVisibleLogicalRange(keep); } catch (e) { /* */ } syncing = false; } });
+    }, 60000);
   };
 
   Pane.prototype.load = function () {
@@ -155,6 +171,8 @@
       return r.json().then(function (j) { if (!r.ok) throw new Error(j.error || '오류'); return j; });
     }).then(function (d) {
       self.data = d;
+      self.chart.applyOptions({ timeScale: { timeVisible: isIntra(s.tf), secondsVisible: false } });
+      self.setupRefresh(s.tf);
       var big = d.last.close >= 1000;
       self.candle.applyOptions({ priceFormat: { type: 'price', precision: big ? 0 : 2, minMove: big ? 1 : 0.01 } });
       self.candle.setData(d.candles);
@@ -184,7 +202,7 @@
 
   // 기준일(신호 화면에서 넘어온 날짜): 그날(없으면 그 뒤 첫 봉)의 봉 번호·표시 시각
   Pane.prototype.focusIndex = function () {
-    if (!BOOT.focus || !this.data) return -1;
+    if (!BOOT.focus || !this.data || isIntra(this.settings().tf)) return -1;
     var c = this.data.candles, i = c.findIndex(function (x) { return x.time >= BOOT.focus; });
     return i < 0 ? c.length - 1 : i;
   };
@@ -315,6 +333,7 @@
     var name = A.root.querySelector('.cname').textContent;
     if (q === 'sets') { setSel(A, 'a', 'D'); setSel(B, 'b', 'D'); }
     if (q === 'tf') { setSel(A, 'a', 'D'); setSel(B, 'a', 'W'); }
+    if (q === 'scalp') { setSel(A, 'a', '5m', 'dante'); setSel(B, 'a', '15m', 'dante'); bars = 120; }
     Promise.all([A.setStock(A.code, name), B.setStock(A.code, name)]).then(function () { showBoth(); saveUrl(); });
   });
 })();
