@@ -345,8 +345,9 @@ def form_edit(key: str):
 
     title, sources = excel_forms.EXPORT_FORMS[key]
     if request.method == "POST":
-        cols = [{"source": s, "header": h, "format": fmt} for s, h, fmt in
-                zip(request.form.getlist("source"), request.form.getlist("header"), request.form.getlist("format"))]
+        cols = [{"source": s, "header": h, "format": fmt, "col": c, "new": n == "1"} for s, h, fmt, c, n in
+                zip(request.form.getlist("source"), request.form.getlist("header"), request.form.getlist("format"),
+                    request.form.getlist("col"), request.form.getlist("new"))]
         problem = excel_forms.save_export(key, cols, f_str("sheet"), _int("header_row", 1), _int("start_row", 2),
                                           f_str("start_col") or "A", request.form.get("write_header") == "1",
                                           f_str("title"), actor())
@@ -383,6 +384,31 @@ def form_template(key: str):
         problem = excel_forms.upload_template(key, file.read(excel_forms.MAX_TEMPLATE_BYTES + 1), file.filename, actor())
         flash(problem or "회사 양식 파일을 올렸습니다. 열 연결과 시작 행을 확인한 뒤 저장하세요.",
               "error" if problem else "success")
+    return redirect(url_for("admin.form_edit", key=key))
+
+
+@bp.post("/forms/<key>/learn")
+@role_required("ADMIN")
+def form_learn(key: str):
+    """회사 엑셀 한 개를 올리면 머리글 행·시트·열 이름·서식을 읽어 이 양식으로 바로 저장한다."""
+    from core import excel_forms
+    file = request.files.get("file")
+    if key not in excel_forms.EXPORT_FORMS:
+        abort(404)
+    if not file or not file.filename:
+        flash("회사 엑셀 파일을 고르세요.", "error")
+        return redirect(url_for("admin.form_edit", key=key))
+    data = file.read(excel_forms.MAX_TEMPLATE_BYTES + 1)
+    import_key = next((i for i, e in excel_forms.LEARN_PAIRS.items() if e == key), None)
+    out = excel_forms.learn(key, data, file.filename, import_key)
+    if not out["ok"]:
+        flash(out["problem"], "error")
+        return redirect(url_for("admin.form_edit", key=key))
+    excel_forms.adopt(key, out["cfg"], out["template"], file.filename, actor())
+    s = out["summary"]
+    flash(f"'{file.filename}'의 양식을 기억했습니다 — 시트 {s['sheet']} · 머리글 {s['header_row']}행 · 열 {s['total']}개 중 {s['mapped']}개 연결"
+          + (f" · 연결 못 한 열: {', '.join(s['unmapped'][:8])}" if s["unmapped"] else "")
+          + (f" · 오른쪽에 덧붙임: {', '.join(s['extra'][:8])}" if s["extra"] else "") + ". 아래 '미리보기'로 확인하세요.", "success")
     return redirect(url_for("admin.form_edit", key=key))
 
 

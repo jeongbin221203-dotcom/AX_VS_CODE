@@ -1,9 +1,9 @@
 """포트폴리오 시연 모드 (MM_DEMO=1 일 때만).
 
-- 서버가 뜰 때 시연용 시스템관리자(demo)와 샘플 데이터(4개 플랜트·1년 치 거래, core/seed_demo.py)를 만든다. 빈 DB일 때만 넣는다.
+- 서버가 뜰 때 시연용 시스템관리자(demo)와 샘플 데이터(부산·창원, 수량 적고 금액 큰 6개월 거래, core/seed_clean.py)를 만든다. 빈 DB일 때만 넣는다.
 - 로그인하지 않은 방문자는 이 계정으로 자동 로그인된다 → 어느 컴퓨터에서 열어도 바로 모든 화면을 볼 수 있다.
 - 방문자가 시연 계정을 중지·강등해도 다음 자동 로그인 때 되돌린다.
-- 사이드바 '다른 역할로 보기': 샘플 사용자(core/seed_demo.py)로 바꿔 역할·창고 범위 차이를 볼 수 있다.
+- 사이드바 '다른 역할로 보기': 샘플 사용자(core/seed_clean.py)로 바꿔 역할·창고 범위 차이를 볼 수 있다.
 - 관리자 설정(사용자·플랜트·창고·배치·엑셀 양식·비밀번호·샘플 추가)은 저장을 막는다 — 업무 데이터는 저장된다.
 - '샘플로 되돌리기'(reset) 또는 매일 새벽(MM_DEMO_RESET_HOUR, 한국 시간) 첫 요청 때 DB를 비우고 샘플을 다시 만든다.
   방문자가 바꾼 내용은 감사로그 표준출력(MM_AUDIT_STDOUT)으로 서버 로그에 남아 초기화 뒤에도 확인할 수 있다.
@@ -51,9 +51,9 @@ def ensure_user() -> dict:
     return user
 
 
-# 다른 역할로 보기: (역할, 아이디, 표시) — 아이디는 core/seed_demo.py 의 샘플 사용자
+# 다른 역할로 보기: (역할, 아이디, 표시) — 아이디는 core/seed_clean.py 의 샘플 사용자
 ROLE_VIEWS = [("ADMIN", USERNAME, "시스템관리자"), ("MANAGER", "park.jh", "관리자"),
-              ("CLERK", "kim.mj", "담당자(인천 창고)"), ("DATA", "yoon.jw", "데이터 관리"), ("VIEWER", "kang.dy", "조회")]
+              ("CLERK", "kim.mj", "담당자(부산 창고)"), ("DATA", "yoon.jw", "데이터 관리"), ("VIEWER", "kang.dy", "조회")]
 # 시연에서 저장을 막는 관리자 설정: admin 블루프린트 전체 + 아래 (시연 초기화 /demo/reset 은 막지 않는다)
 LOCKED_ENDPOINTS = {"auth.password", "data_admin.make_seed", "data_admin.make_seed_mfg"}
 
@@ -128,35 +128,32 @@ def prepare() -> None:
     """서버 시작 때: 시연 계정 + (빈 DB면) 샘플 데이터."""
     ensure_user()
     if not repo.count_materials():
-        from core import seed, seed_demo, seed_mfg
+        from core import seed_clean
         with audit.quiet():                      # 샘플 생성 기록은 서버 로그에 쏟지 않는다
-            seed.seed(history=True)              # 부산 포장·고박 자재
-            seed_mfg.seed_manufacturing()        # 창원 제조공장
-            seed_demo.seed_large()               # 인천·평택 + 담당자 · 1년 치 거래 · 구매 · 월 마감
+            seed_clean.seed_clean()              # 부산 포장·고박 + 창원 제조 — 수량은 적고 금액은 큰 깔끔한 기본 샘플
             _extras()                            # 거래처 마스터 · BOM·생산 투입 · 바코드 · 알림 메일 주소
         _mark_today()
 
 
 # 샘플 자재 바코드 (스캔 시연용 — 카메라나 스캐너로 찍으면 그 자재)
 DEMO_BARCODES = {"PKG-001": "8801234500017", "PKG-002": "8801234500024", "PKG-003": "8801234500031",
-                 "PT-BLT-001": "8809876500016", "PT-NUT-001": "8809876500023", "PT-MTR-001": "8809876500030",
-                 "PT-PCB-001": "8809876500047", "PK-BOX-001": "8809876500054"}
+                 "PT-MTR-001": "8809876500030", "PT-PCB-001": "8809876500047", "PT-BRG-001": "8809876500016"}
 
 
 def _extras() -> None:
     """시연에서 보여 줄 새 기능의 샘플: 거래처 마스터(+표기만 다른 이름 1개는 미등록으로 남김), BOM·생산 투입,
     자재 바코드, 결재 알림을 받을 메일 주소(시연은 '기록만' — 실제로 보내지 않음)."""
-    from core import partners, production, services
-    production.seed_sample()
+    from core import partners, services
+    _clean_boms()
     partners.seed_from_data(audit.SYSTEM)
     for code, bc in DEMO_BARCODES.items():
         db.execute("UPDATE materials SET barcode = ? WHERE code = ? AND barcode = ''", (bc, code))
     db.execute("UPDATE users SET email = username || '@example.com' WHERE email = '' AND role IN ('MANAGER', 'ADMIN', 'CLERK')")
     # 같은 회사를 다르게 적은 입고 1건 → '미등록 이름 정리'에서 기존 거래처에 연결해 볼 수 있다
     mid = db.scalar("SELECT id FROM materials WHERE code = 'PKG-001'")
-    wh = db.scalar("SELECT id FROM warehouses ORDER BY id LIMIT 1")
+    wh = db.scalar("SELECT id FROM warehouses WHERE code = 'WH1'")
     if mid and wh:
-        services.register_transaction(int(mid), "IN", 10, date_today(), 18000, ref_no="DEMO-ALIAS",
+        services.register_transaction(int(mid), "IN", 1, date_today(), 380000, ref_no="DEMO-ALIAS",
                                       partner="대한팔레트 부산지점", actor=audit.SYSTEM, warehouse_id=int(wh))
     _manufacturing_extras()
     from core import notify
@@ -168,15 +165,40 @@ def _extras() -> None:
                           "'🔁 대결 지정'으로 휴가 동안 결재를 맡길 수도 있습니다."], "/approvals/", "demo:welcome")
 
 
-# 리드타임(일) · 최소 발주량 · 발주 배수 (창원 제조공장 샘플)
-DEMO_PLANNING = {"PT-MTR-001": (14, 50, 10), "PT-PCB-001": (21, 50, 10), "PT-BRG-001": (7, 100, 50),
-                 "PT-HRN-001": (10, 100, 50), "PT-BLT-001": (5, 1000, 500), "PT-NUT-001": (5, 1000, 500),
-                 "PT-SEL-001": (7, 500, 100), "PK-BOX-001": (5, 200, 100), "RM-STL-002": (10, 500, 100),
-                 "CH-PNT-001": (14, 50, 25), "SA-BRK-001": (2, 0, 0), "FG-FAN-001": (3, 0, 0)}
-DEMO_UNITS = [("PT-BLT-001", "BOX", 500, "8809876500993"), ("PT-NUT-001", "BOX", 500, "8809876500986"),
-              ("PK-BOX-001", "BUNDLE", 20, "8809876500979"), ("PKG-003", "BUNDLE", 10, "8801234500048")]
-DEMO_ROUTING = {"SA-BRK-001": [("프레스", "프레스 1호", 1.5), ("분체 도장", "도장 라인", 3.0)],
-                "FG-FAN-001": [("모터·기판 조립", "조립 1라인", 6.0), ("성능 검사", "QC", 2.0), ("포장", "포장", 1.0)]}
+# 제품 BOM: 제품 → (이름, 규격, 분류, 안전재고, 부품 [(코드, 수량, 손실률%, 꺼내는 창고)])
+CLEAN_PRODUCTS = {
+    "SA-MDL-001": ("구동 모듈 (반제품)", "모터+제어기판+하네스", "반제품", 6,
+                   [("PT-MTR-001", 1, 0, "CW-PT"), ("PT-PCB-001", 1, 0, "CW-PT"), ("PT-HRN-001", 1, 0, "CW-PT")]),
+    "FG-FAN-001": ("BLDC 송풍기 모듈", "24V 60W Ø180", "완제품", 4,
+                   [("SA-MDL-001", 1, 0, "CW-FG"), ("PT-FRM-001", 1, 0, "CW-PT"), ("PT-BRG-001", 2, 0, "CW-PT")]),
+}
+# 리드타임(일) · 최소 발주량 · 발주 배수
+DEMO_PLANNING = {"PT-MTR-001": (14, 10, 5), "PT-PCB-001": (21, 10, 5), "PT-HRN-001": (10, 10, 5), "PT-BRG-001": (7, 20, 10),
+                 "PT-FRM-001": (7, 8, 4), "RM-STL-002": (10, 2, 1), "SA-MDL-001": (2, 0, 0), "FG-FAN-001": (3, 0, 0)}
+DEMO_UNITS = [("PT-BRG-001", "BOX", 20, "8809876500993"), ("PT-HRN-001", "BOX", 10, "8809876500986"),
+              ("PKG-002", "PLT", 20, "8801234500055")]
+DEMO_ROUTING = {"SA-MDL-001": [("모터·기판 조립", "조립 1라인", 4.0), ("통전 검사", "QC", 1.5)],
+                "FG-FAN-001": [("본체 조립", "조립 2라인", 6.0), ("성능 검사", "QC", 2.0), ("포장", "포장", 1.0)]}
+
+
+def _clean_boms() -> None:
+    """창원 제조공장에 반제품·완제품과 BOM을 만들고 완료된 생산 투입 2건을 넣는다 (core/seed_clean.py 자재 기준)."""
+    from core import production
+    ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    for code, (name, spec, cat, safety, _lines) in CLEAN_PRODUCTS.items():
+        db.execute("INSERT INTO materials (code, name, spec, unit, category, safety_stock, unit_price, location, supplier, active, "
+                   "created_at, updated_at) VALUES (?, ?, ?, 'EA', ?, ?, 0, 'F-01', '', 1, ?, ?) ON CONFLICT (code) DO NOTHING",
+                   (code, name, spec, cat, safety, ts, ts))
+    ids = {r.code: int(r.id) for r in db.query_df("SELECT id, code FROM materials").itertuples()}
+    whs = {r.code: int(r.id) for r in db.query_df("SELECT id, code FROM warehouses").itertuples()}
+    system = {**audit.SYSTEM, "name": "system"}
+    for product, (_n, _s, _c, _sf, lines) in CLEAN_PRODUCTS.items():
+        production.save_bom(ids[product], 1, [production.BomLine(ids[c], q, s, whs[w]) for c, q, s, w in lines], "시연 샘플", system)
+        cost = float(production.boms_df().set_index("code").loc[product, "unit_cost"])
+        db.execute("UPDATE materials SET unit_price = ? WHERE id = ?", (round(cost), ids[product]))
+    for n, (product, qty, src) in enumerate((("SA-MDL-001", 12, "CW-PT"), ("FG-FAN-001", 6, "CW-PT")), 1):
+        production.post(ids[product], qty, whs[src], date.today().isoformat(), actor=system, receipt_wh_id=whs["CW-FG"],
+                        work_order=f"WO-{date.today():%y%m}-{n:03d}", note="시연 샘플")
 
 
 def _manufacturing_extras() -> None:
@@ -197,18 +219,18 @@ def _manufacturing_extras() -> None:
     whs = {r.code: int(r.id) for r in db.query_df("SELECT id, code FROM warehouses").itertuples()}
     plant = int(db.scalar("SELECT id FROM plants WHERE code = 'P-CW'"))
     today = date.today()
-    mrp.add_demand(plant, ids["FG-FAN-001"], 120, (today + timedelta(days=21)).isoformat(), "대리점 11월 출하 계획", audit.SYSTEM)
-    mrp.add_demand(plant, ids["FG-FAN-001"], 60, (today + timedelta(days=45)).isoformat(), "설비 교체 수주 #A-1027", audit.SYSTEM)
-    # 진행 중 작업지시: 브래킷 40개 — 강판·볼트 투입, 프레스 실적까지 (재공품)
-    wo = production.create_wo(ids["SA-BRK-001"], 40, whs["CW-RM"], due_date=(today + timedelta(days=2)).isoformat(),
+    mrp.add_demand(plant, ids["FG-FAN-001"], 12, (today + timedelta(days=21)).isoformat(), "대리점 11월 출하 계획", audit.SYSTEM)
+    mrp.add_demand(plant, ids["FG-FAN-001"], 6, (today + timedelta(days=45)).isoformat(), "설비 교체 수주 #A-1027", audit.SYSTEM)
+    # 진행 중 작업지시: 구동 모듈 5개 — 부품 투입, 조립 실적까지 (재공품)
+    wo = production.create_wo(ids["SA-MDL-001"], 5, whs["CW-PT"], due_date=(today + timedelta(days=2)).isoformat(),
                               actor=audit.SYSTEM, receipt_wh_id=whs["CW-FG"], work_order="WO-DEMO-01", note="시연 샘플")
     if wo.ok:
         lines = production.wo_lines(wo.tx_id)
-        qty = {int(r.id): float(r.planned_qty) for r in lines.itertuples() if r.code in ("RM-STL-002", "PT-BLT-001")}
+        qty = {int(r.id): float(r.planned_qty) for r in lines.itertuples()}
         production.issue(wo.tx_id, qty, today.isoformat(), actor=audit.SYSTEM)
         op = production.wo_ops(wo.tx_id)
         if len(op):
-            production.report_operation(wo.tx_id, int(op.iloc[0]["id"]), 40, 1, 65, "김작업", "", audit.SYSTEM)
+            production.report_operation(wo.tx_id, int(op.iloc[0]["id"]), 5, 0, 20, "김작업", "", audit.SYSTEM)
     mrp.run(plant, audit.SYSTEM)
 
 

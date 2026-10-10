@@ -104,6 +104,10 @@ def seed_large() -> dict:
         r = auth.create_user(username, name, role, "Demo" + secrets.token_hex(8) + "1", audit.SYSTEM, must_change_pw=False)
         if r.ok:
             users[username] = {"id": r.user["id"], "name": name, "role": role, "area": area}
+        else:                                  # 기본 샘플(core/seed_clean.py)이 같은 사용자를 이미 만들었다
+            row = db.query_df("SELECT id, name, role FROM users WHERE username = ?", (username,))
+            if not row.empty:
+                users[username] = {"id": int(row.iloc[0]["id"]), "name": row.iloc[0]["name"], "role": row.iloc[0]["role"], "area": area}
     clerks = {area: [u for u in users.values() if u["role"] == "CLERK" and u["area"] == area] for area in ("IC", "PT")}
     managers = [u for u in users.values() if u["role"] == "MANAGER"]
     admin = next((u for u in users.values() if u["role"] == "ADMIN"), None)

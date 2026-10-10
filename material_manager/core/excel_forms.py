@@ -9,6 +9,10 @@
 올리기(import)
   - 회사 엑셀의 열 이름(예: 품번·품명)을 이 시스템 항목에 연결(별칭)하고, 머리글이 몇 행에 있는지·어느 시트인지 정한다.
 
+양식 기억(learn): 회사 엑셀을 올리면(일괄 업로드 화면 또는 관리자 > 엑셀 양식 > 자동 설정) 머리글 행·시트·열 이름과 서식을 읽어
+  같은 항목의 내려받기 양식으로 저장한다 → 나중에 내려받으면 그 회사 엑셀과 같은 모양(열 순서·이름·서식·제목·결재란)으로 나온다.
+  데이터 행은 저장하지 않는다(머리글 아래를 비우고 첫 행 서식만 남김).
+
 보안: 양식은 .xlsx만(매크로 파일 .xlsm 거부), 압축 폭탄 검사. 사용자 데이터는 계속 수식으로 실행되지 않게 처리한다.
 양식 파일은 파일 저장소(forms/…), 설정은 DB(excel_forms)에 있어 서버가 여러 대여도 같은 양식을 쓴다.
 """
@@ -218,8 +222,13 @@ def save_export(form_key: str, columns: list[dict], sheet: str, header_row: int,
             return f"'{c['source']}'는 이 양식에 없는 항목입니다."
         if c.get("format", "") not in NUMBER_FORMATS:
             return "숫자 서식을 목록에서 고르세요."
-        cols.append({"source": c["source"], "header": (c.get("header") or c["source"]).strip()[:100],
-                     "format": c.get("format", "")})
+        item = {"source": c["source"], "header": (c.get("header") or c["source"]).strip()[:100],
+                "format": c.get("format", "")}
+        if str(c.get("col") or "").isdigit() and 1 <= int(c["col"]) <= 200:      # 회사 양식에서 읽은 실제 열 위치 (빈 열이 끼어 있어도 맞게)
+            item["col"] = int(c["col"])
+        if c.get("new"):
+            item["new"] = True
+        cols.append(item)
     start_col = (start_col or "A").strip().upper()
     if not COL_RE.match(start_col):
         return "시작 열은 A, B, C … 처럼 입력하세요."
@@ -349,14 +358,22 @@ def export(form_key: str, df: pd.DataFrame, ctx: dict | None = None) -> bytes:
     start_row = int(cfg.get("start_row") or header_row + 1)
     first_col = column_index_from_string(cfg.get("start_col") or "A")
 
-    if write_header:
-        for i, c in enumerate(cols):
-            cell = ws.cell(row=header_row, column=first_col + i, value=neutralize_formula(c["header"]))
+    # 열 위치: 회사 양식에서 읽은 열(col)이 있으면 그 자리, 없으면 시작 열부터 차례로
+    pos = [int(c.get("col") or first_col + i) for i, c in enumerate(cols)]
+    for i, c in enumerate(cols):
+        if write_header or (template is not None and c.get("new")):      # 덧붙인 열(회사 양식에 없던 항목)은 머리글을 새로 쓴다
+            try:
+                cell = ws.cell(row=header_row, column=pos[i], value=neutralize_formula(c["header"]))
+            except AttributeError:                                          # 병합 셀 — 건너뜀
+                continue
             if template is None:
                 cell.font = openpyxl.styles.Font(bold=True)
                 cell.fill = openpyxl.styles.PatternFill("solid", fgColor="E8EDF9")
+            elif c.get("new") and pos[i] > 1:                                # 옆 머리글과 같은 모양으로
+                cell._style = copy(ws.cell(row=header_row, column=pos[i] - 1)._style)
+                ws.column_dimensions[get_column_letter(pos[i])].width = max(len(str(c["header"])) * 1.8, 10)
     # 양식의 첫 데이터 행 서식을 이어 쓴다
-    styles = [copy(ws.cell(row=start_row, column=first_col + i)._style) for i in range(len(cols))]
+    styles = [copy(ws.cell(row=start_row, column=pos[i])._style) for i in range(len(cols))]
     formats = [c.get("format", "") for c in cols]
     data = df[[c["source"] for c in cols]]
     for r, values in enumerate(data.itertuples(index=False), start=start_row):
@@ -365,7 +382,7 @@ def export(form_key: str, df: pd.DataFrame, ctx: dict | None = None) -> bytes:
                 v = None
             elif hasattr(v, "item"):
                 v = v.item()                           # numpy 숫자 → 파이썬 숫자
-            cell = ws.cell(row=r, column=first_col + i, value=neutralize_formula(v))
+            cell = ws.cell(row=r, column=pos[i], value=neutralize_formula(v))
             if template is not None and r > start_row:
                 cell._style = copy(styles[i])
             if formats[i]:
@@ -373,12 +390,189 @@ def export(form_key: str, df: pd.DataFrame, ctx: dict | None = None) -> bytes:
     if template is None:                               # 새 파일이면 열 너비를 대충 맞춘다
         for i, c in enumerate(cols):
             width = max([len(str(c["header"]))] + [len(str(v)) for v in data.iloc[:200, i].tolist()]) + 2
-            ws.column_dimensions[get_column_letter(first_col + i)].width = min(max(width * 1.2, 8), 50)
+            ws.column_dimensions[get_column_letter(pos[i])].width = min(max(width * 1.2, 8), 50)
         ws.freeze_panes = ws.cell(row=header_row + 1, column=first_col)
     _fill_placeholders(ws, ctx)
     buf = io.BytesIO()
     wb.save(buf)
     return buf.getvalue()
+
+
+# ── 업로드한 회사 엑셀의 양식을 기억해 내려받기에 쓴다 ──────────────────
+# 올리기 항목 → 같은 열을 내려받는 양식 (내려받기 열 = 올리기 열의 상위 집합이라 회사 열 이름이 그대로 대응한다)
+LEARN_PAIRS = {"material_upload": "materials_master", "partner_upload": "partners", "bom_upload": "boms", "unit_upload": "units"}
+BULK_IMPORT_KEY = {"partners": "partner_upload", "bom": "bom_upload", "units": "unit_upload"}     # views/bulk_ui 의 kind → 올리기 항목
+_TOKEN_RE = re.compile(r"^[0-9a-f]{32}$")
+
+
+def _known_headers() -> set[str]:
+    names = {_norm(k) for k in SYNONYMS} | {_norm(x) for v in SYNONYMS.values() for x in v}
+    for _title, cols in EXPORT_FORMS.values():
+        names |= {_norm(c) for c in cols}
+    for _title, fields in IMPORT_FORMS.values():
+        for std, defaults in fields.values():
+            names |= {_norm(std)} | {_norm(d) for d in defaults}
+    return names
+
+
+def _guess_header_row(ws) -> int:
+    """머리글 행 추정: 글자 칸이 많고 시스템 항목 이름과 많이 맞는 행 (제목·결재란 줄을 건너뛴다)."""
+    known = _known_headers()
+    best, best_score = 1, -1
+    for i, row in enumerate(ws.iter_rows(min_row=1, max_row=30, values_only=True), start=1):
+        cells = [c for c in row if isinstance(c, str) and c.strip()]
+        score = len(cells) + 3 * sum(1 for c in cells if _norm(c) in known)
+        if score > best_score:
+            best, best_score = i, score
+    return best
+
+
+def learn(export_key: str, data: bytes, filename: str, import_key: str | None = None) -> dict:
+    """회사 엑셀(.xlsx) 한 개에서 내려받기 양식을 만든다 (저장은 adopt). {ok, problem, cfg, template, summary}.
+    머리글 아래의 데이터는 버리고(개인·거래 정보를 양식에 남기지 않음) 머리글·제목·결재란·첫 데이터 행의 서식만 남긴다."""
+    def fail(message: str) -> dict:
+        return {"ok": False, "problem": message}
+
+    if export_key not in EXPORT_FORMS:
+        return fail("없는 양식입니다.")
+    if not filename.lower().endswith(".xlsx"):
+        return fail("엑셀(.xlsx)만 양식으로 기억할 수 있습니다 (CSV·옛 .xls 는 서식이 없습니다).")
+    if len(data) > MAX_TEMPLATE_BYTES:
+        return fail("파일이 5MB 를 넘어 양식으로 기억하지 않았습니다 — 데이터가 많은 파일은 머리글만 있는 양식 파일을 관리자 > 엑셀 양식에서 올리세요.")
+    problem = xlsx_problem(data, config.XLSX_MAX_UNCOMPRESSED, config.XLSX_MAX_RATIO)
+    if problem:
+        return fail(problem)
+    try:
+        wb = openpyxl.load_workbook(io.BytesIO(data))
+    except Exception:
+        return fail("엑셀 파일을 열 수 없어 양식을 기억하지 못했습니다.")
+    if wb.vba_archive is not None:
+        return fail("매크로가 들어 있는 파일은 양식으로 기억하지 않습니다.")
+    icfg = load(import_key) if import_key else {}
+    ws = wb[icfg["sheet"]] if icfg.get("sheet") in wb.sheetnames else wb.worksheets[0]
+    header_row = int(icfg["header_row"]) if int(icfg.get("header_row") or 1) > 1 else _guess_header_row(ws)
+
+    sources = EXPORT_FORMS[export_key][1]
+    lookup: dict[str, str] = {}
+    for src in sources:
+        lookup.setdefault(_norm(src), src)
+    if import_key:                                       # 올리기에서 이미 연결해 둔 회사 열 이름(별칭)도 그대로 쓴다
+        for field, (std, defaults) in IMPORT_FORMS[import_key][1].items():
+            if std in sources:
+                for n in [std, *defaults, *icfg.get("aliases", {}).get(field, [])]:
+                    lookup.setdefault(_norm(n), std)
+    for src in sources:
+        for x in SYNONYMS.get(src, []):
+            lookup.setdefault(_norm(x), src)
+    cols, used = [], set()
+    for cell in ws[header_row]:
+        text = "" if cell.value is None else str(cell.value).strip()
+        if not text:
+            continue
+        src = lookup.get(_norm(text), "")
+        if src in used:
+            src = ""
+        if src:
+            used.add(src)
+        cols.append({"source": src, "header": text[:100], "format": "", "col": int(cell.column)})
+    if sum(1 for c in cols if c["source"]) < 2:
+        return fail(f"{header_row}행에서 이 시스템의 항목과 맞는 열 이름을 2개 이상 찾지 못해 양식으로 기억하지 않았습니다.")
+    unmapped = [c["header"] for c in cols if not c["source"]]
+    extra = [s for s in sources if s not in used]        # 회사 파일에 없던 항목은 오른쪽에 덧붙여 내려받는다 (데이터가 빠지지 않게)
+    last = max(c["col"] for c in cols)
+    for j, s in enumerate(extra, start=1):
+        cols.append({"source": s, "header": s, "format": "", "col": last + j, "new": True})
+
+    # 양식 파일 정리: 이 시트만, 머리글 아래 데이터는 비우고 첫 데이터 행의 서식만 남긴다
+    for name in wb.sheetnames:
+        if name != ws.title:
+            del wb[name]
+    for rng in list(ws.merged_cells.ranges):
+        if rng.min_row > header_row:
+            ws.unmerge_cells(str(rng))
+    start = header_row + 1
+    if ws.max_row > start:
+        ws.delete_rows(start + 1, ws.max_row - start)
+    for cell in ws[start]:
+        cell.value = None
+    buf = io.BytesIO()
+    wb.save(buf)
+    first_col = min(c["col"] for c in cols)
+    cfg = {"columns": cols, "sheet": ws.title, "header_row": header_row, "start_row": start,
+           "start_col": get_column_letter(first_col), "write_header": False, "title": ""}
+    summary = {"export_label": label(export_key), "sheet": ws.title, "header_row": header_row,
+               "mapped": sum(1 for c in cols if c["source"] and not c.get("new")), "total": len(cols) - len(extra),
+               "unmapped": unmapped, "extra": extra}
+    return {"ok": True, "problem": "", "cfg": cfg, "template": buf.getvalue(), "summary": summary}
+
+
+def adopt(export_key: str, cfg: dict, template: bytes, source_name: str, actor: dict | None) -> None:
+    """learn 으로 만든 양식을 내려받기 양식으로 저장한다 (같은 항목의 이전 양식·설정을 바꾼다)."""
+    storage.get().put(_key(export_key), template)
+    with db.transaction() as conn:
+        _save(conn, export_key, cfg, True, actor)
+        audit.record(conn, actor, "FORM_UPDATE", "excel_form", export_key,
+                     {"learned_from": source_name, "columns": sum(1 for c in cfg["columns"] if c["source"]), "sheet": cfg["sheet"]})
+
+
+def learn_state(import_key: str | None) -> dict | None:
+    """업로드 화면의 '이 엑셀의 양식을 기억' 선택에 쓸 현황. 기억하지 않는 항목이면 None."""
+    export_key = LEARN_PAIRS.get(import_key or "")
+    if not export_key:
+        return None
+    cfg = load(export_key)
+    from core import demo
+    return {"export_key": export_key, "label": label(export_key), "has_template": bool(cfg.get("has_template")),
+            "updated_at": cfg.get("updated_at"), "locked": demo.enabled()}
+
+
+def stage_learn(token: str, import_key: str, data: bytes, filename: str) -> dict:
+    """업로드 미리보기 단계에서 양식을 읽어 임시로 보관한다 (반영을 눌렀을 때만 저장 — adopt_staged)."""
+    export_key = LEARN_PAIRS.get(import_key)
+    if not export_key or not _TOKEN_RE.match(token):
+        return {"ok": False, "problem": "이 항목은 내려받기 양식을 기억하지 않습니다."}
+    out = learn(export_key, data, filename, import_key)
+    if not out["ok"]:
+        return out
+    store = storage.get()
+    store.put(f"uploads/{token}-form.xlsx", out["template"])
+    store.put(f"uploads/{token}-form.json", json.dumps({"export_key": export_key, "cfg": out["cfg"], "filename": filename,
+                                                         "summary": out["summary"]}, ensure_ascii=False).encode("utf-8"))
+    return {"ok": True, "summary": out["summary"]}
+
+
+def staged(token: str) -> dict | None:
+    """보관해 둔 양식의 요약 (미리보기 화면에 보여 줄 것)."""
+    if not _TOKEN_RE.match(token or ""):
+        return None
+    raw = storage.get().get(f"uploads/{token}-form.json")
+    try:
+        return json.loads(raw.decode("utf-8")) if raw else None
+    except ValueError:
+        return None
+
+
+def adopt_staged(token: str, actor: dict | None) -> str:
+    """반영이 성공했을 때: 보관해 둔 양식을 내려받기 양식으로 저장. 안내 문구 (없으면 '')."""
+    if not _TOKEN_RE.match(token or ""):
+        return ""
+    store = storage.get()
+    raw, template = store.get(f"uploads/{token}-form.json"), store.get(f"uploads/{token}-form.xlsx")
+    if raw is None or template is None:
+        return ""
+    try:
+        meta = json.loads(raw.decode("utf-8"))
+        adopt(meta["export_key"], meta["cfg"], template, meta.get("filename", ""), actor)
+        return f"'{label(meta['export_key'])}' 내려받기가 올린 파일의 양식으로 바뀌었습니다 — 이제 내려받으면 같은 모양으로 나옵니다."
+    finally:
+        discard_staged(token)
+
+
+def discard_staged(token: str) -> None:
+    if _TOKEN_RE.match(token or ""):
+        store = storage.get()
+        store.delete(f"uploads/{token}-form.xlsx")
+        store.delete(f"uploads/{token}-form.json")
 
 
 def sample_df(form_key: str) -> pd.DataFrame:

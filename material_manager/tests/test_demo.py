@@ -26,21 +26,66 @@ def test_demo_auto_login_and_seed(monkeypatch):
     assert c.get("/admin/users").status_code == 200      # 시스템관리자 화면도 열린다
 
 
-def test_demo_sample_is_large_and_consistent(monkeypatch):
+def test_demo_sample_is_clean_small_qty_big_amount(monkeypatch):
     application = _demo_app(monkeypatch)
-    assert repo.count_materials() >= 70
-    assert db.scalar("SELECT COUNT(*) FROM transactions") > 5000
-    assert db.scalar("SELECT COUNT(*) FROM warehouses") >= 9
+    assert 15 <= repo.count_materials() <= 40
+    assert db.scalar("SELECT COUNT(*) FROM transactions") < 600
     # 재고는 (자재, 창고, 로트) 어디서도 음수가 아니다
     assert db.scalar("""SELECT COUNT(*) FROM (SELECT SUM(CASE WHEN tx_type = 'OUT' THEN -qty ELSE qty END) s
                         FROM transactions GROUP BY material_id, warehouse_id, lot_no) x WHERE s < -0.001""") == 0
+    # 수량은 적고(자재·창고별 재고 100 이하) 금액은 크다(재고 평가 수천만 원 이상)
+    assert db.scalar("""SELECT MAX(s) FROM (SELECT SUM(CASE WHEN tx_type = 'OUT' THEN -qty ELSE qty END) s
+                        FROM transactions GROUP BY material_id, warehouse_id) x""") <= 100
+    assert db.scalar("""SELECT SUM(m.unit_price * s.q) FROM materials m JOIN (
+                        SELECT material_id, SUM(CASE WHEN tx_type = 'OUT' THEN -qty ELSE qty END) q FROM transactions
+                        GROUP BY material_id) s ON s.material_id = m.id""") > 50_000_000
     statuses = set(db.query_df("SELECT DISTINCT status FROM purchase_requests")["status"])
     assert {"PENDING", "APPROVED", "REJECTED", "ORDERED", "CANCELLED"} <= statuses
-    assert db.scalar("SELECT COUNT(*) FROM period_closes") >= 6
+    assert db.scalar("SELECT COUNT(*) FROM period_closes") >= 3
+    assert db.scalar("SELECT COUNT(*) FROM boms") >= 2
     c = application.test_client()
-    for url in ("/", "/stock/", "/history/", "/history/?page=20", "/purchase/", "/purchase/?tab=po", "/approvals/",
-                "/periods/", "/reports/ledger", "/reports/valuation", "/reports/reconcile", "/admin/users", "/admin/audit", "/materials/", "/statements/"):
+    for url in ("/", "/stock/", "/history/", "/purchase/", "/purchase/?tab=po", "/approvals/", "/periods/", "/reports/ledger",
+                "/reports/valuation", "/reports/reconcile", "/admin/users", "/admin/audit", "/materials/", "/statements/",
+                "/production/", "/mrp/", "/data/"):
         assert c.get(url).status_code in (200, 302), url
+
+
+def test_demo_packs_add_complex_data_once(monkeypatch):
+    application = _demo_app(monkeypatch)
+    from core import seed_packs
+    c = application.test_client()
+    c.get("/")
+    token = csrf(c)
+    before = db.scalar("SELECT COUNT(*) FROM transactions")
+    for key in ("lots", "multiplant", "procurement"):
+        assert not seed_packs.done(key)
+        res = c.post(f"/data/pack/{key}", data={"_csrf": token}, follow_redirects=True)
+        assert res.status_code == 200 and "추가했습니다" in res.get_data(as_text=True), key
+        assert seed_packs.done(key)
+        again = c.post(f"/data/pack/{key}", data={"_csrf": token}, follow_redirects=True)
+        assert "이미 추가" in again.get_data(as_text=True)
+    assert db.scalar("SELECT COUNT(*) FROM transactions") > before + 150
+    assert db.scalar("""SELECT COUNT(*) FROM (SELECT SUM(CASE WHEN tx_type = 'OUT' THEN -qty ELSE qty END) s
+                        FROM transactions GROUP BY material_id, warehouse_id, lot_no) x WHERE s < -0.001""") == 0
+    assert db.scalar("SELECT COUNT(*) FROM purchase_orders WHERE status = 'PARTIAL'") >= 3
+    assert db.scalar("SELECT COUNT(*) FROM lots") >= 40
+    assert c.get("/data/").status_code == 200 and c.get("/").status_code == 200
+    assert c.post("/data/pack/nothing", data={"_csrf": token}).status_code == 302
+
+
+def test_large_pack_after_clean_sample(monkeypatch):
+    application = _demo_app(monkeypatch)
+    from core import seed_packs
+    c = application.test_client()
+    c.get("/")
+    token = csrf(c)
+    res = c.post("/data/pack/large", data={"_csrf": token}, follow_redirects=True)
+    assert "추가했습니다" in res.get_data(as_text=True)
+    assert repo.count_materials() >= 60 and db.scalar("SELECT COUNT(*) FROM transactions") > 5000
+    assert db.scalar("""SELECT COUNT(*) FROM (SELECT SUM(CASE WHEN tx_type = 'OUT' THEN -qty ELSE qty END) s
+                        FROM transactions GROUP BY material_id, warehouse_id, lot_no) x WHERE s < -0.001""") == 0
+    assert db.scalar("SELECT COUNT(*) FROM period_closes WHERE action = 'CLOSE'") >= 6
+    assert seed_packs.done("large")
 
 
 def test_demo_logout_shows_button_and_user_is_repaired(monkeypatch):
@@ -86,8 +131,8 @@ def test_demo_reset_button_restores_sample_and_logs(monkeypatch, capsys):
     c = application.test_client()
     c.get("/")
     before = db.scalar("SELECT COUNT(*) FROM transactions")
-    mid = db.scalar("SELECT id FROM materials WHERE code = 'PK-TAPE-001'")
-    wh = db.scalar("SELECT id FROM warehouses WHERE code = 'IC-A'")
+    mid = db.scalar("SELECT id FROM materials WHERE code = 'PKG-002'")
+    wh = db.scalar("SELECT id FROM warehouses WHERE code = 'WH1'")
     token = csrf(c)
     res = c.post("/transactions/", data={"_csrf": token, "material_id": mid, "warehouse_id": wh, "tx_type": "OUT",
                                           "qty": "1", "tx_date": TODAY_STR(), "partner": "방문자"})

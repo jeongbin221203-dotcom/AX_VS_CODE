@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_macros.html" import csrf %}
+{% from "_macros.html" import csrf, learn_box, learn_result %}
 
 {% block content %}
 <h2>{{ heading }}</h2>
@@ -35,12 +35,14 @@
     <label class="grow">파일 (.xlsx · .csv)<input type="file" name="file" accept=".xlsx,.csv" required></label>
     <button class="btn btn-primary">미리보기</button>
   </div>
+  {{ learn_box(learn) }}
   <p class="muted small">회사 엑셀의 열 이름이 달라도 됩니다 — 흔한 이름(상호·업체명, 모품목·자품목 등)은 알아서 맞추고, 더 맞출 이름은 관리자 → 엑셀 양식에서 넣습니다.
     한 줄이라도 문제가 있으면 아무것도 반영하지 않습니다.</p>
 </form>
 
 {% if preview %}
   <h3>미리보기 — {{ preview.summary }}</h3>
+  {{ learn_result(learn_summary) }}
   {% if preview.errors %}
     <div class="alert alert-error">고칠 곳 {{ preview.errors|length }}개 — 파일을 고쳐 다시 올리세요.<br>{{ preview.errors[:20]|join('\n') }}</div>
   {% endif %}

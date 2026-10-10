@@ -4,6 +4,18 @@
 <p><a href="{{ url_for('admin.forms_list') }}">← 엑셀 양식 목록</a> · <strong>{{ form_title }}</strong> (내려받기)</p>
 
 <section class="card">
+  <h3>0. 회사 엑셀로 자동 설정</h3>
+  <p class="muted small">회사에서 쓰는 엑셀 파일을 올리면 머리글 행·시트·열 이름·서식(로고·제목·결재란 포함)을 읽어 아래 설정과 양식 파일을 자동으로 만듭니다.
+    올린 파일의 <strong>데이터는 저장하지 않고</strong>(머리글 아래를 비움) 서식만 남깁니다. 이 시스템에 없는 열은 그대로 두고, 파일에 없던 항목은 오른쪽에 덧붙입니다.
+    자동 설정 뒤에 아래에서 열을 손볼 수 있습니다. (.xlsx, 5MB 이하)</p>
+  <form class="row-actions" method="post" action="{{ url_for('admin.form_learn', key=key) }}" enctype="multipart/form-data">
+    {{ csrf() }}
+    <label>회사 엑셀 파일<input type="file" name="file" accept=".xlsx" required></label>
+    <button class="btn btn-primary">📄 양식 기억하기</button>
+  </form>
+</section>
+
+<section class="card">
   <h3>1. 회사 양식 파일 (선택)</h3>
   {% if cfg.has_template %}
     <p>올린 양식: 시트 {{ sheets|join(', ') }} ·
@@ -43,7 +55,7 @@
     <tr><th>#</th><th>이 시스템 항목</th><th>회사 양식 머리글</th><th>숫자 서식</th></tr>
     {% for r in rows %}
     <tr>
-      <td class="num">{{ loop.index }}</td>
+      <td class="num">{{ loop.index }}<input type="hidden" name="col" value="{{ r.col or '' }}"><input type="hidden" name="new" value="{{ '1' if r.new else '' }}"></td>
       <td><select name="source"><option value="">(사용 안 함)</option>
         {% for s in sources %}<option {{ 'selected' if s == r.source }}>{{ s }}</option>{% endfor %}</select></td>
       <td><input name="header" value="{{ r.header }}"></td>

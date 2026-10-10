@@ -159,3 +159,21 @@
   {% else %}<p class="muted small">기록이 없습니다.</p>{% endif %}
 </details>
 {% endmacro %}
+
+{# 업로드 화면: 이 엑셀의 양식을 내려받기 양식으로 기억 (관리자만) #}
+{% macro learn_box(learn) %}
+  {% if learn and not learn.locked and can('ADMIN') %}
+  <label class="check learn-box"><input type="checkbox" name="learn_form" value="1" {{ 'checked' if not learn.has_template }}>
+    이 엑셀의 양식을 '{{ learn.label }}' 내려받기 양식으로 기억
+    <span class="hint">{{ '이미 저장된 양식이 있습니다 — 체크하면 이 파일의 양식으로 바뀝니다 (.xlsx 만)' if learn.has_template else '나중에 내려받을 때 같은 모양(열 순서·이름·서식·제목)으로 나옵니다 (.xlsx 만, 데이터는 저장 안 함)' }}</span></label>
+  {% endif %}
+{% endmacro %}
+
+{% macro learn_result(summary) %}
+  {% if summary %}
+  <div class="alert alert-info">📄 이 파일의 양식을 읽었습니다 — 시트 <strong>{{ summary.sheet }}</strong> · 머리글 {{ summary.header_row }}행 · 열 {{ summary.total }}개 중 {{ summary.mapped }}개 연결.
+    반영하면 '{{ summary.export_label }}' 내려받기가 이 양식으로 나옵니다.
+    {% if summary.unmapped %}<br>연결하지 못한 열(그대로 비워 둡니다): {{ summary.unmapped[:8]|join(', ') }}{% endif %}
+    {% if summary.extra %}<br>파일에 없던 항목(오른쪽에 덧붙여 내려받음): {{ summary.extra[:8]|join(', ') }}{% endif %}</div>
+  {% endif %}
+{% endmacro %}

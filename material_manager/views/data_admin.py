@@ -15,7 +15,7 @@ import pandas as pd
 from flask import Blueprint, abort, flash, redirect, request, session, url_for
 
 import config
-from core import audit, db, excel_forms, jobs, repository as repo, seed, services, storage, tasks
+from core import audit, db, excel_forms, jobs, repository as repo, seed_packs, services, storage, tasks
 from core.utils import to_csv_zip_bytes, to_excel_bytes, xlsx_problem
 from views.helpers import Table, actor, file_response, form_response, render_page, role_required, xlsx_response
 
@@ -26,8 +26,10 @@ PREVIEW_FMT = {"안전재고": "{:,.2f}", "단가": "₩{:,.0f}"}
 
 
 def _page(**ctx):
-    from core import seed_mfg
-    return render_page("data_admin.html", "data", material_cnt=repo.count_materials(), mfg_exists=seed_mfg.exists(),
+    ctx.setdefault("learn_summary", None)
+    packs = [{"key": p.key, "title": p.title, "summary": p.summary, "done": seed_packs.done(p.key)} for p in seed_packs.PACKS]
+    return render_page("data_admin.html", "data", learn=excel_forms.learn_state("material_upload"),
+                       material_cnt=repo.count_materials(), packs=packs,
                        db_file=not db.is_pg() and config.DB_PATH.exists(), is_pg=db.is_pg(),
                        storage_name=storage.get().name,
                        attach_cnt=len(storage.get().keys("attachments/")), **ctx)
@@ -98,8 +100,14 @@ def upload():
     session["upload_token"] = token          # 미리보기를 본 사람만 반영할 수 있게 세션에 묶는다
     storage.get().put(f"uploads/{token}.json",
                       result.df.to_json(orient="records", force_ascii=False).encode("utf-8"))
+    learn = None
+    if request.form.get("learn_form") == "1" and not excel_forms.learn_state("material_upload")["locked"]:   # 이 엑셀의 양식을 기억 (반영 때 저장)
+        learn = excel_forms.stage_learn(token, "material_upload", data, uploaded.filename)
+        if not learn["ok"]:
+            flash(f"양식은 기억하지 않았습니다: {learn['problem']}", "warning")
     return _page(preview=Table(result.df.drop(columns="_blank").rename(columns=config.MATERIAL_COLS), PREVIEW_FMT),
-                 token=token, preview_cnt=len(result.df), filename=uploaded.filename)
+                 token=token, preview_cnt=len(result.df), filename=uploaded.filename,
+                 learn_summary=learn["summary"] if learn and learn["ok"] else None)
 
 
 @bp.post("/upload/apply")
@@ -121,13 +129,21 @@ def apply_upload():
     df = df[[*config.MATERIAL_COLS, "_blank"]]
     storage.get().delete(key)
     who = actor()
+
+    def run(progress=None):
+        result = services.import_materials(df, who)
+        excel_forms.adopt_staged(token, who)         # 양식을 기억하기로 했다면 반영이 끝난 뒤 저장
+        return result
+
     if len(df) > config.BG_ROWS:                    # 자재가 많으면 백그라운드로 (요청 제한에 걸리지 않게)
-        tid = tasks.start("material_import", f"자재 마스터 일괄 반영 ({len(df):,}줄)",
-                          lambda progress: services.import_materials(df, who), who)
+        tid = tasks.start("material_import", f"자재 마스터 일괄 반영 ({len(df):,}줄)", run, who)
         flash(f"자재 {len(df):,}줄 반영을 시작했습니다. 끝나면 이 화면에 결과가 나옵니다.", "info")
         return redirect(url_for("tasks.detail", task_id=tid))
-    result = services.import_materials(df, who)
+    staged = excel_forms.staged(token)
+    result = run()
     flash(result.message, "success")
+    if staged:
+        flash(f"'{excel_forms.label(staged['export_key'])}' 내려받기가 올린 파일의 양식으로 바뀌었습니다 — 이제 내려받으면 같은 모양으로 나옵니다.", "success")
     return redirect(url_for("data_admin.index"))
 
 
@@ -201,19 +217,34 @@ def backup_attachments():
 @bp.post("/seed")
 @role_required("ADMIN")
 def make_seed():
+    """기본 샘플(수량은 적고 금액은 큰 깔끔한 데이터) — 빈 DB에서만."""
     if repo.count_materials():
-        flash("샘플 생성은 빈 DB에서만 가능합니다.", "warning")
+        flash("기본 샘플 생성은 빈 DB에서만 가능합니다. 복잡한 데이터는 '추가 데이터 목록'에서 더하세요.", "warning")
     else:
-        seed.seed(history=True)                # 지난 11개월 거래·장기 미사용 자재까지
-        audit.log(actor(), "SEED", "material", "", {"materials": repo.count_materials()})
-        flash("샘플 데이터가 생성되었습니다.", "success")
+        from core import demo, seed_clean
+        counts = seed_clean.seed_clean()
+        demo._extras()                         # 거래처 마스터 · BOM·작업지시·MRP 샘플
+        audit.log(actor(), "SEED", "material", "", counts)
+        flash(f"기본 샘플을 생성했습니다 — 자재 {counts.get('materials', 0)}종, 거래 {counts.get('transactions', 0):,}건.", "success")
+    return redirect(url_for("data_admin.index"))
+
+
+@bp.post("/pack/<key>")
+@role_required("ADMIN")
+def add_pack(key: str):
+    """추가 데이터 목록에서 고른 팩 하나를 넣는다 (팩마다 한 번만, 시연·교육용 DB)."""
+    if not repo.count_materials():
+        flash("먼저 기본 샘플을 생성하거나 자재를 등록하세요.", "warning")
+        return redirect(url_for("data_admin.index"))
+    ok, msg = seed_packs.add(key, actor())
+    flash(msg, "success" if ok else "warning")
     return redirect(url_for("data_admin.index"))
 
 
 @bp.post("/seed-mfg")
 @role_required("ADMIN")
 def make_seed_mfg():
-    """제조 공장 샘플 추가 (다른 데이터가 있어도 한 번만). 운영 DB에서는 쓰지 말 것 — 화면에서 확인 문구를 받는다."""
+    """제조 공장 샘플 추가 (다른 데이터가 있어도 한 번만). 추가 데이터 목록의 '제조 공장'과 같다."""
     from core import seed_mfg
     if seed_mfg.exists():
         flash("제조 샘플은 이미 추가되어 있습니다.", "info")
