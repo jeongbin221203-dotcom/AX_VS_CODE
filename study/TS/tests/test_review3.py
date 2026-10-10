@@ -287,3 +287,9 @@ def test_vocab_quiz_options_never_repeat(tmp_path):
             qs = _json.loads(_re.search(r'id="vq-data">(.*?)</script>', html, _re.S).group(1))
             for q in qs:
                 assert len(q["options"]) == 4 and len(set(q["options"])) == 4 and q["options"][q["answer"]] == q["meaning"], q
+
+
+def test_home_cards_have_vocab_button(tmp_path):
+    app = create_app({"TESTING": True, "DB_PATH": tmp_path / "h.db"})
+    html = app.test_client().get("/").get_data(as_text=True)
+    assert html.count("hub-vocab") >= 2 and "단어 공부 시작" in html and "학술 어휘 공부 시작" in html

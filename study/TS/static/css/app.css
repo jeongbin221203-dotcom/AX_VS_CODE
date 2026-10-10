@@ -403,3 +403,11 @@ ul.clean li { margin: 4px 0; }
 .vocab-hero .done-note { color: var(--ok); font-weight: 700; }
 .vocab-nudge { border-left: 4px solid var(--accent); background: var(--accent-soft); padding: 10px 14px; border-radius: 8px; margin-bottom: 14px; }
 @media (max-width: 720px) { .vocab-hero { grid-template-columns: 1fr; } .vocab-hero .cta { min-width: 0; } }
+
+/* 메인 시험 카드의 단어 공부 버튼 — 단어를 먼저 */
+.hub-vocab { display: block; margin: 10px 16px 12px; padding: 11px 14px; border: 2px solid var(--accent); border-radius: 10px;
+  background: var(--accent-soft); color: var(--ink); text-decoration: none; }
+.hub-vocab b { display: block; font-size: 1.05rem; color: var(--accent); }
+.hub-vocab span { font-size: .85rem; color: var(--ink-2); }
+.hub-vocab:hover { background: var(--accent); }
+.hub-vocab:hover b, .hub-vocab:hover span { color: #fff; }

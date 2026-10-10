@@ -24,6 +24,9 @@
       <span>{% if e.last %}마지막 학습 {{ e.last }}{% else %}아직 기록 없음{% endif %}</span>
       <span>{% if e.date %}시험일 {{ e.date }}{% else %}<a href="{{ url_for('main.settings') }}">시험일 정하기</a>{% endif %}</span>
     </div>
+    {% if e.vocab %}
+    <a class="hub-vocab" href="{{ e.vocab.href }}"><b>{{ e.vocab.title }}</b><span>{{ e.vocab.sub }}</span></a>
+    {% endif %}
     <div class="hub-links">
       <div class="hub-quick">{% for label, href in e.links %}<a class="btn small" href="{{ href }}">{{ label }}</a>{% endfor %}</div>
       <a class="btn primary hub-go" href="{{ e.href }}">{{ e.name }} 들어가기 →</a>

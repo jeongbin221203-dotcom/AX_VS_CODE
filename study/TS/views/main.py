@@ -43,22 +43,26 @@ def home():
     tsp_est = S.tsp_estimate(S.tsp_task_stats())
     tsp_lv = S.tsp_level(tsp_est)
     opic = S.opic_stats()
+    plan = planner.build(tb, st)
+    vh = vocab_hero(plan, st)
     exams = [
         {"key": "toeic", "href": url_for("main.dashboard"), "mark": "LC·RC",
+         "vocab": {"title": "📘 단어 공부 시작", "href": url_for("vocab.study"),
+                   "sub": ("오늘 단어를 다 했어요 ✅" if vh["done"] else f"오늘 복습 {vh['due']}개 · 새 단어 {vh['new']}개")},
          "now": f"{score}점" if score else "–", "now_sub": f"{grade.name} · {src}" if grade else "진단 테스트로 시작",
          "target": f"{st.get('target_score')}점", "n": f"{toeic_n:,}문항 · 단어 {len(tb.vocab):,}",
          "last": last("SELECT MAX(created_at) FROM sessions"),
          "date": st.get("exam_date"),
-         "links": [("📘 단어", url_for("vocab.overview")), ("파트 연습", url_for("quiz.practice")),
-                   ("모의고사", url_for("quiz.mock"))]},
+         "links": [("파트 연습", url_for("quiz.practice")), ("모의고사", url_for("quiz.mock")),
+                   ("진단 테스트", url_for("quiz.diagnostic"))]},
         {"key": "toefl", "href": url_for("toefl.home"), "mark": "R·L·S·W",
+         "vocab": {"title": "📘 학술 어휘 공부 시작", "href": url_for("tvocab.study"), "sub": "지문 핵심 단어부터"},
          "now": f"밴드 {overall}" if overall else "–",
          "now_sub": T.cefr(overall) if overall else ("영역별 " + " · ".join(f"{k} {v}" for k, v in bands.items() if v) if any(bands.values()) else "네 영역을 풀면 계산"),
          "target": f"밴드 {st.get('toefl_target')}", "n": f"{toefl_n:,}문제 · 어휘 {len(fb.vocab):,}",
          "last": last("SELECT MAX(created_at) FROM toefl_attempts"),
          "date": st.get("toefl_exam_date"),
-         "links": [("📘 학술 어휘", url_for("tvocab.overview")), ("영역 연습", url_for("toefl.home") + "#sec-R"),
-                   ("모의고사", url_for("toefl.mock"))]},
+         "links": [("영역 연습", url_for("toefl.home") + "#sec-R"), ("모의고사", url_for("toefl.mock"))]},
         {"key": "toeic-speaking", "href": url_for("speaking.tsp_home"), "mark": "11문항",
          "now": f"{tsp_est}점" if tsp_est is not None else "–", "now_sub": tsp_lv[1] if tsp_lv else "다섯 유형을 연습하면 계산",
          "target": f"{st.get('tsp_target')}점", "n": f"{sum(len(v) for v in sb.tsp.values()):,}문제",
