@@ -251,3 +251,33 @@ def test_demo_guide_links_follow_role(monkeypatch):
     c.get("/demo/as/VIEWER")
     page = c.get("/").get_data(as_text=True)
     assert "조회만 됩니다" in page and 'href="/transactions/batch"' not in page and 'href="/admin/jobs"' not in page
+
+
+def test_demo_role_users_have_data_scope(monkeypatch):
+    """'다른 역할로 보기'의 관리자·담당자·조회가 빈 화면이 아니도록 샘플 계정에 데이터 범위를 준다 (범위 없는 계정은 아무것도 못 봄)."""
+    from core import org
+    application = _demo_app(monkeypatch)
+    c = application.test_client()
+    uid = {r: db.scalar("SELECT id FROM users WHERE username = ?", (n,)) for r, n in
+           (("MANAGER", "park.jh"), ("VIEWER", "kang.dy"), ("CLERK", "kim.mj"))}
+    assert org.allowed_warehouses(auth.get_user(uid["MANAGER"])) is None
+    assert org.allowed_warehouses(auth.get_user(uid["VIEWER"])) is None
+    clerk = org.allowed_warehouses(auth.get_user(uid["CLERK"]))
+    busan = {int(r.id) for r in db.query_df("SELECT w.id FROM warehouses w JOIN plants p ON p.id = w.plant_id WHERE p.code = 'P1'").itertuples()}
+    assert clerk == busan and clerk                         # 담당자 = 부산 플랜트의 창고들
+    for role in ("MANAGER", "CLERK", "VIEWER"):
+        html = c.get(f"/demo/as/{role}", follow_redirects=True).get_data(as_text=True)
+        assert "데이터 범위 없음" not in html
+
+
+def test_demo_guide_matches_sample_data(monkeypatch):
+    """대시보드의 시연 안내가 말하는 값이 실제 샘플과 같아야 한다."""
+    application = _demo_app(monkeypatch)
+    c = application.test_client()
+    html = c.get("/").get_data(as_text=True)
+    assert "볼베어링 1 BOX = 20 EA" in html and "브래킷" not in html
+    row = db.query_df("SELECT m.name, u.factor FROM material_units u JOIN materials m ON m.id = u.material_id "
+                      "WHERE u.barcode = '8809876500993'")
+    assert row.iloc[0]["name"] == "깊은홈 볼베어링" and float(row.iloc[0]["factor"]) == 20
+    qty = sorted(float(v) for v in db.query_df("SELECT qty FROM mrp_demands").iloc[:, 0])
+    assert qty == [6.0, 12.0]

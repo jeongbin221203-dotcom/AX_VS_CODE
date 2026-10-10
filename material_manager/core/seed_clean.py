@@ -296,4 +296,19 @@ def seed_clean() -> dict:
             break
         if not periods.close_month(ym, {**admin, "ip": ""}).ok:
             break
+    _grant_scopes(users)
     return counts
+
+
+def _grant_scopes(users: dict) -> None:
+    """샘플 계정에 데이터 범위를 준다. 범위가 없는 계정은 일부러 아무것도 보이지 않게 해 두었으므로(안전한 기본값),
+    이걸 안 주면 시연 '다른 역할로 보기'의 관리자·담당자·조회 화면이 비어 보인다.
+    관리자·조회는 전체 창고, 담당자는 맡은 지역의 플랜트(부산 = 기본 플랜트 P1, 창원 = P-CW)."""
+    from core import org
+    plant_of = {"BS": "P1", "CW": "P-CW"}
+    ids = {r.code: int(r.id) for r in db.query_df("SELECT id, code FROM plants").itertuples()}
+    for u in users.values():
+        if u["role"] in ("MANAGER", "VIEWER"):
+            org.set_user_scope(u["id"], True, [], [], audit.SYSTEM)
+        elif u["role"] == "CLERK" and plant_of.get(u["area"]) in ids:
+            org.set_user_scope(u["id"], False, [ids[plant_of[u["area"]]]], [], audit.SYSTEM)

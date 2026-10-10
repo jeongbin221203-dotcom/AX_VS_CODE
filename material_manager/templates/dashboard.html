@@ -17,10 +17,10 @@
     {% if not can('CLERK') %}이 역할은 조회만 됩니다 — 아래 화면은 왼쪽 아래 '다른 역할로 보기'에서 담당자 이상으로 바꿔 보세요.{% endif %}</p>
   {% macro go(role, href, text) %}{% if can(role) %}<a href="{{ href }}">{{ text }}</a>{% else %}<span title="이 역할은 열 수 없음">{{ text }}</span>{% endif %}{% endmacro %}
   <ol class="small">
-    <li>{{ go('CLERK', url_for('transactions.batch'), '📷 여러 줄·스캔 입출고') }} — 스캔 칸에 <code>8801234500017</code>(팔레트)이나 상자 바코드 <code>8809876500993</code>(볼트 1 BOX = 500 EA)을 넣고 Enter.
+    <li>{{ go('CLERK', url_for('transactions.batch'), '📷 여러 줄·스캔 입출고') }} — 스캔 칸에 <code>8801234500017</code>(수출용 목재 팔레트)이나 상자 바코드 <code>8809876500993</code>(깊은홈 볼베어링 1 BOX = 20 EA)을 넣고 Enter.
       '찍을 때마다' 수량을 바꾸면 그만큼씩, <code>24*PKG-001</code>처럼 한 번만 다른 수량도 됩니다(휴대폰은 📷 카메라, 아이폰 포함).</li>
-    <li>{{ go('CLERK', url_for('mrp.index'), '📅 MRP') }} — 송풍기 출하 계획 180대로 계산한 구매·생산 계획(리드타임 역산, 늦은 발주는 빨간 줄) → 구매요청·작업지시로 바꾸기.</li>
-    <li>{{ go('CLERK', url_for('production.index', tab='wo'), '🏭 작업지시') }} — 진행 중인 브래킷 작업지시에서 자재 투입·반납, 공정 실적, 완료(실제 원가) · {{ go('CLERK', url_for('production.index', tab='wip'), '재공품') }}.</li>
+    <li>{{ go('CLERK', url_for('mrp.index'), '📅 MRP') }} — 송풍기 출하 계획(12대·6대)으로 계산한 구매·생산 계획(리드타임 역산, 늦은 발주는 빨간 줄) → 구매요청·작업지시로 바꾸기.</li>
+    <li>{{ go('CLERK', url_for('production.index', tab='wo'), '🏭 작업지시') }} — 진행 중인 구동 모듈 작업지시(WO-DEMO-01)에서 공정 실적, 완료(실제 원가)와 새 작업지시의 자재 투입·반납 · {{ go('CLERK', url_for('production.index', tab='wip'), '재공품') }}.</li>
     <li><a href="{{ url_for('partners.index', tab='unknown') }}">🤝 거래처 → 미등록 이름 정리</a> — '대한팔레트 부산지점'을 기존 거래처에 연결 · 엑셀 일괄 등록.</li>
     <li><a href="{{ url_for('materials.labels') }}">🏷️ 바코드 라벨 인쇄</a>, {{ go('CLERK', url_for('purchase.index'), '🛒 구매') }} 결재와 왼쪽 아래 '다른 역할로 보기'.</li>
   </ol>
