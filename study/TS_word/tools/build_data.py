@@ -1,6 +1,6 @@
 """TS 앱의 단어(content/*/vocab*.json)를 서버 없이 쓰는 data/*.js 로 바꾼다.
 
-실행:  python tools/build_data.py            (TS_ward 폴더에서)
+실행:  python tools/build_data.py            (TS_word 폴더에서)
        python tools/build_data.py ../TS      (TS 앱 위치를 직접 줄 때)
 
 HTML 을 file:// 로 열어도 되게(fetch 는 file:// 에서 막힘) JSON 이 아니라 <script> 로 읽는 .js 로 만든다.

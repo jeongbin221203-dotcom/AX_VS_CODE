@@ -1,4 +1,4 @@
-/* TS 단어(TS_ward) 전용 추가 스타일 — 기본 모양은 css/app.css (TS 앱과 같음) */
+/* TS 단어(TS_word) 전용 추가 스타일 — 기본 모양은 css/app.css (TS 앱과 같음) */
 .vocab-hero { display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: center; margin-bottom: 14px;
   border: 2px solid var(--accent); background: var(--accent-soft); }
 .vocab-hero h2 { margin: 0 0 4px; }
