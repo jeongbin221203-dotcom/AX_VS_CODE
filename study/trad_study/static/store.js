@@ -1,5 +1,5 @@
 /* 학습 기록 저장소 — 시험 기록·메모·AI 해설은 이 브라우저(IndexedDB)에만 저장합니다.
- * 서버는 문제·이미지·공식 정답·AI 호출만 맡고, 기록은 갖지 않습니다.
+ * 문제·이미지·공식 정답은 data/ 의 정적 파일이고, 기록은 이 브라우저에만 있습니다.
  * app.js 의 api() 가 /api/dashboard·attempts·wrong·questions/<id> 요청을 여기로 보냅니다(응답 모양은 예전 서버와 같음).
  * 브라우저와 Node 테스트(tests/store.test.js)에서 같은 파일을 씁니다. */
 (function (root, factory) {
@@ -161,7 +161,7 @@
       if (a0.submitted_at !== null) return a0;
       let answers;
       try { answers = await opts.answers(a0.items.map(i => i.qid)); }
-      catch (e) { throw fail(e.status || 502, e.status ? e.message : '채점하려면 서버에 연결해야 해요. 연결을 확인하고 다시 시도해 주세요.'); }
+      catch (e) { throw fail(e.status || 502, e.status ? e.message : '공식 정답 파일을 불러오지 못했어요. 새로 고침한 뒤 다시 시도해 주세요.'); }
       return mutate(s => {
         const a = needAttempt(s, id);
         if (a.submitted_at !== null) return a;

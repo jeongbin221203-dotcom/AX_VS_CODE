@@ -1,8 +1,5 @@
 #!/usr/bin/env sh
 set -eu
 cd "$(dirname "$0")"
-if [ ! -x .venv/bin/python ]; then
-  python3 -m venv .venv
-fi
-.venv/bin/python -m pip install -r requirements.txt
-exec .venv/bin/python app.py
+echo "Open http://127.0.0.1:5091 in your browser. Stop with Ctrl+C."
+exec python3 -m http.server 5091 --bind 127.0.0.1

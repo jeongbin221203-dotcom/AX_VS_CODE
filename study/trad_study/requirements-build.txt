@@ -1,0 +1,4 @@
+PyMuPDF>=1.26.0,<2
+Pillow>=11
+fonttools>=4.50
+brotli>=1.1

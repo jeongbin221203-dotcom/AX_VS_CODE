@@ -1,1 +1,0 @@
-{"version":"0.2.0","configurations":[{"name":"무역연습실 Flask 실행","type":"debugpy","request":"launch","program":"${workspaceFolder}/app.py","cwd":"${workspaceFolder}","console":"integratedTerminal","justMyCode":true}]}

@@ -1,5 +1,5 @@
-// static/store.js 검증 — 실제 문항·공식 정답(FIXTURE_DIR 의 catalog.json·answers.json)으로 시험·채점·오답노트·백업을 확인한다.
-// 실행: python -m pytest tests -q (test_browser_store_in_node 가 이 파일을 실행)  또는  FIXTURE_DIR=<폴더> node --test tests/store.test.js
+// static/store.js 검증 — 실제 문항·공식 정답(data/catalog.js·data/answers.js)으로 시험·채점·오답노트·백업을 확인한다.
+// 실행: node --test
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
@@ -7,11 +7,14 @@ const fs = require('fs');
 const path = require('path');
 const { createStore, memoryAdapter, isLocal, cleanState } = require('../static/store.js');
 
-const dir = process.env.FIXTURE_DIR;
-if (!dir) throw new Error('FIXTURE_DIR 이 필요합니다 (pytest 로 실행하세요).');
-const read = name => JSON.parse(fs.readFileSync(path.join(dir, name), 'utf-8'));
-const catalog = read('catalog.json').items;
-const answers = read('answers.json');
+const vm = require('node:vm');
+const loadData = name => {
+  const sandbox = { window: {} };
+  vm.runInNewContext(fs.readFileSync(path.join(__dirname, '..', 'data', name), 'utf-8'), sandbox);
+  return sandbox.window;
+};
+const catalog = loadData('catalog.js').TRADE_CATALOG;
+const answers = loadData('answers.js').TRADE_ANSWERS;
 const wrongChoice = qid => answers[qid] % 4 + 1;
 
 function setup(extra = {}) {
@@ -111,7 +114,7 @@ test('시간이 지났는데 서버에 못 닿으면 보류했다가 연결되�
   const waiting = await view(t, id);
   assert.equal(waiting.submitted_at, null);
   await rejects(answer(t, id, a.questions[0].id, 1), 409);                                 // 보류 중에도 고칠 수 없음
-  await assert.rejects(api(t, 'POST', `/api/attempts/${id}/submit`, {}), /서버에 연결/);
+  await assert.rejects(api(t, 'POST', `/api/attempts/${id}/submit`, {}), /정답 파일을 불러오지/);
   t.env.offline = false;
   assert.ok((await view(t, id)).submitted_at !== null);
 });
@@ -280,22 +283,6 @@ test('이 앱의 백업이 아니거나 고친 흔적이 있는 파일은 거부
   for (const [name, text] of Object.entries(cases)) await assert.rejects(t.store.importJson(text), e => e.status === 400, name);
   assert.equal((await api(t, 'GET', '/api/dashboard')).history.length, 1);                 // 그대로
   assert.equal((await view(t, id)).questions[0].choice, 1);
-});
-
-test('예전 서버(sqlite) 백업을 바꾼 기록도 그대로 복원되고 이어서 쓸 수 있음', async () => {
-  const converted = read('converted.json');
-  const t = setup();
-  assert.deepEqual(await t.store.importState(converted), { attempts: 2, notes: 1, explanations: 1 });
-  const d = await api(t, 'GET', '/api/dashboard');
-  assert.equal(d.completed, 1); assert.equal(d.average, 90);
-  assert.equal(d.wrong, 2);                                                                 // 마지막 3문항을 틀렸고 그중 1개는 복습 완료 표시 → 복습할 문제 2
-  assert.equal((await api(t, 'GET', '/api/wrong')).items.length, 3);
-  const going = d.history.find(h => h.id === 'old2');
-  assert.equal(going.submitted_at, null); assert.equal(going.total, 3);
-  const r = await view(t, 'old1');
-  assert.equal(r.questions[2].flagged, true); assert.equal(r.questions.filter(q => !q.is_correct).length, 3);
-  const w = (await api(t, 'GET', '/api/wrong')).items.find(i => i.note);
-  assert.equal(w.note, '옛 메모'); assert.equal(w.mastered, 1);
 });
 
 test('주소 구분: 기록 요청만 이 저장소가 받음', () => {
