@@ -14,7 +14,8 @@ from jinja2 import Undefined
 from markupsafe import Markup
 
 BASE = Path(__file__).resolve().parent
-SNAPSHOT = Path(os.environ.get("STOCK_SNAPSHOT_FILE", BASE / "snapshot" / "signals.json"))
+SNAPSHOT = Path(os.environ.get("STOCK_SNAPSHOT_FILE", BASE / "snapshot" / "signals.json"))     # 최신
+DAYS = Path(os.environ.get("STOCK_SNAPSHOT_DAYS", BASE / "snapshot" / "days"))                 # 날짜별: YYYY-MM-DD.json
 DISCLAIMER = "투자 참고용 학습 도구이며 수익을 보장하지 않습니다. 투자 판단과 책임은 본인에게 있습니다."
 
 
@@ -27,6 +28,20 @@ def pct(v, d=1, sign=False):
 def load():
     try:
         return json.loads(SNAPSHOT.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+
+
+def days():
+    try:
+        return sorted(p.stem for p in DAYS.glob("*.json"))
+    except OSError:
+        return []
+
+
+def load_day(date):
+    try:
+        return json.loads((DAYS / f"{date}.json").read_text(encoding="utf-8"))
     except (OSError, ValueError):
         return None
 
@@ -53,12 +68,27 @@ def create_app():
 
     @app.get("/")
     def home():
-        rep = load()
+        asked = (request.args.get("date") or "").strip()
+        ds = days()
+        rep = None
+        if asked:
+            if len(asked) != 10 or not asked.replace("-", "").isdigit():
+                abort(400)
+            use = max((d for d in ds if d <= asked), default=None)       # 그날이 없으면 그 전 보관일
+            rep = load_day(use) if use else None
+            if rep is not None:
+                i = ds.index(use)
+                rep["meta"].update(asked=asked, prev=ds[i - 1] if i else None, next=ds[i + 1] if i + 1 < len(ds) else None)
+        else:
+            rep = load()
+            if rep and ds and rep["meta"].get("date") in ds:
+                i = ds.index(rep["meta"]["date"])
+                rep["meta"]["prev"] = ds[i - 1] if i else None
         min_sig = min(max(request.args.get("min", 1, type=int) or 1, 1), 6)
         if rep and min_sig > 1:
             for k in ("pred", "ai", "high"):
                 rep[k] = [r for r in rep.get(k, []) if len(r["signals"]) >= min_sig]
-        return render_template("signals.html", rep=rep, asked="", lo=None, hi=None, mode="today", min_sig=min_sig,
+        return render_template("signals.html", rep=rep, asked=asked, lo=ds[0] if ds else None, hi=ds[-1] if ds else None, mode="date" if asked else "today", min_sig=min_sig, snap_days=ds,
                                snapshot=True, base_tpl="snapshot_base.html", disclaimer=DISCLAIMER)
 
     @app.after_request

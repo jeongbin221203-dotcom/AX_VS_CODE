@@ -26,7 +26,15 @@
   {% if rep and rep.meta.next %}<a class="btn" href="{{ url_for('main.home', date=rep.meta.next, min=min_sig) }}">{{ rep.meta.next }} ▶</a>{% endif %}
   {% if mode == 'date' %}<a class="btn" href="{{ url_for('main.home', min=min_sig) }}">오늘</a>{% endif %}
   <span class="hint">{% if lo %}조회 가능 {{ lo }} ~ {{ hi }}(거래일이 아니면 그 전 거래일){% else %}날짜별 이력은 전 종목 훑기(signals-scan) 뒤에 생깁니다{% endif %}</span>
-</form>{% else %}<p class="toolbar datebar">신호 <a class="btn{{ ' on' if min_sig == 1 }}" href="?min=1">전체</a><a class="btn{{ ' on' if min_sig == 2 }}" href="?min=2">2개 이상 겹침</a><a class="btn{{ ' on' if min_sig == 3 }}" href="?min=3">3개 이상 겹침</a></p>{% endif %}
+</form>{% else %}<form class="toolbar datebar" method="get" action="/">
+  {% if snap_days %}<label>날짜 <select name="date">{% for d in snap_days|reverse %}<option value="{{ d }}" {{ 'selected' if rep and rep.meta.date == d }}>{{ d }}</option>{% endfor %}</select></label>{% endif %}
+  <label>신호 <select name="min"><option value="1" {{ 'selected' if min_sig == 1 }}>전체</option><option value="2" {{ 'selected' if min_sig == 2 }}>2개 이상 겹침</option><option value="3" {{ 'selected' if min_sig == 3 }}>3개 이상 겹침</option></select></label>
+  <button class="btn" type="submit">보기</button>
+  {% if rep and rep.meta.prev %}<a class="btn" href="?date={{ rep.meta.prev }}&min={{ min_sig }}">◀ {{ rep.meta.prev }}</a>{% endif %}
+  {% if rep and rep.meta.next %}<a class="btn" href="?date={{ rep.meta.next }}&min={{ min_sig }}">{{ rep.meta.next }} ▶</a>{% endif %}
+  {% if mode == 'date' %}<a class="btn" href="/?min={{ min_sig }}">최신</a>{% endif %}
+  <span class="hint">보관된 날짜 {{ snap_days|length }}개 · 앱이 켜진 날의 신호가 쌓입니다</span>
+</form>{% endif %}
 {% if not rep or not rep.meta.date %}
 <p class="note">{% if mode == 'date' %}{{ asked }} 이전의 이력이 없습니다.{% else %}아직 훑어 둔 결과가 없습니다. <code>python manage.py signals-scan</code>(전 종목, 약 15분)으로 만들면 이 화면에 나옵니다. 일봉 자동 갱신 뒤에는 자동으로 다시 만듭니다.{% endif %}</p>
 {% else %}

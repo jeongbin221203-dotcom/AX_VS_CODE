@@ -14,7 +14,9 @@ from pathlib import Path
 import config
 
 SRC = config.DATA_DIR / "signals.json"
-DST = config.BASE / "snapshot" / "signals.json"
+DST = config.BASE / "snapshot" / "signals.json"        # 최신
+DAYS = config.BASE / "snapshot" / "days"                 # 날짜별 보관(days/YYYY-MM-DD.json) — 다음 주에도 그날 신호를 볼 수 있게
+KEEP_DAYS = 90                                           # 저장소가 불어나지 않게 최근 90거래일만
 
 
 def refresh() -> bool:
@@ -26,14 +28,21 @@ def refresh() -> bool:
     if not new.get("meta", {}).get("date"):
         raise RuntimeError("신호 결과가 비어 있어 올리지 않습니다")
     DST.parent.mkdir(parents=True, exist_ok=True)
-    try:
-        old = json.loads(DST.read_text(encoding="utf-8"))
-        if old == new:
-            return False
-    except (OSError, ValueError):
-        pass
-    shutil.copyfile(SRC, DST)
-    return True
+    DAYS.mkdir(parents=True, exist_ok=True)
+    day = DAYS / f"{new['meta']['date']}.json"
+    changed = False
+    for target in (DST, day):
+        try:
+            if json.loads(target.read_text(encoding="utf-8")) == new:
+                continue
+        except (OSError, ValueError):
+            pass
+        shutil.copyfile(SRC, target)
+        changed = True
+    for old in sorted(DAYS.glob("*.json"))[:-KEEP_DAYS]:
+        old.unlink()
+        changed = True
+    return changed
 
 
 def _git(*args, env=None, cwd=None):
@@ -55,7 +64,7 @@ def push(log=print) -> str:
     env = {"GIT_INDEX_FILE": idx}
     try:
         _git("read-tree", "HEAD", env=env, cwd=top)
-        _git("add", "-f", "--", rel, env=env, cwd=top)
+        _git("add", "-A", "-f", "--", rel, DAYS.relative_to(top).as_posix(), env=env, cwd=top)
         if not _git("diff", "--cached", "--name-only", env=env, cwd=top):
             return "변경 없음"
         msg = f"스냅샷: {datetime.now():%Y-%m-%d %H:%M} 오늘의 신호 갱신"

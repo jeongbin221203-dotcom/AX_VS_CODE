@@ -27,11 +27,30 @@ def client(tmp_path, monkeypatch):
 def test_snapshot_page_has_no_links_or_forms(client):
     html = client.get("/").get_data(as_text=True)
     assert "삼성전자" in html and "읽기 전용 스냅샷" in html and "상 — 대기 후보" in html
-    assert "/compare" not in html and 'data-href' not in html and "<form" not in html
+    assert "/compare" not in html and "data-href" not in html
     assert "2개 이상 겹침" in html and client.get("/?min=2").status_code == 200
     assert "신호 2개 이상 겹친 종목만" in client.get("/?min=2").get_data(as_text=True)
     assert client.get("/healthz").get_data(as_text=True) == "ok"
     assert client.get("/nope").status_code == 404
+
+
+def test_snapshot_dates(tmp_path, monkeypatch):
+    days = tmp_path / "days"
+    days.mkdir()
+    for d, name in (("2026-10-06", "화요일종목"), ("2026-10-08", "목요일종목")):
+        rep = _rep()
+        rep["meta"]["date"] = d
+        rep["pred"][0]["name"] = name
+        (days / f"{d}.json").write_text(json.dumps(rep, ensure_ascii=False), encoding="utf-8")
+    monkeypatch.setattr(snapshot_app, "DAYS", days)
+    monkeypatch.setattr(snapshot_app, "SNAPSHOT", days / "2026-10-08.json")
+    c = snapshot_app.create_app().test_client()
+    html = c.get("/?date=2026-10-07").get_data(as_text=True)               # 보관일이 아니면 그 전 보관일
+    assert "화요일종목" in html and "2026-10-08 ▶" in html and "2026-10-07" in html
+    assert "목요일종목" in c.get("/?date=2026-10-08").get_data(as_text=True)
+    assert "<option value=\"2026-10-06\"" in c.get("/").get_data(as_text=True)
+    assert "이전의 이력이 없습니다" in c.get("/?date=2020-01-01").get_data(as_text=True)
+    assert c.get("/?date=abc").status_code == 400
 
 
 def test_snapshot_password(client, monkeypatch):
@@ -52,8 +71,9 @@ def test_publish_refresh_copies_only_when_changed(tmp_path, monkeypatch):
     src, dst = tmp_path / "signals.json", tmp_path / "snap" / "signals.json"
     monkeypatch.setattr(publish, "SRC", src)
     monkeypatch.setattr(publish, "DST", dst)
+    monkeypatch.setattr(publish, "DAYS", tmp_path / "snap" / "days")
     src.write_text(json.dumps(_rep()), encoding="utf-8")
-    assert publish.refresh() is True and dst.exists()
+    assert publish.refresh() is True and dst.exists() and (tmp_path / "snap" / "days" / "2026-10-08.json").exists()
     assert publish.refresh() is False                                   # 같은 내용이면 다시 올리지 않음
     src.write_text(json.dumps({"meta": {"date": None}}), encoding="utf-8")
     with pytest.raises(RuntimeError):
