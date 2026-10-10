@@ -238,3 +238,16 @@ test("백업: 말하기 기록(speaking_*)이 백업에 들어가고 합치기�
   assert.strictEqual(W.TSStore.exportData().ext.speaking_attempts.length, 1);
   assert.ok(S.getMock(mid).plan.length === 7);
 });
+
+test("모의고사 소요 시간: TS 앱 api_mock_finish 처럼 0~6000초로 자르고, 숫자가 아니면 비운다", () => {
+  const W = sandbox(), S = W.Spk;
+  S.setNow(() => "2026-10-10T10:00:00");
+  const tp = S.tspMockPlan(W.TSU.makeRng(5));
+  const rows = tp.flatMap(u => u.steps).slice(0, 2).map(s => ({ ...s.ref, points: 1 }));
+  const dur = d => { const id = S.createMock("tsp", tp, {}); return S.finishMock(id, rows, d).result.duration; };
+  assert.strictEqual(dur(99999), 6000);
+  assert.strictEqual(dur(-5), 0);
+  assert.strictEqual(dur("abc"), null);
+  assert.strictEqual(dur(undefined), null);
+  assert.strictEqual(dur(754), 754);
+});

@@ -11,7 +11,7 @@
     }
     const r = m.result;
     const target = T.targetBand();
-    const val = x => (x !== null && x !== undefined ? x : "–");
+    const val = T.fmtBand;
     $("app").innerHTML = `
       <div class="page-head">
         <div><div class="muted small">${esc(m.finished_at.slice(0, 16).replace("T", " "))}${r.duration_sec ? " · " + UI.mmss(r.duration_sec) : ""}</div>
@@ -22,7 +22,7 @@
         <div class="card kpi">
           <div class="label">종합 밴드</div>
           <div class="value">${val(r.total)}</div>
-          <div class="sub">${r.total ? `${T.cefr(r.total)} · 예전 점수 약 ${T.BAND_OLD[r.total]} · 목표 ${target}` : ""}</div>
+          <div class="sub">${r.total ? `${T.cefr(r.total)} · 예전 점수 약 ${T.BAND_OLD[r.total]} · 목표 ${T.fmtBand(target)}` : ""}</div>
         </div>
         ${["R", "L", "W", "S"].map(k => {
           const b = r.bands[k];
@@ -41,7 +41,7 @@
           ${r.detail.map(d => {
             const t = T.TASKS[d.task];
             return `<tr><td>${esc(T.SECTIONS[t.section].name)}</td><td>${esc(t.name)}</td><td>밴드 ${T.LEVEL_BAND[d.level]}</td>
-              <td class="r num">${t.auto ? Math.round(d.avg * 100) + "%" : (Math.round(d.avg * 5 * 10) / 10) + " / 5"}
+              <td class="r num">${T.scoreText(d.task, d.avg, " / ")}
                 ${t.auto && d.n > 1 ? `<span class="muted small">(${d.n}문항)</span>` : ""}</td></tr>`;
           }).join("")}
           </tbody>

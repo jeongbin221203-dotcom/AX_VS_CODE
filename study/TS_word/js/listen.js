@@ -26,7 +26,7 @@ UI.boot("listen", () => {
   $("app").innerHTML = `
     <div class="page-head">
       <div><h1>🎧 단어 듣기 ${level ? UI.gradeBadge(level) : ""}</h1>
-        <div class="muted small">영어 → 한국어 뜻을 반복해서 읽어 줍니다. 운전·산책 중에 귀로 외우세요. (${words.length}단어)</div></div>
+        <div class="muted small">영어 단어 <b id="ls-rep-label">3</b>번(미국 → 영국 → 호주 발음) → 한국어 뜻 → 다음 단어. <b>정지</b>를 누를 때까지 계속 반복합니다. (${words.length}단어)</div></div>
       <div class="row" id="filters">
         ${sel("level", [["", "모든 등급"], ...grades.map(g => [g.level, g.name])], level)}
         ${sel("tier", [["", "필수 + 도전"], ["core", "필수"], ["stretch", "도전"]], tier)}
@@ -36,20 +36,19 @@ UI.boot("listen", () => {
     ${words.length ? `
     <div class="card listen-card">
       <div class="spread small muted"><span id="ls-prog"></span><span id="ls-phase"></span></div>
-      <div class="flash-card" style="min-height:0;padding:18px 0">
-        <div class="word" id="ls-word"></div>
-        <div class="pos"><span id="ls-pos"></span> <span class="tag ok hidden" id="ls-tier">도전</span></div>
-        <div class="meaning" id="ls-meaning"></div>
-        <div class="muted small" id="ls-ex"></div>
-      </div>
-      <div class="row" style="justify-content:center">
-        <button class="btn" id="ls-prev">⏮</button>
-        <button class="btn primary big" id="ls-play">▶ 시작</button>
-        <button class="btn" id="ls-next">⏭</button>
+      <div class="ls-word" id="ls-word">준비</div>
+      <div class="ls-pos muted"><span id="ls-pos"></span> <span class="tag ok hidden" id="ls-tier">도전</span></div>
+      <div class="ls-meaning" id="ls-meaning">${words.length}개 단어</div>
+      <div class="ls-ex muted" id="ls-ex"></div>
+      <div class="ls-controls">
+        <button class="btn" id="ls-prev" title="이전 단어">⏮</button>
+        <button class="btn primary ls-main" id="ls-play">▶ 시작</button>
+        <button class="btn" id="ls-next" title="다음 단어">⏭</button>
         <button class="btn" id="ls-stop" title="정지">■ 정지</button>
         <button class="star" id="ls-star" title="별표">★</button>
       </div>
       <div class="small muted" id="ls-warn" style="text-align:center;margin-top:8px"></div>
+      <p class="small muted" style="margin-top:10px">재생하는 동안 화면이 꺼지지 않게 유지합니다. 단축키: <span class="kbd">Space</span> 재생/일시정지 · <span class="kbd">→</span> 다음 · <span class="kbd">←</span> 이전. 마지막 위치는 이 브라우저에 기억됩니다.</p>
     </div>
     <div class="card"><h2 style="margin-top:0">듣기 설정</h2><div class="grid three">
       <label>영어 반복 <select id="opt-repeats">${[1, 2, 3, 4, 5].map(n => `<option value="${n}" ${n === 3 ? "selected" : ""}>${n}번</option>`).join("")}</select></label>
@@ -152,7 +151,7 @@ UI.boot("listen", () => {
   async function lockScreen() { try { if ("wakeLock" in navigator && !wakeLock) wakeLock = await navigator.wakeLock.request("screen"); } catch (e) { wakeLock = null; } }
   function unlockScreen() { try { wakeLock?.release(); } catch (e) { /* 무시 */ } wakeLock = null; }
   document.addEventListener("visibilitychange", () => { if (playing && document.visibilityState === "visible") { wakeLock = null; lockScreen(); } });
-  function setButton() { $("ls-play").textContent = playing ? "⏸ 일시정지" : "▶ " + (token ? "계속" : "시작"); }
+  function setButton() { $("ls-play").textContent = playing ? "⏸ 일시정지" : "▶ " + (token ? "계속" : "시작"); document.body.classList.toggle("listening", playing); }
 
   async function play() {
     await TTS.load();
@@ -172,7 +171,7 @@ UI.boot("listen", () => {
   $("ls-stop").addEventListener("click", stop);
   $("ls-star").addEventListener("click", () => $("ls-star").classList.toggle("on", Ward.toggleStar(cur().id)));
   document.addEventListener("keydown", e => {
-    if (e.target.matches("select,input")) return;
+    if (e.target.closest?.("input, select, textarea") || e.ctrlKey || e.metaKey || e.altKey) return;
     if (e.key === " ") { e.preventDefault(); playing ? pause() : play(); }
     else if (e.key === "ArrowRight") jump(1);
     else if (e.key === "ArrowLeft") jump(-1);
@@ -196,5 +195,17 @@ UI.boot("listen", () => {
     try { await navigator.clipboard.writeText(mp3Command()); $("mp3-copy").textContent = "복사했습니다"; } catch (e) { $("mp3-copy").textContent = "직접 선택해서 복사하세요"; }
     setTimeout(() => { $("mp3-copy").textContent = "명령 복사"; }, 1800);
   });
+  const repLabel = () => { $("ls-rep-label").textContent = $("opt-repeats").value; };
+  $("opt-repeats").addEventListener("change", repLabel);
+  repLabel();
+  if ("mediaSession" in navigator) {                          // 휴대폰 잠금화면·이어폰 버튼 (지원하는 브라우저만)
+    try {
+      navigator.mediaSession.setActionHandler("play", play);
+      navigator.mediaSession.setActionHandler("pause", pause);
+      navigator.mediaSession.setActionHandler("nexttrack", () => jump(1));
+      navigator.mediaSession.setActionHandler("previoustrack", () => jump(-1));
+    } catch (e) { /* 미지원 */ }
+  }
+  addEventListener("beforeunload", () => save({ pos: { ...(load().pos || {}), [key]: pos } }));
   show();
 });

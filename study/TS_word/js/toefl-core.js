@@ -68,6 +68,22 @@
   const halfUp = x => Math.floor(x * 2 + 0.5) / 2;
   const cefr = band => (band ? (CEFR[Math.trunc(band)] || "") : "");
 
+  // ---- 표시 (TS 앱 템플릿의 Jinja 출력과 같게) ----------------------------------------------
+  /** 평균 점수(0~1) → 정답률 정수 %. Jinja `(a*100)|round|int` = 파이썬 round() 라 .5 는 짝수 쪽 (62.5 → 62). Math.round 는 63 이 된다. */
+  const pct = a => U.pyRound(a * 100);
+  /** 파이썬 round(x, 1) — 정확히 반으로 갈리는 값(x.25, x.75)만 짝수 쪽 (2.25 → 2.2), 나머지는 toFixed 와 같다. */
+  function round1(x) {
+    const t = x * 4;
+    if (Number.isInteger(t) && t % 2 !== 0) return U.pyRound(x * 10) / 10;
+    return Number(x.toFixed(1));
+  }
+  /** 자기 평가 평균(0~1) → "2.2" 같은 5점 만점 표시 (Jinja `(a*5)|round(1)`: 정수도 "3.0") */
+  const self5 = a => round1(a * 5).toFixed(1);
+  /** 밴드 표시: 파이썬 float 출력처럼 정수도 "4.0", 없으면 "–" */
+  const fmtBand = b => (b === null || b === undefined ? "–" : (Number.isInteger(Number(b)) ? Number(b).toFixed(1) : String(Number(b))));
+  /** 정답률/자기 평가 점수 한 칸: 자동 채점 과제는 "62%", 자기 평가 과제는 "2.2/5" */
+  const scoreText = (task, a, sep = "/") => (TASKS[task].auto ? pct(a) + "%" : self5(a) + sep + "5");
+
   let now = () => U.nowStr();
   let today = () => U.todayStr();
   const setClock = (n, t) => { now = n || (() => U.nowStr()); today = t || (() => U.todayStr()); };
@@ -372,7 +388,7 @@
   root.Toefl = {
     SECTIONS, TASKS, TASK_KEYS, DEFAULT_N, CEFR, BAND_OLD, LEVEL_BAND, RUBRIC, WRONG_CUT_AUTO, WRONG_CUT_SELF, ATTEMPT_CAP,
     ADAPT_CUT, M1_LEVELS, HARD_LEVELS, EASY_LEVELS, READ_MODULE, LISTEN_MODULE, MOCK_ORDER,
-    halfUp, cefr, setClock, setItems, load, loadTask, itemsOf, get, count, totalItems,
+    halfUp, cefr, pct, round1, self5, fmtBand, scoreText, setClock, setItems, load, loadTask, itemsOf, get, count, totalItems,
     record, lastDate, lastSeen, taskStats, recent, wrongItems, itemLabel, history, levelAcc, bandFromLevels, selfBand, sectionBands, overallBand,
     targetBand, recommendedLevel, pick, buildMock, createMock, getMock, listMocks, unfinishedMocks, finishMock, deleteMock,
   };

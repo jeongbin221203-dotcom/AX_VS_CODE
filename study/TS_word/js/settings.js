@@ -30,7 +30,7 @@ UI.boot("settings", () => {
         <label class="field"><span>목표 등급</span><select name="opic_target">${Object.entries(OPIC_NAMES).reverse().map(([g, n]) => opt(g, t.opic_target, `${g} · ${n}`)).join("")}</select></label>
         <label class="field"><span>설문 난이도 (모의고사 기본값)</span><select name="opic_level">${Object.entries(OPIC_LEVELS).map(([v, n]) => opt(v, t.opic_level, n)).join("")}</select></label>
         <label class="field"><span>시험일</span><input type="date" name="opic_exam_date" value="${esc(t.opic_exam_date)}"></label>
-        <p class="small muted">설문 주제 ${surveyN}개 선택됨</p></div>
+        <p class="small muted">설문 주제 ${surveyN}개 선택됨 · <a href="opic-survey.html">설문 주제 고르기 →</a></p></div>
       <div class="card"><h2>하루 학습량 <span class="small muted">토익</span></h2>
         <label class="field"><span>하루 문항 수 목표</span><input type="number" name="daily_questions" min="5" max="300" value="${esc(t.daily_questions)}"></label>
         <p class="small muted">하루 새 단어 수는 아래 '단어'에서 정합니다.</p></div>
@@ -40,8 +40,8 @@ UI.boot("settings", () => {
     <div class="card" style="max-width:640px;margin-top:14px">
       <h2 style="margin-top:0">단어</h2>
       <p><label>하루 새 단어 수
-        <select id="daily_new">${[5, 10, 15, 20, 30, 40, 50].map(n => opt(n, w.daily_new, n + "개")).join("")}</select></label>
-        <span class="muted small">복습할 단어는 한도와 상관없이 모두 나옵니다.</span></p>
+        <input type="number" id="daily_new" min="0" max="200" step="1" value="${esc(w.daily_new)}" style="width:80px">개</label>
+        <span class="muted small">0~200개. 복습할 단어는 한도와 상관없이 모두 나옵니다.</span></p>
       <p><label>내 등급 (토익 단어)
         <select id="my_level">${opt(0, w.my_level, "자동 (1등급부터)")}${toeicGrades.map(g => opt(g.level, w.my_level, `${g.name} (${Score.rangeText(g)})`)).join("")}</select></label>
         <span class="muted small">새 단어를 이 등급부터 보여 줍니다.</span></p>
@@ -49,10 +49,11 @@ UI.boot("settings", () => {
         <span class="muted">점수를 넣으면 위 등급이 자동으로 바뀝니다.</span></p>
       <h2>음성 <span class="small muted">모든 시험</span></h2>
       <p><label>발음 억양
-        <select id="tts_accent">${[["mix", "섞어서"], ["us", "미국"], ["uk", "영국"], ["au", "호주"]].map(([v, l]) => opt(v, w.tts_accent, l)).join("")}</select></label>
+        <select id="tts_accent">${[["mix", "섞기 (실제 시험처럼)"], ["us", "미국"], ["uk", "영국"], ["au", "호주"]].map(([v, l]) => opt(v, w.tts_accent, l)).join("")}</select></label>
       <label style="margin-left:14px">읽는 속도
-        <select id="tts_rate">${[0.7, 0.85, 1, 1.15, 1.3].map(r => opt(r, w.tts_rate, r + "배")).join("")}</select></label>
-      <button class="btn small" id="test-voice">🔊 들어 보기</button></p>
+        <select id="tts_rate">${[0.7, 0.8, 0.85, 0.9, 1, 1.1, 1.15, 1.2, 1.3].map(r => opt(r, w.tts_rate, r === 1 ? "1배 (기본)" : r + "배")).join("")}</select></label>
+      <button class="btn small" id="test-voice">🔊 음성 확인</button></p>
+      <p class="small muted" style="margin-top:-6px">브라우저에 설치된 영어 음성을 씁니다. 엣지의 'Online (Natural)' 음성이 가장 자연스럽습니다.</p>
       <div class="small muted" id="voice-info"></div>
       <div id="saved" class="small" style="color:var(--ok)"></div>
     </div>
@@ -104,7 +105,14 @@ UI.boot("settings", () => {
   // ---- 단어·음성 (바꾸면 바로 저장) ----
   const flash = (m, bad) => { $("saved").textContent = m; $("saved").style.color = bad ? "var(--bad)" : "var(--ok)"; setTimeout(() => { $("saved").textContent = ""; }, 2000); };
   for (const k of ["daily_new", "tts_accent", "tts_rate", "my_level"]) {
-    $(k).addEventListener("change", () => { Ward.setSetting({ [k]: k === "tts_accent" ? $(k).value : Number($(k).value) }); flash("저장했습니다"); });
+    $(k).addEventListener("change", () => {
+      if (k === "daily_new") {                                   // TS 앱과 같은 검사: 0~200 사이 정수
+        const n = /^\d+$/.test($(k).value.trim()) ? parseInt($(k).value, 10) : NaN;
+        if (!(n >= 0 && n <= 200)) { $(k).value = Ward.settings().daily_new; return flash("하루 새 단어 수는 0~200 사이 숫자로 입력하세요.", true); }
+        Ward.setSetting({ daily_new: n });
+      } else Ward.setSetting({ [k]: k === "tts_accent" ? $(k).value : Number($(k).value) });
+      flash("저장했습니다");
+    });
   }
   $("score").addEventListener("change", () => {
     const val = Number($("score").value);
@@ -114,7 +122,18 @@ UI.boot("settings", () => {
     Ward.setSetting({ my_level: lv });
     flash(`${val}점 → ${toeicGrades.find(g => g.level === lv).name} 등급으로 저장했습니다`);
   });
-  $("test-voice").addEventListener("click", async () => { await TTS.load(); UI.sayWord("vocabulary"); });
+  $("test-voice").addEventListener("click", async () => {      // TS 앱과 같이: 설치된 영어 음성 목록을 보이고, 여자·남자 목소리로 짧은 대화를 읽는다
+    await TTS.load();
+    const info = TTS.info();
+    $("voice-info").innerHTML = info.count
+      ? `영어 음성 ${info.count}개 · 억양: ${esc(info.accents.join(", ") || "-")}<br>` + info.voices.map(esc).join("<br>")
+      : "영어 음성이 없습니다. Windows 설정 → 시간 및 언어 → 음성에서 영어 음성을 추가하세요.";
+    const acc = $("tts_accent").value;
+    TTS.play([
+      { text: "Hello. Could you send me the quarterly report by Friday?", gender: "female", pause: 400 },
+      { text: "Sure. I'll e-mail it to you this afternoon.", gender: "male" },
+    ], { rate: Number($("tts_rate").value) || 1, accent: acc === "mix" ? "us" : acc });
+  });
   TTS.load().then(() => {
     const i = TTS.info();
     $("voice-info").textContent = TTS.supported

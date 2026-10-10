@@ -170,5 +170,27 @@ def main() -> None:
     print(f"{path.name}: 풀이 기록 {len(ext['toefl_attempts'])}건 · 모의고사 {len(ext['toefl_mocks'])}번 · {path.stat().st_size // 1024}KB")
 
 
+def display_fixtures() -> None:
+    """화면 표시 규칙: TS 앱 템플릿의 Jinja `(a*100)|round|int`, `(a*5)|round(1)`, 밴드 float 출력을 실제 Jinja 로 렌더해 저장한다.
+    (파이썬 round 는 .5 를 짝수로 — 62.5% → 62, 2.25점 → 2.2. 자바스크립트 Math.round 와 다르다.) → tests/toefl_display_fixtures.json"""
+    import jinja2
+    env = jinja2.Environment()
+    t_pct = env.from_string("{{ ((a * 100) | round | int) }}")
+    t_self = env.from_string("{{ ((a * 5) | round(1)) }}")
+    t_band = env.from_string("{{ x }}")
+    rng = random.Random(SEED)
+    avgs = [k / n for n in range(1, 41) for k in range(0, n + 1)]                        # 맞힌 개수 / 문항 수
+    avgs += [sum(rng.choice([0, 1, 2, 3, 4, 5]) / 5 for _ in range(n)) / n for n in range(1, 25) for _ in range(6)]   # 자기 평가 평균
+    avgs = sorted(set(avgs))
+    cases = [{"a": a, "pct": t_pct.render(a=a), "self": t_self.render(a=a)} for a in avgs]
+    bands = [{"x": x, "out": t_band.render(x=x)} for x in (1.0, 2.0, 2.5, 4.0, 4.5, 6.0, T.half_up(5.25), T.half_up(3.8), 6.0 - 4.5)]
+    path = ROOT / "tests" / "toefl_display_fixtures.json"
+    path.write_text(json.dumps({"cases": cases, "bands": bands}, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    print(f"{path.name}: display rules {len(cases)} / bands {len(bands)}")
+
+
 if __name__ == "__main__":
-    main()
+    if "--display" in sys.argv:
+        display_fixtures()
+    else:
+        main()

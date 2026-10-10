@@ -581,6 +581,7 @@
     rows = (Array.isArray(rows) ? rows : []).filter(r => r && typeof r === "object" && planned.has(`${r.task}|${r.item_id}|${intNum(r.qidx, 0, 20)}`));
     const saved = record(m.exam, rows, mid);
     if (!saved.length) throw new Error("채점한 답변이 없습니다.");
+    duration = num(duration, 0, 6000);                                         // TS 앱 api_mock_finish: _num(duration, 0, 6000)
     const wl = saved.filter(r => r.words !== null).map(r => r.words);
     const avgWords = wl.length ? wl.reduce((a, b) => a + b, 0) / wl.length : null;
     const got = new Map(saved.map(r => [`${r.task}|${r.item_id}|${r.qidx}`, r.points]));

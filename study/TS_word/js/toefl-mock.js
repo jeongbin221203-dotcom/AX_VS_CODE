@@ -16,7 +16,7 @@ UI.boot({ exam: "toefl", page: "toefl-mock" }, () => {
   } catch (e) { /* 저장소 없음 */ }
   const saved = id => { try { return JSON.parse(localStorage.getItem("ts-tmock-" + id) || "null"); } catch (e) { return null; } };
   const ongoingRows = ongoing.map(m => ({ m, s: saved(m.id) })).filter(x => x.s && Array.isArray(x.s.done) && x.s.done.length);
-  const val = x => (x !== null && x !== undefined ? x : "–");
+  const val = T.fmtBand;
 
   $("app").innerHTML = `
     <div class="page-head">
@@ -50,7 +50,7 @@ UI.boot({ exam: "toefl", page: "toefl-mock" }, () => {
       <ul class="clean small" style="margin-top:10px">
         <li><b>적응형:</b> 읽기·듣기 1모듈(밴드 4 난이도)에서 ${cut}% 이상 맞히면 2모듈은 어려운 문제(밴드 5~6), 아니면 쉬운 문제(밴드 2~3)가 나옵니다.</li>
         <li>시험 중에는 정답을 보여 주지 않습니다. 끝나면 쓰기·인터뷰 답을 모범 답안과 비교해 스스로 채점하고, 영역별 밴드와 종합 밴드가 나옵니다.</li>
-        <li>말하기·쓰기 난이도는 목표 밴드(${target}, ${T.CEFR[Math.trunc(target)]}) 근처로 고릅니다. 목표는 토플 홈에서 바꿀 수 있습니다.</li>
+        <li>말하기·쓰기 난이도는 목표 밴드(${T.fmtBand(target)}, ${T.CEFR[Math.trunc(target)]}) 근처로 고릅니다. 목표는 토플 홈에서 바꿀 수 있습니다.</li>
         <li>끝낸 영역은 이 브라우저에 저장됩니다. 새로고침하거나 창을 닫아도 <b>보던 영역만</b> 처음부터 다시 보면 됩니다. 마이크는 https 주소나 이 PC(127.0.0.1·localhost)에서만 켜집니다.</li>
       </ul>
     </div>

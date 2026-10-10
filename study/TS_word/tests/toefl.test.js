@@ -293,3 +293,21 @@ test("sw.js 의 캐시 목록에 토플 화면·스크립트·데이터가 모�
   }
   for (const j of fs.readdirSync(path.join(root, "js")).filter(j => /^toefl/.test(j))) assert.ok(assets.includes("js/" + j), j);
 });
+
+test("화면 표시: 정답률 %·자기 평가 점수·밴드 글자가 TS 앱 템플릿(Jinja)과 같다 (62.5% → 62, 2.25점 → 2.2, 4 → 4.0)", () => {
+  const D = JSON.parse(fs.readFileSync(path.join(__dirname, "toefl_display_fixtures.json"), "utf8"));
+  const { W } = sandbox();
+  const T = W.Toefl;
+  for (const c of D.cases) {
+    assert.strictEqual(String(T.pct(c.a)), c.pct, `정답률 ${c.a}`);
+    assert.strictEqual(T.self5(c.a), c.self, `자기 평가 ${c.a}`);
+  }
+  for (const c of D.bands) assert.strictEqual(T.fmtBand(c.x), c.out, `밴드 ${c.x}`);
+  assert.strictEqual(T.pct(0.125), 12, "Math.round 라면 13");
+  assert.strictEqual(T.pct(0.625), 62);
+  assert.strictEqual(T.self5(0.45), "2.2");
+  assert.strictEqual(T.fmtBand(null), "–");
+  assert.strictEqual(T.scoreText("r_daily", 0.625), "62%");
+  assert.strictEqual(T.scoreText("w_email", 0.6), "3.0/5");
+  assert.strictEqual(T.scoreText("w_email", 0.6, " / "), "3.0 / 5");
+});

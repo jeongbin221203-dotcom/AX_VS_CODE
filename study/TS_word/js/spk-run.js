@@ -496,7 +496,7 @@
         const done = await review(got, u < units.length - 1 ? "저장하고 다음 문제 →" : "저장하고 끝내기");
         let info = "";
         try {
-          Spk.record(EXAM, done.map(rowOf));
+          if (!Spk.record(EXAM, done.map(rowOf)).length) throw new Error("저장할 답변이 없습니다.");     // TS 앱 /api/attempt 의 400
           if (EXAM === "tsp") { const est = Spk.tspEstimate(Spk.tspTaskStats()); if (est != null) info = `지금까지 기록으로 추정한 점수: ${est}점`; }
           else { const g = Spk.opicStats().grade; if (g) info = `지금까지 기록으로 추정한 등급: ${g}`; }
         } catch (e) { alert("기록 실패: " + e.message); }

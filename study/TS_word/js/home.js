@@ -39,7 +39,14 @@ UI.boot("home", () => {
       <p class="small muted" style="margin:6px 0 4px">오늘 복습 ${p.due} · 학습 시작 ${p.seen} / ${p.total}</p>${rows}</div>`;
   }).join("");
 
+  const starBtn = starred ? `<a class="btn" href="study.html?starred=1">★ 별표 단어 ${starred}</a>` : "";
   UI.$("app").innerHTML = `
+    <div class="page-head">
+      <div><h1>${set === "toefl" ? "토플 학술 어휘" : "등급별 단어"}</h1>
+        <div class="muted small">간격 반복: 알면 1일 → 4일 → 점점 길게, 모르면 내일 다시. 간격 21일 이상이면 '암기 완료'.</div></div>
+      <div class="row">${starBtn}<a class="btn" href="listen.html">🔊 듣기 (운전 모드)</a>
+        <a class="btn primary" href="study.html">오늘 학습 (복습 ${q.due.length} · 새 단어 ${q.new.length})</a></div>
+    </div>
     <div class="card vocab-hero">
       <div>
         <h2>📘 오늘의 단어 — 먼저 하세요</h2>

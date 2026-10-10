@@ -124,7 +124,7 @@ UI.boot("quiz", () => {
     if (round === 1) { const r = Ward.quizAnswer(q.id, ok); if (r.scheduled) scheduled++; }   // 첫 회차만 기록 (다시 풀기는 연습이라 두 번 세지 않음)
     $("vq-choices").classList.add("locked");
     [...$("vq-choices").children].forEach((b, m) => { if (m === q.answer) b.classList.add("right"); else if (m === k) b.classList.add("wrong"); });
-    $("vq-explain").innerHTML = `<b>${ok ? "정답" : "오답"}</b> · ${esc(q.word)} = ${esc(q.meaning)}<div>${esc(q.example)}</div><div class="muted">${esc(q.example_ko)}</div>${q.tip ? `<div class="muted">${esc(q.tip)}</div>` : ""}`;
+    $("vq-explain").innerHTML = `<span class="verdict ${ok ? "ok" : "bad"}">${ok ? "정답" : "오답"}</span><b>${esc(q.word)}</b> ${esc(q.meaning)}<div>${esc(q.example)}</div><div class="muted">${esc(q.example_ko)}</div>${q.tip ? `<div class="muted">${esc(q.tip)}</div>` : ""}${ok || round > 1 ? "" : `<div class="muted">→ 복습 카드에 넣었습니다 (내일 다시)</div>`}`;
     $("vq-explain").classList.remove("hidden");
     $("vq-next").classList.remove("hidden");
   }
@@ -132,26 +132,32 @@ UI.boot("quiz", () => {
   function end() {
     $("vq").classList.add("hidden");
     $("vq-done").classList.remove("hidden");
-    $("vq-final").textContent = `${Q.length}문제 중 ${score}개 맞힘 (${Math.round(score / Q.length * 100)}%)`;
-    $("vq-note").textContent = round === 1
-      ? (scheduled ? `틀린 ${scheduled}개는 복습 카드에 들어가 내일 다시 나옵니다.` : "모두 맞혔어요!")
-      : "다시 풀기는 기록에 세지 않습니다.";
+    $("vq-final").textContent = round === 1 ? `${Q.length}문제 중 ${score}개 맞힘 (${Math.round(score / Q.length * 100)}%)`
+                                            : `다시 풀기 ${round - 1}회차: ${Q.length}문제 중 ${score}개 맞힘`;
+    $("vq-note").textContent = round === 1 && missed.length ? `틀린 ${missed.length}개는 복습 카드에 넣었습니다. 내일 단어 카드에 다시 나옵니다.`
+      : round > 1 ? "다시 풀기는 기록에 세지 않습니다." : "";
     $("vq-missed").innerHTML = missed.length
-      ? "<b>틀린 단어</b><ul class='clean'>" + missed.map(q => `<li>${esc(q.word)} — ${esc(q.meaning)}</li>`).join("") + "</ul>" : "";
+      ? "<p><b>틀린 단어</b></p>" + missed.map(q => `<div>• <b>${esc(q.word)}</b> ${esc(q.pos)} — ${esc(q.meaning)}</div>`).join("") : "<p>모두 맞혔습니다!</p>";
     $("vq-retry").classList.toggle("hidden", !missed.length);
   }
 
   $("vq-choices").addEventListener("click", e => { const b = e.target.closest("[data-k]"); if (b) pick(Number(b.dataset.k)); });
   $("vq-next").addEventListener("click", () => { i++; show(); });
   $("vq-retry").addEventListener("click", () => {
-    Q = UI.shuffle(missed); missed = []; i = 0; score = 0; round++;
+    Q = UI.shuffle(missed.map(q => {                          // 선택지 순서도 새로 섞는다
+      const order = UI.shuffle(q.options.map((o, k) => k));
+      return { ...q, options: order.map(k => q.options[k]), answer: order.indexOf(q.answer) };
+    }));
+    missed = []; i = 0; score = 0; round++;
     $("vq-done").classList.add("hidden"); $("vq").classList.remove("hidden");
     show();
   });
   document.addEventListener("keydown", e => {
-    if (e.ctrlKey || e.metaKey || e.altKey || $("vq").classList.contains("hidden")) return;
-    if (e.key === "Enter" && answered) { i++; show(); }
-    else if (!answered && ["1", "2", "3", "4"].includes(e.key)) pick(Number(e.key) - 1);
+    if (e.ctrlKey || e.metaKey || e.altKey || e.target.closest?.("select, input") || $("vq").classList.contains("hidden")) return;
+    const map = { "1": 0, "2": 1, "3": 2, "4": 3, a: 0, b: 1, c: 2, d: 3 };
+    const k = e.key.toLowerCase();
+    if (!answered && k in map && map[k] < Q[i].options.length) pick(map[k]);
+    else if (answered && k === "enter") { i++; show(); }
   });
   TTS.load();
   show();

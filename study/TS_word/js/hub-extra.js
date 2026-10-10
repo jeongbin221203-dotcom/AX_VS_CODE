@@ -13,8 +13,8 @@ Hub.register("toefl", () => {
   const overall = T.overallBand(bands);
   const filled = Object.entries(bands).filter(([, v]) => v);
   return {
-    now: overall ? `밴드 ${overall}` : "–",
-    now_sub: overall ? T.cefr(overall) : (filled.length ? "영역별 " + filled.map(([k, v]) => `${k} ${v}`).join(" · ") : "네 영역을 풀면 계산"),
+    now: overall ? `밴드 ${T.fmtBand(overall)}` : "–",
+    now_sub: overall ? T.cefr(overall) : (filled.length ? "영역별 " + filled.map(([k, v]) => `${k} ${T.fmtBand(v)}`).join(" · ") : "네 영역을 풀면 계산"),
     n: `${T.totalItems().toLocaleString()}문제 · 어휘 ${((window.WARD_DATA && window.WARD_DATA.toefl) || []).length.toLocaleString()}`,
     last: T.lastDate(),
     links: [["영역 연습", "toefl.html#sec-R"], ["모의고사", "toefl-mock.html"]],

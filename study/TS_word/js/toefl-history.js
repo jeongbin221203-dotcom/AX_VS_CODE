@@ -7,7 +7,7 @@ UI.boot({ exam: "toefl", page: "toefl-history" }, () => {
   for (const r of rows) { if (!days.has(r.d)) days.set(r.d, []); days.get(r.d).push(r); }
   const bands = T.sectionBands();
   const mocks = T.listMocks(50);
-  const val = x => (x !== null && x !== undefined ? x : "–");
+  const val = T.fmtBand;
   const dayList = [...days.entries()];
   $("app").innerHTML = `
     <div class="page-head">
@@ -36,7 +36,7 @@ UI.boot({ exam: "toefl", page: "toefl-history" }, () => {
         <summary>${esc(d)} <span class="muted small">· ${list.reduce((a, r) => a + r.n, 0)}문항</span></summary>
         <table class="small"><tbody>
           ${list.map(r => { const t = T.TASKS[r.task]; return `<tr><td>${esc(T.SECTIONS[t.section].ko)}</td><td>${esc(t.name)}</td><td class="r num">${r.items}문제 · ${r.n}문항</td>
-            <td class="r num"><b>${t.auto ? Math.round(r.a * 100) + "%" : (Math.round(r.a * 5 * 10) / 10) + "/5"}</b></td></tr>`; }).join("")}
+            <td class="r num"><b>${T.scoreText(r.task, r.a)}</b></td></tr>`; }).join("")}
         </tbody></table>
       </details>`).join("")}
     </div>`;

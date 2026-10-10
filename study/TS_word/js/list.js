@@ -39,20 +39,21 @@ UI.boot("list", () => {
       </form>
     </div>
     <div class="card" style="padding:0"><div style="overflow-x:auto"><table class="vtable"><thead><tr>
-      <th></th><th>단어</th><th>뜻</th><th>예문</th><th>상태</th><th></th></tr></thead><tbody id="rows"></tbody></table></div>
+      <th></th><th>단어</th><th>뜻</th><th>예문</th><th>팁</th><th>상태</th><th></th></tr></thead><tbody id="rows"></tbody></table></div>
       <div id="more" class="empty hidden"><button class="btn" id="more-btn">더 보기</button></div>
       <div id="none" class="empty hidden">조건에 맞는 단어가 없습니다.</div></div>`;
 
   function draw() {
-    $("count").textContent = `${rows.length}개`;
+    $("count").textContent = `${rows.length}개 · 단어를 누르면 발음을 들려줍니다.`;
     $("none").classList.toggle("hidden", rows.length > 0);
     $("rows").innerHTML = rows.slice(0, shown).map(({ w, c, state }) => {
       const tag = state === "new" ? `<span class="tag">안 봄</span>` : state === "mastered" ? `<span class="tag ok">암기 완료</span>` : `<span class="tag">학습 중 · ${c.interval}일</span>`;
       const due = Ward.seen(c) && c.due <= today ? ` <span class="tag bad">복습</span>` : "";
       return `<tr><td><button class="btn small ghost" data-say="${esc(w.word)}" title="발음">🔊</button></td>
-        <td><b>${esc(w.word)}</b> <span class="muted small">${esc(w.pos)}</span>${w.tier === "stretch" ? ` <span class="tag ok">도전</span>` : ""}<div>${UI.gradeBadge(w.level)}</div></td>
+        <td><button class="btn ghost small" data-say="${esc(w.word)}"><b>${esc(w.word)}</b></button> <span class="muted small">${esc(w.pos)}</span>${w.tier === "stretch" ? ` <span class="tag ok">도전</span>` : ""}<div>${UI.gradeBadge(w.level)}</div></td>
         <td>${esc(w.meaning)}</td>
         <td class="small">${esc(w.example)}<div class="muted">${esc(w.example_ko)}</div></td>
+        <td class="small muted">${esc(w.tip)}</td>
         <td class="small">${tag}${due}${c && c.lapses ? `<div class="muted">잊음 ${c.lapses}</div>` : ""}</td>
         <td><button class="star ${c && c.starred ? "on" : ""}" data-star="${w.id}" title="별표">★</button></td></tr>`;
     }).join("");

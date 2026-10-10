@@ -13,7 +13,7 @@ UI.boot({ exam: "toefl", page: "toefl" }, () => {
     const statText = t => {
       const s = stats[t.key];
       if (!s) return "–";
-      return `${s.n}회 · ${t.auto ? "평균 " + Math.round(s.avg * 100) + "%" : "자기 평가 " + (Math.round(s.avg * 5 * 10) / 10) + "/5"}`;
+      return `${s.n}회 · ${t.auto ? "평균 " + T.pct(s.avg) + "%" : "자기 평가 " + T.self5(s.avg) + "/5"}`;
     };
     const sections = Object.entries(T.SECTIONS).map(([key, sec]) => ({
       key, ...sec, band: bands[key],
@@ -37,12 +37,12 @@ UI.boot({ exam: "toefl", page: "toefl" }, () => {
       <div class="grid four">
         <div class="card kpi">
           <div class="label">종합 밴드 (추정)</div>
-          <div class="value">${overall !== null ? overall : "–"}</div>
-          <div class="sub">${overall ? `${T.cefr(overall)} · 목표 ${target}${overall < target ? ` · ${target - overall} 남음` : " · 목표 달성"}` : "네 영역을 모두 풀면 계산됩니다"}</div>
+          <div class="value">${T.fmtBand(overall)}</div>
+          <div class="sub">${overall ? `${T.cefr(overall)} · 목표 ${T.fmtBand(target)}${overall < target ? ` · ${T.fmtBand(target - overall)} 남음` : " · 목표 달성"}` : "네 영역을 모두 풀면 계산됩니다"}</div>
         </div>
         ${sections.map(s => `<div class="card kpi">
           <div class="label">${esc(s.name)} <span class="muted">${esc(s.ko)}</span></div>
-          <div class="value">${s.band !== null ? s.band : "–"}</div>
+          <div class="value">${T.fmtBand(s.band)}</div>
           <div class="sub">${s.band ? T.cefr(s.band) : "기록 부족"}</div></div>`).join("")}
       </div>
 
@@ -58,7 +58,7 @@ UI.boot({ exam: "toefl", page: "toefl" }, () => {
       <div class="card" style="margin-top:14px" id="sec-${s.key}">
         <div class="spread">
           <h2 style="margin:0">${esc(s.name)} <span class="muted small">${esc(s.ko)} · ${esc(s.time)} · ${esc(s.note)}</span></h2>
-          <span class="num"><b>${s.band !== null ? s.band : "–"}</b> <span class="muted small">밴드</span></span>
+          <span class="num"><b>${T.fmtBand(s.band)}</b> <span class="muted small">밴드</span></span>
         </div>
         <div class="table-wrap" style="margin-top:8px">
         <table>
@@ -87,12 +87,12 @@ UI.boot({ exam: "toefl", page: "toefl" }, () => {
         <h2>최근 기록</h2>
         <table class="small"><tbody>
         ${recent.map(r => `<tr><td>${esc(r.at.slice(0, 16).replace("T", " "))}</td><td>${esc(T.TASKS[r.task].name)}</td><td>밴드 ${T.LEVEL_BAND[r.level]}</td>
-          <td class="r num">${T.TASKS[r.task].auto ? Math.round(r.a * 100) + "%" : (Math.round(r.a * 5 * 10) / 10) + "/5"}</td></tr>`).join("")}
+          <td class="r num">${T.scoreText(r.task, r.a)}</td></tr>`).join("")}
         </tbody></table>
       </div>` : ""}
       <p class="small muted" style="margin-top:12px">시험 형식은 2026년 1월 개편(ETS) 기준입니다. 실제 시험은 읽기·듣기가 적응형이라 앞 단계 결과에 따라 난이도가 바뀝니다.</p>`;
 
-    $("target").onchange = e => { TSStore.setSettings({ toefl_target: e.target.value }); location.reload(); };      // 구역 강조(subNavSpy)가 옛 요소를 붙잡지 않도록 새로 읽는다
+    $("target").onchange = e => { TSStore.setSettings({ toefl_target: Number(e.target.value).toFixed(1) }); location.reload(); };      // 구역 강조(subNavSpy)가 옛 요소를 붙잡지 않도록 새로 읽는다
   }
   draw();
   $("app").addEventListener("click", ev => { const a = ev.target.closest("a[data-set]"); if (a) Ward.setSetting({ set: a.dataset.set }); });
