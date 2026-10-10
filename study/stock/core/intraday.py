@@ -21,6 +21,7 @@ HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; stock-study)", "Accept": "app
 KST = 9 * 3600
 MA_PERIODS = (5, 14, 20, 28, 56, 60, 112, 120, 224, 448)
 _cache: dict = {}
+SOURCE: dict = {}        # (코드, 단위) → {"toss": 성공 여부, "err": 토스 실패 이유} — 화면·점검용(키·토큰 값은 담지 않음)
 _lock = threading.Lock()
 
 
@@ -127,8 +128,13 @@ def _download(code, iv):
     err = None
     try:
         toss_df = _download_toss(code)
+        SOURCE[(code, iv)] = {"toss": True, "err": ""}
     except IntradayError as e:
         err = e
+        SOURCE[(code, iv)] = {"toss": False, "err": str(e)[:120]}
+    except Exception as e:                                   # 토스 쪽 예기치 못한 오류도 Yahoo 로 계속
+        err = IntradayError(f"토스: {type(e).__name__}")
+        SOURCE[(code, iv)] = {"toss": False, "err": f"{type(e).__name__}: {str(e)[:100]}"}
     try:
         yahoo = _download_yahoo(code, iv)
     except IntradayError as e:
@@ -187,7 +193,7 @@ def payload(code: str, iv: str, bars: int) -> dict:
         a = _sma(c, p)
         ma[str(p)] = [{"time": int(t[i]), "value": round(float(a[i]), 4)} for i in range(s, n) if np.isfinite(a[i])]
     prev = float(c[-2]) if n > 1 else float(c[-1])
-    return {"code": code, "tf": iv, "intraday": True, "candles": candles, "volume": vols, "ma": ma, "bb": {"upper": [], "mid": [], "lower": []}, "rsi": [],
+    return {"code": code, "tf": iv, "intraday": True, "source": SOURCE.get((code, iv), {"toss": None, "err": ""}), "candles": candles, "volume": vols, "ma": ma, "bb": {"upper": [], "mid": [], "lower": []}, "rsi": [],
             "macd": {"macd": [], "signal": [], "hist": []}, "stoch": {"k": [], "d": []}, "signals": [], "patterns": [], "levels": [],
             "last": {"date": time.strftime("%Y-%m-%d %H:%M", time.gmtime(int(t[-1]))), "close": float(c[-1]), "change": (float(c[-1]) / prev - 1) * 100 if prev else 0, "volume": float(v[-1])}}
 
