@@ -99,3 +99,23 @@ def test_clean_default_sample(app, isolated_db):
              "GROUP BY s.id, s.paid_amount HAVING COALESCE(s.paid_amount,0) <> COALESCE(SUM(p.amount),0)) x") == 0
     assert "skipped" in sample_clean.seed()
     assert db.verify_audit_chain()["broken_id"] is None
+
+
+def test_demo_server_allows_only_industry_seed(app, isolated_db, monkeypatch):
+    """시연 서버(운영 모드 + 자동 로그인): 업종별 추가 데이터만 허용 — 하나씩, 최대 10곳. 다른 관리자 동작은 막힘."""
+    db.set_context("system", None)
+    ent.seed_org_demo()
+    from conftest import post
+    admin = login(app, "시스템관리자")
+    import config
+    monkeypatch.setattr(config, "PRODUCTION", True)
+    monkeypatch.setattr(config, "DEMO", True)
+    monkeypatch.setattr(config, "DEMO_AUTOLOGIN", "9999")
+    page = admin.get("/admin/data").get_data(as_text=True)
+    assert 'value="seed_industry"' in page and "전체 업종 골고루" not in page and 'value="reset"' not in page
+    assert post(admin, "/admin/data/action", {"action": "seed_industry", "industry": "all"}).status_code == 400
+    assert post(admin, "/admin/data/action", {"action": "reset", "confirm": "1"}).status_code in (302, 403)
+    assert db._scalar("SELECT COUNT(*) FROM customers") == 0
+    res = post(admin, "/admin/data/action", {"action": "seed_industry", "industry": "물류", "sample_count": "50"},
+               follow_redirects=True)
+    assert "물류·운송 거래처 10" in res.get_data(as_text=True)

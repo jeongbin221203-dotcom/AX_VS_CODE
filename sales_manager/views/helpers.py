@@ -176,7 +176,8 @@ def load_context():
 
     ent.apply_context(g.user)
     if config.DEMO_AUTOLOGIN and request.method == "POST" and (
-            request.blueprint == "admin" or request.endpoint in DEMO_LOCKED):
+            request.blueprint == "admin" or request.endpoint in DEMO_LOCKED) and not (
+            request.endpoint == "admin.data_action" and request.form.get("action") == "seed_industry"):
         # 시연 서버: 누구나 관리자로 들어오므로 관리자 설정(회사 설정·사용자·ERP·API 키·초기화 등)은 저장을 막는다.
         # 화면은 그대로 볼 수 있고, 업무 데이터(매출·견적·결재 등)는 저장된다.
         flash("시연 서버에서는 관리자 설정을 바꿀 수 없습니다 — 화면만 둘러볼 수 있습니다.", "warning")

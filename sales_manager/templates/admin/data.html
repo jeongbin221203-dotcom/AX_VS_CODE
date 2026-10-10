@@ -44,32 +44,32 @@
     스냅샷은 주 1회 배치로: <code>python -c "from core import sales_db, enterprise; import datetime; sales_db.init_db(); enterprise.take_snapshot(datetime.date.today().strftime('%Y-%m'))"</code></p>
 </section>
 
-{% if not production %}
+{% if not production or demo_mode %}
 <section class="card">
-  <h3>🧪 샘플 데이터 / 초기화 <span class="env-badge">개발 환경 전용</span></h3>
+  <h3>🧪 샘플 데이터 / 초기화 <span class="env-badge">{{ '시연 서버 — 업종별 추가만 가능(하나씩, 최대 10곳)' if production else '개발 환경 전용' }}</span></h3>
   <div class="grid-2">
     <div class="stack">
-    <form method="post" action="{{ url_for('admin.data_action') }}">
+    {% if not production %}<form method="post" action="{{ url_for('admin.data_action') }}">
       {{ csrf() }}
       <button class="btn" name="action" value="seed_demo">샘플 데이터 생성</button>
-    </form>
+    </form>{% endif %}
     <form method="post" action="{{ url_for('admin.data_action') }}">
       {{ csrf() }}
       <p class="small muted">업종마다 품목·거래처·영업기회·결제 습관이 다른 샘플을 쌓습니다 (지난 12개월 매출·입금·반품·견적·수주·활동).</p>
       <label>업종
         <select name="industry">
-          <option value="all">🌐 전체 업종 골고루 ({{ sample_industries|length }}개)</option>
+          {% if not production %}<option value="all">🌐 전체 업종 골고루 ({{ sample_industries|length }}개)</option>{% endif %}
           {% for key, label in sample_industries %}<option value="{{ key }}">{{ label }}</option>{% endfor %}
         </select></label>
       <label>업종마다 거래처 수 <input type="number" name="sample_count" min="1" max="100" value="8" class="num-sm"></label>
       <button class="btn" name="action" value="seed_industry">🧪 업종별 샘플 추가</button>
     </form>
     </div>
-    <form method="post" action="{{ url_for('admin.data_action') }}" class="danger-zone" data-confirm="'전체 데이터 초기화' — 되돌리기 어렵습니다. 계속할까요?">
+    {% if not production %}<form method="post" action="{{ url_for('admin.data_action') }}" class="danger-zone" data-confirm="'전체 데이터 초기화' — 되돌리기 어렵습니다. 계속할까요?">
       {{ csrf() }}
       <label class="check"><input type="checkbox" name="confirm" value="1"> 전체 삭제에 동의합니다 (직전에 DB 백업을 만들고, 감사로그는 남깁니다)</label>
       <button class="btn btn-danger" name="action" value="reset">⚠️ 전체 데이터 초기화</button>
-    </form>
+    </form>{% endif %}
   </div>
 </section>
 {% endif %}

@@ -726,7 +726,7 @@ def data():
         cust_cnt=int(db._scalar("SELECT COUNT(*) FROM customers")), deal_cnt=int(db._scalar("SELECT COUNT(*) FROM deals")),
         sale_cnt=int(db._scalar("SELECT COUNT(*) FROM sales")), db_path=database.describe(), unlinked=ent.unlinked_counts(),
         backups=[(b.name, f"{b.stat().st_size / 1024 / 1024:,.1f}MB") for b in backups],
-        production=config.PRODUCTION, backup_dir=folder, sample_industries=_sample_industries())
+        production=config.PRODUCTION, demo_mode=config.DEMO, backup_dir=folder, sample_industries=_sample_industries())
 
 
 @bp.route("/data/files.zip")
@@ -767,7 +767,8 @@ def _sample_industries():
 @bp.route("/data/action", methods=["POST"])
 def data_action():
     action = request.form.get("action")
-    if action in ("seed_demo", "seed_mfg", "seed_industry", "reset") and config.PRODUCTION:
+    demo_seed = config.DEMO and action == "seed_industry"      # 시연 서버: 업종별 추가 데이터만 허용 (되돌리기는 '샘플로 되돌리기')
+    if action in ("seed_demo", "seed_mfg", "seed_industry", "reset") and config.PRODUCTION and not demo_seed:
         abort(403, "운영 환경에서는 샘플 데이터 생성과 전체 초기화를 쓸 수 없습니다.")
     try:
         if action == "seed_org":
@@ -792,6 +793,10 @@ def data_action():
             key = request.form.get("industry", "all")
             keys = list(si.PRESETS) if key == "all" else [key]
             count = max(1, min(f_int("sample_count", 8), 100))
+            if demo_seed:
+                if key == "all" or key not in si.PRESETS:
+                    abort(400, "시연 서버에서는 업종을 하나씩 골라 주세요.")
+                count = min(count, 10)
             result = si.seed_many(keys, customers=count)
             flash("업종별 샘플 추가 — " + " · ".join(
                 f"{si.PRESETS[k]['label']} 거래처 {r['customers']}·매출 {r['sales']}·입금 {r['payments']}"
