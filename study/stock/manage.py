@@ -18,6 +18,8 @@ def main():
     a = ap.parse_args()
     if a.cmd == "publish-snapshot":
         from core import publish
+        if a.codes[:1] == ["backfill"]:
+            print("추가", publish.backfill(log=lambda m: print(m, flush=True)), "일")
         print(publish.run(log=lambda m: print(m, flush=True)))
         return
     if a.cmd == "signals-scan":

@@ -27,13 +27,13 @@
   {% if mode == 'date' %}<a class="btn" href="{{ url_for('main.home', min=min_sig) }}">오늘</a>{% endif %}
   <span class="hint">{% if lo %}조회 가능 {{ lo }} ~ {{ hi }}(거래일이 아니면 그 전 거래일){% else %}날짜별 이력은 전 종목 훑기(signals-scan) 뒤에 생깁니다{% endif %}</span>
 </form>{% else %}<form class="toolbar datebar" method="get" action="/">
-  {% if snap_days %}<label>날짜 <select name="date">{% for d in snap_days|reverse %}<option value="{{ d }}" {{ 'selected' if rep and rep.meta.date == d }}>{{ d }}</option>{% endfor %}</select></label>{% endif %}
+  {% if snap_days %}<label>기준일 <input type="date" name="date" value="{{ rep.meta.date if rep and rep.meta.date else '' }}" min="{{ lo }}" max="{{ hi }}"></label>{% endif %}
   <label>신호 <select name="min"><option value="1" {{ 'selected' if min_sig == 1 }}>전체</option><option value="2" {{ 'selected' if min_sig == 2 }}>2개 이상 겹침</option><option value="3" {{ 'selected' if min_sig == 3 }}>3개 이상 겹침</option></select></label>
   <button class="btn" type="submit">보기</button>
   {% if rep and rep.meta.prev %}<a class="btn" href="?date={{ rep.meta.prev }}&min={{ min_sig }}">◀ {{ rep.meta.prev }}</a>{% endif %}
   {% if rep and rep.meta.next %}<a class="btn" href="?date={{ rep.meta.next }}&min={{ min_sig }}">{{ rep.meta.next }} ▶</a>{% endif %}
   {% if mode == 'date' %}<a class="btn" href="/?min={{ min_sig }}">최신</a>{% endif %}
-  <span class="hint">보관된 날짜 {{ snap_days|length }}개 · 앱이 켜진 날의 신호가 쌓입니다</span>
+  <span class="hint">{{ lo }} ~ {{ hi }} ({{ snap_days|length }}거래일){% if rep and rep.meta.trimmed %} · 오래된 날은 추천·강/상만 보관{% endif %}</span>
 </form>{% endif %}
 {% if not rep or not rep.meta.date %}
 <p class="note">{% if mode == 'date' %}{{ asked }} 이전의 이력이 없습니다.{% else %}아직 훑어 둔 결과가 없습니다. <code>python manage.py signals-scan</code>(전 종목, 약 15분)으로 만들면 이 화면에 나옵니다. 일봉 자동 갱신 뒤에는 자동으로 다시 만듭니다.{% endif %}</p>
@@ -53,7 +53,7 @@
   {% for kind, title, sub in (('pred', '예측', '단테 기법 신호가 최근 ' ~ rep.meta.recent ~ '봉 안에 난 종목'), ('ai', 'AI', '20일 안 +20% 확률 상위 10% (경계 ' ~ pct(rep.meta.thr10, 1) ~ ')')) %}
   {% set rows = rep[kind] %}{% set rec = rows|selectattr('score', '>=', rep.meta.recommend)|list %}
   <section class="cpane">
-    <h2>{{ title }} 추천 <small>점검 {{ (rep.meta.recommend * 10)|int }}/10 이상 · {{ rec|length }}개 (전체 {{ rows|length }}개)</small></h2>
+    <h2>{{ title }} 추천 <small>점검 {{ (rep.meta.recommend * 10)|int }}/10 이상 · {{ rec|length }}개 (전체 {{ rep.meta.n_pred if rep.meta.trimmed and kind == 'pred' else rep.meta.n_ai if rep.meta.trimmed else rows|length }}개)</small></h2>
     {% if rec %}{{ table(rec, kind, rep.checks[kind], past) }}{% else %}<p class="note">이날은 {{ (rep.meta.recommend * 10)|int }}개 이상 충족한 종목이 없습니다.</p>{% endif %}
     {% set rest = rows|rejectattr('score', '>=', rep.meta.recommend)|list %}
     {% if rest %}<details><summary>그 밖의 종목 {{ rest|length }}개 (부합 순)</summary>{{ table(rest[:80], kind, rep.checks[kind], past) }}{% if rest|length > 80 %}<p class="hint">상위 80개만 표시.</p>{% endif %}</details>{% endif %}

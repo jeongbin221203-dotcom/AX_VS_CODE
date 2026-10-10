@@ -16,7 +16,7 @@ import config
 SRC = config.DATA_DIR / "signals.json"
 DST = config.BASE / "snapshot" / "signals.json"        # 최신
 DAYS = config.BASE / "snapshot" / "days"                 # 날짜별 보관(days/YYYY-MM-DD.json) — 다음 주에도 그날 신호를 볼 수 있게
-KEEP_DAYS = 90                                           # 저장소가 불어나지 않게 최근 90거래일만
+FULL_DAYS = 90                                           # 최근 90거래일은 전체 목록, 그보다 오래된 날은 추천·강/상만(저장소가 불어나지 않게)
 
 
 def refresh() -> bool:
@@ -39,10 +39,58 @@ def refresh() -> bool:
             pass
         shutil.copyfile(SRC, target)
         changed = True
-    for old in sorted(DAYS.glob("*.json"))[:-KEEP_DAYS]:
-        old.unlink()
+    return compact_old() or changed
+
+
+def trim(rep):
+    """오래된 날짜용 압축: 추천(점검 9/10↑)·강/상만 남기고 나머지 종목은 뺀다."""
+    if rep.get("meta", {}).get("trimmed"):
+        return rep
+    rec = rep["meta"].get("recommend", 0.9)
+    rep["meta"]["trimmed"] = True
+    rep["meta"]["n_pred"], rep["meta"]["n_ai"] = len(rep.get("pred", [])), len(rep.get("ai", []))
+    for k in ("pred", "ai"):
+        rep[k] = [r for r in rep.get(k, []) if r["score"] >= rec]
+    return rep
+
+
+def compact_old() -> bool:
+    """최근 FULL_DAYS 일보다 오래된 날짜 파일을 압축본으로 바꾼다."""
+    changed = False
+    for f in sorted(DAYS.glob("*.json"))[:-FULL_DAYS]:
+        try:
+            rep = json.loads(f.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        if rep.get("meta", {}).get("trimmed"):
+            continue
+        f.write_text(json.dumps(trim(rep), ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
         changed = True
     return changed
+
+
+def backfill(since="2022-01-03", log=print) -> int:
+    """로컬 신호 이력(daily_checks)에서 지난 날짜들을 모두 만들어 snapshot/days 에 넣는다(없는 날짜만). 최근 FULL_DAYS 는 전체, 나머지는 압축."""
+    from core import signal_scan as ss
+    DAYS.mkdir(parents=True, exist_ok=True)
+    with __import__("core.db", fromlist=["db"]).get_conn() as c:
+        dates = [r["date"] for r in c.execute("SELECT DISTINCT date FROM daily_checks WHERE date >= ? ORDER BY date", (since,))]
+    n = 0
+    for i, d in enumerate(dates):
+        f = DAYS / f"{d}.json"
+        if f.exists():
+            continue
+        rep = ss.for_date(d)
+        for k in ("asked", "prev", "next", "latest"):
+            rep["meta"].pop(k, None)
+        old = i < len(dates) - FULL_DAYS
+        if old:
+            rep = trim(rep)
+        f.write_text(json.dumps(rep, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+        n += 1
+        if n % 200 == 0:
+            log(f"[{n}] {d}")
+    return n
 
 
 def _git(*args, env=None, cwd=None):

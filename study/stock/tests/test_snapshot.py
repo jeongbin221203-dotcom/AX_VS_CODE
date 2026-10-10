@@ -48,7 +48,7 @@ def test_snapshot_dates(tmp_path, monkeypatch):
     html = c.get("/?date=2026-10-07").get_data(as_text=True)               # 보관일이 아니면 그 전 보관일
     assert "화요일종목" in html and "2026-10-08 ▶" in html and "2026-10-07" in html
     assert "목요일종목" in c.get("/?date=2026-10-08").get_data(as_text=True)
-    assert "<option value=\"2026-10-06\"" in c.get("/").get_data(as_text=True)
+    assert 'type="date"' in c.get("/").get_data(as_text=True) and 'min="2026-10-06"' in c.get("/").get_data(as_text=True)
     assert "이전의 이력이 없습니다" in c.get("/?date=2020-01-01").get_data(as_text=True)
     assert c.get("/?date=abc").status_code == 400
 
@@ -78,3 +78,25 @@ def test_publish_refresh_copies_only_when_changed(tmp_path, monkeypatch):
     src.write_text(json.dumps({"meta": {"date": None}}), encoding="utf-8")
     with pytest.raises(RuntimeError):
         publish.refresh()                                               # 빈 결과로 덮어쓰지 않음
+
+
+def test_trim_keeps_only_recommended(tmp_path, monkeypatch):
+    rep = _rep()
+    rep["pred"].append(dict(rep["pred"][0], name="낮은점수", score=0.5))
+    rep["ai"].append(dict(rep["ai"][0], name="낮은점수AI", score=0.4))
+    t = publish.trim(rep)
+    assert [r["name"] for r in t["pred"]] == ["삼성전자"] and t["meta"]["n_pred"] == 2 and t["meta"]["n_ai"] == 2 and t["meta"]["trimmed"]
+    assert publish.trim(t) is t                                           # 두 번 압축해도 그대로
+    days = tmp_path / "days"
+    days.mkdir()
+    monkeypatch.setattr(publish, "DAYS", days)
+    monkeypatch.setattr(publish, "FULL_DAYS", 1)
+    for d in ("2026-10-06", "2026-10-07", "2026-10-08"):
+        r = json.loads(json.dumps(_rep()))
+        r["meta"]["date"] = d
+        r["pred"].append(dict(r["pred"][0], name="낮은점수", score=0.5))
+        (days / f"{d}.json").write_text(json.dumps(r, ensure_ascii=False), encoding="utf-8")
+    assert publish.compact_old() is True
+    assert json.loads((days / "2026-10-06.json").read_text(encoding="utf-8"))["meta"]["trimmed"] is True
+    assert "trimmed" not in json.loads((days / "2026-10-08.json").read_text(encoding="utf-8"))["meta"]   # 최근 날은 전체 유지
+    assert publish.compact_old() is False
