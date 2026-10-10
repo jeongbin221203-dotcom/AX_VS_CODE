@@ -20,6 +20,7 @@ def client(tmp_path, monkeypatch):
     f = tmp_path / "signals.json"
     f.write_text(json.dumps(_rep(), ensure_ascii=False), encoding="utf-8")
     monkeypatch.setattr(snapshot_app, "SNAPSHOT", f)
+    monkeypatch.setattr(snapshot_app, "CHARTS", tmp_path / "no_charts")      # 실제 차트 폴더와 분리
     monkeypatch.delenv("STOCK_SNAPSHOT_PASSWORD", raising=False)
     return snapshot_app.create_app().test_client()
 
