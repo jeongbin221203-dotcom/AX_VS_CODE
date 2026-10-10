@@ -290,3 +290,12 @@ def test_error_messages_are_korean_json_and_unexpected_errors_do_not_leak(client
     with patch('fitz.open', side_effect=RuntimeError('내부 경로 C:/secret/path 가 보이면 안 됨')):
         r = client.get('/question-image/59000/body/0.png')
     assert r.status_code == 500 and r.is_json and 'secret' not in r.text and '문제가 생겼어요' in r.json['error']
+
+
+def test_mobile_style_keeps_the_answer_row_readable():
+    """휴대폰 폭에서 '공식 정답 ④'가 한 글자씩 세로로 쪼개지던 문제(줄 전체 폭 링크 규칙이 정답 줄까지 적용됨)의 재발 방지."""
+    css = (ROOT / 'static' / 'style.css').read_text(encoding='utf-8')
+    assert '.question-nav .source-link{order:3;flex:1 0 100%' in css
+    assert '.source-link{order:3' not in css.replace('.question-nav .source-link{order:3', '')
+    assert 'flex-wrap:wrap' in css.split('.review-answer{', 1)[1].split('}', 1)[0]
+    assert 'white-space:nowrap' in css.split('.review-answer strong{', 1)[1].split('}', 1)[0]
