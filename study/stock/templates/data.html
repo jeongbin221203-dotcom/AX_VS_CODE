@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block body %}
+<h1>데이터 수집</h1>
+<p>종목 {{ n_sym|won }}개 · 마지막 일봉 {{ last or '없음' }}</p>
+<p>자동 갱신: 평일 장 마감 후 16:10 (앱이 켜져 있을 때) · 마지막 {{ auto or '아직 없음' }}</p>
+<p>
+  <button class="btn" id="upd" data-top="0">관심종목만 갱신</button>
+  <button class="btn" id="upd50" data-top="50">+ 시총 상위 50</button>
+  <button class="btn" id="upd200" data-top="200">+ 시총 상위 200</button>
+  <button class="btn" id="updall" data-top="5000">전체 종목</button>
+</p>
+<p id="state" class="note">대기 중</p>
+<h2>최근 실패</h2>
+{% if fails %}
+<table class="grid"><tbody>{% for f in fails %}<tr><td>{{ f.code }}</td><td>{{ f.at }}</td><td>{{ f.message }}</td></tr>{% endfor %}</tbody></table>
+{% else %}<p class="note">실패 기록 없음</p>{% endif %}
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/data.js') }}"></script>{% endblock %}

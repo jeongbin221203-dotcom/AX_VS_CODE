@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block body %}
+<h1>관심종목</h1>
+{% if n_px == 0 %}
+<p class="note">아직 받아 둔 데이터가 없습니다. 위 검색창에서 종목을 찾아 열면 일봉을 자동으로 받습니다
+  (종목 목록이 비어 있으면 <a href="{{ url_for('main.data_page') }}">데이터</a> 화면에서 먼저 갱신하세요).</p>
+{% endif %}
+{% if items %}
+<table class="grid">
+  <thead><tr><th>종목</th><th class="num">현재가</th><th class="num">등락</th><th class="num">거래량</th><th>최근 신호</th></tr></thead>
+  <tbody>
+  {% for it in items %}
+  <tr data-href="{{ url_for('main.chart', code=it.code) }}">
+    <td><a href="{{ url_for('main.chart', code=it.code) }}">{{ it.name }}</a> <small>{{ it.code }}</small></td>
+    {% if it.last %}
+    <td class="num">{{ it.last.close|won }}</td>
+    <td class="num {{ 'up' if it.last.change > 0 else 'down' if it.last.change < 0 }}">{{ '%+.2f'|format(it.last.change) }}%</td>
+    <td class="num">{{ it.last.volume|won }}</td>
+    <td>{% for s in it.signals %}<span class="tag {{ s.side }}">{{ s.date[5:] }} {{ s.label }}</span> {% endfor %}</td>
+    {% else %}<td colspan="4"><small>데이터 없음</small></td>{% endif %}
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="note">관심종목이 없습니다. 차트 화면에서 ☆ 를 눌러 추가하세요.</p>
+{% endif %}
+{% endblock %}

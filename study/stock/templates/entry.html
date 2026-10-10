@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %}진입 시점{% endblock %}
+{% block body %}
+<h1>진입 시점 <small>오를지 내릴지 모를 때 — 과거 데이터로 본 상승 가능성과 들어가는 방법</small></h1>
+{% if not rep %}
+<p class="note">아직 분석 결과가 없습니다. <code>python manage.py entry-train</code> 으로 만들면(약 10분) 이 화면에 나옵니다.</p>
+{% else %}
+{% set m = rep.meta %}{% set d = rep.direction %}
+<p class="note">
+  거래 가능 종목 {{ m.rows|won }}개 표본({{ m.stocks|won }}종목, {{ m.split.date_min[:4] }}~{{ m.split.date_max[:4] }})에서 <b>신호일 다음날 시가에 사서 20거래일 뒤 종가</b>로 본 결과입니다(비용 {{ pct(m.cost, 1) }} 차감).
+  정보는 모두 그날 종가까지 알 수 있던 값이고, AI는 ~{{ m.split.valid_end[:4] }}년 자료로 학습해 <b>{{ m.split.valid_end[:4]|int + 1 }}년 이후(처음 보는 기간)</b>에서 확인했습니다.
+  과거 통계이며 생존 편향이 있고 투자 권유가 아닙니다. 생성 {{ m.generated }}.
+</p>
+
+<h2>요약</h2>
+<ul class="aisum">{% for line in rep.text %}<li>{{ line }}</li>{% endfor %}</ul>
+
+<h2>1. 방향을 얼마나 알 수 있나 <small>시험 기간 · 20거래일 뒤</small></h2>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>무엇을 예측</th><th class="num">기준 확률</th><th class="num">AUC</th><th class="num">상위 1%</th><th class="num">상위 5%</th><th class="num">상위 10%</th></tr></thead><tbody>
+{% for key, name in (('up', '오를 것인가 (+)'), ('big_up', '크게 오를 것인가 (+10% 이상)'), ('big_dn', '크게 내릴 것인가 (−10% 이하)')) %}{% set x = d.models[key] %}
+<tr><td>{{ name }}</td><td class="num">{{ pct(x.base, 1) }}</td><td class="num"><b>{{ '%.3f'|format(x.auc) }}</b></td>
+{% for k in ('top1', 'top5', 'top10') %}<td class="num">{{ pct(x[k].precision, 1) }} <small>({{ '%.1f'|format(x[k].lift) }}배)</small></td>{% endfor %}</tr>{% endfor %}
+</tbody></table></div>
+<p class="hint">"크게 내릴 것인가"의 AUC가 더 높은 것은 변동성이 큰 종목을 가려내기 때문입니다 — 방향보다 '얼마나 흔들릴지'가 더 잘 예측됩니다. 상위 N%는 AI 점수가 가장 높은 N% 중 실제로 그 일이 일어난 비율입니다.</p>
+
+<h3>AI 상승 확률 순으로 10등분했을 때 실제 결과 <small>(1=가장 낮음 → 10=가장 높음)</small></h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>구간</th>{% for r in d.deciles %}<th class="num">{{ r.bin }}</th>{% endfor %}</tr></thead><tbody>
+<tr><td>AI 예측 상승 확률</td>{% for r in d.deciles %}<td class="num">{{ pct(r.p_mean, 0) }}</td>{% endfor %}</tr>
+<tr><td>실제 오른 비율</td>{% for r in d.deciles %}<td class="num"><b>{{ pct(r.p_up, 0) }}</b></td>{% endfor %}</tr>
+<tr><td>평균 수익</td>{% for r in d.deciles %}<td class="num {{ 'up' if r.mean > 0 else 'down' }}">{{ pct(r.mean, 1, true) }}</td>{% endfor %}</tr>
+<tr><td>중앙값</td>{% for r in d.deciles %}<td class="num">{{ pct(r.median, 1, true) }}</td>{% endfor %}</tr>
+<tr><td>−10% 이하</td>{% for r in d.deciles %}<td class="num">{{ pct(r.p_big_loss, 0) }}</td>{% endfor %}</tr>
+<tr><td>+10% 이상</td>{% for r in d.deciles %}<td class="num">{{ pct(r.p_big_up, 0) }}</td>{% endfor %}</tr>
+<tr><td>최악 5% 경계</td>{% for r in d.deciles %}<td class="num">{{ pct(r.q05, 0, true) }}</td>{% endfor %}</tr></tbody></table></div>
+
+{% if d.stock_only %}
+<h3>시장 상황을 빼고 종목 자체만 보면? <small>(시장 특징 제외 모델 — 종목 고르기의 실제 능력)</small></h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>무엇을 예측</th><th class="num">AUC</th><th class="num">상위 5% 적중</th><th class="num">상위 10% 적중</th></tr></thead><tbody>
+{% for key, name in (('up', '오를 것인가 (+)'), ('big_up', '크게 오를 것인가 (+10% 이상)'), ('big_dn', '크게 내릴 것인가 (−10% 이하)')) %}{% set x = d.stock_only.models[key] %}
+<tr><td>{{ name }}</td><td class="num"><b>{{ '%.3f'|format(x.auc) }}</b></td><td class="num">{{ pct(x.top5.precision, 1) }} <small>({{ '%.1f'|format(x.top5.lift) }}배)</small></td><td class="num">{{ pct(x.top10.precision, 1) }} <small>({{ '%.1f'|format(x.top10.lift) }}배)</small></td></tr>{% endfor %}
+</tbody></table></div>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>종목 고유 상승 확률 10등분</th>{% for r in d.stock_only.deciles %}<th class="num">{{ r.bin }}</th>{% endfor %}</tr></thead><tbody>
+<tr><td>실제 오른 비율</td>{% for r in d.stock_only.deciles %}<td class="num"><b>{{ pct(r.p_up, 0) }}</b></td>{% endfor %}</tr>
+<tr><td>평균 수익</td>{% for r in d.stock_only.deciles %}<td class="num {{ 'up' if r.mean > 0 else 'down' }}">{{ pct(r.mean, 1, true) }}</td>{% endfor %}</tr>
+<tr><td>−10% 이하</td>{% for r in d.stock_only.deciles %}<td class="num">{{ pct(r.p_big_loss, 0) }}</td>{% endfor %}</tr></tbody></table></div>
+{% endif %}
+
+<h2>2. 시장 전체가 오를지 <small>전 종목 평균 지수, 20일 간격 {{ rep.market.n }}개 표본</small></h2>
+<p>전체 기간에서 20거래일 뒤 시장이 오른 비율 <b>{{ pct(rep.market.up, 0) }}</b>, 평균 {{ pct(rep.market.mean, 1, true) }}.
+  지금 시장({{ rep.market.today.date }}): 52주 고점 대비 <b>{{ pct(rep.market.today.dd250, 0, true) }}</b>, 직전 60일 <b>{{ pct(rep.market.today.r60, 0, true) }}</b>.</p>
+<div class="why2">
+{% for title, rows in rep.market.bins.items() %}
+<div><h3>{{ title }}별</h3><div class="scroll"><table class="grid cmp"><thead><tr><th>구간</th><th class="num">표본</th><th class="num">이후 20일 상승 확률</th><th class="num">평균</th><th class="num">최악 5% 경계</th></tr></thead><tbody>
+{% for r in rows %}<tr><td>{{ r.label }}</td><td class="num">{{ r.n }}</td><td class="num"><b>{{ pct(r.p_up, 0) }}</b></td><td class="num {{ 'up' if r.mean > 0 else 'down' }}">{{ pct(r.mean, 1, true) }}</td><td class="num">{{ pct(r.q05, 0, true) }}</td></tr>{% endfor %}
+</tbody></table></div></div>{% endfor %}
+</div>
+<p class="hint">시장 급락·깊은 낙폭 뒤에는 이후 상승 확률과 평균 수익이 높아지는 경향이 있는지 위 표로 직접 확인하세요. 표본 수가 적은 구간(n이 작은 줄)은 우연일 수 있습니다.</p>
+
+<h2>3. 이런 상황이면 상승 확률은? <small>종목 단위 · 20거래일 뒤 · 전체 기간 (시장 평균은 {{ pct(rep.conditions.base.p_up, 0) }} 상승)</small></h2>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>상황</th><th class="num">표본</th><th class="num">상승 확률</th><th class="num">평균 수익</th><th class="num">시장 대비</th><th class="num">+10% 이상</th><th class="num">−10% 이하</th><th class="num">최악 5%</th><th class="num">2022~ 상승 확률</th><th class="num">2022~ 평균</th></tr></thead><tbody>
+<tr class="baseline"><td>전체 평균</td><td class="num">{{ rep.conditions.base.n|won }}</td><td class="num">{{ pct(rep.conditions.base.p_up, 1) }}</td><td class="num">{{ pct(rep.conditions.base.mean, 2, true) }}</td><td class="num">–</td><td class="num">{{ pct(rep.conditions.base.p_big_up, 0) }}</td><td class="num">{{ pct(rep.conditions.base.p_big_loss, 0) }}</td><td class="num">{{ pct(rep.conditions.base.q05, 0, true) }}</td><td class="num" colspan="2">–</td></tr>
+{% for r in rep.conditions.rows %}<tr><td>{{ r.name }}</td><td class="num">{{ r.n|won }}</td><td class="num"><b class="{{ 'up' if r.p_up > rep.conditions.base.p_up + 0.02 else 'down' if r.p_up < rep.conditions.base.p_up - 0.02 }}">{{ pct(r.p_up, 1) }}</b></td>
+<td class="num {{ 'up' if r.mean > 0 else 'down' }}">{{ pct(r.mean, 2, true) }}</td><td class="num {{ 'up' if r.excess > 0.003 else 'down' if r.excess < -0.003 }}">{{ pct(r.excess, 2, true) }}</td>
+<td class="num">{{ pct(r.p_big_up, 0) }}</td><td class="num">{{ pct(r.p_big_loss, 0) }}</td><td class="num">{{ pct(r.q05, 0, true) }}</td><td class="num">{{ pct(r.p_up_test, 1) }}</td><td class="num">{{ pct(r.mean_test, 2, true) }}</td></tr>{% endfor %}
+</tbody></table></div>
+<p class="hint">시장 대비 = 같은 날 모든 종목 평균을 뺀 값. 상승 확률이 기준보다 크게 다르지 않으면(±2%p 안) 그 상황은 방향에 대한 정보가 거의 없습니다.</p>
+
+<h2>4. 어떻게 들어갈까 <small>진입 방식 비교 — 방향을 모를 때는 '최악의 경우'를 줄이는 쪽이 현실적</small></h2>
+{% for u in rep.entry_methods %}
+<h3>{{ u.universe }}</h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>진입 방식</th><th class="num">체결 비율</th><th class="num">평균 수익</th><th class="num">신호당 기대*</th><th class="num">중앙값</th><th class="num">변동(표준편차)</th><th class="num">상승 확률</th><th class="num">−10% 이하</th><th class="num">최악 5%</th><th class="num">보유 중 최대 낙폭</th></tr></thead><tbody>
+{% for r in u.rows %}<tr><td>{{ r.name }}</td><td class="num">{{ pct(r.coverage, 0) }}</td><td class="num {{ 'up' if r.mean > 0 else 'down' }}">{{ pct(r.mean, 2, true) }}</td><td class="num">{{ pct(r.per_signal, 2, true) }}</td>
+<td class="num">{{ pct(r.median, 1, true) }}</td><td class="num">{{ pct(r.std, 1) }}</td><td class="num">{{ pct(r.p_up, 0) }}</td><td class="num">{{ pct(r.p_big_loss, 0) }}</td><td class="num">{{ pct(r.q05, 0, true) }}</td><td class="num">{{ pct(r.mae, 1, true) if r.mae is not none else '–' }}</td></tr>{% endfor %}
+</tbody></table></div>
+{% endfor %}
+<p class="hint">* 신호당 기대 = 체결 비율 × 평균 수익(체결되지 않은 신호는 0으로, 즉 안 샀다고) — 확인·눌림 방식은 안 사는 날이 생기므로 이 값으로 비교해야 공정합니다. 보유 중 최대 낙폭은 진입 후 20일 동안 저가 기준 최대 하락(3분할은 아직 안 산 몫을 현금으로).
+  체결 비율이 낮은 방식은 평균이 좋아 보여도 실제로는 좋은 종목을 놓치는 것일 수 있습니다.</p>
+
+<h2>5. 지금 상승 가능성이 상대적으로 높은 종목 <small>{{ rep.picks[0].date if rep.picks else '' }} 기준 · 오를 확률 + 크게 오를 확률 − 크게 내릴 확률 순 · 참고용, 매수 추천이 아님</small></h2>
+{% if rep.today_market %}<p class="note">지금 시장 상태(거래 가능 종목 중앙값): 시장 60일 {{ pct(rep.today_market.mkt_r60, 0, true) }}, 52주 고점 대비 {{ pct(rep.today_market.mkt_dd250, 0, true) }}.
+  {% if rep.today_market.market_lift_up is defined %}시장 상황 때문에 <b>모든 종목의 상승 확률이 평균 {{ pct(rep.today_market.market_lift_up, 0, true) }}p 올라가 보입니다</b>(시장 특징을 넣은 AI 평균 {{ pct(rep.today_market.mean_p_up_with_market, 0) }} → 종목 고유 {{ pct(rep.today_market.mean_p_up_stock_only, 0) }}).
+  그래서 아래 순위는 시장 효과를 뺀 <b>종목 고유 점수</b>이고, 확률은 시험 기간의 실제 비율에 맞춰 보정한 값입니다. 시장 전체의 방향은 위 2장 표를 보세요.{% endif %}</p>{% endif %}
+{% if rep.picks %}
+<div class="scroll"><table class="grid cmp"><thead><tr><th>종목</th><th class="num">종가</th><th class="num">상승 확률(보정)</th><th class="num">+10% 확률</th><th class="num">−10% 확률</th><th class="num">20일 수익률</th><th>이유 (그 특징이 상승 확률을 올린 정도)</th></tr></thead><tbody>
+{% for r in rep.picks %}<tr data-href="{{ url_for('main.chart', code=r.code) }}"><td><a href="{{ url_for('main.chart', code=r.code) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td><td class="num">{{ r.close|won }}</td>
+<td class="num"><b>{{ pct(r.p_up, 0) }}</b></td><td class="num">{{ pct(r.p_big_up, 0) }}</td><td class="num">{{ pct(r.p_big_dn, 0) }}</td><td class="num">{{ pct(r.ret20, 0, true) }}</td><td style="white-space:normal;min-width:380px"><small>{{ r.reason }}</small></td></tr>{% endfor %}
+</tbody></table></div>
+<p class="hint">확률은 시험 기간의 보정과 비교해 해석하세요. 위 1장의 십분위 표에서 "AI 예측 상승 확률"과 "실제 오른 비율"이 얼마나 일치했는지가 이 확률을 믿을 수 있는 정도입니다.</p>
+{% endif %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}차트분석{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="{{ url_for('main.home') }}">📈 차트분석</a>
+  <div class="search">
+    <input id="q" type="search" placeholder="종목명 또는 코드" autocomplete="off">
+    <ul id="results" hidden></ul>
+  </div>
+  {# 메뉴: 자주 쓰는 셋은 바로, 나머지는 묶음(▾)으로 — 22개를 한 줄에 늘어놓으면 글자가 끊겨 보여서 #}
+  {% set menus = [
+    ('기법', [('analysis.page', '기법 정확도'), ('entry.page', '진입 시점'), ('avoid.page', '피할 종목·갭'), ('surge.page', '거래량 급증'), ('notes.index', '단테 노트')]),
+    ('AI·전략', [('ai.page', 'AI 분석'), ('ai.patterns', '패턴'), ('combined.page', '종합 전략'), ('strategy.page', '전략 보강'), ('risk.page', '거래정지 위험')]),
+    ('급등 연구', [('boom.page', '급등주'), ('jump.page', '+20% 급등일'), ('precursor.page', '급등 전조'), ('pattern.page', '급등 전 패턴'), ('quietvol.page', '조용한 대량 거래')]),
+    ('매수 시점', [('timing.page', '매수 시점'), ('presignal.page', '신호 한 주 전'), ('bestday.page', '최적 매수일')]),
+  ] %}
+  {% set ep = request.endpoint %}
+  <nav>
+    <a href="{{ url_for('main.home') }}" {% if ep == 'main.home' %}class="on"{% endif %}>신호</a>
+    <a href="{{ url_for('main.compare') }}" {% if ep == 'main.compare' %}class="on"{% endif %}>차트 비교</a>
+    <a href="{{ url_for('main.watch') }}" {% if ep == 'main.watch' %}class="on"{% endif %}>관심종목</a>
+    <a href="{{ url_for('plan.page') }}" {% if ep == 'plan.page' %}class="on"{% endif %}>매매 계획</a>
+    {% for title, items in menus %}
+    <details class="menu"{% if ep in items|map(attribute=0)|list %} data-on="1"{% endif %}>
+      <summary>{{ title }} <span class="caret">▾</span></summary>
+      <div class="dd">{% for e, label in items %}<a href="{{ url_for(e) }}" {% if ep == e %}class="on"{% endif %}>{{ label }}</a>{% endfor %}</div>
+    </details>
+    {% endfor %}
+    <a href="{{ url_for('main.data_page') }}" {% if ep == 'main.data_page' %}class="on"{% endif %}>데이터</a>
+  </nav>
+</header>
+<main>{% block body %}{% endblock %}</main>
+<footer class="foot">{{ disclaimer }}</footer>
+<script src="{{ url_for('static', filename='js/search.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

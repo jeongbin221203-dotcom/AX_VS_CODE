@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}최적 매수일{% endblock %}
+{% macro st(s) %}{% if s %}<td class="num">{{ s.n|won }}</td><td class="num {{ 'up' if s.mean > 0 else 'down' }}"><b>{{ pct(s.mean, 2, true) }}</b></td><td class="num {{ 'up' if s.excess is defined and s.excess > 0 else 'down' }}">{{ pct(s.excess, 2, true) if s.excess is defined else '–' }}</td><td class="num"><b>{{ pct(s.p_up, 0) }}</b></td><td class="num">{{ pct(s.p_big_up, 0) }}</td><td class="num">{{ pct(s.p_dn10, 0) }}</td><td class="num">{{ pct(s.q05, 0, true) }}</td>{% else %}<td colspan="7" class="num">&ndash;</td>{% endif %}{% endmacro %}
+{% set H7 = '<th class="num">건수</th><th class="num">20일 평균</th><th class="num">시장 대비</th><th class="num">상승</th><th class="num">+10%↑</th><th class="num">−10%↓</th><th class="num">최악 5%</th>' %}
+{% block body %}
+<h1>모든 신호로 고르는 최적 매수일 <small>기법 신호·패턴·전조·급등 전력·거래정지 위험을 한 점수로 — 어떤 종목을, 오늘 살지 기다릴지</small></h1>
+{% if not rep %}
+<p class="note">아직 분석 결과가 없습니다. <code>python manage.py strategy-train</code>(표본 캐시) 뒤 <code>python manage.py bestday-train</code>(약 30분, 두 번째부터 10분)으로 만들면 이 화면에 나옵니다.</p>
+{% else %}
+{% set m = rep.meta %}
+<p class="note">표본 {{ m.rows|won }}행(거래 가능 종목, 연중일 5일 간격), 특징 {{ m.features }}개. 진입 다음날 시가, 20거래일 보유(비용 {{ pct(m.cost, 1) }}). 모델은 ~{{ m.split.train_end[:4] }} 학습, {{ m.split.train_end[:4]|int + 1 }}~ 시험. "시장 대비" = 같은 날 전체 평균을 뺀 값. 과거 통계이며 투자 권유가 아닙니다. 생성 {{ m.generated }}.</p>
+<h2>요약</h2>
+<ul class="aisum">{% for line in rep.text %}<li>{{ line }}</li>{% endfor %}</ul>
+
+{% set td = rep.today %}
+<h2>1. 오늘 통합 점수 상위 종목과 매수일 판정 <small>{{ td.date }} · 상위 10% 기준 점수 {{ pct(td.thr10, 0) }}↑ · 시장 52주 고점 대비 {{ pct(td.mkt_dd250, 1, true) }} → 시장 필터 {{ '켜짐' if td.mkt_under else '꺼짐 (규칙상 쉬는 구간)' }}</small></h2>
+{% if td.rows %}
+<div class="scroll"><table class="grid cmp"><thead><tr><th>종목</th><th class="num">종가</th><th class="num">통합 점수</th><th>매수일</th><th class="num">타이밍 점수</th><th class="num">거래정지 위험</th><th>피함</th><th>최근 신호</th><th>패턴</th><th class="num">20일 등락</th><th class="num">52주 고점 대비</th><th class="num">20일선 대비</th><th class="num">변동성</th></tr></thead><tbody>
+{% for r in td.rows %}<tr data-href="{{ url_for('main.chart', code=r.code) }}" {% if r.avoid or (r.halt_p and r.halt_p >= 0.03) %}class="faint"{% endif %}><td><a href="{{ url_for('main.chart', code=r.code) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td><td class="num">{{ r.close|won }}</td><td class="num"><b>{{ pct(r.score, 0) }}</b></td><td>{{ '오늘 (다음날 시가)' if r.buy_today else '기다리기 (5일 뒤·눌림)' }}</td><td class="num">{{ pct(r.timing, 0) }}</td><td class="num {{ 'down' if r.halt_p and r.halt_p >= 0.03 }}">{{ pct(r.halt_p, 1) if r.halt_p is not none else '–' }}</td><td>{{ '해당' if r.avoid else '' }}</td><td><small>{{ r.signals|join(' · ') }}</small></td><td><small>{{ r.patterns|join(' · ') }}</small></td><td class="num">{{ pct(r.ret20, 1, true) }}</td><td class="num">{{ pct(r.nh250, 0, true) }}</td><td class="num">{{ pct(r.dist20, 1, true) }}</td><td class="num">{{ pct(r.atrp, 1) }}</td></tr>{% endfor %}</tbody></table></div>
+<p class="hint">흐린 행 = 피함 규칙 해당 또는 거래정지 위험 높음(3%↑). 다음날 시가가 종가 +3% 넘으면 안 삽니다. "매수일"은 '오늘이 앞 5일 중 최저 시가일 확률'(타이밍 점수)이 중앙값 이상이면 오늘, 아니면 기다리기 — 아래 2절의 성과를 보고 쓸지 정하세요. 확률은 과거 평균이지 예측이 아닙니다.</p>
+{% else %}<p class="note">오늘 상위 10%에 드는 종목이 없습니다.</p>{% endif %}
+
+<h2>2. 매수일 — 점수 상위 10% (피함 제외·시장 필터) 종목을 언제 사나 <small>시험 기간</small></h2>
+<div class="scroll"><table class="grid cmp"><thead><tr><th rowspan="2">매수일</th><th rowspan="2" class="num">체결</th><th colspan="7" class="grp">학습</th><th colspan="7" class="grp">시험</th><th rowspan="2" class="num">신호당(시험)</th></tr><tr>{{ H7|safe }}{{ H7|safe }}</tr></thead><tbody>
+{% for r in rep.timing %}<tr {% if r.name.startswith('오늘') %}class="baseline"{% elif r.name.startswith('오라클') %}class="faint"{% endif %}><td>{{ r.name }}</td><td class="num">{{ pct(r.coverage, 0) }}</td>{{ st(r.tr) }}{{ st(r.te) }}<td class="num">{{ pct(r.per_signal_te, 2, true) if r.per_signal_te is not none else '–' }}</td></tr>{% endfor %}</tbody></table></div>
+{% set tmd = rep.timing_model %}
+<p>앞 5일 중 최저 시가가 오늘(다음날)인 비율 {{ pct(rep.best5_rate, 0) }} — 날짜별: {% for b in rep.best_day_dist %}{{ b.day }}일째 {{ pct(b.share, 0) }}{{ ' · ' if not loop.last }}{% endfor %}.
+  타이밍 모델 AUC {{ '%.3f'|format(tmd.auc) }}: 점수 상위 20%는 실제 최저 {{ pct(tmd.hi_best5, 0) }}, 하위 20%는 {{ pct(tmd.lo_best5, 0) }}(기준 {{ pct(tmd.base_best5, 0) }}).
+  {% if tmd.hi_today %}상위 20%: 오늘 {{ pct(tmd.hi_today.mean, 2, true) }} vs 5일 뒤 {{ pct(tmd.hi_x5.mean, 2, true) }} · 하위 20%: 오늘 {{ pct(tmd.lo_today.mean, 2, true) }} vs 5일 뒤 {{ pct(tmd.lo_x5.mean, 2, true) }}.{% endif %}</p>
+<div class="scroll"><table class="grid cmp"><thead><tr><th rowspan="2">타이밍 규칙</th><th colspan="7" class="grp">학습</th><th colspan="7" class="grp">시험</th></tr><tr>{{ H7|safe }}{{ H7|safe }}</tr></thead><tbody>
+{% for r in tmd.rules %}<tr><td>{{ r.name }}</td>{{ st(r.tr) }}{{ st(r.te) }}</tr>{% endfor %}</tbody></table></div>
+
+<h2>3. 통합 점수 vs 기존 AI <small>시험 기간 상위 1·5·10%의 실제 성과</small></h2>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>맞히려는 것</th><th>특징</th><th class="num">AUC</th><th class="num">기준</th>{% for k in ('top1', 'top5', 'top10') %}<th class="num">상위 {{ k[3:] }}% 적중</th><th class="num">20일 평균</th><th class="num">상승</th>{% endfor %}</tr></thead><tbody>
+{% for r in rep.compare %}<tr {% if r.features.startswith('통합') %}class="baseline"{% endif %}><td>{{ r.target }}</td><td>{{ r.features }}</td><td class="num"><b>{{ '%.3f'|format(r.auc) }}</b></td><td class="num">{{ pct(r.base, 1) }}</td>{% for k in ('top1', 'top5', 'top10') %}<td class="num">{{ pct(r[k].hit, 1) }}</td><td class="num {{ 'up' if r[k].mean > 0 else 'down' }}"><b>{{ pct(r[k].mean, 2, true) }}</b></td><td class="num">{{ pct(r[k].p_up, 0) }}</td>{% endfor %}</tr>{% endfor %}</tbody></table></div>
+<p>통합 점수에서 중요한 특징: {% for i in rep.importance %}{{ i.label }}{{ ', ' if not loop.last }}{% endfor %}.</p>
+<h3>조건을 쌓았을 때 (통합 점수 기준)</h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th rowspan="2">단계</th><th rowspan="2" class="num">한 달(시험)</th><th colspan="7" class="grp">학습 (모델이 본 기간)</th><th colspan="7" class="grp">시험</th></tr><tr>{{ H7|safe }}{{ H7|safe }}</tr></thead><tbody>
+{% for s in rep.stages %}<tr {% if loop.last %}class="baseline"{% endif %}><td>{{ s.name }}</td><td class="num">{{ '%.0f'|format(s.per_month_te) }}</td>{{ st(s.tr) }}{{ st(s.te) }}</tr>{% endfor %}</tbody></table></div>
+
+{% set w = rep.walk %}
+<h2>4. 걸어가며 검증 <small>해마다 그 해 전까지로 다시 학습 → 상위 10% + 피함 제외 + 시장 필터 (모두 처음 보는 해)</small></h2>
+<div class="scroll"><table class="grid cmp"><thead><tr><th rowspan="2">연도</th><th colspan="4" class="grp">통합 점수 상위 10%</th><th colspan="4" class="grp">같은 조건 전체</th></tr><tr>{% for i in range(2) %}<th class="num">건수</th><th class="num">평균</th><th class="num">시장 대비</th><th class="num">상승</th>{% endfor %}</tr></thead><tbody>
+{% for r in w.rows %}<tr><td>{{ r.year }}</td>{% for k in ('final', 'base') %}{% set s = r[k] %}{% if s %}<td class="num">{{ s.n|won }}</td><td class="num {{ 'up' if s.mean > 0 else 'down' }}">{{ pct(s.mean, 2, true) }}</td><td class="num">{{ pct(s.excess, 2, true) }}</td><td class="num"><b>{{ pct(s.p_up, 0) }}</b></td>{% else %}<td colspan="4" class="num">–</td>{% endif %}{% endfor %}</tr>{% endfor %}
+<tr class="baseline"><td>합계 ({{ w.years_better }}/{{ w.years }}년 우세)</td>{% for k in ('final', 'base') %}{% set s = w.total[k] %}{% if s %}<td class="num">{{ s.n|won }}</td><td class="num">{{ pct(s.mean, 2, true) }}</td><td class="num">{{ pct(s.excess, 2, true) }}</td><td class="num"><b>{{ pct(s.p_up, 0) }}</b></td>{% else %}<td colspan="4"></td>{% endif %}{% endfor %}</tr></tbody></table></div>
+{% endif %}
+{% endblock %}

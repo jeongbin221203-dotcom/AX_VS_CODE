@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}{{ v.title }}{% endblock %}
+{% block body %}
+<p><a href="{{ url_for('notes.index', q=q) }}">← 노트 목록</a></p>
+<h1>{{ v.title }}</h1>
+<p><small>{{ v.channel }} · {{ v.upload_date }} · {{ (v.duration or 0)|mmss }}{% if v.view_count %} · 조회 {{ v.view_count|won }}{% endif %}
+  · <a href="https://www.youtube.com/watch?v={{ v.id }}" target="_blank" rel="noopener">유튜브에서 보기</a></small></p>
+<p>{% for t in tags %}<a class="tag" href="{{ url_for('notes.index', tag=t) }}">{{ t }}</a><a href="{{ url_for('tech.page', name=t) }}" title="차트에 적용">📈</a> {% endfor %}</p>
+{% if chapters %}
+<h2>챕터</h2>
+<ul class="chap">{% for ch in chapters %}<li><a href="https://www.youtube.com/watch?v={{ v.id }}&t={{ ch.start_time|int }}s" target="_blank" rel="noopener">{{ ch.start_time|mmss }}</a> {{ ch.title }}</li>{% endfor %}</ul>
+{% endif %}
+{% if v.description %}
+<details><summary>영상 설명</summary><pre class="desc">{{ v.description }}</pre></details>
+{% endif %}
+<h2>자막 {{ '(원문 조각)' if raw else '(정리본)' }}
+  <small>{% if v.caption_status == 'ok' %}{{ '자동 생성' if v.caption_kind == 'auto' else '수동 작성' }} · 한국어 ·
+  <a href="{{ url_for('notes.detail', video_id=v.id, q=q, raw=(0 if raw else 1)) }}">{{ '정리본 보기' if raw else '원문 조각 보기' }}</a>{% endif %}</small></h2>
+{% if v.kind == 'short' %}<p class="note">쇼츠는 자막을 수집하지 않습니다.</p>
+{% elif not paras %}<p class="note">자막이 아직 없습니다 ({{ v.caption_status or '수집 전' }}).</p>{% endif %}
+<div class="tx">
+{% for s, text in paras %}
+<p><a class="ts" href="https://www.youtube.com/watch?v={{ v.id }}&t={{ s|int }}s" target="_blank" rel="noopener">{{ s|mmss }}</a> {{ text|hl(q) }}</p>
+{% endfor %}
+</div>
+{% if v.caption_kind == 'auto' %}<p class="note">자동 생성 자막이라 오인식이 있을 수 있습니다. 용어는 자주 틀리는 것만 고쳤고, 정확한 내용은 영상을 확인하세요.</p>{% endif %}
+{% endblock %}

@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+{% block title %}AI 분석{% endblock %}
+{% macro edge(v) %}{% if v is none %}∞{% else %}{{ '%.2f'|format(v) }}{% endif %}{% endmacro %}
+{% block body %}
+<h1>AI 분석 <small>20거래일 뒤 +20% 이상 오른 종목의 이유 · 예측 정확성 · 거래량</small></h1>
+{% if not rep %}
+<p class="note">아직 AI 분석 결과가 없습니다. <code>python manage.py ai-train</code> 으로 만들면(전 종목 약 10~20분) 이 화면에 나옵니다.</p>
+{% else %}
+{% set m = rep.meta %}{% set t = rep.accuracy.test %}
+<p class="note">
+  <b>정답</b> = 신호일 다음날 시가에 사서 <b>20거래일 뒤 종가가 +{{ (m.target * 100)|int }}% 이상</b>인 경우.
+  <b>모델</b> = 그래디언트 부스팅 트리 · 특징 {{ m.features }}개(가격·이평 위치, 수익률, 변동성, <b>거래량</b>, 시장 상황, 하락·반등 패턴, <b>기법 신호</b> — 모두 그날 종가까지 알 수 있는 값).
+  <b>검증</b> = 시간 순서로 학습 ≤{{ m.split.train_end[:4] }}, 검증 ~{{ m.split.valid_end[:4] }}, <b>시험 {{ (m.split.valid_end[:4]|int + 1) }}~{{ m.split.date_max[:4] }}(처음 보는 기간)</b>.
+  표본 {{ m.rows|won }}행(종목 {{ m.stocks|won }}개, 5일 간격) 중 거래 가능(20일 평균 거래대금 {{ (m.tradable_value / 100000000)|int }}억 원↑) {{ m.tradable_rows|won }}행 · 분석 {{ m.generated }}.<br>
+  <b>AI = 통계적 패턴 학습</b>이며 미래를 아는 것이 아닙니다. 상장폐지 종목이 빠진 생존 편향이 있고 투자 권유가 아닙니다.
+</p>
+
+<h2>요약</h2>
+<ul class="aisum">{% for line in rep.text %}<li>{{ line }}</li>{% endfor %}</ul>
+
+<h2>1. 정확성 <small>처음 보는 기간(시험)에서 예측이 얼마나 맞았나</small></h2>
+<div class="scroll"><table class="grid cmp">
+<thead><tr><th>구분</th><th class="num">표본</th><th class="num">+20% 기준 확률</th><th class="num">AUC</th><th class="num">상위 1% 적중</th><th class="num">상위 5% 적중</th><th class="num">상위 10% 적중</th></tr></thead>
+<tbody>
+{% for name, x in (('시험 · 거래 가능', rep.accuracy.test), ('검증 · 거래 가능', rep.accuracy.valid)) %}
+<tr><td>{{ name }}</td><td class="num">{{ x.n|won }}</td><td class="num">{{ pct(x.base, 1) }}</td><td class="num">{{ '%.3f'|format(x.auc) if x.auc else '–' }}</td>
+{% for k in ('top1', 'top5', 'top10') %}<td class="num">{{ pct(x[k].precision, 1) }} <small>({{ '%.1f'|format(x[k].lift) }}배)</small></td>{% endfor %}</tr>
+{% endfor %}
+</tbody></table></div>
+<p class="hint">AUC 0.5 = 무작위, 0.6 = 약한 구분, 0.7 = 쓸 만한 구분. "상위 5% 적중"은 AI 점수가 가장 높은 5%가 실제로 +20% 이상 오른 비율이고 괄호는 기준 확률 대비 배수입니다.</p>
+
+{% if rep.yearly %}
+<details open><summary>연도별 (시험 기간)</summary>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>연도</th>{% for y in rep.yearly %}<th class="num">{{ y.year }}</th>{% endfor %}</tr></thead><tbody>
+<tr><td>기준 확률</td>{% for y in rep.yearly %}<td class="num">{{ pct(y.base, 1) }}</td>{% endfor %}</tr>
+<tr><td>AUC</td>{% for y in rep.yearly %}<td class="num">{{ '%.2f'|format(y.auc) if y.auc else '–' }}</td>{% endfor %}</tr>
+<tr><td>상위 5% 적중</td>{% for y in rep.yearly %}<td class="num">{{ pct(y.top5, 1) }}</td>{% endfor %}</tr>
+<tr><td>배수</td>{% for y in rep.yearly %}<td class="num">{{ '%.1f'|format(y.lift5) }}배</td>{% endfor %}</tr></tbody></table></div></details>
+{% endif %}
+
+{% if rep.baselines %}<h3>AI 없이 특징 하나만으로 순위를 매기면? <small>(시험 · 거래 가능)</small></h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>순위 기준</th><th class="num">AUC</th><th class="num">상위 5% 적중</th><th class="num">배수</th></tr></thead><tbody>
+<tr class="baseline"><td>AI (특징 {{ m.features }}개 종합)</td><td class="num">{{ '%.3f'|format(t.auc) }}</td><td class="num">{{ pct(t.top5.precision, 1) }}</td><td class="num">{{ '%.1f'|format(t.top5.lift) }}배</td></tr>
+{% for b in rep.baselines %}<tr><td>{{ b.label }}</td><td class="num">{{ '%.3f'|format(b.auc) }}</td><td class="num">{{ pct(b.top5, 1) }}</td><td class="num">{{ '%.1f'|format(b.lift5) }}배</td></tr>{% endfor %}
+</tbody></table></div>
+<p class="hint">단순 기준과 AI의 차이가 AI가 더해 준 부분입니다. 변동성이 큰 종목이 +20%도 −20%도 더 자주 나오므로, 방향이 아니라 '크게 움직일 종목'을 가려내는 효과가 큽니다.</p>{% endif %}
+
+<h3>보정 — AI가 말한 확률 vs 실제 (점수 낮은 10% → 높은 10%)</h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>구간</th>{% for c in rep.accuracy.calibration %}<th class="num">{{ c.bin }}</th>{% endfor %}</tr></thead><tbody>
+<tr><td>AI 예측 확률</td>{% for c in rep.accuracy.calibration %}<td class="num">{{ pct(c.pred, 1) }}</td>{% endfor %}</tr>
+<tr><td>실제 비율</td>{% for c in rep.accuracy.calibration %}<td class="num"><b>{{ pct(c.actual, 1) }}</b></td>{% endfor %}</tr></tbody></table></div>
+<p class="hint">두 줄이 비슷하면 확률을 믿을 만하고, 실제가 훨씬 낮거나 높으면 과신·과소평가입니다.</p>
+
+
+{% if rep.signals_compare %}
+<h2>1-2. 기법 신호를 특징으로 넣으면 좋아질까? <small>같은 모델·같은 시험 기간(2022~), 특징만 늘림</small></h2>
+<div class="scroll"><table class="grid cmp">
+<thead><tr><th>특징 구성</th><th class="num">특징 수</th><th class="num">AUC</th><th class="num">상위 1% 적중</th><th class="num">상위 5% 적중</th><th class="num">상위 10% 적중</th><th class="num">AI 상위 20개 평균(20일)</th><th class="num">시장 대비</th><th class="num">이긴 횟수</th></tr></thead><tbody>
+{% for r in rep.signals_compare %}<tr><td>{{ r.name }}</td><td class="num">{{ r.n_features }}</td><td class="num"><b>{{ '%.3f'|format(r.auc) }}</b></td>
+{% for k in ('top1', 'top5', 'top10') %}<td class="num">{{ pct(r[k].precision, 1) }} <small>({{ '%.1f'|format(r[k].lift) }}배)</small></td>{% endfor %}
+<td class="num {{ 'up' if r.topn_mean > 0 else 'down' }}">{{ pct(r.topn_mean, 2, true) }}</td><td class="num">{{ pct(r.topn_excess, 2, true) }}</td><td class="num">{{ pct(r.topn_win, 0) }}</td></tr>{% endfor %}
+</tbody></table></div>
+<p class="hint">기법 신호 = 매집봉·256·이평 때리기·밥그릇·공구리·역매공파·세력선·정배열·눌림목·돌파·52주 신고가·캔들 등 24종이 "마지막으로 나온 뒤 며칠 지났나"와 "최근 10봉에 몇 종류 나왔나". AUC 차이가 0.01 미만이면 사실상 같습니다.</p>
+{% endif %}
+
+<h2>2. AI 추천대로 샀다면? <small>시험 기간에 {{ rep.topn.n_pick }}개씩, 28일 간격, 20거래일 보유, 비용 0.3% 차감</small></h2>
+<div class="scroll"><table class="grid cmp">
+<thead><tr><th>고르는 방법</th><th class="num">평균 수익(20일)</th><th class="num">시장 대비</th><th class="num">시장보다 나은 횟수</th></tr></thead><tbody>
+<tr class="baseline"><td>시장(거래 가능 종목 전체 평균)</td><td class="num">{{ pct(rep.topn.market, 2, true) }}</td><td class="num">–</td><td class="num">{{ rep.topn.periods }}회 중</td></tr>
+{% for name, x in methods.items() %}<tr><td>{{ name }}</td><td class="num {{ 'up' if x.mean > 0 else 'down' }}">{{ pct(x.mean, 2, true) }}</td>
+<td class="num {{ 'up' if x.excess > 0 else 'down' }}">{{ pct(x.excess, 2, true) }}</td><td class="num">{{ pct(x.win_vs_market, 0) }}</td></tr>{% endfor %}
+</tbody></table></div>
+<p class="hint">+20% 이상을 맞히는 능력과 평균 수익은 다릅니다. 변동성이 큰 종목을 고르면 +20% 적중은 늘지만 큰 손실도 같이 늘어 평균은 오르지 않을 수 있습니다.</p>
+
+<h2>3. 무엇이 중요했나 <small>그 특징을 무작위로 섞었을 때 정확도가 얼마나 떨어지나</small></h2>
+<div class="why2"><div>
+<h3>특징 묶음</h3>
+{% for g, v in groups %}<div class="bar"><span class="bl">{{ g }}</span><span class="bv"><i class="win" style="width:{{ (v / top_g * 100)|round(1) if v > 0 else 0 }}%"></i></span><span class="bn">{{ '%.4f'|format(v) }}</span></div>{% endfor %}
+<h3>개별 특징 상위 15</h3>
+{% for r in imp %}<div class="bar"><span class="bl">{{ r.label }} <small>{{ r.group }}</small></span><span class="bv"><i class="win" style="width:{{ (r.imp / top_imp * 100)|round(1) if r.imp > 0 else 0 }}%"></i></span><span class="bn">{{ '%.4f'|format(r.imp) }}</span></div>{% endfor %}
+</div><div>
+<h3>+20% 이상 오른 경우의 특징 <small>(오르지 않은 경우와 비교한 차이 d)</small></h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>특징</th><th class="num">상승 종목 중앙값</th><th class="num">전체 중앙값</th><th class="num">d</th></tr></thead><tbody>
+{% for r in rep.profiles[:14] %}<tr><td>{{ r.label }}</td><td class="num">{{ '%.3f'|format(r.win_med) if r.win_med is not none else '–' }}</td><td class="num">{{ '%.3f'|format(r.all_med) if r.all_med is not none else '–' }}</td>
+<td class="num {{ 'up' if r.d > 0 else 'down' }}">{{ '%+.2f'|format(r.d) }}</td></tr>{% endfor %}
+</tbody></table></div>
+<p class="hint">d 가 +면 오른 종목이 평균적으로 그 값이 더 컸고 −면 더 작았습니다(|d|≥0.2 정도부터 의미).</p>
+</div></div>
+
+<h2>4. 거래량은 얼마나 영향이 있나 <small>구간별 +20% 이상 오른 비율 (기준 {{ pct(m.base_tradable, 1) }}, 거래 가능 종목)</small></h2>
+{% for f, label, rows in vol %}
+<h3>{{ label }}</h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>구간</th>{% for r in rows %}<th class="num">{{ edge(r.lo) }}~{{ edge(r.hi) }}</th>{% endfor %}</tr></thead><tbody>
+<tr><td>+20% 비율</td>{% for r in rows %}<td class="num"><b>{{ pct(r.rate, 1) }}</b></td>{% endfor %}</tr>
+<tr><td>기준 대비</td>{% for r in rows %}<td class="num {{ 'up' if r.lift > 1.1 else 'down' if r.lift < 0.9 }}">{{ '%.2f'|format(r.lift) }}배</td>{% endfor %}</tr>
+<tr><td>20일 안 터치</td>{% for r in rows %}<td class="num">{{ pct(r.touch, 0) }}</td>{% endfor %}</tr>
+<tr><td>표본</td>{% for r in rows %}<td class="num"><small>{{ r.n|won }}</small></td>{% endfor %}</tr></tbody></table></div>
+{% endfor %}
+
+<h2>5. 조건별 확률 <small>이런 상태에서 20거래일 뒤 +20% 이상이 된 비율</small></h2>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>조건</th><th class="num">표본</th><th class="num">+20% 비율</th><th class="num">기준 대비</th><th class="num">20일 안 터치</th></tr></thead><tbody>
+{% for c in rep.conditions %}<tr><td>{{ c.name }}</td><td class="num">{{ c.n|won }}</td><td class="num"><b>{{ pct(c.rate, 1) }}</b></td>
+<td class="num {{ 'up' if c.lift > 1.1 else 'down' if c.lift < 0.9 }}">{{ '%.2f'|format(c.lift) }}배</td><td class="num">{{ pct(c.touch, 0) }}</td></tr>{% endfor %}
+</tbody></table></div>
+
+{% if other %}<details><summary>다른 중요 특징의 구간별 비율</summary>
+{% for f, label, rows in other %}<h3>{{ label }}</h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>구간</th>{% for r in rows %}<th class="num">{{ edge(r.lo) }}~{{ edge(r.hi) }}</th>{% endfor %}</tr></thead><tbody>
+<tr><td>+20% 비율</td>{% for r in rows %}<td class="num">{{ pct(r.rate, 1) }}</td>{% endfor %}</tr></tbody></table></div>{% endfor %}</details>{% endif %}
+
+
+{% if horizons %}
+<h2>6. 단기·중기·중장기·장기 비교 <small>기간마다 따로 학습한 AI의 시험 기간(2022~) 성과</small></h2>
+<div class="scroll"><table class="grid cmp">
+<thead><tr><th rowspan="2">기간 · 목표</th><th rowspan="2" class="num">전체 평균 수익</th><th rowspan="2" class="num">목표 달성 기준 확률</th><th rowspan="2" class="num">AUC</th><th rowspan="2" class="num">상위 5% 적중</th>
+<th colspan="5" class="grp">AI 상위 20개를 보유 기간만큼 샀을 때 (비용 차감)</th></tr>
+<tr><th class="num">평균 수익</th><th class="num">중앙값</th><th class="num">시장 평균</th><th class="num">시장 대비</th><th class="num">시장보다 나은 횟수</th></tr></thead><tbody>
+{% for key, h in horizons %}{% set a = h.topn.methods['AI 점수'] %}
+<tr><td><b>{{ h.title }}</b></td><td class="num">{{ pct(h.mean_all, 1, true) }}</td><td class="num">{{ pct(h.base, 1) }}</td><td class="num">{{ '%.3f'|format(h.auc) }}</td>
+<td class="num">{{ pct(h.top5.precision, 1) }} <small>({{ '%.1f'|format(h.top5.lift) }}배)</small></td>
+<td class="num {{ 'up' if a.mean > 0 else 'down' }}">{{ pct(a.mean, 1, true) }}</td><td class="num">{{ pct(a.median, 1, true) }}</td><td class="num">{{ pct(h.topn.market, 1, true) }}</td>
+<td class="num {{ 'up' if a.excess > 0 else 'down' }}">{{ pct(a.excess, 1, true) }}</td><td class="num">{{ pct(a.win_vs_market, 0) }} <small>({{ h.topn.periods }}회)</small></td></tr>
+{% endfor %}</tbody></table></div>
+<p class="hint">AUC가 0.55 아래면 그 기간은 사실상 예측하지 못한 것입니다. 기간이 길수록 시험 기간의 독립된 구간 수(회)가 적어 결과가 불안정합니다. "전체 평균 수익"은 그 기간 보유했을 때 모든 거래 가능 종목 표본의 평균입니다.</p>
+
+<h2>7. 추천 종목과 이유 <small>가장 최근 거래일 기준, 기간별 AI 점수 상위 10 — 참고용이며 매수 추천이 아닙니다</small></h2>
+{% for key, h in horizons %}{% if h.picks %}
+<details {{ 'open' if key == 'mid' }}><summary><b>{{ h.title }}</b> — AI 확률 상위 (이 기간 AUC {{ '%.2f'|format(h.auc) }}{{ ' · 예측력 낮음' if h.auc < 0.55 }})</summary>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>종목</th><th class="num">종가</th><th class="num">확률</th><th>이유 (그 특징이 확률을 올린 정도)</th></tr></thead><tbody>
+{% for r in h.picks %}<tr data-href="{{ url_for('main.chart', code=r.code) }}"><td><a href="{{ url_for('main.chart', code=r.code) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td>
+<td class="num">{{ r.close|won }}</td><td class="num"><b>{{ pct(r.prob, 1) }}</b></td><td style="white-space:normal;min-width:420px"><small>{{ r.reason }}</small></td></tr>{% endfor %}
+</tbody></table></div></details>
+{% endif %}{% endfor %}
+<p class="hint">이유는 "그 특징을 평범한 값(중앙값)으로 바꿨을 때 확률이 얼마나 떨어지나"로 계산했습니다. 확률은 위 표의 시험 기간 보정과 함께 해석하세요(과신하기 쉽습니다).</p>
+{% endif %}
+
+{% if rep.signal_horizons %}
+<h2>8. 기법 신호별 기간별 수익률 <small>신호가 나온 날 다음날 시가에 사서 N거래일 보유 · 같은 날 모든 종목 평균을 뺀 초과수익(비용 0.3% 차감 전)</small></h2>
+<div class="scroll"><table class="grid cmp"><thead><tr><th rowspan="2">신호</th><th rowspan="2" class="num">표본</th>{% for h in ('5', '20', '60', '120', '250') %}<th colspan="2" class="grp">{{ h }}일</th>{% endfor %}</tr>
+<tr>{% for h in range(5) %}<th class="num">초과</th><th class="num">승률</th>{% endfor %}</tr></thead><tbody>
+<tr class="baseline"><td>전체 평균 (비용 차감)</td><td class="num">–</td>{% for h in ('5', '20', '60', '120', '250') %}<td class="num">{{ pct(rep.signal_horizons.base[h].mean, 1, true) }}</td><td class="num">{{ pct(rep.signal_horizons.base[h].win, 0) }}</td>{% endfor %}</tr>
+{% for r in rep.signal_horizons.signals %}<tr><td>{{ r.label }}{{ ' ★' if r.dante }}</td><td class="num">{{ r.n|won }}</td>
+{% for h in ('5', '20', '60', '120', '250') %}{% set x = r.h.get(h) %}{% if x %}<td class="num {{ 'up' if x.excess > 0.005 else 'down' if x.excess < -0.005 }}">{{ pct(x.excess, 1, true) }}</td><td class="num">{{ pct(x.win, 0) }}</td>{% else %}<td class="num">–</td><td class="num">–</td>{% endif %}{% endfor %}</tr>
+{% endfor %}</tbody></table></div>
+<p class="hint">★ = 단테 기법 계열. 초과수익이 + 면 같은 날 아무 종목이나 산 것보다 높았다는 뜻입니다.</p>
+{% endif %}
+
+<h2>9. 오늘 AI 점수 상위 <small>가장 최근 거래일 기준, 거래 가능 종목 — 참고용, 매수 추천이 아닙니다</small></h2>
+{% if rep.today %}
+<div class="scroll"><table class="grid cmp"><thead><tr><th>종목</th><th class="num">종가</th><th class="num">AI 확률(+20%)</th><th class="num">거래량 ÷20일</th><th class="num">20일 수익률</th><th class="num">52주 고점 대비</th></tr></thead><tbody>
+{% for r in rep.today %}<tr data-href="{{ url_for('main.chart', code=r.code) }}"><td><a href="{{ url_for('main.chart', code=r.code) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td>
+<td class="num">{{ r.close|won }}</td><td class="num"><b>{{ pct(r.prob, 1) }}</b></td><td class="num">{{ '%.1f'|format(r.volratio) if r.volratio is not none else '–' }}배</td>
+<td class="num">{{ pct(r.ret20, 0, true) }}</td><td class="num">{{ pct(r.nh250, 0, true) }}</td></tr>{% endfor %}
+</tbody></table></div>
+<p class="hint">기준일 {{ rep.today[0].date }}. 확률은 시험 기간의 보정표와 함께 해석하세요(과신하기 쉽습니다).</p>
+{% else %}<p class="note">오늘 점수가 없습니다.</p>{% endif %}
+{% endif %}
+{% endblock %}

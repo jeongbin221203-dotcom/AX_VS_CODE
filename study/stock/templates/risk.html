@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}거래정지 위험·성공률{% endblock %}
+{% macro st(s) %}{% if s %}<td class="num">{{ s.n|won }}</td><td class="num {{ 'up' if s.mean > 0 else 'down' }}"><b>{{ pct(s.mean, 2, true) }}</b></td><td class="num {{ 'up' if s.excess is defined and s.excess > 0 else 'down' }}">{{ pct(s.excess, 2, true) if s.excess is defined else '–' }}</td><td class="num"><b>{{ pct(s.p_up, 0) }}</b></td><td class="num">{{ pct(s.p_big_up, 0) }}</td><td class="num">{{ pct(s.p_dn20, 0) }}</td>{% else %}<td colspan="6" class="num">&ndash;</td>{% endif %}{% endmacro %}
+{% set H6 = '<th class="num">표본</th><th class="num">20일 평균</th><th class="num">시장 대비</th><th class="num">상승</th><th class="num">+10%↑</th><th class="num">−20%↓</th>' %}
+{% macro tier(t) %}<span class="{{ 'down' if t == '높음' else '' }}">{{ t }}</span>{% endmacro %}
+{% block body %}
+<h1>거래정지 위험 · 성공률 보강 <small>거래정지 전 패턴으로 진입 위험을 점수화하고, 보강 규칙의 상승 확률을 더 올리기</small></h1>
+{% if not rep %}
+<p class="note">아직 결과가 없습니다. <code>python manage.py strategy-train</code>(표본 캐시) 뒤 <code>python manage.py risk-train</code>(약 15분)으로 만들면 이 화면에 나옵니다.</p>
+{% else %}
+{% set m = rep.meta %}
+<p class="note">표본 {{ m.rows|won }}행({{ m.stocks|won }}종목, {{ m.split.date_min[:4] }}~{{ m.split.date_max[:4] }}). 거래정지 = 거래량 0 이 {{ m.halt_min }}일 이상 이어진 구간, 위험 = 그 날 뒤 120거래일 안에 거래정지가 시작될 확률. 모델·규칙은 ~{{ m.split.train_end[:4] }}년으로 만들고 {{ m.split.train_end[:4]|int + 1 }}년 이후로 확인. 상장폐지 종목은 DB 에 없어 실제 위험은 이보다 큽니다. 투자 권유가 아닙니다. 생성 {{ m.generated }}.</p>
+<h2>요약</h2>
+<ul class="aisum">{% for line in rep.text %}<li>{{ line }}</li>{% endfor %}</ul>
+
+{% set td = rep.today %}
+<h2>1. 오늘 진입 위험 <small>{{ td.date }} 종가 기준 · 시장 52주 고점 대비 {{ pct(td.market_under.dd250, 1, true) }} → 시장 필터 {{ '켜짐' if td.market_under.under else '꺼짐 (규칙상 쉬는 구간)' }}</small></h2>
+<h3>거래정지 위험 중간·높음 종목 <small>(높음 {{ td.n_risk_high }} · 중간 {{ td.n_risk_mid }} / 거래 가능 {{ td.n|won }}종목)</small></h3>
+{% if td.risk_rows %}
+<div class="scroll"><table class="grid cmp"><thead><tr><th>종목</th><th class="num">종가</th><th>위험</th><th class="num">120일 안 거래정지 예측</th><th class="num">20일 등락</th><th class="num">52주 고점 대비</th><th class="num">224일선 대비</th><th class="num">변동성</th><th class="num">거래대금(20일)</th><th class="num">60일 중 거래 없는 날</th><th>피함 규칙</th></tr></thead><tbody>
+{% for r in td.risk_rows %}<tr data-href="{{ url_for('main.chart', code=r.code) }}"><td><a href="{{ url_for('main.chart', code=r.code) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td><td class="num">{{ r.close|won }}</td><td>{{ tier(r.tier) }}</td><td class="num"><b>{{ pct(r.halt_p, 1) }}</b></td><td class="num">{{ pct(r.ret20, 1, true) }}</td><td class="num">{{ pct(r.nh250, 0, true) }}</td><td class="num">{{ pct(r.dist224, 0, true) }}</td><td class="num">{{ pct(r.atrp, 1) }}</td><td class="num">{{ (r.liq / 100000000)|round(1) }}억</td><td class="num">{{ r.zero_vol60|int }}</td><td>{{ '해당' if r.avoid else '' }}</td></tr>{% endfor %}</tbody></table></div>
+{% else %}<p class="note">위험 중간 이상인 종목이 없습니다.</p>{% endif %}
+<h3>오늘 AI 상위 10% 후보의 위험 <small>(피함 제외, 다음날 갭 +3% 넘으면 안 삼{% if not td.market_under.under %} — 시장 필터가 꺼진 날이라 규칙상 참고만{% endif %})</small></h3>
+{% if td.rows %}
+<div class="scroll"><table class="grid cmp"><thead><tr><th>종목</th><th class="num">종가</th><th class="num">AI 점수</th><th class="num">앙상블 순위</th><th>거래정지 위험</th><th class="num">예측</th><th>채택 신호</th><th class="num">20일 등락</th><th class="num">52주 고점 대비</th><th class="num">변동성</th></tr></thead><tbody>
+{% for r in td.rows %}<tr data-href="{{ url_for('main.chart', code=r.code) }}" {% if r.tier == '높음' %}class="faint"{% endif %}><td><a href="{{ url_for('main.chart', code=r.code) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td><td class="num">{{ r.close|won }}</td><td class="num">{{ pct(r.prob, 0) if r.prob is not none else '–' }}</td><td class="num">{{ pct(r.ens, 0) if r.ens is not none else '–' }}</td><td>{{ tier(r.tier) }}</td><td class="num">{{ pct(r.halt_p, 1) }}</td><td><small>{{ r.signals|join(' · ') }}</small></td><td class="num">{{ pct(r.ret20, 1, true) }}</td><td class="num">{{ pct(r.nh250, 0, true) }}</td><td class="num">{{ pct(r.atrp, 1) }}</td></tr>{% endfor %}</tbody></table></div>
+{% else %}<p class="note">오늘 후보가 없습니다.</p>{% endif %}
+<p class="hint">보강 규칙에 더해진 조건: {{ td.used|join(', ') if td.used else '없음' }}. 위험 '높음' 행은 흐리게 표시했습니다.</p>
+
+{% set pt = rep.patterns %}
+<h2>2. 거래정지 전 패턴 <small>120일 안에 거래정지가 시작된 행 {{ pt.n_pos|won }}개 vs 나머지 — 기준 확률 {{ pct(pt.base, 2) }}</small></h2>
+<h3>위험 조건 <small>(학습·시험 모두 기준의 2배↑면 ✔)</small></h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>조건</th><th>✔</th><th class="num">표본</th><th class="num">비중</th><th class="num">120일 안 거래정지</th><th class="num">60일 안</th><th class="num">학습 배수</th><th class="num">시험 배수</th></tr></thead><tbody>
+{% for r in pt.rules %}<tr {% if r.robust %}class="baseline"{% endif %}><td>{{ r.name }}</td><td>{{ '✔' if r.robust else '' }}</td><td class="num">{{ r.n|won }}</td><td class="num">{{ pct(r.share, 1) }}</td><td class="num"><b>{{ pct(r.p120, 2) }}</b></td><td class="num">{{ pct(r.p60, 2) }}</td><td class="num">{{ '%.1f'|format(r.lift_tr) }}배</td><td class="num">{{ '%.1f'|format(r.lift_te) }}배</td></tr>{% endfor %}</tbody></table></div>
+<h3>특징 차이 <small>(정지 전 행 중앙값 vs 나머지, 차이는 표준편차 단위)</small></h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>특징</th><th class="num">거래정지 전</th><th class="num">나머지</th><th class="num">차이</th></tr></thead><tbody>
+{% for r in pt.diff %}<tr><td>{{ r.label }}</td><td class="num">{{ '%.3f'|format(r.pos) }}</td><td class="num">{{ '%.3f'|format(r.neg) }}</td><td class="num {{ 'down' if r.d > 0.15 else 'up' if r.d < -0.15 }}">{{ '%+.2f'|format(r.d) }}</td></tr>{% endfor %}</tbody></table></div>
+
+{% set md = rep.model %}
+<h2>3. 거래정지 위험 모델 <small>AUC 시험 {{ '%.3f'|format(md.auc) }} (학습 {{ '%.3f'|format(md.auc_tr) }})</small></h2>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>위험 점수 구간 (시험 기간)</th>{% for b in md.deciles %}<th class="num">{{ b.bin }}</th>{% endfor %}</tr></thead><tbody>
+<tr><td>예측 확률 평균</td>{% for b in md.deciles %}<td class="num">{{ pct(b.p_mean, 2) }}</td>{% endfor %}</tr><tr><td>실제 120일 안 거래정지</td>{% for b in md.deciles %}<td class="num"><b>{{ pct(b.actual, 2) }}</b></td>{% endfor %}</tr></tbody></table></div>
+<h3>위험 등급</h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>등급</th><th class="num">기준</th><th class="num">학습 비중</th><th class="num">학습 실제</th><th class="num">시험 비중</th><th class="num">시험 실제</th></tr></thead><tbody>
+{% for t in md.tiers %}<tr><td>{{ tier(t.name) }}</td><td class="num">{% if t.name == '높음' %}{{ pct(md.thresholds.high, 1) }}↑{% elif t.name == '중간' %}{{ pct(md.thresholds.mid, 1) }}~{{ pct(md.thresholds.high, 1) }}{% else %}{{ pct(md.thresholds.mid, 1) }} 미만{% endif %}</td><td class="num">{{ pct(t.tr.share, 1) }}</td><td class="num">{{ pct(t.tr.actual, 2) if t.tr.actual is not none else '–' }}</td><td class="num">{{ pct(t.te.share, 1) }}</td><td class="num"><b>{{ pct(t.te.actual, 2) if t.te.actual is not none else '–' }}</b></td></tr>{% endfor %}</tbody></table></div>
+{% if md.importance %}<p>중요 특징: {% for i in md.importance %}{{ i.label }}{{ ', ' if not loop.last }}{% endfor %}.</p>{% endif %}
+<h3>시장 필터 AI 규칙에서 위험 등급별 성과</h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th rowspan="2">위험</th><th rowspan="2" class="num">비중</th><th rowspan="2" class="num">실제 거래정지</th><th colspan="6" class="grp">학습</th><th colspan="6" class="grp">시험</th></tr><tr>{{ H6|safe }}{{ H6|safe }}</tr></thead><tbody>
+{% for r in rep.risk_vs_return %}<tr><td>{{ r.name }}</td><td class="num">{{ pct(r.share, 0) }}</td><td class="num">{{ pct(r.halt, 2) }}</td>{{ st(r.tr) }}{{ st(r.te) }}</tr>{% endfor %}</tbody></table></div>
+
+{% set im = rep.improve %}
+<h2>4. 성공률 올리기 <small>미리 정한 후보를 학습·시험 모두 상승 확률(+1%p↑)·평균이 오를 때만 하나씩 더함</small></h2>
+<div class="scroll"><table class="grid cmp"><thead><tr><th rowspan="2">단계</th><th rowspan="2" class="num">한 달 신호(시험)</th><th colspan="6" class="grp">학습 (~{{ m.split.train_end[:4] }})</th><th colspan="6" class="grp">시험 ({{ m.split.train_end[:4]|int + 1 }}~)</th><th colspan="2" class="grp">시험 · 3분할</th><th colspan="2" class="grp">시험 · 목표 +10%</th></tr><tr>{{ H6|safe }}{{ H6|safe }}<th class="num">평균</th><th class="num">상승</th><th class="num">평균</th><th class="num">상승</th></tr></thead><tbody>
+{% for r in im.steps %}<tr {% if loop.last %}class="baseline"{% endif %}><td>{{ r.name }}</td><td class="num">{{ '%.0f'|format(r.per_month_te) }}</td>{{ st(r.tr) }}{{ st(r.te) }}<td class="num">{{ pct(r.split3_te.mean, 2, true) if r.split3_te else '–' }}</td><td class="num">{{ pct(r.split3_te.p_up, 0) if r.split3_te else '–' }}</td><td class="num">{{ pct(r.tgt10_te.mean, 2, true) if r.tgt10_te else '–' }}</td><td class="num">{{ pct(r.tgt10_te.p_up, 0) if r.tgt10_te else '–' }}</td></tr>{% endfor %}</tbody></table></div>
+<h3>시험해 본 후보 전부</h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>단계</th><th>후보</th><th>통과</th><th class="num">시험 표본</th><th class="num">학습 상승</th><th class="num">시험 상승</th><th class="num">학습 평균</th><th class="num">시험 평균</th></tr></thead><tbody>
+{% for r in im.tried %}<tr {% if r.pass %}class="baseline"{% endif %}><td class="num">{{ r.stage }}</td><td>{{ r.name }}</td><td>{{ '✔' if r.pass else '' }}</td><td class="num">{{ r.n_te|won }}</td><td class="num">{{ pct(r.p_up_tr, 0) if r.p_up_tr is not none else '–' }}</td><td class="num">{{ pct(r.p_up_te, 0) if r.p_up_te is not none else '–' }}</td><td class="num">{{ pct(r.mean_tr, 2, true) if r.mean_tr is not none else '–' }}</td><td class="num">{{ pct(r.mean_te, 2, true) if r.mean_te is not none else '–' }}</td></tr>{% endfor %}</tbody></table></div>
+
+{% set w = rep.walk %}
+<h2>5. 걸어가며 검증 <small>해마다 그 해 전까지로 AI 를 다시 학습 → 시장 필터 규칙 vs 보강 규칙 (모두 처음 보는 해)</small></h2>
+<div class="scroll"><table class="grid cmp"><thead><tr><th rowspan="2">연도</th><th colspan="4" class="grp">시장 필터 규칙</th><th colspan="4" class="grp">보강 규칙</th></tr><tr>{% for i in range(2) %}<th class="num">표본</th><th class="num">평균</th><th class="num">시장 대비</th><th class="num">상승</th>{% endfor %}</tr></thead><tbody>
+{% for r in w.rows %}<tr><td>{{ r.year }}</td>{% for k in ('base', 'final') %}{% set s = r[k] %}{% if s %}<td class="num">{{ s.n|won }}</td><td class="num {{ 'up' if s.mean > 0 else 'down' }}">{{ pct(s.mean, 2, true) }}</td><td class="num">{{ pct(s.excess, 2, true) }}</td><td class="num"><b>{{ pct(s.p_up, 0) }}</b></td>{% else %}<td colspan="4" class="num">–</td>{% endif %}{% endfor %}</tr>{% endfor %}
+<tr class="baseline"><td>합계 ({{ w.years_better }}/{{ w.years }}년 보강이 더 높음)</td>{% for k in ('base', 'final') %}{% set s = w.total[k] %}{% if s %}<td class="num">{{ s.n|won }}</td><td class="num">{{ pct(s.mean, 2, true) }}</td><td class="num">{{ pct(s.excess, 2, true) }}</td><td class="num"><b>{{ pct(s.p_up, 0) }}</b></td>{% else %}<td colspan="4"></td>{% endif %}{% endfor %}</tr></tbody></table></div>
+<p class="hint">{% if w.not_walked %}해마다 다시 학습하지 않은 조건({{ w.not_walked|join(', ') }})은 여기서 뺐습니다. {% endif %}시장 필터가 켜진 해에만 표본이 있습니다. 시장이 52주 고점 −10% 아래로 간 적이 없는 해는 비어 있거나 적습니다.</p>
+{% endif %}
+{% endblock %}

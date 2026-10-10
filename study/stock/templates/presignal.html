@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}신호 한 주 전{% endblock %}
+{% macro st(s) %}{% if s %}<td class="num">{{ s.n|won }}</td><td class="num {{ 'up' if s.mean > 0 else 'down' }}"><b>{{ pct(s.mean, 2, true) }}</b></td><td class="num">{{ pct(s.p_up, 0) }}</td><td class="num">{{ pct(s.p_dn10, 0) }}</td>{% else %}<td colspan="4" class="num">&ndash;</td>{% endif %}{% endmacro %}
+{% block body %}
+<h1>단테 기법 신호 한 주 전에 살 수 있나 <small>신호 5일 전 자리(셋업)를 미리 정해 — 실제로 신호가 오는지, 그 자리에서 사면 나은지</small></h1>
+{% if not rep %}
+<p class="note">아직 분석 결과가 없습니다. <code>python manage.py presignal-train</code> 으로 만들면(약 25분) 이 화면에 나옵니다.</p>
+{% else %}
+{% set m = rep.meta %}{% set b = rep.base %}
+<p class="note">표본 {{ m.rows|won }}행(거래 가능 종목의 5일 간격 날 {{ m.sampled|won }} + 모든 단테 신호의 {{ m.ahead }}일 전·신호일). 진입 다음날 시가, 20거래일 보유(비용 {{ pct(m.cost, 1) }}). "(사후) 신호 5일 전"은 신호가 날 것을 미리 안 셈이라 <b>실현 불가능한 상한</b>이고, "셋업"은 그날 종가까지의 정보로 미리 정한 자리입니다. 학습 ~{{ m.split.train_end[:4] }} / 시험 {{ m.split.train_end[:4]|int + 1 }}~. 과거 통계이며 투자 권유가 아닙니다. 생성 {{ m.generated }}.</p>
+<h2>요약</h2>
+<ul class="aisum">{% for line in rep.text %}<li>{{ line }}</li>{% endfor %}</ul>
+
+<h2>1. 기법별 — 신호일 매수 vs 5일 전 매수(사후) vs 셋업 매수 <small>시험 기간 · 기준 아무 날 {{ pct(b.te.mean, 2, true) }}·상승 {{ pct(b.te.p_up, 0) }}</small></h2>
+{% for t in rep.techs %}
+<h3>{{ t.label }} <small>신호 {{ t.n_sig|won }}건 · 아무 날에 5일 안 이 신호가 날 확률 {{ pct(t.rate5, 1) }}</small></h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th rowspan="2">언제 사나</th><th rowspan="2" class="num">비중</th><th rowspan="2" class="num">5일 안 신호 발생</th><th rowspan="2" class="num">배수</th><th rowspan="2" class="num">실제 신호 5일 전 중 포착</th><th colspan="4" class="grp">학습</th><th colspan="4" class="grp">시험</th><th rowspan="2" class="num">신호 왔을 때</th><th rowspan="2" class="num">안 왔을 때</th><th rowspan="2" class="num">20일 안 +20%</th><th rowspan="2" class="num">최대 낙폭</th></tr><tr>{% for i in range(2) %}<th class="num">건수</th><th class="num">평균</th><th class="num">상승</th><th class="num">−10%↓</th>{% endfor %}</tr></thead><tbody>
+<tr class="baseline"><td>신호일 다음날 (기준)</td><td></td><td></td><td></td><td></td>{{ st(t.at_signal.tr) }}{{ st(t.at_signal.te) }}<td></td><td></td><td></td><td></td></tr>
+<tr class="faint"><td>(사후) 신호 5일 전 — 실현 불가 상한</td><td></td><td class="num">100%</td><td></td><td></td>{{ st(t.pre5_actual.tr) }}{{ st(t.pre5_actual.te) }}<td></td><td></td><td></td><td></td></tr>
+{% for s in t.setups %}<tr {% if s.robust %}class="baseline"{% endif %}><td>셋업: {{ s.name }}{% if s.robust %} ✔{% endif %}</td><td class="num">{{ pct(s.share, 1) }}</td><td class="num"><b>{{ pct(s.precision, 0) }}</b></td><td class="num">{{ '%.0f'|format(s.lift) if s.lift else '–' }}배</td><td class="num">{{ pct(s.recall, 0) if s.recall is not none else '–' }}</td>{{ st(s.tr) }}{{ st(s.te) }}<td class="num {{ 'up' if s.came and s.came.mean > 0 else 'down' }}">{{ pct(s.came.mean, 2, true) if s.came else '–' }}</td><td class="num {{ 'up' if s.not_came and s.not_came.mean > 0 else 'down' }}">{{ pct(s.not_came.mean, 2, true) if s.not_came else '–' }}</td><td class="num">{{ pct(s.te.touch20, 0) if s.te and s.te.touch20 is not none else '–' }}</td><td class="num">{{ pct(s.te.mae, 1, true) if s.te and s.te.mae is not none else '–' }}</td></tr>{% endfor %}
+{% if not t.setups %}<tr><td colspan="17"><small>이 기법은 미리 정한 셋업이 없거나 표본이 부족합니다.</small></td></tr>{% endif %}</tbody></table></div>
+{% endfor %}
+<p class="hint">✔ = 학습·시험 모두 평균 플러스·상승 45%↑인 셋업. "신호 왔을 때/안 왔을 때"는 셋업 자리에서 산 뒤 5일 안에 실제로 그 신호가 났는지로 나눈 20일 평균(전체 기간).</p>
+
+{% if rep.sell %}
+<h2>1-2. 전주에 사서 신호일에 판다 <small>셋업 자리에서 다음날 시가 매수 → N일 안에 신호가 나면 그날 종가(또는 다음날 시가) 매도, 안 나면 N일째 종가 매도 · 손절 −5% 변형</small></h2>
+{% macro sv(v) %}{% if v %}<td class="num">{{ pct(v.p_signal, 0) }}</td><td class="num {{ 'up' if v.close.mean > 0 else 'down' }}"><b>{{ pct(v.close.mean, 2, true) }}</b></td><td class="num">{{ pct(v.close.p_up, 0) }}</td><td class="num {{ 'up' if v.close.tr and v.close.tr > 0 else 'down' }}">{{ pct(v.close.tr, 2, true) if v.close.tr is not none else '–' }}</td><td class="num {{ 'up' if v.close.te and v.close.te > 0 else 'down' }}">{{ pct(v.close.te, 2, true) if v.close.te is not none else '–' }}</td><td class="num up">{{ pct(v.close.came, 2, true) if v.close.came is not none else '–' }}</td><td class="num down">{{ pct(v.close.not, 2, true) if v.close.not is not none else '–' }}</td><td class="num {{ 'up' if v.open.mean > 0 else 'down' }}">{{ pct(v.open.mean, 2, true) }}</td><td class="num">{{ pct(v.close.q05, 0, true) }}</td>{% else %}<td colspan="9" class="num">&ndash;</td>{% endif %}{% endmacro %}
+<div class="scroll"><table class="grid cmp"><thead><tr><th>기법 · 셋업</th><th>✔</th><th class="num">건수</th><th>변형</th><th class="num">신호 발생</th><th class="num">평균(종가 매도)</th><th class="num">상승</th><th class="num">학습</th><th class="num">시험</th><th class="num">신호 왔을 때</th><th class="num">안 왔을 때</th><th class="num">다음날 시가 매도</th><th class="num">최악 5%</th><th class="num">(비교) 20일 보유</th></tr></thead><tbody>
+{% for s in rep.sell %}{% for key, lab in (('w5_s0', '5일 대기'), ('w5_s5', '5일 · 손절 −5%'), ('w10_s0', '10일 대기'), ('w10_s5', '10일 · 손절 −5%')) %}{% set v = s.variants[key] %}{% if v %}<tr {% if s.best and s.best.key == key and s.robust %}class="baseline"{% elif s.best and s.best.key == key %}class="hl"{% endif %}>{% if loop.first %}<td rowspan="{{ s.variants|length }}">{{ s.tech }}<br><small>{{ s.setup }}</small></td><td rowspan="{{ s.variants|length }}">{{ '✔' if s.robust else '' }}</td><td rowspan="{{ s.variants|length }}" class="num">{{ v.n|won }}</td>{% endif %}<td>{{ lab }}</td>{{ sv(v) }}<td class="num {{ 'up' if v.hold20.mean > 0 else 'down' }}">{{ pct(v.hold20.mean, 2, true) }}</td></tr>{% endif %}{% endfor %}{% endfor %}</tbody></table></div>
+{% set sm = rep.sell_model %}{% if sm %}
+<h3>모델 점수 상위 10% 자리에서 사서, 아무 단테 신호가 나면 판다</h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>변형</th><th class="num">건수</th><th class="num">신호 발생</th><th class="num">평균(종가 매도)</th><th class="num">상승</th><th class="num">학습</th><th class="num">시험</th><th class="num">신호 왔을 때</th><th class="num">안 왔을 때</th><th class="num">다음날 시가 매도</th><th class="num">최악 5%</th><th class="num">(비교) 20일 보유</th></tr></thead><tbody>
+{% for key, lab in (('w5_s0', '5일 대기'), ('w5_s5', '5일 · 손절 −5%'), ('w10_s0', '10일 대기'), ('w10_s5', '10일 · 손절 −5%')) %}{% set v = sm[key] %}{% if v %}<tr><td>{{ lab }}</td><td class="num">{{ v.n|won }}</td>{{ sv(v) }}<td class="num {{ 'up' if v.hold20.mean > 0 else 'down' }}">{{ pct(v.hold20.mean, 2, true) }}</td></tr>{% endif %}{% endfor %}</tbody></table></div>
+{% endif %}
+<p class="hint">"신호일 종가 매도"는 장중에 신호를 확인해 마감에 파는 경우, "다음날 시가 매도"는 마감 뒤 확인해 다음날 파는 경우입니다. ✔ = 가장 나은 변형이 학습·시험 모두 플러스. 모델 행은 학습 기간 점수도 섞여 있어(그 기간은 모델이 본 데이터) 시험 값만 믿을 것.</p>
+{% endif %}
+
+{% set mo = rep.model %}
+<h2>2. '5일 안 단테 신호' 예측 모델 <small>AUC {{ '%.3f'|format(mo.auc) }} · 기준 발생률 {{ pct(mo.base, 0) }}</small></h2>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>점수 구간 (시험)</th>{% for d in mo.deciles %}<th class="num">{{ d.bin }}</th>{% endfor %}</tr></thead><tbody>
+<tr><td>5일 안 신호 실제 발생</td>{% for d in mo.deciles %}<td class="num"><b>{{ pct(d.actual, 0) }}</b></td>{% endfor %}</tr>
+<tr><td>그 자리 매수 20일 평균</td>{% for d in mo.deciles %}<td class="num {{ 'up' if d.r20 > 0 else 'down' }}">{{ pct(d.r20, 2, true) }}</td>{% endfor %}</tr>
+<tr><td>상승</td>{% for d in mo.deciles %}<td class="num">{{ pct(d.p_up, 0) }}</td>{% endfor %}</tr></tbody></table></div>
+<p>상위 10%에서 신호가 실제로 온 경우 20일 평균 {{ pct(mo.top_came.mean, 2, true) if mo.top_came else '–' }}(상승 {{ pct(mo.top_came.p_up, 0) if mo.top_came else '–' }}), 안 온 경우 {{ pct(mo.top_not.mean, 2, true) if mo.top_not else '–' }}(상승 {{ pct(mo.top_not.p_up, 0) if mo.top_not else '–' }}). 학습 기간 상위 10%: {{ pct(mo.top_tr_check.mean, 2, true) if mo.top_tr_check else '–' }}.
+  중요 특징: {% for i in mo.importance %}{{ i.label }}{{ ', ' if not loop.last }}{% endfor %}.</p>
+
+{% set td = rep.today %}
+<h2>3. 오늘 신호가 임박한 종목 <small>{{ td.date }} · 5일 안 단테 신호 점수 상위 (오늘 이미 신호가 난 종목 제외)</small></h2>
+{% if td.rows %}
+<div class="scroll"><table class="grid cmp"><thead><tr><th>종목</th><th class="num">종가</th><th class="num">5일 안 신호 확률</th><th>해당 셋업 (✔ = 사도 괜찮았던 자리)</th><th class="num">224일선 대비</th><th class="num">20일선 대비</th><th class="num">직전 언덕 대비</th><th class="num">20일 등락</th><th class="num">52주 고점 대비</th><th class="num">변동성</th></tr></thead><tbody>
+{% for r in td.rows %}<tr data-href="{{ url_for('main.chart', code=r.code) }}"><td><a href="{{ url_for('main.chart', code=r.code) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td><td class="num">{{ r.close|won }}</td><td class="num"><b>{{ pct(r.prob, 0) }}</b></td><td><small>{{ r.setups|join(' · ') if r.setups else '–' }}</small></td><td class="num">{{ pct(r.dist224, 0, true) }}</td><td class="num">{{ pct(r.dist20, 1, true) }}</td><td class="num">{{ pct(r.hill_gap, 0, true) }}</td><td class="num">{{ pct(r.ret20, 0, true) }}</td><td class="num">{{ pct(r.nh250, 0, true) }}</td><td class="num">{{ pct(r.atrp, 1) }}</td></tr>{% endfor %}</tbody></table></div>
+<p class="hint">신호가 임박했다고 오른다는 뜻이 아닙니다 — 위 2번 표의 "그 자리 매수 20일 평균"을 보고 판단하세요.</p>
+{% else %}<p class="note">오늘 데이터가 없습니다.</p>{% endif %}
+{% endif %}
+{% endblock %}

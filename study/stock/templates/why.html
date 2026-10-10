@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}성공·실패 이유{% endblock %}
+{% macro val(v, pct_) %}{% if v is none %}&ndash;{% elif pct_ %}{{ '%+.1f'|format(v * 100) }}%{% else %}{{ '%.2f'|format(v) }}{% endif %}{% endmacro %}
+{% block body %}
+<p><a href="{{ url_for('analysis.page') }}">← 기법 정확도</a></p>
+<h1>성공한 이유 · 실패한 이유 <small>신호가 난 날 알 수 있던 특징으로 비교</small></h1>
+{% if not w %}
+<p class="note">아직 분석 결과가 없습니다. <code>python manage.py backtest</code> 로 만들면 나옵니다.</p>
+{% else %}
+<p class="note">
+  <b>성공</b> = 신호 다음날 시가에 사서 20봉 뒤 종가 수익이 <b>같은 날 시장 평균(전 종목 평균)보다 높았던</b> 신호, 나머지는 실패.
+  {% if base %}아무 날 샀을 때의 성공률은 <b>{{ '%.1f'|format(base.rate * 100) }}%</b>(시장 대비 평균 {{ '%+.2f'|format(base.x20 * 100) }}%p)입니다 — 신호가 이보다 높아야 의미가 있습니다.{% endif %}<br>
+  특징은 신호일 종가까지의 정보(이평선 위치·기울기·낙폭·변동성·거래량·시장 상황 등 20개)이고, <b>d</b>는 성공 그룹과 실패 그룹의 표준화된 평균 차이입니다(|d|가 클수록 두 그룹을 잘 가르는 특징, 0.2 미만이면 약함).
+  인과가 아니라 <b>같이 나타난 특징</b>이며, 같은 날 신호가 몰려 있어 해석은 보수적으로 하세요.
+</p>
+{% for label, d in items %}
+<section class="whycard">
+  <h2>{{ label }} <small>{{ d.tech }} · 신호 {{ d.n|won }}건(표본)</small></h2>
+  <p>
+    성공률 <b>{{ '%.1f'|format(d.rate * 100) }}%</b>{% if base %} (아무 날 {{ '%.1f'|format(base.rate * 100) }}%){% endif %} · 시장 대비 평균 <b class="{{ 'up' if d.x20 > 0 else 'down' }}">{{ '%+.2f'|format(d.x20 * 100) }}%p</b>
+    {% if d.tgt3_rate is not none %}· 기법 손절·3R 목표: 손절보다 먼저 목표 도달 <b>{{ '%.0f'|format(d.tgt3_rate * 100) }}%</b> (손익분기 25%){% endif %}
+  </p>
+  <div class="why2">
+    <div>
+      <h3>성공/실패를 가르는 특징 (큰 순)</h3>
+      <div class="scroll"><table class="grid cmp">
+        <thead><tr><th>특징</th><th class="num">성공 평균</th><th class="num">실패 평균</th><th class="num">d</th><th>구간별 성공률 (낮은 값 → 높은 값)</th></tr></thead>
+        <tbody>
+        {% for f in d.features[:6] %}
+        <tr><td>{{ f.label }}</td><td class="num">{{ val(f.succ_mean, f.pct) }}</td><td class="num">{{ val(f.fail_mean, f.pct) }}</td>
+        <td class="num {{ 'up' if f.d > 0 else 'down' }}">{{ '%+.2f'|format(f.d) }}</td>
+        <td>{% if f.q %}<span class="qbars">{% for q in f.q %}<i style="height:{{ (q.rate * 100)|round(0)|int }}%" title="{{ '%.0f'|format(q.rate * 100) }}% · n={{ q.n }}"></i>{% endfor %}</span>
+          <small>{% for q in f.q %}{{ '%.0f'|format(q.rate * 100) }}{{ ' · ' if not loop.last }}{% endfor %}%</small>{% endif %}</td></tr>
+        {% endfor %}
+        </tbody></table></div>
+    </div>
+    <div>
+      <h3>손실(기법 손절)이 난 이유 <small>{{ '%.0f'|format((d.fail_modes.stop_market + d.fail_modes.stop_fast + d.fail_modes.stop_whip + d.fail_modes.stop_slow) * 100) if d.fail_modes else '–' }}%가 손절</small></h3>
+      {% if d.fail_modes %}
+      {% for k, text in modes.items() %}
+      <div class="bar"><span class="bl">{{ text }}</span><span class="bv"><i class="{{ 'win' if k == 'time_win' else 'loss' }}" style="width:{{ (d.fail_modes[k] * 100)|round(1) }}%"></i></span><span class="bn">{{ '%.0f'|format(d.fail_modes[k] * 100) }}%</span></div>
+      {% endfor %}
+      <small>손절 시 평균 {{ '%+.1f'|format(d.fail_modes.avg_loss_stop * 100) }}% · 평균 {{ '%.0f'|format(d.fail_modes.avg_hold_stop) }}봉 만에 손절</small>
+      {% endif %}
+      <h3>시장 상황별 성공률 <small>(신호 직전 시장 60일 수익률)</small></h3>
+      <table class="grid cmp"><tbody>{% for r in d.regimes %}<tr><td>{{ r.name }}</td><td class="num">n={{ r.n }}</td><td class="num">{{ '%.0f'|format(r.rate * 100) }}%</td><td class="num {{ 'up' if r.x20 > 0 else 'down' }}">{{ '%+.2f'|format(r.x20 * 100) }}%p</td></tr>{% endfor %}</tbody></table>
+    </div>
+  </div>
+  {% if d.years %}
+  <details><summary>연도별 성공률</summary>
+  <div class="scroll"><table class="grid cmp"><thead><tr><th>연도</th>{% for y in d.years %}<th class="num">{{ y.year }}</th>{% endfor %}</tr></thead>
+  <tbody><tr><td>성공률</td>{% for y in d.years %}<td class="num">{{ '%.0f'|format(y.rate * 100) }}%</td>{% endfor %}</tr>
+  <tr><td>시장 대비</td>{% for y in d.years %}<td class="num {{ 'up' if y.x20 > 0 else 'down' }}">{{ '%+.1f'|format(y.x20 * 100) }}</td>{% endfor %}</tr>
+  <tr><td>표본</td>{% for y in d.years %}<td class="num"><small>{{ y.n }}</small></td>{% endfor %}</tr></tbody></table></div></details>
+  {% endif %}
+</section>
+{% endfor %}
+{% endif %}
+{% endblock %}

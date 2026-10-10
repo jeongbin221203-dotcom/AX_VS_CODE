@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% block title %}기법 정확도{% endblock %}
+{% macro cell(s, key, sign=true) %}{% if s %}<td class="num">{{ pct(s[key], 0 if key in ('target','stop','time','win') else 2, sign and key == 'mean') }}</td>{% else %}<td class="num">&ndash;</td>{% endif %}{% endmacro %}
+{% block body %}
+<h1>기법 정확도 <small>과거 일봉으로 신호 이후를 실제로 따라가 본 결과</small></h1>
+{% if not rep %}
+<p class="note">아직 분석 결과가 없습니다. <code>python manage.py backtest</code> 로 만들면 이 화면에 나옵니다.</p>
+{% else %}
+{% set m = rep.meta %}
+<p class="note">
+  <b>{{ m.stocks|won }}개 종목</b> · 일봉 {{ m.date_min }} ~ {{ m.date_max }} · 매수 신호 <b>{{ m.signals|won }}건</b> · 분석 {{ m.generated }}
+  {% if has_why %}· <a href="{{ url_for('analysis.why_page') }}"><b>성공·실패 이유 보기 →</b></a>{% endif %}<br>
+  규칙: 신호 <b>다음 거래일 시가</b>에 진입(미래 정보 금지) · 최대 {{ m.params.horizon_bars }}봉 보유 · 왕복 비용 {{ pct(m.params.cost, 1) }} 차감 ·
+  한 봉에서 손절·목표가 모두 닿으면 손절 우선 · 갭으로 손절가 아래 시가면 시가에 청산.<br>
+  <b>기준(아무 날 진입)</b>: 같은 종목에서 {{ m.params.base_step }}봉 간격으로 뽑은 날({{ m.baseline_samples|won }}건)에 진입한 결과 · <b>시장 평균</b>: 같은 날 모든 종목을 샀을 때의 평균 수익.<br>
+  한계: 현재 상장 종목만 있어 생존 편향(상장폐지 종목 누락), 체결 실패·슬리피지 단순화, 같은 종목의 인접 신호는 서로 겹칠 수 있음.
+</p>
+
+<h2>0. 한눈에 <small>(같은 날 아무 종목이나 샀을 때(시장 평균)보다 20일 수익이 유의하게 높고 최근 5년에도 높아야 "우위")</small></h2>
+<div class="scroll"><table class="grid cmp">
+<thead><tr><th>기법 신호</th><th class="num">신호 수</th><th class="num">종목 수</th><th class="num">20일 평균</th><th class="num">시장 대비 초과</th><th class="num">t (날짜 묶음)</th><th class="num">최근 5년 초과</th><th>판정</th></tr></thead>
+<tbody>
+{% set b20 = base.fixed['20'] if base and base.fixed else None %}
+{% if b20 %}<tr class="baseline"><td>기준(아무 날 진입)</td><td class="num">{{ b20.n|won }}</td><td class="num">–</td><td class="num">{{ pct(b20.mean, 2, true) }}</td><td class="num">–</td><td class="num">–</td><td class="num">–</td><td>비교 대상</td></tr>{% endif %}
+{% for r in rows %}{% set f = r.d.fixed.get('20') %}
+<tr><td>{{ r.label }} <small>{{ r.d.tech }}</small></td><td class="num">{{ r.d.n_signals|won }}</td><td class="num">{{ r.d.n_stocks|won }}</td>
+<td class="num">{{ pct(f.mean, 2, true) if f else '–' }}</td><td class="num">{{ pct(r.d.excess.mean, 2, true) if r.d.excess else '–' }}</td>
+<td class="num">{{ '%.1f'|format(r.d.excess.t_day) if r.d.excess and r.d.excess.t_day is not none else '–' }}</td>
+<td class="num">{{ pct(r.d.excess_recent.mean, 2, true) if r.d.excess_recent else '–' }}</td><td><span class="verd {{ r.cls }}">{{ r.verdict }}</span></td></tr>
+{% endfor %}
+</tbody></table></div>
+
+<h2>1. 진입 시점·진입가 <small>신호 다음날 시가로 샀을 때</small></h2>
+<div class="scroll"><table class="grid cmp">
+<thead><tr><th rowspan="2">기법 신호</th><th rowspan="2" class="num">갭<br><small>신호 종가→다음 시가</small></th>
+<th colspan="4" class="grp">승률 (진입가 대비 N일 뒤 종가)</th><th colspan="4" class="grp">평균 수익률</th>
+<th rowspan="2" class="num">10일 안<br>−3% 눌림</th><th rowspan="2" class="num">10일 안<br>−5% 눌림</th></tr>
+<tr>{% for h in horizons %}<th class="num">{{ h }}일</th>{% endfor %}{% for h in horizons %}<th class="num">{{ h }}일</th>{% endfor %}</tr></thead>
+<tbody>
+{% if base and base.fixed %}<tr class="baseline"><td>기준(아무 날 진입)</td><td class="num">{{ pct(base.entry.gap, 2, true) }}</td>
+{% for h in horizons %}<td class="num">{{ pct(base.fixed[h].win, 0) if h in base.fixed else '–' }}</td>{% endfor %}
+{% for h in horizons %}<td class="num">{{ pct(base.fixed[h].mean, 2, true) if h in base.fixed else '–' }}</td>{% endfor %}
+<td class="num">{{ pct(base.entry.dip3_10, 0) }}</td><td class="num">{{ pct(base.entry.dip5_10, 0) }}</td></tr>{% endif %}
+{% for r in rows %}
+<tr class="{{ 'faint' if r.d.n_signals < min_n }}"><td>{{ r.label }} <small>n={{ r.d.n_signals|won }}</small></td><td class="num">{{ pct(r.d.entry.gap, 2, true) }}</td>
+{% for h in horizons %}<td class="num">{{ pct(r.d.fixed[h].win, 0) if h in r.d.fixed else '–' }}</td>{% endfor %}
+{% for h in horizons %}<td class="num">{{ pct(r.d.fixed[h].mean, 2, true) if h in r.d.fixed else '–' }}</td>{% endfor %}
+<td class="num">{{ pct(r.d.entry.dip3_10, 0) }}</td><td class="num">{{ pct(r.d.entry.dip5_10, 0) }}</td></tr>
+{% endfor %}
+</tbody></table></div>
+<p class="hint">갭이 크면 신호 종가에 사려던 가격과 실제 진입가가 벌어진다는 뜻입니다. "눌림" 비율이 높을수록 다음날 바로 사지 않고 기다리면 더 싸게 살 기회가 있었다는 뜻입니다.</p>
+
+<h2>2. 진입을 늦추면? <small>다음날 시가(0일) · 하루 뒤 · 이틀 뒤 · 눌림 지정가(−{{ (m.params.pb_dip * 100)|round(0)|int }}%, {{ m.params.pb_wait }}봉 대기)</small></h2>
+<div class="scroll"><table class="grid cmp">
+<thead><tr><th rowspan="2">기법 신호</th><th colspan="3" class="grp">20일 평균 수익</th><th colspan="3" class="grp">시장 대비 초과</th>
+<th colspan="4" class="grp">눌림 지정가</th><th colspan="4" class="grp">2×ATR 손절·3R 목표 평균</th></tr>
+<tr><th class="num">0일</th><th class="num">+1일</th><th class="num">+2일</th><th class="num">0일</th><th class="num">+1일</th><th class="num">+2일</th>
+<th class="num">체결률</th><th class="num">체결건 눌림진입</th><th class="num">같은 신호 0일진입</th><th class="num">미체결건 0일진입</th>
+<th class="num">0일</th><th class="num">+1일</th><th class="num">+2일</th><th class="num">눌림</th></tr></thead>
+<tbody>
+{% if base and base.entry_study %}{% set bs = base.entry_study %}<tr class="baseline"><td>기준(아무 날)</td>
+{% for d in ('0','1','2') %}<td class="num">{{ pct(bs[d].mean, 2, true) }}</td>{% endfor %}<td class="num">–</td><td class="num">–</td><td class="num">–</td><td class="num" colspan="4">–</td>
+{% for k in ('atr2|3R', 'e1|3R', 'e2|3R', 'epb|3R') %}{{ cell(base.sim.get(k), 'mean') }}{% endfor %}</tr>{% endif %}
+{% for r in rows %}{% set es = r.d.entry_study %}{% set pb = r.d.pb %}
+<tr class="{{ 'faint' if r.d.n_signals < min_n }}"><td>{{ r.label }}</td>
+{% for d in ('0','1','2') %}<td class="num">{{ pct(es[d].mean, 2, true) }}</td>{% endfor %}
+{% for d in ('0','1','2') %}<td class="num {{ 'up' if es[d].excess and es[d].excess.mean > 0 else 'down' }}">{{ pct(es[d].excess.mean, 2, true) if es[d].excess else '–' }}</td>{% endfor %}
+<td class="num">{{ pct(pb.fill_rate, 0) }}</td><td class="num">{{ pct(pb.pb_mean, 2, true) }}</td><td class="num">{{ pct(pb.d0_same, 2, true) }}</td><td class="num">{{ pct(pb.d0_unfilled, 2, true) }}</td>
+{% for k in ('atr2|3R', 'e1|3R', 'e2|3R', 'epb|3R') %}{{ cell(r.sim.get(k), 'mean') }}{% endfor %}</tr>
+{% endfor %}
+</tbody></table></div>
+<p class="hint">"체결건 눌림진입"은 −3% 지정가가 체결된 신호만의 20일 수익이고 "같은 신호 0일진입"은 그 같은 신호를 다음날 시가에 샀을 때입니다. 둘의 차이가 눌림을 기다린 이득(또는 손해)입니다. 체결되지 않은 신호(바로 올라간 신호)는 "미체결건 0일진입"으로 보면 놓친 기회를 알 수 있습니다.</p>
+
+<h2>3. 목표가 ↔ 진입가 <small>목표를 손절보다 먼저 맞힌 비율 (기법 손절 사용)</small></h2>
+<div class="scroll"><table class="grid cmp">
+<thead><tr><th rowspan="2">기법 신호</th><th rowspan="2" class="num">평균<br>위험폭</th>
+{% for k in tkeys %}<th colspan="3" class="grp">{{ {'2R':'목표 2R (손익비 2:1)','3R':'목표 3R (3:1)','5R':'목표 5R (5:1)','자연1':'자연 목표 1','자연2':'자연 목표 2'}[k] }}</th>{% endfor %}</tr>
+<tr>{% for k in tkeys %}<th class="num">도달</th><th class="num">손절</th><th class="num">기대</th>{% endfor %}</tr></thead>
+<tbody>
+{% if base and base.sim %}<tr class="baseline"><td>기준(아무 날, 2×ATR 손절)</td><td class="num">{{ pct(base.sim['atr2|none'].risk, 1) if 'atr2|none' in base.sim else '–' }}</td>
+{% for k in tkeys %}{% set s = base.sim.get('atr2|' + k) %}{% if s %}<td class="num">{{ pct(s.target, 0) }}</td><td class="num">{{ pct(s.stop, 0) }}</td><td class="num">{{ pct(s.mean, 2, true) }}</td>{% else %}<td class="num">–</td><td class="num">–</td><td class="num">–</td>{% endif %}{% endfor %}</tr>{% endif %}
+{% for r in rows %}
+<tr class="{{ 'faint' if r.d.n_signals < min_n }}"><td>{{ r.label }}</td><td class="num">{{ pct(r.sim['tech|none'].risk, 1) if 'tech|none' in r.sim else '–' }}</td>
+{% for k in tkeys %}{% set s = r.sim.get('tech|' + k) %}{% if s %}<td class="num" title="n={{ s.n }}">{{ pct(s.target, 0) }}</td><td class="num">{{ pct(s.stop, 0) }}</td><td class="num {{ 'up' if s.mean > 0 else 'down' }}">{{ pct(s.mean, 2, true) }}</td>{% else %}<td class="num">–</td><td class="num">–</td><td class="num">–</td>{% endif %}{% endfor %}</tr>
+{% endfor %}
+</tbody></table></div>
+<p class="hint">"기대"는 거래 한 건당 평균 수익률(비용 차감 후, 최대 {{ m.params.horizon_bars }}봉). 손익비 3:1의 손익분기 도달률은 약 25%, 5:1은 약 17%입니다. 자연 목표: 256=60·224일선, 이평 때리기=224일선, 224 돌파=448일선, 공구리·역매공파=직전 파동 1배·1.5배(대칭).</p>
+
+<h2>4. 손절을 넓히면? <small>손절만 걸고 {{ m.params.horizon_bars }}봉 보유했을 때 — 손절 폭이 넓을수록 덜 걸리지만 한 번 걸릴 때 손실이 큽니다</small></h2>
+<div class="scroll"><table class="grid cmp">
+<thead><tr><th rowspan="2">기법 신호</th>
+{% for t in ('기법 손절', '기법 손절 −1×ATR', '2×ATR', '3×ATR') %}<th colspan="4" class="grp">{{ t }}</th>{% endfor %}</tr>
+<tr>{% for t in range(4) %}<th class="num">위험폭</th><th class="num">손절 맞음</th><th class="num">되돌림*</th><th class="num">평균 수익</th>{% endfor %}</tr></thead>
+<tbody>
+{% if base and base.sim %}<tr class="baseline"><td>기준(아무 날)</td><td class="num" colspan="8">–</td>
+{% for k in ('atr2|none', 'atr3|none') %}{% set s = base.sim.get(k) %}{% if s %}<td class="num">{{ pct(s.risk, 1) }}</td><td class="num">{{ pct(s.stop, 0) }}</td><td class="num">{{ pct(s.whipsaw, 0) }}</td><td class="num">{{ pct(s.mean, 2, true) }}</td>{% else %}<td class="num" colspan="4">–</td>{% endif %}{% endfor %}</tr>{% endif %}
+{% for r in rows %}
+<tr class="{{ 'faint' if r.d.n_signals < min_n }}"><td>{{ r.label }}</td>
+{% for k in ('tech|none', 'techw|none', 'atr2|none', 'atr3|none') %}{% set s = r.sim.get(k) %}{% if s %}<td class="num">{{ pct(s.risk, 1) }}</td><td class="num">{{ pct(s.stop, 0) }}</td><td class="num">{{ pct(s.whipsaw, 0) }}</td><td class="num {{ 'up' if s.mean > 0 else 'down' }}">{{ pct(s.mean, 2, true) }}</td>{% else %}<td class="num" colspan="4">–</td>{% endif %}{% endfor %}</tr>
+{% endfor %}
+</tbody></table></div>
+<p class="hint">* 되돌림 = 손절당한 뒤 20봉 안에 종가가 진입가를 다시 넘은 비율 (높을수록 손절이 너무 빡빡했다는 뜻).</p>
+
+<h2>5. 매집봉이 있으면 더 잘 될까? <small>최근 60봉 안에 매집봉이 있었던 신호 vs 없었던 신호</small></h2>
+{% if acc_rows %}
+<div class="scroll"><table class="grid cmp">
+<thead><tr><th rowspan="2">기법</th><th colspan="5" class="grp">매집봉 있음</th><th colspan="5" class="grp">매집봉 없음</th></tr>
+<tr>{% for t in range(2) %}<th class="num">신호 수</th><th class="num">20일 평균</th><th class="num">시장 대비</th><th class="num">t</th><th>판정</th>{% endfor %}</tr></thead>
+<tbody>
+{% for a in acc_rows %}<tr><td>{{ a.label }}</td>
+{% for key, v in (('on', a.von), ('off', a.voff)) %}{% set x = a[key] %}<td class="num">{{ x.n_signals|won }}</td><td class="num">{{ pct(x.fixed['20'].mean, 2, true) if '20' in x.fixed else '–' }}</td>
+<td class="num">{{ pct(x.excess.mean, 2, true) if x.excess else '–' }}</td><td class="num">{{ '%.1f'|format(x.excess.t_day) if x.excess and x.excess.t_day is not none else '–' }}</td><td><span class="verd {{ v[1] }}">{{ v[0] }}</span></td>{% endfor %}</tr>
+{% endfor %}
+</tbody></table></div>
+<p class="hint">매집봉 정의(자막 기반): 224일선 아래 바닥권에서 거래량 2배↑의 장대양봉·윗꼬리형·장기 이평을 찌르고 빠지는 캔들. 숫자 기준(몸통 5%·윗꼬리 7%·거래량 2배)은 자막에 없어 제가 정한 값입니다.</p>
+{% else %}<p class="note">이 분석 결과에는 매집봉 비교가 없습니다. 다시 분석하면 나옵니다.</p>{% endif %}
+
+<h2>6. 성공했다면 얼마나 걸렸나 <small>목표에 손절보다 먼저 닿은 거래만의 소요 기간 (거래일 기준, {{ m.params.horizon_bars }}봉 안)</small></h2>
+<div class="scroll"><table class="grid cmp">
+<thead><tr><th rowspan="2">기법 신호</th>
+{% for t in ('+10%', '+20%', '3R (손익비 3:1)', '자연 목표') %}<th colspan="3" class="grp">{{ t }}</th>{% endfor %}<th rowspan="2" class="num">손절까지<br>평균 소요</th></tr>
+<tr>{% for t in range(4) %}<th class="num">도달률</th><th class="num">중앙 소요</th><th class="num">빠른~느린 (25~75%)</th>{% endfor %}</tr></thead>
+<tbody>
+{% macro tcell(s) %}{% if s %}<td class="num">{{ pct(s.target, 0) }}</td><td class="num">{{ s.held_q50 if s.held_q50 else '–' }}일</td><td class="num">{{ s.held_q25 if s.held_q25 else '–' }}~{{ s.held_q75 if s.held_q75 else '–' }}일</td>{% else %}<td class="num">–</td><td class="num">–</td><td class="num">–</td>{% endif %}{% endmacro %}
+{% if base and base.sim %}<tr class="baseline"><td>기준(아무 날, 2×ATR 손절)</td>
+{% for k in ('atr2|p10', 'atr2|p20', 'atr2|3R') %}{{ tcell(base.sim.get(k)) }}{% endfor %}<td class="num" colspan="3">–</td>
+<td class="num">{{ '%.1f'|format(base.sim['atr2|p10'].held_stop) ~ '일' if base.sim.get('atr2|p10') and base.sim['atr2|p10'].held_stop else '–' }}</td></tr>{% endif %}
+{% for r in rows %}
+<tr class="{{ 'faint' if r.d.n_signals < min_n }}"><td>{{ r.label }}</td>
+{% for k in ('tech|p10', 'tech|p20', 'tech|3R', 'tech|자연1') %}{{ tcell(r.sim.get(k)) }}{% endfor %}
+<td class="num">{{ ('%.1f'|format(r.sim['tech|p10'].held_stop) ~ '일') if r.sim.get('tech|p10') and r.sim['tech|p10'].held_stop else '–' }}</td></tr>
+{% endfor %}
+</tbody></table></div>
+<p class="hint">도달률 = 전체 신호 중 손절보다 먼저 그 목표에 닿은 비율(성공률). 소요 = 성공한 거래만 본 진입일부터 목표 도달일까지의 거래일 수(중앙값, 25~75% 구간). 빠르게 닿지 않은 거래는 손절되거나 {{ m.params.horizon_bars }}봉 뒤 시간 청산됩니다. 손절 소요는 손절로 끝난 거래의 평균입니다.</p>
+{% endif %}
+{% endblock %}

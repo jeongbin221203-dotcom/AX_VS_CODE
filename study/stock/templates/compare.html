@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}차트 비교{% endblock %}
+{% block body %}
+<h1>차트 비교 <small>한쪽을 확대·이동하면 다른 쪽도 같이 움직입니다</small></h1>
+<div class="toolbar">
+  <label class="syncbox"><input type="checkbox" id="sync" checked> 동기화</label>
+  <label class="syncbox" title="한쪽에 종목을 넣으면 다른 쪽도 같은 종목으로 바뀜(끄면 두 종목 비교)"><input type="checkbox" id="same" checked> 같은 종목</label>
+  <span class="grp" id="range">
+    <button class="btn" data-bars="60">3M</button><button class="btn" data-bars="120">6M</button>
+    <button class="btn on" data-bars="250">1Y</button><button class="btn" data-bars="750">3Y</button><button class="btn" data-bars="5000">전체</button>
+  </span>
+  <span class="grp" id="quick">
+    <button class="btn" data-q="sets" title="왼쪽 종목을 양쪽에 놓고 이평선 세트만 다르게">같은 종목·세트 비교</button>
+    <button class="btn" data-q="tf" title="왼쪽 종목을 양쪽에 놓고 왼쪽 일봉·오른쪽 주봉">일봉 ↔ 주봉</button>
+    <button class="btn" data-q="swap">좌우 바꾸기</button>
+  </span>
+</div>
+<div id="cmsg" class="note" hidden></div>
+<div id="tip" class="tip"></div>
+<div class="cgrid">
+  {% for side, p in (('a', pa), ('b', pb)) %}
+  <section class="cpane" data-side="{{ side }}">
+    <div class="chead">
+      <div class="csearch">
+        <input class="cq" type="search" value="{{ p.name }}" placeholder="종목명 또는 코드" autocomplete="off" aria-label="종목">
+        <ul class="cres" hidden></ul>
+      </div>
+      <select class="cset" aria-label="이평선 세트">
+        <option value="a" {{ 'selected' if p.set == 'a' }}>256 세트 (5·20·60·112·224)</option>
+        <option value="b" {{ 'selected' if p.set == 'b' }}>14·28·56·112·224·448</option>
+        <option value="none" {{ 'selected' if p.set == 'none' }}>이평선 없음</option>
+      </select>
+      <select class="ctf" aria-label="봉 단위">
+        <option value="D" {{ 'selected' if p.tf == 'D' }}>일봉</option>
+        <option value="W" {{ 'selected' if p.tf == 'W' }}>주봉</option>
+        <option value="M" {{ 'selected' if p.tf == 'M' }}>월봉</option>
+      </select>
+      <select class="ckind" aria-label="겹쳐 그리기" title="예측 = 단테 기법 신호, AI = 20일 +20% 확률">
+        <option value="none" {{ 'selected' if p.kind == 'none' }}>기법 없음</option>
+        <option value="dante" {{ 'selected' if p.kind == 'dante' }}>예측 (단테 기법)</option>
+        <option value="ai" {{ 'selected' if p.kind == 'ai' }}>AI (상승 확률)</option>
+      </select>
+      <a class="open" href="#" title="이 종목 차트(기법·지표) 열기">상세 ↗</a>
+    </div>
+    <div class="cinfo"><b class="cname"></b> <span class="cprice"></span></div>
+    <div class="cchart"></div>
+    <div class="cpred hint"></div>
+  </section>
+  {% endfor %}
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='vendor/lightweight-charts.js') }}"></script>
+<script id="boot" type="application/json">{{ {'a': pa, 'b': pb, 'focus': focus} | tojson }}</script>
+<script src="{{ url_for('static', filename='js/compare.js') }}"></script>
+{% endblock %}

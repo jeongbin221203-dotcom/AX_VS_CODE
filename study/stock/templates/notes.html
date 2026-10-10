@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}단테 노트{% endblock %}
+{% block body %}
+<h1>단테 노트 <small>주식단테 유튜브 · 개인 학습용 보관</small></h1>
+<form class="nform" method="get">
+  <input type="search" name="q" value="{{ q }}" placeholder="기법·용어 검색 (예: 눌림목, 손익비, 역매공파)" autofocus>
+  <select name="ch"><option value="">전체 채널</option>{% for c in chans %}<option value="{{ c.id }}" {{ 'selected' if c.id == ch }}>{{ c.name }}</option>{% endfor %}</select>
+  <select name="kind">
+    <option value="long" {{ 'selected' if kind == 'long' }}>영상·라이브(자막 검색)</option>
+    <option value="short" {{ 'selected' if kind == 'short' }}>쇼츠(제목·설명만)</option>
+    <option value="all" {{ 'selected' if kind == 'all' }}>전체</option>
+  </select>
+  {% if tag %}<input type="hidden" name="tag" value="{{ tag }}">{% endif %}
+  <button class="btn on">검색</button>
+</form>
+<p class="tags">
+  <a class="tag {{ '' if tag else 'buy' }}" href="{{ url_for('notes.index', q=q, ch=ch, kind=kind) }}">전체 기법</a>
+  {% for t in tag_list %}<a class="tag {{ 'buy' if t.tag == tag }}" href="{{ url_for('notes.index', q=q, ch=ch, kind=kind, tag=t.tag) }}">{{ t.tag }} <small>{{ t.n }}</small></a>{% endfor %}
+  {% if tag %}<a class="btn on" href="{{ url_for('tech.page', name=tag) }}">📈 “{{ tag }}” 차트에 적용</a>{% endif %}
+</p>
+<p><small>{{ total|won }}개 영상{% if q %} · “{{ q }}”{% endif %}</small></p>
+{% for it in items %}
+<article class="note">
+  <a class="thumb" href="{{ url_for('notes.detail', video_id=it.v.id, q=q) }}"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/{{ it.v.id }}/mqdefault.jpg"></a>
+  <div class="body">
+    <h3><a href="{{ url_for('notes.detail', video_id=it.v.id, q=q) }}">{{ it.v.title|hl(q) }}</a></h3>
+    <small>{{ it.v.channel }} · {{ it.v.upload_date }} · {{ (it.v.duration or 0)|mmss }}{% if it.v.view_count %} · 조회 {{ it.v.view_count|won }}{% endif %}
+      {% if it.v.kind == 'short' %} · 쇼츠{% elif it.v.kind == 'live' %} · 라이브{% endif %}
+      {% if it.v.caption_status == 'ok' %} · 자막 {{ '(자동)' if it.v.caption_kind == 'auto' else '(수동)' }}{% endif %}</small>
+    <div>{% for t in it.tags %}<a class="tag" href="{{ url_for('tech.page', name=t) }}" title="이 기법을 차트에 적용">📈 {{ t }}</a> {% endfor %}</div>
+    {% for s, text in it.hits %}
+    <p class="snip"><a href="https://www.youtube.com/watch?v={{ it.v.id }}&t={{ s|int }}s" target="_blank" rel="noopener">{{ s|mmss }}</a> {{ text|hl(q) }}</p>
+    {% endfor %}
+    {% if it.nhits > 3 %}<small>…이 영상에서 {{ it.nhits }}곳</small>{% endif %}
+  </div>
+</article>
+{% else %}
+<p class="note">결과가 없습니다. 자막은 수집·정리가 끝난 영상부터 검색됩니다.</p>
+{% endfor %}
+{% if pages > 1 %}
+<p class="pager">
+  {% if page > 1 %}<a class="btn" href="{{ url_for('notes.index', q=q, ch=ch, kind=kind, tag=tag, page=page-1) }}">이전</a>{% endif %}
+  {{ page }} / {{ pages }}
+  {% if page < pages %}<a class="btn" href="{{ url_for('notes.index', q=q, ch=ch, kind=kind, tag=tag, page=page+1) }}">다음</a>{% endif %}
+</p>
+{% endif %}
+{% endblock %}

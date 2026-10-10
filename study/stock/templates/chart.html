@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}{{ name }} 차트{% endblock %}
+{% block body %}
+<div class="head">
+  <h1>{{ name }} <small>{{ code }}</small></h1>
+  <button id="star" class="btn" data-code="{{ code }}">{{ '★' if star else '☆' }}</button>
+  <a class="btn" href="{{ url_for('main.compare', a=code) }}" title="다른 종목·이평선 세트와 나란히 비교(확대·이동 동기화)">↔ 비교</a>
+  <span id="price" class="price"></span>
+</div>
+<div class="toolbar">
+  <span class="grp" id="tf">
+    <button class="btn on" data-tf="D">일</button><button class="btn" data-tf="W">주</button><button class="btn" data-tf="M">월</button>
+  </span>
+  <span class="grp" id="range">
+    <button class="btn" data-bars="60">3M</button><button class="btn" data-bars="120">6M</button>
+    <button class="btn on" data-bars="250">1Y</button><button class="btn" data-bars="750">3Y</button><button class="btn" data-bars="5000">전체</button>
+  </span>
+  <span class="grp" id="mapreset" title="이평선 세트">
+    <b>이평선</b>
+    <button class="btn{{ ' on' if ma == 'a' }}" data-set="a" title="5·20·60·112·224일선 — 256기법에 쓰는 선">256 세트</button>
+    <button class="btn{{ ' on' if ma == 'b' }}" data-set="b" title="14·28·56·112·224·448일선">14·28·56… 세트</button>
+    <button class="btn{{ ' on' if ma == 'ab' }}" data-set="ab" title="위·아래에 두 세트를 나란히">나란히</button>
+    <button class="btn{{ ' on' if ma == 'none' }}" data-set="none">끄기</button>
+  </span>
+  <span class="grp" id="overlays">
+    <label><input type="checkbox" data-ov="bb">볼린저</label>
+    <label><input type="checkbox" data-ov="markers">일반 신호 표시</label>
+    <label><input type="checkbox" data-ov="log">로그</label>
+  </span>
+  <span class="grp">
+    <select id="sub1"><option value="rsi">RSI</option><option value="macd">MACD</option><option value="stoch">스토캐스틱</option><option value="">없음</option></select>
+    <select id="sub2"><option value="macd">MACD</option><option value="rsi">RSI</option><option value="stoch">스토캐스틱</option><option value="">없음</option></select>
+  </span>
+</div>
+<div class="toolbar techbar" id="techs">
+  <b>기법</b>
+  {% for t in catalog %}
+    {% if t.status == 'ready' %}<button class="btn tech{{ ' on' if t.name in active }}" data-tech="{{ t.name }}" title="{{ t.rules|join(' / ') }}">{{ t.name }}</button>
+    {% elif t.status == 'pending' %}<button class="btn tech" disabled title="단테 고유 규칙 — 자막 확인 후 적용">{{ t.name }} (준비 중)</button>{% endif %}
+  {% endfor %}
+</div>
+<div id="techsum" class="techsum"></div>
+<div id="msg" class="note" hidden></div>
+<div id="tip" class="tip"></div>
+<div id="main" class="pane main"></div>
+<div id="main2wrap" hidden><div class="paneTitle" id="main2title"></div><div id="main2" class="pane main2"></div></div>
+<div id="p1" class="pane sub"></div>
+<div id="p2" class="pane sub"></div>
+<h2>신호 내역 <small>(최근 순 · 근거 포함)</small></h2>
+<div id="sigs" class="siglist"></div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='vendor/lightweight-charts.js') }}"></script>
+<script id="boot" type="application/json">{{ {'code': code, 'active': active, 'ma': ma} | tojson }}</script>
+<script src="{{ url_for('static', filename='js/chart.js') }}"></script>
+{% endblock %}

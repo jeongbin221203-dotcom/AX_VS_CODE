@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}급등 전조{% endblock %}
+{% block body %}
+<h1>+20% 급등 전조 <small>급등 전날까지의 224일선·이평선·거래량·가격 모습 — 아무 날과 다른가, 그 조건이면 급등 확률이 오르나</small></h1>
+{% if not rep %}
+<p class="note">아직 분석 결과가 없습니다. <code>python manage.py precursor-train</code> 으로 만들면(약 3분) 이 화면에 나옵니다.</p>
+{% else %}
+{% set m = rep.meta %}{% set b = rep.base %}
+<p class="note">급등일 = 종가 등락 +{{ (m.jump * 100)|int }}% 이상(거래 가능 종목, 상장 250일↑). 전조는 <b>급등 전날 종가까지의 값</b>만 봅니다. 급등 전날 {{ m.events|won }}건({{ m.stocks|won }}종목, {{ m.date_min[:4] }}~{{ m.date_max[:4] }}) vs 아무 날 {{ m.baseline|won }}건({{ m.base_step }}일 간격).
+  두 가지로 봅니다: ① 급등 전날에 그 모습이 아무 날보다 얼마나 흔했나(배수), ② 아무 날 중 그 모습인 날에 <b>이후 20일 안 급등일이 나올 확률</b>(기준 {{ pct(b.p20, 1) }}, 5일 안 {{ pct(b.p5, 1) }}). ②가 실제로 쓸 수 있는 "전조"입니다. 모델은 ~{{ m.split.train_end[:4] }} 학습, {{ m.split.train_end[:4]|int + 1 }}~ 시험. 과거 통계이며 투자 권유가 아닙니다. 생성 {{ m.generated }}.</p>
+<h2>요약</h2>
+<ul class="aisum">{% for line in rep.text %}<li>{{ line }}</li>{% endfor %}</ul>
+
+<h2>1. 조건별 전조 <small>배수 = 아무 날 대비 · 20일 안 급등 확률의 학습·시험 배수가 모두 1.3↑면 ✔</small></h2>
+{% for grp in ['224일선', '이평선 배열', '가격', '거래량', '이전 급등', '종목·시장'] %}
+<h3>{{ grp }}</h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>조건</th><th>✔</th><th class="num">급등 전날 비율</th><th class="num">아무 날 비율</th><th class="num">배수</th><th class="num">20일 안 급등 확률</th><th class="num">배수</th><th class="num">학습 배수</th><th class="num">시험 배수</th><th class="num">5일 안 급등</th><th class="num">아무 날 건수</th></tr></thead><tbody>
+{% for r in rep.conditions if r.group == grp %}<tr {% if r.robust %}class="baseline"{% endif %}><td>{{ r.name }}</td><td>{{ '✔' if r.robust else '' }}</td><td class="num">{{ pct(r.share_pre, 0) }}</td><td class="num">{{ pct(r.share_base, 0) }}</td><td class="num {{ 'up' if r.lift_share >= 1.5 else 'down' if r.lift_share <= 0.67 }}">{{ '%.1f'|format(r.lift_share) }}배</td><td class="num"><b>{{ pct(r.p20, 1) }}</b></td><td class="num {{ 'up' if r.lift20 >= 1.3 else 'down' if r.lift20 <= 0.77 }}"><b>{{ '%.1f'|format(r.lift20) }}배</b></td><td class="num">{{ '%.1f'|format(r.lift_tr) if r.lift_tr else '–' }}</td><td class="num">{{ '%.1f'|format(r.lift_te) if r.lift_te else '–' }}</td><td class="num">{{ pct(r.p5, 1) }}</td><td class="num">{{ r.n_base|won }}</td></tr>{% endfor %}</tbody></table></div>
+{% endfor %}
+
+<h2>2. 급등 전 60일 경로 <small>급등 전날 = 0 · 중앙값</small></h2>
+{% set sel = [-59, -40, -30, -20, -15, -10, -7, -5, -4, -3, -2, -1, 0] %}
+<div class="scroll"><table class="grid cmp"><thead><tr><th>일</th>{% for p in rep.paths if p.d in sel %}<th class="num">{{ p.d }}</th>{% endfor %}</tr></thead><tbody>
+<tr><td>224일선 대비</td>{% for p in rep.paths if p.d in sel %}<td class="num"><b>{{ pct(p.d224, 0, true) }}</b></td>{% endfor %}</tr>
+<tr><td>224일선 위 비율</td>{% for p in rep.paths if p.d in sel %}<td class="num">{{ pct(p.above224, 0) }}</td>{% endfor %}</tr>
+<tr><td>종가 (전날=1)</td>{% for p in rep.paths if p.d in sel %}<td class="num">{{ '%.2f'|format(p.c) }}</td>{% endfor %}</tr>
+<tr><td>거래량 배수(20일 평균 대비)</td>{% for p in rep.paths if p.d in sel %}<td class="num"><b>{{ '%.2f'|format(p.v) }}</b></td>{% endfor %}</tr>
+<tr><td>거래량 2배↑ 날 비율</td>{% for p in rep.paths if p.d in sel %}<td class="num">{{ pct(p.v2, 0) }}</td>{% endfor %}</tr></tbody></table></div>
+
+<h3>특징 중앙값 차이 <small>(급등 전날 vs 아무 날, 차이는 표준편차 단위)</small></h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>특징</th><th class="num">급등 전날</th><th class="num">아무 날</th><th class="num">차이</th></tr></thead><tbody>
+{% for r in rep.diff %}<tr><td>{{ r.label }}</td><td class="num">{{ '%.3f'|format(r.pre) }}</td><td class="num">{{ '%.3f'|format(r.base) }}</td><td class="num {{ 'up' if r.d > 0.15 else 'down' if r.d < -0.15 }}">{{ '%+.2f'|format(r.d) }}</td></tr>{% endfor %}</tbody></table></div>
+
+{% set mo = rep.model %}
+<h2>3. 전조로 급등을 맞힐 수 있나 <small>아무 날 표본으로 '20일 안 급등' 예측</small></h2>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>특징</th><th class="num">AUC</th><th class="num">기준</th>{% for i in range(1, 11) %}<th class="num">{{ i }}구간</th>{% endfor %}<th class="num">상위 5%</th><th class="num">상위 1%</th></tr></thead><tbody>
+{% for name, r in mo.items() %}<tr {% if loop.last %}class="baseline"{% endif %}><td>{{ name }}</td><td class="num"><b>{{ '%.3f'|format(r.auc) }}</b></td><td class="num">{{ pct(r.base, 1) }}</td>{% for d in r.deciles %}<td class="num">{{ pct(d.actual, 1) }}</td>{% endfor %}<td class="num">{{ pct(r.top5, 1) }}</td><td class="num"><b>{{ pct(r.top1, 1) }}</b></td></tr>{% endfor %}</tbody></table></div>
+{% set last = mo['+ 이전 급등 내역'] %}{% if last.importance %}<p>중요 특징(섞었을 때 AUC 하락 순): {% for i in last.importance %}{{ i.label }}{{ ', ' if not loop.last }}{% endfor %}.</p>{% endif %}
+<p class="hint">구간 = 시험 기간 점수 10구간의 실제 20일 안 급등 비율. 상위 1%도 대부분은 급등하지 않습니다 — "전조"는 확률을 몇 배 올리는 것이지 급등을 예고하는 것이 아닙니다.</p>
+
+{% set td = rep.today %}
+<h2>4. 오늘 전조 점수 상위 <small>{{ td.date }} 종가 기준 · 거래 가능 {{ td.n|won }}종목 · 기준 확률 {{ pct(td.base, 1) }}</small></h2>
+{% if td.rows %}
+<div class="scroll"><table class="grid cmp"><thead><tr><th>종목</th><th class="num">종가</th><th class="num">20일 안 급등 확률</th><th class="num">224일선 대비</th><th class="num">20일선 대비</th><th class="num">이평선 밀집</th><th class="num">20일 수익</th><th class="num">52주 고점 대비</th><th class="num">5일÷20일 거래량</th><th class="num">변동성</th><th class="num">20일 폭</th><th class="num">250일 안 급등</th></tr></thead><tbody>
+{% for r in td.rows %}<tr data-href="{{ url_for('main.chart', code=r.code) }}"><td><a href="{{ url_for('main.chart', code=r.code) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td><td class="num">{{ r.close|won }}</td><td class="num"><b>{{ pct(r.prob, 0) }}</b></td><td class="num">{{ pct(r.dist224, 0, true) }}</td><td class="num">{{ pct(r.dist20, 1, true) }}</td><td class="num">{{ pct(r.ma_conv, 0) }}</td><td class="num">{{ pct(r.ret20, 0, true) }}</td><td class="num">{{ pct(r.nh250, 0, true) }}</td><td class="num">{{ '%.1f'|format(r.vr5) }}배</td><td class="num">{{ pct(r.atrp, 1) }}</td><td class="num">{{ pct(r.range20, 0) }}</td><td class="num">{{ r.n_j250|int }}회</td></tr>{% endfor %}</tbody></table></div>
+<p class="hint">전조 점수가 높은 종목은 대개 변동성이 크고 급등이 잦았던 종목이라 거래정지 위험·되돌림도 큽니다(거래정지 위험 화면과 같이 볼 것). 확률은 과거 평균이지 예측이 아닙니다.</p>
+{% else %}<p class="note">오늘 데이터가 없습니다.</p>{% endif %}
+{% endif %}
+{% endblock %}

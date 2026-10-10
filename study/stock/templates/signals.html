@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}신호{% endblock %}
+{% macro ago(s) %}{{ '오늘' if s.ago == 0 else '어제' if s.ago == 1 else '2~5일 전' }}{% endmacro %}
+{% macro ret(v) %}{% if v is none %}<span class="hint">–</span>{% else %}<span class="{{ 'up' if v > 0 else 'down' }}">{{ pct(v, 1, true) }}</span>{% endif %}{% endmacro %}
+{% macro table(rows, kind, checks, past) %}
+<div class="scroll"><table class="grid cmp sig"><thead><tr><th>종목</th><th class="num">종가</th><th>{{ '신호' if kind == 'pred' else 'AI 확률' }}</th><th class="num" title="과거에 같은 AI 구간·같은 시장·피함 조건이었던 종목이 다음날 시가 매수 후 5일·20일 뒤 실제로 오른 비율(2022년 이후)">예상 상승 확률<br><small>5일 · 20일</small></th><th class="num">부합</th>{% if past %}<th class="num" title="다음날 시가 매수 → 5일 뒤 종가">5일 뒤</th><th class="num" title="다음날 시가 매수 → 20일 뒤 종가">20일 뒤</th>{% endif %}<th>점검 (✔ 충족 · ✖ 미충족)</th></tr></thead><tbody>
+{% for r in rows %}<tr data-href="{{ (url_for('main.compare', a=r.code, date=rep.meta.date) if mode == 'date' else url_for('main.compare', a=r.code)) }}" class="{{ 'rec' if r.score >= rep.meta.recommend else '' }}{{ ' faint' if r.avoid }}">
+  <td><a href="{{ (url_for('main.compare', a=r.code, date=rep.meta.date) if mode == 'date' else url_for('main.compare', a=r.code)) }}" title="그날 차트 비교(왼쪽 예측 · 오른쪽 AI)">{{ r.name }}</a> <small>{{ r.code }}</small>{% if r.tier %} <small class="tag buy">{{ r.tier }}</small>{% endif %}</td>
+  <td class="num">{{ r.close|won }}</td>
+  <td>{% if kind == 'pred' %}<small>{% for s in r.signals[:2] %}{{ s.label }}{% if s.good %} ✔{% endif %} {{ ago(s) }}{{ ' · ' if not loop.last }}{% endfor %}</small>{% if r.ai_top %} <small class="tag buy">AI</small>{% endif %}
+      {% else %}<b>{{ pct(r.prob, 1) }}</b>{% if r.signals %} <small>{{ r.signals[0].label }} {{ ago(r.signals[0]) }}</small>{% endif %}{% endif %}</td>
+  <td class="num">{% if r.est %}<span title="{{ r.est.band }} · 과거 {{ r.est.n }}건 · 평균 수익 5일 {{ pct(r.est.m5, 1, true) }} · 20일 {{ pct(r.est.m20, 1, true) if r.est.m20 is not none else '–' }}"><b>{{ pct(r.est.p5, 0) }}</b> · <b>{{ pct(r.est.p20, 0) if r.est.p20 is not none else '–' }}</b></span>{% else %}<span class="hint">–</span>{% endif %}</td>
+  <td class="num"><b>{{ (r.score * 10)|round|int }}/10</b></td>
+  {% if past %}<td class="num">{{ ret(r.r5) }}</td><td class="num">{{ ret(r.r20) }}</td>{% endif %}
+  <td class="checks">{% for ok in r.checks %}<span class="{{ 'ok' if ok else 'no' }}" title="{{ checks[loop.index0] }}">{{ '✔' if ok else '✖' }}</span>{% endfor %}</td>
+</tr>{% endfor %}</tbody></table></div>
+{% endmacro %}
+{% macro ostat(s) %}{% if s and s.n5 %}{{ s.n }}개 · 5일 평균 {{ pct(s.r5, 1, true) }}(상승 {{ pct(s.up5, 0) }}){% if s.n20 %} · 20일 평균 {{ pct(s.r20, 1, true) }}(상승 {{ pct(s.up20, 0) }}){% endif %}{% else %}{{ s.n if s else 0 }}개 · 아직 결과 없음{% endif %}{% endmacro %}
+{% block body %}
+<h1>신호 <small>왼쪽 예측(단테 기법) · 오른쪽 AI — 점검 10개 중 9개 이상 충족하면 추천</small></h1>
+<form class="toolbar datebar" method="get" action="{{ url_for('main.home') }}">
+  <label>기준일 <input type="date" name="date" value="{{ asked or (rep.meta.date if rep and rep.meta.date else '') }}" {% if lo %}min="{{ lo }}" max="{{ hi }}"{% endif %}></label>
+  <button class="btn" type="submit">그날 신호 보기</button>
+  {% if rep and rep.meta.prev %}<a class="btn" href="{{ url_for('main.home', date=rep.meta.prev) }}">◀ {{ rep.meta.prev }}</a>{% endif %}
+  {% if rep and rep.meta.next %}<a class="btn" href="{{ url_for('main.home', date=rep.meta.next) }}">{{ rep.meta.next }} ▶</a>{% endif %}
+  {% if mode == 'date' %}<a class="btn" href="{{ url_for('main.home') }}">오늘</a>{% endif %}
+  <span class="hint">{% if lo %}조회 가능 {{ lo }} ~ {{ hi }}(거래일이 아니면 그 전 거래일){% else %}날짜별 이력은 전 종목 훑기(signals-scan) 뒤에 생깁니다{% endif %}</span>
+</form>
+{% if not rep or not rep.meta.date %}
+<p class="note">{% if mode == 'date' %}{{ asked }} 이전의 이력이 없습니다.{% else %}아직 훑어 둔 결과가 없습니다. <code>python manage.py signals-scan</code>(전 종목, 약 15분)으로 만들면 이 화면에 나옵니다. 일봉 자동 갱신 뒤에는 자동으로 다시 만듭니다.{% endif %}</p>
+{% else %}
+{% set past = rep.meta.past %}{% set sm = rep.strong_mkt or {} %}
+{% set strong = rep.high|selectattr('tier', '==', '강')|list %}{% set weak = rep.high|selectattr('tier', '==', '상')|list %}
+{% set rec_p = rep.pred|selectattr('score', '>=', rep.meta.recommend)|list %}{% set rec_a = rep.ai|selectattr('score', '>=', rep.meta.recommend)|list %}
+<p class="sumline"><b>{{ rep.meta.date }}</b>{% if mode == 'date' and rep.meta.asked != rep.meta.date %} <small>({{ rep.meta.asked }}은 거래일이 아니라 그 전 거래일)</small>{% endif %} · 시장 52주 고점 대비 {{ pct(rep.meta.mkt_dd250, 1, true) }}
+  · 추천 <b>강 {{ strong|length }}</b> · <b>상 {{ weak|length }}</b> · 점검 9/10↑ <b>예측 {{ rec_p|length }}</b> · <b>AI {{ rec_a|length }}</b>{% if mode != 'date' %} <small>· 생성 {{ rep.meta.generated }}</small>{% endif %}</p>
+
+<h2 class="hi">강 추천 <small>AI 상위 3% + 시장 20일 −5% 미만 + 피함 제외 + 시장 필터 · {{ strong|length }}개{% if past %} · 그 뒤 {{ ostat(rep.outcome.strong) }}{% endif %}</small></h2>
+{% if strong %}{{ table(strong, 'ai', rep.checks.ai, past) }}{% else %}<p class="note"><b>이날은 강 조건에 해당하는 종목이 없습니다.</b> 시장 20일 수익률 {{ (pct(rep.meta.mkt_r20, 1, true) if rep.meta.mkt_r20 is defined and rep.meta.mkt_r20 is not none else '–') }}(−5% 미만 필요){% if not rep.meta.mkt_dd250 < -0.10 %}, 시장 52주 고점 대비 {{ pct(rep.meta.mkt_dd250, 1, true) }}(−10% 아래 필요){% endif %}.
+  {% if sm.last %}마지막으로 충족된 날은 {{ sm.last }}{% if sm.share %}(2022년 이후 전체의 {{ pct(sm.share, 0) }}){% endif %}.{% endif %}</p>{% endif %}
+{% if weak %}<h2 class="hi">상 — 대기 후보 <small>AI 상위 2% + 피함 제외 + 시장 필터 · {{ weak|length }}개{% if past %} · 그 뒤 {{ ostat(rep.outcome.high) }}{% endif %}</small></h2>{{ table(weak, 'ai', rep.checks.ai, past) }}{% endif %}
+
+<div class="cgrid">
+  {% for kind, title, sub in (('pred', '예측', '단테 기법 신호가 최근 ' ~ rep.meta.recent ~ '봉 안에 난 종목'), ('ai', 'AI', '20일 안 +20% 확률 상위 10% (경계 ' ~ pct(rep.meta.thr10, 1) ~ ')')) %}
+  {% set rows = rep[kind] %}{% set rec = rows|selectattr('score', '>=', rep.meta.recommend)|list %}
+  <section class="cpane">
+    <h2>{{ title }} 추천 <small>점검 {{ (rep.meta.recommend * 10)|int }}/10 이상 · {{ rec|length }}개 (전체 {{ rows|length }}개)</small></h2>
+    {% if rec %}{{ table(rec, kind, rep.checks[kind], past) }}{% else %}<p class="note">이날은 {{ (rep.meta.recommend * 10)|int }}개 이상 충족한 종목이 없습니다.</p>{% endif %}
+    {% set rest = rows|rejectattr('score', '>=', rep.meta.recommend)|list %}
+    {% if rest %}<details><summary>그 밖의 종목 {{ rest|length }}개 (부합 순)</summary>{{ table(rest[:80], kind, rep.checks[kind], past) }}{% if rest|length > 80 %}<p class="hint">상위 80개만 표시.</p>{% endif %}</details>{% endif %}
+  </section>
+  {% endfor %}
+</div>
+
+<details class="expl"><summary>설명 · 점검 항목 · 그 뒤 결과</summary>
+<ul class="aisum">{% for line in rep.text %}<li>{{ line }}</li>{% endfor %}
+{% if past %}<li><b>그 뒤 실제 결과</b>(다음날 시가 매수): 예측 추천 {{ ostat(rep.outcome.pred_rec) }} / 예측 전체 {{ ostat(rep.outcome.pred) }} / AI 추천 {{ ostat(rep.outcome.ai_rec) }} / AI 전체 {{ ostat(rep.outcome.ai) }} / <b>그날 거래 가능 종목 전체</b> {{ ostat(rep.outcome.all) }}</li>{% endif %}
+<li><small>신호·AI 확률은 그날까지의 정보로만 계산 · 종목을 누르면 차트 비교(예측·AI)로 갑니다. 피함 종목은 흐리게.</small></li></ul>
+<p class="hint">{{ rep.high_note }}</p>
+<div class="cgrid">{% for kind, title in (('pred', '예측'), ('ai', 'AI')) %}<div><b>{{ title }} 점검 항목 10가지</b><ol class="hint">{% for c in rep.checks[kind] %}<li>{{ c }}</li>{% endfor %}</ol></div>{% endfor %}</div>
+</details>
+{% endif %}
+{% endblock %}

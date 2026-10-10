@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}종합 전략{% endblock %}
+{% macro cell(s, key, d=2, sign=true) %}{% if s and s[key] is defined and s[key] is not none %}{{ pct(s[key], d, sign) }}{% else %}&ndash;{% endif %}{% endmacro %}
+{% macro srow(s) %}{% if s %}<td class="num">{{ s.n|won }}</td><td class="num {{ 'up' if s.mean > 0 else 'down' }}"><b>{{ pct(s.mean, 2, true) }}</b></td><td class="num {{ 'up' if s.excess > 0 else 'down' }}">{{ pct(s.excess, 2, true) }}</td><td class="num">{{ pct(s.p_up, 0) }}</td><td class="num">{{ pct(s.p_big_up, 0) }}</td><td class="num">{{ pct(s.p_dn20, 0) }}</td><td class="num">{{ pct(s.q05, 0, true) }}</td><td class="num">{{ cell(s, 'mae', 1) }}</td><td class="num">{{ cell(s, 'r60', 1) }}</td><td class="num">{{ cell(s, 'r120', 1) }}</td><td class="num">{{ '%.1f'|format(s.t) if s.t is not none else '–' }}</td>{% else %}<td colspan="11" class="num">&ndash;</td>{% endif %}{% endmacro %}
+{% set H = '<th class="num">표본</th><th class="num">20일 평균</th><th class="num">시장 대비</th><th class="num">상승</th><th class="num">+10%↑</th><th class="num">−20%↓</th><th class="num">최악 5%</th><th class="num">최대 낙폭</th><th class="num">60일</th><th class="num">120일</th><th class="num">t(날짜)</th>' %}
+{% block body %}
+<h1>종합 전략 <small>지금까지의 분석을 한 규칙으로 묶어 전체 데이터에 적용</small></h1>
+{% if not rep %}
+<p class="note">아직 분석 결과가 없습니다. <code>python manage.py combined-train</code> 으로 만들면(약 30분) 이 화면에 나옵니다.</p>
+{% else %}
+{% set m = rep.meta %}
+<p class="note">
+  거래 가능 종목(20일 평균 거래대금 3억↑) {{ m.rows|won }}개 표본({{ m.stocks|won }}종목, {{ m.split.date_min[:4] }}~{{ m.split.date_max[:4] }}, 연중일 5일 간격 추출).
+  신호일 종가를 알고 <b>다음날 시가</b>에 사서 20거래일 뒤 종가로 청산(비용 {{ pct(m.cost, 1) }} 차감), 60·120일은 참고.
+  <b>시험 기간 = {{ m.split.train_end[:4]|int + 1 }}년 이후</b>(규칙은 그 전 기간에서 정하고 시험 기간은 확인만). "시장 대비" = 같은 날 모든 표본 평균을 뺀 값, t(날짜) = 날짜별 평균으로 계산한 t 값(2 넘으면 우연이라 보기 어려움).
+  과거 통계이며 생존 편향이 있고 투자 권유가 아닙니다. 생성 {{ m.generated }}.
+</p>
+<h2>요약</h2>
+<ul class="aisum">{% for line in rep.text %}<li>{{ line }}</li>{% endfor %}</ul>
+
+<h2>1. 규칙을 하나씩 쌓았을 때 <small>각 단계는 앞 단계 위에 더한 것</small></h2>
+<h3>시험 기간 ({{ m.split.train_end[:4]|int + 1 }}년 이후)</h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>단계</th><th class="num">한 달 신호</th>{{ H|safe }}</tr></thead><tbody>
+{% for s in rep.stages %}<tr {% if s.name.startswith('4.') %}class="baseline"{% endif %}><td>{{ s.name }}{% if s.note %}<br><small>{{ s.note }}</small>{% endif %}</td><td class="num">{{ '%.0f'|format(s.per_month_te) }}</td>{{ srow(s.te) }}</tr>{% endfor %}</tbody></table></div>
+<h3>학습 기간 (~{{ m.split.train_end[:4] }})</h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>단계</th><th class="num">비중</th>{{ H|safe }}</tr></thead><tbody>
+{% for s in rep.stages %}<tr><td>{{ s.name }}</td><td class="num">{{ pct(s.share, 2) }}</td>{{ srow(s.tr) }}</tr>{% endfor %}</tbody></table></div>
+<p class="hint">3분할 단계의 수익은 분할 평균가 기준이고 "최대 낙폭"은 아직 안 산 분할분을 현금으로 친 값입니다. 2×ATR 손절은 손절가(또는 갭이면 시가)로 청산, 안 닿으면 20일 뒤 종가입니다.</p>
+
+<h2>2. 피함 규칙 <small>(피할 종목 연구에서 두 시기 모두 나빴던 7개 — 하나라도 걸리면 제외)</small></h2>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>규칙</th><th class="num">표본</th><th class="num">비중</th><th class="num">시험 기간 시장 대비</th></tr></thead><tbody>
+{% for r in rep.avoid.rows %}<tr><td>{{ r.name }}</td><td class="num">{{ r.n|won }}</td><td class="num">{{ pct(r.share, 1) }}</td><td class="num {{ 'down' if r.excess_te is not none and r.excess_te < 0 }}">{{ pct(r.excess_te, 2, true) if r.excess_te is not none else '–' }}</td></tr>{% endfor %}
+<tr class="baseline"><td>하나라도 해당</td><td></td><td class="num">{{ pct(rep.avoid.share, 1) }}</td><td></td></tr></tbody></table></div>
+
+<h2>3. 진입 신호 후보 <small>앞선 연구에서 좋게 나온 것들을 미리 정해 두고, 피함 제외 뒤 학습·시험 기간 모두 시장보다 좋아야 채택</small></h2>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>신호 (신호일 포함 {{ m.sig_win }}봉 안)</th><th>근거</th><th>채택</th><th class="num">학습 표본</th><th class="num">학습 시장 대비</th><th class="num">학습 상승</th><th class="num">시험 표본</th><th class="num">시험 20일 평균</th><th class="num">시험 시장 대비</th><th class="num">시험 상승</th><th class="num">+10%↑</th><th class="num">−20%↓</th><th class="num">t(날짜)</th><th class="num">60일</th><th class="num">120일</th></tr></thead><tbody>
+{% for r in rep.candidates %}<tr {% if r.pass %}class="baseline"{% endif %}><td>{{ r.name }}{% if r.note %}<br><small>{{ r.note }}</small>{% endif %}</td><td><small>{{ r.why }}</small></td><td>{{ '✔ 채택' if r.pass else '—' }}</td>
+<td class="num">{{ r.tr.n|won if r.tr else '–' }}</td><td class="num {{ 'up' if r.tr and r.tr.excess > 0 else 'down' }}">{{ cell(r.tr, 'excess') }}</td><td class="num">{{ pct(r.tr.p_up, 0) if r.tr else '–' }}</td>
+<td class="num">{{ r.te.n|won if r.te else '–' }}</td><td class="num {{ 'up' if r.te and r.te.mean > 0 else 'down' }}"><b>{{ cell(r.te, 'mean') }}</b></td><td class="num {{ 'up' if r.te and r.te.excess > 0 else 'down' }}">{{ cell(r.te, 'excess') }}</td><td class="num">{{ pct(r.te.p_up, 0) if r.te else '–' }}</td><td class="num">{{ pct(r.te.p_big_up, 0) if r.te else '–' }}</td><td class="num">{{ pct(r.te.p_dn20, 0) if r.te else '–' }}</td><td class="num">{{ '%.1f'|format(r.te.t) if r.te and r.te.t is not none else '–' }}</td><td class="num">{{ cell(r.te, 'r60', 1) }}</td><td class="num">{{ cell(r.te, 'r120', 1) }}</td></tr>{% endfor %}</tbody></table></div>
+<p class="hint">채택 기준: 학습 표본 300↑·시험 표본 200↑, 두 기간 모두 시장 대비 플러스. AI 행은 ~{{ m.split.train_end[:4] }}년이 학습 기간이라 시험 기간 성적만 봅니다.</p>
+
+{% set f = rep.final %}
+<h2>4. 최종 규칙의 안정성 <small>피함 제외 + 채택 신호 + 갭 +{{ (m.gap_max * 100)|int }}% 이하 + 3분할 · 전체 {{ f.n|won }}건</small></h2>
+{% if f.by_signal %}
+<h3>채택 신호별 (갭 조건·3분할 적용 뒤)</h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>신호</th><th class="num">한 달 신호(시험)</th>{{ H|safe }}</tr></thead><tbody>
+{% for s in f.by_signal %}<tr><td>{{ s.name }} <small>(시험 기간)</small></td><td class="num">{{ '%.0f'|format(s.per_month_te) }}</td>{{ srow(s.te) }}</tr>{% endfor %}</tbody></table></div>
+{% endif %}
+{% if f.overlap %}
+<h3>채택 신호가 몇 개 겹쳤나 (시험 기간)</h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>겹침</th><th class="num">한 달 신호</th>{{ H|safe }}</tr></thead><tbody>
+{% for s in f.overlap %}<tr><td>{{ s.name }}</td><td class="num">{{ '%.0f'|format(s.per_month_te) }}</td>{{ srow(s.te) }}</tr>{% endfor %}</tbody></table></div>
+{% endif %}
+<h3>해마다 (3분할 기준)</h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>연도</th><th class="num">신호</th><th class="num">평균</th><th class="num">시장(같은 날 전체 평균)</th><th class="num">시장 대비</th><th class="num">상승</th><th class="num">−20%↓</th></tr></thead><tbody>
+{% for y in f.yearly %}<tr {% if y.year|int > m.split.train_end[:4]|int %}class="baseline"{% endif %}><td>{{ y.year }}</td><td class="num">{{ y.n|won }}</td><td class="num {{ 'up' if y.mean > 0 else 'down' }}"><b>{{ pct(y.mean, 2, true) }}</b></td><td class="num">{{ pct(y.market, 2, true) }}</td><td class="num {{ 'up' if y.excess > 0 else 'down' }}">{{ pct(y.excess, 2, true) }}</td><td class="num">{{ pct(y.p_up, 0) }}</td><td class="num">{{ pct(y.p_dn20, 0) }}</td></tr>{% endfor %}</tbody></table></div>
+<p class="hint">굵은 행이 시험 기간입니다. 시장 대비가 해마다 플러스인지가 규칙이 특정 시기 덕이 아닌지를 보는 기준입니다.</p>
+{% if f.monthly_te %}{% set mo = f.monthly_te %}
+<h3>시험 기간 월별 <small>그달 신호를 모두 같은 비중으로 샀을 때(3분할)</small></h3>
+<p>{{ mo.months }}개월 중 플러스 {{ pct(mo.p_pos, 0) }} · 월평균 {{ pct(mo.mean, 2, true) }} · 최고 {{ pct(mo.best, 1, true) }} · 최악 {{ pct(mo.worst, 1, true) }} · 매달 재투자 누적 {{ pct(mo.cum, 0, true) }}</p>
+<div class="why2"><div>{% for r in mo.last %}<div class="bar"><span class="bl">{{ r.mon }} <small>({{ r.n }}건)</small></span><span class="bv"><i class="{{ 'win' if r.mean > 0 else 'loss' }}" style="width:{{ (r.mean|abs * 100 * 5)|round(1) if r.mean|abs * 100 * 5 < 100 else 100 }}%"></i></span><span class="bn">{{ pct(r.mean, 1, true) }}</span></div>{% endfor %}</div></div>
+{% endif %}
+<h3>시장 상황별 (전체 기간, 20일 전액 기준)</h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>시장 60일 수익률</th><th class="num">표본</th><th class="num">비중</th><th class="num">20일 평균</th><th class="num">시장 대비</th><th class="num">시험 기간 시장 대비</th><th class="num">상승</th><th class="num">−20%↓</th></tr></thead><tbody>
+{% for r in f.regime %}<tr><td>{{ r.name }}</td><td class="num">{{ r.n|won }}</td><td class="num">{{ pct(r.share, 0) }}</td><td class="num {{ 'up' if r.mean > 0 else 'down' }}">{{ pct(r.mean, 2, true) }}</td><td class="num {{ 'up' if r.excess > 0 else 'down' }}">{{ pct(r.excess, 2, true) }}</td><td class="num">{{ pct(r.excess_te, 2, true) if r.excess_te is not none else '–' }}</td><td class="num">{{ pct(r.p_up, 0) }}</td><td class="num">{{ pct(r.p_dn20, 0) }}</td></tr>{% endfor %}</tbody></table></div>
+
+{% set td = rep.today %}
+<h2>5. 오늘 규칙에 걸리는 종목 <small>{{ td.date }} 종가 기준 · 거래 가능 {{ td.n_tradable|won }} → 피함 제외 {{ td.n_keep|won }} → 채택 신호 {{ td.n_rows|won }}종목</small></h2>
+{% if td.rows %}
+<div class="scroll"><table class="grid cmp"><thead><tr><th>종목</th><th class="num">종가</th><th>채택 신호</th>{% if m.ai %}<th class="num">AI 점수</th>{% endif %}<th class="num">거래량 배수</th><th class="num">20일 등락</th><th class="num">52주 고점 대비</th><th class="num">20일선 대비</th><th class="num">변동성</th></tr></thead><tbody>
+{% for r in td.rows %}<tr data-href="{{ url_for('main.chart', code=r.code) }}"><td><a href="{{ url_for('main.chart', code=r.code) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td><td class="num">{{ r.close|won }}</td><td><small>{{ r.signals|join(' · ') }}</small></td>{% if m.ai %}<td class="num">{{ pct(r.prob, 0) if r.prob is not none else '–' }}</td>{% endif %}<td class="num">{{ '%.1f'|format(r.volratio) }}배</td><td class="num">{{ pct(r.ret20, 1, true) }}</td><td class="num">{{ pct(r.nh250, 0, true) }}</td><td class="num">{{ pct(r.dist20, 1, true) }}</td><td class="num">{{ pct(r.atrp, 1) }}</td></tr>{% endfor %}</tbody></table></div>
+<p class="hint">규칙대로라면 다음날 시가가 종가의 +{{ (m.gap_max * 100)|int }}%를 넘으면 사지 않고, 사면 3분할(다음날·5일 뒤·10일 뒤)입니다. 과거 평균이 그대로 적용되는 예측이 아닙니다.</p>
+{% else %}<p class="note">오늘은 규칙에 걸리는 종목이 없습니다.</p>{% endif %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block title %}거래량 급증{% endblock %}
+{% macro dcell(x) %}{% if x and x.median %}{{ '%.0f'|format(x.median) }}일 <small>({{ '%.0f'|format(x.q25) }}~{{ '%.0f'|format(x.q75) }})</small>{% else %}&ndash;{% endif %}{% endmacro %}
+{% block body %}
+<h1>거래량 급증 뒤 큰 상승 <small>급증하고 며칠 만에, 얼마나 자주 올랐나</small></h1>
+{% if not rep %}
+<p class="note">아직 분석 결과가 없습니다. <code>python manage.py surge-train</code> 으로 만들면(약 10~15분) 이 화면에 나옵니다.</p>
+{% else %}
+{% set m = rep.meta %}
+<p class="note">
+  <b>급증</b> = 거래량이 직전 20일 평균의 {{ m.min_ratio|int }}배 이상(직전 20일 안에 급증이 없던 첫 급증, 20일 평균 거래대금 {{ (m.liq_min / 100000000)|int }}억 원↑). 이벤트 <b>{{ m.events|won }}건</b>({{ m.stocks|won }}종목, {{ m.date_min[:4] }}~{{ m.date_max[:4] }}).
+  <b>진입은 급증 다음날 시가</b>이고 이후 {{ m.look }}거래일 동안 고가가 진입가 대비 +10·20·30·50·100%에 처음 닿은 날을 셉니다("며칠 뒤" = 급증 다음날이 1일째).
+  <b>기준</b> = 같은 종목에서 10봉 간격으로 뽑은 아무 날 {{ m.baseline|won }}건. 고가 기준이라 장중에 닿기만 해도 닿은 것으로 칩니다(매도 가능 여부와 다름). 과거 통계이며 생존 편향이 있고 투자 권유가 아닙니다. 생성 {{ m.generated }}.
+</p>
+<h2>요약</h2>
+<ul class="aisum">{% for line in rep.text %}<li>{{ line }}</li>{% endfor %}</ul>
+
+<h2>1. 급증 뒤 큰 상승 확률 <small>N일 안에 고가가 진입가 대비 +X%에 닿은 비율</small></h2>
+<div class="scroll"><table class="grid cmp"><thead><tr><th rowspan="2">구분</th><th rowspan="2" class="num">표본</th>{% for x in ('10', '20', '30', '50', '100') %}<th colspan="5" class="grp">+{{ x }}%</th>{% endfor %}</tr>
+<tr>{% for x in range(5) %}{% for n in ('5', '10', '20', '60', '120') %}<th class="num">{{ n }}일</th>{% endfor %}{% endfor %}</tr></thead><tbody>
+{% for g in rep.levels %}<tr><td><b>{{ g.name }}</b></td><td class="num">{{ g.n|won }}</td>{% for x in ('10', '20', '30', '50', '100') %}{% for n in ('5', '10', '20', '60', '120') %}<td class="num">{{ pct(g.hit[x][n], 0) }}</td>{% endfor %}{% endfor %}</tr>{% endfor %}
+<tr class="baseline"><td>기준 (아무 날)</td><td class="num">{{ rep.baseline.n|won }}</td>{% for x in ('10', '20', '30', '50', '100') %}{% for n in ('5', '10', '20', '60', '120') %}<td class="num">{{ pct(rep.baseline.hit[x][n], 0) }}</td>{% endfor %}{% endfor %}</tr>
+</tbody></table></div>
+
+<h3>닿는다면 급증 며칠 뒤였나 <small>(닿은 경우만, 중앙값 · 괄호는 빠른 25%~느린 25%)</small></h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>구분</th>{% for x in ('10', '20', '30', '50', '100') %}<th class="num">+{{ x }}% 도달 비율(120일)</th><th class="num">며칠 뒤</th>{% endfor %}<th class="num">정점까지(중앙)</th><th class="num">−10% 먼저 맞은 비율</th><th class="num">20일 평균</th><th class="num">60일 평균</th></tr></thead><tbody>
+{% for g in rep.levels %}<tr><td><b>{{ g.name }}</b></td>{% for x in ('10', '20', '30', '50', '100') %}<td class="num">{{ pct(g.days[x].share, 0) }}</td><td class="num">{{ dcell(g.days[x]) }}</td>{% endfor %}
+<td class="num">{{ '%.0f'|format(g.peak_median) }}일</td><td class="num">{{ pct(g.dn10_first, 0) }}</td><td class="num {{ 'up' if g.r20 > 0 else 'down' }}">{{ pct(g.r20, 1, true) }}</td><td class="num {{ 'up' if g.r60 > 0 else 'down' }}">{{ pct(g.r60, 1, true) }}</td></tr>{% endfor %}
+<tr class="baseline"><td>기준 (아무 날)</td>{% for x in ('10', '20', '30', '50', '100') %}<td class="num">{{ pct(rep.baseline.days[x].share, 0) }}</td><td class="num">{{ dcell(rep.baseline.days[x]) }}</td>{% endfor %}
+<td class="num">{{ '%.0f'|format(rep.baseline.peak_median) }}일</td><td class="num">{{ pct(rep.baseline.dn10_first, 0) }}</td><td class="num">{{ pct(rep.baseline.r20, 1, true) }}</td><td class="num">{{ pct(rep.baseline.r60, 1, true) }}</td></tr></tbody></table></div>
+<p class="hint">"−10% 먼저 맞은 비율"은 고가가 +20%에 닿기 전에(또는 닿지 못한 채) 저가가 진입가 −10%를 먼저 건드린 비율입니다. 큰 상승이 있었더라도 그 전에 크게 흔들렸다면 실제로 버티기 어려웠을 수 있습니다.</p>
+
+<h3>급증 후 몇 일째에 닿았나 <small>(전체 급증 이벤트 중 비율)</small></h3>
+<div class="why2">
+{% for h in rep.time_hist %}<div><h3>+{{ h.x }}%에 처음 닿은 날 <small>(120일 안 도달 {{ pct(h.hit_share, 0) }})</small></h3>
+{% for b in h.bins %}<div class="bar"><span class="bl">{{ b.label }}</span><span class="bv"><i class="win" style="width:{{ (b.share_all * 100 / (h.hit_share * 100 if h.hit_share > 0 else 1) * 100)|round(1) }}%"></i></span><span class="bn">{{ pct(b.share_all, 1) }}</span></div>{% endfor %}</div>{% endfor %}
+</div>
+<h3>누적 확률 — 급증 후 N일째까지 +20% / +50%에 닿은 비율</h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>N일</th>{% for r in rep.curve.event %}<th class="num">{{ r.day }}</th>{% endfor %}</tr></thead><tbody>
+<tr><td>급증 → +20%</td>{% for r in rep.curve.event %}<td class="num"><b>{{ pct(r.p, 0) }}</b></td>{% endfor %}</tr>
+<tr><td>기준 → +20%</td>{% for r in rep.curve.baseline %}<td class="num">{{ pct(r.p, 0) }}</td>{% endfor %}</tr>
+<tr><td>급증 → +50%</td>{% for r in rep.curve.event50 %}<td class="num"><b>{{ pct(r.p, 0) }}</b></td>{% endfor %}</tr>
+<tr><td>기준 → +50%</td>{% for r in rep.curve.baseline50 %}<td class="num">{{ pct(r.p, 0) }}</td>{% endfor %}</tr></tbody></table></div>
+
+<h2>2. 어떤 급증이 큰 상승으로 이어졌나 <small>거래량 3배↑ 급증 전체를 조건별로 나눔</small></h2>
+{% for g in rep.breakdown %}
+<h3>{{ g.group }}</h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>조건</th><th class="num">표본</th><th class="num">20일 안 +20%</th><th class="num">60일 안 +30%</th><th class="num">120일 안 +50%</th><th class="num">+20%까지 (중앙)</th><th class="num">−10% 먼저</th><th class="num">20일 평균</th><th class="num">60일 평균</th></tr></thead><tbody>
+{% for r in g.rows %}<tr><td>{{ r.name }}</td><td class="num">{{ r.n|won }}</td>
+<td class="num"><b class="{{ 'up' if r.p20_in20 > rep.levels[0].hit['20']['20'] + 0.03 else 'down' if r.p20_in20 < rep.levels[0].hit['20']['20'] - 0.03 }}">{{ pct(r.p20_in20, 0) }}</b></td><td class="num">{{ pct(r.p30_in60, 0) }}</td><td class="num">{{ pct(r.p50_in120, 0) }}</td>
+<td class="num">{{ ('%.0f'|format(r.days20) ~ '일') if r.days20 else '–' }}</td><td class="num">{{ pct(r.dn10_first, 0) }}</td>
+<td class="num {{ 'up' if r.r20 > 0 else 'down' }}">{{ pct(r.r20, 1, true) }}</td><td class="num {{ 'up' if r.r60 > 0 else 'down' }}">{{ pct(r.r60, 1, true) }}</td></tr>{% endfor %}</tbody></table></div>
+{% endfor %}
+
+<h3>120일 안에 +50%까지 오른 급증 vs 못 오른 급증 <small>(특징 중앙값)</small></h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>특징</th><th class="num">+50% 도달</th><th class="num">미도달</th></tr></thead><tbody>
+{% for r in rep.profile %}<tr><td>{{ label.get(r.name, r.name) }}</td><td class="num">{{ pct(r.big, 1, true) if r.name in pct_feats else '%.2f'|format(r.big) }}</td><td class="num">{{ pct(r.rest, 1, true) if r.name in pct_feats else '%.2f'|format(r.rest) }}</td></tr>{% endfor %}</tbody></table></div>
+
+<h2>3. 최근 급증한 종목 <small>최근 6거래일 안 3배↑ 거래량 — 비슷한 모습(급증일 캔들·위치·직전 거래량)의 과거 결과를 붙임, 참고용</small></h2>
+{% if rep.recent %}
+<div class="scroll"><table class="grid cmp"><thead><tr><th>종목</th><th>급증일</th><th class="num">종가</th><th class="num">거래량 배수</th><th class="num">당일 등락</th><th class="num">52주 고점 대비</th><th>비슷한 과거 급증 그룹</th><th class="num">과거 표본</th><th class="num">20일 안 +20%</th><th class="num">120일 안 +50%</th><th class="num">+20%까지</th><th class="num">−10% 먼저</th></tr></thead><tbody>
+{% for r in rep.recent %}<tr data-href="{{ url_for('main.chart', code=r.code) }}"><td><a href="{{ url_for('main.chart', code=r.code) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td><td>{{ r.date }}</td><td class="num">{{ r.close|won }}</td>
+<td class="num">{{ '%.1f'|format(r.volratio) }}배</td><td class="num">{{ pct(r.ret1, 1, true) }}</td><td class="num">{{ pct(r.nh250, 0, true) }}</td><td><small>{{ r.group }}</small></td><td class="num">{{ r.n|won }}</td>
+<td class="num"><b>{{ pct(r.p20_in20, 0) }}</b></td><td class="num">{{ pct(r.p50_in120, 0) }}</td><td class="num">{{ ('%.0f'|format(r.days20) ~ '일') if r.days20 else '–' }}</td><td class="num">{{ pct(r.dn10_first, 0) }}</td></tr>{% endfor %}</tbody></table></div>
+<p class="hint">이미 올라 버린 급증일 가격은 포함하지 않았습니다. 과거 그룹 확률은 평균이므로 이 종목에 그대로 적용되는 예측이 아닙니다.</p>
+{% else %}<p class="note">최근 6거래일 안에 해당하는 종목이 없습니다.</p>{% endif %}
+{% macro srow(r) %}<tr><td>{{ r.name }}</td><td class="num">{{ r.n|won }}</td><td class="num"><b>{{ pct(r.p20_in20, 0) }}</b></td><td class="num">{{ pct(r.p50_in120, 0) }}</td><td class="num">{{ ('%.0f'|format(r.days20) ~ '일') if r.days20 else '–' }}</td><td class="num">{{ pct(r.dn10_first, 0) }}</td><td class="num {{ 'up' if r.r20 > 0 else 'down' }}">{{ pct(r.r20, 1, true) }}</td></tr>{% endmacro %}
+{% if rep.speed %}
+<h2>4. 가장 빨리 오른 급증 vs 가장 늦게 오른 급증 <small>+20%에 닿는 데 걸린 기간별 상승폭과 거래량 재폭등</small></h2>
+<p class="hint">상승폭 = 진입가 대비 120거래일 안 고가 기준 최고 상승. 재폭등 = 급증 뒤 120일 안에 거래량이 20일 평균의 5배↑로 또 터진 날(앞선 폭등과 5일 넘게 떨어진 것, 3배는 전체 날의 약 7%라 거의 항상 나와 기준에서 뺐습니다). '기준'은 아무 날 뒤 120일의 같은 값입니다. "닿기 직전 5일"은 +20%에 닿은 날 포함 앞 5일 안에 재폭등이 있었다는 뜻입니다.</p>
+<h3>상승폭</h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>+20%까지 걸린 기간</th><th class="num">표본</th><th class="num">비중</th><th class="num">최고 상승 중앙</th><th class="num">(빠른25~느린25)</th><th class="num">+30%↑</th><th class="num">+50%↑</th><th class="num">+100%↑</th><th class="num">정점까지</th><th class="num">닿기 전 최대 하락(중앙)</th><th class="num">−10% 먼저</th></tr></thead><tbody>
+{% for r in rep.speed if not r.baseline %}<tr><td><b>{{ r.name }}</b></td><td class="num">{{ r.n|won }}</td><td class="num">{{ pct(r.share, 1) }}</td><td class="num up"><b>{{ pct(r.gain_med, 0, true) }}</b></td><td class="num">{{ pct(r.gain_q25, 0, true) }} ~ {{ pct(r.gain_q75, 0, true) }}</td>
+<td class="num">{{ pct(r.p30, 0) }}</td><td class="num">{{ pct(r.p50, 0) }}</td><td class="num">{{ pct(r.p100, 0) }}</td><td class="num">{{ '%.0f'|format(r.peak_med) }}일</td><td class="num">{{ pct(r.dd, 0, true) if r.dd is defined and r.dd is not none else '–' }}</td><td class="num">{{ pct(r.dn10_first, 0) }}</td></tr>{% endfor %}</tbody></table></div>
+<h3>거래량 재폭등 <small>급증 뒤 120일 안에 5배↑ 폭등이 또 있었나 · 언제 처음 나왔나</small></h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>+20%까지 걸린 기간</th><th class="num">표본</th><th class="num">재폭등 있음(5배↑)</th><th class="num">10배↑</th><th class="num">평균 횟수</th><th class="num">첫 재폭등(중앙)</th><th class="num">1~10일째</th><th class="num">11~20일</th><th class="num">21~40일</th><th class="num">41~80일</th><th class="num">81~120일</th><th class="num">+20% 닿기 전 재폭등</th><th class="num">닿기 직전 5일</th><th class="num">(우연 기대치)</th><th class="num">정점 직전 5일</th></tr></thead><tbody>
+{% for r in rep.speed %}<tr {% if r.baseline %}class="baseline"{% endif %}><td>{% if r.baseline %}{{ r.name }}{% else %}<b>{{ r.name }}</b>{% endif %}</td><td class="num">{{ r.n|won }}</td><td class="num"><b>{{ pct(r.rs_any, 0) }}</b></td><td class="num">{{ pct(r.rs10_any, 0) }}</td><td class="num">{{ '%.1f'|format(r.rs_n) }}회</td><td class="num">{{ ('%.0f'|format(r.rs_first) ~ '일') if r.rs_first else '–' }}</td>
+{% for x in r.rs_bins %}<td class="num">{{ pct(x, 0) }}</td>{% endfor %}<td class="num">{{ pct(r.rs_before, 0) if r.rs_before is defined else '–' }}</td><td class="num"><b>{{ pct(r.rs_trig, 0) if r.rs_trig is defined else '–' }}</b></td><td class="num">{{ pct(r.rs_trig_exp, 0) if r.rs_trig_exp is defined else '–' }}</td><td class="num">{{ pct(r.rs_peak, 0) if r.rs_peak is defined else '–' }}</td></tr>{% endfor %}</tbody></table></div>
+<p class="hint">"1~10일째 … 81~120일"은 첫 재폭등이 그 구간에 나온 비율(전체 대비)이라, 합하면 '재폭등 있음'입니다. "닿기 전 재폭등"은 +20%에 닿은 급증 중 닿은 날 전에 재폭등이 한 번이라도 있었던 비율입니다.</p>
+
+<h3>상승폭이 클수록 얼마나 걸렸나 <small>120일 안 최고 상승폭별</small></h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>최고 상승폭</th><th class="num">표본</th><th class="num">비중</th><th class="num">+20%까지 중앙</th><th class="num">(빠른25~느린25)</th><th class="num">+50%까지 중앙</th><th class="num">정점까지 중앙</th><th class="num">(빠른25~느린25)</th><th class="num">재폭등 있음(5배↑)</th><th class="num">평균 횟수</th><th class="num">정점 직전 5일 재폭등</th><th class="num">급증 배수 중앙</th><th class="num">급증일 등락 중앙</th></tr></thead><tbody>
+{% for r in rep.size %}<tr><td><b>{{ r.name }}</b></td><td class="num">{{ r.n|won }}</td><td class="num">{{ pct(r.share, 1) }}</td><td class="num">{{ ('%.0f'|format(r.d20_med) ~ '일') if r.d20_med else '–' }}</td><td class="num">{{ ('%.0f'|format(r.d20_q25) ~ ' ~ ' ~ '%.0f'|format(r.d20_q75)) if r.d20_q25 is not none else '–' }}</td><td class="num">{{ ('%.0f'|format(r.d50_med) ~ '일') if r.d50_med else '–' }}</td>
+<td class="num">{{ '%.0f'|format(r.peak_med) }}일</td><td class="num">{{ '%.0f'|format(r.peak_q25) }} ~ {{ '%.0f'|format(r.peak_q75) }}</td><td class="num"><b>{{ pct(r.rs_any, 0) }}</b></td><td class="num">{{ '%.1f'|format(r.rs_n) }}회</td><td class="num">{{ pct(r.rs_peak, 0) }}</td><td class="num">{{ '%.1f'|format(r.ratio_med) }}배</td><td class="num">{{ pct(r.ret1_med, 1, true) }}</td></tr>{% endfor %}</tbody></table></div>
+
+{% for key, title in (('fast', '+50%에 5일 안에 닿은 급증 — 최고 상승폭 순'), ('slow', '+20%에 90일 이후에야 닿은 급증 — 최고 상승폭 순')) %}
+<h3>{{ title }} <small>해당 {{ rep.examples[key ~ '_n']|won }}건 중 상위, +1,000% 넘는 값은 액면분할·데이터 오류 가능성이 있어 제외</small></h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>종목</th><th>급증일</th><th class="num">거래량 배수</th><th class="num">당일 등락</th><th class="num">52주 고점 대비</th><th class="num">+20%까지</th><th class="num">+50%까지</th><th class="num">최고 상승</th><th class="num">정점(일째)</th><th class="num">재폭등(5배↑) 횟수</th><th class="num">첫 재폭등</th></tr></thead><tbody>
+{% for r in rep.examples[key] %}<tr data-href="{{ url_for('main.chart', code=r.code) }}"><td><a href="{{ url_for('main.chart', code=r.code) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td><td>{{ r.date }}</td><td class="num">{{ '%.1f'|format(r.volratio) }}배</td><td class="num">{{ pct(r.ret1, 1, true) }}</td><td class="num">{{ pct(r.nh250, 0, true) }}</td><td class="num">{{ ('%.0f'|format(r.d20) ~ '일') if r.d20 else '–' }}</td><td class="num">{{ ('%.0f'|format(r.d50) ~ '일') if r.d50 else '–' }}</td><td class="num up"><b>{{ pct(r.gain, 0, true) }}</b></td><td class="num">{{ '%.0f'|format(r.peak) }}</td><td class="num">{{ '%.0f'|format(r.rs_n) }}회</td><td class="num">{{ ('%.0f'|format(r.rs_first) ~ '일') if r.rs_first else '–' }}</td></tr>{% endfor %}</tbody></table></div>
+{% endfor %}
+{% endif %}
+
+{% if rep.signals %}
+{% set sg = rep.signals %}
+<h2>5. 급증과 겹친 기법 신호·이평선 <small>급증일(포함 앞 3봉) 안에 신호가 있었는지</small></h2>
+<p class="note">신호는 급증일 종가까지의 정보만 쓰며(진입은 다음날 시가), 표본 300건 미만 조건은 뺐습니다. 전체 평균은 20일 안 +20% {{ pct(rep.levels[0].hit['20']['20'], 0) }}, 120일 안 +50% {{ pct(rep.levels[0].hit['50']['120'], 0) }}입니다. 조건을 많이 훑으면 우연히 높게 나오는 것도 있으므로, '겹침' 표는 앞 시기(2018년까지)와 뒤 시기가 모두 평균보다 높은 것만 안정적으로 따로 보여 줍니다.</p>
+<h3>겹친 신호 개수별</h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>조건</th><th class="num">표본</th><th class="num">20일 안 +20%</th><th class="num">120일 안 +50%</th><th class="num">+20%까지 (중앙)</th><th class="num">−10% 먼저</th><th class="num">20일 평균</th></tr></thead><tbody>
+{% for r in sg.stack %}{{ srow(r) }}{% endfor %}</tbody></table></div>
+<h3>신호·이평선 조건 하나씩 <small>20일 안 +20% 확률이 높은 순 · 평균 대비 차이 포함</small></h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>조건</th><th>종류</th><th class="num">표본</th><th class="num">급증 중 비중</th><th class="num">20일 안 +20%</th><th class="num">평균 대비</th><th class="num">120일 안 +50%</th><th class="num">+20%까지 (중앙)</th><th class="num">−10% 먼저</th><th class="num">20일 평균</th><th class="num">60일 평균</th><th class="num">재폭등(5배↑) 있음</th></tr></thead><tbody>
+{% for r in sg.singles %}<tr><td>{{ r.name }}</td><td><small>{{ r.group }}</small></td><td class="num">{{ r.n|won }}</td><td class="num">{{ pct(r.share, 1) }}</td><td class="num"><b>{{ pct(r.p20_in20, 0) }}</b></td><td class="num {{ 'up' if r.lift20 > 0.03 else 'down' if r.lift20 < -0.03 }}">{{ '%+.0f'|format(r.lift20 * 100) }}%p</td><td class="num">{{ pct(r.p50_in120, 0) }}</td><td class="num">{{ ('%.0f'|format(r.days20) ~ '일') if r.days20 else '–' }}</td><td class="num">{{ pct(r.dn10_first, 0) }}</td><td class="num {{ 'up' if r.r20 > 0 else 'down' }}">{{ pct(r.r20, 1, true) }}</td><td class="num {{ 'up' if r.r60 > 0 else 'down' }}">{{ pct(r.r60, 1, true) }}</td><td class="num">{{ pct(r.rs_any, 0) }}</td></tr>{% endfor %}</tbody></table></div>
+{% for key, title in (('pairs_stable', '두 조건 겹침 — 앞·뒤 시기 모두 평균보다 높았던 조합'), ('pairs_best', '두 조건 겹침 — 20일 안 +20% 확률 상위 (우연 가능성 있음)'), ('pairs_worst', '두 조건 겹침 — 가장 낮은 조합')) %}
+<h3>{{ title }} <small>(검토한 조합 {{ sg.pair_count|won }}개 중, 표본 300건↑)</small></h3>
+{% if sg[key] %}<div class="scroll"><table class="grid cmp"><thead><tr><th>조합</th><th class="num">표본</th><th class="num">20일 안 +20%</th><th class="num">2018년까지</th><th class="num">2019년 이후</th><th class="num">120일 안 +50%</th><th class="num">+20%까지 (중앙)</th><th class="num">−10% 먼저</th><th class="num">20일 평균</th></tr></thead><tbody>
+{% for r in sg[key] %}<tr><td>{{ r.name }}</td><td class="num">{{ r.n|won }}</td><td class="num"><b>{{ pct(r.p20_in20, 0) }}</b></td><td class="num">{{ pct(r.p20_early, 0) if r.p20_early is not none else '–' }}</td><td class="num">{{ pct(r.p20_late, 0) if r.p20_late is not none else '–' }}</td><td class="num">{{ pct(r.p50_in120, 0) }}</td><td class="num">{{ ('%.0f'|format(r.days20) ~ '일') if r.days20 else '–' }}</td><td class="num">{{ pct(r.dn10_first, 0) }}</td><td class="num {{ 'up' if r.r20 > 0 else 'down' }}">{{ pct(r.r20, 1, true) }}</td></tr>{% endfor %}</tbody></table></div>
+{% else %}<p class="note">해당하는 조합이 없습니다.</p>{% endif %}
+{% endfor %}
+<p class="hint">앞 시기 평균 {{ pct(sg.base_early, 0) }} · 뒤 시기 평균 {{ pct(sg.base_late, 0) }}(20일 안 +20%). 신호가 있다고 이긴다는 뜻이 아니라 과거 급증 중 그 조건이었던 것들의 평균입니다.</p>
+{% endif %}
+{% endif %}
+{% endblock %}

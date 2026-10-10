@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}매매 계획{% endblock %}
+{% macro st(s) %}{% if s %}<td class="num">{{ s.n|won }}</td><td class="num">{{ pct(s.coverage, 0) }}</td><td class="num {{ 'up' if s.mean > 0 else 'down' }}"><b>{{ pct(s.mean, 2, true) }}</b></td><td class="num"><b>{{ pct(s.p_up, 0) }}</b></td><td class="num">{{ pct(s.p_big_up, 0) }}</td><td class="num">{{ pct(s.p_dn10, 0) }}</td><td class="num">{{ pct(s.q05, 0, true) }}</td>{% else %}<td colspan="7" class="num">&ndash;</td>{% endif %}{% endmacro %}
+{% set H7 = '<th class="num">건수</th><th class="num">체결</th><th class="num">평균</th><th class="num">상승</th><th class="num">+10%↑</th><th class="num">−10%↓</th><th class="num">최악 5%</th>' %}
+{% block body %}
+<h1>매매 계획 <small>기법마다 ① 최적 매수 시점 ② 미래를 모른다는 가정(해마다 그 해 전까지로 규칙을 고름) ③ 매도 시점·손절 위치</small></h1>
+{% if not rep %}
+<p class="note">아직 분석 결과가 없습니다. <code>python manage.py strategy-train</code>(표본 캐시) 뒤 <code>python manage.py plan-train</code>(약 15분)으로 만들면 이 화면에 나옵니다.</p>
+{% else %}
+{% set m = rep.meta %}
+<p class="note">표본 {{ m.rows|won }}행(거래 가능 종목, 연중일 5일 간격) 중 그날 신호가 난 행. 비용 {{ pct(m.cost, 1) }}. <b>규칙은 {{ m.wf_start }}년부터 해마다 "그 해 전까지의 데이터"로만 고르고(조건 → 진입 → 청산·손절, 표본 {{ m.min_n }}건↑), 그 해에 적용</b>해 처음 보는 해들의 성과만 모았습니다. "체결" = 조건·진입 방식 때문에 실제로 산 비율, "평균"은 체결된 거래 기준. 과거 통계이며 투자 권유가 아닙니다. 생성 {{ m.generated }}.</p>
+<h2>요약</h2>
+<ul class="aisum">{% for line in rep.text %}<li>{{ line }}</li>{% endfor %}</ul>
+
+<h2>1. 기법별 — 규칙대로 했을 때 처음 보는 해들의 성과 <small>규칙 없이 '다음날 시가·20일' 과 비교</small></h2>
+<div class="scroll"><table class="grid cmp"><thead><tr><th rowspan="2">기법</th><th rowspan="2">✔</th><th rowspan="2" class="num">해</th><th rowspan="2" class="num">플러스 해</th><th colspan="3" class="grp">규칙 없이</th><th colspan="7" class="grp">규칙대로 (조건 + 진입 + 청산·손절)</th><th rowspan="2">지금 규칙 (마지막 해 전까지로 고른 것)</th></tr><tr><th class="num">건수</th><th class="num">평균</th><th class="num">상승</th>{{ H7|safe }}</tr></thead><tbody>
+{% for t in rep.techs %}{% set g = t.oos.exit and t.oos.exit.mean > 0 and t.oos.years_pos >= t.years * 0.6 %}<tr {% if g and not t.ai %}class="baseline"{% elif t.ai %}class="hl"{% endif %}><td>{{ t.label }}{% if t.dante %} <small>단테</small>{% endif %}</td><td>{{ '✔' if g and not t.ai else '' }}</td><td class="num">{{ t.years }}</td><td class="num">{{ t.oos.years_pos }}</td><td class="num">{{ t.oos.naive.n|won if t.oos.naive else '–' }}</td><td class="num {{ 'up' if t.oos.naive and t.oos.naive.mean > 0 else 'down' }}">{{ pct(t.oos.naive.mean, 2, true) if t.oos.naive else '–' }}</td><td class="num">{{ pct(t.oos.naive.p_up, 0) if t.oos.naive else '–' }}</td>{{ st(t.oos.exit) }}<td><small>{{ t.rule_now.cond }} → {{ t.rule_now.entry }} → {{ t.rule_now.exit }}</small></td></tr>{% endfor %}</tbody></table></div>
+<p class="hint">✔ = 처음 보는 해 평균 플러스이고 60% 이상의 해에서 플러스. "규칙대로"의 체결 비율이 낮으면 신호 대부분을 걸러낸 것이라 거래가 드뭅니다.</p>
+
+{% set td = rep.today %}
+<h2>2. 오늘 신호 종목의 매매 계획 <small>{{ td.date }} · {{ td.n }}종목 · 시장 52주 고점 대비 {{ pct(td.mkt_dd250, 1, true) }}</small></h2>
+{% if td.rows %}
+<div class="scroll"><table class="grid cmp"><thead><tr><th>종목</th><th class="num">종가</th><th>오늘 신호</th><th>기준 기법</th><th>조건</th><th>충족</th><th>진입</th><th>청산·손절</th><th class="num">그 규칙의 과거 성과</th><th class="num">AI</th><th>피함</th></tr></thead><tbody>
+{% for r in td.rows %}<tr data-href="{{ url_for('main.chart', code=r.code) }}" {% if r.avoid %}class="faint"{% endif %}><td><a href="{{ url_for('main.chart', code=r.code) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td><td class="num">{{ r.close|won }}</td><td><small>{{ r.signals|join(' · ') }}{% if r.ai_top %}{{ ' · ' if r.signals }}AI 상위 10%{% endif %}</small></td><td>{{ r.best or '–' }}{% if r.good %} ✔{% endif %}</td><td><small>{{ r.cond }}</small></td><td>{{ '✔' if r.cond_met else '✖' }}</td><td>{{ r.entry }}</td><td>{{ r.exit }}</td><td class="num">{% if r.oos_mean is not none %}{{ pct(r.oos_mean, 2, true) }} · {{ pct(r.oos_up, 0) }}{% else %}–{% endif %}</td><td class="num">{{ pct(r.prob, 0) if r.prob is not none else '–' }}</td><td>{{ '해당' if r.avoid else '' }}</td></tr>{% endfor %}</tbody></table></div>
+<p class="hint">"충족"은 조건(피함 제외·시장 필터·AI·음봉·조정)을 오늘 이 종목이 만족하는지(갭은 내일 시가라 제외). ✔ 기법만 과거에 규칙이 통했습니다.</p>
+{% else %}<p class="note">오늘 신호가 난 종목이 없습니다.</p>{% endif %}
+
+<h2>3. 손절 위치 — 20일 안 최대 하락(MAE)으로 본 손절선 <small>그 깊이까지 떨어진 거래 중 결국 플러스로 끝난 비율이 높으면 그 손절선은 이긴 거래를 자릅니다</small></h2>
+{% macro maetab(mt) %}<div class="scroll"><table class="grid cmp"><thead><tr><th>손절선</th><th class="num">그 깊이까지 떨어진 비율</th><th class="num">떨어진 뒤 결국 플러스</th><th class="num">떨어진 뒤 20일 평균</th><th class="num">이긴 거래 중 걸림</th><th class="num">진 거래 중 걸림</th></tr></thead><tbody>
+{% for r in mt.rows %}<tr><td>−{{ (r.level * 100)|int }}%</td><td class="num">{{ pct(r.share, 0) }}</td><td class="num"><b>{{ pct(r.win_after, 0) }}</b></td><td class="num {{ 'up' if r.mean_after > 0 else 'down' }}">{{ pct(r.mean_after, 2, true) }}</td><td class="num">{{ pct(r.win_share, 0) }}</td><td class="num">{{ pct(r.lose_share, 0) }}</td></tr>{% endfor %}</tbody></table></div>
+<p class="hint">이긴 거래의 최대 하락 중앙 {{ pct(mt.mae_win_med, 1, true) }} · 진 거래 {{ pct(mt.mae_lose_med, 1, true) }} (건수 {{ mt.n|won }}).</p>{% endmacro %}
+<h3>아무 날 (기준)</h3>{{ maetab(rep.base.mae) }}
+{% for t in rep.techs %}<details><summary><b>{{ t.label }}</b> — 이긴 거래 최대 하락 중앙 {{ pct(t.mae.mae_win_med, 1, true) }} · 진 거래 {{ pct(t.mae.mae_lose_med, 1, true) }}{% if t.days %} · 목표 +10% 도달 {{ pct(t.days['목표 +10%'].hit, 0) if t.days['목표 +10%'] else '–' }}(중앙 {{ '%.0f'|format(t.days['목표 +10%'].days_med) if t.days['목표 +10%'] and t.days['목표 +10%'].days_med else '–' }}일){% endif %}</summary>
+{{ maetab(t.mae) }}
+{% if t.days %}<div class="scroll"><table class="grid cmp"><thead><tr><th>매도 기준</th><th class="num">도달 비율</th><th class="num">도달까지 중앙</th><th class="num">그 청산 평균</th><th class="num">상승</th></tr></thead><tbody>
+{% for k, v in t.days.items() %}<tr><td>{{ k }}</td><td class="num">{{ pct(v.hit, 0) }}</td><td class="num">{{ ('%.0f'|format(v.days_med) ~ '일') if v.days_med else '–' }}</td><td class="num {{ 'up' if v.mean > 0 else 'down' }}">{{ pct(v.mean, 2, true) }}</td><td class="num">{{ pct(v.p_up, 0) }}</td></tr>{% endfor %}</tbody></table></div>{% endif %}
+<h4>해마다 고른 규칙</h4>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>연도</th><th>조건</th><th>진입</th><th>청산·손절</th><th class="num">건수</th><th class="num">규칙대로 평균</th><th class="num">상승</th><th class="num">규칙 없이 평균</th></tr></thead><tbody>
+{% for h in t.hist %}<tr><td>{{ h.year }}</td><td><small>{{ h.cond }}</small></td><td>{{ h.entry }}</td><td>{{ h.exit }}</td><td class="num">{{ h.n|won }}</td><td class="num {{ 'up' if h.exit_stat and h.exit_stat.mean > 0 else 'down' }}">{{ pct(h.exit_stat.mean, 2, true) if h.exit_stat else '–' }}</td><td class="num">{{ pct(h.exit_stat.p_up, 0) if h.exit_stat else '–' }}</td><td class="num">{{ pct(h.naive.mean, 2, true) if h.naive else '–' }}</td></tr>{% endfor %}</tbody></table></div>
+</details>{% endfor %}
+{% endif %}
+{% endblock %}

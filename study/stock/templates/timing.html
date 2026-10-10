@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}매수 시점{% endblock %}
+{% macro st(s) %}{% if s %}<td class="num">{{ pct(s.coverage, 0) }}</td><td class="num {{ 'up' if s.mean > 0 else 'down' }}"><b>{{ pct(s.mean, 2, true) }}</b></td><td class="num">{{ pct(s.per_signal, 2, true) }}</td><td class="num"><b>{{ pct(s.p_up, 0) }}</b></td><td class="num">{{ pct(s.p_dn10, 0) }}</td><td class="num">{{ pct(s.q05, 0, true) }}</td>{% else %}<td colspan="6" class="num">&ndash;</td>{% endif %}{% endmacro %}
+{% set H6 = '<th class="num">체결</th><th class="num">평균</th><th class="num">신호당</th><th class="num">상승</th><th class="num">−10%↓</th><th class="num">최악 5%</th>' %}
+{% block body %}
+<h1>매수 시점 <small>기법마다 언제·어떻게 사는 게 맞았나 — 진입 방법·청산·추가 조건 비교, 오늘 신호 종목의 권장 매수 시점</small></h1>
+{% if not rep %}
+<p class="note">아직 분석 결과가 없습니다. <code>python manage.py strategy-train</code>(표본 캐시) 뒤 <code>python manage.py timing-train</code>(약 1분)으로 만들면 이 화면에 나옵니다.</p>
+{% else %}
+{% set m = rep.meta %}
+<p class="note">표본 {{ m.rows|won }}행(거래 가능 종목, 연중일 5일 간격) 중 <b>그날 신호가 난 행</b>만. 20거래일 보유(비용 {{ pct(m.cost, 1) }}). "신호당" = 체결 비율 × 평균(안 산 신호는 0). 학습 ~{{ m.split.train_end[:4] }} / 시험 {{ m.split.train_end[:4]|int + 1 }}~ 를 따로 보고, <b>두 시기 모두 '다음날 시가 전액'보다 상승 확률이 높고 신호당 기대가 크게 깎이지 않는 방법만 ✔</b>. 과거 통계이며 투자 권유가 아닙니다. 생성 {{ m.generated }}.</p>
+<h2>요약</h2>
+<ul class="aisum">{% for line in rep.text %}<li>{{ line }}</li>{% endfor %}</ul>
+
+{% set td = rep.today %}
+<h2>1. 오늘 신호 종목의 권장 매수 시점 <small>{{ td.date }} · {{ td.n }}종목 · 시장 52주 고점 대비 {{ pct(td.mkt_dd250, 1, true) }} → 시장 필터 {{ '켜짐' if td.mkt_under else '꺼짐 (시장 필터 조건은 지금 해당 안 됨)' }}</small></h2>
+{% if td.rows %}
+<div class="scroll"><table class="grid cmp"><thead><tr><th>종목</th><th class="num">종가</th><th>오늘 난 신호</th><th>기준 신호</th><th>권장 진입</th><th>권장 청산</th><th>권장 조건</th><th>조건 충족</th><th class="num">그때 상승 확률(시험)</th>{% if m.ai %}<th class="num">AI 점수</th>{% endif %}<th class="num">거래정지 위험</th><th>피함</th><th class="num">20일 등락</th><th class="num">52주 고점 대비</th></tr></thead><tbody>
+{% for r in td.rows %}<tr data-href="{{ url_for('main.chart', code=r.code) }}" {% if r.avoid %}class="faint"{% endif %}><td><a href="{{ url_for('main.chart', code=r.code) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td><td class="num">{{ r.close|won }}</td><td><small>{{ r.signals|join(' · ') }}{% if r.ai_top %}{{ ' · ' if r.signals }}AI 상위 10%{% endif %}</small></td><td>{{ r.best_signal or '–' }}{% if r.robust %} ✔{% endif %}</td><td>{{ r.entry }}</td><td>{{ r.exit }}</td><td><small>{{ r.cond }}</small></td><td>{{ '✔' if r.cond_met else '✖' }}</td><td class="num"><b>{{ pct(r.p_up, 0) if r.p_up is not none else '–' }}</b></td>{% if m.ai %}<td class="num">{{ pct(r.prob, 0) if r.prob is not none else '–' }}</td>{% endif %}<td class="num {{ 'down' if r.halt_p and r.halt_p >= 0.03 }}">{{ pct(r.halt_p, 1) if r.halt_p is not none else '–' }}</td><td>{{ '해당' if r.avoid else '' }}</td><td class="num">{{ pct(r.ret20, 1, true) }}</td><td class="num">{{ pct(r.nh250, 0, true) }}</td></tr>{% endfor %}</tbody></table></div>
+<p class="hint">✔ = 시험 기간에 시장보다 좋았던 기법. "조건 충족"은 피함 제외·시장 필터·AI 상위 10% 조건을 오늘 이 종목이 만족하는지(갭은 내일 시가라 제외)입니다. 피함 규칙에 걸린 종목은 흐리게 표시했습니다. 확률은 과거 평균이지 예측이 아닙니다.</p>
+{% else %}<p class="note">오늘 신호가 난 종목이 없습니다.</p>{% endif %}
+
+<h2>2. 기법별 요약 <small>시험 기간 시장 대비 순 · 권장 진입·청산·조건</small></h2>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>기법(신호)</th><th>✔</th><th class="num">시험 신호 수</th><th class="num">다음날 시가 전액: 평균</th><th class="num">시장 대비</th><th class="num">상승</th><th>권장 진입</th><th>권장 청산</th><th>권장 조건</th><th class="num">권장대로 했을 때 상승</th></tr></thead><tbody>
+{% for t in rep.techs %}<tr {% if t.robust and not t.ai %}class="baseline"{% elif t.ai %}class="faint"{% endif %}><td>{{ t.label }}{% if t.dante %} <small>단테</small>{% endif %}</td><td>{{ '✔' if t.robust and not t.ai else '' }}</td><td class="num">{{ t.n_te|won }}</td><td class="num {{ 'up' if t.base.te.mean > 0 else 'down' }}">{{ pct(t.base.te.mean, 2, true) }}</td><td class="num {{ 'up' if t.base.te.excess > 0 else 'down' }}">{{ pct(t.base.te.excess, 2, true) }}</td><td class="num">{{ pct(t.base.te.p_up, 0) }}</td><td>{{ t.best_entry }}</td><td>{{ t.best_exit }}</td><td><small>{{ t.best_cond }}</small></td><td class="num"><b>{{ pct(t.best_p_up, 0) if t.best_p_up else '–' }}</b></td></tr>{% endfor %}</tbody></table></div>
+
+<h2>3. 기법별 상세 <small>진입·청산 방법과 추가 조건 (학습 / 시험)</small></h2>
+{% for t in rep.techs %}
+<details><summary><b>{{ t.label }}</b> — 시험 {{ t.n_te|won }}건 · 다음날 시가 전액 {{ pct(t.base.te.mean, 2, true) }} · 상승 {{ pct(t.base.te.p_up, 0) }} · 권장: {{ t.best_entry }} / {{ t.best_exit }} / {{ t.best_cond }}</summary>
+<h3>진입·청산 방법</h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th rowspan="2">방법</th><th rowspan="2">구분</th><th rowspan="2">✔</th><th colspan="6" class="grp">학습</th><th colspan="6" class="grp">시험</th></tr><tr>{{ H6|safe }}{{ H6|safe }}</tr></thead><tbody>
+{% for r in t.methods %}<tr {% if r.key == 'r20' %}class="baseline"{% endif %}><td>{{ r.name }}</td><td>{{ r.kind }}</td><td>{{ '✔' if r.better else '' }}</td>{{ st(r.tr) }}{{ st(r.te) }}</tr>{% endfor %}</tbody></table></div>
+<h3>추가 조건 (다음날 시가 전액)</h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>조건</th><th>✔</th><th class="num">시험 건수</th><th class="num">남는 비율</th><th class="num">학습 평균</th><th class="num">학습 상승</th><th class="num">시험 평균</th><th class="num">시험 시장 대비</th><th class="num">시험 상승</th></tr></thead><tbody>
+{% for r in t.conds %}<tr {% if r.better %}class="baseline"{% endif %}><td>{{ r.name }}</td><td>{{ '✔' if r.better else '' }}</td><td class="num">{{ r.n_te|won }}</td><td class="num">{{ pct(r.share_te, 0) if r.share_te is not none else '–' }}</td><td class="num {{ 'up' if r.tr.mean > 0 else 'down' }}">{{ pct(r.tr.mean, 2, true) }}</td><td class="num">{{ pct(r.tr.p_up, 0) }}</td><td class="num {{ 'up' if r.te.mean > 0 else 'down' }}">{{ pct(r.te.mean, 2, true) }}</td><td class="num">{{ pct(r.te.excess, 2, true) }}</td><td class="num"><b>{{ pct(r.te.p_up, 0) }}</b></td></tr>{% endfor %}</tbody></table></div>
+</details>
+{% endfor %}
+{% endif %}
+{% endblock %}

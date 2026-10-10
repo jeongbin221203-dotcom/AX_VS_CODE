@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}조용한 대량 거래{% endblock %}
+{% macro dcell(x) %}{% if x and x.median %}{{ '%.0f'|format(x.median) }}일 <small>({{ '%.0f'|format(x.q25) }}~{{ '%.0f'|format(x.q75) }})</small>{% else %}&ndash;{% endif %}{% endmacro %}
+{% block body %}
+<h1>조용한 대량 거래 <small>거래량은 크게 늘었는데 주가는 거의 안 움직인 날 — 얼마 뒤에 올랐나</small></h1>
+{% if not rep %}
+<p class="note">아직 분석 결과가 없습니다. <code>python manage.py quietvol-train</code> 으로 만들면(약 2분) 이 화면에 나옵니다.</p>
+{% else %}
+{% set m = rep.meta %}
+<p class="note">사건 = 거래량이 직전 20일 평균의 {{ m.min_ratio|int }}배 이상이면서 종가 등락이 ±{{ (m.flat * 100)|int }}% 안인 날(직전 20일 안에 급증이 없던 첫 급증, 거래 가능 종목) <b>{{ m.events|won }}건</b>({{ m.stocks|won }}종목, {{ m.date_min[:4] }}~{{ m.date_max[:4] }}). <b>진입은 다음날 시가</b>, 이후 {{ m.look }}거래일 동안 고가가 +10·20·30·50%에 처음 닿은 날(다음날 = 1일째). 비교: 같은 급증인데 양봉 +5%↑ / 음봉 −3%↓, 기준 = 아무 날. 고가 기준이라 장중 터치도 닿은 것으로 칩니다. 과거 통계이며 투자 권유가 아닙니다. 생성 {{ m.generated }}.</p>
+<h2>요약</h2>
+<ul class="aisum">{% for line in rep.text %}<li>{{ line }}</li>{% endfor %}</ul>
+
+<h2>1. 얼마 뒤에 올랐나 <small>N일 안에 +X%에 닿은 비율 · 닿은 경우 중앙 일수</small></h2>
+<div class="scroll"><table class="grid cmp"><thead><tr><th rowspan="2">구분</th><th rowspan="2" class="num">건수</th>{% for x in ('10', '20', '30', '50') %}<th colspan="6" class="grp">+{{ x }}%</th>{% endfor %}</tr>
+<tr>{% for x in range(4) %}{% for n in ('5', '10', '20', '40', '60', '120') %}<th class="num">{{ n }}일</th>{% endfor %}{% endfor %}</tr></thead><tbody>
+{% for g in rep.groups %}<tr {% if g.key == 'quiet' %}class="baseline"{% endif %}><td>{{ g.name }}</td><td class="num">{{ g.n|won }}</td>{% for x in ('10', '20', '30', '50') %}{% for n in ('5', '10', '20', '40', '60', '120') %}<td class="num">{{ pct(g.hit[x][n], 0) }}</td>{% endfor %}{% endfor %}</tr>{% endfor %}</tbody></table></div>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>구분</th>{% for x in ('10', '20', '30', '50') %}<th class="num">+{{ x }}% 도달(120일)</th><th class="num">며칠 뒤</th>{% endfor %}<th class="num">정점까지</th><th class="num">−10% 먼저</th><th class="num">다음날 평균</th><th class="num">20일</th><th class="num">60일</th><th class="num">120일</th><th class="num">20일 안 +20% 급등일</th><th class="num">5일 안 재급증</th></tr></thead><tbody>
+{% for g in rep.groups %}<tr {% if g.key == 'quiet' %}class="baseline"{% endif %}><td>{{ g.name }}</td>{% for x in ('10', '20', '30', '50') %}<td class="num">{{ pct(g.days[x].share, 0) }}</td><td class="num">{{ dcell(g.days[x]) }}</td>{% endfor %}<td class="num">{{ '%.0f'|format(g.peak_median) }}일</td><td class="num">{{ pct(g.dn10_first, 0) }}</td><td class="num {{ 'up' if g.next_ret > 0 else 'down' }}">{{ pct(g.next_ret, 2, true) }}</td><td class="num {{ 'up' if g.r20 > 0 else 'down' }}">{{ pct(g.r20, 1, true) }}</td><td class="num {{ 'up' if g.r60 > 0 else 'down' }}">{{ pct(g.r60, 1, true) }}</td><td class="num {{ 'up' if g.r120 > 0 else 'down' }}">{{ pct(g.r120, 1, true) }}</td><td class="num">{{ pct(g.jump20, 1) }}</td><td class="num">{{ pct(g.again5, 0) }}</td></tr>{% endfor %}</tbody></table></div>
+<h3>+20%에 처음 닿은 날 (전체 사건 중 비율)</h3>
+<div class="why2">{% for h in rep.time_hist %}<div><h3>+{{ h.x }}% <small>(120일 안 도달 {{ pct(h.hit_share, 0) }})</small></h3>
+{% for b in h.bins %}<div class="bar"><span class="bl">{{ b.label }}</span><span class="bv"><i class="win" style="width:{{ (b.share_all / (h.hit_share if h.hit_share > 0 else 1) * 100)|round(1) }}%"></i></span><span class="bn">{{ pct(b.share_all, 1) }}</span></div>{% endfor %}</div>{% endfor %}</div>
+<h3>누적 — N일째까지 +20%에 닿은 비율</h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>N일</th>{% for r in rep.curve.quiet %}<th class="num">{{ r.day }}</th>{% endfor %}</tr></thead><tbody>
+{% for k, lab in (('quiet', '조용한 대량 거래'), ('up', '양봉 급증'), ('down', '음봉 급증'), ('bs', '아무 날')) %}{% if rep.curve[k] %}<tr {% if k == 'quiet' %}class="baseline"{% endif %}><td>{{ lab }}</td>{% for r in rep.curve[k] %}<td class="num">{{ pct(r.p, 0) }}</td>{% endfor %}</tr>{% endif %}{% endfor %}</tbody></table></div>
+
+<h2>2. 어떤 조용한 대량 거래가 올랐나</h2>
+{% for g in rep.breakdown %}
+<h3>{{ g.group }}</h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>조건</th><th class="num">건수</th><th class="num">20일 안 +20%</th><th class="num">60일 안 +20%</th><th class="num">120일 안 +50%</th><th class="num">+20%까지(중앙)</th><th class="num">−10% 먼저</th><th class="num">20일 평균</th><th class="num">60일 평균</th><th class="num">20일 안 급등일</th><th class="num">다음날 평균</th></tr></thead><tbody>
+{% for r in g.rows %}<tr><td>{{ r.name }}</td><td class="num">{{ r.n|won }}</td><td class="num"><b class="{{ 'up' if r.p20_in20 > rep.groups[0].hit['20']['20'] + 0.03 else 'down' if r.p20_in20 < rep.groups[0].hit['20']['20'] - 0.03 }}">{{ pct(r.p20_in20, 0) }}</b></td><td class="num">{{ pct(r.p20_in60, 0) }}</td><td class="num">{{ pct(r.p50_in120, 0) }}</td><td class="num">{{ ('%.0f'|format(r.days20) ~ '일') if r.days20 else '–' }}</td><td class="num">{{ pct(r.dn10_first, 0) }}</td><td class="num {{ 'up' if r.r20 > 0 else 'down' }}">{{ pct(r.r20, 1, true) }}</td><td class="num {{ 'up' if r.r60 > 0 else 'down' }}">{{ pct(r.r60, 1, true) }}</td><td class="num">{{ pct(r.jump20, 1) }}</td><td class="num">{{ pct(r.next_ret, 2, true) }}</td></tr>{% endfor %}</tbody></table></div>
+{% endfor %}
+
+<h2>3. 최근 조용한 대량 거래 종목 <small>최근 8거래일 · 비슷한 과거 그룹(캔들·위치·배수)의 결과</small></h2>
+{% if rep.recent %}
+<div class="scroll"><table class="grid cmp"><thead><tr><th>종목</th><th>날짜</th><th class="num">종가</th><th class="num">거래량 배수</th><th class="num">당일 등락</th><th class="num">52주 고점 대비</th><th class="num">224일선 대비</th><th class="num">직전 거래량 마름</th><th class="num">250일 안 급등</th><th>과거 그룹</th><th class="num">표본</th><th class="num">20일 안 +20%</th><th class="num">60일 안</th><th class="num">+20%까지</th><th class="num">−10% 먼저</th><th class="num">60일 평균</th></tr></thead><tbody>
+{% for r in rep.recent %}<tr data-href="{{ url_for('main.chart', code=r.code) }}"><td><a href="{{ url_for('main.chart', code=r.code) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td><td>{{ r.date }}</td><td class="num">{{ r.close|won }}</td><td class="num">{{ '%.1f'|format(r.volratio) }}배</td><td class="num">{{ pct(r.ret1, 1, true) }}</td><td class="num">{{ pct(r.nh250, 0, true) }}</td><td class="num">{{ pct(r.dist224, 0, true) }}</td><td class="num">{{ '%.2f'|format(r.vdry10) }}배</td><td class="num">{{ r.n_j250|int }}회</td><td><small>{{ r.group }}</small></td><td class="num">{{ r.n|won }}</td><td class="num"><b>{{ pct(r.p20_in20, 0) }}</b></td><td class="num">{{ pct(r.p20_in60, 0) }}</td><td class="num">{{ ('%.0f'|format(r.days20) ~ '일') if r.days20 else '–' }}</td><td class="num">{{ pct(r.dn10_first, 0) }}</td><td class="num {{ 'up' if r.r60 > 0 else 'down' }}">{{ pct(r.r60, 1, true) }}</td></tr>{% endfor %}</tbody></table></div>
+<p class="hint">과거 그룹 확률은 평균이라 이 종목에 그대로 적용되는 예측이 아닙니다.</p>
+{% else %}<p class="note">최근 8거래일 안 해당 종목이 없습니다.</p>{% endif %}
+{% endif %}
+{% endblock %}

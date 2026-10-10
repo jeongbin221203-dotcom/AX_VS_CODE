@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}피할 종목·갭{% endblock %}
+{% block body %}
+<h1>갭 줄이기 · 절대 피할 종목 <small>진입가 차이를 줄이고, 들어가면 안 되는 종목으로 범위를 좁히기</small></h1>
+{% if not rep %}
+<p class="note">아직 분석 결과가 없습니다. <code>python manage.py avoid-train</code> 으로 만들면(약 20분) 이 화면에 나옵니다.</p>
+{% else %}
+{% set m = rep.meta %}
+<p class="note">
+  거래 가능 종목 {{ m.rows|won }}개 표본({{ m.stocks|won }}종목, {{ m.split.date_min[:4] }}~{{ m.split.date_max[:4] }}). 신호일 종가를 알고 <b>다음날 시가</b>에 사서 20거래일 뒤 종가로 청산한 결과(비용 {{ pct(m.cost, 1) }} 차감).
+  모든 조건은 신호일 종가까지 알 수 있던 값이고, 규칙은 <b>~{{ m.split.valid_end[:4] }}년과 {{ m.split.valid_end[:4]|int + 1 }}년 이후를 따로 확인</b>해 두 기간 모두 나쁜 것만 "피함"으로 판정했습니다.
+  과거 통계이며 생존 편향이 있고 투자 권유가 아닙니다. 생성 {{ m.generated }}.
+</p>
+<h2>요약</h2>
+<ul class="aisum">{% for line in rep.text %}<li>{{ line }}</li>{% endfor %}</ul>
+
+<h2>1. 갭 — 신호일 종가와 다음날 시가의 차이 <small>(시험 기간 {{ rep.gap.dist.n|won }}건)</small></h2>
+{% set g = rep.gap.dist %}
+<p>평균 <b>{{ pct(g.mean, 2, true) }}</b> · 중앙값 {{ pct(g.median, 2, true) }} · 상위 10%는 {{ pct(g.p90, 1, true) }}↑ · 상위 1%는 {{ pct(g.p99, 1, true) }}↑.
+  갭상승 +1%↑ {{ pct(g.share_1, 0) }} · +3%↑ {{ pct(g.share_3, 0) }} · +5%↑ {{ pct(g.share_5, 0) }} / 갭하락 −1%↓ {{ pct(g.share_down1, 0) }}.</p>
+<h3>갭 크기별 이후 수익 <small>(시가 진입 vs 신호일 종가 진입)</small></h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>갭</th><th class="num">표본</th><th class="num">평균 갭</th><th class="num">시가 진입 20일 평균</th><th class="num">종가 진입 20일 평균</th><th class="num">상승 확률(시가 진입)</th><th class="num">−10% 이하</th></tr></thead><tbody>
+{% for b in rep.gap.buckets %}<tr><td>{{ b.label }}</td><td class="num">{{ b.n|won }}</td><td class="num">{{ pct(b.gap, 2, true) }}</td>
+<td class="num {{ 'up' if b.mean_open > 0 else 'down' }}">{{ pct(b.mean_open, 2, true) }}</td><td class="num {{ 'up' if b.mean_close > 0 else 'down' }}">{{ pct(b.mean_close, 2, true) }}</td>
+<td class="num">{{ pct(b.p_up_open, 0) }}</td><td class="num">{{ pct(b.p_dn10, 0) }}</td></tr>{% endfor %}</tbody></table></div>
+<p class="hint">시가 진입과 종가 진입 수익의 차이가 갭이 깎아 먹은 몫입니다. 큰 갭상승 구간에서 시가 진입이 종가 진입보다 확실히 나쁘면 "갭이 클 때는 추격하지 말라"는 근거가 됩니다.</p>
+
+<h3>갭을 줄이는 방법 비교</h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>방법</th><th class="num">체결 비율</th><th class="num">평균 수익</th><th class="num">신호당 기대*</th><th class="num">변동폭</th><th class="num">상승 확률</th><th class="num">−10% 이하</th><th class="num">최악 5%</th></tr></thead><tbody>
+{% for r in rep.gap.methods %}<tr><td>{{ r.name }}</td><td class="num">{{ pct(r.coverage, 0) }}</td><td class="num {{ 'up' if r.mean > 0 else 'down' }}">{{ pct(r.mean, 2, true) }}</td><td class="num"><b>{{ pct(r.per_signal, 2, true) }}</b></td>
+<td class="num">{{ pct(r.std, 1) }}</td><td class="num">{{ pct(r.p_up, 0) }}</td><td class="num">{{ pct(r.p_dn10, 0) }}</td><td class="num">{{ pct(r.q05, 0, true) }}</td></tr>{% endfor %}</tbody></table></div>
+<p class="hint">* 신호당 기대 = 체결 비율 × 평균 수익(체결되지 않은 신호는 0). 갭 상한·지정가 방식은 안 사는 날이 생기므로 이 값으로 비교해야 공정합니다. "신호일 종가에 진입"은 마감 직전에 신호를 확정해 살 수 있을 때만 가능한 이상적인 경우입니다.</p>
+
+{% if rep.gap.by_signal %}
+<h3>기법 신호별 평균 갭 <small>(기법 백테스트 기준 — 갭이 큰 신호는 시가 추격이 되기 쉬움)</small></h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>신호</th><th class="num">신호 수</th><th class="num">평균 갭</th></tr></thead><tbody>
+{% for r in rep.gap.by_signal[:10] %}<tr><td>{{ r.label }}</td><td class="num">{{ r.n|won }}</td><td class="num {{ 'down' if r.gap > 0.005 }}">{{ pct(r.gap, 2, true) }}</td></tr>{% endfor %}
+<tr class="baseline"><td colspan="2">가장 갭이 작은 신호</td><td class="num">{{ pct(rep.gap.by_signal[-1].gap, 2, true) }} ({{ rep.gap.by_signal[-1].label }})</td></tr></tbody></table></div>
+{% endif %}
+
+<h2>2. 절대 들어가면 안 되는 종목 — 위험 조건 <small>(전체 {{ rep.rules.base.n|won }}건, 평균 {{ pct(rep.rules.base.mean, 2, true) }}, −20% 이하 {{ pct(rep.rules.base.p_dn20, 1) }})</small></h2>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>판정</th><th>조건 (신호일 종가 기준)</th><th class="num">해당 비율</th><th class="num">평균 수익</th><th class="num">시장 대비</th><th class="num">−10% 이하</th><th class="num">−20% 이하</th><th class="num">−20%↓ 배수</th><th class="num">~2021 시장대비</th><th class="num">2022~ 시장대비</th></tr></thead><tbody>
+{% for r in rep.rules.rows %}<tr><td><span class="verd {{ 'bad' if r.verdict == '피함' else 'mid' if r.verdict == '주의' else 'na' }}">{{ r.verdict }}</span></td><td>{{ r.name }}</td>
+<td class="num">{{ pct(r.share, 1) }}</td><td class="num {{ 'up' if r.mean > 0 else 'down' }}">{{ pct(r.mean, 2, true) }}</td><td class="num {{ 'down' if r.excess < -0.005 else 'up' if r.excess > 0.005 }}">{{ pct(r.excess, 2, true) }}</td>
+<td class="num">{{ pct(r.p_dn10, 0) }}</td><td class="num"><b>{{ pct(r.p_dn20, 1) }}</b></td><td class="num">{{ '%.2f'|format(r.lift_dn20) ~ '배' if r.lift_dn20 else '–' }}</td>
+<td class="num">{{ pct(r.excess_tr, 2, true) }}</td><td class="num">{{ pct(r.excess_te, 2, true) }}</td></tr>{% endfor %}</tbody></table></div>
+<p class="hint"><b>피함</b> = 두 기간 모두 시장보다 0.5%p 이상 나쁘고 −20% 이하 비율이 나머지의 1.2배 이상. <b>주의</b> = 한 쪽 기간에서만 나쁘거나 위험만 큰 경우(방향성은 약함). "관계 약함"은 걸러 낼 이유가 없는 조건입니다.</p>
+
+{% set n = rep.narrowing %}
+<h2>3. 범위를 좁히면 달라지나 <small>"피함" 조건 {{ n.rules|length }}개로 제외 — 거래 가능 종목의 {{ pct(n.excluded_share, 0) }} (시험 기간 {{ pct(n.excluded_share_test, 0) }})</small></h2>
+<ul>{% for r in n.rules %}<li>{{ r }}</li>{% endfor %}</ul>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>기간</th><th>대상</th><th class="num">표본</th><th class="num">평균 수익</th><th class="num">중앙값</th><th class="num">상승 확률</th><th class="num">−10% 이하</th><th class="num">−20% 이하</th><th class="num">최악 5%</th></tr></thead><tbody>
+{% for per in ('전체 기간', '시험 기간(2022~)') %}{% for key, lab in (('before', '전체'), ('excluded', '제외한 종목'), ('after', '남긴 종목')) %}{% set x = n[per][key] %}
+{% if x %}<tr class="{{ 'baseline' if key == 'after' }}"><td>{{ per if key == 'before' }}</td><td>{{ lab }}</td><td class="num">{{ x.n|won }}</td><td class="num {{ 'up' if x.mean > 0 else 'down' }}">{{ pct(x.mean, 2, true) }}</td><td class="num">{{ pct(x.median, 1, true) }}</td><td class="num">{{ pct(x.p_up, 0) }}</td><td class="num">{{ pct(x.p_dn10, 0) }}</td><td class="num">{{ pct(x.p_dn20, 1) }}</td><td class="num">{{ pct(x.q05, 0, true) }}</td></tr>{% endif %}{% endfor %}{% endfor %}
+</tbody></table></div>
+
+{% if n.ai_top10 %}<h3>AI 상승 확률 상위 10% 중에서도 제외하면 <small>(시험 기간)</small></h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>구분</th><th class="num">표본</th><th class="num">평균 수익</th><th class="num">상승 확률</th><th class="num">−10% 이하</th><th class="num">−20% 이하</th><th class="num">최악 5%</th></tr></thead><tbody>
+{% for lab, x in (('AI 상위 10%', n.ai_top10.before), ('+ "피함" 조건 제외', n.ai_top10.after), ('+ 위험 점수 하위 70%만', n.after_crash_filter.ai_top10_after)) %}{% if x %}<tr><td>{{ lab }}</td><td class="num">{{ x.n|won }}</td><td class="num {{ 'up' if x.mean > 0 else 'down' }}">{{ pct(x.mean, 2, true) }}</td><td class="num">{{ pct(x.p_up, 0) }}</td><td class="num">{{ pct(x.p_dn10, 0) }}</td><td class="num">{{ pct(x.p_dn20, 1) }}</td><td class="num">{{ pct(x.q05, 0, true) }}</td></tr>{% endif %}{% endfor %}</tbody></table></div>{% endif %}
+
+{% if n.crash_model %}<h3>"크게 잃을(−20% 이하) 확률" 모델 <small>AUC {{ '%.3f'|format(n.crash_model.auc) }} · 기준 {{ pct(n.crash_model.base, 1) }} · 위험 점수 상위 5%의 실제 폭락 {{ pct(n.crash_model.top5.precision, 0) }} ({{ '%.1f'|format(n.crash_model.top5.lift) }}배)</small></h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>위험 점수 10등분 (1=낮음 → 10=높음)</th>{% for d in n.crash_model.deciles %}<th class="num">{{ d.bin }}</th>{% endfor %}</tr></thead><tbody>
+<tr><td>−20% 이하로 빠진 비율</td>{% for d in n.crash_model.deciles %}<td class="num"><b>{{ pct(d.p_crash, 0) }}</b></td>{% endfor %}</tr>
+<tr><td>평균 수익</td>{% for d in n.crash_model.deciles %}<td class="num {{ 'up' if d.mean > 0 else 'down' }}">{{ pct(d.mean, 1, true) }}</td>{% endfor %}</tr></tbody></table></div>
+<p class="hint">위험 점수는 변동성·낙폭·거래량·가격 수준 등 종목 자체의 특징으로 계산했습니다(시장 상황 제외). 위험이 높은 종목은 오르는 것이 아니라 "크게 흔들릴" 가능성이 큰 것이므로, 방향과 별개로 비중을 줄이거나 아예 빼는 용도입니다.</p>{% endif %}
+
+<h2>4. 지금 피해야 할 종목 <small>거래 가능 {{ rep.today.n_universe|won }}개 중 "피함" 조건에 걸린 {{ rep.today.flagged|won }}개 — 걸린 조건 수·위험 점수 순</small></h2>
+{% if rep.today.rows %}
+<div class="scroll"><table class="grid cmp"><thead><tr><th>종목</th><th class="num">종가</th><th class="num">걸린 조건</th><th class="num">폭락(−20%↓) 위험 점수</th><th>이유</th></tr></thead><tbody>
+{% for r in rep.today.rows %}<tr data-href="{{ url_for('main.chart', code=r.code) }}"><td><a href="{{ url_for('main.chart', code=r.code) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td><td class="num">{{ r.close|won }}</td><td class="num">{{ r.n_rules }}</td>
+<td class="num {{ 'down' if r.danger > rep.today.base_danger * 2 }}"><b>{{ pct(r.danger, 0) }}</b></td><td style="white-space:normal;min-width:360px"><small>{{ r.reasons|join(' · ') }}</small></td></tr>{% endfor %}</tbody></table></div>
+{% endif %}
+{% if rep.today.top_danger %}
+<h3>조건에 안 걸려도 위험 점수가 가장 높은 종목 <small>(기준 폭락 확률 {{ pct(rep.today.base_danger, 0) }})</small></h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>종목</th><th class="num">종가</th><th class="num">위험 점수</th><th>걸린 조건</th></tr></thead><tbody>
+{% for r in rep.today.top_danger %}<tr data-href="{{ url_for('main.chart', code=r.code) }}"><td><a href="{{ url_for('main.chart', code=r.code) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td><td class="num">{{ r.close|won }}</td><td class="num"><b>{{ pct(r.danger, 0) }}</b></td><td><small>{{ r.reasons|join(' · ') or '–' }}</small></td></tr>{% endfor %}</tbody></table></div>
+{% endif %}
+<p class="hint">참고용입니다. 관리종목·거래정지·재무 위험 같은 가격 밖 정보는 이 자료에 없으므로, 여기서 걸리지 않아도 안전하다는 뜻이 아닙니다.</p>
+{% endif %}
+{% endblock %}

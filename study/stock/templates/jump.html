@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}+20% 급등일{% endblock %}
+{% macro st(s) %}{% if s %}<td class="num">{{ s.n|won }}</td><td class="num {{ 'up' if s.mean > 0 else 'down' }}"><b>{{ pct(s.mean, 1, true) }}</b></td><td class="num">{{ pct(s.p_up, 0) }}</td><td class="num">{{ pct(s.touch20, 0) if s.touch20 is not none else '–' }}</td><td class="num">{{ pct(s.giveback, 0) if s.giveback is not none else '–' }}</td><td class="num">{{ pct(s.p_dn20, 0) }}</td><td class="num">{{ pct(s.next_jump250, 0) if s.next_jump250 is not none else '–' }}</td>{% else %}<td colspan="7" class="num">&ndash;</td>{% endif %}{% endmacro %}
+{% set H7 = '<th class="num">건수</th><th class="num">20일 평균</th><th class="num">상승</th><th class="num">+20% 더</th><th class="num">시가 아래로</th><th class="num">−20%↓</th><th class="num">250일 안 재급등</th>' %}
+{% macro gtable(rows) %}
+<div class="scroll"><table class="grid cmp"><thead><tr><th rowspan="2">구분</th><th rowspan="2" class="num">비중</th><th colspan="7" class="grp">전체</th><th colspan="7" class="grp">시험 (2022~)</th></tr><tr>{{ H7|safe }}{{ H7|safe }}</tr></thead><tbody>
+{% for r in rows %}<tr><td>{{ r.name }}</td><td class="num">{{ pct(r.share, 0) }}</td>{{ st(r.all) }}{{ st(r.te) }}</tr>{% endfor %}</tbody></table></div>
+{% endmacro %}
+{% block body %}
+<h1>하루 +20% 급등일 분석 <small>급등 다음에 어떻게 되나 · 같은 종목의 이전 급등 내역이 결과를 더 잘 맞히나</small></h1>
+{% if not rep %}
+<p class="note">아직 분석 결과가 없습니다. <code>python manage.py jump-train</code> 으로 만들면(약 2분) 이 화면에 나옵니다.</p>
+{% else %}
+{% set m = rep.meta %}{% set o = rep.overall %}
+<p class="note">사건 = 종가 등락 +{{ (m.jump * 100)|int }}% 이상인 날 전부(거래 가능 종목 20일 평균 거래대금 {{ (m.liq_min / 100000000)|int }}억↑, 상장 250일↑) {{ m.events|won }}건({{ m.stocks|won }}종목, {{ m.date_min[:4] }}~{{ m.date_max[:4] }}). <b>진입은 급등 다음날 시가</b>, 20일 뒤 종가(비용 {{ pct(m.cost, 1) }} 차감). "+20% 더" = 20일 안 고가가 진입가 +20%, "시가 아래로" = 20일 안 종가가 급등일 시가 아래로 되돌림, "250일 안 재급등" = 그 뒤 250일 안에 +20% 날이 또 나옴. 이전 내역은 그 종목의 과거 급등만 씁니다(미래 정보 없음). 모델은 ~{{ m.split.train_end[:4] }} 학습, {{ m.split.train_end[:4]|int + 1 }}~ 시험. 과거 통계이며 투자 권유가 아닙니다. 생성 {{ m.generated }}.</p>
+<h2>요약</h2>
+<ul class="aisum">{% for line in rep.text %}<li>{{ line }}</li>{% endfor %}</ul>
+
+<h2>1. 급등 다음에 어떻게 되나</h2>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>기간</th>{{ H7|safe }}<th class="num">다음날 수익</th><th class="num">60일</th><th class="num">최악 5%</th></tr></thead><tbody>
+{% for k, lab in (('all', '전체'), ('tr', '학습 ~' ~ m.split.train_end[:4]), ('te', '시험 ' ~ (m.split.train_end[:4]|int + 1) ~ '~')) %}{% set s = o[k] %}<tr {% if k == 'te' %}class="baseline"{% endif %}><td>{{ lab }}</td>{{ st(s) }}<td class="num">{{ pct(s.r1, 1, true) }}</td><td class="num">{{ pct(s.r60, 1, true) }}</td><td class="num">{{ pct(s.q05, 0, true) }}</td></tr>{% endfor %}</tbody></table></div>
+<p>다음날 시가 갭 평균 {{ pct(o.entry_gap, 1, true) }}(중앙 {{ pct(o.entry_gap_med, 1, true) }}) · 다음날 하루 상승 {{ pct(o.r1_up, 0) }} · 5일 평균 {{ pct(o.r5, 1, true) }} · 20일 안 최대 하락 중앙 {{ pct(o.dd20, 0, true) }}.</p>
+<h3>해마다</h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>연도</th>{% for y in rep.by_year %}<th class="num">{{ y.year }}</th>{% endfor %}</tr></thead><tbody>
+<tr><td>급등일</td>{% for y in rep.by_year %}<td class="num">{{ y.n|won }}</td>{% endfor %}</tr><tr><td>20일 평균</td>{% for y in rep.by_year %}<td class="num {{ 'up' if y.r20 > 0 else 'down' }}">{{ pct(y.r20, 1, true) }}</td>{% endfor %}</tr>
+<tr><td>상승</td>{% for y in rep.by_year %}<td class="num">{{ pct(y.p_up, 0) }}</td>{% endfor %}</tr><tr><td>+20% 더</td>{% for y in rep.by_year %}<td class="num">{{ pct(y.touch, 0) }}</td>{% endfor %}</tr></tbody></table></div>
+
+<h2>2. 같은 종목의 이전 급등 내역별</h2>
+{{ gtable(rep.history) }}
+<h3>또 급등하나 <small>이전 횟수별 60·250일 안 재급등 확률</small></h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>구분</th><th class="num">건수</th><th class="num">60일 안 또 +20%</th><th class="num">250일 안 또 +20%</th><th class="num">20일 평균</th></tr></thead><tbody>
+{% for r in rep.repeat %}<tr><td>{{ r.name }}</td><td class="num">{{ r.n|won }}</td><td class="num">{{ pct(r.p60, 0) }}</td><td class="num"><b>{{ pct(r.p250, 0) }}</b></td><td class="num {{ 'up' if r.r20 > 0 else 'down' }}">{{ pct(r.r20, 1, true) }}</td></tr>{% endfor %}</tbody></table></div>
+
+<h2>3. 급등일 모습별</h2>
+{{ gtable(rep.context) }}
+
+<h2>4. 정확성 — 이전 내역을 더하면 더 잘 맞히나 <small>모델 ~{{ m.split.train_end[:4] }} 학습 · {{ m.split.train_end[:4]|int + 1 }}~ 시험</small></h2>
+{% for mdl in rep.models %}
+<h3>{{ mdl.target }}</h3>
+<div class="scroll"><table class="grid cmp"><thead><tr><th>특징</th><th class="num">AUC</th><th class="num">시험 건수</th><th class="num">기준 적중</th><th class="num">상위 10% 적중</th><th class="num">하위 10% 적중</th><th class="num">상위 10% 20일 평균</th><th class="num">하위 10% 20일 평균</th><th class="num">상위 10% 상승</th><th class="num">전체 상승</th></tr></thead><tbody>
+{% for r in mdl.rows %}<tr {% if loop.last %}class="baseline"{% endif %}><td>{{ r.name }}</td><td class="num"><b>{{ '%.3f'|format(r.auc) }}</b></td><td class="num">{{ r.n_te|won }}</td><td class="num">{{ pct(r.base, 1) }}</td><td class="num"><b>{{ pct(r.top10_hit, 1) }}</b></td><td class="num">{{ pct(r.bot10_hit, 1) }}</td><td class="num {{ 'up' if r.top10_r20 > 0 else 'down' }}">{{ pct(r.top10_r20, 1, true) }}</td><td class="num {{ 'up' if r.bot10_r20 > 0 else 'down' }}">{{ pct(r.bot10_r20, 1, true) }}</td><td class="num">{{ pct(r.top10_up, 0) }}</td><td class="num">{{ pct(r.all_up, 0) }}</td></tr>{% endfor %}</tbody></table></div>
+{% set last = mdl.rows[-1] %}{% if last.yearly %}<p class="hint">이전 내역 모델 상위 10% 연도별 적중(기준): {% for y in last.yearly %}{{ y.year }} {{ pct(y.hit, 0) }}({{ pct(y.base, 0) }}){{ ' · ' if not loop.last }}{% endfor %}</p>{% endif %}
+{% if mdl.importance %}<p>중요 특징: {% for i in mdl.importance %}<span {% if i.hist %}class="up"{% endif %}>{{ i.label }}</span>{{ ', ' if not loop.last }}{% endfor %} <small>(색: 이전 내역 특징)</small></p>{% endif %}
+{% endfor %}
+
+{% set td = rep.today %}
+<h2>5. 최근 급등일 <small>{{ td.since }} 이후 {{ td.n }}건 · 20일 뒤 플러스 확률 순(전체 기간 학습 모델)</small></h2>
+{% if td.rows %}
+<div class="scroll"><table class="grid cmp"><thead><tr><th>종목</th><th>급등일</th><th class="num">종가</th><th class="num">등락</th><th class="num">20일 플러스 확률</th><th class="num">250일 안 이전 급등</th><th class="num">마지막 급등 뒤</th><th class="num">이전 급등 20일 결과</th><th class="num">연평균 급등</th><th class="num">거래량 배수</th><th class="num">52주 고점 대비</th><th class="num">종가 위치</th><th class="num">다음날 실제</th></tr></thead><tbody>
+{% for r in td.rows %}<tr data-href="{{ url_for('main.chart', code=r.code) }}"><td><a href="{{ url_for('main.chart', code=r.code) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td><td>{{ r.date }}</td><td class="num">{{ r.close|won }}</td><td class="num up">{{ pct(r.jump, 1, true) }}</td><td class="num"><b>{{ pct(r.prob, 0) }}</b></td><td class="num">{{ r.n_j250 }}회</td><td class="num">{{ (r.days_since ~ '일') if r.days_since is not none else '없음' }}</td><td class="num {{ 'up' if r.prev_r20 and r.prev_r20 > 0 else 'down' if r.prev_r20 is not none }}">{{ pct(r.prev_r20, 0, true) if r.prev_r20 is not none else '–' }}</td><td class="num">{{ '%.1f'|format(r.hist_rate) }}회</td><td class="num">{{ '%.1f'|format(r.volratio) }}배</td><td class="num">{{ pct(r.nh250, 0, true) }}</td><td class="num">{{ pct(r.close_pos, 0) }}</td><td class="num">{{ pct(r.r1, 1, true) if r.r1 is not none else '–' }}</td></tr>{% endfor %}</tbody></table></div>
+{% else %}<p class="note">최근 급등일이 없습니다.</p>{% endif %}
+<p class="hint">확률은 과거 급등 수만 건의 평균을 학습한 값이라 이 종목에 그대로 적용되는 예측이 아닙니다. 급등일 다음날 시가 갭(평균 {{ pct(o.entry_gap, 1, true) }})까지 포함한 결과입니다.</p>
+{% endif %}
+{% endblock %}
