@@ -299,3 +299,17 @@ def test_mobile_style_keeps_the_answer_row_readable():
     assert '.source-link{order:3' not in css.replace('.question-nav .source-link{order:3', '')
     assert 'flex-wrap:wrap' in css.split('.review-answer{', 1)[1].split('}', 1)[0]
     assert 'white-space:nowrap' in css.split('.review-answer strong{', 1)[1].split('}', 1)[0]
+
+
+def test_question_texts_have_their_word_spaces_restored(client):
+    """시험지 PDF 의 글자 층에는 문제 문장의 공백이 빠져 있어 '대외무역법령상무역거래의…' 로 붙어 나왔다(제목의 82%) — scripts/respace.py 로 되살림."""
+    import re
+    items = {q['id']: q for q in client.get('/api/catalog').json['items']}
+    assert items[59000]['title'] == '1. 대외무역법령상 무역거래의 대상(객체)에 해당하지 않는 것은?'
+    assert items[59090]['title'] == '1. 다음 offer의 내용상 밑줄 친 (A)～(D) 중에서 내용이 부적절한 것은?'
+    for q in items.values():
+        hangul = len(re.findall('[가-힣]', q['title']))
+        if hangul >= 10:
+            assert q['title'].count(' ') / hangul >= 0.08, (q['id'], q['title'])
+        assert re.search(r'[가-힣]{12,}', q['title']) is None, (q['id'], q['title'])     # 한글이 12자 넘게 붙어 있으면 띄어쓰기 누락
+    assert 'A. 보세창고' in items[59021]['body'] and 'E. 종합보세구역' in items[59021]['body']     # 표의 가로줄은 칸 사이를 띄움

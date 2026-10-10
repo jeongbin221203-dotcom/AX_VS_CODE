@@ -7,6 +7,8 @@ from pathlib import Path
 
 import fitz
 
+from respace import line_gaps, respace
+
 ROOT = Path(__file__).resolve().parents[1]
 SUBJECTS = ['무역규범', '무역결제', '무역계약', '무역영어']
 MARK = re.compile(r'^(\d{1,2})(?:\.(?!\d)|\s+(?=[가-힣]))')
@@ -86,6 +88,11 @@ def parse_round(n):
                 end = event
         body, text = regions(doc, pos, end)
         context, context_text = shared.get(i, ([], ''))
+        # PDF 글자 층에는 문제 문장의 공백 문자가 빠져 있어('대외무역법령상무역거래의…') 글자 간격으로 되살린다 (respace.py)
+        text, miss_body = respace(text, line_gaps(doc, body))
+        title, miss_title = respace(title, line_gaps(doc, body))
+        context_text, miss_context = respace(context_text, line_gaps(doc, context)) if context else (context_text, 0)
+        assert not (miss_body or miss_title or miss_context), (n, i + 1, 'respace: 짝을 찾지 못한 줄', miss_body, miss_title, miss_context)
         assert body and all(c in text for c in '①②③④'), (n, i+1, 'missing choices')
         rows.append((n*1000+i, n, i//30, i%30+1, title, text, context_text,
                      json.dumps(body), json.dumps(context), answers[i], pos[0]+1))
