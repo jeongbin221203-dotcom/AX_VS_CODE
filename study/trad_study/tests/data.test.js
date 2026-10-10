@@ -122,3 +122,34 @@ test('문제 글의 띄어쓰기: 시험지 PDF 에서 빠졌던 공백을 되�
   }
   assert.ok(byId.get(59021).body.includes('A. 보세창고') && byId.get(59021).body.includes('E. 종합보세구역'));
 });
+
+test('HTML 구조(2026-10-10 점검에서 찾은 문제의 재발 방지): 영역 이름·제목 단계·버튼 type·noscript·글자 대비', () => {
+  const html = fs.readFileSync(at('index.html'), 'utf-8');
+  const app = fs.readFileSync(at('static', 'app.js'), 'utf-8');
+  const css = fs.readFileSync(at('static', 'style.css'), 'utf-8');
+  // index.html
+  assert.match(html, /<aside class="sidebar" aria-label="[^"]+">/, '사이드바 영역에 이름이 있어야 함');
+  assert.match(html, /<noscript>[\s\S]*JavaScript[\s\S]*<\/noscript>/, 'JavaScript 를 끈 경우의 안내');
+  assert.ok(!html.includes('class="loading"'), 'JS 없이 영원히 "준비하고 있어요"만 보이면 안 됨');
+  assert.match(html, /<meta name="description" content="[^"]+">/);
+  assert.ok(!html.includes('aria-labelledby="dialog-title"'), '가리키는 대상이 없는 aria-labelledby (setModal 이 열 때 붙임)');
+  // app.js 가 만드는 HTML
+  assert.equal([...app.matchAll(/<button (?![^>]*\btype=)/g)].length, 0, 'type 없는 <button>');
+  for (const m of app.matchAll(/<aside\b[^>]*>/g)) assert.match(m[0], /aria-label=/, `이름 없는 <aside>: ${m[0]}`);
+  assert.ok(app.includes("setAttribute('aria-labelledby','dialog-title')"));
+  assert.ok(app.includes('<h1 style="margin-top:8px">${esc(a.title)}'), '결과 화면에 h1');
+  assert.ok(!/<h3>(\$\{title\}|문제 해설)/.test(app), 'h1 아래에서 h3 로 건너뜀');
+  assert.ok(app.includes("e.setAttribute('aria-current','page')"));
+  // 제목 태그를 바꾼 곳은 스타일 선택자도 같이 바뀌어야 겉모양이 유지됨
+  for (const sel of ['.result-hero h1', '.concept-card h2', '.explanation h2']) assert.ok(css.includes(sel + '{'), sel);
+  assert.ok(!css.includes('.result-hero h2{') && !css.includes('.concept-card h3{') && !css.includes('.explanation h3{'));
+  // 글자 대비 WCAG AA(4.5:1): 예전에 부족했던 색이 돌아오지 않았고, 보조 글자색 변수는 가장 어두운 배경에서도 통과
+  const OLD = ['#5a7b61', '#66805f', '#668069', '#698272', '#71816f', '#718172', '#74817c', '#74827f', '#77867c', '#82907d', '#84907f', '#849183', '#86988b', '#88948d', '#8e7d56', '#94ac91', '#95a099', '#99a39f', '#99a59c', '#a0aaa1', '#a98239', '#b25c4c', '#b35047'];
+  for (const c of OLD) assert.ok(!css.toLowerCase().includes(c), `대비가 부족했던 색 ${c} 이 다시 쓰임`);
+  const lum = hex => { const v = [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16) / 255).map(x => x <= 0.03928 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4); return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2]; };
+  const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
+  for (const token of ['--muted', '--red', '--green', '--ink']) {
+    const hex = css.match(new RegExp(token + ':(#[0-9a-fA-F]{6})'))[1];
+    for (const bg of ['#ffffff', '#f6f8f4']) assert.ok(ratio(hex, bg) >= 4.5, `${token} ${hex} 대 ${bg} = ${ratio(hex, bg).toFixed(2)}`);
+  }
+});

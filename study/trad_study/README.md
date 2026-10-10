@@ -118,7 +118,7 @@ python scripts/build_data.py --font-only  # 화면 글자가 바뀌어 글꼴만
 ## 검증
 
 ```powershell
-node --test        # Node 20 이상, 추가 설치 없음. 34개
+node --test        # Node 20 이상, 추가 설치 없음. 35개
 python scripts/verify_against_flask.py   # 데이터·이미지·PDF 를 Flask 버전과 대조 (Python, ../trad 필요)
 ```
 
