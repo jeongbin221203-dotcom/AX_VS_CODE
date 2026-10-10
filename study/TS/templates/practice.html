@@ -9,6 +9,10 @@
   </div>
 </div>
 
+{% if vocab_due %}
+<div class="vocab-nudge">📘 복습할 단어가 <b>{{ vocab_due }}개</b> 남아 있어요. 단어를 먼저 보고 문제를 풀면 훨씬 잘 풀립니다.
+  <a class="btn small primary" href="{{ url_for('vocab.study') }}">단어 먼저 하기</a></div>
+{% endif %}
 <div class="stack">
 {% for p in parts %}
   <div class="card">

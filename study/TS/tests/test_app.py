@@ -603,7 +603,7 @@ def test_sub_nav_lists_current_exam_items(client):
     html = client.get("/toeic").data.decode()
     sub = html.split('id="sub-nav"')[1].split("</nav>")[0]
     for label in ("홈", "등급 가이드", "파트 연습", "모의고사", "오답노트", "단어", "받아쓰기", "통계"):
-        assert f">{label}</a>" in sub
+        assert f"{label}</a>" in sub          # 단어는 "📘 단어" 로 강조 표시
     stats = client.get("/stats").data.decode().split('id="sub-nav"')[1].split("</nav>")[0]
     assert 'class="on" aria-current=page>통계</a>' in stats
     opic = client.get("/speaking/opic/survey").data.decode().split('id="sub-nav"')[1].split("</nav>")[0]

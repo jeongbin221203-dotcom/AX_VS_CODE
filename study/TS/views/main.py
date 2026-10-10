@@ -9,7 +9,7 @@ from core import db, planner, scoring, stats
 from core.exams import EXAMS
 from core.content import PART_INFO
 from core.guide import GUIDE, PART_TIPS, TARGET_SEC
-from core.srs import level_progress
+from core.srs import level_progress, queue as vocab_queue
 
 from .helpers import bank
 
@@ -49,16 +49,16 @@ def home():
          "target": f"{st.get('target_score')}점", "n": f"{toeic_n:,}문항 · 단어 {len(tb.vocab):,}",
          "last": last("SELECT MAX(created_at) FROM sessions"),
          "date": st.get("exam_date"),
-         "links": [("파트 연습", url_for("quiz.practice")),
-                   ("모의고사", url_for("quiz.mock")), ("단어", url_for("vocab.overview"))]},
+         "links": [("📘 단어", url_for("vocab.overview")), ("파트 연습", url_for("quiz.practice")),
+                   ("모의고사", url_for("quiz.mock"))]},
         {"key": "toefl", "href": url_for("toefl.home"), "mark": "R·L·S·W",
          "now": f"밴드 {overall}" if overall else "–",
          "now_sub": T.cefr(overall) if overall else ("영역별 " + " · ".join(f"{k} {v}" for k, v in bands.items() if v) if any(bands.values()) else "네 영역을 풀면 계산"),
          "target": f"밴드 {st.get('toefl_target')}", "n": f"{toefl_n:,}문제 · 어휘 {len(fb.vocab):,}",
          "last": last("SELECT MAX(created_at) FROM toefl_attempts"),
          "date": st.get("toefl_exam_date"),
-         "links": [("영역 연습", url_for("toefl.home") + "#sec-R"), ("모의고사", url_for("toefl.mock")),
-                   ("학술 어휘", url_for("tvocab.overview"))]},
+         "links": [("📘 학술 어휘", url_for("tvocab.overview")), ("영역 연습", url_for("toefl.home") + "#sec-R"),
+                   ("모의고사", url_for("toefl.mock"))]},
         {"key": "toeic-speaking", "href": url_for("speaking.tsp_home"), "mark": "11문항",
          "now": f"{tsp_est}점" if tsp_est is not None else "–", "now_sub": tsp_lv[1] if tsp_lv else "다섯 유형을 연습하면 계산",
          "target": f"{st.get('tsp_target')}점", "n": f"{sum(len(v) for v in sb.tsp.values()):,}문제",
@@ -84,11 +84,24 @@ def home():
     return render_template("home.html", exams=exams, streak=stats.streak())
 
 
+def vocab_hero(plan: dict, settings: dict) -> dict:
+    """오늘 화면 맨 위 '오늘의 단어' 카드 — 복습·새 단어 개수, 내 등급 단어를 얼마나 봤는지."""
+    lv = plan["grade"].level if plan.get("grade") else None
+    daily = int(settings.get("daily_new_words") or 0)
+    q = vocab_queue(bank(), None, daily, start_level=lv)
+    prog = {p["level"]: p for p in level_progress(bank())}
+    mine = prog.get(lv or 1)
+    return {"due": len(q["due"]), "new": len(q["new"]), "daily_new": daily, "words_today": plan["today"]["words"],
+            "level": lv or 1, "grade_name": plan["grade"].name if plan.get("grade") else "Orange",
+            "seen": mine["seen"], "total": mine["total"], "mastered": mine["mastered"],
+            "done": not q["due"] and not q["new"]}
+
+
 @bp.route("/toeic")
 def dashboard():
     settings = db.get_settings()
     plan = planner.build(bank(), settings)
-    return render_template("dashboard.html", plan=plan, streak=stats.streak(),
+    return render_template("dashboard.html", plan=plan, streak=stats.streak(), vocab_hero=vocab_hero(plan, settings),
                            acc=stats.part_accuracy(last_n=60), recent=stats.recent_sessions(5), ongoing=stats.unfinished_sessions(),
                            history=stats.score_history(10))
 

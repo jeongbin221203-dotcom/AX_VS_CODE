@@ -9,16 +9,17 @@ from core.exams import EXAMS
 MENUS = {
     "toeic": [
         ("홈", "main.dashboard", {}, ["main.dashboard"]),
+        ("단어", "vocab.overview", {}, ["vocab."]),
         ("등급 가이드", "main.guide", {}, ["main.guide"]),
         ("파트 연습", "quiz.practice", {}, ["quiz.practice", "quiz.practice_start", "quiz.quiz:practice"]),
         ("모의고사", "quiz.mock", {}, ["quiz.mock", "quiz.diagnostic", "quiz.quiz:mock", "quiz.quiz:diagnostic", "quiz.result"]),
         ("오답노트", "quiz.review", {}, ["quiz.review", "quiz.quiz:review"]),
-        ("단어", "vocab.overview", {}, ["vocab."]),
         ("받아쓰기", "quiz.dictation", {}, ["quiz.dictation"]),
         ("통계", "main.stats_page", {}, ["main.stats_page", "main.history"]),
     ],
     "toefl": [
         ("홈", "toefl.home", {}, ["toefl.home"]),
+        ("학술 어휘", "tvocab.overview", {}, ["tvocab."]),
         ("읽기", "toefl.home", {"_anchor": "sec-R"}, ["toefl.practice:r_"]),
         ("듣기", "toefl.home", {"_anchor": "sec-L"}, ["toefl.practice:l_"]),
         ("말하기", "toefl.home", {"_anchor": "sec-S"}, ["toefl.practice:s_"]),
@@ -26,7 +27,6 @@ MENUS = {
         ("모의고사", "toefl.mock", {}, ["toefl.mock", "toefl.mock_run", "toefl.mock_result"]),
         ("오답노트", "toefl.review", {}, ["toefl.review"]),
         ("기록", "toefl.history", {}, ["toefl.history"]),
-        ("학술 어휘", "tvocab.overview", {}, ["tvocab."]),
     ],
     "toeic-speaking": [
         ("홈", "speaking.tsp_home", {}, ["speaking.tsp_home"]),
@@ -50,6 +50,9 @@ def _mock_exam() -> str:
     from core import speaking
     m = speaking.get_mock((request.view_args or {}).get("mid", 0))
     return m["exam"] if m else ""
+
+
+EMPHASIS = {"단어", "학술 어휘"}          # 단어를 몰라서 문제를 못 푸는 경우가 많다 → 메뉴에서 눈에 띄게
 
 
 def _session_mode() -> str:
@@ -99,7 +102,8 @@ def nav_menus() -> list[dict]:
             args = dict(args)
             anchor = args.pop("_anchor", None)
             href = url_for(endpoint, **args) + (f"#{anchor}" if anchor else "")
-            items.append({"label": label, "href": href, "on": key == cur and any(_matches(p, ep) for p in pats)})
+            items.append({"label": label, "href": href, "emph": label in EMPHASIS,
+                          "on": key == cur and any(_matches(p, ep) for p in pats)})
         if not e["ready"]:
             items = [{"label": f"{e['name']} 안내 (준비 중)", "href": url_for("main.exam", key=key), "on": key == cur}]
         active = next((i["label"] for i in items if i["on"]), "")

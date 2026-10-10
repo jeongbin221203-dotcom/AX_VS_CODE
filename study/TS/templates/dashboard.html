@@ -14,6 +14,28 @@
   </tbody></table>
 </div>
 {% endif %}
+{% set vh = vocab_hero %}
+<div class="card vocab-hero">
+  <div>
+    <h2>📘 오늘의 단어 — 먼저 하세요</h2>
+    <div class="small muted">문제를 못 푸는 가장 큰 이유는 단어입니다. 단어를 먼저 끝내면 같은 문제가 훨씬 쉬워집니다.</div>
+    <div class="nums">
+      <div><b>{{ vh.due }}</b><span>복습할 단어</span></div>
+      <div><b>{{ vh.new }}</b><span>새 단어 (하루 {{ vh.daily_new }}개)</span></div>
+      <div><b>{{ vh.seen }}<small style="font-size:1rem;font-weight:600"> / {{ vh.total }}</small></b><span>{{ vh.grade_name }} 단어 본 수 · 외운 {{ vh.mastered }}</span></div>
+    </div>
+    <div class="bar"><i style="width:{{ (vh.seen / vh.total * 100)|round if vh.total else 0 }}%"></i></div>
+  </div>
+  <div class="cta">
+    {% if vh.done %}
+      <div class="done-note">✅ 오늘 단어를 다 했어요</div>
+      <a class="btn" href="{{ url_for('vocab.quiz') }}">단어 시험 보기</a>
+    {% else %}
+      <a class="btn primary big" href="{{ url_for('vocab.study') }}">단어 공부 시작</a>
+    {% endif %}
+    <a class="btn small" href="{{ url_for('vocab.listen') }}">🎧 듣기 모드</a>
+  </div>
+</div>
 <div class="page-head">
   <div>
     <div class="muted small">연속 학습 {{ streak }}일</div>

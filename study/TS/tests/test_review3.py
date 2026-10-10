@@ -243,3 +243,47 @@ def test_frequent_words_are_core_tier(app, bank):
     tiers = {w["word"]: w["tier"] for w in bank.vocab}
     for w in ("client", "receipt", "overtime", "inventory", "permission", "headquarters", "eligible", "reimburse"):
         assert tiers[w] == "core", w
+
+
+# ---- 단어 먼저: 오늘 화면 단어 카드·메뉴 강조·연습 화면 안내 ---------------------------
+
+def test_dashboard_leads_with_vocab_card(tmp_path):
+    app = create_app({"TESTING": True, "DB_PATH": tmp_path / "v.db"})
+    c = app.test_client()
+    html = c.get("/toeic").get_data(as_text=True)
+    assert "오늘의 단어" in html and html.index("오늘의 단어") < html.index("오늘의 토익")      # 단어 카드가 맨 위
+    assert "단어 공부 시작" in html
+
+
+def test_vocab_menu_is_second_and_emphasized(tmp_path):
+    app = create_app({"TESTING": True, "DB_PATH": tmp_path / "m.db"})
+    html = app.test_client().get("/toeic").get_data(as_text=True)
+    import re as _re
+    items = _re.findall(r'<a href="[^"]*" class="[^"]*"[^>]*>(?:📘 )?([^<]+)</a>', html.split('id="sub-nav"')[1].split("</nav>")[0])
+    assert items[:2] == ["홈", "단어"] and 'emph' in html
+
+
+def test_practice_nudges_when_words_are_due(tmp_path):
+    app = create_app({"TESTING": True, "DB_PATH": tmp_path / "p.db"})
+    bank = app.extensions["bank"]
+    c = app.test_client()
+    assert "복습할 단어가" not in c.get("/practice").get_data(as_text=True)
+    srs.review(bank.vocab[0]["id"], 0)                                   # 틀리면 내일 복습 → 오늘은 아직 아님
+    from datetime import date as _d, timedelta as _t
+    with db.connect() as con:
+        con.execute("UPDATE vocab_cards SET due = ?", ((_d.today() - _t(days=1)).isoformat(),))
+    assert "복습할 단어가" in c.get("/practice").get_data(as_text=True)
+
+
+def test_vocab_quiz_options_never_repeat(tmp_path):
+    """뜻이 같은 단어가 오답으로 두 번 뽑혀 같은 보기가 둘 나오던 문제 — 여러 번 뽑아도 항상 4개가 서로 달라야 한다."""
+    import json as _json
+    import re as _re
+    app = create_app({"TESTING": True, "DB_PATH": tmp_path / "q.db"})
+    c = app.test_client()
+    for lv in (1, 2, 3, 4, 5):
+        for _ in range(60):                          # 옛 방식은 문제 5,000개에 1개꼴로 중복 — 1만 문제 이상 뽑아야 확실히 잡힌다
+            html = c.get(f"/vocab/quiz?n=50&level={lv}").get_data(as_text=True)
+            qs = _json.loads(_re.search(r'id="vq-data">(.*?)</script>', html, _re.S).group(1))
+            for q in qs:
+                assert len(q["options"]) == 4 and len(set(q["options"])) == 4 and q["options"][q["answer"]] == q["meaning"], q

@@ -28,7 +28,7 @@
   </div>
   {% if cur %}
   <nav class="sub-nav nav" aria-label="{{ cur.name }} 메뉴" id="sub-nav">
-    {% for it in cur['items'] %}<a href="{{ it.href }}" class="{{ 'on' if it.on }}" {{ 'aria-current=page' if it.on }}>{{ it.label }}</a>{% endfor %}
+    {% for it in cur['items'] %}<a href="{{ it.href }}" class="{{ 'on' if it.on }}{{ ' emph' if it.emph }}" {{ 'aria-current=page' if it.on }}>{% if it.emph %}📘 {% endif %}{{ it.label }}</a>{% endfor %}
   </nav>
   {% endif %}
 </header>

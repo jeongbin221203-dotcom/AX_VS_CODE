@@ -27,7 +27,9 @@ def _int_arg(name, default=None):
 @bp.route("/practice")
 def practice():
     b = bank()
+    from core import srs
     score, _ = planner.current_score(db.get_settings())
+    vocab_due = len(srs.queue(b, None, 0)["due"])
     g = scoring.grade_for(score)
     lvl_acc = stats.level_accuracy()
     parts = []
@@ -39,7 +41,7 @@ def practice():
             "acc": {lv: lvl_acc.get((p, lv)) for lv in range(1, 6)},
             "rec_level": planner.recommended_level(p, g.level, lvl_acc) if g else None,
         })
-    return render_template("practice.html", parts=parts, grade=g, tips=PART_TIPS)
+    return render_template("practice.html", parts=parts, grade=g, tips=PART_TIPS, vocab_due=vocab_due)
 
 
 @bp.route("/practice/start")

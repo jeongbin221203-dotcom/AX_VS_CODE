@@ -388,3 +388,18 @@ ul.clean li { margin: 4px 0; }
 }
 
 .ladder .step b { overflow-wrap: anywhere; }
+
+/* 단어 먼저: 메뉴 강조 + 오늘 화면 단어 카드 */
+.nav a.emph { border: 1px solid var(--accent); font-weight: 700; }
+.nav a.emph.on { background: var(--accent); color: #fff; }
+.vocab-hero { display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: center; margin-bottom: 14px;
+  border: 2px solid var(--accent); background: var(--accent-soft); }
+.vocab-hero h2 { margin: 0 0 4px; }
+.vocab-hero .nums { display: flex; gap: 22px; flex-wrap: wrap; margin: 10px 0 6px; }
+.vocab-hero .nums b { display: block; font-size: 1.9rem; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.vocab-hero .nums span { font-size: .85rem; color: var(--ink-2); }
+.vocab-hero .cta { display: flex; flex-direction: column; gap: 8px; min-width: 190px; }
+.vocab-hero .cta .btn.big { padding: 14px 18px; font-size: 1.1rem; text-align: center; }
+.vocab-hero .done-note { color: var(--ok); font-weight: 700; }
+.vocab-nudge { border-left: 4px solid var(--accent); background: var(--accent-soft); padding: 10px 14px; border-radius: 8px; margin-bottom: 14px; }
+@media (max-width: 720px) { .vocab-hero { grid-template-columns: 1fr; } .vocab-hero .cta { min-width: 0; } }

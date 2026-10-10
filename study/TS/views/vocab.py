@@ -175,7 +175,14 @@ def quiz():
     for w in picks:
         same_pos = [x for x in distract_pool if x["id"] != w["id"] and x["pos"] == w["pos"] and x["meaning"] != w["meaning"]]
         others = same_pos if len(same_pos) >= 3 else [x for x in distract_pool if x["id"] != w["id"]]
-        distract = rng.sample(others, min(3, len(others)))
+        # 오답 보기끼리·정답과 뜻이 같은 단어는 건너뛴다 (같은 보기가 두 번 나오지 않게)
+        distract, used = [], {w["meaning"]}
+        for x in rng.sample(others, len(others)):
+            if x["meaning"] not in used:
+                distract.append(x)
+                used.add(x["meaning"])
+                if len(distract) == 3:
+                    break
         opts = [w] + distract
         rng.shuffle(opts)
         questions.append({"id": w["id"], "word": w["word"], "pos": w["pos"], "example": w["example"],
