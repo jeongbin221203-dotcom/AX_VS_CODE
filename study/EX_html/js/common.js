@@ -248,7 +248,7 @@
     }).join('');
     var el = document.getElementById('site-header');
     if (!el) return;
-    el.innerHTML = '<div class="top-in"><a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">X</span>엑셀 연습장</a>' +
+    el.innerHTML = '<div class="top-in"><a class="brand" href="index.html" aria-label="엑셀 연습장 홈" title="엑셀 연습장"><span class="brand-mark" aria-hidden="true">X</span></a>' +
       '<nav class="nav" aria-label="주 메뉴">' + nav + '</nav>' +
       '<button class="theme-btn" type="button" id="theme-btn" title="밝게/어둡게" aria-label="밝게 또는 어둡게 바꾸기">◐</button></div>';
     document.getElementById('theme-btn').addEventListener('click', function () {
