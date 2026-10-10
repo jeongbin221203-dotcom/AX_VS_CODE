@@ -66,6 +66,20 @@ test('원본 시험지·정답표 PDF 14개와 문항의 시험지 링크', () =
   }
 });
 
+test('validation.json: 문제 PDF의 SHA-256·회차별 문항 수가 맞음', () => {
+  const validation = JSON.parse(fs.readFileSync(at('data', 'validation.json'), 'utf-8'));
+  assert.equal(validation.length, 7);
+  for (const v of validation) {
+    const bytes = fs.readFileSync(at('data', 'sources', `${v.round}_questions.pdf`));
+    assert.equal(require('node:crypto').createHash('sha256').update(bytes).digest('hex'), v.sha256, `${v.round}회`);
+    assert.equal(v.questions, 120); assert.equal(v.answers, 120);
+    assert.equal(catalog.filter(q => q.round === v.round).length, v.questions);
+    const sharedGroups = new Set(catalog.filter(q => q.round === v.round && q.context).map(q => q.context)).size;
+    assert.ok(sharedGroups >= 1, `${v.round}회 공통 지문`);
+  }
+  assert.equal(validation.reduce((n, v) => n + v.shared_groups, 0), 42);
+});
+
 test('index.html: 상대 경로·필요한 스크립트·보안 설정, 정답 파일은 처음에 불러오지 않음', () => {
   const html = fs.readFileSync(at('index.html'), 'utf-8');
   const refs = [...html.matchAll(/(?:src|href)="([^"#][^"]*)"/g)].map(m => m[1]);

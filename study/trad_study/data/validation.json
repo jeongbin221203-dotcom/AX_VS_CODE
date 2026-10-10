@@ -1,0 +1,58 @@
+[
+  {
+    "round": 59,
+    "questions": 120,
+    "answers": 120,
+    "shared_groups": 3,
+    "pdf_pages": 65,
+    "sha256": "087311c0a3a1ed13dc8779ad02acc312a66d242593e6502f806cab7307f5dd78"
+  },
+  {
+    "round": 60,
+    "questions": 120,
+    "answers": 120,
+    "shared_groups": 3,
+    "pdf_pages": 65,
+    "sha256": "2842c8cd5c847594e9f904e698960ac9b0cda4a31352e6bba8e7d25b4fc41960"
+  },
+  {
+    "round": 61,
+    "questions": 120,
+    "answers": 120,
+    "shared_groups": 5,
+    "pdf_pages": 63,
+    "sha256": "b5d0e4210a973b5f4876afb99dd6b12e3c91e12c1a4ac5d6f8f0badc42765f19"
+  },
+  {
+    "round": 62,
+    "questions": 120,
+    "answers": 120,
+    "shared_groups": 7,
+    "pdf_pages": 58,
+    "sha256": "fd4e11d9b644d585bf5baa5084d142c82758029742c06673d15f976118a903cd"
+  },
+  {
+    "round": 63,
+    "questions": 120,
+    "answers": 120,
+    "shared_groups": 6,
+    "pdf_pages": 61,
+    "sha256": "021286b46f5cd80c9648c129c97747789e3fbf365d9105387aef9c7f29c3b006"
+  },
+  {
+    "round": 64,
+    "questions": 120,
+    "answers": 120,
+    "shared_groups": 9,
+    "pdf_pages": 56,
+    "sha256": "f22541c11b88f6df8db2f04de1ebcfee03ee67e562aba59755ede0fe8f7e9c65"
+  },
+  {
+    "round": 65,
+    "questions": 120,
+    "answers": 120,
+    "shared_groups": 9,
+    "pdf_pages": 55,
+    "sha256": "a929bc7839ab36b7b58847b956e5b141a68b7b5bc0a0ebd78557eb6a54f9bc60"
+  }
+]

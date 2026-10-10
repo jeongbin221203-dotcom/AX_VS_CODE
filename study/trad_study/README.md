@@ -69,13 +69,19 @@
 
 ## 데이터 구성
 
-| 회차 | 연도 | 문항 수 |
-|---|---|---:|
-| 59·60회 | 2024 | 각 120 |
-| 61~64회 | 2025 | 각 120 |
-| 65회 | 2026 | 120 |
+| 회차 | 연도 | 문제 PDF | 정답 PDF | 문항 수 |
+|---|---|---:|---:|---:|
+| 59회 | 2024 | 65쪽 | 1쪽 | 120 |
+| 60회 | 2024 | 65쪽 | 1쪽 | 120 |
+| 61회 | 2025 | 63쪽 | 1쪽 | 120 |
+| 62회 | 2025 | 58쪽 | 1쪽 | 120 |
+| 63회 | 2025 | 61쪽 | 1쪽 | 120 |
+| 64회 | 2025 | 56쪽 | 1쪽 | 120 |
+| 65회 | 2026 | 55쪽 | 1쪽 | 120 |
 
-총 **840문항**(과목별 210), 공통 지문 **42개 묶음**. 사용자가 제공한 시험지·정답표 PDF 14개가 원본입니다.
+총 **840문항**, 과목별 **210문항**, 공통 지문 **42개 묶음**입니다. 사용자가 제공한 최종 PDF를 기준으로 하며, 앞서 제출된 HWP 변환 실패 파일이나 중복 문제지는 사용하지 않습니다.
+
+문항을 PDF에서 읽을 때 60회 무역규범 13번의 마침표 생략, 62회 무역계약 28번의 다른 들여쓰기, 다음 페이지까지 이어지는 공통 지문을 처리했습니다(변환 규칙은 Flask 버전의 `scripts/build_catalog.py`). 원본별 쪽수와 문제 PDF의 SHA-256, 회차별 공통 지문 묶음 수는 `data/validation.json`에 있습니다. 이 폴더의 데이터가 Flask 버전과 같은지는 `scripts/verify_against_flask.py`로 대조합니다(아래 "검증").
 
 ```text
 trad_study/
@@ -90,9 +96,12 @@ trad_study/
     catalog.js              문항 840개(정답 없음, 이미지 주소 포함)
     answers.js              공식 정답 840개 — 채점할 때만 불러옴
     sources/                원본 시험지·정답표 PDF 14개
+    validation.json         변환 검사 결과와 문제 PDF 해시
   img/                      문항·공통 지문 이미지 883개(WebP, 같은 그림은 한 파일)
   scripts/build_data.py     ../trad 의 문항 DB·PDF 에서 data/·img/·글꼴을 다시 만드는 도구
+  scripts/verify_against_flask.py   만든 데이터가 Flask 버전과 같은지 대조(글·정답·이미지 픽셀·PDF 해시)
   tests/                    Node 테스트 (store·ai·data)
+  .vscode/launch.json       VS Code F5 로 Chrome 에서 index.html 열기
   start.bat / start.sh      로컬 서버(5091번)
 ```
 
@@ -104,17 +113,18 @@ python scripts/build_data.py              # 문항·이미지·정답·글꼴 �
 python scripts/build_data.py --font-only  # 화면 글자가 바뀌어 글꼴만 다시 만들 때
 ```
 
-`scripts/build_data.py`는 `../trad`(Flask 버전 폴더)의 `catalog.sqlite3`와 글꼴 원본을 읽습니다.
+`scripts/build_data.py`는 `../trad`(Flask 버전 폴더)의 `catalog.sqlite3`와 글꼴 원본을 읽습니다. 그 문항 DB를 PDF에서 새로 만드는 `build_catalog.py`도 Flask 버전 쪽(`../trad/scripts/`)에만 있으므로, PDF·문항을 바꿀 때는 먼저 거기서 DB를 만든 뒤 이 폴더의 도구를 실행하세요. 이 폴더만 따로 올려 쓰는 데는 필요 없습니다(결과 파일이 이미 들어 있음).
 
 ## 검증
 
 ```powershell
-node --test        # Node 20 이상, 추가 설치 없음. 31개
+node --test        # Node 20 이상, 추가 설치 없음. 32개
+python scripts/verify_against_flask.py   # 데이터·이미지·PDF 를 Flask 버전과 대조 (Python, ../trad 필요)
 ```
 
 - `tests/store.test.js`: 실제 문항 840개·공식 정답으로 28개 회차·과목 만점 채점, 120문항 시험, 오답·미응답, 이어 풀기, 제한 시간 자동 제출, 입력 검사, 메모·복습 완료·오답 다시 풀기, AI 해설 한 번만 생성, 동시 저장, 백업·복원과 잘못된 백업 13종 거부
 - `tests/ai.test.js`: 가짜 `fetch`로 OpenAI 요청 모양(주소·헤더·본문), 키 보관·만료, 오류 안내, 정답 숨김, 그림 순서, 입력 검사 — 실제 API 호출·비용 없음
-- `tests/data.test.js`: 이미지·PDF·글꼴 파일 존재와 형식, 정답이 문항에 들어 있지 않음, `index.html`의 상대 경로
+- `tests/data.test.js`: 이미지·PDF·글꼴 파일 존재와 형식, 정답이 문항에 들어 있지 않음, 문제 PDF의 SHA-256·문항 수(`validation.json`), `index.html`의 상대 경로
 
 실제 Chrome(헤드리스)으로 웹 주소와 `file://` 두 방식 모두 34개 항목을 확인했습니다. 자세한 내용은 [TESTING.md](TESTING.md)를 보세요.
 
