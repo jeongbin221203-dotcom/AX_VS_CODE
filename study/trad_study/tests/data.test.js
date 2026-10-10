@@ -102,3 +102,11 @@ test('글꼴: 쓰는 글자만 남긴 woff2 이고 크기가 작음', () => {
   assert.ok(fs.existsSync(at('static', 'fonts', 'OFL.txt')));
   assert.ok(fs.readFileSync(at('static', 'style.css'), 'utf-8').includes('fonts/NotoSansKR-subset.woff2'));
 });
+
+test('휴대폰 화면 스타일: 줄 전체 폭 링크 규칙이 정답 줄까지 번지지 않음(정답 글자가 세로로 쪼개지던 문제)', () => {
+  const css = fs.readFileSync(at('static', 'style.css'), 'utf-8');
+  assert.ok(css.includes('.question-nav .source-link{order:3;flex:1 0 100%'), '문제 이동 줄에만 적용');
+  assert.ok(!/(^|[}{,])\.source-link\{order:3/.test(css), '.source-link 에 직접 적용하면 .review-answer 안의 링크까지 줄 전체를 차지함');
+  assert.match(css, /\.review-answer\{[^}]*flex-wrap:wrap/);
+  assert.match(css, /\.review-answer strong\{[^}]*white-space:nowrap/);
+});
