@@ -8,6 +8,7 @@ UI.boot("quiz", () => {
   const which = SETS[P.get("set")] ? P.get("set") : "all";
   const SIZES = [15, 30, 50];
   const n = SIZES.includes(parseInt(P.get("n"), 10)) ? parseInt(P.get("n"), 10) : 15;
+  const listenMode = P.get("listen") === "1";      // 듣고 풀기: 단어 글자를 숨기고 발음만 들려 준다
   const grades = Ward.grades();
   const L = ["A", "B", "C", "D"];
 
@@ -58,6 +59,7 @@ UI.boot("quiz", () => {
         ${sel("tier", [["", "필수 + 도전"], ["core", "필수 단어"], ["stretch", "도전 단어"]], tier)}
         ${sel("set", Object.entries(SETS).map(([k, v]) => [k, `${v} (${counts[k]})`]), which)}
         ${sel("n", SIZES.map(s => [s, s + "문제"]), n)}
+        ${sel("listen", [["", "👁 보고 풀기"], ["1", "🎧 듣고 풀기"]], listenMode ? "1" : "")}
       </div>
     </div>
     <div id="body"></div>`;
@@ -80,6 +82,7 @@ UI.boot("quiz", () => {
       <div class="spread small muted"><span id="vq-prog"></span><span id="vq-score"></span></div>
       <div class="flash-card" style="min-height:0;padding:16px 0">
         <div class="word" id="vq-word"></div>
+        <div style="margin-top:6px"><button class="btn small" id="vq-say" type="button" aria-label="발음 다시 듣기">🔊 발음 <span class="kbd">P</span></button></div>
         <div class="pos"><span id="vq-pos"></span> <span class="tag ok hidden" id="vq-tier">도전</span> <span class="tag hidden" id="vq-round">다시 풀기</span></div>
       </div>
       <div class="choices" id="vq-choices"></div>
@@ -104,8 +107,8 @@ UI.boot("quiz", () => {
     answered = false;
     $("vq-prog").textContent = `${i + 1} / ${Q.length}`;
     $("vq-score").textContent = `맞힘 ${score}`;
-    $("vq-word").textContent = q.word;
-    $("vq-pos").textContent = q.pos;
+    $("vq-word").textContent = listenMode ? "🎧 ? ? ?" : q.word;
+    $("vq-pos").textContent = listenMode ? "" : q.pos;
     $("vq-tier").classList.toggle("hidden", q.tier !== "stretch");
     $("vq-round").classList.toggle("hidden", round === 1);
     $("vq-choices").classList.remove("locked");
@@ -124,9 +127,10 @@ UI.boot("quiz", () => {
     if (round === 1) { const r = Ward.quizAnswer(q.id, ok); if (r.scheduled) scheduled++; }   // 첫 회차만 기록 (다시 풀기는 연습이라 두 번 세지 않음)
     $("vq-choices").classList.add("locked");
     [...$("vq-choices").children].forEach((b, m) => { if (m === q.answer) b.classList.add("right"); else if (m === k) b.classList.add("wrong"); });
-    $("vq-explain").innerHTML = `<span class="verdict ${ok ? "ok" : "bad"}">${ok ? "정답" : "오답"}</span><b>${esc(q.word)}</b> ${esc(q.meaning)}<div>${esc(q.example)}</div><div class="muted">${esc(q.example_ko)}</div>${q.tip ? `<div class="muted">${esc(q.tip)}</div>` : ""}${ok || round > 1 ? "" : `<div class="muted">→ 복습 카드에 넣었습니다 (내일 다시)</div>`}`;
+    $("vq-explain").innerHTML = `<span class="verdict ${ok ? "ok" : "bad"}">${ok ? "정답" : "오답"}</span><b>${esc(q.word)}</b> ${esc(q.meaning)}<div>${esc(q.example)} <button class="btn small" id="vq-say-ex" type="button" aria-label="예문 듣기">🔊 예문</button></div><div class="muted">${esc(q.example_ko)}</div>${q.tip ? `<div class="muted">${esc(q.tip)}</div>` : ""}${ok || round > 1 ? "" : `<div class="muted">→ 복습 카드에 넣었습니다 (내일 다시)</div>`}`;
     $("vq-explain").classList.remove("hidden");
     $("vq-next").classList.remove("hidden");
+    if (listenMode) { $("vq-word").textContent = q.word; $("vq-pos").textContent = q.pos; }       // 답한 뒤에 글자를 보여 준다
   }
 
   function end() {
@@ -141,6 +145,10 @@ UI.boot("quiz", () => {
     $("vq-retry").classList.toggle("hidden", !missed.length);
   }
 
+  $("vq-explain").addEventListener("click", e => {
+    if (e.target.closest("#vq-say-ex")) { const t = UI.ttsRaw(); TTS.play([{ text: Q[i].example, gender: "female" }], { rate: t.rate, accent: t.accent }); }
+  });
+  $("vq-say").addEventListener("click", () => UI.sayWord(Q[i].word));
   $("vq-choices").addEventListener("click", e => { const b = e.target.closest("[data-k]"); if (b) pick(Number(b.dataset.k)); });
   $("vq-next").addEventListener("click", () => { i++; show(); });
   $("vq-retry").addEventListener("click", () => {
@@ -156,6 +164,7 @@ UI.boot("quiz", () => {
     if (e.ctrlKey || e.metaKey || e.altKey || e.target.closest?.("select, input") || $("vq").classList.contains("hidden")) return;
     const map = { "1": 0, "2": 1, "3": 2, "4": 3, a: 0, b: 1, c: 2, d: 3 };
     const k = e.key.toLowerCase();
+    if (k === "p") { UI.sayWord(Q[i].word); return; }
     if (!answered && k in map && map[k] < Q[i].options.length) pick(map[k]);
     else if (answered && k === "enter") { i++; show(); }
   });
