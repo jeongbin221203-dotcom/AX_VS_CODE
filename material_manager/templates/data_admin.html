@@ -58,7 +58,7 @@
       최근 6개월 입출고, 안전재고 미달, 유효기한 로트, 구매요청·발주, 결재 대기, 월 마감, BOM·작업지시·MRP가 하나씩 들어 있습니다.</p>
   {% endif %}
 
-  <h4>추가 데이터 목록</h4>
+  <h4 id="packs">추가 데이터 목록</h4>
   <p class="muted small">기본 샘플 위에 더하는 복잡한 데이터입니다. 팩마다 자기 플랜트·창고·자재를 만들어 서로 겹치지 않고, 한 번만 추가됩니다.
     시연·교육용 DB에만 넣으세요(운영 DB가 아님).</p>
   {% if not material_cnt %}
@@ -74,6 +74,8 @@
         <td>
           {% if p.done %}
             <span class="badge">추가됨</span>
+          {% elif p.running %}
+            <span class="badge">추가 중…</span>
           {% elif material_cnt %}
             <form method="post" action="{{ url_for('data_admin.add_pack', key=p.key) }}"
                   {% if p.key in ('large', 'mfg') %}data-confirm="{{ p.title }}을(를) 추가합니다. 시간이 걸리고 화면이 무거워질 수 있습니다. 계속할까요?"{% endif %}>

@@ -79,8 +79,16 @@ def test_large_pack_after_clean_sample(monkeypatch):
     c = application.test_client()
     c.get("/")
     token = csrf(c)
+    assert "추가 데이터 넣기" in c.get("/").get_data(as_text=True)          # 시연 사이드바 링크
     res = c.post("/data/pack/large", data={"_csrf": token}, follow_redirects=True)
-    assert "추가했습니다" in res.get_data(as_text=True)
+    assert "백그라운드" in res.get_data(as_text=True)                        # 시연 서버는 오래 걸리는 팩을 백그라운드로
+    import time
+    for _ in range(300):
+        if seed_packs.done("large") and not seed_packs.running():
+            break
+        time.sleep(0.5)
+    assert seed_packs.done("large")
+    assert "이미 추가" in c.post("/data/pack/large", data={"_csrf": token}, follow_redirects=True).get_data(as_text=True)
     assert repo.count_materials() >= 60 and db.scalar("SELECT COUNT(*) FROM transactions") > 5000
     assert db.scalar("""SELECT COUNT(*) FROM (SELECT SUM(CASE WHEN tx_type = 'OUT' THEN -qty ELSE qty END) s
                         FROM transactions GROUP BY material_id, warehouse_id, lot_no) x WHERE s < -0.001""") == 0

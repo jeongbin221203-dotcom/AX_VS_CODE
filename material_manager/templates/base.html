@@ -74,6 +74,9 @@
       </details>
     </div>
     {% endif %}
+    {% if config.DEMO and g.user and g.user.role == 'ADMIN' %}
+    <div class="demo-note small">➕ <a href="{{ url_for('data_admin.index') }}#packs">추가 데이터 넣기</a> — 로트·다중 플랜트·구매·대규모 샘플을 더해 볼 수 있습니다.</div>
+    {% endif %}
     {% if config.DEMO and g.user %}
     <div class="demo-roles small">다른 역할로 보기:
       {% for role, uname, label in DEMO_ROLE_VIEWS %}<a href="{{ url_for('auth.demo_as', role=role) }}" class="{{ 'active' if g.user.username == uname }}">{{ label }}</a>{% if not loop.last %} · {% endif %}{% endfor %}

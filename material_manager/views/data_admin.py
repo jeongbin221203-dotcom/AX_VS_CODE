@@ -27,7 +27,8 @@ PREVIEW_FMT = {"안전재고": "{:,.2f}", "단가": "₩{:,.0f}"}
 
 def _page(**ctx):
     ctx.setdefault("learn_summary", None)
-    packs = [{"key": p.key, "title": p.title, "summary": p.summary, "done": seed_packs.done(p.key)} for p in seed_packs.PACKS]
+    packs = [{"key": p.key, "title": p.title, "summary": p.summary, "done": seed_packs.done(p.key),
+              "running": seed_packs.running(p.key)} for p in seed_packs.PACKS]
     return render_page("data_admin.html", "data", learn=excel_forms.learn_state("material_upload"),
                        material_cnt=repo.count_materials(), packs=packs,
                        db_file=not db.is_pg() and config.DB_PATH.exists(), is_pg=db.is_pg(),
@@ -236,7 +237,7 @@ def add_pack(key: str):
     if not repo.count_materials():
         flash("먼저 기본 샘플을 생성하거나 자재를 등록하세요.", "warning")
         return redirect(url_for("data_admin.index"))
-    ok, msg = seed_packs.add(key, actor())
+    ok, msg = (seed_packs.add_background if config.DEMO else seed_packs.add)(key, actor())
     flash(msg, "success" if ok else "warning")
     return redirect(url_for("data_admin.index"))
 

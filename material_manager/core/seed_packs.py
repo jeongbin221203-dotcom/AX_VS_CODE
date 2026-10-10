@@ -384,3 +384,39 @@ def add(key: str, actor: dict | None = None) -> tuple[bool, str]:
     audit.log(actor, "SEED", "material", f"pack:{key}", counts)
     detail = " · ".join(f"{k} {v:,}" if isinstance(v, int) else f"{k} {v}" for k, v in counts.items())
     return True, f"'{pack.title}'을(를) 추가했습니다 — {detail}"
+
+
+# ── 시연 서버: 오래 걸리는 팩은 요청을 붙잡지 않고 백그라운드에서 ─────────────
+_running: set[str] = set()
+HEAVY = {"large", "mfg"}
+
+
+def running(key: str | None = None):
+    return (key in _running) if key else bool(_running)
+
+
+def add_background(key: str, actor: dict | None = None) -> tuple[bool, str]:
+    """HEAVY 팩은 스레드에서 넣고 바로 돌려준다(무료 서버의 요청 제한 시간 안에 끝나지 않을 수 있다). 한 번에 하나만."""
+    import threading
+    pack = next((p for p in PACKS if p.key == key), None)
+    if pack is None:
+        return False, "알 수 없는 데이터 팩입니다."
+    if key not in HEAVY:
+        return add(key, actor)
+    if done(key):
+        return False, f"'{pack.title}'은(는) 이미 추가되어 있습니다."
+    if _running:
+        return False, "다른 데이터 팩을 추가하는 중입니다. 끝난 뒤 다시 시도하세요."
+    _running.add(key)
+
+    def work():
+        try:
+            add(key, actor)
+        except Exception:                    # 실패해도 서버는 계속 — 다시 눌러 볼 수 있다
+            import logging
+            logging.getLogger("app").exception("데이터 팩 추가 실패: %s", key)
+        finally:
+            _running.discard(key)
+
+    threading.Thread(target=work, daemon=True, name=f"pack-{key}").start()
+    return True, f"'{pack.title}'을(를) 백그라운드에서 추가합니다. 1~2분 뒤 새로 고치면 '추가됨'으로 바뀝니다."
