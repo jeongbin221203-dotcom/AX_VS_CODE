@@ -1,0 +1,24 @@
+/* TS 단어(TS_ward) 전용 추가 스타일 — 기본 모양은 css/app.css (TS 앱과 같음) */
+.vocab-hero { display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: center; margin-bottom: 14px;
+  border: 2px solid var(--accent); background: var(--accent-soft); }
+.vocab-hero h2 { margin: 0 0 4px; }
+.vocab-hero .nums { display: flex; gap: 22px; flex-wrap: wrap; margin: 10px 0 6px; }
+.vocab-hero .nums b { display: block; font-size: 1.9rem; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.vocab-hero .nums span { font-size: .85rem; color: var(--ink-2); }
+.vocab-hero .cta { display: flex; flex-direction: column; gap: 8px; min-width: 190px; }
+.vocab-hero .cta .btn.big { padding: 14px 18px; font-size: 1.1rem; text-align: center; }
+.vocab-hero .done-note { color: var(--ok); font-weight: 700; }
+.nav a.emph { border: 1px solid var(--accent); font-weight: 700; }
+.nav a.emph.on { background: var(--accent); color: #fff; }
+.brand b { font-size: 1rem; }
+.listen-card .btn.big { padding: 12px 26px; font-size: 1.1rem; }
+.listen-card .meaning { font-size: 1.4rem; margin-top: 10px; }
+.vtable { width: 100%; border-collapse: collapse; }
+.vtable th, .vtable td { padding: 10px 12px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+.vtable th { color: var(--ink-3); font-weight: 600; font-size: .85rem; white-space: nowrap; }
+label select, label input[type=checkbox] { margin-left: 4px; }
+.hidden { display: none !important; }
+@media (max-width: 720px) {
+  .vocab-hero { grid-template-columns: 1fr; }
+  .vocab-hero .cta { min-width: 0; }
+}
