@@ -891,13 +891,21 @@ def forecast_accuracy(months: int = 6, db_path: str | None = None) -> pd.DataFra
 # 4. 파이프라인 분석 - 전환율 / 체류일 / Win-Loss
 # ============================================================================
 def stage_conversion(days: int = 365, db_path: str | None = None) -> pd.DataFrame:
-    """단계별 진입 건수와 다음 단계 전환율, 평균 체류일."""
+    """단계별 진입 건수(그 단계 이상에 오른 딜 수)와 다음 단계 전환율, 평균 체류일."""
     since = (date.today() - timedelta(days=days)).strftime("%Y-%m-%d")
-    # 진입건수는 to_stage 기준, 체류일은 from_stage 기준으로 집계해야 의미가 맞다.
-    # (days_in_stage 는 '그 단계에 머문 일수'를 이탈 시점에 기록한 값이다)
-    entered = db._df(
-        "SELECT h.to_stage AS 단계, COUNT(*) AS 진입건수 "
-        "FROM deal_stage_history h WHERE h.changed_at >= ? GROUP BY h.to_stage", [since], db_path)
+    # 진입건수 = 그 단계 '이상'에 오른 딜 수 (협상에서 바로 생긴 딜도 앞 단계를 거친 것으로 센다).
+    # 단계마다 따로 세면 '다음 단계 진입 > 현재 단계 진입'이 되어 전환율이 100%를 넘는다.
+    # 체류일은 from_stage 기준 (days_in_stage 는 '그 단계에 머문 일수'를 이탈 시점에 기록한 값이다)
+    hist = db._df("SELECT h.deal_id AS deal_id, h.to_stage AS to_stage FROM deal_stage_history h "
+                  "WHERE h.changed_at >= ?", [since], db_path)
+    ladder = [s for s in db.STAGES if s != db.STAGE_LOST]            # 리드 … 수주 (순서대로)
+    rank = {s: i for i, s in enumerate(ladder)}
+    best = (hist[hist["to_stage"].isin(rank)].assign(r=lambda d: d["to_stage"].map(rank)).groupby("deal_id")["r"].max()
+            if not hist.empty else pd.Series(dtype="int64"))
+    rows = [{"단계": s, "진입건수": int((best >= rank[s]).sum())} for s in ladder]
+    rows.append({"단계": db.STAGE_LOST, "진입건수": int(hist.loc[hist["to_stage"] == db.STAGE_LOST, "deal_id"].nunique())
+                 if not hist.empty else 0})
+    entered = pd.DataFrame(rows)
     dwell = db._df(
         "SELECT h.from_stage AS 단계, AVG(h.days_in_stage) AS 평균체류일 "
         "FROM deal_stage_history h WHERE h.changed_at >= ? AND h.from_stage IS NOT NULL "

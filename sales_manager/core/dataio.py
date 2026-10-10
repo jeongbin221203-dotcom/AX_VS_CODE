@@ -148,7 +148,7 @@ IMPORT_SPECS: dict[str, dict] = {
         "optional": ["등급", "업종", "사업자번호", "고객담당자", "연락처", "이메일",
                      "주소", "여신한도", "결제조건일", "ERP코드", "메모"],
         "sample": {"거래처명": "예시상사", "담당자": "김영업", "등급": "A", "업종": "제조",
-                   "사업자번호": "123-45-67890", "고객담당자": "홍길동 과장",
+                   "사업자번호": "123-45-67891", "고객담당자": "홍길동 과장",
                    "연락처": "010-1234-5678", "이메일": "hong@example.co.kr",
                    "주소": "서울시 강남구", "여신한도": 300000000, "결제조건일": 30,
                    "ERP코드": "C100234", "메모": "신규 발굴"},
@@ -326,6 +326,12 @@ def _row_customer(row: pd.Series, ctx: dict) -> tuple[str, dict]:
         **_owner(row, ctx),
         "_blank": blank,
     }
+    if data["biz_no"] and not db.valid_biz_no(data["biz_no"]):
+        # 등록 단계(upsert_customer)와 같은 규칙: 이미 저장된 번호를 그대로 두는 갱신은 막지 않는다.
+        # 검증 단계에서 미리 알려 주지 않으면 '등록 가능 4행'이라 해 놓고 등록 때 거부되는 행이 생긴다.
+        old = _existing_customer(data, ctx, ctx.get("db_path"))
+        if not old or db.biz_digits(old.get("biz_no")) != db.biz_digits(data["biz_no"]):
+            raise ValueError(f"사업자번호: {data['biz_no']} 가 올바르지 않습니다 (10자리·검증번호를 확인하세요)")
     return data["owner"], data
 
 

@@ -131,6 +131,24 @@ def demo_login(user: dict) -> None:
     session["sv"] = core_auth.session_version(user)
 
 
+def _demo_back_url() -> str:
+    """시연 잠금 안내 뒤 돌아갈 곳. 이전 화면이 POST 로만 열리는 주소(업로드 검증 결과 등)면 GET 으로 열 수 없어
+    '허용되지 않는 요청'(405)이 뜨므로, GET 으로 열리는 곳이 아니면 그 메뉴의 첫 화면으로 보낸다."""
+    from urllib.parse import urlparse
+    from werkzeug.exceptions import HTTPException
+    from werkzeug.routing import RequestRedirect
+    back = request.referrer or ""
+    if back.startswith(request.host_url):
+        try:
+            current_app.url_map.bind_to_environ(request.environ).match(urlparse(back).path, method="GET")
+            return back
+        except RequestRedirect:
+            return back
+        except HTTPException:
+            pass
+    return url_for("io.index") if request.blueprint == "io" else url_for("reports.dashboard")
+
+
 def load_context():
     """매 요청마다 사용자와 접근범위를 다시 읽는다 → 권한 변경·비활성화가 즉시 반영된다."""
     g.user = None
@@ -181,8 +199,7 @@ def load_context():
         # 시연 서버: 누구나 관리자로 들어오므로 관리자 설정(회사 설정·사용자·ERP·API 키·초기화 등)은 저장을 막는다.
         # 화면은 그대로 볼 수 있고, 업무 데이터(매출·견적·결재 등)는 저장된다.
         flash("시연 서버에서는 관리자 설정을 바꿀 수 없습니다 — 화면만 둘러볼 수 있습니다.", "warning")
-        back = request.referrer or ""
-        return redirect(back if back.startswith(request.host_url) else url_for("reports.dashboard"))
+        return redirect(_demo_back_url())
     if core_auth.password_expired(g.user) and request.endpoint not in PASSWORD_ENDPOINTS:
         flash("비밀번호를 변경해야 계속 사용할 수 있습니다.", "warning")
         return redirect(url_for("auth.password"))

@@ -2,7 +2,7 @@
 {% from "_macros.html" import table, tabs, csrf, select, download, pick, change_history %}
 {% block content %}
 <p class="subtitle">매출·견적의 단가는 <strong>거래처 특가(해당 일자에 유효) → 품목 정가</strong> 순으로 정해집니다.
-  품목은 시스템관리자가, 거래처 특가는 팀장 이상이 담당 범위의 거래처에 대해 등록합니다. 모든 변경은 감사로그에 남습니다.</p>
+  품목은 영업지원 이상이(시스템관리자 포함), 거래처 특가는 팀장 이상이 담당 범위의 거래처에 대해 등록합니다. 모든 변경은 감사로그에 남습니다.</p>
 
 <section class="card">
   {{ tabs([('products', '📦 품목 마스터'), ('prices', '🏷️ 거래처 특가')], tab) }}
