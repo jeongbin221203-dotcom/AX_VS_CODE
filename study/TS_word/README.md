@@ -9,6 +9,17 @@ TS 영어 시험 앱의 **단어 공부 기능 전부**를 서버 없이 HTML·J
   서버로 열면 **홈 화면에 설치**할 수 있고, 한 번 열어 두면 **인터넷이 없어도** 공부됩니다(서비스 워커).
   `file://` 로는 휴대폰 브라우저가 막는 경우가 많습니다.
 
+## Vercel 배포
+빌드가 필요 없는 정적 사이트입니다. `vercel.json`(서비스 워커·매니페스트 헤더)과 `.vercelignore`(tests·tools 제외)가 들어 있습니다.
+
+1. Vercel → **Add New → Project** → GitHub 저장소(`AX_VS_CODE`)를 가져옵니다.
+2. **Root Directory** 를 `study/TS_word` 로 고릅니다.
+3. **Framework Preset** 은 `Other`, Build Command·Output Directory 는 **비워 둡니다**(Install Command 도 비움).
+4. Deploy 한 뒤 **Settings → Git → Production Branch** 를 `TS_word` 로 바꿉니다(그래야 이 브랜치가 운영 주소가 됩니다).
+
+배포되면 https 라서 휴대폰에서 홈 화면에 설치·오프라인 사용이 됩니다. 이후에는 `TS_word` 브랜치에 푸시할 때마다 자동으로 다시 배포됩니다.
+단어를 고치면 `python tools/build_data.py` 후 `sw.js` 의 `CACHE` 이름(`ts-word-v1`)을 올려 푸시하세요.
+
 ## 화면
 | 파일 | 내용 |
 |---|---|
