@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends base_tpl|default("base.html") %}
 {% block title %}차트 비교{% endblock %}
 {% block body %}
 <h1>차트 비교 <small>한쪽을 확대·이동하면 다른 쪽도 같이 움직입니다</small></h1>

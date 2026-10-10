@@ -43,13 +43,45 @@ def chart_meta(cal, thr):
     from core import ai, predict
     info = predict._tech_info(predict.plan())
     labels = [ai.SIGNAL_LABELS[j] for j in range(len(ai.SIGNAL_LABELS))]
-    return {"cal": cal, "labels": labels, "dante": predict.DANTE_IDX, "good": [lab for lab in labels if info.get(lab, {}).get("good")], "thr": thr}
+    tech = {k: {"mean": v["mean"], "p_up": v["p_up"], "years": v["years"], "rule": v["rule"], "good": v["good"], "ai": v["ai"]} for k, v in info.items()}
+    thr = dict(sorted(thr.items()))
+    return {"cal": cal, "labels": labels, "dante": predict.DANTE_IDX, "good": [lab for lab in labels if info.get(lab, {}).get("good")], "why": predict.DANTE_WHY,
+            "tech": tech, "thr": thr, "thr_now": (list(thr.values())[-1] if thr else None)}
 
 
-def charts(log=print) -> int:
-    """추천·강/상으로 나온 종목의 일봉(2021~)·단테 신호·AI 확률을 snapshot/charts/<코드>.json 으로. 이미 충분히 긴 파일은 건너뛴다."""
+def _chart_work(code):
+    """한 종목의 일봉(CHART_FROM~)과 모든 날짜의 단테 신호·AI 확률 — PC 차트와 같은 계산(거래대금 조건 없이 모든 봉)."""
+    import numpy as np
+    from core import ai, predict, service
+    try:
+        df = service.load_prices(code)
+        if len(df) < 60:
+            return None
+        X = ai.compute_features(df, ai.MKT_DF, True)
+        dates = df.index.strftime("%Y-%m-%d").to_numpy()
+        keep = dates >= CHART_FROM
+        P = np.full(len(df), np.nan)
+        valid = np.isfinite(X[:, ai.NAMES.index("ret60")])
+        model = predict._model()
+        if model is not None and valid.any():
+            P[valid] = model.predict_proba(X[valid])[:, 1]
+        sig = np.column_stack([X[:, ai.NAMES.index(f"sig{j:02d}")] for j in predict.DANTE_IDX])
+        mask = ((sig == 0) & np.isfinite(sig)).astype(np.int64) @ (1 << np.array(predict.DANTE_IDX, dtype=np.int64))
+        idx = np.flatnonzero(keep)
+        rnd = lambda v: int(round(v)) if v >= 1000 else round(float(v), 2)  # noqa: E731
+        sub = df.iloc[idx]
+        return {"dates": list(dates[idx]), "o": [rnd(v) for v in sub["open"]], "h": [rnd(v) for v in sub["high"]], "l": [rnd(v) for v in sub["low"]], "c": [rnd(v) for v in sub["close"]],
+                "v": [int(v) for v in sub["volume"].fillna(0)], "p": [(-1 if not np.isfinite(P[i]) else int(round(P[i] * 1000))) for i in idx],
+                "g": [[k, int(mask[i])] for k, i in enumerate(idx) if mask[i]]}
+    except Exception:
+        return None
+
+
+def charts(log=print, workers: int = 0) -> int:
+    """추천·강/상으로 나온 종목의 일봉(2021~)·단테 신호·AI 확률을 snapshot/charts/<코드>.json 으로. 이미 충분히 긴 최신 형식 파일은 건너뛴다."""
+    from concurrent.futures import ProcessPoolExecutor
     from datetime import timedelta
-    from core import db, predict
+    from core import backtest as bt, db, ai
     CHARTS.mkdir(parents=True, exist_ok=True)
     last = _recommended_codes()
     if not last:
@@ -57,36 +89,32 @@ def charts(log=print) -> int:
     with db.get_conn() as c:
         cal = [r["date"] for r in c.execute("SELECT DISTINCT date FROM prices WHERE date >= ? ORDER BY date", (CHART_FROM,))]
         names = {r["code"]: r["name"] for r in c.execute("SELECT code,name FROM symbols")}
-        latest = cal[-1]
-        pos = {d: i for i, d in enumerate(cal)}
-        dante = sum(1 << j for j in predict.DANTE_IDX)
-        n = 0
-        for code, d in sorted(last.items()):
-            need = min(latest, (datetime.strptime(d, "%Y-%m-%d") + timedelta(days=CHART_AFTER_DAYS)).strftime("%Y-%m-%d"))
-            f = CHARTS / f"{code}.json"
-            try:
-                if json.loads(f.read_text(encoding="utf-8")).get("last", "") >= need:
-                    continue
-            except (OSError, ValueError):
-                pass
-            rows = c.execute("SELECT date,open,high,low,close,volume FROM prices WHERE code=? AND date >= ? ORDER BY date", (code, CHART_FROM)).fetchall()
-            if len(rows) < 30:
+    latest = cal[-1]
+    pos = {d: i for i, d in enumerate(cal)}
+    todo = []
+    for code, d in sorted(last.items()):
+        need = min(latest, (datetime.strptime(d, "%Y-%m-%d") + timedelta(days=CHART_AFTER_DAYS)).strftime("%Y-%m-%d"))
+        try:
+            old = json.loads((CHARTS / f"{code}.json").read_text(encoding="utf-8"))
+            if old.get("v") == 2 and old.get("last", "") >= need:
                 continue
-            chk = {r["date"]: (r["prob"], r["sig0"]) for r in c.execute("SELECT date,prob,sig0 FROM daily_checks WHERE code=?", (code,))}
-            idx = [pos[r["date"]] for r in rows]
-            rnd = lambda v: int(round(v)) if v >= 1000 else round(v, 2)  # noqa: E731
-            p, g = [], []
-            for i, r in enumerate(rows):
-                pr, sg = chk.get(r["date"], (None, 0))
-                p.append(-1 if pr is None else int(round(pr * 1000)))
-                if sg and (int(sg) & dante):
-                    g.append([i, int(sg) & dante])
-            obj = {"n": names.get(code, code), "last": rows[-1]["date"], "d": idx, "o": [rnd(r["open"]) for r in rows], "h": [rnd(r["high"]) for r in rows],
-                   "l": [rnd(r["low"]) for r in rows], "c": [rnd(r["close"]) for r in rows], "v": [int(r["volume"] or 0) for r in rows], "p": p, "g": g}
-            f.write_text(json.dumps(obj, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
-            n += 1
-            if n % 200 == 0:
-                log(f"차트 [{n}] {code}")
+        except (OSError, ValueError):
+            pass
+        todo.append(code)
+    n = 0
+    workers = workers or max(1, min(6, (os.cpu_count() or 2) - 2))
+    if todo:
+        with ProcessPoolExecutor(max_workers=workers, initializer=ai._init_worker, initargs=(bt.MKT_PATH,)) as ex:
+            for code, r in zip(todo, ex.map(_chart_work, todo, chunksize=4)):
+                if not r:
+                    continue
+                obj = {"v": 2, "n": names.get(code, code), "last": r["dates"][-1], "d": [pos[x] for x in r["dates"]], "o": r["o"], "h": r["h"], "l": r["l"], "c": r["c"], "v": r["v"], "p": r["p"], "g": r["g"]}
+                obj["vol"] = obj.pop("v")
+                obj["v"] = 2
+                (CHARTS / f"{code}.json").write_text(json.dumps(obj, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+                n += 1
+                if n % 100 == 0:
+                    log(f"차트 [{n}/{len(todo)}] {code}")
     thr = {}
     for f in DAYS.glob("*.json"):
         try:

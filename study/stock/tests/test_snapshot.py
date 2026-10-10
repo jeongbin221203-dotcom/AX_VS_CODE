@@ -103,21 +103,55 @@ def test_trim_keeps_only_recommended(tmp_path, monkeypatch):
     assert publish.compact_old() is False
 
 
-def test_snapshot_chart_routes(tmp_path, monkeypatch):
+def _chart_fixture(tmp_path, monkeypatch):
     charts = tmp_path / "charts"
     charts.mkdir()
-    (charts / "005930.json").write_text(json.dumps({"n": "삼성전자", "last": "2026-10-08", "d": [0, 1], "o": [1, 1], "h": [1, 1], "l": [1, 1], "c": [1, 1], "v": [1, 1], "p": [-1, 200], "g": []}), encoding="utf-8")
-    meta = tmp_path / "chartmeta.json"
-    meta.write_text(json.dumps({"cal": ["2026-10-07", "2026-10-08"], "labels": [], "dante": [], "good": [], "thr": {}}), encoding="utf-8")
+    n = 30
+    cal = [f"2026-09-{d:02d}" for d in range(1, 31)]                       # 9/1(화)~9/30
+    closes = [100 + i for i in range(n)]
+    obj = {"v": 2, "n": "삼성전자", "last": cal[-1], "d": list(range(n)), "o": closes, "h": [x + 2 for x in closes], "l": [x - 2 for x in closes], "c": closes,
+           "vol": [1000] * n, "p": [-1] * 5 + [150] * 25, "g": [[28, 1 << 8], [29, (1 << 11) | (1 << 12)]]}
+    (charts / "005930.json").write_text(json.dumps(obj, ensure_ascii=False), encoding="utf-8")
+    meta = {"cal": cal, "labels": ["l%d" % i for i in range(24)], "dante": [8, 11, 12], "good": ["l12"], "why": {"l8": "공구리 설명"},
+            "tech": {"l8": {"mean": 0.01, "p_up": 0.44, "years": "8/15", "rule": "규칙A", "good": False, "ai": False},
+                     "l12": {"mean": 0.02, "p_up": 0.43, "years": "10/15", "rule": "규칙B", "good": True, "ai": False},
+                     "AI": {"mean": 0.027, "p_up": 0.47, "years": "10/14", "rule": "규칙C", "good": True, "ai": True}},
+            "thr": {"2026-09-30": 0.138}, "thr_now": 0.138}
+    (tmp_path / "chartmeta.json").write_text(json.dumps(meta, ensure_ascii=False), encoding="utf-8")
     f = tmp_path / "signals.json"
     f.write_text(json.dumps(_rep(), ensure_ascii=False), encoding="utf-8")
     monkeypatch.setattr(snapshot_app, "CHARTS", charts)
-    monkeypatch.setattr(snapshot_app, "META", meta)
+    monkeypatch.setattr(snapshot_app, "META", tmp_path / "chartmeta.json")
     monkeypatch.setattr(snapshot_app, "SNAPSHOT", f)
-    c = snapshot_app.create_app().test_client()
-    assert "/chart/005930?date=2026-10-08" in c.get("/").get_data(as_text=True)           # 목록의 종목이 차트로 연결
-    page = c.get("/chart/005930?date=2026-10-08")
-    assert page.status_code == 200 and "삼성전자" in page.get_data(as_text=True) and "snapshot_chart.js" in page.get_data(as_text=True)
-    assert c.get("/chartdata/005930.json").get_json()["n"] == "삼성전자" and c.get("/chartmeta.json").get_json()["cal"][0] == "2026-10-07"
-    assert c.get("/chart/NOPE").status_code == 404 and c.get("/chart/005930?date=abc").status_code == 400
-    assert c.get("/chartdata/..%2Fsignals.json").status_code == 404 and c.get("/chartdata/a.b.json").status_code == 404
+    monkeypatch.delenv("STOCK_SNAPSHOT_PASSWORD", raising=False)
+    return snapshot_app.create_app().test_client()
+
+
+def test_snapshot_uses_local_compare_screen(tmp_path, monkeypatch):
+    c = _chart_fixture(tmp_path, monkeypatch)
+    assert "/compare?a=005930&amp;date=2026-10-08" in c.get("/").get_data(as_text=True)      # 목록 종목 → PC 와 같은 차트 비교 화면
+    page = c.get("/compare?a=005930&date=2026-09-30").get_data(as_text=True)
+    assert "js/compare.js" in page and "예측 (단테 기법)" in page and "AI (상승 확률)" in page and '"focus": "2026-09-30"' in page
+    assert c.get("/chart/005930?date=2026-09-30", follow_redirects=False).status_code == 302
+    assert c.get("/compare?a=NOPE").status_code == 404 and c.get("/compare?a=005930&date=abc").status_code == 400
+    j = c.get("/api/chart/005930?tf=D&bars=5000").get_json()
+    assert len(j["candles"]) == 30 and j["last"]["close"] == 129 and len(j["ma"]["5"]) == 26 and j["volume"][0]["up"] is True
+    w = c.get("/api/chart/005930?tf=W&bars=5000").get_json()                     # 주봉: 9/1~9/4 ... 한 주에 한 봉
+    assert 5 <= len(w["candles"]) <= 6 and w["candles"][-1]["time"] == "2026-09-30"
+    assert c.get("/api/chart/NOPE").status_code == 404 and c.get("/api/chart/005930?tf=X").status_code == 400
+
+
+def test_snapshot_predict_and_search(tmp_path, monkeypatch):
+    c = _chart_fixture(tmp_path, monkeypatch)
+    d = c.get("/api/predict/005930?kind=dante&tf=D&bars=5000").get_json()
+    labs = {(m["date"], m["label"]): m for m in d["markers"]}
+    assert ("2026-09-29", "l8") in labs and labs[("2026-09-30", "l12")]["good"] is True and "처음 보는 해 평균 +2.00%" in labs[("2026-09-30", "l12")]["stat"]
+    assert [r["label"] for r in d["recent"]] == ["l11", "l12", "l8"] or {r["label"] for r in d["recent"]} == {"l8", "l11", "l12"}
+    assert "규칙(l12): 규칙B" in d["summary"]
+    dw = c.get("/api/predict/005930?kind=dante&tf=W&bars=5000").get_json()
+    assert all(m["date"] == "2026-09-30" for m in dw["markers"] if m["label"] in ("l8", "l11", "l12"))        # 주봉에서는 그 주의 마지막 봉으로
+    a = c.get("/api/predict/005930?kind=ai&tf=D&bars=5000").get_json()
+    assert a["thr"] == 0.138 and a["prob"][0]["time"] == "2026-09-06" and a["latest"]["top"] is True and a["markers"][0]["date"] == "2026-09-06"
+    assert "오늘 AI 확률 15.0%" in a["summary"] and "규칙C" in a["summary"]
+    assert c.get("/api/predict/005930?kind=x").status_code == 400 and c.get("/api/predict/NOPE?kind=ai").status_code == 404
+    assert [r["code"] for r in c.get("/api/search?q=삼성").get_json()] == ["005930"] and c.get("/api/search?q=").get_json() == []

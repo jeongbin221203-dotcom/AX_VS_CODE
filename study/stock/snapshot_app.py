@@ -11,7 +11,9 @@ from pathlib import Path
 
 import re
 
-from flask import Flask, Response, abort, render_template, request, send_from_directory
+from flask import Flask, Response, abort, jsonify, redirect, render_template, request, send_from_directory
+
+import snapshot_api
 from jinja2 import Undefined
 from markupsafe import Markup
 
@@ -105,19 +107,64 @@ def create_app():
         return render_template("signals.html", rep=rep, asked=asked, lo=ds[0] if ds else None, hi=ds[-1] if ds else None, mode="date" if asked else "today", min_sig=min_sig, snap_days=ds, charts_avail=chart_codes(),
                                snapshot=True, base_tpl="snapshot_base.html", disclaimer=DISCLAIMER)
 
-    @app.get("/chart/<code>")
-    def chart_page(code):
-        if not CODE_RE.match(code) or not (CHARTS / f"{code}.json").exists():
-            abort(404)
+    store = snapshot_api.Store(CHARTS, META)
+
+    def side(code, set_, tf, default_set, kind, default_kind):
+        try:
+            name = store.raw(code).get("n", code)
+        except OSError:
+            name = code
+        return {"code": code, "name": name, "tf": tf if tf in ("D", "W", "M") else "D", "set": set_ if set_ in ("a", "b", "none") else default_set,
+                "kind": kind if kind in ("none", "dante", "ai") else default_kind}
+
+    @app.get("/compare")
+    def compare():
+        """PC 앱의 '차트 비교' 화면과 같은 화면(같은 HTML·JS). 데이터만 저장된 파일에서 온다."""
+        a = request.args.get("a", "")
+        b = request.args.get("b") or a
+        for c in (a, b):
+            if not store.has(c):
+                abort(404)
         focus = (request.args.get("date") or "").strip()
         if focus and (len(focus) != 10 or not focus.replace("-", "").isdigit()):
             abort(400)
-        try:
-            name = json.loads((CHARTS / f"{code}.json").read_text(encoding="utf-8")).get("n", code)
-        except (OSError, ValueError):
-            name = code
-        back = "/?date=" + focus if focus else "/"
-        return render_template("snapshot_chart.html", code=code, name=name, focus=focus, back=back, rep=None, disclaimer=DISCLAIMER)
+        pa = side(a, request.args.get("sa"), request.args.get("ta"), "a", request.args.get("ka"), "dante")
+        pb = side(b, request.args.get("sb"), request.args.get("tb"), "b" if b == a else "a", request.args.get("kb"), "ai")
+        return render_template("compare.html", pa=pa, pb=pb, focus=focus, base_tpl="snapshot_base.html", rep=None, disclaimer=DISCLAIMER)
+
+    @app.get("/chart/<code>")
+    def chart_page(code):
+        if not store.has(code):
+            abort(404)
+        return redirect(f"/compare?a={code}" + (f"&date={request.args['date']}" if request.args.get("date", "").replace("-", "").isdigit() else ""))
+
+    def _tf_bars():
+        tf = request.args.get("tf", "D")
+        if tf not in ("D", "W", "M"):
+            abort(400)
+        return tf, min(max(request.args.get("bars", 500, type=int), 30), 5000)
+
+    @app.get("/api/chart/<code>")
+    def api_chart(code):
+        if not store.has(code):
+            return jsonify(error="이 종목의 데이터가 없습니다(스냅샷에는 추천·강/상으로 나온 종목만 있음)"), 404
+        tf, nbars = _tf_bars()
+        return jsonify(snapshot_api.chart_payload(store, code, tf, nbars))
+
+    @app.get("/api/predict/<code>")
+    def api_predict(code):
+        kind = request.args.get("kind", "dante")
+        if kind not in ("dante", "ai"):
+            return jsonify(error="kind must be dante/ai"), 400
+        if not store.has(code):
+            return jsonify(error="이 종목의 데이터가 없습니다"), 404
+        tf, nbars = _tf_bars()
+        fn = snapshot_api.dante if kind == "dante" else snapshot_api.ai_pred
+        return jsonify(fn(store, code, tf, nbars))
+
+    @app.get("/api/search")
+    def api_search():
+        return jsonify(snapshot_api.search(store, request.args.get("q", "")))
 
     @app.get("/chartdata/<code>.json")
     def chart_data(code):
