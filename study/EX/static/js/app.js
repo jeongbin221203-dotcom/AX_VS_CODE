@@ -157,6 +157,27 @@
     });
   }
 
+  /* 단축키 모음 검색 */
+  var ssearch = document.getElementById('sc-search');
+  if (ssearch) {
+    var shot = document.getElementById('sc-hot');
+    var filterShortcuts = function () {
+      var q = ssearch.value.replace(/\s+/g, '').toUpperCase();
+      var onlyHot = !!(shot && shot.checked);
+      document.querySelectorAll('[data-sc]').forEach(function (r) {
+        var miss = q && r.getAttribute('data-sc').replace(/\s+/g, '').toUpperCase().indexOf(q) < 0;
+        r.classList.toggle('hidden', !!miss || (onlyHot && !r.hasAttribute('data-hot')));
+      });
+      document.querySelectorAll('[data-sc-group]').forEach(function (g) {
+        g.classList.toggle('hidden', !g.querySelector('[data-sc]:not(.hidden)'));
+      });
+      var none = document.getElementById('sc-none');
+      if (none) none.classList.toggle('hidden', !!document.querySelector('[data-sc]:not(.hidden)'));
+    };
+    ssearch.addEventListener('input', filterShortcuts);
+    if (shot) shot.addEventListener('change', filterShortcuts);
+  }
+
   /* 파일 끌어 놓기 */
   document.querySelectorAll('[data-drop]').forEach(function (zone) {
     var input = zone.querySelector('input[type=file]');

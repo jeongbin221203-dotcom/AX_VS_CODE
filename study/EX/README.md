@@ -44,7 +44,7 @@ python app.py            # http://127.0.0.1:5005
 - `core/content.py` 문제 은행 읽기·채점·시트 격자 · `core/study.py` 기록·대시보드 통계
 - `core/analyze.py` 파일 → 표 → 요약 · `core/build.py` 실습 과제·연습 파일·채점 · `core/xlsx.py` 안전한 엑셀 읽기
 - `views/` main · learn · functions · analyze · build
-- `content/problems/*.json` 문제(형식 `content/SCHEMA.md`), `content/functions.json` 함수 사전, `content/datasets.json` 공용 데이터
+- `content/problems/*.json` 문제(형식 `content/SCHEMA.md`), `content/functions.json` 함수 사전, `content/shortcuts.json` 엑셀 단축키 모음(/shortcuts, 검사는 tests/test_shortcuts.py), `content/datasets.json` 공용 데이터
 - CSP `script-src 'self'` — 인라인 스크립트 금지, 데이터는 `<script type="application/json">`
 
 ## 검사

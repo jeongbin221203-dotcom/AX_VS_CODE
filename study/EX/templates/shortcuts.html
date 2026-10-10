@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}엑셀 단축키 · 엑셀 연습장{% endblock %}
+{% macro keys(list, seq) -%}
+  {%- for k in list -%}<kbd>{{ k }}</kbd>{% if not loop.last %}<span class="sc-join" aria-hidden="true">{{ ',' if seq else '+' }}</span><span class="visually-hidden">{{ ', 그다음 ' if seq else ' 와 함께 ' }}</span>{% endif %}{%- endfor -%}
+{%- endmacro %}
+{% block content %}
+<div class="page-head">
+  <div><h1>엑셀 단축키</h1><p>Windows용 Excel(2016 이상) 기준 {{ total }}개 · 시험·실무에서 자주 쓰는 {{ hot }}개는 <span class="sc-hot" title="자주 쓰는 키">★</span> 로 표시했습니다.</p></div>
+  <div class="sc-tools">
+    <input id="sc-search" type="search" placeholder="기능·키 검색 (예: 저장, Ctrl+1, 날짜)" aria-label="단축키 검색">
+    <label class="sc-only"><input type="checkbox" id="sc-hot"> ★ 자주 쓰는 키만</label>
+  </div>
+</div>
+<p class="muted small">표기: <kbd>Ctrl</kbd><span class="sc-join">+</span><kbd>C</kbd> 는 두 키를 <b>동시에</b> 누르고, <kbd>Alt</kbd><span class="sc-join">,</span><kbd>H</kbd><span class="sc-join">,</span><kbd>O</kbd> 는 <b>한 키씩 차례로</b> 누릅니다. 한글 입력 상태에서는 일부 키가 동작하지 않을 수 있으니 영문으로 바꾼 뒤 누르세요.</p>
+<div id="sc-none" class="card empty hidden">찾는 단축키가 없습니다. '저장', '복사', '날짜', '필터'처럼 기능의 일부 단어로 찾아 보세요.</div>
+{% for g in groups %}
+<section class="card" data-sc-group>
+  <h2>{{ g.name }}</h2>
+  {% if g.note %}<p class="muted small">{{ g.note }}</p>{% endif %}
+  <table class="t sc-table">
+    <thead><tr><th scope="col">단축키</th><th scope="col">기능</th></tr></thead>
+    <tbody>
+    {% for it in g['items'] %}
+    {% set all_keys = [it.k] + it.get('also', []) %}
+    <tr data-sc="{{ g.name }} {{ it.d }} {{ it.get('also_d', '') }} {% for a in all_keys %}{{ a|join('+') }} {{ a|join(' ') }} {% endfor %}" {% if it.hot %}data-hot="1"{% endif %}>
+      <td class="sc-keys">{% if it.hot %}<span class="sc-hot" title="자주 쓰는 키"><span class="visually-hidden">자주 쓰는 키 </span>★</span>{% endif %}{{ keys(it.k, it.seq) }}</td>
+      <td>{{ it.d }}{% if it.get('also_d') %}<div class="muted small">{{ it.also_d }}</div>{% endif %}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endfor %}
+{% endblock %}

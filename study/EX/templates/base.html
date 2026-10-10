@@ -21,6 +21,7 @@
       <a href="{{ url_for('learn.index') }}" class="{{ 'on' if ep.startswith('learn.') and ep != 'learn.review' }}">문제 풀기</a>
       <a href="{{ url_for('learn.review') }}" class="{{ 'on' if ep == 'learn.review' }}">오답 노트</a>
       <a href="{{ url_for('functions.index') }}" class="{{ 'on' if ep.startswith('functions.') }}">함수 사전</a>
+      <a href="{{ url_for('shortcuts.index') }}" class="{{ 'on' if ep.startswith('shortcuts.') }}">단축키</a>
       <a href="{{ url_for('analyze.index') }}" class="{{ 'on' if ep.startswith('analyze.') }}">파일 분석</a>
       <a href="{{ url_for('build.index') }}" class="{{ 'on' if ep.startswith('build.') }}">대시보드 실습</a>
       <a href="{{ url_for('exam.index') }}" class="{{ 'on' if ep.startswith('exam.') }}">컴활 모의고사</a>

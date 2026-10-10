@@ -254,6 +254,15 @@ table.sheet td.spill { background: var(--accent-soft); font-style: italic; }
 details summary { cursor: pointer; color: var(--ink-2); font-size: .88rem; }
 
 /* 함수 사전 */
+kbd { display: inline-block; min-width: 1.6em; padding: 1px 6px; margin: 1px 0; border: 1px solid var(--line-strong); border-bottom-width: 2px;
+  border-radius: 5px; background: var(--surface-2); color: var(--ink); font-family: var(--mono); font-size: .82rem; line-height: 1.5; text-align: center; }
+.sc-join { color: var(--ink-3); margin: 0 3px; }
+.sc-keys { white-space: nowrap; width: 1%; }
+.sc-hot { color: var(--accent); margin-right: 6px; }
+.sc-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.sc-tools input[type=search] { width: 280px; max-width: 100%; }
+.sc-only { font-size: .88rem; color: var(--ink-2); white-space: nowrap; }
+@media (max-width: 640px) { .sc-keys { white-space: normal; } }
 .fn-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
 .fn-card { display: block; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: inherit; }
 .fn-card:hover { border-color: var(--accent-line); text-decoration: none; }
