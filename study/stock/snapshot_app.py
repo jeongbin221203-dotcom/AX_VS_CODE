@@ -53,6 +53,13 @@ def load_day(date):
         return None
 
 
+def chart_codes():
+    try:
+        return {p.stem for p in CHARTS.glob("*.json")}
+    except OSError:
+        return set()
+
+
 def create_app():
     app = Flask(__name__)
     app.jinja_env.filters["pct"] = pct
@@ -95,7 +102,7 @@ def create_app():
         if rep and min_sig > 1:
             for k in ("pred", "ai", "high"):
                 rep[k] = [r for r in rep.get(k, []) if len(r["signals"]) >= min_sig]
-        return render_template("signals.html", rep=rep, asked=asked, lo=ds[0] if ds else None, hi=ds[-1] if ds else None, mode="date" if asked else "today", min_sig=min_sig, snap_days=ds,
+        return render_template("signals.html", rep=rep, asked=asked, lo=ds[0] if ds else None, hi=ds[-1] if ds else None, mode="date" if asked else "today", min_sig=min_sig, snap_days=ds, charts_avail=chart_codes(),
                                snapshot=True, base_tpl="snapshot_base.html", disclaimer=DISCLAIMER)
 
     @app.get("/chart/<code>")

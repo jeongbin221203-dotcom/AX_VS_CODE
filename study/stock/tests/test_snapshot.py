@@ -27,7 +27,7 @@ def client(tmp_path, monkeypatch):
 def test_snapshot_page_has_no_links_or_forms(client):
     html = client.get("/").get_data(as_text=True)
     assert "삼성전자" in html and "읽기 전용 스냅샷" in html and "상 — 대기 후보" in html
-    assert "/compare" not in html and "/chart/005930" in html
+    assert "/compare" not in html and "/chart/005930" not in html     # 차트 파일이 없는 종목은 링크 없음
     assert "2개 이상 겹침" in html and client.get("/?min=2").status_code == 200
     assert "신호 2개 이상 겹친 종목만" in client.get("/?min=2").get_data(as_text=True)
     assert client.get("/healthz").get_data(as_text=True) == "ok"
