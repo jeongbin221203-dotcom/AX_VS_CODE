@@ -110,3 +110,15 @@ test('휴대폰 화면 스타일: 줄 전체 폭 링크 규칙이 정답 줄까�
   assert.match(css, /\.review-answer\{[^}]*flex-wrap:wrap/);
   assert.match(css, /\.review-answer strong\{[^}]*white-space:nowrap/);
 });
+
+test('문제 글의 띄어쓰기: 시험지 PDF 에서 빠졌던 공백을 되살림(제목의 82%가 붙어 나오던 문제)', () => {
+  const byId = new Map(catalog.map(q => [q.id, q]));
+  assert.equal(byId.get(59000).title, '1. 대외무역법령상 무역거래의 대상(객체)에 해당하지 않는 것은?');
+  assert.equal(byId.get(59090).title, '1. 다음 offer의 내용상 밑줄 친 (A)～(D) 중에서 내용이 부적절한 것은?');
+  for (const q of catalog) {
+    const hangul = (q.title.match(/[가-힣]/g) || []).length;
+    if (hangul >= 10) assert.ok((q.title.split(' ').length - 1) / hangul >= 0.08, `${q.id} ${q.title}`);
+    assert.ok(!/[가-힣]{12,}/.test(q.title), `${q.id} 한글이 12자 넘게 붙어 있음: ${q.title}`);
+  }
+  assert.ok(byId.get(59021).body.includes('A. 보세창고') && byId.get(59021).body.includes('E. 종합보세구역'));
+});

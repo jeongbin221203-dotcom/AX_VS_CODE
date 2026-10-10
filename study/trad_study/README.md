@@ -81,7 +81,7 @@
 
 총 **840문항**, 과목별 **210문항**, 공통 지문 **42개 묶음**입니다. 사용자가 제공한 최종 PDF를 기준으로 하며, 앞서 제출된 HWP 변환 실패 파일이나 중복 문제지는 사용하지 않습니다.
 
-문항을 PDF에서 읽을 때 60회 무역규범 13번의 마침표 생략, 62회 무역계약 28번의 다른 들여쓰기, 다음 페이지까지 이어지는 공통 지문을 처리했습니다(변환 규칙은 Flask 버전의 `scripts/build_catalog.py`). 원본별 쪽수와 문제 PDF의 SHA-256, 회차별 공통 지문 묶음 수는 `data/validation.json`에 있습니다. 이 폴더의 데이터가 Flask 버전과 같은지는 `scripts/verify_against_flask.py`로 대조합니다(아래 "검증").
+문항을 PDF에서 읽을 때 60회 무역규범 13번의 마침표 생략, 62회 무역계약 28번의 다른 들여쓰기, 다음 페이지까지 이어지는 공통 지문을 처리했습니다(변환 규칙은 Flask 버전의 `scripts/build_catalog.py`). 시험지 PDF의 글자 층에는 문제 문장의 공백이 빠져 있어, 같은 변환 단계에서 글자 위치(간격)로 띄어쓰기를 되살렸습니다(Flask 버전 `scripts/respace.py`). 원본별 쪽수와 문제 PDF의 SHA-256, 회차별 공통 지문 묶음 수는 `data/validation.json`에 있습니다. 이 폴더의 데이터가 Flask 버전과 같은지는 `scripts/verify_against_flask.py`로 대조합니다(아래 "검증").
 
 ```text
 trad_study/
@@ -118,7 +118,7 @@ python scripts/build_data.py --font-only  # 화면 글자가 바뀌어 글꼴만
 ## 검증
 
 ```powershell
-node --test        # Node 20 이상, 추가 설치 없음. 33개
+node --test        # Node 20 이상, 추가 설치 없음. 34개
 python scripts/verify_against_flask.py   # 데이터·이미지·PDF 를 Flask 버전과 대조 (Python, ../trad 필요)
 ```
 
