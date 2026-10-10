@@ -68,5 +68,53 @@ t("schedule: 잘못된 평가는 거부", () => assert.throws(() => Ward.schedul
       vm.runInContext(fs.readFileSync(path.join(root, "js/store.js"), "utf8"), c); return w.Ward; })();
     assert.ok(s3.cardOf(id) && s3.cardOf(id).reps === 1);
   });
+  t("내 등급을 정하면 새 단어가 그 등급부터 나온다", () => {
+    const s2 = sandbox(); return s2.Ward.init().then(() => {
+      s2.Ward.setSetting({ my_level: 4 });
+      const q = s2.Ward.queue({ dailyNew: 10 });
+      assert.ok(q.new.length === 10 && q.new.every(w => w.level === 4));
+      s2.Ward.setSetting({ my_level: 0 });
+      assert.ok(s2.Ward.queue({ dailyNew: 10 }).new.every(w => w.level === 1));
+    });
+  });
+  t("토익 점수 → 등급", () => {
+    const L = W.levelFromScore;
+    assert.deepStrictEqual([L(10), L(215), L(220), L(465), L(470), L(725), L(730), L(855), L(860), L(990)], [1, 1, 2, 2, 3, 3, 4, 4, 5, 5]);
+  });
+  await (async () => {
+    const A = sandbox(), B = sandbox();
+    await A.Ward.init(); await B.Ward.init();
+    const ids = A.Ward.words().slice(0, 3).map(w => w.id);
+    A.Ward.review(ids[0], 5); A.Ward.review(ids[1], 4); A.Ward.toggleStar(ids[2]);
+    B.Ward.review(ids[1], 0); B.Ward.review(ids[2], 5);
+    const dumpA = A.Ward.exportJSON();
+    // B 가 A 의 기록을 '합치기' 로 불러온다
+    const r = B.Ward.importJSON(dumpA, "merge");
+    t("합치기: A 의 카드가 더해지고 B 의 것도 남는다", () => {
+      assert.ok(B.Ward.cardOf(ids[0]) && B.Ward.cardOf(ids[1]) && B.Ward.cardOf(ids[2]));
+      assert.strictEqual(r.added, 1);                                  // ids[0] 만 새로 들어옴
+    });
+    t("합치기: 별표는 어느 한쪽이라도 있으면 유지", () => assert.strictEqual(B.Ward.cardOf(ids[2]).starred, 1));
+    t("합치기: 기록은 중복 없이 합쳐진다", () => {
+      const before = JSON.parse(B.Ward.exportJSON()).log.length;
+      B.Ward.importJSON(dumpA, "merge");                                // 같은 파일을 또 합쳐도 늘지 않는다
+      assert.strictEqual(JSON.parse(B.Ward.exportJSON()).log.length, before);
+    });
+    t("바꾸기: 파일 내용으로 통째로 바뀐다", () => {
+      B.Ward.importJSON(dumpA, "replace");
+      assert.strictEqual(B.Ward.exportJSON(), dumpA);
+    });
+    t("TS 앱에서 변환한 백업(형식)을 불러올 수 있다", () => {
+      const ts = { app: "ts-word", v: 1, settings: { daily_new: 15 }, cards: { "v-0001": { ef: 2.6, interval: 2, reps: 1, lapses: 0, due: "2026-09-29", first_seen: "2026-09-27T20:36:57", last_review: "2026-09-27T20:36:57", starred: 0 } },
+        log: [{ i: "v-0001", g: 5, n: 1, t: "2026-09-27T20:36:57" }], quiz: [] };
+      const C = sandbox(); return C.Ward.init().then(() => {
+        C.Ward.importJSON(JSON.stringify(ts), "merge");
+        assert.strictEqual(C.Ward.cardOf("v-0001").interval, 2);
+        assert.strictEqual(C.Ward.settings().daily_new, 20);            // 합치기는 지금 설정을 지킨다
+        C.Ward.importJSON(JSON.stringify(ts), "replace");
+        assert.strictEqual(C.Ward.settings().daily_new, 15);            // 바꾸기는 파일의 설정을 따른다
+      });
+    });
+  })();
   console.log(`\n${ok}개 통과`);
 })().catch(e => { console.error("실패:", e.message); process.exit(1); });

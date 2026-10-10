@@ -14,6 +14,9 @@ UI.boot("home", () => {
   const totalMastered = prog.reduce((s, p) => s + p.mastered, 0);
   const all = Ward.words().length;
   const done = !q.due.length && !q.new.length;
+  const myLv = Number(Ward.settings().my_level) || 0;
+  const mine = myLv ? prog.find(p => p.level === myLv) : null;
+  const myName = mine ? grades.find(g => g.level === myLv).name : "";
 
   const levels = prog.map(p => {
     const g = grades.find(x => x.level === p.level);
@@ -40,11 +43,11 @@ UI.boot("home", () => {
     <div class="card vocab-hero">
       <div>
         <h2>📘 오늘의 단어 — 먼저 하세요</h2>
-        <div class="small muted">문제를 못 푸는 가장 큰 이유는 단어입니다. 단어를 먼저 끝내면 같은 문제가 훨씬 쉬워집니다.</div>
+        <div class="small muted">문제를 못 푸는 가장 큰 이유는 단어입니다. 단어를 먼저 끝내면 같은 문제가 훨씬 쉬워집니다.${mine ? ` 새 단어는 내 등급(${esc(myName)})부터 나옵니다.` : ` <a href="settings.html">내 등급을 정하면</a> 그 등급 단어부터 나옵니다.`}</div>
         <div class="nums">
           <div><b>${q.due.length}</b><span>복습할 단어</span></div>
           <div><b>${q.new.length}</b><span>새 단어 (하루 ${daily}개)</span></div>
-          <div><b>${totalSeen}<small style="font-size:1rem;font-weight:600"> / ${all}</small></b><span>본 단어 · 외운 ${totalMastered}</span></div>
+          <div><b>${mine ? mine.seen : totalSeen}<small style="font-size:1rem;font-weight:600"> / ${mine ? mine.total : all}</small></b><span>${mine ? esc(myName) + " 단어 본 수 · 외운 " + mine.mastered : "본 단어 · 외운 " + totalMastered}</span></div>
           <div><b>${Ward.streak()}</b><span>연속 학습일</span></div>
         </div>
         <div class="bar"><i style="width:${all ? Math.round(totalSeen / all * 100) : 0}%"></i></div>

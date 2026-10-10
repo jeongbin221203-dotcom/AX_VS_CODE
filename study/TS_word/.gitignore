@@ -1,0 +1,4 @@
+# 만든 음성 파일과 개인 백업은 올리지 않는다
+audio/
+ts-word-backup*.json
+__pycache__/

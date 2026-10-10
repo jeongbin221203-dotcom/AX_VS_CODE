@@ -17,7 +17,9 @@
     toefl: [2, 3, 4, 5, 6].map((b, i) => ({ level: i + 1, name: "밴드 " + b, range: "CEFR " + ["A2", "B1", "B2", "C1", "C2"][i] })),
   };
   const SET_NAMES = { toeic: "토익 단어", toefl: "토플 학술 어휘" };
-  const DEFAULTS = { set: "toeic", daily_new: 20, tts_rate: 1, tts_accent: "mix" };
+  // 토익 점수 → 등급(1~5). TS 앱의 등급표(Orange 10~, Brown 220~, Green 470~, Blue 730~, Gold 860~)와 같다
+  const levelFromScore = score => (score >= 860 ? 5 : score >= 730 ? 4 : score >= 470 ? 3 : score >= 220 ? 2 : 1);
+  const DEFAULTS = { set: "toeic", daily_new: 20, tts_rate: 1, tts_accent: "mix", my_level: 0 };   // my_level 0 = 자동(1등급부터)
 
   const pad = n => String(n).padStart(2, "0");
   const todayStr = (d = new Date()) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
@@ -163,6 +165,7 @@
   // 오늘 볼 카드: 복습 예정(due) 먼저, 그다음 새 단어(하루 한도까지)
   function queue({ level = null, tier = null, starredOnly = false, startLevel = null, dailyNew } = {}) {
     const today = todayStr();
+    if (startLevel === null) startLevel = Number(db.settings.my_level) || null;   // 내 등급부터 새 단어 (700점대가 1등급 단어부터 나오지 않게)
     dailyNew = dailyNew ?? Number(db.settings.daily_new) ?? 20;
     let ws = words.filter(w => (!level || w.level === level) && (!tier || w.tier === tier));
     ws = ws.slice().sort((a, b) =>
@@ -207,17 +210,34 @@
   }
 
   // ---- 백업 ------------------------------------------------------------------------
-  const exportJSON = () => JSON.stringify({ app: "ts-ward", ...db }, null, 0);
-  function importJSON(text) {
+  const exportJSON = () => JSON.stringify({ app: "ts-word", ...db }, null, 0);
+  /* mode "replace": 지금 기록을 파일 내용으로 바꾼다 / "merge": 합친다(카드는 나중에 복습한 쪽, 별표는 어느 한쪽이라도, 기록은 중복 없이) */
+  function importJSON(text, mode = "replace") {
     const raw = JSON.parse(text);
     if (!raw || typeof raw !== "object" || !raw.cards || typeof raw.cards !== "object") throw new Error("백업 파일 모양이 아닙니다");
-    db = normalize(raw);
+    const inc = normalize(raw);
+    if (mode !== "merge") { db = inc; save(); return { cards: Object.keys(db.cards).length }; }
+    let added = 0;
+    for (const [id, c] of Object.entries(inc.cards)) {
+      const cur = db.cards[id];
+      if (!cur) { db.cards[id] = c; added++; }
+      else if ((c.last_review || "") > (cur.last_review || "")) db.cards[id] = { ...c, starred: c.starred || cur.starred ? 1 : 0 };
+      else if (c.starred) cur.starred = 1;
+    }
+    const union = (mine, theirs, keyOf) => {
+      const seen = new Set(mine.map(keyOf));
+      for (const x of theirs) if (!seen.has(keyOf(x))) { mine.push(x); seen.add(keyOf(x)); }
+      return mine.sort((a, b) => (a.t < b.t ? -1 : a.t > b.t ? 1 : 0));
+    };
+    db.log = union(db.log, inc.log, l => `${l.i}|${l.t}|${l.g}`);
+    db.quiz = union(db.quiz, inc.quiz, q => `${q.i}|${q.t}|${q.o}`);
     save();
+    return { cards: Object.keys(db.cards).length, added };
   }
   function reset() { db = fresh(); save(); }
 
   window.Ward = {
-    GRADES, TIERS, SET_NAMES, MASTERED_DAYS, WEAK_MIN_FAILS,
+    GRADES, TIERS, SET_NAMES, MASTERED_DAYS, WEAK_MIN_FAILS, levelFromScore,
     todayStr, init, settings, setSetting, currentSet,
     words: () => words, wordById: id => byId.get(id), grades: () => GRADES[currentSet()],
     cardOf, stateOf, seen, schedule, review, quizAnswer, toggleStar, failCounts, recentlyMissed,

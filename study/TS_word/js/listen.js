@@ -8,7 +8,7 @@ UI.boot("listen", () => {
   const which = SETS[P.get("set")] ? P.get("set") : "all";
   const grades = Ward.grades();
   const STORE = "ward:listen";
-  const OPTS = ["repeats", "order", "rate-en", "rate-ko", "gap", "after", "example", "loop"];
+  const OPTS = ["repeats", "order", "rate-en", "rate-ko", "gap", "after", "example", "spell", "loop"];
 
   const fails = which === "weak" ? Ward.failCounts() : {};
   const words = Ward.words().slice().sort((a, b) => a.level - b.level || Number(a.tier !== "core") - Number(b.tier !== "core")).filter(w => {
@@ -46,6 +46,7 @@ UI.boot("listen", () => {
         <button class="btn" id="ls-prev">⏮</button>
         <button class="btn primary big" id="ls-play">▶ 시작</button>
         <button class="btn" id="ls-next">⏭</button>
+        <button class="btn" id="ls-stop" title="정지">■ 정지</button>
         <button class="star" id="ls-star" title="별표">★</button>
       </div>
       <div class="small muted" id="ls-warn" style="text-align:center;margin-top:8px"></div>
@@ -53,13 +54,20 @@ UI.boot("listen", () => {
     <div class="card"><h2 style="margin-top:0">듣기 설정</h2><div class="grid three">
       <label>영어 반복 <select id="opt-repeats">${[1, 2, 3, 4, 5].map(n => `<option value="${n}" ${n === 3 ? "selected" : ""}>${n}번</option>`).join("")}</select></label>
       <label>순서 <select id="opt-order"><option value="seq">차례대로</option><option value="shuffle">섞어서</option></select></label>
-      <label>영어 속도 <select id="opt-rate-en">${[0.8, 0.9, 1, 1.1].map(r => `<option value="${r}" ${r === 1 ? "selected" : ""}>${r}배</option>`).join("")}</select></label>
-      <label>한국어 속도 <select id="opt-rate-ko">${[0.9, 1, 1.1, 1.25].map(r => `<option value="${r}" ${r === 1 ? "selected" : ""}>${r}배</option>`).join("")}</select></label>
-      <label>반복 사이 쉼 <select id="opt-gap">${[0.3, 0.6, 1, 1.5].map(r => `<option value="${r}" ${r === 0.6 ? "selected" : ""}>${r}초</option>`).join("")}</select></label>
-      <label>단어 사이 쉼 <select id="opt-after">${[0.5, 1, 1.5, 2.5].map(r => `<option value="${r}" ${r === 1 ? "selected" : ""}>${r}초</option>`).join("")}</select></label>
-      <label><input type="checkbox" id="opt-example"> 예문도 읽기</label>
+      <label>영어 속도 <select id="opt-rate-en">${[0.7, 0.8, 0.9, 1, 1.1, 1.2].map(r => `<option value="${r}" ${r === 0.9 ? "selected" : ""}>${r}배</option>`).join("")}</select></label>
+      <label>한국어 속도 <select id="opt-rate-ko">${[0.9, 1, 1.1, 1.2, 1.3].map(r => `<option value="${r}" ${r === 1.1 ? "selected" : ""}>${r}배</option>`).join("")}</select></label>
+      <label>반복 사이 쉼 <select id="opt-gap">${[0.5, 0.8, 1.2, 1.8].map(r => `<option value="${r}" ${r === 0.8 ? "selected" : ""}>${r}초</option>`).join("")}</select></label>
+      <label>단어 사이 쉼 <select id="opt-after">${[1, 1.5, 2.5, 4].map(r => `<option value="${r}" ${r === 1.5 ? "selected" : ""}>${r}초</option>`).join("")}</select></label>
+      <label><input type="checkbox" id="opt-example"> 뜻 다음에 영어 예문도 읽기</label>
+      <label><input type="checkbox" id="opt-spell"> 단어 철자도 읽기 (s-u-b-m-i-t)</label>
       <label><input type="checkbox" id="opt-loop" checked> 끝나면 처음부터 반복</label>
-    </div></div>` : `<div class="card empty">조건에 맞는 단어가 없습니다. <a class="btn" href="listen.html">전체 단어로 듣기</a></div>`}`;
+    </div></div>
+    <div class="card"><h2 style="margin-top:0">🎧 긴 MP3 파일로 만들기 <span class="small muted">(화면을 끄고 듣는 용도)</span></h2>
+      <p class="small muted">브라우저만으로는 음성 파일을 만들 수 없어서 컴퓨터에서 한 줄을 실행합니다. (Python, <code>pip install edge-tts lameenc</code> 필요)
+      지금 고른 조건 그대로의 명령이 아래에 만들어집니다. 만든 파일은 <code>audio/</code> 폴더에 생기고, 휴대폰에 옮겨 들으세요.</p>
+      <pre class="cmd" id="mp3-cmd" style="white-space:pre-wrap;word-break:break-all;background:var(--surface-2);padding:10px;border-radius:8px"></pre>
+      <div class="row"><label class="small">길이 <select id="mp3-min"><option>10</option><option>30</option><option selected>60</option></select>분</label>
+        <button class="btn small" id="mp3-copy">명령 복사</button></div></div>` : `<div class="card empty">조건에 맞는 단어가 없습니다. <a class="btn" href="listen.html">전체 단어로 듣기</a></div>`}`;
 
   $("filters").addEventListener("change", () => {
     const q = {};
@@ -78,6 +86,7 @@ UI.boot("listen", () => {
     if (saved.opts && k in saved.opts) el.type === "checkbox" ? (el.checked = saved.opts[k]) : (el.value = saved.opts[k]);
     el.addEventListener("change", () => { save({ opts: readOpts(true) }); if (k === "order") buildOrder(true); });
   }
+  function readOptsRaw() { return readOpts(true); }
   function readOpts(raw) {
     const o = {};
     for (const k of OPTS) { const el = $("opt-" + k); o[k] = el.type === "checkbox" ? el.checked : el.value; }
@@ -111,11 +120,13 @@ UI.boot("listen", () => {
 
   async function speakWord(my) {
     const o = readOpts(), w = cur(), segs = [];
+    const spell = readOptsRaw().spell;
     const ACC = [["us", "미국"], ["uk", "영국"], ["au", "호주"]];     // 반복할 때 미국 → 영국 → 호주
     for (let i = 0; i < o.repeats; i++) {
       const [acc, name] = ACC[i % 3];
       segs.push({ text: clean(w.word), gender: (i + order[pos]) % 2 ? "male" : "female", accent: acc, rate: o.rateEn, pause: o.gap,
                   onStart: () => show(`영어 ${i + 1}/${o.repeats} · ${name}`) });
+      if (spell && i === 0 && !/\s/.test(w.word)) segs.push({ text: clean(w.word).toUpperCase().split("").join(", "), gender: "female", rate: o.rateEn, pause: o.gap });
     }
     segs.push({ text: clean(w.meaning) || w.meaning, lang: "ko", rate: o.rateKo, pause: o.example ? o.gap : 0, onStart: () => show("뜻") });
     if (o.example) segs.push({ text: w.example, gender: "female", accent: ACC[order[pos] % 3][0], rate: o.rateEn, pause: 0, onStart: () => show("예문") });
@@ -158,12 +169,32 @@ UI.boot("listen", () => {
   $("ls-play").addEventListener("click", () => (playing ? pause() : play()));
   $("ls-prev").addEventListener("click", () => jump(-1));
   $("ls-next").addEventListener("click", () => jump(1));
+  $("ls-stop").addEventListener("click", stop);
   $("ls-star").addEventListener("click", () => $("ls-star").classList.toggle("on", Ward.toggleStar(cur().id)));
   document.addEventListener("keydown", e => {
     if (e.target.matches("select,input")) return;
     if (e.key === " ") { e.preventDefault(); playing ? pause() : play(); }
     else if (e.key === "ArrowRight") jump(1);
     else if (e.key === "ArrowLeft") jump(-1);
+  });
+  // MP3 만들기 명령: 지금 고른 등급·범위·반복·예문을 그대로 담는다
+  function mp3Command() {
+    const o = readOpts(true);
+    let c = `python tools/make_audio.py --set ${Ward.currentSet()}`;
+    if (level) c += ` --level ${level}`;
+    if (tier) c += ` --tier ${tier}`;
+    if (which !== "all") c += ` --which ${which} --backup 백업파일.json`;
+    c += ` --minutes ${$("mp3-min").value} --repeats ${o.repeats}`;
+    if (o.example) c += " --example";
+    return c;
+  }
+  const drawCmd = () => { $("mp3-cmd").textContent = mp3Command(); };
+  drawCmd();
+  $("mp3-min").addEventListener("change", drawCmd);
+  for (const k of OPTS) $("opt-" + k).addEventListener("change", drawCmd);
+  $("mp3-copy").addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(mp3Command()); $("mp3-copy").textContent = "복사했습니다"; } catch (e) { $("mp3-copy").textContent = "직접 선택해서 복사하세요"; }
+    setTimeout(() => { $("mp3-copy").textContent = "명령 복사"; }, 1800);
   });
   show();
 });

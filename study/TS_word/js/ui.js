@@ -33,7 +33,7 @@
 
   function gradeBadge(level) {
     const g = Ward.grades().find(x => x.level === level);
-    return g ? `<span class="tag g${level}">${esc(g.name)}</span>` : "";
+    return g ? `<span class="badge g${level}">${esc(g.name)}</span>` : "";
   }
 
   function fatal(msg) {
@@ -42,6 +42,14 @@
 
   /* 페이지 시작: 데이터를 읽고 메뉴를 그린 뒤 start() 를 부른다 */
   async function boot(active, start) {
+    if (/^https?:$/.test(location.protocol)) {              // 서버로 열었을 때만: 휴대폰 설치(manifest) + 오프라인(서비스 워커). file:// 에서는 브라우저가 막아 오류만 난다
+      if (!document.querySelector("link[rel=manifest]")) {
+        const l = document.createElement("link");
+        l.rel = "manifest"; l.href = "manifest.webmanifest";
+        document.head.appendChild(l);
+      }
+      if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => { /* 오프라인 저장 없이도 동작 */ });
+    }
     try {
       await Ward.init();
       header(active);
