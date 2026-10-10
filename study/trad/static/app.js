@@ -17,7 +17,10 @@ const paths = {
  clock:'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20M12 6v6l4 2',
  flag:'M5 22V3c5-5 9 5 15 0v10c-6 5-10-5-15 0',
  check:'M5 12l4 4L20 5', lock:'M6 10h12v11H6zM8 10V6a4 4 0 0 1 8 0v4',
- send:'M22 2 9 15M22 2l-7 20-6-7-7-6z',close:'M5 5l14 14M19 5 5 19'
+ send:'M22 2 9 15M22 2l-7 20-6-7-7-6z',close:'M5 5l14 14M19 5 5 19',
+ moon:'M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z',
+ sun:'M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10M12 1v3M12 20v3M1 12h3M20 12h3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1',
+ halfcircle:'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18M12 3v18M12 3a9 9 0 0 1 0 18'
 };
 const icon=n=>`<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="${paths[n]||paths.book}"/></svg>`;
 document.querySelectorAll('[data-icon]').forEach(e=>e.innerHTML=icon(e.dataset.icon));
@@ -42,6 +45,11 @@ async function initStore(){
   else if(navigator.storage?.persist)navigator.storage.persist().catch(()=>{});
 }
 async function api(url,method='GET',data){return TradeStore.isLocal(url)?store.handle(method,url,data):remote(url,method,data);}
+// 화면 테마: 자동(운영체제 설정) → 다크 → 라이트. 선택은 이 브라우저에 저장하고 theme.js 가 다음 방문 때 먼저 적용한다.
+const THEMES=[{value:'',label:'자동',icon:'halfcircle'},{value:'dark',label:'다크',icon:'moon'},{value:'light',label:'라이트',icon:'sun'}];
+const themeIndex=()=>{const t=document.documentElement.dataset.theme;return t==='dark'?1:t==='light'?2:0;};
+function showTheme(){const t=THEMES[themeIndex()],b=$('[data-action=theme]');if(!b)return;b.querySelector('[data-icon]').innerHTML=icon(t.icon);$('#theme-label').textContent=t.label;b.setAttribute('aria-label',`화면 테마: ${t.label} (누르면 바뀌어요)`);}
+function cycleTheme(){const next=THEMES[(themeIndex()+1)%THEMES.length];if(next.value)document.documentElement.dataset.theme=next.value;else delete document.documentElement.dataset.theme;try{if(next.value)localStorage.setItem('trade-theme',next.value);else localStorage.removeItem('trade-theme');}catch(e){}showTheme();toast(`화면 테마: ${next.label}`);}
 function updateStatus(){ $('#ai-dot').classList.toggle('online',state.ai.connected);$('#ai-status').textContent=state.ai.connected?'AI 연결됨':'AI 연결하기'; }
 function setPage(name,nav){$('#page-name').textContent=name;document.title=`${name} · 무역연습실`;document.querySelectorAll('[data-nav]').forEach(e=>{const on=e.dataset.nav===nav;e.classList.toggle('active',on);if(on)e.setAttribute('aria-current','page');else e.removeAttribute('aria-current');});}
 function empty(title,detail,button=''){return `<div class="empty"><div class="empty-icon">${icon('book')}</div><strong>${esc(title)}</strong><p>${esc(detail)}</p>${button}</div>`;}
@@ -150,7 +158,7 @@ function renderChat(){const root=$('#chat-messages');if(root){root.innerHTML=sta
 function concepts(){setPage('핵심 개념','concepts');const cards=[['무역규범',[['무역의 관리','대외무역법·관세법·FTA 등 각 문제에서 어떤 규정을 묻는지 먼저 구분해요.'],['주체 · 대상 · 기간','누가 신청하는지, 어떤 물품이 대상인지, 언제까지인지 표시하며 읽어요.'],['옳은 것 / 틀린 것','부정형 문항인지 먼저 확인하고 선택지를 하나씩 점검해요.']]],['무역결제',[['송금','지급인이 은행 등을 통해 수취인에게 자금을 보내는 방식이에요.'],['추심','은행을 통해 서류를 제시하고 대금 지급 또는 어음 인수를 받는 절차를 살펴봐요.'],['신용장','서류, 조건, 은행의 역할이 핵심이에요. 개설의뢰인·수익자·개설은행을 구분해요.']]],['무역계약',[['계약의 성립','청약과 승낙, 계약 내용과 변경 과정을 구분해요.'],['정형거래조건','조건별 인도 장소, 비용 부담, 위험 이전을 각각 확인해요.'],['운송 · 보험','운송서류의 종류와 기능, 보험의 담보 범위와 면책을 나누어 정리해요.']]],['무역영어',[['서신의 목적','거래 제안, 주문, 선적 안내, 클레임 등 무엇을 요청하는 글인지 먼저 찾아요.'],['문서 읽기','날짜·금액·당사자·서류명을 표시하고, 지문에 적힌 조건을 먼저 확인해요.'],['기억할 표현','shipment 선적 · draft 환어음 · beneficiary 수익자 · discrepancy 불일치']]]];$('#main').innerHTML=`<div class="page-heading"><div class="eyebrow">KEEP THE ESSENTIALS</div><h1>필요한 개념만, 가볍게.</h1><p>긴 이론 대신 문제를 읽을 때 떠올릴 짧은 학습 메모예요.</p></div><div class="concept-grid">${cards.map(([title,items])=>`<article class="concept-card"><h2>${title}</h2><ul>${items.map(([t,p])=>`<li><strong>${t}</strong>${p}</li>`).join('')}</ul></article>`).join('')}</div><div class="hint-box">기출은 출제 당시 기준입니다. 법령·제도·규정의 최신 내용은 별도로 확인하고, 이 페이지는 개념을 정리하는 학습 출발점으로 활용하세요.</div>`;}
 
 document.addEventListener('click',async e=>{const b=e.target.closest('[data-action]');if(!b||b.disabled)return;try{switch(b.dataset.action){
- case 'settings':openSettings();break;case 'restore':restoreDialog();break;case 'backup':await downloadBackup();break;case 'close':closeModal();break;
+ case 'settings':openSettings();break;case 'theme':cycleTheme();break;case 'restore':restoreDialog();break;case 'backup':await downloadBackup();break;case 'close':closeModal();break;
  case 'round':state.round=Number(b.dataset.round);home(state.dashboard);break;
  case 'start':openStart(Number(b.dataset.subject));break;
  case 'answer':await saveChoice({choice:Number(b.dataset.choice)});break;
@@ -169,4 +177,5 @@ document.addEventListener('change',e=>{if(e.target.id==='mastered')noteChanged()
 document.addEventListener('keydown',e=>{if($('#dialog').open||['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName))return;if(location.hash.startsWith('#attempt/')&&state.attempt?.submitted_at===null){if(/^[1-4]$/.test(e.key)){e.preventDefault();saveChoice({choice:Number(e.key)});}else if(e.key==='ArrowRight'){e.preventDefault();goIndex(state.index+1).catch(err=>toast(err.message));}else if(e.key==='ArrowLeft'){e.preventDefault();goIndex(state.index-1).catch(err=>toast(err.message));}}});
 window.addEventListener('beforeunload',e=>{if(state.note?.dirty||state.saveBusy){e.preventDefault();e.returnValue='';}});
 window.addEventListener('hashchange',route);
+showTheme();
 (async()=>{try{state.boot=await api('/api/bootstrap');await initStore();state.ai=await api('/api/ai/settings');updateStatus();await route();}catch(e){$('#main').innerHTML=empty('연결을 확인해 주세요',e.message);}})();

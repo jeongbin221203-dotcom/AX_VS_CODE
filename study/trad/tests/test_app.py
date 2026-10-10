@@ -347,3 +347,25 @@ def test_html_structure_regressions():
         color = re.search(token + r':(#[0-9a-fA-F]{6})', css).group(1)
         for bg in ('#ffffff', '#f6f8f4'):
             assert ratio(color, bg) >= 4.5, (token, color, bg)
+
+
+def test_dark_theme_is_wired_in():
+    """어두운 테마: 운영체제 설정을 따르고(color-scheme + light-dark()), 수동 전환·저장 키가 theme.js 와 app.js 에서 같다."""
+    import re
+    html = (ROOT / 'templates' / 'index.html').read_text(encoding='utf-8')
+    css = (ROOT / 'static' / 'style.css').read_text(encoding='utf-8')
+    app_js = (ROOT / 'static' / 'app.js').read_text(encoding='utf-8')
+    theme = (ROOT / 'static' / 'theme.js').read_text(encoding='utf-8')
+    assert '<meta name="color-scheme" content="light dark">' in html
+    assert re.search(r'<meta name="theme-color" content="#[0-9a-f]{6}" media="\(prefers-color-scheme: dark\)">', html)
+    assert '<script src="/static/theme.js"></script>' in html and 'defer' not in html.split('/static/theme.js')[1].split('>')[0]
+    assert 'data-action="theme"' in html and 'id="theme-label"' in html
+    assert "localStorage.getItem('trade-theme')" in theme and "localStorage.setItem('trade-theme'" in app_js
+    assert 'function cycleTheme' in app_js and "case 'theme':cycleTheme();break;" in app_js
+    assert '@supports (color:light-dark(#000,#fff))' in css and ':root[data-theme=dark]{color-scheme:dark}' in css
+    assert css.count('light-dark(') >= 150
+    # 밝은 스타일과 어두운 스타일이 두 버전에서 같아야 함(글꼴 줄만 다름)
+    other = (ROOT.parent / 'trad_study' / 'static' / 'style.css')
+    if other.exists():
+        strip = lambda text: [rule for rule in text.split('}') if '@font-face' not in rule]
+        assert strip(css) == strip(other.read_text(encoding='utf-8'))

@@ -2,11 +2,14 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#123f3c">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#123f3c" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1714" media="(prefers-color-scheme: dark)">
   <meta name="description" content="국제무역사 1급 기출 840문항을 풀고 오답노트·메모로 복습하는 개인 학습 웹">
   <title>무역연습실 · 국제무역사 1급</title>
   <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/theme.js"></script>
   <script src="/static/store.js" defer></script>
   <script src="/static/app.js" defer></script>
 </head>
@@ -30,7 +33,10 @@
 </aside>
 <div class="app-shell">
   <header class="topbar"><div class="breadcrumb">국제무역사 1급 <span>/</span> <strong id="page-name">학습 홈</strong></div>
+    <div class="topbar-actions">
+    <button type="button" class="btn compact" data-action="theme" aria-label="화면 테마: 자동"><span data-icon="halfcircle"></span><span id="theme-label">자동</span></button>
     <button type="button" class="btn compact" data-action="settings"><span class="dot" id="ai-dot"></span><span id="ai-status">AI 연결하기</span><span data-icon="settings"></span></button>
+    </div>
   </header>
   <main id="main" tabindex="-1"><noscript><div class="empty"><strong>JavaScript가 필요해요</strong><p>이 학습 앱은 브라우저에서 JavaScript를 켜야 동작해요.</p></div></noscript></main>
   <footer class="footer">조금씩 쌓이는 실력, 무역연습실 <span>개인 학습용 · 기록은 이 브라우저에 저장</span></footer>
