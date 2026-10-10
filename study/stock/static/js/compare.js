@@ -274,7 +274,13 @@
     this.root.querySelector('.cset').addEventListener('change', function () { self.drawMA(); saveUrl(); });
     this.root.querySelector('.ckind').addEventListener('change', function () { self.loadPred(); saveUrl(); });
     this.root.querySelector('.ctf').addEventListener('change', function () {
-      self.load().then(function () { showBoth(); saveUrl(); });
+      var v = self.root.querySelector('.ctf').value, o = other(self), ot = o.settings().tf;
+      var both = document.getElementById('sync').checked && document.getElementById('same').checked && ot !== v && (isIntra(v) || isIntra(ot));
+      // 분봉으로 들어가거나 나올 때는 (동기화·같은 종목이면) 양쪽이 함께 바뀐다 — 분봉과 일봉은 서로 맞출 수 없어서 한쪽만 바뀌면 어색하다
+      function fixAi(p) { if (isIntra(v) && p.root.querySelector('.ckind').value === 'ai') p.root.querySelector('.ckind').value = 'dante'; }   // AI 는 일봉 이상에서만
+      fixAi(self);
+      if (both) { o.root.querySelector('.ctf').value = v; fixAi(o); }
+      Promise.all(both ? [self.load(), o.load()] : [self.load()]).then(function () { showBoth(); saveUrl(); });
     });
   };
 
