@@ -24,7 +24,14 @@ def home():
     """첫 화면 = 신호(왼쪽 예측 · 오른쪽 AI, 점검 충족률 90% 이상 추천). data/signals.json (core/signal_scan.py)."""
     from core import signal_scan
     asked = (request.args.get("date") or "").strip()
+    min_sig = min(max(request.args.get("min", 1, type=int) or 1, 1), 6)      # 신호가 이 개수 이상 겹친 종목만
     lo, hi = signal_scan.dates_available()
+
+    def narrow(rep):
+        if rep and min_sig > 1:
+            for k in ("pred", "ai", "high"):
+                rep[k] = [r for r in rep.get(k, []) if len(r["signals"]) >= min_sig]
+        return rep
     if asked:
         try:
             if len(asked) != 10:
@@ -32,9 +39,9 @@ def home():
             datetime.strptime(asked, "%Y-%m-%d")
         except ValueError:
             return "날짜는 YYYY-MM-DD", 400
-        rep = signal_scan.for_date(asked) if lo else None
-        return render_template("signals.html", rep=rep, asked=asked, lo=lo, hi=hi, mode="date")
-    return render_template("signals.html", rep=signal_scan.load(), asked="", lo=lo, hi=hi, mode="today")
+        rep = narrow(signal_scan.for_date(asked) if lo else None)
+        return render_template("signals.html", rep=rep, asked=asked, lo=lo, hi=hi, mode="date", min_sig=min_sig)
+    return render_template("signals.html", rep=narrow(signal_scan.load()), asked="", lo=lo, hi=hi, mode="today", min_sig=min_sig)
 
 
 @bp.get("/watch")

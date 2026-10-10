@@ -20,10 +20,11 @@
 <h1>신호 <small>왼쪽 예측(단테 기법) · 오른쪽 AI — 점검 10개 중 9개 이상 충족하면 추천</small></h1>
 <form class="toolbar datebar" method="get" action="{{ url_for('main.home') }}">
   <label>기준일 <input type="date" name="date" value="{{ asked or (rep.meta.date if rep and rep.meta.date else '') }}" {% if lo %}min="{{ lo }}" max="{{ hi }}"{% endif %}></label>
+  <label>신호 <select name="min"><option value="1" {{ 'selected' if min_sig == 1 }}>전체</option><option value="2" {{ 'selected' if min_sig == 2 }}>2개 이상 겹침</option><option value="3" {{ 'selected' if min_sig == 3 }}>3개 이상 겹침</option></select></label>
   <button class="btn" type="submit">그날 신호 보기</button>
-  {% if rep and rep.meta.prev %}<a class="btn" href="{{ url_for('main.home', date=rep.meta.prev) }}">◀ {{ rep.meta.prev }}</a>{% endif %}
-  {% if rep and rep.meta.next %}<a class="btn" href="{{ url_for('main.home', date=rep.meta.next) }}">{{ rep.meta.next }} ▶</a>{% endif %}
-  {% if mode == 'date' %}<a class="btn" href="{{ url_for('main.home') }}">오늘</a>{% endif %}
+  {% if rep and rep.meta.prev %}<a class="btn" href="{{ url_for('main.home', date=rep.meta.prev, min=min_sig) }}">◀ {{ rep.meta.prev }}</a>{% endif %}
+  {% if rep and rep.meta.next %}<a class="btn" href="{{ url_for('main.home', date=rep.meta.next, min=min_sig) }}">{{ rep.meta.next }} ▶</a>{% endif %}
+  {% if mode == 'date' %}<a class="btn" href="{{ url_for('main.home', min=min_sig) }}">오늘</a>{% endif %}
   <span class="hint">{% if lo %}조회 가능 {{ lo }} ~ {{ hi }}(거래일이 아니면 그 전 거래일){% else %}날짜별 이력은 전 종목 훑기(signals-scan) 뒤에 생깁니다{% endif %}</span>
 </form>
 {% if not rep or not rep.meta.date %}
@@ -32,7 +33,7 @@
 {% set past = rep.meta.past %}{% set sm = rep.strong_mkt or {} %}
 {% set strong = rep.high|selectattr('tier', '==', '강')|list %}{% set weak = rep.high|selectattr('tier', '==', '상')|list %}
 {% set rec_p = rep.pred|selectattr('score', '>=', rep.meta.recommend)|list %}{% set rec_a = rep.ai|selectattr('score', '>=', rep.meta.recommend)|list %}
-<p class="sumline"><b>{{ rep.meta.date }}</b>{% if mode == 'date' and rep.meta.asked != rep.meta.date %} <small>({{ rep.meta.asked }}은 거래일이 아니라 그 전 거래일)</small>{% endif %} · 시장 52주 고점 대비 {{ pct(rep.meta.mkt_dd250, 1, true) }}
+<p class="sumline"><b>{{ rep.meta.date }}</b>{% if min_sig > 1 %} <span class="tag buy">신호 {{ min_sig }}개 이상 겹친 종목만</span>{% endif %}{% if mode == 'date' and rep.meta.asked != rep.meta.date %} <small>({{ rep.meta.asked }}은 거래일이 아니라 그 전 거래일)</small>{% endif %} · 시장 52주 고점 대비 {{ pct(rep.meta.mkt_dd250, 1, true) }}
   · 추천 <b>강 {{ strong|length }}</b> · <b>상 {{ weak|length }}</b> · 점검 9/10↑ <b>예측 {{ rec_p|length }}</b> · <b>AI {{ rec_a|length }}</b>{% if mode != 'date' %} <small>· 생성 {{ rep.meta.generated }}</small>{% endif %}</p>
 
 <h2 class="hi">강 추천 <small>AI 상위 3% + 시장 20일 −5% 미만 + 피함 제외 + 시장 필터 · {{ strong|length }}개{% if past %} · 그 뒤 {{ ostat(rep.outcome.strong) }}{% endif %}</small></h2>

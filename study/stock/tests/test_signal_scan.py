@@ -102,6 +102,19 @@ def test_high_tier_rule():
     assert r["high"] == []
 
 
+def test_min_signals_filter(client):
+    two = {"label": "공구리(언덕 돌파)", "ago": 0, "good": True}
+    base = {"code": "TEST1", "name": "테스트1", "close": 100.0, "prob": 0.2, "halt_p": 0.001, "avoid": False, "ai_top": True, "r5": None, "r20": None, "est": None}
+    rows = [dict(base, signals=[two], checks=[True] * 10, score=1.0), dict(base, code="TEST2", name="테스트2", signals=[two, dict(two, label="15일선 지지")], checks=[True] * 10, score=1.0)]
+    rep = {"meta": {"date": "2026-10-08", "rows": 2, "thr10": 0.1, "thr3": 0.1, "thr2": 0.1, "mkt_dd250": -0.2, "mkt_r20": 0.0, "recommend": 0.9, "recent": 5, "generated": "x"},
+           "checks": {"pred": signal_scan.CHECKS_PRED, "ai": signal_scan.CHECKS_AI}, "pred": rows, "ai": rows, "high": [], "text": [], "high_note": ""}
+    signal_scan.SIGNALS_PATH.write_text(json.dumps(rep, ensure_ascii=False), encoding="utf-8")
+    all_html = client.get("/").get_data(as_text=True)
+    two_html = client.get("/?min=2").get_data(as_text=True)
+    assert "테스트1" in all_html and "테스트2" in all_html
+    assert "테스트1" not in two_html and "테스트2" in two_html and "신호 2개 이상 겹친 종목만" in two_html
+
+
 def test_home_without_scan(client):
     html = client.get("/").get_data(as_text=True)
     assert "signals-scan" in html

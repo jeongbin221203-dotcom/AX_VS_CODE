@@ -87,3 +87,21 @@ details summary{cursor:pointer;color:var(--mut);margin-top:8px}
 
 h2.hi{margin-top:20px}
 .sumline{margin:6px 0 2px}.expl{margin:18px 0}.expl summary{cursor:pointer;color:var(--mut)}
+
+@media (max-width:760px){
+  body{font-size:15px}main{padding:10px 10px}
+  .top{gap:8px;padding:8px 10px}.search{width:100%}.search input{width:100%}
+  .datebar{gap:6px}.datebar .hint{width:100%}.datebar input[type=date],.datebar select,.datebar .btn{min-height:38px}
+  .sig{font-size:13px}.sig th,.sig td{padding:7px 6px}
+  .sig th:last-child,.sig td:last-child{display:none}                      /* 점검 ✔✖ 열은 좁은 화면에서 숨김(부합 점수는 남김) */
+  .sig td:nth-child(3){min-width:0;max-width:150px}
+  .sig td:first-child{white-space:normal;min-width:92px}
+  .sumline{line-height:1.6}h2.hi{font-size:15px}
+  .cgrid{gap:18px}.toolbar{gap:6px 10px}
+  .grid tr[data-href] td a{padding:4px 0;display:inline-block}            /* 눌러야 하는 종목명 터치 영역 */
+}
+@media (max-width:760px){
+  .top nav>a,.top nav summary{padding:3px 7px;font-size:14px}.top nav{gap:0}.logo{font-size:15px}
+  h1 small{display:block;font-size:12px;margin-top:2px}h1{font-size:18px}
+  .datebar .hint{display:none}
+}
