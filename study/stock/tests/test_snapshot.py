@@ -27,7 +27,7 @@ def client(tmp_path, monkeypatch):
 def test_snapshot_page_has_no_links_or_forms(client):
     html = client.get("/").get_data(as_text=True)
     assert "삼성전자" in html and "읽기 전용 스냅샷" in html and "상 — 대기 후보" in html
-    assert "/compare" not in html and "data-href" not in html
+    assert "/compare" not in html and "/chart/005930" in html
     assert "2개 이상 겹침" in html and client.get("/?min=2").status_code == 200
     assert "신호 2개 이상 겹친 종목만" in client.get("/?min=2").get_data(as_text=True)
     assert client.get("/healthz").get_data(as_text=True) == "ok"
@@ -100,3 +100,23 @@ def test_trim_keeps_only_recommended(tmp_path, monkeypatch):
     assert json.loads((days / "2026-10-06.json").read_text(encoding="utf-8"))["meta"]["trimmed"] is True
     assert "trimmed" not in json.loads((days / "2026-10-08.json").read_text(encoding="utf-8"))["meta"]   # 최근 날은 전체 유지
     assert publish.compact_old() is False
+
+
+def test_snapshot_chart_routes(tmp_path, monkeypatch):
+    charts = tmp_path / "charts"
+    charts.mkdir()
+    (charts / "005930.json").write_text(json.dumps({"n": "삼성전자", "last": "2026-10-08", "d": [0, 1], "o": [1, 1], "h": [1, 1], "l": [1, 1], "c": [1, 1], "v": [1, 1], "p": [-1, 200], "g": []}), encoding="utf-8")
+    meta = tmp_path / "chartmeta.json"
+    meta.write_text(json.dumps({"cal": ["2026-10-07", "2026-10-08"], "labels": [], "dante": [], "good": [], "thr": {}}), encoding="utf-8")
+    f = tmp_path / "signals.json"
+    f.write_text(json.dumps(_rep(), ensure_ascii=False), encoding="utf-8")
+    monkeypatch.setattr(snapshot_app, "CHARTS", charts)
+    monkeypatch.setattr(snapshot_app, "META", meta)
+    monkeypatch.setattr(snapshot_app, "SNAPSHOT", f)
+    c = snapshot_app.create_app().test_client()
+    assert "/chart/005930?date=2026-10-08" in c.get("/").get_data(as_text=True)           # 목록의 종목이 차트로 연결
+    page = c.get("/chart/005930?date=2026-10-08")
+    assert page.status_code == 200 and "삼성전자" in page.get_data(as_text=True) and "snapshot_chart.js" in page.get_data(as_text=True)
+    assert c.get("/chartdata/005930.json").get_json()["n"] == "삼성전자" and c.get("/chartmeta.json").get_json()["cal"][0] == "2026-10-07"
+    assert c.get("/chart/NOPE").status_code == 404 and c.get("/chart/005930?date=abc").status_code == 400
+    assert c.get("/chartdata/..%2Fsignals.json").status_code == 404 and c.get("/chartdata/a.b.json").status_code == 404

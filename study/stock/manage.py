@@ -20,6 +20,7 @@ def main():
         from core import publish
         if a.codes[:1] == ["backfill"]:
             print("추가", publish.backfill(log=lambda m: print(m, flush=True)), "일")
+            print("차트", publish.charts(log=lambda m: print(m, flush=True)), "종목")
         print(publish.run(log=lambda m: print(m, flush=True)))
         return
     if a.cmd == "signals-scan":

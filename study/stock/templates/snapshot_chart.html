@@ -1,0 +1,18 @@
+{% extends "snapshot_base.html" %}
+{% block title %}{{ name }} 차트{% endblock %}
+{% block body %}
+<p><a class="btn" href="{{ back }}">◀ 목록으로</a></p>
+<h1 id="ctitle">{{ name }} <small>{{ code }} · 기준일 {{ focus }}</small></h1>
+<div class="toolbar"><span class="grp" id="range">
+  <button class="btn" data-bars="60">3M</button><button class="btn" data-bars="120">6M</button><button class="btn on" data-bars="250">1Y</button><button class="btn" data-bars="500">2Y</button>
+</span><span class="hint" id="cmsg">불러오는 중…</span></div>
+<h2>예측 <small>단테 기법 신호 (빨강 ✔ 검증 통과, 회색 그 밖)</small></h2>
+<div class="cchart" id="ca"></div><div class="cpred hint" id="ia"></div>
+<h2>AI <small>20일 안 +20% 확률 (보라색 선, 점선 = 그날 상위 10% 경계)</small></h2>
+<div class="cchart" id="cb"></div><div class="cpred hint" id="ib"></div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='vendor/lightweight-charts.js') }}"></script>
+<script id="boot" type="application/json">{{ {'code': code, 'focus': focus} | tojson }}</script>
+<script src="{{ url_for('static', filename='js/snapshot_chart.js') }}"></script>
+{% endblock %}

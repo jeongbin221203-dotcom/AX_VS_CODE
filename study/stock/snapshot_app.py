@@ -9,7 +9,9 @@ import json
 import os
 from pathlib import Path
 
-from flask import Flask, Response, abort, render_template, request
+import re
+
+from flask import Flask, Response, abort, render_template, request, send_from_directory
 from jinja2 import Undefined
 from markupsafe import Markup
 
@@ -30,6 +32,11 @@ def load():
         return json.loads(SNAPSHOT.read_text(encoding="utf-8"))
     except (OSError, ValueError):
         return None
+
+
+CHARTS = Path(os.environ.get("STOCK_SNAPSHOT_CHARTS", BASE / "snapshot" / "charts"))
+META = Path(os.environ.get("STOCK_SNAPSHOT_META", BASE / "snapshot" / "chartmeta.json"))
+CODE_RE = re.compile(r"^[A-Za-z0-9]{1,12}$")
 
 
 def days():
@@ -91,11 +98,36 @@ def create_app():
         return render_template("signals.html", rep=rep, asked=asked, lo=ds[0] if ds else None, hi=ds[-1] if ds else None, mode="date" if asked else "today", min_sig=min_sig, snap_days=ds,
                                snapshot=True, base_tpl="snapshot_base.html", disclaimer=DISCLAIMER)
 
+    @app.get("/chart/<code>")
+    def chart_page(code):
+        if not CODE_RE.match(code) or not (CHARTS / f"{code}.json").exists():
+            abort(404)
+        focus = (request.args.get("date") or "").strip()
+        if focus and (len(focus) != 10 or not focus.replace("-", "").isdigit()):
+            abort(400)
+        try:
+            name = json.loads((CHARTS / f"{code}.json").read_text(encoding="utf-8")).get("n", code)
+        except (OSError, ValueError):
+            name = code
+        back = "/?date=" + focus if focus else "/"
+        return render_template("snapshot_chart.html", code=code, name=name, focus=focus, back=back, rep=None, disclaimer=DISCLAIMER)
+
+    @app.get("/chartdata/<code>.json")
+    def chart_data(code):
+        if not CODE_RE.match(code):
+            abort(404)
+        return send_from_directory(CHARTS, f"{code}.json", mimetype="application/json", max_age=3600)
+
+    @app.get("/chartmeta.json")
+    def chart_meta():
+        return send_from_directory(META.parent, META.name, mimetype="application/json", max_age=600)
+
     @app.after_request
     def headers(resp):
         resp.headers["Content-Security-Policy"] = "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:"
         resp.headers["X-Content-Type-Options"] = "nosniff"
-        resp.headers["Cache-Control"] = "no-store"
+        if not resp.headers.get("Cache-Control"):
+            resp.headers["Cache-Control"] = "no-store"
         return resp
 
     @app.errorhandler(404)

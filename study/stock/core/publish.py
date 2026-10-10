@@ -15,8 +15,87 @@ import config
 
 SRC = config.DATA_DIR / "signals.json"
 DST = config.BASE / "snapshot" / "signals.json"        # 최신
+CHARTS = config.BASE / "snapshot" / "charts"             # 종목별 일봉·신호·AI 확률(휴대폰 차트용)
+META = config.BASE / "snapshot" / "chartmeta.json"
+CHART_FROM = "2021-01-01"                                # 224일선을 2022년 첫날부터 그릴 수 있게
+CHART_AFTER_DAYS = 130                                   # 기준일 뒤 며칠 더(그 뒤 흐름 확인용)
 DAYS = config.BASE / "snapshot" / "days"                 # 날짜별 보관(days/YYYY-MM-DD.json) — 다음 주에도 그날 신호를 볼 수 있게
 FULL_DAYS = 90                                           # 최근 90거래일은 전체 목록, 그보다 오래된 날은 추천·강/상만(저장소가 불어나지 않게)
+
+
+def _recommended_codes():
+    """날짜 파일들에서 추천(점검 9/10↑)·강/상으로 나온 종목과 마지막으로 나온 날."""
+    last = {}
+    for f in sorted(DAYS.glob("*.json")):
+        try:
+            r = json.loads(f.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        d = f.stem
+        for k in ("pred", "ai", "high"):
+            for z in r.get(k, []):
+                if k == "high" or z["score"] >= r["meta"].get("recommend", 0.9):
+                    last[z["code"]] = d
+    return last
+
+
+def chart_meta(cal, thr):
+    from core import ai, predict
+    info = predict._tech_info(predict.plan())
+    labels = [ai.SIGNAL_LABELS[j] for j in range(len(ai.SIGNAL_LABELS))]
+    return {"cal": cal, "labels": labels, "dante": predict.DANTE_IDX, "good": [lab for lab in labels if info.get(lab, {}).get("good")], "thr": thr}
+
+
+def charts(log=print) -> int:
+    """추천·강/상으로 나온 종목의 일봉(2021~)·단테 신호·AI 확률을 snapshot/charts/<코드>.json 으로. 이미 충분히 긴 파일은 건너뛴다."""
+    from datetime import timedelta
+    from core import db, predict
+    CHARTS.mkdir(parents=True, exist_ok=True)
+    last = _recommended_codes()
+    if not last:
+        return 0
+    with db.get_conn() as c:
+        cal = [r["date"] for r in c.execute("SELECT DISTINCT date FROM prices WHERE date >= ? ORDER BY date", (CHART_FROM,))]
+        names = {r["code"]: r["name"] for r in c.execute("SELECT code,name FROM symbols")}
+        latest = cal[-1]
+        pos = {d: i for i, d in enumerate(cal)}
+        dante = sum(1 << j for j in predict.DANTE_IDX)
+        n = 0
+        for code, d in sorted(last.items()):
+            need = min(latest, (datetime.strptime(d, "%Y-%m-%d") + timedelta(days=CHART_AFTER_DAYS)).strftime("%Y-%m-%d"))
+            f = CHARTS / f"{code}.json"
+            try:
+                if json.loads(f.read_text(encoding="utf-8")).get("last", "") >= need:
+                    continue
+            except (OSError, ValueError):
+                pass
+            rows = c.execute("SELECT date,open,high,low,close,volume FROM prices WHERE code=? AND date >= ? ORDER BY date", (code, CHART_FROM)).fetchall()
+            if len(rows) < 30:
+                continue
+            chk = {r["date"]: (r["prob"], r["sig0"]) for r in c.execute("SELECT date,prob,sig0 FROM daily_checks WHERE code=?", (code,))}
+            idx = [pos[r["date"]] for r in rows]
+            rnd = lambda v: int(round(v)) if v >= 1000 else round(v, 2)  # noqa: E731
+            p, g = [], []
+            for i, r in enumerate(rows):
+                pr, sg = chk.get(r["date"], (None, 0))
+                p.append(-1 if pr is None else int(round(pr * 1000)))
+                if sg and (int(sg) & dante):
+                    g.append([i, int(sg) & dante])
+            obj = {"n": names.get(code, code), "last": rows[-1]["date"], "d": idx, "o": [rnd(r["open"]) for r in rows], "h": [rnd(r["high"]) for r in rows],
+                   "l": [rnd(r["low"]) for r in rows], "c": [rnd(r["close"]) for r in rows], "v": [int(r["volume"] or 0) for r in rows], "p": p, "g": g}
+            f.write_text(json.dumps(obj, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+            n += 1
+            if n % 200 == 0:
+                log(f"차트 [{n}] {code}")
+    thr = {}
+    for f in DAYS.glob("*.json"):
+        try:
+            m = json.loads(f.read_text(encoding="utf-8"))["meta"]
+            thr[f.stem] = round(m["thr10"], 4)
+        except (OSError, ValueError, KeyError, TypeError):
+            pass
+    META.write_text(json.dumps(chart_meta(cal, thr), ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    return n
 
 
 def refresh() -> bool:
@@ -112,7 +191,7 @@ def push(log=print) -> str:
     env = {"GIT_INDEX_FILE": idx}
     try:
         _git("read-tree", "HEAD", env=env, cwd=top)
-        _git("add", "-A", "-f", "--", rel, DAYS.relative_to(top).as_posix(), env=env, cwd=top)
+        _git("add", "-A", "-f", "--", rel, DAYS.relative_to(top).as_posix(), CHARTS.relative_to(top).as_posix(), META.relative_to(top).as_posix(), env=env, cwd=top)
         if not _git("diff", "--cached", "--name-only", env=env, cwd=top):
             return "변경 없음"
         msg = f"스냅샷: {datetime.now():%Y-%m-%d %H:%M} 오늘의 신호 갱신"
@@ -132,4 +211,8 @@ def run(log=print, do_push: bool = True) -> str:
         log("스냅샷이 이미 최신입니다")
         return "변경 없음"
     log("snapshot/signals.json 갱신")
+    try:
+        log(f"차트 {charts(log)}종목 갱신")
+    except Exception as e:                                  # 차트 실패가 신호 게시를 막지 않게
+        log(f"차트 갱신 실패: {e}")
     return push(log) if do_push else "복사만"
