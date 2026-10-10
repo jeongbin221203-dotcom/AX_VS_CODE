@@ -9,38 +9,51 @@ Flask 서버 버전은 `study/EX` 입니다(그대로 유지).
 |---|---|---|
 | 홈 | `index.html` | 진행 요약, 바로 가기, 기록 백업·복원 |
 | 컴활 필기 | `written.html` | 1,100문항. 연습(새 문제·틀린 문제 다시·전체 섞기·약점 주제), 실제 구성 모의고사(과목마다 20문항, 2급 40분·1급 60분, 과락·평균 판정, 이어 풀기, 시간 끝나면 자동 제출) |
-| 문제 풀기 | `learn.html` | 함수·기능 문제 276개(선택형 99 + 수식 177). 시트 그림, 범위·분류 필터, 검색 |
+| 문제 풀기 | `learn.html` | 함수·기능 문제 276개(선택형 99 + 수식 177). 시트 그림, 범위·분류 필터, 검색. 수식은 **엑셀 계산기로 값을 계산해** 채점 |
+| 실기 모의고사 | `exam.html` | 컴활 2급·1급 4회분. 문제 파일(.xlsx/.xlsm)·자료 csv 내려받기 → Excel 에서 풀기 → 답안 파일 올리면 항목별 채점, 시험 시간 타이머, 응시 기록 |
+| 실기 실습 | `practice.html` | 공식 예제(zip)·내 교재의 실습/정답 파일 짝을 **내 PC 에서 가져와** 풀고, 올린 파일을 정답 파일과 비교해 항목별 채점(해야 할 일·힌트·자동 지문). 파일은 이 브라우저(IndexedDB)에만 보관 |
+| 대시보드 실습 | `build.html` | 매출·인사·재고 3과제. 연습 파일·완성 예시 내려받기, 올린 파일을 칸마다 채점 |
+| 파일 분석 | `analyze.html` | 엑셀·CSV → 핵심 지표·분류별 집계·월별 추이·피벗 표, 같은 결과를 내는 엑셀 수식, 요약 엑셀 내려받기 |
 | 함수 사전 | `functions.html` | 함수 162개의 형식·인수·예제, 관련 문제 |
 | 단축키 | `shortcuts.html` | 엑셀 단축키 117개, 검색, 자주 쓰는 키만 보기 |
 
-## 서버 버전과 달라지는 점
+## 서버 버전(Flask)과 달라지는 점
 
-- **수식 채점**: 서버 버전은 자체 엑셀 계산기로 값을 계산해 채점하지만, HTML 버전은 정답 수식과 **글자로 비교**합니다(공백·대소문자·`$`·배열 수식 중괄호는 무시). 값이 같은 다른 수식은 자동으로 알 수 없어 정답을 보여 주고 스스로 판단하게 합니다. 선택형 문제와 필기는 서버 버전과 같습니다.
-- **학습 기록**: 브라우저의 `localStorage` 에만 저장됩니다(홈의 [기록 내려받기]로 백업). 브라우저를 바꾸거나 사이트 데이터를 지우면 사라집니다. 서버 버전의 PC↔서버 동기화는 없습니다.
-- **들어 있지 않은 것**: 엑셀 파일을 올려 채점하는 기능(컴활 실기 모의고사·실기 실습), 파일 분석, 대시보드 실습, 개인 교재 자료. 서버(openpyxl·자체 계산기)가 필요해 Flask 버전에서만 씁니다.
+- **파이썬이 브라우저 안에서 돈다.** 실기 모의고사·대시보드 실습·파일 분석·수식 값 채점은 Flask 버전의 `core/`(자체 엑셀 계산기 `formula.py`, `exam.py`, `build.py`, `analyze.py`, openpyxl)를 **고치지 않고 그대로** [Pyodide](https://pyodide.org)(브라우저용 파이썬) 위에서 실행합니다. 올린 엑셀 파일은 어디로도 전송되지 않습니다. 처음 쓸 때 약 13MB 를 읽고 이후엔 브라우저 캐시를 씁니다.
+- **웹 주소로 열어야 하는 기능.** 위 기능은 브라우저 보안 규칙상 `file://` 에서는 실행되지 않습니다. `start.bat`(또는 `python -m http.server`)로 열거나 정적 호스팅에 올리세요. 필기·단축키·함수 사전·선택형 문제는 `file://` 에서도 됩니다. 수식 문제는 `file://` 에서만 정답 수식과 글자로 비교합니다(공백·대소문자·`$`·배열 중괄호 무시, 값이 같은 다른 수식은 스스로 판단).
+- **학습 기록**은 브라우저의 `localStorage` 에만 저장됩니다(홈의 [기록 내려받기]로 백업). 분석한 파일의 요약 표는 IndexedDB 에 최근 20개까지 남으며 백업에는 들어가지 않습니다. 브라우저를 바꾸거나 사이트 데이터를 지우면 사라집니다. 서버 버전의 PC↔서버 동기화는 없습니다.
+- **교재·공식 예제**는 저작물이라 저장소에 들어 있지 않습니다. 실기 실습 화면에서 내 PC 의 파일을 가져옵니다 — 대한상공회의소 공식 사이트에서 받은 예제 **zip**(서버가 아니라 브라우저가 풀어 이 브라우저에만 보관), 교재 **폴더**(`실습`/`정답` 또는 `실습파일`/`완성파일` 짝을 자동으로 찾음), 파일 **한 쌍** 직접 등록. 사이트 데이터를 지우면 사라지니 원본은 따로 두세요. (서버 버전처럼 공식 사이트에서 직접 받지는 못합니다 — 브라우저 보안(CORS) 때문.)
+- **기기 간 동기화**: 서버 대신 **동기화 파일**을 씁니다. 홈의 [기기 간 동기화]에서 파일 하나를 만들어 OneDrive·Google Drive 같은 동기화 폴더에 두고 각 기기의 브라우저에서 연결하면, 열 때·기록이 바뀐 뒤·1분마다 파일과 **합칩니다**(푼 기록은 많이 푼 쪽, 제출·모의고사 기록은 합집합). Chrome·Edge 전용(File System Access API), 브라우저를 다시 열면 한 번 [지금 동기화]로 권한을 허용해야 합니다. 그 밖의 브라우저는 [기록 합쳐서 불러오기]로 파일을 옮기세요. 분석 파일·실습 파일 같은 큰 자료는 동기화되지 않습니다.
+- 정답 데이터(모의고사 채점 기준)가 브라우저로 내려오므로 열어 보면 보입니다. 개인 학습용입니다.
 
 ## 구조
 
 ```
 EX_html/
-├─ index.html written.html learn.html functions.html shortcuts.html
-├─ css/style.css            밝게·어둡게 테마, 인쇄 스타일
-├─ js/common.js             저장소(localStorage 래퍼), 메뉴, 테마, 기록 백업
-├─ js/written.js learn.js functions.js shortcuts.js index.js
-├─ data/*.js                문제·함수·단축키 자료(build.py 가 만든 파일, 직접 고치지 말 것)
-├─ build.py                 ../EX/content → data/*.js
-└─ tests/test_static.py
+├─ index.html written.html learn.html exam.html practice.html build.html analyze.html functions.html shortcuts.html
+├─ start.bat                 http://127.0.0.1:5092 로 열기
+├─ css/style.css tools.css   밝게·어둡게 테마, 인쇄 스타일 / 파일 업로드 기능용 스타일
+├─ js/common.js              저장소(localStorage 래퍼), 메뉴, 테마, 기록 백업, 엔진 상태 표시
+├─ js/written.js learn.js exam.js practice.js build.js analyze.js charts.js functions.js shortcuts.js index.js
+├─ data/*.js                 필기·문제·함수·단축키 자료(build.py 가 만든 파일, 직접 고치지 말 것)
+├─ py/engine.js              Pyodide 불러오기 + 파이썬 호출(call) + 파일 내려받기
+├─ py/bridge.py              Flask 뷰가 하던 데이터 준비를 JSON 으로 돌려주는 연결 계층
+├─ py/bundle.zip             core/*.py + 모의고사·문제 자료 + openpyxl 등 순수 파이썬 휠 (build.py 가 만듦)
+├─ py/pyodide/ py/wheels/    Pyodide 0.27.7 런타임(약 14MB) / openpyxl·et_xmlfile·olefile 휠
+├─ build.py                  ../EX/content·core → data/*.js, py/bundle.zip
+└─ tests/test_static.py py_smoke.js
 ```
 
 자료를 `file://` 로 열어도 읽히도록 JSON 대신 `window.EXDATA` 를 채우는 `.js` 파일로 만들었습니다.
 
 ## 자료 고치기
 
-문제·함수·단축키는 원본(`../EX/content`)에서 고치고 다시 만듭니다.
+문제·함수·단축키와 채점 코드는 원본(`../EX/content`, `../EX/core`)에서 고치고 다시 만듭니다.
 
 ```
-python build.py            # data/*.js 다시 생성
-python -m pytest tests -q  # 원본과 같은지, 페이지가 가리키는 파일이 모두 있는지, JS 문법
+python build.py            # data/*.js 와 py/bundle.zip 다시 생성
+python -m pytest tests -q  # 원본과 같은지, 페이지가 가리키는 파일이 모두 있는지, JS 문법, 파이썬 엔진 끝까지 한 바퀴(node 필요)
+node tests/py_smoke.js     # 엔진만: 모의고사 4회·실습 3과제(완성 예시 만점)·분석·Excel 이 만든 정답 파일 채점
 ```
 
 ## 알아 둘 점

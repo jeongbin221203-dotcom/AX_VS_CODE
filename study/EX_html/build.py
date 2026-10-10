@@ -7,6 +7,7 @@
 """
 import json
 import sys
+import zipfile
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -22,6 +23,40 @@ def js(name, payload):
     out = HERE / 'data' / f'{name}.js'
     out.parent.mkdir(exist_ok=True)
     out.write_text(f'window.EXDATA = window.EXDATA || {{}};\nEXDATA.{name} = {text};\n', encoding='utf-8')
+    return out.stat().st_size
+
+
+CORE_FILES = ['__init__', 'formula', 'xlsx', 'pivots', 'vba', 'exam', 'build', 'analyze', 'content', 'compare', 'describe', 'library', 'official']
+WHEELS = ['openpyxl', 'et_xmlfile', 'olefile']
+
+
+def bundle():
+    """브라우저 파이썬(Pyodide)에 풀어 쓸 묶음: core/*.py + 모의고사·문제 자료 + openpyxl 등 순수 파이썬 휠."""
+    out = HERE / 'py' / 'bundle.zip'
+    names = {}
+    for n in CORE_FILES:
+        names[f'app/core/{n}.py'] = SRC / 'core' / f'{n}.py'
+    names['app/core/bridge.py'] = HERE / 'py' / 'bridge.py'
+    cdir = SRC / 'content'
+    for rel in ['datasets.json', 'functions.json']:
+        names[f'app/content/{rel}'] = cdir / rel
+    for sub in ('problems', 'exams', 'exams/files'):
+        for p in sorted((cdir / sub).glob('*')):
+            if p.is_file():
+                names[f'app/content/{sub}/{p.name}'] = p
+    for whl in sorted((HERE / 'py' / 'wheels').glob('*.whl')):
+        with zipfile.ZipFile(whl) as z:
+            for info in z.infolist():
+                if info.is_dir() or '.dist-info/' in info.filename:
+                    continue
+                names[f'lib/{info.filename}'] = (whl, info.filename)
+    with zipfile.ZipFile(out, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as z:
+        for arc in sorted(names):
+            src = names[arc]
+            data = zipfile.ZipFile(src[0]).read(src[1]) if isinstance(src, tuple) else src.read_bytes()
+            zi = zipfile.ZipInfo(arc, (2026, 1, 1, 0, 0, 0))
+            zi.compress_type = zipfile.ZIP_DEFLATED
+            z.writestr(zi, data, compresslevel=9)
     return out.stat().st_size
 
 
@@ -47,6 +82,7 @@ def build():
 
     sc = json.loads((SRC / 'content' / 'shortcuts.json').read_text(encoding='utf-8'))
     sizes['shortcuts'] = js('shortcuts', sc)
+    sizes['bundle'] = bundle()
     return {'written': len(qs), 'functions': len(funcs), 'problems': len(probs),
             'shortcuts': sum(len(g['items']) for g in sc['groups']), 'bytes': sizes}
 

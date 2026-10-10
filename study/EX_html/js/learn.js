@@ -1,4 +1,4 @@
-/* 문제 풀기: 선택형은 바로 채점, 수식 문제는 정답 수식과 글자로 비교(같은 값을 내는 다른 수식은 스스로 판단) */
+/* 문제 풀기: 선택형은 바로 채점. 수식 문제는 브라우저 안의 엑셀 계산기로 값을 계산해 채점(웹 주소로 열 때), file:// 에서는 정답 수식과 글자로 비교 */
 (function () {
   'use strict';
   var P = window.EXDATA && window.EXDATA.problems;
@@ -78,7 +78,13 @@
       maxR = Math.max(maxR, pos.r); maxC = Math.max(maxC, pos.c);
     });
     var tgt = p.target ? parseAddr(p.target) : null;
+    var fill = null;                       // 채우기 범위(H2:H16) — 결과가 그려질 칸
+    if (p.fill) {
+      var fm = /^([A-Za-z]+\d+):([A-Za-z]+\d+)$/.exec(p.fill);
+      if (fm) fill = { a: parseAddr(fm[1]), b: parseAddr(fm[2]) };
+    }
     if (tgt) { maxR = Math.max(maxR, tgt.r); maxC = Math.max(maxC, tgt.c); }
+    if (fill && fill.a && fill.b) { maxR = Math.max(maxR, fill.b.r); maxC = Math.max(maxC, fill.b.c); }
     var h = '<div class="sheet-wrap"><table class="sheet"><thead><tr><th class="rn"></th>';
     for (var c = 0; c <= maxC; c++) h += '<th>' + colName(c) + '</th>';
     h += '</tr></thead><tbody>';
@@ -86,8 +92,9 @@
       h += '<tr><th class="rn">' + (r + 1) + '</th>';
       for (c = 0; c <= maxC; c++) {
         var cell = grid[r + ',' + c], isT = tgt && tgt.r === r && tgt.c === c;
+        var inFill = fill && fill.a && fill.b && r >= fill.a.r && r <= fill.b.r && c >= fill.a.c && c <= fill.b.c;
         var num = cell && typeof cell.v === 'number';
-        h += '<td class="' + (num ? 'num' : '') + (isT ? ' tgt' : '') + '"' + (isT ? ' title="답을 입력할 셀"' : '') + '>' + (cell ? esc(fmtCell(cell.v, cell.f)) : '') + '</td>';
+        h += '<td data-a="' + colName(c) + (r + 1) + '" class="' + (num ? 'num' : '') + (isT || inFill ? ' tgt' : '') + '"' + (isT ? ' title="답을 입력할 셀"' : '') + '>' + (cell ? esc(fmtCell(cell.v, cell.f)) : '') + '</td>';
       }
       h += '</tr>';
     }
@@ -166,9 +173,12 @@
         return '<button type="button" class="opt" data-i="' + i + '"><span class="n">' + (i + 1) + '</span><span>' + esc(o) + '</span></button>';
       }).join('') + '</div>';
     } else {
+      var useEngine = EX.py && EX.py.available();
       h += '<div class="fbar"><span class="fx">fx</span><input class="formula" id="f-input" type="text" autocomplete="off" spellcheck="false" placeholder="' + esc((p.target || '') + ' 에 입력할 수식 (예: =SUM(A1:A5))') + '" aria-label="수식 입력"></div>' +
-        '<div class="row"><button class="btn primary" id="f-check" type="button">채점</button><button class="btn" id="f-show" type="button">정답 보기</button></div>' +
-        '<p class="muted small" style="margin-top:8px">서버 없이 채점하므로 정답 수식과 글자(공백·대소문자·$ 무시)로 비교합니다. 값이 같은 다른 수식은 자동으로 알 수 없어 스스로 판단합니다.</p>';
+        '<div class="row">' + (useEngine ? '<button class="btn" id="f-try" type="button">계산해 보기</button>' : '') + '<button class="btn primary" id="f-check" type="button">채점</button><button class="btn" id="f-show" type="button">정답 보기</button></div>' +
+        '<p class="muted small" style="margin-top:8px">' + (useEngine
+          ? '브라우저 안의 엑셀 계산기로 수식을 채우기 범위 전체에 계산해 값을 비교합니다(처음 한 번 엔진을 불러오느라 몇 초 걸립니다). 같은 값을 내는 다른 수식도 정답으로 봅니다.'
+          : '파일을 직접 연 상태(file://)라 엑셀 계산기를 쓸 수 없어, 정답 수식과 글자(공백·대소문자·$ 무시)로 비교합니다. 값이 같은 다른 수식은 스스로 판단합니다. 웹 주소(start.bat)로 열면 값을 계산해 채점합니다.') + '</p>';
     }
     h += '<div id="p-out"></div></article>';
     main.innerHTML = h;
@@ -202,22 +212,42 @@
       };
     } else {
       var input = document.getElementById('f-input');
-      var check = function () {
-        var j = judge(p, input.value), box = '', ok = null;
+      /* 한 번 계산한 결과를 시트에 그린다(맞/틀림 색, 칸 위에 마우스를 올리면 그 칸의 수식) */
+      var tds = {};
+      main.querySelectorAll('table.sheet td[data-a]').forEach(function (td) { tds[td.getAttribute('data-a')] = td; td.setAttribute('data-orig', td.textContent); });
+      function resetGrid() {
+        Object.keys(tds).forEach(function (a) { var td = tds[a]; td.classList.remove('okc', 'badc', 'spill'); td.textContent = td.getAttribute('data-orig'); td.removeAttribute('title'); });
+      }
+      function paint(res, graded) {
+        resetGrid();
+        (res.cells || []).forEach(function (c, i) {
+          var td = tds[c.addr];
+          if (!td) return;
+          td.textContent = c.value;
+          if (c.formula) td.title = c.formula;
+          if (c.spill) td.classList.add('spill');
+          else if (graded && res.per) td.classList.add(res.per[i] ? 'okc' : 'badc');
+        });
+      }
+      function fixText(t) { t = t.trim(); return /^[=+]|^\{=/.test(t) ? t : '=' + t; }
+
+      /* 글자 비교(엔진을 쓸 수 없을 때) */
+      function textCheck(note) {
+        var j = judge(p, input.value), box = '';
         if (j.kind === 'empty') { out.innerHTML = '<div class="result-box warn">수식을 입력하세요.</div>'; return; }
+        var pre = note ? '<div class="result-box warn small">' + esc(note) + '</div>' : '';
         if (j.kind === 'exact' || j.kind === 'loose') {
-          ok = true;
           box = '<div class="result-box ok"><b>정답입니다.</b>' + (j.kind === 'loose' ? ' (정답과 $ 절대·상대 참조 표시만 다릅니다)' : '') + '</div>';
           record(p.id, true);
-          out.innerHTML = box + '<div class="explain ok">' + esc(p.explain) + '</div>' + related() + nextBtn();
+          out.innerHTML = pre + box + '<div class="explain ok">' + esc(p.explain) + '</div>' + related() + nextBtn();
           return;
         }
         if (j.kind === 'wrong') {
           record(p.id, false);
-          out.innerHTML = showAnswer('<div class="result-box bad"><b>자주 하는 실수와 같은 수식입니다.</b></div>') + nextBtn();
+          out.innerHTML = pre + showAnswer('<div class="result-box bad"><b>자주 하는 실수와 같은 수식입니다.</b></div>') + nextBtn();
           return;
         }
-        out.innerHTML = showAnswer('<div class="result-box warn"><b>정답 수식과 글자가 다릅니다.</b> 같은 값을 내는 다른 수식일 수 있어 자동으로 알 수 없습니다. 아래 정답과 비교해 직접 선택하세요.</div>') +
+        out.innerHTML = pre + showAnswer('<div class="result-box warn"><b>정답 수식과 글자가 다릅니다.</b> 같은 값을 내는 다른 수식일 수 있어 자동으로 알 수 없습니다. 아래 정답과 비교해 직접 선택하세요.</div>') +
           '<div class="row" style="margin-top:10px"><button class="btn" data-self="1" type="button">내 수식도 맞다</button><button class="btn" data-self="0" type="button">내 수식은 틀렸다</button></div>';
         out.querySelectorAll('[data-self]').forEach(function (b) {
           b.addEventListener('click', function () {
@@ -225,10 +255,41 @@
             out.querySelector('.row').outerHTML = '<p class="muted small">기록했습니다.</p>' + nextBtn();
           });
         });
-      };
-      document.getElementById('f-check').addEventListener('click', check);
-      input.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); check(); } });
+      }
+
+      /* 값 계산 채점(브라우저 안의 파이썬 엑셀 계산기) */
+      async function run(mode) {
+        if (!input.value.trim()) { out.innerHTML = '<div class="result-box warn">수식을 입력하세요. 예: <code>=SUM(B2:B5)</code></div>'; return; }
+        if (!EX.py || !EX.py.available()) { textCheck(); return; }
+        var r = await EX.withEngine(out, function (st) { return EX.py.call('formula_check', { id: p.id, text: fixText(input.value), reveal: mode !== 'try' }, null, st); });
+        if (!r) { textCheck('엑셀 계산기를 불러오지 못해 글자 비교로 채점합니다.'); return; }
+        if (r.error && !r.cells) { resetGrid(); out.innerHTML = '<div class="result-box bad">' + esc(r.error) + '</div>'; return; }
+        if (mode === 'try') {
+          paint(r, false);
+          var first = r.cells && r.cells[0];
+          out.innerHTML = '<div class="result-box warn"><b>계산 결과</b> ' + (first ? esc(first.addr) + ' = <code>' + esc(first.value) + '</code>' : '') +
+            (r.cells && r.cells.length > 1 ? ' · 채우기 범위를 복사해 계산했습니다(칸에 마우스를 올리면 그 칸의 수식).' : '') +
+            (r.unknown && r.unknown.length ? '<br>모르는 함수: ' + esc(r.unknown.join(', ')) : '') + '<div class="small muted">기록되지 않습니다. 맞는지 보려면 [채점].</div></div>';
+          return;
+        }
+        paint(r, true);
+        if (r.error) { out.innerHTML = '<div class="result-box bad">' + esc(r.error) + '</div>'; return; }   // 순환 참조 등: 기록하지 않음
+        record(p.id, !!r.ok);
+        var html = '<div class="result-box ' + (r.ok ? 'ok' : 'bad') + '"><b>' + (r.ok ? '정답입니다.' : '다시 생각해 보세요.') + '</b>' +
+          (r.notes && r.notes.length ? '<ul style="margin:6px 0 0">' + r.notes.map(function (n) { return '<li>' + esc(n) + '</li>'; }).join('') + '</ul>' : '');
+        if (!r.ok && r.expected) {
+          var bad = r.expected.filter(function (e, i) { return !r.per[i]; }).slice(0, 4);
+          if (bad.length) html += '<div class="small" style="margin-top:6px">기대한 값: ' + bad.map(function (e) { return esc(e.addr) + ' = <code>' + esc(e.value) + '</code>'; }).join(', ') + '</div>';
+        }
+        html += '</div>';
+        out.innerHTML = showAnswer(html) + nextBtn();
+      }
+      var tryBtn = document.getElementById('f-try');
+      if (tryBtn) tryBtn.addEventListener('click', function () { run('try'); });
+      document.getElementById('f-check').addEventListener('click', function () { run('check'); });
+      input.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); run('check'); } });
       document.getElementById('f-show').addEventListener('click', function () { out.innerHTML = showAnswer('') + nextBtn(); });
+      input.addEventListener('focus', function () { if (EX.py && EX.py.available()) EX.py.ready().catch(function () {}); }, { once: true });
       input.focus();
     }
   }
