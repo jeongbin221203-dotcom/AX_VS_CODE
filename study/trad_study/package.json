@@ -1,6 +1,0 @@
-{
-  "name": "trad-study-html",
-  "private": true,
-  "description": "무역연습실 · 국제무역사 1급 (서버 없는 HTML 버전)",
-  "scripts": { "test": "node --test" }
-}

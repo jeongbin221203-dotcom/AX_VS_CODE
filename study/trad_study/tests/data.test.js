@@ -88,7 +88,9 @@ test('index.html: 상대 경로·필요한 스크립트·보안 설정, 정답 �
     assert.ok(fs.existsSync(at(ref)), ref);
   }
   const scripts = [...html.matchAll(/<script src="([^"]+)"/g)].map(m => m[1]);
-  assert.deepEqual(scripts, ['data/catalog.js', 'static/store.js', 'static/ai.js', 'static/app.js']);
+  assert.deepEqual(scripts, ['static/theme.js', 'data/catalog.js', 'static/store.js', 'static/ai.js', 'static/app.js']);
+  assert.ok(!/<script src="static\/theme\.js"[^>]*defer/.test(html), 'theme.js 는 defer 없이 먼저 실행돼야 밝은 화면이 번쩍이지 않음');
+  for (const name of ['data/catalog.js', 'static/store.js', 'static/ai.js', 'static/app.js']) assert.ok(html.includes(`<script src="${name}" defer>`), name);
   assert.ok(!html.includes('answers.js'), '정답 파일은 채점할 때만 불러옴');
   assert.match(html, /Content-Security-Policy[^>]*script-src 'self'[^>]*connect-src 'self' https:\/\/api\.openai\.com/);
   for (const file of ['static/app.js', 'static/ai.js', 'static/store.js', 'static/style.css'])
@@ -152,4 +154,31 @@ test('HTML 구조(2026-10-10 점검에서 찾은 문제의 재발 방지): 영�
     const hex = css.match(new RegExp(token + ':(#[0-9a-fA-F]{6})'))[1];
     for (const bg of ['#ffffff', '#f6f8f4']) assert.ok(ratio(hex, bg) >= 4.5, `${token} ${hex} 대 ${bg} = ${ratio(hex, bg).toFixed(2)}`);
   }
+});
+
+test('어두운 테마: 운영체제 설정을 따르고 수동 전환·저장을 지원하며, 어두운 스타일이 밝은 스타일과 맞음', () => {
+  const html = fs.readFileSync(at('index.html'), 'utf-8');
+  const css = fs.readFileSync(at('static', 'style.css'), 'utf-8');
+  const app = fs.readFileSync(at('static', 'app.js'), 'utf-8');
+  const theme = fs.readFileSync(at('static', 'theme.js'), 'utf-8');
+  assert.ok(html.includes('<meta name="color-scheme" content="light dark">'));
+  assert.match(html, /<meta name="theme-color" content="#[0-9a-f]{6}" media="\(prefers-color-scheme: dark\)">/);
+  assert.ok(html.includes('data-action="theme"') && html.includes('id="theme-label"'));
+  // 저장 키가 theme.js(첫 화면 전에 적용)와 app.js(전환 버튼)에서 같아야 함
+  assert.ok(theme.includes("localStorage.getItem('trade-theme')") && app.includes("localStorage.setItem('trade-theme'") && app.includes("localStorage.removeItem('trade-theme')"));
+  assert.ok(app.includes('function cycleTheme') && app.includes("case 'theme':cycleTheme();break;"));
+  // 스타일: light-dark() 구간(scripts/gen_dark_theme.py 가 만듦), 강제 전환 속성
+  assert.ok(css.includes('/* ==== 어두운 테마 (scripts/gen_dark_theme.py') && css.includes('@supports (color:light-dark(#000,#fff))'));
+  assert.ok(css.includes(':root{color-scheme:light dark}') && css.includes(':root[data-theme=dark]{color-scheme:dark}') && css.includes(':root[data-theme=light]{color-scheme:light}'));
+  assert.ok((css.match(/light-dark\(/g) || []).length >= 150);
+  assert.ok(!/background(-color)?:\s*white/.test(css.split('/* ==== 어두운 테마')[1].replace(/light-dark\(white,/g, '')), '색 이름 white 가 어두운 구간에서 변환되지 않고 남음');
+  // 본문 글자/배경의 어두운 색 대비
+  const m = css.match(/\nbody\{background-color:light-dark\(var\(--paper\),(#[0-9a-f]{6})\);color:light-dark\(var\(--ink\),(#[0-9a-f]{6})\)\}/);
+  assert.ok(m, 'body 의 어두운 색');
+  const lum = hex => { const v = [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16) / 255).map(x => x <= 0.03928 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4); return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2]; };
+  const [hi, lo] = [lum(m[1]), lum(m[2])].sort((a, b) => b - a);
+  assert.ok((hi + 0.05) / (lo + 0.05) >= 7, '어두운 테마 본문 글자 대비');
+  // 밝은 CSS 를 고치고 어두운 구간을 다시 만들지 않았는지(파이썬이 있을 때만)
+  const run = require('node:child_process').spawnSync('python', [at('scripts', 'gen_dark_theme.py'), '--check'], { encoding: 'utf-8' });
+  if (!run.error) assert.equal(run.status, 0, '밝은 스타일을 고친 뒤 python scripts/gen_dark_theme.py 를 다시 실행하세요');
 });

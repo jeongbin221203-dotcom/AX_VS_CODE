@@ -30,6 +30,7 @@
 | AI 챗봇·해설 | 현재 문항의 원문·공통 지문을 참고하는 질문 답변, 해설 생성 후 이 브라우저에 저장 |
 | 학습 기록 백업·복원 | 왼쪽 메뉴에서 JSON 파일로 내려받고 다시 올리기 |
 | 핵심 개념 | 과목별 간단한 학습 안내와 기본 용어 |
+| 어두운 테마 | 운영체제 설정을 따르고, 위쪽 `자동`/`다크`/`라이트` 버튼으로 직접 선택(브라우저에 저장) |
 
 시험 화면은 시험지 PDF의 **원본 문항 영역을 미리 만들어 둔 이미지(`img/`)로 표시**합니다. 밑줄, 표, 영어 서신과 보기의 모양을 보존합니다. `문제 텍스트로 보기`와 원본 PDF 링크도 있습니다.
 
@@ -90,6 +91,7 @@ trad_study/
     app.js                  화면 동작
     store.js                학습 기록 저장소: 시험·채점·오답노트·메모·백업을 브라우저에서 처리(IndexedDB)
     ai.js                   OpenAI 직접 호출·키 보관
+    theme.js                저장된 화면 테마를 첫 화면 전에 적용
     style.css, favicon.svg
     fonts/                  쓰는 글자만 남긴 글꼴(NotoSansKR 부분집합 woff2, OFL 라이선스)
   data/
@@ -100,6 +102,7 @@ trad_study/
   img/                      문항·공통 지문 이미지 883개(WebP, 같은 그림은 한 파일)
   scripts/build_data.py     ../trad 의 문항 DB·PDF 에서 data/·img/·글꼴을 다시 만드는 도구
   scripts/verify_against_flask.py   만든 데이터가 Flask 버전과 같은지 대조(글·정답·이미지 픽셀·PDF 해시)
+  scripts/gen_dark_theme.py   style.css 끝의 어두운 테마 구간을 만듦(밝은 스타일을 고친 뒤 다시 실행, --check 로 최신 여부 검사)
   tests/                    Node 테스트 (store·ai·data)
   .vscode/launch.json       VS Code F5 로 Chrome 에서 index.html 열기
   start.bat / start.sh      로컬 서버(5091번)
@@ -118,7 +121,7 @@ python scripts/build_data.py --font-only  # 화면 글자가 바뀌어 글꼴만
 ## 검증
 
 ```powershell
-node --test        # Node 20 이상, 추가 설치 없음. 35개
+node --test        # Node 20 이상, 추가 설치 없음. 36개
 python scripts/verify_against_flask.py   # 데이터·이미지·PDF 를 Flask 버전과 대조 (Python, ../trad 필요)
 ```
 
