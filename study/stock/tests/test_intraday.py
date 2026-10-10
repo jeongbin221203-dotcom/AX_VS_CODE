@@ -72,3 +72,35 @@ def test_download_failure_falls_back_to_cache(client, monkeypatch):
 def test_compare_page_has_intraday_options(client):
     html = client.get("/compare?a=TEST1&b=TEST1&ta=5m&tb=15m").get_data(as_text=True)
     assert "5분봉" in html and "단타 5분·15분" in html and html.count("selected") >= 2
+
+
+def test_resample_1m_to_5m_aligns_to_session_start():
+    # 2026-10-08(목) 09:00 KST = 00:00 UTC = 1791417600 — 1분봉 12개(09:00~09:11)
+    start = 1791417600
+    df = pd.DataFrame({"ts": start + np.arange(12) * 60, "open": np.arange(12) + 100.0, "high": np.arange(12) + 101.0, "low": np.arange(12) + 99.0,
+                       "close": np.arange(12) + 100.5, "volume": np.ones(12) * 10})
+    r = intraday.resample_1m(df, 5)
+    assert len(r) == 3 and list(r["ts"]) == [start, start + 300, start + 600]          # 09:00·09:05·09:10 시작
+    assert r["open"].iloc[0] == 100 and r["close"].iloc[0] == 104.5 and r["high"].iloc[0] == 105 and r["low"].iloc[0] == 99 and r["volume"].iloc[0] == 50
+    assert r["volume"].iloc[2] == 20                                                  # 마지막 묶음은 2봉뿐
+    assert intraday.resample_1m(df, 1) is df
+    # 날이 바뀌면 묶음도 새로 시작
+    nxt = df.assign(ts=df["ts"] + 86400)
+    two = intraday.resample_1m(pd.concat([df, nxt], ignore_index=True), 60)
+    assert len(two) == 2
+
+
+def test_merge_prefers_toss_for_recent(monkeypatch):
+    start = 1791417600
+    toss = pd.DataFrame({"ts": start + np.arange(10) * 60, "open": 200.0, "high": 201.0, "low": 199.0, "close": 200.0, "volume": 5.0})
+    yahoo = pd.DataFrame({"ts": start - 600 + np.arange(30) * 60, "open": 100.0, "high": 101.0, "low": 99.0, "close": 100.0, "volume": 1.0})
+    monkeypatch.setattr(intraday, "_download_toss", lambda code: toss)
+    monkeypatch.setattr(intraday, "_download_yahoo", lambda code, iv: yahoo)
+    out = intraday._download("X", "1m")
+    assert out["ts"].is_monotonic_increasing and (out[out["ts"] >= start]["close"] == 200.0).all()     # 겹치는 구간은 토스
+    assert (out[out["ts"] < start]["close"] == 100.0).all() and len(out[out["ts"] < start]) == 10
+    monkeypatch.setattr(intraday, "_download_toss", lambda code: (_ for _ in ()).throw(intraday.IntradayError("IP")))
+    assert len(intraday._download("X", "1m")) == len(yahoo)                                         # 토스가 안 되면 Yahoo 만
+    monkeypatch.setattr(intraday, "_download_yahoo", lambda code, iv: (_ for _ in ()).throw(intraday.IntradayError("net")))
+    with pytest.raises(intraday.IntradayError):
+        intraday._download("X", "1m")
