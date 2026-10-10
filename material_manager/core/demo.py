@@ -100,6 +100,9 @@ def _mark_today() -> None:
 
 def reset(actor: dict | None, reason: str) -> bool:
     """DB를 비우고 샘플을 다시 만든다. 방금(1분 안) 했거나 다른 요청이 하는 중이면 False."""
+    from core import seed_packs
+    if seed_packs.running():                      # 데이터 팩을 백그라운드로 넣는 중이면 끝난 뒤에
+        return False
     if not _lock.acquire(blocking=False):
         return False
     try:
