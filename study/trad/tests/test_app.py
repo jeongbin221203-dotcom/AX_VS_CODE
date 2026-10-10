@@ -313,3 +313,37 @@ def test_question_texts_have_their_word_spaces_restored(client):
             assert q['title'].count(' ') / hangul >= 0.08, (q['id'], q['title'])
         assert re.search(r'[가-힣]{12,}', q['title']) is None, (q['id'], q['title'])     # 한글이 12자 넘게 붙어 있으면 띄어쓰기 누락
     assert 'A. 보세창고' in items[59021]['body'] and 'E. 종합보세구역' in items[59021]['body']     # 표의 가로줄은 칸 사이를 띄움
+
+def test_html_structure_regressions():
+    """2026-10-10 HTML 구조 점검에서 찾은 문제의 재발 방지: 영역 이름·제목 단계·버튼 type·noscript·글자 대비."""
+    import re
+    html = (ROOT / 'templates' / 'index.html').read_text(encoding='utf-8')
+    app_js = (ROOT / 'static' / 'app.js').read_text(encoding='utf-8')
+    css = (ROOT / 'static' / 'style.css').read_text(encoding='utf-8')
+    assert re.search(r'<aside class="sidebar" aria-label="[^"]+">', html)
+    assert re.search(r'<noscript>[\s\S]*JavaScript[\s\S]*</noscript>', html) and 'class="loading"' not in html
+    assert re.search(r'<meta name="description" content="[^"]+">', html)
+    assert 'aria-labelledby="dialog-title"' not in html
+    assert not re.findall(r'<button (?![^>]*\btype=)', app_js)
+    assert all('aria-label=' in tag for tag in re.findall(r'<aside\b[^>]*>', app_js))
+    assert "setAttribute('aria-labelledby','dialog-title')" in app_js and '<h1 style="margin-top:8px">${esc(a.title)}' in app_js
+    assert not re.search(r'<h3>(\$\{title\}|문제 해설)', app_js) and "e.setAttribute('aria-current','page')" in app_js
+    for sel in ('.result-hero h1', '.concept-card h2', '.explanation h2'):
+        assert sel + '{' in css, sel
+    assert '.result-hero h2{' not in css and '.concept-card h3{' not in css and '.explanation h3{' not in css
+    old = ['#5a7b61', '#66805f', '#668069', '#698272', '#71816f', '#718172', '#74817c', '#74827f', '#77867c', '#82907d', '#84907f', '#849183', '#86988b', '#88948d', '#8e7d56', '#94ac91', '#95a099', '#99a39f', '#99a59c', '#a0aaa1', '#a98239', '#b25c4c', '#b35047']
+    assert not [c for c in old if c in css.lower()], '대비가 부족했던 색이 다시 쓰임'
+
+    def lum(hex_):
+        v = [int(hex_[i:i + 2], 16) / 255 for i in (1, 3, 5)]
+        v = [x / 12.92 if x <= 0.03928 else ((x + 0.055) / 1.055) ** 2.4 for x in v]
+        return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2]
+
+    def ratio(a, b):
+        hi, lo = sorted((lum(a), lum(b)), reverse=True)
+        return (hi + 0.05) / (lo + 0.05)
+
+    for token in ('--muted', '--red', '--green', '--ink'):
+        color = re.search(token + r':(#[0-9a-fA-F]{6})', css).group(1)
+        for bg in ('#ffffff', '#f6f8f4'):
+            assert ratio(color, bg) >= 4.5, (token, color, bg)

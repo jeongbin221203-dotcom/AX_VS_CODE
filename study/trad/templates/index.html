@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#123f3c">
+  <meta name="description" content="국제무역사 1급 기출 840문항을 풀고 오답노트·메모로 복습하는 개인 학습 웹">
   <title>무역연습실 · 국제무역사 1급</title>
   <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/static/style.css">
@@ -11,7 +12,7 @@
 </head>
 <body>
 <a href="#main" class="skip">본문으로 이동</a>
-<aside class="sidebar">
+<aside class="sidebar" aria-label="사이드바">
   <a href="#home" class="brand"><span class="brand-symbol">t.</span><span>무역연습실<small>TRADE STUDY ROOM</small></span></a>
   <div class="side-label">MY STUDY SPACE</div>
   <nav aria-label="주 메뉴">
@@ -29,11 +30,11 @@
 </aside>
 <div class="app-shell">
   <header class="topbar"><div class="breadcrumb">국제무역사 1급 <span>/</span> <strong id="page-name">학습 홈</strong></div>
-    <button class="btn compact" data-action="settings"><span class="dot" id="ai-dot"></span><span id="ai-status">AI 연결하기</span><span data-icon="settings"></span></button>
+    <button type="button" class="btn compact" data-action="settings"><span class="dot" id="ai-dot"></span><span id="ai-status">AI 연결하기</span><span data-icon="settings"></span></button>
   </header>
-  <main id="main" tabindex="-1"><div class="loading">학습 공간을 준비하고 있어요…</div></main>
+  <main id="main" tabindex="-1"><noscript><div class="empty"><strong>JavaScript가 필요해요</strong><p>이 학습 앱은 브라우저에서 JavaScript를 켜야 동작해요.</p></div></noscript></main>
   <footer class="footer">조금씩 쌓이는 실력, 무역연습실 <span>개인 학습용 · 기록은 이 브라우저에 저장</span></footer>
 </div>
-<dialog id="dialog" aria-labelledby="dialog-title"></dialog>
+<dialog id="dialog"></dialog>
 <div id="toast" role="status" aria-live="polite"></div>
 </body></html>
