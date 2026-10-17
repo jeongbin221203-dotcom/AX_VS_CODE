@@ -17,11 +17,29 @@ _manual: threading.Thread | None = None
 CHECK_SECONDS = 60
 
 
+def _log_to_file() -> None:
+    """예약 수집·동기화 기록을 data/scheduler.log 에 남긴다 (멈췄을 때 어디서 늘어졌는지 보려고)."""
+    import config
+    from logging.handlers import RotatingFileHandler
+    root = logging.getLogger("job")
+    if any(isinstance(h, RotatingFileHandler) for h in root.handlers):
+        return
+    try:
+        h = RotatingFileHandler(config.DB_PATH.parent / "scheduler.log", maxBytes=1_000_000, backupCount=3,
+                                encoding="utf-8")
+    except OSError:
+        return
+    h.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(name)s %(message)s"))
+    root.addHandler(h)
+    root.setLevel(logging.INFO)
+
+
 def start() -> None:
     global _started
     if _started:
         return
     _started = True
+    _log_to_file()
     threading.Thread(target=_loop, name="job-crawl-scheduler", daemon=True).start()
 
 
@@ -62,8 +80,15 @@ def _loop() -> None:
             if power.keep_awake(awake):
                 from . import db
                 db.set_setting("keep_awake", "1" if awake else "0")       # 수집 현황 화면에 보여 줌
-            if crawler.run_once() is not None or time.monotonic() - last_sync >= SYNC_SECONDS:
+            t0 = time.monotonic()
+            result = crawler.run_once()
+            if result is not None:
+                log.info("예약 수집 끝: %.0f초, 새 공고 %s, 요청 %s, 오류 %d", time.monotonic() - t0,
+                         result.get("new"), result.get("requests"), len(result.get("errors") or []))
+            if result is not None or time.monotonic() - last_sync >= SYNC_SECONDS:
+                t1 = time.monotonic()
                 _sync()
+                log.info("동기화 %.0f초", time.monotonic() - t1)
                 last_sync = time.monotonic()
         except Exception:  # 한 번 실패해도 다음 주기에 다시 시도
             log.exception("예약 작업 실패")

@@ -634,3 +634,21 @@ def test_reread_old_postings_without_erasing(app):
     assert "71" in crawler._needs_backfill("saramin")
     p = postings.get(postings.find_id("saramin", "71"))
     assert p["salary_min"] == 3000 and p["company_info"]                    # 값은 그대로
+
+
+def test_refresh_stops_at_deadline(app):
+    """저장 공고 갱신은 시간 예산이 지나면 남은 공고를 다음 실행으로 미룬다 (다음 예약을 막지 않게)."""
+    class Boom:
+        requests = 0
+        delay = 0
+
+        def get(self, url):
+            raise AssertionError("예산이 지났는데 요청함")
+    with app.app_context():
+        monkey = crawler.refresh_candidates
+        crawler.refresh_candidates = lambda limit: [{"source": "saramin", "url": "https://www.saramin.co.kr/zf_user/jobs/relay/view?rec_idx=1", "id": 1}]
+        try:
+            upd, closed, errs = crawler.refresh(Boom(), 10, deadline=time.monotonic() - 1)
+        finally:
+            crawler.refresh_candidates = monkey
+    assert (upd, closed) == (0, 0) and errs and "미룸" in errs[0]

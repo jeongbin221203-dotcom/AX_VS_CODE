@@ -487,7 +487,7 @@ def _run(s: dict, f: Fetcher) -> dict:
     # ④ 저장 공고 갱신·API·정리
     progress(phase="저장 공고 다시 읽기", site=None, step=None, requests=f.requests,
              new=summary["new"], filled=summary["updated"])
-    r_upd, r_closed, r_err = refresh(f, s["max_refresh"])
+    r_upd, r_closed, r_err = refresh(f, s["max_refresh"], deadline=run_deadline + 300)
     summary["updated"] += r_upd
     summary["closed"] += r_closed
     summary["errors"] += r_err
@@ -986,12 +986,16 @@ def refresh_candidates(limit: int) -> list[dict]:
             (*REFRESH_SITES, today, day, week, limit))]
 
 
-def refresh(f: Fetcher, limit: int) -> tuple[int, int, list[str]]:
-    """refresh_candidates 를 다시 읽어 갱신하고, 사라진 공고(404·410)는 마감 처리. (갱신 수, 마감 처리 수, 오류)."""
+def refresh(f: Fetcher, limit: int, deadline: float | None = None) -> tuple[int, int, list[str]]:
+    """refresh_candidates 를 다시 읽어 갱신하고, 사라진 공고(404·410)는 마감 처리. (갱신 수, 마감 처리 수, 오류).
+    deadline(time.monotonic 기준)이 지나면 남은 공고는 다음 실행으로 미룬다 — 이 단계가 늘어져 다음 예약을 막지 않게."""
     rows = refresh_candidates(limit)
     updated = closed = 0
     errors: list[str] = []
     for row in rows:
+        if deadline is not None and time.monotonic() > deadline:
+            errors.append("갱신: 시간 예산을 넘겨 나머지는 다음 실행으로 미룸")
+            break
         if not linkimport.is_posting_url(row["url"], row["source"]):
             continue
         try:
