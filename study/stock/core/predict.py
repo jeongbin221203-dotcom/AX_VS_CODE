@@ -10,7 +10,7 @@ import threading
 import numpy as np
 import pandas as pd
 
-from core import ai, backtest as bt, combined_study as cs, indicators as ind, plan_study
+from core import ai, avoid_study, drop_risk, backtest as bt, combined_study as cs, indicators as ind, plan_study
 
 AI_THR_DEFAULT = 0.138          # 2026-10-08 거래 가능 종목 1,322개의 AI 확률 상위 10% 경계(plan.json 에 값이 없을 때)
 DANTE_IDX = list(range(ai.N_DANTE)) + [11, 12, 13]   # 11개 단테 기법 + 세력선(7·15·33일선 지지)
@@ -126,9 +126,29 @@ def _daily_bars(tf, bars):
     return bars * {"D": 1, "W": 5, "M": 21}[tf]
 
 
+def _strong(df, D):
+    """신호 날짜별 '강' 여부 = 피함 7개 규칙에 안 걸림 + 60일선 상승 중 + 종가가 224일선 위.
+    2026-10-11 전 종목(2,656개·표본 140만 행) 점검: 14개 기법 신호의 시장 대비 20일 수익 평균이 학습 −1.02%p·시험(2022~) −0.95%p 였는데,
+    이 조건을 만족하는 신호만 보면 학습 −0.27%p·시험 +0.15%p. 수익을 보장하는 조건이 아니라 약한 신호를 걸러 내는 용도. 신호일 종가까지 아는 값만 쓴다."""
+    X = D.copy()
+    X["zero_vol60"] = (df["volume"].to_numpy(float) <= 0).astype(float)
+    X["zero_vol60"] = X["zero_vol60"].rolling(60, min_periods=1).sum()
+    rules = dict(avoid_study.RULES)
+    avoid = np.zeros(len(X), bool)
+    for name in cs.AVOID_NAMES:
+        avoid |= rules[name](X).fillna(False).to_numpy()
+    return (~avoid) & (X["slope60"].to_numpy() > 0) & (X["dist224"].to_numpy() > 0)
+
+
 def dante(df, tf="D", bars=750):
     X = _features(df)
     D = pd.DataFrame(X, columns=ai.NAMES)
+    strong = _strong(df, D)
+    try:
+        risk_p = drop_risk.probs(X)[0]                      # 날짜별 하락 위험 확률 — '확실한 저점' 판정에 쓴다
+    except RuntimeError:
+        risk_p = None                                       # 위험 모델이 없으면 구분하지 않음(전부 표시)
+    bottom_labels = set(ai.SIGNAL_LABELS[:11])              # 바닥·전환 기법 11개(256·이평 때리기·224·밥그릇·3번 자리·공구리·역매공파·매집봉)
     n = len(df)
     start = max(n - _daily_bars(tf, bars), 0)
     info = _tech_info(plan())
@@ -148,7 +168,8 @@ def dante(df, tf="D", bars=750):
             continue
         seen.add((d, lab))
         t = info.get(lab)
-        markers.append({"date": d, "side": "buy", "label": lab, "why": DANTE_WHY.get(lab, ""), "good": bool(t and t["good"]),
+        markers.append({"date": d, "side": "buy", "label": lab, "why": DANTE_WHY.get(lab, ""), "good": bool(t and t["good"]), "strong": bool(strong[i]),
+                        **({"bottom": True, "certain": bool(np.isfinite(risk_p[i]) and risk_p[i] < drop_risk.CERTAIN_P)} if (risk_p is not None and lab in bottom_labels) else {}),
                         "stat": (f"처음 보는 해 평균 {t['mean'] * 100:+.2f}%·상승 {t['p_up'] * 100:.0f}% ({t['years']}년 플러스)" if t and t["mean"] is not None else "")})
     last = D.iloc[-1]
     recent = []
@@ -157,7 +178,8 @@ def dante(df, tf="D", bars=750):
         ago = last[f"sig{j:02d}"]
         if np.isfinite(ago) and 0 <= ago <= 20:
             t = info.get(lab)
-            recent.append({"label": lab, "ago": int(ago), "good": bool(t and t["good"]), "rule": t["rule"] if t else "", "mean": t["mean"] if t else None, "p_up": t["p_up"] if t else None})
+            recent.append({"label": lab, "ago": int(ago), "good": bool(t and t["good"]), "strong": bool(strong[len(strong) - 1 - int(ago)]),
+                           "certain": bool(risk_p is not None and lab in bottom_labels and np.isfinite(risk_p[len(risk_p) - 1 - int(ago)]) and risk_p[len(risk_p) - 1 - int(ago)] < drop_risk.CERTAIN_P), "rule": t["rule"] if t else "", "mean": t["mean"] if t else None, "p_up": t["p_up"] if t else None})
     recent.sort(key=lambda r: r["ago"])
     techs = {ai.SIGNAL_LABELS[j]: info[ai.SIGNAL_LABELS[j]] for j in DANTE_IDX if ai.SIGNAL_LABELS[j] in info}
     if recent:
@@ -166,15 +188,16 @@ def dante(df, tf="D", bars=750):
             s = f"{r['label']} {r['ago']}일 전" if r["ago"] else f"{r['label']} 오늘"
             if r["mean"] is not None:
                 s += f"({'✔' if r['good'] else '✖'} {r['mean'] * 100:+.1f}%·{r['p_up'] * 100:.0f}%)"
+            s += " 강" if r["strong"] else " 약"
             parts.append(s)
-        summary = "최근 20일 단테 신호: " + ", ".join(parts) + ". ✔ = 처음 보는 해에서 규칙이 통한 기법."
+        summary = "최근 20일 단테 신호: " + ", ".join(parts) + ". ✔ = 처음 보는 해에서 규칙이 통한 기법. 강 = 급등·고변동 등 피함 규칙에 안 걸리고 60일선 상승·224일선 위."
         best = next((r for r in recent if r["good"]), None)
         if best and best["rule"]:
             summary += f" 규칙({best['label']}): {best['rule']}."
     else:
         summary = "최근 20일 안에 단테 기법 신호가 없습니다."
     return {"name": "예측", "kind": "dante", "markers": markers, "recent": recent, "techs": techs, "summary": summary,
-            "note": "단테 계열 14개 신호(256·이평 때리기·224·밥그릇·3번 자리·공구리·역매공파·매집봉·세력선). 괄호는 매매 계획의 '처음 보는 해' 성과(규칙대로, 비용 포함)."}
+            "note": "단테 계열 14개 신호(256·이평 때리기·224·밥그릇·3번 자리·공구리·역매공파·매집봉·세력선). 초록 ▲ = 확실한 저점 신호(바닥 기법 + 신호일 하락 위험 18% 미만, 기본으로는 이것만 표시), 빨간 화살표 = 강(피함 규칙 없음·60일선 상승·224일선 위), 금색 ■★n = 같은 날 강 신호 3개 이상(눈에 띄게 한 표시일 뿐 겹칠수록 성과가 좋아지진 않았음), 회색 = 약(과거 점검에서 걸러낼수록 시장 대비 수익이 나아짐). 괄호는 매매 계획의 '처음 보는 해' 성과(규칙대로, 비용 포함)."}
 
 
 _model_cache = {"mtime": None, "model": None}
@@ -231,3 +254,76 @@ def ai_pred(df, tf="D", bars=750):
     return {"name": "AI", "kind": "ai", "prob": prob, "thr": thr, "markers": markers, "latest": {"prob": p_now, "top": bool(p_now is not None and p_now >= thr)},
             "rule": t, "summary": summary,
             "note": "선 = 날짜마다 그날까지의 정보로 계산한 '20일 안 +20%' 확률(2021년까지 학습한 모델). 점선 = 상위 10% 경계, 마커 = 경계를 넘어선 날."}
+
+
+def _risk_track(df, P, cut_hi, cut_mid):
+    """이 종목에서 지난 예측이 맞았나 — 2022년 이후(모델이 학습에 안 쓴 기간), 신호일 다음날 시가 진입 20거래일 뒤 종가 수익(비용 포함)."""
+    o, c = df["open"].to_numpy(float), df["close"].to_numpy(float)
+    n = len(df)
+    net = np.full(n, np.nan)
+    ok = np.arange(n) + 21 < n
+    i = np.flatnonzero(ok)
+    net[i] = c[i + 21] / o[i + 1] - 1 - ai.COST
+    m = (df.index >= "2022-01-01") & np.isfinite(P) & np.isfinite(net)
+    if m.sum() < 60:
+        return None
+    out = {}
+    for name, sel in (("전체", m), ("높음", m & (P >= cut_hi)), ("주의", m & (P >= cut_mid) & (P < cut_hi)), ("낮음", m & (P < cut_mid))):
+        r = net[sel]
+        out[name] = {"n": int(len(r)), "dn10": float((r <= -0.10).mean()) if len(r) else None, "mean": float(r.mean()) if len(r) else None}
+    return out
+
+
+def risk(df, tf="D", bars=750):
+    """하락 위험 구간 — 날짜별 '20일 안 −10%↓ 확률'(선)과 높음·주의 구간(배경 띠). 주봉·월봉은 그 봉 안의 최댓값."""
+    X = _features(df)
+    P, cut_hi, cut_mid = drop_risk.probs(X)
+    n = len(df)
+    start = max(n - _daily_bars(tf, bars), 0)
+    dates = df.index.strftime("%Y-%m-%d")
+    bar_index = _bar_index(df, tf)
+    bars_of = _to_bar(list(dates[start:]), bar_index)
+    best = {}
+    for k, i in enumerate(range(start, n)):
+        if np.isfinite(P[i]):
+            d = bars_of[k]
+            best[d] = max(best.get(d, 0.0), float(P[i]))
+    prob = [{"time": d, "value": round(v, 4)} for d, v in best.items()]
+    zones = [{"time": d, "level": 2 if v >= cut_hi else 1} for d, v in best.items() if v >= cut_mid]
+    # 표시 날짜: 위험 확률이 높음 경계를 처음 넘어선 날 / 급등 뒤 과열(60일 +80%↑ 또는 224일선 대비 +100%↑)이 처음 된 날 — 직전 10봉에 같은 상태가 없었던 날만
+    ret60_a, dist224_a = X[:, ai.NAMES.index("ret60")], X[:, ai.NAMES.index("dist224")]
+    state = {"risk": np.nan_to_num(P, nan=0.0) >= cut_hi, "heat": (np.nan_to_num(ret60_a, nan=0.0) >= 0.8) | (np.nan_to_num(dist224_a, nan=0.0) >= 1.0)}
+    events, seen_ev = [], set()
+    for kind, st in state.items():
+        before = pd.Series(st).shift(1).rolling(10, min_periods=1).max().fillna(0).to_numpy() > 0
+        idx = [i for i in np.flatnonzero(st & ~before) if i >= start]
+        for i, d in zip(idx, _to_bar([dates[i] for i in idx], bar_index)):
+            if (kind, d) not in seen_ev:
+                seen_ev.add((kind, d))
+                events.append({"time": d, "kind": kind})
+    p_now = float(P[-1]) if np.isfinite(P[-1]) else None
+    rep = drop_risk.report() or {}
+    lv = {r["level"]: r for r in rep.get("levels", [])}
+
+    def stat(name):
+        r = lv.get(name)
+        return f"{name}: 20일 안 −10%↓ {r['dn10'] * 100:.0f}%·−20%↓ {r['dn20'] * 100:.0f}%" if r else ""
+    if p_now is None:
+        summary = "위험 확률을 계산할 데이터가 부족합니다(250봉 이상 필요)."
+        level = None
+    else:
+        level = "높음" if p_now >= cut_hi else "주의" if p_now >= cut_mid else "낮음"
+        summary = f"오늘 하락 위험 {level} — 20일 안 −10% 이하 확률 {p_now * 100:.0f}% (평균 {lv.get('전체', {}).get('dn10', 0) * 100:.0f}%)."
+    track = _risk_track(df, P, cut_hi, cut_mid)
+    last = X[-1]
+    ret60, dist224 = float(last[ai.NAMES.index("ret60")]), float(last[ai.NAMES.index("dist224")])
+    # 급등 뒤 과열(60일 +80%↑ 또는 224일선 대비 +100%↑): 시험 두 기간 모두 20일 안 −20%↓ 22~29%·−30%↓ 8~14%(전체 7%·2%)였다
+    overheat = None
+    if np.isfinite(ret60) and np.isfinite(dist224) and (ret60 >= 0.8 or dist224 >= 1.0):
+        overheat = {"ret60": ret60, "dist224": dist224}
+    fc = drop_risk.forecast(X)
+    return {"name": "하락 위험", "kind": "risk", "prob": prob, "zones": zones, "forecast": fc, "track": track, "overheat": overheat, "events": events, "cut_hi": cut_hi, "cut_mid": cut_mid,
+            "latest": {"prob": p_now, "level": level}, "summary": summary,
+            "note": "빨간 띠 = 위험 높음(시험 기간 상위 10%), 연한 띠 = 주의(상위 10~25%), 아래 선 = 확률. '곧 떨어진다'는 방향 예측이 아니라 크게 흔들릴 위험이 큰 구간(변동성 중심)입니다. "
+                    + " · ".join(x for x in (stat("높음"), stat("낮음")) if x) + f" (2022~ 시험, AUC {rep.get('auc_test', 0):.2f})"
+                    + (f" 화면의 모델은 {rep['live_through']}까지 결과가 확정된 데이터로 학습했고 한 달마다 새 데이터로 다시 학습합니다." if rep.get("live_through") else "")}

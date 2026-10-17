@@ -40,19 +40,22 @@ def _recommended_codes():
 
 
 def chart_meta(cal, thr):
-    from core import ai, predict
+    from core import ai, drop_risk, predict
     info = predict._tech_info(predict.plan())
+    mo = drop_risk.load() or {}
+    rrep = drop_risk.report() or {}
     labels = [ai.SIGNAL_LABELS[j] for j in range(len(ai.SIGNAL_LABELS))]
     tech = {k: {"mean": v["mean"], "p_up": v["p_up"], "years": v["years"], "rule": v["rule"], "good": v["good"], "ai": v["ai"]} for k, v in info.items()}
     thr = dict(sorted(thr.items()))
     return {"cal": cal, "labels": labels, "dante": predict.DANTE_IDX, "good": [lab for lab in labels if info.get(lab, {}).get("good")], "why": predict.DANTE_WHY,
-            "tech": tech, "thr": thr, "thr_now": (list(thr.values())[-1] if thr else None)}
+            "tech": tech, "thr": thr, "thr_now": (list(thr.values())[-1] if thr else None),
+            "risk": {"hi": mo.get("cut_hi"), "mid": mo.get("cut_mid"), "certain": drop_risk.CERTAIN_P, "auc": rrep.get("auc_test"), "levels": rrep.get("levels"), "through": rrep.get("live_through")}}
 
 
 def _chart_work(code):
     """한 종목의 일봉(CHART_FROM~)과 모든 날짜의 단테 신호·AI 확률 — PC 차트와 같은 계산(거래대금 조건 없이 모든 봉)."""
     import numpy as np
-    from core import ai, predict, service
+    from core import ai, drop_risk, predict, service
     try:
         df = service.load_prices(code)
         if len(df) < 60:
@@ -65,6 +68,16 @@ def _chart_work(code):
         model = predict._model()
         if model is not None and valid.any():
             P[valid] = model.predict_proba(X[valid])[:, 1]
+        # 하락 위험(20일 안 −10%↓ 확률)·전망·이 종목의 지난 적중·급등 뒤 과열 — 휴대폰에서도 PC 와 같게 보이도록 함께 저장
+        risk = None
+        try:
+            R, hi, mid = drop_risk.probs(X)
+            heat = (np.nan_to_num(X[:, ai.NAMES.index("ret60")], nan=0) >= 0.8) | (np.nan_to_num(X[:, ai.NAMES.index("dist224")], nan=0) >= 1.0)
+            risk = {"q": [(-1 if not np.isfinite(R[i]) else int(round(R[i] * 1000))) for i in np.flatnonzero(keep)], "hz": [int(k) for k, i in enumerate(np.flatnonzero(keep)) if heat[i]],
+                    "fc": drop_risk.forecast(X), "tr": predict._risk_track(df, R, hi, mid),
+                    "ov": ({"ret60": float(X[-1, ai.NAMES.index("ret60")]), "dist224": float(X[-1, ai.NAMES.index("dist224")])} if heat[-1] else None)}
+        except Exception:
+            risk = None
         sig = np.column_stack([X[:, ai.NAMES.index(f"sig{j:02d}")] for j in predict.DANTE_IDX])
         mask = ((sig == 0) & np.isfinite(sig)).astype(np.int64) @ (1 << np.array(predict.DANTE_IDX, dtype=np.int64))
         idx = np.flatnonzero(keep)
@@ -72,7 +85,7 @@ def _chart_work(code):
         sub = df.iloc[idx]
         return {"dates": list(dates[idx]), "o": [rnd(v) for v in sub["open"]], "h": [rnd(v) for v in sub["high"]], "l": [rnd(v) for v in sub["low"]], "c": [rnd(v) for v in sub["close"]],
                 "v": [int(v) for v in sub["volume"].fillna(0)], "p": [(-1 if not np.isfinite(P[i]) else int(round(P[i] * 1000))) for i in idx],
-                "g": [[k, int(mask[i])] for k, i in enumerate(idx) if mask[i]]}
+                "g": [[k, int(mask[i])] for k, i in enumerate(idx) if mask[i]], "risk": risk}
     except Exception:
         return None
 
@@ -96,7 +109,7 @@ def charts(log=print, workers: int = 0) -> int:
         need = min(latest, (datetime.strptime(d, "%Y-%m-%d") + timedelta(days=CHART_AFTER_DAYS)).strftime("%Y-%m-%d"))
         try:
             old = json.loads((CHARTS / f"{code}.json").read_text(encoding="utf-8"))
-            if old.get("v") == 2 and old.get("last", "") >= need:
+            if old.get("v") == 3 and old.get("last", "") >= need:
                 continue
         except (OSError, ValueError):
             pass
@@ -108,9 +121,9 @@ def charts(log=print, workers: int = 0) -> int:
             for code, r in zip(todo, ex.map(_chart_work, todo, chunksize=4)):
                 if not r:
                     continue
-                obj = {"v": 2, "n": names.get(code, code), "last": r["dates"][-1], "d": [pos[x] for x in r["dates"]], "o": r["o"], "h": r["h"], "l": r["l"], "c": r["c"], "v": r["v"], "p": r["p"], "g": r["g"]}
+                obj = {"v": 2, "n": names.get(code, code), "last": r["dates"][-1], "d": [pos[x] for x in r["dates"]], "o": r["o"], "h": r["h"], "l": r["l"], "c": r["c"], "v": r["v"], "p": r["p"], "g": r["g"], "risk": r["risk"]}
                 obj["vol"] = obj.pop("v")
-                obj["v"] = 2
+                obj["v"] = 3
                 (CHARTS / f"{code}.json").write_text(json.dumps(obj, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
                 n += 1
                 if n % 100 == 0:
@@ -223,9 +236,11 @@ def push(log=print) -> str:
         if not _git("diff", "--cached", "--name-only", env=env, cwd=top):
             return "변경 없음"
         msg = f"스냅샷: {datetime.now():%Y-%m-%d %H:%M} 오늘의 신호 갱신"
+        before = _git("rev-parse", "stock", cwd=top)
         out = subprocess.run(["python", str(helper), "commit", "-m", msg], capture_output=True, text=True, cwd=top, env={**os.environ, **env})
-        if out.returncode:
-            raise RuntimeError(f"커밋 실패: {(out.stderr or out.stdout).strip()[:300]}")
+        if out.returncode and _git("rev-parse", "stock", cwd=top) == before:
+            raise RuntimeError(f"커밋 실패: {(out.stderr or out.stdout).strip()[-300:]}")
+        # 도우미는 파일이 아주 많을 때 마지막 정리(git reset, WinError 206 명령줄 길이)에서 오류를 내지만 커밋·브랜치 갱신은 이미 끝난 뒤다 — 브랜치가 움직였으면 성공으로 본다
     finally:
         if os.path.exists(idx):
             os.remove(idx)

@@ -129,7 +129,7 @@ def _chart_fixture(tmp_path, monkeypatch):
 
 def test_snapshot_uses_local_compare_screen(tmp_path, monkeypatch):
     c = _chart_fixture(tmp_path, monkeypatch)
-    assert "/compare?a=005930&amp;date=2026-10-08" in c.get("/").get_data(as_text=True)      # 목록 종목 → PC 와 같은 차트 비교 화면
+    assert "/jb?a=005930&amp;date=2026-10-08" in c.get("/").get_data(as_text=True)      # 목록 종목 → PC 와 같은 차트 비교 화면
     page = c.get("/compare?a=005930&date=2026-09-30").get_data(as_text=True)
     assert "js/compare.js" in page and "예측 (단테 기법)" in page and "AI (상승 확률)" in page and '"focus": "2026-09-30"' in page
     assert c.get("/chart/005930?date=2026-09-30", follow_redirects=False).status_code == 302
@@ -155,3 +155,28 @@ def test_snapshot_predict_and_search(tmp_path, monkeypatch):
     assert "오늘 AI 확률 15.0%" in a["summary"] and "규칙C" in a["summary"]
     assert c.get("/api/predict/005930?kind=x").status_code == 400 and c.get("/api/predict/NOPE?kind=ai").status_code == 404
     assert [r["code"] for r in c.get("/api/search?q=삼성").get_json()] == ["005930"] and c.get("/api/search?q=").get_json() == []
+
+
+def test_snapshot_risk_api_and_certain_bottom(tmp_path):
+    """휴대폰 스냅샷도 하락 위험(선·띠·위험↑·과열)과 '확실한 저점' 구분을 PC 와 같은 모양으로 낸다."""
+    import json
+    import snapshot_api
+    n = 40
+    cal = [f"2026-09-{d:02d}" if d <= 30 else f"2026-10-{d - 30:02d}" for d in range(1, n + 1)]
+    q = [-1] * 5 + [150] * 15 + [400] * 10 + [100] * 10            # 높음(0.4)이 되는 날 하나의 구간, 그 뒤 낮음
+    raw = {"n": "테스트", "last": cal[-1], "d": list(range(n)), "o": [100] * n, "h": [101] * n, "l": [99] * n, "c": [100] * n, "vol": [1000] * n, "p": [-1] * n,
+           "g": [[10, 1], [25, 1]],                                  # 10일 째(위험 낮음)·25일 째(위험 높음)에 바닥 기법 0번 신호
+           "risk": {"q": q, "hz": [30, 31], "fc": None, "tr": None, "ov": None}, "v": 3}
+    (tmp_path / "AAA.json").write_text(json.dumps(raw), encoding="utf-8")
+    meta = {"cal": cal, "labels": [f"L{j}" for j in range(24)], "dante": [0, 1], "good": [], "tech": {}, "thr": {}, "why": {},
+            "risk": {"hi": 0.35, "mid": 0.27, "certain": 0.18, "auc": 0.65, "levels": [{"level": "전체", "dn10": 0.24, "dn20": 0.07}], "through": "2026-09-02"}}
+    mp = tmp_path / "meta.json"
+    mp.write_text(json.dumps(meta), encoding="utf-8")
+    store = snapshot_api.Store(tmp_path, mp)
+    out = snapshot_api.risk(store, "AAA", "D", 500)
+    assert out["kind"] == "risk" and out["cut_hi"] == 0.35 and out["latest"]["level"] == "낮음"
+    assert [e["kind"] for e in out["events"]].count("risk") == 1 and any(e["kind"] == "heat" for e in out["events"])
+    assert any(z["level"] == 2 for z in out["zones"])
+    pred = snapshot_api.dante(store, "AAA", "D", 500)
+    bottoms = {m["date"]: m["certain"] for m in pred["markers"] if m.get("bottom")}
+    assert bottoms == {cal[10]: True, cal[25]: False}            # 위험 15% 날은 확실, 40% 날은 아님

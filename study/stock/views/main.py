@@ -77,6 +77,16 @@ def chart(code):
 
 @bp.get("/compare")
 def compare():
+    return _compare_page("compare")
+
+
+@bp.get("/jb")
+def jb():
+    """JB차트 — 차트 비교와 같은 화면(두 차트 나란히). 신호에서 종목을 누르면 여기로 오고, 주소의 종목(a·b)·설정이 차트 비교와 그대로 이어진다."""
+    return _compare_page("jb")
+
+
+def _compare_page(page):
     """두 차트를 나란히. 한쪽을 확대·이동하면 다른 쪽도 같이 움직인다(브라우저에서 동기화)."""
     a = request.args.get("a", "005930")
     b = request.args.get("b") or a
@@ -84,12 +94,13 @@ def compare():
         if not _valid_code(c):
             return "잘못된 종목코드", 400
 
-    def side(code, set_, tf, default_set, kind, default_kind):
+    def side(code, set_, tf, default_set, kind, default_kind, risk=None):
         return {"code": code, "name": _name(code), "tf": tf if (tf in ("D", "W", "M") or intraday.is_intraday(tf)) else "D",
                 "set": set_ if set_ in ("a", "b", "none") else default_set,
-                "kind": kind if kind in ("none", "dante", "ai") else default_kind}   # 겹쳐 그리기: 왼쪽 '예측'(단테 기법), 오른쪽 'AI'
-    pa = side(a, request.args.get("sa"), request.args.get("ta"), "a", request.args.get("ka"), "dante")
-    pb = side(b, request.args.get("sb"), request.args.get("tb"), "b" if b == a else "a", request.args.get("kb"), "ai")
+                "kind": kind if kind in ("none", "dante", "ai", "cross") else default_kind,
+                "risk": risk != "0"}   # 하락 위험 띠는 기본 켜짐(주소에 0 이 있을 때만 끔)   # 겹쳐 그리기: 왼쪽 '예측'(단테 기법), 오른쪽 'AI'
+    pa = side(a, request.args.get("sa"), request.args.get("ta"), "a", request.args.get("ka"), "dante", request.args.get("ra"))
+    pb = side(b, request.args.get("sb"), request.args.get("tb"), "b" if b == a else "a", request.args.get("kb"), "ai", request.args.get("rb"))
     focus = (request.args.get("date") or "").strip()      # 신호 화면에서 기준일을 넘겨 받으면 그날을 중심으로 보여 준다
     try:
         if len(focus) != 10:
@@ -97,7 +108,7 @@ def compare():
         datetime.strptime(focus, "%Y-%m-%d")
     except ValueError:
         focus = ""
-    return render_template("compare.html", pa=pa, pb=pb, focus=focus)
+    return render_template("compare.html", pa=pa, pb=pb, focus=focus, page=page, show_all=request.args.get("all") == "1")
 
 
 @bp.get("/api/chart/<code>")

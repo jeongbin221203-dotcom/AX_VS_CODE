@@ -155,7 +155,7 @@
       var ms = tech[n].data.markers;
       ms.forEach(function (m, i) {
         mk.push({ time: m.date, position: m.side === 'sell' ? 'aboveBar' : 'belowBar',
-                  color: m.side === 'buy' ? UP : m.side === 'sell' ? DOWN : '#8f98ab',
+                  color: m.side === 'buy' ? (m.strong === false ? '#8f98ab' : UP) : m.side === 'sell' ? DOWN : '#8f98ab',
                   shape: m.side === 'buy' ? 'arrowUp' : m.side === 'sell' ? 'arrowDown' : 'circle',
                   text: i >= ms.length - 3 ? m.label : '' });  // 글자는 최근 3개만(겹침 방지)
       });
@@ -218,7 +218,7 @@
     var rows = [];
     if (state.data) state.data.signals.forEach(function (x) { rows.push({ date: x.date, side: x.side, label: x.label, why: x.why, src: '' }); });
     Object.keys(tech).forEach(function (n) {
-      tech[n].data.markers.forEach(function (m) { rows.push({ date: m.date, side: m.side, label: m.label, why: m.why, src: n }); });
+      tech[n].data.markers.forEach(function (m) { rows.push({ date: m.date, side: m.side, label: m.label + (m.strong === false ? ' (약)' : m.strong ? ' (강)' : ''), why: m.why, src: n }); });
     });
     rows.sort(function (p, q) { return p.date < q.date ? 1 : p.date > q.date ? -1 : 0; });
     rows.slice(0, 120).forEach(function (s) {

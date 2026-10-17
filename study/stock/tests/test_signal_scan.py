@@ -60,7 +60,7 @@ def test_for_date_past_has_outcomes(client):
     html = client.get("/?date=2025-06-01").get_data(as_text=True)
     assert "<b>2025-05-30</b>" in html and "그 뒤 실제 결과" in html and "2025-06-01은 거래일이 아니라" in html
     assert client.get("/?date=2025-6-1").status_code == 400
-    assert "/compare?a=TEST1&amp;date=2025-05-30" in html or "/compare?a=TEST2&amp;date=2025-05-30" in html   # 종목을 누르면 그날 차트로
+    assert "/jb?a=TEST1&amp;date=2025-05-30" in html or "/jb?a=TEST2&amp;date=2025-05-30" in html   # 종목을 누르면 그날 차트로
     assert '"focus": "2025-05-30"' in client.get("/compare?a=TEST1&date=2025-05-30").get_data(as_text=True)
     assert '"focus": ""' in client.get("/compare?a=TEST1&date=bad").get_data(as_text=True)
 
@@ -75,7 +75,7 @@ def test_home_recommends_90_percent(client):
     signal_scan.SIGNALS_PATH.write_text(json.dumps(rep, ensure_ascii=False), encoding="utf-8")
     html = client.get("/").get_data(as_text=True)
     assert html.count('class="rec') == 2                       # 90% 이상 두 줄(예측 1 · AI 1)만 추천 표시
-    assert "그 밖의 종목 1개" in html and "9/10" in html and "10/10" in html and "/compare?a=TEST1" in html
+    assert "그 밖의 종목 1개" in html and "9/10" in html and "10/10" in html and "/jb?a=TEST1" in html
 
 
 def test_empty_db_does_not_overwrite(tmp_path, monkeypatch):
@@ -118,3 +118,13 @@ def test_min_signals_filter(client):
 def test_home_without_scan(client):
     html = client.get("/").get_data(as_text=True)
     assert "signals-scan" in html
+
+
+def test_jb_chart_page_and_links(client):
+    """JB차트(/jb)는 차트 비교와 같은 화면 — 메뉴·서로 가는 링크·신호 화면의 종목 링크."""
+    jb = client.get("/jb?a=TEST1").get_data(as_text=True)
+    cp = client.get("/compare?a=TEST1").get_data(as_text=True)
+    assert "<title>JB차트" in jb and "<title>차트 비교" in cp
+    assert 'id="xlink"' in jb and 'data-target="compare"' in jb and 'data-target="jb"' in cp
+    assert ">JB차트</a>" in cp and ">차트 비교</a>" in jb          # 메뉴에 둘 다
+    assert jb.index(">JB차트</a>") < jb.index(">차트 비교</a>")      # 신호 바로 옆

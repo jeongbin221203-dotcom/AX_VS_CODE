@@ -28,7 +28,8 @@
     });
     box.hidden = !list.length;
   }
-  function go(code) { location.href = '/chart/' + encodeURIComponent(code); }
+  // JB차트·차트 비교 화면에서 찾으면 그 화면에서 종목만 바꾼다(그 밖에서는 종목 차트)
+  function go(code) { location.href = /^\/(jb|compare)\/?$/.test(location.pathname) ? location.pathname + '?a=' + encodeURIComponent(code) : '/chart/' + encodeURIComponent(code); }
   function mark() {
     Array.prototype.forEach.call(box.children, function (li, i) { li.classList.toggle('on', i === idx); });
   }

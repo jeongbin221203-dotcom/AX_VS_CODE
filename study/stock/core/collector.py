@@ -78,6 +78,18 @@ def last_trading_day(today: date | None = None) -> date:
     return d
 
 
+MARKET_CLOSE = (15, 40)    # 정규장 15:30 + 종가 단일가 정리 시간
+
+
+def drop_unfinished_today(df: pd.DataFrame, now: datetime | None = None) -> pd.DataFrame:
+    """장이 끝나기 전에 받은 일봉에 '오늘' 봉이 끼어 있으면 뺀다 — 진행 중인 봉이 확정 봉처럼 저장되면
+    다음 증분 수집이 '마지막 날짜 다음날'부터 받아서 오늘 봉이 영영 고쳐지지 않는다."""
+    now = now or datetime.now()
+    if df is None or df.empty or (now.hour, now.minute) >= MARKET_CLOSE:
+        return df
+    return df[df.index < pd.Timestamp(now.date())]
+
+
 def last_date(code: str) -> str | None:
     with db.get_conn() as c:
         row = c.execute("SELECT MAX(date) d FROM prices WHERE code=?", (code,)).fetchone()
@@ -103,7 +115,7 @@ def update_prices(code: str, years: int = config.DEFAULT_YEARS, full: bool = Fal
         with db.get_conn() as c:
             done = c.execute("SELECT 1 FROM meta WHERE key=?", (f"full:{code}",)).fetchone()
         if not done:
-            df = fetch_daily(code, FULL_START)
+            df = drop_unfinished_today(fetch_daily(code, FULL_START))
             n = save_prices(code, clean_prices(df)) if df is not None and not df.empty else 0
             with db.get_conn() as c:
                 c.execute("INSERT OR REPLACE INTO meta VALUES(?,?)", (f"full:{code}", datetime.now().isoformat(timespec="seconds")))
@@ -114,7 +126,7 @@ def update_prices(code: str, years: int = config.DEFAULT_YEARS, full: bool = Fal
         start = date.today() - timedelta(days=365 * years)
     if start > last_trading_day():
         return 0  # 이미 최신(주말·휴일에는 호출하지 않음)
-    df = fetch_daily(code, start)
+    df = drop_unfinished_today(fetch_daily(code, start))
     if df is None or df.empty:
         return 0
     return save_prices(code, clean_prices(df))

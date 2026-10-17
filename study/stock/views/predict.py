@@ -33,3 +33,20 @@ def api_predict(code):
     except RuntimeError as e:
         return jsonify(error=str(e)), 503
     return jsonify(out)
+
+
+@bp.get("/api/risk/<code>")
+def api_risk(code):
+    tf = request.args.get("tf", "D")
+    bars = min(max(request.args.get("bars", 750, type=int), 30), 5000)
+    if tf not in ("D", "W", "M"):
+        return jsonify(error="하락 위험은 일봉·주봉·월봉에서만 볼 수 있습니다"), 400
+    if not _valid_code(code):
+        return jsonify(error="잘못된 종목코드"), 400
+    df = service.load_prices(code)
+    if len(df) < ai.MIN_BARS:
+        return jsonify(error=f"데이터가 부족합니다({ai.MIN_BARS}봉 이상 필요)"), 404
+    try:
+        return jsonify(predict.risk(df, tf, bars))
+    except RuntimeError as e:
+        return jsonify(error=str(e)), 503

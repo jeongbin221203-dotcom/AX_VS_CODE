@@ -143,6 +143,7 @@ def dante(store, code, tf, nbars):
     good = set(meta.get("good", []))
     start_day = days[max(len(days) - nbars * {"D": 1, "W": 5, "M": 21}[tf], 0)]
     markers, seen = [], set()
+    bottom_labels = set(meta["labels"][:11])
     for i, mask in raw["g"]:
         if days[i] < start_day:
             continue
@@ -152,7 +153,12 @@ def dante(store, code, tf, nbars):
                 continue
             seen.add((d, lab))
             t = tech.get(lab)
-            markers.append({"date": d, "side": "buy", "label": lab, "why": meta.get("why", {}).get(lab, ""), "good": lab in good,
+            extra = {}
+            q = (raw.get("risk") or {}).get("q")
+            rk = meta.get("risk") or {}
+            if q and lab in bottom_labels and rk.get("certain") is not None:      # 바닥 기법 신호는 하락 위험이 낮을 때만 '확실'
+                extra = {"bottom": True, "certain": bool(q[i] >= 0 and q[i] / 1000 < rk["certain"])}
+            markers.append({"date": d, "side": "buy", "label": lab, "why": meta.get("why", {}).get(lab, ""), "good": lab in good, **extra,
                             "stat": (f"처음 보는 해 평균 {t['mean'] * 100:+.2f}%·상승 {t['p_up'] * 100:.0f}% ({t['years']}년 플러스)" if t and t.get("mean") is not None else "")})
     markers.sort(key=lambda m: m["date"])
     n = len(days)
@@ -215,6 +221,55 @@ def ai_pred(store, code, tf, nbars):
     return {"name": "AI", "kind": "ai", "prob": prob, "thr": thr, "markers": markers, "latest": {"prob": p_now, "top": bool(p_now is not None and p_now >= thr)},
             "rule": ai_t, "summary": summary,
             "note": "선 = 날짜마다 그날까지의 정보로 계산한 '20일 안 +20%' 확률(2021년까지 학습한 모델). 점선 = 상위 10% 경계, 마커 = 경계를 넘어선 날."}
+
+
+def risk(store, code, tf, nbars):
+    """하락 위험 — PC(core/predict.risk)와 같은 모양. 위험 확률·전망·적중은 게시할 때 PC 가 계산해 파일에 넣어 둔 값을 쓴다."""
+    meta, raw = store.meta(), store.raw(code)
+    rk, rs = meta.get("risk") or {}, raw.get("risk")
+    if not rs or not rk.get("hi"):
+        return None
+    times, _o, _h, _l, _c, _v, mp = bars(store, code, tf)
+    days = [meta["cal"][i] for i in raw["d"]]
+    n = len(days)
+    q = [None if x < 0 else x / 1000 for x in rs["q"]]
+    start = max(n - nbars * {"D": 1, "W": 5, "M": 21}[tf], 0)
+    hi, mid = rk["hi"], rk["mid"]
+    best = {}
+    for i in range(start, n):
+        if q[i] is not None:
+            d = mp[days[i]]
+            best[d] = max(best.get(d, 0.0), q[i])
+    prob = [{"time": d, "value": round(v, 4)} for d, v in best.items()]
+    zones = [{"time": d, "level": 2 if v >= hi else 1} for d, v in best.items() if v >= mid]
+    heat = set(rs.get("hz", []))
+    events, seen = [], set()
+    for kind, st in (("risk", [q[i] is not None and q[i] >= hi for i in range(n)]), ("heat", [i in heat for i in range(n)])):
+        last_on = -99
+        for i in range(n):
+            if st[i]:
+                if i - last_on > 10 and i >= start:                     # 직전 10봉에 같은 상태가 없었던 날만
+                    d = mp[days[i]]
+                    if (kind, d) not in seen:
+                        seen.add((kind, d))
+                        events.append({"time": d, "kind": kind})
+                last_on = i
+    p_now = q[-1]
+    lv = {r["level"]: r for r in (rk.get("levels") or [])}
+
+    def stat(name):
+        r = lv.get(name)
+        return f"{name}: 20일 안 −10%↓ {r['dn10'] * 100:.0f}%·−20%↓ {r['dn20'] * 100:.0f}%" if r else ""
+    if p_now is None:
+        summary, level = "위험 확률을 계산할 데이터가 부족합니다.", None
+    else:
+        level = "높음" if p_now >= hi else "주의" if p_now >= mid else "낮음"
+        summary = f"오늘 하락 위험 {level} — 20일 안 −10% 이하 확률 {p_now * 100:.0f}% (평균 {lv.get('전체', {}).get('dn10', 0) * 100:.0f}%)."
+    return {"name": "하락 위험", "kind": "risk", "prob": prob, "zones": zones, "forecast": rs.get("fc"), "track": rs.get("tr"), "overheat": rs.get("ov"), "events": events,
+            "cut_hi": hi, "cut_mid": mid, "latest": {"prob": p_now, "level": level}, "summary": summary,
+            "note": "아래 선 = 확률. '곧 떨어진다'는 방향 예측이 아니라 크게 흔들릴 위험이 큰 구간(변동성 중심)입니다. "
+                    + " · ".join(x for x in (stat("높음"), stat("낮음")) if x) + f" (2022~ 시험, AUC {rk.get('auc') or 0:.2f})"
+                    + (f" 모델은 {rk['through']}까지 결과가 확정된 데이터로 학습했습니다." if rk.get("through") else "")}
 
 
 def search(store, q):

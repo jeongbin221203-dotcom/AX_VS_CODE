@@ -109,18 +109,26 @@ def create_app():
 
     store = snapshot_api.Store(CHARTS, META)
 
-    def side(code, set_, tf, default_set, kind, default_kind):
+    def side(code, set_, tf, default_set, kind, default_kind, risk=None):
         try:
             name = store.raw(code).get("n", code)
         except OSError:
             name = code
         return {"code": code, "name": name, "tf": tf if tf in ("D", "W", "M") else "D", "set": set_ if set_ in ("a", "b", "none") else default_set,
-                "kind": kind if kind in ("none", "dante", "ai") else default_kind}
+                "kind": kind if kind in ("none", "dante", "ai", "cross") else default_kind, "risk": risk != "0"}
 
     @app.get("/compare")
     def compare():
+        return _compare_page("compare")
+
+    @app.get("/jb")
+    def jb():
+        """JB차트 — PC 앱과 같은 화면. 신호에서 종목을 누르면 여기로 온다."""
+        return _compare_page("jb")
+
+    def _compare_page(page):
         """PC 앱의 '차트 비교' 화면과 같은 화면(같은 HTML·JS). 데이터만 저장된 파일에서 온다."""
-        a = request.args.get("a", "")
+        a = request.args.get("a", "") or (store.names()[0][0] if store.names() else "")      # 메뉴에서 바로 열면 목록의 첫 종목
         b = request.args.get("b") or a
         for c in (a, b):
             if not store.has(c):
@@ -128,9 +136,9 @@ def create_app():
         focus = (request.args.get("date") or "").strip()
         if focus and (len(focus) != 10 or not focus.replace("-", "").isdigit()):
             abort(400)
-        pa = side(a, request.args.get("sa"), request.args.get("ta"), "a", request.args.get("ka"), "dante")
-        pb = side(b, request.args.get("sb"), request.args.get("tb"), "b" if b == a else "a", request.args.get("kb"), "ai")
-        return render_template("compare.html", pa=pa, pb=pb, focus=focus, base_tpl="snapshot_base.html", rep=None, disclaimer=DISCLAIMER)
+        pa = side(a, request.args.get("sa"), request.args.get("ta"), "a", request.args.get("ka"), "dante", request.args.get("ra"))
+        pb = side(b, request.args.get("sb"), request.args.get("tb"), "b" if b == a else "a", request.args.get("kb"), "ai", request.args.get("rb"))
+        return render_template("compare.html", pa=pa, pb=pb, focus=focus, page=page, show_all=request.args.get("all") == "1", base_tpl="snapshot_base.html", rep=None, disclaimer=DISCLAIMER)
 
     @app.get("/chart/<code>")
     def chart_page(code):
@@ -161,6 +169,16 @@ def create_app():
         tf, nbars = _tf_bars()
         fn = snapshot_api.dante if kind == "dante" else snapshot_api.ai_pred
         return jsonify(fn(store, code, tf, nbars))
+
+    @app.get("/api/risk/<code>")
+    def api_risk(code):
+        if not store.has(code):
+            return jsonify(error="이 종목의 데이터가 없습니다"), 404
+        tf, nbars = _tf_bars()
+        out = snapshot_api.risk(store, code, tf, nbars)
+        if out is None:
+            return jsonify(error="이 종목의 위험 데이터가 아직 스냅샷에 없습니다(다음 게시 때 포함)"), 404
+        return jsonify(out)
 
     @app.get("/api/search")
     def api_search():

@@ -2,7 +2,9 @@ import time
 
 from flask import Blueprint, abort, jsonify, render_template, request
 
-from core import db, indicators as ind, service, techniques, yt
+import pandas as pd
+
+from core import ai, db, indicators as ind, predict, service, techniques, yt
 
 bp = Blueprint("tech", __name__)
 _scan_cache: dict[str, tuple[float, list]] = {}
@@ -25,7 +27,25 @@ def api_technique(code):
     df = service.load_prices(code)
     if df.empty:
         return jsonify(error="데이터가 없습니다"), 404
-    return jsonify(techniques.apply(name, ind.resample(df, tf), bars))
+    out = techniques.apply(name, ind.resample(df, tf), bars)
+    if tf == "D" and name in STRONG_TECHS and out and len(df) >= ai.MIN_BARS:
+        _tag_strong(df, out)
+    return jsonify(out)
+
+
+# 강/약 구분은 단테 계열 신호(predict.dante 와 같은 조건)에만, 일봉에서만 — 점검 근거가 거기까지다
+STRONG_TECHS = {"256기법", "이평 때리기", "밥그릇", "공구리", "매집봉", "역매공파", "세력선"}
+
+
+def _tag_strong(df, out):
+    try:
+        D = pd.DataFrame(predict._features(df), columns=ai.NAMES)
+        strong = dict(zip(df.index.strftime("%Y-%m-%d"), predict._strong(df, D)))
+    except Exception:
+        return
+    for m in out["markers"]:
+        if m["side"] == "buy" and m["date"] in strong:
+            m["strong"] = bool(strong[m["date"]])
 
 
 def _videos(name, limit=12):

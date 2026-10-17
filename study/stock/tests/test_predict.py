@@ -36,6 +36,8 @@ def test_predict_dante_api(client):
     assert set(j) >= {"markers", "recent", "techs", "summary", "note"}
     for m in j["markers"]:
         assert m["side"] == "buy" and m["label"] in ai.SIGNAL_LABELS and m["date"]
+        assert isinstance(m["strong"], bool)          # 강(피함 규칙 없음·60일선 상승·224일선 위) / 약
+    assert all(isinstance(r["strong"], bool) for r in j["recent"])
     jw = client.get("/api/predict/TEST1?kind=dante&tf=W").get_json()
     assert all(pd.Timestamp(m["date"]).dayofweek == 4 for m in jw["markers"])   # 주봉 날짜(금요일)로 옮겨짐
 
@@ -67,3 +69,10 @@ def test_ai_threshold_fallback(monkeypatch, tmp_path):
     assert predict.ai_threshold() == 0.2
     (tmp_path / "nosig.json").write_text('{"meta": {"thr10": 0.17}}', encoding="utf-8")
     assert predict.ai_threshold() == 0.17                       # 매일 훑은 값이 우선
+
+
+def test_risk_api_inputs(client):
+    assert client.get("/api/risk/TEST1?tf=5m").status_code == 400      # 분봉은 일봉 이상만
+    assert client.get("/api/risk/%21%21").status_code == 400            # 잘못된 코드
+    r = client.get("/api/risk/TEST1?tf=D")
+    assert r.status_code in (200, 404, 503)                              # 모델·데이터가 없으면 안내 오류(500 아님)
