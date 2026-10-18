@@ -1,0 +1,7 @@
+{
+  "name": "stock-html",
+  "private": true,
+  "type": "module",
+  "scripts": { "start": "node server.mjs", "test": "node --test tests/signals.test.js tests/server.test.js tests/universe.test.js tests/periods.test.js tests/tiers.test.js tests/storyrules.test.js" },
+  "dependencies": { "ws": "^8.18.0" }
+}

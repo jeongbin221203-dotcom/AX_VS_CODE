@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>실시간 신호 차트</title>
+<meta name="description" content="토스증권 시세로 보는 매수·매도 신호 차트 (개인 분석용)">
+<link rel="stylesheet" href="style.css">
+<script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
+</head>
+<body>
+<header class="top">
+  <h1>실시간 신호 차트</h1>
+  <div class="seg" id="country" role="group" aria-label="시장 구분">
+    <button data-c="kr">국내</button><button data-c="us">해외</button>
+  </div>
+  <div class="picker" id="picker">
+    <form id="symForm" class="sym" autocomplete="off">
+      <label class="sr" for="symInput">종목명 또는 코드</label>
+      <input id="symInput" maxlength="20" placeholder="종목명 · 코드 검색" spellcheck="false" role="combobox" aria-expanded="false" aria-controls="pickList" aria-autocomplete="list">
+      <button type="submit">조회</button>
+      <button type="button" id="browse" aria-expanded="false" aria-controls="panel">전체 종목 ▾</button>
+    </form>
+    <div id="panel" class="panel" hidden>
+      <div class="filters">
+        <div id="mktChips" class="chips" role="group" aria-label="거래소"></div>
+        <div id="grpChips" class="chips" role="group" aria-label="종목 유형"></div>
+        <div id="tierChips" class="chips" role="group" aria-label="시총 구간"></div>
+        <span id="pickCount" class="pick-count"></span>
+      </div>
+      <ul id="pickList" class="pick-list" role="listbox" aria-label="종목 목록"></ul>
+    </div>
+  </div>
+  <div class="seg" id="tierTabs" role="group" aria-label="시가총액 구간"></div>
+  <div id="presets" class="chips" aria-label="구간별 대표 종목"></div>
+  <div class="seg" id="intervals" role="group" aria-label="봉 단위">
+    <button data-iv="1">1분</button><button data-iv="5">5분</button><button data-iv="15">15분</button><button data-iv="1d">일</button>
+  </div>
+  <div class="live"><span id="dot" class="dot"></span><span id="liveText">연결 전</span></div>
+</header>
+
+<main class="grid">
+  <section class="charts" aria-label="차트">
+    <div class="quote">
+      <span id="qSym" class="q-sym">–</span>
+      <span id="qPrice" class="q-price">–</span>
+      <span id="qChg" class="q-chg"></span>
+      <span id="qTime" class="q-time"></span>
+      <span id="tierBadge" class="tier none"></span>
+    </div>
+    <div id="msg" class="msg" role="status" hidden></div>
+    <div class="bar">
+      <div class="seg" id="periods" role="group" aria-label="보기 기간"></div>
+      <span id="histStatus" class="hist" role="status"></span>
+      <label class="strat" for="strategy">신호 방식
+        <select id="strategy"><option value="auto">자동 (시총 구간)</option><option value="story">대형주 규칙(사용자 설명)</option><option value="manual">사진 기준(현대차)</option><option value="user">통합형(내 가정)</option><option value="bb">볼린저형</option><option value="score">점수형</option><option value="rule">규칙형</option><option value="off">끄기</option></select>
+      </label>
+    </div>
+    <div class="legend" id="legend" role="group" aria-label="이동평균선·볼린저 밴드 표시"></div>
+    <div id="chMain" class="ch ch-main"></div>
+    <div class="ch-title">RSI(14)</div>
+    <div id="chRsi" class="ch ch-sub"></div>
+    <div class="ch-title">MACD(12,26,9)</div>
+    <div id="chMacd" class="ch ch-sub"></div>
+  </section>
+
+  <aside class="side" aria-label="신호 분석">
+    <section class="card" id="now">
+      <h2>현재 판단</h2>
+      <div id="nowBody" class="now-body">불러오는 중…</div>
+    </section>
+    <section class="card">
+      <h2>지표 상태 <small>(마지막 봉 기준)</small></h2>
+      <div id="ctxBody" class="ctx"></div>
+    </section>
+    <section class="card">
+      <h2>최근 신호</h2>
+      <ol id="sigList" class="sigs"></ol>
+    </section>
+    <section class="card">
+      <h2>백테스트 <small>(화면의 봉 기준)</small></h2>
+      <div id="bt" class="bt"></div>
+    </section>
+    <section class="card rules">
+      <h2 id="rulesTitle">매수·매도 기준</h2>
+      <div id="rulesBody"></div>
+    </section>
+  </aside>
+</main>
+
+<footer class="foot">개인 분석용 참고 도구입니다. 기술적 지표 신호는 수익을 보장하지 않으며 투자 판단과 책임은 본인에게 있습니다. 주문 기능은 없습니다.</footer>
+<script type="module" src="js/app.js"></script>
+<noscript>이 화면은 JavaScript 가 필요합니다.</noscript>
+</body>
+</html>
