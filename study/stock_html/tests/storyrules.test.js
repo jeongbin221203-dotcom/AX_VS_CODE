@@ -90,7 +90,7 @@ test('매도: 거래량 폭증 + 상단 대폭 이탈은 보류 근거와 관계
 });
 
 test('T7: 대폭 이탈·장악형 매도 뒤에서만 하단 근접 재매수가 나온다', () => {
-  assert.equal(STORY.nearAfter, '대폭|장악형'); // 상단 대폭 이탈·장악형 음봉 매도 뒤에만
+  assert.equal(STORY.nearAfter, '대폭|장악형|쌍봉'); // 상단 대폭 이탈·장악형 음봉 매도 뒤에만
   const c = flat(460);
   const ind = computeIndicators(c);
   assert.ok(!storyBuyAt(c, ind, c.length - 1, { ...STORY, nearBuy: false }).some((q) => q.startsWith('T7')));
@@ -146,4 +146,19 @@ test('시험용 규칙 옵션(RULE_OPTIONS)은 세 종목에만 있고 T10 은 �
   const m = await import('../public/js/storyrules.js');
   assert.deepEqual(Object.keys(m.RULE_OPTIONS).sort(), ['006400', '035720', '207940']);
   assert.equal(STORY.hlBuy, false);
+});
+
+test('쌍봉 매도(T7 매수 한정)와 상승 중 과열 매도 보류·첫 근접 매수만 소진은 기본 켜짐, 삼성전기·알테오젠 지정 매매는 코드에 없다', () => {
+  assert.equal(STORY.dtop, true);
+  assert.deepEqual(STORY.dtopTags, ['T7']);
+  assert.equal(STORY.hugeHold, 0.02);
+  assert.equal(STORY.nearTouchBuyOnly, true);
+  assert.equal(OPTIONS['009150'], undefined);
+  for (const v of Object.values(OPTIONS)) assert.equal(v.manualTrades, undefined);
+});
+
+test('T11: 저점 확인 매수는 거래량 1배↑, 투매 거래량 2배↑이면 확인 없이 바로 산다(기본 켜짐)', () => {
+  assert.equal(STORY.dipVol, 1.0);
+  assert.equal(STORY.dipCapVol, 2.0);
+  assert.equal(STORY.dipCapRsi, 40);
 });

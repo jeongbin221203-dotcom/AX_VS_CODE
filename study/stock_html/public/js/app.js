@@ -38,7 +38,7 @@ const state = {
   maOn: new Set(JSON.parse(store.get('stock:ma', '[5,20,60,120]'))),
   bbOn: store.get('stock:bb', '1') === '1',
   period: {}, // 봉 단위별로 마지막에 고른 기간 이름
-  mode: ['auto', 'story10', 'off'].includes(store.get('stock:strategy', 'auto')) ? store.get('stock:strategy', 'auto') : 'auto', // 신호 방식 선택
+  mode: ['auto', 'off'].includes(store.get('stock:strategy', 'auto')) ? store.get('stock:strategy', 'auto') : 'auto', // 신호 방식 선택
   strategy: 'pending', // 지금 실제로 쓰는 신호 방식 (recompute 에서 정함)
   caps: null, // /api/caps: 국내 보통주 시총 순위 { items: { 종목: [시총, 순위] } }
   capsLoading: true,

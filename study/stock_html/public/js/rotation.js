@@ -19,13 +19,13 @@ async function main() {
   }
   try { j = await (await fetch(TIER === 'mid' ? 'rotation_mid.json' : 'rotation.json', { cache: 'no-store' })).json(); }
   catch { document.querySelector('main').insertAdjacentHTML('afterbegin', '<p class="note">순환 매매 결과 파일을 불러오지 못했습니다. <code>node tools/rotation_build.mjs</code> 로 만든 뒤 다시 열어 주세요.</p>'); return; }
-  const lab = j.label || '대형주', rule = j.stop ? `손절: 종가가 매수가보다 ${j.stop * 100}% 이상 내려가면 다음 거래일 시가에 정리` : `시간 손절: 매수 후 ${j.timeStop}거래일이 지나도 손실이면 정리`;
+  const lab = j.label || '대형주', rule = j.timeStop ? `시간 손절: 매수 후 ${j.timeStop}거래일이 지나도 손실이면 정리` : `손절: 종가가 매수가보다 ${j.stop * 100}% 이상 내려가면 다음 거래일 시가에 정리`;
   document.title = `${lab} 순환 매매`;
-  $('warn').innerHTML = `<b>과거 데이터 시뮬레이션입니다. 수익을 보장하지 않고, 투자 권유가 아닙니다.</b> 현재 시총 순위로 고른 ${lab}만으로 계산해서 상장폐지·부진 종목이 빠진 <b>생존 편향</b>이 있어 실제보다 높게 나옵니다. ${esc(j.study.note)} 별도 시험의 장기 연수익은 <b>${pct(j.study.cagr)}</b>(낙폭 ${pct(j.study.mdd, 0)}, 해별 최저 ${pct(j.study.worstYear, 0)})였습니다.`;
+  $('warn').innerHTML = `<b>과거 데이터 시뮬레이션입니다. 수익을 보장하지 않고, 투자 권유가 아닙니다.</b> 현재 시총 순위로 고른 ${lab}만으로 계산해서 상장폐지·부진 종목이 빠진 <b>생존 편향</b>이 있어 실제보다 높게 나옵니다. ${esc(j.study.note)} 시험 결과 장기 연수익은 <b>${pct(j.study.cagr)}</b>(낙폭 ${pct(j.study.mdd, 0)}, 해별 최저 ${pct(j.study.worstYear, 0)})였습니다.`;
   $('rules').innerHTML = `<li>대상: ${j.tier === 'mid' ? '시가총액 101~300위이면서 5,000억 원 이상' : '시가총액 1~100위'}(코스피·코스닥 보통주), 20일 평균 거래대금 1억 원 이상인 날만 매수.</li>
     <li>한 번에 <b>${j.slots}종목</b>만 보유(자리마다 같은 비중), 빈 자리는 현금.</li>
     <li>매수: 그날 대형주 규칙의 매수 신호(T1 하단 이탈 · T6 과대 낙폭 · T3/T3b 200일선 · 돌파)가 난 종목. T4는 제외. 이미 가진 종목은 사지 않음.</li>
-    <li>매도: 그 종목의 규칙 매도 신호(상단 터치 + 음봉 + RSI 과열, 장악형, 거래량 폭발, 5/60 데드크로스 등) 또는 <b>${esc(rule)}</b>. 손실 종목이 자리를 계속 막는 것을 막는 장치입니다${j.tier === 'mid' ? '(중형주는 가격 손절이 오히려 수익을 깎아서 시간 손절을 씁니다)' : ''}.</li>
+    <li>매도: 그 종목의 규칙 매도 신호(상단 터치 + 음봉 + RSI 과열, 장악형, 거래량 폭발, 5/60 데드크로스 등) 또는 <b>${esc(rule)}</b>${j.stop && j.timeStop ? ` 또는 <b>손절: 종가가 매수가보다 ${j.stop * 100}% 이상 내려가면 정리</b>` : ''}. 손실 종목이 자리를 계속 막는 것을 막는 장치입니다${j.tier === 'mid' ? '(중형주는 −25~−30% 손절은 수익을 깎았고 −40% 손절과 시간 손절은 도움이 됐습니다)' : ''}.</li>
     <li>체결은 신호 다음 거래일 시가, 왕복 비용 0.6%를 반영했습니다. 규칙은 <code>storyrules.js</code>, 계산은 <code>tools/rotation_build.mjs</code>입니다.</li>`;
   $('asof').textContent = `기준 ${j.asof} 종가 · 시총 순위 ${j.capsDate} · ${j.universe}종목`;
   const st = j.stats;
@@ -50,6 +50,7 @@ async function main() {
   // 후보
   const cb = $('cand').querySelector('tbody');
   cb.innerHTML = j.candidates.length ? j.candidates.map((c) => `<tr><td>${c.rank}</td><td>${symLink(c.code, c.name)}</td><td><span class="tag">${esc(c.tag)}</span></td><td class="${cls(c.dd)}">${pct(c.dd)}</td><td>${won(c.close)}</td><td>${c.buy ? '<span class="badge-buy">다음 시가 매수</span>' : (j.freeSlots === 0 ? '자리 없음(대기)' : '대기')}</td></tr>`).join('') : '<tr><td colspan="6">오늘은 매수 신호가 난 종목이 없습니다.</td></tr>';
+  $('prioNote').textContent = j.tier === 'mid' ? '자리가 비면 위에서부터 삽니다(변동폭이 큰 종목 먼저 — 중형주는 가벼워서 더 크게 움직입니다).' : '자리가 비면 위에서부터 삽니다(T1 → T6 → T3b → T3 → 돌파 순, 같은 종류는 낙폭이 깊은 종목 먼저).';
   $('candNote').textContent = `${j.candidates.length}종목`;
 
   // 해별 막대

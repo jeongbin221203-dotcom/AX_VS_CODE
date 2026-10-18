@@ -17,8 +17,8 @@ const IN = process.argv[2] || path.join(process.env.TEMP || '.', TIER === 'mid' 
 const OUT = process.argv[3] || path.join(HERE, '..', 'public', TIER === 'mid' ? 'rotation_mid.json' : 'rotation.json');
 // 구간별 설정(tools/research/q40.py 시험 결과): 대형주 = 4자리 + 손절 −30%, 중형주 = 5자리 + 시간 손절(250일이 지나도 손실이면 정리; 중형주는 가격 손절이 오히려 수익을 깎았음)
 const CFG = {
-  large: { N: 4, stop: 0.30, timeStop: null, label: '대형주', study: { cagr: 24.9, mdd: -43, y1: 21, y2: 29, worstYear: -9, note: '대형주 표본 90종목, 4자리 + 손절 −30%' } },
-  mid: { N: 5, stop: null, timeStop: 250, label: '중형주', study: { cagr: 26.5, mdd: -45, y1: 29.7, y2: 23.2, worstYear: -3.5, note: '중형주 표본 150종목, 5자리 + 시간 손절 250일' } },
+  large: { N: 4, stop: 0.30, timeStop: null, prio: 'tag', label: '대형주', study: { cagr: 24.9, mdd: -43, y1: 21, y2: 29, worstYear: -9, note: '대형주 표본 90종목, 4자리 + 손절 −30%' } },
+  mid: { N: 4, stop: 0.40, timeStop: 250, prio: 'atr', minSame: process.env.ROT_MINSAME !== undefined ? Number(process.env.ROT_MINSAME) : 3, maxVolx: process.env.ROT_MAXVOLX ? Number(process.env.ROT_MAXVOLX) : 0, label: '중형주', study: { cagr: 31.8, mdd: -56, y1: 26.4, y2: 37.7, worstYear: -25, note: '중형주 196종목에서 4자리 + 변동폭 큰 순 + 같은 날 매수 신호 3개 이상일 때만 + 시간 손절 250일 + 손절 −40%를 고른 시험(같은 종목군에서 고른 설정이라 낙관적이고, 후보 정렬 방식이 조금만 달라도 낙폭이 −49~−62%로 흔들림)' } },
 }[TIER];
 const N = process.env.ROT_N ? Number(process.env.ROT_N) : CFG.N, STOP = process.env.ROT_STOP !== undefined ? (Number(process.env.ROT_STOP) || null) : CFG.stop, TSTOP = process.env.ROT_TSTOP !== undefined ? (Number(process.env.ROT_TSTOP) || null) : CFG.timeStop, COST = 0.006, LIQ = 1e8, MIN_DATE = '2016-01-01';
 const TAG_RANK = { T1: 0, T6: 1, T3b: 2, T3: 3, 돌파: 4 };
@@ -66,9 +66,19 @@ for (const [code, s] of Object.entries(S)) {
         if (TSTOP && j - (i + 1) >= TSTOP && c[j].close < entPx) { sellBar = j; why = `시간 손절(${TSTOP}거래일이 지나도 손실)`; break; }
       }
     }
-    ev.push({ code, i, tag, kinds, dd, sellBar, why });
+    let atr = 0;
+    for (let j = Math.max(0, i - 13); j <= i; j++) atr += (c[j].high - c[j].low) / c[j].close;
+    atr /= Math.min(14, i + 1);
+    let va = 0; for (let j = Math.max(0, i - 20); j < i; j++) va += c[j].volume;
+    va /= Math.max(1, Math.min(20, i));
+    ev.push({ code, i, tag, kinds, dd, atr, volx: va > 0 ? c[i].volume / va : 1, sellBar, why });
   }
 }
+
+// 같은 날 매수 신호가 난 종목 수(시장 전체가 같이 눌린 날 = 반등이 강했던 날): 중형주는 3개 이상일 때만 산다
+const sameDay = new Map();
+for (const e of ev) { const d = S[e.code].dates[e.i]; sameDay.set(d, (sameDay.get(d) || 0) + 1); }
+for (const e of ev) e.nsame = sameDay.get(S[e.code].dates[e.i]);
 
 // 거래 → 시가 체결 수익 경로
 const trades = [];
@@ -89,7 +99,8 @@ for (const e of ev) {
   trades.push({ ...e, today: false, entryDate: dates[k], entryPrice: ent, exitDate, exitPrice, closed, ret: rr.reduce((a, r) => a * (1 + r), 1) - 1, days: rr.length, rr, startIdx: cid.get(dates[k]), endIdx: cid.get(dates[last]), sigDate });
 }
 
-// 순환: 날짜 순으로 빈 자리에 우선순위 높은 후보
+// 순환: 날짜 순으로 빈 자리에 우선순위 높은 후보(대형주: 매수 종류 → 낙폭 깊은 순, 중형주: 변동폭(ATR%) 큰 순 — 가벼운 종목이 더 크게 움직여서)
+const byPrio = CFG.prio === 'atr' ? (a, b) => b.atr - a.atr : (a, b) => TAG_RANK[a.tag] - TAG_RANK[b.tag] || a.dd - b.dd;
 const byStart = new Map();
 for (const t of trades) if (!t.today) { const k = t.startIdx; if (!byStart.has(k)) byStart.set(k, []); byStart.get(k).push(t); }
 const slots = Array(N).fill(null);
@@ -100,7 +111,7 @@ for (const d of [...byStart.keys()].sort((a, b) => a - b)) {
   for (let i = 0; i < N; i++) if (!slots[i] || slots[i].endIdx <= d) free.push(i);
   if (!free.length) continue;
   const held = new Set(slots.filter((s) => s && s.endIdx > d).map((s) => s.code));
-  const cands = byStart.get(d).filter((t) => !held.has(t.code)).sort((a, b) => TAG_RANK[a.tag] - TAG_RANK[b.tag] || a.dd - b.dd);
+  const cands = byStart.get(d).filter((t) => !held.has(t.code) && (!CFG.minSame || t.nsame >= CFG.minSame) && (!CFG.maxVolx || t.volx <= CFG.maxVolx)).sort(byPrio);
   for (let m = 0; m < Math.min(free.length, cands.length); m++) {
     const t = cands[m]; slots[free[m]] = t; taken.push(t);
     for (let q = 0; q < t.rr.length; q++) port[t.startIdx + q] += t.rr[q] / N;
@@ -136,8 +147,8 @@ const holdNow = slots.filter((t) => t && !t.closed).map((t) => {
 });
 const heldCodes = new Set(holdNow.map((h) => h.code));
 const freeNow = N - holdNow.length;
-const todayCands = trades.filter((t) => t.today && !heldCodes.has(t.code)).sort((a, b) => TAG_RANK[a.tag] - TAG_RANK[b.tag] || a.dd - b.dd)
-  .map((t, i) => ({ rank: i + 1, code: t.code, name: S[t.code].name, tag: t.tag, kinds: t.kinds, dd: t.dd * 100, close: S[t.code].c[S[t.code].c.length - 1].close, buy: i < freeNow }));
+const todayCands = trades.filter((t) => t.today && !heldCodes.has(t.code) && (!CFG.minSame || t.nsame >= CFG.minSame) && (!CFG.maxVolx || t.volx <= CFG.maxVolx)).sort(byPrio)
+  .map((t, i) => ({ rank: i + 1, code: t.code, name: S[t.code].name, tag: t.tag, kinds: t.kinds, dd: t.dd * 100, atr: t.atr * 100, close: S[t.code].c[S[t.code].c.length - 1].close, buy: i < freeNow }));
 const recent = taken.filter((t) => t.closed).slice(-25).reverse().map((t) => ({ code: t.code, name: S[t.code].name, tag: t.tag, entryDate: t.entryDate, exitDate: t.exitDate, ret: t.ret * 100, days: t.days, why: t.why }));
 const equity = [];
 for (let i = startIdx; i < calendar.length; i += 5) equity.push([calendar[i], Number(eq[i].toFixed(4))]);
