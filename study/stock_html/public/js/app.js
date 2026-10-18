@@ -38,7 +38,7 @@ const state = {
   maOn: new Set(JSON.parse(store.get('stock:ma', '[5,20,60,120]'))),
   bbOn: store.get('stock:bb', '1') === '1',
   period: {}, // 봉 단위별로 마지막에 고른 기간 이름
-  mode: ['auto', 'story', 'manual', 'user', 'bb', 'score', 'rule', 'off'].includes(store.get('stock:strategy', 'auto')) ? store.get('stock:strategy', 'auto') : 'auto', // 신호 방식 선택
+  mode: ['auto', 'story10', 'off'].includes(store.get('stock:strategy', 'auto')) ? store.get('stock:strategy', 'auto') : 'auto', // 신호 방식 선택
   strategy: 'pending', // 지금 실제로 쓰는 신호 방식 (recompute 에서 정함)
   caps: null, // /api/caps: 국내 보통주 시총 순위 { items: { 종목: [시총, 순위] } }
   capsLoading: true,
@@ -259,6 +259,9 @@ function applyPeriod() {
 // ---------- 그리기 ----------
 // 계산 전 구간은 값 없는 점(whitespace)으로 채워서 세 차트의 봉 위치(논리 인덱스)를 맞춘다
 const pts = (arr) => arr.map((v, i) => (v == null ? { time: ct(state.candles[i].time) } : { time: ct(state.candles[i].time), value: v }));
+/** 신호 방식 'T11 비교' — 지정 매매를 빼고 T11 규칙을 얹어 보는 시험용(기본 규칙은 바뀌지 않음) */
+const T10_VIEW = { manualTrades: null, deadNeedM60Down: true, dipBuy: true, dipExitRsi: 72, dipConfirm: 3, dipInvRsi: 25, dipFlat: 0.12, dipFlatRsi: 70, dnTop: true, dnTopRsi: 65, dnTopTags: ['T6'] }; // 지정 매매 없이 규칙만 본다: T11(하락 중 과대 낙폭 매수·상단 도달 매도) + 횡보 상단 매도 + 60일선 하락 중 상단 터치 매도(T6 매수 한정)
+
 
 function recompute() {
   state.ind = computeIndicators(state.candles);
@@ -267,8 +270,8 @@ function recompute() {
   state.userRun = st === 'user' ? runUser(state.candles, state.ind) : null; // 통합형은 차트 표시용 이벤트(거래량 폭증·보유 유지)도 함께 계산
   state.story = st === 'manual' && state.iv === '1d' ? storyBuys(state.candles, state.ind, manualSignals(state.candles, state.symbol).filter((x) => x.side === 'sell')) : []; // 규칙으로 계산한 매수 후보(사용자 검증용)
   state.storySell = st === 'manual' && state.iv === '1d' ? storySells(state.candles, state.ind, manualSignals(state.candles, state.symbol)) : [];
-  state.surge = st === 'story' && state.iv === '1d' ? storySurges(state.candles, state.ind) : []; // 거래량 폭증(참고용)
-  state.signals = st === 'story' ? (state.iv === '1d' ? computeStorySignals(state.candles, state.ind, { ...STORY, ...(OPTIONS[state.symbol] || {}), exclude: EXCLUDE[state.symbol] }) : []) : st === 'manual' ? (state.iv === '1d' ? manualSignals(state.candles, state.symbol) : []) : st === 'user' ? state.userRun.signals : st === 'bb' ? computeBollingerSignals(state.candles, state.ind) : st === 'score' ? computeScoreSignals(state.candles, state.ind) : st === 'rule' ? computeSignals(state.candles, state.ind) : [];
+  state.surge = (st === 'story' || st === 'story10') && state.iv === '1d' ? storySurges(state.candles, state.ind) : []; // 거래량 폭증(참고용)
+  state.signals = (st === 'story' || st === 'story10') ? (state.iv === '1d' ? computeStorySignals(state.candles, state.ind, { ...STORY, ...(OPTIONS[state.symbol] || {}), ...(st === 'story10' ? T10_VIEW : {}), exclude: EXCLUDE[state.symbol] }) : []) : st === 'manual' ? (state.iv === '1d' ? manualSignals(state.candles, state.symbol) : []) : st === 'user' ? state.userRun.signals : st === 'bb' ? computeBollingerSignals(state.candles, state.ind) : st === 'score' ? computeScoreSignals(state.candles, state.ind) : st === 'rule' ? computeSignals(state.candles, state.ind) : [];
 }
 
 function applyVisibility() {
@@ -488,7 +491,7 @@ function renderBadge() {
   el.title = `대형주: 시총 ${TIER.largeRank}위 이내 / 중형주: ${TIER.largeRank + 1}위 이하이면서 ${fmtCap(TIER.midCap)} 이상 / 소형주: ${fmtCap(TIER.junkCap)} 이상 ${fmtCap(TIER.midCap)} 미만 / 잡주: ${fmtCap(TIER.junkCap)} 미만 (코스피·코스닥 보통주 합산, 현재 시가총액 기준)`;
 }
 
-const STRAT_NAME = { story: '대형주 규칙(사용자 설명)', manual: '사진 기준(내가 지정)', user: '통합형(내 가정)', bb: '볼린저형', score: '점수형', rule: '규칙형', off: '신호 꺼짐', pending: '확인 중' };
+const STRAT_NAME = { story: '대형주 규칙(사용자 설명)', story10: '규칙만(지정 매매 제외·시험)', manual: '사진 기준(내가 지정)', user: '통합형(내 가정)', bb: '볼린저형', score: '점수형', rule: '규칙형', off: '신호 꺼짐', pending: '확인 중' };
 
 function renderRules() {
   const st = state.strategy;
@@ -501,7 +504,7 @@ function renderRules() {
       <li><b>볼린저(20, 2σ)</b> 20봉 단순이동평균 ± 2×표준편차(모집단). <b>RSI(14)</b> Wilder 평활. <b>MACD(12, 26, 9)</b>. 세 설정 모두 널리 쓰이는 표준 기본값입니다.</li>
     </ul></details>`;
   let html;
-  if (st === 'story') {
+  if ((st === 'story' || st === 'story10')) {
     html = `<p class="rl-h buy">대형주 규칙(사용자 설명) — 매수는 <b>볼린저 하단 터치</b>가 기본</p>
       <p>하단 터치(T1·T3·T4)가 아니면 매수하지 않습니다. 20일선 재매수(T2)는 하단 터치가 아니어서 뺐고, 예외는 횡보 중 크게 오르는 돌파(주식의 시작) 하나뿐이며, 하락장·역배열에서는 하단 터치가 아니면(골든크로스, 거래량 급증 포함) 매수가 아닙니다.</p>
       <ol><li><b>T1 하단 이탈 + 간격 확대</b> · 20&gt;60&gt;120&gt;200 정배열, 60일-120일·120일-200일 간격이 벌어지는 중, 5일선 하락 중에 <b>종가가 볼린저 하단 아래로 마감하고 RSI(14) ≤ ${STORY.t1Rsi} 또는 20봉 고점 대비 ${STORY.t1Drop * 100}% 이하</b></li><li><b>T3b 정배열로 전환 중</b> · 60일선 &gt; 200일선, 120일선이 오르고 200일선이 내리며 ${STORY.t3bRatio * 100}% 이내로 수렴하는 중에 저가가 하단 밴드와 200일선에 동시에 닿음. 매수 후 ${STORY.deepSkipBars}봉은 첫 돌파 매도와 60일선 하락 매도를 적용하지 않음</li><li><b>횡보 + 등락폭 큰 날의 T3·T3b 매수 금지</b> · 직전 30봉 효율비(순변화/이동거리) &lt; ${STORY.chopEr}(횡보)이면서 ATR(14)이 종가의 ${STORY.chopAtr}% 이상이면 T3·T3b는 사지 않음 (다른 매수에는 적용 안 함)</li><li><b>T6 과대 낙폭</b> · 저가가 하단 밴드의 +${STORY.deepTouch * 100}% 이내 + RSI(14) ≤ ${STORY.deepRsi} + 250봉 고점 대비 ${STORY.deepDrop * 100}% 이하, 또는 RSI ≤ ${STORY.deepRsi2} + 고점 대비 ${STORY.deepDrop2 * 100}% 이하(더 깊은 낙폭은 RSI 완화). 역배열·200일선 아래여도 허용(바닥 반등 초반의 60일선 하락 매도는 매수 후 ${STORY.deepSkipBars}봉 동안 적용 안 함)</li><li><b>T3 200일선 + 하단</b> · 60&gt;120&gt;200 정배열에서 저가가 하단 밴드와 200일선(+${STORY.maTouch * 100}% 이내)에 동시에 닿음</li><li><b>T4 특이신호 후</b> · 최근 ${STORY.alertBars}봉 안에 거래량 ${STORY.alertK}배↑ + 하단 터치가 있었고, 정배열에서 다시 하단 터치(5일선이 20일선보다 ${-STORY.alertGap}% 넘게 아래면 제외)</li><li><b>돌파(시작)</b> · 직전 20봉 고저폭 ≤ ${STORY.surgeMaxRange * 100}%(횡보) + 60일선 상승 + 당일 +${STORY.surgeRet * 100}%↑ + 종가가 20·60·120·200일선 위 + 거래량 ${STORY.surgeStrongK}배↑ (${STORY.surgeK}~${STORY.surgeStrongK}배는 20일선이 안 오르던 바닥 횡보 뒤 첫 돌파만)</li><li><b>T7 상단 매도 뒤 하단 근접 재매수</b> · '상단 대폭 이탈'·'장악형 음봉' 매도 후 ${STORY.nearWithin}봉 안에, 20&gt;60&gt;120&gt;200 정배열(또는 60&gt;120&gt;200) + 60일선 상승 + RSI ≤ ${STORY.nearRsiMax} + 종가가 200일선 위에서 저가가 하단 밴드의 +${STORY.nearTol * 100}% 이내로 다시 내려올 때(급락 금지 조건은 적용 안 함, 한 번 팔 때마다 첫 근접만)</li></ol><p>거래량은 보조 지표이고 차트가 우선입니다. <b style="color:#b08cff">보라 점</b>은 거래량 폭증 + 큰 상승 + 이평선 위 봉(참고 표시)입니다.</p>
@@ -576,7 +579,7 @@ function renderPanel() {
     body.innerHTML = !n ? '데이터 없음' : strat === 'pending'
       ? `<div class="big flat">구간 확인 중</div>${note}<p>시가총액 순위를 계산하는 중입니다. 하루 첫 조회는 30초쯤 걸릴 수 있습니다.</p>`
       : `<div class="big flat">신호 꺼짐</div>${note}<p>${tierInfo().tier === 'junk' ? `잡주(시총 ${fmtCap(TIER.junkCap)} 미만)는 신호 대상이 아니어서 매수·매도 신호를 표시하지 않습니다.` : (tierInfo().tier === 'large' ? '대형주 규칙은 일봉에서만 적용합니다. 위에서 봉 간격을 일봉으로 바꾸세요.' : '이 구간은 검증된 신호 방식이 없어 매수·매도 신호를 표시하지 않습니다.')} 대형주(시총 ${TIER.largeRank}위 이내)에는 대형주 규칙(사용자 설명)을 일봉에서 적용합니다.</p><p>참고용으로 보려면 위의 '신호 방식'을 통합형·볼린저형·점수형·규칙형 중 하나로 바꾸세요.</p>`;
-  } else if (strat === 'story') {
+  } else if ((strat === 'story' || strat === 'story10')) {
     const st = describeStoryState(c, sigs);
     const last = sigs[sigs.length - 1];
     const fresh = last && last.i >= n - 3;

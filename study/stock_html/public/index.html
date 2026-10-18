@@ -11,6 +11,7 @@
 <body>
 <header class="top">
   <h1>실시간 신호 차트</h1>
+  <a href="rotation.html" class="navlink" style="color:var(--accent);font-size:13px;text-decoration:none;margin-right:8px">대형주 순환 매매</a>
   <div class="seg" id="country" role="group" aria-label="시장 구분">
     <button data-c="kr">국내</button><button data-c="us">해외</button>
   </div>
@@ -53,7 +54,7 @@
       <div class="seg" id="periods" role="group" aria-label="보기 기간"></div>
       <span id="histStatus" class="hist" role="status"></span>
       <label class="strat" for="strategy">신호 방식
-        <select id="strategy"><option value="auto">자동 (시총 구간)</option><option value="story">대형주 규칙(사용자 설명)</option><option value="manual">사진 기준(현대차)</option><option value="user">통합형(내 가정)</option><option value="bb">볼린저형</option><option value="score">점수형</option><option value="rule">규칙형</option><option value="off">끄기</option></select>
+        <select id="strategy" title="자동: 시총 구간별 기본 방식(대형주는 지정 매매 포함). 규칙만: 지정 매매 없이 규칙만으로 본 시험용"><option value="auto">자동 (시총 구간)</option><option value="story10">규칙만 (지정 매매 제외·시험)</option><option value="off">끄기</option></select>
       </label>
     </div>
     <div class="legend" id="legend" role="group" aria-label="이동평균선·볼린저 밴드 표시"></div>

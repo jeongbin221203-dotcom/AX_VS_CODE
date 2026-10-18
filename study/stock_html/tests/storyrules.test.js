@@ -141,3 +141,9 @@ test('추세가 약한 구간의 상단 긴 윗꼬리 매도는 기본 켜짐(RS
   assert.equal(STORY.wk2RsiMax, 60);
   assert.equal(STORY.wickTop, false); // 조건 없는 긴 윗꼬리 매도는 꺼짐
 });
+
+test('시험용 규칙 옵션(RULE_OPTIONS)은 세 종목에만 있고 T10 은 기본 꺼짐', async () => {
+  const m = await import('../public/js/storyrules.js');
+  assert.deepEqual(Object.keys(m.RULE_OPTIONS).sort(), ['006400', '035720', '207940']);
+  assert.equal(STORY.hlBuy, false);
+});
