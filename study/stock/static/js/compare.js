@@ -1,8 +1,8 @@
 (function () {
   var BOOT = JSON.parse(document.getElementById('boot').textContent);
   var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  var UP = dark ? '#ef5b54' : '#d6362f', DOWN = dark ? '#5b8cf0' : '#2b62d9';
-  var FG = dark ? '#e4e8f1' : '#1c2230', GRID = dark ? '#262d3b' : '#eef1f6', BG = dark ? '#10141c' : '#ffffff';
+  var UP = dark ? '#ee6a60' : '#c5392f', DOWN = dark ? '#6f9bf0' : '#2f62c2';
+  var FG = dark ? '#c3c8d4' : '#3b4150', GRID = dark ? '#222833' : '#f0ede6', BG = dark ? '#151a22' : '#ffffff';
   var LC = LightweightCharts;
   var SETS = {
     a: { periods: [5, 14, 56, 112, 224], colors: { 5: '#e0a000', 14: '#d6479b', 56: '#2a9d5c', 112: '#0f9d9d', 224: '#555555' } },

@@ -6,9 +6,10 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Cpath d=%27M2 13l4-5 3 3 5-8%27 fill=%27none%27 stroke=%27%23d33%27 stroke-width=%272%27/%3E%3C/svg%3E">
 <title>{% block title %}신호{% endblock %}</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
 </head>
 <body>
-<header class="top"><a class="logo" href="/">📈 차트분석 · 오늘의 신호</a><a class="btn" href="/">신호</a><a class="btn" href="/jb">JB차트</a><span class="hint">읽기 전용 스냅샷{% if rep and rep.meta.generated %} · 생성 {{ rep.meta.generated }}{% endif %}</span></header>
+<header class="top"><a class="logo" href="/"><span class="mark" aria-hidden="true"></span>차트분석</a><nav aria-label="주 메뉴"><a href="/">신호</a><a href="/jb">JB차트</a></nav><span class="hint">읽기 전용 스냅샷{% if rep and rep.meta.generated %} · 생성 {{ rep.meta.generated }}{% endif %}</span></header>
 <main>{% block body %}{% endblock %}</main>
 <footer class="foot">{{ disclaimer }}</footer>
 {% block scripts %}{% endblock %}

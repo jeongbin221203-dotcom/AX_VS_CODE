@@ -1,8 +1,8 @@
 (function () {
   var BOOT = JSON.parse(document.getElementById('boot').textContent), CODE = BOOT.code;
   var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  var UP = dark ? '#ef5b54' : '#d6362f', DOWN = dark ? '#5b8cf0' : '#2b62d9';
-  var FG = dark ? '#e4e8f1' : '#1c2230', GRID = dark ? '#262d3b' : '#eef1f6', BG = dark ? '#10141c' : '#ffffff';
+  var UP = dark ? '#ee6a60' : '#c5392f', DOWN = dark ? '#6f9bf0' : '#2f62c2';
+  var FG = dark ? '#c3c8d4' : '#3b4150', GRID = dark ? '#222833' : '#f0ede6', BG = dark ? '#151a22' : '#ffffff';
   // 이평선 세트: a = 256기법에 쓰는 선, b = 14·28·56…(2배씩)
   var SETS = {
     a: { label: '256 세트 · 5·20·60·112·224', periods: [5, 20, 60, 112, 224],

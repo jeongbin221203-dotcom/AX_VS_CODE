@@ -384,7 +384,53 @@ def refresh(workers: int = 0, log=print) -> dict:
     out["picks"] = groups["잡주"]["picks"]                                  # 옛 화면 호환
     out["junk"] = groups["잡주"]["n"]
     TODAY_PATH.write_text(json.dumps(out, ensure_ascii=False), encoding="utf-8")
+    try:                                                    # AI 점수 필터 기록(대형주·중형주 그룹 안 순위)
+        gate_update(S, str(latest)[:10])
+    except Exception as e:
+        log(f"AI 필터 기록 실패: {e}")
     return out
+
+
+# ------------------------------------------------------------------ AI 점수 필터(차트 앱 stock_html 이 매수 신호를 거를 때 쓴다)
+GATE_PATH = config.DATA_DIR / "picks_gate.json"
+GATE_GROUPS = ("대형주", "중형주")        # 필터를 쓰는 그룹(대형주 상위 50% · 중형주 상위 20% 이상일 때만 매수)
+
+
+def gate_load(path=None) -> dict:
+    try:
+        return json.loads((path or GATE_PATH).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {"dates": [], "codes": {}}
+
+
+def gate_update(S: pd.DataFrame, date: str, path=None, out=None) -> dict:
+    """오늘 점수(S: code·grp·r_ens)를 날짜별 기록에 더한다. 값 = 그룹 안 전체 모델 순위(0~100), 대형주·중형주가 아니면 -1.
+    기록은 data/picks_gate.json, out(또는 환경변수 STOCK_GATE_OUT)이 있으면 같은 내용을 그 경로에도 쓴다."""
+    G = gate_load(path)
+    dates = G["dates"]
+    if date in dates:
+        k = dates.index(date)
+    else:
+        dates.append(date); k = len(dates) - 1
+        for v in G["codes"].values():
+            v[1].append(-1)
+    seen = set()
+    for r in S.itertuples():
+        seen.add(r.code)
+        ent = G["codes"].setdefault(r.code, [r.grp, [-1] * len(dates)])
+        ent[0] = r.grp
+        ent[1][k] = int(round(float(r.r_ens) * 100)) if r.grp in GATE_GROUPS else -1
+    for code, v in G["codes"].items():
+        if code not in seen:
+            v[1][k] = -1
+    txt = json.dumps(G, ensure_ascii=False, separators=(",", ":"))
+    (path or GATE_PATH).write_text(txt, encoding="utf-8")
+    dest = out or os.environ.get("STOCK_GATE_OUT")
+    if dest:
+        from pathlib import Path
+        Path(dest).parent.mkdir(parents=True, exist_ok=True)
+        Path(dest).write_text(txt, encoding="utf-8")
+    return G
 
 
 def load_today():

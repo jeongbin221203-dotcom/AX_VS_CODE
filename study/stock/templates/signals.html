@@ -49,7 +49,7 @@
   {% if sm.last %}마지막으로 충족된 날은 {{ sm.last }}{% if sm.share %}(2022년 이후 전체의 {{ pct(sm.share, 0) }}){% endif %}.{% endif %}</p>{% endif %}
 {% if weak %}<h2 class="hi">상 — 대기 후보 <small>AI 상위 2% + 피함 제외 + 시장 필터 · {{ weak|length }}개{% if past %} · 그 뒤 {{ ostat(rep.outcome.high) }}{% endif %}</small></h2>{{ table(weak, 'ai', rep.checks.ai, past) }}{% endif %}
 
-<div class="cgrid">
+<div class="cgrid stack">
   {% for kind, title, sub in (('pred', '예측', '단테 기법 신호가 최근 ' ~ rep.meta.recent ~ '봉 안에 난 종목'), ('ai', 'AI', '20일 안 +20% 확률 상위 10% (경계 ' ~ pct(rep.meta.thr10, 1) ~ ')')) %}
   {% set rows = rep[kind] %}{% set rec = rows|selectattr('score', '>=', rep.meta.recommend)|list %}
   <section class="cpane">
