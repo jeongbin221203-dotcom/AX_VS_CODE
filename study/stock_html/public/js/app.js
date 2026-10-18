@@ -260,7 +260,7 @@ function applyPeriod() {
 // 계산 전 구간은 값 없는 점(whitespace)으로 채워서 세 차트의 봉 위치(논리 인덱스)를 맞춘다
 const pts = (arr) => arr.map((v, i) => (v == null ? { time: ct(state.candles[i].time) } : { time: ct(state.candles[i].time), value: v }));
 /** 신호 방식 'T11 비교' — 지정 매매를 빼고 T11 규칙을 얹어 보는 시험용(기본 규칙은 바뀌지 않음) */
-const T10_VIEW = { manualTrades: null, deadNeedM60Down: true, dipBuy: true, dipExitRsi: 72, dipConfirm: 3, dipInvRsi: 25, dipFlat: 0.12, dipFlatRsi: 70, dnTop: true, dnTopRsi: 65, dnTopTags: ['T6'] }; // 지정 매매 없이 규칙만 본다: T11(하락 중 과대 낙폭 매수·상단 도달 매도) + 횡보 상단 매도 + 60일선 하락 중 상단 터치 매도(T6 매수 한정)
+const T10_VIEW = { manualTrades: null }; // 규칙만(지정 매매 제외): 규칙·종목별 옵션은 자동 모드와 같고 지정 매매만 뺀다
 
 
 function recompute() {
