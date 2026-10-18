@@ -18,7 +18,7 @@ export const STORY = {
   useT2: false,                      // T2(20일선 재매수)는 볼린저 하단 터치가 아니라 2026-10-18 사용자 지시('하단 터치가 아니어서 매수 아니야')로 끔
   useGolden: false,                  // T5: 역배열(20<60<120<200)에서 5/20 골든크로스 매수. 사용자가 '볼린저 하단 터치도 아닌데 왜 매수냐'고 해 2026-10-18 끔(의도 확인 대기)
   useSurge: true,                    // 돌파(주식의 시작): 횡보 중 이평선 위로 크게 오르는 봉. 사용자 지시(2026-10-18): 돌파가 있어야 시작 매수가 생김. 거래량은 보조 확인(5배)
-  blow2Over: 0.12, blow2Vol: 5, blow2Wick: 2, blow2Body: -0.01, blowOver: 0.03, blowVol: 3, structBan: null, hlConfirm: 0, hlExit: 'upper', dipBuy: true, dipVol: 1.0, dipCapVol: 2.0, dipCapRsi: 40, dipRsi: 36, dipExt20: -0.09, dipSlope: -0.02, dipTouch: 1.0, dipExitRsi: 72, dipPeakRsi: null, dipStop: null, dipConfirm: 3, dipPar: 0.02, dipParBw: 0.08, dipParRsi: 36, dipParExt: -0.03, dipParSlope: -0.02, dipParFlat: 0.02, invTop: true, dtop: true, dtopTags: ['T7'], dtopWin: 40, dtopGap: 3, dtopTol: 0.01, dtopRsi: 70, invTopLow60: false, invTopBw: 0.23, invTopRsi: 70, invTopTags: null, dipInvRsi: 25, dipFlatRsi: 70, dnTop: true, dnTopTags: ['T6'], dnTopMaxSlope: null, dnTopSlope: -0.01, dnTopRsi: 65, dnTopOver: 0, dipHold120: null, dipFlat: 0.12, dipFall: false, hlBuy: false, hlRegime: 'down', hlLookback: 120, hlMinAge: 10, hlRally: 0.12, hlPull: 0.08, hlBand: 1.02, hlRsiMax: 45, hlStop: 0.03, hlExitRsi: 65, baseStop: false, baseBars: 20, baseTol: 0.02, baseMin: 30, baseTags: ['T6', 'T1', 'T3'], failCooldown: 0, failLoss: null, failInverse: true, failTags: ['T6', 'T1', 'T3', 'T7', '돌파'], failMinBars: 20, extMap: null, extBuy: null, extSell: null, wickTop2: true, wk2Wick: 0.4, wk2RsiMax: 60, wk2SlopeMin: 0, wk2SlopeMax: 0.02, wk2Ext200Min: 0.05, wk2Ext200Max: 0.14, wk2VolMax: 1.2, wickTop: false, wickMin: 0.5, wickRsi: 55, sqTop: false, sqBw: 0.09, sqNear: 0.01, sqRsi: 55, wideTop: false, wideUnaligned: true, wideBw: 0.2, wideNear: 0.005, wideBody: -0.025, wideRsi: 60, firstBreakStrict: false, ma20Exit: false, ma20ExitExt: 0.1, capBuy: true, capRsi: 30, capBelow: 0.03, capVol: 5, capDd: -0.25, supMa200Slope: 0, supBuy: true, supLook: 120, supMinAge: 20, supBelow: 0.02, supAbove: 0.02, supRsi: 30, supMa200Floor: 0.94, supMa200Cap: 1.0, reMode: null, t8Trend: true, reAfter: '', reWithin: 400, reExt200: 0, reTol: 0.01, reBelow: 0.02, reRsiMax: 60, reHigh: 120, deepRsi2: 31, deepDrop2: -0.5, deepExt2: -0.1, deadTight: 0.09, deadTightM200Above: false, deadNeedBelow60: false, deadNeedM60Down: true, deadSkipBars: 120, sellOverMin: null, steepSlope: 0.12, steepRsi: 80, tierB: true, tierBRsi: 68, tierBExt: 0.14, tierBWick: 0.35, tierBBody: 0.01, tierBVol: 1.3, sellBody: null, sellWick: null, sellVolMin: null, unalignedUpper: true, unalignedNeed3: true, unalignedStable: 20, unalignedRsi: 74, unalignedTags: ['T6'], blowBody: -0.01, earlyTop: true, blowM20Flat: true, hugeOver: 0.2, hugeHold: 0.02, hugeVol: 7, // 시험: 상단 이탈 + 거래량 폭증 + 음봉(몸통 blowBody 이하) 매도 / 상단 대폭 이탈(과열) 매도
+  blow2Over: 0.12, blow2Vol: 5, blow2Wick: 2, blow2Body: -0.01, blowOver: 0.03, blowVol: 3, structBan: null, hlConfirm: 0, hlExit: 'upper', dipBuy: true, addBuy: true, addGap: 20, addCapVol: 1.2, addWidePct: 0.9, addCapRsi: 40, dipWideBw: null, dipWidePct: null, flatTop: false, flatTopBw: 0.15, flatTopRange: 0.25, flatTopOver: 0, flatTopRsi: 55, extTop: false, extTopExt: 0.35, megaOver: 0.10, megaVol: 5, megaBody: -0.05, trail: false, trailRsi: 70, trailDrop: 0.10, trailMinGain: 0.3, trailMaxGain: null, climaxTop: true, climaxMinBars: 45, climaxMaxGain: 1.5, climaxTags: null, climaxMaxExt200: null, climaxMinRise: 3.0, climaxMaxVol: 3, climaxMaxExt20: 0.45, climaxRsi: 72, climaxVol: 1.8, climaxNear: 0.01, climaxHigh: 0.05, climaxExt: 0.17, steepHold: 0.10, steepHoldRsi: 80, dipVol: 1.0, dipCapVol: 2.0, dipCapRsi: 40, dipRsi: 36, dipExt20: -0.09, dipSlope: -0.02, dipTouch: 1.0, dipExitRsi: 72, dipPeakRsi: null, dipStop: null, dipConfirm: 3, dipPar: 0.02, dipParBw: 0.08, dipParRsi: 36, dipParExt: -0.03, dipParSlope: -0.02, dipParFlat: 0.02, invTop: true, invTopPct: null, dtop: true, dtopTags: ['T7'], dtopWin: 40, dtopGap: 3, dtopTol: 0.01, dtopRsi: 70, invTopLow60: false, invTopBw: 0.23, invTopRsi: 70, invTopTags: null, dipInvRsi: 25, dipFlatRsi: 70, dnTop: true, dnTopTags: ['T6'], dnTopMaxSlope: null, dnTopSlope: -0.01, dnTopRsi: 65, dnTopOver: 0, dipHold120: null, dipFlat: 0.12, dipFall: false, hlBuy: false, hlRegime: 'down', hlLookback: 120, hlMinAge: 10, hlRally: 0.12, hlPull: 0.08, hlBand: 1.02, hlRsiMax: 45, hlStop: 0.03, hlExitRsi: 65, baseStop: false, baseBars: 20, baseTol: 0.02, baseMin: 30, baseTags: ['T6', 'T1', 'T3'], failCooldown: 0, failLoss: null, failInverse: true, failTags: ['T6', 'T1', 'T3', 'T7', '돌파'], failMinBars: 20, extMap: null, extBuy: null, extSell: null, wickTop2: true, wk2Wick: 0.4, wk2RsiMax: 60, wk2SlopeMin: 0, wk2SlopeMax: 0.02, wk2Ext200Min: 0.05, wk2Ext200Max: 0.14, wk2VolMax: 1.2, wickTop: false, wickMin: 0.5, wickRsi: 55, sqTop: false, sqBw: 0.09, sqNear: 0.01, sqRsi: 55, wideTop: false, wideUnaligned: true, wideBw: 0.2, wideNear: 0.005, wideBody: -0.025, wideRsi: 60, firstBreakStrict: false, ma20Exit: false, ma20ExitExt: 0.1, capBuy: true, capRsi: 30, capBelow: 0.03, capVol: 5, capDd: -0.25, supMa200Slope: 0, supBuy: true, supLook: 120, supMinAge: 20, supBelow: 0.02, supAbove: 0.02, supRsi: 30, supMa200Floor: 0.94, supMa200Cap: 1.0, reMode: null, t8Trend: true, reAfter: '', reWithin: 400, reExt200: 0, reTol: 0.01, reBelow: 0.02, reRsiMax: 60, reHigh: 120, deepRsi2: 31, deepDrop2: -0.5, deepExt2: -0.1, deadTight: 0.09, deadTightM200Above: false, deadNeedBelow60: false, deadNeedM60Down: true, deadSkipBars: 120, sellOverMin: null, steepSlope: 0.12, steepRsi: 80, tierB: true, tierBRsi: 68, tierBExt: 0.14, tierBWick: 0.35, tierBBody: 0.01, tierBVol: 1.3, sellBody: null, sellWick: null, sellVolMin: null, unalignedUpper: true, unalignedNeed3: true, unalignedStable: 20, unalignedRsi: 74, unalignedTags: ['T6'], blowBody: -0.01, earlyTop: true, blowM20Flat: true, hugeOver: 0.2, hugeHold: 0.02, hugeVol: 7, // 시험: 상단 이탈 + 거래량 폭증 + 음봉(몸통 blowBody 이하) 매도 / 상단 대폭 이탈(과열) 매도
   nearBuy: true, nearTouchBuyOnly: true, nearTol: 0.01, nearBelow20: false, nearM20Up: false, nearA3: true, nearRsiMax: 45, nearWithin: 90, nearAfter: '대폭|장악형|쌍봉', // nearAfter: 직전 매도 이유가 이 정규식에 맞을 때만(빈 값=모든 매도) // 시험: 매도 뒤 nearWithin 봉 안에 정배열에서 저가가 하단의 +nearTol 이내로 처음 근접하면 재매수(T7)
   surgeTightRange: null, // 시험: 거래량이 surgeStrongK배 이상이면 기존 조건, 그보다 약하면(surgeK~) 직전 20봉 고저폭이 surgeTightRange 이하일 때만 돌파
   surgeBaseFlat: false, surgeNeedHigh20: false, surgeM20Above60: false, // 시험: 돌파 종가가 직전 20봉 고가 위 / 20일선 > 60일선
@@ -37,7 +37,7 @@ export const STORY = {
   breakOver: 0.05, breakVol: 3, breakBand: 0.09, // 매도: 밴드가 횡보(전일 밴드폭 ≤9%)하다 상단을 5%↑ 크게 이탈한 양봉(거래량 3배↑)이면 즉시 매도 (현대차 2024-05-22)
   alertHold: 210,                    // 단, 최근 210봉(약 10개월) 안에 특이 신호(거래량 3배↑+하단 터치)가 있었고 그 뒤 첫 상승 돌파라면 팔지 않음 (현대차 2025-10-16)
   retouch: true, retouchGap: 10, retouchRsiDrop: 20, retouchLook: 30, retouchExt60: 0.8, // 추세 보유 중 횡보(직전 상단 터치와 10봉↑ 간격) 후 상단을 다시 터치했는데 RSI가 직전 30봉 최고보다 20↑ 낮고 종가가 60일선보다 80%↑ 높으면(과열 뒤 모멘텀 약화) 매도 (삼성전기 2026-06-19에 맞춘 값)
-  trendExit: 'ma20x2',               // 보류 근거가 나온 뒤엔 추세 보유 모드 — 고점 매도(RSI·장악형)는 무시하고 2일 연속 종가<20일선에서 매도 ('ma20' | 'dead520' | 'ma60' | null=그날만 보류)
+  trendExit: 'ma20x2', trendExitNeed60Down: true,               // 보류 근거가 나온 뒤엔 추세 보유 모드 — 고점 매도(RSI·장악형)는 무시하고 2일 연속 종가<20일선에서 매도 ('ma20' | 'dead520' | 'ma60' | null=그날만 보류)
   holdMode: 'obv',                   // 고점 매도 신호(RSI·장악형)를 보류할 근거: 'obv'(OBV=거래량 누적이 60봉 신고가) | 'cmf' | 'macd' (조합은 'obv+macd')
   holdCmf: 0.4, holdMacd: 0.036,
   useRebreak: false, rebreakBars: 90, rebreakRet: 0.03, // 시험: 매도 후 90봉 안에 매도한 날 고가를 종가로 뚫는 +3%↑ 양봉(정배열, 20·60일선 상승)이면 재매수
@@ -204,7 +204,7 @@ export function storyBuyAt(candles, ind, i, o = STORY) {
       if (conf > 0 && !(c.close > cq.close)) return false;
       if (ind.rsi[q] == null || ind.ma20[q - 20] == null || ind.rsi[q] > rsiMax || cq.low > ind.bb.lower[q] * o.dipTouch || cq.close / ind.ma20[q] - 1 > o.dipExt20 || ind.ma20[q] / ind.ma20[q - 20] - 1 > o.dipSlope) return false;
       if (volMin != null && !(ind.volAvg[q - 1] > 0 && cq.volume / ind.volAvg[q - 1] >= volMin)) return false;
-      return o.dipInvRsi == null || ind.rsi[q] <= o.dipInvRsi || (ind.ma20[q] < ind.ma60[q] && ind.ma60[q] < ind.ma[120][q] && ind.ma[120][q] < ind.ma[200][q]);
+      return o.dipInvRsi == null || ind.rsi[q] <= o.dipInvRsi || (o.dipWideBw != null && (ind.bb.upper[q] - ind.bb.lower[q]) / ind.ma20[q] >= o.dipWideBw) || (o.dipWidePct != null && bandwidthPct(ind, q) >= o.dipWidePct) || (ind.ma20[q] < ind.ma60[q] && ind.ma60[q] < ind.ma[120][q] && ind.ma[120][q] < ind.ma[200][q]);
     };
     if (dipAt(i - (o.dipConfirm || 0), o.dipConfirm || 0, o.dipRsi, o.dipVol) || (o.dipCapVol != null && dipAt(i, 0, o.dipCapRsi, o.dipCapVol))) out.push('T11 하락 중 과대 낙폭');
   }
@@ -373,6 +373,16 @@ export function holdReason(candles, ind, i, o = STORY) {
   return null;
 }
 
+/** 볼린저 밴드폭의 최근 250봉 중 백분위(0~1): 종목마다 평소 폭이 달라 절대 %가 아니라 그 종목의 평소와 비교한다 */
+export function bandwidthPct(ind, i) {
+  const bw = (k) => (ind.bb.upper[k] - ind.bb.lower[k]) / ind.ma20[k];
+  const now = bw(i);
+  let lo = 0;
+  let n = 0;
+  for (let k = 1; k <= 250 && i - k >= 20; k++) { n++; if (bw(i - k) < now) lo++; }
+  return n ? lo / n : 0.5;
+}
+
 /** 보유 중인 봉 i 에서 걸리는 매도 이유 (없으면 null). 사용자가 설명한 순서대로 판단한다 */
 export function storySellAt(candles, ind, i, o = STORY, opt = {}) {
   const n = o.slopeBars;
@@ -410,12 +420,41 @@ export function storySellAt(candles, ind, i, o = STORY, opt = {}) {
   // 시험(dnTop): 60일선이 5봉 전보다 dnTopSlope 이하로 내려가는 중에 고가가 볼린저 상단(+dnTopOver)을 터치하고 RSI ≥ dnTopRsi 이면 매도 — 이평선이 하방 전환 중인 상단 터치(윗꼬리·거래량 조건 없음)
   if (o.dnTop && (!o.dnTopTags || o.dnTopTags.includes(opt.entryTag)) && ind.rsi[i] != null && ind.ma60[i - 5] != null && (o.dnTopMaxSlope != null ? Math.max(ind.ma60[i] / ind.ma60[i - 5], ind.ma[120][i] / ind.ma[120][i - 5], ind.ma[200][i] / ind.ma[200][i - 5]) - 1 <= o.dnTopMaxSlope : ind.ma60[i] / ind.ma60[i - 5] - 1 <= o.dnTopSlope) && c.high >= ind.bb.upper[i] * (1 + o.dnTopOver) && ind.rsi[i] >= o.dnTopRsi) return '60일선 하락 중 상단 터치 매도';
   // 시험(invTop): 60 < 120 < 200일선 역배열 + 밴드폭 ≥ invTopBw + 고가가 볼린저 상단 터치 + RSI ≥ invTopRsi 이면 고점으로 보고 매도(삼성전기 2025-02-14)
-  if (o.invTop && (!o.invTopTags || o.invTopTags.includes(opt.entryTag)) && ind.rsi[i] != null && ind.ma[120][i] != null && ind.ma[200][i] != null && (o.invTopLow60 ? (ind.ma60[i] < ind.ma[120][i] && ind.ma60[i] < ind.ma[200][i]) : (ind.ma60[i] < ind.ma[120][i] && ind.ma[120][i] < ind.ma[200][i])) && (ind.bb.upper[i] - ind.bb.lower[i]) / ind.ma20[i] >= o.invTopBw && c.high >= ind.bb.upper[i] * 0.995 && ind.rsi[i] >= o.invTopRsi) return '역배열 + 넓은 밴드 상단 터치 매도';
+  if (o.invTop && (!o.invTopTags || o.invTopTags.includes(opt.entryTag)) && ind.rsi[i] != null && ind.ma[120][i] != null && ind.ma[200][i] != null && (o.invTopLow60 ? (ind.ma60[i] < ind.ma[120][i] && ind.ma60[i] < ind.ma[200][i]) : (ind.ma60[i] < ind.ma[120][i] && ind.ma[120][i] < ind.ma[200][i])) && (o.invTopPct != null ? bandwidthPct(ind, i) >= o.invTopPct : (ind.bb.upper[i] - ind.bb.lower[i]) / ind.ma20[i] >= o.invTopBw) && c.high >= ind.bb.upper[i] * 0.995 && ind.rsi[i] >= o.invTopRsi) return '역배열 + 넓은 밴드 상단 터치 매도';
   // 시험(dtop): 쌍봉 — 고가가 볼린저 상단을 터치하고 RSI ≥ dtopRsi 이며, 최근 dtopWin 봉 안(직전 dtopGap 봉 제외)의 최고가 ±dtopTol 안에 다시 도달하면 고점으로 보고 매도(알테오젠 2024-03-26: 2024-03-18 고가 173,522 재도달)
   if (o.dtop && (!o.dtopTags || o.dtopTags.includes(opt.entryTag)) && i > o.dtopWin + 5 && ind.rsi[i] != null && ind.rsi[i] >= o.dtopRsi && c.high >= ind.bb.upper[i] * 0.995) {
     let pk = 0;
     for (let j = i - o.dtopWin; j <= i - o.dtopGap; j++) pk = Math.max(pk, candles[j].high);
     if (pk > 0 && Math.abs(c.high / pk - 1) <= o.dtopTol) return '쌍봉(이전 고점 재도달) 상단 터치 매도';
+  }
+  // 시험(flatTop): 밴드폭이 좁은(≤ flatTopBw) 횡보(20봉 고저폭 ≤ flatTopRange)에서 고가가 상단을 flatTopOver 이상 넘고 RSI ≥ flatTopRsi 이면 매도(두산 2024-11-19)
+  if (o.flatTop && !opt.skipTop && i >= 20 && ind.rsi[i] != null && (ind.bb.upper[i] - ind.bb.lower[i]) / ind.ma20[i] <= o.flatTopBw && c.high >= ind.bb.upper[i] * (1 + o.flatTopOver) && ind.rsi[i] >= o.flatTopRsi) {
+    let hi = 0;
+    let lo = Infinity;
+    for (let j = i - 19; j <= i; j++) { hi = Math.max(hi, candles[j].high); lo = Math.min(lo, candles[j].low); }
+    if (hi / lo - 1 <= o.flatTopRange) return '밴드폭 좁은 횡보에서 상단 터치 매도';
+  }
+  // 시험(extTop): 종가가 20일선보다 extTopExt 이상 높고 고가가 상단을 터치하면 과열 극단으로 매도(두산 2025-06-23: +38%)
+  if (o.extTop && c.close / ind.ma20[i] - 1 >= o.extTopExt && c.high >= ind.bb.upper[i] * 0.995) return '20일선 이격 과열 극단 상단 터치 매도';
+  // 시험(climaxTop): 거래량 정점 — 양봉으로 고가가 상단(−climaxNear)에 닿고 RSI ≥ climaxRsi, 거래량 ≥ climaxVol배, 종가가 20봉 고점 근처(climaxHigh 이내)이면 매도(두산 2025-06-23·2025-10-29·2026-05-07)
+  if (o.climaxTop && !opt.skipTop && i >= 20 && (opt.barsHeld ?? 0) >= o.climaxMinBars && (opt.gain ?? 0) <= o.climaxMaxGain && (!o.climaxTags || o.climaxTags.includes(opt.entryTag)) && (o.climaxMaxExt200 == null || ind.ma[200][i] == null || c.close / ind.ma[200][i] - 1 <= o.climaxMaxExt200) && ind.rsi[i] != null && ind.volAvg[i - 1] > 0 && c.close > c.open && ind.rsi[i] >= o.climaxRsi && c.volume / ind.volAvg[i - 1] >= o.climaxVol && c.volume / ind.volAvg[i - 1] <= o.climaxMaxVol && c.close / ind.ma20[i] - 1 >= o.climaxExt && c.close / ind.ma20[i] - 1 <= o.climaxMaxExt20 && c.high >= ind.bb.upper[i] * (1 - o.climaxNear)) {
+    let hi = 0;
+    for (let j = i - 19; j <= i; j++) hi = Math.max(hi, candles[j].high);
+    if (c.close >= hi * (1 - o.climaxHigh)) {
+      let lo250 = Infinity;
+      for (let j = Math.max(0, i - 250); j <= i; j++) lo250 = Math.min(lo250, candles[j].low);
+      if (o.climaxMinRise == null || c.close / lo250 - 1 >= o.climaxMinRise) return '거래량 정점 양봉 상단 터치 매도';
+    }
+  }
+  // 시험(megaOver): 상단을 megaOver 이상 뚫고 거래량 megaVol배↑ 폭증한 날은 강력한 과열 매도. 이유에 '대폭'을 넣지 않아 T7 재매수는 켜지지 않는다(두산 2024-07-18: +11.7%·6.2배)
+  if (o.megaOver != null && ind.volAvg[i - 1] > 0 && c.high / ind.bb.upper[i] - 1 >= o.megaOver && c.volume / ind.volAvg[i - 1] >= o.megaVol && (c.close - c.open) / c.open <= o.megaBody) return '상단 돌파 급등 폭증 매도(과열 극단)';
+  // 시험(trail): 과열(최근 20봉 RSI ≥ trailRsi) 뒤 매수 이후 최고가에서 trailDrop 이상 내려오고 종가가 20일선 아래이면 매도 — 고점을 못 팔았을 때 오래 들고 있지 않게
+  if (o.trail && opt.entryIdx != null && opt.gain >= o.trailMinGain && (o.trailMaxGain == null || opt.gain <= o.trailMaxGain) && i >= 20) {
+    let pk = 0;
+    for (let j = opt.entryIdx; j <= i; j++) pk = Math.max(pk, candles[j].high);
+    let hot = false;
+    for (let j = i - 19; j <= i; j++) if ((ind.rsi[j] ?? 0) >= o.trailRsi) { hot = true; break; }
+    if (hot && c.close <= pk * (1 - o.trailDrop) && c.close < ind.ma20[i]) return '과열 뒤 고점 대비 하락 매도';
   }
   const deadSkip = o.deadSkipBars != null && (opt.entryTag === 'T6' || opt.entryTag === 'T3b') && opt.barsHeld <= o.deadSkipBars; // 시험: 바닥 반등 매수 직후의 5/60 데드크로스는 보류
   const tight = o.deadTight != null && ind.ma[120][i] != null && ind.ma[200][i] != null && Math.max(ind.ma60[i], ind.ma[120][i], ind.ma[200][i]) / Math.min(ind.ma60[i], ind.ma[120][i], ind.ma[200][i]) - 1 <= o.deadTight && (!o.deadTightM200Above || ind.ma[200][i] >= ind.ma60[i]); // 시험: 60·120·200일선이 엉켜 있는(수렴) 구간의 데드크로스는 보류
@@ -457,7 +496,8 @@ export function storySellAt(candles, ind, i, o = STORY, opt = {}) {
   if (o.useHot && ind.rsi[i] >= o.hotRsi && !(ind.ma20[i] > ind.ma60[i] && ind.ma60[i] > ind.ma[120][i] && ind.ma[120][i] > maLine(candles, ind, o.maAlign)[i]) && !(o.skipBreakEarly && (opt.entryTag === 'T6' || opt.entryTag === 'T3b') && opt.barsHeld <= 0)) return '상단 터치 + RSI 과열(≥' + o.hotRsi + ') (정배열 아님)';
   if (o.useBigBear && bigBearOk(candles, ind, i, o) && c.close / c.open - 1 <= o.bigBearBody && c.high / ind.bb.upper[i] - 1 >= o.bigBearOver && !(o.holdMode && holdReason(candles, ind, i, o))) return '상단 이탈 후 큰 음봉';
   if (o.useStar && c.close < c.open && c.high / ind.bb.upper[i] - 1 >= o.starOver && (c.high - Math.max(c.open, c.close)) / (c.high - c.low || 1) >= o.starWick && !(o.holdMode && holdReason(candles, ind, i, o))) return '상단 이탈 후 윗꼬리 큰 음봉(유성형)';
-  const topSell = !opt.skipTop && (c.close < c.open) && !(o.holdMode && !o.trendExit && holdReason(candles, ind, i, o));
+  const steepUp = o.steepHold != null && ind.ma20[i - 5] != null && ind.ma20[i] / ind.ma20[i - 5] - 1 >= o.steepHold && (o.steepHoldRsi == null || ind.rsi[i] < o.steepHoldRsi); // 20일선이 5봉에 steepHold 이상 가파르게 오르는 중이면 고점 매도(음봉·장악형)를 미룬다
+  const topSell = !opt.skipTop && !steepUp && (c.close < c.open) && !(o.holdMode && !o.trendExit && holdReason(candles, ind, i, o));
   if (o.useEngulf && topSell && !earlyTop) {
     const p = candles[i - 1];
     if (p.close > p.open && c.close < c.open && c.open >= p.close * 0.995 && c.close <= p.open && (o.engulfMinGain == null || (opt.gain != null && opt.gain >= o.engulfMinGain))) return '상단 터치 + 장악형 음봉(어제 양봉을 덮음)';
@@ -551,6 +591,7 @@ function runStory(candles, ind, o, init) {
   let lastSellWhy = '';
   let lastFail = -9999;
   let lastHugeSell = -999;
+  let lastAdd = -999;
   for (let i = init ? init.i + 1 : 0; i < candles.length; i++) {
     if (entry == null) {
       if (o.failCooldown && i - lastFail < o.failCooldown) continue; // 추세 실패 손절 뒤 쉬는 기간
@@ -613,6 +654,13 @@ function runStory(candles, ind, o, init) {
         lastSell = i;
         nearTouched = false;
         lastSellHigh = candles[i].high;
+      } else if (o.addBuy && i - lastAdd >= o.addGap && candles[i].close < entry) {
+        // 추가 매수 신호(참고): 보유 중 평가손인 상태에서 투매 바닥(T11, 밴드폭 넓음·거래량 addCapVol배↑)이 나오면 표시한다. 보유 평단·손익 계산에는 쓰지 않는다
+        const ak = storyBuyAt(candles, ind, i, { ...o, nearBuy: false, reMode: null, dipCapVol: o.addCapVol, dipWidePct: o.addWidePct, dipConfirm: 0, dipVol: null, dipRsi: -1, dipCapRsi: o.addCapRsi }).filter((q) => q.startsWith('T11'));
+        if (ak.length) {
+          sig.push({ i, time: candles[i].time, side: 'buy', price: candles[i].close, tag: '추가 T11', reasons: ak, add: true });
+          lastAdd = i;
+        }
       }
     }
   }
@@ -639,6 +687,7 @@ function trendExitReason(candles, ind, i, o) {
     if (gap >= o.retouchGap && ind.rsi[i] <= mx - o.retouchRsiDrop && c.close / ind.ma60[i] - 1 >= o.retouchExt60) return '추세 보유 중 횡보 후 상단 재터치 + RSI 약화(다이버전스)';
   }
   const m = o.trendExit;
+  if (o.trendExitNeed60Down && ind.ma60[i - 5] != null && ind.ma60[i] > ind.ma60[i - 5] && c.close >= ind.ma60[i]) return null; // 60일선이 오르고 종가가 60일선 위면 20일선 이탈 정도로는 팔지 않는다
   if (m === 'ma20' && c.close < ind.ma20[i]) return '추세 보유 중 종가가 20일선 아래로 마감';
   if (m === 'ma20x2' && c.close < ind.ma20[i] && candles[i - 1].close < ind.ma20[i - 1]) return '추세 보유 중 2일 연속 종가가 20일선 아래';
   if (m === 'ma60' && c.close < ind.ma60[i]) return '추세 보유 중 종가가 60일선 아래로 마감';
@@ -648,7 +697,7 @@ function trendExitReason(candles, ind, i, o) {
 
 /** 마지막 봉 기준 보유 상태 */
 export function describeStoryState(candles, signals) {
-  const last = signals[signals.length - 1];
+  const last = [...signals].reverse().find((s) => !s.add);
   if (!candles.length) return null;
   if (last && last.side === 'buy') {
     const entry = candles[last.i + 1] ? candles[last.i + 1].open : last.price;

@@ -24,8 +24,8 @@ async function main() {
   $('warn').innerHTML = `<b>과거 데이터 시뮬레이션입니다. 수익을 보장하지 않고, 투자 권유가 아닙니다.</b> 현재 시총 순위로 고른 ${lab}만으로 계산해서 상장폐지·부진 종목이 빠진 <b>생존 편향</b>이 있어 실제보다 높게 나옵니다. ${esc(j.study.note)} 시험 결과 장기 연수익은 <b>${pct(j.study.cagr)}</b>(낙폭 ${pct(j.study.mdd, 0)}, 해별 최저 ${pct(j.study.worstYear, 0)})였습니다.`;
   $('rules').innerHTML = `<li>대상: ${j.tier === 'mid' ? '시가총액 101~300위이면서 5,000억 원 이상' : '시가총액 1~100위'}(코스피·코스닥 보통주), 20일 평균 거래대금 1억 원 이상인 날만 매수.</li>
     <li>한 번에 <b>${j.slots}종목</b>만 보유(자리마다 같은 비중), 빈 자리는 현금.</li>
-    <li>매수: 그날 대형주 규칙의 매수 신호(T1 하단 이탈 · T6 과대 낙폭 · T3/T3b 200일선 · 돌파)가 난 종목. T4는 제외. 이미 가진 종목은 사지 않음.</li>
-    <li>매도: 그 종목의 규칙 매도 신호(상단 터치 + 음봉 + RSI 과열, 장악형, 거래량 폭발, 5/60 데드크로스 등) 또는 <b>${esc(rule)}</b>${j.stop && j.timeStop ? ` 또는 <b>손절: 종가가 매수가보다 ${j.stop * 100}% 이상 내려가면 정리</b>` : ''}. 손실 종목이 자리를 계속 막는 것을 막는 장치입니다${j.tier === 'mid' ? '(중형주는 −25~−30% 손절은 수익을 깎았고 −40% 손절과 시간 손절은 도움이 됐습니다)' : ''}.</li>
+    <li>매수: 그날 대형주 규칙의 매수 신호(T1 하단 이탈 · T6 과대 낙폭 · T3/T3b 200일선 · 돌파)가 난 종목. T4는 제외. 이미 가진 종목은 사지 않음.${j.tier === 'mid' ? ' 신호가 난 날 거래량이 20일 평균의 3배를 넘으면 사지 않습니다(악재성 거래량 폭증 하락 제외 — 승률이 가장 크게 올랐습니다).' : ''}</li>
+    <li>매도: 그 종목의 규칙 매도 신호(상단 터치 + 음봉 + RSI 과열, 장악형, 거래량 폭발, 5/60 데드크로스 등) 또는 <b>${esc(rule)}</b>${j.stop && j.timeStop ? ` 또는 <b>손절: 종가가 매수가보다 ${j.stop * 100}% 이상 내려가면 정리</b>` : ''}. 손실 종목이 자리를 계속 막는 것을 막는 장치입니다${j.tier === 'mid' ? '(중형주는 −25~−30% 손절은 수익을 깎았고 −40% 손절과 시간 손절은 도움이 됐습니다). 수익이 +${j.half * 100}%에 닿으면 <b>절반을 먼저 정리</b>(싸게 사서 비싸게 판다 — 이익을 일부 확정해 승률을 높임)하고, 나머지는 +${j.tp * 100}% 목표 또는 규칙 매도까지 들고 갑니다' : ''}.</li>
     <li>체결은 신호 다음 거래일 시가, 왕복 비용 0.6%를 반영했습니다. 규칙은 <code>storyrules.js</code>, 계산은 <code>tools/rotation_build.mjs</code>입니다.</li>`;
   $('asof').textContent = `기준 ${j.asof} 종가 · 시총 순위 ${j.capsDate} · ${j.universe}종목`;
   const st = j.stats;
@@ -44,7 +44,7 @@ async function main() {
 
   // 보유
   const hb = $('hold').querySelector('tbody');
-  hb.innerHTML = j.holdings.length ? j.holdings.map((h) => `<tr><td>${symLink(h.code, h.name)}</td><td><span class="tag">${esc(h.tag)}</span></td><td>${esc(h.entryDate)}</td><td>${won(h.entryPrice)}</td><td>${won(h.last)}</td><td class="${cls(h.pnl)}">${pct(h.pnl)}</td><td>${h.sellSignal ? `<span class="badge-sell">매도 신호 · ${esc(h.sellSignal)}</span>` : '보유'}</td></tr>`).join('') : '<tr><td colspan="7">보유 종목 없음</td></tr>';
+  hb.innerHTML = j.holdings.length ? j.holdings.map((h) => `<tr><td>${symLink(h.code, h.name)}</td><td><span class="tag">${esc(h.tag)}</span></td><td>${esc(h.entryDate)}</td><td>${won(h.entryPrice)}</td><td>${won(h.last)}</td><td class="${cls(h.pnl)}">${pct(h.pnl)}</td><td>${h.sellSignal ? `<span class="badge-sell">매도 신호 · ${esc(h.sellSignal)}</span>` : (h.half === 'done' ? '보유 (절반은 이미 정리)' : h.half === 'tomorrow' ? '<span class="badge-buy">내일 시가에 절반 정리</span>' : '보유')}</td></tr>`).join('') : '<tr><td colspan="7">보유 종목 없음</td></tr>';
   $('holdNote').textContent = `자리 ${j.slots}개 중 ${j.holdings.length}개 사용, 빈 자리 ${j.freeSlots}개`;
 
   // 후보
@@ -68,7 +68,7 @@ async function main() {
   $('eqNote').textContent = `${eq[0][0]} → ${eq[eq.length - 1][0]}: 1 → ${eq[eq.length - 1][1].toFixed(2)} (낙폭 ${pct(st.mdd, 0)})`;
 
   // 최근 거래
-  $('recent').querySelector('tbody').innerHTML = j.recent.map((t) => `<tr><td>${symLink(t.code, t.name)}</td><td><span class="tag">${esc(t.tag)}</span></td><td>${esc(t.entryDate)}</td><td>${esc(t.exitDate)}</td><td class="${cls(t.ret)}">${pct(t.ret)}</td><td>${t.days}</td><td style="text-align:left;white-space:normal">${esc(t.why || '')}</td></tr>`).join('');
+  $('recent').querySelector('tbody').innerHTML = j.recent.map((t) => `<tr><td>${symLink(t.code, t.name)}</td><td><span class="tag">${esc(t.tag)}</span></td><td>${esc(t.entryDate)}</td><td>${esc(t.exitDate)}</td><td class="${cls(t.ret)}">${pct(t.ret)}</td><td>${t.days}</td><td style="text-align:left;white-space:normal">${esc(t.why || '')}${t.half ? ' <span class="q-time">(절반은 일찍 정리)</span>' : ''}</td></tr>`).join('');
 
   // 종목 이름을 누르면 차트로: 앱이 기억하는 종목·일봉을 바꾼 뒤 이동
   document.addEventListener('click', (e) => {

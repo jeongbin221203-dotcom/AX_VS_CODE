@@ -162,3 +162,14 @@ test('T11: 저점 확인 매수는 거래량 1배↑, 투매 거래량 2배↑�
   assert.equal(STORY.dipCapVol, 2.0);
   assert.equal(STORY.dipCapRsi, 40);
 });
+
+test('거래량 정점 양봉 매도·강력 과열 매도·60일선 상승 중 20일선 이탈 제외·추가 매수 신호는 기본 켜짐', () => {
+  assert.equal(STORY.climaxTop, true);
+  assert.equal(STORY.climaxMinBars, 45);
+  assert.equal(STORY.climaxMinRise, 3.0);
+  assert.equal(STORY.climaxMaxVol, 3);
+  assert.equal(STORY.megaOver, 0.10);
+  assert.equal(STORY.trendExitNeed60Down, true);
+  assert.equal(STORY.steepHold, 0.10);
+  assert.equal(STORY.addBuy, true);
+});
