@@ -90,7 +90,7 @@
     var pr = pane.probMap[p.time], rk = pane.riskMap[p.time];
     tip.textContent = fmtTime(p.time) + '\n시 ' + fmt(c.open) + '  고 ' + fmt(c.high) + '\n저 ' + fmt(c.low) + '  종 ' + fmt(c.close) +
       ' (' + ((c.close / c.open - 1) * 100).toFixed(2) + '%)' + (v ? '\n거래량 ' + fmt(v.value) : '') +
-      (pr !== undefined ? '\nAI 확률 ' + (pr * 100).toFixed(1) + '%' : '') + (rk !== undefined ? '\n하락 위험 ' + riskLevel(rk, pane.riskCuts) + ' ' + (rk * 100).toFixed(0) + '% (20일 안 -10%↓)' : '');
+      (pr !== undefined ? '\n' + (pane.aiLabel === 'AI 점수' ? 'AI 점수 ' + (pr * 100).toFixed(0) + '점' : 'AI 확률 ' + (pr * 100).toFixed(1) + '%') : '') + (rk !== undefined ? '\n하락 위험 ' + riskLevel(rk, pane.riskCuts) + ' ' + (rk * 100).toFixed(0) + '% (20일 안 -10%↓)' : '');
     var r = pane.el.getBoundingClientRect();
     tip.style.display = 'block';
     tip.style.left = Math.min(p.point.x + r.left + window.scrollX + 14, window.scrollX + document.documentElement.clientWidth - 210) + 'px';
@@ -105,6 +105,9 @@
   Pane.prototype.clearPred = function () {
     var self = this;
     this.predSeries.forEach(function (s) { self.chart.removeSeries(s); });
+    var ab = this.root.querySelector('.rb-ai'); if (ab) ab.hidden = true;
+    if (this.legendAi) this.legendAi.hidden = true;
+    this.chart.priceScale('right').applyOptions({ scaleMargins: { top: 0.2, bottom: 0.1 } });
     this.predSeries = []; this.probMap = {}; this.pred = null;
     this.predMk = [];
     this.applyMarkers();
@@ -143,7 +146,7 @@
     if (s.kind === 'none' || !this.data) return Promise.resolve();
     if (s.kind === 'cross') { self.pred = crossPred(this.data.candles, s.set); self.drawPred(); return Promise.resolve(); }
     if (s.kind === 'ai' && isIntra(s.tf)) { this.root.querySelector('.cpred').textContent = 'AI(상승 확률)는 일봉·주봉·월봉에서만 볼 수 있습니다. 분봉에서는 예측(단테 기법)을 쓰세요.'; return Promise.resolve(); }
-    return fetch('/api/predict/' + encodeURIComponent(this.code) + '?kind=' + s.kind + '&tf=' + s.tf + '&bars=' + loadBars).then(function (r) {
+    return fetch('/api/predict/' + encodeURIComponent(this.code) + '?kind=' + s.kind + '&tf=' + s.tf + '&bars=' + loadBars + (s.kind === 'ai' && /^\/jb\/?$/.test(location.pathname) ? '&v=2' : '')).then(function (r) {
       return r.json().then(function (j) { if (!r.ok) throw new Error(j.error || '오류'); return j; });
     }).then(function (j) {
       if (seq !== self.predSeq || self.settings().kind !== s.kind) return;   // 그사이 설정이 바뀜
@@ -183,27 +186,65 @@
     });
     mk = mk.concat(ms.filter(function (m) { return !(j.kind === 'dante' && m.strong && !(m.bottom && m.certain) && big[m.date]); }).map(function (m, i, arr) {
       if (j.kind === 'cross') return { time: m.date, position: m.side === 'sell' ? 'aboveBar' : 'belowBar', color: m.side === 'sell' ? DOWN : UP, shape: m.side === 'sell' ? 'arrowDown' : 'arrowUp', text: i >= arr.length - 2 ? m.label : '' };
-      return { time: m.date, position: 'belowBar', color: j.kind === 'ai' ? '#8a5cd6' : (m.bottom && m.certain ? '#1e8449' : m.strong ? UP : '#8f98ab'),
-               shape: j.kind === 'ai' ? 'circle' : 'arrowUp', size: (m.bottom && m.certain) ? 2 : 1, text: i >= arr.length - 3 ? m.label : '' };   // 글자는 최근 3개만
+      if (j.kind === 'ai' && j.label === 'AI 점수') {                   // 매수(빨강 ▲)·매도(파랑 ▼, 글자=그 거래 수익률). 약한 신호(90점)는 작고 옅게
+        var wk = m.tier === '약';
+        return { time: m.date, position: m.side === 'sell' ? 'aboveBar' : 'belowBar', color: m.side === 'sell' ? (wk ? 'rgba(43,98,217,0.6)' : DOWN) : (wk ? 'rgba(214,54,47,0.55)' : UP),
+                 shape: m.side === 'sell' ? 'arrowDown' : 'arrowUp', size: wk ? 1 : 2, text: m.label };
+      }
+      return { time: m.date, position: 'belowBar', color: j.kind === 'ai' ? (j.label === 'AI 점수' ? '#d81b60' : '#8a5cd6') : (m.bottom && m.certain ? '#1e8449' : m.strong ? UP : '#8f98ab'),
+               shape: j.kind === 'ai' ? 'circle' : 'arrowUp', size: (m.bottom && m.certain) ? 2 : 1, text: i >= arr.length - (j.kind === 'ai' ? 1 : 3) ? m.label : '' };   // 글자는 최근 3개만
     }));
     mk = mk.concat(this.focusMarkers());
     mk.sort(function (p, q) { return p.time < q.time ? -1 : p.time > q.time ? 1 : 0; });
     this.predMk = mk;
     this.applyMarkers();
     if (j.kind === 'ai') {
-      // AI 확률(%)은 왼쪽 눈금에 — 가격(오른쪽)과 섞이지 않게
-      var line = this.chart.addLineSeries({ color: '#8a5cd6', lineWidth: 1, priceScaleId: 'left', priceLineVisible: false, lastValueVisible: true,
-                                            title: 'AI', priceFormat: { type: 'custom', minMove: 0.1, formatter: function (v) { return v.toFixed(1) + '%'; } } });
-      line.setData(j.prob.map(function (p) { return { time: p.time, value: p.value * 100 }; }));
-      line.createPriceLine({ price: j.thr * 100, color: '#8a5cd6', lineWidth: 1, lineStyle: 2, axisLabelVisible: true, title: '상위 10%' });
-      this.el.classList.add('hasleft');   // 왼쪽 눈금이 생기면 범례를 그 오른쪽으로
-      this.keepRange(function () { self.chart.applyOptions({ leftPriceScale: { visible: true, borderColor: GRID, scaleMargins: { top: 0.55, bottom: 0.17 } } }); });
+      // AI 확률(%)·점수(점)는 왼쪽 눈금에 — 가격(오른쪽)과 섞이지 않게
+      this.aiLabel = j.label || 'AI 확률';
+      var isScore = this.aiLabel === 'AI 점수';
+      var ab = this.root.querySelector('.rb-ai');
+      if (ab && j.group) { ab.textContent = (isScore && j.latest && j.latest.prob != null ? 'AI ' + (j.latest.prob * 100).toFixed(0) + '점 · ' : '') + j.group.name + ' 후보 ' + j.group.rank + '위/' + j.group.n; ab.title = 'AI 후보 순위(' + j.group.date + ' 기준, 그룹 안)'; ab.hidden = false; }
+      var line;
+      if (isScore) {
+        // AI 점수(0~100): 차트 위쪽의 빈 띠(가격 위)에 따로 그린다 — 왼쪽 눈금을 쓰지 않아 가격·이평선과 겹치지 않고 눈금이 0~100 으로 고정된다.
+        // 굵은 선 = 5봉 평균(잡음 줄임), 90점(상위 10%) 이상은 진한 분홍, 옅은 선 = 그날 값
+        var raw = j.prob.map(function (p) { return p.value * 100; }), sm = raw.map(function (v, i) {
+          var from = Math.max(0, i - 4), sum = 0; for (var k = from; k <= i; k++) sum += raw[k]; return sum / (i - from + 1);
+        });
+        var fixed = function () { return { priceRange: { minValue: 0, maxValue: 100 } }; };
+        var pfmt = { type: 'custom', minMove: 1, formatter: function (v) { return v.toFixed(0) + '점'; } };   // (전역 fmt 함수를 가리지 않게 다른 이름)
+        var base = { priceScaleId: 'aiscore', priceLineVisible: false, lastValueVisible: false, autoscaleInfoProvider: fixed, priceFormat: pfmt };
+        this.chart.priceScale('right').applyOptions({ scaleMargins: { top: 0.27, bottom: 0.1 } });   // 캔들이 AI 띠 아래에 오도록
+        var thin = this.chart.addLineSeries(Object.assign({ color: 'rgba(123,79,208,0.35)', lineWidth: 1, crosshairMarkerVisible: false }, base));
+        thin.setData(j.prob.map(function (p, i) { return { time: p.time, value: raw[i] }; }));
+        line = this.chart.addLineSeries(Object.assign({ color: '#7b4fd0', lineWidth: 2, crosshairMarkerVisible: false }, base));
+        line.setData(j.prob.map(function (p, i) { return { time: p.time, value: sm[i], color: sm[i] >= j.thr * 100 ? '#d81b60' : '#7b4fd0' }; }));
+        line.createPriceLine({ price: j.thr * 100, color: '#d81b60', lineWidth: 1, lineStyle: 2, axisLabelVisible: false, title: '' });
+        if (j.thr_weak) line.createPriceLine({ price: j.thr_weak * 100, color: 'rgba(216,27,96,0.4)', lineWidth: 1, lineStyle: 3, axisLabelVisible: false, title: '' });
+        line.createPriceLine({ price: 50, color: 'rgba(143,152,171,0.7)', lineWidth: 1, lineStyle: 3, axisLabelVisible: false, title: '' });
+        this.predSeries.push(thin);
+        this.chart.priceScale('aiscore').applyOptions({ scaleMargins: { top: 0.02, bottom: 0.80 }, visible: false });
+        if (!this.legendAi) { this.legendAi = document.createElement('div'); this.legendAi.className = 'cleg cleg3'; this.el.appendChild(this.legendAi); }
+        this.legendAi.textContent = 'AI 점수 ' + (j.latest && j.latest.prob != null ? (j.latest.prob * 100).toFixed(0) + '점' : '-') + ' · 위 띠: 굵은 선 5봉 평균, 분홍 점선 = 95점(강한 매수), 옅은 점선 = 90점(약한 매수), 회색 점선 = 50점';
+        this.legendAi.hidden = false;
+      } else {
+        line = this.chart.addLineSeries({ color: '#8a5cd6', lineWidth: 1, priceScaleId: 'left', priceLineVisible: false, lastValueVisible: true,
+                                          title: 'AI', priceFormat: { type: 'custom', minMove: 0.1, formatter: function (v) { return v.toFixed(1) + '%'; } } });
+        line.setData(j.prob.map(function (p) { return { time: p.time, value: p.value * 100 }; }));
+        line.createPriceLine({ price: j.thr * 100, color: '#8a5cd6', lineWidth: 1, lineStyle: 2, axisLabelVisible: true, title: '상위 10%' });
+        this.el.classList.add('hasleft');   // 왼쪽 눈금이 생기면 범례를 그 오른쪽으로
+        this.keepRange(function () { self.chart.applyOptions({ leftPriceScale: { visible: true, borderColor: GRID, scaleMargins: { top: 0.55, bottom: 0.17 } } }); });
+      }
       this.predSeries.push(line);
       j.prob.forEach(function (p) { self.probMap[p.time] = p.value; });
     }
     box.textContent = '';
     var b = document.createElement('b'); b.textContent = j.name + ' · '; box.appendChild(b);
     box.appendChild(document.createTextNode(j.summary + (j.note ? '\n' + j.note : '')));
+    if (j.kind === 'ai' && j.trades && j.trades.length) {
+      var tr = j.trades.slice(-5).reverse().map(function (t) { return t.buy.slice(2) + ' 매수 ' + fmt(t.buy_px) + ' → ' + t.sell.slice(2) + ' 매도 ' + fmt(t.sell_px) + ' (' + (t.ret >= 0 ? '+' : '') + (t.ret * 100).toFixed(1) + '%)' + (t.seen ? '·학습구간' : ''); });
+      box.appendChild(document.createTextNode('\n최근 거래: ' + tr.join(' / ')));
+    }
     if (j.kind === 'dante' && nBottom) {
       box.appendChild(document.createTextNode('\n저점(바닥) 신호 ' + nBottom + '개 중 하락 위험이 낮은 "확실" ' + nCertain + '개(초록 ▲)' + (showAll ? ' + 나머지 ' + (nBottom - nCertain) + '개(전체 보기 켜짐)' : '만 표시 — 나머지 ' + (nBottom - nCertain) + '개는 "저점 신호 전체 보기"를 켜면 보임') + '. 확실 기준: 신호일 하락 위험 확률 18% 미만(시험 기간 −10%↓ 26%→13%). ※ 저점 신호는 진짜 저점보다 앞서 나오는 편이라(신호 뒤 20일 안에 평균 −7% 더 내려감) 나눠서 진입하는 것을 권합니다.'));
     }

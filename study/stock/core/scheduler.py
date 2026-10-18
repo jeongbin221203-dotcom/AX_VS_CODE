@@ -49,6 +49,14 @@ def run_update(limit: int = 0) -> dict:
                 _state["msg"] += " · 스냅샷 " + run_publish()
         except Exception as e:
             _state["msg"] = f"완료: 성공 {res['ok']}, 실패 {res['fail']} · 신호 갱신 실패: {e}"
+        try:                                                     # 연습용 잡주 후보 — 일봉 갱신 뒤 오늘 점수를 다시 계산(모델은 30일마다 재학습)
+            from core import picks
+            _state["msg"] += " · 잡주 후보 계산"
+            picks.refresh(log=lambda m: _state.update(msg=f"잡주 후보: {m}"))
+            if picks.wf_stale():                                 # 과거 차트용 걸어가며 검증 모델은 1년에 한 번(약 20분)
+                picks.train_walkforward(log=lambda m: _state.update(msg=f"걸어가며 검증 모델: {m}"))
+        except Exception as e:
+            _state["msg"] += f" · 잡주 후보 실패: {e}"
         try:                                                     # 하락 위험·전망 모델은 한 달마다 새 데이터로 다시 학습
             from core import drop_risk
             _state["msg"] += " · 위험 모델 점검"

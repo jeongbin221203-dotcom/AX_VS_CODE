@@ -29,7 +29,12 @@ def api_predict(code):
     if len(df) < ai.MIN_BARS:
         return jsonify(error=f"데이터가 부족합니다({ai.MIN_BARS}봉 이상 필요)"), 404
     try:
-        out = predict.dante(df, tf, bars) if kind == "dante" else predict.ai_pred(df, tf, bars)
+        out = None
+        if kind == "ai" and request.args.get("v") == "2":       # JB차트의 새 AI 점수(core/picks) — 모델이 없으면 옛 AI 확률로
+            from core import picks
+            out = picks.ai_chart(df, code, tf, bars, predict._mkt())
+        if out is None:
+            out = predict.dante(df, tf, bars) if kind == "dante" else predict.ai_pred(df, tf, bars)
     except RuntimeError as e:
         return jsonify(error=str(e)), 503
     return jsonify(out)

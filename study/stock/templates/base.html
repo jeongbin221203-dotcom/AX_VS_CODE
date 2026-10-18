@@ -26,6 +26,7 @@
     <a href="{{ url_for('main.home') }}" {% if ep == 'main.home' %}class="on"{% endif %}>신호</a>
     <a href="{{ url_for('main.jb') }}" {% if ep == 'main.jb' %}class="on"{% endif %}>JB차트</a>
     <a href="{{ url_for('main.compare') }}" {% if ep == 'main.compare' %}class="on"{% endif %}>차트 비교</a>
+    <a href="{{ url_for('picks.page') }}" {% if ep == 'picks.page' %}class="on"{% endif %}>잡주 후보</a>
     <a href="{{ url_for('main.watch') }}" {% if ep == 'main.watch' %}class="on"{% endif %}>관심종목</a>
     <a href="{{ url_for('plan.page') }}" {% if ep == 'plan.page' %}class="on"{% endif %}>매매 계획</a>
     {% for title, items in menus %}

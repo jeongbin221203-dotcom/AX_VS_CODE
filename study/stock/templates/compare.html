@@ -26,6 +26,7 @@
     <li><b>하락 위험</b> 배지·빨간 선: 앞으로 20거래일 안에 −10% 이하로 끝날 확률. 높음 35%↑ · 주의 27%↑ · 낮음. 전체 평균은 약 24%입니다.</li>
     <li><b>파란 ▼ 위험↑</b>: 위험이 처음 높음 경계를 넘은 날. <b>주황 ●  과열</b>: 60일 +80%↑ 또는 224일선 대비 +100%↑가 처음 된 날.</li>
     <li><b>맨 아래 띠</b>(JB차트) / 배경 띠(차트 비교): 빨강 = 위험 높음, 주황 = 주의.</li>
+    {% if page == 'jb' %}<li><b>AI 점수</b>(JB차트의 겹쳐 그리기 → AI 점수): 차트 지표 88개로 만든 모델 4개의 평균 백분위(0~100점). 분홍 점선 = 95점(강한 매수)·옅은 점선 = 90점(약한 매수), 빨간 ▲ 매수 = 점수가 95점(약한 신호는 90점)을 처음 넘은 다음 날 시가, 파란 ▼ 매도 = 매수 후 20거래일째 종가(글자 = 그 거래의 수익률). 과거 시험(전 종목)에서 95점 신호는 2022~23년 평균 +6.0%·2024~26년 +5.3%, 90점은 +4.9%·+3.7%였고, 2016년 이후 과거 표시는 해마다 다시 학습한 모델이라 학습에 쓰지 않은 구간입니다. 이름 옆 보라색 배지 = 오늘 그 종목이 속한 그룹(대형·중형·소형·잡주) 안 후보 순위. 모델이 학습에 쓴 기간의 점수는 실제보다 좋아 보입니다.</li>{% endif %}
     <li><b>단테 신호</b>: 초록 ▲ = 확실한 저점(바닥 기법 + 하락 위험 18% 미만) · 빨강 ▲ = 강 · 회색 ▲ = 약 · 금색 ■★n = 같은 날 강 신호 n개. 나머지 저점 신호는 "저점 신호 전체 보기"로 볼 수 있습니다.</li>
     <li><b>알아둘 점</b>: 저점 신호는 진짜 저점보다 앞서 나오는 편이라 나눠서 진입하는 것을 권합니다. 위험 표시가 없다고 안전한 것은 아닙니다. 투자 권유가 아니며 수익을 보장하지 않습니다.</li>
   </ul>
@@ -59,13 +60,13 @@
       <select class="ckind" aria-label="겹쳐 그리기" title="예측 = 단테 기법 신호, AI = 20일 +20% 확률">
         <option value="none" {{ 'selected' if p.kind == 'none' }}>기법 없음</option>
         <option value="dante" {{ 'selected' if p.kind == 'dante' }}>예측 (단테 기법)</option>
-        <option value="ai" {{ 'selected' if p.kind == 'ai' }}>AI (상승 확률)</option>
+        <option value="ai" {{ 'selected' if p.kind == 'ai' }}>{{ 'AI 점수' if page == 'jb' else 'AI (상승 확률)' }}</option>
         <option value="cross" {{ 'selected' if p.kind == 'cross' }}>골든·데드크로스</option>
       </select>
       <label class="crisk-sw" title="20일 안 -10% 이하로 끝날 위험이 큰 구간을 배경 띠와 선으로 표시(일·주·월봉)"><input type="checkbox" class="crk" {{ 'checked' if p.risk }}>하락 위험</label>
       <a class="open" href="#" title="이 종목 차트(기법·지표) 열기">상세 ↗</a>
     </div>
-    <div class="cinfo"><b class="cname"></b> <span class="cprice"></span> <span class="rbadge" hidden></span></div>
+    <div class="cinfo"><b class="cname"></b> <span class="cprice"></span> <span class="rbadge" hidden></span> <span class="rbadge rb-ai" hidden></span></div>
     <div class="cchart"></div>
     <div class="cpred hint"></div>
     <div class="crisk hint"></div>

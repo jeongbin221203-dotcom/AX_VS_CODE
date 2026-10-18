@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}후보{% endblock %}
+{% block body %}
+<h1>후보 <small>연습용 · 소액 가정 — 그룹(대형·중형·소형·잡주)마다 점수가 높은 종목 5개</small></h1>
+<p class="note">종목을 시총 순위로 <b>대형주(1~100위) · 중형주(101~300위) · 소형주(301위 밖) · 잡주(301위 밖이면서 시총 1,000억 미만이거나 주가 1,000원 미만이거나 하루 거래대금 5억 미만)</b>로 나누고,
+그룹마다 따로 학습한 AI 점수로 후보를 뽑습니다. 그룹마다 과거에 가장 잘 맞았던 설정(몇 개를 살지, 위험 필터를 쓸지)이 다르고, <b>모두 "다음 날 시가에 사서 20거래일 뒤 종가에 파는" 방식이 가장 좋았습니다</b>(60·120일 보유는 더 낮았음).
+투자 권유가 아니며 수익을 보장하지 않습니다.</p>
+<h2>추천 설정을 묶었을 때 <small>그룹마다 최적 설정으로 같은 금액씩 · 걸어가며 검증 · 20일 보유</small></h2>
+<div class="scroll"><table class="grid cmp">
+<thead><tr><th>구성</th><th class="num">2022~23년</th><th class="num">2024~26년</th><th class="num">샤프(시험)</th><th class="num">최대 낙폭(시험)</th><th class="num">추가 비용 0.7%p</th><th class="num">추가 비용 1.5%p</th><th>연도별(2022~2026)</th></tr></thead><tbody>
+{% for c in comb %}<tr><td>{{ c[0] }}</td><td class="num">{{ c[1][0] }}</td><td class="num"><b>{{ c[1][1] }}</b></td><td class="num">{{ c[2] }}</td><td class="num">{{ c[3] }}</td><td class="num">{{ c[4][0] }} | {{ c[4][1] }}</td><td class="num">{{ c[5][0] }} | {{ c[5][1] }}</td><td>{{ c[6] }}%</td></tr>{% endfor %}
+<tr><td>전체 종목 평균(비교)</td><td class="num down">−11%</td><td class="num">0%</td><td class="num">-</td><td class="num">-</td><td class="num">-</td><td class="num">-</td><td>-</td></tr>
+</tbody></table></div>
+{% if not rep %}
+<p class="note">아직 결과가 없습니다. <code>python manage.py picks-train</code>(약 25분)으로 모델을 만든 뒤 <code>python manage.py picks-today</code>(약 3분)를 실행하세요. 이후에는 평일 일봉 갱신 뒤 자동으로 갱신됩니다.</p>
+{% else %}
+<p class="sumline">기준일 <b>{{ rep.date }}</b> 종가 · 점수를 낼 수 있는 종목 {{ rep.universe|won }}개 · 모델은 {{ rep.model_through }}까지 결과가 확정된 데이터로 학습{% if age > 30 %} <span class="down">(모델이 {{ age|int }}일 지났습니다 — 곧 다시 학습)</span>{% endif %}
+ · 바로가기: {% for g in order %}<a href="#g-{{ loop.index }}">{{ g }}</a>{% if not loop.last %} · {% endif %}{% endfor %}</p>
+{% for g in order %}
+{% set grp = rep.groups.get(g) if rep.groups else None %}
+{% set b = bt[g] %}
+<h2 id="g-{{ loop.index }}">{{ g }} <small>{{ b.rule }}{% if grp %} · 오늘 {{ grp.n|won }}종목{% endif %}</small></h2>
+<table class="grid cmp" style="max-width:820px"><thead><tr><th>과거 시험(연수익)</th><th class="num">2022~23년</th><th class="num">2024~26년</th></tr></thead><tbody>
+<tr><td>이 그룹 전체 평균(비교)</td><td class="num down">{{ b.avg[0] }}</td><td class="num">{{ b.avg[1] }}</td></tr>
+<tr><td><b>추천: {{ b.cfg }}</b></td><td class="num"><b>{{ b.reco[0] }}</b></td><td class="num"><b>{{ b.reco[1] }}</b></td></tr>
+</tbody></table>
+<p class="hint">연도별(2022~2026): {{ b.years }}% · 시험 기간 최대 낙폭 {{ b.mdd }} · 샤프 {{ b.sharpe }}. {{ b.note }}{% if grp and grp.risk_filter %} 오늘 후보는 하락 위험이 그룹 안 하위 50%인 종목만 대상입니다.{% endif %}</p>
+{% if grp and grp.picks %}
+<div class="scroll"><table class="grid cmp">
+<thead><tr><th class="num">순위</th><th>종목</th><th class="num">종가</th><th class="num">하루 거래대금</th><th class="num">시총(추정)</th><th class="num">점수</th><th class="num">최근 20일</th></tr></thead>
+<tbody>
+{% for p in grp.picks %}
+<tr {% if not p.main %}class="faint"{% endif %} data-href="{{ url_for('main.jb', a=p.code) }}">
+  <td class="num">{{ p.rank }}{% if p.main %} ★{% endif %}</td>
+  <td><a href="{{ url_for('main.jb', a=p.code) }}">{{ p.name }}</a> <small>{{ p.code }}{% if p.kosdaq %} · 코스닥{% endif %}</small></td>
+  <td class="num">{{ p.close|won }}</td>
+  <td class="num">{{ '%.1f'|format(p.value_eok) }}억</td>
+  <td class="num">{{ p.mcap_eok|won }}억</td>
+  <td class="num"><b>{{ '%.3f'|format(p.score) }}</b></td>
+  <td class="num {{ 'up' if (p.ret20 or 0) > 0 else 'down' }}">{{ ('%+.1f%%'|format(p.ret20 * 100)) if p.ret20 is not none else '-' }}</td>
+</tr>
+{% endfor %}
+</tbody></table></div>
+{% else %}<p class="hint">이 그룹의 오늘 후보가 아직 없습니다.</p>{% endif %}
+{% endfor %}
+<p class="hint">★ = 그 그룹의 추천 설정 종목 수(대형 5 · 중형 10 · 소형 7 · 잡주 5, 나머지는 참고). 종목 이름을 누르면 JB차트가 열립니다. 점수가 높은 종목은 최근 20일에 크게 빠진 경우가 많습니다(과하게 내린 뒤의 반등을 노리는 방식이라 "최근 20일"이 마이너스인 것이 정상입니다).</p>
+{% endif %}
+
+<h2>꼭 알아둘 점</h2>
+<ul class="aisum">
+<li>상위 5개는 우연의 영향이 큽니다. 그룹과 설정을 여러 개 비교한 뒤의 값이라 <b>실제로는 이보다 낮을 가능성이 큽니다.</b> 손절은 성과를 낮춰서 쓰지 않습니다(잡주 시험 평균 연 +45% → 손절 −10~−20%에서 +20~31%).</li>
+<li>현재 상장 종목만 있어 상장폐지·관리종목이 빠진 <b>생존 편향</b>이 있습니다. 소형주·잡주에서 가장 크게 작용합니다.</li>
+<li>상장폐지·거래정지·상하한가(사고팔 수 없는 날)와 호가 공백은 반영하지 못했습니다. 한 종목이 −60% 넘게 빠진 경우도 있었습니다.</li>
+<li>2022~2026년 한 시장 국면의 결과입니다. 소형주·잡주는 하루 거래대금이 작아(대형 약 770억 · 중형 약 80억 · 소형 약 9억 · 잡주 약 4억 원) 소량 연습용으로만 맞습니다.</li>
+</ul>
+{% endblock %}

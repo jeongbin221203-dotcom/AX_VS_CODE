@@ -123,3 +123,6 @@ h2.hi{margin-top:20px}
   .cleg2{display:none}
   #showb{margin:2px 0 8px}
 }
+.rb-ai{background:#7b4fd0}
+.cleg3{top:36px;left:8px;color:var(--mut)}.cchart.hasleft .cleg3{left:68px}
+@media (max-width:760px){.cleg3{display:none}}

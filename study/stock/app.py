@@ -19,6 +19,8 @@ def create_app():
     app.register_blueprint(combined_bp)
     from views.strategy import bp as strategy_bp
     app.register_blueprint(strategy_bp)
+    from views.picks import bp as picks_bp
+    app.register_blueprint(picks_bp)
     from views.risk import bp as risk_bp
     app.register_blueprint(risk_bp)
     from views.boom import bp as boom_bp

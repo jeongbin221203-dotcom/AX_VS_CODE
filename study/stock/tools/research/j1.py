@@ -1,0 +1,16 @@
+import os,sqlite3,numpy as np,pandas as pd
+D=pd.read_pickle(os.environ["TEMP"]+"/stk/D6.pkl")
+con=sqlite3.connect("data/stock.db")
+sym=pd.read_sql("select code,marcap from symbols",con)
+last=pd.read_sql("select p.code,p.close as close_now from prices p join (select code,max(date) d from prices group by code) m on p.code=m.code and p.date=m.d",con)
+dates=sorted(D.date.unique());print(len(dates),"날짜")
+con.execute("create temp table dts(d text primary key)");con.executemany("insert into dts values(?)",[(d,) for d in dates])
+px=pd.read_sql("select p.code,p.date,p.close from prices p join dts on p.date=dts.d",con)
+D=D.merge(px,on=["code","date"],how="left").merge(sym,on="code",how="left").merge(last,on="code",how="left")
+D["mcap_est"]=D.marcap*D.close/D.close_now
+D=D.dropna(subset=["mcap_est"])
+D["rk"]=D.groupby("date").mcap_est.rank(ascending=False,method="first")
+junk=(D.rk>300)&((D.mcap_est<1000e8)|(D.close<1000)|(D.liqv<5e8))
+D["grp"]=np.where(D.rk<=100,"대형주",np.where(D.rk<=300,"중형주",np.where(junk,"잡주","소형주")))
+print(D.groupby(["yr","grp"]).size().unstack().tail(8))
+D.to_pickle(os.environ["TEMP"]+"/stk/D6g.pkl")

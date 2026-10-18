@@ -6,7 +6,7 @@ from core import collector, db
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=["update", "toss-check", "yt-list", "yt-meta", "yt-captions", "yt-stats", "yt-clean", "backtest", "ai-train", "entry-train", "avoid-train", "surge-train", "combined-train", "strategy-train", "risk-train", "drop-train", "boom-train", "jump-train", "precursor-train", "pattern-train", "quietvol-train", "timing-train", "presignal-train", "bestday-train", "plan-train", "signals-scan", "publish-snapshot"])
+    ap.add_argument("cmd", choices=["update", "toss-check", "yt-list", "yt-meta", "yt-captions", "yt-stats", "yt-clean", "backtest", "ai-train", "entry-train", "avoid-train", "surge-train", "combined-train", "strategy-train", "risk-train", "drop-train", "picks-train", "picks-today", "picks-wf", "boom-train", "jump-train", "precursor-train", "pattern-train", "quietvol-train", "timing-train", "presignal-train", "bestday-train", "plan-train", "signals-scan", "publish-snapshot"])
     ap.add_argument("--top", type=int, default=0, help="시가총액 상위 N개")
     ap.add_argument("--codes", nargs="*", default=[])
     ap.add_argument("--all", action="store_true", help="전체 종목(관심종목 먼저)")
@@ -118,6 +118,20 @@ def main():
         rep = entry_study.run(limit=a.limit, log=lambda m: print(m, flush=True))
         for line in rep["text"]:
             print("-", line)
+        return
+    if a.cmd == "picks-train":
+        from core import picks
+        print(picks.train(log=lambda m: print(m, flush=True)))
+        return
+    if a.cmd == "picks-wf":
+        from core import picks
+        print(picks.train_walkforward(log=lambda m: print(m, flush=True)))
+        return
+    if a.cmd == "picks-today":
+        from core import picks
+        out = picks.refresh(log=lambda m: print(m, flush=True))
+        for p in out["picks"]:
+            print(p["rank"], p["code"], p["name"], p["close"], f"거래대금 {p['value_eok']}억", f"점수 {p['score']}")
         return
     if a.cmd == "drop-train":
         from core import drop_risk
