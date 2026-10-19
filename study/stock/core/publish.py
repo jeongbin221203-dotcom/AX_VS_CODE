@@ -29,8 +29,27 @@ FULL_DAYS = 90                                           # 최근 90거래일은
 
 
 def _recommended_codes():
-    """날짜 파일들에서 추천(점검 9/10↑)·강/상으로 나온 종목과 마지막으로 나온 날."""
+    """날짜 파일들에서 추천(점검 9/10↑)·강/상으로 나온 종목과 마지막으로 나온 날 + 장중 신호(추천·강/상)·오늘 할 일(살·2차 매수·보유·매도) 종목."""
     last = {}
+    extra = []
+    for src in (config.DATA_DIR / "signals_live.json",):
+        try:
+            r = json.loads(src.read_text(encoding="utf-8"))
+            d = r["meta"]["date"]
+            for k in ("pred", "ai", "high"):
+                for z in r.get(k, []):
+                    if k == "high" or z["score"] >= r["meta"].get("recommend", 0.9):
+                        extra.append((z["code"], d))
+        except (OSError, ValueError, KeyError):
+            pass
+    try:
+        a = json.loads((config.DATA_DIR / "jb_actions.json").read_text(encoding="utf-8"))
+        for g in a.get("groups", {}).values():
+            for k in ("buy", "add", "hold", "sell"):
+                for z in g.get(k, []):
+                    extra.append((z["code"], a["date"]))
+    except (OSError, ValueError, KeyError):
+        pass
     for f in sorted(DAYS.glob("*.json")):
         try:
             r = json.loads(f.read_text(encoding="utf-8"))
@@ -41,6 +60,9 @@ def _recommended_codes():
             for z in r.get(k, []):
                 if k == "high" or z["score"] >= r["meta"].get("recommend", 0.9):
                     last[z["code"]] = d
+    for code, d in extra:
+        if d > last.get(code, ""):
+            last[code] = d
     return last
 
 
@@ -322,6 +344,10 @@ def push_live(log=print) -> str:
     if not src.exists():
         return "장중 신호 없음"
     shutil.copyfile(src, LIVE)
+    try:                                                    # 장중 신호에 새로 나온 종목도 휴대폰에서 눌러 열 수 있게 차트를 만든다
+        charts(log)
+    except Exception as e:
+        log(f"차트 갱신 실패: {e}")
     return push(log)
 
 
