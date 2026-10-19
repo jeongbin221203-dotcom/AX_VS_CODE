@@ -18,12 +18,12 @@ COST = 0.003
 TOP, WEAK, GAP = 0.95, 0.90, 10
 RULES = {
     "대형주": {"entry": "strong_b50", "ret60_max": -0.165, "mkt_dd_max": -0.054, "exit": ("hold", 40),   # 2026-10-19 대형주 연구(jb_mid.py 대형주)
-              "order": {"buy_k": 0.05, "buy_wait": 10, "buy_fallback": "skip", "ladder": [0.10, 0.20], "add_limit": False}},   # 지정가 저가 매수(tools/research/jb_order.py)
-    "중형주": {"entry": "strong_b50", "liq_max": 10.3, "exit": ("ai_or_bb", 0.30, 0.20),     # 2026-10-19 중형주 연구(tools/research/jb_mid.py)
+              "order": {"buy_k": 0.05, "buy_wait": 10, "buy_fallback": "skip", "ladder": [0.10, 0.20], "add_limit": False, "hold_ext": 20}},   # 지정가 저가 매수(jb_order.py) · 고가 매도: 40일째 5일선 위면 최대 20봉 더(jb_sellhigh.py)
+    "중형주": {"entry": "strong_b50", "liq_max": 10.3, "exit": ("ai_or_bb", 0.30, 0.30),     # 고가 매도: 상단 지정가 매도 기준 수익 +20 → +30%(jb_sellhigh.py)     # 2026-10-19 중형주 연구(tools/research/jb_mid.py)
               "order": {"buy_k": 0.03, "buy_wait": 3, "buy_fallback": "skip", "ladder": [0.10, 0.20], "add_limit": False}},
-    "소형주": {"entry": "strong_b50", "exit": ("ai_or_bb", 0.40, 0.20),
+    "소형주": {"entry": "strong_b50", "exit": ("ai_or_bb", 0.40, 0.30),
               "order": {"buy_k": 0.03, "buy_wait": 3, "buy_fallback": "skip", "ladder": [0.07, 0.14], "add_limit": False}},
-    "잡주": {"entry": "strong_b50", "exit": ("ai_or_bb", 0.40, 0.20),
+    "잡주": {"entry": "strong_b50", "exit": ("ai_or_bb", 0.40, 0.30),
             "order": {"buy_k": 0.05, "buy_wait": 5, "buy_fallback": "skip", "ladder": [0.05, 0.10], "add_limit": False}},
 }
 # 2026-10-19 저가 매수(사용자 "저가 매수·고가 매도는 주식의 기본 — 무조건 적용", tools/research/jb_order.py): 신호 다음 날부터 '신호일 종가보다 k% 아래' 지정가로 며칠 기다려
@@ -52,7 +52,8 @@ def describe(group: str | None) -> tuple[str, str]:
               if r.get("order", {}).get("buy_k") else " → 다음 날 시가 매수"))
     x = r["exit"]
     if x[0] == "hold":
-        sell = f"매수 후 {x[1]}거래일째 종가에 매도"
+        ext = (r.get("order") or {}).get("hold_ext")
+        sell = f"매수 후 {x[1]}거래일째 종가에 매도" + (f"(그날 5일선 위면 최대 {ext}거래일 더 들고 있다가 5일선 아래로 마감하는 날)" if ext else "")
     else:
         sell = f"AI 점수(5봉 평균)가 {x[1] * 100:.0f}점 아래로 내려오면 그날 종가, 또는 수익 +{x[2] * 100:.0f}% 이상에서 볼린저 상단(전날 값)에 닿으면 그 가격에 매도"
     return buy, sell
@@ -272,7 +273,15 @@ def _trade_order(o, h, l, c, up, sm5, i, n, r):
         return sum(f[1] * f[2] for f in fills) / sum(f[2] for f in fills)
 
     sell, px, why = None, None, ""
+    ride, armed = od.get("ride"), None              # 고가 매도: 매도 조건이 와도 바로 팔지 않고 꺾이는 날(상단 아래·5일선 아래 마감) 종가에
+    ext = od.get("hold_ext", 0)                     # 보유형: 기간이 끝나도 5일선 위에서 오르면 최대 ext 봉 더 들고 있음
+    ma5 = lambda j: c[max(0, j - 4):j + 1].mean()   # noqa: E731
     for j in range(b + 1, n):
+        if armed is not None:
+            if (ride == "band" and np.isfinite(up[j]) and c[j] < up[j]) or (ride == "ma5" and c[j] < ma5(j)):
+                sell, px, why = j, c[j], f"수익 구간에서 볼린저 상단 도달 뒤 {'상단' if ride == 'band' else '5일선'} 아래로 마감 — 고점을 지나 종가 매도"
+                break
+            continue
         added = False
         if nxt < len(drops):
             P = entry * (1 - drops[nxt])
@@ -282,8 +291,10 @@ def _trade_order(o, h, l, c, up, sm5, i, n, r):
             elif trig is not None:
                 fills.append((j, float(o[j]), w)); nxt += 1; trig = None              # 시가 체결 — 그 뒤 장중 매도는 가능
         a = avg()
-        if x[0] == "hold" and j == b + cap:
-            sell, px, why = j, c[j], f"매수 후 {cap}거래일째 종가"
+        if x[0] == "hold" and j >= b + cap:
+            if ext and j < b + cap + ext and c[j] >= ma5(j):
+                continue                              # 아직 5일선 위 — 더 들고 있음
+            sell, px, why = j, c[j], f"매수 후 {cap}거래일째 종가" if j == b + cap else f"매수 후 {j - b}거래일 — 5일선 아래로 마감해 종가"
             break
         if not added:
             if od.get("recover") is not None and len(fills) > 1 and h[j] >= a * (1 + od["recover"]):
@@ -300,6 +311,12 @@ def _trade_order(o, h, l, c, up, sm5, i, n, r):
         if x[0] != "hold":
             u = up[j - 1]
             if not added and np.isfinite(u) and h[j] >= u and max(o[j], u) >= entry * (1 + x[2]):
+                if ride:
+                    armed = j                         # 고가 매도: 여기서 팔지 않고 꺾이는 날을 기다림
+                    if (ride == "band" and c[j] < up[j]) or (ride == "ma5" and c[j] < ma5(j)):
+                        sell, px, why = j, c[j], f"수익 +{x[2] * 100:.0f}% 이상에서 볼린저 상단 도달했으나 그날 바로 꺾여 종가 매도"
+                        break
+                    continue
                 sell, px, why = j, max(o[j], u), f"수익 +{x[2] * 100:.0f}% 이상에서 볼린저 상단 {u:,.0f}원 도달"
                 break
             if j - b >= 5 and sm5[j] < x[1]:
