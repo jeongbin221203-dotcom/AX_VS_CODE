@@ -291,5 +291,5 @@ def jb_ai(j: dict, nbars: int) -> dict:
     grp = j.get("grp")
     return {"name": "AI", "kind": "ai", "label": "AI 점수", "prob": prob, "thr": 0.95, "thr_weak": 0.90,
             "markers": [m for m in j.get("m", []) if m["date"] >= first], "latest": {"prob": now, "top": bool(now is not None and now >= 0.95)},
-            "summary": j.get("sum", ""), "rule": {"group": grp, "buy": j.get("buy"), "sell": j.get("sell"), "note": j.get("note", "")},
+            "summary": j.get("sum", ""), "action": j.get("act"), "rule": {"group": grp, "buy": j.get("buy"), "sell": j.get("sell"), "note": j.get("note", "")},
             "group": None, "note": f"▲ 매수 = {j.get('buy')}, ▼ 매도({grp or '소형주'} 규칙) = {j.get('sell')}. 규칙은 시총 구간마다 따로 고른 것입니다(학습에 쓰지 않은 구간으로 시험). " + (j.get("note") or "")}

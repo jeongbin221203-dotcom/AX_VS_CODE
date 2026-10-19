@@ -157,7 +157,8 @@ def jb_files(log=print) -> int:
             r = np.array(rets)
             summary += f" ▶ 이 종목 거래 {len(r)}건: 승률 {(r > 0).mean() * 100:.0f}% · 평균 {r.mean() * 100:+.1f}%(학습에 쓰지 않은 구간)."
         obj = {"grp": g, "d": [d for d, k in zip(dates, keep) if k], "s": [(-1 if not np.isfinite(v) else int(round(v * 1000))) for v, k in zip(score, keep) if k],
-               "m": [x for x in mk if x["date"] >= CHART_FROM], "sum": summary, "buy": buy_txt, "sell": sell_txt, "note": jb_rules.STATUS.get(g or "", "")}
+               "m": [x for x in mk if x["date"] >= CHART_FROM], "sum": summary, "buy": buy_txt, "sell": sell_txt, "note": jb_rules.STATUS.get(g or "", ""),
+               "act": jb_rules.action(list(dates), o, c, tr, pend, aux, score, g)}       # 이름 옆 배지(오늘 할 일) — PC 와 같게
         (JB / f"{code}.json").write_text(json.dumps(obj, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
         n += 1
     src = config.DATA_DIR / "jb_actions.json"
