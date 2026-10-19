@@ -149,3 +149,23 @@ mark{background:color-mix(in srgb,var(--gold) 35%,transparent);color:inherit;bor
   .grid th,.grid td{padding:12px 10px}.datebar{padding:10px 12px}
   .foot{padding:22px 16px 36px}
 }
+/* 실시간 시세 상태(static/js/live.js) */
+.live{font-size:12px;color:var(--mut);margin-left:8px;white-space:nowrap}.live.on{color:#2a8a4a;font-weight:600}
+@media (prefers-color-scheme:dark){.live.on{color:#5fcf86}}
+/* 매수·매도 표시 설명과 신호 목록 누르기(static/js/chart.js) */
+.mklegend{font-size:12px;color:var(--mut);margin:6px 2px 10px;line-height:1.6}.mklegend .b{color:var(--up);font-weight:700}.mklegend .s{color:var(--down);font-weight:700}
+.siglist .sigrow{cursor:pointer}.siglist .sigrow:hover{background:color-mix(in srgb,var(--gold) 8%,var(--surface))}.siglist .sigrow.on{background:color-mix(in srgb,var(--gold) 18%,var(--surface));box-shadow:inset 3px 0 var(--gold)}
+.tip{max-width:420px;white-space:pre-wrap}
+/* JB차트: 차트 아래 긴 설명은 두 줄만 보이고 "설명 더보기"로 펼침 */
+.cpane .cexp{max-height:3.3em;overflow:hidden;position:relative}.cpane .cexp::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1.4em;background:linear-gradient(transparent,var(--bg))}
+.cpane.expand .cexp{max-height:none}.cpane.expand .cexp::after{display:none}
+.cpane .cmore{font-size:12px;padding:2px 10px;margin:4px 0 0;min-height:0}
+/* JB차트: 차트 하나(2026-10-19) */
+.cgrid.single{grid-template-columns:minmax(0,1fr)}
+/* 신호 화면 장중 안내 */
+.livebar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.livebar form.inline{display:inline;margin:0}
+/* 신호 화면: 오늘 할 일(시총 구간별) */
+.actgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,520px),1fr));gap:14px;margin:8px 0 6px}
+.actcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;box-shadow:var(--shadow)}
+.actcard h3{margin:0 0 4px}.actcard .rule{margin:0 0 8px;font-size:12px}.actcard table{margin:6px 0}.actcard .note{margin:6px 0}
+.grph{margin:12px 0 4px;font-size:15px}

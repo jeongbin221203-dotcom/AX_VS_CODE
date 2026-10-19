@@ -55,6 +55,8 @@ def create_app():
     app.register_blueprint(predict_bp)
     from views.notes import bp as notes_bp
     app.register_blueprint(notes_bp)
+    from views.live import bp as live_bp
+    app.register_blueprint(live_bp)
 
     if config.SCHEDULER and not app.testing and not os.environ.get("PYTEST_CURRENT_TEST"):
         from core import scheduler

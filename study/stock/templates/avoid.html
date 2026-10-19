@@ -67,13 +67,13 @@
 <h2>4. 지금 피해야 할 종목 <small>거래 가능 {{ rep.today.n_universe|won }}개 중 "피함" 조건에 걸린 {{ rep.today.flagged|won }}개 — 걸린 조건 수·위험 점수 순</small></h2>
 {% if rep.today.rows %}
 <div class="scroll"><table class="grid cmp"><thead><tr><th>종목</th><th class="num">종가</th><th class="num">걸린 조건</th><th class="num">폭락(−20%↓) 위험 점수</th><th>이유</th></tr></thead><tbody>
-{% for r in rep.today.rows %}<tr data-href="{{ url_for('main.chart', code=r.code) }}"><td><a href="{{ url_for('main.chart', code=r.code) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td><td class="num">{{ r.close|won }}</td><td class="num">{{ r.n_rules }}</td>
+{% for r in rep.today.rows %}<tr data-href="{{ url_for('main.jb', a=r.code) }}"><td><a href="{{ url_for('main.jb', a=r.code) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td><td class="num">{{ r.close|won }}</td><td class="num">{{ r.n_rules }}</td>
 <td class="num {{ 'down' if r.danger > rep.today.base_danger * 2 }}"><b>{{ pct(r.danger, 0) }}</b></td><td style="white-space:normal;min-width:360px"><small>{{ r.reasons|join(' · ') }}</small></td></tr>{% endfor %}</tbody></table></div>
 {% endif %}
 {% if rep.today.top_danger %}
 <h3>조건에 안 걸려도 위험 점수가 가장 높은 종목 <small>(기준 폭락 확률 {{ pct(rep.today.base_danger, 0) }})</small></h3>
 <div class="scroll"><table class="grid cmp"><thead><tr><th>종목</th><th class="num">종가</th><th class="num">위험 점수</th><th>걸린 조건</th></tr></thead><tbody>
-{% for r in rep.today.top_danger %}<tr data-href="{{ url_for('main.chart', code=r.code) }}"><td><a href="{{ url_for('main.chart', code=r.code) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td><td class="num">{{ r.close|won }}</td><td class="num"><b>{{ pct(r.danger, 0) }}</b></td><td><small>{{ r.reasons|join(' · ') or '–' }}</small></td></tr>{% endfor %}</tbody></table></div>
+{% for r in rep.today.top_danger %}<tr data-href="{{ url_for('main.jb', a=r.code) }}"><td><a href="{{ url_for('main.jb', a=r.code) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td><td class="num">{{ r.close|won }}</td><td class="num"><b>{{ pct(r.danger, 0) }}</b></td><td><small>{{ r.reasons|join(' · ') or '–' }}</small></td></tr>{% endfor %}</tbody></table></div>
 {% endif %}
 <p class="hint">참고용입니다. 관리종목·거래정지·재무 위험 같은 가격 밖 정보는 이 자료에 없으므로, 여기서 걸리지 않아도 안전하다는 뜻이 아닙니다.</p>
 {% endif %}

@@ -70,7 +70,7 @@ def test_download_failure_falls_back_to_cache(client, monkeypatch):
 
 
 def test_compare_page_has_intraday_options(client):
-    html = client.get("/compare?a=TEST1&b=TEST1&ta=5m&tb=15m").get_data(as_text=True)
+    html = client.get("/jb?a=TEST1&b=TEST1&ta=5m&tb=15m").get_data(as_text=True)
     assert "5분봉" in html and "단타 5분·15분" in html and html.count("selected") >= 2
 
 

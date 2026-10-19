@@ -130,10 +130,11 @@ def _chart_fixture(tmp_path, monkeypatch):
 def test_snapshot_uses_local_compare_screen(tmp_path, monkeypatch):
     c = _chart_fixture(tmp_path, monkeypatch)
     assert "/jb?a=005930&amp;date=2026-10-08" in c.get("/").get_data(as_text=True)      # 목록 종목 → PC 와 같은 차트 비교 화면
-    page = c.get("/compare?a=005930&date=2026-09-30").get_data(as_text=True)
-    assert "js/compare.js" in page and "예측 (단테 기법)" in page and "AI (상승 확률)" in page and '"focus": "2026-09-30"' in page
+    page = c.get("/jb?a=005930&date=2026-09-30").get_data(as_text=True)
+    assert "js/compare.js" in page and "예측 (단테 기법)" in page and "AI 점수" in page and '"focus": "2026-09-30"' in page
     assert c.get("/chart/005930?date=2026-09-30", follow_redirects=False).status_code == 302
-    assert c.get("/compare?a=NOPE").status_code == 404 and c.get("/compare?a=005930&date=abc").status_code == 400
+    assert c.get("/jb?a=NOPE").status_code == 404 and c.get("/jb?a=005930&date=abc").status_code == 400
+    assert c.get("/compare?a=005930").status_code == 302
     j = c.get("/api/chart/005930?tf=D&bars=5000").get_json()
     assert len(j["candles"]) == 30 and j["last"]["close"] == 129 and len(j["ma"]["5"]) == 26 and j["volume"][0]["up"] is True
     w = c.get("/api/chart/005930?tf=W&bars=5000").get_json()                     # 주봉: 9/1~9/4 ... 한 주에 한 봉

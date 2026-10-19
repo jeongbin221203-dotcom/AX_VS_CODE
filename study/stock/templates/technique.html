@@ -20,14 +20,14 @@
   <button class="btn on">차트 열기</button>
 </form>
 {% if wl %}<p>관심종목:
-  {% for w in wl %}<a class="tag" href="{{ url_for('main.chart', code=w.code, tech=name) }}">{{ w.name or w.code }}</a> {% endfor %}</p>{% endif %}
+  {% for w in wl %}<a class="tag" href="{{ url_for('main.jb', a=w.code) }}">{{ w.name or w.code }}</a> {% endfor %}</p>{% endif %}
 
 <h2>오늘 이 신호가 나온 종목</h2>
 {% if found is none %}
 <p><a class="btn" href="{{ url_for('tech.page', name=name, scan=1) }}">찾기 (관심종목 + 시총 상위 {{ scan_limit }}개, 처음엔 수 초 걸림)</a></p>
 {% elif found %}
 <table class="grid"><thead><tr><th>종목</th><th class="num">종가</th><th>신호</th><th>근거</th></tr></thead><tbody>
-{% for f in found %}<tr data-href="{{ url_for('main.chart', code=f.code, tech=name) }}"><td><a href="{{ url_for('main.chart', code=f.code, tech=name) }}">{{ f.name }}</a> <small>{{ f.code }}</small></td>
+{% for f in found %}<tr data-href="{{ url_for('main.jb', a=f.code) }}"><td><a href="{{ url_for('main.jb', a=f.code) }}">{{ f.name }}</a> <small>{{ f.code }}</small></td>
 <td class="num">{{ f.close|won }}</td><td><span class="tag {{ f.side }}">{{ f.label }}</span></td><td><small>{{ f.why }}</small></td></tr>{% endfor %}
 </tbody></table>
 {% else %}<p class="note">오늘 해당 신호가 나온 종목이 없습니다.</p>{% endif %}

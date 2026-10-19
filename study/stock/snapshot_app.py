@@ -109,17 +109,17 @@ def create_app():
 
     store = snapshot_api.Store(CHARTS, META)
 
-    def side(code, set_, tf, default_set, kind, default_kind, risk=None):
+    def side(code, set_, tf, default_set, kind, default_kind, risk=None, bb=None):
         try:
             name = store.raw(code).get("n", code)
         except OSError:
             name = code
         return {"code": code, "name": name, "tf": tf if tf in ("D", "W", "M") else "D", "set": set_ if set_ in ("a", "b", "none") else default_set,
-                "kind": kind if kind in ("none", "dante", "ai", "cross") else default_kind, "risk": risk != "0"}
+                "kind": kind if kind in ("none", "both", "dante", "ai", "cross") else default_kind, "risk": risk == "1", "bb": bb != "0"}
 
     @app.get("/compare")
     def compare():
-        return _compare_page("compare")
+        return redirect("/jb" + ("?" + request.query_string.decode() if request.query_string else ""))
 
     @app.get("/jb")
     def jb():
@@ -136,15 +136,15 @@ def create_app():
         focus = (request.args.get("date") or "").strip()
         if focus and (len(focus) != 10 or not focus.replace("-", "").isdigit()):
             abort(400)
-        pa = side(a, request.args.get("sa"), request.args.get("ta"), "a", request.args.get("ka"), "dante", request.args.get("ra"))
-        pb = side(b, request.args.get("sb"), request.args.get("tb"), "b" if b == a else "a", request.args.get("kb"), "ai", request.args.get("rb"))
-        return render_template("compare.html", pa=pa, pb=pb, focus=focus, page=page, show_all=request.args.get("all") == "1", base_tpl="snapshot_base.html", rep=None, disclaimer=DISCLAIMER)
+        pa = side(a, request.args.get("sa"), request.args.get("ta"), "a", request.args.get("ka"), "both", request.args.get("ra"), request.args.get("ba"))
+        pb = side(b, request.args.get("sb"), request.args.get("tb"), "b" if b == a else "a", request.args.get("kb"), "ai", request.args.get("rb"), request.args.get("bb"))
+        return render_template("compare.html", pa=pa, pb=pb, focus=focus, page="jb", show_all=request.args.get("all") == "1", base_tpl="snapshot_base.html", rep=None, disclaimer=DISCLAIMER)
 
     @app.get("/chart/<code>")
     def chart_page(code):
         if not store.has(code):
             abort(404)
-        return redirect(f"/compare?a={code}" + (f"&date={request.args['date']}" if request.args.get("date", "").replace("-", "").isdigit() else ""))
+        return redirect(f"/jb?a={code}" + (f"&date={request.args['date']}" if request.args.get("date", "").replace("-", "").isdigit() else ""))
 
     def _tf_bars():
         tf = request.args.get("tf", "D")

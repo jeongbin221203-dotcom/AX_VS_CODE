@@ -23,10 +23,10 @@ def client(tmp_path, monkeypatch):
 
 
 def test_compare_page_has_kind_selects(client):
-    html = client.get("/compare?a=TEST1&b=TEST1").get_data(as_text=True)
-    assert "예측 (단테 기법)" in html and "AI (상승 확률)" in html
+    html = client.get("/jb?a=TEST1&b=TEST1").get_data(as_text=True)
+    assert "예측 (단테 기법)" in html and "AI 점수" in html
     assert html.count('value="dante" selected') == 1 and html.count('value="ai" selected') == 1   # 기본: 왼쪽 예측, 오른쪽 AI
-    html2 = client.get("/compare?a=TEST1&b=TEST1&ka=ai&kb=none").get_data(as_text=True)
+    html2 = client.get("/jb?a=TEST1&b=TEST1&ka=ai&kb=none").get_data(as_text=True)
     assert 'value="none" selected' in html2
 
 

@@ -539,6 +539,25 @@ def _stats(rets):
     return {"n": int(len(r)), "win": round(float((r > 0).mean()), 3), "mean": round(float(r.mean()), 4)}
 
 
+def chart_score_recent(df: pd.DataFrame, code: str, mkt=None, last: int = 30, tail: int = 600):
+    """최근 last 봉의 JB차트 AI 점수 [(날짜, 점수 0~1)] — 신호 화면(오늘 살 종목·매도 신호)용. 최종 모델만 쓴다(오늘·최근은 학습에 안 쓴 구간).
+    특징은 마지막 tail 봉만으로 계산 — 전체 기록으로 계산한 값과 같음을 확인함(2026-10-19, 600봉). 모델이 없으면 None."""
+    obj = load_models()
+    if obj is None or "chart" not in obj or len(df) < ai.MIN_BARS:
+        return None
+    with db.get_conn() as c:
+        r = c.execute("SELECT market FROM symbols WHERE code=?", (code,)).fetchone()
+    kq = 1.0 if r and (r["market"] or "").startswith("KOSDAQ") else 0.0
+    d = df.iloc[-tail:]
+    F = stock_frame(d, kq, mkt)
+    X = F[obj["chart_cols"]].astype("float32").iloc[-last:]
+    ok = np.isfinite(F["ret60"].to_numpy()[-last:])
+    s = np.full(len(X), np.nan)
+    if ok.any():
+        s[ok] = _calibrate(obj["chart_q"], _score_four(obj["chart"], X[ok]))
+    return [(t.strftime("%Y-%m-%d"), float(v)) for t, v in zip(X.index, s)]
+
+
 def ai_chart(df: pd.DataFrame, code: str, tf: str = "D", bars: int = 750, mkt=None):
     """JB차트의 AI 점수(0~100%)와 매수·매도 표시. 점수 = 차트 지표 88개로 만든 모델 4개의 평균 백분위.
     매수 = 점수가 95점(강)·90점(약)을 처음 넘은 다음 날 시가, 매도 = 매수 후 20거래일째 종가. 과거 표시는 해마다 다시 학습한 모델(학습에 안 쓴 구간)로 계산한다."""
@@ -562,78 +581,65 @@ def ai_chart(df: pd.DataFrame, code: str, tf: str = "D", bars: int = 750, mkt=No
         if np.isfinite(score[i]):
             seen[bars_of[k]] = float(score[i])
     prob = [{"time": d, "value": round(v, 4)} for d, v in seen.items()]
-    # 매수 신호(강·약) → 다음 거래일 시가 매수 → 20거래일째 종가 매도
-    o_arr, c_arr = df["open"].to_numpy(float), df["close"].to_numpy(float)
-    sc = np.nan_to_num(score, nan=0.0)
+    # 매수·매도 = 시총 구간별 규칙(core/jb_rules) — 신호 화면의 '오늘 살 종목'·'매도 신호'와 같은 계산
+    from core import jb_rules
+    cur = load_today() or {}
+    info = (cur.get("scores") or {}).get(code)
+    grp = info[0] if info else None
+    o_arr, h_arr, l_arr, c_arr = (df[k].to_numpy(float) for k in ("open", "high", "low", "close"))
+    tr, pend_i, _bb = jb_rules.simulate(o_arr, h_arr, l_arr, c_arr, score, grp, ok=oos & np.isfinite(score))
+    buy_txt, sell_txt = jb_rules.describe(grp)
     markers, trades, pending = [], [], None
-    last_sig, last_tier = -10**9, ""
-    for i in range(max(start - HOLD_DAYS - 1, 0), n):
-        prev = sc[i - 1] if i > 0 else 0.0
-        strong, weak = sc[i] >= AI_TOP and prev < AI_TOP, sc[i] >= AI_WEAK and prev < AI_WEAK
-        if not (strong or weak):
-            continue
-        tier = "강" if sc[i] >= AI_TOP else "약"
-        if i - last_sig < SIGNAL_GAP and not (strong and last_tier == "약"):
-            continue
-        last_sig, last_tier = i, tier
-        b, s_ = i + 1, i + 1 + HOLD_DAYS
-        name = "매수" if tier == "강" else "약매수"
-        if b >= n:                                   # 오늘 신호 — 내일 시가에 매수
-            pending = {"state": "buy_tomorrow", "tier": tier, "signal": dates[i], "score": round(float(score[i]) * 100)}
-            continue
+    for i, b, j, px, ret, why in tr:
         if b >= start:
-            markers.append({"date": predict._to_bar([dates[b]], bar_index)[0], "side": "buy", "tier": tier, "label": name,
-                            "why": f"{dates[i]} AI 점수 {score[i] * 100:.0f}점({'95' if tier == '강' else '90'}점 상향 돌파) → {dates[b]} 시가 {o_arr[b]:,.0f}원에 매수"})
-        if s_ < n:
-            ret = c_arr[s_] / o_arr[b] - 1 - 0.003
-            trades.append({"buy": dates[b], "buy_px": float(o_arr[b]), "sell": dates[s_], "sell_px": float(c_arr[s_]), "ret": round(float(ret), 4), "tier": tier,
-                           "seen": bool(not oos[i])})
-            if s_ >= start:
-                markers.append({"date": predict._to_bar([dates[s_]], bar_index)[0], "side": "sell", "tier": tier, "label": f"매도 {ret * 100:+.0f}%",
-                                "why": f"{dates[b]} 매수 후 {HOLD_DAYS}거래일째 종가 {c_arr[s_]:,.0f}원에 매도 (비용 포함 {ret * 100:+.1f}%)"})
-        else:                                        # 아직 보유 중 — 매도 예정일(영업일 기준 근사)
-            due = (df.index[-1] + pd.offsets.BDay(s_ - (n - 1))).strftime("%Y-%m-%d")
-            pending = {"state": "holding", "tier": tier, "signal": dates[i], "buy": dates[b], "buy_px": float(o_arr[b]), "due": due,
-                       "now_ret": round(float(c_arr[-1] / o_arr[b] - 1), 4), "days_left": int(s_ - (n - 1))}
+            markers.append({"date": predict._to_bar([dates[b]], bar_index)[0], "side": "buy", "tier": "강", "label": "매수",
+                            "why": f"{dates[i]} AI 점수 {score[i] * 100:.0f}점(95점 상향 돌파) · 볼린저 가운데 아래 → {dates[b]} 시가 {o_arr[b]:,.0f}원에 매수"})
+        if j is not None:
+            trades.append({"buy": dates[b], "buy_px": float(o_arr[b]), "sell": dates[j], "sell_px": px, "ret": round(ret, 4), "tier": "강", "seen": False})
+            if j >= start:
+                markers.append({"date": predict._to_bar([dates[j]], bar_index)[0], "side": "sell", "tier": "강", "label": f"매도 {ret * 100:+.0f}%",
+                                "why": f"{dates[b]} 매수 → {dates[j]} {why}, {px:,.0f}원에 매도 (비용 포함 {ret * 100:+.1f}%)"})
+        else:
+            pending = {"state": "holding", "tier": "강", "signal": dates[i], "buy": dates[b], "buy_px": float(o_arr[b]),
+                       "now_ret": round(float(c_arr[-1] / o_arr[b] - 1), 4), "days": int(n - 1 - b)}
+    if pend_i is not None:
+        pending = {"state": "buy_tomorrow", "tier": "강", "signal": dates[pend_i], "score": round(float(score[pend_i]) * 100)}
     # 표시 구간의 정확도: 이 차트의 거래 결과 + 같은 기간 아무 날 사서 20일 보유한 평균
     valid_i = np.flatnonzero(np.isfinite(score[start:]))
     s0 = start + int(valid_i[0]) if len(valid_i) else start          # 점수가 있는 첫 날(걸어가며 검증 모델이 없는 해는 점수가 없다)
     shown = [t for t in trades if t["buy"] >= dates[s0]]
     idx = np.arange(s0, n - HOLD_DAYS - 1)
     base = float(np.mean(c_arr[idx + 1 + HOLD_DAYS] / o_arr[idx + 1] - 1 - 0.003)) if len(idx) else None
-    accuracy = {"all": _stats([t["ret"] for t in shown]), "strong": _stats([t["ret"] for t in shown if t["tier"] == "강"]),
-                "weak": _stats([t["ret"] for t in shown if t["tier"] == "약"]), "base": None if base is None else round(base, 4),
-                "oos": bool(shown and all(not t["seen"] for t in shown)), "from": dates[s0]}
+    accuracy = {"all": _stats([t["ret"] for t in shown]), "strong": _stats([t["ret"] for t in shown]), "weak": None,
+                "base": None if base is None else round(base, 4), "oos": True, "from": dates[s0], "group": grp}
     now = float(score[-1]) if np.isfinite(score[-1]) else None
-    cur = load_today() or {}
-    info = (cur.get("scores") or {}).get(code)
     group = {"name": info[0], "rank": info[2], "n": info[3], "date": cur.get("date")} if info else None
     if now is None:
         summary = "AI 점수를 계산할 데이터가 부족합니다(250봉 이상 필요)."
     else:
-        summary = f"오늘 AI 점수 {now * 100:.0f}점" + (" — 강한 매수 기준(95점) 위 ✔" if now >= AI_TOP else (" — 약한 매수 기준(90점) 위" if now >= AI_WEAK else " (매수 기준 90·95점)")) + "."
+        summary = f"오늘 AI 점수 {now * 100:.0f}점" + (" — 매수 기준(95점) 위 ✔" if now >= AI_TOP else " (매수 기준 95점 + 볼린저 가운데선 아래)") + "."
         if group:
             summary += f" 그룹({group['name']}) 안 후보 순위 {group['rank']}위/{group['n']}종목(상위 {group['rank'] / group['n'] * 100:.0f}%, {group['date']} 기준)."
     through = obj.get("through", "")
     if pending:
-        kind = "강한" if pending["tier"] == "강" else "약한"
         if pending["state"] == "buy_tomorrow":
-            summary += f" ▶ {kind} 매수 신호: {pending['signal']} 점수 {pending['score']}점 → 다음 거래일 시가에 매수, 매수 후 {HOLD_DAYS}거래일째 종가에 매도."
+            summary += f" ▶ 매수 신호: {pending['signal']} 점수 {pending['score']}점 → 다음 거래일 시가에 매수({grp or '구간 미정'} 규칙)."
         else:
-            summary += (f" ▶ 보유 중({kind} 신호): {pending['buy']} 시가 {pending['buy_px']:,.0f}원 매수({pending['now_ret'] * 100:+.1f}%) → 약 {pending['due']} 종가에 매도 예정"
-                        f"(앞으로 {pending['days_left']}거래일).")
-    elif now is not None and now < AI_WEAK:
-        summary += " ▶ 지금은 매수 신호가 없습니다(90점 미만)."
+            summary += f" ▶ 보유 중: {pending['buy']} 시가 {pending['buy_px']:,.0f}원 매수({pending['now_ret'] * 100:+.1f}%, {pending['days']}거래일째) — 매도 조건: {sell_txt}."
+    elif now is not None and now < AI_TOP:
+        summary += " ▶ 지금은 매수 신호가 없습니다(95점 미만)."
     a = accuracy["all"]
     if a:
-        summary += (f" ▶ 이 차트({accuracy['from']}~)의 거래 {a['n']}건: 승률 {a['win'] * 100:.0f}% · 평균 {a['mean'] * 100:+.1f}%"
+        summary += (f" ▶ 이 차트({accuracy['from']}~)의 거래 {a['n']}건({grp or '소형주'} 규칙): 승률 {a['win'] * 100:.0f}% · 평균 {a['mean'] * 100:+.1f}%"
                     + (f" (같은 기간 아무 날 사서 20일 보유하면 평균 {accuracy['base'] * 100:+.1f}%)" if accuracy["base"] is not None else "")
-                    + (" — 모두 학습에 쓰지 않은 구간(해마다 다시 학습한 모델)." if accuracy["oos"] else " — 일부는 모델이 학습에 쓴 구간이라 실제보다 좋게 나옵니다."))
+                    + " — 모두 학습에 쓰지 않은 구간(해마다 다시 학습한 모델).")
     wf_note = (f"{WF_FIRST}년 이후의 과거 표시는 해마다 전 해 9월까지의 데이터로 다시 학습한 모델로 계산해 학습에 쓰지 않은 구간입니다(그 이전 해는 점수 없음)."
                if wf else f"모델은 {through}까지 결과가 확정된 데이터로 학습해 그 이전 구간은 모델이 본 데이터라 실제보다 좋아 보입니다(python manage.py picks-wf 로 걸어가며 검증 모델을 만들면 해결).")
     return {"name": "AI", "kind": "ai", "label": "AI 점수", "prob": prob, "thr": AI_TOP, "thr_weak": AI_WEAK, "markers": markers,
             "latest": {"prob": now, "top": bool(now is not None and now >= AI_TOP)},
             "trades": trades[-12:], "pending": pending, "accuracy": accuracy, "backtest": BACKTEST_NOTE, "wf": bool(wf),
-            "group": group, "through": through, "summary": summary, "rule": None,
+            "group": group, "through": through, "summary": summary, "rule": {"group": grp, "buy": buy_txt, "sell": sell_txt, "note": jb_rules.STATUS.get(grp or "", "")},
             "note": "선 = 날짜마다 그날까지의 정보로 계산한 AI 점수(차트 지표 88개 · 20일 순위·시장+8%p 확률·초과수익·60일 순위 모델 4개의 평균 백분위). 분홍 점선 = 95점(강한 매수), "
-                    "▲ 매수 = 점수가 95점(약한 신호는 90점)을 처음 넘은 다음 날 시가, ▼ 매도 = 매수 후 20거래일째 종가(글자 = 그 거래의 수익률). " + BACKTEST_NOTE + " " + wf_note}
+                    f"▲ 매수 = {buy_txt}, ▼ 매도({grp or '소형주'} 규칙) = {sell_txt}(글자 = 그 거래의 수익률). "
+                    "규칙은 시총 구간(대형·중형·소형·잡주)마다 따로 고른 것입니다(학습에 쓰지 않은 구간, 2017~2021년과 2022년 이후 모두 예전 '20일 보유' 규칙보다 나음 — 다만 두 기간을 보고 고른 규칙이라 실제보다 좋게 나올 수 있음). "
+                    + jb_rules.STATUS.get(grp or "", "") + " " + wf_note}

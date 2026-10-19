@@ -79,12 +79,10 @@ def test_technique_api(client):
     assert client.get("/api/technique/T1?name=이평선&tf=X").status_code == 400
 
 
-def test_chart_page_prechecks_defaults_and_honours_query(client):
-    html = client.get("/chart/T1").get_data(as_text=True)
-    assert 'class="btn tech on" data-tech="이평선"' in html and 'data-tech="캔들"' in html
-    assert 'class="btn tech on" data-tech="캔들"' not in html
-    html = client.get("/chart/T1?tech=캔들").get_data(as_text=True)
-    assert 'class="btn tech on" data-tech="캔들"' in html and 'class="btn tech on" data-tech="이평선"' not in html
+def test_chart_page_redirects_to_jb(client):
+    """개별 차트 화면은 지웠다 — 예전 주소는 JB차트로(기법 선택 tech 는 버림)."""
+    r = client.get("/chart/T1?tech=캔들")
+    assert r.status_code == 302 and "/jb?a=T1" in r.headers["Location"] and "tech" not in r.headers["Location"]
 
 
 def test_technique_pages(client):
@@ -162,21 +160,15 @@ def test_chart_payload_has_both_ma_sets(client):
     assert j["ma"]["14"] and j["ma"]["224"]
 
 
-def test_ma_preset_param(client):
-    for v, on in (("a", "a"), ("b", "b"), ("ab", "ab"), ("none", "none"), ("zzz", "a")):
-        html = client.get(f"/chart/T1?ma={v}").get_data(as_text=True)
-        assert f'class="btn on" data-set="{on}"' in html
-
-
 def test_compare_page(client):
-    html = client.get("/compare?a=T1").get_data(as_text=True)
+    html = client.get("/jb?a=T1").get_data(as_text=True)
     assert 'data-side="a"' in html and 'data-side="b"' in html
     assert '<option value="b" selected>' in html          # 같은 종목이면 오른쪽은 14·28·56 세트
-    html = client.get("/compare?a=T1&b=T1&sa=none&sb=a&tb=W").get_data(as_text=True)
+    html = client.get("/jb?a=T1&b=T1&sa=none&sb=a&tb=W").get_data(as_text=True)
     assert '<option value="W" selected>' in html and '<option value="none" selected>' in html
-    assert client.get("/compare?a=bad;code").status_code == 400
-    assert client.get("/compare?a=T1&b=%3Cx%3E").status_code == 400
-    assert "차트 비교" in client.get("/").get_data(as_text=True)
+    assert client.get("/jb?a=bad;code").status_code == 400
+    assert client.get("/jb?a=T1&b=%3Cx%3E").status_code == 400
+    assert "JB차트" in client.get("/").get_data(as_text=True) and "차트 비교</a>" not in client.get("/").get_data(as_text=True)
 
 
 def acc_series():

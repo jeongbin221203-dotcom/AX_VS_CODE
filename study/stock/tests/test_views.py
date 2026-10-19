@@ -22,14 +22,14 @@ def client(tmp_path, monkeypatch):
 
 
 def test_pages_ok(client):
-    for url in ("/", "/watch", "/chart/TEST1", "/data"):
+    for url in ("/", "/watch", "/jb?a=TEST1", "/data"):
         assert client.get(url).status_code == 200
 
 
 def test_static_urls_carry_version(client):
-    html = client.get("/compare?a=TEST1").get_data(as_text=True)
+    html = client.get("/jb?a=TEST1").get_data(as_text=True)
     assert "js/compare.js?v=" in html and "css/app.css?v=" in html      # 고친 JS·CSS 를 브라우저가 옛 캐시로 쓰지 않게
-    assert 'id="same" checked' in html
+    assert 'data-side="a"' in html and 'data-side="b"' not in html          # 차트 하나(2026-10-19)
 
 
 def test_chart_api(client):

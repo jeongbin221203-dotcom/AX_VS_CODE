@@ -33,7 +33,7 @@
 <h2>4. 오늘 패턴 점수 상위 <small>{{ td.date }} 종가 기준 · 거래 가능 {{ td.n|won }}종목</small></h2>
 {% if td.rows %}
 <div class="scroll"><table class="grid cmp"><thead><tr><th>종목</th><th class="num">종가</th><th class="num">20일 안 급등 확률</th><th>패턴</th><th>기법 신호</th><th class="num">60일 안 매집봉</th><th class="num">250일 안 급등</th><th class="num">224일선 대비</th><th class="num">변동성</th></tr></thead><tbody>
-{% for r in td.rows %}<tr data-href="{{ url_for('main.chart', code=r.code) }}"><td><a href="{{ url_for('main.chart', code=r.code) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td><td class="num">{{ r.close|won }}</td><td class="num"><b>{{ pct(r.prob, 0) }}</b></td><td><small>{{ r.patterns|join(' · ') }}</small></td><td><small>{{ r.signals|join(' · ') }}</small></td><td class="num">{{ r.acc_60n|int }}</td><td class="num">{{ r.n_j250|int }}회</td><td class="num">{{ pct(r.dist224, 0, true) }}</td><td class="num">{{ pct(r.atrp, 1) }}</td></tr>{% endfor %}</tbody></table></div>
+{% for r in td.rows %}<tr data-href="{{ url_for('main.jb', a=r.code) }}"><td><a href="{{ url_for('main.jb', a=r.code) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td><td class="num">{{ r.close|won }}</td><td class="num"><b>{{ pct(r.prob, 0) }}</b></td><td><small>{{ r.patterns|join(' · ') }}</small></td><td><small>{{ r.signals|join(' · ') }}</small></td><td class="num">{{ r.acc_60n|int }}</td><td class="num">{{ r.n_j250|int }}회</td><td class="num">{{ pct(r.dist224, 0, true) }}</td><td class="num">{{ pct(r.atrp, 1) }}</td></tr>{% endfor %}</tbody></table></div>
 <p class="hint">확률은 과거 평균이지 예측이 아니며, 점수가 높은 종목은 변동성·거래정지 위험도 높습니다.</p>
 {% else %}<p class="note">오늘 데이터가 없습니다.</p>{% endif %}
 {% endif %}

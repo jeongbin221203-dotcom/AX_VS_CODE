@@ -10,8 +10,8 @@
   <thead><tr><th>종목</th><th class="num">현재가</th><th class="num">등락</th><th class="num">거래량</th><th>최근 신호</th></tr></thead>
   <tbody>
   {% for it in items %}
-  <tr data-href="{{ url_for('main.chart', code=it.code) }}">
-    <td><a href="{{ url_for('main.chart', code=it.code) }}">{{ it.name }}</a> <small>{{ it.code }}</small></td>
+  <tr data-href="{{ url_for('main.jb', a=it.code) }}">
+    <td><a href="{{ url_for('main.jb', a=it.code) }}">{{ it.name }}</a> <small>{{ it.code }}</small></td>
     {% if it.last %}
     <td class="num">{{ it.last.close|won }}</td>
     <td class="num {{ 'up' if it.last.change > 0 else 'down' if it.last.change < 0 }}">{{ '%+.2f'|format(it.last.change) }}%</td>

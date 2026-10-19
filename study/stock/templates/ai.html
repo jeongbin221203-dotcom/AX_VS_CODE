@@ -127,7 +127,7 @@
 {% for key, h in horizons %}{% if h.picks %}
 <details {{ 'open' if key == 'mid' }}><summary><b>{{ h.title }}</b> — AI 확률 상위 (이 기간 AUC {{ '%.2f'|format(h.auc) }}{{ ' · 예측력 낮음' if h.auc < 0.55 }})</summary>
 <div class="scroll"><table class="grid cmp"><thead><tr><th>종목</th><th class="num">종가</th><th class="num">확률</th><th>이유 (그 특징이 확률을 올린 정도)</th></tr></thead><tbody>
-{% for r in h.picks %}<tr data-href="{{ url_for('main.chart', code=r.code) }}"><td><a href="{{ url_for('main.chart', code=r.code) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td>
+{% for r in h.picks %}<tr data-href="{{ url_for('main.jb', a=r.code) }}"><td><a href="{{ url_for('main.jb', a=r.code) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td>
 <td class="num">{{ r.close|won }}</td><td class="num"><b>{{ pct(r.prob, 1) }}</b></td><td style="white-space:normal;min-width:420px"><small>{{ r.reason }}</small></td></tr>{% endfor %}
 </tbody></table></div></details>
 {% endif %}{% endfor %}
@@ -148,7 +148,7 @@
 <h2>9. 오늘 AI 점수 상위 <small>가장 최근 거래일 기준, 거래 가능 종목 — 참고용, 매수 추천이 아닙니다</small></h2>
 {% if rep.today %}
 <div class="scroll"><table class="grid cmp"><thead><tr><th>종목</th><th class="num">종가</th><th class="num">AI 확률(+20%)</th><th class="num">거래량 ÷20일</th><th class="num">20일 수익률</th><th class="num">52주 고점 대비</th></tr></thead><tbody>
-{% for r in rep.today %}<tr data-href="{{ url_for('main.chart', code=r.code) }}"><td><a href="{{ url_for('main.chart', code=r.code) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td>
+{% for r in rep.today %}<tr data-href="{{ url_for('main.jb', a=r.code) }}"><td><a href="{{ url_for('main.jb', a=r.code) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td>
 <td class="num">{{ r.close|won }}</td><td class="num"><b>{{ pct(r.prob, 1) }}</b></td><td class="num">{{ '%.1f'|format(r.volratio) if r.volratio is not none else '–' }}배</td>
 <td class="num">{{ pct(r.ret20, 0, true) }}</td><td class="num">{{ pct(r.nh250, 0, true) }}</td></tr>{% endfor %}
 </tbody></table></div>

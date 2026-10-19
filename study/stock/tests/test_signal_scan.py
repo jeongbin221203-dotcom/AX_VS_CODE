@@ -61,8 +61,8 @@ def test_for_date_past_has_outcomes(client):
     assert "<b>2025-05-30</b>" in html and "그 뒤 실제 결과" in html and "2025-06-01은 거래일이 아니라" in html
     assert client.get("/?date=2025-6-1").status_code == 400
     assert "/jb?a=TEST1&amp;date=2025-05-30" in html or "/jb?a=TEST2&amp;date=2025-05-30" in html   # 종목을 누르면 그날 차트로
-    assert '"focus": "2025-05-30"' in client.get("/compare?a=TEST1&date=2025-05-30").get_data(as_text=True)
-    assert '"focus": ""' in client.get("/compare?a=TEST1&date=bad").get_data(as_text=True)
+    assert '"focus": "2025-05-30"' in client.get("/jb?a=TEST1&date=2025-05-30").get_data(as_text=True)
+    assert '"focus": ""' in client.get("/jb?a=TEST1&date=bad").get_data(as_text=True)
 
 
 def test_home_recommends_90_percent(client):
@@ -121,10 +121,11 @@ def test_home_without_scan(client):
 
 
 def test_jb_chart_page_and_links(client):
-    """JB차트(/jb)는 차트 비교와 같은 화면 — 메뉴·서로 가는 링크·신호 화면의 종목 링크."""
+    """차트는 JB차트(/jb) 하나 — 예전 차트 비교(/compare)·개별 차트(/chart/<코드>) 주소는 JB차트로 넘긴다(2026-10-19)."""
     jb = client.get("/jb?a=TEST1").get_data(as_text=True)
-    cp = client.get("/compare?a=TEST1").get_data(as_text=True)
-    assert "<title>JB차트" in jb and "<title>차트 비교" in cp
-    assert 'id="xlink"' in jb and 'data-target="compare"' in jb and 'data-target="jb"' in cp
-    assert ">JB차트</a>" in cp and ">차트 비교</a>" in jb          # 메뉴에 둘 다
-    assert jb.index(">JB차트</a>") < jb.index(">차트 비교</a>")      # 신호 바로 옆
+    assert "<title>JB차트" in jb and ">JB차트</a>" in jb and ">차트 비교</a>" not in jb and 'id="xlink"' not in jb
+    r = client.get("/compare?a=TEST1&ta=W")
+    assert r.status_code == 302 and r.headers["Location"].endswith("/jb?a=TEST1&ta=W")
+    r = client.get("/chart/TEST1?date=2025-05-30")
+    assert r.status_code == 302 and r.headers["Location"].endswith("/jb?a=TEST1&date=2025-05-30")
+    assert 'class="cbb" checked' in jb and 'class="crk" >' in jb            # 볼린저 기본 켬 · 하락 위험 기본 끔

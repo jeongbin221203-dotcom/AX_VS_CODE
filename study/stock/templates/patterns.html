@@ -49,7 +49,7 @@
 <div class="scroll"><table class="grid cmp"><thead><tr><th>종목</th><th class="num">종가</th>
 {% if key == 'rebound' %}<th class="num">120일 고점 대비</th><th class="num">저점 대비 반등</th><th class="num">저점 후 경과</th><th class="num">저점 유지(hl10)</th><th class="num">20일선 돌파 후</th><th class="num">거래량 5일÷20일</th>
 {% else %}<th class="num">20일선 대비</th><th class="num">20일 고점 대비</th><th class="num">52주 고점 대비</th><th class="num">가격 폭(20일)</th><th class="num">거래량 마름</th><th class="num">20일 수익률</th>{% endif %}</tr></thead><tbody>
-{% for r in p.today %}<tr data-href="{{ url_for('main.chart', code=r.code) }}"><td><a href="{{ url_for('main.chart', code=r.code) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td><td class="num">{{ r.close|won }}</td>
+{% for r in p.today %}<tr data-href="{{ url_for('main.jb', a=r.code) }}"><td><a href="{{ url_for('main.jb', a=r.code) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td><td class="num">{{ r.close|won }}</td>
 {% if key == 'rebound' %}<td class="num">{{ pct(r.dd120, 0, true) }}</td><td class="num">{{ pct(r.rebound60, 0, true) }}</td><td class="num">{{ '%.0f'|format(r.low_age) if r.low_age is not none else '–' }}봉</td><td class="num">{{ pct(r.hl10, 1, true) }}</td><td class="num">{{ '%.0f'|format(r.cross20) if r.cross20 is not none else '–' }}봉</td><td class="num">{{ '%.1f'|format(r.vr5) if r.vr5 is not none else '–' }}배</td>
 {% else %}<td class="num">{{ pct(r.dist20, 1, true) }}</td><td class="num">{{ pct(r.hh20_gap, 1, true) }}</td><td class="num">{{ pct(r.nh250, 1, true) }}</td><td class="num">{{ pct(r.range20, 0) }}</td><td class="num">{{ '%.2f'|format(r.vdry10) if r.vdry10 is not none else '–' }}</td><td class="num">{{ pct(r.ret20, 0, true) }}</td>{% endif %}</tr>{% endfor %}
 </tbody></table></div>

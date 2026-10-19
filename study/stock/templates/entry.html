@@ -82,7 +82,7 @@
   그래서 아래 순위는 시장 효과를 뺀 <b>종목 고유 점수</b>이고, 확률은 시험 기간의 실제 비율에 맞춰 보정한 값입니다. 시장 전체의 방향은 위 2장 표를 보세요.{% endif %}</p>{% endif %}
 {% if rep.picks %}
 <div class="scroll"><table class="grid cmp"><thead><tr><th>종목</th><th class="num">종가</th><th class="num">상승 확률(보정)</th><th class="num">+10% 확률</th><th class="num">−10% 확률</th><th class="num">20일 수익률</th><th>이유 (그 특징이 상승 확률을 올린 정도)</th></tr></thead><tbody>
-{% for r in rep.picks %}<tr data-href="{{ url_for('main.chart', code=r.code) }}"><td><a href="{{ url_for('main.chart', code=r.code) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td><td class="num">{{ r.close|won }}</td>
+{% for r in rep.picks %}<tr data-href="{{ url_for('main.jb', a=r.code) }}"><td><a href="{{ url_for('main.jb', a=r.code) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td><td class="num">{{ r.close|won }}</td>
 <td class="num"><b>{{ pct(r.p_up, 0) }}</b></td><td class="num">{{ pct(r.p_big_up, 0) }}</td><td class="num">{{ pct(r.p_big_dn, 0) }}</td><td class="num">{{ pct(r.ret20, 0, true) }}</td><td style="white-space:normal;min-width:380px"><small>{{ r.reason }}</small></td></tr>{% endfor %}
 </tbody></table></div>
 <p class="hint">확률은 시험 기간의 보정과 비교해 해석하세요. 위 1장의 십분위 표에서 "AI 예측 상승 확률"과 "실제 오른 비율"이 얼마나 일치했는지가 이 확률을 믿을 수 있는 정도입니다.</p>

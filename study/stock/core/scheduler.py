@@ -1,4 +1,5 @@
 """장 마감 후 자동 갱신: 평일 UPDATE_AT(기본 16:10) 이후 하루 한 번 전체 종목 일봉을 이어 받는다.
+장중(평일 09:10~15:35)에는 30분마다 오늘 미완성 일봉으로 신호를 다시 훑는다(core/live_scan.py, STOCK_LIVE_SCAN=0 이면 끔).
 
 놓친 갱신은 앱이 켜지는 즉시 따라잡는다(PC 가 꺼져 있었거나 갱신이 실패한 경우) — 가장 최근 평일 16:10 이후의 갱신이 없으면 due.
 휴대폰(Render) 게시(STOCK_PUBLISH=1)는 실패하면 PUBLISH_RETRY 초마다 다시 시도한다(신호 날짜가 게시된 날짜와 같아질 때까지).
@@ -56,7 +57,13 @@ def run_update(limit: int = 0) -> dict:
             if picks.wf_stale():                                 # 과거 차트용 걸어가며 검증 모델은 1년에 한 번(약 20분)
                 picks.train_walkforward(log=lambda m: _state.update(msg=f"걸어가며 검증 모델: {m}"))
         except Exception as e:
-            _state["msg"] += f" · 잡주 후보 실패: {e}"
+            _state["msg"] += f" · 잡주 후보 실패: {e}
+        try:                                                     # 신호 화면 '오늘 할 일'(시총 구간별 규칙: 살 종목·보유 중·매도 신호)
+            from core import jb_daily
+            _state["msg"] += " · 오늘 할 일 계산"
+            jb_daily.run(log=lambda m: _state.update(msg=f"오늘 할 일: {m}"))
+        except Exception as e:
+            _state["msg"] += f" · 오늘 할 일 실패: {e}""
         try:                                                     # 하락 위험·전망 모델은 한 달마다 새 데이터로 다시 학습
             from core import drop_risk
             _state["msg"] += " · 위험 모델 점검"
@@ -139,6 +146,10 @@ def start_background(check_every: int = 60):
                 elif not _state["running"] and publish_due() and time.time() - _pub["last_try"] >= PUBLISH_RETRY:
                     _pub["last_try"] = time.time()                     # 게시만 실패한 경우 — 갱신은 다시 하지 않고 게시만 재시도
                     _state["msg"] = "스냅샷 게시 재시도: " + run_publish()
+                elif not _state["running"] and os.environ.get("STOCK_LIVE_SCAN", "1") == "1":
+                    from core import live_scan                              # 장중(평일 09:10~15:35) 30분마다 오늘 미완성 봉으로 신호를 다시 훑는다
+                    if live_scan.due():
+                        live_scan.start_thread()
             except Exception as e:  # 스레드가 죽지 않게
                 _state["msg"] = f"스케줄러 오류: {e}"
                 _pub["last_try"] = time.time()
