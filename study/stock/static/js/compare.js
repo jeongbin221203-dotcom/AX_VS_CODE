@@ -98,7 +98,7 @@
     if (pane.riskEv && pane.riskEv[p.time]) tip.textContent += '\n' + pane.riskEv[p.time];
     var sg = pane.sigMap && pane.sigMap[p.time];
     if (sg) tip.textContent += '\n' + sg.slice(0, 6).map(function (m) {   // 그 봉의 매수·매도 신호와 이유
-      return (m.side === 'sell' ? '▼ ' : '▲ ') + m.label + (m.strong === true ? ' (강)' : m.strong === false ? ' (약)' : '') + (m.why ? ' — ' + String(m.why).slice(0, 70) : '');
+      return (m.side === 'sell' ? '▼ ' : (m.side === 'low' || m.side === 'high') ? '● ' : '▲ ') + m.label + (m.strong === true ? ' (강)' : m.strong === false ? ' (약)' : '') + (m.why ? ' — ' + String(m.why).slice(0, 140) : '');
     }).join('\n');
     tip.style.display = 'block';
     var r = pane.el.getBoundingClientRect();
@@ -212,6 +212,8 @@
     });
     mk = mk.concat(ms.filter(function (m) { return !(j.kind === 'dante' && m.strong && !(m.bottom && m.certain) && big[m.date]); }).map(function (m, i, arr) {
       if (j.kind === 'cross') return { time: m.date, position: m.side === 'sell' ? 'aboveBar' : 'belowBar', color: m.side === 'sell' ? DOWN : UP, shape: m.side === 'sell' ? 'arrowDown' : 'arrowUp', text: i >= arr.length - 2 ? m.label : '' };
+      if (m.side === 'low' || m.side === 'high')                        // 그 무렵 실제 저점(초록 점)·고점(주황 점) — 매수·매도가 얼마나 가까웠는지 직접 확인용
+        return { time: m.date, position: m.side === 'low' ? 'belowBar' : 'aboveBar', color: m.side === 'low' ? 'rgba(30,132,73,0.75)' : 'rgba(224,138,0,0.8)', shape: 'circle', size: 0.6, text: '' };
       if (j.kind === 'ai' && j.label === 'AI 점수') {                   // 매수(빨강 ▲)·매도(파랑 ▼, 글자=그 거래 수익률). 약한 신호(90점)는 작고 옅게
         var wk = m.tier === '약';
         return { time: m.date, position: m.side === 'sell' ? 'aboveBar' : 'belowBar', color: m.side === 'sell' ? (wk ? 'rgba(43,98,217,0.6)' : DOWN) : (wk ? 'rgba(214,54,47,0.55)' : UP),

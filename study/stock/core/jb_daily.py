@@ -235,7 +235,7 @@ def chart(code: str, df, bars: int = 750) -> dict | None:
     buy_txt, sell_txt = jb_rules.describe(g)
     n = len(dates)
     start = max(n - bars, 0)
-    mk, trades = jb_rules.markers(list(dates), o, c, s, tr, aux, start=dates[start])
+    mk, trades = jb_rules.markers(list(dates), o, c, s, tr, aux, start=dates[start], h=h, l=l)
     hold = jb_rules.holding(list(dates), o, c, tr, aux)
     shown = [t["ret"] for t in trades if t["buy"] >= dates[start]]
     now = float(s[-1])
@@ -254,6 +254,10 @@ def chart(code: str, df, bars: int = 750) -> dict | None:
     if shown:
         r = np.array(shown)
         summary += f" ▶ 이 차트({dates[start]}~)의 거래 {len(r)}건({g or '소형주'} 규칙): 승률 {(r > 0).mean() * 100:.0f}% · 평균 {r.mean() * 100:+.1f}% — 학습에 쓰지 않은 구간."
+        fl = [t["from_low"] for t in trades if t["buy"] >= dates[start] and "from_low" in t]
+        fh = [t["from_high"] for t in trades if t["buy"] >= dates[start] and "from_high" in t]
+        if fl:
+            summary += f" 저점·고점: 산 가격은 그 무렵 실제 저점보다 평균 +{np.mean(fl) * 100:.1f}%, 판 가격은 실제 고점보다 평균 −{np.mean(fh) * 100:.1f}%(차트의 작은 점 = 실제 저점·고점)."
     prob = [{"time": dates[i], "value": round(float(s[i]), 4)} for i in range(start, n) if np.isfinite(s[i])]
     return {"name": "AI", "kind": "ai", "label": "AI 점수", "prob": prob, "thr": jb_rules.TOP, "thr_weak": jb_rules.WEAK, "markers": mk,
             "latest": {"prob": now, "top": bool(now >= jb_rules.TOP)}, "trades": trades[-12:], "group": group, "summary": summary,

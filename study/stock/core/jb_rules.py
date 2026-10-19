@@ -236,15 +236,37 @@ def market_dd(dates) -> np.ndarray:
         return np.full(len(dates), np.nan)
 
 
-def markers(dates, o, c, score, tr, aux, start: str = ""):
-    """JB차트 표식과 거래 목록(JB차트·휴대폰 스냅샷이 같이 씀). 2차 매수(나눠 사기)도 표시. 돌려줌: (표식[], 끝난 거래[])."""
+def near_low(l, i):
+    """매수 신호 무렵의 실제 저점: 신호 앞 5봉 ~ 뒤 15봉 저가 중 최저(봉, 가격) — 저점을 얼마나 잘 잡았는지 확인용(지난 거래만 의미)."""
+    a, z = max(0, i - 5), min(len(l), i + 16)
+    k = a + int(np.argmin(l[a:z]))
+    return k, float(l[k])
+
+
+def near_high(h, j):
+    """매도 무렵의 실제 고점: 매도 앞뒤 10봉 고가 중 최고(봉, 가격)."""
+    a, z = max(0, j - 10), min(len(h), j + 11)
+    k = a + int(np.argmax(h[a:z]))
+    return k, float(h[k])
+
+
+def markers(dates, o, c, score, tr, aux, start: str = "", h=None, l=None):
+    """JB차트 표식과 거래 목록(JB차트·휴대폰 스냅샷이 같이 씀). 2차 매수(나눠 사기)도 표시. 돌려줌: (표식[], 끝난 거래[]).
+    h·l 을 주면 거래마다 그 무렵 실제 저점·고점(작은 점)과 '저점보다 +x% / 고점보다 −y%'를 함께 — 차트로 직접 확인하는 용도."""
     mk, done = [], []
     adds = aux.get("adds", {})
+    n = len(c)
     for i, b, j, px, ret, why in tr:
         e = float(o[b])
+        low_txt = ""
+        if l is not None:
+            lk, lp = near_low(l, i)
+            low_txt = f" · 그 무렵 실제 저점 {dates[lk]} {lp:,.0f}원 → 산 가격이 저점보다 +{(e / lp - 1) * 100:.1f}%"
+            if dates[lk] >= start and lk <= n - 1:
+                mk.append({"date": dates[lk], "side": "low", "tier": "참고", "label": "저점", "why": f"매수({dates[b]}) 무렵 실제 저점 {lp:,.0f}원(신호 앞 5봉~뒤 15봉 최저가)"})
         if dates[b] >= start:
             mk.append({"date": dates[b], "side": "buy", "tier": "강", "label": "매수",
-                       "why": f"{dates[i]} AI 점수 {score[i] * 100:.0f}점(95점 상향 돌파) · 볼린저 가운데 아래 → {dates[b]} 시가 {e:,.0f}원에 1차(절반) 매수"})
+                       "why": f"{dates[i]} AI 점수 {score[i] * 100:.0f}점(95점 상향 돌파) · 볼린저 가운데 아래 → {dates[b]} 시가 {e:,.0f}원에 1차(절반) 매수" + low_txt})
         avg = e
         if b in adds:
             ab, apx = adds[b]
@@ -253,11 +275,21 @@ def markers(dates, o, c, score, tr, aux, start: str = ""):
                 mk.append({"date": dates[ab], "side": "buy", "tier": "약", "label": "2차 매수",
                            "why": f"{dates[ab - 1]} 종가가 1차 매수가 {e:,.0f}원보다 {SPLIT * 100:.0f}% 이상 아래 → {dates[ab]} 시가 {apx:,.0f}원에 나머지 절반(평균 단가 {avg:,.0f}원)"})
         if j is not None:
-            done.append({"buy": dates[b], "buy_px": e, "avg": round(avg, 2), "add": dates[adds[b][0]] if b in adds else None, "sell": dates[j], "sell_px": px, "ret": round(ret, 4), "tier": "강", "seen": False})
+            t_ = {"buy": dates[b], "buy_px": e, "avg": round(avg, 2), "add": dates[adds[b][0]] if b in adds else None, "sell": dates[j], "sell_px": px, "ret": round(ret, 4), "tier": "강", "seen": False}
+            high_txt = ""
+            if l is not None:
+                t_["from_low"] = round(e / near_low(l, i)[1] - 1, 4)
+            if h is not None:
+                hk, hp = near_high(h, j)
+                t_["from_high"] = round(1 - px / hp, 4)
+                high_txt = f" · 그 무렵 실제 고점 {dates[hk]} {hp:,.0f}원 → 판 가격이 고점보다 −{(1 - px / hp) * 100:.1f}%"
+                if dates[hk] >= start:
+                    mk.append({"date": dates[hk], "side": "high", "tier": "참고", "label": "고점", "why": f"매도({dates[j]}) 무렵 실제 고점 {hp:,.0f}원(매도 앞뒤 10봉 최고가)"})
+            done.append(t_)
             if dates[j] >= start:
                 mk.append({"date": dates[j], "side": "sell", "tier": "강", "label": f"매도 {ret * 100:+.0f}%",
                            "why": f"{dates[b]} 매수{' + ' + dates[adds[b][0]] + ' 2차 매수' if b in adds else ''} → {dates[j]} {why}, {px:,.0f}원에 매도"
-                                  f"(평균 단가 {avg:,.0f}원, 비용 포함 {ret * 100:+.1f}%)"})
+                                  f"(평균 단가 {avg:,.0f}원, 비용 포함 {ret * 100:+.1f}%)" + high_txt})
     mk.sort(key=lambda m: m["date"])
     return mk, done
 

@@ -589,7 +589,7 @@ def ai_chart(df: pd.DataFrame, code: str, tf: str = "D", bars: int = 750, mkt=No
     o_arr, h_arr, l_arr, c_arr = (df[k].to_numpy(float) for k in ("open", "high", "low", "close"))
     tr, pend_i, _bb = jb_rules.simulate(o_arr, h_arr, l_arr, c_arr, score, grp, ok=np.isfinite(score), v=df["volume"].to_numpy(float), mkt_dd=jb_rules.market_dd(dates))   # 걸어가며 검증 모델이 없는 해는 학습 구간 점수(seen 표시)
     buy_txt, sell_txt = jb_rules.describe(grp)
-    mk_d, trades = jb_rules.markers(list(dates), o_arr, c_arr, score, tr, _bb, start=dates[start])
+    mk_d, trades = jb_rules.markers(list(dates), o_arr, c_arr, score, tr, _bb, start=dates[start], h=h_arr, l=l_arr)
     for t_, (i, b, j, px, ret, why) in zip(trades, [x for x in tr if x[2] is not None]):
         t_["seen"] = bool(not oos[i])                      # 걸어가며 검증 모델이 없던 해(학습 구간) 표시
     markers = [{**m, "date": predict._to_bar([m["date"]], bar_index)[0]} for m in mk_d]   # 주·월봉이면 그 주·달 봉으로
@@ -631,6 +631,10 @@ def ai_chart(df: pd.DataFrame, code: str, tf: str = "D", bars: int = 750, mkt=No
         summary += (f" ▶ 이 차트({accuracy['from']}~)의 거래 {a['n']}건({grp or '소형주'} 규칙): 승률 {a['win'] * 100:.0f}% · 평균 {a['mean'] * 100:+.1f}%"
                     + (f" (같은 기간 아무 날 사서 20일 보유하면 평균 {accuracy['base'] * 100:+.1f}%)" if accuracy["base"] is not None else "")
                     + (" — 모두 학습에 쓰지 않은 구간(해마다 다시 학습한 모델)." if accuracy["oos"] else " — 일부는 모델이 학습에 쓴 구간이라 실제보다 좋게 나옵니다."))
+        fl = [t["from_low"] for t in shown if "from_low" in t]
+        fh = [t["from_high"] for t in shown if "from_high" in t]
+        if fl:
+            summary += f" 저점·고점: 산 가격은 그 무렵 실제 저점보다 평균 +{np.mean(fl) * 100:.1f}%, 판 가격은 실제 고점보다 평균 −{np.mean(fh) * 100:.1f}%(차트의 작은 점 = 실제 저점·고점)."
     wf_note = (f"{WF_FIRST}년 이후의 과거 표시는 해마다 전 해 9월까지의 데이터로 다시 학습한 모델로 계산해 학습에 쓰지 않은 구간입니다(그 이전 해는 점수 없음)."
                if wf else f"모델은 {through}까지 결과가 확정된 데이터로 학습해 그 이전 구간은 모델이 본 데이터라 실제보다 좋아 보입니다(python manage.py picks-wf 로 걸어가며 검증 모델을 만들면 해결).")
     return {"name": "AI", "kind": "ai", "label": "AI 점수", "prob": prob, "thr": AI_TOP, "thr_weak": AI_WEAK, "markers": markers,

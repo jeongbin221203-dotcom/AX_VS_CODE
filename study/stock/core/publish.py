@@ -120,7 +120,7 @@ def jb_files(log=print) -> int:
         o, h, l, c = (df[k].to_numpy(float) for k in ("open", "high", "low", "close"))
         tr, pend, aux = jb_rules.simulate(o, h, l, c, score, g, v=df["volume"].to_numpy(float), mkt_dd=jb_rules.market_dd(dates))
         buy_txt, sell_txt = jb_rules.describe(g)
-        mk, done = jb_rules.markers(list(dates), o, c, score, tr, aux)
+        mk, done = jb_rules.markers(list(dates), o, c, score, tr, aux, h=h, l=l)
         rets = [t["ret"] for t in done]
         hold = jb_rules.holding(list(dates), o, c, tr, aux)
         keep = dates >= CHART_FROM
