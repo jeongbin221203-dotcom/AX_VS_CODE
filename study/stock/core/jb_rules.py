@@ -129,6 +129,15 @@ def simulate(o, h, l, c, score, group=None, ok=None, v=None, mkt_dd=None, rule=N
             pending = i                 # 오늘 신호 — 다음 거래일 시가 매수
             continue
         entry = o[b]
+        if r.get("protect") or r.get("trail") or r.get("tp_half"):      # 이익 지키기·고점 대비 하락·절반 익절이 있는 규칙
+            sell, px, why, add, ret, padd = _exit_plus(o, h, c, up, sm5, b, n, entry, r)
+            if add:
+                adds[b] = add
+            if padd:
+                add_pending.append(b)
+            trades.append((i, b, sell, None if px is None else float(px), ret, why))
+            busy = n if sell is None else sell
+            continue
         x = r["exit"]
         sell, px, why = None, None, ""
         if x[0] == "hold":
@@ -167,6 +176,54 @@ def simulate(o, h, l, c, score, group=None, ok=None, v=None, mkt_dd=None, rule=N
         trades.append((i, b, sell, None if px is None else float(px), ret, why))
         busy = n if sell is None else sell
     return trades, pending, {"mid": mid, "up": up, "lo": lo, "sm5": sm5, "adds": adds, "add_pending": add_pending}
+
+
+def _exit_plus(o, h, c, up, sm5, b, n, entry, r):
+    """나눠 사기 + 기본 매도 + (선택) 이익 지키기·고점 대비 하락·절반 익절을 한 번에 따라간다.
+    protect=(오른 폭, 남길 폭): 평균 단가 기준 종가 수익이 한 번이라도 '오른 폭' 이상이었다가 '남길 폭' 이하로 내려오면 그날 종가에 매도(수익일 때 팔기)
+    trail=(오른 폭, 하락 폭): 수익이 '오른 폭' 이상이 된 뒤 가장 높았던 종가보다 '하락 폭' 이상 내려오면 매도
+    tp_half=목표: 고가가 평균 단가 +목표에 닿으면 절반을 그 가격에 팔고, 나머지는 위 조건·기본 매도로
+    돌려줌: (매도 봉, 매도가, 이유, 2차 매수(봉, 가격)|None, 수익|None, 오늘 2차 매수 신호 여부)"""
+    x = r["exit"]
+    cap = x[1] if x[0] == "hold" else CAP
+    add, avg, peak, tp = None, entry, -1.0, None
+    sell, px, why = None, None, ""
+    end = min(b + cap, n - 1)
+    for j in range(b + 1, end + 1):
+        if SPLIT and add is None and c[j - 1] <= entry * (1 - SPLIT):
+            add = (j, float(o[j])); avg = (entry + o[j]) / 2
+        if x[0] == "hold" and j == b + cap:
+            sell, px, why = j, c[j], f"매수 후 {cap}거래일째 종가"
+            break
+        if r.get("tp_half") and tp is None and h[j] >= avg * (1 + r["tp_half"]):
+            tp = (j, max(o[j], avg * (1 + r["tp_half"])))
+        if x[0] != "hold":
+            u = up[j - 1]
+            if np.isfinite(u) and h[j] >= u and max(o[j], u) >= entry * (1 + x[2]):
+                sell, px, why = j, max(o[j], u), f"수익 +{x[2] * 100:.0f}% 이상에서 볼린저 상단 {u:,.0f}원 도달"
+                break
+            if j - b >= 5 and sm5[j] < x[1]:
+                sell, px, why = j, c[j], f"AI 점수(5봉 평균) {sm5[j] * 100:.0f}점 — {x[1] * 100:.0f}점 아래"
+                break
+            if j == b + cap:
+                sell, px, why = j, c[j], f"{cap}거래일 동안 매도 조건이 없어 종가 매도"
+                break
+        g = c[j] / avg - 1
+        peak = max(peak, g)
+        if r.get("protect") and peak >= r["protect"][0] and g <= r["protect"][1]:
+            sell, px, why = j, c[j], f"한때 +{peak * 100:.0f}%까지 올랐다가 +{r['protect'][1] * 100:.0f}% 아래로 — 이익 지키기"
+            break
+        if r.get("trail") and peak >= r["trail"][0] and (1 + g) <= (1 + peak) * (1 - r["trail"][1]):
+            sell, px, why = j, c[j], f"고점(+{peak * 100:.0f}%)보다 {r['trail'][1] * 100:.0f}% 넘게 내려옴"
+            break
+    padd = sell is None and add is None and SPLIT and c[n - 1] <= entry * (1 - SPLIT)
+    if sell is None:
+        return None, None, "", add, None, bool(padd)
+    ret = px / avg - 1 - COST
+    if tp and tp[0] <= sell:
+        ret = 0.5 * (tp[1] / avg - 1) + 0.5 * (px / avg - 1) - COST
+        why += f" (절반은 {tp[1]:,.0f}원에 먼저 익절)"
+    return sell, float(px), why, add, float(ret), False
 
 
 def market_dd(dates) -> np.ndarray:
