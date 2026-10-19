@@ -2,7 +2,7 @@
 from flask import Blueprint, jsonify, request
 
 from core import ai, intraday, predict, service
-from views.main import _valid_code
+from views.main import _valid_code, cached
 
 bp = Blueprint("predict", __name__)
 
@@ -25,19 +25,29 @@ def api_predict(code):
             return jsonify(intraday.dante(code, tf, bars))
         except intraday.IntradayError as e:
             return jsonify(error=str(e)), 502
-    df = service.load_prices(code)
-    if len(df) < ai.MIN_BARS:
-        return jsonify(error=f"데이터가 부족합니다({ai.MIN_BARS}봉 이상 필요)"), 404
     try:
-        out = None
-        if kind == "ai" and request.args.get("v") == "2":       # JB차트의 새 AI 점수(core/picks) — 모델이 없으면 옛 AI 확률로
-            from core import picks
-            out = picks.ai_chart(df, code, tf, bars, predict._mkt())
-        if out is None:
-            out = predict.dante(df, tf, bars) if kind == "dante" else predict.ai_pred(df, tf, bars)
+        out = cached("predict", code, (kind, tf, bars, request.args.get("v")), lambda: _predict(code, kind, tf, bars))
     except RuntimeError as e:
         return jsonify(error=str(e)), 503
+    if out is None:
+        return jsonify(error=f"데이터가 부족합니다({ai.MIN_BARS}봉 이상 필요)"), 404
     return jsonify(out)
+
+
+def _predict(code, kind, tf, bars):
+    df = service.load_prices(code)
+    if len(df) < ai.MIN_BARS:
+        return None
+    out = None
+    if kind == "ai" and request.args.get("v") == "2":           # JB차트의 새 AI 점수(core/picks) — 모델이 없으면 옛 AI 확률로
+        from core import jb_daily, picks
+        if tf == "D":                                           # 일봉은 기록된 점수로 바로(수십 초 → 1초 안)
+            out = jb_daily.chart(code, df, bars)
+        if out is None:
+            out = picks.ai_chart(df, code, tf, bars, predict._mkt())
+    if out is None:
+        out = predict.dante(df, tf, bars) if kind == "dante" else predict.ai_pred(df, tf, bars)
+    return out
 
 
 @bp.get("/api/risk/<code>")
@@ -48,10 +58,13 @@ def api_risk(code):
         return jsonify(error="하락 위험은 일봉·주봉·월봉에서만 볼 수 있습니다"), 400
     if not _valid_code(code):
         return jsonify(error="잘못된 종목코드"), 400
-    df = service.load_prices(code)
-    if len(df) < ai.MIN_BARS:
-        return jsonify(error=f"데이터가 부족합니다({ai.MIN_BARS}봉 이상 필요)"), 404
+    def make():
+        df = service.load_prices(code)
+        return None if len(df) < ai.MIN_BARS else predict.risk(df, tf, bars)
     try:
-        return jsonify(predict.risk(df, tf, bars))
+        out = cached("risk", code, (tf, bars), make)
+        if out is None:
+            return jsonify(error=f"데이터가 부족합니다({ai.MIN_BARS}봉 이상 필요)"), 404
+        return jsonify(out)
     except RuntimeError as e:
         return jsonify(error=str(e)), 503

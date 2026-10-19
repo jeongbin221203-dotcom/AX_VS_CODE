@@ -140,7 +140,7 @@ def run(workers: int = 0, log=print, limit: int = 0, out=None) -> dict:
         mkt = market_live(today, bars, prev_close)
         mkt.to_pickle(MKT_LIVE)
         _state["msg"] = f"전 종목 훑는 중({len(bars)}종목)"
-        workers = workers or max(1, min(6, (os.cpu_count() or 2) - 2))
+        workers = workers or max(1, min(3, (os.cpu_count() or 2) // 4))      # 장중에는 화면이 느려지지 않게 CPU 를 적게(3개까지)
         rows = []
         with ProcessPoolExecutor(max_workers=workers, initializer=_init2, initargs=(MKT_LIVE, TODAY_PATH, today)) as ex:
             for out in ex.map(_work, list(bars), chunksize=8):
@@ -155,6 +155,12 @@ def run(workers: int = 0, log=print, limit: int = 0, out=None) -> dict:
         (out or OUT_PATH).write_text(json.dumps(rep, ensure_ascii=False), encoding="utf-8")
         _state.update(last=rep["meta"]["generated"], msg=f"장중 신호 {today} {rep['meta']['generated'][11:16]} · {len(rows)}종목 · {time.time() - t0:.0f}초")
         log(_state["msg"])
+        if out is None and os.environ.get("STOCK_PUBLISH") == "1":       # 휴대폰(Render)에도 같은 장중 신호
+            try:
+                from core import publish
+                _state["msg"] += " · 휴대폰 게시 " + publish.push_live()
+            except Exception as e:
+                _state["msg"] += f" · 휴대폰 게시 실패: {e}"
         return rep
     except Exception as e:
         _state["msg"] = f"장중 신호 실패: {e}"

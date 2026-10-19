@@ -37,8 +37,8 @@
   {% if mode == 'date' %}<a class="btn" href="/?min={{ min_sig }}">최신</a>{% endif %}
   <span class="hint">{{ lo }} ~ {{ hi }} ({{ snap_days|length }}거래일){% if rep and rep.meta.trimmed %} · 오래된 날은 추천·강/상만 보관{% endif %}</span>
 </form>{% endif %}
-{% if not snapshot and mode == 'today' %}<div class="note livebar">{% if rep and rep.meta.live %}<b>● 오늘 {{ rep.meta.date }} 장중 신호</b> — {{ rep.meta.asof[11:16] }} 시세(오늘 미완성 일봉) 기준, 장중 30분마다 다시 훑습니다. 거래량·종가 조건은 마감 때까지 바뀌고, 16:10 이후 확정 신호로 바뀝니다. <a href="{{ url_for('main.home', final=1) }}">지난 거래일 확정 신호 보기</a>{% else %}확정 신호({{ rep.meta.date if rep and rep.meta.date else '-' }} 마감 기준){% if live_state.msg %} · 장중 신호: {{ live_state.msg }}{% endif %}{% endif %}
-  <form method="post" action="{{ url_for('main.api_live_scan') }}" class="inline"><input type="hidden" name="back" value="1"><button class="btn tiny" type="submit" {% if live_state.running %}disabled{% endif %}>{{ '장중 신호 훑는 중…' if live_state.running else '지금 장중 신호 다시 훑기' }}</button></form></div>{% endif %}
+{% if mode == 'today' %}<div class="note livebar">{% if rep and rep.meta.live %}<b>● 오늘 {{ rep.meta.date }} 장중 신호</b> — {{ rep.meta.asof[11:16] }} 시세(오늘 미완성 일봉) 기준, 장중 30분마다 다시 훑습니다. 거래량·종가 조건은 마감 때까지 바뀌고, 16:10 이후 확정 신호로 바뀝니다. <a href="?final=1">지난 거래일 확정 신호 보기</a>{% else %}확정 신호({{ rep.meta.date if rep and rep.meta.date else '-' }} 마감 기준){% if live_state is defined and live_state.msg %} · 장중 신호: {{ live_state.msg }}{% endif %}{% endif %}
+  {% if not snapshot %}<form method="post" action="{{ url_for('main.api_live_scan') }}" class="inline"><input type="hidden" name="back" value="1"><button class="btn tiny" type="submit" {% if live_state.running %}disabled{% endif %}>{{ '장중 신호 훑는 중…' if live_state.running else '지금 장중 신호 다시 훑기' }}</button></form>{% endif %}</div>{% endif %}
 {% if not rep or not rep.meta.date %}
 <p class="note">{% if mode == 'date' %}{{ asked }} 이전의 이력이 없습니다.{% else %}아직 훑어 둔 결과가 없습니다. <code>python manage.py signals-scan</code>(전 종목, 약 15분)으로 만들면 이 화면에 나옵니다. 일봉 자동 갱신 뒤에는 자동으로 다시 만듭니다.{% endif %}</p>
 {% else %}

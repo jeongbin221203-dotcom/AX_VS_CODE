@@ -15,6 +15,23 @@ def _name(code):
     return r["name"] if r else code
 
 
+_RESP: dict = {}     # 차트 API 응답 기억(같은 종목·같은 설정·같은 마지막 일봉이면 다시 계산하지 않음 — 일봉은 장 마감 뒤에만 바뀜)
+
+
+def cached(kind: str, code: str, args: tuple, fn):
+    import os
+    if os.environ.get("PYTEST_CURRENT_TEST"):          # 시험마다 DB 가 달라 기억하면 섞임
+        return fn()
+    with db.get_conn() as c:
+        r = c.execute("SELECT MAX(date) d FROM prices WHERE code=?", (code,)).fetchone()
+    key = (kind, code, args, r["d"] if r else None)
+    if key not in _RESP:
+        if len(_RESP) > 400:
+            _RESP.clear()
+        _RESP[key] = fn()
+    return _RESP[key]
+
+
 def _valid_code(code):
     return 0 < len(code) <= 12 and code.replace(".", "").replace("-", "").isalnum()
 
@@ -158,8 +175,9 @@ def api_chart(code):
             return jsonify(intraday.payload(code, tf, bars))
         except intraday.IntradayError as e:
             return jsonify(error=str(e)), 502
-    p = service.chart_payload(code, tf, bars)
+    p = cached("chart", code, (tf, bars), lambda: service.chart_payload(code, tf, bars))
     if p is None:  # 아직 없으면 한 번 받아 본다
+        _RESP.clear()
         try:
             collector.update_prices(code)
         except Exception as e:

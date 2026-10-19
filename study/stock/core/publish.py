@@ -24,6 +24,7 @@ DAYS = config.BASE / "snapshot" / "days"                 # 날짜별 보관(days
 JB = config.BASE / "snapshot" / "jb"                     # 종목별 JB AI 점수·시총 구간별 매수·매도 표시(PC JB차트 '자동'과 같은 계산)
 ACTIONS = config.BASE / "snapshot" / "actions.json"      # 신호 화면 '오늘 할 일'
 ACT_DAYS = config.BASE / "snapshot" / "actions_days"     # 지난 날 할 일(날짜.json)
+LIVE = config.BASE / "snapshot" / "signals_live.json"    # 오늘 장중 신호(core/live_scan — 장중 30분마다)
 FULL_DAYS = 90                                           # 최근 90거래일은 전체 목록, 그보다 오래된 날은 추천·강/상만(저장소가 불어나지 않게)
 
 
@@ -302,7 +303,7 @@ def push(log=print) -> str:
     env = {"GIT_INDEX_FILE": idx}
     try:
         _git("read-tree", "HEAD", env=env, cwd=top)
-        extra = [p.relative_to(top).as_posix() for p in (JB, ACTIONS, ACT_DAYS) if p.exists()]       # JB AI 표시·오늘/지난 날 할 일
+        extra = [p.relative_to(top).as_posix() for p in (JB, ACTIONS, ACT_DAYS, LIVE) if p.exists()]       # JB AI 표시·오늘/지난 날 할 일·장중 신호
         _git("add", "-A", "-f", "--", rel, DAYS.relative_to(top).as_posix(), CHARTS.relative_to(top).as_posix(), META.relative_to(top).as_posix(), *extra, env=env, cwd=top)
         if not _git("diff", "--cached", "--name-only", env=env, cwd=top):
             return "변경 없음"
@@ -318,6 +319,15 @@ def push(log=print) -> str:
     _git("push", "origin", "stock", cwd=top)
     log("stock 브랜치 푸시 완료")
     return "푸시 완료"
+
+
+def push_live(log=print) -> str:
+    """장중 신호(data/signals_live.json)를 스냅샷에 복사해 올린다 — Render 신호 화면도 PC 처럼 '오늘 장중 신호'를 보이게."""
+    src = config.DATA_DIR / "signals_live.json"
+    if not src.exists():
+        return "장중 신호 없음"
+    shutil.copyfile(src, LIVE)
+    return push(log)
 
 
 def run(log=print, do_push: bool = True) -> str:

@@ -107,6 +107,11 @@ def create_app():
                 rep["meta"].update(asked=asked, prev=ds[i - 1] if i else None, next=ds[i + 1] if i + 1 < len(ds) else None)
         else:
             rep = load()
+            lv = _json(BASE / "snapshot" / "signals_live.json")
+            if (lv and rep and lv.get("meta", {}).get("date", "") > rep.get("meta", {}).get("date", "") and lv["meta"].get("prev") == rep["meta"].get("date")
+                    and request.args.get("final") != "1"):                    # PC 와 같게: 오늘 장중 신호(같은 확정 신호 위에서 만든 것)
+                lv["meta"]["prev"] = rep["meta"].get("date")
+                rep = lv
             if rep and ds and rep["meta"].get("date") in ds:
                 i = ds.index(rep["meta"]["date"])
                 rep["meta"]["prev"] = ds[i - 1] if i else None
