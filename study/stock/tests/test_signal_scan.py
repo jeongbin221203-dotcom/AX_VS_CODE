@@ -128,4 +128,4 @@ def test_jb_chart_page_and_links(client):
     assert r.status_code == 302 and r.headers["Location"].endswith("/jb?a=TEST1&ta=W")
     r = client.get("/chart/TEST1?date=2025-05-30")
     assert r.status_code == 302 and r.headers["Location"].endswith("/jb?a=TEST1&date=2025-05-30")
-    assert 'class="cbb" checked' in jb and 'class="crk" >' in jb            # 볼린저 기본 켬 · 하락 위험 기본 끔
+    assert 'class="cbb" checked' in jb and 'class="cver" >' in jb and "하락 위험</label>" not in jb   # 볼린저 기본 켬 · 근거 보기 기본 끔 · 하락 위험 띠 없음(종합 신호 하나)
