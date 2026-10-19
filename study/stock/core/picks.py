@@ -587,7 +587,7 @@ def ai_chart(df: pd.DataFrame, code: str, tf: str = "D", bars: int = 750, mkt=No
     info = (cur.get("scores") or {}).get(code)
     grp = info[0] if info else None
     o_arr, h_arr, l_arr, c_arr = (df[k].to_numpy(float) for k in ("open", "high", "low", "close"))
-    tr, pend_i, _bb = jb_rules.simulate(o_arr, h_arr, l_arr, c_arr, score, grp, ok=oos & np.isfinite(score))
+    tr, pend_i, _bb = jb_rules.simulate(o_arr, h_arr, l_arr, c_arr, score, grp, ok=np.isfinite(score))   # 걸어가며 검증 모델이 없는 해는 학습 구간 점수(seen 표시)
     buy_txt, sell_txt = jb_rules.describe(grp)
     markers, trades, pending = [], [], None
     for i, b, j, px, ret, why in tr:
@@ -595,7 +595,7 @@ def ai_chart(df: pd.DataFrame, code: str, tf: str = "D", bars: int = 750, mkt=No
             markers.append({"date": predict._to_bar([dates[b]], bar_index)[0], "side": "buy", "tier": "강", "label": "매수",
                             "why": f"{dates[i]} AI 점수 {score[i] * 100:.0f}점(95점 상향 돌파) · 볼린저 가운데 아래 → {dates[b]} 시가 {o_arr[b]:,.0f}원에 매수"})
         if j is not None:
-            trades.append({"buy": dates[b], "buy_px": float(o_arr[b]), "sell": dates[j], "sell_px": px, "ret": round(ret, 4), "tier": "강", "seen": False})
+            trades.append({"buy": dates[b], "buy_px": float(o_arr[b]), "sell": dates[j], "sell_px": px, "ret": round(ret, 4), "tier": "강", "seen": bool(not oos[i])})
             if j >= start:
                 markers.append({"date": predict._to_bar([dates[j]], bar_index)[0], "side": "sell", "tier": "강", "label": f"매도 {ret * 100:+.0f}%",
                                 "why": f"{dates[b]} 매수 → {dates[j]} {why}, {px:,.0f}원에 매도 (비용 포함 {ret * 100:+.1f}%)"})
@@ -611,7 +611,7 @@ def ai_chart(df: pd.DataFrame, code: str, tf: str = "D", bars: int = 750, mkt=No
     idx = np.arange(s0, n - HOLD_DAYS - 1)
     base = float(np.mean(c_arr[idx + 1 + HOLD_DAYS] / o_arr[idx + 1] - 1 - 0.003)) if len(idx) else None
     accuracy = {"all": _stats([t["ret"] for t in shown]), "strong": _stats([t["ret"] for t in shown]), "weak": None,
-                "base": None if base is None else round(base, 4), "oos": True, "from": dates[s0], "group": grp}
+                "base": None if base is None else round(base, 4), "oos": bool(shown and all(not t["seen"] for t in shown)), "from": dates[s0], "group": grp}
     now = float(score[-1]) if np.isfinite(score[-1]) else None
     group = {"name": info[0], "rank": info[2], "n": info[3], "date": cur.get("date")} if info else None
     if now is None:
@@ -632,7 +632,7 @@ def ai_chart(df: pd.DataFrame, code: str, tf: str = "D", bars: int = 750, mkt=No
     if a:
         summary += (f" ▶ 이 차트({accuracy['from']}~)의 거래 {a['n']}건({grp or '소형주'} 규칙): 승률 {a['win'] * 100:.0f}% · 평균 {a['mean'] * 100:+.1f}%"
                     + (f" (같은 기간 아무 날 사서 20일 보유하면 평균 {accuracy['base'] * 100:+.1f}%)" if accuracy["base"] is not None else "")
-                    + " — 모두 학습에 쓰지 않은 구간(해마다 다시 학습한 모델).")
+                    + (" — 모두 학습에 쓰지 않은 구간(해마다 다시 학습한 모델)." if accuracy["oos"] else " — 일부는 모델이 학습에 쓴 구간이라 실제보다 좋게 나옵니다."))
     wf_note = (f"{WF_FIRST}년 이후의 과거 표시는 해마다 전 해 9월까지의 데이터로 다시 학습한 모델로 계산해 학습에 쓰지 않은 구간입니다(그 이전 해는 점수 없음)."
                if wf else f"모델은 {through}까지 결과가 확정된 데이터로 학습해 그 이전 구간은 모델이 본 데이터라 실제보다 좋아 보입니다(python manage.py picks-wf 로 걸어가며 검증 모델을 만들면 해결).")
     return {"name": "AI", "kind": "ai", "label": "AI 점수", "prob": prob, "thr": AI_TOP, "thr_weak": AI_WEAK, "markers": markers,

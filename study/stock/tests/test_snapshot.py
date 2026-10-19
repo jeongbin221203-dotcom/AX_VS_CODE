@@ -131,7 +131,7 @@ def test_snapshot_uses_local_compare_screen(tmp_path, monkeypatch):
     c = _chart_fixture(tmp_path, monkeypatch)
     assert "/jb?a=005930&amp;date=2026-10-08" in c.get("/").get_data(as_text=True)      # 목록 종목 → PC 와 같은 차트 비교 화면
     page = c.get("/jb?a=005930&date=2026-09-30").get_data(as_text=True)
-    assert "js/compare.js" in page and "예측 (단테 기법)" in page and "AI 점수" in page and '"focus": "2026-09-30"' in page
+    assert "js/compare.js" in page and "자동</option>" in page and "골든·데드크로스" in page and '"focus": "2026-09-30"' in page
     assert c.get("/chart/005930?date=2026-09-30", follow_redirects=False).status_code == 302
     assert c.get("/jb?a=NOPE").status_code == 404 and c.get("/jb?a=005930&date=abc").status_code == 400
     assert c.get("/compare?a=005930").status_code == 302

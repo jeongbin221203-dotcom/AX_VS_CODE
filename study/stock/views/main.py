@@ -104,6 +104,16 @@ def jb():
     return _compare_page("jb")
 
 
+def _grp(code):
+    """종목의 시총 구간 이름(대형주·중형주·소형주·잡주) — JB차트 '자동' 이름용. 모르면 빈 문자열."""
+    try:
+        from core import picks
+        v = ((picks.load_today() or {}).get("scores") or {}).get(code)
+        return v[0] if v else ""
+    except Exception:
+        return ""
+
+
 def _compare_page(page):
     """두 차트를 나란히. 한쪽을 확대·이동하면 다른 쪽도 같이 움직인다(브라우저에서 동기화)."""
     a = request.args.get("a", "005930")
@@ -115,10 +125,10 @@ def _compare_page(page):
     def side(code, set_, tf, default_set, kind, default_kind, risk=None, bb=None):
         return {"code": code, "name": _name(code), "tf": tf if (tf in ("D", "W", "M") or intraday.is_intraday(tf)) else "D",
                 "set": set_ if set_ in ("a", "b", "none") else default_set,
-                "kind": kind if kind in ("none", "both", "dante", "ai", "cross") else default_kind,
+                "kind": "both" if kind in ("dante", "ai") else kind if kind in ("none", "both", "cross") else default_kind, "grp": _grp(code),
                 "risk": risk == "1", "bb": bb != "0"}   # 하락 위험 띠는 기본 꺼짐(주소에 1 이 있을 때만 켬)   # 겹쳐 그리기: 왼쪽 '예측'(단테 기법), 오른쪽 'AI'
     pa = side(a, request.args.get("sa"), request.args.get("ta"), "a", request.args.get("ka"), "both", request.args.get("ra"), request.args.get("ba"))
-    pb = side(b, request.args.get("sb"), request.args.get("tb"), "b" if b == a else "a", request.args.get("kb"), "ai", request.args.get("rb"), request.args.get("bb"))
+    pb = side(b, request.args.get("sb"), request.args.get("tb"), "b" if b == a else "a", request.args.get("kb"), "both", request.args.get("rb"), request.args.get("bb"))
     focus = (request.args.get("date") or "").strip()      # 신호 화면에서 기준일을 넘겨 받으면 그날을 중심으로 보여 준다
     try:
         if len(focus) != 10:

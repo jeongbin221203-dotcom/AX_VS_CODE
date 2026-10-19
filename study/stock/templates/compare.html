@@ -20,7 +20,7 @@
     <li><b>하락 위험</b>(기본 꺼짐, 켜면 배지와 차트 맨 아래 띠): 앞으로 20거래일 안에 −10% 이하로 끝날 확률. 띠 빨강 = 높음(35%↑) · 주황 = 주의(27%↑). 전체 평균은 약 24%입니다. 파란 ▼ = 위험이 처음 높음 경계를 넘은 날, 주황 ● = 급등 뒤 과열이 처음 된 날(이유는 툴팁).</li>
     <li><b>표식 글자</b>: 차트에는 가장 최근 신호에만 글자를 붙입니다. 나머지는 봉에 마우스를 올리면 툴팁에 나옵니다.</li>
     {% if page == 'jb' %}<li><b>AI 점수</b>(JB차트의 겹쳐 그리기 → AI 점수): 차트 지표 88개로 만든 모델 4개의 평균 백분위(0~100점). 분홍 점선 = 95점(강한 매수)·옅은 점선 = 90점(약한 매수), 빨간 ▲ 매수 = 점수가 95점(약한 신호는 90점)을 처음 넘은 다음 날 시가, 파란 ▼ 매도 = 매수 후 20거래일째 종가(글자 = 그 거래의 수익률). 과거 시험(전 종목)에서 95점 신호는 2022~23년 평균 +6.0%·2024~26년 +5.3%, 90점은 +4.9%·+3.7%였고, 2016년 이후 과거 표시는 해마다 다시 학습한 모델이라 학습에 쓰지 않은 구간입니다. 이름 옆 보라색 배지 = 오늘 그 종목이 속한 그룹(대형·중형·소형·잡주) 안 후보 순위. 모델이 학습에 쓴 기간의 점수는 실제보다 좋아 보입니다.</li>{% endif %}
-    <li><b>단테 신호</b>(예측만 볼 때): 초록 ▲ = 확실한 저점(바닥 기법 + 하락 위험 18% 미만) · 빨강 ▲ = 강 · 회색 ▲ = 약 · 금색 ■★n = 같은 날 강 신호 n개. <b>'예측 + AI 점수'</b>로 볼 때는 화살표(▲▼) = AI 매수·매도, 봉 아래 작은 동그라미 = 단테 신호(초록 = 확실한 저점, 주황 = 강). 나머지 저점 신호는 "저점 신호 전체 보기"로 볼 수 있습니다.</li>
+    <li><b>단테 신호</b>: 초록 ▲ = 확실한 저점(바닥 기법 + 하락 위험 18% 미만) · 빨강 ▲ = 강 · 회색 ▲ = 약 · 금색 ■★n = 같은 날 강 신호 n개. <b>'자동'</b>으로 볼 때는 화살표(▲▼) = AI 매수·매도, 봉 아래 작은 동그라미 = 단테 신호(초록 = 확실한 저점, 주황 = 강). 나머지 저점 신호는 "저점 신호 전체 보기"로 볼 수 있습니다.</li>
     <li><b>알아둘 점</b>: 저점 신호는 진짜 저점보다 앞서 나오는 편이라 나눠서 진입하는 것을 권합니다. 위험 표시가 없다고 안전한 것은 아닙니다. 투자 권유가 아니며 수익을 보장하지 않습니다.</li>
   </ul>
 </details>
@@ -49,12 +49,10 @@
         <option value="W" {{ 'selected' if p.tf == 'W' }}>주봉</option>
         <option value="M" {{ 'selected' if p.tf == 'M' }}>월봉</option>
       </select>
-      <select class="ckind" aria-label="겹쳐 그리기" title="예측 + AI 점수 = 단테 기법 신호(동그라미)와 AI 매수·매도(화살표)를 함께 · 하나만 보려면 고르기">
-        <option value="none" {{ 'selected' if p.kind == 'none' }}>기법 없음</option>
-        <option value="both" {{ 'selected' if p.kind == 'both' }}>예측 + AI 점수</option>
-        <option value="dante" {{ 'selected' if p.kind == 'dante' }}>예측 (단테 기법)</option>
-        <option value="ai" {{ 'selected' if p.kind == 'ai' }}>AI 점수</option>
+      <select class="ckind" aria-label="겹쳐 그리기" title="자동 = 예측(단테 기법) 신호 + AI 점수 + 그 종목 시총 구간(대형·중형·소형·잡주)의 매수·매도 규칙">
+        <option value="both" {{ 'selected' if p.kind == 'both' }}>{{ (p.grp ~ ' ') if p.grp }}자동</option>
         <option value="cross" {{ 'selected' if p.kind == 'cross' }}>골든·데드크로스</option>
+        <option value="none" {{ 'selected' if p.kind == 'none' }}>없음</option>
       </select>
       <label class="crisk-sw" title="볼린저밴드(20일, 표준편차 2배): 가운데 = 20일 평균, 위·아래 = 평균 ± 2 표준편차"><input type="checkbox" class="cbb" {{ 'checked' if p.bb }}>볼린저</label>
       <label class="crisk-sw" title="20일 안 -10% 이하로 끝날 위험이 큰 구간을 차트 맨 아래 띠로 표시(일·주·월봉)"><input type="checkbox" class="crk" {{ 'checked' if p.risk }}>하락 위험</label>

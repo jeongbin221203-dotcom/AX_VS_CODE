@@ -57,13 +57,13 @@ def run_update(limit: int = 0) -> dict:
             if picks.wf_stale():                                 # 과거 차트용 걸어가며 검증 모델은 1년에 한 번(약 20분)
                 picks.train_walkforward(log=lambda m: _state.update(msg=f"걸어가며 검증 모델: {m}"))
         except Exception as e:
-            _state["msg"] += f" · 잡주 후보 실패: {e}
+            _state["msg"] += f" · 잡주 후보 실패: {e}"
         try:                                                     # 신호 화면 '오늘 할 일'(시총 구간별 규칙: 살 종목·보유 중·매도 신호)
             from core import jb_daily
             _state["msg"] += " · 오늘 할 일 계산"
             jb_daily.run(log=lambda m: _state.update(msg=f"오늘 할 일: {m}"))
         except Exception as e:
-            _state["msg"] += f" · 오늘 할 일 실패: {e}""
+            _state["msg"] += f" · 오늘 할 일 실패: {e}"
         try:                                                     # 하락 위험·전망 모델은 한 달마다 새 데이터로 다시 학습
             from core import drop_risk
             _state["msg"] += " · 위험 모델 점검"

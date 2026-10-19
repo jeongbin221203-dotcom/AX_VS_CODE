@@ -154,7 +154,8 @@
     this.clearPred();
     if (s.kind === 'none' || !this.data) return Promise.resolve();
     if (s.kind === 'cross') { self.pred = crossPred(this.data.candles, s.set); self.drawPred(); return Promise.resolve(); }
-    if ((s.kind === 'ai' || s.kind === 'both') && isIntra(s.tf)) { this.root.querySelector('.cpred').textContent = 'AI 점수는 일봉·주봉·월봉에서만 볼 수 있습니다. 분봉에서는 예측(단테 기법)을 쓰세요.'; return Promise.resolve(); }
+    if (s.kind === 'ai' && isIntra(s.tf)) { this.root.querySelector('.cpred').textContent = 'AI 점수는 일봉·주봉·월봉에서만 볼 수 있습니다.'; return Promise.resolve(); }
+    if (s.kind === 'both' && isIntra(s.tf)) s = Object.assign({}, s, { kind: 'dante' });   // 분봉 '자동' = 예측(단테 기법)만(AI 는 일봉 이상)
     if (s.kind === 'both') {
       var get = function (k) {
         return fetch('/api/predict/' + encodeURIComponent(self.code) + '?kind=' + k + '&tf=' + s.tf + '&bars=' + loadBars + (k === 'ai' ? '&v=2' : '')).then(function (r) {
@@ -166,13 +167,15 @@
         if (res[0].error && !res[1]) throw new Error(res[0].error);
         self.pred = res[0].error ? res[1] : res[0];
         self.pred2 = res[0].error ? null : res[1];
+        var g = !res[0].error && res[0].rule && res[0].rule.group, opt = self.root.querySelector('.ckind option[value="both"]');
+        if (opt) opt.textContent = (g ? g + ' ' : '') + '자동';
         self.drawPred();
       }).catch(function (e) { if (seq === self.predSeq) self.root.querySelector('.cpred').textContent = '예측·AI: ' + e.message; });
     }
     return fetch('/api/predict/' + encodeURIComponent(this.code) + '?kind=' + s.kind + '&tf=' + s.tf + '&bars=' + loadBars + (s.kind === 'ai' && /^\/jb\/?$/.test(location.pathname) ? '&v=2' : '')).then(function (r) {
       return r.json().then(function (j) { if (!r.ok) throw new Error(j.error || '오류'); return j; });
     }).then(function (j) {
-      if (seq !== self.predSeq || self.settings().kind !== s.kind) return;   // 그사이 설정이 바뀜
+      if (seq !== self.predSeq || (self.settings().kind !== s.kind && !(self.settings().kind === 'both' && s.kind === 'dante'))) return;   // 그사이 설정이 바뀜
       self.pred = j;
       self.drawPred();
     }).catch(function (e) {
@@ -600,7 +603,7 @@
       var v = self.root.querySelector('.ctf').value, o = other(self), ot = o ? o.settings().tf : v;
       var both = !!o && document.getElementById('sync').checked && document.getElementById('same').checked && ot !== v && (isIntra(v) || isIntra(ot));
       // 분봉으로 들어가거나 나올 때는 (동기화·같은 종목이면) 양쪽이 함께 바뀐다 — 분봉과 일봉은 서로 맞출 수 없어서 한쪽만 바뀌면 어색하다
-      function fixAi(p) { var k = p.root.querySelector('.ckind'); if (isIntra(v) && (k.value === 'ai' || k.value === 'both')) k.value = 'dante'; }   // AI 는 일봉 이상에서만
+      function fixAi() { /* '자동'은 분봉이면 예측(단테)만 그린다 — 선택은 그대로 */ }   // AI 는 일봉 이상에서만
       fixAi(self);
       if (both) { o.root.querySelector('.ctf').value = v; fixAi(o); }
       Promise.all(both ? [self.load(), o.load()] : [self.load()]).then(function () { showBoth(); saveUrl(); });

@@ -115,7 +115,7 @@ def create_app():
         except OSError:
             name = code
         return {"code": code, "name": name, "tf": tf if tf in ("D", "W", "M") else "D", "set": set_ if set_ in ("a", "b", "none") else default_set,
-                "kind": kind if kind in ("none", "both", "dante", "ai", "cross") else default_kind, "risk": risk == "1", "bb": bb != "0"}
+                "kind": "both" if kind in ("dante", "ai") else kind if kind in ("none", "both", "cross") else default_kind, "grp": "", "risk": risk == "1", "bb": bb != "0"}
 
     @app.get("/compare")
     def compare():
@@ -137,7 +137,7 @@ def create_app():
         if focus and (len(focus) != 10 or not focus.replace("-", "").isdigit()):
             abort(400)
         pa = side(a, request.args.get("sa"), request.args.get("ta"), "a", request.args.get("ka"), "both", request.args.get("ra"), request.args.get("ba"))
-        pb = side(b, request.args.get("sb"), request.args.get("tb"), "b" if b == a else "a", request.args.get("kb"), "ai", request.args.get("rb"), request.args.get("bb"))
+        pb = side(b, request.args.get("sb"), request.args.get("tb"), "b" if b == a else "a", request.args.get("kb"), "both", request.args.get("rb"), request.args.get("bb"))
         return render_template("compare.html", pa=pa, pb=pb, focus=focus, page="jb", show_all=request.args.get("all") == "1", base_tpl="snapshot_base.html", rep=None, disclaimer=DISCLAIMER)
 
     @app.get("/chart/<code>")

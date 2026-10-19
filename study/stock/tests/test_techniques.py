@@ -162,9 +162,9 @@ def test_chart_payload_has_both_ma_sets(client):
 
 def test_compare_page(client):
     html = client.get("/jb?a=T1").get_data(as_text=True)
-    assert 'data-side="a"' in html and 'data-side="b"' in html
-    assert '<option value="b" selected>' in html          # 같은 종목이면 오른쪽은 14·28·56 세트
-    html = client.get("/jb?a=T1&b=T1&sa=none&sb=a&tb=W").get_data(as_text=True)
+    assert 'data-side="a"' in html and 'data-side="b"' not in html          # 차트 하나
+    assert '<option value="a" selected>' in html          # 차트 하나 — 256 세트가 기본
+    html = client.get("/jb?a=T1&sa=none&ta=W").get_data(as_text=True)
     assert '<option value="W" selected>' in html and '<option value="none" selected>' in html
     assert client.get("/jb?a=bad;code").status_code == 400
     assert client.get("/jb?a=T1&b=%3Cx%3E").status_code == 400

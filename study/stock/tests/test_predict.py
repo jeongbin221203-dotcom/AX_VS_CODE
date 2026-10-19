@@ -24,10 +24,11 @@ def client(tmp_path, monkeypatch):
 
 def test_compare_page_has_kind_selects(client):
     html = client.get("/jb?a=TEST1&b=TEST1").get_data(as_text=True)
-    assert "예측 (단테 기법)" in html and "AI 점수" in html
-    assert html.count('value="dante" selected') == 1 and html.count('value="ai" selected') == 1   # 기본: 왼쪽 예측, 오른쪽 AI
-    html2 = client.get("/jb?a=TEST1&b=TEST1&ka=ai&kb=none").get_data(as_text=True)
+    assert "자동</option>" in html and "골든·데드크로스" in html and "예측 (단테 기법)</option>" not in html   # 자동·골든데드·없음 셋만
+    assert html.count('value="both" selected') == 1                                # 기본: 자동(예측 + AI 점수 + 시총 구간 규칙)
+    html2 = client.get("/jb?a=TEST1&ka=none").get_data(as_text=True)
     assert 'value="none" selected' in html2
+    assert 'value="both" selected' in client.get("/jb?a=TEST1&ka=dante").get_data(as_text=True)   # 예전 주소(예측만·AI만)는 자동으로
 
 
 def test_predict_dante_api(client):
