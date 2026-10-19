@@ -72,17 +72,36 @@ def _crossings(s: np.ndarray, ok: np.ndarray):
     return out
 
 
-def simulate(o, h, l, c, score, group=None, ok=None, v=None, mkt_dd=None):
+def regime(c, n_ma: int = 224, k: int = 20, flat: float = 0.01) -> np.ndarray:
+    """봉마다 추세 상태: 'up'(224일선이 20봉 사이 +1% 넘게 오름 · 종가가 224일선 위), 'down'(224일선이 −1% 넘게 내림 · 종가가 그 아래), 나머지 'side'(횡보).
+    224일선이 아직 없으면 'side'."""
+    c = np.asarray(c, float)
+    n = len(c)
+    ma = np.full(n, np.nan)
+    if n >= n_ma:
+        ma[n_ma - 1:] = np.lib.stride_tricks.sliding_window_view(c, n_ma).mean(axis=1)
+    out = np.full(n, "side", dtype=object)
+    for i in range(n_ma - 1 + k, n):
+        sl = ma[i] / ma[i - k] - 1
+        if sl > flat and c[i] > ma[i]:
+            out[i] = "up"
+        elif sl < -flat and c[i] < ma[i]:
+            out[i] = "down"
+    return out
+
+
+def simulate(o, h, l, c, score, group=None, ok=None, v=None, mkt_dd=None, rule=None):
     """규칙대로 거래를 다시 계산. 돌려줌: trades[(신호 봉, 매수 봉, 매도 봉|None, 매도가|None, 수익|None, 이유)], 오늘 신호(매수 대기) 봉 또는 None.
     매도 봉이 None 이면 아직 보유 중(마지막 거래). ok: 점수를 믿을 수 있는 봉(학습에 쓰지 않은 구간 등) — 신호는 그 봉에서만."""
-    r = rule_for(group)
+    base = rule or rule_for(group)
     n = len(c)
+    reg = regime(c) if base.get("regimes") else None          # 추세 상태마다 다른 규칙(있으면): base 위에 덮어씀
     s = np.nan_to_num(np.asarray(score, float), nan=0.0)
     ok = np.isfinite(np.asarray(score, float)) if ok is None else np.asarray(ok, bool)
     mid, up, lo = bands(np.asarray(c, float))
     sm5 = np.convolve(s, np.ones(5) / 5, mode="full")[:n]
     liq = None
-    if r.get("liq_max") and v is not None:                  # 20일 평균 거래대금(로그) — ai 특징 'liq' 와 같은 계산
+    if v is not None:                                       # 20일 평균 거래대금(로그) — ai 특징 'liq' 와 같은 계산
         val = np.asarray(c, float) * np.asarray(v, float)
         m20 = np.full(n, np.nan)
         if n >= 20:
@@ -91,10 +110,13 @@ def simulate(o, h, l, c, score, group=None, ok=None, v=None, mkt_dd=None):
     trades, busy, pending = [], -1, None
     adds, add_pending = {}, []                               # 나눠 사기: 1차 매수 봉 → (2차 매수 봉, 가격), 오늘 마감에 2차 매수 신호가 난 1차 매수 봉
     for i, t in _crossings(s, ok):
+        r = {**base, **base["regimes"].get(reg[i], {})} if reg is not None else base
+        if r.get("skip"):
+            continue
         if r["entry"] == "strong_b50":
             if t != "강" or not np.isfinite(up[i]) or up[i] <= lo[i] or (c[i] - lo[i]) > 0.5 * (up[i] - lo[i]):
                 continue
-        if liq is not None and not (np.isfinite(liq[i]) and liq[i] < r["liq_max"]):
+        if r.get("liq_max") and liq is not None and not (np.isfinite(liq[i]) and liq[i] < r["liq_max"]):
             continue
         if r.get("ret60_max") is not None and not (i >= 60 and c[i] / c[i - 60] - 1 < r["ret60_max"]):
             continue
@@ -110,10 +132,17 @@ def simulate(o, h, l, c, score, group=None, ok=None, v=None, mkt_dd=None):
         x = r["exit"]
         sell, px, why = None, None, ""
         if x[0] == "hold":
-            if b + x[1] < n:
+            for j in range(b + 1, min(b + x[1], n)):
+                if r.get("stop") and c[j] <= entry * (1 - r["stop"]):
+                    sell, px, why = j, c[j], f"1차 매수가보다 {r['stop'] * 100:.0f}% 아래 마감(손절)"
+                    break
+            if sell is None and b + x[1] < n:
                 sell, px, why = b + x[1], c[b + x[1]], f"매수 후 {x[1]}거래일째 종가"
         else:
             for j in range(b + 1, min(b + CAP, n)):
+                if r.get("stop") and c[j] <= entry * (1 - r["stop"]):      # 손절(1차 매수가 기준) — 있을 때만
+                    sell, px, why = j, c[j], f"1차 매수가보다 {r['stop'] * 100:.0f}% 아래 마감(손절)"
+                    break
                 u = up[j - 1]
                 if np.isfinite(u) and h[j] >= u and max(o[j], u) >= entry * (1 + x[2]):
                     sell, px, why = j, max(o[j], u), f"수익 +{x[2] * 100:.0f}% 이상에서 볼린저 상단 {u:,.0f}원 도달"
