@@ -133,7 +133,7 @@ def compute(date: str | None = None) -> dict:
         if not np.isfinite(s[k]):
             continue                              # 그날 점수가 없으면(갱신 전·기록 밖) 건너뜀
         o, h, l, cl = (df[x].to_numpy(float) for x in ("open", "high", "low", "close"))
-        tr, pend, _ = jb_rules.simulate(o, h, l, cl, s, g, v=df["volume"].to_numpy(float))
+        tr, pend, _ = jb_rules.simulate(o, h, l, cl, s, g, v=df["volume"].to_numpy(float), mkt_dd=jb_rules.market_dd(dates))
         day = max(day, dates[k])
         base = {"code": code, "name": names.get(code, code), "close": float(cl[k]), "score": round(float(s[k]) * 100), "date": dates[k]}
         if k == len(cl) - 1 and pend is not None:
@@ -222,7 +222,7 @@ def chart(code: str, df, bars: int = 750) -> dict | None:
     info = (cur.get("scores") or {}).get(code)
     g = info[0] if info else None
     o, h, l, c = (df[k].to_numpy(float) for k in ("open", "high", "low", "close"))
-    tr, pend, _ = jb_rules.simulate(o, h, l, c, s, g, v=df["volume"].to_numpy(float))
+    tr, pend, _ = jb_rules.simulate(o, h, l, c, s, g, v=df["volume"].to_numpy(float), mkt_dd=jb_rules.market_dd(dates))
     buy_txt, sell_txt = jb_rules.describe(g)
     n = len(dates)
     start = max(n - bars, 0)

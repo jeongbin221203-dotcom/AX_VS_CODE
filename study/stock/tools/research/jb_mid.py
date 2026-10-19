@@ -36,9 +36,14 @@ def _feat(code):
         return code, None, None
 
 
-def simulate(P, ok_entry=None, exit_kind=("ai_or_bb", 0.40, 0.20), stop=None, trail=None, cap=jb_rules.CAP):
+RULE = jb_rules.rule_for(GROUP)
+
+
+def simulate(P, ok_entry=None, exit_kind=None, stop=None, trail=None, cap=jb_rules.CAP, liq_max="rule"):
     """jb_rules.simulate 와 같은 규칙 + 매수 조건(ok_entry(i) → bool)·손절(stop)·고점 대비 이탈(trail)·보유 상한(cap)."""
     o, h, c, s, oos = P["o"], P["h"], P["c"], P["s"], P["oos"]
+    exit_kind = exit_kind or RULE["exit"]
+    lm = RULE.get("liq_max") if liq_max == "rule" else liq_max
     n = len(c)
     sc = np.nan_to_num(s, nan=0.0)
     mid, up, lo = jb_rules.bands(c)
@@ -46,6 +51,8 @@ def simulate(P, ok_entry=None, exit_kind=("ai_or_bb", 0.40, 0.20), stop=None, tr
     out, busy = [], -1
     for i, t in jb_rules._crossings(sc, oos & np.isfinite(s)):
         if t != "강" or not np.isfinite(up[i]) or up[i] <= lo[i] or (c[i] - lo[i]) > 0.5 * (up[i] - lo[i]):
+            continue
+        if lm and not (P["f"]["liq"][i] < lm):
             continue
         if i <= busy or (ok_entry and not ok_entry(i)):
             continue
@@ -112,6 +119,8 @@ def main():
     order = sorted(contrib, key=contrib.get)
     k = len(order) // 3
     tier = {c: ("하위" if n < k else "중간" if n < 2 * k else "상위") for n, c in enumerate(order)}
+    worst = [(c, round(float(np.expm1(contrib[c])) * 100, 1), sum(1 for x in base if x[0] == c)) for c in order[:12]]
+    print("수익이 가장 낮은 종목(차트로 볼 것):", worst, flush=True)
 
     def stat(rows, cond=lambda x: True):
         r = np.array([x[2] for x in rows if cond(x)])
@@ -123,7 +132,7 @@ def main():
         return {"name": name, "all": a, "early": e, "late": l, **{t: g[t] for t in g}}
 
     fmt = lambda s: f"{s[0]:4d}건 {s[1] * 100:+6.2f}% {s[2] * 100:4.0f}%" if s[0] else "   없음"
-    B = report("지금 중형주 규칙", base)
+    B = report(f"지금 {GROUP} 규칙", base)
 
     def line(R):
         return (f"{R['name'][:34]:34s} | 전체 {fmt(R['all'])} | ~2021 {fmt(R['early'])} | 2022~ {fmt(R['late'])} | 하위 {fmt(R['하위'])} | 중간 {fmt(R['중간'])} | 상위 {fmt(R['상위'])}")
@@ -159,7 +168,9 @@ def main():
                      ("+30% 뒤 고점 대비 −10%", {"trail": (0.30, 0.10)}), ("+20% 뒤 고점 대비 −8%", {"trail": (0.20, 0.08)}),
                      ("보유 상한 60봉", {"cap": 60}), ("보유 상한 90봉", {"cap": 90}),
                      ("AI 50점 아래 또는 상단(+20%)", {"exit_kind": ("ai_or_bb", 0.50, 0.20)}), ("AI 40점 아래 또는 상단(+30%)", {"exit_kind": ("ai_or_bb", 0.40, 0.30)}),
-                     ("AI 30점 아래 또는 상단(+20%)", {"exit_kind": ("ai_or_bb", 0.30, 0.20)}), ("40일 보유", {"exit_kind": ("hold", 40)})):
+                     ("AI 30점 아래 또는 상단(+20%)", {"exit_kind": ("ai_or_bb", 0.30, 0.20)}), ("40일 보유", {"exit_kind": ("hold", 40)}),
+                     ("30일 보유", {"exit_kind": ("hold", 30)}), ("50일 보유", {"exit_kind": ("hold", 50)}), ("60일 보유", {"exit_kind": ("hold", 60)}),
+                     ("거래대금 조건 없음", {"liq_max": None}), ("거래대금 200억 미만", {"liq_max": 10.3}), ("거래대금 500억 미만", {"liq_max": 10.7})):
         res.append(report("매도 " + name, run(**kw)))
 
     def good(R):
@@ -180,7 +191,9 @@ def main():
     exit_kw = {"매도 손절 −10%": {"stop": 0.10}, "매도 손절 −15%": {"stop": 0.15}, "매도 손절 −20%": {"stop": 0.20}, "매도 +30% 뒤 고점 대비 −10%": {"trail": (0.30, 0.10)},
                "매도 +20% 뒤 고점 대비 −8%": {"trail": (0.20, 0.08)}, "매도 보유 상한 60봉": {"cap": 60}, "매도 보유 상한 90봉": {"cap": 90},
                "매도 AI 50점 아래 또는 상단(+20%)": {"exit_kind": ("ai_or_bb", 0.50, 0.20)}, "매도 AI 40점 아래 또는 상단(+30%)": {"exit_kind": ("ai_or_bb", 0.40, 0.30)},
-               "매도 AI 30점 아래 또는 상단(+20%)": {"exit_kind": ("ai_or_bb", 0.30, 0.20)}, "매도 40일 보유": {"exit_kind": ("hold", 40)}}
+               "매도 AI 30점 아래 또는 상단(+20%)": {"exit_kind": ("ai_or_bb", 0.30, 0.20)}, "매도 40일 보유": {"exit_kind": ("hold", 40)},
+               "매도 30일 보유": {"exit_kind": ("hold", 30)}, "매도 50일 보유": {"exit_kind": ("hold", 50)}, "매도 60일 보유": {"exit_kind": ("hold", 60)},
+               "매도 거래대금 조건 없음": {"liq_max": None}, "매도 거래대금 200억 미만": {"liq_max": 10.3}, "매도 거래대금 500억 미만": {"liq_max": 10.7}}
     ks = list(names)
     for a in range(len(ks)):
         for b in range(a + 1, len(ks)):
@@ -199,7 +212,7 @@ def main():
     print(f"\n둘씩 묶어 통과한 것 {len(combos)}개:")
     for R in combos[:10]:
         print(line(R))
-    json.dump({"group": GROUP, "base": B, "pass": ok[:15], "combos": combos[:10], "tier_counts": {t: sum(1 for v in tier.values() if v == t) for t in ("하위", "중간", "상위")}},
+    json.dump({"group": GROUP, "worst": worst, "base": B, "pass": ok[:15], "combos": combos[:10], "tier_counts": {t: sum(1 for v in tier.values() if v == t) for t in ("하위", "중간", "상위")}},
               open(os.path.join("data", "research", f"jb_mid_{GROUP}.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1, default=float)
     print(f"\n끝 {time.time() - t0:.0f}초")
 

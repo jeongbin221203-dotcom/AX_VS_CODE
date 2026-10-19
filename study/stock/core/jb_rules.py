@@ -3,7 +3,8 @@
 공통 매수: AI 점수가 95점을 처음 넘은 날(강한 신호, 같은 종목 10봉 안 반복 신호 제외) + 그날 볼린저 %B ≤ 0.5(20일, 2 표준편차의 가운데 아래)
           → 다음 거래일 시가 매수. 한 종목에 한 번에 한 거래.
 매도(구간마다 다름):
-  대형주 = 매수 후 40거래일째 종가
+  대형주 = 매수에 '60일 동안 16.5% 넘게 하락' + '시장(전 종목 평균 지수)이 52주 고점보다 5.4% 넘게 아래' 추가, 매도 = 매수 후 40거래일째 종가
+           (대형주 연구: 하위 3분의 1 종목 +2.3% → +5.9%, 전체 +16.8%(승률 76%) → +21.3%(83%), 두 기간 모두 개선)
   중형주 = 매수에 '20일 평균 거래대금 약 200억 원 미만' 추가, 매도 = AI 점수(5봉 평균) 30점 아래 또는 수익 +20% 이상에서 전날 볼린저 상단(지정가)
            (중형주 연구: 거래대금이 큰 중형주에서 손실이 몰렸음 — 하위 3분의 1 종목 평균 −1.1% → +4.5%, 전체 +12.2% → +15.2%, 두 기간 모두 개선)
   소형주 = AI 점수(5봉 평균)가 40점 아래로 내려온 날 종가, 또는 수익 +20% 이상인 상태에서 전날 볼린저 상단에 닿으면 그 가격(지정가)
@@ -16,7 +17,7 @@ import numpy as np
 COST = 0.003
 TOP, WEAK, GAP = 0.95, 0.90, 10
 RULES = {
-    "대형주": {"entry": "strong_b50", "exit": ("hold", 40)},
+    "대형주": {"entry": "strong_b50", "ret60_max": -0.165, "mkt_dd_max": -0.054, "exit": ("hold", 40)},   # 2026-10-19 대형주 연구(jb_mid.py 대형주)
     "중형주": {"entry": "strong_b50", "liq_max": 10.3, "exit": ("ai_or_bb", 0.30, 0.20)},     # 2026-10-19 중형주 연구(tools/research/jb_mid.py)
     "소형주": {"entry": "strong_b50", "exit": ("ai_or_bb", 0.40, 0.20)},
     "잡주": {"entry": "strong_b50", "exit": ("ai_or_bb", 0.40, 0.20)},
@@ -32,7 +33,11 @@ def rule_for(group: str | None) -> dict:
 def describe(group: str | None) -> tuple[str, str]:
     """(매수 설명, 매도 설명) — 화면 문구."""
     r = rule_for(group)
-    buy = "AI 점수가 95점을 처음 넘고 그날 종가가 볼린저 가운데선(20일 평균) 아래" + (f" · 20일 평균 거래대금 {10 ** r['liq_max'] / 1e8:,.0f}억 원 미만" if r.get("liq_max") else "") + " → 다음 날 시가 매수"
+    buy = ("AI 점수가 95점을 처음 넘고 그날 종가가 볼린저 가운데선(20일 평균) 아래"
+           + (f" · 20일 평균 거래대금 {10 ** r['liq_max'] / 1e8:,.0f}억 원 미만" if r.get("liq_max") else "")
+           + (f" · 60일 동안 {-r['ret60_max'] * 100:.1f}% 넘게 하락" if r.get("ret60_max") is not None else "")
+           + (f" · 시장이 52주 고점보다 {-r['mkt_dd_max'] * 100:.1f}% 넘게 아래" if r.get("mkt_dd_max") is not None else "")
+           + " → 다음 날 시가 매수")
     x = r["exit"]
     if x[0] == "hold":
         sell = f"매수 후 {x[1]}거래일째 종가에 매도"
@@ -65,7 +70,7 @@ def _crossings(s: np.ndarray, ok: np.ndarray):
     return out
 
 
-def simulate(o, h, l, c, score, group=None, ok=None, v=None):
+def simulate(o, h, l, c, score, group=None, ok=None, v=None, mkt_dd=None):
     """규칙대로 거래를 다시 계산. 돌려줌: trades[(신호 봉, 매수 봉, 매도 봉|None, 매도가|None, 수익|None, 이유)], 오늘 신호(매수 대기) 봉 또는 None.
     매도 봉이 None 이면 아직 보유 중(마지막 거래). ok: 점수를 믿을 수 있는 봉(학습에 쓰지 않은 구간 등) — 신호는 그 봉에서만."""
     r = rule_for(group)
@@ -87,6 +92,10 @@ def simulate(o, h, l, c, score, group=None, ok=None, v=None):
             if t != "강" or not np.isfinite(up[i]) or up[i] <= lo[i] or (c[i] - lo[i]) > 0.5 * (up[i] - lo[i]):
                 continue
         if liq is not None and not (np.isfinite(liq[i]) and liq[i] < r["liq_max"]):
+            continue
+        if r.get("ret60_max") is not None and not (i >= 60 and c[i] / c[i - 60] - 1 < r["ret60_max"]):
+            continue
+        if r.get("mkt_dd_max") is not None and mkt_dd is not None and not (np.isfinite(mkt_dd[i]) and mkt_dd[i] < r["mkt_dd_max"]):
             continue
         if i <= busy:
             continue
@@ -115,3 +124,13 @@ def simulate(o, h, l, c, score, group=None, ok=None, v=None):
         trades.append((i, b, sell, None if px is None else float(px), ret, why))
         busy = n if sell is None else sell
     return trades, pending, {"mid": mid, "up": up, "lo": lo, "sm5": sm5}
+
+
+def market_dd(dates) -> np.ndarray:
+    """날짜별 시장(전 종목 평균 지수) 52주 고점 대비 — 대형주 규칙의 시장 조건용. 지수 파일이 없으면 모두 NaN(조건 없이)."""
+    try:
+        from core import predict
+        m = predict._mkt()
+        return m["mkt_dd250"].reindex([str(d)[:10] for d in dates]).to_numpy(float)
+    except Exception:
+        return np.full(len(dates), np.nan)
