@@ -587,7 +587,7 @@ def ai_chart(df: pd.DataFrame, code: str, tf: str = "D", bars: int = 750, mkt=No
     info = (cur.get("scores") or {}).get(code)
     grp = info[0] if info else None
     o_arr, h_arr, l_arr, c_arr = (df[k].to_numpy(float) for k in ("open", "high", "low", "close"))
-    tr, pend_i, _bb = jb_rules.simulate(o_arr, h_arr, l_arr, c_arr, score, grp, ok=np.isfinite(score))   # 걸어가며 검증 모델이 없는 해는 학습 구간 점수(seen 표시)
+    tr, pend_i, _bb = jb_rules.simulate(o_arr, h_arr, l_arr, c_arr, score, grp, ok=np.isfinite(score), v=df["volume"].to_numpy(float))   # 걸어가며 검증 모델이 없는 해는 학습 구간 점수(seen 표시)
     buy_txt, sell_txt = jb_rules.describe(grp)
     markers, trades, pending = [], [], None
     for i, b, j, px, ret, why in tr:

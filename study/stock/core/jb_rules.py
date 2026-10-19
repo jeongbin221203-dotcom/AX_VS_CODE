@@ -4,7 +4,9 @@
           → 다음 거래일 시가 매수. 한 종목에 한 번에 한 거래.
 매도(구간마다 다름):
   대형주 = 매수 후 40거래일째 종가
-  중형주·소형주 = AI 점수(5봉 평균)가 40점 아래로 내려온 날 종가, 또는 수익 +20% 이상인 상태에서 전날 볼린저 상단에 닿으면 그 가격(지정가)
+  중형주 = 매수에 '20일 평균 거래대금 약 200억 원 미만' 추가, 매도 = AI 점수(5봉 평균) 30점 아래 또는 수익 +20% 이상에서 전날 볼린저 상단(지정가)
+           (중형주 연구: 거래대금이 큰 중형주에서 손실이 몰렸음 — 하위 3분의 1 종목 평균 −1.1% → +4.5%, 전체 +12.2% → +15.2%, 두 기간 모두 개선)
+  소형주 = AI 점수(5봉 평균)가 40점 아래로 내려온 날 종가, 또는 수익 +20% 이상인 상태에서 전날 볼린저 상단에 닿으면 그 가격(지정가)
   잡주 = 아직 시험 전 — 소형주 규칙을 임시로 쓴다(STATUS 참고)
 시험(학습에 쓰지 않은 구간, 비용 0.3%): 대형 2017~21 +14.8%·승률 70% / 2022~ +19.2%·84%, 중형 +13.6%·79% / +12.1%·76%, 소형 +17.8%·83% / +13.4%·76%.
 두 기간을 함께 보고 고른 규칙이라 실제보다 좋게 나올 수 있다(2021년까지로만 고른 규칙도 2022년 이후 지금 규칙보다 나았음 — 연구 노트 참고).
@@ -15,7 +17,7 @@ COST = 0.003
 TOP, WEAK, GAP = 0.95, 0.90, 10
 RULES = {
     "대형주": {"entry": "strong_b50", "exit": ("hold", 40)},
-    "중형주": {"entry": "strong_b50", "exit": ("ai_or_bb", 0.40, 0.20)},
+    "중형주": {"entry": "strong_b50", "liq_max": 10.3, "exit": ("ai_or_bb", 0.30, 0.20)},     # 2026-10-19 중형주 연구(tools/research/jb_mid.py)
     "소형주": {"entry": "strong_b50", "exit": ("ai_or_bb", 0.40, 0.20)},
     "잡주": {"entry": "strong_b50", "exit": ("ai_or_bb", 0.40, 0.20)},
 }
@@ -30,7 +32,7 @@ def rule_for(group: str | None) -> dict:
 def describe(group: str | None) -> tuple[str, str]:
     """(매수 설명, 매도 설명) — 화면 문구."""
     r = rule_for(group)
-    buy = "AI 점수가 95점을 처음 넘고 그날 종가가 볼린저 가운데선(20일 평균) 아래 → 다음 날 시가 매수"
+    buy = "AI 점수가 95점을 처음 넘고 그날 종가가 볼린저 가운데선(20일 평균) 아래" + (f" · 20일 평균 거래대금 {10 ** r['liq_max'] / 1e8:,.0f}억 원 미만" if r.get("liq_max") else "") + " → 다음 날 시가 매수"
     x = r["exit"]
     if x[0] == "hold":
         sell = f"매수 후 {x[1]}거래일째 종가에 매도"
@@ -63,7 +65,7 @@ def _crossings(s: np.ndarray, ok: np.ndarray):
     return out
 
 
-def simulate(o, h, l, c, score, group=None, ok=None):
+def simulate(o, h, l, c, score, group=None, ok=None, v=None):
     """규칙대로 거래를 다시 계산. 돌려줌: trades[(신호 봉, 매수 봉, 매도 봉|None, 매도가|None, 수익|None, 이유)], 오늘 신호(매수 대기) 봉 또는 None.
     매도 봉이 None 이면 아직 보유 중(마지막 거래). ok: 점수를 믿을 수 있는 봉(학습에 쓰지 않은 구간 등) — 신호는 그 봉에서만."""
     r = rule_for(group)
@@ -72,11 +74,20 @@ def simulate(o, h, l, c, score, group=None, ok=None):
     ok = np.isfinite(np.asarray(score, float)) if ok is None else np.asarray(ok, bool)
     mid, up, lo = bands(np.asarray(c, float))
     sm5 = np.convolve(s, np.ones(5) / 5, mode="full")[:n]
+    liq = None
+    if r.get("liq_max") and v is not None:                  # 20일 평균 거래대금(로그) — ai 특징 'liq' 와 같은 계산
+        val = np.asarray(c, float) * np.asarray(v, float)
+        m20 = np.full(n, np.nan)
+        if n >= 20:
+            m20[19:] = np.lib.stride_tricks.sliding_window_view(val, 20).mean(axis=1)
+        liq = np.log10(m20 + 1)
     trades, busy, pending = [], -1, None
     for i, t in _crossings(s, ok):
         if r["entry"] == "strong_b50":
             if t != "강" or not np.isfinite(up[i]) or up[i] <= lo[i] or (c[i] - lo[i]) > 0.5 * (up[i] - lo[i]):
                 continue
+        if liq is not None and not (np.isfinite(liq[i]) and liq[i] < r["liq_max"]):
+            continue
         if i <= busy:
             continue
         b = i + 1

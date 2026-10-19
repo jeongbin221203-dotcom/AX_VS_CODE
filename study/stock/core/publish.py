@@ -118,7 +118,7 @@ def jb_files(log=print) -> int:
         score = np.array([m.get(d, np.nan) for d in dates], float)
         g = grp_of.get(code)
         o, h, l, c = (df[k].to_numpy(float) for k in ("open", "high", "low", "close"))
-        tr, pend, _ = jb_rules.simulate(o, h, l, c, score, g)
+        tr, pend, _ = jb_rules.simulate(o, h, l, c, score, g, v=df["volume"].to_numpy(float))
         buy_txt, sell_txt = jb_rules.describe(g)
         mk, rets = [], []
         for i, b, j, px, ret, why in tr:
