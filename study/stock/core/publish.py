@@ -8,6 +8,7 @@ import os
 import shutil
 import subprocess
 import tempfile
+import time
 from datetime import datetime
 from pathlib import Path
 
@@ -20,6 +21,9 @@ META = config.BASE / "snapshot" / "chartmeta.json"
 CHART_FROM = "2021-01-01"                                # 224일선을 2022년 첫날부터 그릴 수 있게
 CHART_AFTER_DAYS = 130                                   # 기준일 뒤 며칠 더(그 뒤 흐름 확인용)
 DAYS = config.BASE / "snapshot" / "days"                 # 날짜별 보관(days/YYYY-MM-DD.json) — 다음 주에도 그날 신호를 볼 수 있게
+JB = config.BASE / "snapshot" / "jb"                     # 종목별 JB AI 점수·시총 구간별 매수·매도 표시(PC JB차트 '자동'과 같은 계산)
+ACTIONS = config.BASE / "snapshot" / "actions.json"      # 신호 화면 '오늘 할 일'
+ACT_DAYS = config.BASE / "snapshot" / "actions_days"     # 지난 날 할 일(날짜.json)
 FULL_DAYS = 90                                           # 최근 90거래일은 전체 목록, 그보다 오래된 날은 추천·강/상만(저장소가 불어나지 않게)
 
 
@@ -88,6 +92,72 @@ def _chart_work(code):
                 "g": [[k, int(mask[i])] for k, i in enumerate(idx) if mask[i]], "risk": risk}
     except Exception:
         return None
+
+
+def jb_files(log=print) -> int:
+    """휴대폰 JB차트용: 스냅샷 차트가 있는 종목마다 기록된 JB AI 점수(core/jb_daily)와 시총 구간별 규칙의 매수·매도 표시를 snapshot/jb/<코드>.json 으로.
+    모델을 다시 돌리지 않고 기록된 점수만 쓴다. '오늘 할 일'(data/jb_actions.json)도 snapshot/actions.json 으로 복사."""
+    import numpy as np
+    from core import jb_daily, jb_rules, picks, service
+    JB.mkdir(parents=True, exist_ok=True)
+    st = jb_daily.load_store()
+    grp_of = {k: v[0] for k, v in ((picks.load_today() or {}).get("scores") or {}).items()}
+    n = 0
+    for f in sorted(CHARTS.glob("*.json")):
+        code = f.stem
+        ds, sc = jb_daily.series(code, st)
+        if not ds:
+            continue
+        df = service.load_prices(code)
+        df = df[df.index >= "2019-01-01"]
+        if len(df) < 60:
+            continue
+        dates = df.index.strftime("%Y-%m-%d")
+        m = dict(zip(ds, sc))
+        score = np.array([m.get(d, np.nan) for d in dates], float)
+        g = grp_of.get(code)
+        o, h, l, c = (df[k].to_numpy(float) for k in ("open", "high", "low", "close"))
+        tr, pend, _ = jb_rules.simulate(o, h, l, c, score, g)
+        buy_txt, sell_txt = jb_rules.describe(g)
+        mk, rets = [], []
+        for i, b, j, px, ret, why in tr:
+            mk.append({"date": dates[b], "side": "buy", "tier": "강", "label": "매수",
+                       "why": f"{dates[i]} AI 점수 {score[i] * 100:.0f}점(95점 상향 돌파) · 볼린저 가운데 아래 → {dates[b]} 시가 {o[b]:,.0f}원에 매수"})
+            if j is not None:
+                rets.append(ret)
+                mk.append({"date": dates[j], "side": "sell", "tier": "강", "label": f"매도 {ret * 100:+.0f}%",
+                           "why": f"{dates[b]} 매수 → {dates[j]} {why}, {px:,.0f}원에 매도 (비용 포함 {ret * 100:+.1f}%)"})
+        keep = dates >= CHART_FROM
+        now = float(score[-1]) if np.isfinite(score[-1]) else None
+        summary = (f"AI 점수 {now * 100:.0f}점({dates[-1]})" if now is not None else "AI 점수 없음") + f" · {g or '소형주'} 규칙."
+        if pend is not None:
+            summary += f" ▶ 매수 신호: {dates[pend]} → 다음 거래일 시가에 매수."
+        elif tr and tr[-1][2] is None:
+            b = tr[-1][1]
+            summary += f" ▶ 보유 중: {dates[b]} 시가 {o[b]:,.0f}원 매수({c[-1] / o[b] - 1:+.1%}) — 매도 조건: {sell_txt}."
+        if rets:
+            r = np.array(rets)
+            summary += f" ▶ 이 종목 거래 {len(r)}건: 승률 {(r > 0).mean() * 100:.0f}% · 평균 {r.mean() * 100:+.1f}%(학습에 쓰지 않은 구간)."
+        obj = {"grp": g, "d": [d for d, k in zip(dates, keep) if k], "s": [(-1 if not np.isfinite(v) else int(round(v * 1000))) for v, k in zip(score, keep) if k],
+               "m": [x for x in mk if x["date"] >= CHART_FROM], "sum": summary, "buy": buy_txt, "sell": sell_txt, "note": jb_rules.STATUS.get(g or "", "")}
+        (JB / f"{code}.json").write_text(json.dumps(obj, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+        n += 1
+    src = config.DATA_DIR / "jb_actions.json"
+    if src.exists():
+        shutil.copyfile(src, ACTIONS)
+    ACT_DAYS.mkdir(parents=True, exist_ok=True)
+    k = 0
+    for f in sorted(DAYS.glob("*.json"))[-FULL_DAYS:]:                    # 신호 날짜마다 그날 할 일(+그 뒤 결과) — 없는 날만 새로(처음엔 날짜당 약 10초)
+        out = ACT_DAYS / f.name
+        if out.exists() and time.time() - out.stat().st_mtime < 7 * 86400:      # 이미 있으면 일주일에 한 번만 다시(그 뒤 결과 갱신)
+            continue
+        rep = jb_daily.for_date(f.stem)
+        if rep:
+            out.write_text(json.dumps(rep, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+            k += 1
+    log(f"지난 날 할 일 {k}일 갱신")
+    log(f"JB AI 표시 {n}종목")
+    return n
 
 
 def charts(log=print, workers: int = 0) -> int:
@@ -232,7 +302,8 @@ def push(log=print) -> str:
     env = {"GIT_INDEX_FILE": idx}
     try:
         _git("read-tree", "HEAD", env=env, cwd=top)
-        _git("add", "-A", "-f", "--", rel, DAYS.relative_to(top).as_posix(), CHARTS.relative_to(top).as_posix(), META.relative_to(top).as_posix(), env=env, cwd=top)
+        extra = [p.relative_to(top).as_posix() for p in (JB, ACTIONS, ACT_DAYS) if p.exists()]       # JB AI 표시·오늘/지난 날 할 일
+        _git("add", "-A", "-f", "--", rel, DAYS.relative_to(top).as_posix(), CHARTS.relative_to(top).as_posix(), META.relative_to(top).as_posix(), *extra, env=env, cwd=top)
         if not _git("diff", "--cached", "--name-only", env=env, cwd=top):
             return "변경 없음"
         msg = f"스냅샷: {datetime.now():%Y-%m-%d %H:%M} 오늘의 신호 갱신"
@@ -258,4 +329,8 @@ def run(log=print, do_push: bool = True) -> str:
         log(f"차트 {charts(log)}종목 갱신")
     except Exception as e:                                  # 차트 실패가 신호 게시를 막지 않게
         log(f"차트 갱신 실패: {e}")
+    try:
+        jb_files(log)
+    except Exception as e:
+        log(f"JB AI 표시 실패: {e}")
     return push(log) if do_push else "복사만"

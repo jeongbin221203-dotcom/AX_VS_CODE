@@ -70,7 +70,7 @@
 {% endblock %}
 {% block scripts %}
 <script src="{{ url_for('static', filename='vendor/lightweight-charts.js') }}"></script>
-<script id="boot" type="application/json">{{ {'a': pa, 'b': pb, 'focus': focus} | tojson }}</script>
+<script id="boot" type="application/json">{{ {'a': pa, 'b': pb, 'focus': focus, 'live': base_tpl is not defined} | tojson }}</script>
 <script src="{{ url_for('static', filename='js/live.js') }}"></script>
 <script src="{{ url_for('static', filename='js/compare.js') }}"></script>
 {% endblock %}

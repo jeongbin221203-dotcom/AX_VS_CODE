@@ -47,7 +47,13 @@ def home():
         except ValueError:
             return "날짜는 YYYY-MM-DD", 400
         rep = narrow(signal_scan.for_date(asked) if lo else None)
-        return render_template("signals.html", rep=rep, asked=asked, lo=lo, hi=hi, mode="date", min_sig=min_sig, act=None)
+        act = None
+        if rep and rep.get("meta", {}).get("date"):
+            try:
+                act = jb_daily.for_date(rep["meta"]["date"])     # 그날 할 일(시총 구간별 규칙) + 그 뒤 결과 — 처음 여는 날은 10초쯤
+            except Exception:
+                act = None
+        return render_template("signals.html", rep=rep, asked=asked, lo=lo, hi=hi, mode="date", min_sig=min_sig, act=act)
     from core import live_scan
     rep, lv = signal_scan.load(), live_scan.load()
     if (lv and rep and lv.get("meta", {}).get("date", "") > rep.get("meta", {}).get("date", "") and lv["meta"].get("prev") == rep.get("meta", {}).get("date")

@@ -38,6 +38,16 @@ def load():
 
 CHARTS = Path(os.environ.get("STOCK_SNAPSHOT_CHARTS", BASE / "snapshot" / "charts"))
 META = Path(os.environ.get("STOCK_SNAPSHOT_META", BASE / "snapshot" / "chartmeta.json"))
+JBDIR = BASE / "snapshot" / "jb"                          # 종목별 JB AI 점수·시총 구간별 매수·매도(PC JB차트 '자동'과 같은 계산)
+ACT = BASE / "snapshot" / "actions.json"                  # 신호 화면 '오늘 할 일'
+ACT_DAYS = BASE / "snapshot" / "actions_days"             # 지난 날 할 일(날짜.json)
+
+
+def _json(path):
+    try:
+        return json.loads(Path(path).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
 CODE_RE = re.compile(r"^[A-Za-z0-9]{1,12}$")
 
 
@@ -104,7 +114,8 @@ def create_app():
         if rep and min_sig > 1:
             for k in ("pred", "ai", "high"):
                 rep[k] = [r for r in rep.get(k, []) if len(r["signals"]) >= min_sig]
-        return render_template("signals.html", rep=rep, asked=asked, lo=ds[0] if ds else None, hi=ds[-1] if ds else None, mode="date" if asked else "today", min_sig=min_sig, snap_days=ds, charts_avail=chart_codes(),
+        act = _json(ACT_DAYS / f"{rep['meta']['date']}.json") if (asked and rep and rep.get("meta", {}).get("date")) else (_json(ACT) if not asked else None)
+        return render_template("signals.html", rep=rep, asked=asked, lo=ds[0] if ds else None, hi=ds[-1] if ds else None, mode="date" if asked else "today", min_sig=min_sig, snap_days=ds, charts_avail=chart_codes(), act=act,
                                snapshot=True, base_tpl="snapshot_base.html", disclaimer=DISCLAIMER)
 
     store = snapshot_api.Store(CHARTS, META)
@@ -167,6 +178,10 @@ def create_app():
         if not store.has(code):
             return jsonify(error="이 종목의 데이터가 없습니다"), 404
         tf, nbars = _tf_bars()
+        if kind == "ai" and request.args.get("v") == "2" and tf == "D":       # JB차트 '자동' — PC 와 같은 JB AI 점수·시총 구간별 매수·매도(파일이 있으면)
+            j = _json(JBDIR / f"{code}.json")
+            if j:
+                return jsonify(snapshot_api.jb_ai(j, nbars))
         fn = snapshot_api.dante if kind == "dante" else snapshot_api.ai_pred
         return jsonify(fn(store, code, tf, nbars))
 

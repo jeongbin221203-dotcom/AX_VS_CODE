@@ -318,7 +318,7 @@
   };
   Pane.prototype.setupLive = function (d) {
     var self = this;
-    if (!window.StockLive) return;
+    if (!window.StockLive || BOOT.live === false) return;      // 휴대폰 스냅샷(Render)에는 실시간이 없음
     if (this.liveCode !== this.code) {
       if (this.unwatch) this.unwatch();
       var el = this.root.querySelector('.live');

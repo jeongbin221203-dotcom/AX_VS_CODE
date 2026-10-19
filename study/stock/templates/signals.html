@@ -15,6 +15,8 @@
   <td class="checks">{% for ok in r.checks %}<span class="{{ 'ok' if ok else 'no' }}" title="{{ checks[loop.index0] }}">{{ '✔' if ok else '✖' }}</span>{% endfor %}</td>
 </tr>{% endfor %}</tbody></table></div>
 {% endmacro %}
+{% macro jbu(code, d=none) %}{{ url_for('jb' if snapshot else 'main.jb', a=code, date=d) }}{% endmacro %}
+{% macro outcome(r) %}{% if r.exit %}<small>{{ r.exit }} 매도</small> <span class="{{ 'up' if r.exit_ret > 0 else 'down' }}"><b>{{ pct(r.exit_ret * 100, 1, true) }}</b></span>{% elif r.now_ret is defined and r.now_ret is not none %}<small>아직 보유</small> <span class="{{ 'up' if r.now_ret > 0 else 'down' }}">{{ pct(r.now_ret * 100, 1, true) }}</span>{% else %}–{% endif %}{% endmacro %}
 {% macro ostat(s) %}{% if s and s.n5 %}{{ s.n }}개 · 5일 평균 {{ pct(s.r5, 1, true) }}(상승 {{ pct(s.up5, 0) }}){% if s.n20 %} · 20일 평균 {{ pct(s.r20, 1, true) }}(상승 {{ pct(s.up20, 0) }}){% endif %}{% else %}{{ s.n if s else 0 }}개 · 아직 결과 없음{% endif %}{% endmacro %}
 {% block body %}
 <h1>신호 <small>왼쪽 예측(단테 기법) · 오른쪽 AI — 점검 10개 중 9개 이상 충족하면 추천</small></h1>
@@ -47,20 +49,20 @@
   · 추천 <b>강 {{ strong|length }}</b> · <b>상 {{ weak|length }}</b> · 점검 9/10↑ <b>예측 {{ rec_p|length }}</b> · <b>AI {{ rec_a|length }}</b>{% if mode != 'date' %} <small>· 생성 {{ rep.meta.generated }}</small>{% endif %}</p>
 
 {% if act %}{% set G = ('대형주', '중형주', '소형주', '잡주') %}
-<h2 class="hi">오늘 할 일 <small>시총 구간마다 따로 고른 규칙(JB차트와 같음) · {{ act.date }} 마감 기준 · 매수는 다음 거래일 시가</small></h2>
+<h2 class="hi">{{ '그날 할 일' if act.past else '오늘 할 일' }} <small>시총 구간마다 따로 고른 규칙(JB차트와 같음) · {{ act.date }} 마감 기준 · 매수는 다음 거래일 시가{% if act.past %} · '그 뒤 결과' = 그 뒤 실제 가격으로 규칙대로 판 결과{% endif %}</small></h2>
 <div class="actgrid">
 {% for g in G %}{% set a = act.groups[g] %}
 <section class="actcard">
-  <h3>{{ g }} <small>살 종목 <b>{{ a.buy|length }}</b> · 매도 신호 <b>{{ a.sell|length }}</b> · 보유 {{ a.hold|length }}</small></h3>
+  <h3>{{ g }} <small>{{ '산 종목' if act.past else '살 종목' }} <b>{{ a.buy|length }}</b> · 매도 신호 <b>{{ a.sell|length }}</b> · 보유 {{ a.hold|length }}</small></h3>
   <p class="hint rule">매수: {{ a.rule.buy }}<br>매도: {{ a.rule.sell }}{% if a.rule.note %}<br>※ {{ a.rule.note }}{% endif %}</p>
-  {% if a.buy %}<div class="scroll"><table class="grid"><thead><tr><th>살 종목</th><th class="num">종가</th><th class="num">AI 점수</th></tr></thead><tbody>
-  {% for r in a.buy %}<tr data-href="{{ url_for('main.jb', a=r.code) }}"><td><a href="{{ url_for('main.jb', a=r.code) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td><td class="num">{{ r.close|won }}</td><td class="num"><b>{{ r.score }}</b>점</td></tr>{% endfor %}
+  {% if a.buy %}<div class="scroll"><table class="grid"><thead><tr><th>{{ '산 종목' if act.past else '살 종목' }}</th><th class="num">종가</th><th class="num">AI 점수</th>{% if act.past %}<th>그 뒤 결과</th>{% endif %}</tr></thead><tbody>
+  {% for r in a.buy %}<tr data-href="{{ jbu(r.code, act.date) }}"><td><a href="{{ jbu(r.code, act.date) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td><td class="num">{{ r.close|won }}</td><td class="num"><b>{{ r.score }}</b>점</td>{% if act.past %}<td>{{ outcome(r) }}</td>{% endif %}</tr>{% endfor %}
   </tbody></table></div>{% else %}<p class="note">오늘 살 종목이 없습니다.</p>{% endif %}
   {% if a.sell %}<div class="scroll"><table class="grid sellt"><thead><tr><th>매도 신호</th><th class="num">산 날·가격</th><th class="num">수익</th><th>이유</th></tr></thead><tbody>
-  {% for r in a.sell %}<tr data-href="{{ url_for('main.jb', a=r.code) }}"><td><a href="{{ url_for('main.jb', a=r.code) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td><td class="num"><small>{{ r.buy }}</small> {{ r.buy_px|won }}</td><td class="num"><span class="{{ 'up' if r.ret > 0 else 'down' }}">{{ pct(r.ret * 100, 1, true) }}</span></td><td><small>{{ r.why }}</small></td></tr>{% endfor %}
+  {% for r in a.sell %}<tr data-href="{{ jbu(r.code, act.date if act.past else none) }}"><td><a href="{{ jbu(r.code, act.date if act.past else none) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td><td class="num"><small>{{ r.buy }}</small> {{ r.buy_px|won }}</td><td class="num"><span class="{{ 'up' if r.ret > 0 else 'down' }}">{{ pct(r.ret * 100, 1, true) }}</span></td><td><small>{{ r.why }}</small></td></tr>{% endfor %}
   </tbody></table></div>{% else %}<p class="note">매도 신호가 없습니다.</p>{% endif %}
-  {% if a.hold %}<details><summary>보유 중(규칙대로 샀다면) {{ a.hold|length }}개</summary><div class="scroll"><table class="grid"><thead><tr><th>종목</th><th class="num">산 날·가격</th><th class="num">지금 수익</th><th class="num">보유</th></tr></thead><tbody>
-  {% for r in a.hold %}<tr data-href="{{ url_for('main.jb', a=r.code) }}"><td><a href="{{ url_for('main.jb', a=r.code) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td><td class="num"><small>{{ r.buy }}</small> {{ r.buy_px|won }}</td><td class="num"><span class="{{ 'up' if r.ret > 0 else 'down' }}">{{ pct(r.ret * 100, 1, true) }}</span></td><td class="num">{{ r.days }}일</td></tr>{% endfor %}
+  {% if a.hold %}<details><summary>보유 중(규칙대로 샀다면) {{ a.hold|length }}개</summary><div class="scroll"><table class="grid"><thead><tr><th>종목</th><th class="num">산 날·가격</th><th class="num">{{ '그날 수익' if act.past else '지금 수익' }}</th><th class="num">보유</th>{% if act.past %}<th>그 뒤 결과</th>{% endif %}</tr></thead><tbody>
+  {% for r in a.hold %}<tr data-href="{{ jbu(r.code, act.date) }}"><td><a href="{{ jbu(r.code, act.date) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td><td class="num"><small>{{ r.buy }}</small> {{ r.buy_px|won }}</td><td class="num"><span class="{{ 'up' if r.ret > 0 else 'down' }}">{{ pct(r.ret * 100, 1, true) }}</span></td><td class="num">{{ r.days }}일</td>{% if act.past %}<td>{{ outcome(r) }}</td>{% endif %}</tr>{% endfor %}
   </tbody></table></div></details>{% endif %}
 </section>
 {% endfor %}
