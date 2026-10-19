@@ -134,9 +134,7 @@ def compute(date: str | None = None, live: dict | None = None) -> dict:
         df = px.get(code)
         if df is None or len(df) < 60:
             continue
-        if live:
-            if code not in live["bars"]:
-                continue
+        if live and code in live["bars"]:          # 장중 가격을 못 받은 종목은 어제까지 값으로(보유 목록에서 빠지지 않게)
             df = _with_live(df, live["date"], live["bars"][code])
         dates = df["date"].to_numpy()
         k = int(np.searchsorted(dates, date, side="right")) - 1 if date else len(dates) - 1
