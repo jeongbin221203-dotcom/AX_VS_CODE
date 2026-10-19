@@ -1,6 +1,6 @@
+"""대형·중형·소형 규칙 변형 빠른 비교(상승 상태 조건 풀기·손절) — python tools/research/jb_regime_try.py 대형주 (study/stock 에서 실행)"""
 import os, sys, pickle, numpy as np
-sys.path.insert(0, r"C:\Users\user\AX_VS_CODE\study\stock")
-os.chdir(r"C:\Users\user\AX_VS_CODE\study\stock")
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from core import jb_rules, picks
 GROUP = sys.argv[1]
 D = pickle.load(open("data/research/jb_scores.pkl", "rb"))
