@@ -619,7 +619,7 @@ def ai_chart(df: pd.DataFrame, code: str, tf: str = "D", bars: int = 750, mkt=No
     through = obj.get("through", "")
     if pending:
         if pending["state"] == "buy_tomorrow":
-            summary += f" ▶ 매수 신호: {pending['signal']} 점수 {pending['score']}점 → 다음 거래일 시가에 매수({grp or '구간 미정'} 규칙)."
+            summary += " ▶ 매수 신호: " + jb_rules.action(list(dates), o_arr, c_arr, tr, pend_i, _bb, score, grp)["title"] + "."
         else:
             summary += (f" ▶ 보유 중: {pending['buy']} 시가 {pending['buy_px']:,.0f}원 1차 매수" + (f", {pending['add']} 2차 매수(평균 단가 {pending['avg']:,.0f}원)" if pending.get("add") else "")
                         + f" — 평균 단가 기준 {pending['now_ret'] * 100:+.1f}%, {pending['days']}거래일째"

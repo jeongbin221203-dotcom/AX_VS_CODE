@@ -11,7 +11,7 @@ C = np.full(10, 100.0)
 def test_buy_when_signal_today():
     s = np.full(10, 0.5); s[-1] = 0.97
     a = jb_rules.action(D, O, C, [], 9, {}, s, "중형주")
-    assert a["kind"] == "buy" and "중형주" in a["text"] and "다음 거래일" in a["text"]
+    assert a["kind"] == "buy" and "중형주" in a["text"] and "지정가 매수 97원" in a["text"] and "3일" in a["text"]   # 중형주: 종가 100원 −3%, 3일
 
 
 def test_sell_today_and_hold_and_wait():

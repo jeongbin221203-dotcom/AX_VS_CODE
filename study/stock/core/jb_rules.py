@@ -17,11 +17,19 @@ import numpy as np
 COST = 0.003
 TOP, WEAK, GAP = 0.95, 0.90, 10
 RULES = {
-    "대형주": {"entry": "strong_b50", "ret60_max": -0.165, "mkt_dd_max": -0.054, "exit": ("hold", 40)},   # 2026-10-19 대형주 연구(jb_mid.py 대형주)
-    "중형주": {"entry": "strong_b50", "liq_max": 10.3, "exit": ("ai_or_bb", 0.30, 0.20)},     # 2026-10-19 중형주 연구(tools/research/jb_mid.py)
-    "소형주": {"entry": "strong_b50", "exit": ("ai_or_bb", 0.40, 0.20)},
-    "잡주": {"entry": "strong_b50", "exit": ("ai_or_bb", 0.40, 0.20)},
+    "대형주": {"entry": "strong_b50", "ret60_max": -0.165, "mkt_dd_max": -0.054, "exit": ("hold", 40),   # 2026-10-19 대형주 연구(jb_mid.py 대형주)
+              "order": {"buy_k": 0.05, "buy_wait": 10, "buy_fallback": "skip", "ladder": [0.10, 0.20], "add_limit": False}},   # 지정가 저가 매수(tools/research/jb_order.py)
+    "중형주": {"entry": "strong_b50", "liq_max": 10.3, "exit": ("ai_or_bb", 0.30, 0.20),     # 2026-10-19 중형주 연구(tools/research/jb_mid.py)
+              "order": {"buy_k": 0.03, "buy_wait": 3, "buy_fallback": "skip", "ladder": [0.10, 0.20], "add_limit": False}},
+    "소형주": {"entry": "strong_b50", "exit": ("ai_or_bb", 0.40, 0.20),
+              "order": {"buy_k": 0.03, "buy_wait": 3, "buy_fallback": "skip", "ladder": [0.07, 0.14], "add_limit": False}},
+    "잡주": {"entry": "strong_b50", "exit": ("ai_or_bb", 0.40, 0.20),
+            "order": {"buy_k": 0.05, "buy_wait": 5, "buy_fallback": "skip", "ladder": [0.05, 0.10], "add_limit": False}},
 }
+# 2026-10-19 저가 매수(사용자 "저가 매수·고가 매도는 주식의 기본 — 무조건 적용", tools/research/jb_order.py): 신호 다음 날부터 '신호일 종가보다 k% 아래' 지정가로 며칠 기다려
+# 닿으면 그 가격에 1차 매수(안 닿으면 사지 않음), 추가 매수는 3번에 나눠(1차 매수가 기준 두 단계, 종가가 닿으면 다음 날 시가). 2021년까지로 고르고 2022년 이후 확인:
+# 거래당 평균 대형 +23.8→+24.8% · 중형 +15.4→+17.0% · 소형 +17.0→+19.5% · 잡주 +16.0→+18.7%, 손실 거래 10→4 · 23→13 · 152→81 · 139→80건,
+# 평균 단가가 실제 저점에 더 가까움. 대신 지정가에 안 닿은 신호는 건너뛰어 거래 수가 약 50~60%로 줄어듦. 지정가 매도(목표가·회복·상단)는 모든 구간에서 평균을 낮춰 넣지 않음.
 STATUS = {"잡주": "잡주는 소형주와 같은 규칙입니다 — 잡주만 따로 고른 규칙은 고를 때 안 본 2022년 이후에서 더 나빠 그대로 둠(잡주 340종목 시험: 2017~21년 +25%, 2022년 이후 +16%)."}
 CAP = 120           # 매도 조건이 오지 않아도 이 봉 수가 지나면 종가에 매도
 SPLIT = 0.10        # 나눠 사기(2026-10-19, tools/research/jb_loss.py): 신호 다음 날 시가에 절반, 매도 전 처음으로 종가가 1차 매수가보다 10% 이상 아래면
@@ -39,7 +47,9 @@ def describe(group: str | None) -> tuple[str, str]:
            + (f" · 20일 평균 거래대금 {10 ** r['liq_max'] / 1e8:,.0f}억 원 미만" if r.get("liq_max") else "")
            + (f" · 60일 동안 {-r['ret60_max'] * 100:.1f}% 넘게 하락" if r.get("ret60_max") is not None else "")
            + (f" · 시장이 52주 고점보다 {-r['mkt_dd_max'] * 100:.1f}% 넘게 아래" if r.get("mkt_dd_max") is not None else "")
-           + " → 다음 날 시가 매수")
+           + (f" → 다음 날부터 {r['order']['buy_wait']}일 동안 신호일 종가보다 {r['order']['buy_k'] * 100:.0f}% 낮은 지정가 매수(안 닿으면 사지 않음)"
+              f", 1차 매수가보다 {' · '.join(f'{d * 100:.0f}%' for d in r['order']['ladder'])} 아래로 마감하면 다음 날 시가에 추가 매수(3번에 나눠)"
+              if r.get("order", {}).get("buy_k") else " → 다음 날 시가 매수"))
     x = r["exit"]
     if x[0] == "hold":
         sell = f"매수 후 {x[1]}거래일째 종가에 매도"
@@ -109,6 +119,7 @@ def simulate(o, h, l, c, score, group=None, ok=None, v=None, mkt_dd=None, rule=N
         liq = np.log10(m20 + 1)
     trades, busy, pending = [], -1, None
     adds, add_pending = {}, []                               # 나눠 사기: 1차 매수 봉 → (2차 매수 봉, 가격), 오늘 마감에 2차 매수 신호가 난 1차 매수 봉
+    aux_fills = {}                                          # 지정가 주문 방식: 1차 매수 봉 → [(봉, 가격, 비중), …](채워진 것만)
     for i, t in _crossings(s, ok):
         r = {**base, **base["regimes"].get(reg[i], {})} if reg is not None else base
         if r.get("skip"):
@@ -123,6 +134,22 @@ def simulate(o, h, l, c, score, group=None, ok=None, v=None, mkt_dd=None, rule=N
         if r.get("mkt_dd_max") is not None and mkt_dd is not None and not (np.isfinite(mkt_dd[i]) and mkt_dd[i] < r["mkt_dd_max"]):
             continue
         if i <= busy:
+            continue
+        if r.get("order"):              # 지정가 주문 방식(저가 매수·고가 매도·손실 회복 매도) — _trade_order
+            res = _trade_order(o, h, l, c, up, sm5, i, n, r)
+            if res is None:             # 아직 지정가가 안 닿았고 기다리는 중(오늘이 기다리는 기간 안)
+                pending = i
+                continue
+            if res == "skip":
+                continue
+            b, entry, sell, px, why, fills, ret, padd = res
+            if len(fills) > 1:
+                adds[b] = (fills[1][0], fills[1][1])
+            aux_fills[b] = fills
+            if padd:
+                add_pending.append(b)
+            trades.append((i, b, sell, None if px is None else float(px), ret, why))
+            busy = n if sell is None else sell
             continue
         if r.get("entry_close"):        # 장 마감 전(15시) 신호 → 그날 종가에 매수(시험용 옵션, tools/research/jb_close.py)
             b, entry = i, c[i]
@@ -196,7 +223,96 @@ def simulate(o, h, l, c, score, group=None, ok=None, v=None, mkt_dd=None, rule=N
         ret = None if sell is None else float(px / avg - 1 - COST)
         trades.append((i, b, sell, None if px is None else float(px), ret, why))
         busy = n if sell is None else sell
-    return trades, pending, {"mid": mid, "up": up, "lo": lo, "sm5": sm5, "adds": adds, "add_pending": add_pending}
+    return trades, pending, {"mid": mid, "up": up, "lo": lo, "sm5": sm5, "adds": adds, "add_pending": add_pending, "fills": aux_fills}
+
+
+def _trade_order(o, h, l, c, up, sm5, i, n, r):
+    """지정가 주문 방식으로 한 거래를 따라간다(2026-10-19, 사용자 "저가 매수·고가 매도가 주식의 기본 — 무조건 적용").
+    r["order"]:
+      buy_k·buy_wait·buy_fallback: 신호일 종가보다 buy_k 아래 지정가로 다음 날부터 buy_wait 일 기다림(장중 저가가 닿으면 그 가격, 시가가 더 낮으면 시가),
+                                    끝까지 안 닿으면 'close' = 마지막 날 종가 매수 / 'skip' = 사지 않음. buy_k=0 이면 다음 날 시가(예전과 같음).
+      ladder: 추가 매수 하락 폭 목록(1차 매수가 기준, 예 [0.10] = 지금의 나눠 사기, [0.07, 0.14] = 3번에 나눠). 모든 몫은 같은 비중.
+      add_limit: True 면 추가 매수도 지정가(장중 저가가 닿는 순간), False 면 종가가 닿은 다음 날 시가(예전).
+      tp: 평균 단가 +tp 에 지정가 매도 · band_gain(보유형 규칙): 수익 band_gain 이상에서 전날 볼린저 상단 지정가 매도
+      recover: 추가 매수로 평균 단가가 내려간 뒤 평균 단가 +recover 에 지정가 매도(손실 거래를 작은 수익으로 끝냄)
+    같은 봉에서 추가 매수가 체결되면 그 봉에서는 지정가 매도를 하지 않는다(고가가 저가보다 먼저였는지 알 수 없어서).
+    돌려줌: None(아직 지정가를 기다리는 중) · "skip" · (매수 봉, 1차 가격, 매도 봉|None, 매도가, 이유, 체결[(봉, 가격, 비중)], 수익, 오늘 추가 매수 대기)"""
+    od = r["order"]
+    k, W = od.get("buy_k", 0.0), od.get("buy_wait", 1)
+    if k <= 0:
+        b = i + 1
+        if b >= n:
+            return None
+        entry = float(o[b])
+    else:
+        L, b = c[i] * (1 - k), None
+        for j in range(i + 1, min(i + W, n - 1) + 1):
+            if o[j] <= L:
+                b, entry = j, float(o[j])
+                break
+            if l[j] <= L:
+                b, entry = j, float(L)
+                break
+        if b is None:
+            if i + W > n - 1:
+                return None
+            if od.get("buy_fallback", "close") == "skip":
+                return "skip"
+            b, entry = i + W, float(c[i + W])
+    drops = list(od.get("ladder", [SPLIT] if SPLIT else []))
+    w = 1.0 / (1 + len(drops))
+    fills = [(b, entry, w)]
+    nxt, trig = 0, None
+    if drops and not od.get("add_limit") and c[b] <= entry * (1 - drops[0]):
+        trig = b                                        # 매수한 날 종가부터 −10% 면 다음 날 시가에 추가(예전 계산과 같게)
+    x = r["exit"]
+    cap = x[1] if x[0] == "hold" else CAP
+
+    def avg():
+        return sum(f[1] * f[2] for f in fills) / sum(f[2] for f in fills)
+
+    sell, px, why = None, None, ""
+    for j in range(b + 1, n):
+        added = False
+        if nxt < len(drops):
+            P = entry * (1 - drops[nxt])
+            if od.get("add_limit"):
+                if l[j] <= P:
+                    fills.append((j, float(min(o[j], P)), w)); nxt += 1; added = True     # 장중 체결 — 이 봉의 지정가 매도는 막음
+            elif trig is not None:
+                fills.append((j, float(o[j]), w)); nxt += 1; trig = None              # 시가 체결 — 그 뒤 장중 매도는 가능
+        a = avg()
+        if x[0] == "hold" and j == b + cap:
+            sell, px, why = j, c[j], f"매수 후 {cap}거래일째 종가"
+            break
+        if not added:
+            if od.get("recover") is not None and len(fills) > 1 and h[j] >= a * (1 + od["recover"]):
+                sell, px, why = j, max(o[j], a * (1 + od["recover"])), f"추가 매수 뒤 평균 단가 +{od['recover'] * 100:.0f}% 회복 — 지정가 매도"
+                break
+            if od.get("tp") and h[j] >= a * (1 + od["tp"]):
+                sell, px, why = j, max(o[j], a * (1 + od["tp"])), f"평균 단가 +{od['tp'] * 100:.0f}% 목표가 — 지정가 매도"
+                break
+            if x[0] == "hold" and od.get("band_gain") is not None:
+                u = up[j - 1]
+                if np.isfinite(u) and h[j] >= u and max(o[j], u) >= a * (1 + od["band_gain"]):
+                    sell, px, why = j, max(o[j], u), f"수익 +{od['band_gain'] * 100:.0f}% 이상에서 볼린저 상단 {u:,.0f}원 — 지정가 매도"
+                    break
+        if x[0] != "hold":
+            u = up[j - 1]
+            if not added and np.isfinite(u) and h[j] >= u and max(o[j], u) >= entry * (1 + x[2]):
+                sell, px, why = j, max(o[j], u), f"수익 +{x[2] * 100:.0f}% 이상에서 볼린저 상단 {u:,.0f}원 도달"
+                break
+            if j - b >= 5 and sm5[j] < x[1]:
+                sell, px, why = j, c[j], f"AI 점수(5봉 평균) {sm5[j] * 100:.0f}점 — {x[1] * 100:.0f}점 아래"
+                break
+            if j == b + cap:
+                sell, px, why = j, c[j], f"{cap}거래일 동안 매도 조건이 없어 종가 매도"
+                break
+        if not od.get("add_limit") and nxt < len(drops) and trig is None and c[j] <= entry * (1 - drops[nxt]):
+            trig = j
+    if sell is None:
+        return b, entry, None, None, "", fills, None, trig is not None
+    return b, entry, sell, float(px), why, fills, float(px / avg() - 1 - COST), False
 
 
 def _exit_plus(o, h, c, up, sm5, b, n, entry, r):
@@ -271,6 +387,22 @@ def near_high(h, j):
     return k, float(h[k])
 
 
+def fills_of(aux, b, o):
+    """한 거래의 체결 목록 [(봉, 가격, 비중)] — 지정가 주문 방식이면 그 기록, 예전 방식이면 1차(시가)+2차(나눠 사기)."""
+    f = (aux.get("fills") or {}).get(b)
+    if f:
+        return f
+    adds = aux.get("adds", {})
+    if b in adds:
+        return [(b, float(o[b]), 0.5), (adds[b][0], float(adds[b][1]), 0.5)]
+    return [(b, float(o[b]), 1.0)]
+
+
+def avg_price(fills, upto=None):
+    f = [x for x in fills if upto is None or x[0] <= upto]
+    return sum(x[1] * x[2] for x in f) / sum(x[2] for x in f)
+
+
 def markers(dates, o, c, score, tr, aux, start: str = "", h=None, l=None):
     """JB차트 표식과 거래 목록(JB차트·휴대폰 스냅샷이 같이 씀). 2차 매수(나눠 사기)도 표시. 돌려줌: (표식[], 끝난 거래[]).
     h·l 을 주면 거래마다 그 무렵 실제 저점·고점(작은 점)과 '저점보다 +x% / 고점보다 −y%'를 함께 — 차트로 직접 확인하는 용도."""
@@ -278,7 +410,8 @@ def markers(dates, o, c, score, tr, aux, start: str = "", h=None, l=None):
     adds = aux.get("adds", {})
     n = len(c)
     for i, b, j, px, ret, why in tr:
-        e = float(o[b])
+        fl = fills_of(aux, b, o)
+        e = fl[0][1]
         low_txt = ""
         if l is not None:
             lk, lp = near_low(l, i)
@@ -287,16 +420,15 @@ def markers(dates, o, c, score, tr, aux, start: str = "", h=None, l=None):
                 mk.append({"date": dates[lk], "side": "low", "tier": "참고", "label": "저점", "why": f"매수({dates[b]}) 무렵 실제 저점 {lp:,.0f}원(신호 앞 5봉~뒤 15봉 최저가)"})
         if dates[b] >= start:
             mk.append({"date": dates[b], "side": "buy", "tier": "강", "label": "매수",
-                       "why": f"{dates[i]} AI 점수 {score[i] * 100:.0f}점(95점 상향 돌파) · 볼린저 가운데 아래 → {dates[b]} 시가 {e:,.0f}원에 1차(절반) 매수" + low_txt})
-        avg = e
-        if b in adds:
-            ab, apx = adds[b]
-            avg = (e + apx) / 2
+                       "why": f"{dates[i]} AI 점수 {score[i] * 100:.0f}점(95점 상향 돌파) · 볼린저 가운데 아래 → {dates[b]} {e:,.0f}원에 1차 매수"
+                              + ("(시가)" if abs(e - o[b]) < 1e-9 else "(지정가 기다리다 안 닿아 종가)" if abs(e - c[b]) < 1e-9 else "(신호일 종가보다 낮은 지정가 체결)") + low_txt})
+        for n_, (ab, apx, _w) in enumerate(fl[1:], 2):
             if dates[ab] >= start:
-                mk.append({"date": dates[ab], "side": "buy", "tier": "약", "label": "2차 매수",
-                           "why": f"{dates[ab - 1]} 종가가 1차 매수가 {e:,.0f}원보다 {SPLIT * 100:.0f}% 이상 아래 → {dates[ab]} 시가 {apx:,.0f}원에 나머지 절반(평균 단가 {avg:,.0f}원)"})
+                mk.append({"date": dates[ab], "side": "buy", "tier": "약", "label": f"{n_}차 매수",
+                           "why": f"1차 매수가 {e:,.0f}원보다 {(1 - apx / e) * 100:.0f}% 아래 → {dates[ab]} {apx:,.0f}원에 {n_}차 매수(평균 단가 {avg_price(fl, ab):,.0f}원)"})
+        avg = avg_price(fl, j)
         if j is not None:
-            t_ = {"buy": dates[b], "buy_px": e, "avg": round(avg, 2), "add": dates[adds[b][0]] if b in adds else None, "sell": dates[j], "sell_px": px, "ret": round(ret, 4), "tier": "강", "seen": False}
+            t_ = {"buy": dates[b], "buy_px": e, "avg": round(avg, 2), "add": dates[fl[1][0]] if len(fl) > 1 and fl[1][0] <= j else None, "sell": dates[j], "sell_px": px, "ret": round(ret, 4), "tier": "강", "seen": False}
             high_txt = ""
             if l is not None:
                 t_["from_low"] = round(e / near_low(l, i)[1] - 1, 4)
@@ -309,7 +441,7 @@ def markers(dates, o, c, score, tr, aux, start: str = "", h=None, l=None):
             done.append(t_)
             if dates[j] >= start:
                 mk.append({"date": dates[j], "side": "sell", "tier": "강", "label": f"매도 {ret * 100:+.0f}%",
-                           "why": f"{dates[b]} 매수{' + ' + dates[adds[b][0]] + ' 2차 매수' if b in adds else ''} → {dates[j]} {why}, {px:,.0f}원에 매도"
+                           "why": f"{dates[b]} 매수{''.join(f' + {dates[x[0]]} 추가 매수' for x in fl[1:] if x[0] <= j)} → {dates[j]} {why}, {px:,.0f}원에 매도"
                                   f"(평균 단가 {avg:,.0f}원, 비용 포함 {ret * 100:+.1f}%)" + high_txt})
     mk.sort(key=lambda m: m["date"])
     return mk, done
@@ -322,7 +454,14 @@ def action(dates, o, c, tr, pending, aux, score=None, group=None) -> dict:
     g = (group or "소형주")
     sc = None if score is None or not np.isfinite(score[-1]) else float(score[-1]) * 100
     sc_txt = f"AI {sc:.0f}점" if sc is not None else "AI 점수 없음"
+    od = rule_for(group).get("order") or {}
     if pending is not None:
+        if od.get("buy_k"):
+            lim = c[pending] * (1 - od["buy_k"])
+            left = pending + od.get("buy_wait", 1) - (n - 1)
+            return {"kind": "buy", "text": f"{g} ▲ 지정가 매수 {lim:,.0f}원 · {left}일",
+                    "title": f"{dates[pending]} AI 점수 {score[pending] * 100:.0f}점(95점 상향 돌파) + 볼린저 가운데 아래 → 신호일 종가 {c[pending]:,.0f}원보다 {od['buy_k'] * 100:.0f}% 낮은 "
+                             f"{lim:,.0f}원에 지정가 매수 주문(앞으로 {left}거래일, 안 닿으면 사지 않음) — 1차 매수(3분의 1)"}
         return {"kind": "buy", "text": f"{g} ▲ 매수 — 다음 거래일 시가",
                 "title": f"{dates[pending]} AI 점수 {score[pending] * 100:.0f}점(95점 상향 돌파) + 볼린저 가운데 아래 → 다음 거래일 시가에 1차(절반) 매수"}
     if tr and tr[-1][2] == n - 1:
@@ -331,8 +470,9 @@ def action(dates, o, c, tr, pending, aux, score=None, group=None) -> dict:
     h = holding(dates, o, c, tr, aux)
     if h:
         if h["add_pending"]:
-            return {"kind": "add", "text": f"{g} ▲ 2차 매수 — 다음 거래일 시가",
-                    "title": f"오늘 종가가 1차 매수가 {h['buy_px']:,.0f}원보다 10% 이상 아래 → 다음 거래일 시가에 나머지 절반(지금 {h['ret'] * 100:+.1f}%)"}
+            nth = h.get("fills", 1) + 1
+            return {"kind": "add", "text": f"{g} ▲ {nth}차 매수 — 다음 거래일 시가",
+                    "title": f"오늘 종가가 추가 매수 기준(1차 매수가 {h['buy_px']:,.0f}원 대비)에 닿음 → 다음 거래일 시가에 {nth}차 매수(지금 {h['ret'] * 100:+.1f}%)"}
         return {"kind": "hold", "text": f"{g} 보유 중 {h['ret'] * 100:+.1f}% · {h['days']}일째",
                 "title": f"{h['buy']} 매수" + (f" + {h['add']} 2차 매수" if h["add"] else "") + f", 평균 단가 {h['avg']:,.0f}원 · 매도 조건: {describe(group)[1]}"}
     return {"kind": "wait", "text": f"{g} 관망 · {sc_txt}", "title": "매수 신호 없음 — " + describe(group)[0]}
@@ -343,8 +483,7 @@ def holding(dates, o, c, tr, aux):
     if not tr or tr[-1][2] is not None:
         return None
     b = tr[-1][1]
-    e = float(o[b])
-    adds = aux.get("adds", {})
-    avg = (e + adds[b][1]) / 2 if b in adds else e
-    return {"buy": dates[b], "buy_px": e, "avg": round(avg, 2), "add": dates[adds[b][0]] if b in adds else None,
+    fl = fills_of(aux, b, o)
+    e, avg = fl[0][1], avg_price(fl)
+    return {"buy": dates[b], "buy_px": e, "avg": round(avg, 2), "add": dates[fl[1][0]] if len(fl) > 1 else None, "fills": len(fl),
             "add_pending": b in aux.get("add_pending", []), "ret": round(float(c[-1] / avg - 1), 4), "days": int(len(c) - 1 - b)}

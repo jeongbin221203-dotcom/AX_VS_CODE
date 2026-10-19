@@ -155,26 +155,35 @@ def compute(date: str | None = None, live: dict | None = None) -> dict:
         if live and live.get("mkt_dd") is not None and dates[-1] == live["date"]:
             mdd[-1] = live["mkt_dd"]
         tr, pend, aux = jb_rules.simulate(o, h, l, cl, s, g, v=df["volume"].to_numpy(float), mkt_dd=mdd)
-        adds = aux["adds"]
         day = max(day, dates[k])
+        od = jb_rules.rule_for(g).get("order") or {}
         base = {"code": code, "name": names.get(code, code), "close": float(cl[k]), "score": round(float(s[k]) * 100), "date": dates[k]}
-        if k == len(cl) - 1 and pend is not None:
-            out[g]["buy"].append({**base, "signal": dates[pend]})
+        if k == len(cl) - 1 and pend is not None:                 # 매수 신호(지정가면 아직 안 닿아 기다리는 중 — 주문 가격·남은 날)
+            row = {**base, "signal": dates[pend]}
+            if od.get("buy_k"):
+                row.update(limit_px=round(float(cl[pend]) * (1 - od["buy_k"])), wait_left=int(pend + od.get("buy_wait", 1) - k))
+            out[g]["buy"].append(row)
         for i, b, j, p2, ret, why in tr:
-            later = {"exit": dates[j] if j is not None else None, "exit_ret": ret, "exit_why": why} if j is not None else {"exit": None, "now_ret": round(float(cl[-1] / o[b] - 1), 4)}
-            if i == k and b < len(cl):                    # 그날 매수 신호 → 다음 날 시가 매수(지난 날이면 그 뒤 결과까지)
-                out[g]["buy"].append({**base, "signal": dates[i], "buy": dates[b], "buy_px": float(o[b]), **later})
-            if b <= k and (j is None or j > k):           # 그날 보유 중(나눠 사기: 그날까지 2차 매수했으면 평균 단가)
-                ab = adds.get(b)
-                avg = (o[b] + ab[1]) / 2 if ab and ab[0] <= k else float(o[b])
-                row = {**base, "buy": dates[b], "buy_px": float(o[b]), "avg": round(avg, 2), "add": dates[ab[0]] if ab and ab[0] <= k else None,
+            fl = jb_rules.fills_of(aux, b, o)
+            e = fl[0][1]
+            later = {"exit": dates[j] if j is not None else None, "exit_ret": ret, "exit_why": why} if j is not None else {"exit": None, "now_ret": round(float(cl[-1] / jb_rules.avg_price(fl) - 1), 4)}
+            if i == k and b < len(cl):                    # 그날 매수 신호 → (지난 날이면) 실제 산 날·가격과 그 뒤 결과
+                out[g]["buy"].append({**base, "signal": dates[i], "buy": dates[b], "buy_px": e, **later})
+            if b <= k and (j is None or j > k):           # 그날 보유 중(추가 매수했으면 그날까지의 평균 단가)
+                avg = jb_rules.avg_price(fl, k)
+                done_adds = [x for x in fl[1:] if x[0] <= k]
+                row = {**base, "buy": dates[b], "buy_px": e, "avg": round(avg, 2), "add": dates[done_adds[-1][0]] if done_adds else None, "fills": 1 + len(done_adds),
                        "ret": round(float(cl[k] / avg - 1), 4), "days": int(k - b), **later}
+                ladder = od.get("ladder", [jb_rules.SPLIT])
+                if len(done_adds) < len(ladder):
+                    row["next_add_px"] = round(e * (1 - ladder[len(done_adds)]))      # 다음 추가 매수 가격(지정가면 걸어 둘 주문)
                 out[g]["hold"].append(row)
-                # 그날 마감에 2차 매수 신호(−10%) → 다음 거래일 시가에 나머지 절반
-                if (ab and ab[0] - 1 == k) or (k == len(cl) - 1 and b in aux["add_pending"]):
-                    out[g]["add"].append({**row, "add_px": ab[1] if ab and ab[0] - 1 == k else None})
+                # 추가 매수: 지정가는 그날 장중에 체결된 것, 예전 방식은 그날 마감 −10% → 다음 거래일 시가
+                today_fill = [x for x in fl[1:] if (x[0] == k if od.get("add_limit") else x[0] - 1 == k)]
+                if today_fill or (k == len(cl) - 1 and b in aux["add_pending"]):
+                    out[g]["add"].append({**row, "add_px": today_fill[0][1] if today_fill else None})
             if j == k:                                    # 그날 매도 신호
-                out[g]["sell"].append({**base, "buy": dates[b], "buy_px": float(o[b]), "sell_px": p2, "ret": round(ret, 4), "why": why})
+                out[g]["sell"].append({**base, "buy": dates[b], "buy_px": e, "avg": round(jb_rules.avg_price(fl, j), 2), "sell_px": p2, "ret": round(ret, 4), "why": why})
     for g in out:
         out[g]["buy"].sort(key=lambda r: -r["score"])
         out[g]["hold"].sort(key=lambda r: -r["ret"])
@@ -185,11 +194,11 @@ def compute(date: str | None = None, live: dict | None = None) -> dict:
     latest = max((px[c_]["date"].iloc[-1] for c_ in px), default="")
     if live:
         return {"date": day, "past": False, "live": True, "asof": live.get("asof", ""), "generated": datetime.now().isoformat(timespec="seconds"), "groups": out,
-                "note": f"장중({live.get('asof', '')[11:16]} 가격) 기준 — 같은 시총 구간별 규칙을 오늘 미완성 봉으로 미리 계산했습니다. 살 종목은 오늘 종가(15:20~15:30 종가 단일가)에 사는 것을 가정합니다"
-                        "(과거 시험: 다음 날 시가 대신 그날 종가에 사도 구간별 평균 차이 1%p 안 — tools/research/jb_close.py). 마감까지 가격이 바뀌면 신호가 사라지거나 새로 생길 수 있고, "
+                "note": f"장중({live.get('asof', '')[11:16]} 가격) 기준 — 같은 시총 구간별 규칙을 오늘 미완성 봉으로 미리 계산했습니다. 살 종목은 신호일(오늘) 장중 가격보다 3~5% 낮은 지정가 주문입니다(마감 가격이 달라지면 16시 결과의 지정가로 고칠 것). "
+                        "마감까지 가격이 바뀌면 신호가 사라지거나 새로 생길 수 있고, "
                         "16시 갱신 뒤에는 마감 값으로 다시 계산한 결과가 나옵니다. 과거 시험 결과이며 수익을 보장하지 않습니다."}
     return {"date": day, "past": bool(date and day < latest), "generated": datetime.now().isoformat(timespec="seconds"), "groups": out,
-            "note": "JB차트와 같은 시총 구간별 규칙. 매수·매도 신호는 그날 마감 값으로 나오고 다음 거래일 시가(매수)·그날 종가/지정가(매도)를 가정합니다. "
+            "note": "JB차트와 같은 시총 구간별 규칙. 매수 신호는 그날 마감 값으로 나오고, 다음 날부터 신호일 종가보다 3~5% 낮은 지정가로 기다려 닿으면 삽니다(안 닿으면 사지 않음). 매도는 그날 종가/지정가. "
                     "'보유 중'은 규칙대로 샀다고 가정한 종목입니다. 지난 날을 보면 '그 뒤 결과'는 그 뒤 실제 가격으로 규칙대로 판 결과입니다. 과거 시험 결과이며 수익을 보장하지 않습니다."}
 
 
@@ -377,7 +386,7 @@ def chart(code: str, df, bars: int = 750) -> dict | None:
     if group:
         summary += f" 그룹({group['name']}) 안 후보 순위 {group['rank']}위/{group['n']}종목({group['date']} 기준)."
     if pend is not None:
-        summary += f" ▶ 매수 신호: {dates[pend]} 점수 {s[pend] * 100:.0f}점 → 다음 거래일 시가에 매수({g or '소형주'} 규칙)."
+        summary += " ▶ 매수 신호: " + jb_rules.action(list(dates), o, c, tr, pend, aux, s, g)["title"] + "."
     elif hold:
         summary += (f" ▶ 보유 중: {hold['buy']} 시가 {hold['buy_px']:,.0f}원 1차 매수" + (f", {hold['add']} 2차 매수(평균 단가 {hold['avg']:,.0f}원)" if hold["add"] else "")
                     + f" — 평균 단가 기준 {hold['ret'] * 100:+.1f}%, {hold['days']}거래일째" + (" · ▶ 오늘 마감 −10% → 다음 거래일 시가에 2차(나머지 절반) 매수" if hold["add_pending"] else "")
