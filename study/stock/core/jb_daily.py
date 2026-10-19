@@ -116,7 +116,7 @@ def compute(date: str | None = None) -> dict:
         names = {r["code"]: r["name"] for r in c.execute("SELECT code,name FROM symbols")}
     codes = [k for k in st if grp_of.get(k) in GROUPS]
     px = _prices_all(codes)
-    out = {g: {"buy": [], "hold": [], "sell": []} for g in GROUPS}
+    out = {g: {"buy": [], "add": [], "hold": [], "sell": []} for g in GROUPS}
     day = ""
     for code in codes:
         g = grp_of[code]
@@ -133,7 +133,8 @@ def compute(date: str | None = None) -> dict:
         if not np.isfinite(s[k]):
             continue                              # 그날 점수가 없으면(갱신 전·기록 밖) 건너뜀
         o, h, l, cl = (df[x].to_numpy(float) for x in ("open", "high", "low", "close"))
-        tr, pend, _ = jb_rules.simulate(o, h, l, cl, s, g, v=df["volume"].to_numpy(float), mkt_dd=jb_rules.market_dd(dates))
+        tr, pend, aux = jb_rules.simulate(o, h, l, cl, s, g, v=df["volume"].to_numpy(float), mkt_dd=jb_rules.market_dd(dates))
+        adds = aux["adds"]
         day = max(day, dates[k])
         base = {"code": code, "name": names.get(code, code), "close": float(cl[k]), "score": round(float(s[k]) * 100), "date": dates[k]}
         if k == len(cl) - 1 and pend is not None:
@@ -142,16 +143,24 @@ def compute(date: str | None = None) -> dict:
             later = {"exit": dates[j] if j is not None else None, "exit_ret": ret, "exit_why": why} if j is not None else {"exit": None, "now_ret": round(float(cl[-1] / o[b] - 1), 4)}
             if i == k and b < len(cl):                    # 그날 매수 신호 → 다음 날 시가 매수(지난 날이면 그 뒤 결과까지)
                 out[g]["buy"].append({**base, "signal": dates[i], "buy": dates[b], "buy_px": float(o[b]), **later})
-            if b <= k and (j is None or j > k):           # 그날 보유 중
-                out[g]["hold"].append({**base, "buy": dates[b], "buy_px": float(o[b]), "ret": round(float(cl[k] / o[b] - 1), 4), "days": int(k - b), **later})
+            if b <= k and (j is None or j > k):           # 그날 보유 중(나눠 사기: 그날까지 2차 매수했으면 평균 단가)
+                ab = adds.get(b)
+                avg = (o[b] + ab[1]) / 2 if ab and ab[0] <= k else float(o[b])
+                row = {**base, "buy": dates[b], "buy_px": float(o[b]), "avg": round(avg, 2), "add": dates[ab[0]] if ab and ab[0] <= k else None,
+                       "ret": round(float(cl[k] / avg - 1), 4), "days": int(k - b), **later}
+                out[g]["hold"].append(row)
+                # 그날 마감에 2차 매수 신호(−10%) → 다음 거래일 시가에 나머지 절반
+                if (ab and ab[0] - 1 == k) or (k == len(cl) - 1 and b in aux["add_pending"]):
+                    out[g]["add"].append({**row, "add_px": ab[1] if ab and ab[0] - 1 == k else None})
             if j == k:                                    # 그날 매도 신호
                 out[g]["sell"].append({**base, "buy": dates[b], "buy_px": float(o[b]), "sell_px": p2, "ret": round(ret, 4), "why": why})
     for g in out:
         out[g]["buy"].sort(key=lambda r: -r["score"])
         out[g]["hold"].sort(key=lambda r: -r["ret"])
         out[g]["sell"].sort(key=lambda r: -r["ret"])
+        out[g]["add"].sort(key=lambda r: r["ret"])
         b, s_ = jb_rules.describe(g)
-        out[g]["rule"] = {"buy": b, "sell": s_, "note": jb_rules.STATUS.get(g, "")}
+        out[g]["rule"] = {"buy": b + f" (나눠 사기: 1차 절반 → {jb_rules.SPLIT * 100:.0f}% 떨어지면 나머지 절반)", "sell": s_, "note": jb_rules.STATUS.get(g, "")}
     latest = max((px[c_]["date"].iloc[-1] for c_ in px), default="")
     return {"date": day, "past": bool(date and day < latest), "generated": datetime.now().isoformat(timespec="seconds"), "groups": out,
             "note": "JB차트와 같은 시총 구간별 규칙. 매수·매도 신호는 그날 마감 값으로 나오고 다음 거래일 시가(매수)·그날 종가/지정가(매도)를 가정합니다. "
@@ -222,20 +231,12 @@ def chart(code: str, df, bars: int = 750) -> dict | None:
     info = (cur.get("scores") or {}).get(code)
     g = info[0] if info else None
     o, h, l, c = (df[k].to_numpy(float) for k in ("open", "high", "low", "close"))
-    tr, pend, _ = jb_rules.simulate(o, h, l, c, s, g, v=df["volume"].to_numpy(float), mkt_dd=jb_rules.market_dd(dates))
+    tr, pend, aux = jb_rules.simulate(o, h, l, c, s, g, v=df["volume"].to_numpy(float), mkt_dd=jb_rules.market_dd(dates))
     buy_txt, sell_txt = jb_rules.describe(g)
     n = len(dates)
     start = max(n - bars, 0)
-    mk, trades = [], []
-    for i, b, j, px, ret, why in tr:
-        if b >= start:
-            mk.append({"date": dates[b], "side": "buy", "tier": "강", "label": "매수",
-                       "why": f"{dates[i]} AI 점수 {s[i] * 100:.0f}점(95점 상향 돌파) · 볼린저 가운데 아래 → {dates[b]} 시가 {o[b]:,.0f}원에 매수"})
-        if j is not None:
-            trades.append({"buy": dates[b], "buy_px": float(o[b]), "sell": dates[j], "sell_px": px, "ret": round(ret, 4), "tier": "강", "seen": False})
-            if j >= start:
-                mk.append({"date": dates[j], "side": "sell", "tier": "강", "label": f"매도 {ret * 100:+.0f}%",
-                           "why": f"{dates[b]} 매수 → {dates[j]} {why}, {px:,.0f}원에 매도 (비용 포함 {ret * 100:+.1f}%)"})
+    mk, trades = jb_rules.markers(list(dates), o, c, s, tr, aux, start=dates[start])
+    hold = jb_rules.holding(list(dates), o, c, tr, aux)
     shown = [t["ret"] for t in trades if t["buy"] >= dates[start]]
     now = float(s[-1])
     group = {"name": info[0], "rank": info[2], "n": info[3], "date": cur.get("date")} if info else None
@@ -244,9 +245,10 @@ def chart(code: str, df, bars: int = 750) -> dict | None:
         summary += f" 그룹({group['name']}) 안 후보 순위 {group['rank']}위/{group['n']}종목({group['date']} 기준)."
     if pend is not None:
         summary += f" ▶ 매수 신호: {dates[pend]} 점수 {s[pend] * 100:.0f}점 → 다음 거래일 시가에 매수({g or '소형주'} 규칙)."
-    elif tr and tr[-1][2] is None:
-        b = tr[-1][1]
-        summary += f" ▶ 보유 중: {dates[b]} 시가 {o[b]:,.0f}원 매수({c[-1] / o[b] - 1:+.1%}, {n - 1 - b}거래일째) — 매도 조건: {sell_txt}."
+    elif hold:
+        summary += (f" ▶ 보유 중: {hold['buy']} 시가 {hold['buy_px']:,.0f}원 1차 매수" + (f", {hold['add']} 2차 매수(평균 단가 {hold['avg']:,.0f}원)" if hold["add"] else "")
+                    + f" — 평균 단가 기준 {hold['ret'] * 100:+.1f}%, {hold['days']}거래일째" + (" · ▶ 오늘 마감 −10% → 다음 거래일 시가에 2차(나머지 절반) 매수" if hold["add_pending"] else "")
+                    + f". 매도 조건: {sell_txt}.")
     else:
         summary += " ▶ 지금은 매수 신호가 없습니다."
     if shown:

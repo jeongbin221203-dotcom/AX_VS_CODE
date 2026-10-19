@@ -53,16 +53,19 @@
 <div class="actgrid">
 {% for g in G %}{% set a = act.groups[g] %}
 <section class="actcard">
-  <h3>{{ g }} <small>{{ '산 종목' if act.past else '살 종목' }} <b>{{ a.buy|length }}</b> · 매도 신호 <b>{{ a.sell|length }}</b> · 보유 {{ a.hold|length }}</small></h3>
+  <h3>{{ g }} <small>{{ '산 종목' if act.past else '살 종목' }} <b>{{ a.buy|length }}</b> · 2차 매수 <b>{{ (a.add or [])|length }}</b> · 매도 신호 <b>{{ a.sell|length }}</b> · 보유 {{ a.hold|length }}</small></h3>
   <p class="hint rule">매수: {{ a.rule.buy }}<br>매도: {{ a.rule.sell }}{% if a.rule.note %}<br>※ {{ a.rule.note }}{% endif %}</p>
   {% if a.buy %}<div class="scroll"><table class="grid"><thead><tr><th>{{ '산 종목' if act.past else '살 종목' }}</th><th class="num">종가</th><th class="num">AI 점수</th>{% if act.past %}<th>그 뒤 결과</th>{% endif %}</tr></thead><tbody>
   {% for r in a.buy %}<tr data-href="{{ jbu(r.code, act.date) }}"><td><a href="{{ jbu(r.code, act.date) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td><td class="num">{{ r.close|won }}</td><td class="num"><b>{{ r.score }}</b>점</td>{% if act.past %}<td>{{ outcome(r) }}</td>{% endif %}</tr>{% endfor %}
   </tbody></table></div>{% else %}<p class="note">{{ '그날 산 종목이 없습니다.' if act.past else '오늘 살 종목이 없습니다.' }}</p>{% endif %}
+  {% if a.add %}<div class="scroll"><table class="grid"><thead><tr><th>2차 매수(나머지 절반)</th><th class="num">1차 매수</th><th class="num">{{ '그날' if act.past else '지금' }} 수익</th>{% if act.past %}<th>그 뒤 결과</th>{% endif %}</tr></thead><tbody>
+  {% for r in a.add %}<tr data-href="{{ jbu(r.code, act.date if act.past else none) }}"><td><a href="{{ jbu(r.code, act.date if act.past else none) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td><td class="num"><small>{{ r.buy }}</small> {{ r.buy_px|won }}</td><td class="num"><span class="{{ 'up' if r.ret > 0 else 'down' }}">{{ pct(r.ret, 1, true) }}</span></td>{% if act.past %}<td>{{ outcome(r) }}</td>{% endif %}</tr>{% endfor %}
+  </tbody></table></div><p class="hint">종가가 1차 매수가보다 10% 이상 아래 → 다음 거래일 시가에 나머지 절반을 삽니다(평균 단가를 낮춰 손실을 줄이는 나눠 사기).</p>{% endif %}
   {% if a.sell %}<div class="scroll"><table class="grid sellt"><thead><tr><th>매도 신호</th><th class="num">산 날·가격</th><th class="num">수익</th><th>이유</th></tr></thead><tbody>
   {% for r in a.sell %}<tr data-href="{{ jbu(r.code, act.date if act.past else none) }}"><td><a href="{{ jbu(r.code, act.date if act.past else none) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td><td class="num"><small>{{ r.buy }}</small> {{ r.buy_px|won }}</td><td class="num"><span class="{{ 'up' if r.ret > 0 else 'down' }}">{{ pct(r.ret, 1, true) }}</span></td><td><small>{{ r.why }}</small></td></tr>{% endfor %}
   </tbody></table></div>{% else %}<p class="note">{{ '그날 매도 신호가 없었습니다.' if act.past else '매도 신호가 없습니다.' }}</p>{% endif %}
   {% if a.hold %}<details><summary>{{ '그날 보유 중' if act.past else '보유 중' }}(규칙대로 샀다면) {{ a.hold|length }}개</summary><div class="scroll"><table class="grid"><thead><tr><th>종목</th><th class="num">산 날·가격</th><th class="num">{{ '그날 수익' if act.past else '지금 수익' }}</th><th class="num">보유</th>{% if act.past %}<th>그 뒤 결과</th>{% endif %}</tr></thead><tbody>
-  {% for r in a.hold %}<tr data-href="{{ jbu(r.code, act.date) }}"><td><a href="{{ jbu(r.code, act.date) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td><td class="num"><small>{{ r.buy }}</small> {{ r.buy_px|won }}</td><td class="num"><span class="{{ 'up' if r.ret > 0 else 'down' }}">{{ pct(r.ret, 1, true) }}</span></td><td class="num">{{ r.days }}일</td>{% if act.past %}<td>{{ outcome(r) }}</td>{% endif %}</tr>{% endfor %}
+  {% for r in a.hold %}<tr data-href="{{ jbu(r.code, act.date) }}"><td><a href="{{ jbu(r.code, act.date) }}">{{ r.name }}</a> <small>{{ r.code }}</small></td><td class="num"><small>{{ r.buy }}</small> {{ r.buy_px|won }}{% if r.add %}<br><small>2차 {{ r.add }} · 평균 {{ r.avg|won }}</small>{% endif %}</td><td class="num"><span class="{{ 'up' if r.ret > 0 else 'down' }}">{{ pct(r.ret, 1, true) }}</span></td><td class="num">{{ r.days }}일</td>{% if act.past %}<td>{{ outcome(r) }}</td>{% endif %}</tr>{% endfor %}
   </tbody></table></div></details>{% endif %}
 </section>
 {% endfor %}

@@ -91,7 +91,7 @@ def test_ai_chart_score_and_group_badge(tmp_path, monkeypatch):
     sells = [m for m in out["markers"] if m["side"] == "sell"]
     assert buys and sells and buys[0]["label"] == "매수" and buys[0]["tier"] == "강" and sells[0]["label"].startswith("매도 ")
     t = out["trades"][0]
-    assert t["buy"] < t["sell"] and abs(t["ret"] - (t["sell_px"] / t["buy_px"] - 1 - 0.003)) < 1e-3 and t["seen"] is True    # 걸어가며 검증 모델이 없으니 학습 구간 포함 표시
+    assert t["buy"] < t["sell"] and abs(t["ret"] - (t["sell_px"] / t["avg"] - 1 - 0.003)) < 1e-3 and (t["add"] is None) == (t["avg"] == t["buy_px"])   # 나눠 사기: 평균 단가 기준 and t["seen"] is True    # 걸어가며 검증 모델이 없으니 학습 구간 포함 표시
     assert out["accuracy"]["all"]["n"] >= 1 and out["accuracy"]["oos"] is False and "학습에 쓴" in out["summary"]
 
 

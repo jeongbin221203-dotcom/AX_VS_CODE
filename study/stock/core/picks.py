@@ -589,19 +589,15 @@ def ai_chart(df: pd.DataFrame, code: str, tf: str = "D", bars: int = 750, mkt=No
     o_arr, h_arr, l_arr, c_arr = (df[k].to_numpy(float) for k in ("open", "high", "low", "close"))
     tr, pend_i, _bb = jb_rules.simulate(o_arr, h_arr, l_arr, c_arr, score, grp, ok=np.isfinite(score), v=df["volume"].to_numpy(float), mkt_dd=jb_rules.market_dd(dates))   # 걸어가며 검증 모델이 없는 해는 학습 구간 점수(seen 표시)
     buy_txt, sell_txt = jb_rules.describe(grp)
-    markers, trades, pending = [], [], None
-    for i, b, j, px, ret, why in tr:
-        if b >= start:
-            markers.append({"date": predict._to_bar([dates[b]], bar_index)[0], "side": "buy", "tier": "강", "label": "매수",
-                            "why": f"{dates[i]} AI 점수 {score[i] * 100:.0f}점(95점 상향 돌파) · 볼린저 가운데 아래 → {dates[b]} 시가 {o_arr[b]:,.0f}원에 매수"})
-        if j is not None:
-            trades.append({"buy": dates[b], "buy_px": float(o_arr[b]), "sell": dates[j], "sell_px": px, "ret": round(ret, 4), "tier": "강", "seen": bool(not oos[i])})
-            if j >= start:
-                markers.append({"date": predict._to_bar([dates[j]], bar_index)[0], "side": "sell", "tier": "강", "label": f"매도 {ret * 100:+.0f}%",
-                                "why": f"{dates[b]} 매수 → {dates[j]} {why}, {px:,.0f}원에 매도 (비용 포함 {ret * 100:+.1f}%)"})
-        else:
-            pending = {"state": "holding", "tier": "강", "signal": dates[i], "buy": dates[b], "buy_px": float(o_arr[b]),
-                       "now_ret": round(float(c_arr[-1] / o_arr[b] - 1), 4), "days": int(n - 1 - b)}
+    mk_d, trades = jb_rules.markers(list(dates), o_arr, c_arr, score, tr, _bb, start=dates[start])
+    for t_, (i, b, j, px, ret, why) in zip(trades, [x for x in tr if x[2] is not None]):
+        t_["seen"] = bool(not oos[i])                      # 걸어가며 검증 모델이 없던 해(학습 구간) 표시
+    markers = [{**m, "date": predict._to_bar([m["date"]], bar_index)[0]} for m in mk_d]   # 주·월봉이면 그 주·달 봉으로
+    hold = jb_rules.holding(list(dates), o_arr, c_arr, tr, _bb)
+    pending = None
+    if hold:
+        pending = {"state": "holding", "tier": "강", "signal": dates[tr[-1][0]], "buy": hold["buy"], "buy_px": hold["buy_px"], "avg": hold["avg"],
+                   "add": hold["add"], "add_pending": hold["add_pending"], "now_ret": hold["ret"], "days": hold["days"]}
     if pend_i is not None:
         pending = {"state": "buy_tomorrow", "tier": "강", "signal": dates[pend_i], "score": round(float(score[pend_i]) * 100)}
     # 표시 구간의 정확도: 이 차트의 거래 결과 + 같은 기간 아무 날 사서 20일 보유한 평균
@@ -625,7 +621,9 @@ def ai_chart(df: pd.DataFrame, code: str, tf: str = "D", bars: int = 750, mkt=No
         if pending["state"] == "buy_tomorrow":
             summary += f" ▶ 매수 신호: {pending['signal']} 점수 {pending['score']}점 → 다음 거래일 시가에 매수({grp or '구간 미정'} 규칙)."
         else:
-            summary += f" ▶ 보유 중: {pending['buy']} 시가 {pending['buy_px']:,.0f}원 매수({pending['now_ret'] * 100:+.1f}%, {pending['days']}거래일째) — 매도 조건: {sell_txt}."
+            summary += (f" ▶ 보유 중: {pending['buy']} 시가 {pending['buy_px']:,.0f}원 1차 매수" + (f", {pending['add']} 2차 매수(평균 단가 {pending['avg']:,.0f}원)" if pending.get("add") else "")
+                        + f" — 평균 단가 기준 {pending['now_ret'] * 100:+.1f}%, {pending['days']}거래일째"
+                        + (" · ▶ 오늘 마감 −10% → 다음 거래일 시가에 2차(나머지 절반) 매수" if pending.get("add_pending") else "") + f". 매도 조건: {sell_txt}.")
     elif now is not None and now < AI_TOP:
         summary += " ▶ 지금은 매수 신호가 없습니다(95점 미만)."
     a = accuracy["all"]

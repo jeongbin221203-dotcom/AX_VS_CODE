@@ -24,6 +24,8 @@ RULES = {
 }
 STATUS = {"잡주": "잡주는 아직 시험 전이라 소형주 규칙을 임시로 씁니다."}
 CAP = 120           # 매도 조건이 오지 않아도 이 봉 수가 지나면 종가에 매도
+SPLIT = 0.10        # 나눠 사기(2026-10-19, tools/research/jb_loss.py): 신호 다음 날 시가에 절반, 매도 전 처음으로 종가가 1차 매수가보다 10% 이상 아래면
+                    # 다음 날 시가에 나머지 절반. 수익률 = 평균 단가 기준. 모든 구간에서 평균 +3~3.5%p, 손실 거래 평균 손실 감소(대형 −8.0% → −4.4%)
 
 
 def rule_for(group: str | None) -> dict:
@@ -87,6 +89,7 @@ def simulate(o, h, l, c, score, group=None, ok=None, v=None, mkt_dd=None):
             m20[19:] = np.lib.stride_tricks.sliding_window_view(val, 20).mean(axis=1)
         liq = np.log10(m20 + 1)
     trades, busy, pending = [], -1, None
+    adds, add_pending = {}, []                               # 나눠 사기: 1차 매수 봉 → (2차 매수 봉, 가격), 오늘 마감에 2차 매수 신호가 난 1차 매수 봉
     for i, t in _crossings(s, ok):
         if r["entry"] == "strong_b50":
             if t != "강" or not np.isfinite(up[i]) or up[i] <= lo[i] or (c[i] - lo[i]) > 0.5 * (up[i] - lo[i]):
@@ -120,10 +123,21 @@ def simulate(o, h, l, c, score, group=None, ok=None, v=None, mkt_dd=None):
                     break
             if sell is None and b + CAP < n:
                 sell, px, why = b + CAP, c[b + CAP], f"{CAP}거래일 동안 매도 조건이 없어 종가 매도"
-        ret = None if sell is None else float(px / entry - 1 - COST)
+        avg = entry
+        if SPLIT:
+            last = sell if sell is not None else n - 1
+            for x_ in range(b, last + (0 if sell is not None else 1)):
+                if c[x_] <= entry * (1 - SPLIT):
+                    if x_ + 1 <= last and x_ + 1 < n:
+                        adds[b] = (x_ + 1, float(o[x_ + 1]))
+                        avg = (entry + o[x_ + 1]) / 2
+                    elif sell is None:
+                        add_pending.append(b)           # 오늘 마감에 −10% → 다음 거래일 시가에 2차 매수
+                    break
+        ret = None if sell is None else float(px / avg - 1 - COST)
         trades.append((i, b, sell, None if px is None else float(px), ret, why))
         busy = n if sell is None else sell
-    return trades, pending, {"mid": mid, "up": up, "lo": lo, "sm5": sm5}
+    return trades, pending, {"mid": mid, "up": up, "lo": lo, "sm5": sm5, "adds": adds, "add_pending": add_pending}
 
 
 def market_dd(dates) -> np.ndarray:
@@ -134,3 +148,41 @@ def market_dd(dates) -> np.ndarray:
         return m["mkt_dd250"].reindex([str(d)[:10] for d in dates]).to_numpy(float)
     except Exception:
         return np.full(len(dates), np.nan)
+
+
+def markers(dates, o, c, score, tr, aux, start: str = ""):
+    """JB차트 표식과 거래 목록(JB차트·휴대폰 스냅샷이 같이 씀). 2차 매수(나눠 사기)도 표시. 돌려줌: (표식[], 끝난 거래[])."""
+    mk, done = [], []
+    adds = aux.get("adds", {})
+    for i, b, j, px, ret, why in tr:
+        e = float(o[b])
+        if dates[b] >= start:
+            mk.append({"date": dates[b], "side": "buy", "tier": "강", "label": "매수",
+                       "why": f"{dates[i]} AI 점수 {score[i] * 100:.0f}점(95점 상향 돌파) · 볼린저 가운데 아래 → {dates[b]} 시가 {e:,.0f}원에 1차(절반) 매수"})
+        avg = e
+        if b in adds:
+            ab, apx = adds[b]
+            avg = (e + apx) / 2
+            if dates[ab] >= start:
+                mk.append({"date": dates[ab], "side": "buy", "tier": "약", "label": "2차 매수",
+                           "why": f"{dates[ab - 1]} 종가가 1차 매수가 {e:,.0f}원보다 {SPLIT * 100:.0f}% 이상 아래 → {dates[ab]} 시가 {apx:,.0f}원에 나머지 절반(평균 단가 {avg:,.0f}원)"})
+        if j is not None:
+            done.append({"buy": dates[b], "buy_px": e, "avg": round(avg, 2), "add": dates[adds[b][0]] if b in adds else None, "sell": dates[j], "sell_px": px, "ret": round(ret, 4), "tier": "강", "seen": False})
+            if dates[j] >= start:
+                mk.append({"date": dates[j], "side": "sell", "tier": "강", "label": f"매도 {ret * 100:+.0f}%",
+                           "why": f"{dates[b]} 매수{' + ' + dates[adds[b][0]] + ' 2차 매수' if b in adds else ''} → {dates[j]} {why}, {px:,.0f}원에 매도"
+                                  f"(평균 단가 {avg:,.0f}원, 비용 포함 {ret * 100:+.1f}%)"})
+    mk.sort(key=lambda m: m["date"])
+    return mk, done
+
+
+def holding(dates, o, c, tr, aux):
+    """마지막 거래가 보유 중이면 {buy, buy_px, avg, add, add_pending, ret(평균 단가 기준), days}, 아니면 None."""
+    if not tr or tr[-1][2] is not None:
+        return None
+    b = tr[-1][1]
+    e = float(o[b])
+    adds = aux.get("adds", {})
+    avg = (e + adds[b][1]) / 2 if b in adds else e
+    return {"buy": dates[b], "buy_px": e, "avg": round(avg, 2), "add": dates[adds[b][0]] if b in adds else None,
+            "add_pending": b in aux.get("add_pending", []), "ret": round(float(c[-1] / avg - 1), 4), "days": int(len(c) - 1 - b)}

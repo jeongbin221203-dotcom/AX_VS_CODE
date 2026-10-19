@@ -118,24 +118,19 @@ def jb_files(log=print) -> int:
         score = np.array([m.get(d, np.nan) for d in dates], float)
         g = grp_of.get(code)
         o, h, l, c = (df[k].to_numpy(float) for k in ("open", "high", "low", "close"))
-        tr, pend, _ = jb_rules.simulate(o, h, l, c, score, g, v=df["volume"].to_numpy(float), mkt_dd=jb_rules.market_dd(dates))
+        tr, pend, aux = jb_rules.simulate(o, h, l, c, score, g, v=df["volume"].to_numpy(float), mkt_dd=jb_rules.market_dd(dates))
         buy_txt, sell_txt = jb_rules.describe(g)
-        mk, rets = [], []
-        for i, b, j, px, ret, why in tr:
-            mk.append({"date": dates[b], "side": "buy", "tier": "강", "label": "매수",
-                       "why": f"{dates[i]} AI 점수 {score[i] * 100:.0f}점(95점 상향 돌파) · 볼린저 가운데 아래 → {dates[b]} 시가 {o[b]:,.0f}원에 매수"})
-            if j is not None:
-                rets.append(ret)
-                mk.append({"date": dates[j], "side": "sell", "tier": "강", "label": f"매도 {ret * 100:+.0f}%",
-                           "why": f"{dates[b]} 매수 → {dates[j]} {why}, {px:,.0f}원에 매도 (비용 포함 {ret * 100:+.1f}%)"})
+        mk, done = jb_rules.markers(list(dates), o, c, score, tr, aux)
+        rets = [t["ret"] for t in done]
+        hold = jb_rules.holding(list(dates), o, c, tr, aux)
         keep = dates >= CHART_FROM
         now = float(score[-1]) if np.isfinite(score[-1]) else None
         summary = (f"AI 점수 {now * 100:.0f}점({dates[-1]})" if now is not None else "AI 점수 없음") + f" · {g or '소형주'} 규칙."
         if pend is not None:
             summary += f" ▶ 매수 신호: {dates[pend]} → 다음 거래일 시가에 매수."
-        elif tr and tr[-1][2] is None:
-            b = tr[-1][1]
-            summary += f" ▶ 보유 중: {dates[b]} 시가 {o[b]:,.0f}원 매수({c[-1] / o[b] - 1:+.1%}) — 매도 조건: {sell_txt}."
+        elif hold:
+            summary += (f" ▶ 보유 중: {hold['buy']} 1차 매수" + (f", {hold['add']} 2차 매수" if hold["add"] else "") + f"(평균 단가 {hold['avg']:,.0f}원, {hold['ret']:+.1%})"
+                        + (" · 오늘 마감 −10% → 다음 거래일 시가에 2차 매수" if hold["add_pending"] else "") + f" — 매도 조건: {sell_txt}.")
         if rets:
             r = np.array(rets)
             summary += f" ▶ 이 종목 거래 {len(r)}건: 승률 {(r > 0).mean() * 100:.0f}% · 평균 {r.mean() * 100:+.1f}%(학습에 쓰지 않은 구간)."
