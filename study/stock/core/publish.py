@@ -148,7 +148,7 @@ def jb_files(log=print) -> int:
         shutil.copyfile(src, ACTIONS)
     ACT_DAYS.mkdir(parents=True, exist_ok=True)
     k = 0
-    for f in sorted(DAYS.glob("*.json"))[-FULL_DAYS:]:                    # 신호 날짜마다 그날 할 일(+그 뒤 결과) — 없는 날만 새로(처음엔 날짜당 약 10초)
+    for f in sorted(DAYS.glob("*.json"))[-FULL_DAYS:][::-1]:              # 최근 날부터 · 신호 날짜마다 그날 할 일(+그 뒤 결과) — 없는 날만 새로(처음엔 날짜당 약 10초)
         out = ACT_DAYS / f.name
         if out.exists() and time.time() - out.stat().st_mtime < 7 * 86400:      # 이미 있으면 일주일에 한 번만 다시(그 뒤 결과 갱신)
             continue

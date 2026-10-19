@@ -131,7 +131,7 @@ def create_app():
         except OSError:
             name = code
         return {"code": code, "name": name, "tf": tf if tf in ("D", "W", "M") else "D", "set": set_ if set_ in ("a", "b", "none") else default_set,
-                "kind": "both" if kind in ("dante", "ai") else kind if kind in ("none", "both", "cross") else default_kind, "grp": "", "risk": risk == "1", "bb": bb != "0"}
+                "kind": "both" if kind in ("dante", "ai") else kind if kind in ("none", "both", "cross") else default_kind, "grp": (_json(JBDIR / f"{code}.json") or {}).get("grp") or "", "risk": risk == "1", "bb": bb != "0"}
 
     @app.get("/compare")
     def compare():
