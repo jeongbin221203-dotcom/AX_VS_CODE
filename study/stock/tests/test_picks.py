@@ -81,6 +81,8 @@ def test_ai_chart_score_and_group_badge(tmp_path, monkeypatch):
     monkeypatch.setattr(picks, "load_models", lambda: {"chart": chart, "chart_q": q, "chart_cols": feats, "through": "2026-09-02"})
     monkeypatch.setattr(picks, "load_wf", lambda: None)               # 걸어가며 검증 모델 파일(실제 data)에 기대지 않게
     monkeypatch.setattr(picks, "load_today", lambda: {"date": "2026-10-16", "scores": {"T1": ["잡주", 0.97, 4, 300]}})
+    from core import jb_rules
+    monkeypatch.setitem(jb_rules.RULES, "잡주", {"entry": "strong_b50", "exit": ("ai_or_bb", 0.40, 0.20)})   # 화면 연결 확인용 단순 규칙(실제 잡주 조건은 가짜 데이터에서 매수가 안 남)
     out = picks.ai_chart(df, "T1", "D", 700)
     assert out["kind"] == "ai" and out["label"] == "AI 점수" and out["thr"] == picks.AI_TOP
     assert abs(out["latest"]["prob"] - 0.96) < 0.011 and out["latest"]["top"]       # 점수 약 95~96점 → 상위 10% 경계(90점) 위

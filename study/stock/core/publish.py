@@ -150,10 +150,9 @@ def jb_files(log=print) -> int:
         now = float(score[-1]) if np.isfinite(score[-1]) else None
         summary = (f"AI 점수 {now * 100:.0f}점({dates[-1]})" if now is not None else "AI 점수 없음") + f" · {g or '소형주'} 규칙."
         if pend is not None:
-            summary += f" ▶ 매수 신호: {dates[pend]} → 다음 거래일 시가에 매수."
+            summary += " ▶ 매수 신호: " + jb_rules.action(list(dates), o, c, tr, pend, aux, score, g)["title"] + "."
         elif hold:
-            summary += (f" ▶ 보유 중: {hold['buy']} 1차 매수" + (f", {hold['add']} 2차 매수" if hold["add"] else "") + f"(평균 단가 {hold['avg']:,.0f}원, {hold['ret']:+.1%})"
-                        + (" · 오늘 마감 −10% → 다음 거래일 시가에 2차 매수" if hold["add_pending"] else "") + f" — 매도 조건: {sell_txt}.")
+            summary += " ▶ " + jb_rules.hold_text(hold, sell_txt)
         if rets:
             r = np.array(rets)
             summary += f" ▶ 이 종목 거래 {len(r)}건: 승률 {(r > 0).mean() * 100:.0f}% · 평균 {r.mean() * 100:+.1f}%(학습에 쓰지 않은 구간)."

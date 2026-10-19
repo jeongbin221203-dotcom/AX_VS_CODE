@@ -270,7 +270,7 @@ def _needs_score(df, s_prev, g, bar, busy_hold):
         return False
     w = c[-20:]
     m, sd = w.mean(), w.std()
-    if sd <= 0 or (c[-1] - (m - 2 * sd)) > 0.5 * (4 * sd):     # 볼린저 %B ≤ 0.5
+    if sd <= 0 or (c[-1] - (m - 2 * sd)) > r.get("pb_max", 0.5) * (4 * sd):     # 볼린저 %B 기준(구간마다)
         return False
     if r.get("ret60_max") is not None and not (c[-1] / c[-61] - 1 < r["ret60_max"]):
         return False
@@ -388,9 +388,7 @@ def chart(code: str, df, bars: int = 750) -> dict | None:
     if pend is not None:
         summary += " ▶ 매수 신호: " + jb_rules.action(list(dates), o, c, tr, pend, aux, s, g)["title"] + "."
     elif hold:
-        summary += (f" ▶ 보유 중: {hold['buy']} 시가 {hold['buy_px']:,.0f}원 1차 매수" + (f", {hold['add']} 2차 매수(평균 단가 {hold['avg']:,.0f}원)" if hold["add"] else "")
-                    + f" — 평균 단가 기준 {hold['ret'] * 100:+.1f}%, {hold['days']}거래일째" + (" · ▶ 오늘 마감 −10% → 다음 거래일 시가에 2차(나머지 절반) 매수" if hold["add_pending"] else "")
-                    + f". 매도 조건: {sell_txt}.")
+        summary += " ▶ " + jb_rules.hold_text(hold, sell_txt)
     else:
         summary += " ▶ 지금은 매수 신호가 없습니다."
     if shown:

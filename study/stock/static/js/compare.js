@@ -105,7 +105,7 @@
     if (pane.riskEv && pane.riskEv[p.time]) tip.textContent += '\n' + pane.riskEv[p.time];
     var sg = pane.sigMap && pane.sigMap[p.time];
     if (sg) tip.textContent += '\n' + sg.slice(0, 6).map(function (m) {   // 그 봉의 매수·매도 신호와 이유
-      return (m.side === 'sell' ? '▼ ' : (m.side === 'low' || m.side === 'high') ? '● ' : '▲ ') + m.label + (m.strong === true ? ' (강)' : m.strong === false ? ' (약)' : '') + (m.why ? ' — ' + String(m.why).slice(0, 140) : '');
+      return (m.side === 'sell' ? '▼ ' : (m.side === 'low' || m.side === 'high' || m.side === 'skip') ? '● ' : '▲ ') + m.label + (m.px != null && m.side !== 'low' && m.side !== 'high' ? ' ' + fmt(m.px) + '원' : '') + (m.strong === true ? ' (강)' : m.strong === false ? ' (약)' : '') + (m.why ? ' — ' + String(m.why).slice(0, 140) : '');
     }).join('\n');
     tip.style.display = 'block';
     var r = pane.el.getBoundingClientRect();
@@ -125,11 +125,40 @@
     if (this.legendAi) this.legendAi.hidden = true;
     this.chart.priceScale('right').applyOptions({ scaleMargins: { top: 0.2, bottom: 0.1 } });
     this.predSeries = []; this.probMap = {}; this.pred = null; this.pred2 = null; this.sigMap = null;
+    (this.tradeSeries || []).forEach(function (s) { self.chart.removeSeries(s); }); this.tradeSeries = [];
+    if (this.waitLine) { try { this.candle.removePriceLine(this.waitLine); } catch (e) { /* */ } this.waitLine = null; }
     this.predMk = [];
     this.applyMarkers();
     this.el.classList.remove('hasleft');
     if (this.chart.options().leftPriceScale.visible) this.keepRange(function () { self.chart.applyOptions({ leftPriceScale: { visible: false } }); });
     this.root.querySelector('.cpred').textContent = '';
+  };
+
+  // 거래 경로: 같은 거래(tid)의 1차 매수 → 추가 매수 → 매도 체결 가격을 잇는 선(수익 빨강·손실 파랑·보유 중 점선은 오늘 종가까지) + 지정가 대기 가로선.
+  // 표식(▲▼)은 봉 위·아래에만 찍혀 가격을 알 수 없어서, 실제로 사고판 가격을 선으로 보여 준다.
+  Pane.prototype.drawTrades = function (ms) {
+    var self = this, by = {}, order = [];
+    (this.tradeSeries || []).forEach(function (s) { self.chart.removeSeries(s); });
+    this.tradeSeries = [];
+    if (this.waitLine) { try { this.candle.removePriceLine(this.waitLine); } catch (e) { /* */ } this.waitLine = null; }
+    ms.forEach(function (m) {
+      if (m.tid && m.px != null && (m.side === 'buy' || m.side === 'sell')) { if (!by[m.tid]) { by[m.tid] = []; order.push(m.tid); } by[m.tid].push(m); }
+      if (m.side === 'wait' && m.px != null) self.waitLine = self.candle.createPriceLine({ price: m.px, color: '#e08a00', lineWidth: 1, lineStyle: 2, axisLabelVisible: true, title: '지정가' });
+    });
+    var cs = this.data.candles, last = cs[cs.length - 1];
+    order.forEach(function (tid) {
+      var pts = [], seen = {}, sell = null;
+      by[tid].sort(function (p, q) { return p.date < q.date ? -1 : p.date > q.date ? 1 : (p.side === 'sell' ? 1 : -1); });
+      by[tid].forEach(function (m) { if (m.side === 'sell') sell = m; seen[m.date] = m.px; });
+      Object.keys(seen).sort().forEach(function (d) { pts.push({ time: d, value: seen[d] }); });
+      var open = !sell;
+      if (open && last && last.time > pts[pts.length - 1].time) pts.push({ time: last.time, value: last.close });
+      if (pts.length < 2) return;
+      var col = open ? 'rgba(224,138,0,0.9)' : (sell.ret > 0 ? 'rgba(197,57,47,0.85)' : 'rgba(47,98,194,0.85)');
+      var ln = self.chart.addLineSeries({ color: col, lineWidth: 2, lineStyle: open ? 2 : 0, priceLineVisible: false, lastValueVisible: false, crosshairMarkerVisible: false, pointMarkersVisible: true, title: '' });
+      ln.setData(pts);
+      self.tradeSeries.push(ln);
+    });
   };
 
   // 응답은 그대로 두고 그려 둔 선(AI 점수)만 지운다 — '근거 보기'를 바꿀 때 다시 받지 않고 다시 그리기
@@ -211,7 +240,7 @@
     this.data.candles.forEach(function (c) { have[c.time] = true; });
     var ms = j.markers.filter(function (m) { return have[m.date]; });
     var verify = !!(this.root.querySelector('.cver') && this.root.querySelector('.cver').checked);   // '근거 보기': AI 점수 선 + 실제 저점·고점 점
-    if (j.kind === 'ai' && !verify) ms = ms.filter(function (m) { return m.side !== 'low' && m.side !== 'high'; });
+    if (j.kind === 'ai' && !verify) ms = ms.filter(function (m) { return m.side !== 'low' && m.side !== 'high' && m.side !== 'skip'; });
     var lastTrade = {};                                  // 글자는 가장 최근 매수·매도에만
     ms.forEach(function (m, i) { if (m.side === 'buy' || m.side === 'sell') lastTrade[m.side] = i; });
     // 저점(바닥) 신호는 하락 위험이 낮을 때만 '확실' — 기본은 확실한 것만 그리고, '저점 신호 전체 보기'를 켜면 모두(데이터는 그대로)
@@ -229,6 +258,10 @@
     });
     mk = mk.concat(ms.filter(function (m) { return !(j.kind === 'dante' && m.strong && !(m.bottom && m.certain) && big[m.date]); }).map(function (m, i, arr) {
       if (j.kind === 'cross') return { time: m.date, position: m.side === 'sell' ? 'aboveBar' : 'belowBar', color: m.side === 'sell' ? DOWN : UP, shape: m.side === 'sell' ? 'arrowDown' : 'arrowUp', text: i >= arr.length - 2 ? m.label : '' };
+      if (m.side === 'skip')                                            // 지정가에 안 닿아 사지 않은 신호(근거 보기)
+        return { time: m.date, position: 'belowBar', color: 'rgba(143,152,171,0.85)', shape: 'circle', size: 0.6, text: '' };
+      if (m.side === 'wait')                                            // 지금 지정가 매수 주문을 기다리는 신호
+        return { time: m.date, position: 'belowBar', color: '#e08a00', shape: 'arrowUp', size: 1.6, text: m.label };
       if (m.side === 'low' || m.side === 'high')                        // 그 무렵 실제 저점(초록 점)·고점(주황 점) — 매수·매도가 얼마나 가까웠는지 직접 확인용
         return { time: m.date, position: m.side === 'low' ? 'belowBar' : 'aboveBar', color: m.side === 'low' ? 'rgba(30,132,73,0.75)' : 'rgba(224,138,0,0.8)', shape: 'circle', size: 0.6, text: '' };
       if (j.kind === 'ai' && j.label === 'AI 점수') {                   // 매수(빨강 ▲)·매도(파랑 ▼, 글자=그 거래 수익률). 약한 신호(90점)는 작고 옅게
@@ -250,6 +283,7 @@
       }));
     }
     this.sigMap = sm;
+    if (j.kind === 'ai') this.drawTrades(ms);
     mk = mk.concat(this.focusMarkers());
     mk.sort(function (p, q) { return p.time < q.time ? -1 : p.time > q.time ? 1 : 0; });
     this.predMk = mk;
