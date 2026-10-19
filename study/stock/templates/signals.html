@@ -49,7 +49,8 @@
   · 추천 <b>강 {{ strong|length }}</b> · <b>상 {{ weak|length }}</b> · 점검 9/10↑ <b>예측 {{ rec_p|length }}</b> · <b>AI {{ rec_a|length }}</b>{% if mode != 'date' %} <small>· 생성 {{ rep.meta.generated }}</small>{% endif %}</p>
 
 {% if act %}{% set G = ('대형주', '중형주', '소형주', '잡주') %}
-<h2 class="hi">{{ '그날 할 일' if act.past else '오늘 할 일' }} <small>시총 구간마다 따로 고른 규칙(JB차트와 같음) · {{ act.date }} 마감 기준 · 매수는 다음 거래일 시가{% if act.past %} · '그 뒤 결과' = 그 뒤 실제 가격으로 규칙대로 판 결과{% endif %}</small></h2>
+{% if act.live %}<h2 class="hi">오늘 할 일 <span class="live">장중 {{ (act.asof or '')[11:16] }} 가격</span> <small>시총 구간마다 따로 고른 규칙(JB차트와 같음) · {{ act.date }} · <b>살 종목은 오늘 종가(15:20~15:30 종가 단일가)에 매수</b> · 매도 신호도 오늘 종가 · 마감까지 가격이 바뀌면 달라질 수 있음</small></h2>
+{% else %}<h2 class="hi">{{ '그날 할 일' if act.past else '오늘 할 일' }} <small>시총 구간마다 따로 고른 규칙(JB차트와 같음) · {{ act.date }} 마감 기준 · 매수는 다음 거래일 시가{% if act.past %} · '그 뒤 결과' = 그 뒤 실제 가격으로 규칙대로 판 결과{% endif %}</small></h2>{% endif %}
 <div class="actgrid">
 {% for g in G %}{% set a = act.groups[g] %}
 <section class="actcard">

@@ -2,11 +2,10 @@
 {% set page = "jb" %}
 {% block title %}JB차트{% endblock %}
 {% block body %}
-<h1>JB차트 <small>예측(단테 기법)과 AI 매수·매도를 한 차트에</small></h1>
+<h1>JB차트 <small>모든 신호를 합친 하나의 매수·매도 신호</small></h1>
 <div class="toolbar">
   <button class="btn mobile-only" id="tbtoggle" type="button">⚙ 도구</button>
   <input type="checkbox" id="sync" hidden>
-  <label class="syncbox" title="저점(바닥) 신호 중 하락 위험이 낮은 확실한 것만 그리는 것이 기본 — 켜면 나머지 저점 신호도 모두 표시"><input type="checkbox" id="showall" {{ 'checked' if show_all }}> 저점 신호 전체 보기</label>
   <input type="checkbox" id="same" hidden>
   <span class="grp" id="range">
     <button class="btn" data-bars="60">3M</button><button class="btn" data-bars="120">6M</button>
@@ -16,12 +15,12 @@
 <details class="helpbox">
   <summary>표시 설명(범례)</summary>
   <ul>
-    <li><b>볼린저밴드</b>(회색 선): 가운데 점선 = 20일 평균, 위·아래 = 평균 ± 2 표준편차. 끄려면 차트 위 '볼린저' 체크를 풉니다.</li>
-    <li><b>하락 위험</b>(기본 꺼짐, 켜면 배지와 차트 맨 아래 띠): 앞으로 20거래일 안에 −10% 이하로 끝날 확률. 띠 빨강 = 높음(35%↑) · 주황 = 주의(27%↑). 전체 평균은 약 24%입니다. 파란 ▼ = 위험이 처음 높음 경계를 넘은 날, 주황 ● = 급등 뒤 과열이 처음 된 날(이유는 툴팁).</li>
-    <li><b>표식 글자</b>: 차트에는 가장 최근 신호에만 글자를 붙입니다. 나머지는 봉에 마우스를 올리면 툴팁에 나옵니다.</li>
-    {% if page == 'jb' %}<li><b>AI 점수</b>(JB차트의 겹쳐 그리기 → AI 점수): 차트 지표 88개로 만든 모델 4개의 평균 백분위(0~100점). 분홍 점선 = 95점(강한 매수)·옅은 점선 = 90점(약한 매수), 빨간 ▲ 매수 = 점수가 95점(약한 신호는 90점)을 처음 넘은 다음 날 시가, 파란 ▼ 매도 = 매수 후 20거래일째 종가(글자 = 그 거래의 수익률). 과거 시험(전 종목)에서 95점 신호는 2022~23년 평균 +6.0%·2024~26년 +5.3%, 90점은 +4.9%·+3.7%였고, 2016년 이후 과거 표시는 해마다 다시 학습한 모델이라 학습에 쓰지 않은 구간입니다. 이름 옆 보라색 배지 = 오늘 그 종목이 속한 그룹(대형·중형·소형·잡주) 안 후보 순위. 모델이 학습에 쓴 기간의 점수는 실제보다 좋아 보입니다.</li>{% endif %}
-    <li><b>단테 신호</b>: 초록 ▲ = 확실한 저점(바닥 기법 + 하락 위험 18% 미만) · 빨강 ▲ = 강 · 회색 ▲ = 약 · 금색 ■★n = 같은 날 강 신호 n개. <b>'자동'</b>으로 볼 때는 화살표(▲▼) = AI 매수·매도, 봉 아래 작은 동그라미 = 단테 신호(초록 = 확실한 저점, 주황 = 강). 나머지 저점 신호는 "저점 신호 전체 보기"로 볼 수 있습니다.</li>
-    <li><b>알아둘 점</b>: 저점 신호는 진짜 저점보다 앞서 나오는 편이라 나눠서 진입하는 것을 권합니다. 위험 표시가 없다고 안전한 것은 아닙니다. 투자 권유가 아니며 수익을 보장하지 않습니다.</li>
+    <li><b>종합 신호</b>('자동', 일·주·월봉): 차트에 그리는 표시는 이것 하나입니다. 빨간 ▲ 매수 · 작은 ▲ 2차 매수(1차 매수가보다 10% 내려가면 나머지 절반) · 파란 ▼ 매도(글자 = 그 거래 수익률). 규칙은 그 종목의 시총 구간(대형·중형·소형·잡주)마다 따로 고른 것이고, AI 점수·볼린저·시장 흐름 등 시험에서 수익을 올린 조건만 이 신호 안에 들어 있습니다. 이름 옆 배지 = 오늘 할 일(매수·2차 매수·보유·매도·관망).</li>
+    <li><b>근거 보기</b>(기본 꺼짐): 켜면 신호를 만든 AI 점수(위쪽 보라 선, 분홍 점선 = 95점)와 거래마다 그 무렵 실제 저점(초록 점)·고점(주황 점)이 함께 보입니다 — 신호가 저점·고점에 얼마나 가까웠는지 직접 확인하는 용도.</li>
+    <li><b>볼린저밴드</b>(회색 선): 가운데 점선 = 20일 평균, 위·아래 = 평균 ± 2 표준편차. 끄려면 '볼린저' 체크를 풉니다.</li>
+    <li><b>표식 글자</b>: 가장 최근 매수·매도에만 글자를 붙입니다. 나머지는 봉에 마우스를 올리면 툴팁에 이유와 함께 나옵니다.</li>
+    <li><b>분봉</b>: AI 점수는 일봉 이상에서만 계산하므로 분봉 '자동'은 예측(단테 기법) 신호만 그립니다.</li>
+    <li><b>알아둘 점</b>: 과거 표시는 해마다 다시 학습한 모델(학습에 쓰지 않은 구간)로 계산했지만 실제 결과는 다를 수 있습니다. 투자 권유가 아니며 수익을 보장하지 않습니다.</li>
   </ul>
 </details>
 <div id="cmsg" class="note" hidden></div>
@@ -49,13 +48,14 @@
         <option value="W" {{ 'selected' if p.tf == 'W' }}>주봉</option>
         <option value="M" {{ 'selected' if p.tf == 'M' }}>월봉</option>
       </select>
-      <select class="ckind" aria-label="겹쳐 그리기" title="자동 = 예측(단테 기법) 신호 + AI 점수 + 그 종목 시총 구간(대형·중형·소형·잡주)의 매수·매도 규칙">
+      <select class="ckind" aria-label="겹쳐 그리기" title="자동 = 그 종목 시총 구간(대형·중형·소형·잡주)의 종합 매수·매도 신호 하나">
         <option value="both" {{ 'selected' if p.kind == 'both' }}>{{ (p.grp ~ ' ') if p.grp }}자동</option>
         <option value="cross" {{ 'selected' if p.kind == 'cross' }}>골든·데드크로스</option>
         <option value="none" {{ 'selected' if p.kind == 'none' }}>없음</option>
       </select>
       <label class="crisk-sw" title="볼린저밴드(20일, 표준편차 2배): 가운데 = 20일 평균, 위·아래 = 평균 ± 2 표준편차"><input type="checkbox" class="cbb" {{ 'checked' if p.bb }}>볼린저</label>
-      <label class="crisk-sw" title="20일 안 -10% 이하로 끝날 위험이 큰 구간을 차트 맨 아래 띠로 표시(일·주·월봉)"><input type="checkbox" class="crk" {{ 'checked' if p.risk }}>하락 위험</label>
+      <label class="crisk-sw" title="신호의 근거: AI 점수 선과 거래마다 그 무렵 실제 저점·고점(작은 점)"><input type="checkbox" class="cver" {{ 'checked' if p.verify }}>근거 보기</label>
+      <input type="checkbox" class="crk" hidden>
     </div>
     <div class="cinfo"><b class="cname"></b> <span class="cprice"></span> <span class="rbadge" hidden></span> <span class="rbadge rb-ai" hidden></span></div>
     <div class="cchart"></div>

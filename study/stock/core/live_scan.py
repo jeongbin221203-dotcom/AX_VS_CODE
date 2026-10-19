@@ -27,6 +27,7 @@ TODAY_PATH = config.DATA_DIR / "live_today.json"
 MKT_LIVE = config.DATA_DIR / "market_idx_live.pkl"
 EVERY_MIN = 30                       # 장중 이 간격(분)마다 다시 훑는다
 START, END = (9, 10), (15, 35)       # 정규장 안에서만(시작 직후 10분은 거래가 적어 건너뜀)
+JB_AT = (15, 0)                      # 이 시각 이후 첫 훑기에서 '오늘 할 일'(종가 매수 후보)을 먼저 계산 — 2026-10-19 사용자 "3시에 바로 매수 종목"
 _state = {"running": False, "last": "", "msg": ""}
 TODAY = {}                           # 워커 프로세스 전역: 코드 → [시, 고, 저, 종, 거래량]
 
@@ -139,6 +140,17 @@ def run(workers: int = 0, log=print, limit: int = 0, out=None) -> dict:
         TODAY_PATH.write_text(json.dumps({"date": today, "at": datetime.now().isoformat(timespec="seconds"), "bars": bars}), encoding="utf-8")
         mkt = market_live(today, bars, prev_close)
         mkt.to_pickle(MKT_LIVE)
+        now = live.now_kst()
+        if out is None and now.hour * 60 + now.minute >= JB_AT[0] * 60 + JB_AT[1]:   # 15시 이후: 시총 구간별 '오늘 할 일'을 먼저(종가 단일가 전에 보이게)
+            try:
+                from core import jb_daily
+                _state["msg"] = "15시 오늘 할 일 계산 중"
+                jb_daily.live(log=lambda m: _state.update(msg=m))
+                if os.environ.get("STOCK_PUBLISH") == "1":
+                    from core import publish
+                    threading.Thread(target=publish.push_jb_live, daemon=True).start()    # 휴대폰 게시는 뒤에서(커밋이 몇 분 걸림)
+            except Exception as e:
+                _state["msg"] = f"15시 오늘 할 일 실패: {e}"
         _state["msg"] = f"전 종목 훑는 중({len(bars)}종목)"
         workers = workers or max(1, min(3, (os.cpu_count() or 2) // 4))      # 장중에는 화면이 느려지지 않게 CPU 를 적게(3개까지)
         rows = []
@@ -207,8 +219,14 @@ def due(now=None) -> bool:
         return True
     try:
         last = datetime.fromisoformat(rep["meta"]["generated"])
+        asof = datetime.fromisoformat(rep["meta"].get("asof") or rep["meta"]["generated"])
     except (KeyError, ValueError):
         return True
+    at = now.replace(hour=JB_AT[0], minute=JB_AT[1], second=0, microsecond=0, tzinfo=None)
+    if now.replace(tzinfo=None) >= at and asof < at:          # 15시가 지났는데 15시 이후 가격으로 훑은 적이 없으면 바로(30분 간격과 상관없이)
+        return True
+    if at.timestamp() - 20 * 60 <= now.replace(tzinfo=None).timestamp() < at.timestamp():
+        return False                                          # 14:40~15:00 에는 새로 시작하지 않는다 — 15시 훑기가 앞 훑기(약 15분)에 막히지 않게
     return (now.replace(tzinfo=None) - last).total_seconds() >= EVERY_MIN * 60
 
 

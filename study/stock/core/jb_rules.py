@@ -90,7 +90,7 @@ def regime(c, n_ma: int = 224, k: int = 20, flat: float = 0.01) -> np.ndarray:
     return out
 
 
-def simulate(o, h, l, c, score, group=None, ok=None, v=None, mkt_dd=None, rule=None):
+def simulate(o, h, l, c, score, group=None, ok=None, v=None, mkt_dd=None, rule=None, pl=None, ph=None):
     """규칙대로 거래를 다시 계산. 돌려줌: trades[(신호 봉, 매수 봉, 매도 봉|None, 매도가|None, 수익|None, 이유)], 오늘 신호(매수 대기) 봉 또는 None.
     매도 봉이 None 이면 아직 보유 중(마지막 거래). ok: 점수를 믿을 수 있는 봉(학습에 쓰지 않은 구간 등) — 신호는 그 봉에서만."""
     base = rule or rule_for(group)
@@ -124,11 +124,26 @@ def simulate(o, h, l, c, score, group=None, ok=None, v=None, mkt_dd=None, rule=N
             continue
         if i <= busy:
             continue
-        b = i + 1
-        if b >= n:
-            pending = i                 # 오늘 신호 — 다음 거래일 시가 매수
-            continue
-        entry = o[b]
+        if r.get("entry_close"):        # 장 마감 전(15시) 신호 → 그날 종가에 매수(시험용 옵션, tools/research/jb_close.py)
+            b, entry = i, c[i]
+        elif r.get("entry_wait") and pl is not None:     # 저점 기다리기(시험용, tools/research/jb_extreme.py): 신호 뒤 W봉 안에 '저점 확률' pl 이 기준 이상인 첫날 종가, 없으면 W봉째 종가
+            W, b = r["entry_wait"], None
+            for j in range(i, min(i + W, n - 1) + 1):
+                if np.isfinite(pl[j]) and pl[j] >= r["entry_thr"]:
+                    b = j
+                    break
+            if b is None:
+                if i + W >= n:
+                    pending = i
+                    continue
+                b = i + W
+            entry = c[b]
+        else:
+            b = i + 1
+            if b >= n:
+                pending = i             # 오늘 신호 — 다음 거래일 시가 매수
+                continue
+            entry = o[b]
         if r.get("protect") or r.get("trail") or r.get("tp_half"):      # 이익 지키기·고점 대비 하락·절반 익절이 있는 규칙
             sell, px, why, add, ret, padd = _exit_plus(o, h, c, up, sm5, b, n, entry, r)
             if add:
@@ -142,6 +157,9 @@ def simulate(o, h, l, c, score, group=None, ok=None, v=None, mkt_dd=None, rule=N
         sell, px, why = None, None, ""
         if x[0] == "hold":
             for j in range(b + 1, min(b + x[1], n)):
+                if ph is not None and r.get("exit_thr") and np.isfinite(ph[j]) and ph[j] >= r["exit_thr"] and c[j] >= entry * (1 + r.get("exit_gain", 0)):
+                    sell, px, why = j, c[j], f"고점 확률 {ph[j] * 100:.0f}% · 수익 구간 → 종가 매도"
+                    break
                 if r.get("stop") and c[j] <= entry * (1 - r["stop"]):
                     sell, px, why = j, c[j], f"1차 매수가보다 {r['stop'] * 100:.0f}% 아래 마감(손절)"
                     break
@@ -149,6 +167,9 @@ def simulate(o, h, l, c, score, group=None, ok=None, v=None, mkt_dd=None, rule=N
                 sell, px, why = b + x[1], c[b + x[1]], f"매수 후 {x[1]}거래일째 종가"
         else:
             for j in range(b + 1, min(b + CAP, n)):
+                if ph is not None and r.get("exit_thr") and np.isfinite(ph[j]) and ph[j] >= r["exit_thr"] and c[j] >= entry * (1 + r.get("exit_gain", 0)):
+                    sell, px, why = j, c[j], f"고점 확률 {ph[j] * 100:.0f}% · 수익 구간 → 종가 매도"
+                    break
                 if r.get("stop") and c[j] <= entry * (1 - r["stop"]):      # 손절(1차 매수가 기준) — 있을 때만
                     sell, px, why = j, c[j], f"1차 매수가보다 {r['stop'] * 100:.0f}% 아래 마감(손절)"
                     break
@@ -292,6 +313,29 @@ def markers(dates, o, c, score, tr, aux, start: str = "", h=None, l=None):
                                   f"(평균 단가 {avg:,.0f}원, 비용 포함 {ret * 100:+.1f}%)" + high_txt})
     mk.sort(key=lambda m: m["date"])
     return mk, done
+
+
+def action(dates, o, c, tr, pending, aux, score=None, group=None) -> dict:
+    """오늘 할 일 하나(종합 신호) — JB차트 이름 옆 배지·휴대폰 화면이 같이 씀.
+    kind: buy(다음 거래일 시가 매수) · add(다음 거래일 시가 2차 매수) · sell(오늘 매도) · hold(보유 중) · wait(관망)."""
+    n = len(c)
+    g = (group or "소형주")
+    sc = None if score is None or not np.isfinite(score[-1]) else float(score[-1]) * 100
+    sc_txt = f"AI {sc:.0f}점" if sc is not None else "AI 점수 없음"
+    if pending is not None:
+        return {"kind": "buy", "text": f"{g} ▲ 매수 — 다음 거래일 시가",
+                "title": f"{dates[pending]} AI 점수 {score[pending] * 100:.0f}점(95점 상향 돌파) + 볼린저 가운데 아래 → 다음 거래일 시가에 1차(절반) 매수"}
+    if tr and tr[-1][2] == n - 1:
+        i, b, j, px, ret, why = tr[-1]
+        return {"kind": "sell", "text": f"{g} ▼ 매도 {ret * 100:+.1f}%", "title": f"{dates[j]} {why} — {px:,.0f}원에 매도({dates[b]} 매수)"}
+    h = holding(dates, o, c, tr, aux)
+    if h:
+        if h["add_pending"]:
+            return {"kind": "add", "text": f"{g} ▲ 2차 매수 — 다음 거래일 시가",
+                    "title": f"오늘 종가가 1차 매수가 {h['buy_px']:,.0f}원보다 10% 이상 아래 → 다음 거래일 시가에 나머지 절반(지금 {h['ret'] * 100:+.1f}%)"}
+        return {"kind": "hold", "text": f"{g} 보유 중 {h['ret'] * 100:+.1f}% · {h['days']}일째",
+                "title": f"{h['buy']} 매수" + (f" + {h['add']} 2차 매수" if h["add"] else "") + f", 평균 단가 {h['avg']:,.0f}원 · 매도 조건: {describe(group)[1]}"}
+    return {"kind": "wait", "text": f"{g} 관망 · {sc_txt}", "title": "매수 신호 없음 — " + describe(group)[0]}
 
 
 def holding(dates, o, c, tr, aux):

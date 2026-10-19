@@ -106,9 +106,20 @@ def _prices_all(codes):
     return out
 
 
-def compute(date: str | None = None) -> dict:
+def _with_live(df, live_day, bar):
+    """DB 일봉 + 오늘 장중 봉 한 줄(시·고·저·종·거래량)."""
+    import pandas as pd
+    if bar is None or df["date"].iloc[-1] >= live_day:
+        return df
+    row = pd.DataFrame([{"code": df["code"].iloc[-1], "date": live_day, "open": bar[0], "high": bar[1], "low": bar[2], "close": bar[3], "volume": bar[4]}])
+    return pd.concat([df, row], ignore_index=True)
+
+
+def compute(date: str | None = None, live: dict | None = None) -> dict:
     """그날(없으면 최신) 마감 기준 구간별 할 일. 규칙은 미래를 보지 않으므로 전체 기록으로 한 번 계산한 거래에서 그날 상태를 읽는다.
-    지난 날이면 '그 뒤 결과'(규칙대로의 매도일·수익)도 붙인다."""
+    지난 날이면 '그 뒤 결과'(규칙대로의 매도일·수익)도 붙인다.
+    live = {"date", "bars": {코드: [시,고,저,종,량]}, "scores": {코드: 오늘 점수}, "mkt_dd": 오늘 시장 52주 고점 대비} — 장중(15시) 계산:
+    오늘 미완성 봉을 붙이고, 오늘 점수를 계산하지 않은 종목은 어제 점수를 그대로 쓴다(매수 후보가 아니라 새 신호가 날 수 없는 종목)."""
     st = load_store()
     cur = picks.load_today() or {}
     grp_of = {k: v[0] for k, v in (cur.get("scores") or {}).items()}
@@ -123,6 +134,10 @@ def compute(date: str | None = None) -> dict:
         df = px.get(code)
         if df is None or len(df) < 60:
             continue
+        if live:
+            if code not in live["bars"]:
+                continue
+            df = _with_live(df, live["date"], live["bars"][code])
         dates = df["date"].to_numpy()
         k = int(np.searchsorted(dates, date, side="right")) - 1 if date else len(dates) - 1
         if k < 0:
@@ -130,10 +145,18 @@ def compute(date: str | None = None) -> dict:
         ds, sc = st[code]
         m = dict(zip(ds, sc))
         s = np.array([m.get(d, np.nan) for d in dates], float)
+        if live and dates[-1] == live["date"]:
+            if code in live["scores"]:
+                s[-1] = live["scores"][code]
+            elif not np.isfinite(s[-1]) and len(s) > 1:
+                s[-1] = s[-2]                     # 오늘 점수를 계산하지 않은 종목(새 신호가 날 수 없음)은 어제 점수 그대로
         if not np.isfinite(s[k]):
             continue                              # 그날 점수가 없으면(갱신 전·기록 밖) 건너뜀
         o, h, l, cl = (df[x].to_numpy(float) for x in ("open", "high", "low", "close"))
-        tr, pend, aux = jb_rules.simulate(o, h, l, cl, s, g, v=df["volume"].to_numpy(float), mkt_dd=jb_rules.market_dd(dates))
+        mdd = np.array(jb_rules.market_dd(dates), float)        # (pandas 가 준 배열은 읽기 전용일 수 있어 복사)
+        if live and live.get("mkt_dd") is not None and dates[-1] == live["date"]:
+            mdd[-1] = live["mkt_dd"]
+        tr, pend, aux = jb_rules.simulate(o, h, l, cl, s, g, v=df["volume"].to_numpy(float), mkt_dd=mdd)
         adds = aux["adds"]
         day = max(day, dates[k])
         base = {"code": code, "name": names.get(code, code), "close": float(cl[k]), "score": round(float(s[k]) * 100), "date": dates[k]}
@@ -162,6 +185,11 @@ def compute(date: str | None = None) -> dict:
         b, s_ = jb_rules.describe(g)
         out[g]["rule"] = {"buy": b + f" (나눠 사기: 1차 절반 → {jb_rules.SPLIT * 100:.0f}% 떨어지면 나머지 절반)", "sell": s_, "note": jb_rules.STATUS.get(g, "")}
     latest = max((px[c_]["date"].iloc[-1] for c_ in px), default="")
+    if live:
+        return {"date": day, "past": False, "live": True, "asof": live.get("asof", ""), "generated": datetime.now().isoformat(timespec="seconds"), "groups": out,
+                "note": f"장중({live.get('asof', '')[11:16]} 가격) 기준 — 같은 시총 구간별 규칙을 오늘 미완성 봉으로 미리 계산했습니다. 살 종목은 오늘 종가(15:20~15:30 종가 단일가)에 사는 것을 가정합니다"
+                        "(과거 시험: 다음 날 시가 대신 그날 종가에 사도 구간별 평균 차이 1%p 안 — tools/research/jb_close.py). 마감까지 가격이 바뀌면 신호가 사라지거나 새로 생길 수 있고, "
+                        "16시 갱신 뒤에는 마감 값으로 다시 계산한 결과가 나옵니다. 과거 시험 결과이며 수익을 보장하지 않습니다."}
     return {"date": day, "past": bool(date and day < latest), "generated": datetime.now().isoformat(timespec="seconds"), "groups": out,
             "note": "JB차트와 같은 시총 구간별 규칙. 매수·매도 신호는 그날 마감 값으로 나오고 다음 거래일 시가(매수)·그날 종가/지정가(매도)를 가정합니다. "
                     "'보유 중'은 규칙대로 샀다고 가정한 종목입니다. 지난 날을 보면 '그 뒤 결과'는 그 뒤 실제 가격으로 규칙대로 판 결과입니다. 과거 시험 결과이며 수익을 보장하지 않습니다."}
@@ -196,11 +224,118 @@ def for_date(date: str) -> dict | None:
 
 
 
-def load() -> dict | None:
+LIVE_OUT = config.DATA_DIR / "jb_actions_live.json"
+LIVE_BAR = {}                        # 워커 전역: 오늘 장중 봉
+LIVE_PREV_MIN = 0.60                 # 15시 계산에서 오늘 점수를 다시 매길 매수 후보의 어제 점수 하한 — 95점 첫 돌파의 전날 점수는 99%가 49점↑·95%가 70점↑(2016~ 24,746건)
+
+
+def _live_init(mkt_path, bars, day):
+    ai._init_worker(mkt_path)
+    LIVE_BAR.clear(); LIVE_BAR.update(bars); LIVE_BAR["_day"] = day
+
+
+def _live_score(code):
+    """오늘 장중 봉을 붙인 일봉으로 오늘 AI 점수 하나."""
     try:
-        return json.loads(OUT.read_text(encoding="utf-8"))
+        import pandas as pd
+        df = service.load_prices(code)
+        day = LIVE_BAR["_day"]
+        df = df[df.index < pd.Timestamp(day)].copy()          # (마감 값이 이미 있으면 장중 봉으로 바꿔 계산 — 점검용)
+        if len(df) < ai.MIN_BARS:
+            return code, None
+        df.loc[pd.Timestamp(day)] = LIVE_BAR[code]
+        r = picks.chart_score_recent(df, code, ai.MKT_DF, last=1)
+        return code, (r[0][1] if r and r[0][0] == day and np.isfinite(r[0][1]) else None)
+    except Exception:
+        return code, None
+
+
+def _needs_score(df, s_prev, g, bar, busy_hold):
+    """오늘 점수가 있어야 결과가 바뀌는 종목만: ① 보유 중이고 매도가 AI 점수형(중형·소형·잡주) ② 보유 중이 아니고 오늘 매수 조건(점수 빼고)을 이미 만족.
+    나머지는 오늘 점수와 상관없이 할 일이 같다(대형주 보유 = 40일 보유, 볼린저·구간 조건을 못 넘은 종목 = 새 매수 없음)."""
+    r = jb_rules.rule_for(g)
+    if busy_hold:
+        return r["exit"][0] != "hold"
+    if not np.isfinite(s_prev) or s_prev >= jb_rules.TOP or s_prev < LIVE_PREV_MIN:
+        return False                              # 어제 이미 95점 이상이면 '처음 넘는' 신호가 날 수 없음 · 어제 60점 아래에서 하루에 95점을 넘는 경우는 드묾
+    c = np.append(df["close"].to_numpy(float), bar[3])
+    if len(c) < 61:
+        return False
+    w = c[-20:]
+    m, sd = w.mean(), w.std()
+    if sd <= 0 or (c[-1] - (m - 2 * sd)) > 0.5 * (4 * sd):     # 볼린저 %B ≤ 0.5
+        return False
+    if r.get("ret60_max") is not None and not (c[-1] / c[-61] - 1 < r["ret60_max"]):
+        return False
+    if r.get("liq_max"):
+        v = np.append(df["volume"].to_numpy(float), bar[4])
+        if not np.log10((c[-20:] * v[-20:]).mean() + 1) < r["liq_max"]:
+            return False
+    return True
+
+
+def live(log=print, workers: int = 0) -> dict | None:
+    """장중(15시) 할 일 — live_scan 이 받아 둔 오늘 봉(data/live_today.json)·시장 지수(data/market_idx_live.pkl)로 계산해 data/jb_actions_live.json."""
+    import pandas as pd
+    from core import live_scan
+    try:
+        t = json.loads(live_scan.TODAY_PATH.read_text(encoding="utf-8"))
     except (OSError, ValueError):
         return None
+    day, bars, t0 = t["date"], t["bars"], time.time()
+    st = load_store()
+    cur = picks.load_today() or {}
+    grp_of = {k: v[0] for k, v in (cur.get("scores") or {}).items()}
+    codes = [k for k in st if grp_of.get(k) in GROUPS and k in bars]
+    px = _prices_all(codes)
+    need = []
+    for code in codes:
+        df = px.get(code)
+        if df is None or len(df) < 60 or df["date"].iloc[-1] >= day:
+            continue
+        ds, sc = st[code]
+        m = dict(zip(ds, sc))
+        dates = df["date"].to_numpy()
+        s = np.array([m.get(d, np.nan) for d in dates], float)
+        o, h, l, c = (df[x].to_numpy(float) for x in ("open", "high", "low", "close"))
+        tr, pend, _ = jb_rules.simulate(o, h, l, c, s, grp_of[code], v=df["volume"].to_numpy(float), mkt_dd=jb_rules.market_dd(dates))
+        hold = bool(tr and tr[-1][2] is None) or pend is not None     # 어제 신호(오늘 시가 매수)도 오늘은 보유 중
+        if _needs_score(df, s[-1], grp_of[code], bars[code], hold):
+            need.append(code)
+    log(f"장중 할 일: 점수 계산 {len(need)}/{len(codes)}종목")
+    scores = {}
+    if need:
+        workers = workers or max(1, min(4, (os.cpu_count() or 2) // 2))
+        with ProcessPoolExecutor(max_workers=workers, initializer=_live_init, initargs=(live_scan.MKT_LIVE, {k: bars[k] for k in need}, day)) as ex:
+            for code, v in ex.map(_live_score, need, chunksize=4):
+                if v is not None:
+                    scores[code] = v
+    try:
+        mdd = float(pd.read_pickle(live_scan.MKT_LIVE)["mkt_dd250"].iloc[-1])
+    except Exception:
+        mdd = None
+    rep = compute(live={"date": day, "bars": bars, "scores": scores, "mkt_dd": mdd, "asof": t.get("at", "")})
+    rep["elapsed_sec"] = round(time.time() - t0)
+    rep["scored"] = len(scores)
+    LIVE_OUT.write_text(json.dumps(rep, ensure_ascii=False), encoding="utf-8")
+    g = rep["groups"]
+    log(f"장중 할 일 {day} ({t.get('at', '')[11:16]} 가격, {rep['elapsed_sec']}초): " + ", ".join(f"{k} 매수 {len(g[k]['buy'])}·매도 {len(g[k]['sell'])}" for k in GROUPS))
+    return rep
+
+
+def load() -> dict | None:
+    """오늘 할 일 — 장중(15시) 계산이 마감 기준보다 새 날짜면 그것을."""
+    try:
+        rep = json.loads(OUT.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        rep = None
+    try:
+        lv = json.loads(LIVE_OUT.read_text(encoding="utf-8"))
+        if lv.get("date") and (rep is None or lv["date"] > rep.get("date", "")):
+            return lv
+    except (OSError, ValueError):
+        pass
+    return rep
 
 
 def run(log=print):
@@ -261,6 +396,7 @@ def chart(code: str, df, bars: int = 750) -> dict | None:
     prob = [{"time": dates[i], "value": round(float(s[i]), 4)} for i in range(start, n) if np.isfinite(s[i])]
     return {"name": "AI", "kind": "ai", "label": "AI 점수", "prob": prob, "thr": jb_rules.TOP, "thr_weak": jb_rules.WEAK, "markers": mk,
             "latest": {"prob": now, "top": bool(now >= jb_rules.TOP)}, "trades": trades[-12:], "group": group, "summary": summary,
+            "action": jb_rules.action(list(dates), o, c, tr, pend, aux, s, g),
             "rule": {"group": g, "buy": buy_txt, "sell": sell_txt, "note": jb_rules.STATUS.get(g or "", "")},
             "note": f"▲ 매수 = {buy_txt}, ▼ 매도({g or '소형주'} 규칙) = {sell_txt}(글자 = 그 거래의 수익률). 규칙은 시총 구간(대형·중형·소형·잡주)마다 따로 고른 것입니다"
                     "(학습에 쓰지 않은 구간으로 시험 — 두 기간을 보고 고른 규칙이라 실제보다 좋게 나올 수 있음). " + jb_rules.STATUS.get(g or "", ""), "fast": True}

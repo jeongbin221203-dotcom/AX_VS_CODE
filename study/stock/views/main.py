@@ -149,7 +149,7 @@ def _compare_page(page):
         return {"code": code, "name": _name(code), "tf": tf if (tf in ("D", "W", "M") or intraday.is_intraday(tf)) else "D",
                 "set": set_ if set_ in ("a", "b", "none") else default_set,
                 "kind": "both" if kind in ("dante", "ai") else kind if kind in ("none", "both", "cross") else default_kind, "grp": _grp(code),
-                "risk": risk == "1", "bb": bb != "0"}   # 하락 위험 띠는 기본 꺼짐(주소에 1 이 있을 때만 켬)   # 겹쳐 그리기: 왼쪽 '예측'(단테 기법), 오른쪽 'AI'
+                "risk": risk == "1", "bb": bb != "0", "verify": request.args.get("va") == "1"}   # 하락 위험 띠는 기본 꺼짐(주소에 1 이 있을 때만 켬)   # 겹쳐 그리기: 왼쪽 '예측'(단테 기법), 오른쪽 'AI'
     pa = side(a, request.args.get("sa"), request.args.get("ta"), "a", request.args.get("ka"), "both", request.args.get("ra"), request.args.get("ba"))
     pb = side(b, request.args.get("sb"), request.args.get("tb"), "b" if b == a else "a", request.args.get("kb"), "both", request.args.get("rb"), request.args.get("bb"))
     focus = (request.args.get("date") or "").strip()      # 신호 화면에서 기준일을 넘겨 받으면 그날을 중심으로 보여 준다

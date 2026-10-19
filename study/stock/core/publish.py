@@ -43,7 +43,8 @@ def _recommended_codes():
         except (OSError, ValueError, KeyError):
             pass
     try:
-        a = json.loads((config.DATA_DIR / "jb_actions.json").read_text(encoding="utf-8"))
+        from core import jb_daily
+        a = jb_daily.load() or {}                            # 15시 장중 할 일이 더 새것이면 그것
         for g in a.get("groups", {}).values():
             for k in ("buy", "add", "hold", "sell"):
                 for z in g.get(k, []):
@@ -326,7 +327,8 @@ def push(log=print) -> str:
             return "변경 없음"
         msg = f"스냅샷: {datetime.now():%Y-%m-%d %H:%M} 오늘의 신호 갱신"
         before = _git("rev-parse", "stock", cwd=top)
-        out = subprocess.run(["python", str(helper), "commit", "-m", msg], capture_output=True, text=True, cwd=top, env={**os.environ, **env})
+        out = subprocess.run(["python", str(helper), "commit", "-m", msg], capture_output=True, text=True, encoding="utf-8", errors="replace", cwd=top,
+                             env={**os.environ, **env, "PYTHONIOENCODING": "utf-8"})   # 도우미의 한글 출력을 cp949 로 읽다 깨져 오류 내용이 비던 것
         if out.returncode and _git("rev-parse", "stock", cwd=top) == before:
             raise RuntimeError(f"커밋 실패: {(out.stderr or out.stdout).strip()[-300:]}")
         # 도우미는 파일이 아주 많을 때 마지막 정리(git reset, WinError 206 명령줄 길이)에서 오류를 내지만 커밋·브랜치 갱신은 이미 끝난 뒤다 — 브랜치가 움직였으면 성공으로 본다
@@ -336,6 +338,20 @@ def push(log=print) -> str:
     _git("push", "origin", "stock", cwd=top)
     log("stock 브랜치 푸시 완료")
     return "푸시 완료"
+
+
+def push_jb_live(log=print) -> str:
+    """15시 장중 할 일(data/jb_actions_live.json)을 휴대폰 '오늘 할 일'로 올린다 — 마감 뒤 확정 결과가 나오면 jb_files 가 다시 덮어씀."""
+    from core import jb_daily
+    rep = jb_daily.load()
+    if not rep or not rep.get("live"):
+        return "장중 할 일 없음"
+    ACTIONS.write_text(json.dumps(rep, ensure_ascii=False), encoding="utf-8")
+    try:
+        charts(log)                                          # 새로 나온 살 종목도 눌러 열 수 있게
+    except Exception as e:
+        log(f"차트 갱신 실패: {e}")
+    return push(log)
 
 
 def push_live(log=print) -> str:

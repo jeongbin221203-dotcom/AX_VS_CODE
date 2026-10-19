@@ -639,7 +639,8 @@ def ai_chart(df: pd.DataFrame, code: str, tf: str = "D", bars: int = 750, mkt=No
                if wf else f"모델은 {through}까지 결과가 확정된 데이터로 학습해 그 이전 구간은 모델이 본 데이터라 실제보다 좋아 보입니다(python manage.py picks-wf 로 걸어가며 검증 모델을 만들면 해결).")
     return {"name": "AI", "kind": "ai", "label": "AI 점수", "prob": prob, "thr": AI_TOP, "thr_weak": AI_WEAK, "markers": markers,
             "latest": {"prob": now, "top": bool(now is not None and now >= AI_TOP)},
-            "trades": trades[-12:], "pending": pending, "accuracy": accuracy, "backtest": BACKTEST_NOTE, "wf": bool(wf),
+            "trades": trades[-12:], "pending": pending, "accuracy": accuracy,
+            "action": jb_rules.action(list(dates), o_arr, c_arr, tr, pend_i, _bb, score, grp), "backtest": BACKTEST_NOTE, "wf": bool(wf),
             "group": group, "through": through, "summary": summary, "rule": {"group": grp, "buy": buy_txt, "sell": sell_txt, "note": jb_rules.STATUS.get(grp or "", "")},
             "note": "선 = 날짜마다 그날까지의 정보로 계산한 AI 점수(차트 지표 88개 · 20일 순위·시장+8%p 확률·초과수익·60일 순위 모델 4개의 평균 백분위). 분홍 점선 = 95점(강한 매수), "
                     f"▲ 매수 = {buy_txt}, ▼ 매도({grp or '소형주'} 규칙) = {sell_txt}(글자 = 그 거래의 수익률). "

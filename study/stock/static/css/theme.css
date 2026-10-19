@@ -113,6 +113,8 @@ input[type=checkbox],input[type=radio]{accent-color:var(--acc)}
 .verd.bad{background:color-mix(in srgb,var(--down) 10%,var(--surface));border-color:color-mix(in srgb,var(--down) 35%,var(--line));color:var(--down)}
 .rbadge{border-radius:999px;font-weight:650;padding:2px 10px}
 .rb-hi{background:#b8453c}.rb-mid{background:#b88a3a}.rb-lo{background:#3f8a63}.rb-ai{background:#6a55b8}
+/* 종합 신호 배지(오늘 할 일): 매수·2차 매수 = 빨강, 매도 = 파랑, 보유 = 진한 노랑, 관망 = 회색 */
+.rb-ai.rb-buy,.rb-ai.rb-add{background:#c5392f}.rb-ai.rb-sell{background:#2f62c2}.rb-ai.rb-hold{background:#9a6a00}.rb-ai.rb-wait{background:#6b7280}
 
 /* 차트·패널 */
 .pane,.cchart{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
